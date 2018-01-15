@@ -317,18 +317,12 @@
 
       <Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidgui.exe" KeyPath="yes" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)poppler-qt5.dll" />
-        <!-- SCAP v2 has a dependency on pteidlibCpp.dll so its practical to include it here -->
+        
+        <!-- This is not a poppler "make install" target folder, it was crafted by us... -->
+        <File Source="$(env.PTEID_POPPLER_QT5)\poppler-qt5-win32\poppler-qt5.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)\ScapSignature.exe" />
         <File Source="..\..\..\scap-client-v2\scapsignature_pt.qm" />
       </Component>
-
-      <!--
-      <Component Id="Runtime35ThirdPartyOpenSSL" Guid="{A98B4895-7CCF-4A91-ACE2-433B8D4363F9}" SharedDllRefCount="yes">
-        <File Id="libeay32A" Source="$(var.PTEID_BUILD_FOLDER_X86)libeay32.dll" KeyPath="yes"/>
-        <File Id="ssleay32A" Source="$(var.PTEID_BUILD_FOLDER_X86)ssleay32.dll" />
-      </Component>
-      -->
 
       <Component Id="GuiLang" Guid="{6B03ED1B-DF24-4CE6-A70C-476AF4C0941B}" SharedDllRefCount="yes">
         <File Source="..\..\..\eidgui\eidmw_en.qm" KeyPath="yes" />
@@ -337,10 +331,6 @@
 
 
       <Component Id="Qt" Guid="{AF5AF018-EE70-4EA9-98BA-9C2947F19060}" SharedDllRefCount="yes">
-        <!-- QT4
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)QtCore4.dll" KeyPath="yes" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)QtGui4.dll" />
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)QtNetwork4.dll" />  -->
         <!-- QT5  -->
         <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5Core.dll" KeyPath="yes" />
         <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5Gui.dll" />
@@ -368,8 +358,8 @@
 
       <Component Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
-        <File Id="libeay32A" Source="$(var.PTEID_BUILD_FOLDER_X86)libeay32.dll" />
-        <File Id="ssleay32A" Source="$(var.PTEID_BUILD_FOLDER_X86)ssleay32.dll" />
+        <File Id="libeay32A" Source="$(env.PTEID_DIR_OPENSSL_098)\bin\libeay32.dll" />
+        <File Id="ssleay32A" Source="$(env.PTEID_DIR_OPENSSL_098)\bin\ssleay32.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll" />
@@ -379,12 +369,12 @@
       </Component>
 
       <Component Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44D4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)xerces-c_3_1.dll" KeyPath="yes"/>
+        <File Source="$(env.PTEID_DIR_XERCES_31)\bin\xerces-c_3_1.dll" KeyPath="yes"/>
       </Component>
 
       <!--Our Build of LibCurl - custom build options to remove unneeded features-->
       <Component Id="Curl" Guid="{1BA8207B-BEC4-43E3-93FA-AE9D25117CFA}" SharedDllRefCount="yes">
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)libcurl.dll" KeyPath="yes" />
+        <File Source="$(env.PTEID_DIR_CURL)\build\Win32\VC12\DLL Release\libcurl.dll" KeyPath="yes" />
       </Component>
       
       <!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
@@ -401,7 +391,7 @@
       </Component>
 
       <Component Id="XMLSecurity" Guid="{EF7A30DC-47CC-4385-832A-8E871EF69F65}" SharedDllRefCount="yes">
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)xsec_1_7.dll" KeyPath="yes" />
+        <File Source="$(env.PTEID_XMLSECURITY)\Build\Win32\VC10\Release No Xalan\xsec_1_7.dll" KeyPath="yes" />
       </Component>
 
       <Component Id="pkcs11" Guid="{D54164C0-795D-4B2D-96C6-C8E395100896}" SharedDllRefCount="yes">

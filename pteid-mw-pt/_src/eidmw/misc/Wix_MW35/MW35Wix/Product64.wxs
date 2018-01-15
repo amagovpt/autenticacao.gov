@@ -294,7 +294,7 @@
 
 				<Component Id="GUI" Guid="{E45C85CA-0A5A-400C-9B86-7038C82B254D}" SharedDllRefCount="yes">
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X64)pteidgui.exe" KeyPath="yes" />
-                <File Source="$(var.PTEID_BUILD_FOLDER_X64)poppler-qt5.dll" />
+                <File Source="$(env.PTEID_POPPLER_QT5)\poppler-qt5-x64\poppler-qt5.dll" />
                 <File Source="$(var.PTEID_BUILD_FOLDER_X64)\ScapSignature.exe" />
                 <File Source="..\..\..\scap-client-v2\scapsignature_pt.qm" />
 				</Component>
@@ -337,8 +337,8 @@
                 <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCS_Wrapper.dll" />
                 <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
-                <File Source="$(var.PTEID_BUILD_FOLDER_X86)libeay32.dll" />
-                <File Source="$(var.PTEID_BUILD_FOLDER_X86)ssleay32.dll" />
+                <File Source="$(env.PTEID_DIR_OPENSSL_098)\bin\libeay32.dll" />
+                <File Source="$(env.PTEID_DIR_OPENSSL_098)\bin\ssleay32.dll" />
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
 				</Component>
 
@@ -348,12 +348,12 @@
       </Component>
 
 				<Component Win64="no" Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
-          			<File Source="$(var.PTEID_BUILD_FOLDER_X86)xerces-c_3_1.dll" KeyPath="yes"/>
+          			<File Source="$(env.PTEID_DIR_XERCES_31)\Build\Win32\VC12\Release\xerces-c_3_1.dll" KeyPath="yes"/>
 				</Component>
 
 				<!--Our Build of LibCurl - custom build options to remove unneeded features-->
 				<Component Win64="no" Id="Curl" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFA}" SharedDllRefCount="yes">
-          			<File Source="$(var.PTEID_BUILD_FOLDER_X86)libcurl.dll" KeyPath="no" />
+          			<File Source="$(env.PTEID_DIR_CURL)\build\Win32\VC12\DLL Release\libcurl.dll" KeyPath="yes" />
 				</Component>
 
         <Component Win64="no" Id="pteidmdrvsystem32" Guid="{9C571B6F-E4E0-47AF-812D-E51CFA406F67}" Permanent="no">
@@ -365,7 +365,7 @@
 				</Component>
 
 				<Component Win64="no" Id="XMLSecurity" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F65" SharedDllRefCount="yes">
-          			<File Source="$(var.PTEID_BUILD_FOLDER_X86)xsec_1_7.dll" KeyPath="yes" />
+          			<File Source="$(env.PTEID_XMLSECURITY)\Build\Win32\VC10\Release No Xalan\xsec_1_7.dll" KeyPath="yes" />
 				</Component>
 
 				<Component Win64="no" Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
@@ -381,8 +381,8 @@
                 <File Id="pteidlib_64.dll"       Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlib.dll" />
                 <File Id="pteidcardlayer_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcardlayer.dll" />
                 <File Id="pteidlibj_64.dll"      Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibj.dll"/>
-                <File Id="libeay_64.dll"         Source="$(var.PTEID_BUILD_FOLDER_X64)libeay32.dll" />
-                <File Id="ssleay_64.dll"         Source="$(var.PTEID_BUILD_FOLDER_X64)ssleay32.dll" />
+                <File Id="libeay_64.dll"         Source="$(env.PTEID_DIR_OPENSSL_098_X64)\bin\libeay32.dll" />
+                <File Id="ssleay_64.dll"         Source="$(env.PTEID_DIR_OPENSSL_098_X64)\bin\ssleay32.dll" />
                 <File Id="pteidlibCS_Wrapper_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCS_Wrapper.dll" />
 			          <File Id="pteidcommon_64.dll"    Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcommon.dll" />
 			          <File Id="pteidDlgsWin32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidDlgsWin32.dll" />
@@ -397,7 +397,7 @@
 				</Component>
 
 				<Component Id="XMLSecurity_64" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F66" SharedDllRefCount="yes">
-          			<File Id="xsec_1_6_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)xsec_1_7.dll" KeyPath="yes" />
+          			<File Id="xsec_1_6_64.dll" Source="$(env.PTEID_XMLSECURITY)\Build\x64\VC10\Release No Xalan\xsec_1_7.dll" KeyPath="yes" />
 				</Component>
 
 				<!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
@@ -410,12 +410,12 @@
         </Component>
 
 				<Component Id="Runtime35ThirdPartyXerces_64" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FF}" SharedDllRefCount="yes">
-         			 <File Id="xercesc_3_1_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)xerces-c_3_1.dll" KeyPath="yes"/>
+         			 <File Id="xercesc_3_1_64.dll" Source="$(env.PTEID_DIR_XERCES_31_X64)\Build\Win64\VC12\Release\xerces-c_3_1.dll" KeyPath="yes"/>
 				</Component>
 
 				<!--Our Build of LibCurl - custom build options to remove unneeded features-->
 				<Component Id="Curl_64" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFB}" SharedDllRefCount="yes">
-          			<File Id="libcurl_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)libcurl.dll" KeyPath="no" />
+          			<File Id="libcurl_64.dll" Source="$(env.PTEID_DIR_CURL_X64)\build\Win64\VC12\DLL Release\libcurl.dll" KeyPath="no" />
 				</Component>
 
 			</DirectoryRef>
