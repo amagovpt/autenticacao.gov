@@ -289,7 +289,7 @@
 
 				<Component Win64="no" Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
 			          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
-					  <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlib.dll" KeyPath="yes" />
+					      <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlib.dll" />
                 <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll"/>
                 <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCS_Wrapper.dll" />
                 <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
