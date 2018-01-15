@@ -30,7 +30,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
-    <Compile Include="qml-app_x86.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixDifxAppExtension">

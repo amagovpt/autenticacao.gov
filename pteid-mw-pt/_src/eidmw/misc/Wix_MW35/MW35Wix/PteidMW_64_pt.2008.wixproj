@@ -36,7 +36,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product64.wxs" />
-    <Compile Include="qml-app.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixDifxAppExtension">
