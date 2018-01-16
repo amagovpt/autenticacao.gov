@@ -1,7 +1,6 @@
 @call "%~dp0set_path_vc9.bat"
 
 @set CHECKS=%~dp0..\Checks
-@set SOLUTION=%~dp0..\..\..\_src\eidmw\_Builds\PteidEasyBuild.2008.sln
 
 :: Check Visual Studio
 :: ========================
@@ -164,7 +163,7 @@
 
 :debug
 @echo [INFO] Opening Visual Studio solution: "%SOLUTION%"
-@"%PTEID_DIR_VS%\Common7\IDE\devenv.exe"  /log "C:\Users\agrr\VS_Log.txt" "%SOLUTION%"
+@"%PTEID_DIR_VS%\Common7\IDE\devenv.exe" "%SOLUTION%"
 @goto end
 
 :end
