@@ -1,6 +1,6 @@
 
-@set PTEID_POPPLER_QT5=C:\Users\agrr\Downloads\poppler-buildroot\
-@set PTEID_XMLSECURITY=C:\Users\agrr\Downloads\xml-security-c-1.7.3\
+@set PTEID_POPPLER_QT5=
+@set PTEID_XMLSECURITY=
 
 :: Compiled / external libs x86
 ::==============================
