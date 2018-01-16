@@ -43,40 +43,13 @@
     <?define var.PTEID_QT_PLATFORMPLUGINS=$(env.PTEID_DIR_QT_4_X64)\plugins\platforms\?>
     <?define var.PTEID_QT_IMAGEFORMATS=$(env.PTEID_DIR_QT_4_X64)\plugins\imageformats\?>
     <?define var.PTEID_QT_PRINTSUPPORT=$(env.PTEID_DIR_QT_4_X64)\plugins\printsupport\?>
-	    
     
-    <!-- Choose the target runtime to use: -->
-	    <!-- hack: Checking the solution file that was loaded with the visual studio -->
-	    <!-- $(var.SolutionName: 
-	       {
-	        PteidEasyBuild      (visual studio 2005) 
-	        PteidEasyBuild.2008 (visual studio 2008)
-	       } 
-	    -->
-	    <?if $(var.SolutionName) = PteidEasyBuild ?>
-	      <?define var.PTEID_TARGET_RUNTIME=VCR8 ?>
-	    <?elseif $(var.SolutionName) = PteidEasyBuild.2008 ?>
-	      <?define var.PTEID_TARGET_RUNTIME=VCR9 ?>
-		<?else?>
-	      <?error Can't determine the Visual studio runtime to use. ?>
-		<?endif?>
+	  <?define var.PTEID_TARGET_RUNTIME=VCR9 ?>
 
-    	<!-- Look for compiled components and libs in: -->
-	    <?if $(var.PTEID_TARGET_RUNTIME) = VCR8 ?>
-	      <!-- In the future it should all be using this path format!
-	      <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\VC8\Release\ ?>
-	      <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\VC8\Release\ ?>
-	      <?define var.PTEID_BUILD_FOLDER_AnyCPU=..\..\..\_Binaries35\AnyCPU\VC8\Release\ ?>
-	      -->
-	      <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Release\ ?>
-	      <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\Release\ ?>
-	      <!-- just using for c# dll for now (java here would also be useful). -->
-	      <?define var.PTEID_BUILD_FOLDER_AnyCPU=..\..\..\_Binaries35\Release ?>
-	    <?elseif $(var.PTEID_TARGET_RUNTIME) = VCR9 ?>
-	      <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\VC9\Release\ ?>
-	      <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\VC9\Release\ ?>
-	      <?define var.PTEID_BUILD_FOLDER_AnyCPU=..\..\..\_Binaries35\AnyCPU\VC9\Release\ ?>
-		<?endif?>
+    <!-- Look for compiled components and libs in: -->
+	  <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\VC9\Release\ ?>
+	  <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\VC9\Release\ ?>
+	  <?define var.PTEID_BUILD_FOLDER_AnyCPU=..\..\..\_Binaries35\AnyCPU\VC9\Release\ ?>
 
 		<WixVariable Id="WixUILicenseRtf" Value="..\..\..\misc\licenses\License_pt.rtf" />
 		<WixVariable Id="WixUIBannerBmp" Value="..\..\..\misc\Wix_MW35\new_banner.bmp" />
@@ -338,11 +311,11 @@
 			          <File Id="pteidcardlayer_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcardlayer.dll" />
 					  <File Id="pteidlib_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlib.dll"/>
 					  <File Id="pteidlibj_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibj.dll"/>
-                      <File Id="libeay_64.dll" Source="$(env.PTEID_DIR_OPENSSL_098_X64)\bin\libeay32.dll" />
-                      <File Id="ssleay_64.dll" Source="$(env.PTEID_DIR_OPENSSL_098_X64)\bin\ssleay32.dll" />
-                      <File Id="pteidlibCS_Wrapper_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCS_Wrapper.dll" />
-			          <File Id="pteidcommon_64.dll"    Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcommon.dll" />
-			          <File Id="pteidDlgsWin32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidDlgsWin32.dll" />
+            <File Id="libeay_64.dll" Source="$(env.PTEID_DIR_OPENSSL_098_X64)\bin\libeay32.dll" />
+            <File Id="ssleay_64.dll" Source="$(env.PTEID_DIR_OPENSSL_098_X64)\bin\ssleay32.dll" />
+            <File Id="pteidlibCS_Wrapper_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCS_Wrapper.dll" />
+			      <File Id="pteidcommon_64.dll"    Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcommon.dll" />
+			      <File Id="pteidDlgsWin32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidDlgsWin32.dll" />
 				</Component>
 
 				<Component Id="pkcs11_64" Guid="{3C4751D6-D92C-40ab-8FA5-3A1DF1D927EA}" SharedDllRefCount="yes" Win64="yes">
@@ -454,20 +427,7 @@
 						<RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
 						<RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
 					</RegistryKey>
-
-					<!--
-						SmartCardName="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (GemSafe)"
-SmartCardName_101="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS)"
-SmartCardNameWOW64="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (GemSafe)"
-SmartCardNameWOW64_101="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS)"
-
-SmartCardName_1="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (GemSafe) 1"
-SmartCardName_101_1="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS) 1"
-SmartCardNameWOW64_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (GemSafe) 1"
-SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS) 1"
-						
-						-->
-						
+				
 				</Component>
 
 				<Component Id="RegistryXadesFileType" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA5}">
