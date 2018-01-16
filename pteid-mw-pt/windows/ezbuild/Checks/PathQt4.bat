@@ -17,7 +17,7 @@
 @if NOT "%FILE_NOT_FOUND_INC%"=="" goto fail
 
 ::---- lib
-@set FILE_TO_FIND_LIB="lib\qtmain.lib" "lib\qtmaind.lib" "lib\Qt5Core.lib" "lib\Qt5Cored.lib" "bin\Qt5Core.dll" "bin\Qt5Cored.dll" "lib\Qt5Gui.lib" "bin\Qt5Guid.dll"  "plugins\imageformats\qjpeg.dll" "plugins\imageformats\qjpegd.dll"
+@set FILE_TO_FIND_LIB="lib\qtmain.lib" "lib\Qt5Core.lib" "bin\Qt5Core.dll" "lib\Qt5Gui.lib" "plugins\imageformats\qjpeg.dll"
 @echo [INFO] Looking for files: %FILE_TO_FIND_LIB%
 
 @set FILE_NOT_FOUND_LIB=
