@@ -1,4 +1,12 @@
-@call "%~dp0set_path_vc9.bat"
+@if %MW_VERSION% == 2 (
+  @call "%~dp0set_path_vc9.bat"
+  @set SOLUTION=%~dp0..\..\..\_src\eidmw\_Builds\PteidEasyBuild.2008.sln
+) else (
+  @call "%~dp0set_path_autenticacao.gov.bat"
+  @set SOLUTION=%~dp0..\..\..\_src\eidmw\_Builds\Autenticacao.gov.sln
+)
+
+
 
 @set CHECKS=%~dp0..\Checks
 

@@ -1,7 +1,7 @@
 :: If DEBUG=1 open project in VS,
 :: if      =0 just build it all
 @set DEBUG=1
-@set SOLUTION=%~dp0..\..\..\_src\eidmw\_Builds\PteidEasyBuild.2008.sln
+@set MW_VERSION=2
 
 :: If SKIP_X64_DEPS_CHECK=1 if set will skip cheking %<DEPS>_X64% to see if they are in place.
 :: Useful if for just compiling and creating the x86 targets
