@@ -90,10 +90,12 @@ Rectangle {
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     text: ""
-                    anchors.topMargin: 2
+                    anchors.top: dragSigRect.top
+                    anchors.topMargin: propertySigLineHeight * 0.60
                     x: 2
                     visible: false
                 }
+
                 Image {
                     id: dragSigWaterImage
                     height: dragSigRect.height * 0.4
@@ -239,8 +241,8 @@ Rectangle {
     }
     function updateSignPreview(droped_x,droped_y){
 
-        dragTarget.coord_x = (droped_x - background_image.x) / background_image.width
-        dragTarget.coord_y = (droped_y + dragSigRect.height - background_image.y) / background_image.height
+        dragTarget.coord_x = (dragSigRect.x) / background_image.width
+        dragTarget.coord_y = (dragSigRect.y + dragSigRect.height) / background_image.height
         dragTarget.lastCoord_x = dragSigRect.x
         dragTarget.lastCoord_y = dragSigRect.y
         dragTarget.lastScreenWidth = background_image.width
