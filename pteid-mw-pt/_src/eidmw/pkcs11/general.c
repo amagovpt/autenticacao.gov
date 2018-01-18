@@ -189,7 +189,7 @@ CK_RV C_GetInfo(CK_INFO_PTR pInfo)
    pInfo->cryptokiVersion.major = 2;
    pInfo->cryptokiVersion.minor = 11;
    strcpy_n(pInfo->manufacturerID,  "Portuguese Government",  sizeof(pInfo->manufacturerID), ' ');
-   strcpy_n(pInfo->libraryDescription, "Portugal eID NG PKCS#11 interface v2", sizeof(pInfo->libraryDescription), ' ');
+   strcpy_n(pInfo->libraryDescription, "Portugal eID PKCS#11 interface v2", sizeof(pInfo->libraryDescription), ' ');
    pInfo->libraryVersion.major = 1;
    pInfo->libraryVersion.minor = 0;
 

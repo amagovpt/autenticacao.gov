@@ -139,7 +139,7 @@ catch (CMWException e)
 catch (...)
    {
    	lRet = -1;
-   	log_trace(WHERE, "E: unkown exception thrown");
+   	log_trace(WHERE, "E: unknown exception thrown");
       return (CKR_FUNCTION_FAILED);
 	}
 
@@ -216,13 +216,12 @@ try
    }
 catch (CMWException e)
    {
-     printf ("oCardLayer->getReader");
-   return(cal_translate_error(WHERE, e.GetError()));
+      return(cal_translate_error(WHERE, e.GetError()));
    }
 catch (...)
    {
 	lRet = -1;
-	log_trace(WHERE, "E: unkown exception thrown");
+	log_trace(WHERE, "E: unknown exception thrown");
    return (CKR_FUNCTION_FAILED);
 	}
 
@@ -290,13 +289,12 @@ try
    }
 catch (CMWException e)
    {
-     printf ("oCardLayer->getReader\n");
-   return(cal_translate_error(WHERE, e.GetError()));
+      return(cal_translate_error(WHERE, e.GetError()));
    }
 catch (...)
    {
 	lRet = -1;
-	log_trace(WHERE, "E: unkown exception thrown");
+	log_trace(WHERE, "E: unknown exception thrown");
    return (CKR_FUNCTION_FAILED);
 	}
 
@@ -699,7 +697,7 @@ catch (CMWException e)
 catch (...)
    {
 	lRet = -1;
-	log_trace(WHERE, "E: unkown exception thrown");
+	log_trace(WHERE, "E: unknown exception thrown");
    return (CKR_FUNCTION_FAILED);
 	}
 return (ret);
@@ -908,7 +906,7 @@ catch (CMWException e)
 catch (...)
    {
 	lRet = -1;
-	log_trace(WHERE, "E: unkown exception thrown");
+	log_trace(WHERE, "E: unknown exception thrown");
    return (CKR_FUNCTION_FAILED);
 	}
 
@@ -1065,7 +1063,7 @@ catch (CMWException e)
 catch (...)
    {
 	lRet = -1;
-	log_trace(WHERE, "E: unkown exception thrown");
+	log_trace(WHERE, "E: unknown exception thrown");
    return (CKR_GENERAL_ERROR);
 	}
 return (ret);
@@ -1135,7 +1133,7 @@ catch (CMWException e)
 catch (...)
    {
 	lRet = -1;
-	log_trace(WHERE, "E: unkown exception thrown");
+	log_trace(WHERE, "E: unknown exception thrown");
    return (CKR_SESSION_HANDLE_INVALID);
 	}
 return ((int)status);
