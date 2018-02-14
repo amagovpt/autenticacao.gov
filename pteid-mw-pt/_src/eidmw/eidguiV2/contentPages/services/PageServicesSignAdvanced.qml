@@ -1021,6 +1021,7 @@ PageServicesSignAdvancedForm {
         onCountChanged: {
             propertyTextAttributesMsg.visible = false
             propertyMouseAreaTextAttributesMsg.enabled = false
+            propertyMouseAreaTextAttributesMsg.z = 0
         }
     }
 
@@ -1127,6 +1128,7 @@ PageServicesSignAdvancedForm {
                 propertyRadioButtonXADES.enabled = false
                 propertyTextAttributesMsg.visible = true
                 propertyMouseAreaTextAttributesMsg.enabled = true
+                propertyMouseAreaTextAttributesMsg.z = 1
                 // Load attributes from cache (all, isShortDescription)
                 gapi.startLoadingAttributesFromCache(2, 1)
             }else{
@@ -1143,6 +1145,7 @@ PageServicesSignAdvancedForm {
                 propertyRadioButtonXADES.enabled = true
                 propertyTextAttributesMsg.visible = false
                 propertyMouseAreaTextAttributesMsg.enabled = false
+                propertyMouseAreaTextAttributesMsg.z = 0
             }
         }
     }

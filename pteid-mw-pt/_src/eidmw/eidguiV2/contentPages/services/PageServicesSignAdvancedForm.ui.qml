@@ -456,7 +456,6 @@ Item {
                             anchors.fill: parent
                             enabled: true
                             hoverEnabled: true
-                            z: 1
                         }
 
                         Text {

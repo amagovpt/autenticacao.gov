@@ -1690,16 +1690,14 @@ void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
     if (card == NULL)
         return;
 
-    if (queryType == 0 || queryType == 2)
+    if (queryType == 0 )
         attributes = scapServices.loadAttributesFromCache(*card, false);
-
-    if (queryType == 1 || queryType == 2) {
-        std::vector<ns2__AttributesType *> attributes2 = scapServices.loadAttributesFromCache(*card, true);
-        attributes.insert(attributes.end(), attributes2.begin(), attributes2.end());
-    }
+    else if (queryType == 1 )
+        attributes = scapServices.loadAttributesFromCache(*card, true);
+    else if (queryType == 2)
+        attributes = scapServices.reloadAttributesFromCache(*card);
 
     for(uint i = 0; i < attributes.size() ; i++) {
-        
        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
        std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), isShortDescription);
 
@@ -1708,6 +1706,7 @@ void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
           attribute_list.append(QString::fromStdString(childAttributes.at(j)));
        }
     }
+
     if (queryType == 1)
         emit signalCompanyAttributesLoaded(attribute_list);
     else if (queryType == 0)

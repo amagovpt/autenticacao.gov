@@ -106,8 +106,6 @@ PageDefinitionsSCAPForm {
 
             // Load attributes from cache (Entities, isShortDescription)
             gapi.startLoadingAttributesFromCache(0, 0)
-            // Load attributes from cache (Companies, isShortDescription)
-            gapi.startLoadingAttributesFromCache(1, 0)
             propertyBusyIndicator.running = false
 
         }
@@ -142,7 +140,9 @@ PageDefinitionsSCAPForm {
                     }
                 }
             }
-            propertyBusyIndicatorAttributes.running = false
+            //Load attributes from cache (Companies, isShortDescription)
+            gapi.startLoadingAttributesFromCache(1, 0)
+
         }
         onSignalCompanyAttributesLoaded: {
             console.log("Definitions SCAP - Signal SCAP company attributes loaded")
@@ -282,6 +282,8 @@ PageDefinitionsSCAPForm {
             console.log("ButtonLoadCompanyAttributes clicked!")
             companyAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
+            propertyPageLoader.attributeListBackup = []
+            propertyPageLoader.propertyBackupSignAdd = false
             gapi.startGettingCompanyAttributes()
         }
 
@@ -300,6 +302,8 @@ PageDefinitionsSCAPForm {
                 }
             }
             console.log("QML AttributeList: ", attributeList)
+            propertyPageLoader.attributeListBackup = []
+            propertyPageLoader.propertyBackupSignAdd = false
             gapi.startGettingEntityAttributes(attributeList)
         }
     }
@@ -308,6 +312,8 @@ PageDefinitionsSCAPForm {
             console.log("propertyButtonRemoveCompanyAttributes clicked!")
             companyAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
+            propertyPageLoader.attributeListBackup = []
+            propertyPageLoader.propertyBackupSignAdd = false
             gapi.startRemovingAttributesFromCache(1)
         }
 
@@ -318,6 +324,8 @@ PageDefinitionsSCAPForm {
             console.log("propertyButtonRemoveEntityAttributes clicked!")
             entityAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
+            propertyPageLoader.attributeListBackup = []
+            propertyPageLoader.propertyBackupSignAdd = false
             gapi.startRemovingAttributesFromCache(0)
         }
     }

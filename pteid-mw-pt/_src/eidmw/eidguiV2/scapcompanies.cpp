@@ -44,7 +44,7 @@ std::vector<ns2__AttributesType *> loadCacheFile(QString &filePath) {
     return attributesType;
 }
 
-std::vector<ns2__AttributesType *> 
+std::vector<ns2__AttributesType *>
     ScapServices::loadAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies) {
 
     std::vector<ns2__AttributesType *> attributesType;
@@ -58,13 +58,6 @@ std::vector<ns2__AttributesType *>
         QString filePath = scapCacheDir + citizenNIC + (isCompanies ? COMPANIES_SUFFIX : ENTITIES_SUFFIX);
 
         attributesType = loadCacheFile(filePath);
-
-        if (attributesType.size() > 0)
-        {
-            //Merge into single vector
-            m_attributesList.insert(m_attributesList.end(), attributesType.begin(), attributesType.end());
-
-        }
     }
     catch(...) {
         std::cerr << "Error ocurred while loading attributes from cache!";
@@ -72,6 +65,46 @@ std::vector<ns2__AttributesType *>
     }
 
     return attributesType;
+}
+
+std::vector<ns2__AttributesType *>
+    ScapServices::reloadAttributesFromCache(eIDMW::PTEID_EIDCard &card) {
+
+    std::vector<ns2__AttributesType *> attributesType;
+    try
+    {
+        QString citizenNIC(card.getID().getCivilianIdNumber());
+
+        ScapSettings settings;
+        QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
+
+        QString filePathEntities = scapCacheDir + citizenNIC + ENTITIES_SUFFIX;
+
+        attributesType = loadCacheFile(filePathEntities);
+
+        m_attributesList.clear();
+
+        if (attributesType.size() > 0)
+        {
+            //Merge into single vector
+            m_attributesList.insert(m_attributesList.end(), attributesType.begin(), attributesType.end());
+        }
+
+        QString filePathCompanies = scapCacheDir + citizenNIC + COMPANIES_SUFFIX;
+
+        attributesType = loadCacheFile(filePathCompanies);
+
+        if (attributesType.size() > 0)
+        {
+            //Merge into single vector
+            m_attributesList.insert(m_attributesList.end(), attributesType.begin(), attributesType.end());
+        }
+    }
+    catch(...) {
+        std::cerr << "Error ocurred while loading attributes from cache!";
+        //TODO: report error
+    }
+    return m_attributesList;
 }
 
 bool ScapServices::removeAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies) {

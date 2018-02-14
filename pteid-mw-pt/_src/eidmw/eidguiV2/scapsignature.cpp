@@ -97,35 +97,40 @@ std::vector<ns3__AttributeType*> ScapServices::getSelectedAttributes(std::vector
 
     std::vector<ns3__AttributeType*> parsedAttributes;
     ns2__AttributesType * parent = NULL;
+    int index = 0;
 
     for (int i=0; i!=attributes_index.size(); i++) {
-        try {
-            parent = m_attributesList.at(attributes_index[i]);    
-        }
-        catch (std::out_of_range &e)
-        {
-            qDebug() << "Invalid attribute index: "
-                     << attributes_index[i] << "This shouldn't happen!";
-            continue;
-        }
+        index = 0;
 
-        std::vector<ns5__SignatureType *> childs = parent->SignedAttributes->ns3__SignatureAttribute;
-        for(uint childPos = 0;  childPos < childs.size(); childPos++)
-        {
-            ns5__SignatureType * child = childs.at(childPos);
-            if ( child->ns5__Object.size() > 0 )
+        for (int j=0; j < m_attributesList.size(); j++) {
+
+            try {
+                parent = m_attributesList.at(j);
+            }
+            catch (std::out_of_range &e)
             {
-                ns5__ObjectType * objType = child->ns5__Object.at(0);
-                ns3__AttributeType * attr = objType->union_ObjectType.ns3__Attribute;
-                //"Fix" the AttributeSupplier (ID and Name): they can have different values in SCAP and the actual entity Attribute
-                attr->AttributeSupplier->Id = parent->ATTRSupplier->Id;
-                attr->AttributeSupplier->Name = parent->ATTRSupplier->Name;
-                parsedAttributes.push_back(attr);
-                qDebug() << "Selected attribute from supplier: " << attr->AttributeSupplier->Name.c_str();
-               
-           }
-       }
+                qDebug() << "Invalid attribute index: "
+                         << attributes_index[j] << "This shouldn't happen!";
+                continue;
+            }
 
+            std::vector<ns5__SignatureType *> childs = parent->SignedAttributes->ns3__SignatureAttribute;
+            for(uint childPos = 0;  childPos < childs.size(); childPos++)
+            {
+                ns5__SignatureType * child = childs.at(childPos);
+                if ( child->ns5__Object.size() > 0 && index == attributes_index[i] )
+                {
+                    ns5__ObjectType * objType = child->ns5__Object.at(0);
+                    ns3__AttributeType * attr = objType->union_ObjectType.ns3__Attribute;
+                    //"Fix" the AttributeSupplier (ID and Name): they can have different values in SCAP and the actual entity Attribute
+                    attr->AttributeSupplier->Id = parent->ATTRSupplier->Id;
+                    attr->AttributeSupplier->Name = parent->ATTRSupplier->Name;
+                    parsedAttributes.push_back(attr);
+                    qDebug() << "Selected attribute from supplier: " << attr->AttributeSupplier->Name.c_str();
+                }
+                index++;
+            }
+        }
     }
 
     return parsedAttributes;
