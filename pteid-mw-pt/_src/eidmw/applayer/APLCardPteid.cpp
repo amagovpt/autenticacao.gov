@@ -1710,14 +1710,6 @@ APL_SodEid::~APL_SodEid()
 
 CByteArray APL_SodEid::getXML(bool bNoHeader)
 {
-/*
-	<biometric>
-		<picture type=�jpg�>
-			<data encoding=�base64�></data>
-			<hash encoding=�base64� method=�md5�></hash>
-		</picture>
-	</biometric>
-*/
 
 	CByteArray xml;
 	CByteArray baB64;
@@ -1732,8 +1724,6 @@ CByteArray APL_SodEid::getXML(bool bNoHeader)
 		xml+=		baB64;
 	xml+="		</data>\n";
 	xml+="		<hash encoding=\"base64\" method=\"md5\">\n";
-	/*if(m_cryptoFwk->b64Encode(getHash(),baB64))
-		xml+=		baB64;*/
 	xml+="		</hash>\n";
 	xml+="	</picture>\n";
 	xml+="</biometric>\n";
@@ -1743,18 +1733,12 @@ CByteArray APL_SodEid::getXML(bool bNoHeader)
 
 CByteArray APL_SodEid::getCSV()
 {
-/*
-data;hash;
-*/
-
 	CByteArray csv;
 	CByteArray baB64;
 
 	if(m_cryptoFwk->b64Encode(getData(),baB64,false))
 		csv+=		baB64;
 	csv+=CSV_SEPARATOR;
-	/*if(m_cryptoFwk->b64Encode(getHash(),baB64,false))
-		csv+=		baB64;*/
 	csv+=CSV_SEPARATOR;
 
 	return csv;

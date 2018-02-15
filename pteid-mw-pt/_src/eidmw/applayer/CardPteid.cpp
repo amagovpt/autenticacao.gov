@@ -788,15 +788,18 @@ tCardFileStatus APL_EidFile_Address::VerifyFile()
 
 	MapFieldsInternal();
 
-	if (m_SODCheck){
+/* This disables the address check for now as requested by INCM on Feb 14 2018 */
+#ifdef CHECK_ADDRESS_SOD
+	if (m_SODCheck) {
 		CByteArray addrData;
 		PackAddressData(addrData, m_AddressType != m_FOREIGN);
 
 		if (!m_cryptoFwk->VerifyHashSha256(addrData,pcard->getFileSod()->getAddressHash()))
 			throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS);
 	}
-	m_isVerified = true;
+#endif
 
+	m_isVerified = true;
 	return CARDFILESTATUS_OK;
 }
 
