@@ -96,7 +96,7 @@ namespace eidpt
        {
            throw new PteidException(SC_ERROR_CARD_NOT_PRESENT);
        }
-       catch (PTEID_ExCardBadType)
+       catch (PTEID_ExCardTypeUnknown)
        {
            throw new PteidException(SC_ERROR_INVALID_CARD);
        }
