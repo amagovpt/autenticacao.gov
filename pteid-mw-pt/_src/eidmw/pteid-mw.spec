@@ -65,7 +65,7 @@ Conflicts:  cartao_de_cidadao
 
 License:        GPLv2+
 Group:          System/Libraries
-Version:        2.4.6.%{svn_revision}
+Version:        2.4.11.%{svn_revision}
 %if 0%{?fedora}
 Release:        1%{?dist}
 %else
@@ -75,7 +75,7 @@ Summary:        Portuguese eID middleware
 Url:            https://svn.gov.pt/projects/ccidadao/
 Vendor:         Portuguese Government
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-Source0:        pteid-mw_2.4.6svn%{svn_revision}-1.tar.gz
+Source0:        pteid-mw_2.4.11svn%{svn_revision}-1.tar.gz
 Source1:        pteid-mw-gui.desktop
 Source2:        pteid-scalable.svg
 Source3:        pteid-signature.png
@@ -98,7 +98,7 @@ Identity Card (Cartão de Cidadão) in order to authenticate securely
 in certain websites and/or sign documents.
 
 %prep
-%setup -q -n pteid-mw_2.4.6svn%{svn_revision}
+%setup -q -n pteid-mw_2.4.11svn%{svn_revision}
 
 %if 0%{?fedora} || 0%{?centos_ver}
 sed -i 's/$QT4DIR/"$QT4DIR"/g' configure_fedora.sh
@@ -319,6 +319,9 @@ fi
 /usr/local/share/certs
 
 %changelog
+* Thu Feb 15 2018 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+  New SVN snapshot: revision 5334 - Disable checking of the address file hash contained and other minor bugfixes
+
 * Fri Oct 27 2017 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   New SVN snapshot: revision 5239 - PKCS#11 corrections and new ECRaizEstado certificate
 
