@@ -1707,10 +1707,10 @@ void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
        }
     }
 
-    if (queryType == 1)
-        emit signalCompanyAttributesLoaded(attribute_list);
-    else if (queryType == 0)
+    if (queryType == 0)
         emit signalEntityAttributesLoaded(attribute_list);
+    else if (queryType == 1)
+        emit signalCompanyAttributesLoaded(attribute_list);
     else if (queryType == 2)
         emit signalAttributesLoaded(attribute_list);
 }

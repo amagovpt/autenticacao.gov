@@ -97,6 +97,7 @@ PageDefinitionsSCAPForm {
         }
         onSignalSCAPEntitiesLoaded: {
             console.log("Definitions SCAP - Signal SCAP entities loaded")
+            entityAttributesModel.clear()
             for (var i = 0; i < entitiesList.length; i++)
             {
                 entityAttributesModel.append({
@@ -146,6 +147,7 @@ PageDefinitionsSCAPForm {
         }
         onSignalCompanyAttributesLoaded: {
             console.log("Definitions SCAP - Signal SCAP company attributes loaded")
+            companyAttributesModel.clear()
             for(var i = 0; i < attribute_list.length; i=i+2)
             {
                 if(companyAttributesModel.count>0 &&
