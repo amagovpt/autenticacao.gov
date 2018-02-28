@@ -238,10 +238,6 @@ public:
 
     PDFPreviewImageProvider * image_provider_pdf;
 
-    // Public Method to Test GAPI
-    //void fillDataCardIdentifyDummy();
-    void testUpdateCardIdentify(int timerValue);
-
     //This flag is used to start the application in specific subpage
     void setShortcutFlag(int value) { m_shortcutFlag = value; }
     void setShortcutPDFPath(QString &inputPdf) { m_shortcutInputPDF = inputPdf ;}
@@ -438,8 +434,5 @@ private:
 
 protected:
     QTranslator m_translator;
-private slots:
-    // Test functions
-    void triggerTestUpdateCardIdentify();
 };
 #endif // GAPI_H

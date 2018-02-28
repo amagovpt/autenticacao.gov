@@ -8,7 +8,6 @@
 #include <QPrinter>
 #include "qpainter.h"
 
-
 #include "CMDSignature.h"
 #include "cmdErrors.h"
 
@@ -102,25 +101,6 @@ void GAPI::setDataCardIdentify(QMap<IDInfoKey, QString> data) {
 
     m_data = data;
     emit signalCardDataChanged();
-}
-
-void GAPI::testUpdateCardIdentify(int timerValue) {
-
-    qDebug() << "C++: testUpdateCardIdentify";
-
-    QTimer *timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this,
-            SLOT(triggerTestUpdateCardIdentify()));
-    timer->start(timerValue);
-}
-
-void GAPI::triggerTestUpdateCardIdentify() {
-
-    static char i = 0;
-
-    m_data[Givenname] = "Joana Ovilia " + QString::number(i++);
-
-    setDataCardIdentify(m_data);
 }
 
 bool isExpiredDate(const char * strDate) {
