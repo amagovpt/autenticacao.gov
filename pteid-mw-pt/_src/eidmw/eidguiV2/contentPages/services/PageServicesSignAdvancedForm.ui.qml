@@ -65,6 +65,8 @@ Item {
     property alias propertyTextSpinBox: textSpinBox
     property alias propertySpinBoxControl: spinBoxControl
     property alias propertyCheckLastPage: checkLastPage
+    property alias propertyPageText: pageText
+
 
     BusyIndicator {
         id: busyIndicator

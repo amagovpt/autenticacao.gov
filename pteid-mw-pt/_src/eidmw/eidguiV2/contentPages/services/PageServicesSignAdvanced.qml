@@ -942,7 +942,6 @@ PageServicesSignAdvancedForm {
     propertyFileDialogBatchOutput {
         onAccepted: {
             propertyBusyIndicator.running = true
-            var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogBatchOutput.folder.toString()
             if (Qt.platform.os === "windows") {
@@ -950,10 +949,15 @@ PageServicesSignAdvancedForm {
             }else{
                 outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
-			outputFile = decodeURIComponent(outputFile)
+            outputFile = decodeURIComponent(outputFile)
             if (propertyRadioButtonPADES.checked) {
 
-                var page = propertySpinBoxControl.value
+                if(propertyCheckLastPage.checked){
+                    var page = 0 // Sign last page in all documents
+                }else{
+                    var page = propertySpinBoxControl.value
+                }
+
                 var reason = propertyTextFieldReason.text
                 var location = propertyTextFieldLocal.text
                 var isSmallSignature = propertyCheckSignReduced.checked
@@ -1431,7 +1435,7 @@ PageServicesSignAdvancedForm {
                         + propertyListViewFiles.count)
             if(filesModel.count === 0) {
                 fileLoaded = false
-				propertyTextDragMsgImg.visible = true
+                propertyTextDragMsgImg.visible = true
                 propertyPDFPreview.propertyBackground.source = ""
                 propertyPDFPreview.propertyDragSigImg.visible = false
                 propertyPDFPreview.propertyDragSigReasonText.visible = false
@@ -1443,14 +1447,20 @@ PageServicesSignAdvancedForm {
                 propertyPDFPreview.propertyDragSigImg.visible = false
             }
             else {
-				fileLoaded = true
+                fileLoaded = true
                 if(propertyRadioButtonPADES.checked){
-				    propertyTextDragMsgImg.visible = false
+                    propertyTextDragMsgImg.visible = false
+                    // Preview the last file selected
                     var loadedFilePath = filesModel.get(filesModel.count-1).fileUrl
                     var pageCount = gapi.getPDFpageCount(loadedFilePath)
                     if(pageCount > 0){
                         propertyBusyIndicator.running = true
-                        propertySpinBoxControl.to = getMinimumPage()
+                        if(propertyCheckLastPage.checked==true
+                                || propertySpinBoxControl.value > pageCount)
+                            propertySpinBoxControl.value = pageCount
+                        if(propertySpinBoxControl.value > getMinimumPage())
+                            propertySpinBoxControl.value = getMinimumPage()
+                        updateIndicators(pageCount)
                         propertyPDFPreview.propertyBackground.cache = false
                         propertyPDFPreview.propertyBackground.source =
                                 "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
@@ -1494,29 +1504,33 @@ PageServicesSignAdvancedForm {
 
     propertySpinBoxControl {
         onValueChanged: {
-            var loadedFilePath = filesModel.get(0).fileUrl
+            var loadedFilePath = filesModel.get(filesModel.count-1).fileUrl
             propertyPDFPreview.propertyBackground.source =
                     "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
             propertyPageLoader.propertyBackupPage =  propertySpinBoxControl.value
-            propertySpinBoxControl.up.indicator.visible = true
-            propertySpinBoxControl.down.indicator.visible = true
-            if(propertySpinBoxControl.value === getMinimumPage()){
-                propertySpinBoxControl.up.indicator.visible = false
-            }
-            if (propertySpinBoxControl.value === 1){
-                propertySpinBoxControl.down.indicator.visible = false
-            }
+
+            var pageCount = gapi.getPDFpageCount(loadedFilePath)
+            updateIndicators(pageCount)
         }
     }
     propertyCheckLastPage {
         onCheckedChanged: {
-            var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
+            var loadedFilePath = propertyListViewFiles.model.get(filesModel.count-1).fileUrl
             propertyPageLoader.propertyBackupLastPage =  propertyCheckLastPage.checked
+            var pageCount = gapi.getPDFpageCount(loadedFilePath)
+
             if(propertyCheckLastPage.checked){
-                propertySpinBoxControl.value = getMinimumPage()
+                propertySpinBoxControl.enabled = false
+                propertyPageText.enabled = false
+                propertyTextSpinBox.visible = false
                 propertyPDFPreview.propertyBackground.source =
-                        "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + getMinimumPage()
+                        "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + pageCount
             }else{
+                propertySpinBoxControl.enabled = true
+                propertyPageText.enabled = true
+                propertyTextSpinBox.visible = true
+                if(propertySpinBoxControl.value > getMinimumPage())
+                    propertySpinBoxControl.value = getMinimumPage()
                 propertyPDFPreview.propertyBackground.source =
                         "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
             }
@@ -1610,5 +1624,22 @@ PageServicesSignAdvancedForm {
                         + "minimum: " + minimumPage)
         }
         return minimumPage
+    }
+
+    function updateIndicators(pageCount){
+        propertySpinBoxControl.up.indicator.visible = true
+        propertySpinBoxControl.down.indicator.visible = true
+        propertySpinBoxControl.up.indicator.enabled = true
+        propertySpinBoxControl.down.indicator.enabled = true
+
+        if(propertySpinBoxControl.value === pageCount
+                || propertySpinBoxControl.value === getMinimumPage()){
+            propertySpinBoxControl.up.indicator.visible = false
+            propertySpinBoxControl.up.indicator.enabled = false
+        }
+        if (propertySpinBoxControl.value === 1){
+            propertySpinBoxControl.down.indicator.visible = false
+            propertySpinBoxControl.down.indicator.enabled = false
+        }
     }
 }

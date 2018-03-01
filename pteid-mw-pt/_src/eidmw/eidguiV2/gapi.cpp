@@ -1345,7 +1345,8 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
     for( int i = 0; i < params.loadedFileBatchPath.count(); i++ ){
         qDebug() << params.loadedFileBatchPath[i];
         QString fullInputPath = params.loadedFileBatchPath[i];
-		sig_handler->addToBatchSigning((char *)getPlatformNativeString(fullInputPath), false);
+        sig_handler->addToBatchSigning((char *)getPlatformNativeString(fullInputPath),
+                                       params.page == 0 ? true : false);
     }
 
     if (params.isTimestamp > 0)
