@@ -161,8 +161,12 @@ namespace eIDMW
 		char buffer[BUFSIZE];
 
 		OpenSSL_add_all_digests();
-
+#ifdef WIN32
+		std::wstring utf16FileName = utilStringWiden(std::string(filename));
+		FILE *fp = _wfopen(utf16FileName.c_str(), L"rb");
+#else
 		FILE *fp = fopen(filename, "rb");
+#endif
 		if (!fp)
 		{
 			fprintf(stderr, "Error opening file!\n");
@@ -293,6 +297,7 @@ std::basic_string<XMLCh> createSignedPropertiesURI()
     }
 
 
+#ifdef DEBUG
     void WriteToFile(const char *path, const char *str)
     {
     	FILE *f=NULL;
@@ -306,6 +311,7 @@ std::basic_string<XMLCh> createSignedPropertiesURI()
         }
 
     }
+#endif
 
 	void appendCertRef(XERCES_NS DOMDocument *doc, CByteArray &cert_data, X509* cert, DOMNode* parent)
 	{

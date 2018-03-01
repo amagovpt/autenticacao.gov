@@ -31,6 +31,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>
+//For utilStringWiden()
+#include "Util.h"
 #endif
 
 #include <cstdio>
@@ -495,7 +497,10 @@ bool CPathUtil::existFile(const char *filePath)
 
 #ifdef WIN32
 	DWORD dwError = 0;
-	DWORD dwAttr = GetFileAttributesA(filePath);
+
+	std::wstring utf16FileName = utilStringWiden(std::string(filePath));
+
+	DWORD dwAttr = GetFileAttributesW(utf16FileName.c_str());
 	if(dwAttr == INVALID_FILE_ATTRIBUTES) dwError = GetLastError();
 	if(dwError == ERROR_FILE_NOT_FOUND || dwError == ERROR_PATH_NOT_FOUND)
 	{

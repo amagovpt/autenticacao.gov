@@ -17,6 +17,7 @@
 
 #ifdef WIN32
 #include <Windows.h> //CharToOem()
+#include "Util.h"
 #define unlink _unlink
 #endif
 
@@ -24,7 +25,7 @@
 #include "ByteArray.h"
 
 #include <openssl/sha.h>
-#include "miniz.c"
+#include "miniz.h"
 #include "SigContainer.h"
 #include "Log.h"
 
@@ -110,7 +111,12 @@ static const char *SIGCONTAINER_README=
 
 	char *readFile(const char *path, int *size)
 	{
+#ifdef WIN32
+		std::wstring utf16FileName = utilStringWiden(std::string(path));
+		std::ifstream file(utf16FileName, std::ios::binary | std::ios::ate);
+#else
 		std::ifstream file(path, std::ios::binary|std::ios::ate);
+#endif
 		char * in;
 
 		if (file.is_open())
@@ -195,22 +201,19 @@ static const char *SIGCONTAINER_README=
 		return hashes;
 	}
 
-
-	void AddReadMe(const char *output_file)
+	void AddReadMe(mz_zip_archive *pZip)
 	{
-
 		mz_bool status = MZ_FALSE;
 
-		status = mz_zip_add_mem_to_archive_file_in_place (output_file, "META-INF/README.txt", SIGCONTAINER_README, strlen(SIGCONTAINER_README),
-				"", (unsigned short)0, MZ_BEST_COMPRESSION);
+		status = mz_zip_writer_add_mem(pZip, "META-INF/README.txt", SIGCONTAINER_README, strlen(SIGCONTAINER_README), MZ_BEST_COMPRESSION);
 
 		if (!status)
 		{
-			MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed for README.txt");
+			MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_writer_add_mem failed for README.txt");
 		}
 	}
 
-	void AddMimeTypeFile(const char *output_file, int num_paths)
+	void AddMimeTypeFile(mz_zip_archive *pZip, int num_paths)
 	{
 		mz_bool status = MZ_FALSE;
 
@@ -220,12 +223,11 @@ static const char *SIGCONTAINER_README=
 		const char *mimetype = num_paths > 1 ? MIMETYPE_ASIC_E : MIMETYPE_ASIC_S;
 
 		//We need to store the file with no compression to act as a kind of "magic number" within the zip container
-		status = mz_zip_add_mem_to_archive_file_in_place(output_file, "mimetype", mimetype, strlen(mimetype),
-				"", (unsigned short)0, MZ_NO_COMPRESSION);
+		status = mz_zip_writer_add_mem(pZip, "mimetype", mimetype, strlen(mimetype), MZ_NO_COMPRESSION);
 
 		if (!status)
 		{
-			MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed for mimetype");
+			MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_writer_add_mem failed for mimetype. miniz error code: %d", mz_zip_get_last_error(pZip));
 		}
 	}
 
@@ -236,21 +238,32 @@ static const char *SIGCONTAINER_README=
 		char *ptr_content = NULL;
 		const char *absolute_path = NULL;
 		char *zip_entry_name= NULL;
-#ifdef WIN32
-		char *utf8_filename;
-#endif
+
 		mz_bool status;
+		//Zip-file object handler
+		mz_zip_archive pZip;
+		memset(&pZip, 0, sizeof(pZip));
 
-		MWLOG(LEV_DEBUG, MOD_APL, "StoreSignatureToDisk() called with output_file = %s\n",output_file);
+		MWLOG(LEV_DEBUG, MOD_APL, "StoreSignatureToDisk() called with output_file = %s",output_file);
 
-		//Try to delete the output file first...
-		if (unlink(output_file) == 0)
-		    MWLOG(LEV_DEBUG, MOD_APL, "StoreSignatureToDisk() overwriting output file %s\n",output_file);
-
+		//TODO: any flags to specify
+		mz_uint flags = 0;
+#ifdef WIN32
+		std::wstring utf16FileName = utilStringWiden(std::string(output_file));
+		FILE *pFile = _wfopen(utf16FileName.c_str(), L"wb");
+#else
+		FILE *pFile = fopen(output_file, "wb");
+#endif
+		status = mz_zip_writer_init_cfile(&pZip, pFile, flags);
+		if (!status) {
+			mz_zip_error mz_err = mz_zip_get_last_error(&pZip);
+			MWLOG(LEV_DEBUG, MOD_APL, "mz_zip_writer_init_cfile() failed, error 0x%X (%s)\n", mz_err, mz_zip_get_error_string(mz_err));
+		}
+	
 		//Add a mimetype file as defined in the ASIC standard ETSI TS 102 918
 		//It needs to be stored first in the archive and uncompressed so it can be used as a kind of magic number
 		//for systems that use them
-		AddMimeTypeFile(output_file, num_paths);
+		AddMimeTypeFile(&pZip, num_paths);
 
 		// Append the referenced files to the zip file
 		for (unsigned int  i = 0; i < num_paths; i++)
@@ -261,16 +274,8 @@ static const char *SIGCONTAINER_README=
 
 			zip_entry_name = Basename((char *)absolute_path);
 
-
-#ifdef WIN32
-			utf8_filename = new char[strlen(zip_entry_name)*2];
-			latin1_to_utf8((unsigned char *)zip_entry_name, (unsigned char *)utf8_filename);
-			zip_entry_name = utf8_filename;
-			MWLOG (LEV_DEBUG, MOD_APL, "Compressing filename (after conversion): %s", zip_entry_name);
-#endif
-
-			status = mz_zip_add_mem_to_archive_file_in_place(output_file, zip_entry_name, ptr_content,
-					file_size, "", (unsigned short)0, MZ_BEST_COMPRESSION);
+			status = mz_zip_writer_add_mem(&pZip, zip_entry_name, ptr_content,
+					file_size, MZ_BEST_COMPRESSION);
 
 			free(ptr_content);
 			if (!status)
@@ -283,8 +288,7 @@ static const char *SIGCONTAINER_README=
 
 		//Add the signature file to the container
 
-		status = mz_zip_add_mem_to_archive_file_in_place(output_file, SIG_INTERNAL_PATH, sig.GetBytes(),
-				sig.Size(), "", (unsigned short)0, MZ_BEST_COMPRESSION);
+		status = mz_zip_writer_add_mem(&pZip, SIG_INTERNAL_PATH, sig.GetBytes(),	sig.Size(), MZ_BEST_COMPRESSION);
 		if (!status)
 		{
 			MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed for the signature file");
@@ -292,7 +296,17 @@ static const char *SIGCONTAINER_README=
 		}
 
 		//Add a README file to the container
-		AddReadMe(output_file);
+		AddReadMe(&pZip);
+
+		status = mz_zip_writer_finalize_archive(&pZip);
+		if (!status)
+			return;
+
+		status = mz_zip_writer_end(&pZip);
+		if (!status)
+			return;
+
+		fclose(pFile);
 
 	}
 };
