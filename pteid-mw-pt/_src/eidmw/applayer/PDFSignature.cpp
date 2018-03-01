@@ -9,6 +9,7 @@
 #include "MiscUtil.h"
 #include "CardPteidDef.h"
 #include "Log.h"
+#include "Util.h"
 #include "APLConfig.h"
 
 #include <string>
@@ -27,6 +28,18 @@ namespace eIDMW
 	const double PDFSignature::sig_height = 90;
 	const double PDFSignature::sig_width = 178;
 	const double PDFSignature::tb_margin = 40;
+
+
+	PDFDoc * makePDFDoc(const char *utf8Filepath) {
+#ifdef WIN32
+		std::string utf8Filename(utf8Filepath);
+		std::wstring utf16Filename = utilStringWiden(utf8Filename);
+
+		return new PDFDoc((wchar_t *)utf16Filename.c_str(), utf16Filename.size());
+#else
+		return new PDFDoc(new GooString(pdf_file_path));
+#endif
+	}
 
 	PDFSignature::PDFSignature()
 	{
@@ -69,7 +82,8 @@ namespace eIDMW
         m_isLandscape = false;
         m_small_signature = false;
         my_custom_image.img_data = NULL;
-        m_doc = new PDFDoc(new GooString(pdf_file_path));
+
+		m_doc = makePDFDoc(pdf_file_path);
 
         m_card = NULL;
         m_signerInfo = NULL;
@@ -117,7 +131,7 @@ namespace eIDMW
             m_isLandscape = false;
             m_small_signature = false;
             my_custom_image.img_data = NULL;
-            m_doc = new PDFDoc(new GooString(pdf_file_path));
+			m_doc = makePDFDoc(pdf_file_path);
 
             m_card = NULL;
             m_signerInfo = NULL;
@@ -393,7 +407,7 @@ namespace eIDMW
 				 std::string f = generateFinalPath(outfile_path,
 						 current_file);
 
-				 m_doc = new PDFDoc(new GooString(current_file));
+				 m_doc = makePDFDoc(current_file);
 				 //Set page as the last
 				 if (m_files_to_sign.at(i).second)
 				 	m_page = m_doc->getNumPages();
@@ -429,7 +443,7 @@ namespace eIDMW
 
 		return doc.getNumPages();
 	}
-
+	
 
 	int PDFSignature::signSingleFile(const char *location,
 		const char *reason, const char *outfile_path)
@@ -596,8 +610,7 @@ namespace eIDMW
 			{
 				delete m_doc;
 				if (!m_batch_mode)
-					m_doc = new PDFDoc(new GooString(m_pdf_file_path));
-
+					m_doc = makePDFDoc(m_pdf_file_path);
 			}
 			throw;
 		}
@@ -695,8 +708,15 @@ namespace eIDMW
 
         PDFWriteMode pdfWriteMode =
             incremental ? writeForceIncremental : writeForceRewrite;
+#ifdef WIN32
+		std::string utf8Filename(m_outputName->getCString());
+		std::wstring utf16Filename = utilStringWiden(utf8Filename);
 
-        int final_ret = m_doc->saveAs( m_outputName, pdfWriteMode );
+		int final_ret = m_doc->saveAs((wchar_t *)utf16Filename.c_str(), pdfWriteMode);
+#else
+		int final_ret = m_doc->saveAs(m_outputName, pdfWriteMode);
+#endif
+
         if ( final_ret != errNone )
          throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 

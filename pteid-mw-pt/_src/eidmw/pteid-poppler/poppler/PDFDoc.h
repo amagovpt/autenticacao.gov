@@ -219,6 +219,9 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
   POPPLER_API int savePageAs(GooString *name, int pageNo);
   // Save this file with another name.
   POPPLER_API int saveAs(GooString *name, PDFWriteMode mode=writeStandard);
+#ifdef WIN32
+  POPPLER_API int saveAs(wchar_t *name, PDFWriteMode mode=writeStandard);
+#endif
   // Save this file in the given output stream.
   POPPLER_API int saveAs(OutStream *outStr, PDFWriteMode mode=writeStandard);
   // Save this file with another name without saving changes
