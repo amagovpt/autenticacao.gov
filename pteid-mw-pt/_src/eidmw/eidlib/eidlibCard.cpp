@@ -299,7 +299,10 @@ int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coo
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
 
 	PDFSignature *pdf_sig = sig_handler.mp_signature;
-	pdf_sig->setVisibleCoordinates(page, coord_x, coord_y);
+
+	if (coord_x >= 0 && coord_y >= 0){
+		pdf_sig->setVisibleCoordinates(page, coord_x, coord_y);
+	}
 
 	rc = pcard->SignPDF(pdf_sig, location, reason, outfile_path);
 

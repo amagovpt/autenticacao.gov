@@ -445,10 +445,16 @@ PageServicesSignAdvancedForm {
                         var reason = ""
                         var location = ""
                         var isSmallSignature = ""
-                        var coord_x = propertyPDFPreview.propertyCoordX
-                        //coord_y must be the lower left corner of the signature rectangle
-                        var coord_y = propertyPDFPreview.propertyCoordY
+                        if(propertyCheckSignShow.checked){
+                            var coord_x = propertyPDFPreview.propertyCoordX
 
+                            //coord_y must be the lower left corner of the signature rectangle
+
+                            var coord_y = propertyPDFPreview.propertyCoordY
+                        }else{
+                            var coord_x  = -1
+                            var coord_y  = -1
+                        }
                         console.log("Output filename: " + outputFile)
                         console.log("Signing in position coord_x: " + coord_x
                                     + " and coord_y: "+coord_y)
@@ -886,11 +892,15 @@ PageServicesSignAdvancedForm {
                 var reason = propertyTextFieldReason.text
                 var location = propertyTextFieldLocal.text
                 var isSmallSignature = propertyCheckSignReduced.checked
-                var coord_x = propertyPDFPreview.propertyCoordX
 
-                //coord_y must be the lower left corner of the signature rectangle
-
-                var coord_y = propertyPDFPreview.propertyCoordY
+                if(propertyCheckSignShow.checked){
+                    var coord_x = propertyPDFPreview.propertyCoordX
+                    //coord_y must be the lower left corner of the signature rectangle
+                    var coord_y = propertyPDFPreview.propertyCoordY
+                }else{
+                    var coord_x  = -1
+                    var coord_y  = -1
+                }
 
                 console.log("Output filename: " + outputFile)
                 console.log("Signing in position coord_x: " + coord_x
@@ -913,6 +923,7 @@ PageServicesSignAdvancedForm {
                     gapi.startSigningSCAP(loadedFilePath, outputFile, page, coord_x, coord_y,
                                           0, attributeList)
                 }else{
+
                     gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
                                          reason, location, isTimestamp, isSmallSignature)
                 }
@@ -961,11 +972,14 @@ PageServicesSignAdvancedForm {
                 var reason = propertyTextFieldReason.text
                 var location = propertyTextFieldLocal.text
                 var isSmallSignature = propertyCheckSignReduced.checked
-                var coord_x = propertyPDFPreview.propertyCoordX
-
-                //coord_y must be the lower left corner of the signature rectangle
-
-                var coord_y = propertyPDFPreview.propertyCoordY
+                if(propertyCheckSignShow.checked){
+                    var coord_x = propertyPDFPreview.propertyCoordX
+                    //coord_y must be the lower left corner of the signature rectangle
+                    var coord_y = propertyPDFPreview.propertyCoordY
+                }else{
+                    var coord_x  = -1
+                    var coord_y  = -1
+                }
 
                 console.log("Output filename: " + outputFile)
                 console.log("Signing Batch in position coord_x: " + coord_x
@@ -1107,6 +1121,25 @@ PageServicesSignAdvancedForm {
     propertyCheckSignShow{
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSignShow = propertyCheckSignShow.checked
+            if(propertyCheckSignShow.checked){
+                propertyCheckLastPage.enabled = true
+                propertySpinBoxControl.enabled = true
+                propertySpinBoxControl.up.indicator.enabled = true
+                propertySpinBoxControl.down.indicator.enabled = true
+                propertySpinBoxControl.up.indicator.opacity = 1
+                propertySpinBoxControl.down.indicator.opacity = 1
+                propertyTextSpinBox.visible = true
+                propertyPageText.opacity = 1
+            }else{
+                propertyCheckLastPage.enabled = false
+                propertySpinBoxControl.enabled = false
+                propertySpinBoxControl.up.indicator.enabled = false
+                propertySpinBoxControl.down.indicator.enabled = false
+                propertySpinBoxControl.up.indicator.opacity = Constants.OPACITY_SIGNATURE_TEXT_DISABLED
+                propertySpinBoxControl.down.indicator.opacity = Constants.OPACITY_SIGNATURE_TEXT_DISABLED
+                propertyTextSpinBox.visible = false
+                propertyPageText.opacity = Constants.OPACITY_SIGNATURE_TEXT_DISABLED
+            }
         }
     }
 
