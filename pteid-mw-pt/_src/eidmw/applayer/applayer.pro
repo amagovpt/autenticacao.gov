@@ -89,12 +89,13 @@ HEADERS += \
 	PhotoPteid.h \
 	SecurityContext.h  \
 	APLPublicKey.h \
-    SigContainer.h \
+	SigContainer.h \
 	ScapSSLConnection.h \
 	XadesSignature.h \
 	TSAClient.h \
 	SODParser.h \ 
 	cJSON.h \
+	miniz.h \
  	SSLConnection.h \	 
 
 
@@ -124,6 +125,7 @@ SOURCES += \
 	SecurityContext.cpp \
 	sign-pkcs7.cpp \
 	cJSON.c \
+	miniz.c \
 	CRLFetcher.cpp \
 	PDFSignature.cpp \
 	SAM.cpp \
