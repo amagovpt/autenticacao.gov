@@ -75,134 +75,33 @@ static const char *SIGCONTAINER_README=
 "Xades / Xades-T" NL
 "http://www.w3.org/TR/XAdES" NL;
 
-/*
 
-	Container::Container(const char *zip_path)
+	char *readFile(const char *path, int *size)
 	{
-	  memset(&zip_archive, 0, sizeof(zip_archive));
-	  mz_bool status = mz_zip_reader_init_file(&zip_archive, zip_path, 0);
-	  if (!status)
-	     MWLOG(LEV_ERROR, MOD_APL, L"Error in mz_zip_reader_init_file!");
+	#ifdef WIN32
+		std::wstring utf16FileName = utilStringWiden(std::string(path));
+		std::ifstream file(utf16FileName, std::ios::binary | std::ios::ate);
+	#else
+		std::ifstream file(path, std::ios::binary | std::ios::ate);
+	#endif
+		char * in;
 
-	}
-
-	Container::~Container()
-	{
-		//Close the zip file and other buffers
-		mz_zip_reader_end(&zip_archive);
-
-	}
-
-	CByteArray &Container::ExtractFile(const char *entry)
-	{
-		void *p;
-		size_t uncompressed_size = 0;
-		CByteArray *ba = new CByteArray();
-		p = mz_zip_reader_extract_file_to_heap(&zip_archive, entry, &uncompressed_size, 0);
-		if (!p)
+		if (file.is_open())
 		{
-			MWLOG(LEV_ERROR, MOD_APL, "Error in ExtractFile() %s", entry);
-			return *ba;
+			*size = file.tellg();
+			in = (char *)malloc(*size);
+			file.seekg(0, std::ios::beg);
+			file.read(in, *size);
+		}
+		else
+		{
+			MWLOG(LEV_ERROR, MOD_APL, "SigContainer::readFile() Error opening file %s", path);
+			return NULL;
 		}
 
-		ba->Append ((const unsigned char *)p, uncompressed_size);
-		zip_archive.m_pFree(zip_archive.m_pAlloc_opaque, p);
-
-		return *ba;
+		file.close();
+		return in;
 	}
-	
-	CByteArray& Container::ExtractSignature()
-	{
-		return ExtractFile(SIG_INTERNAL_PATH);
-	}
-
-	CByteArray& Container::ExtractTimestamp()
-	{
-		return ExtractFile(TS_INTERNAL_PATH);
-	}
-
-	tHashedFile** Container::getHashes(int *pn_files)
-	{
-		unsigned char out[20];
-		int i;
-		int c= 0;
-		void *p;
-
-		int n_files = mz_zip_reader_get_num_files(&zip_archive);
-		tHashedFile **hashes = new tHashedFile*[n_files];
-
-		for (i = 0; i < n_files; i++)
-		{
-			size_t uncomp_size = 0;
-			mz_zip_archive_file_stat file_stat;
-			memset(out, 0, 20);
-			if (!mz_zip_reader_file_stat(&zip_archive, i, &file_stat))
-			{
-				fprintf(stderr, "E: mz_zip_reader_file_stat() failed!\n");
-				mz_zip_reader_end(&zip_archive);
-				continue;
-			}
-			// Exclude from signed file checking the Signature itself
-			// and the README file that gets added to all signed containers
-			// and the "workaround timestamp response" file
-			if (strstr(file_stat.m_filename, "META-INF") == 0
-				&& strcmp(file_stat.m_filename, "README.txt") != 0)
-			{
-				p = mz_zip_reader_extract_file_to_heap(&zip_archive,file_stat.m_filename, &uncomp_size, 0);
-				if (!p)
-				{
-					fprintf(stderr, "E: mz_zip_reader_extract_file_to_heap() failed!\n");
-					mz_zip_reader_end(&zip_archive);
-					continue;
-				}
-
-				CByteArray* ba = new CByteArray();
-
-				SHA1((unsigned char *)p, uncomp_size, out);
-				ba->Append(out, 20);
-				tHashedFile *t = new tHashedFile();
-
-				t->hash = ba;
-				t->URI = new std::string(file_stat.m_filename);
-				hashes[c] = t;
-				c++;
-
-				//Cleanup each read file buffer
-				free(p);
-			}
-		}
-		hashes[c] = NULL;
-		*pn_files = n_files-1;
-		return hashes;
-	}
-	*/
-
-char *readFile(const char *path, int *size)
-{
-#ifdef WIN32
-	std::wstring utf16FileName = utilStringWiden(std::string(path));
-	std::ifstream file(utf16FileName, std::ios::binary | std::ios::ate);
-#else
-	std::ifstream file(path, std::ios::binary | std::ios::ate);
-#endif
-	char * in;
-
-	if (file.is_open())
-	{
-		*size = file.tellg();
-		in = (char *)malloc(*size);
-		file.seekg(0, std::ios::beg);
-		file.read(in, *size);
-	}
-	else
-	{
-		MWLOG(LEV_ERROR, MOD_APL, "SigContainer::readFile() Error opening file %s", path);
-		return NULL;
-	}
-
-	file.close();
-	return in;
-}
 
 	void AddReadMe(mz_zip_archive *pZip)
 	{
@@ -291,7 +190,7 @@ char *readFile(const char *path, int *size)
 
 		//Add the signature file to the container
 
-		status = mz_zip_writer_add_mem(&pZip, SIG_INTERNAL_PATH, sig.GetBytes(),	sig.Size(), MZ_BEST_COMPRESSION);
+		status = mz_zip_writer_add_mem(&pZip, SIG_INTERNAL_PATH, sig.GetBytes(), sig.Size(), MZ_BEST_COMPRESSION);
 		if (!status)
 		{
 			MWLOG(LEV_ERROR, MOD_APL, L"mz_zip_add_mem_to_archive_file_in_place failed for the signature file");
