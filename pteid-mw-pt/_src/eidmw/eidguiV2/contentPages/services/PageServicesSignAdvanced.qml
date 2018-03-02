@@ -1321,7 +1321,6 @@ PageServicesSignAdvancedForm {
 
                     if(propertyRadioButtonPADES.checked){
                         propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
-                        propertyFileDialogBatchOutput.folder = "file://" + outputFile
                         propertyFileDialogBatchOutput.open()
                     }else{
 
