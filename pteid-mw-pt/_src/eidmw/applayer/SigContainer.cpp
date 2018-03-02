@@ -75,6 +75,8 @@ static const char *SIGCONTAINER_README=
 "Xades / Xades-T" NL
 "http://www.w3.org/TR/XAdES" NL;
 
+/*
+
 	Container::Container(const char *zip_path)
 	{
 	  memset(&zip_archive, 0, sizeof(zip_archive));
@@ -108,34 +110,7 @@ static const char *SIGCONTAINER_README=
 
 		return *ba;
 	}
-
-	char *readFile(const char *path, int *size)
-	{
-#ifdef WIN32
-		std::wstring utf16FileName = utilStringWiden(std::string(path));
-		std::ifstream file(utf16FileName, std::ios::binary | std::ios::ate);
-#else
-		std::ifstream file(path, std::ios::binary|std::ios::ate);
-#endif
-		char * in;
-
-		if (file.is_open())
-		{
-			*size = file.tellg();
-			in = (char *)malloc(*size);
-			file.seekg(0, std::ios::beg);
-			file.read (in, *size);
-		}
-		else
-		{
-			MWLOG(LEV_ERROR, MOD_APL, "SigContainer::readFile() Error opening file %s", path);
-			return NULL;
-		}
-
-		file.close();
-		return in;
-	}
-
+	
 	CByteArray& Container::ExtractSignature()
 	{
 		return ExtractFile(SIG_INTERNAL_PATH);
@@ -200,6 +175,34 @@ static const char *SIGCONTAINER_README=
 		*pn_files = n_files-1;
 		return hashes;
 	}
+	*/
+
+char *readFile(const char *path, int *size)
+{
+#ifdef WIN32
+	std::wstring utf16FileName = utilStringWiden(std::string(path));
+	std::ifstream file(utf16FileName, std::ios::binary | std::ios::ate);
+#else
+	std::ifstream file(path, std::ios::binary | std::ios::ate);
+#endif
+	char * in;
+
+	if (file.is_open())
+	{
+		*size = file.tellg();
+		in = (char *)malloc(*size);
+		file.seekg(0, std::ios::beg);
+		file.read(in, *size);
+	}
+	else
+	{
+		MWLOG(LEV_ERROR, MOD_APL, "SigContainer::readFile() Error opening file %s", path);
+		return NULL;
+	}
+
+	file.close();
+	return in;
+}
 
 	void AddReadMe(mz_zip_archive *pZip)
 	{

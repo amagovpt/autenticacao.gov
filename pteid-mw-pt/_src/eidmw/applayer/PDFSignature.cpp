@@ -37,7 +37,7 @@ namespace eIDMW
 
 		return new PDFDoc((wchar_t *)utf16Filename.c_str(), utf16Filename.size());
 #else
-		return new PDFDoc(new GooString(pdf_file_path));
+		return new PDFDoc(new GooString(utf8Filepath));
 #endif
 	}
 

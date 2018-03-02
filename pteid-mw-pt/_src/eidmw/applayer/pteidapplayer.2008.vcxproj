@@ -193,6 +193,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>PTEID_35;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -230,6 +231,7 @@
     <ClCompile Include="CRLFetcher.cpp" />
     <ClCompile Include="cryptoFramework.cpp" />
     <ClCompile Include="cryptoFwkPteid.cpp" />
+    <ClCompile Include="miniz.c" />
     <ClCompile Include="MiscUtil.cpp" />
     <ClCompile Include="OCSP.cpp" />
     <ClCompile Include="PDFSignature.cpp" />
