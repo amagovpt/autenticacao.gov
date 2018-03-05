@@ -138,7 +138,7 @@ bool CMDServices::init(int recv_timeout, int send_timeout,
     setUserId( STR_EMPTY );
 
     //Don't change this: it serves as authentication for the service
-    setApplicationID( std::string( "264af13f-c287-4703-9add-10a303b951a3" ) );
+    setApplicationID(std::string("b826359c-06f8-425e-8ec3-50a97a418916"));
 
     //Define appropriate network timeouts
     sp->recv_timeout = recv_timeout;
