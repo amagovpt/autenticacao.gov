@@ -106,7 +106,7 @@ namespace eIDMW
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_SCAP_HOST       =       {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_SCAP_HOST, L"scap.autenticacao.gov.pt" };
   
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_SCAP_PORT       =      {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_SCAP_PORT, L"443" };
-  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_HOST       =       {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_CMD_HOST, L"dev.cmd.autenticacao.gov.pt"};
+  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_HOST       =       {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_CMD_HOST, L"preprod.cmd.autenticacao.gov.pt"};
 
   const struct CConfig::Param_Num CConfig::EIDMW_CONFIG_PARAM_GENERAL_SHOW_JAVA_APPS          =       {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_SHOW_JAVA_APPS, 0};
 
