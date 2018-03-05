@@ -369,7 +369,7 @@ int CMDServices::GetCertificate( std::string in_userId
 _ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp , char *endpoint,
                                                 std::string in_applicationID
                                               , unsigned char *in_hash
-                                              , std::string in_pin
+                                              , std::string *in_pin
                                               , std::string *in_userId) {
     //SOAP_ENV__Header *soapHeader = soap_new_SOAP_ENV__Header( sp );
     //soapHeader->wsa__To = endpoint;
@@ -385,7 +385,7 @@ _ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp , char *endpoint
     int hash_len = 51;
     soapBody->Hash          = soap_new_set_xsd__base64Binary(sp, in_hash, hash_len,
                                              NULL, NULL, NULL);  //encode_base64( sp, in_hash );
-    soapBody->Pin           = &in_pin;  //encode_base64(sp, in_pin );
+    soapBody->Pin           = in_pin;
     soapBody->UserId        = in_userId;
 
     _ns2__CCMovelSign *send = soap_new_set__ns2__CCMovelSign( sp, soapBody );
@@ -455,7 +455,7 @@ int CMDServices::CCMovelSign( unsigned char * in_hash, std::string in_pin ) {
     _ns2__CCMovelSign *send = get_CCMovelSignRequest( sp
                                                     , (char*)endPoint
                                                     , getApplicationID()
-                                                    , in_hash, in_pin
+                                                    , in_hash, &in_pin
                                                     , &in_userId );
     if ( send == NULL ){
         MWLOG_ERR( logBuf, "NULL send parameters" );

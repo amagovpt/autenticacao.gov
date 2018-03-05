@@ -81,7 +81,7 @@ class CMDServices{
                                                  , char *endpoint
                                                  , std::string in_applicationID
                                                  , unsigned char * in_hash
-                                                 , std::string in_pin
+                                                 , std::string *in_pin
                                                  , std::string *in_userId );
 
         int checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response );
