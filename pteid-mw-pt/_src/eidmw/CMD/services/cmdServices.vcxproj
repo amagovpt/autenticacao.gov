@@ -226,8 +226,9 @@
   <ItemGroup>
     <ClCompile Include="cmdServices.cpp" />
     <ClCompile Include="CMDSignature.cpp" />
+    <ClCompile Include="duration.cpp" />
     <ClCompile Include="soapC.cpp" />
-    <ClCompile Include="soapWSHttpBinding_USCORECCMovelSignatureProxy.cpp" />
+    <ClCompile Include="soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp" />
     <ClCompile Include="stdsoap2.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -237,7 +238,7 @@
     <ClInclude Include="CMDSignature.h" />
     <ClInclude Include="soapH.h" />
     <ClInclude Include="soapStub.h" />
-    <ClInclude Include="soapWSHttpBinding_USCORECCMovelSignatureProxy.h" />
+    <ClInclude Include="soapBasicHttpBinding_USCORECCMovelSignatureProxy.h" />
     <ClInclude Include="stdsoap2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

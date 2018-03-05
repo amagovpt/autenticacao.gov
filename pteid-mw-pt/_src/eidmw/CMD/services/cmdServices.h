@@ -72,8 +72,7 @@ class CMDServices{
         std::string m_userId;
         const char *m_endpoint;
 
-        bool init( int recv_timeout, int send_timeout
-                          , int connect_timeout, short mustUnderstand );
+        bool init(int recv_timeout, int send_timeout, int connect_timeout, short mustUnderstand);
 
         // CCMovelSign
         int CCMovelSign( unsigned char * in_hash, std::string in_pin );

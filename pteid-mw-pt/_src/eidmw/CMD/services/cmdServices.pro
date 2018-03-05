@@ -22,6 +22,8 @@ DEPENDPATH += .
 
 macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2j/lib/ /Users/yosemite/gsoap-2.8.30/gsoap/libgsoapssl++.a -lz -lssl -lcrypto
 
+QMAKE_CXXFLAGS += -fvisibility=hidden
+
 LIBS += -L./../../lib -l$${COMMONLIB} -l$${APPLAYERLIB} -l$${CARDLAYERLIB} -lpteidlib
 INCLUDEPATH += . ../../eidlib/ ../../common ../../applayer ../../cardlayer
 macx:INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2j/include/
@@ -41,7 +43,9 @@ HEADERS += \
 
 SOURCES += \
             soapC.cpp \
-            soapWSHttpBinding_USCORECCMovelSignatureProxy.cpp \
+            duration.cpp \
+#            soapWSHttpBinding_USCORECCMovelSignatureProxy.cpp \
+	    soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp \
             cmdServices.cpp \
             CMDSignature.cpp
 

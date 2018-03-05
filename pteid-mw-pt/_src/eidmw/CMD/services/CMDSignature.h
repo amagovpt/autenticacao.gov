@@ -16,7 +16,7 @@ using namespace eIDMW;
 #define PTEIDCMD_API  __declspec(dllimport)
 #endif
 #else
-#define PTEIDCMD_API
+#define PTEIDCMD_API __attribute__ ((visibility ("default")))
 #endif
 
 
