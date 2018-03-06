@@ -388,13 +388,14 @@ Item {
                     }
                     Rectangle {
                         id: rectPreCustomImage
-                        width: 185
-                        height: 41
+                        width: 189
+                        height: 45
                         anchors.top: sigLocationTextCustom.bottom
                         anchors.topMargin: parent.height * 0.1
                         x: 2
                         visible: true
-                        color: Constants.COLOR_MAIN_SOFT_GRAY
+                        border.width : 2
+                        border.color : Constants.COLOR_MAIN_SOFT_GRAY
 
                         Image {
                             id: imagePreCustom

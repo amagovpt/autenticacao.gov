@@ -136,7 +136,7 @@ PageDefinitionsSignatureForm {
                 filesModel.append({
                                       "fileUrl": path
                                   })
-                var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpeg"
+                var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.png"
                 propertyImagePreCustom.grabToImage(function(result){
                     if (!result.saveToFile(urlCustomImage)){
                         console.error('Unknown error saving to',urlCustomImage);
@@ -161,7 +161,7 @@ PageDefinitionsSignatureForm {
                                   "fileUrl": path
                               })
 
-            var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpeg"
+            var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.png"
             propertyImagePreCustom.grabToImage(function(result){
                 if (!result.saveToFile(urlCustomImage)){
                     console.error('Unknown error saving to',urlCustomImage);
@@ -237,7 +237,7 @@ PageDefinitionsSignatureForm {
             propertyRadioButtonCustom.checked = false
         }
         if(gapi.customSignImageExist()){
-            var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpeg"
+            var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.png"
             if (Qt.platform.os === "windows") {
                 urlCustomImage = "file:///"+urlCustomImage
             }else{

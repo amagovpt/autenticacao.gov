@@ -872,7 +872,7 @@ PageServicesSignSimpleForm {
                     propertySpinBoxControl.to = pageCount
                     propertyPDFPreview.propertyBackground.cache = false
                     propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
-                    var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpeg"
+                    var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.png"
                     if(gapi.getUseCustomSignature() && gapi.customSignImageExist()){
                         if (Qt.platform.os === "windows") {
                             urlCustomImage = "file:///"+urlCustomImage

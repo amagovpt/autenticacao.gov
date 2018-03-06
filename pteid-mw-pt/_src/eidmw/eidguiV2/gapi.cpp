@@ -2239,7 +2239,7 @@ QString GAPI::getCachePath(void){
 }
 
 bool GAPI::customSignImageExist(void){
-    QString path = m_Settings.getPteidCachedir()+"/CustomSignPicture.jpeg";
+    QString path = m_Settings.getPteidCachedir()+"/CustomSignPicture.png";
     QFileInfo check_file(path);
     // check if file exists and if yes: Is it really a file and no directory?
     if (check_file.exists()) {
@@ -2250,22 +2250,27 @@ bool GAPI::customSignImageExist(void){
 }
 
 void GAPI::customSignRemove(void){
-    QString path = m_Settings.getPteidCachedir()+"/CustomSignPicture.jpeg";
+    QString path = m_Settings.getPteidCachedir()+"/CustomSignPicture.png";
     QFile file (path);
     file.remove();
 }
 
 bool GAPI::useCustomSignature(void){
     // Detect Custom Signature Image
-    m_custom_image = QImage(m_Settings.getPteidCachedir()+"/CustomSignPicture.jpeg");
+    m_custom_image = QImage(m_Settings.getPteidCachedir()+"/CustomSignPicture.png");
     if (m_Settings.getUseCustomSignature() && !m_custom_image.isNull())
     {
         qDebug() << "Using Custom Picture to CC sign";
         QBuffer buffer(&m_jpeg_scaled_data);
         buffer.open(QIODevice::WriteOnly);
         //Save the generated image as high-quality JPEG data
-        QImage generated_img (m_Settings.getPteidCachedir()+"/CustomSignPicture.jpeg");
-        generated_img.save(&buffer, "JPG", 100);
+        QImage generated_img (m_Settings.getPteidCachedir()+"/CustomSignPicture.png");
+        QImage final_img(generated_img.size(),QImage::Format_RGB32);
+        // Fill background with white
+        final_img.fill(QColor(Qt::white).rgb());
+        QPainter painter(&final_img);
+        painter.drawImage(0, 0, generated_img);
+        final_img.save(&buffer, "JPG", 100);
         return true;
     }else{
         qDebug() << "Using default Picture to CC sign";
