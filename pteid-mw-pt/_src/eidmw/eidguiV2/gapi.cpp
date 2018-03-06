@@ -679,6 +679,9 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QString loaded
     if (params.isSmallSignature > 0)
         cmd_pdfSignature->enableSmallSignatureFormat();
 
+    if(useCustomSignature())
+        cmd_pdfSignature->setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
+
     cmd_signature->set_pdf_handler(cmd_pdfSignature);
     QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, params);
 }
