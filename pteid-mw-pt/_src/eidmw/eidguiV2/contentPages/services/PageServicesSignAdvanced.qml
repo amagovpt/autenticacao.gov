@@ -472,6 +472,8 @@ PageServicesSignAdvancedForm {
                         textFieldMobileNumber.text = ""
                         textFieldPin.text = ""
                         dialogSignCMD.close()
+                        buttonCMDProgressConfirm.visible = false
+                        buttonCMDProgressConfirm.text = qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
                         dialogCMDProgress.open()
                     }
                 }
