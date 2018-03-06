@@ -375,7 +375,7 @@ PageServicesSignSimpleForm {
                     enabled: textFieldMobileNumber.length !== 0 && textFieldPin.length !== 0 ? true : false
                     onClicked: {
                         var loadedFilePath = filesModel.get(0).fileUrl
-                        var isTimestamp = propertySwitchSignTemp.checked
+                        var isTimestamp = false
                         var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
                         if (Qt.platform.os === "windows") {
                             outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
@@ -387,9 +387,9 @@ PageServicesSignSimpleForm {
                         var page = 1
                         propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
                                                     page = propertySpinBoxControl.value
-                        var reason = propertyTextFieldReason.text
-                        var location = propertyTextFieldLocal.text
-                        var isSmallSignature = propertyCheckSignReduced.checked
+                        var reason = ""
+                        var location = ""
+                        var isSmallSignature = false
                         var coord_x = propertyPDFPreview.propertyCoordX
                         //coord_y must be the lower left corner of the signature rectangle
                         var coord_y = propertyPDFPreview.propertyCoordY
