@@ -430,7 +430,7 @@ PageServicesSignAdvancedForm {
                     enabled: textFieldMobileNumber.length !== 0 && textFieldPin.length !== 0 ? true : false
                     onClicked: {
                         var loadedFilePath = filesModel.get(0).fileUrl
-                        var isTimestamp = ""
+                        var isTimestamp = propertySwitchSignTemp.checked
                         var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
                         if (Qt.platform.os === "windows") {
                             outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
@@ -442,18 +442,15 @@ PageServicesSignAdvancedForm {
                         var page = 1
                         propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
                                                     page = propertySpinBoxControl.value
-                        var reason = ""
-                        var location = ""
-                        var isSmallSignature = ""
+                        var reason = propertyTextFieldReason.text
+                        var location = propertyTextFieldLocal.text
+                        var isSmallSignature = propertyCheckSignReduced.checked
+                        var coord_x = -1
+                        var coord_y = -1
                         if(propertyCheckSignShow.checked){
-                            var coord_x = propertyPDFPreview.propertyCoordX
-
+                            coord_x = propertyPDFPreview.propertyCoordX
                             //coord_y must be the lower left corner of the signature rectangle
-
-                            var coord_y = propertyPDFPreview.propertyCoordY
-                        }else{
-                            var coord_x  = -1
-                            var coord_y  = -1
+                            coord_y = propertyPDFPreview.propertyCoordY
                         }
                         console.log("Output filename: " + outputFile)
                         console.log("Signing in position coord_x: " + coord_x
@@ -893,13 +890,12 @@ PageServicesSignAdvancedForm {
                 var location = propertyTextFieldLocal.text
                 var isSmallSignature = propertyCheckSignReduced.checked
 
+                var coord_x = -1
+                var coord_y = -1
                 if(propertyCheckSignShow.checked){
-                    var coord_x = propertyPDFPreview.propertyCoordX
+                    coord_x = propertyPDFPreview.propertyCoordX
                     //coord_y must be the lower left corner of the signature rectangle
-                    var coord_y = propertyPDFPreview.propertyCoordY
-                }else{
-                    var coord_x  = -1
-                    var coord_y  = -1
+                    coord_y = propertyPDFPreview.propertyCoordY
                 }
 
                 console.log("Output filename: " + outputFile)
@@ -972,13 +968,12 @@ PageServicesSignAdvancedForm {
                 var reason = propertyTextFieldReason.text
                 var location = propertyTextFieldLocal.text
                 var isSmallSignature = propertyCheckSignReduced.checked
+                var coord_x = -1
+                var coord_y = -1
                 if(propertyCheckSignShow.checked){
-                    var coord_x = propertyPDFPreview.propertyCoordX
+                    coord_x = propertyPDFPreview.propertyCoordX
                     //coord_y must be the lower left corner of the signature rectangle
-                    var coord_y = propertyPDFPreview.propertyCoordY
-                }else{
-                    var coord_x  = -1
-                    var coord_y  = -1
+                    coord_y = propertyPDFPreview.propertyCoordY
                 }
 
                 console.log("Output filename: " + outputFile)
