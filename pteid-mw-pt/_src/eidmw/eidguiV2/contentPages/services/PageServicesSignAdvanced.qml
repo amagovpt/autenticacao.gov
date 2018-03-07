@@ -82,7 +82,7 @@ PageServicesSignAdvancedForm {
             buttonCMDProgressConfirm.text = qsTranslate("Popup File","STR_POPUP_FILE_OPEN")
         }
         onSignalPdfSignSucess: {
-            mainFormID.opacity = 0.5
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             signsuccess_dialog.visible = true
             propertyBusyIndicator.running = false
             // test time stamp
@@ -416,7 +416,7 @@ PageServicesSignAdvancedForm {
                     font.capitalization: Font.MixedCase
                     onClicked: {
                         dialogSignCMD.close()
-                        mainFormID.opacity = 1.0
+                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     }
                 }
                 Button {
@@ -478,6 +478,9 @@ PageServicesSignAdvancedForm {
                     }
                 }
             }
+        }
+        onRejected:{
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
     }
 
@@ -618,7 +621,7 @@ PageServicesSignAdvancedForm {
                 onClicked: {
                     dialogCMDProgress.close()
                     rectReturnCode.visible = false
-                    mainFormID.opacity = 1.0
+                    mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                 }
             }
             Button {
@@ -649,10 +652,13 @@ PageServicesSignAdvancedForm {
                         }
                         console.log("Open Url Externally: " + propertyOutputSignedFile)
                         Qt.openUrlExternally(propertyOutputSignedFile)
-                        mainFormID.opacity = 1.0
+                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     }
                 }
             }
+        }
+        onRejected:{
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
     }
 
@@ -732,7 +738,7 @@ PageServicesSignAdvancedForm {
                     font.capitalization: Font.MixedCase
                     onClicked: {
                         signsuccess_dialog.close()
-                        mainFormID.opacity = 1.0
+                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     }
                 }
                 Button {
@@ -752,10 +758,13 @@ PageServicesSignAdvancedForm {
                         console.log("Open Url Externally: " + propertyOutputSignedFile)
                         Qt.openUrlExternally(propertyOutputSignedFile)
                         signsuccess_dialog.close()
-                        mainFormID.opacity = 1.0
+                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     }
                 }
             }
+        }
+        onRejected:{
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
     }
 
@@ -944,7 +953,7 @@ PageServicesSignAdvancedForm {
     }
     propertyFileDialogCMDOutput {
         onAccepted: {
-            mainFormID.opacity = 0.5
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             dialogSignCMD.open()
         }
     }

@@ -101,7 +101,7 @@ Load language error. Please reinstall the application"
               //  console.log("Reader List " + "i = " + i +" : "+ gapi.getRetReaderList()[i])
                 comboBoxReader.model = gapi.getRetReaderList()
             }
-            mainFormID.opacity = 0.5
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             readerContext.open()
         }
     }
@@ -191,7 +191,7 @@ Load language error. Please reinstall the application"
             console.log("propertyComboBoxReader onActivated index = " + comboBoxReader.currentIndex)
             gapi.setReaderByUser(comboBoxReader.currentIndex)
 
-            mainFormID.opacity = 1
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             mainFormID.propertyPageLoader.source = mainFormID.propertyPageLoader.source
 
             // Force reload page loader
@@ -200,7 +200,7 @@ Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.source = temp
         }
         onRejected: {
-            mainFormID.opacity = 1
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
     }
 

@@ -276,7 +276,7 @@ PageCardAdressForm {
             }
 
             var triesLeft = gapi.verifyAddressPin(textFieldPin.text)
-            mainFormID.opacity = 1.0
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             if (triesLeft === 3) {
                 propertyBusyIndicator.running = true
                 gapi.startReadingAddress()
@@ -295,7 +295,7 @@ PageCardAdressForm {
             }
         }
         onRejected: {
-            mainFormID.opacity = 1.0
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
     }
 
@@ -429,7 +429,7 @@ PageCardAdressForm {
                 font.capitalization: Font.MixedCase
                 onClicked: {
                     dialogConfirmOfAddress.close()
-                    mainFormID.opacity = 1.0
+                    mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                 }
             }
             Button {
@@ -450,6 +450,9 @@ PageCardAdressForm {
                     dialogConfirmOfAddressProgress.open()
                 }
             }
+        }
+        onRejected:{
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
     }
 
@@ -542,16 +545,19 @@ PageCardAdressForm {
                 font.capitalization: Font.MixedCase
                 visible: progressBarIndeterminate.visible ? false : true
                 onClicked: {
-                    mainFormID.opacity = 1.0
+                    mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     dialogConfirmOfAddressProgress.close()
                 }
             }
+        }
+        onRejected:{
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
     }
 
     propertyButtonConfirmOfAddress{
         onClicked: {
-            mainFormID.opacity = 0.5
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             dialogConfirmOfAddress.open()
         }
 

@@ -30,6 +30,10 @@ var TITLE_BAR_H_ICON_SPACE = 30
 // Frame detection
 var FRAME_WINDOW_SIZE = 20
 
+// Opacity Main vs Popups Focus
+var OPACITY_POPUP_FOCUS = 0.5
+var OPACITY_MAIN_FOCUS = 1.0
+
 // Views Relative Size
 var MAIN_MENU_VIEW_RELATIVE_SIZE = 0.25
 var SUB_MENU_VIEW_RELATIVE_SIZE = 0.25

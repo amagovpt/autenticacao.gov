@@ -321,7 +321,7 @@ PageSecurityPinCodesForm {
             }
 
             dialogTestPin.visible = false
-            mainFormID.opacity = 1.0
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyBusyIndicator.running = false
 
             if (triesLeft === 3) {
@@ -347,7 +347,7 @@ PageSecurityPinCodesForm {
             }
         }
         onRejected: {
-            mainFormID.opacity = 1.0
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
     }
 
@@ -565,7 +565,7 @@ PageSecurityPinCodesForm {
                 }
 
                 dialogTestPin.visible = false
-                mainFormID.opacity = 1.0
+                mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                 propertyBusyIndicator.running = false
 
                 if (triesLeft === 3) {
@@ -597,7 +597,7 @@ PageSecurityPinCodesForm {
             }
         }
         onRejected: {
-            mainFormID.opacity = 1.0
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
     }
 
@@ -624,7 +624,7 @@ PageSecurityPinCodesForm {
                                             + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
                 }
             }else{
-                mainFormID.opacity = 0.5
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 dialogModifyPin.propertyLabelModifyTextTitle.text = qsTranslate("Popup PIN","STR_PIN_AUTH_MODIFY")
                 dialogModifyPin.propertyTextFieldPinCurrent.text = ""
                 dialogModifyPin.propertyTextFieldPinNew.text = ""
@@ -656,7 +656,7 @@ PageSecurityPinCodesForm {
                                             + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
                 }
             }else{
-                mainFormID.opacity = 0.5
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 dialogTestPin.propertyLabelTextTitle.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY_AUTH")
                 dialogTestPin.propertyTextTypePin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_AUTH")
                 dialogTestPin.propertyTextFieldPin.text = ""
@@ -689,7 +689,7 @@ PageSecurityPinCodesForm {
                                             + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
                 }
             }else{
-                mainFormID.opacity = 0.5
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 dialogModifyPin.propertyLabelModifyTextTitle.text = qsTranslate("Popup PIN","STR_PIN_SIGN_MODIFY")
                 dialogModifyPin.propertyTextFieldPinCurrent.text = ""
                 dialogModifyPin.propertyTextFieldPinNew.text = ""
@@ -723,7 +723,7 @@ PageSecurityPinCodesForm {
                                             + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
                 }
             }else{
-                mainFormID.opacity = 0.5
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 dialogTestPin.propertyLabelTextTitle.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY_SIGN")
                 dialogTestPin.propertyTextTypePin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SIGN")
                 dialogTestPin.propertyTextFieldPin.text = ""
@@ -754,7 +754,7 @@ PageSecurityPinCodesForm {
                             + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
                 }
             }else{
-                mainFormID.opacity = 0.5
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 dialogModifyPin.propertyLabelModifyTextTitle.text = qsTranslate("Popup PIN","STR_PIN_ADDRESS_MODIFY")
                 dialogModifyPin.propertyTextFieldPinCurrent.text = ""
                 dialogModifyPin.propertyTextFieldPinNew.text = ""
@@ -787,7 +787,7 @@ PageSecurityPinCodesForm {
                             + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
                 }
             }else{
-                mainFormID.opacity = 0.5
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 dialogTestPin.propertyLabelTextTitle.text =
                         qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY_ADDRESS")
                 dialogTestPin.propertyTextTypePin.text =
