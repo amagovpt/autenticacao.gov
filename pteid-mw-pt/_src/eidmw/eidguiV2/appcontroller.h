@@ -32,6 +32,7 @@ public:
     }
 
 public slots:
+    void restoreScreen(void);
     Q_INVOKABLE QVariant getCursorPos();
     QString getAppVersion(void);
     bool isAnimationsEnabled(void);
@@ -116,6 +117,7 @@ protected:
     QTranslator m_translator;
 
 signals:
+    void signalRestoreWindows();
     void languageChanged();
     void signalLanguageChangedError();
     void signalAutoUpdateFail(int error_code);

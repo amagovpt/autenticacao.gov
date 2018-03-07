@@ -42,6 +42,12 @@ Window {
 
     Connections {
         target: controler
+        onSignalRestoreWindows: {
+            console.log("Signal onSignalRestoreWindows")
+            mainWindow.raise();
+            mainWindow.show();
+            mainWindow.activateWindow();
+        }
         onSignalLanguageChangedError: {
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                     "Erro / Error"

@@ -7,6 +7,7 @@
 #include "filesavedialog.h"
 #include "gapi.h"
 #include "eidlib.h"
+#include "singleapplication.h"
 
 using namespace eIDMW;
 
@@ -16,7 +17,7 @@ int main(int argc, char *argv[])
     bool test_mode = false;
     const char * default_sam_server = NULL;
 
-    QApplication app(argc, argv);
+    SingleApplication app(argc, argv);
 
     // Set app icon
     app.setWindowIcon(QIcon(":/favicon.ico"));
@@ -75,6 +76,13 @@ int main(int argc, char *argv[])
 
     // Load main QML file
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+
+    // Each starting instance will make the running instance to restore.
+    QObject::connect(
+        &app,
+        &SingleApplication::instanceStarted,
+        &controller,
+        &AppController::restoreScreen);
 
     retValue = app.exec();
 

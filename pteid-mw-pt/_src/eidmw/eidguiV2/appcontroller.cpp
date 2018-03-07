@@ -59,6 +59,10 @@ AppController::AppController(GUISettings& settings,QObject *parent) :
     qDebug() << "C++: AppController started. App version: " << m_Settings.getGuiVersion() +" - "+ SVN_REVISION_STR;
 }
 
+void AppController::restoreScreen(void){
+    emit signalRestoreWindows();
+}
+
 bool AppController::getTestMode(void){
     return m_Settings.getTestMode();
 }

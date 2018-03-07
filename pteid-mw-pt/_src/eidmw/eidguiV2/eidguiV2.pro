@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     scapcompanies.cpp \
     filesavedialog.cpp \
     genpur.cpp \
-    certificates.cpp
+    certificates.cpp \
+    singleapplication.cpp
 
 INCLUDEPATH += /usr/include/poppler/qt5/
 INCLUDEPATH += ../CMD/services
@@ -87,4 +88,6 @@ HEADERS += \
     scapsignature.h \
     Settings.h \
     genpur.h \
-    certificates.h
+    certificates.h \
+    singleapplication.h \
+    singleapplication_p.h
