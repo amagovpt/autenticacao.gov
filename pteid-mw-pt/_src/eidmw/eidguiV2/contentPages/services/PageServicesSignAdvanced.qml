@@ -837,7 +837,7 @@ PageServicesSignAdvancedForm {
                 filesModel.append({
                                       "fileUrl": path
                                   })
-                mainFormID.propertyBackupfilesModel.append({
+                propertyPageLoader.propertyBackupfilesModel.append({
                                       "fileUrl": path
                                   })
             }
