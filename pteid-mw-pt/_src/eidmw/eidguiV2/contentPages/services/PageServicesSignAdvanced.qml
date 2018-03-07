@@ -1458,6 +1458,12 @@ PageServicesSignAdvancedForm {
                         hoverEnabled : true
                         onClicked: {
                             console.log("Delete file index:" + index);
+                            for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
+                            {
+                                if(propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl
+                                        === filesModel.get(index).fileUrl)
+                                    propertyPageLoader.propertyBackupfilesModel.remove(index)
+                            }
                             filesModel.remove(index)
                         }
                     }
