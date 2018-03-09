@@ -80,6 +80,18 @@
     <ClCompile Include="certificates.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+	<ClCompile Include="GeneratedFiles\Debug\moc_singleapplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="singleapplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_singleapplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_singleapplication_p.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug\qrc_resources.cpp">
@@ -227,6 +239,12 @@
       <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="appcontroller.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+	<CustomBuild Include="singleapplication.h">
+      <Filter>Header Files\with QObject</Filter>
+    </CustomBuild>
+    <CustomBuild Include="singleapplication_p.h">
       <Filter>Generated Files</Filter>
     </CustomBuild>
   </ItemGroup>
