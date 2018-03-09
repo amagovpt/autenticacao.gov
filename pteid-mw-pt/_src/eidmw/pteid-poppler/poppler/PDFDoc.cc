@@ -186,7 +186,6 @@ PDFDoc::PDFDoc(GooString *fileNameA, GooString *ownerPassword,
 #ifdef _WIN32
 PDFDoc::PDFDoc(wchar_t *fileNameA, int fileNameLen, GooString *ownerPassword,
 	       GooString *userPassword, void *guiDataA) {
-  OSVERSIONINFO version;
   Object obj;
   int i;
 
@@ -205,22 +204,15 @@ PDFDoc::PDFDoc(wchar_t *fileNameA, int fileNameLen, GooString *ownerPassword,
 
 
   // try to open file
-  // NB: _wfopen is only available in NT
   struct _stat buf;
   int size;
-  version.dwOSVersionInfoSize = sizeof(version);
-  GetVersionEx(&version);
-  if (version.dwPlatformId == VER_PLATFORM_WIN32_NT) {
-    if (_wstat(fileNameU, &buf) == 0) {
+   
+  if (_wstat(fileNameU, &buf) == 0) {
       size = buf.st_size;
-    }
-    file = _wfopen(fileNameU, L"rb");
-  } else {
-    if (_stat(fileName->getCString(), &buf) == 0) {
-      size = buf.st_size;
-    }
-    file = fopen(fileName->getCString(), "rb");
+	  fileSize = size;
   }
+  file = _wfopen(fileNameU, L"rb");
+  
   if (!file) {
     error(errIO, -1, "Couldn't open file '{0:t}'", fileName);
     errCode = errOpenFile;
