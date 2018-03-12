@@ -1278,6 +1278,10 @@ Please specify .xml, .csv or .eid</source>
         <translation>O Cartão de Cidadão não se encontra ativo</translation>
     </message>
     <message>
+        <source>The Citizen Card is expired</source>
+        <translation>O Cartão de Cidadão encontra-se expirado</translation>
+    </message>
+    <message>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
