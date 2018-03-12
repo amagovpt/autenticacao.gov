@@ -1879,7 +1879,9 @@ void MainWnd::getCertStatusText(PTEID_CertifStatus certStatus, QString &strCertS
 	case PTEID_CERTIF_STATUS_VALID:
 		strCertStatus = tr("Valid");
 		break;
-	//TODO: Handle the network error with a different string such as "cant validate certificate status"
+	case PTEID_CERTIF_STATUS_EXPIRED:
+		strCertStatus = tr("Expired");
+		break;
 	case PTEID_CERTIF_STATUS_CONNECT:
 		strCertStatus = networkError;
 		break;

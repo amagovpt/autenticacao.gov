@@ -890,6 +890,10 @@ Please specify .xml, .csv or .eid</source>
         <translation>Revogado</translation>
     </message>
     <message>
+        <source>Expired</source>
+        <translation>Expirado</translation>
+    </message>
+    <message>
         <source>Inactive or Suspended</source>
         <translation>Inativo ou Suspenso</translation>
     </message>
