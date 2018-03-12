@@ -165,7 +165,6 @@
 		        <File Source="..\..\certs\CartaodeCidadao001.der" KeyPath="yes" />
 		        <File Source="..\..\certs\CartaodeCidadao002.der" />
             <File Source="..\..\certs\CartaodeCidadao003.der" />
-            <File Source="..\..\certs\CartaodeCidadao004.der" />
         <!--  <File Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" /> -->
 		        <File Source="..\..\certs\ECRaizEstado_MC.der" />
 		        <File Source="..\..\certs\Multicert_Root_01.der" />
