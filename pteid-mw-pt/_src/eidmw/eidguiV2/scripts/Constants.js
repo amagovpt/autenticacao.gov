@@ -18,6 +18,7 @@ var PTEID_CERTIF_STATUS_CONNECT = 3     /* Connection problem */
 var PTEID_CERTIF_STATUS_ISSUER = 4      /* An issuer is missing in the chain */
 var PTEID_CERTIF_STATUS_ERROR = 5       /* Error during validation */
 var PTEID_CERTIF_STATUS_VALID = 6       /* Valid certificate */
+var PTEID_CERTIF_STATUS_EXPIRED = 7       /* Expired certificate */
 
 // Screen Size
 var SCREEN_MINIMUM_WIDTH = 1024

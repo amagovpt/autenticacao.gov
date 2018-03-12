@@ -1113,7 +1113,12 @@
         <translation>Revoked</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="201"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="205"/>
+        <source>STR_STATUS_EXPIRED</source>
+        <translation>Expired</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="199"/>
         <source>STR_STATUS_SUSPENDED</source>
         <translation>Inactive or Suspended</translation>
     </message>

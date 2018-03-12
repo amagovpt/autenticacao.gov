@@ -212,6 +212,9 @@ PageSecurityCertificatesForm {
         case Constants.PTEID_CERTIF_STATUS_VALID:
             strCertStatus = qsTr("STR_STATUS_VALID")
             break;
+        case Constants.PTEID_CERTIF_STATUS_EXPIRED:
+            strCertStatus = qsTr("STR_STATUS_EXPIRED")
+            break;
         default:
             strCertStatus = qsTr("STR_STATUS_UNKNOWN");
             break;
