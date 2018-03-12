@@ -403,7 +403,7 @@ public:
 		m_PersoDataInfo.Reset();
 	}
 
-	bool isExpiredDate( const char *in_strDate ){
+	bool isExpiredDate(const char *in_strDate) {
         if ( in_strDate == NULL ) return false;
 
         QDate qDate = QDate::fromString( in_strDate, "dd MM yyyy" );
@@ -411,7 +411,7 @@ public:
 
         if ( curDate > qDate ) return true;
         return false;
-    }/* isExpiredDate() */
+    }
 
 	//----------------------------------------------
 	// retrieve data from EID card
@@ -462,10 +462,11 @@ public:
 
 		m_Fields[LOCALOFREQUEST]			= pteid_eid.getLocalofRequest();
 
-		if ( !Card.isActive() ){
+		if ( !Card.isActive() ) {
            m_Fields[VALIDATION]	= "The Citizen Card is not active";
             m_Fields[LINK_TO_CERT] = "";
-		} else{
+		}
+		else {
             bool bIsExpired = isExpiredDate( pteid_eid.getValidityEndDate() );
             if ( bIsExpired ){
                 m_Fields[VALIDATION] = "The Citizen Card is expired";
@@ -473,8 +474,8 @@ public:
             } else{
                 m_Fields[VALIDATION] = "The Citizen Card has been activated";
                 m_Fields[LINK_TO_CERT] = "To verify that the card is not suspended or revoked,you should validate the certificates on the Certificates tab";
-            }/* !if ( bIsExpired ) */
-		}/* if ( !Card.isActive() ) */
+            }
+		}
 
 		m_Fields[MRZ1]						= pteid_eid.getMRZ1();
 		m_Fields[MRZ2]						= pteid_eid.getMRZ2();
