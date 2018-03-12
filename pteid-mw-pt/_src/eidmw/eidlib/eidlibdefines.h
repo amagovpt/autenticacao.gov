@@ -57,11 +57,12 @@ enum PTEID_CertifStatus
 {
 	PTEID_CERTIF_STATUS_UNKNOWN=0,		/**< Validity unknown */
 	PTEID_CERTIF_STATUS_REVOKED,		/**< Revoked certificate */
-	PTEID_CERTIF_STATUS_SUSPENDED,
+	PTEID_CERTIF_STATUS_SUSPENDED,      /**< Suspended certificate */ 
 	PTEID_CERTIF_STATUS_CONNECT,		/**< Connection problem */
-	PTEID_CERTIF_STATUS_ISSUER,		/**< An issuer is missing in the chain */
-	PTEID_CERTIF_STATUS_ERROR,		/**< Error during validation */
-	PTEID_CERTIF_STATUS_VALID		/**< Valid certificate */
+	PTEID_CERTIF_STATUS_ISSUER,		    /**< An issuer is missing in the chain */
+	PTEID_CERTIF_STATUS_ERROR,		    /**< Error during validation */
+	PTEID_CERTIF_STATUS_VALID,		    /**< Valid certificate */
+	PTEID_CERTIF_STATUS_EXPIRED         /**< Expired certificate */
 };
 
 enum PTEID_CertifType
@@ -69,7 +70,7 @@ enum PTEID_CertifType
 	PTEID_CERTIF_TYPE_UNKNOWN,			/**< UNKNOWN certificate */
 	PTEID_CERTIF_TYPE_ROOT,				/**< Root certificate */
 	PTEID_CERTIF_TYPE_ROOT_SIGN,
-	PTEID_CERTIF_TYPE_ROOT_AUTH,				/**< CA certificate */
+	PTEID_CERTIF_TYPE_ROOT_AUTH,		/**< CA certificate */
 	PTEID_CERTIF_TYPE_AUTHENTICATION,	/**< Authentication certificate */
 	PTEID_CERTIF_TYPE_SIGNATURE			/**< Signature certificate */
 };
@@ -113,16 +114,14 @@ enum PTEID_Param
 	PTEID_PARAM_CERTCACHE_VALIDITY,		//number
 	PTEID_PARAM_CERTCACHE_WAITDELAY,		//number
 
-        //PROXY
-        PTEID_PARAM_TIMESTAMP_HOST,                     //string;
+    //TIMESTAMP SERVER
+    PTEID_PARAM_TIMESTAMP_HOST,                     //string;
 	//PROXY
 	PTEID_PARAM_PROXY_HOST,				//string;
 	PTEID_PARAM_PROXY_PORT,				//number
 	PTEID_PARAM_PROXY_USERNAME,			//string;
 	PTEID_PARAM_PROXY_PWD,				//string;
 	PTEID_PARAM_PROXY_PACFILE,			//string
-
-	//SECURITY
 
 	//GUITOOL
 	PTEID_PARAM_GUITOOL_STARTWIN,		//number; 0=no(default), 1=yes
@@ -143,10 +142,10 @@ enum PTEID_Param
 	PTEID_PARAM_XSIGN_TIMEOUT,			//number
 
 	//GUITOOL
-        PTEID_PARAM_GUITOOL_SHOWNOTIFICATION,   //number; 0=no(default), 1=yes
-        PTEID_PARAM_GUITOOL_USECUSTOMSIGN,      //number; 0=no(default), 1=yes
-        PTEID_PARAM_GUITOOL_SHOWANIMATIONS,     //number; 0=no(default), 1=yes
-        PTEID_PARAM_GUITOOL_SHOWSTARTUPHELP,    //number; 0=no(default), 1=yes
+    PTEID_PARAM_GUITOOL_SHOWNOTIFICATION,   //number; 0=no(default), 1=yes
+    PTEID_PARAM_GUITOOL_USECUSTOMSIGN,      //number; 0=no(default), 1=yes
+    PTEID_PARAM_GUITOOL_SHOWANIMATIONS,     //number; 0=no(default), 1=yes
+    PTEID_PARAM_GUITOOL_SHOWSTARTUPHELP,    //number; 0=no(default), 1=yes
 
 	//PROXY
 	PTEID_PARAM_PROXY_CONNECT_TIMEOUT,	//number

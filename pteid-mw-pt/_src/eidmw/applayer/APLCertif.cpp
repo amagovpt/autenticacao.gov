@@ -1490,6 +1490,8 @@ APL_CertifStatus APL_Certif::getStatus(APL_ValidationLevel crl, APL_ValidationLe
 		return APL_CERTIF_STATUS_SUSPENDED;
 	else if (statusOcsp == CSC_STATUS_REVOKED)
 		return APL_CERTIF_STATUS_REVOKED;
+	else if (statusOcsp == CSC_STATUS_DATE)
+		return APL_CERTIF_STATUS_EXPIRED;
 	else
 		return APL_CERTIF_STATUS_ERROR;
 

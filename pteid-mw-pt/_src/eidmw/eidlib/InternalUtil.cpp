@@ -63,6 +63,9 @@ PTEID_CertifStatus ConvertCertStatus(APL_CertifStatus eStatus)
 	case APL_CERTIF_STATUS_VALID:
 		return PTEID_CERTIF_STATUS_VALID;
 
+	case APL_CERTIF_STATUS_EXPIRED:
+		return PTEID_CERTIF_STATUS_EXPIRED;
+
 	default:
 		return PTEID_CERTIF_STATUS_ERROR;
 	}
