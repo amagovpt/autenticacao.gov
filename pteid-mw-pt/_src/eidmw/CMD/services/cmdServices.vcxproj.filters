@@ -32,10 +32,13 @@
     <ClCompile Include="soapC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="soapWSHttpBinding_USCORECCMovelSignatureProxy.cpp">
+    <ClCompile Include="stdsoap2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stdsoap2.cpp">
+    <ClCompile Include="duration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -58,10 +61,10 @@
     <ClInclude Include="soapStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="soapWSHttpBinding_USCORECCMovelSignatureProxy.h">
+    <ClInclude Include="stdsoap2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stdsoap2.h">
+    <ClInclude Include="soapBasicHttpBinding_USCORECCMovelSignatureProxy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
