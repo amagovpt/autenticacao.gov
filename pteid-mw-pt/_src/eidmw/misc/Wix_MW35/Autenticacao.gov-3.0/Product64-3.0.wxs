@@ -5,7 +5,7 @@
 	<?include ..\..\..\svn_revision.wxs ?>
 
 	<?define var.ProductVersion = 3.0.$(var.RevisionNumber)?>
-  <?define var.OfficialProductVersion = 3.0.7 ?>
+  <?define var.OfficialProductVersion = 3.0.9 ?>
 
 	<?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
 	<?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F20$(var.RevisionNumber)}?>
@@ -164,8 +164,9 @@
 			<Component Id="Certs" Guid="{750F471B-6A83-4118-A0AF-2A138B770AD6}">
 		        <File Source="..\..\certs\CartaodeCidadao001.der" KeyPath="yes" />
 		        <File Source="..\..\certs\CartaodeCidadao002.der" />
-                <File Source="..\..\certs\CartaodeCidadao003.der" />
-		       <!--  <File Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" /> -->
+            <File Source="..\..\certs\CartaodeCidadao003.der" />
+            <File Source="..\..\certs\CartaodeCidadao004.der" />
+        <!--  <File Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" /> -->
 		        <File Source="..\..\certs\ECRaizEstado_MC.der" />
 		        <File Source="..\..\certs\Multicert_Root_01.der" />
 		        <File Source="..\..\certs\BaltimoreCyberTrustRoot.der" />
