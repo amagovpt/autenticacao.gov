@@ -14,12 +14,9 @@
 //#include "ASService/soapH.h"
 //#include "ACService/ACServiceH.h"
 
-#include "SCAPServices/SCAPH.h"
-#include "SCAPServices/SCAPPDFSignatureSoapBindingProxy.h"
+#include "SCAP-Services2/SCAPH.h"
+#include "SCAP-Services2/SCAPPDFSignatureWithAttachSoapBindingProxy.h"
 
-//#include "ACService/ACServiceH.h"
-
-//using namespace PDFSignature;
 
 pdf__AttributeType* convertAttributeType(ns3__AttributeType *, soap *);
 
@@ -28,12 +25,14 @@ PDFSignatureClient::PDFSignatureClient()
 
 }
 const char * processId = "10001";
-const char * pdf_endpoint = "/PADES/PDFSignature";
+//const char * pdf_endpoint = "/PADES/PDFSignature";
+const char * pdf_endpoint = "/PADES/PDFSignatureWithAttach";
 
 bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QString filepath, QString citizenName, QString citizenId, int ltv, PDFSignatureInfo signatureInfo, std::vector<ns3__AttributeType *> &attributeTypeList) {
     //const SOAP_ENV__Fault * fault = NULL;
 
-    soap * sp = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
+    soap * sp = soap_new2(SOAP_C_UTFSTRING | SOAP_ENC_MTOM, SOAP_C_UTFSTRING | SOAP_ENC_MTOM);
+    //soap * sp = soap_new2(SOAP_ENC_MTOM, SOAP_ENC_MTOM);
 
     //Define appropriate network timeouts
     sp->recv_timeout = 20;
@@ -45,7 +44,7 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
 	//TODO: this disables server certificate verification !!
 	soap_ssl_client_context(sp, SOAP_SSL_NO_AUTHENTICATION, NULL, NULL, NULL, NULL, NULL);
 
-    PDFSignatureSoapBindingProxy proxy(sp);
+    PDFSignatureWithAttachSoapBindingProxy proxy(sp);
 
     // Get endpoint from settings
     ScapSettings settings;
@@ -126,7 +125,8 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
 
 
     // Gets PDF Base 64
-    xsd__base64Binary * base64PDF = soap_new_set_xsd__base64Binary(sp, (unsigned char *)fileBinary, pdfBinaryLen, NULL, NULL, NULL);
+    xsd__base64Binary * base64PDF = soap_new_set_xsd__base64Binary(sp, (unsigned char *)fileBinary, pdfBinaryLen, 
+        NULL, "application/pdf", "my_scap_document.pdf");
 
 
     std::string citizenNIC = citizenId.toStdString();
@@ -155,7 +155,7 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
     // Request Sign PDF
     try
     {
-        pdf__SignRequest * signRequest = soap_new_set_pdf__SignRequest(sp, processId, personalData, attributeList,
+        pdf__SignRequestWithAttach * signRequest = soap_new_set_pdf__SignRequestWithAttach(sp, processId, personalData, attributeList,
                         signatureField.toStdString(), *base64PDF, &ltv, signatureInfo.getSelectedPage(), signatureInfo.getX(), signatureInfo.getY(), orientationType);
 
         pdf__SignResponse resp;

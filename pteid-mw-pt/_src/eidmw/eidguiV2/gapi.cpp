@@ -449,7 +449,7 @@ void GAPI::showChangeAddressDialog(long code)
         break;
         //The error code for connection error is common between SAM and OTP
     case EIDMW_OTP_CONNECTION_ERROR:
-        error_msg = tr("STR_CONNECTION ERROR") + "\n\n" +
+        error_msg = tr("STR_CONNECTION_ERROR") + "\n\n" +
                 tr("STR_VERIFY_INTERNET");
         break;
 
@@ -483,33 +483,28 @@ void GAPI::showChangeAddressDialog(long code)
     qDebug() << error_msg;
     signalUpdateProgressStatus(error_msg);
 
-    //TO-DO: Reload card information in case of successful address change
+    //TODO: Reload card information in case of successful address change
 }
 
 void GAPI::showSignCMDDialog(long code)
 {
     QString error_msg;
-    long sam_error_code = 0;
     QString support_string = tr("STR_CMD_ERROR_MSG");
 
     PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "CMD signature op finished with error code 0x%08x", code);
 
     switch(code)
     {
-    case 0:
-        error_msg = tr("STR_CMD_SUCESS");
-        break;
-        //The error code for connection error is common between SAM and OTP
-    default:
-        //Make sure we only show the user error codes from the SAM service and not some weird pteid exception error code
-        sam_error_code = code;
-        error_msg = tr("STR_CMD_LOGIN_ERROR");
-        break;
-    }
-
-    if (sam_error_code != 0)
-    {
-        error_msg += "\n\n" + tr("STR_ERROR_CODE") + QString::number(sam_error_code);
+        case 0:
+            error_msg = tr("STR_CMD_SUCESS");
+            break;
+        case SOAP_TCP_ERROR:
+            error_msg = tr("STR_CONNECTION_ERROR") + "\n\n" +
+                    tr("STR_VERIFY_INTERNET");
+            break;
+        default:
+            error_msg = tr("STR_CMD_LOGIN_ERROR");
+            break;
     }
 
     if (code != 0)
@@ -590,6 +585,19 @@ void GAPI::changeAddress(QString process, QString secret_code)
     QtConcurrent::run(this, &GAPI::doChangeAddress, processUtf8, secret_codeUtf8);
 }
 
+QString GAPI::translateCMDErrorCode(int errorCode) {
+   QString errorMsg;
+
+   switch (errorCode) {
+     case SOAP_TCP_ERROR:
+       errorMsg = tr("STR_CONNECTION_ERROR") + "\n\n" +
+                tr("STR_VERIFY_INTERNET");
+       break;
+   }
+
+   return errorMsg;
+}
+
 void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdSignParams &params)
 {
     qDebug() << "doOpenSignCMD! MobileNumber = " << params.mobileNumber << " secret_code = " << params.secret_code <<
@@ -609,6 +617,7 @@ void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdSignParams &params)
 
         if ( ret != 0 ) {
             qDebug() << "signOpen failed! - ret: " << ret << endl;
+     
             signCMDFinished(ret);
             signalUpdateProgressBar(100);
             return;
@@ -673,7 +682,6 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QString loaded
 
 	cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
 
-
     if (params.isTimestamp > 0)
         cmd_pdfSignature->enableTimestamp();
     if (params.isSmallSignature > 0)
@@ -691,9 +699,6 @@ void GAPI::signCloseCMD(QString sms_token)
     qDebug() << "signCloseCMD! sms_token = " + sms_token;
 
     signalUpdateProgressStatus(tr("STR_CMD_SENDING_CODE"));
-
-    connect(this, SIGNAL(signCMDFinished(long)),
-            this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
 
     QtConcurrent::run(this, &GAPI::doCloseSignCMD, cmd_signature, sms_token);
 }
@@ -1509,7 +1514,7 @@ void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, int l
 
 
     QtConcurrent::run(this, &GAPI::doSignSCAP, signParams);
-
+    
 }
 
 

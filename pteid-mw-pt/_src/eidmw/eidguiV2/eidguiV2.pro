@@ -13,9 +13,9 @@ CONFIG += c++11
 SOURCES += main.cpp \
     appcontroller.cpp \
     gapi.cpp \
-    SCAPServices/SCAPAttributeSupplierBindingProxy.cpp \
-    SCAPServices/SCAPC.cpp \
-    SCAPServices/SCAPPDFSignatureSoapBindingProxy.cpp \
+    SCAP-Services2/SCAPAttributeSupplierBindingProxy.cpp \
+    SCAP-Services2/SCAPC.cpp \
+    SCAP-Services2/SCAPPDFSignatureWithAttachSoapBindingProxy.cpp \
     pdfsignatureclient.cpp \
     ErrorConn.cpp \
     stdsoap2.cpp \
