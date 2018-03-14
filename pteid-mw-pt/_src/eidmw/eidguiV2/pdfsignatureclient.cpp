@@ -126,7 +126,7 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
 
     // Gets PDF Base 64
     xsd__base64Binary * base64PDF = soap_new_set_xsd__base64Binary(sp, (unsigned char *)fileBinary, pdfBinaryLen, 
-        NULL, "application/pdf", "my_scap_document.pdf");
+        NULL, (char *)"application/pdf", NULL);
 
 
     std::string citizenNIC = citizenId.toStdString();

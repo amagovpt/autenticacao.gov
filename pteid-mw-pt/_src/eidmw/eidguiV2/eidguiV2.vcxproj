@@ -273,9 +273,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_filesavedialog.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp" />
     <ClCompile Include="scapcompanies.cpp" />
-    <ClCompile Include="SCAPServices\SCAPAttributeSupplierBindingProxy.cpp" />
-    <ClCompile Include="SCAPServices\SCAPC.cpp" />
-    <ClCompile Include="SCAPServices\SCAPPDFSignatureSoapBindingProxy.cpp" />
+    <ClCompile Include="SCAP-Services2\SCAPAttributeSupplierBindingProxy.cpp" />
+    <ClCompile Include="SCAP-Services2\SCAPC.cpp" />
+    <ClCompile Include="SCAP-Services2\SCAPPDFSignatureWithAttachSoapBindingProxy.cpp" />
     <ClCompile Include="scapsignature.cpp" />
     <ClCompile Include="singleapplication.cpp" />
     <ClCompile Include="stdsoap2.cpp" />
