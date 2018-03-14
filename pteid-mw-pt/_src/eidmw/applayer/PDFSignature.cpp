@@ -116,30 +116,31 @@ namespace eIDMW
 			delete m_doc;
 	}
 
-        void PDFSignature::setFile(char *pdf_file_path)
-        {
-            m_visible = false;
-            m_page = 1;
-            m_sector = 0;
-            //Illegal values to start with
-            location_x = -1;
-            location_y = -1;
-            m_civil_number = NULL;
-            m_citizen_fullname = NULL;
-            m_batch_mode = false;
-            m_timestamp = false;
-            m_isLandscape = false;
-            m_small_signature = false;
-            my_custom_image.img_data = NULL;
-			m_doc = makePDFDoc(pdf_file_path);
+	void PDFSignature::setFile(char *pdf_file_path)
+	{
+		m_visible = false;
+		m_page = 1;
+		m_sector = 0;
+		//Illegal values to start with
+		location_x = -1;
+		location_y = -1;
+		m_civil_number = NULL;
+		m_citizen_fullname = NULL;
+		m_batch_mode = false;
+		m_timestamp = false;
+		m_isLandscape = false;
+		m_small_signature = false;
+		my_custom_image.img_data = NULL;
+		m_pdf_file_path = strdup(pdf_file_path);
+		m_doc = makePDFDoc(pdf_file_path);
 
-            m_card = NULL;
-            m_signerInfo = NULL;
-            m_pkcs7 = NULL;
-            m_outputName = NULL;
-            m_signStarted = false;
-            m_isExternalCertificate = false;
-        }
+		m_card = NULL;
+		m_signerInfo = NULL;
+		m_pkcs7 = NULL;
+		m_outputName = NULL;
+		m_signStarted = false;
+		m_isExternalCertificate = false;
+	}
 	void PDFSignature::batchAddFile(char *file_path, bool last_page)
 	{
 		m_files_to_sign.push_back(std::make_pair(_strdup(file_path), last_page));
@@ -387,6 +388,13 @@ namespace eIDMW
 		std::string final_path = string(output_dir) + PATH_SEP + clean_filename + "_signed.pdf";
 
 		return final_path;
+	}
+
+	std::string PDFSignature::getDocName() {
+		char * pdf_filename = Basename((char *)m_pdf_file_path);
+		std::string clean_filename = CPathUtil::remove_ext_from_basename(pdf_filename);
+
+		return clean_filename.size() > 44 ? clean_filename.substr(0, 44) : clean_filename;
 	}
 
 	int PDFSignature::signFiles(const char *location,
