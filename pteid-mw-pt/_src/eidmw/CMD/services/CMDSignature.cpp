@@ -141,7 +141,11 @@ namespace eIDMW {
         CByteArray signatureInput(sha256SigPrefix, sizeof(sha256SigPrefix));
         signatureInput.Append(hashByteArray);
 
-        int ret = cmdService->sendDataToSign(signatureInput.GetBytes(), userPin);
+		std::string pdfDocName = pdf->getDocName();
+
+		MWLOG_DEBUG(logBuf, "DocName is %s", pdfDocName.c_str());
+
+		int ret = cmdService->sendDataToSign(signatureInput.GetBytes(), pdfDocName, userPin);
         if ( ret != ERR_NONE ) {
             MWLOG_ERR( logBuf, "CMDSignature - Error @ sendDataToSign()" );
             return ret;

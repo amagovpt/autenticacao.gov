@@ -366,11 +366,8 @@ int CMDServices::GetCertificate( std::string in_userId
 /*  *********************************************************
     ***    CMDServices::get_CCMovelSignRequest()          ***
     ********************************************************* */
-_ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp , char *endpoint,
-                                                std::string in_applicationID
-                                              , unsigned char *in_hash
-                                              , std::string *in_pin
-                                              , std::string *in_userId) {
+_ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp , char *endpoint, std::string in_applicationID, std::string *docName,
+                                              unsigned char *in_hash, std::string *in_pin, std::string *in_userId) {
     //SOAP_ENV__Header *soapHeader = soap_new_SOAP_ENV__Header( sp );
     //soapHeader->wsa__To = endpoint;
 
@@ -387,6 +384,7 @@ _ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp , char *endpoint
                                              NULL, NULL, NULL);  //encode_base64( sp, in_hash );
     soapBody->Pin           = in_pin;
     soapBody->UserId        = in_userId;
+	soapBody->DocName = docName;
 
     _ns2__CCMovelSign *send = soap_new_set__ns2__CCMovelSign( sp, soapBody );
     return send;
@@ -412,7 +410,7 @@ int CMDServices::checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response )
 /*  *********************************************************
     ***    CMDServices::CCMovelSign()                     ***
     ********************************************************* */
-int CMDServices::CCMovelSign( unsigned char * in_hash, std::string in_pin ) {
+int CMDServices::CCMovelSign(unsigned char * in_hash, std::string docName, std::string in_pin) {
 
     soap *sp = getSoap();
     if (sp == NULL) {
@@ -452,11 +450,7 @@ int CMDServices::CCMovelSign( unsigned char * in_hash, std::string in_pin ) {
     /*
         Get CCMovelSign request
     */
-    _ns2__CCMovelSign *send = get_CCMovelSignRequest( sp
-                                                    , (char*)endPoint
-                                                    , getApplicationID()
-                                                    , in_hash, &in_pin
-                                                    , &in_userId );
+    _ns2__CCMovelSign *send = get_CCMovelSignRequest( sp, (char*)endPoint, getApplicationID(), &docName, in_hash, &in_pin, &in_userId );
     if ( send == NULL ){
         MWLOG_ERR( logBuf, "NULL send parameters" );
         return ERR_NULL_HANDLER;
@@ -702,8 +696,8 @@ int CMDServices::getCertificate(std::string in_userId,
 /*  *********************************************************
     ***    CMDServices::sendDataToSign()                  ***
     ********************************************************* */
-int CMDServices::sendDataToSign(unsigned char * in_hash, std::string in_pin ){
-    return CCMovelSign( in_hash, in_pin );
+int CMDServices::sendDataToSign(unsigned char * in_hash, std::string docName, std::string in_pin ){
+    return CCMovelSign( in_hash, docName, in_pin );
 }
 
 /*  *********************************************************

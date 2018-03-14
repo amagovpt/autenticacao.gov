@@ -43,7 +43,7 @@ class CMDServices{
         int getCertificate( std::string in_userId, std::vector<CByteArray> &out_certificate );
 
         // CCMovelSign
-        int sendDataToSign( unsigned char * in_hash, std::string in_pin );
+		int sendDataToSign(unsigned char * in_hash, std::string docName, std::string in_pin);
 
         // ValidateOtp
         int getSignature( std::string in_code, CByteArray& out_signature );
@@ -75,11 +75,11 @@ class CMDServices{
         bool init(int recv_timeout, int send_timeout, int connect_timeout, short mustUnderstand);
 
         // CCMovelSign
-        int CCMovelSign( unsigned char * in_hash, std::string in_pin );
+		int CCMovelSign(unsigned char * in_hash, std::string docName, std::string in_pin);
 
         _ns2__CCMovelSign *get_CCMovelSignRequest( soap *sp
                                                  , char *endpoint
-                                                 , std::string in_applicationID
+												 , std::string in_applicationID, std::string *docName
                                                  , unsigned char * in_hash
                                                  , std::string *in_pin
                                                  , std::string *in_userId );
