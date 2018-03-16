@@ -879,10 +879,24 @@ PageServicesSignSimpleForm {
                 if(pageCount > 0){
                     console.log("loadedFilePath: " + loadedFilePath + " page count: " + pageCount)
                     fileLoaded = true
-                    propertySpinBoxControl.value = 1
-                    propertySpinBoxControl.to = pageCount
                     propertyPDFPreview.propertyBackground.cache = false
-                    propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
+
+                    if(propertyCheckLastPage.checked == true){
+                        propertySpinBoxControl.value = pageCount
+                        propertyPDFPreview.propertyBackground.source =
+                                "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + pageCount
+                    }else{
+                        if(propertySpinBoxControl.value > pageCount){
+                            propertySpinBoxControl.value = 1
+                            propertyPDFPreview.propertyBackground.source
+                                    = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=1"
+                        }else{
+                            propertyPDFPreview.propertyBackground.source
+                                    = "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
+                        }
+                    }
+                    updateIndicators(pageCount)
+
                     var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.png"
                     if(gapi.getUseCustomSignature() && gapi.customSignImageExist()){
                         if (Qt.platform.os === "windows") {
@@ -924,22 +938,14 @@ PageServicesSignSimpleForm {
             var pageCount = gapi.getPDFpageCount(loadedFilePath)
             propertyPDFPreview.propertyBackground.source =
                     "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
-
-            propertySpinBoxControl.up.indicator.visible = true
-            propertySpinBoxControl.down.indicator.visible = true
-            if(propertySpinBoxControl.value === gapi.getPDFpageCount(loadedFilePath)){
-                propertySpinBoxControl.up.indicator.visible = false
-            }
-            if (propertySpinBoxControl.value === 1){
-                propertySpinBoxControl.down.indicator.visible = false
-            }
-
+            updateIndicators(pageCount)
         }
     }
     propertyCheckLastPage {
         onCheckedChanged: {
             var loadedFilePath = filesModel.get(0).fileUrl
             var pageCount = gapi.getPDFpageCount(loadedFilePath)
+            propertySpinBoxControl.value = pageCount
             if(propertyCheckLastPage.checked){
                 propertyPDFPreview.propertyBackground.source =
                         "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + pageCount
@@ -961,5 +967,19 @@ PageServicesSignSimpleForm {
         propertyPDFPreview.propertyDragSigSignedByNameText.text = "Assinado por:"
         propertyPDFPreview.propertyDragSigNumIdText.text = "Num. de Identificação Civil:"
         gapi.startCardReading()
+    }
+    function updateIndicators(pageCount){
+        propertySpinBoxControl.up.indicator.visible = true
+        propertySpinBoxControl.down.indicator.visible = true
+        propertySpinBoxControl.up.indicator.enabled = true
+        propertySpinBoxControl.down.indicator.enabled = true
+        if(propertySpinBoxControl.value >= pageCount){
+            propertySpinBoxControl.up.indicator.visible = false
+            propertySpinBoxControl.up.indicator.enabled = false
+        }
+        if (propertySpinBoxControl.value === 1){
+            propertySpinBoxControl.down.indicator.visible = false
+            propertySpinBoxControl.down.indicator.enabled = false
+        }
     }
 }

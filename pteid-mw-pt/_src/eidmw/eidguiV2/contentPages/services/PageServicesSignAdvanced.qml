@@ -1564,9 +1564,9 @@ PageServicesSignAdvancedForm {
             var pageCount = gapi.getPDFpageCount(loadedFilePath)
 
             if(propertyCheckLastPage.checked){
+                propertySpinBoxControl.value = pageCount
                 propertySpinBoxControl.enabled = false
                 propertyPageText.enabled = false
-                propertyTextSpinBox.visible = false
                 propertyPDFPreview.propertyBackground.source =
                         "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + pageCount
             }else{
