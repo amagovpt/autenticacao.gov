@@ -145,6 +145,7 @@ install -m 755 -p lib/libpteidlibj.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpte
 #install header files
 mkdir -p $RPM_BUILD_ROOT/usr/local/include
 install -m 644 eidlib/eidlib.h $RPM_BUILD_ROOT/usr/local/include/
+install -m 644 eidlib/eidlibcompat.h $RPM_BUILD_ROOT/usr/local/include/
 install -m 644 eidlib/eidlibdefines.h $RPM_BUILD_ROOT/usr/local/include/
 install -m 644 eidlib/eidlibException.h $RPM_BUILD_ROOT/usr/local/include/
 install -m 644 common/eidErrors.h $RPM_BUILD_ROOT/usr/local/include/

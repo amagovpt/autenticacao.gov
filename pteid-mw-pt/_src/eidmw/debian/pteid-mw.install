@@ -3,6 +3,7 @@ misc/DSS/config.properties /usr/local/bin/DSS/
 misc/certs/* /usr/local/share/certs/
 
 /usr/local/include/eidlib.h
+/usr/local/include/eidlibcompat.h
 /usr/local/include/eidErrors.h
 /usr/local/include/eidlibdefines.h
 /usr/local/include/eidlibException.h
