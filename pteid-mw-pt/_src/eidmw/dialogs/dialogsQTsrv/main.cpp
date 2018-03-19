@@ -43,8 +43,6 @@
 #include "../../common/Util.h"
 #include "../../common/Config.h"
 
-
-const static char csOverWrite[] = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 std::string readableFilePath = "/usr/local/etc/pteidgui.conf";
 
 DlgDisplayPinpadInfoArguments *oInfoData = NULL;
@@ -72,17 +70,6 @@ void sigint_handler(int sig)
   dlg = NULL;
 }
 
-int g_UseKeyPad = -1;
-
-bool DlgGetKeyPad()
-{
-	if(g_UseKeyPad==-1)
-	{
-		g_UseKeyPad = (CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_VIRTUALKBD)?1:0);
-	}
-	return g_UseKeyPad;
-}
-
 /*
  * Translate Pin names to english from their native labels
  * present on the in-card objects
@@ -107,30 +94,32 @@ QString getPinName( DlgPinUsage usage, wchar_t *inPinName ){
         DLG_PIN_UNKNOWN:
             if ( inPinName == NULL ){
                 PinName = GETQSTRING_DLG(UnknownPin);
-            }else{
+            }
+            else {
                 if( wcscmp( inPinName , L"" ) == 0 ){
                     PinName = GETQSTRING_DLG(UnknownPin);
-                } else{
+                } else {
                     PinName = QString::fromWCharArray( inPinName );
-                }/* if( wcscmp( inPinName , L"" ) == 0 ) */
-            }/* if ( inPinName == NULL ) */
+                }
+            }
             break;
 
         default:
             if ( inPinName == NULL ){
                 PinName = GETQSTRING_DLG(UnknownPin);
-            }else{
+            }
+            else{
                 if ( wcscmp( inPinName, L"") == 0 ){
                     PinName = GETQSTRING_DLG(Pin);
                 } else {
                     PinName = QString::fromWCharArray( inPinName );
-                }/* if ( wcscmp( inPinName, L"") == 0 ) */
-            }/* if ( inPinName == NULL ) */
+                }
+            }
             break;
-    }/* switch( usage ) */
+    }
 
     return PinName;
-}/* getPinName() */
+}
 
 int main(int argc, char *argv[])
 {
@@ -159,7 +148,7 @@ int main(int argc, char *argv[])
             parentWndGeometry.y = atoi(argv[4]);
             parentWndGeometry.width = atoi(argv[5]);
             parentWndGeometry.height = atoi(argv[6]);
-		}/* if (argc > 5 ) */
+		}
 
 		#ifdef __APPLE__
 		// In MacOS we deploy the QT plugins in a specific location which is common
@@ -236,7 +225,7 @@ int main(int argc, char *argv[])
 									   oData->usage,
 									   Header,
 									   PINName,
-									   DlgGetKeyPad(),
+									   false,
                                        0, &parentWndGeometry );
 				int retVal = dlg->exec();
 				if( retVal == QDialog::Accepted )
@@ -269,7 +258,7 @@ int main(int argc, char *argv[])
 			DlgAskPINsArguments *oData = NULL;
 			SharedMem oShMemory;
 			oShMemory.Attach( sizeof(DlgAskPINsArguments), readableFilePath.c_str(),(void **) &oData);
-			MWLOG(LEV_ERROR, MOD_DLG, L"Running DLG_ASK_PINS with args: operation=> %d usage=> %d\n", oData->operation, oData->usage);
+			MWLOG(LEV_ERROR, MOD_DLG, L"dlgsQTsrv: Running DLG_ASK_PINS with args: operation=> %d usage=> %d\n", oData->operation, oData->usage);
 
 			dlgWndAskPINs *dlg = NULL;
 			try
@@ -298,15 +287,11 @@ int main(int argc, char *argv[])
 						Header += " ";
 						Header = GETQSTRING_DLG(Your);
 						Header += " \"";
+						PINName = GETQSTRING_DLG(Puk);
+						break;
 
-					//	if( oData->usage == DLG_PIN_UNKNOWN )
-					//	{
-				    //			PINName = QString::fromWCharArray(oData->pinName);
-					//	}
-					//	else
-					//	{
-							PINName = GETQSTRING_DLG(Puk);
-					//	}
+					case DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK:
+						MWLOG(LEV_DEBUG, MOD_DLG, L"dlgsQTsrv: Performing operation UNBLOCK_CHANGE_NO_PUK");
 						break;
 					default:
 						oData->returnValue = DLG_BAD_PARAM;
@@ -326,6 +311,10 @@ int main(int argc, char *argv[])
 					Header = GETQSTRING_DLG(UnlockDialogHeader);
 					tr_pin = QString("PUK");
 				}
+				else if (oData->operation == DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK) {
+					Header = GETQSTRING_DLG(UnblockPinHeader);
+					tr_pin = PINName;
+				}
 				else
 				{
 					tr_pin = PINName;
@@ -335,12 +324,16 @@ int main(int argc, char *argv[])
 						oData->pin2Info,
 						Header,
 						tr_pin,
-						DlgGetKeyPad(),
+						oData->operation == DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK,
 						0, &parentWndGeometry );
 				if( dlg->exec() )
 				{
-				        wcscpy_s(oData->pin1, sizeof(oData->pin1)/sizeof(wchar_t), dlg->getPIN1().c_str());
+					//We only need PIN2
+				    if (oData->operation != DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK)
+				    	wcscpy_s(oData->pin1, sizeof(oData->pin1)/sizeof(wchar_t), dlg->getPIN1().c_str());
+
 					wcscpy_s(oData->pin2, sizeof(oData->pin2)/sizeof(wchar_t), dlg->getPIN2().c_str());
+
 					delete dlg;
 					dlg = NULL;
 					oData->returnValue = DLG_OK;

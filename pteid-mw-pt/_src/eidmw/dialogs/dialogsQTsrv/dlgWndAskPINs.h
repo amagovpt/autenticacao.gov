@@ -39,7 +39,7 @@ class dlgWndAskPINs : public dlgWndBase
 	Q_OBJECT
 
 public:
-	dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString & Header, QString & PINName, bool UseKeypad, QWidget *parent = 0, Type_WndGeometry *pParentWndGeometry = 0 );
+	dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString & Header, QString & PINName, bool dontAskPUK, QWidget *parent = 0, Type_WndGeometry *pParentWndGeometry = 0 );
 	~dlgWndAskPINs();
 
 	std::wstring getPIN1(){ return QString(ui.txtOldPIN->text()).toStdWString(); };
@@ -48,14 +48,14 @@ public:
 private:
 	Ui::dlgWndAskPINsClass ui;
 	bool OldPIN_OK, NewPIN1_OK, NewPIN2_OK;
-	bool TestPINs(){ return ( OldPIN_OK && NewPIN1_OK && NewPIN2_OK ); }
+	bool TestPINs() { return ( (OldPIN_OK || m_DontAskPUK ) && NewPIN1_OK && NewPIN2_OK ); }
 	unsigned int m_ulPin1MinLen;
 	unsigned int m_ulPin2MinLen;
 	unsigned int m_ulPin1MaxLen;
 	unsigned int m_ulPin2MaxLen;
 	unsigned int m_ulPinMaxLen;
 	unsigned int m_ulPin2Flags;
-	bool m_UseKeypad;
+	bool m_DontAskPUK;
 	unsigned char m_UK_InputField;
 	QRegExpValidator *m_Pin1Validator;
 	QRegExpValidator *m_Pin2Validator;

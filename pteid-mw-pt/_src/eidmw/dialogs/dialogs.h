@@ -61,6 +61,7 @@ typedef enum {
 	DLG_PIN_OP_CHANGE,
 	DLG_PIN_OP_UNBLOCK_NO_CHANGE,
 	DLG_PIN_OP_UNBLOCK_CHANGE,
+	DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK,
 } DlgPinOperation;
 
 typedef enum {
