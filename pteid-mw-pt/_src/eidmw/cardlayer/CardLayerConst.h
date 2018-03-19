@@ -29,6 +29,10 @@ namespace eIDMW
  */
 const static unsigned long MAX_READERS = 8;
 
+
+#define UNBLOCK_FLAG_NEW_PIN    1
+#define UNBLOCK_FLAG_PUK_MERGE  2   // Only on pinpad readers
+
 typedef enum
 {
     DISCONNECT_LEAVE_CARD = 0,
@@ -45,7 +49,8 @@ typedef enum
 {
     PIN_OP_VERIFY,
     PIN_OP_CHANGE,
-    PIN_OP_RESET
+    PIN_OP_RESET,
+    PIN_OP_RESET_NO_PUK
 } tPinOperation;
 
 const unsigned long SIGN_ALGO_RSA_RAW = 0x01;

@@ -97,7 +97,7 @@ DWORD GemPcPinpad::loadStrings(SCARDHANDLE hCard, unsigned char ucPinType, tPinO
 	unsigned int STRING_LEN = 16;
 	DWORD recvlen = sizeof(recvBuf);
 
-	if (operation == PIN_OP_RESET)
+	if (operation == PIN_OP_RESET || operation == PIN_OP_RESET_NO_PUK)
 	{
 		pin_string = "PUK ";
 	}
@@ -193,7 +193,7 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation,
 			return PinpadControl((unsigned long)ioctl2, b2, operation,
                                 ucPinType, pin.csLabel, wndGeometry );
 		}
-		else if (operation == PIN_OP_RESET)
+		else if (operation == PIN_OP_RESET || operation == PIN_OP_RESET_NO_PUK)
 		{
 			ioctl2 = CM_IOCTL_MODIFY_PIN;
 			pin_struct = &pin_change;

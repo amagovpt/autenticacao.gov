@@ -205,9 +205,6 @@ unsigned char CPkiCard::PinUsage2Pinpad(const tPin & Pin, const tPrivKey *pKey)
 	return (unsigned char)Pin.ulID;
 }
 
-#define UNBLOCK_FLAG_NEW_PIN    1
-#define UNBLOCK_FLAG_PUK_MERGE  2   // Only on pinpad readers
-
 bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
         unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg, void *wndGeometry, unsigned long unblockFlags)
@@ -227,19 +224,20 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
 	if (operation == PIN_OP_CHANGE && !csPin1.empty())
 		bAskPIN = false;
 	//Ask for PIN in RESET also in the PUK merge case
-	if (operation == PIN_OP_RESET && !csPin1.empty() && !bPukMerge)
+	if (operation == PIN_OP_RESET && !csPin1.empty() && !csPin2.empty() && !bPukMerge)
 		bAskPIN = false;
 
 	bool bUsePinpad = bAskPIN ? m_poPinpad != NULL : false;
 
 bad_pin:
-	//fprintf(stderr, "DEBUG PinCmd: bUsePinpad:%d, bPukMerge: %d defineNewPin=%d\n", bUsePinpad, bPukMerge, defineNewPin);
+	MWLOG(LEV_DEBUG, MOD_CAL, L"DEBUG PinCmd: bUsePinpad:%d, bPukMerge: %d defineNewPin=%d", bUsePinpad, bPukMerge, defineNewPin);
 
     // If no Pin(s) provided and it's no Pinpad reader -> ask Pins
     if (bAskPIN && !bUsePinpad)
 	{
         showPinDialog(operation, Pin, csReadPin1, csReadPin2, pKey, wndGeometry);
-		pcsPin1 = &csReadPin1;
+        if (operation != PIN_OP_RESET_NO_PUK)
+			pcsPin1 = &csReadPin1;
 		pcsPin2 = &csReadPin2;
 	}
 
@@ -640,6 +638,8 @@ DlgPinOperation CPkiCard::PinOperation2Dlg(tPinOperation operation)
 		 //We ignore the RESET with no change case for now
 		case PIN_OP_RESET:
 		   return DLG_PIN_OP_UNBLOCK_CHANGE;
+		case PIN_OP_RESET_NO_PUK:
+		   return DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK;
 		default:
 		   return DLG_PIN_OP_VERIFY;
 	}
@@ -660,6 +660,7 @@ CByteArray CPkiCard::MakePinCmd(tPinOperation operation, const tPin & Pin, bool 
         oCmd.Append(0x24);
         break;
     case PIN_OP_RESET:
+    case PIN_OP_RESET_NO_PUK:
     	oCmd.Append(0x2C);
     	break;
     default:

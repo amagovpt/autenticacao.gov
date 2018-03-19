@@ -428,6 +428,8 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 	bool bOK = false;
 	unsigned long ulRemaining;
 
+	MWLOG(LEV_DEBUG, MOD_CAL, L"PteidCard::unlockPIN called with PUK length=%d unblockFlags=%lu", strlen(pszPuk), unblockFlags);
+
 	try
 	{
 		//This implementation is deprecated because there are no more IAS 1.01 cards
@@ -446,7 +448,8 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 			if (pszPuk != NULL)
 				puk_str = pszPuk;
 
-			bOK = PinCmd(PIN_OP_RESET, pin, puk_str, pin_str, triesLeft, NULL, true, NULL, unblockFlags);
+			bOK = PinCmd(strlen(pszPuk)== 8 && (unblockFlags & UNBLOCK_FLAG_PUK_MERGE) == 0 ? PIN_OP_RESET_NO_PUK : PIN_OP_RESET,
+			     pin, puk_str, pin_str, triesLeft, NULL, true, NULL, unblockFlags);
 		}
 	}
 	catch(CMWException e)
@@ -540,10 +543,10 @@ int consoleAskForPin(tPinOperation operation, const tPin &Pin,
 bool detectXorgRunning()
 {
 
-		char * display = getenv("DISPLAY");
-		char * x_authority = getenv("XAUTHORITY");
+	char * display = getenv("DISPLAY");
+	char * x_authority = getenv("XAUTHORITY");
 
-		return display && x_authority;
+	return display && x_authority;
 
 }
 
@@ -609,7 +612,7 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 	if (ret == DLG_OK)
 	{
 		csPin1 = utilStringNarrow(wsPin1);
-		if (operation == PIN_OP_CHANGE || operation == PIN_OP_RESET)
+		if (operation != PIN_OP_VERIFY)
 			csPin2 = utilStringNarrow(wsPin2);
 	}
 	else if (ret == DLG_CANCEL)
@@ -631,13 +634,15 @@ bool CPteidCard::PinCmd(tPinOperation operation, const tPin & Pin,
     // not necessary, so we can save a Select File command
     pteidPin.csPath = "";
 
+    MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::PinCmd called with operation=%d", (int)operation);
+
 	pteidPin.encoding = PIN_ENC_ASCII; //PT uses ASCII only for PIN
 	if (m_AppletVersion == 1 ) {
-		pincheck = CPkiCard::PinCmd(operation, pteidPin, csPin1, csPin2
-                                , ulRemaining, pKey,bShowDlg, wndGeometry, unblockFlags);
+		pincheck = CPkiCard::PinCmd(operation, pteidPin, csPin1, csPin2,
+                                ulRemaining, pKey,bShowDlg, wndGeometry, unblockFlags);
 	} else {
-		pincheck = CPkiCard::PinCmdIAS(operation, pteidPin, csPin1, csPin2
-                                    , ulRemaining, pKey,bShowDlg, wndGeometry);
+		pincheck = CPkiCard::PinCmdIAS(operation, pteidPin, csPin1, csPin2, ulRemaining,
+		           pKey,bShowDlg, wndGeometry);
 	}
 
 	return pincheck;
