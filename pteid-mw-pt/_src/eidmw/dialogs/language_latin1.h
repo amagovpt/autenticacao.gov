@@ -34,14 +34,10 @@ class CLang;
 
 #define LANG_STRCODE_EN L"EN"
 #define LANG_STRCODE_NL L"NL"
-#define LANG_STRCODE_FR L"FR"
-#define LANG_STRCODE_DE L"DE"
 
 typedef enum {
   LANG_EN=0,
   LANG_NL=1,
-  LANG_FR=2,
-  LANG_DE=3
 } tLanguage;
 
 DEFINE_LANG_STR(Yes) = {L"&Yes", L"&Sim", L"", L""};

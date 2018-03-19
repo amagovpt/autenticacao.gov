@@ -23,8 +23,6 @@
 #include "Config.h"
 #include "Util.h"
 
-#define PATH_LENGHT 255
-
 namespace eIDMW
 {
 
@@ -42,10 +40,6 @@ const wchar_t *CLang::GetLangW()
 		return LANG_STRCODE_EN;
 	case LANG_NL:
 		return LANG_STRCODE_NL;
-	case LANG_FR:
-		return LANG_STRCODE_FR;
-	case LANG_DE:
-		return LANG_STRCODE_DE;
 	//case LANG_PT:
 	//	return LANG_STRCODE_PT;
 	default:
@@ -64,10 +58,6 @@ unsigned long CLang::GetLangL()
 		return DLG_LANG_EN;
 	case LANG_NL:
 		return DLG_LANG_NL;
-	case LANG_FR:
-		return DLG_LANG_FR;
-	case LANG_DE:
-		return DLG_LANG_DE;
 	//case LANG_PT:
 	//	return DLG_LANG_PT;
 	default:
@@ -82,10 +72,6 @@ void CLang::SetLangW(const wchar_t *lang)
 		ms_Lang=LANG_EN;
 	else if(wcscmp(lang,LANG_STRCODE_NL)==0)
 		ms_Lang=LANG_NL;
-	else if(wcscmp(lang,LANG_STRCODE_FR)==0)
-		ms_Lang=LANG_FR;
-	else if(wcscmp(lang,LANG_STRCODE_DE)==0)
-		ms_Lang=LANG_DE;
 	//else if(wcscmp(lang,LANG_STRCODE_PT)==0)
 	//	ms_Lang=LANG_PT;
 	else
@@ -102,12 +88,6 @@ void CLang::SetLangL(unsigned long lang)
 		break;
 	case DLG_LANG_NL:
 		ms_Lang=LANG_NL;
-		break;
-	case DLG_LANG_FR:
-		ms_Lang=LANG_FR;
-		break;
-	case DLG_LANG_DE:
-		ms_Lang=LANG_DE;
 		break;
 	//case DLG_LANG_PT:
 	//	ms_Lang=LANG_PT;
