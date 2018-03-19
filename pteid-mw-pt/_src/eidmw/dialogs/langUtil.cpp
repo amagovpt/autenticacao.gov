@@ -104,10 +104,6 @@ void CLang::Init()
 
 	if(wcscmp(L"nl",lang.c_str())==0)
 		ms_Lang=LANG_NL;
-	else if(wcscmp(L"fr",lang.c_str())==0)
-		ms_Lang=LANG_FR;
-	else if(wcscmp(L"de",lang.c_str())==0)
-		ms_Lang=LANG_DE;
 	else
 		ms_Lang=LANG_EN;
 
