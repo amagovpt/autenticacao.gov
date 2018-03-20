@@ -755,15 +755,6 @@ void PTEID_EIDCard::ChangeAddress(char *secretCode, char *process, t_address_cha
 	END_TRY_CATCH
 }
 
-bool testPIN(const char* pin){
-	int i;
-	std::stringstream ss(pin);
-
-	if ((ss >> i).fail() || !(ss >> std::ws).eof())
-		return false;
-	return true;
-}
-
 
 void PTEID_EIDCard::doSODCheck(bool check) {
 
