@@ -806,7 +806,7 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
-                        enabled: fileLoaded && propertyRadioButtonPADES.checked
+                        enabled: fileLoaded
                         checked: true
                     }
                 }
@@ -825,7 +825,7 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
-                        enabled: fileLoaded && propertyRadioButtonPADES.checked
+                        enabled: fileLoaded
                     }
                 }
             }

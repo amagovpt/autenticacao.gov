@@ -1379,6 +1379,8 @@ PageServicesSignAdvancedForm {
                 propertyTextFieldReason.opacity = 1.0
                 propertyTextFieldLocal.opacity = 1.0
                 propertySwitchSignAdd.enabled = true
+                propertyCheckSignShow.enabled = true
+                propertyCheckSignReduced.enabled = true
                 filesModel.clear()
                 for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
                 {
@@ -1394,6 +1396,10 @@ PageServicesSignAdvancedForm {
                 propertyTextFieldReason.opacity = Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                 propertyTextFieldLocal.opacity = Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                 propertySwitchSignAdd.enabled = false
+
+                propertyCheckSignShow.enabled = false
+                propertyCheckSignReduced.enabled = false
+
                 filesModel.clear()
                 for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
                 {
