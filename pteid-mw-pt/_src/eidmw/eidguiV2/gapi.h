@@ -356,9 +356,10 @@ signals:
     void signalCertificatesChanged(const QVariantMap certificatesMap);
     void getCertificateAuthStatusFinished(int certificateStatus);
     void signalShowCardActivation(QString statusMessage);
-
+        
     //SCAP signals
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
+    void signalSCAPServiceFail();
     void signalCompanyAttributesLoaded(const QList<QString> attribute_list);
     void signalEntityAttributesLoaded(const QList<QString> attribute_list);
     void signalAttributesLoaded(const QList<QString> attribute_list);

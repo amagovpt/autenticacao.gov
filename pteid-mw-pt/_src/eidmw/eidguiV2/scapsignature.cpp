@@ -198,17 +198,16 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
                 }
                 else {
                     qDebug() << "Error in PADES/PDFSignature service!";
-                    parent->signalPdfSignFail();
+                    parent->signalSCAPServiceFail();
                 }
             }
             else {
 
-            	//TODO: Handle error in the local signature
+                parent->signalPdfSignFail();
             }
                 
         }
-        catch (eIDMW::PTEID_Exception &e)
-        {
+        catch (eIDMW::PTEID_Exception &e)       {
             parent->signalPdfSignFail();
             std::cerr << "Caught exception getting EID Card. Error code: " << hex << e.GetError() << std::endl;
             //this->success = SIG_ERROR;
