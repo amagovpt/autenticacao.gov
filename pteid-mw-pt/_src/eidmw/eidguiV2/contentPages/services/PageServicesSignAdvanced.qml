@@ -99,6 +99,15 @@ PageServicesSignAdvancedForm {
             }
         }
         onSignalPdfSignFail: {
+            signerror_dialog.propertySignFailDialogText.text =
+                    qsTranslate("PageServicesSign","STR_SIGN_LOCAL_PDF_FAIL")
+            signerror_dialog.visible = true
+            propertyBusyIndicator.running = false
+            propertyOutputSignedFile = ""
+        }
+        onSignalSCAPServiceFail: {
+            signerror_dialog.propertySignFailDialogText.text =
+                    qsTranslate("PageServicesSign","STR_SIGN_SCAP_SERVICE_FAIL")
             signerror_dialog.visible = true
             propertyBusyIndicator.running = false
             propertyOutputSignedFile = ""
@@ -779,6 +788,8 @@ PageServicesSignAdvancedForm {
            + mainView.width * 0.5 - signerror_dialog.width * 0.5
         y: parent.height * 0.5 - signerror_dialog.height * 0.5
 
+        property alias propertySignFailDialogText: text_sign_error
+
         header: Label {
             text: qsTranslate("PageServicesSign","STR_SIGN_FAIL")
             elide: Label.ElideRight
@@ -788,7 +799,19 @@ PageServicesSignAdvancedForm {
             font.pixelSize: 16
             color: Constants.COLOR_MAIN_BLUE
         }
-
+        Item {
+            width: signerror_dialog.availableWidth
+            height: 50
+            Text {
+                id: text_sign_error
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
+                height: parent.height
+                width: parent.width - 48
+                wrapMode: Text.Wrap
+            }
+        }
         standardButtons: DialogButtonBox.Ok
     }
 

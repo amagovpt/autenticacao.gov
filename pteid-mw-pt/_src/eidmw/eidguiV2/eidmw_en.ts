@@ -20,7 +20,6 @@
     </message>
     <message>
         <location filename="gapi.cpp" line="477"/>
-        <location filename="gapi.cpp" line="512"/>
         <source>STR_ERROR_CODE</source>
         <translation>Error code = </translation>
     </message>
@@ -41,11 +40,16 @@
     </message>
     <message>
         <location filename="gapi.cpp" line="452"/>
-        <source>STR_CONNECTION ERROR</source>
+        <location filename="gapi.cpp" line="502"/>
+        <location filename="gapi.cpp" line="593"/>
+        <source>STR_CONNECTION_ERROR</source>
+        <oldsource>STR_CONNECTION ERROR</oldsource>
         <translation>Connection Error</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="453"/>
+        <location filename="gapi.cpp" line="503"/>
+        <location filename="gapi.cpp" line="594"/>
         <source>STR_VERIFY_INTERNET</source>
         <translation>Please make sure you are connected to the Internet</translation>
     </message>
@@ -77,12 +81,12 @@
         <translation>Please make sure you have a valid authentication certificate</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="493"/>
+        <location filename="gapi.cpp" line="492"/>
         <source>STR_CMD_ERROR_MSG</source>
         <translation>Please try again. If this error persists, please have your process number and error code ready, and contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail cartaodecidadao@irn.mj.pt.</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="500"/>
+        <location filename="gapi.cpp" line="499"/>
         <source>STR_CMD_SUCESS</source>
         <translation>Signature with Chave Móvel Digital successfully.</translation>
     </message>
@@ -92,47 +96,47 @@
         <translation>Error in the Chave Móvel Digital Login operation!</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="583"/>
+        <location filename="gapi.cpp" line="578"/>
         <source>STR_CHANGING_ADDRESS</source>
         <translation>Changing Address in card...</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="624"/>
+        <location filename="gapi.cpp" line="633"/>
         <source>STR_CMD_LOGIN_SUCESS</source>
         <translation>Login successfully. Wait for the code sent by SMS!</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="664"/>
+        <location filename="gapi.cpp" line="673"/>
         <source>STR_CMD_CONNECTING</source>
         <translation>Connecting to the server</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="693"/>
+        <location filename="gapi.cpp" line="701"/>
         <source>STR_CMD_SENDING_CODE</source>
         <translation>Sending confirmation code to the server</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="720"/>
+        <location filename="gapi.cpp" line="725"/>
         <source>STR_CARD_ACTIVE_AND_VALID</source>
         <translation>Citizen card active and valid.</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="727"/>
+        <location filename="gapi.cpp" line="732"/>
         <source>STR_CARD_CONNECTION_ERROR</source>
         <translation>Citizen Card status could not be verified. Please check your Internet connection.</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="733"/>
+        <location filename="gapi.cpp" line="738"/>
         <source>STR_CARD_CANCELED</source>
         <translation>Citizen card canceled. Please contact a competent Citizen Card issuing service.</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="738"/>
+        <location filename="gapi.cpp" line="743"/>
         <source>STR_CARD_EXPIRED</source>
         <translation>Expired Citizen Card. Please contact a competent Citizen Card issuing service.</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="743"/>
+        <location filename="gapi.cpp" line="748"/>
         <source>STR_CARD_NOT_ACTIVE</source>
         <translation>The Citizen Card was not activated.</translation>
     </message>
@@ -141,31 +145,31 @@
         <translation type="vanished">The Citizen Card has been activated</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1023"/>
+        <location filename="gapi.cpp" line="1028"/>
         <source>STR_BASIC_INFORMATION</source>
         <translation>BASIC INFORMATION</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="66"/>
-        <location filename="gapi.cpp" line="1042"/>
+        <location filename="gapi.cpp" line="1047"/>
         <source>STR_GIVEN_NAME</source>
         <translation>Given Name(s)</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="81"/>
-        <location filename="gapi.cpp" line="1046"/>
+        <location filename="gapi.cpp" line="1051"/>
         <source>STR_SURNAME</source>
         <translation>Surname(s)</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="147"/>
-        <location filename="gapi.cpp" line="1050"/>
+        <location filename="gapi.cpp" line="1055"/>
         <source>STR_GENDER</source>
         <translation>Gender</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="157"/>
-        <location filename="gapi.cpp" line="1051"/>
+        <location filename="gapi.cpp" line="1056"/>
         <source>STR_HEIGHT</source>
         <translation>Height</translation>
     </message>
@@ -176,7 +180,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="177"/>
-        <location filename="gapi.cpp" line="1052"/>
+        <location filename="gapi.cpp" line="1057"/>
         <source>STR_DATE_OF_BIRTH</source>
         <translation>Date of birth</translation>
     </message>
@@ -185,18 +189,18 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="40"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="80"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="97"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="146"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="160"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1622"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="174"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1664"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="82"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="96"/>
-        <location filename="gapi.cpp" line="1057"/>
+        <location filename="gapi.cpp" line="1062"/>
         <source>STR_DOCUMENT_NUMBER</source>
         <translation>Document Number</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="206"/>
-        <location filename="gapi.cpp" line="1058"/>
+        <location filename="gapi.cpp" line="1063"/>
         <source>STR_VALIDITY_DATE</source>
         <translation>Validity Date</translation>
     </message>
@@ -206,136 +210,136 @@
         <translation>Affiliation</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1063"/>
+        <location filename="gapi.cpp" line="1068"/>
         <source>STR_FATHER</source>
         <translation>Father</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1067"/>
+        <location filename="gapi.cpp" line="1072"/>
         <source>STR_MOTHER</source>
         <translation>Mother</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="281"/>
-        <location filename="gapi.cpp" line="1071"/>
+        <location filename="gapi.cpp" line="1076"/>
         <source>STR_NOTES</source>
         <translation>Notes</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1079"/>
+        <location filename="gapi.cpp" line="1084"/>
         <source>STR_ADDITIONAL_INFORMATION</source>
         <translation>ADDITIONAL INFORMATION</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="54"/>
-        <location filename="gapi.cpp" line="1083"/>
+        <location filename="gapi.cpp" line="1088"/>
         <source>STR_VAT_NUM</source>
         <translation>VAT identification no.</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="65"/>
-        <location filename="gapi.cpp" line="1084"/>
+        <location filename="gapi.cpp" line="1089"/>
         <source>STR_SOCIAL_SECURITY_NUM</source>
         <translation>Social Security no.</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="76"/>
-        <location filename="gapi.cpp" line="1086"/>
+        <location filename="gapi.cpp" line="1091"/>
         <source>STR_NATIONAL_HEALTH_NUM</source>
         <translation>National Health System no.</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="96"/>
-        <location filename="gapi.cpp" line="1090"/>
+        <location filename="gapi.cpp" line="1095"/>
         <source>STR_CARD_VERSION</source>
         <translation>Card Version</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="107"/>
-        <location filename="gapi.cpp" line="1091"/>
+        <location filename="gapi.cpp" line="1096"/>
         <source>STR_DELIVERY_DATE</source>
         <translation>Delivery Date</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="126"/>
-        <location filename="gapi.cpp" line="1093"/>
+        <location filename="gapi.cpp" line="1098"/>
         <source>STR_DELIVERY_ENTITY</source>
         <translation>Delivery Entity</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="173"/>
-        <location filename="gapi.cpp" line="1101"/>
+        <location filename="gapi.cpp" line="1106"/>
         <source>STR_CARD_STATE</source>
         <translation>Card State</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="137"/>
-        <location filename="gapi.cpp" line="1096"/>
+        <location filename="gapi.cpp" line="1101"/>
         <source>STR_DOCUMENT_TYPE</source>
         <translation>Document type</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="156"/>
-        <location filename="gapi.cpp" line="1098"/>
+        <location filename="gapi.cpp" line="1103"/>
         <source>STR_DELIVERY_LOCATION</source>
         <translation>Delivery Location</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1108"/>
+        <location filename="gapi.cpp" line="1113"/>
         <source>STR_ADDRESS</source>
         <translation>ADDRESS</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="75"/>
-        <location filename="gapi.cpp" line="1162"/>
+        <location filename="gapi.cpp" line="1167"/>
         <source>STR_FOREIGN_COUNTRY</source>
         <translation>Country</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="93"/>
-        <location filename="gapi.cpp" line="1178"/>
+        <location filename="gapi.cpp" line="1183"/>
         <source>STR_FOREIGN_ADDRESS</source>
         <translation>Address</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="111"/>
-        <location filename="gapi.cpp" line="1166"/>
+        <location filename="gapi.cpp" line="1171"/>
         <source>STR_FOREIGN_CITY</source>
         <translation>City</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="130"/>
-        <location filename="gapi.cpp" line="1164"/>
+        <location filename="gapi.cpp" line="1169"/>
         <source>STR_FOREIGN_REGION</source>
         <translation>Region</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="149"/>
-        <location filename="gapi.cpp" line="1171"/>
+        <location filename="gapi.cpp" line="1176"/>
         <source>STR_FOREIGN_LOCALITY</source>
         <translation>Locality</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="168"/>
-        <location filename="gapi.cpp" line="1173"/>
+        <location filename="gapi.cpp" line="1178"/>
         <source>STR_FOREIGN_POSTAL_CODE</source>
         <translation>ZIP</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="194"/>
-        <location filename="gapi.cpp" line="1115"/>
+        <location filename="gapi.cpp" line="1120"/>
         <source>STR_DISTRICT</source>
         <translation>District</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="212"/>
-        <location filename="gapi.cpp" line="1117"/>
+        <location filename="gapi.cpp" line="1122"/>
         <source>STR_MUNICIPALY</source>
         <translation>Municipality</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="230"/>
-        <location filename="gapi.cpp" line="1119"/>
+        <location filename="gapi.cpp" line="1124"/>
         <source>STR_CICIL_PARISH</source>
         <translation>Civil Parish</translation>
     </message>
@@ -345,94 +349,94 @@
         <translation>Zip Code</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1124"/>
+        <location filename="gapi.cpp" line="1129"/>
         <source>STR_AB_STREET_TYPE</source>
         <translation>Ab. street type</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="249"/>
-        <location filename="gapi.cpp" line="1126"/>
+        <location filename="gapi.cpp" line="1131"/>
         <source>STR_STREET_TYPE</source>
         <translation>Street type</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1133"/>
+        <location filename="gapi.cpp" line="1138"/>
         <source>STR_AB_BUILDING_TYPE</source>
         <translation>Ab. Building Type</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1135"/>
+        <location filename="gapi.cpp" line="1140"/>
         <source>STR_BUILDING_TYPE</source>
         <translation>Building Type</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="290"/>
-        <location filename="gapi.cpp" line="1141"/>
+        <location filename="gapi.cpp" line="1146"/>
         <source>STR_FLOOR</source>
         <translation>Floor</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="301"/>
-        <location filename="gapi.cpp" line="1143"/>
+        <location filename="gapi.cpp" line="1148"/>
         <source>STR_SIDE</source>
         <translation>Side</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="319"/>
-        <location filename="gapi.cpp" line="1145"/>
+        <location filename="gapi.cpp" line="1150"/>
         <source>STR_PLACE</source>
         <translation>Place</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1149"/>
+        <location filename="gapi.cpp" line="1154"/>
         <source>STR_ZIP_CODE_4</source>
         <translation>Zip Code 4</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1151"/>
+        <location filename="gapi.cpp" line="1156"/>
         <source>STR_ZIP_CODE_3</source>
         <translation>Zip Code 3</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="385"/>
-        <location filename="gapi.cpp" line="1153"/>
+        <location filename="gapi.cpp" line="1158"/>
         <source>STR_POSTAL_LOCALITY</source>
         <translation>Postal Locality</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="330"/>
-        <location filename="gapi.cpp" line="1158"/>
+        <location filename="gapi.cpp" line="1163"/>
         <source>STR_LOCALITY</source>
         <translation>Postal Locality</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1200"/>
+        <location filename="gapi.cpp" line="1205"/>
         <source>STR_PERSONAL_NOTES</source>
         <translation>PERSONAL NOTES</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1000"/>
+        <location filename="gapi.cpp" line="1005"/>
         <source>STR_PERSONAL_DATA</source>
         <oldsource>PERSONAL DATA</oldsource>
         <translation>PERSONAL DATA</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="225"/>
-        <location filename="gapi.cpp" line="1060"/>
+        <location filename="gapi.cpp" line="1065"/>
         <source>STR_COUNTRY</source>
         <oldsource>Country</oldsource>
         <translation>Country</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="260"/>
-        <location filename="gapi.cpp" line="1128"/>
+        <location filename="gapi.cpp" line="1133"/>
         <source>STR_STREET_NAME</source>
         <oldsource>Ab. street type</oldsource>
         <translation>Street Name</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="279"/>
-        <location filename="gapi.cpp" line="1137"/>
+        <location filename="gapi.cpp" line="1142"/>
         <source>STR_HOUSE_BUILDING_NUM</source>
         <oldsource>Ab. Building Type</oldsource>
         <translation>House/building no.</translation>
@@ -851,9 +855,9 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="34"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="78"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="95"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="142"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="159"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1621"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="156"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="173"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1663"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="78"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="95"/>
         <source>STR_CUSTOM_SIGN_BY</source>
@@ -1113,12 +1117,12 @@
         <translation>Revoked</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="205"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="216"/>
         <source>STR_STATUS_EXPIRED</source>
         <translation>Expired</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="199"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="201"/>
         <source>STR_STATUS_SUSPENDED</source>
         <translation>Inactive or Suspended</translation>
     </message>
@@ -1140,7 +1144,7 @@
     <message>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="190"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="195"/>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="216"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="219"/>
         <source>STR_STATUS_UNKNOWN</source>
         <translation>Unknown</translation>
     </message>
@@ -1183,140 +1187,152 @@
 <context>
     <name>PageServicesSign</name>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="215"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="499"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="229"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="513"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="160"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="440"/>
         <source>STR_SIGN_CMD</source>
         <translation>Sign with Chave Móvel Digital</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="236"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="250"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="181"/>
         <source>STR_SIGN_INSERT_LOGIN</source>
         <translation>Enter login information</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="256"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="270"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="201"/>
         <source>STR_SIGN_CMD_MOVEL_NUM</source>
         <translation>Mobile number</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="337"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="351"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="282"/>
         <source>STR_SIGN_CMD_MOVEL_NUM_OP</source>
         <translation>Number</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="355"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="369"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="300"/>
         <source>STR_SIGN_CMD_PIN</source>
         <translation>PIN</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="370"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="384"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="315"/>
         <source>STR_SIGN_CMD_PIN_OP</source>
         <translation>PIN</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="389"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="403"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="334"/>
         <source>STR_SIGN_CMD_URL</source>
         <translation>Click to know the Chave Móvel Digital</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="678"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="692"/>
         <source>STR_SIGN_SUCESS_MULTI</source>
         <translation>File(s) successfully signed</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="551"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="565"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="492"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="637"/>
         <source>STR_SIGN_OPEN</source>
         <translation>Open signed file ?</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="713"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="86"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="115"/>
+        <source>STR_SIGN_SCAP_SERVICE_FAIL</source>
+        <translation>Fail at PDF signature service with professional attributes. Please try again.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="108"/>
+        <source>STR_SIGN_LOCAL_PDF_FAIL</source>
+        <translation>PDF signature failed. Please try again.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="727"/>
         <source>STR_SIGN_OPEN_MULTI</source>
         <translation>Open signed file(s) ?</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="783"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="799"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="818"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="707"/>
         <source>STR_SIGN_FAIL</source>
         <translation>PDF signature failed</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="798"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="828"/>
         <source>STR_SIGN_PDF_FILES</source>
         <translation>PAdES (PDF Advanced Electronic Signatures)</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="807"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="837"/>
         <source>STR_SIGN_PACKAGE</source>
         <translation>CCSIGN Package with XML Advanced Electronic Signatures (XAdES)</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1274"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1281"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1315"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1304"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1311"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1345"/>
         <source>STR_SCAP_WARNING</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1276"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1306"/>
         <source>STR_SCAP_ATTRIBUTES_NOT_SELECT</source>
         <oldsource>STR_MULTI_FILE_ATTRIBUTES_WARNING</oldsource>
         <translation>Attributes not selected</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1283"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1313"/>
         <source>STR_SCAP_MAX_FILESIZE</source>
         <translation>File size was exceeded. Max supported file size is</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1317"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1347"/>
         <source>STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG</source>
         <translation>Unable to sign multiple files with professional attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1352"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1382"/>
         <source>STR_MULTI_FILE_CMD_WARNING</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1354"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1384"/>
         <source>STR_MULTI_FILE_CMD_WARNING_MSG</source>
         <translation>Can not sign multiple files with CMD</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1376"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1619"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1406"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1661"/>
         <source>STR_SIGN_DROP_MULTI</source>
         <translation>Drag here files to be signed or click here to find files</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1391"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1423"/>
         <source>STR_SIGN_NOT_PREVIEW</source>
         <translation>No preview available</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1531"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="912"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1573"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="926"/>
         <source>STR_LOAD_PDF_ERROR</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1533"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1575"/>
         <source>STR_LOAD_ADVANCED_PDF_ERROR_MSG</source>
         <translation>PDF format is selected. Only PDF files can be selected. Check the file format that you understand.</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="412"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="616"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="426"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="630"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="357"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="558"/>
         <source>STR_CMD_POPUP_CANCEL</source>
@@ -1324,9 +1340,9 @@
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="425"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="476"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="631"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="439"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="490"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="645"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="370"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="418"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="573"/>
@@ -1340,28 +1356,26 @@
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="914"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="928"/>
         <source>STR_LOAD_PDF_ERROR_MSG</source>
         <translation>Error reading PDF file. Please check the format of the file.</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="569"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="583"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="510"/>
         <source>STR_SIGN_CMD_CODE</source>
         <translation>Enter the code</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="92"/>
         <source>STR_TIME_STAMP_MULTI_FAILED</source>
-        <translation>But some of the timestamps could not be applied</translation>
+        <translation type="vanished">But some of the timestamps could not be applied</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="95"/>
         <source>STR_TIME_STAMP_FAILED</source>
-        <translation>But the timestamp could not be applied</translation>
+        <translation type="vanished">But the timestamp could not be applied</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="584"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="598"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="525"/>
         <source>STR_SIGN_CMD_CODE_OP</source>
         <translation>Code</translation>
@@ -1584,17 +1598,17 @@
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="27"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="33"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="39"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="111"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="117"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="123"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="129"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="125"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="131"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="137"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="143"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="47"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="53"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="59"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="65"/>
-        <location filename="main.qml" line="60"/>
-        <location filename="main.qml" line="69"/>
-        <location filename="main.qml" line="77"/>
+        <location filename="main.qml" line="66"/>
+        <location filename="main.qml" line="75"/>
+        <location filename="main.qml" line="83"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Error</translation>
     </message>
@@ -1608,7 +1622,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="55"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="23"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="23"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="113"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="127"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="49"/>
         <source>STR_POPUP_NO_CARD_READER</source>
         <translation>No card readers are detected.</translation>
@@ -1623,7 +1637,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="61"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="29"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="29"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="119"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="133"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="55"/>
         <source>STR_POPUP_NO_CARD</source>
         <translation>No card present</translation>
@@ -1638,7 +1652,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="67"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="35"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="35"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="125"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="139"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="61"/>
         <source>STR_SOD_VALIDATION_ERROR</source>
         <translation>SOD validation failed: card data consistency is compromised!</translation>
@@ -1655,7 +1669,7 @@
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="41"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="337"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="581"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="131"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="145"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="67"/>
         <source>STR_POPUP_CARD_ACCESS_ERROR</source>
         <translation>A problem has occurred while trying to read card. Please, try again.</translation>
@@ -1680,9 +1694,9 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="91"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="104"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="112"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="155"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="165"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="174"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="169"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="179"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="188"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="91"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="101"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="110"/>
@@ -1696,7 +1710,7 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="152"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="59"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="93"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="157"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="171"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="93"/>
         <source>STR_POPUP_CARD_REMOVED</source>
         <translation>Citizen card removed</translation>
@@ -1708,7 +1722,7 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="158"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="65"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="106"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="167"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="181"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="103"/>
         <source>STR_POPUP_CARD_CHANGED</source>
         <translation>Citizen card inserted</translation>
@@ -1721,28 +1735,28 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="166"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="73"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="114"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="176"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="190"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="112"/>
         <source>STR_POPUP_CARD_READ_UNKNOWN</source>
         <translation>Application error! Please reinstall the application</translation>
     </message>
     <message>
-        <location filename="main.qml" line="62"/>
+        <location filename="main.qml" line="68"/>
         <source>STR_GENERIC_ERROR_MSG</source>
         <translation>Please try again. If this error persists, contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail cartaodecidadao@irn.mj.pt.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="63"/>
+        <location filename="main.qml" line="69"/>
         <source>STR_ERROR_CODE</source>
         <translation>Error code = </translation>
     </message>
     <message>
-        <location filename="main.qml" line="71"/>
+        <location filename="main.qml" line="77"/>
         <source>STR_CERTIFICATES_IMPORT_ERROR_MSG</source>
         <translation>Error importing certificates</translation>
     </message>
     <message>
-        <location filename="main.qml" line="79"/>
+        <location filename="main.qml" line="85"/>
         <source>STR_CERTIFICATES_REMOVE_ERROR_MSG</source>
         <translation>Error removing certificates</translation>
     </message>
@@ -1762,7 +1776,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="42"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1260"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1290"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="100"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="105"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="60"/>
@@ -1777,7 +1791,7 @@
         <translation>Choose file</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1329"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1359"/>
         <source>STR_POPUP_FILE_OUTPUT_FOLDER</source>
         <translation>Choose the destination folder of the files</translation>
     </message>
@@ -1787,13 +1801,13 @@
         <translation>To sign multiple files use the advanced signature page</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="734"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="748"/>
         <source>STR_POPUP_FILE_CANCEL</source>
         <translation>Cancel</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="82"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="747"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="761"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="30"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="671"/>
         <source>STR_POPUP_FILE_OPEN</source>
@@ -2042,7 +2056,7 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="main.qml" line="588"/>
+        <location filename="main.qml" line="594"/>
         <source>STR_RUN_MODE</source>
         <translation>Test mode</translation>
     </message>
