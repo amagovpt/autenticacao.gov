@@ -1406,6 +1406,7 @@ PageServicesSignAdvancedForm {
                 propertySwitchSignAdd.enabled = true
                 propertyCheckSignShow.enabled = true
                 propertyCheckSignReduced.enabled = true
+                propertyButtonSignCMD.enabled = true
                 filesModel.clear()
                 for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
                 {
@@ -1424,7 +1425,7 @@ PageServicesSignAdvancedForm {
 
                 propertyCheckSignShow.enabled = false
                 propertyCheckSignReduced.enabled = false
-
+                propertyButtonSignCMD.enabled = false
                 filesModel.clear()
                 for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
                 {
