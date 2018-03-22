@@ -170,7 +170,10 @@ namespace eIDMW {
 
         PDFSignature *pdf = m_pdf_handler->getPdfSignature();
 
-        pdf->setVisibleCoordinates(page, coord_x, coord_y);
+        if (coord_x >= 0 && coord_y >= 0){
+            pdf->setVisibleCoordinates(page, coord_x, coord_y);
+        }
+
         ret = pdf->signFiles(location, reason, outfile_path);
 
         if ( ret != ERR_NONE ) {
