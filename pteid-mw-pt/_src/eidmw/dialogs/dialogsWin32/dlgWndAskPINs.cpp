@@ -44,7 +44,7 @@
 
 std::wstring langchange = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
-dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & PINName, bool UseKeypad, HWND Parent )
+dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & PINName, bool dontAskPUK, HWND Parent )
 :Win32Dialog(L"WndAskPINs")
 {
 
@@ -54,13 +54,11 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 	Pin2Result[0] = ' ';
 	Pin2Result[1] = (char)0;
 	DrawError = false;
+	m_dontAskPIN1 = dontAskPUK;
 
 	std::wstring tmpTitle = L"";
-	/*if(wcscmp(L"nl",langchange.c_str())==0)
-		tmpTitle += (L"Renovar o código PIN");
-		else*/
 
-	if (PINName.find(L"PUK") != std::wstring::npos)
+	if (PINName.find(L"PUK") != std::wstring::npos || dontAskPUK)
 		tmpTitle += GETSTRING_DLG(Unblock);
 	else
 		tmpTitle += GETSTRING_DLG(RenewingPinCode);
@@ -68,7 +66,6 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 	m_ulPinMaxLen = 8;
 	m_ulPin1MinLen = 4;
 	m_ulPin1MaxLen = 8;
-
 
 	szHeader = const_cast<wchar_t *>(Header.c_str());
 	szPIN = PINName.c_str();
@@ -98,13 +95,15 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 		if (pinInfo1.ulFlags & PIN_FLAG_DIGITS)
 			dwStyle |= ES_NUMBER;
 
+		int vert_offset = m_dontAskPIN1 ? 25 : 0;
 
-		HWND hTextEdit1 = CreateWindowEx(WS_EX_CLIENTEDGE,
-			L"EDIT", L"", dwStyle,
-			clientRect.right / 2 + 110, clientRect.bottom - 150, 80, 26,
-			m_hWnd, (HMENU)IDC_EDIT_PIN1, m_hInstance, NULL);
-		SendMessage(hTextEdit1, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
-
+		if (!m_dontAskPIN1) {
+			HWND hTextEdit1 = CreateWindowEx(WS_EX_CLIENTEDGE,
+				L"EDIT", L"", dwStyle,
+				clientRect.right / 2 + 110, clientRect.bottom - 150, 80, 26,
+				m_hWnd, (HMENU)IDC_EDIT_PIN1, m_hInstance, NULL);
+			SendMessage(hTextEdit1, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
+		}
 
 		dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_PASSWORD;
 		if (pinInfo2.ulFlags & PIN_FLAG_DIGITS)
@@ -112,35 +111,38 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 
 		HWND hTextEdit2 = CreateWindowEx(WS_EX_CLIENTEDGE,
 			L"EDIT", L"", dwStyle,
-			clientRect.right / 2 + 110, clientRect.bottom - 120, 80, 26,
+			clientRect.right / 2 + 110, clientRect.bottom - 120 - vert_offset, 80, 26,
 			m_hWnd, (HMENU)IDC_EDIT_PIN2, m_hInstance, NULL);
 		SendMessage(hTextEdit2, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
 
 		HWND hTextEdit3 = CreateWindowEx(WS_EX_CLIENTEDGE,
 			L"EDIT", L"", dwStyle,
-			clientRect.right / 2 + 110, clientRect.bottom - 90, 80, 26,
+			clientRect.right / 2 + 110, clientRect.bottom - 90 - vert_offset, 80, 26,
 			m_hWnd, (HMENU)IDC_EDIT_PIN3, m_hInstance, NULL);
 		SendMessage(hTextEdit3, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
 
 		std::wstring oldPin_label = PINName.find(L"PUK") != std::wstring::npos ? GETSTRING_DLG(Puk) : GETSTRING_DLG(CurrentPin);
+		if (!m_dontAskPIN1) {
 
-		HWND hStaticText1 = CreateWindow(
-			L"STATIC", oldPin_label.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
-			210, clientRect.bottom - 146, clientRect.right / 2 - 120, 22,
-			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
+			HWND hStaticText1 = CreateWindow(
+				L"STATIC", oldPin_label.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
+				210, clientRect.bottom - 146, clientRect.right / 2 - 120, 22,
+				m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
+			SendMessage(hStaticText1, WM_SETFONT, (WPARAM)TextFont, 0);
+		}
 
 		HWND hStaticText2 = CreateWindow(
 			L"STATIC", GETSTRING_DLG(NewPin), WS_CHILD | WS_VISIBLE | SS_LEFT,
-			210, clientRect.bottom - 116, clientRect.right / 2 - 100, 22,
+			210, clientRect.bottom - 116 - vert_offset, clientRect.right / 2 - 100, 22,
 			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
 
 		HWND hStaticText3 = CreateWindow(
 			L"STATIC", GETSTRING_DLG(ConfirmNewPin), WS_CHILD | WS_VISIBLE | SS_LEFT,
-			210, clientRect.bottom - 86, clientRect.right / 2 - 100, 22,
+			210, clientRect.bottom - 86 - vert_offset, clientRect.right / 2 - 100, 22,
 			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
 
 
-		SendMessage(hStaticText1, WM_SETFONT, (WPARAM)TextFont, 0);
+		
 		SendMessage(hStaticText2, WM_SETFONT, (WPARAM)TextFont, 0);
 		SendMessage(hStaticText3, WM_SETFONT, (WPARAM)TextFont, 0);
 
@@ -231,7 +233,7 @@ LRESULT dlgWndAskPINs::ProcecEvent
 
 						unsigned int len = (unsigned int)SendMessage(GetDlgItem(m_hWnd, IDC_EDIT_PIN1), WM_GETTEXTLENGTH, 0, 0);
 						InputField1_OK = len >= m_ulPin1MinLen;
-						EnableWindow(GetDlgItem(m_hWnd, IDOK), (InputField1_OK && InputField2_OK && InputField3_OK));
+						EnableWindow(GetDlgItem(m_hWnd, IDOK), ((InputField1_OK || m_dontAskPIN1) && InputField2_OK && InputField3_OK));
 
 					}
 					return TRUE;
@@ -242,7 +244,7 @@ LRESULT dlgWndAskPINs::ProcecEvent
 					{
 						unsigned int len = (unsigned int)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN2 ), WM_GETTEXTLENGTH, 0, 0 );
 						InputField2_OK = len >= m_ulPin1MinLen;
-						EnableWindow( GetDlgItem( m_hWnd, IDOK ), ( InputField1_OK && InputField2_OK && InputField3_OK ) );
+						EnableWindow( GetDlgItem( m_hWnd, IDOK ), ( (InputField1_OK || m_dontAskPIN1) && InputField2_OK && InputField3_OK ) );
 					}
 					return TRUE;
 				}
@@ -252,7 +254,7 @@ LRESULT dlgWndAskPINs::ProcecEvent
 					{
 						unsigned int len = (unsigned int)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN3 ), WM_GETTEXTLENGTH, 0, 0 );
 						InputField3_OK = len >= m_ulPin1MinLen;
-						EnableWindow( GetDlgItem( m_hWnd, IDOK ), ( InputField1_OK && InputField2_OK && InputField3_OK ) );
+						EnableWindow( GetDlgItem( m_hWnd, IDOK ), ( (InputField1_OK || m_dontAskPIN1) && InputField2_OK && InputField3_OK ) );
 					}
 					return TRUE;
 				}
@@ -277,37 +279,9 @@ LRESULT dlgWndAskPINs::ProcecEvent
 					return TRUE;
 
 				case IDB_CANCEL:
-					//strcpy( PinResult, "" );
 					dlgResult = eIDMW::DLG_CANCEL;
 					close();
 					return TRUE;
-
-				default:
-					unsigned short tmp = LOWORD(wParam);
-					if( tmp >= IDB_KeypadStart && tmp < IDB_KeypadEnd ) // Keypad Buttons
-					{
-						wchar_t nameBuf[128];
-						SendMessage( GetDlgItem( m_hWnd, IDC_EDIT ), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf );
-						size_t iPos = wcslen( nameBuf );
-						if( iPos >= m_ulPinMaxLen )
-							return TRUE;
-						if( tmp == IDB_KeypadEnd - 1 ) // Keypad Button 0
-						{
-							nameBuf[ iPos++ ] = L'0';
-						}
-						else // Keypad Button 1 to 9
-						{
-							nameBuf[ iPos++ ] = 49 + tmp - IDB_KeypadStart;
-						}
-							nameBuf[ iPos++ ] = NULL;				
-						SendMessage( GetDlgItem( m_hWnd, IDC_EDIT ), WM_SETTEXT, 0, (LPARAM)nameBuf );
-						return TRUE;
-					}
-					if( tmp == IDB_KeypadEnd ) // Keypad Button CE
-					{
-						SendMessage( GetDlgItem( m_hWnd, IDC_EDIT ), WM_SETTEXT, 0, (LPARAM)"" );
-					}
-					return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
 			}
 		}
 
@@ -389,6 +363,13 @@ LRESULT dlgWndAskPINs::ProcecEvent
 			SetBkColor(m_hDC, GetSysColor(COLOR_3DFACE));
 			SelectObject(m_hDC, TextFont);
 			DrawText(m_hDC, szHeader, -1, &rect, DT_WORDBREAK);
+
+			if (m_dontAskPIN1) {
+				rect.top += 20;
+				rect.bottom += 20;
+
+				DrawText(m_hDC, szPIN, -1, &rect, DT_WORDBREAK);
+			}
 
 			if (DrawError)
 			{

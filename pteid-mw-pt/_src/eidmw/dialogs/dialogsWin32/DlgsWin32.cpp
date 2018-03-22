@@ -33,8 +33,6 @@ using namespace eIDMW;
 
 HMODULE g_hDLLInstance = (HMODULE)NULL;
 
-int g_UseKeyPad = -1;
-
 typedef std::map< unsigned long, dlgWndPinpadInfo* > TD_WNDPINPAD_MAP;
 typedef std::pair< unsigned long, dlgWndPinpadInfo* > TD_WNDPINPAD_PAIR;
 
@@ -70,14 +68,6 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 #pragma managed(pop)
 #endif
 
-bool DlgGetKeyPad()
-{
-	if(g_UseKeyPad==-1)
-	{
-		g_UseKeyPad = (CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_VIRTUALKBD)?1:0);
-	}
-    return (g_UseKeyPad==0 ? false: true);
-}
 
 std::wstring getPinName(DlgPinUsage usage, const wchar_t *inPinName) {
     std::wstring PinName;
@@ -139,7 +129,6 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 		usage, csPinName,operation);
 
 	CLang::ResetInit();				// Reset language to take into account last change
-	g_UseKeyPad=-1;					// Reset the keypad
 
 	dlgWndAskPIN *dlg = NULL;
 	try
@@ -202,7 +191,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			break;
 		}
 
-		dlg = new dlgWndAskPIN( pinInfo, usage, sMessage, PINName, DlgGetKeyPad() );
+		dlg = new dlgWndAskPIN( pinInfo, usage, sMessage, PINName);
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
@@ -233,8 +222,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgAskPins() called");
 
 	CLang::ResetInit();				// Reset language to take into account last change
-	g_UseKeyPad=-1;					// Reset the keypad
-
+	
 	dlgWndAskPINs *dlg = NULL;
 	try
 	{
@@ -258,17 +246,25 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 				PINName = GETSTRING_DLG(Puk);
 			Header += GETSTRING_DLG(UnlockDialogHeader);
 			break;
+		case DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK:
+			//This message doesn't mention introducing any PUK
+			Header += GETSTRING_DLG(UnblockPinHeader);
+			PINName = getPinName(usage, csPinName);
+			MWLOG(LEV_DEBUG, MOD_DLG, L"dlgsWin32: Performing operation UNBLOCK_CHANGE_NO_PUK");
+			break;
 		default:
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskPins() returns DLG_BAD_PARAM");
 			return DLG_BAD_PARAM;
 			break;
 		}
 
-        dlg = new dlgWndAskPINs( pin1Info, pin2Info, Header, PINName, DlgGetKeyPad() );
+        dlg = new dlgWndAskPINs(pin1Info, pin2Info, Header, PINName, operation == DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK);
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
-			wcscpy_s(csPin1,ulPin1BufferLen,dlg->Pin1Result);
+			if (operation != DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK)
+				wcscpy_s(csPin1,ulPin1BufferLen,dlg->Pin1Result);
+
 			wcscpy_s(csPin2,ulPin2BufferLen,dlg->Pin2Result);
 
 			delete dlg;
@@ -462,7 +458,6 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 			pin_name_label = PINName;
 		}
 
-		//QString buf = "dlg num: " + QString().setNum( dlgPinPadInfoCollectorIndex );
 		dlgPinPadInfoCollectorIndex++;
 		dlgModal = new dlgWndPinpadInfo( dlgPinPadInfoCollectorIndex, usage,
 			operation, csReader, pin_name_label, sMessage);

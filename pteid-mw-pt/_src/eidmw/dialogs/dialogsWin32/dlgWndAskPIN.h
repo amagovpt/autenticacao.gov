@@ -41,7 +41,7 @@ class dlgWndAskPIN : public Win32Dialog
 
 
 public:
-	dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring & Header, std::wstring & PINName, bool UseKeypad, HWND Parent = NULL );
+	dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring & Header, std::wstring & PINName, HWND Parent = NULL );
 	virtual ~dlgWndAskPIN();
 
 	wchar_t PinResult[128];
