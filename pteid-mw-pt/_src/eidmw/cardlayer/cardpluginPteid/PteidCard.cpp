@@ -465,13 +465,13 @@ DlgPinUsage CPteidCard::PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey)
 {
 	DlgPinUsage usage = DLG_PIN_UNKNOWN;
 
-    if (Pin.ulID == 1)
+	if (Pin.ulID == 1 || Pin.ulPinRef == 0x84)
         usage = DLG_PIN_AUTH;
-    else if (Pin.ulID == 2)
+	else if (Pin.ulID == 2 || Pin.ulPinRef == 0x85)
         usage = DLG_PIN_SIGN;
-    else if (Pin.ulID == 3)
+	else if (Pin.ulID == 3 || Pin.ulPinRef == 0x86)
         usage = DLG_PIN_ADDRESS;
-    else 
+    else
     	usage = DLG_PIN_ACTIVATE;
 
 	return usage;
@@ -599,9 +599,8 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 		}
 		else
 		{
-			ret = DlgAskPins(pinOperation, usage, wideLabel.c_str(),
-				pinInfo, wsPin1,PIN_MAX_LENGTH+1,
-				pinInfo, wsPin2,PIN_MAX_LENGTH+1, wndGeometry );
+
+			ret = DlgAskPins(pinOperation, usage, wideLabel.c_str(),pinInfo, wsPin1,PIN_MAX_LENGTH+1, pinInfo, wsPin2,PIN_MAX_LENGTH+1, wndGeometry );
 		}
 #ifdef __linux__
 
