@@ -1151,6 +1151,7 @@ PageServicesSignAdvancedForm {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSignShow = propertyCheckSignShow.checked
             if(propertyCheckSignShow.checked){
+                propertyCheckSignReduced.enabled = true
                 propertyCheckLastPage.enabled = true
                 propertySpinBoxControl.enabled = true
                 propertySpinBoxControl.up.indicator.enabled = true
@@ -1160,6 +1161,7 @@ PageServicesSignAdvancedForm {
                 propertyTextSpinBox.visible = true
                 propertyPageText.opacity = 1
             }else{
+                propertyCheckSignReduced.enabled = false
                 propertyCheckLastPage.enabled = false
                 propertySpinBoxControl.enabled = false
                 propertySpinBoxControl.up.indicator.enabled = false
