@@ -2178,19 +2178,7 @@ void GAPI::startfillCertificateList( void ) {
 
 void GAPI::startGetCardActivation( void ) {
 
-    connect(this, SIGNAL(getCertificateAuthStatusFinished(int)),
-            this, SLOT(showCertificateAuthStatus(int)), Qt::UniqueConnection);
-
     QtConcurrent::run(this, &GAPI::getCertificateAuthStatus);
-}
-
-void GAPI::showCertificateAuthStatus(int certificateStatus)
-{
-    QString returnString;
-
-    returnString = getCardActivation();
-
-    emit signalShowCardActivation(returnString);
 }
 
 void GAPI::getCertificateAuthStatus ( void )
@@ -2198,6 +2186,8 @@ void GAPI::getCertificateAuthStatus ( void )
     int certificateStatus = PTEID_CERTIF_STATUS_UNKNOWN;
 
     qDebug() << "getCertificateAuthStatus";
+
+    QString returnString;
 
     BEGIN_TRY_CATCH
 
@@ -2209,7 +2199,9 @@ void GAPI::getCertificateAuthStatus ( void )
 
     certificateStatus = certificates.getCert(PTEID_Certificate::CITIZEN_AUTH).getStatus();
 
-    emit getCertificateAuthStatusFinished(certificateStatus);
+    returnString = getCardActivation();
+
+    emit signalShowCardActivation(returnString);
 
     END_TRY_CATCH
 }

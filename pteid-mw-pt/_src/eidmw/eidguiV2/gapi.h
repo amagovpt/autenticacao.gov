@@ -320,7 +320,6 @@ public slots:
     void setEventCallbacks( void );
     void startfillCertificateList ( void );
     void startGetCardActivation ( void );
-    void showCertificateAuthStatus(int certificateStatus);
 
     void initTranslation();
 
@@ -354,7 +353,6 @@ signals:
     void signalCardChanged(const int error_code);
     void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage);
     void signalCertificatesChanged(const QVariantMap certificatesMap);
-    void getCertificateAuthStatusFinished(int certificateStatus);
     void signalShowCardActivation(QString statusMessage);
         
     //SCAP signals
