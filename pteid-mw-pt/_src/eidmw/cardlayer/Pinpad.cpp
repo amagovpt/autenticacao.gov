@@ -87,8 +87,8 @@ CByteArray CPinpad::PinpadControl(unsigned long ulControl, const CByteArray & oC
 	catch (...)
 	{
 		throw ;
-	}	
-done:
+	}
+
 	return oResp;
 }
 

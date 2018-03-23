@@ -50,7 +50,8 @@ public:
 
 private:
 	void fillVerifyControlStruct(PP_VERIFY_CCID * pin_verify);
-	void fillModifyControlStruct(PP_CHANGE_CCID * pin_change, int include_verify);
+	void fillModifyControlStruct(PP_CHANGE_CCID * pin_change, bool include_verify);
+	void fillUnlockControlStruct(PP_CHANGE_CCID *pin_change);
 	unsigned int fillStructIAS(unsigned char* apdu, unsigned char ucPintype, int changePIN);
 	unsigned int fillStructGemsafe(unsigned char * apdu, unsigned char ucPintype, int changePin);
 	DWORD loadStrings(SCARDHANDLE hCard, unsigned char ucPinType, tPinOperation operation);

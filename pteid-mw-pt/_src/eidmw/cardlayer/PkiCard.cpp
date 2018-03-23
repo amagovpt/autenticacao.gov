@@ -249,7 +249,7 @@ bad_pin:
 		csReadPin1 += csPin1;
 	}
 
-    CByteArray oPinBuf = MakePinBuf(Pin, *pcsPin1, bUsePinpad, bPukMerge);
+    CByteArray oPinBuf = MakePinBuf(Pin, *pcsPin1, pcsPin1->size() == 0, bPukMerge);
     //There is one case for PIN_OP_RESET where we don't have a new PIN
     if (defineNewPin)
         oPinBuf.Append(MakePinBuf(Pin, *pcsPin2, bUsePinpad, false));

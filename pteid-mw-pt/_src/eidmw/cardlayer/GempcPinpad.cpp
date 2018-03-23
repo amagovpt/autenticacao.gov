@@ -36,9 +36,9 @@ void GemPcPinpad::fillVerifyControlStruct(PP_VERIFY_CCID * pin_verify)
 	pin_verify -> bTeoPrologue[1] = 0x00;
 	pin_verify -> bTeoPrologue[2] = 0x00;
 
-} //sizeof() == 19
+}
 
-void GemPcPinpad::fillModifyControlStruct(PP_CHANGE_CCID * pin_change, int include_verify)
+void GemPcPinpad::fillModifyControlStruct(PP_CHANGE_CCID * pin_change, bool include_verify)
 {
 
 	pin_change -> bTimerOut = 0x1E;                                         
@@ -47,13 +47,13 @@ void GemPcPinpad::fillModifyControlStruct(PP_CHANGE_CCID * pin_change, int inclu
 	pin_change -> bmPINBlockString = 0x00;
 	pin_change -> bmPINLengthFormat = 0x00;
 	pin_change -> bInsertionOffsetOld = 0x00;
-	pin_change -> bInsertionOffsetNew = include_verify == 1 ? 0x08 : 0x00; 
+	pin_change -> bInsertionOffsetNew = include_verify ? 0x08 : 0x00; 
 	(pin_change -> wPINMaxExtraDigit)[0] = 0x08; /* Min Max */
 	pin_change -> wPINMaxExtraDigit[1] = 0x04; 
-	pin_change -> bConfirmPIN = include_verify == 1 ? 0x03 : 0x01;
+	pin_change -> bConfirmPIN = include_verify ? 0x03 : 0x01;
 	pin_change -> bEntryValidationCondition = 0x02;
 	/* validation key pressed */
-	pin_change -> bNumberMessage = include_verify == 1 ? 0x03 : 0x02;
+	pin_change -> bNumberMessage = include_verify ? 0x03 : 0x02;
 	(pin_change -> wLangId)[0] = 0x16; //0x0816
 	pin_change -> wLangId[1] = 0x08; 
 	pin_change -> bMsgIndex1 = 0x00;
@@ -63,7 +63,33 @@ void GemPcPinpad::fillModifyControlStruct(PP_CHANGE_CCID * pin_change, int inclu
 	pin_change -> bTeoPrologue[1] = 0x00;
 	pin_change -> bTeoPrologue[2] = 0x00;
 
-} //sizeof() == 24
+}
+
+//This function is used for the special case of unlockPIN without introducing a PUK (included in the supplied APDU)
+void GemPcPinpad::fillUnlockControlStruct(PP_CHANGE_CCID * pin_change)
+{
+	pin_change->bTimerOut = 0x1E;
+	pin_change->bTimerOut2 = 0x1E;   //30 seconds timeout
+	pin_change->bmFormatString = 0x02;
+	pin_change->bmPINBlockString = 0x00;
+	pin_change->bmPINLengthFormat = 0x00;
+	pin_change->bInsertionOffsetOld = 0x00;
+	pin_change->bInsertionOffsetNew = 0x08;
+	(pin_change->wPINMaxExtraDigit)[0] = 0x08; /* Min Max */
+	pin_change->wPINMaxExtraDigit[1] = 0x04;
+	pin_change->bConfirmPIN = 0x01;
+	pin_change->bEntryValidationCondition = 0x02;
+	/* validation key pressed */
+	pin_change->bNumberMessage = 0x02; //The messages should be (New PIN, Confirm PIN)
+	(pin_change->wLangId)[0] = 0x16; //0x0816
+	pin_change->wLangId[1] = 0x08;
+	pin_change->bMsgIndex1 = 0x00;
+	pin_change->bMsgIndex2 = 0x00;
+	pin_change->bMsgIndex3 = 0x00;
+	(pin_change->bTeoPrologue)[0] = 0x00;
+	pin_change->bTeoPrologue[1] = 0x00;
+	pin_change->bTeoPrologue[2] = 0x00;
+}
 
 
 DWORD GemPcPinpad::loadStrings(SCARDHANDLE hCard, unsigned char ucPinType, tPinOperation operation)
@@ -181,13 +207,12 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation,
 		ioctl2 = CM_IOCTL_MODIFY_PIN;
 		pin_struct = &pin_change;
 
-		fillModifyControlStruct(&pin_change, (!IsGemsafe(atr) ? 0 : 1));
+		fillModifyControlStruct(&pin_change, IsGemsafe(atr));
 		pin_change.ulDataLength = oAPDU.Size();
-		memcpy(pin_change.abData,oAPDU.GetBytes(),oAPDU.Size());
+		memcpy(pin_change.abData, oAPDU.GetBytes(), oAPDU.Size());
 		length = sizeof(PP_CHANGE_CCID) - PP_APDU_MAX_LEN + oAPDU.Size();
 
-		MWLOG(LEV_DEBUG, MOD_CAL, L"[Modify Pin] GemPc Pinpad sending %d bytes in MODIFY PIN structure",
-			length);
+		MWLOG(LEV_DEBUG, MOD_CAL, L"[Modify Pin] GemPc Pinpad sending %d bytes in MODIFY PIN structure", length);
 		CByteArray b2((const unsigned char *)pin_struct, (unsigned long)length);
 
 		return PinpadControl((unsigned long)ioctl2, b2, operation,
@@ -197,14 +222,17 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation,
 	{
 		ioctl2 = CM_IOCTL_MODIFY_PIN;
 		pin_struct = &pin_change;
+		bool include_verify = IsGemsafe(atr);
+		if (operation == PIN_OP_RESET)
+			fillModifyControlStruct(&pin_change, include_verify);
+		else
+			fillUnlockControlStruct(&pin_change);
 
-		fillModifyControlStruct(&pin_change, (!IsGemsafe(atr) ? 0 : 1));
 		pin_change.ulDataLength = oAPDU.Size();
 		memcpy(pin_change.abData,oAPDU.GetBytes(),oAPDU.Size());
 		length = sizeof(PP_CHANGE_CCID) - PP_APDU_MAX_LEN + oAPDU.Size();
 
-		MWLOG(LEV_DEBUG, MOD_CAL, L"[Reset Pin] GemPc Pinpad sending %d bytes in MODIFY PIN structure",
-			length);
+		MWLOG(LEV_DEBUG, MOD_CAL, L"[Reset Pin] GemPc Pinpad sending %d bytes in MODIFY PIN structure",	length);
 		CByteArray b2((const unsigned char *)pin_struct, (unsigned long)length);
 
 		return PinpadControl((unsigned long)ioctl2, b2, operation,
