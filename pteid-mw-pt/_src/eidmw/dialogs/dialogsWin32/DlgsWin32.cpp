@@ -228,6 +228,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 	{
 		std::wstring PINName;
 		std::wstring Header;
+		bool isUnlock = true;
 
 		switch( operation )
 		{
@@ -238,13 +239,11 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 			Header += L" ";
 			Header += PINName;
 			Header += L" ";
+			isUnlock = false;
 			break;
 		case DLG_PIN_OP_UNBLOCK_CHANGE:
-			if( usage == DLG_PIN_UNKNOWN )
-				PINName = csPinName;
-			else
-				PINName = GETSTRING_DLG(Puk);
 			Header += GETSTRING_DLG(UnlockDialogHeader);
+			PINName = getPinName(usage, csPinName);
 			break;
 		case DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK:
 			//This message doesn't mention introducing any PUK
@@ -258,7 +257,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 			break;
 		}
 
-        dlg = new dlgWndAskPINs(pin1Info, pin2Info, Header, PINName, operation == DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK);
+		dlg = new dlgWndAskPINs(pin1Info, pin2Info, Header, PINName, isUnlock, operation == DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK);
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;

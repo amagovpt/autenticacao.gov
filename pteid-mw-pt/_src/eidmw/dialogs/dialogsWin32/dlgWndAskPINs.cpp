@@ -44,7 +44,7 @@
 
 std::wstring langchange = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
-dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & PINName, bool dontAskPUK, HWND Parent )
+dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & PINName, bool isUnlock, bool dontAskPUK, HWND Parent )
 :Win32Dialog(L"WndAskPINs")
 {
 
@@ -58,7 +58,7 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 
 	std::wstring tmpTitle = L"";
 
-	if (PINName.find(L"PUK") != std::wstring::npos || dontAskPUK)
+	if (isUnlock)
 		tmpTitle += GETSTRING_DLG(Unblock);
 	else
 		tmpTitle += GETSTRING_DLG(RenewingPinCode);
@@ -121,7 +121,7 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wst
 			m_hWnd, (HMENU)IDC_EDIT_PIN3, m_hInstance, NULL);
 		SendMessage(hTextEdit3, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
 
-		std::wstring oldPin_label = PINName.find(L"PUK") != std::wstring::npos ? GETSTRING_DLG(Puk) : GETSTRING_DLG(CurrentPin);
+		std::wstring oldPin_label = isUnlock ? GETSTRING_DLG(Puk) : GETSTRING_DLG(CurrentPin);
 		if (!m_dontAskPIN1) {
 
 			HWND hStaticText1 = CreateWindow(
