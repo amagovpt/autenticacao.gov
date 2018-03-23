@@ -46,7 +46,7 @@ DEFINE_LANG_STR(Ok) = {L"&OK", L"&OK", L"O&k", L"&Ok"};
 DEFINE_LANG_STR(Cancel) = {L"&Cancel", L"&Cancelar", L"", L""};
 DEFINE_LANG_STR(CancelNo) = {L"&Cancel (No)", L"&Cancelar (Nao)", L"", L""};
 DEFINE_LANG_STR(Pin) = {L"PIN", L"PIN", L"", L""};
-DEFINE_LANG_STR(Puk) = {L"PUK", L"Código de desbloqueio", L"", L""};
+DEFINE_LANG_STR(Puk) = {L"PUK", L"PUK", L"", L""};
 DEFINE_LANG_STR(Retry) = {L"&Retry", L"Repetir", L"", L""};
 DEFINE_LANG_STR(Always) = {L"&Always", L"&Sempre", L"", L""};
 DEFINE_LANG_STR(Never) = {L"Ne&ver", L"Nunca", L"", L""};
@@ -55,7 +55,6 @@ DEFINE_LANG_STR(Function) = {L"Function:", L"Funcao:", L"", L""};
 DEFINE_LANG_STR(EnterYourPin) = {L"Enter your PIN", L"Introduza o PIN", L"", L""};
 DEFINE_LANG_STR(Asking) = {L"Asking", L"Pedir", L"", L""};
 DEFINE_LANG_STR(SigningWith) = {L"Signing with", L"Assinar com", L"", L""};
-DEFINE_LANG_STR(PrivacyFilter) = {L"Privacy Filter", L"Filtro de privacidade", L"", L""};
 DEFINE_LANG_STR(EnterYour) = {L"Enter your", L"Introduza o seu", L"", L""};
 DEFINE_LANG_STR(ForVerification) = {L"for verification", L"voor verificatie", L"", L""};
 DEFINE_LANG_STR(Unblock) = {L"Unblock PIN code", L"Desbloquear código PIN", L"", L""};
@@ -107,6 +106,8 @@ L"1) Introduza o seu PIN atual e clique em 'OK'. \n2) Introduza o seu novo PIN e
 																			
 DEFINE_LANG_STR(UnlockDialogInstructions) = {L"1) Enter your PUK code and press 'OK'. \n2) Enter your new PIN and press 'OK'.3) Enter your new PIN again and press 'OK'.",
                                             L"1) Por favor insira o seu código PUK e pressione 'OK' \n2) Introduza o seu novo PIN e pressione 'OK'. \n3) Introduza novamente o seu novo PIN e pressione 'OK'.", L"", L""};																			
+DEFINE_LANG_STR(UnlockWithoutPUKInstructions) = {L"1) Enter your new PIN and press 'OK'. \n2) Enter your new PIN again and press 'OK'.",
+												 L"1) Por favor introduza o seu novo PIN e pressione 'OK'\n2) Introduza novamente o seu novo PIN e pressione 'OK'.", L"", L""};
 
 #define GETSTRING_DLG(code) LANG_STR_ ## code[CLang::GetLang()]
 #ifndef WIN32
