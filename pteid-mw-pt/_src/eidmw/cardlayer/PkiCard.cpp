@@ -629,22 +629,6 @@ CByteArray CPkiCard::UpdateBinary(unsigned long ulOffset, const CByteArray & oDa
                     (unsigned char) (ulOffset % 256), oData);
 }
 
-DlgPinOperation CPkiCard::PinOperation2Dlg(tPinOperation operation)
-{
-	switch(operation)
-	{
-		case PIN_OP_CHANGE:
-		   return DLG_PIN_OP_CHANGE;
-		 //We ignore the RESET with no change case for now
-		case PIN_OP_RESET:
-		   return DLG_PIN_OP_UNBLOCK_CHANGE;
-		case PIN_OP_RESET_NO_PUK:
-		   return DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK;
-		default:
-		   return DLG_PIN_OP_VERIFY;
-	}
-}
-
 CByteArray CPkiCard::MakePinCmd(tPinOperation operation, const tPin & Pin, bool specialP1Value)
 {
     CByteArray oCmd(5 + 32);

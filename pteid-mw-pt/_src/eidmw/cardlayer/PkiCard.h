@@ -80,7 +80,6 @@ protected:
     virtual CByteArray UpdateBinary(unsigned long ulOffset, const CByteArray & oData);
 
 	virtual unsigned char PinUsage2Pinpad(const tPin & Pin, const tPrivKey *pKey);
-	virtual DlgPinOperation PinOperation2Dlg(tPinOperation operation);
     virtual void showPinDialog(tPinOperation operation, const tPin & Pin,
         std::string & csPin1, std::string & csPin2, const tPrivKey *pKey, void *wndGeometry = 0 ) = 0;
 

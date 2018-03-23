@@ -418,7 +418,12 @@ CByteArray CPCSC::Control(SCARDHANDLE hCard, unsigned long ulControl, const CByt
 {
 	MWLOG(LEV_DEBUG, MOD_CAL, L"      SCardControl(ctrl=0x%0x, %ls)",
 		ulControl, oCmd.ToWString(true, true, 0, 5).c_str());
-
+	
+	/* Full message: it might include prebuilt APDU with PUK and/or PIN
+	// Commented out for security
+	MWLOG(LEV_DEBUG, MOD_CAL, L"      SCardControl(ctrl=0x%0x, %ls)",
+			ulControl, oCmd.ToWString(true, false).c_str());
+	*/
 	unsigned char *pucRecv = new unsigned char[ulMaxResponseSize];
 	if (pucRecv == NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_MEMORY);

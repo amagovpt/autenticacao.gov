@@ -23,9 +23,13 @@
 #include "Reader.h"
 #include "ReadersInfo.h"
 #include "Context.h"
+#include "CardLayerConst.h"
+#include "../dialogs/dialogs.h"
 
 namespace eIDMW
 {
+
+	DlgPinOperation PinOperation2Dlg(tPinOperation operation);
 
 class EIDMW_CAL_API CCardLayer
 {

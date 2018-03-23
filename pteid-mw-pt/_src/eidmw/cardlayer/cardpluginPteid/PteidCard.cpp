@@ -20,6 +20,7 @@
 **************************************************************************** */
 #include "PteidCard.h"
 #include "../common/Log.h"
+#include "../CardLayer.h"
 
 #ifdef __GNUC__
 #include <termios.h>
