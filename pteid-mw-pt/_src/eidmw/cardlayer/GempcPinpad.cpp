@@ -157,59 +157,59 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation,
 	rv = loadStrings(m_hCard, ucPinType, operation);
 #endif	
 
-		//For IAS cards we need to VerifyPIN before Modify
-		if (operation == PIN_OP_VERIFY )
-		{
-			ioctl2 = CM_IOCTL_VERIFY_PIN;
-			pin_struct = &pin_verify;
+	//For IAS cards we need to VerifyPIN before Modify
+	if (operation == PIN_OP_VERIFY)
+	{
+		ioctl2 = CM_IOCTL_VERIFY_PIN;
+		pin_struct = &pin_verify;
 
-			fillVerifyControlStruct(&pin_verify);
-			pin_verify.ulDataLength = oAPDU.Size();
-			memcpy(pin_verify.abData,oAPDU.GetBytes(),oAPDU.Size());
-			length = sizeof(PP_VERIFY_CCID) - PP_APDU_MAX_LEN + oAPDU.Size();
+		fillVerifyControlStruct(&pin_verify);
+		pin_verify.ulDataLength = oAPDU.Size();
+		memcpy(pin_verify.abData,oAPDU.GetBytes(),oAPDU.Size());
+		length = sizeof(PP_VERIFY_CCID) - PP_APDU_MAX_LEN + oAPDU.Size();
 
-			MWLOG(LEV_DEBUG, MOD_CAL, L"[Verify Pin] GemPC Pinpad sending %d bytes in VERIFY structure",
-				length);
+		MWLOG(LEV_DEBUG, MOD_CAL, L"[Verify Pin] GemPC Pinpad sending %d bytes in VERIFY structure",
+			length);
 
-			CByteArray b1((const unsigned char *)pin_struct, (unsigned long)length);
+		CByteArray b1((const unsigned char *)pin_struct, (unsigned long)length);
 
-			return PinpadControl((unsigned long)ioctl2, b1, operation,
-                                ucPinType, pin.csLabel, wndGeometry );
-		}
-		else if (operation == PIN_OP_CHANGE)
-		{
-			ioctl2 = CM_IOCTL_MODIFY_PIN;
-			pin_struct = &pin_change;
+		return PinpadControl((unsigned long)ioctl2, b1, operation,
+                            ucPinType, pin.csLabel, wndGeometry );
+	}
+	else if (operation == PIN_OP_CHANGE)
+	{
+		ioctl2 = CM_IOCTL_MODIFY_PIN;
+		pin_struct = &pin_change;
 
-			fillModifyControlStruct(&pin_change, (!IsGemsafe(atr) ? 0 : 1));
-			pin_change.ulDataLength = oAPDU.Size();
-			memcpy(pin_change.abData,oAPDU.GetBytes(),oAPDU.Size());
-			length = sizeof(PP_CHANGE_CCID) - PP_APDU_MAX_LEN + oAPDU.Size();
+		fillModifyControlStruct(&pin_change, (!IsGemsafe(atr) ? 0 : 1));
+		pin_change.ulDataLength = oAPDU.Size();
+		memcpy(pin_change.abData,oAPDU.GetBytes(),oAPDU.Size());
+		length = sizeof(PP_CHANGE_CCID) - PP_APDU_MAX_LEN + oAPDU.Size();
 
-			MWLOG(LEV_DEBUG, MOD_CAL, L"[Modify Pin] GemPc Pinpad sending %d bytes in MODIFY PIN structure",
-				length);
-			CByteArray b2((const unsigned char *)pin_struct, (unsigned long)length);
+		MWLOG(LEV_DEBUG, MOD_CAL, L"[Modify Pin] GemPc Pinpad sending %d bytes in MODIFY PIN structure",
+			length);
+		CByteArray b2((const unsigned char *)pin_struct, (unsigned long)length);
 
-			return PinpadControl((unsigned long)ioctl2, b2, operation,
-                                ucPinType, pin.csLabel, wndGeometry );
-		}
-		else if (operation == PIN_OP_RESET || operation == PIN_OP_RESET_NO_PUK)
-		{
-			ioctl2 = CM_IOCTL_MODIFY_PIN;
-			pin_struct = &pin_change;
+		return PinpadControl((unsigned long)ioctl2, b2, operation,
+                            ucPinType, pin.csLabel, wndGeometry );
+	}
+	else if (operation == PIN_OP_RESET || operation == PIN_OP_RESET_NO_PUK)
+	{
+		ioctl2 = CM_IOCTL_MODIFY_PIN;
+		pin_struct = &pin_change;
 
-			fillModifyControlStruct(&pin_change, (!IsGemsafe(atr) ? 0 : 1));
-			pin_change.ulDataLength = oAPDU.Size();
-			memcpy(pin_change.abData,oAPDU.GetBytes(),oAPDU.Size());
-			length = sizeof(PP_CHANGE_CCID) - PP_APDU_MAX_LEN + oAPDU.Size();
+		fillModifyControlStruct(&pin_change, (!IsGemsafe(atr) ? 0 : 1));
+		pin_change.ulDataLength = oAPDU.Size();
+		memcpy(pin_change.abData,oAPDU.GetBytes(),oAPDU.Size());
+		length = sizeof(PP_CHANGE_CCID) - PP_APDU_MAX_LEN + oAPDU.Size();
 
-			MWLOG(LEV_DEBUG, MOD_CAL, L"[Reset Pin] GemPc Pinpad sending %d bytes in MODIFY PIN structure",
-				length);
-			CByteArray b2((const unsigned char *)pin_struct, (unsigned long)length);
+		MWLOG(LEV_DEBUG, MOD_CAL, L"[Reset Pin] GemPc Pinpad sending %d bytes in MODIFY PIN structure",
+			length);
+		CByteArray b2((const unsigned char *)pin_struct, (unsigned long)length);
 
-			return PinpadControl((unsigned long)ioctl2, b2, operation,
-                                ucPinType, pin.csLabel, wndGeometry );
-		}
+		return PinpadControl((unsigned long)ioctl2, b2, operation,
+                            ucPinType, pin.csLabel, wndGeometry );
+	}
 }
 
 

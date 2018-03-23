@@ -30,15 +30,15 @@ namespace eIDMW
 {
 
 
-	GenericPinpad::GenericPinpad(CContext *poContext, SCARDHANDLE hCard,
+GenericPinpad::GenericPinpad(CContext *poContext, SCARDHANDLE hCard,
 			const std::string & csReader): m_poContext(poContext), m_csReader(csReader), m_hCard(hCard)
-	{
-		m_ulLangCode = 0x0813;
-		GetFeatureList();
-	};
-	// See par 4.1.11.3 bmFormatString description
+{
+	m_ulLangCode = 0x0813;
+	GetFeatureList();
+};
+// See par 4.1.11.3 bmFormatString description
 
-	unsigned char GenericPinpad::ToFormatString(const tPin & pin)
+unsigned char GenericPinpad::ToFormatString(const tPin & pin)
 {
 	switch(pin.encoding)
 	{
@@ -376,11 +376,13 @@ unsigned char GenericPinpad::PinOperation2Lib(tPinOperation operation)
 {
 	switch(operation)
 	{
-	case PIN_OP_VERIFY: return EIDMW_PP_OP_VERIFY;
-	case PIN_OP_CHANGE: return EIDMW_PP_OP_CHANGE;
-	case PIN_OP_RESET:	return EIDMW_PP_OP_UNBLOCK_CHANGE;
-	// Add others when needed
-	default: throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+		case PIN_OP_VERIFY: return EIDMW_PP_OP_VERIFY;
+		case PIN_OP_CHANGE: return EIDMW_PP_OP_CHANGE;
+		case PIN_OP_RESET:
+		case PIN_OP_RESET_NO_PUK:
+			return EIDMW_PP_OP_UNBLOCK_CHANGE;
+		// Add others when needed
+		default: throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	}
 }
 
