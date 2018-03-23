@@ -438,7 +438,10 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 			case DLG_PIN_OP_UNBLOCK_CHANGE:
 				sMessage = L"\n";
 				sMessage += GETSTRING_DLG(UnlockDialogInstructions);
-
+				break;
+			case DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK:
+				sMessage = L"\n";
+				sMessage += GETSTRING_DLG(UnlockWithoutPUKInstructions);
 				break;
 			default:
 				MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgDisplayPinpadInfo() returns DLG_BAD_PARAM");
@@ -448,10 +451,10 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 		}
 		//Small hack for the PIN unlock dialog :)
 		std::wstring pin_name_label;
-		if (operation == DLG_PIN_OP_UNBLOCK_CHANGE)
+		if (operation == DLG_PIN_OP_UNBLOCK_CHANGE || operation == DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK)
 		{
 		 pin_name_label +=  GETSTRING_DLG(UnblockPinHeader);
-		 pin_name_label	+= L" ";
+		 pin_name_label	+= L": ";
 		 pin_name_label += csPinName;
 		}
 		else {
