@@ -67,6 +67,10 @@ namespace eIDMW
         /* CA Certificates */
 		EIDMW_APL_API void setExternCertificateCA(std::vector<CByteArray> &certificateCAS);
 
+		EIDMW_APL_API char * getCitizenCertificateName() { return m_citizen_fullname; };
+
+		EIDMW_APL_API char * getCitizenCertificateID() { return m_civil_number; } ;
+
         /* Hash */
 		EIDMW_APL_API CByteArray getHash();
         
