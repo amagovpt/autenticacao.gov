@@ -38,7 +38,10 @@ namespace eIDMW {
                         , const char *outfile_path );
 
 			PTEIDCMD_API int signClose(std::string in_code);
-                        PTEIDCMD_API void set_pdf_handler(PTEID_PDFSignature *in_pdf_handler );
+            PTEIDCMD_API void set_pdf_handler(PTEID_PDFSignature *in_pdf_handler );
+
+            PTEIDCMD_API char * getCertificateCitizenName();
+            PTEIDCMD_API char * getCertificateCitizenID();
 
         private:
             CMDServices *cmdService;
@@ -49,8 +52,7 @@ namespace eIDMW {
             std::string m_receiveCode;
             int cli_getCertificate( std::string in_userId );
             int cli_sendDataToSign( std::string in_pin );
-            int cli_getSignature( std::string in_code
-                                , PTEID_ByteArray &out_sign );
+            int cli_getSignature(std::string in_code, PTEID_ByteArray &out_sign);
     };
 }/* namespace eIDMW */
 

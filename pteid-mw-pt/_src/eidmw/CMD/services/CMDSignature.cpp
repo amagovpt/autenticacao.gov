@@ -45,21 +45,30 @@ namespace eIDMW {
         m_pdf_handler = in_pdf_handler;
     }
 
+    char * CMDSignature::getCertificateCitizenName() {
+        PDFSignature *pdf = m_pdf_handler->getPdfSignature();
+
+        return pdf->getCitizenCertificateName();
+    }
+
+    char * CMDSignature::getCertificateCitizenID() {
+        PDFSignature *pdf = m_pdf_handler->getPdfSignature();
+        
+        return pdf->getCitizenCertificateID();
+    }
+
     int CMDSignature::cli_getCertificate( std::string in_userId) {
-        if ( NULL == m_pdf_handler ){
+        if ( NULL == m_pdf_handler ) {
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
             return ERR_NULL_PDF_HANDLER;
         }
 
-        /* printData */
         if ( isDBG ) {
-            printData( (char *)"\nUserId: "
-                        , (unsigned char *)in_userId.c_str()
-                        , in_userId.size() );
+            printData( (char *)"\nUserId: ", (unsigned char *)in_userId.c_str(), in_userId.size());
         }
 
         std::vector<CByteArray> certificates;
-        int ret = cmdService->getCertificate( in_userId, certificates);
+        int ret = cmdService->getCertificate(in_userId, certificates);
 
         if ( ret != ERR_NONE ) return ret;
 
@@ -69,10 +78,12 @@ namespace eIDMW {
         }
 
         PDFSignature *pdf = m_pdf_handler->getPdfSignature();
-        if ( NULL == pdf ){
+        if ( NULL == pdf ) {
             MWLOG_ERR( logBuf, "NULL Pdf\n" );
             return ERR_NULL_PDF;
         }
+
+        CByteArray cert_ba = certificates.at(0);
 
         /* TODO: At the moment, it is only possible to sign one document. */
         pdf->setBatch_mode(false);
