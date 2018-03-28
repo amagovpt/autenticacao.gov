@@ -80,7 +80,7 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
     const char * c_endpoint = s_endpoint.c_str();
     proxy.soap_endpoint = c_endpoint;
 
-    std::cout << "PDF Signing endpoint: " << c_endpoint << std::endl;
+    std::cerr << "SCAP PDFSignatureClient:: PDF Signing endpoint: " << c_endpoint << std::endl;
 
     // Get PDF File
     QFile file(filepath);

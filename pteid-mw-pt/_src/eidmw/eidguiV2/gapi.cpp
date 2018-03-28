@@ -498,6 +498,10 @@ void GAPI::showSignCMDDialog(long code)
         case 0:
             error_msg = tr("STR_CMD_SUCESS");
             break;
+        //TODO: add proper message for SCAP error
+        case -1:
+            error_msg = tr("STR_SCAP_SIGNATURE_ERROR");
+            break;
         case SOAP_TCP_ERROR:
             error_msg = tr("STR_CONNECTION_ERROR") + "\n\n" +
                     tr("STR_VERIFY_INTERNET");
@@ -660,6 +664,112 @@ void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
     emit signalCloseCMDSucess();
 }
 
+void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token, QList<int> attribute_list) {
+        qDebug() << "doCloseSignCMDWithSCAP! " << "sms_token = " << sms_token
+          <<"attribute_list size: " << attribute_list.size();
+
+    int ret = 0;
+    std::string local_sms_token = sms_token.toUtf8().data();
+
+    try {
+        signalUpdateProgressBar(65);
+        ret = cmd_signature->signClose( local_sms_token );
+        if ( ret != 0 ) {
+            qDebug() << "signClose failed!" << endl;
+            signCMDFinished(ret);
+            signalUpdateProgressBar(100);
+            return;
+        }
+
+    } catch (PTEID_Exception &e) {
+        qDebug() << "Caught exception in some SDK method. Error code: " << hex << e.GetError() << endl;
+    }
+
+    signalUpdateProgressBar(80);
+
+    //Do SCAP Signature
+    std::vector<int> attrs;
+    for (unsigned int i = 0; i!= attribute_list.size(); i++) {
+        attrs.push_back(attribute_list.at(i));
+    }
+
+    //See details of this
+    CmdSignedFileDetails cmd_details;
+    cmd_details.signedCMDFile = m_scap_params.inputPDF;
+
+    cmd_details.citizenName = cmd_signature->getCertificateCitizenName();
+    //The method returns something like "BI124559972";
+    cmd_details.citizenId = QString(cmd_signature->getCertificateCitizenID()+2);
+
+    scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
+                m_scap_params.location_x, m_scap_params.location_y, 0, attrs, cmd_details);
+
+    //TODO: reset the m_scap_params struct
+
+    //scapServices.executeSCAPSignature(this, params.inputPDF, params.outputPDF, params.page,
+    //            params.location_x, params.location_y, params.ltv, attrs);
+
+    //signCMDFinished(ret);
+    //signalUpdateProgressBar(100);
+    //emit signalCloseCMDSucess();
+}
+
+
+QString generateTempFile() {
+    QTemporaryFile tempFile;
+
+    if (!tempFile.open()) {
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "generateTempFile", "SCAP Signature error: Error creating temporary file");
+        return "";
+    }
+
+    return tempFile.fileName();
+}
+
+//TODO: call this instead of signOpenCMD when there attributes
+void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
+                   QString outputFile, int page, double coord_x, double coord_y) {
+
+    qDebug() << "signOpenScapWithCMD! MobileNumber = " + mobileNumber + " secret_code = " + secret_code +
+                " loadedFilePath = " + loadedFilePath + " outputFile = " + outputFile +
+                "page = " + page + "coord_x" + coord_x + "coord_y" + coord_y;
+
+    signalUpdateProgressStatus(tr("STR_CMD_CONNECTING"));
+
+    connect(this, SIGNAL(signCMDFinished(long)),
+            this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
+
+    //Final params for the SCAP signature (visible signature params)  
+    m_scap_params.outputPDF = outputFile;
+    m_scap_params.inputPDF = generateTempFile();
+    m_scap_params.page = page;
+    m_scap_params.location_x = coord_x;
+    m_scap_params.location_y = coord_y;
+
+    CmdSignParams params;
+
+    //Invisible CMD signature
+    params.secret_code = secret_code;
+    params.mobileNumber = mobileNumber;
+    params.loadedFilePath = loadedFilePath;
+    params.outputFile = m_scap_params.inputPDF;
+    params.page = 0;
+    params.coord_x = -1;
+    params.coord_y = -1;
+    params.location = "";
+    params.reason = "";
+    params.isTimestamp = 0;
+    params.isSmallSignature = 0;
+
+    QString fullInputPath = params.loadedFilePath;
+
+    cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
+
+    cmd_signature->set_pdf_handler(cmd_pdfSignature);
+    QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, params);            
+
+}
+
 void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
                    QString outputFile, int page, double coord_x, double coord_y,
                    QString reason, QString location, double isTimestamp, double isSmall)
@@ -694,13 +804,17 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QString loaded
     QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, params);
 }
 
-void GAPI::signCloseCMD(QString sms_token)
+void GAPI::signCloseCMD(QString sms_token, QList<int> attribute_list)
 {
     qDebug() << "signCloseCMD! sms_token = " + sms_token;
 
     signalUpdateProgressStatus(tr("STR_CMD_SENDING_CODE"));
 
-    QtConcurrent::run(this, &GAPI::doCloseSignCMD, cmd_signature, sms_token);
+    if (attribute_list.size() > 0)
+        QtConcurrent::run(this, &GAPI::doCloseSignCMDWithSCAP, cmd_signature, sms_token, attribute_list);
+
+    else
+        QtConcurrent::run(this, &GAPI::doCloseSignCMD, cmd_signature, sms_token);
 }
 
 QString GAPI::getCardActivation() {
@@ -1517,6 +1631,12 @@ void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, int l
     
 }
 
+
+/*
+void GAPI::doSignSCAPWithCMD() {
+
+}
+*/
 
 void GAPI::doSignSCAP(SCAPSignParams params) {
 

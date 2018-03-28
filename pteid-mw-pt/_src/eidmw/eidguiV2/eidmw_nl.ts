@@ -19,6 +19,10 @@
         <translation>Erro</translation>
     </message>
     <message>
+        <source>STR_SCAP_SIGNATURE_ERROR</source>
+        <translation>Erro na assinatura com atributos profissionais</translation>
+    </message>
+    <message>
         <location filename="gapi.cpp" line="477"/>
         <source>STR_ERROR_CODE</source>
         <translation>Código de erro = </translation>

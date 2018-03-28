@@ -43,6 +43,8 @@ namespace eIDMW {
 	class PTEID_EIDCard;
 }
 
+struct CmdSignedFileDetails;
+
 
 class ns2__AttributesType;
 class ns3__AttributeType;
@@ -61,6 +63,10 @@ public:
 
 	void getEntityAttributes();
     std::vector<ns2__AttributesType *> getAttributes(eIDMW::PTEID_EIDCard &card, std::vector<int> supplier_ids);
+
+    void executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepath, int selected_page,
+   				double location_x, double location_y, int ltv_years, std::vector<int> attributes_index, CmdSignedFileDetails cmd_details);
+
 	void executeSCAPSignature(GAPI *parent, QString &inputPath, QString &savefilepath, int selected_page,
 	     double location_x, double location_y, int ltv_years, std::vector<int> selected_attributes);
 

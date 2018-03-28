@@ -136,6 +136,41 @@ std::vector<ns3__AttributeType*> ScapServices::getSelectedAttributes(std::vector
     return parsedAttributes;
 }
 
+/*
+*  SCAP signature with citizen signature using CMD
+*/
+void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepath, int selected_page,
+   double location_x, double location_y, int ltv_years, std::vector<int> attributes_index, CmdSignedFileDetails cmd_details) {
+
+    // Sets user selected file save path
+    const char* citizenId = NULL;
+
+    std::vector<ns3__AttributeType*> selected_attributes = getSelectedAttributes(attributes_index);
+
+    if (selected_attributes.size() == 0)
+    {
+        qDebug() << "Couldn't find any index in m_attributesList!";
+        return;
+    }
+
+    bool successful = PDFSignatureClient::signPDF(m_proxyInfo, savefilepath, cmd_details.signedCMDFile, cmd_details.citizenName,
+        cmd_details.citizenId, ltv_years, PDFSignatureInfo(selected_page, location_x, location_y, false), selected_attributes);
+
+    if (successful) {
+        parent->signalPdfSignSucess(parent->SignMessageOK);
+
+    }
+    else {
+        //TODO: define proper SCAP error code
+        int ret = -1;
+        qDebug() << "Error in PADES/PDFSignature service!";
+        parent->signalSCAPServiceFail();
+        parent->signCMDFinished(ret);
+    }
+
+    parent->signalUpdateProgressBar(100);
+}
+
 void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QString &savefilepath, int selected_page,
          double location_x, double location_y, int ltv_years, std::vector<int> attributes_index)
 {

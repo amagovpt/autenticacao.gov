@@ -139,6 +139,13 @@ public:
     double isSmallSignature;
 };
 
+struct CmdSignedFileDetails {
+public:
+    QString signedCMDFile;
+    QString citizenName;
+    QString citizenId;
+};
+
 struct SignBatchParams {
 public:
     QList<QString> loadedFileBatchPath; QString outputFile;
@@ -306,9 +313,13 @@ public slots:
     void signOpenCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
                   QString outputFile, int page, double coord_x, double coord_y, QString reason, QString location,
                  double isTimestamp, double isSmall);
-    void signCloseCMD(QString sms_token);
+    void signCloseCMD(QString sms_token, QList<int> attribute_list);
     void doOpenSignCMD(CMDSignature *cmd_signature, CmdSignParams &params);
     void doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token);
+    void doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token, QList<int> attribute_list);
+    void signOpenScapWithCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
+                   QString outputFile, int page, double coord_x, double coord_y);
+
     static void addressChangeCallback(void *, int);
     void showChangeAddressDialog(long code);
     void showSignCMDDialog(long code);
@@ -418,6 +429,8 @@ private:
     CMDSignature *cmd_signature;
     PTEID_PDFSignature *cmd_pdfSignature;
     ScapServices scapServices;
+    SCAPSignParams m_scap_params;
+
     QString m_persoData;
     bool m_addressLoaded;
     int m_shortcutFlag;

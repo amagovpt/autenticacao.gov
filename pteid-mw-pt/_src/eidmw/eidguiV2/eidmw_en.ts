@@ -24,6 +24,10 @@
         <translation>Error code = </translation>
     </message>
     <message>
+        <source>STR_SCAP_SIGNATURE_ERROR</source>
+        <translation>SCAP signature service error</translation>
+    </message>
+    <message>
         <location filename="gapi.cpp" line="257"/>
         <source>STR_PERSONAL_NOTES_ERROR</source>
         <translation>Error writing personal notes!</translation>

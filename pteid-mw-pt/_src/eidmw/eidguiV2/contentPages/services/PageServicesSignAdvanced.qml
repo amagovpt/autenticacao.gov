@@ -465,16 +465,24 @@ PageServicesSignAdvancedForm {
                         console.log("Signing in position coord_x: " + coord_x
                                     + " and coord_y: "+coord_y)
 
-                        var indicatice = comboBoxIndicative.currentText.substring(0, comboBoxIndicative.currentText.indexOf(' '));
-                        var mobileNumber = indicatice + " " + textFieldMobileNumber.text
+                        var countryCode = comboBoxIndicative.currentText.substring(0, comboBoxIndicative.currentText.indexOf(' '));
+                        var mobileNumber = countryCode + " " + textFieldMobileNumber.text
 
                         propertyOutputSignedFile = outputFile
                         rectLabelCMDText.visible = false
+
+                        if (propertySwitchSignAdd.checked) {
+                           gapi.signOpenScapWithCMD(mobileNumber,textFieldPin.text,
+                                     loadedFilePath,outputFile,page, coord_x,coord_y)
+                        }
+                        else {
                         gapi.signOpenCMD(mobileNumber,textFieldPin.text,
                                      loadedFilePath,outputFile,page,
                                      coord_x,coord_y,
                                      reason,location,
                                      isTimestamp, isSmallSignature)
+
+                        }
 
                         progressBarIndeterminate.visible = true
                         progressBar.visible = true
@@ -645,14 +653,36 @@ PageServicesSignAdvancedForm {
                 visible: false
                 onClicked: {
                     console.log("Send sms_token : " + textFieldReturnCode.text)
-                    if( progressBar.value < 100){
-                        gapi.signCloseCMD(textFieldReturnCode.text)
+                    if( progressBar.value < 100) {
+
+                        var attributeList = []        
+                        //CMD with SCAP attributes        
+                        if (propertySwitchSignAdd.checked) {
+                            
+                            var count = 0
+                            for (var i = 0; i < entityAttributesModel.count; i++){
+                                if(entityAttributesModel.get(i).checkBoxAttr == true) {
+                                    attributeList[count] = i
+                                    count++
+                                }
+                            }
+                            if(count == 0) {
+                                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                                        qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+                                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                                        qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
+                                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+                                return
+                            }
+                        }
+
+                        gapi.signCloseCMD(textFieldReturnCode.text, attributeList)
                         progressBarIndeterminate.visible = true
                         rectReturnCode.visible = false
                         buttonCMDProgressConfirm.visible = false
                         textFieldReturnCode.text = ""
                         dialogCMDProgress.open()
-                    }else{
+                    } else {
                         dialogCMDProgress.close()
                         if (Qt.platform.os === "windows") {
                             propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
@@ -937,7 +967,7 @@ PageServicesSignAdvancedForm {
                             + " and coord_y: "+coord_y + " page: " + page + " timestamp: " + isTimestamp)
 
                 propertyOutputSignedFile = outputFile;
-                if(propertySwitchSignAdd.checked){
+                if(propertySwitchSignAdd.checked) {
                     coord_x = gapi.getPageSize(page).width * coord_x
                     coord_y = gapi.getPageSize(page).height * (1 - coord_y)
 
@@ -952,7 +982,7 @@ PageServicesSignAdvancedForm {
                     console.log("QML AttributeList: ", attributeList)
                     gapi.startSigningSCAP(loadedFilePath, outputFile, page, coord_x, coord_y,
                                           0, attributeList)
-                }else{
+                }else {
 
                     gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
                                          reason, location, isTimestamp, isSmallSignature)
@@ -1174,7 +1204,7 @@ PageServicesSignAdvancedForm {
         }
     }
 
-    propertySwitchSignAdd{
+    propertySwitchSignAdd {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSignAdd = propertySwitchSignAdd.checked
             if(propertySwitchSignAdd.checked){
@@ -1188,7 +1218,6 @@ PageServicesSignAdvancedForm {
                 propertyTextFieldLocal.text = ""
                 propertySwitchSignTemp.checked = false
                 propertySwitchSignTemp.enabled = false
-                propertyButtonSignCMD.enabled = false
                 propertyCheckSignShow.checked = true
                 propertyCheckSignShow.enabled = false
                 propertyCheckSignReduced.checked = false
@@ -1207,7 +1236,6 @@ PageServicesSignAdvancedForm {
                 propertyTextFieldReason.opacity = 1.0
                 propertyTextFieldLocal.opacity = 1.0
                 propertySwitchSignTemp.enabled = true
-                propertyButtonSignCMD.enabled = true
                 propertyCheckSignReduced.enabled = true
                 propertyCheckSignShow.enabled = true
                 propertyRadioButtonXADES.enabled = true
@@ -1625,8 +1653,8 @@ PageServicesSignAdvancedForm {
         gapi.startCardReading()
     }
 
-    function loadUnfinishedSignature(){
-        // Load backup data about unfinished advance signature
+    function loadUnfinishedSignature() {
+        // Load backup data about unfinished advanced signature
         propertyRadioButtonPADES.checked = propertyPageLoader.propertyBackupFormatPades
         propertyRadioButtonXADES.checked = !propertyPageLoader.propertyBackupFormatPades
         propertySwitchSignTemp.checked = propertyPageLoader.propertyBackupTempSign
