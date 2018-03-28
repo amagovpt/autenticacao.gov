@@ -1789,22 +1789,28 @@ void GAPI::getSCAPCompanyAttributes() {
     emit signalCompanyAttributesLoaded(attribute_list);
 }
 
+
 void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
 
     PTEID_EIDCard * card = NULL;
     std::vector<ns2__AttributesType *> attributes;
     QList<QString> attribute_list;
 
-    getCardInstance(card);
-    if (card == NULL)
-        return;
+    //Card is only required for loading entities and companies seperately...
+    //This is a hack to support loading attributes without NIC in the context of CMD 
+    if (queryType < 2) {
+        getCardInstance(card);
+        if (card == NULL)
+            return;
 
-    if (queryType == 0 )
-        attributes = scapServices.loadAttributesFromCache(*card, false);
-    else if (queryType == 1 )
-        attributes = scapServices.loadAttributesFromCache(*card, true);
-    else if (queryType == 2)
-        attributes = scapServices.reloadAttributesFromCache(*card);
+        if (queryType == 0 )
+            attributes = scapServices.loadAttributesFromCache(*card, false);
+        else if (queryType == 1 )
+            attributes = scapServices.loadAttributesFromCache(*card, true);    
+    }
+    else if (queryType == 2) {
+        attributes = scapServices.reloadAttributesFromCache();
+    }
 
     for(uint i = 0; i < attributes.size() ; i++) {
        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
@@ -1846,7 +1852,7 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
 void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
 
     try
-    {
+    { 
         unsigned long ReaderEndIdx = ReaderSet.readerCount();
         long ReaderIdx = 0;
         long CardIdx = 0;

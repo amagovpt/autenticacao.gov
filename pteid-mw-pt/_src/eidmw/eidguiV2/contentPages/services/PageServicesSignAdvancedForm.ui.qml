@@ -442,7 +442,7 @@ Item {
                         anchors.top: switchSignTemp.bottom
                         text: qsTranslate("PageServicesSign",
                                           "STR_SIGN_ADD_ATTRIBUTES")
-                        enabled: fileLoaded && cardLoaded
+                        enabled: fileLoaded
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase

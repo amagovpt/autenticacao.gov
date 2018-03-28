@@ -68,15 +68,49 @@ std::vector<ns2__AttributesType *>
 }
 
 std::vector<ns2__AttributesType *>
-    ScapServices::reloadAttributesFromCache(eIDMW::PTEID_EIDCard &card) {
+    ScapServices::reloadAttributesFromCache() {
 
     std::vector<ns2__AttributesType *> attributesType;
     try
     {
-        QString citizenNIC(card.getID().getCivilianIdNumber());
+        //QString citizenNIC(card.getID().getCivilianIdNumber());
 
         ScapSettings settings;
-        QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
+        QString scapCachePath(settings.getCacheDir() + "/scap_attributes/");
+        QDir scapCacheDir(scapCachePath);
+        QStringList flist = scapCacheDir.entryList(QStringList("*.xml"), QDir::Files | QDir::NoSymLinks);
+        
+        m_attributesList.clear();
+
+        foreach (QString str, flist) {
+            if (str.endsWith(ENTITIES_SUFFIX))
+            {
+                QString cachefilePath(scapCachePath+str);
+                attributesType = loadCacheFile(cachefilePath);
+
+                if (attributesType.size() > 0)
+                {
+                    //Merge into single vector
+                    m_attributesList.insert(m_attributesList.end(), attributesType.begin(), attributesType.end());
+                }
+            }
+        }
+
+        foreach (QString str, flist) {
+            if (str.endsWith(COMPANIES_SUFFIX))
+            {
+                QString cachefilePath(scapCachePath+str);
+                attributesType = loadCacheFile(cachefilePath);
+
+                if (attributesType.size() > 0)
+                {
+                    //Merge into single vector
+                    m_attributesList.insert(m_attributesList.end(), attributesType.begin(), attributesType.end());
+                }
+            }
+        }
+
+        /*
 
         QString filePathEntities = scapCacheDir + citizenNIC + ENTITIES_SUFFIX;
 
@@ -99,6 +133,7 @@ std::vector<ns2__AttributesType *>
             //Merge into single vector
             m_attributesList.insert(m_attributesList.end(), attributesType.begin(), attributesType.end());
         }
+        */
     }
     catch(...) {
         std::cerr << "Error ocurred while loading attributes from cache!";
