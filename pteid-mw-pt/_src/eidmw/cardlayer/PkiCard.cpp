@@ -226,6 +226,8 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
 	//Ask for PIN in RESET also in the PUK merge case
 	if (operation == PIN_OP_RESET && !csPin1.empty() && !csPin2.empty() && !bPukMerge)
 		bAskPIN = false;
+	if (operation == PIN_OP_RESET && !defineNewPin)
+		bAskPIN = false;
 
 	bool bUsePinpad = bAskPIN ? m_poPinpad != NULL : false;
 
