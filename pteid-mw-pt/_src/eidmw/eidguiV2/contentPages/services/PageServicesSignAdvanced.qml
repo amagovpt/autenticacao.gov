@@ -472,8 +472,11 @@ PageServicesSignAdvancedForm {
                         rectLabelCMDText.visible = false
 
                         if (propertySwitchSignAdd.checked) {
+                           //SCAP PDF coordinate conversion: it expects native PDF units
+                           coord_x = gapi.getPageSize(page).width * coord_x
+                           coord_y = gapi.getPageSize(page).height * (1 - coord_y)
                            gapi.signOpenScapWithCMD(mobileNumber,textFieldPin.text,
-                                     loadedFilePath,outputFile,page, coord_x,coord_y)
+                                     loadedFilePath,outputFile,page,coord_x, coord_y)
                         }
                         else {
                         gapi.signOpenCMD(mobileNumber,textFieldPin.text,
@@ -492,6 +495,7 @@ PageServicesSignAdvancedForm {
                         buttonCMDProgressConfirm.visible = false
                         buttonCMDProgressConfirm.text = qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
                         dialogCMDProgress.open()
+                        textFieldReturnCode.focus = true
                     }
                 }
             }
@@ -510,6 +514,7 @@ PageServicesSignAdvancedForm {
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - dialogCMDProgress.width * 0.5
         y: parent.height * 0.5 - dialogCMDProgress.height * 0.5
+        focus: true
 
         header: Label {
             id: labelConfirmOfAddressProgressTextTitle
@@ -682,6 +687,8 @@ PageServicesSignAdvancedForm {
                         buttonCMDProgressConfirm.visible = false
                         textFieldReturnCode.text = ""
                         dialogCMDProgress.open()
+                        
+
                     } else {
                         dialogCMDProgress.close()
                         if (Qt.platform.os === "windows") {

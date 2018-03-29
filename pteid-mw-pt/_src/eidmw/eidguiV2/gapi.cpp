@@ -739,7 +739,7 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QStrin
     connect(this, SIGNAL(signCMDFinished(long)),
             this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
 
-    //Final params for the SCAP signature (visible signature params)  
+    //Final params for the SCAP signature (visible PDF signature params)  
     m_scap_params.outputPDF = outputFile;
     m_scap_params.inputPDF = generateTempFile();
     m_scap_params.page = page;
@@ -1519,8 +1519,6 @@ QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, c
         m_doc->setRenderBackend(Poppler::Document::RenderBackend::SplashBackend);
     }
 
-    //TODO: Hardcoded image size...
-    //int img_height = 420;
     QPixmap pTest = renderPDFPage(page);
     qDebug() << "PDFPreviewImageProvider sending signal signalPdfSourceChanged width : "
              << pTest.width()<< " - height : " << pTest.height();
