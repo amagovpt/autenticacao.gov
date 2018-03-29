@@ -165,7 +165,6 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
         qDebug() << "Error in PADES/PDFSignature service!";
         parent->signalSCAPServiceFail();
         parent->signCMDFinished(-1);
-        return;
     }
 
     parent->signalUpdateProgressBar(100);
