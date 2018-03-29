@@ -226,13 +226,14 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
 	//Ask for PIN in RESET also in the PUK merge case
 	if (operation == PIN_OP_RESET && !csPin1.empty() && !csPin2.empty() && !bPukMerge)
 		bAskPIN = false;
-	if (operation == PIN_OP_RESET && !defineNewPin)
+	if (operation == PIN_OP_RESET_NO_PUK && !defineNewPin)
 		bAskPIN = false;
 
 	bool bUsePinpad = bAskPIN ? m_poPinpad != NULL : false;
 
 bad_pin:
-	MWLOG(LEV_DEBUG, MOD_CAL, L"DEBUG PinCmd: bUsePinpad:%d, bPukMerge: %d defineNewPin=%d", bUsePinpad, bPukMerge, defineNewPin);
+	MWLOG(LEV_DEBUG, MOD_CAL, L"DEBUG PinCmd: operation: %d, bUsePinpad:%d, bPukMerge: %d defineNewPin=%d",
+		(int)operation, bUsePinpad, bPukMerge, defineNewPin);
 
     // If no Pin(s) provided and it's no Pinpad reader -> ask Pins
     if (bAskPIN && !bUsePinpad)
@@ -257,7 +258,7 @@ bad_pin:
         oPinBuf.Append(MakePinBuf(Pin, *pcsPin2, bUsePinpad, false));
 
     // add CLA, INS, P1, P2 (we only need a special P1 value if Unblocking PIN without defining new PIN)
-    CByteArray oAPDU = MakePinCmd(operation, Pin, operation == PIN_OP_RESET && !defineNewPin); 
+	CByteArray oAPDU = MakePinCmd(operation, Pin, (operation == PIN_OP_RESET || operation == PIN_OP_RESET_NO_PUK) && !defineNewPin);
     // add Lc
     oAPDU.Append((unsigned char) oPinBuf.Size());
     oAPDU.Append(oPinBuf);
