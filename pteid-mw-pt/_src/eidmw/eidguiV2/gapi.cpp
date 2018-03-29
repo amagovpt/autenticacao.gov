@@ -685,6 +685,8 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
         qDebug() << "Caught exception in some SDK method. Error code: " << hex << e.GetError() << endl;
     }
 
+    signalUpdateProgressStatus(tr("STR_CMD_SIGNING_SCAP"));
+
     signalUpdateProgressBar(80);
 
     //Do SCAP Signature

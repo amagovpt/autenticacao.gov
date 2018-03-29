@@ -94,6 +94,10 @@
         <translation>Assinatura com Chave Móvel Digital com sucesso.</translation>
     </message>
     <message>
+        <source>STR_CMD_SIGNING_SCAP</source>
+        <translation>Assinando com atributos profissionais</translation>
+    </message>
+    <message>
         <location filename="gapi.cpp" line="506"/>
         <source>STR_CMD_LOGIN_ERROR</source>
         <translation>Erro na operação de Login na Chave Móvel Digital!</translation>

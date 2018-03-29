@@ -28,6 +28,10 @@
         <translation>SCAP signature service error</translation>
     </message>
     <message>
+        <source>STR_CMD_SIGNING_SCAP</source>
+        <translation>Signing document with professional attributes</translation>
+    </message>
+    <message>
         <location filename="gapi.cpp" line="257"/>
         <source>STR_PERSONAL_NOTES_ERROR</source>
         <translation>Error writing personal notes!</translation>
