@@ -8,9 +8,6 @@
 
 #include "eidlib.h"
 
-
-#define STR_LANGUAGE		"EN"
-
 class ScapSettings
 {
 public:

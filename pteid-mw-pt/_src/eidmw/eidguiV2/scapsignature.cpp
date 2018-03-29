@@ -142,9 +142,6 @@ std::vector<ns3__AttributeType*> ScapServices::getSelectedAttributes(std::vector
 void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepath, int selected_page,
    double location_x, double location_y, int ltv_years, std::vector<int> attributes_index, CmdSignedFileDetails cmd_details) {
 
-    // Sets user selected file save path
-    const char* citizenId = NULL;
-
     std::vector<ns3__AttributeType*> selected_attributes = getSelectedAttributes(attributes_index);
 
     if (selected_attributes.size() == 0)
