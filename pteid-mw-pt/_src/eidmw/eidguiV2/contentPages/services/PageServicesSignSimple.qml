@@ -417,6 +417,7 @@ PageServicesSignSimpleForm {
                         buttonCMDProgressConfirm.visible = false
                         buttonCMDProgressConfirm.text = qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
                         dialogCMDProgress.open()
+                        textFieldReturnCode.focus = true
                     }
                 }
             }
@@ -434,6 +435,7 @@ PageServicesSignSimpleForm {
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - dialogCMDProgress.width * 0.5
         y: parent.height * 0.5 - dialogCMDProgress.height * 0.5
+        focus: true
 
         header: Label {
             id: labelConfirmOfAddressProgressTextTitle
@@ -578,14 +580,16 @@ PageServicesSignSimpleForm {
                 visible: false
                 onClicked: {
                     console.log("Send sms_token : " + textFieldReturnCode.text)
-                    if( progressBar.value < 100){
-                        gapi.signCloseCMD(textFieldReturnCode.text)
+                    if( progressBar.value < 100) {
+                        //Empty attributes list, in simple signature view it's not SCAP signature
+                        gapi.signCloseCMD(textFieldReturnCode.text, [])
                         progressBarIndeterminate.visible = true
                         rectReturnCode.visible = false
                         buttonCMDProgressConfirm.visible = false
                         textFieldReturnCode.text = ""
                         dialogCMDProgress.open()
-                    }else{
+                    }
+                    else {
                         dialogCMDProgress.close()
                         if (Qt.platform.os === "windows") {
                             propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
