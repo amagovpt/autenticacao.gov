@@ -86,7 +86,7 @@
     <message>
         <location filename="gapi.cpp" line="492"/>
         <source>STR_CMD_ERROR_MSG</source>
-        <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail cartaodecidadao@irn.mj.pt.</translation>
+        <translation>Por favor tente novamente e, caso o erro persista, contacte-nos por email para info.portaldocidadao@ama.pt</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="499"/>

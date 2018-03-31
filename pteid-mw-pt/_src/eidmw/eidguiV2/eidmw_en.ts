@@ -91,7 +91,7 @@
     <message>
         <location filename="gapi.cpp" line="492"/>
         <source>STR_CMD_ERROR_MSG</source>
-        <translation>Please try again. If this error persists, please have your process number and error code ready, and contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail cartaodecidadao@irn.mj.pt.</translation>
+        <translation>Please try again, if this error persists email us at info.portaldocidadao@ama.pt</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="499"/>
