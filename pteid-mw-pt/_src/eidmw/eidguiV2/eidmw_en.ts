@@ -548,7 +548,7 @@
     <message>
         <location filename="MainMenuModel.qml" line="45"/>
         <source>STR_MENU_SIGN_ADVANCE</source>
-        <translation>Advance</translation>
+        <translation>Advanced</translation>
     </message>
     <message>
         <location filename="MainMenuModel.qml" line="52"/>
