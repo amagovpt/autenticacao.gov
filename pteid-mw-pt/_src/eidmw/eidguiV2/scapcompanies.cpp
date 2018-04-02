@@ -2,8 +2,8 @@
 #include <sstream>
 #include "eidlib.h"
 
-#include "SCAPServices/SCAPH.h"
-#include "SCAPServices/SCAP.nsmap"
+#include "SCAP-Services2/SCAPH.h"
+#include "SCAP-Services2/SCAP.nsmap"
 #include "scapsignature.h"
 #include "ScapSettings.h"
 #include <QDir>

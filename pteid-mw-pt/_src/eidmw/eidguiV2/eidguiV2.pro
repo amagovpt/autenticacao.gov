@@ -34,6 +34,12 @@ INCLUDEPATH += ../cardlayer
 INCLUDEPATH += ../eidlib
 INCLUDEPATH += ../_Builds
 
+#Include paths for MacOS homebrew libraries
+macx: INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2o_1/include/
+macx: INCLUDEPATH += /usr/local/Cellar/poppler/0.53.0/include/poppler/qt5/
+macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2o_1/lib/
+macx: LIBS += -L/usr/local/Cellar/poppler/0.53.0/lib/
+
 unix:!macx: LIBS += -Wl,-rpath-link,../lib
 LIBS += -L../lib -lpteidlib -lssl -lcrypto -lpoppler-qt5 -lCMDServices
 
