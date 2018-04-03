@@ -44,8 +44,10 @@ CONFIG += config qt thread create_prl link_prl console
 
 ##LIBS += -L$$[QT_INSTALL_PLUGINS]/imageformats -ljasper
 
+macx: LIBS += -L/usr/local/Cellar/poppler/0.53.0/lib/ 
+
 #We need to override this because SingleApplication needs some C++11 feature
-QMAKE_CXXFLAGS += '-std=c++11'
+CONFIG += c++11
 
 ###
 ### make sure the RPATH is set to where the Qt libs will be installed
@@ -91,6 +93,7 @@ DEPENDPATH += . ../dialogs
 INCLUDEPATH += . ../dialogs ../eidlib ../_Builds ../common ../
 
 unix:!macx: INCLUDEPATH += /usr/include/poppler/qt5
+macx: INCLUDEPATH += /usr/local/include/poppler/qt5/
 
 LIBS += -L../lib  \
     -l$${EIDLIB} \

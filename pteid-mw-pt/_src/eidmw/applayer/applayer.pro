@@ -29,7 +29,9 @@ DESTDIR = ../lib
 DEFINED += APPLAYER_EXPORTS
 
 LIBS += -L../lib \
-	     -L/usr/local/Cellar/openssl/1.0.1i/lib \
+	    -L/usr/local/Cellar/openssl/1.0.2j/lib/ \
+	    -L/usr/local/Cellar/xerces-c/3.1.2/lib/ \
+	    -L/usr/local/Cellar/xml-security-c/1.7.3/lib/ \
 	    -l$${COMMONLIB} \
 	    -lcrypto -lssl \
 	    -lxerces-c \
@@ -37,14 +39,15 @@ LIBS += -L../lib \
 	    -lcurl
 
 !macx: LIBS += -Wl,-R,'../lib' -lxml-security-c
-!macx: LIBS += ../lib/libpteid-poppler.a
+LIBS += ../lib/libpteid-poppler.a
 !macx: LIBS += -Wl,--exclude-libs,ALL 
 
 macx: LIBS += -lxml-security-c
 macx: LIBS += -Wl,-framework -Wl,CoreFoundation
 macx: LIBS += -Wl,-framework -Wl,SystemConfiguration
 macx: LIBS += -Wl,-framework -Wl,CoreServices
-macx: INCLUDEPATH += /usr/local/Cellar/openssl/1.0.1i/include/ /usr/local/include/
+macx: LIBS += -liconv
+macx: INCLUDEPATH +=/usr/local/Cellar/openssl/1.0.2j/include /usr/local/Cellar/xml-security-c/1.7.3/include/ /usr/local/Cellar/xerces-c/3.1.2/include
 macx: INCLUDEPATH += /System/Library/Frameworks/CFNetwork.framework/Headers
 
 isEmpty(EMULATE_CARDLAYER) {
@@ -58,9 +61,10 @@ isEmpty(EMULATE_CARDLAYER) {
 }
 
 DEPENDPATH += .
-INCLUDEPATH += . ../common ../cardlayer ../eidlib ../dialogs ../FreeImagePTEiD/Source
+INCLUDEPATH += . ../common ../pteid-poppler ../cardlayer ../eidlib ../dialogs ../FreeImagePTEiD/Source
+macx: INCLUDEPATH += /usr/local/include
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
-INCLUDEPATH += ../pteid-poppler/
+
 DEFINES += APPLAYER_EXPORTS
 # Input
 HEADERS += \

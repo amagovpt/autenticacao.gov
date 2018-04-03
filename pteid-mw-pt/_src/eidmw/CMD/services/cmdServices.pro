@@ -20,7 +20,7 @@ QT -= gui
 DESTDIR = ./../../lib
 DEPENDPATH += .
 
-macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2j/lib/ /Users/yosemite/gsoap-2.8.30/gsoap/libgsoapssl++.a -lz -lssl -lcrypto
+macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2j/lib/ /Users/yosemite/Downloads/gsoap_2.8.49/gsoap-2.8/gsoap/libgsoapssl++.a -lz -lssl -lcrypto
 
 QMAKE_CXXFLAGS += -fvisibility=hidden
 
