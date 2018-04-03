@@ -5,7 +5,7 @@ BASENAME=libpteid-poppler
 #Need to link to zlib to get FlateEncode compression and decompression
 
 ifeq ($(shell uname), Darwin)
-	LIB_FILENAME=$(BASENAME).dylib
+	LIB_FILENAME=$(BASENAME).a
 	LDFLAGS += -liconv
 	CXXFLAGS += -std=c++11 -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
 	CFLAGS += -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
