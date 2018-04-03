@@ -1336,7 +1336,7 @@
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1575"/>
         <source>STR_LOAD_ADVANCED_PDF_ERROR_MSG</source>
-        <translation>PDF format is selected. Only PDF files can be selected. Check the file format that you understand.</translation>
+        <translation>Verify that the file is not corrupted and check the type of signature selected.</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="426"/>
