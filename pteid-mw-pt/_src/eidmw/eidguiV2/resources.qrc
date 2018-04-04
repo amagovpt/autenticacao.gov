@@ -55,16 +55,12 @@
         <file>images/help_icon_selected.png</file>
         <file>contentPages/definitions/PageDefinitionsSignature.qml</file>
         <file>contentPages/definitions/PageDefinitionsSignatureForm.ui.qml</file>
-        <file>images/dummy/photo.png</file>
         <file>images/titleBar/maximize.png</file>
         <file>images/titleBar/minimize.png</file>
         <file>images/titleBar/quit.png</file>
         <file>images/titleBar/maximize_hover.png</file>
         <file>images/titleBar/minimize_hover.png</file>
         <file>images/titleBar/quit_hover.png</file>
-        <file>images/dummy/CCdemo.png</file>
-        <file>images/dummy/CCdemo_custom.png</file>
-        <file>images/dummy/Pdfdemo.png</file>
         <file>images/remove_file.png</file>
         <file>images/remove_file_hover.png</file>
         <file>images/logo_CC.png</file>
