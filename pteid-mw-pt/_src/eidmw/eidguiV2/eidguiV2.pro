@@ -1,5 +1,7 @@
 TEMPLATE = app
 
+macx: ICON = appicon.icns
+
 QT += quick quickcontrols2 concurrent
 
 #Needed for the FileSaveDialog class

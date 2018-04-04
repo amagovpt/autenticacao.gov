@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     SingleApplication app(argc, argv);
 
     // Set app icon
-    app.setWindowIcon(QIcon(":/favicon.ico"));
+    app.setWindowIcon(QIcon(":/appicon.ico"));
 
     QQuickStyle::setStyle("Material");
     //QQuickStyle::setStyle("Universal");

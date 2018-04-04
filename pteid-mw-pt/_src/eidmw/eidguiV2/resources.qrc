@@ -66,7 +66,6 @@
         <file>images/logo_CC.png</file>
         <file>components/TitleBar.qml</file>
         <file>components/FrameWindow.qml</file>
-        <file>favicon.ico</file>
         <file>images/tooltip_grey.png</file>
         <file>components/PDFPreview.qml</file>
         <file>images/icons-move.png</file>
@@ -80,5 +79,7 @@
         <file>scripts/Functions.js</file>
         <file>contentPages/services/PageServicesSignHelp.qml</file>
         <file>contentPages/services/PageServicesSignHelpForm.ui.qml</file>
+        <file>appicon.icns</file>
+        <file>appicon.ico</file>
     </qresource>
 </RCC>
