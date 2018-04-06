@@ -36,11 +36,12 @@ rm -f /usr/local/bin/pteiddialogsQTsrv
 rm -rf /usr/local/share/certs/
 
 #Applications
-rm -rf '/Applications/Validacao de assinaturas.app'
+rm -rf '/Applications/Validação de assinaturas.app'
+rm -rf '/Applications/Autenticação.gov.app'
 
 #Remove the system package "receipts"
-pkgutil --forget pt.cartaodecidadao.certs.pkg
-pkgutil --forget pt.cartaodecidadao.lib.pkg
-pkgutil --forget pt.cartaodecidadao.bin.pkg
-pkgutil --forget pt.cartaodecidadao.apps.pkg
-pkgutil --forget pt.cartaodecidadao.frameworks.pkg
+pkgutil --forget pt.cartaodecidadao.certs
+pkgutil --forget pt.cartaodecidadao.lib
+pkgutil --forget pt.cartaodecidadao.bin
+pkgutil --forget pt.cartaodecidadao.apps
+pkgutil --forget pt.cartaodecidadao.frameworks
