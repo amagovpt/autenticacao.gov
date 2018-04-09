@@ -1,3 +1,9 @@
+pteid-mw (2.4.11svn5339-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 5339 - Disable checking of the address file hash in SOD only if the card was issued in a specific range of dates
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 15 Feb 2018 10:48:55 +0100
+
 pteid-mw (2.4.11svn5334-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 5334 - Disable checking of the address file hash contained and other minor bugfixes 
