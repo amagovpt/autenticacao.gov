@@ -5,7 +5,7 @@
   <?include ..\..\..\svn_revision.wxs ?>
 
   <?define var.ProductVersion = 3.0.$(var.RevisionNumber)?>
-  <?define var.OfficialProductVersion = 3.0.9 ?>
+  <?define var.OfficialProductVersion = 3.0.11 ?>
 
   <?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
   <?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F20$(var.RevisionNumber)}?>
@@ -166,6 +166,7 @@
       <Component Id="Cpp_SDK_component" Guid="{CDA14D17-04E8-4F4B-BEE1-771A0DDC3578}">
         <File Id="pteidlib.lib" KeyPath="yes" Name="pteidlib.lib" Source="$(var.PTEID_BUILD_FOLDER_X86)\pteidlib.lib"/>
         <File Id="eidlib.h" Name="eidlib.h" Source="..\..\..\eidlib\eidlib.h"/>
+		<File Id="eidlibcompat.h" Name="eidlibcompat.h" Source="..\..\..\eidlib\eidlibcompat.h"/>
         <File Id="eidlibdefines.h" Name="eidlibdefines.h" Source="..\..\..\eidlib\eidlibdefines.h"/>
         <File Id="eidlibException.h" Name="eidlibException.h" Source="..\..\..\eidlib\eidlibException.h"/>
         <File Id="eidErrors.h" Name="eidErrors.h" Source="..\..\..\common\eidErrors.h" />
