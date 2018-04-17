@@ -166,7 +166,7 @@ namespace eIDMW {
     }
 
 /*  *********************************************************
-    ***    CMDSignature::signOpen()                    ***
+    ***    CMDSignature::signOpen()                       ***
     ********************************************************* */
     int CMDSignature::signOpen( std::string in_userId, std::string in_pin
                                     , int page

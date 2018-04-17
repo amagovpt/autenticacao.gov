@@ -94,10 +94,8 @@ int handleError( BasicHttpBinding_USCORECCMovelSignatureProxy proxy, int ret ){
     ***    CMDServices::CMDServices()                     ***
     ********************************************************* */
 CMDServices::CMDServices( const char *endpoint ) {
-    if ( !init( SOAP_RECV_TIMEOUT_DEFAULT
-              , SOAP_SEND_TIMEOUT_DEFAULT
-              , SOAP_CONNECT_TIMEOUT_DEFAULT
-              , SOAP_MUST_NO_UNDERSTAND ) ) 
+    if ( !init( SOAP_RECV_TIMEOUT_DEFAULT, SOAP_SEND_TIMEOUT_DEFAULT, SOAP_CONNECT_TIMEOUT_DEFAULT,
+              SOAP_MUST_NO_UNDERSTAND) ) 
         return;
 
     const char *new_endpoint = NULL;
@@ -148,10 +146,15 @@ bool CMDServices::init(int recv_timeout, int send_timeout,
     //Dont output mustUnderstand attributes
     sp->mustUnderstand = mustUnderstand;
 
-    //TODO: this disables server certificate verification!!
-    int ret = soap_ssl_client_context( sp
-                                    , SOAP_SSL_NO_AUTHENTICATION
-                                    , NULL, NULL, NULL, NULL, NULL );
+    //TODO: test this !
+    std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR))+"/cacerts.pem";
+    int ret = soap_ssl_client_context(sp, SOAP_SSL_DEFAULT,
+            NULL,    /* keyfile: required only when client must authenticate to server (see SSL docs on how to obtain this file) */ 
+            NULL,    /* password to read the key file (not used with GNUTLS) */ 
+            cacerts_file.c_str(), /* cacert file to store trusted certificates (needed to verify server) */ 
+            NULL,    /* capath to directory with trusted certificates */ 
+            NULL);
+
     if ( ret != SOAP_OK ) {
         soap_destroy( sp );
         setSoap( NULL );
