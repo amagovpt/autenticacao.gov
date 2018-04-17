@@ -377,6 +377,14 @@ void getProxySystemWide(const wchar_t *host_default, long port_default, const wc
 	if(pac)
 		*pac=pac_default;
 
+	APL_Config config_useSystemProxy(CConfig::EIDMW_CONFIG_PARAM_PROXY_USE_SYSTEM);
+
+	if (config_useSystemProxy.getLong() != 1)
+	{
+		MWLOG(LEV_DEBUG, MOD_APL, L"getProxySystemWide(): Skipping because config flag is OFF");
+		return;
+	}
+
 #ifdef WIN32
 	//On windows if there is no proxy parameters, we check if there is some IE settings
 	HMODULE hLibrary=LoadLibrary(L"winhttp.dll");

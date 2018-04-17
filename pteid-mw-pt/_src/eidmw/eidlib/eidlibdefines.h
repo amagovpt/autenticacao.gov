@@ -122,6 +122,7 @@ enum PTEID_Param
 	PTEID_PARAM_PROXY_USERNAME,			//string;
 	PTEID_PARAM_PROXY_PWD,				//string;
 	PTEID_PARAM_PROXY_PACFILE,			//string
+	PTEID_PARAM_PROXY_USE_SYSTEM,        //number; 0=no, 1=yes
 
 	//GUITOOL
 	PTEID_PARAM_GUITOOL_STARTWIN,		//number; 0=no(default), 1=yes
