@@ -341,7 +341,7 @@ public:
         // Check proxy settings
         //---------------------------------------------------------
         {
-            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_SYSTEM);
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_USE_SYSTEM);
             long proxy_system = config.getLong();
             m_bProxySystem = proxy_system;
         }
@@ -612,7 +612,7 @@ public:
     {
         m_bProxySystem = bProxySystem;
 
-        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_SYSTEM);
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_USE_SYSTEM);
         config.setLong(m_bProxySystem);
     }
     void setProxyHost(QString const& proxy_host)
