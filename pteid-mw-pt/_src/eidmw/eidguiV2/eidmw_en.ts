@@ -625,7 +625,7 @@
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="405"/>
         <source>STR_ADDRESS_CHANGE_CONFIRMATION_TEXT</source>
-        <translation>To complete the change of address process, click on the &quot;Confirm&quot;</translation>
+        <translation>To complete a possible change of address process, click on the &quot;Confirm&quot; button</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="424"/>
