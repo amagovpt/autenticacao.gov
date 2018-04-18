@@ -164,7 +164,7 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 font.italic: true
-                text: "<a href=\"https://www.autenticacao.gov.pt/documents/10179/12134/Manual+de+utiliza%C3%A7%C3%A3o+da+vers%C3%A3o+2.4+para+Windows%2C%20Mac+e+Linux/\">"
+                text: "<a href=\"https://www.autenticacao.gov.pt/documents/10179/11465/Manual+de+Utiliza%C3%A7%C3%A3o+da+Aplica%C3%A7%C3%A3o+do+Cart%C3%A3o+de+Cidad%C3%A3o+v3/\">"
                       + qsTranslate("PageHelpDocOnline","STR_HELP_URL")
                 width: parent.width
                 wrapMode: Text.Wrap
