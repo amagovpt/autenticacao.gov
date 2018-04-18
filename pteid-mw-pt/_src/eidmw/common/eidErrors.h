@@ -238,9 +238,12 @@
 #define EIDMW_SAM_CONNECTION_ERROR      0xe1d00d05
 #define EIDMW_SAM_PROTOCOL_ERROR        0xe1d00d06
 #define EIDMW_SAM_UNKNOWN_ERROR         0xe1d00d07
+#define EIDMW_SSL_PROTOCOL_ERROR        0xe1d00d08
 #define EIDMW_SAM_UNSUPPORTED_CARD      0xe1d00d10
 #define EIDMW_SAM_UNCONFIRMED_CHANGE    0xe1d00d11
-#define EIDMW_SSL_PROTOCOL_ERROR        0xe1d00d08
+#define EIDMW_SAM_PROXY_AUTH_FAILED     0xe1d00d12
+#define EIDMW_SAM_PROXY_UNSUPPORTED     0xe1d00d13
+
 
 //Errors related to CVC authentication and Secure Messaging
 #define EIDMW_ERR_CVC_GENERIC_ERROR       0xe1d00f01
