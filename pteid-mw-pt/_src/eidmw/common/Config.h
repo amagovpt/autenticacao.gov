@@ -171,6 +171,7 @@ replace $install by string in install parameter
 #define EIDMW_CNF_CERTCACHE_WAITDELAY   L"cert_cache_waitdelay"     //number
 
 #define EIDMW_CNF_SECTION_PROXY         L"proxy"                    //section with the proxy parameters
+#define EIDMW_CNF_PROXY_SYSTEM          L"proxy_system"             //number; 0=no, 1=yes
 #define EIDMW_CNF_PROXY_HOST            L"proxy_host"               //string;
 #define EIDMW_CNF_PROXY_PORT            L"proxy_port"               //number
 #define EIDMW_CNF_PROXY_USERNAME        L"proxy_username"           //string
@@ -323,6 +324,7 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_TIMESTAMP_HOST;
 
     //PROXY
+    static const struct Param_Num EIDMW_CONFIG_PARAM_PROXY_SYSTEM;
     static const struct Param_Str EIDMW_CONFIG_PARAM_PROXY_HOST;
     static const struct Param_Num EIDMW_CONFIG_PARAM_PROXY_PORT;
     static const struct Param_Str EIDMW_CONFIG_PARAM_PROXY_PACFILE;

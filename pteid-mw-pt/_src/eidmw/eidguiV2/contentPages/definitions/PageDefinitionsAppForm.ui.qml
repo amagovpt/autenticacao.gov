@@ -23,6 +23,7 @@ Item {
     property alias propertyRectAppTimeStamp: rectAppTimeStamp
     property alias propertyCheckboxTimeStamp: checkboxTimeStamp
     property alias propertyTextFieldTimeStamp: textFieldTimeStamp
+    property alias propertyCheckboxSystemProxy: checkboxSystemProxy
     property alias propertyCheckboxProxy: checkboxProxy
     property alias propertyTextFieldAdress: textFieldAdress
     property alias propertyTextFieldPort: textFieldPort
@@ -50,7 +51,7 @@ Item {
         Item{
             id: rectReader
             width: parent.width
-            height: textReader.height + rectReaderCombo.height + 2 * Constants.SIZE_TEXT_V_SPACE
+            height: textReader.height + rectReaderCombo.height + Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
             Text {
@@ -105,7 +106,7 @@ Item {
         Item{
             id: rectAppStart
             width: parent.width
-            height: dateAppStart.height + rectAppStartCheckBox.height + 2 * Constants.SIZE_TEXT_V_SPACE
+            height: dateAppStart.height + rectAppStartCheckBox.height + Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectReader.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
@@ -157,7 +158,6 @@ Item {
                 }
             }
         }
-
         Item{
             id: rectAppLanguage
             width: parent.width
@@ -221,11 +221,10 @@ Item {
                 }
             }
         }
-
         Item{
             id: rectAppLook
             width: parent.width
-            height: dateAppStart.height + rectAppLookCheckBox.height + 2 * Constants.SIZE_TEXT_V_SPACE
+            height: dateAppLook.height + rectAppLookCheckBox.height + Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppLanguage.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
@@ -280,8 +279,7 @@ Item {
         Item{
             id: rectAppCertificates
             width: parent.width
-            height: dateAppStart.height + rectAppCertificatesCheckBox.height
-                    + 2 * Constants.SIZE_TEXT_V_SPACE
+            height: dateAppCertificates.height + rectAppCertificatesCheckBox.height + Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppLook.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
@@ -345,11 +343,10 @@ Item {
                 }
             }
         }
-
         Item{
             id: rectAppTimeStamp
             width: parent.width
-            height: dateAppTimeStamp.height + rectAppTimeStampCheckBox.height + 2 * Constants.SIZE_TEXT_V_SPACE
+            height: dateAppTimeStamp.height + rectAppTimeStampCheckBox.height + Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppCertificates.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
@@ -424,7 +421,6 @@ Item {
                 }
             }
         }
-
         Item{
             id: rectAppNetwork
             width: parent.width
@@ -467,8 +463,21 @@ Item {
                 color: "white"
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 height: checkboxProxy.height
+                        + checkboxSystemProxy.height
                         + boxAppAdress.height
+                        + Constants.SIZE_TEXT_V_SPACE
                 anchors.top : dateAppNetwork.bottom
+
+                CheckBox {
+                    id: checkboxSystemProxy
+                    text: qsTranslate("PageDefinitionsApp","STR_NETWORK_SYSTEM_PROXY_OP") + controler.autoTr
+                    height: 25
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                    checked: false
+                }
 
                 CheckBox {
                     id: checkboxProxy
@@ -477,6 +486,7 @@ Item {
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
+                    anchors.top: checkboxSystemProxy.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                     checked: false
                 }
@@ -531,6 +541,7 @@ Item {
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
+                    anchors.top: checkboxSystemProxy.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                     checked: false
                 }

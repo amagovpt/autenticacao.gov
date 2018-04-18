@@ -776,6 +776,14 @@ QString AppController::getTimeStampHostValue (void){
 void AppController::setTimeStampHostValue (QString const& timeStamp_host){
     m_Settings.setTimeStampHost(timeStamp_host);
 }
+bool AppController::getProxySystemValue (void){
+
+    return m_Settings.getProxySystem();
+}
+void AppController::setProxySystemValue (bool bProxySystem){
+
+    m_Settings.setProxySystem(bProxySystem);
+}
 QString AppController::getProxyHostValue (void){
 
     return m_Settings.getProxyHost();

@@ -77,6 +77,8 @@ public slots:
     QString getTimeStampHostValue (void);
     void setTimeStampHostValue (QString const& timeStamp_host);
 
+    bool getProxySystemValue (void);
+    void setProxySystemValue (bool bProxySystem);
     QString getProxyHostValue (void);
     void setProxyHostValue (QString const& proxy_host);
     long getProxyPortValue (void);

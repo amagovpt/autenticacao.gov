@@ -114,9 +114,18 @@ PageDefinitionsAppForm {
                               propertyTextFieldTimeStamp.text = ""
                           }
     }
-
+    propertyCheckboxSystemProxy{
+        onCheckedChanged: if (propertyCheckboxSystemProxy.checked ){
+                              propertyCheckboxProxy.checked = false
+                              controler.setProxySystemValue(true)
+                          }else{
+                              controler.setProxySystemValue(false)
+                          }
+    }
     propertyCheckboxProxy{
-        onCheckedChanged: if (!propertyCheckboxProxy.checked ){
+        onCheckedChanged: if (propertyCheckboxProxy.checked ){
+                              propertyCheckboxSystemProxy.checked = false
+                          }else{
                               controler.setProxyHostValue("")
                               controler.setProxyPortValue(0)
                               propertyTextFieldAdress.text = ""
@@ -198,6 +207,8 @@ PageDefinitionsAppForm {
         }else{
             propertyCheckboxTimeStamp.checked = false
         }
+
+        propertyCheckboxSystemProxy.checked = controler.getProxySystemValue()
 
         propertyCheckboxProxy.checked = controler.getProxyHostValue().length > 0 ? true : false
         propertyTextFieldAdress.text = controler.getProxyHostValue()

@@ -341,10 +341,14 @@ public:
         // Check proxy settings
         //---------------------------------------------------------
         {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_SYSTEM);
+            long proxy_system = config.getLong();
+            m_bProxySystem = proxy_system;
+        }
+        {
             eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_HOST);
             QString proxy_host = config.getString();
             m_proxy_host = proxy_host;
-
         }
 
         {
@@ -600,6 +604,17 @@ public:
         return m_DefSavePath;
     }
 
+    bool getProxySystem( void )
+    {
+        return m_bProxySystem;
+    }
+    void setProxySystem( bool bProxySystem )
+    {
+        m_bProxySystem = bProxySystem;
+
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_SYSTEM);
+        config.setLong(m_bProxySystem);
+    }
     void setProxyHost(QString const& proxy_host)
     {
         m_proxy_host = proxy_host;
@@ -676,6 +691,7 @@ public:
 
 private:
     //Proxy Settings
+    bool m_bProxySystem;
     QString m_proxy_host;
     long m_proxy_port;
     QString m_proxy_username;

@@ -117,6 +117,7 @@ enum PTEID_Param
     //TIMESTAMP SERVER
     PTEID_PARAM_TIMESTAMP_HOST,                     //string;
 	//PROXY
+        PTEID_PARAM_PROXY_SYSTEM,			//string;
 	PTEID_PARAM_PROXY_HOST,				//string;
 	PTEID_PARAM_PROXY_PORT,				//number
 	PTEID_PARAM_PROXY_USERNAME,			//string;
