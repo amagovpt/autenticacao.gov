@@ -195,7 +195,6 @@ public:
             }else{
                 setGuiLanguage(STR_DEF_GUILANGUAGE);
             }
-            setGuiLanguage(lng);
         }
 
         //----------------------------------------------------------
