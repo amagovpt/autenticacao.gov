@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QVariant>
 #include "Settings.h"
-#include "genpur.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
@@ -59,8 +58,8 @@ public slots:
     bool getStartMinimizedValue(void);
     void setStartMinimizedValue(bool bStartMinimized );
 
-    int getGuiLanguageCodeValue(void);
-    void setGuiLanguageCodeValue (int language);
+    QString getGuiLanguageString(void);
+    void setGuiLanguageString (QString language);
 
     bool getShowNotificationValue(void);
     bool getShowPictureValue(void);
@@ -99,8 +98,7 @@ public slots:
 
 private:
     GUISettings&    m_Settings;
-    bool LoadTranslationFile( GenPur::UI_LANGUAGE NewLanguage );
-    void setLanguage(GenPur::UI_LANGUAGE language);
+    bool LoadTranslationFile(QString NewLanguage );
 
     QUrl url;
     QNetworkProxy proxy;

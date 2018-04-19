@@ -88,25 +88,34 @@ void AppController::initTranslation(){
 
     QString     appPath = QCoreApplication::applicationDirPath();
     m_Settings.setExePath(appPath);
-    GenPur::UI_LANGUAGE CurrLng   = m_Settings.getGuiLanguageCode();
+    QString CurrLng   = m_Settings.getGuiLanguageString();
+
     if (LoadTranslationFile(CurrLng)==false){
         emit signalLanguageChangedError();
     }
 }
 
-bool AppController::LoadTranslationFile(GenPur::UI_LANGUAGE NewLanguage)
+bool AppController::LoadTranslationFile(QString NewLanguage)
 {
 
     QString strTranslationFile;
-    strTranslationFile = QString("eidmw_") + GenPur::getLanguage(NewLanguage);
+    strTranslationFile = QString("eidmw_") + NewLanguage;
 
     qDebug() << "C++: AppController LoadTranslationFile" << strTranslationFile << m_Settings.getExePath();
 
     if (!m_translator.load(strTranslationFile,m_Settings.getExePath()+"/"))
     {
         // this should not happen, since we've built the menu with the translation filenames
-        qDebug() << "C++: AppController LoadTranslationFile Error";
-        return false;
+        strTranslationFile = QString("eidmw_") + STR_DEF_GUILANGUAGE;
+        //try load default translation file
+        qDebug() << "C++: AppController LoadTranslationFile" << strTranslationFile << m_Settings.getExePath();
+        if (!m_translator.load(strTranslationFile,m_Settings.getExePath()+"/"))
+        {
+            // this should not happen too, since we've built the menu with the translation filenames
+            qDebug() << "C++: AppController Load Default Translation File Error";
+            return false;
+        }
+        qDebug() << "C++: AppController Loaded Default Translation File";
     }
     //------------------------------------
     // install the translator object and load the .qm file for
@@ -711,6 +720,19 @@ void AppController::setStartAutoValue (bool bAutoStartup ){
 
     m_Settings.setAutoStartup(bAutoStartup);
 }
+QString AppController::getGuiLanguageString (void){
+
+    return m_Settings.getGuiLanguageString();
+}
+void AppController::setGuiLanguageString (QString language){
+
+    if (LoadTranslationFile(language)){
+        m_Settings.setLanguage(language);
+        emit languageChanged();
+    }else{
+        emit signalLanguageChangedError();
+    }
+}
 bool AppController::getStartMinimizedValue (void){
 
     return m_Settings.getStartMinimized();
@@ -718,19 +740,6 @@ bool AppController::getStartMinimizedValue (void){
 void AppController::setStartMinimizedValue (bool bStartMinimized ){
 
     m_Settings.setStartMinimized(bStartMinimized);
-}
-int AppController::getGuiLanguageCodeValue (void){
-
-    return m_Settings.getGuiLanguageCode();
-}
-void AppController::setGuiLanguageCodeValue (int language){
-
-    if (LoadTranslationFile((GenPur::UI_LANGUAGE)language)){
-        m_Settings.setGuiLanguage((GenPur::UI_LANGUAGE)language);
-        emit languageChanged();
-    }else{
-        emit signalLanguageChangedError();
-    }
 }
 bool AppController::getShowNotificationValue (void){
 

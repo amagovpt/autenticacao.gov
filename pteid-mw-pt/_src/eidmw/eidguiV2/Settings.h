@@ -26,7 +26,6 @@
 #include <QtCore>
 #include <QSettings>
 #include <QString>
-#include "genpur.h"
 #include "eidlib.h"
 
 #define SECTION_CERTVALIDATION		"certificatevalidation"
@@ -45,7 +44,7 @@
 #define STR_REMOVECERT			"remove_certificate"
 #define STR_CARDREADER			"cardreader"
 
-#define STR_DEF_GUILANGUAGE		"EN"
+#define STR_DEF_GUILANGUAGE		"nl"
 
 #define PIN_MAX_LENGHT 8
 #define PIN_MIN_LENGHT 4
@@ -166,7 +165,7 @@ public:
     // ctor
     //------------------------------------------------------
     GUISettings( void )
-        : m_GuiLanguage("en")
+        : m_GuiLanguage("nl")
         , m_bShowAnimations(false)
         , m_bUseCustomSignature(false)
         , m_bNotShowStartUpHelp(false)
@@ -191,9 +190,10 @@ public:
         {
             eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_LANGUAGE);
             QString lng = config.getString();
-            if ( GenPur::LANG_XX==GenPur::getLanguage(lng))
-            {
-                lng = GenPur::getLanguage(GenPur::LANG_DEF);
+            if(lng == "en" || lng == "nl"){
+                setGuiLanguage(lng);
+            }else{
+                setGuiLanguage(STR_DEF_GUILANGUAGE);
             }
             setGuiLanguage(lng);
         }
@@ -396,17 +396,14 @@ public:
     {
         return m_GuiLanguage;
     }
-    GenPur::UI_LANGUAGE getGuiLanguageCode( void ) const
-    {
-        return GenPur::getLanguage(m_GuiLanguage);
-    }
+
     void setGuiLanguage( QString const& GuiLanguage=STR_DEF_GUILANGUAGE )
     {
         m_GuiLanguage = GuiLanguage;
     }
-    void setGuiLanguage( GenPur::UI_LANGUAGE language )
+    void setLanguage( QString const& language )
     {
-        m_GuiLanguage = GenPur::getLanguage(language);
+        m_GuiLanguage = language;
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_LANGUAGE);
         config.setString(m_GuiLanguage.toLatin1());
     }

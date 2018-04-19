@@ -24,7 +24,6 @@ SOURCES += main.cpp \
     scapsignature.cpp \
     scapcompanies.cpp \
     filesavedialog.cpp \
-    genpur.cpp \
     certificates.cpp \
     singleapplication.cpp
 
@@ -95,7 +94,6 @@ HEADERS += \
     filesavedialog.h \
     scapsignature.h \
     Settings.h \
-    genpur.h \
     certificates.h \
     singleapplication.h \
     singleapplication_p.h

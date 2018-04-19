@@ -40,7 +40,7 @@ PageDefinitionsAppForm {
     propertyRadioButtonUK{
         onCheckedChanged: {
             if (propertyRadioButtonUK.checked)
-                controler.setGuiLanguageCodeValue(GAPI.LANG_EN)
+                controler.setGuiLanguageString("en")
             // Update submenu
             mainFormID.state = "STATE_NORMAL"
             mainFormID.propertySubMenuListView.model.clear()
@@ -63,7 +63,7 @@ PageDefinitionsAppForm {
     propertyRadioButtonPT{
         onCheckedChanged: {
             if (propertyRadioButtonPT.checked)
-                controler.setGuiLanguageCodeValue(GAPI.LANG_NL)
+                controler.setGuiLanguageString("nl")
             // Update submenu
             mainFormID.state = "STATE_NORMAL"
             mainFormID.propertySubMenuListView.model.clear()
@@ -182,12 +182,12 @@ PageDefinitionsAppForm {
             propertyRectAppLanguage.anchors.top = propertyRectReader.bottom
         }
 
-        if(controler.getGuiLanguageCodeValue() === GAPI.LANG_EN){
-            propertyRadioButtonUK.checked = true
-            propertyRadioButtonPT.checked = false
-        }else{
+        if(controler.getGuiLanguageString() === "nl"){
             propertyRadioButtonUK.checked = false
             propertyRadioButtonPT.checked = true
+        }else{
+            propertyRadioButtonUK.checked = true
+            propertyRadioButtonPT.checked = false
         }
 
         propertyCheckboxShowAnime.checked = controler.getShowAnimationsValue()

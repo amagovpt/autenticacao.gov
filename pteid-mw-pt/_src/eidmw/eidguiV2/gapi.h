@@ -13,7 +13,6 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include "Settings.h"
-#include "genpur.h"
 #include "certificates.h"
 
 //MW libraries
@@ -216,17 +215,6 @@ public:
 
     enum eCustomEventType { ET_UNKNOWN, ET_CARD_CHANGED, ET_CARD_REMOVED };
 
-    enum UI_LANGUAGE
-    {
-        LANG_XX
-        , LANG_EN
-        , LANG_DEF = LANG_EN
-        , LANG_NL
-        , LANG_FR
-        , LANG_DE
-        , LANG_LAST
-    };
-
     enum AutoUpdateMessage { GenericError, NoUpdatesAvailable, DownloadFailed, LinuxNotSupported,UpdatesAvailable,
                            UnableSaveFile};
     Q_ENUMS(CardAccessError)
@@ -388,7 +376,7 @@ signals:
     void signalRemoveCertificatesFail();
 
 private:
-    bool LoadTranslationFile( GenPur::UI_LANGUAGE NewLanguage );
+    bool LoadTranslationFile( QString NewLanguage );
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
     void connectToCard();
     void getSCAPEntities();
