@@ -51,6 +51,14 @@
         <translation>Erro na comunicação</translation>
     </message>
     <message>
+        <source>STR_PROXY_AUTH_FAILED</source>
+        <translation>O seu servidor de proxy requer autenticação. Por favor verifique as configurações de rede no menu "Configurações da Aplicação".</translation>
+    </message>
+    <message>
+        <source>STR_PROXY_UNSUPPORTED</source>
+        <translation>O seu servidor de proxy requer o protocolo NTLM/Kerberos que não é suportado por esta aplicação. Por favor verifique as configurações de rede ou execute a aplicação noutro equipamento</translation>
+    </message>
+    <message>
         <location filename="gapi.cpp" line="453"/>
         <location filename="gapi.cpp" line="507"/>
         <location filename="gapi.cpp" line="598"/>

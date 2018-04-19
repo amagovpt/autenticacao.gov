@@ -57,6 +57,15 @@
         <translation>Connection Error</translation>
     </message>
     <message>
+        <source>STR_PROXY_AUTH_FAILED</source>
+        <translation>Your proxy server requires authentication. Please review your network settings in the "Application Configuration" menu.</translation>
+    </message>
+    <message>
+        <source>STR_PROXY_UNSUPPORTED</source>
+        <translation>Your proxy server requires the NTLM/Kerberos protocol which is not supported. Please review your network configurations or run this application in another device.
+        </translation>
+    </message>
+    <message>
         <location filename="gapi.cpp" line="453"/>
         <location filename="gapi.cpp" line="507"/>
         <location filename="gapi.cpp" line="598"/>
@@ -625,7 +634,7 @@
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="405"/>
         <source>STR_ADDRESS_CHANGE_CONFIRMATION_TEXT</source>
-        <translation>To complete a possible change of address process, click on the &quot;Confirm&quot; button</translation>
+        <translation>In order to complete any change of address process click on the &quot;Confirm&quot; button</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="424"/>

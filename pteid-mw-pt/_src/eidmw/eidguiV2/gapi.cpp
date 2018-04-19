@@ -461,6 +461,15 @@ void GAPI::showChangeAddressDialog(long code)
                 tr("STR_VERIFY_INTERNET");
         break;
 
+    case EIDMW_SAM_PROXY_AUTH_FAILED:
+        error_msg = tr("STR_CONNECTION_ERROR") + "\n\n" +
+                    tr("STR_PROXY_AUTH_FAILED");
+        break;
+    case EIDMW_SAM_PROXY_UNSUPPORTED:
+        error_msg = tr("STR_CONNECTION_ERROR") + "\n\n" +
+                    tr("STR_PROXY_UNSUPPORTED");
+        break;
+
     case 1121:
     case 1122:
         error_msg = tr("STR_CHANGE_ADDRESS_ERROR") + "\n\n" + tr("STR_CHANGE_ADDRESS_CHECK_PROCESS_NUMBER");
