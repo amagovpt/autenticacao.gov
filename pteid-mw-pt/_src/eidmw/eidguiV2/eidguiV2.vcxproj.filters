@@ -50,9 +50,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="genpur.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ErrorConn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -65,22 +62,10 @@
     <ClCompile Include="scapsignature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SCAPServices\SCAPAttributeSupplierBindingProxy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SCAPServices\SCAPC.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SCAPServices\SCAPPDFSignatureSoapBindingProxy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stdsoap2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="certificates.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-	<ClCompile Include="GeneratedFiles\Debug\moc_singleapplication.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="singleapplication.cpp">
@@ -91,6 +76,15 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_singleapplication_p.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SCAP-Services2\SCAPAttributeSupplierBindingProxy.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SCAP-Services2\SCAPC.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SCAP-Services2\SCAPPDFSignatureWithAttachSoapBindingProxy.cpp">
+      <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -241,10 +235,10 @@
     <CustomBuild Include="appcontroller.h">
       <Filter>Generated Files</Filter>
     </CustomBuild>
-	<CustomBuild Include="singleapplication.h">
-      <Filter>Header Files\with QObject</Filter>
-    </CustomBuild>
     <CustomBuild Include="singleapplication_p.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="singleapplication.h">
       <Filter>Generated Files</Filter>
     </CustomBuild>
   </ItemGroup>
