@@ -146,13 +146,24 @@ bool CMDServices::init(int recv_timeout, int send_timeout,
     //Dont output mustUnderstand attributes
     sp->mustUnderstand = mustUnderstand;
 
-    //TODO: test this !
+    char * ca_path = NULL;
+    std::string cacerts_file;
+
+#ifdef __linux__
+    ca_path = "/etc/ssl/certs"; 
+    //Load CA certificates from file provided with pteid-mw
+#elif WIN32
     std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR))+"/cacerts.pem";
+    //TODO
+#elif __APPLE__
+    std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR))+"/cacerts.pem";
+#endif
+
     int ret = soap_ssl_client_context(sp, SOAP_SSL_DEFAULT,
-            NULL,    /* keyfile: required only when client must authenticate to server (see SSL docs on how to obtain this file) */ 
-            NULL,    /* password to read the key file (not used with GNUTLS) */ 
-            cacerts_file.c_str(), /* cacert file to store trusted certificates (needed to verify server) */ 
-            NULL,    /* capath to directory with trusted certificates */ 
+            NULL,    
+            NULL,
+            cacerts_file.size() > 0 ? cacerts_file.c_str(): NULL, /* cacert file to store trusted certificates (needed to verify server) */ 
+            ca_path,
             NULL);
 
     if ( ret != SOAP_OK ) {
