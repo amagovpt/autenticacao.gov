@@ -275,16 +275,6 @@ static const char *SSL_ERROR_to_str(int err)
 
 
 /**
- * Print SSL error details
- */
-void print_ssl_error(char* message, FILE* out) {
-
-    fprintf(out, "DEBUG: %s", message);
-    ERR_print_errors_fp(out);
-}
-
-
-/**
  * Initialise OpenSSL
  */
 void SSLConnection::init_openssl() {
@@ -791,6 +781,14 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunke
 
 }
 
+bool isUnsupportedProxy(char *tmpbuf) {
+
+	return strstr(tmpbuf, "Proxy-Authenticate: Negotiate") != NULL ||
+	   strstr(tmpbuf, "Proxy-Authenticate: Kerberos") != NULL || 
+	   strstr(tmpbuf, "Proxy-Authenticate: NTLM") != NULL;
+
+}
+
 BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_port, char *ssl_host, char *proxy_user, char * proxy_pwd, char *ssl_host_andport)
 {
 
@@ -830,7 +828,6 @@ BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_po
         	ret = snprintf(connect_request, sizeof(connect_request), "CONNECT %s HTTP/1.1\r\n Host: %s\r\n%s%s\r\n%s\r\n%s\r\n%s\r\n%s\r\n\r\n",
         		ssl_host_andport, ssl_host, proxy_auth_header, auth_token, user_agent, no_cache, no_content, keepAlive);
 
-        	fprintf(stderr, "DEBUG: snprintf ret=%d\n", ret);
         	free(auth_token);
         }
         else
@@ -838,7 +835,6 @@ BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_po
 
 	    	ret = snprintf(connect_request, sizeof(connect_request), "CONNECT %s HTTP/1.1\r\n Host: %s\r\n%s\r\n%s\r\n%s\r\n%s\r\n\r\n",
             	ssl_host_andport, ssl_host, user_agent, no_cache, no_content, keepAlive);
-	    	fprintf(stderr, "DEBUG: snprintf ret=%d\n", ret);
 		}
 
 	    BIO_puts(cbio, connect_request);
@@ -848,12 +844,21 @@ BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_po
 
         MWLOG(LEV_DEBUG, MOD_APL, "SSLConnection: CONNECT reply: %s", tmpbuf);
 
-        //Add Log with the proxy response to the CONNECT request
-        //BIO_write(out, tmpbuf, len);
-        if (strstr(tmpbuf, "200 Connection established") == NULL)
-        {
-          MWLOG(LEV_DEBUG, MOD_APL, L"Error connecting to proxy!");
-          return NULL;
+        if (strstr(tmpbuf, "200 Connection established") == NULL)  {
+        	long errorCode = 0;
+        	MWLOG(LEV_DEBUG, MOD_APL, L"Error connecting to proxy!");
+          	
+          	if (strstr(tmpbuf, "407 Proxy Authentication Required")!= NULL) {
+
+				if (isUnsupportedProxy(tmpbuf))
+          			errorCode = EIDMW_SAM_PROXY_UNSUPPORTED;
+          		else 
+          			errorCode = EIDMW_SAM_PROXY_AUTH_FAILED;
+          	}
+          	else 
+          		errorCode = EIDMW_OTP_CONNECTION_ERROR;
+          
+            throw CMWEXCEPTION(errorCode);
         }
 
         return cbio;
@@ -946,15 +951,22 @@ void SSLConnection::connect_encrypted(char* host_and_port)
 
 	if (proxy_host != NULL && strlen(proxy_host) > 0)
 	{
+
 		bio = connectToProxyServer(proxy_host, proxy_port,
 			m_host, proxy_user_value, proxy_pwd_value, host_and_port);
+
+		if (!bio) {
+			throw CMWEXCEPTION(EIDMW_OTP_CONNECTION_ERROR);			
+		}
 	}
 	else
 	{
     	bio = BIO_new_connect(host_and_port);
     	if (BIO_do_connect(bio) <= 0) {
-	 	   fprintf(stderr, "Error connecting to SAM server\n");
-	    	ERR_print_errors_fp(stderr);
+    	   MWLOG(LEV_ERROR, MOD_APL, "SSLConnection: BIO_do_connect failed: %s", 
+    	   	 ERR_error_string(ERR_get_error(), NULL));
+
+	 	   throw CMWEXCEPTION(EIDMW_OTP_CONNECTION_ERROR);
     	}
 	}
 
