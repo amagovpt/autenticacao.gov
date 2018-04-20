@@ -31,7 +31,7 @@ namespace eIDMW {
         cmdService = new CMDServices();
     }
 
-    CMDSignature::CMDSignature(PTEID_PDFSignature *in_pdf_handler ) {
+    CMDSignature::CMDSignature(PTEID_PDFSignature *in_pdf_handler) {
         m_pdf_handler = in_pdf_handler;
         cmdService = new CMDServices();
     }
@@ -68,7 +68,7 @@ namespace eIDMW {
         }
 
         std::vector<CByteArray> certificates;
-        int ret = cmdService->getCertificate(in_userId, certificates);
+        int ret = cmdService->getCertificate(m_proxyInfo, in_userId, certificates);
 
         if ( ret != ERR_NONE ) return ret;
 
@@ -156,7 +156,7 @@ namespace eIDMW {
 
 		MWLOG_DEBUG(logBuf, "DocName is %s", pdfDocName.c_str());
 
-		int ret = cmdService->sendDataToSign(signatureInput.GetBytes(), pdfDocName, userPin);
+		int ret = cmdService->ccMovelSign(m_proxyInfo, signatureInput.GetBytes(), pdfDocName, userPin);
         if ( ret != ERR_NONE ) {
             MWLOG_ERR( logBuf, "CMDSignature - Error @ sendDataToSign()" );
             return ret;
@@ -168,13 +168,14 @@ namespace eIDMW {
 /*  *********************************************************
     ***    CMDSignature::signOpen()                       ***
     ********************************************************* */
-    int CMDSignature::signOpen( std::string in_userId, std::string in_pin
+    int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin
                                     , int page
                                     , double coord_x, double coord_y
                                     , const char *location
                                     , const char *reason
                                     , const char *outfile_path) {
 
+        m_proxyInfo = proxyinfo;
         int ret = cli_getCertificate( in_userId );
         if (ret != ERR_NONE)
            return ret;
@@ -212,7 +213,7 @@ namespace eIDMW {
         }
 
         CByteArray cb;
-        int ret = cmdService->getSignature( in_code, cb );
+        int ret = cmdService->getSignature(m_proxyInfo, in_code, cb);
         if ( ret != ERR_NONE )
             return ret;
 

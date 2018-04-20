@@ -8,6 +8,7 @@
 #include "soapH.h"
 #include "ByteArray.h"
 #include "Log.h"
+#include "CMDSignature.h"
 
 #ifdef WIN32
     #define _LOG_( buf, level, mod, format, ... ) { sprintf( buf, "%s() - ", __FUNCTION__ );                \
@@ -34,19 +35,19 @@ namespace eIDMW {
 void printCPtr( char *c_str, int c_str_len );
 xsd__base64Binary *encode_base64( soap *sp, std::string in_str );
 
-class CMDServices{
+class CMDServices {
     public:
-        CMDServices( const char *endpoint = NULL );
+        CMDServices();
         virtual ~CMDServices();
 
-        // Get certificate
-        int getCertificate( std::string in_userId, std::vector<CByteArray> &out_certificate );
+        // GetCertificate
+        int getCertificate(CMDProxyInfo proxyInfo, std::string in_userId, std::vector<CByteArray> &out_certificate );
 
         // CCMovelSign
-		int sendDataToSign(unsigned char * in_hash, std::string docName, std::string in_pin);
+		int ccMovelSign(CMDProxyInfo proxyInfo, unsigned char * in_hash, std::string docName, std::string in_pin);
 
         // ValidateOtp
-        int getSignature( std::string in_code, CByteArray& out_signature );
+        int getSignature(CMDProxyInfo proxyInfo, std::string in_code, CByteArray& out_signature );
 
     protected:
         soap *getSoap();
@@ -75,7 +76,7 @@ class CMDServices{
         bool init(int recv_timeout, int send_timeout, int connect_timeout, short mustUnderstand);
 
         // CCMovelSign
-		int CCMovelSign(unsigned char * in_hash, std::string docName, std::string in_pin);
+
 
         _ns2__CCMovelSign *get_CCMovelSignRequest( soap *sp
                                                  , char *endpoint
@@ -87,7 +88,7 @@ class CMDServices{
         int checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response );
 
         // ValidateOtp
-        int ValidateOtp( std::string in_code
+        int ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
                         , unsigned char **outSignature
                         , unsigned int *outSignatureLen );
 
@@ -105,7 +106,7 @@ class CMDServices{
                                                 , std::string *in_userId );
 
         int checkGetCertificateResponse( _ns2__GetCertificateResponse *response );
-        int GetCertificate( std::string in_userId
+        int GetCertificate(CMDProxyInfo proxyInfo, std::string in_userId
                             , char **out_certificate, int *out_certificateLen );
 };
 
