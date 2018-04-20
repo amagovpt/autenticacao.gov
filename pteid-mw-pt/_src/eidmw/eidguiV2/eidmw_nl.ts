@@ -113,6 +113,10 @@
         <translation>Erro na operação de Login na Chave Móvel Digital!</translation>
     </message>
     <message>
+        <source>STR_CMD_TIMEOUT_ERROR</source>
+        <translation>O serviço está indisponível neste momento</translation>
+    </message>
+    <message>
         <location filename="gapi.cpp" line="582"/>
         <source>STR_CHANGING_ADDRESS</source>
         <translation>Mudando a morada no Cartão...</translation>

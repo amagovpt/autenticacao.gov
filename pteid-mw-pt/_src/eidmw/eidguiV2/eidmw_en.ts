@@ -115,6 +115,10 @@
         <translation>Error in the Chave Móvel Digital Login operation!</translation>
     </message>
     <message>
+        <source>STR_CMD_TIMEOUT_ERROR</source>
+        <translation>The Chave Móvel Digital service is unresponsive</translation>
+    </message>
+    <message>
         <location filename="gapi.cpp" line="582"/>
         <source>STR_CHANGING_ADDRESS</source>
         <translation>Changing Address in card...</translation>

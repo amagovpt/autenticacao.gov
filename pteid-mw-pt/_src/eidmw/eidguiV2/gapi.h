@@ -188,6 +188,7 @@ private:
 
 class GAPI : public QObject
 {
+    #define SCAP_SERVICE_ERROR_CODE -10
     #define TIMERREADERLIST 5000
     Q_OBJECT
     Q_PROPERTY(QMap<IDInfoKey, QString> m_data
@@ -407,6 +408,7 @@ private:
     bool useCustomSignature(void);
     void stopAllEventCallbacks(void);
     void cleanupCallbackData(void);
+    CMDProxyInfo buildProxyInfo();
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;

@@ -22,7 +22,7 @@ using namespace eIDMW;
 
 #define TRIES_LEFT_ERROR    1000
 
-static  bool    g_cleaningCallback=false;
+static  bool g_cleaningCallback=false;
 static  int g_runningCallback=0;
 
 /*
@@ -33,6 +33,8 @@ GAPI::GAPI(QObject *parent) :
     QObject(parent) {
     image_provider = new PhotoImageProvider();
     image_provider_pdf = new PDFPreviewImageProvider();
+
+
     cmd_signature = new eIDMW::CMDSignature();
     cmd_pdfSignature = new eIDMW::PTEID_PDFSignature();
     m_addressLoaded = false;
@@ -44,6 +46,27 @@ GAPI::GAPI(QObject *parent) :
     m_timerReaderList = new QTimer(this);
     connect(m_timerReaderList, SIGNAL(timeout()), this, SLOT(updateReaderList()));
     m_timerReaderList->start(TIMERREADERLIST);
+}
+
+
+CMDProxyInfo GAPI::buildProxyInfo() {
+    ProxyInfo proxyinfo;
+
+    CMDProxyInfo cmd_proxyinfo;
+
+    if (proxyinfo.getProxyHost().size() > 0) {
+        cmd_proxyinfo.host = proxyinfo.getProxyHost().toStdString();
+        cmd_proxyinfo.port = proxyinfo.getProxyPort().toLong();
+
+        if (proxyinfo.getProxyUser().size() > 0) {
+            cmd_proxyinfo.user = proxyinfo.getProxyUser().toStdString();
+            cmd_proxyinfo.pwd = proxyinfo.getProxyPwd().toStdString();
+        }
+    }
+
+    qDebug() << "buildProxyInfo is returning host= " << QString::fromStdString(cmd_proxyinfo.host) << " port= " << cmd_proxyinfo.port;
+    qDebug() << "buildProxyInfo proxy authentication: " <<  (cmd_proxyinfo.user.size() > 0 ? "YES" : "NO" );
+    return cmd_proxyinfo;
 }
 
 void GAPI::initTranslation() {
@@ -307,8 +330,8 @@ unsigned int GAPI::getTriesLeftAuthPin() {
 
     END_TRY_CATCH
 
-            //QML default types don't include long
-            return (unsigned int)tries_left;
+    //QML default types don't include long
+    return (unsigned int)tries_left;
 }
 
 unsigned int GAPI::verifySignPin(QString pin_value) {
@@ -515,9 +538,11 @@ void GAPI::showSignCMDDialog(long code)
         case 0:
             error_msg = tr("STR_CMD_SUCESS");
             break;
-        //TODO: add proper message for SCAP error
-        case -1:
+        case SCAP_SERVICE_ERROR_CODE:
             error_msg = tr("STR_SCAP_SIGNATURE_ERROR");
+            break;
+        case -1:
+            error_msg = tr("STR_CMD_TIMEOUT_ERROR");
             break;
         case SOAP_TCP_ERROR:
             error_msg = tr("STR_CONNECTION_ERROR") + "\n\n" +
@@ -630,7 +655,8 @@ void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdSignParams &params)
 
     try {
         signalUpdateProgressBar(25);
-        ret = cmd_signature->signOpen( params.mobileNumber.toStdString(), params.secret_code.toStdString(),
+        CMDProxyInfo proxyInfo = buildProxyInfo();
+        ret = cmd_signature->signOpen(proxyInfo, params.mobileNumber.toStdString(), params.secret_code.toStdString(),
                                       params.page,
                                       params.coord_x, params.coord_y,
                                       params.location.toUtf8().data(), params.reason.toUtf8().data(),
@@ -664,7 +690,7 @@ void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
 
     try {
         signalUpdateProgressBar(75);
-        ret = cmd_signature->signClose( local_sms_token );
+        ret = cmd_signature->signClose(local_sms_token);
         if ( ret != 0 ) {
             qDebug() << "signClose failed!" << endl;
             signCMDFinished(ret);
@@ -690,7 +716,7 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
 
     try {
         signalUpdateProgressBar(65);
-        ret = cmd_signature->signClose( local_sms_token );
+        ret = cmd_signature->signClose(local_sms_token );
         if ( ret != 0 ) {
             qDebug() << "signClose failed!" << endl;
             signCMDFinished(ret);

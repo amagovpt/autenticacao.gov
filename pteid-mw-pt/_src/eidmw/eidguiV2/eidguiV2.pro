@@ -25,6 +25,7 @@ SOURCES += main.cpp \
     scapcompanies.cpp \
     filesavedialog.cpp \
     certificates.cpp \
+    proxyinfo.cpp \
     singleapplication.cpp
 
 INCLUDEPATH += /usr/include/poppler/qt5/
@@ -34,6 +35,10 @@ INCLUDEPATH += ../common
 INCLUDEPATH += ../cardlayer
 INCLUDEPATH += ../eidlib
 INCLUDEPATH += ../_Builds
+
+#Don't mess up the source folder with generated files
+OBJECTS_DIR = build
+MOC_DIR = build
 
 #Include paths for MacOS homebrew libraries
 macx: INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2o_1/include/
