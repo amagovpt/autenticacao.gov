@@ -210,7 +210,10 @@ PageDefinitionsAppForm {
 
         propertyCheckboxSystemProxy.checked = controler.getProxySystemValue()
 
-        propertyCheckboxProxy.checked = controler.getProxyHostValue().length > 0 ? true : false
+        if(!propertyCheckboxSystemProxy.checked){
+            propertyCheckboxProxy.checked = controler.getProxyHostValue().length > 0 ? true : false
+        }
+
         propertyTextFieldAdress.text = controler.getProxyHostValue()
         propertyTextFieldPort.text = controler.getProxyPortValue() > 0 ?
                     controler.getProxyPortValue().toString() :
