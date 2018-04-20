@@ -32,6 +32,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="proxyinfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="filesavedialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -255,6 +255,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="certificates.cpp" />
+    <ClCompile Include="proxyinfo.cpp" />
     <ClCompile Include="ErrorConn.cpp" />
     <ClCompile Include="filesavedialog.cpp" />
     <ClCompile Include="gapi.cpp" />
