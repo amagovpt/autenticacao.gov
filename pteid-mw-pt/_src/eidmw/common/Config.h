@@ -323,7 +323,6 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_TIMESTAMP_HOST;
 
     //PROXY
-    static const struct Param_Num EIDMW_CONFIG_PARAM_PROXY_SYSTEM;
     static const struct Param_Str EIDMW_CONFIG_PARAM_PROXY_HOST;
     static const struct Param_Num EIDMW_CONFIG_PARAM_PROXY_PORT;
     static const struct Param_Str EIDMW_CONFIG_PARAM_PROXY_PACFILE;
