@@ -208,9 +208,18 @@ PageDefinitionsAppForm {
             propertyCheckboxTimeStamp.checked = false
         }
 
-        propertyCheckboxSystemProxy.checked = controler.getProxySystemValue()
+        if (Qt.platform.os === "linux") {
+            propertyCheckboxSystemProxy.visible = false
+            propertyCheckboxProxy.anchors.top = propertyRectAppNetworkCheckBox.top
+            propertyCheckboxAutProxy.anchors.top = propertyRectAppNetworkCheckBox.top
+            propertyRectAppNetworkCheckBox.height = propertyCheckboxProxy.height
+                                                    + propertyTextFieldAdress.height
+                                                    + Constants.SIZE_TEXT_V_SPACE
+        }else{
+            propertyCheckboxSystemProxy.checked = controler.getProxySystemValue()
+        }
 
-        if(!propertyCheckboxSystemProxy.checked){
+        if(!propertyCheckboxSystemProxy.checked || Qt.platform.os === "linux"){
             propertyCheckboxProxy.checked = controler.getProxyHostValue().length > 0 ? true : false
         }
 

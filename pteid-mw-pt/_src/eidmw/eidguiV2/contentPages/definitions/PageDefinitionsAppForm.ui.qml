@@ -23,6 +23,7 @@ Item {
     property alias propertyRectAppTimeStamp: rectAppTimeStamp
     property alias propertyCheckboxTimeStamp: checkboxTimeStamp
     property alias propertyTextFieldTimeStamp: textFieldTimeStamp
+    property alias propertyRectAppNetworkCheckBox: rectAppNetworkCheckBox
     property alias propertyCheckboxSystemProxy: checkboxSystemProxy
     property alias propertyCheckboxProxy: checkboxProxy
     property alias propertyTextFieldAdress: textFieldAdress
