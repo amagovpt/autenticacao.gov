@@ -45,7 +45,7 @@
     <Compile Include="qml-app_x86.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\MW35Wix\Strings-pt.wxl">
+    <EmbeddedResource Include="Strings-pt.wxl">
       <Link>Strings-pt.wxl</Link>
     </EmbeddedResource>
   </ItemGroup>

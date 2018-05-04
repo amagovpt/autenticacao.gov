@@ -30,7 +30,7 @@
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\MW35Wix\Strings-pt.wxl">
+    <EmbeddedResource Include="Strings-pt.wxl">
       <Link>Strings-pt.wxl</Link>
     </EmbeddedResource>
   </ItemGroup>
