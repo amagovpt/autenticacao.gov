@@ -752,14 +752,6 @@ bool AppController::getShowPictureValue (void){
 bool AppController::getShowAnimationsValue(void){
     return m_Settings.getShowAnimations();
 }
-bool AppController::getRegCertValue (void){
-
-    return m_Settings.getRegCert();
-}
-bool AppController::getRemoveCertValue (void){
-
-    return m_Settings.getRemoveCert();
-}
 void AppController::setShowNotificationValue (bool bShowNotification){
 
     m_Settings.setShowNotification(bShowNotification);

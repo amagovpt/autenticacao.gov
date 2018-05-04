@@ -2461,3 +2461,11 @@ void GAPI::setRemoveCertValue (bool bRemoveCert){
 
     m_Settings.setRemoveCert(bRemoveCert);
 }
+bool GAPI::getRegCertValue (void){
+
+    return m_Settings.getRegCert();
+}
+bool GAPI::getRemoveCertValue (void){
+
+    return m_Settings.getRemoveCert();
+}

@@ -332,6 +332,8 @@ public slots:
     bool getUseCustomSignature(void);
     void setRegCertValue(bool bRegCert);
     void setRemoveCertValue(bool bRemoveCert);
+    bool getRegCertValue(void);
+    bool getRemoveCertValue(void);
 
 signals:
     // Signal from GAPI to Gui

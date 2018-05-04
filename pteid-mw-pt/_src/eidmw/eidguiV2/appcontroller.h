@@ -64,8 +64,6 @@ public slots:
     bool getShowNotificationValue(void);
     bool getShowPictureValue(void);
     bool getShowAnimationsValue(void);
-    bool getRegCertValue(void);
-    bool getRemoveCertValue(void);
 
     void setShowNotificationValue(bool bShowNotification);
     void setShowPictureValue(bool bShowPicture);
