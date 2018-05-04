@@ -694,32 +694,34 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 	//fprintf(stderr, "Wrote to channel: %d bytes\n", ret_channel);
 
 	//Read response
-	unsigned int ret = read_from_stream(m_ssl_connection, server_response, REPLY_BUFSIZE);
+	NetworkBuffer buffer;
+	buffer.buf = server_response;
+	buffer.buf_size = REPLY_BUFSIZE;
+	unsigned int ret = read_from_stream(m_ssl_connection, &buffer);
 	
-
 	if (ret > 0)
 	{
-		MWLOG(LEV_DEBUG, MOD_APL, "do_SAM_1stpost: Server reply: %s", server_response);
-		m_session_cookie = parseCookie(server_response);
+		MWLOG(LEV_DEBUG, MOD_APL, "do_SAM_1stpost: Server reply: %s", buffer.buf);
+		m_session_cookie = parseCookie(buffer.buf);
 		if (m_session_cookie == NULL)
 		{
 			delete server_params;
 			free(post_dhparams);
-			free(server_response);
+			free(buffer.buf);
 
 			//Catch renegotiation errors (e.g. using test cards)
 			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 		}
 	}
 
-	char *body = skipHTTPHeaders(server_response);
+	char *body = skipHTTPHeaders(buffer.buf);
 
 	json = cJSON_Parse(body);
 	cJSON *my_json = json->child;
 	if (my_json == NULL)
 	{
 		fprintf(stderr, "DEBUG: Server returned malformed JSON data: %s\n", body);
-		free(server_response);
+		free(buffer.buf);
 		free(post_dhparams);
         cJSON_Delete(json);
 		return server_params;
@@ -734,7 +736,7 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 	if (child)
 		server_params->cv_ifd_aut = _strdup(child->valuestring);
 
-	free(server_response);
+	free(buffer.buf);
 	free(post_dhparams);
 	cJSON_Delete(json);
 
@@ -761,14 +763,18 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunke
 
 	ret_channel = write_to_stream(m_ssl_connection, body);
 
+	NetworkBuffer buffer;
+	buffer.buf = server_response;
+	buffer.buf_size = REPLY_BUFSIZE;
+
 	//Read response
-	read_from_stream(m_ssl_connection, server_response, REPLY_BUFSIZE);
+	read_from_stream(m_ssl_connection, &buffer);
 
 	//Hack for chunked replies
 	if (strstr(server_response, "chunked") != NULL)
 	{
 		fprintf(stderr, "SSLConnection:POST() reply is chunked, trying read_chunked_reply()\n");
-		read_chunked_reply(m_ssl_connection, server_response, REPLY_BUFSIZE, true);
+		read_chunked_reply(m_ssl_connection, &buffer, true);
 
 	}
 
@@ -1069,10 +1075,14 @@ int waitForRWSocket(SSL *ssl, bool wantRead)
 }
 
 
-void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buffer_len, bool headersAlreadyRead)
+void SSLConnection::read_chunked_reply(SSL *ssl, NetworkBuffer *net_buffer, bool headersAlreadyRead)
 {
 	int r;
 	bool final_chunk_read = false;
+
+	char *buffer = net_buffer->buf;
+	unsigned int current_buf_length = net_buffer->buf_size;
+
 	unsigned int bytes_read = headersAlreadyRead ? strlen(buffer) : 0;
 	unsigned long chunk_bytesToRead = 0;
 	bool is_chunk_length = false;
@@ -1081,7 +1091,7 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     	is_chunk_length = false;
 
 	    // We're using blocking IO so SSL_Write either succeeds completely or not...
-    	r = SSL_read(ssl, buffer+bytes_read, buffer_len-bytes_read);
+    	r = SSL_read(ssl, buffer+bytes_read, current_buf_length-bytes_read);
     	//Read the chunk length
     	if (r > 0 && bytes_read > 0)
     	{
@@ -1155,6 +1165,21 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
     		chunk_bytesToRead -= r;
     		bytes_read += r;
     	}
+
+    	//Check for buffer length
+		if (bytes_read >= current_buf_length) {
+			//Double the buffer length
+			current_buf_length *= 2;
+
+			net_buffer->buf = (char*)realloc(net_buffer->buf, current_buf_length);
+			net_buffer->buf_size = current_buf_length;
+			if (!net_buffer->buf) {
+				fprintf(stderr, "Critical error: out of memory!\n");
+				exit(1);
+			}
+			buffer = net_buffer->buf;
+		}
+
     }
     while(bytes_read == 0 || !final_chunk_read);
 
@@ -1163,22 +1188,23 @@ void SSLConnection::read_chunked_reply(SSL *ssl, char *buffer, unsigned int buff
 /**
  * Read from a stream and handle restarts and buffering if necessary
  */
-unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned int buffer_length)
+unsigned int SSLConnection::read_from_stream(SSL* ssl, NetworkBuffer *net_buffer)
 {
 
 	int r = -1;
 	unsigned int bytes_read = 0, header_len = 0, content_length = 0;
+	unsigned int current_buf_length = net_buffer->buf_size;
 
 	do
 	{
 		// We're using blocking IO so SSL_Write either succeeds completely or not...
-		r = SSL_read(ssl, buffer + bytes_read, buffer_length - bytes_read);
+		r = SSL_read(ssl, net_buffer->buf + bytes_read, current_buf_length - bytes_read);
 		if (r > 0)
 		{
 			if (bytes_read == 0) {
 				header_len = r;
-				char * buffer_tmp = (char*)calloc(strlen(buffer) + 1, 1);
-				strcpy(buffer_tmp, buffer);
+				char * buffer_tmp = (char*)calloc(strlen(net_buffer->buf) + 1, 1);
+				strcpy(buffer_tmp, net_buffer->buf);
 				content_length = parseContentLength(buffer_tmp);
 				free(buffer_tmp);
 			}
@@ -1211,10 +1237,22 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, char* buffer, unsigned in
 				
 			}
 		}
+		//Check for buffer length
+		if (bytes_read >= current_buf_length) {
+			//Double the buffer length
+			current_buf_length *= 2;
+			net_buffer->buf = (char*)realloc(net_buffer->buf, current_buf_length);
+			net_buffer->buf_size = current_buf_length;
+
+			if (!net_buffer->buf) {
+				fprintf(stderr, "Critical error: out of memory!\n");
+				exit(1);
+			}
+		}
 	} while (bytes_read == 0 || bytes_read - header_len < content_length);
 
 	if (bytes_read > 0)
-		buffer[bytes_read] = '\0';
+		net_buffer->buf[bytes_read] = '\0';
 
 	return bytes_read;
 }
