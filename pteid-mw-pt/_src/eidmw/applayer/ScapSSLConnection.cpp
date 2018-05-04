@@ -67,7 +67,7 @@ namespace eIDMW
 		//Hack for chunked replies
 		if (strstr(server_response, "chunked") != NULL)
 		{
-			fprintf(stderr, "ScapSSLConnection: reply is chunked, trying read_chunked_reply()\n");
+			MWLOG(LEV_DEBUG, MOD_APL, "ScapSSLConnection: server response is chunked, trying read_chunked_reply()");
 			read_chunked_reply(m_ssl_connection, &buffer, true);
 
 		}
