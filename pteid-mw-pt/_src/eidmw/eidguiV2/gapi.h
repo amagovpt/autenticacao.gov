@@ -330,6 +330,8 @@ public slots:
     void updateReaderList( void );
     void setUseCustomSignature (bool UseCustomSignature);
     bool getUseCustomSignature(void);
+    void setRegCertValue(bool bRegCert);
+    void setRemoveCertValue(bool bRemoveCert);
 
 signals:
     // Signal from GAPI to Gui

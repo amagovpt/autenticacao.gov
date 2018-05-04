@@ -70,8 +70,6 @@ public slots:
     void setShowNotificationValue(bool bShowNotification);
     void setShowPictureValue(bool bShowPicture);
     void setShowAnimationsValue(bool bShowAnimations);
-    void setRegCertValue(bool bRegCert);
-    void setRemoveCertValue(bool bRemoveCert);
 
     QString getTimeStampHostValue (void);
     void setTimeStampHostValue (QString const& timeStamp_host);

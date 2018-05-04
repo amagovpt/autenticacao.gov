@@ -2453,3 +2453,11 @@ void GAPI::setUseCustomSignature (bool UseCustomSignature){
 bool GAPI::getUseCustomSignature(void){
     return m_Settings.getUseCustomSignature();
 }
+void GAPI::setRegCertValue (bool bRegCert){
+
+    m_Settings.setRegCert(bRegCert);
+}
+void GAPI::setRemoveCertValue (bool bRemoveCert){
+
+    m_Settings.setRemoveCert(bRemoveCert);
+}

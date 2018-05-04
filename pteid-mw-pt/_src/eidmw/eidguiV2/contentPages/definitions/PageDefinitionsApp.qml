@@ -94,12 +94,12 @@ PageDefinitionsAppForm {
                           }
     }
     propertyCheckboxRegister{
-        onCheckedChanged: propertyCheckboxRegister.checked ? controler.setRegCertValue(true) :
-                                                             controler.setRegCertValue(false)
+        onCheckedChanged: propertyCheckboxRegister.checked ? gapi.setRegCertValue(true) :
+                                                             gapi.setRegCertValue(false)
     }
     propertyCheckboxRemove{
-        onCheckedChanged: propertyCheckboxRemove.checked ? controler.setRemoveCertValue(true) :
-                                                           controler.setRemoveCertValue(false)
+        onCheckedChanged: propertyCheckboxRemove.checked ? gapi.setRemoveCertValue(true) :
+                                                           gapi.setRemoveCertValue(false)
     }
     Connections {
         target: propertyTextFieldTimeStamp
@@ -193,8 +193,8 @@ PageDefinitionsAppForm {
         propertyCheckboxShowAnime.checked = controler.getShowAnimationsValue()
 
         if (Qt.platform.os === "windows") {
-            propertyCheckboxRegister.checked = controler.getRegCertValue()
-            propertyCheckboxRemove.checked = controler.getRemoveCertValue()
+            propertyCheckboxRegister.checked = gapi.getRegCertValue()
+            propertyCheckboxRemove.checked = gapi.getRemoveCertValue()
         }else{
             propertyRectAppCertificates.visible = false
             propertyRectAppTimeStamp.anchors.top = propertyRectAppLook.bottom

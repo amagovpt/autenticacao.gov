@@ -771,14 +771,6 @@ void AppController::setShowPictureValue (bool bShowPicture){
 void AppController::setShowAnimationsValue(bool bShowAnimations){
     m_Settings.setShowAnimations(bShowAnimations);
 }
-void AppController::setRegCertValue (bool bRegCert){
-
-    m_Settings.setRegCert(bRegCert);
-}
-void AppController::setRemoveCertValue (bool bRemoveCert){
-
-    m_Settings.setRemoveCert(bRemoveCert);
-}
 QString AppController::getTimeStampHostValue (void){
     return m_Settings.getTimeStampHost();
 }
