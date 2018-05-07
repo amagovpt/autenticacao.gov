@@ -56,7 +56,6 @@ namespace eIDMW
 
 		ret_channel = write_to_stream(m_ssl_connection, (char *)soapRequest.c_str());
 
-
 		NetworkBuffer buffer;
 		buffer.buf = server_response;
 		buffer.buf_size = REPLY_BUFSIZE;
@@ -65,16 +64,16 @@ namespace eIDMW
 		int bytes_read = read_from_stream(m_ssl_connection, &buffer);
 
 		//Hack for chunked replies
-		if (strstr(server_response, "chunked") != NULL)
+		if (strstr(buffer.buf, "chunked") != NULL)
 		{
 			MWLOG(LEV_DEBUG, MOD_APL, "ScapSSLConnection: server response is chunked, trying read_chunked_reply()");
 			read_chunked_reply(m_ssl_connection, &buffer, true);
 
 		}
 
-		MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: Server reply (size=%d): \n%s\n", bytes_read, server_response);
+		MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: Server reply (size=%d): \n%s\n", bytes_read, buffer.buf);
 
-		return server_response;
+		return buffer.buf;
 	}
 
 }
