@@ -20,6 +20,7 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 	                unsigned char *sigret, unsigned int *siglen, const RSA * rsa);
 
 #define REPLY_BUFSIZE 100000
+#define SCAP_REPLY_BUFSIZE 600000
 
 class APL_Certifs;
 

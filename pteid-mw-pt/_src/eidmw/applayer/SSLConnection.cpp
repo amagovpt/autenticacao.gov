@@ -1031,7 +1031,7 @@ long parseLong(char *str)
 	errno = 0;
 	val = strtol(str, &endptr, 16);
 
-           /* Check for various possible errors */
+    /* Check for various possible errors */
 
 	if ((errno == ERANGE && (val == LONG_MAX || val == LONG_MIN))
 		|| (errno != 0 && val == 0)) {
@@ -1044,10 +1044,6 @@ long parseLong(char *str)
 		fprintf(stderr, "No digits were found\n");
 		return -1;
 	}
-
-	//Further characters after number
-	if (*endptr != '\0')
-		return -1;
 
 	return val;
 }
@@ -1074,6 +1070,110 @@ int waitForRWSocket(SSL *ssl, bool wantRead)
 	return rv;
 }
 
+typedef enum  {
+	HEX, CRLF, CHUNK_DATA, TRAILER, PARSER_ERROR
+} Chunky_State;
+
+bool isxdigit_ascii(char digit)
+{
+  return (digit >= 0x30 && digit <= 0x39) /* 0-9 */
+        || (digit >= 0x41 && digit <= 0x46) /* A-F */
+        || (digit >= 0x61 && digit <= 0x66); /* a-f */
+}
+
+void parse_http_chunked_body(NetworkBuffer *net_buffer) {
+
+	if (net_buffer->buf == NULL)
+	{	
+		MWLOG(LEV_ERROR, MOD_APL, "NULL buffer argument for parse_http_chunked_reply!");
+		return;
+	}
+
+	unsigned int buffer_len = strlen(net_buffer->buf);
+	char * out_buffer = (char *)calloc(buffer_len, sizeof(char));
+	char * in_buffer = net_buffer->buf;
+
+	char * body = skipHTTPHeaders(in_buffer);
+	unsigned int offset = (unsigned int)(body - in_buffer);
+
+	//Copy HTTP headers
+	memcpy(out_buffer, in_buffer, offset);
+	long out_offset = offset;
+
+	//State machine variables
+	Chunky_State state = HEX;
+	long chunk_len = 0;
+	int hex_len = 0;
+
+	while(offset < buffer_len) {
+
+		switch (state) {
+			case HEX:
+				hex_len = 0;
+				while(isxdigit_ascii(in_buffer[offset+hex_len]))
+					hex_len++;
+
+				chunk_len = parseLong(in_buffer+offset);
+				if (chunk_len == -1) {
+					state = PARSER_ERROR;
+					fprintf(stderr, "Error in parse_http_chunked_body, couldn't parse Chunk Length\n");
+				}
+				else
+				{
+					if (chunk_len == 0)
+						fprintf(stderr, "Terminating chunk found.\n");
+					state = CRLF;
+					offset += hex_len;
+				}
+				break;
+
+			case CRLF:
+				if (in_buffer[offset] == 0x0D)
+				{
+					state = CHUNK_DATA;
+					offset += 2;
+				}
+				else
+				{
+					fprintf(stderr, "Error in parse_http_chunked_body, expecting CRLF\n");
+					state = PARSER_ERROR;
+				}
+				break;
+
+			case CHUNK_DATA:
+				memcpy(out_buffer+out_offset, in_buffer+offset, chunk_len);
+
+				state = TRAILER;
+				offset += chunk_len;
+				out_offset += chunk_len;
+				break;
+
+			case TRAILER:
+				if (in_buffer[offset] == 0x0D)
+				{
+					state = HEX;
+					offset += 2;
+				}
+				else
+				{
+					state = PARSER_ERROR;
+					fprintf(stderr, "Error in parse_http_chunked_body, expecting CRLF\n");
+				}
+				break;
+
+			case PARSER_ERROR:
+				goto parser_error;
+		}
+	}
+
+	net_buffer->buf = out_buffer;
+	return;
+
+	parser_error:
+		MWLOG(LEV_ERROR, MOD_APL, "http_chunked parser error giving up at offset: %u", offset);
+
+}
+
 
 void SSLConnection::read_chunked_reply(SSL *ssl, NetworkBuffer *net_buffer, bool headersAlreadyRead)
 {
@@ -1084,7 +1184,6 @@ void SSLConnection::read_chunked_reply(SSL *ssl, NetworkBuffer *net_buffer, bool
 	unsigned int current_buf_length = net_buffer->buf_size;
 
 	unsigned int bytes_read = headersAlreadyRead ? strlen(buffer) : 0;
-	unsigned long chunk_bytesToRead = 0;
 	bool is_chunk_length = false;
 	do
     {
@@ -1095,6 +1194,7 @@ void SSLConnection::read_chunked_reply(SSL *ssl, NetworkBuffer *net_buffer, bool
     	//Read the chunk length
     	if (r > 0 && bytes_read > 0)
     	{
+    		//XX: Can we assume that the final Chunk is always at the start of the last SSL packet??
     		if (memcmp(buffer+bytes_read, "\x30\x0d\x0a\x0d\x0a", 5) == 0)
     		{
     			final_chunk_read = true;
@@ -1102,28 +1202,7 @@ void SSLConnection::read_chunked_reply(SSL *ssl, NetworkBuffer *net_buffer, bool
     			//Discard the final chunk
     			*(buffer+bytes_read) = 0;
     		}
-    		else
-    		{
-    			//Search for a chunk-length token in the format Chunk-length (hex) CRLF
-    			char * buffer_tmp = (char*)calloc(r+1, 1);
-    			memcpy(buffer_tmp, buffer+bytes_read, r);
-    			buffer_tmp[r] = '\0';
 
-    			char * endline = strstr(buffer_tmp, "\r\n");
-    			if (endline)
-    				*endline = '\0';
-    			long val = parseLong(buffer_tmp);
-    			if (val != -1 && chunk_bytesToRead == 0)
-    			{
-    				//fprintf(stderr, "DEBUG: Parsed chunk length= %ld\n", val);
-    				*(buffer+bytes_read) = 0;
-    				chunk_bytesToRead = val;
-    				is_chunk_length = true;
-    			}
-
-				free(buffer_tmp);
-
-    		}
     	}
     	if (r > 0 && bytes_read == 0)
     	{
@@ -1158,13 +1237,8 @@ void SSLConnection::read_chunked_reply(SSL *ssl, NetworkBuffer *net_buffer, bool
 				}
 			}
 		}
-    	
-    	//Only include the data if this string is NOT a chunk-length token or a CRLF after the previous chunk
-    	if (!is_chunk_length && chunk_bytesToRead > 0)
-    	{
-    		chunk_bytesToRead -= r;
-    		bytes_read += r;
-    	}
+
+		bytes_read += r;
 
     	//Check for buffer length
 		if (bytes_read >= current_buf_length) {
@@ -1182,6 +1256,9 @@ void SSLConnection::read_chunked_reply(SSL *ssl, NetworkBuffer *net_buffer, bool
 
     }
     while(bytes_read == 0 || !final_chunk_read);
+
+    //Extract the HTTP body of the chunked message
+    parse_http_chunked_body(net_buffer);
 
 }
 

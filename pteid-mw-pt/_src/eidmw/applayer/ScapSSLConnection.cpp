@@ -37,7 +37,7 @@ namespace eIDMW
 	{
 		int ret_channel = 0;
 		char * request_template= "POST %s HTTP/1.1\r\nHost: %s\r\nContent-Type: application/soap+xml; charset=utf-8\r\nSOAPAction: %s\r\nContent-Length: %d\r\n\r\n";
-		char * server_response = (char *) malloc(REPLY_BUFSIZE);
+		char * server_response = (char *) malloc(SCAP_REPLY_BUFSIZE);
 		char request_headers[HEADERS_BUFSIZE];
 
 		std::string soapRequest = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">";
@@ -58,13 +58,13 @@ namespace eIDMW
 
 		NetworkBuffer buffer;
 		buffer.buf = server_response;
-		buffer.buf_size = REPLY_BUFSIZE;
+		buffer.buf_size = SCAP_REPLY_BUFSIZE;
 
 		//Read response
 		int bytes_read = read_from_stream(m_ssl_connection, &buffer);
 
 		//Hack for chunked replies
-		if (strstr(buffer.buf, "chunked") != NULL)
+		if (strstr(buffer.buf, "Transfer-Encoding: chunked") != NULL)
 		{
 			MWLOG(LEV_DEBUG, MOD_APL, "ScapSSLConnection: server response is chunked, trying read_chunked_reply()");
 			read_chunked_reply(m_ssl_connection, &buffer, true);
