@@ -60,7 +60,7 @@ class SSLConnection
 		void ReadUserCert();
 		static void init_openssl();
 		//Generic POST routine that actually writes and reads from the SSL connection
-		char * Post(char *cookie, char *url_path, char *body, bool chunked_expected=false);
+		char * Post(char *cookie, char *url_path, char *body);
 
 		unsigned int write_to_stream(SSL* bio, char* req_string);
 		unsigned int read_from_stream(SSL* bio, NetworkBuffer * buffer);

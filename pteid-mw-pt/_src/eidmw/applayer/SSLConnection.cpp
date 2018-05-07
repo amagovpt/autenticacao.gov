@@ -599,8 +599,7 @@ StartWriteResponse *SSLConnection::do_SAM_3rdpost(char * mse_resp, char *interna
 	snprintf(post_body, buf_len, start_write_format, mse_resp, internal_auth_resp);
 
 	MWLOG(LEV_DEBUG, MOD_APL, "POSTing request: %s", post_body);
-	char *server_response = Post(this->m_session_cookie,
-	  "/changeaddress/startWrite", post_body, true);
+	char *server_response = Post(this->m_session_cookie, "/changeaddress/startWrite", post_body);
 
 	MWLOG(LEV_DEBUG, MOD_APL, "do_SAM_3rdpost server response: %s", server_response);
 
@@ -744,7 +743,7 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 
 }
 
-char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunked_expected)
+char * SSLConnection::Post(char *cookie, char *url_path, char *body)
 {
 	int ret_channel = 0;
 
@@ -771,11 +770,10 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body, bool chunke
 	read_from_stream(m_ssl_connection, &buffer);
 
 	//Hack for chunked replies
-	if (strstr(server_response, "chunked") != NULL)
+	if (strstr(server_response, "Transfer-Encoding: chunked") != NULL)
 	{
 		fprintf(stderr, "SSLConnection:POST() reply is chunked, trying read_chunked_reply()\n");
 		read_chunked_reply(m_ssl_connection, &buffer, true);
-
 	}
 
 //	if (ret == 0)
