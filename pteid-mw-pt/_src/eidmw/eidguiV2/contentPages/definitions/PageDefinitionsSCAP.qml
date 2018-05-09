@@ -112,6 +112,7 @@ PageDefinitionsSCAPForm {
         }
         onSignalEntityAttributesLoaded:{
             console.log("Definitions SCAP - Signal SCAP Entity attributes loaded")
+            propertyButtonRemoveEntityAttributes.enabled = false
             if(entityAttributesModel.count == 0){
                 for(var i = 0; i < attribute_list.length; i=i+2)
                 {
@@ -137,6 +138,7 @@ PageDefinitionsSCAPForm {
                             entityAttributesModel.set(j, {"entityName": attribute_list[i], "attribute":
                                                           entityAttributesModel.get(j).attribute
                                                           + "<ul><li>"+attribute_list[i+1]+"</li></ul>"})
+                        propertyButtonRemoveEntityAttributes.enabled = true
                         }
                     }
                 }

@@ -129,7 +129,7 @@ Item {
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                         anchors.left: parent.left
-                        enabled: entityAttributesModel.count > 1
+                        enabled: false
                     }
                     Button {
                         id: buttonLoadEntityAttributes
