@@ -60,6 +60,12 @@ PageServicesSignSimpleForm {
                     mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                             qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
                 }
+                else if(error_code == GAPI.PinBlocked) {
+                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                            qsTranslate("Popup Card","STR_POPUP_ERROR")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("Popup Card","STR_POPUP_CARD_PIN_BLOCKED")
+                }
                 else {
                     mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                             qsTranslate("Popup Card","STR_POPUP_ERROR")

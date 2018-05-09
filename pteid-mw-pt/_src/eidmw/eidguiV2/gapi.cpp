@@ -172,7 +172,7 @@ QString GAPI::getAddressField(AddressInfoKey key) {
     if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && \
     errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN) \
 { \
-    fprintf(stderr, "SOD exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
+    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "SOD exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
     emit signalCardAccessError(SodCardReadError); \
     } else if (errorCode == EIDMW_TIMESTAMP_ERROR) \
 { \
@@ -181,10 +181,14 @@ QString GAPI::getAddressField(AddressInfoKey key) {
 { \
     emit signalCardAccessError(CardUserPinCancel); \
     } \
+    else if (errorCode == EIDMW_ERR_PIN_BLOCKED) \
+{ \
+    emit signalCardAccessError(PinBlocked); \
+    } \
     else \
 { \
-    fprintf(stderr, "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
-    QString msgError = QString("%08\n").arg(e.GetError()); \
+    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
+    QString msgError = QString("0x%1\n").arg(e.GetError(), 8, 16); \
     emit signalGenericError(msgError); \
     } \
     }
@@ -462,8 +466,8 @@ unsigned int GAPI::changeSignPin(QString currentPin, QString newPin) {
 
     END_TRY_CATCH
 
-            //QML default types don't include long
-            return (unsigned int)tries_left;
+    //QML default types don't include long
+    return (unsigned int)tries_left;
 }
 void GAPI::showChangeAddressDialog(long code)
 {
