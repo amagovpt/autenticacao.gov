@@ -1,3 +1,5 @@
+include(../_Builds/eidcommon.mak)
+
 TEMPLATE = app
 
 macx: ICON = appicon.icns
@@ -87,11 +89,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #Needed for the gsoap binding proxies
 DEFINES += WITH_OPENSSL
 
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+###
+### Installation setup
+###
+target.path = $${INSTALL_DIR_BIN}
 
+## the following lines are needed in order to have
+## the translation files included in the set
+## of files to install
+translations.path = $${INSTALL_DIR_BIN}
+translations.files += eidmw_en.qm \
+                eidmw_nl.qm
+
+INSTALLS += target translations
 
 HEADERS += \
     appcontroller.h \
