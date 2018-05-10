@@ -172,10 +172,10 @@ bool CMDServices::init(int recv_timeout, int send_timeout,
     ca_path = "/etc/ssl/certs"; 
     //Load CA certificates from file provided with pteid-mw
 #elif WIN32
-    std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR))+"/cacerts.pem";
+    cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR))+"/cacerts.pem";
     //TODO
 #elif __APPLE__
-    std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR))+"/cacerts.pem";
+    cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR))+"/cacerts.pem";
 #endif
 
     int ret = soap_ssl_client_context(sp, SOAP_SSL_DEFAULT,
