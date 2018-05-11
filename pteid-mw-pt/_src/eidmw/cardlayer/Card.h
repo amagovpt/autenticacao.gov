@@ -36,9 +36,6 @@
 namespace eIDMW
 {
 
-/** Compatibility version for the entire plugin-relevant API: V1.00 */
-const unsigned long PLUGIN_VERSION = 100;
-
 class EIDMW_CAL_API CCard
 {
 public:

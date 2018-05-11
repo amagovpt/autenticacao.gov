@@ -22,7 +22,6 @@
 #include "PKCS15.h"
 #include "Pinpad.h"
 #include "../common/Hash.h"
-#include "../common/DynamicLib.h"
 
 namespace eIDMW
 {
@@ -174,7 +173,6 @@ private:
     CCard *m_poCard;
     CPKCS15 m_oPKCS15;
     CPinpad *m_oPinpad;
-    CDynamicLib m_oCardPluginLib;
     
     friend class CCardLayer; // calls the CReader constructor
 

@@ -68,6 +68,7 @@ static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard)
 	return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
 }
 
+/*
 static CByteArray ReadInternal(CPCSC *poPCSC, SCARDHANDLE hCard, unsigned long ulOffset, unsigned long ulMaxLen)
 {
 
@@ -103,22 +104,28 @@ static CByteArray ReadInternalIAS(CPCSC *poPCSC, SCARDHANDLE hCard, unsigned lon
 	MWLOG(LEV_INFO, MOD_CAL, L"   Read %d bytes from the PTeid IAS card", oData.Size());
 	return oData;
 }
+*/
 
 CCard *PTeidCardGetVersion (unsigned long ulVersion, const char *csReader,
 	SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad)
 {
 	CCard *poCard = NULL;
-	bool bIsPtgemCard = false;
-	CByteArray oData, oDataias;
+	//bool bIsPtgemCard = false;
+	//CByteArray oData, oDataias;
 
-	poContext->m_oPCSC.BeginTransaction(hCard);
+	poCard = PteidCardGetInstance(ulVersion, csReader, hCard, poContext, poPinpad);
 
+	//poContext->m_oPCSC.BeginTransaction(hCard);
+
+	/*
 	unsigned long ulReadLen = 404; // read everything
 	oData = ReadInternal(&poContext->m_oPCSC, hCard, 0, ulReadLen);
 	bIsPtgemCard = (oData.Size() == 2) && (oData.GetByte(0) == 0x90) && (oData.GetByte(1) == 0x00);
 
 	poContext->m_oPCSC.EndTransaction(hCard);
+	*/
 
+	/*
 	if (bIsPtgemCard)
 	{
 		ulVersion = 1;
@@ -131,8 +138,9 @@ CCard *PTeidCardGetVersion (unsigned long ulVersion, const char *csReader,
 		poContext->m_oPCSC.EndTransaction(hCard);
 		poCard = PteidCardGetInstance(ulVersion, csReader, hCard, poContext, poPinpad);
 	}
+	*/
 
-	poContext->m_oPCSC.EndTransaction(hCard);
+	//poContext->m_oPCSC.EndTransaction(hCard);
 
 	return poCard;
 }

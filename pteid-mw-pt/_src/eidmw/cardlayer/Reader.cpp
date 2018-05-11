@@ -188,7 +188,7 @@ bool CReader::Connect()
 	if (m_poCard != NULL)
 		Disconnect(DISCONNECT_LEAVE_CARD);
 
-	m_poCard = CardConnect(m_csReader, m_poContext, NULL, m_oCardPluginLib);
+	m_poCard = CardConnect(m_csReader, m_poContext, NULL);
 	if (m_poCard != NULL)
 	{
 		m_oPKCS15.SetCard(m_poCard);
