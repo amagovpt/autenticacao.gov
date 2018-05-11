@@ -68,79 +68,12 @@ static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard)
 	return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
 }
 
-/*
-static CByteArray ReadInternal(CPCSC *poPCSC, SCARDHANDLE hCard, unsigned long ulOffset, unsigned long ulMaxLen)
-{
-
-	long lretVal = 0;
-	CByteArray oCmd(40);
-	unsigned char tucReadDat[] = {0x00, 0xA4, 0x04, 0x0C};
-	oCmd.Append(tucReadDat, sizeof(tucReadDat));
-	oCmd.Append((unsigned char) sizeof(GEMSAFE_PTEID_APPLET_AID));
-	oCmd.Append(GEMSAFE_PTEID_APPLET_AID, sizeof(GEMSAFE_PTEID_APPLET_AID));
-
-	CByteArray oData = poPCSC->Transmit(hCard, oCmd, &lretVal);
-
-	//oData.Chop(2); // remove SW12
-
-	MWLOG(LEV_INFO, MOD_CAL, L"   Read %d bytes from the PTeid GemSafe card", oData.Size());
-	return oData;
-
-}
-
-static CByteArray ReadInternalIAS(CPCSC *poPCSC, SCARDHANDLE hCard, unsigned long ulOffset, unsigned long ulMaxLen)
-{
-	long lretVal = 0;
-	CByteArray oCmd(40);
-	unsigned char tucReadDat[] = {0x00, 0xA4, 0x04, 0x0C};
-	oCmd.Append(tucReadDat, sizeof(tucReadDat));
-	oCmd.Append((unsigned char) sizeof(IAS_PTEID_APPLET_AID));
-	oCmd.Append(IAS_PTEID_APPLET_AID, sizeof(IAS_PTEID_APPLET_AID));
-
-	CByteArray oData = poPCSC->Transmit(hCard, oCmd, &lretVal);
-
-	//oData.Chop(2); // remove SW12
-
-	MWLOG(LEV_INFO, MOD_CAL, L"   Read %d bytes from the PTeid IAS card", oData.Size());
-	return oData;
-}
-*/
-
 CCard *PTeidCardGetVersion (unsigned long ulVersion, const char *csReader,
 	SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad)
 {
 	CCard *poCard = NULL;
-	//bool bIsPtgemCard = false;
-	//CByteArray oData, oDataias;
 
 	poCard = PteidCardGetInstance(ulVersion, csReader, hCard, poContext, poPinpad);
-
-	//poContext->m_oPCSC.BeginTransaction(hCard);
-
-	/*
-	unsigned long ulReadLen = 404; // read everything
-	oData = ReadInternal(&poContext->m_oPCSC, hCard, 0, ulReadLen);
-	bIsPtgemCard = (oData.Size() == 2) && (oData.GetByte(0) == 0x90) && (oData.GetByte(1) == 0x00);
-
-	poContext->m_oPCSC.EndTransaction(hCard);
-	*/
-
-	/*
-	if (bIsPtgemCard)
-	{
-		ulVersion = 1;
-		poContext->m_oPCSC.EndTransaction(hCard);
-		poCard = PteidCardGetInstance(ulVersion, csReader, hCard, poContext, poPinpad);
-	} else {
-		ulVersion = 2;
-		poContext->m_oPCSC.BeginTransaction(hCard);
-		oData = ReadInternalIAS(&poContext->m_oPCSC, hCard, 0, ulReadLen);
-		poContext->m_oPCSC.EndTransaction(hCard);
-		poCard = PteidCardGetInstance(ulVersion, csReader, hCard, poContext, poPinpad);
-	}
-	*/
-
-	//poContext->m_oPCSC.EndTransaction(hCard);
 
 	return poCard;
 }
