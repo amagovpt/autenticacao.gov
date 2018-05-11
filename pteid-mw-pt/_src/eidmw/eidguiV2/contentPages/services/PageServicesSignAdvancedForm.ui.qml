@@ -288,7 +288,8 @@ Item {
                     height: Constants.SIZE_TEXT_V_SPACE + rectFormatOptions.height
                             + textFieldReason.height + textFieldLocal.height
                             + switchSignTemp.height + switchSignAdd.height
-                            + rectangleEntities.height + rowPreserv.height
+                            + rectangleEntities.height
+                            //+ rowPreserv.height
                             + Constants.SIZE_TEXT_V_SPACE + Constants.SIZE_TEXT_V_SPACE
 
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -451,7 +452,7 @@ Item {
                     Item {
                         id: rectangleEntities
                         width: parent.width
-                        height: 120
+                        height: mainItem.height * 0.25
                         anchors.top: switchSignAdd.bottom
                         MouseArea {
                             id: mouseAreaTextAttributesMsg
@@ -491,87 +492,87 @@ Item {
                             }
                         }
                     }
-                    Row {
-                        id: rowPreserv
-                        anchors.top: rectangleEntities.bottom
-                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                        width: parent.width
-                        height: 0
-                        spacing: 5
-                        x: 40
-                        visible: false
+//                    Row {
+//                        id: rowPreserv
+//                        anchors.top: rectangleEntities.bottom
+//                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+//                        width: parent.width
+//                        height: 0
+//                        spacing: 5
+//                        x: 40
+//                        visible: false
 
-                        Switch {
-                            id: switchPreserv
-                            text: ""
-                            spacing: -10
-                            anchors.verticalCenter: parent.verticalCenter
-                            font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            font.capitalization: Font.MixedCase
-                            height: parent.height
-                        }
-                        Text {
-                            id: textPreserv1
-                            x: 35
-                            text: qsTranslate("PageServicesSign",
-                                              "STR_SIGN_ATTRIBUTES_SAVE")
-                            verticalAlignment: Text.AlignVCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            font.bold: false
-                            font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            font.capitalization: Font.MixedCase
-                            color: Constants.COLOR_TEXT_BODY
-                            height: parent.height
-                        }
-                        Text {
-                            id: textPreserv2
-                            text: qsTranslate(
-                                      "PageServicesSign",
-                                      "STR_SIGN_ATTRIBUTES_SAVE_HOW_LONG")
-                            verticalAlignment: Text.AlignVCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            font.bold: false
-                            font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            font.capitalization: Font.MixedCase
-                            color: Constants.COLOR_TEXT_BODY
-                            visible: switchPreserv.checked
-                            height: parent.height
-                        }
-                        ComboBox {
-                            id: comboBoxPreserve
-                            width: 80
-                            anchors.verticalCenter: parent.verticalCenter
-                            height: parent.height
-                            // textPreservAnos.text is related with model values
-                            // if model is changed textPreservAnos.text may be changed
-                            model: ["0", "1", "3", "5", "10"]
-                            font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            font.capitalization: Font.MixedCase
-                            visible: switchPreserv.checked
-                        }
-                        Text {
-                            id: textPreservAnos
-                            text: comboBoxPreserve.currentIndex
-                                  === 1 ? qsTranslate(
-                                              "PageServicesSign",
-                                              "STR_SIGN_ATTRIBUTES_YEAR") : qsTranslate(
-                                              "PageServicesSign",
-                                              "STR_SIGN_ATTRIBUTES_YEARS")
-                            verticalAlignment: Text.AlignVCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            font.bold: false
-                            font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            font.capitalization: Font.MixedCase
-                            color: Constants.COLOR_TEXT_BODY
-                            visible: switchPreserv.checked
-                            height: parent.height
-                        }
-                    }
+//                        Switch {
+//                            id: switchPreserv
+//                            text: ""
+//                            spacing: -10
+//                            anchors.verticalCenter: parent.verticalCenter
+//                            font.family: lato.name
+//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+//                            font.capitalization: Font.MixedCase
+//                            height: parent.height
+//                        }
+//                        Text {
+//                            id: textPreserv1
+//                            x: 35
+//                            text: qsTranslate("PageServicesSign",
+//                                              "STR_SIGN_ATTRIBUTES_SAVE")
+//                            verticalAlignment: Text.AlignVCenter
+//                            anchors.verticalCenter: parent.verticalCenter
+//                            font.bold: false
+//                            font.family: lato.name
+//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+//                            font.capitalization: Font.MixedCase
+//                            color: Constants.COLOR_TEXT_BODY
+//                            height: parent.height
+//                        }
+//                        Text {
+//                            id: textPreserv2
+//                            text: qsTranslate(
+//                                      "PageServicesSign",
+//                                      "STR_SIGN_ATTRIBUTES_SAVE_HOW_LONG")
+//                            verticalAlignment: Text.AlignVCenter
+//                            anchors.verticalCenter: parent.verticalCenter
+//                            font.bold: false
+//                            font.family: lato.name
+//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+//                            font.capitalization: Font.MixedCase
+//                            color: Constants.COLOR_TEXT_BODY
+//                            visible: switchPreserv.checked
+//                            height: parent.height
+//                        }
+//                        ComboBox {
+//                            id: comboBoxPreserve
+//                            width: 80
+//                            anchors.verticalCenter: parent.verticalCenter
+//                            height: parent.height
+//                            // textPreservAnos.text is related with model values
+//                            // if model is changed textPreservAnos.text may be changed
+//                            model: ["0", "1", "3", "5", "10"]
+//                            font.family: lato.name
+//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+//                            font.capitalization: Font.MixedCase
+//                            visible: switchPreserv.checked
+//                        }
+//                        Text {
+//                            id: textPreservAnos
+//                            text: comboBoxPreserve.currentIndex
+//                                  === 1 ? qsTranslate(
+//                                              "PageServicesSign",
+//                                              "STR_SIGN_ATTRIBUTES_YEAR") : qsTranslate(
+//                                              "PageServicesSign",
+//                                              "STR_SIGN_ATTRIBUTES_YEARS")
+//                            verticalAlignment: Text.AlignVCenter
+//                            anchors.verticalCenter: parent.verticalCenter
+//                            font.bold: false
+//                            font.family: lato.name
+//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+//                            font.capitalization: Font.MixedCase
+//                            color: Constants.COLOR_TEXT_BODY
+//                            visible: switchPreserv.checked
+//                            height: parent.height
+//                        }
+//                    }
                 }
             }
         }

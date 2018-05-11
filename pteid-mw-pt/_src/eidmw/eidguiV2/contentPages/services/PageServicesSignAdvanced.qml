@@ -1153,7 +1153,7 @@ PageServicesSignAdvancedForm {
                 width: parent.width - checkboxSel.width
                 anchors.verticalCenter: parent.verticalCenter
                 Text {
-                    text: "<b>" + citizenName + " </b> <br>" + entityName + " - " + attribute
+                    text: "<b>" + citizenName + " </b> - " + entityName + " - " + attribute
                     width: parent.width
                     wrapMode: Text.WordWrap
                     font.family: lato.name
