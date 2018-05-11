@@ -114,15 +114,15 @@ PageDefinitionsSCAPForm {
             console.log("Definitions SCAP - Signal SCAP Entity attributes loaded")
             propertyButtonRemoveEntityAttributes.enabled = false
             if(entityAttributesModel.count == 0){
-                for(var i = 0; i < attribute_list.length; i=i+2)
+                for(var i = 0; i < attribute_list.length; i=i+3)
                 {
                     entityAttributesModel.append({
-                                                     entityName: attribute_list[i], attribute: "<ul><li>"+attribute_list[i+1]+"</li></ul>"
+                                                     entityName: attribute_list[i], attribute: "<ul><li>"+attribute_list[i+2]+"</li></ul>"
                                                  });
                 }
             }else{
                 // Remove old attributes
-                for(i = 0; i < attribute_list.length; i=i+2)
+                for(i = 0; i < attribute_list.length; i=i+3)
                 {
                     for (var j = 0; j < entityAttributesModel.count; j++){
                         if(entityAttributesModel.get(j).entityName === attribute_list[i]){
@@ -131,13 +131,13 @@ PageDefinitionsSCAPForm {
                     }
                 }
                 // Add new attribute
-                for(i = 0; i < attribute_list.length; i=i+2)
+                for(i = 0; i < attribute_list.length; i=i+3)
                 {
                     for (var j = 0; j < entityAttributesModel.count; j++){
                         if(entityAttributesModel.get(j).entityName === attribute_list[i]){
                             entityAttributesModel.set(j, {"entityName": attribute_list[i], "attribute":
                                                           entityAttributesModel.get(j).attribute
-                                                          + "<ul><li>"+attribute_list[i+1]+"</li></ul>"})
+                                                          + "<ul><li>"+attribute_list[i+2]+"</li></ul>"})
                         propertyButtonRemoveEntityAttributes.enabled = true
                         }
                     }
@@ -150,7 +150,7 @@ PageDefinitionsSCAPForm {
         onSignalCompanyAttributesLoaded: {
             console.log("Definitions SCAP - Signal SCAP company attributes loaded")
             companyAttributesModel.clear()
-            for(var i = 0; i < attribute_list.length; i=i+2)
+            for(var i = 0; i < attribute_list.length; i=i+3)
             {
                 if(companyAttributesModel.count>0 &&
                         companyAttributesModel.get(companyAttributesModel.count-1).entityName === attribute_list[i]){
@@ -158,11 +158,11 @@ PageDefinitionsSCAPForm {
                                                    entityName: attribute_list[i],
                                                    attribute: companyAttributesModel.get
                                                               (companyAttributesModel.count-1).attribute
-                                                              + "<ul><li>"+attribute_list[i+1]+"</li></ul>"
+                                                              + "<ul><li>"+attribute_list[i+2]+"</li></ul>"
                                                });
                 }else{
                     companyAttributesModel.append({
-                                                      entityName: attribute_list[i], attribute: "<ul><li>"+attribute_list[i+1]+"</li></ul>"
+                                                      entityName: attribute_list[i], attribute: "<ul><li>"+attribute_list[i+2]+"</li></ul>"
                                                   });
                 }
             }

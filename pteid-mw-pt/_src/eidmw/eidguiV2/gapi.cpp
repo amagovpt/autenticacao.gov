@@ -1720,7 +1720,11 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, boo
         if(signatureType->ns5__Object.size() > 0)
         {
             ns5__ObjectType * signatureObject = signatureType->ns5__Object.at(0);
+            ns3__PersonalDataType * personalDataObject = signatureObject->union_ObjectType.ns3__Attribute->PersonalData;
             ns3__MainAttributeType * mainAttributeObject = signatureObject->union_ObjectType.ns3__Attribute->MainAttribute;
+
+            std::string name = personalDataObject->Name;
+            childrensList.push_back(name.c_str());
 
             std::string description = mainAttributeObject->Description->c_str();
             if (!isShortDescription) {
@@ -1783,10 +1787,10 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
         return;   
        }
 
-       for(uint j = 0; j < childAttributes.size() ; j++) {
-
+       for(uint j = 0; j < childAttributes.size() ; j=j+2) {
            attribute_list.append(QString::fromStdString(attrSupplier));
            attribute_list.append(QString::fromStdString(childAttributes.at(j)));
+           attribute_list.append(QString::fromStdString(childAttributes.at(j+1)));
        }
     }
 
@@ -1827,10 +1831,11 @@ void GAPI::getSCAPCompanyAttributes() {
          return;
        }
 
-        for(uint j = 0; j < childAttributes.size(); j++) {
-            attribute_list.append(QString::fromStdString(attrSupplier));
-            attribute_list.append(QString::fromStdString(childAttributes.at(j)));
-        }
+       for(uint j = 0; j < childAttributes.size() ; j=j+2) {
+          attribute_list.append(QString::fromStdString(attrSupplier));
+          attribute_list.append(QString::fromStdString(childAttributes.at(j)));
+          attribute_list.append(QString::fromStdString(childAttributes.at(j+1)));
+       }
     }
 
     emit signalCompanyAttributesLoaded(attribute_list);
@@ -1863,9 +1868,10 @@ void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
        std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), isShortDescription);
 
-       for(uint j = 0; j < childAttributes.size() ; j++) {
+       for(uint j = 0; j < childAttributes.size() ; j=j+2) {
           attribute_list.append(QString::fromStdString(attrSupplier));
           attribute_list.append(QString::fromStdString(childAttributes.at(j)));
+          attribute_list.append(QString::fromStdString(childAttributes.at(j+1)));
        }
     }
 

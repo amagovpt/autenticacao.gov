@@ -52,12 +52,18 @@ PageServicesSignAdvancedForm {
                 propertyBusyIndicator.running = false
         }
         onSignalAttributesLoaded:{
-            console.log("Definitions SCAP - Signal SCAP attributes loaded")
+            console.log("Sign advanced - Signal SCAP attributes loaded")
 
-            for(var i = 0; i < attribute_list.length; i=i+2)
+            for(var i = 0; i < attribute_list.length; i=i+3)
             {
+                // Fix the differences between entities and companies attributes about uppercase style
+                attribute_list[i+1] = attribute_list[i+1].toLowerCase()
                 entityAttributesModel.append({
-                                                  entityName: attribute_list[i], attribute: attribute_list[i+1], checkBoxAttr: false
+                                                 entityName: attribute_list[i],
+                                                 citizenName: attribute_list[i+1]
+                                                 .replace(/\b\w/g, function(l){ return l.toUpperCase() }),
+                                                 attribute: attribute_list[i+2],
+                                                 checkBoxAttr: false
                                               });
             }
 
@@ -1147,7 +1153,7 @@ PageServicesSignAdvancedForm {
                 width: parent.width - checkboxSel.width
                 anchors.verticalCenter: parent.verticalCenter
                 Text {
-                    text: entityName + " - " + attribute
+                    text: "<b>" + citizenName + " </b> <br>" + entityName + " - " + attribute
                     width: parent.width
                     wrapMode: Text.WordWrap
                     font.family: lato.name
