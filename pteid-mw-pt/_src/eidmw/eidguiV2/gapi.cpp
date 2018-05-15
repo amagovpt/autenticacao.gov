@@ -1894,7 +1894,7 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
     if (card == NULL)
         return;
 
-    error_code = scapServices.removeAttributesFromCache(*card, isCompanies);
+    error_code = scapServices.removeAttributesFromCache(*card);
 
     if (error_code == true)
         emit signalRemoveSCAPAttributesSucess(isCompanies);

@@ -44,7 +44,7 @@ public:
 
     std::vector<ns2__AttributesType *> loadAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies);
     std::vector<ns2__AttributesType *> reloadAttributesFromCache();
-    bool removeAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies);
+    bool removeAttributesFromCache(eIDMW::PTEID_EIDCard &card);
 	/* Connection error functions */
 	//The error message should be in the GUI, we should just return an enum
     //QString getConnErrStr();

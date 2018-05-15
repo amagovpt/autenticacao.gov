@@ -93,6 +93,7 @@ Item {
                     id: rectangleEntities
                     width: parent.width
                     height: stackLayout.height - rowProfessional.height - rawButtonLoadEntityAttributes.height
+                        - Constants. SIZE_ROW_V_SPACE
                     anchors.top: rowProfessional.bottom
 
                     ListView {
@@ -118,12 +119,14 @@ Item {
                 Item {
                     id: rawButtonLoadEntityAttributes
                     anchors.top: rectangleEntities.bottom
-                    width: parent.width
+                    anchors.margins: Constants. SIZE_ROW_V_SPACE
+                    width: parent.width - entitiesListViewScroll.width - listViewEntities.spacing
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
+
                     Button {
                         id: buttonRemoveEntityAttributes
                         text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE")
-                        width: 1.5 * Constants.WIDTH_BUTTON
+                        width: 1.4 * Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
@@ -133,8 +136,8 @@ Item {
                     }
                     Button {
                         id: buttonLoadEntityAttributes
-                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_LOAD")
-                        width: 1.5 * Constants.WIDTH_BUTTON
+                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON_LOAD")
+                        width: 1.4 * Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
@@ -166,8 +169,8 @@ Item {
                 Item {
                     id: rectangleCompanies
                     width: parent.width
-                    height: stackLayout.height - rowCompanies.height
-                            - rawButtonLoadCompanyAttributes.height
+                    height: stackLayout.height - rowCompanies.height - rawButtonLoadCompanyAttributes.height
+                        - Constants. SIZE_ROW_V_SPACE
                     anchors.top: rowCompanies.bottom
 
                     ListView {
@@ -193,12 +196,13 @@ Item {
                 Item {
                     id: rawButtonLoadCompanyAttributes
                     anchors.top: rectangleCompanies.bottom
-                    width: parent.width
+                    anchors.topMargin: Constants. SIZE_ROW_V_SPACE
+                    width: parent.width - companiesListViewScroll.width - listViewCompanies.spacing
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     Button {
                         id: buttonRemoveCompanyAttributes
                         text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE")
-                        width: 1.5 * Constants.WIDTH_BUTTON
+                        width: 1.4 * Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
@@ -208,8 +212,8 @@ Item {
                     }
                     Button {
                         id: buttonLoadCompanyAttributes
-                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_LOAD")
-                        width: 1.5 * Constants.WIDTH_BUTTON
+                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_COMPANY_BUTTON_LOAD")
+                        width: 1.4 * Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
