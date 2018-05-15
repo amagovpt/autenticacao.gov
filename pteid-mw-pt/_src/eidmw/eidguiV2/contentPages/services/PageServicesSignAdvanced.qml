@@ -152,6 +152,7 @@ PageServicesSignAdvancedForm {
                             qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
                 }
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                 cardLoaded = false
             }
             propertyBusyIndicator.running = false
@@ -198,6 +199,7 @@ PageServicesSignAdvancedForm {
                 cardLoaded = false
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
         onSignalUpdateProgressStatus: {
             console.log("CMD sign change --> update progress status with text = " + statusMessage)
@@ -1617,6 +1619,7 @@ PageServicesSignAdvancedForm {
                         mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                                 qsTranslate("PageServicesSign","STR_LOAD_ADVANCED_PDF_ERROR_MSG")
                         mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                        mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                     }
                 }else{
 				    propertyTextDragMsgImg.visible = true

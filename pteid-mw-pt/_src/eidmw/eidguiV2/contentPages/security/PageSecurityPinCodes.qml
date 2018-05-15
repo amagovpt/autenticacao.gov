@@ -41,6 +41,7 @@ PageSecurityPinCodesForm {
                             qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
                 }
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                 propertyButtonModifyAuth.enabled = false
                 propertyButtonTestAuth.enabled = false
                 propertyButtonModifySign.enabled = false

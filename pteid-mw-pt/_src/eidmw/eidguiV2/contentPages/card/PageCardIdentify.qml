@@ -65,6 +65,7 @@ PageCardIdentifyForm {
                             qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
                 }
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             }
 
             propertyTextBoxName.propertyDateField.text = ""
@@ -121,6 +122,7 @@ PageCardIdentifyForm {
             }
 
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
 
     }

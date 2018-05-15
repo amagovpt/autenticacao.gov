@@ -10,6 +10,7 @@ Loader{
     height: parent.height
 
     property alias propertyGeneralPopUp: generalPopUp
+    property alias propertyRectPopUp: rectPopUp
     property alias propertyGeneralTitleText: titleText
     property alias propertyGeneralPopUpLabelText: labelText
 
@@ -56,14 +57,22 @@ Loader{
             color: Constants.COLOR_MAIN_BLUE
         }
         Item {
-            width: generalPopUp.width
-            height: generalPopUp.height
+            id: rectPopUp
+            width: generalPopUp.availableWidth - generalPopUp.padding
+            height: generalPopUp.availableHeight - generalPopUp.padding
+
+            Keys.enabled: true
+            Keys.onPressed: {
+                  if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
+                  {
+                      generalPopUp.close()
+                  }
+            }
 
             Item {
                 id: rectLabelText
                 width: parent.width
-                height: 90
-
+                height: parent.height - Constants.HEIGHT_BOTTOM_COMPONENT - Constants.SIZE_TEXT_V_SPACE
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: labelText
@@ -73,14 +82,14 @@ Loader{
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
-                    width: parent.width - 48
+                    width: parent.width
                     anchors.bottom: parent.bottom
                     wrapMode: Text.Wrap
                 }
             }
             Button {
                 width: Constants.WIDTH_BUTTON
-                height:Constants.HEIGHT_BOTTOM_COMPONENT
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
                 text: "OK"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: rectLabelText.bottom
@@ -92,7 +101,6 @@ Loader{
         }
     }
 
-    focus: true
     anchors{
         horizontalCenter: parent.horizontalCenter
         verticalCenter: parent.verticalCenter

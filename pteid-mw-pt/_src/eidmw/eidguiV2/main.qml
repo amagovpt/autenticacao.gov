@@ -68,6 +68,7 @@ Load language error. Please reinstall the application"
                     qsTranslate("Popup Card","STR_GENERIC_ERROR_MSG") + "\n\n" +
                     qsTranslate("Popup Card","STR_ERROR_CODE") + error_code
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
         onSignalImportCertificatesFail: {
             console.log("Signal onSignalImportCertificatesFail")
@@ -76,6 +77,7 @@ Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                     qsTranslate("Popup Card","STR_CERTIFICATES_IMPORT_ERROR_MSG")
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
         onSignalRemoveCertificatesFail: {
             console.log("Signal onSignalRemoveCertificatesFail")
@@ -84,6 +86,7 @@ Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                     qsTranslate("Popup Card","STR_CERTIFICATES_REMOVE_ERROR_MSG")
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
         onSignalLanguageChangedError: {
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
