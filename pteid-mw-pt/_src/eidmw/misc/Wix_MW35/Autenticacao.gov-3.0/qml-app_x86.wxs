@@ -61,10 +61,6 @@
 					          <File Id="fil532B63275F24DCA11F229D2F2A4A6718" Source="..\..\..\eidguiV2\eidmw_nl.qm" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6719" Source="..\..\..\eidguiV2\eidmw_en.qm" />
             </Component>
-          
-          <Component Id="cmpE84F0CD5AF744421985DC878B4D7FED6" Directory="EIDGUIV2DIR" Guid="{E84F0CD5-AF74-4421-985D-C878B4D7FED6}">
-            <File Id="fil532B63275F24DCA11F229D2F2A4A6789" KeyPath="yes" Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlib.dll" />
-          </Component>
        
             <Component Id="cmpD90C57D3866413E9483172896BD5F8CE" Directory="EIDGUIV2DIR" Guid="{C30484BF-362F-4194-BFCA-F6060AD1B12C}">
                 <File Id="fil6CDFD7BC016B64DBD3E26297A346DCEF" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Core.dll" />
