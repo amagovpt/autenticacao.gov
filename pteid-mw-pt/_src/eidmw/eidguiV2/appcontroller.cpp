@@ -57,6 +57,10 @@ AppController::AppController(GUISettings& settings,QObject *parent) :
     QString strVersion (PTEID_PRODUCT_VERSION);
     m_Settings.setGuiVersion(strVersion);
     qDebug() << "C++: AppController started. App version: " << m_Settings.getGuiVersion() +" - "+ SVN_REVISION_STR;
+    QByteArray ba = m_Settings.getGuiVersion().toLatin1();
+     const char *c_str2 = ba.data();
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui",
+              "Application started. App version: %s - %s\n",c_str2, SVN_REVISION_STR);
 }
 
 void AppController::restoreScreen(void){
