@@ -10,10 +10,6 @@ import eidguiV2 1.0
 PageDefinitionsAppForm {
     Connections {
         target: gapi
-        onSignalSetReaderComboIndex: {
-            console.log("onSignalSetReaderComboIndex index = " + selected_reader)
-            propertyComboBoxReader.currentIndex = selected_reader
-        }
         onSignalCardAccessError:{
             propertyComboBoxReader.model = gapi.getRetReaderList()
         }
@@ -33,6 +29,14 @@ PageDefinitionsAppForm {
                     + propertyComboBoxReader.currentIndex)
         gapi.setReaderByUser(propertyComboBoxReader.currentIndex)
     }
+    propertyComboBoxReader.onModelChanged: {
+        console.log("propertyComboBoxReader onModelChanged index = "
+                    + propertyComboBoxReader.currentIndex)
+        propertyComboBoxReader.currentIndex = gapi.getReaderIndex()
+        console.log("propertyComboBoxReader onModelChanged index = "
+                    + propertyComboBoxReader.currentIndex)
+    }
+
     propertyCheckboxAutoStart{
         onCheckedChanged: propertyCheckboxAutoStart.checked ? controler.setStartAutoValue(true) :
                                                               controler.setStartAutoValue(false)

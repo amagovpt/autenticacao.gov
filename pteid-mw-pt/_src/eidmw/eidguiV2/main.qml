@@ -94,11 +94,6 @@ Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
         }
 
-        onSignalSetReaderComboIndex: {
-            console.log("onSignalSetReaderComboIndex index = " + selected_reader)
-            comboBoxReader.currentIndex = selected_reader
-        }
-
         onSignalReaderContext: {
             //console.log("Reader List: " + gapi.getRetReaderList())
             //console.log("Reader List Count: " + gapi.getRetReaderList().length)
@@ -194,7 +189,7 @@ Load language error. Please reinstall the application"
 
         standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
         onAccepted: {
-            console.log("propertyComboBoxReader onActivated index = " + comboBoxReader.currentIndex)
+            console.log("comboBoxReader onActivated index = " + comboBoxReader.currentIndex)
             gapi.setReaderByUser(comboBoxReader.currentIndex)
 
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS

@@ -248,6 +248,7 @@ public:
 public slots:
     // Slots to Gui request values
     QVariantList getRetReaderList(void);
+    int getReaderIndex(void);
     void setReaderByUser(unsigned long setReaderIndex);
     void resetReaderSelected(void) {selectedReaderIndex =  -1; }
     signed int returnReaderSelected(void) {return selectedReaderIndex; }

@@ -2061,6 +2061,16 @@ QVariantList GAPI::getRetReaderList()
     return list;
 }
 
+int GAPI::getReaderIndex(void)
+{
+    qDebug() << "AppController GAPI::geReaderIndex!" << selectedReaderIndex;
+    if ( selectedReaderIndex >= 0 ) {
+
+       return selectedReaderIndex;
+    }
+    return 0;
+}
+
 void GAPI::connectToCard() {
 
     BEGIN_TRY_CATCH
