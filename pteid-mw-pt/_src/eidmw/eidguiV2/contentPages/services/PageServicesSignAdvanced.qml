@@ -64,7 +64,7 @@ PageServicesSignAdvancedForm {
                                                  .replace(/\b\w/g, function(l){ return l.toUpperCase() }),
                                                  attribute: attribute_list[i+2],
                                                  checkBoxAttr: false
-                                              });
+                                             });
             }
 
             for (var i = 0; i < propertyPageLoader.attributeListBackup.length; i++){
@@ -184,7 +184,7 @@ PageServicesSignAdvancedForm {
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
@@ -251,11 +251,11 @@ PageServicesSignAdvancedForm {
 
             Keys.enabled: true
             Keys.onPressed: {
-                  if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return
-                          && textFieldMobileNumber.length !== 0 && textFieldPin.length !== 0)
-                  {
-                      signCMD()
-                  }
+                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return
+                        && textFieldMobileNumber.length !== 0 && textFieldPin.length !== 0)
+                {
+                    signCMD()
+                }
             }
 
             Item {
@@ -524,10 +524,10 @@ PageServicesSignAdvancedForm {
 
             Keys.enabled: true
             Keys.onPressed: {
-                  if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return && buttonCMDProgressConfirm.visible == true)
-                  {
-                      signCMDConfirm()
-                  }
+                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return && buttonCMDProgressConfirm.visible == true)
+                {
+                    signCMDConfirm()
+                }
             }
 
             Item {
@@ -682,10 +682,10 @@ PageServicesSignAdvancedForm {
 
             Keys.enabled: true
             Keys.onPressed: {
-                  if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
-                  {
-                      signCMDShowSignedFile()
-                  }
+                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
+                {
+                    signCMDShowSignedFile()
+                }
             }
 
             Item {
@@ -841,13 +841,13 @@ PageServicesSignAdvancedForm {
                 }else{
                     path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
                 }
-				path = decodeURIComponent(path)
+                path = decodeURIComponent(path)
                 filesModel.append({
                                       "fileUrl": path
                                   })
                 propertyPageLoader.propertyBackupfilesModel.append({
-                                      "fileUrl": path
-                                  })
+                                                                       "fileUrl": path
+                                                                   })
             }
             // Force scroll and focus to the last item addded
             forceScrollandFocus()
@@ -874,13 +874,13 @@ PageServicesSignAdvancedForm {
                 }else{
                     path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
                 }
-				path = decodeURIComponent(path)
+                path = decodeURIComponent(path)
                 filesModel.append({
                                       "fileUrl": path
                                   })
                 propertyPageLoader.propertyBackupfilesModel.append({
-                                      "fileUrl": path
-                                  })
+                                                                       "fileUrl": path
+                                                                   })
             }
             // Force scroll and focus to the last item addded
             forceScrollandFocus()
@@ -1216,13 +1216,13 @@ PageServicesSignAdvancedForm {
                 }else{
                     path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
                 }
-				path = decodeURIComponent(path)
+                path = decodeURIComponent(path)
                 filesModel.append({
                                       "fileUrl": path
                                   })
                 propertyPageLoader.propertyBackupfilesModel.append({
-                                      "fileUrl": path
-                                  })
+                                                                       "fileUrl": path
+                                                                   })
             }
 
             // Force scroll and focus to the last item addded
@@ -1264,82 +1264,91 @@ PageServicesSignAdvancedForm {
     propertyButtonSignWithCC {
         onClicked: {
             console.log("Sign with CC")
-            if (propertyListViewFiles.count == 1){
-                propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
-                if (propertyRadioButtonPADES.checked) {
-                    if(propertySwitchSignAdd.checked){
-                        var count = 0
-                        //15 MB filesize limit for SCAP
-                        var MAX_SIZE = 15 * 1024 *1024
-                        var outputNativePath = stripFilePrefix(propertyListViewFiles.model.get(0).fileUrl)
-                        for (var i = 0; i < entityAttributesModel.count; i++){
-                            if(entityAttributesModel.get(i).checkBoxAttr == true){
-                                count++
+            if (gapi.getTriesLeftSignPin() === 0) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup PIN","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SIGN_BLOCKED")
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            }else{
+                if (propertyListViewFiles.count == 1){
+                    propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
+                    if (propertyRadioButtonPADES.checked) {
+                        if(propertySwitchSignAdd.checked){
+                            var count = 0
+                            //15 MB filesize limit for SCAP
+                            var MAX_SIZE = 15 * 1024 *1024
+                            var outputNativePath = stripFilePrefix(propertyListViewFiles.model.get(0).fileUrl)
+                            for (var i = 0; i < entityAttributesModel.count; i++){
+                                if(entityAttributesModel.get(i).checkBoxAttr == true){
+                                    count++
+                                }
                             }
-                        }
-                        if(count == 0) {
-                            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                                    qsTranslate("PageServicesSign","STR_SCAP_WARNING")
-                            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                                    qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
-                            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-                        }
-                        else if (gapi.getFileSize(outputNativePath) > MAX_SIZE) {
-                            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                                    qsTranslate("PageServicesSign","STR_SCAP_WARNING")
-                            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                                    qsTranslate("PageServicesSign","STR_SCAP_MAX_FILESIZE") + " 15 MB"
-                            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-                        }
-                        else {
-                            var outputFile = propertyListViewFiles.model.get(0).fileUrl
+                            if(count == 0) {
+                                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                                        qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+                                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                                        qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
+                                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+                            }
+                            else if (gapi.getFileSize(outputNativePath) > MAX_SIZE) {
+                                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                                        qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+                                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                                        qsTranslate("PageServicesSign","STR_SCAP_MAX_FILESIZE") + " 15 MB"
+                                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+                            }
+                            else {
+                                var outputFile = propertyListViewFiles.model.get(0).fileUrl
+                                //Check if filename has extension and remove it.
+                                if( outputFile.lastIndexOf('.') > 0)
+                                    var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
+                                propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
+                                propertyFileDialogOutput.open()
+                            }
+                        }else{
+                            var outputFile =  propertyListViewFiles.model.get(0).fileUrl
                             //Check if filename has extension and remove it.
                             if( outputFile.lastIndexOf('.') > 0)
                                 var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
                             propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
                             propertyFileDialogOutput.open()
                         }
-                    }else{
-                        var outputFile =  propertyListViewFiles.model.get(0).fileUrl
+                    }
+                    else {
+                        var outputFile = propertyListViewFiles.model.get(0).fileUrl
                         //Check if filename has extension and remove it.
                         if( outputFile.lastIndexOf('.') > 0)
                             var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
-                        propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
+
+                        propertyFileDialogOutput.filename = outputFile + "_xadessign.ccsigned"
                         propertyFileDialogOutput.open()
                     }
-                }
-                else {
-                    var outputFile = propertyListViewFiles.model.get(0).fileUrl
-                    //Check if filename has extension and remove it.
-                    if( outputFile.lastIndexOf('.') > 0)
-                        var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
-
-                    propertyFileDialogOutput.filename = outputFile + "_xadessign.ccsigned"
-                    propertyFileDialogOutput.open()
-                }
-            }else{
-                if (propertySwitchSignAdd.checked){
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("PageServicesSign","STR_SCAP_WARNING")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
                 }else{
-                    var outputFile = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
-                    //Check if filename has extension and remove it.
-                    if( outputFile.lastIndexOf('.') > 0)
-                        var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
-                    //Check if filename has file name and remove it.
-                    if( outputFile.lastIndexOf('/') > 0)
-                        var outputFile = outputFile.substring(0, outputFile.lastIndexOf('/'))
-
-                    if(propertyRadioButtonPADES.checked){
-                        propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
-                        propertyFileDialogBatchOutput.open()
+                    if (propertySwitchSignAdd.checked){
+                        mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                                qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+                        mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                                qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
+                        mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
                     }else{
+                        var outputFile = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
+                        //Check if filename has extension and remove it.
+                        if( outputFile.lastIndexOf('.') > 0)
+                            var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
+                        //Check if filename has file name and remove it.
+                        if( outputFile.lastIndexOf('/') > 0)
+                            var outputFile = outputFile.substring(0, outputFile.lastIndexOf('/'))
 
-                        propertyFileDialogOutput.filename = outputFile + "/" + "xadessign.ccsigned"
-                        propertyFileDialogOutput.open()
+                        if(propertyRadioButtonPADES.checked){
+                            propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
+                            propertyFileDialogBatchOutput.open()
+                        }else{
+
+                            propertyFileDialogOutput.filename = outputFile + "/" + "xadessign.ccsigned"
+                            propertyFileDialogOutput.open()
+                        }
                     }
                 }
             }
@@ -1380,7 +1389,7 @@ PageServicesSignAdvancedForm {
         onCheckedChanged:{
             propertyPageLoader.propertyBackupFormatPades = propertyRadioButtonPADES.checked
             if(propertyRadioButtonPADES.checked){
-				propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
+                propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                         qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
                 propertyTextFieldReason.enabled = true
                 propertyTextFieldLocal.enabled = true
@@ -1398,7 +1407,7 @@ PageServicesSignAdvancedForm {
                                       })
                 }
             }else{
-				propertyTextDragMsgImg.text =
+                propertyTextDragMsgImg.text =
                         qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW")
                 propertyTextFieldReason.enabled = false
                 propertyTextFieldLocal.enabled = false
@@ -1556,8 +1565,8 @@ PageServicesSignAdvancedForm {
                         mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                     }
                 }else{
-				    propertyTextDragMsgImg.visible = true
-				}
+                    propertyTextDragMsgImg.visible = true
+                }
             }
         }
     }
@@ -1649,7 +1658,7 @@ PageServicesSignAdvancedForm {
 
     function stripFilePrefix(filePath) {
         if (Qt.platform.os === "windows") {
-               return filePath.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+            return filePath.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
         }
         else {
             return filePath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
@@ -1743,28 +1752,28 @@ PageServicesSignAdvancedForm {
         rectLabelCMDText.visible = false
 
         if (propertySwitchSignAdd.checked) {
-           //SCAP PDF coordinate conversion: it expects native PDF units
-           coord_x = gapi.getPageSize(page).width * coord_x
-           coord_y = gapi.getPageSize(page).height * (1 - coord_y)
+            //SCAP PDF coordinate conversion: it expects native PDF units
+            coord_x = gapi.getPageSize(page).width * coord_x
+            coord_y = gapi.getPageSize(page).height * (1 - coord_y)
             gapi.signOpenScapWithCMD(mobileNumber,textFieldPin.text,
-                      loadedFilePath,outputFile,page,coord_x, coord_y)
-         }
-         else
+                                     loadedFilePath,outputFile,page,coord_x, coord_y)
+        }
+        else
         {
-             gapi.signOpenCMD(mobileNumber,textFieldPin.text,
-                      loadedFilePath,outputFile,page,
-                      coord_x,coord_y,
-                      reason,location,
-                      isTimestamp, isSmallSignature)
-         }
-         progressBarIndeterminate.visible = true
-         progressBar.visible = true
-         textFieldPin.text = ""
-         textReturnCode.text = ""
-         dialogSignCMD.close()
-         buttonCMDProgressConfirm.visible = false
-         buttonCMDProgressConfirm.text = qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
-         dialogCMDProgress.open()
+            gapi.signOpenCMD(mobileNumber,textFieldPin.text,
+                             loadedFilePath,outputFile,page,
+                             coord_x,coord_y,
+                             reason,location,
+                             isTimestamp, isSmallSignature)
+        }
+        progressBarIndeterminate.visible = true
+        progressBar.visible = true
+        textFieldPin.text = ""
+        textReturnCode.text = ""
+        dialogSignCMD.close()
+        buttonCMDProgressConfirm.visible = false
+        buttonCMDProgressConfirm.text = qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
+        dialogCMDProgress.open()
         textFieldReturnCode.focus = true
     }
     function signCMDConfirm(){

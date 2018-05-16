@@ -573,10 +573,19 @@ PageCardAdressForm {
             gapi.startReadingAddress()
         }else{
             if(Constants.USE_SDK_PIN_UI_POPUP){
-                var triesLeft = gapi.verifyAddressPin("")
-                if (triesLeft === 3) {
-                    propertyBusyIndicator.running = true
-                    gapi.startReadingAddress()
+                if (gapi.getTriesLeftAddressPin() === 0) {
+                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                            qsTranslate("Popup PIN","STR_POPUP_ERROR")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_ADDRESS_BLOCKED")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                    mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                }else{
+                    var triesLeft = gapi.verifyAddressPin("")
+                    if (triesLeft === 3) {
+                        propertyBusyIndicator.running = true
+                        gapi.startReadingAddress()
+                    }
                 }
             }else{
                 dialogTestPin.open()

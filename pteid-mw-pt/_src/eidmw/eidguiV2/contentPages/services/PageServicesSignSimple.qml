@@ -105,7 +105,7 @@ PageServicesSignSimpleForm {
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
@@ -181,11 +181,11 @@ PageServicesSignSimpleForm {
 
             Keys.enabled: true
             Keys.onPressed: {
-                  if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return
-                          && textFieldMobileNumber.length !== 0 && textFieldPin.length !== 0)
-                  {
-                      signCMD()
-                  }
+                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return
+                        && textFieldMobileNumber.length !== 0 && textFieldPin.length !== 0)
+                {
+                    signCMD()
+                }
             }
 
             Item {
@@ -453,10 +453,10 @@ PageServicesSignSimpleForm {
 
             Keys.enabled: true
             Keys.onPressed: {
-                  if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return && buttonCMDProgressConfirm.visible == true)
-                  {
-                      signCMDConfirm()
-                  }
+                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return && buttonCMDProgressConfirm.visible == true)
+                {
+                    signCMDConfirm()
+                }
             }
 
             Item {
@@ -612,10 +612,10 @@ PageServicesSignSimpleForm {
 
             Keys.enabled: true
             Keys.onPressed: {
-                  if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
-                  {
-                      signCMDShowSignedFile()
-                  }
+                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
+                {
+                    signCMDShowSignedFile()
+                }
             }
 
             Item {
@@ -721,8 +721,8 @@ PageServicesSignSimpleForm {
                 }else{
                     path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
                 }
-				path = decodeURIComponent(path)
-				console.log("Adding file: " + path)
+                path = decodeURIComponent(path)
+                console.log("Adding file: " + path)
                 filesModel.insert(0, {"fileUrl": path})
             }
         }
@@ -742,30 +742,30 @@ PageServicesSignSimpleForm {
             }else{
                 outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
-			outputFile = decodeURIComponent(outputFile)
+            outputFile = decodeURIComponent(outputFile)
 
-                var page = 1
-                propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
+            var page = 1
+            propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
                                             page = propertySpinBoxControl.value
-                var reason = ""
-                var location = ""
+            var reason = ""
+            var location = ""
 
-                var isSmallSignature = false
+            var isSmallSignature = false
 
-                var coord_x = propertyPDFPreview.propertyCoordX
+            var coord_x = propertyPDFPreview.propertyCoordX
 
-                //coord_y must be the lower left corner of the signature rectangle
+            //coord_y must be the lower left corner of the signature rectangle
 
-                var coord_y = propertyPDFPreview.propertyCoordY
+            var coord_y = propertyPDFPreview.propertyCoordY
 
-                console.log("Output filename: " + outputFile)
-                console.log("Signing in position coord_x: " + coord_x
-                            + " and coord_y: "+coord_y)
+            console.log("Output filename: " + outputFile)
+            console.log("Signing in position coord_x: " + coord_x
+                        + " and coord_y: "+coord_y)
 
-                propertyOutputSignedFile = outputFile;
+            propertyOutputSignedFile = outputFile;
 
-                gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
-                                     reason, location, isTimestamp, isSmallSignature)
+            gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
+                                 reason, location, isTimestamp, isSmallSignature)
         }
     }
     propertyFileDialogCMDOutput {
@@ -787,8 +787,8 @@ PageServicesSignSimpleForm {
             }else{
                 path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
-			path = decodeURIComponent(path)
-			console.log("Adding file: " + path)
+            path = decodeURIComponent(path)
+            console.log("Adding file: " + path)
             filesModel.append({
                                   "fileUrl": path
                               })
@@ -814,13 +814,21 @@ PageServicesSignSimpleForm {
     propertyButtonSignWithCC {
         onClicked: {
             console.log("Sign with CC")
-
-            var outputFile = filesModel.get(0).fileUrl
-            //Check if filename has extension and remove it.
-            if( outputFile.lastIndexOf('.') > 0)
-                var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'));
-            propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
-            propertyFileDialogOutput.open()
+            if (gapi.getTriesLeftSignPin() === 0) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup PIN","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SIGN_BLOCKED")
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            }else{
+                var outputFile = filesModel.get(0).fileUrl
+                //Check if filename has extension and remove it.
+                if( outputFile.lastIndexOf('.') > 0)
+                    var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'));
+                propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
+                propertyFileDialogOutput.open()
+            }
         }
     }
     propertyButtonSignCMD {
@@ -1003,10 +1011,10 @@ PageServicesSignSimpleForm {
         propertyOutputSignedFile = outputFile
         rectLabelCMDText.visible = false
         gapi.signOpenCMD(mobileNumber,textFieldPin.text,
-                     loadedFilePath,outputFile,page,
-                     coord_x,coord_y,
-                     reason,location,
-                     isTimestamp, isSmallSignature)
+                         loadedFilePath,outputFile,page,
+                         coord_x,coord_y,
+                         reason,location,
+                         isTimestamp, isSmallSignature)
 
         progressBarIndeterminate.visible = true
         progressBar.visible = true
