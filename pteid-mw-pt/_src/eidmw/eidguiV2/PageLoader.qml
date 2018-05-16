@@ -29,6 +29,8 @@ Loader{
     property bool propertyBackupLastPage: false
     property string propertyBackupLocal: ""
     property string propertyBackupReason: ""
+    property string propertyBackupMobileNumber: ""
+    property int propertyBackupMobileIndicatorIndex: 0
 
     ListModel {
         id: backupfilesModel
@@ -58,7 +60,7 @@ Loader{
         }
         Item {
             id: rectPopUp
-            width: generalPopUp.availableWidth - generalPopUp.padding
+            width: generalPopUp.availableWidth
             height: generalPopUp.availableHeight - generalPopUp.padding
 
             Keys.enabled: true

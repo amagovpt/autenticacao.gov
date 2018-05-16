@@ -179,6 +179,15 @@ PageServicesSignSimpleForm {
             width: parent.width
             height: rectMessageTopLogin.height + rectMobilNumber.height + rectPin.height
 
+            Keys.enabled: true
+            Keys.onPressed: {
+                  if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return
+                          && textFieldMobileNumber.length !== 0 && textFieldPin.length !== 0)
+                  {
+                      signCMD()
+                  }
+            }
+
             Item {
                 id: rectMessageTopLogin
                 width: parent.width
@@ -281,6 +290,13 @@ PageServicesSignSimpleForm {
                     visible: true
                     anchors.left: textPinCurrent.right
                     anchors.bottom: parent.bottom
+                    onCurrentIndexChanged: {
+                        if(comboBoxIndicative.currentIndex > 0){
+                            propertyPageLoader.propertyBackupMobileIndicatorIndex = comboBoxIndicative.currentIndex
+                        }else{
+                            comboBoxIndicative.currentIndex = propertyPageLoader.propertyBackupMobileIndicatorIndex
+                        }
+                    }
                 }
                 TextField {
                     id: textFieldMobileNumber
@@ -295,6 +311,9 @@ PageServicesSignSimpleForm {
                     anchors.left: comboBoxIndicative.right
                     anchors.leftMargin:  parent.width * 0.05
                     anchors.bottom: parent.bottom
+                    onEditingFinished: {
+                        propertyPageLoader.propertyBackupMobileNumber = textFieldMobileNumber.text
+                    }
                 }
             }
             Item {
@@ -369,6 +388,7 @@ PageServicesSignSimpleForm {
                     font.capitalization: Font.MixedCase
                     onClicked: {
                         dialogSignCMD.close()
+                        textFieldPin.text = ""
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     }
                 }
@@ -382,55 +402,13 @@ PageServicesSignSimpleForm {
                     font.capitalization: Font.MixedCase
                     enabled: textFieldMobileNumber.length !== 0 && textFieldPin.length !== 0 ? true : false
                     onClicked: {
-                        var loadedFilePath = filesModel.get(0).fileUrl
-                        var isTimestamp = false
-                        var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
-                        if (Qt.platform.os === "windows") {
-                            outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
-                        }else{
-                            outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-                        }
-                        outputFile = decodeURIComponent(outputFile)
-
-                        var page = 1
-                        propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
-                                                    page = propertySpinBoxControl.value
-                        var reason = ""
-                        var location = ""
-                        var isSmallSignature = false
-                        var coord_x = propertyPDFPreview.propertyCoordX
-                        //coord_y must be the lower left corner of the signature rectangle
-                        var coord_y = propertyPDFPreview.propertyCoordY
-
-                        console.log("Output filename: " + outputFile)
-                        console.log("Signing in position coord_x: " + coord_x
-                                    + " and coord_y: "+coord_y)
-
-                        var indicatice = comboBoxIndicative.currentText.substring(0, comboBoxIndicative.currentText.indexOf(' '));
-                        var mobileNumber = indicatice + " " + textFieldMobileNumber.text
-
-                        propertyOutputSignedFile = outputFile
-                        rectLabelCMDText.visible = false
-                        gapi.signOpenCMD(mobileNumber,textFieldPin.text,
-                                     loadedFilePath,outputFile,page,
-                                     coord_x,coord_y,
-                                     reason,location,
-                                     isTimestamp, isSmallSignature)
-
-                        progressBarIndeterminate.visible = true
-                        progressBar.visible = true
-                        textFieldMobileNumber.text = ""
-                        textFieldPin.text = ""
-                        dialogSignCMD.close()
-                        buttonCMDProgressConfirm.visible = false
-                        buttonCMDProgressConfirm.text = qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
-                        dialogCMDProgress.open()
-                        textFieldReturnCode.focus = true
+                        signCMD()
                     }
                 }
             }
         }
         onRejected:{
+            textFieldPin.text = ""
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
     }
@@ -472,6 +450,14 @@ PageServicesSignSimpleForm {
             width: parent.width
             height: rectMessageTop.height + rectReturnCode.height + progressBarIndeterminate.height
             anchors.top: progressBar.bottom
+
+            Keys.enabled: true
+            Keys.onPressed: {
+                  if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return && buttonCMDProgressConfirm.visible == true)
+                  {
+                      signCMDConfirm()
+                  }
+            }
 
             Item {
                 id: rectMessageTop
@@ -572,6 +558,7 @@ PageServicesSignSimpleForm {
                 font.capitalization: Font.MixedCase
                 onClicked: {
                     dialogCMDProgress.close()
+                    textReturnCode.text = ""
                     rectReturnCode.visible = false
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                 }
@@ -587,31 +574,13 @@ PageServicesSignSimpleForm {
                 font.capitalization: Font.MixedCase
                 visible: false
                 onClicked: {
-                    console.log("Send sms_token : " + textFieldReturnCode.text)
-                    if( progressBar.value < 100) {
-                        //Empty attributes list, in simple signature view it's not SCAP signature
-                        gapi.signCloseCMD(textFieldReturnCode.text, [])
-                        progressBarIndeterminate.visible = true
-                        rectReturnCode.visible = false
-                        buttonCMDProgressConfirm.visible = false
-                        textFieldReturnCode.text = ""
-                        dialogCMDProgress.open()
-                    }
-                    else {
-                        dialogCMDProgress.close()
-                        if (Qt.platform.os === "windows") {
-                            propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
-                        }else{
-                            propertyOutputSignedFile = "file://" + propertyOutputSignedFile
-                        }
-                        console.log("Open Url Externally: " + propertyOutputSignedFile)
-                        Qt.openUrlExternally(propertyOutputSignedFile)
-                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-                    }
+                    signCMDConfirm()
                 }
             }
         }
         onRejected:{
+            textReturnCode.text = ""
+            rectReturnCode.visible = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
     }
@@ -640,6 +609,15 @@ PageServicesSignSimpleForm {
         Item {
             width: signsuccess_dialog.availableWidth
             height: 50
+
+            Keys.enabled: true
+            Keys.onPressed: {
+                  if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
+                  {
+                      signCMDShowSignedFile()
+                  }
+            }
+
             Item {
                 id: rectLabelText
                 width: parent.width
@@ -686,15 +664,7 @@ PageServicesSignSimpleForm {
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     onClicked: {
-                        if (Qt.platform.os === "windows") {
-                            propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
-                        }else{
-                            propertyOutputSignedFile = "file://" + propertyOutputSignedFile
-                        }
-                        console.log("Open Url Externally: " + propertyOutputSignedFile)
-                        Qt.openUrlExternally(propertyOutputSignedFile)
-                        signsuccess_dialog.close()
-                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                        signCMDShowSignedFile()
                     }
                 }
             }
@@ -979,6 +949,10 @@ PageServicesSignSimpleForm {
         propertyBusyIndicator.running = true
         propertyPDFPreview.propertyDragSigSignedByNameText.text = "Assinado por:"
         propertyPDFPreview.propertyDragSigNumIdText.text = "Num. de Identificação Civil:"
+
+        //  CMD load backup mobile data
+        textFieldMobileNumber.text = propertyPageLoader.propertyBackupMobileNumber
+
         gapi.startCardReading()
     }
     function updateIndicators(pageCount){
@@ -994,5 +968,89 @@ PageServicesSignSimpleForm {
             propertySpinBoxControl.down.indicator.visible = false
             propertySpinBoxControl.down.indicator.enabled = false
         }
+    }
+    function signCMD(){
+        var loadedFilePath = filesModel.get(0).fileUrl
+        var isTimestamp = false
+        var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
+        if (Qt.platform.os === "windows") {
+            outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+        }else{
+            outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+        }
+        outputFile = decodeURIComponent(outputFile)
+
+        var page = 1
+        if(propertyCheckLastPage.checked) {
+            page = gapi.getPDFpageCount(loadedFilePath)
+        }else{
+            page = propertySpinBoxControl.value
+        }
+        var reason = ""
+        var location = ""
+        var isSmallSignature = false
+        var coord_x = propertyPDFPreview.propertyCoordX
+        //coord_y must be the lower left corner of the signature rectangle
+        var coord_y = propertyPDFPreview.propertyCoordY
+
+        console.log("Output filename: " + outputFile)
+        console.log("Signing in position coord_x: " + coord_x
+                    + " and coord_y: "+coord_y)
+
+        var countryCode = comboBoxIndicative.currentText.substring(0, comboBoxIndicative.currentText.indexOf(' '));
+        var mobileNumber = countryCode + " " + textFieldMobileNumber.text
+
+        propertyOutputSignedFile = outputFile
+        rectLabelCMDText.visible = false
+        gapi.signOpenCMD(mobileNumber,textFieldPin.text,
+                     loadedFilePath,outputFile,page,
+                     coord_x,coord_y,
+                     reason,location,
+                     isTimestamp, isSmallSignature)
+
+        progressBarIndeterminate.visible = true
+        progressBar.visible = true
+        textFieldPin.text = ""
+        textReturnCode.text = ""
+        dialogSignCMD.close()
+        buttonCMDProgressConfirm.visible = false
+        buttonCMDProgressConfirm.text = qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
+        dialogCMDProgress.open()
+        textFieldReturnCode.focus = true
+    }
+    function signCMDConfirm(){
+        console.log("Send sms_token : " + textFieldReturnCode.text)
+        if( progressBar.value < 100) {
+            //Empty attributes list, in simple signature view it's not SCAP signature
+            gapi.signCloseCMD(textFieldReturnCode.text, [])
+            progressBarIndeterminate.visible = true
+            rectReturnCode.visible = false
+            buttonCMDProgressConfirm.visible = false
+            textFieldReturnCode.text = ""
+            dialogCMDProgress.open()
+        }
+        else
+        {
+            dialogCMDProgress.close()
+            if (Qt.platform.os === "windows") {
+                propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+            }else{
+                propertyOutputSignedFile = "file://" + propertyOutputSignedFile
+            }
+            console.log("Open Url Externally: " + propertyOutputSignedFile)
+            Qt.openUrlExternally(propertyOutputSignedFile)
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+        }
+    }
+    function signCMDShowSignedFile(){
+        if (Qt.platform.os === "windows") {
+            propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+        }else{
+            propertyOutputSignedFile = "file://" + propertyOutputSignedFile
+        }
+        console.log("Open Url Externally: " + propertyOutputSignedFile)
+        Qt.openUrlExternally(propertyOutputSignedFile)
+        signsuccess_dialog.close()
+        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
     }
 }
