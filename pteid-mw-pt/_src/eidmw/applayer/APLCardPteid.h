@@ -94,11 +94,6 @@ public:
 
 	EIDMW_APL_API void ChangeAddress(char *secret_code, char *process, t_callback_addr, void *);
 
-	/** 
-	 * Return a document from the card
-	 */
-	EIDMW_APL_API virtual APL_XMLDoc& getDocument(APL_DocumentType type);
-
 	EIDMW_APL_API APL_CCXML_Doc& getXmlCCDoc(APL_XmlUserRequestedInfo& userRequestedInfo);
 
 
@@ -141,7 +136,7 @@ public:
  	/** 
 	 * Return rawdata from the card
 	 */
-	EIDMW_APL_API virtual const CByteArray& getRawData(APL_RawDataType type);
+	EIDMW_APL_API virtual const CByteArray& getRawData(APL_RawDataType type);	
 
  	EIDMW_APL_API const CByteArray& getRawData_Id();			/**< Get the id RawData */
 	EIDMW_APL_API const CByteArray& getRawData_IdSig();			/**< Get the IdSig RawData */

@@ -91,11 +91,6 @@ public:
 	 */
 	EIDMW_APL_API virtual APL_CardType getType() const;
 
- 	/**
-	 * Return a document from the card
-	 */
-	EIDMW_APL_API virtual APL_XMLDoc& getDocument(APL_DocumentType type)=0;
-
   	/**
 	 * Return rawdata from the card
 	 */

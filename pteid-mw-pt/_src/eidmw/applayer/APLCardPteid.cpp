@@ -507,27 +507,6 @@ unsigned long APL_EIDCard::certificateCount()
 	return m_certificateCount;
 }
 
-APL_XMLDoc& APL_EIDCard::getDocument(APL_DocumentType type)
-{
-	switch(type)
-	{
-	case APL_DOCTYPE_ID:
-		return getID();
-	case APL_DOCTYPE_ADDRESS:
-		return getAddr();
-	case APL_DOCTYPE_SOD:
-		return getSod();
-	case APL_DOCTYPE_INFO:
-		return getDocInfo();
-	case APL_DOCTYPE_PINS:
-		return *getPins();
-	case APL_DOCTYPE_CERTIFICATES:
-		return *getCertificates();
-	default:
-		throw CMWEXCEPTION(EIDMW_ERR_DOCTYPE_UNKNOWN);
-	}
-}
-
 
 APL_CCXML_Doc& APL_EIDCard::getXmlCCDoc(APL_XmlUserRequestedInfo& userRequestedInfo){
 	if (m_CCcustomDoc)
@@ -631,7 +610,7 @@ const CByteArray& APL_EIDCard::getRawData(APL_RawDataType type)
 	case APL_RAWDATA_PERSO_DATA:
 		return getRawData_PersoData();
 	default:
-		throw CMWEXCEPTION(EIDMW_ERR_FILETYPE_UNKNOWN);
+		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	}
 }
 

@@ -177,22 +177,11 @@
 /** Too many files are currently open in the system.*/
 #define EIDMW_TOO_MANY_OPENED_FILES    0xe1d00803
 
-/** An I/O error occurred while reading from the file system.*/
-#define EIDMW_ERROR_IO                 0xe1d00807
-
 /** Call of the Logger after destruct time */
 #define EIDMW_ERR_LOGGER_APPLEAVING		0xe1d00900
 
-
-// SDK error
-/** The document type is unknown for this card */
-#define EIDMW_ERR_DOCTYPE_UNKNOWN		0xe1d00b00
-
 /** This card type is unknown */
 #define EIDMW_ERR_CARDTYPE_UNKNOWN		0xe1d00b02
-
-/** This Certificate has no issuer (=root) */
-#define EIDMW_ERR_CERT_NOISSUER			0xe1d00b03
 
 /** No release of SDK object has been done before closing the application */
 #define EIDMW_ERR_RELEASE_NEEDED		0xe1d00b04
@@ -200,11 +189,6 @@
 /** Bad transaction commande (Unlock without Lock OR Lock without Unlock) */
 #define EIDMW_ERR_BAD_TRANSACTION		0xe1d00b05
 
-/** The file type is unknown for this card */
-#define EIDMW_ERR_FILETYPE_UNKNOWN		0xe1d00b06
-
-/** The card has been changed */
-#define EIDMW_ERR_CARD_CHANGED			0xe1d00b07
 
 /** This Certificate has no CDP */
 #define EIDMW_ERR_CERT_NOCRL			0xe1d00b0A

@@ -1333,18 +1333,11 @@ switch(err)
    /** {OPEN_MAX} file descriptors are currently open in the calling process. */
    /** Too many files are currently open in the system.*/
    case EIDMW_TOO_MANY_OPENED_FILES:         return(CKR_FUNCTION_FAILED);  break;
-   /** An I/O error occurred while reading from the file system.*/
-   case EIDMW_ERROR_IO:                      return(CKR_FUNCTION_FAILED);  break;
    /** Call of the Logger after destruct time */
    case EIDMW_ERR_LOGGER_APPLEAVING:         return(CKR_FUNCTION_FAILED);  break;
 
-   // SDK error
-   /** The document type is unknown for this card */
-   case EIDMW_ERR_DOCTYPE_UNKNOWN:           return(CKR_FUNCTION_FAILED);  break;
    /** This card type is unknown */
    case EIDMW_ERR_CARDTYPE_UNKNOWN:          return(CKR_TOKEN_NOT_RECOGNIZED); break;
-   /** This Certificate has no issuer (=root) */
-   case EIDMW_ERR_CERT_NOISSUER:             return(CKR_FUNCTION_FAILED);  break;
    /** No release of SDK object has been done before closing the application */
    case EIDMW_ERR_RELEASE_NEEDED:            return(CKR_FUNCTION_FAILED);  break;
 
