@@ -1703,10 +1703,14 @@ void GAPI::getSCAPEntities() {
     QList<QString> attributeSuppliers;
     std::vector<ns3__AttributeSupplierType *> entities = scapServices.getAttributeSuppliers();
 
+    if(entities.size() == 0){
+        emit signalSCAPServiceFail();
+        return;
+    }
+
     for (unsigned int i = 0; i!=entities.size(); i++)
         attributeSuppliers.append(QString::fromStdString(entities.at(i)->Name));
     
-    //TODO: emit signal for error
     emit signalSCAPEntitiesLoaded(attributeSuppliers);
 }
 

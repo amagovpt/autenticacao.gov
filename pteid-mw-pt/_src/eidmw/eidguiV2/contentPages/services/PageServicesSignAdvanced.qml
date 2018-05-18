@@ -57,11 +57,10 @@ PageServicesSignAdvancedForm {
             for(var i = 0; i < attribute_list.length; i=i+3)
             {
                 // Fix the differences between entities and companies attributes about uppercase style
-                attribute_list[i+1] = attribute_list[i+1].toLowerCase()
+                attribute_list[i+1] = toTitleCase(attribute_list[i+1])
                 entityAttributesModel.append({
                                                  entityName: attribute_list[i],
-                                                 citizenName: attribute_list[i+1]
-                                                 .replace(/\b\w/g, function(l){ return l.toUpperCase() }),
+                                                 citizenName: attribute_list[i+1],
                                                  attribute: attribute_list[i+2],
                                                  checkBoxAttr: false
                                              });
@@ -1828,5 +1827,10 @@ PageServicesSignAdvancedForm {
         Qt.openUrlExternally(propertyOutputSignedFile)
         signsuccess_dialog.close()
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+    }
+    function toTitleCase(str) {
+        return str.replace(/\w\S*/g, function(txt){
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
     }
 }

@@ -132,7 +132,7 @@ Item {
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                         anchors.left: parent.left
-                        enabled: false
+                        enabled: true
                     }
                     Button {
                         id: buttonLoadEntityAttributes
@@ -208,7 +208,7 @@ Item {
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                         anchors.left: parent.left
-                        enabled: companyAttributesModel.count > 0
+                        enabled: true
                     }
                     Button {
                         id: buttonLoadCompanyAttributes

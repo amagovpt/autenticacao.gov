@@ -991,17 +991,23 @@
     <name>PageDifinitionsSCAP</name>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="83"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="93"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="94"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="104"/>
         <source>STR_SCAP_ERROR</source>
         <translation>Erro</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="85"/>
+        <source>STR_SCAP_SERVICE_FAIL</source>
+        <translation type="unfinished">Erro ao aceder ao serviço de carregamento de atributos. Por favor volte a tentar.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="96"/>
         <source>STR_SCAP_LOAD_ENTITIES_ERROR</source>
         <translation>Erro carregando atributos de entidades</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="95"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="106"/>
         <source>STR_SCAP_LOAD_COMPANY_ERROR</source>
         <translation>Erro carregando atributos de empresas</translation>
     </message>
@@ -1898,6 +1904,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="287"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="580"/>
         <source>STR_POPUP_CARD_PIN_ADDRESS_BLOCKED</source>
         <translation>PIN da morada bloqueado!</translation>
     </message>
@@ -2096,6 +2103,7 @@
         <translation>Este PIN é usado para alteração e leitura de morada.</translation>
     </message>
     <message>
+        <location filename="contentPages/card/PageCardAdress.qml" line="578"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1269"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="819"/>
         <source>STR_POPUP_ERROR</source>

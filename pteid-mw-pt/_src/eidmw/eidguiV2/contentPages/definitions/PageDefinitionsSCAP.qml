@@ -77,6 +77,17 @@ PageDefinitionsSCAPForm {
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
+        onSignalSCAPServiceFail: {
+            console.log("Definitions SCAP - Signal SCAP service fail")
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    qsTranslate("PageDifinitionsSCAP","STR_SCAP_ERROR")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    qsTranslate("PageDifinitionsSCAP","STR_SCAP_SERVICE_FAIL")
+             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            // Load attributes from cache (Entities, isShortDescription)
+            gapi.startLoadingAttributesFromCache(0, 0)
+            propertyBusyIndicator.running = false
+        }
         onSignalEntityAttributesLoadedError: {
             console.log("Definitions SCAP - Signal SCAP entities loaded error")
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
@@ -103,7 +114,9 @@ PageDefinitionsSCAPForm {
             for (var i = 0; i < entitiesList.length; i++)
             {
                 entityAttributesModel.append({
-                                                 entityName: entitiesList[i], attribute: "", checkBoxAttr: false
+                                                 entityName: entitiesList[i],
+                                                 attribute: "",
+                                                 checkBoxAttr: false
                                              });
             }
 
@@ -114,12 +127,13 @@ PageDefinitionsSCAPForm {
         }
         onSignalEntityAttributesLoaded:{
             console.log("Definitions SCAP - Signal SCAP Entity attributes loaded")
-            propertyButtonRemoveEntityAttributes.enabled = false
             if(entityAttributesModel.count == 0){
                 for(var i = 0; i < attribute_list.length; i=i+3)
                 {
                     entityAttributesModel.append({
-                                                     entityName: attribute_list[i], attribute: "<ul><li>"+attribute_list[i+2]+"</li></ul>"
+                                                     entityName: attribute_list[i],
+                                                     attribute: "<ul><li>"+attribute_list[i+2]+"</li></ul>",
+                                                     checkBoxAttr: false
                                                  });
                 }
             }else{
@@ -140,7 +154,6 @@ PageDefinitionsSCAPForm {
                             entityAttributesModel.set(j, {"entityName": attribute_list[i], "attribute":
                                                           entityAttributesModel.get(j).attribute
                                                           + "<ul><li>"+attribute_list[i+2]+"</li></ul>"})
-                        propertyButtonRemoveEntityAttributes.enabled = true
                         }
                     }
                 }
@@ -164,7 +177,9 @@ PageDefinitionsSCAPForm {
                                                });
                 }else{
                     companyAttributesModel.append({
-                                                      entityName: attribute_list[i], attribute: "<ul><li>"+attribute_list[i+2]+"</li></ul>"
+                                                      entityName: attribute_list[i],
+                                                      attribute: "<ul><li>"+attribute_list[i+2]+"</li></ul>",
+                                                      checkBoxAttr: false
                                                   });
                 }
             }
@@ -205,9 +220,7 @@ PageDefinitionsSCAPForm {
                 font.capitalization: Font.MixedCase
                 anchors.top: parent.top
                 onCheckedChanged: {
-
                     entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
-
                     propertyButtonLoadEntityAttributes.enabled = false
                     for (var i = 0; i < entityAttributesModel.count; i++){
                         if(entityAttributesModel.get(i).checkBoxAttr === true){
@@ -215,7 +228,6 @@ PageDefinitionsSCAPForm {
                             break
                         }
                     }
-
                 }
             }
             Column {
@@ -317,6 +329,7 @@ PageDefinitionsSCAPForm {
         onClicked: {
             console.log("propertyButtonRemoveCompanyAttributes clicked!")
             companyAttributesModel.clear()
+            entityAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
             propertyPageLoader.attributeListBackup = []
             propertyPageLoader.propertyBackupSignAdd = false
@@ -328,6 +341,7 @@ PageDefinitionsSCAPForm {
     propertyButtonRemoveEntityAttributes {
         onClicked: {
             console.log("propertyButtonRemoveEntityAttributes clicked!")
+            companyAttributesModel.clear()
             entityAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
             propertyPageLoader.attributeListBackup = []
