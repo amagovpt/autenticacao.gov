@@ -125,7 +125,7 @@ static const inline wchar_t * Status2String(tCardStatus status)
 	{
 	case CARD_INSERTED: return L"card inserted";
 	case CARD_NOT_PRESENT: return L"no card present";
-	case CARD_STILL_PRESENT: return L"card stil present";
+	case CARD_STILL_PRESENT: return L"card still present";
 	case CARD_REMOVED: return L"card removed";
 	case CARD_OTHER: return L"card removed and (another) card inserted";
 	default: return L"unknown state?!?";
