@@ -154,12 +154,12 @@ APL_CardType APL_ReaderContext::getPhysicalCardType()
 
 	APL_CardType ret=APL_CARDTYPE_UNKNOWN;
 
-	tCardType CalCarType;
+	tCardType calCardType;
 
 	CalLock();
 	try
 	{
-		CalCarType=m_calreader->GetCardType();
+		calCardType=m_calreader->GetCardType();
 	}
 	catch(CMWException &e)
 	{
@@ -172,13 +172,11 @@ APL_CardType APL_ReaderContext::getPhysicalCardType()
 	}
 	CalUnlock();
 
-	switch(CalCarType)
+	switch(calCardType)
 	{
 	case CARD_PTEID_IAS07:
 	case CARD_PTEID_IAS101:
 	{
-		//Check the document type in the ID file
-		long lDocType=-1;
 		CalLock();
 		//Don't need to read anything from the start yet...
 		try
@@ -202,7 +200,7 @@ APL_CardType APL_ReaderContext::getPhysicalCardType()
 		}
 		CalUnlock();
 
-       		ret=ConvertCardType(CalCarType);
+       		ret=ConvertCardType(calCardType);
 
 		break;
 	}
