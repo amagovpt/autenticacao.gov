@@ -477,7 +477,7 @@
 							<RegistryValue Type="string" Name="language" Value="nl"/>
 							<RegistryValue Type="string" Name="install_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
 							<RegistryValue Type="string" Name="certs_dir" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\certs"/>
-            				<RegistryValue Type="string" Name="certs_dir_test" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\certs_test"/>
+            	<RegistryValue Type="string" Name="certs_dir_test" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\certs_test"/>
 							<RegistryValue Type="integer" Name="show_java_apps" Value="0"/>
 						</RegistryKey>
 
@@ -498,6 +498,27 @@
 					</RegistryKey>
 					
 				</Component>
+        
+        <!-- Registry keys needed to support applications using the SDK in 32-bit mode -->
+        <Component Id="RegistryPteidSystem32" Win64="no" Guid="{30FCD9E0-5B87-4CB9-BDF9-62BD07D21DEC}">
+          <RegistryKey Root="HKLM" Key="SOFTWARE\PTEID">
+            <RegistryKey Key="general" Action="createAndRemoveOnUninstall">
+							<RegistryValue Type="string" Name="language" Value="nl"/>
+							<RegistryValue Type="string" Name="install_dirname" Value="C:\Program Files\Portugal Identity Card"/>
+							<RegistryValue Type="string" Name="certs_dir" Value="C:\Program Files\Portugal Identity Card\eidstore\certs"/>
+						</RegistryKey>
+            <RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
+							<RegistryValue Type="string" Name="log_dirname" Value="C:\Program Files\Portugal Identity Card\log"/>
+						</RegistryKey>
+          	<RegistryKey Key="certificatecache" Action="createAndRemoveOnUninstall">
+							<RegistryValue Type="string" Name="cert_cachefile" Value="C:\Program Files\Portugal Identity Card\eidstore\crl\.cache.csc"/>
+						</RegistryKey>
+						<RegistryKey Key="crl" Action="createAndRemoveOnUninstall">
+							<RegistryValue Type="string" Name="crl_cachedir" Value="C:\Program Files\Portugal Identity Card\eidstore\crl"/>
+						</RegistryKey>
+          
+          </RegistryKey>
+       </Component>
         
 
 
@@ -541,25 +562,25 @@
 				<ComponentRef Id="License"/>
 				<ComponentRef Id="LogDir"/>
 				<ComponentRef Id="DSSApp"/>
-                <ComponentGroupRef Id="qmlAppComponentGroup"/>
-                <!-- System32 -->
+        <ComponentGroupRef Id="qmlAppComponentGroup"/>
+        <!-- System32 -->
 
 				<ComponentRef Id="Runtime35"/>
 				<ComponentRef Id="Runtime35_64"/>
-                <!--<ComponentRef Id="Runtime35ThirdPartyOpenSSL"/> -->
-		        <!--<ComponentRef Id="Runtime35ThirdPartyOpenSSL_64"/> -->
+        
 				<ComponentRef Id="Runtime35ThirdPartyXerces"/>
 				<ComponentRef Id="Runtime35ThirdPartyXerces_64"/>
 
 				<!-- Registry -->
 				<ComponentRef Id="RegistryPteidSystem"/>
+        <ComponentRef Id="RegistryPteidSystem32"/>
+        
         <ComponentRef Id="RegistryXadesFileType"/>
 
 				<Feature Id="GUI"
 						  Title="!(loc.PteidGui)"
 						  Description="!(loc.PteidGuiDescr)"
-						  Level="1"
-                >
+						  Level="1">
          
         
 					<ComponentRef Id="FreeImage"/>
