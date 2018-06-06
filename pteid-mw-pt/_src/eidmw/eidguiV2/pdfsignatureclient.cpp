@@ -35,9 +35,9 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
     //soap * sp = soap_new2(SOAP_ENC_MTOM, SOAP_ENC_MTOM);
 
     //Define appropriate network timeouts
-    sp->recv_timeout = 20;
-    sp->send_timeout = 20;
-    sp->connect_timeout = 20;
+    sp->recv_timeout = 60;
+    sp->send_timeout = 60;
+    sp->connect_timeout = 60;
 
     //soap_set_namespaces(sp, SCAPnamespaces);
 

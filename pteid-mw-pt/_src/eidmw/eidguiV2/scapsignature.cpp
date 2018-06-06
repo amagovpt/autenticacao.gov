@@ -218,9 +218,9 @@ std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
 	std::string sup_endpoint = std::string("https://") + settings.getScapServerHost().toStdString() + ":" + port + as_endpoint;
 
     //Define appropriate network timeouts
-    sp->recv_timeout = 20;
-    sp->send_timeout = 20;
-    sp->connect_timeout = 20;
+    sp->recv_timeout = 60;
+    sp->send_timeout = 60;
+    sp->connect_timeout = 60;
 
 	std::string proxy_host;
     long proxy_port = 0;
