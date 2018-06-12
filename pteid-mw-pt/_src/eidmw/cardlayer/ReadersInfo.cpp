@@ -102,16 +102,24 @@ CReadersInfo::CReadersInfo(CPCSC *poPCSC, const CByteArray & oReaders)
 	bFirstTime = true;
     m_ulReaderCount = 0;
 
-	//Parse the string reader-list into the array "m_tcsReaders"
+	//Parse the string reader-list into the array "m_tInfos"
 	const char *csReaders = (const char *) oReaders.GetBytes();
     for (size_t i = 0;
 		csReaders != NULL && csReaders[0] != '\0' && i < MAX_READERS;
 		i++, m_ulReaderCount++)
     {
-        m_tInfos[m_ulReaderCount].csReader = csReaders;
-        m_tInfos[m_ulReaderCount].ulCurrentState = 0;
-        m_tInfos[m_ulReaderCount].ulEventState = 0;
-        csReaders += m_tInfos[m_ulReaderCount].csReader.length() + 1;
+		//Ignore readers associated to Windows Virtual Smart Cards
+		if (strstr(csReaders, "Virtual Smart Card") == NULL) {
+			m_tInfos[m_ulReaderCount].csReader = csReaders;
+			m_tInfos[m_ulReaderCount].ulCurrentState = 0;
+			m_tInfos[m_ulReaderCount].ulEventState = 0;
+			csReaders += m_tInfos[m_ulReaderCount].csReader.length() + 1;
+		}
+		else {
+			csReaders += strlen(csReaders) + 1;
+			m_ulReaderCount -= 1;
+		}
+        
     }
 }
 
