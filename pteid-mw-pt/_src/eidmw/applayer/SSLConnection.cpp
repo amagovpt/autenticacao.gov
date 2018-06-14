@@ -378,6 +378,10 @@ char *parseToken(char * server_response, const char * token)
 */
 void handleErrorCode(cJSON * json_obj, const char *caller_function)
 {
+	if (json_obj == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, "JSON parsing error. Invalid input to handleErrorCode()");
+		throw CMWEXCEPTION(EIDMW_SAM_UNKNOWN_ERROR);
+	}
 	cJSON *error_obj = cJSON_GetObjectItem(json_obj, "ErrorStatus");
 	if (error_obj != NULL)
 	{
@@ -772,16 +776,11 @@ char * SSLConnection::Post(char *cookie, char *url_path, char *body)
 	//Hack for chunked replies
 	if (strstr(server_response, "Transfer-Encoding: chunked") != NULL)
 	{
-		fprintf(stderr, "SSLConnection:POST() reply is chunked, trying read_chunked_reply()\n");
+		MWLOG(LEV_DEBUG, MOD_APL, "SSLConnection:Post() server response is chunked, calling read_chunked_reply()");
 		read_chunked_reply(m_ssl_connection, &buffer, true);
 	}
 
-//	if (ret == 0)
-//	   ERR_print_errors_fp(stderr); //Connection aborted by server
-
-	//fprintf(stderr, "Server reply: \n%s\n", server_response);
-
-	return server_response;
+	return buffer.buf;
 
 }
 
