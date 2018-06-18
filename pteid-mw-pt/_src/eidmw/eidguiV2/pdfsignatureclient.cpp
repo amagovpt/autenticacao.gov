@@ -24,7 +24,7 @@ PDFSignatureClient::PDFSignatureClient()
 {
 
 }
-const char * processId = "10001";
+
 //const char * pdf_endpoint = "/PADES/PDFSignature";
 const char * pdf_endpoint = "/PADES/PDFSignatureWithAttach";
 
@@ -91,6 +91,11 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
     // Finds signature position
     static const char needleValues[] = { 0x2F, 0x54, 0x20, 0x28 };
     static const char endNeedle = 0x29;
+    //This would need QT 5.11
+    //QString request_uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    QString request_uuid = QUuid::createUuid().toString();
+    QString cleanUuid = request_uuid.midRef(1, request_uuid.size()-2).toString();
+
     QByteArray needle = QByteArray::fromRawData(needleValues, sizeof(needleValues));
     QByteArray fileByteArray = file.readAll();
     char * fileBinary = fileByteArray.data();
@@ -155,7 +160,7 @@ bool PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QSt
     // Request Sign PDF
     try
     {
-        pdf__SignRequestWithAttach * signRequest = soap_new_set_pdf__SignRequestWithAttach(sp, processId, personalData, attributeList,
+        pdf__SignRequestWithAttach * signRequest = soap_new_set_pdf__SignRequestWithAttach(sp, cleanUuid.toStdString(), personalData, attributeList,
                         signatureField.toStdString(), *base64PDF, &ltv, signatureInfo.getSelectedPage(), signatureInfo.getX(), signatureInfo.getY(), orientationType);
 
         pdf__SignResponse resp;
