@@ -218,6 +218,10 @@ public:
 
     enum AutoUpdateMessage { GenericError, NoUpdatesAvailable, DownloadFailed, LinuxNotSupported,UpdatesAvailable,
                            UnableSaveFile};
+
+    enum ScapPdfSignResult { ScapTimeOutError, ScapGenericError, ScapAttributesExpiredError, ScapZeroAttributesError,
+                             ScapNotValidAttributesError, ScapSucess };
+    Q_ENUMS(ScapPdfSignResult)
     Q_ENUMS(CardAccessError)
     Q_ENUMS(eCustomEventType)
     Q_ENUMS(IDInfoKey)
@@ -281,6 +285,7 @@ public slots:
     void startLoadingAttributesFromCache(int isCompanies, bool isShortDescription);
     void startRemovingAttributesFromCache(int isCompanies);
     void startGettingEntityAttributes(QList<int> entity_index);
+    void startPingSCAP();
 
     void startSigningSCAP(QString inputPdf, QString outputPDF, int page, int location_x, int location_y, 
                           int ltv, QList<int> attribute_index);
@@ -336,6 +341,9 @@ public slots:
     bool getRegCertValue(void);
     bool getRemoveCertValue(void);
 
+    void cancelDownload();
+    void httpFinished();
+
 signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed
@@ -362,7 +370,11 @@ signals:
         
     //SCAP signals
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
-    void signalSCAPServiceFail();
+    void signalSCAPServiceFail(int pdfsignresult);
+    void signalSCAPDifinitionsServiceFail(int pdfsignresult, bool isCompany);
+    void signalSCAPServiceTimeout();
+    void signalSCAPPingFail();
+    void signalSCAPPingSuccess();
     void signalCompanyAttributesLoaded(const QList<QString> attribute_list);
     void signalEntityAttributesLoaded(const QList<QString> attribute_list);
     void signalAttributesLoaded(const QList<QString> attribute_list);
@@ -439,6 +451,14 @@ private:
     QByteArray m_jpeg_scaled_data;
 
     QTimer* m_timerReaderList;
+
+    QUrl url;
+    QNetworkProxy proxy;
+    QNetworkAccessManager qnam;
+    QNetworkReply *reply;
+    QString m_pac_url;
+    bool httpRequestAborted;
+    bool httpRequestSuccess;
 
 protected:
     QTranslator m_translator;

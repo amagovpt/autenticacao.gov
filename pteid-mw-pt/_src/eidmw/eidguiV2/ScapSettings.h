@@ -10,6 +10,15 @@
 
 class ScapSettings
 {
+    #define RECV_TIMEOUT        60
+    #define SEND_TIMEOUT        60
+    #define CONNECT_TIMEOUT     60
+
+    #define SCAP_ATTRIBUTES_OK          200
+    #define SCAP_ATTRIBUTES_EXPIRED     401
+    #define SCAP_ZERO_ATTRIBUTES        402
+    #define SCAP_ATTRIBUTES_NOT_VALID   403
+
 public:
     //------------------------------------------------------
     // ctor

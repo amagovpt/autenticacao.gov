@@ -39,9 +39,10 @@ private:
 class PDFSignatureClient
 {
 public:
+
     PDFSignatureClient();
 
-    static bool signPDF(ProxyInfo, QString, QString, QString, QString, int, PDFSignatureInfo, std::vector<ns3__AttributeType *> &);
+    static int signPDF(ProxyInfo, QString, QString, QString, QString, int, PDFSignatureInfo, std::vector<ns3__AttributeType *> &);
 };
 
 #endif // PDFSIGNATURECLIENT_H

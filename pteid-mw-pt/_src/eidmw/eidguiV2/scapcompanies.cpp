@@ -8,6 +8,7 @@
 #include "ScapSettings.h"
 #include <QDir>
 
+#include "gapi.h"
 
 std::vector<ns2__AttributesType *> loadCacheFile(QString &filePath) {
     std::vector<ns2__AttributesType *> attributesType;
@@ -170,7 +171,7 @@ bool ScapServices::removeAttributesFromCache(eIDMW::PTEID_EIDCard &card) {
     }
 }
 
-std::vector<ns2__AttributesType *> ScapServices::getAttributes(eIDMW::PTEID_EIDCard &card, std::vector<int> supplier_ids) {
+std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eIDMW::PTEID_EIDCard &card, std::vector<int> supplier_ids) {
 
     std::vector<ns2__AttributesType *> result;
     bool allEnterprises = true;
@@ -286,7 +287,9 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(eIDMW::PTEID_EIDC
         long ret = soap_read_ns2__AttributeResponseType(soap2, &attr_response);
         
         if (ret != 0) {
+            qDebug() << "Error reading AttributeResponseType! Malformed XML response";
             std::cerr << "Error reading AttributeResponseType! Malformed XML response" << std::endl;
+            parent->signalSCAPDifinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
             return result;
         }
 
@@ -296,11 +299,35 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(eIDMW::PTEID_EIDC
         
 
         if (resp_size > 0) {
-            ns2__AttributesType * parent = attr_response.AttributeResponseValues.at(0);
-            std::vector<ns5__SignatureType *> childs = parent->SignedAttributes->ns3__SignatureAttribute;
+            ns2__AttributesType * parentAttribute = attr_response.AttributeResponseValues.at(0);
+            std::vector<ns5__SignatureType *> childs = parentAttribute->SignedAttributes->ns3__SignatureAttribute;
+
+            std::string resultCode = parentAttribute->ResponseResult->ResultCode;
+
+            int resultCodeValue = atoi(resultCode.c_str());
+
+            if (resultCodeValue != SCAP_ATTRIBUTES_OK)
+            {
+                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                                 "Error in getAttributes(): Result Code: %d", resultCodeValue);
+                qDebug() << "Error in getAttributes(): Result Code: " << resultCodeValue ;
+
+                if(resultCodeValue == SCAP_ATTRIBUTES_EXPIRED){
+                    parent->signalSCAPDifinitionsServiceFail(GAPI::ScapAttributesExpiredError, allEnterprises);
+                }else if(resultCodeValue == SCAP_ZERO_ATTRIBUTES){
+                    parent->signalSCAPDifinitionsServiceFail(GAPI::ScapZeroAttributesError, allEnterprises);
+                }else if(resultCodeValue == SCAP_ATTRIBUTES_NOT_VALID){
+                    parent->signalSCAPDifinitionsServiceFail(GAPI::ScapNotValidAttributesError, allEnterprises);
+                }else{
+                    parent->signalSCAPDifinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
+                }
+
+                return result;
+            }
 
             if (childs.size() == 0) {
                 qDebug() << "getAttributes(): Empty attributes response!";
+                parent->signalCompanyAttributesLoadedError();
                 return result;
             }
 
@@ -314,12 +341,19 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(eIDMW::PTEID_EIDC
             {
                 std::cerr << "Couldn't save attribute result to cache. Error: " << cacheFile.errorString().toStdString() << std::endl;
             }
-        }
+        } else {
 
+            if(allEnterprises) {
+                parent->signalCompanyAttributesLoadedError();
+            }else{
+                parent->signalEntityAttributesLoadedError();
+            }
+        }
         
         result = attr_response.AttributeResponseValues;
     }
     catch(...) {
+        parent->signalSCAPDifinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
         qDebug() << "reqAttributeSupplierListType ERROR << - TODO: improve error handling";
     }
 

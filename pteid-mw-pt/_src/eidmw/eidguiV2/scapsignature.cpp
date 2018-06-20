@@ -102,16 +102,21 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
         return;
     }
 
-    bool successful = PDFSignatureClient::signPDF(m_proxyInfo, savefilepath, cmd_details.signedCMDFile, cmd_details.citizenName,
+    int successful = PDFSignatureClient::signPDF(m_proxyInfo, savefilepath, cmd_details.signedCMDFile, cmd_details.citizenName,
         cmd_details.citizenId, ltv_years, PDFSignatureInfo(selected_page, location_x, location_y, false), selected_attributes);
 
-    if (successful) {
+    if (successful == GAPI::ScapSucess) {
         parent->signalPdfSignSucess(parent->SignMessageOK);
         parent->signCMDFinished(0);
     }
+    else if (successful == GAPI::ScapTimeOutError) {
+        qDebug() << "Error in SCAP service Timeout!";
+        parent->signalSCAPServiceTimeout();
+        parent->signCMDFinished(SCAP_SERVICE_ERROR_CODE);
+    }
     else {
-        qDebug() << "Error in PADES/PDFSignature service!";
-        parent->signalSCAPServiceFail();
+        qDebug() << "Error in SCAP Signature with CMD service!";
+        parent->signalSCAPServiceFail(successful);
         parent->signCMDFinished(SCAP_SERVICE_ERROR_CODE);
     }
 
@@ -171,31 +176,32 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
 
             if (sign_rc == 0)
             {
-                //this->success = SIG_ERROR;
-                bool successful = PDFSignatureClient::signPDF(m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
+                int successful = PDFSignatureClient::signPDF(m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
                     QString(citizenId), ltv_years, PDFSignatureInfo(selected_page, location_x, location_y, false), selected_attributes);
 
-                if (successful) {
+                if (successful == GAPI::ScapSucess) {
                     parent->signalPdfSignSucess(parent->SignMessageOK);
-                	
+                }
+                else if (successful == GAPI::ScapTimeOutError) {
+                    qDebug() << "Error in SCAP service Timeout!";
+                    parent->signalSCAPServiceTimeout();
                 }
                 else {
-                    qDebug() << "Error in PADES/PDFSignature service!";
-                    parent->signalSCAPServiceFail();
+                    qDebug() << "Error in SCAP Signature service!";
+                    parent->signalSCAPServiceFail(successful);
                 }
             }
             else {
-
-                parent->signalPdfSignFail();
+                parent->signalSCAPServiceFail(GAPI::ScapGenericError);
             }
                 
         }
-        catch (eIDMW::PTEID_Exception &e)       {
+        catch (eIDMW::PTEID_Exception &e)
+        {
             parent->signalPdfSignFail();
             std::cerr << "Caught exception getting EID Card. Error code: " << hex << e.GetError() << std::endl;
             //this->success = SIG_ERROR;
         }
-
     free(temp_save_path);
 }
 
@@ -218,9 +224,9 @@ std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
 	std::string sup_endpoint = std::string("https://") + settings.getScapServerHost().toStdString() + ":" + port + as_endpoint;
 
     //Define appropriate network timeouts
-    sp->recv_timeout = 60;
-    sp->send_timeout = 60;
-    sp->connect_timeout = 60;
+    sp->recv_timeout = RECV_TIMEOUT;
+    sp->send_timeout = SEND_TIMEOUT;
+    sp->connect_timeout = CONNECT_TIMEOUT;
 
 	std::string proxy_host;
     long proxy_port = 0;

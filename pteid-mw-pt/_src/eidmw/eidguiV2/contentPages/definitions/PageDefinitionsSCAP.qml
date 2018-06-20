@@ -8,6 +8,8 @@ import "../../scripts/Constants.js" as Constants
 
 PageDefinitionsSCAPForm {
 
+    property string popupMsg: ""
+
     Connections {
         target: gapi
         onSignalGenericError: {
@@ -18,6 +20,12 @@ PageDefinitionsSCAPForm {
             propertyBusyIndicator.running = true
             propertyBusyIndicatorAttributes.running = true
             gapi.startGettingEntities()
+            propertyBusyIndicator.running = false
+        }
+        onSignalSCAPPingSuccess: {
+            console.log("Definitions SCAP Signature -->Signal SCAP ping success")
+            propertyBusyIndicator.running = true
+            propertyBusyIndicatorAttributes.running = true
             propertyBusyIndicator.running = false
         }
         onSignalCardAccessError: {
@@ -77,16 +85,91 @@ PageDefinitionsSCAPForm {
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
-        onSignalSCAPServiceFail: {
-            console.log("Definitions SCAP - Signal SCAP service fail")
+        onSignalSCAPDifinitionsServiceFail: {
+            console.log("Definitions SCAP - Signal SCAP service fail Code = "
+                        + pdfsignresult + " isCompany = " + isCompany)
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                     qsTranslate("PageDifinitionsSCAP","STR_SCAP_ERROR")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("PageDifinitionsSCAP","STR_SCAP_SERVICE_FAIL")
-             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+
+            if(isCompany === true){
+                if(pdfsignresult == GAPI.ScapAttributesExpiredError){
+                    console.log("ScapAttributesExpiredError")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("PageDifinitionsSCAP","STR_SCAP_COMPANY_ATTRIBUTES_EXPIRED")
+                }else if(pdfsignresult == GAPI.ScapZeroAttributesError){
+                    console.log("ScapZeroAttributesError")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("PageDifinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES")
+                }else {
+                    console.log("ScapGenericError")
+                    gapi.startPingSCAP()
+                }
+            }else{
+                var attributeList = []
+                var totalCount = 0
+                var count = 0
+
+                for (var i = 0; i < entityAttributesModel.count; i++){
+                    if(entityAttributesModel.get(i).checkBoxAttr == true){
+                        totalCount++
+                    }
+                }
+
+                for (var i = 0; i < entityAttributesModel.count; i++){
+                    if(entityAttributesModel.get(i).checkBoxAttr == true){
+
+                        if(count > 0){
+                            if(count == totalCount-1){
+                                popupMsg += " e "
+                            }else{
+                                popupMsg += " , "
+                            }
+                        }
+                        popupMsg += entityAttributesModel.get(i).entityName
+                        count++
+                    }
+                }
+                console.log(popupMsg)
+                if(pdfsignresult == GAPI.ScapAttributesExpiredError){
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("PageDifinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_FIRST")
+                            + " " + popupMsg + " "
+                            + qsTranslate("PageDifinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_SECOND")
+                            + "\n\n"
+                            + qsTranslate("PageDifinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_THIRD")
+                            + " " + popupMsg + "."
+                }else if(pdfsignresult == GAPI.ScapZeroAttributesError){
+                    console.log("ScapZeroAttributesError")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("PageDifinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST")
+                            + " " + popupMsg + "."
+                            + "\n\n" + qsTranslate("PageDifinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND")
+                            + " " + popupMsg + "."
+                }else {
+                    console.log("ScapGenericError")
+                    gapi.startPingSCAP()
+                }
+            }
+
+            popupMsg = ""
+
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
             // Load attributes from cache (Entities, isShortDescription)
             gapi.startLoadingAttributesFromCache(0, 0)
             propertyBusyIndicator.running = false
+        }
+        onSignalSCAPPingFail: {
+            console.log("Definitions SCAP - Signal SCAP ping fail")
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    qsTranslate("PageDifinitionsSCAP","STR_SCAP_ERROR")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    qsTranslate("PageDifinitionsSCAP","STR_SCAP_PING_FAIL_FIRST")
+                    + "\n\n"
+                    + qsTranslate("PageDifinitionsSCAP","STR_SCAP_PING_FAIL_SECOND")
+             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            // Load attributes from cache (Entities, isShortDescription)
+            propertyBusyIndicator.running = false
+            propertyBusyIndicatorAttributes.running = false
         }
         onSignalEntityAttributesLoadedError: {
             console.log("Definitions SCAP - Signal SCAP entities loaded error")

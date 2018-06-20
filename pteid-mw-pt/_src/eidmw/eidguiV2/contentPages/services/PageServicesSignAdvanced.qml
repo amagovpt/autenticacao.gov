@@ -110,9 +110,38 @@ PageServicesSignAdvancedForm {
             propertyBusyIndicator.running = false
             propertyOutputSignedFile = ""
         }
+        onSignalSCAPServiceTimeout: {
+            gapi.startPingSCAP()
+        }
         onSignalSCAPServiceFail: {
+            console.log("Sign advanced - Signal SCAP Service Fail")
+            if(pdfsignresult == GAPI.ScapAttributesExpiredError ||
+                    pdfsignresult == GAPI.ScapZeroAttributesError ||
+                    pdfsignresult == GAPI.ScapNotValidAttributesError){
+                console.log("ScapAttributesExpiredError")
+                signerror_dialog.propertySignFailDialogText.text =
+                        qsTranslate("PageServicesSign","STR_SCAP_NOT_VALID_ATTRIBUTES")
+            } else {
+                console.log("ScapGenericError")
+                gapi.startPingSCAP()
+            }
+            signerror_dialog.visible = true
+            propertyBusyIndicator.running = false
+            propertyOutputSignedFile = ""
+        }
+        onSignalSCAPPingSuccess: {
             signerror_dialog.propertySignFailDialogText.text =
                     qsTranslate("PageServicesSign","STR_SIGN_SCAP_SERVICE_FAIL")
+            signerror_dialog.visible = true
+            propertyBusyIndicator.running = false
+            propertyOutputSignedFile = ""
+        }
+        onSignalSCAPPingFail: {
+            console.log("Sign advanced - Signal SCAP ping fail")
+            signerror_dialog.propertySignFailDialogText.text =
+                    qsTranslate("PageServicesSign","STR_SCAP_PING_FAIL_FIRST")
+                    + "\n\n"
+                    + qsTranslate("PageServicesSign","STR_SCAP_PING_FAIL_SECOND")
             signerror_dialog.visible = true
             propertyBusyIndicator.running = false
             propertyOutputSignedFile = ""

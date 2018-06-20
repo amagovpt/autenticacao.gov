@@ -17,6 +17,7 @@
 //#include "ASService/ASServiceH.h"   
 //#include "PDFSignature/envStub.h"
 
+#include "ScapSettings.h"
 
 using namespace eIDMW;
 
@@ -1649,7 +1650,119 @@ void GAPI::startGettingCompanyAttributes() {
 }
 
 void GAPI::startGettingEntityAttributes(QList<int> entities_index) {
-    QtConcurrent::run(this, &GAPI::getSCAPEntityAttributes, entities_index);       
+    QtConcurrent::run(this, &GAPI::getSCAPEntityAttributes, entities_index);
+}
+
+void GAPI::startPingSCAP() {
+
+    // schedule the request
+    httpRequestAborted = httpRequestSuccess = false;
+
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) {
+        return;
+    }
+
+    const char * as_endpoint = "/CCC-REST/rest/scap/pingSCAP";
+
+    // Get Endpoint from settings
+    ScapSettings settings;
+    std::string port = settings.getScapServerPort().toStdString();
+    std::string sup_endpoint = std::string("https://")
+            + settings.getScapServerHost().toStdString() + ":" + port + as_endpoint;
+
+    url = sup_endpoint.c_str();
+
+    eIDMW::PTEID_Config config_pacfile(eIDMW::PTEID_PARAM_PROXY_PACFILE);
+    const char * pacfile_url = config_pacfile.getString();
+
+    if (pacfile_url != NULL && strlen(pacfile_url) > 0)
+    {
+        m_pac_url = QString(pacfile_url);
+    }
+
+    eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_HOST);
+    eIDMW::PTEID_Config config_port(eIDMW::PTEID_PARAM_PROXY_PORT);
+    eIDMW::PTEID_Config config_username(eIDMW::PTEID_PARAM_PROXY_USERNAME);
+    eIDMW::PTEID_Config config_pwd(eIDMW::PTEID_PARAM_PROXY_PWD);
+
+    std::string proxy_host = config.getString();
+    std::string proxy_username = config_username.getString();
+    std::string proxy_pwd = config_pwd.getString();
+    long proxy_port = config_port.getLong();
+
+    //10 second timeout
+    int network_timeout = 10000;
+
+    if (!proxy_host.empty() && proxy_port != 0)
+    {
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "PingSCAP: using manual proxy config");
+        qDebug() << "C++: PingSCAP: using manual proxy config";
+        proxy.setType(QNetworkProxy::HttpProxy);
+        proxy.setHostName(QString::fromStdString(proxy_host));
+        proxy.setPort(proxy_port);
+
+        if (!proxy_username.empty())
+        {
+            proxy.setUser(QString::fromStdString(proxy_username));
+            proxy.setPassword(QString::fromStdString(proxy_pwd));
+        }
+
+        QNetworkProxy::setApplicationProxy(proxy);
+    }
+    else if (!m_pac_url.isEmpty())
+    {
+        std::string proxy_port_str;
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PingSCAP: using system proxy config");
+        qDebug() << "C++: PingSCAP: using system proxy config";
+        PTEID_GetProxyFromPac(m_pac_url.toUtf8().constData(),
+                              url.toString().toUtf8().constData(), &proxy_host, &proxy_port_str);
+        proxy.setType(QNetworkProxy::HttpProxy);
+        proxy.setHostName(QString::fromStdString(proxy_host));
+        proxy.setPort(atol(proxy_port_str.c_str()));
+        QNetworkProxy::setApplicationProxy(proxy);
+    }
+
+    reply = qnam.get(QNetworkRequest(url));
+
+    QTimer::singleShot(network_timeout, this, SLOT(cancelDownload()));
+    connect(reply, SIGNAL(finished()),
+            this, SLOT(httpFinished()));
+}
+
+void GAPI::cancelDownload()
+{
+    if(!httpRequestSuccess && !httpRequestAborted){
+        qDebug() << "C++: signalSCAPPingFail";
+        httpRequestAborted = true;
+        httpRequestSuccess = false;
+        emit signalSCAPPingFail();
+        reply->deleteLater();
+    }
+}
+
+void GAPI::httpFinished()
+{
+    qDebug() << "C++: httpFinished";
+    if(!httpRequestSuccess && !httpRequestAborted){
+
+        if (reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ) != 200) {
+            qDebug() << "C++: reply error";
+            httpRequestAborted = true;
+            httpRequestSuccess = false;
+            emit signalSCAPPingFail();
+            QString strLog = QString("PingSCAP:: Http request failed to: ");
+            strLog += reply->url().toString();
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", strLog.toStdString().c_str() );
+        } else {
+            qDebug() << "C++: signalSCAPPingSuccess";
+            httpRequestAborted = false;
+            httpRequestSuccess = true;
+            emit signalSCAPPingSuccess();
+        }
+        reply->deleteLater();
+    }
 }
 
 void GAPI::startReadingPersoNotes() {
@@ -1673,17 +1786,8 @@ void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, int l
     SCAPSignParams signParams = {inputPDF, outputPDF, page, location_x, location_y,
                             ltv, attribute_index};
 
-
     QtConcurrent::run(this, &GAPI::doSignSCAP, signParams);
-    
 }
-
-
-/*
-void GAPI::doSignSCAPWithCMD() {
-
-}
-*/
 
 void GAPI::doSignSCAP(SCAPSignParams params) {
 
@@ -1694,17 +1798,15 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
 
     scapServices.executeSCAPSignature(this, params.inputPDF, params.outputPDF, params.page,
                 params.location_x, params.location_y, params.ltv, attrs);
-
 }
 
-
 void GAPI::getSCAPEntities() {
-    
+
     QList<QString> attributeSuppliers;
     std::vector<ns3__AttributeSupplierType *> entities = scapServices.getAttributeSuppliers();
 
     if(entities.size() == 0){
-        emit signalSCAPServiceFail();
+        emit signalSCAPDifinitionsServiceFail(ScapGenericError, false);
         return;
     }
 
@@ -1773,10 +1875,9 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
         supplier_ids.push_back(supplier_id);
     }
 
-    std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(*card, supplier_ids);
+    std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, *card, supplier_ids);
 
     if (attributes.size() == 0) {
-        emit signalEntityAttributesLoadedError();
         return;
     }
 
@@ -1814,11 +1915,10 @@ void GAPI::getSCAPCompanyAttributes() {
 
     std::vector<int> supplierIDs;
 
-    std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(*card, supplierIDs);
+    std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, *card, supplierIDs);
 
     if (attributes.size() == 0)
     {
-        emit signalCompanyAttributesLoadedError();
         return;
     }
 
