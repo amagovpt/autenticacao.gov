@@ -87,6 +87,9 @@ Loader{
                     width: parent.width
                     anchors.bottom: parent.bottom
                     wrapMode: Text.Wrap
+                    onLinkActivated: {
+                        Qt.openUrlExternally(link)
+                    }
                 }
             }
             Button {
