@@ -300,8 +300,6 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
 
         if (resp_size > 0) {
             ns2__AttributesType * parentAttribute = attr_response.AttributeResponseValues.at(0);
-            std::vector<ns5__SignatureType *> childs = parentAttribute->SignedAttributes->ns3__SignatureAttribute;
-
             std::string resultCode = parentAttribute->ResponseResult->ResultCode;
 
             int resultCodeValue = atoi(resultCode.c_str());
@@ -325,7 +323,8 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
                 return result;
             }
 
-            if (childs.size() == 0) {
+            std::vector<ns5__SignatureType *> childs = parentAttribute->SignedAttributes->ns3__SignatureAttribute;
+            if (parentAttribute->SignedAttributes == NULL || childs.size() == 0) {
                 qDebug() << "getAttributes(): Empty attributes response!";
                 parent->signalCompanyAttributesLoadedError();
                 return result;
