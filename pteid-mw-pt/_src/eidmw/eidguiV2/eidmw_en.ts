@@ -992,21 +992,22 @@
 <context>
     <name>PageDifinitionsSCAP</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="92"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="170"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="183"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="193"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="86"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="164"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="177"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="190"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="200"/>
         <source>STR_SCAP_ERROR</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="98"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="92"/>
         <source>STR_SCAP_COMPANY_ATTRIBUTES_EXPIRED</source>
         <oldsource>STR_SCAP_ZERO_ATTRIBUTES</oldsource>
         <translation>Your business attributes are expired. To associate new attributes, please go to</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="105"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="99"/>
         <source>STR_SCAP_COMPANY_ZERO_ATTRIBUTES</source>
         <translation>Do not have business attributes. To associate new attributes, please go to</translation>
     </message>
@@ -1015,48 +1016,58 @@
         <translation type="vanished">Error accessing the attribute load service. Please try again.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="141"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="135"/>
         <source>STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_FIRST</source>
         <translation>Your professional attributes in the entity</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="143"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="137"/>
         <source>STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_SECOND</source>
         <translation>are expired.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="145"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="139"/>
         <source>STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_THIRD</source>
         <translation>For more information, please contact the entity</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="150"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="144"/>
         <source>STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST</source>
         <translation>Has no professional attributes in the entity</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="152"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="146"/>
         <source>STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND</source>
         <translation>For more information, please contact the entity</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="172"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="166"/>
+        <source>STR_SCAP_SERVICE_FAIL_FIRST</source>
+        <translation>Error accessing the attribute load service.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="168"/>
+        <source>STR_SCAP_SERVICE_FAIL_SECOND</source>
+        <translation>Please try again.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="179"/>
         <source>STR_SCAP_PING_FAIL_FIRST</source>
         <oldsource>STR_SCAP_PING_FAIL</oldsource>
         <translation>Error accessing the attribute load service.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="174"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="181"/>
         <source>STR_SCAP_PING_FAIL_SECOND</source>
         <translation>Please check your Internet connection and try again.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="185"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="192"/>
         <source>STR_SCAP_LOAD_ENTITIES_ERROR</source>
         <translation>SCAP entities load error</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="195"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="202"/>
         <source>STR_SCAP_LOAD_COMPANY_ERROR</source>
         <translation>SCAP company loaded error</translation>
     </message>
@@ -1692,10 +1703,10 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="129"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="136"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="143"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="29"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="35"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="41"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="47"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="53"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="53"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="59"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="65"/>
@@ -1730,7 +1741,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="28"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="38"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="124"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="37"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="31"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="55"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="23"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="23"/>
@@ -1751,7 +1762,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="34"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="44"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="131"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="43"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="37"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="61"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="29"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="29"/>
@@ -1766,7 +1777,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="40"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="50"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="138"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="49"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="43"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="67"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="35"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="35"/>
@@ -1781,7 +1792,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="46"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="56"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="145"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="55"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="49"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="73"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="41"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="41"/>
@@ -1806,9 +1817,9 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="156"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="162"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="170"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="60"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="66"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="72"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="80"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="74"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="92"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="105"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="113"/>
@@ -1826,7 +1837,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="65"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="77"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="158"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="68"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="62"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="94"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="207"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="100"/>
@@ -1838,7 +1849,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="72"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="92"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="164"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="74"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="68"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="107"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="217"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="110"/>
@@ -1851,7 +1862,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="80"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="100"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="172"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="82"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="76"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="115"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="226"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="119"/>

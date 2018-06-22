@@ -22,12 +22,6 @@ PageDefinitionsSCAPForm {
             gapi.startGettingEntities()
             propertyBusyIndicator.running = false
         }
-        onSignalSCAPPingSuccess: {
-            console.log("Definitions SCAP Signature -->Signal SCAP ping success")
-            propertyBusyIndicator.running = true
-            propertyBusyIndicatorAttributes.running = true
-            propertyBusyIndicator.running = false
-        }
         onSignalCardAccessError: {
             console.log("Definitions SCAP Signature --> onSignalCardAccessError")
             if (error_code == GAPI.NoReaderFound) {
@@ -162,6 +156,19 @@ PageDefinitionsSCAPForm {
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
             // Load attributes from cache (Entities, isShortDescription)
             gapi.startLoadingAttributesFromCache(0, 0)
+            propertyBusyIndicator.running = false
+        }
+        onSignalSCAPPingSuccess: {
+            console.log("Definitions SCAP Signature -->Signal SCAP ping success")
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    qsTranslate("PageDifinitionsSCAP","STR_SCAP_ERROR")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    qsTranslate("PageDifinitionsSCAP","STR_SCAP_SERVICE_FAIL_FIRST")
+                    + "\n\n"
+                    + qsTranslate("PageDifinitionsSCAP","STR_SCAP_SERVICE_FAIL_SECOND")
+             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            // Load attributes from cache (Entities, isShortDescription)
+            propertyBusyIndicatorAttributes.running = false
             propertyBusyIndicator.running = false
         }
         onSignalSCAPPingFail: {
