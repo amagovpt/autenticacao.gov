@@ -175,7 +175,7 @@ bool CMDServices::init(int recv_timeout, int send_timeout,
     cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR))+"/cacerts.pem";
     //TODO
 #elif __APPLE__
-    cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR))+"/cacerts.pem";
+    cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR))+"/cacerts.pem";
 #endif
 
     int ret = soap_ssl_client_context(sp, SOAP_SSL_DEFAULT,
