@@ -26,12 +26,13 @@ using namespace eIDMW;
 class dlgWndAskPIN : public Win32Dialog
 {
 	void GetPinResult();
-	HBITMAP ImagePIN;
-	HBITMAP ImagePIN_Mask;
+	//HBITMAP ImagePIN;
+	//HBITMAP ImagePIN_Mask;
 
-	HBITMAP ImageKP_BTN[12];
-	HBITMAP ImageKP_BTN_Mask;
-	HFONT TextFont;
+	HWND OK_Btn;
+	HWND Cancel_Btn;
+
+	HBRUSH hbrBkgnd;
 	
 	unsigned int m_ulPinMinLen;
 	unsigned int m_ulPinMaxLen;

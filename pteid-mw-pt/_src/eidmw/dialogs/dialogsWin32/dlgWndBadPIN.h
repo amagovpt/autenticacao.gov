@@ -25,11 +25,14 @@ using namespace eIDMW;
 
 class dlgWndBadPIN : public Win32Dialog
 {
-	HBITMAP ImagePIN;
-	HBITMAP ImagePIN_Mask;
+	//HBITMAP ImagePIN;
+	//HBITMAP ImagePIN_Mask;
 	wchar_t * szHeader;
 	const wchar_t * szBody;
-	HFONT TextFont;
+	HWND Retry_Btn;
+	HWND Cancel_Btn;
+	HWND OK_Btn;
+	HBRUSH hbrBkgnd;
 
 public:
 	dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries, HWND Parent = NULL );

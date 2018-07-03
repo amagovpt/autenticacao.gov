@@ -37,6 +37,8 @@ std::wstring langbad = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LA
 dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries, HWND Parent )
 :Win32Dialog(L"WndBadPIN")
 {
+	hbrBkgnd = NULL;
+
 	std::wstring tmpTitle = L"";
 
 	if(wcscmp(L"nl",langbad.c_str())==0)
@@ -72,7 +74,7 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 	if( RemainingTries == 0 )
 	{
 		if ( wcsstr(const_cast<wchar_t*>( PINName.c_str()), (L"PIN da Autentica")) != 0)
-			tmpTitle += (L"Pin da Autenticação");
+			tmpTitle += L"Pin da Autenticação";
 		else
 			tmpTitle += PINName;
 		tmpStr += L" ";
@@ -84,44 +86,44 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 		szBody = GETSTRING_DLG(TryAgainOrCancel);
 	}
 
-	if (CreateWnd(tmpTitle.c_str(), 280, 230, IDI_APPICON, Parent))
+	int window_height = 280;
+	int window_width = 420;
+
+	if (CreateWnd(tmpTitle.c_str(), window_width, window_height, IDI_APPICON, Parent))
 	{
 		RECT clientRect;
 		GetClientRect( m_hWnd, &clientRect );
 
-		TextFont = GetSystemFont();
-
 		if( RemainingTries == 0 )
 		{
-			HWND hOkButton = CreateWindow(
-				L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_DEFPUSHBUTTON, 
-				clientRect.right - 160, clientRect.bottom - 36, 72, 24, 
+			OK_Btn = CreateWindow(
+				L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
+				clientRect.right - 100, clientRect.bottom - 65, 72, 24, 
 				m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL );
-			SendMessage( hOkButton, WM_SETFONT, (WPARAM)TextFont, 0 );
+			SendMessage(OK_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
 		}
 		else
 		{
-			HWND hRetryButton = CreateWindow(
-				L"BUTTON", GETSTRING_DLG(Retry), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_DEFPUSHBUTTON, 
-				clientRect.right - 160, clientRect.bottom - 36, 72, 24, 
+			Retry_Btn = CreateWindow(
+				L"BUTTON", GETSTRING_DLG(Retry), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
+				clientRect.right - 180, clientRect.bottom - 65, 72, 24, 
 				m_hWnd, (HMENU)IDB_RETRY, m_hInstance, NULL );
-			SendMessage( hRetryButton, WM_SETFONT, (WPARAM)TextFont, 0 );
+			SendMessage(Retry_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
 
-			HWND hCancelButton = CreateWindow(
-				L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT, 
-				clientRect.right - 80, clientRect.bottom - 36, 72, 24, 
+			Cancel_Btn = CreateWindow(
+				L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
+				clientRect.right - 100, clientRect.bottom - 65, 72, 24, 
 				m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL );
-			SendMessage( hCancelButton, WM_SETFONT, (WPARAM)TextFont, 0 );
+			SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
 		}
 
+		//Message is vertically centered 
 		HWND hStaticText = CreateWindow( 
 			L"STATIC", szBody, WS_CHILD | WS_VISIBLE | SS_CENTER, 
-			0, clientRect.bottom - 76, clientRect.right, 22, 
+			0, clientRect.bottom / 2, clientRect.right, 22, 
 			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
 		SendMessage( hStaticText, WM_SETFONT, (WPARAM)TextFont, 0 );
 
-		ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_PIN) );
-		CreateBitapMask( ImagePIN, ImagePIN_Mask );
 	}
 }
 
@@ -174,35 +176,48 @@ LRESULT dlgWndBadPIN::ProcecEvent
 				return 0;
 			break;
 		}
+		//Set the TextColor for the subwindows hTextEdit and hStaticText
+		case WM_CTLCOLORSTATIC:
+		{
+			COLORREF grey = RGB(0xD6, 0xD7, 0xD7);
+			COLORREF white = RGB(0xFF, 0xFF, 0xFF);
+			HDC hdcStatic = (HDC)wParam;
+			SetTextColor(hdcStatic, RGB(0x3C, 0x5D, 0xBC));
+
+			//MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndBadPIN::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
+			if ((HWND)lParam == Retry_Btn || (HWND)lParam == OK_Btn || (HWND)lParam == Cancel_Btn)
+			{
+				SetBkColor(hdcStatic, grey);
+				return (INT_PTR)CreateSolidBrush(grey);
+			}
+
+			SetBkColor(hdcStatic, white);
+
+			if (hbrBkgnd == NULL)
+			{
+				hbrBkgnd = CreateSolidBrush(white);
+			}
+
+			return (INT_PTR)hbrBkgnd;
+		}
 
 		case WM_PAINT:
 		{
-			m_hDC = BeginPaint( m_hWnd, &ps );
+			m_hDC = BeginPaint(m_hWnd, &ps);
+			SetTextColor(m_hDC, RGB(0x3C, 0x5D, 0xBC));
 
-				HDC hdcMem;
+			GetClientRect(m_hWnd, &rect);
+			rect.left += 20;
+			rect.top += 32;
+			rect.right -= 20;
+			rect.bottom -= 60;
+			SetBkColor(m_hDC, RGB(255, 255, 255));
+			SelectObject(m_hDC, TextFontHeader);
+			DrawText(m_hDC, szHeader, -1, &rect, DT_WORDBREAK);
 
-				hdcMem = CreateCompatibleDC( m_hDC );
-				SelectObject( hdcMem , ImagePIN );
+			EndPaint(m_hWnd, &ps);
 
-				MaskBlt( m_hDC, 4, 4, IMG_SIZE, IMG_SIZE,
-					hdcMem, 0, 0,
-					ImagePIN_Mask, 0, 0,
-					MAKEROP4( SRCCOPY, 0x00AA0029 ) );
-
-				DeleteDC(hdcMem);
-
-				GetClientRect( m_hWnd, &rect );
-				rect.left += 136;
-				rect.top += 32;
-				rect.right -= 8;
-				rect.bottom = 136 - 8;
-				SetBkColor( m_hDC, GetSysColor( COLOR_3DFACE ) );
-				SelectObject( m_hDC, TextFont );
-				DrawText( m_hDC, szHeader, -1, &rect, DT_WORDBREAK );
-
-			EndPaint( m_hWnd, &ps );
-
-			SetForegroundWindow( m_hWnd );
+			SetForegroundWindow(m_hWnd);
 
 			return 0;
 		}

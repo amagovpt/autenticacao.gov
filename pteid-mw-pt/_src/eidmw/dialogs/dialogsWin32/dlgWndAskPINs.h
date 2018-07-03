@@ -27,13 +27,12 @@ class dlgWndAskPINs : public Win32Dialog
 {
 	void GetPinResult();
 	bool CheckPin2Result();
-	void SetHeaderText(const wchar_t * txt);
-	HBITMAP ImagePIN;
-	HBITMAP ImagePIN_Mask;
+	//void SetHeaderText(const wchar_t * txt);
+	HWND OK_Btn;
+	HWND Cancel_Btn;
+	HBRUSH hbrBkgnd;
 
-	HFONT TextFont;
-	HBITMAP ImageKP_BTN[12];
-	HBITMAP ImageKP_BTN_Mask;
+
 	bool DrawError;
 	bool m_dontAskPIN1;
 	unsigned int m_ulPinMaxLen;

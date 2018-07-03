@@ -55,15 +55,19 @@ protected:
 	bool CreateWnd( const wchar_t* title, int width, int height, int Icon = 0 , HWND Parent = NULL );
 	void KillWindow( );
 	virtual void Destroy();
+	HFONT loadFontFromResource(int font_pointsize, bool isBold);
 
 protected:
 	HDC			m_hDC;					// Private GDI Device Context
 	HWND		m_hWnd;					// Holds Our Window Handle
 	HINSTANCE	m_hInstance;			// Instance to our Module(DLL)
 	bool		m_ModalHold;			// Wheither it's modal or not
+	HFONT TextFontHeader;
+	HFONT TextFont;
 
 private:
 	wchar_t*	m_appName;				// Name of the Window Class
+	HANDLE      m_fonthandle;
 
 };
 

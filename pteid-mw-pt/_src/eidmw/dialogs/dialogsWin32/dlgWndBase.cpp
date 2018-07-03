@@ -19,6 +19,7 @@
 **************************************************************************** */
 
 #include "stdafx.h"
+#include "dlgWndBase.h"
 #include "resource.h"
 #include "../langUtil.h"
 #include "Log.h"
@@ -28,6 +29,58 @@ Win32Dialog *Win32Dialog::Active_lpWnd = NULL;
 HWND Win32Dialog::Active_hWnd = NULL;
 extern HMODULE g_hDLLInstance;// = (HMODULE)NULL;
 
+HFONT Win32Dialog::loadFontFromResource(int font_pointsize, bool isBold) {
+	/*
+	const char * szFontFile = "Lato-Regular.ttf";
+	int nResults = AddFontResourceA(szFontFile); 		// font file name
+	*/
+
+	if (m_fonthandle == NULL) {
+	
+	HRSRC res = FindResource(m_hInstance,
+		MAKEINTRESOURCE(IDR_MYFONT), L"BINARY");
+	if (res)
+	{
+		HGLOBAL mem = LoadResource(m_hInstance, res);
+		void *data = LockResource(mem);
+		size_t len = SizeofResource(m_hInstance, res);
+
+		DWORD nFonts;
+		m_fonthandle = AddFontMemResourceEx(
+			data,       	// font resource
+			len,       	// number of bytes in font resource 
+			NULL,          	// Reserved. Must be 0.
+			&nFonts      	// number of fonts installed
+			);
+
+		if (m_fonthandle == 0)
+		{
+			MWLOG(LEV_ERROR, MOD_DLG, L"  --> Win32Dialog::loadFontFromResource failed!");
+		}
+	}
+	}
+
+	HFONT TextFont;
+
+	LOGFONT lf;
+	memset(&lf, 0, sizeof(lf));
+	HDC screen = GetDC(0);
+
+	lf.lfHeight = -MulDiv(font_pointsize, GetDeviceCaps(screen, LOGPIXELSY), 72);
+	lf.lfWeight = isBold ? FW_BOLD : FW_NORMAL;
+	lf.lfOutPrecision = OUT_TT_ONLY_PRECIS;
+
+	wcscpy_s(lf.lfFaceName, L"Lato Regular");
+
+	TextFont = CreateFont(lf.lfHeight, lf.lfWidth,
+		lf.lfEscapement, lf.lfOrientation, lf.lfWeight,
+		lf.lfItalic, lf.lfUnderline, lf.lfStrikeOut, lf.lfCharSet,
+		lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality,
+		lf.lfPitchAndFamily, lf.lfFaceName);
+
+	return TextFont;
+}
+
 Win32Dialog::Win32Dialog(const wchar_t *appName)
 {
 	m_ModalHold = true;
@@ -36,7 +89,11 @@ Win32Dialog::Win32Dialog(const wchar_t *appName)
 	m_hInstance = g_hDLLInstance;	// Grab An Instance From our DLL module to become able to Create our windows for/from
 	//m_appName = "DialogBase";		// Application Core-Name
 	dlgResult = eIDMW::DLG_CANCEL;	// Dialog Result
+	m_fonthandle = NULL;
 	m_appName=_wcsdup(appName);
+
+	TextFontHeader = loadFontFromResource(16*.75, true);
+	TextFont = loadFontFromResource(12 * .75, false);
 }
 
 Win32Dialog::~Win32Dialog()
@@ -79,14 +136,14 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 	else
 		hIco = LoadIcon( m_hInstance, MAKEINTRESOURCE(Icon) );
 
-	wc.style			= CS_HREDRAW | CS_VREDRAW; // | CS_OWNDC;	// Redraw On Size, And Own DC For Window.
+	wc.style			= CS_HREDRAW | CS_VREDRAW | CS_DROPSHADOW; // 	            // Redraw On Size, And Drop Shadow
 	wc.lpfnWndProc		= (WNDPROC)WndProc;							// WndProc Handles Messages
 	wc.cbClsExtra		= 0;										// No Extra Window Data
 	wc.cbWndExtra		= 0; //DLGWINDOWEXTRA;							// No Extra Window Data
 	wc.hInstance		= m_hInstance;								// Set The Instance
 	wc.hIcon			= hIco;			// Load The Default Icon
 	wc.hCursor			= LoadCursor( NULL, IDC_ARROW );			// Load The Arrow Pointer
-	wc.hbrBackground	= (HBRUSH)GetSysColorBrush( COLOR_3DFACE );	// What Color we want in our background
+	wc.hbrBackground =  CreateSolidBrush(RGB(255, 255, 255));        //CreateSolidBrush(RGB(255, 255, 255));        //(HBRUSH)GetSysColorBrush( COLOR_3DFACE );	// What Color we want in our background
 	wc.lpszMenuName		= NULL;										// We Don't Want A Menu
 	wc.lpszClassName	= m_appName;								// Set The Class Name
 
@@ -97,7 +154,9 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 		return false;											// Return FALSE
 	}
 
-	dwStyle = WS_CAPTION | WS_VISIBLE |  WS_SYSMENU | WS_OVERLAPPED;
+	//dwStyle = WS_CAPTION | WS_VISIBLE |  WS_SYSMENU | WS_OVERLAPPED;
+	dwStyle = WS_POPUP | WS_BORDER;
+
 	dwExStyle = WS_EX_LEFT | WS_EX_LTRREADING | WS_EX_WINDOWEDGE | WS_EX_TOPMOST;
 	if( m_ModalHold )
 	{
@@ -108,7 +167,30 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 	AdjustWindowRectEx( &WindowRect, dwStyle, FALSE, dwExStyle );	// Adjust Window To True Requested Size
 
 	Active_lpWnd = this;
+
 	// Create The Window
+	if (!(m_hWnd = CreateWindow(m_appName, title, dwStyle,
+		DeskRect.right / 2 - (WindowRect.right - WindowRect.left) / 2,
+		DeskRect.bottom / 2 - (WindowRect.bottom - WindowRect.top) / 2,
+		WindowRect.right - WindowRect.left,
+		WindowRect.bottom - WindowRect.top,
+		  Parent,
+		  NULL,
+		  m_hInstance,
+		  NULL)))
+	{
+		unsigned long err = GetLastError();
+		KillWindow();								// Reset The Display
+		MWLOG(LEV_WARN, MOD_DLG, L"  --> Win32Dialog::CreateWnd - Window Creation Error - Error=%ld", err);
+		return false;
+	}
+
+	 SetWindowLong(m_hWnd, GWL_STYLE, 0);  //remove all window styles, check MSDN for details
+
+	 //ShowWindow(m_hWnd, SW_SHOW);          //display window
+
+	// Create The Window
+	 /*
 	if( !( m_hWnd = Active_hWnd = CreateWindowEx(	dwExStyle,			// Extended Style For The Window
 								m_appName,							// Class Name
 								title,								// Window Title
@@ -129,6 +211,8 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 		return false;								// Return FALSE
 	}
 	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> Win32Dialog::CreateWnd - CreateWindowEx (m_hWnd=%X)",m_hWnd);
+
+	*/
 
 	WndMap.insert( TD_WNDPAIR( m_hWnd, this ) );
 

@@ -56,10 +56,16 @@ END
 // Bitmap
 //
 
-IDB_BITMAP1             BITMAP                  "Images\\bg_AuthenticationPin.bmp"
-IDB_BITMAP2             BITMAP                  "Images\\bg_SignaturePin.bmp"
+//IDB_BITMAP1             BITMAP                  "Images\\bg_AuthenticationPin.bmp"
+//IDB_BITMAP2             BITMAP                  "Images\\bg_SignaturePin.bmp"
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// BINARY
+//
+IDR_MYFONT              BINARY                  "..\\..\\eidguiV2\\fonts\\lato\\Lato-Regular.ttf"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -115,12 +121,12 @@ END
 // Bitmap
 //
 
-IDB_PINSIGN             BITMAP                  "Images\\ICO_CARD_SIGN_128x128.bmp"
-IDB_PIN                 BITMAP                  "Images\\ICO_CARD_PIN_128x128.bmp"
-IDB_ICO_INFO            BITMAP                  "Images\\ICO_CARD_INFO_64x64.bmp"
-IDB_ICO_NOK             BITMAP                  "Images\\ICO_CARD_NOK_64x64.bmp"
-IDB_ICO_QUESTION        BITMAP                  "Images\\ICO_CARD_QUESTION_64x64.bmp"
-IDB_ICO_WARNING         BITMAP                  "Images\\ICO_CARD_WARNING_64x64.bmp"
+//IDB_PINSIGN             BITMAP                  "Images\\ICO_CARD_SIGN_128x128.bmp"
+//IDB_PIN                 BITMAP                  "Images\\ICO_CARD_PIN_128x128.bmp"
+//IDB_ICO_INFO            BITMAP                  "Images\\ICO_CARD_INFO_64x64.bmp"
+//IDB_ICO_NOK             BITMAP                  "Images\\ICO_CARD_NOK_64x64.bmp"
+//IDB_ICO_QUESTION        BITMAP                  "Images\\ICO_CARD_QUESTION_64x64.bmp"
+//IDB_ICO_WARNING         BITMAP                  "Images\\ICO_CARD_WARNING_64x64.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -129,7 +135,7 @@ IDB_ICO_WARNING         BITMAP                  "Images\\ICO_CARD_WARNING_64x64.
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_APPICON              ICON                    "images\\eid.ico"
+//IDI_APPICON              ICON                    "images\\eid.ico"
 #endif    // English (U.K.) resources
 /////////////////////////////////////////////////////////////////////////////
 

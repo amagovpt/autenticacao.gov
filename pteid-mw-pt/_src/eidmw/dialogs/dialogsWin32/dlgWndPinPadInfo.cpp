@@ -27,7 +27,6 @@
 
 #define IDB_OK 1
 #define IDB_CANCEL 2
-#define IMG_SIZE 128
 
 dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusage, 
 		DlgPinOperation operation, const std::wstring & csReader, 
@@ -65,19 +64,22 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 	
 	if (CreateWnd(tmpTitle.c_str(), 420, 280, IDI_APPICON, Parent))
 	{
+		/*
 		if( PinPusage == DLG_PIN_SIGN )
 			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP2) );
 		else
 			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP1) );
 		CreateBitapMask( ImagePIN, ImagePIN_Mask );
+		*/
 
-		TextFont = GetSystemFont();
+		//TextFont = GetSystemFont();
 
 		SendMessage( Parent, WM_SETFONT, (WPARAM)TextFont, 0 );
 
 	}
 
 }
+
 
 dlgWndPinpadInfo::~dlgWndPinpadInfo()
 {
@@ -109,38 +111,24 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 		{
 			m_hDC = BeginPaint( m_hWnd, &ps );
 
-			HDC hdcMem;
-
-			hdcMem = CreateCompatibleDC( m_hDC );
-
-			HGDIOBJ oldObj = SelectObject( hdcMem , ImagePIN );
+			SetTextColor(m_hDC, RGB(0x3C, 0x5D, 0xBC));
 
 			GetClientRect( m_hWnd, &rect );
-			//Size of the background Image
-			MaskBlt( m_hDC, 4, 8,
-				410, 261,	hdcMem, 0, 0,
-				ImagePIN_Mask, 0, 0, MAKEROP4( SRCCOPY, 0x00AA0029 ) );
-		
-			
-			SelectObject( hdcMem, oldObj );
-			DeleteDC(hdcMem);
-
-			GetClientRect( m_hWnd, &rect );
-			rect.left += IMG_SIZE + 100;
+			rect.left += 20;
 			rect.top = 32;
 			rect.right -= 8;
 			rect.bottom = 136 - 8;
-			SetBkColor( m_hDC, GetSysColor( COLOR_3DFACE ) );
-			SelectObject( m_hDC, TextFont );
+			SetBkColor( m_hDC, RGB(255,255,255));
+			SelectObject( m_hDC, TextFontHeader );
 			DrawText( m_hDC, m_szHeader, -1, &rect, DT_WORDBREAK );
 
 			//Change top header dimensions
 			GetClientRect( m_hWnd, &rect );
-			rect.left += IMG_SIZE + 100;
+			rect.left += 20;
 			rect.top = 60;
 			rect.right -= 20;
 			rect.bottom = rect.bottom - 60;
-			SetBkColor( m_hDC, GetSysColor( COLOR_3DFACE ) );
+			SetBkColor(m_hDC, RGB(255, 255, 255));
 			SelectObject( m_hDC, TextFont );
 			DrawText( m_hDC, m_szMessage, -1, &rect, DT_WORDBREAK );
 
