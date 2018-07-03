@@ -14,7 +14,7 @@
    <string>dlgWndAskPINs</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/Resources/bg_AuthenticationPin_2.png);</string>
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
   </property>
   <widget class="QFrame" name="fraPIN_Keypad">
    <property name="geometry">
@@ -83,7 +83,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>30</x>
       <y>100</y>
       <width>161</width>
       <height>32</height>
@@ -111,9 +111,9 @@
    <widget class="QLineEdit" name="txtOldPIN">
     <property name="geometry">
      <rect>
-      <x>375</x>
+      <x>320</x>
       <y>100</y>
-      <width>71</width>
+      <width>75</width>
       <height>25</height>
      </rect>
     </property>
@@ -124,9 +124,9 @@
    <widget class="QLineEdit" name="txtNewPIN1">
     <property name="geometry">
      <rect>
-      <x>375</x>
+      <x>320</x>
       <y>130</y>
-      <width>71</width>
+      <width>75</width>
       <height>25</height>
      </rect>
     </property>
@@ -137,9 +137,9 @@
    <widget class="QLineEdit" name="txtNewPIN2">
     <property name="geometry">
      <rect>
-      <x>375</x>
+      <x>320</x>
       <y>160</y>
-      <width>71</width>
+      <width>75</width>
       <height>25</height>
      </rect>
     </property>
@@ -150,7 +150,7 @@
    <widget class="QLabel" name="lblNewPIN2">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>30</x>
       <y>160</y>
       <width>161</width>
       <height>32</height>
@@ -172,7 +172,7 @@
    <widget class="QPushButton" name="btnCancel">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>320</x>
       <y>200</y>
       <width>75</width>
       <height>25</height>
@@ -201,9 +201,9 @@
    <widget class="QLabel" name="lblHeader">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>30</x>
       <y>20</y>
-      <width>201</width>
+      <width>361</width>
       <height>71</height>
      </rect>
     </property>
@@ -233,7 +233,7 @@
    <widget class="QLabel" name="lblNewPIN1">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>30</x>
       <y>130</y>
       <width>161</width>
       <height>32</height>

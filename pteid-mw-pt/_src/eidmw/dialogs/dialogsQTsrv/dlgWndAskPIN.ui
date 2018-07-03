@@ -14,7 +14,7 @@
    <string>dlgWndAskPIN</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/Resources/bg_AuthenticationPin.png);</string>
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
   </property>
   <widget class="QFrame" name="fraPIN_Keypad">
    <property name="geometry">
@@ -217,10 +217,10 @@
   <widget class="QLabel" name="lblPINName">
    <property name="geometry">
     <rect>
-     <x>220</x>
-     <y>30</y>
-     <width>151</width>
-     <height>51</height>
+     <x>30</x>
+     <y>100</y>
+     <width>271</width>
+     <height>71</height>
     </rect>
    </property>
    <property name="layoutDirection">
@@ -236,10 +236,10 @@
   <widget class="QLineEdit" name="txtPIN">
    <property name="geometry">
     <rect>
-     <x>220</x>
-     <y>170</y>
-     <width>161</width>
-     <height>27</height>
+     <x>310</x>
+     <y>130</y>
+     <width>75</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="echoMode">
@@ -254,8 +254,8 @@
     <rect>
      <x>220</x>
      <y>200</y>
-     <width>71</width>
-     <height>27</height>
+     <width>75</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="text">
@@ -265,10 +265,10 @@
   <widget class="QLabel" name="lblHeader">
    <property name="geometry">
     <rect>
-     <x>220</x>
-     <y>70</y>
-     <width>171</width>
-     <height>90</height>
+     <x>30</x>
+     <y>20</y>
+     <width>371</width>
+     <height>71</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -283,6 +283,9 @@
    <property name="text">
     <string>Enter you PIN</string>
    </property>
+   <property name="textFormat">
+    <enum>Qt::PlainText</enum>
+   </property>
    <property name="wordWrap">
     <bool>true</bool>
    </property>
@@ -292,12 +295,18 @@
     <rect>
      <x>310</x>
      <y>200</y>
-     <width>71</width>
-     <height>27</height>
+     <width>75</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="text">
     <string>&amp;Cancel</string>
+   </property>
+   <property name="autoDefault">
+    <bool>true</bool>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QWidget" name="layoutWidget">
@@ -329,31 +338,6 @@
        <string/>
       </property>
      </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>263</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout">
-    <item>
-     <spacer>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>261</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
     </item>
    </layout>
   </widget>

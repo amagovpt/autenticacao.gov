@@ -27,20 +27,20 @@
 
 #define KP_BTN_SIZE 48
 
-dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString & Header, QString & PINName, bool dontAskPUK, QWidget *parent, Type_WndGeometry *pParentWndGeometry ) : dlgWndBase(parent)
+dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString & Header, QString & PINName, bool UseKeypad, QWidget *parent, Type_WndGeometry *pParentWndGeometry ) : dlgWndBase(parent)
 {
 	ui.setupUi(this);
 
 	setFixedSize(this->width(), this->height());
 
-    if(PINName.contains("Assinatura", Qt::CaseInsensitive))
+    /*if(PINName.contains("Assinatura", Qt::CaseInsensitive))
         this->setStyleSheet("background-image: url(:/Resources/bg_SignaturePin_2.png);");
     else if (!PINName.contains("PUK"))
         this->setStyleSheet("background-image: url(:/Resources/bg_AuthenticationPin_2.png);");
+        */
 
 	//this->resize( 350, 280 );
 	m_UK_InputField = 0;
-	m_DontAskPUK = dontAskPUK;
 	m_ulPin1MinLen = pinInfo1.ulMinLen;
 	m_ulPin2MinLen = pinInfo2.ulMinLen;
 	m_ulPin1MaxLen = pinInfo1.ulMaxLen;
@@ -76,7 +76,7 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 
     this->setWindowIcon( QIcon( ":/Resources/ICO_CARD_EID_PLAIN_16x16.png" ) );
 
-    if (PINName.contains("PUK") || dontAskPUK)
+    if (PINName.contains("PUK"))
     {
         Title+= QString::fromWCharArray(GETSTRING_DLG(Unblock));
     }
@@ -87,34 +87,36 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 
 
     this->setWindowTitle( Title );
+    this->setWindowTitle( Title );
+    this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint );
 
     ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
     ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
+    ui.lblHeader->setStyleSheet("QLabel { color : #3C5DBC; font-size:16pt; font-weight:600 }");
 
     ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
     ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
+    ui.lblPINName_2->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt; }");
 
     if (PINName.contains("PUK"))
         ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(Puk)) );
     else
         ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
-
-    if (m_DontAskPUK)
-    {
-    	ui.lblOldPINName->setVisible(false);
-    	ui.txtOldPIN->setVisible(false);
-    }
-
     ui.lblOldPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
+    ui.lblOldPINName->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt; }");
     ui.lblNewPIN1->setText( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
     ui.lblNewPIN1->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
+    ui.lblNewPIN1->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt; }");
     ui.lblNewPIN2->setText( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
     ui.lblNewPIN2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
+    ui.lblNewPIN2->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt; }");
 
     ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
     ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
+    ui.btnOk->setStyleSheet("QPushButton {background-color: #D6D7D7; color: #333333;}");
     ui.btnCancel->setText( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
     ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
+    ui.btnCancel->setStyleSheet("QPushButton {background-color: #D6D7D7; color: #333333;}");
 
     ui.fraPIN_Keypad->setVisible( false );
     connect( ui.btnOk, SIGNAL( clicked() ), this, SLOT( FinalCheck() ) );
@@ -230,17 +232,22 @@ void dlgWndAskPINs::NextField()
 
 void dlgWndAskPINs::FinalCheck()
 {
-	if( ui.txtNewPIN2->text() == ui.txtNewPIN1->text())
+	if( ui.txtNewPIN2->text() == ui.txtNewPIN1->text() && !ui.txtNewPIN1->text().isEmpty() )
 	{
-		if (!m_DontAskPUK || !ui.txtNewPIN1->text().isEmpty())
-			this->accept();
+		this->accept();
 	}
 	else
 	{
-		//TODO: no error message ??
-        // ui.lblError->setText( QString::fromWCharArray(GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical)) );
-        // ui.lblError->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical)) );
-        // ui.lblError->setVisible( true );
+        //ui.lblError->setText( QString::fromWCharArray(GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical)) );
+        //ui.lblError->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical)) );
+        //ui.lblError->setVisible( true );
+		if( m_UseKeypad )
+		{
+			m_UK_InputField = INPUTFIELD_NEW;
+			ui.txtPIN_Keypad->clear();
+			ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(RetryEnterYourNewPinCode)) );
+			ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(RetryEnterYourNewPinCode)) );
+		}
 	}
 }
 

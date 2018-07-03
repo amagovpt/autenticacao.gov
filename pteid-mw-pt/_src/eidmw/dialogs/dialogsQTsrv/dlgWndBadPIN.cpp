@@ -29,7 +29,7 @@ dlgWndBadPIN::dlgWndBadPIN( QString & PINName, unsigned long RemainingTries, QWi
 {
 	ui.setupUi(this);
 
-	setFixedSize(411, 183);
+	setFixedSize(450, 183);
 
 	QString Title="";
 	//if( DApplic == DLG_APP_BELPIC )
@@ -47,26 +47,32 @@ dlgWndBadPIN::dlgWndBadPIN( QString & PINName, unsigned long RemainingTries, QWi
     Title+=" ";
     Title+=PINName;
 
-	this->setWindowTitle(Title);
+    this->setWindowTitle(Title);
+    this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint );
 
 	ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
 	ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
+    ui.btnOk->setStyleSheet("QPushButton {background-color: #D6D7D7; color: #333333;}");
 	ui.btnCancel->setText( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
 	ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
+    ui.btnCancel->setStyleSheet("QPushButton {background-color: #D6D7D7; color: #333333;}");
 	ui.btnRetry->setText( QString::fromWCharArray(GETSTRING_DLG(Retry)) );
 	ui.btnRetry->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Retry)) );
-	ui.lblIcon->setPixmap( QPixmap( ":/Resources/ICO_CARD_NOK_64x64.png" ) );
+    ui.btnRetry->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt;}");
+    //ui.lblIcon->setPixmap( QPixmap( ":/Resources/ICO_CARD_NOK_64x64.png" ) );
 
 	QString sHeader;
 	sHeader=QString::fromWCharArray(GETSTRING_DLG(Bad));
-	sHeader+=" "; 
+	sHeader+=" ";
 	sHeader+=PINName;
-	sHeader+=": "; 
+	sHeader+=": ";
 	sHeader+=QString().setNum( RemainingTries );
 	sHeader+=" ";
 	sHeader+=QString::fromWCharArray(GETSTRING_DLG(RemainingAttempts));
 	ui.lblHeader->setText( sHeader );
 	ui.lblHeader->setAccessibleName( sHeader );
+    ui.lblHeader->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt; }");
+
 
 	QString sCenter="";
 	if( RemainingTries == 0 )
@@ -85,6 +91,7 @@ dlgWndBadPIN::dlgWndBadPIN( QString & PINName, unsigned long RemainingTries, QWi
 
 	ui.lblCenter->setText(sCenter);
 	ui.lblCenter->setAccessibleName(sCenter);
+    ui.lblCenter->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt; }");
 
         Type_WndGeometry WndGeometry;
         if ( getWndCenterPos( pParentWndGeometry

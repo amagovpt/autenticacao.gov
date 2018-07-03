@@ -22,12 +22,15 @@
      <height>181</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);</string>
+   </property>
    <widget class="QLabel" name="lblHeader">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>30</x>
       <y>30</y>
-      <width>341</width>
+      <width>391</width>
       <height>41</height>
      </rect>
     </property>
@@ -35,25 +38,12 @@
      <string>3 Remaining tries</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lblIcon">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>131</width>
-      <height>101</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&lt;Icon&gt;</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="lblCenter">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>30</x>
       <y>90</y>
-      <width>331</width>
+      <width>391</width>
       <height>20</height>
      </rect>
     </property>
@@ -61,15 +51,15 @@
      <string>Try again or cancel?</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="btnCancel">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>300</x>
       <y>140</y>
-      <width>111</width>
+      <width>75</width>
       <height>27</height>
      </rect>
     </property>
@@ -80,9 +70,9 @@
    <widget class="QPushButton" name="btnRetry">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>200</x>
       <y>140</y>
-      <width>111</width>
+      <width>75</width>
       <height>27</height>
      </rect>
     </property>
@@ -93,9 +83,9 @@
    <widget class="QPushButton" name="btnOk">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>100</x>
       <y>140</y>
-      <width>111</width>
+      <width>75</width>
       <height>27</height>
      </rect>
     </property>

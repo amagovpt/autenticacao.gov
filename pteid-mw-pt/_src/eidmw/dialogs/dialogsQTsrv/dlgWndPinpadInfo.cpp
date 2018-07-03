@@ -31,10 +31,11 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 	ui.setupUi(this);
     setFixedSize(417, 259);
 
-    if(PINName.contains("Assinatura", Qt::CaseInsensitive))
+    /*if(PINName.contains("Assinatura", Qt::CaseInsensitive))
         this->setStyleSheet("background-image: url(:/Resources/bg_SignaturePin.png);");
     else
         this->setStyleSheet("background-image: url(:/Resources/bg_AuthenticationPin.png);");
+        */
 
 	QString Title="";
 
@@ -49,7 +50,8 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
     else
         Title+=QString::fromWCharArray(GETSTRING_DLG(PinpadInfo));
 
-	parent->setWindowTitle( Title );
+    parent->setWindowTitle( Title );
+    parent->setWindowFlags(Qt::Window | Qt::FramelessWindowHint );
 
     Type_WndGeometry WndGeometry;
     if ( getWndCenterPos( pParentWndGeometry
@@ -65,6 +67,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 
     ui.label_2->setText( tmpHeader );
     ui.label_2->setAccessibleName( tmpHeader );
+    ui.label_2->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt; }");
     ui.label->wordWrap();
 
     QString label;
@@ -79,6 +82,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 
     ui.label->setText(label);
     ui.label->setAccessibleName(label);
+    ui.label->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt; }");
 	m_ulHandle = ulHandle;
 }
 

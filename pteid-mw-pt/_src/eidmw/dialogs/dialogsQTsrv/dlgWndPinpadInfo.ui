@@ -35,15 +35,15 @@
    <string>dlgWndPinpadInfo</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/Resources/bg_AuthenticationPin.png);</string>
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
   </property>
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>411</width>
-     <height>251</height>
+     <x>-20</x>
+     <y>-10</y>
+     <width>441</width>
+     <height>271</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -52,9 +52,9 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>40</x>
       <y>110</y>
-      <width>171</width>
+      <width>361</width>
       <height>61</height>
      </rect>
     </property>
@@ -71,9 +71,9 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>40</x>
       <y>60</y>
-      <width>241</width>
+      <width>711</width>
       <height>41</height>
      </rect>
     </property>

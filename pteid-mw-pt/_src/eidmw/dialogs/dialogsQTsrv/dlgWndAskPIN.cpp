@@ -64,23 +64,36 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 	Title = QString::fromWCharArray(GETSTRING_DLG(VerifyingPinCode));
 	this->setWindowTitle(Title);
 	this->setAccessibleName(Title);
+    this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint );
 
 	ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
 	ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
+    ui.lblHeader->setStyleSheet("QLabel { color : #3C5DBC; font-size:16pt; font-weight:600 }");
+
 	ui.lblPINName->setText( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
 	ui.lblPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
+    ui.lblPINName->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt; }");
+
 	ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
 	ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
+    ui.lblPINName_2->setStyleSheet("QLabel { color : #3C5DBC; font-size:16pt; }");
+
 
 	ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
 	ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
+    ui.btnOk->setStyleSheet("QPushButton {background-color: #D6D7D7; color: #333333;}");
+
+
 	ui.btnCancel->setText( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
 	ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
+    ui.btnCancel->setStyleSheet("QPushButton {background-color: #D6D7D7; color: #333333;}");
 
-	if( PinPusage == DLG_PIN_SIGN )
+
+    /*if( PinPusage == DLG_PIN_SIGN )
 		this->setStyleSheet("background-image: url(:/Resources/bg_SignaturePin.png);");
 	else
 		this->setStyleSheet("background-image: url(:/Resources/bg_AuthenticationPin.png);");
+        */
 
 	m_ulPinMinLen = pinInfo.ulMinLen;
 	m_ulPinMaxLen = pinInfo.ulMaxLen;
