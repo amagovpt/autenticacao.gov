@@ -482,6 +482,11 @@ int consoleAskForPin(tPinOperation operation, const tPin &Pin,
     return 0;
 }
 
+bool detectWaylandRunning()
+{
+	return getenv("WAYLAND_DISPLAY") != NULL;
+}
+
 bool detectXorgRunning()
 {
 
@@ -513,7 +518,7 @@ void CPteidCard::showPinDialog(tPinOperation operation, const tPin & Pin,
 	DlgRet ret;
 
 #ifdef __linux__
-	if (!detectXorgRunning())
+	if (!detectXorgRunning() && !detectWaylandRunning())
 	{
 		char sPin1[PIN_MAX_LENGTH +1];
 		char sPin2[PIN_MAX_LENGTH +1];
