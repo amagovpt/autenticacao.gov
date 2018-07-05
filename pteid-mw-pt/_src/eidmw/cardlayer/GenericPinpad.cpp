@@ -34,7 +34,9 @@ namespace eIDMW
 GenericPinpad::GenericPinpad(CContext *poContext, SCARDHANDLE hCard,
 			const std::string & csReader): m_poContext(poContext), m_csReader(csReader), m_hCard(hCard)
 {
-	m_ulLangCode = 0x0813;
+	//USB LANGID for English (US): it should work for all readers
+	//TODO: we should query the reader for supported languages and then select PT_pt or PT_br
+	m_ulLangCode = 0x0409;
 	GetFeatureList();
 };
 // See par 4.1.11.3 bmFormatString description

@@ -49,7 +49,7 @@ public:
    //Warning: This ctor shouldn't be used, it's just a workaround for a convoluted Pinpad detection process
    GenericPinpad()
    {
-	   m_ulLangCode = 0x0813;
+	   m_ulLangCode = 0x0409;
    }
 
    GenericPinpad(CContext *poContext, SCARDHANDLE hCard,
