@@ -22,7 +22,7 @@ Item {
         }
         Text {
             id: text0
-            font.pixelSize: Constants.SIZE_TEXT_TITLE
+            font.pointSize: Constants.SIZE_TEXT_TITLE
             font.family: lato.name
             text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TITLE") + " " + mainWindow.title
             font.bold: true
@@ -38,7 +38,7 @@ Item {
             id: text1
             anchors.top: text0.bottom
             anchors.topMargin: Constants.SIZE_TEXT_BODY
-            font.pixelSize: Constants.SIZE_TEXT_BODY
+            font.pointSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
             text:  qsTranslate("PageHelpDocOnline","STR_HELP_DOC_SUB_TITLE")
             wrapMode: Text.Wrap
@@ -51,7 +51,7 @@ Item {
             id: text2
             anchors.top: text1.bottom
             anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
-            font.pixelSize: Constants.SIZE_TEXT_BODY
+            font.pointSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
             text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC") + ":"
             wrapMode: Text.Wrap
@@ -69,7 +69,7 @@ Item {
             Components.TextBullet{}
             Text {
                 id: text3
-                font.pixelSize: Constants.SIZE_TEXT_BODY
+                font.pointSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC_1")
                 wrapMode: Text.Wrap
@@ -90,7 +90,7 @@ Item {
             Text {
                 id: text4
 
-                font.pixelSize: Constants.SIZE_TEXT_BODY
+                font.pointSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC_2")
                 wrapMode: Text.Wrap
@@ -108,7 +108,7 @@ Item {
 
             Components.TextBullet{}
             Text {
-                font.pixelSize: Constants.SIZE_TEXT_BODY
+                font.pointSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC_3")
                 wrapMode: Text.Wrap
@@ -126,7 +126,7 @@ Item {
 
             Components.TextBullet{}
             Text {
-                font.pixelSize: Constants.SIZE_TEXT_BODY
+                font.pointSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC_4")
                 width: parent.width
@@ -145,7 +145,7 @@ Item {
             Text {
                 id: textLinks
                 text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_ONLINE") + ":"
-                font.pixelSize: Constants.SIZE_TEXT_BODY
+                font.pointSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_BODY
             }
@@ -161,7 +161,7 @@ Item {
             Text {
                 id: textLinkCC
                 textFormat: Text.RichText
-                font.pixelSize: Constants.SIZE_TEXT_BODY
+                font.pointSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 font.italic: true
                 text: "<a href=\"https://www.autenticacao.gov.pt/documents/10179/11465/Manual+de+Utiliza%C3%A7%C3%A3o+da+Aplica%C3%A7%C3%A3o+do+Cart%C3%A3o+de+Cidad%C3%A3o+v3/\">"
@@ -184,7 +184,7 @@ Item {
                 text: qsTranslate("PageHelpDocOnline","STR_HOME_REMINDER")
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.pointSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 enabled: true
             }

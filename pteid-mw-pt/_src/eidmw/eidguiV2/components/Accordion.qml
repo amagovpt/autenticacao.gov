@@ -57,7 +57,7 @@ Column {
                         margins: Constants.SIZE_TEXT_FIELD * 0.5
                     }
                     visible: parent.visible
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.pointSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     color: if(checkOptionSelected(modelData)){
                                Constants.COLOR_MAIN_BLUE

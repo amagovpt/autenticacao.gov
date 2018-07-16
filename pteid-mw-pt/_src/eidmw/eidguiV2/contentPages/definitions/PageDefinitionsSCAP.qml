@@ -312,7 +312,7 @@ PageDefinitionsSCAPForm {
                 height: 25
                 width: 50
                 font.family: lato.name
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.pointSize: Constants.SIZE_TEXT_FIELD
                 font.capitalization: Font.MixedCase
                 anchors.top: parent.top
                 onCheckedChanged: {

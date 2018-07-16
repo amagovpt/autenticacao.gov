@@ -104,7 +104,7 @@ PageSecurityPinCodesForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pixelSize: 16
+            font.pointSize: 16
             color: Constants.COLOR_MAIN_BLUE
         }
 
@@ -122,7 +122,7 @@ PageSecurityPinCodesForm {
                     text: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pointSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -135,7 +135,7 @@ PageSecurityPinCodesForm {
                 text: "OK"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: rectOkPin.bottom
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.pointSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 onClicked: dialogPinOK.close()
@@ -161,7 +161,7 @@ PageSecurityPinCodesForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pixelSize: 16
+            font.pointSize: 16
             color: Constants.COLOR_MAIN_BLUE
         }
 
@@ -179,7 +179,7 @@ PageSecurityPinCodesForm {
                     id: textBadPin
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pointSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -193,7 +193,7 @@ PageSecurityPinCodesForm {
                 text: "OK"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: rectBadPin.bottom
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.pointSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 onClicked: dialogBadPin.close()
@@ -222,7 +222,7 @@ PageSecurityPinCodesForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pixelSize: 16
+            font.pointSize: 16
             color: Constants.COLOR_MAIN_BLUE
         }
 
@@ -240,7 +240,7 @@ PageSecurityPinCodesForm {
                     id: textTypePin
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pointSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -257,7 +257,7 @@ PageSecurityPinCodesForm {
                     validator: RegExpValidator { regExp: /[0-9]+/ }
                     maximumLength: 8
                     font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.pointSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textTypePin.right
                     anchors.bottom: parent.bottom
@@ -376,7 +376,7 @@ PageSecurityPinCodesForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pixelSize: 16
+            font.pointSize: 16
             color: Constants.COLOR_MAIN_BLUE
         }
 
@@ -394,7 +394,7 @@ PageSecurityPinCodesForm {
                     text: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_CURRENT")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pointSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -411,7 +411,7 @@ PageSecurityPinCodesForm {
                     validator: RegExpValidator { regExp: /[0-9]+/ }
                     maximumLength: 8
                     font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.pointSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textPinCurrent.right
                     anchors.bottom: parent.bottom
@@ -428,7 +428,7 @@ PageSecurityPinCodesForm {
                     text: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_NEW")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pointSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -445,7 +445,7 @@ PageSecurityPinCodesForm {
                     validator: RegExpValidator { regExp: /[0-9]+/ }
                     maximumLength: 8
                     font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.pointSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textPinNew.right
                     anchors.bottom: parent.bottom
@@ -462,7 +462,7 @@ PageSecurityPinCodesForm {
                     text: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_CONFIRM")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pointSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -479,7 +479,7 @@ PageSecurityPinCodesForm {
                     validator: RegExpValidator { regExp: /[0-9]+/ }
                     maximumLength: 8
                     font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.pointSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textPinConfirm.right
                     anchors.bottom: parent.bottom
@@ -495,7 +495,7 @@ PageSecurityPinCodesForm {
                     id: textPinMsgConfirm
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pointSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
                     height: parent.height

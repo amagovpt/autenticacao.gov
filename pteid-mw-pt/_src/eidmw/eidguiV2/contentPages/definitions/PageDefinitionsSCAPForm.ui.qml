@@ -79,7 +79,7 @@ Item {
                     height: 5 * Constants.SIZE_TEXT_BODY
 
                     Text {
-                        font.pixelSize: Constants.SIZE_TEXT_BODY
+                        font.pointSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
                         text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_ENTITIES_MSG")
                         wrapMode: Text.Wrap
@@ -128,7 +128,7 @@ Item {
                         text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE")
                         width: 1.4 * Constants.WIDTH_BUTTON
                         height: parent.height
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.pointSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                         anchors.left: parent.left
@@ -139,7 +139,7 @@ Item {
                         text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON_LOAD")
                         width: 1.4 * Constants.WIDTH_BUTTON
                         height: parent.height
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.pointSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                         anchors.right: parent.right
@@ -155,7 +155,7 @@ Item {
                     width: parent.width
                     height: 5 * Constants.SIZE_TEXT_BODY
                     Text {
-                        font.pixelSize: Constants.SIZE_TEXT_BODY
+                        font.pointSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
                         text: qsTranslate("PageDifinitionsSCAP",
                                           "STR_SCAP_ATTRIBUTES_COMPANY_MSG")
@@ -204,7 +204,7 @@ Item {
                         text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE")
                         width: 1.4 * Constants.WIDTH_BUTTON
                         height: parent.height
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.pointSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                         anchors.left: parent.left
@@ -215,7 +215,7 @@ Item {
                         text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_COMPANY_BUTTON_LOAD")
                         width: 1.4 * Constants.WIDTH_BUTTON
                         height: parent.height
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.pointSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                         anchors.right: parent.right

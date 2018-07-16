@@ -25,7 +25,7 @@ PageCardPrintForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pixelSize: 16
+            font.pointSize: 16
             color: Constants.COLOR_MAIN_BLUE
         }
 
@@ -43,7 +43,7 @@ PageCardPrintForm {
                     text: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pointSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -56,7 +56,7 @@ PageCardPrintForm {
                 text: "OK"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: rectOkPin.bottom
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.pointSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 onClicked: dialogPinOK.close()

@@ -139,7 +139,7 @@ Item {
             Text {
                 id: titleSelectFile
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pointSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
@@ -184,7 +184,7 @@ Item {
                             wrapMode: Text.WordWrap
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            font.pixelSize: Constants.SIZE_TEXT_BODY
+                            font.pointSize: Constants.SIZE_TEXT_BODY
                             font.family: lato.name
                             color: Constants.COLOR_TEXT_LABEL
                             visible: !fileLoaded
@@ -211,7 +211,7 @@ Item {
                         height: parent.height
                         text: qsTranslate("PageServicesSign",
                                           "STR_SIGN_ADD_MULTI_BUTTON")
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.pointSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                     }
@@ -223,7 +223,7 @@ Item {
                         text: qsTranslate("PageServicesSign",
                                           "STR_SIGN_REMOVE_MULTI_BUTTON")
                         enabled: fileLoaded
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.pointSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                     }
@@ -267,7 +267,7 @@ Item {
             Text {
                 id: titleConf
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pointSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
@@ -310,7 +310,7 @@ Item {
                             color: Constants.COLOR_TEXT_BODY
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
                             font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.pointSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
                         }
                         RadioButton {
@@ -330,7 +330,7 @@ Item {
                                 text: radioButtonPADES.text
                                 leftPadding: 22
                                 font.family: lato.name
-                                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                                font.pointSize: Constants.SIZE_TEXT_LABEL
                                 horizontalAlignment: Text.AlignRight
                                 verticalAlignment: Text.AlignVCenter
                                 color: Constants.COLOR_MAIN_PRETO
@@ -367,14 +367,14 @@ Item {
                             rightPadding: 0
                             enabled: true
                             font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.pointSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
                             opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                             contentItem: Text {
                                 text: radioButtonXADES.text
                                 leftPadding: 22
                                 font.family: lato.name
-                                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                                font.pointSize: Constants.SIZE_TEXT_LABEL
                                 horizontalAlignment: Text.AlignRight
                                 verticalAlignment: Text.AlignVCenter
                                 color: Constants.COLOR_MAIN_PRETO
@@ -411,7 +411,7 @@ Item {
                                                      "STR_SIGN_REASON") + "?"
                         enabled: fileLoaded
                         font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.pointSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                     }
                     TextField {
@@ -421,7 +421,7 @@ Item {
                         anchors.top: textFieldReason.bottom
                         placeholderText: qsTranslate("PageServicesSign",
                                                      "STR_SIGN_LOCAL") + "?"
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.pointSize: Constants.SIZE_TEXT_FIELD
                         enabled: fileLoaded
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
@@ -434,7 +434,7 @@ Item {
                                           "STR_SIGN_ADD_TIMESTAMP")
                         enabled: fileLoaded
                         font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.pointSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                     }
                     Switch {
@@ -445,7 +445,7 @@ Item {
                                           "STR_SIGN_ADD_ATTRIBUTES")
                         enabled: fileLoaded
                         font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.pointSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         z: 1
                     }
@@ -469,7 +469,7 @@ Item {
                             color: Constants.COLOR_TEXT_LABEL
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
                             font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.pointSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
                             visible: false
                             x: 54
@@ -508,7 +508,7 @@ Item {
 //                            spacing: -10
 //                            anchors.verticalCenter: parent.verticalCenter
 //                            font.family: lato.name
-//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+//                            font.pointSize: Constants.SIZE_TEXT_FIELD
 //                            font.capitalization: Font.MixedCase
 //                            height: parent.height
 //                        }
@@ -521,7 +521,7 @@ Item {
 //                            anchors.verticalCenter: parent.verticalCenter
 //                            font.bold: false
 //                            font.family: lato.name
-//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+//                            font.pointSize: Constants.SIZE_TEXT_FIELD
 //                            font.capitalization: Font.MixedCase
 //                            color: Constants.COLOR_TEXT_BODY
 //                            height: parent.height
@@ -535,7 +535,7 @@ Item {
 //                            anchors.verticalCenter: parent.verticalCenter
 //                            font.bold: false
 //                            font.family: lato.name
-//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+//                            font.pointSize: Constants.SIZE_TEXT_FIELD
 //                            font.capitalization: Font.MixedCase
 //                            color: Constants.COLOR_TEXT_BODY
 //                            visible: switchPreserv.checked
@@ -550,7 +550,7 @@ Item {
 //                            // if model is changed textPreservAnos.text may be changed
 //                            model: ["0", "1", "3", "5", "10"]
 //                            font.family: lato.name
-//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+//                            font.pointSize: Constants.SIZE_TEXT_FIELD
 //                            font.capitalization: Font.MixedCase
 //                            visible: switchPreserv.checked
 //                        }
@@ -566,7 +566,7 @@ Item {
 //                            anchors.verticalCenter: parent.verticalCenter
 //                            font.bold: false
 //                            font.family: lato.name
-//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+//                            font.pointSize: Constants.SIZE_TEXT_FIELD
 //                            font.capitalization: Font.MixedCase
 //                            color: Constants.COLOR_TEXT_BODY
 //                            visible: switchPreserv.checked
@@ -607,7 +607,7 @@ Item {
             Text {
                 id: titlePre
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pointSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
@@ -631,7 +631,7 @@ Item {
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    font.pixelSize: Constants.SIZE_TEXT_BODY
+                    font.pointSize: Constants.SIZE_TEXT_BODY
                     color: Constants.COLOR_TEXT_LABEL
                     visible: true
                     font.family: lato.name
@@ -683,7 +683,7 @@ Item {
                         text: qsTranslate("PageServicesSign",
                                           "STR_SIGN_PAGE") + ":"
                         font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        font.pointSize: Constants.SIZE_TEXT_LABEL
                         color: Constants.COLOR_MAIN_PRETO
                         font.capitalization: Font.MixedCase
                         opacity: fileLoaded && propertyRadioButtonPADES.checked
@@ -709,7 +709,7 @@ Item {
                             id: textSpinBox
                             z: 2
                             font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_LABEL
+                            font.pointSize: Constants.SIZE_TEXT_LABEL
                             color: Constants.COLOR_MAIN_PRETO
                             opacity: fileLoaded
                                      && propertyRadioButtonPADES.checked
@@ -732,14 +732,13 @@ Item {
                             Text {
                                 text: ">"
                                 font.family: lato.name
-                                font.pixelSize: Constants.SIZE_ARROW_INDICATOR
+                                font.pointSize: Constants.SIZE_ARROW_INDICATOR
                                 color: Constants.COLOR_MAIN_BLUE
                                 font.bold: true
                                 opacity: fileLoaded
                                          && propertyRadioButtonPADES.checked
                                          && !checkLastPage.checked ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                                 anchors.fill: parent
-                                fontSizeMode: Text.Fit
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
@@ -756,13 +755,12 @@ Item {
                             Text {
                                 text: "<"
                                 font.family: lato.name
-                                font.pixelSize: Constants.SIZE_ARROW_INDICATOR
+                                font.pointSize: Constants.SIZE_ARROW_INDICATOR
                                 color: Constants.COLOR_MAIN_BLUE
                                 opacity: fileLoaded
                                          && propertyRadioButtonPADES.checked
                                          && !checkLastPage.checked ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                                 anchors.fill: parent
-                                fontSizeMode: Text.Fit
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
@@ -780,7 +778,7 @@ Item {
                         text: qsTranslate("PageServicesSign", "STR_SIGN_LAST")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.pointSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         enabled: fileLoaded && propertyRadioButtonPADES.checked
                     }
@@ -805,7 +803,7 @@ Item {
                                           "STR_SIGN_VISIBLE")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.pointSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         enabled: fileLoaded
                         checked: true
@@ -824,7 +822,7 @@ Item {
                                           "STR_SIGN_REDUCED")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.pointSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         enabled: fileLoaded
                     }
@@ -847,7 +845,7 @@ Item {
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
                     enabled: fileLoaded && cardLoaded
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.pointSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     anchors.left: parent.left
@@ -861,7 +859,7 @@ Item {
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
                     enabled: fileLoaded
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.pointSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     anchors.right: parent.right

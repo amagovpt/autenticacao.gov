@@ -24,7 +24,7 @@ Item {
 
         Text {
             id: textTitle
-            font.pixelSize: Constants.SIZE_TEXT_LABEL
+            font.pointSize: Constants.SIZE_TEXT_LABEL
             font.family: lato.name
             text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TITLE")
             wrapMode: Text.Wrap
@@ -39,7 +39,7 @@ Item {
             id: textDescription
             anchors.top: textTitle.bottom
             anchors.topMargin: Constants.SIZE_TEXT_BODY
-            font.pixelSize: Constants.SIZE_TEXT_BODY
+            font.pointSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
             text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
             wrapMode: Text.Wrap
@@ -77,7 +77,7 @@ Item {
                 text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_BUTTON")
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.pointSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -94,7 +94,7 @@ Item {
                 text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_BUTTON_START")
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.pointSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 anchors.horizontalCenter: parent.horizontalCenter

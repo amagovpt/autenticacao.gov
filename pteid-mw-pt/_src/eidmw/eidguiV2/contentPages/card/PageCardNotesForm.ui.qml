@@ -51,7 +51,7 @@ Item {
                 id: notesText
                 text: qsTranslate("PageCardNotes","STR_NOTES_PAGE")
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pointSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
@@ -60,7 +60,7 @@ Item {
                 id: notesTextDescription
                 text: qsTranslate("PageCardNotes","STR_NOTES_DESCRIPTION_PAGE")
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pointSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
                 color: Constants.COLOR_MAIN_PRETO
                 anchors.top: notesText.bottom
@@ -119,7 +119,7 @@ Item {
                         height: flickable.height
                         focus: true
                         wrapMode: TextEdit.Wrap
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.pointSize: Constants.SIZE_TEXT_FIELD
                         color: Constants.COLOR_TEXT_BODY
                     }
 
@@ -161,7 +161,7 @@ Item {
                 id: dateText
                 text: qsTranslate("PageCardNotes","STR_NOTES_PAGE_SIZE")
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pointSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
@@ -194,7 +194,7 @@ Item {
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.pointSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
             }

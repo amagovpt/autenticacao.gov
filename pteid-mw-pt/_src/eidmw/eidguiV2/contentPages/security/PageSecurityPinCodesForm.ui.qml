@@ -86,7 +86,7 @@ Item {
                             + 2 * Constants.SIZE_TEXT_FIELD
                     Text {
                         anchors.topMargin: Constants.SIZE_TEXT_BODY
-                        font.pixelSize: Constants.SIZE_TEXT_BODY
+                        font.pointSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
                         text: qsTranslate("Popup PIN","STR_PIN_AUTH_TEXT")
                         wrapMode: Text.Wrap
@@ -107,7 +107,7 @@ Item {
                     Text {
                         id: triesLeftAuthPin
                         anchors.topMargin: Constants.SIZE_TEXT_BODY
-                        font.pixelSize: Constants.SIZE_TEXT_BODY
+                        font.pointSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
                         wrapMode: Text.Wrap
                         width: parent.width
@@ -130,7 +130,7 @@ Item {
                             height:Constants.HEIGHT_BOTTOM_COMPONENT
                             text: qsTranslate("Popup PIN","STR_PIN_TEST")
                             anchors.horizontalCenter: parent.horizontalCenter
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.pointSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
                             enabled: false
@@ -146,7 +146,7 @@ Item {
                             height:Constants.HEIGHT_BOTTOM_COMPONENT
                             text: qsTranslate("Popup PIN","STR_PIN_MODIFY")
                             anchors.horizontalCenter: parent.horizontalCenter
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.pointSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
                             enabled: false
@@ -165,7 +165,7 @@ Item {
                             + 2 * Constants.SIZE_TEXT_FIELD
                     Text {
                         anchors.topMargin: Constants.SIZE_TEXT_BODY
-                        font.pixelSize: Constants.SIZE_TEXT_BODY
+                        font.pointSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
                         text: qsTranslate("Popup PIN","STR_PIN_SIGN_TEXT")
                         wrapMode: Text.Wrap
@@ -186,7 +186,7 @@ Item {
                     Text {
                         id: triesLeftSignPin
                         anchors.topMargin: Constants.SIZE_TEXT_BODY
-                        font.pixelSize: Constants.SIZE_TEXT_BODY
+                        font.pointSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
                         wrapMode: Text.Wrap
                         width: parent.width
@@ -210,7 +210,7 @@ Item {
                             height:Constants.HEIGHT_BOTTOM_COMPONENT
                             text: qsTranslate("Popup PIN","STR_PIN_TEST")
                             anchors.horizontalCenter: parent.horizontalCenter
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.pointSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
                             enabled: false
@@ -226,7 +226,7 @@ Item {
                             height:Constants.HEIGHT_BOTTOM_COMPONENT
                             text: qsTranslate("Popup PIN","STR_PIN_MODIFY")
                             anchors.horizontalCenter: parent.horizontalCenter
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.pointSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
                             enabled: false
@@ -245,7 +245,7 @@ Item {
                             + 2 * Constants.SIZE_TEXT_FIELD
                     Text {
                         anchors.topMargin: Constants.SIZE_TEXT_BODY
-                        font.pixelSize: Constants.SIZE_TEXT_BODY
+                        font.pointSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
                         text: qsTranslate("Popup PIN","STR_PIN_ADDRESS_TEXT")
                         wrapMode: Text.Wrap
@@ -266,7 +266,7 @@ Item {
                     Text {
                         id: triesLeftAddressPin
                         anchors.topMargin: Constants.SIZE_TEXT_BODY
-                        font.pixelSize: Constants.SIZE_TEXT_BODY
+                        font.pointSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
                         wrapMode: Text.Wrap
                         width: parent.width
@@ -289,7 +289,7 @@ Item {
                             height:Constants.HEIGHT_BOTTOM_COMPONENT
                             text: qsTranslate("Popup PIN","STR_PIN_TEST")
                             anchors.horizontalCenter: parent.horizontalCenter
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.pointSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
                             enabled: false
@@ -305,7 +305,7 @@ Item {
                             height:Constants.HEIGHT_BOTTOM_COMPONENT
                             text: qsTranslate("Popup PIN","STR_PIN_MODIFY")
                             anchors.horizontalCenter: parent.horizontalCenter
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.pointSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
                             enabled: false
