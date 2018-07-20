@@ -2253,11 +2253,12 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
         //------------------------------------
         // is card removed from the reader?
         //------------------------------------
-        if ((cardState & 0x0100) == 0)  {
+		if (!readerContext.isCardPresent())
+		{
 
             if (pCallBackData->getMainWnd()->m_Settings.getRemoveCert())
             {
-                PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Will try to RemoveCertificates...");            
+                PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Will try to RemoveCertificates...");
                 bool bImported = pCallBackData->getMainWnd()->m_Certificates.RemoveCertificates(pCallBackData->getReaderName());
 
                 if(!bImported) {
@@ -2285,7 +2286,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
         //------------------------------------
         // is card inserted ?
         //------------------------------------
-        else
+		else if (readerContext.isCardChanged(pCallBackData->m_cardID))
         {
             //------------------------------------
             // send an event to the main app to show the popup message
@@ -2308,6 +2309,10 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
                 }
             }
         }
+		else
+		{
+			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Event ignored");
+		}
     }
     catch (...)
     {
