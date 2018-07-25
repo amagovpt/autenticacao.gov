@@ -1319,7 +1319,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="425"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="327"/>
         <source>STR_SIGN_CMD_PIN</source>
-        <translation>PIN</translation>
+        <translation>Signature PIN</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="440"/>
