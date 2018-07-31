@@ -1314,22 +1314,6 @@ APL_EidFile_Sod::~APL_EidFile_Sod()
 {
 }
 
-/*
-char * parseSubjectFromCert(X509 * cert)
-{
-
-       X509_NAME * subject_struct = X509_get_subject_name(cert);	
-
-       int space_needed = X509_NAME_get_text_by_NID(subject_struct, NID_commonName, NULL, 0) +1;
-       char *subject = (char *)malloc(space_needed);
-
-       X509_NAME_get_text_by_NID(subject_struct, NID_commonName, subject, space_needed);
-
-       return subject;
-}
-*/
-
-
 tCardFileStatus APL_EidFile_Sod::VerifyFile()
 {
 	tCardFileStatus filestatus = CARDFILESTATUS_ERROR_SIGNATURE;
