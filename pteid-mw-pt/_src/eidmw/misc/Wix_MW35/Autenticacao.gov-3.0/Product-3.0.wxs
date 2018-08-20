@@ -190,10 +190,11 @@
         <File Source="..\..\certs\CartaodeCidadao001.der" KeyPath="yes" />
         <File Source="..\..\certs\CartaodeCidadao002.der" />
         <File Source="..\..\certs\CartaodeCidadao003.der" />
-        <!--<File Source="..\..\certs\ECRaizEstado_novo_assinado_GTE.der" /> -->
         <File Source="..\..\certs\ECRaizEstado_MC.der" />
         <File Source="..\..\certs\Multicert_Root_01.der" />
         <File Source="..\..\certs\BaltimoreCyberTrustRoot.der" />
+        <File Source="..\..\certs\GlobalChambersignRoot-2008.der" />
+        <File Source="..\..\certs\COMODORSACertificationAuthority.der" />
       </Component>
 
       <Component Id="CertCC004" Guid="{08EF0B6A-2989-429F-846C-EED6F241D192}">
