@@ -906,7 +906,9 @@ void SSLConnection::connect_encrypted(char* host_and_port)
     //Load any available root cert to validate the server certificate (needed for AddressChange test server)
     loadAllRootCerts(store);
 	
-	loadWindowsRootCertificates(store);
+	// TODO: Load windows root certificates with some validations
+	//loadWindowsRootCertificates(store);
+
 	SSL_CTX_set_default_verify_paths(ctx);
 
     SSL_CTX_set_options(ctx, SSL_OP_NO_TICKET | SSL_OP_NO_SSLv2);
