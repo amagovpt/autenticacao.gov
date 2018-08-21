@@ -76,7 +76,7 @@ Item {
 
         Text {
             id: innerText
-            font.pointSize: fontSize
+            font.pixelSize: fontSize
             anchors.centerIn: parent
         }
     }

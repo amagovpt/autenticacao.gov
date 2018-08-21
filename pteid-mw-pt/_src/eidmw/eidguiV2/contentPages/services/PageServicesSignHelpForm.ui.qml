@@ -25,7 +25,7 @@ Item {
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
         Text {
             id: textTitle
-            font.pointSize: Constants.SIZE_TEXT_TITLE
+            font.pixelSize: Constants.SIZE_TEXT_TITLE
             font.family: lato.name
             text: qsTranslate("PageServicesSign","STR_SIGN_HELP_TITLE")
             font.bold: true
@@ -39,7 +39,7 @@ Item {
             id: textSubTitle
             anchors.top: textTitle.bottom
             anchors.topMargin: Constants.SIZE_TEXT_BODY
-            font.pointSize: Constants.SIZE_TEXT_BODY
+            font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
             text: qsTranslate("PageServicesSign","STR_SIGN_HELP_SUB_TITLE")
                   + "<a href=\"https://www.autenticacao.gov.pt/cmd-pedido-chave\">"
@@ -53,7 +53,7 @@ Item {
             id: textTopic1
             anchors.top: textSubTitle.bottom
             anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
-            font.pointSize: Constants.SIZE_TEXT_BODY
+            font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
             text: qsTranslate("PageServicesSign","STR_SIGN_HELP_TOPIC_1")
             wrapMode: Text.Wrap
@@ -67,7 +67,7 @@ Item {
             id: autenticacaoGovLink
             anchors.top: textTopic1.bottom
             anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
-            font.pointSize: Constants.SIZE_TEXT_BODY
+            font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
             text: qsTranslate("PageServicesSign","STR_SIGN_HELP_TOPIC_2")
                   + "<a href=\"https://www.autenticacao.gov.pt\">"

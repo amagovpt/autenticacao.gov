@@ -82,7 +82,7 @@ Rectangle {
 
                 Text {
                     id: sigReasonText
-                    font.pointSize: propertySigLineHeight * 0.75
+                    font.pixelSize: propertySigLineHeight
                     font.italic: true
                     height: propertySigLineHeight
                     width: parent.width - 4
@@ -107,7 +107,7 @@ Rectangle {
                 }
                 Text {
                     id: sigSignedByText
-                    font.pointSize:propertySigLineHeight * 0.75
+                    font.pixelSize:propertySigLineHeight
                     height: propertySigLineHeight
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
@@ -118,7 +118,7 @@ Rectangle {
                 }
                 Text {
                     id: sigSignedByNameText
-                    font.pointSize: propertySigLineHeight * 0.75
+                    font.pixelSize: propertySigLineHeight
                     height: propertySigLineHeight
                     width: parent.width - sigSignedByText.paintedWidth - 6
                     clip: true
@@ -133,7 +133,7 @@ Rectangle {
                 }
                 Text {
                     id: sigNumIdText
-                    font.pointSize: propertySigLineHeight * 0.75
+                    font.pixelSize: propertySigLineHeight
                     height: propertySigLineHeight
                     width: parent.width - 4
                     clip: true
@@ -146,7 +146,7 @@ Rectangle {
                 }
                 Text {
                     id: sigDateText
-                    font.pointSize: propertySigLineHeight * 0.75
+                    font.pixelSize: propertySigLineHeight
                     height: propertySigLineHeight
                     width: parent.width - 4
                     clip: true
@@ -159,7 +159,7 @@ Rectangle {
                 }
                 Text {
                     id: sigLocationText
-                    font.pointSize: propertySigLineHeight * 0.75
+                    font.pixelSize: propertySigLineHeight
                     height: propertySigLineHeight
                     width: parent.width - 4
                     clip: true

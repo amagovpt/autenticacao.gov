@@ -269,7 +269,7 @@ PageServicesSignAdvancedForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
 
@@ -296,7 +296,7 @@ PageServicesSignAdvancedForm {
                     text: qsTranslate("PageServicesSign","STR_SIGN_INSERT_LOGIN")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -316,7 +316,7 @@ PageServicesSignAdvancedForm {
                     text: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
                     height: parent.height
@@ -383,7 +383,7 @@ PageServicesSignAdvancedForm {
                         "+381 - Yugoslavia (discontinued)","+243 - Zaire","+260 - Zambia","+263 - Zimbabwe",
                     ]
                     font.family: lato.name
-                    font.pointSize: Constants.SIZE_TEXT_FIELD
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                     visible: true
                     anchors.left: textPinCurrent.right
@@ -404,7 +404,7 @@ PageServicesSignAdvancedForm {
                     placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM_OP") + "?"
                     validator: RegExpValidator { regExp: /[0-9]+/ }
                     font.family: lato.name
-                    font.pointSize: Constants.SIZE_TEXT_FIELD
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: comboBoxIndicative.right
                     anchors.leftMargin:  parent.width * 0.05
@@ -425,7 +425,7 @@ PageServicesSignAdvancedForm {
                     text: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
                     height: parent.height
@@ -440,7 +440,7 @@ PageServicesSignAdvancedForm {
                     placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN_OP") + "?"
                     echoMode : TextInput.Password
                     font.family: lato.name
-                    font.pointSize: Constants.SIZE_TEXT_FIELD
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textPinNew.right
                     anchors.bottom: parent.bottom
@@ -460,7 +460,7 @@ PageServicesSignAdvancedForm {
                     font.italic: true
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
                     height: parent.height
@@ -481,7 +481,7 @@ PageServicesSignAdvancedForm {
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CANCEL")
                     anchors.left: parent.left
-                    font.pointSize: Constants.SIZE_TEXT_FIELD
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     onClicked: {
@@ -495,7 +495,7 @@ PageServicesSignAdvancedForm {
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
                     anchors.right: parent.right
-                    font.pointSize: Constants.SIZE_TEXT_FIELD
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     enabled: textFieldMobileNumber.length !== 0 && textFieldPin.length !== 0 ? true : false
@@ -530,7 +530,7 @@ PageServicesSignAdvancedForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
         ProgressBar {
@@ -566,7 +566,7 @@ PageServicesSignAdvancedForm {
                 Text {
                     id: textMessageTop
                     text: ""
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -585,7 +585,7 @@ PageServicesSignAdvancedForm {
                 Text {
                     id: labelCMDText
                     text: qsTranslate("PageServicesSign","STR_SIGN_OPEN")
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -605,7 +605,7 @@ PageServicesSignAdvancedForm {
                     text: qsTranslate("PageServicesSign","STR_SIGN_CMD_CODE") + ":"
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
                     height: parent.height
@@ -620,7 +620,7 @@ PageServicesSignAdvancedForm {
                     placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_CODE_OP") + "?"
                     validator: RegExpValidator { regExp: /[0-9]+/ }
                     font.family: lato.name
-                    font.pointSize: Constants.SIZE_TEXT_FIELD
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textReturnCode.right
                     anchors.bottom: parent.bottom
@@ -651,7 +651,7 @@ PageServicesSignAdvancedForm {
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CANCEL")
                 anchors.left: parent.left
-                font.pointSize: Constants.SIZE_TEXT_FIELD
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 onClicked: {
@@ -667,7 +667,7 @@ PageServicesSignAdvancedForm {
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
                 anchors.right: parent.right
-                font.pointSize: Constants.SIZE_TEXT_FIELD
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 visible: false
@@ -701,7 +701,7 @@ PageServicesSignAdvancedForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
         Item {
@@ -723,7 +723,7 @@ PageServicesSignAdvancedForm {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: labelText
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -741,7 +741,7 @@ PageServicesSignAdvancedForm {
                 Text {
                     id: labelOpenText
                     text: qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI")
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -763,7 +763,7 @@ PageServicesSignAdvancedForm {
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     text: qsTranslate("Popup File","STR_POPUP_FILE_CANCEL")
                     anchors.left: parent.left
-                    font.pointSize: Constants.SIZE_TEXT_FIELD
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     onClicked: {
@@ -776,7 +776,7 @@ PageServicesSignAdvancedForm {
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     text: qsTranslate("Popup File","STR_POPUP_FILE_OPEN")
                     anchors.right: parent.right
-                    font.pointSize: Constants.SIZE_TEXT_FIELD
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     onClicked: {
@@ -809,7 +809,7 @@ PageServicesSignAdvancedForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
         Item {
@@ -817,7 +817,7 @@ PageServicesSignAdvancedForm {
             height: 50
             Text {
                 id: text_sign_error
-                font.pointSize: Constants.SIZE_TEXT_LABEL
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: parent.height
@@ -1096,7 +1096,7 @@ PageServicesSignAdvancedForm {
             CheckBox {
                 id: checkboxSel
                 font.family: lato.name
-                font.pointSize: Constants.SIZE_TEXT_FIELD
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.capitalization: Font.MixedCase
                 anchors.verticalCenter: parent.verticalCenter
                 checked: checkBoxAttr
@@ -1121,7 +1121,7 @@ PageServicesSignAdvancedForm {
                     width: parent.width
                     wrapMode: Text.WordWrap
                     font.family: lato.name
-                    font.pointSize: Constants.SIZE_TEXT_FIELD
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                 }
             }
@@ -1480,7 +1480,7 @@ PageServicesSignAdvancedForm {
                     text: fileUrl
                     width: parent.width - iconRemove.width - Constants.SIZE_LISTVIEW_IMAGE_SPACE
                     x: Constants.SIZE_LISTVIEW_IMAGE_SPACE * 0.5
-                    font.pointSize: Constants.SIZE_TEXT_FIELD
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     color: Constants.COLOR_TEXT_BODY

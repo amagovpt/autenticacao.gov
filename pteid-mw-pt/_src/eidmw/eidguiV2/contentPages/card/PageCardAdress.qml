@@ -169,7 +169,7 @@ PageCardAdressForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
 
@@ -187,7 +187,7 @@ PageCardAdressForm {
                     id: textBadPin
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -221,7 +221,7 @@ PageCardAdressForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
 
@@ -240,7 +240,7 @@ PageCardAdressForm {
                     text: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_ADDRESS")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -257,7 +257,7 @@ PageCardAdressForm {
                     validator: RegExpValidator { regExp: /[0-9]+/ }
                     maximumLength: 8
                     font.family: lato.name
-                    font.pointSize: Constants.SIZE_TEXT_FIELD
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textPin.right
                     anchors.bottom: parent.bottom
@@ -319,7 +319,7 @@ PageCardAdressForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
 
@@ -339,7 +339,7 @@ PageCardAdressForm {
                           + " "+ qsTr("STR_ADDRESS_CHANGE_TEXT_LINK")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
                     height: parent.height
@@ -363,7 +363,7 @@ PageCardAdressForm {
                     text:  qsTr("STR_ADDRESS_CHANGE_NUMBER")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -377,7 +377,7 @@ PageCardAdressForm {
                     font.italic: textFieldNumProcess.text === "" ? true: false
                     placeholderText: qsTr("STR_ADDRESS_CHANGE_NUMBER_OP")
                     font.family: lato.name
-                    font.pointSize: Constants.SIZE_TEXT_FIELD
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textPinCurrent.right
                     anchors.bottom: parent.bottom
@@ -394,7 +394,7 @@ PageCardAdressForm {
                     text: qsTr("STR_ADDRESS_CHANGE_CODE")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -408,7 +408,7 @@ PageCardAdressForm {
                     font.italic: textFieldConfirmAddress.text === "" ? true: false
                     placeholderText: qsTr("STR_ADDRESS_CHANGE_CODE_OP")
                     font.family: lato.name
-                    font.pointSize: Constants.SIZE_TEXT_FIELD
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textPinNew.right
                     anchors.bottom: parent.bottom
@@ -426,7 +426,7 @@ PageCardAdressForm {
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 text: qsTr("STR_ADDRESS_CHANGE_CANCEL")
                 anchors.left: parent.left
-                font.pointSize: Constants.SIZE_TEXT_FIELD
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 onClicked: {
@@ -439,7 +439,7 @@ PageCardAdressForm {
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 text: qsTr("STR_ADDRESS_CHANGE_CONFIRM")
                 anchors.right: parent.right
-                font.pointSize: Constants.SIZE_TEXT_FIELD
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 enabled: textFieldNumProcess.length !== 0 && textFieldConfirmAddress.length !== 0 ? true : false
@@ -476,7 +476,7 @@ PageCardAdressForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
 
@@ -494,7 +494,7 @@ PageCardAdressForm {
                     text: ""
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
                     height: parent.height
@@ -542,7 +542,7 @@ PageCardAdressForm {
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 text: qsTr("STR_ADDRESS_CHANGE_OK")
                 anchors.right: parent.right
-                font.pointSize: Constants.SIZE_TEXT_FIELD
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 visible: progressBarIndeterminate.visible ? false : true

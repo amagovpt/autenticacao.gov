@@ -126,7 +126,7 @@ Load language error. Please reinstall the application"
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
         Item {
@@ -141,7 +141,7 @@ Load language error. Please reinstall the application"
                 Text {
                     id: textMessageTop
                     text: "Múltiplos cartões detectados"
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -164,7 +164,7 @@ Load language error. Please reinstall the application"
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     font.family: lato.name
-                    font.pointSize: Constants.SIZE_TEXT_FIELD
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                     visible: true
                 }
@@ -179,7 +179,7 @@ Load language error. Please reinstall the application"
                 Text {
                     id: textNote
                     text:  "Para alterar essa opção mais tarde, vá para o menu de configuração"
-                    font.pointSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
@@ -661,7 +661,7 @@ Load language error. Please reinstall the application"
                 font.weight: mouseAreaMainMenu.containsMouse ?
                                  Font.Bold :
                                  Font.Normal
-                font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
+                font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             }
             Image {
                 id: imageArrowMainMenu
@@ -784,7 +784,7 @@ Load language error. Please reinstall the application"
                 font.weight: mouseAreaSubMenu.containsMouse ?
                                  Font.Bold :
                                  Font.Normal
-                font.pointSize: Constants.SIZE_TEXT_SUB_MENU
+                font.pixelSize: Constants.SIZE_TEXT_SUB_MENU
                 wrapMode: Text.Wrap
                 width: parent.width - 2 * imageArrowSubMenu.width
                        - 2 * Constants.IMAGE_ARROW_SUB_MENU_MARGIN

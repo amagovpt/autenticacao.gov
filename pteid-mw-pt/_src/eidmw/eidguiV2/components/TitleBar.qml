@@ -61,7 +61,7 @@ Item {
                     horizontalCenter: parent.horizontalCenter
                 }
                 text: mainWindow.title
-                font.pointSize: Constants.SIZE_TEXT_BODY
+                font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 color: "white"
             }
