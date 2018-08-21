@@ -5,7 +5,7 @@
 	<?include ..\..\..\svn_revision.wxs ?>
 
 	<?define var.ProductVersion = 3.0.$(var.RevisionNumber)?>
-  <?define var.OfficialProductVersion = 3.0.13 ?>
+  <?define var.OfficialProductVersion = 3.0.14 ?>
 
 	<?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
 	<?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F20$(var.RevisionNumber)}?>
