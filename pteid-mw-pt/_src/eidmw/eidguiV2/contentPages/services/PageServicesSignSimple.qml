@@ -171,7 +171,7 @@ PageServicesSignSimpleForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pointSize: 16
+            font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
 
@@ -431,7 +431,7 @@ PageServicesSignSimpleForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pointSize: 16
+            font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
         ProgressBar {
@@ -602,7 +602,7 @@ PageServicesSignSimpleForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pointSize: 16
+            font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
 
@@ -691,7 +691,7 @@ PageServicesSignSimpleForm {
             padding: 24
             bottomPadding: 0
             font.bold: true
-            font.pointSize: 16
+            font.pointSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
 
