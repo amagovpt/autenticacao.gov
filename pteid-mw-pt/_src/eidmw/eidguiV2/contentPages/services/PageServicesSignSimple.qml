@@ -408,8 +408,8 @@ PageServicesSignSimpleForm {
             }
         }
         onRejected:{
-            textFieldPin.text = ""
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            // Reject CMD Popup's only with ESC key
+            dialogSignCMD.open()
         }
     }
     Dialog {
@@ -579,9 +579,8 @@ PageServicesSignSimpleForm {
             }
         }
         onRejected:{
-            textReturnCode.text = ""
-            rectReturnCode.visible = false
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            // Reject CMD Popup's only with ESC key
+            dialogCMDProgress.open()
         }
     }
 
