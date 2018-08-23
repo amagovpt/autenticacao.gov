@@ -454,7 +454,8 @@ PageCardAdressForm {
             }
         }
         onRejected:{
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            // Reject address change Popup's only with ESC key
+            dialogConfirmOfAddress.open()
         }
     }
 
@@ -553,7 +554,8 @@ PageCardAdressForm {
             }
         }
         onRejected:{
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            // Reject address change Popup's only with ESC key
+            dialogConfirmOfAddressProgress.open()
         }
     }
 
