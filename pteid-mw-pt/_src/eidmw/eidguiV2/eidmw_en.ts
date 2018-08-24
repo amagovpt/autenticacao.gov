@@ -1301,7 +1301,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="296"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="198"/>
         <source>STR_SIGN_INSERT_LOGIN</source>
-        <translation>Enter login information</translation>
+        <translation>Enter information</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="316"/>
