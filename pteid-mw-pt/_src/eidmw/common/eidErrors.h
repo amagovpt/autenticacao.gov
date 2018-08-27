@@ -76,8 +76,6 @@
 /** Unable to read applet version from the card */
 #define EIDMW_ERR_APPLET_VERSION_NOT_FOUND 0xe1d00209
 
-#define EIDMW_ERR_PINREF_NOT_FOUND	   0xe1d0020A
-
 
 // Reader errors
 
@@ -97,10 +95,10 @@
 #define EIDMW_ERR_CANT_CONNECT         0xe1d0020D
 
 /** The card has been reset (e.g. by another application) */
-#define EIDMW_ERR_CARD_RESET           0xe1d0021e
+#define EIDMW_ERR_CARD_RESET           0xe1d0020E
 
 /** The card can't be accessed because of other connections */
-#define EIDMW_ERR_CARD_SHARING         0xe1d0021f
+#define EIDMW_ERR_CARD_SHARING         0xe1d0020F
 
 /** Can't end a transaction that wasn't started (also returned
  *  on Mac OS X when multiple apps are access the card simultaneously) */
