@@ -183,7 +183,7 @@ APL_Pin *APL_Pins::getPinByPinRef(unsigned long pinRef)
 	    	return itr->second;
 	}
 
-	throw CMWEXCEPTION(EIDMW_ERR_PINREF_NOT_FOUND);
+	throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
 }
 
 APL_Pin *APL_Pins::addPin(unsigned long ulIndex,const CByteArray *pin_tlv_struct)
