@@ -189,7 +189,9 @@ QString GAPI::getAddressField(AddressInfoKey key) {
     else \
 { \
     PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
-    QString msgError = QString("0x%1\n").arg(e.GetError(), 8, 16); \
+    /* Discard the 0xe1d0 prefix */                       \
+    unsigned long user_error = e.GetError() & 0x0000FFFF; \
+    QString msgError = QString("%1\n").arg(user_error); \
     emit signalGenericError(msgError); \
     } \
     }
