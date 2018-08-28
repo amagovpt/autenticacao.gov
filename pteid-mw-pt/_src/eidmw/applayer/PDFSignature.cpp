@@ -65,6 +65,7 @@ namespace eIDMW
         m_outputName = NULL;
         m_signStarted = false;
         m_isExternalCertificate = false;
+        m_incrementalMode = false;
 	}
 
 	PDFSignature::PDFSignature(const char *pdf_file_path): m_pdf_file_path(pdf_file_path)
@@ -91,6 +92,7 @@ namespace eIDMW
         m_outputName = NULL;
         m_signStarted = false;
         m_isExternalCertificate = false;
+        m_incrementalMode = false;
 	}
 
 	void PDFSignature::setCustomImage(unsigned char *img_data, unsigned long img_length)
@@ -577,14 +579,14 @@ namespace eIDMW
 		   	}
 		}
 		
-        bool incremental = doc->isSigned() || doc->isReaderEnabled();
+        m_incrementalMode = doc->isSigned() || doc->isReaderEnabled();
 
 		if (this->my_custom_image.img_data != NULL)
 			doc->addCustomSignatureImage(my_custom_image.img_data, my_custom_image.img_length);
 
-        doc->prepareSignature(incremental, &sig_location, m_citizen_fullname, m_civil_number,
+        doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, m_civil_number,
 			         location, reason, m_page, m_sector, isLangPT, !isExternalCertificate());
-        unsigned long len = doc->getSigByteArray(&to_sign, incremental);
+        unsigned long len = doc->getSigByteArray(&to_sign, m_incrementalMode);
 
 		int rc = 0;
 		try
@@ -698,8 +700,6 @@ namespace eIDMW
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
 
-        bool incremental = m_doc->isSigned() || m_doc->isReaderEnabled();
-
         int return_code =
             getSignedData_pkcs7( (unsigned char*)signature.GetBytes()
                                 , signature.Size()
@@ -715,7 +715,7 @@ namespace eIDMW
         m_doc->closeSignature( signature_contents );
 
         PDFWriteMode pdfWriteMode =
-            incremental ? writeForceIncremental : writeForceRewrite;
+            m_incrementalMode ? writeForceIncremental : writeForceRewrite;
 #ifdef WIN32
 		std::string utf8Filename(m_outputName->getCString());
 		std::wstring utf16Filename = utilStringWiden(utf8Filename);

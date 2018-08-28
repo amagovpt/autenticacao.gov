@@ -125,6 +125,7 @@ namespace eIDMW
         GooString *m_outputName;
         bool m_signStarted;
         bool m_isExternalCertificate;
+        bool m_incrementalMode;
 	};
 
 }
