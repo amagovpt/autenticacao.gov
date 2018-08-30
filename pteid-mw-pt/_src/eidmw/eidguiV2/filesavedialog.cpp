@@ -25,6 +25,12 @@ FileSaveDialog::FileSaveDialog(QQuickItem *parent)
                 this, &FileSaveDialog::accept);
         connect(m_dlgHelper, &QPlatformFileDialogHelper::reject,
                 this, &FileSaveDialog::reject);
+    }else{
+        qDebug() << "##########################################################################################";
+        qDebug() << "ERROR: Autentication.gov needs gtk3 platform plugin";
+        qDebug() << "To automatically set gtk3 to QT_QPA_PLATFORMTHEME add the following line to ~/.profile.  ";
+        qDebug() << "echo \"export QT_QPA_PLATFORMTHEME=gtk3\">> ~/.profile && source ~/.profile";
+        qDebug() << "##########################################################################################";
     }
 }
 
