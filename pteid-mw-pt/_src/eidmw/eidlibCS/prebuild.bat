@@ -16,7 +16,7 @@ echo [assembly: AssemblyTrademark("")]				>> "%OUTPUT_FILE%"
 echo [assembly: AssemblyCulture("")]				>> "%OUTPUT_FILE%"
 echo [assembly: ComVisible(false)]				>> "%OUTPUT_FILE%"
 echo [assembly: Guid("a69697fa-c784-4923-8476-2ee828accae8")]	>> "%OUTPUT_FILE%"
-echo [assembly: AssemblyVersion("2.4.0.%SVN_REVISION%")]	>> "%OUTPUT_FILE%"
+echo [assembly: AssemblyVersion("3.0.0.%SVN_REVISION%")]	>> "%OUTPUT_FILE%"
 echo [assembly: AssemblyFileVersion("2.4.0.%SVN_REVISION%")]	>> "%OUTPUT_FILE%"
 
 exit 0
