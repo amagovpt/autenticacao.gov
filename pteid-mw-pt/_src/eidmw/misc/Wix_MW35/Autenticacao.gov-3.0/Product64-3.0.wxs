@@ -5,7 +5,7 @@
 	<?include ..\..\..\svn_revision.wxs ?>
 
 	<?define var.ProductVersion = 3.0.$(var.RevisionNumber)?>
-  <?define var.OfficialProductVersion = 3.0.14 ?>
+  <?define var.OfficialProductVersion = 3.0.15 ?>
 
 	<?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
 	<?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F20$(var.RevisionNumber)}?>
@@ -138,7 +138,7 @@
 		        <!-- VC9 runtime -->
 		        <?define var.VCRT_TITLE="VC++ 9.0 runtime" ?>
 		        <Merge Id="VCRT1"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC120_CRT_x64.msm" Language="0" DiskId="1" />
-            <Merge Id="VCRT2"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC120_CRT_x86.msm" Language="0" DiskId="1" />
+                <Merge Id="VCRT2"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC120_CRT_x86.msm" Language="0" DiskId="1" />
 	      <?endif?>
       
 			</Directory>
@@ -546,7 +546,7 @@
 
 				<Feature Id="VCRedist" Title="$(var.VCRT_TITLE)" AllowAdvertise="no" Display="hidden" Level="1">
 					<MergeRef Id="VCRT1" />
-          <MergeRef Id="VCRT2" />
+					<MergeRef Id="VCRT2" />
 				</Feature>
 
 				<!-- Program Files -->
