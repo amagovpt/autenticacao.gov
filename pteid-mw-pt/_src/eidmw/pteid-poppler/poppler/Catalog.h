@@ -91,6 +91,16 @@ private:
                     // length is the number of real Entry
 };
 
+
+class SignatureSignerInfo {
+public:
+  const char * name;
+  const char * civil_number;
+  //Professional attributes info
+  const char * attribute_provider;
+  const char * attribute_name;
+};
+
 //------------------------------------------------------------------------
 // Catalog
 //------------------------------------------------------------------------
@@ -121,8 +131,8 @@ public:
 
   void setIncrementalSignature(bool);
 
-  void prepareSignature(PDFRectangle *rect, const char * name, Ref *first_page_ref, const char *location,
-	  const char * civil_number, const char *reason, unsigned long, int page, int sig_sector, 
+  void prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_info, Ref *first_page_ref, const char *location,
+	                      const char *reason, unsigned long, int page, int sig_sector, 
     unsigned char *img_data, unsigned long img_length, bool isPTLanguage, bool isCCSignature);
   
   Ref addFontDict(const char *basefont, const char *name);
@@ -131,7 +141,7 @@ public:
   Ref newXObject(char *plain_text_stream,
 	 int height, int width, bool needs_font, bool needs_image, unsigned char *img_data = NULL, unsigned long img_length = 0);
 
-  void addSignatureAppearance(Object *signature_field, const char* name, const char *civil_number,
+  void addSignatureAppearance(Object *signature_field, SignatureSignerInfo *signer_info,
 	     char *date_str,	const char* location, const char* reason, int rect_x, int rect_y,
 		 unsigned char *img_data, unsigned long img_length, bool rotate_signature, bool isPTLanguage);
   void addSignatureAppearance(Object *parent, int, int);

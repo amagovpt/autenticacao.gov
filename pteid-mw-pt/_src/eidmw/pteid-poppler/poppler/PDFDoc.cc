@@ -125,6 +125,8 @@ void PDFDoc::init()
   pageCache = NULL;
   signature_mode = gFalse;
   m_image_data_jpeg = NULL;
+  m_attribute_supplier = NULL;
+  m_attribute_name = NULL;
   m_image_length = 0;
 }
 
@@ -394,6 +396,11 @@ void PDFDoc::addCustomSignatureImage(unsigned char *image_data, unsigned long im
 {
   m_image_data_jpeg = image_data;
   m_image_length = image_length;
+}
+
+void PDFDoc::addSCAPAttributes(const char *attributeSupplier, const char *attributeName) {
+    m_attribute_supplier = attributeSupplier;
+    m_attribute_name = attributeName;
 }
   
 // Check for a PDF header on this stream.  Skip past some garbage
@@ -702,15 +709,17 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
 
 	getCatalog()->setIncrementalSignature(incremental_mode);
 
+  SignatureSignerInfo signer_info { name, civil_number, m_attribute_supplier, m_attribute_name };
 	if (isLinearized())
 	{
 	   Ref first_page = getPageRef(page);
-	   getCatalog()->prepareSignature(rect, name, &first_page, location,
-		   civil_number, reason, this->fileSize, page, sector, m_image_data_jpeg, m_image_length, isPTLanguage, isCCSignature);
+     
+	   getCatalog()->prepareSignature(rect, &signer_info, &first_page, location,
+		   reason, this->fileSize, page, sector, m_image_data_jpeg, m_image_length, isPTLanguage, isCCSignature);
 	}
 	else
-	   getCatalog()->prepareSignature(rect, name, NULL, location,
-	   civil_number, reason, this->fileSize, page, sector, m_image_data_jpeg, m_image_length, isPTLanguage, isCCSignature);
+	   getCatalog()->prepareSignature(rect, &signer_info, NULL, location,
+	   reason, this->fileSize, page, sector, m_image_data_jpeg, m_image_length, isPTLanguage, isCCSignature);
 	
 	//Add enough space for the placeholder string
 	MemOutStream mem_stream(this->fileSize + 20000); 

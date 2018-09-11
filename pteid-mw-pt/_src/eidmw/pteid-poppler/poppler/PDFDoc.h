@@ -174,6 +174,7 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
 		  const char *civil_number, const char *location,
 		  const char *reason, int page, int sector, bool isPTLanguage, bool isCCSignature);
   POPPLER_API void addCustomSignatureImage(unsigned char *image_data, unsigned long image_length);
+  POPPLER_API void addSCAPAttributes(const char *attributeSupplier, const char *attributeName);
   
   POPPLER_API char* getOccupiedSectors(int page);
 
@@ -296,6 +297,8 @@ private:
 
   unsigned char * m_image_data_jpeg;
   unsigned long m_image_length;
+  const char * m_attribute_supplier;
+  const char * m_attribute_name;
   //Internal buffer that will store the final signed Document
   unsigned char * preparedSig;
   unsigned int preparedSigLength;

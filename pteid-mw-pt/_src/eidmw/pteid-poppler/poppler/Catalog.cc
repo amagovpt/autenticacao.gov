@@ -259,9 +259,8 @@ fallback:
 
 
 //TODO: Too long, split this into 2 functions at least
-void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *firstPageRef,
-	       	const char *location, const char *civil_number,
-		const char *reason, unsigned long filesize, int page, int sig_sector,
+void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_info, Ref *firstPageRef,
+	       	const char *location, const char *reason, unsigned long filesize, int page, int sig_sector,
 		unsigned char *img_data, unsigned long img_length, bool isPTLanguage, bool isCCSignature)
 {
 
@@ -328,7 +327,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 		rotate_signature = true;
 	}
 
-	addSignatureAppearance(&signature_field, name, civil_number, date_outstr,
+	addSignatureAppearance(&signature_field, signer_info, date_outstr,
 		 location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
 
 	memset(date_outstr, 0, sizeof(date_outstr));
@@ -359,7 +358,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, const char * name, Ref *first
 	signature_dict->dictAdd(copyString("Contents"), obj1.initString(sig_content));
 	signature_dict->dictAdd(copyString("SubFilter"), obj1.initName("adbe.pkcs7.detached"));
 
-	char * name_latin1 = utf8_to_latin1(name);
+	char * name_latin1 = utf8_to_latin1(signer_info->name);
 	signature_dict->dictAdd(copyString("Name"), obj1.initString(new GooString(name_latin1)));
 
 	build_prop.initDict(xref);
@@ -897,7 +896,7 @@ GooString *formatMultilineString(char *content, double available_space, double f
 
 }
 
-void Catalog::addSignatureAppearance(Object *signature_field, const char *name, const char *civil_number,
+void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInfo *signer_info,
 	char * date_str, const char* location, const char* reason, int rect_x, int rect_y,
 	unsigned char *img_data, unsigned long img_length, bool rotate_signature, bool isPTLanguage)
 {
@@ -970,7 +969,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	n2_commands->append(str1.get());
 	
 	//The parameter 5 in lines is intended to allow as much lines as needed to the name field	
-	char * name_latin1 = utf8_to_latin1(name);
+	char * name_latin1 = utf8_to_latin1(signer_info->name);
 	GooString *name_str = formatMultilineString(name_latin1, 
 					rect_width, font_size, MYRIAD_BOLD, 5, rect_width - assinado_por_length);
 	n2_commands->append(name_str);
@@ -996,7 +995,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, const char *name, 
 	n2_commands->append(str3.get());
 
 	std::unique_ptr<GooString> str4(GooString::format(isPTLanguage ? strings_pt[1] : strings_en[1],
-				civil_number));
+				signer_info->civil_number));
 	n2_commands->append(str4.get());
 
 	std::unique_ptr<GooString> str5(GooString::format(isPTLanguage ? strings_pt[2] : strings_en[2],
