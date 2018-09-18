@@ -33,7 +33,7 @@ namespace eIDMW
 		EIDMW_APL_API PDFSignature(const char *path);
 		EIDMW_APL_API ~PDFSignature();
 
-                EIDMW_APL_API void setFile(char *pdf_file_path);
+        EIDMW_APL_API void setFile(char *pdf_file_path);
 		//Batch Operations (with PIN caching)
 		EIDMW_APL_API void batchAddFile(char *file_path, bool last_page);
 		EIDMW_APL_API void enableTimestamp();
@@ -82,6 +82,9 @@ namespace eIDMW
         
 		EIDMW_APL_API int signClose(CByteArray signature);
 
+		void setSCAPAttributes(const char * citizenName, const char * citizenId,
+	                      const char * attributeSupplier, const char * attributeName);
+
 	private:
 		void parseCitizenDataFromCert(CByteArray &certData);
 		CByteArray getCitizenCertificate();
@@ -126,6 +129,10 @@ namespace eIDMW
         bool m_signStarted;
         bool m_isExternalCertificate;
         bool m_incrementalMode;
+
+        /* Fields for SCAP signature */
+        const char * m_attributeSupplier;
+        const char * m_attributeName;
 	};
 
 }

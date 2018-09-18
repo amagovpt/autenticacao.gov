@@ -52,6 +52,8 @@ namespace eIDMW
 		location_y = -1;
 		m_civil_number = NULL;
 		m_citizen_fullname = NULL;
+		m_attributeSupplier = NULL;
+		m_attributeName = NULL;
 		m_batch_mode = true;
 		m_timestamp = false;
 		m_isLandscape = false;
@@ -78,6 +80,8 @@ namespace eIDMW
         location_y = -1;
         m_civil_number = NULL;
         m_citizen_fullname = NULL;
+        m_attributeSupplier = NULL;
+		m_attributeName = NULL;
         m_batch_mode = false;
         m_timestamp = false;
         m_isLandscape = false;
@@ -128,6 +132,8 @@ namespace eIDMW
 		location_y = -1;
 		m_civil_number = NULL;
 		m_citizen_fullname = NULL;
+		m_attributeSupplier = NULL;
+		m_attributeName = NULL;
 		m_batch_mode = false;
 		m_timestamp = false;
 		m_isLandscape = false;
@@ -327,6 +333,16 @@ namespace eIDMW
             m_card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
 
             return certData;
+	}
+
+	void PDFSignature::setSCAPAttributes(const char * citizenName, const char * citizenId,
+	                      const char * attributeSupplier, const char * attributeName) {
+
+		m_attributeSupplier = attributeSupplier;
+		m_attributeName = attributeName;
+		m_citizen_fullname = (char *) citizenName;
+		m_civil_number = (char *)citizenId;
+
 	}
 
 	void PDFSignature::parseCitizenDataFromCert(CByteArray &certData) {
@@ -568,7 +584,7 @@ namespace eIDMW
 
 		unsigned char *to_sign;
 
-		if (isExternalCertificate()) {
+		if (isExternalCertificate() && m_attributeSupplier == NULL) {
 			parseCitizenDataFromCert(m_externCertificate);
 		}
 		else {
@@ -577,6 +593,10 @@ namespace eIDMW
 		   		CByteArray signatureCert = getCitizenCertificate();
 		   		parseCitizenDataFromCert(signatureCert);
 		   	}
+		}
+
+		if (m_attributeSupplier != NULL) {
+			doc->addSCAPAttributes(m_attributeSupplier, m_attributeName);
 		}
 		
         m_incrementalMode = doc->isSigned() || doc->isReaderEnabled();
