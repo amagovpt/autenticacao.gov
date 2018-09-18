@@ -132,7 +132,7 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GENERAL_INSTALLDIR    L"install_dirname"      //string, directory of the basic eid software; �c:/Program Files/pteid/�
 #define EIDMW_CNF_GENERAL_CACHEDIR      L"cache_dirname"        //string, cache directory for card-file; $common/pteid/crlcache/
 #define EIDMW_CNF_GENERAL_CERTSDIR      L"certs_dir"
-#define EIDMW_CNF_GENERAL_CERTSDIR_TEST      L"certs_dir_test"
+#define EIDMW_CNF_GENERAL_CERTSDIR_TEST L"certs_dir_test"
 #define EIDMW_CNF_GENERAL_LANGUAGE      L"language"             //string, user lanugage: fr, nl, en, de, es, �
 #define EIDMW_CNF_GENERAL_CARDTXDELAY   L"card_transmit_delay"  //number, delay while communicating with the smartcard, in mili-seconds, default 1 mSec
 #define EIDMW_CNF_GENERAL_CARDCONNDELAY L"card_connect_delay"   //number, delay before connecting to a smartcard, in mili-seconds, default 0 mSec
@@ -141,6 +141,7 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GENERAL_SAM_SERVER    L"sam_server"
 #define EIDMW_CNF_GENERAL_SCAP_HOST     L"scap_host"
 #define EIDMW_CNF_GENERAL_SCAP_PORT     L"scap_port"
+#define EIDMW_CNF_GENERAL_SCAP_APIKEY   L"scap_apikey"
 #define EIDMW_CNF_GENERAL_SHOW_JAVA_APPS L"show_java_apps"
 #define EIDMW_CNF_GENERAL_CMD_HOST      L"cmd_host"
 
@@ -291,6 +292,7 @@ public:
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_SHOW_JAVA_APPS;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_HOST;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_PORT;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_APIKEY;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CMD_HOST;
 
     //LOGGING
