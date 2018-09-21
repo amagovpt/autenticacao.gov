@@ -302,11 +302,11 @@ my $QtVerY = 0;
 my $QtVerZ = 0;
 my $qmakeVerI = 10000 * $QtVerX + 100 * $QtVerY + $QtVerZ;
 
-my $qmakeVer = `qmake -v`;
-my $qmakeCmd = "qmake";
+my $qmakeVer = `qmake -qt=5 -v`;
+my $qmakeCmd = "qmake -qt=5";
 eval {
 	print "trying qmake...";
-	$qmakeVer = `qmake -v`;
+	$qmakeVer = `qmake -qt=5 -v`;
 };
 
 # get the version nr from the version string

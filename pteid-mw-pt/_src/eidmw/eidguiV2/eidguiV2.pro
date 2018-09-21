@@ -17,9 +17,11 @@ CONFIG += c++11
 SOURCES += main.cpp \
     appcontroller.cpp \
     gapi.cpp \
-    SCAP-Services2/SCAPAttributeSupplierBindingProxy.cpp \
-    SCAP-Services2/SCAPC.cpp \
-    SCAP-Services2/SCAPPDFSignatureWithAttachSoapBindingProxy.cpp \
+    SCAP-services-v3/SCAPAttributeClientServiceBindingProxy.cpp \
+    SCAP-services-v3/SCAPAttributeSupplierBindingProxy.cpp \
+    SCAP-services-v3/SCAPAuthorizationServiceSoapBindingProxy.cpp \
+    SCAP-services-v3/SCAPC.cpp \
+    SCAP-services-v3/SCAPSignatureServiceSoapBindingProxy.cpp \
     pdfsignatureclient.cpp \
     ErrorConn.cpp \
     stdsoap2.cpp \
@@ -28,6 +30,7 @@ SOURCES += main.cpp \
     filesavedialog.cpp \
     certificates.cpp \
     proxyinfo.cpp \
+    totp_gen.cpp \
     singleapplication.cpp
 
 INCLUDEPATH += /usr/include/poppler/qt5/
@@ -49,7 +52,7 @@ macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2o_1/lib/
 macx: LIBS += -L/usr/local/Cellar/poppler/0.53.0/lib/
 
 unix:!macx: LIBS += -Wl,-rpath-link,../lib
-LIBS += -L../lib -lpteidlib -lssl -lcrypto -lpoppler-qt5 -lCMDServices
+LIBS += -L../lib -lpteidcommon -lpteidapplayer -lpteidlib  -lssl -lcrypto -lpoppler-qt5 -lCMDServices
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

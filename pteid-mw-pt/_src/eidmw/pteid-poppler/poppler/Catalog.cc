@@ -891,7 +891,6 @@ GooString *formatMultilineString(char *content, double available_space, double f
 	multi_line->append(") Tj\r\n");
 
 
-
 	return multi_line;
 
 }
@@ -1016,6 +1015,15 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 		delete multiline2;
 		delete tmp_location;
 		free(location_latin1);
+	}
+
+	//Display SCAP attribute provider and names
+	//XX: improve this
+	if (signer_info->attribute_provider != NULL) {
+		n2_commands->append("0 -10 Td\r\n");
+		char * content = GooString::format("Certificado por: {0:s}\r\n", signer_info->attribute_provider)->getCString();
+		n2_commands->append(formatMultilineString(content,
+			rect_width, font_size, MYRIAD_REGULAR, 1));
 	}
 
 	n2_commands->append("\r\nET\r\n");

@@ -5,11 +5,8 @@
 #include "ScapSettings.h"
 #include "gapi.h"
 
-//#include "ASService/soapH.h"
-//#include "ASService/soapAttributeSupplierBindingProxy.h"
-//#include "ASService/AttributeSupplierBinding.nsmap"
-#include "SCAPServices/SCAPH.h"
-#include "SCAPServices/SCAPAttributeSupplierBindingProxy.h"
+#include "SCAP-services-v3/SCAPH.h"
+#include "SCAP-services-v3/SCAPAttributeSupplierBindingProxy.h"
 //#include "SCAPServices/SCAP.nsmap"
 
 // Client for WS PADES/PDFSignature
@@ -102,7 +99,9 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
         return;
     }
 
-    int successful = PDFSignatureClient::signPDF(m_proxyInfo, savefilepath, cmd_details.signedCMDFile, cmd_details.citizenName,
+    PDFSignatureClient scap_signature_client;
+
+    int successful = scap_signature_client.signPDF(m_proxyInfo, savefilepath, cmd_details.signedCMDFile, cmd_details.citizenName,
         cmd_details.citizenId, ltv_years, PDFSignatureInfo(selected_page, location_x, location_y, false), selected_attributes);
 
     if (successful == GAPI::ScapSucess) {
@@ -147,6 +146,7 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
     }
 
     char *temp_save_path = strdup(tempFile.fileName().toStdString().c_str());
+    qDebug() << "Generating first tempFile: " << temp_save_path;
     int sign_rc = 0;
 
     try {
@@ -176,7 +176,8 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
 
             if (sign_rc == 0)
             {
-                int successful = PDFSignatureClient::signPDF(m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
+                PDFSignatureClient scap_signature_client;
+                int successful = scap_signature_client.signPDF(m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
                     QString(citizenId), ltv_years, PDFSignatureInfo(selected_page, location_x, location_y, false), selected_attributes);
 
                 if (successful == GAPI::ScapSucess) {

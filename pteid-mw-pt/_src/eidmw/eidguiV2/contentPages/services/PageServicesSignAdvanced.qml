@@ -950,8 +950,10 @@ PageServicesSignAdvancedForm {
 
                 propertyOutputSignedFile = outputFile;
                 if(propertySwitchSignAdd.checked) {
-                    coord_x = gapi.getPageSize(page).width * coord_x
-                    coord_y = gapi.getPageSize(page).height * (1 - coord_y)
+                    //In the new SCAP implementation we use our PDFSignature class as a simple signature
+                    //so we don't need to convert coordinates
+                    //coord_x = gapi.getPageSize(page).width * coord_x
+                    //coord_y = gapi.getPageSize(page).height * (1 - coord_y)
 
                     var attributeList = []
                     var count = 0
@@ -964,7 +966,7 @@ PageServicesSignAdvancedForm {
                     console.log("QML AttributeList: ", attributeList)
                     gapi.startSigningSCAP(loadedFilePath, outputFile, page, coord_x, coord_y,
                                           0, attributeList)
-                }else {
+                } else {
 
                     gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
                                          reason, location, isTimestamp, isSmallSignature)

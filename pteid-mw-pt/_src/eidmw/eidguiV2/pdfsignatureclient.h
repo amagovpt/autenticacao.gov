@@ -3,6 +3,9 @@
 
 #include <QString>
 #include <QTreeWidget>
+#include <string>
+
+#include "eidlib.h"
 #include "cstdio"
 
 class SelectedTreeInfo;
@@ -14,11 +17,14 @@ class ns3__AttributeType;
 
 //PDFSignature version of Attribute type
 class ns4__AttributeType;
+class ns1__MainAttributeType;
+class ns1__AttributeSupplierType;
+class ns1__TransactionType;
 
 
 class PDFSignatureInfo{
 public:
-    PDFSignatureInfo(int _selectedPage, int _x, int _y, bool _isPortrait){
+    PDFSignatureInfo(int _selectedPage, double _x, double _y, bool _isPortrait){
         selectedPage = _selectedPage;
         x = _x;
         y = _y;
@@ -26,23 +32,47 @@ public:
     }
 
     int getSelectedPage() { return selectedPage; }
-    int getX (){ return x; }
-    int getY(){ return y; }
-    bool isPortrait(){return portrait;}
+    double getX() { return x; }
+    double getY() { return y; }
+    bool isPortrait() { return portrait; }
 private:
     int selectedPage;
-    int x;
-    int y;
+    double x;
+    double y;
     bool portrait;
+};
+
+class SignatureDetails {
+public: 
+    QByteArray signature;
+    QByteArray document_hash;
+    QByteArray signing_certificate;
 };
 
 class PDFSignatureClient
 {
+
 public:
 
     PDFSignatureClient();
+    int signPDF(ProxyInfo, QString, QString, QString, QString, int, PDFSignatureInfo, std::vector<ns3__AttributeType *> &);
 
-    static int signPDF(ProxyInfo, QString, QString, QString, QString, int, PDFSignatureInfo, std::vector<ns3__AttributeType *> &);
+private:
+
+    QByteArray openSCAPSignature(const char *inputFile, const char *outputPath, std::string certChain, QString citizenName, QString citizenId,
+                            ns1__AttributeSupplierType *attributeSupplier, ns1__MainAttributeType * attribute, PDFSignatureInfo signatureInfo);
+
+    unsigned char * callSCAPSignatureService(soap* sp, QByteArray signatureHash, ns1__TransactionType *transaction, unsigned int &signatureLen);
+
+    int closeSCAPSignature(unsigned char * scap_signature, unsigned int len);
+    
+    eIDMW::PTEID_PDFSignature * local_pdf_handler;
+    QString current_output_file;
+
+    std::string * processId;
+    //This key is used as input for the TOTP generation
+    std::string m_secretKey;
+    std::string m_appID;
 };
 
 #endif // PDFSIGNATURECLIENT_H

@@ -425,6 +425,7 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
 
     PKCS7_add_certificate( p7, x509 );
 
+    //For non-card signatures we need to add the supplied CA certificates
     if (ca_certificates.size() > 0) {
         addExternalCertificateChain(p7, ca_certificates);
     }

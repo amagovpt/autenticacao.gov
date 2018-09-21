@@ -13,7 +13,7 @@
 
 //SCAP
 #include "scapsignature.h"
-#include "SCAPServices/SCAPH.h"
+#include "SCAP-services-v3/SCAPH.h"
 //#include "ASService/ASServiceH.h"   
 //#include "PDFSignature/envStub.h"
 
@@ -1783,7 +1783,7 @@ void GAPI::startRemovingAttributesFromCache(int isCompanies) {
     QtConcurrent::run(this, &GAPI::removeSCAPAttributesFromCache, isCompanies);
 }
 
-void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, int location_x, int location_y,
+void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, double location_x, double location_y,
                             int ltv, QList<int> attribute_index) {
     SCAPSignParams signParams = {inputPDF, outputPDF, page, location_x, location_y,
                             ltv, attribute_index};
@@ -1926,6 +1926,10 @@ void GAPI::getSCAPCompanyAttributes() {
 
     for(uint i = 0; i < attributes.size() ; i++)
     {
+       //Skip malformed AttributeResponseValues element
+       if (attributes.at(i)->ATTRSupplier == NULL) {
+            continue;
+       }
        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
        std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), false);
 
@@ -1971,6 +1975,10 @@ void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
     }
 
     for(uint i = 0; i < attributes.size() ; i++) {
+        //Skip malformed AttributeResponseValues element
+       if (attributes.at(i)->ATTRSupplier == NULL) {
+            continue;
+       }
        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
        std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), isShortDescription);
 

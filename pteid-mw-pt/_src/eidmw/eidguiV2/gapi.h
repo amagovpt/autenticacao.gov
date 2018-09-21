@@ -161,7 +161,7 @@ struct SCAPSignParams {
 public:
     QString inputPDF;
     QString outputPDF;
-    int page; int location_x; int location_y;
+    int page; double location_x; double location_y;
     int ltv;
     QList<int> attribute_index;
 };
@@ -287,7 +287,7 @@ public slots:
     void startGettingEntityAttributes(QList<int> entity_index);
     void startPingSCAP();
 
-    void startSigningSCAP(QString inputPdf, QString outputPDF, int page, int location_x, int location_y, 
+    void startSigningSCAP(QString inputPdf, QString outputPDF, int page, double location_x, double location_y, 
                           int ltv, QList<int> attribute_index);
 
     //Returns page size in postscript points

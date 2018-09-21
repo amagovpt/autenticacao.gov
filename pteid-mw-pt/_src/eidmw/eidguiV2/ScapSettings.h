@@ -5,6 +5,7 @@
 #include <QtCore>
 #include <QString>
 #include <QSettings>
+#include <string>
 
 #include "eidlib.h"
 
@@ -66,6 +67,12 @@ public:
             m_scap_server_port = server_port;
 
         }
+
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APIKEY);
+            m_secretKey = config.getString();
+
+        }
     }
     ~ScapSettings( void )
     {
@@ -82,6 +89,18 @@ public:
 
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_HOST);
         config.setString(host.toUtf8());
+    }
+
+    void setSecretKey(std::string secretKey)
+    {
+        m_secretKey = secretKey;
+
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APIKEY);
+        config.setString(secretKey.c_str());
+    }
+
+    std::string getSecretKey() {
+        return m_secretKey;
     }
 
     QString getScapServerHost ( void )
@@ -112,6 +131,7 @@ public:
 private:
     QString m_pteid_language;
     QString m_cache_dir;
+    std::string m_secretKey;
 
     QString m_scap_server_host;
     QString m_scap_server_port;
