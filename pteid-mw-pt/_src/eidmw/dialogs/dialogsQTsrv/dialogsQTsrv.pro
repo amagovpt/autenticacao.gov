@@ -74,6 +74,3 @@ SOURCES += main.cpp \
            dlgWndAskPINs.cpp  \
            dlgWndBadPIN.cpp \
 	   dlgWndPinpadInfo.cpp
-
-
-RESOURCES += dlgs.qrc
