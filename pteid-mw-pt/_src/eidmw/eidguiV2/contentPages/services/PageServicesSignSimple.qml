@@ -558,7 +558,6 @@ PageServicesSignSimpleForm {
                 font.capitalization: Font.MixedCase
                 onClicked: {
                     dialogCMDProgress.close()
-                    textReturnCode.text = ""
                     rectReturnCode.visible = false
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                 }
@@ -1018,7 +1017,7 @@ PageServicesSignSimpleForm {
         progressBarIndeterminate.visible = true
         progressBar.visible = true
         textFieldPin.text = ""
-        textReturnCode.text = ""
+        textFieldReturnCode.text = ""
         dialogSignCMD.close()
         buttonCMDProgressConfirm.visible = false
         buttonCMDProgressConfirm.text = qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
