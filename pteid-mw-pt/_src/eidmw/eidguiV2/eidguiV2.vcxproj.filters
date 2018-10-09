@@ -41,17 +41,8 @@
     <ClCompile Include="gapi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_gapi.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_filesavedialog.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="appcontroller.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp">
-      <Filter>Generated Files</Filter>
+	<ClCompile Include="appcontroller.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ErrorConn.cpp">
       <Filter>Source Files</Filter>
@@ -68,26 +59,41 @@
     <ClCompile Include="stdsoap2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+	<ClCompile Include="totp_gen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="certificates.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="singleapplication.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_gapi.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_filesavedialog.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_singleapplication.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_singleapplication_p.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SCAP-services-v3\SCAPAttributeSupplierBindingProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SCAP-Services2\SCAPAttributeSupplierBindingProxy.cpp">
-      <Filter>Generated Files</Filter>
+    <ClCompile Include="SCAP-services-v3\SCAPC.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SCAP-Services2\SCAPC.cpp">
-      <Filter>Generated Files</Filter>
+    <ClCompile Include="SCAP-services-v3\SCAPSignatureServiceSoapBindingProxy.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SCAP-Services2\SCAPPDFSignatureWithAttachSoapBindingProxy.cpp">
-      <Filter>Generated Files</Filter>
+	<ClCompile Include="SCAP-services-v3\SCAPAuthorizationServiceSoapBindingProxy.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

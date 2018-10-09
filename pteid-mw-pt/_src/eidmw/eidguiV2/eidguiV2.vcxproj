@@ -112,7 +112,7 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Cryptui.lib;Crypt32.lib;qtmain.lib;shell32.lib;libeay32.lib;ssleay32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidlib.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Cryptui.lib;Crypt32.lib;qtmain.lib;shell32.lib;libeay32.lib;ssleay32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidcommon.lib;pteid-poppler.lib;pteidlib.lib;xsec_1.lib;FreeImage.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(PTEID_DIR_OPENSSL_098_X64)\lib;$(PTEID_DIR_QT_4_X64)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
@@ -154,7 +154,7 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>qtmain.lib;Crypt32.lib;shell32.lib;ssleay32.lib;libeay32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidlib.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>qtmain.lib;Crypt32.lib;shell32.lib;ssleay32.lib;libeay32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteid-poppler.lib;pteidDlgsWin32.lib;cmdServices.lib;xsec_1.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(PTEID_DIR_OPENSSL_098)\lib\;$(PTEID_DIR_QT_4)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
@@ -163,7 +163,7 @@
       <LinkIncremental>false</LinkIncremental>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Link>
     <Midl>
@@ -259,7 +259,7 @@
     <ClCompile Include="ErrorConn.cpp" />
     <ClCompile Include="filesavedialog.cpp" />
     <ClCompile Include="gapi.cpp" />
-	<ClCompile Include="GeneratedFiles\Release\moc_singleapplication.cpp">
+    <ClCompile Include="GeneratedFiles\Release\moc_singleapplication.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -273,12 +273,14 @@
     <ClCompile Include="GeneratedFiles\Release\moc_filesavedialog.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp" />
     <ClCompile Include="scapcompanies.cpp" />
-    <ClCompile Include="SCAP-Services2\SCAPAttributeSupplierBindingProxy.cpp" />
-    <ClCompile Include="SCAP-Services2\SCAPC.cpp" />
-    <ClCompile Include="SCAP-Services2\SCAPPDFSignatureWithAttachSoapBindingProxy.cpp" />
+    <ClCompile Include="SCAP-services-v3\SCAPAttributeSupplierBindingProxy.cpp" />
+    <ClCompile Include="SCAP-services-v3\SCAPAuthorizationServiceSoapBindingProxy.cpp" />
+    <ClCompile Include="SCAP-services-v3\SCAPC.cpp" />
+    <ClCompile Include="SCAP-services-v3\SCAPSignatureServiceSoapBindingProxy.cpp" />
     <ClCompile Include="scapsignature.cpp" />
     <ClCompile Include="singleapplication.cpp" />
     <ClCompile Include="stdsoap2.cpp" />
+    <ClCompile Include="totp_gen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug\qrc_resources.cpp">

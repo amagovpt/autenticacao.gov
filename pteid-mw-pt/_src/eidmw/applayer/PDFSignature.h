@@ -82,7 +82,7 @@ namespace eIDMW
         
 		EIDMW_APL_API int signClose(CByteArray signature);
 
-		void setSCAPAttributes(const char * citizenName, const char * citizenId,
+		EIDMW_APL_API void setSCAPAttributes(const char * citizenName, const char * citizenId,
 	                      const char * attributeSupplier, const char * attributeName);
 
 	private:
