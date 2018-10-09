@@ -940,6 +940,11 @@
         <source>STR_UPDATE_BUTTON_START</source>
         <translation>Instalar</translation>
     </message>
+	<message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="112"/>
+        <source>STR_UPDATE_BUTTON_CANCEL</source>
+        <translation>Cancelar transferência</translation>
+    </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="14"/>
         <source>STR_UPDATE_ERROR</source>
@@ -964,6 +969,11 @@
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="26"/>
         <source>STR_UPDATE_DOWNLOAD_FAIL</source>
         <translation>A Transferência falhou.</translation>
+    </message>
+	<message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="26"/>
+        <source>STR_UPDATE_VERSION_LOOKUP</source>
+        <translation>A procura de nova versão.</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="40"/>

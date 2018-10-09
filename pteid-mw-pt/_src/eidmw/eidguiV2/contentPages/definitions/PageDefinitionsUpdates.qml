@@ -24,16 +24,24 @@ PageDefinitionsUpdatesForm {
             }else if (error_code == GAPI.DownloadFailed) {
                 propertyTextDescription.text =
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_DOWNLOAD_FAIL")
-            }
+            }else if (error_code == GAPI.DownloadCancelled) {
+				propertyTextDescription.text =
+                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
+			}
             propertyProgressBar.indeterminate = false
             propertyProgressBar.visible = false
             propertyButtonSearch.visible = true
             propertyButtonStartUpdate.visible = false
+			propertyButtonCancelUpdate.visible = false
         }
         onSignalAutoUpdateProgress: {
             propertyProgressBar.indeterminate = false
             propertyProgressBar.visible = true
             propertyProgressBar.value = value
+			if (propertyButtonStartUpdate.visible == true) {
+				propertyButtonStartUpdate.visible = false
+				propertyButtonCancelUpdate.visible = true
+			}
         }
         onSignalAutoUpdateAvailable: {
             propertyTextDescription.text =
@@ -55,7 +63,7 @@ PageDefinitionsUpdatesForm {
             propertyProgressBar.visible = true
             propertyButtonSearch.visible = false
             propertyTextDescription.text =
-                    qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
+                    qsTranslate("PageDefinitionsUpdates","STR_UPDATE_VERSION_LOOKUP")
             controler.autoUpdates()
         }
     }
@@ -66,6 +74,14 @@ PageDefinitionsUpdatesForm {
             propertyProgressBar.indeterminate = false
             propertyButtonSearch.visible = false
             controler.startUpdate()
+        }
+    }
+	propertyButtonCancelUpdate {
+        onClicked: {
+            console.log("propertyButtonCancelUpdate clicked")
+            propertyProgressBar.visible = false
+            propertyButtonSearch.visible = true
+            controler.cancelUpdateDownload()
         }
     }
 }
