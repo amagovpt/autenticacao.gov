@@ -327,8 +327,13 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 		rotate_signature = true;
 	}
 
-	addSignatureAppearance(&signature_field, signer_info, date_outstr,
-		 location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
+        if (signer_info->attribute_provider == NULL) {
+            addSignatureAppearance(&signature_field, signer_info, date_outstr,
+                     location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
+        }else{
+            addSignatureAppearanceSCAP(&signature_field, signer_info, date_outstr,
+                     location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
+        }
 
 	memset(date_outstr, 0, sizeof(date_outstr));
 
@@ -815,7 +820,7 @@ std::string getFittingSubString(std::string &str, double font_size,
  * layout 
  */
 GooString *formatMultilineString(char *content, double available_space, double font_size, MyriadFontType font,
-	       int available_lines, double space_first_line=0)
+               int available_lines, double line_height, double space_first_line=0)
 {
 	GooString *multi_line = new GooString();
 	std::string line = std::string(content);
@@ -861,7 +866,7 @@ GooString *formatMultilineString(char *content, double available_space, double f
 				horizontal_shift = 0;
 
 			//Line spacing
-			GooString * tmp = GooString::format("{0:f} -10 Td\r\n", horizontal_shift);
+                        GooString * tmp = GooString::format("{0:f} -{1:f} Td\r\n", horizontal_shift, line_height);
 			multi_line->append(tmp);
 
 			delete tmp; 
@@ -937,6 +942,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 		
 	char n0_commands[] = "% DSBlank\n";
 	const float font_size = 8;
+        const float line_height = 10.0;
 	int rect_width = rotate_signature ? rect_y : rect_x;
 	int rect_height = rotate_signature ? rect_x : rect_y;
 	
@@ -946,7 +952,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 	if (!small_signature_format && reason != NULL && strlen(reason) > 0)
 	{
 		char * reason_latin1 = utf8_to_latin1(reason);
-		GooString * multiline = formatMultilineString(reason_latin1, rect_width, font_size, MYRIAD_ITALIC, 2);
+                GooString * multiline = formatMultilineString(reason_latin1, rect_width, font_size, MYRIAD_ITALIC, 2, line_height);
 		n2_commands->append(multiline);
 
 		free(reason_latin1);
@@ -1009,21 +1015,12 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 					location_latin1);
 
 		GooString * multiline2 = formatMultilineString(tmp_location->getCString(), 
-					rect_width, font_size, MYRIAD_REGULAR, 1); 
+                                        rect_width, font_size, MYRIAD_REGULAR, 1, line_height);
 		n2_commands->append(multiline2);
 
 		delete multiline2;
 		delete tmp_location;
 		free(location_latin1);
-	}
-
-	//Display SCAP attribute provider and names
-	//XX: improve this
-	if (signer_info->attribute_provider != NULL) {
-		n2_commands->append("0 -10 Td\r\n");
-		char * content = GooString::format("Certificado por: {0:s}\r\n", signer_info->attribute_provider)->getCString();
-		n2_commands->append(formatMultilineString(content,
-			rect_width, font_size, MYRIAD_REGULAR, 1));
 	}
 
 	n2_commands->append("\r\nET\r\n");
@@ -1092,6 +1089,252 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 	free(name_latin1);
 }
 
+void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSignerInfo *signer_info,
+        char * date_str, const char* location, const char* reason, int rect_x, int rect_y,
+        unsigned char *img_data, unsigned long img_length, bool rotate_signature, bool isPTLanguage)
+{
+        char * strings_pt[] = { "(Assinado por : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
+                                                        "(Num. de Identifica\xE7\xE3o Civil: {0:s}) Tj\r\n",
+                                                        "0 -8 Td\r\n(Data: {0:s}) Tj\r\n",
+                                                        "Localiza\xE7\xE3o: {0:s}",
+                                                        "(Certificado por : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
+                                                        "(Atributos certificados : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n"};
+
+        char * strings_en[] = { "(Signed by : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
+                                                        "(Civil identification number: {0:s}) Tj\r\n",
+                                                        "0 -8 Td\r\n(Date: {0:s}) Tj\r\n",
+                                                        "Location: {0:s}",
+                                                        "(Certified by : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
+                                                        "(Certified Attributes : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n"};
+
+        Object ap_dict, appearance_obj, obj1, obj2, obj3,
+               ref_to_dict, ref_to_dict2, ref_to_n2, ref_to_n0, font_dict, xobject_layers;
+
+        GooString ap_command_toplevel;
+
+        if (rotate_signature)
+        {
+                ap_command_toplevel.appendf("0 1 -1 0 {0:d} 0 cm \r\n", rect_x);
+
+        }
+
+        std::string commands_template;
+
+        //Small signature formats only includes one image: Im1
+        if (small_signature_format)
+                commands_template = "q\r\n40.5 0 0 31.5 0 0 cm\r\n/Im1 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
+        else if (useCCLogo)
+                commands_template = "q\r\n40.5 0 0 31.5 0 43 cm\r\n/Im1 Do\r\nQ\r\nq\r\n139.29 0 0 30.87 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
+        else
+                commands_template = "q\r\n40.5 0 0 31.5 0 43 cm\r\n/Im1 Do\r\nQ\r\nq\r\n109.29 0 0 31.00 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
+
+        initBuiltinFontTables();
+
+        //const char appearance_command1[] =
+        ap_command_toplevel.append("q 1 0 0 1 0 0 cm /n0 Do Q\r\nq 1 0 0 1 0 0 cm /n2 Do Q\r\n");
+
+        char n0_commands[] = "% DSBlank\n";
+        const float font_size = 8;
+        const float line_height = 8.0;
+
+        const float font_size_medium = 6;
+        const float line_height_medium = 6.0;
+
+        const float font_size_small = 4;
+        const float line_height_small = 4.0;
+        int rect_width = rotate_signature ? rect_y : rect_x;
+        int rect_height = rotate_signature ? rect_x : rect_y;
+
+        //Start with Italics font
+        GooString *n2_commands = GooString::format(commands_template.c_str(), rect_height - 10, (int)font_size);
+
+        if (!small_signature_format && reason != NULL && strlen(reason) > 0)
+        {
+                char * reason_latin1 = utf8_to_latin1(reason);
+                GooString * multiline = formatMultilineString(reason_latin1, rect_width, font_size_medium, MYRIAD_ITALIC, 2, line_height_medium);
+                n2_commands->append(multiline);
+
+                free(reason_latin1);
+                delete multiline;
+        }
+
+        n2_commands->append("0 -8 Td\r\n");
+        GooString * buf = GooString::format("0 0 0 rg\r\n/F1 {0:d} Tf\r\n", (int)font_size);
+        //Change font to regular black font
+        n2_commands->append(buf);
+
+        delete buf;
+
+        double assinado_por_length = 51.0;
+        //Change to bold font for the signer name
+        std::unique_ptr<GooString> str1(GooString::format(isPTLanguage ? strings_pt[0] : strings_en[0],
+                assinado_por_length, (int)font_size));
+
+        n2_commands->append(str1.get());
+
+        //The parameter 5 in lines is intended to allow as much lines as needed to the name field
+        char * name_latin1 = utf8_to_latin1(signer_info->name);
+        GooString *name_str = formatMultilineString(name_latin1,
+                                        rect_width, font_size, MYRIAD_BOLD, 5, line_height, rect_width - assinado_por_length);
+        n2_commands->append(name_str);
+
+        int lines = 0;
+    char *haystack = name_str->getCString();
+        while ((haystack = strstr(haystack, "Tj")) != NULL)
+        {
+                haystack += 2; //Skip current match of "Tj"
+                lines++;
+        }
+
+        if (lines < 2)
+        {
+                std::unique_ptr<GooString> str2(GooString::format("{0:f} -7 Td\r\n", -assinado_por_length));
+                n2_commands->append(str2.get());
+        }
+        else
+                n2_commands->append("0 -7 Td\r\n");
+
+        //Back to regular font
+        std::unique_ptr<GooString> str3(GooString::format("/F1 {0:d} Tf\r\n", (int)font_size_medium));
+        n2_commands->append(str3.get());
+
+        std::unique_ptr<GooString> str4(GooString::format(isPTLanguage ? strings_pt[1] : strings_en[1],
+                                signer_info->civil_number));
+        n2_commands->append(str4.get());
+
+        std::unique_ptr<GooString> str5(GooString::format(isPTLanguage ? strings_pt[2] : strings_en[2],
+                date_str));
+        n2_commands->append(str5.get());
+
+        if (!small_signature_format && location != NULL && strlen(location) > 0)
+        {
+                n2_commands->append("0 -7 Td\r\n");
+                char * location_latin1 = utf8_to_latin1(location);
+                GooString * tmp_location = GooString::format(isPTLanguage ? strings_pt[3] : strings_en[3],
+                                        location_latin1);
+
+                GooString * multiline2 = formatMultilineString(tmp_location->getCString(),
+                                        rect_width, font_size_medium, MYRIAD_REGULAR, 1, line_height_medium);
+                n2_commands->append(multiline2);
+
+                delete multiline2;
+                delete tmp_location;
+                free(location_latin1);
+        }
+
+        buf = GooString::format("0 0 0 rg\r\n/F1 {0:d} Tf\r\n", (int)font_size_small);
+        //Change font to regular black font
+        n2_commands->append(buf);
+        delete buf;
+
+        assinado_por_length = 30.0;
+
+        if (signer_info->attribute_provider != NULL) {
+
+            n2_commands->append("0 -6 Td\r\n");
+            //Change to bold font for the signer name
+            std::unique_ptr<GooString> str6(GooString::format(isPTLanguage ? strings_pt[4] : strings_en[4],
+                    assinado_por_length, (int)font_size_small));
+
+            n2_commands->append(str6.get());
+
+            //The parameter 2 in lines is intended to allow as much lines as needed to the name field
+            char * name_latin1 = utf8_to_latin1(signer_info->attribute_provider);
+            GooString *name_str = formatMultilineString(name_latin1,
+                                            rect_width, font_size_small, MYRIAD_BOLD, 2, line_height_small, rect_width - assinado_por_length);
+            n2_commands->append(name_str);
+        }
+
+
+        std::unique_ptr<GooString> str7(GooString::format("{0:f} -6 Td\r\n", -assinado_por_length));
+        n2_commands->append(str7.get());
+
+        buf = GooString::format("0 0 0 rg\r\n/F1 {0:d} Tf\r\n", (int)font_size_small);
+        //Change font to regular black font
+        n2_commands->append(buf);
+        delete buf;
+
+        assinado_por_length = 38.0;
+
+        if (signer_info->attribute_name != NULL) {
+            //Change to bold font for the signer name
+            std::unique_ptr<GooString> str8(GooString::format(isPTLanguage ? strings_pt[5] : strings_en[5],
+                    assinado_por_length, (int)font_size_small));
+
+            n2_commands->append(str8.get());
+
+            //The parameter 2 in lines is intended to allow as much lines as needed to the name field
+            char * name_latin1 = utf8_to_latin1(signer_info->attribute_name);
+            GooString *name_str = formatMultilineString(name_latin1,
+                                            rect_width, font_size_small, MYRIAD_BOLD, 9, line_height_small, rect_width - assinado_por_length);
+            n2_commands->append(name_str);
+        }
+
+        n2_commands->append("\r\nET\r\n");
+
+        appearance_obj.initDict(xref);
+        appearance_obj.dictAdd(copyString("Type"), obj1.initName("XObject"));
+        appearance_obj.dictAdd(copyString("Subtype"), obj1.initName("Form"));
+        Object procset, resources;
+        procset.initArray(xref);
+        resources.initDict(xref);
+        /* Obsolete according to the spec since PDF 1.4 ?? */
+    procset.arrayAdd(obj1.initName("PDF"));
+        procset.arrayAdd(obj1.initName("Text"));
+        procset.arrayAdd(obj1.initName("ImageB"));
+        procset.arrayAdd(obj1.initName("ImageC"));
+        procset.arrayAdd(obj1.initName("ImageI"));
+        resources.dictAdd(copyString("ProcSet"), &procset);
+
+        xobject_layers.initDict(xref);
+        Ref n2_layer = newXObject(n2_commands->getCString(), rotate_signature ? rect_y : rect_x, rotate_signature ? rect_x : rect_y,
+         true, true, img_data, img_length);
+        ref_to_n2.initRef(n2_layer.num, n2_layer.gen);
+        xobject_layers.dictAdd(copyString("n2"), &ref_to_n2);
+
+        Ref n0_layer = newXObject(n0_commands, rect_x, rect_y, false, false);
+        ref_to_n0.initRef(n0_layer.num, n0_layer.gen);
+        xobject_layers.dictAdd(copyString("n0"), &ref_to_n0);
+
+        resources.dictAdd(copyString("XObject"), &xobject_layers);
+
+        //Adding /Resources to AP dict
+        appearance_obj.dictAdd(copyString("Resources"), &resources);
+
+        obj1.initArray(xref);
+
+        // BBox gives the coordinates (left, bottom, right, top) of the
+        // Signature Rectangle relative to its origin point
+        obj1.arrayAdd(obj2.initReal(0));
+        obj1.arrayAdd(obj2.initReal(0));
+        obj1.arrayAdd(obj2.initReal(rect_x));
+        obj1.arrayAdd(obj2.initReal(rect_y));
+        appearance_obj.dictAdd(copyString("BBox"), &obj1);
+        appearance_obj.dictAdd(copyString("Length"),
+                        obj1.initInt(ap_command_toplevel.getLength()));
+
+        //appearance_obj.dictAdd(copyString("Filter"), obj1.initName("FlateDecode"));
+
+        MemStream *mStream = new MemStream(strdup(ap_command_toplevel.getCString()), 0,
+                        ap_command_toplevel.getLength(), &appearance_obj);
+
+        mStream->setNeedFree(gTrue);
+        Object aStream;
+        aStream.initStream(mStream);
+
+        Ref ref_to_appearance = xref->addIndirectObject(&aStream);
+        ref_to_dict2.initRef(ref_to_appearance.num, ref_to_appearance.gen);
+
+        ap_dict.initDict(xref);
+        ap_dict.dictAdd(copyString("N"), &ref_to_dict2);
+
+        signature_field->dictAdd(copyString("AP"), &ap_dict);
+
+        delete name_str;
+        delete n2_commands;
+
+        free(name_latin1);
+}
 
 GBool Catalog::setSigFlags(Object * acroform, int value)
 {
