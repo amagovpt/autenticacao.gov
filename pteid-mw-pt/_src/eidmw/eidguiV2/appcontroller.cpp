@@ -213,8 +213,8 @@ void AppController::startRequest(QUrl url){
     std::string proxy_pwd = config_pwd.getString();
     long proxy_port = config2.getLong();
 
-    //10 second timeout
-    int network_timeout = 10000;
+    //allow up to 5 minutes to download full package
+	int download_duration = 300000;
 
     if (!proxy_host.empty() && proxy_port != 0)
     {
@@ -245,7 +245,7 @@ void AppController::startRequest(QUrl url){
     }
 
     reply = qnam.get(QNetworkRequest(url));
-    QTimer::singleShot(network_timeout, this, SLOT(cancelDownload()));
+	QTimer::singleShot(download_duration, this, SLOT(cancelDownload()));
     connect(reply, SIGNAL(finished()),
             this, SLOT(httpFinished()));
     connect(reply, SIGNAL(readyRead()),
@@ -257,9 +257,9 @@ void AppController::startRequest(QUrl url){
 void AppController::startUpdateRequest(QUrl url){
     qDebug() << "C++: startUpdateRequest";
 
-    int network_timeout = 10000;
+	int download_duration = 300000;
     reply = qnam.get(QNetworkRequest(url));
-    QTimer::singleShot(network_timeout, this, SLOT(cancelUpdateDownload()));
+	QTimer::singleShot(download_duration, this, SLOT(cancelUpdateDownload()));
     connect(reply, SIGNAL(finished()),
             this, SLOT(httpUpdateFinished()));
     connect(reply, SIGNAL(readyRead()),
@@ -281,11 +281,13 @@ void AppController::httpUpdateFinished(){
             qDebug() << "C++: httpUpdateRequestAborted";
         }
         reply->deleteLater();
+		qDebug() << "eidgui Autoupdates: download failed 1";
         emit signalAutoUpdateFail(GAPI::DownloadFailed);
         return;
     }
     if (!file){
         reply->deleteLater();
+		qDebug() << "eidgui Autoupdates: download failed 2";
         emit signalAutoUpdateFail(GAPI::DownloadFailed);
         return;
     }
@@ -296,6 +298,7 @@ void AppController::httpUpdateFinished(){
     if (reply->error())
     {
         file->remove();
+		qDebug() << "eidgui Autoupdates: download failed 3";
         emit signalAutoUpdateFail(GAPI::DownloadFailed);
     }
     else if (!redirectionTarget.isNull())
@@ -410,7 +413,7 @@ void AppController::httpFinished()
             delete file;
             file = 0;
         }
-
+		qDebug() << "eidgui Autoupdates: download failed 4";
         emit signalAutoUpdateFail(GAPI::DownloadFailed);
         reply->deleteLater();
         return;
@@ -420,6 +423,7 @@ void AppController::httpFinished()
     if (reply->error()) {
         qDebug() << "C++: reply error";
         file->remove();
+		qDebug() << "eidgui Autoupdates: download failed 5";
         emit signalAutoUpdateFail(GAPI::DownloadFailed);
         QString strLog = QString("AutoUpdates:: Download failed: ");
         strLog += reply->url().toString();
@@ -701,6 +705,7 @@ void AppController::cancelUpdateDownload()
     qDebug() << "C++: cancelUpdateDownload";
     httpUpdateRequestAborted = true;
     reply->abort();
+	qDebug() << "eidgui Autoupdates: download failed 6";
     emit signalAutoUpdateFail(GAPI::DownloadFailed);
 }
 
