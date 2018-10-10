@@ -10,6 +10,7 @@ Item {
     property alias propertyProgressBar: progressBar
     property alias propertyTextDescription: textDescription
     property alias propertyButtonStartUpdate: buttonStartUpdate
+	property alias propertyButtonCancelUpdate: buttonCancelUpdate
     Item {
         width: parent.width
         height: parent.height
@@ -92,6 +93,24 @@ Item {
             Button {
                 id: buttonStartUpdate
                 text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_BUTTON_START")
+                width: Constants.WIDTH_BUTTON
+                height: parent.height
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                font.capitalization: Font.MixedCase
+                anchors.horizontalCenter: parent.horizontalCenter
+                visible: false
+            }
+        }
+		Item {
+            id: rawButtonCancelUpdate
+            anchors.top: rawButtonSearch.bottom
+            anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+            width: parent.width
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            Button {
+                id: buttonCancelUpdate
+                text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_BUTTON_CANCEL")
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
