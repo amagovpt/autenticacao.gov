@@ -62,35 +62,41 @@ PageCardAdressForm {
         }
         onSignalCardAccessError: {
             console.log("Card Adress onSignalCardAccessError"+ error_code)
-            if (error_code != GAPI.CardUserPinCancel){
-                if (error_code == GAPI.NoReaderFound) {
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("Popup Card","STR_POPUP_ERROR")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
-                }
-                else if (error_code == GAPI.NoCardFound) {
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("Popup Card","STR_POPUP_ERROR")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("Popup Card","STR_POPUP_NO_CARD")
-                }
-                else if (error_code == GAPI.SodCardReadError) {
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("Popup Card","STR_POPUP_ERROR")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
-                }
-                else {
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("Popup Card","STR_POPUP_ERROR")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
-                }
-                propertyButtonConfirmOfAddress.enabled = false
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            
+            if (error_code == GAPI.NoReaderFound) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
             }
+            else if (error_code == GAPI.NoCardFound) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CARD")
+            }
+            else if (error_code == GAPI.SodCardReadError) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
+            }
+			else if (error_code == GAPI.CardUserPinCancel) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
+            }
+            else {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
+            }
+            propertyButtonConfirmOfAddress.enabled = false
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            
             propertyDistrict.propertyDateField.text = ""
             propertyMunicipality.propertyDateField.text = ""
             propertyParish.propertyDateField.text = ""

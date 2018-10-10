@@ -41,7 +41,7 @@ PageServicesSignSimpleForm {
         }
         onSignalCardAccessError: {
             console.log("Sign simple Page onSignalCardAccessError")
-            if(cardLoaded && error_code != GAPI.CardUserPinCancel){
+            if(cardLoaded){
                 if (error_code == GAPI.NoReaderFound) {
                     mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                             qsTranslate("Popup Card","STR_POPUP_ERROR")
@@ -59,6 +59,12 @@ PageServicesSignSimpleForm {
                             qsTranslate("Popup Card","STR_POPUP_ERROR")
                     mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                             qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
+                }
+				else if (error_code == GAPI.CardUserPinCancel) {
+                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                            qsTranslate("Popup Card","STR_POPUP_ERROR")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
                 }
                 else if(error_code == GAPI.PinBlocked) {
                     mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
