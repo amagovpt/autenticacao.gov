@@ -173,12 +173,18 @@ PageServicesSignAdvancedForm {
                     mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                             qsTranslate("Popup Card","STR_POPUP_CARD_PIN_BLOCKED")
                 }
-				else if (error_code == GAPI.CardUserPinCancel) {
+                else if (error_code == GAPI.CardUserPinCancel) {
                     mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                             qsTranslate("Popup Card","STR_POPUP_ERROR")
                     mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                             qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
                 }
+				else if (error_code == GAPI.CardPinTimeout) {
+                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                            qsTranslate("Popup Card","STR_POPUP_ERROR")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
+            }
                 else {
                     mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                             qsTranslate("Popup Card","STR_POPUP_ERROR")

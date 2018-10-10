@@ -186,6 +186,10 @@ QString GAPI::getAddressField(AddressInfoKey key) {
 { \
     emit signalCardAccessError(PinBlocked); \
     } \
+    else if (errorCode == EIDMW_ERR_TIMEOUT) \
+{ \
+    emit signalCardAccessError(CardPinTimeout); \
+    } \
     else \
 { \
     PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
