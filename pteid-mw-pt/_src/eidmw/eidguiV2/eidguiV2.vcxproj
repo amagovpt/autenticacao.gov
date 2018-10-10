@@ -121,7 +121,7 @@
       <LinkIncremental>false</LinkIncremental>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Link>
     <Midl>
@@ -163,7 +163,7 @@
       <LinkIncremental>false</LinkIncremental>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Link>
     <Midl>
