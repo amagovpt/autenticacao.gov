@@ -3,8 +3,8 @@
   <?define var.QMLDIR=..\..\..\_Binaries35\Win32\VC9\Release\qml-app\ ?>
   <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\VC9\Release\ ?>
     <Fragment>
-        <DirectoryRef Id="TARGETDIR">
-            <Directory Id="EIDGUIV2DIR" Name="Autenticacao.gov" />
+        <DirectoryRef Id="ProgramFiles64Folder">
+            <Directory Id="EIDGUIV2DIR" Name="Portugal Identity Card"/>
         </DirectoryRef>
 			<DirectoryRef Id="ApplicationProgramsFolder">
 			<Component Id="PteidGuiShortcut" Guid="{CBD0F388-EAE5-4FA1-8C38-EC223928FF13}">

@@ -4,8 +4,8 @@
   <?define var.PTEID_QT_PRINTSUPPORT=$(env.PTEID_DIR_QT_4_X64)\plugins\printsupport\?>
   <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\VC9\Release\ ?>
     <Fragment>
-        <DirectoryRef Id="TARGETDIR">
-            <Directory Id="EIDGUIV2DIR" Name="Autenticacao.gov">
+        <DirectoryRef Id="ProgramFiles64Folder">
+              <Directory Id="EIDGUIV2DIR" Name="Portugal Identity Card">
                 <Component Id="cmpCC914190102D9CDC82EA7078F7C9EBC4" Guid="{D3354F32-A827-4C36-8989-67BD0450E7B4}">
                     <File Id="fil980E5FBB643F571E77169394A9917ABF" KeyPath="yes" Source="$(var.QMLDIR)\D3Dcompiler_47.dll" />
                 </Component>
