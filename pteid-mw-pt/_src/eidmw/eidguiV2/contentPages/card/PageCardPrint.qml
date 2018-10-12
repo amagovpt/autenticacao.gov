@@ -7,6 +7,8 @@ import eidguiV2 1.0
 
 PageCardPrintForm {
 
+    property string outputFile : ""
+
     Dialog {
         id: dialogPinOK
         width: 400
@@ -63,22 +65,108 @@ PageCardPrintForm {
             }
         }
     }
+    Dialog {
+        id: createsuccess_dialog
+        width: 400
+        height: 200
+        visible: false
+        font.family: lato.name
+        // Center dialog in the main view
+        x: - mainMenuView.width - subMenuView.width
+           + mainView.width * 0.5 - createsuccess_dialog.width * 0.5
+        y: parent.height * 0.5 - createsuccess_dialog.height * 0.5
+
+        header: Label {
+            text: qsTr("STR_CREATE_SUCESS")
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: true
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
+            color: Constants.COLOR_MAIN_BLUE
+        }
+
+        Item {
+            width: createsuccess_dialog.availableWidth
+            height: 50
+
+            Keys.enabled: true
+            Keys.onPressed: {
+                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
+                {
+                    showCreatedFile()
+                }
+            }
+
+            Item {
+                id: rectLabelText
+                width: parent.width
+                height: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    text: qsTr("STR_CREATE_OPEN")
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width - 48
+                    wrapMode: Text.Wrap
+                }
+            }
+        }
+        Item {
+            width: createsuccess_dialog.availableWidth
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            y: 80
+            Item {
+                width: parent.width
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.horizontalCenter: parent.horizontalCenter
+                Button {
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("Popup File","STR_POPUP_FILE_CANCEL")
+                    anchors.left: parent.left
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    onClicked: {
+                        createsuccess_dialog.close()
+                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                    }
+                }
+                Button {
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("Popup File","STR_POPUP_FILE_OPEN")
+                    anchors.right: parent.right
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    onClicked: {
+                        showCreatedFile()
+                    }
+                }
+            }
+        }
+        onRejected:{
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+        }
+    }
     Connections {
         target: gapi
         onSignalGenericError: {
             propertyBusyIndicator.running = false
         }
         onSignalPdfPrintSignSucess: {
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTr("STR_PRINT_CREATE_PDF")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTr("STR_PRINT_CREATE_PDF_SUCESS")
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+            createsuccess_dialog.visible = true
+            propertyBusyIndicator.running = false
         }
         onSignalPdfPrintSucess: {
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTr("STR_PRINT_CREATE_PDF")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTr("STR_PRINT_CREATE_PDF_SUCESS")
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+            createsuccess_dialog.visible = true
+            propertyBusyIndicator.running = false
         }
         onSignalPdfPrintFail: {
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTr("STR_PRINT_CREATE_PDF")
@@ -192,7 +280,7 @@ PageCardPrintForm {
     propertyFileDialogOutput {
         onAccepted: {
 
-            var outputFile = propertyFileDialogOutput.fileUrl.toString()
+            outputFile = propertyFileDialogOutput.fileUrl.toString()
             if (Qt.platform.os === "windows") {
                 outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
             }else{
@@ -260,5 +348,17 @@ PageCardPrintForm {
         propertySwitchAddress.checked = false
         propertySwitchNotes.checked = false
         propertySwitchPdfSign.checked = false
+    }
+    
+    function showCreatedFile(){
+        if (Qt.platform.os === "windows") {
+            outputFile = "file:///" + outputFile
+        }else{
+            outputFile = "file://" + outputFile
+        }
+        console.log("Open Url Externally: " + outputFile)
+        Qt.openUrlExternally(outputFile)
+        createsuccess_dialog.close()
+        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
     }
 }
