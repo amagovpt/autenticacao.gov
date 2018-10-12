@@ -937,6 +937,9 @@ PageServicesSignSimpleForm {
         onValueChanged: {
             var loadedFilePath = filesModel.get(0).fileUrl
             var pageCount = gapi.getPDFpageCount(loadedFilePath)
+            if(propertySpinBoxControl.value > pageCount){
+                propertySpinBoxControl.value = 1
+            }
             propertyPDFPreview.propertyBackground.source =
                     "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
             updateIndicators(pageCount)

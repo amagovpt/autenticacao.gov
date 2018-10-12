@@ -1614,11 +1614,13 @@ PageServicesSignAdvancedForm {
     propertySpinBoxControl {
         onValueChanged: {
             var loadedFilePath = filesModel.get(filesModel.count-1).fileUrl
+            var pageCount = gapi.getPDFpageCount(loadedFilePath)
+            if(propertySpinBoxControl.value > pageCount){
+                propertySpinBoxControl.value = 1
+            }
             propertyPDFPreview.propertyBackground.source =
                     "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
-            propertyPageLoader.propertyBackupPage =  propertySpinBoxControl.value
-
-            var pageCount = gapi.getPDFpageCount(loadedFilePath)
+            propertyPageLoader.propertyBackupPage =  propertySpinBoxControl.value           
             updateIndicators(pageCount)
         }
     }
