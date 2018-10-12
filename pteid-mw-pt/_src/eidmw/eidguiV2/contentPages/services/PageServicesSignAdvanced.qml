@@ -706,7 +706,13 @@ PageServicesSignAdvancedForm {
         property alias propertySignSuccessDialogText: labelText
 
         header: Label {
-            text: qsTranslate("PageServicesSign","STR_SIGN_SUCESS_MULTI")
+            text: {
+                if(propertyListViewFiles.count > 1) {
+                    qsTranslate("PageServicesSign", "STR_SIGN_SUCESS_MULTI")
+                } else {
+                    qsTranslate("PageServicesSign", "STR_SIGN_SUCESS")
+                }
+            }
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
@@ -750,7 +756,14 @@ PageServicesSignAdvancedForm {
                 anchors.top: rectLabelText.bottom
                 Text {
                     id: labelOpenText
-                    text: qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI")
+                    text: {
+                        if(propertyListViewFiles.count > 1) {
+                            qsTranslate("PageServicesSign", "STR_SIGN_OPEN_MULTI")
+                        } else {
+                            qsTranslate("PageServicesSign", "STR_SIGN_OPEN")
+                        }
+                    }
+
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
