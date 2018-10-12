@@ -194,7 +194,10 @@ Item {
             Button {
                 id: buttonPrint
                 text: qsTranslate("PageCardPrint","STR_PRINT_BUTTON")
-                enabled: false
+                enabled: {
+                    (switchBasic.checked || switchAdditional.checked || switchAddress.checked 
+                              || switchNotes.checked) && !switchPdfSign.checked
+                }
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -212,7 +215,10 @@ Item {
             Button {
                 id: buttonPdf
                 text: qsTranslate("PageCardPrint","STR_PRINT_PDF_BUTTON")
-                enabled: false
+                enabled: {
+                    switchBasic.checked || switchAdditional.checked 
+                         || switchAddress.checked || switchNotes.checked
+                }
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 font.pixelSize: Constants.SIZE_TEXT_FIELD

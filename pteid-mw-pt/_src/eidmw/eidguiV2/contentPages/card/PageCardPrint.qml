@@ -101,8 +101,6 @@ PageCardPrintForm {
         onSignalCardDataChanged: {
             console.log("Data Card Print --> Data Changed")
             propertyBusyIndicator.running = false
-            propertyButtonPrint.enabled = true
-            propertyButtonPdf.enabled = true
             propertySwitchBasic.enabled = true
             propertySwitchAdditional.enabled = true
             propertySwitchAddress.enabled = true
@@ -244,17 +242,6 @@ PageCardPrintForm {
             }
         }
     }
-    propertySwitchPdfSign {
-        onCheckedChanged: {
-            if(propertySwitchPdfSign.checked){
-                propertyButtonPrint.enabled = false
-                propertyButtonPrint.checked = false
-            } else {
-                propertyButtonPrint.enabled = true
-                propertyButtonPrint.checked = false
-            }
-        }
-    }
 
     Component.onCompleted: {
         console.log("Page Card Print mainWindow Completed")
@@ -273,7 +260,5 @@ PageCardPrintForm {
         propertySwitchAddress.checked = false
         propertySwitchNotes.checked = false
         propertySwitchPdfSign.checked = false
-        propertyButtonPrint.enabled = false
-        propertyButtonPdf.enabled = false
     }
 }
