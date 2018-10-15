@@ -338,33 +338,27 @@ void AppController::RunPackage(std::string pkg, std::string distro){
     PROCESS_INFORMATION pi;
     ZeroMemory(&si,sizeof(si));
     si.cb = sizeof(si);
+    ZeroMemory(&pi, sizeof(pi));
 
-    std::string installer_app = "C:\\Windows\\system32\\msiexec.exe";
+    std::wstring msi_path = QDir::toNativeSeparators(QString::fromStdString(pkgpath)).toStdWString();
+    qDebug() << QString::fromStdString("msi package path");
+    qDebug() << QString::fromStdWString(msi_path);
 
-    std::string msi_path = QDir::toNativeSeparators(QString::fromStdString(pkgpath)).toStdString();
-    qDebug() << QString::fromStdString("msi path " + msi_path);
-
-    std::string log_file = QDir::toNativeSeparators(QString::fromStdString(QDir::tempPath().toStdString() + "\\Pteid-MSI.log")).toStdString();
-    qDebug() << QString::fromStdString("log file path " + log_file);
-
-    std::string arg = "/i ";
-    arg.append(msi_path);
-    arg.append(" /L*v ");
-    arg.append(log_file);
+    std::wstring log_file = QDir::toNativeSeparators(QString::fromStdString(QDir::tempPath().toStdString() + "\\Pteid-MSI.log")).toStdWString();
+    qDebug() << QString::fromStdString("log file path");
+    qDebug() << QString::fromStdWString(log_file);
 
     //Prepare CreateProcess args
-    std::wstring installer_app_w(installer_app.length(), L' '); // Make room for characters
-    std::copy(installer_app.begin(), installer_app.end(), installer_app_w.begin()); // Copy string to wstring.
+    std::wstring installer_app = L"C:\\Windows\\system32\\msiexec.exe";
+    std::wstring logging_level = L" /L*v ";
+    std::wstring msi_args = L" /i ";
 
-    std::wstring arg_w(arg.length(), L' '); // Make room for characters
-    std::copy(arg.begin(), arg.end(), arg_w.begin()); // Copy string to wstring.
+    std::wstring path = installer_app + msi_args + msi_path + logging_level + log_file;
+    path.push_back(0);
 
-    std::wstring input = installer_app_w + L" " + arg_w;
-    wchar_t* arg_concat = const_cast<wchar_t*>(input.c_str());
-    const wchar_t* app_const = installer_app_w.c_str();
-
-    if(!CreateProcessW(app_const, arg_concat, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)){
+    if (!CreateProcess(NULL, &path[0], NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)){
         qDebug() << "autoUpdate process failed to start";
+        qDebug() << QString::fromStdString("Error: " + GetLastError());
         emit signalAutoUpdateFail(GAPI::InstallFailed);
     } else {
         PTEID_ReleaseSDK();
