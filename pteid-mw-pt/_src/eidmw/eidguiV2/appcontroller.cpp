@@ -341,10 +341,12 @@ void AppController::RunPackage(std::string pkg, std::string distro){
     ZeroMemory(&pi, sizeof(pi));
 
     std::wstring msi_path = QDir::toNativeSeparators(QString::fromStdString(pkgpath)).toStdWString();
+
     qDebug() << QString::fromStdString("msi package path");
     qDebug() << QString::fromStdWString(msi_path);
 
     std::wstring log_file = QDir::toNativeSeparators(QString::fromStdString(QDir::tempPath().toStdString() + "\\Pteid-MSI.log")).toStdWString();
+
     qDebug() << QString::fromStdString("log file path");
     qDebug() << QString::fromStdWString(log_file);
 
@@ -353,7 +355,22 @@ void AppController::RunPackage(std::string pkg, std::string distro){
     std::wstring logging_level = L" /L*v ";
     std::wstring msi_args = L" /i ";
 
-    std::wstring path = installer_app + msi_args + msi_path + logging_level + log_file;
+    std::wstring path = installer_app;
+    path.append(msi_args);
+
+    //add double quotes for paths
+    path.append(L"\"");
+    path.append(msi_path);
+    path.append(L"\"");
+
+    path.append(logging_level);
+
+    //add double quotes for paths
+    path.append(L"\"");
+    path.append(log_file);
+    path.append(L"\"");
+
+    //guarantees null-terminating string
     path.push_back(0);
 
     if (!CreateProcess(NULL, &path[0], NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)){

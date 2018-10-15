@@ -985,7 +985,12 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="32"/>
         <source>STR_UPDATE_INSTALL_FAIL</source>
-        <translation type="unfinished">Failed to install update.</translation>
+        <translation>Failed to install update.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="32"/>
+        <source>STR_CONTACT_SUPPORT</source>
+        <translation>Please try again. If this error persists, contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail cartaodecidadao@irn.mj.pt.</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="70"/>

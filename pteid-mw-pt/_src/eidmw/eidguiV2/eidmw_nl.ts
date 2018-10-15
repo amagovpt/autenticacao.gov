@@ -983,7 +983,12 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="32"/>
         <source>STR_UPDATE_INSTALL_FAIL</source>
-        <translation type="unfinished">Falha na instalação da actualização.</translation>
+        <translation>Falha na instalação da actualização.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="32"/>
+        <source>STR_CONTACT_SUPPORT</source>
+        <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail cartaodecidadao@irn.mj.pt.</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="70"/>

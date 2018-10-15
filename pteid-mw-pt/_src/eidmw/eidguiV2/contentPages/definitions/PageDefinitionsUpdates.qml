@@ -29,7 +29,7 @@ PageDefinitionsUpdatesForm {
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
             }else if (error_code == GAPI.InstallFailed) {
                 propertyTextDescription.text =
-                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL")
+                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL") + "\n\n" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
             }
             propertyProgressBar.value = 0
             propertyProgressBar.indeterminate = false
@@ -42,8 +42,7 @@ PageDefinitionsUpdatesForm {
             propertyProgressBar.indeterminate = false
             propertyProgressBar.visible = true
             propertyProgressBar.value = value
-            if (propertyButtonStartUpdate.visible == true) {
-                propertyButtonStartUpdate.visible = false
+            if (propertyButtonCancelUpdate.visible == false) {
                 propertyButtonCancelUpdate.visible = true
             }
         }
@@ -77,6 +76,7 @@ PageDefinitionsUpdatesForm {
             propertyProgressBar.visible = true
             propertyProgressBar.indeterminate = false
             propertyButtonSearch.visible = false
+            propertyButtonStartUpdate.visible = false //instant hide it after press guarantees that user never accidentally clicks two times
             controler.startUpdate()
         }
     }
