@@ -330,25 +330,46 @@ void AppController::RunPackage(std::string pkg, std::string distro){
     pkgpath.append(QDir::tempPath().toStdString());
     pkgpath.append("/");
     pkgpath.append(pkg);
+
+    qDebug() << QString::fromStdString("pkgpath " + pkgpath);
+
 #ifdef WIN32
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
     ZeroMemory(&si,sizeof(si));
     si.cb = sizeof(si);
 
-    std::string winpath;
-    winpath.append("C:\\Windows\\system32\\msiexec.exe /i");
+    std::string installer_app = "C:\\Windows\\system32\\msiexec.exe";
 
-    QString s = QDir::toNativeSeparators(QString::fromStdString(pkgpath));
-    winpath.append(s.toStdString());
-    winpath.append(" /L*v ");
-    winpath.append(QDir::tempPath().toStdString());
-    winpath.append("\\Pteid-MSI.log");
-    CreateProcess(NULL, LPTSTR(winpath.c_str()), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
-	
-	PTEID_ReleaseSDK();
-	
-    exit(0);
+    std::string msi_path = QDir::toNativeSeparators(QString::fromStdString(pkgpath)).toStdString();
+    qDebug() << QString::fromStdString("msi path " + msi_path);
+
+    std::string log_file = QDir::toNativeSeparators(QString::fromStdString(QDir::tempPath().toStdString() + "\\Pteid-MSI.log")).toStdString();
+    qDebug() << QString::fromStdString("log file path " + log_file);
+
+    std::string arg = "/i ";
+    arg.append(msi_path);
+    arg.append(" /L*v ");
+    arg.append(log_file);
+
+    //Prepare CreateProcess args
+    std::wstring installer_app_w(installer_app.length(), L' '); // Make room for characters
+    std::copy(installer_app.begin(), installer_app.end(), installer_app_w.begin()); // Copy string to wstring.
+
+    std::wstring arg_w(arg.length(), L' '); // Make room for characters
+    std::copy(arg.begin(), arg.end(), arg_w.begin()); // Copy string to wstring.
+
+    std::wstring input = installer_app_w + L" " + arg_w;
+    wchar_t* arg_concat = const_cast<wchar_t*>(input.c_str());
+    const wchar_t* app_const = installer_app_w.c_str();
+
+    if(!CreateProcessW(app_const, arg_concat, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)){
+        qDebug() << "autoUpdate process failed to start";
+        emit signalAutoUpdateFail(GAPI::InstallFailed);
+    } else {
+        PTEID_ReleaseSDK();
+        exit(0);
+    }
 
 #elif __APPLE__
     // This launches the GUI installation process, the user has to follow the wizard to actually perform the installation

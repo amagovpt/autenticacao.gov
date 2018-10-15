@@ -981,17 +981,22 @@
         <translation>A Transferência falhou.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="66"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="32"/>
+        <source>STR_UPDATE_INSTALL_FAIL</source>
+        <translation type="unfinished">Falha na instalação da actualização.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="70"/>
         <source>STR_UPDATE_VERSION_LOOKUP</source>
         <translation>A procura de nova versão.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="48"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="52"/>
         <source>STR_UPDATE_AVAILABLE</source>
         <translation>Existem atualizações disponíves. Clique em Instalar para prosseguir.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="55"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="59"/>
         <source>STR_UPDATE_STARTING_DOWNLOAD</source>
         <translation>A transferir</translation>
     </message>

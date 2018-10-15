@@ -25,23 +25,27 @@ PageDefinitionsUpdatesForm {
                 propertyTextDescription.text =
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_DOWNLOAD_FAIL")
             }else if (error_code == GAPI.DownloadCancelled) {
-				propertyTextDescription.text =
+                propertyTextDescription.text =
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
-			}
+            }else if (error_code == GAPI.InstallFailed) {
+                propertyTextDescription.text =
+                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL")
+            }
+            propertyProgressBar.value = 0
             propertyProgressBar.indeterminate = false
             propertyProgressBar.visible = false
             propertyButtonSearch.visible = true
             propertyButtonStartUpdate.visible = false
-			propertyButtonCancelUpdate.visible = false
+            propertyButtonCancelUpdate.visible = false
         }
         onSignalAutoUpdateProgress: {
             propertyProgressBar.indeterminate = false
             propertyProgressBar.visible = true
             propertyProgressBar.value = value
-			if (propertyButtonStartUpdate.visible == true) {
-				propertyButtonStartUpdate.visible = false
-				propertyButtonCancelUpdate.visible = true
-			}
+            if (propertyButtonStartUpdate.visible == true) {
+                propertyButtonStartUpdate.visible = false
+                propertyButtonCancelUpdate.visible = true
+            }
         }
         onSignalAutoUpdateAvailable: {
             propertyTextDescription.text =
@@ -76,7 +80,7 @@ PageDefinitionsUpdatesForm {
             controler.startUpdate()
         }
     }
-	propertyButtonCancelUpdate {
+    propertyButtonCancelUpdate {
         onClicked: {
             console.log("propertyButtonCancelUpdate clicked")
             propertyProgressBar.visible = false
