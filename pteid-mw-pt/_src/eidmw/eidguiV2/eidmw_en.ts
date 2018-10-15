@@ -703,12 +703,12 @@
     <message>
         <location filename="contentPages/card/PageCardPrint.qml" line="80"/>
         <source>STR_CREATE_SUCESS</source>
-        <translation type="unfinished">File successfully created</translation>
+        <translation>File successfully created</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrint.qml" line="107"/>
         <source>STR_CREATE_OPEN</source>
-        <translation type="unfinished">Open created file?</translation>
+        <translation>Open created file?</translation>
     </message>
     <message>
         <source>STR_POPUP_FILE_CANCEL</source>

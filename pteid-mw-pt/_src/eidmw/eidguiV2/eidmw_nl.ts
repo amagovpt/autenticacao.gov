@@ -692,12 +692,12 @@
     <message>
         <location filename="contentPages/card/PageCardPrint.qml" line="80"/>
         <source>STR_CREATE_SUCESS</source>
-        <translation type="unfinished">Ficheiro criado com sucesso</translation>
+        <translation>Ficheiro criado com sucesso</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrint.qml" line="107"/>
         <source>STR_CREATE_OPEN</source>
-        <translation type="unfinished">Abrir ficheiro criado?</translation>
+        <translation>Abrir ficheiro criado?</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrint.qml" line="172"/>
