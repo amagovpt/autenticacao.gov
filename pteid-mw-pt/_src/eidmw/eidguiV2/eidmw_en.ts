@@ -943,17 +943,18 @@
 <context>
     <name>PageDefinitionsUpdates</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="30"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="37"/>
         <source>STR_UPDATE_TITLE</source>
         <translation>Updates</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="95"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="58"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="103"/>
         <source>STR_UPDATE_BUTTON_START</source>
         <translation>Install</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="113"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="123"/>
         <source>STR_UPDATE_BUTTON_CANCEL</source>
         <translation>Cancel download</translation>
     </message>
@@ -993,28 +994,33 @@
         <translation>Please try again. If this error persists, contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail cartaodecidadao@irn.mj.pt.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="70"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="59"/>
+        <source>STR_VERSION</source>
+        <translation>version</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="79"/>
         <source>STR_UPDATE_VERSION_LOOKUP</source>
         <translation>Searching for new version.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="52"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="56"/>
         <source>STR_UPDATE_AVAILABLE</source>
-        <translation>There are updates available press Install do perform the updates.</translation>
+        <translation>A new update is available. Press Install do perform the update.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="59"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="68"/>
         <source>STR_UPDATE_STARTING_DOWNLOAD</source>
         <translation>Downloading</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="29"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="45"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="52"/>
         <source>STR_UPDATE_TEXT</source>
         <translation>Press the button to check for available updates.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="78"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="85"/>
         <source>STR_UPDATE_BUTTON</source>
         <translation>Check for updates</translation>
     </message>

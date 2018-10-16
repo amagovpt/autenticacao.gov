@@ -120,7 +120,7 @@ Item {
             Button {
                 id: buttonCancelUpdate
                 y: 21
-                text: qsTr("PageDefinitionsUpdates", "STR_UPDATE_BUTTON_CANCEL")
+                text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_BUTTON_CANCEL")
                 anchors.horizontalCenterOffset: 0
                 width: Constants.WIDTH_BUTTON
                 height: parent.height
