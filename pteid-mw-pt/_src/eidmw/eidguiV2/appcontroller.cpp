@@ -519,9 +519,21 @@ bool AppController::VerifyUpdates(std::string filedata)
     QString ver (WIN_GUI_VERSION_STRING);
 
     //Only consider the first line of version.txt
-    QString remote_data(filedata.c_str());
+    QString remote_data(filedata.c_str());    
+    QStringList remote_data_list = remote_data.split('\n');
 
-    remote_data = remote_data.left(remote_data.indexOf('\n'));
+    remote_data = remote_data_list[0];
+    released_version = remote_data;
+    released_version = released_version.replace(',', '.');
+
+    //used for initialization and cleaning previous content in case it failed
+    release_notes = "";
+    for(int i = 1; i < remote_data_list.length(); i++){
+        release_notes += remote_data_list[i];
+    }
+
+    qDebug() << release_notes;
+    qDebug() << released_version;
 
     QStringList list1 = ver.split(",");
 
@@ -721,7 +733,7 @@ void AppController::updateWindows(std::string uri, std::string distro)
     urli = uri;
     getdistro = distro;
 
-    emit signalAutoUpdateAvailable();
+    emit signalAutoUpdateAvailable(release_notes, released_version);
 }
 
 void AppController::cancelDownload()

@@ -108,6 +108,8 @@ private:
     std::string urli;
     std::string getdistro;
     QString fileName;
+    QString release_notes;
+    QString released_version;
 
 protected:
     QTranslator m_translator;
@@ -117,7 +119,7 @@ signals:
     void languageChanged();
     void signalLanguageChangedError();
     void signalAutoUpdateFail(int error_code);
-    void signalAutoUpdateAvailable();
+    void signalAutoUpdateAvailable(QString release_notes, QString released_version);
     void signalAutoUpdateProgress(int value);
     void signalStartUpdate(QString filename);
 };

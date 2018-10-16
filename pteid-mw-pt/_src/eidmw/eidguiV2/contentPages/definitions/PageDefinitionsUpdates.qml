@@ -37,6 +37,8 @@ PageDefinitionsUpdatesForm {
             propertyButtonSearch.visible = true
             propertyButtonStartUpdate.visible = false
             propertyButtonCancelUpdate.visible = false
+            propertyReleaseNoteScrollView.visible = false
+            propertyReleaseScrollViewText.visible = false
         }
         onSignalAutoUpdateProgress: {
             propertyProgressBar.indeterminate = false
@@ -47,13 +49,21 @@ PageDefinitionsUpdatesForm {
             }
         }
         onSignalAutoUpdateAvailable: {
+            propertyReleaseNoteScrollView.visible = true
+            propertyReleaseScrollViewText.text = release_notes
+            propertyReleaseScrollViewText.visible = true
             propertyTextDescription.text =
                     qsTranslate("PageDefinitionsUpdates","STR_UPDATE_AVAILABLE")
-            propertyButtonSearch.visible = true
+            propertyButtonSearch.visible = false
+            propertyButtonStartUpdate.text = qsTranslate("PageDefinitionsUpdates",
+                                                         "STR_UPDATE_BUTTON_START") + " " + qsTranslate("PageDefinitionsUpdates",
+                                                                                                       "STR_VERSION") + " " + released_version
             propertyButtonStartUpdate.visible = true
             propertyProgressBar.visible = false
         }
         onSignalStartUpdate: {
+            propertyReleaseNoteScrollView.visible = false
+            propertyReleaseScrollViewText.visible = false
             propertyTextDescription.text =
                     qsTranslate("PageDefinitionsUpdates","STR_UPDATE_STARTING_DOWNLOAD") + " " + filename
         }
