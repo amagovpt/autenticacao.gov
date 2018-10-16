@@ -372,8 +372,10 @@ void AppController::RunPackage(std::string pkg, std::string distro){
 
     //guarantees null-terminating string
     path.push_back(0);
-
-    if (!CreateProcess(NULL, &path[0], NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)){
+    
+    LPWSTR path_pointer = (wchar_t *) path.c_str();
+    
+    if (!CreateProcess(NULL, path_pointer, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)){
         qDebug() << "autoUpdate process failed to start";
         qDebug() << QString::fromStdString("Error: " + GetLastError());
         emit signalAutoUpdateFail(GAPI::InstallFailed);
@@ -518,6 +520,7 @@ bool AppController::VerifyUpdates(std::string filedata)
 
     //Only consider the first line of version.txt
     QString remote_data(filedata.c_str());
+
     remote_data = remote_data.left(remote_data.indexOf('\n'));
 
     QStringList list1 = ver.split(",");
