@@ -49,6 +49,14 @@ Item {
         anchors.top: rowTop.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
+        BusyIndicator {
+            id: busyIndication
+            running: false
+            anchors.centerIn: parent
+            // BusyIndicator should be on top of all other content
+            z: 1
+        }
+
         Item{
             id: rectReader
             width: parent.width

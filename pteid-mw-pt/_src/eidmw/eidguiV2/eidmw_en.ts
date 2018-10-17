@@ -514,12 +514,17 @@
         <translation>Updates</translation>
     </message>
     <message>
-        <location filename="MainMenuBottomModel.qml" line="39"/>
+        <location filename="MainMenuBottomModel.qml" line="31"/>
+        <source>STR_MENU_APP_DATA</source>
+        <translation>Application Data</translation>
+    </message>
+    <message>
+        <location filename="MainMenuBottomModel.qml" line="44"/>
         <source>STR_MENU_DOCUMENTATION</source>
         <translation>Documentation</translation>
     </message>
     <message>
-        <location filename="MainMenuBottomModel.qml" line="44"/>
+        <location filename="MainMenuBottomModel.qml" line="49"/>
         <source>STR_MENU_ABOUT</source>
         <translation>About</translation>
     </message>
@@ -758,14 +763,39 @@
     </message>
 </context>
 <context>
+    <name>PageDataApp</name>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="23"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="34"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="83"/>
+        <source>STR_CLEAR_CACHE</source>
+        <translation>Clear Cache</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="25"/>
+        <source>STR_CLEAR_CACHE_SUCC</source>
+        <translation>Files in cache successfully deleted</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="36"/>
+        <source>STR_CLEAR_CACHE_FAIL</source>
+        <translation>The cache is empty</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="52"/>
+        <source>STR_CACHE_TITLE</source>
+        <translation>Card Data Cache</translation>
+    </message>
+</context>
+<context>
     <name>PageDefinitionsApp</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="65"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="73"/>
         <source>STR_CARD_READER_TITLE</source>
         <translation>Card reader</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="122"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="130"/>
         <source>STR_START_TITLE</source>
         <translation>Startup</translation>
     </message>
@@ -774,7 +804,7 @@
         <translation type="vanished">Automatic card reading</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="153"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="161"/>
         <source>STR_AUTO_START_OP</source>
         <translation>Activate on startup</translation>
     </message>
@@ -783,22 +813,22 @@
         <translation type="vanished">Start minimized</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="177"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="185"/>
         <source>STR_LANGUAGE_TITLE</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="209"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="217"/>
         <source>STR_PT_NAME_OP</source>
         <translation>Português</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="218"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="226"/>
         <source>STR_UK_NAME_OP</source>
         <translation>English</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="240"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="248"/>
         <source>STR_APP_LOOK_TITLE</source>
         <translation>Layout</translation>
     </message>
@@ -811,77 +841,77 @@
         <translation type="vanished">Show picture on startup</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="271"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="279"/>
         <source>STR_SHOW_ANIME_OP</source>
         <translation>Enable animations</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="295"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="303"/>
         <source>STR_CERTIFICATES_TITLE</source>
         <translation>Certificates</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="328"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="336"/>
         <source>STR_CERTIFICATES_REGISTER_OP</source>
         <translation>Register certificates on insert</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="337"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="345"/>
         <source>STR_CERTIFICATES_REMOVE_OP</source>
         <translation>Remove certificates on close</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="362"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="370"/>
         <source>STR_TIMESTAMP_TITLE</source>
         <translation>Timestamp service</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="394"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="402"/>
         <source>STR_TIMESTAMP_OP</source>
         <translation>Configure custom timestamp service</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="413"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="421"/>
         <source>STR_TIMESTAMP_URL_OP</source>
         <translation>URL?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="440"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="448"/>
         <source>STR_NETWORK_TITLE</source>
         <translation>Network settings</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="474"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="482"/>
         <source>STR_NETWORK_SYSTEM_PROXY_OP</source>
         <translation>Use system proxy</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="485"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="493"/>
         <source>STR_NETWORK_PROXY_OP</source>
         <translation>Configure proxy server</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="505"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="513"/>
         <source>STR_NETWORK_PROXY_ADDRESS_OP</source>
         <translation>Host?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="525"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="533"/>
         <source>STR_NETWORK_PROXY_PORT_OP</source>
         <translation>Port?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="540"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="548"/>
         <source>STR_NETWORK_AUTH_OP</source>
         <translation>Configure proxy authentication</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="560"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="568"/>
         <source>STR_NETWORK_AUTH_USERNAME_OP</source>
         <translation>Username?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="581"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="589"/>
         <source>STR_NETWORK_AUTH_PASSWORD_OP</source>
         <translation>Password?</translation>
     </message>

@@ -2,6 +2,7 @@
 #include <QObject>
 #include <QCursor>
 #include <QDebug>
+#include <QtConcurrent>
 
 #include <fstream>
 #include <sstream>
@@ -855,3 +856,18 @@ QString AppController::getProxyPwdValue (void){
 void AppController::setProxyPwdValue (QString const& proxy_pwd){
     m_Settings.setProxyPwd(proxy_pwd);
 }
+
+void AppController::flushCache(){
+    QtConcurrent::run(this, &AppController::doFlushCache);
+}
+
+void AppController::doFlushCache(){
+    if(ReaderSet.flushCache()){
+        emit signalFlushCacheSuccess();
+    }else{
+        emit signalFlushCacheFail();
+    }
+}
+
+
+

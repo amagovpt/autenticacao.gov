@@ -26,6 +26,11 @@ ListModel {
                 subName: QT_TR_NOOP("STR_MENU_UPDATES")
                 expand: false
                 url: "contentPages/definitions/PageDefinitionsUpdates.qml"
+            },
+            ListElement {
+                subName: QT_TR_NOOP("STR_MENU_APP_DATA")
+                expand: false
+                url: "contentPages/definitions/PageDefinitionsData.qml"
             }
         ]
     }

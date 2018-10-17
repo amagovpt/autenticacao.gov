@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <QUrl>
 #include "Settings.h"
 
 #include <QNetworkAccessManager>
@@ -91,10 +92,12 @@ public slots:
     void httpUpdateFinished();
     void httpUpdateReadyRead();
     void updateUpdateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
-
+    void flushCache();
+    
 private:
     GUISettings&    m_Settings;
     bool LoadTranslationFile(QString NewLanguage );
+    void doFlushCache();
 
     QUrl url;
     QNetworkProxy proxy;
@@ -122,6 +125,8 @@ signals:
     void signalAutoUpdateAvailable(QString release_notes, QString released_version);
     void signalAutoUpdateProgress(int value);
     void signalStartUpdate(QString filename);
+    void signalFlushCacheSuccess(); 
+    void signalFlushCacheFail();
 };
 
 #endif // APPCONTROLLER_H

@@ -8,6 +8,7 @@ import "../../scripts/Constants.js" as Constants
 import eidguiV2 1.0
 
 PageDefinitionsAppForm {
+
     Connections {
         target: gapi
         onSignalCardAccessError:{
