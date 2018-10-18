@@ -90,18 +90,18 @@ void Base64Decode(const char *array, unsigned int inlen, char * &decoded, unsign
 /*   TOTP Generator according to RFC 6238   */
 std::string generateTOTP(std::string secretKey) {
 
-	std::string key_buffer;
+    std::string key_buffer;
 
-	unsigned char hs[128];
-	char output_otp[10];
-	int key_len = 0;
+    unsigned char hs[128];
+    char output_otp[10];
+    int key_len = 0;
 
-	unsigned int md_len = sizeof(hs);
+    unsigned int md_len = sizeof(hs);
 
-	memset(hs, 0, sizeof(hs));
-	memset(output_otp, 0, sizeof(output_otp));
+    memset(hs, 0, sizeof(hs));
+    memset(output_otp, 0, sizeof(output_otp));
 
-	long S = 0;
+    long S = 0;
 
     unsigned int decoded_len = 0;
     char * base64_buffer;
@@ -110,43 +110,43 @@ std::string generateTOTP(std::string secretKey) {
 
     //key_buffer = std::string(base64_buffer, decoded_len);
     key_buffer = std::string(base64_buffer, decoded_len);
-	//Base32Decode(secretKey, key_buffer);
+    //Base32Decode(secretKey, key_buffer);
 
-	key_len = key_buffer.size();
+    key_len = key_buffer.size();
 
-	const int digits = 6;
+    const int digits = 6;
 
 /* Big-endian conversion */
 #ifdef _WIN32
-	unsigned __int64 msg = _byteswap_uint64(time(NULL) / 60);
-	fprintf(stderr, "DEBUG: Timestamp used to generate TOTP: %ld\n", _byteswap_uint64(msg) * 60);
+    unsigned __int64 msg = _byteswap_uint64(time(NULL) / 60);
+    fprintf(stderr, "DEBUG: Timestamp used to generate TOTP: %ld\n", _byteswap_uint64(msg) * 60);
 #else
-	uint64_t msg = __builtin_bswap64((uint64_t)time(NULL) / 60);
-	fprintf(stderr, "DEBUG: Timestamp used to generate TOTP: %ld\n", __builtin_bswap64(msg) * 60);
+    uint64_t msg = __builtin_bswap64((uint64_t)time(NULL) / 60);
+    fprintf(stderr, "DEBUG: Timestamp used to generate TOTP: %ld\n", __builtin_bswap64(msg) * 60);
 #endif
 
     if (HMAC(EVP_sha1(), key_buffer.c_str(), key_len,
             (const unsigned char*) &msg, sizeof(msg), hs, &md_len) != NULL) {
 
-    	uint8_t offset = hs[md_len - 1] & 0x0f;
+        uint8_t offset = hs[md_len - 1] & 0x0f;
 
-    	S = (((hs[offset] & 0x7f) << 24)
-	 		| ((hs[offset + 1] & 0xff) << 16)
-	 		| ((hs[offset + 2] & 0xff) << 8) | ((hs[offset + 3] & 0xff)));
+        S = (((hs[offset] & 0x7f) << 24)
+            | ((hs[offset + 1] & 0xff) << 16)
+            | ((hs[offset + 2] & 0xff) << 8)
+                | ((hs[offset + 3] & 0xff)));
 
-    	//Digits = 6
-    	S = S % 1000000;
+        //Digits = 6
+        S = S % 1000000;
 #ifndef _WIN32
-    	snprintf(output_otp, digits + 1, "%.*ld", digits, S);
+        snprintf(output_otp, digits + 1, "%.*ld", digits, S);
 #endif
-		output_otp[digits] = '\0';
-    	return output_otp;
+        output_otp[digits] = '\0';
+
+        return output_otp;
     }
     else {
-    	fprintf(stderr, "Error in HMAC-SHA1 in generateTOTP()!!\n");
+        fprintf(stderr, "Error in HMAC-SHA1 in generateTOTP()!!\n");
 
-    	return std::string("");
+        return std::string("");
     }
 }
-
-

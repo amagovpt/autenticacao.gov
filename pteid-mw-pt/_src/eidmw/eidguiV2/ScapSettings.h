@@ -70,7 +70,14 @@ public:
 
         {
             eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APIKEY);
-            m_secretKey = config.getString();
+
+            std::string temp_secretKey = config.getString();
+
+            QByteArray temp_array(temp_secretKey.data(), temp_secretKey.length());
+
+            QByteArray m_secretKey_array =  QByteArray::fromHex(temp_array);
+
+            m_secretKey = m_secretKey_array.constData();
 
         }
     }
@@ -95,8 +102,11 @@ public:
     {
         m_secretKey = secretKey;
 
+        QByteArray array(secretKey.data(), secretKey.length());
+
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APIKEY);
-        config.setString(secretKey.c_str());
+
+        config.setString(array.toHex());
     }
 
     std::string getSecretKey() {

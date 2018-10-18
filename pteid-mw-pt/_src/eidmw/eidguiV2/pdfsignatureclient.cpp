@@ -31,9 +31,17 @@ PDFSignatureClient::PDFSignatureClient()
 {
 
     eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APIKEY);
-    //m_secretKey = config.getString();
-    /* Current Adriano key "TYXBV3HOnA/4g9BNJmyPjr1CEv9xN+V1hpZMK5amBnsz9J3DGZ+7otVsmKmoOaEsKyFk3kQ4lZDFnIRbPSUm5xvdv0uHLQlJ/ALdoDJomScxrPPjpKEQZQ=="; */
-    m_secretKey = "0zbAfiDQ2LxpcZfgqSL2fEkGnbJTcogEoQLh/eRwV4UVnZerqEAnMGLV2LP4XFMRboqzY5p0L7Dsc8JM32Nk5f4j3kTwhg32oz1Uu7i4Ls7d7McZQVQ+pQ==";
+
+    std::string temp_secretKey = config.getString();
+
+    QByteArray temp_array(temp_secretKey.data(), temp_secretKey.length());
+
+    QByteArray m_secretKey_array =  QByteArray::fromHex(temp_array);
+
+    m_secretKey = m_secretKey_array.constData();
+
+    qDebug() << "m_secretKey = " << m_secretKey.data();
+
     m_appID = "26a5eba4-7155-4db0-8e3e-f26b7de2464c";
 }
 
