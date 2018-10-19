@@ -62,7 +62,7 @@ PageDefinitionsSCAPForm {
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
-
+            propertyBusyIndicatorAttributes.running = false
             propertyBusyIndicator.running = false
         }
         onSignalCardChanged: {

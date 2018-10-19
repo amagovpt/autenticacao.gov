@@ -765,37 +765,61 @@
 <context>
     <name>PageDataApp</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="23"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="34"/>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="83"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="75"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="99"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="110"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="74"/>
         <source>STR_CLEAR_CACHE</source>
         <translation>Clear Cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="25"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="77"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="101"/>
         <source>STR_CLEAR_CACHE_SUCC</source>
         <translation>Files in cache successfully deleted</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="36"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="87"/>
+        <source>STR_CLEAR_CACHE_ERROR</source>
+        <translation>Error while clearing cache</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="112"/>
         <source>STR_CLEAR_CACHE_FAIL</source>
         <translation>The cache is empty</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="52"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="61"/>
         <source>STR_CACHE_TITLE</source>
         <translation>Card Data Cache</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="99"/>
+        <source>STR_SCAP_CACHE_TITLE</source>
+        <translation>Professional and Business Attributes Cache</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_ATTRIBUTES_BUTTON_REMOVE</source>
+        <translation type="obsolete">Remove cache</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_PROFESSIONAL_ATTRIBUTES_BUTTON_REMOVE</source>
+        <translation type="vanished">Remove business attributes cache</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_BUSINESS_ATTRIBUTES_BUTTON_REMOVE</source>
+        <translation type="vanished">Remove professional attributes cache</translation>
     </message>
 </context>
 <context>
     <name>PageDefinitionsApp</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="73"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="65"/>
         <source>STR_CARD_READER_TITLE</source>
         <translation>Card reader</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="130"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="122"/>
         <source>STR_START_TITLE</source>
         <translation>Startup</translation>
     </message>
@@ -804,7 +828,7 @@
         <translation type="vanished">Automatic card reading</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="161"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="153"/>
         <source>STR_AUTO_START_OP</source>
         <translation>Activate on startup</translation>
     </message>
@@ -813,22 +837,22 @@
         <translation type="vanished">Start minimized</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="185"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="177"/>
         <source>STR_LANGUAGE_TITLE</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="217"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="209"/>
         <source>STR_PT_NAME_OP</source>
         <translation>Português</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="226"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="218"/>
         <source>STR_UK_NAME_OP</source>
         <translation>English</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="248"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="240"/>
         <source>STR_APP_LOOK_TITLE</source>
         <translation>Layout</translation>
     </message>
@@ -841,77 +865,77 @@
         <translation type="vanished">Show picture on startup</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="279"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="271"/>
         <source>STR_SHOW_ANIME_OP</source>
         <translation>Enable animations</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="303"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="295"/>
         <source>STR_CERTIFICATES_TITLE</source>
         <translation>Certificates</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="336"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="328"/>
         <source>STR_CERTIFICATES_REGISTER_OP</source>
         <translation>Register certificates on insert</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="345"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="337"/>
         <source>STR_CERTIFICATES_REMOVE_OP</source>
         <translation>Remove certificates on close</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="370"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="362"/>
         <source>STR_TIMESTAMP_TITLE</source>
         <translation>Timestamp service</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="402"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="394"/>
         <source>STR_TIMESTAMP_OP</source>
         <translation>Configure custom timestamp service</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="421"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="413"/>
         <source>STR_TIMESTAMP_URL_OP</source>
         <translation>URL?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="448"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="440"/>
         <source>STR_NETWORK_TITLE</source>
         <translation>Network settings</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="482"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="474"/>
         <source>STR_NETWORK_SYSTEM_PROXY_OP</source>
         <translation>Use system proxy</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="493"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="485"/>
         <source>STR_NETWORK_PROXY_OP</source>
         <translation>Configure proxy server</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="513"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="505"/>
         <source>STR_NETWORK_PROXY_ADDRESS_OP</source>
         <translation>Host?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="533"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="525"/>
         <source>STR_NETWORK_PROXY_PORT_OP</source>
         <translation>Port?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="548"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="540"/>
         <source>STR_NETWORK_AUTH_OP</source>
         <translation>Configure proxy authentication</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="568"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="560"/>
         <source>STR_NETWORK_AUTH_USERNAME_OP</source>
         <translation>Username?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="589"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="581"/>
         <source>STR_NETWORK_AUTH_PASSWORD_OP</source>
         <translation>Password?</translation>
     </message>
@@ -1053,6 +1077,14 @@
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="85"/>
         <source>STR_UPDATE_BUTTON</source>
         <translation>Check for updates</translation>
+    </message>
+</context>
+<context>
+    <name>PageDifiniionsSCAP</name>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="112"/>
+        <source>STR_SCAP_ATTRIBUTES_BUTTON_REMOVE</source>
+        <translation>Remove cache</translation>
     </message>
 </context>
 <context>
@@ -1781,6 +1813,8 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="229"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="235"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="241"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="19"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="85"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="29"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="35"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="41"/>
@@ -1831,6 +1865,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="28"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="38"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="210"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="22"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="31"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="55"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="23"/>
@@ -1852,6 +1887,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="34"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="44"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="217"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="26"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="37"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="61"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="29"/>
@@ -1867,6 +1903,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="46"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="56"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="231"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="34"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="49"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="73"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="41"/>
@@ -1882,6 +1919,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="52"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="62"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="237"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="38"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="55"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="79"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="47"/>
@@ -1897,6 +1935,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="40"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="50"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="224"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="30"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="43"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="67"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="35"/>
@@ -1912,6 +1951,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="58"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="68"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="243"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="42"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="61"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="85"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="53"/>
@@ -1937,6 +1977,7 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="254"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="260"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="268"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="52"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="72"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="78"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="86"/>
@@ -1957,6 +1998,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="79"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="89"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="256"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="55"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="74"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="106"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="219"/>
@@ -1969,6 +2011,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="86"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="104"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="262"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="59"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="80"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="119"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="229"/>
@@ -1982,6 +2025,7 @@
         <location filename="contentPages/card/PageCardNotes.qml" line="94"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="112"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="270"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="65"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="88"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="127"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="238"/>
