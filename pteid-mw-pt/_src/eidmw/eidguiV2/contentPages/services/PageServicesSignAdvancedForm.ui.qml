@@ -98,12 +98,14 @@ Item {
         FileSaveDialog {
             id: fileDialogOutput
             title: qsTranslate("Popup File", "STR_POPUP_FILE_OUTPUT")
-            nameFilters: ["PDF (*.pdf)", "All files (*)"]
+            nameFilters: (propertyRadioButtonPADES.checked ? ["PDF (*.pdf)", "All files (*)"] :
+                                                             ["Cartão de Cidadão Digital Signature (*.ccsigned)", "All files (*)"])
         }
         FileSaveDialog {
             id: fileDialogCMDOutput
             title: qsTranslate("Popup File", "STR_POPUP_FILE_OUTPUT")
-            nameFilters: ["PDF (*.pdf)", "All files (*)"]
+            nameFilters: (propertyRadioButtonPADES.checked ? ["PDF (*.pdf)", "All files (*)"] :
+                                                             ["Cartão de Cidadão Digital Signature (*.ccsigned)", "All files (*)"])
         }
         FileDialog {
             id: fileDialogBatchOutput
