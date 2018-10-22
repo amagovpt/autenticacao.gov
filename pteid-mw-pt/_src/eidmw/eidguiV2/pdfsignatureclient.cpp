@@ -241,8 +241,10 @@ ns1__AttributeType *convertAttributeType(ns3__AttributeType *attributeType, soap
 /* Attribute parameter is optional, we only need it for the last visible signature.
    TODO: For the visible signature we shall have the complete list of attributes */
 
-QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const char *outputPath, std::string certChain, QString citizenName, QString citizenId,
-                            ns1__AttributeSupplierType *attributeSupplier, ns1__MainAttributeType *attribute, PDFSignatureInfo signatureInfo)
+QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const char *outputPath,
+                                                 std::string certChain, QString citizenName, QString citizenId,
+                                                 ns1__AttributeSupplierType *attributeSupplier,  QString attribute,
+                                                 PDFSignatureInfo signatureInfo, bool isVisible)
 {
 
     qDebug() << "openSCAPSignature inputFile: " << inputFile << " outputPath: " << outputPath;
@@ -270,13 +272,14 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
         certificatesData.push_back(ba);
     }
 
-    if (attribute != NULL) {
+    if (isVisible) {
         if (signatureInfo.getX() >= 0 && signatureInfo.getY() >= 0) {
             sig_handler->setVisibleCoordinates(signatureInfo.getSelectedPage(), signatureInfo.getX(), signatureInfo.getY());
         } 
-        //TODO: this should come from MainAttributeType
-        const char * attribute_name = "Nome do Atributo - TODO";
-        sig_handler->setSCAPAttributes(strdup(citizenName.toUtf8().constData()), strdup(citizenId.toUtf8().constData()), attributeSupplier->Name.c_str(), attribute_name);
+        sig_handler->setSCAPAttributes(strdup(citizenName.toUtf8().constData()),
+                                       strdup(citizenId.toUtf8().constData()),
+                                       attributeSupplier->Name.c_str(), strdup(attribute.toUtf8().constData()));
+
     }
 
     sig_handler->setExternCertificate(certificatesData.at(0));
@@ -287,7 +290,7 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
 
     //Add PDF signature objects right before we call getHash()
 
-    sig_handler->signFiles(/*location*/ "Lisboa: change this", "TODO: change this"/*reason*/, outputPath);
+    sig_handler->signFiles(signatureInfo.getLocation(), signatureInfo.getReason(), outputPath);
 
     /* Calculate hash */
     CByteArray hashByteArray = sig_handler->getHash();
@@ -457,7 +460,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
     //Certificate is string in PEM format
     authorizationRequest.SignatureCertificate = std::string(sigDetails.signing_certificate);
-    ns1__PersonalData *personalData = soap_new_req_ns1__PersonalData(sp, citizenName.toStdString(), citizenId.toStdString());/* soap_new_req_ns1__PersonalData(sp, "JOÃO ANTÓNIO PAÇÃO", "01373821");*/
+    ns1__PersonalData *personalData = soap_new_req_ns1__PersonalData(sp, citizenName.toStdString(), citizenId.toStdString());
     
     authorizationRequest.PersonalData = personalData;
 
@@ -512,7 +515,10 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
             QTemporaryFile *tempFile = NULL;
 
+            QString attributeListString;
+
             for (unsigned int i = 0; i != transactionList.size(); i++) {
+                bool isVisible = false;
                 QByteArray signatureHash;
                 ns1__MainAttributeType *mainAttribute = NULL;
                 //TODO: 1- call something similar to the CMD openSignature() method for each transaction, we need a new Method for the SCAP visible signature
@@ -520,15 +526,26 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                         3- Call closeSignature() with the byteArray returned by SignatureService */
                 ns1__TransactionType *transaction = transactionList.at(i);
 
+                mainAttribute = transaction->MainAttribute;
+
                 //In this case we are adding a visible signature
                 if (i == transactionList.size() - 1) {
-                    mainAttribute = transaction->MainAttribute;
                     outputPath = strdup(finalfilepath.toUtf8().constData());
+                    attributeListString.append(QString::fromStdString("."));
+                    isVisible = true;
                 }
                 else {
                     // Creates a temporary file for every iteration except the last
+                     isVisible = false;
+                     if(i == transactionList.size() - 2 )
+                         attributeListString.append(QString::fromStdString(" e "));
+                     else if(i != 0)
+                         attributeListString.append(QString::fromStdString(", "));
+
+                     attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
+
                      tempFile = new QTemporaryFile();
-                 
+
                      if (!tempFile->open()) {
                         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "PDF Signature error: Error creating temporary file");
                         return GAPI::ScapGenericError;
@@ -537,7 +554,8 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                 }
 
                 signatureHash = openSCAPSignature(inputPath, outputPath,
-                                transaction->AttributeSupplierCertificateChain, citizenName, citizenId, transaction->AttributeSupplier, mainAttribute, signatureInfo);
+                                transaction->AttributeSupplierCertificateChain, citizenName, citizenId,
+                                transaction->AttributeSupplier, attributeListString, signatureInfo, isVisible);
 
                 if (signatureHash.size() == 0) {
                     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "openSCAPSignature() failed!");
@@ -559,6 +577,9 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                     WriteToFile(filename.c_str(), (unsigned char *)scap_signature, sig_len);
 #endif
                     closeSCAPSignature(scap_signature, sig_len);
+                }else{
+                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "callSCAPSignatureService() failed!");
+                    return GAPI::ScapGenericError;
                 }
                 // Apply the next signature over the current one's output file
                 inputPath = outputPath;

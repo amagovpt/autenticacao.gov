@@ -21,9 +21,16 @@ class ns1__MainAttributeType;
 class ns1__AttributeSupplierType;
 class ns1__TransactionType;
 
-
 class PDFSignatureInfo{
 public:
+    PDFSignatureInfo(int _selectedPage, double _x, double _y, bool _isPortrait, const char *_location, const char *_reason){
+        selectedPage = _selectedPage;
+        x = _x;
+        y = _y;
+        portrait = _isPortrait;
+        location = _location;
+        reason = _reason;
+    }
     PDFSignatureInfo(int _selectedPage, double _x, double _y, bool _isPortrait){
         selectedPage = _selectedPage;
         x = _x;
@@ -35,11 +42,15 @@ public:
     double getX() { return x; }
     double getY() { return y; }
     bool isPortrait() { return portrait; }
+    const char * getLocation(){ return location; }
+    const char * getReason(){ return reason; }
 private:
     int selectedPage;
     double x;
     double y;
     bool portrait;
+    const char *location;
+    const char *reason;
 };
 
 class SignatureDetails {
@@ -60,7 +71,8 @@ public:
 private:
 
     QByteArray openSCAPSignature(const char *inputFile, const char *outputPath, std::string certChain, QString citizenName, QString citizenId,
-                            ns1__AttributeSupplierType *attributeSupplier, ns1__MainAttributeType * attribute, PDFSignatureInfo signatureInfo);
+                            ns1__AttributeSupplierType *attributeSupplier, QString attribute, PDFSignatureInfo signatureInfo,
+                                 bool isVisible);
 
     unsigned char * callSCAPSignatureService(soap* sp, QByteArray signatureHash, ns1__TransactionType *transaction, unsigned int &signatureLen);
 

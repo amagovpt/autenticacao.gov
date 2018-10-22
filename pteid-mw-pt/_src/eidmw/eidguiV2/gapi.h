@@ -162,6 +162,7 @@ public:
     QString inputPDF;
     QString outputPDF;
     int page; double location_x; double location_y;
+    QString location; QString reason;
     int ltv;
     QList<int> attribute_index;
 };
@@ -287,8 +288,8 @@ public slots:
     void startGettingEntityAttributes(QList<int> entity_index);
     void startPingSCAP();
 
-    void startSigningSCAP(QString inputPdf, QString outputPDF, int page, double location_x, double location_y, 
-                          int ltv, QList<int> attribute_index);
+    void startSigningSCAP(QString inputPdf, QString outputPDF, int page, double location_x, double location_y,
+                          QString location, QString reason, int ltv, QList<int> attribute_index);
 
     //Returns page size in postscript points
     QSize getPageSize(int page) { return image_provider_pdf->getPageSize(page); };

@@ -124,7 +124,7 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
 }
 
 void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QString &savefilepath, int selected_page,
-         double location_x, double location_y, int ltv_years, std::vector<int> attributes_index)
+         double location_x, double location_y, QString &location, QString &reason, int ltv_years, std::vector<int> attributes_index)
 {
     // Sets user selected file save path
     const char* citizenId = NULL;
@@ -177,8 +177,10 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
             if (sign_rc == 0)
             {
                 PDFSignatureClient scap_signature_client;
-                int successful = scap_signature_client.signPDF(m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
-                    QString(citizenId), ltv_years, PDFSignatureInfo(selected_page, location_x, location_y, false), selected_attributes);
+                int successful = scap_signature_client.signPDF(
+                            m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
+                            QString(citizenId), ltv_years, PDFSignatureInfo(selected_page, location_x, location_y,
+                            false, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes);
 
                 if (successful == GAPI::ScapSucess) {
                     parent->signalPdfSignSucess(parent->SignMessageOK);
