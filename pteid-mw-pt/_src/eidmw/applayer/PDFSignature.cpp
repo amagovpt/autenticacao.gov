@@ -67,6 +67,7 @@ namespace eIDMW
         m_outputName = NULL;
         m_signStarted = false;
         m_isExternalCertificate = false;
+        m_isCC = true;
         m_incrementalMode = false;
 	}
 
@@ -96,6 +97,7 @@ namespace eIDMW
         m_outputName = NULL;
         m_signStarted = false;
         m_isExternalCertificate = false;
+        m_isCC = true;
         m_incrementalMode = false;
 	}
 
@@ -605,7 +607,7 @@ namespace eIDMW
 			doc->addCustomSignatureImage(my_custom_image.img_data, my_custom_image.img_length);
 
         doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, m_civil_number,
-			         location, reason, m_page, m_sector, isLangPT, !isExternalCertificate());
+                                 location, reason, m_page, m_sector, isLangPT, isCC());
         unsigned long len = doc->getSigByteArray(&to_sign, m_incrementalMode);
 
 		int rc = 0;
@@ -656,6 +658,14 @@ namespace eIDMW
 
         return rc;
 	}
+
+    bool PDFSignature::isCC(){
+       return m_isCC;
+    }
+
+    void PDFSignature::setIsCC(bool in_IsCC){
+        m_isCC = in_IsCC;
+    }
 
     bool PDFSignature::isExternalCertificate(){
         return m_isExternalCertificate;

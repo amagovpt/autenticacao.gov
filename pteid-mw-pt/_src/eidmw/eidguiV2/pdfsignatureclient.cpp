@@ -288,6 +288,8 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
 
     sig_handler->setExternCertificateCA(caCerts);
 
+    sig_handler->setIsCC(true);
+
     //Add PDF signature objects right before we call getHash()
 
     sig_handler->signFiles(signatureInfo.getLocation(), signatureInfo.getReason(), outputPath);

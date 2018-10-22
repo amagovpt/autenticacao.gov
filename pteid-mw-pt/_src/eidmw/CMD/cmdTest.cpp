@@ -43,7 +43,9 @@ int main()
 
 		CMDSignature cmd_signature(&sig_handler);
 
-		ret = cmd_signature.signOpen( in_userId, in_pin,
+                CMDProxyInfo proxyinfo;
+
+                ret = cmd_signature.signOpen( proxyinfo, in_userId, in_pin,
 				page,
 				coord_x, coord_y,
 				"LISBOA, PT", "Concordo com todo o conteudo - Teste", outfile_path );

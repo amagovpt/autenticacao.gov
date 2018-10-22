@@ -59,6 +59,8 @@ namespace eIDMW
 		EIDMW_APL_API std::string getDocName();
 
         bool isExternalCertificate();
+        bool isCC();
+        void setIsCC( bool in_IsCC );
         void setIsExtCertificate( bool in_IsExternalCertificate );
 
         /* Certificate */
@@ -128,6 +130,7 @@ namespace eIDMW
         GooString *m_outputName;
         bool m_signStarted;
         bool m_isExternalCertificate;
+        bool m_isCC;
         bool m_incrementalMode;
 
         /* Fields for SCAP signature */

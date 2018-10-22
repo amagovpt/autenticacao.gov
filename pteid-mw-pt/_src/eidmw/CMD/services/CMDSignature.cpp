@@ -89,7 +89,9 @@ namespace eIDMW {
         pdf->setBatch_mode(false);
 
         pdf->setExternCertificate(certificates.at(0));
-        
+
+        pdf->setIsCC(false);
+
         std::vector<CByteArray> newVec(certificates.begin()+1, certificates.end());
         pdf->setExternCertificateCA( newVec );
 
