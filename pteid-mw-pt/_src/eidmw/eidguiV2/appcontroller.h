@@ -85,6 +85,8 @@ public slots:
     void setProxyPwdValue (QString const& proxy_pwd);
 
     void cancelDownload();
+    void httpError(QNetworkReply::NetworkError networkError);
+    void httpUpdateError(QNetworkReply::NetworkError networkError);
     void httpFinished();
     void httpReadyRead();
     void updateDataReadProgress(qint64 bytesRead, qint64 totalBytes);

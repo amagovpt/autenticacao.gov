@@ -30,10 +30,13 @@ PageDefinitionsUpdatesForm {
             }else if (error_code == GAPI.InstallFailed) {
                 propertyTextDescription.text =
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL") + "\n\n" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
+            }else if (error_code == GAPI.NetworkError) {
+                propertyTextDescription.text =
+                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_NETWORK_ERROR")
             }
+            propertyProgressBar.visible = false
             propertyProgressBar.value = 0
             propertyProgressBar.indeterminate = false
-            propertyProgressBar.visible = false
             propertyButtonSearch.visible = true
             propertyButtonStartUpdate.visible = false
             propertyButtonCancelUpdate.visible = false
@@ -49,17 +52,27 @@ PageDefinitionsUpdatesForm {
             }
         }
         onSignalAutoUpdateAvailable: {
-            propertyReleaseNoteScrollView.visible = true
-            propertyReleaseScrollViewText.text = release_notes
-            propertyReleaseScrollViewText.visible = true
-            propertyTextDescription.text =
-                    qsTranslate("PageDefinitionsUpdates","STR_UPDATE_AVAILABLE")
-            propertyButtonSearch.visible = false
-            propertyButtonStartUpdate.text = qsTranslate("PageDefinitionsUpdates",
-                                                         "STR_UPDATE_BUTTON_START") + " " + qsTranslate("PageDefinitionsUpdates",
-                                                                                                       "STR_VERSION") + " " + released_version
-            propertyButtonStartUpdate.visible = true
+            //make sure we have something to display
+            if (release_notes != ""){
+                propertyReleaseNoteScrollView.visible = true
+                propertyReleaseScrollViewText.text = release_notes
+                propertyReleaseScrollViewText.visible = true
+                propertyTextDescription.text =
+                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_AVAILABLE")
+                propertyButtonSearch.visible = false
+                propertyButtonStartUpdate.text = qsTranslate("PageDefinitionsUpdates",
+                                                             "STR_UPDATE_BUTTON_START") + " " + qsTranslate("PageDefinitionsUpdates",
+                                                                                                           "STR_VERSION") + " " + released_version
+                propertyButtonStartUpdate.visible = true
+
+            } else {
+                propertyTextDescription.text =
+                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_NO_UPDATES")
+                propertyButtonSearch.visible = true
+            }
             propertyProgressBar.visible = false
+            propertyProgressBar.value = 0
+            propertyProgressBar.indeterminate = false
         }
         onSignalStartUpdate: {
             propertyReleaseNoteScrollView.visible = false
