@@ -108,7 +108,7 @@ PageDefinitionsUpdatesForm {
             console.log("propertyButtonCancelUpdate clicked")
             propertyProgressBar.visible = false
             propertyButtonSearch.visible = true
-            controler.cancelUpdateDownload()
+            controler.userCancelledUpdateDownload()
         }
     }
 }

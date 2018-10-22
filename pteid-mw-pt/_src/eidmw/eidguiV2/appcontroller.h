@@ -91,6 +91,7 @@ public slots:
     void httpReadyRead();
     void updateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
     void cancelUpdateDownload();
+    void userCancelledUpdateDownload();
     void httpUpdateFinished();
     void httpUpdateReadyRead();
     void updateUpdateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
@@ -109,6 +110,7 @@ private:
     QString m_pac_url;
     bool httpRequestAborted;
     bool httpUpdateRequestAborted;
+    bool userCanceled;
     std::string filedata;
     std::string urli;
     std::string getdistro;

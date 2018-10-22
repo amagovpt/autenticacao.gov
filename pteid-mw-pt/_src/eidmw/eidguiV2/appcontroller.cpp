@@ -299,9 +299,14 @@ void AppController::httpUpdateFinished(){
             file = 0;
             qDebug() << "C++: httpUpdateRequestAborted";
         }
+
+        if (!userCanceled){
+            //network failure occurred when downloading
+            emit signalAutoUpdateFail(GAPI::NetworkError);
+        }
+
         reply->deleteLater();
         reply = 0;
-        emit signalAutoUpdateFail(GAPI::DownloadFailed);
         return;
     }
     if (!file){
@@ -317,7 +322,7 @@ void AppController::httpUpdateFinished(){
     if (reply->error())
     {
         file->remove();
-        emit signalAutoUpdateFail(GAPI::DownloadFailed);
+        emit signalAutoUpdateFail(GAPI::NetworkError);
     }
     else if (!redirectionTarget.isNull())
     {
@@ -782,15 +787,26 @@ void AppController::cancelDownload()
     }
 }
 
+void AppController::userCancelledUpdateDownload()
+{
+    qDebug() << "C++: userCanceledUpdateDownload";
+
+    httpUpdateRequestAborted = true;
+    userCanceled = true;
+
+    emit signalAutoUpdateFail(GAPI::DownloadCancelled);
+}
+
 void AppController::cancelUpdateDownload()
 {
     qDebug() << "C++: cancelUpdateDownload";
+
     httpUpdateRequestAborted = true;
+    userCanceled = false;
 
     if (reply != NULL){
         reply->abort();
     }
-    //emit signalAutoUpdateFail(GAPI::DownloadCancelled);
 }
 
 QVariant AppController::getCursorPos()
