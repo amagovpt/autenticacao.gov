@@ -766,7 +766,7 @@
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="75"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="99"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="110"/>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="74"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="67"/>
         <source>STR_CLEAR_CACHE</source>
         <translation>Apagar cache</translation>
     </message>
@@ -787,12 +787,12 @@
         <translation>A cache está vazia</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="61"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="54"/>
         <source>STR_CACHE_TITLE</source>
         <translation>Cache de dados do cartão</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="99"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="92"/>
         <source>STR_SCAP_CACHE_TITLE</source>
         <translation>Cache de atributos profissionais e empresariais</translation>
     </message>
@@ -1000,7 +1000,7 @@
         <translation>Atualizações</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="58"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="63"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="103"/>
         <source>STR_UPDATE_BUTTON_START</source>
         <translation>Instalar</translation>
@@ -1017,6 +1017,7 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="17"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="70"/>
         <source>STR_UPDATE_NO_UPDATES</source>
         <translation>Não existem atualizações de momento</translation>
     </message>
@@ -1046,22 +1047,27 @@
         <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail cartaodecidadao@irn.mj.pt.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="59"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="35"/>
+        <source>STR_UPDATE_NETWORK_ERROR</source>
+        <translation>Por favor verifique a sua ligação a internet e volte a tentar.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="64"/>
         <source>STR_VERSION</source>
         <translation>versão</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="79"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="92"/>
         <source>STR_UPDATE_VERSION_LOOKUP</source>
         <translation>A procura de nova versão.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="56"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="61"/>
         <source>STR_UPDATE_AVAILABLE</source>
         <translation>Existe uma actualização disponível. Clique em Instalar para prosseguir.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="68"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="81"/>
         <source>STR_UPDATE_STARTING_DOWNLOAD</source>
         <translation>A transferir</translation>
     </message>
@@ -1080,7 +1086,7 @@
 <context>
     <name>PageDifiniionsSCAP</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="112"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="105"/>
         <source>STR_SCAP_ATTRIBUTES_BUTTON_REMOVE</source>
         <translation>Apagar cache</translation>
     </message>
@@ -1624,57 +1630,57 @@
         <translation>Arraste para esta zona o ficheiro a assinar ou clique para procurar o ficheiro</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="212"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="214"/>
         <source>STR_SIGN_ADD_MULTI_BUTTON</source>
         <translation>Adicionar ficheiros</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="223"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="225"/>
         <source>STR_SIGN_REMOVE_MULTI_BUTTON</source>
         <translation>Remover todos</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="274"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="276"/>
         <source>STR_SIGN_SETTINGS</source>
         <translation>Configurações</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="305"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="307"/>
         <source>STR_SIGN_FORMAT</source>
         <translation>Tipo</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="320"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="322"/>
         <source>STR_SIGN_WHERE</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="363"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="365"/>
         <source>STR_SIGN_ANY_FILE</source>
         <translation>Outros ficheiros</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="410"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="412"/>
         <source>STR_SIGN_REASON</source>
         <translation>Motivo</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="422"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="424"/>
         <source>STR_SIGN_LOCAL</source>
         <translation>Localidade</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="433"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="435"/>
         <source>STR_SIGN_ADD_TIMESTAMP</source>
         <translation>Adicionar selo temporal</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="444"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="446"/>
         <source>STR_SIGN_ADD_ATTRIBUTES</source>
         <translation>Adicionar atributos profissionais</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="466"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="468"/>
         <source>STR_ATTRIBUTES_EMPTY</source>
         <translation>Clique aqui para carregar atributos profissionais</translation>
     </message>
@@ -1695,42 +1701,42 @@
         <translation type="vanished">anos</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="614"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="616"/>
         <source>STR_SIGN_PREVIEW</source>
         <translation>Pré-visualização</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="802"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="804"/>
         <source>STR_SIGN_VISIBLE</source>
         <translation>Visível</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="821"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="823"/>
         <source>STR_SIGN_REDUCED</source>
         <translation>Reduzida</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="683"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="685"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="167"/>
         <source>STR_SIGN_PAGE</source>
         <translation>Página</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="841"/>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="855"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="843"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="857"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="303"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="314"/>
         <source>STR_SIGN_SIGN_BUTTON</source>
         <translation>Assinar com</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="857"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="859"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="315"/>
         <source>STR_SIGN_CMD_BUTTON</source>
         <translation>Chave Móvel Digital</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="778"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="780"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="258"/>
         <source>STR_SIGN_LAST</source>
         <translation>Última</translation>
@@ -1741,7 +1747,7 @@
         <translation>Remover ficheiro</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="843"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="845"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="304"/>
         <source>STR_SIGN_CARD_BUTTON</source>
         <oldsource>STR_SIGN_CARD</oldsource>
@@ -2069,7 +2075,7 @@
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="42"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1329"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="100"/>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="105"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="106"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="60"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="65"/>
         <source>STR_POPUP_FILE_OUTPUT</source>
@@ -2108,7 +2114,7 @@
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="91"/>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="146"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="148"/>
         <source>STR_POPUP_FILE_INPUT_MULTI</source>
         <translation>Escolha os ficheiros</translation>
     </message>
