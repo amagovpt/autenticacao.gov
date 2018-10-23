@@ -60,7 +60,7 @@ namespace eIDMW
 
         bool isExternalCertificate();
         bool isCC();
-        void setIsCC( bool in_IsCC );
+		EIDMW_APL_API void setIsCC( bool in_IsCC );
         void setIsExtCertificate( bool in_IsExternalCertificate );
 
         /* Certificate */
