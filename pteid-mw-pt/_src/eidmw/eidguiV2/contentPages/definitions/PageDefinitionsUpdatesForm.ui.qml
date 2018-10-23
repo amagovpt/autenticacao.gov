@@ -18,193 +18,214 @@ Item {
     property alias propertyReleaseNoteScrollView: releaseNoteScrollView
 
     Item {
-        id: item1
+        id: rowTop
         width: parent.width
-        height: parent.height
+        height: parent.height * Constants.HEIGHT_DEFINITIONS_UPDATES_ROW_TOP_V_RELATIVE
+                + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
+                * Constants.HEIGHT_DEFINITIONS_UPDATES_ROW_TOP_INC_RELATIVE
+    }
+
+    Item {
+        id: updateMain
+        width: parent.width
+        height: parent.height - rowTop.height
+        anchors.top: rowTop.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
         Item {
-            id: rowTop
-            width: parent.width
-            height: parent.height * Constants.HEIGHT_DEFINITIONS_UPDATES_ROW_TOP_V_RELATIVE
-                    + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
-                    * Constants.HEIGHT_DEFINITIONS_UPDATES_ROW_TOP_INC_RELATIVE
+            id: rawUpdateTitle
+            width: parent.width * Constants.WIDTH_DEFINITIONS_UPDATE_MAIN_H_RELATIVE
+            height: Constants.SIZE_TEXT_LABEL
+            anchors.top: updateMain.top
+            anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
+            anchors.horizontalCenter: parent.horizontalCenter
+            Text {
+                id: updateTitle
+                //x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
+                height: parent.height
+                text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TITLE")
+            }
         }
 
-        Text {
-            id: textTitle
-            font.pixelSize: Constants.SIZE_TEXT_LABEL
-            font.family: lato.name
-            text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TITLE")
-            wrapMode: Text.Wrap
-            width: parent.width
-            horizontalAlignment: Text.left
-            color: Constants.COLOR_TEXT_LABEL
-            Layout.fillWidth: true
-            anchors.top: rowTop.bottom
+        Item {
+            id: mainItemWithPadding
+            width: parent.width * Constants.WIDTH_DEFINITIONS_UPDATE_MAIN_H_RELATIVE
+            height: parent.height
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: rawUpdateTitle.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-        }
-        Text {
-            id: textDescription
-            anchors.top: textTitle.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_BODY
-            font.pixelSize: Constants.SIZE_TEXT_BODY
-            font.family: lato.name
-            text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT")
-            wrapMode: Text.Wrap
-            width: parent.width
-            horizontalAlignment: Text.left
-            Layout.fillWidth: true
-        }
-        Item {
-            id: textProgressBar
-            anchors.top: textDescription.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_BODY
-            width: parent.width
-            height: 50
-            ProgressBar {
-                id: progressBar
+            Item {
+                id: rawTextDescription
                 width: parent.width
-                anchors.horizontalCenter: parent.horizontalCenter
-                height: 20
-                to: 100
-                value: 0
-                visible: false
-                indeterminate: false
-                z: 1
-            }
-        }
-        Item {
-            id: rawButtonSearch
-            anchors.top: textDescription.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-            width: parent.width
-            height: Constants.HEIGHT_BOTTOM_COMPONENT
-            Button {
-                id: buttonSearch
-                y: 53
-                text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_BUTTON")
-                anchors.horizontalCenterOffset: 0
-                width: 1.4 * Constants.WIDTH_BUTTON
-                height: parent.height
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                font.capitalization: Font.MixedCase
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-        }
-        Item {
-            id: rawButtonStartUpdate
-            anchors.top: rawReleaseNoteScrollView.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-            width: parent.width
-            height: Constants.HEIGHT_BOTTOM_COMPONENT
-            Button {
-                id: buttonStartUpdate
-                text: qsTranslate("PageDefinitionsUpdates",
-                                  "STR_UPDATE_BUTTON_START")
-                width: Constants.WIDTH_BUTTON
-                height: parent.height
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                font.capitalization: Font.MixedCase
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: false
-            }
-        }
-        Item {
-            id: rawButtonCancelUpdate
-            anchors.top: textProgressBar.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-            width: parent.width
-            height: Constants.HEIGHT_BOTTOM_COMPONENT
-            Button {
-                id: buttonCancelUpdate
-                y: 21
-                text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_BUTTON_CANCEL")
-                anchors.horizontalCenterOffset: 0
-                width: Constants.WIDTH_BUTTON
-                height: parent.height
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                font.capitalization: Font.MixedCase
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: false
-            }
-        }
-
-        Item {
-            id: rawReleaseNoteScrollView
-            width: parent.width
-            height: parent.height * Constants.HEIGHT_SETTINGS_UPDATE_RELEASE_NOTE
-            anchors.top: textDescription.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-
-            Rectangle{
-                id: releaseNoteScrollView
-                width: parent.width
-                height: parent.height
-                opacity: 1
-                visible:false
-                DropShadow {
-                    anchors.fill: rectFieldFlick
-                    horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
-                    verticalOffset: Constants.FORM_SHADOW_V_OFFSET
-                    radius: Constants.FORM_SHADOW_RADIUS
-                    samples: Constants.FORM_SHADOW_SAMPLES
-                    color: Constants.COLOR_FORM_SHADOW
-                    source: rectFieldFlick
-                    spread: Constants.FORM_SHADOW_SPREAD
-                    opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
-                }
-                RectangularGlow {
-                    anchors.fill: rectFieldFlick
-                    glowRadius: Constants.FORM_GLOW_RADIUS
-                    spread: Constants.FORM_GLOW_SPREAD
-                    color: Constants.COLOR_FORM_GLOW
-                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                    opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
-                }
-                Rectangle {
-                    id: rectFieldFlick
+                height: parent.height * 0.1
+                anchors.top: mainItemWithPadding.top
+                anchors.topMargin: 2 * Constants.SIZE_TEXT_V_SPACE
+                Text {
+                    id: textDescription
+                    font.pixelSize: Constants.SIZE_TEXT_BODY
+                    font.family: lato.name
+                    text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT")
+                    wrapMode: Text.Wrap
                     width: parent.width
-                    height: parent.height - 2 * Constants.SIZE_ROW_V_SPACE
-                    anchors.top: textDescription.bottom
-                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                    height: parent.height
+                }
+            }
+
+            Item {
+                id: textProgressBar
+                width: parent.width
+                height: 50
+                anchors.top: rawTextDescription.bottom
+                //anchors.topMargin: Constants.SIZE_TEXT_BODY
+                anchors.horizontalCenter: parent.horizontalCenter
+                ProgressBar {
+                    id: progressBar
+                    width: parent.width
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    height: 20
+                    to: 100
+                    value: 0
+                    visible: false
+                    indeterminate: false
+                    z: 1
+                }
+            }
+            Item {
+                id: rawButtonSearch
+                width: parent.width
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.top: rawTextDescription.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                anchors.horizontalCenter: parent.horizontalCenter
+                Button {
+                    id: buttonSearch
+                    //y: 53
+                    text: qsTranslate("PageDefinitionsUpdates",
+                                      "STR_UPDATE_BUTTON")
+                    anchors.horizontalCenterOffset: 0
+                    width: 1.4 * Constants.WIDTH_BUTTON
+                    height: parent.height
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+            Item {
+                id: rawButtonStartUpdate
+                width: parent.width
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.top: rawReleaseNoteScrollView.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                Button {
+                    id: buttonStartUpdate
+                    text: qsTranslate("PageDefinitionsUpdates",
+                                      "STR_UPDATE_BUTTON_START")
+                    width: Constants.WIDTH_BUTTON
+                    height: parent.height
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: false
+                }
+            }
+            Item {
+                id: rawButtonCancelUpdate
+                width: parent.width
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.top: textProgressBar.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                Button {
+                    id: buttonCancelUpdate
+                    //y: 21
+                    text: qsTranslate("PageDefinitionsUpdates",
+                                      "STR_UPDATE_BUTTON_CANCEL")
+                    anchors.horizontalCenterOffset: 0
+                    width: Constants.WIDTH_BUTTON
+                    height: parent.height
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: false
+                }
+            }
+
+            Item {
+                id: rawReleaseNoteScrollView
+                width: parent.width
+                height: parent.height * Constants.HEIGHT_DEFINITIONS_UPDATE_RELEASE_NOTE
+                anchors.top: rawTextDescription.bottom
+                Rectangle {
+                    id: releaseNoteScrollView
+                    width: parent.width
+                    height: parent.height
                     opacity: 1
+                    visible: false
+                    DropShadow {
+                        anchors.fill: rectFieldFlick
+                        horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                        verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                        radius: Constants.FORM_SHADOW_RADIUS
+                        samples: Constants.FORM_SHADOW_SAMPLES
+                        color: Constants.COLOR_FORM_SHADOW
+                        source: rectFieldFlick
+                        spread: Constants.FORM_SHADOW_SPREAD
+                        opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
+                    }
+                    RectangularGlow {
+                        anchors.fill: rectFieldFlick
+                        glowRadius: Constants.FORM_GLOW_RADIUS
+                        spread: Constants.FORM_GLOW_SPREAD
+                        color: Constants.COLOR_FORM_GLOW
+                        cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                        opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
+                    }
+                    Rectangle {
+                        id: rectFieldFlick
+                        width: parent.width
+                        height: parent.height
+                        anchors.top: parent.top
+                        opacity: 1
 
-                    Flickable {
-                        id: flickable
-                        x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                        y: Constants.SIZE_TEXT_FIELD_V_SPACE
-                        width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                        height: parent.height - 2 * Constants.SIZE_TEXT_FIELD_V_SPACE
-                        boundsBehavior: Flickable.StopAtBounds
-                        maximumFlickVelocity: 2500
-                        flickableDirection: Flickable.VerticalFlick
-                        contentWidth: releaseNoteScrollViewText.paintedWidth
-                        contentHeight: releaseNoteScrollViewText.paintedHeight
-                        clip: true
+                        Flickable {
+                            id: flickable
+                            x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                            y: Constants.SIZE_TEXT_FIELD_V_SPACE
+                            width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+                            height: parent.height - 2 * Constants.SIZE_TEXT_FIELD_V_SPACE
+                            boundsBehavior: Flickable.StopAtBounds
+                            maximumFlickVelocity: 2500
+                            flickableDirection: Flickable.VerticalFlick
+                            contentWidth: releaseNoteScrollViewText.paintedWidth
+                            contentHeight: releaseNoteScrollViewText.paintedHeight
+                            clip: true
 
-                        Label {
-                            id: releaseNoteScrollViewText
-                            text: ""
-                            width: flickable.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                            height: flickable.height - 2 * Constants.SIZE_TEXT_FIELD_V_SPACE
-                            wrapMode: TextEdit.Wrap
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            color: Constants.COLOR_TEXT_BODY
-                            visible: false
-                            textFormat: "RichText"
-                        }
+                            Label {
+                                id: releaseNoteScrollViewText
+                                text: ""
+                                width: flickable.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+                                height: flickable.height - 2 * Constants.SIZE_TEXT_FIELD_V_SPACE
+                                wrapMode: TextEdit.Wrap
+                                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                                color: Constants.COLOR_TEXT_BODY
+                                visible: false
+                                textFormat: "RichText"
+                            }
 
-                        ScrollBar.vertical: ScrollBar {
-                            active : true
-                            visible: true
-                            width: Constants.SIZE_TEXT_FIELD_H_SPACE
-                        }
-                        MouseArea {
-                            id: mouseAreaFlickable
-                            anchors.fill: parent
+                            ScrollBar.vertical: ScrollBar {
+                                active: true
+                                visible: true
+                                width: Constants.SIZE_TEXT_FIELD_H_SPACE
+                            }
+                            MouseArea {
+                                id: mouseAreaFlickable
+                                anchors.fill: parent
+                            }
                         }
                     }
                 }
