@@ -583,8 +583,8 @@ bool AppController::VerifyUpdates(std::string filedata)
     QStringList remote_data_list = remote_data.split('\n');
 
     remote_data = remote_data_list[0];
-    released_version = remote_data;
-    released_version = released_version.replace(',', '.');
+    remote_version = remote_data;
+    remote_version = remote_version.replace(',', '.');
 
     //used for initialization and cleaning previous content in case it failed
     release_notes = "";
@@ -593,9 +593,11 @@ bool AppController::VerifyUpdates(std::string filedata)
     }
 
     qDebug() << release_notes;
-    qDebug() << released_version;
+    qDebug() << remote_version;
 
     QStringList list1 = ver.split(",");
+
+    installed_version = list1.at(0) + '.' + list1.at(1) + '.' + list1.at(2);
 
     QStringList list2 = remote_data.split(",");
 
@@ -767,7 +769,7 @@ void AppController::updateWindows(std::string uri, std::string distro)
     urli = uri;
     getdistro = distro;
 
-    emit signalAutoUpdateAvailable(release_notes, released_version);
+    emit signalAutoUpdateAvailable(release_notes, installed_version, remote_version);
 }
 
 void AppController::cancelDownload()
@@ -793,6 +795,10 @@ void AppController::userCancelledUpdateDownload()
 
     httpUpdateRequestAborted = true;
     userCanceled = true;
+
+    if (reply != NULL){
+        reply->abort();
+    }
 
     emit signalAutoUpdateFail(GAPI::DownloadCancelled);
 }

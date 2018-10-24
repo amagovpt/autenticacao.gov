@@ -16,6 +16,8 @@ Item {
     property alias propertyButtonCancelUpdate: buttonCancelUpdate
     property alias propertyReleaseScrollViewText: releaseNoteScrollViewText
     property alias propertyReleaseNoteScrollView: releaseNoteScrollView
+    property alias propertyRemoteVersion: remoteVersion
+    property alias propertyInstalledVersion: installedVersion
 
     Item {
         id: rowTop
@@ -28,7 +30,7 @@ Item {
     Item {
         id: updateMain
         width: parent.width
-        height: parent.height - rowTop.height
+        height: parent.height - rowTop.height - Constants.SIZE_ROW_V_SPACE
         anchors.top: rowTop.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
@@ -41,7 +43,6 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             Text {
                 id: updateTitle
-                //x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
@@ -53,16 +54,17 @@ Item {
         Item {
             id: mainItemWithPadding
             width: parent.width * Constants.WIDTH_DEFINITIONS_UPDATE_MAIN_H_RELATIVE
-            height: parent.height
+            height: parent.height - rawUpdateTitle.height - 2 * Constants.SIZE_ROW_V_SPACE
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: rawUpdateTitle.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+
             Item {
                 id: rawTextDescription
                 width: parent.width
-                height: parent.height * 0.1
+                height: parent.height * Constants.HEIGHT_DEFINITIONS_UPDATE_LABEL_ROW
                 anchors.top: mainItemWithPadding.top
-                anchors.topMargin: 2 * Constants.SIZE_TEXT_V_SPACE
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 Text {
                     id: textDescription
                     font.pixelSize: Constants.SIZE_TEXT_BODY
@@ -75,12 +77,50 @@ Item {
             }
 
             Item {
+                id: rawInstalledVersion
+                width: parent.width
+                height: parent.height * Constants.HEIGHT_DEFINITIONS_UPDATE_LABEL_ROW
+                anchors.top: rawTextDescription.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
+                Text {
+                    id: installedVersion
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    text: qsTranslate("PageDefinitionsUpdates", "STR_INSTALLED_VERSION")
+                    wrapMode: Text.Wrap
+                    width: parent.width
+                    height: parent.height
+                    visible: false
+                }
+            }
+
+            Item {
+                id: rawRemoteVersion
+                width: parent.width
+                height: parent.height * Constants.HEIGHT_DEFINITIONS_UPDATE_LABEL_ROW
+                anchors.top: rawInstalledVersion.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                Text {
+                    id: remoteVersion
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    text: qsTranslate("PageDefinitionsUpdates", "STR_REMOTE_VERSION")
+                    wrapMode: Text.Wrap
+                    width: parent.width
+                    height: parent.height
+                    visible: false
+                }
+            }
+
+            Item {
                 id: textProgressBar
                 width: parent.width
-                height: 50
+                height: Constants.HEIGHT_DEFININTIONS_UPDATE_PROGRESS_BAR
                 anchors.top: rawTextDescription.bottom
-                //anchors.topMargin: Constants.SIZE_TEXT_BODY
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 anchors.horizontalCenter: parent.horizontalCenter
+
                 ProgressBar {
                     id: progressBar
                     width: parent.width
@@ -97,16 +137,14 @@ Item {
                 id: rawButtonSearch
                 width: parent.width
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
-                anchors.top: rawTextDescription.bottom
+                anchors.top: textProgressBar.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 anchors.horizontalCenter: parent.horizontalCenter
                 Button {
                     id: buttonSearch
-                    //y: 53
-                    text: qsTranslate("PageDefinitionsUpdates",
-                                      "STR_UPDATE_BUTTON")
+                    text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_BUTTON")
                     anchors.horizontalCenterOffset: 0
-                    width: 1.4 * Constants.WIDTH_BUTTON
+                    width: 2 * Constants.WIDTH_BUTTON
                     height: parent.height
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
@@ -119,11 +157,10 @@ Item {
                 width: parent.width
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.top: rawReleaseNoteScrollView.bottom
-                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                anchors.topMargin: 2 * Constants.SIZE_TEXT_V_SPACE
                 Button {
                     id: buttonStartUpdate
-                    text: qsTranslate("PageDefinitionsUpdates",
-                                      "STR_UPDATE_BUTTON_START")
+                    text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_BUTTON_START")
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -158,8 +195,8 @@ Item {
             Item {
                 id: rawReleaseNoteScrollView
                 width: parent.width
-                height: parent.height * Constants.HEIGHT_DEFINITIONS_UPDATE_RELEASE_NOTE
-                anchors.top: rawTextDescription.bottom
+                height: (parent.height * Constants.HEIGHT_DEFINITIONS_UPDATE_RELEASE_NOTE) - Constants.HEIGHT_BOTTOM_COMPONENT - 8 * Constants.SIZE_TEXT_V_SPACE;
+                anchors.top: rawRemoteVersion.bottom
                 Rectangle {
                     id: releaseNoteScrollView
                     width: parent.width

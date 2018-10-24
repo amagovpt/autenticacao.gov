@@ -42,6 +42,8 @@ PageDefinitionsUpdatesForm {
             propertyButtonCancelUpdate.visible = false
             propertyReleaseNoteScrollView.visible = false
             propertyReleaseScrollViewText.visible = false
+            propertyInstalledVersion.visible = false
+            propertyRemoteVersion.visible = false
         }
         onSignalAutoUpdateProgress: {
             propertyProgressBar.indeterminate = false
@@ -57,12 +59,17 @@ PageDefinitionsUpdatesForm {
                 propertyReleaseNoteScrollView.visible = true
                 propertyReleaseScrollViewText.text = release_notes
                 propertyReleaseScrollViewText.visible = true
-                propertyTextDescription.text =
-                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_AVAILABLE")
+                propertyTextDescription.text = qsTranslate("PageDefinitionsUpdates","STR_UPDATE_AVAILABLE")
+                propertyInstalledVersion.text = qsTranslate("PageDefinitionsUpdates", "STR_INSTALLED_VERSION") + ' ' + installed_version
+                propertyRemoteVersion.text = qsTranslate("PageDefinitionsUpdates", "STR_REMOTE_VERSION") + ' '+  remote_version
+
+                propertyInstalledVersion.visible = true
+                propertyRemoteVersion.visible = true
+
                 propertyButtonSearch.visible = false
-                propertyButtonStartUpdate.text = qsTranslate("PageDefinitionsUpdates",
-                                                             "STR_UPDATE_BUTTON_START") + " " + qsTranslate("PageDefinitionsUpdates",
-                                                                                                           "STR_VERSION") + " " + released_version
+                propertyButtonStartUpdate.text =
+                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_BUTTON_START") + ' ' +
+                        qsTranslate("PageDefinitionsUpdates","STR_VERSION") + ' ' + remote_version
                 propertyButtonStartUpdate.visible = true
 
             } else {
@@ -79,6 +86,9 @@ PageDefinitionsUpdatesForm {
             propertyReleaseScrollViewText.visible = false
             propertyTextDescription.text =
                     qsTranslate("PageDefinitionsUpdates","STR_UPDATE_STARTING_DOWNLOAD") + " " + filename
+
+            propertyInstalledVersion.visible = false
+            propertyRemoteVersion.visible = false
         }
     }
     propertyButtonSearch {

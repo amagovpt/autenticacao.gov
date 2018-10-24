@@ -116,8 +116,8 @@ private:
     std::string getdistro;
     QString fileName;
     QString release_notes;
-    QString released_version;
-
+    QString remote_version;
+    QString installed_version;
 protected:
     QTranslator m_translator;
 
@@ -126,7 +126,7 @@ signals:
     void languageChanged();
     void signalLanguageChangedError();
     void signalAutoUpdateFail(int error_code);
-    void signalAutoUpdateAvailable(QString release_notes, QString released_version);
+    void signalAutoUpdateAvailable(QString release_notes, QString installed_version, QString remote_version);
     void signalAutoUpdateProgress(int value);
     void signalStartUpdate(QString filename);
     void signalFlushCacheSuccess(); 
