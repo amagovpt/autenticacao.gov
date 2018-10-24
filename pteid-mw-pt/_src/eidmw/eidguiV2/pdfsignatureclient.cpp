@@ -244,9 +244,8 @@ ns1__AttributeType *convertAttributeType(ns3__AttributeType *attributeType, soap
 QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const char *outputPath,
                                                  std::string certChain, QString citizenName, QString citizenId,
                                                  ns1__AttributeSupplierType *attributeSupplier,  QString attribute,
-                                                 PDFSignatureInfo signatureInfo, bool isVisible)
+                                                 PDFSignatureInfo signatureInfo, bool isVisible, bool isCC)
 {
-
     qDebug() << "openSCAPSignature inputFile: " << inputFile << " outputPath: " << outputPath;
 
     local_pdf_handler = new PTEID_PDFSignature(inputFile);
@@ -288,10 +287,10 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
 
     sig_handler->setExternCertificateCA(caCerts);
 
-    sig_handler->setIsCC(true);
+    // Set the correct image logo, CC, CMD or custom
+    isCC ? sig_handler->setIsCC(true) : sig_handler->setIsCC(false);
 
     //Add PDF signature objects right before we call getHash()
-
     sig_handler->signFiles(signatureInfo.getLocation(), signatureInfo.getReason(), outputPath);
 
     /* Calculate hash */
@@ -409,8 +408,8 @@ int PDFSignatureClient::closeSCAPSignature(unsigned char * scap_signature, unsig
 
 
 int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QString filepath,
-                                QString citizenName, QString citizenId,
-                                int ltv, PDFSignatureInfo signatureInfo, std::vector<ns3__AttributeType *> &attributeTypeList)
+                                QString citizenName, QString citizenId,int ltv, bool isCC,
+                                PDFSignatureInfo signatureInfo, std::vector<ns3__AttributeType *> &attributeTypeList)
 {
     // Get endpoint from settings
     ScapSettings settings;
@@ -539,11 +538,12 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                 else {
                     // Creates a temporary file for every iteration except the last
                      isVisible = false;
-                     if(i == transactionList.size() - 2 )
-                         attributeListString.append(QString::fromStdString(" e "));
-                     else if(i != 0)
-                         attributeListString.append(QString::fromStdString(", "));
-
+                     if (i > 0){
+                          if(i == transactionList.size() - 2)
+                              attributeListString.append(QString::fromStdString(" e "));
+                          else
+                              attributeListString.append(QString::fromStdString(", "));
+                     }
                      attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
 
                      tempFile = new QTemporaryFile();
@@ -557,7 +557,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
                 signatureHash = openSCAPSignature(inputPath, outputPath,
                                 transaction->AttributeSupplierCertificateChain, citizenName, citizenId,
-                                transaction->AttributeSupplier, attributeListString, signatureInfo, isVisible);
+                                transaction->AttributeSupplier, attributeListString, signatureInfo, isVisible, isCC);
 
                 if (signatureHash.size() == 0) {
                     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "openSCAPSignature() failed!");

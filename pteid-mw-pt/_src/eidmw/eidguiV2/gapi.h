@@ -314,7 +314,8 @@ public slots:
     void doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token);
     void doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token, QList<int> attribute_list);
     void signOpenScapWithCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
-                   QString outputFile, int page, double coord_x, double coord_y);
+                       QString outputFile, int page, double coord_x, double coord_y,
+                       QString reason, QString location);
 
     static void addressChangeCallback(void *, int);
     void showChangeAddressDialog(long code);

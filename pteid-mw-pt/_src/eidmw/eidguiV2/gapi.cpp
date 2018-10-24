@@ -758,16 +758,10 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
     cmd_details.citizenId = QString(cmd_signature->getCertificateCitizenID()+2);
 
     scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
-                m_scap_params.location_x, m_scap_params.location_y, 0, attrs, cmd_details);
+                m_scap_params.location_x, m_scap_params.location_y,
+                m_scap_params.location, m_scap_params.reason, 0, attrs, cmd_details);
 
     //TODO: reset the m_scap_params struct
-
-    //scapServices.executeSCAPSignature(this, params.inputPDF, params.outputPDF, params.page,
-    //            params.location_x, params.location_y, params.ltv, attrs);
-
-    //signCMDFinished(ret);
-    //signalUpdateProgressBar(100);
-    //emit signalCloseCMDSucess();
 }
 
 
@@ -782,11 +776,12 @@ QString generateTempFile() {
     return tempFile.fileName();
 }
 
-//TODO: call this instead of signOpenCMD when there attributes
 void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
-                   QString outputFile, int page, double coord_x, double coord_y) {
+                   QString outputFile, int page, double coord_x, double coord_y,
+                   QString reason, QString location) {
 
     qDebug() << "signOpenScapWithCMD! MobileNumber = " + mobileNumber + " secret_code = " + secret_code +
+                " reason = " + reason + " location = " + location +
                 " loadedFilePath = " + loadedFilePath + " outputFile = " + outputFile +
                 "page = " + page + "coord_x" + coord_x + "coord_y" + coord_y;
 
@@ -801,6 +796,9 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QStrin
     m_scap_params.page = page;
     m_scap_params.location_x = coord_x;
     m_scap_params.location_y = coord_y;
+    m_scap_params.location = reason;
+    m_scap_params.reason = location;
+
 
     CmdSignParams params;
 
@@ -822,7 +820,7 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QStrin
     cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
 
     cmd_signature->set_pdf_handler(cmd_pdfSignature);
-    QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, params);            
+    QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, params);
 
 }
 

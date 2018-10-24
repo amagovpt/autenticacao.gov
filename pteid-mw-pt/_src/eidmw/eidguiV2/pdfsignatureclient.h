@@ -66,15 +66,18 @@ class PDFSignatureClient
 public:
 
     PDFSignatureClient();
-    int signPDF(ProxyInfo, QString, QString, QString, QString, int, PDFSignatureInfo, std::vector<ns3__AttributeType *> &);
+    int signPDF(ProxyInfo, QString, QString, QString, QString, int, bool,
+                PDFSignatureInfo, std::vector<ns3__AttributeType *> &);
 
 private:
 
-    QByteArray openSCAPSignature(const char *inputFile, const char *outputPath, std::string certChain, QString citizenName, QString citizenId,
-                            ns1__AttributeSupplierType *attributeSupplier, QString attribute, PDFSignatureInfo signatureInfo,
-                                 bool isVisible);
+    QByteArray openSCAPSignature(const char *inputFile, const char *outputPath,
+                            std::string certChain, QString citizenName, QString citizenId,
+                            ns1__AttributeSupplierType *attributeSupplier, QString attribute,
+                            PDFSignatureInfo signatureInfo,bool isVisible, bool isCC);
 
-    unsigned char * callSCAPSignatureService(soap* sp, QByteArray signatureHash, ns1__TransactionType *transaction, unsigned int &signatureLen);
+    unsigned char * callSCAPSignatureService(soap* sp, QByteArray signatureHash,
+                            ns1__TransactionType *transaction, unsigned int &signatureLen);
 
     int closeSCAPSignature(unsigned char * scap_signature, unsigned int len);
     

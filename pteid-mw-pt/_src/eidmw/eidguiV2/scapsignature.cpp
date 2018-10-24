@@ -89,7 +89,8 @@ std::vector<ns3__AttributeType*> ScapServices::getSelectedAttributes(std::vector
 *  SCAP signature with citizen signature using CMD
 */
 void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepath, int selected_page,
-   double location_x, double location_y, int ltv_years, std::vector<int> attributes_index, CmdSignedFileDetails cmd_details) {
+        double location_x, double location_y, QString &location, QString &reason, int ltv_years,
+        std::vector<int> attributes_index, CmdSignedFileDetails cmd_details) {
 
     std::vector<ns3__AttributeType*> selected_attributes = getSelectedAttributes(attributes_index);
 
@@ -102,7 +103,8 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
     PDFSignatureClient scap_signature_client;
 
     int successful = scap_signature_client.signPDF(m_proxyInfo, savefilepath, cmd_details.signedCMDFile, cmd_details.citizenName,
-        cmd_details.citizenId, ltv_years, PDFSignatureInfo(selected_page, location_x, location_y, false), selected_attributes);
+        cmd_details.citizenId, ltv_years, false, PDFSignatureInfo(selected_page, location_x, location_y,
+        false,strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes);
 
     if (successful == GAPI::ScapSucess) {
         parent->signalPdfSignSucess(parent->SignMessageOK);
@@ -179,7 +181,7 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
                 PDFSignatureClient scap_signature_client;
                 int successful = scap_signature_client.signPDF(
                             m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
-                            QString(citizenId), ltv_years, PDFSignatureInfo(selected_page, location_x, location_y,
+                            QString(citizenId), ltv_years, true, PDFSignatureInfo(selected_page, location_x, location_y,
                             false, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes);
 
                 if (successful == GAPI::ScapSucess) {

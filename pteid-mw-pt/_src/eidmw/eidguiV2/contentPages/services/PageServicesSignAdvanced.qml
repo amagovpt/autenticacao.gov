@@ -1797,11 +1797,10 @@ PageServicesSignAdvancedForm {
         rectLabelCMDText.visible = false
 
         if (propertySwitchSignAdd.checked) {
-            //SCAP PDF coordinate conversion: it expects native PDF units
-            coord_x = gapi.getPageSize(page).width * coord_x
-            coord_y = gapi.getPageSize(page).height * (1 - coord_y)
             gapi.signOpenScapWithCMD(mobileNumber,textFieldPin.text,
-                                     loadedFilePath,outputFile,page,coord_x, coord_y)
+                                     loadedFilePath,outputFile,page,
+                                     coord_x, coord_y,
+                                     reason,location)
         }
         else
         {
