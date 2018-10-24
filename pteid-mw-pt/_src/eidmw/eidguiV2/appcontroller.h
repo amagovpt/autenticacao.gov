@@ -101,6 +101,7 @@ private:
     GUISettings&    m_Settings;
     bool LoadTranslationFile(QString NewLanguage );
     void doFlushCache();
+    bool removePteidCache();
 
     QUrl url;
     QNetworkProxy proxy;
@@ -131,6 +132,8 @@ signals:
     void signalStartUpdate(QString filename);
     void signalFlushCacheSuccess(); 
     void signalFlushCacheFail();
+    void signalCacheNotReadable();
+    void signalCacheNotWritable();
 };
 
 #endif // APPCONTROLLER_H

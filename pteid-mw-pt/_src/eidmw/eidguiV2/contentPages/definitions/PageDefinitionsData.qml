@@ -114,11 +114,31 @@ PageDefinitionsDataForm {
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
+        onSignalCacheNotReadable:{
+            propertyBusyIndicator.running = false;
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
+        
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+        }
+        onSignalCacheNotWritable:{
+            propertyBusyIndicator.running = false;
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    qsTranslate("PageDataApp","STR_CACHE_NOT_WRITABLE")
+        
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+        }
     }
 
-    propertyButtonFlushCache {
+    propertyButtonRemoveAppCache {
         onClicked: {
-            console.log("propertyButtonFlushCache clicked");
+            console.log("propertyButtonRemoveAppCache clicked");
             propertyBusyIndicator.running = true;
             controler.flushCache()
         }

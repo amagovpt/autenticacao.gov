@@ -926,10 +926,53 @@ void AppController::flushCache(){
 }
 
 void AppController::doFlushCache(){
-    if(ReaderSet.flushCache()){
+    if(removePteidCache()){
         emit signalFlushCacheSuccess();
-    }else{
+    }
+}
+
+bool AppController::removePteidCache() {
+
+    try
+    {
+        GUISettings settings;
+        QString ptEidCacheDir = settings.getPteidCachedir();
+        qDebug() << "C++: Removing ptEidCache files: " << ptEidCacheDir;
+
+        extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+        qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
+        QDir dir(ptEidCacheDir);
+
+        if(!dir.isReadable())
+        {
+            qDebug() << "C++: Cache folder does not have read permissions! ";
+            qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
+            emit signalCacheNotReadable();
+            return false;
+        }
+        QFileInfo cacheInfo(ptEidCacheDir);
+        if(!cacheInfo.isWritable())
+        {
+            qDebug() << "C++: Cache folder does not have write permissions! ";
+            qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
+            emit signalCacheNotWritable();
+            return false;
+        }
+        dir.setNameFilters(QStringList() << "*.bin");
+        dir.setFilter(QDir::Files);
+
+        foreach(QString dirFile, dir.entryList())
+        {
+            dir.remove(dirFile);
+        }
+
+        return true;
+
+    }
+    catch(...) {
+        std::cerr << "Error ocurred while removing ptEidCache from cache!";
         emit signalFlushCacheFail();
+        return false;
     }
 }
 
