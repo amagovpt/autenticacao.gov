@@ -537,22 +537,35 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                 }
                 else {
                     // Creates a temporary file for every iteration except the last
-                     isVisible = false;
-                     if (i > 0){
-                          if(i == transactionList.size() - 2)
-                              attributeListString.append(QString::fromStdString(" e "));
-                          else
-                              attributeListString.append(QString::fromStdString(", "));
-                     }
-                     attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
+                    isVisible = false;
+                    if (i > 0){
+                        if(i == transactionList.size() - 2)
+                            attributeListString.append(QString::fromStdString(" e "));
+                        else
+                            attributeListString.append(QString::fromStdString(", "));
+                    }
+                    else {
+                        if(transactionList.size() > 2)
+                            attributeListString.append(QString::fromStdString("{ "));
+                    }
 
-                     tempFile = new QTemporaryFile();
+                    attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
 
-                     if (!tempFile->open()) {
+                    if(i == transactionList.size() - 2){
+                        if(transactionList.size() > 2)
+                            attributeListString.append(QString::fromStdString(" }"));
+
+                        attributeListString.append(QString::fromStdString(" de "));
+                        attributeListString.append(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
+
+                    }
+                    tempFile = new QTemporaryFile();
+
+                    if (!tempFile->open()) {
                         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "PDF Signature error: Error creating temporary file");
                         return GAPI::ScapGenericError;
-                     }
-                     outputPath = strdup(tempFile->fileName().toStdString().c_str());
+                    }
+                    outputPath = strdup(tempFile->fileName().toStdString().c_str());
                 }
 
                 signatureHash = openSCAPSignature(inputPath, outputPath,
