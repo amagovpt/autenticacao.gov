@@ -144,7 +144,7 @@ Item {
                     id: buttonSearch
                     text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_BUTTON")
                     anchors.horizontalCenterOffset: 0
-                    width: 2 * Constants.WIDTH_BUTTON
+                    width: 1.4 * Constants.WIDTH_BUTTON
                     height: parent.height
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
@@ -161,7 +161,7 @@ Item {
                 Button {
                     id: buttonStartUpdate
                     text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_BUTTON_START")
-                    width: Constants.WIDTH_BUTTON
+                    width: 1.4 * Constants.WIDTH_BUTTON
                     height: parent.height
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
@@ -178,11 +178,10 @@ Item {
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 Button {
                     id: buttonCancelUpdate
-                    //y: 21
                     text: qsTranslate("PageDefinitionsUpdates",
                                       "STR_UPDATE_BUTTON_CANCEL")
                     anchors.horizontalCenterOffset: 0
-                    width: Constants.WIDTH_BUTTON
+                    width: 1.4 * Constants.WIDTH_BUTTON
                     height: parent.height
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
