@@ -137,7 +137,9 @@ std::string generateTOTP(std::string secretKey) {
 
         //Digits = 6
         S = S % 1000000;
-#ifndef _WIN32
+#ifdef _WIN32
+        sprintf_s(output_otp, digits + 1, "%.*ld", digits, S);
+#else
         snprintf(output_otp, digits + 1, "%.*ld", digits, S);
 #endif
         output_otp[digits] = '\0';
