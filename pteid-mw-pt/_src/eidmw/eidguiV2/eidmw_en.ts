@@ -788,7 +788,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="112"/>
         <source>STR_CLEAR_CACHE_FAIL</source>
-        <translation>The cache is empty</translation>
+        <translation type="unfinished">Error while removing cache</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="122"/>
@@ -816,7 +816,7 @@
         <translation>Professional and Business Attributes Cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="166"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="161"/>
         <source>STR_SCAP_CACHE_TEXT</source>
         <translation>The professional attributes cache stores attributes previously loaded, avoiding a new connection to the server</translation>
     </message>
@@ -1019,18 +1019,18 @@
 <context>
     <name>PageDefinitionsUpdates</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="49"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="50"/>
         <source>STR_UPDATE_TITLE</source>
         <translation>Updates</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="63"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="125"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="71"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="163"/>
         <source>STR_UPDATE_BUTTON_START</source>
         <translation>Install</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="145"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="181"/>
         <source>STR_UPDATE_BUTTON_CANCEL</source>
         <translation>Cancel download</translation>
     </message>
@@ -1041,7 +1041,7 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="17"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="70"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="77"/>
         <source>STR_UPDATE_NO_UPDATES</source>
         <translation>No updates available at the moment</translation>
     </message>
@@ -1076,33 +1076,33 @@
         <translation>Please check your Internet connection and try again.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="64"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="72"/>
         <source>STR_VERSION</source>
         <translation>version</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="92"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="102"/>
         <source>STR_UPDATE_VERSION_LOOKUP</source>
         <translation>Searching for new version.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="61"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="62"/>
         <source>STR_UPDATE_AVAILABLE</source>
         <translation>A new update is available. Press Install do perform the update.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="81"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="88"/>
         <source>STR_UPDATE_STARTING_DOWNLOAD</source>
         <translation>Downloading</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="29"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="70"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="72"/>
         <source>STR_UPDATE_TEXT</source>
         <translation>Press the button to check for available updates.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="106"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="145"/>
         <source>STR_UPDATE_BUTTON</source>
         <translation>Check for updates</translation>
     </message>
@@ -1110,7 +1110,7 @@
 <context>
     <name>PageDifiniionsSCAP</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="182"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="201"/>
         <source>STR_SCAP_ATTRIBUTES_BUTTON_REMOVE</source>
         <translation>Remove cache</translation>
     </message>

@@ -926,9 +926,18 @@ void AppController::flushCache(){
 }
 
 void AppController::doFlushCache(){
+#ifdef WIN32
+    extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+    qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
+#endif
+
     if(removePteidCache()){
         emit signalFlushCacheSuccess();
     }
+
+#ifdef WIN32
+    qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
+#endif
 }
 
 bool AppController::removePteidCache() {
@@ -939,24 +948,20 @@ bool AppController::removePteidCache() {
         QString ptEidCacheDir = settings.getPteidCachedir();
         qDebug() << "C++: Removing ptEidCache files: " << ptEidCacheDir;
 
-        extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
-        qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
         QDir dir(ptEidCacheDir);
-
+        bool has_all_permissions;
         if(!dir.isReadable())
         {
             qDebug() << "C++: Cache folder does not have read permissions! ";
-            qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
+            has_all_permissions = false;
             emit signalCacheNotReadable();
-            return false;
         }
         QFileInfo cacheInfo(ptEidCacheDir);
         if(!cacheInfo.isWritable())
         {
             qDebug() << "C++: Cache folder does not have write permissions! ";
-            qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
+            has_all_permissions = false;
             emit signalCacheNotWritable();
-            return false;
         }
         dir.setNameFilters(QStringList() << "*.bin");
         dir.setFilter(QDir::Files);
@@ -965,9 +970,7 @@ bool AppController::removePteidCache() {
         {
             dir.remove(dirFile);
         }
-
-        return true;
-
+        return has_all_permissions;
     }
     catch(...) {
         std::cerr << "Error ocurred while removing ptEidCache from cache!";
@@ -975,6 +978,18 @@ bool AppController::removePteidCache() {
         return false;
     }
 }
+/*
+int AppController::getPteidCacheSize() {
+    QString ptEidCacheDir = settings.getPteidCachedir();
+    QFileInfo cacheInfo(ptEidCacheDir);
+    return cacheInfo.size();
+}
 
+int AppController::getScapCacheSize() {
+    ScapSettings settings;
+    QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
+    QFileInfo cacheInfo(scapCacheDir);
+    return cacheInfo.size();
+}*/
 
 
