@@ -766,57 +766,63 @@
     <name>PageDataApp</name>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="75"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="99"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="110"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="120"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="130"/>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="106"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="101"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="113"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="124"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="135"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="135"/>
         <source>STR_CLEAR_CACHE</source>
         <translation>Remove Cache</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="77"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="101"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="103"/>
         <source>STR_CLEAR_CACHE_SUCC</source>
         <translation>Files in cache successfully deleted</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="87"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="88"/>
         <source>STR_CLEAR_CACHE_ERROR</source>
         <translation>Error while clearing cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="112"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="115"/>
         <source>STR_CLEAR_CACHE_FAIL</source>
-        <translation type="unfinished">Error while removing cache</translation>
+        <translation>Error while removing cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="122"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="126"/>
         <source>STR_CACHE_NOT_READABLE</source>
         <translation>You don&apos;t have permissions to read cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="132"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="137"/>
         <source>STR_CACHE_NOT_WRITABLE</source>
         <translation>You don&apos;t have permissions to write in cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="55"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="165"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="167"/>
+        <source>STR_SIZE_OF_CACHE</source>
+        <translation>Cache size:</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="57"/>
         <source>STR_CACHE_TITLE</source>
         <translation>Card Data Cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="90"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="94"/>
         <source>STR_APP_CACHE_TEXT</source>
         <translation>The application cache stores card data allowing next reads to take less time</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="131"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="161"/>
         <source>STR_SCAP_CACHE_TITLE</source>
         <translation>Professional and Business Attributes Cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="161"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="200"/>
         <source>STR_SCAP_CACHE_TEXT</source>
         <translation>The professional attributes cache stores attributes previously loaded, avoiding a new connection to the server</translation>
     </message>
@@ -1110,7 +1116,7 @@
 <context>
     <name>PageDifiniionsSCAP</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="201"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="240"/>
         <source>STR_SCAP_ATTRIBUTES_BUTTON_REMOVE</source>
         <translation>Remove cache</translation>
     </message>
@@ -1842,7 +1848,7 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="235"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="241"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="19"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="85"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="86"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="29"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="35"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="41"/>

@@ -64,22 +64,23 @@ PageDefinitionsDataForm {
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN") + controler.autoTr
             }
-
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
         onSignalRemoveSCAPAttributesSucess: {
             console.log("Definitions SCAP - Signal SCAP Signal Remove SCAP Attributes Sucess")
+            updateCacheSize();
             propertyBusyIndicator.running = false
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                     qsTranslate("PageDataApp","STR_CLEAR_CACHE")
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                     qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC")
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus()
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
         onSignalRemoveSCAPAttributesFail: {
             console.log("Definitions SCAP - Signal Remove SCAP Attributes Fail")
+            updateCacheSize();
             propertyBusyIndicator.running = false
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                     qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
@@ -88,12 +89,23 @@ PageDefinitionsDataForm {
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
-
+        onSignalCacheNotReadable:{
+            updateCacheSize();
+            propertyBusyIndicator.running = false;
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
+        
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+        }
     }
     Connections {
         target: controler
         
-        onSignalFlushCacheSuccess:{
+        onSignalRemovePteidCacheSuccess:{
+            updateCacheSize();
             propertyBusyIndicator.running = false;
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                     qsTranslate("PageDataApp","STR_CLEAR_CACHE")
@@ -103,8 +115,10 @@ PageDefinitionsDataForm {
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             
+            
         }
-        onSignalFlushCacheFail:{
+        onSignalRemovePteidCacheFail:{
+            updateCacheSize();
             propertyBusyIndicator.running = false;
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                     qsTranslate("PageDataApp","STR_CLEAR_CACHE")
@@ -115,6 +129,7 @@ PageDefinitionsDataForm {
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
         onSignalCacheNotReadable:{
+            updateCacheSize();
             propertyBusyIndicator.running = false;
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                     qsTranslate("PageDataApp","STR_CLEAR_CACHE")
@@ -124,15 +139,11 @@ PageDefinitionsDataForm {
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
-        onSignalCacheNotWritable:{
-            propertyBusyIndicator.running = false;
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("PageDataApp","STR_CLEAR_CACHE")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("PageDataApp","STR_CACHE_NOT_WRITABLE")
-        
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+        onSignalAppCacheSize:{
+            propertyCacheAppSizeTextField.text  = qsTranslate("PageDataApp", "STR_SIZE_OF_CACHE") + " " + cacheSize;
+        }
+        onSignalScapCacheSize:{
+            propertyCacheSCAPSizeTextField.text  = qsTranslate("PageDataApp", "STR_SIZE_OF_CACHE") + " " + cacheSize;
         }
     }
 
@@ -149,5 +160,14 @@ PageDefinitionsDataForm {
             propertyBusyIndicator.running = true;
             gapi.startRemovingAttributesFromCache(0)
         }
+    }
+
+    Component.onCompleted: {
+        updateCacheSize();
+    }
+
+    function updateCacheSize() {
+        controler.getPteidCacheSize();
+        controler.getScapCacheSize();
     }
 }

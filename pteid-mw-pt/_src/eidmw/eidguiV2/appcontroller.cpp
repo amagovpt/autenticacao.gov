@@ -926,18 +926,9 @@ void AppController::flushCache(){
 }
 
 void AppController::doFlushCache(){
-#ifdef WIN32
-    extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
-    qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
-#endif
-
     if(removePteidCache()){
-        emit signalFlushCacheSuccess();
+        emit signalRemovePteidCacheSuccess();
     }
-
-#ifdef WIN32
-    qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
-#endif
 }
 
 bool AppController::removePteidCache() {
@@ -950,19 +941,22 @@ bool AppController::removePteidCache() {
 
         QDir dir(ptEidCacheDir);
         bool has_all_permissions;
+#ifdef WIN32
+        extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+        qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
+#endif
         if(!dir.isReadable())
         {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "No read permissions: PTEID cache directory!");
             qDebug() << "C++: Cache folder does not have read permissions! ";
             has_all_permissions = false;
             emit signalCacheNotReadable();
         }
-        QFileInfo cacheInfo(ptEidCacheDir);
-        if(!cacheInfo.isWritable())
-        {
-            qDebug() << "C++: Cache folder does not have write permissions! ";
-            has_all_permissions = false;
-            emit signalCacheNotWritable();
-        }
+#ifdef WIN32
+        qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
+#endif
+
         dir.setNameFilters(QStringList() << "*.bin");
         dir.setFilter(QDir::Files);
 
@@ -974,22 +968,58 @@ bool AppController::removePteidCache() {
     }
     catch(...) {
         std::cerr << "Error ocurred while removing ptEidCache from cache!";
-        emit signalFlushCacheFail();
+        emit signalRemovePteidCacheFail();
         return false;
     }
 }
-/*
-int AppController::getPteidCacheSize() {
-    QString ptEidCacheDir = settings.getPteidCachedir();
-    QFileInfo cacheInfo(ptEidCacheDir);
-    return cacheInfo.size();
+
+
+void AppController::getPteidCacheSize() {
+    QtConcurrent::run(this, &AppController::doGetPteidCacheSize);
 }
 
-int AppController::getScapCacheSize() {
+void AppController::doGetPteidCacheSize() {
+    GUISettings settings;
+    QString ptEidCacheDir = settings.getPteidCachedir();
+    emit signalAppCacheSize(formatSize(dirSize(ptEidCacheDir, "*.bin")));
+}
+
+void AppController::getScapCacheSize() {
+    QtConcurrent::run(this, &AppController::doGetScapCacheSize);
+}
+
+void AppController::doGetScapCacheSize() {
     ScapSettings settings;
     QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
-    QFileInfo cacheInfo(scapCacheDir);
-    return cacheInfo.size();
-}*/
+    emit signalScapCacheSize(formatSize(dirSize(scapCacheDir, "*.xml")));
+}
 
+//borrowed from https://stackoverflow.com/a/47854799
+qint64 AppController::dirSize(QString dirPath, QString nameFilter) {
+    qint64 size = 0;
+    QDir dir(dirPath);
+    //calculate total size of current directories' files
+    QDir::Filters fileFilters = QDir::Files|QDir::System|QDir::Hidden;
+    dir.setNameFilters(QStringList() << nameFilter);
+    for(QString filePath : dir.entryList(fileFilters)) {
+        QFileInfo fi(dir, filePath);
+        size+= fi.size();
+    }
+    //add size of child directories recursively
+    QDir::Filters dirFilters = QDir::Dirs|QDir::NoDotAndDotDot|QDir::System|QDir::Hidden;
+    for(QString childDirPath : dir.entryList(dirFilters))
+        size+= dirSize(dirPath + QDir::separator() + childDirPath, nameFilter);
+    return size;
+}
+//borrowed from https://stackoverflow.com/a/47854799
+QString AppController::formatSize(qint64 size) {
+    QStringList units = {"Bytes", "KB", "MB", "GB", "TB", "PB"};
+    int i;
+    double outputSize = size;
+    for(i=0; i<units.size()-1; i++) {
+        if(outputSize<1024) break;
+        outputSize= outputSize/1024;
+    }
+    return QString("%0 %1").arg(outputSize, 0, 'f', 0).arg(units[i]);
+}
 

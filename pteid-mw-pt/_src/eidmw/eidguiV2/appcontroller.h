@@ -5,6 +5,7 @@
 #include <QVariant>
 #include <QUrl>
 #include "Settings.h"
+#include "ScapSettings.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
@@ -96,12 +97,18 @@ public slots:
     void httpUpdateReadyRead();
     void updateUpdateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
     void flushCache();
+    void getPteidCacheSize();
+    void getScapCacheSize();
     
 private:
     GUISettings&    m_Settings;
     bool LoadTranslationFile(QString NewLanguage );
     void doFlushCache();
     bool removePteidCache();
+    void doGetPteidCacheSize();
+    void doGetScapCacheSize();
+    qint64 dirSize(QString dirPath, QString nameFilter);
+    QString formatSize(qint64 size);
 
     QUrl url;
     QNetworkProxy proxy;
@@ -130,10 +137,12 @@ signals:
     void signalAutoUpdateAvailable(QString release_notes, QString installed_version, QString remote_version);
     void signalAutoUpdateProgress(int value);
     void signalStartUpdate(QString filename);
-    void signalFlushCacheSuccess(); 
-    void signalFlushCacheFail();
+    void signalRemovePteidCacheSuccess(); 
+    void signalRemovePteidCacheFail();
     void signalCacheNotReadable();
     void signalCacheNotWritable();
+    void signalAppCacheSize(QString cacheSize);
+    void signalScapCacheSize(QString cacheSize);
 };
 
 #endif // APPCONTROLLER_H

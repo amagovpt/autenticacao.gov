@@ -148,7 +148,7 @@ std::vector<ns2__AttributesType *>
     return m_attributesList;
 }
 
-bool ScapServices::removeAttributesFromCache(eIDMW::PTEID_EIDCard &card) {
+bool ScapServices::removeAttributesFromCache() {
 
     try
     {

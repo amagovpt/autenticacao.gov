@@ -2006,14 +2006,31 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
 
     qDebug() << "removeSCAPAttributesFromCache : " << isCompanies;
 
-    PTEID_EIDCard * card = NULL;
+    ScapSettings settings;
+    QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
+    QDir dir(scapCacheDir);
+    bool has_read_permissions = true;
+#ifdef WIN32
+    extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+    qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
+#endif
+    if(!dir.isReadable())
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "No read permissions: SCAP cache directory!");
+        qDebug() << "C++: Cache folder does not have read permissions! ";
+        has_read_permissions = false;
+        emit signalCacheNotReadable();
+    }
+#ifdef WIN32
+    qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
+#endif
+
     bool error_code = false;
+    error_code = scapServices.removeAttributesFromCache();
 
-    getCardInstance(card);
-    if (card == NULL)
+    if (!has_read_permissions)
         return;
-
-    error_code = scapServices.removeAttributesFromCache(*card);
 
     if (error_code == true)
         emit signalRemoveSCAPAttributesSucess(isCompanies);
