@@ -940,7 +940,7 @@ bool AppController::removePteidCache() {
         qDebug() << "C++: Removing ptEidCache files: " << ptEidCacheDir;
 
         QDir dir(ptEidCacheDir);
-        bool has_all_permissions;
+        bool has_all_permissions = true;
 #ifdef WIN32
         extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
         qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
