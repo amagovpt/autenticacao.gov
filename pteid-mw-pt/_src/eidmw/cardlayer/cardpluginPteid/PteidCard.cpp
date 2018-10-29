@@ -716,11 +716,14 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
     	// PSO: Hash GEMSAFE
     	oResp1 = SendAPDU(0x2A, 0x90, 0xA0, oData1);
     	// PSO: Compute Digital Signature GEMSAFE
-    	// Length of expected signature: for pteid it's either 128 or 256 bytes
-    	// If expected length is 256 it can be encoded as 0 following ISO 7816-4 Section 5.1
+		oResp = SendAPDU(0x2A, 0x9E, 0x9A, 0x00);
 
-        unsigned char len_byte = key.ulKeyLenBytes == 256 ? 0 : key.ulKeyLenBytes;
-		oResp = SendAPDU(0x2A, 0x9E, 0x9A, len_byte);
+		//3072 key support: Get the remaining 128 bytes of the signature
+		if (oResp.GetByte(oResp.Size() - 2) == 0x61) {
+			char remaining = oResp.GetByte(oResp.Size() - 1);
+			oResp.Chop(2);
+			oResp.Append(SendAPDU(0xC0, 0x00, 0x00, remaining));
+		}
     } else {
     	// PSO:Hash IAS - does CDS
     	oResp = SendAPDU(0x88, 0x02, 0x00, oData);
@@ -728,6 +731,7 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
 
     unsigned long ulSW12 = getSW12(oResp);
     MWLOG(LEV_INFO, MOD_CAL, L"Resp oResp PSO is: 0x%2X", ulSW12);
+    
     if (ulSW12 != 0x9000)
     	throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
 
