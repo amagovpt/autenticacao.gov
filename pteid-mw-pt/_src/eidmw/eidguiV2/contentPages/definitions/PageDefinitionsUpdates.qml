@@ -60,8 +60,8 @@ PageDefinitionsUpdatesForm {
                 propertyReleaseScrollViewText.text = release_notes
                 propertyReleaseScrollViewText.visible = true
                 propertyTextDescription.text = qsTranslate("PageDefinitionsUpdates","STR_UPDATE_AVAILABLE")
-                propertyInstalledVersion.text = qsTranslate("PageDefinitionsUpdates", "STR_INSTALLED_VERSION") + ' ' + installed_version
-                propertyRemoteVersion.text = qsTranslate("PageDefinitionsUpdates", "STR_REMOTE_VERSION") + ' '+  remote_version
+                propertyInstalledVersion.propertyDateField.text = installed_version
+                propertyRemoteVersion.propertyDateField.text = remote_version
 
                 propertyInstalledVersion.visible = true
                 propertyRemoteVersion.visible = true

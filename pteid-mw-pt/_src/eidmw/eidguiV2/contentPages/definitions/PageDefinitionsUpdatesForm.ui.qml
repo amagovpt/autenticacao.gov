@@ -36,7 +36,7 @@ Item {
 
         Item {
             id: rawUpdateTitle
-            width: parent.width * Constants.WIDTH_DEFINITIONS_UPDATE_MAIN_H_RELATIVE
+            width: parent.width
             height: Constants.SIZE_TEXT_LABEL
             anchors.top: updateMain.top
             anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
@@ -53,7 +53,7 @@ Item {
 
         Item {
             id: mainItemWithPadding
-            width: parent.width * Constants.WIDTH_DEFINITIONS_UPDATE_MAIN_H_RELATIVE
+            width: parent.width
             height: parent.height - rawUpdateTitle.height - 2 * Constants.SIZE_ROW_V_SPACE
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: rawUpdateTitle.bottom
@@ -69,47 +69,70 @@ Item {
                     id: textDescription
                     font.pixelSize: Constants.SIZE_TEXT_BODY
                     font.family: lato.name
-                    text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT")
+                    text: qsTranslate("PageDefinitionsUpdates",
+                                      "STR_UPDATE_TEXT")
                     wrapMode: Text.Wrap
                     width: parent.width
                     height: parent.height
                 }
             }
-
             Item {
-                id: rawInstalledVersion
+                id: rawRowVersion
                 width: parent.width
-                height: parent.height * Constants.HEIGHT_DEFINITIONS_UPDATE_LABEL_ROW
+                height: parent.height * 3 * Constants.HEIGHT_DEFINITIONS_UPDATE_LABEL_ROW
                 anchors.top: rawTextDescription.bottom
-                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-
-                Text {
-                    id: installedVersion
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    text: qsTranslate("PageDefinitionsUpdates", "STR_INSTALLED_VERSION")
-                    wrapMode: Text.Wrap
-                    width: parent.width
+                anchors.topMargin: 6 * Constants.SIZE_TEXT_V_SPACE
+                Item {
+                    id: rawInstalledVersion
+                    width: parent.width * 0.33 - Constants.SIZE_ROW_H_SPACE
                     height: parent.height
-                    visible: false
+                    anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                    Components.LabelTextBoxForm {
+                        id: installedVersion
+                        propertyDateText.text: qsTranslate(
+                                                   "PageDefinitionsUpdates",
+                                                   "STR_INSTALLED_VERSION")
+                        propertyDateField.text: ""
+                        visible: false
+                        propertyDateField.horizontalAlignment: Text.AlignHCenter
+                    }
                 }
-            }
-
-            Item {
-                id: rawRemoteVersion
-                width: parent.width
-                height: parent.height * Constants.HEIGHT_DEFINITIONS_UPDATE_LABEL_ROW
-                anchors.top: rawInstalledVersion.bottom
-                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                Text {
-                    id: remoteVersion
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    text: qsTranslate("PageDefinitionsUpdates", "STR_REMOTE_VERSION")
-                    wrapMode: Text.Wrap
-                    width: parent.width
+                Item {
+                    id: rawRemoteVersion
+                    width: parent.width * 0.33 - Constants.SIZE_ROW_H_SPACE
                     height: parent.height
-                    visible: false
+                    anchors.left: rawInstalledVersion.right
+                    anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                    Components.LabelTextBoxForm {
+
+                        id: remoteVersion
+                        propertyDateText.text: qsTranslate(
+                                                   "PageDefinitionsUpdates",
+                                                   "STR_REMOTE_VERSION")
+                        propertyDateField.text: ""
+                        visible: false
+                        propertyDateField.horizontalAlignment: Text.AlignHCenter
+                    }
+                }
+                Item {
+                    id: rawButtonStartUpdate
+                    width: parent.width * 0.33
+                    height: parent.height
+                    anchors.left: rawRemoteVersion.right
+                    anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                    Button {
+                        id: buttonStartUpdate
+                        y: 10
+                        text: qsTr("PageDefinitionsUpdates",
+                                   "STR_UPDATE_BUTTON_START")
+
+                        width: parent.width
+                        height: Constants.HEIGHT_BOTTOM_COMPONENT
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.capitalization: Font.MixedCase
+                        visible: false
+                    }
                 }
             }
 
@@ -142,7 +165,8 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Button {
                     id: buttonSearch
-                    text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_BUTTON")
+                    text: qsTranslate("PageDefinitionsUpdates",
+                                      "STR_UPDATE_BUTTON")
                     anchors.horizontalCenterOffset: 0
                     width: 1.4 * Constants.WIDTH_BUTTON
                     height: parent.height
@@ -150,24 +174,6 @@ Item {
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     anchors.horizontalCenter: parent.horizontalCenter
-                }
-            }
-            Item {
-                id: rawButtonStartUpdate
-                width: parent.width
-                height: Constants.HEIGHT_BOTTOM_COMPONENT
-                anchors.top: rawReleaseNoteScrollView.bottom
-                anchors.topMargin: 2 * Constants.SIZE_TEXT_V_SPACE
-                Button {
-                    id: buttonStartUpdate
-                    text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_BUTTON_START")
-                    width: 1.4 * Constants.WIDTH_BUTTON
-                    height: parent.height
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.family: lato.name
-                    font.capitalization: Font.MixedCase
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    visible: false
                 }
             }
             Item {
@@ -194,8 +200,9 @@ Item {
             Item {
                 id: rawReleaseNoteScrollView
                 width: parent.width
-                height: (parent.height * Constants.HEIGHT_DEFINITIONS_UPDATE_RELEASE_NOTE) - Constants.HEIGHT_BOTTOM_COMPONENT - 8 * Constants.SIZE_TEXT_V_SPACE;
-                anchors.top: rawRemoteVersion.bottom
+                height: (parent.height * Constants.HEIGHT_DEFINITIONS_UPDATE_RELEASE_NOTE) - 12 * Constants.SIZE_TEXT_V_SPACE
+                anchors.top: rawRowVersion.bottom
+                anchors.topMargin: 2 * Constants.SIZE_TEXT_V_SPACE
                 Rectangle {
                     id: releaseNoteScrollView
                     width: parent.width
@@ -269,3 +276,9 @@ Item {
         }
     }
 }
+
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/
