@@ -220,7 +220,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="110"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="209"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="223"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1699"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1650"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="102"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="116"/>
         <location filename="gapi.cpp" line="1230"/>
@@ -979,7 +979,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="108"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="205"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="222"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1698"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1649"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="98"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="115"/>
         <source>STR_CUSTOM_SIGN_BY</source>
@@ -1027,12 +1027,12 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="71"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="163"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="126"/>
         <source>STR_UPDATE_BUTTON_START</source>
         <translation>Install</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="181"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="187"/>
         <source>STR_UPDATE_BUTTON_CANCEL</source>
         <translation>Cancel download</translation>
     </message>
@@ -1078,14 +1078,12 @@
         <translation>Please check your Internet connection and try again.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="63"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="90"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="92"/>
         <source>STR_INSTALLED_VERSION</source>
         <translation>Current version</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="64"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="108"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="109"/>
         <source>STR_REMOTE_VERSION</source>
         <translation>New version</translation>
     </message>
@@ -1116,7 +1114,7 @@
         <translation>Press the button to check for available updates.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="145"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="168"/>
         <source>STR_UPDATE_BUTTON</source>
         <translation>Check for updates</translation>
     </message>
@@ -1523,69 +1521,80 @@
         <translation>PDF signature failed</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="858"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1862"/>
+        <source>STR_FILE_UPLOAD_FAIL</source>
+        <translatorcomment>This message is shown when a user attempts to add multiple time same files</translatorcomment>
+        <translation>File submission failure</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1864"/>
+        <source>STR_FILE_ALREADY_UPLOADED</source>
+        <translation>File(s) already submitted</translation>
+    </message>
+    <message>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="857"/>
         <source>STR_SIGN_PDF_FILES</source>
         <translation>PAdES (PDF Advanced Electronic Signatures)</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="867"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="866"/>
         <source>STR_SIGN_PACKAGE</source>
         <translation>CCSIGN Package with XML Advanced Electronic Signatures (XAdES)</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1334"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1341"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1375"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1839"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1281"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1288"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1322"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1795"/>
         <source>STR_SCAP_WARNING</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1336"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1841"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1283"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1797"/>
         <source>STR_SCAP_ATTRIBUTES_NOT_SELECT</source>
         <oldsource>STR_MULTI_FILE_ATTRIBUTES_WARNING</oldsource>
         <translation>Attributes not selected</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1343"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1290"/>
         <source>STR_SCAP_MAX_FILESIZE</source>
         <translation>File size was exceeded. Max supported file size is</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1377"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1324"/>
         <source>STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG</source>
         <translation>Unable to sign multiple files with professional attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1413"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1360"/>
         <source>STR_MULTI_FILE_CMD_WARNING</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1415"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1362"/>
         <source>STR_MULTI_FILE_CMD_WARNING_MSG</source>
         <translation>Can not sign multiple files with CMD</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1437"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1696"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1384"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1647"/>
         <source>STR_SIGN_DROP_MULTI</source>
         <translation>Drag here files to be signed or click here to find files</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1455"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1402"/>
         <source>STR_SIGN_NOT_PREVIEW</source>
         <translation>No preview available</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1605"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="927"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1552"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="929"/>
         <source>STR_LOAD_PDF_ERROR</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1607"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1554"/>
         <source>STR_LOAD_ADVANCED_PDF_ERROR_MSG</source>
         <translation>Verify that the file is not corrupted and check the type of signature selected.</translation>
     </message>
@@ -1601,10 +1610,10 @@
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="509"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="680"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1820"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1767"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="411"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="582"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="1039"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="1043"/>
         <source>STR_CMD_POPUP_CONFIRM</source>
         <oldsource>STR_ADDRESS_CHANGE_CONFIRM</oldsource>
         <translation>OK</translation>
@@ -1615,7 +1624,7 @@
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="929"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="931"/>
         <source>STR_LOAD_PDF_ERROR_MSG</source>
         <translation>Error reading PDF file. Please check the format of the file.</translation>
     </message>
@@ -1762,31 +1771,31 @@
     <message>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="843"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="857"/>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="303"/>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="314"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="307"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="318"/>
         <source>STR_SIGN_SIGN_BUTTON</source>
         <translation>Sign with</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="859"/>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="315"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="319"/>
         <source>STR_SIGN_CMD_BUTTON</source>
         <translation>Chave Móvel Digital</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="780"/>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="258"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="262"/>
         <source>STR_SIGN_LAST</source>
         <translation>Last</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="284"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="288"/>
         <source>STR_SIGN_REMOVE_BUTTON</source>
         <translation>Remove file</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="845"/>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="304"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="308"/>
         <source>STR_SIGN_CARD_BUTTON</source>
         <oldsource>STR_SIGN_CARD</oldsource>
         <translation>Cartão de Cidadão</translation>
@@ -2111,7 +2120,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="42"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1320"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1267"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="100"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="106"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="60"/>
@@ -2126,7 +2135,7 @@
         <translation>Choose file</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1389"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1336"/>
         <source>STR_POPUP_FILE_OUTPUT_FOLDER</source>
         <translation>Choose the destination folder of the files</translation>
     </message>
@@ -2392,13 +2401,13 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="592"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1313"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1260"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="830"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1315"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1262"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="832"/>
         <source>STR_POPUP_CARD_PIN_SIGN_BLOCKED</source>
         <translation>Signature PIN is blocked</translation>

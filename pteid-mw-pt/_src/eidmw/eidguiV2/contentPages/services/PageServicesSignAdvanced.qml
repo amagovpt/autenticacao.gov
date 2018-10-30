@@ -851,7 +851,6 @@ PageServicesSignAdvancedForm {
         }
         standardButtons: DialogButtonBox.Ok
     }
-
     propertyMouseAreaToolTipPades{
         onEntered: {
             controlToolTip.close()
@@ -884,23 +883,7 @@ PageServicesSignAdvancedForm {
             propertyPageLoader.propertyBackupCoordX = propertyPDFPreview.propertyDragSigRect.x
             propertyPageLoader.propertyBackupCoordY = propertyPDFPreview.propertyDragSigRect.y
 
-            for(var i = 0; i < filesArray.length; i++){
-                console.log("Adding file: " + filesArray[i])
-                var path =  filesArray[i]
-                //  Get the path itself without a regex
-                if (Qt.platform.os === "windows") {
-                    path = path.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
-                }else{
-                    path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-                }
-                path = decodeURIComponent(path)
-                filesModel.append({
-                                      "fileUrl": path
-                                  })
-                propertyPageLoader.propertyBackupfilesModel.append({
-                                                                       "fileUrl": path
-                                                                   })
-            }
+            updateUploadedFiles(filesArray)
             // Force scroll and focus to the last item addded
             forceScrollandFocus()
         }
@@ -917,23 +900,9 @@ PageServicesSignAdvancedForm {
         }
         onDropped: {
             //TODO: Validate files type
-            for(var i = 0; i < filesArray.length; i++){
-                console.log("Adding file: " + filesArray[i])
-                var path =  filesArray[i]
-                //  Get the path itself without a regex
-                if (Qt.platform.os === "windows") {
-                    path = path.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
-                }else{
-                    path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-                }
-                path = decodeURIComponent(path)
-                filesModel.append({
-                                      "fileUrl": path
-                                  })
-                propertyPageLoader.propertyBackupfilesModel.append({
-                                                                       "fileUrl": path
-                                                                   })
-            }
+
+            updateUploadedFiles(filesArray)
+
             // Force scroll and focus to the last item addded
             forceScrollandFocus()
         }
@@ -949,12 +918,7 @@ PageServicesSignAdvancedForm {
             var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogOutput.fileUrl.toString()
-            if (Qt.platform.os === "windows") {
-                outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
-            }else{
-                outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-            }
-            outputFile = decodeURIComponent(outputFile)
+            outputFile = decodeURIComponent(stripFilePrefix(outputFile))
             if (propertyRadioButtonPADES.checked) {
                 var page = propertySpinBoxControl.value
                 var reason = propertyTextFieldReason.text
@@ -1024,12 +988,7 @@ PageServicesSignAdvancedForm {
             propertyBusyIndicator.running = true
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogBatchOutput.folder.toString()
-            if (Qt.platform.os === "windows") {
-                outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
-            }else{
-                outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-            }
-            outputFile = decodeURIComponent(outputFile)
+            outputFile = decodeURIComponent(stripFilePrefix(outputFile))
             if (propertyRadioButtonPADES.checked) {
 
                 if(propertyCheckLastPage.checked){
@@ -1057,6 +1016,10 @@ PageServicesSignAdvancedForm {
                 for(var i = 0; i < propertyListViewFiles.count; i++){
                     batchFilesArray[i] =  propertyListViewFiles.model.get(i).fileUrl;
                 }
+
+                // remove duplicate fileUrls
+                batchFilesArray = batchFilesArray.filter(onlyUnique);
+
                 propertyOutputSignedFile = outputFile;
                 gapi.startSigningBatchPDF(batchFilesArray, outputFile, page, coord_x, coord_y,
                                           reason, location, isTimestamp, isSmallSignature)
@@ -1251,23 +1214,7 @@ PageServicesSignAdvancedForm {
             console.log("You chose file(s): " + propertyFileDialog.fileUrls)
             console.log("Num files: " + propertyFileDialog.fileUrls.length)
 
-            for(var i = 0; i < propertyFileDialog.fileUrls.length; i++){
-                console.log("Adding file: " + propertyFileDialog.fileUrls[i])
-                var path = propertyFileDialog.fileUrls[i];
-                //  Get the path itself without a regex
-                if (Qt.platform.os === "windows") {
-                    path = path.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
-                }else{
-                    path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-                }
-                path = decodeURIComponent(path)
-                filesModel.append({
-                                      "fileUrl": path
-                                  })
-                propertyPageLoader.propertyBackupfilesModel.append({
-                                                                       "fileUrl": path
-                                                                   })
-            }
+            updateUploadedFiles(propertyFileDialog.fileUrls)
 
             // Force scroll and focus to the last item addded
             forceScrollandFocus()
@@ -1686,12 +1633,16 @@ PageServicesSignAdvancedForm {
         propertyTextFieldReason.text = propertyPageLoader.propertyBackupLocal
         propertyTextFieldLocal.text = propertyPageLoader.propertyBackupReason
 
-        if (gapi.getShortcutFlag() > 0)
-            filesModel.append(
-                        {
-                            "fileUrl": gapi.getShortcutInputPDF()
-                        });
+        if (gapi.getShortcutFlag() > 0){
 
+            var newFileUrl = {
+                "fileUrl": gapi.getShortcutInputPDF()
+            };
+
+            if (!containsFile(newFileUrl, filesModel)){
+                filesModel.append(newFileUrl)
+            }
+        }
         propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                 qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
         propertyPDFPreview.propertyDragSigSignedByNameText.text =
@@ -1764,12 +1715,8 @@ PageServicesSignAdvancedForm {
         var loadedFilePath = filesModel.get(0).fileUrl
         var isTimestamp = propertySwitchSignTemp.checked
         var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
-        if (Qt.platform.os === "windows") {
-            outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
-        }else{
-            outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-        }
-        outputFile = decodeURIComponent(outputFile)
+
+        outputFile = decodeURIComponent(stripFilePrefix(outputFile))
 
         var page = 1
         if(propertyCheckLastPage.checked){
@@ -1821,6 +1768,15 @@ PageServicesSignAdvancedForm {
         dialogCMDProgress.open()
         textFieldReturnCode.focus = true
     }
+    function openSignedFile(){
+        if (Qt.platform.os === "windows") {
+            propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+        }else{
+            propertyOutputSignedFile = "file://" + propertyOutputSignedFile
+        }
+        console.log("Open Url Externally: " + propertyOutputSignedFile)
+        Qt.openUrlExternally(propertyOutputSignedFile)
+    }
     function signCMDConfirm(){
         console.log("Send sms_token : " + textFieldReturnCode.text)
         if( progressBar.value < 100) {
@@ -1853,24 +1809,12 @@ PageServicesSignAdvancedForm {
         else
         {
             dialogCMDProgress.close()
-            if (Qt.platform.os === "windows") {
-                propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
-            }else{
-                propertyOutputSignedFile = "file://" + propertyOutputSignedFile
-            }
-            console.log("Open Url Externally: " + propertyOutputSignedFile)
-            Qt.openUrlExternally(propertyOutputSignedFile)
+            openSignedFile()
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
     }
     function signCMDShowSignedFile(){
-        if (Qt.platform.os === "windows") {
-            propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
-        }else{
-            propertyOutputSignedFile = "file://" + propertyOutputSignedFile
-        }
-        console.log("Open Url Externally: " + propertyOutputSignedFile)
-        Qt.openUrlExternally(propertyOutputSignedFile)
+        openSignedFile()
         signsuccess_dialog.close()
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
     }
@@ -1878,5 +1822,48 @@ PageServicesSignAdvancedForm {
         return str.replace(/\w\S*/g, function(txt){
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
+    }
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+    //should only used by a fileModel list because it uses .count instead of .length
+    function containsFile(obj, list) {
+        var i;
+        for (i = 0; i < list.count; i++) {
+            if (list.get(i).fileUrl.toString() === obj.fileUrl) {
+                console.log("File already uploaded");
+                return true;
+            }
+        }
+        return false;
+    }
+    function updateUploadedFiles(fileList){
+        var fileAlreadyUploaded = false
+        for(var i = 0; i < fileList.length; i++){
+            var path = fileList[i];
+            console.log("Adding file: " + path)
+
+            path = decodeURIComponent(stripFilePrefix(path))
+
+            var newFileUrl = {
+                "fileUrl": path
+            };
+
+            if (!containsFile(newFileUrl, filesModel)){
+                filesModel.append(newFileUrl)
+                propertyPageLoader.propertyBackupfilesModel.append(newFileUrl)
+            } else {
+                fileAlreadyUploaded = true
+            }
+        }
+
+        if (fileAlreadyUploaded){
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    qsTranslate("PageServicesSign","STR_FILE_UPLOAD_FAIL")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    qsTranslate("PageServicesSign","STR_FILE_ALREADY_UPLOADED")
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus()
+        }
     }
 }
