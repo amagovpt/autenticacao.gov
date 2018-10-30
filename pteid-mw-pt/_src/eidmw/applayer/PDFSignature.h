@@ -119,6 +119,7 @@ namespace eIDMW
 		bool m_timestamp;
 		bool m_small_signature;
 		std::vector< std::pair<char *, bool> > m_files_to_sign;
+		std::vector< std::pair<std::string, int> > unique_filenames;
 		Pixmap my_custom_image;
 
         PKCS7 *m_pkcs7;

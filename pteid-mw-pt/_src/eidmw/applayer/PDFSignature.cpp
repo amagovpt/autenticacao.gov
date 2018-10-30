@@ -405,7 +405,25 @@ namespace eIDMW
 		char * pdf_filename = Basename((char*)path);
 		std::string clean_filename = CPathUtil::remove_ext_from_basename(pdf_filename);
 
-		std::string final_path = string(output_dir) + PATH_SEP + clean_filename + "_signed.pdf";
+		int equal_filename_count = 0;
+		for (unsigned int i = 0; i < unique_filenames.size(); i++)
+		{
+			std::string current_file_name = unique_filenames.at(i).first;
+			if (clean_filename == current_file_name) {
+				//unique_filenames contains clean_filename
+				equal_filename_count = ++unique_filenames.at(i).second;
+				break;
+			}
+		}
+		unique_filenames.push_back(std::make_pair(clean_filename, equal_filename_count));
+
+		std::string final_path = string(output_dir) + PATH_SEP + clean_filename;
+
+		if(equal_filename_count > 0){
+			final_path += "_" + std::to_string(equal_filename_count);
+		}
+
+		final_path += "_signed.pdf";
 
 		return final_path;
 	}
