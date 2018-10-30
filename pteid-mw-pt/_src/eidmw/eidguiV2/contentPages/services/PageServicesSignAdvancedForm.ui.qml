@@ -697,6 +697,7 @@ Item {
                         y: 0
                         from: 1
                         to: 10000
+                        stepSize: 1
                         value: 1
                         anchors.left: pageText.right
                         width: 100
@@ -706,7 +707,7 @@ Item {
                                  && !checkLastPage.checked
                         editable: checkSignShow.checked
                                   && fileLoaded ? true : false
-
+                        validator: RegExpValidator { regExp: /[1-9][0-9]*/ }
                         contentItem: TextInput {
                             id: textSpinBox
                             z: 2
@@ -722,6 +723,7 @@ Item {
                             readOnly: !spinBoxControl.editable
                             validator: spinBoxControl.validator
                             inputMethodHints: Qt.ImhFormattedNumbersOnly
+                            maximumLength: 5 //pages go from 1 to 99999
                         }
 
                         up.indicator: Rectangle {

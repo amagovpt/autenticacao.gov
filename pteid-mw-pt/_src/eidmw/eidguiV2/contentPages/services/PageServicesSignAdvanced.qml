@@ -1513,6 +1513,7 @@ PageServicesSignAdvancedForm {
                     var loadedFilePath = filesModel.get(filesModel.count-1).fileUrl
                     var pageCount = gapi.getPDFpageCount(loadedFilePath)
                     if(pageCount > 0){
+                        propertyTextSpinBox.maximumLength = maxTextInputLength(pageCount)
                         propertyBusyIndicator.running = true
                         if(propertyCheckLastPage.checked==true
                                 || propertySpinBoxControl.value > pageCount)
@@ -1865,5 +1866,9 @@ PageServicesSignAdvancedForm {
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus()
         }
+    }
+    function maxTextInputLength(num){
+        //given number of pages returns maximum length that TextInput should accept
+        return Math.ceil(Math.log(num + 1) / Math.LN10);
     }
 }

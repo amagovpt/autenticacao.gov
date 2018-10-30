@@ -727,14 +727,14 @@ PageServicesSignSimpleForm {
                 // Needed because the PDFPreview
                 var path =  filesArray[0]
                 //  Get the path itself without a regex
-                if (Qt.platform.os === "windows") {
-                    path = path.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
-                }else{
-                    path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-                }
-                path = decodeURIComponent(path)
+                path = decodeURIComponent(decodeURIComponent(stripFilePrefix(path)))
                 console.log("Adding file: " + path)
-                filesModel.insert(0, {"fileUrl": path})
+                var newFileUrl = {"fileUrl": path}
+                if (!containsFile(newFileUrl, filesModel)){
+                    //guarantees only a single file is used on simple signature
+                    filesModel.clear()
+                    filesModel.insert(0, newFileUrl);
+                }
             }
         }
         onExited: {
@@ -748,12 +748,7 @@ PageServicesSignSimpleForm {
             var loadedFilePath = filesModel.get(0).fileUrl
             var isTimestamp = false
             var outputFile = propertyFileDialogOutput.fileUrl.toString()
-            if (Qt.platform.os === "windows") {
-                outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
-            }else{
-                outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-            }
-            outputFile = decodeURIComponent(outputFile)
+            outputFile = decodeURIComponent(stripFilePrefix(outputFile))
 
             var page = 1
             propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
@@ -791,18 +786,14 @@ PageServicesSignSimpleForm {
         onAccepted: {
             console.log("You chose file(s): " + propertyFileDialog.fileUrls)
             var path = propertyFileDialog.fileUrls[0];
-
-            //  Get the path itself without a regex
-            if (Qt.platform.os === "windows") {
-                path = path.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
-            }else{
-                path = path.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-            }
-            path = decodeURIComponent(path)
+            path = decodeURIComponent(stripFilePrefix(path))
             console.log("Adding file: " + path)
-            filesModel.append({
-                                  "fileUrl": path
-                              })
+            var newFileUrl = {"fileUrl": path}
+            if (!containsFile(newFileUrl, filesModel)){
+                //guarantees only a single file is used on simple signature
+                filesModel.clear()
+                filesModel.insert(0, newFileUrl);
+            }
         }
         onRejected: {
             console.log("Canceled")
@@ -877,10 +868,15 @@ PageServicesSignSimpleForm {
                 propertyBusyIndicator.running = true
                 var loadedFilePath = filesModel.get(0).fileUrl
                 var pageCount = gapi.getPDFpageCount(loadedFilePath)
+
                 if(pageCount > 0){
+                    propertyTextSpinBox.maximumLength = maxTextInputLength(pageCount)
+
                     console.log("loadedFilePath: " + loadedFilePath + " page count: " + pageCount)
                     fileLoaded = true
                     propertyPDFPreview.propertyBackground.cache = false
+
+                    propertySpinBoxControl.to = pageCount
 
                     if(propertyCheckLastPage.checked == true){
                         propertySpinBoxControl.value = pageCount
@@ -995,12 +991,8 @@ PageServicesSignSimpleForm {
         var loadedFilePath = filesModel.get(0).fileUrl
         var isTimestamp = false
         var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
-        if (Qt.platform.os === "windows") {
-            outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
-        }else{
-            outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-        }
-        outputFile = decodeURIComponent(outputFile)
+
+        outputFile = decodeURIComponent(stripFilePrefix(outputFile))
 
         var page = 1
         if(propertyCheckLastPage.checked) {
@@ -1074,5 +1066,27 @@ PageServicesSignSimpleForm {
         Qt.openUrlExternally(propertyOutputSignedFile)
         signsuccess_dialog.close()
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+    }
+    function stripFilePrefix(filePath) {
+        if (Qt.platform.os === "windows") {
+            return filePath.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+        }
+        else {
+            return filePath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
+        }
+    }
+    function containsFile(obj, list) {
+        var i;
+        for (i = 0; i < list.count; i++) {
+            if (list.get(i).fileUrl.toString() === obj.fileUrl) {
+                console.log("File already uploaded");
+                return true;
+            }
+        }
+        return false;
+    }
+    function maxTextInputLength(num){
+        //given number of pages returns maximum length that TextInput should accept
+        return Math.ceil(Math.log(num + 1) / Math.LN10);
     }
 }
