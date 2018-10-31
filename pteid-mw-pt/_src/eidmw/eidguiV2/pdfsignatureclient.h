@@ -87,7 +87,7 @@ private:
     std::string * processId;
     //This key is used as input for the TOTP generation
     std::string m_secretKey;
-    std::string m_appID;
+    QString m_appID;
 };
 
 #endif // PDFSIGNATURECLIENT_H

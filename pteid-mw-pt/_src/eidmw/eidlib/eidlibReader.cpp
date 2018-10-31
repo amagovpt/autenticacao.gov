@@ -761,6 +761,8 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 		m_impl = new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SCAP_PORT);      break;
 	case PTEID_PARAM_GENERAL_SCAP_APIKEY:
 		m_impl = new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SCAP_APIKEY);      break;
+	case PTEID_PARAM_GENERAL_SCAP_APPID:
+	        m_impl = new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SCAP_APPID);      break;
 
 	//LOGGING
 	case PTEID_PARAM_LOGGING_DIRNAME:

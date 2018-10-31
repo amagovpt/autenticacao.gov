@@ -2010,6 +2010,10 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
     QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
     QDir dir(scapCacheDir);
     bool has_read_permissions = true;
+
+    // Delete SCAP secretkey to get a new one
+    settings.setSecretKey("");
+
 #ifdef WIN32
     extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
     qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)

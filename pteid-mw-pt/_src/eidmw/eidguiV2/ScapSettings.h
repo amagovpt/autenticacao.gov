@@ -80,6 +80,11 @@ public:
             m_secretKey = m_secretKey_array.constData();
 
         }
+
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APPID);
+            m_appID = config.getString();
+        }
     }
     ~ScapSettings( void )
     {
@@ -113,6 +118,20 @@ public:
         return m_secretKey;
     }
 
+    void setAppID(QString const& appID)
+    {
+        m_appID = appID;
+
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APPID);
+
+        config.setString(m_appID.toUtf8());
+    }
+
+    QString const getAppID(void)
+    {
+        return m_appID;
+    }
+
     QString getScapServerHost ( void )
     {
         return m_scap_server_host;
@@ -142,6 +161,7 @@ private:
     QString m_pteid_language;
     QString m_cache_dir;
     std::string m_secretKey;
+    QString m_appID;
 
     QString m_scap_server_host;
     QString m_scap_server_port;

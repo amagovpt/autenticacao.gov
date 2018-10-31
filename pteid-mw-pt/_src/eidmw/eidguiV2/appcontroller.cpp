@@ -625,7 +625,7 @@ bool AppController::VerifyUpdates(std::string filedata)
     qDebug() << "local_version:" << QString::number(local_version.major) << QString::number(local_version.minor) << QString::number(local_version.release);
     qDebug() << "remote_version:" << QString::number(remote_version.major) << QString::number(remote_version.minor) << QString::number(remote_version.release);
 
-    if (compareVersions(local_version, remote_version) > 0)
+    if (1 || compareVersions(local_version, remote_version) > 0)
     {
         qDebug() << "C++: updates available";
         distrover = VerifyOS("distro");
