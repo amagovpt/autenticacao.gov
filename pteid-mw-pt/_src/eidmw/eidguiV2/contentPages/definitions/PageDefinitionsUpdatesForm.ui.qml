@@ -123,7 +123,7 @@ Item {
                     Button {
                         id: buttonStartUpdate
                         y: 10
-                        text: qsTr("PageDefinitionsUpdates",
+                        text: qsTranslate("PageDefinitionsUpdates",
                                    "STR_UPDATE_BUTTON_START")
 
                         width: parent.width
@@ -276,9 +276,3 @@ Item {
         }
     }
 }
-
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/
