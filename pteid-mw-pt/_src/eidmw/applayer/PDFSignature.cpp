@@ -409,13 +409,17 @@ namespace eIDMW
 		for (unsigned int i = 0; i < unique_filenames.size(); i++)
 		{
 			std::string current_file_name = unique_filenames.at(i).first;
-			if (clean_filename == current_file_name) {
+			if (clean_filename.compare(current_file_name) == 0) {
 				//unique_filenames contains clean_filename
 				equal_filename_count = ++unique_filenames.at(i).second;
 				break;
 			}
 		}
-		unique_filenames.push_back(std::make_pair(clean_filename, equal_filename_count));
+
+		if (equal_filename_count == 0){
+			//clean_filename is not part of the vector, make sure it's added to it
+			unique_filenames.push_back(std::make_pair(clean_filename, equal_filename_count));
+		}
 
 		std::string final_path = string(output_dir) + PATH_SEP + clean_filename;
 
