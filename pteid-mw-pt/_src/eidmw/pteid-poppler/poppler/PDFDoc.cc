@@ -1048,7 +1048,9 @@ int PDFDoc::saveAs(wchar_t *name, PDFWriteMode mode) {
 	OutStream *outStr;
 	int res;
 	if (!(f = _wfopen(name, L"wb"))) {
-        error(errIO, -1, "Couldn't open file '{0:t}'", name);
+        
+        error(errIO, -1, "Couldn't open file ");
+        fprintf(stderr, "%ws \n", name); //GooString does not format wchar_t
         if (errno == EACCES) {
             return errPermission;
         } else {

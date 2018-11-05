@@ -104,8 +104,14 @@ PageServicesSignAdvancedForm {
             }
         }
         onSignalPdfSignFail: {
-            signerror_dialog.propertySignFailDialogText.text =
-                    qsTranslate("PageServicesSign","STR_SIGN_LOCAL_PDF_FAIL")
+            console.log("Sign failed with error code: " + error_code)
+
+            if (error_code == GAPI.SignFilePermissionFailed) {
+                signerror_dialog.propertySignFailDialogText.text = qsTranslate("PageServicesSign","STR_SIGN_FILE_PERMISSION_FAIL")
+            } else {
+                signerror_dialog.propertySignFailDialogText.text = qsTranslate("PageServicesSign","STR_SIGN_GENERIC_ERROR") + " " + error_code
+            }
+            
             signerror_dialog.visible = true
             propertyBusyIndicator.running = false
             propertyOutputSignedFile = ""
