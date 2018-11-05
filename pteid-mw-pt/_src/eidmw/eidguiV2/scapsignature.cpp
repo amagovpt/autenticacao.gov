@@ -203,7 +203,7 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
         }
         catch (eIDMW::PTEID_Exception &e)
         {
-            parent->signalPdfSignFail();
+            parent->signalPdfSignFail(e.GetError());
             std::cerr << "Caught exception getting EID Card. Error code: " << hex << e.GetError() << std::endl;
             //this->success = SIG_ERROR;
         }

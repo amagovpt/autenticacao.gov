@@ -1047,11 +1047,14 @@ int PDFDoc::saveAs(wchar_t *name, PDFWriteMode mode) {
 	FILE *f;
 	OutStream *outStr;
 	int res;
-
 	if (!(f = _wfopen(name, L"wb"))) {
-		error(errIO, -1, "Couldn't open file '{0:t}'", name);
-		return errOpenFile;
-	}
+        error(errIO, -1, "Couldn't open file '{0:t}'", name);
+        if (errno == EACCES) {
+            return errPermission;
+        } else {
+            return errOpenFile;
+        }
+    }
 	outStr = new FileOutStream(f, 0);
 	res = saveAs(outStr, mode);
 	delete outStr;

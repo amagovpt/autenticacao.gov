@@ -35,6 +35,13 @@ PageServicesSignSimpleForm {
             propertyBusyIndicator.running = false
         }
         onSignalPdfSignFail: {
+            console.log("Sign failed with error code: " + error_code)
+
+            if (error_code == GAPI.SignFilePermissionFailed) {
+                signerror_dialog.propertySignFailDialogText.text = qsTranslate("PageServicesSign","STR_SIGN_FILE_PERMISSION_FAIL")
+            } else {
+                signerror_dialog.propertySignFailDialogText.text = qsTranslate("PageServicesSign","STR_SIGN_GENERIC_ERROR") + " " + error_code
+            }
             signerror_dialog.visible = true
             propertyBusyIndicator.running = false
             propertyOutputSignedFile = ""
@@ -696,6 +703,8 @@ PageServicesSignSimpleForm {
            + mainView.width * 0.5 - signerror_dialog.width * 0.5
         y: parent.height * 0.5 - signerror_dialog.height * 0.5
 
+        property alias propertySignFailDialogText: text_sign_error
+
         header: Label {
             text: qsTranslate("PageServicesSign","STR_SIGN_FAIL")
             elide: Label.ElideRight
@@ -704,6 +713,19 @@ PageServicesSignSimpleForm {
             font.bold: true
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
+        }
+        Item {
+            width: signerror_dialog.availableWidth
+            height: 50
+            Text {
+                id: text_sign_error
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
+                height: parent.height
+                width: parent.width - 48
+                wrapMode: Text.Wrap
+            }
         }
 
         standardButtons: DialogButtonBox.Ok

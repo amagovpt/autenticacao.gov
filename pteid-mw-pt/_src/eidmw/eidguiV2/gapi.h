@@ -213,7 +213,7 @@ public:
 
     enum CardAccessError { NoReaderFound, NoCardFound, PinBlocked, CardReadError, SodCardReadError, CardUserPinCancel, CardUnknownError, CardPinTimeout };
 
-    enum SignMessage { SignMessageOK, SignMessageTimestampFailed };
+    enum SignMessage { SignMessageOK, SignMessageTimestampFailed, SignFilePermissionFailed};
 
     enum eCustomEventType { ET_UNKNOWN, ET_CARD_CHANGED, ET_CARD_REMOVED };
 
@@ -358,7 +358,7 @@ signals:
     void signalPersoDataLoaded(const QString& persoNotes);
     void signalAddressLoadedChanged();
     void signalPdfSignSucess(int error_code);
-    void signalPdfSignFail();
+    void signalPdfSignFail(int error_code);
     void signalUpdateProgressBar(int value);
     void signalUpdateProgressStatus(const QString statusMessage);
     void addressChangeFinished(long return_code);

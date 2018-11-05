@@ -776,10 +776,6 @@ namespace eIDMW
 #else
 		int final_ret = m_doc->saveAs(m_outputName, pdfWriteMode);
 #endif
-
-        if ( final_ret != errNone )
-         throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
-
         m_signStarted = false;
 
         free((void *)signature_contents);
@@ -793,10 +789,16 @@ namespace eIDMW
         PKCS7_free( m_pkcs7 );
         m_pkcs7 = NULL;
 
-        if (return_code == 1) {
-        	throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
+        if (final_ret == errPermission){
+            throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
+        }
+        else if (final_ret != errNone) {
+            throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
 
+        if (return_code == 1) {
+            throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
+        }
         return return_code;
     }
 }

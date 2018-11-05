@@ -178,6 +178,9 @@ QString GAPI::getAddressField(AddressInfoKey key) {
     } else if (errorCode == EIDMW_TIMESTAMP_ERROR) \
 { \
     emit signalPdfSignSucess(SignMessageTimestampFailed); \
+    } else if (errorCode == EIDMW_PERMISSION_DENIED) \
+{ \
+    emit signalPdfSignFail(SignFilePermissionFailed); \
     } else if (errorCode == EIDMW_ERR_PIN_CANCEL) \
 { \
     emit signalCardAccessError(CardUserPinCancel); \
