@@ -1868,6 +1868,17 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, boo
     return childrensList;
 }
 
+void GAPI::initScapAppId(){
+    ScapSettings settings;
+    if(settings.getAppID()==""){
+        QString appIDstring;
+        QString request_uuid = QUuid::createUuid().toString();
+        appIDstring = request_uuid.midRef(1, request_uuid.size() - 2).toString();
+        settings.setAppID(appIDstring);
+        removeSCAPAttributesFromCache(0);
+    }
+}
+
 void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
 
     QList<QString> attribute_list;
@@ -1877,6 +1888,8 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
         emit signalEntityAttributesLoadedError();
         return;
     }
+
+    initScapAppId();
 
     std::vector<int> supplier_ids;
     
@@ -1922,6 +1935,8 @@ void GAPI::getSCAPCompanyAttributes() {
         emit signalCompanyAttributesLoadedError();
         return;
     }
+
+    initScapAppId();
 
     std::vector<int> supplierIDs;
 

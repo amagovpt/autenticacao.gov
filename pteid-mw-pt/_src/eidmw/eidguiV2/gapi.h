@@ -428,6 +428,7 @@ private:
     bool useCustomSignature(void);
     void stopAllEventCallbacks(void);
     void cleanupCallbackData(void);
+    void initScapAppId(void);
     CMDProxyInfo buildProxyInfo();
 
     // Data Card Identify map

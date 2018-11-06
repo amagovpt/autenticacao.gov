@@ -182,20 +182,16 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
     ScapSettings settings;
     bool allEnterprises = true;
     const char * soapAction = "http://www.cartaodecidadao.pt/services/ccc/ACS/Operations/Attributes";
-	const char * ac_endpoint = "/DSS/ACService";
+    const char * ac_endpoint = "/DSS/ACService";
 
-    QString request_uuid = QUuid::createUuid().toString();
-    QString cleanUuid = request_uuid.midRef(1, request_uuid.size() - 2).toString();
 
-    std::string appID = cleanUuid.toStdString();
 
-    if(settings.getAppID()==""){
-        settings.setAppID(cleanUuid);
-    }
-
-    qDebug() << "Set SCAP AppID = " << cleanUuid;
+    std::string appID = settings.getAppID().toStdString();
+    qDebug() << "SCAP AppID = " << appID.c_str();
 
     std::string appName("TEST");
+
+    //TODO:  std::string appName("Autenticacao.gov");
 
     qDebug() << "C++: getAttributes called";
 
