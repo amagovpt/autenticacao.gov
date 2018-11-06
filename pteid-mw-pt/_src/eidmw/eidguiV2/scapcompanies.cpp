@@ -233,7 +233,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
 
         const char* idNumber = card.getID().getCivilianIdNumber();
 
-        std::string secretKey = settings.getSecretKey();
+        std::string secretKey = settings.getSecretKey(idNumber);
 
         ns3__PersonalDataType * citizen = soap_new_req_ns3__PersonalDataType(sp, fullname.toStdString(), idNumber);
 
@@ -320,7 +320,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
 
             if (attr_response.SecretKey != NULL) {
                 qDebug() << "We received a SCAP secretKey so let's save it!";
-                settings.setSecretKey(*attr_response.SecretKey);
+                settings.setSecretKey(*attr_response.SecretKey, idNumber);
             }
 
             ns2__AttributesType * parentAttribute = attr_response.AttributeResponseValues.at(0);

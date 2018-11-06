@@ -39,7 +39,8 @@ public:
 	EIDMW_APL_API APL_Config(const CConfig::Param_Num param);
 
     EIDMW_APL_API APL_Config(const char *csName, const char *czSection, const char *csDefaultValue);
-    EIDMW_APL_API APL_Config(const wchar_t *csName, const wchar_t *czSection, const wchar_t *csDefaultValue);
+    EIDMW_APL_API APL_Config(const char *csName, const wchar_t *czSection, const wchar_t *csDefaultValue);
+
     EIDMW_APL_API APL_Config(const char *csName, const char *czSection, long lDefaultValue);
     EIDMW_APL_API APL_Config(const wchar_t *csName, const wchar_t *czSection, long lDefaultValue);
 

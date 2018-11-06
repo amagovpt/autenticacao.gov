@@ -8,6 +8,7 @@
 #include <string>
 
 #include "eidlib.h"
+#include "Config.h"
 
 class ScapSettings
 {
@@ -69,19 +70,6 @@ public:
         }
 
         {
-            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APIKEY);
-
-            std::string temp_secretKey = config.getString();
-
-            QByteArray temp_array(temp_secretKey.data(), temp_secretKey.length());
-
-            QByteArray m_secretKey_array =  QByteArray::fromHex(temp_array);
-
-            m_secretKey = m_secretKey_array.constData();
-
-        }
-
-        {
             eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APPID);
             m_appID = config.getString();
         }
@@ -103,18 +91,27 @@ public:
         config.setString(host.toUtf8());
     }
 
-    void setSecretKey(std::string secretKey)
+    void setSecretKey(std::string secretKey, QString nic)
     {
         m_secretKey = secretKey;
 
         QByteArray array(secretKey.data(), secretKey.length());
-
-        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APIKEY);
-
+        std::string str = "scap_apikey_" + nic.toStdString() ;
+        const char* pName = str.c_str();
+        eIDMW::PTEID_Config config(pName,EIDMW_CNF_SECTION_GENERAL,L"");
         config.setString(array.toHex());
     }
 
-    std::string getSecretKey() {
+    std::string getSecretKey(QString nic) {
+
+        std::string str = "scap_apikey_" + nic.toStdString();
+
+        const char* pName = str.c_str();
+        eIDMW::PTEID_Config config(pName,EIDMW_CNF_SECTION_GENERAL,L"");
+        std::string temp_secretKey = config.getString();
+        QByteArray temp_array(temp_secretKey.data(), temp_secretKey.length());
+        QByteArray m_secretKey_array =  QByteArray::fromHex(temp_array);
+        m_secretKey = m_secretKey_array.constData();
         return m_secretKey;
     }
 

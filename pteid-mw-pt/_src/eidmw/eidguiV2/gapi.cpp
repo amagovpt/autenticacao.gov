@@ -2030,7 +2030,12 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
     bool has_read_permissions = true;
 
     // Delete SCAP secretkey to get a new one
-    settings.setSecretKey("");
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card != NULL) {
+        QString citizenNIC(card->getID().getCivilianIdNumber());
+        settings.setSecretKey("",citizenNIC);
+    }
 
 #ifdef WIN32
     extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;

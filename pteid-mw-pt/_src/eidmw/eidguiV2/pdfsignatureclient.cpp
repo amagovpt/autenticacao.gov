@@ -30,20 +30,6 @@
 PDFSignatureClient::PDFSignatureClient()
 {
     {
-        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APIKEY);
-
-        std::string temp_secretKey = config.getString();
-
-        QByteArray temp_array(temp_secretKey.data(), temp_secretKey.length());
-
-        QByteArray m_secretKey_array =  QByteArray::fromHex(temp_array);
-
-        m_secretKey = m_secretKey_array.constData();
-
-        qDebug() << "m_secretKey = " << m_secretKey.data();
-    }
-
-    {
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APPID);
 
         m_appID = config.getString();
@@ -337,7 +323,8 @@ const char *AUTHORIZATION_ENDPOINT = "/SCAPSignature/AuthorizationService";
 const char *SIGNATURE_ENDPOINT = "/SCAPSignature/SignatureService";
 
 unsigned char * PDFSignatureClient::callSCAPSignatureService(soap* sp, QByteArray documentHash,
-                                                 ns1__TransactionType *transaction, unsigned int &signatureLen)
+                                                 ns1__TransactionType *transaction, unsigned int &signatureLen,
+                                                             QString citizenId)
 {
     ScapSettings settings;
    
@@ -350,8 +337,12 @@ unsigned char * PDFSignatureClient::callSCAPSignatureService(soap* sp, QByteArra
     sigRequest.ProcessId = *(this->processId);
     sigRequest.Transaction = transaction;
 
-    std::string new_totp = generateTOTP(m_secretKey);
+    m_secretKey = settings.getSecretKey(citizenId);
 
+    qDebug() << "m_secretKey = " << m_secretKey.data();
+
+    std::string new_totp = generateTOTP(m_secretKey);
+    eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Generated TOTP: %s", new_totp.c_str());
     sigRequest.TOTP = &new_totp;
 
     xsd__base64Binary *base64DocumentHash =
@@ -440,6 +431,10 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
     //TODO: change this
     authorizationRequest.AppId = m_appID.toStdString();
+
+    m_secretKey = settings.getSecretKey(citizenId);
+
+    qDebug() << "m_secretKey = " << m_secretKey.data();
 
     std::string new_totp = generateTOTP(m_secretKey);
     eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Generated TOTP: %s", new_totp.c_str());
@@ -592,7 +587,8 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 #endif
 
                 unsigned int sig_len = 0;
-                unsigned char * scap_signature = callSCAPSignatureService(sp, signatureHash, transaction, sig_len);
+                unsigned char * scap_signature = callSCAPSignatureService(sp, signatureHash,
+                                                                          transaction, sig_len, citizenId);
                 
                 if (sig_len > 0) {
 #ifdef DEBUG            

@@ -856,6 +856,11 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 
 PTEID_Config::PTEID_Config(const char *csName, const char *czSection, const char *csDefaultValue):PTEID_Object(NULL,new APL_Config(csName,czSection,csDefaultValue))
 {
+        m_delimpl=true;
+}
+
+PTEID_Config::PTEID_Config(const char *csName, const wchar_t *czSection, const wchar_t *csDefaultValue):PTEID_Object(NULL,new APL_Config(csName,czSection,csDefaultValue))
+{
 	m_delimpl=true;
 }
 

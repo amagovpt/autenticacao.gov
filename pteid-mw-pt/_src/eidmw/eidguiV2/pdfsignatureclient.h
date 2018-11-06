@@ -77,7 +77,7 @@ private:
                             PDFSignatureInfo signatureInfo,bool isVisible, bool isCC);
 
     unsigned char * callSCAPSignatureService(soap* sp, QByteArray signatureHash,
-                            ns1__TransactionType *transaction, unsigned int &signatureLen);
+                            ns1__TransactionType *transaction, unsigned int &signatureLen, QString citizenId);
 
     int closeSCAPSignature(unsigned char * scap_signature, unsigned int len);
     

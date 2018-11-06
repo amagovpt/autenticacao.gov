@@ -141,11 +141,11 @@ APL_Config::APL_Config(const char *csName, const char *czSection, const char *cs
 	m_numtype=false;
 }
 
-APL_Config::APL_Config(const wchar_t *csName, const wchar_t *czSection, const wchar_t *csDefaultValue)
+APL_Config::APL_Config(const char *csName, const wchar_t *czSection, const wchar_t *csDefaultValue)
 {
 	m_eBehaviour=NORMAL;
 
-	m_name=csName;
+	m_name=utilStringWiden(csName);
 	m_section=czSection;
 
 	m_strdefvalue=csDefaultValue;

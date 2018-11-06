@@ -1454,6 +1454,11 @@ public:
 	  */
     PTEIDSDK_API PTEID_Config(const char *csName, const char *czSection, const char *csDefaultValue);
 
+        /**
+        * Create object to access a string parameter.
+        */
+    PTEIDSDK_API PTEID_Config(const char *csName, const wchar_t *czSection, const wchar_t *csDefaultValue);
+
 	/**
 	  * Create object to access a numerical parameter.
 	  */
