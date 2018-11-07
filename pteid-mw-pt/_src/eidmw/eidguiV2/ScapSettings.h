@@ -92,10 +92,14 @@ public:
 
     void setSecretKey(std::string secretKey, QString nic)
     {
-        m_secretKey = secretKey;
+        QString nic_no_check = nic;
+
+        // Remove NIC Check Digit
+        if(nic_no_check.size() == 9)
+            nic_no_check = nic_no_check.left(8);
 
         QByteArray array(secretKey.data(), secretKey.length());
-        std::string str = "scap_apikey_" + nic.toStdString() ;
+        std::string str = "scap_apikey_" + nic_no_check.toStdString() ;
         const char* pName = str.c_str();
         eIDMW::PTEID_Config config(pName, L"general", L"");
         config.setString(array.toHex());
@@ -103,15 +107,21 @@ public:
 
     std::string getSecretKey(QString nic) {
 
-        std::string str = "scap_apikey_" + nic.toStdString();
+        QString nic_no_check = nic;
+
+        // Remove NIC Check Digit
+        if(nic_no_check.size() == 9)
+            nic_no_check = nic_no_check.left(8);
+
+        std::string str = "scap_apikey_" + nic_no_check.toStdString();
 
         const char* pName = str.c_str();
-		eIDMW::PTEID_Config config(pName, L"general", L"");
+        eIDMW::PTEID_Config config(pName, L"general", L"");
         std::string temp_secretKey = config.getString();
         QByteArray temp_array(temp_secretKey.data(), temp_secretKey.length());
         QByteArray m_secretKey_array =  QByteArray::fromHex(temp_array);
-        m_secretKey = m_secretKey_array.constData();
-        return m_secretKey;
+
+        return m_secretKey_array.constData();
     }
 
     void setAppID(QString const& appID)
@@ -156,7 +166,6 @@ public:
 private:
     QString m_pteid_language;
     QString m_cache_dir;
-    std::string m_secretKey;
     QString m_appID;
 
     QString m_scap_server_host;

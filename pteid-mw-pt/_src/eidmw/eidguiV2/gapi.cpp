@@ -757,7 +757,7 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
     cmd_details.signedCMDFile = m_scap_params.inputPDF;
 
     cmd_details.citizenName = cmd_signature->getCertificateCitizenName();
-    //The method returns something like "BI124559972";
+    //The method returns something like "BI123456789";
     cmd_details.citizenId = QString(cmd_signature->getCertificateCitizenID()+2);
 
     scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
