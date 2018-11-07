@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:c14n="http://www.w3.org/2001/10/xml-exc-c14n#"
+  xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+  xmlns:wsc="http://docs.oasis-open.org/ws-sx/ws-secureconversation/200512"
+  xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+  xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+  xmlns:xenc="http://www.w3.org/2001/04/xmlenc#"
+  xmlns:ns4="http://www.cartaodecidadao.pt/ccc/commons/messages/Types"
+  xmlns:ns3="http://www.cartaodecidadao.pt/ccc/commons/messages/Attribute"
+  xmlns:ns1="http://www.cartaodecidadao.pt/ccc/sccc/services/AttributeClientService"
+  xmlns:ns2="http://www.cartaodecidadao.pt/ccc/sccc/messages/AttributeClientService">
+ <SOAP-ENV:Header>
+ </SOAP-ENV:Header>
+ <SOAP-ENV:Body>
+  <ns2:AttributeResponse>
+   <ns2:ProcessId></ns2:ProcessId>
+   <ns2:AttributeResponseValues>
+    <ns2:ATTRSupplier>
+     <ns3:Id></ns3:Id>
+     <ns3:Name></ns3:Name>
+    </ns2:ATTRSupplier>
+    <ns2:ResponseResult>
+     <ns2:ResultCode></ns2:ResultCode>
+     <ns2:ResultMessage></ns2:ResultMessage>
+     <ns2:CitizenIDWithExtraInfo>
+      <ns3:Name></ns3:Name>
+      <ns3:NIC></ns3:NIC>
+      <ns3:ExtraIDList>
+       <ns3:ExtraID>
+        <ns3:Name></ns3:Name>
+        <ns3:Value></ns3:Value>
+       </ns3:ExtraID>
+      </ns3:ExtraIDList>
+     </ns2:CitizenIDWithExtraInfo>
+    </ns2:ResponseResult>
+    <ns2:SignedAttributes>
+     <ns3:SignatureAttribute Id="">
+      <ds:SignedInfo Id="">
+       <ds:CanonicalizationMethod Algorithm="">
+       </ds:CanonicalizationMethod>
+       <ds:SignatureMethod Algorithm="">
+       </ds:SignatureMethod>
+       <ds:Reference>
+        <ds:DigestMethod xsi:nil="true"/>        <ds:DigestValue></ds:DigestValue>
+       </ds:Reference>
+       <ds:Reference>
+        <ds:DigestMethod xsi:nil="true"/>        <ds:DigestValue></ds:DigestValue>
+       </ds:Reference>
+      </ds:SignedInfo>
+      <ds:SignatureValue></ds:SignatureValue>
+      <ds:KeyInfo Id="">
+       <ds:KeyName></ds:KeyName>
+       <ds:KeyValue>
+       </ds:KeyValue>
+       <ds:RetrievalMethod URI="" Type="">
+       </ds:RetrievalMethod>
+       <ds:X509Data>
+        <ds:X509SKI></ds:X509SKI>
+        <ds:X509SubjectName></ds:X509SubjectName>
+        <ds:X509Certificate></ds:X509Certificate>
+        <ds:X509CRL></ds:X509CRL>
+       </ds:X509Data>
+       <wsse:SecurityTokenReference wsu:Id="" wsc:Instance="" Usage="">
+       </wsse:SecurityTokenReference>
+      </ds:KeyInfo>
+     </ns3:SignatureAttribute>
+    </ns2:SignedAttributes>
+   </ns2:AttributeResponseValues>
+   <ns2:ErrorMessage></ns2:ErrorMessage>
+  </ns2:AttributeResponse>
+ </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

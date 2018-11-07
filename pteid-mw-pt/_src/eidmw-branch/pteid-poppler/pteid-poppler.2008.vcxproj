@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>pteid-poppler</ProjectName>
+    <ProjectGuid>{5AA075F8-394E-4C6E-824A-39096E21869F}</ProjectGuid>
+    <RootNamespace>pteidpoppler</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(ProjectDir)\goo;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(ProjectDir)\goo;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\_Builds\;$(ProjectDir)\goo;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\_Builds\;$(ProjectDir)\goo;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <EnablePREfast>false</EnablePREfast>
+    </ClCompile>
+    <Link>
+      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="goo\FixedPoint.cc" />
+    <ClCompile Include="goo\gfile.cc" />
+    <ClCompile Include="goo\gmem.cc" />
+    <ClCompile Include="goo\gmempp.cc" />
+    <ClCompile Include="goo\GooHash.cc" />
+    <ClCompile Include="goo\GooList.cc" />
+    <ClCompile Include="goo\GooString.cc" />
+    <ClCompile Include="goo\GooTimer.cc" />
+    <ClCompile Include="goo\gstrtod.cc" />
+    <ClCompile Include="goo\ImgWriter.cc" />
+    <ClCompile Include="goo\JpegWriter.cc" />
+    <ClCompile Include="goo\PNGWriter.cc" />
+    <ClCompile Include="goo\TiffWriter.cc" />
+    <ClCompile Include="poppler\Annot.cc" />
+    <ClCompile Include="poppler\Array.cc" />
+    <ClCompile Include="poppler\BuiltinFont.cc" />
+    <ClCompile Include="poppler\BuiltinFontTables.cc" />
+    <ClCompile Include="poppler\CachedFile.cc" />
+    <ClCompile Include="poppler\Catalog.cc" />
+    <ClCompile Include="poppler\DateInfo.cc" />
+    <ClCompile Include="poppler\Decrypt.cc" />
+    <ClCompile Include="poppler\Dict.cc" />
+    <ClCompile Include="poppler\Error.cc" />
+    <ClCompile Include="poppler\FileSpec.cc" />
+    <ClCompile Include="poppler\FontEncodingTables.cc" />
+    <ClCompile Include="poppler\Form.cc" />
+    <ClCompile Include="poppler\Hints.cc" />
+    <ClCompile Include="poppler\Iconv.cc" />
+    <ClCompile Include="poppler\JArithmeticDecoder.cc" />
+    <ClCompile Include="poppler\JBIG2Stream.cc" />
+    <ClCompile Include="poppler\JPXStream.cc" />
+    <ClCompile Include="poppler\Lexer.cc" />
+    <ClCompile Include="poppler\Linearization.cc" />
+    <ClCompile Include="poppler\Link.cc" />
+    <ClCompile Include="poppler\LocalPDFDocBuilder.cc" />
+    <ClCompile Include="poppler\memmem.c" />
+    <ClCompile Include="poppler\Movie.cc" />
+    <ClCompile Include="poppler\Myriad-Font.cc" />
+    <ClCompile Include="poppler\NameToCharCode.cc" />
+    <ClCompile Include="poppler\Object.cc" />
+    <ClCompile Include="poppler\OptionalContent.cc" />
+    <ClCompile Include="poppler\Outline.cc" />
+    <ClCompile Include="poppler\Page.cc" />
+    <ClCompile Include="poppler\PageLabelInfo.cc" />
+    <ClCompile Include="poppler\PageTransition.cc" />
+    <ClCompile Include="poppler\Parser.cc" />
+    <ClCompile Include="poppler\PDFDoc.cc" />
+    <ClCompile Include="poppler\PDFDocEncoding.cc" />
+    <ClCompile Include="poppler\PDFDocFactory.cc" />
+    <ClCompile Include="poppler\PopplerCache.cc" />
+    <ClCompile Include="poppler\ProfileData.cc" />
+    <ClCompile Include="poppler\PSTokenizer.cc" />
+    <ClCompile Include="poppler\Rendition.cc" />
+    <ClCompile Include="poppler\SecurityHandler.cc" />
+    <ClCompile Include="poppler\Sound.cc" />
+    <ClCompile Include="poppler\StdinCachedFile.cc" />
+    <ClCompile Include="poppler\StdinPDFDocBuilder.cc" />
+    <ClCompile Include="poppler\Stream.cc" />
+    <ClCompile Include="poppler\ViewerPreferences.cc" />
+    <ClCompile Include="poppler\win_iconv.c" />
+    <ClCompile Include="poppler\XpdfPluginAPI.cc" />
+    <ClCompile Include="poppler\XRef.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="config.h" />
+    <ClInclude Include="goo\FixedPoint.h" />
+    <ClInclude Include="goo\gfile.h" />
+    <ClInclude Include="goo\gmem.h" />
+    <ClInclude Include="goo\GooHash.h" />
+    <ClInclude Include="goo\GooLikely.h" />
+    <ClInclude Include="goo\GooList.h" />
+    <ClInclude Include="goo\GooMutex.h" />
+    <ClInclude Include="goo\GooString.h" />
+    <ClInclude Include="goo\GooTimer.h" />
+    <ClInclude Include="goo\gstrtod.h" />
+    <ClInclude Include="goo\gtypes.h" />
+    <ClInclude Include="goo\gtypes_p.h" />
+    <ClInclude Include="goo\ImgWriter.h" />
+    <ClInclude Include="goo\JpegWriter.h" />
+    <ClInclude Include="goo\PNGWriter.h" />
+    <ClInclude Include="goo\TiffWriter.h" />
+    <ClInclude Include="poppler\Annot.h" />
+    <ClInclude Include="poppler\Array.h" />
+    <ClInclude Include="poppler\BuiltinFontTables.h" />
+    <ClInclude Include="poppler\CachedFile.h" />
+    <ClInclude Include="poppler\Catalog.h" />
+    <ClInclude Include="poppler\DateInfo.h" />
+    <ClInclude Include="poppler\Decrypt.h" />
+    <ClInclude Include="poppler\Dict.h" />
+    <ClInclude Include="poppler\Error.h" />
+    <ClInclude Include="poppler\FileSpec.h" />
+    <ClInclude Include="poppler\Form.h" />
+    <ClInclude Include="poppler\Hints.h" />
+    <ClInclude Include="poppler\JArithmeticDecoder.h" />
+    <ClInclude Include="poppler\JBIG2Stream.h" />
+    <ClInclude Include="poppler\JPXStream.h" />
+    <ClInclude Include="poppler\Lexer.h" />
+    <ClInclude Include="poppler\Linearization.h" />
+    <ClInclude Include="poppler\Link.h" />
+    <ClInclude Include="poppler\LocalPDFDocBuilder.h" />
+    <ClInclude Include="poppler\Movie.h" />
+    <ClInclude Include="poppler\Myriad-Font.h" />
+    <ClInclude Include="poppler\NameToCharCode.h" />
+    <ClInclude Include="poppler\Object.h" />
+    <ClInclude Include="poppler\OptionalContent.h" />
+    <ClInclude Include="poppler\Outline.h" />
+    <ClInclude Include="poppler\Page.h" />
+    <ClInclude Include="poppler\PageLabelInfo.h" />
+    <ClInclude Include="poppler\PageTransition.h" />
+    <ClInclude Include="poppler\Parser.h" />
+    <ClInclude Include="poppler\PDFDoc.h" />
+    <ClInclude Include="poppler\PDFDocEncoding.h" />
+    <ClInclude Include="poppler\PDFDocFactory.h" />
+    <ClInclude Include="poppler\PopplerCache.h" />
+    <ClInclude Include="poppler\ProfileData.h" />
+    <ClInclude Include="poppler\PSTokenizer.h" />
+    <ClInclude Include="poppler\Rendition.h" />
+    <ClInclude Include="poppler\SecurityHandler.h" />
+    <ClInclude Include="poppler\Sound.h" />
+    <ClInclude Include="poppler\StdinCachedFile.h" />
+    <ClInclude Include="poppler\StdinPDFDocBuilder.h" />
+    <ClInclude Include="poppler\Stream.h" />
+    <ClInclude Include="poppler\ViewerPreferences.h" />
+    <ClInclude Include="poppler\win_iconv.h" />
+    <ClInclude Include="poppler\XpdfPluginAPI.h" />
+    <ClInclude Include="poppler\XRef.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="pteid-poppler.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

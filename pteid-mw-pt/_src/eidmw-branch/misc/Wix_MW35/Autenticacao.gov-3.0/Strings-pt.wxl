@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="pt-PT" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="Lang" Overridable="yes">2070</String>
+  <String Id="Langpref" Overridable="yes">pt</String>
+  <String Id="StartApp" Overridable="yes">Lançar a aplicação utilitária</String>
+  <String Id="MinOs" Overridable="yes">Este Instalador precisa no mínimo de um sistema Windows 2000</String>
+  <String Id="PteidRuntime" Overridable="yes">Autenticação.Gov 3.0</String>
+  <String Id="PteidRuntimeDesc" Overridable="yes">Este módulo é necessário para utilizar o Cartão de Cidadão.</String>
+  <String Id="PteidGui" Overridable="yes">Aplicação Utilitária</String>
+  <String Id="PteidGuiDescr" Overridable="yes">Acesso aos dados de identificação do Cidadão e assinatura electrónica</String>
+  <String Id="Minidriver" Overridable="yes">Minidriver do Cartão de Cidadão</String>
+  <String Id="MinidriverDescr" Overridable="yes">Este módulo fornece serviços criptográficos às aplicações que usam a Microsoft CryptoAPI no Windows 7, 8 e 10</String>
+  <String Id="Crypto" Overridable="yes">Módulo Criptográfico</String>
+  <String Id="CryptoDescr" Overridable="yes">Este módulo é necessário para utilizar o Cartão de Cidadão como cartão de identidade eletrónico nos navegadores de Internet ou para criar assinaturas digitais no Microsoft Office, LibreOffice, Microsoft Outlook, Thunderbird, etc.</String>
+  <String Id="OldMiddlewareErrorMsg" Overridable="yes">Foi detectada a versão 1 do software do Cartão de Cidadão no seu sistema, por favor desinstale-a antes de executar este instalador.</String>
+  <String Id="x86InstallerIn64bitSystem">Este pacote de instalação só deve ser utilizado em sistemas operativos Windows de 32 bits</String>
+  <String Id="OutlookDescr" Overridable="yes">Configurar MS Outlook para o CC</String>
+  <String Id="Users" Overridable="yes">Utilizadores</String>
+  <String Id="msierrSecureObjectsFailedCreateSD" Overridable="yes">Could not create security descriptor [3]\[4], error: [2]</String>
+  <String Id="msierrSecureObjectsFailedSet" Overridable="yes">Could not apply object security descriptor [3], error: [2]</String>
+  <String Id="msierrSecureObjectsUnknownType" Overridable="yes">Unknown object type [3], error: [2]</String>
+  <String Id="AdminNeeded" Overridable="yes">Necessita de privilégios de Administrador para instalar este produto</String>
+  <String Id="NoDowngrade" Overridable="yes">Versão mais recente já instalada.</String>
+</WixLocalization>

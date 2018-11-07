@@ -1,0 +1,15 @@
+[Desktop Entry]
+Comment=Validate electronic signatures in XAdES and PDF format
+Comment[pt]=Validar assinaturas electrónicas em formato XAdES e PAdES
+Encoding=UTF-8
+Exec=java -jar /usr/local/bin/DSS/dss-standalone-app-3.0.4.jar pt %U
+GenericName=Portuguese eID - Signature Validation
+GenericName[pt]=Cartão de Cidadão - Validação de Assinaturas
+Icon=pteid-scalable
+Name=Portugal eID - Signature Validation
+Name[pt]=Cartão de Cidadão - Validação de Assinaturas
+StartupNotify=true
+Terminal=false
+Type=Application
+MimeType=application/x-signedcc
+Categories=Office;

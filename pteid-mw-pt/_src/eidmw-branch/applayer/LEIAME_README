@@ -1,0 +1,56 @@
+############################################################
+LEIA-ME
+
+Este ficheiro zip contém informação assinada com a respectiva assinatura em META-INF/signature.xml
+Esta assinatura foi criada através da Aplicação Oficial do Cartão de Cidadão.
+
+Para verificar a validade da assinatura, deverá usar a Aplicação de Validação de Assinaturas Digitais do Cartão de Cidadão.
+
+Como executar a Aplicação de Validação de Assinaturas Digitais do Cartão de Cidadão:
+(Windows) 
+Duplo clique no ficheiro .ccsigned que pretende validar
+ou
+Duplo clique no ficheiro da aplicação em C:\Program Files\Portugal Identity Card\DSS\dss-standalone.exe
+
+(Linux e Mac)
+Execute "java -jar /usr/local/bin/DSS/dss-standalone-app-3.0.4.jar pt %U" na linha de comandos
+ou
+Duplo clique no ficheiro da aplicação em /usr/local/bin/DSS/. 
+
+Mais Informação:
+
+Download da Aplicação Oficial do Cartão de Cidadão:
+http://svn.gov.pt/projects/ccidadao/browser/middleware-offline/tags/builds
+
+Especificação Técnica da Assinatura Digital:
+Xades / Xades-T
+http://www.w3.org/TR/XAdES/
+
+############################################################
+README
+
+This zip file includes signed information. The signature file can be found in META-INF/signature.xml
+This signature was produced through Portuguese ID Card Management application.
+
+To verify this signature, use the Portuguese ID Digital Signature Validation Application.
+
+How to run the Portuguese ID Digital Signature Validation Application:
+(Windows)
+Double click in the .ccdigned to validate
+or
+Double click in the application file at C:\Program Files\Portugal Identity Card\DSS\dss-standalone.exe
+
+(Linux and Mac)
+Run "java -jar /usr/local/bin/DSS/dss-standalone-app-3.0.4.jar pt %U" in the shell
+or
+Double click in the application file at /usr/local/bin/DSS/.
+
+More Info:
+
+Donwload Portuguese ID Card Management application:
+http://svn.gov.pt/projects/ccidadao/browser/middleware-offline/tags/builds
+
+Signature technical specification:
+Xades / Xades-T
+http://www.w3.org/TR/XAdES/
+

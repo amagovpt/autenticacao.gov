@@ -1,0 +1,2870 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWnd</class>
+ <widget class="QMainWindow" name="MainWnd">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>925</width>
+    <height>1042</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Portuguese Citizen Card</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>100</y>
+      <width>1282</width>
+      <height>521</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="widget_3" native="true">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>1241</width>
+       <height>501</height>
+      </rect>
+     </property>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>813</width>
+        <height>493</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-image: url(:/images/Images/bg_Empty.png);</string>
+      </property>
+      <property name="currentIndex">
+       <number>4</number>
+      </property>
+      <widget class="QWidget" name="page_Wellcome"/>
+      <widget class="QWidget" name="page_Identity">
+       <property name="styleSheet">
+        <string notr="true">background-image: url(:/images/Images/Page_background_Identity.png);
+</string>
+       </property>
+       <widget class="QLineEdit" name="txtIdentity_Name">
+        <property name="geometry">
+         <rect>
+          <x>23</x>
+          <y>88</y>
+          <width>376</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentity_GivenNames">
+        <property name="geometry">
+         <rect>
+          <x>23</x>
+          <y>40</y>
+          <width>376</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentity_Sex">
+        <property name="geometry">
+         <rect>
+          <x>23</x>
+          <y>147</y>
+          <width>64</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentity_Height">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>147</y>
+          <width>53</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentity_Country">
+        <property name="geometry">
+         <rect>
+          <x>23</x>
+          <y>264</y>
+          <width>195</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentity_Nationality">
+        <property name="geometry">
+         <rect>
+          <x>185</x>
+          <y>147</y>
+          <width>90</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentity_BirthDate">
+        <property name="geometry">
+         <rect>
+          <x>298</x>
+          <y>147</y>
+          <width>101</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lblIdentity_ImgPerson">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>430</x>
+          <y>10</y>
+          <width>202</width>
+          <height>269</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>400</width>
+          <height>400</height>
+         </size>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/alpha.png);</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="scaledContents">
+         <bool>false</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentity_Parents_Father">
+        <property name="geometry">
+         <rect>
+          <x>23</x>
+          <y>313</y>
+          <width>375</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>240</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentity_DocumentNumber">
+        <property name="geometry">
+         <rect>
+          <x>23</x>
+          <y>210</y>
+          <width>140</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentity_ValidUntil">
+        <property name="geometry">
+         <rect>
+          <x>186</x>
+          <y>210</y>
+          <width>87</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentity_Parents_Mother">
+        <property name="geometry">
+         <rect>
+          <x>23</x>
+          <y>344</y>
+          <width>375</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>240</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentity_AccidentalIndications">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>400</y>
+          <width>381</width>
+          <height>61</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>240</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnShortcut_UnivSign">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>360</y>
+          <width>171</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          color: rgb(108, 108, 108);
+          font: 75 15px Arial;
+          background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
+         </string>
+        </property>
+        <property name="text">
+         <string>Universal Signature</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnShortcut_VerifSign">
+        <property name="geometry">
+         <rect>
+          <x>420</x>
+          <y>360</y>
+          <width>191</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+              color: rgb(108, 108, 108);
+              font: 75 15px Arial;
+              background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
+            </string>
+        </property>
+        <property name="text">
+         <string>Verify Signature</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnShortcut_PdfSign">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>310</y>
+          <width>171</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          color: rgb(108, 108, 108);
+          font: 75 15px Arial;
+          background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);</string>
+        </property>
+        <property name="text">
+         <string>PDF Signature</string>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnShortcut_SCAPSign">
+        <property name="geometry">
+         <rect>
+          <x>420</x>
+          <y>310</y>
+          <width>191</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          color: rgb(108, 108, 108);
+          font: 75 15px Arial;
+          background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);
+         </string>
+        </property>
+        <property name="text">
+         <string>Professional signature</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page_IdentityExtra">
+       <property name="styleSheet">
+        <string notr="true">background-image: url(:/images/Images/tab-backgrounds/bg_additional_data2.png);</string>
+       </property>
+       <widget class="QLineEdit" name="txtIdentityExtra_SocialSecurityNo">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>60</y>
+          <width>131</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentityExtra_TaxNo">
+        <property name="geometry">
+         <rect>
+          <x>27</x>
+          <y>60</y>
+          <width>125</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentityExtra_CardVersion">
+        <property name="geometry">
+         <rect>
+          <x>27</x>
+          <y>159</y>
+          <width>125</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentityExtra_DocumentType">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>245</y>
+          <width>150</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentityExtra_LocalofRequest">
+        <property name="geometry">
+         <rect>
+          <x>27</x>
+          <y>381</y>
+          <width>321</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="sizeIncrement">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentityExtra_HealthNo">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>60</y>
+          <width>127</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentityExtra_IssuingEntity">
+        <property name="geometry">
+         <rect>
+          <x>27</x>
+          <y>245</y>
+          <width>150</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentityExtra_Validate">
+        <property name="geometry">
+         <rect>
+          <x>27</x>
+          <y>320</y>
+          <width>320</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="sizeIncrement">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtIdentityExtra_ValidFrom">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>160</y>
+          <width>131</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnIdentityExtra_linkToCert">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>313</y>
+          <width>355</width>
+          <height>35</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <underline>true</underline>
+         </font>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="acceptDrops">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgba(255, 255, 255, 0);
+background-image: url(:/images/Images/alpha.png);
+color: rgb(0, 0, 255);
+text-align: left top;</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="autoDefault">
+         <bool>true</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page_Address">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <widget class="QLineEdit" name="txtAddress_District">
+        <property name="geometry">
+         <rect>
+          <x>27</x>
+          <y>40</y>
+          <width>190</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_Place">
+        <property name="geometry">
+         <rect>
+          <x>27</x>
+          <y>375</y>
+          <width>190</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_Municipality">
+        <property name="geometry">
+         <rect>
+          <x>27</x>
+          <y>88</y>
+          <width>190</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_Zip3">
+        <property name="geometry">
+         <rect>
+          <x>155</x>
+          <y>424</y>
+          <width>101</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_PostalLocality">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>424</y>
+          <width>190</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_CivilParish">
+        <property name="geometry">
+         <rect>
+          <x>27</x>
+          <y>135</y>
+          <width>190</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_StreetType1">
+        <property name="geometry">
+         <rect>
+          <x>27</x>
+          <y>183</y>
+          <width>190</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_StreetType2">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>183</y>
+          <width>190</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_StreetName">
+        <property name="geometry">
+         <rect>
+          <x>27</x>
+          <y>231</y>
+          <width>190</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_BuildingType1">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>280</y>
+          <width>190</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_BuildingType2">
+        <property name="geometry">
+         <rect>
+          <x>27</x>
+          <y>280</y>
+          <width>190</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_DoorNo">
+        <property name="geometry">
+         <rect>
+          <x>27</x>
+          <y>327</y>
+          <width>105</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_Floor">
+        <property name="geometry">
+         <rect>
+          <x>202</x>
+          <y>327</y>
+          <width>110</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_Side">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>327</y>
+          <width>120</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_Locality">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>375</y>
+          <width>190</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtAddress_Zip4">
+        <property name="geometry">
+         <rect>
+          <x>27</x>
+          <y>424</y>
+          <width>101</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnAddress_Change">
+        <property name="geometry">
+         <rect>
+          <x>500</x>
+          <y>375</y>
+          <width>200</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+color: rgb(108, 108, 108);
+font: 75 15px Arial;
+background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);          </string>
+        </property>
+        <property name="text">
+         <string>Address Confirmation</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page_Certificates">
+       <property name="styleSheet">
+        <string notr="true">background-image: url(:/images/Images/tab-backgrounds/bg_certificates.png);</string>
+       </property>
+       <widget class="QTreeWidget" name="treeCert">
+        <property name="geometry">
+         <rect>
+          <x>22</x>
+          <y>20</y>
+          <width>369</width>
+          <height>361</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>20</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Light-Blue.png);
+border-image: url(:/images/Images/bg-Light-Blue.png);
+image: url(:/images/Images/bg-Light-Blue.png);</string>
+        </property>
+        <property name="sortingEnabled">
+         <bool>false</bool>
+        </property>
+        <property name="headerHidden">
+         <bool>true</bool>
+        </property>
+        <attribute name="headerVisible">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="headerShowSortIndicator" stdset="0">
+         <bool>false</bool>
+        </attribute>
+        <column>
+         <property name="text">
+          <string>Certificates Overview</string>
+         </property>
+        </column>
+       </widget>
+       <widget class="QLineEdit" name="txtCert_Owner">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>50</y>
+          <width>380</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtCert_Issuer">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>120</y>
+          <width>380</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtCert_KeyLenght">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>245</y>
+          <width>175</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtCert_ValidFrom">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>180</y>
+          <width>175</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtCert_ValidUntil">
+        <property name="geometry">
+         <rect>
+          <x>610</x>
+          <y>180</y>
+          <width>175</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnCert_Register">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>370</y>
+          <width>111</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+color: rgb(108, 108, 108);
+font: 75 15px Arial;
+background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);          </string>
+        </property>
+        <property name="text">
+         <string>&amp;Register</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnCert_Details">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>410</y>
+          <width>111</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+color: rgb(108, 108, 108);
+font: 75 15px Arial;
+background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);          </string>
+        </property>
+        <property name="text">
+         <string>&amp;Details &gt;&gt;</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="txtCert_RevStatus">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>310</y>
+          <width>370</width>
+          <height>45</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page_PINCodes">
+       <property name="styleSheet">
+        <string notr="true">background-image: url(:/images/Images/tab-backgrounds/bg_pinCodes.png);
+</string>
+       </property>
+       <widget class="QLineEdit" name="txtPIN_Name">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>175</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtPIN_ID">
+        <property name="geometry">
+         <rect>
+          <x>610</x>
+          <y>60</y>
+          <width>175</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtPIN_Status">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>130</y>
+          <width>370</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QTreeWidget" name="treePIN">
+        <property name="geometry">
+         <rect>
+          <x>22</x>
+          <y>20</y>
+          <width>369</width>
+          <height>371</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Light-Blue.png);
+border-image: url(:/images/Images/bg-Light-Blue.png);
+image: url(:/images/Images/bg-Light-Blue.png);</string>
+        </property>
+        <column>
+         <property name="text">
+          <string>PINs</string>
+         </property>
+         <property name="background">
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </property>
+         <property name="foreground">
+          <brush brushstyle="NoBrush">
+           <color alpha="255">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </property>
+        </column>
+       </widget>
+       <widget class="QPushButton" name="btnPIN_Test">
+        <property name="geometry">
+         <rect>
+          <x>400</x>
+          <y>180</y>
+          <width>131</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+color: rgb(108, 108, 108);
+font: 75 15px Arial;
+background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);          </string>
+        </property>
+        <property name="text">
+         <string>Test PIN</string>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnPIN_Change">
+        <property name="geometry">
+         <rect>
+          <x>540</x>
+          <y>180</y>
+          <width>131</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(108, 108, 108);
+font: 75 15px Arial;
+background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);          </string>
+        </property>
+        <property name="text">
+         <string>Change PIN</string>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page_Notes">
+       <property name="styleSheet">
+        <string notr="true">background-image: url(:/images/Images/tab-backgrounds/bg_notes.png);
+</string>
+       </property>
+       <widget class="QPlainTextEdit" name="txtPersoData">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>40</y>
+          <width>751</width>
+          <height>341</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Light-Blue.png);</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="lineWidth">
+         <number>0</number>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnPersoDataSave">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>710</x>
+          <y>410</y>
+          <width>81</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+color: rgb(108, 108, 108);
+font: 75 15px Arial;
+background-image: url(:/images/Images/backgrounds/bg_toolbarMenu2.png);   </string>
+        </property>
+        <property name="text">
+         <string>Save</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_5">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>410</y>
+          <width>121</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/alpha.png);
+color: rgb(108, 108, 108);
+font: 12px &quot;Arial&quot;;</string>
+        </property>
+        <property name="text">
+         <string>Bytes available:</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="txtPersoDataCount">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>410</y>
+          <width>87</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/images/Images/bg-Blue.png);</string>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="widget_2" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>54</y>
+      <width>1021</width>
+      <height>38</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>1050</width>
+      <height>100</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/images/Images/bg_SelectTabTool.png);</string>
+    </property>
+    <widget class="QPushButton" name="btnSelectTab_Identity">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>-3</y>
+       <width>145</width>
+       <height>43</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(108, 108, 108);
+font: 75 15px &quot;Arial&quot;;
+background-image: url(:/images/Images/alpha.png);</string>
+     </property>
+     <property name="text">
+      <string>Identity</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnSelectTab_Identity_Extra">
+     <property name="geometry">
+      <rect>
+       <x>145</x>
+       <y>-3</y>
+       <width>145</width>
+       <height>43</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(108, 108, 108);
+font: 75 15px &quot;Arial&quot;;
+background-image: url(:/images/Images/alpha.png);</string>
+     </property>
+     <property name="text">
+      <string>Additional Data</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnSelectTab_Address">
+     <property name="geometry">
+      <rect>
+       <x>285</x>
+       <y>-3</y>
+       <width>130</width>
+       <height>43</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(108, 108, 108);
+font: 75 15px &quot;Arial&quot;;
+background-image: url(:/images/Images/alpha.png);</string>
+     </property>
+     <property name="text">
+      <string>Address</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnSelectTab_Certificates">
+     <property name="geometry">
+      <rect>
+       <x>420</x>
+       <y>-3</y>
+       <width>130</width>
+       <height>43</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(108, 108, 108);
+font: 75 15px &quot;Arial&quot;;
+background-image: url(:/images/Images/alpha.png);</string>
+     </property>
+     <property name="text">
+      <string>Certificates</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnSelectTab_PinCodes">
+     <property name="geometry">
+      <rect>
+       <x>570</x>
+       <y>-3</y>
+       <width>145</width>
+       <height>43</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(108, 108, 108);
+font: 75 15px &quot;Arial&quot;;
+background-image: url(:/images/Images/alpha.png);</string>
+     </property>
+     <property name="text">
+      <string>PIN Codes</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnSelectTab_Notes">
+     <property name="geometry">
+      <rect>
+       <x>720</x>
+       <y>-3</y>
+       <width>135</width>
+       <height>43</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(108, 108, 108);
+font: 75 15px &quot;Arial&quot;;
+background-image: url(:/images/Images/alpha.png);</string>
+     </property>
+     <property name="text">
+      <string>Notes</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="widget_Toolbar" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>1</y>
+      <width>1021</width>
+      <height>56</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/images/Images/backgrounds/bg_toolbarMenu.png);</string>
+    </property>
+    <widget class="QPushButton" name="btn_menu_card">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>-2</y>
+       <width>127</width>
+       <height>58</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/buttons/btn_card.png);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>   Card</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_menu_tools">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>-2</y>
+       <width>145</width>
+       <height>58</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/buttons/btn_tools.png);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>   Services</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_menu_settings">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>-2</y>
+       <width>145</width>
+       <height>58</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="whatsThis">
+      <string/>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/buttons/btn_settings.png);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>   Settings</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_menu_help">
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>-2</y>
+       <width>108</width>
+       <height>58</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/buttons/btn_help.png);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>  Help</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_menu_language">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>752</x>
+       <y>8</y>
+       <width>44</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string extracomment="to portuguese">Change language</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="eidgui.qrc">
+       <normaloff>:/images/Images/flags/pt32.png</normaloff>:/images/Images/flags/pt32.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="shortcut">
+      <string/>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+     <property name="default">
+      <bool>false</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_testmode">
+     <property name="geometry">
+      <rect>
+       <x>630</x>
+       <y>-2</y>
+       <width>81</width>
+       <height>58</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>-1</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="visible">
+      <bool>true</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-image: url(:/images/Images/alpha.png);
+color: rgb(0, 0, 255);
+font: 12px &quot;Arial&quot;;
+text-align: center;
+      </string>
+     </property>
+     <property name="text">
+      <string>Test Mode</string>
+     </property>
+    </widget>
+    <zorder>btn_menu_help</zorder>
+    <zorder>btn_menu_settings</zorder>
+    <zorder>btn_menu_tools</zorder>
+    <zorder>btn_menu_card</zorder>
+    <zorder>btn_menu_language</zorder>
+    <zorder>lbl_testmode</zorder>
+   </widget>
+   <widget class="QWidget" name="wdg_submenu_card" native="true">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>760</y>
+      <width>126</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/images/Images/submenu_backgrounds/bg_selected_menu_card.png);</string>
+    </property>
+    <widget class="QLabel" name="lbl_menuCard">
+     <property name="geometry">
+      <rect>
+       <x>56</x>
+       <y>16</y>
+       <width>61</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>Card</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Read">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>45</y>
+       <width>81</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>Read Card</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Quit">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>85</y>
+       <width>51</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>Exit</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_11">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>32</y>
+       <width>105</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">image: url(:/images/Images/sub_menu_separator.png);
+background-image: url(:/images/Images/alpha.png);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Pdf">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>65</y>
+       <width>101</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>Export / Print</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Read_18">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>45</y>
+       <width>16</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>»</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Read_19">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>65</y>
+       <width>16</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>»</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Read_20">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>85</y>
+       <width>16</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>»</string>
+     </property>
+    </widget>
+    <zorder>lbl_menuCard_Read</zorder>
+    <zorder>lbl_menuCard_Quit</zorder>
+    <zorder>label_11</zorder>
+    <zorder>lbl_menuCard_Pdf</zorder>
+    <zorder>lbl_menuCard</zorder>
+    <zorder>lbl_menuCard_Read_18</zorder>
+    <zorder>lbl_menuCard_Read_19</zorder>
+    <zorder>lbl_menuCard_Read_20</zorder>
+   </widget>
+   <widget class="QWidget" name="wdg_submenu_tools" native="true">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>760</y>
+      <width>221</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/images/Images/submenu_backgrounds/bg_selected_menu_tools.png);</string>
+    </property>
+    <widget class="QLabel" name="lbl_menuTools">
+     <property name="geometry">
+      <rect>
+       <x>45</x>
+       <y>16</y>
+       <width>81</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>Services</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>32</y>
+       <width>105</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">image: url(:/images/Images/sub_menu_separator.png);
+background-image: url(:/images/Images/alpha.png);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuTools_Signature">
+     <property name="geometry">
+      <rect>
+       <x>25</x>
+       <y>105</y>
+       <width>131</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="visible">
+      <bool>true</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>Universal Signature</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuTools_VerifySignature">
+     <property name="geometry">
+      <rect>
+       <x>25</x>
+       <y>85</y>
+       <width>131</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="visible">
+      <bool>true</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>Verify Signature</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuTools_SCAPSignature_bullet">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>105</y>
+       <width>16</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>»</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuTools_SCAPSignature">
+     <property name="geometry">
+      <rect>
+       <x>25</x>
+       <y>65</y>
+       <width>158</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="visible">
+      <bool>true</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>Professional signature</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Read_8">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>45</y>
+       <width>16</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>»</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Read_9">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>65</y>
+       <width>16</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>»</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuTools_PDFSignature">
+     <property name="geometry">
+      <rect>
+       <x>25</x>
+       <y>45</y>
+       <width>131</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>PDF Signature</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Read_12">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>85</y>
+       <width>16</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>»</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="wdg_submenu_help" native="true">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>760</y>
+      <width>171</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/images/Images/submenu_backgrounds/bg_selected_menu_help.png);</string>
+    </property>
+    <widget class="QLabel" name="lbl_menuHelp">
+     <property name="geometry">
+      <rect>
+       <x>45</x>
+       <y>16</y>
+       <width>91</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>Help</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuHelp_about">
+     <property name="geometry">
+      <rect>
+       <x>25</x>
+       <y>85</y>
+       <width>81</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>About</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_10">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>32</y>
+       <width>105</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">image: url(:/images/Images/sub_menu_separator.png);
+background-image: url(:/images/Images/alpha.png);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuHelp_updates">
+     <property name="geometry">
+      <rect>
+       <x>25</x>
+       <y>65</y>
+       <width>81</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>Updates</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuHelp_documentation">
+     <property name="geometry">
+      <rect>
+       <x>25</x>
+       <y>45</y>
+       <width>131</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>Online Documentation</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Read_21">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>85</y>
+       <width>16</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>»</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Read_22">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>65</y>
+       <width>16</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>»</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Read_23">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>45</y>
+       <width>16</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>»</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="wdg_submenu_settings" native="true">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>760</y>
+      <width>151</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/images/Images/submenu_backgrounds/bg_selected_menu_settings.png);</string>
+    </property>
+    <widget class="QLabel" name="lbl_menuSettings">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>16</y>
+       <width>71</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>Settings</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuSettings_Parameters">
+     <property name="geometry">
+      <rect>
+       <x>31</x>
+       <y>53</y>
+       <width>81</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>Parameters</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_15">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>105</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">image: url(:/images/Images/sub_menu_separator.png);
+background-image: url(:/images/Images/alpha.png);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_menuCard_Read_17">
+     <property name="geometry">
+      <rect>
+       <x>16</x>
+       <y>53</y>
+       <width>16</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+        background-image: url(:/images/Images/alpha.png);
+        color: rgb(108, 108, 108);
+        font: 12px &quot;Arial&quot;;
+      </string>
+     </property>
+     <property name="text">
+      <string>»</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionE_xit">
+   <property name="icon">
+    <iconset resource="eidgui.qrc">
+     <normaloff>:/images/Images/Icons/Exit.png</normaloff>:/images/Images/Icons/Exit.png</iconset>
+   </property>
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+  </action>
+  <action name="actionReload_eID">
+   <property name="icon">
+    <iconset resource="eidgui.qrc">
+     <normaloff>:/images/Images/Icons/Chip.png</normaloff>:/images/Images/Icons/Chip.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Reload eID</string>
+   </property>
+   <property name="iconText">
+    <string>Reload eID</string>
+   </property>
+  </action>
+  <action name="actionSave_eID">
+   <property name="icon">
+    <iconset resource="eidgui.qrc">
+     <normaloff>:/images/Images/Icons/Save.png</normaloff>:/images/Images/Icons/Save.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save eID</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_eID_as">
+   <property name="icon">
+    <iconset resource="eidgui.qrc">
+     <normaloff>:/images/Images/Icons/save_as.png</normaloff>:/images/Images/Icons/save_as.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save eID as...</string>
+   </property>
+  </action>
+  <action name="actionOpen_eID">
+   <property name="icon">
+    <iconset resource="eidgui.qrc">
+     <normaloff>:/images/Images/Icons/Open.png</normaloff>:/images/Images/Icons/Open.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open eID</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionPrint_eID">
+   <property name="icon">
+    <iconset resource="eidgui.qrc">
+     <normaloff>:/images/Images/Icons/Print.png</normaloff>:/images/Images/Icons/Print.png</iconset>
+   </property>
+   <property name="text">
+    <string>Print eID</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionPrinter_Settings">
+   <property name="text">
+    <string>Printer Settings</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionOptions">
+   <property name="icon">
+    <iconset resource="eidgui.qrc">
+     <normaloff>:/images/Images/Icons/Options.png</normaloff>:/images/Images/Icons/Options.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Options</string>
+   </property>
+  </action>
+  <action name="actionEnglish">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;English</string>
+   </property>
+  </action>
+  <action name="actionNederlands">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Portuguese</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>&amp;Help / Manual</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="eidgui.qrc">
+     <normaloff>:/images/Images/Icons/Help.png</normaloff>:/images/Images/Icons/Help.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="actionPINRequest">
+   <property name="text">
+    <string>Test PIN</string>
+   </property>
+  </action>
+  <action name="actionPINChange">
+   <property name="text">
+    <string>Change PIN</string>
+   </property>
+  </action>
+  <action name="actionPINRenew">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>PIN renew (PUK)</string>
+   </property>
+  </action>
+  <action name="actionZoom_In">
+   <property name="icon">
+    <iconset resource="eidgui.qrc">
+     <normaloff>:/images/Images/Icons/Zoom_IN.png</normaloff>:/images/Images/Icons/Zoom_IN.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom &amp;In</string>
+   </property>
+   <property name="shortcut">
+    <string>+</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionZoom_Out">
+   <property name="icon">
+    <iconset resource="eidgui.qrc">
+     <normaloff>:/images/Images/Icons/Zoom_OUT.png</normaloff>:/images/Images/Icons/Zoom_OUT.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Zoom Out</string>
+   </property>
+   <property name="shortcut">
+    <string>-</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionDisplay_Pinpad_Info">
+   <property name="text">
+    <string>Display pinpad info</string>
+   </property>
+  </action>
+  <action name="actionClose_Pinpad_Info">
+   <property name="text">
+    <string>Close pinpad info</string>
+   </property>
+  </action>
+  <action name="actionIdentity_Card">
+   <property name="text">
+    <string>&amp;Identity Card</string>
+   </property>
+  </action>
+  <action name="actionForeigner_Card">
+   <property name="text">
+    <string>Foreigner Card</string>
+   </property>
+  </action>
+  <action name="actionSave_PersoData">
+   <property name="text">
+    <string>Save PersoData</string>
+   </property>
+  </action>
+ </widget>
+ <tabstops>
+  <tabstop>txtIdentity_GivenNames</tabstop>
+  <tabstop>txtIdentity_Sex</tabstop>
+  <tabstop>txtIdentity_Height</tabstop>
+  <tabstop>txtIdentity_Country</tabstop>
+  <tabstop>txtIdentity_Nationality</tabstop>
+  <tabstop>txtIdentity_BirthDate</tabstop>
+  <tabstop>txtIdentity_Parents_Father</tabstop>
+  <tabstop>txtIdentity_DocumentNumber</tabstop>
+  <tabstop>txtIdentity_ValidUntil</tabstop>
+  <tabstop>txtIdentity_Parents_Mother</tabstop>
+  <tabstop>txtIdentity_AccidentalIndications</tabstop>
+  <tabstop>btnShortcut_UnivSign</tabstop>
+  <tabstop>btnShortcut_PdfSign</tabstop>
+  <tabstop>txtIdentityExtra_SocialSecurityNo</tabstop>
+  <tabstop>txtIdentityExtra_TaxNo</tabstop>
+  <tabstop>txtIdentityExtra_CardVersion</tabstop>
+  <tabstop>txtIdentityExtra_DocumentType</tabstop>
+  <tabstop>txtIdentityExtra_LocalofRequest</tabstop>
+  <tabstop>txtIdentityExtra_HealthNo</tabstop>
+  <tabstop>txtIdentityExtra_IssuingEntity</tabstop>
+  <tabstop>txtIdentityExtra_Validate</tabstop>
+  <tabstop>txtIdentityExtra_ValidFrom</tabstop>
+  <tabstop>txtAddress_District</tabstop>
+  <tabstop>txtAddress_Place</tabstop>
+  <tabstop>txtAddress_Municipality</tabstop>
+  <tabstop>txtAddress_Zip3</tabstop>
+  <tabstop>txtAddress_PostalLocality</tabstop>
+  <tabstop>txtAddress_CivilParish</tabstop>
+  <tabstop>txtAddress_StreetType1</tabstop>
+  <tabstop>txtAddress_StreetType2</tabstop>
+  <tabstop>txtAddress_StreetName</tabstop>
+  <tabstop>txtAddress_BuildingType1</tabstop>
+  <tabstop>txtAddress_BuildingType2</tabstop>
+  <tabstop>txtAddress_DoorNo</tabstop>
+  <tabstop>txtAddress_Floor</tabstop>
+  <tabstop>txtAddress_Side</tabstop>
+  <tabstop>txtAddress_Locality</tabstop>
+  <tabstop>txtAddress_Zip4</tabstop>
+  <tabstop>treeCert</tabstop>
+  <tabstop>txtCert_Owner</tabstop>
+  <tabstop>txtCert_Issuer</tabstop>
+  <tabstop>txtIdentity_Name</tabstop>
+  <tabstop>txtCert_ValidFrom</tabstop>
+  <tabstop>txtCert_ValidUntil</tabstop>
+  <tabstop>txtCert_KeyLenght</tabstop>
+  <tabstop>txtCert_RevStatus</tabstop>
+  <tabstop>btnCert_Register</tabstop>
+  <tabstop>btnCert_Details</tabstop>
+  <tabstop>txtPIN_Name</tabstop>
+  <tabstop>txtPIN_ID</tabstop>
+  <tabstop>txtPIN_Status</tabstop>
+  <tabstop>treePIN</tabstop>
+  <tabstop>btnPIN_Test</tabstop>
+  <tabstop>btnPIN_Change</tabstop>
+  <tabstop>txtPersoData</tabstop>
+  <tabstop>btnPersoDataSave</tabstop>
+  <tabstop>txtPersoDataCount</tabstop>
+  <tabstop>btnSelectTab_Identity</tabstop>
+  <tabstop>btnSelectTab_Identity_Extra</tabstop>
+  <tabstop>btnSelectTab_Address</tabstop>
+  <tabstop>btnSelectTab_Certificates</tabstop>
+  <tabstop>btnSelectTab_PinCodes</tabstop>
+  <tabstop>btnSelectTab_Notes</tabstop>
+  <tabstop>btn_menu_language</tabstop>
+ </tabstops>
+ <resources>
+  <include location="eidgui.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+ <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+   <mime-type type="application/x-signedcc">  
+   <sub-class-of type="application/zip"/>
+   <comment>XAdES Signed Files</comment>
+   <comment xml:lang="pt">Ficheiros assinados em formato XAdES</comment>
+   <glob pattern="*.ccsigned"/>
+  </mime-type>
+ </mime-info>

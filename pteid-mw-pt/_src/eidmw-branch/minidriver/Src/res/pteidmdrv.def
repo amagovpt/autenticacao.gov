@@ -1,0 +1,48 @@
+
+EXPORTS
+
+   CardAcquireContext
+   CardDeleteContext
+
+   CardAuthenticatePin
+   CardGetChallenge
+   CardAuthenticateChallenge
+   CardDeauthenticate
+   CardAuthenticateEx
+   CardGetChallengeEx
+   CardDeauthenticateEx
+   CardChangeAuthenticatorEx
+   CardUnblockPin
+   CardChangeAuthenticator
+   
+   CardCreateDirectory
+   CardDeleteDirectory
+   CardReadFile
+   CardCreateFile
+   CardGetFileInfo
+   CardWriteFile
+   CardDeleteFile
+   CardEnumFiles
+   CardQueryFreeSpace
+   
+   CardQueryCapabilities
+   
+   CardGetContainerProperty
+   CardSetContainerProperty
+   CardGetProperty
+   CardSetProperty
+   
+   CardCreateContainer
+   CardDeleteContainer
+   CardGetContainerInfo
+   
+   CardRSADecrypt
+   CardConstructDHAgreement
+   CardDeriveKey
+   CardDestroyDHAgreement
+   CardSignData
+   CardQueryKeySizes
+   
+   
+   
+   

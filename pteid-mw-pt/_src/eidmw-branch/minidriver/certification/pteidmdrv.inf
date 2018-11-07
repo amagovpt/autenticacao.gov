@@ -1,0 +1,161 @@
+;
+;Portugal eID Smartcard Minidriver for an x86 and x64 based package.
+;
+
+[Version]
+Signature="$Windows NT$"
+Class=SmartCard
+ClassGuid={990A2BD7-E738-46c7-B26F-1CF8FB9F1391}
+Provider=%FEDICT%
+CatalogFile=pteidmdrv.cat
+DriverVer=12/08/2009,4.0.0.2
+
+[Manufacturer]
+%FEDICT%=Fedict,NTamd64,NTamd64.6.1,NTx86,NTx86.6.1
+
+[Fedict.NTamd64]
+%FedictCardDeviceName%=Fedict64_Install,SCFILTER\CID_a503010101ad1310
+%FedictCardDeviceName%=Fedict64_Install,SCFILTER\CID_a503010101ad1311
+
+[Fedict.NTx86]
+%FedictCardDeviceName%=Fedict32_Install,SCFILTER\CID_a503010101ad1310
+%FedictCardDeviceName%=Fedict32_Install,SCFILTER\CID_a503010101ad1311
+
+[Fedict.NTamd64.6.1]
+%FedictCardDeviceName%=Fedict64_61_Install,SCFILTER\CID_a503010101ad1310
+%FedictCardDeviceName%=Fedict64_61_Install,SCFILTER\CID_a503010101ad1311
+
+[Fedict.NTx86.6.1]
+%FedictCardDeviceName%=Fedict32_61_Install,SCFILTER\CID_a503010101ad1310
+%FedictCardDeviceName%=Fedict32_61_Install,SCFILTER\CID_a503010101ad1311
+
+[DefaultInstall]
+CopyFiles=x86_CopyFiles
+AddReg=AddRegDefault
+
+[DefaultInstall.ntamd64]
+CopyFiles=amd64_CopyFiles
+CopyFiles=wow64_CopyFiles
+AddReg=AddRegWOW64
+AddReg=AddRegDefault
+
+[DefaultInstall.ntamd64.6.1]
+CopyFiles=amd64_CopyFiles
+CopyFiles=wow64_CopyFiles
+AddReg=AddRegWOW64
+AddReg=AddRegDefault
+
+[DefaultInstall.NTx86]
+CopyFiles=x86_CopyFiles
+AddReg=AddRegDefault
+
+[DefaultInstall.NTx86.6.1]
+CopyFiles=x86_CopyFiles
+AddReg=AddRegDefault
+
+[SourceDisksFiles]
+pteidmdrv64.dll=1
+pteidmdrv.dll=1
+
+[SourceDisksNames]
+1 = %MediaDescription%
+
+[Fedict64_Install.NT]
+CopyFiles=amd64_CopyFiles
+CopyFiles=wow64_CopyFiles
+AddReg=AddRegWOW64
+AddReg=AddRegDefault
+
+[Fedict64_61_Install.NT]
+CopyFiles=amd64_CopyFiles
+CopyFiles=wow64_CopyFiles
+AddReg=AddRegWOW64
+AddReg=AddRegDefault
+Include=umpass.inf
+Needs=UmPass
+
+[Fedict32_Install.NT]
+CopyFiles=x86_CopyFiles
+AddReg=AddRegDefault
+
+[Fedict32_61_Install.NT]
+CopyFiles=x86_CopyFiles
+AddReg=AddRegDefault
+Include=umpass.inf
+Needs=UmPass
+
+[Fedict64_61_Install.NT.Services]
+Include=umpass.inf
+Needs=UmPass.Services
+
+[Fedict32_61_Install.NT.Services]
+Include=umpass.inf
+Needs=UmPass.Services
+
+
+[Fedict64_61_Install.NT.HW]
+Include=umpass.inf
+Needs=UmPass.HW
+
+[Fedict64_61_Install.NT.CoInstallers]
+Include=umpass.inf
+Needs=UmPass.CoInstallers
+
+
+[Fedict64_61_Install.NT.Interfaces]
+Include=umpass.inf
+Needs=UmPass.Interfaces
+
+
+[Fedict32_61_Install.NT.HW]
+Include=umpass.inf
+Needs=UmPass.HW
+
+[Fedict32_61_Install.NT.CoInstallers]
+Include=umpass.inf
+Needs=UmPass.CoInstallers
+
+
+[Fedict32_61_Install.NT.Interfaces]
+Include=umpass.inf
+Needs=UmPass.Interfaces
+
+
+[amd64_CopyFiles]
+pteidmdrv.dll,pteidmdrv64.dll
+
+[x86_CopyFiles]
+pteidmdrv.dll
+
+[wow64_CopyFiles]
+pteidmdrv.dll
+
+[AddRegWOW64]
+HKLM, %SmartCardNameWOW64%,"ATR",0x00000001,3b,98,00,40,00,a5,03,01,01,01,ad,13,00
+HKLM, %SmartCardNameWOW64%,"ATRMask",0x00000001,ff,ff,00,ff,00,ff,ff,ff,ff,ff,ff,ff,00
+HKLM, %SmartCardNameWOW64%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
+HKLM, %SmartCardNameWOW64%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
+HKLM, %SmartCardNameWOW64%,"80000001",0x00000000,%SmartCardCardModule%
+
+[AddRegDefault]
+HKLM, %SmartCardName%,"ATR",0x00000001,3b,98,00,40,00,a5,03,01,01,01,ad,13,00
+HKLM, %SmartCardName%,"ATRMask",0x00000001,ff,ff,00,ff,00,ff,ff,ff,ff,ff,ff,ff,00
+HKLM, %SmartCardName%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
+HKLM, %SmartCardName%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
+HKLM, %SmartCardName%,"80000001",0x00000000,%SmartCardCardModule%
+
+[DestinationDirs]
+amd64_CopyFiles=10,system32
+x86_CopyFiles=10,system32
+wow64_CopyFiles=10,syswow64
+
+
+; =================== Generic ==================================
+
+[Strings]
+FEDICT="Fedict"
+MediaDescription="Portugal eID Smart Card Minidriver Installation Disk"
+FedictCardDeviceName="Portugal eID Minidriver for Smart Card"
+SmartCardName="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid"
+SmartCardNameWOW64="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\Pteid"
+SmartCardCardModule="pteidmdrv.dll"

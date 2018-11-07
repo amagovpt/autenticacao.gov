@@ -1,0 +1,43 @@
+This work was packaged for Debian by:
+
+    André Guerreiro <andre.guerreiro@caixamagica.pt> on Tue, 13 Dec 2015 10:32:25 +0000
+    Pedro Fragoso <pedro.fragoso@caixamagica.pt> on Tue, 13 Dec 2011 10:32:25 +0000
+
+
+It was downloaded from:
+
+    <http://svn.gov.pt>
+
+Upstream Author(s):
+
+	Caixa Mágica Software <www.caixamagica.pt>
+
+Copyright:
+
+	Caixa Mágica Software <www.caixamagica.pt>
+
+
+License:
+
+    pteid-mw is free software; you can redistribute it and/or modify it under
+    the terms of the GNU General Public License a published by the Free
+    Software Foundation; either version 2 of the License, or (at your option)
+    any later version.
+
+    CARTAODECIDADAO is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of #MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+    more details.
+
+    You should have received a copy of the GNU General Public License along
+    with Foobar; if not, write to the Free Software #Foundation, Inc., 51
+    Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
+
+
+
+The Debian packaging is:
+
+    Copyright (C) 2010 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
+
+    and is licensed under the GPL version 3,
+    see "/usr/share/common-licenses/GPL-3".

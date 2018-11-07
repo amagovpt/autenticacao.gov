@@ -1,0 +1,425 @@
+pteid-mw (2.4.11svn5339-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 5339 - Disable checking of the address file hash in SOD only if the card was issued in a specific range of dates
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 15 Feb 2018 10:48:55 +0100
+
+pteid-mw (2.4.11svn5334-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 5334 - Disable checking of the address file hash contained and other minor bugfixes 
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 15 Feb 2018 10:48:55 +0100
+
+pteid-mw (2.4.6svn5239-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 5239 - PKCS#1 fixes and new ECRaizEstado Certificate
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 27 Oct 2017 11:32:55 +0100
+pteid-mw (2.4.4svn5176-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 5176 - Public Release supporting new cert chain with 10 year citizen certificates
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 28 Sep 2017 16:37:50 +0100
+
+pteid-mw (2.4.0svn4973-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 4973
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 25 Jul 2017 15:09:50 +0100
+
+pteid-mw (2.4.0svn4672-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 4672
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 27 Apr 2017 15:09:50 +0100
+
+pteid-mw (2.4.0svn4662-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 4662
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 21 Apr 2017 15:09:50 +0100
+
+pteid-mw (2.4.0svn4654-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 4654 - Major improvements
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 20 Apr 2017 12:16:50 +0100
+
+pteid-mw (2.4.0svn4301-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 4301 - Major improvements
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 22 Dec 2016 15:25:59 +0000
+
+pteid-mw (2.3.0svn3890-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 3890
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Wed, 06 Apr 2016 15:56:00 +0100
+
+pteid-mw (2.3.0svn3886-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 3886
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 22 Jan 2016 16:23:18 +0100
+
+pteid-mw (2.3.0svn3788-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 3788
+  * Add new mimetype and SCAP and DSS bundled apps	
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 05 Dec 2014 16:23:18 +0100
+
+pteid-mw (2.3.0svn3716-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 3716
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Wed, 22 Oct 2014 15:54:18 +0100
+
+pteid-mw (2.2.0svn3696-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 3696
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Mon, 29 Sep 2014 15:54:18 +0100
+
+pteid-mw (2.2.0svn3577-1ubuntu5) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 3577
+  * Fix linking issue
+  * Update OpenSSL dep to 1.0.0
+
+ -- agrr <agrr@ag-thinkpad>  Tue, 23 Sep 2014 15:54:18 +0100
+
+pteid-mw (2.1.2svn3412-1) horn; urgency=low
+
+  * Bump to 3412 
+
+ -- user <vasco.silva@caixamagica.pt>  Mon, 09 Sep 2013 11:59:00 +0100
+
+pteid-mw (2.1.2svn3365-1) horn; urgency=low
+
+  * Bump to 3365
+
+ -- Vasco Silva <vasco.silva@caixamagica.pt>  Tue, 16 Apr 2013 22:31:05 +0100
+
+pteid-mw (2.1.2svn3362-1) horn; urgency=low
+
+  * Bump to 3362 
+
+ -- Vasco Silva <vasco.silva@caixamagica.pt>  Tue, 16 Apr 2013 18:36:59 +0100
+
+pteid-mw (2.1.2svn3271-1) horn; urgency=low
+
+  * New SVN snapshot - revision 3271
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 31 Jan 2013 18:43:30 +0000
+
+pteid-mw (2.0.0svn3246-2) horn; urgency=low
+
+  * Remove unneeded files installed from bundled xml-security
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Tue, 15 Jan 2013 10:58:00 +0000
+
+pteid-mw (2.0.0svn3246-1) horn; urgency=low
+
+  * Fix error on signing 2nd PDF files
+
+ -- Vasco Sila <vasco.silva@caixamagica.pt>  Fri, 11 Jan 2013 17:25:32 +0000
+
+pteid-mw (2.0.0svn3236-1) horn; urgency=low
+
+  * Fix pdf signature.
+
+ -- Vasco Silva <vasco.silva@caixamagica.pt>  Thu, 10 Jan 2013 19:09:20 +0000
+
+pteid-mw (2.0.0svn3151-1) horn; urgency=low
+
+  * PDF sign free.
+
+ -- Vasco Silva <vasco.silva@caixamagica.pt>  Thu, 29 Nov 2012 01:08:53 +0000
+
+pteid-mw (2.0.0svn3132-1) horn; urgency=low
+
+  * Bumb to 3132
+
+ -- user <vasco.silva@caixamagica.pt>  Sat, 17 Nov 2012 01:13:50 +0000
+
+pteid-mw (2.0.0svn3070-1) horn; urgency=low
+
+  * Bump to 3070 
+
+ -- Vasco Silva <vasco.silva@caixamagica.pt>  Wed, 31 Oct 2012 00:42:45 +0000
+
+pteid-mw (2.0.0svn3051-1) horn; urgency=low
+
+  * Bump to 3051 
+
+ -- user <vasco.silva@caixamagica.pt>  Fri, 26 Oct 2012 11:38:53 +0100
+
+pteid-mw (2.0.0svn3041-1) horn; urgency=low
+
+  * Version 2.1.0
+  * Sign Pdf native 
+
+ -- Vasco Silva <vasco.silva@caixamagica.pt>  Thu, 25 Oct 2012 16:05:40 +0100
+
+pteid-mw (2.0.0svn3032-1) horn; urgency=low
+
+  * Sign Pdf Natively
+
+ -- Vasco Silva <vasco.silva@caixamagica.pt>  Wed, 24 Oct 2012 01:46:39 +0100
+
+pteid-mw (2.0.0svn2992-1) horn; urgency=low
+
+  * debian/patches/pteidgui-revert-pdf-signature.patch: Remove patch
+
+ -- user <vsilva@caixamagica.pt>  Tue, 11 Sep 2012 19:16:17 +0100
+
+pteid-mw (2.0.0svn2953-2) horn; urgency=low
+
+  * debian/patches/pteidgui-revert-pdf-signature.patch: Remove pdf sign
+    ftm
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Thu, 26 Jul 2012 14:40:07 +0100
+
+pteid-mw (2.0.0svn2953-1) horn; urgency=low
+
+  * Minor release 
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Thu, 26 Jul 2012 12:27:38 +0100
+
+pteid-mw (2.0.0svn2952-1) horn; urgency=low
+
+  * Bump to 2952
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Thu, 26 Jul 2012 11:29:08 +0100
+
+pteid-mw (2.0.0svn2878-1) horn; urgency=low
+
+  * Non-maintainer upload.
+  * 2.0.0svn2878-1 
+
+ -- Vasco Silva <vasco.silva@caixamagica.pt>  Fri, 15 Jun 2012 20:13:55 +0100
+
+pteid-mw (2.0.0svn2797-1) horn; urgency=low
+
+  * Non-maintainer upload.
+  * 2.0.0svn2797-1
+
+ -- Vasco Silva <vasco.silva@caixamagica.pt>  Wed, 16 May 2012 18:17:54 +0100
+
+pteid-mw (2.0.0svn2772-1) horn; urgency=low
+
+  * First Official Release
+  * 2.0.0svn2772-1 
+
+ -- Vasco Silva <vasco.silva@caixamagica.pt>  Wed, 16 May 2012 15:25:44 +0100
+
+pteid-mw (1.0.1svn2738-1) horn; urgency=low
+
+  * Non-maintainer upload.
+  * 1.0.1svn2738-1 
+
+ -- Vasco Silva <vsilva@vsilva-ThinkPad>  Fri, 11 May 2012 19:21:04 +0100
+
+pteid-mw (1.0.1svn2554-1) horn; urgency=low
+
+  * Non-maintainer upload.
+  * 1.0.1svn2554-1 
+
+ -- Vasco Silva <vasco.silva@caixamagica.pt>  Thu, 12 Apr 2012 12:08:44 +0100
+
+pteid-mw (1.0.1svn2552-1) horn; urgency=low
+
+  * Non-maintainer upload.
+  * 1.0.1svn2552-1
+
+ -- Vasco Silva <vasco.silva@caixamagica.pt>  Wed, 11 Apr 2012 00:57:19 +0100
+
+pteid-mw (1.0.1svn2549-1) horn; urgency=low
+
+  * Bump 2549-1 
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Thu, 05 Apr 2012 16:36:52 +0100
+
+pteid-mw (1.0.1svn2460-1) horn; urgency=low
+
+  * Bump
+  * 1.0.1svn2460-1
+
+ -- Vasco Silva <vsilva@vsilva-ThinkPad>  Fri, 30 Mar 2012 18:57:36 +0100
+
+pteid-mw (1.0.1svn2281-1) horn; urgency=low
+
+  * Bump
+  * Non-maintainer upload.
+
+ -- Vasco Silva <vsilva@vsilva-ThinkPad>  Wed, 14 Mar 2012 11:39:28 +0000
+
+pteid-mw (1.0.1svn2198-1ubuntu1) horn; urgency=low
+
+  * Bump
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Thu, 08 Mar 2012 12:24:31 +0000
+
+pteid-mw (1.0.1svn2145-1) horn; urgency=low
+
+  * Bump release
+  * soname stable change
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Wed, 07 Mar 2012 14:39:54 +0000
+
+pteid-mw (1.0.1svn1843-1) horn; urgency=low
+
+  * Bump to 1843 
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Mon, 20 Feb 2012 11:05:14 +0000
+
+pteid-mw (1.0.1svn1764-1) horn; urgency=low
+
+  * Bump to 1764 
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Wed, 15 Feb 2012 15:00:21 +0000
+
+pteid-mw (1.0.1svn1706-1) horn; urgency=low
+
+  * Bump to 1706 
+  * debian/rules: Remove configure on xml-security
+  * debian/control: B-d libusb-dev flex
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Fri, 10 Feb 2012 13:39:09 +0000
+
+pteid-mw (1.0.1svn1605-1) horn; urgency=low
+
+  * Bump to 1605
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Wed, 01 Feb 2012 17:32:32 +0000
+
+pteid-mw (1.0.1svn1601-1) horn; urgency=low
+
+  * Bump to 1600
+  * Dep on qt4-network 
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Wed, 01 Feb 2012 12:01:24 +0000
+
+pteid-mw (1.0.1svn1591-1) horn; urgency=low
+
+  * Bump to 1591 
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Tue, 31 Jan 2012 15:35:38 +0000
+
+pteid-mw (1.0.1svn1584-2) horn; urgency=low
+
+  * Fix so files 
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Tue, 31 Jan 2012 13:53:26 +0000
+
+pteid-mw (1.0.1svn1584-1) horn; urgency=low
+
+  * Bum to 1584 
+  * Split extensions in packages
+  * Dep on curl
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Tue, 31 Jan 2012 12:09:50 +0000
+
+pteid-mw (1.0.1svn1571-1) horn; urgency=low
+
+  * Bump to 1570
+  * debian/patches/fix_tmp_ftfbs.patch: Removed, patch upstream
+  * B-d on curl
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Mon, 30 Jan 2012 10:47:58 +0000
+
+pteid-mw (1.0.1svn1522-1) horn; urgency=low
+
+  * Build with 1522
+  * Install the xpi files
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Tue, 24 Jan 2012 11:18:51 +0000
+
+pteid-mw (1.0.1svn1477-1) horn; urgency=low
+
+  * Build with 1477
+  * Override shlibs
+  * Build-dep on xerces3
+  * Postinst reload udev rules
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Tue, 17 Jan 2012 14:11:54 +0000
+
+pteid-mw (1.0.1svn1431-2) horn; urgency=low
+
+  * debian/patches/use_system_png.patch: temp fix for CM16
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Tue, 10 Jan 2012 16:40:10 +0000
+
+pteid-mw (1.0.1svn1431-1) horn; urgency=low
+
+  * Build with svn 1431
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Tue, 10 Jan 2012 15:22:55 +0000
+
+pteid-mw (1.0.1svn1389-1) horn; urgency=low
+
+  * Build with svn 1389
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Mon, 09 Jan 2012 15:59:47 +0000
+
+pteid-mw (1.0.1svn1347-1) horn; urgency=low
+
+  * Add Libcairo2-dev to build deps
+  * Build with svn 1347 revision 
+
+ -- Vasco Silva <vsilva@vsilva-ThinkPad>  Thu, 05 Jan 2012 14:56:02 +0000
+
+pteid-mw (1.0.1svn1345-1) horn; urgency=low
+
+  * Build with svn 1345 revision
+
+ -- Vasco Silva <vsilva@vsilva-ThinkPad>  Thu, 05 Jan 2012 12:33:15 +0000
+
+pteid-mw (1.0.1svn1299-1xcm1) horn; urgency=low
+
+  * Build with svn 1293 revision
+
+ -- Luis Medinas <luis.medinas@caixamagica.pt>  Fri, 30 Dec 2011 17:35:33 +0000
+
+pteid-mw (1.0.1svn1293-1) horn; urgency=low
+
+  * Build with svn 1293 revision
+
+ -- Vasco Silva <vsilva@vsilva-ThinkPad>  Fri, 30 Dec 2011 16:00:07 +0000
+
+pteid-mw (1.0.1svn1262-1) horn; urgency=low
+
+  * Build with svn 1262 revision
+
+ -- Vasco Silva <vsilva@vsilva-ThinkPad>  Fri, 30 Dec 2011 02:12:36 +0000
+
+pteid-mw (1.0.1svn1203-1) horn; urgency=low
+
+  * Build with svn 1203 revision
+
+ -- Vasco Silva <vsilva@vsilva-ThinkPad>  Thu, 29 Dec 2011 01:28:42 +0000
+
+pteid-mw (1.0.1svn1083-1) horn; urgency=low
+
+  * Build with svn 1083 revision
+
+ -- Vasco Silva <vsilva@vsilva-ThinkPad>  Fri, 23 Dec 2011 15:45:04 +0000
+
+pteid-mw (1.0.1svn1015-3) oneiric; urgency=low
+
+  * Add jar file 
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Thu, 22 Dec 2011 17:31:59 +0000
+
+pteid-mw (1.0.1svn1015-2) oneiric; urgency=low
+
+  * Rewrote rules, and install desktop file
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Thu, 22 Dec 2011 14:36:05 +0000
+
+pteid-mw (1.0.1svn1015-1) oneiric; urgency=low
+
+  * Initial release. (Closes: #XXXXXX)
+
+ -- Pedro Fragoso <pedro.fragoso@caixamagica.pt>  Tue, 13 Dec 2011 12:40:23 +0000

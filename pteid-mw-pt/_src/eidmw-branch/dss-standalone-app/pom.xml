@@ -1,0 +1,211 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+		<groupId>eu.europa.ec.joinup.sd-dss</groupId>
+		<artifactId>app-dss</artifactId>
+		<version>3.0.3</version>
+    <relativePath>../..</relativePath>
+	</parent>
+
+	<name>Standalone Application</name>
+  <description>Demo: Standalone Application Version 2</description>
+  <artifactId>dss-standalone-app</artifactId>
+
+  <packaging>jar</packaging>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <!-- Do not run UI tests in the maven test phase -->
+                        <exclude>**/main/*</exclude>
+                    </excludes>
+
+                </configuration>
+	</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-dependencies</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<excludeArtifactIds>xercesImpl,xalan</excludeArtifactIds>
+							<excludes>META-INF/**/*,javax/servlet/**/*,junit/**/*,org/apache/log4j/**/*,org/junit/**/*,org/springframework/**/*</excludes>
+					<!-- For OSX build we need to exclude the eawt stub classes because the JDK provides the real ones 
+					<excludes>META-INF/**/*,javax/servlet/**/*,junit/**/*,com/apple/eawt/**/*,org/apache/log4j/**/*,org/junit/**/*,org/springframework/**/*</excludes> -->
+							<includes>**/*</includes>
+							<outputDirectory>${project.build.directory}/classes</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+	<plugin> 
+		<groupId>org.apache.maven.plugins</groupId> 
+		<artifactId>maven-resources-plugin</artifactId> 
+		<configuration> 
+			<encoding>UTF-8</encoding> 
+		</configuration> 
+	</plugin> 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>eu.europa.ec.markt.dss.commons.swing.mvc.applet.ApplicationCore</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+<plugin>
+    <groupId>org.bluestemsoftware.open.maven.plugin</groupId>
+    <artifactId>launch4j-plugin</artifactId>
+    <version>1.5.0.0</version>
+    <executions>
+	<execution>
+            <id>l4j-gui</id>
+            <phase>package</phase>
+            <goals>
+                <goal>launch4j</goal>
+            </goals>
+            <configuration>
+                <headerType>gui</headerType>
+                <outfile>target/dss-standalone.exe</outfile>
+                <jar>target/${artifactId}-${version}.jar</jar>
+                <errTitle>App Err</errTitle>
+                <classPath>
+                    <mainClass>eu.europa.ec.markt.dss.commons.swing.mvc.applet.ApplicationCore</mainClass>
+                </classPath>
+                <icon>src/main/resources/pteid.ico</icon>
+                <jre>
+                    <minVersion>1.6.0</minVersion>
+                    <initialHeapSize>128</initialHeapSize>
+                    <maxHeapSize>1024</maxHeapSize>
+                </jre>
+                <versionInfo>
+                    <fileVersion>1.0.0.0</fileVersion>
+                    <txtFileVersion>1.0.0.0</txtFileVersion>
+                    <fileDescription>DSS - Signature Validation</fileDescription>
+                    <copyright>Copyright (C) 2014</copyright>
+                    <productVersion>1.0.0.0</productVersion>
+                    <txtProductVersion>1.0.0.0</txtProductVersion>
+                    <productName>Pteid - DSS validation</productName>
+                    <internalName>DSS</internalName>
+                    <originalFilename>dss-standalone.exe</originalFilename>
+                </versionInfo>
+            </configuration>
+        </execution> 
+	</executions>
+</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/bin.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+	</plugins>
+	</build>
+
+  <dependencies>
+		<dependency>
+			<groupId>eu.europa.ec.joinup.sd-dss</groupId>
+			<artifactId>dss-report</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>eu.europa.ec.joinup.sd-dss</groupId>
+			<artifactId>dss-document</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>eu.europa.ec.joinup.sd-dss</groupId>
+			<artifactId>dss-demo-remoting-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jgoodies</groupId>
+			<artifactId>jgoodies-forms</artifactId>
+		</dependency>
+
+		<dependency>
+  			<groupId>com.yuvimasory</groupId>
+  			<artifactId>orange-extensions</artifactId>
+  			<version>1.3.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.jgoodies</groupId>
+			<artifactId>jgoodies-binding</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-pdf</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.lowagie</groupId>
+                    <artifactId>itext</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+    </dependency>
+      <dependency>
+          <groupId>org.easytesting</groupId>
+          <artifactId>fest-swing-junit</artifactId>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>eu.europa.ec.joinup.sd-dss</groupId>
+          <artifactId>dss-test-support</artifactId>
+          <scope>test</scope>
+      </dependency>
+  </dependencies>
+</project>

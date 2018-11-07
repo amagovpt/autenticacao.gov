@@ -1,0 +1,398 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="poppler\Annot.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Array.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\BuiltinFont.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\BuiltinFontTables.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\CachedFile.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Catalog.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\DateInfo.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Decrypt.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Dict.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Error.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\FileSpec.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="goo\FixedPoint.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\FontEncodingTables.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Form.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="goo\gfile.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="goo\gmem.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="goo\gmempp.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="goo\GooHash.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="goo\GooList.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="goo\GooString.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="goo\GooTimer.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="goo\gstrtod.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Hints.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Iconv.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="goo\ImgWriter.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\JArithmeticDecoder.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\JBIG2Stream.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="goo\JpegWriter.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\JPXStream.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Lexer.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Linearization.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Link.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\LocalPDFDocBuilder.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\memmem.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Movie.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Myriad-Font.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\NameToCharCode.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Object.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\OptionalContent.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Outline.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Page.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\PageLabelInfo.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\PageTransition.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Parser.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\PDFDoc.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\PDFDocEncoding.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\PDFDocFactory.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="goo\PNGWriter.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\PopplerCache.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\ProfileData.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\PSTokenizer.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Rendition.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\SecurityHandler.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Sound.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\StdinCachedFile.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\StdinPDFDocBuilder.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\Stream.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="goo\TiffWriter.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\ViewerPreferences.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\win_iconv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\XpdfPluginAPI.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="poppler\XRef.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="poppler\Annot.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Array.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\BuiltinFontTables.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\CachedFile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Catalog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\DateInfo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Decrypt.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Dict.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Error.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\FileSpec.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\FixedPoint.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Form.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\gfile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\gmem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\GooHash.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\GooLikely.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\GooList.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\GooMutex.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\GooString.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\GooTimer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\gstrtod.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\gtypes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\gtypes_p.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Hints.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\ImgWriter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\JArithmeticDecoder.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\JBIG2Stream.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\JpegWriter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\JPXStream.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Lexer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Linearization.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Link.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\LocalPDFDocBuilder.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Movie.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Myriad-Font.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\NameToCharCode.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Object.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\OptionalContent.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Outline.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Page.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\PageLabelInfo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\PageTransition.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Parser.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\PDFDoc.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\PDFDocEncoding.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\PDFDocFactory.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\PNGWriter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\PopplerCache.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\ProfileData.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\PSTokenizer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Rendition.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\SecurityHandler.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Sound.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\StdinCachedFile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\StdinPDFDocBuilder.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\Stream.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goo\TiffWriter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\ViewerPreferences.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\win_iconv.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\XpdfPluginAPI.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\XRef.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="pteid-poppler.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

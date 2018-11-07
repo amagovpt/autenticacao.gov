@@ -1,0 +1,14 @@
+[Desktop Entry]
+Comment=See and change information on your Portuguese eID Card
+Comment[pt]=Veja e altere informações no seu Cartão de Cidadão
+Encoding=UTF-8
+Exec=pteidgui
+GenericName=Portuguese eID Data
+GenericName[pt]=Dados do Cartão de Cidadão
+Icon=pteid-scalable
+Name=Portugal eID Gui
+Name[pt]=Cartão de Cidadão
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Office;

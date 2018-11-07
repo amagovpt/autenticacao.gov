@@ -1,0 +1,545 @@
+#!/usr/bin/perl -w
+
+#############################################################
+# Configuration script for pteid Middleware	            #
+#							    #
+# This script is supposed to:				    #
+#  							    #
+#  - read the arguments passed by the user		    #
+#							    #
+#  - check the dependencies:				    #
+#  	-- pcsclite library and header			    #
+#  							    #
+#  - run qmake with the given arguments in order	    #
+#  	to generate the Makefiles 			    #
+#############################################################
+
+use strict;
+
+my $verbose = 2;
+my $pro_file = "eidmw.pro";
+
+
+if (!-e $pro_file)
+{
+	print STDERR "[Error] project file eidmw.pro not found\n\n";
+	exit -1;
+}
+
+#############################################################
+# check if it is a local build. If not get the SVN revision nr
+#############################################################
+if (!-e "local.cfg")
+{
+	if (-e "./getsvnrevision.pl")
+	{	
+		system("./getsvnrevision.pl");
+	}
+}
+
+my @full_distribution;
+my $distro;
+my $distribution_version;
+
+if ($^O =~ m/linux/)
+{
+	if (-e "/etc/fedora-release")
+	{
+		@full_distribution    = split(/ /,`cat /etc/fedora-release`);
+		$distribution_version = $full_distribution[2];
+		$distro 	      = "fedora";
+	}
+	elsif (-e "/etc/SuSE-release")
+	{
+		@full_distribution    = split(/ /,`cat /etc/SuSE-release`);
+		$distribution_version = $full_distribution[1];
+		$distro 	      = "suse";
+	}
+	elsif (-e "/etc/debian_version")
+	{
+		my $tmp = `cat /etc/debian_version`;
+		chomp($tmp);	
+		$distribution_version = "etch";
+		$distro 	      = "debian";
+	}
+	elsif (-e "/etc/gentoo-release")
+	{
+		# TODO : set correct version
+		$distribution_version = "2008.0";
+		$distro 	      = "gentoo";
+	}
+	else
+	{
+		## the --include and --lib must be set by the user
+	}
+}
+#############################################################
+## the elements of the options hash are pairs
+## of options-attributes. The attributes are
+## array with the following elements:
+##
+## [0] : description of the option
+## [1] : flag which specifies if the option is used with the
+##        += assignment, i.e. to add more than one path (optional)
+##        At the beginning this flag is true if the option *can*
+##        be used with +=. Later it is filled with the user's choice.
+## [2] : the value of the option (optional, i.e. "--help" does not
+##        need any value
+## [3] : the qmake variable associated with this option
+#############################################################
+
+my %options;
+$options{"--prefix"} = ["destination directory for the binaries",
+			1,
+			"/usr/local",
+			"PREFIX_DIR"];
+$options{"--include"} = ["include path",
+			 1,
+			 "/usr/include/PCSC /usr/include/i386-linux-gnu/qt5 /usr/include/x86_64-linux-gnu/qt5/",
+			 "INCLUDEPATH"];
+
+#############################################################
+## determine where java is installed 
+#############################################################
+
+my $java_dir  = `which java`;
+chomp($java_dir);
+if ("" eq $java_dir) {die "java not found, please adjust path: export PATH=<path_to_java>:\$PATH\n"};
+
+#############################################################
+## determine the version of java and check if it is higher or equal
+## than the version we need
+#############################################################
+
+my $javaVerX = 1;
+my $javaVerY = 4;
+my $javaVerZ = 2;
+my $javaVerI = 10000 * $javaVerX + 100 * $javaVerY + $javaVerZ;
+
+my $javaVer = `java -version 2>&1`;	# get the version nr from STDERR
+#my $javaVer = `java -version`;
+chomp($javaVer);
+
+# get the version nr from the version string
+$javaVer =~ m/([0-9]+)\.([0-9]+)\.([0-9]+)/;
+my $javaVerXX = $1;
+my $javaVerYY = $2;
+my $javaVerZZ = $3;
+my $javaVerII = 10000 * $javaVerXX + 100 * $javaVerYY + $javaVerZZ;
+ 
+#check the version nr against the minimum version nr
+if ($javaVerII < $javaVerI)
+{
+	print STDOUT "Java version ($javaVerXX.$javaVerYY.$javaVerZZ) must higher than $javaVerX.$javaVerY.$javaVerZ\n";
+	exit -1;
+}
+
+#############################################################
+## determine where javac is installed 
+## derive the include path from the bin path
+#############################################################
+my $javac_link;
+if($distro eq "gentoo")
+{
+	$javac_link = "/etc/java-config-2/current-system-vm/bin/javac";
+}
+else
+{
+	$javac_link = `which javac`;
+}
+
+chomp($javac_link);
+
+if($javac_link eq "") {die "java not found, please adjust PATH: export PATH=<path_to_javac>:\$PATH\n"};
+my $javac_dir;
+if ( $^O =~ m/linux/ ) 
+{
+	$javac_dir = `readlink -f $javac_link`;
+}
+else 
+{
+	$javac_dir = `readlink $javac_link`;
+}
+chomp($javac_dir);
+
+$javac_dir =~ m/^(\/.+)\/javac/ or die "javac not found, please adjust path: export PATH=<path_to_javac>:\$PATH\n";
+
+my $javac_include = $1 . "/../include";
+my $javac_include2 = $1 . "/../include/linux";
+
+my $new_include = $options{"--include"}->[2] . " " . $javac_include . " " . $javac_include2;
+$options{"--include"}->[2] = $new_include;
+
+#############################################################
+## check if java and javac are in the same directory
+#############################################################
+$java_dir =~ m/^(\/.+)\/java/;
+my $java_path = $1;
+
+$javac_dir =~ m/^(\/.+)\/javac/;
+my $javac_path = $1;
+
+if($javac_path ne $java_path)
+{
+	print STDOUT "Warning: path to javac is different from path to java\n";
+	print STDOUT "Warning: it is assumed that javac version corresponds to the java version\n";
+}
+
+#############################################################
+## other path for Mac for the default include path
+#############################################################
+$options{"--include"}->[2] = "/System/Library/Frameworks/PCSC.framework/Versions/A/Headers/ /Library/Frameworks/QtCore.framework/Versions/Current/Headers/ /Library/Frameworks/QtGui.framework/Versions/Current/Headers/ /Library/Frameworks/QtNetwork.framework/Versions/Current/Headers/"
+  unless($^O =~ m/linux/);
+
+$options{"--lib"} = ["library path",
+		     1,
+		     "-L/usr/lib/xerces-c-2.7.0 -L/usr/lib ",
+		     "LIBS"
+                    ];
+
+#############################################################
+## other path for Mac for the default lib path
+#############################################################
+$options{"--lib"}->[2] = "-L/System/Library/Frameworks/PCSC.framework/ -L/Library/Frameworks/QtGui.framework/" unless($^O =~ m/linux/);
+
+
+$options{"--path"} = ["paths for the search of dependencies, separated by white space",
+		     1,
+		     join(" ", split(/:/,$ENV{"PATH"}) ),
+		     "BINARIES"];
+
+$options{"--help"} = ["this help",
+		      0];
+$options{"-h"} = ["this help",
+		      0];
+$options{"--silent"} = ["do not give messages about the dependency checking",
+		      0];
+
+#############################################################
+## options which configure should accept according to 
+## http://www.gnu.org/prep/standards/html_node/Configuration.html
+## but are not meaningful for this package
+#############################################################
+$options{"--build"}    = ["ignored"];
+$options{"--host"}     = ["ignored"];
+$options{"--enable-*"} = ["ignored"];
+$options{"--with-*"}   = ["ignored"];
+
+#############################################################
+## The elements of the dependencies hash are pairs of
+## objects-attributes values, were the objects are entities
+## for which we have to check the presence and location. The
+## attributes are arrays with the following elements:
+##
+## [0] : option to check for the expected location
+## [1] : error message in case the dependency 
+##        is not satisfied
+##
+#############################################################
+my %dependencies;
+$dependencies{"pcsclite.h"} = ["--include",
+			       "could not find %s in: %s\nPlease specify the location " .
+			       "of the file with the option %s\n\n"];
+
+my $pcscliteName = "libpcsclite.so";
+$pcscliteName = "PCSC" unless($^O =~ m/linux/);
+
+$dependencies{$pcscliteName} = ["--lib",
+				"could not find %s in: %s\nPlease specify the location " .
+				"of the library with the option %s\n\n"];
+#############################################################
+## qt5
+#############################################################
+#$dependencies{"qglobal.h"} =  ["--include",
+#			       "could not find %s in: %s\nPlease specify the location " .
+#			       "of the file with the option %s\n\n"];
+
+
+#############################################################
+## qt5-devel
+#############################################################
+my $QtName = "libQt5Gui.so";
+$QtName = "QtGui" unless($^O =~ m/linux/);
+$dependencies{"$QtName"} = ["--lib",
+				"could not find %s in: %s\nPlease specify the location " .
+				"of the library with the option %s\n\n"];
+
+#############################################################
+## qmake
+#############################################################
+$dependencies{"qmake"} = ["--path",
+			"could not find %s in: %s\nPlease specify the location " .
+			"of the library with the option %s\n\n"];
+
+#############################################################
+## gcc
+#############################################################
+$dependencies{"gcc"} = ["--path",
+			"could not find %s in: %s\nPlease specify the location " .
+			"of the library with the option %s\n\n"];
+
+#############################################################
+## g++
+#############################################################
+$dependencies{"g++"} = ["--path",
+			"could not find %s in: %s\nPlease specify the location " .
+			"of the library with the option %s\n\n"];
+
+#############################################################
+##
+## parse the command-line arguments, which have to be of the form --arg=value
+##
+#############################################################
+&parseArguments() if(@ARGV>0);
+
+#############################################################
+##
+## Check QT versions
+##
+#############################################################
+my $QtVerX = 5;
+my $QtVerY = 0;
+my $QtVerZ = 0;
+my $qmakeVerI = 10000 * $QtVerX + 100 * $QtVerY + $QtVerZ;
+
+my $qmakeVer = `qmake -qt=5 -v`;
+my $qmakeCmd = "qmake -qt=5";
+eval {
+	print "trying qmake...";
+	$qmakeVer = `qmake -qt=5 -v`;
+};
+
+# get the version nr from the version string
+$qmakeVer =~ m/([0-9])\.([0-9]+)\.([0-9]+)/;
+my $qmakeVerXX = $1;
+my $qmakeVerYY = $2;
+my $qmakeVerZZ = $3;
+my $qmakeVerII = 10000 * $qmakeVerXX + 100 * $qmakeVerYY + $qmakeVerZZ;
+
+#check the version nr against the minimum version nr
+if ($qmakeVerII < $qmakeVerI)
+{
+	print STDOUT "qmake version ($qmakeVerXX.$qmakeVerYY.$qmakeVerZZ) must higher than $QtVerX.$QtVerY.$QtVerZ\n";
+	exit -1;
+}
+
+
+#############################################################
+##
+## check dependencies
+##
+#############################################################
+
+&checkDependencies();
+
+#############################################################
+## if all dependencies are satisfied, call qmake
+#############################################################
+my $qmakeOptions = "";
+foreach(keys %options)
+{
+  ## do we have a qmake variable associated with this option?
+  if( @{ $options{$_} } > 3)
+  {
+    $qmakeOptions .= "\"". $options{$_}->[3] ;
+    if($options{$_}->[1] == 1)
+    {
+       $qmakeOptions .= " += ";
+    }
+    else 
+    {
+       $qmakeOptions .= " = ";
+    }
+    $qmakeOptions .=  $options{$_}->[2]. "\" ";
+  }
+}
+
+if ($^O =~ m/linux/)
+{
+}
+else
+{
+	## Mac qmake fix: for a release build you have to add "CONFIG -= debug",
+	## otherwise the version numbers will be _after_ the ".dylib"
+
+	my $configOptionIdx=rindex($qmakeOptions, "CONFIG");
+	my $configOptionIdxEnd=rindex($qmakeOptions, "release");
+
+	if ($configOptionIdxEnd != -1)
+	{
+	    $configOptionIdxEnd = $configOptionIdxEnd + 7;
+	    my $rest1 = substr($qmakeOptions,0,$configOptionIdx-1);
+	    my $rest2 = substr($qmakeOptions,$configOptionIdxEnd+1,length($qmakeOptions)-$configOptionIdxEnd);
+
+	    $qmakeOptions = $rest1 . $rest2;
+	    #substr($qmakeOptions,$configOptionIdx,($configOptionIdxEnd-$configOptionIdx))="";
+	    $qmakeOptions .= "\"CONFIG-=debug\"";
+	}
+	$qmakeOptions .= " -spec macx-g++42";
+}
+
+
+#print STDERR $qmakeOptions;
+
+#############################################################
+## call qmake
+#############################################################
+print STDERR "$qmakeCmd $qmakeOptions\n" if($verbose > 1);
+
+system("export PATH=\"" . join(":",split( /\s+/,$options{"--path"}->[2]) ) .":\$PATH\"; ".
+       " [ -e Makefile ] && make distclean &> /dev/null ; $qmakeCmd $pro_file $qmakeOptions ");
+
+#############################################################
+## TODO
+## write out the options used in config.status
+#############################################################
+&writeConfigStatus();
+exit;
+
+##--------------------------------------------------------------------
+## Helper functions
+##--------------------------------------------------------------------
+
+sub parseArguments()
+{
+  for(my $index = 0; $index<@ARGV; ++$index)
+  {
+
+    ## check if we have an argument of the form VARIABLE=value
+    if ( $ARGV[$index] =~ m/^([^-+]+)(\+?=)(.*)/) 
+    {
+      $options{"$1"} = ["variable $1",
+		      $2 eq "+=",
+		      "$3",
+		      "$1"];
+    }
+    else
+    {
+      $ARGV[$index] =~ m/(-+[^\s=+]+)/;
+      my $option = $1;
+
+      ## ignore --with-* and --enable-*
+      next if ( $option =~ m/^--(with|enable)-/ );
+
+      if (defined $options{$option}) 
+      {
+	    &printHelp() if($option eq "--help" || $option eq "-h");
+	    $verbose = 0 if($option eq "--silent");
+
+		if ( @{ $options{$option} } > 2 ) 
+		{
+		  ## parse the value if this option accepts it
+		  $ARGV[$index] =~ m/$option([=+]+)(.*)/;
+
+		  my ($assignment,$value) = ($1,$2);
+
+		  if ($assignment eq "=") 
+		  {
+			## replace the original value with the current one
+			$options{$option}->[2] = $value;
+			#$options{$option}->[1] = 0;
+
+		  } 
+		  elsif ($assignment eq "+=" && $options{$option}->[1] == 1) 
+		  {
+			## add the value to the existing list
+			##$options{$option}->[2] .= " " . $value;
+			$options{$option}->[2] = $value . " " . $options{$option}->[2];
+			$options{$option}->[1] = 1;
+		  }
+		  else
+		  {
+			print STDERR "syntax error in assignment: $option$assignment$value\n\n";
+			print STDERR "oops: $options{$option}->[1]\n"
+		  }
+	    }
+      }
+      else
+      {
+	print STDERR "$1 is an invalid option!\n";
+	&printHelp();
+      }
+    }
+  }
+}
+
+
+##--------------------------------------------------------------------
+
+sub checkDependencies()
+{
+  foreach(keys %dependencies)
+  {
+    print STDERR "checking $_ .." if($verbose > 0);
+    my $fileFound = 0;
+    my $relatedOption = $dependencies{$_}->[0];
+
+    if (defined $options{$relatedOption}->[2]) 
+    {
+      my @possiblePaths = split(/\s+/, $options{$relatedOption}->[2]);
+      for (my $index = 0; $index < @possiblePaths; ++$index) 
+      {
+
+		## remove the "-L" part in front of the directory name
+		$possiblePaths[$index] =~ s/^-L//;
+		my $fileToFind = $possiblePaths[$index] ."/". $_;
+		++$fileFound if ( -e $fileToFind || -l $fileToFind );
+      }
+      unless($fileFound > 0)
+      {
+		printf STDERR "\n$dependencies{$_}->[1]",
+					  $_,join(", ",@possiblePaths),$relatedOption;
+		exit;
+      }
+      print STDERR " .. OK\n" if($verbose > 0);
+
+    } 
+    else 
+    {
+      ## we counted on the wronf option and now we are doomed
+      print STDERR "Internal error: option $relatedOption does not have a path to search!\n";
+      exit;
+    }
+  }
+}
+
+##--------------------------------------------------------------------
+
+sub printHelp()
+{
+  print STDERR "\n";
+  print STDERR "Usage:\n  $0 --option[=<value>]\n  $0 --option[+=<value>]\n\n";
+  print STDERR "Allowed options are:\n\n";
+  foreach(keys %options)
+  {
+
+    ## print the description of the option
+    printf STDERR "  %-12s: $options{$_}->[0]\n",$_;
+
+    ## print the info about the flag
+    printf STDERR "%-16scan be used with += and = \n",""
+      if( @{ $options{$_} } > 1 && $options{$_}->[1] == 1);
+
+    ## print the default value if there is one
+    printf STDERR "%-16s(default = \"$options{$_}->[2]\")\n",""
+      if( @{ $options{$_} } > 2);
+    printf("\n");
+  }
+  exit;
+}
+
+##--------------------------------------------------------------------
+sub writeConfigStatus()
+{
+  open CONFIGSTATUS, "> config.status" or die "[Error] Could not open config.status\n";
+  print CONFIGSTATUS "./configure ";
+  for(my $index = 0; $index<@ARGV; ++$index)
+  {
+    print CONFIGSTATUS $ARGV[$index]." ";
+  }
+  print CONFIGSTATUS "\n";
+  close CONFIGSTATUS;
+  my $cmd;
+  $cmd = "chmod +x config.status";
+  system($cmd);
+}

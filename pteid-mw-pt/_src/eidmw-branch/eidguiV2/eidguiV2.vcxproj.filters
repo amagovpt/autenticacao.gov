@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="proxyinfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="filesavedialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gapi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+	<ClCompile Include="appcontroller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ErrorConn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pdfsignatureclient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scapcompanies.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scapsignature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdsoap2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+	<ClCompile Include="totp_gen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="certificates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="singleapplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_gapi.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_filesavedialog.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_singleapplication.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_singleapplication_p.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SCAP-services-v3\SCAPAttributeSupplierBindingProxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SCAP-services-v3\SCAPC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SCAP-services-v3\SCAPSignatureServiceSoapBindingProxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+	<ClCompile Include="SCAP-services-v3\SCAPAuthorizationServiceSoapBindingProxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="debug\qrc_resources.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\qrc_resources.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scripts\Constants.js">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="fonts\karma\Karma-Medium.ttf">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="fonts\lato\Lato-Regular.ttf">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="MainForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="MainMenuModel.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardAdress.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardAdressForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardIdentify.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardIdentifyForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardNotes.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardNotesForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardOtherData.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\card\PageCardOtherDataForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\help\PageHelpAbout.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\help\PageHelpAboutForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\help\PageHelpDocOnline.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\help\PageHelpDocOnlineForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\home\PageHome.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\home\PageHomeForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="PageLoader.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="SubMenuModel.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="main.cpp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="main.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <CustomBuild Include="resources.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <None Include="components\Accordion.qml" />
+    <None Include="components\Button.qml" />
+    <None Include="images\dummy\CCdemo.png" />
+    <None Include="images\dummy\CCdemo_custom.png" />
+    <None Include="components\CardRowTop.qml" />
+    <None Include="components\FrameWindow.qml" />
+    <None Include="components\LabelTextBox.qml" />
+    <None Include="components\LabelTextBoxForm.ui.qml" />
+    <None Include="MainMenuBottomModel.qml" />
+    <None Include="components\PDFPreview.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsApp.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsAppForm.ui.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsSignature.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsSignatureForm.ui.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsUpdates.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsUpdatesForm.ui.qml" />
+    <None Include="contentPages\security\PageSecurityCertificates.qml" />
+    <None Include="contentPages\security\PageSecurityCertificatesForm.ui.qml" />
+    <None Include="contentPages\security\PageSecurityPinCodes.qml" />
+    <None Include="contentPages\security\PageSecurityPinCodesForm.ui.qml" />
+    <None Include="contentPages\services\PageServicesSignAdvanced.qml" />
+    <None Include="contentPages\services\PageServicesSignAdvancedForm.ui.qml" />
+    <None Include="contentPages\services\PageServicesSignSimple.qml" />
+    <None Include="contentPages\services\PageServicesSignSimpleForm.ui.qml" />
+    <None Include="images\dummy\Pdfdemo.png" />
+    <None Include="contentPages\security\PinCodesModel.qml" />
+    <None Include="components\ScrollBar.qml" />
+    <None Include="components\TextBullet.qml" />
+    <None Include="components\TitleBar.qml" />
+    <None Include="images\arrow-right_AMA.png" />
+    <None Include="images\arrow-right_hover.png" />
+    <None Include="images\arrow-right_white_AMA.png" />
+    <None Include="images\definitions_icon.png" />
+    <None Include="images\definitions_icon_selected.png" />
+    <None Include="favicon.ico" />
+    <None Include="images\help_icon.png" />
+    <None Include="images\help_icon_selected.png" />
+    <None Include="images\icons-move.png" />
+    <None Include="images\logo_CC.png" />
+    <None Include="images\logo_autenticacao_gov.png" />
+    <None Include="images\logo_autenticacao_gov100.png" />
+    <None Include="images\logo_compete2020.png" />
+    <None Include="images\titleBar\maximize.png" />
+    <None Include="images\titleBar\maximize_hover.png" />
+    <None Include="images\titleBar\minimize.png" />
+    <None Include="images\titleBar\minimize_hover.png" />
+    <None Include="images\dummy\photo.png" />
+    <None Include="images\pteid_signature_watermark.jpg" />
+    <None Include="qtquickcontrols2.conf" />
+    <None Include="images\titleBar\quit.png" />
+    <None Include="images\titleBar\quit_hover.png" />
+    <None Include="images\remove_file.png" />
+    <None Include="images\remove_file_hover.png" />
+    <None Include="images\tooltip_grey.png" />
+    <None Include="contentPages\card\PageCardPrint.qml" />
+    <None Include="contentPages\card\PageCardPrintForm.ui.qml" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="gapi.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filesavedialog.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="appcontroller.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="singleapplication_p.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="singleapplication.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="eidguiV2.rc" />
+  </ItemGroup>
+</Project>

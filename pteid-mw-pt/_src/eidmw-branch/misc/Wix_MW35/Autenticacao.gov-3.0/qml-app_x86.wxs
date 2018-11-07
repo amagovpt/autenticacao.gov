@@ -1,0 +1,1742 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?define var.QMLDIR=..\..\..\_Binaries35\Win32\VC9\Release\qml-app\ ?>
+  <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\VC9\Release\ ?>
+    <Fragment>
+        <DirectoryRef Id="ProgramFilesFolder">
+            <Directory Id="EIDGUIV2DIR" Name="Portugal Identity Card"/>
+        </DirectoryRef>
+			<DirectoryRef Id="ApplicationProgramsFolder">
+			<Component Id="PteidGuiShortcut" Guid="{CBD0F388-EAE5-4FA1-8C38-EC223928FF13}">
+          
+			<Shortcut Id="eidguiV2StartMenuShortcut"
+							  Name="Autenticação.gov"
+							  Description="!(loc.PteidGuiDescr)"
+							  Target="[EIDGUIV2DIR]pteidguiV2.exe"
+							  WorkingDirectory="eidguiV2Dir"/>
+
+			<Shortcut Id="eidguiV2Shortcut"
+                Name="Autenticação.Gov"
+                Directory="DesktopFolder"
+                Description="!(loc.PteidGuiDescr)"
+                Target="[EIDGUIV2DIR]pteidguiV2.exe"
+                WorkingDirectory="EIDGUIV2DIR"/>
+          
+					<RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+					<RegistryValue Root="HKCU" Key="SOFTWARE\PTEID\Installer" Name="GuiShortcut" Type="integer" Value="1" KeyPath="yes" />
+				</Component>
+				
+		    <Component Id="RegisterPteidAutoStart" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA6}">
+          <RegistryKey Root="HKCU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
+            <RegistryValue Type="string" Name="pteid" Value="&quot;[EIDGUIV2DIR]pteidguiV2.exe&quot;"/>
+          </RegistryKey>
+        </Component>
+		
+		 </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="qmlAppComponentGroup">
+		    <ComponentRef Id="PteidGuiShortcut"/>
+			<ComponentRef Id="RegisterPteidAutoStart"/>
+            <Component Id="cmp5DF3FF25B92E00276E2DAC6ACBEE3EAC" Directory="EIDGUIV2DIR" Guid="{FDC53750-BA21-4E2E-99F6-B0DA7A1C0B3D}">
+                <File Id="filCC878DC615BAE204217B0ABF742A5D81" KeyPath="yes" Source="$(var.QMLDIR)\cmdServices.dll" />
+            </Component>
+            <Component Id="cmpD94D987CD7CEE5C9E964633DD52E7305" Directory="EIDGUIV2DIR" Guid="{A747CEB7-27BB-49DF-BA08-7E09BC6CBFF8}">
+                <File Id="fil5A03D03833CC9B3BB9FCCB5FE1121279" KeyPath="yes" Source="$(var.QMLDIR)\d3dcompiler_47.dll" />
+            </Component>
+            <Component Id="cmpF47C4BA3E56746CDA8910145CEB3D8A6" Directory="EIDGUIV2DIR" Guid="{F5D2B943-457E-40F2-BB3B-52A22837C6CD}">
+                <File Id="filA983C9033291E390B326ABDC5CE51C42" KeyPath="yes" Source="$(var.QMLDIR)\libEGL.dll" />
+            </Component>
+            <Component Id="cmp7AD83D9FA870B89EC1FDCA9CB0B2E5C8" Directory="EIDGUIV2DIR" Guid="{E926F7DC-F342-46BA-81AA-35B77F3A3712}">
+                <File Id="fil24524D4E60C53F0D214F06E752B1BB1C" KeyPath="yes" Source="$(var.QMLDIR)\libGLESV2.dll" />
+            </Component>
+            <Component Id="cmp70C8B0D6482CD0F39F058E518853A018" Directory="EIDGUIV2DIR" Guid="{1767FDF6-AE34-4F8D-AE02-AA3D103D0351}">
+                <File Id="fil54F2A8534F90BD016136AAAC44C0161D" KeyPath="yes" Source="$(var.QMLDIR)\opengl32sw.dll" />
+            </Component>
+            <Component Id="cmp7F40CCD4FD162222E744B7B74F9DF5A3" Directory="EIDGUIV2DIR" Guid="{F64668D0-3ACB-4E29-AB95-742B18B6AF3D}">
+                <File Id="fil3CBCB4A9EED52796624FC6C8977CC71C" KeyPath="yes" Source="$(env.PTEID_POPPLER_QT5)\poppler-qt5-win32\poppler-qt5.dll" />
+            </Component>
+            <Component Id="cmpF7D4B937B6CC948CB191AA956CEEE7B0" Directory="EIDGUIV2DIR" Guid="{7502708F-3CCF-4D23-8540-6AD5BCBC7EDD}">
+                    <File Id="fil532B63275F24DCA11F229D2F2A4A676C" KeyPath="yes" Source="$(var.QMLDIR)\pteidguiV2.exe" />
+					          <File Id="fil532B63275F24DCA11F229D2F2A4A6718" Source="..\..\..\eidguiV2\eidmw_nl.qm" />
+                    <File Id="fil532B63275F24DCA11F229D2F2A4A6719" Source="..\..\..\eidguiV2\eidmw_en.qm" />
+            </Component>
+       
+            <Component Id="cmpD90C57D3866413E9483172896BD5F8CE" Directory="EIDGUIV2DIR" Guid="{C30484BF-362F-4194-BFCA-F6060AD1B12C}">
+                <File Id="fil6CDFD7BC016B64DBD3E26297A346DCEF" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Core.dll" />
+            </Component>
+            <Component Id="cmp5672A7472B88D287C976B2FC7B919E60" Directory="EIDGUIV2DIR" Guid="{A30C8DF4-64B0-4720-9534-CB564D47B63A}">
+                <File Id="fil5ECBDB3F9A4725B306CA0450941CD27D" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Gui.dll" />
+            </Component>
+            <Component Id="cmp29B33F5BB418719C19229E9CD898CF8D" Directory="EIDGUIV2DIR" Guid="{482FA0B2-BB01-484B-8C8A-2DAAB4C1F942}">
+                <File Id="fil0B83CC8CFBA55D865EB2F2F8A25F2FD2" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Network.dll" />
+            </Component>
+            <Component Id="cmpCA323A01DDF4FA35007EB259BDDFE3C1" Directory="EIDGUIV2DIR" Guid="{03CC75BD-E8B7-4335-85D8-99B7296C45DC}">
+                <File Id="fil8400A93B38A10837A86D11691BABA6EA" KeyPath="yes" Source="$(var.QMLDIR)\Qt5PrintSupport.dll" />
+            </Component>
+            <Component Id="cmpD2874F57A09578298FD4135DBCB261EA" Directory="EIDGUIV2DIR" Guid="{E38C1C4B-6C0E-48BB-9023-79EB65E820D0}">
+                <File Id="filC76A925FF74F6A508DBE63EF2425FF26" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Qml.dll" />
+            </Component>
+            <Component Id="cmp2952216044FC2667143140F8BF324816" Directory="EIDGUIV2DIR" Guid="{8022CBE0-BBA5-4C92-850E-21748E57E987}">
+                <File Id="filE39AA507AAEA1D75B9BB40C77E667F0C" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Quick.dll" />
+            </Component>
+            <Component Id="cmp141140B14E16D8A8112000E5F09B4465" Directory="EIDGUIV2DIR" Guid="{D9644690-56CF-4A43-854B-B4FA848E5AE8}">
+                <File Id="fil56006DB178BB933083E4CB321B025D1B" KeyPath="yes" Source="$(var.QMLDIR)\Qt5QuickControls2.dll" />
+            </Component>
+            <Component Id="cmp0C536BF0DBAAB2FDD79C894B214E3372" Directory="EIDGUIV2DIR" Guid="{C5D01C97-E181-45F8-9E44-EEC235A933EA}">
+                <File Id="fil32B179FA42CE060AB347D56E22E84499" KeyPath="yes" Source="$(var.QMLDIR)\Qt5QuickTemplates2.dll" />
+            </Component>
+            <Component Id="cmp4303C1700AB276CD72A436DABBF14CAF" Directory="EIDGUIV2DIR" Guid="{29BDD019-D4D8-4FCA-819A-8C79AE157AC4}">
+                <File Id="fil5207EBFB6E2F7B47AC43359BE612BA7E" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Svg.dll" />
+            </Component>
+            <Component Id="cmpE8A0086BA59275B02CA72297D79CD62D" Directory="EIDGUIV2DIR" Guid="{7EDD74FB-1548-48AB-91D6-2B6E4AD2EA83}">
+                <File Id="fil549581913584FD03973B266696CAF5B2" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Widgets.dll" />
+            </Component>
+            <Component Id="cmp2187091A9C7BFEBC4A15E92B1675BD66" Directory="EIDGUIV2DIR" Guid="{1E6DA848-81BC-4138-A6AC-49DB69F0F468}">
+                <File Id="filB7DB93213389A34B74FC8C211109E174" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Xml.dll" />
+            </Component>
+            <Component Id="cmp537602E31CE3380A1561177D7DBF2819" Directory="dir2C96DF9BF68D36FECFDCFBE5DE37120F" Guid="{D1D8A970-165F-455A-96C1-A74603DF7027}">
+                <File Id="fil51268DE9F8E9E51B00979CE0107AD64F" KeyPath="yes" Source="$(var.QMLDIR)\bearer\qgenericbearer.dll" />
+            </Component>
+            <Component Id="cmp0EDA9FFCE12F451682B60627125E1B00" Directory="dir2C96DF9BF68D36FECFDCFBE5DE37120F" Guid="{F903232B-61D8-4175-991F-3BA8D4DD81BE}">
+                <File Id="fil2B1513C892EE68AB9337ED8875C12741" KeyPath="yes" Source="$(var.QMLDIR)\bearer\qnativewifibearer.dll" />
+            </Component>
+            <Component Id="cmpF6AD2A3CBE1E6907A5787EB9FEEBA184" Directory="dir96BE59C736C0A6835539D23562B3B8AC" Guid="{76160498-D313-4145-B962-DDEFE3358275}">
+                <File Id="fil5BB13AA4170763AFB97F5B1308372E6D" KeyPath="yes" Source="$(var.QMLDIR)\iconengines\qsvgicon.dll" />
+            </Component>
+            <Component Id="cmp868FD8158277F64F6DB63E86ACA67DD6" Directory="dirACBCA48FB53307D99122F3916C4BCCDC" Guid="{C807EAD5-2C4F-4FEE-BA49-66E213E8A8B8}">
+                <File Id="fil90AB73985637128C6AD346F1C28BEB86" KeyPath="yes" Source="$(var.QMLDIR)\imageformats\qgif.dll" />
+            </Component>
+            <Component Id="cmp22D7EA10601E826756AD43E2FD918416" Directory="dirACBCA48FB53307D99122F3916C4BCCDC" Guid="{8020C905-018F-47C6-B7BE-F7F117949FBD}">
+                <File Id="fil069DCD27D07CA59AF16C97B76E8C96FF" KeyPath="yes" Source="$(var.QMLDIR)\imageformats\qicns.dll" />
+            </Component>
+            <Component Id="cmp4FBE73F0369B169FEA01E663EF3C534A" Directory="dirACBCA48FB53307D99122F3916C4BCCDC" Guid="{C4AE854F-E699-4ABD-A200-BD554642FD29}">
+                <File Id="fil1A3C1DCA4C1E61BBF37648CA8D9721BA" KeyPath="yes" Source="$(var.QMLDIR)\imageformats\qico.dll" />
+            </Component>
+            <Component Id="cmpE0C177E9D6E190395A20702DA7D487EF" Directory="dirACBCA48FB53307D99122F3916C4BCCDC" Guid="{A9FE9DB6-0AFD-46F8-9B78-9D57ED4DB181}">
+                <File Id="filD2CFC123E69C4FDFB2F34AFFCECDA5B7" KeyPath="yes" Source="$(var.QMLDIR)\imageformats\qjpeg.dll" />
+            </Component>
+            <Component Id="cmp4F36E484744B568696C3FFF4EA2CDF4A" Directory="dirACBCA48FB53307D99122F3916C4BCCDC" Guid="{6655EE35-3386-4FA5-9EA4-ECF5D190F2BD}">
+                <File Id="filB38235ADAA6E059CF0A8CFF335FEEC07" KeyPath="yes" Source="$(var.QMLDIR)\imageformats\qsvg.dll" />
+            </Component>
+            <Component Id="cmpCC094701526BB2CDF9B4818BA033D055" Directory="dirACBCA48FB53307D99122F3916C4BCCDC" Guid="{F986637D-7FD8-4600-A25E-A690FBFEE758}">
+                <File Id="fil5AAC7BDD312AA0FDEA81FF31B500139F" KeyPath="yes" Source="$(var.QMLDIR)\imageformats\qtga.dll" />
+            </Component>
+            <Component Id="cmp9E563A528AD6DBC7639CAD0F206B4606" Directory="dirACBCA48FB53307D99122F3916C4BCCDC" Guid="{1E5DA56D-A083-4BE3-A03A-350D803B0ED7}">
+                <File Id="fil84453CE42273B003A55E82C889B0AB46" KeyPath="yes" Source="$(var.QMLDIR)\imageformats\qtiff.dll" />
+            </Component>
+            <Component Id="cmp2A331590386EDED45BE0A7FDC0FA06F7" Directory="dirACBCA48FB53307D99122F3916C4BCCDC" Guid="{74248694-0CB7-4C66-BAF1-0D5C7E8A3256}">
+                <File Id="fil568813D43A64E6CEE6C68A02CD433C3E" KeyPath="yes" Source="$(var.QMLDIR)\imageformats\qwbmp.dll" />
+            </Component>
+            <Component Id="cmp63825F910B4734870FAE000EAF020243" Directory="dirACBCA48FB53307D99122F3916C4BCCDC" Guid="{7A6C999C-48C5-4704-BEB6-992B9FF553AF}">
+                <File Id="filA44B96E0C39B366A3127AB12E7C1B52D" KeyPath="yes" Source="$(var.QMLDIR)\imageformats\qwebp.dll" />
+            </Component>
+            <Component Id="cmpEADE39A79251A1D18FF6C9B2B29CAC55" Directory="dir1E5FC9E1355C90A63622CA46A0220E42" Guid="{2A93BD15-2EEA-40C2-9457-BC5D368377EE}">
+                <File Id="fil61FA5A6194B943A540BD796055864121" KeyPath="yes" Source="$(var.QMLDIR)\platforminputcontexts\qtvirtualkeyboardplugin.dll" />
+            </Component>
+            <Component Id="cmpE27765DBB8CE176CE8FC7A3E4DDBBF3F" Directory="dirC09DA36A115015E9038FA12E538F7749" Guid="{91785EF6-3474-4A52-99E2-82D79AA1BDEF}">
+                <File Id="fil66E1A02D5E2D7906F866A89E88C42908" KeyPath="yes" Source="$(var.QMLDIR)\platforms\qwindows.dll" />
+            </Component>
+            <Component Id="cmp44DDAF9FD632C496ED3E69D0883F91D4" Directory="dirB34CFBD2664AA42147B1EC7A4A7C3E55" Guid="{C7AEDD2F-3543-4815-8F2B-391745DC8DB4}">
+                <File Id="fil7D3791EDC247910B7CBB3677C60FCCC6" KeyPath="yes" Source="$(var.QMLDIR)\printsupport\windowsprintersupport.dll" />
+            </Component>
+            <Component Id="cmp0FB0EAE0175EF9B7BC21419AE1DADFC7" Directory="dirD71C252969EC4EA43D0B2F22AFA715BB" Guid="{48112530-484A-4345-B8DC-215008123239}">
+                <File Id="fil0EFAF6922265690BB927A59177CBD791" KeyPath="yes" Source="$(var.QMLDIR)\qmltooling\qmldbg_debugger.dll" />
+            </Component>
+            <Component Id="cmpE5AE9A6BD245065012D54551561E27E4" Directory="dirD71C252969EC4EA43D0B2F22AFA715BB" Guid="{6488C17D-5CB2-48AB-8C1E-96FA59E0E54A}">
+                <File Id="filA8668C7F9B970C9A23771CD4BEF94476" KeyPath="yes" Source="$(var.QMLDIR)\qmltooling\qmldbg_inspector.dll" />
+            </Component>
+            <Component Id="cmp5C785E8A73D0E3D802573E9FAB186B22" Directory="dirD71C252969EC4EA43D0B2F22AFA715BB" Guid="{A35B57AE-94CE-4F8A-9A6C-D221F6DF7057}">
+                <File Id="fil46034D90A63704451A0887DA2A2EC2BA" KeyPath="yes" Source="$(var.QMLDIR)\qmltooling\qmldbg_local.dll" />
+            </Component>
+            <Component Id="cmp489183ADCEDD4AD7692CDC365501E5D2" Directory="dirD71C252969EC4EA43D0B2F22AFA715BB" Guid="{3F649903-8169-472F-BC65-B5D1C427B2E2}">
+                <File Id="filFA27274C2AD355FAE3E8EFED0243C8DE" KeyPath="yes" Source="$(var.QMLDIR)\qmltooling\qmldbg_messages.dll" />
+            </Component>
+            <Component Id="cmpA8A6AB951871B49334747EE05F15E8DB" Directory="dirD71C252969EC4EA43D0B2F22AFA715BB" Guid="{B0A54461-7A26-4744-80A1-49D6B795CDE1}">
+                <File Id="fil77E33F90E2C388A3C6D51268EE9343E0" KeyPath="yes" Source="$(var.QMLDIR)\qmltooling\qmldbg_native.dll" />
+            </Component>
+            <Component Id="cmpBAEAC4EC98169E5DB5856DCCC610D407" Directory="dirD71C252969EC4EA43D0B2F22AFA715BB" Guid="{66D24E4E-637F-4304-9CD3-81A33E424BBC}">
+                <File Id="fil90C2DC93C8D21C18C1439537F078458F" KeyPath="yes" Source="$(var.QMLDIR)\qmltooling\qmldbg_nativedebugger.dll" />
+            </Component>
+            <Component Id="cmpA0A3D23A65678BC4937F0922DCB6944D" Directory="dirD71C252969EC4EA43D0B2F22AFA715BB" Guid="{82C72582-D1C8-4FD7-BA43-E6F762489177}">
+                <File Id="filBA8AE994396B4DB06A849466DC314C6F" KeyPath="yes" Source="$(var.QMLDIR)\qmltooling\qmldbg_profiler.dll" />
+            </Component>
+            <Component Id="cmpA0C57DD2EEAF2E6AD138C98F3D83000B" Directory="dirD71C252969EC4EA43D0B2F22AFA715BB" Guid="{578C7145-4A68-4BD3-9C25-363C9102B754}">
+                <File Id="filF6517BC6B66E6B7D1C79522C13D21A8D" KeyPath="yes" Source="$(var.QMLDIR)\qmltooling\qmldbg_quickprofiler.dll" />
+            </Component>
+            <Component Id="cmp2E52D311C881CEA472EB7EB73F8272EA" Directory="dirD71C252969EC4EA43D0B2F22AFA715BB" Guid="{2B20BEE1-6CD2-4B33-8A2F-09199A8100B2}">
+                <File Id="fil1E17926EBFB6E6882B1C4103D84F24DE" KeyPath="yes" Source="$(var.QMLDIR)\qmltooling\qmldbg_server.dll" />
+            </Component>
+            <Component Id="cmp9F095869C8B01105A47A4DBAB2422653" Directory="dirD71C252969EC4EA43D0B2F22AFA715BB" Guid="{F4BDC746-B158-4CDB-B270-90A598A37FAB}">
+                <File Id="filE1699E8A19A2529ED471A7948D981670" KeyPath="yes" Source="$(var.QMLDIR)\qmltooling\qmldbg_tcp.dll" />
+            </Component>
+            <Component Id="cmp46A82256524B192D4DEEFEBBC62C0429" Directory="dirEE5DDCAEA6A870B155EA653DC2AF0883" Guid="{F3F3E89B-6EE7-4245-82EA-0E4E8411C4EF}">
+                <File Id="fil2BC794F547C82F9A0EB37039CE4FE2B4" KeyPath="yes" Source="$(var.QMLDIR)\Qt\labs\folderlistmodel\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmp9D5780E30B93C8798ADC66057F9DDBAD" Directory="dirEE5DDCAEA6A870B155EA653DC2AF0883" Guid="{6897E4BC-FBBC-495F-B84D-870706F98E77}">
+                <File Id="fil61EEB1385082F55E09FCBAF55C88D226" KeyPath="yes" Source="$(var.QMLDIR)\Qt\labs\folderlistmodel\qmldir" />
+            </Component>
+            <Component Id="cmp1764C0C30A06F0AD9B419A458F82E9E9" Directory="dirEE5DDCAEA6A870B155EA653DC2AF0883" Guid="{D3CF2871-DD95-48AE-8186-935E6F2138CD}">
+                <File Id="fil515465341F48CE8C961058B7666CE1CF" KeyPath="yes" Source="$(var.QMLDIR)\Qt\labs\folderlistmodel\qmlfolderlistmodelplugin.dll" />
+            </Component>
+            <Component Id="cmp597469145744D524270ED099B99E4A8D" Directory="dir154D3ABFD36F164A2B01DF0516E94EDF" Guid="{E44E70D7-CA12-42A6-BB10-DB32D254DCB0}">
+                <File Id="fil4FB4656A916BBD88DE2396B0975C2342" KeyPath="yes" Source="$(var.QMLDIR)\Qt\labs\settings\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmpF5A97E97F30FCB30C41546638572184B" Directory="dir154D3ABFD36F164A2B01DF0516E94EDF" Guid="{34F8A8A5-2A6D-4036-B284-7C3B0F0B405D}">
+                <File Id="filBFBFB6C24781DF591183521BE4F81E0A" KeyPath="yes" Source="$(var.QMLDIR)\Qt\labs\settings\qmldir" />
+            </Component>
+            <Component Id="cmpBCC27A1BB43E0AFF7DA39D29CCA7C003" Directory="dir154D3ABFD36F164A2B01DF0516E94EDF" Guid="{42642277-894E-4E51-A599-97A7234702B6}">
+                <File Id="fil9529583EF8334853C77F0F870ECF3EDA" KeyPath="yes" Source="$(var.QMLDIR)\Qt\labs\settings\qmlsettingsplugin.dll" />
+            </Component>
+            <Component Id="cmpEB1E2238263B3D892602F568E8C08FC7" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{71EC92BE-886E-40FB-B9AF-8FADC4F99D4D}">
+                <File Id="filE0A254D22C5B091F20FE5FEF68038916" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\Blend.qml" />
+            </Component>
+            <Component Id="cmpE806081B63C492CC1A5F71CD85AC1D7D" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{0533292C-3E82-4907-A88A-C9C3ECDF4885}">
+                <File Id="fil452EC30E631635036104E57E049D374F" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\BrightnessContrast.qml" />
+            </Component>
+            <Component Id="cmpBE8A10C3A704DFF72A24DFD3DFEBFFDC" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{1BAEF05A-51FF-4CD7-933C-D3AC7E8F8B3B}">
+                <File Id="fil198A5EF4C54CE10966EA78A884D196F1" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\Colorize.qml" />
+            </Component>
+            <Component Id="cmpFF53F7FC84E093A6339D007DD70DD88B" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{FB3660EA-0879-4EE2-ABA8-BF5A7594E766}">
+                <File Id="filCC99B6F7F2A8E6ADD85D42280FEC3208" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\ColorOverlay.qml" />
+            </Component>
+            <Component Id="cmpE37BA0185093EF7210AFCEB6E10CB689" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{1682D809-0DC9-4084-BD05-0F73B435F3C6}">
+                <File Id="filAF14F08FA64F13B07A1E7FC5A1C1D4B0" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\ConicalGradient.qml" />
+            </Component>
+            <Component Id="cmpD208808C87A15A4B6E1C7F10FDB218E3" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{3E77C482-6543-433E-8686-42398963F9DF}">
+                <File Id="fil7D294CF0F73B893CAC3EB4FA0D406093" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\Desaturate.qml" />
+            </Component>
+            <Component Id="cmp15262EBB050D1B5318033ECF76FA3613" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{AD3C8B7E-4C7E-422F-836D-9ED0A786CDC5}">
+                <File Id="fil031C3CB6BD956748AA434EA902CA1453" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\DirectionalBlur.qml" />
+            </Component>
+            <Component Id="cmpC6038F1A3AC31B0EB0F6B65817160EEE" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{46A0762C-89C5-4123-877B-5552A910A2D3}">
+                <File Id="fil676B6B41ADAD0CFE10A49DBBC30E642F" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\Displace.qml" />
+            </Component>
+            <Component Id="cmp000A005F1CC26A1A34C7842D0368595B" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{3DF0D5B6-FCD1-4F4E-B10F-F2F118FDD5B6}">
+                <File Id="filB25889B806DA42BF0306EB256C13212F" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\DropShadow.qml" />
+            </Component>
+            <Component Id="cmp3922CAB02A2389FF23DF43DA5939A536" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{FDC7BC83-A9EF-4431-89F2-4B621AF95BA4}">
+                <File Id="filE04C8B67C0DAF148C0EDAC19EF714AE3" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\FastBlur.qml" />
+            </Component>
+            <Component Id="cmp8427FB26986A5B931DAD0316A737621D" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{CE2C67F0-E067-497F-A910-4ACF52EA5721}">
+                <File Id="fil366756EB4AF72ED5295247AF87B45B35" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\GammaAdjust.qml" />
+            </Component>
+            <Component Id="cmp877BFF4A52EC2B435B843B60E07BEDB0" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{206EA3D2-3BD2-4816-B704-A94102A55119}">
+                <File Id="filD60B8F067684C1D07B3FF19D27D7A690" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\GaussianBlur.qml" />
+            </Component>
+            <Component Id="cmpDA620DB61B5A5384A2F6082000184659" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{5A4F9D79-0DB7-4B31-827E-6D1F62AEA884}">
+                <File Id="fil936899D4DFD3504A4308DED10DB873B4" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\Glow.qml" />
+            </Component>
+            <Component Id="cmp8FAC2753E9942276204A52D6EB6B2CEF" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{CF91A9B3-D55D-44D2-BB5E-AF0E01E3442A}">
+                <File Id="fil3DFAE6039A1C2AB534549747632D06AB" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\HueSaturation.qml" />
+            </Component>
+            <Component Id="cmpBCC43D77677C71FFCA60CB29A965BC87" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{478B6F3D-62E4-4732-9846-36C16466FD2D}">
+                <File Id="filB4A0DD98FEB1C289373501E768E2A375" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\InnerShadow.qml" />
+            </Component>
+            <Component Id="cmpAF4F315D6738C514D55D1C04863D9FF4" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{EE275FA2-51F2-4826-9BB2-7B230CCD515B}">
+                <File Id="fil84AB8C8F8C1B95E8FE1FEFC321B4D11C" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\LevelAdjust.qml" />
+            </Component>
+            <Component Id="cmp3A1FE2A6B1C22ADDCAFE75EB0BBDFBE5" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{D4628ECF-BC5E-4022-A79D-0DB4B571CF77}">
+                <File Id="fil8C63FF30E02093DB8ED28B63F2965E9C" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\LinearGradient.qml" />
+            </Component>
+            <Component Id="cmpD95874F1AFC5531AAAB5BFD94E9D9A84" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{0B07A206-67A9-435E-B2FD-6F0D86718903}">
+                <File Id="filB440E4A8263343EB51621E2252D403E2" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\MaskedBlur.qml" />
+            </Component>
+            <Component Id="cmp160CED8C7FC99B3B4DED2DBB463D92CF" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{DB89BBB9-27D4-43EE-A3D6-8997B7584522}">
+                <File Id="fil5003EC74B63204D8DD67C1CCB8C6EC77" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\OpacityMask.qml" />
+            </Component>
+            <Component Id="cmp0250FC2DC6682FFCDA6628A8A9526DE2" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{349F5674-7DFB-42D8-823D-47A0907E4DF4}">
+                <File Id="filAB7E4FEF09AAE0BB4A3C191943C60135" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\qmldir" />
+            </Component>
+            <Component Id="cmpD791472ACA2C55D813AAE39237A6AB36" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{495C3F8F-2680-4F59-B447-9FE802B3EDCD}">
+                <File Id="fil5C4FEB70644493CD688115E93F475606" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\qtgraphicaleffectsplugin.dll" />
+            </Component>
+            <Component Id="cmpE9AC201D989EA30F92032C76BA3945C3" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{06DA32C1-7471-4AC1-98A2-32B9AB1435E0}">
+                <File Id="fil9B80395B024BE2B165C96A76833D24E0" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\RadialBlur.qml" />
+            </Component>
+            <Component Id="cmp1E0D29D0F20D52344220E350BC026D37" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{79770950-79A2-4F9B-9CF6-EE67D655A4D2}">
+                <File Id="fil96012B984071691FE8EE01CCA8A56EB5" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\RadialGradient.qml" />
+            </Component>
+            <Component Id="cmp956EBAE7DEF5EBDB773877B82A053C9D" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{F9145A58-153A-4D30-B09D-8E679DC8C05A}">
+                <File Id="filB25BD4D53DD38F65C7B8B034F1C94B79" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\RectangularGlow.qml" />
+            </Component>
+            <Component Id="cmp3845CA223A838D126654A627CEA21483" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{757D065C-AEFD-46FD-85B3-50D45FC79E34}">
+                <File Id="filF841D041C902DE52BBDA3F5B8AB322FD" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\RecursiveBlur.qml" />
+            </Component>
+            <Component Id="cmp04F05A9F09FEB12BE59E8142636873D9" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{7E41580D-5B91-48D6-BBB0-BF735A16A6E9}">
+                <File Id="filB4FB0A9E7EC46C6362DBEA8FBF1E0853" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\ThresholdMask.qml" />
+            </Component>
+            <Component Id="cmpFDCF2727F4762BED4666DA915C22C0D0" Directory="dirF8A9C49517D718C43D63713832797CD5" Guid="{9F304DF2-0337-4D23-BA89-B99D9131FBF3}">
+                <File Id="fil9FEDC10B9DD4C8F41DD45023A340C7F8" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\ZoomBlur.qml" />
+            </Component>
+            <Component Id="cmpB9771D74D36D4311053A721D6BFF2777" Directory="dir0205D14FA430EA6A2A02096F15BB6222" Guid="{3A089F85-9509-41A1-A592-B170511A8479}">
+                <File Id="fil23486EDEDB27409B7F4AD64DCF072354" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\private\DropShadowBase.qml" />
+            </Component>
+            <Component Id="cmp402702B599CD9B548AE0D289273BAAF4" Directory="dir0205D14FA430EA6A2A02096F15BB6222" Guid="{332F3522-33E5-447F-AB1C-81AA143CE452}">
+                <File Id="filBD66E601C06E277B61FA0D197DEEDE8A" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\private\FastGlow.qml" />
+            </Component>
+            <Component Id="cmp004D392F23BFCD5E41B4E805D3335508" Directory="dir0205D14FA430EA6A2A02096F15BB6222" Guid="{46EE835B-4171-49B0-AFFA-5A3D993CF13F}">
+                <File Id="filA23F27B2BB41566D3E5DE325C5BB6886" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\private\FastInnerShadow.qml" />
+            </Component>
+            <Component Id="cmpD328393DF4A62960B114B456C93A840A" Directory="dir0205D14FA430EA6A2A02096F15BB6222" Guid="{78090061-C972-460F-AF17-5DD5819CD6D4}">
+                <File Id="filBB49C0F2CD2FC7C0E90270B42D61D867" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\private\FastMaskedBlur.qml" />
+            </Component>
+            <Component Id="cmpAEC710F9AF43FA842EDAE23CCA522E0B" Directory="dir0205D14FA430EA6A2A02096F15BB6222" Guid="{F196FF89-D92F-4359-A840-F84B5474A45E}">
+                <File Id="fil4FCE207A513C55E4A8424B5DFDC87B52" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\private\GaussianDirectionalBlur.qml" />
+            </Component>
+            <Component Id="cmpE414897AD3C6340722559A83B3FD469D" Directory="dir0205D14FA430EA6A2A02096F15BB6222" Guid="{BB3ED4B4-38EE-43E7-8BC6-50F10C142BBE}">
+                <File Id="fil812905AAC1A8D651194A50ADC94C8BD1" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\private\GaussianGlow.qml" />
+            </Component>
+            <Component Id="cmpAD856B042115DC896555A6F8609506FB" Directory="dir0205D14FA430EA6A2A02096F15BB6222" Guid="{B11870CF-6919-4396-B896-AD81CEA22187}">
+                <File Id="fil1B804B2E8F645629366150DECB7F6FDE" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\private\GaussianInnerShadow.qml" />
+            </Component>
+            <Component Id="cmp7C9782C71EFBA873AB6FB1DEA7FE8523" Directory="dir0205D14FA430EA6A2A02096F15BB6222" Guid="{BFFE1ABD-B2B0-4444-A496-820094DDADEE}">
+                <File Id="fil89C6FD7DC23423664E8FB3F2A73BD499" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\private\GaussianMaskedBlur.qml" />
+            </Component>
+            <Component Id="cmp89D5C68B7773D8D6854224B961BD9075" Directory="dir0205D14FA430EA6A2A02096F15BB6222" Guid="{DAD23D40-ED9E-43E8-8A2D-83D3CE52D1F4}">
+                <File Id="filAFF52E09C1D2F533B4F0902A2D5E3E31" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\private\qmldir" />
+            </Component>
+            <Component Id="cmp67928AAAD585B6FA42B4250841EFA6D9" Directory="dir0205D14FA430EA6A2A02096F15BB6222" Guid="{D0521CC1-514E-4F83-A9D0-2D8CD3A81B8F}">
+                <File Id="filD1986D5AF7A32ED75A3587540F5D4F5C" KeyPath="yes" Source="$(var.QMLDIR)\QtGraphicalEffects\private\qtgraphicaleffectsprivate.dll" />
+            </Component>
+            <Component Id="cmp07A4743F9A5DA96A6F2E5765616A608F" Directory="dirA9B557E5A38E8146E13DC6064F3F4B10" Guid="{4DEF171B-289C-4E5E-A936-482C07C69487}">
+                <File Id="filD43C0AFB4E4461136044047F2E4116D5" KeyPath="yes" Source="$(var.QMLDIR)\QtQml\Models.2\modelsplugin.dll" />
+            </Component>
+            <Component Id="cmpE17A91261A7007BD4104896B26281C29" Directory="dirA9B557E5A38E8146E13DC6064F3F4B10" Guid="{874B4BE5-9D42-4C70-B71A-EB52CC8DE81C}">
+                <File Id="fil54E15027ED354B3D550F76007CD050FF" KeyPath="yes" Source="$(var.QMLDIR)\QtQml\Models.2\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmp98B4F290148C342EC490FE3B7E372BF4" Directory="dirA9B557E5A38E8146E13DC6064F3F4B10" Guid="{E207371E-DE2C-4622-9A85-4C4D4EECC97F}">
+                <File Id="fil2EDDB68D104D5D5D2470E49EB9ED2A26" KeyPath="yes" Source="$(var.QMLDIR)\QtQml\Models.2\qmldir" />
+            </Component>
+            <Component Id="cmpAEC9C40C6C20674DE79FE40CDDDF16C5" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{DDB3A989-DB51-4541-BFFF-E97809988BD7}">
+                <File Id="fil0645701ED4B2E11CB25D6CD04703522F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\ApplicationWindow.qml" />
+            </Component>
+            <Component Id="cmp99A3B5A3F5677C54686EAA2FA9E95B55" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{2B9E194F-32FC-4337-BCFE-85147ECD0264}">
+                <File Id="filC450864C0A03A792659B5F7C67F48DCC" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\BusyIndicator.qml" />
+            </Component>
+            <Component Id="cmp55E4821ED043F68F65D7ACA22A706650" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{B881E828-A43D-4023-97E6-F0C4CFB01431}">
+                <File Id="fil2606C38FD0948E8C0EF902279E081EF5" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Button.qml" />
+            </Component>
+            <Component Id="cmpFBC9E6F8167804DEDEAA28534BF709E9" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{A40D3BCF-5F61-4C16-8F21-2A513ED3C1B5}">
+                <File Id="filD1FDB62F01534D1560945769BAF2AC94" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Calendar.qml" />
+            </Component>
+            <Component Id="cmp3445D77CB3F71D7D85019DFC67F2516D" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{B13E9FFE-6556-4EF0-80F9-E61F0E9651CA}">
+                <File Id="fil30B2FF59DC3F567C2960340E5AF6349E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\CheckBox.qml" />
+            </Component>
+            <Component Id="cmpB02E433EE6789FFEF92CAE4F4E303831" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{08285008-C677-4D8C-A5DA-2A31323C8E72}">
+                <File Id="filE2D8C34CEE8E6340F223913B604D2ECC" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\ComboBox.qml" />
+            </Component>
+            <Component Id="cmp19AF43B993B45DC75AEF9ACDC3E0BAA4" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{173EB471-370E-4E3F-AFF1-9B2EAF67DAD7}">
+                <File Id="filCD8DF0776232FF7ABD6D61E7B9AF343D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\GroupBox.qml" />
+            </Component>
+            <Component Id="cmp750C993BDAF5B7D506A2023278DE0642" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{8C85A623-648D-4CC0-856D-85298541044E}">
+                <File Id="fil96C12798BF17DADE6385A58D2EF351B3" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Label.qml" />
+            </Component>
+            <Component Id="cmpD5FB5DA89AD29002CFAE6605AE56B1CE" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{B4CE1871-EC15-485E-B661-27010042E4E9}">
+                <File Id="fil76CFFCA4D32FF2442051A48167625171" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Menu.qml" />
+            </Component>
+            <Component Id="cmp41A5DD711DFCB7AF1F1802452F241B8C" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{78BB897D-E7EB-4914-8A7C-C2A93B57EC72}">
+                <File Id="filDCC787A33A156CCF771AD70D66FC66F9" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\MenuBar.qml" />
+            </Component>
+            <Component Id="cmp5F258A352BAA7EC3BFD6070DFE3E2DA3" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{AF28EB00-7105-4ADD-BE0F-19EA463745D5}">
+                <File Id="filE451E8692094667BCC8180893F7399CF" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmp3DA5BB83605888ADB506F33D906B6047" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{F562A483-93FA-4A1F-A10D-0844CDC6D84C}">
+                <File Id="filDFDB8EA319FD55AB8F69269DDC0EE69E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\ProgressBar.qml" />
+            </Component>
+            <Component Id="cmp666DCD3EB0E18824D7F821C83371C489" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{20D1E149-FD13-4078-B17E-5EDEA04962B6}">
+                <File Id="filFB7BF3EE544FD71EC797D94DDB12099E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\qmldir" />
+            </Component>
+            <Component Id="cmp1E8F786A3DC78BE64D9E505706E067AE" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{90EED640-217F-44B7-9158-687C3CB12433}">
+                <File Id="fil586B1B8C8FDD2DC741CA0C05EC16750A" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\qtquickcontrolsplugin.dll" />
+            </Component>
+            <Component Id="cmpB1B570629264E4B6FDF1E2597DCA8B8A" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{E1B2F93D-7335-47F6-8B43-8A205DE069F3}">
+                <File Id="filD62C960CA096DD323E55C2462A313EFE" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\RadioButton.qml" />
+            </Component>
+            <Component Id="cmp9CA64743ED43ACE4D79749131030CDF6" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{C7B8DC24-1A80-4D41-A5B5-28CC421B01F4}">
+                <File Id="fil8177A81AEF1F3ABD8F6E8A1C6C149483" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\ScrollView.qml" />
+            </Component>
+            <Component Id="cmpAF23CF54BBF299FA6677E2B00BB1A81C" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{7F1104D5-7B33-4620-BD7D-3AEE92A23B55}">
+                <File Id="fil7E59C2CAFAAE8403BB7717FA62FDC581" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Slider.qml" />
+            </Component>
+            <Component Id="cmp2752AD9FE5B670A23D88B30BF68A10C5" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{1319B7F0-444D-4C5C-B01E-7E8C3FD0044B}">
+                <File Id="fil7B68084B6FA494491F4FA57DC0801D2D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\SpinBox.qml" />
+            </Component>
+            <Component Id="cmpF316E0C3F5EFC50A2C18843C6591AE26" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{5923CD15-3130-48C1-BD08-931159D9CAF9}">
+                <File Id="fil179874D54B72818F7676932037A7E5BD" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\SplitView.qml" />
+            </Component>
+            <Component Id="cmpF759BC5F85526B77DCDC043725DF9AFB" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{C72D50BB-CD40-4560-93FB-2EEE3D2CADA5}">
+                <File Id="fil00179FE216B8D58D7A9E9DD6C9CC90C9" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\StackView.qml" />
+            </Component>
+            <Component Id="cmp7E41CA02B9EE7E60C92F7623693FC6A5" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{31D24DDB-5D76-4E94-BC72-C46FD52184CD}">
+                <File Id="fil2EA44653B04718AF20D824F3472D54F9" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\StackViewDelegate.qml" />
+            </Component>
+            <Component Id="cmp2C31442938572022551BA600D640C643" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{4D0881CF-1C56-4091-B61D-30AC53EA8F85}">
+                <File Id="fil54FE2BC7284310154872BEC9F0685D5D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\StackViewTransition.qml" />
+            </Component>
+            <Component Id="cmp6447DCF5C2EB03AF55B3BE3DBAD5F285" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{47E260B9-DA67-48A5-87BD-608FABAE8F29}">
+                <File Id="fil021CFCC17BAF3661ECBD51AFF40EFD8E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\StatusBar.qml" />
+            </Component>
+            <Component Id="cmpCFBDE327DA148FFFF20AC262571C3465" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{60DE1986-D0B4-4694-8D2D-9E42CF56BADF}">
+                <File Id="fil453AC8817125E0900B7253DE5A0282F1" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Switch.qml" />
+            </Component>
+            <Component Id="cmp04ABFBACF056DE331DED5E638041F12D" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{611C8E51-94A8-4511-AD42-C54F98EEF7EA}">
+                <File Id="filEDEEF959A15D514449DAF26A5DD71612" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Tab.qml" />
+            </Component>
+            <Component Id="cmpD1FCAC48C57674608555B6D0718E3B2B" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{1300B233-1AC3-4056-9EC1-AEA66FBEA5B0}">
+                <File Id="filB98B6D0DAC56D92A390E1C213078E87C" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\TableView.qml" />
+            </Component>
+            <Component Id="cmp378D6F98EBD0F4FB420E335ED12DD9AA" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{C90530CD-A564-4934-BC8D-ADE67B0150CD}">
+                <File Id="filAF5F8FBEF66C2E4C76B4772C98F6594F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\TableViewColumn.qml" />
+            </Component>
+            <Component Id="cmp0DAF20BDF2CB330A05F02A05A77A5227" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{9649C17B-94E5-44D5-A534-DFFBFD27455D}">
+                <File Id="fil9CA206259DDD27841CD3AEC185A97F8C" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\TabView.qml" />
+            </Component>
+            <Component Id="cmp0913ED7594884AB06243D60392231581" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{85A45BF8-4CF3-434F-9E85-8A4AABD81D03}">
+                <File Id="fil94B0C8818FC3F2CE5A6474E3FB3BCD43" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\TextArea.qml" />
+            </Component>
+            <Component Id="cmp426884BD20CEA6DAB34AB531A8945280" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{95657658-496C-41BD-BB99-A2D23C2605E6}">
+                <File Id="filE81C42EC3F11FB636F55FEA1CC70E261" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\TextField.qml" />
+            </Component>
+            <Component Id="cmp390A5C9A83D010A4A05C53DD3107F255" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{339D2156-3D5D-43C8-BAF1-05CCC2F8720E}">
+                <File Id="filE62EF4321F7E17753DA3B06EA2BB344A" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\ToolBar.qml" />
+            </Component>
+            <Component Id="cmp2E7D5052D39B5E9991D14838C974047E" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{369A3FC1-C0B6-43B8-9A35-B62FCACC46D5}">
+                <File Id="fil5C01E783BD03988334C47D186FDE9722" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\ToolButton.qml" />
+            </Component>
+            <Component Id="cmp636E1D829E1F9F151019F78CAFBC7A95" Directory="dirD89CECF96B86AA27F1569DC5902CA941" Guid="{3766272C-94C2-4327-A2D9-E08AF22195F3}">
+                <File Id="filE5F96E24B9A67ECD821E88761C48F852" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\TreeView.qml" />
+            </Component>
+            <Component Id="cmpD0333F340C89EE0187D7A0BDF8F7CEBF" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{172DEB27-0174-409C-AA45-763DAC2104D2}">
+                <File Id="fil5C394129C7276B009E2EA1113E7C7F59" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\AbstractCheckable.qml" />
+            </Component>
+            <Component Id="cmp43C8A23032B16730D56C093ADA13AD7F" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{6630409D-5C52-4548-8CA1-C898C8C67B0D}">
+                <File Id="filC8126ED07D5E8CB39505466B26BE0793" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\BasicButton.qml" />
+            </Component>
+            <Component Id="cmp2EE1E26BC53A0349F9C8FAD2E2D925CC" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{5A7DEA87-6B5A-4D40-9B58-91E6FFAFFBC2}">
+                <File Id="fil68E08B5AEF189FF6E2633BFF25191887" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\BasicTableView.qml" />
+            </Component>
+            <Component Id="cmp35E79FA222EAE8B1811938A8A787CB55" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{A112D982-6403-4159-9ACA-3C90D0D85308}">
+                <File Id="fil11B6A42CFA8658798DCC0B7BF4DE760D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\CalendarHeaderModel.qml" />
+            </Component>
+            <Component Id="cmp7F37F363641A6022E0E8DA5DD4E704CD" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{8BEB73B8-0528-4D91-ADFC-9750D8662C88}">
+                <File Id="filA6EEFE35FA7969FF2C7E7A3F04287E59" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\CalendarUtils.js" />
+            </Component>
+            <Component Id="cmpABDA2A6E9406B8330884CF92CEE1A188" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{95ABDCF4-06E1-44B5-BD74-E7A67C698F62}">
+                <File Id="fil840C17822C716BC8BD7E197D912285C0" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\ColumnMenuContent.qml" />
+            </Component>
+            <Component Id="cmpD9FC9ADD35E4D2E39EDB8A622DB4DA6B" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{DB5EAA60-CDD6-4721-913D-F08CAFD192A4}">
+                <File Id="fil7F91DCE8BD7EE43B2B3899841BDB11A0" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\ContentItem.qml" />
+            </Component>
+            <Component Id="cmp6DE60104D2EDE61E835E4EB69214A47C" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{57588069-B150-45E9-B3D9-F9F594C966D6}">
+                <File Id="filFD3E15C86B27AD61495035D9231B1AD4" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\Control.qml" />
+            </Component>
+            <Component Id="cmpC03AACB781F8C126144DFC1E59E7594A" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{38632E30-D976-4A54-B1C4-4D04EC8CE7D1}">
+                <File Id="fil645029D3CF937066E670A4C94222040D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\EditMenu.qml" />
+            </Component>
+            <Component Id="cmp257667ECBEACAB38444043BBC8AA5D9E" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{20BA7BB6-3A53-402E-8ED4-BC563970A84B}">
+                <File Id="filEDC7CFAA0819725E053B6594B2EF296A" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\EditMenu_base.qml" />
+            </Component>
+            <Component Id="cmpD5A4366ADCFADFB183500A28180504B3" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{7D5DC056-D37B-4F38-8178-E6B30DE2FFE7}">
+                <File Id="fil603C654596FD5369E5E05D7BB5D5EDD1" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\FastGlow.qml" />
+            </Component>
+            <Component Id="cmpAE5E22B620EF294B4095AF616A2D1A4C" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{E42AC229-4C59-4DBD-AF0B-E24E5DC53204}">
+                <File Id="fil053470990E3DC08342B94203F56945B6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\FocusFrame.qml" />
+            </Component>
+            <Component Id="cmpD3079AF9EC485337A33EE5A7D6C30E8C" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{E0B3013E-9AE2-47C5-9605-48B5C35A8193}">
+                <File Id="fil06B68DF4B268A8F8936ABD136B052AE8" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\HoverButton.qml" />
+            </Component>
+            <Component Id="cmp39660B9EACB55A2506C8D117A0122230" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{D1F4DE50-219B-4B22-8C2E-1BF6F8A370E5}">
+                <File Id="fil0C37B4E1CEFB786CD81EC6D3906C6EB7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\MenuContentItem.qml" />
+            </Component>
+            <Component Id="cmpCCFEC4810851CB5C476922330FAB8C3C" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{7D8EBE99-B23E-4751-9CDB-339067158EBF}">
+                <File Id="fil2187C485C3E7BCBD6342DAB5B5955AC0" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\MenuContentScroller.qml" />
+            </Component>
+            <Component Id="cmpDA990F0064D18DFB43A3174F4376F476" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{36919F27-BC78-484F-A616-650C4CA8FCDF}">
+                <File Id="filAE2EB77D695000D1B3451CFBBC6145AC" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\MenuItemSubControls.qml" />
+            </Component>
+            <Component Id="cmp81150DBFDF7B9510B00FA9A7CA92183E" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{3E9F9D19-73D0-4203-B01C-69F599868F99}">
+                <File Id="fil11A69854398174DB5CE31B07F6F432CA" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\ModalPopupBehavior.qml" />
+            </Component>
+            <Component Id="cmp50D1E6C71BEED9705535C8576C39F6C4" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{B0113B07-23CE-437D-9A2A-53AA05D5246D}">
+                <File Id="fil18764F267D1BE1BA78793E42F51DE521" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\qmldir" />
+            </Component>
+            <Component Id="cmp964223CF1ACB6B703CA988F06E855FAE" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{01519E77-143F-4D32-9A1B-E7146AE2E3AB}">
+                <File Id="fil39977D06FFC716F7E6B0E5FC439F1968" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\ScrollBar.qml" />
+            </Component>
+            <Component Id="cmpAAA48E3DD92BA813D7CEEA9A71DAD829" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{CF2EAFE2-3B0E-4A5A-91FD-F79D043D1553}">
+                <File Id="fil98C3749556A0D67C8587D69F56744CB6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\ScrollViewHelper.qml" />
+            </Component>
+            <Component Id="cmp8DBA7E65017DB4E95930BD816D24BEDA" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{6F07F445-5060-48B3-AE6D-C4887133F388}">
+                <File Id="filAE8B50E2C0F3B36861EEC46E753D7173" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\SourceProxy.qml" />
+            </Component>
+            <Component Id="cmp176CB2ACFE97DE06A32D043D6C35C668" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{757E8884-12D7-4E92-A8F7-27AC5DA422C5}">
+                <File Id="fil04532BD55434102DB9D767B868932C8E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\StackView.js" />
+            </Component>
+            <Component Id="cmp9E2DD2EC9FF28EEBDA6C3B44D199FBC8" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{1E8C87FA-F570-4391-A863-B1B4B67AB211}">
+                <File Id="filECA599839E1754A985F54BC4E028BD7D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\StackViewSlideDelegate.qml" />
+            </Component>
+            <Component Id="cmp73AA8B78F601D0E2C9F14D0AF1F5967C" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{690A5C39-50AB-4167-855C-ACF4341097E5}">
+                <File Id="filDEBCFF4B779C92BB3872C91327CD14B0" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\style.js" />
+            </Component>
+            <Component Id="cmpD2D3B983A9AFB79408B4096309E330C0" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{D3A05E10-88C1-4A28-A07A-DDDFB9C2C460}">
+                <File Id="fil52FA1EA332F22E9E120E7F47DF6C2415" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\Style.qml" />
+            </Component>
+            <Component Id="cmp5DEAF04CDB65059CD69936E06449F2B1" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{D663C13B-70DF-4C7E-B5BE-F6FD4D183015}">
+                <File Id="fil7BEC2C2E2A18CBC84208A19164EF5281" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\SystemPaletteSingleton.qml" />
+            </Component>
+            <Component Id="cmp663B7BEF0C51A4EEBF3D2F9F4AC1B918" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{EDBFC946-04C8-4710-B25A-183AF506A2D8}">
+                <File Id="fil555C1A98F73AD0A4F0C51B0FC866848C" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\TabBar.qml" />
+            </Component>
+            <Component Id="cmp01CB6EAAD233A015629CC4CD091D5097" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{B4C02A9B-6B56-4D76-880A-32D862313AA2}">
+                <File Id="filFCEC297CF586D6E9F31238B472601B0A" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\TableViewItemDelegateLoader.qml" />
+            </Component>
+            <Component Id="cmpD9373B6FE194A2CB7F977F603B2A9673" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{04CD8FA0-4AE9-4CD7-ABA2-E947EF550979}">
+                <File Id="filE1B168D49D48F9419FAA5EB33A2E79FC" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\TableViewSelection.qml" />
+            </Component>
+            <Component Id="cmpC8087FD442E9620896C2E55000D71467" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{5F216248-779E-4FCC-A0EF-2068A859AF82}">
+                <File Id="filE0F8C9D990B39A89D5F5F6904BF06863" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\TextHandle.qml" />
+            </Component>
+            <Component Id="cmpE8A182325A2B3163C989DDBFD0747A69" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{825E8EA6-C47B-4C5F-835E-9B7C85478327}">
+                <File Id="fil78E532FB441462E0C83A48AF30E74790" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\TextInputWithHandles.qml" />
+            </Component>
+            <Component Id="cmp5A8F0DCF2EFA841F03126D3F49B3DECD" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{1E900DCD-EEE7-4B2F-97AC-DEE58B8A1289}">
+                <File Id="fil9988C1089355A5C712D453AA85A3A29C" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\TextSingleton.qml" />
+            </Component>
+            <Component Id="cmp7E349054AC426B2AE83AED70D38A3F07" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{5B451202-9D79-41A1-B1DE-3B617749676D}">
+                <File Id="fil9A3CD1F8FCBC671FD60C291BACA946E0" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\ToolMenuButton.qml" />
+            </Component>
+            <Component Id="cmp00C6DB486505E0753F018F7DEDC1B321" Directory="dir4008D30C416D002838926369A2B3D1D6" Guid="{1DC93B51-E43A-4C47-B769-B925DA277520}">
+                <File Id="filC00E601AF6369CB04EA3EBA294975E29" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Private\TreeViewItemDelegateLoader.qml" />
+            </Component>
+            <Component Id="cmpCC493D293FF863503B6931E2565ECB70" Directory="dir7347A908DA32165E0EFC09B75E8A696C" Guid="{9779DF1B-DF01-4F75-90DD-394A28F41610}">
+                <File Id="fil3431A9DCF2BCB013481988F4C11BCE78" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\qmldir" />
+            </Component>
+            <Component Id="cmp753112DBBC945D198B4EE02C975AC321" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{D7F32B49-C442-45BD-8C20-4271B69FA1C7}">
+                <File Id="fil31D208AF97E8A938A57BC08705CBA3C3" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\ApplicationWindowStyle.qml" />
+            </Component>
+            <Component Id="cmp23132843F98D74E4B05B8B020C21CBFF" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{798F7562-1B7B-4BCE-9EF6-31F2790D09FE}">
+                <File Id="fil09F0EE3E58451238305548AB00A9ED6C" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\BasicTableViewStyle.qml" />
+            </Component>
+            <Component Id="cmp6F5EE0AC90CB15B061519308ED3EDDA1" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{D101BC7B-6672-4BDA-8899-B6E0AFED90CA}">
+                <File Id="fil1BD452C2B3CA46B50E34656A8DB93BA0" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\BusyIndicatorStyle.qml" />
+            </Component>
+            <Component Id="cmpDBB0631420CEA24C188223978803DCE2" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{F235E5B1-BAC9-453B-BEA4-FB5FBD23BAC3}">
+                <File Id="fil71DA94976E4E61128EC47A7E0716D068" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\ButtonStyle.qml" />
+            </Component>
+            <Component Id="cmpDF341B24F48B5825BDA000FC1992E6C2" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{11731DAA-76A0-4D95-BCAC-4949CBA707B6}">
+                <File Id="fil43BBAC97E35A3E11BE4496F525397A68" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\CalendarStyle.qml" />
+            </Component>
+            <Component Id="cmp1B838DEB62467E6725E450E5C983E68B" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{D75E2845-4915-4BF3-A2B9-6DF2653896C0}">
+                <File Id="filB207B00F0ADC2218549BFB6534BB12F1" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\CheckBoxStyle.qml" />
+            </Component>
+            <Component Id="cmp009FA38875313EE3356CEC6F96F9F98C" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{51F157D5-6719-48D8-A2D8-667EE17E0D77}">
+                <File Id="fil1AE68B7C966E5D46CD939A7F8097AFCA" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\CircularButtonStyle.qml" />
+            </Component>
+            <Component Id="cmpA4BAC5B865A9D245E77A7BCD561D8B66" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{F8842614-2B5D-4E93-85DE-1789A69A762C}">
+                <File Id="filF0CC5FF2D0DD4AE1DA1AAED74E868843" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\CircularGaugeStyle.qml" />
+            </Component>
+            <Component Id="cmp1845B0B92E1F0106CB8274E1622F07EC" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{C7BC771D-8C63-42AD-A985-5014B34933BF}">
+                <File Id="fil0D4E5A3CCA4D30552B2A6EEE685D0D36" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\CircularTickmarkLabelStyle.qml" />
+            </Component>
+            <Component Id="cmp505D2C14766426E4E28131539555A4BA" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{856994BE-78B6-4E8B-8E6D-6957872179FF}">
+                <File Id="filCEB419BF6518DC736884CD8915059F09" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\ComboBoxStyle.qml" />
+            </Component>
+            <Component Id="cmp0959E2B2A09AD0A61B929CEF836DFDC1" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{78B3359C-1026-4B49-8A09-659B2E987A73}">
+                <File Id="filDFB1DDB172D68CB5A17B5A31B9B3C1E8" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\CommonStyleHelper.qml" />
+            </Component>
+            <Component Id="cmpFA6E436D79C709035A44FBFECFE98EFF" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{5B91E9FB-1E7C-42D2-8F36-34E758CDCCE0}">
+                <File Id="filD6EE380422E1919BA9D6FF225A5941EE" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\DelayButtonStyle.qml" />
+            </Component>
+            <Component Id="cmpC72AFE91A1683D377B1737D2BE0F3C96" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{0D597067-7780-4DC0-91E8-F1E3B31499AA}">
+                <File Id="fil9A58FA43F8E410C8F00B60B31D1045F9" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\DialStyle.qml" />
+            </Component>
+            <Component Id="cmpAF781557C3DCE4E86830C216ACFF6057" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{5C536F4B-75A6-4614-9E57-B68ADE099E86}">
+                <File Id="fil6B2AF3B4A8591EE3E8DC64144422F450" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\FocusFrameStyle.qml" />
+            </Component>
+            <Component Id="cmp3B3E4A39807FF76F9A4CE3FB9E01B951" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{6BDE329F-3788-415D-8ED4-27C3F984268A}">
+                <File Id="fil47C7F257BC96ACDBCF1463957BFFBC10" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\GaugeStyle.qml" />
+            </Component>
+            <Component Id="cmpB7A14768D5428AE69B40DB0978802BFB" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{6CD7B37C-CAFF-4A01-A1D2-F7A7A7FC3E83}">
+                <File Id="filECCDA334A52D41914EDDDA1AF00F4846" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\GroupBoxStyle.qml" />
+            </Component>
+            <Component Id="cmpBEEFF7917DE65FB52397D553B9090F4D" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{2955C40B-E140-44FC-94B3-C63C442F3A95}">
+                <File Id="filA369C114163D19028E38D87AC4F8CEDD" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\HandleStyle.qml" />
+            </Component>
+            <Component Id="cmp2EE3FB6E94B8E7BA7BC687EC335C5B59" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{6A7E27C5-76A9-4419-B47A-9DFF47B907AF}">
+                <File Id="fil67F0C65CD3DE7DB4581C608B100F97D1" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\HandleStyleHelper.qml" />
+            </Component>
+            <Component Id="cmpACBA6B3483DA585B20E4D386BD891E58" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{AB958265-224E-4393-99EB-95E6A205F750}">
+                <File Id="filA2E2A6CC3555D4565BE267DE03ABADEC" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\MenuBarStyle.qml" />
+            </Component>
+            <Component Id="cmp6DD9F2EC4790D12D3C2CAD3E6731E63D" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{9643469E-A647-4FE1-8534-AA5BD442A85B}">
+                <File Id="fil5296DDF062970BBAFA5552F3BA659DF7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\MenuStyle.qml" />
+            </Component>
+            <Component Id="cmp1846C17585EF5A791EB3BBDCA4C71EDC" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{8FAF8EB5-C276-4A17-9A7A-078FEA2F4E63}">
+                <File Id="filC4C866AE1012C965CE1CE8C8CB6AFB6A" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\PieMenuStyle.qml" />
+            </Component>
+            <Component Id="cmp9EACE8A2BEE48A9C9FCD11A3277CA9A7" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{1C36DB6D-0CA6-4B48-B495-62B1509E4AD5}">
+                <File Id="filC4394D5DB5C1BB3F46ADEA8B20820D19" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\ProgressBarStyle.qml" />
+            </Component>
+            <Component Id="cmpF7B380FCB40026337A6E30987914BE42" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{7153980E-755E-43EA-84E9-5829BDEA48AB}">
+                <File Id="filA54D27506F7E4C2EB3F64BF83557890D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\RadioButtonStyle.qml" />
+            </Component>
+            <Component Id="cmp5B6C996D3AE8D93D8C0A723E6A43449E" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{77161387-1F79-4A5B-A435-C042DFECD6DD}">
+                <File Id="filE10B45CA17F6A512756529473052FA59" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\ScrollViewStyle.qml" />
+            </Component>
+            <Component Id="cmpDE1EC56108092B320431713598950A94" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{183D77DC-5C0B-4656-9AB6-AAA32A78AF12}">
+                <File Id="fil77109887261D49854472A242B519D86F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\SliderStyle.qml" />
+            </Component>
+            <Component Id="cmpFB0C60A5F167D9FAD7B386895F92F0E5" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{F8FD031C-96DD-40B4-B4F8-D1AEF39060FC}">
+                <File Id="filA7743FCB89ACA04D4E62EBDAE5EBA193" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\SpinBoxStyle.qml" />
+            </Component>
+            <Component Id="cmp5B90C977CED25AACCC1C403E2F0FE022" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{726C6D46-7F7E-47BA-A6E4-3AD962A3B624}">
+                <File Id="fil071A711344CAC8FDA58C76D1F2C57D1E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\StatusBarStyle.qml" />
+            </Component>
+            <Component Id="cmpF45A1F0576FA392C34EBDC3D08C21DDD" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{89D4F1B1-5494-44E0-9D74-0539D4354719}">
+                <File Id="fil3C67C5170C7F977FBB6032210ED48529" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\StatusIndicatorStyle.qml" />
+            </Component>
+            <Component Id="cmp17BAD04125DD7EFEC1A6F6C07A7EE45A" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{FC0E96CC-C388-4E6D-B299-FC745389835E}">
+                <File Id="filDB1A88447E4C1312669921B4E0986303" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\SwitchStyle.qml" />
+            </Component>
+            <Component Id="cmp715514668B5BCB023A874339FE5BB780" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{667015FD-5319-40F9-ACE1-62CDFFE5D4E0}">
+                <File Id="fil774B3B357941CFD80E03BD1A9B53B2DF" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\TableViewStyle.qml" />
+            </Component>
+            <Component Id="cmp07EA5CDF4C804FFC66F67E0C7E417D13" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{049E714D-CFBD-4132-B220-7C2FA4F08F5B}">
+                <File Id="filE7910F497529468A97BC5950857BDF8B" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\TabViewStyle.qml" />
+            </Component>
+            <Component Id="cmpDF3AB8C339E5AFC5C749283FFF990378" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{CDCB1755-B2C4-4263-8E5D-622EE3BFF492}">
+                <File Id="fil3634906DB4A9B2C859EF1AEAB50440F7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\TextAreaStyle.qml" />
+            </Component>
+            <Component Id="cmp0761485A57D4EC72D8105BC042AF098B" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{4D9B26C2-6A87-401C-9651-603882601A93}">
+                <File Id="fil8566CF535D13CE929796EC2C3799E13D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\TextFieldStyle.qml" />
+            </Component>
+            <Component Id="cmp2230E9FE16156017341BE0E99B83F770" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{52DA921F-A244-4755-9508-050EBF3068C7}">
+                <File Id="filE907754BE7FA432F5F65266B813C5F55" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\ToggleButtonStyle.qml" />
+            </Component>
+            <Component Id="cmp959B66138572CE34D765484EC4283E0E" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{279BAB46-4FD0-4F04-BFA7-CD11CF30BA38}">
+                <File Id="fil7449A0A2F334B1A33D3994006B0FD6F6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\ToolBarStyle.qml" />
+            </Component>
+            <Component Id="cmpA9D137EFDCE02D9B63F2AA2FC89074AE" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{FD50D16F-54AF-4C9F-9E2C-0D2D65BDCBC9}">
+                <File Id="fil900BA10D877287DBA80B1C8623FBEED1" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\ToolButtonStyle.qml" />
+            </Component>
+            <Component Id="cmpDD988A3ACE979428AB65CD1E45A3D946" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{766FAB9D-A002-428F-ABB3-8BF0EE13276B}">
+                <File Id="filC9DA834B8D0592D1E7DD692E16B05FB9" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\TreeViewStyle.qml" />
+            </Component>
+            <Component Id="cmp9B0065F09F28CAF9FFB1BC2F24357490" Directory="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Guid="{0FB5B2DD-59F3-4AE5-A374-B3BE6EC93FA5}">
+                <File Id="filD1B3E356F0C454E6EEC406CDC5539DEE" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\TumblerStyle.qml" />
+            </Component>
+            <Component Id="cmp224A2ADB6456F3BBD581B5D4C3239660" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{D2321148-3F22-469E-9D65-EE471B1471D1}">
+                <File Id="filAA44BDC71FB7C5AF7667AF1B9F9A6624" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\arrow-down.png" />
+            </Component>
+            <Component Id="cmp41B7B057AEB74564E5E39B99ED93E3C2" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{40E43C5C-3C7B-45DB-8B2E-39C0A83ABB85}">
+                <File Id="filBED6763FA7A3C763E7E78A2ED514617E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\arrow-down@2x.png" />
+            </Component>
+            <Component Id="cmpF55E0D9EA03A153D8006D53360A70B0C" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{1EB117F8-94A3-43E7-BCC6-1BB8DE062BB5}">
+                <File Id="filF7BCED44C784C786FC6174063D28CA84" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\arrow-left.png" />
+            </Component>
+            <Component Id="cmp386406D5DB425270606AD0C11E074100" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{3F38B856-E1D6-4C1E-B197-A2E79D2AB962}">
+                <File Id="filEEAB41B3042D3A67A108C5957BB1116A" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\arrow-left@2x.png" />
+            </Component>
+            <Component Id="cmp70BC920BE1C60255F7807CA8A2C2C586" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{16F10766-F683-4A8B-9134-0001F8263F1D}">
+                <File Id="fil58217DFD36444FEC0C1111B3FEA56BDB" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\arrow-right.png" />
+            </Component>
+            <Component Id="cmp5BF5F340C2D47415B822F1D8E0E8EA4A" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{E6BEF442-E367-40D7-AF45-2A0F245C6756}">
+                <File Id="fil3414EC14CBF1F246933E7257850ED5FD" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\arrow-right@2x.png" />
+            </Component>
+            <Component Id="cmp73CF8F6AE1A2B4DFC9CED2F958A404D1" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{38F1A0DB-7DBB-4011-BC34-4AB6863E65C6}">
+                <File Id="filDEB792426071E864A7210B23253AC37A" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\arrow-up.png" />
+            </Component>
+            <Component Id="cmp7D4E2B034ACAB05591A4030B6BA5B1D7" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{46CA7B32-D74D-46BE-BF6B-20CA8B9E78D0}">
+                <File Id="fil51A0E418CD59A1A60154D9C2665485D1" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\arrow-up@2x.png" />
+            </Component>
+            <Component Id="cmpB61FBC824A97E167713776B5957323FF" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{5F88F58B-0DE3-4699-A9C9-388D1FF53714}">
+                <File Id="filCE76F3DC3CE01F5CDBE5924BBF4142C6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\button.png" />
+            </Component>
+            <Component Id="cmpBD68B3C702D10F7691951278D015DB1D" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{86F63112-DD48-460E-8C32-2AC1E2869081}">
+                <File Id="fil9EC5AF5FED78C9DB997A90783FA13661" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\button_down.png" />
+            </Component>
+            <Component Id="cmpF9DD5DA2BA95CC3123664303F1065BEE" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{A82213DA-A6AF-4091-9359-293B4A34E448}">
+                <File Id="fil97160064D80F79C023CB750F7837699E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\check.png" />
+            </Component>
+            <Component Id="cmp8505523C22DD1499CC19B812AF6D0F62" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{1B0209E2-F81E-4C3F-9FB4-23A8D6ACA23C}">
+                <File Id="fil4B15C4B9AFBAE8283B5E468CF0B21475" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\check@2x.png" />
+            </Component>
+            <Component Id="cmpA4395A6E99DD011D049A90AB169E86EF" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{228C8252-4FE0-4264-B1F3-2507B5D71BFB}">
+                <File Id="fil63C676F61C9864E9F44CC594E8038AEA" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\editbox.png" />
+            </Component>
+            <Component Id="cmpBCEB9670AEE376B5E75A63B49C144BBB" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{E545DEE1-CE9C-4A17-AFCE-C973CDBCC6FB}">
+                <File Id="fil23D7E0E241F3FF0B3B27C10257D22821" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\focusframe.png" />
+            </Component>
+            <Component Id="cmp06DAD3C17E0766C23AAA01C7648E7453" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{3D2F400E-473F-401E-9892-9AA0C20CD5AC}">
+                <File Id="filDD9387091610DEA056A6D6AB2F696DFC" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\groupbox.png" />
+            </Component>
+            <Component Id="cmpC432DCDDC8344FC71E4C9675C7D563C7" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{062CFBF7-6B4D-47BC-B5AE-842E428252A9}">
+                <File Id="fil9BB0F640A3D7B69BF1749AF53EF88B5E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\header.png" />
+            </Component>
+            <Component Id="cmp6896BC4E234D5B5BB9DE46C6CE1166EB" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{8B709AE3-5278-46BF-860A-1C877A95600A}">
+                <File Id="fil6809F58C7B73E2118A96F5CBC48CEF0F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\knob.png" />
+            </Component>
+            <Component Id="cmp5AE13A9EFBE3DDD87F055BCD18A20853" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{CD1BE4C9-BCEC-422C-8034-2A948595439C}">
+                <File Id="fil2F50137813130979BE6BB0245CF838E3" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\leftanglearrow.png" />
+            </Component>
+            <Component Id="cmp0CB7694FA643096B560168C8F61E5683" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{D4A963A1-F3FC-4E70-AC22-6C8009DCEC66}">
+                <File Id="filB9226877376A1B1C8B20EF1A99A1F723" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\needle.png" />
+            </Component>
+            <Component Id="cmp48AD60ECC4C7FCF2685E1A812E67E86A" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{93FF397D-ACA5-487C-B704-D60B8BE01408}">
+                <File Id="fil88C8DFB5B9A4E16BC7234BDD2694CC5E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\progress-indeterminate.png" />
+            </Component>
+            <Component Id="cmp2D75503C9E50C0E17CF0EA133F74A1F7" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{300DA1D3-6543-4732-A16F-E602282F3715}">
+                <File Id="fil520A1C391EECE301153BC7CFF8D18BEB" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\rightanglearrow.png" />
+            </Component>
+            <Component Id="cmpEA6F850E7DFE792E51EC9BE3D9366937" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{51C722F8-34AC-478A-9CFA-7C70F1EBF184}">
+                <File Id="filCE2AD85590112641A819EBDBBDFE8BB8" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\scrollbar-handle-horizontal.png" />
+            </Component>
+            <Component Id="cmp58F1B86727CB014E4B79DD68FFD3B631" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{6A055139-8B4A-4D8A-ABED-38CB35F4FB87}">
+                <File Id="fil97EC787332131A1AF15C011C76857875" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\scrollbar-handle-transient.png" />
+            </Component>
+            <Component Id="cmp7BFE46242AFF2D0D67D1224F9801FCF8" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{2641C8EF-7FA6-4B8D-87D6-D3EA2532D98B}">
+                <File Id="fil573833D7FBE5084FE9C6D954FE975489" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\scrollbar-handle-vertical.png" />
+            </Component>
+            <Component Id="cmp234D73C93078AA114E38A6BD47B1DE0B" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{F7421A1F-FD5E-45F2-94FE-1C2319B775AE}">
+                <File Id="filB280B7F4E143DAABCFB2B2D188AA2341" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\slider-groove.png" />
+            </Component>
+            <Component Id="cmpE828C479F308AD47860C8B986532115B" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{D53AB769-337C-4A83-A47F-E38D53507B30}">
+                <File Id="fil113568DB7EE1FB0BD3F978D64F905901" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\slider-handle.png" />
+            </Component>
+            <Component Id="cmp9D8434CDA6EFDA1F1ACCE7EF7F3129A9" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{A7E82BBD-8E5F-44D6-A5FA-BB440729C613}">
+                <File Id="fil07F232764414A4CA295FABBDAECD0B75" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\spinner_large.png" />
+            </Component>
+            <Component Id="cmp09A3047716570F0ED93D6CF4917EAD97" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{F63D1D18-1653-4584-A86E-E172A1324C0F}">
+                <File Id="filE56F085C79E77DC46973D13CB6AF11BE" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\spinner_medium.png" />
+            </Component>
+            <Component Id="cmp10982017B34EB4947DEFE88BED07D645" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{46D93C8A-60E4-4070-80F5-6EA7059F67B3}">
+                <File Id="fil464FF3E1F90AD319C953FF0FD71213B8" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\spinner_small.png" />
+            </Component>
+            <Component Id="cmpB72C29634A36B128AF27733C2DCF82D6" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{67DB3EAB-F6B1-492D-8C3F-F5B7E571D8E1}">
+                <File Id="filBF00B07BEBE4EB6F3359048703B14895" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\tab.png" />
+            </Component>
+            <Component Id="cmp0388663CB6D4EAB853D44AF086A186EC" Directory="dir8A06CEEEC98026525CFB60D3E98F954D" Guid="{B5530E95-B7AD-42A0-ACBF-DDA8C63C2B25}">
+                <File Id="filDE82D8119EB38092797043A5F6998829" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Base\images\tab_selected.png" />
+            </Component>
+            <Component Id="cmp39A9F6BCBC09CB9C1FC5F0C4CA2FA813" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{099A7FBC-DA85-4911-921A-B24EE423D39C}">
+                <File Id="fil10B21370CE2DECE196E0C66A9DFC97F7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\ApplicationWindowStyle.qml" />
+            </Component>
+            <Component Id="cmp9FC3CFE52DB44EE3ABB905495AEFEE79" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{66515DDC-D0CB-4506-A054-32BA87918122}">
+                <File Id="fil366E0E62CEE71232CB107233AC3FB75F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\BusyIndicatorStyle.qml" />
+            </Component>
+            <Component Id="cmpEB39FA6047E3E3607E8AC02705CDF9A7" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{3BED488A-0B68-4335-BFAC-8BE9940C3561}">
+                <File Id="fil53FFE8552E8877EAE18327F067438B1F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\ButtonStyle.qml" />
+            </Component>
+            <Component Id="cmp796A3F5D3D49BEECBAAB12ECD714A47E" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{CBF985E5-DC00-4C14-95B9-F39CD90DF8D0}">
+                <File Id="fil0BFAC1082C93D8058390525E7EC3FFB8" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\CalendarStyle.qml" />
+            </Component>
+            <Component Id="cmp44634547932175D1AC711C49FE7DE9B3" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{DAEA0553-D856-48C7-9265-6C43F76A71BC}">
+                <File Id="fil182EB3537CA6D2947D947F318BE5EDF6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\CheckBoxStyle.qml" />
+            </Component>
+            <Component Id="cmpE7B6B848040ABD6B7DAC21FB7987016A" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{8B38F250-104F-4387-AF68-B5BD1D1E3C40}">
+                <File Id="filA53468D3983EE1BB049A756932BA94E4" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\ComboBoxStyle.qml" />
+            </Component>
+            <Component Id="cmp53496FB3083BA53FC43FD3C6BAA58434" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{0E1B4960-DB57-437C-AB09-90EAD26C01C5}">
+                <File Id="filB29CE6DC0998341916FD3E2BEB99018A" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\FocusFrameStyle.qml" />
+            </Component>
+            <Component Id="cmp64372A3382E90992E48B7F025AD92714" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{6283E9D8-D85D-41FB-AB28-7628D129475E}">
+                <File Id="fil7211E0F44CE9CE5DCA6C1AD3DD4DE1D6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\GroupBoxStyle.qml" />
+            </Component>
+            <Component Id="cmp5DB73A1719E5E52B607FC4A6F72AAD37" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{181C02D2-5C20-454C-8699-FF4E45F51FD5}">
+                <File Id="filF41F824138826626F3490B6D408474E2" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\MenuBarStyle.qml" />
+            </Component>
+            <Component Id="cmpB4BAF202253676EC3F0C08C436A05DEB" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{2CFF551D-DE0C-4721-A1B3-A71076EED9A4}">
+                <File Id="fil1D8C9D7136DC17AC37E9670F57203474" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\MenuStyle.qml" />
+            </Component>
+            <Component Id="cmpA00C4EC3C4F6AE8C8BC9CEAF7CEEAA2C" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{6D666DF5-AB56-4DC7-8391-7254C99CE6AA}">
+                <File Id="filD656F19C3108AAF63D7FD81429F5D4B6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\ProgressBarStyle.qml" />
+            </Component>
+            <Component Id="cmp6C8B31AE0CB2D1AF103ABB6D345140ED" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{B3D754E3-B6C2-43E1-8F47-8D1B6C4D25F7}">
+                <File Id="fil149E99F087AE1BC72A5FA7F666E0B71B" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\qmldir" />
+            </Component>
+            <Component Id="cmp6AE4F6818E3F6644782C95D17A255E61" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{01148DA7-050E-4AD8-B5DA-E01187B992B8}">
+                <File Id="filBBC4DACAD83E723D4908EBDC87EEB3B1" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\RadioButtonStyle.qml" />
+            </Component>
+            <Component Id="cmp1C175ACDB1499653E73C5C14748A82B1" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{A7C0D199-CB57-436B-957F-8956DA8A5390}">
+                <File Id="fil6532112962BE1EFFC47E34EFE823D726" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\RowItemSingleton.qml" />
+            </Component>
+            <Component Id="cmp731C23A0148962725C64738CA38224AF" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{89C8BC9B-BCE0-48D1-8CB8-7FFCD94B0383}">
+                <File Id="filC347F9E82563CE04AD30178C02313987" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\ScrollViewStyle.qml" />
+            </Component>
+            <Component Id="cmpBBF3D5C6567F19316C7709B3F2DD3881" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{F1264B3C-DA99-4132-BAAD-4D9017BBFE3E}">
+                <File Id="fil60B4027B69E4F14B5535D0A67065C0AE" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\SliderStyle.qml" />
+            </Component>
+            <Component Id="cmpE54A06D257858BD349D0D13FAC580A22" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{DF1324B6-4AA4-4836-9B72-59542E88C9A1}">
+                <File Id="filD78D9D3B5F4445A8E37D6C4E487A4707" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\SpinBoxStyle.qml" />
+            </Component>
+            <Component Id="cmpD1B32C8129E0FA11175677CF6D75C248" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{A542DE71-B842-4D8C-B2E2-45121BB2232B}">
+                <File Id="fil56B26D671DE2D4697083BAF004743EE5" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\StatusBarStyle.qml" />
+            </Component>
+            <Component Id="cmpAD9DA4748FAECA6415BD7F8C51996259" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{96A25E4E-4C28-4E32-BCA5-CE34739559D3}">
+                <File Id="filFF68C33B597CA47DDB2A99300C1D5B8F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\SwitchStyle.qml" />
+            </Component>
+            <Component Id="cmp148B9CF1C1F408079476813C374299D3" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{7BE20DF7-FC99-40D3-9F96-8F9429BF6F41}">
+                <File Id="fil29AD1F5BBE1A9BA98600E607BD289E34" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\TableViewStyle.qml" />
+            </Component>
+            <Component Id="cmp3C79642AF2BF653AB1C732B806935CC2" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{02387AA7-E577-4A44-AEC4-DED0ACDD5803}">
+                <File Id="filC180837C1045AF110D12F51CA40F17E6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\TabViewStyle.qml" />
+            </Component>
+            <Component Id="cmp90328ACBC200472A00235C300711FB45" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{06F85DCE-9231-4B43-8D1F-AA3517C7B4CF}">
+                <File Id="fil8225A6B1FF0050D324882415A2D49B6D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\TextAreaStyle.qml" />
+            </Component>
+            <Component Id="cmpA52BC3B8B5CC91893E6F07D6B9AE8955" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{7D146223-6524-4E66-8C2C-95375CAFD18F}">
+                <File Id="fil9DD5592459225E0CC513282CF28E5047" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\TextFieldStyle.qml" />
+            </Component>
+            <Component Id="cmpAE1B4D4AE8D5578653ED21BC2A448828" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{7D4DF170-409E-4173-85CB-A1D925C4CEDD}">
+                <File Id="fil6F65C4A98E25A4E8FAE481DA38EBABC3" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\ToolBarStyle.qml" />
+            </Component>
+            <Component Id="cmp4FC8049C0659A79E65694D677425BA68" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{73F9A8D7-D96B-4958-8843-4E79DE26CD83}">
+                <File Id="filF7F3090852F4A7A120199A3C19FBD289" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\ToolButtonStyle.qml" />
+            </Component>
+            <Component Id="cmpD1FA35D8F17E2D48C527763230B2DEDB" Directory="dir09DA90BC73019D3765D52F3E63DF25C1" Guid="{290DBBC1-2F4D-4EEA-967A-8FBDD278E2B4}">
+                <File Id="fil9741CE21E891A80155F70EB81BC2BBF1" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Desktop\TreeViewStyle.qml" />
+            </Component>
+            <Component Id="cmpA7D25A9C2008E0ACB3CBCF976BADE042" Directory="dir5B766A86EDB5B62D2D0DBB69BD12A666" Guid="{95FDA188-539B-4A57-B86D-EA3629A4D892}">
+                <File Id="fil2057691476D520145ACC5FE8742F3540" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Flat\qmldir" />
+            </Component>
+            <Component Id="cmpC9768DC8F6818D3075E59ACD2B3BBCA6" Directory="dir5B766A86EDB5B62D2D0DBB69BD12A666" Guid="{054B8D40-F119-494D-B296-7712A714B57F}">
+                <File Id="fil2088121CF384A9425D36F49C290952A5" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls\Styles\Flat\qtquickextrasflatplugin.dll" />
+            </Component>
+            <Component Id="cmp7A50ADD86D78955A433BA31345117506" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{EB26B7ED-1CBE-4787-829D-7D8794CA965C}">
+                <File Id="fil5716ACA549456B6D3D00E64424A96092" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\AbstractButton.qml" />
+            </Component>
+            <Component Id="cmpC146D7A3EEF7DDE820D0FED2A6558733" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{D7754793-79C5-4707-A9BF-8D1D89AEF037}">
+                <File Id="fil31E9997A179CA564E96172CD58420063" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\ApplicationWindow.qml" />
+            </Component>
+            <Component Id="cmp24CAB92897020BA9EF8D870A421CA915" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{CF2346D6-83CC-4BF9-85F6-C71445FF5787}">
+                <File Id="fil16552703E4C68351F442B905730CB9D6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\BusyIndicator.qml" />
+            </Component>
+            <Component Id="cmp77D0A7A084AA882E84DACEF8A4A6311B" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{4DE27774-7F7A-4AEB-9B5D-5B7DC89AFD41}">
+                <File Id="fil50B2B0C110E417DDDCDDDC7CE0C9BEF1" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Button.qml" />
+            </Component>
+            <Component Id="cmp5AFA8C450F65DF6A7A618E4ED64679D4" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{CFDE789A-3DC3-4598-AE37-01F605B195E4}">
+                <File Id="fil3D225C4360D188080D38F5B02D8FDB91" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\ButtonGroup.qml" />
+            </Component>
+            <Component Id="cmp2837B79C271861B255C86D71C93A407D" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{F2F24E14-F51F-491D-A76C-F52C07AE1929}">
+                <File Id="filAA766ABCDDB7513590901C7F49661BF9" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\CheckBox.qml" />
+            </Component>
+            <Component Id="cmp819F418ACD7CBDAE3356E61003964326" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{47589A86-20DA-440B-A21D-511514A7E079}">
+                <File Id="filCDED78221BD6E47AD7DE353E132B0A2C" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\CheckDelegate.qml" />
+            </Component>
+            <Component Id="cmp1345C13F83D1A776DC7356067559378C" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{0ED3AFBF-9CFB-49BC-8E49-8ACF9235246E}">
+                <File Id="filD67C8DC9FC10A4BD93AC8ACCE193C655" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\CheckIndicator.qml" />
+            </Component>
+            <Component Id="cmpF674DF9CBCD23B1C7C38DCDC2B54E97E" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{F3F25B01-5650-42B5-9835-79DD1A6C98F7}">
+                <File Id="fil281B55AFA68716351C59EAB812827798" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\ComboBox.qml" />
+            </Component>
+            <Component Id="cmp817214B793CEB0C2C539A56A9A454F34" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{A65F81F1-F72E-4273-8F7A-0091D9506010}">
+                <File Id="fil6F829C1CF6129E5EB18DB5F4553F6E27" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Container.qml" />
+            </Component>
+            <Component Id="cmp3F873C9D910C829C5BD41B04535D91A7" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{23594861-F5F1-4796-B8DE-3FA6AF53D6E4}">
+                <File Id="filA5F7B9D762D899B4673D639F4839C993" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Control.qml" />
+            </Component>
+            <Component Id="cmpC4F722881734B33FCE83B3716597AF30" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{CEFE7C24-8FAB-489E-95BC-AE3D8299E967}">
+                <File Id="fil5E3532A26C560FC437D7570566D4047B" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\DelayButton.qml" />
+            </Component>
+            <Component Id="cmp0959D31035D7046ACCF3FF123DEFD384" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{306C39E0-975A-4067-817B-9A508729D7C4}">
+                <File Id="filB5DCD7AABEE39C6935B18D5AEBD3DCC6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Dial.qml" />
+            </Component>
+            <Component Id="cmpC684C90387C7EAD1D0F6C9AA5234C79E" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{F7C4A0B7-3542-4770-BC87-56A511B1D1B8}">
+                <File Id="filF3FB86F05AAB32C21B56D9146F9DD825" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Dialog.qml" />
+            </Component>
+            <Component Id="cmp09764C8184236959824FF0312957E2F7" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{68E66FD8-EFC2-47BC-8C64-EEFA4A3F3F50}">
+                <File Id="filAD820FDA41823B6213782B33BAD8D2CB" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\DialogButtonBox.qml" />
+            </Component>
+            <Component Id="cmp0296697F6C5C58892FDCC90118DCE13D" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{18BF50F1-D9B7-42F9-9576-E84AD0BC8AB3}">
+                <File Id="fil5AF4ED9E5BE7579F074C11C40524B31D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Drawer.qml" />
+            </Component>
+            <Component Id="cmpC57FF5210DD9B02009146158723898C6" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{8E1E9834-2AC6-466A-B351-D47EC93D9ECE}">
+                <File Id="filC15B96BF139A55AC9D9652CD7479522E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Frame.qml" />
+            </Component>
+            <Component Id="cmp8D14E0390FD15EA4856B8E5FD0A33C3F" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{46E211E8-79FF-441A-B832-109553FC0150}">
+                <File Id="fil8EBE74C4001C298C679E4C61F12179E7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\GroupBox.qml" />
+            </Component>
+            <Component Id="cmp905B2EEDB161F3B03D0A5BEC123B5152" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{5275BA72-DDE2-4FC8-89CB-81761D078ABC}">
+                <File Id="fil811C93EE82D6ADF38A20968BC4A81C85" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\ItemDelegate.qml" />
+            </Component>
+            <Component Id="cmpFDC9A2A85A8EC7BE2A9B27B617D6D84F" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{50459D97-BD57-49AA-B845-36DDE6A9BBE7}">
+                <File Id="filC5661FB15325A71156177DC3355C6C7E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Label.qml" />
+            </Component>
+            <Component Id="cmpB0033EDA8BB8589E6D950E223D87E56C" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{8619E766-CD57-42AE-BAAD-ED5EF411C118}">
+                <File Id="fil8D280A54F887A0B8702CB3861BE2CAB0" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Menu.qml" />
+            </Component>
+            <Component Id="cmp8C49793FA9DED90C545F7A34CCA3E78F" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{EAF77C2A-50EA-4593-917A-12A33111D47F}">
+                <File Id="fil0843A198765CA691CB50182F389C3044" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\MenuItem.qml" />
+            </Component>
+            <Component Id="cmpD3C854BF5E7D04BA47B5E52AEC8EE5E4" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{50C73C26-03E2-45C7-931D-85C2B0C2E7EE}">
+                <File Id="fil1B52A394FA161CACBEFB2475764597DF" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\MenuSeparator.qml" />
+            </Component>
+            <Component Id="cmp9BB320BF66C9DB65D1D321E44A32F004" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{C344C00F-9FD3-4D95-B1DC-8390B5B72A6D}">
+                <File Id="filED023D92609BB2406B5DC62A09A756D7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Page.qml" />
+            </Component>
+            <Component Id="cmp6B98913CBF70B18A18627567C83D0CD4" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{3D843975-EA74-4336-A0AB-4B085E3D1332}">
+                <File Id="fil3B47BD96661B4C902788054C65D994DA" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\PageIndicator.qml" />
+            </Component>
+            <Component Id="cmpFC9ABCB4ADDE04E6B27C17727FC49333" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{5FFBDB33-840A-407E-BC69-DD9E90E5F120}">
+                <File Id="fil09FADF9A67453CA74BAFBA3A05013651" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Pane.qml" />
+            </Component>
+            <Component Id="cmp8B95211DE5DF70E6C81536BEA8D861AB" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{73FC469D-F1A2-4AEF-B3FF-5143ADCA6740}">
+                <File Id="fil828B4166B09C25AE207C5BD875068B62" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmp43B1678E97513E02CBE19C6620FF3A30" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{8FBDC78E-3DEF-4CFA-A474-254E750706B7}">
+                <File Id="fil900FE3C4A68E51F54981D4AD95588657" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Popup.qml" />
+            </Component>
+            <Component Id="cmp6487E656C43F9F437C18F943B00CAFDD" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{5AD83291-B4EB-4514-B3E4-D769047462DF}">
+                <File Id="filB6D2DEFFD2A260BC4605092510EDFDA3" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\ProgressBar.qml" />
+            </Component>
+            <Component Id="cmpB170962587FDBC76EFFF124FD1A2FC47" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{F5348E4B-93ED-4145-9647-177897422E6A}">
+                <File Id="filD64BC981D118D38AAA5A42EE71EA4A5B" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\qmldir" />
+            </Component>
+            <Component Id="cmp5F90C2298903BAF4E6B02F90C45F1B28" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{1121B885-F5DC-4A00-95E0-2AE56BF48386}">
+                <File Id="filB8D9CA8FA2133C1F269DEBC388737C0B" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\qtquickcontrols2plugin.dll" />
+            </Component>
+            <Component Id="cmp97BDD57421305D0811BE4118256895D5" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{8DC3E7DE-0ADA-4039-A045-1DEB737B94C1}">
+                <File Id="filBC445A81EF42BACD0E865019B8F931C6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\RadioButton.qml" />
+            </Component>
+            <Component Id="cmpF7632961F0566AFEC4BB07C92AFF20CA" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{7A7EE7D8-8218-4B64-82F1-839CB90E549D}">
+                <File Id="fil86E393709BEFF04A151A766B61808C07" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\RadioDelegate.qml" />
+            </Component>
+            <Component Id="cmpBC7514701F11BF60FC28720790F65F74" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{01DA9549-8316-4AB0-9B43-862EFD6745C4}">
+                <File Id="filB93927E3EA64E6BCA138D0FE4E9FB3C7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\RadioIndicator.qml" />
+            </Component>
+            <Component Id="cmp5FCAE906C20C384206246E14D9AE46BE" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{1B31FAE3-6DE2-4DD1-ADE4-5B5E92F338CE}">
+                <File Id="filE6D33EA2AC9CF707250FB9F2B7D7A223" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\RangeSlider.qml" />
+            </Component>
+            <Component Id="cmp9F3FFC5B423A366A56F086CB1ACE12D6" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{20EA49BF-7865-40A2-BD2C-30A8C33D28F6}">
+                <File Id="fil32CC2A866C09E99D8653C402372DB82C" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\RoundButton.qml" />
+            </Component>
+            <Component Id="cmpF2C0B2D0341698CDD172450AB2FEF644" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{A6712D72-FD49-4F91-82EB-79D3C44DF446}">
+                <File Id="fil46B3B25BB2D6DCAB680B68B25E102FB0" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\ScrollBar.qml" />
+            </Component>
+            <Component Id="cmp707B7F99B231080B17DFD84DD27F6DC1" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{797F0074-580A-4B2C-8CC6-714562963ECD}">
+                <File Id="filB2C63977E2222CDBEB79B6CFB03FDB42" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\ScrollIndicator.qml" />
+            </Component>
+            <Component Id="cmpED3760DC2CFD1762CB02BA0E6E9E7876" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{F4B0109A-A201-406A-AB0B-73F7E9794A5C}">
+                <File Id="fil6C8880AD4EA10A00BADD75B60AE560EF" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\ScrollView.qml" />
+            </Component>
+            <Component Id="cmp1B17DB61A19AFF4FC36552081A3044EF" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{AC8FB9AB-8FCB-435B-83A5-9204B2BF9E69}">
+                <File Id="filC883A42062BF0B6790B48FEA8222570F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Slider.qml" />
+            </Component>
+            <Component Id="cmpA1B27ABD98DBD4BC4E0374CDC27BFFD4" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{3B8BA2BC-020A-4D81-922B-67DA8F2DDF92}">
+                <File Id="fil8F3615150E894C8B3CC8A63D41A2AE31" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\SpinBox.qml" />
+            </Component>
+            <Component Id="cmp5DCC5284729D81E5B2E9B0402580E147" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{211AC5CE-BC6C-4741-8928-D02804334374}">
+                <File Id="filC1776AF683E8DAAD8C802D8C08E766BC" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\StackView.qml" />
+            </Component>
+            <Component Id="cmp033BB1FF59BFB289337A6DB0FC6FA84A" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{A74F3A9D-5BA5-4E92-B3DC-503B3F46A92E}">
+                <File Id="fil17DC714F4AC4DFB35EF948574690C8D1" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\SwipeDelegate.qml" />
+            </Component>
+            <Component Id="cmpFA37DA691D151241EA183A44E826EE27" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{4B740CBE-FDAF-4C03-8577-AA48ED2089C3}">
+                <File Id="fil9870F11531ACDE6514C2B6C3CEC79734" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\SwipeView.qml" />
+            </Component>
+            <Component Id="cmp5685BA8165AB8F1F5BD7A0B9D5D37BEB" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{0A41FF24-BBDD-4DA9-9408-C8EF79574004}">
+                <File Id="fil5897AAB274D4C85948FFDE9658ED60BF" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Switch.qml" />
+            </Component>
+            <Component Id="cmp8EC104F485BD8C2C7C30ED8CC3369585" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{0E4235CD-B82E-4BEF-B32A-8FCA25DC0C29}">
+                <File Id="filA7E99AB9F1A3760E232CDA4A569FFBE3" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\SwitchDelegate.qml" />
+            </Component>
+            <Component Id="cmpB727E1058C89089FB43E9F3505618BD1" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{B1962221-1072-4C76-A76B-4DE0A827449B}">
+                <File Id="fil473BCD670131B139255C3D56D21B702A" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\SwitchIndicator.qml" />
+            </Component>
+            <Component Id="cmp5086236CE1D1B9ED52B24A9C54673927" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{B94B6B62-A45F-4BA9-8105-0A2CEDFC2702}">
+                <File Id="filDACD16CFB7645EE453E2C57FF8EFC996" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\TabBar.qml" />
+            </Component>
+            <Component Id="cmp7AEDE8B6A32B7A692380778781794E4A" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{136BD9BA-77DD-4F91-845D-5ABC42DC46C5}">
+                <File Id="fil07A3D18226AD6880459DA5B1FB1F3D45" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\TabButton.qml" />
+            </Component>
+            <Component Id="cmp1D0E6B04BB7E4D44143BFC851E49612B" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{33B18741-DF97-49F3-9D41-CD816AF171D1}">
+                <File Id="fil3A22F428127BA8CD623B2DA3400E2E1D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\TextArea.qml" />
+            </Component>
+            <Component Id="cmp62B51BE4F1A68183F0AE7F9D03B67F71" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{EEB9CBE4-4189-4401-84DB-0472226463A5}">
+                <File Id="fil64F95277058096D3C0949C870394B237" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\TextField.qml" />
+            </Component>
+            <Component Id="cmp45D66BD390D5BA7F45F69C33DBAC6595" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{36CC8048-C402-40F9-9A32-3BF6326B6ACB}">
+                <File Id="fil84C7EACA532F81E3C1E529C96DD04B51" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\ToolBar.qml" />
+            </Component>
+            <Component Id="cmp1E7217BB5350927E530CBBF6A73EED56" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{53ABA69D-353B-4BF9-A10D-7320F89B397A}">
+                <File Id="fil2BD46B61C952492C7670FDC5E5800D9E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\ToolButton.qml" />
+            </Component>
+            <Component Id="cmp0E63788BE6FB47F553889B7FBAE8BD92" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{7FDE9D28-0462-4725-A814-E0237083780E}">
+                <File Id="filFEBB134665B42793EA385A0EA3F84D4F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\ToolSeparator.qml" />
+            </Component>
+            <Component Id="cmp716B7085DE5AA77FE28AF016D14E708E" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{98404082-4697-4BB3-B8B7-5B62706289BC}">
+                <File Id="fil7D86851D16BA548E379DE29F04B7177C" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\ToolTip.qml" />
+            </Component>
+            <Component Id="cmp80BBFE08C695FD5AD39754B7E358F993" Directory="dir60959F3A114DA2236E4EE00457C00F6D" Guid="{3EA614AE-7163-462D-A57E-A7ED9C2F2E23}">
+                <File Id="fil840956A9965A6A4BDBFA18C565513106" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Tumbler.qml" />
+            </Component>
+            <Component Id="cmp708B26E36BF373319FC45B21050FB2C4" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{36A12034-362F-4FBA-8DAF-A7A1715AC841}">
+                <File Id="fil1E2F36AF98D966EFA31F8132121F4AD7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\ApplicationWindow.qml" />
+            </Component>
+            <Component Id="cmp34A430A4B7B7DCF14003A3C1C93207D8" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{10D9CE49-02B4-4B28-951D-C1ED5FBC381B}">
+                <File Id="fil2CD2890F02598D131F5BC3A5C9E22DB1" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\BoxShadow.qml" />
+            </Component>
+            <Component Id="cmp8F0DF804F1FFBB2B0439A644EC194792" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{F536943B-EA86-4B23-ABA9-A566A58B911F}">
+                <File Id="fil72DAF9D948D2EC35CA10498C916DFC28" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\BusyIndicator.qml" />
+            </Component>
+            <Component Id="cmp9C85C9DA2D9D7654BFF49382714837B8" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{1F46810C-03EE-4C55-99AC-504B7DED34E9}">
+                <File Id="fil39B1AD72AFC5E75AC6B4195A13242650" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\Button.qml" />
+            </Component>
+            <Component Id="cmp395C0E289082D72B65F3D6BF368BEAB7" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{83101379-681D-431C-B190-36BE724DDB35}">
+                <File Id="filBBCD783EF39E537E0F94A060F1EA5622" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\CheckBox.qml" />
+            </Component>
+            <Component Id="cmp5D19039235ED2ACB03133EDC6E23E024" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{FBF86FC6-9B36-4B53-9AC5-883792D4561A}">
+                <File Id="fil257CD8217840BD49F31724DD815882C5" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\CheckDelegate.qml" />
+            </Component>
+            <Component Id="cmpA426B2788D0F4F815BC1E628E0D36007" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{9A13CEAF-A39C-4D62-B530-46333630F6F3}">
+                <File Id="fil05E26EE39F26F6336F0A051C48CEE822" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\CheckIndicator.qml" />
+            </Component>
+            <Component Id="cmp3094B7F7615737C08C4FE43F7310B885" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{C46C88B8-8CD6-4FE0-A253-4EC0748C135D}">
+                <File Id="fil0ABA957CE0B4D4C026EFD27EAA64A695" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\ComboBox.qml" />
+            </Component>
+            <Component Id="cmpFF7BDF92A69AAFC3EA8425BF5D744488" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{B8754195-406E-4B0E-81D3-3DFEF4A40ED9}">
+                <File Id="filBE1926233CB59FA921F2731694EED9D6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\CursorDelegate.qml" />
+            </Component>
+            <Component Id="cmp2A9DB24258111A7CF49839B82F00B785" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{4E79FCE9-2EBC-426B-93FD-3CEE225BA6BA}">
+                <File Id="filDE4BF3664F8294E5D5B3FEB048DFF499" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\DelayButton.qml" />
+            </Component>
+            <Component Id="cmpCF2DBF99E7B951BE39D0198768207785" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{CA5A4BC7-E7AA-48BF-909A-BDA4E150057E}">
+                <File Id="filEA2F8D405DE5356FFB4B21812FEDEE9F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\Dial.qml" />
+            </Component>
+            <Component Id="cmp3E54DAA775930E4A696685AF7C7EEBF0" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{AE1EA54E-5B9F-40EE-A590-209FA970053F}">
+                <File Id="fil56EB0A2797C5DA66E4EA66E818F3F43B" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\Dialog.qml" />
+            </Component>
+            <Component Id="cmp1150D22063D656C01398E2604A883525" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{771CC9BE-58BE-4E0D-B326-0F54F174BABC}">
+                <File Id="fil1AE8BD301300976844C4D3600A99C857" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\DialogButtonBox.qml" />
+            </Component>
+            <Component Id="cmp05FCFA3125FAC78EB8A47271C9476800" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{B8CB3055-33B5-4122-B75B-6D2939032E00}">
+                <File Id="fil188685A4D8D3F42A2C755189B90178AF" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\Drawer.qml" />
+            </Component>
+            <Component Id="cmpB326A07FA93F9171CD71E892C843CEE0" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{7052D416-C2D8-48C8-B363-1E96FFE01204}">
+                <File Id="fil1CE82DDF4ADB4A551D88E70947AC2399" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\ElevationEffect.qml" />
+            </Component>
+            <Component Id="cmp8043C72612F4A8D15134E3A5C4BE96FA" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{F0DAD0DF-B3B0-41B3-B7C6-1335F1DB24D1}">
+                <File Id="fil365284AE999F2C95CE2F7A64C892FD67" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\Frame.qml" />
+            </Component>
+            <Component Id="cmp4FE0EAA0B60BDE698A8680A638B52007" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{20DAB36E-006F-408F-9D5A-381E1C99E5D4}">
+                <File Id="filA2E526195492736C85B91DB4515E6811" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\GroupBox.qml" />
+            </Component>
+            <Component Id="cmpCB5352B828400903DBC4E1FBBA432ABC" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{FB54EA24-C2CC-4B4B-B9CA-B57D73A8BE8A}">
+                <File Id="fil307A6AD20DB3052FF93C93C10ED8AE9B" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\ItemDelegate.qml" />
+            </Component>
+            <Component Id="cmpFE9553AE5BB321704A42F89E8D6099EF" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{5EF1F006-0CA5-4ACC-BEEF-9A0A86678CB5}">
+                <File Id="fil9E0605AB2C4C57EE51CC162D6830A974" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\Label.qml" />
+            </Component>
+            <Component Id="cmpDED072CFB23C84B9B8F5923380BABA5D" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{09228F64-3ECB-4A5B-9B9D-A03529EE0826}">
+                <File Id="fil758D85D1B9BB095B36495E295AF1C828" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\Menu.qml" />
+            </Component>
+            <Component Id="cmp6C1DFB6BA921B63F363C30C23E9B91B2" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{9A0321CD-09F9-484A-A284-CF8A03D4AD9A}">
+                <File Id="fil098153653F1B5255CD532232D20E5303" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\MenuItem.qml" />
+            </Component>
+            <Component Id="cmpE5CE5AE6CCE77B2E29B08F3CBE60A81B" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{0246BDBC-0B1A-4CB3-80C3-E1A28DA52E82}">
+                <File Id="fil810B06A0C90BB359381C3F5D930707D5" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\MenuSeparator.qml" />
+            </Component>
+            <Component Id="cmpCE69322727659D2D90ADFAA5B5F3B22D" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{F56F5AD3-F4E1-4561-966C-C5BFB7B654A4}">
+                <File Id="fil9CB239ED4141F95CBE4DC50661820777" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\Page.qml" />
+            </Component>
+            <Component Id="cmpDC9E07CEE9AB670EBA82057EC10BFEEE" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{CA785DC6-0BCC-4F40-9FFD-CA380C2F1225}">
+                <File Id="filD06B194F53D7B6B608C816FCAF31C7CB" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\PageIndicator.qml" />
+            </Component>
+            <Component Id="cmp6DBCB17FE14A39B81514979B98F8757B" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{3F7B2876-29A8-497F-BB2B-645D6434819C}">
+                <File Id="filEED319348D74D17BB90327FD2451FFB7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\Pane.qml" />
+            </Component>
+            <Component Id="cmp4FC43AFA273A5048F050FCE593FA867D" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{5593ED64-343A-4880-8492-2AAE32D68B4E}">
+                <File Id="fil84291965C28CD8F2810812ECB5D6A1FD" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmp54FB6FDA4EB991F3CA1505996FA1A5F2" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{7C46D6AE-53FD-489A-A59D-EC25F8447F0E}">
+                <File Id="fil302F63BD35134CB516EB584B14BD9238" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\Popup.qml" />
+            </Component>
+            <Component Id="cmp0FA480A9D308FC9BF026D0009D39B284" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{8274CC9B-69E1-4985-BD15-A00A8F75E393}">
+                <File Id="fil8D472560D6031BB6A3AB059087009757" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\ProgressBar.qml" />
+            </Component>
+            <Component Id="cmpB816BB469BC4B5B9E8DE73C4EB01DD9A" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{0F0EB4C9-4C1D-49CB-A1AC-F91B671B455D}">
+                <File Id="fil69649E02D7F78F36A86E02592C4BCE13" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\qmldir" />
+            </Component>
+            <Component Id="cmp4193DFD0652E7A6182F3ACA820B57E07" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{12C7E8BB-C003-4E71-BB3A-11F1A574D996}">
+                <File Id="fil958E1F1EEF4BF9805FE51607BBA9A190" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\qtquickcontrols2materialstyleplugin.dll" />
+            </Component>
+            <Component Id="cmp6067D5BFCEFEA493B385922C0DE8D3A5" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{62FDE80D-7A27-45B1-B4A8-199296E9E1D7}">
+                <File Id="fil8D130F3A9A262E3580DE4142FA551133" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\RadioButton.qml" />
+            </Component>
+            <Component Id="cmp2BC5994E5FD2C34A27028AA91A887012" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{1425ACED-5F4E-4F59-A5D0-6075FDE8A7C0}">
+                <File Id="filB46296A9EB7274D6A2639DB4D05AABD2" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\RadioDelegate.qml" />
+            </Component>
+            <Component Id="cmp5C6E2F2D1B1E2A40B05291AC8675D93E" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{6B951A18-A54B-4E86-AD8F-87098ABF0678}">
+                <File Id="filFA23A876E0E97A7609D9CDCF2B38209D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\RadioIndicator.qml" />
+            </Component>
+            <Component Id="cmp44005DFFF11A41AD2B0223F467C9FC46" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{1F30358D-CDDF-468D-BCFD-3D6E1AEC99F6}">
+                <File Id="fil46F66E4A29233C5CE8C8EC5E4D4AE7C7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\RangeSlider.qml" />
+            </Component>
+            <Component Id="cmpD58DA669A03974CA664AFA0DE7F11A6B" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{123BECE7-DE59-47B5-92FE-68FE0753E9C3}">
+                <File Id="fil049C2E873BD056172897D63DC7BC75B3" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\RectangularGlow.qml" />
+            </Component>
+            <Component Id="cmp0F87998B7DDA2D1ACE888EF7D87123E2" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{240B5BF7-AC96-4FD1-AF13-9088034105D7}">
+                <File Id="fil96649C6C0FB5D01B7DB77778B0528BB7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\RoundButton.qml" />
+            </Component>
+            <Component Id="cmpE61AB55E50141622CEA4B2D4D4837C10" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{8C3ABF02-5C4B-4492-8631-B78ECE401549}">
+                <File Id="filA0200A6DD27EB615B93A534478808BD7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\ScrollBar.qml" />
+            </Component>
+            <Component Id="cmpF5EF536281AA441C5AB064714B875766" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{31FD949E-DC45-4000-8BB7-79D49C8B3CEA}">
+                <File Id="fil1AD524FCACBAF6A0C54AB3B46C7DE496" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\ScrollIndicator.qml" />
+            </Component>
+            <Component Id="cmp30254E0F880DD5A7386BB6B8149C5537" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{A985957D-014E-4D10-BC76-213DE489D0FE}">
+                <File Id="filAABBC36E41292D3B1F9555EEDA01E3A6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\Slider.qml" />
+            </Component>
+            <Component Id="cmpDDBC9456D8683993488F3A78D1C57FE7" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{0D758211-0474-462E-9C11-7F231D108885}">
+                <File Id="filA3841C5BC3A5A3DCBE1ACD66A40B7F88" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\SliderHandle.qml" />
+            </Component>
+            <Component Id="cmp5849F555C0EB994ED103252523A816C0" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{C954D1E5-0776-4DC7-9845-8E77EE8CA910}">
+                <File Id="fil18A32F257DA8BCF70A5B8218AD66F0CB" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\SpinBox.qml" />
+            </Component>
+            <Component Id="cmp7827EBBF733BCE31B451A8F41C980748" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{068B115B-0578-4AE7-AB03-2FE2C092F83D}">
+                <File Id="filF2C2D6F350127EF7C12E4A670B8DB16F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\StackView.qml" />
+            </Component>
+            <Component Id="cmpC3B1109DA9D1E4FB3C7C61BAFC191C72" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{78CB2D57-EF99-4507-8CB7-4EB8E0A1EBB9}">
+                <File Id="fil8271FED7615E35A172C0CCCE8540E046" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\SwipeDelegate.qml" />
+            </Component>
+            <Component Id="cmp13F0804821E9FF51C87B4431A16A07E4" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{F51A2B41-3790-4A33-8F89-1137B9802C0C}">
+                <File Id="fil0D509601BA471D407FAD2B2B61E1073F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\SwipeView.qml" />
+            </Component>
+            <Component Id="cmp2A4CD25BF82B6C3A5D4CBB82936009D0" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{16D4749B-3F34-48EC-B2A1-AE153E1A94FB}">
+                <File Id="fil70C006C58727A3539D032A0A0BA56821" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\Switch.qml" />
+            </Component>
+            <Component Id="cmpE3149EBCBEFC5C6FBA4CCC8FD31629BA" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{E49F174A-1A4E-4786-9B17-4D9BC2645670}">
+                <File Id="fil95B8DC9BB0D45FE8DCE1DA1CDF441CA8" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\SwitchDelegate.qml" />
+            </Component>
+            <Component Id="cmpE345DD796BEB42522311F34CAF51D5CB" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{A5074391-1577-474D-BFB5-628BAEB790AF}">
+                <File Id="fil78BCF926B7D957F1C2CCF94541C81D58" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\SwitchIndicator.qml" />
+            </Component>
+            <Component Id="cmp7BF125B9655E82A19E9ADB2575BE77EE" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{8CAE8189-F49F-4777-856D-59E3743AB385}">
+                <File Id="fil24FA1920BD0FF3E87A54DBAAE75A4738" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\TabBar.qml" />
+            </Component>
+            <Component Id="cmp4B3B4285F0FE28FD0D38E71969F58042" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{7BF10119-F615-45F9-BFF7-53819001028F}">
+                <File Id="fil905942A290E5433397845B659E119B1C" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\TabButton.qml" />
+            </Component>
+            <Component Id="cmp37B9304FA0DE11DA2C8B2799A48CE714" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{B6E99D7F-14BE-479A-9643-172B808198F9}">
+                <File Id="filF333085BC214E5E88969EFE6D8AD7358" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\TextArea.qml" />
+            </Component>
+            <Component Id="cmp0F3196DB480CBEC8F4299BCD6877A581" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{37C8F5D9-0BF8-4DEF-8667-91765717E84F}">
+                <File Id="fil60EF0EEFE4DD3C80F3D949CEBF6464A3" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\TextField.qml" />
+            </Component>
+            <Component Id="cmpFB373D4AFA946ABBBB101DFCFC842D6A" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{B18560B3-417D-4307-AB5B-472D4CEF9164}">
+                <File Id="fil81728BE75404FADE271D16B9EF4A5CAB" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\ToolBar.qml" />
+            </Component>
+            <Component Id="cmp9A30558BEE5E616D2846794531691D31" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{145E8C5A-C50E-499D-9E61-2606F68B5078}">
+                <File Id="fil5B824EF4EE3B32C0665D0DFA2667A482" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\ToolButton.qml" />
+            </Component>
+            <Component Id="cmp8B18E39207695A75038936349756316B" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{4C23C12B-39FA-4548-A4B3-B6C744D8E58E}">
+                <File Id="fil64F32252020F37BFCA6D7101AA0FEF22" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\ToolSeparator.qml" />
+            </Component>
+            <Component Id="cmpCA56197FC61BB4181DC716697847A802" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{0015DE62-D84E-43C4-98D0-7B567F3BCB94}">
+                <File Id="filE55DD138E4C6D4C4C708B6B412F6D307" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\ToolTip.qml" />
+            </Component>
+            <Component Id="cmp6A0800EAEAA66D7317404A3804E0262E" Directory="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Guid="{92537FB5-2122-412D-919E-8FA76C3F8DDA}">
+                <File Id="filC39DFB26EBC1D6547D2A224E4FAC77FB" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Material\Tumbler.qml" />
+            </Component>
+            <Component Id="cmp5F6C391C6D5A99F3BFBE3B587FB3FA60" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{459E9218-A4AB-49F1-8252-2CF6B970A8BE}">
+                <File Id="fil8355A03832F54747C3C193C861D7A5B9" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\ApplicationWindow.qml" />
+            </Component>
+            <Component Id="cmp2F70AC9152DF9691EE5A5E12DD3E86CA" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{E8966B2F-C8F7-4922-8DC4-D3E49AEB1D92}">
+                <File Id="filCD6177F2BC4366BD32BC32BFC5B4EB40" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\BusyIndicator.qml" />
+            </Component>
+            <Component Id="cmp7201B607C9520837167D849E4C61949F" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{FB8B203E-1089-4C18-85FE-0B64EDE2C6E3}">
+                <File Id="fil545BE555B6C58CB8257A097EDFF24EDD" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\Button.qml" />
+            </Component>
+            <Component Id="cmpCD2EB00DDC2459C529F94BF6FB3A775B" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{75F6AE24-16B2-48AE-9A36-18657897DDFE}">
+                <File Id="fil2B45CB869AA7C926D2BE87E8F8333F64" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\CheckBox.qml" />
+            </Component>
+            <Component Id="cmp22A1A3A9E2CEE243ABF30B0D6FDF86D9" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{B30822B3-BF92-4F11-903A-91126C176CA5}">
+                <File Id="fil2D840FD197A61B7BFD866055373FD471" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\CheckDelegate.qml" />
+            </Component>
+            <Component Id="cmp01A11947EE3163A5C7260C61D18C4C5F" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{C0B7BA1C-C7CC-4619-9E70-6E0F10FF37C4}">
+                <File Id="fil4A37A7697FCCF67022070F22507D9A2C" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\CheckIndicator.qml" />
+            </Component>
+            <Component Id="cmpE20D7294668DBEEF331C320918F36966" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{5951651F-1AFB-47FF-9231-20AD125A5D6B}">
+                <File Id="filE75AFFB80564116D3FB9CEA8312832C6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\ComboBox.qml" />
+            </Component>
+            <Component Id="cmp51CB7E88A5F0D8FDBC9847926D7182C5" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{9F69BB92-A28F-4184-830B-91D8AE8835F5}">
+                <File Id="fil4AEFF9C7019DBF3C7E66F50916D37F22" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\DelayButton.qml" />
+            </Component>
+            <Component Id="cmpA7C8908BBB9F53EE7BC090671270383D" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{2EC1B0EF-D417-4AF8-A2AF-0A10A51CBD3B}">
+                <File Id="filB066CD8AA525C1CE061C13C5E14A3A84" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\Dial.qml" />
+            </Component>
+            <Component Id="cmp128DD0C829CDD5BEAE489BE2D0A81711" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{161A93FA-D2E8-408D-91D6-FE2798B81EA4}">
+                <File Id="filD56A1C79F08AF461E7CBCFB05898E030" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\Dialog.qml" />
+            </Component>
+            <Component Id="cmp105A644879B413C194010ED438AE42AD" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{B09EB641-B920-4545-9110-487C2642A760}">
+                <File Id="fil0936D35A38D55161983963838406BF96" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\DialogButtonBox.qml" />
+            </Component>
+            <Component Id="cmpAE99AF4B650BA9428A9403DC5163092E" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{2D1C8042-C43B-411E-AA3E-EC76D1FDED10}">
+                <File Id="fil40C0F1E4955EECAECC571E82C3F17DEC" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\Drawer.qml" />
+            </Component>
+            <Component Id="cmp668F3197ACB36DB7E27437F157FF6822" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{AF2DB653-8094-433B-B68A-7D6EBD50328B}">
+                <File Id="filBDE2F5DD8D16F9DC89447653B2F83EBE" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\Frame.qml" />
+            </Component>
+            <Component Id="cmpCBE22BFA56EAA060B5BBDEC2FCC4828D" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{62D0CF93-DB3D-4EF5-9416-19531D0DC0BE}">
+                <File Id="fil8C6DF6E75FD2AF68CD50DFB8CF846A56" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\GroupBox.qml" />
+            </Component>
+            <Component Id="cmp54AADA412693BD0016CCABF0CBC95CD9" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{F367BD2B-F4C9-4587-AB94-C34BE56C950C}">
+                <File Id="filD11ABBFABBEBF6DF2584861A5110E4FD" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\ItemDelegate.qml" />
+            </Component>
+            <Component Id="cmpEFED149CEFCEFB8BF678EAA281D77B59" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{656510D7-D4FD-4897-BCAE-5D7100467CE3}">
+                <File Id="fil67024C4083BDF9DA88D7DF37D854AEB7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\Label.qml" />
+            </Component>
+            <Component Id="cmp59CF371E7500856D52FE75EDFC2C4B2A" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{D87FC3BC-EC26-4A41-8CC7-949F77473D81}">
+                <File Id="fil43D22740163B4A8AEC634C2B9017A336" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\Menu.qml" />
+            </Component>
+            <Component Id="cmp0939262280EEE87F312DE73D0E3BBBB1" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{BE544FA6-B753-498B-A861-E3A8375DD07E}">
+                <File Id="filE7D6F2221206107DA9BC1ABDE10DA253" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\MenuItem.qml" />
+            </Component>
+            <Component Id="cmp448E49679375430D549254BF8E00CC5B" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{25264531-96FA-4BCB-8AE1-0435C7FD5A87}">
+                <File Id="filFAF769B0237A6F273814C1513D5D76CF" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\MenuSeparator.qml" />
+            </Component>
+            <Component Id="cmp0A8E4560AAE7AF3DBF9A6C635431DA3B" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{A655D2A0-6493-48F1-BA7F-EA91C74886F0}">
+                <File Id="filF33E43211052C9369FF2B62A65D77076" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\Page.qml" />
+            </Component>
+            <Component Id="cmp16F3D3052A1036FAF9193EA508A61594" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{B25AEF8F-71B5-404F-98B3-91844B0A17BB}">
+                <File Id="fil7D2573A08553FD73E1FCB39585E4F486" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\PageIndicator.qml" />
+            </Component>
+            <Component Id="cmp1D8ECC27217B7BA45ADECFBBD49A0BFA" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{580E257F-89D4-460E-AE07-1A8D1AB309B0}">
+                <File Id="fil9AB7D0162FC74A949C85DB144E23C218" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\Pane.qml" />
+            </Component>
+            <Component Id="cmp8D6B8EDD72E5BD1197BD5F2236E19EA0" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{F6B032BB-AEF8-45EB-8581-E78E3C21982B}">
+                <File Id="fil100DA96250E99D8941D8B985B499234E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmpE2C0EF92A392328B1E883E8138DBB63B" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{2979972A-7CD3-442C-B1E0-BA33A05E146A}">
+                <File Id="filE34BF42393C1CD7F88616E451833017E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\Popup.qml" />
+            </Component>
+            <Component Id="cmpB85C7D5A1830E4BDA050255547CB732B" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{8E488AB5-9534-42B4-A9F6-762EBDC3EB67}">
+                <File Id="fil0FC65591B12EAB5645980EA269B3D716" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\ProgressBar.qml" />
+            </Component>
+            <Component Id="cmp281715924894A9769F51E05897D8F9A2" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{F366709A-3643-4CB5-B4E1-C83B58DCEE3A}">
+                <File Id="fil587B1A25BA7427D58A5D33E655A28873" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\qmldir" />
+            </Component>
+            <Component Id="cmp6DD4F498815CE7CE43A32E6AC057A8F2" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{2ADD45D2-AB6B-49AB-9BF3-D32C6749291F}">
+                <File Id="fil7E195CE928D82A1A6487731928479D53" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\qtquickcontrols2universalstyleplugin.dll" />
+            </Component>
+            <Component Id="cmp9A5571F26F52C57F2676D7792F9415C9" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{87EAAC12-86B0-4EFD-9515-50820BA71D91}">
+                <File Id="fil41EC7CB7837B9B77D548DBAB012B9386" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\RadioButton.qml" />
+            </Component>
+            <Component Id="cmp2F879FDD3EB2DDE600A907B9C6E45E1C" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{5F368250-2E09-4F7D-90F0-E61424E34BF0}">
+                <File Id="fil0D1B619F20E938256D232D42A41BF486" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\RadioDelegate.qml" />
+            </Component>
+            <Component Id="cmp89D1772E94A10BBC5A53EBA35554D754" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{0454F183-556C-49AC-81FE-7883496C3E60}">
+                <File Id="fil06C172CAA4FEE27CEB1E0CEFF4837221" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\RadioIndicator.qml" />
+            </Component>
+            <Component Id="cmp587803A79D73055CA75A27AE449DACAA" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{8D4AA9AF-F11B-468C-B7DC-E3C9B3BC9B36}">
+                <File Id="fil373D6E6BC6932184CC70B39D2E648E2E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\RangeSlider.qml" />
+            </Component>
+            <Component Id="cmp3396A8B551731AAE484DFFF54B11156C" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{924B1CF7-EAA4-4D94-A4DC-242AB424C742}">
+                <File Id="fil09E77B98AD0656021F32389549674D8F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\RoundButton.qml" />
+            </Component>
+            <Component Id="cmp1E21AA729DC53ED5D6B26DC45FF91A4F" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{5F166FAD-4733-4198-9A34-0E440DD54D9A}">
+                <File Id="filCF4484AE8FE28D9CD71457C60843CDFD" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\ScrollBar.qml" />
+            </Component>
+            <Component Id="cmp442A824EE56E78F46AAC2BC67B0CF0BF" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{5EEACFAD-45D4-4BD0-8095-B78B59DAA881}">
+                <File Id="fil75EBCBAE85CEFC65B5EEA8FDF7413C14" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\ScrollIndicator.qml" />
+            </Component>
+            <Component Id="cmp1B70D79E74FEC36A5CF3AF7B02EC2F2B" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{4D24D652-9BAE-4650-B843-EE9BC36E60C8}">
+                <File Id="fil8EEB7CFDAC8917BC4FD197BAF15F0CAF" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\Slider.qml" />
+            </Component>
+            <Component Id="cmp3E64EF2349B3D937824AA3A736FF0A42" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{53E7074C-CE67-47C7-BEAD-7D8CB972D2C0}">
+                <File Id="fil2A1CAF54FDD66B31F8DFB5E113E7B384" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\SpinBox.qml" />
+            </Component>
+            <Component Id="cmp371A2FC8C01E5B89B29526F4E16023AB" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{0368D660-D4B8-4DA1-8DA9-23756A29058F}">
+                <File Id="filBE4DBF67B115F0801C5E9F962C1CFD03" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\StackView.qml" />
+            </Component>
+            <Component Id="cmpB2FC0B785396C31076A9D8BA16E78F5A" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{0DC749F6-31B6-4FC4-8B2F-BC1C0F1A53A9}">
+                <File Id="fil91EE6E0BC67A875A92395C40C7566070" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\SwipeDelegate.qml" />
+            </Component>
+            <Component Id="cmp8FFD218A4A017D67C17DAB9C242204A1" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{E44BA36D-9A78-409F-BF5F-738FD05CA9B3}">
+                <File Id="fil660EA94CB21421A5E307491809E7CBB1" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\Switch.qml" />
+            </Component>
+            <Component Id="cmp26D4DCCB0BDB8572248A564DDD0E388B" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{39B82EE7-4230-495C-B06C-DF339EE5D8BB}">
+                <File Id="fil7EA27B2893DE4BB34CE83AF730BA7F6E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\SwitchDelegate.qml" />
+            </Component>
+            <Component Id="cmp955394A85CC02543AD369425D7864FEE" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{74DD86C7-577B-4449-B332-DE4EB4AAD6F8}">
+                <File Id="fil96A76CA246FBA31F22C4F528228F44A4" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\SwitchIndicator.qml" />
+            </Component>
+            <Component Id="cmpD6735FE5873DF29A4CE7DDFED7B14623" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{08FD4463-C69D-4E5A-8572-9AAA1A0EF5C6}">
+                <File Id="fil0F7C542D2BD9C408FB066AFB667277C3" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\TabBar.qml" />
+            </Component>
+            <Component Id="cmp397A9D2EA6C2EF3AD8BA92D9633E8C52" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{B63F161D-3DE6-4D81-BF14-7FD26F02F52A}">
+                <File Id="fil7F39D0F228740FC42A04257469FC8854" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\TabButton.qml" />
+            </Component>
+            <Component Id="cmpA84AC666F9C336EEBA144DD5FAB7E0A3" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{1412D460-7A5E-4D31-BEB8-C29C0BAEB991}">
+                <File Id="filCA4805140A86E1FEE7D8DD3682FEB5CC" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\TextArea.qml" />
+            </Component>
+            <Component Id="cmpF05E23147BC56EBC3CB7C735F16448BA" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{379D16DD-354A-41E9-BECB-919D6D4774F8}">
+                <File Id="fil202CB2183DF8C2A618448F3952F1E617" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\TextField.qml" />
+            </Component>
+            <Component Id="cmp0D92DB6BF8C51DCB74395C01B1C075DE" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{2D201E26-8336-413C-A67B-B56E137517CE}">
+                <File Id="fil9DB6F095084C500D96392FADE73F1BFA" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\ToolBar.qml" />
+            </Component>
+            <Component Id="cmp01AD9E92DB5BC519B2FA291F96C27176" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{387C59F4-261C-45CE-9629-C4E42301F7CE}">
+                <File Id="fil05D95F9B63E5B97E11AC42D41252DCAD" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\ToolButton.qml" />
+            </Component>
+            <Component Id="cmp7BDCF1694D0952B60115534B0ECB2FE6" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{B0E3AC35-4BC8-4FA4-8493-D9B96016C523}">
+                <File Id="fil768D1EDF22FEC03DC37C24D457F286D5" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\ToolSeparator.qml" />
+            </Component>
+            <Component Id="cmp4665DCB910659828CB1E9A41CB1DCEF5" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{4DAC68AE-C6AA-4B94-8EF2-AA63B40C44F8}">
+                <File Id="fil3A23151B2437FE9F7585917DA22A80B2" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\ToolTip.qml" />
+            </Component>
+            <Component Id="cmp308DA8BDD3FFC5949E61D951B3C6088B" Directory="dir6A3DDBB1414E178E7E5028287C351525" Guid="{09CE63EC-87AA-4FCE-9E8A-18C6FA3B74CA}">
+                <File Id="fil303C2FE7A22194B71D9278886BF2C6AC" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Controls.2\Universal\Tumbler.qml" />
+            </Component>
+            <Component Id="cmpBA94150EE88BADF87B278C476751F610" Directory="dir6F494B1445907C3650080DF0C653B06F" Guid="{C4BCDAF5-C60F-4C75-9ADD-64AC3704C6E9}">
+                <File Id="fil3CE86F970CCA639885CD22EF039D5648" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\DefaultColorDialog.qml" />
+            </Component>
+            <Component Id="cmpE7426BB9604E6581A049467C96D79D43" Directory="dir6F494B1445907C3650080DF0C653B06F" Guid="{104BBCBF-B26A-4721-9B83-DD852F539B67}">
+                <File Id="fil26701784C1D89FDCB8EED9E5F675BEB9" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\DefaultDialogWrapper.qml" />
+            </Component>
+            <Component Id="cmpEED601A237035B6C3F74057B3C0614E6" Directory="dir6F494B1445907C3650080DF0C653B06F" Guid="{81C4A2D2-B652-4163-9E27-5034E4939B8B}">
+                <File Id="fil277A911C2277EC46BC38E7F6134CF94B" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\DefaultFileDialog.qml" />
+            </Component>
+            <Component Id="cmpDB586BF0D3F23BBF96C85F64D26927E8" Directory="dir6F494B1445907C3650080DF0C653B06F" Guid="{0D21D2C8-DEEE-4711-9562-5CFBCBB7758E}">
+                <File Id="fil63E56D3BE7004EC5CB32456B08772B47" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\DefaultFontDialog.qml" />
+            </Component>
+            <Component Id="cmp37B558DACDF04C31688E3135F4BBABCF" Directory="dir6F494B1445907C3650080DF0C653B06F" Guid="{2811559B-C2BF-4FF7-80DF-5E24F1D3A0B6}">
+                <File Id="fil3BCF8D301E7259EBA544218018FC3981" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\DefaultMessageDialog.qml" />
+            </Component>
+            <Component Id="cmpEF0968C33A88B64CB61E75923293423A" Directory="dir6F494B1445907C3650080DF0C653B06F" Guid="{D3303EF4-8449-445B-A7B3-6B1847B96399}">
+                <File Id="filB09082F3176DE5F6AEB992E1AF642753" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\dialogplugin.dll" />
+            </Component>
+            <Component Id="cmpFF15193D79C06CBB5B69E877C31F747E" Directory="dir6F494B1445907C3650080DF0C653B06F" Guid="{ABF0CC51-168A-4DE5-B836-44F8A34BA6B2}">
+                <File Id="filBC48F269DC324154432FA93024E9FA0F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmpD8CA7972438230FB75DD28A17F5E1A66" Directory="dir6F494B1445907C3650080DF0C653B06F" Guid="{50D50AE1-F5A7-4468-8C08-34094A54F731}">
+                <File Id="filB5E569A1A03E71C0247E808250E79B46" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\qmldir" />
+            </Component>
+            <Component Id="cmp2A08395BE0BC0E5B3E50F761EEB145D3" Directory="dir6F494B1445907C3650080DF0C653B06F" Guid="{A416AC36-5440-41EC-8DB5-07A18AC40201}">
+                <File Id="filB94DED29F10CC3BD8F808C884D8003EA" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\WidgetColorDialog.qml" />
+            </Component>
+            <Component Id="cmp61D87F15F2902F13819DFE5F2E6BCDE0" Directory="dir6F494B1445907C3650080DF0C653B06F" Guid="{1DAC5341-1058-44F2-8DA7-6F19FC4121CB}">
+                <File Id="filDA6247868AF39D1B60553046C7D5FB38" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\WidgetFileDialog.qml" />
+            </Component>
+            <Component Id="cmpD7887028ED75025EF82DC57BE8A00677" Directory="dir6F494B1445907C3650080DF0C653B06F" Guid="{C0A8DD04-8DD4-4CC7-85FD-54898F923B68}">
+                <File Id="filF2523A561C8977B0E45B74F3F58039EC" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\WidgetFontDialog.qml" />
+            </Component>
+            <Component Id="cmp8B744213269F5E4ACB3F990C05943FC6" Directory="dir6F494B1445907C3650080DF0C653B06F" Guid="{66788C1F-92E0-479E-B89C-EBE0C1B64F76}">
+                <File Id="filB8E3AE7F8B6818ED0B0C49645BCE05EA" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\WidgetMessageDialog.qml" />
+            </Component>
+            <Component Id="cmp30636E54312335A47DEB7B3AA9504D68" Directory="dirE2B64AA4B399EA0CD9DFDA3EB0CB4650" Guid="{8E0CA028-F054-498F-B83F-3B7DEA99C198}">
+                <File Id="fil620A1AD428BF030B58C0EEE2908D6FDA" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\images\checkers.png" />
+            </Component>
+            <Component Id="cmp75612CC9F2A1D004ADF67EB67F4B7C43" Directory="dirE2B64AA4B399EA0CD9DFDA3EB0CB4650" Guid="{B884163B-9247-46FA-AD21-026003F9B4EF}">
+                <File Id="fil4D4D0A3BE3B8EF2971E78C56794C924E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\images\checkmark.png" />
+            </Component>
+            <Component Id="cmp8F3BBDCABC71AE8AF4FE2D3AD74DD3F5" Directory="dirE2B64AA4B399EA0CD9DFDA3EB0CB4650" Guid="{FD82EE89-C1A5-4DAF-94F0-1A3DD8A17699}">
+                <File Id="filD5CE6F8974D5251C3B3D307E4FA7E0B3" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\images\copy.png" />
+            </Component>
+            <Component Id="cmp189BD0F2E9ADAD771305966F2399A0B5" Directory="dirE2B64AA4B399EA0CD9DFDA3EB0CB4650" Guid="{9F14A35F-06F7-4EB8-8FB3-50924D0DBBAE}">
+                <File Id="fil672D7091C9136D706BE8EA9215AB4CB8" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\images\critical.png" />
+            </Component>
+            <Component Id="cmp5D040DD64DDD5912F8270D42BB56ECA3" Directory="dirE2B64AA4B399EA0CD9DFDA3EB0CB4650" Guid="{5DFEA095-63AA-43B7-90E3-0F5B9C7126AA}">
+                <File Id="fil68259FDA3477B2890F63B6FC8A36833C" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\images\crosshairs.png" />
+            </Component>
+            <Component Id="cmp705F1611D6128E14BF4180B20D46A032" Directory="dirE2B64AA4B399EA0CD9DFDA3EB0CB4650" Guid="{9E77028C-4BE2-4D27-98B1-60AD75556AD3}">
+                <File Id="filE41E83831C001552D228B4EBD95881F3" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\images\information.png" />
+            </Component>
+            <Component Id="cmp5704255D17B77CBD09D0F74877FC2988" Directory="dirE2B64AA4B399EA0CD9DFDA3EB0CB4650" Guid="{B75E67E7-DE90-4C84-A271-F59C111C6857}">
+                <File Id="filE6C944F2587C6E3E5D0A79373355DDB7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\images\question.png" />
+            </Component>
+            <Component Id="cmpDE7A51C35FBAEACA89DED26076CAAA66" Directory="dirE2B64AA4B399EA0CD9DFDA3EB0CB4650" Guid="{4B876C57-DA96-4329-A8A3-B5E3DEFCFCCB}">
+                <File Id="fil8F5D267EBF611E262769063DA4577569" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\images\slider_handle.png" />
+            </Component>
+            <Component Id="cmp9DD844C220AE8B8D4E08615B7E362AD8" Directory="dirE2B64AA4B399EA0CD9DFDA3EB0CB4650" Guid="{FEFED0DE-ED83-4A5B-80B0-8E129728F573}">
+                <File Id="fil101752CD4322C509185766DECF165C26" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\images\sunken_frame.png" />
+            </Component>
+            <Component Id="cmp84222817282EFFCB1643292DF5E7E22E" Directory="dirE2B64AA4B399EA0CD9DFDA3EB0CB4650" Guid="{2F017A6E-7386-4198-980B-8757A0E24F07}">
+                <File Id="filF39F42F35AFE0FBF0453598B2B11DE6A" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\images\warning.png" />
+            </Component>
+            <Component Id="cmp492F8579BCB8E322F13257688EA7335B" Directory="dirE2B64AA4B399EA0CD9DFDA3EB0CB4650" Guid="{C6049B35-4E48-466E-945D-AB82224BB7C8}">
+                <File Id="fil63B2AC0CB81BD6D2F3637426DDBF55BE" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\images\window_border.png" />
+            </Component>
+            <Component Id="cmp217AADFA16C87DB82A1E465FECF3CD36" Directory="dir25C4D7AE193D6122DFAC5A56BCCBF9CB" Guid="{96F98C5D-388C-4989-87D2-5D2AB0D60312}">
+                <File Id="fil6BC8A5B0D100E29B70ED155216DB1A83" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\Private\dialogsprivateplugin.dll" />
+            </Component>
+            <Component Id="cmpD1D61D3DA41F6A79C7B45FAF3822B63A" Directory="dir25C4D7AE193D6122DFAC5A56BCCBF9CB" Guid="{5967CF9F-338D-4FD7-9C65-52A8564D71F2}">
+                <File Id="fil636C9F6908715D539CE7740DFBBE6DDA" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\Private\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmp0824BBE3A19393E7E6F7BEA818990FD0" Directory="dir25C4D7AE193D6122DFAC5A56BCCBF9CB" Guid="{AEBF5ACA-CCF4-4337-AEE5-6263525EB0A8}">
+                <File Id="fil7BF3399FC0E2F76757465288C21AD414" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\Private\qmldir" />
+            </Component>
+            <Component Id="cmpCFBA97CF4FC36C9BD1A1705FE5583861" Directory="dir04E4A8BCC6C4A0EBC63DE14C0811F243" Guid="{D8FA8E2E-4933-4781-B117-403364F41003}">
+                <File Id="filA67A7D2D2FFF146251B90C07D735D116" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\qml\ColorSlider.qml" />
+            </Component>
+            <Component Id="cmpB9B85C627E2A5218A856AB8044EE6CBB" Directory="dir04E4A8BCC6C4A0EBC63DE14C0811F243" Guid="{E1E26676-6A20-4DAB-B5AA-F3C9020DEECF}">
+                <File Id="fil328FD3ABDFA83B5A1369BAE2E147DDC9" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\qml\DefaultWindowDecoration.qml" />
+            </Component>
+            <Component Id="cmp9049DC8FC0003A98E70AF9F9CE7623C4" Directory="dir04E4A8BCC6C4A0EBC63DE14C0811F243" Guid="{828DD124-9AF7-4B4F-B7D5-FEECC4A79CB6}">
+                <File Id="filE21E12E42C9381607DF285006057CD96" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\qml\IconButtonStyle.qml" />
+            </Component>
+            <Component Id="cmpB1AF2DAD4F14E236E16B3E5C656F26CF" Directory="dir04E4A8BCC6C4A0EBC63DE14C0811F243" Guid="{F987661C-5760-4F44-B937-2C5B9666146B}">
+                <File Id="fil1EE13308EEBB719152FF89148282CCBA" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\qml\IconGlyph.qml" />
+            </Component>
+            <Component Id="cmp0A166066F80453A5B632048BD8BD6654" Directory="dir04E4A8BCC6C4A0EBC63DE14C0811F243" Guid="{24215CCA-711A-4DEF-8E74-DB00254EFC89}">
+                <File Id="filB78E42899C325A5CEE5B3D1B4E0A0A8A" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\qml\icons.ttf" />
+            </Component>
+            <Component Id="cmp337B364B8AC04D31496B7920D533EEA0" Directory="dir04E4A8BCC6C4A0EBC63DE14C0811F243" Guid="{7119A620-A07A-49D5-A70A-AF75497F1932}">
+                <File Id="fil6E147A4D786DFB0A1C5C7E17B6F2F9A7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Dialogs\qml\qmldir" />
+            </Component>
+            <Component Id="cmp8BC54087447D87E68B6494BED9393489" Directory="dir19786D44411E2E50AE3C81813D21B8FC" Guid="{68A5DB93-2168-4D2E-9EE2-4AEE8933A4FD}">
+                <File Id="fil2C0ABF597F4D5752EDE281EBDF344EC4" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\CircularGauge.qml" />
+            </Component>
+            <Component Id="cmpEC7CDDB6B72F88DD0FB46438D697269C" Directory="dir19786D44411E2E50AE3C81813D21B8FC" Guid="{7E4758B7-437E-4ADB-B8EE-9C1C5BFBF92D}">
+                <File Id="fil88C6ED4E0475E16D10FAC10796CC445D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\DelayButton.qml" />
+            </Component>
+            <Component Id="cmp0260F34842B3C8B52CDA829B31A6C9C8" Directory="dir19786D44411E2E50AE3C81813D21B8FC" Guid="{1B04C945-61CA-4762-BF60-65F2115F58C7}">
+                <File Id="filA1E88695B7703D109160224EDA075093" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\Dial.qml" />
+            </Component>
+            <Component Id="cmp469646DA4D1B56406EC0B5521B0D28E1" Directory="dir19786D44411E2E50AE3C81813D21B8FC" Guid="{A160AF54-1CD6-4454-8192-CE8570944400}">
+                <File Id="filEDA1C691697F30E59C20E78C97229CC3" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\Gauge.qml" />
+            </Component>
+            <Component Id="cmp765D801EA51375D240FB084DE585D20A" Directory="dir19786D44411E2E50AE3C81813D21B8FC" Guid="{14D1E2F4-4EEF-40C2-BDEF-E89A1C32F88A}">
+                <File Id="fil38EB8864B73C7C9BFFF09F116D55F7F8" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\PieMenu.qml" />
+            </Component>
+            <Component Id="cmp8CA43E674255A443F146F993186E4E63" Directory="dir19786D44411E2E50AE3C81813D21B8FC" Guid="{F6498DDC-958C-473A-A4C1-EC66CC792314}">
+                <File Id="fil425E225A85772D92E27503F99AF7D95D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmp0F6DE943011316213A037427A49CC708" Directory="dir19786D44411E2E50AE3C81813D21B8FC" Guid="{DEF52FF1-7C37-4EDE-8F80-E1B71D525B14}">
+                <File Id="fil9400958A31BC557439EE550A98C50704" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\qmldir" />
+            </Component>
+            <Component Id="cmpB0231DAE11DA4841D3435F072BF22E2D" Directory="dir19786D44411E2E50AE3C81813D21B8FC" Guid="{125BEF58-E501-4E04-9A35-547D7CA71082}">
+                <File Id="fil8953485FE15757C46D162177BAFF9BA1" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\qtquickextrasplugin.dll" />
+            </Component>
+            <Component Id="cmpF34BEEB1E538DD8B6C2AA80AF8935535" Directory="dir19786D44411E2E50AE3C81813D21B8FC" Guid="{F48B0D64-A3E4-40A4-99D1-870F2722F63E}">
+                <File Id="filBFECBACF69FB7CD741AF8749B6336D87" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\StatusIndicator.qml" />
+            </Component>
+            <Component Id="cmpC41A7C9654535FF05856F0381BDEE8EB" Directory="dir19786D44411E2E50AE3C81813D21B8FC" Guid="{F41A1E17-589B-4BC9-9B0B-06E2ED41A5EF}">
+                <File Id="fil3B6359B7B32D5D53A315426E8A11B198" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\ToggleButton.qml" />
+            </Component>
+            <Component Id="cmp0646FB8D0C702B229D664E7AAF85A86D" Directory="dir19786D44411E2E50AE3C81813D21B8FC" Guid="{45633F0E-26C7-4150-8013-8A9EBAE20E4C}">
+                <File Id="fil844D73E341FF8287F2FFE6D00229669A" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\Tumbler.qml" />
+            </Component>
+            <Component Id="cmp9D9CED92D561330E6B51D1C2951DF939" Directory="dir19786D44411E2E50AE3C81813D21B8FC" Guid="{87447015-DF98-453E-969E-CE9070439756}">
+                <File Id="fil505A631A6BF190BD248625E101853DDE" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\TumblerColumn.qml" />
+            </Component>
+            <Component Id="cmpFF750CCACA03B33EE990319EDDF35E9C" Directory="dir8149F48CA8654A15483DADC840D29F27" Guid="{241176AC-2BB1-4C7C-AE50-3E150858E36D}">
+                <File Id="filE5A33BEAF1B6662024B493DF55DBD7F4" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\Private\CircularButton.qml" />
+            </Component>
+            <Component Id="cmp42A9DADF9E7171E84A1557DD2B0713D9" Directory="dir8149F48CA8654A15483DADC840D29F27" Guid="{DC2DD7A6-08FF-4FBD-A52A-9F8CFE8005A7}">
+                <File Id="filEDDF509FC162579178CE1DD72C20218D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\Private\CircularButtonStyleHelper.qml" />
+            </Component>
+            <Component Id="cmp3F568B3789D650B0A1331CF86FB60C0D" Directory="dir8149F48CA8654A15483DADC840D29F27" Guid="{15D2D8EA-2878-4279-93B6-5611D3BD8C5C}">
+                <File Id="filDAD208717D635A734CD80D8C88493E70" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\Private\CircularTickmarkLabel.qml" />
+            </Component>
+            <Component Id="cmp295AC54FCD5471FD41A671F41AA587AC" Directory="dir8149F48CA8654A15483DADC840D29F27" Guid="{94ADD753-251D-40FD-9525-1225DC5AEA7B}">
+                <File Id="fil5096978A105A75B3B001FDC0EC2084B9" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\Private\Handle.qml" />
+            </Component>
+            <Component Id="cmpEED56BBB837DF7E95BC6B1207169D31D" Directory="dir8149F48CA8654A15483DADC840D29F27" Guid="{EA5B7854-205D-42A8-8861-CF200CA547CC}">
+                <File Id="fil66B2F3314DFE448038BBA5BBE288784B" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\Private\PieMenuIcon.qml" />
+            </Component>
+            <Component Id="cmp49D543F68229131F54C2B1D177146238" Directory="dir8149F48CA8654A15483DADC840D29F27" Guid="{DA2CD936-23E0-4B76-BD78-FE1618247EE8}">
+                <File Id="fil563B40AF63AB172FFA38CA7BE4B81C7E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\Private\qmldir" />
+            </Component>
+            <Component Id="cmpF36893B2804CA33F202DD4DCBEE10A84" Directory="dir8149F48CA8654A15483DADC840D29F27" Guid="{28C9DA62-DEB3-4582-B6CB-165CCBBBAE7B}">
+                <File Id="fil0166C78CE4B385A738D83A559CB4685E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Extras\Private\TextSingleton.qml" />
+            </Component>
+            <Component Id="cmp9B9346D3432664449B12B9CCFA38B51B" Directory="dir5016C67A349BEBB8214A9C2ECE73A33E" Guid="{4383464E-7EEC-4103-A9D1-1954450B1509}">
+                <File Id="fil552BD7A65441CE0D3F3055B0783D04B3" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Layouts\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmp3F8C577611FF3034238FD39077E95CBD" Directory="dir5016C67A349BEBB8214A9C2ECE73A33E" Guid="{55401C9A-7E7D-4652-9979-6D13C9ED7CF5}">
+                <File Id="fil8471CF833AB4FD30BEEC72CBDDCB366E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Layouts\qmldir" />
+            </Component>
+            <Component Id="cmpE8AEBB16D87842F8CC6D4B99AA197221" Directory="dir5016C67A349BEBB8214A9C2ECE73A33E" Guid="{1AD18CAD-3501-4421-9422-BE1F05C446A5}">
+                <File Id="fil9FB01BD990C3D7225B54D102F7B0555D" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Layouts\qquicklayoutsplugin.dll" />
+            </Component>
+            <Component Id="cmpBB7948F3B57807376C88FCA372A6D0E5" Directory="dir02568860B4E2153A9310DD45C529A882" Guid="{B8833007-9BA8-4074-B8F2-482A0EDC3BF2}">
+                <File Id="filFD5A8DBD4CE7EB6E95D48447C78F9B71" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\PrivateWidgets\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmp5F800EDE8DD580A92DF9852B46BCF82C" Directory="dir02568860B4E2153A9310DD45C529A882" Guid="{48BC23C2-F797-4564-9439-888A47CD07CA}">
+                <File Id="filD7D2C10464D7C0095AB99756B7F4955F" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\PrivateWidgets\qmldir" />
+            </Component>
+            <Component Id="cmp90A89BD65478DD40B02349591BD58CCA" Directory="dir02568860B4E2153A9310DD45C529A882" Guid="{ED0D1E33-E6F8-408F-966C-20C7AD0F0E86}">
+                <File Id="fil15F34C46C4FC0D7C6F2D19B8714042F7" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\PrivateWidgets\widgetsplugin.dll" />
+            </Component>
+            <Component Id="cmpEED20C6B8C515B77703693155BF4130F" Directory="dirDA900F1B2D96C1608DD951872C9DEFD4" Guid="{A29EDD6A-5DC1-419C-928E-AD65E41B7278}">
+                <File Id="fil0BD4DBE6F50B9CB39CB7648B4C96950B" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Templates.2\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmp33C1C0084E077B4DFA1378862CE3D2E2" Directory="dirDA900F1B2D96C1608DD951872C9DEFD4" Guid="{81EF60AD-01DD-410D-8A2F-C1D9C3783294}">
+                <File Id="filAFB1E3F306DEF55CCFCE9602C25EE617" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Templates.2\qmldir" />
+            </Component>
+            <Component Id="cmpDFDE542F568D3DE95EB34A05AA0AD73E" Directory="dirDA900F1B2D96C1608DD951872C9DEFD4" Guid="{0126C4AF-10B4-4FCA-A355-26C3ECA82F19}">
+                <File Id="fil8A5F1C726E678739C2730ADB0EDE4432" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Templates.2\qtquicktemplates2plugin.dll" />
+            </Component>
+            <Component Id="cmp2871FDE9D4B0B00D81FAAD53AC89919C" Directory="dirC4E6D1063410C444718D22062183FE06" Guid="{983FA1C2-CB07-4FB3-A04E-8E4511C6FE8A}">
+                <File Id="fil6ACBD605F02BFEB8646C6B23BFDC5986" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Window.2\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmpC9E29B9E4D4A9D404CD4E7BCA21B602B" Directory="dirC4E6D1063410C444718D22062183FE06" Guid="{118C1416-AF32-462A-A7DC-99014478AA74}">
+                <File Id="filC9C1DA77402CB0C3DA6F8A1E6BE4B42E" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Window.2\qmldir" />
+            </Component>
+            <Component Id="cmp6E7BFFF3A9F434A8DA6F5135E5E08A9E" Directory="dirC4E6D1063410C444718D22062183FE06" Guid="{B7600829-D6F2-4E1F-A579-5B6B687EF992}">
+                <File Id="fil8FA8DDDFA76FDA2BE8EE01494A2788D3" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick\Window.2\windowplugin.dll" />
+            </Component>
+            <Component Id="cmp7598CB02F5A44E53A24FA0490F612BB2" Directory="dirCE9F2C551DD30BF58D2C8CBF5DAAF6B7" Guid="{79E40817-6636-40B7-9B07-8589DDBAAFCB}">
+                <File Id="fil38066C27B9C9005B52A81B83916935CF" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick.2\plugins.qmltypes" />
+            </Component>
+            <Component Id="cmpED6FFF9830849C7D3447921686D2A54C" Directory="dirCE9F2C551DD30BF58D2C8CBF5DAAF6B7" Guid="{8DFEC2A6-B7CB-41BC-A52E-798748CBA6AD}">
+                <File Id="filF70EFF20816B6425953F18E85C037EA6" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick.2\qmldir" />
+            </Component>
+            <Component Id="cmp76EEA3AA122008D8A54EA2670A910106" Directory="dirCE9F2C551DD30BF58D2C8CBF5DAAF6B7" Guid="{50A9A79F-510E-4A73-9676-4EBEF254F2E2}">
+                <File Id="filD7C5911E9AE9A138A6F0708CDDF90BCF" KeyPath="yes" Source="$(var.QMLDIR)\QtQuick.2\qtquick2plugin.dll" />
+            </Component>
+            <Component Id="cmpD4E9CE27915790DFCE788FE374C56BCE" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{B55089F8-D688-4BFA-A145-D075618AA229}">
+                <File Id="fil286B69EFA1132ABC4A745ECC19DA9F37" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_bg.qm" />
+            </Component>
+            <Component Id="cmpDCC8A0F0A32281A9A5C6BF56DB913942" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{B76D4302-40D2-459C-A048-539B93AEBEA1}">
+                <File Id="fil3413FBDB3D0BE93D0168974FBA0DD1B2" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_ca.qm" />
+            </Component>
+            <Component Id="cmp2AC09B9598F59FA90B5E3F7CD49C5292" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{632D81E6-DC09-4571-B486-4A40C0EBA5CE}">
+                <File Id="fil2EC1E609A266B02FBE044F37A34BCB2F" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_cs.qm" />
+            </Component>
+            <Component Id="cmp9014217E6DBA500553ED8B623B5BD1A8" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{5C2BAADE-8328-4FFA-9B93-4DB64E5DFE32}">
+                <File Id="fil20CA92C9AFDB37494FC8938EEFC6C949" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_da.qm" />
+            </Component>
+            <Component Id="cmp02A18CCF2FBC4303E0BFA4306E920D80" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{AC3E7819-602D-4EBE-A990-C946E718141E}">
+                <File Id="filCD10EAC389E7B4C7BF3F69B7FA289D7B" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_de.qm" />
+            </Component>
+            <Component Id="cmp230D68550139AE1AF88A664E64E95CF8" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{9E3904EA-344F-41E1-90CA-7FE24EFB5289}">
+                <File Id="fil668F574B23B43BC6209C4D27D8656E5D" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_en.qm" />
+            </Component>
+            <Component Id="cmp93B2F114F48848ED953CAEF5641585B1" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{F4D9F230-E1B4-4287-BB4B-D706013BA4CC}">
+                <File Id="filA3D1FB6D47C99277790E1E6EA24BDC21" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_es.qm" />
+            </Component>
+            <Component Id="cmpE0629A5BD3206FCC148B80C2A2A6E684" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{DF0B7070-124F-4B24-8B0A-0F7B5E1529B7}">
+                <File Id="fil2F9D408E46B756940CFED6DAC44EF908" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_fi.qm" />
+            </Component>
+            <Component Id="cmp2E516F7C5DA6925A1EED83B08BF73C1B" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{7AC442CD-B760-4D7A-A18F-2F82D338577C}">
+                <File Id="fil2E0B698995028E8BADF824FF0C1B1966" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_fr.qm" />
+            </Component>
+            <Component Id="cmpD360CBA374FFCBBE72F56B3E54845541" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{8BAE624C-0B72-4E66-BBC1-8F7668955823}">
+                <File Id="fil8BF8868830A4D2931E414690266148B0" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_gd.qm" />
+            </Component>
+            <Component Id="cmpD88F5AB4A90978C6F7694B37954E586F" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{A196E546-C17A-4418-8C69-1A0C4DDBADD9}">
+                <File Id="fil855592D837ACD4F4FD87FD1956370CCD" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_he.qm" />
+            </Component>
+            <Component Id="cmpE7B45A3D89F72B3FA898D374AA5512F8" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{031B3531-6452-411B-9307-F382FC3A9205}">
+                <File Id="fil8E019A5DA58D80B52072695E0B46D910" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_hu.qm" />
+            </Component>
+            <Component Id="cmp38989E0B4C0858450BF0E770F290389D" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{5746FCB2-0E85-4B9D-99C5-4F30CD81DA0A}">
+                <File Id="fil523D927C7754A65C57B89FFCC6D286AC" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_it.qm" />
+            </Component>
+            <Component Id="cmp43B7F866F956B962D4CF04AF02C8C973" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{3437885A-523F-429C-9D3E-FC18D29F9BBD}">
+                <File Id="fil17B576793BC3BFA5CE5CEAA7EDA1CC70" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_ja.qm" />
+            </Component>
+            <Component Id="cmpE910B6B0021001E62B892B79D68394A8" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{A50D4DA2-B6A0-48A1-A7B6-6EE24F6822AF}">
+                <File Id="fil7A5C62F0D31C06ACA94F038A959D0412" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_ko.qm" />
+            </Component>
+            <Component Id="cmp92076C7595DB66408EB321492B80CC08" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{C6417685-668B-4ADC-8275-D298A1AE1047}">
+                <File Id="filFAAF8DDCCBBA55511C3708E392C98AED" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_lv.qm" />
+            </Component>
+            <Component Id="cmp0147F5F77B39B46DD09723550E9B0EAD" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{A69F9FED-1D18-4220-82BD-7ACA34E077E2}">
+                <File Id="fil78F63E089ACE84FF7582C2DB2D2608E3" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_pl.qm" />
+            </Component>
+            <Component Id="cmp9DC29AC95C27F968F7D46BF43ED48AE6" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{174A64C0-9EA8-4150-83A3-F4C9FB1EAD4E}">
+                <File Id="filD83933224E197EB1E6F111B82571F838" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_ru.qm" />
+            </Component>
+            <Component Id="cmp6C967D9C0F7488191043359B3BF9AEF3" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{64D79B37-F664-4EF6-B691-820CD1F13297}">
+                <File Id="fil7B19216DF6FD5AB52EE4A792A4118B48" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_sk.qm" />
+            </Component>
+            <Component Id="cmpDF93FDBD7C9AE17BEC1F7261F28B52CC" Directory="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Guid="{C47FED44-A85D-43E3-8A67-CD2C95C98384}">
+                <File Id="fil13245F0C4762875780CC7211E8AF5C16" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_uk.qm" />
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirF8A9C49517D718C43D63713832797CD5">
+            <Directory Id="dir0205D14FA430EA6A2A02096F15BB6222" Name="private" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirCBE6F48717D88CA7AD1AFB6413583CB8">
+            <Directory Id="dir02568860B4E2153A9310DD45C529A882" Name="PrivateWidgets" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6F494B1445907C3650080DF0C653B06F">
+            <Directory Id="dir04E4A8BCC6C4A0EBC63DE14C0811F243" Name="qml" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir7347A908DA32165E0EFC09B75E8A696C">
+            <Directory Id="dir09DA90BC73019D3765D52F3E63DF25C1" Name="Desktop" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirEC66718D6D042FA1C0B2DDA2AFB13F6E">
+            <Directory Id="dir154D3ABFD36F164A2B01DF0516E94EDF" Name="settings" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirCBE6F48717D88CA7AD1AFB6413583CB8">
+            <Directory Id="dir19786D44411E2E50AE3C81813D21B8FC" Name="Extras" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="EIDGUIV2DIR">
+            <Directory Id="dir1E5FC9E1355C90A63622CA46A0220E42" Name="platforminputcontexts" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6F494B1445907C3650080DF0C653B06F">
+            <Directory Id="dir25C4D7AE193D6122DFAC5A56BCCBF9CB" Name="Private" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="EIDGUIV2DIR">
+            <Directory Id="dir2C96DF9BF68D36FECFDCFBE5DE37120F" Name="bearer" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirD89CECF96B86AA27F1569DC5902CA941">
+            <Directory Id="dir4008D30C416D002838926369A2B3D1D6" Name="Private" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="EIDGUIV2DIR">
+            <Directory Id="dir4D6A02B3D9A53341F205F14BFBBD5C42" Name="QtQml" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirCBE6F48717D88CA7AD1AFB6413583CB8">
+            <Directory Id="dir5016C67A349BEBB8214A9C2ECE73A33E" Name="Layouts" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir7347A908DA32165E0EFC09B75E8A696C">
+            <Directory Id="dir5B766A86EDB5B62D2D0DBB69BD12A666" Name="Flat" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirCBE6F48717D88CA7AD1AFB6413583CB8">
+            <Directory Id="dir60959F3A114DA2236E4EE00457C00F6D" Name="Controls.2" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir60959F3A114DA2236E4EE00457C00F6D">
+            <Directory Id="dir6A3DDBB1414E178E7E5028287C351525" Name="Universal" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirCBE6F48717D88CA7AD1AFB6413583CB8">
+            <Directory Id="dir6F494B1445907C3650080DF0C653B06F" Name="Dialogs" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirD89CECF96B86AA27F1569DC5902CA941">
+            <Directory Id="dir7347A908DA32165E0EFC09B75E8A696C" Name="Styles" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir19786D44411E2E50AE3C81813D21B8FC">
+            <Directory Id="dir8149F48CA8654A15483DADC840D29F27" Name="Private" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirD47C0BA46FFFFD55AE56ABDE7E085F1E">
+            <Directory Id="dir8A06CEEEC98026525CFB60D3E98F954D" Name="images" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="EIDGUIV2DIR">
+            <Directory Id="dir8CF2976D3D49ED9B2744FFBF6EE8C610" Name="Qt" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="EIDGUIV2DIR">
+            <Directory Id="dir96BE59C736C0A6835539D23562B3B8AC" Name="iconengines" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir60959F3A114DA2236E4EE00457C00F6D">
+            <Directory Id="dir9EBD2FF0870B0CC03604ED6E2BFD9D5E" Name="Material" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir4D6A02B3D9A53341F205F14BFBBD5C42">
+            <Directory Id="dirA9B557E5A38E8146E13DC6064F3F4B10" Name="Models.2" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="EIDGUIV2DIR">
+            <Directory Id="dirACBCA48FB53307D99122F3916C4BCCDC" Name="imageformats" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="EIDGUIV2DIR">
+            <Directory Id="dirB34CFBD2664AA42147B1EC7A4A7C3E55" Name="printsupport" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="EIDGUIV2DIR">
+            <Directory Id="dirC09DA36A115015E9038FA12E538F7749" Name="platforms" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="EIDGUIV2DIR">
+            <Directory Id="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Name="translations" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirCBE6F48717D88CA7AD1AFB6413583CB8">
+            <Directory Id="dirC4E6D1063410C444718D22062183FE06" Name="Window.2" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="EIDGUIV2DIR">
+            <Directory Id="dirCBE6F48717D88CA7AD1AFB6413583CB8" Name="QtQuick" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="EIDGUIV2DIR">
+            <Directory Id="dirCE9F2C551DD30BF58D2C8CBF5DAAF6B7" Name="QtQuick.2" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir7347A908DA32165E0EFC09B75E8A696C">
+            <Directory Id="dirD47C0BA46FFFFD55AE56ABDE7E085F1E" Name="Base" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="EIDGUIV2DIR">
+            <Directory Id="dirD71C252969EC4EA43D0B2F22AFA715BB" Name="qmltooling" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirCBE6F48717D88CA7AD1AFB6413583CB8">
+            <Directory Id="dirD89CECF96B86AA27F1569DC5902CA941" Name="Controls" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirCBE6F48717D88CA7AD1AFB6413583CB8">
+            <Directory Id="dirDA900F1B2D96C1608DD951872C9DEFD4" Name="Templates.2" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6F494B1445907C3650080DF0C653B06F">
+            <Directory Id="dirE2B64AA4B399EA0CD9DFDA3EB0CB4650" Name="images" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir8CF2976D3D49ED9B2744FFBF6EE8C610">
+            <Directory Id="dirEC66718D6D042FA1C0B2DDA2AFB13F6E" Name="labs" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirEC66718D6D042FA1C0B2DDA2AFB13F6E">
+            <Directory Id="dirEE5DDCAEA6A870B155EA653DC2AF0883" Name="folderlistmodel" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="EIDGUIV2DIR">
+            <Directory Id="dirF8A9C49517D718C43D63713832797CD5" Name="QtGraphicalEffects" />
+        </DirectoryRef>
+    </Fragment>
+</Wix>

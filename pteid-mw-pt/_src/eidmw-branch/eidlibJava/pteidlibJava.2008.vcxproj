@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>libJava</ProjectName>
+    <ProjectGuid>{F810EA71-3A5A-4C86-BCFF-EC47017CF9CE}</ProjectGuid>
+    <RootNamespace>pteidlibJava</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <CustomBuildStep>
+      <Message>javac...</Message>
+      <Command>"%25PTEID_DIR_JDK%25\bin\javac.exe" -verbose -d class ..\eidlibJava_Wrapper\GeneratedFiles\*.java</Command>
+      <Outputs>$(ProjectName).class;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Message>Creating jar file...</Message>
+      <Command>"%25PTEID_DIR_JDK%25\bin\jar.exe" cvf  ../jar/pteid$(ProjectName).jar -C class pt
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <CustomBuildStep>
+      <Message>javac...</Message>
+      <Command>"%25PTEID_DIR_JDK%25\bin\javac.exe" -verbose -d class ..\eidlibJava_Wrapper\GeneratedFiles\*.java</Command>
+      <Outputs>$(ProjectName).class;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Message>Creating jar file...</Message>
+      <Command>"%25PTEID_DIR_JDK%25\bin\jar.exe" cvf  ../jar/pteid$(ProjectName).jar -C class pt</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <CustomBuildStep>
+      <Message>javac...</Message>
+      <Command>"%25PTEID_DIR_JDK%25\bin\javac.exe" -verbose -d class ..\eidlibJava_Wrapper\GeneratedFiles\*.java
+</Command>
+      <Outputs>$(ProjectName).class;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Message>Creating jar file...</Message>
+      <Command>"%25PTEID_DIR_JDK%25\bin\jar.exe" cvf  ../jar/pteidlibj.jar -C class .</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <CustomBuildStep>
+      <Message>javac...</Message>
+      <Command>"%25PTEID_DIR_JDK%25\bin\javac.exe" -verbose -d class ..\eidlibJava_Wrapper\src\*.java ..\eidlibJava_Wrapper\GeneratedFiles\*.java
+</Command>
+      <Outputs>$(ProjectName).class;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Message>Creating jar file...</Message>
+      <Command>"%25PTEID_DIR_JDK%25\bin\jar.exe" cvf  ../jar/pteidlibj.jar -C class .</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\Callback.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\pteidlibJava_Wrapper.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\pteidlibJava_WrapperJNI.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Biometric.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ByteArray.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Card.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_CardType.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_CardVersionInfo.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Certificate.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Certificates.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_CertifStatus.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Config.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Crl.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_CrlStatus.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Crypto.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_DocumentType.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_EId.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_EIDCard.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_EIdFullDoc.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExBadTransaction.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExBadUsage.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExCardBadType.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExCardChanged.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExCardTypeUnknown.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Exception.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExCertNoIssuer.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExCmdNotAllowed.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExCmdNotSupported.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExDocTypeUnknown.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExFileTypeUnknown.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExNoCardPresent.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExNoReader.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExParamRange.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExReaderSetChanged.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExReleaseNeeded.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExUnknown.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_FileType.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ForeignerCard.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_HashAlgo.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_KidsCard.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_LogLevel.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_MemoryCard.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Object.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_OcspResponse.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Param.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Picture.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Pin.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Pins.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_PinUsage.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_RawDataType.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_RawData_Eid.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ReaderContext.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ReaderSet.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_SmartCard.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ulwrapper.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ValidationLevel.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ValidationProcess.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_XMLDoc.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\SWIGTYPE_p_unsigned_long.java" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\eidlibJava_Wrapper\pteidlibJava_Wrapper.2008.vcxproj">
+      <Project>{4066e21f-5a62-4581-a3b3-47a083396d0c}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

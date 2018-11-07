@@ -1,0 +1,51 @@
+Source: pteid-mw
+Section: utils
+Priority: extra
+Maintainer: Agência para a Modernização Administrativa, IP <ama@ama.pt>
+Build-Depends: chrpath,
+               debhelper (>= 7.0.50~),
+               libpcsclite-dev,
+               libpoppler-qt5-dev,
+               openjdk-8-jdk,
+               qtbase5-dev,
+               qt5-qmake,
+               qtbase5-private-dev,
+               qt5-default,
+               qtdeclarative5-dev,
+               qtquickcontrols2-5-dev,
+               qml-module-qtquick-controls2,	
+               libssl1.0-dev,
+               libxerces-c-dev,
+               libxml-security-c-dev,
+               swig,
+               libcurl4-nss-dev
+Standards-Version: 3.9.1
+Homepage: https://www.autenticacao.gov.pt/cc-software
+
+Package: pteid-mw
+Conflicts: cartaodecidadao
+Architecture: any
+Depends: pcsc-tools,
+         pcscd,
+         qml-module-qtquick2,
+         qml-module-qtquick-controls2,	
+         qml-module-qtquick-dialogs,	
+         qml-module-qt-labs-folderlistmodel,
+         qml-module-qt-labs-settings,	
+         qml-module-qtgraphicaleffects,
+         qml-module-qtquick-dialogs,	
+         qml-module-qtquick-controls,
+         qml-module-qtquick-controls2,	
+         qml-module-qtquick-dialogs,
+         qml-module-qtquick-layouts,
+         qml-module-qtquick-window2,
+         qml-module-qtquick-templates2,
+         java8-runtime,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Description: Autenticação.Gov
+ The Autenticação.Gov package provides a utility application (eidguiV2), a set of
+ libraries and a PKCS#11 module to use the Portuguese Identity Card
+ (Cartão de Cidadão) and Chave Móvel Digital in order to authenticate securely 
+ in certain websites and sign documents.
+

@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="GeneratedFiles">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\Callback.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Biometric.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ByteArray.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Card.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_CardType.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_CardVersionInfo.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Certificate.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Certificates.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_CertifStatus.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Config.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Crl.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_CrlStatus.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Crypto.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_DocumentType.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_EId.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_EIDCard.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_EIdFullDoc.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExBadTransaction.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExBadUsage.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExCardBadType.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExCardChanged.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExCardTypeUnknown.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Exception.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExCertNoIssuer.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExCmdNotAllowed.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExCmdNotSupported.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExDocTypeUnknown.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExFileTypeUnknown.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExNoCardPresent.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExNoReader.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExParamRange.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExReaderSetChanged.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExReleaseNeeded.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ExUnknown.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_FileType.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ForeignerCard.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_HashAlgo.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_KidsCard.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_LogLevel.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_MemoryCard.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Object.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_OcspResponse.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Param.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Picture.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Pin.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Pins.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_PinUsage.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_RawData_Eid.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_RawDataType.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ReaderContext.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ReaderSet.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_SmartCard.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ulwrapper.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ValidationLevel.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ValidationProcess.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_XMLDoc.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\pteidlibJava_Wrapper.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\pteidlibJava_WrapperJNI.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\SWIGTYPE_p_unsigned_long.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+  </ItemGroup>
+</Project>

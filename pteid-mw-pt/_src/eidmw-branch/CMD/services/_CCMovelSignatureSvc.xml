@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions targetNamespace="http://Ama.Authentication.Service/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://Ama.Authentication.Service/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://Ama.Authentication.Service/Imports">
+			<xsd:import schemaLocation="https://dev.cmd.autenticacao.gov.pt/Ama.Authentication.Service/CCMovelSignature.svc?xsd=xsd0" namespace="http://Ama.Authentication.Service/"/>
+			<xsd:import schemaLocation="https://dev.cmd.autenticacao.gov.pt/Ama.Authentication.Service/CCMovelSignature.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/"/>
+			<xsd:import schemaLocation="https://dev.cmd.autenticacao.gov.pt/Ama.Authentication.Service/CCMovelSignature.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Ama.Structures.CCMovelSignature"/>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="CCMovelSignature_CCMovelSign_InputMessage">
+		<wsdl:part name="parameters" element="tns:CCMovelSign"/>
+	</wsdl:message>
+	<wsdl:message name="CCMovelSignature_CCMovelSign_OutputMessage">
+		<wsdl:part name="parameters" element="tns:CCMovelSignResponse"/>
+	</wsdl:message>
+	<wsdl:message name="CCMovelSignature_ValidateOtp_InputMessage">
+		<wsdl:part name="parameters" element="tns:ValidateOtp"/>
+	</wsdl:message>
+	<wsdl:message name="CCMovelSignature_ValidateOtp_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ValidateOtpResponse"/>
+	</wsdl:message>
+	<wsdl:message name="CCMovelSignature_CCMovelValidateSignature_InputMessage">
+		<wsdl:part name="parameters" element="tns:CCMovelValidateSignature"/>
+	</wsdl:message>
+	<wsdl:message name="CCMovelSignature_CCMovelValidateSignature_OutputMessage">
+		<wsdl:part name="parameters" element="tns:CCMovelValidateSignatureResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="CCMovelSignature">
+		<wsdl:operation name="CCMovelSign">
+			<wsdl:input wsaw:Action="http://Ama.Authentication.Service/CCMovelSignature/CCMovelSign" message="tns:CCMovelSignature_CCMovelSign_InputMessage"/>
+			<wsdl:output wsaw:Action="http://Ama.Authentication.Service/CCMovelSignature/CCMovelSignResponse" message="tns:CCMovelSignature_CCMovelSign_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ValidateOtp">
+			<wsdl:input wsaw:Action="http://Ama.Authentication.Service/CCMovelSignature/ValidateOtp" message="tns:CCMovelSignature_ValidateOtp_InputMessage"/>
+			<wsdl:output wsaw:Action="http://Ama.Authentication.Service/CCMovelSignature/ValidateOtpResponse" message="tns:CCMovelSignature_ValidateOtp_OutputMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="CCMovelValidateSignature">
+			<wsdl:input wsaw:Action="http://Ama.Authentication.Service/CCMovelSignature/CCMovelValidateSignature" message="tns:CCMovelSignature_CCMovelValidateSignature_InputMessage"/>
+			<wsdl:output wsaw:Action="http://Ama.Authentication.Service/CCMovelSignature/CCMovelValidateSignatureResponse" message="tns:CCMovelSignature_CCMovelValidateSignature_OutputMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+</wsdl:definitions>
