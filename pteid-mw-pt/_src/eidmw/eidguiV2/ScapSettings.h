@@ -8,7 +8,6 @@
 #include <string>
 
 #include "eidlib.h"
-#include "Config.h"
 
 class ScapSettings
 {
@@ -98,7 +97,7 @@ public:
         QByteArray array(secretKey.data(), secretKey.length());
         std::string str = "scap_apikey_" + nic.toStdString() ;
         const char* pName = str.c_str();
-        eIDMW::PTEID_Config config(pName,EIDMW_CNF_SECTION_GENERAL,L"");
+        eIDMW::PTEID_Config config(pName, L"general", L"");
         config.setString(array.toHex());
     }
 
@@ -107,7 +106,7 @@ public:
         std::string str = "scap_apikey_" + nic.toStdString();
 
         const char* pName = str.c_str();
-        eIDMW::PTEID_Config config(pName,EIDMW_CNF_SECTION_GENERAL,L"");
+		eIDMW::PTEID_Config config(pName, L"general", L"");
         std::string temp_secretKey = config.getString();
         QByteArray temp_array(temp_secretKey.data(), temp_secretKey.length());
         QByteArray m_secretKey_array =  QByteArray::fromHex(temp_array);

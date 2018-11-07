@@ -249,6 +249,9 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\SWIGTYPE_p_void.cs">
       <Link>GeneratedFiles\SWIGTYPE_p_void.cs</Link>
     </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\SWIGTYPE_p_wchar_t.cs">
+      <Link>GeneratedFiles\SWIGTYPE_p_wchar_t.cs</Link>
+    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\XMLUserData.cs">
       <Link>GeneratedFiles\XMLUserData.cs</Link>
     </Compile>
@@ -266,6 +269,5 @@
   </Target>
   -->
   <PropertyGroup>
-    
   </PropertyGroup>
 </Project>
