@@ -2047,7 +2047,7 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
                 "No read permissions: SCAP cache directory!");
         qDebug() << "C++: Cache folder does not have read permissions! ";
         has_read_permissions = false;
-        emit signalCacheNotReadable();
+        emit signalCacheNotReadable(isCompanies);
     }
 #ifdef WIN32
     qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance

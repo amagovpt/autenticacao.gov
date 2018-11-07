@@ -390,7 +390,7 @@ signals:
     void signalLanguageChangedError();
     void signalRemoveSCAPAttributesSucess(int isCompanies);
     void signalRemoveSCAPAttributesFail(int isCompanies);
-    void signalCacheNotReadable();
+    void signalCacheNotReadable(int isCompanies);
 
     // Import Certificates
     void signalImportCertificatesFail();
