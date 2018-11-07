@@ -799,8 +799,8 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QStrin
     m_scap_params.page = page;
     m_scap_params.location_x = coord_x;
     m_scap_params.location_y = coord_y;
-    m_scap_params.location = reason;
-    m_scap_params.reason = location;
+    m_scap_params.location = location;
+    m_scap_params.reason = reason;
 
 
     CmdSignParams params;
