@@ -373,15 +373,14 @@ namespace eIDMW
 	}
 
 	int PDFSignature::getPageCount()  {
+		if (m_doc->getErrorCode() == errEncrypted)
+		{
+			fprintf(stderr, "getPageCount(): Encrypted PDFs are unsupported at the moment\n");
+			return -2;
+		}
 		if (!m_doc->isOk())
 		{
-			fprintf(stderr, "getPageCount(): Probably broken PDF...\n");
-			return -1;
-		}
-		if (m_doc->isEncrypted())
-		{
-			fprintf(stderr,
-				"getPageCount(): Encrypted PDFs are unsupported at the moment\n");
+			fprintf(stderr,"getPageCount(): Probably broken PDF...\n");
 			return -1;
 		}
 		return m_doc->getNumPages();
@@ -479,15 +478,15 @@ namespace eIDMW
 		GooString filename(input_path);
 		PDFDoc doc(new GooString(input_path));
 
+        if (doc.getErrorCode() == errEncrypted)
+        {
+            fprintf(stderr,
+                "getOtherPageCount(): Encrypted PDFs are unsupported at the moment\n");
+            return -2;
+        }
 		if (!doc.isOk())
 		{
 			fprintf(stderr, "getOtherPageCount(): Probably broken PDF...\n");
-			return -1;
-		}
-		if (doc.isEncrypted())
-		{
-			fprintf(stderr,
-				"getOtherPageCount(): Encrypted PDFs are unsupported at the moment\n");
 			return -1;
 		}
 

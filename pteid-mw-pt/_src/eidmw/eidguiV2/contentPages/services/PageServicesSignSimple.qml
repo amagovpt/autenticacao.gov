@@ -935,16 +935,23 @@ PageServicesSignSimpleForm {
                     propertyPDFPreview.propertyDragSigNumIdText.visible = true
                     propertyPDFPreview.propertyDragSigDateText.visible = true
                     propertyPDFPreview.propertyDragSigImg.visible = true
-                }else{
-                    console.log("Error loading pdf file")
+                } else {
                     propertyBusyIndicator.running = false
                     filesModel.remove(filesModel.count-1)
                     fileLoaded = false
                     propertyPDFPreview.propertyBackground.source = ""
                     mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                             qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR_MSG")
+                    if (pageCount === -1){
+                        console.log("Error loading pdf file")
+                        mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                                qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR_MSG")
+
+                    } else if (pageCount === -2){
+                        console.log("Error loading pdf encrypted file")
+                        mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                                qsTranslate("PageServicesSign","STR_LOAD_ENCRYPTED_PDF_ERROR_MSG")
+                    }
                     mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                     mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                 }

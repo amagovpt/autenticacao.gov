@@ -1553,12 +1553,18 @@ PageServicesSignAdvancedForm {
                         propertyPDFPreview.propertyDragSigImg.visible = true
                         propertyBusyIndicator.running = false
                     }else{
-                        console.log("Error loading pdf file")
                         filesModel.remove(propertyListViewFiles.count-1)
                         mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                                 qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR")
-                        mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                                qsTranslate("PageServicesSign","STR_LOAD_ADVANCED_PDF_ERROR_MSG")
+                        if(pageCount === -1){
+                            console.log("Error loading pdf file")
+                            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                                    qsTranslate("PageServicesSign","STR_LOAD_ADVANCED_PDF_ERROR_MSG")
+                        }else if(pageCount === -2){
+                            console.log("Error loading pdf encrypted file")
+                            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                                    qsTranslate("PageServicesSign","STR_LOAD_ENCRYPTED_PDF_ERROR_MSG")
+                        }
                         mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                         mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                     }
