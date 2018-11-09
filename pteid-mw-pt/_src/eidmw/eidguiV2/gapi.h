@@ -108,6 +108,7 @@ public:
     double isAddicionalInfo;
     double isAddress;
     double isNotes;
+    double isPrintDate;
     double isSign;
 };
 
@@ -267,9 +268,9 @@ public slots:
     int getShortcutFlag() {return m_shortcutFlag; }
 	QString getShortcutInputPDF() {	return m_shortcutInputPDF.replace(QChar('\\'), QChar('/')); }
     void startPrintPDF(QString outputFile, double isBasicInfo,double isAdditionalInfo,
-                       double isAddress,double isNotes,double isSign);
+                       double isAddress,double isNotes,double isPrintDate,double isSign);
     void startPrint(QString outputFile, double isBasicInfo,double isAdditionalInfo,
-                       double isAddress, double isNotes, double isSign);
+                       double isAddress, double isNotes, double isPrintDate, double isSign);
     //This method should be used by basic and advanced signature modes
     void startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
                          QString reason, QString location, double isTimestamp, double isSmall);

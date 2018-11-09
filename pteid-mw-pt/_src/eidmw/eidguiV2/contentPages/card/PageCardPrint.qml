@@ -193,11 +193,13 @@ PageCardPrintForm {
             propertySwitchAdditional.enabled = true
             propertySwitchAddress.enabled = true
             propertySwitchNotes.enabled = true
+            propertySwitchPrintDate.checked = true
             propertySwitchPdfSign.enabled = true
             propertySwitchBasic.checked = false
             propertySwitchAdditional.checked = false
             propertySwitchAddress.checked = false
             propertySwitchNotes.checked = false
+            propertySwitchPrintDate.checked = false
             propertySwitchPdfSign.checked = false
         }
         onSignalCardAccessError: {
@@ -293,6 +295,7 @@ PageCardPrintForm {
                                propertySwitchAdditional.checked,
                                propertySwitchAddress.checked,
                                propertySwitchNotes.checked,
+                               propertySwitchPrintDate.checked,
                                propertySwitchPdfSign.checked)
         }
     }
@@ -311,6 +314,7 @@ PageCardPrintForm {
                                propertySwitchAdditional.checked,
                                propertySwitchAddress.checked,
                                propertySwitchNotes.checked,
+                               propertySwitchPrintDate.checked,
                                propertySwitchPdfSign.checked)
         }
     }

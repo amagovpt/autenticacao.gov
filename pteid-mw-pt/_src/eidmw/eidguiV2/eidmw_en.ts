@@ -170,6 +170,16 @@
         <translation>The Citizen Card was not activated.</translation>
     </message>
     <message>
+        <location filename="gapi.cpp" line="1363"/>
+        <source>STR_PRINTED_ON</source>
+        <translation>Printed on</translation>
+    </message>
+    <message>
+        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="130"/>
+        <source>STR_PRINT_DATE</source>
+        <translation>Printing Date</translation>
+    </message>
+    <message>
         <source>STR_CARD_HAS_BEEN_ACTIVATED</source>
         <translation type="vanished">The Citizen Card has been activated</translation>
     </message>
@@ -439,7 +449,7 @@
         <translation>Postal Locality</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1376"/>
+        <location filename="gapi.cpp" line="1387"/>
         <source>STR_PERSONAL_NOTES</source>
         <translation>PERSONAL NOTES</translation>
     </message>
@@ -471,22 +481,22 @@
         <translation>House/building no.</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="93"/>
+        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="94"/>
         <source>STR_BASIC_INFORMATION_UPPERCASE</source>
         <translation>Basic Information</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="102"/>
+        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="103"/>
         <source>STR_ADDITIONAL_INFORMATION_UPPERCASE</source>
         <translation>Additional Information</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="111"/>
+        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="112"/>
         <source>STR_ADDRESS_UPPERCASE</source>
         <translation>Address</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="120"/>
+        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="121"/>
         <source>STR_PERSONAL_NOTES_UPPERCASE</source>
         <translation>Personal Notes</translation>
     </message>
@@ -741,23 +751,23 @@
         <translation>Printing failed.</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="80"/>
-        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="162"/>
+        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="81"/>
+        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="172"/>
         <source>STR_PRINT_SETTINGS</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="175"/>
+        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="185"/>
         <source>STR_PRINT_SIGN_PDF</source>
         <translation>Signed PDF document</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="196"/>
+        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="206"/>
         <source>STR_PRINT_BUTTON</source>
         <translation>Print</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="217"/>
+        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="227"/>
         <source>STR_PRINT_PDF_BUTTON</source>
         <translation>Create PDF</translation>
     </message>
@@ -1882,12 +1892,12 @@
         <location filename="contentPages/card/PageCardOtherData.qml" line="54"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="60"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="66"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="208"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="215"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="222"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="229"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="235"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="241"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="210"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="217"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="224"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="231"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="237"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="243"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="19"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="86"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="29"/>
@@ -1939,7 +1949,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="47"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="28"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="38"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="210"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="212"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="22"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="31"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="55"/>
@@ -1961,7 +1971,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="53"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="34"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="44"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="217"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="219"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="26"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="37"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="61"/>
@@ -1977,7 +1987,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="65"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="46"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="56"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="231"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="233"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="34"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="49"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="73"/>
@@ -1993,7 +2003,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="71"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="52"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="62"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="237"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="239"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="38"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="55"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="79"/>
@@ -2009,7 +2019,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="59"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="40"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="50"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="224"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="226"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="30"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="43"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="67"/>
@@ -2025,7 +2035,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="77"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="58"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="68"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="243"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="245"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="42"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="61"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="85"/>
@@ -2049,9 +2059,9 @@
         <location filename="contentPages/card/PageCardOtherData.qml" line="87"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="102"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="110"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="254"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="260"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="268"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="256"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="262"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="270"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="52"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="72"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="78"/>
@@ -2072,7 +2082,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="105"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="79"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="89"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="256"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="258"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="55"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="74"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="106"/>
@@ -2085,7 +2095,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="125"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="86"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="104"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="262"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="264"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="59"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="80"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="119"/>
@@ -2099,7 +2109,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="133"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="94"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="112"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="270"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="272"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="65"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="88"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="127"/>
@@ -2143,7 +2153,7 @@
         <translation>You can only select one custom signature file</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="42"/>
+        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="43"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1273"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="100"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="106"/>
@@ -2194,7 +2204,7 @@
     <name>Popup PIN</name>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="179"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="324"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="328"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="171"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="341"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="656"/>
@@ -2284,7 +2294,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrint.qml" line="45"/>
-        <location filename="contentPages/card/PageCardPrint.qml" line="325"/>
+        <location filename="contentPages/card/PageCardPrint.qml" line="329"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="134"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="342"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="657"/>

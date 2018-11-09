@@ -18,6 +18,7 @@ Item {
     property alias propertySwitchAdditional: switchAdditional
     property alias propertySwitchAddress: switchAddress
     property alias propertySwitchNotes: switchNotes
+    property alias propertySwitchPrintDate: switchPrintDate
     property alias propertySwitchPdfSign: switchPdfSign
 
     Item {
@@ -46,7 +47,7 @@ Item {
     Item {
         id: rowSelectData
         width: parent.width
-        height: 4 * Constants.HEIGHT_SWITCH_COMPONENT
+        height: 5 * Constants.HEIGHT_SWITCH_COMPONENT
         anchors.top: rowTop.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
@@ -118,6 +119,15 @@ Item {
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchAddress.bottom
                 text: qsTranslate("GAPI","STR_PERSONAL_NOTES_UPPERCASE")
+                enabled: true
+                font.family: lato.name
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+            }
+            Switch {
+                id: switchPrintDate
+                height: Constants.HEIGHT_SWITCH_COMPONENT
+                anchors.top: switchNotes.bottom
+                text: qsTranslate("GAPI","STR_PRINT_DATE")
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD

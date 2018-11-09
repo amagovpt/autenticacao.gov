@@ -944,16 +944,16 @@ QPixmap PhotoImageProvider::requestPixmap(const QString &id, QSize *size, const 
 }
 
 void GAPI::startPrintPDF(QString outputFile, double isBasicInfo,double isAddicionalInfo,
-                         double isAddress,double isNotes,double isSign) {
+                         double isAddress,double isNotes,double isPrintDate,double isSign) {
 
-    PrintParams params = {outputFile, isBasicInfo, isAddicionalInfo, isAddress, isNotes, isSign};
+    PrintParams params = {outputFile, isBasicInfo, isAddicionalInfo, isAddress, isNotes, isPrintDate, isSign};
     QtConcurrent::run(this, &GAPI::doPrintPDF, params);
 }
 
 void GAPI::startPrint(QString outputFile, double isBasicInfo,double isAddicionalInfo,
-                         double isAddress,double isNotes,double isSign) {
+                         double isAddress,double isNotes,double isPrintDate,double isSign) {
 
-    PrintParams params = {outputFile, isBasicInfo, isAddicionalInfo, isAddress, isNotes, isSign};
+    PrintParams params = {outputFile, isBasicInfo, isAddicionalInfo, isAddress, isNotes, isPrintDate, isSign};
 
     QPrinter printer;
     bool res = false;
@@ -1009,7 +1009,7 @@ void GAPI::doPrintPDF(PrintParams &params) {
 
     qDebug() << "doPrintPDF! outputFile = " << params.outputFile <<
                 "isBasicInfo = " << params.isBasicInfo << "isAddicionalInfo" << params.isAddicionalInfo << "isAddress"
-             << params.isAddress << "isNotes = " << params.isNotes << "isSign = " << params.isSign;
+             << params.isAddress << "isNotes = " << params.isNotes << "isPrintDate = " << params.isPrintDate << "isSign = " << params.isSign;
 
     QString pdffiletmp;
     QPrinter pdf_printer;
@@ -1090,6 +1090,15 @@ void drawSectionHeader(QPainter &painter, double pos_x, double pos_y, QString se
     painter.setFont(regular_font);
 }
 
+void drawPrintingDate(QPainter &painter, QString printing_date){
+    QFont regular_font("DIN Medium");
+    regular_font.setPixelSize(10);
+    regular_font.setBold(false);
+    printing_date += " " +  QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm");
+    painter.setFont(regular_font);
+    painter.drawText(QRectF(painter.device()->width() - 225, painter.device()->height() - 25, 200, 100), Qt::TextWordWrap, printing_date);
+}
+
 QPixmap loadHeader()
 {
     return QPixmap(":/images/pdf_document_header.png");
@@ -1099,7 +1108,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 {
     qDebug() << "drawpdf! outputFile = " << params.outputFile <<
                 "isBasicInfo = " << params.isBasicInfo << "isAddicionalInfo" << params.isAddicionalInfo << "isAddress"
-             << params.isAddress << "isNotes = " << params.isNotes << "isSign = " << params.isSign;
+             << params.isAddress << "isNotes = " << params.isNotes << "isPrintDate = " << params.isPrintDate << "isSign = " << params.isSign;
 
     double pos_x = 0, pos_y = 0;
     bool res = false;
@@ -1357,8 +1366,14 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
         pos_y += 80;
     }
 
+    if (params.isPrintDate)
+    {
+        drawPrintingDate(painter,  tr("STR_PRINTED_ON"));
+    }
+
     if (params.isNotes)
     {
+        bool more_than_one_page = false;
         QString perso_data;
         perso_data = QString(card->readPersonalNotes());
 
@@ -1369,6 +1384,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
             {
                 printer.newPage();
                 pos_y = 0;
+                more_than_one_page = true;
             }
             pos_x = 0;
 
@@ -1378,8 +1394,13 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
             pos_y += 75;
             painter.drawText(QRectF(pos_x, pos_y, 700, 700), Qt::TextWordWrap, perso_data);
         }
-    }
 
+        //add printing date also on new page
+        if (more_than_one_page && params.isPrintDate)
+        {
+            drawPrintingDate(painter,  tr("STR_PRINTED_ON"));
+        }
+    }
     //Finish drawing/printing
     painter.end();
     END_TRY_CATCH
