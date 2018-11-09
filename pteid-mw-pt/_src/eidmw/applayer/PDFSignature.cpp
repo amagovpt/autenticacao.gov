@@ -478,12 +478,12 @@ namespace eIDMW
 		GooString filename(input_path);
 		PDFDoc doc(new GooString(input_path));
 
-        if (doc.getErrorCode() == errEncrypted)
-        {
-            fprintf(stderr,
-                "getOtherPageCount(): Encrypted PDFs are unsupported at the moment\n");
-            return -2;
-        }
+		if (doc.getErrorCode() == errEncrypted)
+		{
+		    fprintf(stderr,
+		        "getOtherPageCount(): Encrypted PDFs are unsupported at the moment\n");
+		    return -2;
+		}
 		if (!doc.isOk())
 		{
 			fprintf(stderr, "getOtherPageCount(): Probably broken PDF...\n");
