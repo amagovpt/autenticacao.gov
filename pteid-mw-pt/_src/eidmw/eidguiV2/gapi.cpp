@@ -1460,7 +1460,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
                 pos_y += diff * TEXT_LINE_HEIGHT;
                 completed_lines += diff;
                 line_index_start = line_index_stop;
-            };
+            }
         }
     }
     //Finish drawing/printing
