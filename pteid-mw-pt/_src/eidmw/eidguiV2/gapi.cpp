@@ -1091,12 +1091,17 @@ void drawSectionHeader(QPainter &painter, double pos_x, double pos_y, QString se
 }
 
 void drawPrintingDate(QPainter &painter, QString printing_date){
+    QFont date_font("DIN Medium");
+    date_font.setPointSize(8);
+    date_font.setBold(false);
     QFont regular_font("DIN Medium");
-    regular_font.setPixelSize(10);
-    regular_font.setBold(false);
+    regular_font.setPointSize(12);
+
     printing_date += " " +  QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm");
-    painter.setFont(regular_font);
+    painter.setFont(date_font);
     painter.drawText(QRectF(painter.device()->width() - 225, painter.device()->height() - 25, 200, 100), Qt::TextWordWrap, printing_date);
+
+    painter.setFont(regular_font);
 }
 
 QPixmap loadHeader()
@@ -1104,13 +1109,30 @@ QPixmap loadHeader()
     return QPixmap(":/images/pdf_document_header.png");
 }
 
+QString getTextFromLines(QStringList lines, int start, int stop){
+    QStringList text_lines;
+
+    //make sure doesn't access a invalid index
+    if (stop > lines.length())
+    {
+        stop = lines.length();
+    }
+
+    for (int i = start; i < stop; i++)
+    {
+         text_lines.append(lines.at(i));
+    }
+
+    return text_lines.join("\n");
+}
+
 bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 {
     qDebug() << "drawpdf! outputFile = " << params.outputFile <<
                 "isBasicInfo = " << params.isBasicInfo << "isAddicionalInfo" << params.isAddicionalInfo << "isAddress"
              << params.isAddress << "isNotes = " << params.isNotes << "isPrintDate = " << params.isPrintDate << "isSign = " << params.isSign;
-
-    double pos_x = 0, pos_y = 0;
+    //gives a bit of left margin
+    double pos_x = 30, pos_y = 0;
     bool res = false;
     int sections_to_print = 0;
 
@@ -1373,32 +1395,72 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
     if (params.isNotes)
     {
-        bool more_than_one_page = false;
         QString perso_data;
+
         perso_data = QString(card->readPersonalNotes());
 
         if (perso_data.size() > 0)
         {
-            //Force a page-break before PersoData only if we're drawing all the sections
-            if (sections_to_print == 3)
+            pos_x = 30; //gives a bit of left margin
+            pos_y += 50;
+
+            int max_height = painter.device()->height();
+            if (pos_y > max_height)
             {
                 printer.newPage();
-                pos_y = 0;
-                more_than_one_page = true;
+                pos_y = 50;
+                if (params.isPrintDate)
+                {
+                    drawPrintingDate(painter,  tr("STR_PRINTED_ON"));
+                }
             }
-            pos_x = 0;
-
 
             drawSectionHeader(painter, pos_x, pos_y, tr("STR_PERSONAL_NOTES"));
 
-            pos_y += 75;
-            painter.drawText(QRectF(pos_x, pos_y, 700, 700), Qt::TextWordWrap, perso_data);
-        }
+            pos_y += 50;
 
-        //add printing date also on new page
-        if (more_than_one_page && params.isPrintDate)
-        {
-            drawPrintingDate(painter,  tr("STR_PRINTED_ON"));
+            QStringList lines = perso_data.split("\n", QString::KeepEmptyParts);
+
+            const int TEXT_LINE_HEIGHT = 20;
+
+            int line_count = lines.length();
+            int height_to_print = TEXT_LINE_HEIGHT * line_count;
+            int line_index_start = 0;
+            int line_index_stop = 0;
+            int completed_lines = 0;
+
+            while (completed_lines < line_count){
+                int page_remaining_space = static_cast<int>(max_height - pos_y);
+
+                line_index_stop = line_index_start + (page_remaining_space / TEXT_LINE_HEIGHT);
+
+                if (page_remaining_space < 50 && height_to_print > 0)
+                {
+                    printer.newPage();
+                    pos_y = 50;
+                    drawSectionHeader(painter, pos_x, pos_y, tr("STR_PERSONAL_NOTES"));
+                    pos_y += 50;
+                    if (params.isPrintDate)
+                    {
+                        drawPrintingDate(painter,  tr("STR_PRINTED_ON"));
+                    }
+                    // not enough area recalculate lines needed
+                    page_remaining_space = static_cast<int>(max_height - pos_y);
+                    line_index_stop = line_index_start + (page_remaining_space / TEXT_LINE_HEIGHT);
+                }
+
+                QString text = getTextFromLines(lines, line_index_start, line_index_stop);
+
+                int diff = line_index_stop - line_index_start;
+
+                painter.drawText(static_cast<int>(pos_x), static_cast<int>(pos_y), painter.device()->width() - 60,
+                                 diff * TEXT_LINE_HEIGHT, Qt::TextWordWrap, text);
+
+                height_to_print -= diff * TEXT_LINE_HEIGHT;
+                pos_y += diff * TEXT_LINE_HEIGHT;
+                completed_lines += diff;
+                line_index_start = line_index_stop;
+            };
         }
     }
     //Finish drawing/printing
