@@ -73,8 +73,8 @@ private:
 
     QByteArray openSCAPSignature(const char *inputFile, const char *outputPath,
                             std::string certChain, QString citizenName, QString citizenId,
-                            ns1__AttributeSupplierType *attributeSupplier, QString attribute,
-                            PDFSignatureInfo signatureInfo,bool isVisible, bool isCC);
+                            QString attributeSupplier, QString attribute,
+                            PDFSignatureInfo signatureInfo, bool isVisible, bool isCC);
 
     unsigned char * callSCAPSignatureService(soap* sp, QByteArray signatureHash,
                             ns1__TransactionType *transaction, unsigned int &signatureLen, QString citizenId);

@@ -231,13 +231,9 @@ ns1__AttributeType *convertAttributeType(ns3__AttributeType *attributeType, soap
     return convertedAttribute;
 }
 
-
-/* Attribute parameter is optional, we only need it for the last visible signature.
-   TODO: For the visible signature we shall have the complete list of attributes */
-
 QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const char *outputPath,
                                                  std::string certChain, QString citizenName, QString citizenId,
-                                                 ns1__AttributeSupplierType *attributeSupplier,  QString attribute,
+                                                 QString attributeSupplier,  QString attribute,
                                                  PDFSignatureInfo signatureInfo, bool isVisible, bool isCC)
 {
     qDebug() << "openSCAPSignature inputFile: " << inputFile << " outputPath: " << outputPath;
@@ -271,7 +267,7 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
         } 
         sig_handler->setSCAPAttributes(strdup(citizenName.toUtf8().constData()),
                                        strdup(citizenId.toUtf8().constData()),
-                                       attributeSupplier->Name.c_str(), strdup(attribute.toUtf8().constData()));
+                                       strdup(attributeSupplier.toUtf8().constData()), strdup(attribute.toUtf8().constData()));
 
     }
 
@@ -519,15 +515,19 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
             QTemporaryFile *tempFile = NULL;
 
-            QString attributeListString;
+            QString attributeListString = "";
+            QString attributeSupplierListString = "";
+            QString lastAttrSupplierString = "";
+            QString lastAttrSupplierType = "";
+            bool moreThanOneNext = false;
+            std::vector <QTemporaryFile *> tempFiles;
 
             for (unsigned int i = 0; i != transactionList.size(); i++) {
                 bool isVisible = false;
                 QByteArray signatureHash;
                 ns1__MainAttributeType *mainAttribute = NULL;
-                //TODO: 1- call something similar to the CMD openSignature() method for each transaction, we need a new Method for the SCAP visible signature
-                /*      2- Call the SignatureService once for every attribute + 1 last time for the SCAP e-seal
-                        3- Call closeSignature() with the byteArray returned by SignatureService */
+                ns1__MainAttributeType *mainAttributePrevious = NULL;
+
                 ns1__TransactionType *transaction = transactionList.at(i);
 
                 mainAttribute = transaction->MainAttribute;
@@ -536,33 +536,103 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                 if (i == transactionList.size() - 1) {
                     outputPath = strdup(finalfilepath.toUtf8().constData());
                     attributeListString.append(QString::fromStdString("."));
+                    attributeSupplierListString.append(QString::fromStdString("."));
                     isVisible = true;
                 }
                 else {
                     // Creates a temporary file for every iteration except the last
                     isVisible = false;
-                    if (i > 0){
-                        if(i == transactionList.size() - 2)
-                            attributeListString.append(QString::fromStdString(" e "));
-                        else
-                            attributeListString.append(QString::fromStdString(", "));
-                    }
-                    else {
-                        if(transactionList.size() > 2)
-                            attributeListString.append(QString::fromStdString("{ "));
+                    ns1__TransactionType *transactionNext = transactionList.at(i+1);
+
+
+                    // A new attribute for a NEW attribute supplier;
+                    if(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()) != lastAttrSupplierString){
+                            qDebug() << "A new attribute for a NEW attribute supplier";
+
+                            // Check if have more than one attribute from this attribute supplier
+                            if(moreThanOneNext){
+                                attributeListString.append(QString::fromStdString(" } "));
+                            }
+                            if(QString::fromStdString(transaction->AttributeSupplier->Name.c_str())
+                                    == QString::fromStdString(transactionNext->AttributeSupplier->Name.c_str())){
+                                moreThanOneNext = true;
+                            }else{
+                                moreThanOneNext = false;
+                            }
+                            // Check if the first time
+                            if(i == 0){
+                                qDebug() << "The first time";
+                                if(moreThanOneNext) attributeListString.append(QString::fromStdString(" { "));
+                                attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
+                            }else{
+                                qDebug() << "Not the first time";
+                                ns1__TransactionType *transactionPrevious = transactionList.at(i-1);
+                                mainAttributePrevious = transactionPrevious->MainAttribute;
+                                attributeListString.append(QString::fromStdString(" de "));
+                                if(lastAttrSupplierType == "INSTITUTION"){
+                                    if (mainAttributePrevious->SubAttributeList != NULL) {
+                                        for (uint ii = 0; ii < mainAttributePrevious->SubAttributeList->SubAttribute.size(); ii++) {
+                                            ns1__SubAttributeType *acSubAttr = mainAttributePrevious->SubAttributeList->SubAttribute.at(ii);
+                                            if(QString::fromStdString(acSubAttr->AttributeID.c_str()).contains("Nome") == true){
+                                                attributeListString.append(QString::fromStdString(acSubAttr->Value->c_str()));
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    attributeListString.append(lastAttrSupplierString);
+                                }
+                                attributeListString.append(QString::fromStdString(" e "));
+                                if(moreThanOneNext) attributeListString.append(QString::fromStdString(" { "));
+                                attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
+                                attributeSupplierListString.append(QString::fromStdString(" e "));
+                            }
+
+                            if(QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "INSTITUTION"){
+                                attributeSupplierListString.append(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
+                            }else{
+                                attributeSupplierListString.append(QString::fromStdString("SCAP"));
+                            }
+
                     }
 
-                    attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
+                    //  A new attribute for the SAME attribute supplier
+                    if(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()) == lastAttrSupplierString){
+                            qDebug() << "A new attribute for the same attribute supplier";
+                            if(QString::fromStdString(transaction->AttributeSupplier->Name.c_str())
+                                    == QString::fromStdString(transactionNext->AttributeSupplier->Name.c_str())){
+                                attributeListString.append(QString::fromStdString(" , "));
+                            }else{
+                                attributeListString.append(QString::fromStdString(" e "));
+                            }
 
+                            attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
+                    }
+
+                    // The LAST attribute visible
                     if(i == transactionList.size() - 2){
-                        if(transactionList.size() > 2)
-                            attributeListString.append(QString::fromStdString(" }"));
+                            qDebug() << "The LAST attribute visible";
+                            if(moreThanOneNext) attributeListString.append(QString::fromStdString(" } "));
+                            attributeListString.append(QString::fromStdString(" de "));
 
-                        attributeListString.append(QString::fromStdString(" de "));
-                        attributeListString.append(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
-
+                            if(QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "INSTITUTION"){
+                                if (mainAttribute->SubAttributeList != NULL) {
+                                    for (uint ii = 0; ii < mainAttribute->SubAttributeList->SubAttribute.size(); ii++) {
+                                        ns1__SubAttributeType *acSubAttr = mainAttribute->SubAttributeList->SubAttribute.at(ii);
+                                        if(QString::fromStdString(acSubAttr->AttributeID.c_str()).contains("Nome") == true){
+                                            attributeListString.append(QString::fromStdString(acSubAttr->Value->c_str()));
+                                        }
+                                    }
+                                }
+                            }else{
+                                attributeListString.append(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
+                            }
                     }
+                    lastAttrSupplierString = QString::fromStdString(transaction->AttributeSupplier->Name.c_str());
+                    lastAttrSupplierType = QString::fromStdString(transaction->AttributeSupplier->Type->c_str());
+
                     tempFile = new QTemporaryFile();
+                    tempFiles.push_back(tempFile);
+
 
                     if (!tempFile->open()) {
                         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "PDF Signature error: Error creating temporary file");
@@ -573,7 +643,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
                 signatureHash = openSCAPSignature(inputPath, outputPath,
                                 transaction->AttributeSupplierCertificateChain, citizenName, citizenId,
-                                transaction->AttributeSupplier, attributeListString, signatureInfo, isVisible, isCC);
+                                attributeSupplierListString, attributeListString, signatureInfo, isVisible, isCC);
 
                 if (signatureHash.size() == 0) {
                     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "openSCAPSignature() failed!");
@@ -602,14 +672,12 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                 }
                 // Apply the next signature over the current one's output file
                 inputPath = outputPath;
-
-                //TODO: manually cleanup the tempFiles :S
-                /*
-                if (tempFile != NULL) {
-                    delete tempFile;
-                } 
-                */
             }
+            // Delete tempFiles the tempFiles
+            for (auto& tempFile : tempFiles){
+                delete tempFile;
+            }
+
         }
     }
 
