@@ -930,9 +930,9 @@ extern intmax_t __strtoull(const char*, char**, int);
 # include <zlib.h>
 #endif
 
-#define DEBUG /* Uncomment to debug sending (in file SENT.log) receiving (in file RECV.log) and internal operations (in file TEST.log) */
+/* #define DEBUG */ /* Uncomment to debug sending (in file SENT.log) receiving (in file RECV.log) and internal operations (in file TEST.log) */
 
-#define DEBUG_STAMP /* Uncomment to debug sending (in file SENT.log) receiving (in file RECV.log) and time-stamped operations (in file TEST.log) */
+/* #define DEBUG_STAMP */ /* Uncomment to debug sending (in file SENT.log) receiving (in file RECV.log) and time-stamped operations (in file TEST.log) */
 
 #ifdef __cplusplus
 extern "C" {
