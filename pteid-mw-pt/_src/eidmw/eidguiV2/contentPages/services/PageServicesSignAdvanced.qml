@@ -31,26 +31,6 @@ PageServicesSignAdvancedForm {
         onSignalGenericError: {
             propertyBusyIndicator.running = false
         }
-        onSignalEntityAttributesLoadedError: {
-            console.log("Definitions SCAP - Signal SCAP entities loaded error")
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    "Error"
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    "SCAP entities loaded error"
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-            if(propertyBar.currentIndex == 0)
-                propertyBusyIndicator.running = false
-        }
-        onSignalCompanyAttributesLoadedError: {
-            console.log("Definitions SCAP - Signal SCAP company loaded error")
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    "Error"
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    "SCAP company loaded error"
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-            if(propertyBar.currentIndex == 1)
-                propertyBusyIndicator.running = false
-        }
         onSignalAttributesLoaded:{
             console.log("Sign advanced - Signal SCAP attributes loaded")
 
