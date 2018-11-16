@@ -41,9 +41,9 @@ Item {
         Item {
             id: rowTop
             width: parent.width
-            height: parent.height * Constants.HEIGHT_DIFINITIONS_ATTRIBUTES_ROW_TOP_V_RELATIVE
+            height: parent.height * Constants.HEIGHT_DEFINITIONS_ATTRIBUTES_ROW_TOP_V_RELATIVE
                     + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
-                    * Constants.HEIGHT_DIFINITIONS_ATTRIBUTES_ROW_TOP_INC_RELATIVE
+                    * Constants.HEIGHT_DEFINITIONS_ATTRIBUTES_ROW_TOP_INC_RELATIVE
         }
 
         TabBar {
@@ -52,12 +52,12 @@ Item {
             width: parent.width
             currentIndex: 0
             TabButton {
-                text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_ENTITIES")
+                text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_ENTITIES")
                 rightPadding: 2
                 leftPadding: 2
             }
             TabButton {
-                text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_COMPANY")
+                text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_COMPANY")
                 rightPadding: 2
                 leftPadding: 2
             }
@@ -81,7 +81,7 @@ Item {
                     Text {
                         font.pixelSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
-                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_ENTITIES_MSG")
+                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_ENTITIES_MSG")
                         wrapMode: Text.Wrap
                         width: parent.width
                         color: Constants.COLOR_MAIN_BLUE
@@ -125,7 +125,7 @@ Item {
 
                     Button {
                         id: buttonRemoveEntityAttributes
-                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE")
+                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE")
                         width: 1.4 * Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -136,7 +136,7 @@ Item {
                     }
                     Button {
                         id: buttonLoadEntityAttributes
-                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON_LOAD")
+                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON_LOAD")
                         width: 1.4 * Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -157,7 +157,7 @@ Item {
                     Text {
                         font.pixelSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
-                        text: qsTranslate("PageDifinitionsSCAP",
+                        text: qsTranslate("PageDefinitionsSCAP",
                                           "STR_SCAP_ATTRIBUTES_COMPANY_MSG")
                         wrapMode: Text.Wrap
                         width: parent.width
@@ -201,7 +201,7 @@ Item {
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     Button {
                         id: buttonRemoveCompanyAttributes
-                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE")
+                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE")
                         width: 1.4 * Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -212,7 +212,7 @@ Item {
                     }
                     Button {
                         id: buttonLoadCompanyAttributes
-                        text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_COMPANY_BUTTON_LOAD")
+                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_COMPANY_BUTTON_LOAD")
                         width: 1.4 * Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD

@@ -182,10 +182,6 @@
         <translation>Printing Date</translation>
     </message>
     <message>
-        <source>STR_CARD_HAS_BEEN_ACTIVATED</source>
-        <translation type="vanished">The Citizen Card has been activated</translation>
-    </message>
-    <message>
         <location filename="gapi.cpp" line="1230"/>
         <source>STR_BASIC_INFORMATION</source>
         <translation>BASIC INFORMATION</translation>
@@ -715,10 +711,6 @@
         <translation>Create PDF</translation>
     </message>
     <message>
-        <source>STR_PRINT_CREATE_PDF_SUCESS</source>
-        <translation type="vanished">PDF file successfully generated.</translation>
-    </message>
-    <message>
         <location filename="contentPages/card/PageCardPrint.qml" line="80"/>
         <source>STR_CREATE_SUCESS</source>
         <translation>File successfully created</translation>
@@ -727,10 +719,6 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="107"/>
         <source>STR_CREATE_OPEN</source>
         <translation>Open created file?</translation>
-    </message>
-    <message>
-        <source>STR_POPUP_FILE_CANCEL</source>
-        <translation type="obsolete">Cancel</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrint.qml" line="173"/>
@@ -855,17 +843,9 @@
         <translation>Startup</translation>
     </message>
     <message>
-        <source>STR_AUTO_READ_OP</source>
-        <translation type="vanished">Automatic card reading</translation>
-    </message>
-    <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="153"/>
         <source>STR_AUTO_START_OP</source>
         <translation>Activate on startup</translation>
-    </message>
-    <message>
-        <source>STR_START_MINIMIZED_OP</source>
-        <translation type="vanished">Start minimized</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="177"/>
@@ -886,14 +866,6 @@
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="240"/>
         <source>STR_APP_LOOK_TITLE</source>
         <translation>Layout</translation>
-    </message>
-    <message>
-        <source>STR_SHOW_NOT_OP</source>
-        <translation type="vanished">Show notification</translation>
-    </message>
-    <message>
-        <source>STR_SHOW_PHOTO_OP</source>
-        <translation type="vanished">Show picture on startup</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="271"/>
@@ -969,6 +941,120 @@
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="590"/>
         <source>STR_NETWORK_AUTH_PASSWORD_OP</source>
         <translation>Password?</translation>
+    </message>
+</context>
+<context>
+    <name>PageDefinitionsSCAP</name>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="240"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="128"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="204"/>
+        <source>STR_SCAP_ATTRIBUTES_BUTTON_REMOVE</source>
+        <translation>Remove cache</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="98"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="176"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="189"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="202"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="212"/>
+        <source>STR_SCAP_ERROR</source>
+        <translation>Error</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="104"/>
+        <source>STR_SCAP_COMPANY_ATTRIBUTES_EXPIRED</source>
+        <translation>Your business attributes are expired. To associate new attributes, please go to</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="111"/>
+        <source>STR_SCAP_COMPANY_ZERO_ATTRIBUTES</source>
+        <translation>Do not have business attributes. To associate new attributes, please go to</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="147"/>
+        <source>STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_FIRST</source>
+        <translation>Your professional attributes in the entity</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="149"/>
+        <source>STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_SECOND</source>
+        <translation>are expired.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="151"/>
+        <source>STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_THIRD</source>
+        <translation>For more information, please contact the entity</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="156"/>
+        <source>STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST</source>
+        <translation>Has no professional attributes in the entity</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="158"/>
+        <source>STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND</source>
+        <translation>For more information, please contact the entity</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="178"/>
+        <source>STR_SCAP_SERVICE_FAIL_FIRST</source>
+        <translation>Error accessing the attribute load service.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="180"/>
+        <source>STR_SCAP_SERVICE_FAIL_SECOND</source>
+        <translation>Please try again.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="191"/>
+        <source>STR_SCAP_PING_FAIL_FIRST</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="193"/>
+        <source>STR_SCAP_PING_FAIL_SECOND</source>
+        <translation>Please check your Internet connection and try again.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="204"/>
+        <source>STR_SCAP_LOAD_ENTITIES_ERROR</source>
+        <translation>SCAP entities load error</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="214"/>
+        <source>STR_SCAP_LOAD_COMPANY_ERROR</source>
+        <translation>SCAP company loaded error</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="55"/>
+        <source>STR_SCAP_ATTRIBUTES_ENTITIES</source>
+        <translation>Professional Attributes</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="60"/>
+        <source>STR_SCAP_ATTRIBUTES_COMPANY</source>
+        <translation>Business Attributes</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="84"/>
+        <source>STR_SCAP_ATTRIBUTES_ENTITIES_MSG</source>
+        <translation>Choose the entity for which you want to load the professional attributes</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="139"/>
+        <source>STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON_LOAD</source>
+        <translation>Load professional attributes</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="160"/>
+        <source>STR_SCAP_ATTRIBUTES_COMPANY_MSG</source>
+        <translation>List of entities for which you have business attributes</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="215"/>
+        <source>STR_SCAP_ATTRIBUTES_COMPANY_BUTTON_LOAD</source>
+        <translation>Load business attributes</translation>
     </message>
 </context>
 <context>
@@ -1124,132 +1210,6 @@
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="168"/>
         <source>STR_UPDATE_BUTTON</source>
         <translation>Check for updates</translation>
-    </message>
-</context>
-<context>
-    <name>PageDifinitionsSCAP</name>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="98"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="176"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="189"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="202"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="212"/>
-        <source>STR_SCAP_ERROR</source>
-        <translation>Error</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="104"/>
-        <source>STR_SCAP_COMPANY_ATTRIBUTES_EXPIRED</source>
-        <oldsource>STR_SCAP_ZERO_ATTRIBUTES</oldsource>
-        <translation>Your business attributes are expired. To associate new attributes, please go to</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="111"/>
-        <source>STR_SCAP_COMPANY_ZERO_ATTRIBUTES</source>
-        <translation>Do not have business attributes. To associate new attributes, please go to</translation>
-    </message>
-    <message>
-        <source>STR_SCAP_SERVICE_FAIL</source>
-        <translation type="vanished">Error accessing the attribute load service. Please try again.</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="147"/>
-        <source>STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_FIRST</source>
-        <translation>Your professional attributes in the entity</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="149"/>
-        <source>STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_SECOND</source>
-        <translation>are expired.</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="151"/>
-        <source>STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_THIRD</source>
-        <translation>For more information, please contact the entity</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="156"/>
-        <source>STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST</source>
-        <translation>Has no professional attributes in the entity</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="158"/>
-        <source>STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND</source>
-        <translation>For more information, please contact the entity</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="178"/>
-        <source>STR_SCAP_SERVICE_FAIL_FIRST</source>
-        <translation>Error accessing the attribute load service.</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="180"/>
-        <source>STR_SCAP_SERVICE_FAIL_SECOND</source>
-        <translation>Please try again.</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="191"/>
-        <source>STR_SCAP_PING_FAIL_FIRST</source>
-        <oldsource>STR_SCAP_PING_FAIL</oldsource>
-        <translation>Error accessing the attribute load service.</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="193"/>
-        <source>STR_SCAP_PING_FAIL_SECOND</source>
-        <translation>Please check your Internet connection and try again.</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="204"/>
-        <source>STR_SCAP_LOAD_ENTITIES_ERROR</source>
-        <translation>SCAP entities load error</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="214"/>
-        <source>STR_SCAP_LOAD_COMPANY_ERROR</source>
-        <translation>SCAP company loaded error</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="55"/>
-        <source>STR_SCAP_ATTRIBUTES_ENTITIES</source>
-        <translation>Professional Attributes</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="60"/>
-        <source>STR_SCAP_ATTRIBUTES_COMPANY</source>
-        <translation>Business Attributes</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="84"/>
-        <source>STR_SCAP_ATTRIBUTES_ENTITIES_MSG</source>
-        <translation>Choose the entity for which you want to load the professional attributes</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="240"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="128"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="204"/>
-        <source>STR_SCAP_ATTRIBUTES_BUTTON_REMOVE</source>
-        <oldsource>STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON</oldsource>
-        <translation>Remove cache</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="139"/>
-        <source>STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON_LOAD</source>
-        <oldsource>STR_SCAP_ATTRIBUTES_BUTTON_LOAD</oldsource>
-        <translation>Load professional attributes</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="160"/>
-        <source>STR_SCAP_ATTRIBUTES_COMPANY_MSG</source>
-        <translation>List of entities for which you have business attributes</translation>
-    </message>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="215"/>
-        <source>STR_SCAP_ATTRIBUTES_COMPANY_BUTTON_LOAD</source>
-        <translation>Load business attributes</translation>
-    </message>
-    <message>
-        <source>STR_SCAP_ATTRIBUTES_COMPANY_BUTTON</source>
-        <translation type="vanished">Load business attributes</translation>
     </message>
 </context>
 <context>
@@ -1488,14 +1448,6 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="120"/>
         <source>STR_SIGN_SCAP_SERVICE_FAIL</source>
         <translation>Fail at PDF signature service with professional attributes. Please try again.</translation>
-    </message>
-    <message>
-        <source>STR_SIGN_LOCAL_PDF_FAIL</source>
-        <translation type="vanished">PDF signature failed. Please try again.</translation>
-    </message>
-    <message>
-        <source>STR_SCAP_ERROR</source>
-        <translation type="vanished">Error</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="128"/>

@@ -374,7 +374,7 @@ signals:
     //SCAP signals
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
     void signalSCAPServiceFail(int pdfsignresult);
-    void signalSCAPDifinitionsServiceFail(int pdfsignresult, bool isCompany);
+    void signalSCAPDefinitionsServiceFail(int pdfsignresult, bool isCompany);
     void signalSCAPServiceTimeout();
     void signalSCAPPingFail();
     void signalSCAPPingSuccess();

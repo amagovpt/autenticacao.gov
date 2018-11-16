@@ -19,9 +19,9 @@ Item {
     Item {
         id: rowTop
         width: parent.width
-        height: parent.height * Constants.HEIGHT_DIFINITIONS_APP_ROW_TOP_V_RELATIVE
+        height: parent.height * Constants.HEIGHT_DEFINITIONS_APP_ROW_TOP_V_RELATIVE
                 + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
-                * Constants.HEIGHT_DIFINITIONS_APP_ROW_TOP_INC_RELATIVE
+                * Constants.HEIGHT_DEFINITIONS_APP_ROW_TOP_INC_RELATIVE
     }
 
     Item {
@@ -45,7 +45,7 @@ Item {
             width: parent.width
             height: 5*Constants.SIZE_TEXT_FIELD + 3*Constants.SIZE_ROW_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
 
             Text {
                 id: dateAppCache
@@ -237,7 +237,7 @@ Item {
                         anchors.rightMargin: Constants.SIZE_ROW_H_SPACE
                         Button {
                             id: buttonRemoveSCAPCache
-                            text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE") + controler.autoTr
+                            text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE") + controler.autoTr
                             width: parent.width
                             height: Constants.HEIGHT_BOTTOM_COMPONENT
                             font.pixelSize: Constants.SIZE_TEXT_FIELD

@@ -308,7 +308,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
         if (ret != 0) {
             qDebug() << "Error reading AttributeResponseType! Malformed XML response";
             std::cerr << "Error reading AttributeResponseType! Malformed XML response" << std::endl;
-            parent->signalSCAPDifinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
+            parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
             return result;
         }
 
@@ -335,13 +335,13 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
                 qDebug() << "Error in getAttributes(): Result Code: " << resultCodeValue ;
 
                 if(resultCodeValue == SCAP_ATTRIBUTES_EXPIRED){
-                    parent->signalSCAPDifinitionsServiceFail(GAPI::ScapAttributesExpiredError, allEnterprises);
+                    parent->signalSCAPDefinitionsServiceFail(GAPI::ScapAttributesExpiredError, allEnterprises);
                 }else if(resultCodeValue == SCAP_ZERO_ATTRIBUTES){
-                    parent->signalSCAPDifinitionsServiceFail(GAPI::ScapZeroAttributesError, allEnterprises);
+                    parent->signalSCAPDefinitionsServiceFail(GAPI::ScapZeroAttributesError, allEnterprises);
                 }else if(resultCodeValue == SCAP_ATTRIBUTES_NOT_VALID){
-                    parent->signalSCAPDifinitionsServiceFail(GAPI::ScapNotValidAttributesError, allEnterprises);
+                    parent->signalSCAPDefinitionsServiceFail(GAPI::ScapNotValidAttributesError, allEnterprises);
                 }else{
-                    parent->signalSCAPDifinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
+                    parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
                 }
 
                 return result;
@@ -376,7 +376,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
         result = attr_response.AttributeResponseValues;
     }
     catch(...) {
-        parent->signalSCAPDifinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
+        parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
         qDebug() << "reqAttributeSupplierListType ERROR << - TODO: improve error handling";
     }
 

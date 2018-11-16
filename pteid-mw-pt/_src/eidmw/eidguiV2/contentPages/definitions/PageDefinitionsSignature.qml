@@ -238,7 +238,7 @@ PageDefinitionsSignatureForm {
 
     Component.onCompleted: {
 
-        console.log("Page Difinitions Signature mainWindowCompleted")
+        console.log("Page Definitions Signature mainWindowCompleted")
         propertyBusyIndicator.running = true
         gapi.startCardReading()
         propertySigDateText.text = propertySigDateTextCustom.text =getData()

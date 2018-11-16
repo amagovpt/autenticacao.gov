@@ -1899,7 +1899,7 @@ void GAPI::getSCAPEntities() {
     std::vector<ns3__AttributeSupplierType *> entities = scapServices.getAttributeSuppliers();
 
     if(entities.size() == 0){
-        emit signalSCAPDifinitionsServiceFail(ScapGenericError, false);
+        emit signalSCAPDefinitionsServiceFail(ScapGenericError, false);
         return;
     }
 

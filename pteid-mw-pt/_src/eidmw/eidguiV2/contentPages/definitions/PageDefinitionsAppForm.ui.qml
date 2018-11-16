@@ -37,9 +37,9 @@ Item {
     Item {
         id: rowTop
         width: parent.width
-        height: parent.height * Constants.HEIGHT_DIFINITIONS_APP_ROW_TOP_V_RELATIVE
+        height: parent.height * Constants.HEIGHT_DEFINITIONS_APP_ROW_TOP_V_RELATIVE
                 + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
-                * Constants.HEIGHT_DIFINITIONS_APP_ROW_TOP_INC_RELATIVE
+                * Constants.HEIGHT_DEFINITIONS_APP_ROW_TOP_INC_RELATIVE
     }
 
     Item {
@@ -110,7 +110,7 @@ Item {
             height: dateAppStart.height + rectAppStartCheckBox.height + Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectReader.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
 
             Text {
                 id: dateAppStart
@@ -165,7 +165,7 @@ Item {
             height: dateAppLanguage.height + rectAppLanguageCheckBox.height + Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppStart.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
 
             Text {
                 id: dateAppLanguage
@@ -228,7 +228,7 @@ Item {
             height: dateAppLook.height + rectAppLookCheckBox.height + Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppLanguage.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
 
             Text {
                 id: dateAppLook
@@ -283,7 +283,7 @@ Item {
             height: dateAppCertificates.height + rectAppCertificatesCheckBox.height + Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppLook.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
 
             Text {
                 id: dateAppCertificates
@@ -350,7 +350,7 @@ Item {
             height: dateAppTimeStamp.height + rectAppTimeStampCheckBox.height + Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppCertificates.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
 
             Text {
                 id: dateAppTimeStamp
@@ -417,7 +417,7 @@ Item {
                         enabled: checkboxTimeStamp.checked
                         opacity: checkboxTimeStamp.checked ?
                                      1.0 :
-                                     Constants.OPACITY_DIFINITIONS_APP_OPTION_DISABLED
+                                     Constants.OPACITY_DEFINITIONS_APP_OPTION_DISABLED
                         inputMethodHints: Qt.ImhUrlCharactersOnly
                         validator: RegExpValidator{
                             //http/https url validator
@@ -433,7 +433,7 @@ Item {
             height: dateAppNetwork.height + rectAppNetworkCheckBox.height
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppTimeStamp.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DIFINITIONS_APP
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
 
             Text {
                 id: dateAppNetwork
@@ -513,7 +513,7 @@ Item {
                         enabled: checkboxProxy.checked
                         opacity: checkboxProxy.checked ?
                                      1.0 :
-                                     Constants.OPACITY_DIFINITIONS_APP_OPTION_DISABLED
+                                     Constants.OPACITY_DEFINITIONS_APP_OPTION_DISABLED
                         validator: RegExpValidator{
                             //validates IPV4/IPV6 host
                             regExp: /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*/
@@ -540,7 +540,7 @@ Item {
                         enabled: checkboxProxy.checked
                         opacity: checkboxProxy.checked ?
                                      1.0 :
-                                     Constants.OPACITY_DIFINITIONS_APP_OPTION_DISABLED
+                                     Constants.OPACITY_DEFINITIONS_APP_OPTION_DISABLED
                     }
                 }
                 CheckBox {
@@ -573,7 +573,7 @@ Item {
                         enabled: checkboxAutProxy.checked
                         opacity: checkboxAutProxy.checked ?
                                      1.0 :
-                                     Constants.OPACITY_DIFINITIONS_APP_OPTION_DISABLED
+                                     Constants.OPACITY_DEFINITIONS_APP_OPTION_DISABLED
                     }
                 }
                 Item {
@@ -595,7 +595,7 @@ Item {
                         enabled: checkboxAutProxy.checked
                         opacity: checkboxAutProxy.checked ?
                                      1.0 :
-                                     Constants.OPACITY_DIFINITIONS_APP_OPTION_DISABLED
+                                     Constants.OPACITY_DEFINITIONS_APP_OPTION_DISABLED
                     }
                 }
             }
