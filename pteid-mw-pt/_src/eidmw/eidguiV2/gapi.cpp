@@ -813,8 +813,8 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QStrin
     params.page = 0;
     params.coord_x = -1;
     params.coord_y = -1;
-    params.location = "";
-    params.reason = "";
+    params.location = location;
+    params.reason = reason;
     params.isTimestamp = 0;
     params.isSmallSignature = 0;
 
