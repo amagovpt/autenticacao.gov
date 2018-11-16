@@ -485,7 +485,7 @@ void GAPI::showChangeAddressDialog(long code)
     long sam_error_code = 0;
     QString support_string = tr("STR_CHANGE_ADDRESS_ERROR_MSG");
 
-    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code 0x%08x", code);
+    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "AddressChange op finished with error code 0x%08x", code);
 
     switch(code)
     {
