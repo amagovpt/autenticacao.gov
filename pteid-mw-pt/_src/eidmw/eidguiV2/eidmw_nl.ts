@@ -839,18 +839,6 @@
         <source>STR_SCAP_CACHE_TEXT</source>
         <translation>A cache dos atributos profissionais guarda atributos previamente carregados, evitando nova ligação ao servidor</translation>
     </message>
-    <message>
-        <source>STR_SCAP_ATTRIBUTES_BUTTON_REMOVE</source>
-        <translation type="obsolete">Apagar cache</translation>
-    </message>
-    <message>
-        <source>STR_SCAP_PROFESSIONAL_ATTRIBUTES_BUTTON_REMOVE</source>
-        <translation type="vanished">Remover cache de atributos empresariais</translation>
-    </message>
-    <message>
-        <source>STR_SCAP_BUSINESS_ATTRIBUTES_BUTTON_REMOVE</source>
-        <translation type="vanished">Remover cache de atributos profissionais</translation>
-    </message>
 </context>
 <context>
     <name>PageDefinitionsApp</name>
@@ -1137,14 +1125,6 @@
     </message>
 </context>
 <context>
-    <name>PageDifiniionsSCAP</name>
-    <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="240"/>
-        <source>STR_SCAP_ATTRIBUTES_BUTTON_REMOVE</source>
-        <translation>Apagar cache</translation>
-    </message>
-</context>
-<context>
     <name>PageDifinitionsSCAP</name>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="98"/>
@@ -1242,6 +1222,7 @@
         <translation>Escolha a entidade para a qual pretende carregar os atributos profissionais</translation>
     </message>
     <message>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="240"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="128"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="204"/>
         <source>STR_SCAP_ATTRIBUTES_BUTTON_REMOVE</source>
@@ -1767,22 +1748,6 @@
         <translation>Clique aqui para carregar atributos profissionais</translation>
     </message>
     <message>
-        <source>STR_SIGN_ATTRIBUTES_SAVE</source>
-        <translation type="vanished">Preservar</translation>
-    </message>
-    <message>
-        <source>STR_SIGN_ATTRIBUTES_SAVE_HOW_LONG</source>
-        <translation type="vanished">durante</translation>
-    </message>
-    <message>
-        <source>STR_SIGN_ATTRIBUTES_YEAR</source>
-        <translation type="vanished">ano</translation>
-    </message>
-    <message>
-        <source>STR_SIGN_ATTRIBUTES_YEARS</source>
-        <translation type="vanished">anos</translation>
-    </message>
-    <message>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="616"/>
         <source>STR_SIGN_PREVIEW</source>
         <translation>Pré-visualização</translation>
@@ -1997,7 +1962,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="166"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="74"/>
         <source>STR_POPUP_PIN_CANCELED</source>
-        <translation>Introdução de PIN no leitor PINPAD cancelada</translation>
+        <translation>Introdução de PIN cancelada</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="94"/>

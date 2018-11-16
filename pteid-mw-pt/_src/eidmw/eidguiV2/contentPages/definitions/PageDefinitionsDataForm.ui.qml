@@ -237,7 +237,7 @@ Item {
                         anchors.rightMargin: Constants.SIZE_ROW_H_SPACE
                         Button {
                             id: buttonRemoveSCAPCache
-                            text: qsTranslate("PageDifiniionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE") + controler.autoTr
+                            text: qsTranslate("PageDifinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE") + controler.autoTr
                             width: parent.width
                             height: Constants.HEIGHT_BOTTOM_COMPONENT
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
