@@ -519,6 +519,8 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
             QString attributeSupplierListString = "";
             QString lastAttrSupplierString = "";
             QString lastAttrSupplierType = "";
+            QString signOriginalReason = signatureInfo.getReason();
+            QString signOriginalLocation = signatureInfo.getLocation();
             bool moreThanOneNext = false;
             std::vector <QTemporaryFile *> tempFiles;
 
@@ -639,6 +641,33 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                         return GAPI::ScapGenericError;
                     }
                     outputPath = strdup(tempFile->fileName().toStdString().c_str());
+                }
+
+                // If signature is not visible then add attribute details in the reason field of the signature details
+                // Else add original reason and location
+                if(!isVisible)
+                {
+                    QString signDetailsReason = "";
+                    QString signDetailsLocation = "";
+                    signDetailsReason.append("Entidade: " + QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
+                    signDetailsReason.append(". Na qualidade de: ");
+                    signDetailsReason.append(mainAttribute->Description->c_str());
+                    signDetailsReason.append(". Subatributos: ");
+
+                    if (mainAttribute->SubAttributeList != NULL) {
+                        for (uint ii = 0; ii < mainAttribute->SubAttributeList->SubAttribute.size(); ii++) {
+                            ns1__SubAttributeType *acSubAttr = mainAttribute->SubAttributeList->SubAttribute.at(ii);
+                            if(ii != 0)signDetailsReason.append("; ");
+                            signDetailsReason.append(QString::fromStdString(acSubAttr->Description->c_str()));
+                            signDetailsReason.append(": ");
+                            signDetailsReason.append(QString::fromStdString(acSubAttr->Value->c_str()));
+                        }
+                    }
+                    signatureInfo.setReason(strdup(signDetailsReason.toStdString().c_str()));
+                    signatureInfo.setLocation(strdup(signDetailsLocation.toStdString().c_str()));
+                }else{
+                    signatureInfo.setReason(strdup(signOriginalReason.toStdString().c_str()));
+                    signatureInfo.setLocation(strdup(signOriginalLocation.toStdString().c_str()));
                 }
 
                 signatureHash = openSCAPSignature(inputPath, outputPath,

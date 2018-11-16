@@ -174,7 +174,8 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
             PTEID_PDFSignature pdf_sig(strdup(inputPath.toUtf8().constData()));
 
             // Sign pdf
-            sign_rc = card.SignPDF(pdf_sig, selected_page, 0, false, "" , "", temp_save_path);
+            sign_rc = card.SignPDF(pdf_sig, selected_page, 0, false, strdup(location.toUtf8().constData()),
+                                   strdup(reason.toUtf8().constData()), temp_save_path);
 
             if (sign_rc == 0)
             {

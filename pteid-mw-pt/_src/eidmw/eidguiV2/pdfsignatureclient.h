@@ -31,12 +31,6 @@ public:
         location = _location;
         reason = _reason;
     }
-    PDFSignatureInfo(int _selectedPage, double _x, double _y, bool _isPortrait){
-        selectedPage = _selectedPage;
-        x = _x;
-        y = _y;
-        portrait = _isPortrait;
-    }
 
     int getSelectedPage() { return selectedPage; }
     double getX() { return x; }
@@ -44,6 +38,9 @@ public:
     bool isPortrait() { return portrait; }
     const char * getLocation(){ return location; }
     const char * getReason(){ return reason; }
+    void setReason(const char * _reason){reason = _reason;}
+    void setLocation(const char * _location){location = _location;}
+
 private:
     int selectedPage;
     double x;
