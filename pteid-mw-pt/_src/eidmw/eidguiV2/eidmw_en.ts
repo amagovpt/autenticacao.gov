@@ -1009,7 +1009,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="191"/>
         <source>STR_SCAP_PING_FAIL_FIRST</source>
-        <translation></translation>
+        <translation>Error accessing the attribute load service.Please try again.</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="193"/>
