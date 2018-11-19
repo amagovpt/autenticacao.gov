@@ -189,9 +189,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
     std::string appID = settings.getAppID().toStdString();
     qDebug() << "SCAP AppID = " << appID.c_str();
 
-    std::string appName("TEST");
-
-    //TODO:  std::string appName("Autenticacao.gov");
+    std::string appName("Autenticacao.gov");
 
     qDebug() << "C++: getAttributes called";
 
