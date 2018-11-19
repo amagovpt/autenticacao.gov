@@ -284,8 +284,11 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
         // Save to cache
         QString s_scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
         QDir scapCacheDir;
-        scapCacheDir.mkpath(s_scapCacheDir);
-
+		// Tries to create if does not exist
+		if (!scapCacheDir.mkpath(s_scapCacheDir)) {
+			qDebug() << "couldn't create SCAP cache folder";
+			parent->signalCacheFolderNotCreated();
+		}
         QString fileLocation = s_scapCacheDir + idNumber + (allEnterprises ? COMPANIES_SUFFIX : ENTITIES_SUFFIX);
 
         // Convert string to istream
@@ -361,6 +364,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
             else
             {
                 std::cerr << "Couldn't save attribute result to cache. Error: " << cacheFile.errorString().toStdString() << std::endl;
+				parent->signalCacheNotWritable();
             }
         } else {
 

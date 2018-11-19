@@ -775,6 +775,8 @@
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="300"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="315"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="329"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="344"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="354"/>
         <source>STR_CLEAR_CACHE</source>
         <translation>Remove Cache</translation>
     </message>
@@ -828,6 +830,16 @@
         <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="200"/>
         <source>STR_SCAP_CACHE_TEXT</source>
         <translation>The professional attributes cache stores attributes previously loaded, avoiding a new connection to the server</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="346"/>
+        <source>STR_CACHE_NOT_WRITABLE</source>
+        <translation>You don&apos;t have permissions to write in cache</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="356"/>
+        <source>STR_CACHE_FOLDER_NOT_CREATED</source>
+        <translation>Cache folder could not be created</translation>
     </message>
 </context>
 <context>

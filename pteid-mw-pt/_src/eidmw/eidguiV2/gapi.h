@@ -392,6 +392,8 @@ signals:
     void signalRemoveSCAPAttributesSucess(int isCompanies);
     void signalRemoveSCAPAttributesFail(int isCompanies);
     void signalCacheNotReadable(int isCompanies);
+	void signalCacheNotWritable();
+	void signalCacheFolderNotCreated();
 
     // Import Certificates
     void signalImportCertificatesFail();
@@ -409,6 +411,7 @@ private:
     void getSCAPAttributesFromCache(int queryType, bool isShortDescription);
     //querytype - 0 = Entities, 1 = Companies
     void removeSCAPAttributesFromCache(int queryType);
+	bool prepareSCAPCache();
     void getSCAPEntityAttributes(QList<int> entityIDs);
     void doSignSCAP(SCAPSignParams params);
     void getPersoDataFile();

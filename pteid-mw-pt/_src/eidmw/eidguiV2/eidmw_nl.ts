@@ -773,6 +773,8 @@
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="300"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="315"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="329"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="344"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="354"/>
         <source>STR_CLEAR_CACHE</source>
         <translation>Apagar cache</translation>
     </message>
@@ -826,6 +828,16 @@
         <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="200"/>
         <source>STR_SCAP_CACHE_TEXT</source>
         <translation>A cache dos atributos profissionais guarda atributos previamente carregados, evitando nova ligação ao servidor</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="346"/>
+        <source>STR_CACHE_NOT_WRITABLE</source>
+        <translation>Não tem permissões de escrita na cache</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="356"/>
+        <source>STR_CACHE_FOLDER_NOT_CREATED</source>
+        <translation>Criação da diretoria da cache falhou</translation>
     </message>
 </context>
 <context>

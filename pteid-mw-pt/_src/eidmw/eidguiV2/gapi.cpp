@@ -1980,7 +1980,9 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
     foreach (supplier_id, entityIDs) {
         supplier_ids.push_back(supplier_id);
     }
-
+	if (!prepareSCAPCache()){
+		return;
+	}
     std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, *card, supplier_ids);
 
     if (attributes.size() == 0) {
@@ -2022,7 +2024,9 @@ void GAPI::getSCAPCompanyAttributes() {
     initScapAppId();
 
     std::vector<int> supplierIDs;
-
+	if (!prepareSCAPCache()) {
+		return;
+	}
     std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, *card, supplierIDs);
 
     if (attributes.size() == 0)
@@ -2121,8 +2125,8 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
     }
 
 #ifdef WIN32
-    extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
-    qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
+	extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+	qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
 #endif
     if(!dir.isReadable())
     {
@@ -2133,7 +2137,7 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
         emit signalCacheNotReadable(isCompanies);
     }
 #ifdef WIN32
-    qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
+	qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
 #endif
 
     bool error_code = false;
@@ -2146,6 +2150,38 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
         emit signalRemoveSCAPAttributesSucess(isCompanies);
     else
         emit signalRemoveSCAPAttributesFail(isCompanies);
+}
+
+bool GAPI::prepareSCAPCache() {
+	ScapSettings settings;
+	QString s_scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
+	QFileInfo scapCacheDir(s_scapCacheDir);
+	QDir scapCache(s_scapCacheDir);
+	bool hasPermissions = true;
+	// Tries to create if does not exist
+	if (!scapCache.mkpath(s_scapCacheDir)) {	
+		qDebug() << "couldn't create SCAP cache folder";
+		emit signalCacheFolderNotCreated();
+		hasPermissions = false;
+	}
+#ifdef WIN32
+	extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+	qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
+#endif
+	if (!scapCacheDir.isWritable()) {
+		qDebug() << "SCAP cache not writable";
+		emit signalCacheNotWritable();
+		hasPermissions = false;
+	}
+	if (!scapCacheDir.isReadable()) {
+		qDebug() << "SCAP cache not readable";
+		emit signalCacheNotReadable(0); // isCompanies parameter not used
+		hasPermissions = false;
+	}
+#ifdef WIN32
+	qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
+#endif
+	return hasPermissions;
 }
 
 void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {

@@ -337,7 +337,26 @@ PageDefinitionsSCAPForm {
                 gapi.startGettingEntities()
                 propertyBusyIndicator.running = true
             }
-            
+        }
+		onSignalCacheNotWritable:{
+            propertyBusyIndicatorAttributes.running = false;
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    qsTranslate("PageDataApp","STR_CACHE_NOT_WRITABLE")
+        
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+        }
+		onSignalCacheFolderNotCreated:{
+            propertyBusyIndicatorAttributes.running = false;
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    qsTranslate("PageDataApp","STR_CACHE_FOLDER_NOT_CREATED")
+        
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
     }
 
