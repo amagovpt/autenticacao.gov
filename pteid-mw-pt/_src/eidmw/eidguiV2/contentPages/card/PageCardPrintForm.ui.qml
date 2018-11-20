@@ -169,7 +169,7 @@ Item {
             font.family: lato.name
             color: Constants.COLOR_TEXT_LABEL
             height: Constants.SIZE_TEXT_LABEL
-            text: qsTranslate("PageCardPrint","STR_PRINT_SETTINGS")
+            text: qsTranslate("PageCardPrint","STR_PRINT_SIGN_SETTINGS")
         }
 
         Rectangle {

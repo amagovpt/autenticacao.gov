@@ -104,12 +104,12 @@ private:
 struct PrintParams {
 public:
     QString outputFile;
-    double isBasicInfo;
-    double isAddicionalInfo;
-    double isAddress;
-    double isNotes;
-    double isPrintDate;
-    double isSign;
+    bool isBasicInfo;
+    bool isAddicionalInfo;
+    bool isAddress;
+    bool isNotes;
+    bool isPrintDate;
+    bool isSign;
 };
 
 struct SignParams {
@@ -120,8 +120,8 @@ public:
     double coord_y;
     QString reason;
     QString location;
-    double isTimestamp;
-    double isSmallSignature;
+    bool isTimestamp;
+    bool isSmallSignature;
 };
 
 struct CmdSignParams {
@@ -154,8 +154,8 @@ public:
     double coord_y;
     QString reason;
     QString location;
-    double isTimestamp;
-    double isSmallSignature;
+    bool isTimestamp;
+    bool isSmallSignature;
 };
 
 struct SCAPSignParams {
@@ -267,15 +267,15 @@ public slots:
     void startReadingAddress();
     int getShortcutFlag() {return m_shortcutFlag; }
 	QString getShortcutInputPDF() {	return m_shortcutInputPDF.replace(QChar('\\'), QChar('/')); }
-    void startPrintPDF(QString outputFile, double isBasicInfo,double isAdditionalInfo,
-                       double isAddress,double isNotes,double isPrintDate,double isSign);
-    void startPrint(QString outputFile, double isBasicInfo,double isAdditionalInfo,
-                       double isAddress, double isNotes, double isPrintDate, double isSign);
+    void startPrintPDF(QString outputFile, bool isBasicInfo,bool isAdditionalInfo,
+                       bool isAddress,bool isNotes,bool isPrintDate,bool isSign);
+    void startPrint(QString outputFile, bool isBasicInfo,bool isAdditionalInfo,
+                       bool isAddress, bool isNotes, bool isPrintDate, bool isSign);
     //This method should be used by basic and advanced signature modes
     void startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
-                         QString reason, QString location, double isTimestamp, double isSmall);
+                         QString reason, QString location, bool isTimestamp, bool isSmall);
     void startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outputFile, int page, double coord_x, double coord_y,
-                         QString reason, QString location, double isTimestamp, double isSmall);
+                         QString reason, QString location, bool isTimestamp, bool isSmall);
     int getPDFpageCount(QString loadedFilePath);
 
     void startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp);

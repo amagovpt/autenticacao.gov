@@ -209,7 +209,7 @@ Item {
                 width: parent.width
                 Components.LabelTextBoxForm {
                     id: textBoxMunicipality
-                    propertyDateText.text: qsTranslate("GAPI","STR_MUNICIPALY")
+                    propertyDateText.text: qsTranslate("GAPI","STR_MUNICIPALITY")
                     propertyDateField.text: ""
                 }
             }
@@ -227,7 +227,7 @@ Item {
                 width: parent.width
                 Components.LabelTextBoxForm {
                     id: textBoxParish
-                    propertyDateText.text: qsTranslate("GAPI","STR_CICIL_PARISH")
+                    propertyDateText.text: qsTranslate("GAPI","STR_CIVIL_PARISH")
                     propertyDateField.text: ""
                 }
             }

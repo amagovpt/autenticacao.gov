@@ -193,8 +193,9 @@ PageCardPrintForm {
             propertySwitchAdditional.enabled = true
             propertySwitchAddress.enabled = true
             propertySwitchNotes.enabled = true
-            propertySwitchPrintDate.checked = true
+            propertySwitchPrintDate.enabled = true
             propertySwitchPdfSign.enabled = true
+
             propertySwitchBasic.checked = false
             propertySwitchAdditional.checked = false
             propertySwitchAddress.checked = false
@@ -346,11 +347,14 @@ PageCardPrintForm {
         propertySwitchAdditional.enabled = false
         propertySwitchAddress.enabled = false
         propertySwitchNotes.enabled = false
+        propertySwitchPrintDate.enabled = false
         propertySwitchPdfSign.enabled = false
+
         propertySwitchBasic.checked = false
         propertySwitchAdditional.checked = false
         propertySwitchAddress.checked = false
         propertySwitchNotes.checked = false
+        propertySwitchPrintDate.checked = false
         propertySwitchPdfSign.checked = false
     }
     

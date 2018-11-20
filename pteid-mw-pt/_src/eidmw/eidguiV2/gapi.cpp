@@ -943,15 +943,15 @@ QPixmap PhotoImageProvider::requestPixmap(const QString &id, QSize *size, const 
     return p;
 }
 
-void GAPI::startPrintPDF(QString outputFile, double isBasicInfo,double isAddicionalInfo,
-                         double isAddress,double isNotes,double isPrintDate,double isSign) {
+void GAPI::startPrintPDF(QString outputFile, bool isBasicInfo, bool isAddicionalInfo,
+                         bool isAddress, bool isNotes, bool isPrintDate, bool isSign) {
 
     PrintParams params = {outputFile, isBasicInfo, isAddicionalInfo, isAddress, isNotes, isPrintDate, isSign};
     QtConcurrent::run(this, &GAPI::doPrintPDF, params);
 }
 
-void GAPI::startPrint(QString outputFile, double isBasicInfo,double isAddicionalInfo,
-                         double isAddress,double isNotes,double isPrintDate,double isSign) {
+void GAPI::startPrint(QString outputFile, bool isBasicInfo, bool isAddicionalInfo,
+                         bool isAddress, bool isNotes, bool isPrintDate, bool isSign) {
 
     PrintParams params = {outputFile, isBasicInfo, isAddicionalInfo, isAddress, isNotes, isPrintDate, isSign};
 
@@ -1055,18 +1055,42 @@ void GAPI::doPrintPDF(PrintParams &params) {
 static QPen black_pen;
 static QPen blue_pen;
 
-void drawSingleField(QPainter &painter, double pos_x, double pos_y, QString name, QString value, bool single_column=false)
+double drawSingleField(QPainter &painter, double pos_x, double pos_y, QString name, QString value, double line_length, int field_margin=15, bool is_bounded_rect=false, double bound_width=360)
 {
-    int line_length = single_column ? 300 : 180;
-
     painter.setPen(blue_pen);
-    painter.drawText(QPointF(pos_x, pos_y), name);
+
+    if (field_margin == 0){
+        line_length -= 15;
+    }
+
+    painter.drawText(QPointF(pos_x + field_margin, pos_y), name);
     pos_y += 7;
 
-    painter.drawLine(QPointF(pos_x, pos_y), QPointF(pos_x+line_length, pos_y));
-    pos_y += 15;
+    painter.drawLine(QPointF(pos_x + field_margin, pos_y), QPointF(pos_x + (line_length - field_margin) , pos_y));
     painter.setPen(black_pen);
-    painter.drawText(QPointF(pos_x, pos_y), value);
+
+    if (is_bounded_rect){
+        int flags = Qt::TextWordWrap | Qt::TextWrapAnywhere;
+        int textFlags = Qt::TextWordWrap;
+        QFontMetricsF fm = painter.fontMetrics();
+        QRectF bounding_rect = fm.boundingRect(QRectF(pos_x + field_margin, pos_y, bound_width -  2 * field_margin ,  500), flags, value);
+
+        //QRectF rectangle = QRectF(pos_x, pos_y, 600, 600);
+        //QRectF bounding_rect;
+        //painter.drawText(bounding_rect, Qt::TextDontPrint, value);
+
+        qDebug() << "Value: " << value;
+        qDebug() << "BR Width: " << bounding_rect.width();
+        qDebug() << "BR height: " << bounding_rect.height();
+
+        painter.drawText(bounding_rect.adjusted(0, 0, 0, 0), textFlags, value);
+        pos_y += bounding_rect.height() + 15;
+    } else {
+        pos_y += 15;
+        painter.drawText(QPointF(pos_x + field_margin, pos_y), value);
+    }
+
+    return pos_y;
 }
 
 void drawSectionHeader(QPainter &painter, double pos_x, double pos_y, QString section_name)
@@ -1126,15 +1150,28 @@ QString getTextFromLines(QStringList lines, int start, int stop){
     return text_lines.join("\n");
 }
 
+double checkNewPageAndPrint(QPrinter &printer, QPainter &painter, double current_y, double remaining_height, double max_height, bool print_date=false, QString date_label=""){
+    if (current_y + remaining_height > max_height){
+        printer.newPage();
+        current_y = 50;
+        if (print_date)
+        {
+            drawPrintingDate(painter,  date_label);
+        }
+    }
+    return current_y;
+}
+
 bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 {
     qDebug() << "drawpdf! outputFile = " << params.outputFile <<
                 "isBasicInfo = " << params.isBasicInfo << "isAddicionalInfo" << params.isAddicionalInfo << "isAddress"
              << params.isAddress << "isNotes = " << params.isNotes << "isPrintDate = " << params.isPrintDate << "isSign = " << params.isSign;
     //gives a bit of left margin
-    double pos_x = 30, pos_y = 0;
+    double page_margin = 33.5;
+    double pos_x = page_margin, pos_y = 0;
     bool res = false;
-    int sections_to_print = 0;
+    int field_margin = 15;
 
     BEGIN_TRY_CATCH;
 
@@ -1167,6 +1204,10 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
         qDebug() << "Start drawing return error: " <<  res;
         return false;
     }
+    double page_height = painter.device()->height();
+    double page_width = painter.device()->width();
+    double half_page = (page_width - 2 * page_margin) / 2;
+    double third_of_page = (page_width - 2 * page_margin) / 3;
 
     //Font setup
     QFont din_font("DIN Medium");
@@ -1184,7 +1225,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     //renderer.render(&painter, QRect(pos_x, pos_y, 504, 132));
     //renderer.render(&painter, QRect(pos_x, pos_y, 250, 120));
 
-    pos_y += header.height() + 15;
+    pos_y += header.height() + field_margin;
     black_pen = painter.pen();
 
     blue_pen.setColor(QColor(78, 138, 190));
@@ -1198,15 +1239,14 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     //Change text color
     blue_pen = painter.pen();
 
-    const int COLUMN_WIDTH = 220;
-    const int LINE_HEIGHT = 45;
+    const double LINE_HEIGHT = 45.0;
 
     //    din_font.setBold(true);
     painter.setFont(din_font);
 
     painter.drawText(QPointF(pos_x, pos_y), tr("STR_PERSONAL_DATA"));
 
-    pos_y += 15;
+    pos_y += field_margin;
     int circle_radius = 6;
 
     //Draw 4 blue circles
@@ -1224,11 +1264,15 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
     pos_y += 30;
 
+    if (params.isPrintDate)
+    {
+        drawPrintingDate(painter,  tr("STR_PRINTED_ON"));
+    }
+
     if (params.isBasicInfo)
     {
 
         drawSectionHeader(painter, pos_x, pos_y, tr("STR_BASIC_INFORMATION"));
-        sections_to_print++;
 
         //Load photo into a QPixmap
         PTEID_ByteArray& photo = eid_file.getPhotoObj().getphoto();
@@ -1246,151 +1290,153 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
         pos_y += 50;
 
-        drawSingleField(painter, pos_x, pos_y, tr("STR_GIVEN_NAME"), QString::fromUtf8(eid_file.getGivenName()), true);
+        double new_pos_y = drawSingleField(painter, pos_x, pos_y, tr("STR_GIVEN_NAME"),
+                                           QString::fromUtf8(eid_file.getGivenName()), half_page, 0, true, half_page);
+        pos_y = std::max(new_pos_y, pos_y + LINE_HEIGHT);
 
+        new_pos_y = drawSingleField(painter, pos_x, pos_y, tr("STR_SURNAME"),
+                                    QString::fromUtf8(eid_file.getSurname()), half_page, 0, true, half_page);
+        pos_y = std::max(new_pos_y, pos_y + LINE_HEIGHT);
+
+        double f_col = half_page / 2;
+        drawSingleField(painter, pos_x, pos_y, tr("STR_GENDER"), QString::fromUtf8(eid_file.getGender()), f_col, 0);
+        drawSingleField(painter, pos_x + f_col, pos_y, tr("STR_HEIGHT"), QString::fromUtf8(eid_file.getHeight()), f_col);
+        drawSingleField(painter, pos_x + 2 * f_col, pos_y, tr("STR_NATIONALITY"),
+                        QString::fromUtf8(eid_file.getNationality()), f_col);
+        drawSingleField(painter, pos_x + 3 * f_col, pos_y, tr("STR_DATE_OF_BIRTH"),
+                        QString::fromUtf8(eid_file.getDateOfBirth()), f_col);
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("STR_SURNAME"), QString::fromUtf8(eid_file.getSurname()), true);
-
+        drawSingleField(painter, pos_x, pos_y, tr("STR_DOCUMENT_NUMBER"), QString::fromUtf8(eid_file.getDocumentNumber()), half_page, 0);
+        drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_VALIDITY_DATE"),
+                        QString::fromUtf8(eid_file.getValidityEndDate()), half_page);
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("STR_GENDER"), QString::fromUtf8(eid_file.getGender()));
-        drawSingleField(painter, pos_x + COLUMN_WIDTH, pos_y, tr("STR_HEIGHT"), QString::fromUtf8(eid_file.getHeight()));
-        drawSingleField(painter, pos_x + COLUMN_WIDTH*2, pos_y, tr("STR_DATE_OF_BIRTH"),
-                        QString::fromUtf8(eid_file.getDateOfBirth()));
+        double new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_FATHER"),
+                                                 QString::fromUtf8(eid_file.getGivenNameFather()) + " " +
+                                                 QString::fromUtf8(eid_file.getSurnameFather()), half_page, 0, true, half_page);
+        double new_height_right = drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_MOTHER"),
+                                                  QString::fromUtf8(eid_file.getGivenNameMother()) + " " +
+                                                  QString::fromUtf8(eid_file.getSurnameMother()),  half_page, field_margin, true, half_page);
+        pos_y = std::max(std::max(new_height_left, new_height_right), pos_y + LINE_HEIGHT);
 
-        pos_y += LINE_HEIGHT;
+        new_pos_y = drawSingleField(painter, pos_x, pos_y, tr("STR_NOTES"),
+                                    QString::fromUtf8(eid_file.getAccidentalIndications()), half_page, 0, true, page_width);
 
-        drawSingleField(painter, pos_x, pos_y, tr("STR_DOCUMENT_NUMBER"), QString::fromUtf8(eid_file.getDocumentNumber()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_VALIDITY_DATE"),
-                        QString::fromUtf8(eid_file.getValidityEndDate()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_COUNTRY"), QString::fromUtf8(eid_file.getCountry()));
-
-        pos_y += LINE_HEIGHT;
-        drawSingleField(painter, pos_x, pos_y, tr("STR_FATHER"), QString::fromUtf8(eid_file.getGivenNameFather()) + " " +
-                        QString::fromUtf8(eid_file.getSurnameFather()), true);
-        pos_y += LINE_HEIGHT;
-
-        drawSingleField(painter, pos_x, pos_y, tr("STR_MOTHER"), QString::fromUtf8(eid_file.getGivenNameMother()) + " " +
-                        QString::fromUtf8(eid_file.getSurnameMother()), true);
-        pos_y += LINE_HEIGHT;
-
-        drawSingleField(painter, pos_x, pos_y, tr("STR_NOTES"),
-                        QString::fromUtf8(eid_file.getAccidentalIndications()), true);
-
-        pos_y += 50;
+        pos_y = std::max(new_pos_y, pos_y + LINE_HEIGHT);
     }
 
     if (params.isAddicionalInfo)
     {
+        //height of this section, if spacing between fields change update this value
+        double min_section_height = 235;
+        pos_y = checkNewPageAndPrint(printer, painter, pos_y, min_section_height, page_height, params.isPrintDate, tr("STR_PRINTED_ON"));
+
         drawSectionHeader(painter, pos_x, pos_y, tr("STR_ADDITIONAL_INFORMATION"));
-        sections_to_print++;
         pos_y += 50;
 
-        drawSingleField(painter, pos_x, pos_y, tr("STR_VAT_NUM"), QString::fromUtf8(eid_file.getTaxNo()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_SOCIAL_SECURITY_NUM"),
-                        QString::fromUtf8(eid_file.getSocialSecurityNumber()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_NATIONAL_HEALTH_NUM"),
-                        QString::fromUtf8(eid_file.getHealthNumber()));
+        drawSingleField(painter, pos_x, pos_y, tr("STR_VAT_NUM"),
+                        QString::fromUtf8(eid_file.getTaxNo()), third_of_page, 0);
+        drawSingleField(painter, pos_x + third_of_page, pos_y, tr("STR_SOCIAL_SECURITY_NUM"),
+                        QString::fromUtf8(eid_file.getSocialSecurityNumber()), third_of_page);
+        drawSingleField(painter, pos_x + 2 * third_of_page, pos_y, tr("STR_NATIONAL_HEALTH_NUM"),
+                        QString::fromUtf8(eid_file.getHealthNumber()), third_of_page);
         pos_y += LINE_HEIGHT;
 
-        drawSingleField(painter, pos_x, pos_y, tr("STR_CARD_VERSION"), QString::fromUtf8(eid_file.getDocumentVersion()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_DELIVERY_DATE"),
-                        QString::fromUtf8(eid_file.getValidityBeginDate()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_DELIVERY_ENTITY"),
-                        QString::fromUtf8(eid_file.getIssuingEntity()));
+        drawSingleField(painter, pos_x, pos_y, tr("STR_DELIVERY_ENTITY"),
+                        QString::fromUtf8(eid_file.getIssuingEntity()), half_page, 0, true, half_page);
+        drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_DELIVERY_DATE"),
+                        QString::fromUtf8(eid_file.getValidityBeginDate()), half_page);
         pos_y += LINE_HEIGHT;
+
         drawSingleField(painter, pos_x, pos_y, tr("STR_DOCUMENT_TYPE"),
-                        QString::fromUtf8(eid_file.getDocumentType()));
-        drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_DELIVERY_LOCATION"),
-                        QString::fromUtf8(eid_file.getLocalofRequest()));
+                        QString::fromUtf8(eid_file.getDocumentType()), half_page, 0, true, half_page);
+        drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_DELIVERY_LOCATION"),
+                        QString::fromUtf8(eid_file.getLocalofRequest()), half_page, field_margin, true, half_page);
         pos_y += LINE_HEIGHT;
-        drawSingleField(painter, pos_x, pos_y, tr("STR_CARD_STATE"), getCardActivation());
 
+        drawSingleField(painter, pos_x, pos_y, tr("STR_CARD_VERSION"),
+                        QString::fromUtf8(eid_file.getDocumentVersion()), half_page, 0);
+        drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_CARD_STATE"),
+                        getCardActivation(), half_page, field_margin, true, half_page);
         pos_y += 50;
     }
 
     if (params.isAddress)
     {
+        //height of this section, if spacing between fields change update this value
+        double min_section_height = 350;
+        pos_y = checkNewPageAndPrint(printer, painter, pos_y, min_section_height, page_height, params.isPrintDate, tr("STR_PRINTED_ON"));
+
         drawSectionHeader(painter, pos_x, pos_y, tr("STR_ADDRESS"));
-        sections_to_print++;
         pos_y += 50;
 
         PTEID_Address &addressFile = card->getAddr();
 
         if (addressFile.isNationalAddress()){
-            drawSingleField(painter, pos_x, pos_y, tr("STR_DISTRICT"),
-                            QString::fromUtf8(addressFile.getDistrict()));
-            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_MUNICIPALY"),
-                            QString::fromUtf8(addressFile.getMunicipality()));
-            drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_CICIL_PARISH"),
-                            QString::fromUtf8(addressFile.getCivilParish()));
+            double new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_DISTRICT"),
+                                                     QString::fromUtf8(addressFile.getDistrict()), half_page, 0, true, half_page);
+            double new_height_right = drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_MUNICIPALITY"),
+                                                      QString::fromUtf8(addressFile.getMunicipality()), half_page,
+                                                      field_margin, true, half_page);
+            pos_y = std::max(std::max(new_height_left, new_height_right), pos_y + LINE_HEIGHT);
 
-            pos_y += LINE_HEIGHT;
+            new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_CIVIL_PARISH"),
+                                              QString::fromUtf8(addressFile.getCivilParish()), half_page, 0, true, page_width);
+            pos_y = std::max(new_height_left, pos_y + LINE_HEIGHT);
 
-            drawSingleField(painter, pos_x, pos_y, tr("STR_AB_STREET_TYPE"),
-                            QString::fromUtf8(addressFile.getAbbrStreetType()));
-            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_STREET_TYPE"),
-                            QString::fromUtf8(addressFile.getStreetType()));
-            drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_STREET_NAME"),
-                            QString::fromUtf8(addressFile.getStreetName()));
+            drawSingleField(painter, pos_x, pos_y, tr("STR_STREET_TYPE"),
+                            QString::fromUtf8(addressFile.getStreetType()), (half_page / 2), 0, true, (half_page / 2));
 
-            pos_y += LINE_HEIGHT;
+            new_height_left = drawSingleField(painter, pos_x + (half_page / 2), pos_y, tr("STR_STREET_NAME"),
+                                              QString::fromUtf8(addressFile.getStreetName()), 3 * (half_page / 2),
+                                              field_margin, true, 3 * (half_page / 2));
+            pos_y = std::max(new_height_left, pos_y + LINE_HEIGHT);
 
-            drawSingleField(painter, pos_x, pos_y, tr("STR_AB_BUILDING_TYPE"),
-                            QString::fromUtf8(addressFile.getAbbrBuildingType()));
-            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_BUILDING_TYPE"),
-                            QString::fromUtf8(addressFile.getBuildingType()));
-            drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_HOUSE_BUILDING_NUM"),
-                            QString::fromUtf8(addressFile.getDoorNo()));
-            pos_y += LINE_HEIGHT;
+            new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_HOUSE_BUILDING_NUM"),
+                            QString::fromUtf8(addressFile.getDoorNo()), third_of_page, 0);
+            new_height_right = drawSingleField(painter, pos_x + third_of_page, pos_y, tr("STR_FLOOR"),
+                            QString::fromUtf8(addressFile.getFloor()), third_of_page);
+            double new_height = drawSingleField(painter, pos_x + 2 * third_of_page, pos_y, tr("STR_SIDE"),
+                            QString::fromUtf8(addressFile.getSide()), third_of_page);
+            pos_y = std::max(new_height, std::max(new_height_left, std::max(new_height_left, pos_y + LINE_HEIGHT)));
 
-            drawSingleField(painter, pos_x, pos_y, tr("STR_FLOOR"),
-                            QString::fromUtf8(addressFile.getFloor()));
-            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_SIDE"),
-                            QString::fromUtf8(addressFile.getSide()));
-            drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_PLACE"),
-                            QString::fromUtf8(addressFile.getPlace()));
-            pos_y += LINE_HEIGHT;
+            drawSingleField(painter, pos_x, pos_y, tr("STR_PLACE"),
+                            QString::fromUtf8(addressFile.getPlace()), half_page, 0, true, half_page);
+            new_height_left = drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_LOCALITY"),
+                            QString::fromUtf8(addressFile.getLocality()), half_page, field_margin, true, half_page);
 
-            drawSingleField(painter, pos_x, pos_y, tr("STR_ZIP_CODE_4"),
-                            QString::fromUtf8(addressFile.getZip4()));
-            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_ZIP_CODE_3"),
-                            QString::fromUtf8(addressFile.getZip3()));
-            drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_POSTAL_LOCALITY"),
-                            QString::fromUtf8(addressFile.getPostalLocality()));
+            pos_y = std::max(new_height_left, pos_y + LINE_HEIGHT);
 
-            pos_y += LINE_HEIGHT;
+            drawSingleField(painter, pos_x, pos_y, tr("STR_ZIP_CODE"),
+                            QString::fromUtf8(addressFile.getZip4()) + "-" + QString::fromUtf8(addressFile.getZip3()), half_page/2, 0);
+            new_height_left = drawSingleField(painter, pos_x + (half_page / 2), pos_y, tr("STR_POSTAL_LOCALITY"),
+                                              QString::fromUtf8(addressFile.getPostalLocality()),
+                                              (3 * half_page) / 2, field_margin, true, (3 * half_page) / 2);
+            pos_y = std::max(new_height_left, pos_y + LINE_HEIGHT);
 
-            drawSingleField(painter, pos_x, pos_y, tr("STR_LOCALITY"),
-                            QString::fromUtf8(addressFile.getLocality()));
         }else{
             /* Foreign Address*/
             drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_COUNTRY"),
-                            QString::fromUtf8(addressFile.getForeignCountry()));
-            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_FOREIGN_REGION"),
-                            QString::fromUtf8(addressFile.getForeignRegion()));
-            drawSingleField(painter, pos_x+COLUMN_WIDTH*2, pos_y, tr("STR_FOREIGN_CITY"),
-                            QString::fromUtf8(addressFile.getForeignCity()));
+                            QString::fromUtf8(addressFile.getForeignCountry()), third_of_page, 0);
+            drawSingleField(painter, pos_x + third_of_page, pos_y, tr("STR_FOREIGN_REGION"),
+                            QString::fromUtf8(addressFile.getForeignRegion()), third_of_page);
+            drawSingleField(painter, pos_x + 2 * third_of_page, pos_y, tr("STR_FOREIGN_CITY"),
+                            QString::fromUtf8(addressFile.getForeignCity()), third_of_page);
 
             pos_y += LINE_HEIGHT;
 
             drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_LOCALITY"),
-                            QString::fromUtf8(addressFile.getForeignLocality()));
-            drawSingleField(painter, pos_x+COLUMN_WIDTH, pos_y, tr("STR_FOREIGN_POSTAL_CODE"),
-                            QString::fromUtf8(addressFile.getForeignPostalCode()));
+                            QString::fromUtf8(addressFile.getForeignLocality()), half_page, 0, true, half_page);
+            drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_FOREIGN_POSTAL_CODE"),
+                            QString::fromUtf8(addressFile.getForeignPostalCode()), half_page, field_margin, true, half_page);
 
             pos_y += LINE_HEIGHT;
 
             drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_ADDRESS"),
-                            QString::fromUtf8(addressFile.getForeignAddress()));
+                            QString::fromUtf8(addressFile.getForeignAddress()), half_page, 0, true, page_width);
         }
         pos_y += 80;
-    }
-
-    if (params.isPrintDate)
-    {
-        drawPrintingDate(painter,  tr("STR_PRINTED_ON"));
     }
 
     if (params.isNotes)
@@ -1404,16 +1450,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
             pos_x = 30; //gives a bit of left margin
             pos_y += 50;
 
-            int max_height = painter.device()->height();
-            if (pos_y > max_height)
-            {
-                printer.newPage();
-                pos_y = 50;
-                if (params.isPrintDate)
-                {
-                    drawPrintingDate(painter,  tr("STR_PRINTED_ON"));
-                }
-            }
+            pos_y = checkNewPageAndPrint(printer, painter, pos_y, 0, page_height, params.isPrintDate, tr("STR_PRINTED_ON"));
 
             drawSectionHeader(painter, pos_x, pos_y, tr("STR_PERSONAL_NOTES"));
 
@@ -1430,7 +1467,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
             int completed_lines = 0;
 
             while (completed_lines < line_count){
-                int page_remaining_space = static_cast<int>(max_height - pos_y);
+                int page_remaining_space = static_cast<int>(page_height - pos_y);
 
                 line_index_stop = line_index_start + (page_remaining_space / TEXT_LINE_HEIGHT);
 
@@ -1445,7 +1482,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
                         drawPrintingDate(painter,  tr("STR_PRINTED_ON"));
                     }
                     // not enough area recalculate lines needed
-                    page_remaining_space = static_cast<int>(max_height - pos_y);
+                    page_remaining_space = static_cast<int>(page_height - pos_y);
                     line_index_stop = line_index_start + (page_remaining_space / TEXT_LINE_HEIGHT);
                 }
 
@@ -1470,7 +1507,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 }
 
 void GAPI::startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
-                           QString reason, QString location, double isTimestamp, double isSmall) {
+                           QString reason, QString location, bool isTimestamp, bool isSmall) {
 
     SignParams params = {loadedFilePath, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isSmall};
     QFuture<void> future =
@@ -1479,7 +1516,7 @@ void GAPI::startSigningPDF(QString loadedFilePath, QString outputFile, int page,
 }
 
 void GAPI::startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outputFile, int page, double coord_x, double coord_y,
-                                QString reason, QString location, double isTimestamp, double isSmall) {
+                                QString reason, QString location, bool isTimestamp, bool isSmall) {
 
     SignBatchParams params = {loadedFileBatchPath, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isSmall};
 
@@ -2378,6 +2415,7 @@ void GAPI::connectToCard() {
             QString::fromUtf8(eid_file.getSurnameFather());
     cardData[Mother] = QString::fromUtf8(eid_file.getGivenNameMother()) + " " +
             QString::fromUtf8(eid_file.getSurnameMother());
+    cardData[AccidentalIndications]  = QString::fromUtf8(eid_file.getAccidentalIndications());
     cardData[Documenttype] = QString::fromUtf8(eid_file.getDocumentType());
     cardData[Documentnum] = QString::fromUtf8(eid_file.getDocumentNumber());
     cardData[Documentversion] = QString::fromUtf8(eid_file.getDocumentVersion());
