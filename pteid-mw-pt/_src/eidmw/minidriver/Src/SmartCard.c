@@ -471,7 +471,6 @@ cleanup:
 }
 #undef WHERE
 
-
 /****************************************************************************************************/
 
 #define WHERE "PteidMSE"
@@ -785,6 +784,8 @@ DWORD PteidGetCardSN(PCARD_DATA  pCardData,
 
    *pdwSerialNumber = 0;
 
+
+
    /***************/
    /* Select File */
    /***************/
@@ -810,7 +811,7 @@ DWORD PteidGetCardSN(PCARD_DATA  pCardData,
    if (!checkStatusCode(WHERE" -> select Dir Root", dwReturn, SW1, SW2))
 		CLEANUP(dwReturn);
 
-   Cmd[5] = 0x5F;
+   Cmd[5] = 0x4F;
    memset(recvbuf, 0, sizeof(recvbuf));
    recvlen = sizeof(recvbuf);
    dwReturn = SCardTransmit(pCardData->hScard, 
@@ -826,8 +827,8 @@ DWORD PteidGetCardSN(PCARD_DATA  pCardData,
 	if (!checkStatusCode(WHERE" -> select Specific Dir", dwReturn, SW1, SW2))
 		CLEANUP(dwReturn);
 
-     Cmd [5] = 0xEF;
-     Cmd [6] = 0x02;
+     Cmd [5] = 0x50;
+     Cmd [6] = 0x32;
 	 
 	 memset(recvbuf, 0, sizeof(recvbuf));
 	 recvlen = sizeof(recvbuf);
@@ -849,8 +850,8 @@ DWORD PteidGetCardSN(PCARD_DATA  pCardData,
    Cmd [0] = 0x00;
    Cmd [1] = 0xB0;
    Cmd [2] = 0x00;
-   Cmd [3] = 0xB6;
-   Cmd [4] = 0x10;
+   Cmd [3] = 0x07;
+   Cmd [4] = 0x08;
 
    uiCmdLg = 5;
    recvlen = sizeof(recvbuf);
@@ -876,8 +877,9 @@ DWORD PteidGetCardSN(PCARD_DATA  pCardData,
 		CLEANUP(SCARD_E_UNEXPECTED);
    }
 
-   *pdwSerialNumber = 16;
-   memcpy(pbSerialNumber, recvbuf, 16);
+
+   *pdwSerialNumber = 8;
+   memcpy(pbSerialNumber, recvbuf, 8);
 
 cleanup:
    return (dwReturn);
@@ -918,7 +920,6 @@ DWORD PteidSignData(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE
    {
 	CLEANUP(dwReturn);
    }
-
    
 
    /* Sign Command for IAS*/
@@ -950,7 +951,6 @@ DWORD PteidSignData(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE
    LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", cbHdrHash + cbToBeSigned, (char *)&Cmd[5]);
 #endif
    
-   //printByteArray(Cmd, uiCmdLg);
    recvlen = sizeof(recvbuf);
    dwReturn = SCardTransmit(pCardData->hScard, 
                             &ioSendPci, 
@@ -1048,8 +1048,11 @@ DWORD PteidParsePrKDF(PCARD_DATA pCardData, DWORD *cbStream, BYTE *pbStream, WOR
 	*cbKeySize = 0;
 
    LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
+
+   /*
    LogTrace(LOGTYPE_INFO, WHERE, "Contents of PrKDF:");	
    LogDump(*cbStream, pbStream);
+   */
 	/********************/
    /* Check Parameters */
    /********************/
@@ -1069,6 +1072,7 @@ DWORD PteidParsePrKDF(PCARD_DATA pCardData, DWORD *cbStream, BYTE *pbStream, WOR
       CLEANUP(SCARD_E_INVALID_PARAMETER);
 	 }
 
+	 //Ghetto-style ASN-1 parser to obtain the keysize from PrK DF file
 	 if(pbStream[dwCounter] == 0x30) //0x30 means sequence
 	 {
 		 LogTrace(LOGTYPE_TRACE, WHERE, "sequence [0x30]");
@@ -1081,7 +1085,7 @@ DWORD PteidParsePrKDF(PCARD_DATA pCardData, DWORD *cbStream, BYTE *pbStream, WOR
 			 //the last 2 bytes are the key size
 			 *cbKeySize = (pbStream[dwCounter-1])*256;
 			 *cbKeySize += (pbStream[dwCounter]);
-			 LogTrace(LOGTYPE_INFO, WHERE, "rsa key size is %d",*cbKeySize);
+			 LogTrace(LOGTYPE_INFO, WHERE, "PrK DF parser: obtained RSA key size = %d bits", *cbKeySize);
 		 }
 		 else
 		 {
@@ -1108,13 +1112,12 @@ DWORD PteidReadPrKDF(PCARD_DATA pCardData, DWORD *out_len, PBYTE *data)
 {
    DWORD dwReturn = 0;	
    unsigned char recvbuf[1024];
-   int recvlen = sizeof(recvbuf);
+   DWORD recvlen = sizeof(recvbuf);
    unsigned char Cmd[128];
    DWORD dwCounter = 0;
    unsigned int uiCmdLg = 0;
    BYTE          SW1, SW2;
    SCARD_IO_REQUEST        ioSendPci = *g_pioSendPci;
-   //SCARD_IO_REQUEST        ioRecvPci = {1, sizeof(SCARD_IO_REQUEST)};
 
    /***************/
    /* Select File */
@@ -1124,7 +1127,7 @@ DWORD PteidReadPrKDF(PCARD_DATA pCardData, DWORD *out_len, PBYTE *data)
    Cmd [2] = 0x00;
    Cmd [3] = 0x0C;
    Cmd [4] = 0x02; 
-   Cmd [5] = 0x3F; //5F, (EF, 0C), ReadBinary(), (02, CertID)  
+   Cmd [5] = 0x3F;
    Cmd [6] = 0x00;
    uiCmdLg = 7;
 
@@ -1135,6 +1138,19 @@ DWORD PteidReadPrKDF(PCARD_DATA pCardData, DWORD *out_len, PBYTE *data)
                             NULL, 
                             recvbuf, 
                             &recvlen);
+
+   SW1 = recvbuf[recvlen - 2];
+   SW2 = recvbuf[recvlen - 1];
+
+   //Missing select applet
+   if (SW1 == 0x6A && SW2 == 0x86)
+   {
+	   dwReturn = PteidSelectApplet(pCardData);
+	   if (dwReturn != SCARD_S_SUCCESS)
+	   {
+		   CLEANUP(dwReturn);
+	   }
+   }
 
    Cmd[5] = 0x5F;
 
@@ -1236,14 +1252,15 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    DWORD                   dwReturn = 0;
 
    SCARD_IO_REQUEST        ioSendPci = *g_pioSendPci;
-   //SCARD_IO_REQUEST        ioRecvPci = {1, sizeof(SCARD_IO_REQUEST)};
 
    unsigned char           Cmd[128];
    unsigned int            uiCmdLg = 0;
+   unsigned int            signature_len = 0;
 
    unsigned char           recvbuf[1024];
    unsigned long           recvlen = sizeof(recvbuf);
    BYTE                    SW1, SW2;
+   PBYTE                   le_sig = NULL;
 
    unsigned int            i          = 0;
    unsigned int            cbHdrHash  = 0;
@@ -1260,7 +1277,6 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    BYTE is_sha256 = cbToBeSigned == 32;
    DWORD out_len = 0;
 
-   //LogTrace(LOGTYPE_INFO, WHERE, "PteidParsePrKDF returned: %d", keysize);
    memset(recvbuf, 0, out_len);
 
    dwReturn = PteidMSE(pCardData, pin_id, is_sha256);
@@ -1275,12 +1291,6 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
 	  LogTrace(LOGTYPE_INFO, WHERE, "Using SHA1_AID as header...");
       cbHdrHash = sizeof(SHA1_AID);
       pbHdrHash = SHA1_AID;
-	/*
-	  Cmd [4] = (BYTE)(cbToBeSigned + cbHdrHash);
-      memcpy(Cmd + 5, pbHdrHash, cbHdrHash);
-      memcpy(Cmd + 5 + cbHdrHash, pbToBeSigned, cbToBeSigned);
-      uiCmdLg = 5 + cbHdrHash + cbToBeSigned;
-	  */
    }
 
    /* Sign Command for GEMSAFE*/
@@ -1288,7 +1298,7 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    Cmd [1] = 0x2A;   /* PSO: Hash COMMAND */
    Cmd [2] = 0x90;
    Cmd [3] = 0xA0; 
-   Cmd [4] = cbToBeSigned == 20 ? (BYTE)(cbToBeSigned + cbHdrHash) + 2 :  cbToBeSigned+2; // The value of cbToBeSigned should always fit a single byte so this cast is safe 
+   Cmd[4] = cbToBeSigned == 20 ? (BYTE)(cbToBeSigned + cbHdrHash) + 2 : (BYTE)(cbToBeSigned + 2); // The value of cbToBeSigned should always fit a single byte so this cast is safe 
    Cmd [5] = 0x90;
    Cmd [6] = cbToBeSigned == 20 ? (BYTE)(cbToBeSigned + cbHdrHash) : (BYTE)(cbToBeSigned);
    
@@ -1312,7 +1322,6 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
 
 #endif
    
-   //printByteArray(Cmd, uiCmdLg);
    dwReturn = SCardTransmit(pCardData->hScard, 
                             &ioSendPci, 
                             Cmd, 
@@ -1322,7 +1331,7 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
                             &recvlen);
    SW1 = recvbuf[recvlen-2];
    SW2 = recvbuf[recvlen-1];
-   //PteidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
+
    if ( dwReturn != SCARD_S_SUCCESS )
    {
 	   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: Hash) errorcode: [0x%02X]", dwReturn);
@@ -1335,7 +1344,7 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    Cmd [1] = 0x2A;   /* PSO: Compute Digital Signature COMMAND */
    Cmd [2] = 0x9E;
    Cmd [3] = 0x9A;
-   Cmd [4] = g_keySize == 2048 ? 0x00 : 0x80;  /* Length of expected signature */
+   Cmd [4] = g_keySize == 1024 ? 0x80 : 0x00;  /* Length of expected signature */
    
    uiCmdLg = 5;
 
@@ -1350,40 +1359,71 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
                             NULL, 
                             recvbuf, 
                             &recvlen);
-   SW1 = recvbuf[recvlen-2];
-   SW2 = recvbuf[recvlen-1];
    
-   if ( dwReturn != SCARD_S_SUCCESS )
-   {
+   if ( dwReturn != SCARD_S_SUCCESS )   {
 	   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: CDS) errorcode: [0x%02X]", dwReturn);
-      CLEANUP(dwReturn);
+       CLEANUP(dwReturn);
    }
-   LogTrace(LOGTYPE_INFO, WHERE, "Return: APDU PSO CDS");
-   LogDump (recvlen, (char *)recvbuf);
 
-   if ( (recvlen - 2) != 0x80 && (recvlen - 2) != 0x100 )
+   SW1 = recvbuf[recvlen - 2];
+   SW2 = recvbuf[recvlen - 1];
+
+   *pcbSignature = g_keySize / 8; //g_keySize == 2048 ? 0x100 : 0x80;
+
+   /* Allocate memory for the target buffer and the intermediate little-endian signature buffer */
+   le_sig = pCardData->pfnCspAlloc(*pcbSignature);
+
+   *ppbSignature = pCardData->pfnCspAlloc(*pcbSignature);
+
+   if (*ppbSignature == NULL)
    {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid length received: [0x%02X][0x%02X]", recvlen - 2, 0x80);
-      CLEANUP(SCARD_E_UNEXPECTED);
+	   LogTrace(LOGTYPE_ERROR, WHERE, "Error allocating memory for [*ppbSignature]");
+	   CLEANUP(SCARD_E_NO_MEMORY);
    }
 
-   *pcbSignature = g_keySize == 2048 ? 0x100 : 0x80;
+   if (SW1 == 0x61) {
+	   //3072 bit support
+	   //Save the first 256 bytes of the signature
+	   memcpy(le_sig, recvbuf, recvlen - 2);
 
-   /* Allocate memory for the target buffer */
-   *ppbSignature = pCardData->pfnCspAlloc(*pcbSignature); //pfnCspAlloc é o Memory allocator fornecido pelo CSP
+	   signature_len += recvlen - 2;
+	   Cmd[1] = 0xC0;
+	   Cmd[2] = 0x00;
+	   Cmd[3] = 0x00;
+	   Cmd[4] = SW2;
+		
+	   recvlen = sizeof(recvbuf);
+	   dwReturn = SCardTransmit(pCardData->hScard,
+		   &ioSendPci,
+		   Cmd,
+		   uiCmdLg,
+		   NULL,
+		   recvbuf,
+		   &recvlen);
 
-   if ( *ppbSignature == NULL )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Error allocating memory for [*ppbSignature]");
-      CLEANUP(SCARD_E_NO_MEMORY);
+	   if (dwReturn != SCARD_S_SUCCESS)   {
+		   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: CDS) GET RESPONSE errorcode: [0x%02X]", dwReturn);
+		   CLEANUP(dwReturn);
+	   }
+	   SW1 = recvbuf[recvlen - 2];
+	   SW2 = recvbuf[recvlen - 1];
+
    }
-   /* Copy the signature to output buffer */
+   if (SW1 != 0x90 && SW2 != 0x00) {
+	   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: CDS) GET RESPONSE errorcode: [0x%02X]", dwReturn);
+	   CLEANUP(SCARD_E_UNEXPECTED);
+   }
+
+   memcpy(le_sig + signature_len, recvbuf, recvlen - 2);
+   
+   //Convert the signature to big-endian with the result in ppbSignature
    for ( i = 0 ; i < *pcbSignature ; i++ )
    {
-      (*ppbSignature)[i] = recvbuf[*pcbSignature - i - 1];
+      (*ppbSignature)[i] = le_sig[*pcbSignature - i - 1];
    }
 
 cleanup:
+   pCardData->pfnCspFree(le_sig);
    return (dwReturn);
 }
 
@@ -1966,13 +2006,14 @@ DWORD createVerifyCommandACR83(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned in
     pVerifyCommand->ulDataLength = 13;
 
 	return 0;
-
-
-
+	
 }
 #undef WHERE
 
 
+/*  VERIFY command for generic Pinpad readers,
+	it's known to work with the Gemalto IDBridge CT710 reader
+*/
 
 #define WHERE "createVerifyCommand"
 DWORD createVerifyCommand(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned int pin_ref) {
@@ -1980,77 +2021,24 @@ DWORD createVerifyCommand(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned int pin
 	LogTrace(LOGTYPE_INFO, WHERE, "createVerifyCommand(): pinRef = %d", pin_ref);
     pVerifyCommand->bTimeOut = 30;
     pVerifyCommand->bTimeOut2 = 30;
-    pVerifyCommand->bmFormatString = 0x80 | 0x08 | 0x00 | 0x01;
-    /*
-     * bmFormatString. 
-     *  01234567
-     *  10001001
-     *
-     * bit 7: 1 = system units are bytes
-     *
-     * bit 6-3: 1 = PIN position in APDU command after Lc, so just after the
-     * 0x20 | pinSize.
-     * 
-     * bit 2: 0 = left justify data
-     * 
-     * bit 1-0: 01 = BCD
-     */
+    pVerifyCommand->bmFormatString = 0x00 | 0x00 | 0x00 | 0x02;
 
-    pVerifyCommand->bmPINBlockString = 0x47;
-    /*
-     * bmPINBlockString
-     * 
-     * bit 7-4: 4 = PIN length
-     * 
-     * bit 3-0: 7 = PIN block size (7 times 0xff)
-     */
-
-    pVerifyCommand->bmPINLengthFormat = 0x04;
-    /*
-     * bmPINLengthFormat. weird... the values do not make any sense to me.
-     * 
-     * bit 7-5: 0 = RFU
-     * 
-     * bit 4: 0 = system units are bits
-     * 
-     * bit 3-0: 4 = PIN length position in APDU
-     */
-
-
+    pVerifyCommand->bmPINBlockString = 0x08;
+    pVerifyCommand->bmPINLengthFormat = 0x00;
     pVerifyCommand->wPINMaxExtraDigit = PTEID_MIN_USER_PIN_LEN << 8 | PTEID_MAX_USER_PIN_LEN ;
-    /*
-     * First byte:  maximum PIN size in digit
-     * 
-     * Second byte: minimum PIN size in digit
-     */
-
     pVerifyCommand->bEntryValidationCondition = 0x02;
-    /*
-     * 0x02 = validation key pressed. So the user must press the green
-     * button on his pinpad.
-     */
-
     pVerifyCommand->bNumberMessage = 0x01;
-    /*
-     * 0x01 = message with index in bMsgIndex
-     */
-
-    pVerifyCommand->wLangId = 0x1308;
+    pVerifyCommand->wLangId = 0x0409;
     /*
      * We should support multiple languages for CCID devices with LCD screen
      */
-
     pVerifyCommand->bMsgIndex = 0x00;
     /*
      * 0x00 = PIN insertion prompt
      */
-
     pVerifyCommand->bTeoPrologue[0] = 0x00;
     pVerifyCommand->bTeoPrologue[1] = 0x00;
     pVerifyCommand->bTeoPrologue[2] = 0x00;
-    /*
-     * bTeoPrologue : only significant for T=1 protocol.
-     */
 
     pVerifyCommand->abData[0] = 0x00; // CLA
     pVerifyCommand->abData[1] = 0x20; // INS Verify
