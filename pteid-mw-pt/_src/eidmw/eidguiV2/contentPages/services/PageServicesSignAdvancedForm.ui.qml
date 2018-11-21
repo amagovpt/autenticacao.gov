@@ -473,7 +473,7 @@ Item {
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
-							font.underline: mouseAreaTextAttributesMsg.containsMouse
+                            font.underline: mouseAreaTextAttributesMsg.containsMouse
                             visible: false
                             x: 54
                         }

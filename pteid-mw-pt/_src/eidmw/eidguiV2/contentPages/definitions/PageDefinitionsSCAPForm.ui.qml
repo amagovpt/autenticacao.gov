@@ -18,7 +18,7 @@ Item {
     property alias propertyCompaniesListViewScroll: companiesListViewScroll
     property alias propertyEntitiesListViewScroll: entitiesListViewScroll
 	property alias propertyMouseAreaTextSignaturePageLinkCompanies : mouseAreaTextSignaturePageLinkCompanies
-	property alias propertyMouseAreaTextSignaturePageLinkEntities : mouseAreaTextSignaturePageLinkEntities
+    property alias propertyMouseAreaTextSignaturePageLinkEntities : mouseAreaTextSignaturePageLinkEntities
 
     anchors.fill: parent
     Item {
@@ -246,7 +246,7 @@ Item {
 						font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
 						font.capitalization: Font.MixedCase
-						font.underline: mouseAreaTextSignaturePageLinkCompanies.containsMouse
+                        font.underline: mouseAreaTextSignaturePageLinkCompanies.containsMouse
 						color: Constants.COLOR_MAIN_BLUE
 						visible: propertyPageLoader.propertyBackupFromSignaturePage
 					}

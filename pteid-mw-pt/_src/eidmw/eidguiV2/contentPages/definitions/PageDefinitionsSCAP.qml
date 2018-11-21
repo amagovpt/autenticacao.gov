@@ -8,6 +8,8 @@ import "../../scripts/Constants.js" as Constants
 
 PageDefinitionsSCAPForm {
 
+    property string popupMsg: ""
+
     Connections {
         target: gapi
         onSignalGenericError: {
