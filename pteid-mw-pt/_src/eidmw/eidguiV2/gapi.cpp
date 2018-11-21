@@ -484,6 +484,7 @@ void GAPI::showChangeAddressDialog(long code)
     QString error_msg;
     long sam_error_code = 0;
     QString support_string = tr("STR_CHANGE_ADDRESS_ERROR_MSG");
+    QString support_string_wait_5min = tr("STR_CHANGE_ADDRESS_WAIT_5MIN_ERROR_MSG");
 
     PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "AddressChange op finished with error code 0x%08x", code);
 
@@ -494,45 +495,48 @@ void GAPI::showChangeAddressDialog(long code)
         break;
         //The error code for connection error is common between SAM and OTP
     case EIDMW_OTP_CONNECTION_ERROR:
-        error_msg = tr("STR_CONNECTION_ERROR") + "\n\n" +
+        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CONNECTION_ERROR") + "<br><br>" +
                 tr("STR_VERIFY_INTERNET");
         break;
 
     case EIDMW_SAM_PROXY_AUTH_FAILED:
-        error_msg = tr("STR_CONNECTION_ERROR") + "\n\n" +
+        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CONNECTION_ERROR") + "<br><br>" +
                     tr("STR_PROXY_AUTH_FAILED");
         break;
     case EIDMW_SAM_PROXY_UNSUPPORTED:
-        error_msg = tr("STR_CONNECTION_ERROR") + "\n\n" +
+        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CONNECTION_ERROR") + "<br><br>" +
                     tr("STR_PROXY_UNSUPPORTED");
         break;
 
     case 1121:
     case 1122:
-        error_msg = tr("STR_CHANGE_ADDRESS_ERROR") + "\n\n" + tr("STR_CHANGE_ADDRESS_CHECK_PROCESS_NUMBER");
+        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CHANGE_ADDRESS_CHECK_PROCESS_NUMBER");
         sam_error_code = code;
         break;
     case EIDMW_SAM_UNCONFIRMED_CHANGE:
-        error_msg = tr("STR_CHANGE_ADDRESS_ERROR_INCOMPLETE") + "\n\n" + tr("STR_CHANGE_ADDRESS_NOT_CONFIRMED");
+        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CHANGE_ADDRESS_ERROR_INCOMPLETE") + "<br><br>" + tr("STR_CHANGE_ADDRESS_NOT_CONFIRMED");
         break;
     case EIDMW_SSL_PROTOCOL_ERROR:
-        error_msg = tr("STR_CHANGE_ADDRESS_ERROR") + "\n\n" + tr("STR_CHANGE_ADDRESS_CHECK_AUTHENTICATION_CERTIFICATE");
+        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CHANGE_ADDRESS_CHECK_AUTHENTICATION_CERTIFICATE");
         break;
     default:
         //Make sure we only show the user error codes from the SAM service and not some weird pteid exception error code
         if (code > 1100 && code < 3500)
             sam_error_code = code;
-        error_msg = tr("STR_CHANGE_ADDRESS_ERROR");
+        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + "\n\n";
         break;
     }
 
     if (sam_error_code != 0)
     {
-        error_msg += "\n\n" + tr("STR_ERROR_CODE") + QString::number(sam_error_code);
+        error_msg += "<br><br>" + tr("STR_ERROR_CODE") + QString::number(sam_error_code);
     }
 
-    if (code != 0)
-        error_msg += "\n\n" + support_string;
+    if(code == EIDMW_SAM_UNCONFIRMED_CHANGE){
+        error_msg += "<br><br>" + support_string_wait_5min;
+    } else if (code != 0){
+        error_msg += "<br><br>" + support_string;
+    }
 
     qDebug() << error_msg;
     signalUpdateProgressStatus(error_msg);

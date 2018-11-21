@@ -504,6 +504,7 @@ PageCardAdressForm {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textMessageTop
+                    textFormat: Text.RichText
                     text: ""
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
