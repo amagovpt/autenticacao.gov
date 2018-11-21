@@ -8,7 +8,7 @@ Class=SmartCard
 ClassGuid={990A2BD7-E738-46c7-B26F-1CF8FB9F1391}
 Provider=%AMA%
 CatalogFile=pteidmdrv.cat
-DriverVer=26/07/2016,4.0.0.3
+DriverVer=11/15/2018,4.0.0.4
 
 [Manufacturer]
 %AMA%=Fedict,NTamd64,NTamd64.6.1,NTx86,NTx86.6.1
@@ -19,6 +19,7 @@ DriverVer=26/07/2016,4.0.0.3
 %FedictCardDeviceName%=DefaultInstall.NTamd64,SCFILTER\CID_d000540132
 %FedictCardDeviceName%=DefaultInstall.NTamd64,SCFILTER\CID_80318065B08311C0A983009000
 %FedictCardDeviceName%=DefaultInstall.NTamd64,SCFILTER\CID_80318065b0850300ef120fff829000
+%FedictCardDeviceName%=DefaultInstall.NTamd64,SCFILTER\CID_80318065b085040120120fff829000
 
 [Fedict.NTx86]
 %FedictCardDeviceName%=DefaultInstall.NTx86,SCFILTER\CID_80318065b0831100c883009000
@@ -26,6 +27,7 @@ DriverVer=26/07/2016,4.0.0.3
 %FedictCardDeviceName%=DefaultInstall.NTx86,SCFILTER\CID_d000540132
 %FedictCardDeviceName%=DefaultInstall.NTx86,SCFILTER\CID_80318065B08311C0A983009000
 %FedictCardDeviceName%=DefaultInstall.NTx86,SCFILTER\CID_80318065b0850300ef120fff829000
+%FedictCardDeviceName%=DefaultInstall.NTx86,SCFILTER\CID_80318065b085040120120fff829000
 
 [Fedict.NTamd64.6.1]
 %FedictCardDeviceName%=DefaultInstall.ntamd64.6.1,SCFILTER\CID_80318065b0831100c883009000
@@ -33,6 +35,7 @@ DriverVer=26/07/2016,4.0.0.3
 %FedictCardDeviceName%=DefaultInstall.ntamd64.6.1,SCFILTER\CID_d000540132
 %FedictCardDeviceName%=DefaultInstall.ntamd64.6.1,SCFILTER\CID_80318065B08311C0A983009000	
 %FedictCardDeviceName%=DefaultInstall.ntamd64.6.1,SCFILTER\CID_80318065b0850300ef120fff829000
+%FedictCardDeviceName%=DefaultInstall.ntamd64.6.1,SCFILTER\CID_80318065b085040120120fff829000
 
 [Fedict.NTx86.6.1]
 %FedictCardDeviceName%=DefaultInstall.NTx86.6.1,SCFILTER\CID_80318065b0831100c883009000
@@ -40,6 +43,7 @@ DriverVer=26/07/2016,4.0.0.3
 %FedictCardDeviceName%=DefaultInstall.NTx86.6.1,SCFILTER\CID_d000540132
 %FedictCardDeviceName%=DefaultInstall.NTx86.6.1,SCFILTER\CID_80318065B08311C0A983009000
 %FedictCardDeviceName%=DefaultInstall.NTx86.6.1,SCFILTER\CID_80318065b0850300ef120fff829000
+%FedictCardDeviceName%=DefaultInstall.NTx86.6.1,SCFILTER\CID_80318065b085040120120fff829000
 
 [DefaultInstall]
 CopyFiles=x86_CopyFiles
@@ -148,6 +152,11 @@ HKLM, %SmartCardName_4%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff
 HKLM, %SmartCardName_4%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName_4%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
 HKLM, %SmartCardName_4%,"80000001",0x00000000,"pteidmdrv32.dll"
+HKLM, %SmartCardName_5%,"ATR",0x00000001,3b,ff,96,00,00,81,31,fe,43,80,31,80,65,b0,85,04,01,20,12,0f,ff,82,90,00,d0
+HKLM, %SmartCardName_5%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff
+HKLM, %SmartCardName_5%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
+HKLM, %SmartCardName_5%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
+HKLM, %SmartCardName_5%,"80000001",0x00000000,"pteidmdrv32.dll"
 
 
 [AddRegDefault64]
@@ -176,6 +185,11 @@ HKLM, %SmartCardName_4%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff
 HKLM, %SmartCardName_4%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardName_4%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
 HKLM, %SmartCardName_4%,"80000001",0x00000000,"pteidmdrv64.dll"
+HKLM, %SmartCardName_5%,"ATR",0x00000001,3b,ff,96,00,00,81,31,fe,43,80,31,80,65,b0,85,04,01,20,12,0f,ff,82,90,00,d0
+HKLM, %SmartCardName_5%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff
+HKLM, %SmartCardName_5%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
+HKLM, %SmartCardName_5%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
+HKLM, %SmartCardName_5%,"80000001",0x00000000,"pteidmdrv64.dll"
 
 [AddRegDefaultWOW64]
 HKLM, %SmartCardNameWOW64%,"ATR",0x00000001,3b,95,95,40,ff,d0,00,54,01,30
@@ -203,6 +217,11 @@ HKLM, %SmartCardNameWOW64_4%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,
 HKLM, %SmartCardNameWOW64_4%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
 HKLM, %SmartCardNameWOW64_4%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
 HKLM, %SmartCardNameWOW64_4%,"80000001",0x00000000,"pteidmdrv32.dll"
+HKLM, %SmartCardNameWOW64_5%,"ATR",0x00000001,3b,ff,96,00,00,81,31,fe,43,80,31,80,65,b0,85,04,01,20,12,0f,ff,82,90,00,d0
+HKLM, %SmartCardNameWOW64_5%,"ATRMask",0x00000001,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff
+HKLM, %SmartCardNameWOW64_5%,"Crypto Provider",0x00000000,"Microsoft Base Smart Card Crypto Provider"
+HKLM, %SmartCardNameWOW64_5%,"Smart Card Key Storage Provider",0x00000000,"Microsoft Smart Card Key Storage Provider"
+HKLM, %SmartCardNameWOW64_5%,"80000001",0x00000000,"pteidmdrv32.dll"
 
 [DestinationDirs]
 amd64_CopyFiles=10,system32
@@ -221,11 +240,13 @@ SmartCardName_1="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS) 2
 SmartCardName_2="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 1"
 SmartCardName_3="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 2"
 SmartCardName_4="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 3"
+SmartCardName_5="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 4"
 SmartCardNameWOW64="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS) 1"
 SmartCardNameWOW64_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS) 2"
 SmartCardNameWOW64_2="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 1"
 SmartCardNameWOW64_3="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 2"
 SmartCardNameWOW64_4="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 3"
+SmartCardNameWOW64_5="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 4"
 
 
 
