@@ -505,7 +505,6 @@ PageDefinitionsSCAPForm {
 
 	propertyMouseAreaTextSignaturePageLinkEntities {
 		onClicked: {
-		propertyPageLoader.propertyBackupFromSignaturePage = false
 			console.log("propertyMouseAreaTextSignaturePageLinkEntities clicked!")
 			mainFormID.state = "STATE_EXPAND"
 			mainFormID.propertySubMenuListView.model.clear()

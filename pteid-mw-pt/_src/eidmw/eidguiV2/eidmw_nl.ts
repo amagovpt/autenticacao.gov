@@ -1066,7 +1066,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="138"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="242"/>
         <source>STR_BACK_TO_SIGNATURE_PAGE</source>
-        <translation>Clique aqui para voltar para a página de assinatura</translation>
+        <translation>Clique aqui para voltar para a página de assinatura avançada</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="167"/>

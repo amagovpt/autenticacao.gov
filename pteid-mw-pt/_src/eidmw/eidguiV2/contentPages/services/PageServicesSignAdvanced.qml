@@ -1601,6 +1601,7 @@ PageServicesSignAdvancedForm {
 
     Component.onCompleted: {
         console.log("Page Services Sign Advanced mainWindowCompleted")
+        propertyPageLoader.propertyBackupFromSignaturePage = false
         propertyBusyIndicator.running = true
         gapi.startCardReading()
     }
