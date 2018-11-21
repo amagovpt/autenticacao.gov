@@ -1296,11 +1296,11 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
         double new_pos_y = drawSingleField(painter, pos_x, pos_y, tr("STR_GIVEN_NAME"),
                                            QString::fromUtf8(eid_file.getGivenName()), half_page, 0, true, half_page);
-        pos_y = std::max(new_pos_y, pos_y + LINE_HEIGHT);
+        pos_y = (std::max)(new_pos_y, pos_y + LINE_HEIGHT);
 
         new_pos_y = drawSingleField(painter, pos_x, pos_y, tr("STR_SURNAME"),
                                     QString::fromUtf8(eid_file.getSurname()), half_page, 0, true, half_page);
-        pos_y = std::max(new_pos_y, pos_y + LINE_HEIGHT);
+        pos_y = (std::max)(new_pos_y, pos_y + LINE_HEIGHT);
 
         double f_col = half_page / 2;
         drawSingleField(painter, pos_x, pos_y, tr("STR_GENDER"), QString::fromUtf8(eid_file.getGender()), f_col, 0);
@@ -1322,12 +1322,12 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
         double new_height_right = drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_MOTHER"),
                                                   QString::fromUtf8(eid_file.getGivenNameMother()) + " " +
                                                   QString::fromUtf8(eid_file.getSurnameMother()),  half_page, field_margin, true, half_page);
-        pos_y = std::max(std::max(new_height_left, new_height_right), pos_y + LINE_HEIGHT);
+        pos_y = (std::max)((std::max)(new_height_left, new_height_right), pos_y + LINE_HEIGHT);
 
         new_pos_y = drawSingleField(painter, pos_x, pos_y, tr("STR_NOTES"),
                                     QString::fromUtf8(eid_file.getAccidentalIndications()), half_page, 0, true, page_width);
 
-        pos_y = std::max(new_pos_y, pos_y + LINE_HEIGHT);
+        pos_y = (std::max)(new_pos_y, pos_y + LINE_HEIGHT);
     }
 
     if (params.isAddicionalInfo)
@@ -1383,11 +1383,11 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
             double new_height_right = drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_MUNICIPALITY"),
                                                       QString::fromUtf8(addressFile.getMunicipality()), half_page,
                                                       field_margin, true, half_page);
-            pos_y = std::max(std::max(new_height_left, new_height_right), pos_y + LINE_HEIGHT);
+            pos_y = (std::max)((std::max)(new_height_left, new_height_right), pos_y + LINE_HEIGHT);
 
             new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_CIVIL_PARISH"),
                                               QString::fromUtf8(addressFile.getCivilParish()), half_page, 0, true, page_width);
-            pos_y = std::max(new_height_left, pos_y + LINE_HEIGHT);
+            pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
 
             drawSingleField(painter, pos_x, pos_y, tr("STR_STREET_TYPE"),
                             QString::fromUtf8(addressFile.getStreetType()), (half_page / 2), 0, true, (half_page / 2));
@@ -1395,7 +1395,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
             new_height_left = drawSingleField(painter, pos_x + (half_page / 2), pos_y, tr("STR_STREET_NAME"),
                                               QString::fromUtf8(addressFile.getStreetName()), 3 * (half_page / 2),
                                               field_margin, true, 3 * (half_page / 2));
-            pos_y = std::max(new_height_left, pos_y + LINE_HEIGHT);
+            pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
 
             new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_HOUSE_BUILDING_NUM"),
                             QString::fromUtf8(addressFile.getDoorNo()), third_of_page, 0);
@@ -1403,21 +1403,21 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
                             QString::fromUtf8(addressFile.getFloor()), third_of_page);
             double new_height = drawSingleField(painter, pos_x + 2 * third_of_page, pos_y, tr("STR_SIDE"),
                             QString::fromUtf8(addressFile.getSide()), third_of_page);
-            pos_y = std::max(new_height, std::max(new_height_left, std::max(new_height_left, pos_y + LINE_HEIGHT)));
+            pos_y = (std::max)(new_height, (std::max)(new_height_left, (std::max)(new_height_left, pos_y + LINE_HEIGHT)));
 
             drawSingleField(painter, pos_x, pos_y, tr("STR_PLACE"),
                             QString::fromUtf8(addressFile.getPlace()), half_page, 0, true, half_page);
             new_height_left = drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_LOCALITY"),
                             QString::fromUtf8(addressFile.getLocality()), half_page, field_margin, true, half_page);
 
-            pos_y = std::max(new_height_left, pos_y + LINE_HEIGHT);
+            pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
 
             drawSingleField(painter, pos_x, pos_y, tr("STR_ZIP_CODE"),
                             QString::fromUtf8(addressFile.getZip4()) + "-" + QString::fromUtf8(addressFile.getZip3()), half_page/2, 0);
             new_height_left = drawSingleField(painter, pos_x + (half_page / 2), pos_y, tr("STR_POSTAL_LOCALITY"),
                                               QString::fromUtf8(addressFile.getPostalLocality()),
                                               (3 * half_page) / 2, field_margin, true, (3 * half_page) / 2);
-            pos_y = std::max(new_height_left, pos_y + LINE_HEIGHT);
+            pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
 
         }else{
             /* Foreign Address*/
