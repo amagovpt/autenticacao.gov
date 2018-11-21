@@ -8,8 +8,6 @@ import "../../scripts/Constants.js" as Constants
 
 PageDefinitionsSCAPForm {
 
-    property string popupMsg: ""
-
     Connections {
         target: gapi
         onSignalGenericError: {
@@ -458,7 +456,6 @@ PageDefinitionsSCAPForm {
             companyAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
             propertyPageLoader.attributeListBackup = []
-            propertyPageLoader.propertyBackupSignAdd = false
             gapi.startGettingCompanyAttributes()
         }
 
@@ -478,7 +475,6 @@ PageDefinitionsSCAPForm {
             }
             console.log("QML AttributeList: ", attributeList)
             propertyPageLoader.attributeListBackup = []
-            propertyPageLoader.propertyBackupSignAdd = false
             gapi.startGettingEntityAttributes(attributeList)
         }
     }
@@ -489,7 +485,6 @@ PageDefinitionsSCAPForm {
             entityAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
             propertyPageLoader.attributeListBackup = []
-            propertyPageLoader.propertyBackupSignAdd = false
             gapi.startRemovingAttributesFromCache(1)
         }
 
@@ -502,10 +497,61 @@ PageDefinitionsSCAPForm {
             entityAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
             propertyPageLoader.attributeListBackup = []
-            propertyPageLoader.propertyBackupSignAdd = false
             gapi.startRemovingAttributesFromCache(0)
         }
     }
+
+	propertyMouseAreaTextSignaturePageLinkEntities {
+		onClicked: {
+		propertyPageLoader.propertyBackupFromSignaturePage = false
+			console.log("propertyMouseAreaTextSignaturePageLinkEntities clicked!")
+			mainFormID.state = "STATE_EXPAND"
+			mainFormID.propertySubMenuListView.model.clear()
+			for(var i = 0; i < mainFormID.propertyMainMenuListView.model.get(1).subdata.count; ++i) {
+                console.log("Sub Menu indice " + i + " - "
+                            + mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i).subName);
+                mainFormID.propertySubMenuListView.model
+                .append({
+                            "subName": qsTranslate("MainMenuModel",
+                                                   mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i).name),
+                            "expand": mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i)
+                            .expand,
+                            "url": mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i)
+                            .url
+                        })
+            }		
+			mainFormID.propertyMainMenuListView.currentIndex = 1
+            mainFormID.propertyMainMenuBottomListView.currentIndex = -1
+            mainFormID.propertySubMenuListView.currentIndex = -1
+			mainFormID.propertyPageLoader.source = "/contentPages/services/PageServicesSignAdvanced.qml"
+		}
+	}
+
+	propertyMouseAreaTextSignaturePageLinkCompanies {
+		onClicked: {
+		propertyPageLoader.propertyBackupFromSignaturePage = false
+			console.log("propertyMouseAreaTextSignaturePageLink clicked!")
+			mainFormID.state = "STATE_EXPAND"
+			mainFormID.propertySubMenuListView.model.clear()
+			for(var i = 0; i < mainFormID.propertyMainMenuListView.model.get(1).subdata.count; ++i) {
+                console.log("Sub Menu indice " + i + " - "
+                            + mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i).subName);
+                mainFormID.propertySubMenuListView.model
+                .append({
+                            "subName": qsTranslate("MainMenuModel",
+                                                   mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i).name),
+                            "expand": mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i)
+                            .expand,
+                            "url": mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i)
+                            .url
+                        })
+            }		
+			mainFormID.propertyMainMenuListView.currentIndex = 1
+            mainFormID.propertyMainMenuBottomListView.currentIndex = -1
+            mainFormID.propertySubMenuListView.currentIndex = -1
+			mainFormID.propertyPageLoader.source = "/contentPages/services/PageServicesSignAdvanced.qml"
+		}
+	}
 
     Component.onCompleted: {
         console.log("Page Definitions SCAP Completed")

@@ -17,6 +17,8 @@ Item {
     property alias propertyListViewEntities: listViewEntities
     property alias propertyCompaniesListViewScroll: companiesListViewScroll
     property alias propertyEntitiesListViewScroll: entitiesListViewScroll
+	property alias propertyMouseAreaTextSignaturePageLinkCompanies : mouseAreaTextSignaturePageLinkCompanies
+	property alias propertyMouseAreaTextSignaturePageLinkEntities : mouseAreaTextSignaturePageLinkEntities
 
     anchors.fill: parent
     Item {
@@ -94,6 +96,8 @@ Item {
                     width: parent.width
                     height: stackLayout.height - rowProfessional.height - rawButtonLoadEntityAttributes.height
                         - Constants. SIZE_ROW_V_SPACE
+						- (propertyPageLoader.propertyBackupFromSignaturePage ? 
+							Constants.SIZE_TEXT_FIELD  + Constants.SIZE_ROW_V_SPACE: 0)
                     anchors.top: rowProfessional.bottom
 
                     ListView {
@@ -116,9 +120,35 @@ Item {
                     }
                 }
 
+				Item {
+					id: rectSignaturePageLinkEntities
+					width: parent.width
+					height: (propertyPageLoader.propertyBackupFromSignaturePage ? 
+							Constants.SIZE_TEXT_FIELD : 0)
+					anchors.top: rectangleEntities.bottom
+					anchors.margins: (propertyPageLoader.propertyBackupFromSignaturePage ? 
+										Constants. SIZE_ROW_V_SPACE : 0)
+					visible: propertyPageLoader.propertyBackupFromSignaturePage
+					MouseArea {
+                        id: mouseAreaTextSignaturePageLinkEntities
+                        anchors.fill: parent
+                        enabled: propertyPageLoader.propertyBackupFromSignaturePage
+                        hoverEnabled: true
+                    }
+					Text {
+						id: textSignaturePageLinkEntities
+						text: qsTranslate("PageDefinitionsSCAP","STR_BACK_TO_SIGNATURE_PAGE")
+						font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+						font.capitalization: Font.MixedCase
+						color: Constants.COLOR_MAIN_BLUE
+						visible: propertyPageLoader.propertyBackupFromSignaturePage
+						font.underline: mouseAreaTextSignaturePageLinkEntities.containsMouse
+					}
+				}
                 Item {
                     id: rawButtonLoadEntityAttributes
-                    anchors.top: rectangleEntities.bottom
+                    anchors.top: rectSignaturePageLinkEntities.bottom
                     anchors.margins: Constants. SIZE_ROW_V_SPACE
                     width: parent.width - entitiesListViewScroll.width - listViewEntities.spacing
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
@@ -171,6 +201,8 @@ Item {
                     width: parent.width
                     height: stackLayout.height - rowCompanies.height - rawButtonLoadCompanyAttributes.height
                         - Constants. SIZE_ROW_V_SPACE
+						- (propertyPageLoader.propertyBackupFromSignaturePage ? 
+							Constants.SIZE_TEXT_FIELD  + Constants.SIZE_ROW_V_SPACE: 0)
                     anchors.top: rowCompanies.bottom
 
                     ListView {
@@ -193,9 +225,35 @@ Item {
                     }
                 }
 
+				Item {
+					id: rectSignaturePageLinkCompanies
+					width: parent.width
+					height: (propertyPageLoader.propertyBackupFromSignaturePage ? 
+							Constants.SIZE_TEXT_FIELD : 0)
+					anchors.top: rectangleCompanies.bottom
+					anchors.margins: (propertyPageLoader.propertyBackupFromSignaturePage ? 
+										Constants. SIZE_ROW_V_SPACE : 0)
+					visible: propertyPageLoader.propertyBackupFromSignaturePage
+					MouseArea {
+                        id: mouseAreaTextSignaturePageLinkCompanies
+                        anchors.fill: parent
+                        enabled: propertyPageLoader.propertyBackupFromSignaturePage
+                        hoverEnabled: true
+                    }
+					Text {
+						id: textSignaturePageLinkCompanies
+						text: qsTranslate("PageDefinitionsSCAP","STR_BACK_TO_SIGNATURE_PAGE")
+						font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+						font.capitalization: Font.MixedCase
+						font.underline: mouseAreaTextSignaturePageLinkCompanies.containsMouse
+						color: Constants.COLOR_MAIN_BLUE
+						visible: propertyPageLoader.propertyBackupFromSignaturePage
+					}
+				}
                 Item {
                     id: rawButtonLoadCompanyAttributes
-                    anchors.top: rectangleCompanies.bottom
+                    anchors.top: rectSignaturePageLinkCompanies.bottom
                     anchors.topMargin: Constants. SIZE_ROW_V_SPACE
                     width: parent.width - companiesListViewScroll.width - listViewCompanies.spacing
                     height: Constants.HEIGHT_BOTTOM_COMPONENT

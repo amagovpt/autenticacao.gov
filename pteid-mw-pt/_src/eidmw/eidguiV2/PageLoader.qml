@@ -31,6 +31,7 @@ Loader{
     property string propertyBackupReason: ""
     property string propertyBackupMobileNumber: ""
     property int propertyBackupMobileIndicatorIndex: 0
+	property bool propertyBackupFromSignaturePage: false
 
     ListModel {
         id: backupfilesModel

@@ -1106,6 +1106,7 @@ PageServicesSignAdvancedForm {
 
     propertyMouseAreaTextAttributesMsg{
         onClicked: {
+			propertyPageLoader.propertyBackupFromSignaturePage = true
             // Jump to Menu Definitions - PageDefinitionsSCAP
             mainFormID.state = "STATE_NORMAL"
             mainFormID.propertySubMenuListView.model.clear()
