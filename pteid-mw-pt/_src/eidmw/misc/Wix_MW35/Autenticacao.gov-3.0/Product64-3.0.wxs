@@ -100,7 +100,6 @@
 				<Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
 				<Directory Id="APPLICATIONROOTFOLDER" Name="Portugal Identity Card">
           
-          <Directory Id="DSS" Name="DSS"/>
           <Directory Id="EIDSTORE" Name="eidstore">
 						<Directory Id="CERTSDIR" Name="certs"/>
 						<Directory Id="CRLDIR" Name="crl">
@@ -153,13 +152,7 @@
 				</Component>
 			</DirectoryRef>
 
-    <DirectoryRef Id="DSS">
-      <Component Id="DSSApp" Guid="{CDA14D17-04E8-4f4b-BEE1-771A0DDC2558}">
-        <File Id="dss_standalone.exe" Name="dss-standalone.exe" KeyPath="yes" Source="..\..\..\misc\DSS\dss-standalone.exe" />
-        <File Id="config_dss.properties" Name="config.properties" Source="..\..\..\misc\DSS\config.properties" />
-      </Component>
-    </DirectoryRef>
-		
+	
 		<DirectoryRef Id="CERTSDIR">
 			<Component Id="Certs" Guid="{750F471B-6A83-4118-A0AF-2A138B770AD6}">
 		        <File Source="..\..\certs\CartaodeCidadao001.der" KeyPath="yes" />
@@ -436,27 +429,6 @@
 				
 				</Component>
 
-				<Component Id="RegistryXadesFileType" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA5}">
-					<RegistryKey Root="HKLM"
-							Key="SOFTWARE\Classes\.ccsigned"
-								 Action="createAndRemoveOnUninstall">
-						<RegistryValue Type="string" Value="PteidASICSignature"/>
-					</RegistryKey>
-					<RegistryKey Root="HKLM"
-							Key="SOFTWARE\Classes\PteidASICSignature" Action="createAndRemoveOnUninstall">
-						<RegistryKey
-							Key="shell\Open\command"
-								 Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="string" Value="C:\Program Files\Portugal Identity Card\DSS\dss-standalone.exe pt &quot;%1&quot;"/>
-						</RegistryKey>
-						<RegistryKey Key="DefaultIcon"  Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="string" Value="[ProgramFiles64Folder]Portugal Identity Card\assinatura.ico"/>
-						</RegistryKey>
-					<RegistryValue Type="string" Value="Cartão de Cidadão Digital Signature"/>
-				</RegistryKey>
-					
-			</Component>
-
 				<Component Id="RegistryPteidSystem" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA3}">
 					<RegistryKey Root="HKLM"
 						Key="SOFTWARE\PTEID"
@@ -562,7 +534,6 @@
 				<ComponentRef Id="DirectoryCache"/>
 				<ComponentRef Id="License"/>
 				<ComponentRef Id="LogDir"/>
-				<ComponentRef Id="DSSApp"/>
         <ComponentGroupRef Id="qmlAppComponentGroup"/>
         <!-- System32 -->
 
@@ -576,8 +547,6 @@
 				<ComponentRef Id="RegistryPteidSystem"/>
         <ComponentRef Id="RegistryPteidSystem32"/>
         
-        <ComponentRef Id="RegistryXadesFileType"/>
-
 				<Feature Id="GUI"
 						  Title="!(loc.PteidGui)"
 						  Description="!(loc.PteidGuiDescr)"

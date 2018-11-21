@@ -45,23 +45,10 @@ static const char *SIGCONTAINER_README=
 "Este ficheiro zip contém informação assinada com a respectiva assinatura em META-INF/signature.xml" NL
 "Esta assinatura foi criada através da Aplicação Oficial do Cartão de Cidadão." NL
 "" NL
-"Para verificar a validade da assinatura, deverá usar a Aplicação de Validação de Assinaturas Digitais do Cartão de Cidadão." NL
-"" NL
-"Como executar a Aplicação de Validação de Assinaturas Digitais do Cartão de Cidadão:" NL
-"(Windows) " NL
-"Duplo clique no ficheiro .ccsigned que pretende validar" NL
-"ou" NL
-"Duplo clique no ficheiro da aplicação em C:\\Program Files\\Portugal Identity Card\\DSS\\dss-standalone.exe" NL
-"" NL
-"(Linux e Mac)" NL
-"Execute \"java -jar /usr/local/bin/DSS/dss-standalone-app-3.0.4.jar pt %U\" na linha de comandos" NL
-"ou" NL
-"Duplo clique no ficheiro da aplicação em /usr/local/bin/DSS/. " NL
-"" NL
 "Mais Informação:" NL
 "" NL
 "Download da Aplicação Oficial do Cartão de Cidadão:" NL
-"http://svn.gov.pt/projects/ccidadao" NL
+"https://www.autenticacao.gov.pt/cc-aplicacao" NL
 "" NL
 "Especificação Técnica da Assinatura Digital:" NL
 "Xades / Xades-T" NL
@@ -73,23 +60,10 @@ static const char *SIGCONTAINER_README=
 "This zip file includes signed information. The signature file can be found in META-INF/signature.xml" NL
 "This signature was produced through Portuguese ID Card Management application." NL
 "" NL
-"To verify this signature, use the Portuguese ID Digital Signature Validation Application." NL
-"" NL
-"How to run the Portuguese ID Digital Signature Validation Application:" NL
-"(Windows)" NL
-"Double click in the .ccdigned to validate" NL
-"or" NL
-"Double click in the application file at C:\\Program Files\\Portugal Identity Card\\DSS\\dss-standalone.exe" NL
-"" NL
-"(Linux and Mac)" NL
-"Run \"java -jar /usr/local/bin/DSS/dss-standalone-app-3.0.4.jar pt %U\" in the shell" NL
-"or" NL
-"Double click in the application file at /usr/local/bin/DSS/." NL
-"" NL
 "More Info:" NL
 "" NL
 "Download Portuguese ID Card Management application:" NL
-"http://svn.gov.pt/projects/ccidadao" NL
+"https://www.autenticacao.gov.pt/cc-aplicacao" NL
 "" NL
 "Signature technical specification:" NL
 "Xades / Xades-T" NL
