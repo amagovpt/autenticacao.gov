@@ -994,8 +994,10 @@ PageServicesSignSimpleForm {
 
         console.log("Page Services Sign Simple mainWindowCompleted")
         propertyBusyIndicator.running = true
-        propertyPDFPreview.propertyDragSigSignedByNameText.text = "Assinado por:"
-        propertyPDFPreview.propertyDragSigNumIdText.text = "Num. de Identificação Civil:"
+
+        propertyPDFPreview.propertyDragSigSignedByNameText.text =
+                qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
+        propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
 
         //  CMD load backup mobile data
         textFieldMobileNumber.text = propertyPageLoader.propertyBackupMobileNumber
