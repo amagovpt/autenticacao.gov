@@ -265,11 +265,10 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
         if (signatureInfo.getX() >= 0 && signatureInfo.getY() >= 0) {
             sig_handler->setVisibleCoordinates(signatureInfo.getSelectedPage(), signatureInfo.getX(), signatureInfo.getY());
         } 
-        sig_handler->setSCAPAttributes(strdup(citizenName.toUtf8().constData()),
-                                       strdup(citizenId.toUtf8().constData()),
-                                       strdup(attributeSupplier.toUtf8().constData()), strdup(attribute.toUtf8().constData()));
-
     }
+    sig_handler->setSCAPAttributes(strdup(citizenName.toUtf8().constData()),
+                                   strdup(citizenId.toUtf8().constData()),
+                                   strdup(attributeSupplier.toUtf8().constData()), strdup(attribute.toUtf8().constData()));
 
     sig_handler->setExternCertificate(certificatesData.at(0));
 
