@@ -252,7 +252,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="110"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="195"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="209"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1645"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1649"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="109"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="123"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="1005"/>
@@ -1102,7 +1102,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="108"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="191"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="208"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1644"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1648"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="105"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="122"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="1004"/>
@@ -1509,13 +1509,13 @@
         <translation>PDF File is encrypted with a password</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1857"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1861"/>
         <source>STR_FILE_UPLOAD_FAIL</source>
         <translatorcomment>This message is shown when a user attempts to add multiple time same files</translatorcomment>
         <translation>File submission failure</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1859"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1863"/>
         <source>STR_FILE_ALREADY_UPLOADED</source>
         <translation>File(s) already submitted</translation>
     </message>
@@ -1533,13 +1533,13 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1268"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1275"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1309"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1790"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1794"/>
         <source>STR_SCAP_WARNING</source>
         <translation>Warning</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1270"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1792"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1796"/>
         <source>STR_SCAP_ATTRIBUTES_NOT_SELECT</source>
         <oldsource>STR_MULTI_FILE_ATTRIBUTES_WARNING</oldsource>
         <translation>Attributes not selected</translation>
@@ -1566,7 +1566,7 @@
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1371"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1642"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1646"/>
         <source>STR_SIGN_DROP_MULTI</source>
         <translation>Drag here files to be signed or click here to find files</translation>
     </message>
@@ -1598,7 +1598,7 @@
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="495"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="666"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1762"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1766"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="418"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="589"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="1067"/>
@@ -1625,6 +1625,7 @@
         <translation>Cancel</translation>
     </message>
     <message>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1551"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="948"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="957"/>
         <source>STR_LOAD_PDF_ERROR_MSG</source>

@@ -250,7 +250,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="110"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="195"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="209"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1645"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1649"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="109"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="123"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="1005"/>
@@ -1100,7 +1100,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="108"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="191"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="208"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1644"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1648"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="105"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="122"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="1004"/>
@@ -1507,13 +1507,13 @@
         <translation>Ficheiro PDF está encriptado com uma palavra passe</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1857"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1861"/>
         <source>STR_FILE_UPLOAD_FAIL</source>
         <translatorcomment>Messagem mostrada quando um utilizador tenta adicionar ficheiros que já estão carregados </translatorcomment>
         <translation>Falha ao adicionar ficheiros</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1859"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1863"/>
         <source>STR_FILE_ALREADY_UPLOADED</source>
         <translation>Ficheiro(s) já adicionado(s)</translation>
     </message>
@@ -1531,13 +1531,13 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1268"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1275"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1309"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1790"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1794"/>
         <source>STR_SCAP_WARNING</source>
         <translation>Aviso</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1270"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1792"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1796"/>
         <source>STR_SCAP_ATTRIBUTES_NOT_SELECT</source>
         <oldsource>STR_MULTI_FILE_ATTRIBUTES_WARNING</oldsource>
         <translation>Atributos não selecionados</translation>
@@ -1564,7 +1564,7 @@
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1371"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1642"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1646"/>
         <source>STR_SIGN_DROP_MULTI</source>
         <translation>Arraste para esta zona os ficheiros a assinar ou clique para procurar os ficheiros</translation>
     </message>
@@ -1596,7 +1596,7 @@
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="495"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="666"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1762"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1766"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="418"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="589"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="1067"/>
@@ -1623,6 +1623,7 @@
         <translation>Cancelar</translation>
     </message>
     <message>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1551"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="948"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="957"/>
         <source>STR_LOAD_PDF_ERROR_MSG</source>

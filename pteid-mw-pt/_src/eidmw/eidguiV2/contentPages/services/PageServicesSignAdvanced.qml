@@ -1545,6 +1545,10 @@ PageServicesSignAdvancedForm {
                             console.log("Error loading pdf encrypted file")
                             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                                     qsTranslate("PageServicesSign","STR_LOAD_ENCRYPTED_PDF_ERROR_MSG")
+                        }else{
+                            console.log("Generic Error loading pdf file")
+                            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                                    qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR_MSG")
                         }
                         mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                         mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
