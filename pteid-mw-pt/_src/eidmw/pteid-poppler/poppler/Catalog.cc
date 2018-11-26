@@ -1065,8 +1065,9 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 	
 	//The parameter 5 in lines is intended to allow as much lines as needed to the name field	
 	char * name_latin1 = utf8_to_latin1(signer_info->name);
-	GooString *name_str = formatMultilineString(name_latin1, 
-					rect_width, font_size, MYRIAD_BOLD, 5, rect_width - assinado_por_length);
+        GooString *name_str = formatMultilineString(name_latin1, rect_width, font_size,
+                                                    MYRIAD_BOLD, 5, line_height,
+                                                    rect_width - assinado_por_length);
 	n2_commands->append(name_str);
 
 	int lines = 0;
