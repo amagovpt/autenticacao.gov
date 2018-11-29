@@ -562,9 +562,27 @@ void GAPI::showSignCMDDialog(long code)
         case -1:
             error_msg = tr("STR_CMD_TIMEOUT_ERROR");
             break;
+        case ERR_GET_CERTIFICATE:
+            error_msg = tr("STR_CMD_GET_CERTIFICATE_ERROR");
+            break;
         case SOAP_TCP_ERROR:
-            error_msg = tr("STR_CONNECTION_ERROR") + "\n\n" +
+            error_msg = tr("STR_CONNECTION_ERROR") + "<br><br>" +
                     tr("STR_VERIFY_INTERNET");
+            break;
+        case SOAP_ERR_SERVICE_FAIL:
+            error_msg = tr("STR_CMD_SERVICE_FAIL");
+            break;
+        case SOAP_ERR_INVALID_PIN:
+            error_msg = tr("STR_CMD_INVALID_PIN");
+            break;  
+        case SOAP_ERR_INVALID_OTP:
+            error_msg = tr("STR_CMD_INVALID_OTP");
+            break;        
+        case SOAP_ERR_OTP_VALIDATION_ERROR:
+            error_msg = tr("STR_CMD_OTP_VALIDATION_ERROR");
+            break;
+        case SOAP_ERR_INACTIVE_SERVICE:
+            error_msg = tr("STR_CMD_INACTIVE_SERVICE");
             break;
         default:
             error_msg = tr("STR_CMD_LOGIN_ERROR");
@@ -572,7 +590,7 @@ void GAPI::showSignCMDDialog(long code)
     }
 
     if (code != 0)
-        error_msg += "\n\n" + support_string;
+        error_msg += "<br><br>" + support_string;
 
     qDebug() << error_msg;
     signalUpdateProgressStatus(error_msg);

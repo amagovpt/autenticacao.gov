@@ -21,8 +21,16 @@
 #define ERR_INV_CODE            (ERR_ADDR_USER_BASE + 0x10)
 #define ERR_SIZE                (ERR_ADDR_USER_BASE + 0x11)
 #define ERR_NULL_DATA           (ERR_ADDR_USER_BASE + 0x12)
+#define ERR_INV_DATA            (ERR_ADDR_USER_BASE + 0x13)
 
-#define IS_SOAP_ERROR(error)    ( ( error != ERR_NONE ) && ( error < ERR_ADDR_USER_BASE ) )
+#define SOAP_SUCCESS_CODE                   200
+#define IS_SOAP_ERROR(error)    ( ( error != ERR_NONE ) && ( error != SOAP_SUCCESS_CODE ) && ( error < ERR_ADDR_USER_BASE ) )
 
+#define SOAP_ERR_SERVICE_FAIL               500 // NOT TESTED
+#define SOAP_ERR_INVALID_PIN                801 
+#define SOAP_ERR_INVALID_OTP                802 // NOT TESTED
+#define SOAP_ERR_OTP_VALIDATION_ERROR       816 // NOT TESTED
+#define SOAP_ERR_INACTIVE_SERVICE           817 // NOT TESTED
+#define SOAP_ERR_GENERIC                    900 // NOT TESTED
 
 #endif /* CMD_ERRORS_H */

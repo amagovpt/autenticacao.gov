@@ -494,6 +494,9 @@ PageServicesSignSimpleForm {
                     width: parent.width
                     anchors.bottom: parent.bottom
                     wrapMode: Text.WordWrap
+                    onLinkActivated: {
+                        Qt.openUrlExternally(link)
+                    }
                 }
             }
             Item {

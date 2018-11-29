@@ -312,7 +312,7 @@ int CMDServices::checkGetCertificateResponse(
 
     if ( response->GetCertificateResult == NULL ){
         MWLOG_ERR( logBuf, "Null GetCertificateResult" );
-        return ERR_NULL_DATA;
+        return ERR_GET_CERTIFICATE;
     }
 
     return ERR_NONE;
@@ -560,6 +560,27 @@ int CMDServices::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response )
     if ( response->ValidateOtpResult == NULL ) {
         MWLOG_ERR( logBuf, "Null ValidateOtpResult" );
         return ERR_NULL_HANDLER;
+    }
+
+    if (response->ValidateOtpResult->Status == NULL) {
+        MWLOG_ERR( logBuf, "Null Status" );
+        return ERR_NULL_HANDLER;
+    }
+
+    if (response->ValidateOtpResult->Status->Code == NULL) {
+        MWLOG_ERR( logBuf, "Null Status Code" );
+        return ERR_NULL_DATA;
+    }
+
+    int statusCode = atoi( response->ValidateOtpResult->Status->Code->c_str() );    
+    if (statusCode == 0) {
+        MWLOG_ERR( logBuf, "Status Code is not a valid code" );
+        return ERR_INV_DATA;
+    }
+
+    if (IS_SOAP_ERROR(statusCode)) {
+        MWLOG_ERR( logBuf, "Error Status Code");
+        return statusCode;
     }
 
     if ( response->ValidateOtpResult->Signature == NULL ) {
