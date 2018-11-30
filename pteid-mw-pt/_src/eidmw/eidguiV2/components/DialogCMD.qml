@@ -173,7 +173,7 @@ Item {
                     anchors.left: textPinCurrent.right
                     anchors.bottom: parent.bottom
                     onCurrentIndexChanged: {
-                        if(comboBoxIndicative.currentIndex > 0){
+                        if(comboBoxIndicative.currentIndex >= 0){
                             propertyPageLoader.propertyBackupMobileIndicatorIndex = comboBoxIndicative.currentIndex
                         }else{
                             comboBoxIndicative.currentIndex = propertyPageLoader.propertyBackupMobileIndicatorIndex
