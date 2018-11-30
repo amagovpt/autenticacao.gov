@@ -222,6 +222,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldPin.text === "" ? true: false
                     placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN_OP") + "?"
+                    validator: RegExpValidator { regExp: /[0-9]{4,8}/ }
                     echoMode : TextInput.Password
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -282,7 +283,7 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
-                    enabled: textFieldMobileNumber.length !== 0 && textFieldPin.length !== 0 ? true : false
+                    enabled: textFieldMobileNumber.acceptableInput && textFieldPin.acceptableInput
                     onClicked: {
                         signCMD()
                     }
@@ -404,7 +405,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldReturnCode.text === "" ? true: false
                     placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_CODE_OP") + "?"
-                    validator: RegExpValidator { regExp: /[0-9]+/ }
+                    validator: RegExpValidator { regExp: /^[0-9]{6}$/ }
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
@@ -448,6 +449,8 @@ Item {
                 }
             }
             Button {
+                property var isOpenFile: false
+
                 id: buttonCMDProgressConfirm
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
@@ -456,6 +459,7 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                enabled: textFieldReturnCode.acceptableInput || isOpenFile
                 visible: false
                 onClicked: {
                     signCMDConfirm()
@@ -469,6 +473,7 @@ Item {
     }
 
     function open() {
+        buttonCMDProgressConfirm.isOpenFile = false
         dialogSignCMD.open()
     }
     function signCMD(){
@@ -518,6 +523,7 @@ Item {
     }
     function signCMDConfirm(){
         console.log("Send sms_token : " + textFieldReturnCode.text)
+        buttonCMDProgressConfirm.isOpenFile = true
         if( progressBar.value < 100) {
             //Empty attributes list, in simple signature view it's not SCAP signature
             gapi.signCloseCMD(textFieldReturnCode.text, [])
