@@ -190,7 +190,7 @@ Load language error. Please reinstall the application"
             }
         }
 
-        standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
+        standardButtons: DialogButtonBox.Ok
         onAccepted: {
             console.log("comboBoxReader onActivated index = " + comboBoxReader.currentIndex)
             gapi.setReaderByUser(comboBoxReader.currentIndex)
@@ -204,7 +204,7 @@ Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.source = temp
         }
         onRejected: {
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            readerContext.open()
         }
     }
 

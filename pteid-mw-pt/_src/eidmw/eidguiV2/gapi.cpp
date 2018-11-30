@@ -2248,6 +2248,7 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
     try
     { 
         unsigned long ReaderEndIdx = ReaderSet.readerCount();
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Card Reader count =  %ld", ReaderEndIdx);
         long ReaderIdx = 0;
         long CardIdx = 0;
         long tempReaderIndex = 0;
@@ -2262,24 +2263,34 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
             for (ReaderIdx = 0; ReaderIdx < ReaderEndIdx; ReaderIdx++)
             {
                 PTEID_ReaderContext& readerContext = ReaderSet.getReaderByNum(ReaderIdx);
-
-                if (readerContext.isCardPresent())
+                try
                 {
-                    bCardPresent = true;
-                    CardIdx++;
-                    tempReaderIndex = ReaderIdx;
+                    if (readerContext.isCardPresent())
+                    {
+                        bCardPresent = true;
+                        CardIdx++;
+                        tempReaderIndex = ReaderIdx;
+                    }
+                }
+                catch(PTEID_Exception &e){
+                    unsigned long err = e.GetError();
+                    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui",
+                              "Failed to check is Card Present 0x%08x\n", err);
                 }
             }
             // Test if Card Reader was previously selected
-            if(selectedReaderIndex != -1){ // Card Reader was previously selected
+            if(selectedReaderIndex != -1)
+            {
                 PTEID_ReaderContext& readerContext = ReaderSet.getReaderByNum(selectedReaderIndex);
                 PTEID_CardType CardType = readerContext.getCardType();
                 lastFoundCardType = CardType;
+                qDebug()<< "Card Reader was previously selected CardType:" << CardType;
+                PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui",
+                          "Card Reader was previously selected CardType: %d", CardType);
                 switch (CardType)
                 {
                 case PTEID_CARDTYPE_IAS07:
                 {
-
                     PTEID_EIDCard& Card = readerContext.getEIDCard();
                     new_card = &Card;
                     break;
@@ -2289,16 +2300,21 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                 default:
                     break;
                 }
-            }else{ //Card Reader was not previously selected
-                if(CardIdx == 1){
+            }
+            else
+            { //Card Reader was not previously selected
+                if(CardIdx == 1)
+                {
                     PTEID_ReaderContext& readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
                     PTEID_CardType CardType = readerContext.getCardType();
                     lastFoundCardType = CardType;
+                    qDebug()<< "Card Reader was not previously selected CardType:" << CardType;
+                    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui",
+                              "Card Reader was not previously selected CardType: %d", CardType);
                     switch (CardType)
                     {
                         case PTEID_CARDTYPE_IAS07:
                         {
-
                             PTEID_EIDCard& Card = readerContext.getEIDCard();
                             new_card = &Card;
                             break;
@@ -2309,11 +2325,15 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                             break;
                     }
                 }
-                if(CardIdx > 1 && selectedReaderIndex == -1){
-                    emit signalReaderContext();
-                    selectedReaderIndex = -1;
+                else if(CardIdx > 1) //Card Reader was not previously selected
+                {
+                    qDebug()<< "Card Reader was not previously selected. Ask user to select card";
+                    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Card Reader was not previously selected. "
+                                                               "Ask user to select card");
+                    emit signalReaderContext(); // Ask user to select card
                 }
-                else{
+                else
+                {
                     if (!bCardPresent)
                     {
                         emit signalCardAccessError(NoCardFound);
