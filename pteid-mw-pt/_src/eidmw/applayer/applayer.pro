@@ -28,6 +28,7 @@ CONFIG -= warn_on qt
 DESTDIR = ../lib 
 DEFINED += APPLAYER_EXPORTS
 
+#external libs are openjp2="libopenjp2-7-dev", png="libpng-dev", z="zlib1g-dev"
 LIBS += -L../lib \
 	    -L/usr/local/Cellar/openssl/1.0.2j/lib/ \
 	    -L/usr/local/Cellar/xerces-c/3.1.2/lib/ \
@@ -35,8 +36,10 @@ LIBS += -L../lib \
 	    -l$${COMMONLIB} \
 	    -lcrypto -lssl \
 	    -lxerces-c \
-	    -lfreeimagePTEiD \
-	    -lcurl
+            -lcurl \
+            -lopenjp2 \
+            -lpng \
+            -lz \
 
 !macx: LIBS += -Wl,-R,'../lib' -lxml-security-c
 LIBS += ../lib/libpteid-poppler.a
@@ -49,6 +52,7 @@ macx: LIBS += -Wl,-framework -Wl,CoreServices
 macx: LIBS += -liconv
 macx: INCLUDEPATH +=/usr/local/Cellar/openssl/1.0.2j/include /usr/local/Cellar/xml-security-c/1.7.3/include/ /usr/local/Cellar/xerces-c/3.1.2/include
 macx: INCLUDEPATH += /System/Library/Frameworks/CFNetwork.framework/Headers
+!macx: INCLUDEPATH += /usr/include/openjpeg-2.3 /usr/include/libpng16
 
 isEmpty(EMULATE_CARDLAYER) {
 
@@ -61,7 +65,7 @@ isEmpty(EMULATE_CARDLAYER) {
 }
 
 DEPENDPATH += .
-INCLUDEPATH += . ../common ../pteid-poppler ../cardlayer ../eidlib ../dialogs ../FreeImagePTEiD/Source
+INCLUDEPATH += . ../common ../pteid-poppler ../cardlayer ../eidlib ../dialogs
 macx: INCLUDEPATH += /usr/local/include
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 
@@ -100,7 +104,9 @@ HEADERS += \
 	SODParser.h \ 
 	cJSON.h \
 	miniz.h \
- 	SSLConnection.h \	 
+        SSLConnection.h \
+        convert.h \
+        J2KHelper.h \
 
 
 SOURCES += \
@@ -133,7 +139,9 @@ SOURCES += \
 	CRLFetcher.cpp \
 	PDFSignature.cpp \
 	SAM.cpp \
-	OCSP.cpp
+        OCSP.cpp \
+        convert.cpp \
+        J2KHelper.cpp \
 
 # Disable annoying and mostly useless gcc warning
 QMAKE_CXXFLAGS += -Wno-write-strings
