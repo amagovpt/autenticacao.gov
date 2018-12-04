@@ -115,7 +115,7 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Cryptui.lib;Crypt32.lib;qtmain.lib;shell32.lib;libeay32.lib;ssleay32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidcommon.lib;pteid-poppler.lib;pteidlib.lib;xsec_1.lib;FreeImage.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Cryptui.lib;Crypt32.lib;qtmain.lib;shell32.lib;libeay32.lib;ssleay32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidcommon.lib;pteid-poppler.lib;pteidlib.lib;xsec_1.lib;cmdServices.lib;zlib.lib;libpng16.lib;openjp2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(PTEID_DIR_OPENSSL_098_X64)\lib;$(PTEID_DIR_QT_4_X64)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
@@ -157,7 +157,7 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>qtmain.lib;Crypt32.lib;shell32.lib;ssleay32.lib;libeay32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteid-poppler.lib;pteidDlgsWin32.lib;cmdServices.lib;xsec_1.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>qtmain.lib;Crypt32.lib;shell32.lib;ssleay32.lib;libeay32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteid-poppler.lib;pteidDlgsWin32.lib;cmdServices.lib;xsec_1.lib;zlib.lib;libpng16.lib;openjp2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(PTEID_DIR_OPENSSL_098)\lib\;$(PTEID_DIR_QT_4)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>

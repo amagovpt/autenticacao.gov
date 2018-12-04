@@ -5,7 +5,7 @@
 	<?include ..\..\..\svn_revision.wxs ?>
 
 	<?define var.ProductVersion = 3.0.$(var.RevisionNumber)?>
-  <?define var.OfficialProductVersion = 3.0.16 ?>
+	<?define var.OfficialProductVersion = 3.0.16 ?>
 
 	<?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
 	<?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F20$(var.RevisionNumber)}?>
@@ -32,24 +32,24 @@
 				 Compressed="yes"
 				 InstallPrivileges="elevated" />
 
-    <MajorUpgrade DowngradeErrorMessage="!(loc.NoDowngrade)"/>
+		<MajorUpgrade DowngradeErrorMessage="!(loc.NoDowngrade)"/>
 
 		<?ifndef env.PTEID_DIR_MSM?>
-	     	<?error PTEID_DIR_MSM not defined ?>
+		<?error PTEID_DIR_MSM not defined ?>
 		<?else?>
-			<?define var.PTEID_DIR_MSM=$(env.PTEID_DIR_MSM)?>
+		<?define var.PTEID_DIR_MSM=$(env.PTEID_DIR_MSM)?>
 		<?endif?>
 
-    <?define var.PTEID_QT_PLATFORMPLUGINS=$(env.PTEID_DIR_QT_4_X64)\plugins\platforms\?>
-    <?define var.PTEID_QT_IMAGEFORMATS=$(env.PTEID_DIR_QT_4_X64)\plugins\imageformats\?>
-    <?define var.PTEID_QT_PRINTSUPPORT=$(env.PTEID_DIR_QT_4_X64)\plugins\printsupport\?>
-    
-	  <?define var.PTEID_TARGET_RUNTIME=VCR9 ?>
+		<?define var.PTEID_QT_PLATFORMPLUGINS=$(env.PTEID_DIR_QT_4_X64)\plugins\platforms\?>
+		<?define var.PTEID_QT_IMAGEFORMATS=$(env.PTEID_DIR_QT_4_X64)\plugins\imageformats\?>
+		<?define var.PTEID_QT_PRINTSUPPORT=$(env.PTEID_DIR_QT_4_X64)\plugins\printsupport\?>
 
-    <!-- Look for compiled components and libs in: -->
-	  <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\VC9\Release\ ?>
-	  <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\VC9\Release\ ?>
-	  <?define var.PTEID_BUILD_FOLDER_AnyCPU=..\..\..\_Binaries35\AnyCPU\VC9\Release\ ?>
+		<?define var.PTEID_TARGET_RUNTIME=VCR9 ?>
+
+		<!-- Look for compiled components and libs in: -->
+		<?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\VC9\Release\ ?>
+		<?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\VC9\Release\ ?>
+		<?define var.PTEID_BUILD_FOLDER_AnyCPU=..\..\..\_Binaries35\AnyCPU\VC9\Release\ ?>
 
 		<WixVariable Id="WixUILicenseRtf" Value="..\..\..\misc\licenses\License_pt.rtf" />
 		<WixVariable Id="WixUIBannerBmp" Value="..\..\..\misc\Wix_MW35\new_banner.bmp" />
@@ -65,7 +65,7 @@
 		</Condition>
 
 		<Media Id="1" Cabinet="Middleware.cab" EmbedCab="yes" CompressionLevel="high"/>
- 
+
 		<Icon Id="pteid.ico" SourceFile="..\..\..\eidgui\Images\Icons\pteid.ico"/>
 
 		<Property Id="ARPPRODUCTICON" Value="pteid.ico" />
@@ -84,8 +84,6 @@
 		<Condition Message="!(loc.OldMiddlewareErrorMsg)" >
 			<![CDATA[Installed OR (NOT OLDMIDDLEWAREINSTALLED AND NOT OLDMIDDLEWAREINSTALLED2)]]>
 		</Condition>
-    
-    
 
 		<Directory Id="TARGETDIR" Name="SourceDir">
 
@@ -96,17 +94,18 @@
 			</Directory>
 
 			<Directory Id="ProgramFiles64Folder">
-      
+
 				<Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
 				<Directory Id="APPLICATIONROOTFOLDER" Name="Portugal Identity Card">
-          
-          <Directory Id="EIDSTORE" Name="eidstore">
+
+					<Directory Id="DSS" Name="DSS"/>
+					<Directory Id="EIDSTORE" Name="eidstore">
 						<Directory Id="CERTSDIR" Name="certs"/>
 						<Directory Id="CRLDIR" Name="crl">
 							<Directory Id="HTTPDIR" Name="http">
 
-					 </Directory>
-					</Directory>
+							</Directory>
+						</Directory>
 					</Directory>
 					<Directory Id="DIRECTORYCACHE" Name=".cache"/>
 					<Directory Id="LOGDIR" Name="log"/>
@@ -127,260 +126,268 @@
 			</Directory>
 
 			<Directory Id="SystemFolder"></Directory>
-      
-	      <?if $(var.PTEID_TARGET_RUNTIME) = VCR8 ?>
-		        <!-- VC8 runtime -->
-		        <?define var.VCRT_TITLE="VC++ 8.0 runtime" ?>
-				<Merge Id="VCRT"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC80_CRT_x86_x64.msm" Language="0" DiskId="1" />
-				<Merge Id="VCRT_POLICY" SourceFile="$(var.PTEID_DIR_MSM)\policy_8_0_Microsoft_VC80_CRT_x86_x64.msm" Language="0" DiskId="1" />
-	      <?elseif $(var.PTEID_TARGET_RUNTIME) = VCR9 ?>
-		        <!-- VC9 runtime -->
-		        <?define var.VCRT_TITLE="VC++ 9.0 runtime" ?>
-		        <Merge Id="VCRT1"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC120_CRT_x64.msm" Language="0" DiskId="1" />
-                <Merge Id="VCRT2"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC120_CRT_x86.msm" Language="0" DiskId="1" />
-	      <?endif?>
-      
-			</Directory>
 
-			<DirectoryRef Id="EIDSTORE">
-				<Component Id="EidStore" Guid="{F30FFFBD-4F50-4e4d-86D2-90F192A3F01B}" KeyPath="yes">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-					<RemoveFile Id="RemoveEidstoreFiles" On="uninstall" Name="*"/>
-					<RemoveFolder Id="RemoveEidstoreFolder" On="uninstall"/>
-				</Component>
-			</DirectoryRef>
+			<?if $(var.PTEID_TARGET_RUNTIME) = VCR8 ?>
+			<!-- VC8 runtime -->
+			<?define var.VCRT_TITLE="VC++ 8.0 runtime" ?>
+			<Merge Id="VCRT"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC80_CRT_x86_x64.msm" Language="0" DiskId="1" />
+			<Merge Id="VCRT_POLICY" SourceFile="$(var.PTEID_DIR_MSM)\policy_8_0_Microsoft_VC80_CRT_x86_x64.msm" Language="0" DiskId="1" />
+			<?elseif $(var.PTEID_TARGET_RUNTIME) = VCR9 ?>
+			<!-- VC9 runtime -->
+			<?define var.VCRT_TITLE="VC++ 9.0 runtime" ?>
+			<Merge Id="VCRT1"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC120_CRT_x64.msm" Language="0" DiskId="1" />
+			<Merge Id="VCRT2"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC120_CRT_x86.msm" Language="0" DiskId="1" />
+			<?endif?>
 
-	
-		<DirectoryRef Id="CERTSDIR">
-			<Component Id="Certs" Guid="{750F471B-6A83-4118-A0AF-2A138B770AD6}">
-		        <File Source="..\..\certs\CartaodeCidadao001.der" KeyPath="yes" />
-		        <File Source="..\..\certs\CartaodeCidadao002.der" />
-                <File Source="..\..\certs\CartaodeCidadao003.der" />
-		        <File Source="..\..\certs\ECRaizEstado_MC.der" />
-		        <File Source="..\..\certs\Multicert_Root_01.der" />
-		        <File Source="..\..\certs\BaltimoreCyberTrustRoot.der" />
-		        <File Source="..\..\certs\GlobalChambersignRoot-2008.der" />
-                <File Source="..\..\certs\COMODORSACertificationAuthority.der" />
-			</Component>
+		</Directory>
 
-			<Component Id="CertCC004" Guid="{08EF0B6A-2989-429F-846C-EED6F241D192}">
-			   <File Source="..\..\certs\CartaodeCidadao004.der" />
+		<DirectoryRef Id="EIDSTORE">
+			<Component Id="EidStore" Guid="{F30FFFBD-4F50-4e4d-86D2-90F192A3F01B}" KeyPath="yes">
+				<CreateFolder>
+					<util:PermissionEx GenericAll="yes" User="Users" />
+				</CreateFolder>
+				<RemoveFile Id="RemoveEidstoreFiles" On="uninstall" Name="*"/>
+				<RemoveFolder Id="RemoveEidstoreFolder" On="uninstall"/>
 			</Component>
 		</DirectoryRef>
 
-			<DirectoryRef Id="CRLDIR">
-				<Component Id="CrlDir" Guid="{5731B322-17EE-4d08-90A5-9DB53F53EC29}">
-					<CreateFolder/>
-					<RemoveFile Id="RemoveCrlCacheFiles" On="uninstall" Name="*"/>
-					<RemoveFolder Id="RemoveCrlCacheFolder" On="uninstall"/>
-				</Component>
-			</DirectoryRef>
+		
+		<DirectoryRef Id="CERTSDIR">
+			<Component Id="Certs" Guid="{750F471B-6A83-4118-A0AF-2A138B770AD6}">
+				<File Source="..\..\certs\CartaodeCidadao001.der" KeyPath="yes" />
+				<File Source="..\..\certs\CartaodeCidadao002.der" />
+				<File Source="..\..\certs\CartaodeCidadao003.der" />
+				<File Source="..\..\certs\ECRaizEstado_MC.der" />
+				<File Source="..\..\certs\Multicert_Root_01.der" />
+				<File Source="..\..\certs\BaltimoreCyberTrustRoot.der" />
+				<File Source="..\..\certs\GlobalChambersignRoot-2008.der" />
+				<File Source="..\..\certs\COMODORSACertificationAuthority.der" />
+			</Component>
 
-			<DirectoryRef Id="HTTPDIR">
-				<Component Id="HttpDir" Guid="{24B807B8-E1F2-42BB-976D-C98B7F52A119}" KeyPath="yes">
-					<CreateFolder />
-				</Component>
-			</DirectoryRef>
+			<Component Id="CertCC004" Guid="{08EF0B6A-2989-429F-846C-EED6F241D192}">
+				<File Source="..\..\certs\CartaodeCidadao004.der" />
+			</Component>
+		</DirectoryRef>
 
-			<DirectoryRef Id="LOGDIR">
-				<Component Id="LogDir" Guid="{A300DA04-F8DF-4506-B654-1E5EB2782DF3}" KeyPath="yes">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-					<RemoveFile Id="RemoveLogFiles" On="uninstall" Name="*"/>
-					<RemoveFolder Id="RemoveLogFolder" On="uninstall"/>
-				</Component>
-			</DirectoryRef>
+		<DirectoryRef Id="CRLDIR">
+			<Component Id="CrlDir" Guid="{5731B322-17EE-4d08-90A5-9DB53F53EC29}">
+				<CreateFolder/>
+				<RemoveFile Id="RemoveCrlCacheFiles" On="uninstall" Name="*"/>
+				<RemoveFolder Id="RemoveCrlCacheFolder" On="uninstall"/>
+			</Component>
+		</DirectoryRef>
 
-			<DirectoryRef Id="DIRECTORYCACHE">
-				<Component Id="DirectoryCache" Guid="{7CAEB639-7068-4084-B422-D7B5E55D0FBC}" KeyPath="yes">
-					<CreateFolder>
-						<util:PermissionEx GenericAll="yes" User="Users" />
-					</CreateFolder>
-					<RemoveFile Id="RemoveCacheFiles" On="uninstall" Name="*"/>
-					<RemoveFolder Id="RemoveCacheFolder" On="uninstall"/>
-				</Component>
-			</DirectoryRef>
-   
-			<DirectoryRef Id="MINIDRIVERROOTFOLDER">
-				<Component Id="pteidmdrv" Guid="2bdf2bb0-4f7a-4ed6-a3d4-abcbe212fa14" Win64="yes">
-					<File Id="pteidmdrv.inf" Name="pteidmdrv.inf" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.inf" KeyPath="yes" DiskId="1" />
-					<File Id="pteidmdrv.cat" Name="pteidmdrv.cat" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.cat" KeyPath="no" DiskId="1" />
-					<File Id="pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="no" DiskId="1" />
-					<File Id="pteidmdrv64.dll" Name="pteidmdrv64.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" KeyPath="no" DiskId="1" />
-					<difx:Driver ForceInstall="no" PlugAndPlayPrompt="no" DeleteFiles="yes" />
-				</Component>
-				<!-- Certificate Propagation Service is a standard Windows service available in Windows Vista and later versions. In order to use the minidriver
+		<DirectoryRef Id="HTTPDIR">
+			<Component Id="HttpDir" Guid="{24B807B8-E1F2-42BB-976D-C98B7F52A119}" KeyPath="yes">
+				<CreateFolder />
+			</Component>
+		</DirectoryRef>
+
+		<DirectoryRef Id="LOGDIR">
+			<Component Id="LogDir" Guid="{A300DA04-F8DF-4506-B654-1E5EB2782DF3}" KeyPath="yes">
+				<CreateFolder>
+					<util:PermissionEx GenericAll="yes" User="Users" />
+				</CreateFolder>
+				<RemoveFile Id="RemoveLogFiles" On="uninstall" Name="*"/>
+				<RemoveFolder Id="RemoveLogFolder" On="uninstall"/>
+			</Component>
+		</DirectoryRef>
+
+		<DirectoryRef Id="DIRECTORYCACHE">
+			<Component Id="DirectoryCache" Guid="{7CAEB639-7068-4084-B422-D7B5E55D0FBC}" KeyPath="yes">
+				<CreateFolder>
+					<util:PermissionEx GenericAll="yes" User="Users" />
+				</CreateFolder>
+				<RemoveFile Id="RemoveCacheFiles" On="uninstall" Name="*"/>
+				<RemoveFolder Id="RemoveCacheFolder" On="uninstall"/>
+			</Component>
+		</DirectoryRef>
+
+		<DirectoryRef Id="MINIDRIVERROOTFOLDER">
+			<Component Id="pteidmdrv" Guid="2bdf2bb0-4f7a-4ed6-a3d4-abcbe212fa14" Win64="yes">
+				<File Id="pteidmdrv.inf" Name="pteidmdrv.inf" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.inf" KeyPath="yes" DiskId="1" />
+				<File Id="pteidmdrv.cat" Name="pteidmdrv.cat" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.cat" KeyPath="no" DiskId="1" />
+				<File Id="pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="no" DiskId="1" />
+				<File Id="pteidmdrv64.dll" Name="pteidmdrv64.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" KeyPath="no" DiskId="1" />
+				<difx:Driver ForceInstall="no" PlugAndPlayPrompt="no" DeleteFiles="yes" />
+			</Component>
+			<!-- Certificate Propagation Service is a standard Windows service available in Windows Vista and later versions. In order to use the minidriver
 			   it is necessary that this service is running. When a smart card reader is inserted this service should be started  by the smart card
 			   driver. As not all drivers are following this guidance, we start CertPropSvc during the minidriver install -->
-				<Component Id="CertPropService" Guid="932459d0-df59-11de-8a39-0800200c9a66" Permanent="yes" Win64="yes">
-					<!-- Start Certificate Propagation Service during startup -->
-					<RegistryValue Root="HKLM" Key="System\CurrentControlSet\Services\CertPropSvc" Type="integer" Name="Start" Value="2" KeyPath="yes"/>
-					<!-- Start Certificate Propagation Service now -->
-					<!--<ServiceControl Id="StartCertPropSvc" Name="CertPropSvc" Start="install" />-->
-				</Component>
-			</DirectoryRef>
+			<Component Id="CertPropService" Guid="932459d0-df59-11de-8a39-0800200c9a66" Permanent="yes" Win64="yes">
+				<!-- Start Certificate Propagation Service during startup -->
+				<RegistryValue Root="HKLM" Key="System\CurrentControlSet\Services\CertPropSvc" Type="integer" Name="Start" Value="2" KeyPath="yes"/>
+				<!-- Start Certificate Propagation Service now -->
+				<!--<ServiceControl Id="StartCertPropSvc" Name="CertPropSvc" Start="install" />-->
+			</Component>
+		</DirectoryRef>
 
-			<DirectoryRef Id="APPLICATIONROOTFOLDER">
+		<DirectoryRef Id="APPLICATIONROOTFOLDER">
 
-				<Component Id="RootFolder" Guid="{2FB5D279-50BD-49ed-98D9-3D043520F450}">
-					<CreateFolder/>
-					<Environment Id="PATH" Action="set" Part="last" Permanent="no" System="yes" Name="PATH" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
-					<Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
-				</Component>
+			<Component Id="RootFolder" Guid="{2FB5D279-50BD-49ed-98D9-3D043520F450}">
+				<CreateFolder/>
+				<Environment Id="PATH" Action="set" Part="last" Permanent="no" System="yes" Name="PATH" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
+				<Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
+			</Component>
 
-				<Component Id="Icon" Guid="{5B657BAD-8CFC-4E42-AF8C-13338C50D784}" SharedDllRefCount="yes">
-          			<File Source="..\..\..\misc\assinatura.ico" KeyPath="yes" />
-				</Component>
+			<Component Id="Icon" Guid="{5B657BAD-8CFC-4E42-AF8C-13338C50D784}" SharedDllRefCount="yes">
+				<File Source="..\..\..\misc\assinatura.ico" KeyPath="yes" />
+			</Component>
 
-				<Component Id="OutlookTool" Guid="{F36A543C-CB17-4D91-BF0C-2EAEFEC3CB3A}">
-          			<File Source="..\MW35Wix\pteidoutlooksnc.exe" KeyPath="yes" />
-				</Component>
-				
-				<Component Id="CACerts" Guid="{b0fb28de-54ac-45b0-a565-1dce90ffe080}">
-        		  <File Source="..\..\certs\cacerts.pem" KeyPath="yes"/>
-      			</Component>
+			<Component Id="OutlookTool" Guid="{F36A543C-CB17-4D91-BF0C-2EAEFEC3CB3A}">
+				<File Source="..\MW35Wix\pteidoutlooksnc.exe" KeyPath="yes" />
+			</Component>
 
-				<Component Id="License" Guid="{C00AF621-E882-4805-BA9C-B90AA5DBBCB6}" SharedDllRefCount="yes">
-			          <File Source="..\..\..\misc\licenses\License_pt.rtf" KeyPath="yes" />
-			          <File Source="..\..\..\misc\licenses\THIRDPARTY-LICENSES.txt" />
-				</Component>
+			<Component Id="CACerts" Guid="{b0fb28de-54ac-45b0-a565-1dce90ffe080}">
+				<File Source="..\..\certs\cacerts.pem" KeyPath="yes"/>
+			</Component>
 
-			</DirectoryRef>
+			<Component Id="License" Guid="{C00AF621-E882-4805-BA9C-B90AA5DBBCB6}" SharedDllRefCount="yes">
+				<File Source="..\..\..\misc\licenses\License_pt.rtf" KeyPath="yes" />
+				<File Source="..\..\..\misc\licenses\THIRDPARTY-LICENSES.txt" />
+			</Component>
+
+		</DirectoryRef>
 
 
-			<DirectoryRef Id="WindowsFolder">
+		<DirectoryRef Id="WindowsFolder">
 
-			</DirectoryRef>
+		</DirectoryRef>
 
-			<!-- We need to ship all the 32-bit DLLs to have working 32-bit versions of the PKCS#11 and pteidlibj module -->
-			<DirectoryRef Id="SystemFolder">
+		<!-- We need to ship all the 32-bit DLLs to have working 32-bit versions of the PKCS#11 and pteidlibj module -->
+		<DirectoryRef Id="SystemFolder">
 
-				<Component Win64="no" Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
-					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
-					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlib.dll" />
-					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll"/>
-					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCS_Wrapper.dll" />
-					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
-					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
-					<File Source="$(env.PTEID_DIR_OPENSSL_098)\bin\libeay32.dll" />
-					<File Source="$(env.PTEID_DIR_OPENSSL_098)\bin\ssleay32.dll" />
-					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
-				</Component>
+			<Component Win64="no" Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
+				<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
+				<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlib.dll" />
+				<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll"/>
+				<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCS_Wrapper.dll" />
+				<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
+				<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
+				<File Source="$(env.PTEID_DIR_OPENSSL_098)\bin\libeay32.dll" />
+				<File Source="$(env.PTEID_DIR_OPENSSL_098)\bin\ssleay32.dll" />
+				<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
+			</Component>
 
-				<!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
+			<!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
 			<Component Win64="no" Id="Poppler" Guid="{3C54AC04-E71D-4DC3-9525-21C3BF3BDD9A}">
-        <File Id="pteid_poppler.dll" Name="pteid-poppler.dll" KeyPath="yes" Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-poppler.dll"/>
-      </Component>
+				<File Id="pteid_poppler.dll" Name="pteid-poppler.dll" KeyPath="yes" Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-poppler.dll"/>
+			</Component>
 
-				<Component Win64="no" Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
-          			<File Source="$(env.PTEID_DIR_XERCES_31)\Build\Win32\VC12\Release\xerces-c_3_1.dll" KeyPath="yes"/>
-				</Component>
+			<Component Win64="no" Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
+				<File Source="$(env.PTEID_DIR_XERCES_31)\Build\Win32\VC12\Release\xerces-c_3_1.dll" KeyPath="yes"/>
+			</Component>
 
-				<!--Our Build of LibCurl - custom build options to remove unneeded features-->
-				<Component Win64="no" Id="Curl" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFA}" SharedDllRefCount="yes">
-          			<File Source="$(env.PTEID_DIR_CURL)\build\Win32\VC12\DLL Release\libcurl.dll" KeyPath="no" />
-				</Component>
+			<Component Win64="no" Id="Libpng" Guid="7763EFEE-ACE6-438E-96D3-4A2126102895" SharedDllRefCount="yes">
+				<File Source="$(env.PTEID_DIR_LIBPNG)\bin\libpng16.dll" KeyPath="yes" />
+			</Component>
 
-        <Component Win64="no" Id="pteidmdrvsystem32" Guid="{9C571B6F-E4E0-47AF-812D-E51CFA406F67}" Permanent="no">
-          <File Id="system32_pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="yes"/>
-        </Component>
-				
-				<Component Win64="no" Id="FreeImage" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F64" SharedDllRefCount="yes">
-         			 <File Source="$(var.PTEID_BUILD_FOLDER_X86)FreeImage.dll" KeyPath="yes" />
-				</Component>
+			<Component Win64="no" Id="Openjpeg" Guid="80F913A1-48D8-42E3-8FA6-56EDF085F8E3" SharedDllRefCount="yes">
+				<File Source="$(env.PTEID_DIR_OPENJPEG)\bin\openjp2.dll" KeyPath="yes" />
+			</Component>
 
-				<Component Win64="no" Id="XMLSecurity" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F65" SharedDllRefCount="yes">
-          			<File Source="$(env.PTEID_XMLSECURITY)\Build\Win32\VC10\Release No Xalan\xsec_1_7.dll" KeyPath="yes" />
-				</Component>
+			<!--Our Build of LibCurl - custom build options to remove unneeded features-->
+			<Component Win64="no" Id="Curl" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFA}" SharedDllRefCount="yes">
+				<File Source="$(env.PTEID_DIR_CURL)\build\Win32\VC12\DLL Release\libcurl.dll" KeyPath="no" />
+			</Component>
 
-				<Component Win64="no" Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
-          			<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidpkcs11.dll" KeyPath="yes" />
-				</Component>
+			<Component Win64="no" Id="pteidmdrvsystem32" Guid="{9C571B6F-E4E0-47AF-812D-E51CFA406F67}" Permanent="no">
+				<File Id="system32_pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="yes"/>
+			</Component>
 
-			</DirectoryRef>
+			<Component Win64="no" Id="XMLSecurity" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F65" SharedDllRefCount="yes">
+				<File Source="$(env.PTEID_XMLSECURITY)\Build\Win32\VC10\Release No Xalan\xsec_1_7.dll" KeyPath="yes" />
+			</Component>
 
-			<DirectoryRef Id="System64Folder">
+			<Component Win64="no" Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
+				<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidpkcs11.dll" KeyPath="yes" />
+			</Component>
 
-				<Component Id="Runtime35_64" Guid="{8FE1C7FB-F06A-40db-8454-88D9E8BDD626}" SharedDllRefCount="yes" Win64="yes">
-			          <File Id="pteidapplayer_64.dll"  Source="$(var.PTEID_BUILD_FOLDER_X64)pteidapplayer.dll" KeyPath="yes" />
-			          <File Id="pteidcardlayer_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcardlayer.dll" />
-					  <File Id="pteidlib_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlib.dll"/>
-					  <File Id="pteidlibj_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibj.dll"/>
-            <File Id="libeay_64.dll" Source="$(env.PTEID_DIR_OPENSSL_098_X64)\bin\libeay32.dll" />
-            <File Id="ssleay_64.dll" Source="$(env.PTEID_DIR_OPENSSL_098_X64)\bin\ssleay32.dll" />
-            <File Id="pteidlibCS_Wrapper_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCS_Wrapper.dll" />
-			      <File Id="pteidcommon_64.dll"    Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcommon.dll" />
-			      <File Id="pteidDlgsWin32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidDlgsWin32.dll" />
-				</Component>
+		</DirectoryRef>
 
-				<Component Id="pkcs11_64" Guid="{3C4751D6-D92C-40ab-8FA5-3A1DF1D927EA}" SharedDllRefCount="yes" Win64="yes">
-			          <File Id="pteidpkcs11_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidpkcs11.dll" KeyPath="yes" />
-				</Component>
+		<DirectoryRef Id="System64Folder">
 
-				<Component Id="FreeImage_64" Guid="C3CAF347-FBA3-4d65-A23F-C6357541DAB2" SharedDllRefCount="yes">
-          			<File Id="FreeImage_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)FreeImage.dll" KeyPath="yes" />
-				</Component>
+			<Component Id="Runtime35_64" Guid="{8FE1C7FB-F06A-40db-8454-88D9E8BDD626}" SharedDllRefCount="yes" Win64="yes">
+				<File Id="pteidapplayer_64.dll"  Source="$(var.PTEID_BUILD_FOLDER_X64)pteidapplayer.dll" KeyPath="yes" />
+				<File Id="pteidcardlayer_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcardlayer.dll" />
+				<File Id="pteidlib_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlib.dll"/>
+				<File Id="pteidlibj_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibj.dll"/>
+				<File Id="libeay_64.dll" Source="$(env.PTEID_DIR_OPENSSL_098_X64)\bin\libeay32.dll" />
+				<File Id="ssleay_64.dll" Source="$(env.PTEID_DIR_OPENSSL_098_X64)\bin\ssleay32.dll" />
+				<File Id="pteidlibCS_Wrapper_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCS_Wrapper.dll" />
+				<File Id="pteidcommon_64.dll"    Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcommon.dll" />
+				<File Id="pteidDlgsWin32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidDlgsWin32.dll" />
+			</Component>
 
-				<Component Id="XMLSecurity_64" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F66" SharedDllRefCount="yes">
-          			<File Id="xsec_1_6_64.dll" Source="$(env.PTEID_XMLSECURITY)\Build\x64\VC10\Release No Xalan\xsec_1_7.dll" KeyPath="yes" />
-				</Component>
+			<Component Id="pkcs11_64" Guid="{3C4751D6-D92C-40ab-8FA5-3A1DF1D927EA}" SharedDllRefCount="yes" Win64="yes">
+				<File Id="pteidpkcs11_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidpkcs11.dll" KeyPath="yes" />
+			</Component>
 
-				<!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
-				<Component Id="Poppler_64" Guid="{54E15AA8-F4A5-42e8-9D38-3B151223B003}">
-          			<File Id="pteid_poppler_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteid-poppler.dll" KeyPath="no" />
-				</Component>
+			<Component Id="XMLSecurity_64" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F66" SharedDllRefCount="yes">
+				<File Id="xsec_1_6_64.dll" Source="$(env.PTEID_XMLSECURITY)\Build\x64\VC10\Release No Xalan\xsec_1_7.dll" KeyPath="yes" />
+			</Component>
 
-        <Component Id="pteidmdrvsystem64" Guid="{BA4FED31-E6E6-4D39-9D3A-3D0F2B572524}" Permanent="no">
-          <File Id="system32_pteidmdrv64.dll" Name="pteidmdrv64.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" KeyPath="yes" DiskId="1" />
-        </Component>
+			<!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
+			<Component Id="Poppler_64" Guid="{54E15AA8-F4A5-42e8-9D38-3B151223B003}">
+				<File Id="pteid_poppler_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteid-poppler.dll" KeyPath="no" />
+			</Component>
 
-				<Component Id="Runtime35ThirdPartyXerces_64" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FF}" SharedDllRefCount="yes">
-         			 <File Id="xercesc_3_1_64.dll" Source="$(env.PTEID_DIR_XERCES_31_X64)\Build\Win64\VC12\Release\xerces-c_3_1.dll" KeyPath="yes"/>
-				</Component>
+			<Component Id="pteidmdrvsystem64" Guid="{BA4FED31-E6E6-4D39-9D3A-3D0F2B572524}" Permanent="no">
+				<File Id="system32_pteidmdrv64.dll" Name="pteidmdrv64.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" KeyPath="yes" DiskId="1" />
+			</Component>
 
-				<!--Our Build of LibCurl - custom build options to remove unneeded features-->
-				<Component Id="Curl_64" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFB}" SharedDllRefCount="yes">
-          			<File Id="libcurl_64.dll" Source="$(env.PTEID_DIR_CURL_X64)\build\Win64\VC12\DLL Release\libcurl.dll" KeyPath="no" />
-				</Component>
+			<Component Id="Runtime35ThirdPartyXerces_64" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FF}" SharedDllRefCount="yes">
+				<File Id="xercesc_3_1_64.dll" Source="$(env.PTEID_DIR_XERCES_31_X64)\Build\Win64\VC12\Release\xerces-c_3_1.dll" KeyPath="yes"/>
+			</Component>
 
-			</DirectoryRef>
+			<Component Id="Libpng_64" Guid="{88D3D0A3-24C6-4AC7-AC2C-F6F8FF1BABA8}" SharedDllRefCount="yes">
+				<File Id="libpng16_64.dll" Source="$(env.PTEID_DIR_LIBPNG_X64)\bin\libpng16.dll" KeyPath="yes"/>
+			</Component>
 
-    <DirectoryRef Id="SDK">
-      <Component Id="Cpp_SDK_component" Guid="{CDA14D17-04E8-4F4B-BEE1-771A0DDC3578}">
-        <File Id="pteidlib.lib" KeyPath="yes" Name="pteidlib.lib" Source="$(var.PTEID_BUILD_FOLDER_X64)\pteidlib.lib"/>
-        <File Id="eidlib.h" Name="eidlib.h" Source="..\..\..\eidlib\eidlib.h"/>
-		<File Id="eidlibcompat.h" Name="eidlibcompat.h" Source="..\..\..\eidlib\eidlibcompat.h"/>
-        <File Id="eidlibdefines.h" Name="eidlibdefines.h" Source="..\..\..\eidlib\eidlibdefines.h"/>
-        <File Id="eidlibException.h" Name="eidlibException.h" Source="..\..\..\eidlib\eidlibException.h"/>
-        <File Id="eidErrors.h" Name="eidErrors.h" Source="..\..\..\common\eidErrors.h"/>
-      </Component>
-    </DirectoryRef>
+			<Component Id="Openjpeg_64" Guid="{BC8586B3-80CB-4525-B6E2-94F9AF278C59}" SharedDllRefCount="yes">
+				<File Id="openjp2_64.dll" Source="$(env.PTEID_DIR_OPENJPEG_X64)\bin\openjp2.dll" KeyPath="yes"/>
+			</Component>
+			
+			<!--Our Build of LibCurl - custom build options to remove unneeded features-->
+			<Component Id="Curl_64" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFB}" SharedDllRefCount="yes">
+				<File Id="libcurl_64.dll" Source="$(env.PTEID_DIR_CURL_X64)\build\Win64\VC12\DLL Release\libcurl.dll" KeyPath="no" />
+			</Component>
 
-			<DirectoryRef Id="JAVA_SDK">
-				<Component Id="Java_SDK_Component" Guid="{8B0D8006-DB84-4986-A8D7-AC5F84F4AEF8}" >
-		          <File Source="..\..\..\jar\pteidlibj.jar" />
-				</Component>
-			</DirectoryRef>
+		</DirectoryRef>
 
-			<DirectoryRef Id="CSHARP_SDK">
-				<Component Id="CSharp_SDK_Component" Guid="{67F8BF67-A48C-4711-9AB7-CAC056FA6C35}">
-		          <File Source="$(var.PTEID_BUILD_FOLDER_AnyCPU)pteidlib_dotnet.dll" KeyPath="yes"/>
-				</Component>
-			</DirectoryRef>
+		<DirectoryRef Id="SDK">
+			<Component Id="Cpp_SDK_component" Guid="{CDA14D17-04E8-4F4B-BEE1-771A0DDC3578}">
+				<File Id="pteidlib.lib" KeyPath="yes" Name="pteidlib.lib" Source="$(var.PTEID_BUILD_FOLDER_X64)\pteidlib.lib"/>
+				<File Id="eidlib.h" Name="eidlib.h" Source="..\..\..\eidlib\eidlib.h"/>
+				<File Id="eidlibcompat.h" Name="eidlibcompat.h" Source="..\..\..\eidlib\eidlibcompat.h"/>
+				<File Id="eidlibdefines.h" Name="eidlibdefines.h" Source="..\..\..\eidlib\eidlibdefines.h"/>
+				<File Id="eidlibException.h" Name="eidlibException.h" Source="..\..\..\eidlib\eidlibException.h"/>
+				<File Id="eidErrors.h" Name="eidErrors.h" Source="..\..\..\common\eidErrors.h"/>
+			</Component>
+		</DirectoryRef>
+
+		<DirectoryRef Id="JAVA_SDK">
+			<Component Id="Java_SDK_Component" Guid="{8B0D8006-DB84-4986-A8D7-AC5F84F4AEF8}" >
+				<File Source="..\..\..\jar\pteidlibj.jar" />
+			</Component>
+		</DirectoryRef>
+
+		<DirectoryRef Id="CSHARP_SDK">
+			<Component Id="CSharp_SDK_Component" Guid="{67F8BF67-A48C-4711-9AB7-CAC056FA6C35}">
+				<File Source="$(var.PTEID_BUILD_FOLDER_AnyCPU)pteidlib_dotnet.dll" KeyPath="yes"/>
+			</Component>
+		</DirectoryRef>
 
 
-			<DirectoryRef Id="TARGETDIR">
-				<Component Id="SCardSvrService" Guid="{C3BC9746-0843-41b2-BDDA-3192772974CE}" Permanent="yes">
-					<!-- Start SCardSvr Service during startup -->
-					<RegistryValue Root="HKLM" Key="System\CurrentControlSet\Services\SCardSvr" Type="integer" Name="Start" Value="2" KeyPath="yes"/>
-					<!-- Start SCardSvr Service now -->
-					<!-- <ServiceControl Id="StartSCardSvrService" Name="SCardSvr" Start="install" /> -->
-				</Component>
-        
-        <!-- 
+		<DirectoryRef Id="TARGETDIR">
+			<Component Id="SCardSvrService" Guid="{C3BC9746-0843-41b2-BDDA-3192772974CE}" Permanent="yes">
+				<!-- Start SCardSvr Service during startup -->
+				<RegistryValue Root="HKLM" Key="System\CurrentControlSet\Services\SCardSvr" Type="integer" Name="Start" Value="2" KeyPath="yes"/>
+				<!-- Start SCardSvr Service now -->
+				<!-- <ServiceControl Id="StartSCardSvrService" Name="SCardSvr" Start="install" /> -->
+			</Component>
+
+			<!-- 
 				<Component Id="REGISTERXPI" Win64="no" Guid="{946B85B6-99CC-4893-8A42-E7EC6FFE0D87}">
 					<RegistryKey Root="HKLM"
 								 Key="SOFTWARE\Mozilla\Firefox\Extensions"
@@ -390,216 +397,221 @@
 					</RegistryKey>
 				</Component>
         -->
-        
-				<Component Id="REGISTERMINIDRIVER_64" Guid="{3BCA1B2C-08AF-4727-AD85-1C60025656EA}" Win64="yes">
-					<RegistryKey Root="HKLM"
-							  Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid (IAS)"
-							  Action="createAndRemoveOnUninstall">
-						<RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="yes"/>
-						<RegistryValue Type="binary" Name="ATR" Value="3B959540FFD000540130" KeyPath="no"/>
-						<RegistryValue Type="binary" Name="ATRMask" Value="fffffffffffffffffffc" KeyPath="no"/>
-						<RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
-						<RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+
+			<Component Id="REGISTERMINIDRIVER_64" Guid="{3BCA1B2C-08AF-4727-AD85-1C60025656EA}" Win64="yes">
+				<RegistryKey Root="HKLM"
+						  Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid (IAS)"
+						  Action="createAndRemoveOnUninstall">
+					<RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="yes"/>
+					<RegistryValue Type="binary" Name="ATR" Value="3B959540FFD000540130" KeyPath="no"/>
+					<RegistryValue Type="binary" Name="ATRMask" Value="fffffffffffffffffffc" KeyPath="no"/>
+					<RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+					<RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+				</RegistryKey>
+
+				<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
+					Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS)" />
+				<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
+					Key="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (GemSafe)" />
+				<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
+					Key="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS)" />
+				<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
+					Key="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS) 1" />
+				<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
+					Key="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (GemSafe) 1" />
+				<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
+					Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (GemSafe) 1"/>
+				<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
+					Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS) 1"/>
+
+				<RegistryKey Root="HKLM"
+				   Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid (Gemsafe)"
+				   Action="createAndRemoveOnUninstall">
+					<RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="no"/>
+					<RegistryValue Type="binary" Name="ATR" Value="3B7D95000080318065B08311000083009000" KeyPath="no"/>
+					<RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
+					<RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+					<RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+				</RegistryKey>
+
+			</Component>
+
+			<Component Id="RegistryPteidSystem" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA3}">
+				<RegistryKey Root="HKLM"
+					Key="SOFTWARE\PTEID"
+					Action="createAndRemoveOnUninstall">
+					<RegistryKey Key="certificatevalidation" Action="createAndRemoveOnUninstall">
+						<RegistryValue Type="integer" Name="cert_validation_ocsp" Value="0"/>
+						<RegistryValue Type="integer" Name="cert_validation_crl" Value="0"/>
 					</RegistryKey>
-					
-					<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
-						Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS)" />
-					<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
-						Key="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (GemSafe)" />
-					<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
-						Key="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS)" />
-					<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
-						Key="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS) 1" />
-					<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
-						Key="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (GemSafe) 1" />
-					<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
-						Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (GemSafe) 1"/>
-					<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
-						Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS) 1"/>
-					
-					<RegistryKey Root="HKLM"
-					   Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid (Gemsafe)"
-					   Action="createAndRemoveOnUninstall">
-						<RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="no"/>
-						<RegistryValue Type="binary" Name="ATR" Value="3B7D95000080318065B08311000083009000" KeyPath="no"/>
-						<RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
-						<RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
-						<RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+
+					<RegistryKey Key="certificatecache" Action="createAndRemoveOnUninstall">
+						<RegistryValue Type="string" Name="cert_cachefile" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\crl\.cache.csc"/>
 					</RegistryKey>
-				
-				</Component>
 
-				<Component Id="RegistryPteidSystem" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA3}">
-					<RegistryKey Root="HKLM"
-						Key="SOFTWARE\PTEID"
-						Action="createAndRemoveOnUninstall">
-						<RegistryKey Key="certificatevalidation" Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="integer" Name="cert_validation_ocsp" Value="0"/>
-							<RegistryValue Type="integer" Name="cert_validation_crl" Value="0"/>
-						</RegistryKey>
-
-						<RegistryKey Key="certificatecache" Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="string" Name="cert_cachefile" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\crl\.cache.csc"/>
-						</RegistryKey>
-
-						<RegistryKey Key="crl" Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="string" Name="crl_cachedir" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\crl"/>
-						</RegistryKey>
-
-						<RegistryKey Key="general" Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="string" Name="language" Value="nl"/>
-							<RegistryValue Type="string" Name="install_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
-							<RegistryValue Type="string" Name="certs_dir" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\certs"/>
-            	<RegistryValue Type="string" Name="certs_dir_test" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\certs_test"/>
-							<RegistryValue Type="integer" Name="show_java_apps" Value="0"/>
-						</RegistryKey>
-
-						<RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="string" Name="log_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card\log"/>
-						</RegistryKey>
-
-						<RegistryKey Key="configuretool" Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="integer" Name="start_with_windows" Value="1"/>
-							<RegistryValue Type="integer" Name="start_minimized" Value="0"/>
-							<RegistryValue Type="integer" Name="show_toolbar" Value="1"/>
-							<RegistryValue Type="integer" Name="show_picture" Value="0"/>
-							<RegistryValue Type="integer" Name="show_notification" Value="1"/>
-							<RegistryValue Type="integer" Name="automatic_cardreading" Value="1"/>
-							<RegistryValue Type="integer" Name="cardreader" Value="0"/>
-							<RegistryValue Type="integer" Name="registrate_certificate" Value="1"/>
-						</RegistryKey>
+					<RegistryKey Key="crl" Action="createAndRemoveOnUninstall">
+						<RegistryValue Type="string" Name="crl_cachedir" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\crl"/>
 					</RegistryKey>
-					
-				</Component>
-        
-        <!-- Registry keys needed to support applications using the SDK in 32-bit mode -->
-        <Component Id="RegistryPteidSystem32" Win64="no" Guid="{30FCD9E0-5B87-4CB9-BDF9-62BD07D21DEC}">
-          <RegistryKey Root="HKLM" Key="SOFTWARE\PTEID">
-            <RegistryKey Key="general" Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="string" Name="language" Value="nl"/>
-							<RegistryValue Type="string" Name="install_dirname" Value="C:\Program Files\Portugal Identity Card"/>
-							<RegistryValue Type="string" Name="certs_dir" Value="C:\Program Files\Portugal Identity Card\eidstore\certs"/>
-						</RegistryKey>
-            <RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="string" Name="log_dirname" Value="C:\Program Files\Portugal Identity Card\log"/>
-						</RegistryKey>
-          	<RegistryKey Key="certificatecache" Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="string" Name="cert_cachefile" Value="C:\Program Files\Portugal Identity Card\eidstore\crl\.cache.csc"/>
-						</RegistryKey>
-						<RegistryKey Key="crl" Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="string" Name="crl_cachedir" Value="C:\Program Files\Portugal Identity Card\eidstore\crl"/>
-						</RegistryKey>
-          
-          </RegistryKey>
-       </Component>
-        
 
+					<RegistryKey Key="general" Action="createAndRemoveOnUninstall">
+						<RegistryValue Type="string" Name="language" Value="nl"/>
+						<RegistryValue Type="string" Name="install_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
+						<RegistryValue Type="string" Name="certs_dir" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\certs"/>
+						<RegistryValue Type="string" Name="certs_dir_test" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\certs_test"/>
+						<RegistryValue Type="integer" Name="show_java_apps" Value="0"/>
+					</RegistryKey>
 
-			</DirectoryRef>
+					<RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
+						<RegistryValue Type="string" Name="log_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card\log"/>
+					</RegistryKey>
 
-			<DirectoryRef Id="ApplicationProgramsFolderUtilities">
-				<Component Id="OutlookShortcut" Guid="{813C0984-0401-4604-9D7F-E13BDD28FBD7}">
-					<Shortcut Id="OutlookStartMenuShortcut"
-					  Name="Parametrização do Microsoft Outlook"
-					  Description="!(loc.OutlookDescr)"
-					  Target="[APPLICATIONROOTFOLDER]pteidoutlooksnc.exe"
-					  WorkingDirectory="APPLICATIONROOTFOLDER"/>
-					<RemoveFolder Id="ApplicationProgramsFolderUtilities" On="uninstall"/>
-					<RegistryValue Root="HKCU" Key="SOFTWARE\PTEID\Installer" Name="OutlookShortcut" Type="integer" Value="1" KeyPath="yes" />
-				</Component>
-			</DirectoryRef>
+					<RegistryKey Key="configuretool" Action="createAndRemoveOnUninstall">
+						<RegistryValue Type="integer" Name="start_with_windows" Value="1"/>
+						<RegistryValue Type="integer" Name="start_minimized" Value="0"/>
+						<RegistryValue Type="integer" Name="show_toolbar" Value="1"/>
+						<RegistryValue Type="integer" Name="show_picture" Value="0"/>
+						<RegistryValue Type="integer" Name="show_notification" Value="1"/>
+						<RegistryValue Type="integer" Name="automatic_cardreading" Value="1"/>
+						<RegistryValue Type="integer" Name="cardreader" Value="0"/>
+						<RegistryValue Type="integer" Name="registrate_certificate" Value="1"/>
+					</RegistryKey>
+				</RegistryKey>
 
-			<Feature Id="PteidRuntime"
-					 Title="!(loc.PteidRuntime)"
-					 Description="!(loc.PteidRuntimeDesc)"
-					 Absent="disallow"
-					 Level="1"
+			</Component>
+
+			<!-- Registry keys needed to support applications using the SDK in 32-bit mode -->
+			<Component Id="RegistryPteidSystem32" Win64="no" Guid="{30FCD9E0-5B87-4CB9-BDF9-62BD07D21DEC}">
+				<RegistryKey Root="HKLM" Key="SOFTWARE\PTEID">
+					<RegistryKey Key="general" Action="createAndRemoveOnUninstall">
+						<RegistryValue Type="string" Name="language" Value="nl"/>
+						<RegistryValue Type="string" Name="install_dirname" Value="C:\Program Files\Portugal Identity Card"/>
+						<RegistryValue Type="string" Name="certs_dir" Value="C:\Program Files\Portugal Identity Card\eidstore\certs"/>
+					</RegistryKey>
+					<RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
+						<RegistryValue Type="string" Name="log_dirname" Value="C:\Program Files\Portugal Identity Card\log"/>
+					</RegistryKey>
+					<RegistryKey Key="certificatecache" Action="createAndRemoveOnUninstall">
+						<RegistryValue Type="string" Name="cert_cachefile" Value="C:\Program Files\Portugal Identity Card\eidstore\crl\.cache.csc"/>
+					</RegistryKey>
+					<RegistryKey Key="crl" Action="createAndRemoveOnUninstall">
+						<RegistryValue Type="string" Name="crl_cachedir" Value="C:\Program Files\Portugal Identity Card\eidstore\crl"/>
+					</RegistryKey>
+
+				</RegistryKey>
+			</Component>
+
+		</DirectoryRef>
+
+		<DirectoryRef Id="ApplicationProgramsFolderUtilities">
+			<Component Id="OutlookShortcut" Guid="{813C0984-0401-4604-9D7F-E13BDD28FBD7}">
+				<Shortcut Id="OutlookStartMenuShortcut"
+				  Name="Parametrização do Microsoft Outlook"
+				  Description="!(loc.OutlookDescr)"
+				  Target="[APPLICATIONROOTFOLDER]pteidoutlooksnc.exe"
+				  WorkingDirectory="APPLICATIONROOTFOLDER"/>
+				<RemoveFolder Id="ApplicationProgramsFolderUtilities" On="uninstall"/>
+				<RegistryValue Root="HKCU" Key="SOFTWARE\PTEID\Installer" Name="OutlookShortcut" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+
+		<Feature Id="PteidRuntime"
+				 Title="!(loc.PteidRuntime)"
+				 Description="!(loc.PteidRuntimeDesc)"
+				 Absent="disallow"
+				 Level="1"
              >
 
-				<Feature Id="VCRedist" Title="$(var.VCRT_TITLE)" AllowAdvertise="no" Display="hidden" Level="1">
-					<MergeRef Id="VCRT1" />
-					<MergeRef Id="VCRT2" />
-				</Feature>
-
-				<!-- Program Files -->
-				<ComponentRef Id="RootFolder"/>
-				<ComponentRef Id="Icon" />
-				<ComponentRef Id="EidStore"/>
-				<ComponentRef Id="Certs"/>
-				<ComponentRef Id="CertCC004"/>
-				<ComponentRef Id="CACerts"/>
-				<ComponentRef Id="CrlDir"/>
-				<ComponentRef Id="HttpDir"/>
-
-				<ComponentRef Id="DirectoryCache"/>
-				<ComponentRef Id="License"/>
-				<ComponentRef Id="LogDir"/>
-        <ComponentGroupRef Id="qmlAppComponentGroup"/>
-        <!-- System32 -->
-
-				<ComponentRef Id="Runtime35"/>
-				<ComponentRef Id="Runtime35_64"/>
-        
-				<ComponentRef Id="Runtime35ThirdPartyXerces"/>
-				<ComponentRef Id="Runtime35ThirdPartyXerces_64"/>
-
-				<!-- Registry -->
-				<ComponentRef Id="RegistryPteidSystem"/>
-        <ComponentRef Id="RegistryPteidSystem32"/>
-        
-				<Feature Id="GUI"
-						  Title="!(loc.PteidGui)"
-						  Description="!(loc.PteidGuiDescr)"
-						  Level="1">
-         
-        
-					<ComponentRef Id="FreeImage"/>
-					<ComponentRef Id="FreeImage_64"/>
-					<ComponentRef Id="Curl"/>
-					<ComponentRef Id="Curl_64"/>
-          <ComponentRef Id="Poppler"/>
-					<ComponentRef Id="Poppler_64"/>
-
-					<ComponentRef Id="XMLSecurity"/>
-					<ComponentRef Id="XMLSecurity_64"/>
-
-          <ComponentRef Id="Cpp_SDK_component"/>
-					<ComponentRef Id="Java_SDK_Component"/>
-					<ComponentRef Id="CSharp_SDK_Component"/>
-
-				</Feature>
-
-				<Feature Id="Crypto"
-						  Title="!(loc.Crypto)"
-						  Description="!(loc.CryptoDescr)"
-						  Level="1"
-                >
-					<ComponentRef Id="SCardSvrService"/>
-					<ComponentRef Id="pkcs11"/>
-					<ComponentRef Id="pkcs11_64"/>
-
-					<ComponentRef Id="OutlookTool" />
-					<!-- Shortcuts -->
-					<ComponentRef Id ="OutlookShortcut"/>
-					<Feature Id="Install_Minidriver" Level="0" Title="!(loc.Minidriver)" Description="!(loc.MinidriverDescr)">
-						<ComponentRef Id="pteidmdrv"/>
-						<ComponentRef Id="CertPropService"/>
-            <ComponentRef Id="pteidmdrvsystem32"/>
-            <ComponentRef Id="pteidmdrvsystem64"/>
-						<ComponentRef Id="REGISTERMINIDRIVER_64"/>
-						<Condition Level="1">VersionNT >= 600</Condition>
-					</Feature>
-					
-				</Feature>
+			<Feature Id="VCRedist" Title="$(var.VCRT_TITLE)" AllowAdvertise="no" Display="hidden" Level="1">
+				<MergeRef Id="VCRT1" />
+				<MergeRef Id="VCRT2" />
 			</Feature>
 
-	    <?if $(var.PTEID_TARGET_RUNTIME) = VCR8 ?>
-		  <Binary Id="MarkHidden"    SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>
-	      <Binary Id="CleanMdrvKeys" SourceFile="$(var.PTEID_BUILD_FOLDER_X64)clean_mdrv_keys.exe" />
-	    <?elseif $(var.PTEID_TARGET_RUNTIME) = VCR9 ?>
-	      <Binary Id="MarkHidden"    SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Build\x64\VC9\Release\MarkHidden.exe" />
-	      <Binary Id="CleanMdrvKeys" SourceFile="$(var.PTEID_BUILD_FOLDER_X64)clean_mdrv_keys.exe" />
-	    <?endif?>
+			<!-- Program Files -->
+			<ComponentRef Id="RootFolder"/>
+			<ComponentRef Id="Icon" />
+			<ComponentRef Id="EidStore"/>
+			<ComponentRef Id="Certs"/>
+			<ComponentRef Id="CertCC004"/>
+			<ComponentRef Id="CACerts"/>
+			<ComponentRef Id="CrlDir"/>
+			<ComponentRef Id="HttpDir"/>
+
+			<ComponentRef Id="DirectoryCache"/>
+			<ComponentRef Id="License"/>
+			<ComponentRef Id="LogDir"/>
+			<ComponentRef Id="DSSApp"/>
+			<ComponentGroupRef Id="qmlAppComponentGroup"/>
+			<!-- System32 -->
+
+			<ComponentRef Id="Runtime35"/>
+			<ComponentRef Id="Runtime35_64"/>
+
+			<ComponentRef Id="Runtime35ThirdPartyXerces"/>
+			<ComponentRef Id="Runtime35ThirdPartyXerces_64"/>
+
+			<!-- Registry -->
+			<ComponentRef Id="RegistryPteidSystem"/>
+			<ComponentRef Id="RegistryPteidSystem32"/>
+
+
+			<ComponentRef Id="RegistryXadesFileType"/>
+			<Feature Id="GUI"
+					  Title="!(loc.PteidGui)"
+					  Description="!(loc.PteidGuiDescr)"
+					  Level="1">
+
+
+				<ComponentRef Id="Libpng"/>
+				<ComponentRef Id="Libpng_64"/>
+
+				<ComponentRef Id="Openjpeg"/>
+				<ComponentRef Id="Openjpeg_64"/>
+
+				<ComponentRef Id="Curl"/>
+				<ComponentRef Id="Curl_64"/>
+				<ComponentRef Id="Poppler"/>
+				<ComponentRef Id="Poppler_64"/>
+
+				<ComponentRef Id="XMLSecurity"/>
+				<ComponentRef Id="XMLSecurity_64"/>
+
+				<ComponentRef Id="Cpp_SDK_component"/>
+				<ComponentRef Id="Java_SDK_Component"/>
+				<ComponentRef Id="CSharp_SDK_Component"/>
+
+			</Feature>
+
+			<Feature Id="Crypto"
+					  Title="!(loc.Crypto)"
+					  Description="!(loc.CryptoDescr)"
+					  Level="1"
+                >
+				<ComponentRef Id="SCardSvrService"/>
+				<ComponentRef Id="pkcs11"/>
+				<ComponentRef Id="pkcs11_64"/>
+
+				<ComponentRef Id="OutlookTool" />
+				<!-- Shortcuts -->
+				<ComponentRef Id ="OutlookShortcut"/>
+				<Feature Id="Install_Minidriver" Level="0" Title="!(loc.Minidriver)" Description="!(loc.MinidriverDescr)">
+					<ComponentRef Id="pteidmdrv"/>
+					<ComponentRef Id="CertPropService"/>
+					<ComponentRef Id="pteidmdrvsystem32"/>
+					<ComponentRef Id="pteidmdrvsystem64"/>
+					<ComponentRef Id="REGISTERMINIDRIVER_64"/>
+					<Condition Level="1">VersionNT >= 600</Condition>
+				</Feature>
+
+			</Feature>
+		</Feature>
+
+		<?if $(var.PTEID_TARGET_RUNTIME) = VCR8 ?>
+		<Binary Id="MarkHidden"    SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>
+		<Binary Id="CleanMdrvKeys" SourceFile="$(var.PTEID_BUILD_FOLDER_X64)clean_mdrv_keys.exe" />
+		<?elseif $(var.PTEID_TARGET_RUNTIME) = VCR9 ?>
+		<Binary Id="MarkHidden"    SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Build\x64\VC9\Release\MarkHidden.exe" />
+		<Binary Id="CleanMdrvKeys" SourceFile="$(var.PTEID_BUILD_FOLDER_X64)clean_mdrv_keys.exe" />
+		<?endif?>
 
 		<CustomAction Id="CleanMinidriverKeys"
 			BinaryKey="CleanMdrvKeys"
@@ -608,47 +620,47 @@
 			Return="ignore"
 			Execute="deferred"/>
 
-			<UI>
-				<UIRef Id="WixUI_FeatureTree" />
-				<Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTFOLDER" />
-				<UIRef Id="WixUI_ErrorProgressText" />
+		<UI>
+			<UIRef Id="WixUI_FeatureTree" />
+			<Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTFOLDER" />
+			<UIRef Id="WixUI_ErrorProgressText" />
 
-			</UI>
+		</UI>
 
-			<CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[APPLICATIONROOTFOLDER]" />
+		<CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[APPLICATIONROOTFOLDER]" />
 
-			<CustomAction Id="SetCacheDirHidden"
-							Impersonate="no"
-							BinaryKey="MarkHidden"
-							ExeCommand="&quot;[ProgramFilesFolder]Portugal Identity Card\.cache&quot;"
-							Execute="deferred"
-							Return="asyncNoWait"
+		<CustomAction Id="SetCacheDirHidden"
+						Impersonate="no"
+						BinaryKey="MarkHidden"
+						ExeCommand="&quot;[ProgramFilesFolder]Portugal Identity Card\.cache&quot;"
+						Execute="deferred"
+						Return="asyncNoWait"
 					/>
-			
-			<CustomAction Id="IsPrivileged" Error="!(loc.AdminNeeded)" />
-			<CustomAction Id="PreventDowngrading" Error="!(loc.NoDowngrade)" />
-			<Property Id="RUNDLLPATH" Value="C:\Windows\System32\rundll32.exe"> </Property>
 
-			<CustomAction
-			Id="MinidriverManualInstall"
-			Property="RUNDLLPATH"
-			ExeCommand="setupapi.dll,InstallHinfSection DefaultInstall.ntamd64 0 C:\Program Files\PTeID Minidriver\pteidmdrv.inf"
-					Impersonate="no"
-					Return="check"
-					Execute="deferred"
+		<CustomAction Id="IsPrivileged" Error="!(loc.AdminNeeded)" />
+		<CustomAction Id="PreventDowngrading" Error="!(loc.NoDowngrade)" />
+		<Property Id="RUNDLLPATH" Value="C:\Windows\System32\rundll32.exe"> </Property>
+
+		<CustomAction
+		Id="MinidriverManualInstall"
+		Property="RUNDLLPATH"
+		ExeCommand="setupapi.dll,InstallHinfSection DefaultInstall.ntamd64 0 C:\Program Files\PTeID Minidriver\pteidmdrv.inf"
+				Impersonate="no"
+				Return="check"
+				Execute="deferred"
 					
 					/>
 
-			<InstallExecuteSequence>
-				<Custom Action="SetARPINSTALLLOCATION" After="InstallValidate"></Custom>
+		<InstallExecuteSequence>
+			<Custom Action="SetARPINSTALLLOCATION" After="InstallValidate"></Custom>
 
-				<Custom Action="IsPrivileged" Before="LaunchConditions">Not Privileged</Custom>
-	      <Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
-	      <Custom Action="CleanMinidriverKeys" After="RemoveRegistryValues">NOT Installed</Custom>
-	      <Custom Action="MinidriverManualInstall" After="InstallFiles"> NOT Installed and VersionNT = 600</Custom>
+			<Custom Action="IsPrivileged" Before="LaunchConditions">Not Privileged</Custom>
+			<Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
+			<Custom Action="CleanMinidriverKeys" After="RemoveRegistryValues">NOT Installed</Custom>
+			<Custom Action="MinidriverManualInstall" After="InstallFiles"> NOT Installed and VersionNT = 600</Custom>
 
-		<ScheduleReboot After="InstallFinalize">NOT Installed</ScheduleReboot>
-	</InstallExecuteSequence>
+			<ScheduleReboot After="InstallFinalize">NOT Installed</ScheduleReboot>
+		</InstallExecuteSequence>
 
-		</Product>
+	</Product>
 </Wix>
