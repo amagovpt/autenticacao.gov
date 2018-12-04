@@ -100,6 +100,33 @@
 :find_xerces_31
 @echo [INFO] Using PTEID_DIR_XERCES_31=%PTEID_DIR_XERCES_31%
 
+:: Check Zlib
+:: ==================
+@call "%CHECKS%\PathZlib.bat"
+@if %ERRORLEVEL%==0 goto find_zlib
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_ZLIB
+@goto end
+:find_zlib
+@echo [INFO] Using PTEID_DIR_ZLIB=%PTEID_DIR_ZLIB%
+
+:: Check Libpng
+:: ==================
+@call "%CHECKS%\PathLibpng.bat"
+@if %ERRORLEVEL%==0 goto find_libpng
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_LIBPNG
+@goto end
+:find_libpng
+@echo [INFO] Using PTEID_DIR_LIBPNG=%PTEID_DIR_LIBPNG%
+
+:: Check Openjpeg
+:: ==================
+@call "%CHECKS%\PathOpenjpeg.bat"
+@if %ERRORLEVEL%==0 goto find_openjpeg
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_OPENJPEG
+@goto end
+:find_openjpeg
+@echo [INFO] Using PTEID_DIR_OPENJPEG=%PTEID_DIR_OPENJPEG%
+
 :: Curl
 ::=============
 @call "%CHECKS%\PathCurl.bat"
@@ -139,6 +166,32 @@
 :find_xerces_31_x64
 @echo [INFO] Using PTEID_DIR_XERCES_31_X64=%PTEID_DIR_XERCES_31_X64%
 
+:: Check Zlib  X64
+:: ================== 
+@call "%CHECKS%\PathZlib_x64.bat"
+@if %ERRORLEVEL%==0 goto find_zlib_x64
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_ZLIB_X64
+@goto end
+:find_zlib_x64
+@echo [INFO] Using PTEID_DIR_ZLIB_X64=%PTEID_DIR_ZLIB_X64%
+
+:: Check Libpng X64
+:: ==================
+@call "%CHECKS%\PathLibpng_x64.bat"
+@if %ERRORLEVEL%==0 goto find_libpng_x64
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_LIBPNG_X64
+@goto end
+:find_libpng_x64
+@echo [INFO] Using PTEID_DIR_LIBPNG_X64=%PTEID_DIR_LIBPNG_X64%
+
+:: Check Openjpeg X64
+:: ==================
+@call "%CHECKS%\PathOpenjpeg_x64.bat"
+@if %ERRORLEVEL%==0 goto find_openjpeg_x64
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_OPENJPEG_X64
+@goto end
+:find_openjpeg_x64
+@echo [INFO] Using PTEID_DIR_OPENJPEG_X64=%PTEID_DIR_OPENJPEG_X64%
 
 :: Curl X64
 ::=============
