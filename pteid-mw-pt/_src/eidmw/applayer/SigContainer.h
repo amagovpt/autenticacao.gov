@@ -7,6 +7,7 @@
 #include <cstdio>
 #include "ByteArray.h"
 #include "MiscUtil.h"
+#include <zip.h>
 
 #ifdef WIN32
 #define NL "\r\n"

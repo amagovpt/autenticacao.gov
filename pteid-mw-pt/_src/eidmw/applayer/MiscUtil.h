@@ -63,6 +63,8 @@ int Truncate(const char *path);
 void latin1_to_utf8(unsigned char * in, unsigned char *out);
 char * utf8_to_latin1(char * in);
 
+std::string urlEncode(unsigned char *data, int len);
+
 void replace_lastdot_inplace(char *in);
 
 char *Base64Encode(const unsigned char *input, long length);

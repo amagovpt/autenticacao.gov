@@ -158,6 +158,19 @@ const void *memmem(const void *haystack, size_t n, const void *needle, size_t m)
 		*out = '\0';
 	}
 
+	//adapted from https://codereview.stackexchange.com/a/78539
+	std::string urlEncode(unsigned char *data, int len)
+	{
+		char hexmap[] = { '0', '1', '2', '3', '4', '5', '6', '7',
+			'8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+		std::string s(len * 3, ' ');
+		for (int i = 0; i < len; ++i) {
+			s[3 * i] = '%';
+			s[3 * i + 1] = hexmap[(data[i] & 0xF0) >> 4];
+			s[3 * i + 2] = hexmap[data[i] & 0x0F];
+		}
+		return s;
+	}
 
 
 void replace_lastdot_inplace(char* str_in)

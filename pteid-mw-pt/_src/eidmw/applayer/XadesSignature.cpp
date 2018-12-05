@@ -520,11 +520,11 @@ void XadesSignature::terminateXMLUtils()
 	XMLPlatformUtils::Terminate();
 }
 
+
 XMLCh* XadesSignature::createURI(const char *path)
 {
-
-	string uri = string("./") + Basename((char *)path);
-
+	char * filename = Basename((char *)path);
+	string uri = urlEncode((unsigned char *)filename, strlen(filename));
 	return XMLString::transcode(uri.c_str());
 }
 
@@ -1200,7 +1200,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		HashSignedPropertiesNode(sig->getParentDocument(), sha1_hash_signed_props);
 
 		DSIGReference * ref_signed_props = sig->createReference(createSignedPropertiesURI().c_str(), HASH_SHA256);
-		ref_signed_props->setType(XMLString::transcode("http://uri.etsi.org/01903/v1.1.1#SignedProperties"));
+		ref_signed_props->setType(XMLString::transcode("http://uri.etsi.org/01903#SignedProperties"));
 
 		setReferenceHash(sha1_hash_signed_props, SHA256_LEN, references_count, doc);
 		//ref_signed_props->setExternalHash(sha1_hash_signed_props);
