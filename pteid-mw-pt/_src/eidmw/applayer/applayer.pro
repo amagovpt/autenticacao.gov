@@ -40,6 +40,7 @@ LIBS += -L../lib \
             -lopenjp2 \
             -lpng \
             -lz \
+            -lzip
 
 !macx: LIBS += -Wl,-R,'../lib' -lxml-security-c
 LIBS += ../lib/libpteid-poppler.a
@@ -105,7 +106,7 @@ HEADERS += \
 	cJSON.h \
 	miniz.h \
         SSLConnection.h \
-        convert.h \
+        PNGConverter.h \
         J2KHelper.h \
 
 
@@ -140,7 +141,7 @@ SOURCES += \
 	PDFSignature.cpp \
 	SAM.cpp \
         OCSP.cpp \
-        convert.cpp \
+        PNGConverter.cpp \
         J2KHelper.cpp \
 
 # Disable annoying and mostly useless gcc warning
