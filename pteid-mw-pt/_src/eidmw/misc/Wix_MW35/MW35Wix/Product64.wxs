@@ -360,10 +360,14 @@
           <File Id="system32_pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="yes"/>
         </Component>
 				
-				<Component Win64="no" Id="FreeImage" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F64" SharedDllRefCount="yes">
-         			 <File Source="$(var.PTEID_BUILD_FOLDER_X86)FreeImage.dll" KeyPath="yes" />
+				<Component Win64="no" Id="Libpng" Guid="{6C373220-CD6A-477B-A2A9-BE0860C40235}" SharedDllRefCount="yes">
+					<File Source="$(env.PTEID_DIR_LIBPNG)\bin\libpng16.dll" KeyPath="yes" />
 				</Component>
 
+				<Component Win64="no" Id="Openjpeg" Guid="{D715E199-73B1-4897-B50A-C005030EC4C8}" SharedDllRefCount="yes">
+					<File Source="$(env.PTEID_DIR_OPENJPEG)\bin\openjp2.dll" KeyPath="yes" />
+				</Component>
+				
 				<Component Win64="no" Id="XMLSecurity" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F65" SharedDllRefCount="yes">
           			<File Source="$(env.PTEID_XMLSECURITY)\Build\Win32\VC10\Release No Xalan\xsec_1_7.dll" KeyPath="yes" />
 				</Component>
@@ -391,11 +395,15 @@
 				<Component Id="pkcs11_64" Guid="{3C4751D6-D92C-40ab-8FA5-3A1DF1D927EA}" SharedDllRefCount="yes" Win64="yes">
 			          <File Id="pteidpkcs11_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidpkcs11.dll" KeyPath="yes" />
 				</Component>
-
-				<Component Id="FreeImage_64" Guid="C3CAF347-FBA3-4d65-A23F-C6357541DAB2" SharedDllRefCount="yes">
-          			<File Id="FreeImage_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)FreeImage.dll" KeyPath="yes" />
+				
+				<Component Id="Libpng_64" Guid="{138C26EC-A8E5-43C9-98AD-77E832EC38DB}" SharedDllRefCount="yes">
+					<File Id="libpng16_64.dll" Source="$(env.PTEID_DIR_LIBPNG_X64)\bin\libpng16.dll" KeyPath="no" />
 				</Component>
 
+				<Component Id="Openjpeg_64" Guid="{1BF8E614-18B4-431A-9088-C1D3FC3FAA9B}" SharedDllRefCount="yes">
+					<File Id="openjp2_64.dll" Source="$(env.PTEID_DIR_OPENJPEG_64)\bin\openjp2.dll" KeyPath="no" />
+				</Component>
+				
 				<Component Id="XMLSecurity_64" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F66" SharedDllRefCount="yes">
           			<File Id="xsec_1_6_64.dll" Source="$(env.PTEID_XMLSECURITY)\Build\x64\VC10\Release No Xalan\xsec_1_7.dll" KeyPath="yes" />
 				</Component>
@@ -415,7 +423,7 @@
 
 				<!--Our Build of LibCurl - custom build options to remove unneeded features-->
 				<Component Id="Curl_64" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFB}" SharedDllRefCount="yes">
-          			<File Id="libcurl_64.dll" Source="$(env.PTEID_DIR_CURL_X64)\build\Win64\VC12\DLL Release\libcurl.dll" KeyPath="no" />
+					<File Id="libcurl_64.dll" Source="$(env.PTEID_DIR_CURL_X64)\build\Win64\VC12\DLL Release\libcurl.dll" KeyPath="no" />
 				</Component>
 
 			</DirectoryRef>
@@ -669,9 +677,13 @@ SmartCardNameWOW64_101_1="SOFTWARE\Wow6432Node\Microsoft\Cryptography\Calais\Sma
           <!-- QT5 additional DLLs for Windows -->
           <ComponentRef Id="qt5PlatformDll"/>
           <ComponentRef Id="qt5WindowsPrintSupport"/>
-          
-					<ComponentRef Id="FreeImage"/>
-					<ComponentRef Id="FreeImage_64"/>
+					
+					<ComponentRef Id="Libpng"/>
+					<ComponentRef Id="Libpng_64"/>
+					
+					<ComponentRef Id="Openjpeg"/>
+					<ComponentRef Id="Openjpeg_64"/>
+					
 					<ComponentRef Id="Curl"/>
 					<ComponentRef Id="Curl_64"/>
           <ComponentRef Id="Poppler"/>

@@ -385,9 +385,13 @@
       <Component Id="pteidmdrvsystem32" Guid="{A8259480-E408-11DE-8A39-0800200C9A66}" Permanent="no">
         <File Id="system32_pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="yes" DiskId="1" />
       </Component>
+	  
+      <Component Id="Libpng" Guid="{826678FB-A5E4-4B47-8A59-52B299B9F15D}" SharedDllRefCount="yes">
+        <File Source="$(env.PTEID_DIR_LIBPNG)\bin\libpng16.dll" KeyPath="yes" />
+      </Component>
 
-      <Component Id="FreeImage" Guid="{EF7A30DC-47CC-4385-832A-8E871EF69F64}" SharedDllRefCount="yes">
-        <File Source="$(var.PTEID_BUILD_FOLDER_X86)FreeImage.dll" KeyPath="yes" />
+      <Component Id="Openjpeg" Guid="{EE30C75C-6DC1-4F75-889D-4695F55514AA}" SharedDllRefCount="yes">
+        <File Source="$(env.PTEID_DIR_OPENJPEG)\bin\openjp2.dll" KeyPath="yes" />
       </Component>
 
       <Component Id="XMLSecurity" Guid="{EF7A30DC-47CC-4385-832A-8E871EF69F65}" SharedDllRefCount="yes">
@@ -584,8 +588,9 @@
         <ComponentRef Id="Qt"/>
         <ComponentRef Id="qt5PlatformDll"/>
         <ComponentRef Id="qt5WindowsPrintSupport"/>
-        
-        <ComponentRef Id="FreeImage"/>
+
+        <ComponentRef Id="Libpng"/>
+        <ComponentRef Id="Openjpeg"/>
         <ComponentRef Id="Curl"/>
         <ComponentRef Id="Poppler"/>
         <ComponentRef Id="XMLSecurity"/>
