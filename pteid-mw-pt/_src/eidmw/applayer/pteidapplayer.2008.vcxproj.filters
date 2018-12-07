@@ -105,10 +105,10 @@
     <ClCompile Include="miniz.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="convert.cpp">
+    <ClCompile Include="J2KHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="J2KHelper.cpp">
+    <ClCompile Include="PNGConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -218,10 +218,10 @@
     <ClInclude Include="XadesSignature.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="convert.h">
+    <ClInclude Include="J2KHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="J2KHelper.h">
+    <ClInclude Include="PNGConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

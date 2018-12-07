@@ -45,7 +45,7 @@
 
 #include <openjpeg.h>
 
-#include "convert.h"
+#include "PNGConverter.h"
 
 /* Component precision scaling */
 void clip_component(opj_image_comp_t* component, OPJ_UINT32 precision)
