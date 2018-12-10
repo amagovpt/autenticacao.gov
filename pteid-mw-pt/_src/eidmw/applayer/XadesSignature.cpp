@@ -154,7 +154,11 @@ namespace eIDMW
 	{
 		const int BUFSIZE = 4*1024;
 		EVP_MD_CTX *mdctx;
+#ifdef WIN32
+        struct _stat64 sb;
+#else
 		struct stat sb;
+#endif
 		long long filesize;
 		unsigned char md_value[EVP_MAX_MD_SIZE];
 		unsigned int md_len, i;
@@ -176,8 +180,12 @@ namespace eIDMW
 		mdctx = EVP_MD_CTX_create();
 		EVP_DigestInit_ex(mdctx, EVP_sha256(), NULL);
 
-		stat(filename, &sb);
-		filesize = (long long) sb.st_size;
+#ifdef WIN32
+        _wstat64(utf16FileName.c_str(), &sb);
+#else
+        stat(filename, &sb);
+#endif
+        filesize = (long long)sb.st_size;
 
 		if (filesize <= BUFSIZE)
 		{
@@ -192,7 +200,9 @@ namespace eIDMW
 			{
 				int read_b = fread(buffer, 1, BUFSIZE, fp);
 				EVP_DigestUpdate(mdctx, buffer, read_b);
-
+                if (ferror(fp)) {
+                    MWLOG(LEV_ERROR, MOD_APL, L"XadesSignature::HashFile: Failed while reading file");
+                }
 				if (read_b < BUFSIZE)
 					break;
 			}
