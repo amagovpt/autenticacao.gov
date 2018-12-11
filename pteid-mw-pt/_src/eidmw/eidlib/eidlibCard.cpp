@@ -916,6 +916,17 @@ using eIDMW::PTEID_PublicKey;
 using eIDMW::APL_Card;
 using eIDMW::CMWException;
 
+//Error codes inherited from Pteid Middleware V1: documented in CC_Technical_Reference_1.61
+#define SC_ERROR_NO_READERS_FOUND -1101
+#define SC_ERROR_CARD_NOT_PRESENT -1104
+#define SC_ERROR_KEYPAD_TIMEOUT -1108
+#define SC_ERROR_KEYPAD_CANCELLED -1109
+
+#define SC_ERROR_AUTH_METHOD_BLOCKED -1212
+#define SC_ERROR_PIN_CODE_INCORRECT -1214
+
+#define SC_ERROR_INTERNAL -1400
+#define SC_ERROR_OBJECT_NOT_VALID -1406
 
 //This object should be initialized by calling PTEID_CVC_Init() and freed after a CVC_WriteFile() or CVC_ReadFile() operation
 //It will hold all the keys and other values necessary for Secure Messaging operations
@@ -937,11 +948,11 @@ PTEIDSDK_API long PTEID_Init(char *ReaderName){
 	}
 	catch(PTEID_ExNoCardPresent &)
 	{
-		return -1104;
+		return SC_ERROR_CARD_NOT_PRESENT;
 	}
 	catch(PTEID_ExNoReader &)
 	{
-		return -1101;
+		return SC_ERROR_NO_READERS_FOUND;
 	}
 	catch(PTEID_Exception &ex)
 	{
@@ -981,13 +992,6 @@ PTEIDSDK_API tCompCardType PTEID_GetCardType() {
 	}
 	return COMP_CARD_TYPE_ERR;
 }
-
-//Error codes inherited from Pteid Middleware V1: documented in CC_Technical_Reference_1.61
-#define SC_ERROR_AUTH_METHOD_BLOCKED -1212
-#define SC_ERROR_PIN_CODE_INCORRECT -1214
-#define SC_ERROR_INTERNAL -1400
-#define SC_ERROR_OBJECT_NOT_VALID -1406
-#define SC_ERROR_PIN_CODE_INCORRECT -1214
 
 PTEIDSDK_API long PTEID_GetID(PTEID_ID *IDData){
 
@@ -1112,17 +1116,15 @@ PTEIDSDK_API long PTEID_GetAddr(PTEID_ADDR *AddrData) {
 		catch (PTEID_Exception &ex)
 		{
 			long errorCode = ex.GetError();
-
 			if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE &&
 				errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN)
 			{
 				return SC_ERROR_OBJECT_NOT_VALID;
-			}
-			else
-			{
+			} else if (errorCode == EIDMW_ERR_PIN_CANCEL) {
+				return SC_ERROR_KEYPAD_CANCELLED;
+			} else {
 				return SC_ERROR_INTERNAL;
 			}
-
 		}
 
 	}
@@ -1207,9 +1209,17 @@ PTEIDSDK_API long PTEID_VerifyPIN(unsigned char PinId,	char *Pin, long *triesLef
                 }
             }
 		}
-		catch(PTEID_Exception &)
+		catch(PTEID_Exception &ex)
 		{
-			return SC_ERROR_AUTH_METHOD_BLOCKED;
+			long errorCode = ex.GetError();
+			if (errorCode == EIDMW_ERR_TIMEOUT) {
+				return SC_ERROR_KEYPAD_TIMEOUT;
+			}
+			else if (errorCode == EIDMW_ERR_PIN_CANCEL) {
+				return SC_ERROR_KEYPAD_CANCELLED;
+			} else {
+				return SC_ERROR_AUTH_METHOD_BLOCKED;
+			}
 		}
 	}
 
@@ -1333,9 +1343,17 @@ PTEIDSDK_API long PTEID_UnblockPIN_Ext(unsigned char PinId,	char *pszPuk, char *
 				}
 			}
 		}
-		catch(PTEID_Exception &)
+		catch(PTEID_Exception &ex)
 		{
-			return PTEID_E_NOT_INITIALIZED;
+			long errorCode = ex.GetError();
+			if (errorCode == EIDMW_ERR_TIMEOUT) {
+				return SC_ERROR_KEYPAD_TIMEOUT;
+			}
+			else if (errorCode == EIDMW_ERR_PIN_CANCEL) {
+				return SC_ERROR_KEYPAD_CANCELLED;
+			} else {
+				return PTEID_E_NOT_INITIALIZED;
+			}
 		}
 	}
 

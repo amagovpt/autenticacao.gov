@@ -123,6 +123,15 @@ public class pteid {
         }
    }
 
+    private static void handleUnderlyingException(PTEID_Exception ex) throws PteidException {
+        if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_TIMEOUT) {
+            throw new PteidException(SC_ERROR_KEYPAD_TIMEOUT);
+        } else if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_PIN_CANCEL) {
+            throw new PteidException(SC_ERROR_KEYPAD_CANCELLED);
+        } else {
+            throw new PteidException(ex.GetError());
+        }  
+    }
 
     public static PTEID_ADDR GetAddr() throws PteidException {
         try {
@@ -145,8 +154,9 @@ public class pteid {
             }
             throw new PteidException();
         } catch (PTEID_Exception ex) {
-            throw new PteidException(ex.GetError());
+            handleUnderlyingException(ex);
         }
+        throw new PteidException();
     }
 
 
@@ -225,15 +235,7 @@ public class pteid {
                 return (int)(tries_left.m_long);
             }
             catch (PTEID_Exception ex) {
-                if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_TIMEOUT)
-                    throw new PteidException(SC_ERROR_KEYPAD_TIMEOUT);
-                else if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_PIN_CANCEL)
-                    throw new PteidException(SC_ERROR_KEYPAD_CANCELLED);
-                else
-                {
-                    //ex.printStackTrace();
-                    throw new PteidException(ex.GetError());
-                }
+               handleUnderlyingException(ex);
             }
         }
         throw new PteidException();
@@ -268,12 +270,7 @@ public class pteid {
                 }
             }
             catch (PTEID_Exception ex) {
-                if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_TIMEOUT)
-                    throw new PteidException(SC_ERROR_KEYPAD_TIMEOUT);
-                else if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_PIN_CANCEL)
-                    throw new PteidException(SC_ERROR_KEYPAD_CANCELLED);
-                else
-                    throw new PteidException(ex.GetError());
+                handleUnderlyingException(ex);
             }
             return (int)(tries_left.m_long);
         }
@@ -388,15 +385,7 @@ public class pteid {
                 }
             }
             catch (PTEID_Exception ex) {
-                if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_TIMEOUT)
-                    throw new PteidException(SC_ERROR_KEYPAD_TIMEOUT);
-                else if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_PIN_CANCEL)
-                    throw new PteidException(SC_ERROR_KEYPAD_CANCELLED);
-                else
-                {
-                    //ex.printStackTrace();
-                    throw new PteidException(ex.GetError());
-                }
+                handleUnderlyingException(ex);
             }
         }
 
@@ -452,7 +441,7 @@ public class pteid {
                 System.arraycopy(pb.GetBytes(), 0, retArray, 0, retArray.length);
             }
             catch (PTEID_Exception ex) {
-                throw new PteidException(ex.GetError());
+                handleUnderlyingException(ex);
             }
             catch (Exception ex) {
                 ex.printStackTrace();
@@ -486,7 +475,8 @@ public class pteid {
                 }
 
                 idCard.writeFile(ashex(file),pb,pin, "", inOffset);
-
+            } catch (PTEID_Exception ex) {
+                handleUnderlyingException(ex);
             } catch (Exception ex) {
                 throw new PteidException();
             }
