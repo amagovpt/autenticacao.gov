@@ -147,6 +147,39 @@
 
 #define MODE_ACTIVATE_BLOCK_PIN   1
 
+/********************************************************************************
+  * These defines and functions are meant for compatibility with old C sdk.
+  *********************************************************************************/
+
+/* General return codes */
+#define PTEID_OK							0 /* Function succeeded */
+#define PTEID_E_BAD_PARAM					1 /* Invalid parameter (NULL pointer, out of bound, etc.) */
+#define PTEID_E_INTERNAL					2 /* An internal consistency check failed */
+#define PTEID_E_INSUFFICIENT_BUFFER	        3 /* The data buffer to receive returned data is too small for the returned data */
+#define PTEID_E_KEYPAD_CANCELLED	        4 /* Input on pinpad cancelled */
+#define PTEID_E_KEYPAD_TIMEOUT				5 /* Timeout returned from pinpad */
+#define PTEID_E_KEYPAD_PIN_MISMATCH			6 /* The two PINs did not match */
+#define PTEID_E_KEYPAD_MSG_TOO_LONG			7 /* Message too long on pinpad */
+#define PTEID_E_INVALID_PIN_LENGTH			8 /* Invalid PIN length */
+#define PTEID_E_NOT_INITIALIZED				9 /* Library not initialized */
+#define PTEID_E_UNKNOWN						10 /* An internal error has been detected, but the source is unknown */
+#define PTEID_E_FILE_NOT_FOUND				11 /* Attempt to read a file has failed. */
+#define PTEID_E_USER_CANCELLED				12 /* An operation was cancelled by the user. */
+
+
+/* Return codes originally from OpenSC project however are kept to maintain compatibility with old C sdk */
+//Error codes inherited from Pteid Middleware V1: documented in CC_Technical_Reference_1.61
+#define SC_ERROR_NO_READERS_FOUND 			-1101
+#define SC_ERROR_CARD_NOT_PRESENT 			-1104
+#define SC_ERROR_KEYPAD_TIMEOUT 			-1108
+#define SC_ERROR_KEYPAD_CANCELLED 			-1109
+
+#define SC_ERROR_AUTH_METHOD_BLOCKED 		-1212
+#define SC_ERROR_PIN_CODE_INCORRECT 		-1214
+
+#define SC_ERROR_INTERNAL 					-1400
+#define SC_ERROR_OBJECT_NOT_VALID 			-1406
+
 extern "C"
 {
 
