@@ -36,11 +36,11 @@ LIBS += -L../lib \
 	    -l$${COMMONLIB} \
 	    -lcrypto -lssl \
 	    -lxerces-c \
-            -lcurl \
-            -lopenjp2 \
-            -lpng \
-            -lz \
-            -lzip
+		-lcurl \
+		-lopenjp2 \
+		-lpng \
+		-lz \
+		-lzip
 
 !macx: LIBS += -Wl,-R,'../lib' -lxml-security-c
 LIBS += ../lib/libpteid-poppler.a
@@ -104,10 +104,9 @@ HEADERS += \
 	TSAClient.h \
 	SODParser.h \ 
 	cJSON.h \
-	miniz.h \
-        SSLConnection.h \
-        PNGConverter.h \
-        J2KHelper.h \
+	SSLConnection.h \
+	PNGConverter.h \
+	J2KHelper.h \
 
 
 SOURCES += \
@@ -136,13 +135,12 @@ SOURCES += \
 	SecurityContext.cpp \
 	sign-pkcs7.cpp \
 	cJSON.c \
-	miniz.c \
 	CRLFetcher.cpp \
 	PDFSignature.cpp \
 	SAM.cpp \
-        OCSP.cpp \
-        PNGConverter.cpp \
-        J2KHelper.cpp \
+	OCSP.cpp \
+	PNGConverter.cpp \
+	J2KHelper.cpp \
 
 # Disable annoying and mostly useless gcc warning
 QMAKE_CXXFLAGS += -Wno-write-strings
