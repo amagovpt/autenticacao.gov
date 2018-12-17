@@ -214,7 +214,7 @@ public:
 
     enum CardAccessError { NoReaderFound, NoCardFound, PinBlocked, CardReadError, SodCardReadError, CardUserPinCancel, CardUnknownError, CardPinTimeout };
 
-    enum SignMessage { SignMessageOK, SignMessageTimestampFailed, SignFilePermissionFailed};
+    enum SignMessage { SignMessageOK, SignMessageTimestampFailed, SignFilePermissionFailed, PDFFileUnsupported};
 
     enum eCustomEventType { ET_UNKNOWN, ET_CARD_CHANGED, ET_CARD_REMOVED };
 

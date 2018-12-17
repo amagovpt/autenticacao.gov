@@ -525,8 +525,7 @@ namespace eIDMW
 
 		if (doc->isEncrypted())
 		{
-			fprintf(stderr, "Encrypted PDF: This is in the TODO List\n");
-			//TODO: Add proper error code(s)
+			fprintf(stderr, "Error: Encrypted PDF \n");
 			delete outputName;
 			throw CMWEXCEPTION(EIDMW_PDF_UNSUPPORTED_ERROR);
 		}

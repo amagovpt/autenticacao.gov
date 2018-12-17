@@ -28,6 +28,8 @@ PageServicesSignSimpleForm {
 
             if (error_code == GAPI.SignFilePermissionFailed) {
                 signerror_dialog.propertySignFailDialogText.text = qsTranslate("PageServicesSign","STR_SIGN_FILE_PERMISSION_FAIL")
+            } else if (error_code == GAPI.PDFFileUnsupported) {
+                signerror_dialog.propertySignFailDialogText.text = qsTranslate("PageServicesSign","STR_SIGN_PDF_FILE_UNSUPPORTED")
             } else {
                 signerror_dialog.propertySignFailDialogText.text = qsTranslate("PageServicesSign","STR_SIGN_GENERIC_ERROR") + " " + error_code
             }
