@@ -102,9 +102,6 @@
     <ClCompile Include="SecurityContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="miniz.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="J2KHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

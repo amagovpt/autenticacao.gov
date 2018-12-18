@@ -233,7 +233,6 @@
     <ClCompile Include="cryptoFramework.cpp" />
     <ClCompile Include="cryptoFwkPteid.cpp" />
     <ClCompile Include="J2KHelper.cpp" />
-    <ClCompile Include="miniz.c" />
     <ClCompile Include="MiscUtil.cpp" />
     <ClCompile Include="OCSP.cpp" />
     <ClCompile Include="PDFSignature.cpp" />
