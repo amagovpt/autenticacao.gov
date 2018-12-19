@@ -3,13 +3,6 @@
 
 
 ##########WARNING!!!#####CHANGING THIS VERSIONS WILL CHANGE THE SO VERSION#########
-
-###### version nr of custom FreeImage (FreeImagePTEiD)
-FREEIMGLIB=FreeImagePTEiD
-FREEIMGLIB_MAJ=1
-FREEIMGLIB_MIN=0
-FREEIMGLIB_REV=0
-
 ###### version nr of GUI
 EIDGUI=pteidgui
 EIDGUI_MAJ=2

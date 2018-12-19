@@ -25,7 +25,6 @@ rm -f /usr/local/lib/libjpeg.8.dylib
 rm -f /usr/local/lib/libfreetype.6.dylib
 rm -f /usr/local/lib/libfontconfig.1.dylib
 rm -f /usr/local/lib/libcurl.4.dylib
-rm -f /usr/local/lib/libfreeimagePTEiD*.dylib
 
 rm -rf /usr/local/lib/pteid_jni/
 

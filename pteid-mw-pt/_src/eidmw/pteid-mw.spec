@@ -133,7 +133,6 @@ make %{?jobs:-j%jobs}
 
 #install libs
 mkdir -p $RPM_BUILD_ROOT/usr/local/lib/
-install -m 755 -p lib/libfreeimagePTEiD-3.15.1.so $RPM_BUILD_ROOT/usr/local/lib/libfreeimagePTEiD-3.15.1.so
 install -m 755 -p lib/libpteidcommon.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidcommon.so.2.0.0
 install -m 755 -p lib/libpteiddialogsQT.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteiddialogsQT.so.2.0.0
 install -m 755 -p lib/libpteidcardlayer.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidcardlayer.so.2.0.0
@@ -187,8 +186,6 @@ install -m 644 -p %{SOURCE5} $RPM_BUILD_ROOT/usr/share/mime/packages/
 rm -rf $RPM_BUILD_ROOT
 
 %post
-ln -f -s /usr/local/lib/libfreeimagePTEiD-3.15.1.so /usr/local/lib/libfreeimagePTEiD.so
-ln -f -s /usr/local/lib/libfreeimagePTEiD-3.15.1.so /usr/local/lib/libfreeimagePTEiD.so.3
 ln -s -f /usr/local/lib/libpteidcommon.so.2.0.0 /usr/local/lib/libpteidcommon.so
 ln -s -f /usr/local/lib/libpteidcommon.so.2.0.0 /usr/local/lib/libpteidcommon.so.2
 ln -s -f /usr/local/lib/libpteidcommon.so.2.0.0 /usr/local/lib/libpteidcommon.so.2.0
@@ -271,8 +268,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %postun
 if [ "$1" = "0" ]; then
-rm -rf /usr/local/lib/libfreeimagePTEiD.so
-rm -rf /usr/local/lib/libfreeimagePTEiD.so.3
 rm -rf /usr/local/lib/libpteidcommon.so
 rm -rf /usr/local/lib/libpteidcommon.so.2
 rm -rf /usr/local/lib/libpteidcommon.so.2.0

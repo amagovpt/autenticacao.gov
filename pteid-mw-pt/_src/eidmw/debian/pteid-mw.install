@@ -14,7 +14,6 @@ misc/certs/* /usr/local/share/certs/
 /usr/local/lib/libpteidlibj.so.2.0.0
 /usr/local/lib/libpteidcardlayer.so.2.0.0
 /usr/local/lib/libpteidcommon.so.2.0.0
-/usr/local/lib/libfreeimagePTEiD-3.15.1.so
 /usr/local/bin/pteiddialogsQTsrv
 /usr/local/bin/eidmw_nl.qm
 /usr/local/bin/pteidgui
@@ -35,11 +34,9 @@ misc/certs/* /usr/local/share/certs/
 /usr/local/lib/libpteiddialogsQT.so.2
 /usr/local/lib/libpteiddialogsQT.so.2.0
 /usr/local/lib/libpteidcommon.so.2.0
-/usr/local/lib/libfreeimagePTEiD.so
 /usr/local/lib/libpteidpkcs11.so
 /usr/local/lib/libpteiddialogsQT.so
 /usr/local/lib/libpteidlibj.so.2
-/usr/local/lib/libfreeimagePTEiD.so.3
 /usr/local/lib/libpteidcardlayer.so.2.0
 /usr/local/lib/libpteidcardlayer.so
 /usr/local/lib/libpteidlib.so.2.0

@@ -1,7 +1,5 @@
 #!/bin/sh
 if [ "$1" = "remove" ]; then
-        rm -rf /usr/local/lib/libfreeimagePTEiD.so
-        rm -rf /usr/local/lib/libfreeimagePTEiD.so.3
 	rm -rf /usr/local/lib/libpteidcommon.so
 	rm -rf /usr/local/lib/libpteidcommon.so.2
 	rm -rf /usr/local/lib/libpteidcommon.so.2.0
