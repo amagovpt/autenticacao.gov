@@ -141,6 +141,7 @@ Item {
                     anchors.leftMargin:  parent.width * 0.05
                     anchors.bottom: parent.bottom
                     onEditingFinished: {
+                        // CMD load backup mobile data
                         propertyPageLoader.propertyBackupMobileNumber = textFieldMobileNumber.text
                     }
                 }
@@ -417,6 +418,10 @@ Item {
             // Reject CMD Popup's only with ESC key
             dialogCMDProgress.open()
         }
+    }
+
+    Component.onCompleted: {
+        textFieldMobileNumber.text = propertyPageLoader.propertyBackupMobileNumber
     }
 
     function open() {

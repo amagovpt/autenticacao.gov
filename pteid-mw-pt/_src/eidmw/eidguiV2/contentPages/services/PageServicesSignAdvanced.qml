@@ -1196,9 +1196,6 @@ PageServicesSignAdvancedForm {
         }
         propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                 qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
-
-        // CMD load backup mobile data
-        textFieldMobileNumber.text = propertyPageLoader.propertyBackupMobileNumber
     }
 
     function stripFilePrefix(filePath) {
