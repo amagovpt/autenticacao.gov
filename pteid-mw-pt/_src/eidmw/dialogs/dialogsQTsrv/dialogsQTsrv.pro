@@ -44,9 +44,8 @@ DESTDIR = ../../bin
 ###
 LIBS = -L../../lib \
 	-l$${DLGLIB} \	
-	 -l$${COMMONLIB} \
-	-lssl \
-	-lfreeimagePTEiD
+	-l$${COMMONLIB} \
+	-lssl
 	
 macx: LIBS +=-lcrypto
 
