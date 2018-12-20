@@ -2873,3 +2873,43 @@ bool GAPI::getRemoveCertValue (void){
 
     return m_Settings.getRemoveCert();
 }
+
+void GAPI::quitApplication(void) {
+    try
+    {
+        if (m_Settings.getRemoveCert())
+        {
+            for (unsigned long readerCount=0;readerCount<ReaderSet.readerCount();readerCount++)
+            {
+                QString readerName = ReaderSet.getReaderName(readerCount);
+                m_Certificates.RemoveCertificates(readerName);
+            }
+        }
+
+        //-------------------------------------------------------------------
+        // we must release all the certificate contexts before releasing the SDK.
+        // After Release, no more calls should be done to the SDK and as such
+        // noting should be done in the dtor
+        //-------------------------------------------------------------------
+        forgetAllCertificates();
+        stopAllEventCallbacks();
+
+    }
+    catch (...) {}
+    qApp->quit();
+}
+
+//*****************************************************
+// forget all the certificates we kept for all readers
+//*****************************************************
+void GAPI::forgetAllCertificates( void )
+{
+#ifdef WIN32
+    bool bRefresh = true;;
+    for (unsigned long readerIdx=0; readerIdx<ReaderSet.readerCount(bRefresh); readerIdx++)
+    {
+        const char* readerName = ReaderSet.getReaderByNum(readerIdx).getName();
+        forgetCertificates(readerName);
+    }
+#endif
+}

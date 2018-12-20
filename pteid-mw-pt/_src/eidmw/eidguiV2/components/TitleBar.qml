@@ -127,8 +127,7 @@ Item {
                 id: mouseAreaQuitButton
                 anchors.fill: parent
                 hoverEnabled: true
-                //TODO: implement some similar with MainWnd::quit_application
-                onClicked: Qt.quit()
+                onClicked: quitApplication()
             }
         }
         MouseArea {
@@ -163,5 +162,9 @@ Item {
             console.log("Screen is not Maximized" + mainWindow.visibility)
             mainWindow.showMaximized()
         }
+    }
+    function quitApplication() {
+        //mainWindow.hide()
+        gapi.quitApplication()
     }
 }

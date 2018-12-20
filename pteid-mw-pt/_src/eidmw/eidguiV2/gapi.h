@@ -347,6 +347,9 @@ public slots:
     void cancelDownload();
     void httpFinished();
 
+    void quitApplication();
+    static void forgetAllCertificates( void );
+
 signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed
