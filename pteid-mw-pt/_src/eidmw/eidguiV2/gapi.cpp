@@ -2913,3 +2913,25 @@ void GAPI::forgetAllCertificates( void )
     }
 #endif
 }
+
+//*****************************************************
+// forget all the certificates we kept for a specific reader
+//*****************************************************
+void GAPI::forgetCertificates(QString const& reader)
+{
+    char readerName[256];
+    readerName[0] = 0;
+    if (reader.length()>0)
+    {
+        strcpy(readerName, reader.toUtf8().data());
+    }
+#ifdef WIN32
+    QVector<PCCERT_CONTEXT> readerCertContext = m_Certificates.m_certContexts[readerName];
+    while (0 < readerCertContext.size())
+    {
+        PCCERT_CONTEXT pContext = readerCertContext[readerCertContext.size() - 1];
+        CertFreeCertificateContext(pContext);
+        readerCertContext.erase(readerCertContext.end() - 1);
+    }
+#endif
+}

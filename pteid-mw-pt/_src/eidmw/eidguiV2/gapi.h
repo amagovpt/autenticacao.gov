@@ -348,7 +348,8 @@ public slots:
     void httpFinished();
 
     void quitApplication();
-    static void forgetAllCertificates( void );
+    void forgetAllCertificates( void );
+    void forgetCertificates(QString const& reader);
 
 signals:
     // Signal from GAPI to Gui
