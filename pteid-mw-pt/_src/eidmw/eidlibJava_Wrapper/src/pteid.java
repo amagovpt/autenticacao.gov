@@ -35,7 +35,9 @@ public class pteid {
     private static int SC_ERROR_KEYPAD_CANCELLED = -1109;
     private static int SC_ERROR_NO_READERS_FOUND = -1101;
     private static int SC_ERROR_CARD_NOT_PRESENT = -1104;
-    
+
+        private static String GEMPC_PINPAD = "GemPC Pinpad";
+
     protected static final char[] hexChars = {
         '0', '1', '2', '3', '4', '5',
         '6', '7', '8', '9', 'A', 'B',
@@ -75,8 +77,8 @@ public class pteid {
                 readerContext = readerSet.getReader();
             else
                 readerContext = readerSet.getReaderByName(readerName);
-			
-			pteidlibJava_Wrapper.setCompatReaderContext(readerContext);
+
+                        pteidlibJava_Wrapper.setCompatReaderContext(readerContext);
             idCard = readerContext.getEIDCard();
         }
         catch(PTEID_ExNoReader ex) {
@@ -134,7 +136,14 @@ public class pteid {
     }
 
     public static PTEID_ADDR GetAddr() throws PteidException {
+
         try {
+                        //Workaround for GemPC issue with 3072-bits cards
+                        if (readerContext.getName().contains(GEMPC_PINPAD)) {
+                                //Just need to read SOD file, we don't actually need the data
+                                PTEID_ByteArray throwaway_sod = new PTEID_ByteArray();
+                                idCard.readFile("3F005F00EF06", throwaway_sod);
+                        }
             PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
             PTEID_Pins pins = idCard.getPins();
             for (long i = 0; i < pins.count(); i++) {
@@ -159,8 +168,7 @@ public class pteid {
         throw new PteidException();
     }
 
-
-    public static PTEID_PIC GetPic() throws PteidException{
+    public static PTEID_PIC GetPic() throws PteidException {
         PTEID_PIC pic = null;
 
         try {
@@ -293,7 +301,7 @@ public class pteid {
                         pinArray[currentId] = new PTEID_Pin();
                         pinArray[currentId].flags = (int) pin.getFlags();
                         // rmartinho: might not be the intended use, but gives the expected compatible result.
-                        pinArray[currentId].usageCode = (int) pin.getId(); 
+                        pinArray[currentId].usageCode = (int) pin.getId();
                         pinArray[currentId].pinType = (int) pin.getType();
                         pinArray[currentId].label = pin.getLabel();
                         pinArray[currentId].triesLeft = pin.getTriesLeft();
@@ -350,21 +358,27 @@ public class pteid {
 
 
     public static int UnblockPIN(byte pin_id, String puk, String newPin) throws PteidException {
-       
+
        return UnblockPIN_Ext(pin_id, puk, newPin, UNBLOCK_FLAG_NEW_PIN);
     }
 
     public static int UnblockPIN_Ext(byte pin_id, String puk, String newPin, int flags) throws PteidException {
-    	PTEID_ulwrapper tries_left = new PTEID_ulwrapper(-1);
+        PTEID_ulwrapper tries_left = new PTEID_ulwrapper(-1);
 
         //Convert byte to long
         long pinId = pin_id & 0x00000000000000FF;
 
         if (readerContext!=null) {
             try {
-
-                if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131)
+                                if (pinId != 1 && pinId != 129 && pinId != 130 && pinId != 131)
                     return 0;
+
+                                //Workaround for GemPC issue with 3072-bits cards
+                                if (readerContext.getName().contains(GEMPC_PINPAD)) {
+                                        //Just need to read SOD file, we don't actually need the data
+                                        PTEID_ByteArray throwaway_sod = new PTEID_ByteArray();
+                                        idCard.readFile("3F005F00EF06", throwaway_sod);
+                                }
 
                 PTEID_Pins pins = idCard.getPins();
                 for (long pinIdx=0; pinIdx < pins.count(); pinIdx++) {
@@ -499,9 +513,9 @@ public class pteid {
         PTEID_ByteArray pb = new PTEID_ByteArray(bytes, bytes.length);
         if (readerContext != null) {
             try {
-		        boolean mode = activateMode == MODE_ACTIVATE_BLOCK_PIN;
+                        boolean mode = activateMode == MODE_ACTIVATE_BLOCK_PIN;
                 idCard.Activate(actPin, pb, mode);
-            } 
+            }
             catch (PTEID_Exception ex) {
                 if (ex.GetError() == pteidlibJava_WrapperConstants.EIDMW_ERR_PIN_CANCEL)
                     throw new PteidException(SC_ERROR_PIN_CODE_INCORRECT);
@@ -533,7 +547,7 @@ public class pteid {
 
                 for(PTEID_Certif pcert : pteidcs)
                 {
-					PTEID_ByteArray pba = new PTEID_ByteArray(pcert.certif, pcert.certif.length);
+                                        PTEID_ByteArray pba = new PTEID_ByteArray(pcert.certif, pcert.certif.length);
                     readerContext.getEIDCard().getCertificates().addToSODCAs(pba);
                 }
             } catch (Exception ex) {
@@ -554,7 +568,7 @@ public class pteid {
                 key.modulus = new byte[(int) cardKey.getCardAuthKeyModulus().Size()];
                 System.arraycopy(cardKey.getCardAuthKeyExponent().GetBytes(), 0, key.exponent, 0, key.exponent.length);
                 System.arraycopy(cardKey.getCardAuthKeyModulus().GetBytes(), 0, key.modulus, 0, key.modulus.length);
-            } 
+            }
             catch (PTEID_Exception ex) {
                 throw new PteidException(ex.GetError());
             }
@@ -615,7 +629,7 @@ public class pteid {
         {
             PTEID_ByteArray ba = pteidlibJava_Wrapper.PTEID_CVC_Init(cvc);
             ret = new byte[(int) ba.Size()];
-			System.arraycopy(ba.GetBytes(), 0, ret, 0,  ret.length);
+                        System.arraycopy(ba.GetBytes(), 0, ret, 0,  ret.length);
         }
         catch (Exception ex) {
                 System.err.println("Error in CVC_Init: " + ex.getMessage());
@@ -666,7 +680,7 @@ public class pteid {
         {
             PTEID_ByteArray ba = pteidlibJava_Wrapper.PTEID_CVC_ReadFile(ba_fileID);
             ret = new byte[(int) ba.Size()];
-			System.arraycopy(ba.GetBytes(), 0, ret, 0, ret.length);
+                        System.arraycopy(ba.GetBytes(), 0, ret, 0, ret.length);
         }
         catch (Exception ex) {
             System.err.println("Error in CVC_ReadFile: "+ex.getMessage());
@@ -690,9 +704,9 @@ public class pteid {
 
 
    private static String findReaderNameWithCard() throws Exception{
-	long nrReaders  = readerSet.readerCount();
+        long nrReaders  = readerSet.readerCount();
 
-	for ( int readerIdx=0; readerIdx<nrReaders; readerIdx++)
+        for ( int readerIdx=0; readerIdx<nrReaders; readerIdx++)
             if (readerContext.isCardPresent())
                 return readerSet.getReaderName(readerIdx);
 
