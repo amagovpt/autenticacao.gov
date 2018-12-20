@@ -817,7 +817,6 @@ Load language error. Please reinstall the application"
 
     Component.onCompleted: {
         console.log("Window mainWindow Completed")
-        gapi.setEventCallbacks()
         controler.initTranslation()
         mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
         gapi.initTranslation()

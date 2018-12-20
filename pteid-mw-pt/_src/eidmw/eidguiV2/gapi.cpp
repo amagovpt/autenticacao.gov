@@ -41,6 +41,9 @@ GAPI::GAPI(QObject *parent) :
     m_addressLoaded = false;
     m_shortcutFlag = 0;
 
+    // Create callbacks for all readers at the startup
+    setEventCallbacks();
+
     //----------------------------------
     // set a timer to check if the number of card readers is changed
     //----------------------------------
