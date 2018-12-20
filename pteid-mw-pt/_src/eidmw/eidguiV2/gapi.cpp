@@ -707,7 +707,7 @@ void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdSignParams &params)
                                       params.page,
                                       params.coord_x, params.coord_y,
                                       params.location.toUtf8().data(), params.reason.toUtf8().data(),
-									  getPlatformNativeString(params.outputFile));
+                                      getPlatformNativeString(params.outputFile));
 
         if ( ret != 0 ) {
             qDebug() << "signOpen failed! - ret: " << ret << endl;
@@ -880,7 +880,7 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QString loaded
 
     QString fullInputPath = params.loadedFilePath;
 
-	cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
+    cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
 
     if (params.isTimestamp > 0)
         cmd_pdfSignature->enableTimestamp();
@@ -1027,9 +1027,9 @@ bool GAPI::doSignPrintPDF(QString &file_to_sign, QString &outputsign) {
     getCardInstance(card);
     if (card == NULL) return false;
 
-	PTEID_PDFSignature sig_handler(getPlatformNativeString(file_to_sign));
+    PTEID_PDFSignature sig_handler(getPlatformNativeString(file_to_sign));
 
-	card->SignPDF(sig_handler, 0, 0, false, "", "", getPlatformNativeString(outputsign));
+    card->SignPDF(sig_handler, 0, 0, false, "", "", getPlatformNativeString(outputsign));
 
     return true;
 
@@ -1559,7 +1559,7 @@ void GAPI::startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outp
 
 int GAPI::getPDFpageCount(QString loadedFilePath) {
 
-	PTEID_PDFSignature sig_handler(getPlatformNativeString(loadedFilePath));
+    PTEID_PDFSignature sig_handler(getPlatformNativeString(loadedFilePath));
 
     int pageCount = sig_handler.getPageCount();
 
@@ -1617,10 +1617,10 @@ void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTime
     if (card == NULL) return;
 
     const char *files_to_sign[1];
-	QByteArray tempLoadedFilePath = getPlatformNativeString(loadedFilePath);
+    QByteArray tempLoadedFilePath = getPlatformNativeString(loadedFilePath);
     files_to_sign[0] = tempLoadedFilePath.constData();
 
-	QByteArray tempOutputFile = getPlatformNativeString(outputFile);
+    QByteArray tempOutputFile = getPlatformNativeString(outputFile);
 
     if (isTimestamp > 0)
         card->SignXadesT(tempOutputFile.constData(), files_to_sign, 1);
@@ -1641,7 +1641,7 @@ void GAPI::doSignPDF(SignParams &params) {
     if (card == NULL) return;
 
     QString fullInputPath = params.loadedFilePath;
-	PTEID_PDFSignature sig_handler(getPlatformNativeString(fullInputPath));
+    PTEID_PDFSignature sig_handler(getPlatformNativeString(fullInputPath));
 
     if (params.isTimestamp > 0)
         sig_handler.enableTimestamp();
@@ -1652,8 +1652,8 @@ void GAPI::doSignPDF(SignParams &params) {
         sig_handler.setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
 
     card->SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
-					params.location.toUtf8().data(), params.reason.toUtf8().data(),
-					getPlatformNativeString(params.outputFile));
+                    params.location.toUtf8().data(), params.reason.toUtf8().data(),
+                    getPlatformNativeString(params.outputFile));
 
     emit signalPdfSignSucess(SignMessageOK);
 
@@ -1690,8 +1690,8 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
         sig_handler->setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
 
     card->SignPDF(*sig_handler, params.page, params.coord_x, params.coord_y,
-		params.location.toUtf8().data(), params.reason.toUtf8().data(),
-				 getPlatformNativeString(params.outputFile));
+        params.location.toUtf8().data(), params.reason.toUtf8().data(),
+                 getPlatformNativeString(params.outputFile));
 
     emit signalPdfSignSucess(SignMessageOK);
 
@@ -1700,12 +1700,12 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
 
 QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
-	qDebug() << "PDFPreviewImageProvider received request for: " << id;
+    qDebug() << "PDFPreviewImageProvider received request for: " << id;
     qDebug() << "PDFPreviewImageProvider received request for: "
              << requestedSize.width() << " - " << requestedSize.height();
     QStringList strList = id.split("?");
 
-	QString pdf_path = QUrl::fromPercentEncoding(strList.at(0).toUtf8());
+    QString pdf_path = QUrl::fromPercentEncoding(strList.at(0).toUtf8());
 
     //URL param ?page=xx
     unsigned int page = (unsigned int) strList.at(1).split("=").at(1).toInt();
@@ -2050,9 +2050,9 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
     foreach (supplier_id, entityIDs) {
         supplier_ids.push_back(supplier_id);
     }
-	if (!prepareSCAPCache()){
-		return;
-	}
+    if (!prepareSCAPCache()){
+        return;
+    }
     std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, *card, supplier_ids);
 
     if (attributes.size() == 0) {
@@ -2094,9 +2094,9 @@ void GAPI::getSCAPCompanyAttributes() {
     initScapAppId();
 
     std::vector<int> supplierIDs;
-	if (!prepareSCAPCache()) {
-		return;
-	}
+    if (!prepareSCAPCache()) {
+        return;
+    }
     std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, *card, supplierIDs);
 
     if (attributes.size() == 0)
@@ -2195,8 +2195,8 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
     }
 
 #ifdef WIN32
-	extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
-	qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
+    extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+    qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
 #endif
     if(!dir.isReadable())
     {
@@ -2207,7 +2207,7 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
         emit signalCacheNotReadable(isCompanies);
     }
 #ifdef WIN32
-	qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
+    qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
 #endif
 
     bool error_code = false;
@@ -2223,35 +2223,35 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
 }
 
 bool GAPI::prepareSCAPCache() {
-	ScapSettings settings;
-	QString s_scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
-	QFileInfo scapCacheDir(s_scapCacheDir);
-	QDir scapCache(s_scapCacheDir);
-	bool hasPermissions = true;
-	// Tries to create if does not exist
-	if (!scapCache.mkpath(s_scapCacheDir)) {	
-		qDebug() << "couldn't create SCAP cache folder";
-		emit signalCacheFolderNotCreated();
-		hasPermissions = false;
-	}
+    ScapSettings settings;
+    QString s_scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
+    QFileInfo scapCacheDir(s_scapCacheDir);
+    QDir scapCache(s_scapCacheDir);
+    bool hasPermissions = true;
+    // Tries to create if does not exist
+    if (!scapCache.mkpath(s_scapCacheDir)) {	
+        qDebug() << "couldn't create SCAP cache folder";
+        emit signalCacheFolderNotCreated();
+        hasPermissions = false;
+    }
 #ifdef WIN32
-	extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
-	qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
+    extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+    qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
 #endif
-	if (!scapCacheDir.isWritable()) {
-		qDebug() << "SCAP cache not writable";
-		emit signalCacheNotWritable();
-		hasPermissions = false;
-	}
-	if (!scapCacheDir.isReadable()) {
-		qDebug() << "SCAP cache not readable";
-		emit signalCacheNotReadable(0); // isCompanies parameter not used
-		hasPermissions = false;
-	}
+    if (!scapCacheDir.isWritable()) {
+        qDebug() << "SCAP cache not writable";
+        emit signalCacheNotWritable();
+        hasPermissions = false;
+    }
+    if (!scapCacheDir.isReadable()) {
+        qDebug() << "SCAP cache not readable";
+        emit signalCacheNotReadable(0); // isCompanies parameter not used
+        hasPermissions = false;
+    }
 #ifdef WIN32
-	qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
+    qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
 #endif
-	return hasPermissions;
+    return hasPermissions;
 }
 
 void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
@@ -2522,8 +2522,8 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
         //------------------------------------
         // is card removed from the reader?
         //------------------------------------
-		if (!readerContext.isCardPresent())
-		{
+        if (!readerContext.isCardPresent())
+        {
 
             if (pCallBackData->getMainWnd()->m_Settings.getRemoveCert())
             {
@@ -2534,7 +2534,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
                     qDebug() << "RemoveCertificates fail";
 
                     PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "RemoveCertificates failed!");
-					emit pCallBackData->getMainWnd()->signalRemoveCertificatesFail();
+                    emit pCallBackData->getMainWnd()->signalRemoveCertificatesFail();
                 }
             }
 
@@ -2555,7 +2555,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
         //------------------------------------
         // is card inserted ?
         //------------------------------------
-		else if (readerContext.isCardChanged(pCallBackData->m_cardID))
+        else if (readerContext.isCardChanged(pCallBackData->m_cardID))
         {
             //------------------------------------
             // send an event to the main app to show the popup message
@@ -2567,21 +2567,21 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
             //------------------------------------
             // register certificates when needed
             //------------------------------------
-			if (pCallBackData->getMainWnd()->m_Settings.getRegCert())
+            if (pCallBackData->getMainWnd()->m_Settings.getRegCert())
             {
                 PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Will try to ImportCertificates...");
                 bool bImported = pCallBackData->getMainWnd()->m_Certificates.ImportCertificates(pCallBackData->getReaderName());
 
                 if(!bImported) {
                     PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "ImportCertificates failed!");
-					emit pCallBackData->getMainWnd()->signalImportCertificatesFail();
+                    emit pCallBackData->getMainWnd()->signalImportCertificatesFail();
                 }
             }
         }
-		else
-		{
-			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Event ignored");
-		}
+        else
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Event ignored");
+        }
     }
     catch (...)
     {
