@@ -527,7 +527,6 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                 bool isVisible = false;
                 QByteArray signatureHash;
                 ns1__MainAttributeType *mainAttribute = NULL;
-                ns1__MainAttributeType *mainAttributePrevious = NULL;
 
                 ns1__TransactionType *transaction = transactionList.at(i);
 
@@ -567,25 +566,21 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                                 attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
                             }else{
                                 qDebug() << "Not the first time";
-                                ns1__TransactionType *transactionPrevious = transactionList.at(i-1);
-                                mainAttributePrevious = transactionPrevious->MainAttribute;
-                                attributeListString.append(QString::fromStdString(" de "));
-                                if(lastAttrSupplierType == "INSTITUTION"){
-                                    if (mainAttributePrevious->SubAttributeList != NULL) {
-                                        for (uint ii = 0; ii < mainAttributePrevious->SubAttributeList->SubAttribute.size(); ii++) {
-                                            ns1__SubAttributeType *acSubAttr = mainAttributePrevious->SubAttributeList->SubAttribute.at(ii);
-                                            if(QString::fromStdString(acSubAttr->AttributeID.c_str()).contains("Nome") == true){
-                                                attributeListString.append(QString::fromStdString(acSubAttr->Value->c_str()));
-                                            }
-                                        }
-                                    }
-                                }else{
+                                if(lastAttrSupplierType == "ENTERPRISE"){
+                                    attributeListString.append(QString::fromStdString(" de "));
                                     attributeListString.append(lastAttrSupplierString);
                                 }
+
                                 attributeListString.append(QString::fromStdString(" e "));
                                 if(moreThanOneNext) attributeListString.append(QString::fromStdString(" { "));
                                 attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
-                                attributeSupplierListString.append(QString::fromStdString(" e "));
+
+                                // The LAST attributeSupplier
+                                if(i == transactionList.size() - 2){
+                                    attributeSupplierListString.append(QString::fromStdString(" e "));
+                                }else{
+                                    attributeSupplierListString.append(QString::fromStdString(" , "));
+                                }
                             }
 
                             if(QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "INSTITUTION"){
@@ -593,7 +588,6 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                             }else{
                                 attributeSupplierListString.append(QString::fromStdString("SCAP"));
                             }
-
                     }
 
                     //  A new attribute for the SAME attribute supplier
@@ -613,18 +607,10 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                     if(i == transactionList.size() - 2){
                             qDebug() << "The LAST attribute visible";
                             if(moreThanOneNext) attributeListString.append(QString::fromStdString(" } "));
-                            attributeListString.append(QString::fromStdString(" de "));
 
-                            if(QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "INSTITUTION"){
-                                if (mainAttribute->SubAttributeList != NULL) {
-                                    for (uint ii = 0; ii < mainAttribute->SubAttributeList->SubAttribute.size(); ii++) {
-                                        ns1__SubAttributeType *acSubAttr = mainAttribute->SubAttributeList->SubAttribute.at(ii);
-                                        if(QString::fromStdString(acSubAttr->AttributeID.c_str()).contains("Nome") == true){
-                                            attributeListString.append(QString::fromStdString(acSubAttr->Value->c_str()));
-                                        }
-                                    }
-                                }
-                            }else{
+                            if(QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "ENTERPRISE")
+                            {
+                                attributeListString.append(QString::fromStdString(" de "));
                                 attributeListString.append(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
                             }
                     }
