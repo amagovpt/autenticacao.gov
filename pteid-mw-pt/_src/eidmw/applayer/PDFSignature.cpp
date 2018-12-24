@@ -787,7 +787,7 @@ namespace eIDMW
         PKCS7_free( m_pkcs7 );
         m_pkcs7 = NULL;
 
-        if (final_ret == errPermission){
+		if (final_ret == errPermission || final_ret == errOpenFile){
             throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
         }
         else if (final_ret != errNone) {
