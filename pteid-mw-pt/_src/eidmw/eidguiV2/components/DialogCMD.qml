@@ -441,12 +441,29 @@ Item {
         }else{
             page = propertySpinBoxControl.value
         }
-        var reason = ""
-        var location = ""
-        var isSmallSignature = false
-        var coord_x = propertyPDFPreview.propertyCoordX
-        //coord_y must be the lower left corner of the signature rectangle
-        var coord_y = propertyPDFPreview.propertyCoordY
+
+        if (typeof propertyTextFieldReason !== "undefined")
+            var reason = propertyTextFieldReason.text
+
+        if (typeof propertyTextFieldLocal !== "undefined")
+            var location = propertyTextFieldLocal.text
+
+        if (typeof propertyCheckSignReduced !== "undefined")
+            var isSmallSignature = propertyCheckSignReduced.checked
+
+        var coord_x = -1
+        var coord_y = -1
+        if(typeof propertyCheckSignShow !== "undefined"){
+            if(propertyCheckSignShow.checked){
+                coord_x = propertyPDFPreview.propertyCoordX
+                //coord_y must be the lower left corner of the signature rectangle
+                coord_y = propertyPDFPreview.propertyCoordY
+            }
+        } else {
+            coord_x = propertyPDFPreview.propertyCoordX
+            //coord_y must be the lower left corner of the signature rectangle
+            coord_y = propertyPDFPreview.propertyCoordY
+        }
 
         console.log("Output filename: " + outputFile)
         console.log("Signing in position coord_x: " + coord_x
@@ -457,11 +474,19 @@ Item {
 
         propertyOutputSignedFile = outputFile
         rectLabelCMDText.visible = false
-        gapi.signOpenCMD(mobileNumber,textFieldPin.text,
-                         loadedFilePath,outputFile,page,
-                         coord_x,coord_y,
-                         reason,location,
-                         isTimestamp, isSmallSignature)
+
+        if (typeof propertySwitchSignAdd !== "undefined" && propertySwitchSignAdd.checked) {
+            gapi.signOpenScapWithCMD(mobileNumber,textFieldPin.text,
+                                     loadedFilePath,outputFile,page,
+                                     coord_x, coord_y,
+                                     reason,location)
+        } else {
+            gapi.signOpenCMD(mobileNumber,textFieldPin.text,
+                             loadedFilePath,outputFile,page,
+                             coord_x,coord_y,
+                             reason,location,
+                             isTimestamp, isSmallSignature)
+        }
 
         progressBarIndeterminate.visible = true
         progressBar.visible = true
@@ -477,8 +502,26 @@ Item {
         console.log("Send sms_token : " + textFieldReturnCode.text)
         buttonCMDProgressConfirm.isOpenFile = true
         if( progressBar.value < 100) {
-            //Empty attributes list, in simple signature view it's not SCAP signature
-            gapi.signCloseCMD(textFieldReturnCode.text, [])
+            var attributeList = []
+            //CMD with SCAP attributes
+            if (typeof propertySwitchSignAdd !== "undefined" && propertySwitchSignAdd.checked) {
+                var count = 0
+                for (var i = 0; i < entityAttributesModel.count; i++){
+                    if(entityAttributesModel.get(i).checkBoxAttr == true) {
+                        attributeList[count] = i
+                        count++
+                    }
+                }
+                if(count == 0) {
+                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                            qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                            qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
+                    mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+                    return
+                }
+            }
+            gapi.signCloseCMD(textFieldReturnCode.text, attributeList)
             progressBarIndeterminate.visible = true
             rectReturnCode.visible = false
             buttonCMDProgressConfirm.visible = false
