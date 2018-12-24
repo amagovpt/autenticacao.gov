@@ -278,8 +278,8 @@ public slots:
                          QString reason, QString location, bool isTimestamp, bool isSmall);
     int getPDFpageCount(QString loadedFilePath);
 
-    void startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
-    void startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, double isTimestamp);
+	void startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp);
+	void startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, bool isTimestamp);
 
     /* SCAP Methods  */
     void startGettingEntities();

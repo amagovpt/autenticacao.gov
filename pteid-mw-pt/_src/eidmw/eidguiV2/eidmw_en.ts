@@ -1683,7 +1683,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced2.qml" line="90"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="30"/>
         <source>STR_SIGN_FILE_PERMISSION_FAIL</source>
-        <translation>Failed to sign the file, verify if the output file is not currently used by another program</translation>
+        <translation>Failed to sign the file, verify if the output file is not currently open in another program or if you have write permissions</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="82"/>

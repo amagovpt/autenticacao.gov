@@ -1681,7 +1681,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced2.qml" line="90"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="30"/>
         <source>STR_SIGN_FILE_PERMISSION_FAIL</source>
-        <translation>Falha ao assinar o ficheiro, verifique se ficheiro resultante não está a ser usado por outro programa</translation>
+        <translation>Falha ao assinar o ficheiro, verifique se ficheiro resultante não está aberto em outro programa ou se tem permissões para escrita</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="82"/>

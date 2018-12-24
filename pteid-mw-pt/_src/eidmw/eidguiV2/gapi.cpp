@@ -1108,14 +1108,6 @@ double drawSingleField(QPainter &painter, double pos_x, double pos_y, QString na
         QFontMetricsF fm = painter.fontMetrics();
         QRectF bounding_rect = fm.boundingRect(QRectF(pos_x + field_margin, pos_y, bound_width -  2 * field_margin ,  500), flags, value);
 
-        //QRectF rectangle = QRectF(pos_x, pos_y, 600, 600);
-        //QRectF bounding_rect;
-        //painter.drawText(bounding_rect, Qt::TextDontPrint, value);
-
-        qDebug() << "Value: " << value;
-        qDebug() << "BR Width: " << bounding_rect.width();
-        qDebug() << "BR height: " << bounding_rect.height();
-
         painter.drawText(bounding_rect.adjusted(0, 0, 0, 0), textFlags, value);
         pos_y += bounding_rect.height() + 15;
     } else {
@@ -1566,13 +1558,13 @@ int GAPI::getPDFpageCount(QString loadedFilePath) {
     return pageCount;
 }
 
-void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, double isTimestamp) {
+void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp) {
     QFuture<void> future =
             QtConcurrent::run(this, &GAPI::doSignXADES, loadedFilePath, outputFile, isTimestamp);
 
 }
 
-void GAPI::startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, double isTimestamp) {
+void GAPI::startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, bool isTimestamp) {
 
     SignBatchParams params = {loadedFileBatchPath, outputFile, 0, 0, 0, "", "", isTimestamp, 0};
 
