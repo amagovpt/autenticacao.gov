@@ -20,7 +20,7 @@
 #ifndef __SVN_REVISION_H__
 #define __SVN_REVISION_H__
 
-#define SVN_REVISION 5766
-#define SVN_REVISION_STR "5766"
+#define SVN_REVISION 5771
+#define SVN_REVISION_STR "5771"
 
 #endif //__SVN_REVISION_H__
