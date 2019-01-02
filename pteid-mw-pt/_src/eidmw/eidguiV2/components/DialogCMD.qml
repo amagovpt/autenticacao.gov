@@ -430,7 +430,6 @@ Item {
     }
     function signCMD(){
         var loadedFilePath = filesModel.get(0).fileUrl
-        var isTimestamp = false
         var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
 
         outputFile = decodeURIComponent(stripFilePrefix(outputFile))
@@ -441,6 +440,10 @@ Item {
         }else{
             page = propertySpinBoxControl.value
         }
+
+        var isTimestamp = false
+        if (typeof propertySwitchSignTemp !== "undefined")
+            isTimestamp = propertySwitchSignTemp.checked
 
         if (typeof propertyTextFieldReason !== "undefined")
             var reason = propertyTextFieldReason.text
