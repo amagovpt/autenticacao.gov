@@ -174,7 +174,6 @@ ListModel {
     ListElement { text: "+51 - Peru" }
     ListElement { text: "+63 - Philippines" }
     ListElement { text: "+48 - Poland" }
-    ListElement { text: "+351 - Portugal (includes Azores)" }
     ListElement { text: "+1 787 - Puerto Rico" }
     ListElement { text: "+974 - Qatar" }
     ListElement { text: "+262 - Reunion (France)" }
