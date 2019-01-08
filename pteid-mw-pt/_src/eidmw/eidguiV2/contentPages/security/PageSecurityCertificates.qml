@@ -165,7 +165,7 @@ PageSecurityCertificatesForm {
                                         'valid': certificatesMap.levelB1.ValidityBegin,
                                         'until':certificatesMap.levelB1.ValidityEnd,
                                         'key': certificatesMap.levelB1.KeyLength,
-                                        'status': certificatesMap.levelB1.Status,
+                                        'status': getCertStatus(certificatesMap.levelB1.Status),
                                         'children': [
                                             {
                                                 'entity': certificatesMap.levelB0.OwnerName,
