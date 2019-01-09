@@ -181,8 +181,13 @@ PageCardPrintForm {
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
         onSignalPrinterPrintFail: {
+            console.log("got error on printer print failed "  + error_code)
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTr("STR_PRINT_PRINTER")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  qsTr("STR_PRINT_PRINTER_FAIL")
+            if (error_code == GAPI.NoPrinterAvailable) {
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  qsTr("STR_PRINT_NO_PRINTER_AVAILABLE")
+            } else {
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  qsTr("STR_PRINT_PRINTER_FAIL")
+            }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }

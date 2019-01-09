@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <QQuickImageProvider>
 #include <QPrinter>
+#include <QPrinterInfo>
 #include "qpainter.h"
 
 #include "CMDSignature.h"
@@ -985,6 +986,12 @@ void GAPI::startPrintPDF(QString outputFile, bool isBasicInfo, bool isAddicional
 
 void GAPI::startPrint(QString outputFile, bool isBasicInfo, bool isAddicionalInfo,
                          bool isAddress, bool isNotes, bool isPrintDate, bool isSign) {
+
+    if (QPrinterInfo::availablePrinters().size() == 0) {
+        qDebug() << "No Printers Available";
+        emit signalPrinterPrintFail(NoPrinterAvailable);
+        return;
+    }
 
     PrintParams params = {outputFile, isBasicInfo, isAddicionalInfo, isAddress, isNotes, isPrintDate, isSign};
 

@@ -11,6 +11,7 @@
 #include <QPixmap>
 #include <poppler-qt5.h>
 #include <QPrinter>
+#include <QPrinterInfo>
 #include <QPrintDialog>
 #include "Settings.h"
 #include "certificates.h"
@@ -216,6 +217,8 @@ public:
 
     enum SignMessage { SignMessageOK, SignMessageTimestampFailed, SignFilePermissionFailed, PDFFileUnsupported};
 
+    enum PrintMessage {NoPrinterAvailable};
+
     enum eCustomEventType { ET_UNKNOWN, ET_CARD_CHANGED, ET_CARD_REMOVED };
 
     enum AutoUpdateMessage {GenericError, NoUpdatesAvailable, DownloadFailed, DownloadCancelled, LinuxNotSupported, UpdatesAvailable,
@@ -230,6 +233,7 @@ public:
     Q_ENUMS(AddressInfoKey)
     Q_ENUMS(UI_LANGUAGE)
     Q_ENUMS(SignMessage)
+    Q_ENUMS(PrintMessage)
     Q_ENUMS(AutoUpdateMessage)
 
 
@@ -392,6 +396,7 @@ signals:
     void signalPdfPrintSignSucess();
     void signalPdfPrintFail();
     void signalPrinterPrintFail();
+    void signalPrinterPrintFail(int error_code);
     void signalLanguageChangedError();
     void signalRemoveSCAPAttributesSucess(int isCompanies);
     void signalRemoveSCAPAttributesFail(int isCompanies);
