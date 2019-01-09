@@ -263,7 +263,11 @@ public:
 
         {
             eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_CACHEDIR);
-            m_pteid_cachedir = config.getString();
+#ifdef WIN32
+			m_pteid_cachedir = QString::fromLatin1(config.getString());
+#else
+			m_pteid_cachedir = config.getString();
+#endif
         }
     }
     //------------------------------------------------------
@@ -538,14 +542,6 @@ public:
 
     QString getPteidCachedir(){
         return m_pteid_cachedir;
-    }
-
-    void setPteidCachedir(QString const& pteid_cachedir)
-    {
-        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_CACHEDIR);
-        config.setString(pteid_cachedir.toUtf8());
-
-        m_pteid_cachedir = pteid_cachedir;
     }
 
     /* Test Mode */

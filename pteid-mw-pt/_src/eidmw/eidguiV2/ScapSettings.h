@@ -43,11 +43,15 @@ public:
 
 
         //----------------------------------------------------------
-        // check the Cache language
+        // check the Cache dir
         //----------------------------------------------------------
         {
-            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_CACHEDIR);
-            QString cacheDir = config.getString();
+			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_CACHEDIR);
+#ifdef WIN32
+			QString cacheDir = QString::fromLatin1(config.getString());
+#else
+			m_pteid_cachedir = config.getString();
+#endif
             m_cache_dir = cacheDir;
         }
 
