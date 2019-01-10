@@ -296,7 +296,7 @@ PageServicesSignAdvancedForm {
                 Text {
                     id: labelOpenText
                     text: {
-                        if(propertyListViewFiles.count > 1) {
+                        if(propertyListViewFiles.count > 1 || propertyRadioButtonXADES.checked) {
                             qsTranslate("PageServicesSign", "STR_SIGN_OPEN_MULTI")
                         } else {
                             qsTranslate("PageServicesSign", "STR_SIGN_OPEN")

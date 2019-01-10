@@ -1527,7 +1527,7 @@
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="300"/>
         <source>STR_SIGN_OPEN_MULTI</source>
-        <translation>Open folder with signed files ?</translation>
+        <translation>Open folder with signed file(s) ?</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="369"/>
