@@ -50,7 +50,7 @@ public:
 #ifdef WIN32
 			QString cacheDir = QString::fromLatin1(config.getString());
 #else
-			m_pteid_cachedir = config.getString();
+			QString cacheDir = config.getString();
 #endif
             m_cache_dir = cacheDir;
         }
