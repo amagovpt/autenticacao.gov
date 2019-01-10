@@ -267,7 +267,7 @@ PageServicesSignAdvancedForm {
             Keys.onPressed: {
                 if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
                 {
-                    signCMDShowSignedFile()
+                    signSuccessShowSignedFile()
                 }
             }
 
@@ -342,7 +342,7 @@ PageServicesSignAdvancedForm {
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     onClicked: {
-                        signCMDShowSignedFile()
+                        signSuccessShowSignedFile()
                     }
                 }
             }
@@ -1200,7 +1200,7 @@ PageServicesSignAdvancedForm {
 
     function stripFilePrefix(filePath) {
         if (Qt.platform.os === "windows") {
-            return filePath.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+            return filePath.replace(/^(file:\/{3})|(file:)|(qrc:\/{3})|(http:\/{3})/,"")
         }
         else {
             return filePath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
@@ -1256,17 +1256,20 @@ PageServicesSignAdvancedForm {
             propertySpinBoxControl.down.indicator.enabled = false
         }
     }
-    function openSignedFile(){
+	function openSignedFile(){
         if (Qt.platform.os === "windows") {
-            propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+			if (propertyOutputSignedFile.substring(0, 2) == "//" ){
+				propertyOutputSignedFile = "file:" + propertyOutputSignedFile
+			}else{
+				propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+			}
         }else{
             propertyOutputSignedFile = "file://" + propertyOutputSignedFile
         }
         console.log("Open Url Externally: " + propertyOutputSignedFile)
         Qt.openUrlExternally(propertyOutputSignedFile)
     }
-   
-    function signCMDShowSignedFile(){
+    function signSuccessShowSignedFile(){
         openSignedFile()
         signsuccess_dialog.close()
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
