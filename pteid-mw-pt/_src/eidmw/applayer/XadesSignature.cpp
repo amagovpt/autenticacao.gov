@@ -674,20 +674,26 @@ void XadesSignature::addCertificateChain(DSIGKeyInfoX509 *keyInfo)
 
     APL_SmartCard * eid_card = static_cast<APL_SmartCard *> (mp_card);
     APL_Certifs *certs = eid_card->getCertificates();
-    APL_Certif *auth_cert = certs->getCert(APL_CERTIF_TYPE_SIGNATURE);
+    APL_Certif *signature_cert = certs->getCert(APL_CERTIF_TYPE_SIGNATURE);
 
-    APL_Certif *certif = auth_cert;
+    APL_Certif *certif = signature_cert;
     
-    int i = 0;
     while(!certif->isRoot())
     {
-        APL_Certif * issuer = certif->getIssuer();
+		APL_Certif * issuer = NULL;
+        issuer = certif->getIssuer();
 
-        MWLOG(LEV_DEBUG, MOD_APL, "XadesSignature: addCertificateChain: Loading cert: %s", issuer->getOwnerName());
-        addCertificateToKeyInfo(issuer->getData(), keyInfo);
+		if (issuer == NULL) {
+			MWLOG(LEV_ERROR, MOD_APL, "XadesSignature: addCertificateChain() Couldn't find issuer for cert: %s", certif->getOwnerName());
+            break;
+        }
+
+		MWLOG(LEV_DEBUG, MOD_APL, "XadesSignature: addCertificateChain: Loading cert: %s", issuer->getOwnerName());
+		addCertificateToKeyInfo(issuer->getData(), keyInfo);
 		m_cert_bas.push_back(issuer->getData());
-        certif = issuer;
-    }
+		certif = issuer;
+	}
+
 }
 
 
