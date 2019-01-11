@@ -432,7 +432,7 @@ private:
     void doPrint(PrintParams &params);
     bool drawpdf(QPrinter &printer, PrintParams params);
     void doSignBatchPDF(SignBatchParams &params);
-    void doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp);
+	void doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp);
     void doSignBatchXADES(SignBatchParams &params);
     void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);
     void fillCertificateList (void );

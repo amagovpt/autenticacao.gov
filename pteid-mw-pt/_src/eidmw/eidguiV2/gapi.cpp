@@ -1598,7 +1598,7 @@ void GAPI::doSignBatchXADES(SignBatchParams &params) {
 
         QByteArray tempOutputFile = getPlatformNativeString(params.outputFile);
 
-        if (params.isTimestamp > 0)
+        if (params.isTimestamp)
             card->SignXadesT(tempOutputFile.constData(), files_to_sign.data(), params.loadedFileBatchPath.count());
         else
             card->SignXades(tempOutputFile.constData(), files_to_sign.data(), params.loadedFileBatchPath.count());
@@ -1608,7 +1608,7 @@ void GAPI::doSignBatchXADES(SignBatchParams &params) {
     END_TRY_CATCH
 }
 
-void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTimestamp) {
+void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp) {
     BEGIN_TRY_CATCH
 
     PTEID_EIDCard * card = NULL;
@@ -1621,7 +1621,7 @@ void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, double isTime
 
     QByteArray tempOutputFile = getPlatformNativeString(outputFile);
 
-    if (isTimestamp > 0)
+    if (isTimestamp)
         card->SignXadesT(tempOutputFile.constData(), files_to_sign, 1);
     else
         card->SignXades(tempOutputFile.constData(), files_to_sign, 1);
@@ -1642,9 +1642,9 @@ void GAPI::doSignPDF(SignParams &params) {
     QString fullInputPath = params.loadedFilePath;
     PTEID_PDFSignature sig_handler(getPlatformNativeString(fullInputPath));
 
-    if (params.isTimestamp > 0)
+    if (params.isTimestamp)
         sig_handler.enableTimestamp();
-    if (params.isSmallSignature > 0)
+    if (params.isSmallSignature)
         sig_handler.enableSmallSignatureFormat();
 
     if(useCustomSignature())
@@ -1680,9 +1680,9 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
                                        params.page == 0 ? true : false);
     }
 
-    if (params.isTimestamp > 0)
+    if (params.isTimestamp)
         sig_handler->enableTimestamp();
-    if (params.isSmallSignature > 0)
+    if (params.isSmallSignature)
         sig_handler->enableSmallSignatureFormat();
 
     if(useCustomSignature())
