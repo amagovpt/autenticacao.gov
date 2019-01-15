@@ -783,12 +783,36 @@ bool PTEID_EIDCard::Activate(const char *pinCode, PTEID_ByteArray &BCDDate, bool
 bool PTEID_EIDCard::writePersonalNotes(const PTEID_ByteArray &out,PTEID_Pin *pin,const char *csPinCode){
 	BEGIN_TRY_CATCH
 
-	//martinho: TODO: isto terá de ser muito melhorado...
-	persoNotesDirty = writeFile("3F005F00EF07", out, pin, csPinCode);
-
+	/**
+	 * clear notes before writing again,
+	 * avoids mergings previous notes with new ones,
+	 * leading to a inconsistent state
+	*/
+	bool cleared = clearPersonalNotes(pin, csPinCode);
+	if (cleared) {
+		persoNotesDirty = writeFile("3F005F00EF07", out, pin, csPinCode);
+	}
+	
 	END_TRY_CATCH
 
 	return persoNotesDirty;
+}
+
+bool PTEID_EIDCard::clearPersonalNotes(PTEID_Pin *pin,const char *csPinCode){
+	unsigned long ulSize = 1000;
+	unsigned char *pucData = static_cast<unsigned char *>(calloc(ulSize, sizeof(char)));
+	bool cleared = false;
+
+	BEGIN_TRY_CATCH
+
+	const unsigned char *data = const_cast<unsigned char *>(pucData);
+	const PTEID_ByteArray clear(data, ulSize);
+
+	cleared = writeFile("3F005F00EF07", clear, pin, csPinCode);
+
+	END_TRY_CATCH
+	free(pucData);
+	return cleared;
 }
 
 const char *PTEID_EIDCard::readPersonalNotes() {

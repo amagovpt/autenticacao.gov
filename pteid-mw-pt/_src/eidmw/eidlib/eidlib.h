@@ -800,6 +800,7 @@ public:
 	PTEIDSDK_API PTEID_Sod& getSod();							/**< Get the sod document */
 	PTEIDSDK_API PTEID_CardVersionInfo& getVersionInfo();		/**< Get the info document  */
 	PTEIDSDK_API bool writePersonalNotes(const PTEID_ByteArray &out,PTEID_Pin *pin=NULL,const char *csPinCode="");
+	PTEIDSDK_API bool clearPersonalNotes(PTEID_Pin *pin=NULL,const char *csPinCode="");
 	PTEIDSDK_API const char *readPersonalNotes();
 
 	PTEIDSDK_API PTEID_Certificate &getCert(PTEID_CertifType type);/**< Return certificate by type from the card */
@@ -1239,7 +1240,8 @@ public:
 	  *
 	  * @param csPin is the pin code to verify (if csPin is empty, a popup will ask for the code)
 	  * @param ulRemaining return the remaining tries (only if verifying failed)
-	  *
+	  * @param bShowDlg flag used to either show or not a dialog where the user inserts the pin (default=true)
+	  * @param wndGeometry DEPRECATED (default=0)
 	  * @return true if success and false if failed
 	  */
 	PTEIDSDK_API bool verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg=true, void *wndGeometry = 0 );

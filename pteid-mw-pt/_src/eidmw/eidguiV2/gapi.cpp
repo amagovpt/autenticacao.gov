@@ -289,17 +289,12 @@ void GAPI::setPersoDataFile(QString text) {
         PTEID_ReaderContext &ReaderContext  = ReaderSet.getReader();
         PTEID_EIDCard	 &Card	= ReaderContext.getEIDCard();
 
-        if ( TxtPersoDataString.toStdString().size() > 0 ){
+	if ( TxtPersoDataString.toStdString().size() > 0 ){
             const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*> (TxtPersoDataString.toStdString().c_str()), (TxtPersoDataString.toStdString().size() + 1) );
             Card.writePersonalNotes(oData);
         }
         else {
-            unsigned long ulSize = 1000;
-            unsigned char *pucData = (unsigned char *)calloc(ulSize, sizeof(unsigned char));
-
-            const PTEID_ByteArray oData( (const unsigned char *)pucData, ulSize);
-            Card.writePersonalNotes(oData);
-            free(pucData);
+            Card.clearPersonalNotes();
         }
         qDebug() << "Personal notes successfully written!" ;
         emit signalSetPersoDataFile(tr("STR_POPUP_SUCESS"),tr("STR_PERSONAL_NOTES_SUCESS"));
