@@ -783,6 +783,11 @@ bool PTEID_EIDCard::Activate(const char *pinCode, PTEID_ByteArray &BCDDate, bool
 bool PTEID_EIDCard::writePersonalNotes(const PTEID_ByteArray &out,PTEID_Pin *pin,const char *csPinCode){
 	BEGIN_TRY_CATCH
 
+	//ensure that pin asked is the authentication one
+	if (pin != NULL && pin->getPinRef() != PTEID_Pin::AUTH_PIN) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
 	/**
 	 * clear notes before writing again,
 	 * avoids mergings previous notes with new ones,
@@ -804,6 +809,11 @@ bool PTEID_EIDCard::clearPersonalNotes(PTEID_Pin *pin,const char *csPinCode){
 	bool cleared = false;
 
 	BEGIN_TRY_CATCH
+
+	//ensure that pin asked is the authentication one
+	if (pin != NULL && pin->getPinRef() != PTEID_Pin::AUTH_PIN) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
 
 	const unsigned char *data = const_cast<unsigned char *>(pucData);
 	const PTEID_ByteArray clear(data, ulSize);
