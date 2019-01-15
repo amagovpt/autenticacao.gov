@@ -143,10 +143,10 @@ public:
 
   void addSignatureAppearance(Object *signature_field, SignatureSignerInfo *signer_info,
 	     char *date_str,	const char* location, const char* reason, int rect_x, int rect_y,
-		 unsigned char *img_data, unsigned long img_length, bool rotate_signature, bool isPTLanguage);
+		 unsigned char *img_data, unsigned long img_length, int rotate_signature, bool isPTLanguage);
   void addSignatureAppearanceSCAP(Object *signature_field, SignatureSignerInfo *signer_info,
              char *date_str,	const char* location, const char* reason, int rect_x, int rect_y,
-                 unsigned char *img_data, unsigned long img_length, bool rotate_signature, bool isPTLanguage);
+                 unsigned char *img_data, unsigned long img_length, int rotate_signature, bool isPTLanguage);
   void addSignatureAppearance(Object *parent, int, int);
   void closeSignature(const char *signature_contents, unsigned long len);
 

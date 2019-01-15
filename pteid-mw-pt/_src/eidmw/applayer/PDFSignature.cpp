@@ -555,7 +555,7 @@ namespace eIDMW
 		m_isLandscape = isLandscapeFormat();
 
 		//Fix dimensions for the /Rotate case
-		if (m_isLandscape && height > width)
+		if (p->getRotate() == 90 || p->getRotate() == 270)
 		{
 			double dim1 = height;
 			height = width;
@@ -591,16 +591,40 @@ namespace eIDMW
 
 			    sig_location.x2 = sig_location.x1 + sig_width;
 			    sig_location.y2 = sig_location.y1 + actual_sig_height;
+
+				// When batch signing with some PDFs with rotated pages, the max location_x and location_y percentages in horizontal
+				// and vertical pages are different. This may cause the visible signature to be off-page. If this happens,
+				// translate the signature back to the page.
+				if (sig_location.x2 > width) {
+					sig_location.x1 = width-sig_width;
+					sig_location.x2 = width;
+				}
+				if (sig_location.y2 > height) {
+					sig_location.y1 = height-actual_sig_height;
+					sig_location.y2 = height;
+				}
 			}
 
 		}
 		MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Signature rectangle before rotation (if needed) (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
 
-		if (p->getRotate() == 90 || p->getRotate() == 270)
+		if (p->getRotate() == 90)
 		{
 			//Apply Rotation of R: R' = [-y2, x1, -y1, x2]
 			sig_location = PDFRectangle(height-sig_location.y2, sig_location.x1,
 			              height-sig_location.y1, sig_location.x2);
+			MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+		} else if (p->getRotate() == 270)
+		{
+			//Apply Rotation of R: R' = [y1, -x2, y2, -x1]
+			sig_location = PDFRectangle(sig_location.y1, width-sig_location.x2,
+			              sig_location.y2, width-sig_location.x1);
+			MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+		}  else if (p->getRotate() == 180)
+		{
+			//Apply Rotation of R: R' = []
+			sig_location = PDFRectangle(width-sig_location.x2, height-sig_location.y2,
+			              width-sig_location.x1, height-sig_location.y1);
 			MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
 		}
 

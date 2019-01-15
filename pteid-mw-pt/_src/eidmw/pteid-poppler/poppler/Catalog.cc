@@ -320,12 +320,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 
 	Page *page_obj = getPage(page);
 
-	bool rotate_signature = false;
-
-	if (page_obj->getRotate() == 90)
-	{
-		rotate_signature = true;
-	}
+	int rotate_signature = page_obj->getRotate();
 
         if (signer_info->attribute_provider == NULL) {
             addSignatureAppearance(&signature_field, signer_info, date_outstr,
@@ -992,7 +987,7 @@ bool checkFontSize(char *content, double available_space, double font_size, Myri
 
 void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInfo *signer_info,
 	char * date_str, const char* location, const char* reason, int rect_x, int rect_y,
-	unsigned char *img_data, unsigned long img_length, bool rotate_signature, bool isPTLanguage)
+	unsigned char *img_data, unsigned long img_length, int rotate_signature, bool isPTLanguage)
 {
 	char * strings_pt[] = { "(Assinado por : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n", 
 	                                                "(Num. de Identifica\xE7\xE3o: {0:s}) Tj\r\n",
@@ -1009,10 +1004,17 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 
 	GooString ap_command_toplevel;
 
-	if (rotate_signature)
+	if (rotate_signature == 90)
 	{
 		ap_command_toplevel.appendf("0 1 -1 0 {0:d} 0 cm \r\n", rect_x);
-
+	}
+	else if (rotate_signature == 270)
+	{
+		ap_command_toplevel.appendf("0 -1 1 0 0 {0:d} cm \r\n", rect_y);
+	}
+	else if (rotate_signature == 180)
+	{
+		ap_command_toplevel.appendf("-1 0 0 -1 {0:d} {1:d} cm \r\n", rect_x, rect_y);
 	}
 
 	std::string commands_template;
@@ -1033,8 +1035,8 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 	char n0_commands[] = "% DSBlank\n";
 	const float font_size = 8;
         const float line_height = 10.0;
-	int rect_width = rotate_signature ? rect_y : rect_x;
-	int rect_height = rotate_signature ? rect_x : rect_y;
+	int rect_width  = ((rotate_signature == 90 || rotate_signature == 270) ? rect_y : rect_x);
+	int rect_height = ((rotate_signature == 90 || rotate_signature == 270) ? rect_x : rect_y);
 	
 	//Start with Italics font
 	GooString *n2_commands = GooString::format(commands_template.c_str(), rect_height - 10, (int)font_size);
@@ -1131,8 +1133,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 	resources.dictAdd(copyString("ProcSet"), &procset);
 
 	xobject_layers.initDict(xref);
-	Ref n2_layer = newXObject(n2_commands->getCString(), rotate_signature ? rect_y : rect_x, rotate_signature ? rect_x : rect_y,
-	 true, true, img_data, img_length);
+	Ref n2_layer = newXObject(n2_commands->getCString(), rect_width, rect_height, true, true, img_data, img_length);
 	ref_to_n2.initRef(n2_layer.num, n2_layer.gen);
 	xobject_layers.dictAdd(copyString("n2"), &ref_to_n2);
 
@@ -1182,7 +1183,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 
 void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSignerInfo *signer_info,
         char * date_str, const char* location, const char* reason, int rect_x, int rect_y,
-        unsigned char *img_data, unsigned long img_length, bool rotate_signature, bool isPTLanguage)
+        unsigned char *img_data, unsigned long img_length, int rotate_signature, bool isPTLanguage)
 {
         char * strings_pt[] = { "(Assinado por: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
                                                         "(Num. de Identifica\xE7\xE3o: {0:s}) Tj\r\n",
@@ -1203,10 +1204,17 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
 
         GooString ap_command_toplevel;
 
-        if (rotate_signature)
+        if (rotate_signature == 90)
         {
                 ap_command_toplevel.appendf("0 1 -1 0 {0:d} 0 cm \r\n", rect_x);
-
+        } 
+        else if (rotate_signature == 270)
+        {
+          ap_command_toplevel.appendf("0 -1 1 0 0 {0:d} cm \r\n", rect_y);
+        }
+        else if (rotate_signature == 180)
+        {
+          ap_command_toplevel.appendf("-1 0 0 -1 {0:d} {1:d} cm \r\n", rect_x, rect_y);
         }
 
         std::string commands_template;
