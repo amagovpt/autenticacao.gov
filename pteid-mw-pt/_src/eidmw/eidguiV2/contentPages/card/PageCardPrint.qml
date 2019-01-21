@@ -290,7 +290,7 @@ PageCardPrintForm {
 
             outputFile = propertyFileDialogOutput.fileUrl.toString()
             if (Qt.platform.os === "windows") {
-                outputFile = outputFile.replace(/^(file:\/{3})|(qrc:\/{3})|(http:\/{3})/,"");
+                outputFile = outputFile.replace(/^(file:\/{3})|(file:)|(qrc:\/{3})|(http:\/{3})/,"")
             }else{
                 outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
@@ -365,7 +365,11 @@ PageCardPrintForm {
     
     function showCreatedFile(){
         if (Qt.platform.os === "windows") {
-            outputFile = "file:///" + outputFile
+            if (outputFile.substring(0, 2) === "//") {
+                outputFile = "file:" + outputFile
+            } else {
+                outputFile = "file:///" + outputFile
+            }
         }else{
             outputFile = "file://" + outputFile
         }
