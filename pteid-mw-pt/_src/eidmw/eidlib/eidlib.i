@@ -1499,6 +1499,12 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 	  return retval;
 }
 
+//--------------------------------------------------
+// Ignore this method from the java interface
+// However for Java the setCustomImage(const PTEID_ByteArray &image_data) is exposed
+// which should be used as an alterantive
+//--------------------------------------------------
+%ignore eIDMW::PTEID_PDFSignature::setCustomImage(unsigned char *image_data, unsigned long img_length);
 
 #elif SWIGPYTHON
 

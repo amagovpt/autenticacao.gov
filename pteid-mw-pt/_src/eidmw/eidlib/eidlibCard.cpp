@@ -368,10 +368,15 @@ void PTEID_PDFSignature::enableTimestamp()
 	mp_signature->enableTimestamp();
 
 }
-
+// this function is not exposed to Java, however is keep for backward compatibility
 void PTEID_PDFSignature::setCustomImage(unsigned char *image_data, unsigned long img_length)
 {
 	mp_signature->setCustomImage(image_data, img_length);
+}
+
+void PTEID_PDFSignature::setCustomImage(const PTEID_ByteArray &image_data)
+{
+	mp_signature->setCustomImage(const_cast<unsigned char *>(image_data.GetBytes()) , image_data.Size());
 }
 
 void PTEID_PDFSignature::enableSmallSignatureFormat()

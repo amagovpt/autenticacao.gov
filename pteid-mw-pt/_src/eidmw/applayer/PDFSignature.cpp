@@ -103,12 +103,9 @@ namespace eIDMW
 
 	void PDFSignature::setCustomImage(unsigned char *img_data, unsigned long img_length)
 	{
-
-		this->my_custom_image.img_data = img_data;
+		this->my_custom_image.img_data = (unsigned char*)malloc(img_length);
+		memcpy(this->my_custom_image.img_data, img_data, img_length);
 		this->my_custom_image.img_length = img_length;
-		// this->my_custom_image.img_height = img_height;
-		// this->my_custom_image.img_width = img_width;
-
 	}
 
 	PDFSignature::~PDFSignature()
@@ -119,6 +116,10 @@ namespace eIDMW
 		//Free the strdup'ed strings from batchAddFile
 		for (int i = 0; i != m_files_to_sign.size(); i++)
 			free(m_files_to_sign.at(i).first);
+
+		if (my_custom_image.img_data != NULL) {
+			free(my_custom_image.img_data);
+		}
 
 		if (m_doc != NULL)
 			delete m_doc;

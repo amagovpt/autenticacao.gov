@@ -755,6 +755,7 @@ class PTEID_PDFSignature
 		PTEIDSDK_API bool isLandscapeFormat();
 		PTEIDSDK_API char *getOccupiedSectors(int page);
 		PTEIDSDK_API void setCustomImage(unsigned char *image_data, unsigned long image_length);
+		PTEIDSDK_API void setCustomImage(const PTEID_ByteArray &image_data);
 
 		PTEIDSDK_API PDFSignature *getPdfSignature();
 
