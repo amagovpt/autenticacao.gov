@@ -1484,8 +1484,8 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
             pos_y += 50;
 
             QStringList lines = perso_data.split("\n", QString::KeepEmptyParts);
-			if (lines.count() == 2) { // two lines, the line itself and another is only "\n"
-				QString line = lines.first();
+			for (int j = 0; j < lines.count(); j++) {
+				QString line = lines.at(j);
 				if (!line.contains(" ")) { //a really big word without spaces
 					int num_of_chars = line.count();
 					int chars_in_page = 75; //only 75 characters fit in the width of a A4 page
@@ -1496,8 +1496,12 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 							line.insert(n, " "); //add whitespaces in such word to enforce WordWrap
 						}
 					}
-					lines.replace(0, line);
+					lines.replace(j, line);
 				}
+			}
+
+			if (lines.count() == 2) {
+
 			}
             const int TEXT_LINE_HEIGHT = 20;
 
