@@ -883,8 +883,10 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QString loaded
     if (params.isSmallSignature > 0)
         cmd_pdfSignature->enableSmallSignatureFormat();
 
-    if(useCustomSignature())
-        cmd_pdfSignature->setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
+    if(useCustomSignature()) {
+        const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
+        cmd_pdfSignature->setCustomImage(imageData);
+    }
 
     cmd_signature->set_pdf_handler(cmd_pdfSignature);
     QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, params);
@@ -1656,9 +1658,10 @@ void GAPI::doSignPDF(SignParams &params) {
     if (params.isSmallSignature)
         sig_handler.enableSmallSignatureFormat();
 
-    if(useCustomSignature())
-        sig_handler.setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
-
+	if(useCustomSignature()) {
+        const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
+        sig_handler.setCustomImage(imageData);
+	}
     card->SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
                     params.location.toUtf8().data(), params.reason.toUtf8().data(),
                     getPlatformNativeString(params.outputFile));
@@ -1694,8 +1697,10 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
     if (params.isSmallSignature)
         sig_handler->enableSmallSignatureFormat();
 
-    if(useCustomSignature())
-        sig_handler->setCustomImage((unsigned char *)m_jpeg_scaled_data.data(), m_jpeg_scaled_data.size());
+    if(useCustomSignature()) {
+        const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
+        sig_handler->setCustomImage(imageData);
+    }
 
     card->SignPDF(*sig_handler, params.page, params.coord_x, params.coord_y,
         params.location.toUtf8().data(), params.reason.toUtf8().data(),
