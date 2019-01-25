@@ -371,14 +371,16 @@
 		<File Id="eidlibcompat.h" Name="eidlibcompat.h" Source="..\..\..\eidlib\eidlibcompat.h"/>
         <File Id="eidlibdefines.h" Name="eidlibdefines.h" Source="..\..\..\eidlib\eidlibdefines.h"/>
         <File Id="eidlibException.h" Name="eidlibException.h" Source="..\..\..\eidlib\eidlibException.h"/>
-        <File Id="eidErrors.h" Name="eidErrors.h" Source="..\..\..\common\eidErrors.h"/>
+        <File Id="cppdocs.zip" Name="cppdocs.zip" Source="..\..\..\eidlib\cppdocs.zip"/>
+		<File Id="eidErrors.h" Name="eidErrors.h" Source="..\..\..\common\eidErrors.h"/>
       </Component>
     </DirectoryRef>
 
 			<DirectoryRef Id="JAVA_SDK">
 				<Component Id="Java_SDK_Component" Guid="{8B0D8006-DB84-4986-A8D7-AC5F84F4AEF8}" >
-		          <File Source="..\..\..\jar\pteidlibj.jar" />
-				</Component>
+				<File Source="..\..\..\jar\pteidlibj.jar" />
+				<File Source="..\..\..\eidlibJava_Wrapper\javadocs.zip" />
+			</Component>
 			</DirectoryRef>
 
 			<DirectoryRef Id="CSHARP_SDK">
