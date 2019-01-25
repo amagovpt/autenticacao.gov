@@ -1,0 +1,305 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Made with Remarkable!
+  </title>
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css" rel="stylesheet"/>
+  <style type="text/css">
+   ::selection,a::selection{background:rgba(255,255,0,.3)}a,a::selection{color:#0645ad}hr,img{border:0}a,ins{text-decoration:none}::selection,ins,mark{color:#000}dfn,mark{font-style:italic}hr,ol,p,ul{margin:1em 0}table tr td,table tr th{border:1px solid #ccc;text-align:left;padding:6px 13px;margin:0}hr,pre code,table,table tr{padding:0}pre,pre code{white-space:pre}html{font-size:100%;overflow-y:scroll;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}body{color:#444;font-family:Georgia,Palatino,"Palatino Linotype",Times,"Times New Roman",serif;font-size:12px;line-height:1.5em;padding:1em;margin:auto;max-width:42em;background:#fefefe}a:visited{color:#0b0080}a:hover{color:#06e}a:active{color:#faa700}a:focus{outline:dotted thin}a:active,a:hover{outline:0}::-moz-selection{background:rgba(255,255,0,.3);color:#000}a::-moz-selection{background:rgba(255,255,0,.3);color:#0645ad}img{max-width:100%;-ms-interpolation-mode:bicubic;vertical-align:middle}h1,h2,h3,h4,h5,h6{font-weight:400;color:#111;line-height:1em}b,h4,h5,h6,mark,strong,table tr th{font-weight:700}h1{font-size:2.5em}h2{font-size:2em}h3{font-size:1.5em}h4{font-size:1.2em}h5{font-size:1em}h6{font-size:.9em}blockquote{color:#666;margin:0;padding-left:3em;border-left:.5em #EEE solid}hr{display:block;height:2px;border-top:1px solid #aaa;border-bottom:1px solid #eee}code,kbd,pre,samp{color:#000;font-family:monospace,monospace;font-size:.98em}pre{white-space:pre-wrap;word-wrap:break-word}ins{background:#ff9}mark{background:#ff0}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}ol,ul{padding:0 0 0 2em}li p:last-child{margin:0}dd{margin:0 0 0 2em}table{border-collapse:collapse;border-spacing:0}td{vertical-align:top}@media only screen and (min-width:480px){body{font-size:14px}}@media only screen and (min-width:768px){body{font-size:16px}}@media print{blockquote,img,pre,tr{page-break-inside:avoid}*{background:0 0!important;color:#000!important;filter:none!important;-ms-filter:none!important}body{font-size:12pt;max-width:100%}a,a:visited{text-decoration:underline}hr{height:1px;border:0;border-bottom:1px solid #000}a[href]:after{content:" (" attr(href) ")"}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}blockquote,pre{border:1px solid #999;padding-right:1em}img{max-width:100%!important}@page :left{margin:15mm 20mm 15mm 10mm}@page :right{margin:15mm 10mm 15mm 20mm}h2,h3,p{orphans:3;widows:3}h2,h3{page-break-after:avoid}}table tr{border-top:1px solid #ccc;background-color:#fff;margin:0}table tr:nth-child(2n){background-color:#aaa}table tr td :first-child,table tr th :first-child{margin-top:0}table tr td:last-child,table tr th :last-child{margin-bottom:0}code,tt{margin:0 2px;padding:0 5px;white-space:nowrap;border:1px solid #eaeaea;background-color:#f8f8f8;border-radius:3px}pre code{margin:0;border:none;background:0 0}.highlight pre,pre{background-color:#f8f8f8;border:1px solid #ccc;font-size:13px;line-height:19px;overflow:auto;padding:6px 10px;border-radius:3px}
+  </style>
+ </head>
+ <body>
+  <h3 id="java-sdk-examples">
+   Java SDK Examples
+  </h3>
+  <p>
+   Make sure that the JNI library is explicitly loaded using the following code (this implements the wrapper functions for Java)
+  </p>
+  <pre><code class="java">package pteidsample;
+import pt.gov.cartaodecidadao.*;
+(...)
+static {
+    try {
+        System.loadLibrary("pteidlibj");
+    } catch (UnsatisfiedLinkError e) {
+        System.err.println("Native code library failed to load. \n" + e);
+        System.exit(1);
+    }
+}
+</code></pre>
+  <p>
+   Add the initialization and release function in a appropriate place inside your application
+  </p>
+  <pre><code class="java">public class SamplePTEID {
+    public static void main(String[] args) {
+        PTEID_ReaderSet.initSDK();
+        (...)
+        PTEID_ReaderSet.releaseSDK();
+    }
+}
+</code></pre>
+  <p>
+   Access to the card can be achieved as follows
+  </p>
+  <pre><code class="java">PTEID_EIDCard card;
+PTEID_ReaderContext context;
+PTEID_ReaderSet readerSet;
+readerSet = PTEID_ReaderSet.instance();
+for( int i=0; i &lt; readerSet.readerCount(); i++){
+    context = readerSet.getReaderByNum(i);
+    if (context.isCardPresent()){
+        card = context.getEIDCard();
+        (...)
+    }
+}
+</code></pre>
+  <p>
+   Another method of obtaining
+   <code>
+    card
+   </code>
+   is to use
+   <code>
+    getReader
+   </code>
+   directly as follows
+  </p>
+  <pre><code class="java">PTEID_ReaderContext readerContext = PTEID_ReaderSet.instance().getReader();
+PTEID_EIDCard card = readerContext.getEIDCard();
+</code></pre>
+  <h4 id="get-events-for-insertion-and-removal-of-cards">
+   Get events for insertion and removal of cards
+  </h4>
+  <p>
+   The SDK allows to receive events when a card is inserted or removed using callbacks
+   <br/>
+   - For that make sure to use
+   <code>
+    SetEventCallback
+   </code>
+   on
+   <code>
+    PTEID_ReaderContext
+   </code>
+   associated with the reader that you want to receive events
+  </p>
+  <pre><code class="java">class PteidCardCallback implements Callback {
+    public void cardEvent(long lRet, long ulState, Object callbackData) {
+        int cardState = (int)ulState &amp; 0x0000FFFF;
+        int eventCounter = ((int)ulState) &gt;&gt; 16;
+        System.err.println("DEBUG: Card Event:" + " cardState: "+cardState + " Event Counter: "+ eventCounter);
+        if ((cardState &amp; 0x0100) != 0) {
+            System.out.println("Card inserted");
+        }
+        else {
+            System.out.println("Card removed");
+        }
+    }
+}
+(...)
+PTEID_ReaderSet readerSet = PTEID_ReaderSet.instance();
+PTEID_ReaderContext context = readerSet.getReader();
+context.SetEventCallback(new PteidCardCallback(), null);
+</code></pre>
+  <ul>
+   <li>
+    The parameter
+    <code>
+     ulState
+    </code>
+    is a combination of two values
+    <ol>
+     <li>
+      event counter of the reader used
+     </li>
+     <li>
+      a flag that contains the state of the event received, i.e., inserted or removed
+     </li>
+    </ol>
+   </li>
+   <li>
+    The parameter
+    <code>
+     lRet
+    </code>
+    is an error code returned in case of failure (successful access to the reader returns 0)
+   </li>
+   <li>
+    <code>
+     callbackData
+    </code>
+    is a reference to the object associated with
+    <code>
+     SetEventCallback()
+    </code>
+   </li>
+  </ul>
+  <h4 id="get-identification-information">
+   Get identification information
+  </h4>
+  <pre><code class="java">(...)
+PTEID_EIDCard card = context.getEIDCard();
+PTEID_EId eid = card.getID();
+String nome = eid.getGivenName();
+String nrCC = eid.getDocumentNumber();
+(...)
+</code></pre>
+  <h4 id="get-picture-of-a-card-holder">
+   Get picture of a card holder
+  </h4>
+  <pre><code class="java">(...)
+PTEID_EIDCard card = context.getEIDCard();
+PTEID_EId eid = card.getID();
+PTEID_Photo photoObj = eid.getPhotoObj();
+PTEID_ByteArray praw = photoObj.getphotoRAW(); // jpeg2000 format 
+PTEID_ByteArray ppng = photoObj.getphoto(); // PNG format
+(...)
+</code></pre>
+  <h4 id="get-address-information">
+   Get address information
+  </h4>
+  <pre><code class="java">PTEID_EIDCard card;
+PTEID_ulwrapper triesLeft = new PTEID_ulwrapper(-1);
+PTEID_Address address;
+(...)
+PTEID_Pins pins = card.getPins();
+PTEID_Pin pin = pins.getPinByPinRef(PTEID_Pin.ADDR_PIN);
+if (pin.verifyPin(“”, triesLeft, true){
+    address = card.getAddr();
+    String countryCode = address.getCountryCode();
+    String district = address.getDistrict();
+    String municipality = address.getMunicipality();
+    String street = address.getStreet();
+    (...)
+}
+</code></pre>
+  <h4 id="how-to-read-or-write-personal-notes">
+   How to read or write personal notes
+  </h4>
+  <pre><code class="java">PTEID_EIDCard card = context.getEIDCard();
+(...)
+// read personal notes
+String pdata = card.getID().getPersoData();
+// write personal notes
+String notes = “a few notes”;
+PTEID_ByteArray pb = new PTEID_ByteArray(notes.getBytes(), notes.getBytes().length);
+boolean bOk = card.writePersonalNotes(personalNotes, card.getPins().getPinByPinRef(PTEID_Pin.AUTH_PIN));
+(...)
+</code></pre>
+  <h2 id="signing-documents">
+   Signing Documents
+  </h2>
+  <p>
+   Make sure to initialize the underlying classes that will be used to sign documents, as follows
+  </p>
+  <pre><code class="java">PTEID_ReaderSet readerSet = PTEID_ReaderSet.instance();
+PTEID_ReaderContext readerContext = readerSet.getReader();
+pteidlibJava_Wrapper.setCompatReaderContext(readerContext);
+PTEID_EIDCard card = readerContext.getEIDCard();
+</code></pre>
+  <h4 id="how-to-sign-pdf-documents-pades">
+   How to sign PDF documents (PAdES)
+  </h4>
+  <pre><code class="java">int page = 1; // the page where the signature is applied
+int position = 2; // position of the signature in the page
+boolean landscape = false; //indicates if the signature should be applied in landscape
+String location = "Lisbon, Portugal"; 
+String reason = "I agree with the content of this document";
+
+// signing a batch of documents
+PTEID_PDFSignature signature = new PTEID_PDFSignature();
+String[] files = new String[] {'/home/user/document.pdf', '/home/user/another_document.pdf'};
+for (String inputFile : files) {
+    signature.addToBatchSigning(inputFile);
+}
+String output = 'home/user/signed_files';
+signature.enableTimestamp(); // use this if signature should contain a timestamp 
+
+// sign only one document
+PTEID_PDFSignature signature = new PTEID_PDFSignature('/home/user/document.pdf');
+String output = 'home/user/document_signed.pdf';
+
+// do the actual signature
+int returnCode = card.SignPDF(signature, page, position, landscape, location, reason, output);
+
+</code></pre>
+  <h4 id="how-to-sign-any-document-xades">
+   How to sign any document (XAdES)
+  </h4>
+  <pre><code class="java">(...)
+String[] files = new String[] {'/home/user/file1.txt', '/home/user/file2.txt'};
+
+// signing each file individually creating multiple signed files
+String output = '/home/user/signed_folder';
+card.SignXadesIndividual(output, files, files.length);
+
+// combining all files resulting in a single signed file
+String output = 'home/user/signed_file.zip';
+card.SignXades(output, files, files.length);
+
+</code></pre>
+  <p>
+   The SDK also supports other XAdES signatures such as temporal
+   <code>
+    SignXadesT()
+   </code>
+   , archival
+   <code>
+    SignXadesA()
+   </code>
+   , etc..
+   <br/>
+   For more details see at
+   <a href="./classpt_1_1gov_1_1cartaodecidadao_1_1PTEID__EIDCard.html">
+    PTEID_EIDCard
+   </a>
+  </p>
+  <h5 id="xades-signature-configuration">
+   XAdES signature configuration
+  </h5>
+  <p>
+   The SDK allows to configure XAdES signature parameters.
+   <br/>
+   For example, to change the Time Stamping Authority (TSA) by changing the url or the server request timeout, as follows
+  </p>
+  <pre><code class="java">PTEID_Config config = new PTEID_Config(PTEID_PARAM_XSIGN_TSAURL);
+config.setString("http://sha256timestamp.ws.symantec.com/sha256/timestamp"); //use a third party TSA
+
+new PTEID_Config(PTEID_PARAM_XSIGN_TIMEOUT).setLong(60); // allow a timeout of 60 seconds
+</code></pre>
+  <h4 id="verify-a-pades-signature">
+   Verify a PAdES signature
+  </h4>
+  <p>
+   One can verify the a PDF signature using the iText SDK.
+   <br/>
+   See
+   <a href="https://github.com/itext/i7js-samples/tree/master/publications/signatures/src/test/java/com/itextpdf/samples/signatures/chapter05">
+    iText-example
+   </a>
+   for a concrete example of how to verify a signature.
+  </p>
+  <h4 id="verify-a-xades-signature">
+   Verify a XAdES signature
+  </h4>
+  <p>
+   One can use the library
+   <a href="https://github.com/esig/dss/tree/master/dss-xades">
+    DSS-Xades
+   </a>
+   to validate a XAdES signature.
+  </p>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js">
+  </script>
+  <script>
+   hljs.initHighlightingOnLoad();
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   MathJax.Hub.Config({"showProcessingMessages" : false,"messageStyle" : "none","tex2jax": { inlineMath: [ [ "$", "$" ] ] }});
+  </script>
+ </body>
+</html>
