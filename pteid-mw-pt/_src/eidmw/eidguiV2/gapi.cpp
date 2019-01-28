@@ -2769,27 +2769,11 @@ void GAPI::startGetCardActivation( void ) {
 
 void GAPI::getCertificateAuthStatus ( void )
 {
-    int certificateStatus = PTEID_CERTIF_STATUS_UNKNOWN;
-
     qDebug() << "getCertificateAuthStatus";
 
-    QString returnString;
-
-    BEGIN_TRY_CATCH
-
-    PTEID_EIDCard * card = NULL;
-    getCardInstance(card);
-    if (card == NULL) return;
-
-    PTEID_Certificates&	 certificates	= card->getCertificates();
-
-    certificateStatus = certificates.getCert(PTEID_Certificate::CITIZEN_AUTH).getStatus();
-
-    returnString = getCardActivation();
+    QString returnString = getCardActivation();
 
     emit signalShowCardActivation(returnString);
-
-    END_TRY_CATCH
 }
 
 void GAPI::fillCertificateList ( void )
