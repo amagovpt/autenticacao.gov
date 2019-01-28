@@ -2718,6 +2718,7 @@ void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificat
 {
     QVariantMap certificatesMapChildren;
     static int level = 0;
+    static int status = PTEID_CERTIF_STATUS_UNKNOWN;
 
     if (cert.isRoot())
     {
@@ -2726,11 +2727,16 @@ void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificat
         certificatesMapChildren.insert("ValidityBegin", cert.getValidityBegin());
         certificatesMapChildren.insert("ValidityEnd", cert.getValidityEnd());
         certificatesMapChildren.insert("KeyLength", QString::number(cert.getKeyLength()));
-        certificatesMapChildren.insert("Status", cert.getStatus());
+        if(status != PTEID_CERTIF_STATUS_CONNECT
+                && status != PTEID_CERTIF_STATUS_ERROR){
+            status = cert.getStatus();
+        }
+        certificatesMapChildren.insert("Status", status);
 
         certificatesMap.insert("level" + QString::number(level),certificatesMapChildren);
         certificatesMap.insert("levelCount",level+1);
         level = 0;
+        status = PTEID_CERTIF_STATUS_UNKNOWN;
     }
     else
     {
@@ -2739,7 +2745,12 @@ void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificat
         certificatesMapChildren.insert("ValidityBegin", cert.getValidityBegin());
         certificatesMapChildren.insert("ValidityEnd", cert.getValidityEnd());
         certificatesMapChildren.insert("KeyLength", QString::number(cert.getKeyLength()));
-        certificatesMapChildren.insert("Status", cert.getStatus());
+
+        if(status != PTEID_CERTIF_STATUS_CONNECT
+                && status != PTEID_CERTIF_STATUS_ERROR){
+            status = cert.getStatus();
+        }
+        certificatesMapChildren.insert("Status", status);
 
         if(certificatesMap.contains("level" + QString::number(level))) {
             certificatesMap.insert("levelB" + QString::number(level),certificatesMapChildren);
