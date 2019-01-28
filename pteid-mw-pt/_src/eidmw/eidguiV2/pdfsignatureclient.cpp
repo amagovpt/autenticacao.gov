@@ -576,17 +576,24 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                                 attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
 
                                 // The LAST attributeSupplier
-                                if(i == transactionList.size() - 2){
-                                    attributeSupplierListString.append(QString::fromStdString(" e "));
-                                }else{
-                                    attributeSupplierListString.append(QString::fromStdString(" , "));
+                                if(lastAttrSupplierType != "ENTERPRISE"){
+                                    if(i == transactionList.size() - 2){
+                                        attributeSupplierListString.append(QString::fromStdString(" e "));
+                                    }else{
+                                        if(QString::fromStdString(transactionNext->AttributeSupplier->Type->c_str()) == "ENTERPRISE"){
+                                            attributeSupplierListString.append(QString::fromStdString(" e "));
+                                        }else{
+                                            attributeSupplierListString.append(QString::fromStdString(" , "));
+                                        }
+                                    }
                                 }
                             }
-
-                            if(QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "INSTITUTION"){
-                                attributeSupplierListString.append(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
-                            }else{
-                                attributeSupplierListString.append(QString::fromStdString("SCAP"));
+                            if(lastAttrSupplierType != "ENTERPRISE"){
+                                if(QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "INSTITUTION"){
+                                    attributeSupplierListString.append(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
+                                }else{
+                                    attributeSupplierListString.append(QString::fromStdString("SCAP"));
+                                }
                             }
                     }
 
