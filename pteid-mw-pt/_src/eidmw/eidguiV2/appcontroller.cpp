@@ -957,8 +957,8 @@ bool AppController::removePteidCache() {
         qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
 #endif
 
-        dir.setNameFilters(QStringList() << "*.bin");
-        dir.setFilter(QDir::Files);
+        dir.setNameFilters(QStringList() << "*.bin" << ".cache.csc");
+        dir.setFilter(QDir::Files | QDir::Hidden);
 
         foreach(QString dirFile, dir.entryList())
         {

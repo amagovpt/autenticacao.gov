@@ -375,11 +375,11 @@
           </RegistryKey>
 
           <RegistryKey Key="certificatecache" Action="createAndRemoveOnUninstall">
-            <RegistryValue Type="string" Name="cert_cachefile" Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\crl\.cache.csc"/>
+            <RegistryValue Type="string" Name="cert_cachefile" Value="[AppDataFolder].pteid-ng\.cache.csc"/>
           </RegistryKey>
 
           <RegistryKey Key="crl" Action="createAndRemoveOnUninstall">
-            <RegistryValue Type="string" Name="crl_cachedir" Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\crl"/>
+            <RegistryValue Type="string" Name="crl_cachedir" Value="[AppDataFolder].pteid-ng"/>
           </RegistryKey>
 
           <RegistryKey Key="general" Action="createAndRemoveOnUninstall">
