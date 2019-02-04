@@ -43,6 +43,8 @@
 #include "../../common/Util.h"
 #include "../../common/Config.h"
 
+
+const static char csOverWrite[] = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 std::string readableFilePath = "/usr/local/etc/pteidgui.conf";
 
 DlgDisplayPinpadInfoArguments *oInfoData = NULL;
@@ -161,8 +163,8 @@ int main(int argc, char *argv[])
 
 		#ifdef __APPLE__
 		// In MacOS we deploy the QT plugins in a specific location which is common
-		// to all the QT applications (pteidgui, ScapSignature, pteiddialogs)
-		QCoreApplication::addLibraryPath(QString("/usr/local/Frameworks"));
+		// to all the QT applications (eidguiV2, pteiddialogs)
+		QCoreApplication::addLibraryPath(QString("/Applications/Autentica\xC3\xA7\xC3\xA3o.gov.app/Contents/PlugIns/"));
 		#endif
 
 		if(iFunctionIndex == DLG_ASK_PIN)
