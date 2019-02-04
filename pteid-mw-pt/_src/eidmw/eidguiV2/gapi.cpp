@@ -2968,6 +2968,7 @@ void GAPI::forgetCertificates(QString const& reader)
 #endif
 }
 
+#ifdef WIN32
 void GAPI::setWindowGeometry(int x, int y, int width, int height) {
     Type_WndGeometry *appWindowGeom = GetWindowGeometry();
     appWindowGeom->x = x;
@@ -2975,3 +2976,4 @@ void GAPI::setWindowGeometry(int x, int y, int width, int height) {
     appWindowGeom->width = width;
     appWindowGeom->height = height;
 }
+#endif
