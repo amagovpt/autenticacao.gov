@@ -96,6 +96,44 @@ PageSecurityPinCodesForm {
                 propertyButtonTestAddress.enabled = false
             }
         }
+
+		onSignalTestPinFinished: {
+            if (triesLeft === 3) {
+                dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
+                dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
+                dialogPinOK.open()
+            }
+            if (triesLeft === 0) {
+                propertyTriesLeftAuthPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
+            }
+            else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                propertyTriesLeftAuthPin.text = ""
+            }
+            else {
+                propertyTriesLeftAuthPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
+                                        + " " + triesLeft + " "
+                                        + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
+            }
+		}
+
+		onSignalModifyPinFinished: {
+            if (triesLeft === 3) {
+                dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_PIN_MODIFY")
+                dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_PIN_MODIFY_SUCESS")
+                dialogPinOK.open()
+            }
+            if (triesLeft === 0) {
+                propertyTriesLeftSignPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
+            }
+            else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+                propertyTriesLeftSignPin.text = ""
+            }
+            else {
+                propertyTriesLeftSignPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
+                        + " " + triesLeft + " "
+                        + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
+            }
+		}
     }
 
     Dialog {
@@ -618,24 +656,7 @@ PageSecurityPinCodesForm {
     propertyButtonModifyAuth{
         onClicked: {
             if(Constants.USE_SDK_PIN_UI_POPUP){
-                var triesLeft = 0
                 triesLeft = gapi.changeAuthPin("","")
-                if (triesLeft === 3) {
-                    dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_PIN_MODIFY")
-                    dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_PIN_MODIFY_SUCESS")
-                    dialogPinOK.open()
-                }
-                if (triesLeft === 0) {
-                    propertyTriesLeftAuthPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
-                }
-                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
-                    propertyTriesLeftAuthPin.text = ""
-                }
-                else {
-                    propertyTriesLeftAuthPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
-                                            + " " + triesLeft + " "
-                                            + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
-                }
             }else{
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 dialogModifyPin.propertyLabelModifyTextTitle.text = qsTranslate("Popup PIN","STR_PIN_AUTH_MODIFY")
@@ -650,24 +671,7 @@ PageSecurityPinCodesForm {
     propertyButtonTestAuth{
         onClicked: {
             if(Constants.USE_SDK_PIN_UI_POPUP){
-                var triesLeft = 0
-                triesLeft = gapi.verifyAuthPin("")
-                if (triesLeft === 3) {
-                    dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
-                    dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
-                    dialogPinOK.open()
-                }
-                if (triesLeft === 0) {
-                    propertyTriesLeftAuthPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
-                }
-                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
-                    propertyTriesLeftAuthPin.text = ""
-                }
-                else {
-                    propertyTriesLeftAuthPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
-                                            + " " + triesLeft + " "
-                                            + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
-                }
+                gapi.verifyAuthPin("")
             }else{
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 dialogTestPin.propertyLabelTextTitle.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY_AUTH")
@@ -680,27 +684,8 @@ PageSecurityPinCodesForm {
     }
     propertyButtonModifySign{
         onClicked: {
-
-
             if(Constants.USE_SDK_PIN_UI_POPUP){
-                var triesLeft = 0
-                triesLeft = gapi.changeSignPin("","")
-                if (triesLeft === 3) {
-                    dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_PIN_MODIFY")
-                    dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_PIN_MODIFY_SUCESS")
-                    dialogPinOK.open()
-                }
-                if (triesLeft === 0) {
-                    propertyTriesLeftSignPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
-                }
-                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
-                    propertyTriesLeftSignPin.text = ""
-                }
-                else {
-                    propertyTriesLeftSignPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
-                                            + " " + triesLeft + " "
-                                            + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
-                }
+                gapi.changeSignPin("","")
             }else{
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 dialogModifyPin.propertyLabelModifyTextTitle.text = qsTranslate("Popup PIN","STR_PIN_SIGN_MODIFY")
@@ -714,27 +699,8 @@ PageSecurityPinCodesForm {
     }
     propertyButtonTestSign{
         onClicked: {
-
-
             if(Constants.USE_SDK_PIN_UI_POPUP){
-                var triesLeft = 0
-                triesLeft = gapi.verifySignPin("")
-                if (triesLeft === 3) {
-                    dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
-                    dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
-                    dialogPinOK.open()
-                }
-                if (triesLeft === 0) {
-                    propertyTriesLeftSignPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
-                }
-                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
-                    propertyTriesLeftSignPin.text = ""
-                }
-                else {
-                    propertyTriesLeftSignPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
-                                            + " " + triesLeft + " "
-                                            + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
-                }
+                gapi.verifySignPin("")
             }else{
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 dialogTestPin.propertyLabelTextTitle.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY_SIGN")
@@ -746,26 +712,8 @@ PageSecurityPinCodesForm {
     }
     propertyButtonModifyAddress{
         onClicked: {
-
             if(Constants.USE_SDK_PIN_UI_POPUP){
-                var triesLeft = 0
-                triesLeft = gapi.changeAddressPin("","")
-                if (triesLeft === 3) {
-                    dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_PIN_MODIFY")
-                    dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_PIN_MODIFY_SUCESS")
-                    dialogPinOK.open()
-                }
-                if (triesLeft === 0) {
-                    propertyTriesLeftSignPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
-                }
-                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
-                    propertyTriesLeftSignPin.text = ""
-                }
-                else {
-                    propertyTriesLeftSignPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
-                            + " " + triesLeft + " "
-                            + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
-                }
+                gapi.changeAddressPin("","")
             }else{
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 dialogModifyPin.propertyLabelModifyTextTitle.text = qsTranslate("Popup PIN","STR_PIN_ADDRESS_MODIFY")
@@ -779,26 +727,8 @@ PageSecurityPinCodesForm {
     }
     propertyButtonTestAddress{
         onClicked: {
-
             if(Constants.USE_SDK_PIN_UI_POPUP){
-                var triesLeft = 0
                 triesLeft = gapi.verifyAddressPin("")
-                if (triesLeft === 3) {
-                    dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
-                    dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
-                    dialogPinOK.open()
-                }
-                if (triesLeft === 0) {
-                    propertyTriesLeftAddressPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
-                }
-                else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
-                    propertyTriesLeftAddressPin.text = ""
-                }
-                else {
-                    propertyTriesLeftAddressPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
-                            + " " + triesLeft + " "
-                            + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
-                }
             }else{
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 dialogTestPin.propertyLabelTextTitle.text =

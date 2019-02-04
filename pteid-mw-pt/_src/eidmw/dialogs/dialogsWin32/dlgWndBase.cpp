@@ -111,7 +111,7 @@ Win32Dialog::~Win32Dialog()
 }
 
 
-bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Icon, HWND Parent )
+bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Icon, HWND Parent, Type_WndGeometry *wndGeom)
 {
 	if( m_hWnd )
 		return false;
@@ -143,7 +143,11 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 	wc.hInstance		= m_hInstance;								// Set The Instance
 	wc.hIcon			= hIco;			// Load The Default Icon
 	wc.hCursor			= LoadCursor( NULL, IDC_ARROW );			// Load The Arrow Pointer
-	wc.hbrBackground =  CreateSolidBrush(RGB(255, 255, 255));        //CreateSolidBrush(RGB(255, 255, 255));        //(HBRUSH)GetSysColorBrush( COLOR_3DFACE );	// What Color we want in our background
+	// If we want a modal window, a red window is created in front of the application 
+	// and then set color red transparent. 
+	wc.hbrBackground = (m_ModalHold && wndGeom && wndGeom->width>0 && wndGeom->height>0 ?
+		CreateSolidBrush(RGB(255, 0, 0)) :
+		CreateSolidBrush(RGB(255, 255, 255)));        //CreateSolidBrush(RGB(255, 255, 255));        //(HBRUSH)GetSysColorBrush( COLOR_3DFACE );	// What Color we want in our background
 	wc.lpszMenuName		= NULL;										// We Don't Want A Menu
 	wc.lpszClassName	= m_appName;								// Set The Class Name
 
@@ -155,29 +159,49 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 	}
 
 	//dwStyle = WS_CAPTION | WS_VISIBLE |  WS_SYSMENU | WS_OVERLAPPED;
-	dwStyle = WS_POPUP | WS_BORDER;
+	dwStyle = WS_POPUP;
 
-	dwExStyle = WS_EX_LEFT | WS_EX_LTRREADING | WS_EX_WINDOWEDGE | WS_EX_TOPMOST;
-	if( m_ModalHold )
+	dwExStyle = WS_EX_LEFT | WS_EX_LTRREADING | WS_EX_TOPMOST | WS_EX_LAYERED;
+	if( !m_ModalHold )
 	{
-		dwStyle |= WS_POPUP;
-		dwExStyle |= WS_EX_DLGMODALFRAME;
+		dwStyle |= WS_BORDER;
+		dwExStyle |= WS_EX_WINDOWEDGE;
 	}
 
 	AdjustWindowRectEx( &WindowRect, dwStyle, FALSE, dwExStyle );	// Adjust Window To True Requested Size
 
 	Active_lpWnd = this;
 
+	if (m_ModalHold && wndGeom && 
+		wndGeom->width > 0 &&
+		wndGeom->height > 0)
+	{
+		// Create Transparent Window
+		m_hWnd = CreateWindowEx(dwExStyle, m_appName, title, dwStyle,
+			wndGeom->x,
+			wndGeom->y,
+			wndGeom->width,
+			wndGeom->height,
+			Parent,
+			NULL,
+			m_hInstance,
+			NULL);
+		SetLayeredWindowAttributes(m_hWnd, RGB(255,0,0), 0, LWA_COLORKEY);
+	}
+	else {
+		m_hWnd = CreateWindow(m_appName, title, dwStyle,
+			DeskRect.right / 2 - (WindowRect.right - WindowRect.left) / 2,
+			DeskRect.bottom / 2 - (WindowRect.bottom - WindowRect.top) / 2,
+			WindowRect.right - WindowRect.left,
+			WindowRect.bottom - WindowRect.top,
+			Parent,
+			NULL,
+			m_hInstance,
+			NULL);
+	}
+
 	// Create The Window
-	if (!(m_hWnd = CreateWindow(m_appName, title, dwStyle,
-		DeskRect.right / 2 - (WindowRect.right - WindowRect.left) / 2,
-		DeskRect.bottom / 2 - (WindowRect.bottom - WindowRect.top) / 2,
-		WindowRect.right - WindowRect.left,
-		WindowRect.bottom - WindowRect.top,
-		  Parent,
-		  NULL,
-		  m_hInstance,
-		  NULL)))
+	if (!m_hWnd)
 	{
 		unsigned long err = GetLastError();
 		KillWindow();								// Reset The Display

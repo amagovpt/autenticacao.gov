@@ -34,14 +34,19 @@
 #include "P15Objects.h"
 #include "InternalConst.h"
 
+#include "../dialogs/dialogs.h"
 #include "../common/ByteArray.h"
+#include "../common/Thread.h"
 
 #include <winscard.h>
 #include <iostream>
+#include <vector>
 
 namespace eIDMW
 {
 class CContext;
+
+class PinpadDialogThread;
 
 class EIDMW_CAL_API GenericPinpad
 {
@@ -72,9 +77,9 @@ protected:
 
 	bool ShowDlg(tPinOperation operation, unsigned char ucPintype,
 		const std::string & csPinLabel, const std::string & csReader,
-		unsigned long *pulDlgHandle, void *wndGeometry = 0);
+		PinpadDialogThread **pinpadDlgThreads, void *wndGeometry = 0);
 	/** To close the dialog opened by PinCmd() */
-	void CloseDlg(unsigned long ulDlgHandle);
+	void CloseDlg(PinpadDialogThread *pinpadDlgThread);
 
 	unsigned long GetLanguage();
 
@@ -109,6 +114,40 @@ protected:
 	unsigned long m_ioctlChangeStart;
 	unsigned long m_ioctlChangeFinish;
 	unsigned long m_ioctlChangeDirect;
+
+	std::vector<PinpadDialogThread *> pinpadDlgThreads;
+};
+
+class PinpadDialogThread : public CThread
+{
+public:
+
+	PinpadDialogThread(DlgPinOperation operation, const wchar_t *csReader,
+		DlgPinUsage usage, const wchar_t *csPinName, const wchar_t *csMessage, void *wndGeometry)
+	{
+		m_operation = operation;
+		m_csReader = std::wstring(csReader);
+		m_usage = usage;
+		m_csPinName = std::wstring(csPinName);
+		m_csMessage = std::wstring(csMessage);
+		//m_pulHandle = pulHandle;
+		m_wndGeometry = wndGeometry;
+	}
+
+	~PinpadDialogThread() {
+		RequestStop();
+	}
+
+	void Run();
+	void Stop();
+
+	unsigned long m_pulHandle;
+private:
+	DlgPinOperation m_operation;
+	std::wstring m_csReader;
+	DlgPinUsage m_usage;
+	std::wstring m_csPinName, m_csMessage;
+	void *m_wndGeometry;
 };
 
 }

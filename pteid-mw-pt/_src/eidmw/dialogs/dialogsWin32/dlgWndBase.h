@@ -52,7 +52,7 @@ protected:
 						UINT		uMsg,			// Message For This Window
 						WPARAM		wParam,			// Additional Message Information
 						LPARAM		lParam );		// Additional Message Information
-	bool CreateWnd( const wchar_t* title, int width, int height, int Icon = 0 , HWND Parent = NULL );
+	bool CreateWnd( const wchar_t* title, int width, int height, int Icon = 0 , HWND Parent = NULL, Type_WndGeometry *wndGeom = NULL);
 	void KillWindow( );
 	virtual void Destroy();
 	HFONT loadFontFromResource(int font_pointsize, bool isBold);

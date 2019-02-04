@@ -97,6 +97,14 @@ typedef struct {
 	unsigned long long ulFlags;     // PIN_FLAG_DIGITS, ...
 } DlgPinInfo;	
 #endif
+
+struct WndGeometry{
+	int x;
+	int y;
+	int width;
+	int height;
+};
+typedef struct WndGeometry Type_WndGeometry;
 	
 typedef enum {
 	DLG_ICON_NONE,
@@ -212,6 +220,13 @@ DLGS_EXPORT DlgRet DlgDisplayPinpadInfo(DlgPinOperation operation,
 */
 DLGS_EXPORT void DlgClosePinpadInfo(unsigned long ulHandle);
 
+/**
+* Return pointer to WndGeometry struct. This can be used by applications
+* that set the struct with their window geometry so that dialogs can
+* be modal relative to the application.
+*/
+DLGS_EXPORT Type_WndGeometry* GetWindowGeometry();
+
 #ifndef WIN32
 /**
 * Close the all the open pinpad info dialogs 
@@ -273,14 +288,6 @@ struct DlgAskPINArguments {
    std::string csRandomFilename;
    pid_t tRunningProcess;
  };
-
- struct WndGeometry{
-    int x;
-    int y;
-    int width;
-    int height;
-};
-typedef struct WndGeometry Type_WndGeometry;
 
  void InitializeRand();
  std::string RandomFileName();

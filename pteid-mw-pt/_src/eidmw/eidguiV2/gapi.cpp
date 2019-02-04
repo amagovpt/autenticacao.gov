@@ -277,7 +277,7 @@ void GAPI::setPersoDataFile(QString text) {
 
     qDebug() << "setPersoDataFile() called";
 
-    int testAuthPin = verifyAuthPin("");
+    int testAuthPin = doVerifyAuthPin("");
 
     if( testAuthPin == 0 || testAuthPin == TRIES_LEFT_ERROR) {
         return;
@@ -306,7 +306,10 @@ void GAPI::setPersoDataFile(QString text) {
 
 }
 
-unsigned int GAPI::verifyAuthPin(QString pin_value) {
+void GAPI::verifyAuthPin(QString pin_value) {
+    QtConcurrent::run(this, &GAPI::doVerifyAuthPin, pin_value);
+}
+unsigned int  GAPI::doVerifyAuthPin(QString pin_value) {
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
@@ -324,8 +327,9 @@ unsigned int GAPI::verifyAuthPin(QString pin_value) {
 
     END_TRY_CATCH
 
-            //QML default types don't include long
-            return (unsigned int)tries_left;
+    emit signalTestPinFinished(tries_left);
+    //QML default types don't include long
+    return (unsigned int)tries_left;
 }
 
 unsigned int GAPI::getTriesLeftAuthPin() {
@@ -350,7 +354,10 @@ unsigned int GAPI::getTriesLeftAuthPin() {
     return (unsigned int)tries_left;
 }
 
-unsigned int GAPI::verifySignPin(QString pin_value) {
+void GAPI::verifySignPin(QString pin_value) {
+    QtConcurrent::run(this, &GAPI::doVerifySignPin, pin_value);
+}
+unsigned int  GAPI::doVerifySignPin(QString pin_value) {
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
@@ -368,8 +375,9 @@ unsigned int GAPI::verifySignPin(QString pin_value) {
 
     END_TRY_CATCH
 
-            //QML default types don't include long
-            return (unsigned int)tries_left;
+    emit signalTestPinFinished(tries_left);
+    //QML default types don't include long
+    return (unsigned int)tries_left;
 }
 
 unsigned int GAPI::getTriesLeftSignPin() {
@@ -394,7 +402,10 @@ unsigned int GAPI::getTriesLeftSignPin() {
             return (unsigned int)tries_left;
 }
 
-unsigned int GAPI::verifyAddressPin(QString pin_value) {
+void GAPI::verifyAddressPin(QString pin_value) {
+    QtConcurrent::run(this, &GAPI::doVerifyAddressPin, pin_value);
+}
+unsigned int GAPI::doVerifyAddressPin(QString pin_value) {
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
@@ -412,8 +423,9 @@ unsigned int GAPI::verifyAddressPin(QString pin_value) {
 
     END_TRY_CATCH
 
-            //QML default types don't include long
-            return (unsigned int)tries_left;
+    emit signalTestPinFinished(tries_left);
+    //QML default types don't include long
+    return (unsigned int)tries_left;
 }
 
 unsigned int GAPI::getTriesLeftAddressPin() {
@@ -438,7 +450,10 @@ unsigned int GAPI::getTriesLeftAddressPin() {
             return (unsigned int)tries_left;
 }
 
-unsigned int GAPI::changeAuthPin(QString currentPin, QString newPin) {
+void GAPI::changeAuthPin(QString currentPin, QString newPin) {
+    QtConcurrent::run(this, &GAPI::doChangeAuthPin, currentPin, newPin);
+}
+unsigned int GAPI::doChangeAuthPin(QString currentPin, QString newPin) {
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
@@ -456,11 +471,15 @@ unsigned int GAPI::changeAuthPin(QString currentPin, QString newPin) {
 
     END_TRY_CATCH
 
-            //QML default types don't include long
-            return (unsigned int)tries_left;
+    emit signalModifyPinFinished(tries_left);
+    //QML default types don't include long
+    return (unsigned int)tries_left;
 }
 
-unsigned int GAPI::changeSignPin(QString currentPin, QString newPin) {
+void GAPI::changeSignPin(QString currentPin, QString newPin) {
+    QtConcurrent::run(this, &GAPI::doChangeSignPin, currentPin, newPin);
+}
+unsigned int GAPI::doChangeSignPin(QString currentPin, QString newPin) {
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
@@ -478,6 +497,7 @@ unsigned int GAPI::changeSignPin(QString currentPin, QString newPin) {
 
     END_TRY_CATCH
 
+    emit signalModifyPinFinished(tries_left);
     //QML default types don't include long
     return (unsigned int)tries_left;
 }
@@ -603,7 +623,10 @@ void GAPI::showSignCMDDialog(long code)
     signalUpdateProgressStatus(error_msg);
 }
 
-unsigned int GAPI::changeAddressPin(QString currentPin, QString newPin) {
+void GAPI::changeAddressPin(QString currentPin, QString newPin) {
+    QtConcurrent::run(this, &GAPI::doChangeAddressPin, currentPin, newPin);
+}
+unsigned int GAPI::doChangeAddressPin(QString currentPin, QString newPin) {
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
@@ -621,8 +644,9 @@ unsigned int GAPI::changeAddressPin(QString currentPin, QString newPin) {
 
     END_TRY_CATCH
 
-            //QML default types don't include long
-            return (unsigned int)tries_left;
+    emit signalModifyPinFinished(tries_left);
+    //QML default types don't include long
+    return (unsigned int)tries_left;
 }
 
 void GAPI::addressChangeCallback(void *instance, int value)
@@ -2942,4 +2966,12 @@ void GAPI::forgetCertificates(QString const& reader)
         readerCertContext.erase(readerCertContext.end() - 1);
     }
 #endif
+}
+
+void GAPI::setWindowGeometry(int x, int y, int width, int height) {
+    Type_WndGeometry *appWindowGeom = GetWindowGeometry();
+    appWindowGeom->x = x;
+    appWindowGeom->y = y;
+    appWindowGeom->width = width;
+    appWindowGeom->height = height;
 }

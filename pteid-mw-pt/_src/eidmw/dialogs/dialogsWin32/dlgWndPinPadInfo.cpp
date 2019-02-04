@@ -30,14 +30,14 @@
 
 dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusage, 
 		DlgPinOperation operation, const std::wstring & csReader, 
-		const std::wstring & PinName, const std::wstring & Message, HWND Parent)
+		const std::wstring & PinName, const std::wstring & Message, HWND Parent, Type_WndGeometry *wndGeom)
 :Win32Dialog(L"WndPinpadInfo")
 
 {
 	m_szHeader=NULL;
 	m_szMessage=NULL;
 
-	m_ModalHold = false;
+	m_ModalHold = true;
 	m_szMessage = _wcsdup( Message.c_str() );
 
 	m_ulHandle = ulHandle;
@@ -62,7 +62,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 
 	m_szHeader = _wcsdup( PinName.c_str() );
 	
-	if (CreateWnd(tmpTitle.c_str(), 420, 280, IDI_APPICON, Parent))
+	if (CreateWnd(tmpTitle.c_str(), 420, 280, IDI_APPICON, Parent, wndGeom))
 	{
 		/*
 		if( PinPusage == DLG_PIN_SIGN )
@@ -113,20 +113,29 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 
 			SetTextColor(m_hDC, RGB(0x3C, 0x5D, 0xBC));
 
+			//Draw white "fake" dialog popup 
 			GetClientRect( m_hWnd, &rect );
-			rect.left += 20;
-			rect.top = 32;
-			rect.right -= 8;
-			rect.bottom = 136 - 8;
+			rect.left = rect.right / 2 - 210;
+			rect.top = rect.bottom / 2 - 140;
+			rect.right = rect.right / 2 + 210;
+			rect.bottom = rect.bottom / 2 + 140;
+			FillRect(m_hDC, &rect, CreateSolidBrush(RGB(255, 255, 255)));
+			DrawEdge(m_hDC, &rect, EDGE_RAISED, BF_RECT);
+
+			GetClientRect(m_hWnd, &rect);
+			rect.left = rect.right/2 - 210 + 20;
+			rect.top = rect.bottom/2 - 140 + 32;
+			rect.right = rect.right/2 + 210 - 8;
+			rect.bottom = rect.bottom/2 + 136 - 8;
 			SetBkColor( m_hDC, RGB(255,255,255));
 			SelectObject( m_hDC, TextFontHeader );
 			DrawText( m_hDC, m_szHeader, -1, &rect, DT_WORDBREAK );
 
 			//Change top header dimensions
 			GetClientRect( m_hWnd, &rect );
-			rect.left += 20;
-			rect.top = 60;
-			rect.right -= 20;
+			rect.left = rect.right / 2 - 210 + 20;
+			rect.top = rect.bottom / 2 - 140 + 60;
+			rect.right = rect.right / 2 + 210 - 20;
 			rect.bottom = rect.bottom - 60;
 			SetBkColor(m_hDC, RGB(255, 255, 255));
 			SelectObject( m_hDC, TextFont );
@@ -177,4 +186,9 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 		}
 	}
 	return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
+}
+
+void dlgWndPinpadInfo::stopExec() {
+    m_ModalHold = false;
+    PostMessage(m_hWnd, WM_CLOSE, 0, 0);
 }

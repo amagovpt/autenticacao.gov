@@ -42,6 +42,8 @@ unsigned long dlgPinPadInfoCollectorIndex = 0;
 
 std::wstring lang1 = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
+WndGeometry appWindowGeom = { 0, 0, 0, 0 };
+
 #ifdef _MANAGED
 #pragma managed(push, off)
 #endif
@@ -299,6 +301,9 @@ DLGS_EXPORT DlgRet eIDMW::DlgBadPin(
 	return DLG_CANCEL;
 }
 
+DLGS_EXPORT Type_WndGeometry* eIDMW::GetWindowGeometry() {
+    return &appWindowGeom;
+}
 DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 			const wchar_t *csReader, DlgPinUsage usage, const wchar_t *csPinName,
 			const wchar_t *csMessage,
@@ -389,16 +394,18 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 		//QString buf = "dlg num: " + QString().setNum( dlgPinPadInfoCollectorIndex );
 		dlgPinPadInfoCollectorIndex++;
 		dlgModal = new dlgWndPinpadInfo( dlgPinPadInfoCollectorIndex, usage,
-			operation, csReader, pin_name_label, sMessage);
-
-		dlgModal->show();
-		dlgModal->ProcecEvent(WM_PAINT,NULL,NULL);
+			operation, csReader, pin_name_label, sMessage, NULL, &appWindowGeom);
 
 		dlgPinPadInfoCollector.insert(TD_WNDPINPAD_PAIR( dlgPinPadInfoCollectorIndex, dlgModal ) );
 		if( pulHandle )
 			*pulHandle = dlgPinPadInfoCollectorIndex;
 
-		//delete dlgModal;
+		// Loop
+		dlgModal->exec();
+		
+		delete dlgModal;
+		dlgModal = NULL;
+
 		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgDisplayPinpadInfo() returns DLG_OK");
 		return DLG_OK;
 	}
@@ -424,8 +431,7 @@ DLGS_EXPORT void eIDMW::DlgClosePinpadInfo( unsigned long ulHandle )
 
 	if( dlgModal )
 	{
-		delete dlgModal;
-		dlgModal = NULL;
+		dlgModal->stopExec();
 	}
 	dlgPinPadInfoCollector.erase( ulHandle );
 	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgClosePinpadInfo() returns");

@@ -25,6 +25,7 @@
 #include "cmdErrors.h"
 
 #include "scapsignature.h"
+#include "../dialogs/dialogs.h"
 
 /* For filenames we need to maintain latin-1 or UTF-8 native encoding */
 //This macro's argument is a QString
@@ -298,16 +299,16 @@ public slots:
 
     //Returns page size in postscript points
     QSize getPageSize(int page) { return image_provider_pdf->getPageSize(page); };
-    unsigned int verifyAuthPin(QString pin);
+    void verifyAuthPin(QString pin);
     unsigned int getTriesLeftAuthPin();
-    unsigned int verifySignPin(QString pin);
+    void verifySignPin(QString pin);
     unsigned int getTriesLeftSignPin();
-    unsigned int verifyAddressPin(QString pin);
+    void verifyAddressPin(QString pin);
     unsigned int getTriesLeftAddressPin();
 
-    unsigned int changeAuthPin(QString currentPin, QString newPin);
-    unsigned int changeSignPin(QString currentPin, QString newPin);
-    unsigned int changeAddressPin(QString currentPin, QString newPin);
+    void changeAuthPin(QString currentPin, QString newPin);
+    void changeSignPin(QString currentPin, QString newPin);
+    void changeAddressPin(QString currentPin, QString newPin);
 
     void changeAddress(QString process, QString secret_code);
     void doChangeAddress(const char *process, const char *secret_code);
@@ -355,6 +356,8 @@ public slots:
     void forgetAllCertificates( void );
     void forgetCertificates(QString const& reader);
 
+    void setWindowGeometry(int x, int y, int width, int height);
+
 signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed
@@ -378,6 +381,8 @@ signals:
     void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage);
     void signalCertificatesChanged(const QVariantMap certificatesMap);
     void signalShowCardActivation(QString statusMessage);
+    void signalTestPinFinished(int triesLeft);
+    void signalModifyPinFinished(int triesLeft);
         
     //SCAP signals
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
@@ -443,6 +448,13 @@ private:
     void cleanupCallbackData(void);
     void initScapAppId(void);
     CMDProxyInfo buildProxyInfo();
+
+    unsigned int doVerifyAuthPin(QString pin);
+    unsigned int doVerifySignPin(QString pin);
+    unsigned int doVerifyAddressPin(QString pin);
+    unsigned int doChangeAuthPin(QString currentPin, QString newPin);
+    unsigned int doChangeSignPin(QString currentPin, QString newPin);
+    unsigned int doChangeAddressPin(QString currentPin, QString newPin);
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;

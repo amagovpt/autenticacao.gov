@@ -22,7 +22,6 @@
 #include "Context.h"
 #include "CardLayer.h"
 #include "pinpad2.h"
-#include "../dialogs/dialogs.h"
 #include "../common/Log.h"
 #include "../common/Config.h"
 #include "../common/Util.h"
@@ -261,7 +260,7 @@ CByteArray GenericPinpad::PinCmd2(tPinOperation operation,
 
 bool GenericPinpad::ShowDlg(tPinOperation operation, unsigned char ucPintype,
 	const std::string & csPinLabel, const std::string & csReader,
-	unsigned long *pulDlgHandle, void *wndGeometry)
+	PinpadDialogThread **pinpadDlgThread, void *wndGeometry)
 {
 
 	const char *csMesg = "";
@@ -277,24 +276,50 @@ bool GenericPinpad::ShowDlg(tPinOperation operation, unsigned char ucPintype,
 	std::wstring wideReader = utilStringWiden(csReader);
 	std::wstring widePinLabel = utilStringWiden(csPinLabel);
 	std::wstring wideMesg = utilStringWiden(csMesg);
-	return EIDMW_OK == DlgDisplayPinpadInfo(dlgOperation,
-			wideReader.c_str(), dlgUsage,
-			widePinLabel.c_str(), wideMesg.c_str(), pulDlgHandle, wndGeometry );
+
+	*pinpadDlgThread = new PinpadDialogThread(dlgOperation,
+		wideReader.c_str(), dlgUsage,
+		widePinLabel.c_str(), wideMesg.c_str(), wndGeometry);
+
+	this->pinpadDlgThreads.push_back(*pinpadDlgThread);
+	pinpadDlgThreads.back()->Start();
+	return true;
 }
 
-void GenericPinpad::CloseDlg(unsigned long ulDlgHandle)
+void GenericPinpad::CloseDlg(PinpadDialogThread *pinpadDlgThread)
 {
-	DlgClosePinpadInfo(ulDlgHandle);
+	size_t i;
+	for (i = 0; i < this->pinpadDlgThreads.size(); ++i){
+		if ((this->pinpadDlgThreads)[i] == pinpadDlgThread)
+			break;
+	}
+	// Handle not found
+	if (i >= this->pinpadDlgThreads.size())
+		return;
+
+	this->pinpadDlgThreads.erase(this->pinpadDlgThreads.begin() + i);
+	pinpadDlgThread->Stop();
+	delete pinpadDlgThread;
 }
+
+void PinpadDialogThread::Run() {
+	MWLOG(LEV_ERROR, MOD_CAL, L"\nDlgDisplayPinpadInfo(%d,\n%s,\n%d,\n%s,\n%s,...\n", m_operation, m_csReader.c_str(), m_usage, m_csPinName.c_str(), m_csMessage.c_str());
+	DlgDisplayPinpadInfo(m_operation, m_csReader.c_str(), m_usage, m_csPinName.c_str(), m_csMessage.c_str(), &m_pulHandle, m_wndGeometry);
+}
+
+void PinpadDialogThread::Stop(){
+	DlgClosePinpadInfo(this->m_pulHandle);
+}
+
 CByteArray GenericPinpad::PinpadControl(unsigned long ulControl, const CByteArray & oCmd,
 	tPinOperation operation, unsigned char ucPintype,
 	const std::string & csPinLabel,	void *wndGeometry )
 {
 	bool showDlg = ulControl != CCID_IOCTL_GET_FEATURE_REQUEST;
-	unsigned long ulDlgHandle;
-	
+	PinpadDialogThread *pinpadDlgThread;
+
 	if (showDlg)
-		ShowDlg(operation, ucPintype, csPinLabel, m_csReader, &ulDlgHandle, wndGeometry);
+		ShowDlg(operation, ucPintype, csPinLabel, m_csReader, &pinpadDlgThread, wndGeometry);
 
 	CByteArray oResp;
 	try
@@ -310,11 +335,11 @@ CByteArray GenericPinpad::PinpadControl(unsigned long ulControl, const CByteArra
 	catch (...)
 	{
 		if(showDlg)
-			CloseDlg(ulDlgHandle);
+			CloseDlg(pinpadDlgThread);
 		throw;
 	}
 	if (showDlg)
-		CloseDlg(ulDlgHandle);
+		CloseDlg(pinpadDlgThread);
 
 	return oResp;
 }
