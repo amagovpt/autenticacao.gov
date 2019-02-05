@@ -1,4 +1,7 @@
+#include <stdlib.h>
+
 #include "J2KHelper.h"
+
 
 // --------------------------------------------------------------------------
 // Memory Helper Functions
