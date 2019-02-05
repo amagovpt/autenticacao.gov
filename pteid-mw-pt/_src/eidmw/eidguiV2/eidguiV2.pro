@@ -46,9 +46,9 @@ OBJECTS_DIR = build
 MOC_DIR = build
 
 #Include paths for MacOS homebrew libraries
-macx: INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2o_1/include/
+macx: INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2q/include/
 macx: INCLUDEPATH += /usr/local/Cellar/poppler/0.53.0/include/poppler/qt5/
-macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2o_1/lib/
+macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2q/lib/
 macx: LIBS += -L/usr/local/Cellar/poppler/0.53.0/lib/
 
 unix:!macx: LIBS += -Wl,-rpath-link,../lib

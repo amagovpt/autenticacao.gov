@@ -20,16 +20,15 @@ QT -= gui
 DESTDIR = ./../../lib
 DEPENDPATH += .
 
-macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2j/lib/ /Users/yosemite/Downloads/gsoap_2.8.49/gsoap-2.8/gsoap/libgsoapssl++.a -lz -lssl -lcrypto
+macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2q/lib/ /Users/yosemite/Downloads/gsoap_2.8.49/gsoap-2.8/gsoap/libgsoapssl++.a -lz -lssl -lcrypto
 
 QMAKE_CXXFLAGS += -fvisibility=hidden
 
 LIBS += -L./../../lib -l$${COMMONLIB} -l$${APPLAYERLIB} -l$${CARDLAYERLIB} -lpteidlib
 INCLUDEPATH += . ../../eidlib/ ../../common ../../applayer ../../cardlayer
-macx:INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2j/include/
+macx:INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2q/include/
 
 unix: DEFINES += __UNIX__ DEBUG WITH_OPENSSL
-#Support Fat binaries on Mac with both x86 and x86_64 architectures
 
 # Input
 HEADERS += \

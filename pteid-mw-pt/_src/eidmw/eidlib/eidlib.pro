@@ -32,7 +32,7 @@ LIBS += -L../lib  \
 		-l$${APPLAYERLIB} 
 
 DEPENDPATH += .
-INCLUDEPATH += . ../applayer ../common ../cardlayer ../dialogs /usr/local/include
+INCLUDEPATH += . ../applayer ../common ../cardlayer ../dialogs /usr/local/Cellar/openssl/1.0.2q/include/ /usr/local/include
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 DEFINES += EIDMW_EIDLIB_EXPORTS
 
