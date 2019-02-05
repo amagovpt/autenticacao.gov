@@ -355,9 +355,8 @@ public slots:
     void quitApplication();
     void forgetAllCertificates( void );
     void forgetCertificates(QString const& reader);
-#ifdef WIN32
+
     void setWindowGeometry(int x, int y, int width, int height);
-#endif
 
 signals:
     // Signal from GAPI to Gui
