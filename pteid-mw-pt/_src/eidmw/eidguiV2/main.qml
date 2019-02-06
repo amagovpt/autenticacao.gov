@@ -46,6 +46,12 @@ Window {
         console.log("Position: (" + x + "," + y + ")")
         gapi.setWindowGeometry(x, y, width, height)
     }
+    onXChanged: {
+        gapi.setWindowGeometry(x, y, width, height)
+    }
+    onYChanged: {
+        gapi.setWindowGeometry(x, y, width, height)
+    }
 
     Connections {
         target: controler
