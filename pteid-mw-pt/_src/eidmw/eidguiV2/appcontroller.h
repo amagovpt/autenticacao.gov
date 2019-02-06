@@ -85,6 +85,10 @@ public slots:
     QString getProxyPwdValue (void);
     void setProxyPwdValue (QString const& proxy_pwd);
 
+    bool isOutlookInstalled();
+    bool getOutlookSuppressNameChecks(void);
+    void setOutlookSuppressNameChecks(bool bDisabledMatching);
+
     void cancelDownload();
     void httpError(QNetworkReply::NetworkError networkError);
     void httpUpdateError(QNetworkReply::NetworkError networkError);

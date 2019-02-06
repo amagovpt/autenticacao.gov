@@ -98,27 +98,6 @@ PageDefinitionsAppForm {
                               mainFormID.propertShowAnimation = false
                           }
     }
-    propertyCheckboxRegister{
-        onCheckedChanged: propertyCheckboxRegister.checked ? gapi.setRegCertValue(true) :
-                                                             gapi.setRegCertValue(false)
-    }
-    propertyCheckboxRemove{
-        onCheckedChanged: propertyCheckboxRemove.checked ? gapi.setRemoveCertValue(true) :
-                                                           gapi.setRemoveCertValue(false)
-    }
-    Connections {
-        target: propertyTextFieldTimeStamp
-        onEditingFinished: {
-            console.log("Editing TimeStamp finished host: " + propertyTextFieldTimeStamp.text);
-            controler.setTimeStampHostValue(propertyTextFieldTimeStamp.text)
-        }
-    }
-    propertyCheckboxTimeStamp{
-        onCheckedChanged: if (!propertyCheckboxTimeStamp.checked ){
-                              controler.setTimeStampHostValue("http://ts.cartaodecidadao.pt/tsa/server")
-                              propertyTextFieldTimeStamp.text = ""
-                          }
-    }
     propertyCheckboxSystemProxy{
         onCheckedChanged: if (propertyCheckboxSystemProxy.checked ){
                               propertyCheckboxProxy.checked = false
@@ -196,22 +175,6 @@ PageDefinitionsAppForm {
         }
 
         propertyCheckboxShowAnime.checked = controler.getShowAnimationsValue()
-
-        if (Qt.platform.os === "windows") {
-            propertyCheckboxRegister.checked = gapi.getRegCertValue()
-            propertyCheckboxRemove.checked = gapi.getRemoveCertValue()
-        }else{
-            propertyRectAppCertificates.visible = false
-            propertyRectAppTimeStamp.anchors.top = propertyRectAppLook.bottom
-        }
-
-        if (controler.getTimeStampHostValue().length > 0
-                && controler.getTimeStampHostValue() !== "http://ts.cartaodecidadao.pt/tsa/server"){
-            propertyCheckboxTimeStamp.checked = true
-            propertyTextFieldTimeStamp.text = controler.getTimeStampHostValue()
-        }else{
-            propertyCheckboxTimeStamp.checked = false
-        }
 
         if (Qt.platform.os === "linux") {
             propertyCheckboxSystemProxy.visible = false

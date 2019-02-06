@@ -29,9 +29,11 @@
 #endif
 #include <stdlib.h>
 
-#ifdef WIN32
-#include <windows.h>
-#endif
+
+#include "MWException.h"
+#include "Config.h"
+#include "eidErrors.h"
+#include "Util.h"
 
 #include "Util.h"
 
@@ -299,8 +301,34 @@ char* bin2AsciiHex(const unsigned char * pData, unsigned long ulLen)
     return pszHex;
 }
 
+void ReadReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD *dwType, void* output, DWORD *outputSize) {
+    HKEY hKey;
+    LONG result = RegOpenKeyEx(hive, subKey, 0, KEY_READ, &hKey);
+    if (result != ERROR_SUCCESS){
+        throw CMWEXCEPTION(EIDMW_CONF);
+        return;
+    }
+    result = RegQueryValueExW(hKey, leafKey, NULL, dwType, (LPBYTE)output, outputSize);
+    if (result != ERROR_SUCCESS){
+        throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+        return;
+    }
+}
+void WriteReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD dwType, void* input, DWORD inputSize) {
+    HKEY hKey;
+    LONG result = RegOpenKeyEx(hive, subKey, 0, KEY_WRITE, &hKey);
+    if (result != ERROR_SUCCESS){
+        throw CMWEXCEPTION(EIDMW_CONF);
+        return;
+    }
+    result = RegSetValueExW(hKey, leafKey, NULL, dwType, (LPBYTE)input, inputSize);
+    if (result != ERROR_SUCCESS){
+        throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+        return;
+    }
 }
 
+}
 
 #ifndef WIN32
 

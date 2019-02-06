@@ -26,6 +26,10 @@
 #include <string.h>
 #include <iostream>
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 namespace eIDMW
 {
 
@@ -51,6 +55,9 @@ int            Test(void);
 
 EIDMW_CMN_API char *bin2AsciiHex(const unsigned char * pData, unsigned long ulLen);
 
+// Read/Write Registry value
+EIDMW_CMN_API void ReadReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD *dwType, void* output, DWORD *outputSize);
+EIDMW_CMN_API void WriteReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD dwType, void* input, DWORD inputSize);
 }
 
 #ifndef WIN32

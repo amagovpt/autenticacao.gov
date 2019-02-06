@@ -23,6 +23,11 @@ ListModel {
                 url: "contentPages/definitions/PageDefinitionsApp.qml"
             },
             ListElement {
+                subName: QT_TR_NOOP("STR_MENU_SIGN_SETTINGS")
+                expand: false
+                url: "contentPages/definitions/PageDefinitionsSignSettings.qml"
+            },
+            ListElement {
                 subName: QT_TR_NOOP("STR_MENU_APP_DATA")
                 expand: false
                 url: "contentPages/definitions/PageDefinitionsData.qml"

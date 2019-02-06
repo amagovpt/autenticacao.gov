@@ -571,7 +571,7 @@ PageCardAdressForm {
             dialogConfirmOfAddressProgress.open()
         }
     }
-
+    
     propertyButtonConfirmOfAddress{
         onClicked: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS

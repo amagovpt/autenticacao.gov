@@ -11,6 +11,7 @@
 #include <cstring>
 
 #include "eidlib.h"
+#include "Util.h"
 
 #ifdef WIN32
 #include <windows.h>
@@ -1023,3 +1024,66 @@ QString AppController::formatSize(qint64 size) {
     return QString("%0 %1").arg(outputSize, 0, 'f', 0).arg(units[i]);
 }
 
+void getOutlookVersion(std::wstring &version) {
+#ifdef WIN32
+    DWORD dwType = REG_SZ;
+    WCHAR abValueDat[23];
+    DWORD dwValDatLen = sizeof(abValueDat);
+    ReadReg(HKEY_CLASSES_ROOT, L"Outlook.Application\\CurVer", L"", &dwType, abValueDat, &dwValDatLen);
+    if (wcslen(abValueDat) <= 20)
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Outlook CurVer registry format not expected");
+        return;
+    }
+    version.assign(abValueDat, 20, 23);
+#endif
+}
+bool AppController::isOutlookInstalled() {
+#ifdef WIN32
+    std::wstring version;
+    getOutlookVersion(version);
+    return version.compare(L"") != 0;
+#endif
+}
+bool AppController::getOutlookSuppressNameChecks(void) {
+#ifdef WIN32
+    std::wstring version;
+    getOutlookVersion(version);
+    if (version.compare(L"") != 0)
+    {
+        if (version.compare(L"9") == 0)
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Can't write to Outlook 2000 (version 9) without admin privileges");
+            return false;
+        }
+        std::wstring regName(L"Software\\Microsoft\\Office\\" + version + L".0\\Outlook\\Security");
+        DWORD abValueDat(0);
+        DWORD dwValDatLen(sizeof(abValueDat));
+        DWORD dwType = REG_DWORD;
+        ReadReg(HKEY_CURRENT_USER, regName.c_str(), L"SupressNameChecks", &dwType, &abValueDat, &dwValDatLen);
+        return abValueDat == 1;
+    }
+    
+    return false;
+#endif
+}
+void AppController::setOutlookSuppressNameChecks(bool bDisabledMatching) {
+#ifdef WIN32
+    std::wstring version;
+    getOutlookVersion(version);
+    if (version.compare(L"") != 0)
+    {
+        if (version.compare(L"9") == 0)
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Can't write to Outlook 2000 (version 9) without admin privileges");
+            return;
+        }
+        std::wstring regName(L"Software\\Microsoft\\Office\\" + version + L".0\\Outlook\\Security");
+        DWORD abValueDat((bDisabledMatching ? 1 : 0));
+        DWORD dwValDatLen(sizeof(abValueDat));
+        DWORD dwType = REG_DWORD;
+        WriteReg(HKEY_CURRENT_USER, regName.c_str(), L"SupressNameChecks", dwType, &abValueDat, dwValDatLen);
+        return;
+    }
+#endif
+}

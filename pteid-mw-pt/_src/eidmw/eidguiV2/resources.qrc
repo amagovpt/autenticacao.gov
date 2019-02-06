@@ -44,6 +44,8 @@
         <file>contentPages/services/PageServicesSignSimpleForm.ui.qml</file>
         <file>contentPages/definitions/PageDefinitionsApp.qml</file>
         <file>contentPages/definitions/PageDefinitionsAppForm.ui.qml</file>
+        <file>contentPages/definitions/PageDefinitionsSignSettings.qml</file>
+        <file>contentPages/definitions/PageDefinitionsSignSettingsForm.ui.qml</file>
         <file>components/Accordion.qml</file>
         <file>contentPages/definitions/PageDefinitionsUpdates.qml</file>
         <file>contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml</file>
