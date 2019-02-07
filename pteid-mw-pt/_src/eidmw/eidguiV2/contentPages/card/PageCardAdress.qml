@@ -162,6 +162,12 @@ PageCardAdressForm {
                 mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             }
         }
+        onSignalTestPinFinished: {
+            if (triesLeft === 3) {
+                propertyBusyIndicator.running = true
+                gapi.startReadingAddress()
+            }
+        }
     }
 
     Dialog {
@@ -596,11 +602,7 @@ PageCardAdressForm {
                     mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                     mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                 }else{
-                    var triesLeft = gapi.verifyAddressPin("")
-                    if (triesLeft === 3) {
-                        propertyBusyIndicator.running = true
-                        gapi.startReadingAddress()
-                    }
+                    gapi.verifyAddressPin("")
                 }
             }else{
                 dialogTestPin.open()
