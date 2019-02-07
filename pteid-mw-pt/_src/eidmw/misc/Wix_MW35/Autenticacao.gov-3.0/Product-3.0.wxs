@@ -95,7 +95,6 @@
 
       <Directory Id="ProgramMenuFolder" Name="Menu">
         <Directory Id="ApplicationProgramsFolder" Name="Cartão de Cidadão">
-          <Directory Id="ApplicationProgramsFolderUtilities" Name="Utilitários"/>
         </Directory>
       </Directory>
 
@@ -262,11 +261,6 @@
         <File Source="..\..\..\eidgui\eid.ico" KeyPath="yes" />
       </Component>
 
-      <!-- It needs NSI to build from Source -->
-      <Component Id="OutlookTool" Guid="{F36A543C-CB17-4D91-BF0C-2EAEFEC3CB3A}">
-        <File Source="..\MW35Wix\pteidoutlooksnc.exe" KeyPath="yes" />
-      </Component>
-
       <Component Id="CACerts" Guid="{b0fb28de-54ac-45b0-a565-1dce90ffe080}">
         <File Source="..\..\certs\cacerts.pem" KeyPath="yes"/>
       </Component>
@@ -411,18 +405,6 @@
 
     </DirectoryRef>
 
-    <DirectoryRef Id="ApplicationProgramsFolderUtilities">
-      <Component Id="OutlookShortcut" Guid="{813C0984-0401-4604-9D7F-E13BDD28FBD7}">
-        <Shortcut Id="OutlookStartMenuShortcut"
-          Name="Parametrização do Microsoft Outlook"
-          Description="!(loc.OutlookDescr)"
-          Target="[APPLICATIONROOTFOLDER]pteidoutlooksnc.exe"
-          WorkingDirectory="APPLICATIONROOTFOLDER"/>
-        <RemoveFolder Id="ApplicationProgramsFolderUtilities" On="uninstall"/>
-        <RegistryValue Root="HKCU" Key="SOFTWARE\PTEID\Installer" Name="OutlookShortcut" Type="integer" Value="1" KeyPath="yes" />
-      </Component>
-    </DirectoryRef>
-
     <Feature Id="PteidRuntime"
              Title="!(loc.PteidRuntime)"
              Description="!(loc.PteidRuntimeDesc)"
@@ -484,9 +466,7 @@
                 Level="1">
         <ComponentRef Id="SCardSvrService"/>
         <ComponentRef Id="pkcs11"/>
-        <ComponentRef Id="OutlookTool" />
         <!-- Shortcuts -->
-        <ComponentRef Id ="OutlookShortcut"/>
         <Feature Id="Install_Minidriver" Title="!(loc.Minidriver)" Description="!(loc.MinidriverDescr)" Level="0">
           <ComponentRef Id="pteidmdrv"/>
           <ComponentRef Id="CertPropService"/>
