@@ -33,8 +33,6 @@
 namespace eIDMW
 {
 
-EIDMW_CMN_API void LogShitLevel(int x);
-
 //--- string conversion between std::wstring and std::string
 EIDMW_CMN_API std::wstring   utilStringWiden(const std::string& in, const std::locale& locale = std::locale());
 EIDMW_CMN_API std::string    utilStringNarrow(const std::wstring& in, const std::locale& locale = std::locale());
@@ -50,8 +48,6 @@ EIDMW_CMN_API bool StartsWithCI(const char *csData, const char *csSearch);
  * Returns true is csSearch is present in csData.
  */
 EIDMW_CMN_API bool StartsWith(const char *csData, const char *csSearch);
-
-int            Test(void);
 
 EIDMW_CMN_API char *bin2AsciiHex(const unsigned char * pData, unsigned long ulLen);
 
