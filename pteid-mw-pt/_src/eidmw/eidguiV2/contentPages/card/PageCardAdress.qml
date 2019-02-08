@@ -328,6 +328,7 @@ PageCardAdressForm {
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - dialogConfirmOfAddress.width * 0.5
         y: parent.height * 0.5 - dialogConfirmOfAddress.height * 0.5
+        modal: true
 
         header: Label {
             id: labelConfirmOfAddressTextTitle
@@ -486,6 +487,7 @@ PageCardAdressForm {
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - dialogConfirmOfAddress.width * 0.5
         y: parent.height * 0.5 - dialogConfirmOfAddress.height * 0.5
+        modal: true
 
         header: Label {
             id: labelConfirmOfAddressProgressTextTitle
