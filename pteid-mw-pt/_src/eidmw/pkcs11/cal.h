@@ -57,7 +57,8 @@ extern "C" {
 	{ CKA_UNWRAP,           ( CK_VOID_PTR ) NULL, 0 },   \
 	{ CKA_MODULUS,          ( CK_VOID_PTR ) NULL, 0 },   \
    { CKA_MODULUS_BITS,     ( CK_VOID_PTR ) NULL, 0 },   \
-   { CKA_EXTRACTABLE,     ( CK_VOID_PTR ) NULL, 0 },   \
+   { CKA_EXTRACTABLE,      ( CK_VOID_PTR ) NULL, 0 },   \
+   { CKA_ALWAYS_AUTHENTICATE,( CK_VOID_PTR ) NULL, 0 }, \
 	{ CKA_PUBLIC_EXPONENT,  ( CK_VOID_PTR ) NULL, 0 },   \
 	{ CKA_PRIVATE,          ( CK_VOID_PTR ) NULL, 0 },   \
 	{ CKA_PRIVATE_EXPONENT, ( CK_VOID_PTR ) NULL, 0 },   \

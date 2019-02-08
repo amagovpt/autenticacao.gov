@@ -563,35 +563,32 @@ try
       /***************/
       tPrivKey key = oReader.GetPrivKey(i);
       id = (CK_ULONG) key.ulID;
-//      sprintf_s(clabel,sizeof(clabel), "Private Key %d (%s)", i+1, key.csLabel.c_str());
+
       sprintf_s(clabel,sizeof(clabel), "%s", key.csLabel.c_str());
 
       ret = p11_add_slot_object(pSlot, PRV_KEY, sizeof(PRV_KEY)/sizeof(CK_ATTRIBUTE), CK_TRUE, CKO_PRIVATE_KEY, id, CK_TRUE, &hObject);
       if (ret)
          goto cleanup;
 
-      //put some other attribute items allready so the key can be used for signing
+      //put some other attribute items already so the key can be used for signing
       pObject = p11_get_slot_object(pSlot, hObject);
 
-      //type = (CK_ULONG) oReader.GetPrivKey(i).;
-      //TODO fixed set to RSA
       ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_LABEL, (CK_VOID_PTR) clabel, (CK_ULONG)strlen(clabel));
       if (ret) goto cleanup;
-
+      //KEY_TYPE is always RSA
       ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_KEY_TYPE, (CK_VOID_PTR) &keytype, sizeof(CK_KEY_TYPE));
       if (ret) goto cleanup;
 
-      //TODO if (ulKeyUsage & SIGN)
-         {
-         ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_SIGN, (CK_VOID_PTR) &btrue, sizeof(btrue));
-         if (ret) goto cleanup;
-         }
-
-      //TODO error in cal, size is in bits allready
+      ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_SIGN, (CK_VOID_PTR) &btrue, sizeof(btrue));
+      if (ret) goto cleanup;
+      
+      //TODO error in cal, size is in bits already
       modsize = key.ulKeyLenBytes  * 8;
       ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_MODULUS_BITS, (CK_VOID_PTR) &modsize, sizeof(CK_ULONG));
       if (ret) goto cleanup;
       ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_EXTRACTABLE, (CK_VOID_PTR) &bfalse, sizeof(bfalse));
+      if (ret) goto cleanup;
+      ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_ALWAYS_AUTHENTICATE, (CK_VOID_PTR) &btrue, sizeof(btrue));
       if (ret) goto cleanup;
 			ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_DERIVE, (CK_VOID_PTR) &bfalse, sizeof(bfalse));
       if (ret) goto cleanup;
@@ -603,7 +600,6 @@ try
 
       pObject = p11_get_slot_object(pSlot, hObject);
 
-//      sprintf_s(clabel,sizeof(clabel), "Public Key %d (%s)", i+1, key.csLabel.c_str());
       sprintf_s(clabel,sizeof(clabel), "%s", key.csLabel.c_str());
       ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_LABEL, (CK_VOID_PTR) clabel, (CK_ULONG)strlen(clabel));
       if (ret) goto cleanup;
@@ -617,7 +613,7 @@ try
    for (i=0; i < oReader.CertCount(); i++)
       {
       id = (CK_ULONG) oReader.GetCert(i).ulID;
-//      sprintf_s(clabel,sizeof(clabel), "Certificate %d (%s)", i+1, oReader.GetCert(i).csLabel.c_str());
+
       sprintf_s(clabel,sizeof(clabel), "%s", oReader.GetCert(i).csLabel.c_str());
 
       ret = p11_add_slot_object(pSlot, CERTIFICATE, sizeof(CERTIFICATE)/sizeof(CK_ATTRIBUTE), CK_TRUE, CKO_CERTIFICATE, id, CK_FALSE, &hObject);
