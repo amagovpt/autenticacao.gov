@@ -40,10 +40,13 @@
 #define INPUTFIELD_NEW 1
 #define INPUTFIELD_CONFIRM 2
 
+#define WINDOW_WIDTH  420
+#define WINDOW_HEIGHT 263
+
 std::wstring langchange = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
-dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & PINName, bool isUnlock, bool dontAskPUK, HWND Parent)
-:Win32Dialog(L"WndAskPINs")
+dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & PINName, bool isUnlock, bool dontAskPUK, HWND Parent, Type_WndGeometry *wndGeom)
+:Win32Dialog(L"WndAskPINs", wndGeom)
 {
 	hbrBkgnd = NULL;
 	InputField1_OK = InputField2_OK = InputField3_OK = false;
@@ -69,23 +72,23 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 	szHeader = const_cast<wchar_t *>(Header.c_str());
 	szPIN = PINName.c_str();
 
-	int Height = 263;
-
-	if (CreateWnd(tmpTitle.c_str(), 420, Height, IDI_APPICON, Parent))
+	if (CreateWnd(tmpTitle.c_str(), WINDOW_WIDTH, WINDOW_HEIGHT, IDI_APPICON, Parent, wndGeom))
 	{
 		RECT clientRect;
 		GetClientRect(m_hWnd, &clientRect);
 
 		OK_Btn = CreateWindow(
 			L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-			clientRect.right - 180, clientRect.bottom - 40, 72, 24,
-			m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL);
+            clientRect.right - 180 - (wndGeom->width) / 2 + WINDOW_WIDTH / 2,
+            clientRect.bottom - 40 - (wndGeom->height) / 2 + WINDOW_HEIGHT / 2,
+            72, 24, m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL);
 		EnableWindow(OK_Btn, false);
 
 		Cancel_Btn = CreateWindow(
 			L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-			clientRect.right - 100, clientRect.bottom - 40, 72, 24,
-			m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL);
+            clientRect.right - 100 - (wndGeom->width) / 2 + WINDOW_WIDTH / 2,
+            clientRect.bottom - 40 - (wndGeom->height) / 2 + WINDOW_HEIGHT / 2,
+            72, 24, m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL);
 
 		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_PASSWORD;
 		if (pinInfo1.ulFlags & PIN_FLAG_DIGITS)
@@ -94,8 +97,9 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 		if (!m_dontAskPIN1) {
 			HWND hTextEdit1 = CreateWindowEx(WS_EX_CLIENTEDGE,
 				L"EDIT", L"", dwStyle,
-				clientRect.right / 2 + 20, clientRect.bottom - 150, 160, 26,
-				m_hWnd, (HMENU)IDC_EDIT_PIN1, m_hInstance, NULL);
+                clientRect.right / 2 + 20,
+                clientRect.bottom / 2 - 150 + WINDOW_HEIGHT / 2,
+                160, 26, m_hWnd, (HMENU)IDC_EDIT_PIN1, m_hInstance, NULL);
 
 			SendMessage(hTextEdit1, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
 			SendMessage(hTextEdit1, WM_SETFONT, (WPARAM)TextFont, 0);
@@ -107,14 +111,16 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 
 		HWND hTextEdit2 = CreateWindowEx(WS_EX_CLIENTEDGE,
 			L"EDIT", L"", dwStyle,
-			clientRect.right / 2 + 20, clientRect.bottom - 120, 160, 26,
-			m_hWnd, (HMENU)IDC_EDIT_PIN2, m_hInstance, NULL);
+            clientRect.right / 2 + 20,
+            clientRect.bottom / 2 - 120 + WINDOW_HEIGHT / 2,
+            160, 26, m_hWnd, (HMENU)IDC_EDIT_PIN2, m_hInstance, NULL);
 		SendMessage(hTextEdit2, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
 
 		HWND hTextEdit3 = CreateWindowEx(WS_EX_CLIENTEDGE,
 			L"EDIT", L"", dwStyle,
-			clientRect.right / 2 + 20, clientRect.bottom - 90, 160, 26,
-			m_hWnd, (HMENU)IDC_EDIT_PIN3, m_hInstance, NULL);
+            clientRect.right / 2 + 20,
+            clientRect.bottom / 2 - 90 + WINDOW_HEIGHT / 2,
+            160, 26, m_hWnd, (HMENU)IDC_EDIT_PIN3, m_hInstance, NULL);
 		SendMessage(hTextEdit3, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
 
 		std::wstring oldPin_label = isUnlock ? GETSTRING_DLG(Puk) : GETSTRING_DLG(CurrentPin);
@@ -123,20 +129,23 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 		if (!m_dontAskPIN1) {
 			HWND hStaticText1 = CreateWindow(
 				L"STATIC", oldPin_label.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
-				labelsX, clientRect.bottom - 146, clientRect.right / 2 - 120, 22,
-				m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
+                labelsX + (wndGeom->width) / 2 - WINDOW_WIDTH / 2,
+                clientRect.bottom / 2 - 146 + WINDOW_HEIGHT / 2,
+                WINDOW_WIDTH / 2 - 120, 22, m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
 			SendMessage(hStaticText1, WM_SETFONT, (WPARAM)TextFont, 0);
 		}
 
 		HWND hStaticText2 = CreateWindow(
 			L"STATIC", GETSTRING_DLG(NewPin), WS_CHILD | WS_VISIBLE | SS_LEFT,
-			labelsX, clientRect.bottom - 116, clientRect.right / 2 - 100, 22,
-			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
+            labelsX + (wndGeom->width) / 2 - WINDOW_WIDTH / 2,
+            clientRect.bottom / 2 - 116 + WINDOW_HEIGHT / 2,
+            WINDOW_WIDTH / 2 - 100, 22, m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
 
 		HWND hStaticText3 = CreateWindow(
 			L"STATIC", GETSTRING_DLG(ConfirmNewPin), WS_CHILD | WS_VISIBLE | SS_LEFT,
-			labelsX, clientRect.bottom - 86, clientRect.right / 2 - 40, 22,
-			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
+            labelsX + (wndGeom->width) / 2 - WINDOW_WIDTH / 2,
+            clientRect.bottom / 2 - 86 + WINDOW_HEIGHT / 2,
+            WINDOW_WIDTH / 2 - 40, 22, m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
 
 
 		SendMessage(hStaticText2, WM_SETFONT, (WPARAM)TextFont, 0);
@@ -320,13 +329,14 @@ LRESULT dlgWndAskPINs::ProcecEvent
 		case WM_PAINT:
 		{
 			m_hDC = BeginPaint(m_hWnd, &ps);
+            DrawFakeRectangle();
 			SetTextColor(m_hDC, RGB(0x3C, 0x5D, 0xBC));
 			
 			GetClientRect(m_hWnd, &rect);
-			rect.bottom -= 60;
-			rect.top = 20;
-			rect.left += 55;
-			rect.right -= 20;
+            rect.top = rect.bottom / 2 - WINDOW_HEIGHT / 2 + 20;
+            rect.bottom = rect.top + 60;
+            rect.left = rect.right / 2 - WINDOW_WIDTH / 2 + 55;
+            rect.right  = rect.right / 2 + WINDOW_WIDTH / 2 - 20;
 
 			SetBkColor(m_hDC, RGB(255, 255, 255));
 			SelectObject(m_hDC, TextFontHeader);

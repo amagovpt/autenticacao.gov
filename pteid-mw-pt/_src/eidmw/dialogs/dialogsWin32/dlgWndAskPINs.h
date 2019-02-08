@@ -47,7 +47,7 @@ class dlgWndAskPINs : public Win32Dialog
 	const wchar_t * szPIN;
 
 public:
-	dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & PINName, bool isUnlock, bool dontAskPUK, HWND Parent = NULL);
+    dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & PINName, bool isUnlock, bool dontAskPUK, HWND Parent = NULL, Type_WndGeometry *wndGeom = NULL);
 	virtual ~dlgWndAskPINs();
 
 	wchar_t Pin1Result[128];

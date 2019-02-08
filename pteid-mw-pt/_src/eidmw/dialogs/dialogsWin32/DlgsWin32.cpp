@@ -169,7 +169,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			break;
 		}
 
-		dlg = new dlgWndAskPIN( pinInfo, usage, sMessage, PINName);
+        dlg = new dlgWndAskPIN(pinInfo, usage, sMessage, PINName, NULL, &appWindowGeom);
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
@@ -235,7 +235,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 			break;
 		}
 
-		dlg = new dlgWndAskPINs(pin1Info, pin2Info, Header, PINName, isUnlock, operation == DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK);
+		dlg = new dlgWndAskPINs(pin1Info, pin2Info, Header, PINName, isUnlock, operation == DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK, NULL, &appWindowGeom);
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
@@ -278,7 +278,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgBadPin(
         }
         PINName = getPinName( usage, csPinName );
 
-        dlg = new dlgWndBadPIN( PINName, ulRemainingTries );
+        dlg = new dlgWndBadPIN( PINName, ulRemainingTries, NULL, &appWindowGeom);
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;

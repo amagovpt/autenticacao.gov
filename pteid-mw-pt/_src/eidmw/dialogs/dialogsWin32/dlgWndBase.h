@@ -29,7 +29,7 @@ using namespace eIDMW;
 class Win32Dialog
 {
 public:
-	Win32Dialog(const wchar_t *appName);
+	Win32Dialog(const wchar_t *appName, Type_WndGeometry *wndGeom = NULL);
 	virtual ~Win32Dialog();
 	virtual LRESULT ProcecEvent
 					(	UINT		uMsg,			// Message For This Window
@@ -56,12 +56,16 @@ protected:
 	void KillWindow( );
 	virtual void Destroy();
 	HFONT loadFontFromResource(int font_pointsize, bool isBold);
+	void DrawFakeRectangle();			// For modal dialogs
 
 protected:
 	HDC			m_hDC;					// Private GDI Device Context
 	HWND		m_hWnd;					// Holds Our Window Handle
 	HINSTANCE	m_hInstance;			// Instance to our Module(DLL)
 	bool		m_ModalHold;			// Wheither it's modal or not
+	Type_WndGeometry *m_wndGeom;		// Calling application geom (for modal dialogs)
+	int			m_dlgWidth;
+	int			m_dlgHeight;
 	HFONT TextFontHeader;
 	HFONT TextFont;
 

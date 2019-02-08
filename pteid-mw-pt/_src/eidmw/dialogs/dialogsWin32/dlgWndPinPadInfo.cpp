@@ -28,6 +28,9 @@
 #define IDB_OK 1
 #define IDB_CANCEL 2
 
+#define WINDOW_WIDTH  420
+#define WINDOW_HEIGHT 280
+
 dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusage, 
 		DlgPinOperation operation, const std::wstring & csReader, 
 		const std::wstring & PinName, const std::wstring & Message, HWND Parent, Type_WndGeometry *wndGeom)
@@ -62,7 +65,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 
 	m_szHeader = _wcsdup( PinName.c_str() );
 	
-	if (CreateWnd(tmpTitle.c_str(), 420, 280, IDI_APPICON, Parent, wndGeom))
+	if (CreateWnd(tmpTitle.c_str(), WINDOW_WIDTH, WINDOW_HEIGHT, IDI_APPICON, Parent, wndGeom))
 	{
 		/*
 		if( PinPusage == DLG_PIN_SIGN )
@@ -115,27 +118,27 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 
 			//Draw white "fake" dialog popup 
 			GetClientRect( m_hWnd, &rect );
-			rect.left = rect.right / 2 - 210;
-			rect.top = rect.bottom / 2 - 140;
-			rect.right = rect.right / 2 + 210;
-			rect.bottom = rect.bottom / 2 + 140;
+			rect.left = rect.right / 2 - WINDOW_WIDTH / 2;
+            rect.top = rect.bottom / 2 - WINDOW_HEIGHT / 2;
+            rect.right = rect.right / 2 + WINDOW_WIDTH / 2;
+            rect.bottom = rect.bottom / 2 + WINDOW_HEIGHT / 2;
 			FillRect(m_hDC, &rect, CreateSolidBrush(RGB(255, 255, 255)));
 			DrawEdge(m_hDC, &rect, EDGE_RAISED, BF_RECT);
 
 			GetClientRect(m_hWnd, &rect);
-			rect.left = rect.right/2 - 210 + 20;
-			rect.top = rect.bottom/2 - 140 + 32;
-			rect.right = rect.right/2 + 210 - 8;
-			rect.bottom = rect.bottom/2 + 136 - 8;
+            rect.left = rect.right / 2 - WINDOW_WIDTH / 2 + 20;
+            rect.top = rect.bottom / 2 - WINDOW_HEIGHT / 2 + 32;
+            rect.right = rect.right / 2 + WINDOW_WIDTH / 2 - 8;
+            rect.bottom = rect.bottom / 2 + WINDOW_HEIGHT / 2 - 8;
 			SetBkColor( m_hDC, RGB(255,255,255));
 			SelectObject( m_hDC, TextFontHeader );
 			DrawText( m_hDC, m_szHeader, -1, &rect, DT_WORDBREAK );
 
 			//Change top header dimensions
 			GetClientRect( m_hWnd, &rect );
-			rect.left = rect.right / 2 - 210 + 20;
-			rect.top = rect.bottom / 2 - 140 + 60;
-			rect.right = rect.right / 2 + 210 - 20;
+            rect.left = rect.right / 2 - WINDOW_WIDTH / 2 + 20;
+            rect.top = rect.bottom / 2 - WINDOW_HEIGHT / 2 + 60;
+            rect.right = rect.right / 2 + WINDOW_WIDTH / 2 - 20;
 			rect.bottom = rect.bottom - 60;
 			SetBkColor(m_hDC, RGB(255, 255, 255));
 			SelectObject( m_hDC, TextFont );

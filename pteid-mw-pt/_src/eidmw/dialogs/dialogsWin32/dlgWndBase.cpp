@@ -81,7 +81,7 @@ HFONT Win32Dialog::loadFontFromResource(int font_pointsize, bool isBold) {
 	return TextFont;
 }
 
-Win32Dialog::Win32Dialog(const wchar_t *appName)
+Win32Dialog::Win32Dialog(const wchar_t *appName, Type_WndGeometry *wndGeom)
 {
 	m_ModalHold = true;
 	m_hDC = NULL;					// Private GDI Device Context
@@ -91,6 +91,7 @@ Win32Dialog::Win32Dialog(const wchar_t *appName)
 	dlgResult = eIDMW::DLG_CANCEL;	// Dialog Result
 	m_fonthandle = NULL;
 	m_appName=_wcsdup(appName);
+	m_wndGeom = wndGeom;
 
 	TextFontHeader = loadFontFromResource(16*.75, true);
 	TextFont = loadFontFromResource(12 * .75, false);
@@ -117,6 +118,9 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 		return false;
 
 	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> Win32Dialog::CreateWnd (Parent=%X)",Parent);
+
+	m_dlgHeight = height;
+	m_dlgWidth = width;
 
 	DWORD		dwExStyle;				// Window Extended Style
 	DWORD		dwStyle;				// Window Style
@@ -172,9 +176,9 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 
 	Active_lpWnd = this;
 
-	if (m_ModalHold && wndGeom && 
-		wndGeom->width > 0 &&
-		wndGeom->height > 0)
+	if (m_ModalHold && m_wndGeom && 
+		m_wndGeom->width > 0 &&
+		m_wndGeom->height > 0)
 	{
 		// Create Transparent Window
 		m_hWnd = CreateWindowEx(dwExStyle, m_appName, title, dwStyle,
@@ -513,3 +517,13 @@ LRESULT Win32Dialog::ProcecEvent
 	return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
 }
 
+void Win32Dialog::DrawFakeRectangle() {
+    RECT rect;
+    GetClientRect(m_hWnd, &rect);
+    rect.left = rect.right / 2 - m_dlgWidth / 2;
+    rect.top = rect.bottom / 2 - m_dlgHeight / 2;
+    rect.right = rect.right / 2 + m_dlgWidth / 2;
+    rect.bottom = rect.bottom / 2 + m_dlgHeight / 2;
+    FillRect(m_hDC, &rect, CreateSolidBrush(RGB(255, 255, 255)));
+    DrawEdge(m_hDC, &rect, EDGE_RAISED, BF_RECT);
+}

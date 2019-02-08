@@ -34,12 +34,15 @@
 #define IMG_SIZE 128
 #define IDC_EDIT 3
 
+#define WINDOW_HEIGHT 280
+#define WINDOW_WIDTH  420
+
 std::wstring lang = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
 
 
-dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring & Header, std::wstring & PINName, HWND Parent )
-:Win32Dialog(L"WndAskPIN")
+dlgWndAskPIN::dlgWndAskPIN(DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring & Header, std::wstring & PINName, HWND Parent, Type_WndGeometry *wndGeom)
+:Win32Dialog(L"WndAskPIN", wndGeom)
 {
 	hbrBkgnd = NULL;
 	PinResult[0] = ' ';
@@ -56,11 +59,9 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 
 	szHeader = Header.c_str();
 	szPIN = PINName.c_str();
+    m_ModalHold = true;
 
-	int window_height = 280;
-	int window_width = 420;
-
-	if( CreateWnd( tmpTitle.c_str() , window_width, window_height, IDI_APPICON, Parent ) )
+	if( CreateWnd( tmpTitle.c_str() , WINDOW_WIDTH, WINDOW_HEIGHT, IDI_APPICON, Parent, wndGeom ) )
 	{
 		RECT clientRect;
 		GetClientRect( m_hWnd, &clientRect );
@@ -68,8 +69,9 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 		//OK Button
 		OK_Btn = CreateWindow(
 			L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-			clientRect.right - 200, clientRect.bottom - 65, 82, 24, 
-			m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL );
+			clientRect.right - 200 - (wndGeom->width)/2 + WINDOW_WIDTH/2,
+            clientRect.bottom - 65 - (wndGeom->height)/2 + WINDOW_HEIGHT/2,
+            82, 24, m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL );
 
 		//OK button is disabled by default
 		EnableWindow(OK_Btn, false);
@@ -77,16 +79,17 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 		//Cancel Button
 		Cancel_Btn = CreateWindow(
 			L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-			clientRect.right - 110, clientRect.bottom - 65, 82, 24, 
-			m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL );
+            clientRect.right - 110 - (wndGeom->width) / 2 + WINDOW_WIDTH / 2,
+            clientRect.bottom - 65 - (wndGeom->height) / 2 + WINDOW_HEIGHT / 2,
+            82, 24, m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL );
 
 
 		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_PASSWORD;
 		if( pinInfo.ulFlags & PIN_FLAG_DIGITS )
 			dwStyle |= ES_NUMBER;
 
-		LONG pinTop = clientRect.bottom - 130;
-		LONG pinLeft = clientRect.right - 190;
+        LONG pinTop = clientRect.bottom - 130 - (wndGeom->height) / 2 + WINDOW_HEIGHT / 2;
+        LONG pinLeft = clientRect.right - 190 - (wndGeom->width) / 2 + WINDOW_WIDTH / 2;
 
 		HWND hTextEdit = CreateWindowEx( WS_EX_CLIENTEDGE,
 			L"EDIT", L"", dwStyle, 
@@ -94,12 +97,12 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 			m_hWnd, (HMENU)IDC_EDIT, m_hInstance, NULL );
 		SendMessage( hTextEdit, EM_LIMITTEXT, m_ulPinMaxLen, 0 );
 
-		int labelsX = 55;
+        int labelsX = 55 + (wndGeom->width) / 2 - WINDOW_WIDTH / 2;
 
 		//This is vertically aligned with hTextEdit
 		HWND hStaticText = CreateWindow( 
 			L"STATIC", szPIN, WS_CHILD | WS_VISIBLE | SS_LEFT, 
-			labelsX, pinTop, 180, 26,
+			labelsX, pinTop, 170, 26,
 			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
 
 		/*
@@ -220,15 +223,19 @@ LRESULT dlgWndAskPIN::ProcecEvent
 
 		case WM_PAINT:
 		{
+            MWLOG(LEV_DEBUG, MOD_DLG, L"  --> Win32Dialog::ProcecEvent here3");
 			m_hDC = BeginPaint( m_hWnd, &ps );
+            
+            DrawFakeRectangle();
+
 			SetTextColor(m_hDC, RGB(0x3C, 0x5D, 0xBC));
 
 			//Change top header dimensions
 			GetClientRect( m_hWnd, &rect );
-			rect.left += 55;
-			rect.top = 20;
-			rect.right -= 20;
-			rect.bottom = rect.top + 10;
+            rect.left   = rect.right  / 2 - WINDOW_WIDTH  / 2 + 55;
+            rect.top    = rect.bottom / 2 - WINDOW_HEIGHT / 2 + 20;
+            rect.right  = rect.right  / 2 + WINDOW_WIDTH  / 2 - 20;
+            rect.bottom = rect.top + 10;
 
 			SetBkColor(m_hDC, RGB(255, 255, 255));
 			SelectObject(m_hDC, TextFontHeader);
