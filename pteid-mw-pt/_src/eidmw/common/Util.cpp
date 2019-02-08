@@ -33,7 +33,6 @@
 #include "MWException.h"
 #include "Config.h"
 #include "eidErrors.h"
-#include "Util.h"
 
 #include "Util.h"
 
@@ -301,6 +300,7 @@ char* bin2AsciiHex(const unsigned char * pData, unsigned long ulLen)
     return pszHex;
 }
 
+#ifdef WIN32
 void ReadReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD *dwType, void* output, DWORD *outputSize) {
     HKEY hKey;
     LONG result = RegOpenKeyEx(hive, subKey, 0, KEY_READ, &hKey);
@@ -327,7 +327,7 @@ void WriteReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD dw
         return;
     }
 }
-
+#endif
 }
 
 #ifndef WIN32
