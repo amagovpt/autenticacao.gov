@@ -28,6 +28,9 @@
 #define SOAP_MUST_NO_UNDERSTAND             0
 #define SOAP_MUST_UNDERSTAND                1
 
+#define BASIC_AUTH_USER                     "tx3hmWas"
+#define BASIC_AUTH_PASS                     "4pIXikQzfxrQt73wLiO2"
+
 static char logBuf[512];
 
 namespace eIDMW {
@@ -268,6 +271,18 @@ void CMDServices::setUserId( std::string in_userId ){
     m_userId = in_userId;
 }
 
+/*  *********************************************************
+    ***    CMDServices::enableBasicAuthentication()       ***
+    This method has to be called once for every request sent.
+    ********************************************************* */
+void CMDServices::enableBasicAuthentication() {
+    if (m_soap == NULL) {
+        MWLOG_ERR(logBuf, "NULL m_soap");
+        return;
+    }
+    m_soap->userid = BASIC_AUTH_USER;
+    m_soap->passwd = BASIC_AUTH_PASS;
+}
 
 /*  *******************************************************************************************************************
     ****
@@ -328,6 +343,7 @@ int CMDServices::GetCertificate(CMDProxyInfo proxyInfo, std::string in_userId, c
         MWLOG_ERR( logBuf, "Null soap" );
         return ERR_NULL_HANDLER;
     }
+    enableBasicAuthentication();
 
     if (in_userId.empty()) {
         MWLOG_ERR( logBuf, "Empty userId" );
@@ -443,6 +459,7 @@ int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char * in_hash, st
         MWLOG_ERR( logBuf, "Null soap" );
         return ERR_NULL_HANDLER;
     }
+    enableBasicAuthentication();
 
     if (in_hash == NULL) {
         MWLOG_ERR( logBuf, "NULL hash" );
@@ -613,6 +630,7 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
         MWLOG_ERR( logBuf, "Null soap" );
         return ERR_NULL_HANDLER;
     }
+    enableBasicAuthentication();
 
     if ( in_code.empty() ) {
         MWLOG_ERR( logBuf, "Empty code" );

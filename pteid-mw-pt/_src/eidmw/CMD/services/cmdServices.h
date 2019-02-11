@@ -65,6 +65,8 @@ class CMDServices {
         std::string getUserId();
         void setUserId( std::string in_userId );
 
+        void enableBasicAuthentication();
+
     private:
         soap *m_soap;
         std::string m_applicationID;
