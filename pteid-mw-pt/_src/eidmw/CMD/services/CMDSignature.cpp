@@ -4,6 +4,8 @@
 #include "StringOps.h"
 #include "PDFSignature.h"
 #include "cmdServices.h"
+#include <QByteArray>
+#include <QCryptographicHash>
 
 static char logBuf[512];
 
@@ -45,6 +47,12 @@ namespace eIDMW {
         m_pdf_handler = in_pdf_handler;
     }
 
+    void CMDSignature::set_string_handler(std::string in_docname_handle,
+                                          QByteArray in_array_handler) {
+        m_docname_handle = in_docname_handle;
+        m_array_handler = in_array_handler;
+    }
+
     char * CMDSignature::getCertificateCitizenName() {
         PDFSignature *pdf = m_pdf_handler->getPdfSignature();
 
@@ -58,8 +66,9 @@ namespace eIDMW {
     }
 
     int CMDSignature::cli_getCertificate( std::string in_userId) {
-        if ( NULL == m_pdf_handler ) {
-            MWLOG_ERR( logBuf, "NULL pdf_handler" );
+        if ( NULL == m_pdf_handler
+             && (m_docname_handle.size() == 0 || m_array_handler.size() == 0)) {
+            MWLOG_ERR( logBuf, "NULL handler" );
             return ERR_NULL_PDF_HANDLER;
         }
 
@@ -77,23 +86,38 @@ namespace eIDMW {
             return ERR_GET_CERTIFICATE;
         }
 
-        PDFSignature *pdf = m_pdf_handler->getPdfSignature();
-        if ( NULL == pdf ) {
-            MWLOG_ERR( logBuf, "NULL Pdf\n" );
-            return ERR_NULL_PDF;
+        if ( m_pdf_handler != NULL ) {
+            PDFSignature *pdf = m_pdf_handler->getPdfSignature();
+            if ( NULL == pdf ) {
+                MWLOG_ERR( logBuf, "NULL Pdf\n" );
+                return ERR_NULL_PDF;
+            }
+
+            /* TODO: At the moment, it is only possible to sign one document. */
+            pdf->setBatch_mode(false);
+
+            pdf->setExternCertificate(certificates.at(0));
+
+            pdf->setIsCC(false);
+
+            std::vector<CByteArray> newVec(certificates.begin()+1, certificates.end());
+            pdf->setExternCertificateCA( newVec );
         }
+        else
+        {
+            CByteArray externCertificate = certificates.at(0);
 
-        CByteArray cert_ba = certificates.at(0);
+            QByteArray ba((const char *)externCertificate.GetBytes(),
+                          externCertificate.Size());
 
-        /* TODO: At the moment, it is only possible to sign one document. */
-        pdf->setBatch_mode(false);
-
-        pdf->setExternCertificate(certificates.at(0));
-
-        pdf->setIsCC(false);
-
-        std::vector<CByteArray> newVec(certificates.begin()+1, certificates.end());
-        pdf->setExternCertificateCA( newVec );
+            QByteArray temp = ba.toHex(0);
+            m_string_certificate = temp.toStdString();
+            if ( isDBG ){
+                printData( (char *)"\n Certificate: ",
+                           (unsigned char *)externCertificate.GetBytes(),
+                           externCertificate.Size());
+            }
+        }
 
         return ERR_NONE;
     }
@@ -103,8 +127,9 @@ namespace eIDMW {
     ********************************************************* */
     int CMDSignature::cli_sendDataToSign( std::string in_pin) {
 
-        if ( NULL == m_pdf_handler ) {
-            MWLOG_ERR( logBuf, "NULL pdf_handler" );
+        if ( NULL == m_pdf_handler
+             && (m_docname_handle.size() == 0 || m_array_handler.size() == 0)) {
+            MWLOG_ERR( logBuf, "NULL handler" );
             return ERR_NULL_PDF_HANDLER;
         }
 
@@ -116,15 +141,33 @@ namespace eIDMW {
         }
 
         std::string userPin = in_pin;
+        CByteArray hashByteArray;
+        std::string DocName;
 
-        PDFSignature *pdf = m_pdf_handler->getPdfSignature();
-        if ( NULL == pdf ) {
-            MWLOG_ERR( logBuf, "NULL Pdf\n" );
-            return ERR_NULL_PDF;
+        if ( m_pdf_handler != NULL ) {
+            PDFSignature *pdf = m_pdf_handler->getPdfSignature();
+            if ( NULL == pdf ) {
+                MWLOG_ERR( logBuf, "NULL Pdf\n" );
+                return ERR_NULL_PDF;
+            }
+            /* Calculate hash */
+            hashByteArray = pdf->getHash();
+            DocName = pdf->getDocName();
+        }
+        else{
+            /* Calculate hash */
+            QCryptographicHash sha256(QCryptographicHash::Sha256);
+            sha256.addData(m_array_handler);
+
+            QByteArray res = sha256.result();
+
+            // convert to std::string
+            std::string in(res.toStdString());
+
+            hashByteArray.Append(in);
+            DocName = m_docname_handle;
         }
 
-        /* Calculate hash */
-        CByteArray hashByteArray = pdf->getHash();
         if ( 0 == hashByteArray.Size() ) {
             MWLOG_ERR( logBuf, "getHash failed\n" );
             return ERR_GET_HASH;
@@ -154,11 +197,9 @@ namespace eIDMW {
         CByteArray signatureInput(sha256SigPrefix, sizeof(sha256SigPrefix));
         signatureInput.Append(hashByteArray);
 
-		std::string pdfDocName = pdf->getDocName();
+        MWLOG_DEBUG(logBuf, "DocName is %s", DocName.c_str());
 
-		MWLOG_DEBUG(logBuf, "DocName is %s", pdfDocName.c_str());
-
-		int ret = cmdService->ccMovelSign(m_proxyInfo, signatureInput.GetBytes(), pdfDocName, userPin);
+        int ret = cmdService->ccMovelSign(m_proxyInfo, signatureInput.GetBytes(), DocName, userPin);
         if ( ret != ERR_NONE ) {
             MWLOG_ERR( logBuf, "CMDSignature - Error @ sendDataToSign()" );
             return ret;
@@ -182,17 +223,27 @@ namespace eIDMW {
         if (ret != ERR_NONE)
            return ret;
 
-        PDFSignature *pdf = m_pdf_handler->getPdfSignature();
+        if ( m_pdf_handler != NULL )
+        {
+            PDFSignature *pdf = m_pdf_handler->getPdfSignature();
 
-        if (coord_x >= 0 && coord_y >= 0){
-            pdf->setVisibleCoordinates(page, coord_x, coord_y);
+            if (coord_x >= 0 && coord_y >= 0){
+                pdf->setVisibleCoordinates(page, coord_x, coord_y);
+            }
+
+            ret = pdf->signFiles(location, reason, outfile_path);
+            if ( ret != ERR_NONE ) {
+                MWLOG_ERR( logBuf, "PDFSignature::signFiles failed: %d", ret );
+                return ERR_SIGN_PDF;
+            }
         }
-
-        ret = pdf->signFiles(location, reason, outfile_path);
-
-        if ( ret != ERR_NONE ) {
-            MWLOG_ERR( logBuf, "PDFSignature::signFiles failed: %d", ret );
-            return ERR_SIGN_PDF;
+        else
+        {
+            if ( isDBG ) {
+                printf( " Sign String\n" );
+                printData( (char *)"\n String: ",
+                           (unsigned char *)m_docname_handle.c_str(), m_docname_handle.size());
+            }
         }
 
         ret = cli_sendDataToSign( in_pin );
@@ -202,7 +253,8 @@ namespace eIDMW {
 
     int CMDSignature::cli_getSignature(std::string in_code,
                                     PTEID_ByteArray &out_sign) {
-        if ( NULL == m_pdf_handler ) {
+        if ( NULL == m_pdf_handler
+             && (m_docname_handle.size() == 0 || m_array_handler.size() == 0)) {
             MWLOG_ERR( logBuf, "NULL pdf_handler" );
             return ERR_NULL_HANDLER;
         }
@@ -232,17 +284,34 @@ namespace eIDMW {
         PTEID_ByteArray signature;
         int ret = cli_getSignature( in_code, signature );
 
-        if ( ret != ERR_NONE ) 
+        if ( ret != ERR_NONE )
             return ret;
 
-        PDFSignature * pdf = m_pdf_handler->getPdfSignature();
-
         CByteArray signature_cba(signature.GetBytes(), signature.Size());
-        ret = pdf->signClose(signature_cba);
 
-        if (ret != ERR_NONE) {
-            MWLOG_ERR( logBuf, "SignClose failed" );
-            return ERR_SIGN_CLOSE;
+        if ( m_pdf_handler != NULL ) {
+
+            PDFSignature * pdf = m_pdf_handler->getPdfSignature();
+            ret = pdf->signClose(signature_cba);
+
+            if (ret != ERR_NONE) {
+                MWLOG_ERR( logBuf, "SignClose failed" );
+                return ERR_SIGN_CLOSE;
+            }
+        }
+        else
+        {
+            if ( isDBG ){
+                printf( "Sign Close String\n" );
+                printData( (char *)"\n String: ",
+                           (unsigned char *)m_docname_handle.c_str(), m_docname_handle.size());
+            }
+
+            QByteArray ba((const char *)signature.GetBytes(),
+                          signature.Size());
+
+            QByteArray temp = ba.toHex(0);
+            m_string_signature = temp.toStdString();
         }
 
         if ( isDBG ){

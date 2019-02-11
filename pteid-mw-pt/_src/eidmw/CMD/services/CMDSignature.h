@@ -2,7 +2,7 @@
 #define PDF_SIGNATURE_CLI_H
 
 #include "eidlib.h"
-#include "ByteArray.h"
+#include <QByteArray>
 
 #include "cmdErrors.h"
 #define IS_NETWORK_ERROR(error)    IS_SOAP_ERROR(error)
@@ -49,13 +49,20 @@ namespace eIDMW {
 
 			PTEIDCMD_API int signClose(std::string in_code);
             PTEIDCMD_API void set_pdf_handler(PTEID_PDFSignature *in_pdf_handler);
+            PTEIDCMD_API void set_string_handler(std::string in_docname_handle,
+                                                 QByteArray in_array_handler);
 
             PTEIDCMD_API char * getCertificateCitizenName();
             PTEIDCMD_API char * getCertificateCitizenID();
 
+            std::string m_string_signature;
+            std::string m_string_certificate;
+
         private:
             CMDServices *cmdService;
             PTEID_PDFSignature *m_pdf_handler;
+            std::string m_docname_handle;
+            QByteArray m_array_handler;
 
             std::string m_userId;
             std::string m_pin;
