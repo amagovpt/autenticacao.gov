@@ -72,22 +72,25 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 	szHeader = const_cast<wchar_t *>(Header.c_str());
 	szPIN = PINName.c_str();
 
-	if (CreateWnd(tmpTitle.c_str(), WINDOW_WIDTH, WINDOW_HEIGHT, IDI_APPICON, Parent, wndGeom))
+	if (CreateWnd(tmpTitle.c_str(), WINDOW_WIDTH, WINDOW_HEIGHT, IDI_APPICON, Parent))
 	{
 		RECT clientRect;
 		GetClientRect(m_hWnd, &clientRect);
 
+        int horizontalShift = this->horizontalShift();
+        int verticalShift = this->verticalShift();
+
 		OK_Btn = CreateWindow(
 			L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-            clientRect.right - 180 - (wndGeom->width) / 2 + WINDOW_WIDTH / 2,
-            clientRect.bottom - 40 - (wndGeom->height) / 2 + WINDOW_HEIGHT / 2,
+            clientRect.right - 180 - horizontalShift,
+            clientRect.bottom - 40 - verticalShift,
             72, 24, m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL);
 		EnableWindow(OK_Btn, false);
 
 		Cancel_Btn = CreateWindow(
 			L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-            clientRect.right - 100 - (wndGeom->width) / 2 + WINDOW_WIDTH / 2,
-            clientRect.bottom - 40 - (wndGeom->height) / 2 + WINDOW_HEIGHT / 2,
+            clientRect.right - 100 - horizontalShift,
+            clientRect.bottom - 40 - verticalShift,
             72, 24, m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL);
 
 		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_PASSWORD;
@@ -129,7 +132,7 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 		if (!m_dontAskPIN1) {
 			HWND hStaticText1 = CreateWindow(
 				L"STATIC", oldPin_label.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
-                labelsX + (wndGeom->width) / 2 - WINDOW_WIDTH / 2,
+                labelsX + horizontalShift,
                 clientRect.bottom / 2 - 146 + WINDOW_HEIGHT / 2,
                 WINDOW_WIDTH / 2 - 120, 22, m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
 			SendMessage(hStaticText1, WM_SETFONT, (WPARAM)TextFont, 0);
@@ -137,13 +140,13 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 
 		HWND hStaticText2 = CreateWindow(
 			L"STATIC", GETSTRING_DLG(NewPin), WS_CHILD | WS_VISIBLE | SS_LEFT,
-            labelsX + (wndGeom->width) / 2 - WINDOW_WIDTH / 2,
+            labelsX + horizontalShift,
             clientRect.bottom / 2 - 116 + WINDOW_HEIGHT / 2,
             WINDOW_WIDTH / 2 - 100, 22, m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
 
 		HWND hStaticText3 = CreateWindow(
 			L"STATIC", GETSTRING_DLG(ConfirmNewPin), WS_CHILD | WS_VISIBLE | SS_LEFT,
-            labelsX + (wndGeom->width) / 2 - WINDOW_WIDTH / 2,
+            labelsX + horizontalShift,
             clientRect.bottom / 2 - 86 + WINDOW_HEIGHT / 2,
             WINDOW_WIDTH / 2 - 40, 22, m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
 

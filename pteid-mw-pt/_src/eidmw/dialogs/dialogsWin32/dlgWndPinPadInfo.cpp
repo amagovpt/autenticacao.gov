@@ -34,7 +34,7 @@
 dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusage, 
 		DlgPinOperation operation, const std::wstring & csReader, 
 		const std::wstring & PinName, const std::wstring & Message, HWND Parent, Type_WndGeometry *wndGeom)
-:Win32Dialog(L"WndPinpadInfo")
+:Win32Dialog(L"WndPinpadInfo", wndGeom)
 
 {
 	m_szHeader=NULL;
@@ -65,7 +65,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 
 	m_szHeader = _wcsdup( PinName.c_str() );
 	
-	if (CreateWnd(tmpTitle.c_str(), WINDOW_WIDTH, WINDOW_HEIGHT, IDI_APPICON, Parent, wndGeom))
+	if (CreateWnd(tmpTitle.c_str(), WINDOW_WIDTH, WINDOW_HEIGHT, IDI_APPICON, Parent))
 	{
 		/*
 		if( PinPusage == DLG_PIN_SIGN )
@@ -116,14 +116,7 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 
 			SetTextColor(m_hDC, RGB(0x3C, 0x5D, 0xBC));
 
-			//Draw white "fake" dialog popup 
-			GetClientRect( m_hWnd, &rect );
-			rect.left = rect.right / 2 - WINDOW_WIDTH / 2;
-            rect.top = rect.bottom / 2 - WINDOW_HEIGHT / 2;
-            rect.right = rect.right / 2 + WINDOW_WIDTH / 2;
-            rect.bottom = rect.bottom / 2 + WINDOW_HEIGHT / 2;
-			FillRect(m_hDC, &rect, CreateSolidBrush(RGB(255, 255, 255)));
-			DrawEdge(m_hDC, &rect, EDGE_RAISED, BF_RECT);
+            DrawFakeRectangle();
 
 			GetClientRect(m_hWnd, &rect);
             rect.left = rect.right / 2 - WINDOW_WIDTH / 2 + 20;

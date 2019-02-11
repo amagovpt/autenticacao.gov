@@ -89,17 +89,20 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 		szBody = GETSTRING_DLG(TryAgainOrCancel);
 	}
 
-    if (CreateWnd(tmpTitle.c_str(), WINDOW_WIDTH, WINDOW_HEIGHT, IDI_APPICON, Parent, wndGeom))
+    if (CreateWnd(tmpTitle.c_str(), WINDOW_WIDTH, WINDOW_HEIGHT, IDI_APPICON, Parent))
 	{
 		RECT clientRect;
 		GetClientRect( m_hWnd, &clientRect );
+
+        int horizontalShift = this->horizontalShift();
+        int verticalShift = this->verticalShift();
 
 		if( RemainingTries == 0 )
 		{
 			OK_Btn = CreateWindow(
 				L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-                clientRect.right - 100 - (wndGeom->width) / 2 + WINDOW_WIDTH / 2,
-                clientRect.bottom - 65 - (wndGeom->height) / 2 + WINDOW_HEIGHT / 2,
+                clientRect.right - 100 - horizontalShift,
+                clientRect.bottom - 65 - verticalShift,
                 72, 24, m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL );
 			SendMessage(OK_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
 		}
@@ -107,22 +110,22 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 		{
 			Retry_Btn = CreateWindow(
 				L"BUTTON", GETSTRING_DLG(Retry), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-                clientRect.right - 180 - (wndGeom->width) / 2 + WINDOW_WIDTH / 2,
-                clientRect.bottom - 65 - (wndGeom->height) / 2 + WINDOW_HEIGHT / 2,
+                clientRect.right - 180 - horizontalShift,
+                clientRect.bottom - 65 - verticalShift,
                 72, 24, m_hWnd, (HMENU)IDB_RETRY, m_hInstance, NULL );
 			SendMessage(Retry_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
 			Cancel_Btn = CreateWindow(
 				L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-                clientRect.right - 100 - (wndGeom->width) / 2 + WINDOW_WIDTH / 2,
-                clientRect.bottom - 65 - (wndGeom->height) / 2 + WINDOW_HEIGHT / 2,
+                clientRect.right - 100 - horizontalShift,
+                clientRect.bottom - 65 - verticalShift,
                 72, 24, m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL );
 			SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
 		}
 		//Message is vertically centered 
 		HWND hStaticText = CreateWindow( 
 			L"STATIC", szBody, WS_CHILD | WS_VISIBLE | SS_CENTER, 
-            (wndGeom->width) / 2 - WINDOW_WIDTH / 2,
-            (wndGeom->height) / 2,
+            horizontalShift,
+            (clientRect.bottom-clientRect.top) / 2,
             WINDOW_WIDTH, 22, m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
 		SendMessage( hStaticText, WM_SETFONT, (WPARAM)TextFont, 0 );
 	}

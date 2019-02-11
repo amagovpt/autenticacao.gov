@@ -61,16 +61,19 @@ dlgWndAskPIN::dlgWndAskPIN(DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstri
 	szPIN = PINName.c_str();
     m_ModalHold = true;
 
-	if( CreateWnd( tmpTitle.c_str() , WINDOW_WIDTH, WINDOW_HEIGHT, IDI_APPICON, Parent, wndGeom ) )
+	if( CreateWnd( tmpTitle.c_str() , WINDOW_WIDTH, WINDOW_HEIGHT, IDI_APPICON, Parent) )
 	{
 		RECT clientRect;
 		GetClientRect( m_hWnd, &clientRect );
 
+        int horizontalShift = this->horizontalShift();
+        int verticalShift = this->verticalShift();
+
 		//OK Button
 		OK_Btn = CreateWindow(
 			L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-			clientRect.right - 200 - (wndGeom->width)/2 + WINDOW_WIDTH/2,
-            clientRect.bottom - 65 - (wndGeom->height)/2 + WINDOW_HEIGHT/2,
+			clientRect.right - 200 - horizontalShift,
+            clientRect.bottom - 65 - verticalShift,
             82, 24, m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL );
 
 		//OK button is disabled by default
@@ -79,8 +82,8 @@ dlgWndAskPIN::dlgWndAskPIN(DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstri
 		//Cancel Button
 		Cancel_Btn = CreateWindow(
 			L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-            clientRect.right - 110 - (wndGeom->width) / 2 + WINDOW_WIDTH / 2,
-            clientRect.bottom - 65 - (wndGeom->height) / 2 + WINDOW_HEIGHT / 2,
+            clientRect.right - 110 - horizontalShift,
+            clientRect.bottom - 65 - verticalShift,
             82, 24, m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL );
 
 
@@ -88,8 +91,8 @@ dlgWndAskPIN::dlgWndAskPIN(DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstri
 		if( pinInfo.ulFlags & PIN_FLAG_DIGITS )
 			dwStyle |= ES_NUMBER;
 
-        LONG pinTop = clientRect.bottom - 130 - (wndGeom->height) / 2 + WINDOW_HEIGHT / 2;
-        LONG pinLeft = clientRect.right - 190 - (wndGeom->width) / 2 + WINDOW_WIDTH / 2;
+        LONG pinTop = clientRect.bottom - 130 - verticalShift;
+        LONG pinLeft = clientRect.right - 190 - horizontalShift;
 
 		HWND hTextEdit = CreateWindowEx( WS_EX_CLIENTEDGE,
 			L"EDIT", L"", dwStyle, 
@@ -97,7 +100,7 @@ dlgWndAskPIN::dlgWndAskPIN(DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstri
 			m_hWnd, (HMENU)IDC_EDIT, m_hInstance, NULL );
 		SendMessage( hTextEdit, EM_LIMITTEXT, m_ulPinMaxLen, 0 );
 
-        int labelsX = 55 + (wndGeom->width) / 2 - WINDOW_WIDTH / 2;
+        int labelsX = 55 + horizontalShift;
 
 		//This is vertically aligned with hTextEdit
 		HWND hStaticText = CreateWindow( 

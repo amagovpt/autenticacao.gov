@@ -52,18 +52,20 @@ protected:
 						UINT		uMsg,			// Message For This Window
 						WPARAM		wParam,			// Additional Message Information
 						LPARAM		lParam );		// Additional Message Information
-	bool CreateWnd( const wchar_t* title, int width, int height, int Icon = 0 , HWND Parent = NULL, Type_WndGeometry *wndGeom = NULL);
+	bool CreateWnd( const wchar_t* title, int width, int height, int Icon = 0 , HWND Parent = NULL);
 	void KillWindow( );
 	virtual void Destroy();
 	HFONT loadFontFromResource(int font_pointsize, bool isBold);
 	void DrawFakeRectangle();			// For modal dialogs
+    int horizontalShift();				// If the dialog is modal, the buttons / labels must be positioned
+    int verticalShift();				// relative to the "fake" dialog, so they must be shifted
 
 protected:
 	HDC			m_hDC;					// Private GDI Device Context
 	HWND		m_hWnd;					// Holds Our Window Handle
 	HINSTANCE	m_hInstance;			// Instance to our Module(DLL)
 	bool		m_ModalHold;			// Wheither it's modal or not
-	Type_WndGeometry *m_wndGeom;		// Calling application geom (for modal dialogs)
+	Type_WndGeometry *m_wndGeom;		// Calling application geom (for modal dialogs). If NULL or width/height<=0, it behaves as not modal
 	int			m_dlgWidth;
 	int			m_dlgHeight;
 	HFONT TextFontHeader;

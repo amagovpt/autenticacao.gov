@@ -112,7 +112,7 @@ Win32Dialog::~Win32Dialog()
 }
 
 
-bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Icon, HWND Parent, Type_WndGeometry *wndGeom)
+bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Icon, HWND Parent)
 {
 	if( m_hWnd )
 		return false;
@@ -149,7 +149,7 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 	wc.hCursor			= LoadCursor( NULL, IDC_ARROW );			// Load The Arrow Pointer
 	// If we want a modal window, a red window is created in front of the application 
 	// and then set color red transparent. 
-	wc.hbrBackground = (m_ModalHold && wndGeom && wndGeom->width>0 && wndGeom->height>0 ?
+	wc.hbrBackground = (m_ModalHold && m_wndGeom && m_wndGeom->width>0 && m_wndGeom->height>0 ?
 		CreateSolidBrush(RGB(255, 0, 0)) :
 		CreateSolidBrush(RGB(255, 255, 255)));        //CreateSolidBrush(RGB(255, 255, 255));        //(HBRUSH)GetSysColorBrush( COLOR_3DFACE );	// What Color we want in our background
 	wc.lpszMenuName		= NULL;										// We Don't Want A Menu
@@ -182,10 +182,10 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 	{
 		// Create Transparent Window
 		m_hWnd = CreateWindowEx(dwExStyle, m_appName, title, dwStyle,
-			wndGeom->x,
-			wndGeom->y,
-			wndGeom->width,
-			wndGeom->height,
+			m_wndGeom->x,
+			m_wndGeom->y,
+			m_wndGeom->width,
+			m_wndGeom->height,
 			Parent,
 			NULL,
 			m_hInstance,
@@ -518,12 +518,26 @@ LRESULT Win32Dialog::ProcecEvent
 }
 
 void Win32Dialog::DrawFakeRectangle() {
-    RECT rect;
-    GetClientRect(m_hWnd, &rect);
-    rect.left = rect.right / 2 - m_dlgWidth / 2;
-    rect.top = rect.bottom / 2 - m_dlgHeight / 2;
-    rect.right = rect.right / 2 + m_dlgWidth / 2;
-    rect.bottom = rect.bottom / 2 + m_dlgHeight / 2;
-    FillRect(m_hDC, &rect, CreateSolidBrush(RGB(255, 255, 255)));
-    DrawEdge(m_hDC, &rect, EDGE_RAISED, BF_RECT);
+    if (m_ModalHold && m_wndGeom &&
+        m_wndGeom->width > 0 &&
+        m_wndGeom->height > 0)
+    {
+        RECT rect;
+        GetClientRect(m_hWnd, &rect);
+        rect.left = rect.right / 2 - m_dlgWidth / 2;
+        rect.top = rect.bottom / 2 - m_dlgHeight / 2;
+        rect.right = rect.right / 2 + m_dlgWidth / 2;
+        rect.bottom = rect.bottom / 2 + m_dlgHeight / 2;
+        FillRect(m_hDC, &rect, CreateSolidBrush(RGB(255, 255, 255)));
+        DrawEdge(m_hDC, &rect, EDGE_RAISED, BF_RECT);
+    }
+}
+
+int Win32Dialog::horizontalShift() {
+    return (m_ModalHold && m_wndGeom && m_wndGeom->height > 0 && m_wndGeom->width > 0 ?
+        (m_wndGeom->width) / 2 - m_dlgWidth / 2 : 0);
+}
+int Win32Dialog::verticalShift() {
+    return (m_ModalHold && m_wndGeom && m_wndGeom->height > 0 && m_wndGeom->width > 0 ?
+        (m_wndGeom->height) / 2 - m_dlgHeight / 2 : 0);
 }
