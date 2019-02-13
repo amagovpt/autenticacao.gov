@@ -47,7 +47,7 @@ preprocess.variable_out+=SOURCES
 ###
 ### As a postbuild step, compile the generated .java files and jar them to a jar file
 ###
-unix:QMAKE_POST_LINK = javac -d ../eidlibJava/class ./src/*.java ./GeneratedFiles/*.java && jar cf ../jar/$${EIDLIBJAR} -C ../eidlibJava/class .
+unix:QMAKE_POST_LINK = javac -d ../eidlibJava/class ./src/*.java ./GeneratedFiles/*.java && jar cf ../jar/$${EIDLIBJAR} -C ../eidlibJava/class . && mkdir -p javadocs/ && javadoc -d ./javadocs/ -sourcepath ./GeneratedFiles/PTEID_*.java ./GeneratedFiles/Callback.java ./GeneratedFiles/pteidlibJava_*.java ./src/*.java -overview index.html --allow-script-in-comments && zip -r9 javadocs.zip ./javadocs/
 
 ## destination directory
 DESTDIR = ../lib

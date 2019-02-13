@@ -163,7 +163,9 @@
     </Link>
     <PostBuildEvent>
       <Message>Creating jar file...</Message>
-      <Command>"%25PTEID_DIR_JDK%25\bin\jar.exe" cvf  ../jar/pteidlibj.jar -C class .</Command>
+      <Command>"%25PTEID_DIR_JDK%25\bin\jar.exe" cvf  ../jar/pteidlibj.jar -C class .
+"%25PTEID_DIR_JDK%25\bin\javadoc.exe" $(SolutionDir)..\eidlibJava_Wrapper\GeneratedFiles\PTEID_*.java $(SolutionDir)..\eidlibJava_Wrapper\GeneratedFiles\Callback.java $(SolutionDir)..\eidlibJava_Wrapper\GeneratedFiles\pteidlibJava_*.java $(SolutionDir)..\eidlibJava_Wrapper\src\*.java -d $(SolutionDir)..\eidlibJava_Wrapper\javadocs -overview index.html
+"%25PTEID_DIR_7ZIP%25\7z.exe" a $(SolutionDir)..\eidlibJava_Wrapper\javadocs.zip  $(SolutionDir)..\eidlibJava_Wrapper\javadocs -mx9</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -194,7 +196,9 @@
     </Link>
     <PostBuildEvent>
       <Message>Creating jar file...</Message>
-      <Command>"%25PTEID_DIR_JDK%25\bin\jar.exe" cvf  ../jar/pteidlibj.jar -C class .</Command>
+      <Command>"%25PTEID_DIR_JDK%25\bin\jar.exe" cvf  ../jar/pteidlibj.jar -C class .
+"%25PTEID_DIR_JDK%25\bin\javadoc.exe" $(SolutionDir)..\eidlibJava_Wrapper\GeneratedFiles\PTEID_*.java $(SolutionDir)..\eidlibJava_Wrapper\GeneratedFiles\Callback.java $(SolutionDir)..\eidlibJava_Wrapper\GeneratedFiles\pteidlibJava_*.java $(SolutionDir)..\eidlibJava_Wrapper\src\*.java -d $(SolutionDir)..\eidlibJava_Wrapper\javadocs -overview index.html
+"%25PTEID_DIR_7ZIP%25\7z.exe" a $(SolutionDir)..\eidlibJava_Wrapper\javadocs.zip  $(SolutionDir)..\eidlibJava_Wrapper\javadocs -mx9</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
