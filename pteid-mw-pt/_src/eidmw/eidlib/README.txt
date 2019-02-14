@@ -1,10 +1,9 @@
-The (index.html) pages of both Java and C++ containing examples have been generated 
-from markdown files, i.e., eidlibJava_Wrapper/index.md and eidlib/index.md respectively.
-Remarkable has been used to transform markdown to html, however any other tool will be similar.
+============================C++ SDK===========================================
+The file "pteidlib.lib" and respective header file "eidlib.h" contains the Portuguese eID C++ SDK 
+hence should be loaded when developing applications that access the Portuguese Identity Card  
 
+The file "eidlibcompat.h" contains the retrocompatibility API
+and should not be used for developing new applications.
 
-Java and C++ documentation generation 
-- use gen_docs.sh to generate the documentation using Doxygen for C++ tool and javadocs for Java
-- The C++ configuration file is called "Doxygen" while Java uses a cli command.
-
-The zip files javadocs.zip and cppdocs.zip (the result of executing gen_docs.sh) are added to instalation folder
+For more detailed API information and examples of how to use the SDK 
+visit https://svn.gov.pt/projects/ccidadao
