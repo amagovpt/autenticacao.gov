@@ -28,7 +28,7 @@ LIBS += -L./../../lib -l$${COMMONLIB} -l$${APPLAYERLIB} -l$${CARDLAYERLIB} -lpte
 INCLUDEPATH += . ../../eidlib/ ../../common ../../applayer ../../cardlayer
 macx:INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2q/include/
 
-unix: DEFINES += __UNIX__ DEBUG WITH_OPENSSL
+unix: DEFINES += __UNIX__ WITH_OPENSSL
 
 # Input
 HEADERS += \
