@@ -1,7 +1,7 @@
 #
 # spec file for package pteid-mw
 #
-# Copyright (c) 2011-2017 Caixa Magica Software
+# Copyright (c) 2011-2018 Caixa Magica Software
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -22,50 +22,62 @@
 %endif
 %endif
 
-%define svn_revision 5239
+%define svn_revision 5840
 
 Name:           pteid-mw
-BuildRequires:  pcsc-lite-devel make swig automake autoconf libtool
+BuildRequires:  pcsc-lite-devel make swig
+BuildRequires:  libzip-devel
+BuildRequires:  openjpeg2-devel
 Requires:       pcsc-lite curl
 
 
 %if 0%{?suse_version}
-BuildRequires:  curl-devel libxerces-c-devel libopenssl-devel
+BuildRequires:  libcurl-devel libxerces-c-devel libopenssl-devel
 
-Requires: pcsc-ccid xerces-c
+Requires: pcsc-ccid xerces-c libqt5-qtquickcontrols libqt5-qtgraphicaleffects
 %endif
 
 %if 0%{?suse_version}
 BuildRequires:  java-1_8_0-openjdk-devel
-Requires:       java-1_8_0-openjdk
 BuildRequires:  libpoppler-qt5-devel
 BuildRequires:  libqt5-qtbase-devel
 BuildRequires:  libqt5-qttools-devel
+BuildRequires:  libqt5-qtdeclarative-devel
+BuildRequires:  libqt5-qtquickcontrols2
+BuildRequires:  libQt5QuickControls2-devel
+BuildRequires:  libQt5Gui-private-headers-devel
 
 BuildRequires:  libxml-security-c-devel
 %endif
 
-BuildConflicts: brp-check-suse
-
 %if 0%{?fedora} || 0%{?centos_ver}
 BuildRequires:  java-1.8.0-openjdk-devel
-Requires:       java-1.8.0-openjdk
+Requires:       poppler-qt5
+Requires:       pcsc-lite-ccid
+Requires:       qt5
 
 BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtdeclarative-devel
+BuildRequires:  qt5-qtquickcontrols2-devel
 BuildRequires:  qt5-qttools-devel
+#Just install the big qt5 meta-package
+BuildRequires:  qt5
+BuildRequires:  libpng-devel
 
 BuildRequires:  xml-security-c-devel
 BuildRequires:  poppler-qt5-devel
-BuildRequires:  cairo-devel gcc gcc-c++ xerces-c-devel openssl-devel
+BuildRequires:  cairo-devel gcc gcc-c++ xerces-c-devel
 BuildRequires:  qt-devel pcsc-lite-ccid curl-devel
-Requires: pcsc-lite-ccid
+
+BuildRequires:  openssl-devel
+
 %endif
 
 Conflicts:  cartao_de_cidadao
 
 License:        GPLv2+
 Group:          System/Libraries
-Version:        2.4.11.%{svn_revision}
+Version:        3.0.16.%{svn_revision}
 %if 0%{?fedora}
 Release:        1%{?dist}
 %else
@@ -75,12 +87,14 @@ Summary:        Portuguese eID middleware
 Url:            https://svn.gov.pt/projects/ccidadao/
 Vendor:         Portuguese Government
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-Source0:        pteid-mw_2.4.11svn%{svn_revision}-1.tar.gz
+Source0:        pteid-mw_3.0.16svn%{svn_revision}-3.tar.xz
 Source1:        pteid-mw-gui.desktop
 Source2:        pteid-scalable.svg
 Source3:        pteid-signature.png
-Source4:        pteid-dss.desktop
-Source5:        pteid-mime.xml
+
+Patch0:         support-openssl-1.1.patch
+Patch1:         fix-qt5.11-build-qicon.patch
+Patch2:         openssl1.1-support-eidguiV2.patch
 %if 0%{?suse_version}
 BuildRequires:  update-desktop-files unzip
 %endif
@@ -92,23 +106,17 @@ Requires(post): /usr/bin/gtk-update-icon-cache
 Requires(postun): /usr/bin/gtk-update-icon-cache
 
 %description
-The Pteid Middleware provides a utility application (pteidgui), a set of
-libraries and a PKCS#11 module to use the Portuguese
-Identity Card (Cartão de Cidadão) in order to authenticate securely 
-in certain websites and/or sign documents.
-
+ The Autenticação.Gov package provides a utility application (eidguiV2), a set of
+ libraries and a PKCS#11 module to use the Portuguese Identity Card
+ (Cartão de Cidadão) and Chave Móvel Digital in order to authenticate securely
+ in certain websites and sign documents.
 %prep
-%setup -q -n pteid-mw_2.4.11svn%{svn_revision}
+%setup -q -n pteid-mw_3.0.16svn%{svn_revision}
 
-%if 0%{?fedora} || 0%{?centos_ver}
-sed -i 's/$QT4DIR/"$QT4DIR"/g' configure_fedora.sh
-
-#sed -i 's/qmake/qmake-qt5/g' configure
-%ifarch x86_64
-#sed -i 's/\/usr\/lib\/qt4\/bin/\/usr\/lib64\/qt4\/bin/g' configure_fedora.sh
-#sed -i 's/--lib+=-L\/usr\/lib\/xerces-c/--lib+=-L\/usr\/lib\/xerces-c --lib+=-L\/usr\/lib64/g' configure_fedora.sh
-
-%endif
+%if 0%{?fedora} || 0%{?suse_version}
+%patch0 -p0
+%patch1 -p0
+%patch2 -p0
 %endif
 
 
@@ -116,15 +124,15 @@ sed -i 's/$QT4DIR/"$QT4DIR"/g' configure_fedora.sh
 %if 0%{?suse_version}
 %ifarch x86_64
 #./configure --lib+=-L/usr/lib64
-qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/include/ /usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/include/linux/" eidmw.pro
+qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/include/ /usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/include/linux/" pteid-mw.pro
 %else
-qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib/jvm/java-1.8.0-openjdk-1.8.0/include/ /usr/lib/jvm/java-1.8.0-openjdk-1.8.0/include/linux/" eidmw.pro
+qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib/jvm/java-1.8.0-openjdk-1.8.0/include/ /usr/lib/jvm/java-1.8.0-openjdk-1.8.0/include/linux/" pteid-mw.pro
 %endif
 %endif
 
 %if 0%{?fedora} || 0%{?centos_ver}
 # ./configure_fedora.sh
-qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib/jvm/java-1.8.0-openjdk/include/ /usr/lib/jvm/java-1.8.0-openjdk/include/linux/" eidmw.pro
+qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib/jvm/java-1.8.0-openjdk/include/ /usr/lib/jvm/java-1.8.0-openjdk/include/linux/" pteid-mw.pro
 %endif
 
 make %{?jobs:-j%jobs}
@@ -140,6 +148,7 @@ install -m 755 -p lib/libpteidpkcs11.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libp
 install -m 755 -p lib/libpteidapplayer.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidapplayer.so.2.0.0
 install -m 755 -p lib/libpteidlib.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidlib.so.2.0.0
 install -m 755 -p lib/libpteidlibj.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidlibj.so.2.0.0
+install -m 755 -p lib/libCMDServices.so.1.0.0 $RPM_BUILD_ROOT/usr/local/lib/libCMDServices.so.1.0.0
 
 #install header files
 mkdir -p $RPM_BUILD_ROOT/usr/local/include
@@ -156,19 +165,14 @@ mkdir -p $RPM_BUILD_ROOT/usr/local/lib/pteid_jni/
 install -m 755 -p jar/pteidlibj.jar $RPM_BUILD_ROOT/usr/local/lib/pteid_jni/
 
 mkdir -p $RPM_BUILD_ROOT/usr/local/bin/
-mkdir -p $RPM_BUILD_ROOT/usr/local/bin/DSS/
-install -m 644 misc/DSS/dss-standalone-app-3.0.4.jar $RPM_BUILD_ROOT/usr/local/bin/DSS/
-install -m 644 misc/DSS/config.properties $RPM_BUILD_ROOT/usr/local/bin/DSS/
-#cp -r misc/SCAP/ $RPM_BUILD_ROOT/usr/local/bin
+install -m 755 eidguiV2/eidguiV2 $RPM_BUILD_ROOT/usr/local/bin/eidguiV2
+
 install -m 755 -p bin/pteiddialogsQTsrv $RPM_BUILD_ROOT/usr/local/bin/pteiddialogsQTsrv
-install -m 755 -p bin/pteidgui $RPM_BUILD_ROOT/usr/local/bin/pteidgui
-install -m 755 -p scap-client-v2/ScapSignature $RPM_BUILD_ROOT/usr/local/bin/ScapSignature
-install -m 644 -p eidgui/eidmw_en.qm $RPM_BUILD_ROOT/usr/local/bin/
-install -m 644 -p eidgui/eidmw_nl.qm $RPM_BUILD_ROOT/usr/local/bin/
+install -m 644 -p eidguiV2/eidmw_en.qm $RPM_BUILD_ROOT/usr/local/bin/
+install -m 644 -p eidguiV2/eidmw_nl.qm $RPM_BUILD_ROOT/usr/local/bin/
 
 mkdir -p $RPM_BUILD_ROOT/usr/share/applications
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/usr/share/applications
-install -m 644 %{SOURCE4} $RPM_BUILD_ROOT/usr/share/applications
 
 mkdir -p $RPM_BUILD_ROOT/usr/share/icons/hicolor/scalable/apps/
 install -m 644 -p %{SOURCE2} $RPM_BUILD_ROOT/usr/share/icons/hicolor/scalable/apps/
@@ -176,7 +180,6 @@ install -m 644 -p %{SOURCE2} $RPM_BUILD_ROOT/usr/share/icons/hicolor/scalable/ap
 mkdir -p $RPM_BUILD_ROOT/usr/share/pixmaps
 install -m 644 -p %{SOURCE3} $RPM_BUILD_ROOT/usr/share/pixmaps
 mkdir -p $RPM_BUILD_ROOT/usr/share/mime/packages
-install -m 644 -p %{SOURCE5} $RPM_BUILD_ROOT/usr/share/mime/packages/
 
 %if 0%{?suse_version}
  %suse_update_desktop_file -i pteid-mw-gui Office Presentation
@@ -204,44 +207,14 @@ ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplaye
 ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so
 ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2
 ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2.0
+ln -s -f /usr/local/lib/libCMDServices.so.1.0.0 /usr/local/lib/libCMDServices.so
+ln -s -f /usr/local/lib/libCMDServices.so.1.0.0 /usr/local/lib/libCMDServices.so.1
+ln -s -f /usr/local/lib/libCMDServices.so.1.0.0 /usr/local/lib/libCMDServices.so.1.0
 
 ln -s /usr/share/pixmaps/pteid-signature.png /usr/share/icons/hicolor/64x64/mimetypes/application-x-signedcc.png
 ln -s /usr/share/pixmaps/pteid-signature.png /usr/share/icons/hicolor/64x64/mimetypes/gnome-mime-application-x-signedcc.png
 
-update_defaults_list() {
-  # $1: name of the .desktop file
-
-  local DEFAULTS_FILE="/usr/share/applications/defaults.list"
-
-  if [ ! -f "${DEFAULTS_FILE}" ]; then
-    return
-  fi
-
-  # Split key-value pair out of MimeType= line from the .desktop file,
-  # then split semicolon-separated list of mime types (they should not contain
-  # spaces).
-  mime_types="$(grep MimeType= /usr/share/applications/${1} |
-                cut -d '=' -f 2- |
-                tr ';' ' ')"
-  for mime_type in ${mime_types}; do
-    if egrep -q "^${mime_type}=" "${DEFAULTS_FILE}"; then
-      if ! egrep -q "^${mime_type}=.*${1}" "${DEFAULTS_FILE}"; then
-        default_apps="$(grep ${mime_type}= "${DEFAULTS_FILE}" |
-                        cut -d '=' -f 2-)"
-        egrep -v "^${mime_type}=" "${DEFAULTS_FILE}" > "${DEFAULTS_FILE}.new"
-        echo "${mime_type}=${default_apps};${1}" >> "${DEFAULTS_FILE}.new"
-        mv "${DEFAULTS_FILE}.new" "${DEFAULTS_FILE}"
-      fi
-    else
-      # If there's no mention of the mime type in the file, add it.
-      echo "${mime_type}=${1};" >> "${DEFAULTS_FILE}"
-    fi
-  done
-}
-
-update_defaults_list "pteid-dss.desktop"
-
-%if 0%{?mdkversion} || 0%{?fedora} || 0%{?centos_version}
+%if 0%{?fedora} || 0%{?centos_version}
 # BLURP: Add usr local to ldconf
 
 echo "/usr/local/lib" > /etc/ld.so.conf.d/pteid.conf
@@ -301,20 +274,34 @@ fi
 %files
 %defattr(-,root,root)
 /usr/local/lib/*
-/usr/local/bin/pteidgui
-/usr/local/bin/ScapSignature
+/usr/local/bin/eidguiV2
 /usr/local/bin/pteiddialogsQTsrv
 /usr/local/bin/eidmw_en.qm
 /usr/local/bin/eidmw_nl.qm
-/usr/local/bin/DSS
 /usr/local/include/*
 /usr/share/applications/*
 /usr/share/icons/*
 /usr/share/pixmaps/*
-/usr/share/mime/packages/*
 /usr/local/share/certs
 
 %changelog
+* Mon Feb 11 2019 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+  New release - version 3.0.16
+  SCAP Signature improvements
+  Support for new 3072-bit RSA smartcards
+
+* Wed Sep 05 2018 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+  PDF signature bugfix and Linux GTK plugin bugfix
+
+* Wed Jul 04 2018 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+  Address Change critical bugfix and various minor fixes in SCAP and CMD signature
+
+* Tue Apr 10 2018 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+  New major version of pteid-mw: first build of 3.0 branch
+
+* Wed Feb 21 2018 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+  New SVN snapshot: revision 5339 - Disable checking of the address file hash in SOD only if the card was issued in a specific range of dates
+
 * Thu Feb 15 2018 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   New SVN snapshot: revision 5334 - Disable checking of the address file hash contained and other minor bugfixes
 
@@ -453,63 +440,3 @@ fi
 - Bump to 2957
 - Fix Fedora 17 build
 
-* Fri Jul 27 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump to 2953
-- Add pteidgui-revert-pdf-signature.patch
-
-* Mon Jun 18 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump to 2878
-
-* Mon May 14 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump to 2738
-
-* Tue Apr 10 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump to 2549
-- Install all certs
-
-* Wed Apr 04 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Trigger to fix up Fedora 15 repo problems
-
-* Wed Apr 04 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump to 2505 to fix mdv ftbfs
-
-* Mon Apr 02 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump to 2460
-
-* Thu Mar 08 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump to 2198
-
-* Wed Mar 07 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump to 2145
-- Soname stable change
-
-* Mon Feb 20 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump to 1843
-
-* Mon Feb 13 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump
-
-* Wed Feb 2 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump
-
-* Wed Feb 1 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump to 1605
-- Install the thunderbird extension
-
-* Wed Jan 24 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump to svn 1522
-- Install xpi files
-
-* Wed Jan 18 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump to svn 1477
-- Make package able to upgrade old version
-- Fix build on suse 64
-
-* Mon Jan 09 2012 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Bump to svn 1389 
-
-* Fri Dec 30 2011 Luis Medinas <luis.medinas@caixamagica.pt>
-- Bump to svn 1299 and add certificates and pinpad support.
-
-* Fri Dec 02 2011 Pedro Fragoso <pedro.fragoso@caixamagica.pt>
-- Initial release 
