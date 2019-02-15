@@ -21,6 +21,7 @@
 #include "dlgWndPinpadInfo.h"
 #include "../langUtil.h"
 #include <QDesktopWidget>
+#include <QIcon>
 
 dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 		DlgPinOperation operation, const QString & Reader,
