@@ -6,6 +6,9 @@ Build-Depends: chrpath,
                debhelper (>= 7.0.50~),
                libpcsclite-dev,
                libpoppler-qt5-dev,
+               libzip-dev,
+               libopenjp2-7-dev,
+               libpng-dev,
                openjdk-8-jdk,
                qtbase5-dev,
                qt5-qmake,
@@ -25,8 +28,7 @@ Homepage: https://www.autenticacao.gov.pt/cc-software
 Package: pteid-mw
 Conflicts: cartaodecidadao
 Architecture: any
-Depends: pcsc-tools,
-         pcscd,
+Depends: pcscd,
          qml-module-qtquick2,
          qml-module-qtquick-controls2,	
          qml-module-qtquick-dialogs,	
@@ -40,7 +42,7 @@ Depends: pcsc-tools,
          qml-module-qtquick-layouts,
          qml-module-qtquick-window2,
          qml-module-qtquick-templates2,
-         java8-runtime,
+         qt5-gtk-platformtheme,
          ${misc:Depends},
          ${shlibs:Depends}
 Description: Autenticação.Gov

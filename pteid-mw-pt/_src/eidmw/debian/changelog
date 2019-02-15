@@ -1,3 +1,26 @@
+pteid-mw (3.0.16svn5840-3) UNRELEASED; urgency=medium
+
+  * SCAP Signature improvements
+  * Support for new 3072-bit RSA smartcards
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 08 Feb 2019 12:28:55 +0100
+pteid-mw (3.0.15svn5575-1) UNRELEASED; urgency=medium
+
+  * PDF signature bugfix
+  * Linux GTK plugin fix
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Wed, 05 Sep 2018 12:28:55 +0100
+pteid-mw (3.0.13svn5530-1) UNRELEASED; urgency=medium
+
+  * Address Change Bugfix
+  * Various SCAP related fixes
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 28 Jun 2018 12:28:55 +0100
+pteid-mw (3.0.12svn5475-1) UNRELEASED; urgency=medium
+
+  * Update to SVN revision 5437 - New V3 GUI application with CMD signature feature
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 10 May 2018 10:48:55 +0100
 pteid-mw (2.4.11svn5339-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 5339 - Disable checking of the address file hash in SOD only if the card was issued in a specific range of dates

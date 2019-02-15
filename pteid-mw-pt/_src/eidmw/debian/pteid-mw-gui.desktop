@@ -2,12 +2,12 @@
 Comment=See and change information on your Portuguese eID Card
 Comment[pt]=Veja e altere informações no seu Cartão de Cidadão
 Encoding=UTF-8
-Exec=pteidgui
+Exec=env QT_QPA_PLATFORMTHEME=gtk3 eidguiV2
 GenericName=Portuguese eID Data
 GenericName[pt]=Dados do Cartão de Cidadão
 Icon=pteid-scalable
-Name=Portugal eID Gui
-Name[pt]=Cartão de Cidadão
+Name=Autenticação.gov
+Name[pt]=Autenticação.gov
 StartupNotify=true
 Terminal=false
 Type=Application
