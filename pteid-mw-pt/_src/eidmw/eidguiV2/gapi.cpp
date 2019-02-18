@@ -2343,8 +2343,12 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                     new_card = &Card;
                     break;
                 }
-                    
-                case PTEID_CARDTYPE_UNKNOWN:
+				case PTEID_CARDTYPE_UNKNOWN:
+				{
+					selectedReaderIndex = -1;
+					emit signalCardAccessError(CardUnknownError);
+					break;
+				}
                 default:
                     break;
                 }
@@ -2368,7 +2372,12 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                             break;
                         }
                             
-                        case PTEID_CARDTYPE_UNKNOWN:
+						case PTEID_CARDTYPE_UNKNOWN:
+						{
+							selectedReaderIndex = -1;
+							emit signalCardAccessError(CardUnknownError);
+							break;
+						}
                         default:
                             break;
                     }
@@ -2606,13 +2615,21 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
             //------------------------------------
             if (pCallBackData->getMainWnd()->m_Settings.getRegCert())
             {
-                PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Will try to ImportCertificates...");
-                bool bImported = pCallBackData->getMainWnd()->m_Certificates.ImportCertificates(pCallBackData->getReaderName());
+				PTEID_CardType cardType = readerContext.getCardType();
+				switch (cardType)
+				{
+					case PTEID_CARDTYPE_IAS07:
+					case PTEID_CARDTYPE_IAS101:
+					{
+						PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Will try to ImportCertificates...");
+						bool bImported = pCallBackData->getMainWnd()->m_Certificates.ImportCertificates(pCallBackData->getReaderName());
 
-                if(!bImported) {
-                    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "ImportCertificates failed!");
-                    emit pCallBackData->getMainWnd()->signalImportCertificatesFail();
-                }
+						if (!bImported) {
+							PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "ImportCertificates failed!");
+							emit pCallBackData->getMainWnd()->signalImportCertificatesFail();
+						}
+					}
+				}
             }
         }
         else

@@ -84,8 +84,6 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 
 	CCard *poCard = NULL;
 
-	if (ulVersion == 1)
-	{
 		try {
 			bool bNeedToSelectApplet = false;
 			CByteArray oData;
@@ -115,8 +113,8 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 					// Perhaps the applet is no longer selected; so try to select it
 					// first; and if successfull then try to select the AID again
 					bNeedToSelectApplet = PteidCardSelectApplet(poContext, hCard);
-					if (bNeedToSelectApplet)
-						oData = poContext->m_oPCSC.Transmit(hCard, oCmd,&lRetVal);
+					if (!bNeedToSelectApplet)
+						return poCard;
 				}
 
 				ulVersion = 1;
@@ -128,52 +126,6 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 		{
 			std::cerr << "Exception thrown in cardPluginPteid.CardGetInstance() 1" << endl;
 		}
-
-	} else {
-		try {
-			bool bNeedToSelectApplet = false;
-			CByteArray oData;
-			CByteArray oCmd(40);
-			unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x0C};
-			oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
-			oCmd.Append((unsigned char) sizeof(IAS_PTEID_APPLET_AID));
-			oCmd.Append(IAS_PTEID_APPLET_AID, sizeof(IAS_PTEID_APPLET_AID));
-
-			long lRetVal;
-			// Don't remove these brackets, CAutoLock dtor must be called!
-			{
-				CAutoLock oAutLock(&poContext->m_oPCSC, hCard);
-				oData = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal);
-
-				if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED)
-				{
-					unsigned long ulLockCount = 0;
-					poContext->m_oPCSC.Recover(hCard, &ulLockCount);
-
-					bNeedToSelectApplet = PteidCardSelectApplet(poContext, hCard);
-					if (bNeedToSelectApplet)// try again to select the card app
-						oData = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal);
-				}
-				if (oData.Size() == 2 && oData.GetByte(0) == 0x6A &&
-						(oData.GetByte(1) == 0x82 || oData.GetByte(1) == 0x86))
-				{
-					// Perhaps the applet is no longer selected; so try to select it
-					// first; and if successfull then try to select the card AID again
-					bNeedToSelectApplet = PteidCardSelectApplet(poContext, hCard);
-					if (bNeedToSelectApplet)
-						oData = poContext->m_oPCSC.Transmit(hCard, oCmd,&lRetVal);
-				}
-
-					ulVersion = 2;
-					poCard = new CPteidCard(hCard, poContext, poPinpad, oData,
-							bNeedToSelectApplet ? ALW_SELECT_APPLET : TRY_SELECT_APPLET, ulVersion);
-			}
-		}
-		catch(...)
-		{
-			std::cerr << "Exception thrown in cardPluginPteid.CardGetInstance() 2" << endl;
-		}
-	}
 
 	return poCard;
 }
