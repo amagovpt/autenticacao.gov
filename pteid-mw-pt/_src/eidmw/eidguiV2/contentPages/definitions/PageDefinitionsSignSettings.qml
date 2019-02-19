@@ -49,7 +49,7 @@ PageDefinitionsSignSettingsForm {
             propertyCheckboxRemove.checked = gapi.getRemoveCertValue()
         }else{
             propertyRectAppCertificates.visible = false
-            propertyRectAppTimeStamp.anchors.top = propertyRectAppLook.bottom
+            propertyRectAppTimeStamp.anchors.top = propertyRectAppCertificates.top
         }
 
         if (controler.getTimeStampHostValue().length > 0

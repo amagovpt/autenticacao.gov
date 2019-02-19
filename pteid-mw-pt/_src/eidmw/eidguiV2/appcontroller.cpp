@@ -1029,7 +1029,15 @@ void getOutlookVersion(std::wstring &version) {
     DWORD dwType = REG_SZ;
     WCHAR abValueDat[23];
     DWORD dwValDatLen = sizeof(abValueDat);
-    ReadReg(HKEY_CLASSES_ROOT, L"Outlook.Application\\CurVer", L"", &dwType, abValueDat, &dwValDatLen);
+	try
+	{
+		ReadReg(HKEY_CLASSES_ROOT, L"Outlook.Application\\CurVer", L"", &dwType, abValueDat, &dwValDatLen);
+	}
+	catch (...)
+	{
+		PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Outlook CurVer registry not exist");
+	}
+
     if (wcslen(abValueDat) <= 20)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Outlook CurVer registry format not expected");
@@ -1060,7 +1068,14 @@ bool AppController::getOutlookSuppressNameChecks(void) {
         DWORD abValueDat(0);
         DWORD dwValDatLen(sizeof(abValueDat));
         DWORD dwType = REG_DWORD;
-        ReadReg(HKEY_CURRENT_USER, regName.c_str(), L"SupressNameChecks", &dwType, &abValueDat, &dwValDatLen);
+		try
+		{
+			ReadReg(HKEY_CURRENT_USER, regName.c_str(), L"SupressNameChecks", &dwType, &abValueDat, &dwValDatLen);
+		}
+		catch (...)
+		{
+			PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Outlook CurVer registry not exist");
+		}
         return abValueDat == 1;
     }
     
