@@ -306,6 +306,13 @@ public slots:
     void verifyAddressPin(QString pin);
     unsigned int getTriesLeftAddressPin();
 
+    unsigned int doVerifyAuthPin(QString pin);
+    unsigned int doVerifySignPin(QString pin);
+    unsigned int doVerifyAddressPin(QString pin);
+    unsigned int doChangeAuthPin(QString currentPin, QString newPin);
+    unsigned int doChangeSignPin(QString currentPin, QString newPin);
+    unsigned int doChangeAddressPin(QString currentPin, QString newPin);
+
     void changeAuthPin(QString currentPin, QString newPin);
     void changeSignPin(QString currentPin, QString newPin);
     void changeAddressPin(QString currentPin, QString newPin);
@@ -448,13 +455,6 @@ private:
     void cleanupCallbackData(void);
     void initScapAppId(void);
     CMDProxyInfo buildProxyInfo();
-
-    unsigned int doVerifyAuthPin(QString pin);
-    unsigned int doVerifySignPin(QString pin);
-    unsigned int doVerifyAddressPin(QString pin);
-    unsigned int doChangeAuthPin(QString currentPin, QString newPin);
-    unsigned int doChangeSignPin(QString currentPin, QString newPin);
-    unsigned int doChangeAddressPin(QString currentPin, QString newPin);
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;

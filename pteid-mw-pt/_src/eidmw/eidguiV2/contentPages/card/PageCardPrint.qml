@@ -10,62 +10,6 @@ PageCardPrintForm {
     property string outputFile : ""
 
     Dialog {
-        id: dialogPinOK
-        width: 400
-        height: 200
-        // Center dialog in the main view
-        x: - mainMenuView.width - subMenuView.width
-           + mainView.width * 0.5 - dialogPinOK.width * 0.5
-        y: parent.height * 0.5 - dialogPinOK.height * 0.5
-
-        property alias propertyDialogOkLabelText: dialogOkLabelText
-        property alias propertyTextOkPin: textOkPin
-
-        header: Label {
-            id: dialogOkLabelText
-            elide: Label.ElideRight
-            padding: 24
-            bottomPadding: 0
-            font.bold: true
-            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
-            color: Constants.COLOR_MAIN_BLUE
-        }
-
-        Item {
-            width: parent.width
-            height: rectOkPin.height
-
-            Item {
-                id: rectOkPin
-                width: parent.width
-                height: 90
-                anchors.horizontalCenter: parent.horizontalCenter
-                Text {
-                    id: textOkPin
-                    text: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                    height: parent.height
-                    width: 150
-                }
-            }
-            Button {
-                width: Constants.WIDTH_BUTTON
-                height:Constants.HEIGHT_BOTTOM_COMPONENT
-                text: "OK"
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: rectOkPin.bottom
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                font.capitalization: Font.MixedCase
-                onClicked: dialogPinOK.close()
-            }
-        }
-    }
-    Dialog {
         id: createsuccess_dialog
         width: 400
         height: 200
@@ -282,6 +226,18 @@ PageCardPrintForm {
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
+        onSignalTestPinFinished: {
+            if (triesLeft === 3) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            }else {
+                propertySwitchAddress.checked = false
+            }
+        }
 
     }
 
@@ -330,13 +286,6 @@ PageCardPrintForm {
             if(propertySwitchAddress.checked){
                 var triesLeft = 0
                 triesLeft = gapi.verifyAddressPin("")
-                if (triesLeft === 3) {
-                    dialogPinOK.propertyDialogOkLabelText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
-                    dialogPinOK.propertyTextOkPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
-                    dialogPinOK.open()
-                }else {
-                    propertySwitchAddress.checked = false
-                }
             }
         }
     }
