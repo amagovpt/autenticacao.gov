@@ -367,14 +367,14 @@
         <File Id="eidlibdefines.h" Name="eidlibdefines.h" Source="..\..\..\eidlib\eidlibdefines.h"/>
         <File Id="eidlibException.h" Name="eidlibException.h" Source="..\..\..\eidlib\eidlibException.h"/>
 				<File Id="eidErrors.h" Name="eidErrors.h" Source="..\..\..\common\eidErrors.h"/>
-				<File Id="README.txt" Name="README.txt" Source="..\..\..\eidlib\README.txt"/>
+				<File Id="README_cpp.txt" Name="README.txt" Source="..\..\..\eidlib\README.txt"/>
       </Component>
     </DirectoryRef>
 
 			<DirectoryRef Id="JAVA_SDK">
 				<Component Id="Java_SDK_Component" Guid="{8B0D8006-DB84-4986-A8D7-AC5F84F4AEF8}" >
 				<File Source="..\..\..\jar\pteidlibj.jar" />
-				<File Source="..\..\..\eidlibJava_Wrapper\README.txt" />
+				<File Id="README_java.txt"  Source="..\..\..\eidlibJava_Wrapper\README.txt" />
 			</Component>
 			</DirectoryRef>
 
