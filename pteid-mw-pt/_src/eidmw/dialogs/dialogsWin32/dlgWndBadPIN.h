@@ -35,7 +35,7 @@ class dlgWndBadPIN : public Win32Dialog
 	HBRUSH hbrBkgnd;
 
 public:
-    dlgWndBadPIN(std::wstring & PINName, unsigned long RemainingTries, HWND Parent = NULL, Type_WndGeometry *wndGeom = NULL);
+	dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries, HWND Parent = NULL );
 	virtual ~dlgWndBadPIN();
 
 	virtual LRESULT ProcecEvent

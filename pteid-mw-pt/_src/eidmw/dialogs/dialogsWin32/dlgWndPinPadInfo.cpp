@@ -28,13 +28,10 @@
 #define IDB_OK 1
 #define IDB_CANCEL 2
 
-#define WINDOW_WIDTH  420
-#define WINDOW_HEIGHT 280
-
 dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusage, 
 		DlgPinOperation operation, const std::wstring & csReader, 
-		const std::wstring & PinName, const std::wstring & Message, HWND Parent, Type_WndGeometry *wndGeom)
-:Win32Dialog(L"WndPinpadInfo", wndGeom)
+		const std::wstring & PinName, const std::wstring & Message, HWND Parent)
+:Win32Dialog(L"WndPinpadInfo")
 
 {
 	m_szHeader=NULL;
@@ -65,7 +62,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 
 	m_szHeader = _wcsdup( PinName.c_str() );
 	
-	if (CreateWnd(tmpTitle.c_str(), WINDOW_WIDTH, WINDOW_HEIGHT, IDI_APPICON, Parent))
+	if (CreateWnd(tmpTitle.c_str(), 420, 280, IDI_APPICON, Parent))
 	{
 		/*
 		if( PinPusage == DLG_PIN_SIGN )
@@ -78,7 +75,6 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 		//TextFont = GetSystemFont();
 
 		SendMessage( Parent, WM_SETFONT, (WPARAM)TextFont, 0 );
-
 	}
 
 }
@@ -86,6 +82,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 
 dlgWndPinpadInfo::~dlgWndPinpadInfo()
 {
+    EnableWindow(m_parent, TRUE);
 	KillWindow( );
 
 	if(m_szHeader)
@@ -116,22 +113,20 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 
 			SetTextColor(m_hDC, RGB(0x3C, 0x5D, 0xBC));
 
-            DrawFakeRectangle();
-
-			GetClientRect(m_hWnd, &rect);
-            rect.left = rect.right / 2 - WINDOW_WIDTH / 2 + 20;
-            rect.top = rect.bottom / 2 - WINDOW_HEIGHT / 2 + 32;
-            rect.right = rect.right / 2 + WINDOW_WIDTH / 2 - 8;
-            rect.bottom = rect.bottom / 2 + WINDOW_HEIGHT / 2 - 8;
+			GetClientRect( m_hWnd, &rect );
+			rect.left += 20;
+			rect.top = 32;
+			rect.right -= 8;
+			rect.bottom = 136 - 8;
 			SetBkColor( m_hDC, RGB(255,255,255));
 			SelectObject( m_hDC, TextFontHeader );
 			DrawText( m_hDC, m_szHeader, -1, &rect, DT_WORDBREAK );
 
 			//Change top header dimensions
 			GetClientRect( m_hWnd, &rect );
-            rect.left = rect.right / 2 - WINDOW_WIDTH / 2 + 20;
-            rect.top = rect.bottom / 2 - WINDOW_HEIGHT / 2 + 60;
-            rect.right = rect.right / 2 + WINDOW_WIDTH / 2 - 20;
+			rect.left += 20;
+			rect.top = 60;
+			rect.right -= 20;
 			rect.bottom = rect.bottom - 60;
 			SetBkColor(m_hDC, RGB(255, 255, 255));
 			SelectObject( m_hDC, TextFont );

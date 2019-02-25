@@ -363,7 +363,7 @@ public slots:
     void forgetAllCertificates( void );
     void forgetCertificates(QString const& reader);
 
-    void setWindowGeometry(int x, int y, int width, int height);
+    void setAppAsDlgParent();
 
 signals:
     // Signal from GAPI to Gui

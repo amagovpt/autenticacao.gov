@@ -42,7 +42,7 @@ unsigned long dlgPinPadInfoCollectorIndex = 0;
 
 std::wstring lang1 = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
-WndGeometry appWindowGeom = { 0, 0, 0, 0 };
+HWND appWindow;
 
 #ifdef _MANAGED
 #pragma managed(push, off)
@@ -106,6 +106,9 @@ std::wstring getPinName( DlgPinUsage usage, const wchar_t *inPinName ){
 	/************************
 	*       DIALOGS
 	************************/
+DLGS_EXPORT void eIDMW::SetApplicationWindow(HWND app) {
+	appWindow = app;
+}
 DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			DlgPinUsage usage, const wchar_t *csPinName,
 			DlgPinInfo pinInfo, wchar_t *csPin, unsigned long ulPinBufferLen, void *wndGeometry)
@@ -169,7 +172,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			break;
 		}
 
-        dlg = new dlgWndAskPIN(pinInfo, usage, sMessage, PINName, NULL, &appWindowGeom);
+		dlg = new dlgWndAskPIN(pinInfo, usage, sMessage, PINName, appWindow);
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
@@ -235,7 +238,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 			break;
 		}
 
-		dlg = new dlgWndAskPINs(pin1Info, pin2Info, Header, PINName, isUnlock, operation == DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK, NULL, &appWindowGeom);
+		dlg = new dlgWndAskPINs(pin1Info, pin2Info, Header, PINName, isUnlock, operation == DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK, appWindow);
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
@@ -278,7 +281,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgBadPin(
         }
         PINName = getPinName( usage, csPinName );
 
-        dlg = new dlgWndBadPIN( PINName, ulRemainingTries, NULL, &appWindowGeom);
+		dlg = new dlgWndBadPIN(PINName, ulRemainingTries, appWindow);
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
@@ -301,9 +304,6 @@ DLGS_EXPORT DlgRet eIDMW::DlgBadPin(
 	return DLG_CANCEL;
 }
 
-DLGS_EXPORT Type_WndGeometry* eIDMW::GetWindowGeometry() {
-    return &appWindowGeom;
-}
 DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 			const wchar_t *csReader, DlgPinUsage usage, const wchar_t *csPinName,
 			const wchar_t *csMessage,
@@ -393,16 +393,16 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 
 		//QString buf = "dlg num: " + QString().setNum( dlgPinPadInfoCollectorIndex );
 		dlgPinPadInfoCollectorIndex++;
-		dlgModal = new dlgWndPinpadInfo( dlgPinPadInfoCollectorIndex, usage,
-			operation, csReader, pin_name_label, sMessage, NULL, &appWindowGeom);
+		dlgModal = new dlgWndPinpadInfo(dlgPinPadInfoCollectorIndex, usage,
+			operation, csReader, pin_name_label, sMessage, appWindow);
 
-		dlgPinPadInfoCollector.insert(TD_WNDPINPAD_PAIR( dlgPinPadInfoCollectorIndex, dlgModal ) );
-		if( pulHandle )
+		dlgPinPadInfoCollector.insert(TD_WNDPINPAD_PAIR(dlgPinPadInfoCollectorIndex, dlgModal));
+		if (pulHandle)
 			*pulHandle = dlgPinPadInfoCollectorIndex;
 
 		// Loop
 		dlgModal->exec();
-		
+
 		delete dlgModal;
 		dlgModal = NULL;
 
@@ -423,17 +423,17 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 DLGS_EXPORT void eIDMW::DlgClosePinpadInfo( unsigned long ulHandle )
 {
 	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgClosePinpadInfo() called");
-	TD_WNDPINPAD_MAP::iterator it_WndPinpad_Map = dlgPinPadInfoCollector.find( ulHandle );
-	if( it_WndPinpad_Map != dlgPinPadInfoCollector.end() )
+	TD_WNDPINPAD_MAP::iterator it_WndPinpad_Map = dlgPinPadInfoCollector.find(ulHandle);
+	if (it_WndPinpad_Map != dlgPinPadInfoCollector.end())
 		dlgModal = (*it_WndPinpad_Map).second;
 	else
 		dlgModal = NULL;
 
-	if( dlgModal )
+	if (dlgModal)
 	{
 		dlgModal->stopExec();
 	}
-	dlgPinPadInfoCollector.erase( ulHandle );
+	dlgPinPadInfoCollector.erase(ulHandle);
 	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgClosePinpadInfo() returns");
 }
 

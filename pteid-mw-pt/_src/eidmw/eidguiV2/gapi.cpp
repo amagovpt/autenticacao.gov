@@ -19,6 +19,8 @@
 //#include "PDFSignature/envStub.h"
 
 #include "ScapSettings.h"
+#include "../applayer/OAuthAttributes.h"
+#include "../applayer/AttributeFactory.h"
 
 using namespace eIDMW;
 
@@ -310,6 +312,7 @@ void GAPI::verifyAuthPin(QString pin_value) {
     QtConcurrent::run(this, &GAPI::doVerifyAuthPin, pin_value);
 }
 unsigned int  GAPI::doVerifyAuthPin(QString pin_value) {
+    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
@@ -333,6 +336,7 @@ unsigned int  GAPI::doVerifyAuthPin(QString pin_value) {
 }
 
 unsigned int GAPI::getTriesLeftAuthPin() {
+    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
@@ -358,6 +362,7 @@ void GAPI::verifySignPin(QString pin_value) {
     QtConcurrent::run(this, &GAPI::doVerifySignPin, pin_value);
 }
 unsigned int  GAPI::doVerifySignPin(QString pin_value) {
+    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
@@ -381,6 +386,7 @@ unsigned int  GAPI::doVerifySignPin(QString pin_value) {
 }
 
 unsigned int GAPI::getTriesLeftSignPin() {
+    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
@@ -406,6 +412,7 @@ void GAPI::verifyAddressPin(QString pin_value) {
     QtConcurrent::run(this, &GAPI::doVerifyAddressPin, pin_value);
 }
 unsigned int GAPI::doVerifyAddressPin(QString pin_value) {
+    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
@@ -429,6 +436,7 @@ unsigned int GAPI::doVerifyAddressPin(QString pin_value) {
 }
 
 unsigned int GAPI::getTriesLeftAddressPin() {
+    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
@@ -454,6 +462,7 @@ void GAPI::changeAuthPin(QString currentPin, QString newPin) {
     QtConcurrent::run(this, &GAPI::doChangeAuthPin, currentPin, newPin);
 }
 unsigned int GAPI::doChangeAuthPin(QString currentPin, QString newPin) {
+    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
@@ -480,6 +489,7 @@ void GAPI::changeSignPin(QString currentPin, QString newPin) {
     QtConcurrent::run(this, &GAPI::doChangeSignPin, currentPin, newPin);
 }
 unsigned int GAPI::doChangeSignPin(QString currentPin, QString newPin) {
+    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
 
     BEGIN_TRY_CATCH
@@ -1975,6 +1985,11 @@ void GAPI::startLoadingAttributesFromCache(int isCompanies, bool isShortDescript
 }
 
 void GAPI::startRemovingAttributesFromCache(int isCompanies) {
+    std::vector<CitizenAttribute> attributes;
+    attributes.push_back(CitizenAttribute::NIC);
+    attributes.push_back(CitizenAttribute::NAME);
+    OAuthAttributes oauth(attributes);
+    oauth.getAttributesValue();
     QtConcurrent::run(this, &GAPI::removeSCAPAttributesFromCache, isCompanies);
 }
 
@@ -2985,12 +3000,9 @@ void GAPI::forgetCertificates(QString const& reader)
 #endif
 }
 
-void GAPI::setWindowGeometry(int x, int y, int width, int height) {
+void GAPI::setAppAsDlgParent() {
 #ifdef WIN32
-    Type_WndGeometry *appWindowGeom = GetWindowGeometry();
-    appWindowGeom->x = x;
-    appWindowGeom->y = y;
-    appWindowGeom->width = width;
-    appWindowGeom->height = height;
+    HWND appWindow = GetForegroundWindow();
+    SetApplicationWindow(appWindow);
 #endif
 }

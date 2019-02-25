@@ -81,7 +81,7 @@ HFONT Win32Dialog::loadFontFromResource(int font_pointsize, bool isBold) {
 	return TextFont;
 }
 
-Win32Dialog::Win32Dialog(const wchar_t *appName, Type_WndGeometry *wndGeom)
+Win32Dialog::Win32Dialog(const wchar_t *appName)
 {
 	m_ModalHold = true;
 	m_hDC = NULL;					// Private GDI Device Context
@@ -91,7 +91,6 @@ Win32Dialog::Win32Dialog(const wchar_t *appName, Type_WndGeometry *wndGeom)
 	dlgResult = eIDMW::DLG_CANCEL;	// Dialog Result
 	m_fonthandle = NULL;
 	m_appName=_wcsdup(appName);
-	m_wndGeom = wndGeom;
 
 	TextFontHeader = loadFontFromResource(16*.75, true);
 	TextFont = loadFontFromResource(12 * .75, false);
@@ -112,15 +111,12 @@ Win32Dialog::~Win32Dialog()
 }
 
 
-bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Icon, HWND Parent)
+bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Icon, HWND Parent )
 {
 	if( m_hWnd )
 		return false;
 
 	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> Win32Dialog::CreateWnd (Parent=%X)",Parent);
-
-	m_dlgHeight = height;
-	m_dlgWidth = width;
 
 	DWORD		dwExStyle;				// Window Extended Style
 	DWORD		dwStyle;				// Window Style
@@ -147,11 +143,7 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 	wc.hInstance		= m_hInstance;								// Set The Instance
 	wc.hIcon			= hIco;			// Load The Default Icon
 	wc.hCursor			= LoadCursor( NULL, IDC_ARROW );			// Load The Arrow Pointer
-	// If we want a modal window, a red window is created in front of the application 
-	// and then set color red transparent. 
-	wc.hbrBackground = (m_ModalHold && m_wndGeom && m_wndGeom->width>0 && m_wndGeom->height>0 ?
-		CreateSolidBrush(RGB(255, 0, 0)) :
-		CreateSolidBrush(RGB(255, 255, 255)));        //CreateSolidBrush(RGB(255, 255, 255));        //(HBRUSH)GetSysColorBrush( COLOR_3DFACE );	// What Color we want in our background
+	wc.hbrBackground =  CreateSolidBrush(RGB(255, 255, 255));        //CreateSolidBrush(RGB(255, 255, 255));        //(HBRUSH)GetSysColorBrush( COLOR_3DFACE );	// What Color we want in our background
 	wc.lpszMenuName		= NULL;										// We Don't Want A Menu
 	wc.lpszClassName	= m_appName;								// Set The Class Name
 
@@ -163,12 +155,12 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 	}
 
 	//dwStyle = WS_CAPTION | WS_VISIBLE |  WS_SYSMENU | WS_OVERLAPPED;
-	dwStyle = WS_POPUP;
+	dwStyle = WS_POPUP | WS_BORDER;
 
-	dwExStyle = WS_EX_LEFT | WS_EX_LTRREADING | WS_EX_TOPMOST | WS_EX_LAYERED;
-	if( !m_ModalHold )
+	dwExStyle = WS_EX_LEFT | WS_EX_LTRREADING | WS_EX_WINDOWEDGE | WS_EX_TOPMOST;
+	if( m_ModalHold )
 	{
-		dwStyle |= WS_BORDER;
+		dwStyle |= WS_POPUP;
 		dwExStyle |= WS_EX_WINDOWEDGE;
 	}
 
@@ -176,36 +168,16 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 
 	Active_lpWnd = this;
 
-	if (m_ModalHold && m_wndGeom && 
-		m_wndGeom->width > 0 &&
-		m_wndGeom->height > 0)
-	{
-		// Create Transparent Window
-		m_hWnd = CreateWindowEx(dwExStyle, m_appName, title, dwStyle,
-			m_wndGeom->x,
-			m_wndGeom->y,
-			m_wndGeom->width,
-			m_wndGeom->height,
-			Parent,
-			NULL,
-			m_hInstance,
-			NULL);
-		SetLayeredWindowAttributes(m_hWnd, RGB(255,0,0), 0, LWA_COLORKEY);
-	}
-	else {
-		m_hWnd = CreateWindow(m_appName, title, dwStyle,
-			DeskRect.right / 2 - (WindowRect.right - WindowRect.left) / 2,
-			DeskRect.bottom / 2 - (WindowRect.bottom - WindowRect.top) / 2,
-			WindowRect.right - WindowRect.left,
-			WindowRect.bottom - WindowRect.top,
-			Parent,
-			NULL,
-			m_hInstance,
-			NULL);
-	}
-
 	// Create The Window
-	if (!m_hWnd)
+	if (!(m_hWnd = CreateWindow(m_appName, title, dwStyle,
+		DeskRect.right / 2 - (WindowRect.right - WindowRect.left) / 2,
+		DeskRect.bottom / 2 - (WindowRect.bottom - WindowRect.top) / 2,
+		WindowRect.right - WindowRect.left,
+		WindowRect.bottom - WindowRect.top,
+		  Parent,
+		  NULL,
+		  m_hInstance,
+		  NULL)))
 	{
 		unsigned long err = GetLastError();
 		KillWindow();								// Reset The Display
@@ -213,7 +185,9 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 		return false;
 	}
 
-	 SetWindowLong(m_hWnd, GWL_STYLE, 0);  //remove all window styles, check MSDN for details
+	EnableWindow(Parent, FALSE);
+	m_parent = Parent;
+	SetWindowLong(m_hWnd, GWL_STYLE, 0);  //remove all window styles, check MSDN for details
 
 	 //ShowWindow(m_hWnd, SW_SHOW);          //display window
 
@@ -517,27 +491,3 @@ LRESULT Win32Dialog::ProcecEvent
 	return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
 }
 
-void Win32Dialog::DrawFakeRectangle() {
-    if (m_ModalHold && m_wndGeom &&
-        m_wndGeom->width > 0 &&
-        m_wndGeom->height > 0)
-    {
-        RECT rect;
-        GetClientRect(m_hWnd, &rect);
-        rect.left = rect.right / 2 - m_dlgWidth / 2;
-        rect.top = rect.bottom / 2 - m_dlgHeight / 2;
-        rect.right = rect.right / 2 + m_dlgWidth / 2;
-        rect.bottom = rect.bottom / 2 + m_dlgHeight / 2;
-        FillRect(m_hDC, &rect, CreateSolidBrush(RGB(255, 255, 255)));
-        DrawEdge(m_hDC, &rect, EDGE_RAISED, BF_RECT);
-    }
-}
-
-int Win32Dialog::horizontalShift() {
-    return (m_ModalHold && m_wndGeom && m_wndGeom->height > 0 && m_wndGeom->width > 0 ?
-        (m_wndGeom->width) / 2 - m_dlgWidth / 2 : 0);
-}
-int Win32Dialog::verticalShift() {
-    return (m_ModalHold && m_wndGeom && m_wndGeom->height > 0 && m_wndGeom->width > 0 ?
-        (m_wndGeom->height) / 2 - m_dlgHeight / 2 : 0);
-}

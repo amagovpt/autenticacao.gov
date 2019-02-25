@@ -38,19 +38,15 @@ Window {
         mainFormID.propertyMainMenuView.width = Functions.getMainMenuWidth(width)
         mainFormID.propertySubMenuView.width = Functions.getSubMenuWidth(width)
         mainFormID.propertyContentPagesView.width = Functions.getContentPagesMenuWidth(width)
-        gapi.setWindowGeometry(x, y, width, height)
     }
 
     onHeightChanged: {
         console.log("Resizing app height: " + height)
         console.log("Position: (" + x + "," + y + ")")
-        gapi.setWindowGeometry(x, y, width, height)
     }
     onXChanged: {
-        gapi.setWindowGeometry(x, y, width, height)
     }
     onYChanged: {
-        gapi.setWindowGeometry(x, y, width, height)
     }
 
     Connections {
@@ -833,6 +829,6 @@ Load language error. Please reinstall the application"
         controler.initTranslation()
         mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
         gapi.initTranslation()
-        gapi.setWindowGeometry(x, y, width, height)
+        gapi.setAppAsDlgParent()
     }
 }
