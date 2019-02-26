@@ -19,8 +19,6 @@
 //#include "PDFSignature/envStub.h"
 
 #include "ScapSettings.h"
-#include "../applayer/OAuthAttributes.h"
-#include "../applayer/AttributeFactory.h"
 
 using namespace eIDMW;
 
@@ -1985,11 +1983,6 @@ void GAPI::startLoadingAttributesFromCache(int isCompanies, bool isShortDescript
 }
 
 void GAPI::startRemovingAttributesFromCache(int isCompanies) {
-    std::vector<CitizenAttribute> attributes;
-    attributes.push_back(CitizenAttribute::NIC);
-    attributes.push_back(CitizenAttribute::NAME);
-    OAuthAttributes oauth(attributes);
-    oauth.getAttributesValue();
     QtConcurrent::run(this, &GAPI::removeSCAPAttributesFromCache, isCompanies);
 }
 
