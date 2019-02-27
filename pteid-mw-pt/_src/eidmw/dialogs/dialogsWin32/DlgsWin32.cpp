@@ -106,9 +106,11 @@ std::wstring getPinName( DlgPinUsage usage, const wchar_t *inPinName ){
 	/************************
 	*       DIALOGS
 	************************/
+#ifdef WIN32
 DLGS_EXPORT void eIDMW::SetApplicationWindow(HWND app) {
 	appWindow = app;
 }
+#endif
 DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			DlgPinUsage usage, const wchar_t *csPinName,
 			DlgPinInfo pinInfo, wchar_t *csPin, unsigned long ulPinBufferLen, void *wndGeometry)

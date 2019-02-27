@@ -157,7 +157,7 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 	//dwStyle = WS_CAPTION | WS_VISIBLE |  WS_SYSMENU | WS_OVERLAPPED;
 	dwStyle = WS_POPUP | WS_BORDER;
 
-	dwExStyle = WS_EX_LEFT | WS_EX_LTRREADING | WS_EX_WINDOWEDGE | WS_EX_TOPMOST;
+	dwExStyle = WS_EX_LEFT | WS_EX_LTRREADING | WS_EX_WINDOWEDGE | WS_EX_TOPMOST | WS_EX_DLGMODALFRAME;
 	if( m_ModalHold )
 	{
 		dwStyle |= WS_POPUP;
@@ -175,7 +175,7 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
     else
         parentWindow = DeskRect;
     
-	if (!(m_hWnd = CreateWindow(m_appName, title, dwStyle,
+	if (!(m_hWnd = CreateWindowEx(dwExStyle, m_appName, title, dwStyle,
         (parentWindow.right + parentWindow.left)/ 2 - (WindowRect.right - WindowRect.left) / 2,
         (parentWindow.bottom + parentWindow.top)/ 2 - (WindowRect.bottom - WindowRect.top) / 2,
 		WindowRect.right - WindowRect.left,

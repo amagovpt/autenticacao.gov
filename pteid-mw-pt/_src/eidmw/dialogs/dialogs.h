@@ -217,7 +217,9 @@ DLGS_EXPORT void DlgClosePinpadInfo(unsigned long ulHandle);
 * Set the parent window of the dialogs.
 * The dialogs will be modal relative to the app window
 */
+#ifdef WIN32
 DLGS_EXPORT void SetApplicationWindow(HWND app);
+#endif
 
 #ifndef WIN32
 /**
