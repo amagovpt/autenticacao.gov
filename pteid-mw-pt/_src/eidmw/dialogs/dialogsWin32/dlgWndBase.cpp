@@ -169,9 +169,15 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 	Active_lpWnd = this;
 
 	// Create The Window
+    RECT parentWindow;
+    if (Parent)
+        GetWindowRect(Parent, &parentWindow);
+    else
+        parentWindow = DeskRect;
+    
 	if (!(m_hWnd = CreateWindow(m_appName, title, dwStyle,
-		DeskRect.right / 2 - (WindowRect.right - WindowRect.left) / 2,
-		DeskRect.bottom / 2 - (WindowRect.bottom - WindowRect.top) / 2,
+        (parentWindow.right + parentWindow.left)/ 2 - (WindowRect.right - WindowRect.left) / 2,
+        (parentWindow.bottom + parentWindow.top)/ 2 - (WindowRect.bottom - WindowRect.top) / 2,
 		WindowRect.right - WindowRect.left,
 		WindowRect.bottom - WindowRect.top,
 		  Parent,
