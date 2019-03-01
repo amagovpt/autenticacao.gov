@@ -225,7 +225,8 @@ PageServicesSignAdvancedForm {
             console.log("Receive signal onSignalPdfSourceChanged pdfWidth = "+pdfWidth+" pdfHeight = "+pdfHeight);
             propertyPDFPreview.propertyPdfOriginalWidth=pdfWidth
             propertyPDFPreview.propertyPdfOriginalHeight=pdfHeight
-            propertyPDFPreview.setSignPreview(propertyPageLoader.propertyBackupCoordX,propertyPageLoader.propertyBackupCoordY)
+            propertyPDFPreview.updateSignPreview(0,0) //arguments not used
+            propertyPDFPreview.setSignPreview(propertyPageLoader.propertyBackupCoordX * propertyPDFPreview.propertyBackground.width,propertyPageLoader.propertyBackupCoordY * propertyPDFPreview.propertyBackground.height)
         }
     }
 
@@ -418,8 +419,8 @@ PageServicesSignAdvancedForm {
         onDropped: {
             // Update sign preview position variables to be used to send to sdk
             propertyPDFPreview.updateSignPreview(drop.x,drop.y)
-            propertyPageLoader.propertyBackupCoordX = propertyPDFPreview.propertyDragSigRect.x
-            propertyPageLoader.propertyBackupCoordY = propertyPDFPreview.propertyDragSigRect.y
+            propertyPageLoader.propertyBackupCoordX = propertyPDFPreview.propertyDragSigRect.x / propertyPDFPreview.propertyBackground.width
+            propertyPageLoader.propertyBackupCoordY = propertyPDFPreview.propertyDragSigRect.y / propertyPDFPreview.propertyBackground.height
 
             updateUploadedFiles(filesArray)
             // Force scroll and focus to the last item addded
@@ -1183,6 +1184,7 @@ PageServicesSignAdvancedForm {
         propertyCheckLastPage.checked = propertyPageLoader.propertyBackupLastPage
         propertyTextFieldReason.text = propertyPageLoader.propertyBackupLocal
         propertyTextFieldLocal.text = propertyPageLoader.propertyBackupReason
+        propertyPDFPreview.setSignPreview(propertyPageLoader.propertyBackupCoordX * propertyPDFPreview.propertyBackground.width,propertyPageLoader.propertyBackupCoordY * propertyPDFPreview.propertyBackground.height)
 
         if (gapi.getShortcutFlag() > 0){
 
