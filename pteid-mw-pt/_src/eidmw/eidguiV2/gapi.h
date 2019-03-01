@@ -332,7 +332,7 @@ public slots:
 
     static void addressChangeCallback(void *, int);
     void showChangeAddressDialog(long code);
-    void showSignCMDDialog(long code);
+    void showSignCMDDialog(int error_code);
 
     QString getCardActivation();
     QString getDataCardIdentifyValue(GAPI::IDInfoKey key);
@@ -381,7 +381,7 @@ signals:
     void signalUpdateProgressBar(int value);
     void signalUpdateProgressStatus(const QString statusMessage);
     void addressChangeFinished(long return_code);
-    void signCMDFinished(long return_code);
+    void signCMDFinished(int error_code);
     void signalOpenCMDSucess();
     void signalCloseCMDSucess();
     void signalCardChanged(const int error_code);

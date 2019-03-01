@@ -579,14 +579,14 @@ void GAPI::showChangeAddressDialog(long code)
     //TODO: Reload card information in case of successful address change
 }
 
-void GAPI::showSignCMDDialog(long code)
+void GAPI::showSignCMDDialog(int error_code)
 {
     QString error_msg;
     QString support_string = tr("STR_CMD_ERROR_MSG");
 
-    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "CMD signature op finished with error code 0x%08x", code);
+    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "CMD signature op finished with error code 0x%08x", error_code);
 
-    switch(code)
+    switch(error_code)
     {
         case 0:
             error_msg = tr("STR_CMD_SUCESS");
@@ -624,7 +624,7 @@ void GAPI::showSignCMDDialog(long code)
             break;
     }
 
-    if (code != 0)
+    if (error_code != 0)
         error_msg += "<br><br>" + support_string;
 
     qDebug() << error_msg;
@@ -758,7 +758,6 @@ void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdSignParams &params)
 
 void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
 {
-    qDebug() << "doCloseSignCMD! " << "sms_token = " << sms_token;
 
     int ret = 0;
     std::string local_sms_token = sms_token.toUtf8().data();
@@ -774,7 +773,9 @@ void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
         }
 
     } catch (PTEID_Exception &e) {
-        qDebug() << "Caught exception in some SDK method. Error code: " << hex << e.GetError() << endl;
+        ret = e.GetError();
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doCloseSignCMD",
+         "Caught exception in some SDK method. Error code: %08x", e.GetError());
     }
 
     signCMDFinished(ret);
@@ -783,8 +784,6 @@ void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
 }
 
 void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token, QList<int> attribute_list) {
-        qDebug() << "doCloseSignCMDWithSCAP! " << "sms_token = " << sms_token
-          <<"attribute_list size: " << attribute_list.size();
 
     int ret = 0;
     std::string local_sms_token = sms_token.toUtf8().data();
@@ -800,7 +799,9 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
         }
 
     } catch (PTEID_Exception &e) {
-        qDebug() << "Caught exception in some SDK method. Error code: " << hex << e.GetError() << endl;
+        ret = e.GetError();
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doCloseSignCMDWithSCAP",
+         "Caught exception in some SDK method. Error code: %08x", e.GetError());
     }
 
     signalUpdateProgressStatus(tr("STR_CMD_SIGNING_SCAP"));
@@ -851,8 +852,8 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QStrin
 
     signalUpdateProgressStatus(tr("STR_CMD_CONNECTING"));
 
-    connect(this, SIGNAL(signCMDFinished(long)),
-            this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
+    connect(this, SIGNAL(signCMDFinished(int)),
+            this, SLOT(showSignCMDDialog(int)), Qt::UniqueConnection);
 
     //Final params for the SCAP signature (visible PDF signature params)  
     m_scap_params.outputPDF = outputFile;
@@ -900,8 +901,8 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QString loaded
 
     signalUpdateProgressStatus(tr("STR_CMD_CONNECTING"));
 
-    connect(this, SIGNAL(signCMDFinished(long)),
-            this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
+    connect(this, SIGNAL(signCMDFinished(int)),
+            this, SLOT(showSignCMDDialog(int)), Qt::UniqueConnection);
 
     CmdSignParams params = {mobileNumber, secret_code,loadedFilePath,outputFile,
                             page,coord_x,coord_y,reason,location,isTimestamp,isSmall};
@@ -1685,10 +1686,12 @@ void GAPI::doSignPDF(SignParams &params) {
     QString fullInputPath = params.loadedFilePath;
     PTEID_PDFSignature sig_handler(getPlatformNativeString(fullInputPath));
 
-    if (params.isTimestamp)
+    if (params.isTimestamp) {
         sig_handler.enableTimestamp();
-    if (params.isSmallSignature)
+    }
+    if (params.isSmallSignature) {
         sig_handler.enableSmallSignatureFormat();
+    }
 
 	if(useCustomSignature()) {
         const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
@@ -1724,10 +1727,12 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
                                        params.page == 0 ? true : false);
     }
 
-    if (params.isTimestamp)
+    if (params.isTimestamp) {
         sig_handler->enableTimestamp();
-    if (params.isSmallSignature)
+    }
+    if (params.isSmallSignature) {
         sig_handler->enableSmallSignatureFormat();
+    }
 
     if(useCustomSignature()) {
         const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
