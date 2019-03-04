@@ -13809,7 +13809,7 @@ unsigned int getWidth(unsigned char c, MyriadFontType ft)
 Object createMyriadDict(XRef *xref, MyriadFontType ft)
 {
 	Object font_dict, obj_tmp, widths;
-	char *my_base_font = NULL;
+	const char *my_base_font = NULL;
 	int *myriad_widths = NULL;
 
 	switch(ft)

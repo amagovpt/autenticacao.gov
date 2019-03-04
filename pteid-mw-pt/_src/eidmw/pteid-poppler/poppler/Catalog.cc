@@ -989,12 +989,12 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 	char * date_str, const char* location, const char* reason, int rect_x, int rect_y,
 	unsigned char *img_data, unsigned long img_length, int rotate_signature, bool isPTLanguage)
 {
-	char * strings_pt[] = { "(Assinado por : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n", 
+	const char * strings_pt[] = { "(Assinado por : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n", 
 	                                                "(Num. de Identifica\xE7\xE3o: {0:s}) Tj\r\n",
 							"0 -10 Td\r\n(Data: {0:s}) Tj\r\n",
 							"Localiza\xE7\xE3o: {0:s}"};
 
-	char * strings_en[] = { "(Signed by : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
+	const char * strings_en[] = { "(Signed by : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
 	                                                "(Identification number: {0:s}) Tj\r\n",
 							"0 -10 Td\r\n(Date: {0:s}) Tj\r\n",
 							"Location: {0:s}"};
@@ -1185,14 +1185,14 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
         char * date_str, const char* location, const char* reason, int rect_x, int rect_y,
         unsigned char *img_data, unsigned long img_length, int rotate_signature, bool isPTLanguage)
 {
-        char * strings_pt[] = { "(Assinado por: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
+        const char * strings_pt[] = { "(Assinado por: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
                                                         "(Num. de Identifica\xE7\xE3o: {0:s}) Tj\r\n",
                                                         "0 -8 Td\r\n(Data: {0:s}) Tj\r\n",
                                                         "Localiza\xE7\xE3o: {0:s}",
                                                         "(Certificado por: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
                                                         "(Atributos certificados: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n"};
 
-        char * strings_en[] = { "(Signed by: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
+        const char * strings_en[] = { "(Signed by: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
                                                         "(Identification number: {0:s}) Tj\r\n",
                                                         "0 -8 Td\r\n(Date: {0:s}) Tj\r\n",
                                                         "Location: {0:s}",

@@ -19,7 +19,7 @@ typedef struct __font_descriptor
 	int descent;
 	int stemV;
 	int capHeight;
-	char *font_name;
+	const char *font_name;
 	//Ref (FontFile)
 	int font_bbox[4];
 	int flags;
