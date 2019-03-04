@@ -35,11 +35,11 @@ extern "C" {
    {  CKM_SHA384,             384, 384  , CKF_DIGEST         }, \
    {  CKM_SHA512,             512, 512  , CKF_DIGEST         }, \
    {  CKM_RIPEMD160,          160, 160  , CKF_DIGEST         }, \
-   {  CKM_RSA_PKCS,           1024, 2048, CKF_HW | CKF_SIGN  }, \
-   {  CKM_MD5_RSA_PKCS,       1024, 2048, CKF_HW | CKF_SIGN  }, \
-   {  CKM_SHA1_RSA_PKCS,      1024, 2048, CKF_HW | CKF_SIGN  }, \
-   {  CKM_SHA256_RSA_PKCS,    1024, 2048, CKF_HW | CKF_SIGN  }, \
-   {  CKM_RIPEMD160_RSA_PKCS, 1024, 2048, CKF_HW | CKF_SIGN  }  \
+   {  CKM_RSA_PKCS,           1024, 3072, CKF_HW | CKF_SIGN  }, \
+   {  CKM_MD5_RSA_PKCS,       1024, 3072, CKF_HW | CKF_SIGN  }, \
+   {  CKM_SHA1_RSA_PKCS,      1024, 3072, CKF_HW | CKF_SIGN  }, \
+   {  CKM_SHA256_RSA_PKCS,    1024, 3072, CKF_HW | CKF_SIGN  }, \
+   {  CKM_RIPEMD160_RSA_PKCS, 1024, 3072, CKF_HW | CKF_SIGN  }  \
 }
 
 
