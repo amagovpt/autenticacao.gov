@@ -1828,7 +1828,7 @@ typedef soap_int32 soap_mode;
       struct tm _tm;\
       gettimeofday(&_tv, NULL);\
       localtime_r(&_tv.tv_sec, &_tm);\
-      fprintf(fdebug, "%02d%02d%02d %02d:%02d:%02d.%06d|", _tm.tm_year%100, _tm.tm_mon+1, _tm.tm_mday, _tm.tm_hour, _tm.tm_min, _tm.tm_sec, _tv.tv_usec);\
+      fprintf(fdebug, "%02d%02d%02d %02d:%02d:%02d.%06ld|", _tm.tm_year%100, _tm.tm_mon+1, _tm.tm_mday, _tm.tm_hour, _tm.tm_min, _tm.tm_sec, _tv.tv_usec);\
       CMD;\
       fflush(fdebug);\
     }\
