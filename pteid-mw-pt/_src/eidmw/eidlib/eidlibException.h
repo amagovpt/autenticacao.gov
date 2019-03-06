@@ -20,6 +20,7 @@
 #ifndef __EIDLIB_EXCEPTION_H__
 #define __EIDLIB_EXCEPTION_H__
 
+#include <string>
 #include "eidlibdefines.h"
 
 namespace eIDMW
@@ -33,15 +34,17 @@ class CMWException;
 class PTEID_Exception
 {
 public:
-    PTEIDSDK_API PTEID_Exception(long lError);	/**< Constructor - Need error code that comes from eidErrors.h */
+	PTEIDSDK_API PTEID_Exception(long lError);	/**< Constructor - Need error code that comes from eidErrors.h */
 	PTEIDSDK_API virtual ~PTEID_Exception();		/**< Destructor */
 
-    PTEIDSDK_API long GetError() const;			/**< Return the error code */
+	PTEIDSDK_API long GetError() const;			/**< Return the error code */
+	PTEIDSDK_API const char * GetMessage();		        /**< Returns the error message based on the error code */
 
 	NOEXPORT_PTEIDSDK static PTEID_Exception THROWException(CMWException &e);
 
 private:
 	long m_lError;					/**< Error code of the exception (see eidErrors.h)*/
+	std::string error_message;
 };
 
 /******************************************************************************//**
