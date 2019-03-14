@@ -384,10 +384,10 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
 
     x509 = DER_to_X509( certificate.GetBytes(), certificate.Size() );
     if ( NULL == x509){
-        MWLOG(LEV_ERROR, MOD_APL, "Error decoding certificate data!");
+        MWLOG(LEV_ERROR, MOD_APL, "computeHash_pkcs7() - Error decoding certificate data!");
         isError = true;
         goto err_hashCalculate;
-    }
+	}
 
     out = (unsigned char *)malloc( SHA256_LEN );
     if ( NULL == out ){

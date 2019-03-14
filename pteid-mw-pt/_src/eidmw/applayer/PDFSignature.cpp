@@ -631,14 +631,17 @@ namespace eIDMW
 
 		unsigned char *to_sign;
 
+		/* Certificate Data*/
+		CByteArray certificate;
+
 		if (isExternalCertificate() && m_attributeSupplier == NULL) {
 			parseCitizenDataFromCert(m_externCertificate);
 		}
 		else {
 			//Civil number and name should be only read once
 			if (m_civil_number == NULL) {
-		   		CByteArray signatureCert = getCitizenCertificate();
-		   		parseCitizenDataFromCert(signatureCert);
+				certificate = getCitizenCertificate();
+				parseCitizenDataFromCert(certificate);
 		   	}
 		}
 
@@ -660,19 +663,16 @@ namespace eIDMW
 		{
             m_outputName = outputName;
 
-            /* Get certificate */
-            CByteArray certificate;
-
             if (isExternalCertificate()) {
                 certificate = m_externCertificate;
             }
             else {
-                m_card->readFile(PTEID_FILE_CERT_SIGNATURE, certificate);
                 /*
-                    Trim the padding zero bytes which are useless
+                    Get the certificate length to trim the padding zero bytes which are useless
                     and affect the certificate digest computation
                 */
-                certificate.TrimRight( 0 );
+                long certLen = long(((certificate.GetByte(2) << 8) + certificate.GetByte(3)) + 4);
+                certificate = certificate.GetBytes(0, certLen);
             }
 
             computeHash(to_sign, len, certificate, m_ca_certificates);
