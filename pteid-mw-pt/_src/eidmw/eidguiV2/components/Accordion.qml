@@ -22,11 +22,11 @@ Column {
             Rectangle {
                 id: infoRow
                 width: parent.width
-                height: childrenRect.height
+                height: childrenRect.height +  0.5*Constants.SIZE_TEXT_FIELD
                 property bool expanded: true
 
                 MouseArea {
-                    anchors.fill: parent
+                    anchors.fill: carot
                     onClicked: infoRow.expanded = !infoRow.expanded
                     enabled: modelData.children ? true : false
                 }
@@ -79,14 +79,8 @@ Column {
                         anchors.fill: parent
                         hoverEnabled: true
                         onClicked: {
-                            onClicked: infoRow.expanded = !infoRow.expanded
                             enabled: modelData.children ? true : false
-                            textEntity.propertyDateField.text = modelData.entity
-                            textAuth.propertyDateField.text = modelData.auth
-                            textValid.propertyDateField.text = modelData.valid
-                            textUntil.propertyDateField.text = modelData.until
-                            textKey.propertyDateField.text = modelData.key
-                            textStatus.propertyDateField.text = modelData.status
+                            selectOption(modelData)
                         }
                     }
                 }
@@ -121,5 +115,13 @@ Column {
         }else{
             return false
         }
+    }
+    function selectOption(modelData){
+        textEntity.propertyDateField.text= modelData.entity
+        textAuth.propertyDateField.text  = modelData.auth
+        textValid.propertyDateField.text = modelData.valid 
+        textUntil.propertyDateField.text = modelData.until
+        textKey.propertyDateField.text   = modelData.key
+        textStatus.propertyDateField.text= modelData.status
     }
 }

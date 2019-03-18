@@ -130,6 +130,9 @@ PageSecurityCertificatesForm {
                                 ]
                             }
                         ]
+                // Init Date Field with the signature certificate 
+                var initialOption = propertyAcordion.model[0].children[0].children[0].children[1].children[0]
+                propertyAcordion.selectOption(initialOption)
             }else{
                 console.log("test Production Card")
                 propertyAcordion.model = [
@@ -180,15 +183,10 @@ PageSecurityCertificatesForm {
                                 ]
                             }
                         ]
+            // Init Date Field with the signature certificate 
+            var initialOption = propertyAcordion.model[0].children[1].children[0]
+            propertyAcordion.selectOption(initialOption)
             }
-
-            // Init Date Field with the model first option
-            propertyTextEntity.propertyDateField.text = propertyAcordion.model[0].entity
-            propertyTextAuth.propertyDateField.text = propertyAcordion.model[0].auth
-            propertyTextValid.propertyDateField.text = propertyAcordion.model[0].valid
-            propertyTextUntil.propertyDateField.text = propertyAcordion.model[0].until
-            propertyTextKey.propertyDateField.text = propertyAcordion.model[0].key
-            propertyTextStatus.propertyDateField.text = propertyAcordion.model[0].status
             propertyBusyIndicator.running = false
         }
     }
