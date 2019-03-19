@@ -631,17 +631,21 @@ namespace eIDMW
 
 		unsigned char *to_sign;
 
-		/* Certificate Data*/
-		CByteArray certificate;
-
 		if (isExternalCertificate() && m_attributeSupplier == NULL) {
 			parseCitizenDataFromCert(m_externCertificate);
 		}
 		else {
 			//Civil number and name should be only read once
 			if (m_civil_number == NULL) {
-				certificate = getCitizenCertificate();
-				parseCitizenDataFromCert(certificate);
+				m_certificate = getCitizenCertificate();
+				parseCitizenDataFromCert(m_certificate);
+
+				/*
+				Get the certificate length to trim the padding zero bytes which are useless
+				and affect the certificate digest computation
+				*/
+				long certLen = long(((m_certificate.GetByte(2) << 8) + m_certificate.GetByte(3)) + 4);
+				m_certificate = m_certificate.GetBytes(0, certLen);
 		   	}
 		}
 
@@ -664,18 +668,10 @@ namespace eIDMW
             m_outputName = outputName;
 
             if (isExternalCertificate()) {
-                certificate = m_externCertificate;
-            }
-            else {
-                /*
-                    Get the certificate length to trim the padding zero bytes which are useless
-                    and affect the certificate digest computation
-                */
-                long certLen = long(((certificate.GetByte(2) << 8) + certificate.GetByte(3)) + 4);
-                certificate = certificate.GetBytes(0, certLen);
+				m_certificate = m_externCertificate;
             }
 
-            computeHash(to_sign, len, certificate, m_ca_certificates);
+			computeHash(to_sign, len, m_certificate, m_ca_certificates);
 
             m_signStarted = true;
 		}

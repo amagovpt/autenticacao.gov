@@ -96,6 +96,9 @@ namespace eIDMW
 		int signSingleFile(const char *location, const char *reason,
 			const char *outfile_path);
 
+		/* Certificate Data*/
+		CByteArray m_certificate;
+
 		APL_Card *m_card;
 		PDFDoc *m_doc;
 
