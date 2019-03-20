@@ -1035,7 +1035,8 @@ void getOutlookVersion(std::wstring &version) {
 	}
 	catch (...)
 	{
-		PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Outlook CurVer registry not exist");
+		PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Outlook CurVer registry does not exist");
+		return;
 	}
 
     if (wcslen(abValueDat) <= 20)
