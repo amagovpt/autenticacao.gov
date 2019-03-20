@@ -28,9 +28,6 @@
 #define SOAP_MUST_NO_UNDERSTAND             0
 #define SOAP_MUST_UNDERSTAND                1
 
-#define BASIC_AUTH_USER                     "tx3hmWas"
-#define BASIC_AUTH_PASS                     "4pIXikQzfxrQt73wLiO2"
-
 static char logBuf[512];
 
 namespace eIDMW {
@@ -115,7 +112,7 @@ int handleError( BasicHttpBinding_USCORECCMovelSignatureProxy proxy, int ret ){
 /*  *********************************************************
     ***    CMDServices::CMDServices()                     ***
     ********************************************************* */
-CMDServices::CMDServices() {
+CMDServices::CMDServices(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId) {
     if ( !init( SOAP_RECV_TIMEOUT_DEFAULT, SOAP_SEND_TIMEOUT_DEFAULT, SOAP_CONNECT_TIMEOUT_DEFAULT,
               SOAP_MUST_NO_UNDERSTAND) )
         return;
@@ -129,6 +126,10 @@ CMDServices::CMDServices() {
     MWLOG_DEBUG(logBuf, "Using Endpoint: %s", new_endpoint);
 
     setEndPoint(strdup(new_endpoint));
+
+    m_basicAuthUser = basicAuthUser;
+    m_basicAuthPassword = basicAuthPassword;
+    setApplicationID(applicationId);
 }
 
 /*  *********************************************************
@@ -156,9 +157,6 @@ bool CMDServices::init(int recv_timeout, int send_timeout,
     }
 
     setUserId( STR_EMPTY );
-
-    //Don't change this: it serves as authentication for the service
-    setApplicationID(std::string("b826359c-06f8-425e-8ec3-50a97a418916"));
 
     //Define appropriate network timeouts
     sp->recv_timeout = recv_timeout;
@@ -280,8 +278,8 @@ void CMDServices::enableBasicAuthentication() {
         MWLOG_ERR(logBuf, "NULL m_soap");
         return;
     }
-    m_soap->userid = BASIC_AUTH_USER;
-    m_soap->passwd = BASIC_AUTH_PASS;
+    m_soap->userid = m_basicAuthUser.c_str();
+    m_soap->passwd = m_basicAuthPassword.c_str();
 }
 
 /*  *******************************************************************************************************************

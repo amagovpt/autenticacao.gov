@@ -333,6 +333,7 @@ public slots:
     static void addressChangeCallback(void *, int);
     void showChangeAddressDialog(long code);
     void showSignCMDDialog(int error_code);
+    bool checkCMDSupport();
 
     QString getCardActivation();
     QString getDataCardIdentifyValue(GAPI::IDInfoKey key);

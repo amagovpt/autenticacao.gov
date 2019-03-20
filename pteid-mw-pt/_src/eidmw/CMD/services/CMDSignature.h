@@ -35,8 +35,8 @@ namespace eIDMW {
 
 	class CMDSignature {
         public:
-            PTEIDCMD_API CMDSignature();
-			PTEIDCMD_API CMDSignature(PTEID_PDFSignature *in_pdf_handler);
+            PTEIDCMD_API CMDSignature(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId);
+            PTEIDCMD_API CMDSignature(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId, PTEID_PDFSignature *in_pdf_handler);
 			PTEIDCMD_API ~CMDSignature();
 
             //proxyinfo parameter is saved in m_proxyInfo so that we can reuse it later in signClose()

@@ -429,6 +429,9 @@ Item {
         buttonCMDProgressConfirm.isOpenFile = false
         dialogSignCMD.open()
     }
+    function close() {
+        dialogSignCMD.close()
+    }
     function signCMD(){
         var loadedFilePath = filesModel.get(0).fileUrl
         var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
