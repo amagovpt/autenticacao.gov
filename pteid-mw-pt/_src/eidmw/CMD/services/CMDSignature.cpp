@@ -28,14 +28,14 @@ namespace eIDMW {
         printf( "\n" );
     }
 
-    CMDSignature::CMDSignature() {
+    CMDSignature::CMDSignature(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId) {
         m_pdf_handler = NULL;
-        cmdService = new CMDServices();
+        cmdService = new CMDServices(basicAuthUser, basicAuthPassword, applicationId);
     }
 
-    CMDSignature::CMDSignature(PTEID_PDFSignature *in_pdf_handler) {
+    CMDSignature::CMDSignature(std::string userId, std::string password, std::string applicationId, PTEID_PDFSignature *in_pdf_handler) {
         m_pdf_handler = in_pdf_handler;
-        cmdService = new CMDServices();
+        cmdService = new CMDServices(userId, password, applicationId);
     }
 
     CMDSignature::~CMDSignature() {

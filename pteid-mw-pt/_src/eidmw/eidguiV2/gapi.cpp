@@ -19,6 +19,7 @@
 //#include "PDFSignature/envStub.h"
 
 #include "ScapSettings.h"
+#include "credentials.h"
 
 using namespace eIDMW;
 
@@ -36,8 +37,8 @@ GAPI::GAPI(QObject *parent) :
     image_provider = new PhotoImageProvider();
     image_provider_pdf = new PDFPreviewImageProvider();
 
+    cmd_signature = new eIDMW::CMDSignature(CMD_BASIC_AUTH_USERID, CMD_BASIC_AUTH_PASSWORD, CMD_BASIC_AUTH_APPID);
 
-    cmd_signature = new eIDMW::CMDSignature();
     cmd_pdfSignature = new eIDMW::PTEID_PDFSignature();
     m_addressLoaded = false;
     m_shortcutFlag = 0;
@@ -3002,5 +3003,13 @@ void GAPI::setAppAsDlgParent() {
 #ifdef WIN32
     HWND appWindow = GetForegroundWindow();
     SetApplicationWindow(appWindow);
+#endif
+}
+
+bool GAPI::checkCMDSupport() {
+#if CMD_SUPPORT
+    return true;
+#else
+    return false;
 #endif
 }

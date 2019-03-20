@@ -37,7 +37,7 @@ xsd__base64Binary *encode_base64( soap *sp, std::string in_str );
 
 class CMDServices {
     public:
-        CMDServices();
+        CMDServices(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId);
         virtual ~CMDServices();
 
         // GetCertificate
@@ -72,7 +72,9 @@ class CMDServices {
         std::string m_applicationID;
         std::string m_processID;
         std::string m_pin;
-        std::string m_userId;
+        std::string m_userId; // this is the phone number.
+        std::string m_basicAuthUser;
+        std::string m_basicAuthPassword;
         const char *m_endpoint;
 
         bool init(int recv_timeout, int send_timeout, int connect_timeout, short mustUnderstand);

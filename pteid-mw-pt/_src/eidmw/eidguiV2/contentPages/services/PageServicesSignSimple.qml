@@ -412,6 +412,16 @@ PageServicesSignSimpleForm {
     propertyButtonSignCMD {
         onClicked: {
             console.log("Sign with CMD")
+            if (!gapi.checkCMDSupport()) {
+                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_NO_CMD_SUPPORT")
+                
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                return;
+            }
             var outputFile = filesModel.get(0).fileUrl
             //Check if filename has extension and remove it.
             if( outputFile.lastIndexOf('.') > 0)
