@@ -474,15 +474,21 @@ bool CERTIFICATES::ImportCertificates( const char* readerName )
 
     //Register the higher-level CA Cert from disk files
     //TODO: maybe we should do the same for test cards
-    QString certsdir("C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\");
-    QDir dir(certsdir);
+
+	eIDMW::PTEID_Config certs_dir(eIDMW::PTEID_PARAM_GENERAL_CERTS_DIR);
+
+	std::string  certs_dir_str = certs_dir.getString();
+
+	eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "ImportCertificates: Certificates dir: %s", certs_dir_str.c_str());
+
+	QDir dir(certs_dir_str.c_str());
 
     QStringList filter("*.der");
     QStringList flist = dir.entryList(QStringList(filter),
                                    QDir::Files | QDir::NoSymLinks);
 
     foreach (QString str, flist) {
-        QString filename = QString("%1%2").arg(certsdir).arg(str);
+		QString filename = QString("%1%2").arg(certs_dir_str.c_str()).arg(str);
         unsigned int alloc_len = filename.size()+1;
         cert_filepath = new wchar_t[alloc_len];
         //This way we ensure the UTF-16 string is terminated

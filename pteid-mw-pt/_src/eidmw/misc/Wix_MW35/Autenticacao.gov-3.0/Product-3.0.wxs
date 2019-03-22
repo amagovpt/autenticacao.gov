@@ -253,8 +253,8 @@
 
       <Component Id="RootFolder" Guid="{2FB5D279-50BD-49ED-98D9-3D043520F450}" KeyPath="yes">
         <CreateFolder/>
-        <Environment Id="PATH" Action="set" Part="last" Permanent="no" System="yes" Name="PATH" Value="[ProgramFilesFolder]Portugal Identity Card"/>
-        <Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[ProgramFilesFolder]Portugal Identity Card"/>
+        <Environment Id="PATH" Action="set" Part="last" Permanent="no" System="yes" Name="PATH" Value="[APPLICATIONROOTFOLDER]"/>
+        <Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[APPLICATIONROOTFOLDER]"/>
       </Component>
 
       <Component Id="Icon" Guid="{5B657BAD-8CFC-4E42-AF8C-13338C50D784}" SharedDllRefCount="yes">
@@ -378,15 +378,15 @@
 
           <RegistryKey Key="general" Action="createAndRemoveOnUninstall">
             <RegistryValue Type="string" Name="language" Value="nl"/>
-            <RegistryValue Type="string" Name="install_dirname" Value="[ProgramFilesFolder]Portugal Identity Card"/>
-            <RegistryValue Type="string" Name="certs_dir" Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\certs"/>
-            <RegistryValue Type="string" Name="certs_dir_test" Value="[ProgramFilesFolder]Portugal Identity Card\eidstore\certs_test"/>
+            <RegistryValue Type="string" Name="install_dirname" Value="[APPLICATIONROOTFOLDER]"/>
+            <RegistryValue Type="string" Name="certs_dir" Value="[APPLICATIONROOTFOLDER]eidstore\certs"/>
+            <RegistryValue Type="string" Name="certs_dir_test" Value="[APPLICATIONROOTFOLDER]eidstore\certs_test"/>
 
             <RegistryValue Type="integer" Name="show_java_apps" Value="0" />
           </RegistryKey>
 
           <RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
-            <RegistryValue Type="string" Name="log_dirname" Value="[ProgramFilesFolder]Portugal Identity Card\log"/>
+            <RegistryValue Type="string" Name="log_dirname" Value="[APPLICATIONROOTFOLDER]log"/>
           </RegistryKey>
 
           <RegistryKey Key="configuretool" Action="createAndRemoveOnUninstall">
@@ -496,7 +496,7 @@
     <CustomAction Id="SetCacheDirHidden"
                   Impersonate="no"
                   BinaryKey="MarkHidden"
-                  ExeCommand="&quot;[ProgramFilesFolder]Portugal Identity Card\.cache&quot;"
+                  ExeCommand="&quot;[APPLICATIONROOTFOLDER].cache&quot;"
                   Execute="deferred"
                   Return="asyncNoWait"
                   />

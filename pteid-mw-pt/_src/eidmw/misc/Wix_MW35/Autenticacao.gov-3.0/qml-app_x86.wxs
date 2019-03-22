@@ -3,8 +3,7 @@
   <?define var.QMLDIR=..\..\..\_Binaries35\Win32\VC9\Release\qml-app\ ?>
   <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\VC9\Release\ ?>
     <Fragment>
-        <DirectoryRef Id="ProgramFilesFolder">
-            <Directory Id="EIDGUIV2DIR" Name="Portugal Identity Card"/>
+        <DirectoryRef Id="APPLICATIONROOTFOLDER">
         </DirectoryRef>
 			<DirectoryRef Id="ApplicationProgramsFolder">
 			<Component Id="PteidGuiShortcut" Guid="{CBD0F388-EAE5-4FA1-8C38-EC223928FF13}">
@@ -12,15 +11,15 @@
 			<Shortcut Id="eidguiV2StartMenuShortcut"
 							  Name="Autenticação.gov"
 							  Description="!(loc.PteidGuiDescr)"
-							  Target="[EIDGUIV2DIR]pteidguiV2.exe"
-							  WorkingDirectory="eidguiV2Dir"/>
+							  Target="[APPLICATIONROOTFOLDER]pteidguiV2.exe"
+							  WorkingDirectory="APPLICATIONROOTFOLDER"/>
 
 			<Shortcut Id="eidguiV2Shortcut"
                 Name="Autenticação.Gov"
                 Directory="DesktopFolder"
                 Description="!(loc.PteidGuiDescr)"
-                Target="[EIDGUIV2DIR]pteidguiV2.exe"
-                WorkingDirectory="EIDGUIV2DIR"/>
+                Target="[APPLICATIONROOTFOLDER]pteidguiV2.exe"
+                WorkingDirectory="APPLICATIONROOTFOLDER"/>
           
 					<RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
 					<RegistryValue Root="HKCU" Key="SOFTWARE\PTEID\Installer" Name="GuiShortcut" Type="integer" Value="1" KeyPath="yes" />
@@ -28,7 +27,7 @@
 				
 		    <Component Id="RegisterPteidAutoStart" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA6}">
           <RegistryKey Root="HKCU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
-            <RegistryValue Type="string" Name="pteid" Value="&quot;[EIDGUIV2DIR]pteidguiV2.exe&quot;"/>
+            <RegistryValue Type="string" Name="pteid" Value="&quot;[APPLICATIONROOTFOLDER]pteidguiV2.exe&quot;"/>
           </RegistryKey>
         </Component>
 		
@@ -38,61 +37,61 @@
         <ComponentGroup Id="qmlAppComponentGroup">
 		    <ComponentRef Id="PteidGuiShortcut"/>
 			<ComponentRef Id="RegisterPteidAutoStart"/>
-            <Component Id="cmp5DF3FF25B92E00276E2DAC6ACBEE3EAC" Directory="EIDGUIV2DIR" Guid="{FDC53750-BA21-4E2E-99F6-B0DA7A1C0B3D}">
+            <Component Id="cmp5DF3FF25B92E00276E2DAC6ACBEE3EAC" Directory="APPLICATIONROOTFOLDER" Guid="{FDC53750-BA21-4E2E-99F6-B0DA7A1C0B3D}">
                 <File Id="filCC878DC615BAE204217B0ABF742A5D81" KeyPath="yes" Source="$(var.QMLDIR)\cmdServices.dll" />
             </Component>
-            <Component Id="cmpD94D987CD7CEE5C9E964633DD52E7305" Directory="EIDGUIV2DIR" Guid="{A747CEB7-27BB-49DF-BA08-7E09BC6CBFF8}">
+            <Component Id="cmpD94D987CD7CEE5C9E964633DD52E7305" Directory="APPLICATIONROOTFOLDER" Guid="{A747CEB7-27BB-49DF-BA08-7E09BC6CBFF8}">
                 <File Id="fil5A03D03833CC9B3BB9FCCB5FE1121279" KeyPath="yes" Source="$(var.QMLDIR)\d3dcompiler_47.dll" />
             </Component>
-            <Component Id="cmpF47C4BA3E56746CDA8910145CEB3D8A6" Directory="EIDGUIV2DIR" Guid="{F5D2B943-457E-40F2-BB3B-52A22837C6CD}">
+            <Component Id="cmpF47C4BA3E56746CDA8910145CEB3D8A6" Directory="APPLICATIONROOTFOLDER" Guid="{F5D2B943-457E-40F2-BB3B-52A22837C6CD}">
                 <File Id="filA983C9033291E390B326ABDC5CE51C42" KeyPath="yes" Source="$(var.QMLDIR)\libEGL.dll" />
             </Component>
-            <Component Id="cmp7AD83D9FA870B89EC1FDCA9CB0B2E5C8" Directory="EIDGUIV2DIR" Guid="{E926F7DC-F342-46BA-81AA-35B77F3A3712}">
+            <Component Id="cmp7AD83D9FA870B89EC1FDCA9CB0B2E5C8" Directory="APPLICATIONROOTFOLDER" Guid="{E926F7DC-F342-46BA-81AA-35B77F3A3712}">
                 <File Id="fil24524D4E60C53F0D214F06E752B1BB1C" KeyPath="yes" Source="$(var.QMLDIR)\libGLESV2.dll" />
             </Component>
-            <Component Id="cmp70C8B0D6482CD0F39F058E518853A018" Directory="EIDGUIV2DIR" Guid="{1767FDF6-AE34-4F8D-AE02-AA3D103D0351}">
+            <Component Id="cmp70C8B0D6482CD0F39F058E518853A018" Directory="APPLICATIONROOTFOLDER" Guid="{1767FDF6-AE34-4F8D-AE02-AA3D103D0351}">
                 <File Id="fil54F2A8534F90BD016136AAAC44C0161D" KeyPath="yes" Source="$(var.QMLDIR)\opengl32sw.dll" />
             </Component>
-            <Component Id="cmp7F40CCD4FD162222E744B7B74F9DF5A3" Directory="EIDGUIV2DIR" Guid="{F64668D0-3ACB-4E29-AB95-742B18B6AF3D}">
+            <Component Id="cmp7F40CCD4FD162222E744B7B74F9DF5A3" Directory="APPLICATIONROOTFOLDER" Guid="{F64668D0-3ACB-4E29-AB95-742B18B6AF3D}">
                 <File Id="fil3CBCB4A9EED52796624FC6C8977CC71C" KeyPath="yes" Source="$(env.PTEID_POPPLER_QT5)\poppler-qt5-win32\poppler-qt5.dll" />
             </Component>
-            <Component Id="cmpF7D4B937B6CC948CB191AA956CEEE7B0" Directory="EIDGUIV2DIR" Guid="{7502708F-3CCF-4D23-8540-6AD5BCBC7EDD}">
+            <Component Id="cmpF7D4B937B6CC948CB191AA956CEEE7B0" Directory="APPLICATIONROOTFOLDER" Guid="{7502708F-3CCF-4D23-8540-6AD5BCBC7EDD}">
                     <File Id="fil532B63275F24DCA11F229D2F2A4A676C" KeyPath="yes" Source="$(var.QMLDIR)\pteidguiV2.exe" />
 					          <File Id="fil532B63275F24DCA11F229D2F2A4A6718" Source="..\..\..\eidguiV2\eidmw_nl.qm" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6719" Source="..\..\..\eidguiV2\eidmw_en.qm" />
             </Component>
        
-            <Component Id="cmpD90C57D3866413E9483172896BD5F8CE" Directory="EIDGUIV2DIR" Guid="{C30484BF-362F-4194-BFCA-F6060AD1B12C}">
+            <Component Id="cmpD90C57D3866413E9483172896BD5F8CE" Directory="APPLICATIONROOTFOLDER" Guid="{C30484BF-362F-4194-BFCA-F6060AD1B12C}">
                 <File Id="fil6CDFD7BC016B64DBD3E26297A346DCEF" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Core.dll" />
             </Component>
-            <Component Id="cmp5672A7472B88D287C976B2FC7B919E60" Directory="EIDGUIV2DIR" Guid="{A30C8DF4-64B0-4720-9534-CB564D47B63A}">
+            <Component Id="cmp5672A7472B88D287C976B2FC7B919E60" Directory="APPLICATIONROOTFOLDER" Guid="{A30C8DF4-64B0-4720-9534-CB564D47B63A}">
                 <File Id="fil5ECBDB3F9A4725B306CA0450941CD27D" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Gui.dll" />
             </Component>
-            <Component Id="cmp29B33F5BB418719C19229E9CD898CF8D" Directory="EIDGUIV2DIR" Guid="{482FA0B2-BB01-484B-8C8A-2DAAB4C1F942}">
+            <Component Id="cmp29B33F5BB418719C19229E9CD898CF8D" Directory="APPLICATIONROOTFOLDER" Guid="{482FA0B2-BB01-484B-8C8A-2DAAB4C1F942}">
                 <File Id="fil0B83CC8CFBA55D865EB2F2F8A25F2FD2" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Network.dll" />
             </Component>
-            <Component Id="cmpCA323A01DDF4FA35007EB259BDDFE3C1" Directory="EIDGUIV2DIR" Guid="{03CC75BD-E8B7-4335-85D8-99B7296C45DC}">
+            <Component Id="cmpCA323A01DDF4FA35007EB259BDDFE3C1" Directory="APPLICATIONROOTFOLDER" Guid="{03CC75BD-E8B7-4335-85D8-99B7296C45DC}">
                 <File Id="fil8400A93B38A10837A86D11691BABA6EA" KeyPath="yes" Source="$(var.QMLDIR)\Qt5PrintSupport.dll" />
             </Component>
-            <Component Id="cmpD2874F57A09578298FD4135DBCB261EA" Directory="EIDGUIV2DIR" Guid="{E38C1C4B-6C0E-48BB-9023-79EB65E820D0}">
+            <Component Id="cmpD2874F57A09578298FD4135DBCB261EA" Directory="APPLICATIONROOTFOLDER" Guid="{E38C1C4B-6C0E-48BB-9023-79EB65E820D0}">
                 <File Id="filC76A925FF74F6A508DBE63EF2425FF26" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Qml.dll" />
             </Component>
-            <Component Id="cmp2952216044FC2667143140F8BF324816" Directory="EIDGUIV2DIR" Guid="{8022CBE0-BBA5-4C92-850E-21748E57E987}">
+            <Component Id="cmp2952216044FC2667143140F8BF324816" Directory="APPLICATIONROOTFOLDER" Guid="{8022CBE0-BBA5-4C92-850E-21748E57E987}">
                 <File Id="filE39AA507AAEA1D75B9BB40C77E667F0C" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Quick.dll" />
             </Component>
-            <Component Id="cmp141140B14E16D8A8112000E5F09B4465" Directory="EIDGUIV2DIR" Guid="{D9644690-56CF-4A43-854B-B4FA848E5AE8}">
+            <Component Id="cmp141140B14E16D8A8112000E5F09B4465" Directory="APPLICATIONROOTFOLDER" Guid="{D9644690-56CF-4A43-854B-B4FA848E5AE8}">
                 <File Id="fil56006DB178BB933083E4CB321B025D1B" KeyPath="yes" Source="$(var.QMLDIR)\Qt5QuickControls2.dll" />
             </Component>
-            <Component Id="cmp0C536BF0DBAAB2FDD79C894B214E3372" Directory="EIDGUIV2DIR" Guid="{C5D01C97-E181-45F8-9E44-EEC235A933EA}">
+            <Component Id="cmp0C536BF0DBAAB2FDD79C894B214E3372" Directory="APPLICATIONROOTFOLDER" Guid="{C5D01C97-E181-45F8-9E44-EEC235A933EA}">
                 <File Id="fil32B179FA42CE060AB347D56E22E84499" KeyPath="yes" Source="$(var.QMLDIR)\Qt5QuickTemplates2.dll" />
             </Component>
-            <Component Id="cmp4303C1700AB276CD72A436DABBF14CAF" Directory="EIDGUIV2DIR" Guid="{29BDD019-D4D8-4FCA-819A-8C79AE157AC4}">
+            <Component Id="cmp4303C1700AB276CD72A436DABBF14CAF" Directory="APPLICATIONROOTFOLDER" Guid="{29BDD019-D4D8-4FCA-819A-8C79AE157AC4}">
                 <File Id="fil5207EBFB6E2F7B47AC43359BE612BA7E" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Svg.dll" />
             </Component>
-            <Component Id="cmpE8A0086BA59275B02CA72297D79CD62D" Directory="EIDGUIV2DIR" Guid="{7EDD74FB-1548-48AB-91D6-2B6E4AD2EA83}">
+            <Component Id="cmpE8A0086BA59275B02CA72297D79CD62D" Directory="APPLICATIONROOTFOLDER" Guid="{7EDD74FB-1548-48AB-91D6-2B6E4AD2EA83}">
                 <File Id="fil549581913584FD03973B266696CAF5B2" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Widgets.dll" />
             </Component>
-            <Component Id="cmp2187091A9C7BFEBC4A15E92B1675BD66" Directory="EIDGUIV2DIR" Guid="{1E6DA848-81BC-4138-A6AC-49DB69F0F468}">
+            <Component Id="cmp2187091A9C7BFEBC4A15E92B1675BD66" Directory="APPLICATIONROOTFOLDER" Guid="{1E6DA848-81BC-4138-A6AC-49DB69F0F468}">
                 <File Id="filB7DB93213389A34B74FC8C211109E174" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Xml.dll" />
             </Component>
             <Component Id="cmp537602E31CE3380A1561177D7DBF2819" Directory="dir2C96DF9BF68D36FECFDCFBE5DE37120F" Guid="{D1D8A970-165F-455A-96C1-A74603DF7027}">
@@ -1580,7 +1579,7 @@
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <DirectoryRef Id="EIDGUIV2DIR">
+        <DirectoryRef Id="APPLICATIONROOTFOLDER">
             <Directory Id="dir1E5FC9E1355C90A63622CA46A0220E42" Name="platforminputcontexts" />
         </DirectoryRef>
     </Fragment>
@@ -1590,7 +1589,7 @@
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <DirectoryRef Id="EIDGUIV2DIR">
+        <DirectoryRef Id="APPLICATIONROOTFOLDER">
             <Directory Id="dir2C96DF9BF68D36FECFDCFBE5DE37120F" Name="bearer" />
         </DirectoryRef>
     </Fragment>
@@ -1600,7 +1599,7 @@
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <DirectoryRef Id="EIDGUIV2DIR">
+        <DirectoryRef Id="APPLICATIONROOTFOLDER">
             <Directory Id="dir4D6A02B3D9A53341F205F14BFBBD5C42" Name="QtQml" />
         </DirectoryRef>
     </Fragment>
@@ -1645,12 +1644,12 @@
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <DirectoryRef Id="EIDGUIV2DIR">
+        <DirectoryRef Id="APPLICATIONROOTFOLDER">
             <Directory Id="dir8CF2976D3D49ED9B2744FFBF6EE8C610" Name="Qt" />
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <DirectoryRef Id="EIDGUIV2DIR">
+        <DirectoryRef Id="APPLICATIONROOTFOLDER">
             <Directory Id="dir96BE59C736C0A6835539D23562B3B8AC" Name="iconengines" />
         </DirectoryRef>
     </Fragment>
@@ -1665,22 +1664,22 @@
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <DirectoryRef Id="EIDGUIV2DIR">
+        <DirectoryRef Id="APPLICATIONROOTFOLDER">
             <Directory Id="dirACBCA48FB53307D99122F3916C4BCCDC" Name="imageformats" />
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <DirectoryRef Id="EIDGUIV2DIR">
+        <DirectoryRef Id="APPLICATIONROOTFOLDER">
             <Directory Id="dirB34CFBD2664AA42147B1EC7A4A7C3E55" Name="printsupport" />
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <DirectoryRef Id="EIDGUIV2DIR">
+        <DirectoryRef Id="APPLICATIONROOTFOLDER">
             <Directory Id="dirC09DA36A115015E9038FA12E538F7749" Name="platforms" />
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <DirectoryRef Id="EIDGUIV2DIR">
+        <DirectoryRef Id="APPLICATIONROOTFOLDER">
             <Directory Id="dirC17A5BFDAEDBF8CA3A4149AACC38C82E" Name="translations" />
         </DirectoryRef>
     </Fragment>
@@ -1690,12 +1689,12 @@
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <DirectoryRef Id="EIDGUIV2DIR">
+        <DirectoryRef Id="APPLICATIONROOTFOLDER">
             <Directory Id="dirCBE6F48717D88CA7AD1AFB6413583CB8" Name="QtQuick" />
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <DirectoryRef Id="EIDGUIV2DIR">
+        <DirectoryRef Id="APPLICATIONROOTFOLDER">
             <Directory Id="dirCE9F2C551DD30BF58D2C8CBF5DAAF6B7" Name="QtQuick.2" />
         </DirectoryRef>
     </Fragment>
@@ -1705,7 +1704,7 @@
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <DirectoryRef Id="EIDGUIV2DIR">
+        <DirectoryRef Id="APPLICATIONROOTFOLDER">
             <Directory Id="dirD71C252969EC4EA43D0B2F22AFA715BB" Name="qmltooling" />
         </DirectoryRef>
     </Fragment>
@@ -1735,7 +1734,7 @@
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <DirectoryRef Id="EIDGUIV2DIR">
+        <DirectoryRef Id="APPLICATIONROOTFOLDER">
             <Directory Id="dirF8A9C49517D718C43D63713832797CD5" Name="QtGraphicalEffects" />
         </DirectoryRef>
     </Fragment>

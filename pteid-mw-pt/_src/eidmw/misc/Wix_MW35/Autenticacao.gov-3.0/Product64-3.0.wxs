@@ -226,8 +226,8 @@
 
 				<Component Id="RootFolder" Guid="{2FB5D279-50BD-49ed-98D9-3D043520F450}">
 					<CreateFolder/>
-					<Environment Id="PATH" Action="set" Part="last" Permanent="no" System="yes" Name="PATH" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
-					<Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
+					<Environment Id="PATH" Action="set" Part="last" Permanent="no" System="yes" Name="PATH" Value="[APPLICATIONROOTFOLDER]"/>
+					<Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[APPLICATIONROOTFOLDER]"/>
 				</Component>
 
 				<Component Id="Icon" Guid="{5B657BAD-8CFC-4E42-AF8C-13338C50D784}" SharedDllRefCount="yes">
@@ -461,14 +461,14 @@
 
 						<RegistryKey Key="general" Action="createAndRemoveOnUninstall">
 							<RegistryValue Type="string" Name="language" Value="nl"/>
-							<RegistryValue Type="string" Name="install_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card"/>
-							<RegistryValue Type="string" Name="certs_dir" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\certs"/>
-            	<RegistryValue Type="string" Name="certs_dir_test" Value="[ProgramFiles64Folder]Portugal Identity Card\eidstore\certs_test"/>
+							<RegistryValue Type="string" Name="install_dirname" Value="[APPLICATIONROOTFOLDER]"/>
+							<RegistryValue Type="string" Name="certs_dir" Value="[APPLICATIONROOTFOLDER]eidstore\certs"/>
+            	<RegistryValue Type="string" Name="certs_dir_test" Value="[APPLICATIONROOTFOLDER]eidstore\certs_test"/>
 							<RegistryValue Type="integer" Name="show_java_apps" Value="0"/>
 						</RegistryKey>
 
 						<RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="string" Name="log_dirname" Value="[ProgramFiles64Folder]Portugal Identity Card\log"/>
+							<RegistryValue Type="string" Name="log_dirname" Value="[APPLICATIONROOTFOLDER]log"/>
 						</RegistryKey>
 
 						<RegistryKey Key="configuretool" Action="createAndRemoveOnUninstall">
@@ -490,11 +490,11 @@
           <RegistryKey Root="HKLM" Key="SOFTWARE\PTEID">
             <RegistryKey Key="general" Action="createAndRemoveOnUninstall">
 							<RegistryValue Type="string" Name="language" Value="nl"/>
-							<RegistryValue Type="string" Name="install_dirname" Value="C:\Program Files\Portugal Identity Card"/>
-							<RegistryValue Type="string" Name="certs_dir" Value="C:\Program Files\Portugal Identity Card\eidstore\certs"/>
+							<RegistryValue Type="string" Name="install_dirname" Value="[APPLICATIONROOTFOLDER]"/>
+							<RegistryValue Type="string" Name="certs_dir" Value="[APPLICATIONROOTFOLDER]eidstore\certs"/>
 						</RegistryKey>
             <RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="string" Name="log_dirname" Value="C:\Program Files\Portugal Identity Card\log"/>
+							<RegistryValue Type="string" Name="log_dirname" Value="[APPLICATIONROOTFOLDER]log"/>
 						</RegistryKey>
           	<RegistryKey Key="certificatecache" Action="createAndRemoveOnUninstall">
 							<RegistryValue Type="string" Name="cert_cachefile" Value="[AppDataFolder].pteid-ng\.cache.csc"/>
@@ -614,18 +614,17 @@
 			Execute="deferred"/>
 
 			<UI>
-				<UIRef Id="WixUI_FeatureTree" />
 				<Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTFOLDER" />
-				<UIRef Id="WixUI_ErrorProgressText" />
-
-			</UI>
+        <UIRef Id="WixUI_InstallDir" />
+        <UIRef Id="WixUI_ErrorProgressText" />
+      </UI>
 
 			<CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[APPLICATIONROOTFOLDER]" />
 
 			<CustomAction Id="SetCacheDirHidden"
 							Impersonate="no"
 							BinaryKey="MarkHidden"
-							ExeCommand="&quot;[ProgramFilesFolder]Portugal Identity Card\.cache&quot;"
+							ExeCommand="&quot;[APPLICATIONROOTFOLDER].cache&quot;"
 							Execute="deferred"
 							Return="asyncNoWait"
 					/>
