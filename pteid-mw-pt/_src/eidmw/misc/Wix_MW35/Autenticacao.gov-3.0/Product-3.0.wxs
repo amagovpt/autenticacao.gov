@@ -115,10 +115,9 @@
             <Directory Id="JAVA_SDK" Name="Java"/>
             <Directory Id="CSHARP_SDK" Name="dotnet"/>
           </Directory>
+          <Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
+
         </Directory>
-
-        <Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
-
       </Directory>
 
       <Directory Id="DesktopFolder"/>
@@ -519,12 +518,22 @@
 
     <CustomAction Id="IsPrivileged" Error="!(loc.AdminNeeded)" />
 
+    <CustomAction
+    Id="MinidriverManualInstall"
+    Property="RUNDLLPATH"
+    ExeCommand="setupapi.dll,InstallHinfSection DefaultInstall.ntx86 0 [APPLICATIONROOTFOLDER]\PTeID Minidriver\pteidmdrv.inf"
+        Impersonate="no"
+        Return="check"
+        Execute="deferred"
+        />
+
     <InstallExecuteSequence>
       <Custom Action="SetARPINSTALLLOCATION" After="InstallValidate"></Custom>
 
       <Custom Action="IsPrivileged" Before="LaunchConditions">Not Privileged</Custom>
       <Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
       <Custom Action="CleanMinidriverKeys" After="RemoveRegistryValues">NOT Installed</Custom>
+      <Custom Action="MinidriverManualInstall" After="InstallFiles"> NOT Installed and VersionNT = 600</Custom>
       <ScheduleReboot After="InstallFinalize">NOT Installed</ScheduleReboot>
     </InstallExecuteSequence>
 

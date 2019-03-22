@@ -96,14 +96,12 @@
 
 			<Directory Id="ProgramFiles64Folder">
       
-				<Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
 				<Directory Id="APPLICATIONROOTFOLDER" Name="Portugal Identity Card">
           
           <Directory Id="EIDSTORE" Name="eidstore">
 						<Directory Id="CERTSDIR" Name="certs"/>
 						<Directory Id="CRLDIR" Name="crl">
 							<Directory Id="HTTPDIR" Name="http">
-
 					 </Directory>
 					</Directory>
 					</Directory>
@@ -113,6 +111,7 @@
 						<Directory Id="JAVA_SDK" Name="Java"/>
 						<Directory Id="CSHARP_SDK" Name="dotnet"/>
 					</Directory>
+        <Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
 				</Directory>
 
 			</Directory>
@@ -636,7 +635,7 @@
 			<CustomAction
 			Id="MinidriverManualInstall"
 			Property="RUNDLLPATH"
-			ExeCommand="setupapi.dll,InstallHinfSection DefaultInstall.ntamd64 0 C:\Program Files\PTeID Minidriver\pteidmdrv.inf"
+			ExeCommand="setupapi.dll,InstallHinfSection DefaultInstall.ntamd64 0 [APPLICATIONROOTFOLDER]\PTeID Minidriver\pteidmdrv.inf"
 					Impersonate="no"
 					Return="check"
 					Execute="deferred"
