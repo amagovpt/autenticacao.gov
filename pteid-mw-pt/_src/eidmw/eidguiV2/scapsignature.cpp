@@ -101,11 +101,17 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
     }
 
     PDFSignatureClient scap_signature_client;
-
-    int successful = scap_signature_client.signPDF(m_proxyInfo, savefilepath, cmd_details.signedCMDFile, cmd_details.citizenName,
-        cmd_details.citizenId, ltv_years, false, PDFSignatureInfo(selected_page, location_x, location_y,
-        false,strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes);
-
+    int successful;
+    try{
+         successful = scap_signature_client.signPDF(m_proxyInfo, savefilepath, cmd_details.signedCMDFile, cmd_details.citizenName,
+            cmd_details.citizenId, ltv_years, false, PDFSignatureInfo(selected_page, location_x, location_y,
+            false, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes);
+    }
+    catch (eIDMW::PTEID_Exception &e)
+    {
+        std::cerr << "Caught exception signing PDF. Error code: " << e.GetError() << std::endl;
+        throw;
+    }
     if (successful == GAPI::ScapSucess) {
         parent->signalPdfSignSucess(parent->SignMessageOK);
         parent->signCMDFinished(0);
@@ -160,54 +166,53 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
         }
 
 
-            eIDMW::PTEID_EIDCard &card = readerContext.getEIDCard();
+        eIDMW::PTEID_EIDCard &card = readerContext.getEIDCard();
 
-            // Get Citizen info
-            QString citizenName = card.getID().getGivenName();
-            citizenName.append(" ");
-            citizenName.append(card.getID().getSurname());
+        // Get Citizen info
+        QString citizenName = card.getID().getGivenName();
+        citizenName.append(" ");
+        citizenName.append(card.getID().getSurname());
 
-            citizenId = card.getID().getCivilianIdNumber();
+        citizenId = card.getID().getCivilianIdNumber();
 
-            std::cout << "Sent PDF Signature coordinates. X:" << location_x << " Y:" << location_y << std::endl;
+        std::cout << "Sent PDF Signature coordinates. X:" << location_x << " Y:" << location_y << std::endl;
 
-            PTEID_PDFSignature pdf_sig(strdup(inputPath.toUtf8().constData()));
+        PTEID_PDFSignature pdf_sig(strdup(inputPath.toUtf8().constData()));
 
-            // Sign pdf
-            sign_rc = card.SignPDF(pdf_sig, selected_page, 0, false, strdup(location.toUtf8().constData()),
-                                   strdup(reason.toUtf8().constData()), temp_save_path);
-
-            if (sign_rc == 0)
-            {
-                PDFSignatureClient scap_signature_client;
-                int successful = scap_signature_client.signPDF(
-                            m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
-                            QString(citizenId), ltv_years, true, PDFSignatureInfo(selected_page, location_x, location_y,
-                            false, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes);
-
-                if (successful == GAPI::ScapSucess) {
-                    parent->signalPdfSignSucess(parent->SignMessageOK);
-                }
-                else if (successful == GAPI::ScapTimeOutError) {
-                    qDebug() << "Error in SCAP service Timeout!";
-                    parent->signalSCAPServiceTimeout();
-                }
-                else {
-                    qDebug() << "Error in SCAP Signature service!";
-                    parent->signalSCAPServiceFail(successful);
-                }
+        // Sign pdf
+        sign_rc = card.SignPDF(pdf_sig, selected_page, 0, false, strdup(location.toUtf8().constData()),
+                                strdup(reason.toUtf8().constData()), temp_save_path);
+        if (sign_rc == 0)
+        {
+            PDFSignatureClient scap_signature_client;
+            int successful = scap_signature_client.signPDF(
+                        m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
+                        QString(citizenId), ltv_years, true, PDFSignatureInfo(selected_page, location_x, location_y,
+                        false, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes);
+            if (successful == GAPI::ScapSucess) {
+                parent->signalPdfSignSucess(parent->SignMessageOK);
+            }
+            else if (successful == GAPI::ScapTimeOutError) {
+                qDebug() << "Error in SCAP service Timeout!";
+                parent->signalSCAPServiceTimeout();
             }
             else {
-                parent->signalSCAPServiceFail(GAPI::ScapGenericError);
+                qDebug() << "Error in SCAP Signature service!";
+                parent->signalSCAPServiceFail(successful);
             }
+        }
+        else {
+            parent->signalSCAPServiceFail(GAPI::ScapGenericError);
+        }
                 
-        }
-        catch (eIDMW::PTEID_Exception &e)
-        {
-            parent->signalPdfSignFail(e.GetError());
-            std::cerr << "Caught exception getting EID Card. Error code: " << hex << e.GetError() << std::endl;
-            //this->success = SIG_ERROR;
-        }
+    }
+    catch (eIDMW::PTEID_Exception &e)
+    {
+        //parent->signalPdfSignFail(e.GetError());
+        std::cerr << "Caught exception getting EID Card. Error code: " << hex << e.GetError() << std::endl;
+        throw;
+        //this->success = SIG_ERROR;
+    }
     free(temp_save_path);
 }
 

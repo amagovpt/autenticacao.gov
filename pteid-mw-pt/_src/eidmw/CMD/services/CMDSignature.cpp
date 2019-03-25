@@ -6,6 +6,7 @@
 #include "cmdServices.h"
 #include <QByteArray>
 #include <QCryptographicHash>
+#include "eidlibException.h"
 
 static char logBuf[512];
 
@@ -292,7 +293,13 @@ namespace eIDMW {
         if ( m_pdf_handler != NULL ) {
 
             PDFSignature * pdf = m_pdf_handler->getPdfSignature();
-            ret = pdf->signClose(signature_cba);
+            try{
+                ret = pdf->signClose(signature_cba);
+            }
+            catch (CMWException &e) {
+                e.GetError();
+                throw PTEID_Exception(e.GetError());
+            }
 
             if (ret != ERR_NONE) {
                 MWLOG_ERR( logBuf, "SignClose failed" );
