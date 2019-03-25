@@ -620,6 +620,9 @@ void GAPI::showSignCMDDialog(int error_code)
         case SOAP_ERR_INACTIVE_SERVICE:
             error_msg = tr("STR_CMD_INACTIVE_SERVICE");
             break;
+        case EIDMW_PERMISSION_DENIED:
+            error_msg = tr("STR_SIGN_FILE_PERMISSION_FAIL");
+            break;
         default:
             error_msg = tr("STR_CMD_LOGIN_ERROR");
             break;
@@ -781,7 +784,10 @@ void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
 
     signCMDFinished(ret);
     signalUpdateProgressBar(100);
-    emit signalCloseCMDSucess();
+    if (ret == 0)
+    {
+        emit signalCloseCMDSucess();
+    }
 }
 
 void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token, QList<int> attribute_list) {
@@ -799,34 +805,35 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
             return;
         }
 
-    } catch (PTEID_Exception &e) {
+        signalUpdateProgressStatus(tr("STR_CMD_SIGNING_SCAP"));
+
+        signalUpdateProgressBar(80);
+
+        //Do SCAP Signature
+        std::vector<int> attrs;
+        for (unsigned int i = 0; i!= attribute_list.size(); i++) {
+            attrs.push_back(attribute_list.at(i));
+        }
+
+        //See details of this
+        CmdSignedFileDetails cmd_details;
+        cmd_details.signedCMDFile = m_scap_params.inputPDF;
+
+        cmd_details.citizenName = cmd_signature->getCertificateCitizenName();
+        //The method returns something like "BI123456789";
+        cmd_details.citizenId = QString(cmd_signature->getCertificateCitizenID()+2);
+
+        scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
+            m_scap_params.location_x, m_scap_params.location_y,
+            m_scap_params.location, m_scap_params.reason, 0, attrs, cmd_details);
+    }
+    catch (PTEID_Exception &e) {
         ret = e.GetError();
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doCloseSignCMDWithSCAP",
-         "Caught exception in some SDK method. Error code: %08x", e.GetError());
+            "Caught exception in some SDK method. Error code: %08x", e.GetError());
+        signCMDFinished(ret);
+        signalUpdateProgressBar(100);
     }
-
-    signalUpdateProgressStatus(tr("STR_CMD_SIGNING_SCAP"));
-
-    signalUpdateProgressBar(80);
-
-    //Do SCAP Signature
-    std::vector<int> attrs;
-    for (unsigned int i = 0; i!= attribute_list.size(); i++) {
-        attrs.push_back(attribute_list.at(i));
-    }
-
-    //See details of this
-    CmdSignedFileDetails cmd_details;
-    cmd_details.signedCMDFile = m_scap_params.inputPDF;
-
-    cmd_details.citizenName = cmd_signature->getCertificateCitizenName();
-    //The method returns something like "BI123456789";
-    cmd_details.citizenId = QString(cmd_signature->getCertificateCitizenID()+2);
-
-    scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
-                m_scap_params.location_x, m_scap_params.location_y,
-                m_scap_params.location, m_scap_params.reason, 0, attrs, cmd_details);
-
     //TODO: reset the m_scap_params struct
 }
 
@@ -2004,6 +2011,8 @@ void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, doubl
 
 void GAPI::doSignSCAP(SCAPSignParams params) {
 
+    BEGIN_TRY_CATCH
+
     std::vector<int> attrs;
     for (unsigned int i = 0; i!= params.attribute_index.size(); i++) {
         attrs.push_back(params.attribute_index.at(i));
@@ -2012,6 +2021,7 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
     scapServices.executeSCAPSignature(this, params.inputPDF, params.outputPDF, params.page,
                 params.location_x, params.location_y, params.location, params.reason,
                                       params.ltv, attrs);
+    END_TRY_CATCH
 }
 
 void GAPI::getSCAPEntities() {

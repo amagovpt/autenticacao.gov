@@ -27,6 +27,9 @@
 #include "SCAP-services-v3/SCAPAuthorizationServiceSoapBindingProxy.h"
 #include "SCAP-services-v3/SCAPSignatureServiceSoapBindingProxy.h"
 
+#include "eidlib.h"
+#include "MWException.h"
+
 PDFSignatureClient::PDFSignatureClient()
 {
     {
@@ -686,7 +689,13 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                     std::string filename = std::string("/tmp/transaction_")+ std::to_string(i) + "_signature.bin";
                     WriteToFile(filename.c_str(), (unsigned char *)scap_signature, sig_len);
 #endif
-                    closeSCAPSignature(scap_signature, sig_len);
+                    try{
+                        closeSCAPSignature(scap_signature, sig_len);
+                    }
+                    catch (eIDMW::CMWException &e) {
+                        e.GetError();
+                        throw PTEID_Exception(e.GetError());
+                    }
                 }else{
                     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "callSCAPSignatureService() failed!");
                     return GAPI::ScapGenericError;
