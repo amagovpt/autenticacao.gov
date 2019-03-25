@@ -519,14 +519,6 @@ Item {
                         count++
                     }
                 }
-                if(count == 0) {
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("PageServicesSign","STR_SCAP_WARNING")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-                    return
-                }
             }
             gapi.signCloseCMD(textFieldReturnCode.text, attributeList)
             progressBarIndeterminate.visible = true

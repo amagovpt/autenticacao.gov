@@ -807,16 +807,10 @@ PageServicesSignAdvancedForm {
                     propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
                     if (propertyRadioButtonPADES.checked) {
                         if(propertySwitchSignAdd.checked){
-                            var count = 0
                             //15 MB filesize limit for SCAP
                             var MAX_SIZE = 15 * 1024 *1024
                             var outputNativePath = stripFilePrefix(propertyListViewFiles.model.get(0).fileUrl)
-                            for (var i = 0; i < entityAttributesModel.count; i++){
-                                if(entityAttributesModel.get(i).checkBoxAttr == true){
-                                    count++
-                                }
-                            }
-                            if(count == 0) {
+                            if(numberOfAttributesSelected() == 0) {
                                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                                         qsTranslate("PageServicesSign","STR_SCAP_WARNING")
                                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
@@ -897,6 +891,14 @@ PageServicesSignAdvancedForm {
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                 mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                 return;
+            }
+            if(numberOfAttributesSelected() == 0) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+                return
             }
             if (propertyListViewFiles.count == 1){
                 var outputFile =  filesModel.get(0).fileUrl
@@ -1337,5 +1339,15 @@ PageServicesSignAdvancedForm {
     function maxTextInputLength(num){
         //given number of pages returns maximum length that TextInput should accept
         return Math.ceil(Math.log(num + 1) / Math.LN10);
+    }
+    
+    function numberOfAttributesSelected() {
+        var count = 0
+        for (var i = 0; i < entityAttributesModel.count; i++){
+            if(entityAttributesModel.get(i).checkBoxAttr == true){
+                count++
+            }
+        }
+        return count
     }
 }
