@@ -882,13 +882,13 @@ PageServicesSignAdvancedForm {
                 mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                 return;
             }
-            if(numberOfAttributesSelected() == 0) {
+            if( propertySwitchSignAdd.checked && numberOfAttributesSelected() == 0) {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                         qsTranslate("PageServicesSign","STR_SCAP_WARNING")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-                return
+                return;
             }
             if (propertyListViewFiles.count == 1){
                 var outputFile =  filesModel.get(0).fileUrl
