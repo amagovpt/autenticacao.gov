@@ -807,21 +807,11 @@ PageServicesSignAdvancedForm {
                     propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
                     if (propertyRadioButtonPADES.checked) {
                         if(propertySwitchSignAdd.checked){
-                            //15 MB filesize limit for SCAP
-                            var MAX_SIZE = 15 * 1024 *1024
-                            var outputNativePath = stripFilePrefix(propertyListViewFiles.model.get(0).fileUrl)
                             if(numberOfAttributesSelected() == 0) {
                                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                                         qsTranslate("PageServicesSign","STR_SCAP_WARNING")
                                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                                         qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
-                                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-                            }
-                            else if (gapi.getFileSize(outputNativePath) > MAX_SIZE) {
-                                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                                        qsTranslate("PageServicesSign","STR_SCAP_WARNING")
-                                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                                        qsTranslate("PageServicesSign","STR_SCAP_MAX_FILESIZE") + " 15 MB"
                                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
                             }
                             else {
