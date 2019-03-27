@@ -157,18 +157,13 @@ Item {
             width: parent.width
 
             Components.TextBullet{}
-            Text {
+            Components.Link { 
                 id: textLinkCC
-                textFormat: Text.RichText
-                font.pixelSize: Constants.SIZE_TEXT_BODY
-                font.family: lato.name
-                font.italic: true
-                text: "<a href=\"https://www.autenticacao.gov.pt/documents/10179/11465/Manual+de+Utiliza%C3%A7%C3%A3o+da+Aplica%C3%A7%C3%A3o+do+Cart%C3%A3o+de+Cidad%C3%A3o+v3/\">"
-                      + qsTranslate("PageHelpDocOnline","STR_HELP_URL")
-                width: parent.width
-                wrapMode: Text.Wrap
-                horizontalAlignment: Text.left
-                color: Constants.COLOR_TEXT_BODY
+                propertyText.text: "<a href='https://www.autenticacao.gov.pt/documents/10179/11465/Manual+de+Utiliza%C3%A7%C3%A3o+da+Aplica%C3%A7%C3%A3o+do+Cart%C3%A3o+de+Cidad%C3%A3o+v3/'>" 
+                + qsTranslate("PageHelpDocOnline","STR_HELP_URL") + "</a>"
+                propertyText.width: parent.width
+                propertyText.wrapMode: Text.Wrap
+                propertyText.horizontalAlignment: Text.left
                 Layout.fillWidth: true
                 anchors.top: parent.top
             }

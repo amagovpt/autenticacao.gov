@@ -2,6 +2,7 @@ import QtQuick 2.6
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
+import "../../components" as Components
 
 Item {
     property alias propertyTextLinkCC: textLinkCC
@@ -54,17 +55,12 @@ Item {
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
     }
 
-    Text {
+    Components.Link {
         id: textLinkCC
-        color: Constants.COLOR_MAIN_BLUE
-        textFormat: Text.RichText
-        text: "<a href=\"https://www.autenticacao.gov.pt/o-cartao-de-cidadao\">https://www.autenticacao.gov.pt/o-cartao-de-cidadao</a>"
-        font.italic: true
-        font.pixelSize: Constants.SIZE_TEXT_BODY
-        font.family: lato.name
         anchors.top: textDifficult.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE 
+        propertyText.text: "<a href='https://www.autenticacao.gov.pt/o-cartao-de-cidadao'>" + 
+        "https://www.autenticacao.gov.pt/o-cartao-de-cidadao" + "</a>"
     }
 
     Text {

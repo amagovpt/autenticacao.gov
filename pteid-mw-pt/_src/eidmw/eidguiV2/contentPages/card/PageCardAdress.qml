@@ -1,6 +1,9 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
+
 import "../../scripts/Constants.js" as Constants
+import "../../components" as Components
+
 //Import C++ defined enums
 import eidguiV2 1.0
 
@@ -352,23 +355,16 @@ PageCardAdressForm {
                 width: parent.width
                 height: 50
                 anchors.horizontalCenter: parent.horizontalCenter
-                Text {
+                Components.Link {
                     id: textPinMsgConfirm
-                    text: qsTr("STR_ADDRESS_CHANGE_TEXT") + " "
-                          + "<a href=\"https://www.portaldocidadao.pt/web/instituto-dos-registos-e-do-notariado/alterar-a-morada-do-cartao-de-cidadao\">"
+                    propertyText.text: qsTr("STR_ADDRESS_CHANGE_TEXT") + " "
+                          + "<a href='https://www.portaldocidadao.pt/web/instituto-dos-registos-e-do-notariado/alterar-a-morada-do-cartao-de-cidadao'>"
                           + qsTr("STR_ADDRESS_CHANGE_TEXT_LINK")
-                    verticalAlignment: Text.AlignVCenter
+                    propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_BODY
-                    height: parent.height
-                    width: parent.width
-                    anchors.bottom: parent.bottom
-                    wrapMode: Text.WordWrap
-                    onLinkActivated: {
-                        Qt.openUrlExternally(link)
-                    }
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    anchors.fill: parent 
+                    propertyText.anchors.fill: textPinMsgConfirm                
                 }
             }
 

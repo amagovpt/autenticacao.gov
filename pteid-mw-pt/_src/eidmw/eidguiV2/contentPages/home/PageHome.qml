@@ -4,9 +4,6 @@ PageHomeForm {
     Connections {
         target: controler
     }
-    propertyTextLinkCC.onLinkActivated: {
-        Qt.openUrlExternally(link)
-    }
     propertyReminderCheckBox{
         onCheckedChanged: if(propertyReminderCheckBox.checked){
                               controler.setNotShowHelpStartUp(true)
