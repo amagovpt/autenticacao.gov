@@ -716,10 +716,10 @@ QString GAPI::translateCMDErrorCode(int errorCode) {
 
 void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdSignParams &params)
 {
-    qDebug() << "doOpenSignCMD! MobileNumber = " << params.mobileNumber << " secret_code = " << params.secret_code <<
+    /*qDebug() << "doOpenSignCMD! MobileNumber = " << params.mobileNumber << " secret_code = " << params.secret_code <<
                 " loadedFilePath = " << params.loadedFilePath << " outputFile = " << params.outputFile <<
                 "page = " << params.page << "coord_x" << params.coord_x << "coord_y" << params.coord_y <<
-                "reason = " << params.reason << "location = " << params.location;
+                "reason = " << params.reason << "location = " << params.location;*/
 
     int ret = 0;
 
@@ -892,11 +892,11 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QString loaded
                    QString outputFile, int page, double coord_x, double coord_y,
                    QString reason, QString location, double isTimestamp, double isSmall)
 {
-    qDebug() << "signOpenCMD! MobileNumber = " + mobileNumber + " secret_code = " + secret_code +
+    /*qDebug() << "signOpenCMD! MobileNumber = " + mobileNumber + " secret_code = " + secret_code +
                 " loadedFilePath = " + loadedFilePath + " outputFile = " + outputFile +
                 "page = " + page + "coord_x" + coord_x + "coord_y" + coord_y +
                 "reason = " + reason + "location = " + location +
-                "isTimestamp = " +  isTimestamp + "isSmall = " + isSmall;
+                "isTimestamp = " +  isTimestamp + "isSmall = " + isSmall;*/
 
     signalUpdateProgressStatus(tr("STR_CMD_CONNECTING"));
 
@@ -926,7 +926,7 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QString loaded
 
 void GAPI::signCloseCMD(QString sms_token, QList<int> attribute_list)
 {
-    qDebug() << "signCloseCMD! sms_token = " + sms_token;
+    /*qDebug() << "signCloseCMD! sms_token = " + sms_token;*/
 
     signalUpdateProgressStatus(tr("STR_CMD_SENDING_CODE"));
 
@@ -1749,8 +1749,8 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
 
 QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
-    qDebug() << "PDFPreviewImageProvider received request for: " << id;
-    qDebug() << "PDFPreviewImageProvider received request for: "
+    /*qDebug() << "PDFPreviewImageProvider received request for: " << id;*/
+    qDebug() << "PDFPreviewImageProvider received request for (width height): "
              << requestedSize.width() << " - " << requestedSize.height();
     QStringList strList = id.split("?");
 
@@ -2063,7 +2063,7 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, boo
                 subAttributesValues.chop(2);
                 subAttributes.append(subAttributesValues + ")");
 
-                qDebug() << "Sub attributes : " << subAttributes;
+                /* qDebug() << "Sub attributes : " << subAttributes; */
                 description += subAttributes.toStdString();
             }
             
@@ -2165,7 +2165,7 @@ void GAPI::getSCAPCompanyAttributes() {
        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
        std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), false);
 
-       PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Attribute from supplier: %s containing %d child attributes", attrSupplier.c_str(), childAttributes.size()) ;
+       /*PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Attribute from supplier: %s containing %d child attributes", attrSupplier.c_str(), childAttributes.size());*/
 
        if (childAttributes.size() == 0) {
          qDebug() << "Zero child attributes in AttributeResponseValues!";

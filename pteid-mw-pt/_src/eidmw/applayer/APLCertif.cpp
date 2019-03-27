@@ -1469,7 +1469,8 @@ APL_CertifStatus APL_Certif::getStatus()
 {
 	APL_ValidationLevel crl=APL_VALIDATION_LEVEL_NONE;
 	APL_ValidationLevel ocsp=APL_VALIDATION_LEVEL_MANDATORY;
-	MWLOG(LEV_DEBUG, MOD_APL, "APL_Certif::getStatus for cert: %s", this->getOwnerName());
+		MWLOG(LEV_DEBUG, MOD_APL, "APL_Certif::getStatus for certificate. Certificate Label: %s", this->getLabel());
+        /*MWLOG(LEV_DEBUG, MOD_APL, "APL_Certif::getStatus for cert: %s", this->getOwnerName());*/
 
 	return getStatus(crl, ocsp);
 }

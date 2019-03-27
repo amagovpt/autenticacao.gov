@@ -528,8 +528,8 @@ PageDefinitionsSCAPForm {
         mainFormID.state = "STATE_EXPAND"
         mainFormID.propertySubMenuListView.model.clear()
         for(var i = 0; i < mainFormID.propertyMainMenuListView.model.get(1).subdata.count; ++i) {
-            console.log("Sub Menu indice " + i + " - "
-                        + mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i).subName);
+            /*console.log("Sub Menu indice " + i + " - "
+                        + mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i).subName);*/
             mainFormID.propertySubMenuListView.model
             .append({
                         "subName": qsTranslate("MainMenuModel",

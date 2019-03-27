@@ -50,8 +50,8 @@ PageDefinitionsAppForm {
             mainFormID.state = "STATE_NORMAL"
             mainFormID.propertySubMenuListView.model.clear()
             for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
-                console.log("Sub Menu indice " + i + " - "
-                            + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);
+                /*console.log("Sub Menu indice " + i + " - "
+                            + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);*/
                 mainFormID.propertySubMenuListView.model
                 .append({
                             "subName": qsTranslate("MainMenuBottomModel",
@@ -73,8 +73,8 @@ PageDefinitionsAppForm {
             mainFormID.state = "STATE_NORMAL"
             mainFormID.propertySubMenuListView.model.clear()
             for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
-                console.log("Sub Menu indice " + i + " - "
-                            + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);
+                /*console.log("Sub Menu indice " + i + " - "
+                            + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);*/
                 mainFormID.propertySubMenuListView.model
                 .append({
                             "subName": qsTranslate("MainMenuBottomModel",

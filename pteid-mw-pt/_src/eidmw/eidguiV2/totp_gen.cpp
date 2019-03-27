@@ -119,10 +119,10 @@ std::string generateTOTP(std::string secretKey) {
 /* Big-endian conversion */
 #ifdef _WIN32
     unsigned __int64 msg = _byteswap_uint64(time(NULL) / 60);
-    fprintf(stderr, "DEBUG: Timestamp used to generate TOTP: %ld\n", _byteswap_uint64(msg) * 60);
+    /*fprintf(stderr, "DEBUG: Timestamp used to generate TOTP: %ld\n", _byteswap_uint64(msg) * 60);*/
 #else
     uint64_t msg = __builtin_bswap64((uint64_t)time(NULL) / 60);
-    fprintf(stderr, "DEBUG: Timestamp used to generate TOTP: %ld\n", __builtin_bswap64(msg) * 60);
+    /*fprintf(stderr, "DEBUG: Timestamp used to generate TOTP: %ld\n", __builtin_bswap64(msg) * 60);*/
 #endif
 
     if (HMAC(EVP_sha1(), key_buffer.c_str(), key_len,

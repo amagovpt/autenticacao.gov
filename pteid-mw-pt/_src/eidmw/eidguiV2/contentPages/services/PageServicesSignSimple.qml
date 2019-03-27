@@ -288,8 +288,7 @@ PageServicesSignSimpleForm {
     propertyDropArea {
 
         onEntered: {
-            console.log("Signature simple ! You chose file(s): " + drag.urls);
-
+            /*console.log("Signature simple ! You chose file(s): " + drag.urls);*/
             filesArray = drag.urls
             console.log("Num files: "+filesArray.length);
         }
@@ -304,7 +303,7 @@ PageServicesSignSimpleForm {
                 var path =  filesArray[0]
                 //  Get the path itself without a regex
                 path = decodeURIComponent(decodeURIComponent(stripFilePrefix(path)))
-                console.log("Adding file: " + path)
+                /*console.log("Adding file: " + path)*/
                 var newFileUrl = {"fileUrl": path}
                 if (!containsFile(newFileUrl, filesModel)){
                     //guarantees only a single file is used on simple signature
@@ -340,7 +339,7 @@ PageServicesSignSimpleForm {
 
             var coord_y = propertyPDFPreview.propertyCoordY
 
-            console.log("Output filename: " + outputFile)
+            /*console.log("Output filename: " + outputFile)*/
             console.log("Signing in position coord_x: " + coord_x
                         + " and coord_y: "+coord_y)
 
@@ -360,10 +359,10 @@ PageServicesSignSimpleForm {
     propertyFileDialog {
 
         onAccepted: {
-            console.log("You chose file(s): " + propertyFileDialog.fileUrls)
+            /*console.log("You chose file(s): " + propertyFileDialog.fileUrls)*/
             var path = propertyFileDialog.fileUrls[0];
             path = decodeURIComponent(stripFilePrefix(path))
-            console.log("Adding file: " + path)
+            /*console.log("Adding file: " + path)*/
             var newFileUrl = {"fileUrl": path}
             if (!containsFile(newFileUrl, filesModel)){
                 //guarantees only a single file is used on simple signature
@@ -458,7 +457,7 @@ PageServicesSignSimpleForm {
                 if(pageCount > 0){
                     propertyTextSpinBox.maximumLength = maxTextInputLength(pageCount)
 
-                    console.log("loadedFilePath: " + loadedFilePath + " page count: " + pageCount)
+                    /*console.log("loadedFilePath: " + loadedFilePath + " page count: " + pageCount)*/
                     fileLoaded = true
                     propertyPDFPreview.propertyBackground.cache = false
 
@@ -597,7 +596,7 @@ PageServicesSignSimpleForm {
         }else{
             propertyOutputSignedFile = "file://" + propertyOutputSignedFile
         }
-        console.log("Open Url Externally: " + propertyOutputSignedFile)
+        /*console.log("Open Url Externally: " + propertyOutputSignedFile)*/
         Qt.openUrlExternally(propertyOutputSignedFile)
     }
     function signSuccessShowSignedFile(){

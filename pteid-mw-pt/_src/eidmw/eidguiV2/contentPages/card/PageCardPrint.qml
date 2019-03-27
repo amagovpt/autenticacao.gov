@@ -251,7 +251,7 @@ PageCardPrintForm {
                 outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
             }
 
-            console.log("Output filename: " + outputFile)
+            /*console.log("Output filename: " + outputFile)*/
             gapi.startPrintPDF(outputFile,
                                propertySwitchBasic.checked,
                                propertySwitchAdditional.checked,
@@ -322,7 +322,7 @@ PageCardPrintForm {
         }else{
             outputFile = "file://" + outputFile
         }
-        console.log("Open Url Externally: " + outputFile)
+        /*console.log("Open Url Externally: " + outputFile)*/
         Qt.openUrlExternally(outputFile)
         createsuccess_dialog.close()
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS

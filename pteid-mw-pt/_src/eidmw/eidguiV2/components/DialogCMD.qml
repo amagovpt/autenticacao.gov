@@ -472,7 +472,7 @@ Item {
             coord_y = propertyPDFPreview.propertyCoordY
         }
 
-        console.log("Output filename: " + outputFile)
+        /*console.log("Output filename: " + outputFile)*/
         console.log("Signing in position coord_x: " + coord_x
                     + " and coord_y: "+coord_y)
 
@@ -506,7 +506,7 @@ Item {
         textFieldReturnCode.focus = true
     }
     function signCMDConfirm(){
-        console.log("Send sms_token : " + textFieldReturnCode.text)
+        /*console.log("Send sms_token : " + textFieldReturnCode.text)*/
         buttonCMDProgressConfirm.isOpenFile = true
         if( progressBar.value < 100) {
             var attributeList = []
@@ -535,7 +535,7 @@ Item {
             }else{
                 propertyOutputSignedFile = "file://" + propertyOutputSignedFile
             }
-            console.log("Open Url Externally: " + propertyOutputSignedFile)
+            /*console.log("Open Url Externally: " + propertyOutputSignedFile)*/
             Qt.openUrlExternally(propertyOutputSignedFile)
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
