@@ -358,7 +358,7 @@ PageCardAdressForm {
                 Components.Link {
                     id: textPinMsgConfirm
                     propertyText.text: qsTr("STR_ADDRESS_CHANGE_TEXT") + " "
-                          + "<a href='https://www.portaldocidadao.pt/web/instituto-dos-registos-e-do-notariado/alterar-a-morada-do-cartao-de-cidadao'>"
+                          + "<a href='https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'>"
                           + qsTr("STR_ADDRESS_CHANGE_TEXT_LINK")
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
