@@ -198,7 +198,9 @@ namespace eIDMW {
         CByteArray signatureInput(sha256SigPrefix, sizeof(sha256SigPrefix));
         signatureInput.Append(hashByteArray);
 
-        MWLOG_DEBUG(logBuf, "DocName is %s", DocName.c_str());
+		if (isDBG) {
+			MWLOG_DEBUG(logBuf, "DocName is %s", DocName.c_str());
+		}
 
         int ret = cmdService->ccMovelSign(m_proxyInfo, signatureInput.GetBytes(), DocName, userPin);
         if ( ret != ERR_NONE ) {

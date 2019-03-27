@@ -154,17 +154,17 @@ void FileSaveDialog::open()
     m_options->setInitiallySelectedFiles(QList<QUrl>() << initialSelection);
 #endif
 #ifdef Q_OS_WIN
-    qDebug() << "Initial filename:" << name;
+    /*qDebug() << "Initial filename:" << name;*/
     m_options->setInitiallySelectedFiles(QList<QUrl>() << QUrl::fromLocalFile(name));
 #endif
 #ifdef Q_OS_LINUX
     #if (QT_VERSION >= QT_VERSION_CHECK(5, 3, 2))
     // Wohoo, big fix! https://codereview.qt-project.org/91501
     QUrl initialSelection = QUrl::fromLocalFile(QFileInfo(folder, name).absoluteFilePath());
-    qDebug() << "Initial file:" << initialSelection;
+    /*qDebug() << "Initial file:" << initialSelection;*/
     m_options->setInitiallySelectedFiles(QList<QUrl>() << initialSelection);
     #else
-    qDebug() << "Initial directory:" << folder;
+    /*qDebug() << "Initial directory:" << folder;*/
     m_dlgHelper->setDirectory(QUrl::fromLocalFile(folder));
     #endif
 #endif

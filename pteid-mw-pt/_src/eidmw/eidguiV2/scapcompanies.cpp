@@ -187,7 +187,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
 
 
     std::string appID = settings.getAppID().toStdString();
-    qDebug() << "SCAP AppID = " << appID.c_str();
+    /*qDebug() << "SCAP AppID = " << appID.c_str();*/
 
     std::string appName("Autenticacao.gov");
 
@@ -320,7 +320,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
         if (resp_size > 0) {
 
             if (attr_response.SecretKey != NULL) {
-                qDebug() << "We received a SCAP secretKey so let's save it!";
+                // We received a SCAP secretKey so let's save it!
                 settings.setSecretKey(*attr_response.SecretKey, idNumber);
             }
 

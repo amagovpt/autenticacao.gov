@@ -71,7 +71,8 @@ namespace eIDMW
 
 		}
 
-		MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: Server reply (size=%d): \n%s\n", bytes_read, buffer.buf);
+                MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: Server reply (size=%d): \n", bytes_read);
+                /*MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: Server reply (size=%d): \n%s\n", bytes_read, buffer.buf);*/
 
 		return buffer.buf;
 	}

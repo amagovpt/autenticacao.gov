@@ -135,7 +135,7 @@ PageDefinitionsSignatureForm {
     propertyDropArea {
 
         onEntered: {
-            console.log("You chose file(s): " + drag.urls.toString());
+            /*console.log("You chose file(s): " + drag.urls.toString());*/
             filesArray = drag.urls
             console.log("Num files: "+filesArray.length);
         }
@@ -143,7 +143,7 @@ PageDefinitionsSignatureForm {
             if(filesArray.length > 1){
                 dialog.open()
             }else{
-                console.log("Adding file: " + filesArray[0])
+                /*console.log("Adding file: " + filesArray[0])*/
                 var path =  filesArray[0]
 
                 filesModel.clear()
@@ -166,8 +166,8 @@ PageDefinitionsSignatureForm {
 
     propertyFileDialog {
         onAccepted: {
-            console.log("You chose file(s): " + propertyFileDialog.fileUrls)
-            console.log("Adding file: " + propertyFileDialog.fileUrls[0])
+            /*console.log("You chose file(s): " + propertyFileDialog.fileUrls)
+            console.log("Adding file: " + propertyFileDialog.fileUrls[0])*/
             var path = propertyFileDialog.fileUrls[0];
 
             filesModel.clear()

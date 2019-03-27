@@ -633,8 +633,8 @@ Load language error. Please reinstall the application"
                     // Clear list model and then load a new sub menu
                     mainFormID.propertySubMenuListView.model.clear()
                     for(var i = 0; i < mainFormID.propertyMainMenuListView.model.get(index).subdata.count; ++i) {
-                        console.log("Sub Menu indice " + i + " - "
-                                    + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name);
+                        /*console.log("Sub Menu indice " + i + " - "
+                                    + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name);*/
                         mainFormID.propertySubMenuListView.model
                         .append({
                                     "subName": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name,
@@ -716,8 +716,8 @@ Load language error. Please reinstall the application"
                     // Clear list model and then load a new sub menu
                     mainFormID.propertySubMenuListView.model.clear()
                     for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.count; ++i) {
-                        console.log("Sub Menu indice " + i + " - "
-                                    + mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i).subName);
+                        /*console.log("Sub Menu indice " + i + " - "
+                                    + mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i).subName);*/
                         mainFormID.propertySubMenuListView.model
                         .append({
                                     "subName": qsTranslate("MainMenuBottomModel",

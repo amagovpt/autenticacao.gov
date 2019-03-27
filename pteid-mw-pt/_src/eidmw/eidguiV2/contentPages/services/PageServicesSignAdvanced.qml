@@ -412,7 +412,7 @@ PageServicesSignAdvancedForm {
     propertyDropArea {
 
         onEntered: {
-            console.log("Signature advanced ! You chose file(s): " + drag.urls);
+            /*console.log("Signature advanced ! You chose file(s): " + drag.urls);*/
             filesArray = drag.urls
             console.log("Num files: "+filesArray.length);
         }
@@ -433,7 +433,7 @@ PageServicesSignAdvancedForm {
     }
     propertyDropFileArea {
         onEntered: {
-            console.log("Signature advanced Drop File Area! You chose file(s): " + drag.urls);
+            /*console.log("Signature advanced Drop File Area! You chose file(s): " + drag.urls);*/
             filesArray = drag.urls
             console.log("Num files: "+filesArray.length);
         }
@@ -472,7 +472,7 @@ PageServicesSignAdvancedForm {
                     coord_y = propertyPDFPreview.propertyCoordY
                 }
 
-                console.log("Output filename: " + outputFile)
+                /*console.log("Output filename: " + outputFile)*/
                 console.log("Signing in position coord_x: " + coord_x
                             + " and coord_y: "+coord_y + " page: " + page + " timestamp: " + isTimestamp)
 
@@ -547,7 +547,7 @@ PageServicesSignAdvancedForm {
                     coord_y = propertyPDFPreview.propertyCoordY
                 }
 
-                console.log("Output filename: " + outputFile)
+                /*console.log("Output filename: " + outputFile)*/
                 console.log("Signing Batch in position coord_x: " + coord_x
                             + " and coord_y: "+coord_y + " page: " + page + " timestamp: " + isTimestamp)
 
@@ -664,8 +664,8 @@ PageServicesSignAdvancedForm {
             mainFormID.state = "STATE_NORMAL"
             mainFormID.propertySubMenuListView.model.clear()
             for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
-                console.log("Sub Menu indice " + i + " - "
-                            + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);
+                /*console.log("Sub Menu indice " + i + " - "
+                            + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);*/
                 mainFormID.propertySubMenuListView.model
                 .append({
                             "subName": qsTranslate("MainMenuBottomModel",
@@ -751,7 +751,7 @@ PageServicesSignAdvancedForm {
     propertyFileDialog {
 
         onAccepted: {
-            console.log("You chose file(s): " + propertyFileDialog.fileUrls)
+            /*console.log("You chose file(s): " + propertyFileDialog.fileUrls)*/
             console.log("Num files: " + propertyFileDialog.fileUrls.length)
 
             updateUploadedFiles(propertyFileDialog.fileUrls)
@@ -1238,8 +1238,8 @@ PageServicesSignAdvancedForm {
             if(minimumPage == 0 || pageCount < minimumPage)
                 minimumPage = pageCount
 
-            console.log("loadedFilePath: " + loadedFilePath + " page count: " + pageCount
-                        + "minimum: " + minimumPage)
+            /*console.log("loadedFilePath: " + loadedFilePath + " page count: " + pageCount
+                        + "minimum: " + minimumPage)*/
         }
         return minimumPage
     }
@@ -1270,7 +1270,7 @@ PageServicesSignAdvancedForm {
         }else{
             propertyOutputSignedFile = "file://" + propertyOutputSignedFile
         }
-        console.log("Open Url Externally: " + propertyOutputSignedFile)
+        /*console.log("Open Url Externally: " + propertyOutputSignedFile)*/
         Qt.openUrlExternally(propertyOutputSignedFile)
     }
     function signSuccessShowSignedFile(){
@@ -1301,7 +1301,7 @@ PageServicesSignAdvancedForm {
         var fileAlreadyUploaded = false
         for(var i = 0; i < fileList.length; i++){
             var path = fileList[i];
-            console.log("Adding file: " + path)
+            /*console.log("Adding file: " + path)*/
 
             path = decodeURIComponent(stripFilePrefix(path))
 
