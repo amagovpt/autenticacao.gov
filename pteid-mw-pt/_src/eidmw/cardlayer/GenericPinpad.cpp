@@ -303,7 +303,7 @@ void GenericPinpad::CloseDlg(PinpadDialogThread *pinpadDlgThread)
 }
 
 void PinpadDialogThread::Run() {
-	MWLOG(LEV_ERROR, MOD_CAL, L"\nDlgDisplayPinpadInfo(%d,\n%s,\n%d,\n%s,\n%s,...\n", m_operation, m_csReader.c_str(), m_usage, m_csPinName.c_str(), m_csMessage.c_str());
+	MWLOG(LEV_DEBUG, MOD_CAL, L"DlgDisplayPinpadInfo(%d, %s, %d, %s, %s,...)", m_operation, m_csReader.c_str(), m_usage, m_csPinName.c_str(), m_csMessage.c_str());
 	DlgDisplayPinpadInfo(m_operation, m_csReader.c_str(), m_usage, m_csPinName.c_str(), m_csMessage.c_str(), &m_pulHandle, m_wndGeometry);
 }
 
