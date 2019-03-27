@@ -35,18 +35,15 @@ Item {
             color: Constants.COLOR_TEXT_TITLE
             Layout.fillWidth: true
         }
-        Text {
+        Components.Link { 
             id: textSubTitle
             anchors.top: textTitle.bottom
             anchors.topMargin: Constants.SIZE_TEXT_BODY
-            font.pixelSize: Constants.SIZE_TEXT_BODY
-            font.family: lato.name
-            text: qsTranslate("PageServicesSign","STR_SIGN_HELP_SUB_TITLE")
-                  + "<a href=\"https://www.autenticacao.gov.pt/cmd-pedido-chave\">"
-                  + " " + qsTranslate("PageServicesSign","STR_SIGN_HELP_CMD_LINK")
-            wrapMode: Text.Wrap
-            width: parent.width
-            color: Constants.COLOR_TEXT_BODY
+            propertyText.text: qsTranslate("PageServicesSign","STR_SIGN_HELP_SUB_TITLE") + " " +
+            "<a href='https://www.autenticacao.gov.pt/cmd-pedido-chave'>" 
+                + qsTranslate("PageServicesSign","STR_SIGN_HELP_CMD_LINK")
+            propertyText.width: parent.width
+            propertyText.wrapMode: Text.Wrap
             Layout.fillWidth: true
         }
         Text {
@@ -63,19 +60,15 @@ Item {
             Layout.fillWidth: true
         }
 
-        Text {
+         Components.Link { 
             id: autenticacaoGovLink
             anchors.top: textTopic1.bottom
             anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
-            font.pixelSize: Constants.SIZE_TEXT_BODY
-            font.family: lato.name
-            text: qsTranslate("PageServicesSign","STR_SIGN_HELP_TOPIC_2")
-                  + "<a href=\"https://www.autenticacao.gov.pt\">"
+            propertyText.text: qsTranslate("PageServicesSign","STR_SIGN_HELP_TOPIC_2")
+                  + "<a href='https://www.autenticacao.gov.pt'>"
                   + " " + qsTranslate("PageServicesSign","STR_SIGN_HELP_AUTENTICACAO.GOV_LINK")
-            wrapMode: Text.Wrap
-            width: parent.width
-            horizontalAlignment: Text.left
-            color: Constants.COLOR_TEXT_BODY
+            propertyText.width: parent.width
+            propertyText.wrapMode: Text.Wrap
             Layout.fillWidth: true
         }
     }

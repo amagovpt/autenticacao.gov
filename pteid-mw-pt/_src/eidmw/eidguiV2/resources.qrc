@@ -73,6 +73,7 @@
         <file>images/tooltip_grey.png</file>
         <file>components/PDFPreview.qml</file>
         <file>components/DialogCMD.qml</file>
+        <file>components/Link.qml</file>
         <file>components/PhoneCountriesCodeListModel.qml</file>
         <file>images/icons-move.png</file>
         <file>images/pteid_signature_watermark.jpg</file>

@@ -187,23 +187,14 @@ Item {
                 height: 50
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: rectPin.bottom
-                Text {
+                Link {
                     id: textLinkCMD
-                    textFormat: Text.RichText
-                    text: "<a href=\"https://www.autenticacao.gov.pt/cmd-pedido-chave\">"
+                    propertyText.text: "<a href='https://www.autenticacao.gov.pt/cmd-pedido-chave'>"
                             + qsTranslate("PageServicesSign","STR_SIGN_CMD_URL")
-                    font.italic: true
-                    verticalAlignment: Text.AlignVCenter
+                    propertyText.font.italic: true
+                    propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_BODY
-                    height: parent.height
-                    width: parent.width
-                    anchors.bottom: parent.bottom
-                    onLinkActivated: {
-                        Qt.openUrlExternally(link)
-                    }
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
                 }
             }
             Item {
