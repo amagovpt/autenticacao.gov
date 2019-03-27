@@ -488,7 +488,7 @@ bool CERTIFICATES::ImportCertificates( const char* readerName )
                                    QDir::Files | QDir::NoSymLinks);
 
     foreach (QString str, flist) {
-		QString filename = QString("%1%2").arg(certs_dir_str.c_str()).arg(str);
+		QString filename = QString("%1\%2").arg(certs_dir_str.c_str()).arg(str);
         unsigned int alloc_len = filename.size()+1;
         cert_filepath = new wchar_t[alloc_len];
         //This way we ensure the UTF-16 string is terminated
