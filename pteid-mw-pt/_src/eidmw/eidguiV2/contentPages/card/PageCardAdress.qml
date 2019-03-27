@@ -329,6 +329,7 @@ PageCardAdressForm {
            + mainView.width * 0.5 - dialogConfirmOfAddress.width * 0.5
         y: parent.height * 0.5 - dialogConfirmOfAddress.height * 0.5
         modal: true
+        focus: true
 
         header: Label {
             id: labelConfirmOfAddressTextTitle
@@ -488,6 +489,7 @@ PageCardAdressForm {
            + mainView.width * 0.5 - dialogConfirmOfAddress.width * 0.5
         y: parent.height * 0.5 - dialogConfirmOfAddress.height * 0.5
         modal: true
+        focus: true
 
         header: Label {
             id: labelConfirmOfAddressProgressTextTitle

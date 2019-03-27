@@ -45,6 +45,7 @@ Item {
             + mainView.width * 0.5 - dialogSignCMD.width * 0.5
         y: parent.height 
         modal: true
+        focus: true
 
         header: Label {
             id: labelTextTitle
@@ -253,6 +254,7 @@ Item {
         x: - mainMenuView.width - subMenuView.width
             + mainView.width * 0.5 - dialogCMDProgress.width * 0.5
         y: parent.height
+        modal: true
         focus: true
 
         header: Label {
