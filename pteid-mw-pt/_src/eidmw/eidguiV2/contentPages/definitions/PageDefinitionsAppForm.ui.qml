@@ -282,7 +282,7 @@ Item {
             id: rectAppGraphics
             width: parent.width
             height: dateAppGraphics.height + rectAppGraphicsCheckBox.height
-                    + graphicsTextField.height + Constants.SIZE_TEXT_V_SPACE
+                    + 3 * Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppLook.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
