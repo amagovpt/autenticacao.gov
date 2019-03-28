@@ -98,6 +98,24 @@ PageDefinitionsAppForm {
                               mainFormID.propertShowAnimation = false
                           }
     }
+
+    propertyCheckboxAccelGraphics{
+        onCheckedChanged: {
+            if(propertyCheckboxAccelGraphics.checked){
+                controler.setGraphicsAccelValue(true)
+            }else{
+                controler.setGraphicsAccelValue(false)
+            }
+            if(propertyCheckboxAccelGraphics.enabled){
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ACCEL_GRAPHICS") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ACCEL_GRAPHICS_TEXT") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            }
+        }
+    }
     propertyCheckboxSystemProxy{
         onCheckedChanged: if (propertyCheckboxSystemProxy.checked ){
                               propertyCheckboxProxy.checked = false
@@ -175,6 +193,13 @@ PageDefinitionsAppForm {
         }
 
         propertyCheckboxShowAnime.checked = controler.getShowAnimationsValue()
+
+        propertyCheckboxAccelGraphics.checked = controler.getGraphicsAccelValue();
+        propertyCheckboxAccelGraphics.enabled = true;
+
+        propertyGraphicsTextField.text = qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT")  + " : "
+                + OpenGLInfo.majorVersion + "." + OpenGLInfo.minorVersion + "."
+                + "\n" + qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION")
 
         if (Qt.platform.os === "linux") {
             propertyCheckboxSystemProxy.visible = false

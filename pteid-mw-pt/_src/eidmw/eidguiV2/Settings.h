@@ -59,6 +59,7 @@ public:
     GUISettings( void )
         : m_GuiLanguage("nl")
         , m_bShowAnimations(false)
+        , m_bGraphicsAccel(false)
         , m_bUseCustomSignature(false)
         , m_bStartMinimized(false)
         , m_bNotShowStartUpHelp(false)
@@ -132,6 +133,17 @@ public:
             if ( 0 != ShowAnimations )
             {
                 setShowAnimations(true);
+            }
+        }
+        //----------------------------------------------------------
+        // check Acceleration Graphics
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_GRAPHICSACCEL);
+            long AccelGraphics = config.getLong();
+            if ( 0 != AccelGraphics )
+            {
+                setAccelGraphics(true);
             }
         }
         //----------------------------------------------------------
@@ -324,11 +336,21 @@ public:
     {
         return m_bShowAnimations;
     }
+    bool getGraphicsAccel( void )
+    {
+        return m_bGraphicsAccel;
+    }
     void setShowAnimations(  bool bShowAnimations )
     {
         m_bShowAnimations = bShowAnimations;
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWANIMATIONS);
         config.setLong(m_bShowAnimations);
+    }
+    void setAccelGraphics(  bool bGraphicsAccel )
+    {
+        m_bGraphicsAccel = bGraphicsAccel;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_GRAPHICSACCEL);
+        config.setLong(m_bGraphicsAccel);
     }
     bool getUseCustomSignature( void )
     {
@@ -568,6 +590,7 @@ private:
 
     QString m_GuiLanguage;          //!< the GUI language
     bool    m_bShowAnimations;      //!< the GUI Animations
+    bool    m_bGraphicsAccel;       //!< the Graphics Acceleration
     bool    m_bUseCustomSignature;  //!< the GUI use custom signature image
     bool    m_bStartMinimized;      //!< startup minimized (T/F)
     bool    m_bNotShowStartUpHelp;  //!< the GUI Show Help	bool	m_bStartMinimized;		//!< startup minimized (T/F)

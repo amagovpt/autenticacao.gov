@@ -17,6 +17,18 @@ int main(int argc, char *argv[])
     bool test_mode = false;
     const char * default_sam_server = NULL;
 
+    // GUISettings init
+    GUISettings settings;
+    // AppController init
+    AppController controller(settings);
+    if(settings.getGraphicsAccel()){
+        qDebug() << "C++: Starting App with graphics acceleration";
+        QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
+    }else{
+        qDebug() << "C++: Starting App without graphics acceleration";
+        QCoreApplication::setAttribute(Qt::AA_UseSoftwareOpenGL);
+    }
+
     SingleApplication app(argc, argv);
 
     // Set app icon
@@ -27,11 +39,6 @@ int main(int argc, char *argv[])
     //QQuickStyle::setStyle("Default");
 
     QQmlApplicationEngine engine;
-
-    // GUISettings init
-    GUISettings settings;
-    // AppController init
-    AppController controller(settings);
 
     PTEID_InitSDK();
     PTEID_Config sam_server(PTEID_PARAM_GENERAL_SAM_SERVER);

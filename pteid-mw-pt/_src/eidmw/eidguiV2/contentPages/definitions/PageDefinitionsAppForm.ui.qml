@@ -17,6 +17,8 @@ Item {
     property alias propertyRadioButtonUK: radioButtonUK
     property alias propertyRectAppLook: rectAppLook
     property alias propertyCheckboxShowAnime: checkboxShowAnime
+    property alias propertyGraphicsTextField: graphicsTextField
+    property alias propertyCheckboxAccelGraphics: checkboxAccelGraphics
     property alias propertyRectAppNetworkCheckBox: rectAppNetworkCheckBox
     property alias propertyCheckboxSystemProxy: checkboxSystemProxy
     property alias propertyCheckboxProxy: checkboxProxy
@@ -275,13 +277,87 @@ Item {
                 }
             }
         }
+
+        Item {
+            id: rectAppGraphics
+            width: parent.width
+            height: dateAppGraphics.height + rectAppGraphicsCheckBox.height
+                    + graphicsTextField.height + Constants.SIZE_TEXT_V_SPACE
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            anchors.top: rectAppLook.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
+
+            Text {
+                id: dateAppGraphics
+                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
+                height: Constants.SIZE_TEXT_LABEL
+                text: qsTranslate("PageDefinitionsApp",
+                                  "STR_APP_GRAPHICS_TITLE") + controler.autoTr
+            }
+            DropShadow {
+                anchors.fill: rectAppGraphicsCheckBox
+                horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                radius: Constants.FORM_SHADOW_RADIUS
+                samples: Constants.FORM_SHADOW_SAMPLES
+                color: Constants.COLOR_FORM_SHADOW
+                source: rectAppLookCheckBox
+                spread: Constants.FORM_SHADOW_SPREAD
+                opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
+            }
+            RectangularGlow {
+                anchors.fill: rectAppGraphicsCheckBox
+                glowRadius: Constants.FORM_GLOW_RADIUS
+                spread: Constants.FORM_GLOW_SPREAD
+                color: Constants.COLOR_FORM_GLOW
+                cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
+            }
+            Rectangle {
+                id: rectAppGraphicsCheckBox
+                width: parent.width
+                color: "white"
+                height: graphicsTextField.height + checkboxAccelGraphics.height
+                        + 3 * Constants.SIZE_TEXT_V_SPACE
+                anchors.top: dateAppGraphics.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
+                Text {
+                    id: graphicsTextField
+                    width: parent.width - 20
+                    x: 10
+                    y: Constants.SIZE_TEXT_V_SPACE
+                    font.capitalization: Font.MixedCase
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    wrapMode: Text.WordWrap
+                }
+                CheckBox {
+                    id: checkboxAccelGraphics
+                    enabled: false
+                    text: qsTranslate("PageDefinitionsApp",
+                                      "STR_ACCEL_ENABLE")
+                          + controler.autoTr
+                    height: 25
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                    anchors.top: graphicsTextField.bottom
+                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                }
+            }
+        }
+
         Item {
             id: rectAppNetwork
             width: parent.width
             height: dateAppNetwork.height + rectAppNetworkCheckBox.height
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
-            anchors.top: rectAppLook.bottom
+            anchors.top: rectAppGraphics.bottom
 
             Text {
                 id: dateAppNetwork
