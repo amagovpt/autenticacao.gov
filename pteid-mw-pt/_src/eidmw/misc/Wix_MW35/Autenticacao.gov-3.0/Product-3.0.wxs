@@ -59,9 +59,7 @@
     <Condition Message="!(loc.MinOs)">
       <![CDATA[
       Installed
-      OR ((VersionNT = 500) and (ServicePackLevel > 3))
-      OR ((VersionNT = 501) and (ServicePackLevel > 1))
-      OR (VersionNT > 501)
+      OR (VersionNT >= 601)
       ]]>
     </Condition>
 
@@ -471,7 +469,7 @@
           <ComponentRef Id="CertPropService"/>
           <ComponentRef Id="pteidmdrvsystem32"/>
           <ComponentRef Id="REGISTERMINIDRIVER"/>
-          <Condition Level="1">VersionNT >= 600</Condition>
+          <Condition Level="1">VersionNT >= 601</Condition>
         </Feature>
       </Feature>
 
@@ -533,7 +531,7 @@
       <Custom Action="IsPrivileged" Before="LaunchConditions">Not Privileged</Custom>
       <Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
       <Custom Action="CleanMinidriverKeys" After="RemoveRegistryValues">NOT Installed</Custom>
-      <Custom Action="MinidriverManualInstall" After="InstallFiles"> NOT Installed and VersionNT = 600</Custom>
+      <Custom Action="MinidriverManualInstall" After="InstallFiles"> NOT Installed and VersionNT >= 601</Custom>
       <ScheduleReboot After="InstallFinalize">NOT Installed</ScheduleReboot>
     </InstallExecuteSequence>
 
