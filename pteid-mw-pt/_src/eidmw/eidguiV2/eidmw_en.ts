@@ -1032,7 +1032,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="200"/>
         <source>STR_ACCEL_GRAPHICS_TEXT</source>
-        <translation>Graphics driver version</translation>
+        <translation>Graphics acceleration driver version (OpenGL)</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="202"/>

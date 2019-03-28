@@ -198,7 +198,7 @@ PageDefinitionsAppForm {
         propertyCheckboxAccelGraphics.enabled = true;
 
         propertyGraphicsTextField.text = qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT")  + " : "
-                + OpenGLInfo.majorVersion + "." + OpenGLInfo.minorVersion + "."
+                + OpenGLInfo.majorVersion + "." + OpenGLInfo.minorVersion
                 + "\n" + qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION")
 
         if (Qt.platform.os === "linux") {

@@ -1030,12 +1030,12 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="200"/>
         <source>STR_ACCEL_GRAPHICS_TEXT</source>
-        <translation>Versão do driver de gráficos</translation>
+        <translation>Versão do driver de aceleração gráfica (OpenGL)</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="202"/>
         <source>STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION</source>
-        <translation>Por favor experimente alterar esta configuração se existe problemas com os gráficos da aplicação.</translation>
+        <translation>Por favor experimente alterar a configuração se detectar problemas com os gráficos da aplicação.</translation>
     </message>
 </context>
 <context>
