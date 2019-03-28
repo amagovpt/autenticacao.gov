@@ -868,6 +868,9 @@ bool AppController::getShowPictureValue (void){
 bool AppController::getShowAnimationsValue(void){
     return m_Settings.getShowAnimations();
 }
+bool AppController::getGraphicsAccelValue(void){
+    return m_Settings.getGraphicsAccel();
+}
 void AppController::setShowNotificationValue (bool bShowNotification){
 
     m_Settings.setShowNotification(bShowNotification);
@@ -878,6 +881,9 @@ void AppController::setShowPictureValue (bool bShowPicture){
 }
 void AppController::setShowAnimationsValue(bool bShowAnimations){
     m_Settings.setShowAnimations(bShowAnimations);
+}
+void AppController::setGraphicsAccelValue(bool bGraphicsAccel){
+    m_Settings.setAccelGraphics(bGraphicsAccel);
 }
 QString AppController::getTimeStampHostValue (void){
     return m_Settings.getTimeStampHost();

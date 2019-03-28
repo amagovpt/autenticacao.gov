@@ -66,10 +66,12 @@ public slots:
     bool getShowNotificationValue(void);
     bool getShowPictureValue(void);
     bool getShowAnimationsValue(void);
+    bool getGraphicsAccelValue(void);
 
     void setShowNotificationValue(bool bShowNotification);
     void setShowPictureValue(bool bShowPicture);
     void setShowAnimationsValue(bool bShowAnimations);
+    void setGraphicsAccelValue(bool bGraphicsAccel);
 
     QString getTimeStampHostValue (void);
     void setTimeStampHostValue (QString const& timeStamp_host);
