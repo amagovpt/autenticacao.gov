@@ -41,7 +41,8 @@ public:
                 std::vector<int> attributes_index, CmdSignedFileDetails cmd_details);
 
     void executeSCAPSignature(GAPI *parent, QString &inputPath, QString &savefilepath, int selected_page,
-         double location_x, double location_y, QString &location, QString &reason, int ltv_years, std::vector<int> selected_attributes);
+		double location_x, double location_y, QString &location, QString &reason, int ltv_years, bool useCustomImage, 
+		std::vector<int> selected_attributes);
 
     std::vector<ns2__AttributesType *> loadAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies);
     std::vector<ns2__AttributesType *> reloadAttributesFromCache();

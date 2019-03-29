@@ -132,7 +132,7 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
 }
 
 void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QString &savefilepath, int selected_page,
-         double location_x, double location_y, QString &location, QString &reason, int ltv_years, std::vector<int> attributes_index)
+	double location_x, double location_y, QString &location, QString &reason, int ltv_years, bool useCustomImage, std::vector<int> attributes_index)
 {
     // Sets user selected file save path
     const char* citizenId = NULL;
@@ -178,6 +178,14 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
         std::cout << "Sent PDF Signature coordinates. X:" << location_x << " Y:" << location_y << std::endl;
 
         PTEID_PDFSignature pdf_sig(strdup(inputPath.toUtf8().constData()));
+
+		QImage m_custom_image;
+		QByteArray m_jpeg_scaled_data;
+
+		if (useCustomImage) {
+			const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
+			pdf_sig.setCustomImage(imageData);
+		}
 
         // Sign pdf
         sign_rc = card.SignPDF(pdf_sig, selected_page, 0, false, strdup(location.toUtf8().constData()),
