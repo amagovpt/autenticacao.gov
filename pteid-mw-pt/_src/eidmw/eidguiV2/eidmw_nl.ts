@@ -1035,7 +1035,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="233"/>
         <source>STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION</source>
-        <translation>Por favor experimente alterar a configuração se detectar problemas com os gráficos da aplicação.</translation>
+        <translation>Por favor experimente desativar a aceleração gráfica se detectar problemas com os gráficos da aplicação.</translation>
     </message>
 </context>
 <context>
@@ -2176,7 +2176,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="115"/>
         <source>STR_POPUP_ACCEL_GRAPHICS_TEXT</source>
-        <translation>É necessario reinicar a aplicação para esta alteração ter efeito. Por favor reenicie a aplicação.</translation>
+        <translation>É necessário reiniciar a aplicação para esta alteração ter efeito. Por favor reinicie a aplicação.</translation>
     </message>
 </context>
 <context>

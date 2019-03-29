@@ -1037,7 +1037,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="233"/>
         <source>STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION</source>
-        <translation>Please try to change this setting if there are any problems with the application graphics.</translation>
+        <translation>Please try disabling graphical acceleration if you encounter problems with application graphics.</translation>
     </message>
 </context>
 <context>
