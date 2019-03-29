@@ -21,15 +21,15 @@ int main(int argc, char *argv[])
     GUISettings settings;
     // AppController init
     AppController controller(settings);
+
+	SingleApplication app(argc, argv);
+
     if(settings.getGraphicsAccel()){
         qDebug() << "C++: Starting App with graphics acceleration";
-        QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
     }else{
         qDebug() << "C++: Starting App without graphics acceleration";
-        QCoreApplication::setAttribute(Qt::AA_UseSoftwareOpenGL);
+		app.setAttribute(Qt::AA_UseSoftwareOpenGL);
     }
-
-    SingleApplication app(argc, argv);
 
     // Set app icon
     app.setWindowIcon(QIcon(":/appicon.ico"));
