@@ -883,6 +883,11 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QStrin
 
     cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
 
+    if(useCustomSignature()) {
+        const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
+        cmd_pdfSignature->setCustomImage(imageData);
+    }
+
     cmd_signature->set_pdf_handler(cmd_pdfSignature);
     QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, params);
 
@@ -1994,8 +1999,14 @@ void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, doubl
                             double location_y, QString location, QString reason, int ltv,
                             QList<int> attribute_index) {
 
+	bool useCustomImage = false;
+
+	if (useCustomSignature()) {
+		useCustomImage = true;
+	}
+
     SCAPSignParams signParams = {inputPDF, outputPDF, page, location_x, location_y,
-                                 location, reason,ltv, attribute_index};
+		location, reason, ltv, attribute_index, useCustomImage };
 
     QtConcurrent::run(this, &GAPI::doSignSCAP, signParams);
 }
@@ -2011,7 +2022,7 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
 
     scapServices.executeSCAPSignature(this, params.inputPDF, params.outputPDF, params.page,
                 params.location_x, params.location_y, params.location, params.reason,
-                                      params.ltv, attrs);
+				params.ltv, params.useCustomImage, attrs);
     END_TRY_CATCH
 }
 
