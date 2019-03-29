@@ -62,6 +62,7 @@ PageDefinitionsAppForm {
                             .url
                         })
             }
+            updateGraphicsTextField()
             mainFormID.propertySubMenuListView.currentIndex = 2
         }
     }
@@ -85,6 +86,7 @@ PageDefinitionsAppForm {
                             .url
                         })
             }
+            updateGraphicsTextField()
             mainFormID.propertySubMenuListView.currentIndex = 2
         }
     }
@@ -197,9 +199,7 @@ PageDefinitionsAppForm {
         propertyCheckboxAccelGraphics.checked = controler.getGraphicsAccelValue();
         propertyCheckboxAccelGraphics.enabled = true;
 
-        propertyGraphicsTextField.text = qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT")  + " : "
-                + OpenGLInfo.majorVersion + "." + OpenGLInfo.minorVersion
-                + "\n" + qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION")
+        updateGraphicsTextField()
 
         if (Qt.platform.os === "linux") {
             propertyCheckboxSystemProxy.visible = false
@@ -226,5 +226,10 @@ PageDefinitionsAppForm {
         propertyTextFieldAutPass.text = controler.getProxyPwdValue()
 
         console.log("Page definitions onCompleted finished")
+    }
+    function updateGraphicsTextField(){
+        propertyGraphicsTextField.text = qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT")  + " : "
+                + OpenGLInfo.majorVersion + "." + OpenGLInfo.minorVersion
+                + "\n" + qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION")
     }
 }
