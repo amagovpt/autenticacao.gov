@@ -1523,29 +1523,17 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
             pos_y += 50;
 
             QStringList lines = perso_data.split("\n", QString::KeepEmptyParts);
-            for (int j = 0; j < lines.count(); j++) {
-                QString line = lines.at(j);
-                if (!line.contains(" ")) {
-                    int num_of_chars = line.count();
-                    int chars_in_page = 75; //only 75 characters fit in the width of a A4 page
-                    if(num_of_chars > chars_in_page) { //a really big word without spaces
-                        for(int i = 1; i <= num_of_chars / chars_in_page; i++) {
-                            int n = (i * chars_in_page) - 1;
-                            line.insert(n, " "); //add whitespaces in such word to enforce WordWrap
-                        }
-                    }
-                    lines.replace(j, line);
-                }
-             }
 
             const int TEXT_LINE_HEIGHT = 20;
 
             int line_count = lines.length();
-            int height_to_print = TEXT_LINE_HEIGHT * line_count;
+            double height_to_print = TEXT_LINE_HEIGHT * line_count;
             int line_index_start = 0;
             int line_index_stop = 0;
             int completed_lines = 0;
+            double notes_width = painter.device()->width() - 2 * page_margin;
 
+            QFontMetrics fontMetrics(din_font);
             while (completed_lines < line_count){
                 int page_remaining_space = static_cast<int>(page_height - pos_y);
 
@@ -1568,13 +1556,14 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
                 QString text = getTextFromLines(lines, line_index_start, line_index_stop);
 
-                int diff = line_index_stop - line_index_start;
-
-                painter.drawText(static_cast<int>(pos_x), static_cast<int>(pos_y), painter.device()->width() - 60,
-                                 diff * TEXT_LINE_HEIGHT, Qt::TextWordWrap, text);
-
-                height_to_print -= diff * TEXT_LINE_HEIGHT;
-                pos_y += diff * TEXT_LINE_HEIGHT;
+                double diff = line_index_stop - line_index_start;
+                double height = diff * TEXT_LINE_HEIGHT;
+                
+                QRectF bounding_rect = fontMetrics.boundingRect(text);
+                QRectF textRect(pos_x, pos_y, notes_width, height);
+                painter.drawText(textRect, Qt::TextWrapAnywhere, text, &bounding_rect);
+                height_to_print -= height;
+                pos_y += height;
                 completed_lines += diff;
                 line_index_start = line_index_stop;
             }
