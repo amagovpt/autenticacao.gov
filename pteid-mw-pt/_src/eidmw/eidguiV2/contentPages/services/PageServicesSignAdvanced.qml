@@ -48,8 +48,7 @@ PageServicesSignAdvancedForm {
             }
 
             for (var i = 0; i < propertyPageLoader.attributeListBackup.length; i++){
-                console.log(propertyPageLoader.attributeListBackup[i])
-                entityAttributesModel.get(propertyPageLoader.attributeListBackup[i]).checkBoxAttr = true
+                entityAttributesModel.get(i).checkBoxAttr = propertyPageLoader.attributeListBackup[i]
             }
 
             propertyBusyIndicator.running = false
@@ -630,13 +629,7 @@ PageServicesSignAdvancedForm {
                 checked: checkBoxAttr
                 onCheckedChanged: {
                     entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
-                    var count = 0
-                    for (var i = 0; i < entityAttributesModel.count; i++){
-                        if(entityAttributesModel.get(i).checkBoxAttr == true){
-                            propertyPageLoader.attributeListBackup[count] = i
-                            count++
-                        }
-                    }
+                    propertyPageLoader.attributeListBackup[index] = checkboxSel.checked
                 }
             }
             Column {
