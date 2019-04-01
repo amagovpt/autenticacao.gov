@@ -478,8 +478,8 @@
     <!--    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="!(loc.StartApp)" />-->
 
     <UI>
-      <UIRef Id="WixUI_FeatureTree" />
       <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTFOLDER" />
+      <UIRef Id="WixUI_InstallDir" />
       <UIRef Id="WixUI_ErrorProgressText" />
 
       <!--
