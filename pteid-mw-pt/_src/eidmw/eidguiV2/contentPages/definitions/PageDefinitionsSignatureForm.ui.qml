@@ -406,6 +406,7 @@ Item {
                             anchors.verticalCenter: parent.verticalCenter
                             visible: fileLoaded
                             opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
+                            cache: false
                         }
                     }
                     Text {
