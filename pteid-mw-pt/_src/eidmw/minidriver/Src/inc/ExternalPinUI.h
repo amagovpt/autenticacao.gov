@@ -62,6 +62,7 @@ typedef enum _LANGUAGES
 	en,
 	nl,
 	fr,
+	pt,
 	MAX_LANGUAGES
 } LANGUAGES;
 
@@ -92,7 +93,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"Druk op Cancel op het PIN pad",
 		// fr
-		L"Appuyez sur Annuler sur le clavier PIN"
+		L"Appuyez sur Annuler sur le clavier PIN",
+		//pt
+		L"Pressione cancelar no PIN pad"
 	},
 	// CANCEL_CONTENT
 	{
@@ -101,7 +104,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"Om de operatie te annuleren, druk op Cancel op het PIN pad.",
 		// fr
-		L"Pour annuler l�op�ration, appuyez sur Annuler sur le clavier PIN."
+		L"Pour annuler l�op�ration, appuyez sur Annuler sur le clavier PIN.",
+		//pt
+		L"Para cancelar a opera\u00e7\u00e3o, pressione o bot\u00e3o Cancel no PIN pad."
 	},
 	// 	WINDOW_TITLE
 	{
@@ -110,7 +115,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"Extern PIN pad",
 		// fr
-		L"Clavier PIN externe"
+		L"Clavier PIN externe",
+		//pt
+		L"PIN pad externo"
 	},
 	// ENTER_PIN_MAININSTRUCTIONS
 	{
@@ -119,7 +126,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"Tik uw PIN code in op het PIN pad",
 		// fr
-		L"Ins�rez votre code PIN sur le clavier PIN"
+		L"Ins�rez votre code PIN sur le clavier PIN",
+		//pt
+		L"Insira o seu c\u00f3digo PIN no PIN pad"
 	},
 	// ENTER_PIN_CONTENT
 	{
@@ -128,7 +137,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"Bevestig uw PIN met de OK knop op het externe PIN pad.",
 		// fr
-		L"Confirmez votre code PIN avec le bouton OK du clavier PIN externe."
+		L"Confirmez votre code PIN avec le bouton OK du clavier PIN externe.",
+		//pt
+		L"Insira o seu PIN e confirme no bot\u00e3o OK do seu PIN pad externo."
 	},
 	// PIN_TOO_SHORT_MAININSTRUCTIONS
 	{
@@ -137,7 +148,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"PIN is te kort",
 		// fr
-		L"Code PIN trop court"
+		L"Code PIN trop court",
+		//pt
+		L"PIN demasiado curto"
 	},
 	// PIN_TOO_SHORT_CONTENT
 	{
@@ -146,7 +159,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"De PIN is te kort. Gelieve minimum 4 cijfers in te tikken.",
 		// fr
-		L"Le code PIN est trop court. Veuillez ins�rer au minimum 4 chiffres."
+		L"Le code PIN est trop court. Veuillez ins�rer au minimum 4 chiffres.",
+		//pt
+		L"O PIN inserido \u00e9 demasiado curto. Por favor, insira pelo menos 4 d\u00edgitos."
 	},
 	// PIN_TIMED_OUT_MAININSTRUCTIONS
 	{
@@ -155,7 +170,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"Wachttijd is verlopen",
 		// fr
-		L"Le temps d�introduction du code PIN est d�pass�"
+		L"Le temps d�introduction du code PIN est d�pass�",
+		//pt
+		L"O tempo de inser\u00e7\u00e3o do PIN expirou."
 	},
 	// PIN_TIMED_OUT_CONTENT
 	{
@@ -164,7 +181,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"Bevestig uw PIN met OK op het PIN pad.",
 		// fr
-		L"Confirmez votre PIN en tapant OK sur le clavier PIN."
+		L"Confirmez votre PIN en tapant OK sur le clavier PIN.",
+		//pt
+		L"Pressione OK no PIN pad para confirmar o seu c\u00f3digo PIN."
 	},	
 	// PIN_CANCELLED_MAININSTRUCTIONS
 	{
@@ -173,7 +192,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"PIN operatie geannuleerd",
 		// fr
-		L"Op�ration PIN annul�e"
+		L"Op�ration PIN annul�e",
+		//pt
+		L"\u00d3pera\u00e7\u00e3o de PIN anulada"
 	},
 	// PIN_CANCELLED_CONTENT
 	{
@@ -182,7 +203,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"U drukte op de Cancel knop",
 		// fr
-		L"Vous avez appuy� sur la touche Annuler"
+		L"Vous avez appuy� sur la touche Annuler",
+		//pt
+		L"O bot\u00e3o Cancel foi pressionado"
 	},
 	// PIN_DO_NOT_MATCH_MAININSTRUCTIONS
 	{
@@ -191,7 +214,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"De nieuwe PINs komen niet overeen",
 		// fr
-		L"Les nouveaux codes PIN ne conviennent pas"
+		L"Les nouveaux codes PIN ne conviennent pas",
+		//pt
+		L"Os novos PINs n\u00e3o correspondem"
 	},
 	// PIN_DO_NOT_MATCH_CONTENT
 	{
@@ -200,7 +225,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"PIN wijzigen is mislukt omdat de nieuwe PINs niet overeenkomen",
 		// fr
-		L"La modification du code PIN a �chou� car les nouveaux codes PIN ne conviennent pas"
+		L"La modification du code PIN a �chou� car les nouveaux codes PIN ne conviennent pas",
+		//pt
+		L"A altera\u00e7\u00e3o de PIN falhou porque os novos PINs n\u00e3o correspondem"
 	},
 	// PIN_TOO_LONG_MAININSTRUCTIONS
 	{
@@ -209,7 +236,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"PIN is te lang",
 		// fr
-		L"Code PIN trop long"
+		L"Code PIN trop long",
+		//pt
+		L"PIN demasiado longo"
 	},
 	// PIN_TOO_LONG_CONTENT
 	{
@@ -218,7 +247,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"De PIN is te lang. Gelieve maximum 12 cijfers in te tikken.",
 		// fr
-		L"Le code PIN est trop long. Veuillez ins�rer au maximum 12 chiffres."
+		L"Le code PIN est trop long. Veuillez ins�rer au maximum 12 chiffres.",
+		//pt
+		L"O PIN inserido \u00e9 demasiado longo. Por favor, insira no m\u00e1ximo 12 d\u00edgitos."
 	},
 	// PIN_SIZE_MAININSTRUCTIONS
 	{
@@ -227,7 +258,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"Verkeerde PIN lengte",
 		// fr
-		L"Le code PIN a une longueur inappropri�e"
+		L"Le code PIN a une longueur inappropri�e",
+		//pt
+		L"O comprimento do PIN n\u00e3o \u00e9 v\u00e1lido"
 	},
 	// PIN_SIZE_CONTENT
 	{
@@ -236,7 +269,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"De PIN is te kort of te lang. De PIN moet tussen 4 en 12 cijfers lang zijn.",
 		// fr
-		L"Le code PIN est soit trop court soit trop long. Il doit comprendre entre 4 et 12 chiffres."
+		L"Le code PIN est soit trop court soit trop long. Il doit comprendre entre 4 et 12 chiffres.",
+		//pt
+		L"O PIN inserido \u00e9 demasiado curto ou comprido. O PIN dever\u00e1 ter entre 4 e 12 d\u00edgitos."
 	},
 	// PIN_UNKNOWN_MAININSTRUCTIONS
 	{
@@ -245,7 +280,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"Onbekende fout",
 		// fr
-		L"Erreur inconnue"
+		L"Erreur inconnue",
+		//pt
+		L"Erro desconhecido"
 	},
 	// PIN_UNKNOWN_CONTENT
 	{
@@ -254,7 +291,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"Onbekende waarde: %x %x.",
 		// fr
-		L"Valeur inconnue: %x %x."
+		L"Valeur inconnue: %x %x.",
+		//pt
+		L"Valor desconhecido: %x %x."
 	},
 	// PIN_INVALID_MAININSTRUCTIONS
 	{
@@ -263,7 +302,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"Foute PIN",
 		// fr
-		L"Code PIN incorrect"
+		L"Code PIN incorrect",
+		//pt
+		L"PIN incorreto"
 	},
 	// PIN_INVALID_CONTENT
 	{
@@ -272,7 +313,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"De PIN die u ingaf is fout. Pogingen over: %d",
 		// fr
-		L"Le code PIN que vous avez introduit est erron�. Il vous reste %d essais"
+		L"Le code PIN que vous avez introduit est erron�. Il vous reste %d essais",
+		//pt
+		L"O PIN inserido \u00e9 inv\u00e1lido. Tentativas restantes: %d"
 	},
 	// PIN_BLOCKED_MAININSTRUCTIONS
 	{
@@ -281,7 +324,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"PIN geblokkeerd",
 		// fr
-		L"PIN bloqu�"
+		L"PIN bloqu�",
+		//pt
+		L"PIN bloqueado"
 	},
 	// PIN_BLOCKED_CONTENT
 	{
@@ -290,7 +335,9 @@ static wchar_t * t[MAX_LOCALIZATION_STRINGS][MAX_LANGUAGES] =
 		// nl
 		L"De PIN is geblokkeerd",
 		// fr
-		L"Le code PIN a �t� bloqu�"
+		L"Le code PIN a �t� bloqu�",
+		//pt
+		L"O c\u00f3digo PIN est\u00e1 bloqueado"
 	}
 };
 
