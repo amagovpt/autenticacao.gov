@@ -105,6 +105,8 @@ LANGUAGES getLanguage() {
 		return nl;
 	if ((GetUserDefaultUILanguage() & LANG_FRENCH) == LANG_FRENCH) 
 		return fr;
+	if ((GetUserDefaultUILanguage() & LANG_PORTUGUESE) == LANG_PORTUGUESE)
+		return pt;
 	//default language
 	return en;
 }
