@@ -22,6 +22,7 @@
 #include "Context.h"
 #include "CardLayer.h"
 #include "pinpad2.h"
+#include "pinpad2-private.h"
 #include "../common/Log.h"
 #include "../common/Config.h"
 #include "../common/Util.h"
