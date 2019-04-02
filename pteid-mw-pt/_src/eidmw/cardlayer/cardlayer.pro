@@ -40,7 +40,6 @@ QMAKE_CXXFLAGS += -O2
 DEFINES += EIDMW_CAL_EXPORT
 
 unix:!macx:  DEFINES += __UNIX__
-#macx:  DEFINES += __OLD_PCSC_API__
 #Support Fat binaries on Mac with both x86 and x86_64 architectures
 macx: CONFIG += x86
 
