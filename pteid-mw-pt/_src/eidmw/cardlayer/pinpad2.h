@@ -17,48 +17,6 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
-/*
- * This API should be implemented by libraries (also called
- * plugins) that want to support a pinpad reader for use
- * with the eID middleware.
- *
- * The middleware has support for CCID readers; see the PCSC V2
- * part 10 standard and the USB CCID specifications.
- *
- * However these standards don't specify how to display messages
- * on the reader's display. Because the middleware will show a
- * some explanation on the PC whenever a pinpad operation needs
- * to be done, this restriction is not important for pinpad
- * readers without display.
- *
- * But for readers with display, it is important that the correct
- * message be displayed, as to avoid confusion between the different
- * PINs on the eID card and the fact that the "PIN change command"
- * is used for both PIN change and PIN unblock.
- *
- * In this case, as well as for non-CCID pinpad readers or readers
- * that offer extra functionality, a library (a DLL on Windows, an
- * .so file on Linux and a .dylib file on Mac) can be made that
- * exports the 2 functions below.
- * The middleware will first try to load this library and check if
- * it can be used by mean of the EIDMW_PP_Init() function. If so, then
- * all pinpad functionality will be requested  through this library.
- *
- * To allow the middleware to find the library, it must be placed in
- * the following directory:
- *   - On Linux and Mac OS X: /usr/local/lib/pteidpp
- *   - On Windows: <systemdir>\pteidpp
- *     (<systemdir> is the Windows system folder, usually this is
- *      C:\WINDOWS\system32 on WinXP and Vista)
- * And the name of the library should start with "pteidpp2" on
- * Windows, and with "libpteidpp2" on Linux and Mac.
- *
- * Future, incompatible versions of this library will start with
- * "pteidpp3" etc.
- *
- * Remark: for the middleware for other country, "pteid" should be
- * replace by e.g. "pteid", "ileid", ...
- */
 
 #ifndef __PINPAD2_H__
 #define __PINPAD2_H__
@@ -67,77 +25,11 @@
 extern "C" {
 #endif
 
-#if defined(_WIN32) || defined(WIN32)
-#ifdef EIDMW_PP_IMPORT
-#define EIDMW_PP_API __declspec(dllimport)
-#else
-#define EIDMW_PP_API __declspec(dllexport)
-#endif
-#else
-#define EIDMW_PP_API
-#endif
-
 #include <winscard.h>
 
 #ifndef WIN32
 #include "wintypes.h"
 #endif
-
-#define PTEID_MINOR_VERSION       0
-
-#define EIDMW_PP_TYPE_AUTH         0x01   /* The Authentication PIN/PUK */
-#define EIDMW_PP_TYPE_SIGN         0x02    /* The Signature PIN/PUK */
-#define EIDMW_PP_TYPE_ADDR         0x03    /* The Address PIN/PUK */
-#define EIDMW_PP_TYPE_ACTIV        0x04    /* The Activation PIN */
-#define EIDMW_PP_TYPE_UNKNOWN      0xFF    /* Unkonwn PIN/PUK */
-
-#define EIDMW_PP_OP_VERIFY                    0x01    /* PIN verification */
-#define EIDMW_PP_OP_CHANGE                    0x02    /* PIN change */
-#define EIDMW_PP_OP_UNBLOCK_NO_CHANGE         0x03    /* PIN unblock without PIN change */
-#define EIDMW_PP_OP_UNBLOCK_CHANGE            0x04    /* PIn unblock plus PIN change */
-#define EIDMW_PP_OP_UNBLOCK_MERGE_NO_CHANGE   0x05    /* PIN unblock using PUK merge, without PIN change*/
-#define EIDMW_PP_OP_UNBLOCK_MERGE_CHANGE      0x06    /* PIN unblock using PUK merge, plus PIN change */
-
-#define DLG_INFO_CHARS       2000
-
-#define PP_LANG_EN   0x0409
-#define PP_LANG_NL   0x0813
-#define PP_LANG_FR   0x080c
-#define PP_LANG_DE   0x0407
-
-
-/**
- * This function is called for a "Get Feature Request" with control = CM_IOCTL_GET_FEATURE_REQUEST
- * (right after a successfull call to EIDMW_PP_Init())
- * and when a pinpad operation (verify, change, unblock) is needed.
- *
- * The following ioctl codes are recognized and used by the middleware
- *  - For PIN verification:
- *       FEATURE_VERIFY_PIN_DIRECT
- *       FEATURE_VERIFY_PIN_START and FEATURE_VERIFY_PIN_FINISH
- *  - For PIN change and unblock:
- *       FEATURE_MODIFY_PIN_DIRECT
- *       FEATURE_MODIFY_PIN_START and FEATURE_MODIFY_PIN_FINISH
- *
- * - The first 7 parameters are identical to the ones given in an SCardControl()
- *     command, as specified in part 10 of the PCSC standard.
- *   In case of a standard CCID pinpad reader without display, this function could
- *     directly 'forward' these parameters to an SCardControl() function.
- * - ucPintype: one of EIDMW_PP_TYPE_AUTH, ..., EIDMW_PP_TYPE_ACTIV; is ignored for
- *     a "Get Feature Request"
- * - ucOperation: one of EIDMW_PP_OP_VERIFY, ..., EIDMW_PP_OP_UNBLOCK_MERGE; is
- *     ignored for a "Get Feature Request"
- * - ulRfu: reserved for future use, set to 0 for this ucMinorVersion
- * - pRfu: reserved for future use, set to NULL for this ucMinorVersion
- *
- * Returns SC_ERROR_SUCCESS upon success, or another (preferably) PCSC error code otherwise.
- */
-EIDMW_PP_API long EIDMW_PP2_Command(
-	SCARDHANDLE hCard, int ioctl,
-	const unsigned char *pucSendbuf, DWORD dwSendlen,
-	unsigned char *pucRecvbuf, DWORD dwRrecvlen, DWORD *pdwRrecvlen,
-	unsigned char ucPintype, unsigned char ucOperation,
-	unsigned long ulRfu, void *pRfu);
 
 
 /////////////////////////////////// CCID things ///////////////////////////////
