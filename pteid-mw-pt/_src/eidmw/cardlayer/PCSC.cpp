@@ -429,19 +429,14 @@ CByteArray CPCSC::Control(SCARDHANDLE hCard, unsigned long ulControl, const CByt
 		throw CMWEXCEPTION(EIDMW_ERR_MEMORY);
 	DWORD dwRecvLen = ulMaxResponseSize;
 
-#ifndef __OLD_PCSC_API__
 	long lRet = SCardControl(hCard, ulControl,
 		oCmd.GetBytes(), (DWORD) oCmd.Size(),
 		pucRecv, dwRecvLen, &dwRecvLen);
-#else
-	LONG lRet = SCardControl((SCARDHANDLE)hCard,
-		oCmd.GetBytes(), (DWORD) oCmd.Size(),
-		pucRecv, &dwRecvLen);
-#endif
+
 	if (SCARD_S_SUCCESS != lRet)
 	{
 #ifndef WIN32
-		//Special-casing the PIN Blocked response for GemPC Pinpad under pcscd
+		//Special-casing the PIN Blocked response for GemPC Pinpad under pcsc-lite
 		if (lRet == SCARD_E_NOT_TRANSACTED)
 		{
 			pucRecv[0] = 0x64;
@@ -465,7 +460,7 @@ CByteArray CPCSC::Control(SCARDHANDLE hCard, unsigned long ulControl, const CByt
 			pucRecv[0], pucRecv[1]);
 	}
 	else
-		MWLOG(LEV_DEBUG, MOD_CAL, L"        SCardControl(): 2 bytes returned", dwRecvLen);
+		MWLOG(LEV_DEBUG, MOD_CAL, L"        SCardControl(): %02d bytes returned", dwRecvLen);
 
 	CByteArray oResp(pucRecv, (unsigned long) dwRecvLen);
 	delete[] pucRecv;
