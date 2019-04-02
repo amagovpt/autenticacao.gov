@@ -430,7 +430,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
     //TODO: change this
     authorizationRequest.AppId = m_appID.toStdString();
 
-    /*m_secretKey = settings.getSecretKey(citizenId);*/
+    m_secretKey = settings.getSecretKey(citizenId);
 
     /*qDebug() << "m_secretKey = " << m_secretKey.data();*/
 
