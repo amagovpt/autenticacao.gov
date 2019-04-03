@@ -90,7 +90,8 @@ std::vector<ns3__AttributeType*> ScapServices::getSelectedAttributes(std::vector
 */
 void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepath, int selected_page,
         double location_x, double location_y, QString &location, QString &reason, int ltv_years,
-        std::vector<int> attributes_index, CmdSignedFileDetails cmd_details) {
+        std::vector<int> attributes_index, CmdSignedFileDetails cmd_details,
+        bool useCustomImage, QByteArray &m_jpeg_scaled_data) {
 
     std::vector<ns3__AttributeType*> selected_attributes = getSelectedAttributes(attributes_index);
 
@@ -105,7 +106,8 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
     try{
          successful = scap_signature_client.signPDF(m_proxyInfo, savefilepath, cmd_details.signedCMDFile, cmd_details.citizenName,
             cmd_details.citizenId, ltv_years, false, PDFSignatureInfo(selected_page, location_x, location_y,
-            false, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes);
+            false, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes,
+            useCustomImage, m_jpeg_scaled_data);
     }
     catch (eIDMW::PTEID_Exception &e)
     {
@@ -132,7 +134,8 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
 }
 
 void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QString &savefilepath, int selected_page,
-	double location_x, double location_y, QString &location, QString &reason, int ltv_years, bool useCustomImage, std::vector<int> attributes_index)
+    double location_x, double location_y, QString &location, QString &reason, int ltv_years,
+    std::vector<int> attributes_index, bool useCustomImage, QByteArray &m_jpeg_scaled_data )
 {
     // Sets user selected file save path
     const char* citizenId = NULL;
@@ -179,14 +182,6 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
 
         PTEID_PDFSignature pdf_sig(strdup(inputPath.toUtf8().constData()));
 
-		QImage m_custom_image;
-		QByteArray m_jpeg_scaled_data;
-
-		if (useCustomImage) {
-			const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
-			pdf_sig.setCustomImage(imageData);
-		}
-
         // Sign pdf
         sign_rc = card.SignPDF(pdf_sig, selected_page, 0, false, strdup(location.toUtf8().constData()),
                                 strdup(reason.toUtf8().constData()), temp_save_path);
@@ -196,7 +191,8 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
             int successful = scap_signature_client.signPDF(
                         m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
                         QString(citizenId), ltv_years, true, PDFSignatureInfo(selected_page, location_x, location_y,
-                        false, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes);
+                        false, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes,
+                        useCustomImage, m_jpeg_scaled_data);
             if (successful == GAPI::ScapSucess) {
                 parent->signalPdfSignSucess(parent->SignMessageOK);
             }

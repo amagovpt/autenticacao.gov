@@ -168,7 +168,6 @@ public:
     QString location; QString reason;
     int ltv;
     QList<int> attribute_index;
-	bool useCustomImage;
 };
 
 class PDFPreviewImageProvider: public QObject, public QQuickImageProvider
