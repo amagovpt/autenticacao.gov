@@ -592,6 +592,9 @@ void GAPI::showSignCMDDialog(int error_code)
         case ERR_GET_CERTIFICATE:
             error_msg = tr("STR_CMD_GET_CERTIFICATE_ERROR");
             break;
+        case HTTP_PROXY_AUTH_REQUIRED:
+            error_msg = tr("STR_CMD_PROXY_AUTH_ERROR");
+            break;
         case SOAP_TCP_ERROR:
             error_msg = tr("STR_CONNECTION_ERROR") + "<br><br>" +
                     tr("STR_VERIFY_INTERNET");

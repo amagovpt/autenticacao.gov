@@ -55,7 +55,7 @@ public:
 private:
 	std::vector<ns3__AttributeSupplierType *> m_suppliersList;
 	std::vector<ns2__AttributesType *> m_attributesList;
-	ProxyInfo m_proxyInfo;
+	
 	ErrorConn connectionErr;
 	std::vector<ns3__AttributeType*> getSelectedAttributes(std::vector<int> attributes_index);
 	void setConnErr( int soapConnectionErr, void *in_suppliers_resp );

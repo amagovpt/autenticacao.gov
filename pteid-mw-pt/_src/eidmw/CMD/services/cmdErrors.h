@@ -26,6 +26,8 @@
 #define SOAP_SUCCESS_CODE                   200
 #define IS_SOAP_ERROR(error)    ( ( error != ERR_NONE ) && ( error != SOAP_SUCCESS_CODE ) && ( error < ERR_ADDR_USER_BASE ) )
 
+#define HTTP_PROXY_AUTH_REQUIRED            407 // HTTP 407 Proxy Authentication Required
+
 #define SOAP_ERR_SERVICE_FAIL               500 // NOT TESTED
 #define SOAP_ERR_INVALID_PIN                801 
 #define SOAP_ERR_INVALID_OTP                802 // NOT TESTED
