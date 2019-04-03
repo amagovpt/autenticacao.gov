@@ -99,14 +99,36 @@ DWORD WINAPI DialogThreadPinEntry(LPVOID lpParam)
 }
 
 LANGUAGES getLanguage() {
-	if ((GetUserDefaultUILanguage() & LANG_ENGLISH) == LANG_ENGLISH) 
-		return en;
-	if ((GetUserDefaultUILanguage() & LANG_DUTCH) == LANG_DUTCH) 
-		return nl;
-	if ((GetUserDefaultUILanguage() & LANG_FRENCH) == LANG_FRENCH) 
-		return fr;
-	if ((GetUserDefaultUILanguage() & LANG_PORTUGUESE) == LANG_PORTUGUESE)
-		return pt;
-	//default language
-	return en;
+    LANGUAGES default_language = pt;
+    DWORD       dwRet;
+    HKEY        hKey;
+    CHAR        lpData[3];
+    DWORD       dwData = 0;
+
+    dwRet = RegOpenKeyEx(HKEY_CURRENT_USER, TEXT("Software\\PTEID\\general"), 0, KEY_READ, &hKey);
+    if (dwRet != ERROR_SUCCESS){
+        LogTrace(LOGTYPE_ERROR, "getLanguage", "Error in RegOpenKeyEx. Error code: %d", dwRet);
+        return default_language;
+    }
+    
+    dwData = sizeof(lpData);
+    dwRet = RegQueryValueEx(hKey,
+        TEXT("language"),
+        NULL,
+        NULL,
+        (LPBYTE)lpData,
+        &dwData);
+
+    if (dwRet != ERROR_SUCCESS) {
+        LogTrace(LOGTYPE_ERROR, "getLanguage", "Error in RegQueryValueEx. Error code: %d", dwRet);
+        return default_language;
+    }
+
+    if (strcmp(lpData, "en") == 0){
+        return en;
+    }
+    else if (strcmp(lpData, "nl") == 0) {//Middleware uses nl to represent pt
+        return pt;
+    }
+    return default_language;
 }
