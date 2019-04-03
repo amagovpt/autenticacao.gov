@@ -816,7 +816,8 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
 
         scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
             m_scap_params.location_x, m_scap_params.location_y,
-            m_scap_params.location, m_scap_params.reason, 0, attrs, cmd_details);
+            m_scap_params.location, m_scap_params.reason, 0, attrs, cmd_details,
+            useCustomSignature(), m_jpeg_scaled_data);
     }
     catch (PTEID_Exception &e) {
         ret = e.GetError();
@@ -882,11 +883,6 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QStrin
     QString fullInputPath = params.loadedFilePath;
 
     cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
-
-    if(useCustomSignature()) {
-        const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
-        cmd_pdfSignature->setCustomImage(imageData);
-    }
 
     cmd_signature->set_pdf_handler(cmd_pdfSignature);
     QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, params);
@@ -1988,14 +1984,8 @@ void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, doubl
                             double location_y, QString location, QString reason, int ltv,
                             QList<int> attribute_index) {
 
-	bool useCustomImage = false;
-
-	if (useCustomSignature()) {
-		useCustomImage = true;
-	}
-
     SCAPSignParams signParams = {inputPDF, outputPDF, page, location_x, location_y,
-		location, reason, ltv, attribute_index, useCustomImage };
+		location, reason, ltv, attribute_index };
 
     QtConcurrent::run(this, &GAPI::doSignSCAP, signParams);
 }
@@ -2011,7 +2001,7 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
 
     scapServices.executeSCAPSignature(this, params.inputPDF, params.outputPDF, params.page,
                 params.location_x, params.location_y, params.location, params.reason,
-				params.ltv, params.useCustomImage, attrs);
+                params.ltv, attrs, useCustomSignature(), m_jpeg_scaled_data);
     END_TRY_CATCH
 }
 
@@ -2897,7 +2887,7 @@ bool GAPI::useCustomSignature(void){
     m_custom_image = QImage(m_Settings.getPteidCachedir()+"/CustomSignPicture.png");
     if (m_Settings.getUseCustomSignature() && !m_custom_image.isNull())
     {
-        qDebug() << "Using Custom Picture to CC sign";
+        qDebug() << "Using Custom Picture to sign a PDF";
         QBuffer buffer(&m_jpeg_scaled_data);
         buffer.open(QIODevice::WriteOnly);
         //Save the generated image as high-quality JPEG data

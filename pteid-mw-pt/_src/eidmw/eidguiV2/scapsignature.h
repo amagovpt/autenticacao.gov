@@ -38,11 +38,12 @@ public:
 
     void executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepath, int selected_page,
                 double location_x, double location_y, QString &location, QString &reason, int ltv_years,
-                std::vector<int> attributes_index, CmdSignedFileDetails cmd_details);
+                std::vector<int> attributes_index, CmdSignedFileDetails cmd_details,
+                bool useCustomImage, QByteArray &m_jpeg_scaled_data);
 
     void executeSCAPSignature(GAPI *parent, QString &inputPath, QString &savefilepath, int selected_page,
-		double location_x, double location_y, QString &location, QString &reason, int ltv_years, bool useCustomImage, 
-		std::vector<int> selected_attributes);
+		double location_x, double location_y, QString &location, QString &reason, int ltv_years, 
+		std::vector<int> selected_attributes, bool useCustomImage, QByteArray &m_jpeg_scaled_data);
 
     std::vector<ns2__AttributesType *> loadAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies);
     std::vector<ns2__AttributesType *> reloadAttributesFromCache();
