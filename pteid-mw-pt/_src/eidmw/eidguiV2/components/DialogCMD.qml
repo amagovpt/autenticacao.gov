@@ -31,7 +31,7 @@ Item {
         }
         onSignalUpdateProgressStatus: {
             console.log("CMD sign change --> update progress status with text = " + statusMessage)
-            textMessageTop.text = statusMessage
+            textMessageTop.propertyText.text = statusMessage
         }
     }
 
@@ -289,19 +289,14 @@ Item {
                 width: parent.width
                 height: 50
                 anchors.horizontalCenter: parent.horizontalCenter
-                Text {
+                Link {
                     id: textMessageTop
-                    text: ""
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                    height: parent.height
-                    width: parent.width
-                    anchors.bottom: parent.bottom
-                    wrapMode: Text.WordWrap
-                    onLinkActivated: {
-                        Qt.openUrlExternally(link)
-                    }
+                    propertyText.text: ""
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    propertyText.color: Constants.COLOR_TEXT_LABEL
+                    propertyText.wrapMode: Text.WordWrap
+                    propertyText.height: parent.height
+                    propertyText.width: parent.width
                 }
             }
             Item {
