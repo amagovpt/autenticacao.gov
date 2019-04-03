@@ -16,6 +16,7 @@ ProxyInfo::ProxyInfo()
 	std::string proxy_pwd = config_pwd.getString();
 	long proxy_port = config2.getLong();
 	const char * pacfile_url = pacfile.getString();
+    system_proxy = false;
 
 	if (useSystemProxy.getLong() == 1 && pacfile_url != NULL && strlen(pacfile_url) > 0)
 	{
