@@ -10,9 +10,9 @@
 #define CMD_SUPPORT 1                   // CHANGE TO 1 TO SUPPORT CMD
 #if CMD_SUPPORT
 
-    #define CMD_BASIC_AUTH_APPID        "2192354e-4b1f-4401-9631-d5b2bdd7e4c8"  
-    #define CMD_BASIC_AUTH_USERID       "tx3hmWas" 
-    #define CMD_BASIC_AUTH_PASSWORD     "4pIXikQzfxrQt73wLiO2"
+    #define CMD_BASIC_AUTH_APPID        // INSERT CMD APP ID HERE  
+    #define CMD_BASIC_AUTH_USERID       // INSERT CMD USER ID HERE 
+    #define CMD_BASIC_AUTH_PASSWORD     // INSERT CMD PASSWORD HERE
 
 #else
 
