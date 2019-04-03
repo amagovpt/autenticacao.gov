@@ -1052,6 +1052,7 @@ void getOutlookVersion(std::wstring &version) {
     }
     version.assign(abValueDat, 20, 23);
 #endif
+    (void)version;
 }
 bool AppController::isOutlookInstalled() {
 #ifdef WIN32
@@ -1059,6 +1060,8 @@ bool AppController::isOutlookInstalled() {
     getOutlookVersion(version);
     return version.compare(L"") != 0;
 #endif
+
+    return false;
 }
 bool AppController::getOutlookSuppressNameChecks(void) {
 #ifdef WIN32
@@ -1088,6 +1091,8 @@ bool AppController::getOutlookSuppressNameChecks(void) {
     
     return false;
 #endif
+
+    return false;
 }
 void AppController::setOutlookSuppressNameChecks(bool bDisabledMatching) {
 #ifdef WIN32
@@ -1108,4 +1113,5 @@ void AppController::setOutlookSuppressNameChecks(bool bDisabledMatching) {
         return;
     }
 #endif
+    (void)bDisabledMatching;
 }
