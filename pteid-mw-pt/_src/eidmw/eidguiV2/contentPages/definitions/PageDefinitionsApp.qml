@@ -162,15 +162,15 @@ PageDefinitionsAppForm {
     Connections {
         target: propertyTextFieldAutUser
         onEditingFinished: {
-            console.log("Editing proxy username finished - username: " + propertyTextFieldAutUser.text);
+            //console.log("Editing proxy username finished - username: " + propertyTextFieldAutUser.text);
             controler.setProxyUsernameValue(propertyTextFieldAutUser.text)
         }
     }
     Connections {
         target: propertyTextFieldAutPass
         onEditingFinished: {
-            console.log("Editing proxy password finished - password: " + propertyTextFieldAutPass.text);
-            controler.setProxyPwdValue(parseInt(propertyTextFieldAutPass.text))
+            //console.log("Editing proxy password finished - password: " + propertyTextFieldAutPass.text);
+            controler.setProxyPwdValue(propertyTextFieldAutPass.text) 
         }
     }
 
