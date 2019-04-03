@@ -8,6 +8,8 @@
 #include "ScapSettings.h"
 #include "gapi.h"
 #include "eidlibdefines.h"
+#include "Util.h"
+#include "Config.h"
 
 //applayer and common headers
 #include "MiscUtil.h"
@@ -428,10 +430,75 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
     sp->send_timeout = SEND_TIMEOUT;
     sp->connect_timeout = CONNECT_TIMEOUT;
 
-    //TODO: this disables server certificate verification !!
-    soap_ssl_client_context(sp, SOAP_SSL_NO_AUTHENTICATION, NULL, NULL, NULL, NULL, NULL);
+	char * ca_path = NULL;
+	std::string cacerts_file;
+
+#ifdef __linux__
+	ca_path = "/etc/ssl/certs";
+	//Load CA certificates from file provided with pteid-mw
+#elif WIN32
+	cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR)) + "/cacerts.pem";
+	//TODO
+#elif __APPLE__
+	cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
+#endif
+
+	int ret = soap_ssl_client_context(sp, SOAP_SSL_DEFAULT,
+		NULL,
+		NULL,
+		cacerts_file.size() > 0 ? cacerts_file.c_str() : NULL, /* cacert file to store trusted certificates (needed to verify server) */
+		ca_path,
+		NULL);
+
+	if (ret != SOAP_OK) {
+		eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR
+			, "ScapSignature"
+			, "Error in signPDF: Gsoap returned %d "
+			, ret);
+		qDebug() << "signPDF() returned error!";
+		return GAPI::ScapGenericError;
+	}
 
     AuthorizationServiceSoapBindingProxy proxy(sp);
+
+	std::string proxy_host;
+	long proxy_port;
+
+	std::string s_endpoint = QString("https://" + settings.getScapServerHost() + ":" +
+		settings.getScapServerPort().append(AUTHORIZATION_ENDPOINT)).toStdString();
+
+	proxy.soap_endpoint = s_endpoint.c_str();
+
+
+    qDebug() << "signPDF: Read Proxy data: getProxyHost= " << proxyInfo.getProxyHost().toUtf8().constData() 
+        << "size=" << proxyInfo.getProxyPort().toLong() 
+        << "proxyInfo.getProxyHost().size()= " << proxyInfo.getProxyHost().size();
+
+    if (proxyInfo.isSystemProxy()) 
+    {
+        proxyInfo.getProxyForHost(s_endpoint, &proxy_host, &proxy_port);
+		if (proxy_host.size() > 0) {
+			sp->proxy_host = proxy_host.c_str();
+			sp->proxy_port = proxy_port;
+
+			eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
+                "signPDF: Using System Proxy: host=%s, port=%ld", 
+                proxyInfo.getProxyHost().toUtf8().constData(), proxyInfo.getProxyPort().toLong());
+		}
+	}
+	else if (proxyInfo.getProxyHost().size() > 0) {
+        sp->proxy_host = strdup(proxyInfo.getProxyHost().toUtf8().constData());
+		sp->proxy_port = proxyInfo.getProxyPort().toLong();
+		eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
+            "signPDF: Using Manual Proxy: host=%s, port=%ld", 
+            proxyInfo.getProxyHost().toUtf8().constData(), proxyInfo.getProxyPort().toLong());
+
+		if (proxyInfo.getProxyUser().size() > 0) {
+            sp->proxy_userid = strdup(proxyInfo.getProxyUser().toUtf8().constData());
+            sp->proxy_passwd = strdup(proxyInfo.getProxyPwd().toUtf8().constData());
+		}
+
+	}
 
     _ns1__AuthorizationRequest authorizationRequest;
     _ns1__AuthorizationResponse authorizationResponse;
@@ -450,7 +517,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
     SignatureDetails sigDetails;
 
     //Get the details of the first citizen signature, performed via CC or CMD
-    int ret = getCitizenSignatureDetails(filepath, sigDetails);
+    ret = getCitizenSignatureDetails(filepath, sigDetails);
     if (ret == GAPI::ScapSucess) {
         qDebug() << "getCitizenSignatureDetails() returned success!";
     } else {
@@ -487,9 +554,6 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
     ns1__AttributeListType *attributeList = soap_new_req_ns1__AttributeListType(sp, attributes);
 
     authorizationRequest.AttributeList = attributeList;
-
-    std::string s_endpoint = QString("https://" + settings.getScapServerHost() + ":" +
-                                     settings.getScapServerPort().append(AUTHORIZATION_ENDPOINT)).toStdString();
 
     proxy.soap_endpoint = s_endpoint.c_str();
 

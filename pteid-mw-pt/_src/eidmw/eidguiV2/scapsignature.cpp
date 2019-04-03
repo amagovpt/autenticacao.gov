@@ -4,6 +4,8 @@
 
 #include "ScapSettings.h"
 #include "gapi.h"
+#include "Util.h"
+#include "Config.h"
 
 #include "SCAP-services-v3/SCAPH.h"
 #include "SCAP-services-v3/SCAPAttributeSupplierBindingProxy.h"
@@ -102,6 +104,7 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
     }
 
     PDFSignatureClient scap_signature_client;
+    ProxyInfo m_proxyInfo;
     int successful;
     try{
          successful = scap_signature_client.signPDF(m_proxyInfo, savefilepath, cmd_details.signedCMDFile, cmd_details.citizenName,
@@ -188,6 +191,7 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
         if (sign_rc == 0)
         {
             PDFSignatureClient scap_signature_client;
+            ProxyInfo m_proxyInfo;
             int successful = scap_signature_client.signPDF(
                         m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
                         QString(citizenId), ltv_years, true, PDFSignatureInfo(selected_page, location_x, location_y,
@@ -230,8 +234,33 @@ std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
 	//qDebug() << "getAttributeSuppliers(): " << m_suppliersList.size();
 
 	soap * sp = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
-	//TODO: this disables server certificate verification !!
-	soap_ssl_client_context(sp, SOAP_SSL_NO_AUTHENTICATION, NULL, NULL, NULL, NULL, NULL);
+
+	char * ca_path = NULL;
+	std::string cacerts_file;
+
+#ifdef __linux__
+	ca_path = "/etc/ssl/certs";
+	//Load CA certificates from file provided with pteid-mw
+#elif WIN32
+	cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR)) + "/cacerts.pem";
+	//TODO
+#elif __APPLE__
+	cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
+#endif
+
+	int ret = soap_ssl_client_context(sp, SOAP_SSL_DEFAULT,
+		NULL,
+		NULL,
+		cacerts_file.size() > 0 ? cacerts_file.c_str() : NULL, /* cacert file to store trusted certificates (needed to verify server) */
+		ca_path,
+		NULL);
+
+	if (ret != SOAP_OK) {
+		eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR
+			, "ScapSignature"
+			, "Error in getAttributeSuppliers: Gsoap returned %d "
+			, ret);
+	}
 
 	// Get Endpoint from settings
 	ScapSettings settings;
@@ -246,7 +275,12 @@ std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
 	std::string proxy_host;
     long proxy_port = 0;
 	//Proxy support using the gsoap BindingProxy
-	if (m_proxyInfo.isSystemProxy())
+    ProxyInfo m_proxyInfo;
+    qDebug() << "signPDF: Read Proxy data: getProxyHost= " << m_proxyInfo.getProxyHost().toUtf8().constData()
+        << "size=" << m_proxyInfo.getProxyPort().toLong()
+        << "proxyInfo.getProxyHost().size()= " << m_proxyInfo.getProxyHost().size();
+	
+    if (m_proxyInfo.isSystemProxy())
 	{
 		m_proxyInfo.getProxyForHost(sup_endpoint, &proxy_host, &proxy_port);
 		if (proxy_host.size() > 0)
@@ -254,14 +288,18 @@ std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
 			sp->proxy_host = proxy_host.c_str();
 			sp->proxy_port = proxy_port;
 
-			eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Using System Proxy: host=%s, port=%ld", sp->proxy_host, sp->proxy_port);
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", 
+                "getAttributeSuppliers: Using System Proxy: host=%s, port=%ld", 
+                m_proxyInfo.getProxyHost().toUtf8().constData(), m_proxyInfo.getProxyPort().toLong());
 		}
 	}
 	else if (m_proxyInfo.getProxyHost().size() > 0)
 	{
 		sp->proxy_host = strdup(m_proxyInfo.getProxyHost().toUtf8().constData());
 		sp->proxy_port = m_proxyInfo.getProxyPort().toLong();
-		eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Using Manual Proxy: host=%s, port=%ld", sp->proxy_host, sp->proxy_port);
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", 
+            "getAttributeSuppliers: Using Manual Proxy: host=%s, port=%ld", 
+            m_proxyInfo.getProxyHost().toUtf8().constData(), m_proxyInfo.getProxyPort().toLong());
 
 		if (m_proxyInfo.getProxyUser().size() > 0)
 		{
@@ -280,7 +318,7 @@ std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
     //suppliers_proxy.soap_endpoint = c_sup_endpoint;
 
     //int ret = suppliers_proxy.AttributeSuppliers(suppliers_resp);
-    int ret = suppliers_proxy.AttributeSuppliers(c_sup_endpoint, entities_soapAction, suppliers_resp);
+    ret = suppliers_proxy.AttributeSuppliers(c_sup_endpoint, entities_soapAction, suppliers_resp);
 
     setConnErr( ret, &suppliers_resp );
 
