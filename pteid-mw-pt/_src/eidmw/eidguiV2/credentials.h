@@ -7,13 +7,12 @@
 #define CREDENTIALS_H
 
 /* CMD */
-#define CMD_SUPPORT 1                   // CHANGE TO 1 TO SUPPORT CMD
+#define CMD_SUPPORT 0                   // CHANGE TO 1 TO SUPPORT CMD
 #if CMD_SUPPORT
 
     #define CMD_BASIC_AUTH_APPID        // INSERT CMD APP ID HERE  
     #define CMD_BASIC_AUTH_USERID       // INSERT CMD USER ID HERE 
     #define CMD_BASIC_AUTH_PASSWORD     // INSERT CMD PASSWORD HERE
-
 #else
 
     #define CMD_BASIC_AUTH_USERID       "" 
