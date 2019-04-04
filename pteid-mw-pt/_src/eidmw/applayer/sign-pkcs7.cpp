@@ -305,7 +305,7 @@ void add_signingCertificate(PKCS7_SIGNER_INFO *si, X509 *x509, unsigned char * c
 	MWLOG(LEV_ERROR, MOD_APL, L"Failed to add SigningCertificateV2 attribute.");
 }
 
-void addCertificateChain(PKCS7 *p7) 
+void addCardCertificateChain(PKCS7 *p7) 
 {
     
     APL_Card *card = AppLayer.getReader().getCard();
@@ -321,11 +321,11 @@ void addCertificateChain(PKCS7 *p7)
 	    issuer = certif->getIssuer();
 
         if (issuer == NULL) {
-            MWLOG(LEV_ERROR, MOD_APL, "addCertificateChain() Couldn't find issuer for cert: %s", certif->getOwnerName());
+            MWLOG(LEV_ERROR, MOD_APL, "addCardCertificateChain() Couldn't find issuer for cert: %s", certif->getOwnerName());
             break;
         }
 
-        MWLOG(LEV_DEBUG, MOD_APL, "signPKCS7: addCertificateChain: Loading cert: %s", issuer->getOwnerName());
+        MWLOG(LEV_DEBUG, MOD_APL, "signPKCS7: addCardCertificateChain: Loading cert: %s", issuer->getOwnerName());
         add_certificate(p7, certif->getData());
         certif = issuer;
     }
@@ -346,7 +346,8 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
                             , std::vector<CByteArray> &ca_certificates
                             , bool timestamp
                             , PKCS7 *p7
-                            , PKCS7_SIGNER_INFO **out_signer_info) {
+                            , PKCS7_SIGNER_INFO **out_signer_info
+                            , bool isCardSign) {
     CByteArray outHash;
     bool isError = false;
     unsigned char *attr_buf = NULL;
@@ -425,12 +426,12 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
 
     PKCS7_add_certificate( p7, x509 );
 
-    //For non-card signatures we need to add the supplied CA certificates
-    if (ca_certificates.size() > 0) {
-        addExternalCertificateChain(p7, ca_certificates);
+    if (isCardSign){
+        addCardCertificateChain(p7);
     }
-    else {
-        addCertificateChain(p7);
+    else{
+        //For non-card signatures we need to add the supplied CA certificates
+        addExternalCertificateChain(p7, ca_certificates);
     }
 
     PKCS7_set_detached( p7, 1);

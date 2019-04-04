@@ -669,7 +669,7 @@ void XadesSignature::addCertificateToKeyInfo(const CByteArray &cert, DSIGKeyInfo
 	delete ssl_cert;
 }
 
-void XadesSignature::addCertificateChain(DSIGKeyInfoX509 *keyInfo)
+void XadesSignature::addCardCertificateChain(DSIGKeyInfoX509 *keyInfo)
 {
 
     APL_SmartCard * eid_card = static_cast<APL_SmartCard *> (mp_card);
@@ -684,11 +684,11 @@ void XadesSignature::addCertificateChain(DSIGKeyInfoX509 *keyInfo)
         issuer = certif->getIssuer();
 
 		if (issuer == NULL) {
-			MWLOG(LEV_ERROR, MOD_APL, "XadesSignature: addCertificateChain() Couldn't find issuer for cert: %s", certif->getOwnerName());
+			MWLOG(LEV_ERROR, MOD_APL, "XadesSignature: addCardCertificateChain() Couldn't find issuer for cert: %s", certif->getOwnerName());
             break;
         }
 
-		MWLOG(LEV_DEBUG, MOD_APL, "XadesSignature: addCertificateChain: Loading cert: %s", issuer->getOwnerName());
+		MWLOG(LEV_DEBUG, MOD_APL, "XadesSignature: addCardCertificateChain: Loading cert: %s", issuer->getOwnerName());
 		addCertificateToKeyInfo(issuer->getData(), keyInfo);
 		m_cert_bas.push_back(issuer->getData());
 		certif = issuer;
@@ -1244,7 +1244,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		keyInfoX509->appendX509Certificate(ssl_cert->getDEREncodingSB().sbStrToXMLCh());
 
 		//Append to KeyInfo element all the needed CA certificates
-		addCertificateChain(keyInfoX509);
+		addCardCertificateChain(keyInfoX509);
 
 		try
 		{

@@ -76,7 +76,7 @@ namespace eIDMW
 		CByteArray *WriteToByteArray(XERCES_NS DOMDocument *doc);
 
 		//Utility methods for signature
-		void addCertificateChain(DSIGKeyInfoX509 *keyInfo);
+		void addCardCertificateChain(DSIGKeyInfoX509 *keyInfo);
 		void addCertificateToKeyInfo(const CByteArray &cert, DSIGKeyInfoX509 *keyInfo);
 		void loadSignerCert(CByteArray &ba, EVP_PKEY *pub_key);
 		int appendOID(XMLByte *toFill);
