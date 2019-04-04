@@ -1199,7 +1199,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 			//Create a reference to the external file
 			DSIGReference * ref = sig->createReference(createURI(path), HASH_SHA256);
 			MWLOG(LEV_DEBUG, MOD_APL, "SignXades(): Hashing file %s", path);
-			sha1_hash = HashFile(path);
+                sha1_hash = HashFile(path);
 
 			//Fill the hash value as base64-encoded string
 			//ref->setExternalHash(sha1_hash.GetBytes());
@@ -1209,7 +1209,12 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		CByteArray certData;
 	    mp_card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
 	    loadSignerCert(certData, pub_key);
-	    certData.TrimRight(0);
+        /*
+        Get the certificate length to trim the padding zero bytes which are useless
+        and affect the certificate digest computation
+        */
+        long certLen = long(((certData.GetByte(2) << 8) + certData.GetByte(3)) + 4);
+        certData = certData.GetBytes(0, certLen);
 
 		addSignatureProperties(sig, (XMLCh*)signature_id.c_str(), certData);
 
@@ -1223,7 +1228,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		ref_signed_props->appendCanonicalizationTransform(
 			XMLString::transcode("http://www.w3.org/2001/10/xml-exc-c14n#"));
 
-		try
+        try
 		{
 			// This is a somewhat hackish way of getting the canonicalized hash
 			// of the reference
