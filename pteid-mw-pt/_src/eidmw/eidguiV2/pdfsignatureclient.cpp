@@ -293,7 +293,7 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
     isCC ? sig_handler->setIsCC(true) : sig_handler->setIsCC(false);
 
     //Add PDF signature objects right before we call getHash()
-    sig_handler->signFiles(signatureInfo.getLocation(), signatureInfo.getReason(), outputPath);
+    sig_handler->signFiles(signatureInfo.getLocation(), signatureInfo.getReason(), outputPath, false);
 
     /* Calculate hash */
     CByteArray hashByteArray = sig_handler->getHash();

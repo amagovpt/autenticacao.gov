@@ -440,13 +440,13 @@ namespace eIDMW
 	}
 
 	int PDFSignature::signFiles(const char *location,
-		const char *reason, const char *outfile_path)
+		const char *reason, const char *outfile_path, bool isCardSign)
 	{
 		int rc = 0;
 
 		if (!m_batch_mode)
 		{
-			rc = signSingleFile(location, reason, outfile_path);
+            rc = signSingleFile(location, reason, outfile_path, isCardSign);
 		}
 		//PIN-Caching is ON after the first signature
 		else
@@ -462,7 +462,7 @@ namespace eIDMW
 				 if (m_files_to_sign.at(i).second)
 				 	m_page = m_doc->getNumPages();
 
-				rc += signSingleFile(location, reason, f.c_str());
+				rc += signSingleFile(location, reason, f.c_str(), isCardSign);
 				if (i == 0)
 					 m_card->getCalReader()->setSSO(true);
 
@@ -496,10 +496,10 @@ namespace eIDMW
 	
 
 	int PDFSignature::signSingleFile(const char *location,
-		const char *reason, const char *outfile_path)
+        const char *reason, const char *outfile_path, bool isCardSign)
 	{
 
-		bool isLangPT = false;
+        bool isLangPT = false;
 		PDFDoc *doc = m_doc;
 		//The class ctor initializes it to (0,0,0,0)
 		//so we can use this for invisible sig
@@ -671,7 +671,7 @@ namespace eIDMW
 				m_certificate = m_externCertificate;
             }
 
-			computeHash(to_sign, len, m_certificate, m_ca_certificates);
+            computeHash(to_sign, len, m_certificate, m_ca_certificates, isCardSign);
 
             m_signStarted = true;
 		}
@@ -737,7 +737,8 @@ namespace eIDMW
 
     void PDFSignature::computeHash(unsigned char *data, unsigned long dataLen,
                                      CByteArray certificate,
-                                     std::vector<CByteArray> &certificate_cas) {
+                                     std::vector<CByteArray> &certificate_cas,
+                                     bool isCardSign) {
 
         OpenSSL_add_all_algorithms();
         if ( m_pkcs7 != NULL ) PKCS7_free( m_pkcs7 );
@@ -750,7 +751,8 @@ namespace eIDMW
                                                 , certificate_cas
                                                 , m_timestamp
                                                 , m_pkcs7
-                                                , &m_signerInfo );
+                                                , &m_signerInfo 
+                                                , isCardSign);
         setHash(in_hash);
     }
 

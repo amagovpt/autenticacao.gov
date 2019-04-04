@@ -234,7 +234,7 @@ namespace eIDMW {
                 pdf->setVisibleCoordinates(page, coord_x, coord_y);
             }
 
-            ret = pdf->signFiles(location, reason, outfile_path);
+            ret = pdf->signFiles(location, reason, outfile_path, false);
             if ( ret != ERR_NONE ) {
                 MWLOG_ERR( logBuf, "PDFSignature::signFiles failed: %d", ret );
                 return ERR_SIGN_PDF;

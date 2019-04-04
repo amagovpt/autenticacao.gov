@@ -47,7 +47,7 @@ namespace eIDMW
 
 		//General interface to signing in single file-mode or batch-mode
 		EIDMW_APL_API int signFiles(const char *location, const char *reason,
-			const char *outfile_path);
+            const char *outfile_path, bool isCardSign);
         EIDMW_APL_API bool isLandscapeFormat();
 		EIDMW_APL_API void setCustomImage(unsigned char *img_data, unsigned long img_length);
 		EIDMW_APL_API void enableSmallSignature();
@@ -79,7 +79,8 @@ namespace eIDMW
         void setHash( CByteArray in_hash );
         void computeHash(unsigned char *data, unsigned long dataLen,
                          CByteArray certificate,
-                         std::vector<CByteArray> &CA_certificates);
+                         std::vector<CByteArray> &CA_certificates,
+                         bool isCardSign);
 
         
 		EIDMW_APL_API int signClose(CByteArray signature);
@@ -94,7 +95,7 @@ namespace eIDMW
 		PDFRectangle computeSigLocationFromSector(double, double, int);
 		PDFRectangle computeSigLocationFromSectorLandscape(double, double, int);
 		int signSingleFile(const char *location, const char *reason,
-			const char *outfile_path);
+            const char *outfile_path, bool isCardSign);
 
 		/* Certificate Data*/
 		CByteArray m_certificate;

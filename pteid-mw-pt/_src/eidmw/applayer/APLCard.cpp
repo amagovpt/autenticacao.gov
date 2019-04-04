@@ -184,7 +184,7 @@ int APL_Card::SignPDF(PDFSignature *pdf_sig,  const char *location,
 	if (pdf_sig)
 	{
 		pdf_sig->setCard(this);
-		return pdf_sig->signFiles(location, reason, outfile_path);
+		return pdf_sig->signFiles(location, reason, outfile_path, true);
 	}
 
 	return -1;

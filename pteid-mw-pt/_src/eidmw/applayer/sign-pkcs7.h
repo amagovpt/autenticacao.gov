@@ -22,7 +22,8 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
                             , std::vector<CByteArray> &ca_certificates 
                             , bool timestamp
                             , PKCS7 *p7
-                            , PKCS7_SIGNER_INFO **out_signer_info );
+                            , PKCS7_SIGNER_INFO **out_signer_info 
+                            , bool isCardSign);
 
 int getSignedData_pkcs7( unsigned char *signature, unsigned int signatureLen
                         , PKCS7_SIGNER_INFO *signer_info
