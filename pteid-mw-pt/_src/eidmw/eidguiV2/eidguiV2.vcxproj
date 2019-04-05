@@ -135,6 +135,14 @@
     <ResourceCompile>
       <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
+    <PreBuildEvent>
+      <Command>echo "*********************************************************************************"
+echo "Copying credentials file from: %PTEID_CREDENTIALS_FILE%"
+copy "$(ProjectDir)\credentials.h.template" "$(ProjectDir)\credentials.h"
+copy %PTEID_CREDENTIALS_FILE% "$(ProjectDir)\credentials.h"
+echo "*********************************************************************************"
+</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -177,6 +185,13 @@
     <ResourceCompile>
       <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
+    <PreBuildEvent>
+      <Command>echo "*********************************************************************************"
+echo "Copying credentials file from: %PTEID_CREDENTIALS_FILE%"
+copy "$(ProjectDir)\credentials.h.template" "$(ProjectDir)\credentials.h"
+copy %PTEID_CREDENTIALS_FILE% "$(ProjectDir)\credentials.h"
+echo "*********************************************************************************"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
