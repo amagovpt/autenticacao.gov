@@ -594,7 +594,7 @@ PageCardAdressForm {
             gapi.startReadingAddress()
         }else{
             if(Constants.USE_SDK_PIN_UI_POPUP){
-                if (gapi.getTriesLeftAddressPin() === 0) {
+                if (gapi.doGetTriesLeftAddressPin() === 0) {
                     mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                             qsTranslate("Popup PIN","STR_POPUP_ERROR")
                     mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =

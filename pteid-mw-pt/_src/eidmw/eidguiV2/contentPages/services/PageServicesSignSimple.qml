@@ -391,7 +391,7 @@ PageServicesSignSimpleForm {
     propertyButtonSignWithCC {
         onClicked: {
             console.log("Sign with CC")
-            if (gapi.getTriesLeftSignPin() === 0) {
+            if (gapi.doGetTriesLeftSignPin() === 0) {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                         qsTranslate("Popup PIN","STR_POPUP_ERROR")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
