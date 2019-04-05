@@ -437,8 +437,6 @@ PageServicesSignAdvancedForm {
             console.log("Num files: "+filesArray.length);
         }
         onDropped: {
-            //TODO: Validate files type
-
             updateUploadedFiles(filesArray)
 
             // Force scroll and focus to the last item addded
@@ -1290,23 +1288,34 @@ PageServicesSignAdvancedForm {
         }
         return false;
     }
+    function appendFileToModel(path) {
+        var alreadyUploaded = false;
+        var newFileUrl = {
+            "fileUrl": path
+        };
+
+        if (!containsFile(newFileUrl, filesModel)){
+            filesModel.append(newFileUrl);
+            propertyPageLoader.propertyBackupfilesModel.append(newFileUrl);
+        } else {
+            alreadyUploaded = true;
+        }
+        return alreadyUploaded;
+    }
+
     function updateUploadedFiles(fileList){
         var fileAlreadyUploaded = false
         for(var i = 0; i < fileList.length; i++){
             var path = fileList[i];
-            /*console.log("Adding file: " + path)*/
 
-            path = decodeURIComponent(stripFilePrefix(path))
-
-            var newFileUrl = {
-                "fileUrl": path
-            };
-
-            if (!containsFile(newFileUrl, filesModel)){
-                filesModel.append(newFileUrl)
-                propertyPageLoader.propertyBackupfilesModel.append(newFileUrl)
-            } else {
-                fileAlreadyUploaded = true
+            path = decodeURIComponent(stripFilePrefix(path));
+            if (gapi.isFile(path)) {
+                fileAlreadyUploaded = appendFileToModel(path);
+            } else if (gapi.isDirectory(path)) {
+                var filesInDir = gapi.getFilesFromDirectory(path);
+                if (filesInDir instanceof Array) {
+                    updateUploadedFiles(filesInDir); // it's a folder do it again recursively
+                }
             }
         }
 
