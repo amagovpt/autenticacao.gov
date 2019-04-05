@@ -710,6 +710,7 @@ PageSecurityPinCodesForm {
         onCurrentIndexChanged: {
             var triesLeft = 0
             console.log("StackLayout currentIndex = " + protertyStackLayout.currentIndex)
+            propertyBusyIndicator.running = true
             switch(protertyStackLayout.currentIndex) {
             case 0:
                 gapi.getTriesLeftAuthPin()
