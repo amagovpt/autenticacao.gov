@@ -227,6 +227,9 @@ public:
 
     enum ScapPdfSignResult { ScapTimeOutError, ScapGenericError, ScapAttributesExpiredError, ScapZeroAttributesError,
                              ScapNotValidAttributesError, ScapSucess };
+
+    enum PinUsage { AuthPin, SignPin, AddressPin };
+
     Q_ENUMS(ScapPdfSignResult)
     Q_ENUMS(CardAccessError)
     Q_ENUMS(eCustomEventType)
@@ -236,6 +239,7 @@ public:
     Q_ENUMS(SignMessage)
     Q_ENUMS(PrintMessage)
     Q_ENUMS(AutoUpdateMessage)
+    Q_ENUMS(PinUsage)
 
 
     bool isAddressLoaded() {return m_addressLoaded; }
@@ -299,12 +303,15 @@ public slots:
     //Returns page size in postscript points
     QSize getPageSize(int page) { return image_provider_pdf->getPageSize(page); };
     void verifyAuthPin(QString pin);
-    unsigned int getTriesLeftAuthPin();
+    void getTriesLeftAuthPin();
     void verifySignPin(QString pin);
-    unsigned int getTriesLeftSignPin();
+    void getTriesLeftSignPin();
     void verifyAddressPin(QString pin);
-    unsigned int getTriesLeftAddressPin();
+    void getTriesLeftAddressPin();
 
+    unsigned int doGetTriesLeftAuthPin();
+    unsigned int doGetTriesLeftSignPin();
+    unsigned int doGetTriesLeftAddressPin();
     unsigned int doVerifyAuthPin(QString pin);
     unsigned int doVerifySignPin(QString pin);
     unsigned int doVerifyAddressPin(QString pin);
@@ -393,8 +400,9 @@ signals:
     void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage);
     void signalCertificatesChanged(const QVariantMap certificatesMap);
     void signalShowCardActivation(QString statusMessage);
-    void signalTestPinFinished(int triesLeft);
-    void signalModifyPinFinished(int triesLeft);
+    void signalTestPinFinished(int triesLeft, int pin);
+    void signalModifyPinFinished(int triesLeft, int pin);
+    void signalTriesLeftPinFinished(int triesLeft, int pin);
         
     //SCAP signals
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
