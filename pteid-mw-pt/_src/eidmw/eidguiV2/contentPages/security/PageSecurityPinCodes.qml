@@ -54,12 +54,16 @@ PageSecurityPinCodesForm {
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
-            propertyButtonModifyAuth.enabled = false
-            propertyButtonTestAuth.enabled = false
-            propertyButtonModifySign.enabled = false
-            propertyButtonTestSign.enabled = false
-            propertyButtonModifyAddress.enabled = false
-            propertyButtonTestAddress.enabled = false
+
+            if(error_code !== GAPI.CardUserPinCancel
+                    && error_code !== GAPI.CardPinTimeout){
+                propertyButtonModifyAuth.enabled = false
+                propertyButtonTestAuth.enabled = false
+                propertyButtonModifySign.enabled = false
+                propertyButtonTestSign.enabled = false
+                propertyButtonModifyAddress.enabled = false
+                propertyButtonTestAddress.enabled = false
+            }
             
             propertyBusyIndicator.running = false
         }
@@ -119,6 +123,8 @@ PageSecurityPinCodesForm {
             console.log("Pin tries left = " + triesLeft)
             if (triesLeft === 0) {
                 triesLeftText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
+                modifyButton.enabled = false
+                testButton.enabled = false
             }
             else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
                 triesLeftText.text = ""
@@ -156,14 +162,20 @@ PageSecurityPinCodesForm {
             
             if (triesLeft === 0) {
                 triesLeftText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
+                modifyButton.enabled = false
+                testButton.enabled = false
             }
             else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
                 triesLeftText.text = ""
+                modifyButton.enabled = true
+                testButton.enabled = true
             }
             else {
                 triesLeftText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
                                         + " " + triesLeft + " "
                                         + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
+                modifyButton.enabled = true
+                testButton.enabled = true
             }
         }
 
@@ -188,14 +200,20 @@ PageSecurityPinCodesForm {
 
             if (triesLeft === 0) {
                 triesLeftText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
+                modifyButton.enabled = false
+                testButton.enabled = false
             }
             else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
                 triesLeftText.text = ""
+                modifyButton.enabled = true
+                testButton.enabled = true
             }
             else {
                 triesLeftText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
                         + " " + triesLeft + " "
                         + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
+                modifyButton.enabled = true
+                testButton.enabled = true
             }
         }
     }
