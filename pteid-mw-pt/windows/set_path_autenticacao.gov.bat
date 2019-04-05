@@ -36,4 +36,6 @@
 @set PTEID_DIR_MSM=C:\Program Files (x86)\Common Files\Merge Modules
 @set PTEID_DRIVERS_DDK=C:\WinDDK\7600.16385.1
 
-
+:: Credentials
+::======
+@set PTEID_CREDENTIALS_FILE=
