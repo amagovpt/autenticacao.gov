@@ -365,6 +365,11 @@ public slots:
 
     void setAppAsDlgParent();
 
+    // used to check if a path is a directory or a file from QML
+    bool isDirectory(QString path);
+    bool isFile(QString path);
+    QList<QString> getFilesFromDirectory(QString path);
+
 signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed

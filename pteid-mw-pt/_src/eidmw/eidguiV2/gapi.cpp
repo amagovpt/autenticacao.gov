@@ -1644,6 +1644,32 @@ void GAPI::doSignBatchXADES(SignBatchParams &params) {
     END_TRY_CATCH
 }
 
+bool GAPI::isDirectory(QString path) {
+	QFileInfo fi(path);
+	return fi.isDir();
+}
+
+bool GAPI::isFile(QString path) {
+	QFileInfo fi(path);
+	return fi.isFile();
+}
+
+QList<QString> GAPI::getFilesFromDirectory(QString path) {
+	QList<QString> allFiles;
+	if (isDirectory(path)) {
+		QDir dir(path);
+		if (dir.exists() && !dir.isEmpty()) {
+			QFileInfoList list = dir.entryInfoList(QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot | QDir::Readable);
+			for (int i = 0; i < list.size(); ++i) {
+				QFileInfo fi = list.at(i);
+				allFiles.append(fi.absoluteFilePath());
+			}
+		}
+	}
+	qDebug() << "QSTring files " << allFiles;
+	return allFiles;
+}
+
 void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp) {
     BEGIN_TRY_CATCH
 
