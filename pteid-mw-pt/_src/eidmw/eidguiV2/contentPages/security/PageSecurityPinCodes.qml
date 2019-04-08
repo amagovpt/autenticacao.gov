@@ -76,14 +76,31 @@ PageSecurityPinCodesForm {
             propertyButtonModifyAddress.enabled = true
             propertyButtonTestAddress.enabled = true
             propertyBusyIndicator.running = false
+            propertyBusyIndicator.running = true
+            switch(protertyStackLayout.currentIndex) {
+            case 0:
+                gapi.getTriesLeftAuthPin()
+                break;
+            case 1:
+                gapi.getTriesLeftSignPin()
+                break;
+            case 2:
+                gapi.getTriesLeftAddressPin()
+                break;
+            default:
+                break
+            }
         }
         onSignalCardChanged: {
             console.log("Security Pin Codes onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
+                propertyTriesLeftAuthPin.text = ""
                 propertyButtonModifyAuth.enabled = false
                 propertyButtonTestAuth.enabled = false
+                propertyTriesLeftSignPin.text = ""
                 propertyButtonModifySign.enabled = false
                 propertyButtonTestSign.enabled = false
+                propertyTriesLeftAddressPin.text = ""
                 propertyButtonModifyAddress.enabled = false
                 propertyButtonTestAddress.enabled = false
             }
@@ -92,53 +109,19 @@ PageSecurityPinCodesForm {
                 gapi.startCardReading()
             }
             else{
+                propertyTriesLeftAuthPin.text = ""
                 propertyButtonModifyAuth.enabled = false
                 propertyButtonTestAuth.enabled = false
+                propertyTriesLeftSignPin.text = ""
                 propertyButtonModifySign.enabled = false
                 propertyButtonTestSign.enabled = false
+                propertyTriesLeftAddressPin.text = ""
                 propertyButtonModifyAddress.enabled = false
                 propertyButtonTestAddress.enabled = false
             }
         }
         onSignalTriesLeftPinFinished: {
-            var triesLeftText, modifyButton, testButton
-            if (pin == GAPI.AuthPin){
-                triesLeftText = propertyTriesLeftAuthPin
-                modifyButton  = propertyButtonModifyAuth
-                testButton  = propertyButtonTestAuth
-            } else if (pin == GAPI.SignPin){
-                triesLeftText = propertyTriesLeftSignPin
-                modifyButton  = propertyButtonModifySign
-                testButton  = propertyButtonTestSign
-            } else if (pin == GAPI.AddressPin){
-                triesLeftText = propertyTriesLeftAddressPin
-                modifyButton  = propertyButtonModifyAddress
-                testButton  = propertyButtonTestAddress
-            } else {
-                console.log("Error: pin can only be authPin, signPin or addressPin when emitting signal")
-                propertyBusyIndicator.running = false
-                return
-            }
-
-            console.log("Pin tries left = " + triesLeft)
-            if (triesLeft === 0) {
-                triesLeftText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
-                modifyButton.enabled = false
-                testButton.enabled = false
-            }
-            else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
-                triesLeftText.text = ""
-                modifyButton.enabled = true
-                testButton.enabled = true
-            }
-            else {
-                triesLeftText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
-                        + " " + triesLeft + " "
-                        + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
-                modifyButton.enabled = true
-                testButton.enabled = true
-            }
-            propertyBusyIndicator.running = false
+            updateWithTriesLeft(triesLeft, pin)
         }
 
         onSignalTestPinFinished: {
@@ -150,33 +133,7 @@ PageSecurityPinCodesForm {
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                 mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             }
-            var triesLeftText 
-            if (pin == GAPI.AuthPin)
-                triesLeftText = propertyTriesLeftAuthPin
-            else if (pin == GAPI.SignPin)
-                triesLeftText = propertyTriesLeftSignPin
-            else if (pin == GAPI.AddressPin)
-                triesLeftText = propertyTriesLeftAddressPin
-            else 
-                console.log("Error: pin can only be authPin, signPin or addressPin when emitting signal")
-            
-            if (triesLeft === 0) {
-                triesLeftText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
-                modifyButton.enabled = false
-                testButton.enabled = false
-            }
-            else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
-                triesLeftText.text = ""
-                modifyButton.enabled = true
-                testButton.enabled = true
-            }
-            else {
-                triesLeftText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
-                                        + " " + triesLeft + " "
-                                        + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
-                modifyButton.enabled = true
-                testButton.enabled = true
-            }
+            updateWithTriesLeft(triesLeft, pin)
         }
 
         onSignalModifyPinFinished: {
@@ -188,33 +145,7 @@ PageSecurityPinCodesForm {
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                 mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             }
-            var triesLeftText 
-            if (pin == GAPI.AuthPin)
-                triesLeftText = propertyTriesLeftAuthPin
-            else if (pin == GAPI.SignPin)
-                triesLeftText = propertyTriesLeftSignPin
-            else if (pin == GAPI.AddressPin)
-                triesLeftText = propertyTriesLeftAddressPin
-            else 
-                console.log("Error: pin can only be authPin, signPin or addressPin when emitting signal")
-
-            if (triesLeft === 0) {
-                triesLeftText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
-                modifyButton.enabled = false
-                testButton.enabled = false
-            }
-            else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
-                triesLeftText.text = ""
-                modifyButton.enabled = true
-                testButton.enabled = true
-            }
-            else {
-                triesLeftText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
-                        + " " + triesLeft + " "
-                        + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
-                modifyButton.enabled = true
-                testButton.enabled = true
-            }
+            updateWithTriesLeft(triesLeft, pin)
         }
     }
 
@@ -748,5 +679,47 @@ PageSecurityPinCodesForm {
         propertyBusyIndicator.running = true
         console.log("StackLayout currentIndex = " + protertyStackLayout.currentIndex)
         gapi.getTriesLeftAuthPin()
+    }
+
+    function updateWithTriesLeft(triesLeft, pin) {
+    console.log("update with tries left: tries=" + triesLeft + " pin=" + pin)
+        var triesLeftText, modifyButton, testButton
+        if (pin == GAPI.AuthPin){
+            triesLeftText = propertyTriesLeftAuthPin
+            modifyButton  = propertyButtonModifyAuth
+            testButton  = propertyButtonTestAuth
+        } else if (pin == GAPI.SignPin){
+            triesLeftText = propertyTriesLeftSignPin
+            modifyButton  = propertyButtonModifySign
+            testButton  = propertyButtonTestSign
+        } else if (pin == GAPI.AddressPin){
+            triesLeftText = propertyTriesLeftAddressPin
+            modifyButton  = propertyButtonModifyAddress
+            testButton  = propertyButtonTestAddress
+        } else {
+            console.log("Error: pin can only be authPin, signPin or addressPin when emitting signal")
+            propertyBusyIndicator.running = false
+            return
+        }
+
+        console.log("Pin tries left = " + triesLeft)
+        if (triesLeft === 0) {
+            triesLeftText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
+            modifyButton.enabled = false
+            testButton.enabled = false
+        }
+        else if (triesLeft === Constants.TRIES_LEFT_ERROR) {
+            //triesLeftText.text = ""
+            modifyButton.enabled = true
+            testButton.enabled = true
+        }
+        else {
+            triesLeftText.text = qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
+                    + " " + triesLeft + " "
+                    + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
+            modifyButton.enabled = true
+            testButton.enabled = true
+        }
+        propertyBusyIndicator.running = false
     }
 }
