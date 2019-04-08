@@ -21,8 +21,8 @@
 #define __SVN_REVISION_H__
 
 
-#define SVN_REVISION 5892
-#define SVN_REVISION_STR "5892"
+#define SVN_REVISION 6064
+#define SVN_REVISION_STR "6064"
 
 
 #endif //__SVN_REVISION_H__
