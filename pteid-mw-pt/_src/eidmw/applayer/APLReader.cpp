@@ -228,8 +228,10 @@ bool APL_ReaderContext::connectCard()
 	catch(CMWException &e)
 	{
 		unsigned long err = e.GetError();
-		if(err==EIDMW_ERR_CANT_CONNECT)
+		if(err==EIDMW_ERR_CANT_CONNECT) {
 			m_status=CARD_INSERTED;
+			MWLOG(LEV_ERROR, MOD_APL, L"Could not connect to card");
+		}
 
 		throw e;
 	}
