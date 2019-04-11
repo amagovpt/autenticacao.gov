@@ -912,7 +912,7 @@ APL_DocEId::APL_DocEId(APL_EIDCard *card)
 {
 	m_card=card;
 
-	m_FirstName.clear();
+	//m_FirstName.clear();
 
 	_xmlUInfo = NULL;
 }

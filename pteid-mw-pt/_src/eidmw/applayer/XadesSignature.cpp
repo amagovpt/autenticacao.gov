@@ -99,53 +99,9 @@ XERCES_CPP_NAMESPACE_USE
 
 namespace eIDMW
 {
-
-
 	#define ASIC_NAMESPACE "http://uri.etsi.org/2918/v1.2.1#"
 	#define XADES_NAMESPACE "http://uri.etsi.org/01903/v1.3.2#"
 	#define DSIG_NAMESPACE "http://www.w3.org/2000/09/xmldsig#"
-
-	/*
-	CByteArray XadesSignature::HashFile(const char *file_path)
-	{
-
-		std::ifstream file(file_path, std::ios::binary|std::ios::ate);
-		char * in;
-		unsigned char out[SHA1_LEN];
-
-		int size = -1;
-		if (file.is_open())
-		{
-			size = file.tellg();
-			in = new char [size];
-			file.seekg (0, std::ios::beg);
-			file.read (in, size);
-		}
-		file.close();
-
-		//Special-case empty files
-		if (size == 0)
-		{
-			in = new char[SHA1_LEN];
-
-		}
-		//Save the referenced data for the ArchiveTimestamp calculation
-		else if (m_do_long_term_validation)
-		{
-			//ifstream::read doesnt terminate the string!
-			char * tmp = (char*)malloc(size+1);
-			memcpy(tmp, in, size);
-			tmp[size] = '\0';
-			m_referenced_data += (const char *)tmp;
-		}
-		//OpenSSL call
-		SHA1 ((unsigned char *)in, size, out);
-		return CByteArray((const unsigned char*)out, 20L);
-
-	}
-
-	*/
-
 
 	//Implemented in sign-pkcs7.cpp should be moved to a common file though
 	unsigned int SHA256_Wrapper(unsigned char *data, unsigned long data_len, unsigned char *digest);
@@ -154,6 +110,7 @@ namespace eIDMW
 	{
 		const int BUFSIZE = 4*1024;
 		EVP_MD_CTX *mdctx;
+
 #ifdef WIN32
         struct _stat64 sb;
 #else
@@ -161,10 +118,23 @@ namespace eIDMW
 #endif
 		long long filesize;
 		unsigned char md_value[EVP_MAX_MD_SIZE];
-		unsigned int md_len, i;
+		unsigned int md_len;
 		char buffer[BUFSIZE];
 
-		OpenSSL_add_all_digests();
+#ifdef WIN32
+		_wstat64(utf16FileName.c_str(), &sb);
+#else
+		stat(filename, &sb);
+#endif
+		filesize = (long long)sb.st_size;
+
+		if(sb.st_mode & S_IFDIR)
+		{
+			//it's a directory
+			fprintf(stderr, "The path provided is a directory!\n");
+			return CByteArray();
+		}
+
 #ifdef WIN32
 		std::wstring utf16FileName = utilStringWiden(std::string(filename));
 		FILE *fp = _wfopen(utf16FileName.c_str(), L"rb");
@@ -177,15 +147,10 @@ namespace eIDMW
 			return CByteArray();
 		}
 
+		OpenSSL_add_all_digests();
+
 		mdctx = EVP_MD_CTX_create();
 		EVP_DigestInit_ex(mdctx, EVP_sha256(), NULL);
-
-#ifdef WIN32
-        _wstat64(utf16FileName.c_str(), &sb);
-#else
-        stat(filename, &sb);
-#endif
-        filesize = (long long)sb.st_size;
 
 		if (filesize <= BUFSIZE)
 		{

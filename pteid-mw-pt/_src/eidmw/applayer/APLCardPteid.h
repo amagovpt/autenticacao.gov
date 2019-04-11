@@ -303,7 +303,7 @@ private:
 
 	APL_EIDCard *m_card;							/**< Pointer to the card that construct this object*/
 	
-	std::string m_FirstName;						/**< Field FirstName1 follow by FirstName2 */
+	//std::string m_FirstName;						/**< Field FirstName1 follow by FirstName2 */
 	APL_XmlUserRequestedInfo *_xmlUInfo;
 
 friend APL_DocEId& APL_EIDCard::getID();	/**< This method must access protected constructor */
@@ -376,7 +376,6 @@ private:
 
 	APL_EIDCard *m_card;							/**< Pointer to the card that construct this object*/
 
-	//std::string m_FirstName;						/**< Field FirstName1 follow by FirstName2 */
 	APL_XmlUserRequestedInfo *_xmlUInfo;
 
 friend APL_AddrEId& APL_EIDCard::getAddr();	/**< This method must access protected constructor */

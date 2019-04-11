@@ -110,6 +110,7 @@ HEADERS += \
 	SSLConnection.h \
 	PNGConverter.h \
 	J2KHelper.h \
+	PDFSignature.h \
 
 
 SOURCES += \
