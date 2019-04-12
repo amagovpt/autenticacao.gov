@@ -808,6 +808,48 @@ std::string CPathUtil::remove_ext_from_basename(const char *base)
 	}
 }
 
+#ifdef WIN32
+#define PATH_SEP "\\"
+#else
+#define PATH_SEP "/"
+#endif
+void CPathUtil::generate_unique_filenames(const char *folder, std::vector<std::string *> &filenames, const char *suffix)
+{
+	std::vector<std::pair<std::string,int>> filenames_counter;
+	std::vector<std::string> unique_filenames;
+
+	for(int i = 0; i < filenames.size(); i++){
+
+		std::string basename = std::string(Basename((char *)(filenames[i]->c_str())));
+		std::string clean_filename = CPathUtil::remove_ext_from_basename(basename.c_str());
+		std::string extension = std::string(basename.c_str()).erase(0, clean_filename.length());
+
+		int equal_filename_count = 0;
+		for (unsigned int i = 0; i < filenames_counter.size(); i++)
+		{
+			std::string current_file_name = filenames_counter.at(i).first;
+			if (basename.compare(current_file_name) == 0) {
+				//filenames_counter contains clean_filename
+				equal_filename_count = ++filenames_counter.at(i).second;
+				break;
+			}
+		}
+
+		if (equal_filename_count == 0){
+			//clean_filename is not part of the vector, make sure it's added to it
+			filenames_counter.push_back(std::make_pair(basename, equal_filename_count));
+		}
+
+		std::string final_path = string(folder) + PATH_SEP + clean_filename;
+		if(equal_filename_count > 0){
+			final_path += "_" + std::to_string(equal_filename_count);
+		}
+		final_path += suffix + extension;
+
+		filenames[i]->assign((char *)final_path.c_str());
+	}
+}
+
 /*****************************************************************************************
 ------------------------------------ CSVParser ---------------------------------------
 *****************************************************************************************/

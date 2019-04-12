@@ -150,6 +150,11 @@ public:
 	  * Return basename of file ater removing its extension if it exists
 	  */
 	static std::string remove_ext_from_basename(const char *base);
+
+	/**
+	  * 
+	  */
+	static void generate_unique_filenames(const char *folder, std::vector<std::string *> &filenames, const char *suffix = "");
 };
 
 class CByteArray;

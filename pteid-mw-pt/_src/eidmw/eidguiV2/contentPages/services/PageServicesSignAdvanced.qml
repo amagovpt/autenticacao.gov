@@ -519,6 +519,12 @@ PageServicesSignAdvancedForm {
             dialogSignCMD.open()
         }
     }
+    propertyFileDialogBatchCMDOutput {
+        onAccepted: {
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+            dialogSignCMD.open()
+        }
+    }
     propertyFileDialogBatchOutput {
         onAccepted: {
             propertyBusyIndicator.running = true
@@ -889,11 +895,8 @@ PageServicesSignAdvancedForm {
                 propertyFileDialogCMDOutput.filename = outputFile + "_signed.pdf"
                 propertyFileDialogCMDOutput.open()
             }else{
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("PageServicesSign","STR_MULTI_FILE_CMD_WARNING")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("PageServicesSign","STR_MULTI_FILE_CMD_WARNING_MSG")
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+                propertyFileDialogBatchCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
+                propertyFileDialogBatchCMDOutput.open()
             }
         }
     }

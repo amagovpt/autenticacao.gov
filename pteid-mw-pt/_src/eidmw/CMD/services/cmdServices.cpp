@@ -416,7 +416,7 @@ _ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp , char *endpoint
     //Set the created header in our soap structure
     //sp->header = soapHeader;
 
-    _ns3__SignRequest *soapBody = soap_new_ns3__SignRequest(sp);
+    ns3__SignRequest *soapBody = soap_new_ns3__SignRequest(sp);
 
     soapBody->ApplicationId = encode_base64(sp, in_applicationID );
     int hash_len = 51;
@@ -500,7 +500,7 @@ int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char * in_hash, st
     int ret;
     ret = proxy.CCMovelSign( NULL, NULL, send, response );
 
-    /*
+
     /* Clean pointers before exit
     if ( send->request != NULL ) {
         // Clean pointers before leaving function
@@ -530,6 +530,145 @@ int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char * in_hash, st
 
     return ERR_NONE;
 }
+
+/*  *******************************************************************************************************************
+    ****
+    **** CCMovelMultipleSign
+    ****
+    ******************************************************************************************************************* */
+
+_ns2__CCMovelMultipleSign *CMDServices::get_CCMovelMultipleSignRequest( soap *sp, char *endpoint, std::string in_applicationID,
+                                                  std::vector<std::string *> docNames, std::vector<unsigned char *> in_hashes,
+                                                  std::vector<std::string *> ids, std::string *in_pin, std::string *in_userId ) {
+                                                  
+    ns3__MultipleSignRequest *soapMultipleSignRequest = soap_new_ns3__MultipleSignRequest(sp);
+
+    soapMultipleSignRequest->ApplicationId = encode_base64(sp, in_applicationID );
+    soapMultipleSignRequest->Pin           = in_pin;
+    soapMultipleSignRequest->UserId        = in_userId;
+
+    ns3__ArrayOfHashStructure *soapHashesArray = soap_new_ns3__ArrayOfHashStructure(sp);
+
+    for (size_t i = 0; i < in_hashes.size(); i++) {
+        ns3__HashStructure *soapHashStructure = soap_new_ns3__HashStructure(sp);
+
+        int hash_len = 51;
+        soapHashStructure->Hash = soap_new_set_xsd__base64Binary(sp, in_hashes[i], hash_len,
+                                             NULL, NULL, NULL);
+        soapHashStructure->Name = docNames[i];
+        soapHashStructure->id = ids[i];
+        soapHashesArray->HashStructure.push_back(soapHashStructure);
+    }
+
+    _ns2__CCMovelMultipleSign *send = soap_new_set__ns2__CCMovelMultipleSign( sp, soapMultipleSignRequest, soapHashesArray );
+    
+    return send;                                                      
+}
+
+int CMDServices::checkCCMovelMultipleSignResponse( _ns2__CCMovelMultipleSignResponse *response ){
+    if ( response == NULL ){
+        MWLOG_ERR( logBuf, "Null response" );
+        return ERR_NULL_HANDLER;
+    }
+
+    if ( response->CCMovelMultipleSignResult == NULL ){
+        MWLOG_ERR( logBuf, "Null CCMovelMultipleSignResult" );
+        return ERR_NULL_DATA;
+    }
+
+    if (response->CCMovelMultipleSignResult->Code == NULL){
+        MWLOG_ERR( logBuf, "Null CCMovelMultipleSignResult Code" );
+        return ERR_NULL_DATA;
+    }
+
+    int statusCode = atoi(response->CCMovelMultipleSignResult->Code->c_str());
+    if (IS_SOAP_ERROR(statusCode)) {
+        MWLOG_ERR( logBuf, "CCMovelMultipleSignResult SOAP Error Code %d", statusCode);
+        return statusCode;
+    }
+
+    return ERR_NONE;
+}
+
+int CMDServices::ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigned char *> in_hashes,
+                                    std::vector<std::string> docNames, std::string in_pin) {
+    soap *sp = getSoap();
+    if (sp == NULL) {
+        MWLOG_ERR( logBuf, "Null soap" );
+        return ERR_NULL_HANDLER;
+    }
+
+    if (in_hashes.empty()) {
+        MWLOG_ERR( logBuf, "Empty hashes" );
+        return ERR_INV_HASH;
+    }
+    for(size_t i = 0; i < in_hashes.size(); i++) {
+        if(in_hashes[i] == NULL) {
+            MWLOG_ERR( logBuf, "Null hashe" );
+            return ERR_INV_HASH;
+        }
+    }
+
+    if (in_pin.empty()) {
+        MWLOG_ERR( logBuf, "Empty pin" );
+        return ERR_INV_USERPIN;
+    }
+
+    std::string in_userId = getUserId();
+    if (in_userId.empty()) {
+        MWLOG_ERR( logBuf, "Empty userId" );
+        return ERR_INV_USERID;
+    }
+
+    /*
+        ProcessID initialization
+    */
+    setProcessID( STR_EMPTY );
+
+    const char *endPoint = getEndPoint();
+    CMDSignatureGsoapProxy proxy(sp, proxyInfo);
+    proxy.soap_endpoint = endPoint;
+
+    std::vector<std::string *> docNamesPtrs;
+    std::vector<std::string *> ids;
+    for(size_t i = 0; i < in_hashes.size(); i++) {
+        docNamesPtrs.push_back(&docNames[i]);
+        ids.push_back(new std::string(std::to_string(i)));
+    }
+    /*
+        Get CCMovelMultipleSign request
+    */
+    _ns2__CCMovelMultipleSign *send = get_CCMovelMultipleSignRequest( sp, (char*)endPoint, getApplicationID(), 
+                                        docNamesPtrs, in_hashes, ids, &in_pin, &in_userId );
+    if ( send == NULL ){
+        MWLOG_ERR( logBuf, "NULL send parameters" );
+        return ERR_NULL_HANDLER;
+    }
+
+    /*
+        Call CCMovelMultipleSign service
+    */
+    _ns2__CCMovelMultipleSignResponse response;
+    int ret;
+    ret = proxy.CCMovelMultipleSign( NULL, NULL, send, response );
+
+    for(size_t i = 0; i < in_hashes.size(); i++)
+        delete ids[i];
+
+    /* Handling errors */
+    if ( handleError( proxy, ret ) != ERR_NONE ) return ret;
+
+    /* Validate response */
+    ret = checkCCMovelMultipleSignResponse( &response );
+    if ( ret != ERR_NONE ) return ret;
+
+    setProcessID( *response.CCMovelMultipleSignResult->ProcessId );
+
+    return ERR_NONE;
+}
+
+
+
 
 /*  *******************************************************************************************************************
     ****
@@ -598,20 +737,41 @@ int CMDServices::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response )
         return statusCode;
     }
 
-    if ( response->ValidateOtpResult->Signature == NULL ) {
+    if ( response->ValidateOtpResult->Signature == NULL && response->ValidateOtpResult->ArrayOfHashStructure == NULL) {
         MWLOG_ERR( logBuf, "Null Signature" );
         return ERR_NULL_HANDLER;
     }
 
-    if ( response->ValidateOtpResult->Signature->__ptr == NULL ) {
-        MWLOG_ERR( logBuf, "Null Signature pointer" );
-        return ERR_NULL_DATA;
-    }
+    if ( response->ValidateOtpResult->Signature != NULL) {
+        // CMD with single file
+        if ( response->ValidateOtpResult->Signature->__ptr == NULL ) {
+            MWLOG_ERR( logBuf, "Null Signature pointer" );
+            return ERR_NULL_DATA;
+        }
 
-    if ( response->ValidateOtpResult->Signature->__size < 1 ) {
-        MWLOG_ERR( logBuf, "Invalide Signature pointer size: %d",
-                  response->ValidateOtpResult->Signature->__size);
-        return ERR_SIZE;
+        if ( response->ValidateOtpResult->Signature->__size < 1 ) {
+            MWLOG_ERR( logBuf, "Invalide Signature pointer size: %d",
+                    response->ValidateOtpResult->Signature->__size);
+            return ERR_SIZE;
+        }
+    } else {
+        // CMD with multiple files
+        if (response->ValidateOtpResult->ArrayOfHashStructure->HashStructure.size() <= 0) {
+            MWLOG_ERR( logBuf, "Number of hash structures is invalid: %d",
+                    response->ValidateOtpResult->ArrayOfHashStructure->HashStructure.size());
+            return ERR_SIZE;
+        }
+
+        for(size_t i = 0; i < response->ValidateOtpResult->ArrayOfHashStructure->HashStructure.size(); i++){
+            if (response->ValidateOtpResult->ArrayOfHashStructure->HashStructure[i]->Hash == NULL) {
+                MWLOG_ERR( logBuf, "Null hash data" );
+                return ERR_NULL_DATA;
+            }
+            if (response->ValidateOtpResult->ArrayOfHashStructure->HashStructure[i]->id == NULL) {
+                MWLOG_ERR( logBuf, "Null id data" );
+                return ERR_NULL_DATA;
+            }
+        }
     }
 
     return ERR_NONE;
@@ -621,8 +781,8 @@ int CMDServices::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response )
     ***    CMDServices::ValidateOtp()                     ***
     ********************************************************* */
 int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
-                            , unsigned char **outSignature
-                            , unsigned int *outSignatureLen) {
+                            , std::vector<unsigned char *> *outSignature
+                            , std::vector<unsigned int> *outSignatureLen) {
     soap *sp = getSoap();
     if ( sp == NULL ) {
         MWLOG_ERR( logBuf, "Null soap" );
@@ -676,20 +836,45 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
 
     /* Set signature */
     if ( ( outSignature != NULL ) && ( outSignatureLen != NULL ) ) {
-        *outSignature =
-            (unsigned char*)malloc(
-                            response.ValidateOtpResult->Signature->__size );
+        if (response.ValidateOtpResult->Signature != NULL) {
+            // signing single file
+            (*outSignature)[0] =
+                (unsigned char*)malloc(
+                                response.ValidateOtpResult->Signature->__size );
 
-        if ( outSignature == NULL ) {
-            MWLOG_ERR( logBuf, "Malloc fail!" );
-            return ERR_NULL_HANDLER;
+            if ( (*outSignature)[0] == NULL ) {
+                MWLOG_ERR( logBuf, "Malloc fail!" );
+                return ERR_NULL_HANDLER;
+            }
+
+            memcpy( (*outSignature)[0]
+                    , response.ValidateOtpResult->Signature->__ptr
+                    , response.ValidateOtpResult->Signature->__size );
+
+            (*outSignatureLen)[0] = response.ValidateOtpResult->Signature->__size;        
+        }else {
+            // signing multiple files
+            for(size_t i = 0; i < response.ValidateOtpResult->ArrayOfHashStructure->HashStructure.size(); i++)
+            {
+                (*outSignature)[i] =
+                    (unsigned char*)malloc(
+                                    response.ValidateOtpResult->ArrayOfHashStructure->HashStructure[i]->Hash->__size );
+
+                if ( (*outSignature)[i] == NULL ) {
+                    MWLOG_ERR( logBuf, "Malloc fail!" );
+                    return ERR_NULL_HANDLER;
+                }
+
+                memcpy( (*outSignature)[i]
+                        , response.ValidateOtpResult->ArrayOfHashStructure->HashStructure[i]->Hash->__ptr
+                        , response.ValidateOtpResult->ArrayOfHashStructure->HashStructure[i]->Hash->__size );
+
+                (*outSignatureLen)[i] = response.ValidateOtpResult->ArrayOfHashStructure->HashStructure[i]->Hash->__size;        
+            }
         }
+    
 
-        memcpy( *outSignature
-                , response.ValidateOtpResult->Signature->__ptr
-                , response.ValidateOtpResult->Signature->__size );
 
-        *outSignatureLen = response.ValidateOtpResult->Signature->__size;
     }
 
     return ERR_NONE;
@@ -755,34 +940,42 @@ int CMDServices::sendDataToSign(unsigned char * in_hash, std::string docName, st
 */
 
 /*  *********************************************************
-    ***    CMDServices::getSignature()                    ***
+    ***    CMDServices::getSignatures()                    ***
     ********************************************************* */
-int CMDServices::getSignature(CMDProxyInfo proxyInfo, std::string in_code, CByteArray& out_cb ){
-    unsigned int signLen = 0;
-    unsigned char *sign = NULL;
-
+int CMDServices::getSignatures(CMDProxyInfo proxyInfo, std::string in_code, std::vector<CByteArray *> out_cb_vector ){
+    std::vector<unsigned int> signLen;
+    std::vector<unsigned char *> sign;
+    for(size_t i = 0; i < out_cb_vector.size(); i++) {
+        signLen.push_back(0);
+        sign.push_back(NULL);
+    }
     int ret = ValidateOtp(proxyInfo, in_code, &sign, &signLen );
+
     if ( ret != ERR_NONE ){
         MWLOG_ERR( logBuf, "ValidateOtp failed" );
         return ret;
     }
 
-    if ( NULL == sign ){
-        MWLOG_ERR( logBuf, "Null signature" );
-        return ERR_NULL_HANDLER;
+    for(size_t i = 0; i < out_cb_vector.size(); i++){
+        if ( NULL == sign[i] ){
+            MWLOG_ERR( logBuf, "Null signature" );
+            return ERR_NULL_HANDLER; // memory leak: the next elements in sign and signLen won't be freed
+        }
+
+        if ( signLen[i] <= 0 ){
+            free( sign[i] );
+
+            MWLOG_ERR( logBuf, "Invalid signature length: %d", signLen[i] );
+            return ERR_SIZE; // memory leak: the next elements in sign and signLen won't be freed
+        }
+
+        out_cb_vector[i]->ClearContents();
+        out_cb_vector[i]->Append( (const unsigned char *)sign[i], (unsigned long)signLen[i] );
+    
+        free( sign[i] );
     }
 
-    if ( signLen <= 0 ){
-        free( sign );
 
-        MWLOG_ERR( logBuf, "Invalid signature length: %d", signLen );
-        return ERR_SIZE;
-    }
-
-    out_cb.ClearContents();
-    out_cb.Append( (const unsigned char *)sign, (unsigned long)signLen );
-
-    free( sign );
 
     return ERR_NONE;
 }

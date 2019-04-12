@@ -46,8 +46,12 @@ class CMDServices {
         // CCMovelSign
 		int ccMovelSign(CMDProxyInfo proxyInfo, unsigned char * in_hash, std::string docName, std::string in_pin);
 
+        // CCMovelMultipleSign
+		int ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigned char *> in_hashs,
+                                std::vector<std::string> docNames, std::string in_pin);
+
         // ValidateOtp
-        int getSignature(CMDProxyInfo proxyInfo, std::string in_code, CByteArray& out_signature );
+        int getSignatures(CMDProxyInfo proxyInfo, std::string in_code, std::vector<CByteArray *> out_signature );
 
     protected:
         soap *getSoap();
@@ -80,8 +84,6 @@ class CMDServices {
         bool init(int recv_timeout, int send_timeout, int connect_timeout, short mustUnderstand);
 
         // CCMovelSign
-
-
         _ns2__CCMovelSign *get_CCMovelSignRequest( soap *sp
                                                  , char *endpoint
 												 , std::string in_applicationID, std::string *docName
@@ -91,10 +93,21 @@ class CMDServices {
 
         int checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response );
 
+        // CCMovelMultipleSign
+        _ns2__CCMovelMultipleSign *get_CCMovelMultipleSignRequest( soap *sp
+                                                 , char *endpoint
+												 , std::string in_applicationID, std::vector<std::string *> docNames
+                                                 , std::vector<unsigned char *> in_hashes
+                                                 , std::vector<std::string *> ids
+                                                 , std::string *in_pin
+                                                 , std::string *in_userId );
+
+        int checkCCMovelMultipleSignResponse( _ns2__CCMovelMultipleSignResponse *response );
+
         // ValidateOtp
         int ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
-                        , unsigned char **outSignature
-                        , unsigned int *outSignatureLen );
+                        , std::vector<unsigned char *> *outSignature
+                        , std::vector<unsigned int> *outSignatureLen );
 
         _ns2__ValidateOtp *get_ValidateOtpRequest( soap *sp
                                                  , char *endpoint

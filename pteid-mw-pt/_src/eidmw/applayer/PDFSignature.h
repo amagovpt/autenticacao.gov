@@ -56,7 +56,7 @@ namespace eIDMW
 		EIDMW_APL_API void setBatch_mode(bool batch_mode);
 
 		//Returns basename without extension as required by CMD services (size limit: 44 bytes)
-		EIDMW_APL_API std::string getDocName();
+		EIDMW_APL_API std::string getDocName(bool cmd_trim = true);
 
         bool isExternalCertificate();
         bool isCC();

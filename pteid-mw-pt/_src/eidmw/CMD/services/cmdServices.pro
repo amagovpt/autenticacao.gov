@@ -32,7 +32,7 @@ unix: DEFINES += __UNIX__ WITH_OPENSSL
 
 # Input
 HEADERS += \
-            CCMovelSignature.h \
+            CCMovelDigitalSignature.h \
             soapH.h \
             soapStub.h \
             soapWSHttpBinding_USCORECCMovelSignatureProxy.h \
@@ -42,7 +42,6 @@ HEADERS += \
 
 SOURCES += \
             soapC.cpp \
-            duration.cpp \
 #            soapWSHttpBinding_USCORECCMovelSignatureProxy.cpp \
 	    soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp \
             cmdServices.cpp \

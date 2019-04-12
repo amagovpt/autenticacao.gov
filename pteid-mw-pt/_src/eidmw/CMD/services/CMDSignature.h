@@ -49,6 +49,8 @@ namespace eIDMW {
 
 			PTEIDCMD_API int signClose(std::string in_code);
             PTEIDCMD_API void set_pdf_handler(PTEID_PDFSignature *in_pdf_handler);
+            PTEIDCMD_API void add_pdf_handler(PTEID_PDFSignature *in_pdf_handler);
+            PTEIDCMD_API void clear_pdf_handlers();
             PTEIDCMD_API void set_string_handler(std::string in_docname_handle,
                                                  QByteArray in_array_handler);
 
@@ -60,7 +62,7 @@ namespace eIDMW {
 
         private:
             CMDServices *cmdService;
-            PTEID_PDFSignature *m_pdf_handler;
+            std::vector<PTEID_PDFSignature*> m_pdf_handlers;
             std::string m_docname_handle;
             QByteArray m_array_handler;
 
@@ -70,7 +72,7 @@ namespace eIDMW {
             CMDProxyInfo m_proxyInfo;
             int cli_getCertificate( std::string in_userId );
             int cli_sendDataToSign( std::string in_pin );
-            int cli_getSignature(std::string in_code, PTEID_ByteArray &out_sign);
+            int cli_getSignatures(std::string in_code, std::vector<PTEID_ByteArray *> out_sign);
     };
 }
 

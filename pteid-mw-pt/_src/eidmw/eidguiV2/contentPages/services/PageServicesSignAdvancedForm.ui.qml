@@ -23,6 +23,7 @@ Item {
     property alias propertyFileDialogOutput: fileDialogOutput
     property alias propertyFileDialogBatchOutput: fileDialogBatchOutput
     property alias propertyFileDialogCMDOutput: fileDialogCMDOutput
+    property alias propertyFileDialogBatchCMDOutput: fileDialogBatchCMDOutput
     property alias propertyMouseAreaRectMainRigh: mouseAreaRectMainRigh
     property alias propertyMouseAreaItemOptionsFiles: mouseAreaItemOptionsFiles
     property alias propertyTextDragMsgListView: textDragMsgListView
@@ -109,6 +110,11 @@ Item {
         }
         FileDialog {
             id: fileDialogBatchOutput
+            folder: shortcuts.home
+            selectFolder: true
+        }
+        FileDialog {
+            id: fileDialogBatchCMDOutput
             folder: shortcuts.home
             selectFolder: true
         }

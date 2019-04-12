@@ -308,7 +308,8 @@ Item {
                 visible: false
                 Text {
                     id: labelCMDText
-                    text: qsTranslate("PageServicesSign","STR_SIGN_OPEN")
+                    text: (filesModel.count == 1 ? qsTranslate("PageServicesSign","STR_SIGN_OPEN") : 
+                                                   qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI"))
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
@@ -421,18 +422,26 @@ Item {
         dialogSignCMD.close()
     }
     function signCMD(){
-        var loadedFilePath = filesModel.get(0).fileUrl
-        var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
-
+        var loadedFilePaths = []
+        for (var fileIndex = 0; fileIndex < filesModel.count; fileIndex++) {
+            loadedFilePaths.push(filesModel.get(fileIndex).fileUrl)
+        }
+        
+        if (filesModel.count == 1) {
+            var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
+        }
+        else {
+            var outputFile = propertyFileDialogBatchCMDOutput.fileUrl.toString()
+        }
         outputFile = decodeURIComponent(stripFilePrefix(outputFile))
 
         var page = 1
         if(propertyCheckLastPage.checked) {
-            page = gapi.getPDFpageCount(loadedFilePath)
+            page = 0 // Sign last page in all documents
         }else{
             page = propertySpinBoxControl.value
         }
-
+        
         var isTimestamp = false
         if (typeof propertySwitchSignTemp !== "undefined")
             isTimestamp = propertySwitchSignTemp.checked
@@ -472,12 +481,12 @@ Item {
 
         if (typeof propertySwitchSignAdd !== "undefined" && propertySwitchSignAdd.checked) {
             gapi.signOpenScapWithCMD(mobileNumber,textFieldPin.text,
-                                     loadedFilePath,outputFile,page,
+                                     loadedFilePaths[0],outputFile,page,
                                      coord_x, coord_y,
                                      reason,location)
         } else {
             gapi.signOpenCMD(mobileNumber,textFieldPin.text,
-                             loadedFilePath,outputFile,page,
+                             loadedFilePaths,outputFile,page,
                              coord_x,coord_y,
                              reason,location,
                              isTimestamp, isSmallSignature)
