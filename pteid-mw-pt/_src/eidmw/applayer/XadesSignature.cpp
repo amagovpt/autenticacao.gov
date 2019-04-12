@@ -122,6 +122,7 @@ namespace eIDMW
 		char buffer[BUFSIZE];
 
 #ifdef WIN32
+        std::wstring utf16FileName = utilStringWiden(std::string(filename));
 		_wstat64(utf16FileName.c_str(), &sb);
 #else
 		stat(filename, &sb);
@@ -136,7 +137,6 @@ namespace eIDMW
 		}
 
 #ifdef WIN32
-		std::wstring utf16FileName = utilStringWiden(std::string(filename));
 		FILE *fp = _wfopen(utf16FileName.c_str(), L"rb");
 #else
 		FILE *fp = fopen(filename, "rb");
