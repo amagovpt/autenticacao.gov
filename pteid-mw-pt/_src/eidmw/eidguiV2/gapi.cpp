@@ -39,7 +39,6 @@ GAPI::GAPI(QObject *parent) :
 
     cmd_signature = new eIDMW::CMDSignature(CMD_BASIC_AUTH_USERID, CMD_BASIC_AUTH_PASSWORD, CMD_BASIC_AUTH_APPID);
 
-    cmd_pdfSignature = new eIDMW::PTEID_PDFSignature();
     m_addressLoaded = false;
     m_shortcutFlag = 0;
 
@@ -729,23 +728,23 @@ QString GAPI::translateCMDErrorCode(int errorCode) {
    return errorMsg;
 }
 
-void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdSignParams &params)
+void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdParams &cmdParams, SignParams &signParams)
 {
-    /*qDebug() << "doOpenSignCMD! MobileNumber = " << params.mobileNumber << " secret_code = " << params.secret_code <<
-                " loadedFilePath = " << params.loadedFilePath << " outputFile = " << params.outputFile <<
-                "page = " << params.page << "coord_x" << params.coord_x << "coord_y" << params.coord_y <<
-                "reason = " << params.reason << "location = " << params.location;*/
+    /*qDebug() << "doOpenSignCMD! MobileNumber = " << cmdParams.mobileNumber << " secret_code = " << cmdParams.secret_code <<
+                " loadedFilePaths = " << signParams.loadedFilePaths << " outputFile = " << signParams.outputFile <<
+                "page = " << signParams.page << "coord_x" << signParams.coord_x << "coord_y" << signParams.coord_y <<
+                "reason = " << signParams.reason << "location = " << signParams.location;*/
 
     int ret = 0;
 
     try {
         signalUpdateProgressBar(25);
         CMDProxyInfo proxyInfo = buildProxyInfo();
-        ret = cmd_signature->signOpen(proxyInfo, params.mobileNumber.toStdString(), params.secret_code.toStdString(),
-                                      params.page,
-                                      params.coord_x, params.coord_y,
-                                      params.location.toUtf8().data(), params.reason.toUtf8().data(),
-                                      getPlatformNativeString(params.outputFile));
+        ret = cmd_signature->signOpen(proxyInfo, cmdParams.mobileNumber.toStdString(), cmdParams.secret_code.toStdString(),
+                                      signParams.page,
+                                      signParams.coord_x, signParams.coord_y,
+                                      signParams.location.toUtf8().data(), signParams.reason.toUtf8().data(),
+                                      getPlatformNativeString(signParams.outputFile));
 
         if ( ret != 0 ) {
             qDebug() << "signOpen failed! - ret: " << ret << endl;
@@ -775,6 +774,13 @@ void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
     try {
         signalUpdateProgressBar(75);
         ret = cmd_signature->signClose(local_sms_token);
+
+        for(int i = 0; i < cmd_pdfSignatures.size(); i++)
+            delete cmd_pdfSignatures[i];
+
+        cmd_pdfSignatures.clear(); 
+        cmd_signature->clear_pdf_handlers();
+
         if ( ret != 0 ) {
             qDebug() << "signClose failed!" << endl;
             signCMDFinished(ret);
@@ -804,6 +810,13 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
     try {
         signalUpdateProgressBar(65);
         ret = cmd_signature->signClose(local_sms_token );
+
+        for(int i = 0; i < cmd_pdfSignatures.size(); i++)
+            delete cmd_pdfSignatures[i];
+
+        cmd_pdfSignatures.clear(); 
+        cmd_signature->clear_pdf_handlers();
+        
         if ( ret != 0 ) {
             qDebug() << "signClose failed!" << endl;
             signCMDFinished(ret);
@@ -856,14 +869,14 @@ QString generateTempFile() {
     return tempFile.fileName();
 }
 
-void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
+void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
                    QString outputFile, int page, double coord_x, double coord_y,
                    QString reason, QString location) {
 
-    qDebug() << "signOpenScapWithCMD! MobileNumber = " + mobileNumber + " secret_code = " + secret_code +
-                " reason = " + reason + " location = " + location +
-                " loadedFilePath = " + loadedFilePath + " outputFile = " + outputFile +
-                "page = " + page + "coord_x" + coord_x + "coord_y" + coord_y;
+    qDebug() << "signOpenCMD! MobileNumber = " << mobileNumber << " secret_code = " << secret_code <<
+                " loadedFilePaths = " << loadedFilePaths <<
+                " outputFile = " << outputFile << " page = " << page << " coord_x" << coord_x << 
+                " coord_y" << coord_y << " reason = " << reason << " location = " << location;
 
     signalUpdateProgressStatus(tr("STR_CMD_CONNECTING"));
 
@@ -880,64 +893,79 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QStrin
     m_scap_params.reason = reason;
 
 
-    CmdSignParams params;
+    CmdParams cmdParams;
+    SignParams signParams;
 
     //Invisible CMD signature
-    params.secret_code = secret_code;
-    params.mobileNumber = mobileNumber;
-    params.loadedFilePath = loadedFilePath;
-    params.outputFile = m_scap_params.inputPDF;
-    params.page = 0;
-    params.coord_x = -1;
-    params.coord_y = -1;
-    params.location = location;
-    params.reason = reason;
-    params.isTimestamp = 0;
-    params.isSmallSignature = 0;
+    cmdParams.secret_code = secret_code;
+    cmdParams.mobileNumber = mobileNumber;
+    signParams.loadedFilePaths = loadedFilePaths;
+    signParams.outputFile = m_scap_params.inputPDF;
+    signParams.page = 0;
+    signParams.coord_x = -1;
+    signParams.coord_y = -1;
+    signParams.location = location;
+    signParams.reason = reason;
+    signParams.isTimestamp = 0;
+    signParams.isSmallSignature = 0;
 
-    QString fullInputPath = params.loadedFilePath;
+    cmd_signature->clear_pdf_handlers();
+    
+    for (int i = 0; i < loadedFilePaths[i].size(); i++) {
+        QString fullInputPath = loadedFilePaths[i];
+        PTEID_PDFSignature * cmd_pdfSignature = new eIDMW::PTEID_PDFSignature();
 
-    cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
+        cmd_pdfSignatures.push_back(cmd_pdfSignature); // keep track of pointers to be deleted
+        cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
 
-    cmd_signature->set_pdf_handler(cmd_pdfSignature);
-    QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, params);
+        cmd_signature->add_pdf_handler(cmd_pdfSignature);
+    }
+    QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, cmdParams, signParams);
 
 }
 
-void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
+void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
                    QString outputFile, int page, double coord_x, double coord_y,
                    QString reason, QString location, double isTimestamp, double isSmall)
 {
-    /*qDebug() << "signOpenCMD! MobileNumber = " + mobileNumber + " secret_code = " + secret_code +
-                " loadedFilePath = " + loadedFilePath + " outputFile = " + outputFile +
-                "page = " + page + "coord_x" + coord_x + "coord_y" + coord_y +
-                "reason = " + reason + "location = " + location +
-                "isTimestamp = " +  isTimestamp + "isSmall = " + isSmall;*/
+    /*qDebug() << "signOpenCMD! MobileNumber = " << mobileNumber << " secret_code = " << secret_code <<
+                " loadedFilePaths = " << loadedFilePaths <<
+                " outputFile = " << outputFile << " page = " << page << " coord_x" << coord_x << 
+                " coord_y" << coord_y << " reason = " << reason << " location = " << location <<
+                " isTimestamp = " <<  isTimestamp << " isSmall = " << isSmall;*/
+
 
     signalUpdateProgressStatus(tr("STR_CMD_CONNECTING"));
 
     connect(this, SIGNAL(signCMDFinished(int)),
             this, SLOT(showSignCMDDialog(int)), Qt::UniqueConnection);
 
-    CmdSignParams params = {mobileNumber, secret_code,loadedFilePath,outputFile,
-                            page,coord_x,coord_y,reason,location,isTimestamp,isSmall};
+    CmdParams cmdParams = {mobileNumber, secret_code};
+    SignParams signParams = {loadedFilePaths, outputFile, page, coord_x, 
+                            coord_y, reason, location, isTimestamp, isSmall};
+    
+    cmd_signature->clear_pdf_handlers();
+    
+    for (int i  = 0; i < loadedFilePaths.size(); i++) {
+        QString fullInputPath = loadedFilePaths[i];
+        PTEID_PDFSignature * cmd_pdfSignature = new eIDMW::PTEID_PDFSignature();
 
-    QString fullInputPath = params.loadedFilePath;
+        cmd_pdfSignatures.push_back(cmd_pdfSignature); // keep track of pointers to be deleted
+        cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
 
-    cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
-
-    if (params.isTimestamp > 0)
-        cmd_pdfSignature->enableTimestamp();
-    if (params.isSmallSignature > 0)
-        cmd_pdfSignature->enableSmallSignatureFormat();
+        if (signParams.isTimestamp > 0)
+            cmd_pdfSignature->enableTimestamp();
+        if (signParams.isSmallSignature > 0)
+            cmd_pdfSignature->enableSmallSignatureFormat();
 
     if(useCustomSignature()) {
         const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
         cmd_pdfSignature->setCustomImage(imageData);
     }
 
-    cmd_signature->set_pdf_handler(cmd_pdfSignature);
-    QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, params);
+        cmd_signature->add_pdf_handler(cmd_pdfSignature);
+    } 
+    QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, cmdParams, signParams);
 }
 
 void GAPI::signCloseCMD(QString sms_token, QList<int> attribute_list)
@@ -1588,8 +1616,9 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
 void GAPI::startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
                            QString reason, QString location, bool isTimestamp, bool isSmall) {
-
-    SignParams params = {loadedFilePath, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isSmall};
+    //TODO: refactor startSigningPDF/startSigningBatchPDF                           
+    QList<QString> loadedFilePaths = {loadedFilePath};                           
+    SignParams params = {loadedFilePaths, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isSmall};
     QFuture<void> future =
             QtConcurrent::run(this, &GAPI::doSignPDF, params);
 
@@ -1598,7 +1627,7 @@ void GAPI::startSigningPDF(QString loadedFilePath, QString outputFile, int page,
 void GAPI::startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outputFile, int page, double coord_x, double coord_y,
                                 QString reason, QString location, bool isTimestamp, bool isSmall) {
 
-    SignBatchParams params = {loadedFileBatchPath, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isSmall};
+    SignParams params = {loadedFileBatchPath, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isSmall};
 
     QFuture<void> future =
             QtConcurrent::run(this, &GAPI::doSignBatchPDF, params);
@@ -1621,14 +1650,14 @@ void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, bool is
 
 void GAPI::startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, bool isTimestamp) {
 
-    SignBatchParams params = {loadedFileBatchPath, outputFile, 0, 0, 0, "", "", isTimestamp, 0};
+    SignParams params = {loadedFileBatchPath, outputFile, 0, 0, 0, "", "", isTimestamp, 0};
 
     QFuture<void> future =
             QtConcurrent::run(this, &GAPI::doSignBatchXADES, params);
 }
 
-void GAPI::doSignBatchXADES(SignBatchParams &params) {
-    qDebug() << "doSignBatchXADES! loadedFilePath = " << params.loadedFileBatchPath << " outputFile = " << params.outputFile <<
+void GAPI::doSignBatchXADES(SignParams &params) {
+    qDebug() << "doSignBatchXADES! loadedFilePath = " << params.loadedFilePaths << " outputFile = " << params.outputFile <<
                 "page = " << params.page << "coord_x" << params.coord_x << "coord_y" << params.coord_y <<
                 "reason = " << params.reason << "location = " << params.location << "isTimestamp = " <<  params.isTimestamp;
 
@@ -1640,16 +1669,16 @@ void GAPI::doSignBatchXADES(SignBatchParams &params) {
 
         QVector<const char *> files_to_sign;
 
-        for( int i = 0; i < params.loadedFileBatchPath.count(); i++ ){
-            files_to_sign.push_back(strdup(getPlatformNativeString(params.loadedFileBatchPath[i])));
+        for( int i = 0; i < params.loadedFilePaths.count(); i++ ){
+            files_to_sign.push_back(strdup(getPlatformNativeString(params.loadedFilePaths[i])));
         }
 
         QByteArray tempOutputFile = getPlatformNativeString(params.outputFile);
 
         if (params.isTimestamp)
-            card->SignXadesT(tempOutputFile.constData(), files_to_sign.data(), params.loadedFileBatchPath.count());
+            card->SignXadesT(tempOutputFile.constData(), files_to_sign.data(), params.loadedFilePaths.count());
         else
-            card->SignXades(tempOutputFile.constData(), files_to_sign.data(), params.loadedFileBatchPath.count());
+            card->SignXades(tempOutputFile.constData(), files_to_sign.data(), params.loadedFilePaths.count());
 
         emit signalPdfSignSucess(SignMessageOK);
 
@@ -1713,7 +1742,7 @@ void GAPI::doSignPDF(SignParams &params) {
     getCardInstance(card);
     if (card == NULL) return;
 
-    QString fullInputPath = params.loadedFilePath;
+    QString fullInputPath = params.loadedFilePaths[0];
     PTEID_PDFSignature sig_handler(getPlatformNativeString(fullInputPath));
 
     if (params.isTimestamp) {
@@ -1736,9 +1765,9 @@ void GAPI::doSignPDF(SignParams &params) {
     END_TRY_CATCH
 }
 
-void GAPI::doSignBatchPDF(SignBatchParams &params) {
+void GAPI::doSignBatchPDF(SignParams &params) {
 
-    qDebug() << "doSignBatchPDF! loadedFilePath = " << params.loadedFileBatchPath << " outputFile = " << params.outputFile <<
+    qDebug() << "doSignBatchPDF! loadedFilePath = " << params.loadedFilePaths << " outputFile = " << params.outputFile <<
                 "page = " << params.page << "coord_x" << params.coord_x << "coord_y" << params.coord_y <<
                 "reason = " << params.reason << "location = " << params.location;
     BEGIN_TRY_CATCH
@@ -1750,9 +1779,9 @@ void GAPI::doSignBatchPDF(SignBatchParams &params) {
     PTEID_PDFSignature *sig_handler;
     sig_handler = new PTEID_PDFSignature();
 
-    for( int i = 0; i < params.loadedFileBatchPath.count(); i++ ){
-        qDebug() << params.loadedFileBatchPath[i];
-        QString fullInputPath = params.loadedFileBatchPath[i];
+    for( int i = 0; i < params.loadedFilePaths.count(); i++ ){
+        qDebug() << params.loadedFilePaths[i];
+        QString fullInputPath = params.loadedFilePaths[i];
         sig_handler->addToBatchSigning((char *)getPlatformNativeString(fullInputPath),
                                        params.page == 0 ? true : false);
     }

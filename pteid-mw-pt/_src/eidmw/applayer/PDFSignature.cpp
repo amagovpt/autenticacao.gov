@@ -432,11 +432,11 @@ namespace eIDMW
 		return final_path;
 	}
 
-	std::string PDFSignature::getDocName() {
+	std::string PDFSignature::getDocName(bool cmd_trim) {
 		char * pdf_filename = Basename((char *)m_pdf_file_path);
 		std::string clean_filename = CPathUtil::remove_ext_from_basename(pdf_filename);
 
-		return clean_filename.size() > 44 ? clean_filename.substr(0, 44) : clean_filename;
+		return (clean_filename.size() > 44  && cmd_trim ? clean_filename.substr(0, 44) : clean_filename);
 	}
 
 	int PDFSignature::signFiles(const char *location,

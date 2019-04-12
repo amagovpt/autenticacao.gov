@@ -116,7 +116,8 @@ public:
 
 struct SignParams {
 public:
-    QString loadedFilePath; QString outputFile;
+    QList<QString> loadedFilePaths;
+    QString outputFile;
     int page;
     double coord_x;
     double coord_y;
@@ -126,19 +127,10 @@ public:
     bool isSmallSignature;
 };
 
-struct CmdSignParams {
+struct CmdParams {
 public:
     QString mobileNumber;
     QString secret_code;
-    QString loadedFilePath;
-    QString outputFile;
-    int page;
-    double coord_x;
-    double coord_y;
-    QString reason;
-    QString location;
-    double isTimestamp;
-    double isSmallSignature;
 };
 
 struct CmdSignedFileDetails {
@@ -146,18 +138,6 @@ public:
     QString signedCMDFile;
     QString citizenName;
     QString citizenId;
-};
-
-struct SignBatchParams {
-public:
-    QList<QString> loadedFileBatchPath; QString outputFile;
-    int page;
-    double coord_x;
-    double coord_y;
-    QString reason;
-    QString location;
-    bool isTimestamp;
-    bool isSmallSignature;
 };
 
 struct SCAPSignParams {
@@ -325,14 +305,14 @@ public slots:
 
     void changeAddress(QString process, QString secret_code);
     void doChangeAddress(const char *process, const char *secret_code);
-    void signOpenCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
+    void signOpenCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePath,
                   QString outputFile, int page, double coord_x, double coord_y, QString reason, QString location,
                  double isTimestamp, double isSmall);
     void signCloseCMD(QString sms_token, QList<int> attribute_list);
-    void doOpenSignCMD(CMDSignature *cmd_signature, CmdSignParams &params);
+    void doOpenSignCMD(CMDSignature *cmd_signature, CmdParams &cmdParams, SignParams &signParams);
     void doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token);
     void doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token, QList<int> attribute_list);
-    void signOpenScapWithCMD(QString mobileNumber, QString secret_code, QString loadedFilePath,
+    void signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
                        QString outputFile, int page, double coord_x, double coord_y,
                        QString reason, QString location);
 
@@ -456,9 +436,9 @@ private:
     void doPrintPDF(PrintParams &params);
     void doPrint(PrintParams &params);
     bool drawpdf(QPrinter &printer, PrintParams params);
-    void doSignBatchPDF(SignBatchParams &params);
+    void doSignBatchPDF(SignParams &params);
 	void doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp);
-    void doSignBatchXADES(SignBatchParams &params);
+    void doSignBatchXADES(SignParams &params);
     void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);
     void fillCertificateList (void );
     void getCertificateAuthStatus(void );
@@ -476,7 +456,7 @@ private:
     PhotoImageProvider *image_provider;
 
     CMDSignature *cmd_signature;
-    PTEID_PDFSignature *cmd_pdfSignature;
+    std::vector<PTEID_PDFSignature *> cmd_pdfSignatures;
     ScapServices scapServices;
     SCAPSignParams m_scap_params;
 
