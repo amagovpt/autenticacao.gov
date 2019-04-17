@@ -22,7 +22,6 @@ target.path = $${INSTALL_DIR_LIB}
 INSTALLS += target jar
 
 
-
 CONFIG -= warn_on qt
 QMAKE_CXXFLAGS += -fno-strict-aliasing
 QMAKE_CFLAGS += -fno-strict-aliasing
@@ -47,24 +46,33 @@ preprocess.variable_out+=SOURCES
 ###
 ### As a postbuild step, compile the generated .java files and jar them to a jar file
 ###
-unix:QMAKE_POST_LINK = javac -d ../eidlibJava/class ./src/*.java ./GeneratedFiles/*.java && jar cf ../jar/$${EIDLIBJAR} -C ../eidlibJava/class . && mkdir -p javadocs/ && javadoc -d ./javadocs/ -sourcepath ./GeneratedFiles/PTEID_*.java ./GeneratedFiles/Callback.java ./GeneratedFiles/pteidlibJava_*.java ./src/*.java -overview index.html --allow-script-in-comments && zip -r9 javadocs.zip ./javadocs/
+unix:QMAKE_POST_LINK =	javac -d ../eidlibJava/class ./src/*.java ./GeneratedFiles/*.java && \
+			jar cf ../jar/$${EIDLIBJAR} -C ../eidlibJava/class . && mkdir -p javadocs/
 
 ## destination directory
 DESTDIR = ../lib
 
 DEFINES += EIDMW_CMN_EXPORT
 
-LIBS += -L../lib  \
-		-l$${COMMONLIB} \
-		-l$${DLGLIB} \
-		-l$${CARDLAYERLIB} \
-		-l$${APPLAYERLIB}
+LIBS += -L../lib
+LIBS +=	-l$${COMMONLIB}
+LIBS +=	-l$${DLGLIB}
+LIBS +=	-l$${CARDLAYERLIB}
+LIBS +=	-l$${APPLAYERLIB}
 
 macx: INCLUDEPATH += /System/Library/Frameworks/JavaVM.framework/Headers/ /usr/local/Cellar/openssl/1.0.2q/include/
 macx: LIB += -Wl,-framework -Wl,Java
 
 DEPENDPATH += .
-INCLUDEPATH += . ../applayer ../dialogs ../common ../cardlayer ../eidlib /usr/lib/jvm/java-8-openjdk-amd64/include /usr/lib/jvm/java-8-openjdk-amd64/include/linux
+INCLUDEPATH += .
+INCLUDEPATH += ../applayer
+INCLUDEPATH += ../dialogs
+INCLUDEPATH += ../common
+INCLUDEPATH += ../cardlayer
+INCLUDEPATH += ../eidlib
+INCLUDEPATH += /usr/lib/jvm/java-8-openjdk-amd64/include
+INCLUDEPATH += /usr/lib/jvm/java-8-openjdk-amd64/include/linux
+
 macx:INCLUDEPATH += /usr/local/include
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 
@@ -81,6 +89,10 @@ SOURCES += ../eidlib/eidlibReader.cpp
 SOURCES += ../eidlib/InternalUtil.cpp
 SOURCES += ../eidlib/eidlibxades.cpp
 
-
+HEADERS += ../eidlib/eidlib.h
+HEADERS += ../eidlib/eidlibcompat.h
+HEADERS += ../eidlib/eidlibdefines.h
+HEADERS += ../eidlib/eidlibException.h
+HEADERS += ../eidlib/InternalUtil.h
 
 
