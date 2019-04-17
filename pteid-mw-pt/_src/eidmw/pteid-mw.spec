@@ -22,7 +22,8 @@
 %endif
 %endif
 
-%define svn_revision 5840
+%define svn_revision 6072
+%define app_version  3.0.17
 
 Name:           pteid-mw
 BuildRequires:  pcsc-lite-devel make swig
@@ -77,7 +78,7 @@ Conflicts:  cartao_de_cidadao
 
 License:        GPLv2+
 Group:          System/Libraries
-Version:        3.0.16.%{svn_revision}
+Version:        %{app_version}.%{svn_revision}
 %if 0%{?fedora}
 Release:        1%{?dist}
 %else
@@ -87,7 +88,7 @@ Summary:        Portuguese eID middleware
 Url:            https://svn.gov.pt/projects/ccidadao/
 Vendor:         Portuguese Government
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-Source0:        pteid-mw_3.0.16svn%{svn_revision}-3.tar.xz
+Source0:        pteid-mw_%{app_version}svn%{svn_revision}.tar.xz
 Source1:        pteid-mw-gui.desktop
 Source2:        pteid-scalable.svg
 Source3:        pteid-signature.png
@@ -111,7 +112,7 @@ Requires(postun): /usr/bin/gtk-update-icon-cache
  (Cartão de Cidadão) and Chave Móvel Digital in order to authenticate securely
  in certain websites and sign documents.
 %prep
-%setup -q -n pteid-mw_3.0.16svn%{svn_revision}
+%setup -q -n pteid-mw_%{app_version}svn%{svn_revision}
 
 %if 0%{?fedora} || 0%{?suse_version}
 %patch0 -p0
@@ -285,6 +286,10 @@ fi
 /usr/local/share/certs
 
 %changelog
+* Tue Apr 16 2019 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+  PDF Signature fixes
+  Proxy support in SCAP signature
+
 * Mon Feb 11 2019 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   New release - version 3.0.16
   SCAP Signature improvements
