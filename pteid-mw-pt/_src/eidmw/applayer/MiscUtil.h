@@ -152,9 +152,11 @@ public:
 	static std::string remove_ext_from_basename(const char *base);
 
 	/**
-	  * 
+	  * Modify each path in the vector filenames to keep the basename and extension but change the folder
+      * path to be the folder variable. If there are multiple files with the same basename, prepend a sequential
+      * identifier.
 	  */
-	static void generate_unique_filenames(const char *folder, std::vector<std::string *> &filenames, const char *suffix = "");
+    EIDMW_APL_API static void generate_unique_filenames(const char *folder, std::vector<std::string *> &filenames, const char *suffix = "");
 };
 
 class CByteArray;

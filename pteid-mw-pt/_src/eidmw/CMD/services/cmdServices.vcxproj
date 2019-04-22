@@ -226,7 +226,6 @@
   <ItemGroup>
     <ClCompile Include="cmdServices.cpp" />
     <ClCompile Include="CMDSignature.cpp" />
-    <ClCompile Include="duration.cpp" />
     <ClCompile Include="soapC.cpp" />
     <ClCompile Include="soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp" />
     <ClCompile Include="stdsoap2.cpp" />

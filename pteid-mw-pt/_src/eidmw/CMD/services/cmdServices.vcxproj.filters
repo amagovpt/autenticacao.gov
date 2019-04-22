@@ -35,9 +35,6 @@
     <ClCompile Include="stdsoap2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="duration.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
