@@ -401,7 +401,7 @@ int CMDSignature::signClose(std::string in_code)
     std::vector<PTEID_ByteArray *> signatures;
     if (m_pdf_handlers.size() > 0 || (m_docname_handle.size() > 0 && m_array_handler.size() > 0))
     {
-        for (size_t i = 0; i < std::max(m_pdf_handlers.size(), std::size_t{1}); i++)
+        for (size_t i = 0; i < (std::max)(m_pdf_handlers.size(), std::size_t{1}); i++)
         {
             signatures.push_back(new PTEID_ByteArray());
         }
