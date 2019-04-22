@@ -29,22 +29,19 @@ Package: pteid-mw
 Conflicts: cartaodecidadao
 Architecture: any
 Depends: pcscd,
-         qml-module-qtquick2,
-         qml-module-qtquick-controls2,	
-         qml-module-qtquick-dialogs,	
-         qml-module-qt-labs-folderlistmodel,
-         qml-module-qt-labs-settings,	
-         qml-module-qtgraphicaleffects,
-         qml-module-qtquick-dialogs,	
-         qml-module-qtquick-controls,
-         qml-module-qtquick-controls2,	
-         qml-module-qtquick-dialogs,
-         qml-module-qtquick-layouts,
-         qml-module-qtquick-window2,
-         qml-module-qtquick-templates2,
-         qt5-gtk-platformtheme,
-         ${misc:Depends},
-         ${shlibs:Depends}
+	qml-module-qt-labs-folderlistmodel,
+	qml-module-qt-labs-settings,
+	qml-module-qtgraphicaleffects,
+	qml-module-qtquick-controls,
+	qml-module-qtquick-controls2,
+	qml-module-qtquick-dialogs,
+	qml-module-qtquick-layouts,
+	qml-module-qtquick-templates2,
+	qml-module-qtquick-window2,
+	qml-module-qtquick2,
+	qt5-gtk-platformtheme
+        ${misc:Depends},
+        ${shlibs:Depends}
 Description: Autenticação.Gov
  The Autenticação.Gov package provides a utility application (eidguiV2), a set of
  libraries and a PKCS#11 module to use the Portuguese Identity Card
