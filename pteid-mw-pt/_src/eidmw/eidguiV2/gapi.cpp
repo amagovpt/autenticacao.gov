@@ -37,7 +37,7 @@ GAPI::GAPI(QObject *parent) :
     image_provider = new PhotoImageProvider();
     image_provider_pdf = new PDFPreviewImageProvider();
 
-    cmd_signature = new eIDMW::CMDSignature(CMD_BASIC_AUTH_USERID, CMD_BASIC_AUTH_PASSWORD, CMD_BASIC_AUTH_APPID);
+    cmd_signature = new eIDMW::CMDSignature(getCMDBasicAuthUserId(), getCMDBasicAuthPassword(), getCMDBasicAuthAppId());
 
     m_addressLoaded = false;
     m_shortcutFlag = 0;
