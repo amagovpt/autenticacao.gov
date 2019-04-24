@@ -735,29 +735,31 @@ void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdParams &cmdParams, Sign
                 "page = " << signParams.page << "coord_x" << signParams.coord_x << "coord_y" << signParams.coord_y <<
                 "reason = " << signParams.reason << "location = " << signParams.location;*/
 
-    int ret = 0;
+    int ret = -1;
 
-    try {
-        signalUpdateProgressBar(25);
-        CMDProxyInfo proxyInfo = buildProxyInfo();
-        ret = cmd_signature->signOpen(proxyInfo, cmdParams.mobileNumber.toStdString(), cmdParams.secret_code.toStdString(),
-                                      signParams.page,
-                                      signParams.coord_x, signParams.coord_y,
-                                      signParams.location.toUtf8().data(), signParams.reason.toUtf8().data(),
-                                      getPlatformNativeString(signParams.outputFile));
+    BEGIN_TRY_CATCH
+    signalUpdateProgressBar(25);
+    CMDProxyInfo proxyInfo = buildProxyInfo();
+    ret = cmd_signature->signOpen(proxyInfo, cmdParams.mobileNumber.toStdString(), cmdParams.secret_code.toStdString(),
+                                    signParams.page,
+                                    signParams.coord_x, signParams.coord_y,
+                                    signParams.location.toUtf8().data(), signParams.reason.toUtf8().data(),
+                                    getPlatformNativeString(signParams.outputFile));
 
-        if ( ret != 0 ) {
-            qDebug() << "signOpen failed! - ret: " << ret << endl;
+    if ( ret != 0 ) {
+        qDebug() << "signOpen failed! - ret: " << ret << endl;
      
-            signCMDFinished(ret);
-            signalUpdateProgressBar(100);
-            return;
-        }
-
-
-    } catch (PTEID_Exception &e) {
-        qDebug() << "Caught exception in some SDK method. Error code: " << hex << e.GetError() << endl;
+        signCMDFinished(ret);
         signalUpdateProgressBar(100);
+        return;
+    }
+
+    END_TRY_CATCH
+
+    if (ret == -1) {
+        //Exception was thrown in signOpen
+        signalUpdateProgressBar(100);
+        return;
     }
 
     signalUpdateProgressBar(50);

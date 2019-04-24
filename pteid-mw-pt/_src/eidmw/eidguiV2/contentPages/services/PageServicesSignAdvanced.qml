@@ -80,7 +80,7 @@ PageServicesSignAdvancedForm {
             } else {
                 signerror_dialog.propertySignFailDialogText.text = qsTranslate("PageServicesSign","STR_SIGN_GENERIC_ERROR") + " " + error_code
             }
-            
+            dialogSignCMD.close()
             signerror_dialog.visible = true
             propertyBusyIndicator.running = false
             propertyOutputSignedFile = ""
@@ -515,13 +515,11 @@ PageServicesSignAdvancedForm {
     }
     propertyFileDialogCMDOutput {
         onAccepted: {
-            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             dialogSignCMD.open()
         }
     }
     propertyFileDialogBatchCMDOutput {
         onAccepted: {
-            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             dialogSignCMD.open()
         }
     }
