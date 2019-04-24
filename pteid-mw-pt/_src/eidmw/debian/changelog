@@ -1,14 +1,9 @@
-pteid-mw (3.0.17svn6095) UNRELEASED; urgency=medium
+pteid-mw (3.0.16svn5840-3) UNRELEASED; urgency=medium
 
-  [ Andre Guerreiro ]
   * SCAP Signature improvements
   * Support for new 3072-bit RSA smartcards
 
-  [ Venn ]
-  * A lot of new stuff
-
- -- Venn <ven@cm.pt>  Wed, 24 Apr 2019 17:42:18 +0100
-
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 08 Feb 2019 12:28:55 +0100
 pteid-mw (3.0.15svn5575-1) UNRELEASED; urgency=medium
 
   * PDF signature bugfix
