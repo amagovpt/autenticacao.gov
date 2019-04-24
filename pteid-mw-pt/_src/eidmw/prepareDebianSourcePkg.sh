@@ -155,14 +155,13 @@ ask_changelog
 
 function build {
 
-	f1="../pteid-mw_${APP_VERSION}svn${REVISION}.tar.xz"
-	f2="../pteid-mw_${APP_VERSION}svn${REVISION}.dsc"
+	# if a repo url is provided then change to that directory
+	if [ $REPODIR != $DESTDIR ]; then
+		cd $REPODIR
+	fi
 
-	debuild
+	dpkg-source -b "$DESTDIR"
 
-	cp $DESTDIR$f1 $REPODIR
-	cp $DESTDIR$f2 $REPODIR
-	
 	PACKAGE_BUILT=true
 	echo "Debian package created in $REPODIR"
 }
