@@ -7,7 +7,7 @@ REVISION=6072
 APP_VERSION=3.0.17
 LOCALREPO=false
 REWRITE=false
-QUIET=false 
+QUIET=true 
 
 CURRENT_DIRECTORY=$(pwd)
 
@@ -16,8 +16,28 @@ die() {
     exit 1
 }
 
+usage="$(basename "$0") [-h] [-v version -r revision -repo repo_url -o checkout_folder] [--verbose --force --local]
+
+where:
+	-h	show this help text
+	-v version	app version (e.g., 3.0.17) to be set upon releasing
+	-r revision	svn revision number (e.g., 7012) to be used during checkout
+	-repo repo_url	the local folder path of the OBS repository where the packiging will be copied to
+	-o checkout_folder	local folder path where to checkout from SVN
+
+optional flags:
+	--verbose	this flag indicates if should print all 
+	--force		this flag indicates if should rewrite checkout_folder
+	--local 	use this flag if the repository to checkout is local, i.e., current folder or from remote SVN repository
+
+NOTE: the order of the arguments and flags is relevant
+"
+
 while :; do
 	case $1 in
+		h|-h|--help) 
+			die "$usage"
+			;;
 		-v|-version)	
 			if [ "$2" ]; then
 				APP_VERSION="$2"
@@ -40,27 +60,27 @@ while :; do
 				shift
 			fi
 			;;
-		-o|--out)       # Takes an option argument; ensure it has been specified.
+		-o|-out|--out)       # Takes an option argument; ensure it has been specified.
 			if [ "$2" ]; then
 				DESTDIR="$2"
 				shift
 			else
-				die 'ERROR: "--file" requires a non-empty option argument.'
+				die 'ERROR: "-o | --out" requires a non-empty option argument.'
 			fi
 			;;
 		-out=?*)
 			DESTDIR=${1#*=} # Delete everything up to "=" and assign the remainder.
 			;;
 		-out=)         # Handle the case of an empty --file=
-			die 'ERROR: "--file" requires a non-empty option argument.'
+			die 'ERROR: "-o | --out" requires a non-empty option argument.'
 			;;
-		-q|--quiet)
-			QUIET=true 
+		--verbose)
+			QUIET=false 
 			;;
 		--force)
-			REWRITE=true 
+			REWRITE=true
 			;;
-		-l|--local)
+		--local)
 			LOCALREPO=true 
 			;;
 		--)              # End of all options.
@@ -68,6 +88,7 @@ while :; do
 			break
 			;;
 		-?*)
+			echo "$usage"
 			printf 'WARN: Unknown option (ignored): %s\n' "$1" >&2
 			;;
 		*)               # Default case: No more options, so break out of the loop.
@@ -77,39 +98,42 @@ while :; do
 	shift
 done
 
-if [ $DESTDIR ]; then
-	if [ !$REPODIR ]; then
-		REPODIR=$DESTDIR
+SVN_OUT_FOLDER="pteid-mw_${APP_VERSION}svn${REVISION}/"
+
+if [[ $DESTDIR ]]; then
+	DESTDIR=$DESTDIR$SVN_OUT_FOLDER
+
+	if [[ -z "$REPODIR" ]]; then
+		REPODIR="$DESTDIR"
 	fi
 else
-	DESTDIR="$HOME/pteid-deb-packaging/pteid-mw_${APP_VERSION}svn${REVISION}"
+	DESTDIR="$HOME/pteid-deb-packaging/"$SVN_OUT_FOLDER
 fi
 
-echo "SVN checkout on "
-echo $DESTDIR
-echo "OSC Repository on "
-echo $REPODIR
-echo "Revision"
-echo $REVISION
+if [ $QUIET == true ]; then
+	OPTS=" --quiet"
+else
+	echo "SVN checkout on "
+	echo $DESTDIR
+	echo "OSC Repository on "
+	echo $REPODIR
+	echo "Revision"
+	echo $REVISION
+fi
 
 if [ $LOCALREPO ]; then
-	echo "NOTE: checking out local repository"
 	URL='.'
 else
 	URL='https://projects.caixamagica.pt/cartaocidadao/repo/middleware-offline/trunk/pteid-mw-pt/_src/eidmw'
 fi
 
-if [ $REWRITE ]; then
-	OPTS=" --force"
-fi
-
-if [ $QUIET ]; then
-	OPTS+=" --quiet"
+if [ $REWRITE == true ]; then
+	OPTS+=" --force"
 fi
 
 svn export -r $REVISION $URL $DESTDIR $OPTS
 
-cd $DESTDIR
+cd "$DESTDIR"
 
 # remove unused files
 rm -rf cryptoAPI-Test minidriver misc/DSS/dss-standalone.exe eidlibCS eidlibCS_Wrapper *.bat misc/Wix_MW35 misc/scap misc/setup_win misc/mac ffpteidcertinstall pcscEmulation lib/* bin/* pkcs11Test xpi applayerTest pkcs11Test commonTest clean_mdrv_keys dss-standalone-app eidlibNodeJS_Wrapper eidlibPerl_Wrapper eidlibPhp_Wrapper eidlibPython_Wrapper eidlibTest eidlibTestBWC 
@@ -131,13 +155,16 @@ ask_changelog
 
 function build {
 
-	if [ $REPODIR != $DESTDIR ]; then
-		cd $REPODIR
-	fi
+	f1="../pteid-mw_${APP_VERSION}svn${REVISION}.tar.xz"
+	f2="../pteid-mw_${APP_VERSION}svn${REVISION}.dsc"
 
-	dpkg-source -b $DESTDIR;
-	PACKAGE_BUILT=true;
-	echo "Debian package created in $REPODIR";
+	debuild
+
+	cp $DESTDIR$f1 $REPODIR
+	cp $DESTDIR$f2 $REPODIR
+	
+	PACKAGE_BUILT=true
+	echo "Debian package created in $REPODIR"
 }
 
 function ask_to_package {
