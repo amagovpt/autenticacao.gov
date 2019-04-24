@@ -417,9 +417,12 @@ Item {
     function open() {
         buttonCMDProgressConfirm.isOpenFile = false
         dialogSignCMD.open()
+        mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
     }
     function close() {
         dialogSignCMD.close()
+        dialogCMDProgress.close()
+        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
     }
     function signCMD(){
         var loadedFilePaths = []

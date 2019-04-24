@@ -33,6 +33,7 @@ PageServicesSignSimpleForm {
             } else {
                 signerror_dialog.propertySignFailDialogText.text = qsTranslate("PageServicesSign","STR_SIGN_GENERIC_ERROR") + " " + error_code
             }
+            dialogSignCMD.close()
             signerror_dialog.visible = true
             propertyBusyIndicator.running = false
             propertyOutputSignedFile = ""
@@ -351,7 +352,6 @@ PageServicesSignSimpleForm {
     }
     propertyFileDialogCMDOutput {
         onAccepted: {
-            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             dialogSignCMD.open()
         }
     }

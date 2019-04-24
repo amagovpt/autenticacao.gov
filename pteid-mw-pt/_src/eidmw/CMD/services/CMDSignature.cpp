@@ -318,8 +318,11 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
             {
                 pdf->setVisibleCoordinates(page, coord_x, coord_y);
             }
-
-            ret = pdf->signFiles(location, reason, filenames[i]->c_str(), false);
+            try{
+                ret = pdf->signFiles(location, reason, filenames[i]->c_str(), false);
+            } catch (eIDMW::CMWException &e) {
+                throw PTEID_Exception(e.GetError());
+            }
 
             delete filenames[i];
 
