@@ -9,7 +9,7 @@ export CFLAGS
 export CXXFLAGS
 
 %:
-	dh $@
+	dh $@ --parallel
 
 override_dh_usrlocal:
 override_dh_makeshlibs:

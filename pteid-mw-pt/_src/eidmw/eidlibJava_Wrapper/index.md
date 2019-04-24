@@ -195,8 +195,8 @@ For more details see at [PTEID_EIDCard](./classpt_1_1gov_1_1cartaodecidadao_1_1P
 
 
 
-##### XAdES signature configuration 
-The SDK allows to configure XAdES signature parameters.
+##### Timestamp Server configuration 
+The SDK allows to configure timestamp server instead of default one (which is limited to 20 requests to 20 minutes).
 For example, to change the Time Stamping Authority (TSA) by changing the url or the server request timeout, as follows
 ```java
 PTEID_Config config = new PTEID_Config(PTEID_PARAM_XSIGN_TSAURL);

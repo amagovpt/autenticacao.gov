@@ -49,6 +49,9 @@
 #include "eidlibException.h"
 %}
 
+%include "wchar.i"
+%include "std_wstring.i"
+%include "typemaps.i"
 //Define to avoid swig to create definition for NOEXPORT_PTEIDSDK methods
 #define PTEIDSDK_API
 #define NOEXPORT_PTEIDSDK SLASH(/)
@@ -94,7 +97,7 @@
 #elif SWIGJAVASCRIPT
 
 #else
-    TODO
+	//TODO
 #endif
 
 %include "eidlibException.h"	//This file contains the exceptions and should not include try/catch
