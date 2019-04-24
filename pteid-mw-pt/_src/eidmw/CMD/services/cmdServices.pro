@@ -20,22 +20,11 @@ QT -= gui
 DESTDIR = ./../../lib
 DEPENDPATH += .
 
-macx: LIBS +=	-L/usr/local/Cellar/openssl/1.0.2q/lib/ \
-                /Users/yosemite/Downloads/gsoap_2.8.49/gsoap-2.8/gsoap/libgsoapssl++.a \
-                -lz \
-                -lssl \
-		-lcrypto
+macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2q/lib/ /Users/yosemite/Downloads/gsoap_2.8.49/gsoap-2.8/gsoap/libgsoapssl++.a -lz -lssl -lcrypto
 
 QMAKE_CXXFLAGS += -fvisibility=hidden
 
-LIBS += -L./../../lib \
-        -l$${COMMONLIB} \
-        -l$${APPLAYERLIB} \
-        -l$${CARDLAYERLIB} \
-        -lpteidlib \
-        -lssl \
-        -lcrypto
-        
+LIBS += -L./../../lib -l$${COMMONLIB} -l$${APPLAYERLIB} -l$${CARDLAYERLIB} -lpteidlib
 INCLUDEPATH += . ../../eidlib/ ../../common ../../applayer ../../cardlayer
 macx:INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2q/include/
 
@@ -43,19 +32,19 @@ unix: DEFINES += __UNIX__ WITH_OPENSSL
 
 # Input
 HEADERS += \
-            cmdErrors.h \
-            cmdServices.h \
-            CMDSignature.h \
-            CCMovelSignature.h \
+            CCMovelDigitalSignature.h \
             soapH.h \
             soapStub.h \
-            soapBasicHttpBinding_USCORECCMovelSignatureProxy.h \
+            soapWSHttpBinding_USCORECCMovelSignatureProxy.h \
             stdsoap2.h \
+            cmdServices.h \
+            CMDSignature.h
 
 SOURCES += \
-            cmdServices.cpp \
-            CMDSignature.cpp \
             soapC.cpp \
-            soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp \
+#            soapWSHttpBinding_USCORECCMovelSignatureProxy.cpp \
+	    soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp \
+            cmdServices.cpp \
+            CMDSignature.cpp
 
 !macx: SOURCES += stdsoap2.cpp
