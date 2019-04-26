@@ -2,6 +2,7 @@ import QtQuick 2.6
 import QtQuick.Controls 2.1
 
 import "scripts/Constants.js" as Constants
+import "components" as Components
 
 Loader{
     id: theloader
@@ -12,7 +13,7 @@ Loader{
     property alias propertyGeneralPopUp: generalPopUp
     property alias propertyRectPopUp: rectPopUp
     property alias propertyGeneralTitleText: titleText
-    property alias propertyGeneralPopUpLabelText: labelText
+    property alias propertyGeneralPopUpLabelText: labelText.propertyText
 
     // Backup data about unfinished advance signature
     property alias propertyBackupfilesModel: backupfilesModel
@@ -77,20 +78,16 @@ Loader{
                 width: parent.width
                 height: parent.height - Constants.HEIGHT_BOTTOM_COMPONENT - Constants.SIZE_TEXT_V_SPACE
                 anchors.horizontalCenter: parent.horizontalCenter
-                Text {
+                Components.Link {
                     id: labelText
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
                     width: parent.width
+                    propertyText.verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    propertyText.color: Constants.COLOR_TEXT_LABEL
+                    propertyText.height: parent.height
                     anchors.bottom: parent.bottom
-                    wrapMode: Text.Wrap
-                    onLinkActivated: {
-                        Qt.openUrlExternally(link)
-                    }
                 }
             }
             Button {

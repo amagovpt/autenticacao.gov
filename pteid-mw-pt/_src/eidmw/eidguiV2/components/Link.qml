@@ -7,9 +7,12 @@ Item {
     property alias propertyText : linkText 
 
     height: childrenRect.height
-	Text {
+	TextEdit {
 		id: linkText
-		text: parent.text
+        readOnly: true
+        selectByMouse: true
+        selectByKeyboard: true
+        textFormat: Text.AutoText
 		font.pixelSize: Constants.SIZE_TEXT_BODY
         font.italic: false
         font.family: lato.name
@@ -19,6 +22,7 @@ Item {
 		font.underline: mouseArea.containsMouse
         onLinkActivated: Qt.openUrlExternally(link)
         wrapMode: Text.WordWrap
+        width: parent.width
 	}
     MouseArea {
         id: mouseArea

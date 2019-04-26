@@ -61,7 +61,7 @@ Window {
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                     "Erro / Error"
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    "Erro na leitura dos idiomas. Por favor, reinstale a aplicação \n
+                    "Erro na leitura dos idiomas. Por favor, reinstale a aplicação <br/>
 Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
         }
@@ -74,7 +74,7 @@ Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                     qsTranslate("Popup Card","STR_POPUP_ERROR")
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("Popup Card","STR_GENERIC_ERROR_MSG") + "\n\n" +
+                    qsTranslate("Popup Card","STR_GENERIC_ERROR_MSG") + "<br/><br/>" +
                     qsTranslate("Popup Card","STR_ERROR_CODE") + error_code
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
@@ -101,7 +101,7 @@ Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                     "Erro / Error"
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    "Erro na leitura dos idiomas. Por favor, reinstale a aplicação \n
+                    "Erro na leitura dos idiomas. Por favor, reinstale a aplicação <br/>
 Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
         }
