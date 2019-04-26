@@ -320,6 +320,9 @@ public slots:
     void showChangeAddressDialog(long code);
     void showSignCMDDialog(int error_code);
     bool checkCMDSupport();
+    std::string getCMDBasicAuthAppId();
+    std::string getCMDBasicAuthUserId();
+    std::string getCMDBasicAuthPassword();
 
     QString getCardActivation();
     QString getDataCardIdentifyValue(GAPI::IDInfoKey key);

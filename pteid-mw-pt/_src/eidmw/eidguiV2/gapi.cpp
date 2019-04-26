@@ -20,6 +20,8 @@
 
 #include "ScapSettings.h"
 #include "credentials.h"
+#include "Config.h"
+#include "Util.h"
 
 using namespace eIDMW;
 
@@ -3075,4 +3077,28 @@ bool GAPI::checkCMDSupport() {
 #else
     return false;
 #endif
+}
+
+std::string GAPI::getCMDBasicAuthAppId() {
+    std::string regAppId = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_APPID));
+    if (regAppId != "default_value") {
+        return regAppId;
+    }
+    return CMD_BASIC_AUTH_APPID;
+}
+
+std::string GAPI::getCMDBasicAuthUserId() {
+    std::string regUserId = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_USERID));
+    if (regUserId != "default_value") {
+        return regUserId;
+    }
+    return CMD_BASIC_AUTH_USERID;
+}
+
+std::string GAPI::getCMDBasicAuthPassword() {
+    std::string regPassword = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_PASSWORD));
+    if (regPassword != "default_value") {
+        return regPassword;
+    }
+    return CMD_BASIC_AUTH_PASSWORD;
 }
