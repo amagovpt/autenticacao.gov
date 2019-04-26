@@ -295,7 +295,7 @@ PageSecurityPinCodesForm {
                         qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_WRONG")
-                        + " \n\n"
+                        + " <br/><br/>"
                         + qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
                         + " " + triesLeft + " "
                         + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")
@@ -548,7 +548,7 @@ PageSecurityPinCodesForm {
                         qsTranslate("Popup PIN","STR_PIN_MODIFY")
                     mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                             qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_WRONG")
-                            + " \n\n"
+                            + " <br/><br/>"
                             + qsTranslate("Popup PIN","STR_POPUP_CARD_REMAIN")
                             + " " + triesLeft + " "
                             + qsTranslate("Popup PIN","STR_POPUP_CARD_TRIES")

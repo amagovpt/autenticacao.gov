@@ -189,6 +189,7 @@ Item {
                 anchors.top: rectPin.bottom
                 Link {
                     id: textLinkCMD
+                    width: parent.width
                     propertyText.text: "<a href='https://www.autenticacao.gov.pt/cmd-pedido-chave'>"
                             + qsTranslate("PageServicesSign","STR_SIGN_CMD_URL")
                     propertyText.font.italic: true
@@ -287,10 +288,12 @@ Item {
             Item {
                 id: rectMessageTop
                 width: parent.width
-                height: 50
+                height: 70
                 anchors.horizontalCenter: parent.horizontalCenter
                 Link {
                     id: textMessageTop
+                    width: parent.width
+                    height: parent.height
                     propertyText.text: ""
                     propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
                     propertyText.color: Constants.COLOR_TEXT_LABEL
@@ -305,6 +308,7 @@ Item {
                 height: 50
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: rectMessageTop.bottom
+                anchors.topMargin: -15
                 visible: false
                 Text {
                     id: labelCMDText
@@ -323,6 +327,7 @@ Item {
                 width: parent.width
                 height: 50
                 anchors.top: rectMessageTop.bottom
+                anchors.topMargin: -15
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible: false
                 Text {

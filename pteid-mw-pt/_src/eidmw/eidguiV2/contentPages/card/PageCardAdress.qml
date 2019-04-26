@@ -61,7 +61,7 @@ PageCardAdressForm {
         }
         onSignalUpdateProgressStatus: {
             console.log("Address change --> update progress status with text = " + statusMessage)
-            textMessageTop.text = statusMessage
+            textMessageTop.propertyText.text = statusMessage
         }
         onSignalCardAccessError: {
             console.log("Card Adress onSignalCardAccessError"+ error_code)
@@ -508,19 +508,16 @@ PageCardAdressForm {
                 width: parent.width
                 height: 150
                 anchors.horizontalCenter: parent.horizontalCenter
-                Text {
+                Components.Link {
                     id: textMessageTop
-                    textFormat: Text.RichText
-                    text: ""
-                    verticalAlignment: Text.AlignVCenter
+                    propertyText.text: ""
+                    propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_BODY
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
                     height: parent.height
                     width: parent.width
+                    propertyText.height: parent.height
                     anchors.bottom: parent.bottom
-                    wrapMode: Text.WordWrap
                 }
             }
 

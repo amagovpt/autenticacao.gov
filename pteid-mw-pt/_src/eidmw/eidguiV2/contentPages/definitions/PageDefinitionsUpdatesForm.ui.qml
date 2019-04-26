@@ -11,7 +11,7 @@ Item {
     anchors.fill: parent
     property alias propertyButtonSearch: buttonSearch
     property alias propertyProgressBar: progressBar
-    property alias propertyTextDescription: textDescription
+    property alias propertyTextDescription: textDescription.propertyText
     property alias propertyButtonStartUpdate: buttonStartUpdate
     property alias propertyButtonCancelUpdate: buttonCancelUpdate
     property alias propertyReleaseScrollViewText: releaseNoteScrollViewText
@@ -65,13 +65,10 @@ Item {
                 height: parent.height * Constants.HEIGHT_DEFINITIONS_UPDATE_LABEL_ROW
                 anchors.top: mainItemWithPadding.top
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                Text {
+                Components.Link {
                     id: textDescription
-                    font.pixelSize: Constants.SIZE_TEXT_BODY
-                    font.family: lato.name
-                    text: qsTranslate("PageDefinitionsUpdates",
+                    propertyText.text: qsTranslate("PageDefinitionsUpdates",
                                       "STR_UPDATE_TEXT")
-                    wrapMode: Text.Wrap
                     width: parent.width
                     height: parent.height
                 }

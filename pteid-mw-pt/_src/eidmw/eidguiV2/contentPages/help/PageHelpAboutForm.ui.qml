@@ -57,6 +57,7 @@ Item {
 
     Components.Link {
         id: textLinkCC
+        width: parent.width
         anchors.top: textDifficult.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE 
         propertyText.text: "<a href='https://www.autenticacao.gov.pt/o-cartao-de-cidadao'>" + 
