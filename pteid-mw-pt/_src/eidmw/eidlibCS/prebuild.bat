@@ -1,4 +1,4 @@
-set /p SVN_REVISION= < "%~dp0..\svn_revision"
+for /f "delims== tokens=1,2" %%G in (..\svn_revision) do set %%G=%%H
 
 set OUTPUT_FILE=%~dp0Properties\AssemblyInfo.cs
 
@@ -16,7 +16,7 @@ echo [assembly: AssemblyTrademark("")]				>> "%OUTPUT_FILE%"
 echo [assembly: AssemblyCulture("")]				>> "%OUTPUT_FILE%"
 echo [assembly: ComVisible(false)]				>> "%OUTPUT_FILE%"
 echo [assembly: Guid("a69697fa-c784-4923-8476-2ee828accae8")]	>> "%OUTPUT_FILE%"
-echo [assembly: AssemblyVersion("3.0.17.%SVN_REVISION%")]	>> "%OUTPUT_FILE%"
-echo [assembly: AssemblyFileVersion("3.0.17.%SVN_REVISION%")]	>> "%OUTPUT_FILE%"
+echo [assembly: AssemblyVersion("%PTEID_PRODUCT_VERSION%.%SVN_REVISION%")]	>> "%OUTPUT_FILE%"
+echo [assembly: AssemblyFileVersion("%PTEID_PRODUCT_VERSION%.%SVN_REVISION%")]	>> "%OUTPUT_FILE%"
 
 exit 0
