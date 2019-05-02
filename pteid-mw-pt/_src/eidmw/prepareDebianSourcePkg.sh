@@ -5,7 +5,6 @@ set -e
 #REVISION=`svnversion .`
 REVISION=6072
 APP_VERSION=3.0.17
-LOCALREPO=false
 REWRITE=false
 QUIET=true 
 
@@ -28,7 +27,6 @@ where:
 optional flags:
 	--verbose	this flag indicates if should print all 
 	--force		this flag indicates if should rewrite checkout_folder
-	--local 	use this flag if the repository to checkout is local, i.e., current folder or from remote SVN repository
 
 NOTE: the order of the arguments and flags is relevant
 "
@@ -80,9 +78,6 @@ while :; do
 		--force)
 			REWRITE=true
 			;;
-		--local)
-			LOCALREPO=true 
-			;;
 		--)              # End of all options.
 			shift
 			break
@@ -121,11 +116,7 @@ else
 	echo $REVISION
 fi
 
-if [ $LOCALREPO ]; then
-	URL='.'
-else
-	URL='https://projects.caixamagica.pt/cartaocidadao/repo/middleware-offline/trunk/pteid-mw-pt/_src/eidmw'
-fi
+URL='https://projects.caixamagica.pt/cartaocidadao/repo/middleware-offline/trunk/pteid-mw-pt/_src/eidmw'
 
 if [ $REWRITE == true ]; then
 	OPTS+=" --force"
