@@ -1,3 +1,5 @@
-import pteidlib as cc
+import sys
+sys.path.append("../GeneratedModule")
+import pteid
 
-help(cc)
+help(pteid)
