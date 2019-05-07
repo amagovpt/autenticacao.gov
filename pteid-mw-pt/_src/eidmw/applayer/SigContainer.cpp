@@ -1,11 +1,11 @@
 /* ****************************************************************************
  *
  *  PTeID Middleware Project.
- *  Copyright (C) 2012-2016
+ *  Copyright (C) 2012-2019
  *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
  *  Signature container for XAdES signature file and associated signed file(s) -
- *  It should be compliant with the ASIC specification TS 102 918 -
- *  http://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.01.01_60/ts_102918v010101p.pdf
+ *  It should be compliant with the ASiC specification EN 319 162-1 -
+ *  https://www.etsi.org/deliver/etsi_en/319100_319199/31916201/01.01.01_60/en_31916201v010101p.pdf
  */
 
 #include <fstream>
@@ -50,14 +50,14 @@ static const char *SIGCONTAINER_README=
 "https://www.autenticacao.gov.pt/cc-aplicacao" NL
 "" NL
 "Especificação Técnica da Assinatura Digital:" NL
-"Xades / Xades-T" NL
-"http://www.w3.org/TR/XAdES/" NL
+"XAdES / XAdES-T" NL
+"https://www.etsi.org/deliver/etsi_en/319100_319199/31913201/01.01.01_60/en_31913201v010101p.pdf" NL
 "" NL
 "############################################################" NL
 "README" NL
 "" NL
 "This zip file includes signed information. The signature file can be found in META-INF/signature.xml" NL
-"This signature was produced through Portuguese ID Card Management application." NL
+"This signature was produced through Autenticação.gov application." NL
 "" NL
 "More Info:" NL
 "" NL
@@ -65,8 +65,8 @@ static const char *SIGCONTAINER_README=
 "https://www.autenticacao.gov.pt/cc-aplicacao" NL
 "" NL
 "Signature technical specification:" NL
-"Xades / Xades-T" NL
-"http://www.w3.org/TR/XAdES" NL;
+"XAdES / XAdES-T" NL
+"https://www.etsi.org/deliver/etsi_en/319100_319199/31913201/01.01.01_60/en_31913201v010101p.pdf" NL;
 
 
 	char *readFile(const char *path, int *size)
@@ -164,7 +164,8 @@ static const char *SIGCONTAINER_README=
 		//It needs to be stored first in the archive and uncompressed so it can be used as a kind of magic number
 		//for systems that use them
 		AddMimeTypeFile(pZip, num_paths);
-		// The manisfest.xml file is required for ASIC-E validation by the online DSS validation tool but it is not being used as it
+
+		// The manifest.xml file is required for ASIC-E validation by the online DSS validation tool but it is not being used as it
 		// is not required by the standard. As a workaround, to be able to validate with such tools, the manifest file is added empty.
 		if(num_paths > 1)
 		{
