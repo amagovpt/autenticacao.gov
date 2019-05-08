@@ -584,7 +584,7 @@ void GAPI::showChangeAddressDialog(long code)
     //TODO: Reload card information in case of successful address change
 }
 
-void GAPI::showSignCMDDialog(int error_code)
+void GAPI::showSignCMDDialog(long error_code)
 {
     QString error_msg;
     QString support_string = tr("STR_CMD_ERROR_MSG");
@@ -772,7 +772,7 @@ void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdParams &cmdParams, Sign
 void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
 {
 
-    int ret = 0;
+    long ret = 0;
     std::string local_sms_token = sms_token.toUtf8().data();
 
     try {
@@ -808,7 +808,7 @@ void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
 
 void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token, QList<int> attribute_list) {
 
-    int ret = 0;
+    long ret = 0;
     std::string local_sms_token = sms_token.toUtf8().data();
 
     try {
@@ -884,8 +884,8 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<
 
     signalUpdateProgressStatus(tr("STR_CMD_CONNECTING"));
 
-    connect(this, SIGNAL(signCMDFinished(int)),
-            this, SLOT(showSignCMDDialog(int)), Qt::UniqueConnection);
+    connect(this, SIGNAL(signCMDFinished(long)),
+            this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
 
     //Final params for the SCAP signature (visible PDF signature params)  
     m_scap_params.outputPDF = outputFile;
@@ -941,8 +941,8 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QList<QString>
 
     signalUpdateProgressStatus(tr("STR_CMD_CONNECTING"));
 
-    connect(this, SIGNAL(signCMDFinished(int)),
-            this, SLOT(showSignCMDDialog(int)), Qt::UniqueConnection);
+    connect(this, SIGNAL(signCMDFinished(long)),
+            this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
 
     CmdParams cmdParams = {mobileNumber, secret_code};
     SignParams signParams = {loadedFilePaths, outputFile, page, coord_x, 
