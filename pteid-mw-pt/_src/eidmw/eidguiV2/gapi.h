@@ -318,7 +318,7 @@ public slots:
 
     static void addressChangeCallback(void *, int);
     void showChangeAddressDialog(long code);
-    void showSignCMDDialog(int error_code);
+    void showSignCMDDialog(long error_code);
     bool checkCMDSupport();
     std::string getCMDBasicAuthAppId();
     std::string getCMDBasicAuthUserId();
@@ -376,7 +376,7 @@ signals:
     void signalUpdateProgressBar(int value);
     void signalUpdateProgressStatus(const QString statusMessage);
     void addressChangeFinished(long return_code);
-    void signCMDFinished(int error_code);
+    void signCMDFinished(long error_code);
     void signalOpenCMDSucess();
     void signalCloseCMDSucess();
     void signalCardChanged(const int error_code);
