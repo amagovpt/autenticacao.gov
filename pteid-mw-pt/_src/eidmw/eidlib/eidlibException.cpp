@@ -309,7 +309,7 @@ const char* PTEID_Exception::GetMessage()
 				error_message = "Invalid page on PDF document";
 				break;
 			default:
-				error_message = "Unmapped error: " + m_lError;
+				error_message = "Unmapped error: " + std::to_string(m_lError);
 				break;
 		}
 	}
@@ -361,7 +361,6 @@ PTEID_Exception PTEID_Exception::THROWException(CMWException &e)
 	default:
 		throw PTEID_Exception(e.GetError());
 	}
-	return PTEID_Exception(e.GetError());
 }
 
 /*****************************************************************************************
