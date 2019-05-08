@@ -316,7 +316,7 @@ unsigned int  GAPI::doVerifyAuthPin(QString pin_value) {
     auth_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
 
     if (tries_left == 0) {
-        qDebug() << "WARNING: Auth PIN blocked!" + tries_left;
+        qDebug() << "WARNING: Auth PIN blocked!" << tries_left;
     }
 
     END_TRY_CATCH
@@ -343,7 +343,7 @@ unsigned int GAPI::doGetTriesLeftAuthPin() {
     tries_left = auth_pin.getTriesLeft();
 
     if (tries_left == 0) {
-        qDebug() << "WARNING: Auth PIN blocked!" + tries_left;
+        qDebug() << "WARNING: Auth PIN blocked!" << tries_left;
     }
 
     END_TRY_CATCH
@@ -370,7 +370,7 @@ unsigned int  GAPI::doVerifySignPin(QString pin_value) {
     sign_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
 
     if (tries_left == 0) {
-        qDebug() << "WARNING: Sign PIN blocked!" + tries_left;
+        qDebug() << "WARNING: Sign PIN blocked!" << tries_left;
     }
 
     END_TRY_CATCH
@@ -397,7 +397,7 @@ unsigned int GAPI::doGetTriesLeftSignPin() {
     tries_left = sign_pin.getTriesLeft();
 
     if (tries_left == 0) {
-        qDebug() << "WARNING: Sign PIN blocked!" + tries_left;
+        qDebug() << "WARNING: Sign PIN blocked!" << tries_left;
     }
 
     END_TRY_CATCH
@@ -424,7 +424,7 @@ unsigned int GAPI::doVerifyAddressPin(QString pin_value) {
     address_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
 
     if (tries_left == 0) {
-        qDebug() << "WARNING: Address PIN blocked!" + tries_left;
+        qDebug() << "WARNING: Address PIN blocked!" << tries_left;
     }
 
     END_TRY_CATCH
@@ -451,7 +451,7 @@ unsigned int GAPI::doGetTriesLeftAddressPin() {
     tries_left = address_pin.getTriesLeft();
 
     if (tries_left == 0) {
-        qDebug() << "WARNING: Address PIN blocked!" + tries_left;
+        qDebug() << "WARNING: Address PIN blocked!" << tries_left;
     }
 
     END_TRY_CATCH
@@ -478,7 +478,7 @@ unsigned int GAPI::doChangeAuthPin(QString currentPin, QString newPin) {
     auth_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(),tries_left,"");
 
     if (tries_left == 0) {
-        qDebug() << "WARNING: Auth PIN blocked!" + tries_left;
+        qDebug() << "WARNING: Auth PIN blocked!" << tries_left;
     }
 
     END_TRY_CATCH
@@ -505,7 +505,7 @@ unsigned int GAPI::doChangeSignPin(QString currentPin, QString newPin) {
     sign_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(),tries_left,"");
 
     if (tries_left == 0) {
-        qDebug() << "WARNING: Sign PIN blocked!" + tries_left;
+        qDebug() << "WARNING: Sign PIN blocked!" << tries_left;
     }
 
     END_TRY_CATCH
@@ -658,7 +658,7 @@ unsigned int GAPI::doChangeAddressPin(QString currentPin, QString newPin) {
     address_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(),tries_left,"");
 
     if (tries_left == 0) {
-        qDebug() << "WARNING: Address PIN blocked!" + tries_left;
+        qDebug() << "WARNING: Address PIN blocked!" << tries_left;
     }
 
     END_TRY_CATCH
