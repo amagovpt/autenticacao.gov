@@ -133,7 +133,7 @@ class CLogger
 	EIDMW_CMN_API void write(tLOG_Level level,const int line,const char *file,const char *format, ...);
 
   private:
-    static std::auto_ptr<CLogger> m_instance;
+    static std::unique_ptr<CLogger> m_instance;
     static bool m_bApplicationLeaving;
 
 	std::wstring m_directory;
