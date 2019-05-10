@@ -303,7 +303,7 @@ PageServicesSignSimpleForm {
                 // Needed because the PDFPreview
                 var path =  filesArray[0]
                 //  Get the path itself without a regex
-                path = decodeURIComponent(decodeURIComponent(stripFilePrefix(path)))
+                path = decodeURIComponent(stripFilePrefix(path))
                 /*console.log("Adding file: " + path)*/
                 var newFileUrl = {"fileUrl": path}
                 if (!containsFile(newFileUrl, filesModel)){
