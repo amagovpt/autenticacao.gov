@@ -85,7 +85,6 @@ class CMDServices {
 
         // CCMovelSign
         _ns2__CCMovelSign *get_CCMovelSignRequest( soap *sp
-                                                 , char *endpoint
 												 , std::string in_applicationID, std::string *docName
                                                  , unsigned char * in_hash
                                                  , std::string *in_pin
@@ -95,7 +94,6 @@ class CMDServices {
 
         // CCMovelMultipleSign
         _ns2__CCMovelMultipleSign *get_CCMovelMultipleSignRequest( soap *sp
-                                                 , char *endpoint
 												 , std::string in_applicationID, std::vector<std::string *> docNames
                                                  , std::vector<unsigned char *> in_hashes
                                                  , std::vector<std::string *> ids
@@ -110,7 +108,6 @@ class CMDServices {
                         , std::vector<unsigned int> *outSignatureLen );
 
         _ns2__ValidateOtp *get_ValidateOtpRequest( soap *sp
-                                                 , char *endpoint
                                                  , std::string in_applicationID
                                                  , std::string *in_code
                                                  , std::string *in_processId );
@@ -118,7 +115,6 @@ class CMDServices {
         int checkValidateOtpResponse( _ns2__ValidateOtpResponse *response );
 
         _ns2__GetCertificate *get_GetCertificateRequest(  soap *sp
-                                                , char *endpoint
                                                 , std::string in_applicationID
                                                 , std::string *in_userId );
 
