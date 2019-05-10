@@ -45,7 +45,8 @@ CThread::CThread()
 	m_bStopRequest = false;
 	m_SyncHandle = NULL;
 }
-CThread::~CThread() 
+
+CThread::~CThread()
 {
 	THREAD_CLEANUP(m_SyncHandle);
 }

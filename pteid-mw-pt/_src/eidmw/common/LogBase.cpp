@@ -84,7 +84,7 @@ static CMutex m_mutex;	// mutex for:
 						//   - non-windows
 						//   - used as automutex for creating a logger instance
 
-std::auto_ptr<CLogger> CLogger::m_instance;
+std::unique_ptr<CLogger> CLogger::m_instance;
 bool CLogger::m_bApplicationLeaving=false;
 
 //Default constructor
