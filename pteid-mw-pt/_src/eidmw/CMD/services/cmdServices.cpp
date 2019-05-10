@@ -291,23 +291,12 @@ void CMDServices::enableBasicAuthentication() {
 /*  *********************************************************
     ***    CMDServices::get_GetCertificateRequest()       ***
     ********************************************************* */
-_ns2__GetCertificate *CMDServices::get_GetCertificateRequest(soap *sp
-                                                , char *endpoint
-                                                , std::string in_applicationID
-                                                , std::string *in_userId) {
-
-    //SOAP_ENV__Header *soapHeader = soap_new_SOAP_ENV__Header( sp );
-    //soapHeader->wsa__To = endpoint;
-
-    //soapHeader->wsa__Action = CC_MOVEL_SERVICE_GET_CERTIFICATE;
-
-    //Set the created header in our soap structure
-    //sp->header = soapHeader;
+_ns2__GetCertificate *CMDServices::get_GetCertificateRequest(soap *sp, std::string in_applicationID, std::string *in_userId) {
 
     _ns2__GetCertificate *send = soap_new__ns2__GetCertificate( sp );
     if ( NULL == send ) return send;
 
-    send->applicationId = encode_base64( sp, in_applicationID );
+    send->applicationId = encode_base64(sp, in_applicationID);
     send->userId        = in_userId;
 
     return send;
@@ -356,10 +345,9 @@ int CMDServices::GetCertificate(CMDProxyInfo proxyInfo, std::string in_userId, c
     /*
         Get GetCertificate request
     */
-    _ns2__GetCertificate *send = get_GetCertificateRequest( sp
-                                                        , (char*)endPoint
-                                                        , getApplicationID()
-                                                        , &in_userId );
+    _ns2__GetCertificate *send = get_GetCertificateRequest( sp,
+                                                        getApplicationID(),
+                                                        &in_userId );
     if ( send == NULL ) {
         MWLOG_ERR( logBuf, "NULL send parameters" );
         return ERR_NULL_HANDLER;
@@ -406,7 +394,7 @@ int CMDServices::GetCertificate(CMDProxyInfo proxyInfo, std::string in_userId, c
 /*  *********************************************************
     ***    CMDServices::get_CCMovelSignRequest()          ***
     ********************************************************* */
-_ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp , char *endpoint, std::string in_applicationID, std::string *docName,
+_ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp, std::string in_applicationID, std::string *docName,
                                               unsigned char *in_hash, std::string *in_pin, std::string *in_userId) {
     //SOAP_ENV__Header *soapHeader = soap_new_SOAP_ENV__Header( sp );
     //soapHeader->wsa__To = endpoint;
@@ -487,7 +475,7 @@ int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char * in_hash, st
     /*
         Get CCMovelSign request
     */
-    _ns2__CCMovelSign *send = get_CCMovelSignRequest( sp, (char*)endPoint, getApplicationID(), &docName, in_hash, &in_pin, &in_userId );
+    _ns2__CCMovelSign *send = get_CCMovelSignRequest(sp, getApplicationID(), &docName, in_hash, &in_pin, &in_userId);
     if ( send == NULL ){
         MWLOG_ERR( logBuf, "NULL send parameters" );
         return ERR_NULL_HANDLER;
@@ -537,7 +525,7 @@ int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char * in_hash, st
     ****
     ******************************************************************************************************************* */
 
-_ns2__CCMovelMultipleSign *CMDServices::get_CCMovelMultipleSignRequest( soap *sp, char *endpoint, std::string in_applicationID,
+_ns2__CCMovelMultipleSign *CMDServices::get_CCMovelMultipleSignRequest( soap *sp, std::string in_applicationID,
                                                   std::vector<std::string *> docNames, std::vector<unsigned char *> in_hashes,
                                                   std::vector<std::string *> ids, std::string *in_pin, std::string *in_userId ) {
                                                   
@@ -638,7 +626,7 @@ int CMDServices::ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigne
     /*
         Get CCMovelMultipleSign request
     */
-    _ns2__CCMovelMultipleSign *send = get_CCMovelMultipleSignRequest( sp, (char*)endPoint, getApplicationID(), 
+    _ns2__CCMovelMultipleSign *send = get_CCMovelMultipleSignRequest( sp, getApplicationID(), 
                                         docNamesPtrs, in_hashes, ids, &in_pin, &in_userId );
     if ( send == NULL ){
         MWLOG_ERR( logBuf, "NULL send parameters" );
@@ -668,8 +656,6 @@ int CMDServices::ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigne
 }
 
 
-
-
 /*  *******************************************************************************************************************
     ****
     **** ValidateOtp
@@ -679,19 +665,10 @@ int CMDServices::ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigne
 /*  *********************************************************
     ***    CMDServices::get_ValidateOtpRequest()          ***
     ********************************************************* */
-_ns2__ValidateOtp *CMDServices::get_ValidateOtpRequest(  soap *sp
-                                                      , char *endpoint
-                                                      , std::string in_applicationID
-                                                      , std::string *in_code
-                                                      , std::string *in_processId ){
-    //SOAP_ENV__Header *soapHeader = soap_new_SOAP_ENV__Header( sp );
-    //soapHeader->wsa__To = endpoint;
-
-    //soapHeader->wsa__Action = CC_MOVEL_SERVICE_VALIDATE_OTP;
-
-    //Set the created header in our soap structure
-    //sp->header = soapHeader;
-
+_ns2__ValidateOtp *CMDServices::get_ValidateOtpRequest(  soap *sp,
+                                                         std::string in_applicationID,
+                                                         std::string *in_code,
+                                                         std::string *in_processId ) {
     _ns2__ValidateOtp *send = soap_new__ns2__ValidateOtp( sp );
     if ( send == NULL ) return NULL;
 
@@ -757,7 +734,7 @@ int CMDServices::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response )
     } else {
         // CMD with multiple files
         if (response->ValidateOtpResult->ArrayOfHashStructure->HashStructure.size() <= 0) {
-            MWLOG_ERR( logBuf, "Number of hash structures is invalid: %d",
+            MWLOG_ERR( logBuf, "Number of hash structures is invalid: %lu",
                     response->ValidateOtpResult->ArrayOfHashStructure->HashStructure.size());
             return ERR_SIZE;
         }
@@ -805,8 +782,7 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
     /*
         Get ValidateOtp request
     */
-    _ns2__ValidateOtp *send = get_ValidateOtpRequest(sp, (char*)endPoint,
-                                  getApplicationID(), &code, &processId);
+    _ns2__ValidateOtp *send = get_ValidateOtpRequest(sp, getApplicationID(), &code, &processId);
 
     if ( send == NULL ) {
         MWLOG_ERR( logBuf, "Null send parameters" );
