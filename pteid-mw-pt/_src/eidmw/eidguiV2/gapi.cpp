@@ -779,7 +779,7 @@ void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
         signalUpdateProgressBar(75);
         ret = cmd_signature->signClose(local_sms_token);
 
-        for(int i = 0; i < cmd_pdfSignatures.size(); i++)
+        for(size_t i = 0; i < cmd_pdfSignatures.size(); i++)
             delete cmd_pdfSignatures[i];
 
         cmd_pdfSignatures.clear(); 
@@ -815,7 +815,7 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
         signalUpdateProgressBar(65);
         ret = cmd_signature->signClose(local_sms_token );
 
-        for(int i = 0; i < cmd_pdfSignatures.size(); i++)
+        for(size_t i = 0; i < cmd_pdfSignatures.size(); i++)
             delete cmd_pdfSignatures[i];
 
         cmd_pdfSignatures.clear(); 
@@ -834,7 +834,7 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
 
         //Do SCAP Signature
         std::vector<int> attrs;
-        for (unsigned int i = 0; i!= attribute_list.size(); i++) {
+        for (int i = 0; i!= attribute_list.size(); i++) {
             attrs.push_back(attribute_list.at(i));
         }
 
@@ -2069,7 +2069,7 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
     BEGIN_TRY_CATCH
 
     std::vector<int> attrs;
-    for (unsigned int i = 0; i!= params.attribute_index.size(); i++) {
+    for (int i = 0; i!= params.attribute_index.size(); i++) {
         attrs.push_back(params.attribute_index.at(i));
     }
 
@@ -2376,9 +2376,9 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
     { 
         unsigned long ReaderEndIdx = ReaderSet.readerCount();
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Card Reader count =  %ld", ReaderEndIdx);
-        long ReaderIdx = 0;
+        unsigned long ReaderIdx = 0;
         long CardIdx = 0;
-        long tempReaderIndex = 0;
+        unsigned long tempReaderIndex = 0;
 
         if ( ReaderEndIdx == 0 ) {
             emit signalCardAccessError(NoReaderFound);
@@ -2487,32 +2487,32 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
             }
         }
     }
-    catch (PTEID_ExParamRange e)
+    catch (PTEID_ExParamRange &e)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(CardUnknownError);
     }
-    catch (PTEID_ExNoCardPresent e)
+    catch (PTEID_ExNoCardPresent &e)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(NoCardFound);
     }
-    catch (PTEID_ExCardChanged e)
+    catch (PTEID_ExCardChanged &e)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(CardUnknownError);
     }
-    catch (PTEID_ExBadTransaction& e)
+    catch (PTEID_ExBadTransaction &e)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(CardUnknownError);
     }
-    catch (PTEID_ExCertNoRoot& e)
+    catch (PTEID_ExCertNoRoot &e)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(CardUnknownError);
     }
-    catch (PTEID_Exception e)
+    catch (PTEID_Exception &e)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(CardUnknownError);
@@ -2707,7 +2707,11 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
 							PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "ImportCertificates failed!");
 							emit pCallBackData->getMainWnd()->signalImportCertificatesFail();
 						}
+                        break;
 					}
+                    case PTEID_CARDTYPE_UNKNOWN:
+                        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Unknown Card - skipping ImportCertificates()");
+                        break;
 				}
             }
         }

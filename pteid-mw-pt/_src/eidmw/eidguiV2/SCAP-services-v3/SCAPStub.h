@@ -15,7 +15,7 @@ A commercial use license is available from Genivia Inc., contact@genivia.com
 #include <list>
 #include <vector>
 #include <set>
-#define SOAP_NAMESPACE_OF_ns1	"http://www.cartaodecidadao.pt/ccc/sccc/services/AttributeClientService"
+#define SOAP_NAMESPACE_OF_ns1   "http://www.cartaodecidadao.pt/ccc/tipos/SCAPSignature"
 #define SOAP_NAMESPACE_OF_ns2	"http://www.cartaodecidadao.pt/ccc/sccc/messages/AttributeClientService"
 #define SOAP_NAMESPACE_OF_ns5	"http://www.w3.org/2000/09/xmldsig#"
 #define SOAP_NAMESPACE_OF_ns3	"http://www.cartaodecidadao.pt/ccc/commons/messages/Attribute"
@@ -24,7 +24,7 @@ A commercial use license is available from Genivia Inc., contact@genivia.com
 #define SOAP_NAMESPACE_OF_ns7	"http://www.cartaodecidadao.pt/ccc/commons/messages/SVG"
 #define SOAP_NAMESPACE_OF_ns8	"http://www.cartaodecidadao.pt/ccc/sccc/services/AttributeSupplierService"
 #define SOAP_NAMESPACE_OF_ns9	"http://www.cartaodecidadao.pt/ccc/sccc/messages/AttributeSupplierService"
-#define SOAP_NAMESPACE_OF_ns1	"http://www.cartaodecidadao.pt/ccc/tipos/SCAPSignature"
+
 #define SOAP_WSA_200408
 
 #ifndef SCAPStub_H
