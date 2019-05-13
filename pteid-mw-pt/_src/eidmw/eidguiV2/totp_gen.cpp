@@ -15,55 +15,6 @@
 #include <stdint.h> //For uint8_t
 #endif
 
-//Borrowed from https://stackoverflow.com/a/3764426/9906
-//TODO: this decoder needs better testing, e.g. with inputs with "=" padding chars
-void Base32Decode(const std::string & input, std::string & output)
-{
-
-    // The "Base 32 Encoding" section of http://tools.ietf.org/html/rfc4648#page-8
-    // shows that every 8 bytes of base32 encoded data must be translated back into 5 bytes
-    // of original data during a decoding process. The following code does this.
-
-    int input_len = input.length();
-
-    const char * input_str = input.c_str();
-    int output_len = (input_len*5)/8;
-
-    unsigned char *output_str = new unsigned char[output_len];
-
-    char curr_char, temp_char;
-    long long temp_buffer = 0; //formerly: __int64 temp_buffer = 0;
-    for ( int i=0; i<input_len; i++ )
-    {
-        curr_char = input_str[i];
-        if ( curr_char >= 'A' && curr_char <= 'Z' )
-            temp_char = curr_char - 'A';
-        if ( curr_char >= '2' && curr_char <= '7' )
-            temp_char = curr_char - '2' + 26;
-
-        if( temp_buffer )
-            temp_buffer <<= 5; //temp_buffer = (temp_buffer << 5);
-        temp_buffer |= temp_char;
-
-        // If 8 encoded characters have been decoded into the temp location,
-        // then copy them to the appropriate section of the final decoded location
-        if((i>0) && !((i+1) % 8))
-        {
-            unsigned char * source = reinterpret_cast<unsigned char*>(&temp_buffer);
-            //strncpy(output_str+(5*(((i+1)/8)-1)), source, 5);
-            int start_index = 5*(((i+1)/8)-1);
-            int copy_index = 4;
-            for (int x=start_index; x<(start_index+5); x++, copy_index-- )
-                output_str[x] = source[copy_index];
-            temp_buffer = 0;
-        }
-    }
-
-    output.append((char *)output_str, output_len);
-
-    delete [] output_str;
-}
-
 void Base64Decode(const char *array, unsigned int inlen, char * &decoded, unsigned int &decoded_len)
 {
 
@@ -108,9 +59,7 @@ std::string generateTOTP(std::string secretKey) {
 
     Base64Decode(secretKey.c_str(), secretKey.size(), base64_buffer, decoded_len);
 
-    //key_buffer = std::string(base64_buffer, decoded_len);
     key_buffer = std::string(base64_buffer, decoded_len);
-    //Base32Decode(secretKey, key_buffer);
 
     key_len = key_buffer.size();
 
