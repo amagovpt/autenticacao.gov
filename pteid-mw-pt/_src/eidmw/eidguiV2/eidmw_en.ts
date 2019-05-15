@@ -213,6 +213,11 @@
         <source>STR_CARD_CONNECTION_ERROR</source>
         <translation>Citizen Card status could not be verified. Please check your Internet connection.</translation>
     </message>
+	 <message>
+        <location filename="gapi.cpp" line="1019"/>
+        <source>STR_CARD_VALIDATION_ERROR</source>
+        <translation>Citizen Card status could not be verified.</translation>
+    </message>
     <message>
         <location filename="gapi.cpp" line="1021"/>
         <source>STR_CARD_CANCELED</source>
