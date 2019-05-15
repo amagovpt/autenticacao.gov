@@ -211,6 +211,11 @@
         <source>STR_CARD_CONNECTION_ERROR</source>
         <translation>Não foi possível confirmar o estado do Cartão de Cidadão. Verifique a ligação à internet</translation>
     </message>
+	<message>
+        <location filename="gapi.cpp" line="1019"/>
+        <source>STR_CARD_VALIDATION_ERROR</source>
+        <translation>Não foi possível confirmar o estado do Cartão de Cidadão.</translation>
+    </message>
     <message>
         <location filename="gapi.cpp" line="1021"/>
         <source>STR_CARD_CANCELED</source>

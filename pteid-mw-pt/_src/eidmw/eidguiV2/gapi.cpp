@@ -1000,18 +1000,22 @@ QString GAPI::getCardActivation() {
 
     certificateStatus = certificates.getCert(PTEID_Certificate::CITIZEN_AUTH).getStatus();
 
+	PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "PTEID_Certificate::getStatus() returned: %d", certificateStatus);
+
     // If state active AND validity not expired AND certificate active
     if(card->isActive() && !isExpiredDate(eid_file.getValidityEndDate())
             && certificateStatus == PTEID_CERTIF_STATUS_VALID)
     {
         return QString(tr("STR_CARD_ACTIVE_AND_VALID"));
     }
-    // Else If state active AND validity not expired AND certificate error
-    else if(card->isActive() && !isExpiredDate(eid_file.getValidityEndDate())
-            && (certificateStatus == PTEID_CERTIF_STATUS_CONNECT || certificateStatus == PTEID_CERTIF_STATUS_ERROR
-            || certificateStatus == PTEID_CERTIF_STATUS_ISSUER || certificateStatus == PTEID_CERTIF_STATUS_UNKNOWN))
+    // Else If state active AND validity not expired AND certificate validation error
+    else if(card->isActive() && !isExpiredDate(eid_file.getValidityEndDate()))
     {
-        return QString(tr("STR_CARD_CONNECTION_ERROR"));
+		//Network access errors (OCSP/CRL)
+		if (certificateStatus == PTEID_CERTIF_STATUS_CONNECT)
+            return QString(tr("STR_CARD_CONNECTION_ERROR"));
+		else if (certificateStatus == PTEID_CERTIF_STATUS_ERROR	|| certificateStatus == PTEID_CERTIF_STATUS_ISSUER || certificateStatus == PTEID_CERTIF_STATUS_UNKNOWN)
+			return QString(tr("STR_CARD_VALIDATION_ERROR"));
     }
     //Else If state active AND validity not expired AND certificate suspended or revoked
     else if(card->isActive() && !isExpiredDate(eid_file.getValidityEndDate())
