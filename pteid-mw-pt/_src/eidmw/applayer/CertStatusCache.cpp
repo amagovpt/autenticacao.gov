@@ -244,7 +244,9 @@ CSC_Status APL_CertStatusCache::getStatusFromCache(unsigned long ulUniqueID,unsi
 	int find=-1;
 
 	//Load the file
-	loadFile();
+	if (!loadFile()) {
+		return CSC_STATUS_ERROR;
+	}
 
 	//Find if the certificate is in the cache
 	for(unsigned int i=0;i<m_lines.size();i++)
@@ -453,7 +455,14 @@ bool APL_CertStatusCache::loadFile()
 			CThread::SleepMillisecs(50);
 
 		iLoop++;
-	} while(err==EACCES && iLoop<100);
+	} while(err==EACCES && iLoop < 20);
+
+	if (err == ENOENT) {
+		MWLOG(LEV_INFO, MOD_APL, "CertStatusCache: Failed to open cache file for reading. No such file or directory");
+	}
+	if (err == EACCES) {
+		MWLOG(LEV_INFO, MOD_APL, "CertStatusCache: Failed to open cache file for reading. Permission denied");
+	}
 
 	//If the file doesn't exist, we create it
 	if(m_f==NULL)
@@ -465,14 +474,19 @@ bool APL_CertStatusCache::loadFile()
 		m_f = fopen(m_cachefilename.c_str(), "w");
 		if (m_f == NULL) err=errno;		
 #endif
-		if (err != 0) return false;							// Added for unit testing	
+		if (err != 0) {
+			MWLOG(LEV_ERROR, MOD_APL, "CertStatusCache: Failed to open cache file for writing. Error code: %d", err);
+			return false;
+		}
 #ifndef WIN32
 		m_tFl.l_type   = F_WRLCK; // has to be the same type as the mode used to open the file
 #endif
 	}
 
-	if(m_f==NULL)
+	if (m_f == NULL) {
 		return false;
+
+	}
 
 #ifdef WIN32
 	_lock_file(m_f);		//Lock the file to avoid other process to access it
