@@ -1,4 +1,4 @@
-for /f "delims== tokens=1,2" %%G in (..\svn_revision) do set %%G=%%H
+for /f "delims== tokens=1,2" %%G in (%~dp0..\svn_revision) do set %%G=%%H
 
 set OUTPUT_FILE=%~dp0Properties\AssemblyInfo.cs
 
