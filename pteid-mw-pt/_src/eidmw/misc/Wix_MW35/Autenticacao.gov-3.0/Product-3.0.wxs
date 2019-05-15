@@ -365,14 +365,6 @@
             <RegistryValue Type="integer" Name="cert_validation_crl" Value="0"/>
           </RegistryKey>
 
-          <RegistryKey Key="certificatecache" Action="createAndRemoveOnUninstall">
-            <RegistryValue Type="string" Name="cert_cachefile" Value="[AppDataFolder].pteid-ng\.cache.csc"/>
-          </RegistryKey>
-
-          <RegistryKey Key="crl" Action="createAndRemoveOnUninstall">
-            <RegistryValue Type="string" Name="crl_cachedir" Value="[AppDataFolder].pteid-ng"/>
-          </RegistryKey>
-
           <RegistryKey Key="general" Action="createAndRemoveOnUninstall">
             <RegistryValue Type="string" Name="language" Value="nl"/>
             <RegistryValue Type="string" Name="install_dirname" Value="[APPLICATIONROOTFOLDER]"/>
