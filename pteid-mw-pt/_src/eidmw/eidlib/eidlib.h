@@ -250,7 +250,7 @@ class PTEID_ByteArray : public PTEID_Object
 		 *
 		 * @param pucData is the byte array
 		 * @param ulSize is the size of the array
-		 */
+		 **/
 		PTEIDSDK_API PTEID_ByteArray(const unsigned char * pucData, unsigned long ulSize);
 
 		PTEIDSDK_API virtual ~PTEID_ByteArray();				/**< Destructor */
@@ -260,7 +260,7 @@ class PTEID_ByteArray : public PTEID_Object
 		 *
 		 * @param pucData is the byte array
 		 * @param ulSize is the size of the array
-		 */
+		 **/
 		PTEIDSDK_API void Append(const unsigned char * pucData, unsigned long ulSize);
 
 		/**
@@ -386,7 +386,7 @@ public:
 	  * Init the SDK (Optional).
 	  * @param bManageTestCard If true the applayer must ask if test cards are allowed (used for compatibility with old C API).
 	  * @param bManageTestCard If false other applications (ex. gui) take that into their scope
-	  */
+	  **/
 	PTEIDSDK_API static void initSDK(bool bManageTestCard=false);
 	PTEIDSDK_API static void releaseSDK();				/**< Release the SDK */
 
@@ -414,14 +414,14 @@ public:
 	  *         for(const char * const *ppName=ppList;*ppName!=NULL;ppName++) {...}
 	  *
 	  * @param bForceRefresh force the reconnection to the lower layer to see if reader list have changed
-	  */
+	  **/
     PTEIDSDK_API const char * const *readerList(bool bForceRefresh=false);
 
 	/**
 	  * Return the first readercontext with a card.
 	  *		If no card is present, return the firs reader.
 	  *		If no reader exist, throw an exception PTEID_ExNoReader.
-	  */
+	  **/
 	PTEIDSDK_API PTEID_ReaderContext &getReader();
 
 	/**
@@ -433,25 +433,25 @@ public:
 	  * Return the number of card readers connected to the computer.
 	  *
 	  * @param bForceRefresh force the reconnection to the lower layer to see if reader list have changed
-	  */
+	  **/
     PTEIDSDK_API unsigned long readerCount(bool bForceRefresh=false);
 
 	/**
 	  * Get the name of the reader by its Index.
 	  * Throw PTEID_ExParamRange exception if the index is out of range.
- 	  */
+ 	  **/
 	PTEIDSDK_API const char *getReaderName(unsigned long ulIndex);
 
 	/**
 	  * Get the reader by its Index.
 	  * Throw PTEID_ExParamRange exception if the index is out of range.
- 	  */
+ 	  **/
 	PTEIDSDK_API PTEID_ReaderContext &getReaderByNum(unsigned long ulIndex);
 
 	/**
 	  * Return the reader containing the card with this SN.
 	  *		If no card with this SN is found, throw an exception PTEID_ExParamRange.
-	  */
+	  **/
 	PTEIDSDK_API PTEID_ReaderContext &getReaderByCardSerialNumber(const char *cardSerialNumber);
 
 	/**
@@ -522,7 +522,7 @@ public:
 	 * Return the type of the card in the reader.
 	 *
 	 * Throw PTEID_ExNoCardPresent exception if no card is present.
-	 */
+	 **/
 	PTEIDSDK_API PTEID_CardType getCardType();
 
 	/**
@@ -532,7 +532,7 @@ public:
 	 *
 	 * If no card is present in the reader, exception PTEID_ExNoCardPresent is thrown.
 	 * If the card type is not supported, exception PTEID_ExCardTypeUnknown is thrown.
-	 */
+	 **/
     PTEIDSDK_API PTEID_Card &getCard();
 
 	/**
@@ -542,7 +542,7 @@ public:
 	 *
 	 * If no card is present in the reader, exception PTEID_ExNoCardPresent is thrown.
 	 * If the card is not an EIDcard, exception PTEID_ExCardBadType is thrown.
-	 */
+	 **/
     PTEIDSDK_API PTEID_EIDCard &getEIDCard();
 
 	/**
@@ -550,13 +550,13 @@ public:
 	 * card is inserted/remove in/from this reader.
 	 *
 	 * @return A handle can be used to stop the callbacks when they are no longer needed.
-	 */
+	 **/
     PTEIDSDK_API unsigned long SetEventCallback(void (* callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef);
 
 	/**
 	  * To tell that the callbacks are not longer needed.
 	  * @param ulHandle is the handle return by SetEventCallback
-	  */
+	  **/
 	PTEIDSDK_API void StopEventCallback(unsigned long ulHandle);
 
 	PTEIDSDK_API void BeginTransaction();								/**< Begin a transaction with the reader */
@@ -608,7 +608,7 @@ public:
 	 * @param ulOffset is the offset to begins the reading
 	 * @param ulMaxLength is the maximum length of bytes to read
 	 * @return A PTEID_ByteArray with the content of the file
-	 */
+	 **/
 	PTEIDSDK_API virtual PTEID_ByteArray readFile(const char *fileID, unsigned long  ulOffset=0, unsigned long  ulMaxLength=0);
 
  	/**
@@ -616,7 +616,7 @@ public:
 	 * @param fileID is the path of the file
 	 * @param oData contents the bytes to write
 	 * @param ulOffset is the offset to begins the writing
-	 */
+	 **/
 	PTEIDSDK_API virtual bool writeFile(const char *fileID, const PTEID_ByteArray& oData,unsigned long ulOffset=0);
 
 protected:
@@ -670,7 +670,7 @@ public:
 	 * @param pin is the pin to ask for writing
 	 * @param csPinCode is the code of the pin (it will be asked if needed and not set)
 	 * @return a PTEID_ByteArray containing the result
-	 */
+	 **/
     PTEIDSDK_API virtual PTEID_ByteArray sendAPDU(const PTEID_ByteArray& cmd,PTEID_Pin *pin=NULL,const char *csPinCode="");
 
  	/**
@@ -682,7 +682,7 @@ public:
 	 * @param in return the file
 	 * @param pin is the pin to ask for reading
 	 * @param csPinCode is the code of the pin (it will be asked if needed and not set)
-	 */
+	 **/
 	PTEIDSDK_API virtual long readFile(const char *fileID, PTEID_ByteArray &in,PTEID_Pin *pin=NULL,const char *csPinCode="");
 
  	/**
@@ -696,27 +696,27 @@ public:
 	 * @param pin is the pin to ask for writing
 	 * @param csPinCode is the code of the pin (it will be asked if needed and not set)
 	 * @param inOffset is the offset of the data to be written to the file
-	 */
+	 **/
 	PTEIDSDK_API virtual bool writeFile(const char *fileID,const PTEID_ByteArray &out, PTEID_Pin *pin=NULL,const char *csPinCode="",unsigned long inOffset=0);
 
  	/**
-	 * Return the number of pin on the card.
-	 */
+	 * @return the number of pins on the card.
+	 **/
 	PTEIDSDK_API virtual unsigned long pinCount();
 
  	/**
-	 * Return an object to access all the pins on the card.
-	 */
+	 * @return an object to access all the pins on the card.
+	 **/
 	PTEIDSDK_API virtual PTEID_Pins& getPins();
 
  	/**
-	 * Return the number of certificate on the card.
-	 */
+	 * @return the number of certificate on the card.
+	 **/
 	PTEIDSDK_API virtual unsigned long certificateCount();
 
 	/**
-	 * Return an object to access all the certificates on the card.
-	 */
+	 * @return an object to access all the certificates on the card.
+	 **/
 	PTEIDSDK_API virtual PTEID_Certificates& getCertificates();
 
 protected:
@@ -826,7 +826,7 @@ public:
 	    *  @param IN paths is an array of null-terminated strings representing absolute paths in
 	    *  the local filesystem. Those files content (hashed with SHA-1 algorithm) will be the input data for the RSA signature
 	    *  @param IN n_paths is the number of elements in the paths array
-	    */
+	    **/
 	     PTEIDSDK_API PTEID_ByteArray SignXades(const char *output_path, const char * const* paths, unsigned int n_paths); /** Return a Xades signature as a UTF-8 string (supports multiple files)*/
 
 	     PTEIDSDK_API PTEID_ByteArray SignXadesT(const char *output_path, const char * const* path, unsigned int n_paths); /** Return a Xades-T signature as a UTF-8 string (supports multiple files)*/
@@ -836,20 +836,30 @@ public:
 	     PTEIDSDK_API void SignXadesTIndividual(const char *output_path, const char * const* paths, unsigned int n_paths); /** Store the Xades-T signature in individual zip containers  */
 		 PTEIDSDK_API void SignXadesAIndividual(const char *output_path, const char * const* paths, unsigned int n_paths);
 
-	     //PDF Signature with location by page sector (the portrait A4 page is split into 18 cells: 6 lines and 3 columns)
-	     PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason,
+			
+	/**
+	* PDF Signature with location by page sector (the portrait A4 page is split into 18 cells: 6 lines and 3 columns) 
+ 	* @param sig_handler: this defines the input file and some signature options
+ 	* @param page: in case of visible signature it defines the page where the signature will appear
+	* @param page_sector: position in the signature grid, between 1 to 18 for Portrait documents and 1 to 20 for Landscape ones
+ 	*	@param is_landscape: is unused parameter, the SDK now detects document orientation automatically 
+	* @param location: Signature metadata field
+ 	* @param reason: Signature metadata field
+ 	* @param outfile_path: Native Filesystem path of the ouput file
+ 	**/
+	    PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason,
 			const char *outfile_path);
 
-	     /*PDF Signature with location by coordinates (expressed in percentage of page height/width). The coordinate system has its origin in the top left corner
-	     of the page
-		 * @param sig_handler: this defines the input file and some signature options
-		 * @param page: in case of visible signature it defines the page where the signature will appear
-		 * @param coord_x: X coordinate of the signature location (percentage of page width)
-		 * @param coord_y: Y coordinate of the signature location (percentage of page height)
-		 * @param location: Signature metadata field
-		 * @param reason: Signature metadata field
-		 * @param outfile_path: Native Filesystem path of the ouput file
-		 */
+		/**
+		* PDF Signature with location by coordinates (expressed in percentage of page height/width). The coordinate system has its origin in the top left corner of the page
+	 	* @param sig_handler: this defines the input file and some signature options
+	 	*	@param page: in case of visible signature it defines the page where the signature will appear
+	 	* @param coord_x: X coordinate of the signature location (percentage of page width)
+	 	* @param coord_y: Y coordinate of the signature location (percentage of page height)
+	 	* @param location: Signature metadata field
+	 	* @param reason: Signature metadata field
+	 	* @param outfile_path: Native Filesystem path of the ouput file
+	 	**/
 	    PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
 			const char *outfile_path);
 
@@ -917,19 +927,19 @@ public:
 	/**
 	  * Write the xml document into the file csFilePath.
 	  * @return true if succeeded
-	  */
+	  **/
 	PTEIDSDK_API virtual bool writeXmlToFile(const char * csFilePath);
 
 	/**
 	  * Write the csv document into the file csFilePath.
 	  * @return true if succeeded
-	  */
+	  **/
 	PTEIDSDK_API virtual bool writeCsvToFile(const char * csFilePath);
 
 	/**
 	  * Write the tlv document into the file csFilePath.
 	  * @return true if succeeded
-	  */
+	  **/
 	PTEIDSDK_API virtual bool writeTlvToFile(const char * csFilePath);
 
 protected:
@@ -1233,7 +1243,7 @@ public:
 	  * Ask the card to verify the pin.
 	  * A popup will ask for the code.
 	  * @return true if success and false if failed
-	  */
+	  **/
 	PTEIDSDK_API bool verifyPin();
 
 	/**
@@ -1244,14 +1254,14 @@ public:
 	  * @param bShowDlg flag used to either show or not a dialog where the user inserts the pin (default=true)
 	  * @param wndGeometry DEPRECATED (default=0)
 	  * @return true if success and false if failed
-	  */
+	  **/
 	PTEIDSDK_API bool verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg=true, void *wndGeometry = 0 );
 
 	/**
 	  * Ask the card to change the pin.
 	  * A popup will ask for the codes
 	  * @return true if success and false if failed
-	  */
+	  **/
 	PTEIDSDK_API bool changePin();
 
 	/**
@@ -1264,7 +1274,7 @@ public:
 	  * @param ulRemaining return the remaining tries (only when operation failed)
 	  *
 	  * @return true if success and false if failed
-	  */
+	  **/
 	PTEIDSDK_API bool changePin(const char *csPin1,const char *csPin2,unsigned long &ulRemaining, const char *PinName,bool bShowDlg=true, void *wndGeometry = 0 );
 
 private:
@@ -1404,7 +1414,7 @@ public:
 	  *
 	  * @param ulIndex is the children index (the index for the first child is 0)
 	  * Throw PTEID_ExParamRange exception if the index is out of range
-	  */
+	  **/
 	PTEIDSDK_API PTEID_Certificate &getChildren(unsigned long ulIndex);
 
 private:
