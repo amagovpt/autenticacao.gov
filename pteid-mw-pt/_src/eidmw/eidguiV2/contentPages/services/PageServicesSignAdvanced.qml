@@ -832,7 +832,7 @@ PageServicesSignAdvancedForm {
                         if( outputFile.lastIndexOf('.') > 0)
                             var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
 
-                        propertyFileDialogOutput.filename = outputFile + "_xadessign.ccsigned"
+                        propertyFileDialogOutput.filename = outputFile + "_xadessign.asics"
                         propertyFileDialogOutput.open()
                     }
                 }else{
@@ -856,7 +856,7 @@ PageServicesSignAdvancedForm {
                             propertyFileDialogBatchOutput.open()
                         }else{
 
-                            propertyFileDialogOutput.filename = outputFile + "/" + "xadessign.ccsigned"
+                            propertyFileDialogOutput.filename = outputFile + "/" + "xadessign.asice"
                             propertyFileDialogOutput.open()
                         }
                     }

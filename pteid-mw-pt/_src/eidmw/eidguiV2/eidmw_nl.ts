@@ -1659,7 +1659,7 @@
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="404"/>
         <source>STR_SIGN_PACKAGE</source>
-        <translation>Pacote CCSIGN com XML Advanced Electronic Signatures (XAdES)</translation>
+        <translation type="unfinished">Pacote ASiC com XML Advanced Electronic Signatures (XAdES)</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="807"/>
