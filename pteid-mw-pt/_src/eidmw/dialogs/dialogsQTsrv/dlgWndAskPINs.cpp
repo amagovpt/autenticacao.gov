@@ -25,19 +25,12 @@
 #include <iostream>
 #include <stdio.h>
 
-#define KP_BTN_SIZE 48
 
 dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString & Header, QString & PINName, bool UseKeypad, QWidget *parent, Type_WndGeometry *pParentWndGeometry ) : dlgWndBase(parent)
 {
 	ui.setupUi(this);
 
 	setFixedSize(this->width(), this->height());
-
-    /*if(PINName.contains("Assinatura", Qt::CaseInsensitive))
-        this->setStyleSheet("background-image: url(:/Resources/bg_SignaturePin_2.png);");
-    else if (!PINName.contains("PUK"))
-        this->setStyleSheet("background-image: url(:/Resources/bg_AuthenticationPin_2.png);");
-        */
 
 	//this->resize( 350, 280 );
 	m_UK_InputField = 0;
@@ -141,7 +134,7 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
                         , this->width(), this->height()
                         , &WndGeometry ) ){
         this->move( WndGeometry.x, WndGeometry.y );
-    }/* if ( getWndCenterPos( pParentWndGeometry, ... ) ) */
+    }
 }
 
 dlgWndAskPINs::~dlgWndAskPINs()

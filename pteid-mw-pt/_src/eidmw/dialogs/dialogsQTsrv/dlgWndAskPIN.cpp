@@ -26,8 +26,6 @@
 
 #include <stdio.h>
 
-#define KP_BTN_SIZE 48
-
 dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString & Header, QString & PINName, bool UseKeypad, QWidget *parent, Type_WndGeometry *pParentWndGeometry ) : dlgWndBase(parent)
 {
 	ui.setupUi(this);
@@ -123,7 +121,7 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
                         , this->width(), this->height()
                         , &WndGeometry ) ){
         this->move( WndGeometry.x, WndGeometry.y );
-	}/* if ( getWndCenterPos( pParentWndGeometry, ... ) ) */
+	}
 }
 
 dlgWndAskPIN::~dlgWndAskPIN()
