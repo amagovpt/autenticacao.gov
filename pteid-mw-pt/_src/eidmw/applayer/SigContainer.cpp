@@ -156,7 +156,7 @@ static const char *SIGCONTAINER_README=
 
 		pZip = zip_open(output_file, ZIP_CREATE | ZIP_TRUNCATE, &status);
 		if(!pZip) {
-			MWLOG(LEV_DEBUG, MOD_APL, "zip_open() failed, error %d\n", status);
+			MWLOG(LEV_ERROR, MOD_APL, "zip_open() failed, error %d\n", status);
 			return;
 		}
 	
@@ -203,9 +203,10 @@ static const char *SIGCONTAINER_README=
 
 		if (zip_close(pZip) < 0)
 		{
-			free(pZip);
+			
 			MWLOG(LEV_ERROR, MOD_APL, "zip_close failed with error %d",
 				zip_error_strerror(zip_get_error(pZip)));
+			free(pZip);
 			return;
 		}
 	}
