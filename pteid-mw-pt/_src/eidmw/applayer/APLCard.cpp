@@ -225,9 +225,9 @@ char *generateFinalPath(const char *output_dir, const char *path)
 
 	replace_lastdot_inplace(tmp_path);
 
-	//Buffer for the filename components plus ".ccsigned" plus PATH_SEP and terminating NULL
-	char *final_path = new char[strlen(output_dir)+strlen(tmp_path)+11];
-	sprintf(final_path, "%s" PATH_SEP "%s.ccsigned", output_dir, tmp_path);
+	//Buffer for the filename components plus ".asics" plus PATH_SEP and terminating NULL
+	char *final_path = new char[strlen(output_dir)+strlen(tmp_path)+6+1+1];
+	sprintf(final_path, "%s" PATH_SEP "%s.asics", output_dir, tmp_path);
 	delete []tmp_path;
 
 	return final_path;
