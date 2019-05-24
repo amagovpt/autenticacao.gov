@@ -206,6 +206,7 @@ QString GAPI::getAddressField(AddressInfoKey key) {
 void GAPI::getAddressFile() {
     qDebug() << "C++: getAddressFile()";
     bool m_foreign;
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getAddressFile");
 
     BEGIN_TRY_CATCH;
 
@@ -252,7 +253,7 @@ void GAPI::getAddressFile() {
 
 void GAPI::getPersoDataFile() {
 
-    qDebug() << "getPersoDataFile() called";
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getPersoDataFile");
 
     BEGIN_TRY_CATCH;
 
@@ -305,6 +306,7 @@ void GAPI::verifyAuthPin(QString pin_value) {
 unsigned int  GAPI::doVerifyAuthPin(QString pin_value) {
     setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doVerifyAuthPin");
 
     BEGIN_TRY_CATCH
 
@@ -332,6 +334,7 @@ void GAPI::getTriesLeftAuthPin() {
 unsigned int GAPI::doGetTriesLeftAuthPin() {
     setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doGetTriesLeftAuthPin");
 
     BEGIN_TRY_CATCH
 
@@ -359,6 +362,7 @@ void GAPI::verifySignPin(QString pin_value) {
 unsigned int  GAPI::doVerifySignPin(QString pin_value) {
     setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doVerifySignPin");
 
     BEGIN_TRY_CATCH
 
@@ -386,6 +390,7 @@ void GAPI::getTriesLeftSignPin() {
 unsigned int GAPI::doGetTriesLeftSignPin() {
     setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doGetTriesLeftSignPin");
 
     BEGIN_TRY_CATCH
 
@@ -413,6 +418,7 @@ void GAPI::verifyAddressPin(QString pin_value) {
 unsigned int GAPI::doVerifyAddressPin(QString pin_value) {
     setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doVerifyAddressPin");
 
     BEGIN_TRY_CATCH
 
@@ -440,6 +446,7 @@ void GAPI::getTriesLeftAddressPin() {
 unsigned int GAPI::doGetTriesLeftAddressPin() {
     setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doGetTriesLeftAddressPin");
 
     BEGIN_TRY_CATCH
 
@@ -467,6 +474,7 @@ void GAPI::changeAuthPin(QString currentPin, QString newPin) {
 unsigned int GAPI::doChangeAuthPin(QString currentPin, QString newPin) {
     setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doChangeAuthPin");
 
     BEGIN_TRY_CATCH
 
@@ -494,6 +502,7 @@ void GAPI::changeSignPin(QString currentPin, QString newPin) {
 unsigned int GAPI::doChangeSignPin(QString currentPin, QString newPin) {
     setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doChangeSignPin");
 
     BEGIN_TRY_CATCH
 
@@ -647,6 +656,7 @@ void GAPI::changeAddressPin(QString currentPin, QString newPin) {
 }
 unsigned int GAPI::doChangeAddressPin(QString currentPin, QString newPin) {
     unsigned long tries_left = TRIES_LEFT_ERROR;
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doChangeAddressPin");
 
     BEGIN_TRY_CATCH
 
@@ -678,6 +688,7 @@ void GAPI::addressChangeCallback(void *instance, int value)
 void GAPI::doChangeAddress(const char *process, const char *secret_code)
 {
     qDebug() << "DoChangeAddress!";
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doChangeAddress");
 
     try
     {
@@ -986,6 +997,8 @@ void GAPI::signCloseCMD(QString sms_token, QList<int> attribute_list)
 }
 
 QString GAPI::getCardActivation() {
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getCardActivation");
+
     BEGIN_TRY_CATCH
 
         PTEID_EIDCard * card = NULL;
@@ -1285,6 +1298,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     double pos_x = page_margin, pos_y = 0;
     bool res = false;
     int field_margin = 15;
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance drawpdf");
 
     BEGIN_TRY_CATCH;
 
@@ -1669,6 +1683,8 @@ void GAPI::doSignBatchXADES(SignParams &params) {
         "page = " << params.page << "coord_x" << params.coord_x << "coord_y" << params.coord_y <<
         "reason = " << params.reason << "location = " << params.location << "isTimestamp = " << params.isTimestamp;
 
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doSignBatchXADES");
+
     BEGIN_TRY_CATCH
 
         PTEID_EIDCard * card = NULL;
@@ -1720,6 +1736,8 @@ QList<QString> GAPI::getFilesFromDirectory(QString path) {
 }
 
 void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp) {
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doSignXADES");
+
     BEGIN_TRY_CATCH
 
         PTEID_EIDCard * card = NULL;
@@ -1743,6 +1761,8 @@ void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, bool isTimest
 }
 
 void GAPI::doSignPDF(SignParams &params) {
+
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doSignPDF");
 
     BEGIN_TRY_CATCH
 
@@ -1778,6 +1798,9 @@ void GAPI::doSignBatchPDF(SignParams &params) {
     qDebug() << "doSignBatchPDF! loadedFilePath = " << params.loadedFilePaths << " outputFile = " << params.outputFile <<
         "page = " << params.page << "coord_x" << params.coord_x << "coord_y" << params.coord_y <<
         "reason = " << params.reason << "location = " << params.location;
+
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doSignBatchPDF");
+
     BEGIN_TRY_CATCH
 
         PTEID_EIDCard * card = NULL;
@@ -1905,6 +1928,7 @@ QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
 
 
 void GAPI::startCardReading() {
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "StartCardReading connectToCard");
     QFuture<void> future = QtConcurrent::run(this, &GAPI::connectToCard);
 
 }
@@ -1935,6 +1959,7 @@ void GAPI::startPingSCAP() {
     // schedule the request
     httpRequestAborted = httpRequestSuccess = false;
 
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance startPingSCAP");
     PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card == NULL) {
@@ -2155,6 +2180,7 @@ void GAPI::initScapAppId(){
 void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
 
     QList<QString> attribute_list;
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getSCAPEntityAttributes");
     PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card == NULL) {
@@ -2203,6 +2229,7 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
 
 void GAPI::getSCAPCompanyAttributes() {
 
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getSCAPCompanyAttributes");
     PTEID_EIDCard * card = NULL;
     QList<QString> attribute_list;
     getCardInstance(card);
@@ -2254,6 +2281,7 @@ void GAPI::getSCAPCompanyAttributes() {
 
 void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
 
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getSCAPAttributesFromCache");
     PTEID_EIDCard * card = NULL;
     std::vector<ns2__AttributesType *> attributes;
     QList<QString> attribute_list;
@@ -2307,6 +2335,7 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
     bool has_read_permissions = true;
 
     // Delete SCAP secretkey to get a new one
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance removeSCAPAttributesFromCache");
     PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card != NULL) {
@@ -2562,6 +2591,8 @@ int GAPI::getReaderIndex(void)
 
 void GAPI::connectToCard() {
 
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance connectToCard");
+
     BEGIN_TRY_CATCH
 
         PTEID_EIDCard * card = NULL;
@@ -2696,7 +2727,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
                     bool bImported = pCallBackData->getMainWnd()->m_Certificates.ImportCertificates(pCallBackData->getReaderName());
 
                     if (!bImported) {
-                        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "ImportCertificates failed!");
+                        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eventCallback", "ImportCertificates failed!");
                         emit pCallBackData->getMainWnd()->signalImportCertificatesFail();
                     }
                     break;

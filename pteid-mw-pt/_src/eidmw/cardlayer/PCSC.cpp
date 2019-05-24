@@ -358,9 +358,8 @@ try_again:
 	}
 
 	// Don't log the full response for privacy reasons, only SW1-SW2
-	MWLOG(LEV_DEBUG, MOD_CAL, L"        SCardTransmit(): SW12 = %02X %02X",
-		tucRecv[dwRecvLen - 2], tucRecv[dwRecvLen - 1]);
-
+	MWLOG(LEV_DEBUG, MOD_CAL, L"        SCardTransmit(): SW12 = %02X %02X Len = %ld",
+		tucRecv[dwRecvLen - 2], tucRecv[dwRecvLen - 1], dwRecvLen);
 	//DEBUG
 	//printf ("SCardTransmit(): SW12 = %02X %02X\n", tucRecv[dwRecvLen - 2], tucRecv[dwRecvLen - 1]);
 	
