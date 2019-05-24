@@ -169,6 +169,8 @@ bool CERTIFICATES::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertCont
                             //QString strCaption(tr("Deleting former certificate"));
                             //QString strMessage(tr("Error deleting former certificate"));
                             //QMessageBox::information(NULL,strCaption,strMessage);
+                            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                                "StoreUserCerts: Deleting former certificate: Error deleting former certificate");
                         }
                     }
                     pPrevCert = NULL;
@@ -479,13 +481,16 @@ bool CERTIFICATES::ImportCertificates( const char* readerName )
 
 	std::string  certs_dir_str = certs_dir.getString();
 
-	eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "ImportCertificates: Certificates dir: %s", certs_dir_str.c_str());
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "ImportCertificates: Certificates dir: %s", certs_dir_str.c_str());
 
 	QDir dir(certs_dir_str.c_str());
 
     QStringList filter("*.der");
     QStringList flist = dir.entryList(QStringList(filter),
                                    QDir::Files | QDir::NoSymLinks);
+
+    QString strList = flist.join(",");
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Importing certificates Cert list = %s", strList.toStdString().c_str());
 
     foreach (QString str, flist) {
 		QString filename = QString("%1\\%2").arg(certs_dir_str.c_str()).arg(str);
@@ -502,6 +507,9 @@ bool CERTIFICATES::ImportCertificates( const char* readerName )
     {
         PTEID_EIDCard&		 Card			= ReaderContext.getEIDCard();
         PTEID_Certificates&	 certificates	= Card.getCertificates();
+
+
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Importing certificates Card.certificateCount = %ld", Card.certificateCount());
 
         for (size_t CertIdx=0;CertIdx<Card.certificateCount();CertIdx++)
         {
@@ -550,6 +558,7 @@ bool CERTIFICATES::ImportCertificates( const char* readerName )
     {
         long err = e.GetError();
         err = err;
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error importing certificates");
         //QString strCaption(tr("Retrieving certificates"));
         //QString strMessage(tr("Error retrieving certificates"));
         //QMessageBox::information(NULL,strCaption,strMessage);
