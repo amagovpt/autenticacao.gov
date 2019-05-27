@@ -809,6 +809,23 @@ bool CLog::writeLineHeaderW(tLOG_Level level,const int line,const wchar_t *file)
 
 	std::wstring timestamp;
 	getLocalTimeW(timestamp);	
+
+	/* Get the name of the file that started this process*/
+#ifdef WIN32
+	wchar_t baseName[512];
+	memset(baseName, 0, sizeof(baseName));
+	DWORD baseNamseSize = 0;
+	baseNamseSize = GetModuleFileNameW(NULL, baseName, sizeof(baseName));
+	if (baseNamseSize == 0){
+		lstrcpy(baseName, L"Unknown name");
+	}
+#elif __linux__
+	char baseName[512];
+	memset(baseName, 0, sizeof(baseName));
+	readlink("/proc/self/exe", baseName, sizeof(baseName));
+#elif __APPLE__
+	#error "Test add the name of the executable that started an process"
+#endif
 	
 	if(lPreviousOpenFailed > 0)
 	{
@@ -825,16 +842,16 @@ bool CLog::writeLineHeaderW(tLOG_Level level,const int line,const wchar_t *file)
 	if(isFileMixingGroups())
 	{
 		if(line>0 && wcslen(file)>0)
-			fwprintf_s(m_f,L"%ls - %ld|%ld - %ls - %ls -'%ls'-line=%d: ",timestamp.c_str(),CThread::getCurrentPid(),CThread::getCurrentThreadId(),m_group.c_str(),getLevel(level),file,line);
+			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls - %ls -'%ls'-line=%d: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), m_group.c_str(), getLevel(level), file, line);
 		else
-			fwprintf_s(m_f,L"%ls - %ld|%ld - %ls - %ls: ",timestamp.c_str(),CThread::getCurrentPid(),CThread::getCurrentThreadId(),m_group.c_str(),getLevel(level));
+			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls - %ls: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), m_group.c_str(), getLevel(level));
 	}
 	else
 	{
 		if(line>0 && wcslen(file)>0)
-			fwprintf_s(m_f,L"%ls - %ld|%ld - %ls -'%ls'-line=%d: ",timestamp.c_str(),CThread::getCurrentPid(),CThread::getCurrentThreadId(),getLevel(level),file,line);
+			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls -'%ls'-line=%d: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), getLevel(level), file, line);
 		else
-			fwprintf_s(m_f,L"%ls - %ld|%ld - %ls: ",timestamp.c_str(),CThread::getCurrentPid(),CThread::getCurrentThreadId(),getLevel(level));
+			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), getLevel(level));
 	}
 
 	return true;
@@ -855,6 +872,21 @@ bool CLog::writeLineHeaderA(tLOG_Level level_in,const int line,const char *file)
 	std::string timestamp;
 	getLocalTimeA(timestamp);
 
+	/* Get the name of the file that started this process*/
+	char baseName[512];
+	memset(baseName, 0, sizeof(baseName));
+#ifdef WIN32
+	DWORD baseNamseSize = 0;
+	baseNamseSize = GetModuleFileNameA(NULL, baseName, sizeof(baseName));
+	if (baseNamseSize == 0){
+		strcpy(baseName, "Unknown name");
+	}
+#elif __linux__
+	readlink("/proc/self/exe", baseName, sizeof(baseName));
+#elif __APPLE__
+	#error Test add the name of the executable that started an process
+#endif
+
 	if(lPreviousOpenFailed > 0)
 	{
 		if(isFileMixingGroups())
@@ -874,16 +906,16 @@ bool CLog::writeLineHeaderA(tLOG_Level level_in,const int line,const char *file)
 		std::string group=utilStringNarrow(m_group);
 
 		if(line>0 && strlen(file)>0)
-			fprintf_s(m_f,"%s - %ld|%ld - %s - %s -'%s'-line=%d: ",timestamp.c_str(),CThread::getCurrentPid(),CThread::getCurrentThreadId(),group.c_str(),level.c_str(),file,line);
+			fprintf_s(m_f, "%s - %s - %ld|%ld - %s - %s -'%s'-line=%d: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), group.c_str(), level.c_str(), file, line);
 		else
-			fprintf_s(m_f,"%s - %ld|%ld - %s - %s: ",timestamp.c_str(),CThread::getCurrentPid(),CThread::getCurrentThreadId(),group.c_str(),level.c_str());
+			fprintf_s(m_f, "%s - %s - %ld|%ld - %s - %s: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), group.c_str(), level.c_str());
 	}
 	else
 	{
 		if(line>0 && strlen(file)>0)
-			fprintf_s(m_f,"%s - %ld|%ld - %s -'%s'-line=%d: ",timestamp.c_str(),CThread::getCurrentPid(),CThread::getCurrentThreadId(),level.c_str(),file,line);
+			fprintf_s(m_f, "%s - %s - %ld|%ld - %s -'%s'-line=%d: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), level.c_str(), file, line);
 		else
-			fprintf_s(m_f,"%s - %ld|%ld - %s: ",timestamp.c_str(),CThread::getCurrentPid(),CThread::getCurrentThreadId(),level.c_str());
+			fprintf_s(m_f, "%s - %s - %ld|%ld - %s: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), level.c_str());
 	}
 
 	return true;
