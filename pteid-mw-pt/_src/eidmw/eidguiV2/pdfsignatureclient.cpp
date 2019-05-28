@@ -276,8 +276,10 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
 
     if (isVisible) {
         if (signatureInfo.getX() >= 0 && signatureInfo.getY() >= 0) {
-            sig_handler->setVisibleCoordinates(signatureInfo.getSelectedPage(), signatureInfo.getX(), signatureInfo.getY());
-        } 
+            sig_handler->setVisibleCoordinates(
+                        signatureInfo.getSelectedPage() > 0 ? signatureInfo.getSelectedPage() : sig_handler->getPageCount(),
+                        signatureInfo.getX(), signatureInfo.getY());
+        }
     }
     sig_handler->setSCAPAttributes(strdup(citizenName.toUtf8().constData()),
                                    strdup(citizenId.toUtf8().constData()),
@@ -293,7 +295,13 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
     isCC ? sig_handler->setIsCC(true) : sig_handler->setIsCC(false);
 
     //Add PDF signature objects right before we call getHash()
-    sig_handler->signFiles(signatureInfo.getLocation(), signatureInfo.getReason(), outputPath, false);
+    try{
+        sig_handler->signFiles(signatureInfo.getLocation(), signatureInfo.getReason(), outputPath, false);
+    }
+    catch (eIDMW::CMWException &e) {
+        e.GetError();
+        throw PTEID_Exception(e.GetError());
+    }
 
     /* Calculate hash */
     CByteArray hashByteArray = sig_handler->getHash();
