@@ -316,7 +316,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
 
             if (coord_x >= 0 && coord_y >= 0)
             {
-                pdf->setVisibleCoordinates(page, coord_x, coord_y);
+                pdf->setVisibleCoordinates(page > 0 ? page : pdf->getPageCount(), coord_x, coord_y);
             }
             try{
                 ret = pdf->signFiles(location, reason, filenames[i]->c_str(), false);
