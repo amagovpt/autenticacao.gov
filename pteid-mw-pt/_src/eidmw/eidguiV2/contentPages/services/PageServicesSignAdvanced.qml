@@ -872,29 +872,35 @@ PageServicesSignAdvancedForm {
                         qsTranslate("Popup Card","STR_POPUP_ERROR")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_NO_CMD_SUPPORT")
-                
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                 mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
-                return;
             }
-            if( propertySwitchSignAdd.checked && numberOfAttributesSelected() == 0) {
+            else if( propertySwitchSignAdd.checked && numberOfAttributesSelected() == 0) {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                         qsTranslate("PageServicesSign","STR_SCAP_WARNING")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-                return;
             }
-            if (propertyListViewFiles.count == 1){
-                var outputFile =  filesModel.get(0).fileUrl
-                //Check if filename has extension and remove it.
-                if( outputFile.lastIndexOf('.') > 0)
-                    var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
-                propertyFileDialogCMDOutput.filename = outputFile + "_signed.pdf"
-                propertyFileDialogCMDOutput.open()
-            }else{
-                propertyFileDialogBatchCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
-                propertyFileDialogBatchCMDOutput.open()
+            else if (propertySwitchSignAdd.checked && propertyListViewFiles.count > 1){
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            }
+            else {
+                if (propertyListViewFiles.count == 1){
+                    var outputFile =  filesModel.get(0).fileUrl
+                    //Check if filename has extension and remove it.
+                    if( outputFile.lastIndexOf('.') > 0)
+                        var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
+                    propertyFileDialogCMDOutput.filename = outputFile + "_signed.pdf"
+                    propertyFileDialogCMDOutput.open()
+                }else{
+                    propertyFileDialogBatchCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
+                    propertyFileDialogBatchCMDOutput.open()
+                }
             }
         }
     }

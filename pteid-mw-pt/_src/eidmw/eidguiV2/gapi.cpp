@@ -826,12 +826,6 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
         signalUpdateProgressBar(65);
         ret = cmd_signature->signClose(local_sms_token);
 
-        for (size_t i = 0; i < cmd_pdfSignatures.size(); i++)
-            delete cmd_pdfSignatures[i];
-
-        cmd_pdfSignatures.clear();
-        cmd_signature->clear_pdf_handlers();
-
         if (ret != 0) {
             qDebug() << "signClose failed!" << endl;
             signCMDFinished(ret);
@@ -861,6 +855,12 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
             m_scap_params.location_x, m_scap_params.location_y,
             m_scap_params.location, m_scap_params.reason, 0, attrs, cmd_details,
             useCustomSignature(), m_jpeg_scaled_data);
+
+        for (size_t i = 0; i < cmd_pdfSignatures.size(); i++)
+            delete cmd_pdfSignatures[i];
+
+        cmd_pdfSignatures.clear();
+        cmd_signature->clear_pdf_handlers();
     }
     catch (PTEID_Exception &e) {
         ret = e.GetError();
@@ -888,7 +888,7 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<
     QString outputFile, int page, double coord_x, double coord_y,
     QString reason, QString location) {
 
-    qDebug() << "signOpenCMD! MobileNumber = " << mobileNumber << " secret_code = " << secret_code <<
+    qDebug() << "signOpenScapWithCMD! MobileNumber = " << mobileNumber << " secret_code = " << secret_code <<
         " loadedFilePaths = " << loadedFilePaths <<
         " outputFile = " << outputFile << " page = " << page << " coord_x" << coord_x <<
         " coord_y" << coord_y << " reason = " << reason << " location = " << location;
@@ -926,7 +926,7 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<
 
     cmd_signature->clear_pdf_handlers();
 
-    for (int i = 0; i < loadedFilePaths[i].size(); i++) {
+    for (int i = 0; i < loadedFilePaths.size(); i++) {
         QString fullInputPath = loadedFilePaths[i];
         PTEID_PDFSignature * cmd_pdfSignature = new eIDMW::PTEID_PDFSignature();
 
