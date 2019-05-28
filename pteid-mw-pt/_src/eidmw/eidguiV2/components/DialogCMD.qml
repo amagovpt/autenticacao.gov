@@ -489,7 +489,7 @@ Item {
 
         if (typeof propertySwitchSignAdd !== "undefined" && propertySwitchSignAdd.checked) {
             gapi.signOpenScapWithCMD(mobileNumber,textFieldPin.text,
-                                     loadedFilePaths[0],outputFile,page,
+                                     loadedFilePaths,outputFile,page,
                                      coord_x, coord_y,
                                      reason,location)
         } else {
