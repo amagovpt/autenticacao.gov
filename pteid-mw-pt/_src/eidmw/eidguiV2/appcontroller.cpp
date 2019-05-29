@@ -1037,6 +1037,7 @@ QString AppController::formatSize(qint64 size) {
 
 void getOutlookVersion(std::wstring &version) {
 #ifdef WIN32
+    version.assign(L"");
     DWORD dwType = REG_SZ;
     WCHAR abValueDat[23];
     DWORD dwValDatLen = sizeof(abValueDat);
@@ -1046,19 +1047,19 @@ void getOutlookVersion(std::wstring &version) {
 	}
 	catch (...)
 	{
-		PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Outlook CurVer registry does not exist");
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Outlook CurVer registry does not exist");
 		return;
 	}
 
     if (wcslen(abValueDat) <= 20)
     {
-        PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Outlook CurVer registry format not expected");
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Outlook CurVer registry format not expected");
         return;
     }
     version.assign(abValueDat, 20, 23);
 #endif
-    (void)version;
 }
+
 bool AppController::isOutlookInstalled() {
 #ifdef WIN32
     std::wstring version;
@@ -1089,7 +1090,7 @@ bool AppController::getOutlookSuppressNameChecks(void) {
 		}
 		catch (...)
 		{
-			PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Outlook CurVer registry not exist");
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Outlook SupressNameChecks registry does not exist");
 		}
         return abValueDat == 1;
     }
@@ -1114,7 +1115,14 @@ void AppController::setOutlookSuppressNameChecks(bool bDisabledMatching) {
         DWORD abValueDat((bDisabledMatching ? 1 : 0));
         DWORD dwValDatLen(sizeof(abValueDat));
         DWORD dwType = REG_DWORD;
-        WriteReg(HKEY_CURRENT_USER, regName.c_str(), L"SupressNameChecks", dwType, &abValueDat, dwValDatLen);
+        try
+        {
+            WriteReg(HKEY_CURRENT_USER, regName.c_str(), L"SupressNameChecks", dwType, &abValueDat, dwValDatLen);
+        }
+        catch (...)
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Could not set Outlook SupressNameChecks registry");
+        }
         return;
     }
 #endif
