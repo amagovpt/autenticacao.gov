@@ -1120,7 +1120,7 @@ void GAPI::startPrint(QString outputFile, bool isBasicInfo, bool isAddicionalInf
 }
 
 bool GAPI::doSignPrintPDF(QString &file_to_sign, QString &outputsign) {
-
+	PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doSignPrintPDF");
     BEGIN_TRY_CATCH
 
         PTEID_EIDCard * card = NULL;
@@ -2939,7 +2939,7 @@ void GAPI::fillCertificateList(void)
     bool noIssuer = false;
     QVariantMap certificatesMap;
 
-    qDebug() << "fillCertificateList";
+	PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance fillCertificateList");
 
     BEGIN_TRY_CATCH
 
