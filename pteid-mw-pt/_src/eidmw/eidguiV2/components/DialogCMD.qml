@@ -435,11 +435,12 @@ Item {
             loadedFilePaths.push(filesModel.get(fileIndex).fileUrl)
         }
         
+        var outputFile = ""
         if (filesModel.count == 1) {
-            var outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
+            outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
         }
         else {
-            var outputFile = propertyFileDialogBatchCMDOutput.fileUrl.toString()
+            outputFile = propertyFileDialogBatchCMDOutput.fileUrl.toString()
         }
         outputFile = decodeURIComponent(stripFilePrefix(outputFile))
 
@@ -454,14 +455,17 @@ Item {
         if (typeof propertySwitchSignTemp !== "undefined")
             isTimestamp = propertySwitchSignTemp.checked
 
+        var reason = ""
         if (typeof propertyTextFieldReason !== "undefined")
-            var reason = propertyTextFieldReason.text
+            reason = propertyTextFieldReason.text
 
+        var location = ""
         if (typeof propertyTextFieldLocal !== "undefined")
-            var location = propertyTextFieldLocal.text
+            location = propertyTextFieldLocal.text
 
+        var isSmallSignature = false
         if (typeof propertyCheckSignReduced !== "undefined")
-            var isSmallSignature = propertyCheckSignReduced.checked
+            isSmallSignature = propertyCheckSignReduced.checked
 
         var coord_x = -1
         var coord_y = -1
