@@ -118,8 +118,8 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
         throw;
     }
     if (successful == GAPI::ScapSucess) {
-        parent->signalPdfSignSucess(parent->SignMessageOK);
-        parent->signCMDFinished(0);
+        parent->signCMDFinished(ERR_NONE);
+        parent->signalCloseCMDSucess();
     }
     else if (successful == GAPI::ScapTimeOutError) {
         qDebug() << "Error in SCAP service Timeout!";
