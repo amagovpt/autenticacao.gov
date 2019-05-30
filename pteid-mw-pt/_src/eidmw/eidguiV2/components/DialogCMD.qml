@@ -540,7 +540,11 @@ Item {
         {
             dialogCMDProgress.close()
             if (Qt.platform.os === "windows") {
-                propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+                if (propertyOutputSignedFile.substring(0, 2) == "//" ){
+                    propertyOutputSignedFile = "file:" + propertyOutputSignedFile
+                }else{
+                    propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+                }
             }else{
                 propertyOutputSignedFile = "file://" + propertyOutputSignedFile
             }
