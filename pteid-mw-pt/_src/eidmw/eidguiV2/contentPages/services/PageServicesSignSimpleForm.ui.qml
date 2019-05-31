@@ -58,12 +58,12 @@ Item {
         FileSaveDialog {
             id: fileDialogOutput
             title: qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
-            nameFilters: ["Images (*.pdf)", "All files (*)"]
+            nameFilters: ["PDF (*.pdf)", "All files (*)"]
         }
         FileSaveDialog {
             id: fileDialogCMDOutput
             title: qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
-            nameFilters: ["Images (*.pdf)", "All files (*)"]
+            nameFilters: ["PDF (*.pdf)", "All files (*)"]
         }
 
         Item{
