@@ -799,7 +799,7 @@ return $jnicall;
 		catch (eIDMW::PTEID_Exception& e)
 		{
 
-    		for (int i=0; i < size3; i++)
+    		for (int i=0; arg3[i] != 0; i++)
  				delete[] arg3[i];
     		delete[] arg3;
 
