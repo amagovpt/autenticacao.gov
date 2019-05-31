@@ -1301,7 +1301,7 @@ PageServicesSignAdvancedForm {
             "fileUrl": path
         };
 
-        if (!containsFile(newFileUrl, filesModel)){
+        if (!containsFile(newFileUrl, propertyPageLoader.propertyBackupfilesModel)){
             filesModel.append(newFileUrl);
             propertyPageLoader.propertyBackupfilesModel.append(newFileUrl);
         } else {
