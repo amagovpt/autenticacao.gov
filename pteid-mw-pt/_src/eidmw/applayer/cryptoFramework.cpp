@@ -537,12 +537,23 @@ bool APL_CryptoFwk::VerifyHashSha256(const CByteArray &data, const CByteArray &h
 bool APL_CryptoFwk::VerifyHash(const CByteArray &data, const CByteArray &hash, const EVP_MD *algorithm)
 {
 	CByteArray baCalculatedHash;
+	int ret = 0;
 
 	if(!GetHash(data,algorithm,&baCalculatedHash))
+	{
+		MWLOG(LEV_ERROR, MOD_APL, "VerifyHash error baCalculatedHash: %s", baCalculatedHash.ToString(true, false).c_str());
 		return false;
+	}
+
+	ret = memcmp(baCalculatedHash.GetBytes(), hash.GetBytes(), hash.Size());
+
+	if (ret){
+		MWLOG(LEV_DEBUG, MOD_APL, "The calculated hash is different from the given hash: %s %s",
+			baCalculatedHash.ToString(true, false).c_str(), hash.ToString(true, false).c_str());
+	}
 
 	//If the hash calculate is the same as the given hash, it's ok
-	return (memcmp(baCalculatedHash.GetBytes(), hash.GetBytes(), hash.Size()) == 0);
+	return ret == 0;
 }
 
 bool APL_CryptoFwk::GetHash(const CByteArray &data, FWK_HashAlgo algo, CByteArray *hash)

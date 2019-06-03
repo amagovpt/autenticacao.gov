@@ -203,14 +203,18 @@ tCardFileStatus APL_EidFile_ID::VerifyFile()
 		PackIdData(idData);
 		PackPictureData(picData);
 
-		if (!m_cryptoFwk->VerifyHashSha256(pkData,pcard->getFileSod()->getCardPublicKeyHash()))
+		if (!m_cryptoFwk->VerifyHashSha256(pkData, pcard->getFileSod()->getCardPublicKeyHash())){
+			MWLOG(LEV_DEBUG, MOD_APL, "SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY: %s", pcard->getFileSod()->getCardPublicKeyHash().ToString(true, false).c_str());
 			throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY);
-
-		if (!m_cryptoFwk->VerifyHashSha256(idData,pcard->getFileSod()->getIdHash()))
+		}
+		if (!m_cryptoFwk->VerifyHashSha256(idData, pcard->getFileSod()->getIdHash())){
+			MWLOG(LEV_DEBUG, MOD_APL, "SOD_ERR_HASH_NO_MATCH_ID: %s", pcard->getFileSod()->getIdHash().ToString(true, false).c_str());
 			throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_ID);
-
-		if (!m_cryptoFwk->VerifyHashSha256(picData,pcard->getFileSod()->getPictureHash()))
+		}
+		if (!m_cryptoFwk->VerifyHashSha256(picData, pcard->getFileSod()->getPictureHash())){
+			MWLOG(LEV_DEBUG, MOD_APL, "SOD_ERR_HASH_NO_MATCH_PICTURE: %s", pcard->getFileSod()->getPictureHash().ToString(true, false).c_str());
 			throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE);
+		}
 	}
 	m_isVerified = true;
 
@@ -388,7 +392,9 @@ void APL_EidFile_ID::MapFieldsInternal(){
 		CByteArray photoRAW;
 
 		photoRAW = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Photo, PTEIDNG_FIELD_ID_LEN_Photo);
+		MWLOG(LEV_DEBUG, MOD_APL, "SOD photoRAW: %d", photoRAW.Size());
 		photoRAW.TrimRight(0);
+		MWLOG(LEV_DEBUG, MOD_APL, "SOD photoRAW: %d", photoRAW.Size());
 		cbeff = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_CBEFF, PTEIDNG_FIELD_ID_LEN_CBEFF);
 		facialrechdr = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_FACIALRECHDR, PTEIDNG_FIELD_ID_LEN_FACIALRECHDR);
 		facialinfo = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_FACIALINFO, PTEIDNG_FIELD_ID_LEN_FACIALINFO);
@@ -860,8 +866,10 @@ tCardFileStatus APL_EidFile_Address::VerifyFile()
 			CByteArray addrData;
 			PackAddressData(addrData, m_AddressType != m_FOREIGN);
 
-			if (!m_cryptoFwk->VerifyHashSha256(addrData,pcard->getFileSod()->getAddressHash()))
+			if (!m_cryptoFwk->VerifyHashSha256(addrData, pcard->getFileSod()->getAddressHash())){
+				MWLOG(LEV_DEBUG, MOD_APL, "SOD getCardAddressHash: %s", pcard->getFileSod()->getAddressHash().ToString(true, false).c_str());
 				throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS);
+			}
 		}
 	}
 
