@@ -467,19 +467,20 @@ bool APL_CertStatusCache::loadFile()
 	//If the file doesn't exist, we create it
 	if(m_f==NULL)
 	{
+		err = 0;
 #ifdef WIN32
 		err = fopen_s(&m_f, m_cachefilename.c_str(), "w");
 		SetFileAttributesA(m_cachefilename.c_str(),FILE_ATTRIBUTE_HIDDEN);
 #else
 		m_f = fopen(m_cachefilename.c_str(), "w");
-		if (m_f == NULL) err=errno;		
+		if (m_f == NULL) err=errno;
 #endif
 		if (err != 0) {
 			MWLOG(LEV_ERROR, MOD_APL, "CertStatusCache: Failed to open cache file for writing. Error code: %d", err);
 			return false;
 		}
 #ifndef WIN32
-		m_tFl.l_type   = F_WRLCK; // has to be the same type as the mode used to open the file
+		m_tFl.l_type = F_WRLCK; // has to be the same type as the mode used to open the file
 #endif
 	}
 
