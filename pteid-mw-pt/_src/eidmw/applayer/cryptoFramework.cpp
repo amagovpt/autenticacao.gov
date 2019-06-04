@@ -550,6 +550,9 @@ bool APL_CryptoFwk::VerifyHash(const CByteArray &data, const CByteArray &hash, c
 	if (ret){
 		MWLOG(LEV_DEBUG, MOD_APL, "The calculated hash is different from the given hash: %s %s",
 			baCalculatedHash.ToString(true, false).c_str(), hash.ToString(true, false).c_str());
+	} else {
+		MWLOG(LEV_DEBUG, MOD_APL, "The calculated hash is equal from the given hash: %s %s",
+			baCalculatedHash.ToString(true, false).c_str(), hash.ToString(true, false).c_str());
 	}
 
 	//If the hash calculate is the same as the given hash, it's ok

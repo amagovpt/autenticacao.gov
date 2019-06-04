@@ -213,8 +213,6 @@ APL_EidFile_ID *APL_EIDCard::getFileID()
 			m_FileID=new APL_EidFile_ID(this);
 	}
 
-	m_FileID->doSODCheck(m_sodCheck);
-
 	return m_FileID;
 }
 
@@ -226,8 +224,6 @@ APL_EidFile_Address *APL_EIDCard::getFileAddress()
 		if(!m_FileAddress)
 			m_FileAddress=new APL_EidFile_Address(this);
 	}
-
-	m_FileAddress->doSODCheck(m_sodCheck);
 
 	return m_FileAddress;
 }
