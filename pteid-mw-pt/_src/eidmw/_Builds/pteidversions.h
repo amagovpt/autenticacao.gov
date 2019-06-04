@@ -16,11 +16,11 @@
 #define PTEID_PRODUCT_NAME    	"Portugal eID MiddleWare"
 
 
-#define PTEID_PRODUCT_VERSION    "3.0.17"
-#define BASE_VERSION_STRING    "3, 0, 17, "
+#define PTEID_PRODUCT_VERSION    "3.0.18"
+#define BASE_VERSION_STRING    "3, 0, 18, "
 #define BASE_VERSION1          3
 #define BASE_VERSION2          0
-#define BASE_VERSION3          17
+#define BASE_VERSION3          18
 
 
 // Common Lib
