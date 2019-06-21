@@ -109,7 +109,8 @@
 						<Directory Id="JAVA_SDK" Name="Java"/>
 						<Directory Id="CSHARP_SDK" Name="dotnet"/>
 					</Directory>
-        <Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
+					<Directory Id="WEBDIR" Name="web"/>
+					<Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
 				</Directory>
 
 			</Directory>
@@ -187,6 +188,13 @@
 					</CreateFolder>
 					<RemoveFile Id="RemoveLogFiles" On="uninstall" Name="*"/>
 					<RemoveFolder Id="RemoveLogFolder" On="uninstall"/>
+				</Component>
+			</DirectoryRef>
+
+			<DirectoryRef Id="WEBDIR">
+				<Component Id="OAuthPages" Guid="{08F97C8A-7A73-427F-B0F1-86D26ECBAA7E}">
+					<File Source="..\..\web\AutenticacaoGov.html" KeyPath="yes" />
+					<File Source="..\..\web\AutenticacaoGov_failed.html" />
 				</Component>
 			</DirectoryRef>
 
@@ -285,7 +293,7 @@
                 
 				<!--Our Build of LibCurl - custom build options to remove unneeded features-->
 				<Component Win64="no" Id="Curl" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFA}" SharedDllRefCount="yes">
-          			<File Source="$(env.PTEID_DIR_CURL)\build\Win32\VC12\DLL Release\libcurl.dll" KeyPath="no" />
+					<File Source="$(env.PTEID_DIR_CURL)\bin\libcurl.dll" KeyPath="no" />
 				</Component>
 
                 <Component Win64="no" Id="pteidmdrvsystem32" Guid="{9C571B6F-E4E0-47AF-812D-E51CFA406F67}" Permanent="no">
@@ -351,7 +359,7 @@
                 
 				<!--Our Build of LibCurl - custom build options to remove unneeded features-->
 				<Component Id="Curl_64" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFB}" SharedDllRefCount="yes">
-          			<File Id="libcurl_64.dll" Source="$(env.PTEID_DIR_CURL_X64)\build\Win64\VC12\DLL Release\libcurl.dll" KeyPath="no" />
+					<File Id="libcurl_64.dll" Source="$(env.PTEID_DIR_CURL_X64)\bin\libcurl.dll" KeyPath="no" />
 				</Component>
 
 			</DirectoryRef>
@@ -453,6 +461,7 @@
 							<RegistryValue Type="string" Name="install_dirname" Value="[APPLICATIONROOTFOLDER]"/>
 							<RegistryValue Type="string" Name="certs_dir" Value="[APPLICATIONROOTFOLDER]eidstore\certs"/>
             	<RegistryValue Type="string" Name="certs_dir_test" Value="[APPLICATIONROOTFOLDER]eidstore\certs_test"/>
+							<RegistryValue Type="string" Name="web_dir" Value="[APPLICATIONROOTFOLDER]web"/>
 							<RegistryValue Type="integer" Name="show_java_apps" Value="0"/>
 						</RegistryKey>
 
@@ -520,6 +529,7 @@
 				<ComponentRef Id="CACerts"/>
 				<ComponentRef Id="CrlDir"/>
 				<ComponentRef Id="HttpDir"/>
+				<ComponentRef Id="OAuthPages"/>
 
 				<ComponentRef Id="DirectoryCache"/>
 				<ComponentRef Id="License"/>

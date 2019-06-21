@@ -113,11 +113,7 @@ namespace eIDMW
         const char * url = faAuthReq.c_str();
 
         MWLOG(LEV_DEBUG, MOD_APL, "OAuthAttribues::openBrowser URL: %s", url);
-#ifdef WIN32
-        ShellExecuteA(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
-#else
         QDesktopServices::openUrl(QUrl(url));
-#endif
     }
 
     OAuthResult OAuthAttributes::parseRequestToken(QByteArray httpRequest) {

@@ -113,6 +113,7 @@
             <Directory Id="JAVA_SDK" Name="Java"/>
             <Directory Id="CSHARP_SDK" Name="dotnet"/>
           </Directory>
+          <Directory Id="WEBDIR" Name="web"/>
           <Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
 
         </Directory>
@@ -216,6 +217,13 @@
       </Component>
     </DirectoryRef>
 
+    <DirectoryRef Id="WEBDIR">
+      <Component Id="OAuthPages" Guid="{08F97C8A-7A73-427F-B0F1-86D26ECBAA7E}">
+        <File Source="..\..\web\AutenticacaoGov.html" KeyPath="yes" />
+        <File Source="..\..\web\AutenticacaoGov_failed.html" />
+      </Component>
+    </DirectoryRef>
+    
     <DirectoryRef Id="DIRECTORYCACHE">
       <Component Id="DirectoryCache" Guid="{7CAEB639-7068-4084-B422-D7B5E55D0FBC}" KeyPath="yes">
         <CreateFolder>
@@ -305,7 +313,7 @@
   
       <!--Our Build of LibCurl - custom build options to remove unneeded features-->
       <Component Id="Curl" Guid="{1BA8207B-BEC4-43E3-93FA-AE9D25117CFA}" SharedDllRefCount="yes">
-        <File Source="$(env.PTEID_DIR_CURL)\build\Win32\VC12\DLL Release\libcurl.dll" KeyPath="yes" />
+        <File Source="$(env.PTEID_DIR_CURL)\bin\libcurl.dll" KeyPath="yes" />
       </Component>
 
       <!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
@@ -370,7 +378,7 @@
             <RegistryValue Type="string" Name="install_dirname" Value="[APPLICATIONROOTFOLDER]"/>
             <RegistryValue Type="string" Name="certs_dir" Value="[APPLICATIONROOTFOLDER]eidstore\certs"/>
             <RegistryValue Type="string" Name="certs_dir_test" Value="[APPLICATIONROOTFOLDER]eidstore\certs_test"/>
-
+            <RegistryValue Type="string" Name="web_dir" Value="[APPLICATIONROOTFOLDER]web"/>
             <RegistryValue Type="integer" Name="show_java_apps" Value="0" />
           </RegistryKey>
 
@@ -420,6 +428,7 @@
       <ComponentRef Id="DirectoryCache"/>
       <ComponentRef Id="License"/>
       <ComponentRef Id="LogDir"/>
+      <ComponentRef Id="OAuthPages"/>
 
       <!-- System32 -->
       <ComponentRef Id="Runtime35"/>
