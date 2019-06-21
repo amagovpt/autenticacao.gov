@@ -27,6 +27,9 @@
 #include "scapsignature.h"
 #include "../dialogs/dialogs.h"
 
+#include "../applayer/OAuthAttributes.h"
+#include "../applayer/AttributeFactory.h"
+
 /* For filenames we need to maintain latin-1 or UTF-8 native encoding */
 //This macro's argument is a QString
 
@@ -271,14 +274,16 @@ public slots:
 
     /* SCAP Methods  */
     void startGettingEntities();
-    void startGettingCompanyAttributes();
+    void startGettingCompanyAttributes(bool useOAuth);
     void startLoadingAttributesFromCache(int isCompanies, bool isShortDescription);
     void startRemovingAttributesFromCache(int isCompanies);
-    void startGettingEntityAttributes(QList<int> entity_index);
+    void startGettingEntityAttributes(QList<int> entity_index, bool useOAuth);
     void startPingSCAP();
 
     void startSigningSCAP(QString inputPdf, QString outputPDF, int page, double location_x, double location_y,
                           QString location, QString reason, int ltv, QList<int> attribute_index);
+
+    void abortSCAPWithCMD(); // close the listing server
 
     //Returns page size in postscript points
     QSize getPageSize(int page) { return image_provider_pdf->getPageSize(page); };
@@ -386,6 +391,8 @@ signals:
     void signalTestPinFinished(int triesLeft, int pin);
     void signalModifyPinFinished(int triesLeft, int pin);
     void signalTriesLeftPinFinished(int triesLeft, int pin);
+    void signalBeginOAuth();
+    void signalEndOAuth(int oauthResult);
         
     //SCAP signals
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
@@ -421,7 +428,7 @@ private:
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
     void connectToCard();
     void getSCAPEntities();
-    void getSCAPCompanyAttributes();
+    void getSCAPCompanyAttributes(bool OAuth);
     QString translateCMDErrorCode(int errorCode);
 
     //querytype - 0 = Entities, 1 = Companies, 2 = All Attributes 
@@ -429,7 +436,7 @@ private:
     //querytype - 0 = Entities, 1 = Companies
     void removeSCAPAttributesFromCache(int queryType);
 	bool prepareSCAPCache();
-    void getSCAPEntityAttributes(QList<int> entityIDs);
+    void getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth);
     void doSignSCAP(SCAPSignParams params);
     void getPersoDataFile();
     void setPersoDataFile(QString text);

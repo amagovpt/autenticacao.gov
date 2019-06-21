@@ -4,9 +4,14 @@
 
 #include "SCAP-services-v3/SCAPH.h"
 #include "SCAP-services-v3/SCAP.nsmap"
+#include "SCAP-services-v3/SCAPAttributeClientServiceBindingProxy.h"
+
 #include "scapsignature.h"
 #include "ScapSettings.h"
 #include <QDir>
+
+#include "Util.h"
+#include "Config.h"
 
 #include "gapi.h"
 
@@ -51,13 +56,45 @@ std::vector<ns2__AttributesType *> loadCacheFile(QString &filePath) {
 }
 
 std::vector<ns2__AttributesType *>
+    ScapServices::loadAttributesFromCache(bool isCompanies) {
+    std::vector<ns2__AttributesType *> attributesType;
+    try
+    {
+        ScapSettings settings;
+        QString scapCachePath(settings.getCacheDir() + "/scap_attributes/");
+        QDir scapCacheDir(scapCachePath);
+        QStringList flist = scapCacheDir.entryList(QStringList("*.xml"), QDir::Files | QDir::NoSymLinks);
+        
+        m_attributesList.clear();
+
+        foreach (QString str, flist) {
+            if ((!isCompanies ? str.endsWith(ENTITIES_SUFFIX) : str.endsWith(COMPANIES_SUFFIX)))
+            {
+                QString cachefilePath(scapCachePath+str);
+                attributesType = loadCacheFile(cachefilePath);
+
+                if (attributesType.size() > 0)
+                {
+                    //Merge into single vector
+                    m_attributesList.insert(m_attributesList.end(), attributesType.begin(), attributesType.end());
+                }
+            }
+        }
+    }
+    catch(...) {
+        std::cerr << "Error ocurred while loading attributes from cache!";
+        //TODO: report error
+    }
+    return m_attributesList;
+}
+std::vector<ns2__AttributesType *>
     ScapServices::loadAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies) {
 
     std::vector<ns2__AttributesType *> attributesType;
     try
     {
         QString citizenNIC(card.getID().getCivilianIdNumber());
-
+        citizenNIC.chop(1);//remove check digit
         ScapSettings settings;
         QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
 
@@ -176,7 +213,7 @@ bool ScapServices::removeAttributesFromCache() {
     }
 }
 
-std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eIDMW::PTEID_EIDCard &card, std::vector<int> supplier_ids) {
+std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eIDMW::PTEID_EIDCard *card, std::vector<int> supplier_ids, bool useOAuth) {
 
     std::vector<ns2__AttributesType *> result;
     ScapSettings settings;
@@ -195,7 +232,42 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
 
     try {
 
-        soap * sp = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
+        soap sp;
+        soap_init2(&sp, SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
+        
+        long ret;
+        if (useOAuth) {
+            sp.recv_timeout = 60;
+            sp.send_timeout = 60;
+            sp.connect_timeout = 60;
+
+            char * ca_path = NULL;
+            std::string cacerts_file;
+#ifdef __linux__
+            ca_path = "/etc/ssl/certs";
+#elif WIN32
+            cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR)) + "\\cacerts.pem";
+#elif __APPLE__
+            cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
+#endif
+            ret = soap_ssl_client_context(&sp, SOAP_SSL_DEFAULT,
+                NULL,
+                NULL,
+                cacerts_file.size() > 0 ? cacerts_file.c_str() : NULL,
+                ca_path,
+                NULL);
+
+            if (ret != SOAP_OK) {
+                qDebug() << "soap_ssl_client_context() failed - code: " << ret;
+                soap_print_fault(&sp, stderr);
+                ERR_print_errors_fp(stderr);
+
+                soap_destroy(&sp);
+                soap_end(&sp);
+                soap_done(&sp);
+                return result;
+            }
+        }
 
         // Get suppliers List
         std::vector<ns3__AttributeSupplierType *> vec_suppliers;
@@ -215,35 +287,63 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
                 continue;
             }
 
-            ns3__AttributeSupplierType * ac_attributeSupplierType = soap_new_req_ns3__AttributeSupplierType(sp, supplier->Id, supplier->Name);
+            ns3__AttributeSupplierType * ac_attributeSupplierType = soap_new_req_ns3__AttributeSupplierType(&sp, supplier->Id, supplier->Name);
             vec_suppliers.push_back(ac_attributeSupplierType);
         }
         
-        ns2__AttributeSupplierListType * suppliers = soap_new_req_ns2__AttributeSupplierListType(sp, vec_suppliers);
+        ns2__AttributeSupplierListType * suppliers = soap_new_req_ns2__AttributeSupplierListType(&sp, vec_suppliers);
 
 
         // Get Citizen info
-        QString fullname = card.getID().getGivenName();
-        fullname.append(" ");
-        fullname.append(card.getID().getSurname());
+        QString fullname;
+        QString cleanUuid;
+        QString idNumber;
         QString request_uuid = QUuid::createUuid().toString();
-        QString cleanUuid = request_uuid.midRef(1, request_uuid.size() - 2).toString();
-
-        const char* idNumber = card.getID().getCivilianIdNumber();
-
+        cleanUuid = request_uuid.midRef(1, request_uuid.size() - 2).toString();
+        
+        OAuthAttributes oauth;
+        m_oauth = &oauth;
+        if (!useOAuth)
+        {
+            fullname = card->getID().getGivenName();
+            fullname.append(" ");
+            fullname.append(card->getID().getSurname());
+            idNumber = card->getID().getCivilianIdNumber();
+            idNumber.chop(1);//remove check digit
+        }
+        else
+        {
+            std::vector<CitizenAttribute> attributes;
+            attributes.push_back(CitizenAttribute::NIC);
+            attributes.push_back(CitizenAttribute::COMPLETENAME);
+            oauth.setAttributes(attributes);
+            OAuthResult oauthResult = oauth.fetchAttributes();
+            parent->signalEndOAuth((eIDMW::OAuthResult)oauthResult);
+            if (oauthResult != OAuthSuccess) {
+                soap_destroy(&sp);
+                soap_end(&sp);
+                soap_done(&sp);
+                return result;
+            }
+            std::map<CitizenAttribute, std::string> *attributesMap = oauth.getAttributes();
+            fullname = (*attributesMap)[CitizenAttribute::COMPLETENAME].c_str();
+            idNumber = (*attributesMap)[CitizenAttribute::NIC].c_str();
+        }
         std::string secretKey = settings.getSecretKey(idNumber);
 
-        ns3__PersonalDataType * citizen = soap_new_req_ns3__PersonalDataType(sp, fullname.toStdString(), idNumber);
+        ns3__PersonalDataType * citizen = soap_new_req_ns3__PersonalDataType(&sp, fullname.toStdString(), idNumber.toStdString());
 
         //Last param secretKey can be NULL, because we may not have a secretKey stored in configuration (??)
         ns2__AttributeRequestType * attr_request = soap_new_set_ns2__AttributeRequestType(
-            sp, cleanUuid.toStdString(), citizen, suppliers, &allEnterprises, &appID, &appName, secretKey.size() > 0 ? &secretKey : NULL);
+            &sp, cleanUuid.toStdString(), citizen, suppliers, &allEnterprises, &appID, &appName, secretKey.size() > 0 ? &secretKey : NULL);
 
         std::stringstream ss;
-        sp->os = &ss;
-        if (soap_write_ns2__AttributeRequestType(sp, attr_request))
-        {
-            qDebug() << "Error serializing AttributeRequest!";
+        if (!useOAuth) {
+            sp.os = &ss;
+            if (soap_write_ns2__AttributeRequestType(&sp, attr_request))
+            {
+                qDebug() << "Error serializing AttributeRequest!";
+            }
         }
 
         std::string s_soapBody = ss.str();
@@ -263,23 +363,65 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
         char * c_endpoint = strdup(ac_endpoint);
         char * c_soapAction = strdup(soapAction);
 
-        //TODO: the PTEID_ScapConnection class does not implement a network timeout because it uses OpenSSL blocking IO mode
-        //To implement connection timeout it should be done like this: http://stackoverflow.com/a/16035100/9906
-        eIDMW::PTEID_ScapConnection scap(scapAddr, scapPort);
-        char * scapResult = scap.postSoapRequest(c_endpoint, c_soapAction, soapBody);
+        std::string scapResult;
+        if (!useOAuth)
+        {
+            //TODO: the PTEID_ScapConnection class does not implement a network timeout because it uses OpenSSL blocking IO mode
+            //To implement connection timeout it should be done like this: http://stackoverflow.com/a/16035100/9906
+            eIDMW::PTEID_ScapConnection scap(scapAddr, scapPort);
+            scapResult.assign(scap.postSoapRequest(c_endpoint, c_soapAction, soapBody));
+        }
+        else
+        {
+            std::string authorizationHeader = "Authorization: " + oauth.getToken();
+            sp.http_extra_header = authorizationHeader.c_str();
+            AttributeClientServiceBindingProxy proxy(&sp);
+            std::string endpoint("https://");
+            endpoint.append(scapAddr);
+            endpoint.append(c_endpoint);
+            const char * soap_action = c_soapAction;
+            ns2__AttributeResponseType attr_response;
+            ret = proxy.Attributes(endpoint.c_str(), soap_action, attr_request, attr_response);
+            if (ret != SOAP_OK) {
+                qDebug() << "Error returned by calling Attributes in SoapBindingProxy(). Error code: " << ret;
+                parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
+                soap_destroy(&sp);
+                soap_end(&sp);
+                soap_done(&sp);
+                return result;
+            }
 
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR , "ScapSignature",
+            sp.os = &ss;
+            if (soap_write_ns2__AttributeResponseType(&sp, &attr_response))
+            {
+                qDebug() << "Error serializing AttributeResponse!";
+            }
+            sp.os = NULL;
+            scapResult = ss.str();
+        }
+        soap_destroy(&sp);
+        soap_end(&sp);
+        soap_done(&sp);
+        
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG , "ScapSignature",
                         "ACService returned: %s",
-                        ( scapResult ? scapResult : "Null SCAP result" ));
+                        ( !scapResult.empty() ? scapResult.c_str() : "Null SCAP result" ));
 
         // Remove request answer headers
         std::string replyString = scapResult;
 
-        int initialPos = replyString.find("<AttributeResponse");
-        std::string endString = "</AttributeResponse>";
+        if (!useOAuth)
+        {
+            int initialPos = replyString.find("<AttributeResponse");
+            std::string endString = "</AttributeResponse>";
 
-        int finalPos = replyString.find(endString) + endString.length();
-        replyString = replyString.substr(initialPos, finalPos - initialPos);
+            int finalPos = replyString.find(endString) + endString.length();
+            replyString = replyString.substr(initialPos, finalPos - initialPos);
+        }
+        else
+        {
+            replyString = replyString.substr(replyString.find("<ns2:AttributeResponseType"));
+        }
 
         // Save to cache
         QString s_scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
@@ -296,20 +438,25 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
         std::istream * istream = &replyStream;
 
         // Create soap request with generated body content.
-        soap * soap2 = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
+        soap soap2;
+        soap_init2(&soap2, SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
 
-        soap_set_namespaces(soap2, namespaces);
+        soap_set_namespaces(&soap2, namespaces);
 
-        soap2->is = istream;
+        soap2.is = istream;
 
         // Retrieve ns2__AttributeResponseType
         ns2__AttributeResponseType attr_response;
-        long ret = soap_read_ns2__AttributeResponseType(soap2, &attr_response);
+        ret = soap_read_ns2__AttributeResponseType(&soap2, &attr_response);
         
         if (ret != 0) {
             qDebug() << "Error reading AttributeResponseType! Malformed XML response";
             std::cerr << "Error reading AttributeResponseType! Malformed XML response" << std::endl;
             parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
+            //FIXME: mem leak
+            //soap_destroy(&soap2);
+            //soap_end(&soap2);
+            //soap_done(&soap2);
             return result;
         }
 
@@ -344,7 +491,10 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
                 }else{
                     parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
                 }
-
+                //FIXME: mem leak
+                //soap_destroy(&soap2);
+                //soap_end(&soap2);
+                //soap_done(&soap2);
                 return result;
             }
 
@@ -352,6 +502,10 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
             if (parentAttribute->SignedAttributes == NULL || childs.size() == 0) {
                 qDebug() << "getAttributes(): Empty attributes response!";
                 parent->signalCompanyAttributesLoadedError();
+                //FIXME: mem leak
+                //soap_destroy(&soap2);
+                //soap_end(&soap2);
+                //soap_done(&soap2);
                 return result;
             }
 
@@ -376,11 +530,22 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
         }
         
         result = attr_response.AttributeResponseValues;
+
+        //FIXME: mem leak
+        //soap_destroy(&soap2);
+        //soap_end(&soap2);
+        //soap_done(&soap2);
     }
-    catch(...) {
+    catch(const std::exception &ex) {
         parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
-        qDebug() << "reqAttributeSupplierListType ERROR << - TODO: improve error handling";
+        qDebug() << "reqAttributeSupplierListType ERROR << - TODO: improve error handling" << ex.what();
     }
 
     return result;
+}
+
+void ScapServices::cancelGetAttributesWithCMD() {
+    if (m_oauth){
+        m_oauth->closeListener();
+    }
 }

@@ -201,7 +201,7 @@ QString GAPI::getAddressField(AddressInfoKey key) {
     QString msgError = QString("%1\n").arg(user_error); \
     emit signalGenericError(msgError); \
     } \
-    }
+}
 
 void GAPI::getAddressFile() {
     qDebug() << "C++: getAddressFile()";
@@ -1946,12 +1946,12 @@ void GAPI::startGettingEntities() {
     QtConcurrent::run(this, &GAPI::getSCAPEntities);
 }
 
-void GAPI::startGettingCompanyAttributes() {
-    QtConcurrent::run(this, &GAPI::getSCAPCompanyAttributes);
+void GAPI::startGettingCompanyAttributes(bool useOauth) {
+    QtConcurrent::run(this, &GAPI::getSCAPCompanyAttributes, useOauth);
 }
 
-void GAPI::startGettingEntityAttributes(QList<int> entities_index) {
-    QtConcurrent::run(this, &GAPI::getSCAPEntityAttributes, entities_index);
+void GAPI::startGettingEntityAttributes(QList<int> entities_index, bool useOAuth) {
+    QtConcurrent::run(this, &GAPI::getSCAPEntityAttributes, entities_index, useOAuth);
 }
 
 void GAPI::startPingSCAP() {
@@ -1960,11 +1960,6 @@ void GAPI::startPingSCAP() {
     httpRequestAborted = httpRequestSuccess = false;
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance startPingSCAP");
-    PTEID_EIDCard * card = NULL;
-    getCardInstance(card);
-    if (card == NULL) {
-        return;
-    }
 
     const char * as_endpoint = "/CCC-REST/rest/scap/pingSCAP";
 
@@ -2177,14 +2172,19 @@ void GAPI::initScapAppId(){
     }
 }
 
-void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
+void GAPI::getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth) {
 
     QList<QString> attribute_list;
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getSCAPEntityAttributes");
     PTEID_EIDCard * card = NULL;
-    getCardInstance(card);
-    if (card == NULL) {
-        emit signalEntityAttributesLoadedError();
+    if (useOAuth){
+        emit signalBeginOAuth();
+    }
+    else {
+        getCardInstance(card);
+    }
+    if (!useOAuth && card == NULL) {
+        emit signalCompanyAttributesLoadedError();
         return;
     }
 
@@ -2199,7 +2199,7 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
     if (!prepareSCAPCache()){
         return;
     }
-    std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, *card, supplier_ids);
+    std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, card, supplier_ids, useOAuth);
 
     if (attributes.size() == 0) {
         return;
@@ -2227,13 +2227,18 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs) {
 }
 
 
-void GAPI::getSCAPCompanyAttributes() {
+void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getSCAPCompanyAttributes");
     PTEID_EIDCard * card = NULL;
     QList<QString> attribute_list;
-    getCardInstance(card);
-    if (card == NULL){
+    if (useOAuth){
+        emit signalBeginOAuth();
+    }
+    else {
+        getCardInstance(card);
+    }
+    if (!useOAuth && card == NULL) {
         emit signalCompanyAttributesLoadedError();
         return;
     }
@@ -2244,7 +2249,7 @@ void GAPI::getSCAPCompanyAttributes() {
     if (!prepareSCAPCache()) {
         return;
     }
-    std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, *card, supplierIDs);
+    std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, card, supplierIDs, useOAuth);
 
     if (attributes.size() == 0)
     {
@@ -2289,14 +2294,7 @@ void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
     //Card is only required for loading entities and companies seperately...
     //This is a hack to support loading attributes without NIC in the context of CMD 
     if (queryType < 2) {
-        getCardInstance(card);
-        if (card == NULL)
-            return;
-
-        if (queryType == 0)
-            attributes = scapServices.loadAttributesFromCache(*card, false);
-        else if (queryType == 1)
-            attributes = scapServices.loadAttributesFromCache(*card, true);
+        attributes = scapServices.loadAttributesFromCache(queryType == 1);
     }
     else if (queryType == 2) {
         attributes = scapServices.reloadAttributesFromCache();
@@ -2316,7 +2314,6 @@ void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
             attribute_list.append(QString::fromStdString(childAttributes.at(j + 1)));
         }
     }
-
     if (queryType == 0)
         emit signalEntityAttributesLoaded(attribute_list);
     else if (queryType == 1)
@@ -2401,6 +2398,10 @@ bool GAPI::prepareSCAPCache() {
     qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
 #endif
     return hasPermissions;
+}
+
+void GAPI::abortSCAPWithCMD() {
+    scapServices.cancelGetAttributesWithCMD();
 }
 
 void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {

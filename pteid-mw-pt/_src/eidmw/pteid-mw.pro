@@ -34,7 +34,15 @@ SUBDIRS += eidguiV2
 ## the subdirs have to be built in the given order
 CONFIG += ordered
 
+QMAKE_STRIP = echo
+
 data.path +=  /usr/local/share/certs
 data.files += misc/certs/*
 
-INSTALLS += data
+web.path += /usr/local/share/pteid-mw/www
+web.files += misc/web/*
+
+INSTALLS += data \
+	        web
+
+TARGET = pteid-mw
