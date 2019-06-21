@@ -133,6 +133,7 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GENERAL_CACHEDIR      L"cache_dirname"        //string, cache directory for card-file; $common/pteid/crlcache/
 #define EIDMW_CNF_GENERAL_CERTSDIR      L"certs_dir"
 #define EIDMW_CNF_GENERAL_CERTSDIR_TEST L"certs_dir_test"
+#define EIDMW_CNF_GENERAL_WEBDIR        L"web_dir"
 #define EIDMW_CNF_GENERAL_LANGUAGE      L"language"             //string, user lanugage: fr, nl, en, de, es, �
 #define EIDMW_CNF_GENERAL_CARDTXDELAY   L"card_transmit_delay"  //number, delay while communicating with the smartcard, in mili-seconds, default 1 mSec
 #define EIDMW_CNF_GENERAL_CARDCONNDELAY L"card_connect_delay"   //number, delay before connecting to a smartcard, in mili-seconds, default 0 mSec
@@ -148,6 +149,9 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GENERAL_CMD_APPID     L"cmd_appid"
 #define EIDMW_CNF_GENERAL_CMD_USERID    L"cmd_userid"
 #define EIDMW_CNF_GENERAL_CMD_PASSWORD  L"cmd_password"
+#define EIDMW_CNF_GENERAL_OAUTH_HOST     L"oauth_host"
+#define EIDMW_CNF_GENERAL_OAUTH_PORT     L"oauth_port"
+#define EIDMW_CNF_GENERAL_OAUTH_CLIENTID     L"oauth_clientid"
 
 #define EIDMW_CNF_SECTION_LOGGING       L"logging"              //section with the logging parameters
 #define EIDMW_CNF_LOGGING_DIRNAME       L"log_dirname"          //string, location of the log-file; $home/pteid/	Full path with volume name.
@@ -288,6 +292,7 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR_TEST;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_WEB_DIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_CARDTXDELAY;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY;
@@ -303,6 +308,9 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CMD_APPID;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CMD_USERID;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CMD_PASSWORD;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_OAUTH_HOST;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_OAUTH_PORT;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_OAUTH_CLIENTID;
 
     //LOGGING
     static const struct Param_Str EIDMW_CONFIG_PARAM_LOGGING_DIRNAME;

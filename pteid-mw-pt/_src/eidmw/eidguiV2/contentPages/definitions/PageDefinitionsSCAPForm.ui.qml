@@ -8,6 +8,8 @@ Item {
 
     property alias propertyButtonLoadCompanyAttributes: buttonLoadCompanyAttributes
     property alias propertyButtonLoadEntityAttributes: buttonLoadEntityAttributes
+    property alias propertyButtonLoadCompanyAttributesOAuth: buttonLoadCompanyAttributesOAuth
+    property alias propertyButtonLoadEntityAttributesOAuth: buttonLoadEntityAttributesOAuth
     property alias propertyButtonRemoveCompanyAttributes: buttonRemoveCompanyAttributes
     property alias propertyButtonRemoveEntityAttributes: buttonRemoveEntityAttributes
 
@@ -151,12 +153,12 @@ Item {
                     anchors.top: rectSignaturePageLinkEntities.bottom
                     anchors.margins: Constants. SIZE_ROW_V_SPACE
                     width: parent.width - entitiesListViewScroll.width - listViewEntities.spacing
-                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    height: Constants.HEIGHT_SIGN_BOTTOM_COMPONENT
 
                     Button {
                         id: buttonRemoveEntityAttributes
                         text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE")
-                        width: 1.4 * Constants.WIDTH_BUTTON
+                        width: Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
@@ -166,14 +168,43 @@ Item {
                     }
                     Button {
                         id: buttonLoadEntityAttributes
-                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON_LOAD")
-                        width: 1.4 * Constants.WIDTH_BUTTON
+                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CC")
+                        width: Constants.WIDTH_BUTTON
+                        height: parent.height
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.capitalization: Font.MixedCase
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        enabled: isAnyEntitySelected()
+                        //For WordWrap
+                        contentItem: Label {
+                            text: buttonLoadEntityAttributes.text
+                            font: buttonLoadEntityAttributes.font
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            wrapMode: Text.WordWrap
+                            textFormat: Text.RichText
+                        }
+                    }
+                    Button {
+                        id: buttonLoadEntityAttributesOAuth
+                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CMD")
+                        width: Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                         anchors.right: parent.right
-                        enabled: false
+                        enabled: isAnyEntitySelected()
+                        //For WordWrap
+                        contentItem: Label {
+                            text: buttonLoadEntityAttributesOAuth.text
+                            font: buttonLoadEntityAttributesOAuth.font
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            wrapMode: Text.WordWrap
+                            textFormat: Text.RichText
+                        }
                     }
                 }
             }
@@ -256,11 +287,11 @@ Item {
                     anchors.top: rectSignaturePageLinkCompanies.bottom
                     anchors.topMargin: Constants. SIZE_ROW_V_SPACE
                     width: parent.width - companiesListViewScroll.width - listViewCompanies.spacing
-                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    height: Constants.HEIGHT_SIGN_BOTTOM_COMPONENT
                     Button {
                         id: buttonRemoveCompanyAttributes
                         text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE")
-                        width: 1.4 * Constants.WIDTH_BUTTON
+                        width: 1 * Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
@@ -270,13 +301,42 @@ Item {
                     }
                     Button {
                         id: buttonLoadCompanyAttributes
-                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_COMPANY_BUTTON_LOAD")
-                        width: 1.4 * Constants.WIDTH_BUTTON
+                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CC")
+                        width: 1 * Constants.WIDTH_BUTTON
+                        height: parent.height
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.capitalization: Font.MixedCase
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        //For WordWrap
+                        contentItem: Label {
+                            text: buttonLoadCompanyAttributes.text
+                            font: buttonLoadCompanyAttributes.font
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            wrapMode: Text.WordWrap
+                            textFormat: Text.RichText
+                        }
+                        enabled: isCardPresent
+                    }
+                    Button {
+                        id: buttonLoadCompanyAttributesOAuth
+                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CMD")
+                        width: 1 * Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                         anchors.right: parent.right
+                        //For WordWrap
+                        contentItem: Label {
+                            text: buttonLoadCompanyAttributesOAuth.text
+                            font: buttonLoadCompanyAttributesOAuth.font
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            wrapMode: Text.WordWrap
+                            textFormat: Text.RichText
+                        }
                     }
                 }
             }

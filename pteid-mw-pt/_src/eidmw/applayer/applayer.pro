@@ -11,6 +11,8 @@ VERSION = $${APPLAYERLIB_MAJ}.$${APPLAYERLIB_MIN}.$${APPLAYERLIB_REV}
 
 message("Compile $$TARGET")
 
+QT += network
+
 ###
 ### Installation setup
 ###
@@ -22,7 +24,7 @@ INSTALLS += target
 ### Compiler setup
 ###
 
-CONFIG -= warn_on qt
+CONFIG -= warn_on
 
 ## destination directory for the compiler
 DESTDIR = ../lib 
@@ -38,7 +40,9 @@ LIBS += -L../lib \
 	    -lopenjp2 \
 	    -lpng \
 	    -lz \
-	    -lzip
+	    -lzip \
+	    -lstdc++
+
 
 !macx: LIBS += -Wl,-R,'../lib'
 LIBS += ../lib/libpteid-poppler.a
@@ -111,7 +115,8 @@ HEADERS += \
 	PNGConverter.h \
 	J2KHelper.h \
 	PDFSignature.h \
-
+	AttributeFactory.h \
+	OAuthAttributes.h
 
 SOURCES += \
 	APLCertif.cpp        \
@@ -145,6 +150,8 @@ SOURCES += \
 	OCSP.cpp \
 	PNGConverter.cpp \
 	J2KHelper.cpp \
+	AttributeFactory.cpp \
+	OAuthAttributes.cpp
 
 # Disable annoying and mostly useless gcc warning
 QMAKE_CXXFLAGS += -Wno-write-strings
