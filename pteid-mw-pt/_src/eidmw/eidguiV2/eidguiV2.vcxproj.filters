@@ -41,7 +41,7 @@
     <ClCompile Include="gapi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-	<ClCompile Include="appcontroller.cpp">
+    <ClCompile Include="appcontroller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ErrorConn.cpp">
@@ -59,7 +59,7 @@
     <ClCompile Include="stdsoap2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-	<ClCompile Include="totp_gen.cpp">
+    <ClCompile Include="totp_gen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="certificates.cpp">
@@ -92,8 +92,11 @@
     <ClCompile Include="SCAP-services-v3\SCAPSignatureServiceSoapBindingProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-	<ClCompile Include="SCAP-services-v3\SCAPAuthorizationServiceSoapBindingProxy.cpp">
+    <ClCompile Include="SCAP-services-v3\SCAPAuthorizationServiceSoapBindingProxy.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SCAP-services-v3\SCAPAttributeClientServiceBindingProxy.cpp">
+      <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -233,6 +236,17 @@
     <None Include="images\tooltip_grey.png" />
     <None Include="contentPages\card\PageCardPrint.qml" />
     <None Include="contentPages\card\PageCardPrintForm.ui.qml" />
+    <None Include="components\DialogCMD.qml" />
+    <None Include="components\PhoneCountriesCodeListModel.qml" />
+    <None Include="components\Link.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsSignSettings.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsSignSettingsForm.ui.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsSCAP.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsSCAPForm.ui.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsDataForm.ui.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsData.qml" />
+    <None Include="contentPages\services\PageServicesSignHelp.qml" />
+    <None Include="contentPages\services\PageServicesSignHelpForm.ui.qml" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="gapi.h">
@@ -253,5 +267,13 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="eidguiV2.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SCAP-services-v3\SCAPAttributeClientServiceBindingProxy.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="credentials.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

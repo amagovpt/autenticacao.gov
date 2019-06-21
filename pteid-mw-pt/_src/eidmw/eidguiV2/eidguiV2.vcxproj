@@ -116,7 +116,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>Cryptui.lib;Crypt32.lib;qtmain.lib;shell32.lib;libeay32.lib;ssleay32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteid-poppler.lib;pteidlib.lib;xsec_1.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_OPENSSL_098_X64)\lib;$(PTEID_DIR_QT_4_X64)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PTEID_XMLSECURITY)\Build\x64\VC10\Release No Xalan;$(PTEID_POPPLER_QT5)\bin\x64;$(PTEID_DIR_OPENSSL_098_X64)\lib;$(PTEID_DIR_QT_4_X64)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -166,7 +166,7 @@ echo "**************************************************************************
     </ClCompile>
     <Link>
       <AdditionalDependencies>qtmain.lib;Crypt32.lib;shell32.lib;ssleay32.lib;libeay32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteid-poppler.lib;pteidDlgsWin32.lib;cmdServices.lib;xsec_1.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_OPENSSL_098)\lib\;$(PTEID_DIR_QT_4)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PTEID_XMLSECURITY)\Build\Win32\VC10\Release No Xalan;$(PTEID_POPPLER_QT5)\bin\win32;$(PTEID_DIR_OPENSSL_098)\lib\;$(PTEID_DIR_QT_4)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -290,6 +290,7 @@ echo "**************************************************************************
     <ClCompile Include="GeneratedFiles\Release\moc_gapi.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_filesavedialog.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp" />
+    <ClCompile Include="SCAP-services-v3\SCAPAttributeClientServiceBindingProxy.cpp" />
     <ClCompile Include="scapcompanies.cpp" />
     <ClCompile Include="SCAP-services-v3\SCAPAttributeSupplierBindingProxy.cpp" />
     <ClCompile Include="SCAP-services-v3\SCAPAuthorizationServiceSoapBindingProxy.cpp" />
@@ -317,6 +318,17 @@ echo "**************************************************************************
   <ItemGroup>
     <None Include="components\Accordion.qml" />
     <None Include="components\Button.qml" />
+    <None Include="components\DialogCMD.qml" />
+    <None Include="components\PhoneCountriesCodeListModel.qml" />
+    <None Include="components\Link.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsData.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsDataForm.ui.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsSCAP.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsSCAPForm.ui.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsSignSettings.qml" />
+    <None Include="contentPages\definitions\PageDefinitionsSignSettingsForm.ui.qml" />
+    <None Include="contentPages\services\PageServicesSignHelp.qml" />
+    <None Include="contentPages\services\PageServicesSignHelpForm.ui.qml" />
     <None Include="images\dummy\CCdemo.png" />
     <None Include="images\dummy\CCdemo_custom.png" />
     <None Include="components\CardRowTop.qml" />
@@ -461,6 +473,10 @@ echo "**************************************************************************
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="credentials.h" />
+    <ClInclude Include="SCAP-services-v3\SCAPAttributeClientServiceBindingProxy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
