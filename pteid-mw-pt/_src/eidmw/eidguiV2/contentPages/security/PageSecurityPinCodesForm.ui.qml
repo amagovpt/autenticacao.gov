@@ -25,6 +25,14 @@ Item {
 
     property alias propertyBusyIndicator: busyIndicator
 
+    property alias propertyTabAuth: tabButtonAuth
+    property alias propertyTabSign: tabButtonSign
+    property alias propertyTabAddr: tabButtonAddress
+    
+    property bool wasOnAuthTab: false
+    property bool wasOnSignTab:false
+    property bool wasOnAddrTab: false
+
     anchors.fill: parent
     Item {
         width: parent.width * 0.8
@@ -52,20 +60,63 @@ Item {
             width: parent.width
             currentIndex: 0
             TabButton {
+                id: tabButtonAuth
                 text: qsTranslate("Popup PIN","STR_PIN_AUTH")
                 rightPadding: 2
                 leftPadding: 2
+                Accessible.role: Accessible.MenuItem
+                Accessible.name: text
+                KeyNavigation.tab: tabButtonSign
+                Keys.onReturnPressed: {
+                    stackLayout.currentIndex = 0
+                    bar.currentIndex = 0
+                    rowAuth.forceActiveFocus()
+                }
+                Keys.onSpacePressed: {
+                    stackLayout.currentIndex = 0
+                    bar.currentIndex = 0
+                    rowAuth.forceActiveFocus()
+                }
             }
             TabButton {
+                id: tabButtonSign
                 text: qsTranslate("Popup PIN","STR_PIN_SIGN")
                 rightPadding: 2
                 leftPadding: 2
+                Accessible.role: Accessible.MenuItem
+                Accessible.name: text
+                KeyNavigation.tab: tabButtonAddress
+                Keys.onReturnPressed: {
+                    stackLayout.currentIndex = 1
+                    bar.currentIndex = 1
+                    rowSign.forceActiveFocus()
+                }
+                Keys.onSpacePressed: {
+                    stackLayout.currentIndex = 1
+                    bar.currentIndex = 1
+                    rowSign.forceActiveFocus()
+                }
             }
             TabButton {
+                id: tabButtonAddress
                 text: qsTranslate("Popup PIN","STR_PIN_ADDRESS")
                 rightPadding: 2
                 leftPadding: 2
+                Accessible.role: Accessible.MenuItem
+                Accessible.name: text
+                KeyNavigation.tab: tabButtonAuth
+                Keys.onReturnPressed: {
+                    stackLayout.currentIndex = 2
+                    bar.currentIndex = 2
+                    rowAddress.forceActiveFocus()
+                }
+                Keys.onSpacePressed: {
+                    stackLayout.currentIndex = 2
+                    bar.currentIndex = 2
+                    rowAddress.forceActiveFocus()
+                }
             }
+            Accessible.role: Accessible.MenuBar
         }
 
         StackLayout {
@@ -85,6 +136,7 @@ Item {
                             + Constants.SIZE_TEXT_V_SPACE
                             + 2 * Constants.SIZE_TEXT_FIELD
                     Text {
+                        id: authText
                         anchors.topMargin: Constants.SIZE_TEXT_BODY
                         font.pixelSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
@@ -93,7 +145,11 @@ Item {
                         width: parent.width
                         color: Constants.COLOR_MAIN_BLUE
                         Layout.fillWidth: true
+                        font.bold: parent.focus ? true : false   
                     }
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: authText.text
+                    KeyNavigation.tab: rowStateAuth
                 }
 
                 Item {
@@ -113,7 +169,13 @@ Item {
                         width: parent.width
                         color: Constants.COLOR_MAIN_BLUE
                         Layout.fillWidth: true
+                        font.bold: parent.focus ? true : false
+                        
                     }
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: triesLeftAuthPin.text
+                    KeyNavigation.tab: buttonTestAuth
+                    
                 }
                 Item {
                     id: rowButtonsAuth
@@ -134,6 +196,9 @@ Item {
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
                             enabled: false
+                            Accessible.role: Accessible.Button
+                            Accessible.name: text
+                            KeyNavigation.tab: buttonModifyAuth
                         }
                     }
                     Item{
@@ -150,9 +215,13 @@ Item {
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
                             enabled: false
+                            Accessible.role: Accessible.Button
+                            Accessible.name: text
+                            KeyNavigation.tab: rowAuth
                         }
                     }
                 }
+                
             }
             Item {
                 id: tabSign
@@ -164,6 +233,7 @@ Item {
                             + Constants.SIZE_TEXT_V_SPACE
                             + 2 * Constants.SIZE_TEXT_FIELD
                     Text {
+                        id: signText
                         anchors.topMargin: Constants.SIZE_TEXT_BODY
                         font.pixelSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
@@ -172,7 +242,11 @@ Item {
                         width: parent.width
                         color: Constants.COLOR_MAIN_BLUE
                         Layout.fillWidth: true
+                        font.bold: parent.focus ? true : false
                     }
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: signText.text
+                    KeyNavigation.tab: rowStateSign
                 }
 
                 Item {
@@ -192,7 +266,11 @@ Item {
                         width: parent.width
                         color: Constants.COLOR_MAIN_BLUE
                         Layout.fillWidth: true
+                        font.bold: parent.focus ? true : false
                     }
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: triesLeftSignPin.text
+                    KeyNavigation.tab: buttonTestSign
                 }
 
                 Item {
@@ -214,6 +292,9 @@ Item {
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
                             enabled: false
+                            Accessible.role: Accessible.Button
+                            Accessible.name: text
+                            KeyNavigation.tab: buttonModifySign
                         }
                     }
                     Item{
@@ -230,6 +311,9 @@ Item {
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
                             enabled: false
+                            Accessible.role: Accessible.Button
+                            Accessible.name: text
+                            KeyNavigation.tab: rowSign
                         }
                     }
                 }
@@ -244,6 +328,7 @@ Item {
                             + Constants.SIZE_TEXT_V_SPACE
                             + 2 * Constants.SIZE_TEXT_FIELD
                     Text {
+                        id: addrText
                         anchors.topMargin: Constants.SIZE_TEXT_BODY
                         font.pixelSize: Constants.SIZE_TEXT_BODY
                         font.family: lato.name
@@ -252,7 +337,11 @@ Item {
                         width: parent.width
                         color: Constants.COLOR_MAIN_BLUE
                         Layout.fillWidth: true
+                        font.bold: parent.focus ? true : false
                     }
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: addrText.text
+                    KeyNavigation.tab: rowStateAddress
                 }
 
                 Item {
@@ -272,7 +361,11 @@ Item {
                         width: parent.width
                         color: Constants.COLOR_MAIN_BLUE
                         Layout.fillWidth: true
+                        font.bold: parent.focus ? true : false
                     }
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: triesLeftAddressPin.text
+                    KeyNavigation.tab: buttonTestAddress
                 }
                 Item {
                     id: rowButtonsAddress
@@ -293,6 +386,9 @@ Item {
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
                             enabled: false
+                            Accessible.role: Accessible.Button
+                            Accessible.name: text
+                            KeyNavigation.tab: buttonModifyAddress
                         }
                     }
                     Item{
@@ -309,6 +405,9 @@ Item {
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
                             enabled: false
+                            Accessible.role: Accessible.Button
+                            Accessible.name: text
+                            KeyNavigation.tab: rowAddress
                         }
                     }
                 }

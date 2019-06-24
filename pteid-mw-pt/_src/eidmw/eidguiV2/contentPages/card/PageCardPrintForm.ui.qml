@@ -20,6 +20,7 @@ Item {
     property alias propertySwitchNotes: switchNotes
     property alias propertySwitchPrintDate: switchPrintDate
     property alias propertySwitchPdfSign: switchPdfSign
+    property alias propertyMainItem: titleSelectData
 
     Item {
         id: rowTop
@@ -76,9 +77,13 @@ Item {
             x: Constants.SIZE_TEXT_FIELD_H_SPACE
             font.pixelSize: Constants.SIZE_TEXT_LABEL
             font.family: lato.name
+            font.bold: titleSelectData.focus ? true : false
             color: Constants.COLOR_TEXT_LABEL
             height: Constants.SIZE_TEXT_LABEL
             text: qsTranslate("PageCardPrint","STR_PRINT_SETTINGS")
+            Accessible.role: Accessible.Grouping
+            Accessible.name: text
+            KeyNavigation.tab: switchBasic
         }
 
         Rectangle {
@@ -92,45 +97,56 @@ Item {
                 id: switchBasic
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 text: qsTranslate("GAPI","STR_BASIC_INFORMATION_UPPERCASE")
+                font.bold: focus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
+                Accessible.role: Accessible.CheckBox
             }
             Switch {
                 id: switchAdditional
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchBasic.bottom
                 text: qsTranslate("GAPI","STR_ADDITIONAL_INFORMATION_UPPERCASE")
+                font.bold: focus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
+                Accessible.role: Accessible.CheckBox
             }
             Switch {
                 id: switchAddress
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchAdditional.bottom
                 text: qsTranslate("GAPI","STR_ADDRESS_UPPERCASE")
+                font.bold: focus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
+                Accessible.role: Accessible.CheckBox
             }
             Switch {
                 id: switchNotes
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchAddress.bottom
                 text: qsTranslate("GAPI","STR_PERSONAL_NOTES_UPPERCASE")
+                font.bold: focus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
+                Accessible.role: Accessible.CheckBox
             }
             Switch {
                 id: switchPrintDate
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchNotes.bottom
                 text: qsTranslate("GAPI","STR_PRINT_DATE")
+                font.bold: focus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
+                KeyNavigation.tab: titleOptions
+                Accessible.role: Accessible.CheckBox
             }
         }
     }
@@ -167,9 +183,13 @@ Item {
             x: Constants.SIZE_TEXT_FIELD_H_SPACE
             font.pixelSize: Constants.SIZE_TEXT_LABEL
             font.family: lato.name
+            font.bold: focus ? true : false
             color: Constants.COLOR_TEXT_LABEL
             height: Constants.SIZE_TEXT_LABEL
             text: qsTranslate("PageCardPrint","STR_PRINT_SIGN_SETTINGS")
+            Accessible.role: Accessible.Grouping
+            Accessible.name: text
+            KeyNavigation.tab: switchPdfSign
         }
 
         Rectangle {
@@ -183,10 +203,13 @@ Item {
                 id: switchPdfSign
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 text: qsTranslate("PageCardPrint","STR_PRINT_SIGN_PDF")
+                font.bold: focus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.capitalization: Font.MixedCase
+                Accessible.role: Accessible.CheckBox
+                KeyNavigation.tab: buttonPrint.enabled ? (buttonPrint) : (buttonPdf.enabled ? buttonPdf : propertyMainItem)
             }
         }
     }
@@ -214,6 +237,7 @@ Item {
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 anchors.horizontalCenter: parent.horizontalCenter
+                KeyNavigation.tab: buttonPdf.enabled ? buttonPdf : titleSelectData
 
             }
         }
@@ -235,6 +259,7 @@ Item {
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 anchors.horizontalCenter: parent.horizontalCenter
+                KeyNavigation.tab: titleSelectData
 
             }
         }

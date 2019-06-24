@@ -1,23 +1,17 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
 
+import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
+
 //Import C++ defined enums
 import eidguiV2 1.0
 
-/* Constants imports */
-import "../../scripts/Constants.js" as Constants
-
 PageDefinitionsSignatureForm {
 
-    Dialog {
-        id: dialog
-        title: qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE")
-        standardButtons: Dialog.Ok
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
-        Label {
-            text: qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE_TEXT")
-        }
+    Keys.onPressed: {
+        console.log("PageDefinitionsSignatureForm onPressed:" + event.key)
+        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
     }
     Connections {
         target: controler
@@ -45,6 +39,7 @@ PageDefinitionsSignatureForm {
             propertySigWaterImg.source = propertySigWaterImgCustom.source = "qrc:/images/pteid_signature_watermark.jpg"
 
             propertyBusyIndicator.running = false
+            propertyRadioButtonDefault.forceActiveFocus()
         }
         onSignalCardAccessError: {
             console.log("Definitions Signature --> onSignalCardAccessError")
@@ -141,7 +136,12 @@ PageDefinitionsSignatureForm {
         }
         onDropped: {
             if(filesArray.length > 1){
-                dialog.open()
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE_MULTI")
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             }else{
                 /*console.log("Adding file: " + filesArray[0])*/
                 var path =  filesArray[0]
@@ -260,6 +260,7 @@ PageDefinitionsSignatureForm {
             fileLoaded = true
             propertyImagePreCustom.source = urlCustomImage
         }
+        propertyRadioButtonDefault.forceActiveFocus()
     }
     function getData(){
         var time = Qt.formatDateTime(new Date(), "yy.MM.dd hh:mm:ss")

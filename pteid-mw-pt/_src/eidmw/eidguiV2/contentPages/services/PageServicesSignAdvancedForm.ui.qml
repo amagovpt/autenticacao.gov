@@ -16,6 +16,7 @@ Item {
     property bool fileLoaded: false
     property bool cardLoaded: false
 
+    property alias propertyMainItem: mainItem
     property alias propertyRectMainRight: rectMainRight
     property alias propertyBusyIndicator: busyIndicator
     property alias propertyPDFPreview: pdfPreviewArea
@@ -29,6 +30,7 @@ Item {
     property alias propertyTextDragMsgListView: textDragMsgListView
     property alias propertyTextDragMsgImg: textDragMsgImg
     property alias propertyListViewFiles: listViewFiles
+    property alias propertyListViewEntities: listViewEntities
     property alias propertyFilesListViewScroll: filesListViewScroll
     property alias propertyButtonAdd: buttonAdd
     property alias propertyButtonRemoveAll: buttonRemoveAll
@@ -78,6 +80,10 @@ Item {
         // BusyIndicator should be on top of all other content
         z: 1
     }
+
+    Accessible.role: Accessible.TitleBar
+    Accessible.name: qsTranslate("PageServicesSign","STR_SIGN_ADVANCED_TITLE")
+    KeyNavigation.tab: buttonAdd
 
     Item {
         id: rowMain
@@ -222,6 +228,9 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        Accessible.role: Accessible.Button
+                        Accessible.name: text
+                        KeyNavigation.tab: buttonRemoveAll
                     }
                     Button {
                         id: buttonRemoveAll
@@ -234,6 +243,9 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        Accessible.role: Accessible.Button
+                        Accessible.name: text
+                        KeyNavigation.tab: radioButtonPADES
                     }
                 }
             }
@@ -334,6 +346,9 @@ Item {
                             enabled: true
                             font.capitalization: Font.MixedCase
                             opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                            Accessible.role: Accessible.RadioButton
+                            Accessible.name: text
+                            KeyNavigation.tab: radioButtonXADES
                             contentItem: Text {
                                 text: radioButtonPADES.text
                                 leftPadding: 22
@@ -378,6 +393,9 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
                             opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                            Accessible.role: Accessible.RadioButton
+                            Accessible.name: text
+                            KeyNavigation.tab: textFieldReason.enabled ? textFieldReason : mainItem
                             contentItem: Text {
                                 text: radioButtonXADES.text
                                 leftPadding: 22
@@ -421,6 +439,9 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
+                        Accessible.role: Accessible.EditableText
+                        Accessible.name: textFieldReason.placeholderText
+                        KeyNavigation.tab: textFieldLocal
                     }
                     TextField {
                         id: textFieldLocal
@@ -433,6 +454,9 @@ Item {
                         enabled: fileLoaded
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        Accessible.role: Accessible.EditableText
+                        Accessible.name: textFieldLocal.placeholderText
+                        KeyNavigation.tab: switchSignTemp
                     }
                     Switch {
                         id: switchSignTemp
@@ -444,6 +468,9 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        KeyNavigation.tab: switchSignAdd
                     }
                     Switch {
                         id: switchSignAdd
@@ -456,6 +483,7 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         z: 1
+                        KeyNavigation.tab: switchSignAdd.checked ? listViewEntities : pdfPreviewArea
                     }
                     Item {
                         id: rectangleEntities
@@ -492,6 +520,8 @@ Item {
                             focus: true
                             spacing: 2
                             boundsBehavior: Flickable.StopAtBounds
+                            highlightMoveDuration: 1000
+                            highlightMoveVelocity: 1000
 
                             ScrollBar.vertical: ScrollBar {
                                 id: attributesListViewScroll
@@ -628,7 +658,6 @@ Item {
                 width: parent.width
                 height: parent.height - titlePre.height - Constants.SIZE_TEXT_V_SPACE
                 enabled: fileLoaded
-                color: "white"
                 anchors.top: titlePre.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
@@ -646,11 +675,21 @@ Item {
                     font.family: lato.name
                     z: 1
                 }
+                Text {
+                    id: usageDescription
+                    text: qsTranslate("PageServicesSign", "STR_SIGN_NAV_DESCRIPTION")
+                    visible: false
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: text
+                    KeyNavigation.tab: pdfPreviewArea
+                }
                 Components.PDFPreview {
-                    anchors.fill: parent
                     id: pdfPreviewArea
+                    width: parent.width
+                    height: parent.height
                     propertyDragSigRect.visible: checkSignShow.checked
                     propertyReducedChecked: checkSignReduced.checked
+                    KeyNavigation.tab: textSpinBox
                 }
             }
 
@@ -715,6 +754,8 @@ Item {
                         editable: checkSignShow.checked
                                   && fileLoaded ? true : false
                         validator: RegExpValidator { regExp: /[1-9][0-9]*/ }
+                        Accessible.ignored: true
+
                         contentItem: TextInput {
                             id: textSpinBox
                             z: 2
@@ -731,6 +772,9 @@ Item {
                             validator: spinBoxControl.validator
                             inputMethodHints: Qt.ImhFormattedNumbersOnly
                             maximumLength: 5 //pages go from 1 to 99999
+                            Accessible.role: Accessible.EditableText
+                            Accessible.name: qsTranslate("PageServicesSign","STR_SIGN_PAGE") + spinBoxControl.value
+                            KeyNavigation.tab: checkLastPage
                         }
 
                         up.indicator: Rectangle {
@@ -792,6 +836,9 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         enabled: fileLoaded && propertyRadioButtonPADES.checked
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        KeyNavigation.tab: checkSignShow
                     }
                 }
             }
@@ -818,6 +865,9 @@ Item {
                         font.capitalization: Font.MixedCase
                         enabled: fileLoaded
                         checked: true
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        KeyNavigation.tab: checkSignReduced
                     }
                 }
                 Item {
@@ -836,6 +886,9 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         enabled: fileLoaded
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        KeyNavigation.tab: button_signCC.enabled ? button_signCC : button_signCMD
                     }
                 }
             }
@@ -860,6 +913,7 @@ Item {
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     anchors.left: parent.left
+                    KeyNavigation.tab: button_signCMD.enabled ? button_signCMD : buttonAdd
                 }
                 Button {
                     id: button_signCMD
@@ -874,6 +928,7 @@ Item {
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     anchors.right: parent.right
+                    KeyNavigation.tab: buttonAdd
                 }
             }
         }

@@ -1,10 +1,18 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
 
+import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
+
 //Import C++ defined enums
 import eidguiV2 1.0
 
 PageDefinitionsDataForm {
+
+    Keys.onPressed: {
+        console.log("PageDefinitionsDataForm onPressed:" + event.key)
+        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+    }
 
     Connections {
         target: gapi
@@ -149,9 +157,13 @@ PageDefinitionsDataForm {
 
     propertyButtonRemoveAppCache {
         onClicked: {
-            console.log("propertyButtonRemoveAppCache clicked");
-            propertyBusyIndicator.running = true;
-            controler.flushCache()
+            console.log("propertyButtonRemoveAppCache clicked" + propertyButtonRemoveAppCache.enabled);
+            if(propertyButtonRemoveAppCache.enabled)
+            {
+                propertyBusyIndicator.running = true;
+                controler.flushCache()
+            }
+
         }
     }
     propertyButtonRemoveSCAPCache {
@@ -162,8 +174,11 @@ PageDefinitionsDataForm {
         }
     }
 
+
     Component.onCompleted: {
+        propertyMainItem.forceActiveFocus()
         updateCacheSize();
+
     }
 
     function updateCacheSize() {

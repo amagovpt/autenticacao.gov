@@ -7,6 +7,7 @@ import "../../components" as Components
 Item {
     property alias propertyTextLinkCC: textLinkCC
     property alias propertyTextVersion: textVersion
+    property alias propertyMainItem: textAppName
 
     anchors.fill: parent
 
@@ -17,16 +18,22 @@ Item {
                 + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
                 * Constants.HEIGHT_HELP_ABOUT_ROW_TOP_INC_RELATIVE
     }
-
+    Item {
+        width: parent.width - 2 * Constants.SIZE_ROW_H_SPACE
+        height: parent.height - 2 * Constants.SIZE_ROW_V_SPACE
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: rowTop.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
     Text {
         id: textAppName
         text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TITLE") + " " + mainWindow.title
         font.pixelSize: Constants.SIZE_TEXT_TITLE
         color: Constants.COLOR_TEXT_TITLE
         font.family: lato.name
-        font.bold: true
-        anchors.top: rowTop.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            font.bold: textAppName.focus ? true : false
+            Accessible.role: Accessible.TitleBar
+            Accessible.name: text
+            KeyNavigation.tab: textDescription
     }
 
     Text {
@@ -34,16 +41,24 @@ Item {
         text: qsTranslate("PageHelpAbout","STR_HELP_TITLE")
         font.pixelSize: Constants.SIZE_TEXT_BODY
         font.family: lato.name
+            font.bold: textDescription.focus ? true : false
         anchors.top: textAppName.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            Accessible.role: Accessible.Row
+            Accessible.name: text
+            KeyNavigation.tab: textVersion
     }
 
     Text {
         id: textVersion
         font.pixelSize: Constants.SIZE_TEXT_BODY
         font.family: lato.name
+            font.bold: textVersion.focus ? true : false
         anchors.top: textDescription.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            Accessible.role: Accessible.Row
+            Accessible.name: text
+            KeyNavigation.tab: textDifficult
     }
 
     Text {
@@ -51,17 +66,25 @@ Item {
         text: qsTranslate("PageHelpAbout","STR_HELP_LINK") + ": "
         font.pixelSize: Constants.SIZE_TEXT_BODY
         font.family: lato.name
+            font.bold: textDifficult.focus ? true : false
         anchors.top: textVersion.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            Accessible.role: Accessible.Row
+            Accessible.name: text
+            KeyNavigation.tab: textLinkCC.propertyText
     }
 
     Components.Link {
         id: textLinkCC
         width: parent.width
         anchors.top: textDifficult.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE 
-        propertyText.text: "<a href='https://www.autenticacao.gov.pt/o-cartao-de-cidadao'>" + 
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            propertyText.text: "<a href='https://www.autenticacao.gov.pt/o-cartao-de-cidadao'>" +
         "https://www.autenticacao.gov.pt/o-cartao-de-cidadao" + "</a>"
+            propertyAccessibleText: qsTranslate("PageHelpAbout","STR_HELP_CC_SELECT")
+            propertyAccessibleDescription:  qsTranslate("PageHelpAbout","STR_HELP_CC_SELECT")
+            propertyLinkUrl: 'https://www.autenticacao.gov.pt/o-cartao-de-cidadao'
+            KeyNavigation.tab: textDevBy
     }
 
     Text {
@@ -69,8 +92,12 @@ Item {
         text: qsTranslate("PageHelpAbout","STR_HELP_DEV_BY")
         font.pixelSize: Constants.SIZE_TEXT_BODY
         font.family: lato.name
+            font.bold: textDevBy.focus ? true : false
         anchors.top: textLinkCC.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            Accessible.role: Accessible.Row
+            Accessible.name: text
+            KeyNavigation.tab: textDevByAgency
     }
 
     Text {
@@ -78,10 +105,14 @@ Item {
         text: qsTranslate("PageHelpAbout","STR_HELP_DEV_AGENCY")
         font.pixelSize: Constants.SIZE_TEXT_BODY
         font.family: lato.name
+            font.bold: textDevByAgency.focus ? true : false
         anchors.top: textDevBy.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
         width: parent.width
         wrapMode: Text.Wrap
+            Accessible.role: Accessible.Row
+            Accessible.name: text
+            KeyNavigation.tab: propertyMainItem
     }
 
     Image {
@@ -103,5 +134,6 @@ Item {
         source: "../../images/logo_compete2020.png"
         anchors.top: imageCC.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+    }
     }
 }

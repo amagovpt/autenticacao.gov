@@ -3,11 +3,17 @@ import QtQuick.Controls 2.1
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
 
 //Import C++ defined enums
 import eidguiV2 1.0
 
 PageDefinitionsAppForm {
+
+    Keys.onPressed: {
+        console.log("PageDefinitionsAppForm onPressed:" + event.key)
+        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+    }
 
     Connections {
         target: gapi
@@ -47,7 +53,7 @@ PageDefinitionsAppForm {
             if (propertyRadioButtonUK.checked)
                 controler.setGuiLanguageString("en")
             // Update submenu
-            mainFormID.state = "STATE_NORMAL"
+            mainFormID.state = Constants.MenuState.NORMAL
             mainFormID.propertySubMenuListView.model.clear()
             for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
                 /*console.log("Sub Menu indice " + i + " - "
@@ -71,7 +77,7 @@ PageDefinitionsAppForm {
             if (propertyRadioButtonPT.checked)
                 controler.setGuiLanguageString("nl")
             // Update submenu
-            mainFormID.state = "STATE_NORMAL"
+            mainFormID.state = Constants.MenuState.NORMAL
             mainFormID.propertySubMenuListView.model.clear()
             for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
                 /*console.log("Sub Menu indice " + i + " - "
@@ -136,6 +142,7 @@ PageDefinitionsAppForm {
                               propertyTextFieldPort.text = ""
                           }
     }
+
     Connections {
         target: propertyTextFieldAdress
         onEditingFinished: {
@@ -226,6 +233,7 @@ PageDefinitionsAppForm {
         propertyTextFieldAutPass.text = controler.getProxyPwdValue()
 
         console.log("Page definitions onCompleted finished")
+        propertyTextReader.forceActiveFocus()
     }
     function updateGraphicsTextField(){
         propertyGraphicsTextField.text = qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT")  + " : "

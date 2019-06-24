@@ -1,6 +1,8 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
+
 import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
 
 //Import C++ defined enums
 import eidguiV2 1.0
@@ -8,6 +10,11 @@ import eidguiV2 1.0
 PageCardPrintForm {
 
     property string outputFile : ""
+
+    Keys.onPressed: {
+        console.log("PageCardPrintForm onPressed:" + event.key)
+        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+    }
 
     Dialog {
         id: createsuccess_dialog
@@ -138,6 +145,7 @@ PageCardPrintForm {
         onSignalCardDataChanged: {
             console.log("Data Card Print --> Data Changed")
             propertyBusyIndicator.running = false
+
             propertySwitchBasic.enabled = true
             propertySwitchAdditional.enabled = true
             propertySwitchAddress.enabled = true
@@ -145,12 +153,16 @@ PageCardPrintForm {
             propertySwitchPrintDate.enabled = true
             propertySwitchPdfSign.enabled = true
 
+            propertySwitchBasic.forceActiveFocus()
+
             propertySwitchBasic.checked = false
             propertySwitchAdditional.checked = false
             propertySwitchAddress.checked = false
             propertySwitchNotes.checked = false
             propertySwitchPrintDate.checked = false
             propertySwitchPdfSign.checked = false
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
+            propertyMainItem.forceActiveFocus()
         }
         onSignalCardAccessError: {
             console.log("Card Print Page onSignalCardAccessError")
@@ -245,12 +257,9 @@ PageCardPrintForm {
         onAccepted: {
 
             outputFile = propertyFileDialogOutput.fileUrl.toString()
-            if (Qt.platform.os === "windows") {
-                outputFile = outputFile.replace(/^(file:\/{3})|(file:)|(qrc:\/{3})|(http:\/{3})/,"")
-            }else{
-                outputFile = outputFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-            }
-
+            console.log("Output filename on Accepted: " + outputFile)
+            
+            outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
             /*console.log("Output filename: " + outputFile)*/
             gapi.startPrintPDF(outputFile,
                                propertySwitchBasic.checked,

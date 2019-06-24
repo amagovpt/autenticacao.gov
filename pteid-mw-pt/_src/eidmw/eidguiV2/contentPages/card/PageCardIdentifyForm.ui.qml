@@ -25,7 +25,6 @@ Item {
     property alias propertyTextBoxNotes: textBoxNotes
     property alias propertyPhoto: photoImage
 
-
     Item {
         id: rowTop
         width: parent.width
@@ -67,6 +66,7 @@ Item {
                     propertyRectField.height: parent.height
                     propertyDateField.wrapMode: Text.WordWrap
                 }
+                KeyNavigation.tab: textBoxSurName
             }
             Item{
                 id: surNameTextTextForm
@@ -82,6 +82,7 @@ Item {
                     propertyRectField.height: parent.height
                     propertyDateField.wrapMode: Text.WordWrap
                 }
+                KeyNavigation.tab: photoImage
             }
         }
 
@@ -92,6 +93,8 @@ Item {
             anchors.left: rectNamePhotoLeft.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.bottom: parent.bottom
+
+
 
             DropShadow {
                 anchors.fill: rectPhotoField
@@ -116,15 +119,23 @@ Item {
                 id: rectPhotoField
                 width: parent.width
                 height: parent.height
-                color: "white"
+                border.width: photoImage.focus ? 2 : 0
+                border.color: photoImage.focus ? Constants.COLOR_GREY_BUTTON_BACKGROUND
+                                                   : Constants.COLOR_MAIN_SOFT_GRAY
                 Image {
                     id: photoImage
-                    height: parent.height
+                    width: parent.width - 2
+                    height: parent.height - 2
+                    x: 1
+                    y: 1
                     fillMode: Image.PreserveAspectFit
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
                     antialiasing: true
                     cache: false
+                    Accessible.role: Accessible.Graphic
+                    Accessible.name: qsTranslate("GAPI","STR_PHOTO")
+                    KeyNavigation.tab: textBoxSex
                 }
             }
         }
@@ -133,78 +144,86 @@ Item {
     Item {
         id: rowSex
         width: parent.width
-        height: Constants.SIZE_TEXT_LABEL
-                + Constants.SIZE_TEXT_V_SPACE
-                + 2 * Constants.SIZE_TEXT_FIELD
+        height: Constants.HEIGHT_TEXT_BOX
         anchors.top: rowNamePhoto.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
         Item{
             id: rectSex
             width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE ) * 0.20
+            height: parent.height
             Components.LabelTextBoxForm{
                 id: textBoxSex
                 propertyDateText.text: qsTranslate("GAPI","STR_GENDER")
             }
+            KeyNavigation.tab: textBoxHeight
         }
         Item{
             id: rectHeight
             width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE ) * 0.20
+            height: parent.height
             anchors.left: rectSex.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
                 id: textBoxHeight
                 propertyDateText.text: qsTranslate("GAPI","STR_HEIGHT")
             }
+            KeyNavigation.tab: textBoxNacionality
         }
         Item{
             id: rectNacionality
             width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE ) * 0.20
+            height: parent.height
             anchors.left: rectHeight.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
                 id: textBoxNacionality
                 propertyDateText.text: qsTranslate("GAPI","STR_NATIONALITY")
             }
+            KeyNavigation.tab: textBoxDateOfBirth
         }
         Item{
             id: rectDateOfBirth
             width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE ) * 0.40
+            height: parent.height
             anchors.left: rectNacionality.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
                 id: textBoxDateOfBirth
                 propertyDateText.text: qsTranslate("GAPI","STR_DATE_OF_BIRTH")
             }
+            KeyNavigation.tab: textBoxDocumentNum
         }
     }
 
     Item {
         id: rowDocumentMum
         width: parent.width
-        height: Constants.SIZE_TEXT_LABEL
-                + Constants.SIZE_TEXT_V_SPACE
-                + 2 * Constants.SIZE_TEXT_FIELD
+        height: Constants.HEIGHT_TEXT_BOX
         anchors.top: rowSex.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
         Item{
             id: rectDocumentNum
             width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
+            height: parent.height
             Components.LabelTextBoxForm{
                 id: textBoxDocumentNum
                 propertyDateText.text: qsTranslate("GAPI","STR_DOCUMENT_NUMBER")
             }
+            KeyNavigation.tab: textBoxExpirydate
         }
         Item{
             id: rectExpiryDate
             width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
+            height: parent.height
             anchors.left: rectDocumentNum.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm{
                 id: textBoxExpirydate
                 propertyDateText.text: qsTranslate("GAPI","STR_VALIDITY_DATE")
             }
+            KeyNavigation.tab: textBoxCountry
         }
     }
 
@@ -220,10 +239,12 @@ Item {
         Item{
             id: rectCountry
             width: parent.width
+            height: parent.height
             Components.LabelTextBoxForm{
                 id: textBoxCountry
                 propertyDateText.text: qsTranslate("GAPI","STR_COUNTRY")
             }
+            KeyNavigation.tab: textBoxParentsFather
         }
     }
 
@@ -239,47 +260,45 @@ Item {
         Item{
             id: rectParentsFather
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL
-                    + Constants.SIZE_TEXT_V_SPACE
-                    + 2 * Constants.SIZE_TEXT_FIELD
+            height: Constants.HEIGHT_TEXT_BOX
             Components.LabelTextBoxForm{
                 id: textBoxParentsFather
                 propertyDateText.text: qsTranslate("GAPI","STR_AFFILIATION")
             }
+            KeyNavigation.tab: textBoxParentsMother
         }
         Item{
             id: rectParentsMother
             width: parent.width
-            height: + 2 * Constants.SIZE_TEXT_V_SPACE
-                    + 2 * Constants.SIZE_TEXT_FIELD
+            height: Constants.HEIGHT_TEXT_BOX
             anchors.top :rectParentsFather.bottom
             Components.LabelTextBoxForm{
                 id: textBoxParentsMother
+                propertyDateText.text: qsTranslate("GAPI","STR_AFFILIATION")
+                propertyDateText.visible: false
                 propertyDateText.height: 0
                 propertyRectField.anchors.topMargin: 2 * Constants.SIZE_TEXT_V_SPACE
             }
+            KeyNavigation.tab: textBoxNotes
         }
     }
 
     Item {
         id: rowNotes
         width: parent.width
-        height: Constants.SIZE_TEXT_LABEL
-                + Constants.SIZE_TEXT_V_SPACE
-                + 2 * Constants.SIZE_TEXT_FIELD
+        height: Constants.HEIGHT_TEXT_BOX
         anchors.top: rowParents.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
         Item{
             id: rectNotes
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL
-                    + Constants.SIZE_TEXT_V_SPACE
-                    + 2 * Constants.SIZE_TEXT_FIELD
+            height: parent.height
             Components.LabelTextBoxForm{
                 id: textBoxNotes
                 propertyDateText.text: qsTranslate("GAPI","STR_NOTES")
             }
+            KeyNavigation.tab: textBoxName
         }
     }
 }

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.1
 
 /* Constants imports */
 import "../scripts/Constants.js" as Constants
+import "../scripts/Functions.js" as Functions
 
 Item {       
     y: parent.height * 0.5 - dialogSignCMD.height * 0.5
@@ -14,6 +15,7 @@ Item {
             progressBarIndeterminate.visible = false
             rectReturnCode.visible = true
             buttonCMDProgressConfirm.visible = true
+            textFieldReturnCode.forceActiveFocus()
         }
         onSignalCloseCMDSucess: {
             console.log("Signal Close CMD Sucess")
@@ -121,6 +123,7 @@ Item {
                     visible: true
                     anchors.left: textPinCurrent.right
                     anchors.bottom: parent.bottom
+                    focus: true
                     onCurrentIndexChanged: {
                         if(comboBoxIndicative.currentIndex >= 0){
                             propertyPageLoader.propertyBackupMobileIndicatorIndex = comboBoxIndicative.currentIndex
@@ -378,6 +381,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             y: 190
             Button {
+                id: closeButton
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CANCEL")
@@ -408,6 +412,9 @@ Item {
                     signCMDConfirm()
                 }
             }
+        }
+        onOpened: {
+            closeButton.forceActiveFocus()
         }
         onRejected:{
             // Reject CMD Popup's only with ESC key
@@ -442,7 +449,7 @@ Item {
         else {
             outputFile = propertyFileDialogBatchCMDOutput.fileUrl.toString()
         }
-        outputFile = decodeURIComponent(stripFilePrefix(outputFile))
+        outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
 
         var page = 1
         if(propertyCheckLastPage.checked) {
@@ -512,7 +519,6 @@ Item {
         buttonCMDProgressConfirm.visible = false
         buttonCMDProgressConfirm.text = qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
         dialogCMDProgress.open()
-        textFieldReturnCode.focus = true
     }
     function signCMDConfirm(){
         /*console.log("Send sms_token : " + textFieldReturnCode.text)*/

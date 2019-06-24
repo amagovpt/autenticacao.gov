@@ -106,6 +106,7 @@ Item {
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_ENTITY")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textAuth
             }
             Item{
                 id: rectAuth
@@ -120,6 +121,7 @@ Item {
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_ENTITY_ISSUER")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textValid
             }
             Item{
                 id: rectValid
@@ -134,6 +136,7 @@ Item {
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_VALID_FROM")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textUntil
             }
             Item{
                 id: rectUntil
@@ -148,6 +151,7 @@ Item {
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_VALID_UNTIL")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textKey
             }
             Item{
                 id: rectKey
@@ -162,6 +166,7 @@ Item {
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_KEY_SIZE")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textStatus
             }
             Item{
                 id: rectStatus
@@ -177,6 +182,7 @@ Item {
                     //"Estado do certificado"
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textEntity
             }
         }
     }

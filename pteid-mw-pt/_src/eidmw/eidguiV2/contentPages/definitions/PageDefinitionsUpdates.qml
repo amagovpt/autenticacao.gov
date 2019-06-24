@@ -1,10 +1,18 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
 
+import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
+
 //Import C++ defined enums
 import eidguiV2 1.0
 
 PageDefinitionsUpdatesForm {
+    Keys.onPressed: {
+        console.log("PageDefinitionsUpdatesForm onPressed:" + event.key)
+        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+    }
+
     Connections {
         target: controler
         onSignalAutoUpdateFail: {
@@ -44,6 +52,7 @@ PageDefinitionsUpdatesForm {
             propertyReleaseScrollViewText.visible = false
             propertyInstalledVersion.visible = false
             propertyRemoteVersion.visible = false
+            propertyTextDescription.forceActiveFocus()
         }
         onSignalAutoUpdateProgress: {
             propertyProgressBar.indeterminate = false
@@ -58,6 +67,8 @@ PageDefinitionsUpdatesForm {
             if (release_notes != ""){
                 propertyReleaseNoteScrollView.visible = true
                 propertyReleaseScrollViewText.text = release_notes
+                propertyReleaseScrollViewText.Accessible.name =
+                        Functions.filterText(propertyReleaseScrollViewText.text)
                 propertyReleaseScrollViewText.visible = true
                 propertyTextDescription.text = qsTranslate("PageDefinitionsUpdates","STR_UPDATE_AVAILABLE")
                 propertyInstalledVersion.propertyDateField.text = installed_version
@@ -94,6 +105,7 @@ PageDefinitionsUpdatesForm {
     propertyButtonSearch {
         onClicked: {
             console.log("propertyButtonSearch clicked")
+            propertyTextDescription.forceActiveFocus()
             propertyButtonStartUpdate.visible = false
             propertyProgressBar.indeterminate = true
             propertyProgressBar.visible = true
@@ -106,6 +118,7 @@ PageDefinitionsUpdatesForm {
     propertyButtonStartUpdate {
         onClicked: {
             console.log("propertyButtonStartUpdate clicked")
+            propertyTextDescription.forceActiveFocus()
             propertyProgressBar.visible = true
             propertyProgressBar.indeterminate = false
             propertyButtonSearch.visible = false
@@ -119,6 +132,12 @@ PageDefinitionsUpdatesForm {
             propertyProgressBar.visible = false
             propertyButtonSearch.visible = true
             controler.userCancelledUpdateDownload()
+            propertyTextDescription.forceActiveFocus()
         }
+    }
+    Component.onCompleted: {
+        console.log("Page definitionsUpdate onCompleted")
+        propertyMainItem.forceActiveFocus()
+        console.log("Page definitionsUpdate onCompleted finished")
     }
 }

@@ -7,6 +7,7 @@ import "../../components" as Components
 
 Item {
     anchors.fill: parent
+    property alias propertyMainItem: textTitle
     property alias propertyTextSubTitle: textSubTitle
     property alias propertyTextAutenticacaoGovLink: autenticacaoGovLink
 
@@ -27,24 +28,39 @@ Item {
             id: textTitle
             font.pixelSize: Constants.SIZE_TEXT_TITLE
             font.family: lato.name
-            text: qsTranslate("PageServicesSign","STR_SIGN_HELP_TITLE")
-            font.bold: true
+            text: qsTranslate("PageServicesSign", "STR_SIGN_HELP_TITLE")
+            font.bold: textTitle.focus ? true : false
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
             color: Constants.COLOR_TEXT_TITLE
             Layout.fillWidth: true
+            Accessible.role: Accessible.TitleBar
+            Accessible.name: text
+            KeyNavigation.tab: textSubTitle.propertyText
         }
-        Components.Link { 
+        Components.Link {
             id: textSubTitle
             anchors.top: textTitle.bottom
             anchors.topMargin: Constants.SIZE_TEXT_BODY
-            propertyText.text: qsTranslate("PageServicesSign","STR_SIGN_HELP_SUB_TITLE") + " " +
-            "<a href='https://www.autenticacao.gov.pt/cmd-pedido-chave'>" 
-                + qsTranslate("PageServicesSign","STR_SIGN_HELP_CMD_LINK")
+            propertyText.text: qsTranslate("PageServicesSign",
+                                           "STR_SIGN_HELP_SUB_TITLE") + " "
+                               + "<a href='https://www.autenticacao.gov.pt/cmd-pedido-chave'>"
+                               + qsTranslate("PageServicesSign",
+                                             "STR_SIGN_HELP_CMD_LINK")
             propertyText.width: parent.width
             propertyText.wrapMode: Text.Wrap
             Layout.fillWidth: true
+            propertyAccessibleText: qsTranslate(
+                                        "PageServicesSign",
+                                        "STR_SIGN_HELP_SUB_TITLE") + qsTranslate(
+                                        "PageServicesSign",
+                                        "STR_SIGN_HELP_CMD_LINK")
+            propertyAccessibleDescription: qsTranslate(
+                                        "PageServicesSign",
+                                        "STR_SIGN_HELP_CMD_SELECT")
+            propertyLinkUrl: 'https://www.autenticacao.gov.pt/cmd-pedido-chave'
+            KeyNavigation.tab: textTopic1
         }
         Text {
             id: textTopic1
@@ -52,24 +68,40 @@ Item {
             anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            text: qsTranslate("PageServicesSign","STR_SIGN_HELP_TOPIC_1")
+            font.bold: focus ? true : false
+            text: qsTranslate("PageServicesSign", "STR_SIGN_HELP_TOPIC_1")
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
             color: Constants.COLOR_TEXT_BODY
             Layout.fillWidth: true
+            Accessible.role: Accessible.Row
+            Accessible.name: text
+            KeyNavigation.tab: autenticacaoGovLink.propertyText
         }
 
-         Components.Link { 
+        Components.Link {
             id: autenticacaoGovLink
             anchors.top: textTopic1.bottom
             anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
-            propertyText.text: qsTranslate("PageServicesSign","STR_SIGN_HELP_TOPIC_2")
-                  + "<a href='https://www.autenticacao.gov.pt'>"
-                  + " " + qsTranslate("PageServicesSign","STR_SIGN_HELP_AUTENTICACAO.GOV_LINK")
+            propertyText.text: qsTranslate("PageServicesSign",
+                                           "STR_SIGN_HELP_TOPIC_2")
+                               + "<a href='https://www.autenticacao.gov.pt'>" + " " + qsTranslate(
+                                   "PageServicesSign",
+                                   "STR_SIGN_HELP_AUTENTICACAO.GOV_LINK")
             propertyText.width: parent.width
             propertyText.wrapMode: Text.Wrap
             Layout.fillWidth: true
+            propertyAccessibleText: qsTranslate(
+                                        "PageServicesSign",
+                                        "STR_SIGN_HELP_TOPIC_2") + qsTranslate(
+                                        "PageServicesSign",
+                                        "STR_SIGN_HELP_AUTENTICACAO.GOV_LINK")
+            propertyAccessibleDescription: qsTranslate(
+                                        "PageServicesSign",
+                                        "STR_SIGN_HELP_AUTENTICACAO.GOV_SELECT")
+            propertyLinkUrl: 'https://www.autenticacao.gov.pt'
+            KeyNavigation.tab: mainFormID.propertySubMenuListView
         }
     }
 }

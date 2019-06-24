@@ -64,12 +64,11 @@ Item {
         Item {
             id: rowForeignCountry
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 2
-                    * Constants.SIZE_TEXT_FIELD
-
+            height: Constants.HEIGHT_TEXT_BOX
             Item {
                 id: rectForeignCountry
                 width: parent.width
+                height: parent.height
                 Components.LabelTextBoxForm {
                     id: textBoxForeignCountry
                     propertyDateText.text: qsTranslate("GAPI","STR_FOREIGN_COUNTRY")
@@ -80,14 +79,14 @@ Item {
         Item {
             id: rowForeignAddress
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 2
-                    * Constants.SIZE_TEXT_FIELD
+            height: Constants.HEIGHT_TEXT_BOX
             anchors.top: rowForeignCountry.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
             Item {
                 id: rectForeignAddress
                 width: parent.width
+                height: parent.height
                 Components.LabelTextBoxForm {
                     id: textBoxForeignAddress
                     propertyDateText.text: qsTranslate("GAPI","STR_FOREIGN_ADDRESS")
@@ -98,14 +97,14 @@ Item {
         Item {
             id: rowForeignCity
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 2
-                    * Constants.SIZE_TEXT_FIELD
+            height: Constants.HEIGHT_TEXT_BOX
             anchors.top: rowForeignAddress.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
             Item {
                 id: rectForeignCity
                 width: parent.width
+                height: parent.height
                 Components.LabelTextBoxForm {
                     id: textBoxForeignCity
                     propertyDateText.text: qsTranslate("GAPI","STR_FOREIGN_CITY")
@@ -116,14 +115,14 @@ Item {
         Item {
             id: rowForeignRegion
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 2
-                    * Constants.SIZE_TEXT_FIELD
+            height: Constants.HEIGHT_TEXT_BOX
             anchors.top: rowForeignCity.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
             Item {
                 id: rectForeignRegion
                 width: parent.width
+                height: parent.height
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 Components.LabelTextBoxForm {
                     id: textBoxForeignRegion
@@ -136,14 +135,14 @@ Item {
         Item {
             id: rowForeignLocality
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 2
-                    * Constants.SIZE_TEXT_FIELD
+           height: Constants.HEIGHT_TEXT_BOX
             anchors.top: rowForeignRegion.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
             Item {
                 id: rectForeignLocality
                 width: parent.width
+                height: parent.height
                 Components.LabelTextBoxForm {
                     id: textBoxForeignLocality
                     propertyDateText.text: qsTranslate("GAPI","STR_FOREIGN_LOCALITY")
@@ -155,14 +154,14 @@ Item {
         Item {
             id: rowForeignPostalCode
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 2
-                    * Constants.SIZE_TEXT_FIELD
+            height: Constants.HEIGHT_TEXT_BOX
             anchors.top: rowForeignLocality.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
             Item {
                 id: rectForeignPostalCode
                 width: parent.width
+                height: parent.height
                 Components.LabelTextBoxForm {
                     id: textBoxForeignPostalCode
                     propertyDateText.text: qsTranslate("GAPI","STR_FOREIGN_POSTAL_CODE")
@@ -183,76 +182,81 @@ Item {
         Item {
             id: rowNacionalDistrict
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 2
-                    * Constants.SIZE_TEXT_FIELD
+            height: Constants.HEIGHT_TEXT_BOX
 
             Item {
                 id: rectNacionalDistrict
                 width: parent.width
+                height: parent.height
                 Components.LabelTextBoxForm {
                     id: textBoxDistrict
                     propertyDateText.text: qsTranslate("GAPI","STR_DISTRICT")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textBoxMunicipality
             }
         }
         Item {
             id: rowMunicipality
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 2
-                    * Constants.SIZE_TEXT_FIELD
+            height: Constants.HEIGHT_TEXT_BOX
             anchors.top: rowNacionalDistrict.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
             Item {
                 id: rectMunicipality
                 width: parent.width
+                height: parent.height
                 Components.LabelTextBoxForm {
                     id: textBoxMunicipality
                     propertyDateText.text: qsTranslate("GAPI","STR_MUNICIPALITY")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textBoxParish
             }
         }
         Item {
             id: rowCivilParish
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 2
-                    * Constants.SIZE_TEXT_FIELD
+            height: Constants.HEIGHT_TEXT_BOX
             anchors.top: rowMunicipality.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
             Item {
                 id: rectCivilParish
                 width: parent.width
+                height: parent.height
                 Components.LabelTextBoxForm {
                     id: textBoxParish
                     propertyDateText.text: qsTranslate("GAPI","STR_CIVIL_PARISH")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textBoxStreetType
             }
         }
         Item {
             id: rowAbbreviationStreetType
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 2
-                    * Constants.SIZE_TEXT_FIELD
+            height: Constants.HEIGHT_TEXT_BOX
             anchors.top: rowCivilParish.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
             Item {
                 id: rectStreetType
                 width: (parent.width - Constants.SIZE_ROW_H_SPACE) * 0.15
+                height: parent.height
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 Components.LabelTextBoxForm {
                     id: textBoxStreetType
                     propertyDateText.text: qsTranslate("GAPI","STR_STREET_TYPE")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textBoxStreetName
             }
             Item {
                 id: rectStreetName
                 width: (parent.width - Constants.SIZE_ROW_H_SPACE) * 0.85
+                height: parent.height
                 anchors.left: rectStreetType.right
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 Components.LabelTextBoxForm {
@@ -260,29 +264,32 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_STREET_NAME")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textBoxDoorNo
             }
         }
 
         Item {
             id: rowDoorNo
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 2
-                    * Constants.SIZE_TEXT_FIELD
+            height: Constants.HEIGHT_TEXT_BOX
             anchors.top: rowAbbreviationStreetType.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
             Item {
                 id: rectDoorNo
                 width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE) * 0.33
+                height: parent.height
                 Components.LabelTextBoxForm {
                     id: textBoxDoorNo
                     propertyDateText.text: qsTranslate("GAPI","STR_HOUSE_BUILDING_NUM")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textBoxFloor
             }
             Item {
                 id: rectFloor
                 width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE) * 0.33
+                height: parent.height
                 anchors.left: rectDoorNo.right
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 Components.LabelTextBoxForm {
@@ -290,10 +297,12 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_FLOOR")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textBoxSide
             }
             Item {
                 id: rectSide
                 width: (parent.width - 2 * Constants.SIZE_ROW_H_SPACE) * 0.34
+                height: parent.height
                 anchors.left: rectFloor.right
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 Components.LabelTextBoxForm {
@@ -301,28 +310,31 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_SIDE")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textBoxPlace
             }
         }
         Item {
             id: rowPlace
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 2
-                    * Constants.SIZE_TEXT_FIELD
+            height: Constants.HEIGHT_TEXT_BOX
             anchors.top: rowDoorNo.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
             Item {
                 id: rectPlace
                 width: (parent.width - Constants.SIZE_ROW_H_SPACE) * 0.50
+                height: parent.height
                 Components.LabelTextBoxForm {
                     id: textBoxPlace
                     propertyDateText.text: qsTranslate("GAPI","STR_PLACE")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textBoxLocality
             }
             Item {
                 id: rectLocality
                 width: (parent.width - Constants.SIZE_ROW_H_SPACE) * 0.50
+                height: parent.height
                 anchors.left: rectPlace.right
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 Components.LabelTextBoxForm {
@@ -330,24 +342,27 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_LOCALITY")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textBoxZip4
             }
         }
         Item {
             id: rowZip4
             width: parent.width
-            height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 2
-                    * Constants.SIZE_TEXT_FIELD
+            height: Constants.HEIGHT_TEXT_BOX
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             anchors.top: rowPlace.bottom
 
             Item {
                 id: rectZip4
                 width: 50
+                height: parent.height
                 Components.LabelTextBoxForm {
                     id: textBoxZip4
                     propertyDateText.text: qsTranslate("GAPI","STR_ZIP_CODE")
                     propertyDateField.text: ""
+                    text: propertyDateField.text + textBoxZip3.propertyDateField.text
                 }
+                KeyNavigation.tab: textBoxPostalLocality
             }
             Item {
                 id: textIfen
@@ -366,6 +381,7 @@ Item {
             Item {
                 id: rectZip3
                 width: 40
+                height: parent.height
                 anchors.left: textIfen.right
                 anchors.leftMargin: 5
                 Components.LabelTextBoxForm {
@@ -373,11 +389,13 @@ Item {
                     propertyDateText.text: ""
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: textBoxPostalLocality
             }
             Item {
                 id: rectPostalLocality
                 width: parent.width - 2 * Constants.SIZE_ROW_H_SPACE
                        - rectZip4.width - rectZip3.width - textIfen.width + 10
+                height: parent.height
                 anchors.left: rectZip3.right
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 Components.LabelTextBoxForm {
@@ -385,6 +403,7 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_POSTAL_LOCALITY")
                     propertyDateField.text: ""
                 }
+                KeyNavigation.tab: rectConfirmationOfAddressText
             }
         }
     }
@@ -409,9 +428,13 @@ Item {
                 font.capitalization: Font.MixedCase
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
+                font.bold: parent.focus ? true : false
                 color: Constants.COLOR_TEXT_LABEL
                 wrapMode: Text.WordWrap
             }
+            Accessible.role: Accessible.Row
+            Accessible.name: dateField.text
+            KeyNavigation.tab: buttonConfirmOfAddress
         }
         Item {
             id: rectConfirmationOfAddressButton
@@ -429,6 +452,8 @@ Item {
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 enabled: false
+                focus: true
+                KeyNavigation.tab: textBoxDistrict
             }
         }
     }

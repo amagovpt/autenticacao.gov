@@ -1,11 +1,18 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
+
 import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
 
 //Import C++ defined enums
 import eidguiV2 1.0
 
 PageCardIdentifyForm {
+
+    Keys.onPressed: {
+        console.log("PageCardIdentifyForm onPressed:" + event.key)
+        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+    }
 
     Connections {
         target: gapi
@@ -23,7 +30,7 @@ PageCardIdentifyForm {
             propertyTextBoxSex.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Sex)
             propertyTextBoxHeight.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Height)
 
-                     
+
             propertyTextBoxNacionality.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Nationality)
             propertyTextBoxDateOfBirth.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Birthdate)
             propertyTextBoxDocumentNum.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Documentnum)
@@ -36,10 +43,12 @@ PageCardIdentifyForm {
             propertyPhoto.cache = false
             propertyPhoto.source = "image://myimageprovider/photo.png"
             propertyBusyIndicator.running = false
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
+            propertyTextBoxName.forceActiveFocus()
         }
         onSignalCardAccessError: {
             console.log("Card Identify Page onSignalCardAccessError")
-           
+
             if (error_code == GAPI.NoReaderFound) {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                         qsTranslate("Popup Card","STR_POPUP_ERROR")
@@ -64,7 +73,7 @@ PageCardIdentifyForm {
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
             }
-			else if (error_code == GAPI.CardPinTimeout) {
+            else if (error_code == GAPI.CardPinTimeout) {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                         qsTranslate("Popup Card","STR_POPUP_ERROR")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
@@ -78,7 +87,7 @@ PageCardIdentifyForm {
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
-            
+
 
             propertyTextBoxName.propertyDateField.text = ""
             propertyTextBoxSurName.propertyDateField.text = ""

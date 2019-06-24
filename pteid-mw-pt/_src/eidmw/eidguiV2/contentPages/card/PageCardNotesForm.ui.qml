@@ -4,8 +4,8 @@ import QtGraphicalEffects 1.0
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
 import "../../components" as Components
-
 
 Item {
     anchors.fill: parent
@@ -16,7 +16,8 @@ Item {
     property alias propertySaveNotes: saveNotes
     property alias propertyMouseAreaFlickable: mouseAreaFlickable
     property alias propertyProgressBar: progressBar
-
+    property alias propertyMainItem: notesText
+    property string progressBarText: ""
 
     Item {
         id: rowTop
@@ -25,7 +26,7 @@ Item {
                 + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
                 * Constants.HEIGHT_CARD_NOTES_ROW_TOP_INC_RELATIVE
         Components.CardRowTop{}
-    }
+        }
 
     BusyIndicator {
         id: busyIndicator
@@ -42,31 +43,41 @@ Item {
         anchors.top: rowTop.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
-        Rectangle{
+        Rectangle {
             id: rectText
             width: parent.width
             height: parent.height
             opacity: 1
+
             Text {
                 id: notesText
-                text: qsTranslate("PageCardNotes","STR_NOTES_PAGE")
+                text: qsTranslate("PageCardNotes", "STR_NOTES_PAGE")
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: notesText.focus ? true : false
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
+                Accessible.role: Accessible.Column
+                Accessible.name: text
+                KeyNavigation.tab: notesTextDescription
             }
             Text {
                 id: notesTextDescription
-                text: qsTranslate("PageCardNotes","STR_NOTES_DESCRIPTION_PAGE")
+                text: qsTranslate("PageCardNotes", "STR_NOTES_DESCRIPTION_PAGE")
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: notesTextDescription.focus ? true : false
                 color: Constants.COLOR_MAIN_PRETO
                 anchors.top: notesText.bottom
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 width: parent.width - Constants.SIZE_TEXT_FIELD_H_SPACE
                 wrapMode: Text.Wrap
+                Accessible.multiLine: true
+                Accessible.role: Accessible.StaticText
+                Accessible.name: text
+                KeyNavigation.tab: edit
             }
             DropShadow {
                 anchors.fill: rectFieldFlick
@@ -90,13 +101,14 @@ Item {
             Rectangle {
                 id: rectFieldFlick
                 width: parent.width
-                height: parent.height - notesText.height - notesTextDescription.height - 2 * Constants.SIZE_ROW_V_SPACE
+                height: parent.height - notesText.height - notesTextDescription.height
+                        - 2 * Constants.SIZE_ROW_V_SPACE
                 color: "white"
-                anchors.top :notesTextDescription.bottom
+                anchors.top: notesTextDescription.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 opacity: 1
 
-
+                Keys.enabled: true
 
                 Flickable {
                     id: flickable
@@ -121,16 +133,23 @@ Item {
                         wrapMode: TextEdit.Wrap
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         color: Constants.COLOR_TEXT_BODY
+                        Accessible.editable: true
+                        Accessible.focusable: false
+                        Accessible.focused: false
+
+                        Accessible.role: Accessible.EditableText
+                        Accessible.name: text
+                        KeyNavigation.tab: progressBar
                     }
 
                     ScrollBar.vertical: ScrollBar {
-                        active : true
+                        active: true
                         visible: true
                         width: Constants.SIZE_TEXT_FIELD_H_SPACE
 
                         onActiveChanged: {
                             if (!active)
-                                active = true;
+                                active = true
                         }
                     }
                     MouseArea {
@@ -138,8 +157,6 @@ Item {
                         anchors.fill: parent
                     }
                 }
-
-
             }
         }
     }
@@ -147,22 +164,22 @@ Item {
     Item {
         id: rowNotesCount
         width: parent.width
-        height: Constants.SIZE_TEXT_LABEL
-                + 2 * Constants.SIZE_TEXT_V_SPACE
-                + 2 * Constants.SIZE_TEXT_FIELD
+        height: Constants.SIZE_TEXT_LABEL + 2 * Constants.SIZE_TEXT_V_SPACE + 2
+                * Constants.SIZE_TEXT_FIELD
         anchors.top: rowText.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
-        Item{
+        Item {
             id: rectNotesCount
-            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
+            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE) * 0.50
             height: parent.height
             Text {
                 id: dateText
-                text: qsTranslate("PageCardNotes","STR_NOTES_PAGE_SIZE")
+                text: qsTranslate("PageCardNotes", "STR_NOTES_PAGE_SIZE")
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: progressBar.focus ? true : false
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
             }
@@ -171,25 +188,30 @@ Item {
                 width: parent.width
                 color: "white"
                 height: 2 * Constants.SIZE_TEXT_FIELD
-                anchors.top :dateText.bottom
+                anchors.top: dateText.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
                 ProgressBar {
                     id: progressBar
                     width: rectField.width
                     height: rectField.height
+                    Accessible.role: Accessible.ProgressBar
+                    Accessible.name: qsTranslate("PageCardNotes",
+                                                 "STR_NOTES_PAGE_SIZE") + progressBarText
+                    KeyNavigation.tab: saveNotes
                 }
             }
         }
-        Item{
+        Item {
             id: rectNotesComfirm
-            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE ) * 0.50
+            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE) * 0.50
             height: parent.height
             anchors.left: rectNotesCount.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
             Button {
                 id: saveNotes
-                text: qsTranslate("PageCardNotes","STR_NOTES_PAGE_SAVE")
+                text: qsTranslate("PageCardNotes", "STR_NOTES_PAGE_SAVE")
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.right: parent.right
@@ -197,6 +219,9 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                Accessible.role: Accessible.Button
+                Accessible.name: text
+                KeyNavigation.tab: propertyMainItem
             }
         }
     }

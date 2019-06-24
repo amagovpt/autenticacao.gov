@@ -2,7 +2,7 @@ import QtQuick 2.6
 
 ListModel {
     ListElement {
-        name: "Definitions"
+        name: QT_TR_NOOP("STR_MENU_DEFINITIONS")
         expand: false
         imageUrl: "images/definitions_icon.png"
         imageUrlSel: "images/definitions_icon_selected.png"
@@ -40,7 +40,7 @@ ListModel {
         ]
     }
     ListElement {
-        name: "Help"
+        name: QT_TR_NOOP("STR_MENU_HELP")
         expand: false
         imageUrl: "images/help_icon.png"
         imageUrlSel: "images/help_icon_selected.png"

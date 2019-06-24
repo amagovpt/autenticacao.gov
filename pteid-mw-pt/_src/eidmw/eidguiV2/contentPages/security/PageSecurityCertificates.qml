@@ -2,12 +2,17 @@ import QtQuick 2.6
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
 import "../../components/" as Components
 
 //Import C++ defined enums
 import eidguiV2 1.0
 
 PageSecurityCertificatesForm {
+
+    Keys.onPressed: {
+        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+    }
 
     Connections {
         target: gapi
@@ -183,11 +188,12 @@ PageSecurityCertificatesForm {
                                 ]
                             }
                         ]
-            // Init Date Field with the signature certificate 
-            var initialOption = propertyAcordion.model[0].children[1].children[0]
-            propertyAcordion.selectOption(initialOption)
+                // Init Date Field with the signature certificate 
+                var initialOption = propertyAcordion.model[0].children[1].children[0]
+                propertyAcordion.selectOption(initialOption)
             }
             propertyBusyIndicator.running = false
+            propertyTextEntity.forceActiveFocus()
         }
     }
     Component.onCompleted: {

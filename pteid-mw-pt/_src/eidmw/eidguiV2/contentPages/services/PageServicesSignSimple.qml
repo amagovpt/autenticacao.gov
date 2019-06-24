@@ -3,6 +3,7 @@ import QtQuick.Controls 2.1
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
 import "../../components" as Components
 
 //Import C++ defined enums
@@ -11,6 +12,11 @@ import eidguiV2 1.0
 PageServicesSignSimpleForm {
 
     property string propertyOutputSignedFile : ""
+
+    Keys.onPressed: {
+        console.log("PageServicesSignSimpleForm onPressed:" + event.key)
+        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+    }
 
     Connections {
         target: gapi
@@ -89,6 +95,7 @@ PageServicesSignSimpleForm {
                     cardLoaded = false
             }
             propertyBusyIndicator.running = false
+            propertyButtonHidedAdd.forceActiveFocus()
         }
         onSignalCardDataChanged: {
             console.log("Services Sign Simple --> Data Changed")
@@ -102,6 +109,7 @@ PageServicesSignSimpleForm {
                     + gapi.getDataCardIdentifyValue(GAPI.Documentnum)
             propertyBusyIndicator.running = false
             cardLoaded = true
+            propertyButtonHidedAdd.forceActiveFocus()
         }
         onSignalCardChanged: {
             console.log("Services Sign Simple onSignalCardChanged")
@@ -144,16 +152,6 @@ PageServicesSignSimpleForm {
             propertyBusyIndicator.running = false
         }
     }
-    Dialog {
-        id: dialog
-        title: qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE")
-        standardButtons: Dialog.Ok
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
-        Label {
-            text: qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE_MULTI")
-        }
-    }
     Components.DialogCMD{
         id: dialogSignCMD
     }
@@ -170,6 +168,7 @@ PageServicesSignSimpleForm {
         y: parent.height * 0.5 - signsuccess_dialog.height * 0.5
 
         header: Label {
+            id: titleText
             text: qsTranslate("PageServicesSign","STR_SIGN_SUCESS")
             elide: Label.ElideRight
             padding: 24
@@ -180,16 +179,21 @@ PageServicesSignSimpleForm {
         }
 
         Item {
+            id: rectPopUp
             width: signsuccess_dialog.availableWidth
             height: 50
 
             Keys.enabled: true
             Keys.onPressed: {
-                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
+                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return
+                        || event.key===Qt.Key_Space)
                 {
                     signSuccessShowSignedFile()
                 }
             }
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") + titleText.text + labelText.text
+
 
             Item {
                 id: rectLabelText
@@ -197,6 +201,7 @@ PageServicesSignSimpleForm {
                 height: 50
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
+                    id: labelText
                     text: qsTranslate("PageServicesSign","STR_SIGN_OPEN")
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
@@ -216,6 +221,7 @@ PageServicesSignSimpleForm {
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.horizontalCenter: parent.horizontalCenter
                 Button {
+                    id: closeButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     text: qsTranslate("PageServicesSign","STR_POPUP_FILE_CANCEL")
@@ -229,6 +235,7 @@ PageServicesSignSimpleForm {
                     }
                 }
                 Button {
+                    id: openFileButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     text: qsTranslate("Popup File","STR_POPUP_FILE_OPEN")
@@ -241,6 +248,9 @@ PageServicesSignSimpleForm {
                     }
                 }
             }
+        }
+        onOpened: {
+            rectPopUp.forceActiveFocus()
         }
         onRejected:{
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
@@ -261,6 +271,7 @@ PageServicesSignSimpleForm {
         property alias propertySignFailDialogText: text_sign_error
 
         header: Label {
+            id: titleTextError
             text: qsTranslate("PageServicesSign","STR_SIGN_FAIL")
             elide: Label.ElideRight
             padding: 24
@@ -270,8 +281,11 @@ PageServicesSignSimpleForm {
             color: Constants.COLOR_MAIN_BLUE
         }
         Item {
+            id: rectPopUpError
             width: signerror_dialog.availableWidth
             height: 50
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") + titleTextError.text + text_sign_error.text
             Text {
                 id: text_sign_error
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -282,8 +296,33 @@ PageServicesSignSimpleForm {
                 wrapMode: Text.Wrap
             }
         }
-
-        standardButtons: DialogButtonBox.Ok
+        Item {
+            width: signerror_dialog.availableWidth
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            y: 80
+            Item {
+                width: parent.width
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.horizontalCenter: parent.horizontalCenter
+                Button {
+                    id: closeButtonError
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: "OK"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    onClicked: {
+                        signerror_dialog.close()
+                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                    }
+                }
+            }
+        }
+        onOpened: {
+            rectPopUpError.forceActiveFocus()
+        }
     }
 
     propertyDropArea {
@@ -298,7 +337,13 @@ PageServicesSignSimpleForm {
             propertyPDFPreview.updateSignPreview(drop.x,drop.y)
             //TODO: Validate files type
             if(filesArray.length > 1){
-                dialog.open()
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE_MULTI")
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+
             }else if(filesArray.length == 1){
                 // Needed because the PDFPreview
                 var path =  filesArray[0]
@@ -324,7 +369,7 @@ PageServicesSignSimpleForm {
             var loadedFilePath = filesModel.get(0).fileUrl
             var isTimestamp = false
             var outputFile = propertyFileDialogOutput.fileUrl.toString()
-            outputFile = decodeURIComponent(stripFilePrefix(outputFile))
+            outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
 
             var page = 1
             propertyCheckLastPage.checked ? page = gapi.getPDFpageCount(loadedFilePath) :
@@ -361,7 +406,7 @@ PageServicesSignSimpleForm {
         onAccepted: {
             /*console.log("You chose file(s): " + propertyFileDialog.fileUrls)*/
             var path = propertyFileDialog.fileUrls[0];
-            path = decodeURIComponent(stripFilePrefix(path))
+            path = decodeURIComponent(Functions.stripFilePrefix(path))
             /*console.log("Adding file: " + path)*/
             var newFileUrl = {"fileUrl": path}
             if (!containsFile(newFileUrl, filesModel)){
@@ -386,8 +431,15 @@ PageServicesSignSimpleForm {
         onClicked: {
             fileLoaded = false
             filesModel.clear()
+            propertyButtonHidedAdd.forceActiveFocus()
         }
     }
+    propertyButtonHidedAdd {
+        onClicked: {
+            propertyFileDialog.open()
+        }
+    }
+
     propertyButtonSignWithCC {
         onClicked: {
             console.log("Sign with CC")
@@ -459,6 +511,8 @@ PageServicesSignSimpleForm {
 
                     /*console.log("loadedFilePath: " + loadedFilePath + " page count: " + pageCount)*/
                     fileLoaded = true
+                    propertyPDFPreview.forceActiveFocus()
+
                     propertyPDFPreview.propertyBackground.cache = false
 
                     propertySpinBoxControl.to = pageCount
@@ -603,14 +657,6 @@ PageServicesSignSimpleForm {
 		openSignedFile()
         signsuccess_dialog.close()
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-    }
-    function stripFilePrefix(filePath) {
-        if (Qt.platform.os === "windows") {
-            return filePath.replace(/^(file:\/{3})|(file:)|(qrc:\/{3})|(http:\/{3})/,"")
-        }
-        else {
-            return filePath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-        }
     }
     function containsFile(obj, list) {
         var i;

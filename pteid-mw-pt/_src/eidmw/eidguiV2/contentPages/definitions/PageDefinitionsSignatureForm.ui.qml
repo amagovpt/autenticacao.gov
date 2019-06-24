@@ -467,6 +467,7 @@ Item {
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                         anchors.horizontalCenter: parent.horizontalCenter
+                        KeyNavigation.tab: radioButtonDefault
                     }
                 }
             }

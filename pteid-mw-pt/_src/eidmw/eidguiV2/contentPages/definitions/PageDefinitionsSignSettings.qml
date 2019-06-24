@@ -1,13 +1,18 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
 
-/* Constants imports */
 import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
 
 //Import C++ defined enums
 import eidguiV2 1.0
 
 PageDefinitionsSignSettingsForm {
+
+    Keys.onPressed: {
+        console.log("PageDefinitionsSignSettingsForm onPressed:" + event.key)
+        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+    }
 
     Connections {
         target: gapi
@@ -68,6 +73,13 @@ PageDefinitionsSignSettingsForm {
             propertyRectOffice.visible = false
         }
         
+        if(propertyRectAppCertificates.visible){
+            propertyDateAppCertificates.forceActiveFocus()
+        }else{
+            propertyDateAppTimeStamp.forceActiveFocus()
+        }
+
+
         console.log("Page definitionsSignSettings onCompleted finished")
     }
 }

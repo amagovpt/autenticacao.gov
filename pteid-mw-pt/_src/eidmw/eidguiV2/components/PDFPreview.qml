@@ -34,8 +34,50 @@ Rectangle {
     property real propertyPdfOriginalWidth: 0
     property real propertyPdfOriginalHeight: 0
 
+    property real stepSizeX : 5.0
+    property real stepSizeY : 10.0
+
+    property bool sealHasChanged: false
+
     color: Constants.COLOR_MAIN_SOFT_GRAY
 
+    Keys.onUpPressed: {
+        moveUp(stepSizeY)
+        toggleFocus()
+    }
+
+    Keys.onDownPressed: {
+        moveDown(stepSizeY)
+        toggleFocus()
+    }
+
+    Keys.onLeftPressed: {
+        moveLeft(stepSizeX)
+        toggleFocus()
+    }
+
+    Keys.onRightPressed: {
+        moveRight(stepSizeX)
+        toggleFocus()
+    }
+
+    Text {
+        id: positionText
+        text: "X " + dragSigRect.x + "Y " + dragSigRect.y
+        visible: false
+        Accessible.role: Accessible.StaticText
+        Accessible.name: text
+
+        Keys.onPressed: {
+            if (pdfPreview.focus === false) {
+                pdfPreview.forceActiveFocus()
+            }
+        }
+    }
+
+    Accessible.role: Accessible.Canvas
+    Accessible.name: !sealHasChanged ? qsTranslate("PageServicesSign", "STR_SIGN_NAV_DESCRIPTION") : ""
+    
     DropArea {
         id: dragTarget
         width: parent.width
@@ -62,14 +104,15 @@ Rectangle {
 
 
             Rectangle {
-                width: dragSigRect.width
-                height: dragSigRect.height
-                x: dragSigRect.x
-                y: dragSigRect.y
-                border.width : 1
-                border.color: Constants.COLOR_MAIN_DARK_GRAY
+                width: dragSigRect.width + 2 * Constants.PDF_PREVIEW_SEAL_BORDER
+                height: dragSigRect.height + 2 * Constants.PDF_PREVIEW_SEAL_BORDER
+                x: dragSigRect.x - Constants.PDF_PREVIEW_SEAL_BORDER
+                y: dragSigRect.y - Constants.PDF_PREVIEW_SEAL_BORDER
+                border.width: Constants.PDF_PREVIEW_SEAL_BORDER
+                border.color: pdfPreview.focus || positionText.focus? Constants.COLOR_MAIN_DARK_GRAY
+                             : Constants.COLOR_GREY_BUTTON_BACKGROUND
                 opacity: 0.7
-                visible: dragSigRect.visible
+                visible: width >= Constants.PDF_PREVIEW_SEAL_BORDER ? true : false
             }
             Item {
                 id: dragSigRect
@@ -252,6 +295,88 @@ Rectangle {
 
         dragSigRect.x = droped_x
         dragSigRect.y = droped_y
+    }
+
+    function moveUp(positions) {
+        var x = dragSigRect.x
+        var y = dragSigRect.y
+
+        var outOfBounds = y - positions < 0
+        var diff = outOfBounds ? Math.abs(Math.floor(0 - y)) : positions
+        if (diff === 0 || y === 0) {
+            return
+        }
+
+        y = y - diff
+        setSignPreview(x, y)
+        updateSignPreview(x, y)
+    }
+
+    function moveDown(positions) {
+        var pos = dragSigRect.y + dragSigRect.height
+        var outOfBounds = pos >= background_image.height
+
+        // move down number of positions or the difference between current position and bottom of the page
+        var diff = outOfBounds ? 0 : Math.min(positions, Math.floor(background_image.height - pos))
+        
+        // nothing to update return
+        if (diff === 0) {
+            return
+        }
+
+        var x = dragSigRect.x
+        var y = dragSigRect.y + diff
+        setSignPreview(x, y)
+        updateSignPreview(x, y)
+    }
+
+    function moveLeft(positions) {
+        var x = dragSigRect.x
+        var y = dragSigRect.y
+        var outOfBounds = x - positions < 0
+        var diff = outOfBounds ? Math.abs(Math.floor(0 - x)) : positions
+
+        if (diff === 0 || x === 0) {
+            return
+        }
+
+        x = x - diff
+        setSignPreview(x, y)
+        updateSignPreview(x, y)
+    }
+
+    function moveRight(positions) {
+        var pos = dragSigRect.x + dragSigRect.width
+
+        var outOfBounds = pos >= background_image.width
+        
+        // move to the right positions or difference between current position and right side of a page
+        var diff = outOfBounds ? 0 : Math.min(positions, Math.floor(background_image.width - pos))
+        
+        if (diff === 0) {
+            return
+        }
+
+        var x = dragSigRect.x + diff
+        var y = dragSigRect.y
+        setSignPreview(x, y)
+        updateSignPreview(x, y)
+    }
+
+    // this is a hack to make screen reader say x and y positions
+    // after the user changed the position of the signature seal.
+    // Other approaches included using a Slider Component
+    // or Text component with Accessible.role: Accessible.Indicator however the screen reader
+    // does not automatically utter the change so we had to fallback to change the focus to utter the position
+    function toggleFocus() {
+        if (!sealHasChanged) {
+            sealHasChanged = true
+        }
+        if (pdfPreview.focus === true) {
+            positionText.forceActiveFocus()
+        } else {
+            pdfPreview.forceActiveFocus()
+        }
     }
 
     function getData(){

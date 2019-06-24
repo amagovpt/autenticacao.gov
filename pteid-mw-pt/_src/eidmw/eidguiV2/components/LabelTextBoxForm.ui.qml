@@ -11,14 +11,21 @@ Item {
     property alias propertyDateField: dateField
     property alias propertyRectField: rectField
 
+    property string text : dateField.length ? dateField.text : qsTranslate("GAPI","STR_EMPTY_FIELD")
+
     Text {
         id: dateText
         x: Constants.SIZE_TEXT_FIELD_H_SPACE
         font.pixelSize: Constants.SIZE_TEXT_LABEL
         font.family: lato.name
+        font.bold: parent.focus ? true : false
         color: Constants.COLOR_TEXT_LABEL
         height: Constants.SIZE_TEXT_LABEL
     }
+
+    Accessible.role: Accessible.Column
+    Accessible.name: dateText.text + " " + text
+
     DropShadow {
         anchors.fill: rectField
         horizontalOffset: Constants.FORM_SHADOW_H_OFFSET

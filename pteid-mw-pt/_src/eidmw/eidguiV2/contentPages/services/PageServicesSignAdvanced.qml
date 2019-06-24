@@ -3,6 +3,7 @@ import QtQuick.Controls 2.1
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
 import "../../components" as Components
 
 //Import C++ defined enums
@@ -26,7 +27,15 @@ PageServicesSignAdvancedForm {
             color: Constants.COLOR_MAIN_SOFT_GRAY
         }
     }
+    Keys.onPressed: {
+        console.log("PageServicesSignAdvancedForm onPressed:" + event.key)
+        if(propertyListViewEntities.focus === false){
+            Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+        } else {
+            propertyPDFPreview.forceActiveFocus()
+        }
 
+    }
     Connections {
         target: gapi
         onSignalGenericError: {
@@ -52,6 +61,8 @@ PageServicesSignAdvancedForm {
             }
 
             propertyBusyIndicator.running = false
+            propertyListViewEntities.currentIndex = 0
+            propertyListViewEntities.forceActiveFocus()
         }
         onSignalPdfSignSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
@@ -172,6 +183,7 @@ PageServicesSignAdvancedForm {
                     cardLoaded = false
             }
             propertyBusyIndicator.running = false
+            propertyMainItem.forceActiveFocus()
         }
         onSignalCardDataChanged: {
             console.log("Services Sign Advanced --> Data Changed")
@@ -185,6 +197,7 @@ PageServicesSignAdvancedForm {
                     + gapi.getDataCardIdentifyValue(GAPI.Documentnum)
             propertyBusyIndicator.running = false
             cardLoaded = true
+            propertyMainItem.forceActiveFocus()
         }
         onSignalCardChanged: {
             console.log("Services Sign Advanced onSignalCardChanged")
@@ -245,6 +258,7 @@ PageServicesSignAdvancedForm {
         property alias propertySignSuccessDialogText: labelText
 
         header: Label {
+            id: titleText
             text: {
                 if(propertyListViewFiles.count > 1) {
                     qsTranslate("PageServicesSign", "STR_SIGN_SUCESS_MULTI")
@@ -260,16 +274,20 @@ PageServicesSignAdvancedForm {
             color: Constants.COLOR_MAIN_BLUE
         }
         Item {
+            id: rectPopUp
             width: signsuccess_dialog.availableWidth
             height: 50
 
             Keys.enabled: true
             Keys.onPressed: {
-                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
+                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return
+                        || event.key===Qt.Key_Space)
                 {
                     signSuccessShowSignedFile()
                 }
             }
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") + titleText.text + labelText.text
 
             Item {
                 id: rectLabelText
@@ -321,6 +339,7 @@ PageServicesSignAdvancedForm {
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.horizontalCenter: parent.horizontalCenter
                 Button {
+                    id: closeButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     text: qsTranslate("Popup File","STR_POPUP_FILE_CANCEL")
@@ -334,6 +353,7 @@ PageServicesSignAdvancedForm {
                     }
                 }
                 Button {
+                    id: openFileButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     text: qsTranslate("Popup File","STR_POPUP_FILE_OPEN")
@@ -346,6 +366,9 @@ PageServicesSignAdvancedForm {
                     }
                 }
             }
+        }
+        onOpened: {
+            rectPopUp.forceActiveFocus()
         }
         onRejected:{
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
@@ -366,6 +389,7 @@ PageServicesSignAdvancedForm {
         property alias propertySignFailDialogText: text_sign_error
 
         header: Label {
+            id: titleTextError
             text: qsTranslate("PageServicesSign","STR_SIGN_FAIL")
             elide: Label.ElideRight
             padding: 24
@@ -375,8 +399,11 @@ PageServicesSignAdvancedForm {
             color: Constants.COLOR_MAIN_BLUE
         }
         Item {
+            id: rectPopUpError
             width: signerror_dialog.availableWidth
             height: 50
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") + titleTextError.text + text_sign_error.text
             Text {
                 id: text_sign_error
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -387,7 +414,33 @@ PageServicesSignAdvancedForm {
                 wrapMode: Text.Wrap
             }
         }
-        standardButtons: DialogButtonBox.Ok
+        Item {
+            width: signerror_dialog.availableWidth
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            y: 80
+            Item {
+                width: parent.width
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.horizontalCenter: parent.horizontalCenter
+                Button {
+                    id: closeButtonError
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: "OK"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    onClicked: {
+                        signerror_dialog.close()
+                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                    }
+                }
+            }
+        }
+        onOpened: {
+            rectPopUpError.forceActiveFocus()
+        }
     }
     propertyMouseAreaToolTipPades{
         onEntered: {
@@ -454,7 +507,7 @@ PageServicesSignAdvancedForm {
             var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogOutput.fileUrl.toString()
-            outputFile = decodeURIComponent(stripFilePrefix(outputFile))
+            outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
             if (propertyRadioButtonPADES.checked) {
                 var page = propertySpinBoxControl.value
                 var reason = propertyTextFieldReason.text
@@ -528,7 +581,7 @@ PageServicesSignAdvancedForm {
             propertyBusyIndicator.running = true
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogBatchOutput.folder.toString()
-            outputFile = decodeURIComponent(stripFilePrefix(outputFile))
+            outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
             if (propertyRadioButtonPADES.checked) {
 
                 if(propertyCheckLastPage.checked){
@@ -613,6 +666,11 @@ PageServicesSignAdvancedForm {
             propertyMouseAreaTextAttributesMsg.z = 0
         }
     }
+    propertyListViewEntities{
+        onFocusChanged: {
+            if(propertyListViewEntities.focus)propertyListViewEntities.currentIndex = 0
+        }
+    }
 
     Component {
         id: attributeListDelegate
@@ -620,7 +678,23 @@ PageServicesSignAdvancedForm {
             id: container
             width: parent.width - Constants.SIZE_ROW_H_SPACE
             height: columnItem.height + 15
-            color: Constants.COLOR_MAIN_SOFT_GRAY
+            Keys.onSpacePressed: {
+                checkboxSel.focus = true
+            }
+            Keys.onTabPressed: {
+                checkboxSel.focus = true
+                if(propertyListViewEntities.currentIndex == propertyListViewEntities.count -1){
+                    propertyPDFPreview.forceActiveFocus()
+                }else{
+                    propertyListViewEntities.currentIndex++
+                }
+            }
+
+            color:  propertyListViewEntities.currentIndex === index && propertyListViewEntities.focus
+                    ? Constants.COLOR_MAIN_DARK_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
+
+            Accessible.role: Accessible.CheckBox
+            Accessible.name: Functions.filterText(entityText.text)
 
             CheckBox {
                 id: checkboxSel
@@ -633,6 +707,9 @@ PageServicesSignAdvancedForm {
                     entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
                     propertyPageLoader.attributeListBackup[index] = checkboxSel.checked
                 }
+                onFocusChanged: {
+                    if(focus) propertyListViewEntities.currentIndex = index
+                }
             }
             Column {
                 id: columnItem
@@ -640,6 +717,7 @@ PageServicesSignAdvancedForm {
                 width: parent.width - checkboxSel.width
                 anchors.verticalCenter: parent.verticalCenter
                 Text {
+                    id: entityText
                     text: "<b>" + citizenName + " </b> - " + entityName + " - " + attribute
                     width: parent.width
                     wrapMode: Text.WordWrap
@@ -654,9 +732,9 @@ PageServicesSignAdvancedForm {
 
     propertyMouseAreaTextAttributesMsg{
         onClicked: {
-			propertyPageLoader.propertyBackupFromSignaturePage = true
+            propertyPageLoader.propertyBackupFromSignaturePage = true
             // Jump to Menu Definitions - PageDefinitionsSCAP
-            mainFormID.state = "STATE_NORMAL"
+            mainFormID.state = Constants.MenuState.NORMAL
             mainFormID.propertySubMenuListView.model.clear()
             for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
                 /*console.log("Sub Menu indice " + i + " - "
@@ -808,6 +886,7 @@ PageServicesSignAdvancedForm {
                                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                                         qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
                                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+                                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                             }
                             else {
                                 var outputFile = propertyListViewFiles.model.get(0).fileUrl
@@ -842,6 +921,7 @@ PageServicesSignAdvancedForm {
                         mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                                 qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
                         mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+                        mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                     }else{
                         var outputFile = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
                         //Check if filename has extension and remove it.
@@ -881,6 +961,8 @@ PageServicesSignAdvancedForm {
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                return;
             }
             else if (propertySwitchSignAdd.checked && propertyListViewFiles.count > 1){
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
@@ -888,6 +970,7 @@ PageServicesSignAdvancedForm {
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             }
             else {
                 if (propertyListViewFiles.count == 1){
@@ -1044,6 +1127,7 @@ PageServicesSignAdvancedForm {
                 propertyPDFPreview.propertyDragSigDateText.visible = false
                 propertyPDFPreview.propertyDragSigLocationText.visible = false
                 propertyPDFPreview.propertyDragSigImg.visible = false
+                propertyMainItem.forceActiveFocus()
             }
             else {
                 fileLoaded = true
@@ -1109,6 +1193,7 @@ PageServicesSignAdvancedForm {
                 }else{
                     propertyTextDragMsgImg.visible = true
                 }
+                propertyPDFPreview.forceActiveFocus()
             }
         }
     }
@@ -1122,7 +1207,7 @@ PageServicesSignAdvancedForm {
             }
             propertyPDFPreview.propertyBackground.source =
                     "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
-            propertyPageLoader.propertyBackupPage =  propertySpinBoxControl.value           
+            propertyPageLoader.propertyBackupPage =  propertySpinBoxControl.value
             updateIndicators(maxPageAllowed)
         }
     }
@@ -1200,19 +1285,10 @@ PageServicesSignAdvancedForm {
                 qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
     }
 
-    function stripFilePrefix(filePath) {
-        if (Qt.platform.os === "windows") {
-            return filePath.replace(/^(file:\/{3})|(file:)|(qrc:\/{3})|(http:\/{3})/,"")
-        }
-        else {
-            return filePath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"");
-        }
-    }
-
     function forceScrollandFocus() {
         // Force scroll and focus to the last item added
         propertyListViewFiles.positionViewAtEnd()
-        propertyListViewFiles.forceActiveFocus()
+        //propertyListViewFiles.forceActiveFocus()
         propertyListViewFiles.currentIndex = propertyListViewFiles.count -1
         if(propertyFilesListViewScroll.position > 0)
             propertyFilesListViewScroll.active = true
@@ -1258,13 +1334,13 @@ PageServicesSignAdvancedForm {
             propertySpinBoxControl.down.indicator.enabled = false
         }
     }
-	function openSignedFile(){
+    function openSignedFile(){
         if (Qt.platform.os === "windows") {
-			if (propertyOutputSignedFile.substring(0, 2) == "//" ){
-				propertyOutputSignedFile = "file:" + propertyOutputSignedFile
-			}else{
-				propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
-			}
+            if (propertyOutputSignedFile.substring(0, 2) == "//" ){
+                propertyOutputSignedFile = "file:" + propertyOutputSignedFile
+            }else{
+                propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+            }
         }else{
             propertyOutputSignedFile = "file://" + propertyOutputSignedFile
         }
@@ -1315,7 +1391,7 @@ PageServicesSignAdvancedForm {
         for(var i = 0; i < fileList.length; i++){
             var path = fileList[i];
 
-            path = decodeURIComponent(stripFilePrefix(path));
+            path = decodeURIComponent(Functions.stripFilePrefix(path));
             if (gapi.isFile(path)) {
                 fileAlreadyUploaded = appendFileToModel(path);
             } else if (gapi.isDirectory(path)) {
@@ -1339,7 +1415,7 @@ PageServicesSignAdvancedForm {
         //given number of pages returns maximum length that TextInput should accept
         return Math.ceil(Math.log(num + 1) / Math.LN10);
     }
-    
+
     function numberOfAttributesSelected() {
         var count = 0
         for (var i = 0; i < entityAttributesModel.count; i++){
