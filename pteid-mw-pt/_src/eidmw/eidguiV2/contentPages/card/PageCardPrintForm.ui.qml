@@ -236,6 +236,7 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                highlighted: activeFocus ? true : false
                 anchors.horizontalCenter: parent.horizontalCenter
                 KeyNavigation.tab: buttonPdf.enabled ? buttonPdf : titleSelectData
 
@@ -258,6 +259,7 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                highlighted: activeFocus ? true : false
                 anchors.horizontalCenter: parent.horizontalCenter
                 KeyNavigation.tab: titleSelectData
 

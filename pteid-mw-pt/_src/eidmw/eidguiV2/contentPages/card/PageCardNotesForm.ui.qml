@@ -219,6 +219,7 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                highlighted: activeFocus ? true : false
                 Accessible.role: Accessible.Button
                 Accessible.name: text
                 KeyNavigation.tab: propertyMainItem

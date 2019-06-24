@@ -195,6 +195,7 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
+                            highlighted: activeFocus ? true : false
                             enabled: false
                             Accessible.role: Accessible.Button
                             Accessible.name: text
@@ -214,6 +215,7 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
+                            highlighted: activeFocus ? true : false
                             enabled: false
                             Accessible.role: Accessible.Button
                             Accessible.name: text
@@ -291,6 +293,7 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
+                            highlighted: activeFocus ? true : false
                             enabled: false
                             Accessible.role: Accessible.Button
                             Accessible.name: text
@@ -310,6 +313,7 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
+                            highlighted: activeFocus ? true : false
                             enabled: false
                             Accessible.role: Accessible.Button
                             Accessible.name: text
@@ -385,6 +389,7 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
+                            highlighted: activeFocus ? true : false
                             enabled: false
                             Accessible.role: Accessible.Button
                             Accessible.name: text
@@ -404,6 +409,7 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
+                            highlighted: activeFocus ? true : false
                             enabled: false
                             Accessible.role: Accessible.Button
                             Accessible.name: text

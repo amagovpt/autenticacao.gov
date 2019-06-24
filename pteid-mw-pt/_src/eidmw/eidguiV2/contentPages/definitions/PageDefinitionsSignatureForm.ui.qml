@@ -444,6 +444,7 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        highlighted: activeFocus ? true : false
                         anchors.horizontalCenter: parent.horizontalCenter
                         enabled: fileLoaded
                     }
@@ -466,6 +467,7 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        highlighted: activeFocus ? true : false
                         anchors.horizontalCenter: parent.horizontalCenter
                         KeyNavigation.tab: radioButtonDefault
                     }
