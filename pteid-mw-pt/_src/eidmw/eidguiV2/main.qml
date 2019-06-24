@@ -568,8 +568,10 @@ Load language error. Please reinstall the application"
         ]
         Keys.onPressed: {
             console.log("Main Menu Key Pressed: " + event.key)
-            mainFormID.propertyMainMenuListView.currentIndex = 0
-            mainFormID.propertyMainMenuListView.forceActiveFocus()
+            if(propertyImageLogoBottom.focus){
+                mainFormID.propertyMainMenuListView.currentIndex = 0
+                mainFormID.propertyMainMenuListView.forceActiveFocus()
+            }
         }
         Component.onCompleted: {
             if(controler.getNotShowHelpStartUp()){
@@ -613,6 +615,7 @@ Load language error. Please reinstall the application"
         propertyImageLogo {
             onClicked: {
                 mainFormID.state = Constants.MenuState.HOME
+                propertySubMenuListView.currentIndex = -1
                 propertyMainMenuListView.currentIndex = -1
                 propertyMainMenuBottomListView.currentIndex = -1
             }
@@ -1071,18 +1074,19 @@ Load language error. Please reinstall the application"
     }
 
     function getSubMenuName(index){
-
         if(mainFormID.propertyMainMenuListView.currentIndex != -1){
             return "Sub Menu de "
                     + qsTranslate("MainMenuModel", mainFormID.propertyMainMenuListView.model.get(
                                       mainFormID.propertyMainMenuListView.currentIndex).name )
                     + controler.autoTr
 
-        }else{
+        }else if(mainFormID.propertyMainMenuBottomListView.currentIndex != -1){
             return "Sub Menu de "
                     + qsTranslate("MainMenuModel", mainFormID.propertyMainMenuBottomListView.model.get(
                                       mainFormID.propertyMainMenuBottomListView.currentIndex).name )
                     + controler.autoTr
+        } else {
+            return ""
         }
     }
 
