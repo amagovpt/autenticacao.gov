@@ -6,33 +6,41 @@ import "../../scripts/Constants.js" as Constants
 import "../../components" as Components
 
 Item {
-    property alias propertyTextLinkCC: textLinkCC
-    property alias propertyReminderCheckBox: reminderCheckBox
-
     anchors.fill: parent
+    property alias propertyReminderCheckBox: reminderCheckBox
+    property alias propertyButtonDownload: buttonDownload
+    property alias propertyMainItem: text0
+
     Item {
+        id: rowTop
         width: parent.width
-        height: parent.height
-        Item {
-            id: rowTop
-            width: parent.width
-            height: parent.height * Constants.HEIGHT_DOC_ONLINE_ROW_TOP_V_RELATIVE
-                    + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
-                    * Constants.HEIGHT_DOC_ONLINE_ROW_TOP_INC_RELATIVE
-        }
+        height: parent.height * Constants.HEIGHT_HOME_PAGE_ROW_TOP_V_RELATIVE
+                + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
+                * Constants.HEIGHT_HOME_PAGE_ROW_TOP_INC_RELATIVE
+    }
+    Item {
+        width: parent.width - 2 * Constants.SIZE_ROW_H_SPACE
+        height: parent.height - 2 * Constants.SIZE_ROW_V_SPACE
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: rowTop.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
         Text {
             id: text0
             font.pixelSize: Constants.SIZE_TEXT_TITLE
             font.family: lato.name
-            text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TITLE") + " " + mainWindow.title
-            font.bold: true
+            text: qsTranslate("PageHelpDocOnline",
+                              "STR_HELP_DOC_TITLE") + " " + mainWindow.title
+            font.bold: text0.focus ? true : false
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
             color: Constants.COLOR_TEXT_TITLE
             Layout.fillWidth: true
-            anchors.top: rowTop.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            Accessible.role: Accessible.TitleBar
+            Accessible.name: qsTranslate("PageHelpDocOnline",
+                                         "STR_HELP_DOC_TITLE") + " " + mainWindow.title
+                             + qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_HOME_PAGE")
+            KeyNavigation.tab: text1
         }
         Text {
             id: text1
@@ -40,148 +48,172 @@ Item {
             anchors.topMargin: Constants.SIZE_TEXT_BODY
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            text:  qsTranslate("PageHelpDocOnline","STR_HELP_DOC_SUB_TITLE")
+            font.bold: text1.focus ? true : false
+            text: qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_SUB_TITLE")
             wrapMode: Text.Wrap
             width: parent.width
-            horizontalAlignment: Text.left
             color: Constants.COLOR_TEXT_BODY
             Layout.fillWidth: true
+            Accessible.role: Accessible.Row
+            Accessible.name: text
+            KeyNavigation.tab: rectTopics
         }
-        Text {
-            id: text2
+        Item{
+            id: rectTopics
             anchors.top: text1.bottom
             anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
-            font.pixelSize: Constants.SIZE_TEXT_BODY
-            font.family: lato.name
-            text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC") + ":"
-            wrapMode: Text.Wrap
+            height: text2.height + raw1.height + raw2.height + raw3.height + raw4.height
+                    + 4 * Constants.SIZE_TEXT_BODY
             width: parent.width
-            horizontalAlignment: Text.left
-            color: Constants.COLOR_TEXT_BODY
-            Layout.fillWidth: true
-        }
-        RowLayout {
-            id: raw1
-            anchors.top: text2.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_BODY
-            width: parent.width
-
-            Components.TextBullet{}
+            Accessible.role: Accessible.Row
+            Accessible.name: text2.text + text3.text + text4.text + text5.text + text6.text
+            KeyNavigation.tab: textLinks
             Text {
-                id: text3
+                id: text2
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
-                text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC_1")
+                font.bold: rectTopics.focus ? true : false
+                text: qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_TOPIC") + ":"
                 wrapMode: Text.Wrap
                 width: parent.width
                 horizontalAlignment: Text.left
                 color: Constants.COLOR_TEXT_BODY
                 Layout.fillWidth: true
+
             }
-
-        }
-        RowLayout {
-            id: raw2
-            anchors.top: raw1.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_BODY
-            width: parent.width
-
-            Components.TextBullet{}
-            Text {
-                id: text4
-
-                font.pixelSize: Constants.SIZE_TEXT_BODY
-                font.family: lato.name
-                text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC_2")
-                wrapMode: Text.Wrap
+            RowLayout {
+                id: raw1
+                anchors.top: text2.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_BODY
                 width: parent.width
-                horizontalAlignment: Text.left
-                color: Constants.COLOR_TEXT_BODY
-                Layout.fillWidth: true
-            }
-        }
-        RowLayout {
-            id: raw3
-            anchors.top: raw2.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_BODY
-            width: parent.width
 
-            Components.TextBullet{}
-            Text {
-                font.pixelSize: Constants.SIZE_TEXT_BODY
-                font.family: lato.name
-                text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC_3")
-                wrapMode: Text.Wrap
-                width: parent.width
-                horizontalAlignment: Text.left
-                color: Constants.COLOR_TEXT_BODY
-                Layout.fillWidth: true
+                Components.TextBullet {
+                }
+                Text {
+                    id: text3
+                    font.pixelSize: Constants.SIZE_TEXT_BODY
+                    font.family: lato.name
+                    font.bold: rectTopics.focus ? true : false
+                    text: qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_TOPIC_1")
+                    wrapMode: Text.Wrap
+                    width: parent.width
+                    horizontalAlignment: Text.left
+                    color: Constants.COLOR_TEXT_BODY
+                    Layout.fillWidth: true
+                }
             }
-        }
-        RowLayout {
-            id: raw4
-            anchors.top: raw3.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_BODY
-            width: parent.width
+            RowLayout {
+                id: raw2
+                anchors.top: raw1.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_BODY
+                width: parent.width
 
-            Components.TextBullet{}
-            Text {
-                font.pixelSize: Constants.SIZE_TEXT_BODY
-                font.family: lato.name
-                text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TOPIC_4")
+                Components.TextBullet {
+                }
+                Text {
+                    id: text4
+                    font.pixelSize: Constants.SIZE_TEXT_BODY
+                    font.family: lato.name
+                    font.bold: rectTopics.focus ? true : false
+                    text: qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_TOPIC_2")
+                    wrapMode: Text.Wrap
+                    width: parent.width
+                    horizontalAlignment: Text.left
+                    color: Constants.COLOR_TEXT_BODY
+                    Layout.fillWidth: true
+                }
+            }
+            RowLayout {
+                id: raw3
+                anchors.top: raw2.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_BODY
                 width: parent.width
-                wrapMode: Text.Wrap
-                horizontalAlignment: Text.left
-                color: Constants.COLOR_TEXT_BODY
-                Layout.fillWidth: true
+
+                Components.TextBullet {
+                }
+                Text {
+                    id: text5
+                    font.pixelSize: Constants.SIZE_TEXT_BODY
+                    font.family: lato.name
+                    font.bold: rectTopics.focus ? true : false
+                    text: qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_TOPIC_3")
+                    wrapMode: Text.Wrap
+                    width: parent.width
+                    horizontalAlignment: Text.left
+                    color: Constants.COLOR_TEXT_BODY
+                    Layout.fillWidth: true
+                }
+            }
+            RowLayout {
+                id: raw4
+                anchors.top: raw3.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_BODY
+                width: parent.width
+
+                Components.TextBullet {
+                }
+                Text {
+                    id: text6
+                    font.pixelSize: Constants.SIZE_TEXT_BODY
+                    font.family: lato.name
+                    font.bold: rectTopics.focus ? true : false
+                    text: qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_TOPIC_4")
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                    horizontalAlignment: Text.left
+                    color: Constants.COLOR_TEXT_BODY
+                    Layout.fillWidth: true
+                }
             }
         }
+
+
         RowLayout {
             id: raw5
-            anchors.top: raw4.bottom
+            anchors.top: rectTopics.bottom
             anchors.topMargin: Constants.SIZE_TEXT_BODY
             width: parent.width
 
             Text {
                 id: textLinks
-                text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_ONLINE") + ":"
+                text: qsTranslate("PageHelpDocOnline",
+                                  "STR_HELP_DOC_ONLINE") + ":"
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
+                font.bold: textLinks.focus ? true : false
                 color: Constants.COLOR_TEXT_BODY
+                Accessible.role: Accessible.Button
+                Accessible.name: text
+                KeyNavigation.tab: buttonDownload
+            }
+            Button {
+                id: buttonDownload
+                text: qsTranslate("PageHelpDocOnline", "STR_HELP_URL")
+                Accessible.role: Accessible.Button
+                Accessible.name: text
+                KeyNavigation.tab: reminderCheckBox
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                font.capitalization: Font.MixedCase
             }
         }
 
-        RowLayout {
-            id: rawLinks
-            anchors.top: raw5.bottom
-            anchors.topMargin: Constants.SIZE_TEXT_BODY
-            width: parent.width
-
-            Components.TextBullet{}
-            Components.Link { 
-                id: textLinkCC
-                propertyText.text: "<a href='https://www.autenticacao.gov.pt/documents/10179/11465/Manual+de+Utiliza%C3%A7%C3%A3o+da+Aplica%C3%A7%C3%A3o+do+Cart%C3%A3o+de+Cidad%C3%A3o+v3/'>" 
-                + qsTranslate("PageHelpDocOnline","STR_HELP_URL") + "</a>"
-                propertyText.width: parent.width
-                propertyText.wrapMode: Text.Wrap
-                propertyText.horizontalAlignment: Text.left
-                Layout.fillWidth: true
-                anchors.top: parent.top
-            }
-        }
         RowLayout {
             id: rawCheckBox
-            anchors.top: rawLinks.bottom
+            anchors.top: raw5.bottom
             anchors.topMargin: Constants.SIZE_TEXT_BODY
             width: parent.width
             CheckBox {
                 id: reminderCheckBox
-                text: qsTranslate("PageHelpDocOnline","STR_HOME_REMINDER")
+                text: qsTranslate("PageHelpDocOnline", "STR_HOME_REMINDER")
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 enabled: true
+                Accessible.role: Accessible.CheckBox
+                Accessible.name: text
+                KeyNavigation.tab: propertyMainItem
             }
         }
     }

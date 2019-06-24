@@ -9,12 +9,14 @@ import "../../scripts/Constants.js" as Constants
 import "../../components" as Components
 
 Item {
+    id: mainItem
     anchors.fill: parent
 
     property variant filesArray:[]
     property bool fileLoaded: false
     property bool cardLoaded: false
 
+    property alias propertyMainItem: mainItem
     property alias propertyBusyIndicator: busyIndicator
     property alias propertyPDFPreview: pdfPreviewArea
     property alias propertyFileDialog: fileDialog
@@ -22,6 +24,7 @@ Item {
     property alias propertyFileDialogCMDOutput: fileDialogCMDOutput
     property alias propertyMouseAreaRectMain: mouseAreaRectMain
     property alias propertyButtonRemove: buttonRemove
+    property alias propertyButtonHidedAdd: buttonHidedAdd
     property alias propertyButtonSignWithCC: button_signCC
     property alias propertyButtonSignCMD: button_signCMD
     property alias propertyDropArea: dropArea
@@ -37,6 +40,10 @@ Item {
        // BusyIndicator should be on top of all other content
        z: 1
     }
+
+    Accessible.role: Accessible.TitleBar
+    Accessible.name: qsTranslate("PageServicesSign","STR_SIGN_SIMPLES_TITLE")
+    KeyNavigation.tab: buttonHidedAdd
 
     Item {
         id: rowMain
@@ -96,11 +103,18 @@ Item {
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: focus ? true : false
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: fileLoaded ?
                            qsTranslate("PageServicesSign","STR_SIGN_TITLE_SIGN") :
                            qsTranslate("PageServicesSign","STR_SIGN_TITLE_FILE")
+
+                Accessible.role: Accessible.StaticText
+                Accessible.name: fileLoaded ?
+                           qsTranslate("PageServicesSign","STR_SIGN_TITLE_SIGN") :
+                           qsTranslate("PageServicesSign","STR_SIGN_TITLE_FILE")
+                KeyNavigation.tab: buttonHidedAdd
             }
 
             Rectangle {
@@ -110,12 +124,15 @@ Item {
                 color: "white"
                 anchors.top: titlePre.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                border.width: Constants.PDF_PREVIEW_SEAL_BORDER
+                border.color: buttonHidedAdd.focus ? Constants.COLOR_MAIN_DARK_GRAY
+                                                   : Constants.COLOR_MAIN_SOFT_GRAY
 
                 Text {
                     id: textDragMsgImg
                     anchors.fill: parent
                     text: qsTranslate("PageServicesSign","STR_SIGN_DROP")
-                    font.bold: true
+                    font.bold: buttonHidedAdd.focus ? true : false
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -130,11 +147,26 @@ Item {
                     anchors.fill: parent;
                     z: 2
                 }
-                Components.PDFPreview {
+                Button {
+                    id: buttonHidedAdd
+                    text: qsTranslate("PageServicesSign", "STR_SIGN_ADD_BUTTON")
                     anchors.fill: parent
+                    opacity: 0
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: fileLoaded ? pdfPreviewArea : textSpinBox
+                }
+                Components.PDFPreview {
                     id: pdfPreviewArea
+                    width: parent.width - 2 * Constants.PDF_PREVIEW_SEAL_BORDER
+                    height: parent.height - 2 * Constants.PDF_PREVIEW_SEAL_BORDER
+                    x: Constants.PDF_PREVIEW_SEAL_BORDER
+                    y: Constants.PDF_PREVIEW_SEAL_BORDER
                     propertyDragSigRect.visible: true
                     propertyReducedChecked : false
+                    KeyNavigation.tab: textSpinBox
                 }
             }
             MouseArea {
@@ -153,7 +185,6 @@ Item {
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
         // Expanded menu need a Horizontal space to Main Menu
         x: Constants.SIZE_ROW_H_SPACE
-
         Item {
             id: itemCheckPage
             width: parent.width * 0.30
@@ -187,6 +218,8 @@ Item {
                 enabled: fileLoaded && !checkLastPage.checked
                 editable:  fileLoaded ? true : false
                 validator: RegExpValidator { regExp: /[1-9][0-9]*/ }
+                Accessible.ignored: true
+
                 contentItem: TextInput {
                     id: textSpinBox
                     z: 2
@@ -202,6 +235,9 @@ Item {
                     validator: spinBoxControl.validator
                     inputMethodHints: Qt.ImhFormattedNumbersOnly
                     maximumLength: 5 //pages go from 1 to 99999
+                    Accessible.role: Accessible.EditableText
+                    Accessible.name: qsTranslate("PageServicesSign","STR_SIGN_PAGE") + spinBoxControl.value
+                    KeyNavigation.tab: checkLastPage
                 }
 
                 up.indicator: Rectangle {
@@ -210,7 +246,6 @@ Item {
                     height: parent.height
                     implicitWidth: 20
                     implicitHeight: parent.height
-
                     Text {
                         text: ">"
                         font.family: lato.name
@@ -232,7 +267,6 @@ Item {
                     height: parent.height
                     implicitWidth: 20
                     implicitHeight: parent.height
-
                     Text {
                         text: "<"
                         font.family: lato.name
@@ -262,6 +296,9 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.capitalization: Font.MixedCase
                 enabled: fileLoaded
+                Accessible.role: Accessible.CheckBox
+                Accessible.name: qsTranslate("PageServicesSign","STR_SIGN_LAST")
+                KeyNavigation.tab: buttonRemove
             }
         }
     }
@@ -290,6 +327,9 @@ Item {
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 anchors.left: parent.left
+                Accessible.role: Accessible.Button
+                Accessible.name: checkLastPage.text
+                KeyNavigation.tab: button_signCC
             }
         }
         Item{
@@ -309,6 +349,9 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                Accessible.role: Accessible.Button
+                Accessible.name: button_signCC.text
+                KeyNavigation.tab: button_signCMD
             }
             Button {
                 id: button_signCMD
@@ -321,6 +364,9 @@ Item {
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 anchors.right: parent.right
+                Accessible.role: Accessible.Button
+                Accessible.name: button_signCMD.text
+                KeyNavigation.tab: titlePre
             }
         }
     }

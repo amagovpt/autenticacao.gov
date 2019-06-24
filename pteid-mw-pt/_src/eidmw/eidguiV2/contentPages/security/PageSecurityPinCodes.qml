@@ -3,12 +3,42 @@ import QtQuick.Controls 2.1
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
 import "../../components/" as Components
 
 //Import C++ defined enums
 import eidguiV2 1.0
 
 PageSecurityPinCodesForm {
+
+    Keys.onPressed: {
+        var index = protertyStackLayout.currentIndex
+        
+        var isOnAuthTab = index === 0 && propertyTabAuth.focus === true 
+        var isOnSignTab = index === 1 && propertyTabSign.focus === true 
+        var isOnAddrTab = index === 2 && propertyTabAddr.focus === true
+
+        var update = true
+        if (isOnAuthTab && !wasOnAuthTab) {
+            propertyTabAuth.forceActiveFocus()
+        } else if (isOnSignTab && !wasOnSignTab) {
+            propertyTabSign.forceActiveFocus()
+        } else if (isOnAddrTab && !wasOnAddrTab) {
+            propertyTabAddr.forceActiveFocus()
+        } else {
+            Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+            wasOnAuthTab = false
+            wasOnSignTab = false
+            wasOnAddrTab = false
+            update = false
+        }
+
+        if (update) {
+            wasOnAuthTab = isOnAuthTab
+            wasOnSignTab = isOnSignTab
+            wasOnAddrTab = isOnAddrTab
+        }
+    }
 
     Connections {
         target: gapi
@@ -678,7 +708,12 @@ PageSecurityPinCodesForm {
     Component.onCompleted: {
         propertyBusyIndicator.running = true
         console.log("StackLayout currentIndex = " + protertyStackLayout.currentIndex)
+        
+        // guarantee that current index is the first element
+        protertyStackLayout.currentIndex = 0
+
         gapi.getTriesLeftAuthPin()
+        propertyTabAuth.forceActiveFocus()
     }
 
     function updateWithTriesLeft(triesLeft, pin) {

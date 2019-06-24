@@ -1,9 +1,17 @@
 import QtQuick 2.6
 
+import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
+
 //Import C++ defined enums
 import eidguiV2 1.0
 
 PageCardOtherDataForm {
+
+    Keys.onPressed: {
+        console.log("PageCardOtherDataForm onPressed:" + event.key)
+        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+    }
 
     Connections {
         target: gapi
@@ -22,7 +30,8 @@ PageCardOtherDataForm {
             propertyTextBoxDocumentType.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Documenttype)
             propertyTextBoxPlaceOfRequest.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.PlaceOfRequest)
             propertyTextBoxCardState.propertyDateField.text = ""
-
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
+            propertyTextBoxNIF.forceActiveFocus()
         }
         onSignalShowCardActivation: {
             propertyBusyIndicator.running = false

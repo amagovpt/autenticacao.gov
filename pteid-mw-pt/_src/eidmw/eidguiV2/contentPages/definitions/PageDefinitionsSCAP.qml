@@ -5,12 +5,28 @@ import QtQuick.Controls 2.1
 import eidguiV2 1.0
 
 import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
 
 PageDefinitionsSCAPForm {
 
     property string popupMsg: ""
     property bool isCardPresent: false
     property bool isLoadingAttributes: false
+
+    Keys.onPressed: {
+        var index = propertyStackLayout.currentIndex
+
+        var isOnEntitiesTab = index === 0 && propertyTabButtonEntities.focus === true
+        var isOnEntityTab = index === 1 && propertyTabButtonCompanies.focus === true
+
+        if (isOnEntitiesTab) {
+            propertyTabButtonEntities.forceActiveFocus()
+        } else if (isOnEntityTab) {
+            propertyTabButtonCompanies.forceActiveFocus()
+        } else {
+            Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+        }
+    }
 
     Connections {
         target: gapi
@@ -22,6 +38,7 @@ PageDefinitionsSCAPForm {
             propertyBusyIndicator.running = false
             isCardPresent = true
             propertyButtonLoadEntityAttributes.enabled = isCardPresent && isAnyEntitySelected()
+            propertyTabButtonEntities.forceActiveFocus()
         }
         onSignalCardAccessError: {
             console.log("Definitions SCAP Signature --> onSignalCardAccessError")
@@ -61,6 +78,7 @@ PageDefinitionsSCAPForm {
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             propertyBusyIndicatorAttributes.running = false
             propertyBusyIndicator.running = false
+            propertyTabButtonEntities.forceActiveFocus()
         }
         onSignalCardChanged: {
             console.log("Definitions SCAP Signature --> onSignalCardChanged")
@@ -167,6 +185,7 @@ PageDefinitionsSCAPForm {
             popupMsg = ""
 
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             // Load attributes from cache (Entities, isShortDescription)
             gapi.startLoadingAttributesFromCache(0, 0)
             propertyBusyIndicator.running = false
@@ -180,6 +199,7 @@ PageDefinitionsSCAPForm {
                     + "\n\n"
                     + qsTranslate("PageDefinitionsSCAP","STR_SCAP_SERVICE_FAIL_SECOND")
              mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             // Load attributes from cache (Entities, isShortDescription)
             propertyBusyIndicatorAttributes.running = false
             propertyBusyIndicator.running = false
@@ -193,6 +213,7 @@ PageDefinitionsSCAPForm {
                     + "\n\n"
                     + qsTranslate("PageDefinitionsSCAP","STR_SCAP_PING_FAIL_SECOND")
              mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             // Load attributes from cache (Entities, isShortDescription)
             propertyBusyIndicator.running = false
             propertyBusyIndicatorAttributes.running = false
@@ -205,8 +226,11 @@ PageDefinitionsSCAPForm {
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                     qsTranslate("PageDefinitionsSCAP","STR_SCAP_LOAD_ENTITIES_ERROR")
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             if(propertyBar.currentIndex == 0)
                 propertyBusyIndicatorAttributes.running = false
+            propertyListViewEntities.forceActiveFocus()
+
         }
         onSignalCompanyAttributesLoadedError: {
             isLoadingAttributes = false
@@ -216,6 +240,7 @@ PageDefinitionsSCAPForm {
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                     qsTranslate("PageDefinitionsSCAP","STR_SCAP_LOAD_COMPANY_ERROR")
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             if(propertyBar.currentIndex == 1)
                 propertyBusyIndicatorAttributes.running = false
         }
@@ -313,6 +338,11 @@ PageDefinitionsSCAPForm {
                 }
             }
             propertyBusyIndicatorAttributes.running = false
+
+            if(propertyTabButtonEntities.focus)
+                propertyTabButtonEntities.forceActiveFocus()
+            if(propertyTabButtonCompanies.focus)
+                propertyCompaniesText.forceActiveFocus()
         }
         onSignalRemoveSCAPAttributesSucess: {
             console.log("Definitions SCAP - Signal SCAP Signal Remove SCAP Attributes Sucess")
@@ -321,7 +351,7 @@ PageDefinitionsSCAPForm {
                     qsTranslate("PageDataApp","STR_CLEAR_CACHE")
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                     qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC")
-        
+
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             if(isCompanies == false){
@@ -336,7 +366,7 @@ PageDefinitionsSCAPForm {
                     qsTranslate("PageDataApp","STR_CLEAR_CACHE")
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                     qsTranslate("PageDataApp","STR_CLEAR_CACHE_FAIL")
-        
+
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             if(isCompanies == false){
@@ -350,10 +380,10 @@ PageDefinitionsSCAPForm {
                     qsTranslate("PageDataApp","STR_CLEAR_CACHE")
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                     qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
-        
+
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
-               
+
             if(isCompanies == false){
                 gapi.startGettingEntities()
                 propertyBusyIndicator.running = true
@@ -365,7 +395,7 @@ PageDefinitionsSCAPForm {
                     qsTranslate("PageDataApp","STR_CLEAR_CACHE")
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                     qsTranslate("PageDataApp","STR_CACHE_NOT_WRITABLE")
-        
+
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
@@ -375,7 +405,7 @@ PageDefinitionsSCAPForm {
                     qsTranslate("PageDataApp","STR_CLEAR_CACHE")
             mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                     qsTranslate("PageDataApp","STR_CACHE_FOLDER_NOT_CREATED")
-        
+
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
@@ -421,14 +451,37 @@ PageDefinitionsSCAPForm {
         }
     }
 
+    propertyListViewEntities{
+        onFocusChanged: {
+            if(propertyListViewEntities.focus)propertyListViewEntities.currentIndex = 0
+        }
+    }
+
     Component {
-        id: attributeListDelegate
+        id: attributeListDelegateEntities
         Rectangle {
+            id: container
             width: parent.width - propertyEntitiesListViewScroll.width
                    - Constants.SIZE_ROW_H_SPACE * 0.5
             height: columnItem.height + 10
-            id: container
-            color: Constants.COLOR_MAIN_SOFT_GRAY
+            Keys.onSpacePressed: {
+                checkboxSel.focus = true
+            }
+            Keys.onTabPressed: {
+                checkboxSel.focus = true
+                if(propertyListViewEntities.currentIndex == propertyListViewEntities.count -1){
+                    propertyButtonRemoveEntityAttributes.forceActiveFocus()
+                }else{
+                    propertyListViewEntities.currentIndex++
+                }
+            }
+            color:  propertyListViewEntities.currentIndex === index && propertyListViewEntities.focus
+                    ? Constants.COLOR_MAIN_DARK_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
+
+            Accessible.role: Accessible.CheckBox
+            Accessible.name: Functions.filterText(entityText.text + attrTitle.text
+                                                  + (attrText.text.length > 0 ? attrText.text : qsTranslate("GAPI","STR_EMPTY_FIELD"))
+                                                  )
             CheckBox {
                 id: checkboxSel
                 height: 25
@@ -442,6 +495,9 @@ PageDefinitionsSCAPForm {
                     propertyButtonLoadEntityAttributes.enabled = isAnyEntitySelected() && isCardPresent
                     propertyButtonLoadEntityAttributesOAuth.enabled = isAnyEntitySelected()
                 }
+                onFocusChanged: {
+                    if(focus) propertyListViewEntities.currentIndex = index
+                }
             }
             Column {
                 id: columnItem
@@ -449,48 +505,66 @@ PageDefinitionsSCAPForm {
                 width: parent.width - checkboxSel.width - Constants.SIZE_ROW_H_SPACE * 0.5
                 anchors.verticalCenter: parent.verticalCenter
                 Text {
-                    text: '<b>Entidade:</b> ' + entityName
+                    id: entityText
+                    text: '<b>' + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITY") + '</b> ' + entityName
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
                 Text {
-                    text: "<b>Atributos:</b>"
+                    id: attrTitle
+                    text: '<b>'+ qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTR") + '</b>'
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
                 Text {
+                    id: attrText
                     width: parent.width
                     wrapMode: Text.WordWrap
                     text: attribute
                 }
             }
-
         }
     }
     Component {
         id: attributeListDelegateCompanies
         Rectangle {
+            id: container
             width: parent.width - propertyCompaniesListViewScroll.width
                    - Constants.SIZE_ROW_H_SPACE * 0.5
             height: columnItem.height + 10
-            id: container
-            color: Constants.COLOR_MAIN_SOFT_GRAY
+            Keys.onTabPressed: {
+                if(propertyListViewCompanies.currentIndex == propertyListViewCompanies.count -1){
+                    propertyListViewCompanies.currentIndex = 0
+                    propertyButtonRemoveCompanyAttributes.forceActiveFocus()
+                }else{
+                    propertyListViewCompanies.currentIndex++
+                }
+            }
+            color:  propertyListViewCompanies.currentIndex === index && propertyListViewCompanies.focus
+                    ? Constants.COLOR_MAIN_DARK_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
+            Accessible.role: Accessible.CheckBox
+            Accessible.name: Functions.filterText(entityText.text + attrTitle.text
+                                                  + (attrText.text.length > 0 ? attrText.text : qsTranslate("GAPI","STR_EMPTY_FIELD"))
+                                                  )
             Column {
                 id: columnItem
                 width: parent.width - Constants.SIZE_ROW_H_SPACE
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
-                    text: '<b>Entidade:</b> ' + entityName
+                    id: entityText
+                    text: '<b>' + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITY") + '</b> ' + entityName
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
                 Text {
-                    text: "<b>Atributos:</b>"
+                    id: attrTitle
+                    text: '<b>'+ qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTR") + '</b>'
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
                 Text {
+                    id: attrText
                     width: parent.width
                     wrapMode: Text.WordWrap
                     text: attribute
@@ -682,7 +756,7 @@ PageDefinitionsSCAPForm {
 
     function returnToAdvancedSignaturePage() {
         propertyPageLoader.propertyBackupFromSignaturePage = false
-        mainFormID.state = "STATE_EXPAND"
+        mainFormID.state = Constants.MenuState.EXPAND
         mainFormID.propertySubMenuListView.model.clear()
         for(var i = 0; i < mainFormID.propertyMainMenuListView.model.get(1).subdata.count; ++i) {
             /*console.log("Sub Menu indice " + i + " - "
@@ -696,7 +770,7 @@ PageDefinitionsSCAPForm {
                         "url": mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i)
                         .url
                     })
-        }          
+        }
         mainFormID.propertyMainMenuListView.currentIndex = 1
         mainFormID.propertyMainMenuBottomListView.currentIndex = -1
         mainFormID.propertySubMenuListView.currentIndex = -1
@@ -716,5 +790,17 @@ PageDefinitionsSCAPForm {
         return str.replace(/\w\S*/g, function(txt){
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
+    }
+    function tabDetectKeys(key) {
+        if(propertyTabButtonEntities.focus)
+            if(key===Qt.Key_Return || key===Qt.Key_Space){
+                propertyStackLayout.currentIndex = propertyBar.currentIndex = 0
+                propertyEntitiesText.forceActiveFocus()
+            }
+        if(propertyTabButtonCompanies.focus)
+            if(key===Qt.Key_Return || key===Qt.Key_Space){
+                propertyStackLayout.currentIndex = propertyBar.currentIndex = 1
+                propertyCompaniesText.forceActiveFocus()
+            }
     }
 }

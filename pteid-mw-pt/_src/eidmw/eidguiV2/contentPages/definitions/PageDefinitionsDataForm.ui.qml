@@ -14,6 +14,8 @@ Item {
     property alias propertyCacheAppSizeTextField : cacheAppSizeTextField
     property alias propertyCacheSCAPSizeTextField : cacheSCAPSizeTextField
 
+    property alias propertyMainItem: dateAppCache
+
     anchors.fill: parent
 
     Item {
@@ -52,9 +54,13 @@ Item {
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDataApp","STR_CACHE_TITLE") + controler.autoTr
+                Accessible.role: Accessible.TitleBar
+                Accessible.name: text
+                KeyNavigation.tab: cacheAppTextField
             }
             DropShadow {
                 anchors.fill: rowAppCache
@@ -97,7 +103,11 @@ Item {
                         font.capitalization: Font.MixedCase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        font.bold: focus
                         wrapMode: Text.WordWrap
+                        Accessible.role: Accessible.StaticText
+                        Accessible.name: text
+                        KeyNavigation.tab: cacheAppSizeTextField
                     }
                 }
 
@@ -115,15 +125,19 @@ Item {
                         anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                         Text {
                             id: cacheAppSizeTextField
-                            text: "Sem informação do tamanho da cache"
+                            text: qsTranslate("PageDataApp","STR_CLEAR_CACHE_NO_INFO") + controler.autoTr
                             width: parent.width
                             height: parent.height
                             font.capitalization: Font.MixedCase
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
+                            font.bold: focus
                             wrapMode: Text.WordWrap
                             topPadding: Constants.SIZE_ROW_V_SPACE
-                        }  
+                            Accessible.role: Accessible.StaticText
+                            Accessible.name: text
+                            KeyNavigation.tab: buttonRemoveAppCache
+                        }
                     }
                     Rectangle {
                         id: rectAppCacheButton
@@ -138,7 +152,8 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
-                        }             
+                            KeyNavigation.tab: dateSCAPCache
+                        }
                     }
                 }
             }
@@ -156,9 +171,13 @@ Item {
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDataApp","STR_SCAP_CACHE_TITLE") + controler.autoTr
+                Accessible.role: Accessible.TitleBar
+                Accessible.name: text
+                KeyNavigation.tab: cacheSCAPTextField
             }
             DropShadow {
                 anchors.fill: rowSCAPCache
@@ -201,7 +220,11 @@ Item {
                         font.capitalization: Font.MixedCase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
+                        font.bold: focus
                         wrapMode: Text.WordWrap
+                        Accessible.role: Accessible.StaticText
+                        Accessible.name: text
+                        KeyNavigation.tab: cacheSCAPSizeTextField
                         
                     }
                 }
@@ -220,15 +243,19 @@ Item {
                         anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                         Text {
                             id: cacheSCAPSizeTextField
-                            text: "Sem informação do tamanho da cache"
+                            text: qsTranslate("PageDataApp","STR_CLEAR_CACHE_NO_INFO") + controler.autoTr
                             width: parent.width
                             height: parent.height
                             font.capitalization: Font.MixedCase
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
+                            font.bold: focus
                             wrapMode: Text.WordWrap
                             topPadding: Constants.SIZE_ROW_V_SPACE
-                        }  
+                            Accessible.role: Accessible.StaticText
+                            Accessible.name: text
+                            KeyNavigation.tab: buttonRemoveSCAPCache
+                        }
                     }
                     Rectangle {
                         id: rectSCAPCacheButton
@@ -243,7 +270,8 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
-                        }              
+                            KeyNavigation.tab: propertyMainItem
+                        }
                     }
                 }
             }

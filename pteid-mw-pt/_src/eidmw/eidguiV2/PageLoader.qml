@@ -73,6 +73,9 @@ Loader{
                   }
             }
 
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") + titleText.text + labelText.text
+
             Item {
                 id: rectLabelText
                 width: parent.width
@@ -91,6 +94,7 @@ Loader{
                 }
             }
             Button {
+                id: okButton
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 text: "OK"
@@ -99,8 +103,17 @@ Loader{
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
-                onClicked: generalPopUp.close()
+                Accessible.role: Accessible.Button
+                Accessible.name: text 
+                Accessible.onPressAction: generalPopUp.close()
+                onClicked: {
+                    generalPopUp.close()
+                    mainFormID.propertyPageLoader.forceActiveFocus()
             }
+        }
+    }
+        onOpened: {
+            okButton.forceActiveFocus()
         }
     }
 

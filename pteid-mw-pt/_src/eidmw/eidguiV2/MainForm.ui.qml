@@ -1,4 +1,5 @@
 import QtQuick 2.6
+import QtQuick.Controls 2.1
 
 /* Constants imports */
 import "scripts/Constants.js" as Constants
@@ -23,6 +24,8 @@ Rectangle {
     property alias propertyPageLoader: pageLoaderID
 
     property alias propertyImageLogo : mouseAreaImageLogo
+
+    property alias propertyImageLogoBottom: imageLogoBottom
 
     property bool propertShowAnimation: true
 
@@ -66,6 +69,7 @@ Rectangle {
         anchors.bottom: mainView.bottom
         propertySide: "BOTTOM"
     }
+
     /* Main View */
     Item {
 
@@ -73,7 +77,6 @@ Rectangle {
         width: parent.width
         height: parent.height - Constants.TITLE_BAR_SIZE
         y: Constants.TITLE_BAR_SIZE
-
         /* Main Menu View */
         Rectangle {
             id: mainMenuView
@@ -82,20 +85,37 @@ Rectangle {
             color: Constants.COLOR_BACKGROUND_MAIN_MENU
             border.width: 0
             z: 1
+            focus: true
+            Accessible.role: Accessible.MenuBar
+
             Image {
                 id: imageLogo
-                width: Constants.SIZE_IMAGE_LOGO_MAIN_MENU_WIDTH
-                height: Constants.SIZE_IMAGE_LOGO_MAIN_MENU_HEIGHT
-                y: parent.height * Constants.IMAGE_LOGO_RELATIVE_V_POS
-                fillMode: Image.PreserveAspectFit
+                width: imageLogoBottom.focus ? Constants.SIZE_IMAGE_LOGO
+                                               + 8 : Constants.SIZE_IMAGE_LOGO
+                height: imageLogoBottom.focus ? Constants.SIZE_IMAGE_LOGO
+                                                + 8 : Constants.SIZE_IMAGE_LOGO
+                y: imageLogoBottom.focus ? parent.height * Constants.IMAGE_LOGO_RELATIVE_V_POS
+                                           - 4 : parent.height * Constants.IMAGE_LOGO_RELATIVE_V_POS
                 anchors.horizontalCenter: parent.horizontalCenter
                 source: "images/logo_autenticacao_gov100.png"
+                z: 1
                 MouseArea {
                     id: mouseAreaImageLogo
                     anchors.fill: parent
                 }
             }
+            Button {
+                id: imageLogoBottom
+                text: "Autenticação Gov"
+                width: imageLogo.width
+                height: imageLogo.height
+                y: imageLogo.y
+                anchors.horizontalCenter: parent.horizontalCenter
+                opacity: 0
+                Accessible.role: Accessible.Button
+            }
             ListView {
+                focus: true
                 id: mainMenuListView
                 width: parent.width
                 height: parent.height * Constants.MAIN_MENU_RELATIVE_V_SIZE
@@ -107,7 +127,6 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 model: MainMenuModel {}
                 delegate: mainMenuDelegate
-                focus: true
             }
             ListView {
                 id: mainMenuBottomListView
@@ -122,7 +141,6 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
                 model: MainMenuBottomModel {}
                 delegate: mainMenuBottomDelegate
-                focus: true
             }
 
         }
@@ -157,7 +175,6 @@ Rectangle {
                         color: Constants.COLOR_BACKGROUND_SUB_MENU
                         radius: 0
                     }
-                    focus: true
                 }
 
                 Rectangle {
@@ -189,7 +206,7 @@ Rectangle {
                     fillMode: Image.PreserveAspectFit
                     anchors.horizontalCenter: parent.horizontalCenter
                     y: parent.height / 2 - Constants.SIZE_TEXT_SUB_MENU / 2 + Constants.APP_BORDER
-                    source: "images/arrow-right_white_AMA.png"
+                    source: Constants.ARROW_RIGHT
                 }
             }
         }
@@ -208,7 +225,7 @@ Rectangle {
                 PageLoader{
                     id: pageLoaderID
                     propertyGeneralPopUp.visible: false
-                }
+                    }
             }
         }
     }

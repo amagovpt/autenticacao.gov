@@ -7,6 +7,8 @@ import "../../scripts/Constants.js" as Constants
 import "../../components" as Components
 
 Item {
+    property alias propertyDateAppCertificates: dateAppCertificates
+    property alias propertyDateAppTimeStamp: dateAppTimeStamp
     property alias propertyRectAppCertificates: rectAppCertificates
     property alias propertyCheckboxRegister: checkboxRegister
     property alias propertyCheckboxRemove: checkboxRemove
@@ -45,10 +47,14 @@ Item {
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsApp",
                                   "STR_CERTIFICATES_TITLE") + controler.autoTr
+                Accessible.role: Accessible.TitleBar
+                Accessible.name: text
+                KeyNavigation.tab: checkboxRegister
             }
             DropShadow {
                 anchors.fill: rectAppCertificatesCheckBox
@@ -88,6 +94,9 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                    Accessible.role: Accessible.CheckBox
+                    Accessible.name: text
+                    KeyNavigation.tab: checkboxRemove
                 }
                 CheckBox {
                     id: checkboxRemove
@@ -100,6 +109,9 @@ Item {
                     font.capitalization: Font.MixedCase
                     anchors.top: checkboxRegister.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                    Accessible.role: Accessible.CheckBox
+                    Accessible.name: text
+                    KeyNavigation.tab: dateAppTimeStamp
                 }
             }
         }
@@ -117,10 +129,14 @@ Item {
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsApp",
                                   "STR_TIMESTAMP_TITLE") + controler.autoTr
+                Accessible.role: Accessible.TitleBar
+                Accessible.name: text
+                KeyNavigation.tab: checkboxTimeStamp
             }
             DropShadow {
                 anchors.fill: rectAppTimeStampCheckBox
@@ -159,6 +175,9 @@ Item {
                     font.capitalization: Font.MixedCase
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                     checked: false
+                    Accessible.role: Accessible.CheckBox
+                    Accessible.name: text
+                    KeyNavigation.tab: checkboxTimeStamp.checked ? textFieldTimeStamp : (rectOffice.visible ? textOfficeTitle: dateAppTimeStamp)
                 }
                 Item {
                     id: boxAppTimeStamp
@@ -184,6 +203,9 @@ Item {
                             //http/https url validator
                             regExp: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
                         }
+                        Accessible.role: Accessible.EditableText
+                        Accessible.name: text
+                        KeyNavigation.tab: rectOffice.visible ? textOfficeTitle: dateAppTimeStamp
                     }
                 }
             }
@@ -203,10 +225,14 @@ Item {
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsSignSettings",
                                   "STR_OFFICE_TITLE") + controler.autoTr
+                Accessible.role: Accessible.TitleBar
+                Accessible.name: text
+                KeyNavigation.tab: checkboxDisable
             }
             DropShadow {
                 anchors.fill: rectOfficeCheckbox
@@ -246,16 +272,11 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                    Accessible.role: Accessible.CheckBox
+                    Accessible.name: text
+                    KeyNavigation.tab: checkboxRegister.visible ? dateAppCertificates : checkboxTimeStamp
                 }
             }
         }
     }
 }
-
-
-
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

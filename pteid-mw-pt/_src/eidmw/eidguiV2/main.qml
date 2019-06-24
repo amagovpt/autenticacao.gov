@@ -5,12 +5,10 @@ import QtQuick.Controls.Universal 2.1
 import QtQuick.Window 2.2
 
 import "scripts/Functions.js" as Functions
+import "scripts/Constants.js" as Constants
 
 //Import C++ defined enums
 import eidguiV2 1.0
-
-/* Constants imports */
-import "scripts/Constants.js" as Constants
 
 Window {
     id: mainWindow
@@ -64,6 +62,7 @@ Window {
                     "Erro na leitura dos idiomas. Por favor, reinstale a aplicação <br/>
 Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
     }
 
@@ -104,6 +103,7 @@ Load language error. Please reinstall the application"
                     "Erro na leitura dos idiomas. Por favor, reinstale a aplicação <br/>
 Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
 
         onSignalReaderContext: {
@@ -127,6 +127,10 @@ Load language error. Please reinstall the application"
         // Center dialog in the main view
         x: parent.width * 0.5 - readerContext.width * 0.5
         y: parent.height * 0.5 - readerContext.height * 0.5
+
+        Accessible.role: Accessible.AlertMessage
+        Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") + labelReaderContext.text + textMessageTop.text
+
 
         header: Label {
             id: labelReaderContext
@@ -226,22 +230,22 @@ Load language error. Please reinstall the application"
         //************************************************************************/
         states:[
             State{
-                name: "STATE_FIRST_RUN"
+                name: Constants.MenuState.FIRST_RUN
             },
             State{
-                name: "STATE_HOME"
+                name: Constants.MenuState.HOME
             },
             State{
-                name: "STATE_EXPAND"
+                name: Constants.MenuState.EXPAND
             },
             State{
-                name: "STATE_NORMAL"
+                name: Constants.MenuState.NORMAL
             }
         ]
         transitions: [
             Transition {
-                from: "STATE_FIRST_RUN"
-                to: "STATE_NORMAL"
+                from: Constants.MenuState.FIRST_RUN
+                to: Constants.MenuState.NORMAL
                 NumberAnimation
                 {
                     id: animationShowSubMenuFirstRun
@@ -271,8 +275,8 @@ Load language error. Please reinstall the application"
                 }
             },
             Transition {
-                from: "STATE_HOME"
-                to: "STATE_NORMAL"
+                from: Constants.MenuState.HOME
+                to: Constants.MenuState.NORMAL
                 NumberAnimation
                 {
                     id: animationShowSubMenu
@@ -320,8 +324,8 @@ Load language error. Please reinstall the application"
                 }
             },
             Transition {
-                from: "STATE_NORMAL"
-                to: "STATE_HOME"
+                from: Constants.MenuState.NORMAL
+                to: Constants.MenuState.HOME
                 NumberAnimation
                 {
                     id: animationHideSubMenu
@@ -360,8 +364,8 @@ Load language error. Please reinstall the application"
                 }
             },
             Transition {
-                from: "STATE_FIRST_RUN"
-                to: "STATE_HOME"
+                from: Constants.MenuState.FIRST_RUN
+                to: Constants.MenuState.HOME
                 NumberAnimation
                 {
                     id: animationHideSubMenu2
@@ -409,8 +413,8 @@ Load language error. Please reinstall the application"
                 }
             },
             Transition {
-                from: "STATE_EXPAND"
-                to: "STATE_HOME"
+                from: Constants.MenuState.EXPAND
+                to: Constants.MenuState.HOME
                 NumberAnimation
                 {
                     target: mainFormID.propertySubMenuViewMenu
@@ -461,15 +465,15 @@ Load language error. Please reinstall the application"
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 onRunningChanged: {
-                    if (( mainFormID.state == "STATE_HOME") && (!running))
+                    if (( mainFormID.state == Constants.MenuState.HOME) && (!running))
                     {
                         mainFormID.propertyPageLoader.propertyAnimationExtendedFinished = false
                     }
                 }
             },
             Transition {
-                from: "STATE_NORMAL"
-                to: "STATE_EXPAND"
+                from: Constants.MenuState.NORMAL
+                to: Constants.MenuState.EXPAND
                 NumberAnimation
                 {
                     id: animationHideSubMenuExpand
@@ -509,15 +513,15 @@ Load language error. Please reinstall the application"
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 onRunningChanged: {
-                    if (( mainFormID.state == "STATE_EXPAND") && (!running))
+                    if (( mainFormID.state == Constants.MenuState.EXPAND) && (!running))
                     {
                         mainFormID.propertyPageLoader.propertyAnimationExtendedFinished = true
                     }
                 }
             },
             Transition {
-                from: "STATE_EXPAND"
-                to: "STATE_NORMAL"
+                from: Constants.MenuState.EXPAND
+                to: Constants.MenuState.NORMAL
                 NumberAnimation
                 {
                     id: animationShowSubMenuExpand
@@ -555,7 +559,7 @@ Load language error. Please reinstall the application"
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 onRunningChanged: {
-                    if (( mainFormID.state == "STATE_NORMAL") && (!running))
+                    if (( mainFormID.state == Constants.MenuState.NORMAL) && (!running))
                     {
                         mainFormID.propertyPageLoader.propertyAnimationExtendedFinished = false
                     }
@@ -564,9 +568,9 @@ Load language error. Please reinstall the application"
         ]
         Component.onCompleted: {
             if(controler.getNotShowHelpStartUp()){
-                mainFormID.state = "STATE_HOME"
+                mainFormID.state = Constants.MenuState.HOME;
             }else{
-                mainFormID.state = "STATE_FIRST_RUN"
+                mainFormID.state = Constants.MenuState.FIRST_RUN
             }
 
             //Open Advanced Signature on startup
@@ -575,7 +579,7 @@ Load language error. Please reinstall the application"
                 mainFormID.propertyMainMenuListView.currentIndex = 1
                 mainFormID.propertySubMenuListView.currentIndex = 1
 
-                mainFormID.state = "STATE_EXPAND"
+                mainFormID.state = Constants.MenuState.EXPAND
                 // Clean the content page
                 mainFormID.propertyPageLoader.source = "contentPages/services/PageServicesSignAdvanced.qml"
                 //TODO: we shouldn't need this to make sure the contentPage gets the expanded space
@@ -583,7 +587,7 @@ Load language error. Please reinstall the application"
                 return;
             }
 
-            if ( mainFormID.state === "STATE_FIRST_RUN"){
+            if ( mainFormID.state === Constants.MenuState.FIRST_RUN){
                 console.log("Runing First time" + mainWindow.width)
                 mainFormID.propertyMainMenuView.width = mainWindow.width * 2 * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
                 mainFormID.propertySubMenuView.width = 0
@@ -592,6 +596,7 @@ Load language error. Please reinstall the application"
             }else{
                 mainFormID.propertyMainMenuView.width = mainWindow.width
             }
+            mainFormID.propertyImageLogoBottom.forceActiveFocus()
 
             // Do not select any option
             mainFormID.propertyMainMenuListView.currentIndex = -1
@@ -602,17 +607,14 @@ Load language error. Please reinstall the application"
         }
         propertyImageLogo {
             onClicked: {
-                mainFormID.state = "STATE_HOME"
+                mainFormID.state = Constants.MenuState.HOME
                 propertyMainMenuListView.currentIndex = -1
                 propertyMainMenuBottomListView.currentIndex = -1
             }
         }
         propertyMouseAreaSubMenuViewReduced {
             onClicked: {
-                mainFormID.state = "STATE_NORMAL"
-                mainFormID.propertyPageLoader.source = "contentPages/services/PageServicesSignHelp.qml"
-                // Do not select any option in sub menu
-                mainFormID.propertySubMenuListView.currentIndex = -1
+                goToSubMenu()
             }
         }
     }
@@ -622,44 +624,99 @@ Load language error. Please reinstall the application"
             width: mainFormID.propertyMainMenuListView.width
             height: mainFormID.propertyMainMenuListView.height
                     / mainFormID.propertyMainMenuListView.count
+
+            Keys.onPressed: {
+                console.log("mainMenu onPressed:" + event.key)
+                Functions.detectBackKeys(event.key, Constants.MenuState.HOME)
+            }
+
+            Keys.onDownPressed: {
+                console.log("onDownPressed currentIndex:"
+                            + mainFormID.propertyMainMenuListView.currentIndex)
+
+                if(mainFormID.propertyMainMenuListView.currentIndex ==
+                        mainFormID.propertyMainMenuListView.count - 1){
+                    console.log("Move to botton Menu - onDownPressed")
+                    mainFormID.propertyMainMenuListView.currentIndex = -1
+                    mainFormID.propertyMainMenuBottomListView.forceActiveFocus()
+                    mainFormID.propertyMainMenuBottomListView.currentIndex = 0
+
+                } else {
+                    mainFormID.propertyMainMenuListView.currentIndex++
+                }
+            }
+
+            Keys.onUpPressed: {
+                console.log("onUpPressed currentIndex:"
+                            + mainFormID.propertyMainMenuListView.currentIndex)
+
+                if(mainFormID.propertyMainMenuListView.currentIndex <=
+                        0 ){
+                    console.log("Move to botton Menu - onUpPressed")
+                    mainFormID.propertyMainMenuListView.currentIndex = -1
+                    mainFormID.propertyMainMenuBottomListView.forceActiveFocus()
+                    mainFormID.propertyMainMenuBottomListView.currentIndex = mainFormID.propertyMainMenuBottomListView.count - 1
+                } else {
+                    mainFormID.propertyMainMenuListView.currentIndex--
+                }
+            }
+
+            Keys.onRightPressed: {
+                mainMenuPressed(index)
+            }
+
+            Keys.onSpacePressed: {
+                mainMenuPressed(index)
+            }
+
+            Keys.onReturnPressed: {
+                mainMenuPressed(index)
+            }
+
             MouseArea {
                 id: mouseAreaMainMenu
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked: {
-                    mainFormID.propertyMainMenuBottomListView.currentIndex = -1
-                    mainFormID.propertyMainMenuListView.currentIndex = index
-
-                    // Clear list model and then load a new sub menu
-                    mainFormID.propertySubMenuListView.model.clear()
-                    for(var i = 0; i < mainFormID.propertyMainMenuListView.model.get(index).subdata.count; ++i) {
-                        /*console.log("Sub Menu indice " + i + " - "
-                                    + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name);*/
-                        mainFormID.propertySubMenuListView.model
-                        .append({
-                                    "subName": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name,
-                                    "expand": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).expand,
-                                    "url": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).url
-                                })
-                    }
-                    mainFormID.state = "STATE_NORMAL"
-
-                    console.log("Expand Sub Menu = " +  mainFormID.propertyMainMenuListView.model.get(index).expand)
-                    if( mainFormID.propertyMainMenuListView.model.get(index).expand === true){
-                        // Clean the content page
-                        mainFormID.propertyPageLoader.source = "contentPages/services/PageServicesSignHelp.qml"
-                        // Do not select any option in sub menu
-                        mainFormID.propertySubMenuListView.currentIndex = -1
-                    }else{
-                        // Open the content page of the first item of the new sub menu
-                        mainFormID.propertyPageLoader.source =
-                                mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
-                        mainFormID.propertySubMenuListView.currentIndex = 0
-                    }
-                    console.log("Main Menu index = " + index);
-                }
+                onClicked: mainMenuPressed(index)
+                z:1 // MouseArea above buttons
             }
+
+            Button {
+                id: buttonMain
+                text: qsTranslate("MainMenuModel", name) + controler.autoTr
+                width: parent.width
+                height: parent.height
+                focus:  mainFormID.propertyMainMenuListView.currentIndex === index ? true : false
+                opacity: 0
+                Accessible.role: Accessible.Button
+                Accessible.name: text
+                Keys.onTabPressed: {
+                    console.log(" mainMenu onTabPressed currentIndex:"
+                                + mainFormID.propertySubMenuListView.currentIndex)
+                    if(mainFormID.propertyMainMenuListView.currentIndex ==
+                            mainFormID.propertyMainMenuListView.count - 1){
+                        console.log("Move to botton Menu - onTabPressed")
+                        mainFormID.propertyMainMenuListView.currentIndex = -1
+                        mainFormID.propertyMainMenuBottomListView.forceActiveFocus()
+                        mainFormID.propertyMainMenuBottomListView.currentIndex = 0
+                    } else {
+                        mainFormID.propertyMainMenuListView.currentIndex++
+                    }
+                }
+                onClicked: {
+                    console.log(index)
+                    mainMenuPressed(index)
+                }
+                onFocusChanged: {
+                    if(focus === true){
+                    mainFormID.propertyMainMenuListView.currentIndex = index
+                        mainFormID.propertyMainMenuListView.forceActiveFocus()
+                    }
+                    }
+                }
+
             Text {
+                id: textMain
                 text: qsTranslate("MainMenuModel", name) + controler.autoTr
                 color:  mainFormID.propertyMainMenuListView.currentIndex === index ?
                             Constants.COLOR_TEXT_MAIN_MENU_SELECTED :
@@ -671,6 +728,9 @@ Load language error. Please reinstall the application"
                                  Font.Bold :
                                  Font.Normal
                 font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
+                focus:  mainFormID.propertyMainMenuListView.currentIndex === index ?
+                            true :
+                            false
             }
             Image {
                 id: imageArrowMainMenu
@@ -680,7 +740,7 @@ Load language error. Please reinstall the application"
                 x: parent.width * Constants.IMAGE_ARROW_MAIN_MENU_RELATIVE
                 anchors.verticalCenter: parent.verticalCenter
                 source: Functions.getMainMenuArrowSource(index, mouseAreaMainMenu.containsMouse)
-                visible: mainFormID.state === "STATE_HOME" ?
+                visible: mainFormID.state === Constants.MenuState.HOME ?
                              false:
                              true
             }
@@ -705,46 +765,69 @@ Load language error. Please reinstall the application"
         Item {
             width: mainFormID.propertyMainMenuBottomListView.width / 2
             height: mainFormID.propertyMainMenuBottomListView.height
+
+
+            Keys.onPressed: {
+                console.log("mainMenuBottom onPressed:" + event.key)
+                Functions.detectBackKeys(event.key, Constants.MenuState.HOME)
+                    }
+
+            Keys.onReturnPressed: {
+                console.log("MainMenuBottom onReturnPressed")
+                mainMenuBottomPressed(index)
+            }
+            Keys.onSpacePressed: {
+                mainMenuBottomPressed(index)
+            }
+            Keys.onRightPressed: {
+                mainMenuBottomPressed(index)
+            }
+
+            Keys.onBackPressed: {
+                console.log("MainMenuBottom onBackPressed")
+                mainFormID.propertyMainMenuListView.forceActiveFocus();
+                mainFormID.propertyMainMenuListView.currentIndex = 0;
+                mainFormID.propertyMainMenuBottomListView.currentIndex = -1;
+                    }
+
+            Keys.onDownPressed: {
+                console.log("MainMenuBottom onDownPressed currentIndex:"
+                            + mainFormID.propertyMainMenuBottomListView.currentIndex)
+
+                if(mainFormID.propertyMainMenuBottomListView.currentIndex ==
+                        mainFormID.propertyMainMenuBottomListView.count - 1){
+                    console.log("Move to Main Menu")
+                    mainFormID.propertyMainMenuListView.currentIndex = 0
+                    mainFormID.propertyMainMenuListView.forceActiveFocus()
+                    mainFormID.propertyMainMenuBottomListView.currentIndex = -1
+
+                } else {
+                    mainFormID.propertyMainMenuBottomListView.currentIndex++
+                }
+            }
+
+            Keys.onUpPressed: {
+                console.log("MainMenuBottom onUpPressed currentIndex:"
+                            + mainFormID.propertyMainMenuBottomListView.currentIndex)
+
+                if(mainFormID.propertyMainMenuBottomListView.currentIndex <=
+                        0 ){
+                    console.log("Move to Main Menu")
+                    mainFormID.propertyMainMenuListView.currentIndex =
+                            mainFormID.propertyMainMenuListView.count -1
+                    mainFormID.propertyMainMenuListView.forceActiveFocus()
+                    mainFormID.propertyMainMenuBottomListView.currentIndex = -1
+                } else {
+                    mainFormID.propertyMainMenuBottomListView.currentIndex--
+                }
+            }
+
             MouseArea {
                 id: mouseAreaMainMenuBottom
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked: {
-                    // Do not select any option
-                    mainFormID.propertyMainMenuListView.currentIndex = -1
-                    mainFormID.propertyMainMenuBottomListView.currentIndex = index
-                    // Clear list model and then load a new sub menu
-                    mainFormID.propertySubMenuListView.model.clear()
-                    for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.count; ++i) {
-                        /*console.log("Sub Menu indice " + i + " - "
-                                    + mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i).subName);*/
-                        mainFormID.propertySubMenuListView.model
-                        .append({
-                                    "subName": qsTranslate("MainMenuBottomModel",
-                                                           mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i).subName),
-                                    "expand": mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i)
-                                    .expand,
-                                    "url": mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i)
-                                    .url
-                                })
-                    }
-
-                    mainFormID.state = "STATE_NORMAL"
-
-                    console.log("Expand Bottom Menu = " +  mainFormID.propertyMainMenuBottomListView.model.get(index).expand)
-                    if( mainFormID.propertyMainMenuBottomListView.model.get(index).expand === true){
-                        // Clean the content page
-                        mainFormID.propertyPageLoader.source = ""
-                        // Do not select any option in sub menu
-                        mainFormID.propertySubMenuListView.currentIndex = -1
-                    }else{
-                        // Open the content page of the first item of the new sub menu
-                        mainFormID.propertyPageLoader.source =
-                                mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(0).url
-                        mainFormID.propertySubMenuListView.currentIndex = 0
-                    }
-                    console.log("Main Menu Bottom index = " + index);
-                }
+                onClicked: mainMenuBottomPressed(index)
+                z:1 // MouseArea above buttons
             }
             Image {
                 id: imageMainMenuBottom
@@ -753,7 +836,54 @@ Load language error. Please reinstall the application"
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter
                 source: Functions.getBottomMenuImgSource(index,mouseAreaMainMenuBottom.containsMouse)
+            }
+            Button {
+                id: buttonMainMenuBottom
+                text: qsTranslate("MainMenuBottomModel", name) + controler.autoTr
+                width: parent.width
+                height: parent.height
+                focus:  mainFormID.propertyMainMenuBottomListView.currentIndex === index ? true : false
+                opacity: 0
+                Accessible.role: Accessible.Button
+                Accessible.name: text
+                onClicked: mainMenuBottomPressed(index)
+                Keys.onTabPressed: {
+                    console.log(" bottomMenu onTabPressed currentIndex:"
+                                + mainFormID.propertySubMenuListView.currentIndex)
+                    if(mainFormID.propertyMainMenuBottomListView.currentIndex ==
+                            mainFormID.propertyMainMenuBottomListView.count - 1){
+                        // Move to PageLoader or Main Menu
+                        if(mainFormID.propertyPageLoader.source != ""){
+                            var temp = mainFormID.propertyPageLoader.source
+                            mainFormID.propertyPageLoader.source = ""
+                            mainFormID.propertyPageLoader.source = temp
+                            mainFormID.propertyPageLoader.forceActiveFocus()
+                            mainFormID.propertyMainMenuBottomListView.currentIndex = -1
+                        } else {
+                            mainFormID.propertyMainMenuListView.currentIndex = -1
+                            mainFormID.propertyImageLogoBottom.forceActiveFocus()
+                            mainFormID.propertyMainMenuBottomListView.currentIndex = -1
+                        }
+                    } else {
+                        mainFormID.propertyMainMenuBottomListView.currentIndex++
+                    }
 
+            }
+                onFocusChanged: {
+                    if(focus === true){
+                        mainFormID.propertyMainMenuListView.currentIndex = -1
+                        mainFormID.propertyMainMenuBottomListView.currentIndex = index
+                        mainFormID.propertyMainMenuBottomListView.forceActiveFocus()
+                    }
+                }
+            }
+            Text {
+                id: textMainMenuBottom
+                visible: false
+                text: qsTranslate("MainMenuBottomModel", name) + controler.autoTr
+                focus:  mainFormID.propertyMainMenuBottomListView.currentIndex === index ?
+                            true :
+                            false
             }
             Component.onDestruction: {
                 imageMainMenuBottom.source = ""
@@ -761,30 +891,119 @@ Load language error. Please reinstall the application"
         }
 
     }
+
     Component {
         id: subMenuDelegate
         Item {
             width: mainFormID.propertySubMenuListView.width
             height: mainFormID.propertyMainView.height * Constants.SUB_MENU_RELATIVE_V_ITEM_SIZE
+
+            Keys.onPressed: {
+                console.log("subMenu onPressed:" + event.key)
+                Functions.detectBackKeys(event.key, Constants.MenuState.HOME)
+            }
+
+            Keys.onDownPressed: {
+                console.log(" subMenu onDownPressed currentIndex:"
+                            + mainFormID.propertySubMenuListView.currentIndex)
+
+                if(mainFormID.propertySubMenuListView.currentIndex ==
+                        mainFormID.propertySubMenuListView.count - 1){
+                    console.log("Move to top")
+                    mainFormID.propertySubMenuListView.currentIndex = 0
+
+                } else {
+                    mainFormID.propertySubMenuListView.currentIndex++
+                }
+            }
+
+            Keys.onUpPressed: {
+                console.log("subMenu onUpPressed currentIndex:"
+                            + mainFormID.propertySubMenuListView.currentIndex)
+
+                if(mainFormID.propertySubMenuListView.currentIndex <=
+                        0 ){
+                    console.log("Move to Main Menu")
+                    mainFormID.propertySubMenuListView.currentIndex =
+                            mainFormID.propertySubMenuListView.count - 1
+                } else {
+                    mainFormID.propertySubMenuListView.currentIndex--
+                }
+            }
+
+            Keys.onReturnPressed: {
+                console.log("subMenu onReturnPressed")
+                subMenuPressed(index, url)
+            }
+            Keys.onSpacePressed: {
+                subMenuPressed(index, url)
+            }
+            Keys.onRightPressed: {
+                subMenuPressed(index, url)
+            }
+
             MouseArea {
                 id: mouseAreaSubMenu
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked: {
-                    mainFormID.propertySubMenuListView.currentIndex = index
-                    //console.log("Sub Menu index = " + index);
-                    //console.log("Sub Menu Expand Sub Menu" + mainFormID.propertySubMenuListView.model.get(0).expand)
+                onClicked: subMenuPressed(index, url)
+                z:1 // MouseArea above buttons
+            }
 
-                    if(mainFormID.propertySubMenuListView.model.get(0).expand === true){
-                        // Clean the content page
-                        mainFormID.propertyPageLoader.source = url
-                        mainFormID.state = "STATE_EXPAND"
-                    }else{
-                        // Open the content page of the first item of the new sub menu
-                        mainFormID.propertyPageLoader.source = url
+            Button {
+                id: buttonSubMenuBottom
+                text: qsTranslate("MainMenuModel", subName)
+                width: parent.width
+                height: parent.height
+                focus:  mainFormID.propertySubMenuListView.currentIndex === index ? true : false
+                opacity: 0
+                onClicked: subMenuPressed(index, url)
+                Keys.onTabPressed: {
+                    console.log(" onTabPressed "
+                                + "SubMenu currentIndex" + mainFormID.propertySubMenuListView.currentIndex
+                                + "MainMenu currentIndex" + mainFormID.propertyMainMenuListView.currentIndex)
+
+                    if(mainFormID.propertySubMenuListView.currentIndex ==
+                            mainFormID.propertySubMenuListView.count - 1){
+
+                         mainFormID.propertySubMenuListView.currentIndex = 0
+                        var temp = ""
+                        // Check if Main Menu is selected
+                        if(mainFormID.propertyMainMenuListView.currentIndex != -1 )
+                        {
+                            // Check if is a expanded page
+                            if(mainFormID.propertyMainMenuListView.model.get(
+                                        mainFormID.propertyMainMenuListView.currentIndex).expand === true){
+                                temp = mainFormID.propertyPageLoader.source
+                                mainFormID.propertyPageLoader.source = ""
+                                mainFormID.propertyPageLoader.source = temp
+                                mainFormID.propertyPageLoader.forceActiveFocus()
+                    }
+                        } else {
+                            // Check if is a expanded page
+                            if(mainFormID.propertyMainMenuBottomListView.model.get(
+                                        mainFormID.propertyMainMenuBottomListView.currentIndex).expand === true){
+                                temp = mainFormID.propertyPageLoader.source
+                                mainFormID.propertyPageLoader.source = ""
+                                mainFormID.propertyPageLoader.source = temp
+                                mainFormID.propertyPageLoader.forceActiveFocus()
+                }
+            }
+
+                    } else {
+                        mainFormID.propertySubMenuListView.currentIndex++
+                    }
+                }
+                onFocusChanged: {
+                    if(focus === true){
+                        mainFormID.propertySubMenuListView.currentIndex = index
+                        mainFormID.propertySubMenuListView.forceActiveFocus()
                     }
                 }
             }
+            Accessible.role: Accessible.Button
+            Accessible.name: getSubMenuName(index)
+
             Text {
                 text: qsTranslate("MainMenuModel", subName)
                 color: Functions.getSubNameColor(index, mouseAreaSubMenu.containsMouse)
@@ -798,6 +1017,9 @@ Load language error. Please reinstall the application"
                 width: parent.width - 2 * imageArrowSubMenu.width
                        - 2 * Constants.IMAGE_ARROW_SUB_MENU_MARGIN
                 horizontalAlignment: Text.AlignHCenter
+                focus:  mainFormID.propertySubMenuListView.currentIndex === index ?
+                            true :
+                            false
             }
             Image {
                 id: imageArrowSubMenu
@@ -830,5 +1052,125 @@ Load language error. Please reinstall the application"
         mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
         gapi.initTranslation()
         gapi.setAppAsDlgParent()
+    }
+
+    function getSubMenuName(index){
+
+        if(mainFormID.propertyMainMenuListView.currentIndex != -1){
+            return "Sub Menu de "
+                    + qsTranslate("MainMenuModel", mainFormID.propertyMainMenuListView.model.get(
+                                      mainFormID.propertyMainMenuListView.currentIndex).name )
+                    + controler.autoTr
+
+        }else{
+            return "Sub Menu de "
+                    + qsTranslate("MainMenuModel", mainFormID.propertyMainMenuBottomListView.model.get(
+                                      mainFormID.propertyMainMenuBottomListView.currentIndex).name )
+                    + controler.autoTr
+        }
+    }
+
+    function mainMenuPressed(index){
+        mainFormID.propertyMainMenuBottomListView.currentIndex = -1
+        mainFormID.propertyMainMenuListView.currentIndex = index
+
+        // Clear list model and then load a new sub menu
+        mainFormID.propertySubMenuListView.model.clear()
+        for(var i = 0; i < mainFormID.propertyMainMenuListView.model.get(index).subdata.count; ++i) {
+            /*console.log("Sub Menu indice " + i + " - "
+                        + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name + " - "
+                        + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).expand + " - "
+                        + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).url)*/
+            mainFormID.propertySubMenuListView.model
+            .append({
+                        "subName": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name,
+                        "expand": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).expand,
+                        "url": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).url
+                    })
+        }
+
+        mainFormID.state = Constants.MenuState.NORMAL
+
+        console.log("Expand Sub Menu = " +  mainFormID.propertyMainMenuListView.model.get(index).expand)
+        if( mainFormID.propertyMainMenuListView.model.get(index).expand === true){
+            // Clean the content page
+            mainFormID.propertyPageLoader.source =
+                    mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
+            mainFormID.propertySubMenuListView.currentIndex = 0
+        }else{
+            // Do not open the content page of the first item of the new sub menu
+            mainFormID.propertyPageLoader.source = ""
+            mainFormID.propertySubMenuListView.currentIndex = 0
+            // Open the content page of the first item of the new sub menu
+            //mainFormID.propertyPageLoader.source =
+              //      mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
+            //mainFormID.propertySubMenuListView.currentIndex = 0
+        }
+
+        console.log("Main Menu index = " + index);
+        console.log("Set focus sub menu")
+        console.log("Sub menu count" + mainFormID.propertySubMenuListView.count)
+        //if(mainFormID.propertyMainMenuListView.model.get(index).expand === true){
+        //     mainFormID.propertyPageLoader.forceActiveFocus()
+        //} else {
+            mainFormID.propertySubMenuListView.forceActiveFocus()
+        //}
+    }
+
+    function subMenuPressed(index, url){
+        mainFormID.propertySubMenuListView.currentIndex = index
+        console.log("Sub Menu index = " + index);
+        console.log("Sub Menu Pressed Expand Sub Menu" + mainFormID.propertySubMenuListView.model.get(0).expand)
+
+        if(mainFormID.propertySubMenuListView.model.get(index).expand === true){
+            // Clean the content page
+            mainFormID.propertyPageLoader.source = url
+            mainFormID.state = Constants.MenuState.EXPAND
+        }else{
+            var temp = url
+            mainFormID.propertyPageLoader.source = ""
+            mainFormID.propertyPageLoader.source = temp
+        }
+    }
+
+    function mainMenuBottomPressed(index){
+        // Do not select any option
+        mainFormID.propertyMainMenuListView.currentIndex = -1
+        mainFormID.propertyMainMenuBottomListView.currentIndex = index
+        // Clear list model and then load a new sub menu
+        mainFormID.propertySubMenuListView.model.clear()
+        for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.count; ++i) {
+            /*console.log("Sub Menu indice " + i + " - "
+                        + mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i).subName);*/
+            mainFormID.propertySubMenuListView.model
+            .append({
+                        "subName": qsTranslate("MainMenuBottomModel",
+                                               mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i).subName),
+                        "expand": mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i)
+                        .expand,
+                        "url": mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(i)
+                        .url
+                    })
+        }
+
+        mainFormID.state = Constants.MenuState.NORMAL
+
+        console.log("Expand Bottom Menu = " +  mainFormID.propertyMainMenuBottomListView.model.get(index).expand)
+        if( mainFormID.propertyMainMenuBottomListView.model.get(index).expand === true){
+            // Clean the content page
+            mainFormID.propertyPageLoader.source = ""
+            // Do not select any option in sub menu
+            mainFormID.propertySubMenuListView.currentIndex = -1
+        }else{
+            // Do not open the content page of the first item of the new sub menu
+            mainFormID.propertyPageLoader.source = ""
+            mainFormID.propertySubMenuListView.currentIndex = 0
+            // Open the content page of the first item of the new sub menu
+            //mainFormID.propertyPageLoader.source =
+              //      mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(0).url
+            //mainFormID.propertySubMenuListView.currentIndex = 0
+        }
+        console.log("Main Menu Bottom index = " + index);
+        mainFormID.propertySubMenuListView.forceActiveFocus()
     }
 }

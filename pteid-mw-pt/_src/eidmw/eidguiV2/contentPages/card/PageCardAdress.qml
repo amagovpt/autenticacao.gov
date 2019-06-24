@@ -2,12 +2,19 @@ import QtQuick 2.6
 import QtQuick.Controls 2.1
 
 import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
+
 import "../../components" as Components
 
 //Import C++ defined enums
 import eidguiV2 1.0
 
 PageCardAdressForm {
+
+    Keys.onPressed: {
+        console.log("PageCardAdressForm onPressed:" + event.key)
+        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+    }
 
     Connections {
         target: gapi
@@ -50,6 +57,8 @@ PageCardAdressForm {
             gapi.setAddressLoaded(true)
             if(!Constants.USE_SDK_PIN_UI_POPUP)
                 dialogTestPin.visible = false
+
+            propertyDistrict.forceActiveFocus()
         }
         onSignalUpdateProgressBar: {
             console.log("Address change --> update progress bar with value = " + value)
@@ -130,6 +139,12 @@ PageCardAdressForm {
         onSignalCardChanged: {
             console.log("Card Adress onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                 propertyDistrict.propertyDateField.text = ""
                 propertyMunicipality.propertyDateField.text = ""
                 propertyParish.propertyDateField.text = ""
@@ -364,7 +379,10 @@ PageCardAdressForm {
                     anchors.verticalCenter: parent.verticalCenter
                     propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
                     anchors.fill: parent 
-                    propertyText.anchors.fill: textPinMsgConfirm                
+                    propertyText.anchors.fill: textPinMsgConfirm
+
+                    propertyAccessibleText: qsTr("STR_ADDRESS_CHANGE_TEXT") + 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
+                    propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
                 }
             }
 
@@ -397,6 +415,7 @@ PageCardAdressForm {
                     clip: false
                     anchors.left: textPinCurrent.right
                     anchors.bottom: parent.bottom
+                    focus: true
                 }
             }
             Item {
@@ -567,6 +586,7 @@ PageCardAdressForm {
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     dialogConfirmOfAddressProgress.close()
                 }
+                focus: true
             }
         }
         onRejected:{

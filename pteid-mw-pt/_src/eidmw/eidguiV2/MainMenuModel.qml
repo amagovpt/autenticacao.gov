@@ -37,6 +37,11 @@ ListModel {
         expand: true
         subdata:[
             ListElement {
+                name: QT_TR_NOOP("STR_MENU_SIGN_HELP")
+                expand: false
+                url: "contentPages/services/PageServicesSignHelp.qml"
+            },
+            ListElement {
                 name: QT_TR_NOOP("STR_MENU_SIGN_SIMPLE")
                 expand: true
                 url: "contentPages/services/PageServicesSignSimple.qml"

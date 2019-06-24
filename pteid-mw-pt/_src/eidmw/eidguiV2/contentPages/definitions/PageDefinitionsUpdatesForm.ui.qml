@@ -19,6 +19,8 @@ Item {
     property alias propertyRemoteVersion: remoteVersion
     property alias propertyInstalledVersion: installedVersion
 
+    property alias propertyMainItem: updateTitle
+
     Item {
         id: rowTop
         width: parent.width
@@ -45,9 +47,13 @@ Item {
                 id: updateTitle
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: parent.height
                 text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TITLE")
+                Accessible.role: Accessible.TitleBar
+                Accessible.name: text
+                KeyNavigation.tab: textDescription
             }
         }
 
@@ -71,6 +77,9 @@ Item {
                                       "STR_UPDATE_TEXT")
                     width: parent.width
                     height: parent.height
+                    Accessible.role: Accessible.TitleBar
+                    Accessible.name: text
+                    KeyNavigation.tab: buttonSearch.visible ? buttonSearch : installedVersion
                 }
             }
             Item {
@@ -93,6 +102,7 @@ Item {
                         visible: false
                         propertyDateField.horizontalAlignment: Text.AlignHCenter
                     }
+                    KeyNavigation.tab: remoteVersion
                 }
                 Item {
                     id: rawRemoteVersion
@@ -101,7 +111,6 @@ Item {
                     anchors.left: rawInstalledVersion.right
                     anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                     Components.LabelTextBoxForm {
-
                         id: remoteVersion
                         propertyDateText.text: qsTranslate(
                                                    "PageDefinitionsUpdates",
@@ -110,6 +119,7 @@ Item {
                         visible: false
                         propertyDateField.horizontalAlignment: Text.AlignHCenter
                     }
+                    KeyNavigation.tab: releaseNoteScrollViewText
                 }
                 Item {
                     id: rawButtonStartUpdate
@@ -122,13 +132,13 @@ Item {
                         y: 10
                         text: qsTranslate("PageDefinitionsUpdates",
                                    "STR_UPDATE_BUTTON_START")
-
                         width: parent.width
                         height: Constants.HEIGHT_BOTTOM_COMPONENT
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                         visible: false
+                        KeyNavigation.tab: propertyMainItem
                     }
                 }
             }
@@ -160,6 +170,9 @@ Item {
                 anchors.top: textProgressBar.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 anchors.horizontalCenter: parent.horizontalCenter
+                Accessible.role: Accessible.Row
+                Accessible.name: buttonSearch.text
+                KeyNavigation.tab: buttonSearch
                 Button {
                     id: buttonSearch
                     text: qsTranslate("PageDefinitionsUpdates",
@@ -171,6 +184,7 @@ Item {
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     anchors.horizontalCenter: parent.horizontalCenter
+                    KeyNavigation.tab: propertyMainItem
                 }
             }
             Item {
@@ -191,6 +205,7 @@ Item {
                     font.capitalization: Font.MixedCase
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible: false
+                    KeyNavigation.tab: propertyMainItem
                 }
             }
 
@@ -252,9 +267,12 @@ Item {
                                 height: flickable.height - 2 * Constants.SIZE_TEXT_FIELD_V_SPACE
                                 wrapMode: TextEdit.Wrap
                                 font.pixelSize: Constants.SIZE_TEXT_FIELD
+                                font.bold: focus
                                 color: Constants.COLOR_TEXT_BODY
                                 visible: false
                                 textFormat: "RichText"
+                                Accessible.role: Accessible.StaticText
+                                KeyNavigation.tab: buttonStartUpdate
                             }
 
                             ScrollBar.vertical: ScrollBar {

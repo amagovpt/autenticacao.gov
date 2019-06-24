@@ -9,6 +9,7 @@ import "../../components" as Components
 Item {
     property alias propertyComboBoxReader: comboBoxReader
     property alias propertyRectReader: rectReader
+    property alias propertyTextReader: textReader
     property alias propertyRectAppStart: rectAppStart
     property alias propertyRectAppStartCheckBox: rectAppStartCheckBox
     property alias propertyCheckboxAutoStart: checkboxAutoStart
@@ -27,7 +28,6 @@ Item {
     property alias propertyCheckboxAutProxy: checkboxAutProxy
     property alias propertyTextFieldAutUser: textFieldAutUser
     property alias propertyTextFieldAutPass: textFieldAutPass
-
     anchors.fill: parent
 
     Item {
@@ -56,10 +56,16 @@ Item {
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: focus
+
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsApp","STR_CARD_READER_TITLE") + controler.autoTr
+                Accessible.role: Accessible.TitleBar
+                Accessible.name: textReader.text
+                KeyNavigation.tab: comboBoxReader
             }
+
             DropShadow {
                 anchors.fill: rectReaderCombo
                 horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
@@ -97,9 +103,13 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                     visible: true
+                    Accessible.role: Accessible.ComboBox
+                    Accessible.name: textReader.text
+                    KeyNavigation.tab: dateAppStart
                 }
             }
         }
+
         Item{
             id: rectAppStart
             width: parent.width
@@ -107,15 +117,18 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectReader.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
-
             Text {
                 id: dateAppStart
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsApp","STR_START_TITLE") + controler.autoTr
+                Accessible.role: Accessible.TitleBar
+                Accessible.name: text
+                KeyNavigation.tab: checkboxAutoStart
             }
             DropShadow {
                 anchors.fill: rectAppStartCheckBox
@@ -152,6 +165,9 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                    Accessible.role: Accessible.CheckBox
+                    Accessible.name: text
+                    KeyNavigation.tab: dateAppLanguage
                 }
             }
         }
@@ -168,10 +184,15 @@ Item {
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsApp","STR_LANGUAGE_TITLE") + controler.autoTr
+                Accessible.role: Accessible.TitleBar
+                Accessible.name: text
+                KeyNavigation.tab: radioButtonPT
             }
+
             DropShadow {
                 anchors.fill: rectAppLanguageCheckBox
                 horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
@@ -199,24 +220,40 @@ Item {
                 anchors.top: dateAppLanguage.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
-                RadioButton {
-                    id: radioButtonPT
-                    height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-                    text: qsTranslate("PageDefinitionsApp",
-                                      "STR_PT_NAME_OP") + controler.autoTr
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.capitalization: Font.MixedCase
+                Rectangle {
+                    id: rectLeft
+                    width: parent.width/2
+                    height: parent.height
+                    RadioButton {
+                        id: radioButtonPT
+                        height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
+                        text: qsTranslate("PageDefinitionsApp",
+                                          "STR_PT_NAME_OP") + controler.autoTr
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        Accessible.role: Accessible.RadioButton
+                        Accessible.name: text
+                        KeyNavigation.tab: radioButtonUK
+                    }
                 }
-                RadioButton {
-                    id: radioButtonUK
-                    height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-                    x: rectAppLanguageCheckBox.width * 0.5
-                    text: qsTranslate("PageDefinitionsApp",
-                                      "STR_UK_NAME_OP") + controler.autoTr
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.capitalization: Font.MixedCase
+                Rectangle {
+                    id: rectRight
+                    width: parent.width/2
+                    height: parent.height
+                    anchors.left: rectLeft.right
+                    RadioButton {
+                        id: radioButtonUK
+                        height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
+                        text: qsTranslate("PageDefinitionsApp",
+                                          "STR_UK_NAME_OP") + controler.autoTr
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        Accessible.role: Accessible.RadioButton
+                        Accessible.name: text
+                        KeyNavigation.tab: dateAppLook
+                    }
                 }
             }
         }
@@ -233,10 +270,14 @@ Item {
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsApp",
                                   "STR_APP_LOOK_TITLE") + controler.autoTr
+                Accessible.role: Accessible.TitleBar
+                Accessible.name: text
+                KeyNavigation.tab: checkboxShowAnime
             }
             DropShadow {
                 anchors.fill: rectAppLookCheckBox
@@ -274,6 +315,9 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                    Accessible.role: Accessible.CheckBox
+                    Accessible.name: text
+                    KeyNavigation.tab: dateAppGraphics
                 }
             }
         }
@@ -292,10 +336,14 @@ Item {
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsApp",
                                   "STR_APP_GRAPHICS_TITLE") + controler.autoTr
+                Accessible.role: Accessible.TitleBar
+                Accessible.name: text
+                KeyNavigation.tab: graphicsTextField
             }
             DropShadow {
                 anchors.fill: rectAppGraphicsCheckBox
@@ -333,7 +381,11 @@ Item {
                     font.capitalization: Font.MixedCase
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
+                    font.bold: focus
                     wrapMode: Text.WordWrap
+                    Accessible.role: Accessible.TitleBar
+                    Accessible.name: text
+                    KeyNavigation.tab: checkboxAccelGraphics
                 }
                 CheckBox {
                     id: checkboxAccelGraphics
@@ -347,6 +399,9 @@ Item {
                     font.capitalization: Font.MixedCase
                     anchors.top: graphicsTextField.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                    Accessible.role: Accessible.CheckBox
+                    Accessible.name: text
+                    KeyNavigation.tab: dateAppNetwork
                 }
             }
         }
@@ -364,10 +419,14 @@ Item {
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
+                font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsApp",
                                   "STR_NETWORK_TITLE") + controler.autoTr
+                Accessible.role: Accessible.TitleBar
+                Accessible.name: text
+                KeyNavigation.tab: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
             }
             DropShadow {
                 anchors.fill: rectAppNetworkCheckBox
@@ -408,6 +467,9 @@ Item {
                     font.capitalization: Font.MixedCase
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                     checked: false
+                    Accessible.role: Accessible.CheckBox
+                    Accessible.name: text
+                    KeyNavigation.tab: checkboxProxy
                 }
 
                 CheckBox {
@@ -421,6 +483,9 @@ Item {
                     anchors.top: checkboxSystemProxy.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                     checked: false
+                    Accessible.role: Accessible.CheckBox
+                    Accessible.name: text
+                    KeyNavigation.tab: checkboxProxy.checked ? textFieldAdress : checkboxAutProxy
                 }
                 Item {
                     id: boxAppAdress
@@ -444,6 +509,9 @@ Item {
                             //validates IPV4/IPV6 host
                             regExp: /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*/
                         }
+                        Accessible.role: Accessible.EditableText
+                        Accessible.name: text
+                        KeyNavigation.tab: textFieldPort
                     }
                 }
                 Item {
@@ -469,6 +537,9 @@ Item {
                         maximumLength: 5
                         enabled: checkboxProxy.checked
                         opacity: checkboxProxy.checked ? 1.0 : Constants.OPACITY_DEFINITIONS_APP_OPTION_DISABLED
+                        Accessible.role: Accessible.EditableText
+                        Accessible.name: text
+                        KeyNavigation.tab: checkboxAutProxy
                     }
                 }
                 CheckBox {
@@ -483,6 +554,9 @@ Item {
                     anchors.top: checkboxSystemProxy.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                     checked: false
+                    Accessible.role: Accessible.CheckBox
+                    Accessible.name: text
+                    KeyNavigation.tab: checkboxAutProxy.checked? textFieldAutUser: textReader
                 }
                 Item {
                     id: boxAppAutUser
@@ -503,6 +577,9 @@ Item {
                         clip: false
                         enabled: checkboxAutProxy.checked
                         opacity: checkboxAutProxy.checked ? 1.0 : Constants.OPACITY_DEFINITIONS_APP_OPTION_DISABLED
+                        Accessible.role: Accessible.EditableText
+                        Accessible.name: text
+                        KeyNavigation.tab: textFieldAutPass
                     }
                 }
                 Item {
@@ -525,14 +602,12 @@ Item {
                         clip: false
                         enabled: checkboxAutProxy.checked
                         opacity: checkboxAutProxy.checked ? 1.0 : Constants.OPACITY_DEFINITIONS_APP_OPTION_DISABLED
+                        Accessible.role: Accessible.EditableText
+                        Accessible.name: text
+                        KeyNavigation.tab: textReader
                     }
                 }
             }
         }
     }
 }
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

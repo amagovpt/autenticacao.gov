@@ -1,14 +1,25 @@
 import QtQuick 2.6
 
-/* Constants imports */
 import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
 
 //Import C++ defined enums
 import eidguiV2 1.0
 
 PageCardNotesForm {
 
-
+    Keys.onPressed: {
+        console.log("PageCardNotesForm onPressed:" + event.key)
+        if(propertyEditNotes.focus === false){
+            Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+        } else {
+            if(Functions.detectBackKeysTextEdit(event.key)) {
+                propertyProgressBar.forceActiveFocus()
+            } else {
+                propertyEditNotes.forceActiveFocus()
+            }
+        }
+    }
     Connections {
         target: gapi
         onSignalGenericError: {
@@ -20,7 +31,7 @@ PageCardNotesForm {
         }
         onSignalCardAccessError: {
             console.log("Card Notes onSignalCardAccessError")
-            
+
             if (error_code == GAPI.NoReaderFound) {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                         qsTranslate("Popup Card","STR_POPUP_ERROR")
@@ -45,7 +56,7 @@ PageCardNotesForm {
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
             }
-			else if (error_code == GAPI.CardPinTimeout) {
+            else if (error_code == GAPI.CardPinTimeout) {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                         qsTranslate("Popup Card","STR_POPUP_ERROR")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
@@ -63,12 +74,13 @@ PageCardNotesForm {
             propertyEditNotes.text = ""
             propertyBusyIndicator.running = false
         }
-        
-        
+
+
         onSignalSetPersoDataFile: {
             propertyGeneralTitleText.text = titleMessage
             propertyGeneralPopUpLabelText.text = statusMessage
             propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
         onSignalCardChanged: {
             console.log("Card Notes Page onSignalCardChanged")
@@ -107,11 +119,14 @@ PageCardNotesForm {
         onTextChanged: {
             var strLenght = gapi.getStringByteLength(propertyEditNotes.text);
             propertyProgressBar.value = strLenght / (Constants.PAGE_NOTES_MAX_NOTES_LENGHT)
+            var progressBarPerCentText = propertyProgressBar.value * 100
+            progressBarText = " "+ progressBarPerCentText.toFixed(0) + "%"
 
             if (strLenght > Constants.PAGE_NOTES_MAX_NOTES_LENGHT) {
                 propertyGeneralTitleText.text = qsTr("STR_NOTES_PAGE_WARNING")
                 propertyGeneralPopUpLabelText.text = qsTr("STR_NOTES_PAGE_MAX_SIZE")
                 propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                 var cursor = propertyEditNotes.cursorPosition;
                 propertyEditNotes.text = propertyEditNotes.previousText;
                 if (cursor > propertyEditNotes.length) {
@@ -158,11 +173,8 @@ PageCardNotesForm {
 
 
     Component.onCompleted: {
-        propertyEditNotes.forceActiveFocus()
+        propertyMainItem.forceActiveFocus()
         propertyBusyIndicator.running = true
-        //console.log("Listing GAPI object properties in QML...")
-        //listProperties(gapi)
-        //gapi.signalPersoDataChanged.connect(loadPersoData)
         gapi.startReadingPersoNotes()
     }
 }
