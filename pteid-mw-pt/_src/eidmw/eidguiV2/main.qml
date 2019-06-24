@@ -566,6 +566,11 @@ Load language error. Please reinstall the application"
                 }
             }
         ]
+        Keys.onPressed: {
+            console.log("Main Menu Key Pressed: " + event.key)
+            mainFormID.propertyMainMenuListView.currentIndex = 0
+            mainFormID.propertyMainMenuListView.forceActiveFocus()
+        }
         Component.onCompleted: {
             if(controler.getNotShowHelpStartUp()){
                 mainFormID.state = Constants.MenuState.HOME;
@@ -727,7 +732,12 @@ Load language error. Please reinstall the application"
                 font.weight: mouseAreaMainMenu.containsMouse ?
                                  Font.Bold :
                                  Font.Normal
-                font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
+                font.pixelSize: mainFormID.propertyMainMenuListView.currentIndex === index && mainFormID.propertyMainMenuListView.activeFocus
+                    ? Constants.SIZE_TEXT_SUB_MENU + 2
+                    : Constants.SIZE_TEXT_SUB_MENU
+                font.bold: mainFormID.propertyMainMenuListView.currentIndex === index && mainFormID.propertyMainMenuListView.activeFocus
+                    ? true
+                    : false
                 focus:  mainFormID.propertyMainMenuListView.currentIndex === index ?
                             true :
                             false
@@ -1012,7 +1022,13 @@ Load language error. Please reinstall the application"
                 font.weight: mouseAreaSubMenu.containsMouse ?
                                  Font.Bold :
                                  Font.Normal
-                font.pixelSize: Constants.SIZE_TEXT_SUB_MENU
+                font.pixelSize: mainFormID.propertySubMenuListView.currentIndex === index && mainFormID.propertySubMenuListView.activeFocus
+                    ? Constants.SIZE_TEXT_SUB_MENU + 2
+                    : Constants.SIZE_TEXT_SUB_MENU
+                font.bold: mainFormID.propertySubMenuListView.currentIndex === index && mainFormID.propertySubMenuListView.activeFocus
+                    ? true
+                    : false
+
                 wrapMode: Text.Wrap
                 width: parent.width - 2 * imageArrowSubMenu.width
                        - 2 * Constants.IMAGE_ARROW_SUB_MENU_MARGIN

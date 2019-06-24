@@ -12,17 +12,19 @@ PageDefinitionsSCAPForm {
     property string popupMsg: ""
     property bool isCardPresent: false
     property bool isLoadingAttributes: false
+    property bool isTabSelected: true
 
     Keys.onPressed: {
         var index = propertyStackLayout.currentIndex
+        var isOnEntitiesTab = index === 0
+        var isOnEntityTab = index === 1
 
-        var isOnEntitiesTab = index === 0 && propertyTabButtonEntities.focus === true
-        var isOnEntityTab = index === 1 && propertyTabButtonCompanies.focus === true
-
-        if (isOnEntitiesTab) {
+        if (isOnEntitiesTab && isTabSelected === false) {
             propertyTabButtonEntities.forceActiveFocus()
-        } else if (isOnEntityTab) {
+            isTabSelected = true
+        } else if (isOnEntityTab && isTabSelected === false) {
             propertyTabButtonCompanies.forceActiveFocus()
+            isTabSelected = true
         } else {
             Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
         }
@@ -796,11 +798,13 @@ PageDefinitionsSCAPForm {
             if(key===Qt.Key_Return || key===Qt.Key_Space){
                 propertyStackLayout.currentIndex = propertyBar.currentIndex = 0
                 propertyEntitiesText.forceActiveFocus()
+                isTabSelected = false
             }
         if(propertyTabButtonCompanies.focus)
             if(key===Qt.Key_Return || key===Qt.Key_Space){
                 propertyStackLayout.currentIndex = propertyBar.currentIndex = 1
                 propertyCompaniesText.forceActiveFocus()
+                isTabSelected = false
             }
     }
 }

@@ -68,6 +68,7 @@ Item {
                 id: tabButtonEntities
                 text: qsTranslate("PageDefinitionsSCAP",
                                   "STR_SCAP_ATTRIBUTES_ENTITIES")
+                font.bold: activeFocus ? true : false
                 rightPadding: 2
                 leftPadding: 2
                 Accessible.role: Accessible.MenuItem
@@ -82,6 +83,7 @@ Item {
                 id: tabButtonCompanies
                 text: qsTranslate("PageDefinitionsSCAP",
                                   "STR_SCAP_ATTRIBUTES_COMPANY")
+                font.bold: activeFocus? true : false
                 rightPadding: 2
                 leftPadding: 2
                 Accessible.role: Accessible.MenuItem
@@ -200,6 +202,7 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        highlighted: activeFocus ? true : false
                         anchors.left: parent.left
                         enabled: true
                         Accessible.role: Accessible.Button
@@ -214,17 +217,11 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        highlighted: activeFocus ? true : false
                         anchors.horizontalCenter: parent.horizontalCenter
                         enabled: isAnyEntitySelected()
-                        //For WordWrap
-                        contentItem: Label {
-                            text: buttonLoadEntityAttributes.text
-                            font: buttonLoadEntityAttributes.font
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                            wrapMode: Text.WordWrap
-                            textFormat: Text.RichText
-                        }
+                        Accessible.role: Accessible.Button
+                        Accessible.name: text
                     }
                     Button {
                         id: buttonLoadEntityAttributesOAuth
@@ -234,17 +231,9 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        highlighted: activeFocus ? true : false
                         anchors.right: parent.right
                         enabled: isAnyEntitySelected()
-                        //For WordWrap
-                        contentItem: Label {
-                            text: buttonLoadEntityAttributesOAuth.text
-                            font: buttonLoadEntityAttributesOAuth.font
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                            wrapMode: Text.WordWrap
-                            textFormat: Text.RichText
-                        }
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.tab: entitiesText
@@ -344,11 +333,12 @@ Item {
                         id: buttonRemoveCompanyAttributes
                         text: qsTranslate("PageDefinitionsSCAP",
                                           "STR_SCAP_ATTRIBUTES_BUTTON_REMOVE")
-                        width: 1 * Constants.WIDTH_BUTTON
+                        width: Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        highlighted: activeFocus ? true : false
                         anchors.left: parent.left
                         enabled: true
                         Accessible.role: Accessible.Button
@@ -358,41 +348,27 @@ Item {
                     Button {
                         id: buttonLoadCompanyAttributes
                         text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CC")
-                        width: 1 * Constants.WIDTH_BUTTON
+                        width: Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        highlighted: activeFocus ? true : false
                         anchors.horizontalCenter: parent.horizontalCenter
-                        //For WordWrap
-                        contentItem: Label {
-                            text: buttonLoadCompanyAttributes.text
-                            font: buttonLoadCompanyAttributes.font
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                            wrapMode: Text.WordWrap
-                            textFormat: Text.RichText
-                        }
                         enabled: isCardPresent
+                        Accessible.role: Accessible.Button
+                        Accessible.name: text
                     }
                     Button {
                         id: buttonLoadCompanyAttributesOAuth
                         text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CMD")
-                        width: 1 * Constants.WIDTH_BUTTON
+                        width: Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        highlighted: activeFocus ? true : false
                         anchors.right: parent.right
-                        //For WordWrap
-                        contentItem: Label {
-                            text: buttonLoadCompanyAttributesOAuth.text
-                            font: buttonLoadCompanyAttributesOAuth.font
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                            wrapMode: Text.WordWrap
-                            textFormat: Text.RichText
-                        }
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.tab: companiesText

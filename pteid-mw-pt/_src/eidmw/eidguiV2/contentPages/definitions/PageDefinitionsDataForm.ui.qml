@@ -152,6 +152,7 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
+                            highlighted: activeFocus ? true : false
                             KeyNavigation.tab: dateSCAPCache
                         }
                     }
@@ -270,6 +271,7 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
+                            highlighted: activeFocus ? true : false
                             KeyNavigation.tab: propertyMainItem
                         }
                     }

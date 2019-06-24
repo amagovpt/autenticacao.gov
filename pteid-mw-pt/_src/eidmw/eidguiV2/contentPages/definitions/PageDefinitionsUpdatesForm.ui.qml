@@ -74,7 +74,8 @@ Item {
                 Components.Link {
                     id: textDescription
                     propertyText.text: qsTranslate("PageDefinitionsUpdates",
-                                      "STR_UPDATE_TEXT")
+                                                   "STR_UPDATE_TEXT")
+                    propertyText.font.bold: focus
                     width: parent.width
                     height: parent.height
                     Accessible.role: Accessible.TitleBar
@@ -131,12 +132,13 @@ Item {
                         id: buttonStartUpdate
                         y: 10
                         text: qsTranslate("PageDefinitionsUpdates",
-                                   "STR_UPDATE_BUTTON_START")
+                                          "STR_UPDATE_BUTTON_START")
                         width: parent.width
                         height: Constants.HEIGHT_BOTTOM_COMPONENT
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        highlighted: activeFocus ? true : false
                         visible: false
                         KeyNavigation.tab: propertyMainItem
                     }
@@ -183,6 +185,7 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
+                    highlighted: activeFocus ? true : false
                     anchors.horizontalCenter: parent.horizontalCenter
                     KeyNavigation.tab: propertyMainItem
                 }
@@ -203,6 +206,7 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
+                    highlighted: activeFocus ? true : false
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible: false
                     KeyNavigation.tab: propertyMainItem
@@ -212,7 +216,8 @@ Item {
             Item {
                 id: rawReleaseNoteScrollView
                 width: parent.width
-                height: (parent.height * Constants.HEIGHT_DEFINITIONS_UPDATE_RELEASE_NOTE) - 12 * Constants.SIZE_TEXT_V_SPACE
+                height: (parent.height * Constants.HEIGHT_DEFINITIONS_UPDATE_RELEASE_NOTE)
+                        - 12 * Constants.SIZE_TEXT_V_SPACE
                 anchors.top: rawRowVersion.bottom
                 anchors.topMargin: 2 * Constants.SIZE_TEXT_V_SPACE
                 Rectangle {

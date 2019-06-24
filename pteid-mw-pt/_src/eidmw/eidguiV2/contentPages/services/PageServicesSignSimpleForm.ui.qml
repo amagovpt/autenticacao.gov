@@ -154,6 +154,7 @@ Item {
                     opacity: 0
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
+                    highlighted: activeFocus ? true : false
                     Accessible.role: Accessible.Button
                     Accessible.name: text
                     KeyNavigation.tab: fileLoaded ? pdfPreviewArea : textSpinBox
@@ -326,6 +327,7 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                highlighted: activeFocus ? true : false
                 anchors.left: parent.left
                 Accessible.role: Accessible.Button
                 Accessible.name: checkLastPage.text
@@ -349,6 +351,7 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                highlighted: activeFocus ? true : false
                 Accessible.role: Accessible.Button
                 Accessible.name: button_signCC.text
                 KeyNavigation.tab: button_signCMD
@@ -363,6 +366,7 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                highlighted: activeFocus ? true : false
                 anchors.right: parent.right
                 Accessible.role: Accessible.Button
                 Accessible.name: button_signCMD.text

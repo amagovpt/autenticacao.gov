@@ -451,6 +451,7 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                highlighted: activeFocus ? true : false
                 enabled: false
                 focus: true
                 KeyNavigation.tab: textBoxDistrict

@@ -228,6 +228,7 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        highlighted: activeFocus ? true : false
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.tab: buttonRemoveAll
@@ -243,6 +244,7 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
+                        highlighted: activeFocus ? true : false
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.tab: radioButtonPADES
@@ -912,6 +914,7 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
+                    highlighted: activeFocus ? true : false
                     anchors.left: parent.left
                     KeyNavigation.tab: button_signCMD.enabled ? button_signCMD : buttonAdd
                 }
@@ -927,6 +930,7 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
+                    highlighted: activeFocus ? true : false
                     anchors.right: parent.right
                     KeyNavigation.tab: buttonAdd
                 }
