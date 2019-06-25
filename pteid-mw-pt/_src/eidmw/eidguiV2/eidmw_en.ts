@@ -4,7 +4,7 @@
 <context>
     <name>GAPI</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="307"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="309"/>
         <location filename="gapi.cpp" line="294"/>
         <source>STR_POPUP_SUCESS</source>
         <translation>Success</translation>
@@ -460,22 +460,10 @@
         <translation>Zip Code</translation>
     </message>
     <message>
-        <source>STR_AB_STREET_TYPE</source>
-        <translation type="vanished">Ab. street type</translation>
-    </message>
-    <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="251"/>
         <location filename="gapi.cpp" line="1515"/>
         <source>STR_STREET_TYPE</source>
         <translation>Street type</translation>
-    </message>
-    <message>
-        <source>STR_AB_BUILDING_TYPE</source>
-        <translation type="vanished">Ab. Building Type</translation>
-    </message>
-    <message>
-        <source>STR_BUILDING_TYPE</source>
-        <translation type="vanished">Building Type</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="297"/>
@@ -494,14 +482,6 @@
         <location filename="gapi.cpp" line="1531"/>
         <source>STR_PLACE</source>
         <translation>Place</translation>
-    </message>
-    <message>
-        <source>STR_ZIP_CODE_4</source>
-        <translation type="vanished">Zip Code 4</translation>
-    </message>
-    <message>
-        <source>STR_ZIP_CODE_3</source>
-        <translation type="vanished">Zip Code 3</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="403"/>
@@ -569,8 +549,8 @@
     </message>
     <message>
         <location filename="components/LabelTextBoxForm.ui.qml" line="14"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="483"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="547"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="485"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="549"/>
         <source>STR_EMPTY_FIELD</source>
         <translation>Empty field</translation>
     </message>
@@ -699,38 +679,38 @@
 <context>
     <name>OAuth</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="429"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="431"/>
         <source>STR_OAUTH_TIMEOUT</source>
         <translation>The authentication process timed out.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="440"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="442"/>
         <source>STR_OAUTH_CONNECTION_ERROR</source>
         <translation>A conecction error has occured during the authentication process.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="435"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="437"/>
         <source>STR_OAUTH_GENERIC_ERROR</source>
         <translation>An error has occured during the authentication process.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="423"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="425"/>
         <source>STR_OAUTH_SUCCESS_SCAP</source>
         <oldsource>STR_OAUTH_SUCCESS</oldsource>
         <translation>Authentication finished. Please wait while the attributes are loading.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="599"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="601"/>
         <source>STR_OAUTH</source>
         <translation>Chave Móvel Digital Authentication</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="620"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="622"/>
         <source>STR_CONTINUE_IN_BROWSER</source>
         <translation>Continue the authentication process in the default Web browser, please.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="639"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="641"/>
         <source>STR_ABORT_AUTH</source>
         <translation>Cancel</translation>
     </message>
@@ -903,7 +883,7 @@
         <translation>Print</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="251"/>
+        <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="252"/>
         <source>STR_PRINT_PDF_BUTTON</source>
         <translation>Create PDF</translation>
     </message>
@@ -917,18 +897,18 @@
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="132"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="143"/>
         <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="149"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="351"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="366"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="380"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="395"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="405"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="353"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="368"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="382"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="397"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="407"/>
         <source>STR_CLEAR_CACHE</source>
         <translation>Remove Cache</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="85"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="121"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="353"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="355"/>
         <source>STR_CLEAR_CACHE_SUCC</source>
         <translation>Files in cache successfully deleted</translation>
     </message>
@@ -939,14 +919,14 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="134"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="368"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="370"/>
         <source>STR_CLEAR_CACHE_FAIL</source>
         <translation>Error while removing cache</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="106"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="145"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="382"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="384"/>
         <source>STR_CACHE_NOT_READABLE</source>
         <translation>You don&apos;t have permissions to read cache</translation>
     </message>
@@ -968,27 +948,27 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="128"/>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="246"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="247"/>
         <source>STR_CLEAR_CACHE_NO_INFO</source>
         <translation>No cache info</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="177"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="178"/>
         <source>STR_SCAP_CACHE_TITLE</source>
         <translation>Professional and Business Attributes Cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="219"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="220"/>
         <source>STR_SCAP_CACHE_TEXT</source>
         <translation>The professional attributes cache stores attributes previously loaded, avoiding a new connection to the server</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="397"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="399"/>
         <source>STR_CACHE_NOT_WRITABLE</source>
         <translation>You don&apos;t have permissions to write in cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="407"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="409"/>
         <source>STR_CACHE_FOLDER_NOT_CREATED</source>
         <translation>Cache folder could not be created</translation>
     </message>
@@ -996,62 +976,67 @@
 <context>
     <name>PageDefinitionsApp</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="63"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="63"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="64"/>
         <source>STR_CARD_READER_TITLE</source>
         <translation>Card reader</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="128"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="120"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="129"/>
         <source>STR_START_TITLE</source>
         <translation>Startup</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="162"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="151"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="163"/>
         <source>STR_AUTO_START_OP</source>
         <translation>Activate on startup</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="190"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="175"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="191"/>
         <source>STR_LANGUAGE_TITLE</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="230"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="207"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="231"/>
         <source>STR_PT_NAME_OP</source>
         <translation>Português</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="248"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="217"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="249"/>
         <source>STR_UK_NAME_OP</source>
         <translation>English</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="276"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="240"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="277"/>
         <source>STR_APP_LOOK_TITLE</source>
         <translation>Layout</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="311"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="272"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="312"/>
         <source>STR_SHOW_ANIME_OP</source>
         <translation>Enable animations</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="342"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="299"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="341"/>
+        <source>STR_DEBUG_MODE_TITLE</source>
+        <translation>Debug Mode</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="387"/>
+        <source>STR_DEBUG_MODE_DESCRIPTION</source>
+        <translation>Please enable debug mode if you encounter problems with the application.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="393"/>
+        <source>STR_DEBUG_MODE_ENABLE</source>
+        <translation>Enable Debug Mode</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="424"/>
         <source>STR_APP_GRAPHICS_TITLE</source>
         <translation>Graphic acceleration</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="393"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="343"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="475"/>
         <source>STR_ACCEL_ENABLE</source>
         <translation>Enable graphic acceleration</translation>
     </message>
@@ -1086,62 +1071,52 @@
         <translation>URL?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="425"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="371"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="507"/>
         <source>STR_NETWORK_TITLE</source>
         <translation>Network settings</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="461"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="404"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="543"/>
         <source>STR_NETWORK_SYSTEM_PROXY_OP</source>
         <translation>Use system proxy</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="477"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="417"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="559"/>
         <source>STR_NETWORK_PROXY_OP</source>
         <translation>Configure proxy server</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="501"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="438"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="583"/>
         <source>STR_NETWORK_PROXY_ADDRESS_OP</source>
         <translation>Host?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="528"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="462"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="610"/>
         <source>STR_NETWORK_PROXY_PORT_OP</source>
         <translation>Port?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="548"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="479"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="630"/>
         <source>STR_NETWORK_AUTH_OP</source>
         <translation>Configure proxy authentication</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="572"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="500"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="654"/>
         <source>STR_NETWORK_AUTH_USERNAME_OP</source>
         <translation>Username?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="596"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm2.ui.qml" line="521"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="678"/>
         <source>STR_NETWORK_AUTH_PASSWORD_OP</source>
         <translation>Password?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="239"/>
-        <location filename="contentPages/definitions/PageDefinitionsApp2.qml" line="256"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="266"/>
         <source>STR_ACCEL_GRAPHICS_TEXT</source>
         <translation>Graphics acceleration driver version (OpenGL)</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="241"/>
-        <location filename="contentPages/definitions/PageDefinitionsApp2.qml" line="258"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="268"/>
         <source>STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION</source>
         <translation>Please try disabling graphical acceleration if you encounter problems with application graphics.</translation>
     </message>
@@ -1149,105 +1124,105 @@
 <context>
     <name>PageDefinitionsSCAP</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="267"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="196"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="345"/>
+        <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="268"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="198"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="334"/>
         <source>STR_SCAP_ATTRIBUTES_BUTTON_REMOVE</source>
         <translation>Remove cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="117"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="196"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="210"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="225"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="239"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="119"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="198"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="212"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="227"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="241"/>
         <source>STR_SCAP_ERROR</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="123"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="125"/>
         <source>STR_SCAP_COMPANY_ATTRIBUTES_EXPIRED</source>
         <translation>Your business attributes are expired. To associate new attributes, please go to</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="130"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="132"/>
         <source>STR_SCAP_COMPANY_ZERO_ATTRIBUTES</source>
         <translation>Do not have business attributes. To associate new attributes, please go to</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="166"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="168"/>
         <source>STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_FIRST</source>
         <translation>Your professional attributes in the entity</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="168"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="170"/>
         <source>STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_SECOND</source>
         <translation>are expired.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="170"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="172"/>
         <source>STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_THIRD</source>
         <translation>For more information, please contact the entity</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="175"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="177"/>
         <source>STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST</source>
         <translation>Has no professional attributes in the entity</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="177"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="179"/>
         <source>STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND</source>
         <translation>For more information, please contact the entity</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="198"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="200"/>
         <source>STR_SCAP_SERVICE_FAIL_FIRST</source>
         <translation>Error accessing the attribute load service.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="200"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="202"/>
         <source>STR_SCAP_SERVICE_FAIL_SECOND</source>
         <translation>Please try again.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="212"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="214"/>
         <source>STR_SCAP_PING_FAIL_FIRST</source>
         <translation>Error accessing the attribute load service.Please try again.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="214"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="216"/>
         <source>STR_SCAP_PING_FAIL_SECOND</source>
         <translation>Please check your Internet connection and try again.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="227"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="229"/>
         <source>STR_SCAP_LOAD_ENTITIES_ERROR</source>
         <translation>SCAP entities load error</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="241"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="243"/>
         <source>STR_SCAP_LOAD_COMPANY_ERROR</source>
         <translation>SCAP company loaded error</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="309"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="311"/>
         <source>STR_SCAP_ATTRIBUTES_LOADED</source>
         <translation>Attributes successfully loaded</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="421"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="423"/>
         <source>STR_LOADING_SCAP_ATTRIBUTES</source>
         <translation>Loading attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="509"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="556"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="511"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="558"/>
         <source>STR_SCAP_ENTITY</source>
         <translation>Entity:</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="515"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="562"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="517"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="564"/>
         <source>STR_SCAP_ATTR</source>
         <translation>Attributes:</translation>
     </message>
@@ -1257,38 +1232,38 @@
         <translation>Professional Attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="83"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="84"/>
         <source>STR_SCAP_ATTRIBUTES_COMPANY</source>
         <translation>Business Attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="116"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="155"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="118"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="157"/>
         <source>STR_SCAP_ATTRIBUTES_ENTITIES_MSG</source>
         <translation>Choose the entity for which you want to load the professional attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="177"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="327"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="179"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="316"/>
         <source>STR_BACK_TO_SIGNATURE_PAGE</source>
         <translation>Click here to return to the advanced signature page</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="211"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="360"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="214"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="350"/>
         <source>STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CC</source>
         <oldsource>STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON_LOAD</oldsource>
         <translation>Load with&lt;br&gt;Cartão de Cidadão</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="231"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="380"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="228"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="364"/>
         <source>STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CMD</source>
         <translation>Load with&lt;br&gt;Chave Móvel Digital</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="266"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="305"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="255"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="294"/>
         <source>STR_SCAP_ATTRIBUTES_COMPANY_MSG</source>
         <translation>List of entities for which you have business attributes</translation>
     </message>
@@ -1355,7 +1330,7 @@
         <translation>Remove image</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="461"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="462"/>
         <source>STR_CUSTOM_SIGN_ADD_BUTTON</source>
         <translation>Add Image</translation>
     </message>
@@ -1369,12 +1344,12 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="82"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="133"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="134"/>
         <source>STR_UPDATE_BUTTON_START</source>
         <translation>Install</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="198"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="201"/>
         <source>STR_UPDATE_BUTTON_CANCEL</source>
         <translation>Cancel download</translation>
     </message>
@@ -1420,12 +1395,12 @@
         <translation>Please check your Internet connection and try again.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="98"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="99"/>
         <source>STR_INSTALLED_VERSION</source>
         <translation>Current version</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="115"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="116"/>
         <source>STR_REMOTE_VERSION</source>
         <translation>New version</translation>
     </message>
@@ -1456,7 +1431,7 @@
         <translation>Press the button to check for available updates.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="178"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="180"/>
         <source>STR_UPDATE_BUTTON</source>
         <translation>Check for updates</translation>
     </message>
@@ -1562,8 +1537,8 @@
         <translation>Cartão de cidadão application manual</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="208"/>
-        <location filename="contentPages/home/PageHomeForm.ui.qml" line="208"/>
+        <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="209"/>
+        <location filename="contentPages/home/PageHomeForm.ui.qml" line="209"/>
         <source>STR_HOME_REMINDER</source>
         <translation>Do not show again this help at startup</translation>
     </message>
@@ -1775,22 +1750,10 @@
         <translation>Attributes not selected</translation>
     </message>
     <message>
-        <source>STR_SCAP_MAX_FILESIZE</source>
-        <translation type="vanished">File size was exceeded. Max supported file size is</translation>
-    </message>
-    <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="922"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="971"/>
         <source>STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG</source>
         <translation>Unable to sign multiple files with professional attributes</translation>
-    </message>
-    <message>
-        <source>STR_MULTI_FILE_CMD_WARNING</source>
-        <translation type="vanished">Warning</translation>
-    </message>
-    <message>
-        <source>STR_MULTI_FILE_CMD_WARNING_MSG</source>
-        <translation type="vanished">Can not sign multiple files with CMD</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1007"/>
@@ -1918,75 +1881,75 @@
         <translation>Add files</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="240"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="241"/>
         <source>STR_SIGN_REMOVE_MULTI_BUTTON</source>
         <translation>Remove all files</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="294"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="296"/>
         <source>STR_SIGN_SETTINGS</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="325"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="327"/>
         <source>STR_SIGN_FORMAT</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="340"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="342"/>
         <source>STR_SIGN_WHERE</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="386"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="388"/>
         <source>STR_SIGN_ANY_FILE</source>
         <translation>Other files</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="436"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="438"/>
         <source>STR_SIGN_REASON</source>
         <translation>Reason</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="451"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="453"/>
         <source>STR_SIGN_LOCAL</source>
         <translation>Locality</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="465"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="467"/>
         <source>STR_SIGN_ADD_TIMESTAMP</source>
         <translation>Add timestamp</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="479"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="481"/>
         <source>STR_SIGN_ADD_ATTRIBUTES</source>
         <translation>Add professional attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="502"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="504"/>
         <source>STR_ATTRIBUTES_EMPTY</source>
         <translation>Click here to load professional attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="653"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="655"/>
         <source>STR_SIGN_PREVIEW</source>
         <translation>Preview</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="860"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="862"/>
         <source>STR_SIGN_VISIBLE</source>
         <translation>Visible</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="882"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="884"/>
         <source>STR_SIGN_REDUCED</source>
         <translation>Reduced</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="731"/>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="776"/>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="198"/>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="239"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="733"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="778"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="199"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="240"/>
         <source>STR_SIGN_PAGE</source>
         <translation>Page</translation>
     </message>
@@ -1996,34 +1959,34 @@
         <translation>Advance singnature</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="905"/>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="920"/>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="344"/>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="358"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="907"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="923"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="346"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="361"/>
         <source>STR_SIGN_SIGN_BUTTON</source>
         <translation>Sign with</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="922"/>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="359"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="925"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="362"/>
         <source>STR_SIGN_CMD_BUTTON</source>
         <translation>Chave Móvel Digital</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="833"/>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="293"/>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="300"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="835"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="294"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="301"/>
         <source>STR_SIGN_LAST</source>
         <translation>Last</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="322"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="323"/>
         <source>STR_SIGN_REMOVE_BUTTON</source>
         <translation>Remove file</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="907"/>
-        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="345"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="909"/>
+        <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="347"/>
         <source>STR_SIGN_CARD_BUTTON</source>
         <oldsource>STR_SIGN_CARD</oldsource>
         <translation>Cartão de Cidadão</translation>
@@ -2074,7 +2037,7 @@
     </message>
     <message>
         <location filename="components/PDFPreview.qml" line="79"/>
-        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="680"/>
+        <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="682"/>
         <source>STR_SIGN_NAV_DESCRIPTION</source>
         <translation>Move the signature seal</translation>
     </message>
@@ -2114,13 +2077,13 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="205"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="27"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="94"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="54"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="60"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="66"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="72"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="427"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="433"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="438"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="56"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="62"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="68"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="74"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="429"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="435"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="440"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="48"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="54"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="60"/>
@@ -2210,7 +2173,7 @@
         <location filename="contentPages/card/PageCardOtherData.qml" line="65"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="195"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="42"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="62"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="64"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="68"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="46"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="71"/>
@@ -2226,7 +2189,7 @@
         <location filename="contentPages/card/PageCardOtherData.qml" line="71"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="201"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="46"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="68"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="70"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="74"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="52"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="77"/>
@@ -2242,7 +2205,7 @@
         <location filename="contentPages/card/PageCardOtherData.qml" line="59"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="188"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="38"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="56"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="58"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="62"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="40"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="65"/>
@@ -2258,7 +2221,7 @@
         <location filename="contentPages/card/PageCardOtherData.qml" line="77"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="207"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="50"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="74"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="76"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="80"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="58"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="83"/>
@@ -2283,9 +2246,9 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="224"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="232"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="60"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="88"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="95"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="103"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="90"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="97"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="105"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="99"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="112"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="120"/>
@@ -2305,7 +2268,7 @@
         <location filename="contentPages/card/PageCardOtherData.qml" line="98"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="220"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="63"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="90"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="92"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="101"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="208"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="120"/>
@@ -2318,7 +2281,7 @@
         <location filename="contentPages/card/PageCardOtherData.qml" line="113"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="226"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="67"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="97"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="99"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="114"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="218"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="130"/>
@@ -2332,7 +2295,7 @@
         <location filename="contentPages/card/PageCardOtherData.qml" line="121"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="234"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="73"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="105"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="107"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="122"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="227"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="139"/>
@@ -2360,16 +2323,20 @@
         <translation>Error removing certificates</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="119"/>
-        <location filename="contentPages/definitions/PageDefinitionsApp2.qml" line="113"/>
-        <source>STR_POPUP_ACCEL_GRAPHICS</source>
-        <translation>Graphic acceleration</translation>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="120"/>
+        <source>STR_POPUP_DEBUG_MODE</source>
+        <translation>Debug Mode</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="121"/>
-        <location filename="contentPages/definitions/PageDefinitionsApp2.qml" line="115"/>
-        <source>STR_POPUP_ACCEL_GRAPHICS_TEXT</source>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="122"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="140"/>
+        <source>STR_POPUP_RESTART_APP</source>
         <translation>It is necessary to restart the application for this change to take effect. Please restart the application.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="138"/>
+        <source>STR_POPUP_ACCEL_GRAPHICS</source>
+        <translation>Graphic acceleration</translation>
     </message>
     <message>
         <location filename="PageLoader.qml" line="77"/>
@@ -2389,10 +2356,6 @@
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="341"/>
         <source>STR_POPUP_FILE_UNIQUE</source>
         <translation>Drag a single file</translation>
-    </message>
-    <message>
-        <source>STR_POPUP_FILE_UNIQUE_TEXT</source>
-        <translation type="vanished">You can only select one custom signature file</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="44"/>
@@ -2623,8 +2586,8 @@
     </message>
     <message>
         <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="193"/>
-        <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="289"/>
-        <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="383"/>
+        <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="291"/>
+        <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="387"/>
         <source>STR_PIN_TEST</source>
         <translation>Test PIN</translation>
     </message>
@@ -2634,19 +2597,19 @@
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="566"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="572"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="578"/>
-        <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="212"/>
-        <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="308"/>
-        <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="402"/>
+        <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="213"/>
+        <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="311"/>
+        <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="407"/>
         <source>STR_PIN_MODIFY</source>
         <translation>Modify PIN</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="240"/>
+        <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="242"/>
         <source>STR_PIN_SIGN_TEXT</source>
         <translation>This PIN is used to sign documents or transactions in applications that support the Citizen Card.</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="335"/>
+        <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="339"/>
         <source>STR_PIN_ADDRESS_TEXT</source>
         <translation>This PIN is used for change and read of address.</translation>
     </message>
@@ -2667,9 +2630,14 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="main.qml" line="606"/>
+        <location filename="main.qml" line="613"/>
         <source>STR_RUN_MODE</source>
         <translation>Test mode</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="617"/>
+        <source>STR_RUN_DEBUG_MODE</source>
+        <translation>DEBUG MODE</translation>
     </message>
 </context>
 </TS>

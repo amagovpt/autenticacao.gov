@@ -62,6 +62,7 @@ public:
         , m_bGraphicsAccel(false)
         , m_bUseCustomSignature(false)
         , m_bStartMinimized(false)
+        , m_bDebugMode(false)
         , m_bNotShowStartUpHelp(false)
         , m_bShowPicture(false)
         , m_bShowNotification(false)
@@ -100,6 +101,19 @@ public:
             if ( 0 != StartMinimized )
             {
                 setStartMinimized(true);
+            }
+        }
+        //----------------------------------------------------------
+        // check debug mode
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_LOGGING_LEVEL);
+            QString logLevel = config.getString();
+
+            // Debug mode means the log's log_level is "debug".
+            if ("debug" == logLevel)
+            {
+                setDebugMode(true);
             }
         }
         //----------------------------------------------------------
@@ -316,6 +330,23 @@ public:
 
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTMINI);
         config.setLong(m_bStartMinimized);
+    }
+
+    bool getDebugMode(void) const
+    {
+        return m_bDebugMode;
+    }
+    void setDebugMode(bool bDebugMode)
+    {
+        m_bDebugMode = bDebugMode;
+
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_LOGGING_LEVEL);
+        if (bDebugMode) {
+            config.setString("debug");
+        }
+        else {
+            config.setString(""); // Default (see MapLevel)
+        }
     }
 
     bool getShowPicture( void )
@@ -593,7 +624,8 @@ private:
     bool    m_bGraphicsAccel;       //!< the Graphics Acceleration
     bool    m_bUseCustomSignature;  //!< the GUI use custom signature image
     bool    m_bStartMinimized;      //!< startup minimized (T/F)
-    bool    m_bNotShowStartUpHelp;  //!< the GUI Show Help	bool	m_bStartMinimized;		//!< startup minimized (T/F)
+    bool    m_bDebugMode;           //!< debug mode enabled (T/F)
+    bool    m_bNotShowStartUpHelp;  //!< the GUI Show Help	bool	m_bStartMinimized;              //!< startup minimized (T/F)
     bool    m_bShowPicture;         //!< show the picture (T/F)
     bool    m_bShowNotification;    //!< show the notification (T/F)
     bool    m_bAutoCardReading;     //!< read the inserted card at startup (T/F)

@@ -107,6 +107,24 @@ PageDefinitionsAppForm {
                           }
     }
 
+    propertyCheckBoxDebugMode {
+        onCheckedChanged: {
+            if (propertyCheckBoxDebugMode.checked) {
+                controler.setDebugModeValue(true)
+            }
+            else {
+                controler.setDebugModeValue(false)
+            }
+
+            if (propertyCheckBoxDebugMode.enabled) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTranslate("Popup Card","STR_POPUP_DEBUG_MODE") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card","STR_POPUP_RESTART_APP") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            }
+        }
+    }
+
     propertyCheckboxAccelGraphics{
         onCheckedChanged: {
             if(propertyCheckboxAccelGraphics.checked){
@@ -118,7 +136,7 @@ PageDefinitionsAppForm {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
                         qsTranslate("Popup Card","STR_POPUP_ACCEL_GRAPHICS") + controler.autoTr
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ACCEL_GRAPHICS_TEXT") + controler.autoTr
+                        qsTranslate("Popup Card","STR_POPUP_RESTART_APP") + controler.autoTr
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                 mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             }
@@ -202,6 +220,14 @@ PageDefinitionsAppForm {
         }
 
         propertyCheckboxShowAnime.checked = controler.getShowAnimationsValue()
+
+        if (controler.getDebugModeValue()) {
+            propertyCheckBoxDebugMode.checked = true
+        }
+        else {
+            propertyCheckBoxDebugMode.checked = false
+        }
+        propertyCheckBoxDebugMode.enabled = true
 
         propertyCheckboxAccelGraphics.checked = controler.getGraphicsAccelValue();
         propertyCheckboxAccelGraphics.enabled = true;
