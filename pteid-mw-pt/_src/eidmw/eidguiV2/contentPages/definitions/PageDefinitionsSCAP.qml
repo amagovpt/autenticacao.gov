@@ -657,7 +657,6 @@ PageDefinitionsSCAPForm {
         onClicked: {
             console.log("ButtonLoadCompanyAttributes clicked!")
             isLoadingAttributes = true
-            companyAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
             propertyPageLoader.attributeListBackup = []
             gapi.startGettingCompanyAttributes(false)
@@ -667,7 +666,6 @@ PageDefinitionsSCAPForm {
         onClicked: {
             console.log("ButtonLoadCompanyAttributesOAuth clicked!")
             isLoadingAttributes = true
-            companyAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
             propertyPageLoader.attributeListBackup = []
             gapi.startGettingCompanyAttributes(true)
