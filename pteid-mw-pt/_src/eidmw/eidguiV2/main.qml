@@ -611,6 +611,12 @@ Load language error. Please reinstall the application"
             console.log("MainForm Completed testmode: "+controler.getTestMode())
             if(controler.getTestMode())
                 mainWindow.title = mainWindow.title + "   [ " + qsTr("STR_RUN_MODE") + " ]"
+
+            console.log("debugMode: " + controler.getDebugModeValue())
+            if (controler.getDebugModeValue()) {
+                mainWindow.title = mainWindow.title + "   [ " + qsTr("STR_RUN_DEBUG_MODE") + " ]"
+                mainFormID.propertyTitleBarContainer.propertyTitleBar.color = Constants.COLOR_TITLEBAR_DEBUG
+            }
         }
         propertyImageLogo {
             onClicked: {

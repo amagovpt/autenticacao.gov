@@ -47,6 +47,8 @@ import "../scripts/Constants.js" as Constants
 Item {
     id: titleBar
 
+    property alias propertyTitleBar: container
+
     Rectangle {
         id: container
         width: parent.width ; height: parent.height

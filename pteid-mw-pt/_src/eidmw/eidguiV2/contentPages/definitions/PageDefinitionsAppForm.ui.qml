@@ -18,6 +18,7 @@ Item {
     property alias propertyRadioButtonUK: radioButtonUK
     property alias propertyRectAppLook: rectAppLook
     property alias propertyCheckboxShowAnime: checkboxShowAnime
+    property alias propertyCheckBoxDebugMode: checkboxDebugMode
     property alias propertyGraphicsTextField: graphicsTextField
     property alias propertyCheckboxAccelGraphics: checkboxAccelGraphics
     property alias propertyRectAppNetworkCheckBox: rectAppNetworkCheckBox
@@ -323,12 +324,93 @@ Item {
         }
 
         Item {
+            id: rectDebugMode
+            width: parent.width
+            height: dateDebugMode.height + rectDebugModeCheckBox.height + 3 * Constants.SIZE_TEXT_V_SPACE
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            anchors.top: rectAppLook.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
+
+            Text {
+                id: dateDebugMode
+                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
+                height: Constants.SIZE_TEXT_LABEL
+                text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_TITLE") + controler.autoTr
+                Accessible.role: Accessible.TitleBar
+                Accessible.name: text
+                KeyNavigation.tab: debugModeTextField
+            }
+
+            DropShadow {
+                anchors.fill: rectDebugModeCheckBox
+                horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                radius: Constants.FORM_SHADOW_RADIUS
+                samples: Constants.FORM_SHADOW_SAMPLES
+                color: Constants.COLOR_FORM_SHADOW
+                source: rectDebugModeCheckBox
+                spread: Constants.FORM_SHADOW_SPREAD
+                opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
+            }
+            RectangularGlow {
+                anchors.fill: rectDebugModeCheckBox
+                glowRadius: Constants.FORM_GLOW_RADIUS
+                spread: Constants.FORM_GLOW_SPREAD
+                color: Constants.COLOR_FORM_GLOW
+                cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
+            }
+            Rectangle {
+                id: rectDebugModeCheckBox
+                width: parent.width
+                color: "white"
+                height: debugModeTextField.height + checkboxDebugMode.height + 3*Constants.SIZE_TEXT_V_SPACE
+                anchors.top: dateDebugMode.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
+                Text {
+                    id: debugModeTextField
+                    width: parent.width - 20
+                    x: 10
+                    y: Constants.SIZE_TEXT_V_SPACE
+                    font.capitalization: Font.MixedCase
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.bold: focus
+                    wrapMode: Text.WordWrap
+                    Accessible.role: Accessible.TitleBar
+                    Accessible.name: text
+                    KeyNavigation.tab: checkboxDebugMode
+                    text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_DESCRIPTION") + controler.autoTr
+                }
+
+                CheckBox {
+                    id: checkboxDebugMode
+                    enabled: false
+                    text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_ENABLE") + controler.autoTr
+                    height: 25
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.capitalization: Font.MixedCase
+                    anchors.top: debugModeTextField.bottom
+                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                    Accessible.role: Accessible.CheckBox
+                    Accessible.name: text
+                    KeyNavigation.tab: dateAppGraphics
+                }
+            }
+        }
+
+        Item {
             id: rectAppGraphics
             width: parent.width
             height: dateAppGraphics.height + rectAppGraphicsCheckBox.height
                     + 3 * Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            anchors.top: rectAppLook.bottom
+            anchors.top: rectDebugMode.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
 
             Text {

@@ -8,6 +8,8 @@ import "components" as Components
 Rectangle {
     anchors.fill: parent
 
+    property alias propertyTitleBarContainer: titleBar
+
     property alias propertyMainView: mainView
 
     property alias propertyMainMenuView: mainMenuView
