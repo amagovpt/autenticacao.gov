@@ -775,7 +775,6 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                         closeSCAPSignature(scap_signature, sig_len);
                     }
                     catch (eIDMW::CMWException &e) {
-                        e.GetError();
                         throw PTEID_Exception(e.GetError());
                     }
                 }else{
