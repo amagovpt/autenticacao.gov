@@ -1158,18 +1158,26 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		rootElem->appendChild(doc->createTextNode(MAKE_UNICODE_STRING("\n")));
 
 		int references_count = 0;
+		std::vector<std::string *> unique_paths;
+		for (unsigned int i = 0; i != n_paths; i++) 
+		{
+			unique_paths.push_back(new std::string(paths[i]));
+		}
+		CPathUtil::generate_unique_filenames("temporary_folder_name", unique_paths);
 		for (unsigned int i = 0; i != n_paths ; i++)
 		{
-			const char * path = paths[i];
+			const char * path = unique_paths[i]->c_str();
 			//Create a reference to the external file
 			DSIGReference * ref = sig->createReference(createURI(path), HASH_SHA256);
 			MWLOG(LEV_DEBUG, MOD_APL, "SignXades(): Hashing file %s", path);
-                sha1_hash = HashFile(path);
+                sha1_hash = HashFile(paths[i]);
 
 			//Fill the hash value as base64-encoded string
 			//ref->setExternalHash(sha1_hash.GetBytes());
 			setReferenceHash(sha1_hash.GetBytes(), sha1_hash.Size(), references_count, doc);
 			references_count++;
+
+			delete unique_paths[i];
 		}
 		CByteArray certData;
 	    mp_card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
