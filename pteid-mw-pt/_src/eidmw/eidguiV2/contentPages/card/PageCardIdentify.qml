@@ -44,7 +44,6 @@ PageCardIdentifyForm {
             propertyPhoto.source = "image://myimageprovider/photo.png"
             propertyBusyIndicator.running = false
             mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
-            propertyTextBoxName.forceActiveFocus()
         }
         onSignalCardAccessError: {
             console.log("Card Identify Page onSignalCardAccessError")
@@ -150,8 +149,8 @@ PageCardIdentifyForm {
 
     Component.onCompleted: {
         console.log("Page Card Identify mainWindow Completed")
-
         propertyBusyIndicator.running = true
         gapi.startCardReading()
+        propertyTextBoxName.forceActiveFocus()
     }
 }

@@ -39,7 +39,6 @@ PageDefinitionsSignatureForm {
             propertySigWaterImg.source = propertySigWaterImgCustom.source = "qrc:/images/pteid_signature_watermark.jpg"
 
             propertyBusyIndicator.running = false
-            propertyRadioButtonDefault.forceActiveFocus()
         }
         onSignalCardAccessError: {
             console.log("Definitions Signature --> onSignalCardAccessError")

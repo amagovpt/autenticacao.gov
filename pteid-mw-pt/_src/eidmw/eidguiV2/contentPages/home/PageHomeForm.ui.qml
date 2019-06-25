@@ -30,7 +30,7 @@ Item {
             font.family: lato.name
             text: qsTranslate("PageHelpDocOnline",
                               "STR_HELP_DOC_TITLE") + " " + mainWindow.title
-            font.bold: text0.focus ? true : false
+            font.bold: activeFocus ? true : false
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left

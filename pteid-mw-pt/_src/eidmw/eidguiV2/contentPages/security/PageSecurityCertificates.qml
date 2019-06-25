@@ -193,14 +193,13 @@ PageSecurityCertificatesForm {
                 propertyAcordion.selectOption(initialOption)
             }
             propertyBusyIndicator.running = false
-            propertyTextEntity.forceActiveFocus()
         }
     }
     Component.onCompleted: {
-
         console.log("Page Security Certificates Completed")
         propertyBusyIndicator.running = true
         gapi.startfillCertificateList()
+        propertyTextEntity.forceActiveFocus()
     }
     function getCertStatus(certStatus){
 

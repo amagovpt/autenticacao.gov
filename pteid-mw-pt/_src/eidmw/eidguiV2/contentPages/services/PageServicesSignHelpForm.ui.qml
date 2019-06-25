@@ -29,7 +29,7 @@ Item {
             font.pixelSize: Constants.SIZE_TEXT_TITLE
             font.family: lato.name
             text: qsTranslate("PageServicesSign", "STR_SIGN_HELP_TITLE")
-            font.bold: textTitle.focus ? true : false
+            font.bold: activeFocus   ? true : false
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
@@ -101,7 +101,7 @@ Item {
                                         "PageServicesSign",
                                         "STR_SIGN_HELP_AUTENTICACAO.GOV_SELECT")
             propertyLinkUrl: 'https://www.autenticacao.gov.pt'
-            KeyNavigation.tab: mainFormID.propertySubMenuListView
+            KeyNavigation.tab: textTitle
         }
     }
 }

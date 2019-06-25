@@ -628,7 +628,7 @@ Load language error. Please reinstall the application"
         }
         propertyMouseAreaSubMenuViewReduced {
             onClicked: {
-                goToSubMenu()
+                Functions.goToSubMenu()
             }
         }
     }
@@ -981,34 +981,9 @@ Load language error. Please reinstall the application"
                     console.log(" onTabPressed "
                                 + "SubMenu currentIndex" + mainFormID.propertySubMenuListView.currentIndex
                                 + "MainMenu currentIndex" + mainFormID.propertyMainMenuListView.currentIndex)
-
                     if(mainFormID.propertySubMenuListView.currentIndex ==
                             mainFormID.propertySubMenuListView.count - 1){
-
-                         mainFormID.propertySubMenuListView.currentIndex = 0
-                        var temp = ""
-                        // Check if Main Menu is selected
-                        if(mainFormID.propertyMainMenuListView.currentIndex != -1 )
-                        {
-                            // Check if is a expanded page
-                            if(mainFormID.propertyMainMenuListView.model.get(
-                                        mainFormID.propertyMainMenuListView.currentIndex).expand === true){
-                                temp = mainFormID.propertyPageLoader.source
-                                mainFormID.propertyPageLoader.source = ""
-                                mainFormID.propertyPageLoader.source = temp
-                                mainFormID.propertyPageLoader.forceActiveFocus()
-                    }
-                        } else {
-                            // Check if is a expanded page
-                            if(mainFormID.propertyMainMenuBottomListView.model.get(
-                                        mainFormID.propertyMainMenuBottomListView.currentIndex).expand === true){
-                                temp = mainFormID.propertyPageLoader.source
-                                mainFormID.propertyPageLoader.source = ""
-                                mainFormID.propertyPageLoader.source = temp
-                                mainFormID.propertyPageLoader.forceActiveFocus()
-                }
-            }
-
+                        mainFormID.propertySubMenuListView.currentIndex = 0
                     } else {
                         mainFormID.propertySubMenuListView.currentIndex++
                     }
@@ -1114,33 +1089,16 @@ Load language error. Please reinstall the application"
                         "url": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).url
                     })
         }
-
+        // Open the content page of the first item of the new sub menu
         mainFormID.state = Constants.MenuState.NORMAL
+        mainFormID.propertyPageLoader.source =
+                mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
+        mainFormID.propertySubMenuListView.currentIndex = 0
 
-        console.log("Expand Sub Menu = " +  mainFormID.propertyMainMenuListView.model.get(index).expand)
-        if( mainFormID.propertyMainMenuListView.model.get(index).expand === true){
-            // Clean the content page
-            mainFormID.propertyPageLoader.source =
-                    mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
-            mainFormID.propertySubMenuListView.currentIndex = 0
-        }else{
-            // Do not open the content page of the first item of the new sub menu
-            mainFormID.propertyPageLoader.source = ""
-            mainFormID.propertySubMenuListView.currentIndex = 0
-            // Open the content page of the first item of the new sub menu
-            //mainFormID.propertyPageLoader.source =
-              //      mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
-            //mainFormID.propertySubMenuListView.currentIndex = 0
-        }
-
-        console.log("Main Menu index = " + index);
+        /*console.log("Main Menu index = " + index);
         console.log("Set focus sub menu")
-        console.log("Sub menu count" + mainFormID.propertySubMenuListView.count)
-        //if(mainFormID.propertyMainMenuListView.model.get(index).expand === true){
-        //     mainFormID.propertyPageLoader.forceActiveFocus()
-        //} else {
-            mainFormID.propertySubMenuListView.forceActiveFocus()
-        //}
+        console.log("Sub menu count" + mainFormID.propertySubMenuListView.count)*/
+        mainFormID.propertySubMenuListView.forceActiveFocus()
     }
 
     function subMenuPressed(index, url){
@@ -1155,7 +1113,8 @@ Load language error. Please reinstall the application"
         }else{
             var temp = url
             mainFormID.propertyPageLoader.source = ""
-            mainFormID.propertyPageLoader.source = temp
+            mainFormID.propertyPageLoader.source = url
+            mainFormID.state = Constants.MenuState.NORMAL
         }
     }
 
@@ -1178,24 +1137,12 @@ Load language error. Please reinstall the application"
                         .url
                     })
         }
-
+        // Open the content page of the first item of the new sub menu
         mainFormID.state = Constants.MenuState.NORMAL
+        mainFormID.propertyPageLoader.source =
+                mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(0).url
+        mainFormID.propertySubMenuListView.currentIndex = 0
 
-        console.log("Expand Bottom Menu = " +  mainFormID.propertyMainMenuBottomListView.model.get(index).expand)
-        if( mainFormID.propertyMainMenuBottomListView.model.get(index).expand === true){
-            // Clean the content page
-            mainFormID.propertyPageLoader.source = ""
-            // Do not select any option in sub menu
-            mainFormID.propertySubMenuListView.currentIndex = -1
-        }else{
-            // Do not open the content page of the first item of the new sub menu
-            mainFormID.propertyPageLoader.source = ""
-            mainFormID.propertySubMenuListView.currentIndex = 0
-            // Open the content page of the first item of the new sub menu
-            //mainFormID.propertyPageLoader.source =
-              //      mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(0).url
-            //mainFormID.propertySubMenuListView.currentIndex = 0
-        }
         console.log("Main Menu Bottom index = " + index);
         mainFormID.propertySubMenuListView.forceActiveFocus()
     }
