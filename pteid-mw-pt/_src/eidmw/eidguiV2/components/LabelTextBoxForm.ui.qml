@@ -18,7 +18,7 @@ Item {
         x: Constants.SIZE_TEXT_FIELD_H_SPACE
         font.pixelSize: Constants.SIZE_TEXT_LABEL
         font.family: lato.name
-        font.bold: parent.focus ? true : false
+        font.bold: parent.activeFocus ? true : false
         color: Constants.COLOR_TEXT_LABEL
         height: Constants.SIZE_TEXT_LABEL
     }
