@@ -24,56 +24,52 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: rowTop.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-    Text {
-        id: textAppName
-        text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TITLE") + " " + mainWindow.title
-        font.pixelSize: Constants.SIZE_TEXT_TITLE
-        color: Constants.COLOR_TEXT_TITLE
-        font.family: lato.name
-            font.bold: textAppName.focus ? true : false
+        Text {
+            id: textAppName
+            text: qsTranslate("PageHelpDocOnline","STR_HELP_DOC_TITLE") + " " + mainWindow.title
+            font.pixelSize: Constants.SIZE_TEXT_TITLE
+            color: Constants.COLOR_TEXT_TITLE
+            font.family: lato.name
+            font.bold: activeFocus ? true : false
             Accessible.role: Accessible.TitleBar
             Accessible.name: text
             KeyNavigation.tab: textDescription
-    }
-
-    Text {
-        id: textDescription
-        text: qsTranslate("PageHelpAbout","STR_HELP_TITLE")
-        font.pixelSize: Constants.SIZE_TEXT_BODY
-        font.family: lato.name
+        }
+        Text {
+            id: textDescription
+            text: qsTranslate("PageHelpAbout","STR_HELP_TITLE")
+            font.pixelSize: Constants.SIZE_TEXT_BODY
+            font.family: lato.name
             font.bold: textDescription.focus ? true : false
-        anchors.top: textAppName.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            anchors.top: textAppName.bottom
+            anchors.topMargin: Constants.SIZE_TEXT_BODY
             Accessible.role: Accessible.Row
             Accessible.name: text
             KeyNavigation.tab: textVersion
-    }
-
-    Text {
-        id: textVersion
-        font.pixelSize: Constants.SIZE_TEXT_BODY
-        font.family: lato.name
+        }
+        Text {
+            id: textVersion
+            font.pixelSize: Constants.SIZE_TEXT_BODY
+            font.family: lato.name
             font.bold: textVersion.focus ? true : false
-        anchors.top: textDescription.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            anchors.top: textDescription.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             Accessible.role: Accessible.Row
             Accessible.name: text
             KeyNavigation.tab: textDifficult
-    }
-
-    Text {
-        id: textDifficult
-        text: qsTranslate("PageHelpAbout","STR_HELP_LINK") + ": "
-        font.pixelSize: Constants.SIZE_TEXT_BODY
-        font.family: lato.name
+        }
+        Text {
+            id: textDifficult
+            text: qsTranslate("PageHelpAbout","STR_HELP_LINK") + ": "
+            font.pixelSize: Constants.SIZE_TEXT_BODY
+            font.family: lato.name
             font.bold: textDifficult.focus ? true : false
-        anchors.top: textVersion.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            anchors.top: textVersion.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             Accessible.role: Accessible.Row
             Accessible.name: text
             KeyNavigation.tab: textLinkCC.propertyText
-    }
-
+        }
     Components.Link {
         id: textLinkCC
         width: parent.width

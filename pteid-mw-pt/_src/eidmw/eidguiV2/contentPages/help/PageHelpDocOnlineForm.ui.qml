@@ -14,7 +14,7 @@ Item {
     Item {
         id: rowTop
         width: parent.width
-        height: parent.height * Constants.HEIGHT_HOME_PAGE_ROW_TOP_V_RELATIVE
+        height: parent.height * Constants.HEIGHT_DOC_ONLINE_ROW_TOP_V_RELATIVE
                 + (parent.height + Constants.TITLE_BAR_SIZE - Constants.SCREEN_MINIMUM_HEIGHT)
                 * Constants.HEIGHT_HOME_PAGE_ROW_TOP_INC_RELATIVE
     }
@@ -30,7 +30,7 @@ Item {
             font.family: lato.name
             text: qsTranslate("PageHelpDocOnline",
                               "STR_HELP_DOC_TITLE") + " " + mainWindow.title
-            font.bold: text0.focus ? true : false
+            font.bold: activeFocus ? true : false
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
