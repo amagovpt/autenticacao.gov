@@ -172,20 +172,28 @@ static const char *SIGCONTAINER_README=
 			AddManifestFile(pZip);
 		}
 		// Append the referenced files to the zip file
+		std::vector<std::string *> unique_paths;
+		for (unsigned int i = 0; i != num_paths; i++)
+		{
+			unique_paths.push_back(new std::string(paths[i]));
+		}
+		CPathUtil::generate_unique_filenames("temporary_folder_name", unique_paths);
 		for (unsigned int  i = 0; i < num_paths; i++)
 		{
 			absolute_path = paths[i];
 			MWLOG(LEV_DEBUG, MOD_APL, "Adding file %s to archive", absolute_path);
 
-			zip_entry_name = Basename((char *)absolute_path);
+			zip_entry_name = Basename((char *)unique_paths[i]->c_str());
 			zip_source_t *source = zip_source_file(pZip, absolute_path, 0, -1);
 			if (source == NULL ||
 				zip_file_add(pZip, zip_entry_name, source, ZIP_FL_ENC_GUESS) < 0)
 			{
 				zip_source_free(source);
-				MWLOG(LEV_ERROR, MOD_APL, L"Failed to add %s to zip container", zip_entry_name);
+				MWLOG(LEV_ERROR, MOD_APL, "Failed to add %s to zip container", zip_entry_name);
+				delete unique_paths[i];
 				return;
 			}
+			delete unique_paths[i];
 		}
 
 		//Add the signature file to the container
