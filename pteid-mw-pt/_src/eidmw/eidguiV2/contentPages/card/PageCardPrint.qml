@@ -155,12 +155,6 @@ PageCardPrintForm {
 
             propertySwitchBasic.forceActiveFocus()
 
-            propertySwitchBasic.checked = false
-            propertySwitchAdditional.checked = false
-            propertySwitchAddress.checked = false
-            propertySwitchNotes.checked = false
-            propertySwitchPrintDate.checked = false
-            propertySwitchPdfSign.checked = false
             mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
             propertyMainItem.forceActiveFocus()
         }
@@ -218,6 +212,7 @@ PageCardPrintForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
+                disableComponents()
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
@@ -232,9 +227,9 @@ PageCardPrintForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
+                disableComponents()
 
             }
-            disableComponents()
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
