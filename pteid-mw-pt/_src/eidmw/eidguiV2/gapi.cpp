@@ -1342,8 +1342,8 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
     //  Include header as png pixmap
     QPixmap header = loadHeader();
-
-    painter.drawPixmap(QPointF(pos_x, pos_y), header);
+    QRectF headerImgRect = QRectF(pos_x, pos_y, 359.0, 75.0);
+    painter.drawPixmap(headerImgRect, header, QRect(0.0, 0.0, header.width(), header.height()));
 
     //  //Alternative using the QtSVG module, not enabled for now because the rendering is far from perfect
     //QSvgRenderer renderer(QString("C:\\Users\\agrr\\Desktop\\GMC_logo.svg"));
@@ -1352,7 +1352,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     //renderer.render(&painter, QRect(pos_x, pos_y, 504, 132));
     //renderer.render(&painter, QRect(pos_x, pos_y, 250, 120));
 
-    pos_y += header.height() + field_margin;
+    pos_y += headerImgRect.height() + field_margin;
     black_pen = painter.pen();
 
     blue_pen.setColor(QColor(78, 138, 190));
@@ -1375,13 +1375,6 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
     pos_y += field_margin;
     int circle_radius = 6;
-
-    //Draw 4 blue circles
-    painter.setBrush(QColor(78, 138, 190));
-    painter.drawEllipse(QPointF(pos_x + 10, pos_y), circle_radius, circle_radius);
-    painter.drawEllipse(QPointF(pos_x + 40, pos_y), circle_radius, circle_radius);
-    painter.drawEllipse(QPointF(pos_x + 70, pos_y), circle_radius, circle_radius);
-    painter.drawEllipse(QPointF(pos_x + 100, pos_y), circle_radius, circle_radius);
 
     painter.setPen(black_pen);
     //Reset font
