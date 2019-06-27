@@ -463,16 +463,13 @@ return(lBits);
     xLev0Item.l_data = contents.Size();
     pinVector.clear();
 
-//	printf("------ PKCS15Parser AODF\n");
-//	std::cout << "Data: " << xLev0Item.p_data << "\n";
     //decode all Pin's 
     while(xLev0Item.l_data > 0)
     {
         //--- get level.1 sequence: Authentication object
         if ((xLev0Item.l_data < 2) || (asn1_next_item(&xLev0Item, &xLev1Item)!= 0)){
-            //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		printf("FIXE LATTER!!!\n");
-	}
+            throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
+        }
 
         if (xLev1Item.tag == ASN_SEQUENCE)                  //level.1 sequence
         {
@@ -492,24 +489,22 @@ return(lBits);
 
 	        // ------- common authentication object attributes; level.2 second sequence
             if ((xLev1Item.l_data < 2)||(asn1_next_item(&xLev1Item, &xLev2Item)!= 0) ||(xLev2Item.tag != ASN_SEQUENCE)){
-                //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		printf("FIXE LATTER!!!\n");
-		}
+                throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
+     		}
 
 	        // Authority ID 
             if ((xLev2Item.l_data < 2)||(asn1_next_item(&xLev2Item, &xLev3Item)!= 0) ||(xLev3Item.tag != ASN_OCTET_STRING)){
-                //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		printf("FIXE LATTER!!!\n");
-		}
+                throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
+		    }
 
             pin.ulID = bin2ulong(xLev3Item.p_data, xLev3Item.l_data);
 
 
             //--- PIN attributes
             if ((xLev1Item.l_data < 2)||(asn1_next_item(&xLev1Item, &xLev2Item)!= 0)){
-                //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		printf("FIXE LATTER!!!\n");
-		}
+                throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
+		
+		    }
 
             if ((xLev2Item.tag & ASN_CLASS) == ASN_CONTEXT)
             {          
@@ -525,37 +520,37 @@ return(lBits);
 	            pin.csLastChange = "";
                 */
                 //--- sequence
-                if ((xLev2Item.l_data < 2)||(asn1_next_item(&xLev2Item, &xLev3Item)!= 0) ||(xLev3Item.tag != ASN_SEQUENCE)){
-                    //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		printf("FIXE LATTER!!!\n");
-		}
+                if ((xLev2Item.l_data < 2)||(asn1_next_item(&xLev2Item, &xLev3Item)!= 0) ||(xLev3Item.tag != ASN_SEQUENCE)) {
+                    throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
+
+		        }
 
 	            // pin flags
-                if ((xLev3Item.l_data < 2)||(asn1_next_item(&xLev3Item, &xLev4Item)!= 0) ||(xLev4Item.tag != ASN_BIT_STRING)){
-                    //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		printf("FIXE LATTER!!!\n");
-		}
+                if ((xLev3Item.l_data < 2)||(asn1_next_item(&xLev3Item, &xLev4Item)!= 0) ||(xLev4Item.tag != ASN_BIT_STRING)) {
+                    throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
+
+		        }
 	            pin.ulPinFlags = p15_bitstring2ul((unsigned char*)xLev4Item.p_data, xLev4Item.l_data);
 
 	            // pin type
-                if ((xLev3Item.l_data < 2)||(asn1_next_item(&xLev3Item, &xLev4Item)!= 0) ||(xLev4Item.tag != ASN_ENUM)){
-                    //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		printf("FIXE LATTER!!!\n");
-		}
+                if ((xLev3Item.l_data < 2)||(asn1_next_item(&xLev3Item, &xLev4Item)!= 0) ||(xLev4Item.tag != ASN_ENUM)) {
+                    throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
+
+                }
 	            pin.ulPinType = bin2ulong(xLev4Item.p_data, xLev4Item.l_data);
 
 	            // min length
                 if ((xLev3Item.l_data < 2)||(asn1_next_item(&xLev3Item, &xLev4Item)!= 0) ||(xLev4Item.tag != ASN_INTEGER)){
-                    //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		printf("FIXE LATTER!!!\n");
-		}
+                    throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
+
+                }
 	            pin.ulMinLen = bin2ulong(xLev4Item.p_data, xLev4Item.l_data);
 
 	            // stored length
                 if ((xLev3Item.l_data < 2)||(asn1_next_item(&xLev3Item, &xLev4Item)!= 0) ||(xLev4Item.tag != ASN_INTEGER)){
-                   // throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		printf("FIXE LATTER!!!\n");
-		}
+                   throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
+
+				}
 	            pin.ulStoredLen = bin2ulong(xLev4Item.p_data, xLev4Item.l_data);
 #ifdef VERBOSE
 	            std::cerr<<"stored length = "<<pin.ulStoredLen<<std::endl;
@@ -724,10 +719,9 @@ return(lBits);
     while(xLev0Item.l_data > 0)
     {
         //--- get level.1 sequence: Authentication object
-        if ((xLev0Item.l_data < 2) || (asn1_next_item(&xLev0Item, &xLev1Item)!= 0)){
-            //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-	    //printf("FIXE LATTER!!!\n");
-	}
+        if ((xLev0Item.l_data < 2) || (asn1_next_item(&xLev0Item, &xLev1Item)!= 0)) {
+	        break;
+	    }
 
         if(xLev1Item.tag == ASN_SEQUENCE)
         {
@@ -743,64 +737,63 @@ return(lBits);
             // get sequence
             if ((xLev1Item.l_data < 2) || (asn1_next_item(&xLev1Item, &xLev2Item)!= 0)||(xLev2Item.tag != ASN_SEQUENCE)){
                 //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		//printf("FIXE LATTER!!!\n");
-		}
+		        //printf("FIXE LATTER!!!\n");
+		    }
 
 	        // identifier
             if ((xLev2Item.l_data < 2) || (asn1_next_item(&xLev2Item, &xLev3Item)!= 0)||(xLev3Item.tag != ASN_OCTET_STRING)){
                 //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		//printf("FIXE LATTER!!!\n");
-		}
+		        //printf("FIXE LATTER!!!\n");
+		    }
 	        xKey.ulID = bin2ulong(xLev3Item.p_data, xLev3Item.l_data);
 
 	        // xKey usage flags
             if ((xLev2Item.l_data < 2) || (asn1_next_item(&xLev2Item, &xLev3Item)!= 0)||(xLev3Item.tag != ASN_BIT_STRING)){
                 //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		//printf("FIXE LATTER!!!\n");
-		}
+		        //printf("FIXE LATTER!!!\n");
+		    }
 	        xKey.ulKeyUsageFlags = p15_bitstring2ul((unsigned char*)xLev3Item.p_data, xLev3Item.l_data);
 
 	        // key access flags
             if ((xLev2Item.l_data < 2) || (asn1_next_item(&xLev2Item, &xLev3Item)!= 0)||(xLev3Item.tag != ASN_BIT_STRING)){
                 //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		//printf("FIXE LATTER!!!\n");
-		}
+		        //printf("FIXE LATTER!!!\n");
+		    }
 	        xKey.ulKeyAccessFlags = p15_bitstring2ul((unsigned char*)xLev3Item.p_data, xLev3Item.l_data);
 
 	        // key reference
             if ((xLev2Item.l_data < 2) || (asn1_next_item(&xLev2Item, &xLev3Item)!= 0)||(xLev3Item.tag != ASN_INTEGER)){
                 //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		//printf("FIXE LATTER!!!\n");
-		}
+		        //printf("FIXE LATTER!!!\n");
+		    }
 	        xKey.ulKeyRef = bin2ulong(xLev3Item.p_data, xLev3Item.l_data);
-
-
 
 	        //---- private key attributes
             if ((xLev1Item.l_data < 2) || (asn1_next_item(&xLev1Item, &xLev2Item)!= 0)){
                 //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		//printf("FIXE LATTER!!!\n");
-		}
+		     //printf("FIXE LATTER!!!\n");
+		    }
 
-            if (xLev2Item.tag == ASN_CONSTRUCTED_CONTEXT_N(1))
-            {
+            if (xLev2Item.tag == ASN_CONSTRUCTED_CONTEXT_N(1)) {
                 if ((xLev2Item.l_data < 2) || (asn1_next_item(&xLev2Item, &xLev3Item)!= 0) ||(xLev3Item.tag != ASN_SEQUENCE)){
                     //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		    //printf("FIXE LATTER!!!\n");
-		}
+		            //printf("FIXE LATTER!!!\n");
+		        }
 
   	            xKey.csPath = ParsePath2(&xLev3Item);
 
 	            // modulus length
                 if ((xLev3Item.l_data < 2) || (asn1_next_item(&xLev3Item, &xLev4Item)!= 0) ||(xLev4Item.tag != ASN_INTEGER)){
                     //throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-		    //printf("FIXE LATTER!!!\n");
-		}
+		    		//printf("FIXE LATTER!!!\n");
+		        }
 
                 xKey.ulKeyLenBytes = (bin2ulong(xLev4Item.p_data, xLev4Item.l_data) + 7) / 8;  //convert bit to byte, round up
 	        }
+
+	        oResult.push_back(xKey);
         }
-        oResult.push_back(xKey);
+        
     }
     
     return oResult;

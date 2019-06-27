@@ -280,7 +280,6 @@ namespace eIDMW
           ReadFile(&m_xPrKDF,2);
           // parse
           m_oPrKeys = m_poParser->ParsePrkdf(m_xPrKDF.byteArray);
-          m_oPrKeys.pop_back();
           break;
       default:
           // error: this method can only be called with AODF, CDF or PRKDF
