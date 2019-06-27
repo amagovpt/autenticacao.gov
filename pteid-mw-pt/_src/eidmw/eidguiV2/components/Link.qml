@@ -12,6 +12,7 @@ Item {
     height: childrenRect.height
     TextEdit {
         id: linkText
+        width: parent.width
         readOnly: true
         selectByMouse: true
         selectByKeyboard: true
