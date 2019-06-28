@@ -72,6 +72,7 @@ public:
         , m_bRemoveCert(false)
         , m_strExePath("")
         , m_test_mode(false)
+        , m_bPinpadEnabled(false)
 
     {
         //----------------------------------------------------------
@@ -88,6 +89,19 @@ public:
                 setGuiLanguage(lng);
             }else{
                 setGuiLanguage(STR_DEF_GUILANGUAGE);
+            }
+        }
+
+        //----------------------------------------------------------
+        // check use Pinpad functionality
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PINPAD_ENABLED);
+            long pinpadEnabled = config.getLong();
+
+            if (0 != pinpadEnabled)
+            {
+                setPinpadEnabled(true);
             }
         }
 
@@ -319,6 +333,17 @@ public:
         m_GuiLanguage = language;
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_LANGUAGE);
         config.setString(m_GuiLanguage.toLatin1());
+    }
+    bool getPinpadEnabled(void) const
+    {
+        return m_bPinpadEnabled;
+    }
+    void setPinpadEnabled(bool bPinpadEnabled)
+    {
+        m_bPinpadEnabled = bPinpadEnabled;
+
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PINPAD_ENABLED);
+        config.setLong(m_bPinpadEnabled);
     }
     bool getStartMinimized( void ) const
     {
@@ -623,6 +648,7 @@ private:
     bool    m_bShowAnimations;      //!< the GUI Animations
     bool    m_bGraphicsAccel;       //!< the Graphics Acceleration
     bool    m_bUseCustomSignature;  //!< the GUI use custom signature image
+    bool    m_bPinpadEnabled;       //!< use Pinpad functionality when supported by readers (T/F)
     bool    m_bStartMinimized;      //!< startup minimized (T/F)
     bool    m_bDebugMode;           //!< debug mode enabled (T/F)
     bool    m_bNotShowStartUpHelp;  //!< the GUI Show Help	bool	m_bStartMinimized;              //!< startup minimized (T/F)

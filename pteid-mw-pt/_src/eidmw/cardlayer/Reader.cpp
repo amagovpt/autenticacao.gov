@@ -20,6 +20,7 @@
 #include "Reader.h"
 #include "Card.h"
 #include "../common/Log.h"
+#include "../common/Config.h"
 #include "CardFactory.h"
 
 namespace eIDMW
@@ -193,14 +194,16 @@ bool CReader::Connect()
 	{
 		m_oPKCS15.SetCard(m_poCard);
 		m_oPinpad->Init(m_poCard->m_hCard);
-		if (m_oPinpad->UsePinpad())
+		CConfig config;
+		long pinpadEnabled = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PINPAD_ENABLED);
+		if (pinpadEnabled==1 && m_oPinpad->UsePinpad())
 		{
 			MWLOG(LEV_DEBUG, MOD_CAL, L"Using Pinpad reader.");
 			m_poCard->setPinpadHandler(m_oPinpad->getPinpadHandler());
 
 		}
 		else
-			MWLOG(LEV_DEBUG, MOD_CAL, L"Using non-pinpad reader.");
+			MWLOG(LEV_DEBUG, MOD_CAL, L"Using non-pinpad reader. pinpadEnabled=%ld", pinpadEnabled);
 
 		MWLOG(LEV_INFO, MOD_CAL, L" Connected to %ls card in reader %ls",
 				Type2String(m_poCard->GetType()), m_wsReader.c_str());

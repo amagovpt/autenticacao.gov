@@ -44,6 +44,21 @@ PageDefinitionsAppForm {
                     + propertyComboBoxReader.currentIndex)
     }
 
+    propertyCheckboxEnablePinpad {
+        onCheckedChanged: { 
+            controler.setPinpadEnabledValue(propertyCheckboxEnablePinpad.checked) 
+
+            if (propertyCheckboxEnablePinpad.enabled) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("PageDefinitionsApp","STR_USE_PINPAD") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_RESTART_APP") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            }
+        }
+    }
+
     propertyCheckboxAutoStart{
         onCheckedChanged: propertyCheckboxAutoStart.checked ? controler.setStartAutoValue(true) :
                                                               controler.setStartAutoValue(false)
@@ -203,6 +218,9 @@ PageDefinitionsAppForm {
         console.log("Page definitions onCompleted")
 
         propertyComboBoxReader.model = gapi.getRetReaderList()
+
+        propertyCheckboxEnablePinpad.checked = controler.getPinpadEnabledValue()
+        propertyCheckboxEnablePinpad.enabled = true
 
         if (Qt.platform.os === "windows") {
             propertyCheckboxAutoStart.checked = controler.getStartAutoValue()

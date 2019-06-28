@@ -833,6 +833,14 @@ void AppController::setAutoCardReadingValue (bool bAutoCardReading ){
 
     m_Settings.setAutoCardReading(bAutoCardReading);
 }
+bool AppController::getPinpadEnabledValue(void){
+
+    return m_Settings.getPinpadEnabled();
+}
+void AppController::setPinpadEnabledValue(bool bPinpadEnabled){
+
+    m_Settings.setPinpadEnabled(bPinpadEnabled);
+}
 bool AppController::getStartAutoValue (void){
 
     return m_Settings.getAutoStartup();

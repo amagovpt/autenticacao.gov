@@ -54,6 +54,9 @@ public slots:
     void RunPackage(std::string pkg, std::string distro);
     void startUpdate(void);
 
+    bool getPinpadEnabledValue(void);
+    void setPinpadEnabledValue(bool bPinpadEnabled);
+
     bool getStartAutoValue (void);
     void setStartAutoValue (bool bAutoStartup );
 

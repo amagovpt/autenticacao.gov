@@ -10,6 +10,7 @@ Item {
     property alias propertyComboBoxReader: comboBoxReader
     property alias propertyRectReader: rectReader
     property alias propertyTextReader: textReader
+    property alias propertyCheckboxEnablePinpad: checkboxEnablePinpad
     property alias propertyRectAppStart: rectAppStart
     property alias propertyRectAppStartCheckBox: rectAppStartCheckBox
     property alias propertyCheckboxAutoStart: checkboxAutoStart
@@ -77,7 +78,7 @@ Item {
             Item{
                 id: rectReader
                 width: parent.width
-                height: textReader.height + rectReaderCombo.height + Constants.SIZE_TEXT_V_SPACE
+                height: textReader.height + rectReaderCombo.height + 3*Constants.SIZE_TEXT_V_SPACE
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
                 Text {
@@ -118,15 +119,31 @@ Item {
                     id: rectReaderCombo
                     width: parent.width
                     color: "white"
-                    height: 3 * Constants.SIZE_TEXT_FIELD
+                    height: 4 * Constants.SIZE_TEXT_FIELD + checkboxEnablePinpad.height + 4*Constants.SIZE_TEXT_V_SPACE 
                     anchors.top : textReader.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
+                    Text {
+                        id: textSelectReader
+                        x: 10
+                        y: Constants.SIZE_TEXT_V_SPACE
+                        font.capitalization: Font.MixedCase
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.bold: focus
+                        color: Constants.COLOR_TEXT_BODY
+                        wrapMode: Text.WordWrap
+                        Accessible.role: Accessible.TitleBar
+                        Accessible.name: text
+                        KeyNavigation.tab: checkboxDebugMode
+                        text: qsTranslate("PageDefinitionsApp", "STR_SELECT_READER") + controler.autoTr
+                    }
 
                     ComboBox {
                         id: comboBoxReader
                         width: parent.width - 2 * Constants.SIZE_TEXT_V_SPACE
                         height: 3 * Constants.SIZE_TEXT_FIELD
-                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.top: textSelectReader.bottom
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -136,13 +153,28 @@ Item {
                         Accessible.name: textReader.text
                         KeyNavigation.tab: dateAppStart
                     }
+
+                    CheckBox {
+                        id: checkboxEnablePinpad
+                        enabled: false
+                        text: qsTranslate("PageDefinitionsApp", "STR_USE_PINPAD") + controler.autoTr
+                        height: 25
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        anchors.top: comboBoxReader.bottom
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        KeyNavigation.tab: dateAppStart
+                    }
                 }
             }
 
             Item{
                 id: rectAppStart
                 width: parent.width
-                height: dateAppStart.height + rectAppStartCheckBox.height + Constants.SIZE_TEXT_V_SPACE
+                height: dateAppStart.height + rectAppStartCheckBox.height + 3*Constants.SIZE_TEXT_V_SPACE
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 anchors.top: rectReader.bottom
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
@@ -203,7 +235,7 @@ Item {
             Item{
                 id: rectAppLanguage
                 width: parent.width
-                height: dateAppLanguage.height + rectAppLanguageCheckBox.height + Constants.SIZE_TEXT_V_SPACE
+                height: dateAppLanguage.height + rectAppLanguageCheckBox.height + 3*Constants.SIZE_TEXT_V_SPACE
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 anchors.top: rectAppStart.bottom
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
@@ -289,7 +321,7 @@ Item {
             Item {
                 id: rectAppLook
                 width: parent.width
-                height: dateAppLook.height + rectAppLookCheckBox.height + Constants.SIZE_TEXT_V_SPACE
+                height: dateAppLook.height + rectAppLookCheckBox.height + 3*Constants.SIZE_TEXT_V_SPACE
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 anchors.top: rectAppLanguage.bottom
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
