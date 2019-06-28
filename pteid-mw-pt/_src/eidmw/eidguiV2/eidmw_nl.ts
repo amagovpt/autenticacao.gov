@@ -1016,7 +1016,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="341"/>
         <source>STR_DEBUG_MODE_TITLE</source>
-        <translation>Modo Diagnóstico</translation>
+        <translation>Modo diagnóstico</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="387"/>
@@ -1026,7 +1026,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="393"/>
         <source>STR_DEBUG_MODE_ENABLE</source>
-        <translation>Ativar Modo Diagnóstico</translation>
+        <translation>Ativar modo diagnóstico</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="424"/>
@@ -2323,7 +2323,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="120"/>
         <source>STR_POPUP_DEBUG_MODE</source>
-        <translation>Modo Diagnóstico</translation>
+        <translation>Modo diagnóstico</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="122"/>
@@ -2635,7 +2635,7 @@
     <message>
         <location filename="main.qml" line="617"/>
         <source>STR_RUN_DEBUG_MODE</source>
-        <translation>MODO DIAGNÓSTICO</translation>
+        <translation>Modo de diagnóstico</translation>
     </message>
 </context>
 </TS>

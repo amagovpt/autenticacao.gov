@@ -1018,7 +1018,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="341"/>
         <source>STR_DEBUG_MODE_TITLE</source>
-        <translation>Debug Mode</translation>
+        <translation>Debug mode</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="387"/>
@@ -1028,7 +1028,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="393"/>
         <source>STR_DEBUG_MODE_ENABLE</source>
-        <translation>Enable Debug Mode</translation>
+        <translation>Enable debug mode</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="424"/>
@@ -2325,7 +2325,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="120"/>
         <source>STR_POPUP_DEBUG_MODE</source>
-        <translation>Debug Mode</translation>
+        <translation>Debug mode</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="122"/>
@@ -2637,7 +2637,7 @@
     <message>
         <location filename="main.qml" line="617"/>
         <source>STR_RUN_DEBUG_MODE</source>
-        <translation>DEBUG MODE</translation>
+        <translation>Debug mode</translation>
     </message>
 </context>
 </TS>
