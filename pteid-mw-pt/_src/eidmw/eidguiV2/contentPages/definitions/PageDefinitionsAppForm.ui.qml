@@ -57,7 +57,8 @@ Item {
             active: rowMain.moving || !rowMain.moving // QtQuick.Controls 2.1 does not have AlwaysOn prop
             width: Constants.SIZE_TEXT_FIELD_H_SPACE
             anchors.right: parent.right
-            anchors.top: parent.top
+            anchors.top: rowTop.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             anchors.bottom: parent.bottom
         }
         /* This column was added because the rowMain component was cliping the left border of the rectangles.
