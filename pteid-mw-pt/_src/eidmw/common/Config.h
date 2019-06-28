@@ -152,6 +152,7 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GENERAL_OAUTH_HOST     L"oauth_host"
 #define EIDMW_CNF_GENERAL_OAUTH_PORT     L"oauth_port"
 #define EIDMW_CNF_GENERAL_OAUTH_CLIENTID     L"oauth_clientid"
+#define EIDMW_CNF_GENERAL_PINPAD_ENABLED L"use_pinpad"
 
 #define EIDMW_CNF_SECTION_LOGGING       L"logging"              //section with the logging parameters
 #define EIDMW_CNF_LOGGING_DIRNAME       L"log_dirname"          //string, location of the log-file; $home/pteid/	Full path with volume name.
@@ -300,6 +301,7 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_OTP_SERVER;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_SHOW_JAVA_APPS;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_PINPAD_ENABLED;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_HOST;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_PORT;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_APIKEY;
