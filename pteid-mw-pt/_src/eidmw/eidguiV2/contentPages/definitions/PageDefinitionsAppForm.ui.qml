@@ -346,7 +346,7 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
-                        KeyNavigation.tab: dateAppGraphics
+                        KeyNavigation.tab: dateDebugMode
                     }
                 }
             }

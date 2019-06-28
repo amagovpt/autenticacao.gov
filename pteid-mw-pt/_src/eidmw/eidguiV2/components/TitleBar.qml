@@ -48,12 +48,14 @@ Item {
     id: titleBar
 
     property alias propertyTitleBar: container
+    property alias propertyModeText: modeText
 
     Rectangle {
         id: container
-        width: parent.width ; height: parent.height
+        width: parent.width
+        height: parent.height
         color: Constants.COLOR_MAIN_BLUE
-        Item{
+        Item {
             width:  mainFormID.propertyMainMenuView.width
             height: parent.height
             Text {
@@ -63,6 +65,16 @@ Item {
                     horizontalCenter: parent.horizontalCenter
                 }
                 text: mainWindow.title
+                font.pixelSize: Constants.SIZE_TEXT_BODY
+                font.family: lato.name
+                color: "white"
+            }
+            Text {
+                id: modeText
+                anchors.left: categoryText.right
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                }
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 color: "white"

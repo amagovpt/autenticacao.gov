@@ -609,12 +609,13 @@ Load language error. Please reinstall the application"
             mainFormID.propertyMainMenuListView.currentIndex = -1
             mainFormID.propertyMainMenuBottomListView.currentIndex = -1
             console.log("MainForm Completed testmode: "+controler.getTestMode())
-            if(controler.getTestMode())
-                mainWindow.title = mainWindow.title + "   [ " + qsTr("STR_RUN_MODE") + " ]"
+            if (controler.getTestMode()) {
+                mainFormID.propertyTitleBarContainer.propertyModeText.text = "   [ " + qsTr("STR_RUN_MODE") + " ]" + controler.autoTr
+            }
 
             console.log("debugMode: " + controler.getDebugModeValue())
             if (controler.getDebugModeValue()) {
-                mainWindow.title = mainWindow.title + "   [ " + qsTr("STR_RUN_DEBUG_MODE") + " ]"
+                mainFormID.propertyTitleBarContainer.propertyModeText.text += "   [ " + qsTr("STR_RUN_DEBUG_MODE") + " ]" + controler.autoTr
                 mainFormID.propertyTitleBarContainer.propertyTitleBar.color = Constants.COLOR_TITLEBAR_DEBUG
             }
         }
