@@ -41,7 +41,6 @@ Item {
             width: parent.width
             height: Constants.SIZE_TEXT_LABEL
             anchors.top: updateMain.top
-            anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
             anchors.horizontalCenter: parent.horizontalCenter
             Text {
                 id: updateTitle
