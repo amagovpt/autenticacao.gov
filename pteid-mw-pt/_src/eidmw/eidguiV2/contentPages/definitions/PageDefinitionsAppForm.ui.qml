@@ -65,14 +65,14 @@ Item {
            So we increased the width of the rowMain by SIZE_ROW_H_SPACE and filled the gap with the column. */
         Item { 
             id: column
-            anchors.top: rowMain.top
+            anchors.top: parent.top
             width: Constants.SIZE_ROW_H_SPACE
             height: rowMain.height
-            anchors.left: rowMain.left
+            anchors.left: parent.left
         }
         Item{
             id: content
-            anchors.top: rowMain.top
+            anchors.top: parent.top
             anchors.left: column.right
             width: rowMain.parent.width - Constants.SIZE_ROW_H_SPACE
 
