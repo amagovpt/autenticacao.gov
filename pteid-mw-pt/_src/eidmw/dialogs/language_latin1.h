@@ -108,7 +108,7 @@ DEFINE_LANG_STR(UnlockDialogInstructions) = {L"1) Enter your PUK code and press 
                                             L"1) Por favor insira o seu código PUK e pressione 'OK' \n2) Introduza o seu novo PIN e pressione 'OK'. \n3) Introduza novamente o seu novo PIN e pressione 'OK'.", L"", L""};																			
 DEFINE_LANG_STR(UnlockWithoutPUKInstructions) = {L"1) Enter your new PIN and press 'OK'. \n2) Enter your new PIN again and press 'OK'.",
 												 L"1) Por favor introduza o seu novo PIN e pressione 'OK'\n2) Introduza novamente o seu novo PIN e pressione 'OK'.", L"", L""};
-
+DEFINE_LANG_STR(PinpadCanBeDisabled) = { L"The pinpad functionality can be disabled in Application Configuration. Check manual.", L"A funcionalidade PINPAD pode ser desativada na Configuração da Aplicação. Ver manual.", L"", L"" };
 #define GETSTRING_DLG(code) LANG_STR_ ## code[CLang::GetLang()]
 #ifndef WIN32
 #define GETQSTRING_DLG(code) QString::fromWCharArray(LANG_STR_ ## code[CLang::GetLang()])
