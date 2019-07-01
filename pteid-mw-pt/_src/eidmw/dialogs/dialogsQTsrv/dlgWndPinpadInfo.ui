@@ -84,6 +84,28 @@
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="label_bottom">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>200</y>
+      <width>371</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+    </property>
+    <property name="wordWrap">
+      <bool>true</bool>
+    </property>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

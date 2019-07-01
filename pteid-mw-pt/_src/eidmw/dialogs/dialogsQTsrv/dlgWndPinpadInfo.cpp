@@ -85,6 +85,12 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
     ui.label->setAccessibleName(label);
     ui.label->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt; }");
 	m_ulHandle = ulHandle;
+
+    QString labelDisablePinpad = QString::fromWCharArray(GETSTRING_DLG(PinpadCanBeDisabled));
+    ui.label_bottom->setText(labelDisablePinpad);
+    ui.label_bottom->setAccessibleName(labelDisablePinpad);
+    ui.label_bottom->setStyleSheet("QLabel { color : #3C5DBC; font-size:10pt; }");
+    ui.label_bottom->wordWrap();
 }
 
 dlgWndPinpadInfo::~dlgWndPinpadInfo()
