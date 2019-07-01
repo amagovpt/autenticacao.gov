@@ -30,7 +30,7 @@ Item {
         id: rowMain
         width: parent.width
         height: parent.height
-        anchors.topMargin: 3*Constants.SIZE_ROW_V_SPACE
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
         anchors.top: rowTop.bottom
         
         BusyIndicator {

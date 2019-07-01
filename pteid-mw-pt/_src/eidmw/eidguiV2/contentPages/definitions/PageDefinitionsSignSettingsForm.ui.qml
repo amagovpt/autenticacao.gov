@@ -38,7 +38,7 @@ Item {
             id: rectAppCertificates
             width: parent.width
             height: dateAppCertificates.height + rectAppCertificatesCheckBox.height
-                    + Constants.SIZE_TEXT_V_SPACE
+                    + 3*Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
 
@@ -119,7 +119,7 @@ Item {
             id: rectAppTimeStamp
             width: parent.width
             height: dateAppTimeStamp.height + rectAppTimeStampCheckBox.height
-                    + Constants.SIZE_TEXT_V_SPACE
+                    + 3*Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppCertificates.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
@@ -215,7 +215,7 @@ Item {
             id: rectOffice
             width: parent.width
             height: textOfficeTitle.height + rectOfficeCheckbox.height
-                    + Constants.SIZE_TEXT_V_SPACE
+                    + 3*Constants.SIZE_TEXT_V_SPACE
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectAppTimeStamp.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
