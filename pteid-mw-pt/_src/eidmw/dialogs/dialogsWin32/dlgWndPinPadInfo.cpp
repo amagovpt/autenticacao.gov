@@ -132,6 +132,16 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 			SelectObject( m_hDC, TextFont );
 			DrawText( m_hDC, m_szMessage, -1, &rect, DT_WORDBREAK );
 
+            //Pinpad disable warning
+            GetClientRect(m_hWnd, &rect);
+            rect.left += 20;
+            rect.top = rect.bottom - 60;
+            rect.right -= 20;
+            rect.bottom = rect.bottom;
+            SetBkColor(m_hDC, RGB(255, 255, 255));
+            SelectObject(m_hDC, TextFont);
+            DrawText(m_hDC, GETSTRING_DLG(PinpadCanBeDisabled), -1, &rect, DT_WORDBREAK);
+
 			EndPaint( m_hWnd, &ps );
 
 			SetForegroundWindow( m_hWnd );
