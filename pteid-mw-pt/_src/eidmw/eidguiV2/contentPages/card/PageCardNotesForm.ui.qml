@@ -57,7 +57,7 @@ Item {
                                 ? Constants.SIZE_TEXT_LABEL_FOCUS
                                 : Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
-                font.bold: notesText.focus ? true : false
+                font.bold: notesText.activeFocus ? true : false
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 Accessible.role: Accessible.Column
@@ -191,9 +191,11 @@ Item {
                 id: dateText
                 text: qsTranslate("PageCardNotes", "STR_NOTES_PAGE_SIZE")
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pixelSize: activeFocus
+                                ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                : Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
-                font.bold: progressBar.focus ? true : false
+                font.bold: progressBar.activeFocus ? true : false
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
             }
