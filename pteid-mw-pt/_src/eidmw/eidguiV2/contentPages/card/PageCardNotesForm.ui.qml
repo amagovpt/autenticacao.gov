@@ -16,7 +16,7 @@ Item {
     property alias propertySaveNotes: saveNotes
     property alias propertyMouseAreaFlickable: mouseAreaFlickable
     property alias propertyProgressBar: progressBar
-    property alias propertyMainItem: notesText
+    property alias propertyNotesText: notesText
     property string progressBarText: ""
 
     Item {
@@ -53,7 +53,9 @@ Item {
                 id: notesText
                 text: qsTranslate("PageCardNotes", "STR_NOTES_PAGE")
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pixelSize: activeFocus
+                                ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                : Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
                 font.bold: notesText.focus ? true : false
                 color: Constants.COLOR_TEXT_LABEL
@@ -61,6 +63,10 @@ Item {
                 Accessible.role: Accessible.Column
                 Accessible.name: text
                 KeyNavigation.tab: notesTextDescription
+                KeyNavigation.down: notesTextDescription
+                KeyNavigation.right: notesTextDescription
+                KeyNavigation.backtab: saveNotes
+                KeyNavigation.up: saveNotes
             }
             Text {
                 id: notesTextDescription
@@ -78,6 +84,10 @@ Item {
                 Accessible.role: Accessible.StaticText
                 Accessible.name: text
                 KeyNavigation.tab: edit
+                KeyNavigation.down: edit
+                KeyNavigation.right: edit
+                KeyNavigation.backtab: notesText
+                KeyNavigation.up: notesText
             }
             DropShadow {
                 anchors.fill: rectFieldFlick
@@ -140,6 +150,10 @@ Item {
                         Accessible.role: Accessible.EditableText
                         Accessible.name: text
                         KeyNavigation.tab: progressBar
+                        KeyNavigation.down: progressBar
+                        KeyNavigation.right: progressBar
+                        KeyNavigation.backtab: notesTextDescription
+                        KeyNavigation.up: notesTextDescription
                     }
 
                     ScrollBar.vertical: ScrollBar {
@@ -199,6 +213,10 @@ Item {
                     Accessible.name: qsTranslate("PageCardNotes",
                                                  "STR_NOTES_PAGE_SIZE") + progressBarText
                     KeyNavigation.tab: saveNotes
+                    KeyNavigation.down: saveNotes
+                    KeyNavigation.right: saveNotes
+                    KeyNavigation.backtab: edit
+                    KeyNavigation.up: edit
                 }
             }
         }
@@ -222,7 +240,11 @@ Item {
                 highlighted: activeFocus ? true : false
                 Accessible.role: Accessible.Button
                 Accessible.name: text
-                KeyNavigation.tab: propertyMainItem
+                KeyNavigation.tab: notesText
+                KeyNavigation.down: notesText
+                KeyNavigation.right: notesText
+                KeyNavigation.backtab: progressBar
+                KeyNavigation.up: progressBar
             }
         }
     }

@@ -156,7 +156,9 @@ PageCardPrintForm {
             propertySwitchBasic.forceActiveFocus()
 
             mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
-            propertyMainItem.forceActiveFocus()
+            if(mainFormID.propertyPageLoader.propertyForceFocus)
+                        propertyTitleSelectData.forceActiveFocus()
+
         }
         onSignalCardAccessError: {
             console.log("Card Print Page onSignalCardAccessError")

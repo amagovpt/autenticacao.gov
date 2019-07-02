@@ -17,6 +17,7 @@ Item {
     property alias propertyForeignPostalCode: textBoxForeignPostalCode
 
     property alias propertyDistrict: textBoxDistrict
+    property alias propertyRectNacionalDistrict: rectNacionalDistrict
     property alias propertyMunicipality: textBoxMunicipality
     property alias propertyParish: textBoxParish
     property alias propertyStreetType: textBoxStreetType
@@ -193,7 +194,13 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_DISTRICT")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textBoxMunicipality
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxDistrict.accessibleText
+                KeyNavigation.tab: rectMunicipality
+                KeyNavigation.down: rectMunicipality
+                KeyNavigation.right: rectMunicipality
+                KeyNavigation.backtab: buttonConfirmOfAddress
+                KeyNavigation.up: buttonConfirmOfAddress
             }
         }
         Item {
@@ -212,7 +219,13 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_MUNICIPALITY")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textBoxParish
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxMunicipality.accessibleText
+                KeyNavigation.tab: rectCivilParish
+                KeyNavigation.down: rectCivilParish
+                KeyNavigation.right: rectCivilParish
+                KeyNavigation.backtab: rectNacionalDistrict
+                KeyNavigation.up: rectNacionalDistrict
             }
         }
         Item {
@@ -231,7 +244,13 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_CIVIL_PARISH")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textBoxStreetType
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxParish.accessibleText
+                KeyNavigation.tab: rectStreetType
+                KeyNavigation.down: rectStreetType
+                KeyNavigation.right: rectStreetType
+                KeyNavigation.backtab: rectMunicipality
+                KeyNavigation.up: rectMunicipality
             }
         }
         Item {
@@ -251,7 +270,13 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_STREET_TYPE")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textBoxStreetName
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxStreetType.accessibleText
+                KeyNavigation.tab: rectStreetName
+                KeyNavigation.down: rectStreetName
+                KeyNavigation.right: rectStreetName
+                KeyNavigation.backtab: rectMunicipality
+                KeyNavigation.up: rectMunicipality
             }
             Item {
                 id: rectStreetName
@@ -264,7 +289,13 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_STREET_NAME")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textBoxDoorNo
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxStreetName.accessibleText
+                KeyNavigation.tab: rectDoorNo
+                KeyNavigation.down: rectDoorNo
+                KeyNavigation.right: rectDoorNo
+                KeyNavigation.backtab: rectStreetType
+                KeyNavigation.up: rectStreetType
             }
         }
 
@@ -284,7 +315,13 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_HOUSE_BUILDING_NUM")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textBoxFloor
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxDoorNo.accessibleText
+                KeyNavigation.tab: rectFloor
+                KeyNavigation.down: rectFloor
+                KeyNavigation.right: rectFloor
+                KeyNavigation.backtab: rectStreetName
+                KeyNavigation.up: rectStreetName
             }
             Item {
                 id: rectFloor
@@ -297,7 +334,13 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_FLOOR")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textBoxSide
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxFloor.accessibleText
+                KeyNavigation.tab: rectSide
+                KeyNavigation.down: rectSide
+                KeyNavigation.right: rectSide
+                KeyNavigation.backtab: rectDoorNo
+                KeyNavigation.up: rectDoorNo
             }
             Item {
                 id: rectSide
@@ -310,7 +353,13 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_SIDE")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textBoxPlace
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxSide.accessibleText
+                KeyNavigation.tab: rectPlace
+                KeyNavigation.down: rectPlace
+                KeyNavigation.right: rectPlace
+                KeyNavigation.backtab: rectFloor
+                KeyNavigation.up: rectFloor
             }
         }
         Item {
@@ -329,7 +378,13 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_PLACE")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textBoxLocality
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxPlace.accessibleText
+                KeyNavigation.tab: rectLocality
+                KeyNavigation.down: rectLocality
+                KeyNavigation.right: rectLocality
+                KeyNavigation.backtab: rectSide
+                KeyNavigation.up: rectSide
             }
             Item {
                 id: rectLocality
@@ -342,7 +397,13 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_LOCALITY")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textBoxZip4
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxLocality.accessibleText
+                KeyNavigation.tab: rectZip4
+                KeyNavigation.down: rectZip4
+                KeyNavigation.right: rectZip4
+                KeyNavigation.backtab: rectPlace
+                KeyNavigation.up: rectPlace
             }
         }
         Item {
@@ -360,9 +421,14 @@ Item {
                     id: textBoxZip4
                     propertyDateText.text: qsTranslate("GAPI","STR_ZIP_CODE")
                     propertyDateField.text: ""
-                    text: propertyDateField.text + textBoxZip3.propertyDateField.text
                 }
-                KeyNavigation.tab: textBoxPostalLocality
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxZip4.accessibleText + textBoxZip3.propertyDateField.text
+                KeyNavigation.tab: rectPostalLocality
+                KeyNavigation.down: rectPostalLocality
+                KeyNavigation.right: rectPostalLocality
+                KeyNavigation.backtab: rectLocality
+                KeyNavigation.up: rectLocality
             }
             Item {
                 id: textIfen
@@ -389,7 +455,6 @@ Item {
                     propertyDateText.text: ""
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textBoxPostalLocality
             }
             Item {
                 id: rectPostalLocality
@@ -403,7 +468,13 @@ Item {
                     propertyDateText.text: qsTranslate("GAPI","STR_POSTAL_LOCALITY")
                     propertyDateField.text: ""
                 }
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxPostalLocality.accessibleText
                 KeyNavigation.tab: rectConfirmationOfAddressText
+                KeyNavigation.down: rectConfirmationOfAddressText
+                KeyNavigation.right: rectConfirmationOfAddressText
+                KeyNavigation.backtab: rectZip4
+                KeyNavigation.up: rectZip4
             }
         }
     }
@@ -435,6 +506,11 @@ Item {
             Accessible.role: Accessible.Row
             Accessible.name: dateField.text
             KeyNavigation.tab: buttonConfirmOfAddress
+            KeyNavigation.down: buttonConfirmOfAddress
+            KeyNavigation.right: buttonConfirmOfAddress
+            KeyNavigation.backtab: rectPostalLocality
+            KeyNavigation.up: rectPostalLocality
+
         }
         Item {
             id: rectConfirmationOfAddressButton
@@ -454,7 +530,11 @@ Item {
                 highlighted: activeFocus ? true : false
                 enabled: false
                 focus: true
-                KeyNavigation.tab: textBoxDistrict
+                KeyNavigation.tab: rectNacionalDistrict
+                KeyNavigation.down: rectNacionalDistrict
+                KeyNavigation.right: rectNacionalDistrict
+                KeyNavigation.backtab: rectConfirmationOfAddressText
+                KeyNavigation.up: rectConfirmationOfAddressText
             }
         }
     }

@@ -29,7 +29,8 @@ PageHelpDocOnlineForm {
 
     Component.onCompleted: {
         propertyReminderCheckBox.checked = controler.getNotShowHelpStartUp()
-        propertyMainItem.forceActiveFocus()
+        if(mainFormID.propertyPageLoader.propertyForceFocus)
+            propertyMainItem.forceActiveFocus()
     }
 }
 

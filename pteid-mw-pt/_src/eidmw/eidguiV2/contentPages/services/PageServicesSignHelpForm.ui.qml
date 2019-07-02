@@ -7,7 +7,7 @@ import "../../components" as Components
 
 Item {
     anchors.fill: parent
-    property alias propertyMainItem: textTitle
+    property alias propertyTextTitle: textTitle
     property alias propertyTextSubTitle: textSubTitle
     property alias propertyTextAutenticacaoGovLink: autenticacaoGovLink
 
@@ -29,7 +29,7 @@ Item {
             font.pixelSize: Constants.SIZE_TEXT_TITLE
             font.family: lato.name
             text: qsTranslate("PageServicesSign", "STR_SIGN_HELP_TITLE")
-            font.bold: activeFocus   ? true : false
+            font.bold: activeFocus ? true : false
             wrapMode: Text.Wrap
             width: parent.width
             horizontalAlignment: Text.left
@@ -38,6 +38,11 @@ Item {
             Accessible.role: Accessible.TitleBar
             Accessible.name: text
             KeyNavigation.tab: textSubTitle.propertyText
+            KeyNavigation.down: textSubTitle.propertyText
+            KeyNavigation.right: textSubTitle.propertyText
+            KeyNavigation.left: autenticacaoGovLink.propertyText
+            KeyNavigation.backtab: autenticacaoGovLink.propertyText
+            KeyNavigation.up: autenticacaoGovLink.propertyText
         }
         Components.Link {
             id: textSubTitle
@@ -61,6 +66,11 @@ Item {
                                         "STR_SIGN_HELP_CMD_SELECT")
             propertyLinkUrl: 'https://www.autenticacao.gov.pt/cmd-pedido-chave'
             KeyNavigation.tab: textTopic1
+            KeyNavigation.down: textTopic1
+            KeyNavigation.right: textTopic1
+            KeyNavigation.left: textTitle
+            KeyNavigation.backtab: textTitle
+            KeyNavigation.up: textTitle
         }
         Text {
             id: textTopic1
@@ -78,6 +88,11 @@ Item {
             Accessible.role: Accessible.Row
             Accessible.name: text
             KeyNavigation.tab: autenticacaoGovLink.propertyText
+            KeyNavigation.down: autenticacaoGovLink.propertyText
+            KeyNavigation.right: autenticacaoGovLink.propertyText
+            KeyNavigation.left: textSubTitle.propertyText
+            KeyNavigation.backtab: textSubTitle.propertyText
+            KeyNavigation.up: textSubTitle.propertyText
         }
 
         Components.Link {
@@ -102,6 +117,11 @@ Item {
                                         "STR_SIGN_HELP_AUTENTICACAO.GOV_SELECT")
             propertyLinkUrl: 'https://www.autenticacao.gov.pt'
             KeyNavigation.tab: textTitle
+            KeyNavigation.down: textTitle
+            KeyNavigation.right: textTitle
+            KeyNavigation.left: textTopic1
+            KeyNavigation.backtab: textTopic1
+            KeyNavigation.up: textTopic1
         }
     }
 }

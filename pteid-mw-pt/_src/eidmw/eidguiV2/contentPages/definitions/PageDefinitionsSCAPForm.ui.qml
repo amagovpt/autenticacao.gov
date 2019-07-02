@@ -24,6 +24,8 @@ Item {
     property alias propertyEntitiesListViewScroll: entitiesListViewScroll
     property alias propertyMouseAreaTextSignaturePageLinkCompanies: mouseAreaTextSignaturePageLinkCompanies
     property alias propertyMouseAreaTextSignaturePageLinkEntities: mouseAreaTextSignaturePageLinkEntities
+    property alias propertyTextSignaturePageLinkEntities: textSignaturePageLinkEntities
+    property alias propertyTextSignaturePageLinkCompanies: textSignaturePageLinkCompanies
 
     property alias propertyTabButtonEntities: tabButtonEntities
     property alias propertyEntitiesText: entitiesText
@@ -125,7 +127,7 @@ Item {
                         Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         KeyNavigation.tab: listViewEntities.count
-                                           > 0 ? listViewEntities : buttonRemoveEntityAttributes
+                                           > 0 ? listViewEntities : textSignaturePageLinkEntities
                     }
                 }
                 Item {
@@ -157,7 +159,7 @@ Item {
                         Accessible.name: qsTranslate(
                                              "PageDefinitionsSCAP",
                                              "STR_SCAP_ATTRIBUTES_ENTITIES_MSG")
-                        KeyNavigation.tab: buttonRemoveEntityAttributes
+                        KeyNavigation.tab: textSignaturePageLinkEntities
                     }
                 }
 
@@ -184,6 +186,8 @@ Item {
                         color: Constants.COLOR_MAIN_BLUE
                         visible: propertyPageLoader.propertyBackupFromSignaturePage
                         font.underline: mouseAreaTextSignaturePageLinkEntities.containsMouse
+                        font.bold: activeFocus
+                        KeyNavigation.tab: buttonRemoveEntityAttributes
                     }
                 }
                 Item {
@@ -262,7 +266,7 @@ Item {
                         Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         KeyNavigation.tab: listViewCompanies.count
-                                           > 0 ? listViewCompanies : buttonRemoveCompanyAttributes
+                                           > 0 ? listViewCompanies : textSignaturePageLinkCompanies
                     }
                 }
                 Item {
@@ -294,7 +298,7 @@ Item {
                         Accessible.name: qsTranslate(
                                              "PageDefinitionsSCAP",
                                              "STR_SCAP_ATTRIBUTES_COMPANY_MSG")
-                        KeyNavigation.tab: buttonRemoveCompanyAttributes
+                        KeyNavigation.tab: textSignaturePageLinkCompanies
                     }
                 }
 
@@ -319,8 +323,10 @@ Item {
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                         font.underline: mouseAreaTextSignaturePageLinkCompanies.containsMouse
+                        font.bold: activeFocus
                         color: Constants.COLOR_MAIN_BLUE
                         visible: propertyPageLoader.propertyBackupFromSignaturePage
+                        KeyNavigation.tab: buttonRemoveCompanyAttributes
                     }
                 }
                 Item {

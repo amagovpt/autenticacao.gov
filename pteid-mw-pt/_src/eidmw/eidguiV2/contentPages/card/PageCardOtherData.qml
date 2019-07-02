@@ -31,7 +31,8 @@ PageCardOtherDataForm {
             propertyTextBoxPlaceOfRequest.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.PlaceOfRequest)
             propertyTextBoxCardState.propertyDateField.text = ""
             mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
-            propertyTextBoxNIF.forceActiveFocus()
+            if(mainFormID.propertyPageLoader.propertyForceFocus)
+                propertyRectTaxNum.forceActiveFocus()
         }
         onSignalShowCardActivation: {
             propertyBusyIndicator.running = false
@@ -128,7 +129,6 @@ PageCardOtherDataForm {
 
     Component.onCompleted: {
         console.log("Page Card Identify mainWindow Completed")
-
         propertyBusyIndicator.running = true
         gapi.startCardReading()
     }

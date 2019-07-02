@@ -20,7 +20,8 @@ Item {
     property alias propertySwitchNotes: switchNotes
     property alias propertySwitchPrintDate: switchPrintDate
     property alias propertySwitchPdfSign: switchPdfSign
-    property alias propertyMainItem: titleSelectData
+
+    property alias propertyTitleSelectData: titleSelectData
 
     Item {
         id: rowTop
@@ -75,15 +76,21 @@ Item {
         Text {
             id: titleSelectData
             x: Constants.SIZE_TEXT_FIELD_H_SPACE
-            font.pixelSize: Constants.SIZE_TEXT_LABEL
+            font.pixelSize: activeFocus
+                            ? Constants.SIZE_TEXT_LABEL_FOCUS
+                            : Constants.SIZE_TEXT_LABEL
             font.family: lato.name
-            font.bold: titleSelectData.focus ? true : false
+            font.bold: activeFocus ? true : false
             color: Constants.COLOR_TEXT_LABEL
             height: Constants.SIZE_TEXT_LABEL
             text: qsTranslate("PageCardPrint","STR_PRINT_SETTINGS")
             Accessible.role: Accessible.Grouping
             Accessible.name: text
             KeyNavigation.tab: switchBasic
+            KeyNavigation.down: switchBasic
+            KeyNavigation.right: switchBasic
+            KeyNavigation.backtab: buttonPdf
+            KeyNavigation.up: buttonPdf
         }
 
         Rectangle {
@@ -102,6 +109,11 @@ Item {
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 Accessible.role: Accessible.CheckBox
+                KeyNavigation.tab: switchAdditional
+                KeyNavigation.down: switchAdditional
+                KeyNavigation.right: switchAdditional
+                KeyNavigation.backtab: titleSelectData
+                KeyNavigation.up: titleSelectData
             }
             Switch {
                 id: switchAdditional
@@ -113,6 +125,11 @@ Item {
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 Accessible.role: Accessible.CheckBox
+                KeyNavigation.tab: switchAddress
+                KeyNavigation.down: switchAddress
+                KeyNavigation.right: switchAddress
+                KeyNavigation.backtab: switchBasic
+                KeyNavigation.up: switchBasic
             }
             Switch {
                 id: switchAddress
@@ -124,6 +141,11 @@ Item {
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 Accessible.role: Accessible.CheckBox
+                KeyNavigation.tab: switchNotes
+                KeyNavigation.down: switchNotes
+                KeyNavigation.right: switchNotes
+                KeyNavigation.backtab: switchAdditional
+                KeyNavigation.up: switchAdditional
             }
             Switch {
                 id: switchNotes
@@ -135,6 +157,11 @@ Item {
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 Accessible.role: Accessible.CheckBox
+                KeyNavigation.tab: switchPrintDate
+                KeyNavigation.down: switchPrintDate
+                KeyNavigation.right: switchPrintDate
+                KeyNavigation.backtab: switchAddress
+                KeyNavigation.up: switchAddress
             }
             Switch {
                 id: switchPrintDate
@@ -145,8 +172,12 @@ Item {
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
-                KeyNavigation.tab: titleOptions
                 Accessible.role: Accessible.CheckBox
+                KeyNavigation.tab: titleOptions
+                KeyNavigation.down: titleOptions
+                KeyNavigation.right: titleOptions
+                KeyNavigation.backtab: switchNotes
+                KeyNavigation.up: switchNotes
             }
         }
     }
@@ -181,15 +212,21 @@ Item {
         Text {
             id: titleOptions
             x: Constants.SIZE_TEXT_FIELD_H_SPACE
-            font.pixelSize: Constants.SIZE_TEXT_LABEL
+            font.pixelSize: activeFocus
+                            ? Constants.SIZE_TEXT_LABEL_FOCUS
+                            : Constants.SIZE_TEXT_LABEL
             font.family: lato.name
-            font.bold: focus ? true : false
+            font.bold: activeFocus ? true : false
             color: Constants.COLOR_TEXT_LABEL
             height: Constants.SIZE_TEXT_LABEL
             text: qsTranslate("PageCardPrint","STR_PRINT_SIGN_SETTINGS")
             Accessible.role: Accessible.Grouping
             Accessible.name: text
             KeyNavigation.tab: switchPdfSign
+            KeyNavigation.down: switchPdfSign
+            KeyNavigation.right: switchPdfSign
+            KeyNavigation.backtab: switchPrintDate
+            KeyNavigation.up: switchPrintDate
         }
 
         Rectangle {
@@ -209,7 +246,11 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.capitalization: Font.MixedCase
                 Accessible.role: Accessible.CheckBox
-                KeyNavigation.tab: buttonPrint.enabled ? (buttonPrint) : (buttonPdf.enabled ? buttonPdf : propertyMainItem)
+                KeyNavigation.tab: buttonPrint
+                KeyNavigation.down: buttonPrint
+                KeyNavigation.right: buttonPrint
+                KeyNavigation.backtab: titleOptions
+                KeyNavigation.up: titleOptions
             }
         }
     }
@@ -238,7 +279,11 @@ Item {
                 font.capitalization: Font.MixedCase
                 highlighted: activeFocus ? true : false
                 anchors.horizontalCenter: parent.horizontalCenter
-                KeyNavigation.tab: buttonPdf.enabled ? buttonPdf : titleSelectData
+                KeyNavigation.tab: buttonPdf
+                KeyNavigation.down: buttonPdf
+                KeyNavigation.right: buttonPdf
+                KeyNavigation.backtab: switchPdfSign
+                KeyNavigation.up: switchPdfSign
 
             }
         }
@@ -262,6 +307,10 @@ Item {
                 highlighted: activeFocus ? true : false
                 anchors.horizontalCenter: parent.horizontalCenter
                 KeyNavigation.tab: titleSelectData
+                KeyNavigation.down: titleSelectData
+                KeyNavigation.right: titleSelectData
+                KeyNavigation.backtab: buttonPrint
+                KeyNavigation.up: buttonPrint
 
             }
         }

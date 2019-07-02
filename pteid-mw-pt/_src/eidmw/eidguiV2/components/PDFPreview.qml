@@ -104,15 +104,15 @@ Rectangle {
 
 
             Rectangle {
-                width: dragSigRect.width + 2 * Constants.PDF_PREVIEW_SEAL_BORDER
-                height: dragSigRect.height + 2 * Constants.PDF_PREVIEW_SEAL_BORDER
-                x: dragSigRect.x - Constants.PDF_PREVIEW_SEAL_BORDER
-                y: dragSigRect.y - Constants.PDF_PREVIEW_SEAL_BORDER
-                border.width: Constants.PDF_PREVIEW_SEAL_BORDER
+                width: dragSigRect.width + 2 * Constants.FOCUS_BORDER
+                height: dragSigRect.height + 2 * Constants.FOCUS_BORDER
+                x: dragSigRect.x - Constants.FOCUS_BORDER
+                y: dragSigRect.y - Constants.FOCUS_BORDER
+                border.width: Constants.FOCUS_BORDER
                 border.color: pdfPreview.focus || positionText.focus? Constants.COLOR_MAIN_DARK_GRAY
                              : Constants.COLOR_GREY_BUTTON_BACKGROUND
                 opacity: 0.7
-                visible: width >= Constants.PDF_PREVIEW_SEAL_BORDER ? true : false
+                visible: width >= Constants.FOCUS_BORDER ? true : false
             }
             Item {
                 id: dragSigRect

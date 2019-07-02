@@ -16,7 +16,6 @@ Item {
     property bool fileLoaded: false
     property bool cardLoaded: false
 
-    property alias propertyMainItem: mainItem
     property alias propertyRectMainRight: rectMainRight
     property alias propertyBusyIndicator: busyIndicator
     property alias propertyPDFPreview: pdfPreviewArea
@@ -69,6 +68,7 @@ Item {
     property alias propertySpinBoxControl: spinBoxControl
     property alias propertyCheckLastPage: checkLastPage
     property alias propertyPageText: pageText
+    property alias propertyTitleConf: titleConf
 
 
     BusyIndicator {
@@ -80,10 +80,6 @@ Item {
         // BusyIndicator should be on top of all other content
         z: 1
     }
-
-    Accessible.role: Accessible.TitleBar
-    Accessible.name: qsTranslate("PageServicesSign","STR_SIGN_ADVANCED_TITLE")
-    KeyNavigation.tab: buttonAdd
 
     Item {
         id: rowMain
@@ -232,6 +228,10 @@ Item {
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.tab: buttonRemoveAll
+                        KeyNavigation.down: buttonRemoveAll
+                        KeyNavigation.right: buttonRemoveAll
+                        KeyNavigation.backtab: button_signCMD
+                        KeyNavigation.up: button_signCMD
                     }
                     Button {
                         id: buttonRemoveAll
@@ -247,7 +247,11 @@ Item {
                         highlighted: activeFocus ? true : false
                         Accessible.role: Accessible.Button
                         Accessible.name: text
-                        KeyNavigation.tab: radioButtonPADES
+                        KeyNavigation.tab: titleConf
+                        KeyNavigation.down: titleConf
+                        KeyNavigation.right: titleConf
+                        KeyNavigation.backtab: buttonAdd
+                        KeyNavigation.up: buttonAdd
                     }
                 }
             }
@@ -289,11 +293,21 @@ Item {
             Text {
                 id: titleConf
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pixelSize: activeFocus
+                                ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                : Constants.SIZE_TEXT_LABEL
+                font.bold: activeFocus
                 font.family: lato.name
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageServicesSign", "STR_SIGN_SETTINGS")
+                Accessible.role: Accessible.Section
+                Accessible.name: text
+                KeyNavigation.tab: textFormatSign
+                KeyNavigation.down: textFormatSign
+                KeyNavigation.right: textFormatSign
+                KeyNavigation.backtab: buttonRemoveAll
+                KeyNavigation.up: buttonRemoveAll
             }
 
             Rectangle {
@@ -334,13 +348,20 @@ Item {
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
+                            font.bold: activeFocus
+                            Accessible.role: Accessible.Row
+                            Accessible.name: text
+                            KeyNavigation.tab: radioButtonPADES
+                            KeyNavigation.down: radioButtonPADES
+                            KeyNavigation.right: radioButtonPADES
+                            KeyNavigation.backtab: titleConf
+                            KeyNavigation.up: titleConf
                         }
                         RadioButton {
                             id: radioButtonPADES
                             anchors.left: textFormatSign.right
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-                            text: qsTranslate("PageServicesSign",
-                                              "STR_SIGN_WHERE")
+                            text: qsTranslate("PageServicesSign","STR_SIGN_PDF")
                             checked: true
                             leftPadding: 0
                             rightPadding: 0
@@ -351,6 +372,10 @@ Item {
                             Accessible.role: Accessible.RadioButton
                             Accessible.name: text
                             KeyNavigation.tab: radioButtonXADES
+                            KeyNavigation.down: radioButtonXADES
+                            KeyNavigation.right: radioButtonXADES
+                            KeyNavigation.backtab: textFormatSign
+                            KeyNavigation.up: textFormatSign
                             contentItem: Text {
                                 text: radioButtonPADES.text
                                 leftPadding: 22
@@ -397,7 +422,11 @@ Item {
                             opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                             Accessible.role: Accessible.RadioButton
                             Accessible.name: text
-                            KeyNavigation.tab: textFieldReason.enabled ? textFieldReason : mainItem
+                            KeyNavigation.tab: textFieldReason.enabled ? textFieldReason : buttonAdd
+                            KeyNavigation.down: textFieldReason.enabled ? textFieldReason : buttonAdd
+                            KeyNavigation.right: textFieldReason.enabled ? textFieldReason : buttonAdd
+                            KeyNavigation.backtab: radioButtonPADES
+                            KeyNavigation.up: radioButtonPADES
                             contentItem: Text {
                                 text: radioButtonXADES.text
                                 leftPadding: 22
@@ -444,6 +473,10 @@ Item {
                         Accessible.role: Accessible.EditableText
                         Accessible.name: textFieldReason.placeholderText
                         KeyNavigation.tab: textFieldLocal
+                        KeyNavigation.down: textFieldLocal
+                        KeyNavigation.right: textFieldLocal
+                        KeyNavigation.backtab: radioButtonXADES
+                        KeyNavigation.up: radioButtonXADES
                     }
                     TextField {
                         id: textFieldLocal
@@ -459,6 +492,10 @@ Item {
                         Accessible.role: Accessible.EditableText
                         Accessible.name: textFieldLocal.placeholderText
                         KeyNavigation.tab: switchSignTemp
+                        KeyNavigation.down: switchSignTemp
+                        KeyNavigation.right: switchSignTemp
+                        KeyNavigation.backtab: textFieldReason
+                        KeyNavigation.up: textFieldReason
                     }
                     Switch {
                         id: switchSignTemp
@@ -473,6 +510,10 @@ Item {
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: switchSignAdd
+                        KeyNavigation.down: switchSignAdd
+                        KeyNavigation.right: switchSignAdd
+                        KeyNavigation.backtab: textFieldLocal
+                        KeyNavigation.up: textFieldLocal
                     }
                     Switch {
                         id: switchSignAdd
@@ -485,7 +526,11 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         z: 1
-                        KeyNavigation.tab: switchSignAdd.checked ? listViewEntities : pdfPreviewArea
+                        KeyNavigation.tab: pdfPreviewArea
+                        KeyNavigation.down:pdfPreviewArea
+                        KeyNavigation.right: pdfPreviewArea
+                        KeyNavigation.backtab: switchSignTemp
+                        KeyNavigation.up: switchSignTemp
                     }
                     Item {
                         id: rectangleEntities
@@ -510,8 +555,14 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
                             font.underline: mouseAreaTextAttributesMsg.containsMouse
+                            font.bold: activeFocus
                             visible: false
                             x: 54
+                            KeyNavigation.tab: usageDescription
+                            KeyNavigation.down:usageDescription
+                            KeyNavigation.right: usageDescription
+                            KeyNavigation.backtab: switchSignAdd
+                            KeyNavigation.up: switchSignAdd
                         }
                         ListView {
                             id: listViewEntities
@@ -684,6 +735,10 @@ Item {
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     KeyNavigation.tab: pdfPreviewArea
+                    KeyNavigation.down: pdfPreviewArea
+                    KeyNavigation.right: pdfPreviewArea
+                    KeyNavigation.backtab: textAttributesMsg
+                    KeyNavigation.up: textAttributesMsg
                 }
                 Components.PDFPreview {
                     id: pdfPreviewArea
@@ -692,6 +747,10 @@ Item {
                     propertyDragSigRect.visible: checkSignShow.checked
                     propertyReducedChecked: checkSignReduced.checked
                     KeyNavigation.tab: textSpinBox
+                    KeyNavigation.down: textSpinBox
+                    KeyNavigation.right: textSpinBox
+                    KeyNavigation.backtab: usageDescription
+                    KeyNavigation.up: usageDescription
                 }
             }
 
@@ -777,6 +836,10 @@ Item {
                             Accessible.role: Accessible.EditableText
                             Accessible.name: qsTranslate("PageServicesSign","STR_SIGN_PAGE") + spinBoxControl.value
                             KeyNavigation.tab: checkLastPage
+                            KeyNavigation.down: checkLastPage
+                            KeyNavigation.right: checkLastPage
+                            KeyNavigation.backtab: pdfPreviewArea
+                            KeyNavigation.up: pdfPreviewArea
                         }
 
                         up.indicator: Rectangle {
@@ -841,6 +904,10 @@ Item {
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: checkSignShow
+                        KeyNavigation.down: checkSignShow
+                        KeyNavigation.right: checkSignShow
+                        KeyNavigation.backtab: textSpinBox
+                        KeyNavigation.up: textSpinBox
                     }
                 }
             }
@@ -870,6 +937,10 @@ Item {
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: checkSignReduced
+                        KeyNavigation.down: checkSignReduced
+                        KeyNavigation.right: checkSignReduced
+                        KeyNavigation.backtab: checkLastPage
+                        KeyNavigation.up: checkLastPage
                     }
                 }
                 Item {
@@ -891,6 +962,10 @@ Item {
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: button_signCC.enabled ? button_signCC : button_signCMD
+                        KeyNavigation.down: button_signCC.enabled ? button_signCC : button_signCMD
+                        KeyNavigation.right: button_signCC.enabled ? button_signCC : button_signCMD
+                        KeyNavigation.backtab: checkSignShow
+                        KeyNavigation.up: checkSignShow
                     }
                 }
             }
@@ -917,6 +992,10 @@ Item {
                     highlighted: activeFocus ? true : false
                     anchors.left: parent.left
                     KeyNavigation.tab: button_signCMD.enabled ? button_signCMD : buttonAdd
+                    KeyNavigation.down: button_signCMD.enabled ? button_signCMD : buttonAdd
+                    KeyNavigation.right: button_signCMD.enabled ? button_signCMD : buttonAdd
+                    KeyNavigation.backtab: checkSignReduced
+                    KeyNavigation.up: checkSignReduced
                 }
                 Button {
                     id: button_signCMD
@@ -933,6 +1012,10 @@ Item {
                     highlighted: activeFocus ? true : false
                     anchors.right: parent.right
                     KeyNavigation.tab: buttonAdd
+                    KeyNavigation.down: buttonAdd
+                    KeyNavigation.right: buttonAdd
+                    KeyNavigation.backtab: button_signCC
+                    KeyNavigation.up: button_signCC
                 }
             }
         }

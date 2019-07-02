@@ -61,6 +61,10 @@ Item {
                 Accessible.role: Accessible.TitleBar
                 Accessible.name: text
                 KeyNavigation.tab: cacheAppTextField
+                KeyNavigation.down: cacheAppTextField
+                KeyNavigation.right: cacheAppTextField
+                KeyNavigation.backtab: buttonRemoveSCAPCache
+                KeyNavigation.up: buttonRemoveSCAPCache
             }
             DropShadow {
                 anchors.fill: rowAppCache
@@ -108,6 +112,10 @@ Item {
                         Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         KeyNavigation.tab: cacheAppSizeTextField
+                        KeyNavigation.down: cacheAppSizeTextField
+                        KeyNavigation.right: cacheAppSizeTextField
+                        KeyNavigation.backtab: dateAppCache
+                        KeyNavigation.up: dateAppCache
                     }
                 }
 
@@ -137,6 +145,10 @@ Item {
                             Accessible.role: Accessible.StaticText
                             Accessible.name: text
                             KeyNavigation.tab: buttonRemoveAppCache
+                            KeyNavigation.down: buttonRemoveAppCache
+                            KeyNavigation.right: buttonRemoveAppCache
+                            KeyNavigation.backtab: cacheAppTextField
+                            KeyNavigation.up: cacheAppTextField
                         }
                     }
                     Rectangle {
@@ -154,6 +166,10 @@ Item {
                             font.capitalization: Font.MixedCase
                             highlighted: activeFocus ? true : false
                             KeyNavigation.tab: dateSCAPCache
+                            KeyNavigation.down: dateSCAPCache
+                            KeyNavigation.right: dateSCAPCache
+                            KeyNavigation.backtab: cacheAppSizeTextField
+                            KeyNavigation.up: cacheAppSizeTextField
                         }
                     }
                 }
@@ -179,6 +195,10 @@ Item {
                 Accessible.role: Accessible.TitleBar
                 Accessible.name: text
                 KeyNavigation.tab: cacheSCAPTextField
+                KeyNavigation.down: cacheSCAPTextField
+                KeyNavigation.right: cacheSCAPTextField
+                KeyNavigation.backtab: buttonRemoveAppCache
+                KeyNavigation.up: buttonRemoveAppCache
             }
             DropShadow {
                 anchors.fill: rowSCAPCache
@@ -226,6 +246,10 @@ Item {
                         Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         KeyNavigation.tab: cacheSCAPSizeTextField
+                        KeyNavigation.down: cacheSCAPSizeTextField
+                        KeyNavigation.right: cacheSCAPSizeTextField
+                        KeyNavigation.backtab: dateSCAPCache
+                        KeyNavigation.up: dateSCAPCache
                         
                     }
                 }
@@ -256,6 +280,10 @@ Item {
                             Accessible.role: Accessible.StaticText
                             Accessible.name: text
                             KeyNavigation.tab: buttonRemoveSCAPCache
+                            KeyNavigation.down: buttonRemoveSCAPCache
+                            KeyNavigation.right: buttonRemoveSCAPCache
+                            KeyNavigation.backtab: cacheSCAPTextField
+                            KeyNavigation.up: cacheSCAPTextField
                         }
                     }
                     Rectangle {
@@ -273,6 +301,10 @@ Item {
                             font.capitalization: Font.MixedCase
                             highlighted: activeFocus ? true : false
                             KeyNavigation.tab: propertyMainItem
+                            KeyNavigation.down: propertyMainItem
+                            KeyNavigation.right: propertyMainItem
+                            KeyNavigation.backtab: cacheSCAPSizeTextField
+                            KeyNavigation.up: cacheSCAPSizeTextField
                         }
                     }
                 }

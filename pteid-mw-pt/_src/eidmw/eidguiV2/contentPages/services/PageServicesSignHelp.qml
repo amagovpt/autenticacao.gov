@@ -15,6 +15,6 @@ PageServicesSignHelpForm {
 
     Component.onCompleted: {
         console.log("Page Services Sign Help Form Completed")
-        propertyMainItem.forceActiveFocus()
+        propertyTextTitle.forceActiveFocus()
     }
 }

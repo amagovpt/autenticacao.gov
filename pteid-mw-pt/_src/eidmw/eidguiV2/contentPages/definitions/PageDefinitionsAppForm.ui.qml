@@ -85,16 +85,21 @@ Item {
                 Text {
                     id: textReader
                     x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: activeFocus
+                                    ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                    : Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
-                    font.bold: focus
-
+                    font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp","STR_CARD_READER_TITLE") + controler.autoTr
                     Accessible.role: Accessible.TitleBar
                     Accessible.name: textReader.text
-                    KeyNavigation.tab: comboBoxReader
+                    KeyNavigation.tab: textSelectReader
+                    KeyNavigation.down: textSelectReader
+                    KeyNavigation.right: textSelectReader
+                    KeyNavigation.backtab: textFieldAutPass
+                    KeyNavigation.up: textFieldAutPass
                 }
 
                 DropShadow {
@@ -131,12 +136,16 @@ Item {
                         font.capitalization: Font.MixedCase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
-                        font.bold: focus
+                        font.bold: activeFocus
                         color: Constants.COLOR_TEXT_BODY
                         wrapMode: Text.WordWrap
                         Accessible.role: Accessible.TitleBar
                         Accessible.name: text
-                        KeyNavigation.tab: checkboxDebugMode
+                        KeyNavigation.tab: comboBoxReader
+                        KeyNavigation.down: comboBoxReader
+                        KeyNavigation.right: comboBoxReader
+                        KeyNavigation.backtab: textReader
+                        KeyNavigation.up: textReader
                         text: qsTranslate("PageDefinitionsApp", "STR_SELECT_READER") + controler.autoTr
                     }
 
@@ -149,10 +158,15 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
                         visible: true
                         Accessible.role: Accessible.ComboBox
                         Accessible.name: textReader.text
-                        KeyNavigation.tab: dateAppStart
+                        KeyNavigation.tab: checkboxEnablePinpad
+                        KeyNavigation.down: checkboxEnablePinpad
+                        KeyNavigation.right: checkboxEnablePinpad
+                        KeyNavigation.backtab: textSelectReader
+                        KeyNavigation.up: textSelectReader
                     }
 
                     CheckBox {
@@ -163,11 +177,16 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
                         anchors.top: comboBoxReader.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: dateAppStart
+                        KeyNavigation.down: dateAppStart
+                        KeyNavigation.right: dateAppStart
+                        KeyNavigation.backtab: comboBoxReader
+                        KeyNavigation.up: comboBoxReader
                     }
                 }
             }
@@ -182,15 +201,21 @@ Item {
                 Text {
                     id: dateAppStart
                     x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: activeFocus
+                                    ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                    : Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
-                    font.bold: focus
+                    font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp","STR_START_TITLE") + controler.autoTr
                     Accessible.role: Accessible.TitleBar
                     Accessible.name: text
                     KeyNavigation.tab: checkboxAutoStart
+                    KeyNavigation.down: checkboxAutoStart
+                    KeyNavigation.right: checkboxAutoStart
+                    KeyNavigation.backtab: checkboxEnablePinpad
+                    KeyNavigation.up: checkboxEnablePinpad
                 }
                 DropShadow {
                     anchors.fill: rectAppStartCheckBox
@@ -226,10 +251,15 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: dateAppLanguage
+                        KeyNavigation.down: dateAppLanguage
+                        KeyNavigation.right: dateAppLanguage
+                        KeyNavigation.backtab: dateAppStart
+                        KeyNavigation.up: dateAppStart
                     }
                 }
             }
@@ -244,15 +274,21 @@ Item {
                 Text {
                     id: dateAppLanguage
                     x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: activeFocus
+                                    ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                    : Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
-                    font.bold: focus
+                    font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp","STR_LANGUAGE_TITLE") + controler.autoTr
                     Accessible.role: Accessible.TitleBar
                     Accessible.name: text
                     KeyNavigation.tab: radioButtonPT
+                    KeyNavigation.down: radioButtonPT
+                    KeyNavigation.right: radioButtonPT
+                    KeyNavigation.backtab: checkboxAutoStart
+                    KeyNavigation.up: checkboxAutoStart
                 }
 
                 DropShadow {
@@ -294,9 +330,14 @@ Item {
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
+                            font.bold: activeFocus
                             Accessible.role: Accessible.RadioButton
                             Accessible.name: text
                             KeyNavigation.tab: radioButtonUK
+                            KeyNavigation.down: radioButtonUK
+                            KeyNavigation.right: radioButtonUK
+                            KeyNavigation.backtab: dateAppLanguage
+                            KeyNavigation.up: dateAppLanguage
                         }
                     }
                     Rectangle {
@@ -312,9 +353,14 @@ Item {
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
+                            font.bold: activeFocus
                             Accessible.role: Accessible.RadioButton
                             Accessible.name: text
                             KeyNavigation.tab: dateAppLook
+                            KeyNavigation.down: dateAppLook
+                            KeyNavigation.right: dateAppLook
+                            KeyNavigation.backtab: radioButtonPT
+                            KeyNavigation.up: radioButtonPT
                         }
                     }
                 }
@@ -330,9 +376,11 @@ Item {
                 Text {
                     id: dateAppLook
                     x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: activeFocus
+                                    ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                    : Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
-                    font.bold: focus
+                    font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
@@ -340,6 +388,10 @@ Item {
                     Accessible.role: Accessible.TitleBar
                     Accessible.name: text
                     KeyNavigation.tab: checkboxShowAnime
+                    KeyNavigation.down: checkboxShowAnime
+                    KeyNavigation.right: checkboxShowAnime
+                    KeyNavigation.backtab: radioButtonUK
+                    KeyNavigation.up: radioButtonUK
                 }
                 DropShadow {
                     anchors.fill: rectAppLookCheckBox
@@ -376,10 +428,15 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: dateDebugMode
+                        KeyNavigation.down: dateDebugMode
+                        KeyNavigation.right: dateDebugMode
+                        KeyNavigation.backtab: dateAppLook
+                        KeyNavigation.up: dateAppLook
                     }
                 }
             }
@@ -395,14 +452,21 @@ Item {
                 Text {
                     id: dateDebugMode
                     x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: activeFocus
+                                    ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                    : Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
+                    font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_TITLE") + controler.autoTr
                     Accessible.role: Accessible.TitleBar
                     Accessible.name: text
                     KeyNavigation.tab: debugModeTextField
+                    KeyNavigation.down: debugModeTextField
+                    KeyNavigation.right: debugModeTextField
+                    KeyNavigation.backtab: checkboxShowAnime
+                    KeyNavigation.up: checkboxShowAnime
                 }
 
                 DropShadow {
@@ -440,11 +504,15 @@ Item {
                         font.capitalization: Font.MixedCase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
-                        font.bold: focus
+                        font.bold: activeFocus
                         wrapMode: Text.WordWrap
                         Accessible.role: Accessible.TitleBar
                         Accessible.name: text
                         KeyNavigation.tab: checkboxDebugMode
+                        KeyNavigation.down: checkboxDebugMode
+                        KeyNavigation.right: checkboxDebugMode
+                        KeyNavigation.backtab: dateDebugMode
+                        KeyNavigation.up: dateDebugMode
                         text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_DESCRIPTION") + controler.autoTr
                     }
 
@@ -456,11 +524,16 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
                         anchors.top: debugModeTextField.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: dateAppGraphics
+                        KeyNavigation.down: dateAppGraphics
+                        KeyNavigation.right: dateAppGraphics
+                        KeyNavigation.backtab: debugModeTextField
+                        KeyNavigation.up: debugModeTextField
                     }
                 }
             }
@@ -477,9 +550,11 @@ Item {
                 Text {
                     id: dateAppGraphics
                     x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: activeFocus
+                                    ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                    : Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
-                    font.bold: focus
+                    font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
@@ -487,6 +562,10 @@ Item {
                     Accessible.role: Accessible.TitleBar
                     Accessible.name: text
                     KeyNavigation.tab: graphicsTextField
+                    KeyNavigation.down: graphicsTextField
+                    KeyNavigation.right: graphicsTextField
+                    KeyNavigation.backtab: checkboxDebugMode
+                    KeyNavigation.up: checkboxDebugMode
                 }
                 DropShadow {
                     anchors.fill: rectAppGraphicsCheckBox
@@ -524,11 +603,15 @@ Item {
                         font.capitalization: Font.MixedCase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
-                        font.bold: focus
+                        font.bold: activeFocus
                         wrapMode: Text.WordWrap
                         Accessible.role: Accessible.TitleBar
                         Accessible.name: text
                         KeyNavigation.tab: checkboxAccelGraphics
+                        KeyNavigation.down: checkboxAccelGraphics
+                        KeyNavigation.right: checkboxAccelGraphics
+                        KeyNavigation.backtab: dateAppGraphics
+                        KeyNavigation.up: dateAppGraphics
                     }
                     CheckBox {
                         id: checkboxAccelGraphics
@@ -540,11 +623,16 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
                         anchors.top: graphicsTextField.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: dateAppNetwork
+                        KeyNavigation.down: dateAppNetwork
+                        KeyNavigation.right: dateAppNetwork
+                        KeyNavigation.backtab: graphicsTextField
+                        KeyNavigation.up: graphicsTextField
                     }
                 }
             }
@@ -560,9 +648,11 @@ Item {
                 Text {
                     id: dateAppNetwork
                     x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: activeFocus
+                                    ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                    : Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
-                    font.bold: focus
+                    font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
@@ -570,6 +660,10 @@ Item {
                     Accessible.role: Accessible.TitleBar
                     Accessible.name: text
                     KeyNavigation.tab: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
+                    KeyNavigation.down: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
+                    KeyNavigation.right: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
+                    KeyNavigation.backtab: checkboxAccelGraphics
+                    KeyNavigation.up: checkboxAccelGraphics
                 }
                 DropShadow {
                     anchors.fill: rectAppNetworkCheckBox
@@ -608,11 +702,16 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         checked: false
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: checkboxProxy
+                        KeyNavigation.down: checkboxProxy
+                        KeyNavigation.right: checkboxProxy
+                        KeyNavigation.backtab: dateAppNetwork
+                        KeyNavigation.up: dateAppNetwork
                     }
 
                     CheckBox {
@@ -623,12 +722,17 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
                         anchors.top: checkboxSystemProxy.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         checked: false
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: checkboxProxy.checked ? textFieldAdress : checkboxAutProxy
+                        KeyNavigation.down: checkboxProxy.checked ? textFieldAdress : checkboxAutProxy
+                        KeyNavigation.right: checkboxProxy.checked ? textFieldAdress : checkboxAutProxy
+                        KeyNavigation.backtab: checkboxSystemProxy
+                        KeyNavigation.up: checkboxSystemProxy
                     }
                     Item {
                         id: boxAppAdress
@@ -641,6 +745,7 @@ Item {
                             id: textFieldAdress
                             width: parent.width
                             font.italic: textFieldAdress.text === "" ? true : false
+                            font.bold: activeFocus
                             placeholderText: qsTranslate(
                                                  "PageDefinitionsApp",
                                                  "STR_NETWORK_PROXY_ADDRESS_OP") + controler.autoTr
@@ -655,6 +760,10 @@ Item {
                             Accessible.role: Accessible.EditableText
                             Accessible.name: text
                             KeyNavigation.tab: textFieldPort
+                            KeyNavigation.down: textFieldPort
+                            KeyNavigation.right: textFieldPort
+                            KeyNavigation.backtab: checkboxProxy
+                            KeyNavigation.up: checkboxProxy
                         }
                     }
                     Item {
@@ -668,6 +777,7 @@ Item {
                             id: textFieldPort
                             width: parent.width
                             font.italic: textFieldPort.text === "" ? true : false
+                            font.bold: activeFocus
                             placeholderText: qsTranslate(
                                                  "PageDefinitionsApp",
                                                  "STR_NETWORK_PROXY_PORT_OP") + controler.autoTr
@@ -683,6 +793,10 @@ Item {
                             Accessible.role: Accessible.EditableText
                             Accessible.name: text
                             KeyNavigation.tab: checkboxAutProxy
+                            KeyNavigation.down: checkboxAutProxy
+                            KeyNavigation.right: checkboxAutProxy
+                            KeyNavigation.backtab: textFieldAdress
+                            KeyNavigation.up: textFieldAdress
                         }
                     }
                     CheckBox {
@@ -694,12 +808,17 @@ Item {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
                         anchors.top: checkboxSystemProxy.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         checked: false
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: checkboxAutProxy.checked? textFieldAutUser: textReader
+                        KeyNavigation.down: checkboxAutProxy.checked? textFieldAutUser: textReader
+                        KeyNavigation.right: checkboxAutProxy.checked? textFieldAutUser: textReader
+                        KeyNavigation.backtab: textFieldPort
+                        KeyNavigation.up: textFieldPort
                     }
                     Item {
                         id: boxAppAutUser
@@ -717,12 +836,17 @@ Item {
                                                  "STR_NETWORK_AUTH_USERNAME_OP") + controler.autoTr
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.bold: activeFocus
                             clip: false
                             enabled: checkboxAutProxy.checked
                             opacity: checkboxAutProxy.checked ? 1.0 : Constants.OPACITY_DEFINITIONS_APP_OPTION_DISABLED
                             Accessible.role: Accessible.EditableText
                             Accessible.name: text
                             KeyNavigation.tab: textFieldAutPass
+                            KeyNavigation.down: textFieldAutPass
+                            KeyNavigation.right: textFieldAutPass
+                            KeyNavigation.backtab: checkboxAutProxy
+                            KeyNavigation.up: checkboxAutProxy
                         }
                     }
                     Item {
@@ -736,6 +860,7 @@ Item {
                             id: textFieldAutPass
                             width: parent.width
                             font.italic: textFieldAutPass.text === "" ? true : false
+                            font.bold: activeFocus
                             placeholderText: qsTranslate(
                                                  "PageDefinitionsApp",
                                                  "STR_NETWORK_AUTH_PASSWORD_OP") + controler.autoTr
@@ -748,6 +873,10 @@ Item {
                             Accessible.role: Accessible.EditableText
                             Accessible.name: text
                             KeyNavigation.tab: textReader
+                            KeyNavigation.down: textReader
+                            KeyNavigation.right: textReader
+                            KeyNavigation.backtab: textFieldAutUser
+                            KeyNavigation.up: textFieldAutUser
                         }
                     }
                 }

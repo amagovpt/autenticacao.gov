@@ -12,13 +12,7 @@ Item {
     visible: true
 
     property alias propertyAcordion: acordion
-    property alias propertyTextEntity: textEntity
-    property alias propertyTextAuth: textAuth
-    property alias propertyTextValid: textValid
-    property alias propertyTextUntil: textUntil
-    property alias propertyTextKey: textKey
-    property alias propertyTextStatus: textStatus
-
+    property alias propertyRectEntity: rectEntity
     property alias propertyBusyIndicator: busyIndicator
 
     Item {
@@ -106,7 +100,14 @@ Item {
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_ENTITY")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textAuth
+                Accessible.role: Accessible.Row
+                Accessible.name: textEntity.accessibleText
+                KeyNavigation.tab: rectAuth
+                KeyNavigation.down: rectAuth
+                KeyNavigation.right: rectAuth
+                KeyNavigation.left: rectStatus
+                KeyNavigation.backtab: rectStatus
+                KeyNavigation.up: rectStatus
             }
             Item{
                 id: rectAuth
@@ -121,7 +122,14 @@ Item {
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_ENTITY_ISSUER")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textValid
+                Accessible.role: Accessible.Row
+                Accessible.name: textAuth.accessibleText
+                KeyNavigation.tab: rectValid
+                KeyNavigation.down: rectValid
+                KeyNavigation.right: rectValid
+                KeyNavigation.left: rectEntity
+                KeyNavigation.backtab: rectEntity
+                KeyNavigation.up: rectEntity
             }
             Item{
                 id: rectValid
@@ -136,7 +144,14 @@ Item {
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_VALID_FROM")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textUntil
+                Accessible.role: Accessible.Row
+                Accessible.name: textValid.accessibleText
+                KeyNavigation.tab: rectUntil
+                KeyNavigation.down: rectUntil
+                KeyNavigation.right: rectUntil
+                KeyNavigation.left: rectAuth
+                KeyNavigation.backtab: rectAuth
+                KeyNavigation.up: rectAuth
             }
             Item{
                 id: rectUntil
@@ -151,7 +166,14 @@ Item {
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_VALID_UNTIL")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textKey
+                Accessible.role: Accessible.Row
+                Accessible.name: textUntil.accessibleText
+                KeyNavigation.tab: rectKey
+                KeyNavigation.down: rectKey
+                KeyNavigation.right: rectKey
+                KeyNavigation.left: rectValid
+                KeyNavigation.backtab: rectValid
+                KeyNavigation.up: rectValid
             }
             Item{
                 id: rectKey
@@ -166,7 +188,14 @@ Item {
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_KEY_SIZE")
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textStatus
+                Accessible.role: Accessible.Row
+                Accessible.name: textKey.accessibleText
+                KeyNavigation.tab: rectStatus
+                KeyNavigation.down: rectStatus
+                KeyNavigation.right: rectStatus
+                KeyNavigation.left: rectUntil
+                KeyNavigation.backtab: rectUntil
+                KeyNavigation.up: rectUntil
             }
             Item{
                 id: rectStatus
@@ -182,7 +211,14 @@ Item {
                     //"Estado do certificado"
                     propertyDateField.text: ""
                 }
-                KeyNavigation.tab: textEntity
+                Accessible.role: Accessible.Row
+                Accessible.name: textStatus.accessibleText
+                KeyNavigation.tab: rectEntity
+                KeyNavigation.down: rectEntity
+                KeyNavigation.right: rectEntity
+                KeyNavigation.left: rectKey
+                KeyNavigation.backtab: rectKey
+                KeyNavigation.up: rectKey
             }
         }
     }
