@@ -765,7 +765,11 @@ PageDefinitionsSCAPForm {
             returnToAdvancedSignaturePage()
         }
     }
-
+    propertyBar{
+        onCurrentIndexChanged: {
+            propertyStackLayout.currentIndex = propertyBar.currentIndex
+        }
+    }
     Component.onCompleted: {
         console.log("Page Definitions SCAP Completed")
         propertyBusyIndicator.running = true
