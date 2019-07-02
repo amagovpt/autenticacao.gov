@@ -41,10 +41,6 @@ Item {
        z: 1
     }
 
-    Accessible.role: Accessible.TitleBar
-    Accessible.name: qsTranslate("PageServicesSign","STR_SIGN_SIMPLES_TITLE")
-    KeyNavigation.tab: buttonHidedAdd
-
     Item {
         id: rowMain
         width: parent.width - Constants.SIZE_ROW_H_SPACE
@@ -101,20 +97,26 @@ Item {
             Text {
                 id: titlePre
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pixelSize: activeFocus
+                                ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                : Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
-                font.bold: focus ? true : false
+                font.bold: activeFocus ? true : false
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: fileLoaded ?
                            qsTranslate("PageServicesSign","STR_SIGN_TITLE_SIGN") :
                            qsTranslate("PageServicesSign","STR_SIGN_TITLE_FILE")
 
-                Accessible.role: Accessible.StaticText
+                Accessible.role: Accessible.Window
                 Accessible.name: fileLoaded ?
                            qsTranslate("PageServicesSign","STR_SIGN_TITLE_SIGN") :
                            qsTranslate("PageServicesSign","STR_SIGN_TITLE_FILE")
                 KeyNavigation.tab: buttonHidedAdd
+                KeyNavigation.down: buttonHidedAdd
+                KeyNavigation.right: buttonHidedAdd
+                KeyNavigation.backtab: button_signCMD
+                KeyNavigation.up: button_signCMD
             }
 
             Rectangle {
@@ -124,7 +126,7 @@ Item {
                 color: "white"
                 anchors.top: titlePre.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                border.width: Constants.PDF_PREVIEW_SEAL_BORDER
+                border.width: Constants.FOCUS_BORDER
                 border.color: buttonHidedAdd.focus ? Constants.COLOR_MAIN_DARK_GRAY
                                                    : Constants.COLOR_MAIN_SOFT_GRAY
 
@@ -158,16 +160,24 @@ Item {
                     Accessible.role: Accessible.Button
                     Accessible.name: text
                     KeyNavigation.tab: fileLoaded ? pdfPreviewArea : textSpinBox
+                    KeyNavigation.down: fileLoaded ? pdfPreviewArea : textSpinBox
+                    KeyNavigation.right: fileLoaded ? pdfPreviewArea : textSpinBox
+                    KeyNavigation.backtab: titlePre
+                    KeyNavigation.up: titlePre
                 }
                 Components.PDFPreview {
                     id: pdfPreviewArea
-                    width: parent.width - 2 * Constants.PDF_PREVIEW_SEAL_BORDER
-                    height: parent.height - 2 * Constants.PDF_PREVIEW_SEAL_BORDER
-                    x: Constants.PDF_PREVIEW_SEAL_BORDER
-                    y: Constants.PDF_PREVIEW_SEAL_BORDER
+                    width: parent.width - 2 * Constants.FOCUS_BORDER
+                    height: parent.height - 2 * Constants.FOCUS_BORDER
+                    x: Constants.FOCUS_BORDER
+                    y: Constants.FOCUS_BORDER
                     propertyDragSigRect.visible: true
                     propertyReducedChecked : false
                     KeyNavigation.tab: textSpinBox
+                    KeyNavigation.down: textSpinBox
+                    KeyNavigation.right: textSpinBox
+                    KeyNavigation.backtab: buttonHidedAdd
+                    KeyNavigation.up: buttonHidedAdd
                 }
             }
             MouseArea {
@@ -239,6 +249,10 @@ Item {
                     Accessible.role: Accessible.EditableText
                     Accessible.name: qsTranslate("PageServicesSign","STR_SIGN_PAGE") + spinBoxControl.value
                     KeyNavigation.tab: checkLastPage
+                    KeyNavigation.down: checkLastPage
+                    KeyNavigation.right: checkLastPage
+                    KeyNavigation.backtab: pdfPreviewArea
+                    KeyNavigation.up: pdfPreviewArea
                 }
 
                 up.indicator: Rectangle {
@@ -300,6 +314,10 @@ Item {
                 Accessible.role: Accessible.CheckBox
                 Accessible.name: qsTranslate("PageServicesSign","STR_SIGN_LAST")
                 KeyNavigation.tab: buttonRemove
+                KeyNavigation.down: buttonRemove
+                KeyNavigation.right: buttonRemove
+                KeyNavigation.backtab: textSpinBox
+                KeyNavigation.up: textSpinBox
             }
         }
     }
@@ -332,6 +350,10 @@ Item {
                 Accessible.role: Accessible.Button
                 Accessible.name: checkLastPage.text
                 KeyNavigation.tab: button_signCC
+                KeyNavigation.down: button_signCC
+                KeyNavigation.right: button_signCC
+                KeyNavigation.backtab: checkLastPage
+                KeyNavigation.up: checkLastPage
             }
         }
         Item{
@@ -355,6 +377,10 @@ Item {
                 Accessible.role: Accessible.Button
                 Accessible.name: button_signCC.text
                 KeyNavigation.tab: button_signCMD
+                KeyNavigation.down: button_signCMD
+                KeyNavigation.right: button_signCMD
+                KeyNavigation.backtab: buttonRemove
+                KeyNavigation.up: buttonRemove
             }
             Button {
                 id: button_signCMD
@@ -371,6 +397,10 @@ Item {
                 Accessible.role: Accessible.Button
                 Accessible.name: button_signCMD.text
                 KeyNavigation.tab: titlePre
+                KeyNavigation.down: titlePre
+                KeyNavigation.right: titlePre
+                KeyNavigation.backtab: button_signCC
+                KeyNavigation.up: button_signCC
             }
         }
     }

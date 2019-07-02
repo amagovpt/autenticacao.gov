@@ -27,7 +27,10 @@ PageCardNotesForm {
         }
         onSignalPersoDataLoaded: {
             console.log("QML: onSignalPersoDataLoaded!")
-            loadPersoData(persoNotes)
+            propertyEditNotes.text = persoNotes
+            propertyBusyIndicator.running = false
+            if(mainFormID.propertyPageLoader.propertyForceFocus)
+                propertyNotesText.forceActiveFocus()
         }
         onSignalCardAccessError: {
             console.log("Card Notes onSignalCardAccessError")
@@ -152,11 +155,6 @@ PageCardNotesForm {
         }
     }
 
-    function loadPersoData(text) {
-        propertyEditNotes.text = text
-        propertyBusyIndicator.running = false
-    }
-
     function ensureVisible(r)
     {
         if (propertyFlickNotes.contentY >= r.y){
@@ -173,7 +171,6 @@ PageCardNotesForm {
 
 
     Component.onCompleted: {
-        propertyMainItem.forceActiveFocus()
         propertyBusyIndicator.running = true
         gapi.startReadingPersoNotes()
     }

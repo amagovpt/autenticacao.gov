@@ -27,8 +27,22 @@ PageServicesSignAdvancedForm {
             color: Constants.COLOR_MAIN_SOFT_GRAY
         }
     }
+    Keys.onRightPressed: {
+        if(propertyTextAttributesMsg.activeFocus)
+            jumpToDefinitionsSCAP()
+    }
+    Keys.onSpacePressed: {
+        if(propertyTextAttributesMsg.activeFocus)
+            jumpToDefinitionsSCAP()
+    }
+    Keys.onReturnPressed: {
+        if(propertyTextAttributesMsg.activeFocus)
+            jumpToDefinitionsSCAP()
+    }
+
     Keys.onPressed: {
         console.log("PageServicesSignAdvancedForm onPressed:" + event.key)
+
         if(propertyListViewEntities.focus === false){
             Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
         } else {
@@ -62,7 +76,9 @@ PageServicesSignAdvancedForm {
 
             propertyBusyIndicator.running = false
             propertyListViewEntities.currentIndex = 0
-            propertyListViewEntities.forceActiveFocus()
+            entityAttributesModel.count > 0
+                    ? propertyListViewEntities.forceActiveFocus()
+                    : propertyTextAttributesMsg.forceActiveFocus()
         }
         onSignalPdfSignSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
@@ -183,7 +199,7 @@ PageServicesSignAdvancedForm {
                     cardLoaded = false
             }
             propertyBusyIndicator.running = false
-            propertyMainItem.forceActiveFocus()
+            propertyButtonAdd.forceActiveFocus()
         }
         onSignalCardDataChanged: {
             console.log("Services Sign Advanced --> Data Changed")
@@ -197,7 +213,7 @@ PageServicesSignAdvancedForm {
                     + gapi.getDataCardIdentifyValue(GAPI.Documentnum)
             propertyBusyIndicator.running = false
             cardLoaded = true
-            propertyMainItem.forceActiveFocus()
+            propertyButtonAdd.forceActiveFocus()
         }
         onSignalCardChanged: {
             console.log("Services Sign Advanced onSignalCardChanged")
@@ -269,7 +285,7 @@ PageServicesSignAdvancedForm {
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: true
+            font.bold: rectPopUp.activeFocus ? true : false
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
@@ -287,7 +303,13 @@ PageServicesSignAdvancedForm {
                 }
             }
             Accessible.role: Accessible.AlertMessage
-            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") + titleText.text + labelText.text
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
+                             + titleText.text + labelText.text + labelOpenText.text
+            KeyNavigation.tab: closeButton
+            KeyNavigation.down: closeButton
+            KeyNavigation.right: closeButton
+            KeyNavigation.backtab: openFileButton
+            KeyNavigation.up: openFileButton
 
             Item {
                 id: rectLabelText
@@ -351,6 +373,11 @@ PageServicesSignAdvancedForm {
                         signsuccess_dialog.close()
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     }
+                    KeyNavigation.tab: openFileButton
+                    KeyNavigation.down: openFileButton
+                    KeyNavigation.right: openFileButton
+                    KeyNavigation.backtab: openFileButton
+                    KeyNavigation.up: openFileButton
                 }
                 Button {
                     id: openFileButton
@@ -364,6 +391,11 @@ PageServicesSignAdvancedForm {
                     onClicked: {
                         signSuccessShowSignedFile()
                     }
+                    KeyNavigation.tab: rectPopUp
+                    KeyNavigation.down: rectPopUp
+                    KeyNavigation.right: rectPopUp
+                    KeyNavigation.backtab: closeButton
+                    KeyNavigation.up: closeButton
                 }
             }
         }
@@ -372,6 +404,11 @@ PageServicesSignAdvancedForm {
         }
         onRejected:{
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
+        }
+        onClosed: {
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
         }
     }
 
@@ -732,27 +769,7 @@ PageServicesSignAdvancedForm {
 
     propertyMouseAreaTextAttributesMsg{
         onClicked: {
-            propertyPageLoader.propertyBackupFromSignaturePage = true
-            // Jump to Menu Definitions - PageDefinitionsSCAP
-            mainFormID.state = Constants.MenuState.NORMAL
-            mainFormID.propertySubMenuListView.model.clear()
-            for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
-                /*console.log("Sub Menu indice " + i + " - "
-                            + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);*/
-                mainFormID.propertySubMenuListView.model
-                .append({
-                            "subName": qsTranslate("MainMenuBottomModel",
-                                                   mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName),
-                            "expand": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
-                            .expand,
-                            "url": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
-                            .url
-                        })
-            }
-            mainFormID.propertyMainMenuListView.currentIndex = -1
-            mainFormID.propertyMainMenuBottomListView.currentIndex = 0
-            mainFormID.propertySubMenuListView.currentIndex = 1
-            mainFormID.propertyPageLoader.source = "/contentPages/definitions/PageDefinitionsSCAP.qml"
+            jumpToDefinitionsSCAP()
         }
     }
 
@@ -1127,7 +1144,7 @@ PageServicesSignAdvancedForm {
                 propertyPDFPreview.propertyDragSigDateText.visible = false
                 propertyPDFPreview.propertyDragSigLocationText.visible = false
                 propertyPDFPreview.propertyDragSigImg.visible = false
-                propertyMainItem.forceActiveFocus()
+                propertyButtonAdd.forceActiveFocus()
             }
             else {
                 fileLoaded = true
@@ -1193,7 +1210,7 @@ PageServicesSignAdvancedForm {
                 }else{
                     propertyTextDragMsgImg.visible = true
                 }
-                propertyPDFPreview.forceActiveFocus()
+                propertyTitleConf.forceActiveFocus()
             }
         }
     }
@@ -1424,5 +1441,29 @@ PageServicesSignAdvancedForm {
             }
         }
         return count
+    }
+
+    function jumpToDefinitionsSCAP(){
+        propertyPageLoader.propertyBackupFromSignaturePage = true
+        // Jump to Menu Definitions - PageDefinitionsSCAP
+        mainFormID.state = Constants.MenuState.NORMAL
+        mainFormID.propertySubMenuListView.model.clear()
+        for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
+            /*console.log("Sub Menu indice " + i + " - "
+                        + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);*/
+            mainFormID.propertySubMenuListView.model
+            .append({
+                        "subName": qsTranslate("MainMenuBottomModel",
+                                               mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName),
+                        "expand": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
+                        .expand,
+                        "url": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
+                        .url
+                    })
+        }
+        mainFormID.propertyMainMenuListView.currentIndex = -1
+        mainFormID.propertyMainMenuBottomListView.currentIndex = 0
+        mainFormID.propertySubMenuListView.currentIndex = 1
+        mainFormID.propertyPageLoader.source = "/contentPages/definitions/PageDefinitionsSCAP.qml"
     }
 }

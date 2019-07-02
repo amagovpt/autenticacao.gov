@@ -489,7 +489,7 @@ Load language error. Please reinstall the application"
                     target: mainFormID.propertySubMenuView
                     property: "color"
                     easing.type: Easing.Linear
-                    to: Constants.COLOR_MAIN_DARK_GRAY;
+                    to: Constants.COLOR_MAIN_MIDDLE_GRAY;
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
                 }
                 NumberAnimation
@@ -670,7 +670,8 @@ Load language error. Please reinstall the application"
                     console.log("Move to botton Menu - onUpPressed")
                     mainFormID.propertyMainMenuListView.currentIndex = -1
                     mainFormID.propertyMainMenuBottomListView.forceActiveFocus()
-                    mainFormID.propertyMainMenuBottomListView.currentIndex = mainFormID.propertyMainMenuBottomListView.count - 1
+                    mainFormID.propertyMainMenuBottomListView.currentIndex =
+                            mainFormID.propertyMainMenuBottomListView.count - 1
                 } else {
                     mainFormID.propertyMainMenuListView.currentIndex--
                 }
@@ -706,11 +707,8 @@ Load language error. Please reinstall the application"
                 Accessible.role: Accessible.Button
                 Accessible.name: text
                 Keys.onTabPressed: {
-                    console.log(" mainMenu onTabPressed currentIndex:"
-                                + mainFormID.propertySubMenuListView.currentIndex)
                     if(mainFormID.propertyMainMenuListView.currentIndex ==
                             mainFormID.propertyMainMenuListView.count - 1){
-                        console.log("Move to botton Menu - onTabPressed")
                         mainFormID.propertyMainMenuListView.currentIndex = -1
                         mainFormID.propertyMainMenuBottomListView.forceActiveFocus()
                         mainFormID.propertyMainMenuBottomListView.currentIndex = 0
@@ -739,15 +737,13 @@ Load language error. Please reinstall the application"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 font.capitalization: Font.AllUppercase
-                font.weight: mouseAreaMainMenu.containsMouse ?
-                                 Font.Bold :
-                                 Font.Normal
-                font.pixelSize: mainFormID.propertyMainMenuListView.currentIndex === index && mainFormID.propertyMainMenuListView.activeFocus
-                    ? Constants.SIZE_TEXT_SUB_MENU + 2
+                font.weight: mouseAreaMainMenu.containsMouse
+                             || mainFormID.propertyMainMenuListView.currentIndex === index
+                             ? Font.Bold
+                             : Font.Normal
+                font.pixelSize: mainFormID.propertyMainMenuListView.currentIndex === index
+                    ? Constants.SIZE_TEXT_SUB_MENU
                     : Constants.SIZE_TEXT_SUB_MENU
-                font.bold: mainFormID.propertyMainMenuListView.currentIndex === index && mainFormID.propertyMainMenuListView.activeFocus
-                    ? true
-                    : false
                 focus:  mainFormID.propertyMainMenuListView.currentIndex === index ?
                             true :
                             false
@@ -768,7 +764,7 @@ Load language error. Please reinstall the application"
                 id: mainMenuViewHorizontalLine
                 width: Constants.MAIN_MENU_LINE_H_SIZE
                 height: Constants.MAIN_MENU_LINE_V_SIZE
-                color: Constants.COLOR_MAIN_DARK_GRAY
+                color: Constants.COLOR_MAIN_MIDDLE_GRAY
                 visible: mainFormID.propertyMainMenuListView.count - 1 === index ?
                              false :
                              true
@@ -868,17 +864,14 @@ Load language error. Please reinstall the application"
                 Accessible.name: text
                 onClicked: mainMenuBottomPressed(index)
                 Keys.onTabPressed: {
-                    console.log(" bottomMenu onTabPressed currentIndex:"
-                                + mainFormID.propertySubMenuListView.currentIndex)
                     if(mainFormID.propertyMainMenuBottomListView.currentIndex ==
                             mainFormID.propertyMainMenuBottomListView.count - 1){
                         // Move to PageLoader or Main Menu
                         if(mainFormID.propertyPageLoader.source != ""){
-                            var temp = mainFormID.propertyPageLoader.source
-                            mainFormID.propertyPageLoader.source = ""
-                            mainFormID.propertyPageLoader.source = temp
-                            mainFormID.propertyPageLoader.forceActiveFocus()
                             mainFormID.propertyMainMenuBottomListView.currentIndex = -1
+                            var url = "contentPages/home/PageHome.qml"
+                            mainFormID.propertyPageLoader.source = ""
+                            mainFormID.propertyPageLoader.source = url
                         } else {
                             mainFormID.propertyMainMenuListView.currentIndex = -1
                             mainFormID.propertyImageLogoBottom.forceActiveFocus()
@@ -888,7 +881,7 @@ Load language error. Please reinstall the application"
                         mainFormID.propertyMainMenuBottomListView.currentIndex++
                     }
 
-            }
+                }
                 onFocusChanged: {
                     if(focus === true){
                         mainFormID.propertyMainMenuListView.currentIndex = -1
@@ -979,9 +972,6 @@ Load language error. Please reinstall the application"
                 opacity: 0
                 onClicked: subMenuPressed(index, url)
                 Keys.onTabPressed: {
-                    console.log(" onTabPressed "
-                                + "SubMenu currentIndex" + mainFormID.propertySubMenuListView.currentIndex
-                                + "MainMenu currentIndex" + mainFormID.propertyMainMenuListView.currentIndex)
                     if(mainFormID.propertySubMenuListView.currentIndex ==
                             mainFormID.propertySubMenuListView.count - 1){
                         mainFormID.propertySubMenuListView.currentIndex = 0
@@ -1036,7 +1026,7 @@ Load language error. Please reinstall the application"
                 id: subMenuViewHorizontalLine
                 width: Constants.MAIN_MENU_LINE_H_SIZE
                 height: Constants.MAIN_MENU_LINE_V_SIZE
-                color: Constants.COLOR_MAIN_DARK_GRAY
+                color: Constants.COLOR_MAIN_MIDDLE_GRAY
                 visible: Boolean(Functions.getIsVisibleSubMenuViewHorizontalLine(index))
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.bottom
@@ -1091,6 +1081,7 @@ Load language error. Please reinstall the application"
                     })
         }
         // Open the content page of the first item of the new sub menu
+        mainFormID.propertyPageLoader.propertyForceFocus = false
         mainFormID.state = Constants.MenuState.NORMAL
         mainFormID.propertyPageLoader.source =
                 mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
@@ -1109,13 +1100,16 @@ Load language error. Please reinstall the application"
 
         if(mainFormID.propertySubMenuListView.model.get(index).expand === true){
             // Clean the content page
-            mainFormID.propertyPageLoader.source = url
+            mainFormID.propertyPageLoader.propertyForceFocus = false
             mainFormID.state = Constants.MenuState.EXPAND
+            mainFormID.propertyPageLoader.source = url
         }else{
-            var temp = url
+            mainFormID.propertyPageLoader.propertyForceFocus = true
+            mainFormID.state = Constants.MenuState.NORMAL
+            //var temp = url
             mainFormID.propertyPageLoader.source = ""
             mainFormID.propertyPageLoader.source = url
-            mainFormID.state = Constants.MenuState.NORMAL
+
         }
     }
 

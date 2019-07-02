@@ -21,7 +21,7 @@ Item {
         font.italic: false
         font.family: lato.name
         font.capitalization: Font.MixedCase
-        font.bold: focus ? true : false
+        font.bold: activeFocus? true : false
         color: Constants.COLOR_TEXT_BODY
         visible: parent.visible
         font.underline: mouseArea.containsMouse
@@ -32,7 +32,6 @@ Item {
         Accessible.name: propertyAccessibleText
         Accessible.description: propertyAccessibleDescription
 
-        Keys.onRightPressed: Qt.openUrlExternally(propertyLinkUrl)
         Keys.onSpacePressed: Qt.openUrlExternally(propertyLinkUrl)
         Keys.onReturnPressed: Qt.openUrlExternally(propertyLinkUrl)
 

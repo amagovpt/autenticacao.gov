@@ -14,10 +14,27 @@ PageDefinitionsSCAPForm {
     property bool isLoadingAttributes: false
     property bool isTabSelected: true
 
+    Keys.onRightPressed: {
+        if(propertyTextSignaturePageLinkEntities.activeFocus
+                || propertyTextSignaturePageLinkCompanies.activeFocus)
+            returnToAdvancedSignaturePage()
+    }
+    Keys.onSpacePressed: {
+        if(propertyTextSignaturePageLinkEntities.activeFocus
+                || propertyTextSignaturePageLinkCompanies.activeFocus)
+            returnToAdvancedSignaturePage()
+    }
+    Keys.onReturnPressed: {
+        if(propertyTextSignaturePageLinkEntities.activeFocus
+                || propertyTextSignaturePageLinkCompanies.activeFocus)
+            returnToAdvancedSignaturePage()
+    }
+
     Keys.onPressed: {
         var index = propertyStackLayout.currentIndex
         var isOnEntitiesTab = index === 0
         var isOnEntityTab = index === 1
+
 
         if (isOnEntitiesTab && isTabSelected === false) {
             propertyTabButtonEntities.forceActiveFocus()
@@ -472,7 +489,9 @@ PageDefinitionsSCAPForm {
             Keys.onTabPressed: {
                 checkboxSel.focus = true
                 if(propertyListViewEntities.currentIndex == propertyListViewEntities.count -1){
-                    propertyButtonRemoveEntityAttributes.forceActiveFocus()
+                    propertyTextSignaturePageLinkEntities.visible
+                        ? propertyTextSignaturePageLinkEntities.forceActiveFocus()
+                        : propertyButtonRemoveEntityAttributes.forceActiveFocus()
                 }else{
                     propertyListViewEntities.currentIndex++
                 }
@@ -537,7 +556,9 @@ PageDefinitionsSCAPForm {
             Keys.onTabPressed: {
                 if(propertyListViewCompanies.currentIndex == propertyListViewCompanies.count -1){
                     propertyListViewCompanies.currentIndex = 0
-                    propertyButtonRemoveCompanyAttributes.forceActiveFocus()
+                    propertyTextSignaturePageLinkCompanies.visible
+                        ? propertyTextSignaturePageLinkCompanies.forceActiveFocus()
+                        : propertyButtonRemoveCompanyAttributes.forceActiveFocus()
                 }else{
                     propertyListViewCompanies.currentIndex++
                 }

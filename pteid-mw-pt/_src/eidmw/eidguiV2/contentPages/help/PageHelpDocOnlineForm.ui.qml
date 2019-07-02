@@ -7,9 +7,9 @@ import "../../components" as Components
 
 Item {
     anchors.fill: parent
+    property alias propertyMainItem: textTitle
     property alias propertyReminderCheckBox: reminderCheckBox
     property alias propertyButtonDownload: buttonDownload
-    property alias propertyMainItem: text0
 
     Item {
         id: rowTop
@@ -25,7 +25,7 @@ Item {
         anchors.top: rowTop.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
         Text {
-            id: text0
+            id: textTitle
             font.pixelSize: Constants.SIZE_TEXT_TITLE
             font.family: lato.name
             text: qsTranslate("PageHelpDocOnline",
@@ -41,14 +41,18 @@ Item {
                                          "STR_HELP_DOC_TITLE") + " " + mainWindow.title
                              + qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_HOME_PAGE")
             KeyNavigation.tab: text1
+            KeyNavigation.down: text1
+            KeyNavigation.right: text1
+            KeyNavigation.backtab: reminderCheckBox
+            KeyNavigation.up: reminderCheckBox
         }
         Text {
             id: text1
-            anchors.top: text0.bottom
+            anchors.top: textTitle.bottom
             anchors.topMargin: Constants.SIZE_TEXT_BODY
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            font.bold: text1.focus ? true : false
+            font.bold: text1.activeFocus ? true : false
             text: qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_SUB_TITLE")
             wrapMode: Text.Wrap
             width: parent.width
@@ -57,6 +61,10 @@ Item {
             Accessible.role: Accessible.Row
             Accessible.name: text
             KeyNavigation.tab: rectTopics
+            KeyNavigation.down: rectTopics
+            KeyNavigation.right: rectTopics
+            KeyNavigation.backtab: textTitle
+            KeyNavigation.up: textTitle
         }
         Item{
             id: rectTopics
@@ -68,11 +76,15 @@ Item {
             Accessible.role: Accessible.Row
             Accessible.name: text2.text + text3.text + text4.text + text5.text + text6.text
             KeyNavigation.tab: textLinks
+            KeyNavigation.down: textLinks
+            KeyNavigation.right: textLinks
+            KeyNavigation.backtab: text1
+            KeyNavigation.up: text1
             Text {
                 id: text2
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
-                font.bold: rectTopics.focus ? true : false
+                font.bold: rectTopics.activeFocus ? true : false
                 text: qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_TOPIC") + ":"
                 wrapMode: Text.Wrap
                 width: parent.width
@@ -93,7 +105,7 @@ Item {
                     id: text3
                     font.pixelSize: Constants.SIZE_TEXT_BODY
                     font.family: lato.name
-                    font.bold: rectTopics.focus ? true : false
+                    font.bold: rectTopics.activeFocus ? true : false
                     text: qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_TOPIC_1")
                     wrapMode: Text.Wrap
                     width: parent.width
@@ -114,7 +126,7 @@ Item {
                     id: text4
                     font.pixelSize: Constants.SIZE_TEXT_BODY
                     font.family: lato.name
-                    font.bold: rectTopics.focus ? true : false
+                    font.bold: rectTopics.activeFocus ? true : false
                     text: qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_TOPIC_2")
                     wrapMode: Text.Wrap
                     width: parent.width
@@ -135,7 +147,7 @@ Item {
                     id: text5
                     font.pixelSize: Constants.SIZE_TEXT_BODY
                     font.family: lato.name
-                    font.bold: rectTopics.focus ? true : false
+                    font.bold: rectTopics.activeFocus ? true : false
                     text: qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_TOPIC_3")
                     wrapMode: Text.Wrap
                     width: parent.width
@@ -156,7 +168,7 @@ Item {
                     id: text6
                     font.pixelSize: Constants.SIZE_TEXT_BODY
                     font.family: lato.name
-                    font.bold: rectTopics.focus ? true : false
+                    font.bold: rectTopics.activeFocus ? true : false
                     text: qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_TOPIC_4")
                     width: parent.width
                     wrapMode: Text.Wrap
@@ -180,22 +192,30 @@ Item {
                                   "STR_HELP_DOC_ONLINE") + ":"
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
-                font.bold: textLinks.focus ? true : false
+                font.bold: textLinks.activeFocus ? true : false
                 color: Constants.COLOR_TEXT_BODY
                 Accessible.role: Accessible.Button
                 Accessible.name: text
                 KeyNavigation.tab: buttonDownload
+                KeyNavigation.down: buttonDownload
+                KeyNavigation.right: buttonDownload
+                KeyNavigation.backtab: rectTopics
+                KeyNavigation.up: rectTopics
             }
             Button {
                 id: buttonDownload
                 text: qsTranslate("PageHelpDocOnline", "STR_HELP_URL")
-                Accessible.role: Accessible.Button
-                Accessible.name: text
-                KeyNavigation.tab: reminderCheckBox
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 highlighted: activeFocus ? true : false
+                Accessible.role: Accessible.Button
+                Accessible.name: text
+                KeyNavigation.tab: reminderCheckBox
+                KeyNavigation.down: reminderCheckBox
+                KeyNavigation.right: reminderCheckBox
+                KeyNavigation.backtab: textLinks
+                KeyNavigation.up: textLinks
             }
         }
 
@@ -215,6 +235,10 @@ Item {
                 Accessible.role: Accessible.CheckBox
                 Accessible.name: text
                 KeyNavigation.tab: propertyMainItem
+                KeyNavigation.down: propertyMainItem
+                KeyNavigation.right: propertyMainItem
+                KeyNavigation.backtab: buttonDownload
+                KeyNavigation.up: buttonDownload
             }
         }
     }

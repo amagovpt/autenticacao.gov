@@ -65,50 +65,22 @@ PageDefinitionsAppForm {
     }
     propertyRadioButtonUK{
         onCheckedChanged: {
-            if (propertyRadioButtonUK.checked)
+            if (propertyRadioButtonUK.checked){
                 controler.setGuiLanguageString("en")
-            // Update submenu
-            mainFormID.state = Constants.MenuState.NORMAL
-            mainFormID.propertySubMenuListView.model.clear()
-            for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
-                /*console.log("Sub Menu indice " + i + " - "
-                            + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);*/
-                mainFormID.propertySubMenuListView.model
-                .append({
-                            "subName": qsTranslate("MainMenuBottomModel",
-                                                   mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName),
-                            "expand": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
-                            .expand,
-                            "url": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
-                            .url
-                        })
+                propertyRadioButtonPT.checked = false
             }
-            updateGraphicsTextField()
-            mainFormID.propertySubMenuListView.currentIndex = 2
+            updatePages()
         }
     }
     propertyRadioButtonPT{
         onCheckedChanged: {
-            if (propertyRadioButtonPT.checked)
+            if (propertyRadioButtonPT.checked){
                 controler.setGuiLanguageString("nl")
-            // Update submenu
-            mainFormID.state = Constants.MenuState.NORMAL
-            mainFormID.propertySubMenuListView.model.clear()
-            for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
-                /*console.log("Sub Menu indice " + i + " - "
-                            + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);*/
-                mainFormID.propertySubMenuListView.model
-                .append({
-                            "subName": qsTranslate("MainMenuBottomModel",
-                                                   mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName),
-                            "expand": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
-                            .expand,
-                            "url": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
-                            .url
-                        })
+                propertyRadioButtonUK.checked = false
             }
-            updateGraphicsTextField()
-            mainFormID.propertySubMenuListView.currentIndex = 2
+
+            updatePages()
+
         }
     }
 
@@ -250,7 +222,7 @@ PageDefinitionsAppForm {
         propertyCheckboxAccelGraphics.checked = controler.getGraphicsAccelValue();
         propertyCheckboxAccelGraphics.enabled = true;
 
-        updateGraphicsTextField()
+        updatePages()
 
         if (Qt.platform.os === "linux") {
             propertyCheckboxSystemProxy.visible = false
@@ -277,11 +249,35 @@ PageDefinitionsAppForm {
         propertyTextFieldAutPass.text = controler.getProxyPwdValue()
 
         console.log("Page definitions onCompleted finished")
-        propertyTextReader.forceActiveFocus()
+        if(mainFormID.propertyPageLoader.propertyForceFocus)
+            propertyTextReader.forceActiveFocus()
     }
     function updateGraphicsTextField(){
-        propertyGraphicsTextField.text = qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT")  + " : "
-                + OpenGLInfo.majorVersion + "." + OpenGLInfo.minorVersion
-                + "\n" + qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION")
+            propertyGraphicsTextField.text = qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT")  + " : "
+                    + OpenGLInfo.majorVersion + "." + OpenGLInfo.minorVersion
+                    + "\n" + qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION")
+        }
+    function updatePages(){
+        // Update submenu
+        mainFormID.state = Constants.MenuState.NORMAL
+        mainFormID.propertySubMenuListView.model.clear()
+        for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
+            /*console.log("Sub Menu indice " + i + " - "
+                        + mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName);*/
+            mainFormID.propertySubMenuListView.model
+            .append({
+                        "subName": qsTranslate("MainMenuBottomModel",
+                                               mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i).subName),
+                        "expand": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
+                        .expand,
+                        "url": mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(i)
+                        .url
+                    })
+        }
+
+        updateGraphicsTextField()
+
+        mainFormID.propertySubMenuListView.currentIndex = 2
+        mainFormID.propertyPageLoader.forceActiveFocus()
     }
 }

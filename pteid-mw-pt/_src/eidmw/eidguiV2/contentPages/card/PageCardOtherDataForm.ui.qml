@@ -11,6 +11,7 @@ Item {
     property alias propertyBusyIndicator : busyIndication
 
     property alias propertyTextBoxNIF: textBoxNIF
+    property alias propertyRectTaxNum: rectTaxNum
     property alias propertyTextBoxNISS: textBoxNISS
     property alias propertyTextBoxNSNS: textBoxNSNS
     property alias propertyTextBoxCardVersion: textBoxCardVersion
@@ -53,7 +54,13 @@ Item {
                 propertyDateText.text: qsTranslate("GAPI","STR_VAT_NUM")
                 propertyDateField.text: ""
             }
-            KeyNavigation.tab: textBoxNISS
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxNIF.accessibleText
+            KeyNavigation.tab: rectSocialSecurityNum
+            KeyNavigation.down: rectSocialSecurityNum
+            KeyNavigation.right: rectSocialSecurityNum
+            KeyNavigation.backtab: rectCardStatus
+            KeyNavigation.up: rectCardStatus
         }
         Item{
             id: rectSocialSecurityNum
@@ -66,7 +73,13 @@ Item {
                 propertyDateText.text: qsTranslate("GAPI","STR_SOCIAL_SECURITY_NUM")
                 propertyDateField.text: ""
             }
-            KeyNavigation.tab: textBoxNSNS
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxNISS.accessibleText
+            KeyNavigation.tab: rectHealthNum
+            KeyNavigation.down: rectHealthNum
+            KeyNavigation.right: rectHealthNum
+            KeyNavigation.backtab: rectTaxNum
+            KeyNavigation.up: rectTaxNum
         }
         Item{
             id: rectHealthNum
@@ -79,7 +92,13 @@ Item {
                 propertyDateText.text: qsTranslate("GAPI","STR_NATIONAL_HEALTH_NUM")
                 propertyDateField.text: ""
             }
-            KeyNavigation.tab: textBoxCardVersion
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxNSNS.accessibleText
+            KeyNavigation.tab: rectCardVersion
+            KeyNavigation.down: rectCardVersion
+            KeyNavigation.right: rectCardVersion
+            KeyNavigation.backtab: rectSocialSecurityNum
+            KeyNavigation.up: rectSocialSecurityNum
         }
     }
 
@@ -99,7 +118,13 @@ Item {
                 propertyDateText.text: qsTranslate("GAPI","STR_CARD_VERSION")
                 propertyDateField.text: ""
             }
-            KeyNavigation.tab: textBoxIssueDate
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxCardVersion.accessibleText
+            KeyNavigation.tab: rectIssuingDate
+            KeyNavigation.down: rectIssuingDate
+            KeyNavigation.right: rectIssuingDate
+            KeyNavigation.backtab: rectHealthNum
+            KeyNavigation.up: rectHealthNum
         }
         Item{
             id: rectIssuingDate
@@ -112,7 +137,13 @@ Item {
                 propertyDateText.text: qsTranslate("GAPI","STR_DELIVERY_DATE")
                 propertyDateField.text: ""
             }
-            KeyNavigation.tab: textBoxIssuingEntity
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxIssueDate.accessibleText
+            KeyNavigation.tab: rectIssuingEntity
+            KeyNavigation.down: rectIssuingEntity
+            KeyNavigation.right: rectIssuingEntity
+            KeyNavigation.backtab: rectCardVersion
+            KeyNavigation.up: rectCardVersion
         }
     }
     Item {
@@ -131,7 +162,13 @@ Item {
                 propertyDateText.text: qsTranslate("GAPI","STR_DELIVERY_ENTITY")
                 propertyDateField.text: ""
             }
-            KeyNavigation.tab: textBoxDocumentType
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxIssuingEntity.accessibleText
+            KeyNavigation.tab: rectDocumentType
+            KeyNavigation.down: rectDocumentType
+            KeyNavigation.right: rectDocumentType
+            KeyNavigation.backtab: rectIssuingDate
+            KeyNavigation.up: rectIssuingDate
         }
         Item{
             id: rectDocumentType
@@ -144,7 +181,13 @@ Item {
                 propertyDateText.text: qsTranslate("GAPI","STR_DOCUMENT_TYPE")
                 propertyDateField.text: ""
             }
-            KeyNavigation.tab: textBoxPlaceOfRequest
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxDocumentType.accessibleText
+            KeyNavigation.tab: rectLocalOfRequest
+            KeyNavigation.down: rectLocalOfRequest
+            KeyNavigation.right: rectLocalOfRequest
+            KeyNavigation.backtab: rectIssuingEntity
+            KeyNavigation.up: rectIssuingEntity
         }
     }
     Item {
@@ -163,7 +206,13 @@ Item {
                 propertyDateText.text: qsTranslate("GAPI","STR_DELIVERY_LOCATION")
                 propertyDateField.text: ""
             }
-            KeyNavigation.tab: textBoxCardState
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxPlaceOfRequest.accessibleText
+            KeyNavigation.tab: rectCardStatus
+            KeyNavigation.down: rectCardStatus
+            KeyNavigation.right: rectCardStatus
+            KeyNavigation.backtab: rectDocumentType
+            KeyNavigation.up: rectDocumentType
         }
     }
 
@@ -183,7 +232,13 @@ Item {
                 propertyRectField.height: Constants.HEIGHT_TEXT_BOX
                 propertyDateField.wrapMode: Text.WordWrap
             }
-            KeyNavigation.tab: textBoxNIF
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxCardState.accessibleText
+            KeyNavigation.tab: rectTaxNum
+            KeyNavigation.down: rectTaxNum
+            KeyNavigation.right: rectTaxNum
+            KeyNavigation.backtab: rectLocalOfRequest
+            KeyNavigation.up: rectLocalOfRequest
         }
     }
 }

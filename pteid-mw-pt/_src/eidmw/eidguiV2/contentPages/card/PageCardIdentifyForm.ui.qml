@@ -12,6 +12,7 @@ Item {
     property alias propertyBusyIndicator : busyIndication
 
     property alias propertyTextBoxName: textBoxName
+    property alias propertyGivenNameTextForm: givenNameTextForm
     property alias propertyTextBoxSurName: textBoxSurName
     property alias propertyTextBoxSex: textBoxSex
     property alias propertyTextBoxHeight: textBoxHeight
@@ -45,13 +46,15 @@ Item {
     Item {
         id: rowNamePhoto
         width: parent.width
-        height: Constants.HEIGHT_PHOTO_IMAGE + Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE
+        height: Constants.HEIGHT_PHOTO_IMAGE + Constants.SIZE_TEXT_LABEL
+                + Constants.SIZE_TEXT_V_SPACE + 2 * Constants.FOCUS_BORDER
         anchors.top: rowTop.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
         Item{
             id: rectNamePhotoLeft
-            width: parent.width - Constants.WIDTH_PHOTO_IMAGE - Constants.SIZE_ROW_H_SPACE
+            width: parent.width - Constants.WIDTH_PHOTO_IMAGE
+                   - Constants.SIZE_ROW_H_SPACE - 2 * Constants.FOCUS_BORDER
             height: parent.height
 
             Item{
@@ -66,7 +69,13 @@ Item {
                     propertyRectField.height: parent.height
                     propertyDateField.wrapMode: Text.WordWrap
                 }
-                KeyNavigation.tab: textBoxSurName
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxName.accessibleText
+                KeyNavigation.tab: surNameTextTextForm
+                KeyNavigation.down: surNameTextTextForm
+                KeyNavigation.right: surNameTextTextForm
+                KeyNavigation.backtab: rectNotes
+                KeyNavigation.up: rectNotes
             }
             Item{
                 id: surNameTextTextForm
@@ -82,20 +91,23 @@ Item {
                     propertyRectField.height: parent.height
                     propertyDateField.wrapMode: Text.WordWrap
                 }
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxSurName.accessibleText
                 KeyNavigation.tab: photoImage
+                KeyNavigation.down: photoImage
+                KeyNavigation.right: photoImage
+                KeyNavigation.backtab: givenNameTextForm
+                KeyNavigation.up: givenNameTextForm
             }
         }
 
         Item{
             id: rectNamePhotoRight
-            width: Constants.WIDTH_PHOTO_IMAGE
+            width: Constants.WIDTH_PHOTO_IMAGE + 2 * Constants.FOCUS_BORDER
             height: parent.height - Constants.SIZE_TEXT_LABEL - Constants.SIZE_TEXT_V_SPACE
             anchors.left: rectNamePhotoLeft.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.bottom: parent.bottom
-
-
-
             DropShadow {
                 anchors.fill: rectPhotoField
                 horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
@@ -119,15 +131,15 @@ Item {
                 id: rectPhotoField
                 width: parent.width
                 height: parent.height
-                border.width: photoImage.focus ? 2 : 0
-                border.color: photoImage.focus ? Constants.COLOR_GREY_BUTTON_BACKGROUND
-                                                   : Constants.COLOR_MAIN_SOFT_GRAY
+                border.width: photoImage.focus ? Constants.FOCUS_BORDER : 0
+                border.color: photoImage.focus ? Constants.COLOR_MAIN_DARK_GRAY
+                                               : Constants.COLOR_MAIN_SOFT_GRAY
                 Image {
                     id: photoImage
-                    width: parent.width - 2
-                    height: parent.height - 2
-                    x: 1
-                    y: 1
+                    width: parent.width - Constants.FOCUS_BORDER
+                    height: parent.height - Constants.FOCUS_BORDER
+                    x: Constants.FOCUS_BORDER
+                    y: Constants.FOCUS_BORDER
                     fillMode: Image.PreserveAspectFit
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
@@ -135,7 +147,11 @@ Item {
                     cache: false
                     Accessible.role: Accessible.Graphic
                     Accessible.name: qsTranslate("GAPI","STR_PHOTO")
-                    KeyNavigation.tab: textBoxSex
+                    KeyNavigation.tab: rectSex
+                    KeyNavigation.down: rectSex
+                    KeyNavigation.right: rectSex
+                    KeyNavigation.backtab: surNameTextTextForm
+                    KeyNavigation.up: surNameTextTextForm
                 }
             }
         }
@@ -156,7 +172,13 @@ Item {
                 id: textBoxSex
                 propertyDateText.text: qsTranslate("GAPI","STR_GENDER")
             }
-            KeyNavigation.tab: textBoxHeight
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxSex.accessibleText
+            KeyNavigation.tab: rectHeight
+            KeyNavigation.down: rectHeight
+            KeyNavigation.right: rectHeight
+            KeyNavigation.backtab: photoImage
+            KeyNavigation.up: photoImage
         }
         Item{
             id: rectHeight
@@ -168,7 +190,13 @@ Item {
                 id: textBoxHeight
                 propertyDateText.text: qsTranslate("GAPI","STR_HEIGHT")
             }
-            KeyNavigation.tab: textBoxNacionality
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxHeight.accessibleText
+            KeyNavigation.tab: rectNacionality
+            KeyNavigation.down: rectNacionality
+            KeyNavigation.right: rectNacionality
+            KeyNavigation.backtab: rectSex
+            KeyNavigation.up: rectSex
         }
         Item{
             id: rectNacionality
@@ -180,7 +208,13 @@ Item {
                 id: textBoxNacionality
                 propertyDateText.text: qsTranslate("GAPI","STR_NATIONALITY")
             }
-            KeyNavigation.tab: textBoxDateOfBirth
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxNacionality.accessibleText
+            KeyNavigation.tab: rectDateOfBirth
+            KeyNavigation.down: rectDateOfBirth
+            KeyNavigation.right: rectDateOfBirth
+            KeyNavigation.backtab: rectHeight
+            KeyNavigation.up: rectHeight
         }
         Item{
             id: rectDateOfBirth
@@ -192,7 +226,13 @@ Item {
                 id: textBoxDateOfBirth
                 propertyDateText.text: qsTranslate("GAPI","STR_DATE_OF_BIRTH")
             }
-            KeyNavigation.tab: textBoxDocumentNum
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxDateOfBirth.accessibleText
+            KeyNavigation.tab: rectDocumentNum
+            KeyNavigation.down: rectDocumentNum
+            KeyNavigation.right: rectDocumentNum
+            KeyNavigation.backtab: rectNacionality
+            KeyNavigation.up: rectNacionality
         }
     }
 
@@ -211,7 +251,13 @@ Item {
                 id: textBoxDocumentNum
                 propertyDateText.text: qsTranslate("GAPI","STR_DOCUMENT_NUMBER")
             }
-            KeyNavigation.tab: textBoxExpirydate
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxDocumentNum.accessibleText
+            KeyNavigation.tab: rectExpiryDate
+            KeyNavigation.down: rectExpiryDate
+            KeyNavigation.right: rectExpiryDate
+            KeyNavigation.backtab: rectDateOfBirth
+            KeyNavigation.up: rectDateOfBirth
         }
         Item{
             id: rectExpiryDate
@@ -223,7 +269,13 @@ Item {
                 id: textBoxExpirydate
                 propertyDateText.text: qsTranslate("GAPI","STR_VALIDITY_DATE")
             }
-            KeyNavigation.tab: textBoxCountry
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxExpirydate.accessibleText
+            KeyNavigation.tab: rectCountry
+            KeyNavigation.down: rectCountry
+            KeyNavigation.right: rectCountry
+            KeyNavigation.backtab: rectDocumentNum
+            KeyNavigation.up: rectDocumentNum
         }
     }
 
@@ -244,7 +296,13 @@ Item {
                 id: textBoxCountry
                 propertyDateText.text: qsTranslate("GAPI","STR_COUNTRY")
             }
-            KeyNavigation.tab: textBoxParentsFather
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxCountry.accessibleText
+            KeyNavigation.tab: rectParentsFather
+            KeyNavigation.down: rectParentsFather
+            KeyNavigation.right: rectParentsFather
+            KeyNavigation.backtab: rectExpiryDate
+            KeyNavigation.up: rectExpiryDate
         }
     }
 
@@ -265,7 +323,14 @@ Item {
                 id: textBoxParentsFather
                 propertyDateText.text: qsTranslate("GAPI","STR_AFFILIATION")
             }
-            KeyNavigation.tab: textBoxParentsMother
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxParentsFather.accessibleText
+                             + textBoxParentsMother.accessibleText
+            KeyNavigation.tab: rectNotes
+            KeyNavigation.down: rectNotes
+            KeyNavigation.right: rectNotes
+            KeyNavigation.backtab: rectCountry
+            KeyNavigation.up: rectCountry
         }
         Item{
             id: rectParentsMother
@@ -279,7 +344,6 @@ Item {
                 propertyDateText.height: 0
                 propertyRectField.anchors.topMargin: 2 * Constants.SIZE_TEXT_V_SPACE
             }
-            KeyNavigation.tab: textBoxNotes
         }
     }
 
@@ -298,7 +362,13 @@ Item {
                 id: textBoxNotes
                 propertyDateText.text: qsTranslate("GAPI","STR_NOTES")
             }
-            KeyNavigation.tab: textBoxName
+            Accessible.role: Accessible.Column
+            Accessible.name: textBoxNotes.accessibleText
+            KeyNavigation.tab: givenNameTextForm
+            KeyNavigation.down: givenNameTextForm
+            KeyNavigation.right: givenNameTextForm
+            KeyNavigation.backtab: rectParentsFather
+            KeyNavigation.up: rectParentsFather
         }
     }
 }

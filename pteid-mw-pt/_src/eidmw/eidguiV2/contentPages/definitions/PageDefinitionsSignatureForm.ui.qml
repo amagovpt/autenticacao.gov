@@ -100,12 +100,20 @@ Item {
                 contentItem: Text {
                     text: radioButtonDefault.text
                     font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: radioButtonDefault.activeFocus
+                                    ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                    : Constants.SIZE_TEXT_LABEL
+                    font.bold: radioButtonDefault.activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     horizontalAlignment: Text.AlignRight
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: radioButtonDefault.indicator.width + radioButtonDefault.spacing
                 }
+                KeyNavigation.tab: radioButtonCustom
+                KeyNavigation.down: radioButtonCustom
+                KeyNavigation.right: radioButtonCustom
+                KeyNavigation.backtab: buttonAdd
+                KeyNavigation.up: buttonAdd
             }
 
             Rectangle {
@@ -269,12 +277,20 @@ Item {
                 contentItem: Text {
                     text: radioButtonCustom.text
                     font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: radioButtonCustom.activeFocus
+                                    ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                    : Constants.SIZE_TEXT_LABEL
+                    font.bold: radioButtonCustom.activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     horizontalAlignment: Text.AlignRight
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: radioButtonCustom.indicator.width + radioButtonCustom.spacing
                 }
+                KeyNavigation.tab: buttonRemove
+                KeyNavigation.down: buttonRemove
+                KeyNavigation.right: buttonRemove
+                KeyNavigation.backtab: radioButtonDefault
+                KeyNavigation.up: radioButtonDefault
             }
             Rectangle {
                 id: rectPreCustom
@@ -447,6 +463,11 @@ Item {
                         highlighted: activeFocus ? true : false
                         anchors.horizontalCenter: parent.horizontalCenter
                         enabled: fileLoaded
+                        KeyNavigation.tab: buttonAdd
+                        KeyNavigation.down: buttonAdd
+                        KeyNavigation.right: buttonAdd
+                        KeyNavigation.backtab: radioButtonCustom
+                        KeyNavigation.up: radioButtonCustom
                     }
                 }
                 Item {
@@ -470,6 +491,10 @@ Item {
                         highlighted: activeFocus ? true : false
                         anchors.horizontalCenter: parent.horizontalCenter
                         KeyNavigation.tab: radioButtonDefault
+                        KeyNavigation.down: radioButtonDefault
+                        KeyNavigation.right: radioButtonDefault
+                        KeyNavigation.backtab: buttonRemove
+                        KeyNavigation.up: buttonRemove
                     }
                 }
             }

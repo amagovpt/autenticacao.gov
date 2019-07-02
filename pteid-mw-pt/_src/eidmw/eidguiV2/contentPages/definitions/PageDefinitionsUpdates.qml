@@ -52,7 +52,7 @@ PageDefinitionsUpdatesForm {
             propertyReleaseScrollViewText.visible = false
             propertyInstalledVersion.visible = false
             propertyRemoteVersion.visible = false
-            propertyTextDescription.forceActiveFocus()
+            propertyTextDescriptionText.forceActiveFocus()
         }
         onSignalAutoUpdateProgress: {
             propertyProgressBar.indeterminate = false
@@ -91,6 +91,7 @@ PageDefinitionsUpdatesForm {
             propertyProgressBar.visible = false
             propertyProgressBar.value = 0
             propertyProgressBar.indeterminate = false
+            propertyTextDescriptionText.forceActiveFocus()
         }
         onSignalStartUpdate: {
             propertyReleaseNoteScrollView.visible = false

@@ -64,7 +64,7 @@ PageSecurityCertificatesForm {
         onSignalCertificatesChanged: {
 
             console.log("Certificates Added: "+ certificatesMap.levelCount)
-
+            var initialOption
             if(certificatesMap.levelCount === 5){ // Production Card
                 console.log("Detected Production Card")
                 propertyAcordion.model = [
@@ -136,7 +136,7 @@ PageSecurityCertificatesForm {
                             }
                         ]
                 // Init Date Field with the signature certificate 
-                var initialOption = propertyAcordion.model[0].children[0].children[0].children[1].children[0]
+                initialOption = propertyAcordion.model[0].children[0].children[0].children[1].children[0]
                 propertyAcordion.selectOption(initialOption)
             }else{
                 console.log("test Production Card")
@@ -189,17 +189,18 @@ PageSecurityCertificatesForm {
                             }
                         ]
                 // Init Date Field with the signature certificate 
-                var initialOption = propertyAcordion.model[0].children[1].children[0]
+                initialOption = propertyAcordion.model[0].children[1].children[0]
                 propertyAcordion.selectOption(initialOption)
             }
             propertyBusyIndicator.running = false
+            if(mainFormID.propertyPageLoader.propertyForceFocus)
+                propertyRectEntity.forceActiveFocus()
         }
     }
     Component.onCompleted: {
         console.log("Page Security Certificates Completed")
         propertyBusyIndicator.running = true
         gapi.startfillCertificateList()
-        propertyTextEntity.forceActiveFocus()
     }
     function getCertStatus(certStatus){
 

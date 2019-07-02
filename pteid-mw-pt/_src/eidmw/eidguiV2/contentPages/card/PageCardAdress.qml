@@ -57,8 +57,8 @@ PageCardAdressForm {
             gapi.setAddressLoaded(true)
             if(!Constants.USE_SDK_PIN_UI_POPUP)
                 dialogTestPin.visible = false
-
-            propertyDistrict.forceActiveFocus()
+            if(mainFormID.propertyPageLoader.propertyForceFocus)
+                propertyRectNacionalDistrict.forceActiveFocus()
         }
         onSignalUpdateProgressBar: {
             console.log("Address change --> update progress bar with value = " + value)

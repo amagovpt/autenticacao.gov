@@ -67,6 +67,14 @@ Item {
                 Accessible.role: Accessible.MenuItem
                 Accessible.name: text
                 KeyNavigation.tab: tabButtonSign
+                KeyNavigation.right: tabButtonSign
+                KeyNavigation.left: tabButtonAddress
+                Keys.onUpPressed: {}
+                Keys.onDownPressed: {
+                    stackLayout.currentIndex = 0
+                    bar.currentIndex = 0
+                    rowAuth.forceActiveFocus()
+                }
                 Keys.onReturnPressed: {
                     stackLayout.currentIndex = 0
                     bar.currentIndex = 0
@@ -86,6 +94,14 @@ Item {
                 Accessible.role: Accessible.MenuItem
                 Accessible.name: text
                 KeyNavigation.tab: tabButtonAddress
+                KeyNavigation.right: tabButtonAddress
+                KeyNavigation.left: tabButtonAuth
+                Keys.onUpPressed: {}
+                Keys.onDownPressed: {
+                    stackLayout.currentIndex = 1
+                    bar.currentIndex = 1
+                    rowSign.forceActiveFocus()
+                }
                 Keys.onReturnPressed: {
                     stackLayout.currentIndex = 1
                     bar.currentIndex = 1
@@ -105,6 +121,14 @@ Item {
                 Accessible.role: Accessible.MenuItem
                 Accessible.name: text
                 KeyNavigation.tab: tabButtonAuth
+                KeyNavigation.right: tabButtonAuth
+                KeyNavigation.left: tabButtonSign
+                Keys.onUpPressed: {}
+                Keys.onDownPressed: {
+                    stackLayout.currentIndex = 2
+                    bar.currentIndex = 2
+                    rowAddress.forceActiveFocus()
+                }
                 Keys.onReturnPressed: {
                     stackLayout.currentIndex = 2
                     bar.currentIndex = 2
@@ -150,8 +174,10 @@ Item {
                     Accessible.role: Accessible.StaticText
                     Accessible.name: authText.text
                     KeyNavigation.tab: rowStateAuth
+                    KeyNavigation.down: rowStateAuth
+                    KeyNavigation.right: rowStateAuth
+                    KeyNavigation.up: buttonModifyAuth
                 }
-
                 Item {
                     id: rowStateAuth
                     width: parent.width
@@ -175,6 +201,9 @@ Item {
                     Accessible.role: Accessible.StaticText
                     Accessible.name: triesLeftAuthPin.text
                     KeyNavigation.tab: buttonTestAuth
+                    KeyNavigation.down: buttonTestAuth
+                    KeyNavigation.right: buttonTestAuth
+                    KeyNavigation.up: rowAuth
                     
                 }
                 Item {
@@ -200,6 +229,9 @@ Item {
                             Accessible.role: Accessible.Button
                             Accessible.name: text
                             KeyNavigation.tab: buttonModifyAuth
+                            KeyNavigation.down: buttonModifyAuth
+                            KeyNavigation.right: buttonModifyAuth
+                            KeyNavigation.up: rowStateAuth
                         }
                     }
                     Item{
@@ -220,10 +252,12 @@ Item {
                             Accessible.role: Accessible.Button
                             Accessible.name: text
                             KeyNavigation.tab: rowAuth
+                            KeyNavigation.down: rowAuth
+                            KeyNavigation.right: rowAuth
+                            KeyNavigation.up: buttonTestAuth
                         }
                     }
                 }
-                
             }
             Item {
                 id: tabSign
@@ -249,6 +283,9 @@ Item {
                     Accessible.role: Accessible.StaticText
                     Accessible.name: signText.text
                     KeyNavigation.tab: rowStateSign
+                    KeyNavigation.down: rowStateSign
+                    KeyNavigation.right: rowStateSign
+                    KeyNavigation.up: buttonModifySign
                 }
 
                 Item {
@@ -273,6 +310,9 @@ Item {
                     Accessible.role: Accessible.StaticText
                     Accessible.name: triesLeftSignPin.text
                     KeyNavigation.tab: buttonTestSign
+                    KeyNavigation.down: buttonTestSign
+                    KeyNavigation.right: buttonTestSign
+                    KeyNavigation.up: rowSign
                 }
 
                 Item {
@@ -298,6 +338,9 @@ Item {
                             Accessible.role: Accessible.Button
                             Accessible.name: text
                             KeyNavigation.tab: buttonModifySign
+                            KeyNavigation.down: buttonModifySign
+                            KeyNavigation.right: buttonModifySign
+                            KeyNavigation.up: rowStateSign
                         }
                     }
                     Item{
@@ -318,6 +361,9 @@ Item {
                             Accessible.role: Accessible.Button
                             Accessible.name: text
                             KeyNavigation.tab: rowSign
+                            KeyNavigation.down: rowSign
+                            KeyNavigation.right: rowSign
+                            KeyNavigation.up: buttonTestSign
                         }
                     }
                 }
@@ -346,6 +392,9 @@ Item {
                     Accessible.role: Accessible.StaticText
                     Accessible.name: addrText.text
                     KeyNavigation.tab: rowStateAddress
+                    KeyNavigation.down: rowStateAddress
+                    KeyNavigation.right: rowStateAddress
+                    KeyNavigation.up: buttonModifyAddress
                 }
 
                 Item {
@@ -370,6 +419,9 @@ Item {
                     Accessible.role: Accessible.StaticText
                     Accessible.name: triesLeftAddressPin.text
                     KeyNavigation.tab: buttonTestAddress
+                    KeyNavigation.down: buttonTestAddress
+                    KeyNavigation.right: buttonTestAddress
+                    KeyNavigation.up: rowAddress
                 }
                 Item {
                     id: rowButtonsAddress
@@ -394,6 +446,9 @@ Item {
                             Accessible.role: Accessible.Button
                             Accessible.name: text
                             KeyNavigation.tab: buttonModifyAddress
+                            KeyNavigation.down: buttonModifyAddress
+                            KeyNavigation.right: buttonModifyAddress
+                            KeyNavigation.up: rowStateAddress
                         }
                     }
                     Item{
@@ -414,6 +469,9 @@ Item {
                             Accessible.role: Accessible.Button
                             Accessible.name: text
                             KeyNavigation.tab: rowAddress
+                            KeyNavigation.down: rowAddress
+                            KeyNavigation.right: rowAddress
+                            KeyNavigation.up: buttonTestAddress
                         }
                     }
                 }

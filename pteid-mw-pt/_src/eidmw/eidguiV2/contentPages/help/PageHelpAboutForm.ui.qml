@@ -34,6 +34,10 @@ Item {
             Accessible.role: Accessible.TitleBar
             Accessible.name: text
             KeyNavigation.tab: textDescription
+            KeyNavigation.down: textDescription
+            KeyNavigation.right: textDescription
+            KeyNavigation.backtab: textDevByAgency
+            KeyNavigation.up: textDevByAgency
         }
         Text {
             id: textDescription
@@ -46,6 +50,10 @@ Item {
             Accessible.role: Accessible.Row
             Accessible.name: text
             KeyNavigation.tab: textVersion
+            KeyNavigation.down: textVersion
+            KeyNavigation.right: textVersion
+            KeyNavigation.backtab: textAppName
+            KeyNavigation.up: textAppName
         }
         Text {
             id: textVersion
@@ -57,6 +65,10 @@ Item {
             Accessible.role: Accessible.Row
             Accessible.name: text
             KeyNavigation.tab: textDifficult
+            KeyNavigation.down: textDifficult
+            KeyNavigation.right: textDifficult
+            KeyNavigation.backtab: textDescription
+            KeyNavigation.up: textDescription
         }
         Text {
             id: textDifficult
@@ -69,6 +81,10 @@ Item {
             Accessible.role: Accessible.Row
             Accessible.name: text
             KeyNavigation.tab: textLinkCC.propertyText
+            KeyNavigation.down: textLinkCC.propertyText
+            KeyNavigation.right: textLinkCC.propertyText
+            KeyNavigation.backtab: textVersion
+            KeyNavigation.up: textVersion
         }
     Components.Link {
         id: textLinkCC
@@ -81,6 +97,11 @@ Item {
             propertyAccessibleDescription:  qsTranslate("PageHelpAbout","STR_HELP_CC_SELECT")
             propertyLinkUrl: 'https://www.autenticacao.gov.pt/o-cartao-de-cidadao'
             KeyNavigation.tab: textDevBy
+            KeyNavigation.down: textDevBy
+            KeyNavigation.right: textDevBy
+            KeyNavigation.left: textDifficult
+            KeyNavigation.backtab: textDifficult
+            KeyNavigation.up: textDifficult
     }
 
     Text {
@@ -94,6 +115,11 @@ Item {
             Accessible.role: Accessible.Row
             Accessible.name: text
             KeyNavigation.tab: textDevByAgency
+            KeyNavigation.down: textDevByAgency
+            KeyNavigation.right: textDevByAgency
+            KeyNavigation.left: textLinkCC.propertyText
+            KeyNavigation.backtab: textLinkCC.propertyText
+            KeyNavigation.up: textLinkCC.propertyText
     }
 
     Text {
@@ -109,6 +135,10 @@ Item {
             Accessible.role: Accessible.Row
             Accessible.name: text
             KeyNavigation.tab: propertyMainItem
+            KeyNavigation.down: propertyMainItem
+            KeyNavigation.right: propertyMainItem
+            KeyNavigation.backtab: textDevBy
+            KeyNavigation.up: textDevBy
     }
 
     Image {

@@ -206,6 +206,7 @@ PageDefinitionsSignatureForm {
             propertyRadioButtonDefault.checked = true
             propertyRadioButtonCustom.checked = false
             gapi.customSignRemove()
+            propertyRadioButtonDefault.forceActiveFocus()
         }
     }
     ListModel {
@@ -221,6 +222,7 @@ PageDefinitionsSignatureForm {
                 propertyRadioButtonCustom.checked = true
                 var loadedFilePath = filesModel.get(0).fileUrl
                 propertyImagePreCustom.source = loadedFilePath
+                propertyRadioButtonCustom.forceActiveFocus()
             }
         }
     }
@@ -259,7 +261,8 @@ PageDefinitionsSignatureForm {
             fileLoaded = true
             propertyImagePreCustom.source = urlCustomImage
         }
-        propertyRadioButtonDefault.forceActiveFocus()
+        if(mainFormID.propertyPageLoader.propertyForceFocus)
+            propertyRadioButtonDefault.forceActiveFocus()
     }
     function getData(){
         var time = Qt.formatDateTime(new Date(), "yy.MM.dd hh:mm:ss")

@@ -12,6 +12,7 @@ Item {
     property alias propertyButtonSearch: buttonSearch
     property alias propertyProgressBar: progressBar
     property alias propertyTextDescription: textDescription.propertyText
+    property alias propertyTextDescriptionText: textDescription
     property alias propertyButtonStartUpdate: buttonStartUpdate
     property alias propertyButtonCancelUpdate: buttonCancelUpdate
     property alias propertyReleaseScrollViewText: releaseNoteScrollViewText
@@ -44,15 +45,22 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             Text {
                 id: updateTitle
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pixelSize: activeFocus
+                                ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                : Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
-                font.bold: focus
+                font.bold: activeFocus
                 color: Constants.COLOR_TEXT_LABEL
                 height: parent.height
                 text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TITLE")
                 Accessible.role: Accessible.TitleBar
                 Accessible.name: text
                 KeyNavigation.tab: textDescription
+                KeyNavigation.down: textDescription
+                KeyNavigation.right: textDescription
+                KeyNavigation.left: buttonSearch.visible ? buttonSearch : releaseNoteScrollViewText
+                KeyNavigation.backtab: buttonSearch.visible ? buttonSearch : releaseNoteScrollViewText
+                KeyNavigation.up: buttonSearch.visible ? buttonSearch : releaseNoteScrollViewText
             }
         }
 
@@ -74,12 +82,20 @@ Item {
                     id: textDescription
                     propertyText.text: qsTranslate("PageDefinitionsUpdates",
                                                    "STR_UPDATE_TEXT")
-                    propertyText.font.bold: focus
+                    propertyText.font.bold: activeFocus || textDescription.activeFocus
+                    propertyText.font.pixelSize: activeFocus || textDescription.activeFocus
+                                    ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                    : Constants.SIZE_TEXT_LABEL
                     width: parent.width
                     height: parent.height
                     Accessible.role: Accessible.TitleBar
-                    Accessible.name: text
+                    Accessible.name: propertyText.text
                     KeyNavigation.tab: buttonSearch.visible ? buttonSearch : installedVersion
+                    KeyNavigation.down: buttonSearch.visible ? buttonSearch : installedVersion
+                    KeyNavigation.right: buttonSearch.visible ? buttonSearch : installedVersion
+                    KeyNavigation.left: updateTitle
+                    KeyNavigation.backtab: updateTitle
+                    KeyNavigation.up: updateTitle
                 }
             }
             Item {
@@ -103,6 +119,11 @@ Item {
                         propertyDateField.horizontalAlignment: Text.AlignHCenter
                     }
                     KeyNavigation.tab: remoteVersion
+                    KeyNavigation.down: remoteVersion
+                    KeyNavigation.right: remoteVersion
+                    KeyNavigation.left: textDescription
+                    KeyNavigation.backtab: textDescription
+                    KeyNavigation.up: textDescription
                 }
                 Item {
                     id: rawRemoteVersion
@@ -120,6 +141,11 @@ Item {
                         propertyDateField.horizontalAlignment: Text.AlignHCenter
                     }
                     KeyNavigation.tab: releaseNoteScrollViewText
+                    KeyNavigation.down: releaseNoteScrollViewText
+                    KeyNavigation.right: releaseNoteScrollViewText
+                    KeyNavigation.left: rawInstalledVersion
+                    KeyNavigation.backtab: rawInstalledVersion
+                    KeyNavigation.up: rawInstalledVersion
                 }
                 Item {
                     id: rawButtonStartUpdate
@@ -139,7 +165,12 @@ Item {
                         font.capitalization: Font.MixedCase
                         highlighted: activeFocus ? true : false
                         visible: false
-                        KeyNavigation.tab: propertyMainItem
+                        KeyNavigation.tab: releaseNoteScrollViewText
+                        KeyNavigation.down: releaseNoteScrollViewText
+                        KeyNavigation.right: releaseNoteScrollViewText
+                        KeyNavigation.left: remoteVersion
+                        KeyNavigation.backtab: remoteVersion
+                        KeyNavigation.up: remoteVersion
                     }
                 }
             }
@@ -174,6 +205,11 @@ Item {
                 Accessible.role: Accessible.Row
                 Accessible.name: buttonSearch.text
                 KeyNavigation.tab: buttonSearch
+                KeyNavigation.down: buttonSearch
+                KeyNavigation.right: buttonSearch
+                KeyNavigation.left: buttonStartUpdate
+                KeyNavigation.backtab: buttonStartUpdate
+                KeyNavigation.up: buttonStartUpdate
                 Button {
                     id: buttonSearch
                     text: qsTranslate("PageDefinitionsUpdates",
@@ -187,6 +223,11 @@ Item {
                     highlighted: activeFocus ? true : false
                     anchors.horizontalCenter: parent.horizontalCenter
                     KeyNavigation.tab: propertyMainItem
+                    KeyNavigation.down: propertyMainItem
+                    KeyNavigation.right: propertyMainItem
+                    KeyNavigation.left: textDescription
+                    KeyNavigation.backtab: textDescription
+                    KeyNavigation.up: textDescription
                 }
             }
             Item {
@@ -209,6 +250,11 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible: false
                     KeyNavigation.tab: propertyMainItem
+                    KeyNavigation.down: propertyMainItem
+                    KeyNavigation.right: propertyMainItem
+                    KeyNavigation.left: buttonSearch
+                    KeyNavigation.backtab: buttonSearch
+                    KeyNavigation.up: buttonSearch
                 }
             }
 
@@ -271,12 +317,17 @@ Item {
                                 height: flickable.height - 2 * Constants.SIZE_TEXT_FIELD_V_SPACE
                                 wrapMode: TextEdit.Wrap
                                 font.pixelSize: Constants.SIZE_TEXT_FIELD
-                                font.bold: focus
+                                font.bold: activeFocus
                                 color: Constants.COLOR_TEXT_BODY
                                 visible: false
                                 textFormat: "RichText"
                                 Accessible.role: Accessible.StaticText
-                                KeyNavigation.tab: buttonStartUpdate
+                                KeyNavigation.tab: updateTitle
+                                KeyNavigation.down: updateTitle
+                                KeyNavigation.right: updateTitle
+                                KeyNavigation.left: buttonStartUpdate
+                                KeyNavigation.backtab: buttonStartUpdate
+                                KeyNavigation.up: buttonStartUpdate
                             }
 
                             ScrollBar.vertical: ScrollBar {

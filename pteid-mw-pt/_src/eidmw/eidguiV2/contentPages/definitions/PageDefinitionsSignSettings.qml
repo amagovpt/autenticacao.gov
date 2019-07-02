@@ -79,7 +79,6 @@ PageDefinitionsSignSettingsForm {
             propertyDateAppTimeStamp.forceActiveFocus()
         }
 
-
         console.log("Page definitionsSignSettings onCompleted finished")
     }
 }

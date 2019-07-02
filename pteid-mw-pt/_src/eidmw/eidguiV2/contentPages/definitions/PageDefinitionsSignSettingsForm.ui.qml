@@ -45,9 +45,11 @@ Item {
             Text {
                 id: dateAppCertificates
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pixelSize: activeFocus
+                                ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                : Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
-                font.bold: focus
+                font.bold: activeFocus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsApp",
@@ -55,6 +57,10 @@ Item {
                 Accessible.role: Accessible.TitleBar
                 Accessible.name: text
                 KeyNavigation.tab: checkboxRegister
+                KeyNavigation.down: checkboxRegister
+                KeyNavigation.right: checkboxRegister
+                KeyNavigation.backtab: checkboxDisable
+                KeyNavigation.up: checkboxDisable
             }
             DropShadow {
                 anchors.fill: rectAppCertificatesCheckBox
@@ -93,10 +99,15 @@ Item {
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
+                    font.bold: activeFocus
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                     Accessible.role: Accessible.CheckBox
                     Accessible.name: text
                     KeyNavigation.tab: checkboxRemove
+                    KeyNavigation.down: checkboxRemove
+                    KeyNavigation.right: checkboxRemove
+                    KeyNavigation.backtab: dateAppCertificates
+                    KeyNavigation.up: dateAppCertificates
                 }
                 CheckBox {
                     id: checkboxRemove
@@ -107,11 +118,16 @@ Item {
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
+                    font.bold: activeFocus
                     anchors.top: checkboxRegister.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                     Accessible.role: Accessible.CheckBox
                     Accessible.name: text
                     KeyNavigation.tab: dateAppTimeStamp
+                    KeyNavigation.down: dateAppTimeStamp
+                    KeyNavigation.right: dateAppTimeStamp
+                    KeyNavigation.backtab: checkboxRegister
+                    KeyNavigation.up: checkboxRegister
                 }
             }
         }
@@ -127,9 +143,11 @@ Item {
             Text {
                 id: dateAppTimeStamp
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pixelSize: activeFocus
+                                ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                : Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
-                font.bold: focus
+                font.bold: activeFocus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsApp",
@@ -137,6 +155,10 @@ Item {
                 Accessible.role: Accessible.TitleBar
                 Accessible.name: text
                 KeyNavigation.tab: checkboxTimeStamp
+                KeyNavigation.down: checkboxTimeStamp
+                KeyNavigation.right: checkboxTimeStamp
+                KeyNavigation.backtab: checkboxRemove
+                KeyNavigation.up: checkboxRemove
             }
             DropShadow {
                 anchors.fill: rectAppTimeStampCheckBox
@@ -173,11 +195,16 @@ Item {
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
+                    font.bold: activeFocus
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                     checked: false
                     Accessible.role: Accessible.CheckBox
                     Accessible.name: text
                     KeyNavigation.tab: checkboxTimeStamp.checked ? textFieldTimeStamp : (rectOffice.visible ? textOfficeTitle: dateAppTimeStamp)
+                    KeyNavigation.down: checkboxTimeStamp.checked ? textFieldTimeStamp : (rectOffice.visible ? textOfficeTitle: dateAppTimeStamp)
+                    KeyNavigation.right: checkboxTimeStamp.checked ? textFieldTimeStamp : (rectOffice.visible ? textOfficeTitle: dateAppTimeStamp)
+                    KeyNavigation.backtab: dateAppTimeStamp
+                    KeyNavigation.up: dateAppTimeStamp
                 }
                 Item {
                     id: boxAppTimeStamp
@@ -195,6 +222,7 @@ Item {
                                              "STR_TIMESTAMP_URL_OP") + controler.autoTr
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.bold: activeFocus
                         clip: false
                         enabled: checkboxTimeStamp.checked
                         opacity: checkboxTimeStamp.checked ? 1.0 : Constants.OPACITY_DEFINITIONS_APP_OPTION_DISABLED
@@ -206,6 +234,10 @@ Item {
                         Accessible.role: Accessible.EditableText
                         Accessible.name: text
                         KeyNavigation.tab: rectOffice.visible ? textOfficeTitle: dateAppTimeStamp
+                        KeyNavigation.down: rectOffice.visible ? textOfficeTitle: dateAppTimeStamp
+                        KeyNavigation.right: rectOffice.visible ? textOfficeTitle: dateAppTimeStamp
+                        KeyNavigation.backtab: checkboxTimeStamp
+                        KeyNavigation.up: checkboxTimeStamp
                     }
                 }
             }
@@ -223,9 +255,11 @@ Item {
             Text {
                 id: textOfficeTitle
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pixelSize: activeFocus
+                                ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                : Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
-                font.bold: focus
+                font.bold: activeFocus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsSignSettings",
@@ -233,6 +267,10 @@ Item {
                 Accessible.role: Accessible.TitleBar
                 Accessible.name: text
                 KeyNavigation.tab: checkboxDisable
+                KeyNavigation.down: checkboxDisable
+                KeyNavigation.right: checkboxDisable
+                KeyNavigation.backtab: textFieldTimeStamp
+                KeyNavigation.up: textFieldTimeStamp
             }
             DropShadow {
                 anchors.fill: rectOfficeCheckbox
@@ -271,10 +309,15 @@ Item {
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
+                    font.bold: activeFocus
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                     Accessible.role: Accessible.CheckBox
                     Accessible.name: text
                     KeyNavigation.tab: checkboxRegister.visible ? dateAppCertificates : checkboxTimeStamp
+                    KeyNavigation.down: checkboxRegister.visible ? dateAppCertificates : checkboxTimeStamp
+                    KeyNavigation.right: checkboxRegister.visible ? dateAppCertificates : checkboxTimeStamp
+                    KeyNavigation.backtab: textOfficeTitle
+                    KeyNavigation.up: textOfficeTitle
                 }
             }
         }

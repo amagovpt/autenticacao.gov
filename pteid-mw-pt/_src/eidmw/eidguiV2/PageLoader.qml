@@ -32,7 +32,9 @@ Loader{
     property string propertyBackupReason: ""
     property string propertyBackupMobileNumber: ""
     property int propertyBackupMobileIndicatorIndex: 0
-	property bool propertyBackupFromSignaturePage: false
+    property bool propertyBackupFromSignaturePage: false
+
+    property bool propertyForceFocus: false
 
     ListModel {
         id: backupfilesModel
@@ -56,7 +58,7 @@ Loader{
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: true
+            font.bold: rectPopUp.activeFocus ? true : false
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
@@ -67,14 +69,20 @@ Loader{
 
             Keys.enabled: true
             Keys.onPressed: {
-                  if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
-                  {
-                      generalPopUp.close()
-                  }
+                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
+                {
+                    generalPopUp.close()
+                }
             }
 
             Accessible.role: Accessible.AlertMessage
-            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") + titleText.text + labelText.text
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
+                             + titleText.text + labelText.propertyText.text
+            KeyNavigation.tab: okButton
+            KeyNavigation.down: okButton
+            KeyNavigation.right: okButton
+            KeyNavigation.backtab: okButton
+            KeyNavigation.up: okButton
 
             Item {
                 id: rectLabelText
@@ -104,16 +112,24 @@ Loader{
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 Accessible.role: Accessible.Button
-                Accessible.name: text 
-                Accessible.onPressAction: generalPopUp.close()
+                Accessible.name: text
+                KeyNavigation.tab: rectPopUp
+                KeyNavigation.down: rectPopUp
+                KeyNavigation.right: rectPopUp
+                KeyNavigation.backtab: rectPopUp
+                KeyNavigation.up: rectPopUp
+                highlighted: activeFocus ? true : false
                 onClicked: {
                     generalPopUp.close()
                     mainFormID.propertyPageLoader.forceActiveFocus()
+                }
             }
         }
-    }
+        onClosed: {
+            mainFormID.propertyPageLoader.forceActiveFocus()
+        }
         onOpened: {
-            okButton.forceActiveFocus()
+            rectPopUp.forceActiveFocus()
         }
     }
 

@@ -10,22 +10,23 @@ Item {
     property alias propertyDateText: dateText
     property alias propertyDateField: dateField
     property alias propertyRectField: rectField
-
-    property string text : dateField.length ? dateField.text : qsTranslate("GAPI","STR_EMPTY_FIELD")
+    property string accessibleText: dateText.text
+                                    + (dateField.length
+                                    ? dateField.text
+                                    : qsTranslate("GAPI", "STR_EMPTY_FIELD"))
 
     Text {
         id: dateText
         x: Constants.SIZE_TEXT_FIELD_H_SPACE
-        font.pixelSize: Constants.SIZE_TEXT_LABEL
+        font.pixelSize: parent.activeFocus || parent.parent.activeFocus
+                        ? Constants.SIZE_TEXT_LABEL_FOCUS
+                        : Constants.SIZE_TEXT_LABEL
         font.family: lato.name
-        font.bold: parent.activeFocus ? true : false
+        font.bold: parent.activeFocus
+                   || parent.parent.activeFocus ? true : false
         color: Constants.COLOR_TEXT_LABEL
         height: Constants.SIZE_TEXT_LABEL
     }
-
-    Accessible.role: Accessible.Column
-    Accessible.name: dateText.text + " " + text
-
     DropShadow {
         anchors.fill: rectField
         horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
@@ -50,7 +51,7 @@ Item {
         width: parent.width
         color: "white"
         height: 2 * Constants.SIZE_TEXT_FIELD
-        anchors.top :dateText.bottom
+        anchors.top: dateText.bottom
         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
         TextEdit {
             id: dateField
@@ -62,7 +63,7 @@ Item {
             font.pixelSize: Constants.SIZE_TEXT_FIELD
             font.family: lato.name
             color: Constants.COLOR_TEXT_BODY
-            selectByMouse :true
+            selectByMouse: true
             readOnly: true
         }
     }
