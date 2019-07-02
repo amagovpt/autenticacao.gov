@@ -63,7 +63,7 @@ Rectangle {
 
     Text {
         id: positionText
-        text: "X " + dragSigRect.x + "Y " + dragSigRect.y
+        text: "X " + Math.round(dragTarget.coord_x*100) + "% " + "Y " + Math.round(dragTarget.coord_y*100) + "%"
         visible: false
         Accessible.role: Accessible.StaticText
         Accessible.name: text
@@ -269,7 +269,7 @@ Rectangle {
                 fillMode: Image.PreserveAspectFit
                 anchors.top: dragSigRect.bottom
                 anchors.topMargin: -dragSigMoveImage.height * 0.5
-                anchors.left: dragSigRect.right
+                anchors.left: dragSigRect.left
                 anchors.leftMargin: -dragSigMoveImage.width * 0.5
 
                 visible: dragSigRect.visible
@@ -374,6 +374,7 @@ Rectangle {
         }
         if (pdfPreview.focus === true) {
             positionText.forceActiveFocus()
+            console.log("Signature Preview: " + positionText.text)
         } else {
             pdfPreview.forceActiveFocus()
         }
