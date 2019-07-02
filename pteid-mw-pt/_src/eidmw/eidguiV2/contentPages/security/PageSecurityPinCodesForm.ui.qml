@@ -33,6 +33,8 @@ Item {
     property bool wasOnSignTab:false
     property bool wasOnAddrTab: false
 
+    property alias propertyBar: bar
+
     anchors.fill: parent
     Item {
         width: parent.width * 0.8
