@@ -489,7 +489,7 @@ Load language error. Please reinstall the application"
                     target: mainFormID.propertySubMenuView
                     property: "color"
                     easing.type: Easing.Linear
-                    to: Constants.COLOR_MAIN_MIDDLE_GRAY;
+                    to: Constants.COLOR_MAIN_DARK_GRAY;
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
                 }
                 NumberAnimation

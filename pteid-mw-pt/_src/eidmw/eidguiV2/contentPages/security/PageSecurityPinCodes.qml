@@ -684,8 +684,14 @@ PageSecurityPinCodesForm {
             }
         }
     }
-    protertyStackLayout{
 
+    propertyBar{
+        onCurrentIndexChanged: {
+            protertyStackLayout.currentIndex = propertyBar.currentIndex
+        }
+    }
+
+    protertyStackLayout{
         onCurrentIndexChanged: {
             var triesLeft = 0
             console.log("StackLayout currentIndex = " + protertyStackLayout.currentIndex)
@@ -708,7 +714,7 @@ PageSecurityPinCodesForm {
     Component.onCompleted: {
         propertyBusyIndicator.running = true
         console.log("StackLayout currentIndex = " + protertyStackLayout.currentIndex)
-        
+
         // guarantee that current index is the first element
         protertyStackLayout.currentIndex = 0
 
