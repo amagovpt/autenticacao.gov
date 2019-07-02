@@ -124,8 +124,19 @@ public:
             eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_LOGGING_LEVEL);
             QString logLevel = config.getString();
 
+            bool windowsDebugFile = false;
+            #ifdef WIN32
+            QFile debugFileDesktop(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + "\\pteid-debug.conf");
+
+            QFile debugFileSystem(QString::fromWCharArray(_wgetenv(L"WINDIR")) + "\\pteid-debug.conf");
+
+            if (debugFileDesktop.exists() || debugFileSystem.exists()) {
+                windowsDebugFile = true;
+            }
+            #endif
+
             // Debug mode means the log's log_level is "debug".
-            if ("debug" == logLevel)
+            if ("debug" == logLevel || windowsDebugFile)
             {
                 setDebugMode(true);
             }
@@ -371,6 +382,21 @@ public:
         }
         else {
             config.setString(""); // Default (see MapLevel)
+            #ifdef WIN32
+            QFile debugFileDesktop(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + "\\pteid-debug.conf");
+            if (!debugFileDesktop.remove()) {
+                // TODOp: return false so that the caller can show an error popup message
+                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "setDebugMode: Could not delete desktop debug file at:");
+                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", debugFileDesktop.fileName().toLocal8Bit().data());
+            }
+
+            QFile debugFileSystem(QString::fromWCharArray(_wgetenv(L"WINDIR")) + "\\pteid-debug.conf");
+            if (!debugFileSystem.remove()) {
+                // TODOp: return false so that the caller can show an error popup message
+                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "setDebugMode: Could not delete system debug file at:");
+                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", debugFileSystem.fileName().toLocal8Bit().data());
+            }
+            #endif
         }
     }
 
