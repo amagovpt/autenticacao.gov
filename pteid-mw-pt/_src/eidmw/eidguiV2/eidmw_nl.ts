@@ -805,13 +805,13 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardNotesForm.ui.qml" line="192"/>
-        <location filename="contentPages/card/PageCardNotesForm.ui.qml" line="213"/>
+        <location filename="contentPages/card/PageCardNotesForm.ui.qml" line="215"/>
         <source>STR_NOTES_PAGE_SIZE</source>
         <oldsource>STR_NOTES_SIZE</oldsource>
         <translation>Espaço ocupado no Cartão</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardNotesForm.ui.qml" line="232"/>
+        <location filename="contentPages/card/PageCardNotesForm.ui.qml" line="234"/>
         <source>STR_NOTES_PAGE_SAVE</source>
         <oldsource>STR_NOTES_SAVE</oldsource>
         <translation>Gravar Notas</translation>
@@ -974,74 +974,74 @@
 <context>
     <name>PageDefinitionsApp</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="95"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="83"/>
         <source>STR_CARD_READER_TITLE</source>
         <translation>Leitor de cartões</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="149"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="137"/>
         <source>STR_SELECT_READER</source>
         <translation>Selecione</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="211"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="199"/>
         <source>STR_START_TITLE</source>
         <translation>Início</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="249"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="237"/>
         <source>STR_AUTO_START_OP</source>
         <translation>Iniciar automaticamente</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="284"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="272"/>
         <source>STR_LANGUAGE_TITLE</source>
         <translation>Idioma</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="328"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="316"/>
         <source>STR_PT_NAME_OP</source>
         <translation>Português</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="351"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="339"/>
         <source>STR_UK_NAME_OP</source>
         <translation>English</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="386"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="374"/>
         <source>STR_APP_LOOK_TITLE</source>
         <translation>Aparência</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="425"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="413"/>
         <source>STR_SHOW_ANIME_OP</source>
-        <translation>Activar animações</translation>
+        <translation>Ativar animações</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="462"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="450"/>
         <source>STR_DEBUG_MODE_TITLE</source>
         <translation>Modo diagnóstico</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="516"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="504"/>
         <source>STR_DEBUG_MODE_DESCRIPTION</source>
         <translation>Por favor ligue o modo de diagnóstico se encontrar problemas com a aplicação.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="522"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="510"/>
         <source>STR_DEBUG_MODE_ENABLE</source>
         <translation>Ativar modo diagnóstico</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="560"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="548"/>
         <source>STR_APP_GRAPHICS_TITLE</source>
         <translation>Aceleração gráfica</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="619"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="607"/>
         <source>STR_ACCEL_ENABLE</source>
-        <translation>Activar aceleração gráfica</translation>
+        <translation>Ativar aceleração gráfica</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSignSettingsForm.ui.qml" line="55"/>
@@ -1074,50 +1074,50 @@
         <translation>URL?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="658"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="646"/>
         <source>STR_NETWORK_TITLE</source>
         <translation>Configurações de rede</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="698"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="686"/>
         <source>STR_NETWORK_SYSTEM_PROXY_OP</source>
         <translation>Utilizar proxy de sistema</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="719"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="707"/>
         <source>STR_NETWORK_PROXY_OP</source>
         <translation>Configurar servidor proxy</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="749"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="737"/>
         <source>STR_NETWORK_PROXY_ADDRESS_OP</source>
         <translation>Endereço?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="781"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="769"/>
         <source>STR_NETWORK_PROXY_PORT_OP</source>
         <translation>Porto?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="805"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="793"/>
         <source>STR_NETWORK_AUTH_OP</source>
         <translation>Configurar autenticação no proxy</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="834"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="822"/>
         <source>STR_NETWORK_AUTH_USERNAME_OP</source>
         <translation>Utilizador?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="864"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="852"/>
         <source>STR_NETWORK_AUTH_PASSWORD_OP</source>
         <translation>Palavra-passe?</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="53"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="175"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="163"/>
         <source>STR_USE_PINPAD</source>
-        <translation>Usar funcionalidade de PINPAD</translation>
+        <translation>Ativar funcionalidade de PINPAD</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="256"/>
@@ -1135,7 +1135,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="296"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="202"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="340"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="342"/>
         <source>STR_SCAP_ATTRIBUTES_BUTTON_REMOVE</source>
         <translation>Apagar cache</translation>
     </message>
@@ -1253,26 +1253,38 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="181"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="320"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="322"/>
         <source>STR_BACK_TO_SIGNATURE_PAGE</source>
         <translation>Clique aqui para voltar para a página de assinatura avançada</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="218"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="356"/>
-        <source>STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CC</source>
-        <oldsource>STR_SCAP_ATTRIBUTES_ENTITIES_BUTTON_LOAD</oldsource>
-        <translation>Carregar com&lt;br&gt;Cartão de Cidadão</translation>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="233"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="358"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="373"/>
+        <source>STR_SCAP_BUTTON_LOAD</source>
+        <oldsource>STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CC</oldsource>
+        <translation>Carregar com</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="232"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="370"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="219"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="359"/>
+        <source>STR_SCAP_BUTTON_LOAD_CC</source>
+        <translation>Cartão de Cidadão</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="234"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="374"/>
+        <source>STR_SCAP_BUTTON_LOAD_CMD</source>
+        <translation>Chave Móvel Digital</translation>
+    </message>
+    <message>
         <source>STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CMD</source>
-        <translation>Carregar com&lt;br&gt;Chave Móvel Digital</translation>
+        <translation type="vanished">Carregar com&lt;br&gt;Chave Móvel Digital</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="259"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="298"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="261"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAPForm.ui.qml" line="300"/>
         <source>STR_SCAP_ATTRIBUTES_COMPANY_MSG</source>
         <translation>Lista das entidades para a qual tem atributos empresariais</translation>
     </message>
@@ -2103,12 +2115,12 @@
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="44"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="50"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="56"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="52"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="58"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="64"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="70"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="76"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="82"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="51"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="57"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="63"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="69"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="75"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="81"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="156"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="162"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="168"/>
@@ -2152,7 +2164,7 @@
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="30"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="49"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="28"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="54"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="53"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="158"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="54"/>
         <source>STR_POPUP_NO_CARD_READER</source>
@@ -2167,7 +2179,7 @@
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="34"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="55"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="34"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="60"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="59"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="164"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="60"/>
         <source>STR_POPUP_NO_CARD</source>
@@ -2183,7 +2195,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="81"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="67"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="46"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="72"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="71"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="182"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="72"/>
         <source>STR_POPUP_PIN_CANCELED</source>
@@ -2199,7 +2211,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="87"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="73"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="52"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="78"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="77"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="188"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="84"/>
         <source>STR_POPUP_PIN_TIMEOUT</source>
@@ -2215,7 +2227,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="75"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="61"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="40"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="66"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="65"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="170"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="66"/>
         <source>STR_SOD_VALIDATION_ERROR</source>
@@ -2231,7 +2243,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="93"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="79"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="58"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="84"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="83"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="194"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="90"/>
         <source>STR_POPUP_CARD_ACCESS_ERROR</source>
@@ -2419,31 +2431,31 @@
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="203"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="241"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="161"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="308"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="314"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="320"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="326"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="160"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="307"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="313"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="319"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="325"/>
         <source>STR_POPUP_CARD_PIN_VERIFY</source>
         <translation>Verificação de PIN</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="255"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="680"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="679"/>
         <source>STR_POPUP_CARD_PIN_VERIFY_ADDRESS</source>
         <translation>Verificar o Pin da Morada</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="276"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="682"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="681"/>
         <source>STR_POPUP_CARD_PIN_ADDRESS</source>
         <translation>PIN da Morada</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="291"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="234"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="381"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="396"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="233"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="380"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="395"/>
         <source>STR_POPUP_CARD_PIN_CURRENT</source>
         <translation>PIN Atual?</translation>
     </message>
@@ -2455,120 +2467,120 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="327"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="328"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="581"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="327"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="580"/>
         <source>STR_POPUP_CARD_PIN_WRONG</source>
         <translation>O PIN introduzido está errado</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="329"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="265"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="279"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="293"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="330"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="517"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="531"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="545"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="583"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="753"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="264"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="278"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="292"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="329"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="516"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="530"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="544"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="582"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="752"/>
         <source>STR_POPUP_CARD_REMAIN</source>
         <translation>Restam</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="331"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="267"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="281"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="295"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="332"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="519"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="533"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="547"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="585"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="755"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="266"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="280"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="294"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="331"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="518"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="532"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="546"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="584"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="754"/>
         <source>STR_POPUP_CARD_TRIES</source>
         <translation>tentativas.</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrint.qml" line="243"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="163"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="310"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="162"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="309"/>
         <source>STR_POPUP_CARD_PIN_SUCESS</source>
         <translation>PIN introduzido corretamente</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="259"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="273"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="287"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="316"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="511"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="525"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="539"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="569"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="743"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="258"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="272"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="286"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="315"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="510"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="524"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="538"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="568"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="742"/>
         <source>STR_POPUP_CARD_PIN_BLOCKED</source>
         <translation>PIN bloqueado!</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="415"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="430"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="414"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="429"/>
         <source>STR_POPUP_CARD_PIN_NEW</source>
         <translation>Novo PIN</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="449"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="464"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="448"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="463"/>
         <source>STR_POPUP_CARD_PIN_CONFIRM</source>
         <translation>Confirmar novo PIN</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="175"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="562"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="174"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="561"/>
         <source>STR_PIN_MODIFY_SUCESS</source>
         <translation>Alteração de PIN efectuada com sucesso</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="322"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="575"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="321"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="574"/>
         <source>STR_POPUP_CARD_ACCESS_ERROR</source>
         <translation>Ocorreu um erro ao tentar ler o cartão. Tente novamente por favor.</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="591"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="590"/>
         <source>STR_PIN_NEW_CONFIRM</source>
         <translation>Novo PIN e PIN de confirmação têm de ser iguais</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="607"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="606"/>
         <source>STR_PIN_AUTH_MODIFY</source>
         <translation>Modificar o Pin de Autenticação</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="622"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="621"/>
         <source>STR_POPUP_CARD_PIN_VERIFY_AUTH</source>
         <translation>Verificar o Pin da Autenticação</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="623"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="622"/>
         <source>STR_POPUP_CARD_PIN_AUTH</source>
         <translation>PIN de Autenticação</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="636"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="635"/>
         <source>STR_PIN_SIGN_MODIFY</source>
         <translation>Modificar o Pin da Assinatura</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="651"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="650"/>
         <source>STR_POPUP_CARD_PIN_VERIFY_SIGN</source>
         <translation>Verificar o Pin da Assinatura</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="652"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="651"/>
         <source>STR_POPUP_CARD_PIN_SIGN</source>
         <translation>PIN da Assinatura</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="664"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="663"/>
         <source>STR_PIN_ADDRESS_MODIFY</source>
         <translation>Modificar o Pin da Morada</translation>
     </message>
@@ -2600,11 +2612,11 @@
         <translation>Testar PIN</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="173"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="560"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="567"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="573"/>
-        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="579"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="172"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="559"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="566"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="572"/>
+        <location filename="contentPages/security/PageSecurityPinCodes.qml" line="578"/>
         <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="245"/>
         <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="354"/>
         <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="462"/>

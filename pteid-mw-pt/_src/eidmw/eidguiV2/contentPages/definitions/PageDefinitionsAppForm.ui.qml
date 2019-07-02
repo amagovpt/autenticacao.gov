@@ -61,27 +61,15 @@ Item {
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             anchors.bottom: parent.bottom
         }
-        /* This column was added because the rowMain component was cliping the left border of the rectangles.
-           So we increased the width of the rowMain by SIZE_ROW_H_SPACE and filled the gap with the column. */
-        Item { 
-            id: column
-            anchors.top: parent.top
-            width: Constants.SIZE_ROW_H_SPACE
-            height: rowMain.height
-            anchors.left: parent.left
-        }
         Item{
             id: content
             anchors.top: parent.top
-            anchors.left: column.right
             width: rowMain.parent.width - Constants.SIZE_ROW_H_SPACE
-
+            x: Constants.SIZE_ROW_H_SPACE
             Item{
                 id: rectReader
                 width: parent.width
                 height: textReader.height + rectReaderCombo.height + 3*Constants.SIZE_TEXT_V_SPACE
-                anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-
                 Text {
                     id: textReader
                     x: Constants.SIZE_TEXT_FIELD_H_SPACE

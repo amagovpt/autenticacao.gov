@@ -869,6 +869,7 @@ Load language error. Please reinstall the application"
                         // Move to PageLoader or Main Menu
                         if(mainFormID.propertyPageLoader.source != ""){
                             mainFormID.propertyMainMenuBottomListView.currentIndex = -1
+                            var temp = mainFormID.propertyPageLoader.source
                             var url = "contentPages/home/PageHome.qml"
                             mainFormID.propertyPageLoader.source = ""
                             mainFormID.propertyPageLoader.source = url

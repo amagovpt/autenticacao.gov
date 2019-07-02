@@ -215,7 +215,8 @@ Item {
                     }
                     Button {
                         id: buttonLoadEntityAttributes
-                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CC")
+                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_BUTTON_LOAD") + "\n" +
+                              qsTranslate("PageDefinitionsSCAP","STR_SCAP_BUTTON_LOAD_CC")
                         width: Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -229,7 +230,8 @@ Item {
                     }
                     Button {
                         id: buttonLoadEntityAttributesOAuth
-                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CMD")
+                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_BUTTON_LOAD") + "\n" +
+                              qsTranslate("PageDefinitionsSCAP","STR_SCAP_BUTTON_LOAD_CMD")
                         width: Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -353,7 +355,8 @@ Item {
                     }
                     Button {
                         id: buttonLoadCompanyAttributes
-                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CC")
+                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_BUTTON_LOAD") + "\n" +
+                              qsTranslate("PageDefinitionsSCAP","STR_SCAP_BUTTON_LOAD_CC")
                         width: Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -367,7 +370,8 @@ Item {
                     }
                     Button {
                         id: buttonLoadCompanyAttributesOAuth
-                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_LOAD_CMD")
+                        text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_BUTTON_LOAD") + "\n" +
+                              qsTranslate("PageDefinitionsSCAP","STR_SCAP_BUTTON_LOAD_CMD")
                         width: Constants.WIDTH_BUTTON
                         height: parent.height
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
