@@ -78,6 +78,7 @@ PageCardOtherDataForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             propertyTextBoxNIF.propertyDateField.text = ""
             propertyTextBoxNISS.propertyDateField.text = ""
@@ -97,6 +98,7 @@ PageCardOtherDataForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
                 propertyTextBoxNIF.propertyDateField.text = ""
                 propertyTextBoxNISS.propertyDateField.text = ""
                 propertyTextBoxNSNS.propertyDateField.text = ""
@@ -120,6 +122,7 @@ PageCardOtherDataForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
             }
 
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;

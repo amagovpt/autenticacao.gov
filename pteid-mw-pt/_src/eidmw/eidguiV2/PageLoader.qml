@@ -14,6 +14,7 @@ Loader{
     property alias propertyRectPopUp: rectPopUp
     property alias propertyGeneralTitleText: titleText
     property alias propertyGeneralPopUpLabelText: labelText.propertyText
+    property bool propertyGeneralPopUpRetSubMenu: false // By default return to the Page Loader
 
     // Backup data about unfinished advance signature
     property alias propertyBackupfilesModel: backupfilesModel
@@ -121,12 +122,11 @@ Loader{
                 highlighted: activeFocus ? true : false
                 onClicked: {
                     generalPopUp.close()
-                    mainFormID.propertyPageLoader.forceActiveFocus()
                 }
             }
         }
         onClosed: {
-            mainFormID.propertyPageLoader.forceActiveFocus()
+            setReturnFocus(propertyGeneralPopUpRetSubMenu)
         }
         onOpened: {
             rectPopUp.forceActiveFocus()
@@ -136,5 +136,13 @@ Loader{
     anchors{
         horizontalCenter: parent.horizontalCenter
         verticalCenter: parent.verticalCenter
+    }
+    function setReturnFocus(retvalue){
+        propertyGeneralPopUpRetSubMenu = false;
+        if(retvalue === false){
+            mainFormID.propertyPageLoader.forceActiveFocus()
+        } else {
+            mainFormID.propertySubMenuListView.forceActiveFocus()
+        }
     }
 }

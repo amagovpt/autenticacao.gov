@@ -153,8 +153,6 @@ PageCardPrintForm {
             propertySwitchPrintDate.enabled = true
             propertySwitchPdfSign.enabled = true
 
-            propertySwitchBasic.forceActiveFocus()
-
             mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                         propertyTitleSelectData.forceActiveFocus()
@@ -203,6 +201,7 @@ PageCardPrintForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             
             propertyBusyIndicator.running = false
@@ -214,6 +213,7 @@ PageCardPrintForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
                 disableComponents()
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
@@ -229,6 +229,7 @@ PageCardPrintForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
                 disableComponents()
 
             }
