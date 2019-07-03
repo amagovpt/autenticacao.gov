@@ -113,6 +113,7 @@ PageCardAdressForm {
             }
             propertyButtonConfirmOfAddress.enabled = false
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             
             propertyDistrict.propertyDateField.text = ""
@@ -144,6 +145,7 @@ PageCardAdressForm {
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
                 mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                 propertyDistrict.propertyDateField.text = ""
                 propertyMunicipality.propertyDateField.text = ""
@@ -177,6 +179,7 @@ PageCardAdressForm {
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
                 mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             }
         }

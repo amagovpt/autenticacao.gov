@@ -39,6 +39,9 @@ PageDefinitionsSignatureForm {
             propertySigWaterImg.source = propertySigWaterImgCustom.source = "qrc:/images/pteid_signature_watermark.jpg"
 
             propertyBusyIndicator.running = false
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
+            if(mainFormID.propertyPageLoader.propertyForceFocus)
+                        propertyRadioButtonDefault.forceActiveFocus()
         }
         onSignalCardAccessError: {
             console.log("Definitions Signature --> onSignalCardAccessError")
@@ -79,6 +82,7 @@ PageDefinitionsSignatureForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR") + controler.autoTr
             }
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
 
             propertySigReasonText.text = propertySigReasonTextCustom.text = "{" + qsTr("STR_CUSTOM_SIGN_REASON") + "}"
@@ -98,6 +102,7 @@ PageDefinitionsSignatureForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
                 propertySigReasonText.text = "{" + qsTr("STR_CUSTOM_SIGN_REASON") + "}"
                 propertySigSignedByText.text = qsTr("STR_CUSTOM_SIGN_BY") + ": "
                 propertySigSignedByNameText.text = ""
@@ -119,6 +124,7 @@ PageDefinitionsSignatureForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
             }
 
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
