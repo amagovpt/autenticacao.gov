@@ -422,9 +422,9 @@ Item {
                             opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                             Accessible.role: Accessible.RadioButton
                             Accessible.name: text
-                            KeyNavigation.tab: textFieldReason.enabled ? textFieldReason : buttonAdd
-                            KeyNavigation.down: textFieldReason.enabled ? textFieldReason : buttonAdd
-                            KeyNavigation.right: textFieldReason.enabled ? textFieldReason : buttonAdd
+                            KeyNavigation.tab: textFieldReason
+                            KeyNavigation.down: textFieldReason
+                            KeyNavigation.right: textFieldReason
                             KeyNavigation.backtab: radioButtonPADES
                             KeyNavigation.up: radioButtonPADES
                             contentItem: Text {
@@ -526,9 +526,9 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         z: 1
-                        KeyNavigation.tab: pdfPreviewArea
-                        KeyNavigation.down:pdfPreviewArea
-                        KeyNavigation.right: pdfPreviewArea
+                        KeyNavigation.tab: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
+                        KeyNavigation.down: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
+                        KeyNavigation.right: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
                         KeyNavigation.backtab: switchSignTemp
                         KeyNavigation.up: switchSignTemp
                     }
@@ -558,9 +558,9 @@ Item {
                             font.bold: activeFocus
                             visible: false
                             x: 54
-                            KeyNavigation.tab: usageDescription
-                            KeyNavigation.down:usageDescription
-                            KeyNavigation.right: usageDescription
+                            KeyNavigation.tab: listViewEntities
+                            KeyNavigation.down:listViewEntities
+                            KeyNavigation.right: listViewEntities
                             KeyNavigation.backtab: switchSignAdd
                             KeyNavigation.up: switchSignAdd
                         }
@@ -582,6 +582,11 @@ Item {
                                 visible: true
                                 width: Constants.SIZE_TEXT_FIELD_H_SPACE
                             }
+                            KeyNavigation.tab: pdfPreviewArea
+                            KeyNavigation.down:pdfPreviewArea
+                            KeyNavigation.right: pdfPreviewArea
+                            KeyNavigation.backtab: textAttributesMsg
+                            KeyNavigation.up: textAttributesMsg
                         }
                     }
 //                    Row {
@@ -728,18 +733,6 @@ Item {
                     font.family: lato.name
                     z: 1
                 }
-                Text {
-                    id: usageDescription
-                    text: qsTranslate("PageServicesSign", "STR_SIGN_NAV_DESCRIPTION")
-                    visible: false
-                    Accessible.role: Accessible.StaticText
-                    Accessible.name: text
-                    KeyNavigation.tab: pdfPreviewArea
-                    KeyNavigation.down: pdfPreviewArea
-                    KeyNavigation.right: pdfPreviewArea
-                    KeyNavigation.backtab: textAttributesMsg
-                    KeyNavigation.up: textAttributesMsg
-                }
                 Components.PDFPreview {
                     id: pdfPreviewArea
                     width: parent.width
@@ -749,8 +742,8 @@ Item {
                     KeyNavigation.tab: textSpinBox
                     KeyNavigation.down: textSpinBox
                     KeyNavigation.right: textSpinBox
-                    KeyNavigation.backtab: usageDescription
-                    KeyNavigation.up: usageDescription
+                    KeyNavigation.backtab: switchSignAdd
+                    KeyNavigation.up: switchSignAdd
                 }
             }
 

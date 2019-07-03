@@ -109,7 +109,7 @@ Rectangle {
                 x: dragSigRect.x - Constants.FOCUS_BORDER
                 y: dragSigRect.y - Constants.FOCUS_BORDER
                 border.width: Constants.FOCUS_BORDER
-                border.color: pdfPreview.focus || positionText.focus? Constants.COLOR_MAIN_DARK_GRAY
+                border.color: pdfPreview.activeFocus || positionText.activeFocus ? Constants.COLOR_MAIN_DARK_GRAY
                              : Constants.COLOR_GREY_BUTTON_BACKGROUND
                 opacity: 0.7
                 visible: width >= Constants.FOCUS_BORDER ? true : false

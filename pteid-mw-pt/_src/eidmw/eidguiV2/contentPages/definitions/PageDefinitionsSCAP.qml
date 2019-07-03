@@ -15,18 +15,18 @@ PageDefinitionsSCAPForm {
     property bool isTabSelected: true
 
     Keys.onRightPressed: {
-        if(propertyTextSignaturePageLinkEntities.activeFocus
-                || propertyTextSignaturePageLinkCompanies.activeFocus)
+        if(propertylinkScapEntities.activeFocus
+                || propertylinkScapCompanies.activeFocus)
             returnToAdvancedSignaturePage()
     }
     Keys.onSpacePressed: {
-        if(propertyTextSignaturePageLinkEntities.activeFocus
-                || propertyTextSignaturePageLinkCompanies.activeFocus)
+        if(propertylinkScapEntities.activeFocus
+                || propertylinkScapCompanies.activeFocus)
             returnToAdvancedSignaturePage()
     }
     Keys.onReturnPressed: {
-        if(propertyTextSignaturePageLinkEntities.activeFocus
-                || propertyTextSignaturePageLinkCompanies.activeFocus)
+        if(propertylinkScapEntities.activeFocus
+                || propertylinkScapCompanies.activeFocus)
             returnToAdvancedSignaturePage()
     }
 
@@ -489,8 +489,8 @@ PageDefinitionsSCAPForm {
             Keys.onTabPressed: {
                 checkboxSel.focus = true
                 if(propertyListViewEntities.currentIndex == propertyListViewEntities.count -1){
-                    propertyTextSignaturePageLinkEntities.visible
-                        ? propertyTextSignaturePageLinkEntities.forceActiveFocus()
+                    propertylinkScapEntities.visible
+                        ? propertylinkScapEntities.forceActiveFocus()
                         : propertyButtonRemoveEntityAttributes.forceActiveFocus()
                 }else{
                     propertyListViewEntities.currentIndex++
@@ -546,6 +546,11 @@ PageDefinitionsSCAPForm {
             }
         }
     }
+    propertyListViewCompanies{
+        onFocusChanged: {
+            if(propertyListViewCompanies.focus)propertyListViewCompanies.currentIndex = 0
+        }
+    }
     Component {
         id: attributeListDelegateCompanies
         Rectangle {
@@ -555,9 +560,8 @@ PageDefinitionsSCAPForm {
             height: columnItem.height + 10
             Keys.onTabPressed: {
                 if(propertyListViewCompanies.currentIndex == propertyListViewCompanies.count -1){
-                    propertyListViewCompanies.currentIndex = 0
-                    propertyTextSignaturePageLinkCompanies.visible
-                        ? propertyTextSignaturePageLinkCompanies.forceActiveFocus()
+                    propertylinkScapCompanies.visible == true
+                        ? propertylinkScapCompanies.forceActiveFocus()
                         : propertyButtonRemoveCompanyAttributes.forceActiveFocus()
                 }else{
                     propertyListViewCompanies.currentIndex++
@@ -752,16 +756,16 @@ PageDefinitionsSCAPForm {
         }
     }
 
-    propertyMouseAreaTextSignaturePageLinkEntities {
+    propertyMouseArealinkScapEntities {
         onClicked: {
-            console.log("propertyMouseAreaTextSignaturePageLinkEntities clicked!")
+            console.log("propertyMouseArealinkScapEntities clicked!")
             returnToAdvancedSignaturePage()
         }
     }
 
-    propertyMouseAreaTextSignaturePageLinkCompanies {
+    propertyMouseArealinkScapCompanies {
         onClicked: {
-            console.log("propertyMouseAreaTextSignaturePageLinkCompanies clicked!")
+            console.log("propertyMouseArealinkScapCompanies clicked!")
             returnToAdvancedSignaturePage()
         }
     }

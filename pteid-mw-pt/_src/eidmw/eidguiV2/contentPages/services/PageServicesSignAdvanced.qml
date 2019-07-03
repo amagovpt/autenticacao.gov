@@ -834,6 +834,7 @@ PageServicesSignAdvancedForm {
                 propertyTextAttributesMsg.visible = false
                 propertyMouseAreaTextAttributesMsg.enabled = false
                 propertyMouseAreaTextAttributesMsg.z = 0
+                propertyPDFPreview.forceActiveFocus()
             }
         }
     }
