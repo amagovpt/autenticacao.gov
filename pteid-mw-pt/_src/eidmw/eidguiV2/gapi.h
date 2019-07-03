@@ -252,6 +252,7 @@ public slots:
     signed int returnReaderSelected(void) {return selectedReaderIndex; }
     void setAddressLoaded(bool addressLoaded) {m_addressLoaded = addressLoaded; }
     void startCardReading();
+    void startSavingCardPhoto(QString outputFile);
     int getStringByteLength(QString text);
     void startReadingPersoNotes();
     void startWritingPersoNotes(QString text);
@@ -374,6 +375,7 @@ signals:
     void signalAddressLoaded(bool m_foreign);
     void signalCardAccessError(int error_code);
     void signalGenericError(const QString error_code);
+    void signalSaveCardPhotoFinished(bool success);
     void signalPersoDataLoaded(const QString& persoNotes);
     void signalAddressLoadedChanged();
     void signalPdfSignSucess(int error_code);
@@ -440,6 +442,7 @@ private:
     void doSignSCAP(SCAPSignParams params);
     void getPersoDataFile();
     void setPersoDataFile(QString text);
+    void doSaveCardPhoto(QString outputFile);
     void getAddressFile();
     void doSignPDF(SignParams &params);
     bool doSignPrintPDF(QString &file_to_sign, QString &outputsign);
