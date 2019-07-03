@@ -251,6 +251,20 @@ void GAPI::getAddressFile() {
     END_TRY_CATCH
 }
 
+void GAPI::doSaveCardPhoto(QString outputFile) {
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
+
+    PTEID_ByteArray& photo = card->getID().getPhotoObj().getphoto();
+
+    QImage image_photo;
+    image_photo.loadFromData(photo.GetBytes(), photo.Size(), "PNG");
+
+    bool success = image_photo.save(outputFile);
+    emit signalSaveCardPhotoFinished(success);
+}
+
 void GAPI::getPersoDataFile() {
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getPersoDataFile");
@@ -1924,6 +1938,10 @@ void GAPI::startCardReading() {
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "StartCardReading connectToCard");
     QFuture<void> future = QtConcurrent::run(this, &GAPI::connectToCard);
 
+}
+
+void GAPI::startSavingCardPhoto(QString outputFile) {
+    QFuture<void> future = QtConcurrent::run(this, &GAPI::doSaveCardPhoto, outputFile);
 }
 
 void GAPI::startWritingPersoNotes(QString text) {

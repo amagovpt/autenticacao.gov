@@ -1,6 +1,7 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
 import QtGraphicalEffects 1.0
+import eidguiV2 1.0
 
 import "../../scripts/Constants.js" as Constants
 import "../../components" as Components
@@ -25,6 +26,8 @@ Item {
     property alias propertyTextBoxParentsMother: textBoxParentsMother
     property alias propertyTextBoxNotes: textBoxNotes
     property alias propertyPhoto: photoImage
+    property alias propertySavePhotoButton: savePhotoButton
+    property alias propertySavePhotoDialogOutput: savePhotoDialogOutput
 
     Item {
         id: rowTop
@@ -152,6 +155,35 @@ Item {
                     KeyNavigation.right: rectSex
                     KeyNavigation.backtab: surNameTextTextForm
                     KeyNavigation.up: surNameTextTextForm
+
+                    Button {
+                        id: savePhotoButton
+                        width: photoImage.width * 0.25
+                        height: photoImage.height * 0.18
+                        anchors.right: photoImage.right
+                        anchors.rightMargin: photoImage.width * 0.05
+                        anchors.bottomMargin: photoImage.height * 0.04
+                        anchors.bottom: photoImage.bottom
+                        enabled: false
+                        background: Rectangle {
+                            anchors.fill: parent
+                            color: parent.down ? Constants.COLOR_MAIN_BLUE : (parent.hovered ? "grey" : Constants.COLOR_GREY_BUTTON_BACKGROUND)
+                            opacity: parent.enabled ? 0.9 : 0.5
+                            radius: parent.height * 0.1
+                            border.color: "black"
+                            border.width: 1
+                            Image {
+                                source: "../../images/save.png"
+                                anchors.fill: parent
+                            }
+                        }
+                    }
+                    FileSaveDialog {
+                        id: savePhotoDialogOutput
+                        title: qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
+                        filename: "FotoDoCidadao"
+                        nameFilters: ["PNG (*.png)","JPEG (*.jpg,*.jpeg,*.jpe,*.jfif)"]
+                    }
                 }
             }
         }
