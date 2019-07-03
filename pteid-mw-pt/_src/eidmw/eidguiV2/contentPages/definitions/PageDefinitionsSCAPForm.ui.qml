@@ -22,10 +22,10 @@ Item {
     property alias propertyListViewCompanies: listViewCompanies
     property alias propertyCompaniesListViewScroll: companiesListViewScroll
     property alias propertyEntitiesListViewScroll: entitiesListViewScroll
-    property alias propertyMouseAreaTextSignaturePageLinkCompanies: mouseAreaTextSignaturePageLinkCompanies
-    property alias propertyMouseAreaTextSignaturePageLinkEntities: mouseAreaTextSignaturePageLinkEntities
-    property alias propertyTextSignaturePageLinkEntities: textSignaturePageLinkEntities
-    property alias propertyTextSignaturePageLinkCompanies: textSignaturePageLinkCompanies
+    property alias propertyMouseArealinkScapCompanies: mouseArealinkScapCompanies
+    property alias propertyMouseArealinkScapEntities: mouseArealinkScapEntities
+    property alias propertylinkScapEntities: linkScapEntities
+    property alias propertylinkScapCompanies: linkScapCompanies
 
     property alias propertyTabButtonEntities: tabButtonEntities
     property alias propertyEntitiesText: entitiesText
@@ -127,7 +127,7 @@ Item {
                         Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         KeyNavigation.tab: listViewEntities.count
-                                           > 0 ? listViewEntities : textSignaturePageLinkEntities
+                                           > 0 ? listViewEntities : linkScapEntities
                     }
                 }
                 Item {
@@ -148,6 +148,8 @@ Item {
                         focus: false
                         spacing: 10
                         boundsBehavior: Flickable.StopAtBounds
+                        highlightMoveDuration: 1000
+                        highlightMoveVelocity: 1000
 
                         ScrollBar.vertical: ScrollBar {
                             id: entitiesListViewScroll
@@ -159,7 +161,7 @@ Item {
                         Accessible.name: qsTranslate(
                                              "PageDefinitionsSCAP",
                                              "STR_SCAP_ATTRIBUTES_ENTITIES_MSG")
-                        KeyNavigation.tab: textSignaturePageLinkEntities
+                        KeyNavigation.tab: linkScapEntities
                     }
                 }
 
@@ -171,13 +173,13 @@ Item {
                     anchors.margins: (propertyPageLoader.propertyBackupFromSignaturePage ? Constants.SIZE_ROW_V_SPACE : 0)
                     visible: propertyPageLoader.propertyBackupFromSignaturePage
                     MouseArea {
-                        id: mouseAreaTextSignaturePageLinkEntities
+                        id: mouseArealinkScapEntities
                         anchors.fill: parent
                         enabled: propertyPageLoader.propertyBackupFromSignaturePage
                         hoverEnabled: true
                     }
                     Text {
-                        id: textSignaturePageLinkEntities
+                        id: linkScapEntities
                         text: qsTranslate("PageDefinitionsSCAP",
                                           "STR_BACK_TO_SIGNATURE_PAGE")
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -185,7 +187,7 @@ Item {
                         font.capitalization: Font.MixedCase
                         color: Constants.COLOR_MAIN_BLUE
                         visible: propertyPageLoader.propertyBackupFromSignaturePage
-                        font.underline: mouseAreaTextSignaturePageLinkEntities.containsMouse
+                        font.underline: mouseArealinkScapEntities.containsMouse
                         font.bold: activeFocus
                         KeyNavigation.tab: buttonRemoveEntityAttributes
                     }
@@ -268,7 +270,7 @@ Item {
                         Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         KeyNavigation.tab: listViewCompanies.count
-                                           > 0 ? listViewCompanies : textSignaturePageLinkCompanies
+                                           > 0 ? listViewCompanies : linkScapCompanies
                     }
                 }
                 Item {
@@ -289,6 +291,8 @@ Item {
                         focus: true
                         spacing: 10
                         boundsBehavior: Flickable.StopAtBounds
+                        highlightMoveDuration: 1000
+                        highlightMoveVelocity: 1000
 
                         ScrollBar.vertical: ScrollBar {
                             id: companiesListViewScroll
@@ -300,7 +304,7 @@ Item {
                         Accessible.name: qsTranslate(
                                              "PageDefinitionsSCAP",
                                              "STR_SCAP_ATTRIBUTES_COMPANY_MSG")
-                        KeyNavigation.tab: textSignaturePageLinkCompanies
+                        KeyNavigation.tab: linkScapCompanies
                     }
                 }
 
@@ -312,19 +316,19 @@ Item {
                     anchors.margins: (propertyPageLoader.propertyBackupFromSignaturePage ? Constants.SIZE_ROW_V_SPACE : 0)
                     visible: propertyPageLoader.propertyBackupFromSignaturePage
                     MouseArea {
-                        id: mouseAreaTextSignaturePageLinkCompanies
+                        id: mouseArealinkScapCompanies
                         anchors.fill: parent
                         enabled: propertyPageLoader.propertyBackupFromSignaturePage
                         hoverEnabled: true
                     }
                     Text {
-                        id: textSignaturePageLinkCompanies
+                        id: linkScapCompanies
                         text: qsTranslate("PageDefinitionsSCAP",
                                           "STR_BACK_TO_SIGNATURE_PAGE")
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
-                        font.underline: mouseAreaTextSignaturePageLinkCompanies.containsMouse
+                        font.underline: mouseArealinkScapCompanies.containsMouse
                         font.bold: activeFocus
                         color: Constants.COLOR_MAIN_BLUE
                         visible: propertyPageLoader.propertyBackupFromSignaturePage
