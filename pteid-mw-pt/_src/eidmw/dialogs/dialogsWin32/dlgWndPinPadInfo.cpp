@@ -44,6 +44,10 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 
 	std::wstring tmpTitle = L"";
 
+	// Added for accessibility
+	m_szHeader = _wcsdup(PinName.c_str());
+	tmpTitle += m_szHeader;
+
 	switch (operation)
 	{
 		case DLG_PIN_OP_VERIFY:
@@ -60,7 +64,8 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 			break;
 	}
 
-	m_szHeader = _wcsdup( PinName.c_str() );
+	tmpTitle += m_szMessage;
+	tmpTitle += GETSTRING_DLG(PinpadCanBeDisabled);
 	
 	if (CreateWnd(tmpTitle.c_str(), 420, 280, IDI_APPICON, Parent))
 	{

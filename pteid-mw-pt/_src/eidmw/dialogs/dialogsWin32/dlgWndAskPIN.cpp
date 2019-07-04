@@ -56,6 +56,10 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 
 	szHeader = Header.c_str();
 	szPIN = PINName.c_str();
+	
+	// Added for accessibility
+	tmpTitle += szHeader;
+	tmpTitle += szPIN;
 
 	int window_height = 280;
 	int window_width = 420;

@@ -89,6 +89,10 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 	int window_height = 280;
 	int window_width = 420;
 
+	// Added for accessibility
+	tmpTitle += szHeader;
+	tmpTitle += szBody;
+
 	if (CreateWnd(tmpTitle.c_str(), window_width, window_height, IDI_APPICON, Parent))
 	{
 		RECT clientRect;

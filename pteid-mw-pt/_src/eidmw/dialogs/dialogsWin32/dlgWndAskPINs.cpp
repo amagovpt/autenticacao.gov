@@ -67,7 +67,11 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 
 
 	szHeader = const_cast<wchar_t *>(Header.c_str());
-	szPIN = PINName.c_str();
+	// Added for accessibility
+	tmpTitle += szHeader;
+	tmpTitle += isUnlock ? GETSTRING_DLG(Puk) : GETSTRING_DLG(CurrentPin);
+	tmpTitle += GETSTRING_DLG(NewPin);
+	tmpTitle += GETSTRING_DLG(ConfirmNewPin);
 
 	int Height = 263;
 
