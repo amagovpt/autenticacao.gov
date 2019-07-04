@@ -124,19 +124,8 @@ public:
             eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_LOGGING_LEVEL);
             QString logLevel = config.getString();
 
-            bool windowsDebugFile = false;
-            #ifdef WIN32
-            QFile debugFileDesktop(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + "\\pteid-debug.conf");
-
-            QFile debugFileSystem(QString::fromWCharArray(_wgetenv(L"WINDIR")) + "\\pteid-debug.conf");
-
-            if (debugFileDesktop.exists() || debugFileSystem.exists()) {
-                windowsDebugFile = true;
-            }
-            #endif
-
             // Debug mode means the log's log_level is "debug".
-            if ("debug" == logLevel || windowsDebugFile)
+            if ("debug" == logLevel)
             {
                 setDebugMode(true);
             }

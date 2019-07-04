@@ -220,6 +220,7 @@ void CLogger::initFromConfig()
 	if (isWindowsDebugActive())
 	{
 		maxLevel = LOG_LEVEL_DEBUG;
+        config.SetString(CConfig::USER, CConfig::EIDMW_CONFIG_PARAM_LOGGING_LEVEL, L"debug");
 	}
 #endif	
 	long lGroup = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_LOGGING_GROUP);
