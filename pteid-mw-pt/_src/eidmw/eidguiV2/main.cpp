@@ -19,6 +19,8 @@ int main(int argc, char *argv[])
 
 	SingleApplication app(argc, argv);
 
+    PTEID_InitSDK();
+
 	// GUISettings init
 	GUISettings settings;
 	// AppController init
@@ -40,7 +42,6 @@ int main(int argc, char *argv[])
 
 	QQmlApplicationEngine engine;
 
-    PTEID_InitSDK();
     PTEID_Config sam_server(PTEID_PARAM_GENERAL_SAM_SERVER);
 
     if (argc == 2 && strcmp(argv[1], "-test") == 0)
