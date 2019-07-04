@@ -167,13 +167,14 @@ Item {
                         enabled: false
                         background: Rectangle {
                             anchors.fill: parent
-                            color: parent.down ? Constants.COLOR_MAIN_BLUE : (parent.hovered ? "grey" : Constants.COLOR_GREY_BUTTON_BACKGROUND)
-                            opacity: parent.enabled ? 0.9 : 0.5
+                            color: parent.hovered ? Constants.COLOR_MAIN_BLUE : "white"
+                            opacity: parent.enabled ? (parent.hovered ? 1 : 0.8) : 0.5
                             radius: parent.height * 0.1
-                            border.color: "black"
+                            border.color: parent.hovered ? Constants.COLOR_MAIN_MIDDLE_GRAY : Constants.COLOR_MAIN_BLUE
                             border.width: 1
                             Image {
-                                source: "../../images/save.png"
+                                source: savePhotoButton.hovered ? "../../images/download_icon_white.png" :  "../../images/download_icon_blue.png"
+                                anchors.margins: savePhotoButton.width * 0.15
                                 anchors.fill: parent
                             }
                         }
