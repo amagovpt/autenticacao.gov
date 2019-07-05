@@ -96,16 +96,15 @@ PageDefinitionsAppForm {
 
     propertyCheckBoxDebugMode {
         onCheckedChanged: {
-            if (propertyCheckBoxDebugMode.checked) {
-                controler.setDebugModeValue(true)
-            }
-            else {
-                controler.setDebugModeValue(false)
-            }
+            var debugFilename = controler.setDebugModeValue(propertyCheckBoxDebugMode.checked)
 
             if (propertyCheckBoxDebugMode.enabled) {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTranslate("Popup Card","STR_POPUP_DEBUG_MODE") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card","STR_POPUP_RESTART_APP") + controler.autoTr
+                if (debugFilename === "") {
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
+                } else {
+                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card", "STR_POPUP_WIN_DEBUG_FILE_ERROR").arg(debugFilename) + controler.autoTr
+                }
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                 mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             }
