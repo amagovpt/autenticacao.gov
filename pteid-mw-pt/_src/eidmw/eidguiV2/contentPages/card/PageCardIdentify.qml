@@ -169,15 +169,6 @@ PageCardIdentifyForm {
         }
     }
 
-    propertySavePhotoDialogOutput {
-        onAccepted: {
-            outputFile = propertySavePhotoDialogOutput.fileUrl.toString()
-            console.log("Saving photo to: " + outputFile)
-            
-            var file = decodeURIComponent(Functions.stripFilePrefix(outputFile))
-            gapi.startSavingCardPhoto(file)
-        }
-    }
      Dialog {
         id: createsuccess_dialog
         width: 400
@@ -266,9 +257,59 @@ PageCardIdentifyForm {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
     }
+
+    propertySavePhotoDialogOutput {
+        onAccepted: {
+            outputFile = propertySavePhotoDialogOutput.fileUrl.toString()
+            console.log("Saving photo to: " + outputFile)
+            
+            var file = decodeURIComponent(Functions.stripFilePrefix(outputFile))
+            gapi.startSavingCardPhoto(file)
+        }
+    }
+    
+
+    PropertyAnimation {
+        id: expandAnimation
+        target: propertyExportRect
+        properties: "y"
+        to: 0
+        duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+    }
+    PropertyAnimation {
+        id: collapseAnimation
+        target: propertyExportRect
+        properties: "y"
+        to: propertyExportRect.parent.height
+        duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+    }
+
     propertySavePhotoButton {
         onClicked: {
-            propertySavePhotoDialogOutput.open()
+            propertySavePhotoButton.visible = false
+            expandAnimation.start()
+        }
+    }
+    propertyCancelExportMouseArea {
+        onClicked: {
+            propertySavePhotoButton.visible = true
+            collapseAnimation.start()
+        }
+    }
+
+    propertyPngButton {
+        onClicked: {
+            propertySavePhotoDialogOutput.filename = "FotoDoCidadao.png"
+            propertySavePhotoDialogOutput.nameFilters = ["PNG (*.png)"]
+            propertySavePhotoDialogOutput.open();
+        }
+    }
+
+    propertyJpegButton {
+        onClicked: {
+            propertySavePhotoDialogOutput.filename = "FotoDoCidadao.jpg"
+            propertySavePhotoDialogOutput.nameFilters = ["JPEG (*.jpg *.jpeg *.jpe *.jfif)"]
+            propertySavePhotoDialogOutput.open();
         }
     }
 
