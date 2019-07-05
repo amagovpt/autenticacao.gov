@@ -530,6 +530,8 @@ Item {
                 highlighted: activeFocus ? true : false
                 enabled: false
                 focus: true
+                Accessible.role: Accessible.Button
+                Accessible.name: text
                 KeyNavigation.tab: rectNacionalDistrict
                 KeyNavigation.down: rectNacionalDistrict
                 KeyNavigation.right: rectNacionalDistrict
