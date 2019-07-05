@@ -13,7 +13,13 @@ PageCardIdentifyForm {
 
     Keys.onPressed: {
         console.log("PageCardIdentifyForm onPressed:" + event.key)
-        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+        if(propertyCancelExport.focus){
+            propertySavePhotoButton.visible = true
+            collapseAnimation.start()
+            propertyPhoto.forceActiveFocus()
+        } else {
+            Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+        }
     }
 
     Connections {
@@ -267,7 +273,6 @@ PageCardIdentifyForm {
             gapi.startSavingCardPhoto(file)
         }
     }
-    
 
     PropertyAnimation {
         id: expandAnimation
@@ -280,7 +285,7 @@ PageCardIdentifyForm {
         id: collapseAnimation
         target: propertyExportRect
         properties: "y"
-        to: propertyExportRect.parent.height
+        to: propertyExportRect.parent.height + Constants.FOCUS_BORDER
         duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
     }
 
@@ -288,6 +293,7 @@ PageCardIdentifyForm {
         onClicked: {
             propertySavePhotoButton.visible = false
             expandAnimation.start()
+            propertyPngButton.forceActiveFocus()
         }
     }
     propertyCancelExportMouseArea {

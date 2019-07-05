@@ -90,5 +90,7 @@
         <file>contentPages/services/PageServicesSignHelpForm.ui.qml</file>
         <file>appicon.icns</file>
         <file>appicon.ico</file>
+        <file>images/arrow-down_hover.png</file>
+        <file>images/arrow-down_AMA.png</file>
     </qresource>
 </RCC>

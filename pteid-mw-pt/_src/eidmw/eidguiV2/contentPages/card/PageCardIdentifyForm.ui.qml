@@ -31,6 +31,7 @@ Item {
     property alias propertyCancelExportMouseArea: cancelExportMouseArea
     property alias propertyPngButton: pngButton
     property alias propertyJpegButton: jpegButton
+    property alias propertyCancelExport: cancelExport
 
     Item {
         id: rowTop
@@ -153,9 +154,9 @@ Item {
                     cache: false
                     Accessible.role: Accessible.Graphic
                     Accessible.name: qsTranslate("GAPI", "STR_PHOTO")
-                    KeyNavigation.tab: rectSex
-                    KeyNavigation.down: rectSex
-                    KeyNavigation.right: rectSex
+                    KeyNavigation.tab: savePhotoButton
+                    KeyNavigation.down: savePhotoButton
+                    KeyNavigation.right: savePhotoButton
                     KeyNavigation.backtab: surNameTextTextForm
                     KeyNavigation.up: surNameTextTextForm
 
@@ -168,19 +169,31 @@ Item {
                         anchors.bottomMargin: photoImage.height * 0.04
                         anchors.bottom: photoImage.bottom
                         enabled: false
+                        highlighted: activeFocus ? true : false
                         background: Rectangle {
                             anchors.fill: parent
-                            color: parent.hovered ? Constants.COLOR_MAIN_BLUE : "white"
-                            opacity: parent.enabled ? (parent.hovered ? 1 : 0.8) : 0.5
+                            color: parent.hovered || parent.activeFocus ? Constants.COLOR_MAIN_BLUE : "white"
+                            opacity: parent.enabled  ? (parent.hovered || parent.activeFocus ? 1 : 0.8) : 0.5
                             radius: parent.height * 0.1
-                            border.color: parent.hovered ? Constants.COLOR_MAIN_MIDDLE_GRAY : Constants.COLOR_MAIN_BLUE
+                            border.color: parent.hovered
+                                          ? Constants.COLOR_MAIN_MIDDLE_GRAY
+                                          : Constants.COLOR_MAIN_BLUE
                             border.width: 1
                             Image {
-                                source: savePhotoButton.hovered ? "../../images/download_icon_white.png" : "../../images/download_icon_blue.png"
+                                source: savePhotoButton.hovered || savePhotoButton.activeFocus
+                                        ? "../../images/download_icon_white.png"
+                                        : "../../images/download_icon_blue.png"
                                 anchors.margins: savePhotoButton.width * 0.15
                                 anchors.fill: parent
                             }
                         }
+                        Accessible.role: Accessible.Button
+                        Accessible.name: text
+                        KeyNavigation.tab: rectSex
+                        KeyNavigation.down: rectSex
+                        KeyNavigation.right: rectSex
+                        KeyNavigation.backtab: photoImage
+                        KeyNavigation.up: photoImage
                     }
                     FileSaveDialog {
                         id: savePhotoDialogOutput
@@ -192,14 +205,12 @@ Item {
 
                     Rectangle {
                         id: exportRect
-                        anchors.left: parent.left
-                        anchors.right: parent.right
                         height: parent.height
-                        anchors.topMargin: parent.height
+                        width: parent.width
                         color: "white"
                         opacity: 0.9
                         visible: true
-                        y: parent.height
+                        y: parent.height + Constants.FOCUS_BORDER
 
                         Image {
                             id: cancelExport
@@ -208,14 +219,24 @@ Item {
                             anchors.topMargin: parent.height * 0.05
                             anchors.rightMargin: parent.width * 0.05
                             antialiasing: true
-                            width: parent.width * 0.2
-                            height: parent.height * 0.15
-                            source: "../../images/remove_file.png"
+                            width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                            height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                            source: cancelExportMouseArea.containsMouse || activeFocus
+                                    ? "../../images/arrow-down_hover.png"
+                                    : "../../images/arrow-down_AMA.png"
                             MouseArea {
                                 id: cancelExportMouseArea
                                 anchors.fill: parent
                                 hoverEnabled: true
+                                z: 1
                             }
+                            Accessible.role: Accessible.Button
+                            Accessible.name: qsTranslate("GAPI", "STR_CLOSE_EXPORT")
+                            KeyNavigation.tab: pngButton
+                            KeyNavigation.down: pngButton
+                            KeyNavigation.right: pngButton
+                            KeyNavigation.backtab: jpegButton
+                            KeyNavigation.up: jpegButton
                         }
 
                         Button {
@@ -230,6 +251,14 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
+                            highlighted: activeFocus ? true : false
+                            Accessible.role: Accessible.Button
+                            Accessible.name: text
+                            KeyNavigation.tab: jpegButton
+                            KeyNavigation.down: jpegButton
+                            KeyNavigation.right: jpegButton
+                            KeyNavigation.backtab: cancelExport
+                            KeyNavigation.up: cancelExport
                         }
 
                         Button {
@@ -244,6 +273,14 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
+                            highlighted: activeFocus ? true : false
+                            Accessible.role: Accessible.Button
+                            Accessible.name: text
+                            KeyNavigation.tab: cancelExport
+                            KeyNavigation.down: cancelExport
+                            KeyNavigation.right: cancelExport
+                            KeyNavigation.backtab: photoImage
+                            KeyNavigation.up: photoImage
                         }
                     }
                 }
@@ -271,8 +308,8 @@ Item {
             KeyNavigation.tab: rectHeight
             KeyNavigation.down: rectHeight
             KeyNavigation.right: rectHeight
-            KeyNavigation.backtab: photoImage
-            KeyNavigation.up: photoImage
+            KeyNavigation.backtab: savePhotoButton
+            KeyNavigation.up: savePhotoButton
         }
         Item {
             id: rectHeight
@@ -294,7 +331,7 @@ Item {
         }
         Item {
             id: rectNacionality
-            width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE) * 0.20
+            width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE ) * 0.25
             height: parent.height
             anchors.left: rectHeight.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
@@ -312,7 +349,7 @@ Item {
         }
         Item {
             id: rectDateOfBirth
-            width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE) * 0.40
+            width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE ) * 0.35
             height: parent.height
             anchors.left: rectNacionality.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
