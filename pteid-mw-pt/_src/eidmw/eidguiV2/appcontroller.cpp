@@ -874,9 +874,9 @@ bool AppController::getDebugModeValue (void){
 
     return m_Settings.getDebugMode();
 }
-void AppController::setDebugModeValue (bool bDebugMode) {
+QString AppController::setDebugModeValue (bool bDebugMode) {
 
-    m_Settings.setDebugMode(bDebugMode);
+    return m_Settings.setDebugMode(bDebugMode);
 }
 bool AppController::getShowNotificationValue (void){
 

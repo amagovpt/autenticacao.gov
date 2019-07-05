@@ -64,7 +64,7 @@ public slots:
     void setStartMinimizedValue(bool bStartMinimized );
 
     bool getDebugModeValue(void);
-    void setDebugModeValue(bool bDebugMode);
+    QString setDebugModeValue(bool bDebugMode);
 
     QString getGuiLanguageString(void);
     void setGuiLanguageString (QString language);

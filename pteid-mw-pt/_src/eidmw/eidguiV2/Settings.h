@@ -361,7 +361,7 @@ public:
     {
         return m_bDebugMode;
     }
-    void setDebugMode(bool bDebugMode)
+    QString setDebugMode(bool bDebugMode)
     {
         m_bDebugMode = bDebugMode;
 
@@ -374,19 +374,20 @@ public:
             #ifdef WIN32
             QFile debugFileDesktop(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + "\\pteid-debug.conf");
             if (!debugFileDesktop.remove()) {
-                // TODOp: return false so that the caller can show an error popup message
                 eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "setDebugMode: Could not delete desktop debug file at:");
                 eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", debugFileDesktop.fileName().toLocal8Bit().data());
+                return debugFileDesktop.filename();
             }
 
             QFile debugFileSystem(QString::fromWCharArray(_wgetenv(L"WINDIR")) + "\\pteid-debug.conf");
             if (!debugFileSystem.remove()) {
-                // TODOp: return false so that the caller can show an error popup message
                 eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "setDebugMode: Could not delete system debug file at:");
                 eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", debugFileSystem.fileName().toLocal8Bit().data());
+                return debugFileSystem.filename();
             }
             #endif
         }
+        return QString("");
     }
 
     bool getShowPicture( void )

@@ -263,54 +263,54 @@
         <translation>INFORMAÇÕES BÁSICAS</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="72"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="74"/>
         <location filename="gapi.cpp" line="1427"/>
         <source>STR_GIVEN_NAME</source>
         <translation>Nome(s)</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="94"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="96"/>
         <location filename="gapi.cpp" line="1431"/>
         <source>STR_SURNAME</source>
         <translation>Apelido(s)</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="152"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="155"/>
         <source>STR_PHOTO</source>
         <translation>Fotografia do Cidadão</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="216"/>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="230"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="223"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="237"/>
         <source>STR_EXPORT_AS</source>
         <translation>Exportar como</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="260"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="267"/>
         <location filename="gapi.cpp" line="1436"/>
         <source>STR_GENDER</source>
         <translation>Sexo</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="278"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="285"/>
         <location filename="gapi.cpp" line="1437"/>
         <source>STR_HEIGHT</source>
         <translation>Altura</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="296"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="303"/>
         <location filename="gapi.cpp" line="1438"/>
         <source>STR_NATIONALITY</source>
         <translation>Nacionalidade</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="314"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="321"/>
         <location filename="gapi.cpp" line="1440"/>
         <source>STR_DATE_OF_BIRTH</source>
         <translation>Data de Nascimento</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="339"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="346"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="34"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="91"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="109"/>
@@ -324,14 +324,14 @@
         <translation>Número de documento</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="358"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="365"/>
         <location filename="gapi.cpp" line="1445"/>
         <source>STR_VALIDITY_DATE</source>
         <translation>Data de validade</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="410"/>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="428"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="417"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="435"/>
         <source>STR_AFFILIATION</source>
         <translation>Filiação</translation>
     </message>
@@ -346,7 +346,7 @@
         <translation>Mãe</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="449"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="456"/>
         <location filename="gapi.cpp" line="1457"/>
         <source>STR_NOTES</source>
         <translation>Indicações Eventuais</translation>
@@ -512,7 +512,7 @@
         <translation>DADOS PESSOAIS</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="384"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="391"/>
         <source>STR_COUNTRY</source>
         <oldsource>Country</oldsource>
         <translation>País</translation>
@@ -831,13 +831,13 @@
 <context>
     <name>PageCardPrint</name>
     <message>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="193"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="184"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="31"/>
         <source>STR_CREATE_SUCESS</source>
         <translation>Ficheiro criado com sucesso</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="220"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="211"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="58"/>
         <source>STR_CREATE_OPEN</source>
         <translation>Abrir ficheiro criado?</translation>
@@ -1133,12 +1133,12 @@
         <translation>Usar funcionalidade de PINPAD</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="256"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="255"/>
         <source>STR_ACCEL_GRAPHICS_TEXT</source>
         <translation>Versão do driver de aceleração gráfica (OpenGL)</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="258"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="257"/>
         <source>STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION</source>
         <translation>Por favor experimente desativar a aceleração gráfica se detectar problemas com os gráficos da aplicação.</translation>
     </message>
@@ -2355,19 +2355,24 @@
         <translation>Erro ao remover certificados</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="107"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="102"/>
         <source>STR_POPUP_DEBUG_MODE</source>
         <translation>Modo diagnóstico</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="55"/>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="108"/>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="126"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="104"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="125"/>
         <source>STR_POPUP_RESTART_APP</source>
         <translation>É necessário reiniciar a aplicação para esta alteração ter efeito. Por favor reinicie a aplicação.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="124"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="106"/>
+        <source>STR_POPUP_WIN_DEBUG_FILE_ERROR</source>
+        <translation>Erro ao remover o ficheiro de diagnóstico %1. Por favor verifique se tem permissões de escrita.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="123"/>
         <source>STR_POPUP_ACCEL_GRAPHICS</source>
         <translation>Aceleração gráfica</translation>
     </message>
@@ -2391,7 +2396,7 @@
         <translation>Arraste um único ficheiro</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="184"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="187"/>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="45"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="898"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="103"/>
@@ -2420,7 +2425,7 @@
         <translation>Para assinar múltiplos ficheiros use a opção assinatura avançada</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="241"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="232"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="79"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="367"/>
         <source>STR_POPUP_FILE_CANCEL</source>
@@ -2428,7 +2433,7 @@
     </message>
     <message>
         <location filename="components/DialogCMD.qml" line="25"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="254"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="245"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="92"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="386"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="241"/>
