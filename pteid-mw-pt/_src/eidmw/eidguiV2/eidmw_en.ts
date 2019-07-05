@@ -265,54 +265,64 @@
         <translation>BASIC INFORMATION</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="74"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="75"/>
         <location filename="gapi.cpp" line="1427"/>
         <source>STR_GIVEN_NAME</source>
         <translation>Given Name(s)</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="96"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="97"/>
         <location filename="gapi.cpp" line="1431"/>
         <source>STR_SURNAME</source>
         <translation>Surname(s)</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="155"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="156"/>
         <source>STR_PHOTO</source>
         <translation>Citizen photo</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="223"/>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="237"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="173"/>
+        <source>STR_EXPORT_PHOTO</source>
+        <translation>Export photo</translation>
+    </message>
+    <message>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="235"/>
+        <source>STR_EXPORT_PHOTO_CLOSE</source>
+        <translation>Close</translation>
+    </message>
+    <message>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="245"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="266"/>
         <source>STR_EXPORT_AS</source>
         <translation>Export as</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="267"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="303"/>
         <location filename="gapi.cpp" line="1436"/>
         <source>STR_GENDER</source>
         <translation>Gender</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="285"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="321"/>
         <location filename="gapi.cpp" line="1437"/>
         <source>STR_HEIGHT</source>
         <translation>Height</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="303"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="339"/>
         <location filename="gapi.cpp" line="1438"/>
         <source>STR_NATIONALITY</source>
         <translation>Nationality</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="321"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="357"/>
         <location filename="gapi.cpp" line="1440"/>
         <source>STR_DATE_OF_BIRTH</source>
         <translation>Date of birth</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="346"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="382"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="34"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="91"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="109"/>
@@ -326,14 +336,14 @@
         <translation>Document Number</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="365"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="401"/>
         <location filename="gapi.cpp" line="1445"/>
         <source>STR_VALIDITY_DATE</source>
         <translation>Validity Date</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="417"/>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="435"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="453"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="471"/>
         <source>STR_AFFILIATION</source>
         <translation>Affiliation</translation>
     </message>
@@ -348,7 +358,7 @@
         <translation>Mother</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="456"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="492"/>
         <location filename="gapi.cpp" line="1457"/>
         <source>STR_NOTES</source>
         <translation>Notes</translation>
@@ -514,7 +524,7 @@
         <translation>PERSONAL DATA</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="391"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="427"/>
         <source>STR_COUNTRY</source>
         <oldsource>Country</oldsource>
         <translation>Country</translation>
@@ -561,7 +571,7 @@
         <translation>Empty field</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="165"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="171"/>
         <source>STR_SAVE_PHOTO_ERROR</source>
         <translation>An error occured while saving the photo. Check if the file is not currently open in another program or if you have write permissions.</translation>
     </message>
@@ -838,13 +848,13 @@
         <translation>Create PDF</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="184"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="190"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="31"/>
         <source>STR_CREATE_SUCESS</source>
         <translation>File successfully created</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="211"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="217"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="58"/>
         <source>STR_CREATE_OPEN</source>
         <translation>Open created file?</translation>
@@ -2084,13 +2094,13 @@
         <location filename="contentPages/card/PageCardAdress.qml" line="98"/>
         <location filename="contentPages/card/PageCardAdress.qml" line="104"/>
         <location filename="contentPages/card/PageCardAdress.qml" line="110"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="58"/>
         <location filename="contentPages/card/PageCardIdentify.qml" line="64"/>
         <location filename="contentPages/card/PageCardIdentify.qml" line="70"/>
         <location filename="contentPages/card/PageCardIdentify.qml" line="76"/>
         <location filename="contentPages/card/PageCardIdentify.qml" line="82"/>
         <location filename="contentPages/card/PageCardIdentify.qml" line="88"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="163"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="94"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="169"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="40"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="46"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="52"/>
@@ -2160,7 +2170,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="82"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="60"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="66"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="42"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="48"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="168"/>
@@ -2187,7 +2197,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="88"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="66"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="72"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="48"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="54"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="175"/>
@@ -2202,7 +2212,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="100"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="78"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="84"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="60"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="66"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="189"/>
@@ -2218,7 +2228,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="106"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="84"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="90"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="66"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="72"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="195"/>
@@ -2234,7 +2244,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="94"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="72"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="78"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="54"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="60"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="182"/>
@@ -2250,7 +2260,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="112"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="90"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="96"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="72"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="78"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="201"/>
@@ -2267,9 +2277,9 @@
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="144"/>
         <location filename="contentPages/card/PageCardAdress.qml" line="178"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="118"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="140"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="148"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="124"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="146"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="154"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="93"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="101"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="109"/>
@@ -2297,7 +2307,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="146"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="120"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="126"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="95"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="100"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="215"/>
@@ -2310,7 +2320,7 @@
         <translation>Citizen card removed</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="142"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="148"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="103"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="116"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="223"/>
@@ -2324,7 +2334,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="180"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="150"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="156"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="111"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="124"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="231"/>
@@ -2398,7 +2408,7 @@
         <translation>Drag a single file</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="187"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="201"/>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="45"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="898"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="103"/>
@@ -2427,7 +2437,7 @@
         <translation>To sign multiple files use the advanced signature page</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="232"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="238"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="79"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="367"/>
         <source>STR_POPUP_FILE_CANCEL</source>
@@ -2435,7 +2445,7 @@
     </message>
     <message>
         <location filename="components/DialogCMD.qml" line="25"/>
-        <location filename="contentPages/card/PageCardIdentify.qml" line="245"/>
+        <location filename="contentPages/card/PageCardIdentify.qml" line="251"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="92"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="386"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="241"/>

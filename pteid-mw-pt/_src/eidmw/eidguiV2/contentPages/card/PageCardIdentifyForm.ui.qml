@@ -170,6 +170,7 @@ Item {
                         anchors.bottom: photoImage.bottom
                         enabled: false
                         highlighted: activeFocus ? true : false
+                        text: qsTranslate("GAPI","STR_EXPORT_PHOTO")
                         background: Rectangle {
                             anchors.fill: parent
                             color: parent.hovered || parent.activeFocus ? Constants.COLOR_MAIN_BLUE : "white"
@@ -231,7 +232,7 @@ Item {
                                 z: 1
                             }
                             Accessible.role: Accessible.Button
-                            Accessible.name: qsTranslate("GAPI", "STR_CLOSE_EXPORT")
+                            Accessible.name: qsTranslate("GAPI", "STR_EXPORT_PHOTO_CLOSE")
                             KeyNavigation.tab: pngButton
                             KeyNavigation.down: pngButton
                             KeyNavigation.right: pngButton
@@ -241,8 +242,7 @@ Item {
 
                         Button {
                             id: pngButton
-                            text: qsTranslate("GAPI",
-                                              "STR_EXPORT_AS") + "\n PNG"
+                            text: qsTranslate("GAPI","STR_EXPORT_AS") + "\n PNG"
                             width: parent.width * 0.9
                             height: Constants.HEIGHT_SIGN_BOTTOM_COMPONENT
                             anchors.top: cancelExport.bottom
@@ -263,8 +263,7 @@ Item {
 
                         Button {
                             id: jpegButton
-                            text: qsTranslate("GAPI",
-                                              "STR_EXPORT_AS") + "\n JPEG"
+                            text: qsTranslate("GAPI","STR_EXPORT_AS") + "\n JPEG"
                             width: parent.width * 0.9
                             height: Constants.HEIGHT_SIGN_BOTTOM_COMPONENT
                             anchors.top: pngButton.bottom
