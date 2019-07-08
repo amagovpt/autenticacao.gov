@@ -93,7 +93,7 @@ Win32Dialog::Win32Dialog(const wchar_t *appName)
 	m_appName=_wcsdup(appName);
 
 	TextFontHeader = loadFontFromResource(16 *.75, true);
-	TextFont = loadFontFromResource(14 * .75, true);
+	TextFont = loadFontFromResource(14 * .75, false);
 }
 
 Win32Dialog::~Win32Dialog()
