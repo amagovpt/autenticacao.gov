@@ -1021,12 +1021,12 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="273"/>
         <source>STR_START_AUTOUPDATES_TITLE</source>
-        <translation type="unfinished">Automatic updates</translation>
+        <translation>Automatic updates</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="311"/>
         <source>STR_CARD_READER_TEXT</source>
-        <translation type="unfinished">Enable checking of new updates on application start.</translation>
+        <translation>Enable checking of new updates on application start.</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="348"/>
@@ -2451,6 +2451,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="238"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="79"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="367"/>
+        <location filename="main.qml" line="200"/>
         <source>STR_POPUP_FILE_CANCEL</source>
         <translation>Cancel</translation>
     </message>
@@ -2692,16 +2693,28 @@
     </message>
 </context>
 <context>
+    <name>PopupFile</name>
+    <message>
+        <source>STR_POPUP_FILE_CANCEL</source>
+        <translation type="obsolete">Cancel</translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
-        <location filename="main.qml" line="152"/>
+        <location filename="main.qml" line="151"/>
         <source>STR_AUTOUPDATE_TITLE</source>
         <translation>Update Available</translation>
     </message>
     <message>
-        <location filename="main.qml" line="175"/>
+        <location filename="main.qml" line="174"/>
         <source>STR_AUTOUPDATE_TEXT</source>
-        <translation type="unfinished">A new version of the application is available. Press Install do perform the update.</translation>
+        <translation>A new version of the application is available. Press Install do perform the update.</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="175"/>
+        <source>STR_DISABLE_AUTOUPDATE_INFO</source>
+        <translation type="unfinished">To disable the checking for updates on application start, go to Application settings menu.</translation>
     </message>
     <message>
         <location filename="main.qml" line="218"/>
@@ -2709,12 +2722,27 @@
         <translation>Update</translation>
     </message>
     <message>
-        <location filename="main.qml" line="739"/>
+        <location filename="main.qml" line="262"/>
+        <source>STR_WARNING</source>
+        <translation>Warning</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="281"/>
+        <source>STR_MULTIPLE_CARDS_DETECTED</source>
+        <translation>Multiple cards detected</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="319"/>
+        <source>STR_CHANGE_READER_INFO</source>
+        <translation>To change the reader later, go to the application settings menu.</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="738"/>
         <source>STR_RUN_MODE</source>
         <translation>Test mode</translation>
     </message>
     <message>
-        <location filename="main.qml" line="744"/>
+        <location filename="main.qml" line="743"/>
         <source>STR_RUN_DEBUG_MODE</source>
         <translation>Debug mode</translation>
     </message>
