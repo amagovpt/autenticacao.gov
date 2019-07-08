@@ -13,6 +13,7 @@ Item {
     property alias propertyCheckboxEnablePinpad: checkboxEnablePinpad
     property alias propertyRectAppStart: rectAppStart
     property alias propertyRectAppStartCheckBox: rectAppStartCheckBox
+    property alias propertyCheckboxStartAutoupdate: checkboxStartAutoupdate
     property alias propertyCheckboxAutoStart: checkboxAutoStart
     property alias propertyRectAppLanguage: rectAppLanguage
     property alias propertyRadioButtonPT: radioButtonPT
@@ -243,20 +244,95 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
-                        KeyNavigation.tab: dateAppLanguage
-                        KeyNavigation.down: dateAppLanguage
-                        KeyNavigation.right: dateAppLanguage
+                        KeyNavigation.tab: startAutoupdateText
+                        KeyNavigation.down: startAutoupdateText
+                        KeyNavigation.right: startAutoupdateText
                         KeyNavigation.backtab: dateAppStart
                         KeyNavigation.up: dateAppStart
                     }
                 }
             }
+
+            Item{
+                id: rectStartAutoupdate
+                width: parent.width
+                height: startAutoupdateText.height + rectStartAutoupdateCheckbox.height + 3*Constants.SIZE_TEXT_V_SPACE
+                anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                anchors.top: rectAppStart.bottom
+                anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
+                Text {
+                    id: startAutoupdateText
+                    x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                    font.pixelSize: activeFocus
+                                    ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                    : Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    font.bold: activeFocus
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: Constants.SIZE_TEXT_LABEL
+                    text: qsTranslate("PageDefinitionsApp","STR_START_AUTOUPDATES_TITLE") + controler.autoTr
+                    Accessible.role: Accessible.TitleBar
+                    Accessible.name: text
+                    KeyNavigation.tab: checkboxStartAutoupdate
+                    KeyNavigation.down: checkboxStartAutoupdate
+                    KeyNavigation.right: checkboxStartAutoupdate
+                    KeyNavigation.backtab: checkboxAutoStart
+                    KeyNavigation.up: checkboxAutoStart
+                }
+                DropShadow {
+                    anchors.fill: rectStartAutoupdateCheckbox
+                    horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                    verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                    radius: Constants.FORM_SHADOW_RADIUS
+                    samples: Constants.FORM_SHADOW_SAMPLES
+                    color: Constants.COLOR_FORM_SHADOW
+                    source: rectStartAutoupdateCheckbox
+                    spread: Constants.FORM_SHADOW_SPREAD
+                    opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
+                }
+                RectangularGlow {
+                    anchors.fill: rectStartAutoupdateCheckbox
+                    glowRadius: Constants.FORM_GLOW_RADIUS
+                    spread: Constants.FORM_GLOW_SPREAD
+                    color: Constants.COLOR_FORM_GLOW
+                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                    opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
+                }
+                Rectangle {
+                    id: rectStartAutoupdateCheckbox
+                    width: parent.width
+                    color: "white"
+                    height: 25 + Constants.SIZE_TEXT_V_SPACE
+                    anchors.top : startAutoupdateText.bottom
+                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
+                    CheckBox {
+                        id: checkboxStartAutoupdate
+                        text: qsTranslate("PageDefinitionsApp","STR_CARD_READER_TEXT") + controler.autoTr
+                        height: 25
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        KeyNavigation.tab: dateAppLanguage
+                        KeyNavigation.down: dateAppLanguage
+                        KeyNavigation.right: dateAppLanguage
+                        KeyNavigation.backtab: startAutoupdateText
+                        KeyNavigation.up: startAutoupdateText
+                    }
+                }
+            }
+
+
             Item{
                 id: rectAppLanguage
                 width: parent.width
                 height: dateAppLanguage.height + rectAppLanguageCheckBox.height + 3*Constants.SIZE_TEXT_V_SPACE
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-                anchors.top: rectAppStart.bottom
+                anchors.top: rectStartAutoupdate.bottom
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
 
                 Text {
@@ -275,8 +351,8 @@ Item {
                     KeyNavigation.tab: radioButtonPT
                     KeyNavigation.down: radioButtonPT
                     KeyNavigation.right: radioButtonPT
-                    KeyNavigation.backtab: checkboxAutoStart
-                    KeyNavigation.up: checkboxAutoStart
+                    KeyNavigation.backtab: checkboxStartAutoupdate
+                    KeyNavigation.up: checkboxStartAutoupdate
                 }
 
                 DropShadow {

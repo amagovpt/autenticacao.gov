@@ -25,12 +25,6 @@ Window {
     FontLoader { id: karma; source: "qrc:/fonts/karma/Karma-Medium.ttf" }
     FontLoader { id: lato; source: "qrc:/fonts/lato/Lato-Regular.ttf" }
 
-    onMinimumWidthChanged: {
-        console.log("Window Loaded")
-        controler.initTranslation()
-        gapi.initTranslation()
-    }
-
     onWidthChanged: {
         console.log("Resizing app width: " + width + "height" + height)
         mainFormID.propertyMainMenuView.width = Functions.getMainMenuWidth(width)
@@ -63,6 +57,25 @@ Window {
 Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+        }
+
+        property var autoUpdate: true
+        onSignalAutoUpdateAvailable: {
+            if(autoUpdate){
+                console.log("There is an update available.")
+                autoUpdate = false
+                autoUpdateDialog.update_release_notes = release_notes
+                autoUpdateDialog.update_installed_version = installed_version
+                autoUpdateDialog.update_remote_version = remote_version
+                autoUpdateDialog.open()
+                labelTextTitle.forceActiveFocus();
+            }
+        }
+        onSignalAutoUpdateFail: {
+            if(autoUpdate){
+                console.log("No updates or startup auto update failed.")
+                autoUpdate = false
+            }
         }
     }
 
@@ -118,6 +131,117 @@ Load language error. Please reinstall the application"
             readerContext.open()
         }
     }
+    Dialog {
+        property string update_release_notes: ""
+        property string update_installed_version: ""
+        property string update_remote_version: ""
+
+        id: autoUpdateDialog
+        width: 400
+        height: 200
+        font.family: lato.name
+        // Center dialog in the main view
+        x: parent.width * 0.5 - width * 0.5
+        y: parent.height * 0.5 - height * 0.5
+        modal: true
+
+        header: Label {
+            id: labelTextTitle
+            visible: true
+            text: qsTr("STR_AUTOUPDATE_TITLE")
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: activeFocus
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
+            color: Constants.COLOR_MAIN_BLUE
+            KeyNavigation.tab: textAutoupdate
+            KeyNavigation.down: textAutoupdate
+        }
+
+        Item {
+            width: parent.width
+            height: parent.height
+
+            Item {
+                id: rectMessage
+                width: parent.width
+                height: 50
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textAutoupdate
+                    text: qsTr("STR_AUTOUPDATE_TEXT")
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: activeFocus ? Constants.SIZE_TEXT_LABEL_FOCUS : Constants.SIZE_TEXT_LABEL
+                    font.bold: activeFocus
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width
+                    anchors.bottom: parent.bottom
+                    wrapMode: Text.WordWrap
+                    KeyNavigation.tab: buttonCancelUpdate
+                    KeyNavigation.down: buttonCancelUpdate
+                    KeyNavigation.up: labelTextTitle
+                    KeyNavigation.backtab: labelTextTitle
+                }
+            }
+        }
+        Button {
+            id: buttonCancelUpdate
+            width: Constants.WIDTH_BUTTON
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            font.pixelSize: Constants.SIZE_TEXT_FIELD
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            text: "Cancelar"
+            font.capitalization: Font.MixedCase
+            KeyNavigation.tab: buttonInstallUpdate
+            KeyNavigation.right: buttonInstallUpdate
+            KeyNavigation.up: textAutoupdate
+            KeyNavigation.backtab: textAutoupdate
+            highlighted: activeFocus
+            onClicked: {
+                autoUpdateDialog.close()
+            }
+        }
+        Button {
+            id: buttonInstallUpdate
+            width: Constants.WIDTH_BUTTON
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            font.pixelSize: Constants.SIZE_TEXT_FIELD
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            text: qsTr("STR_UPDATE_INSTALL_BUTTON")
+            font.capitalization: Font.MixedCase
+            KeyNavigation.tab: labelTextTitle
+            KeyNavigation.right: labelTextTitle
+            KeyNavigation.left: buttonCancelUpdate
+            KeyNavigation.backtab: buttonCancelUpdate
+            highlighted: activeFocus
+            onClicked: {
+                autoUpdateDialog.close()
+
+                // go to PageDefinitionsUpdatesForm
+                mainMenuBottomPressed(0)
+                mainFormID.propertyPageLoader.source =
+                        mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(5).url
+                mainFormID.propertySubMenuListView.currentIndex = 5
+                mainFormID.propertySubMenuListView.forceActiveFocus()
+
+                //re-emit signal for PageDefinitionsUpdatesForm
+                controler.signalAutoUpdateAvailable(autoUpdateDialog.update_release_notes,
+                                                    autoUpdateDialog.update_installed_version,
+                                                    autoUpdateDialog.update_remote_version)
+            }
+        }
+        onRejected: {
+            autoUpdateDialog.open()
+        }
+    }
+
     Dialog {
         id: readerContext
         width: 400
@@ -1040,10 +1164,11 @@ Load language error. Please reinstall the application"
 
     Component.onCompleted: {
         console.log("Window mainWindow Completed")
-        controler.initTranslation()
         mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
-        gapi.initTranslation()
         gapi.setAppAsDlgParent()
+        if(controler.getStartAutoupdateValue()){
+            controler.autoUpdates()
+        }
     }
 
     function getSubMenuName(index){

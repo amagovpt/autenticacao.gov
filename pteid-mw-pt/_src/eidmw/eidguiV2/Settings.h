@@ -62,6 +62,7 @@ public:
         , m_bGraphicsAccel(false)
         , m_bUseCustomSignature(false)
         , m_bStartMinimized(false)
+        , m_bStartAutoupdate(false)
         , m_bDebugMode(false)
         , m_bNotShowStartUpHelp(false)
         , m_bShowPicture(false)
@@ -117,6 +118,19 @@ public:
                 setStartMinimized(true);
             }
         }
+        //----------------------------------------------------------
+        // check autoupdates on app start
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTUPDATE);
+            long startAutoUpdate = config.getLong();
+
+            if (0 != startAutoUpdate)
+            {
+                setStartAutoupdate(true);
+            }
+        }
+
         //----------------------------------------------------------
         // check debug mode
         //----------------------------------------------------------
@@ -356,7 +370,17 @@ public:
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTMINI);
         config.setLong(m_bStartMinimized);
     }
+    bool getStartAutoupdate(void) const
+    {
+        return m_bStartAutoupdate;
+    }
+    void setStartAutoupdate(bool bStartAutoupdate)
+    {
+        m_bStartAutoupdate = bStartAutoupdate;
 
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTUPDATE);
+        config.setLong(bStartAutoupdate);
+    }
     bool getDebugMode(void) const
     {
         return m_bDebugMode;
@@ -666,6 +690,7 @@ private:
     bool    m_bUseCustomSignature;  //!< the GUI use custom signature image
     bool    m_bPinpadEnabled;       //!< use Pinpad functionality when supported by readers (T/F)
     bool    m_bStartMinimized;      //!< startup minimized (T/F)
+    bool    m_bStartAutoupdate;     //!< check for updates when starting the app (T/F)
     bool    m_bDebugMode;           //!< debug mode enabled (T/F)
     bool    m_bNotShowStartUpHelp;  //!< the GUI Show Help	bool	m_bStartMinimized;              //!< startup minimized (T/F)
     bool    m_bShowPicture;         //!< show the picture (T/F)

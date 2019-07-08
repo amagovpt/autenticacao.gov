@@ -139,6 +139,7 @@ enum PTEID_Param
 	PTEID_PARAM_GUITOOL_REGCERTIF,		//number; 0=no, 1=yes(default)
 	PTEID_PARAM_GUITOOL_REMOVECERTIF,	//number; 0=no, 1=yes(default)
 	PTEID_PARAM_GUITOOL_FILESAVE,		//string; path to directory where to save eid/xml/csv file
+	PTEID_PARAM_GUITOOL_STARTUPDATE,	//number; 0=no, 1=yes(default)
 
 	//XSIGN
 	PTEID_PARAM_XSIGN_TSAURL,			//string;
