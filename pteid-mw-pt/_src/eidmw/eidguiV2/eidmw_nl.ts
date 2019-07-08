@@ -285,42 +285,42 @@
         <translation>Exportar foto</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="235"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="238"/>
         <source>STR_EXPORT_PHOTO_CLOSE</source>
         <translation>Fechar</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="245"/>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="266"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="248"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="269"/>
         <source>STR_EXPORT_AS</source>
         <translation>Exportar como</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="303"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="306"/>
         <location filename="gapi.cpp" line="1436"/>
         <source>STR_GENDER</source>
         <translation>Sexo</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="321"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="324"/>
         <location filename="gapi.cpp" line="1437"/>
         <source>STR_HEIGHT</source>
         <translation>Altura</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="339"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="342"/>
         <location filename="gapi.cpp" line="1438"/>
         <source>STR_NATIONALITY</source>
         <translation>Nacionalidade</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="357"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="360"/>
         <location filename="gapi.cpp" line="1440"/>
         <source>STR_DATE_OF_BIRTH</source>
         <translation>Data de Nascimento</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="382"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="385"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="34"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="91"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="109"/>
@@ -334,14 +334,14 @@
         <translation>Número de documento</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="401"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="404"/>
         <location filename="gapi.cpp" line="1445"/>
         <source>STR_VALIDITY_DATE</source>
         <translation>Data de validade</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="453"/>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="471"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="456"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="474"/>
         <source>STR_AFFILIATION</source>
         <translation>Filiação</translation>
     </message>
@@ -356,7 +356,7 @@
         <translation>Mãe</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="492"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="495"/>
         <location filename="gapi.cpp" line="1457"/>
         <source>STR_NOTES</source>
         <translation>Indicações Eventuais</translation>
@@ -522,7 +522,7 @@
         <translation>DADOS PESSOAIS</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="427"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="430"/>
         <source>STR_COUNTRY</source>
         <oldsource>Country</oldsource>
         <translation>País</translation>
@@ -1916,7 +1916,8 @@
     <message>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="154"/>
         <source>STR_SIGN_ADD_BUTTON</source>
-        <translation></translation>
+        <oldsource>STR_SIGN_ADD_BUTTON1</oldsource>
+        <translation>Adicionar ficheiro</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="222"/>
@@ -2406,7 +2407,7 @@
         <translation>Arraste um único ficheiro</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="201"/>
+        <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="204"/>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="45"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="898"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="103"/>
