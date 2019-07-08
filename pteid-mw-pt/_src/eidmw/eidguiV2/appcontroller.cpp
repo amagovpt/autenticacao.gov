@@ -849,6 +849,14 @@ void AppController::setStartAutoValue (bool bAutoStartup ){
 
     m_Settings.setAutoStartup(bAutoStartup);
 }
+bool AppController::getStartAutoupdateValue(void){
+
+    return m_Settings.getStartAutoupdate();
+}
+void AppController::setStartAutoupdateValue(bool bStartAutoupdate){
+
+    m_Settings.setStartAutoupdate(bStartAutoupdate);
+}
 QString AppController::getGuiLanguageString (void){
 
     return m_Settings.getGuiLanguageString();

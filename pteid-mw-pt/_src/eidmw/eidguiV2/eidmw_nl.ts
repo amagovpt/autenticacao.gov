@@ -997,72 +997,82 @@
 <context>
     <name>PageDefinitionsApp</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="83"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="84"/>
         <source>STR_CARD_READER_TITLE</source>
         <translation>Leitor de cartões</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="137"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="138"/>
         <source>STR_SELECT_READER</source>
         <translation>Selecione</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="199"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="200"/>
         <source>STR_START_TITLE</source>
         <translation>Início</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="237"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="238"/>
         <source>STR_AUTO_START_OP</source>
         <translation>Iniciar automaticamente</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="272"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="273"/>
+        <source>STR_START_AUTOUPDATES_TITLE</source>
+        <translation type="unfinished">Atualizações automáticas</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="311"/>
+        <source>STR_CARD_READER_TEXT</source>
+        <translation type="unfinished">Ativar verificação de novas atualizações ao iniciar a aplicação.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="348"/>
         <source>STR_LANGUAGE_TITLE</source>
         <translation>Idioma</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="316"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="392"/>
         <source>STR_PT_NAME_OP</source>
         <translation>Português</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="339"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="415"/>
         <source>STR_UK_NAME_OP</source>
         <translation>English</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="374"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="450"/>
         <source>STR_APP_LOOK_TITLE</source>
         <translation>Aparência</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="413"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="489"/>
         <source>STR_SHOW_ANIME_OP</source>
         <translation>Activar animações</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="450"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="526"/>
         <source>STR_DEBUG_MODE_TITLE</source>
         <translation>Modo diagnóstico</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="504"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="580"/>
         <source>STR_DEBUG_MODE_DESCRIPTION</source>
         <translation>Por favor ligue o modo de diagnóstico se encontrar problemas com a aplicação.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="510"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="586"/>
         <source>STR_DEBUG_MODE_ENABLE</source>
         <translation>Ativar modo diagnóstico</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="548"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="624"/>
         <source>STR_APP_GRAPHICS_TITLE</source>
         <translation>Aceleração gráfica</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="607"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="683"/>
         <source>STR_ACCEL_ENABLE</source>
         <translation>Activar aceleração gráfica</translation>
     </message>
@@ -1097,58 +1107,58 @@
         <translation>URL?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="646"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="722"/>
         <source>STR_NETWORK_TITLE</source>
         <translation>Configurações de rede</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="686"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="762"/>
         <source>STR_NETWORK_SYSTEM_PROXY_OP</source>
         <translation>Utilizar proxy de sistema</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="707"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="783"/>
         <source>STR_NETWORK_PROXY_OP</source>
         <translation>Configurar servidor proxy</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="737"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="813"/>
         <source>STR_NETWORK_PROXY_ADDRESS_OP</source>
         <translation>Endereço?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="769"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="845"/>
         <source>STR_NETWORK_PROXY_PORT_OP</source>
         <translation>Porto?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="793"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="869"/>
         <source>STR_NETWORK_AUTH_OP</source>
         <translation>Configurar autenticação no proxy</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="822"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="898"/>
         <source>STR_NETWORK_AUTH_USERNAME_OP</source>
         <translation>Utilizador?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="852"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="928"/>
         <source>STR_NETWORK_AUTH_PASSWORD_OP</source>
         <translation>Palavra-passe?</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="53"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="163"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="164"/>
         <source>STR_USE_PINPAD</source>
         <translation>Usar funcionalidade de PINPAD</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="255"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="260"/>
         <source>STR_ACCEL_GRAPHICS_TEXT</source>
         <translation>Versão do driver de aceleração gráfica (OpenGL)</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="257"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="262"/>
         <source>STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION</source>
         <translation>Por favor experimente desativar a aceleração gráfica se detectar problemas com os gráficos da aplicação.</translation>
     </message>
@@ -2161,9 +2171,9 @@
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="82"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="88"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="468"/>
-        <location filename="main.qml" line="74"/>
-        <location filename="main.qml" line="84"/>
-        <location filename="main.qml" line="93"/>
+        <location filename="main.qml" line="87"/>
+        <location filename="main.qml" line="97"/>
+        <location filename="main.qml" line="106"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Erro</translation>
     </message>
@@ -2346,44 +2356,44 @@
         <translation>Erro da aplicação! Por favor reinstale a aplicação</translation>
     </message>
     <message>
-        <location filename="main.qml" line="76"/>
+        <location filename="main.qml" line="89"/>
         <source>STR_GENERIC_ERROR_MSG</source>
         <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="77"/>
+        <location filename="main.qml" line="90"/>
         <source>STR_ERROR_CODE</source>
         <translation>Código de erro = </translation>
     </message>
     <message>
-        <location filename="main.qml" line="86"/>
+        <location filename="main.qml" line="99"/>
         <source>STR_CERTIFICATES_IMPORT_ERROR_MSG</source>
         <translation>Erro ao importar certificados</translation>
     </message>
     <message>
-        <location filename="main.qml" line="95"/>
+        <location filename="main.qml" line="108"/>
         <source>STR_CERTIFICATES_REMOVE_ERROR_MSG</source>
         <translation>Erro ao remover certificados</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="102"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="105"/>
         <source>STR_POPUP_DEBUG_MODE</source>
         <translation>Modo diagnóstico</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="55"/>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="104"/>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="125"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="107"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="128"/>
         <source>STR_POPUP_RESTART_APP</source>
         <translation>É necessário reiniciar a aplicação para esta alteração ter efeito. Por favor reinicie a aplicação.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="106"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="109"/>
         <source>STR_POPUP_WIN_DEBUG_FILE_ERROR</source>
         <translation>Erro ao remover o ficheiro de diagnóstico %1. Por favor verifique se tem permissões de escrita.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="123"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="126"/>
         <source>STR_POPUP_ACCEL_GRAPHICS</source>
         <translation>Aceleração gráfica</translation>
     </message>
@@ -2393,7 +2403,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="443"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="195"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="288"/>
-        <location filename="main.qml" line="132"/>
+        <location filename="main.qml" line="257"/>
         <source>STR_SHOW_WINDOWS</source>
         <translation>Mostrar janela</translation>
     </message>
@@ -2682,12 +2692,27 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="main.qml" line="613"/>
+        <location filename="main.qml" line="152"/>
+        <source>STR_AUTOUPDATE_TITLE</source>
+        <translation>Atualização disponível</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="175"/>
+        <source>STR_AUTOUPDATE_TEXT</source>
+        <translation type="unfinished">Existe uma versão mais recente da aplicação. Clique em Instalar para atualizar.</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="218"/>
+        <source>STR_UPDATE_INSTALL_BUTTON</source>
+        <translation>Instalar</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="739"/>
         <source>STR_RUN_MODE</source>
         <translation>Modo de teste</translation>
     </message>
     <message>
-        <location filename="main.qml" line="618"/>
+        <location filename="main.qml" line="744"/>
         <source>STR_RUN_DEBUG_MODE</source>
         <translation>Modo de diagnóstico</translation>
     </message>

@@ -82,6 +82,10 @@ int main(int argc, char *argv[])
     engine.addImageProvider("myimageprovider", gapi.buildImageProvider());
     engine.addImageProvider("pdfpreview_imageprovider", gapi.buildPdfImageProvider());
 
+    // Load translation files
+    gapi.initTranslation();
+    controller.initTranslation();
+
     // Load main QML file
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 

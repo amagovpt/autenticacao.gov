@@ -207,6 +207,7 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GUITOOL_REGCERTIF         L"registrate_certificate"   //number; 0=no, 1=yes(default)
 #define EIDMW_CNF_GUITOOL_REMOVECERTIF      L"remove_certificate"       //number; 0=no, 1=yes(default)
 #define EIDMW_CNF_GUITOOL_FILESAVE          L"default_save_path"        //string; path, ""(default)
+#define EIDMW_CNF_GUITOOL_STARTUPDATE       L"start_autoupdate"         //number; 0=no, 1=yes(default)
 
 #define EIDMW_CNF_SECTION_XSIGN			L"xsign"					//section for xsign
 #define EIDMW_CNF_XSIGN_TSAURL			L"tsa_url"					//string URL of the Timestamp Server
@@ -368,6 +369,7 @@ public:
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_REGCERTIF;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_REMOVECERTIF;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GUITOOL_FILESAVE;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_STARTUPDATE;
 
     //XSIGN
     static const struct Param_Str EIDMW_CONFIG_PARAM_XSIGN_TSAURL;

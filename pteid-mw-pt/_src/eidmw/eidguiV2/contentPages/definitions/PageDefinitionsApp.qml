@@ -63,6 +63,9 @@ PageDefinitionsAppForm {
         onCheckedChanged: propertyCheckboxAutoStart.checked ? controler.setStartAutoValue(true) :
                                                               controler.setStartAutoValue(false)
     }
+    propertyCheckboxStartAutoupdate{
+        onCheckedChanged: controler.setStartAutoupdateValue(propertyCheckboxStartAutoupdate.checked)
+    }
     propertyRadioButtonUK{
         onCheckedChanged: {
             if (propertyRadioButtonUK.checked){
@@ -199,6 +202,8 @@ PageDefinitionsAppForm {
             propertyRectAppStart.visible = false
             propertyRectAppLanguage.anchors.top = propertyRectReader.bottom
         }
+
+        propertyCheckboxStartAutoupdate.checked = controler.getStartAutoupdateValue()
 
         if(controler.getGuiLanguageString() === "nl"){
             propertyRadioButtonUK.checked = false
