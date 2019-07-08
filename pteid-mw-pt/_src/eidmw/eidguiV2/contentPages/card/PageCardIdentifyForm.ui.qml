@@ -188,6 +188,9 @@ Item {
                                 anchors.fill: parent
                             }
                         }
+                        contentItem: Text {
+                            opacity: 0
+                        }
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.tab: rectSex
