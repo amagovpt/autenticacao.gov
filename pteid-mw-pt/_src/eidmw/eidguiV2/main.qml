@@ -171,7 +171,8 @@ Load language error. Please reinstall the application"
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textAutoupdate
-                    text: qsTr("STR_AUTOUPDATE_TEXT")
+                    text: qsTr("STR_AUTOUPDATE_TEXT") + "\n\n"
+                        + qsTr("STR_DISABLE_AUTOUPDATE_INFO")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: activeFocus ? Constants.SIZE_TEXT_LABEL_FOCUS : Constants.SIZE_TEXT_LABEL
@@ -196,7 +197,7 @@ Load language error. Please reinstall the application"
             font.pixelSize: Constants.SIZE_TEXT_FIELD
             anchors.bottom: parent.bottom
             anchors.left: parent.left
-            text: "Cancelar"
+            text: qsTranslate("Popup File", "STR_POPUP_FILE_CANCEL")
             font.capitalization: Font.MixedCase
             KeyNavigation.tab: buttonInstallUpdate
             KeyNavigation.right: buttonInstallUpdate
@@ -258,7 +259,7 @@ Load language error. Please reinstall the application"
 
         header: Label {
             id: labelReaderContext
-            text: "Aviso"
+            text: qsTr("STR_WARNING") + controler.autoTr
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
@@ -277,7 +278,7 @@ Load language error. Please reinstall the application"
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textMessageTop
-                    text: "Múltiplos cartões detectados"
+                    text: qsTr("STR_MULTIPLE_CARDS_DETECTED") + controler.autoTr
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
@@ -315,7 +316,7 @@ Load language error. Please reinstall the application"
                 visible: true
                 Text {
                     id: textNote
-                    text:  "Para alterar essa opção mais tarde, vá para o menu de configuração"
+                    text:  qsTr("STR_CHANGE_READER_INFO") + controler.autoTr
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
