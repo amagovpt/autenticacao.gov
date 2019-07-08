@@ -154,9 +154,9 @@ Item {
                     cache: false
                     Accessible.role: Accessible.Graphic
                     Accessible.name: qsTranslate("GAPI", "STR_PHOTO")
-                    KeyNavigation.tab: savePhotoButton
-                    KeyNavigation.down: savePhotoButton
-                    KeyNavigation.right: savePhotoButton
+                    KeyNavigation.tab: savePhotoButton.visible ? savePhotoButton : cancelExport
+                    KeyNavigation.down: savePhotoButton.visible ? savePhotoButton : cancelExport
+                    KeyNavigation.right: savePhotoButton.visible ? savePhotoButton : cancelExport
                     KeyNavigation.backtab: surNameTextTextForm
                     KeyNavigation.up: surNameTextTextForm
 
