@@ -13,6 +13,7 @@ Item {
     property alias propertyCheckboxEnablePinpad: checkboxEnablePinpad
     property alias propertyRectAppStart: rectAppStart
     property alias propertyRectAppStartCheckBox: rectAppStartCheckBox
+    property alias propertyRectStartAutoupdate: rectStartAutoupdate
     property alias propertyCheckboxStartAutoupdate: checkboxStartAutoupdate
     property alias propertyCheckboxAutoStart: checkboxAutoStart
     property alias propertyRectAppLanguage: rectAppLanguage
