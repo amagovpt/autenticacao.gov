@@ -200,7 +200,7 @@ PageDefinitionsAppForm {
             propertyCheckboxAutoStart.checked = controler.getStartAutoValue()
         }else{
             propertyRectAppStart.visible = false
-            propertyRectAppLanguage.anchors.top = propertyRectReader.bottom
+            propertyRectStartAutoupdate.anchors.top = propertyRectReader.bottom
         }
 
         propertyCheckboxStartAutoupdate.checked = controler.getStartAutoupdateValue()
