@@ -1260,6 +1260,7 @@ Load language error. Please reinstall the application"
                     })
         }
         // Open the content page of the first item of the new sub menu
+        mainFormID.propertyPageLoader.propertyForceFocus = false
         mainFormID.state = Constants.MenuState.NORMAL
         mainFormID.propertyPageLoader.source =
                 mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(0).url
