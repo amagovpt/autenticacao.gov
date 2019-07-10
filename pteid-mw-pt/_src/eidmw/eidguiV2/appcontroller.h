@@ -10,7 +10,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
 #include <QNetworkReply>
-#include "cJSON.h"
+#include "cJSON_1_7_12.h"
 
 //MW libraries
 #include "eidlib.h"
