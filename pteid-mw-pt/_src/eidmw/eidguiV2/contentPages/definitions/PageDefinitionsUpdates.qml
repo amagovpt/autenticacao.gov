@@ -19,7 +19,7 @@ PageDefinitionsUpdatesForm {
             console.log("onSignalAutoUpdateFail")
             if (error_code == GAPI.GenericError) {
                 propertyTextDescription.text =
-                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_ERROR")
+                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_ERROR") + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
             }else if (error_code == GAPI.NoUpdatesAvailable) {
                 propertyTextDescription.text =
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_NO_UPDATES")
@@ -37,7 +37,7 @@ PageDefinitionsUpdatesForm {
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
             }else if (error_code == GAPI.InstallFailed) {
                 propertyTextDescription.text =
-                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL") + "\n\n" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
+                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL") + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
             }else if (error_code == GAPI.NetworkError) {
                 propertyTextDescription.text =
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_NETWORK_ERROR")

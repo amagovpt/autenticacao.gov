@@ -28,17 +28,7 @@
 
 #include "gapi.h"
 
-std::string serverurl = "https://svn.gov.pt/projects/ccidadao/repository/middleware-offline/tags/builds/lastversion/";
-std::string remoteversion = "https://svn.gov.pt/projects/ccidadao/repository/middleware-offline/tags/builds/lastversion/version.txt";
-
-std::string WINDOWS32 = "PteidMW-Basic.msi";
-std::string WINDOWS64 = "PteidMW-Basic-x64.msi";
-std::string MAC_OS = "pteid-mw.pkg";
-std::string UBUNTU64 = "pteid-mw_ubuntu18_amd64.deb";
-std::string FEDORA32 = "pteid-mw-fedora.i386.rpm";
-std::string FEDORA64 = "pteid-mw-fedora.x86_64.rpm";
-std::string SUSE32 = "pteid-mw-suse.i586.rpm";
-std::string SUSE64 = "pteid-mw-suse.x86_64.rpm";
+#define N_RELEASE_NOTES 3
 
 struct PteidVersion
 {
@@ -139,6 +129,10 @@ void AppController::autoUpdates(){
         return;
     }
 
+    std::string remoteversion;
+    eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_URL);
+    remoteversion.append(config.getString());
+    remoteversion.append("version.json");
     url = remoteversion.c_str();
 
     QFileInfo fileInfo(url.path());
@@ -579,40 +573,55 @@ bool AppController::VerifyUpdates(std::string filedata)
 {
     qDebug() << "C++: VerifyUpdates";
 
-    std::string distrover;
-    std::string archver;
+    std::string distrover = VerifyOS("distro");
+    std::string archver = VerifyOS("arch");
 
+    // installed version
     QString ver (WIN_GUI_VERSION_STRING);
-
-    //Only consider the first line of version.txt
-    QString remote_data(filedata.c_str());    
-    QStringList remote_data_list = remote_data.split('\n');
-
-    remote_data = remote_data_list[0];
-    remote_version = remote_data;
-    remote_version = remote_version.replace(',', '.');
-
-    //used for initialization and cleaning previous content in case it failed
-    release_notes = "";
-    for(int i = 1; i < remote_data_list.length(); i++){
-        release_notes += remote_data_list[i];
-    }
-
-    qDebug() << release_notes;
-    qDebug() << remote_version;
-
     QStringList list1 = ver.split(",");
-
     installed_version = list1.at(0) + '.' + list1.at(1) + '.' + list1.at(2);
 
-    QStringList list2 = remote_data.split(",");
+    // version.json parsing
+    cJSON *json = cJSON_Parse(filedata.c_str());
+    if (!cJSON_IsObject(json))
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: may be a syntax error.");
+        emit signalAutoUpdateFail(GAPI::GenericError);
+        return false;
+    }
 
+    cJSON *dists_json = cJSON_GetObjectItem(json, "distributions");
+    if (!cJSON_IsObject(dists_json))
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get distributions object.");
+        emit signalAutoUpdateFail(GAPI::GenericError);
+        return false;
+    }
+    
+    cJSON *dist_json = cJSON_GetObjectItem(dists_json, distrover.c_str());
+    if (!cJSON_IsObject(dist_json))
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get object for this distribution (%s)", distrover.c_str());
+        emit signalAutoUpdateFail(GAPI::GenericError);
+        return false;
+    }
+
+    cJSON *latestVersion_json = cJSON_GetObjectItem(dist_json, "latestVersion");
+    if (!cJSON_IsString(latestVersion_json))
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get latestVersion for this distribution.", distrover.c_str());
+        emit signalAutoUpdateFail(GAPI::GenericError);
+        return false;
+    }
+    remote_version = latestVersion_json->valuestring;
+
+    QStringList list2 = remote_version.split(".");
     if (list2.size() < 3)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
             "AutoUpdates::VerifyUpdates: Wrong data returned from server or Proxy HTML error!");
         qDebug() << "C++: AutoUpdates::VerifyUpdates: Wrong data returned from server or Proxy HTML error!";
-        emit signalAutoUpdateFail(GAPI::NetworkError);
+        emit signalAutoUpdateFail(GAPI::GenericError);
         return false;
     }
 
@@ -630,22 +639,82 @@ bool AppController::VerifyUpdates(std::string filedata)
 
     qDebug() << "local_version:" << QString::number(local_version.major) << QString::number(local_version.minor) << QString::number(local_version.release);
     qDebug() << "remote_version:" << QString::number(remote_version.major) << QString::number(remote_version.minor) << QString::number(remote_version.release);
-
-    if (compareVersions(local_version, remote_version) > 0)
+    
+    if (compareVersions(local_version, remote_version) <= 0)
     {
-        qDebug() << "C++: updates available";
-        distrover = VerifyOS("distro");
-        archver = VerifyOS("arch");
-        ChooseVersion(distrover, archver);
-        return true;
-    }
-    else {
         qDebug() << "C++: No updates available at the moment";
         emit signalAutoUpdateFail(GAPI::NoUpdatesAvailable);
         return false;
     }
+    qDebug() << "C++: updates available";
+    
+    cJSON *versions_array_json = cJSON_GetObjectItem(json, "versions");
+    if (!cJSON_IsArray(versions_array_json))
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get array of versions.");
+        emit signalAutoUpdateFail(GAPI::GenericError);
+        return false;
+    }
+    int latestVerIdx;
+    for (latestVerIdx = 0; latestVerIdx < cJSON_GetArraySize(versions_array_json); latestVerIdx++)
+    {
+        cJSON *version_json = cJSON_GetArrayItem(versions_array_json, latestVerIdx);
+        if (!cJSON_IsObject(version_json))
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get version object at index %d", latestVerIdx);
+            emit signalAutoUpdateFail(GAPI::GenericError);
+            return false;
+        }
+        cJSON *version_number_json = cJSON_GetObjectItem(version_json, "version");
+        if (!cJSON_IsString(version_number_json))
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get version number from version at %d", latestVerIdx);
+            emit signalAutoUpdateFail(GAPI::GenericError);
+            return false;
+        }
+        if (strcmp(version_number_json->valuestring, latestVersion_json->valuestring) == 0)
+            break;
+    }
 
+    // build release notes string from the previous N_RELEASE_NOTES release notes
+    release_notes = "<h2> Notas de Lançamento</h2>"; //init and clean previous content in case it failed
+    for (int i = latestVerIdx; i < std::min(cJSON_GetArraySize(versions_array_json),latestVerIdx + N_RELEASE_NOTES); i++)
+    {
+        cJSON *version_json = cJSON_GetArrayItem(versions_array_json, i);
+        cJSON *version_number_json = cJSON_GetObjectItem(version_json, "version");
+        cJSON *version_date_json = cJSON_GetObjectItem(version_json, "date");
+        cJSON *version_release_notes_json = cJSON_GetObjectItem(version_json, "release_notes");
+        if (!cJSON_IsObject(version_json)
+         || !cJSON_IsString(version_number_json)
+         || !cJSON_IsString(version_date_json)
+         || !cJSON_IsArray(version_release_notes_json))
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not parse some key/value of version object at %d", i);
+            emit signalAutoUpdateFail(GAPI::GenericError);
+            return false;
+        }
+        release_notes += "<p>";
+        release_notes += QString("<h3>Versão estável ") + version_number_json->valuestring + QString(":</h3>");
+        release_notes += QString("- Data de lançamento: ") + version_date_json->valuestring + QString("<br/>");
+        for (int rlsNoteIdx = 0; rlsNoteIdx < cJSON_GetArraySize(version_release_notes_json); rlsNoteIdx++)
+        {
+            cJSON *release_note_json = cJSON_GetArrayItem(version_release_notes_json, rlsNoteIdx);
+            if (!cJSON_IsString(release_note_json))
+            {
+                PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not parse release note %d of version obj %d", rlsNoteIdx, i);
+                emit signalAutoUpdateFail(GAPI::GenericError);
+                return false;
+            }
+            release_notes += QString("- ") + release_note_json->valuestring + QString("<br/>");
+        }
+        release_notes += "</p>";
+    }
+
+    qDebug() << release_notes;
+
+    return ChooseVersion(distrover, archver, dist_json);
 }
+
 std::string AppController::VerifyOS(std::string param)
 {
     std::string distrostr;
@@ -653,20 +722,25 @@ std::string AppController::VerifyOS(std::string param)
     QRegExp rx;
     QStringList list;
     QString content;
+    QFile osFile("/etc/os-release");
 
     if( QSysInfo::WordSize == 64 )
         archstr = "x86_64";
     else
         archstr = "i386";
-
+    if (param == "arch")
+    {
+        goto done;
+    }
+    
 #ifdef WIN32
     distrostr = "windows";
-
+    distrostr += QSysInfo::WordSize == 64 ? "64" : "32";
 #elif __APPLE__
     distrostr = "osx";
 #else
 
-    QFile osFile("/etc/os-release");
+    
     if (!osFile.exists())
     {
         qDebug() << "Not Linux or too old distro!";
@@ -679,18 +753,33 @@ std::string AppController::VerifyOS(std::string param)
 
     rx = QRegExp("NAME=\"(.*)\"");
     content = osFile.readAll();
-
     rx.setMinimal(true);
-
     rx.indexIn(content);
-
     list = rx.capturedTexts();
-
     if (list.size() > 1)
     {
         distrostr = list.at(1).toStdString();
     }
 
+    if (distrostr == "Ubuntu")
+    {
+        distrostr = "ubuntu"; // lower case
+        rx = QRegExp("VERSION_ID=\"(\\d{2}.\\d{2})\"");
+        rx.setMinimal(true);
+        rx.indexIn(content);
+        list = rx.capturedTexts();
+        if (list.size() > 1)
+        {
+            std::string ubuntuVersion = list.at(1).toStdString();
+            std::size_t pos = ubuntuVersion.find(".");
+            if (pos != std::string::npos)
+            {
+                ubuntuVersion = ubuntuVersion.substr(0, pos);
+            }
+            distrostr += ubuntuVersion;
+            qDebug() << "Ubuntu version: " << distrostr.c_str();
+        }
+    }
 #endif
 
 done:
@@ -699,7 +788,7 @@ done:
     else
         return archstr;
 }
-void AppController::ChooseVersion(std::string distro, std::string arch)
+bool AppController::ChooseVersion(std::string distro, std::string arch, cJSON *dist_json)
 {
     qDebug() << "C++:ChooseVersion";
 
@@ -707,66 +796,37 @@ void AppController::ChooseVersion(std::string distro, std::string arch)
 
     eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_URL);
     std::string configurl = config.getString();
-
-    if (configurl.empty())
-        downloadurl.append(serverurl);
-    else
-        downloadurl.append(configurl);
+    downloadurl.append(configurl);
 
 #ifdef WIN32
-    if (arch == "i386")
-    {
-        downloadurl.append(WINDOWS32);
-        updateWindows(downloadurl, distro);
-    } else {
-        downloadurl.append(WINDOWS64);
-        updateWindows(downloadurl, distro);
-    }
+    distro += arch == "x86_64" ? "64" : "32";
 #elif __APPLE__
 
-    downloadurl.append(MAC_OS);
-    updateWindows(downloadurl, distro);
 #else
 
     if (distro == "unsupported")
     {
        qDebug() << "C++: Your Linux distribution is not supported by Auto-updates";
        emit signalAutoUpdateFail(GAPI::LinuxNotSupported);
+       return false;
     }
-
-    //Name of the deb/rpm will be distro specific
-
-    if (arch == "x86_64")
+    // new builds for ubuntu are only 64 bits
+    if (distro.substr(0, 6) != "ubuntu")
     {
-        if (distro == "Ubuntu")
-        {
-            downloadurl.append(UBUNTU64);
-            updateWindows(downloadurl, distro);
-        }
-        else if (distro == "fedora")
-        {
-            downloadurl.append(FEDORA64);
-            updateWindows(downloadurl, distro);
-        }
-        else if (distro == "suse")
-        {
-                downloadurl.append(SUSE64);
-                updateWindows(downloadurl, distro);
-        }
-    } else {
-        //32bits
-        if (distro == "suse")
-        {
-                downloadurl.append(SUSE32);
-                updateWindows(downloadurl, distro);
-        }
-        else if (distro == "fedora")
-        {
-            downloadurl.append(FEDORA32);
-            updateWindows(downloadurl, distro);
-        }
+        distro += arch == "x86_64" ? "64" : "32";
     }
 #endif
+    //Name of the msi/deb/rpm will be distro specific
+    cJSON *package_json = cJSON_GetObjectItem(dist_json, "package");
+    if (!cJSON_IsString(package_json))
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get package_json for this distribution.");
+        emit signalAutoUpdateFail(GAPI::GenericError);
+        return false;
+    }
+    downloadurl.append(package_json->valuestring);
+    updateWindows(downloadurl, distro);
+    return true;
 }
 
 void AppController::updateWindows(std::string uri, std::string distro)
