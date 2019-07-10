@@ -678,7 +678,7 @@ bool AppController::VerifyUpdates(std::string filedata)
 
     // build release notes string from the previous N_RELEASE_NOTES release notes
     release_notes = "<h2> Notas de Lançamento</h2>"; //init and clean previous content in case it failed
-    for (int i = latestVerIdx; i < std::min(cJSON_GetArraySize(versions_array_json),latestVerIdx + N_RELEASE_NOTES); i++)
+    for (int i = latestVerIdx; i < (std::min)(cJSON_GetArraySize(versions_array_json),latestVerIdx + N_RELEASE_NOTES); i++)
     {
         cJSON *version_json = cJSON_GetArrayItem(versions_array_json, i);
         cJSON *version_number_json = cJSON_GetObjectItem(version_json, "version");
