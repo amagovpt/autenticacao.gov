@@ -761,9 +761,11 @@ std::string AppController::VerifyOS(std::string param)
         distrostr = list.at(1).toStdString();
     }
 
-    if (distrostr == "Ubuntu")
+    //Normalize distro string to lowercase
+    std::transform(distrostr.begin(), distrostr.end(), distrostr.begin(), ::tolower);
+
+    if (distrostr == "ubuntu") // distinguish ubuntu16, ubuntu18, ...
     {
-        distrostr = "ubuntu"; // lower case
         rx = QRegExp("VERSION_ID=\"(\\d{2}.\\d{2})\"");
         rx.setMinimal(true);
         rx.indexIn(content);
@@ -779,6 +781,16 @@ std::string AppController::VerifyOS(std::string param)
             distrostr += ubuntuVersion;
             qDebug() << "Ubuntu version: " << distrostr.c_str();
         }
+    }
+    else
+    {
+        // os-release name for openSUSE can have more characters such as version name
+        if (distrostr.find("opensuse") != std::string::npos)
+        {
+            distrostr = "suse";
+        }
+        
+        distrostr += QSysInfo::WordSize == 64 ? "64" : "32";
     }
 #endif
 
@@ -799,7 +811,7 @@ bool AppController::ChooseVersion(std::string distro, std::string arch, cJSON *d
     downloadurl.append(configurl);
 
 #ifdef WIN32
-    distro += arch == "x86_64" ? "64" : "32";
+    
 #elif __APPLE__
 
 #else
@@ -809,11 +821,6 @@ bool AppController::ChooseVersion(std::string distro, std::string arch, cJSON *d
        qDebug() << "C++: Your Linux distribution is not supported by Auto-updates";
        emit signalAutoUpdateFail(GAPI::LinuxNotSupported);
        return false;
-    }
-    // new builds for ubuntu are only 64 bits
-    if (distro.substr(0, 6) != "ubuntu")
-    {
-        distro += arch == "x86_64" ? "64" : "32";
     }
 #endif
     //Name of the msi/deb/rpm will be distro specific
