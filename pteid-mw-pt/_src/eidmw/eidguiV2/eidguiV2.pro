@@ -58,7 +58,7 @@ SOURCES += main.cpp \
     proxyinfo.cpp \
     totp_gen.cpp \
     singleapplication.cpp \
-    cJSON_1_7_21.c
+    cJSON_1_7_12.c
 
 INCLUDEPATH += /usr/include/poppler/qt5/
 INCLUDEPATH += ../CMD/services
