@@ -86,6 +86,7 @@ Item {
                     propertyText.font.pixelSize: activeFocus || textDescription.activeFocus
                                     ? Constants.SIZE_TEXT_LABEL_FOCUS
                                     : Constants.SIZE_TEXT_LABEL
+                    propertyText.textFormat: Text.RichText
                     width: parent.width
                     height: parent.height
                     Accessible.role: Accessible.TitleBar

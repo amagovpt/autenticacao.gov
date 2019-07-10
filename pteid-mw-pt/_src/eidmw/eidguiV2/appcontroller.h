@@ -10,6 +10,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
 #include <QNetworkReply>
+#include "cJSON.h"
 
 //MW libraries
 #include "eidlib.h"
@@ -49,7 +50,7 @@ public slots:
     void startUpdateRequest(QUrl url);
     bool VerifyUpdates(std::string filedata);
     std::string VerifyOS(std::string param);
-    void ChooseVersion(std::string distro, std::string arch);
+    bool ChooseVersion(std::string distro, std::string arch, cJSON *dist_json);
     void updateWindows(std::string uri, std::string distro);
     void RunPackage(std::string pkg, std::string distro);
     void startUpdate(void);

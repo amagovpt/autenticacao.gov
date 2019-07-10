@@ -999,82 +999,82 @@
 <context>
     <name>PageDefinitionsApp</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="84"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="85"/>
         <source>STR_CARD_READER_TITLE</source>
         <translation>Card reader</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="138"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="139"/>
         <source>STR_SELECT_READER</source>
         <translation>Select</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="200"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="201"/>
         <source>STR_START_TITLE</source>
         <translation>Startup</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="238"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="239"/>
         <source>STR_AUTO_START_OP</source>
         <translation>Activate on startup</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="273"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="274"/>
         <source>STR_START_AUTOUPDATES_TITLE</source>
         <translation>Automatic updates</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="311"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="312"/>
         <source>STR_CARD_READER_TEXT</source>
         <translation>Enable checking of new updates on application start.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="348"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="349"/>
         <source>STR_LANGUAGE_TITLE</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="392"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="393"/>
         <source>STR_PT_NAME_OP</source>
         <translation>Português</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="415"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="416"/>
         <source>STR_UK_NAME_OP</source>
         <translation>English</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="450"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="451"/>
         <source>STR_APP_LOOK_TITLE</source>
         <translation>Layout</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="489"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="490"/>
         <source>STR_SHOW_ANIME_OP</source>
         <translation>Enable animations</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="526"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="527"/>
         <source>STR_DEBUG_MODE_TITLE</source>
         <translation>Debug mode</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="580"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="581"/>
         <source>STR_DEBUG_MODE_DESCRIPTION</source>
         <translation>Please enable debug mode if you encounter problems with the application.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="586"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="587"/>
         <source>STR_DEBUG_MODE_ENABLE</source>
         <translation>Enable debug mode</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="624"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="625"/>
         <source>STR_APP_GRAPHICS_TITLE</source>
         <translation>Graphic acceleration</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="683"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="684"/>
         <source>STR_ACCEL_ENABLE</source>
         <translation>Enable graphic acceleration</translation>
     </message>
@@ -1109,48 +1109,48 @@
         <translation>URL?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="722"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="723"/>
         <source>STR_NETWORK_TITLE</source>
         <translation>Network settings</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="762"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="763"/>
         <source>STR_NETWORK_SYSTEM_PROXY_OP</source>
         <translation>Use system proxy</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="783"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="784"/>
         <source>STR_NETWORK_PROXY_OP</source>
         <translation>Configure proxy server</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="813"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="814"/>
         <source>STR_NETWORK_PROXY_ADDRESS_OP</source>
         <translation>Host?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="845"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="846"/>
         <source>STR_NETWORK_PROXY_PORT_OP</source>
         <translation>Port?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="869"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="870"/>
         <source>STR_NETWORK_AUTH_OP</source>
         <translation>Configure proxy authentication</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="898"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="899"/>
         <source>STR_NETWORK_AUTH_USERNAME_OP</source>
         <translation>Username?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="928"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="929"/>
         <source>STR_NETWORK_AUTH_PASSWORD_OP</source>
         <translation>Password?</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="53"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="164"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="165"/>
         <source>STR_USE_PINPAD</source>
         <translation>Use PINPAD functionality</translation>
     </message>
@@ -1400,19 +1400,19 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="82"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="159"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="160"/>
         <source>STR_UPDATE_BUTTON_START</source>
         <translation>Install</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="241"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="242"/>
         <source>STR_UPDATE_BUTTON_CANCEL</source>
         <translation>Cancel download</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="22"/>
         <source>STR_UPDATE_ERROR</source>
-        <translation>Unable to download the update please check your Network Connection.</translation>
+        <translation type="unfinished">An error occured.</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="25"/>
@@ -1441,6 +1441,7 @@
         <translation>Failed to install update.</translation>
     </message>
     <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="22"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="40"/>
         <source>STR_CONTACT_SUPPORT</source>
         <translation>Please try again. If this error persists, contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
@@ -1451,12 +1452,12 @@
         <translation>Please check your Internet connection and try again.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="114"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="115"/>
         <source>STR_INSTALLED_VERSION</source>
         <translation>Current version</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="136"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="137"/>
         <source>STR_REMOTE_VERSION</source>
         <translation>New version</translation>
     </message>
@@ -1487,7 +1488,7 @@
         <translation>Press the button to check for available updates.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="215"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="216"/>
         <source>STR_UPDATE_BUTTON</source>
         <translation>Check for updates</translation>
     </message>
@@ -1542,7 +1543,8 @@
         <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="42"/>
         <location filename="contentPages/home/PageHomeForm.ui.qml" line="43"/>
         <source>STR_HELP_DOC_HOME_PAGE</source>
-        <translation>Autenticação gov</translation>
+        <translation type="unfinished">
+Autenticação gov</translation>
     </message>
     <message>
         <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="56"/>
@@ -2709,17 +2711,17 @@
     <message>
         <location filename="main.qml" line="174"/>
         <source>STR_AUTOUPDATE_TEXT</source>
-        <translation>A new version of the application is available. Press Install do perform the update.</translation>
+        <translation>A new version of the application is available. Press Open to open the Updates page.</translation>
     </message>
     <message>
         <location filename="main.qml" line="175"/>
         <source>STR_DISABLE_AUTOUPDATE_INFO</source>
-        <translation type="unfinished">To disable the checking for updates on application start, go to Application settings menu.</translation>
+        <translation>To disable the checking for updates on application start, go to Application settings menu.</translation>
     </message>
     <message>
         <location filename="main.qml" line="218"/>
         <source>STR_UPDATE_INSTALL_BUTTON</source>
-        <translation>Update</translation>
+        <translation>Open</translation>
     </message>
     <message>
         <location filename="main.qml" line="262"/>
