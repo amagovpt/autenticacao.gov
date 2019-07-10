@@ -420,7 +420,7 @@ void AppController::RunPackage(std::string pkg, std::string distro){
 
     std::cout << "pkgpath " << pkgpath << " distro " << distro << std::endl;
 
-    if (distro == "ubuntu")
+    if (distro.substr(0, 6) == "ubuntu")
     {
         // TODO: Ubunto < 17
         execl ("/usr/bin/software-center", "software-center", pkgpath.c_str(), NULL);
