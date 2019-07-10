@@ -273,6 +273,7 @@ echo "**************************************************************************
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="certificates.cpp" />
+    <ClCompile Include="cJSON_1_7_12.c" />
     <ClCompile Include="proxyinfo.cpp" />
     <ClCompile Include="ErrorConn.cpp" />
     <ClCompile Include="filesavedialog.cpp" />
@@ -475,6 +476,7 @@ echo "**************************************************************************
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cJSON_1_7_12.h" />
     <ClInclude Include="credentials.h" />
     <ClInclude Include="SCAP-services-v3\SCAPAttributeClientServiceBindingProxy.h" />
   </ItemGroup>

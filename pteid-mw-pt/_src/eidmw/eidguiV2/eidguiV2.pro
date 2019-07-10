@@ -57,7 +57,8 @@ SOURCES += main.cpp \
     certificates.cpp \
     proxyinfo.cpp \
     totp_gen.cpp \
-    singleapplication.cpp
+    singleapplication.cpp \
+    cJSON_1_7_21.c
 
 INCLUDEPATH += /usr/include/poppler/qt5/
 INCLUDEPATH += ../CMD/services
@@ -141,4 +142,5 @@ HEADERS += \
     Settings.h \
     certificates.h \
     singleapplication.h \
-    singleapplication_p.h
+    singleapplication_p.h \
+    cJSON_1_7_12.h
