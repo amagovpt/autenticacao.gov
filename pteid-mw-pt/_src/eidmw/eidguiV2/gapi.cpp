@@ -953,6 +953,12 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<
 
 }
 
+void GAPI::doCancelCMDSign() {
+    cmd_signature->cancelRequest();
+}
+void GAPI::cancelCMDSign() {
+    QtConcurrent::run(this, &GAPI::doCancelCMDSign);
+}
 void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
     QString outputFile, int page, double coord_x, double coord_y,
     QString reason, QString location, double isTimestamp, double isSmall)

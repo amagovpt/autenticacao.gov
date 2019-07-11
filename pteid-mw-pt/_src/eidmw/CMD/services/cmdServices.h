@@ -40,6 +40,8 @@ class CMDServices {
         CMDServices(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId);
         virtual ~CMDServices();
 
+        void cancelRequest();
+
         // GetCertificate
         int getCertificate(CMDProxyInfo proxyInfo, std::string in_userId, std::vector<CByteArray> &out_certificate );
 

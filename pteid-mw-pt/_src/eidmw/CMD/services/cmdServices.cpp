@@ -200,6 +200,13 @@ bool CMDServices::init(int recv_timeout, int send_timeout,
 }
 
 /*  *********************************************************
+    ***    CMDServices::cancelRequest()                   ***
+    ********************************************************* */
+void CMDServices::cancelRequest(){
+    soap_force_closesock(m_soap);
+}
+
+/*  *********************************************************
     ***    CMDServices::getSoap()                         ***
     ********************************************************* */
 soap *CMDServices::getSoap(){
