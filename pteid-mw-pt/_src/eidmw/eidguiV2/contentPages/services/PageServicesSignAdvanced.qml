@@ -554,6 +554,7 @@ PageServicesSignAdvancedForm {
                 var coord_x = -1
                 var coord_y = -1
                 if(propertyCheckSignShow.checked){
+                    propertyPDFPreview.updateSignPreview(0,0) //arguments not used
                     coord_x = propertyPDFPreview.propertyCoordX
                     //coord_y must be the lower left corner of the signature rectangle
                     coord_y = propertyPDFPreview.propertyCoordY
@@ -633,6 +634,7 @@ PageServicesSignAdvancedForm {
                 var coord_x = -1
                 var coord_y = -1
                 if(propertyCheckSignShow.checked){
+                    propertyPDFPreview.updateSignPreview(0,0) //arguments not used
                     coord_x = propertyPDFPreview.propertyCoordX
                     //coord_y must be the lower left corner of the signature rectangle
                     coord_y = propertyPDFPreview.propertyCoordY
@@ -1261,6 +1263,7 @@ PageServicesSignAdvancedForm {
 
     Component.onCompleted: {
         console.log("Page Services Sign Advanced mainWindowCompleted")
+        
         propertyPageLoader.propertyBackupFromSignaturePage = false
         propertyBusyIndicator.running = true
         gapi.startCardReading()
