@@ -215,6 +215,7 @@ Item {
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     onClicked: {
+                        gapi.cancelCMDSign();
                         dialogSignCMD.close()
                         textFieldPin.text = ""
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
@@ -390,6 +391,7 @@ Item {
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 onClicked: {
+                    gapi.cancelCMDSign();
                     dialogCMDProgress.close()
                     rectReturnCode.visible = false
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS

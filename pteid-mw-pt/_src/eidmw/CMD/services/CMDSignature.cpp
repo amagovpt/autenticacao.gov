@@ -50,6 +50,10 @@ CMDSignature::~CMDSignature()
     delete cmdService;
 }
 
+void CMDSignature::cancelRequest()
+{
+    cmdService->cancelRequest();
+}
 void CMDSignature::set_pdf_handler(PTEID_PDFSignature *in_pdf_handler)
 {
     m_pdf_handlers.clear();
