@@ -1955,9 +1955,9 @@ void PDFPreviewImageProvider::closeAllDocs() {
     while (it != m_docs.end())
     {
         delete it->second;
-        m_docs.erase(it);
         it++;
     }
+    m_docs.clear();
 }
 
 void GAPI::startCardReading() {
