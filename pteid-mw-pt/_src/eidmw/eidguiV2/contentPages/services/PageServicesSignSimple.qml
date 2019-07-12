@@ -432,6 +432,7 @@ PageServicesSignSimpleForm {
             fileLoaded = false
             filesModel.clear()
             propertyButtonHidedAdd.forceActiveFocus()
+            gapi.closeAllPdfPreviews();
         }
     }
     propertyButtonHidedAdd {
@@ -625,6 +626,10 @@ PageServicesSignSimpleForm {
         //textFieldMobileNumber.text = propertyPageLoader.propertyBackupMobileNumber
 
         gapi.startCardReading()
+    }
+    Component.onDestruction: {
+        console.log("PageServicesSignSimple destruction")
+        gapi.closeAllPdfPreviews();
     }
     function updateIndicators(pageCount){
         propertySpinBoxControl.up.indicator.visible = true

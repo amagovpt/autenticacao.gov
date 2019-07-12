@@ -882,6 +882,7 @@ PageServicesSignAdvancedForm {
             console.log("Removing all files")
             filesModel.clear()
             propertyPageLoader.propertyBackupfilesModel.clear()
+            gapi.closeAllPdfPreviews();
         }
     }
 
@@ -1116,6 +1117,7 @@ PageServicesSignAdvancedForm {
                         hoverEnabled : true
                         onClicked: {
                             console.log("Delete file index:" + index);
+                            gapi.closePdfPreview(filesModel.get(index).fileUrl);
                             for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
                             {
                                 if(propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl
