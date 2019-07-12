@@ -15,6 +15,7 @@
 #include <QPrintDialog>
 #include "Settings.h"
 #include "certificates.h"
+#include <unordered_map>
 
 //MW libraries
 #include "eidlib.h"
@@ -157,19 +158,21 @@ class PDFPreviewImageProvider: public QObject, public QQuickImageProvider
 {
     Q_OBJECT
 public:
-    PDFPreviewImageProvider() : QQuickImageProvider(QQuickImageProvider::Pixmap), m_doc(NULL) { }
+    PDFPreviewImageProvider() : QQuickImageProvider(QQuickImageProvider::Pixmap) { }
 
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
     //Returns page size in postscript points
     QSize getPageSize(int page);
-
+    
+    void closeDoc(QString filePath);
+    void closeAllDocs();
 signals:
     Q_SIGNAL void signalPdfSourceChanged(int pdfWidth, int pdfHeight);
 private:
     QPixmap renderPdf(int page,const QSize &requestedSize);
     QPixmap renderPDFPage(unsigned int page);
-    Poppler::Document *m_doc;
-    QString m_filePath;
+    std::unordered_map<std::string, Poppler::Document *> m_docs; // all loaded pdfs (remain open)
+    std::string m_filePath; // file in preview
 };
 
 
@@ -269,6 +272,8 @@ public slots:
     void startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outputFile, int page, double coord_x, double coord_y,
                          QString reason, QString location, bool isTimestamp, bool isSmall);
     int getPDFpageCount(QString loadedFilePath);
+    void closePdfPreview(QString filePath);
+    void closeAllPdfPreviews();
 
 	void startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp);
 	void startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, bool isTimestamp);

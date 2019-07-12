@@ -1677,6 +1677,15 @@ int GAPI::getPDFpageCount(QString loadedFilePath) {
     return pageCount;
 }
 
+void GAPI::closePdfPreview(QString filePath)
+{
+    image_provider_pdf->closeDoc(filePath);
+}
+void GAPI::closeAllPdfPreviews() 
+{
+    image_provider_pdf->closeAllDocs();
+}
+
 void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp) {
     QFuture<void> future =
         QtConcurrent::run(this, &GAPI::doSignXADES, loadedFilePath, outputFile, isTimestamp);
@@ -1859,27 +1868,23 @@ QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, c
     QStringList strList = id.split("?");
 
     QString pdf_path = QUrl::fromPercentEncoding(strList.at(0).toUtf8());
+    m_filePath = pdf_path.toStdString();
 
     //URL param ?page=xx
     unsigned int page = (unsigned int)strList.at(1).split("=").at(1).toInt();
 
-    if (m_doc == NULL || m_filePath != pdf_path) {
+    if (m_docs.find(m_filePath) == m_docs.end()) {
 
         Poppler::Document *newdoc = Poppler::Document::load(pdf_path);
         if (!newdoc) {
             qDebug() << "Failed to load PDF file";
             return QPixmap();
         }
-        m_filePath = pdf_path;
+        m_docs.insert(std::pair<std::string, Poppler::Document *>(m_filePath, newdoc));
 
-        //TODO: Close a previous document
-        //closeDocument();
-
-        m_doc = newdoc;
-
-        m_doc->setRenderHint(Poppler::Document::TextAntialiasing, true);
-        m_doc->setRenderHint(Poppler::Document::Antialiasing, true);
-        m_doc->setRenderBackend(Poppler::Document::RenderBackend::SplashBackend);
+        newdoc->setRenderHint(Poppler::Document::TextAntialiasing, true);
+        newdoc->setRenderHint(Poppler::Document::Antialiasing, true);
+        newdoc->setRenderBackend(Poppler::Document::RenderBackend::SplashBackend);
     }
 
     QPixmap pTest = renderPDFPage(page);
@@ -1904,16 +1909,14 @@ QPixmap PDFPreviewImageProvider::renderPdf(int page, const QSize &requestedSize)
 }
 
 QSize PDFPreviewImageProvider::getPageSize(int page) {
-
-    Poppler::Page *popplerPage = m_doc->page(page - 1);
-
+    Poppler::Page *popplerPage = m_docs.at(m_filePath)->page(page - 1);
     return popplerPage->pageSize();
 }
 
 QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
 {
     // Document starts at page 0 in the poppler-qt5 API
-    Poppler::Page *popplerPage = m_doc->page(page - 1);
+    Poppler::Page *popplerPage = m_docs.at(m_filePath)->page(page - 1);
 
     //TODO: Test the resolution on Windows
     const double resX = 120.0;
@@ -1939,6 +1942,23 @@ QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
 
 }
 
+void PDFPreviewImageProvider::closeDoc(QString filePath) {
+    std::string filePathStd = filePath.toStdString();
+    if (m_docs.find(filePathStd) != m_docs.end())
+    {
+        delete m_docs.at(filePathStd);
+        m_docs.erase(filePathStd);
+    }
+}
+void PDFPreviewImageProvider::closeAllDocs() {
+    std::unordered_map<std::string, Poppler::Document *>::iterator it = m_docs.begin();
+    while (it != m_docs.end())
+    {
+        delete it->second;
+        m_docs.erase(it);
+        it++;
+    }
+}
 
 void GAPI::startCardReading() {
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "StartCardReading connectToCard");
