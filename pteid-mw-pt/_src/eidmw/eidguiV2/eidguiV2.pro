@@ -14,6 +14,9 @@ QT += printsupport
 
 CONFIG += c++11
 
+QMAKE_CFLAGS += -fvisibility=hidden
+QMAKE_CXXFLAGS += -fvisibility=hidden
+
 # Copy one file to the destination directory
 defineTest(copyFileToDestDir) {
     file = $$1
