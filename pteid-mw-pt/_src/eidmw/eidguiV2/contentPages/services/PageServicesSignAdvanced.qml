@@ -484,6 +484,14 @@ PageServicesSignAdvancedForm {
         onOpened: {
             rectPopUpError.forceActiveFocus()
         }
+        onRejected:{
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
+        }
+        onClosed: {
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
+        }
     }
     propertyMouseAreaToolTipPades{
         onEntered: {
