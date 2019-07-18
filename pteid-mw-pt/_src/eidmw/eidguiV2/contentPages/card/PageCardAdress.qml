@@ -71,6 +71,7 @@ PageCardAdressForm {
         onSignalUpdateProgressStatus: {
             console.log("Address change --> update progress status with text = " + statusMessage)
             textMessageTop.propertyText.text = statusMessage
+            textMessageTop.propertyText.forceActiveFocus()
         }
         onSignalCardAccessError: {
             console.log("Card Adress onSignalCardAccessError"+ error_code)
@@ -359,14 +360,24 @@ PageCardAdressForm {
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: true
+            font.bold: rectPopUp.activeFocus ? true : false
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
 
         Item {
+            id: rectPopUp
             width: parent.width
             height: rectMessage.height + rectNumProcess.height + rectConfirmAddress.height
+
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
+                             + labelConfirmOfAddressTextTitle.text
+            KeyNavigation.tab: textPinMsgConfirm.propertyText
+            KeyNavigation.down: textPinMsgConfirm.propertyText
+            KeyNavigation.right: textPinMsgConfirm.propertyText
+            KeyNavigation.backtab: okButton
+            KeyNavigation.up: okButton
 
             Item {
                 id: rectMessage
@@ -383,9 +394,13 @@ PageCardAdressForm {
                     propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
                     anchors.fill: parent 
                     propertyText.anchors.fill: textPinMsgConfirm
-
                     propertyAccessibleText: qsTr("STR_ADDRESS_CHANGE_TEXT") + 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
                     propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
+                    KeyNavigation.tab: textPinCurrent
+                    KeyNavigation.down: textPinCurrent
+                    KeyNavigation.right: textPinCurrent
+                    KeyNavigation.backtab: rectPopUp
+                    KeyNavigation.up: rectPopUp
                 }
             }
 
@@ -402,10 +417,19 @@ PageCardAdressForm {
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
+                    font.bold: activeFocus ? true : false
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
                     width: parent.width * 0.5
                     anchors.bottom: parent.bottom
+
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: text
+                    KeyNavigation.tab: textFieldNumProcess
+                    KeyNavigation.down: textFieldNumProcess
+                    KeyNavigation.right: textFieldNumProcess
+                    KeyNavigation.backtab: textPinMsgConfirm.propertyText
+                    KeyNavigation.up: textPinMsgConfirm.propertyText
                 }
                 TextField {
                     id: textFieldNumProcess
@@ -413,12 +437,21 @@ PageCardAdressForm {
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldNumProcess.text === "" ? true: false
                     placeholderText: qsTr("STR_ADDRESS_CHANGE_NUMBER_OP")
+                    font.bold: activeFocus ? true : false
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textPinCurrent.right
                     anchors.bottom: parent.bottom
                     focus: true
+
+                    Accessible.role: Accessible.EditableText
+                    Accessible.name: placeholderText
+                    KeyNavigation.tab: textPinNew
+                    KeyNavigation.down: textPinNew
+                    KeyNavigation.right: textPinNew
+                    KeyNavigation.backtab: textPinCurrent
+                    KeyNavigation.up: textPinCurrent
                 }
             }
             Item {
@@ -432,12 +465,21 @@ PageCardAdressForm {
                     text: qsTr("STR_ADDRESS_CHANGE_CODE")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
+                    font.bold: activeFocus ? true : false
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
                     width: parent.width * 0.5
                     anchors.bottom: parent.bottom
+
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: text
+                    KeyNavigation.tab: textFieldConfirmAddress
+                    KeyNavigation.down: textFieldConfirmAddress
+                    KeyNavigation.right: textFieldConfirmAddress
+                    KeyNavigation.backtab: textFieldNumProcess
+                    KeyNavigation.up: textFieldNumProcess
                 }
                 TextField {
                     id: textFieldConfirmAddress
@@ -445,11 +487,20 @@ PageCardAdressForm {
                     anchors.verticalCenter: parent.verticalCenter
                     font.italic: textFieldConfirmAddress.text === "" ? true: false
                     placeholderText: qsTr("STR_ADDRESS_CHANGE_CODE_OP")
+                    font.bold: activeFocus ? true : false
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
                     anchors.left: textPinNew.right
                     anchors.bottom: parent.bottom
+
+                    Accessible.role: Accessible.EditableText
+                    Accessible.name: placeholderText
+                    KeyNavigation.tab: cancelButton
+                    KeyNavigation.down: cancelButton
+                    KeyNavigation.right: cancelButton
+                    KeyNavigation.backtab: textPinNew
+                    KeyNavigation.up: textPinNew
                 }
             }
         }
@@ -460,6 +511,7 @@ PageCardAdressForm {
             anchors.horizontalCenter: parent.horizontalCenter
             y: 180
             Button {
+                id: cancelButton
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 text: qsTr("STR_ADDRESS_CHANGE_CANCEL")
@@ -467,13 +519,22 @@ PageCardAdressForm {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                highlighted: activeFocus ? true : false
                 onClicked: {
                     dialogConfirmOfAddress.close()
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     mainFormID.propertyPageLoader.forceActiveFocus()
                 }
+                Accessible.role: Accessible.Button
+                Accessible.name: text
+                KeyNavigation.tab: okButton
+                KeyNavigation.down: okButton
+                KeyNavigation.right: okButton
+                KeyNavigation.backtab: textFieldConfirmAddress
+                KeyNavigation.up: textFieldConfirmAddress
             }
             Button {
+                id: okButton
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 text: qsTr("STR_ADDRESS_CHANGE_CONFIRM")
@@ -482,6 +543,7 @@ PageCardAdressForm {
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
                 enabled: textFieldNumProcess.length !== 0 && textFieldConfirmAddress.length !== 0 ? true : false
+                highlighted: activeFocus ? true : false
                 onClicked: {
                     gapi.changeAddress(textFieldNumProcess.text,textFieldConfirmAddress.text)
                     progressBarIndeterminate.visible = true
@@ -490,11 +552,21 @@ PageCardAdressForm {
                     dialogConfirmOfAddress.close()
                     dialogConfirmOfAddressProgress.open()
                 }
+                Accessible.role: Accessible.Button
+                Accessible.name: text
+                KeyNavigation.tab: rectPopUp
+                KeyNavigation.down: rectPopUp
+                KeyNavigation.right: rectPopUp
+                KeyNavigation.backtab: cancelButton
+                KeyNavigation.up: cancelButton
             }
         }
         onRejected:{
             // Reject address change Popup's only with ESC key
             dialogConfirmOfAddress.open()
+        }
+        onOpened: {
+            rectPopUp.forceActiveFocus()
         }
     }
 
@@ -517,9 +589,17 @@ PageCardAdressForm {
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: true
+            font.bold: activeFocus ? true : false
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
+                             + labelConfirmOfAddressProgressTextTitle.text
+            KeyNavigation.tab: textMessageTop.propertyText
+            KeyNavigation.down: textMessageTop.propertyText
+            KeyNavigation.right: textMessageTop.propertyText
+            KeyNavigation.backtab: okButton
+            KeyNavigation.up: okButton
         }
 
         Item {
@@ -536,11 +616,17 @@ PageCardAdressForm {
                     propertyText.text: ""
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    propertyText.font.pixelSize: activeFocus ? Constants.SIZE_TEXT_LABEL+10 : Constants.SIZE_TEXT_LABEL
                     height: parent.height
                     width: parent.width
                     propertyText.height: parent.height
                     anchors.bottom: parent.bottom
+                    propertyAccessibleText: Functions.filterText(textMessageTop.propertyText.text)
+                    KeyNavigation.tab: confirmOkButton
+                    KeyNavigation.down: confirmOkButton
+                    KeyNavigation.right: confirmOkButton
+                    KeyNavigation.backtab: rectPopUp
+                    KeyNavigation.up: rectPopUp
                 }
             }
 
@@ -578,6 +664,7 @@ PageCardAdressForm {
             y: 180
 
             Button {
+                id: confirmOkButton
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 text: qsTr("STR_ADDRESS_CHANGE_OK")
@@ -591,12 +678,22 @@ PageCardAdressForm {
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     mainFormID.propertyPageLoader.forceActiveFocus()
                 }
-                focus: true
+                highlighted: activeFocus ? true : false
+                Accessible.role: Accessible.Button
+                Accessible.name: text
+                KeyNavigation.tab: labelConfirmOfAddressProgressTextTitle
+                KeyNavigation.down: labelConfirmOfAddressProgressTextTitle
+                KeyNavigation.right: textMessageTop.propertyText
+                KeyNavigation.backtab: textMessageTop.propertyText
+                KeyNavigation.up: textMessageTop.propertyText
             }
         }
         onRejected:{
             // Reject address change Popup's only with ESC key
             dialogConfirmOfAddressProgress.open()
+        }
+        onOpened: {
+            labelConfirmOfAddressProgressTextTitle.forceActiveFocus()
         }
     }
     
