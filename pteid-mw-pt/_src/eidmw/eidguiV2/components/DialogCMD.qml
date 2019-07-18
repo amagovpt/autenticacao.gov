@@ -219,6 +219,7 @@ Item {
                         dialogSignCMD.close()
                         textFieldPin.text = ""
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                        mainFormID.propertyPageLoader.forceActiveFocus()
                     }
                 }
                 Button {
@@ -373,7 +374,6 @@ Item {
                 indeterminate: true
                 z:1
             }
-
         }
 
         Item {
@@ -395,6 +395,7 @@ Item {
                     dialogCMDProgress.close()
                     rectReturnCode.visible = false
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                    mainFormID.propertyPageLoader.forceActiveFocus()
                 }
             }
             Button {

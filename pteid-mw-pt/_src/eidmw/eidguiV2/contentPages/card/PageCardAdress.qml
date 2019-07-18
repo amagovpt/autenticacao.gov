@@ -470,6 +470,7 @@ PageCardAdressForm {
                 onClicked: {
                     dialogConfirmOfAddress.close()
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                    mainFormID.propertyPageLoader.forceActiveFocus()
                 }
             }
             Button {
@@ -586,8 +587,9 @@ PageCardAdressForm {
                 font.capitalization: Font.MixedCase
                 visible: progressBarIndeterminate.visible ? false : true
                 onClicked: {
-                    mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     dialogConfirmOfAddressProgress.close()
+                    mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                    mainFormID.propertyPageLoader.forceActiveFocus()
                 }
                 focus: true
             }
