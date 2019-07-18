@@ -82,7 +82,8 @@ PageServicesSignAdvancedForm {
         }
         onSignalPdfSignSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-            signsuccess_dialog.visible = true
+            signsuccess_dialog.open()
+            titleText.forceActiveFocus()
             propertyBusyIndicator.running = false
             // test time stamp
             if(error_code == GAPI.SignMessageTimestampFailed){
@@ -285,9 +286,12 @@ PageServicesSignAdvancedForm {
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: rectPopUp.activeFocus ? true : false
+            font.bold: activeFocus
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
+            KeyNavigation.tab: labelText.text === "" ? labelOpenText : labelText
+            KeyNavigation.right: labelText.text === "" ? labelOpenText : labelText
+            KeyNavigation.down: labelText.text === "" ? labelOpenText : labelText
         }
         Item {
             id: rectPopUp
@@ -302,14 +306,6 @@ PageServicesSignAdvancedForm {
                     signSuccessShowSignedFile()
                 }
             }
-            Accessible.role: Accessible.AlertMessage
-            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
-                             + titleText.text + labelText.text + labelOpenText.text
-            KeyNavigation.tab: closeButton
-            KeyNavigation.down: closeButton
-            KeyNavigation.right: closeButton
-            KeyNavigation.backtab: openFileButton
-            KeyNavigation.up: openFileButton
 
             Item {
                 id: rectLabelText
@@ -318,12 +314,18 @@ PageServicesSignAdvancedForm {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: labelText
+                    font.bold: activeFocus
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
                     width: parent.width - 48
                     wrapMode: Text.Wrap
+                    KeyNavigation.tab: labelOpenText
+                    KeyNavigation.right: labelOpenText
+                    KeyNavigation.down: labelOpenText
+                    KeyNavigation.backtab: titleText
+                    KeyNavigation.up: titleText
                 }
             }
             Item {
@@ -342,13 +344,18 @@ PageServicesSignAdvancedForm {
                             qsTranslate("PageServicesSign", "STR_SIGN_OPEN")
                         }
                     }
-
+                    font.bold: activeFocus
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
                     width: parent.width - 48
                     wrapMode: Text.Wrap
+                    KeyNavigation.tab: closeButton
+                    KeyNavigation.right: closeButton
+                    KeyNavigation.down: closeButton
+                    KeyNavigation.backtab: labelText.text === "" ? titleText : labelText
+                    KeyNavigation.up: labelText.text === "" ? titleText : labelText
                 }
             }
         }
@@ -376,8 +383,9 @@ PageServicesSignAdvancedForm {
                     KeyNavigation.tab: openFileButton
                     KeyNavigation.down: openFileButton
                     KeyNavigation.right: openFileButton
-                    KeyNavigation.backtab: openFileButton
-                    KeyNavigation.up: openFileButton
+                    KeyNavigation.backtab: labelOpenText
+                    KeyNavigation.up: labelOpenText
+                    highlighted: activeFocus
                 }
                 Button {
                     id: openFileButton
@@ -391,16 +399,14 @@ PageServicesSignAdvancedForm {
                     onClicked: {
                         signSuccessShowSignedFile()
                     }
-                    KeyNavigation.tab: rectPopUp
-                    KeyNavigation.down: rectPopUp
-                    KeyNavigation.right: rectPopUp
+                    KeyNavigation.tab: titleText
+                    KeyNavigation.down: titleText
+                    KeyNavigation.right: titleText
                     KeyNavigation.backtab: closeButton
                     KeyNavigation.up: closeButton
+                    highlighted: activeFocus
                 }
             }
-        }
-        onOpened: {
-            rectPopUp.forceActiveFocus()
         }
         onRejected:{
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS

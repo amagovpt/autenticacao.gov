@@ -164,6 +164,7 @@ PageCardIdentifyForm {
         onSignalSaveCardPhotoFinished: {
             if(success) {
                 createsuccess_dialog.open()
+                createdSuccTitle.forceActiveFocus()
             } else {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text = 
                         qsTranslate("Popup Card","STR_POPUP_ERROR")
@@ -175,7 +176,7 @@ PageCardIdentifyForm {
         }
     }
 
-     Dialog {
+    Dialog {
         id: createsuccess_dialog
         width: 400
         height: 200
@@ -187,13 +188,17 @@ PageCardIdentifyForm {
         y: parent.height * 0.5 - createsuccess_dialog.height * 0.5
 
         header: Label {
+            id: createdSuccTitle
             text: qsTranslate("PageCardPrint","STR_CREATE_SUCESS")
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: true
+            font.bold: activeFocus
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
+            KeyNavigation.tab: openFileText
+            KeyNavigation.right: openFileText
+            KeyNavigation.down: openFileText
         }
 
         Item {
@@ -214,13 +219,20 @@ PageCardIdentifyForm {
                 height: 50
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
+                    id: openFileText
                     text: qsTranslate("PageCardPrint", "STR_CREATE_OPEN")
+                    font.bold: activeFocus
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
                     width: parent.width - 48
                     wrapMode: Text.Wrap
+                    KeyNavigation.tab: cancelButton
+                    KeyNavigation.right: cancelButton
+                    KeyNavigation.down: cancelButton
+                    KeyNavigation.backtab: createdSuccTitle
+                    KeyNavigation.up: createdSuccTitle
                 }
             }
         }
@@ -233,6 +245,7 @@ PageCardIdentifyForm {
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 anchors.horizontalCenter: parent.horizontalCenter
                 Button {
+                    id: cancelButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     text: qsTranslate("Popup File","STR_POPUP_FILE_CANCEL")
@@ -240,12 +253,18 @@ PageCardIdentifyForm {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
+                    KeyNavigation.tab: openButton
+                    KeyNavigation.right: openButton
+                    KeyNavigation.backtab: openFileText
+                    KeyNavigation.up: openFileText
+                    highlighted: activeFocus
                     onClicked: {
                         createsuccess_dialog.close()
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     }
                 }
                 Button {
+                    id: openButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     text: qsTranslate("Popup File","STR_POPUP_FILE_OPEN")
@@ -253,6 +272,11 @@ PageCardIdentifyForm {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
+                    KeyNavigation.tab: createdSuccTitle
+                    KeyNavigation.right: createdSuccTitle
+                    KeyNavigation.backtab: cancelButton
+                    KeyNavigation.up: cancelButton
+                    highlighted: activeFocus
                     onClicked: {
                         showCreatedFile()
                     }

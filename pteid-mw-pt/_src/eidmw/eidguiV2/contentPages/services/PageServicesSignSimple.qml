@@ -26,7 +26,8 @@ PageServicesSignSimpleForm {
         
         onSignalPdfSignSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-            signsuccess_dialog.visible = true
+            signsuccess_dialog.open()
+            titleText.forceActiveFocus()
             propertyBusyIndicator.running = false
         }
         onSignalPdfSignFail: {
@@ -173,9 +174,12 @@ PageServicesSignSimpleForm {
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: true
+            font.bold: activeFocus
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
+            KeyNavigation.tab: labelText
+            KeyNavigation.right: labelText
+            KeyNavigation.down: labelText
         }
 
         Item {
@@ -191,9 +195,6 @@ PageServicesSignSimpleForm {
                     signSuccessShowSignedFile()
                 }
             }
-            Accessible.role: Accessible.AlertMessage
-            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") + titleText.text + labelText.text
-
 
             Item {
                 id: rectLabelText
@@ -203,12 +204,18 @@ PageServicesSignSimpleForm {
                 Text {
                     id: labelText
                     text: qsTranslate("PageServicesSign","STR_SIGN_OPEN")
+                    font.bold: activeFocus
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
                     width: parent.width - 48
                     wrapMode: Text.Wrap
+                    KeyNavigation.tab: closeButton
+                    KeyNavigation.right: closeButton
+                    KeyNavigation.down: closeButton
+                    KeyNavigation.backtab: titleText
+                    KeyNavigation.up: titleText
                 }
             }
         }
@@ -229,6 +236,11 @@ PageServicesSignSimpleForm {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
+                    KeyNavigation.tab: openFileButton
+                    KeyNavigation.right: openFileButton
+                    KeyNavigation.backtab: labelText
+                    KeyNavigation.up: labelText
+                    highlighted: activeFocus
                     onClicked: {
                         signsuccess_dialog.close()
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
@@ -243,14 +255,16 @@ PageServicesSignSimpleForm {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
+                    KeyNavigation.tab: titleText
+                    KeyNavigation.right: titleText
+                    KeyNavigation.backtab: closeButton
+                    KeyNavigation.up: closeButton
+                    highlighted: activeFocus
                     onClicked: {
                         signSuccessShowSignedFile()
                     }
                 }
             }
-        }
-        onOpened: {
-            rectPopUp.forceActiveFocus()
         }
         onRejected:{
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
