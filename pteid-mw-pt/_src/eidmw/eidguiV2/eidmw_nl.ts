@@ -260,7 +260,7 @@
     <message>
         <location filename="gapi.cpp" line="1415"/>
         <source>STR_BASIC_INFORMATION</source>
-        <translation>INFORMAÇÕES BÁSICAS</translation>
+        <translation>IDENTIDADE</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="75"/>
@@ -364,7 +364,7 @@
     <message>
         <location filename="gapi.cpp" line="1475"/>
         <source>STR_ADDITIONAL_INFORMATION</source>
-        <translation>INFORMAÇÕES ADICIONAIS</translation>
+        <translation>OUTROS DADOS</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="54"/>
@@ -513,7 +513,7 @@
         <location filename="gapi.cpp" line="1595"/>
         <location filename="gapi.cpp" line="1620"/>
         <source>STR_PERSONAL_NOTES</source>
-        <translation>NOTAS PESSOAIS</translation>
+        <translation>NOTAS</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="1394"/>
@@ -544,12 +544,12 @@
     <message>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="106"/>
         <source>STR_BASIC_INFORMATION_UPPERCASE</source>
-        <translation>Informações Básicas</translation>
+        <translation>Identidade</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="122"/>
         <source>STR_ADDITIONAL_INFORMATION_UPPERCASE</source>
-        <translation>Informações Adicionais</translation>
+        <translation>Outros dados</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="138"/>
@@ -559,7 +559,7 @@
     <message>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="154"/>
         <source>STR_PERSONAL_NOTES_UPPERCASE</source>
-        <translation>Notas Pessoais</translation>
+        <translation>Notas</translation>
     </message>
     <message>
         <location filename="components/LabelTextBoxForm.ui.qml" line="16"/>
@@ -1410,7 +1410,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="22"/>
         <source>STR_UPDATE_ERROR</source>
-        <translation type="unfinished">Ocorreu um erro.</translation>
+        <translation>Ocorreu um erro.</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="25"/>
@@ -1541,7 +1541,7 @@
         <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="42"/>
         <location filename="contentPages/home/PageHomeForm.ui.qml" line="43"/>
         <source>STR_HELP_DOC_HOME_PAGE</source>
-        <translation>Autenticação gov</translation>
+        <translation type="unfinished">Autenticação gov</translation>
     </message>
     <message>
         <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="56"/>
@@ -1760,7 +1760,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1204"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="570"/>
         <source>STR_LOAD_ENCRYPTED_PDF_ERROR_MSG</source>
-        <translation type="unfinished">Ficheiro PDF encriptado. A assinatura PDF não suporta ficheiros PDF encriptados.</translation>
+        <translation>Ficheiro PDF encriptado. A assinatura PDF não suporta ficheiros PDF encriptados.</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1428"/>
