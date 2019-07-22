@@ -46,7 +46,7 @@ Item {
     Flickable {
         id: rowMain
         width: parent.width + Constants.SIZE_ROW_H_SPACE
-        height: parent.height - 2*Constants.SIZE_ROW_V_SPACE
+        height: parent.height - rowTop.height - Constants.SIZE_ROW_V_SPACE
         anchors.top: rowTop.bottom
         anchors.right: parent.right
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
