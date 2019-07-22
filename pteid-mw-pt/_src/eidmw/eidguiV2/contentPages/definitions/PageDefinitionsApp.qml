@@ -149,6 +149,37 @@ PageDefinitionsAppForm {
                               propertyTextFieldPort.text = ""
                           }
     }
+    // Workaround to scroll the page automatically when navigating with keyboard
+    propertyTextReader{
+        onFocusChanged: {
+            if(propertyTextReader.focus)
+                propertySettingsScroll.decrease()
+        }
+    }
+    propertyRadioButtonUK{
+        onFocusChanged: {
+            if(propertyRadioButtonUK.focus)
+                propertySettingsScroll.decrease()
+        }
+    }
+    propertyCheckboxShowAnime{
+        onFocusChanged: {
+            if(propertyCheckboxShowAnime.focus)
+                propertySettingsScroll.increase()
+        }
+    }
+    propertyTextFieldAutPass{
+        onFocusChanged: {
+            if(propertyTextFieldAutPass.focus)
+                propertySettingsScroll.increase()
+        }
+    }
+    propertyCheckboxAutProxy{
+        onFocusChanged: {
+            if(propertyCheckboxAutProxy.focus)
+                propertySettingsScroll.increase()
+        }
+    }
 
     Connections {
         target: propertyTextFieldAdress
