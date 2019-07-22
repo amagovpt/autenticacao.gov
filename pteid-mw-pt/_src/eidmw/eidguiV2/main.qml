@@ -760,6 +760,14 @@ Load language error. Please reinstall the application"
                 propertyMainMenuBottomListView.currentIndex = -1
             }
         }
+        propertyImageLogoBottom {
+            onFocusChanged: {
+                if (propertyImageLogoBottom.focus) {
+                    propertyMainMenuListView.currentIndex = -1
+                    propertyMainMenuBottomListView.currentIndex = -1
+                }
+            }
+        }
         propertyMouseAreaSubMenuViewReduced {
             onClicked: {
                 Functions.goToSubMenu()
@@ -855,11 +863,12 @@ Load language error. Please reinstall the application"
                 }
                 onFocusChanged: {
                     if(focus === true){
-                    mainFormID.propertyMainMenuListView.currentIndex = index
+                        mainFormID.propertyMainMenuBottomListView.currentIndex = -1
+                        mainFormID.propertyMainMenuListView.currentIndex = index
                         mainFormID.propertyMainMenuListView.forceActiveFocus()
                     }
-                    }
                 }
+            }
 
             Text {
                 id: textMain
@@ -1000,17 +1009,16 @@ Load language error. Please reinstall the application"
                     if(mainFormID.propertyMainMenuBottomListView.currentIndex ==
                             mainFormID.propertyMainMenuBottomListView.count - 1){
                         // Move to PageLoader or Main Menu
-                        if(mainFormID.propertyPageLoader.source != ""){
-                            mainFormID.propertyMainMenuBottomListView.currentIndex = -1
+                        if(mainFormID.propertyPageLoader.source == "qrc:/contentPages/home/PageHome.qml"){
                             var temp = mainFormID.propertyPageLoader.source
                             var url = "contentPages/home/PageHome.qml"
                             mainFormID.propertyPageLoader.source = ""
                             mainFormID.propertyPageLoader.source = url
                         } else {
-                            mainFormID.propertyMainMenuListView.currentIndex = -1
                             mainFormID.propertyImageLogoBottom.forceActiveFocus()
-                            mainFormID.propertyMainMenuBottomListView.currentIndex = -1
                         }
+                            mainFormID.propertyMainMenuListView.currentIndex = -1
+                            mainFormID.propertyMainMenuBottomListView.currentIndex = -1
                     } else {
                         mainFormID.propertyMainMenuBottomListView.currentIndex++
                     }
@@ -1050,8 +1058,8 @@ Load language error. Please reinstall the application"
                 Functions.detectBackKeys(event.key, Constants.MenuState.HOME)
             }
 
-            Keys.onDownPressed: {
-                console.log(" subMenu onDownPressed currentIndex:"
+            function moveSelectionDown() {
+                console.log(" subMenu moveSelectionDown currentIndex:"
                             + mainFormID.propertySubMenuListView.currentIndex)
 
                 if(mainFormID.propertySubMenuListView.currentIndex ==
@@ -1063,9 +1071,8 @@ Load language error. Please reinstall the application"
                     mainFormID.propertySubMenuListView.currentIndex++
                 }
             }
-
-            Keys.onUpPressed: {
-                console.log("subMenu onUpPressed currentIndex:"
+            function moveSelectionUp() {
+                console.log("subMenu moveSelectionUp currentIndex:"
                             + mainFormID.propertySubMenuListView.currentIndex)
 
                 if(mainFormID.propertySubMenuListView.currentIndex <=
@@ -1076,6 +1083,18 @@ Load language error. Please reinstall the application"
                 } else {
                     mainFormID.propertySubMenuListView.currentIndex--
                 }
+            }
+            Keys.onDownPressed: {
+                moveSelectionDown()
+            }
+            Keys.onTabPressed: {
+                moveSelectionDown()
+            }
+            Keys.onUpPressed: {
+                moveSelectionUp()
+            }
+            Keys.onBacktabPressed: {
+                moveSelectionUp()
             }
 
             Keys.onReturnPressed: {
@@ -1106,12 +1125,10 @@ Load language error. Please reinstall the application"
                 opacity: 0
                 onClicked: subMenuPressed(index, url)
                 Keys.onTabPressed: {
-                    if(mainFormID.propertySubMenuListView.currentIndex ==
-                            mainFormID.propertySubMenuListView.count - 1){
-                        mainFormID.propertySubMenuListView.currentIndex = 0
-                    } else {
-                        mainFormID.propertySubMenuListView.currentIndex++
-                    }
+                    moveSelectionDown()
+                }
+                Keys.onBacktabPressed: {
+                    moveSelectionUp()
                 }
                 onFocusChanged: {
                     if(focus === true){
