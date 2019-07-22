@@ -190,6 +190,10 @@
       <Component Id="CertCC004" Guid="{08EF0B6A-2989-429F-846C-EED6F241D192}">
          <File Source="..\..\certs\CartaodeCidadao004.der" />
       </Component>
+			<Component Id="CertCC005" Guid="{5B16D2AD-B893-4F5D-8192-BD9ED4F6D920}">
+				<File Source="..\..\certs\CartaodeCidadao005.der" />
+			</Component>
+			
     </DirectoryRef>
 
     <DirectoryRef Id="CRLDIR">
@@ -419,6 +423,7 @@
       <ComponentRef Id="EidStore"/>
       <ComponentRef Id="Certs"/>
       <ComponentRef Id="CertCC004"/>
+			<ComponentRef Id="CertCC005"/>
       <ComponentRef Id="CACerts"/>
       <ComponentRef Id="CrlDir"/>
       <ComponentRef Id="HttpDir"/>
