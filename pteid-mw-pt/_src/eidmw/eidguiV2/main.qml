@@ -688,6 +688,14 @@ Load language error. Please reinstall the application"
                     {
                         mainFormID.propertyPageLoader.propertyAnimationExtendedFinished = false
                     }
+                    if (( mainFormID.state == Constants.MenuState.HOME) && (!running))
+                    {
+                        /* If user went back to home in the middle of this transition, set values as if transition was completed*/
+                        mainFormID.propertySubMenuViewMenu.opacity = 1
+                        mainFormID.propertySubMenuView.color = "white"
+                        mainFormID.propertyContentPagesView.width = mainFormID.propertyMainView.width * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
+                        mainFormID.propertySubMenuView.width = mainFormID.propertyMainView.width * Constants.SUB_MENU_VIEW_RELATIVE_SIZE;
+                    }
                 }
             }
         ]
