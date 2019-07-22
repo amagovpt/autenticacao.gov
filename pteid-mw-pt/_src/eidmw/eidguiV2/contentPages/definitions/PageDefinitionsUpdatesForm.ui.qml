@@ -83,9 +83,7 @@ Item {
                     propertyText.text: qsTranslate("PageDefinitionsUpdates",
                                                    "STR_UPDATE_TEXT")
                     propertyText.font.bold: activeFocus || textDescription.activeFocus
-                    propertyText.font.pixelSize: activeFocus || textDescription.activeFocus
-                                    ? Constants.SIZE_TEXT_LABEL_FOCUS
-                                    : Constants.SIZE_TEXT_LABEL
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
                     propertyText.textFormat: Text.RichText
                     width: parent.width
                     height: parent.height

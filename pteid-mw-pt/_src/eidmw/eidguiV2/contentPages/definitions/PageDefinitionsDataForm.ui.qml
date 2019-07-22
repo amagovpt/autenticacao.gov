@@ -52,7 +52,9 @@ Item {
             Text {
                 id: dateAppCache
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pixelSize: activeFocus
+                                ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                : Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
                 font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
@@ -186,7 +188,9 @@ Item {
             Text {
                 id: dateSCAPCache
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.pixelSize: activeFocus
+                                ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                : Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
                 font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
