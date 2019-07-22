@@ -32,6 +32,7 @@ Item {
     property alias propertyCheckboxAutProxy: checkboxAutProxy
     property alias propertyTextFieldAutUser: textFieldAutUser
     property alias propertyTextFieldAutPass: textFieldAutPass
+    property alias propertySettingsScroll: settingsScroll
     anchors.fill: parent
 
     Item {
@@ -56,12 +57,13 @@ Item {
             id: settingsScroll
             parent: rowMain.parent
             visible: true
-            active: rowMain.moving || !rowMain.moving // QtQuick.Controls 2.1 does not have AlwaysOn prop
+            active: true // QtQuick.Controls 2.1 does not have AlwaysOn prop
             width: Constants.SIZE_TEXT_FIELD_H_SPACE
             anchors.right: parent.right
             anchors.top: rowTop.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             anchors.bottom: parent.bottom
+            stepSize : 1.0
         }
         Item{
             id: content
@@ -88,6 +90,9 @@ Item {
                     KeyNavigation.tab: textSelectReader
                     KeyNavigation.down: textSelectReader
                     KeyNavigation.right: textSelectReader
+
+                    // Move to last component at the page. If change this value have to also update
+                    // the workaround to scroll the page automatically when navigating with keyboard
                     KeyNavigation.backtab: textFieldAutPass
                     KeyNavigation.up: textFieldAutPass
                 }
