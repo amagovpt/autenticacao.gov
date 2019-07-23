@@ -115,6 +115,10 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
                 opacity: 0
                 Accessible.role: Accessible.Button
+                Keys.onBacktabPressed: {
+                    mainMenuBottomListView.currentIndex = 1
+                    mainMenuBottomListView.forceActiveFocus()
+                }
             }
             ListView {
                 focus: true
