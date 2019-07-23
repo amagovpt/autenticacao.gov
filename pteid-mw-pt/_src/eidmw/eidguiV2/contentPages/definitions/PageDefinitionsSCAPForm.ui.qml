@@ -355,7 +355,7 @@ Item {
                         enabled: true
                         Accessible.role: Accessible.Button
                         Accessible.name: text
-                        KeyNavigation.tab: buttonLoadCompanyAttributes
+                        KeyNavigation.tab: buttonLoadCompanyAttributes.enabled ? buttonLoadCompanyAttributes : buttonLoadCompanyAttributesOAuth
                     }
                     Button {
                         id: buttonLoadCompanyAttributes
