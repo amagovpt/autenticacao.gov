@@ -627,9 +627,11 @@ PageDefinitionsSCAPForm {
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: true
+            font.bold: activeFocus
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
+            KeyNavigation.tab: textContinueInBrowser
+            KeyNavigation.down: textContinueInBrowser
         }
 
         Item {
@@ -647,17 +649,21 @@ PageDefinitionsSCAPForm {
                     text: qsTranslate("OAuth","STR_CONTINUE_IN_BROWSER")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.pixelSize: activeFocus ? Constants.SIZE_TEXT_LABEL_FOCUS : Constants.SIZE_TEXT_LABEL
+                    font.bold: activeFocus
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
                     width: parent.width
                     anchors.bottom: parent.bottom
                     wrapMode: Text.WordWrap
+                    KeyNavigation.tab: closeCmdLoadDialogButton
+                    KeyNavigation.down: closeCmdLoadDialogButton
                 }
             }
         }
         Button {
+            id: closeCmdLoadDialogButton
             width: Constants.WIDTH_BUTTON
             height: Constants.HEIGHT_BOTTOM_COMPONENT
             font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -665,6 +671,9 @@ PageDefinitionsSCAPForm {
             anchors.horizontalCenter: parent.horizontalCenter
             text: qsTranslate("OAuth","STR_ABORT_AUTH")
             font.capitalization: Font.MixedCase
+            KeyNavigation.tab: labelTextTitle
+            KeyNavigation.down: labelTextTitle
+            highlighted: activeFocus
             onClicked: {
                 cmdLoadDialog.close()
                 gapi.abortSCAPWithCMD()
@@ -672,8 +681,14 @@ PageDefinitionsSCAPForm {
 
             }
         }
+        onOpened: {
+            labelTextTitle.forceActiveFocus()
+        }
         onRejected: {
             cmdLoadDialog.open()
+        }
+        onClosed: {
+            propertyTabButtonEntities.forceActiveFocus()
         }
 
     }
