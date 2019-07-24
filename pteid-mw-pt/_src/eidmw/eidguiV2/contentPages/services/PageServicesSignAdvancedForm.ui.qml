@@ -380,6 +380,7 @@ Item {
                                 text: radioButtonPADES.text
                                 leftPadding: 22
                                 font.family: lato.name
+                                font.bold: radioButtonPADES.activeFocus
                                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                                 horizontalAlignment: Text.AlignRight
                                 verticalAlignment: Text.AlignVCenter
@@ -431,6 +432,7 @@ Item {
                                 text: radioButtonXADES.text
                                 leftPadding: 22
                                 font.family: lato.name
+                                font.bold: radioButtonXADES.activeFocus
                                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                                 horizontalAlignment: Text.AlignRight
                                 verticalAlignment: Text.AlignVCenter
@@ -505,6 +507,7 @@ Item {
                                           "STR_SIGN_ADD_TIMESTAMP")
                         enabled: fileLoaded
                         font.family: lato.name
+                        font.bold: activeFocus
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         Accessible.role: Accessible.CheckBox
@@ -523,6 +526,7 @@ Item {
                                           "STR_SIGN_ADD_ATTRIBUTES")
                         enabled: fileLoaded
                         font.family: lato.name
+                        font.bold: activeFocus
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         z: 1
@@ -891,6 +895,7 @@ Item {
                         text: qsTranslate("PageServicesSign", "STR_SIGN_LAST")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
+                        font.bold: activeFocus
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         enabled: fileLoaded && propertyRadioButtonPADES.checked
@@ -923,6 +928,7 @@ Item {
                                           "STR_SIGN_VISIBLE")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
+                        font.bold: activeFocus
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         enabled: fileLoaded
@@ -949,6 +955,7 @@ Item {
                                           "STR_SIGN_REDUCED")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
+                        font.bold: activeFocus
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         enabled: fileLoaded
