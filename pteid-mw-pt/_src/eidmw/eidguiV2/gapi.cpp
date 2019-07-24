@@ -544,7 +544,11 @@ void GAPI::showChangeAddressDialog(long code)
     QString support_string = tr("STR_CHANGE_ADDRESS_ERROR_MSG");
     QString support_string_wait_5min = tr("STR_CHANGE_ADDRESS_WAIT_5MIN_ERROR_MSG");
 
-    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "AddressChange op finished with error code 0x%08x", code);
+    if (code == 0){
+        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "AddressChange op finished with sucess");
+    } else {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code 0x%08x", error_code);
+    }
 
     switch (code)
     {
@@ -612,8 +616,11 @@ void GAPI::showSignCMDDialog(long error_code)
     QString error_msg;
     QString support_string = tr("STR_CMD_ERROR_MSG");
 
-    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "CMD signature op finished with error code 0x%08x", error_code);
-
+    if (error_code == 0){
+        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "CMD signature op finished with sucess");
+    } else {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "CMD signature op finished with error code 0x%08x", error_code);
+    }
     switch (error_code)
     {
     case 0:
