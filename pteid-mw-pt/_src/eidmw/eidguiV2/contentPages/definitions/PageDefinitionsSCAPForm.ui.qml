@@ -190,6 +190,10 @@ Item {
                         font.underline: mouseArealinkScapEntities.containsMouse
                         font.bold: activeFocus
                         KeyNavigation.tab: buttonRemoveEntityAttributes
+                        Keys.onBacktabPressed: {
+                            listViewEntities.forceActiveFocus()
+                            listViewEntities.currentIndex = listViewEntities.count -1
+                        }
                     }
                 }
                 Item {
@@ -214,6 +218,14 @@ Item {
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.tab: buttonLoadEntityAttributes.enabled ? buttonLoadEntityAttributes : buttonLoadEntityAttributesOAuth
+                        Keys.onBacktabPressed: {
+                            if (linkScapEntities.visible)
+                                linkScapEntities.forceActiveFocus()
+                            else {
+                                listViewEntities.forceActiveFocus()
+                                listViewEntities.currentIndex = listViewEntities.count -1
+                            }
+                        }
                     }
                     Button {
                         id: buttonLoadEntityAttributes
@@ -245,6 +257,7 @@ Item {
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.tab: entitiesText
+                        KeyNavigation.backtab: buttonLoadEntityAttributes.enabled ? buttonLoadEntityAttributes : buttonRemoveEntityAttributes
                     }
                 }
             }
@@ -333,6 +346,10 @@ Item {
                         color: Constants.COLOR_MAIN_BLUE
                         visible: propertyPageLoader.propertyBackupFromSignaturePage
                         KeyNavigation.tab: buttonRemoveCompanyAttributes
+                        Keys.onBacktabPressed: {
+                            listViewCompanies.forceActiveFocus()
+                            listViewCompanies.currentIndex = listViewCompanies.count -1
+                        }
                     }
                 }
                 Item {
@@ -356,6 +373,16 @@ Item {
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.tab: buttonLoadCompanyAttributes.enabled ? buttonLoadCompanyAttributes : buttonLoadCompanyAttributesOAuth
+                        Keys.onBacktabPressed: {
+                            if (linkScapCompanies.visible)
+                                linkScapCompanies.forceActiveFocus()
+                            else if (listViewCompanies.count > 0) {
+                                listViewCompanies.forceActiveFocus()
+                                listViewCompanies.currentIndex = listViewCompanies.count -1
+                            } else {
+                                companiesText.forceActiveFocus()
+                            }
+                        }
                     }
                     Button {
                         id: buttonLoadCompanyAttributes
@@ -386,6 +413,7 @@ Item {
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.tab: companiesText
+                        KeyNavigation.backtab: buttonLoadCompanyAttributes.enabled ? buttonLoadCompanyAttributes : buttonRemoveCompanyAttributes
                     }
                 }
             }
