@@ -547,7 +547,7 @@ void GAPI::showChangeAddressDialog(long code)
     if (code == 0){
         PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "AddressChange op finished with sucess");
     } else {
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code 0x%08x", error_code);
+		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code 0x%08x", code);
     }
 
     switch (code)
