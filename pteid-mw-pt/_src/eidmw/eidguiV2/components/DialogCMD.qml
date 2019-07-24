@@ -15,7 +15,7 @@ Item {
             progressBarIndeterminate.visible = false
             rectReturnCode.visible = true
             buttonCMDProgressConfirm.visible = true
-            textFieldReturnCode.forceActiveFocus()
+            textMessageTop.propertyText.forceActiveFocus()
         }
         onSignalCloseCMDSucess: {
             console.log("Signal Close CMD Sucess")
@@ -34,6 +34,7 @@ Item {
         onSignalUpdateProgressStatus: {
             console.log("CMD sign change --> update progress status with text = " + statusMessage)
             textMessageTop.propertyText.text = statusMessage
+            textMessageTop.propertyText.forceActiveFocus()
         }
     }
 
@@ -56,12 +57,13 @@ Item {
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: true
+            font.bold: rectPopUp.activeFocus
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
 
         Item {
+            id: rectPopUp
             width: parent.width
             height: rectMessageTopLogin.height + rectMobilNumber.height + rectPin.height
 
@@ -73,6 +75,14 @@ Item {
                     signCMD()
                 }
             }
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
+                             + labelTextTitle.text
+            KeyNavigation.tab: textMessageTopLogin
+            KeyNavigation.down: textMessageTopLogin
+            KeyNavigation.right: textMessageTopLogin
+            KeyNavigation.backtab: okButton
+            KeyNavigation.up: okButton
 
             Item {
                 id: rectMessageTopLogin
@@ -86,11 +96,19 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
+                    font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
                     width: parent.width
                     anchors.bottom: parent.bottom
                     wrapMode: Text.WordWrap
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: text
+                    KeyNavigation.tab: textPinCurrent
+                    KeyNavigation.down: textPinCurrent
+                    KeyNavigation.right: textPinCurrent
+                    KeyNavigation.backtab: rectPopUp
+                    KeyNavigation.up: rectPopUp
                 }
             }
             Item {
@@ -106,10 +124,18 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
+                    font.bold: activeFocus
                     color: Constants.COLOR_TEXT_BODY
                     height: parent.height
                     width: parent.width * 0.3
                     anchors.bottom: parent.bottom
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: text
+                    KeyNavigation.tab: comboBoxIndicative
+                    KeyNavigation.down: comboBoxIndicative
+                    KeyNavigation.right: comboBoxIndicative
+                    KeyNavigation.backtab: textMessageTopLogin
+                    KeyNavigation.up: textMessageTopLogin
                 }
                 ComboBox {
                     id: comboBoxIndicative
@@ -120,10 +146,10 @@ Item {
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.capitalization: Font.MixedCase
+                    font.bold: activeFocus
                     visible: true
                     anchors.left: textPinCurrent.right
                     anchors.bottom: parent.bottom
-                    focus: true
                     onCurrentIndexChanged: {
                         if(comboBoxIndicative.currentIndex >= 0){
                             propertyPageLoader.propertyBackupMobileIndicatorIndex = comboBoxIndicative.currentIndex
@@ -131,6 +157,13 @@ Item {
                             comboBoxIndicative.currentIndex = propertyPageLoader.propertyBackupMobileIndicatorIndex
                         }
                     }
+                    Accessible.role: Accessible.ComboBox
+                    Accessible.name: text
+                    KeyNavigation.tab: textFieldMobileNumber
+                    KeyNavigation.down: textFieldMobileNumber
+                    KeyNavigation.right: textFieldMobileNumber
+                    KeyNavigation.backtab: textPinCurrent
+                    KeyNavigation.up: textPinCurrent
                 }
                 TextField {
                     id: textFieldMobileNumber
@@ -141,6 +174,7 @@ Item {
                     validator: RegExpValidator { regExp: /[0-9]+/ }
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.bold: activeFocus
                     clip: false
                     anchors.left: comboBoxIndicative.right
                     anchors.leftMargin:  parent.width * 0.05
@@ -149,6 +183,13 @@ Item {
                         // CMD load backup mobile data
                         propertyPageLoader.propertyBackupMobileNumber = textFieldMobileNumber.text
                     }
+                    Accessible.role: Accessible.EditableText
+                    Accessible.name: text
+                    KeyNavigation.tab: textPinNew
+                    KeyNavigation.down: textPinNew
+                    KeyNavigation.right: textPinNew
+                    KeyNavigation.backtab: comboBoxIndicative
+                    KeyNavigation.up: comboBoxIndicative
                 }
             }
             Item {
@@ -164,10 +205,18 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
+                    font.bold: activeFocus
                     color: Constants.COLOR_TEXT_BODY
                     height: parent.height
                     width: parent.width * 0.3
                     anchors.bottom: parent.bottom
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: text
+                    KeyNavigation.tab: textFieldPin
+                    KeyNavigation.down: textFieldPin
+                    KeyNavigation.right: textFieldPin
+                    KeyNavigation.backtab: textFieldMobileNumber
+                    KeyNavigation.up: textFieldMobileNumber
                 }
                 TextField {
                     id: textFieldPin
@@ -179,9 +228,17 @@ Item {
                     echoMode : TextInput.Password
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.bold: activeFocus
                     clip: false
                     anchors.left: textPinNew.right
                     anchors.bottom: parent.bottom
+                    Accessible.role: Accessible.EditableText
+                    Accessible.name: text
+                    KeyNavigation.tab: textLinkCMD.propertyText
+                    KeyNavigation.down: textLinkCMD.propertyText
+                    KeyNavigation.right: textLinkCMD.propertyText
+                    KeyNavigation.backtab: textPinNew
+                    KeyNavigation.up: textPinNew
                 }
             }
             Item {
@@ -199,6 +256,13 @@ Item {
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    propertyAccessibleText: qsTr("STR_SIGN_CMD_URL") + 'https://www.autenticacao.gov.pt/cmd-pedido-chave'
+                    propertyLinkUrl: 'https://www.autenticacao.gov.pt/cmd-pedido-chave'
+                    KeyNavigation.tab: cancelButton
+                    KeyNavigation.down: cancelButton
+                    KeyNavigation.right: cancelButton
+                    KeyNavigation.backtab: textFieldPin
+                    KeyNavigation.up: textFieldPin
                 }
             }
             Item {
@@ -207,6 +271,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 y: 190
                 Button {
+                    id: cancelButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CANCEL")
@@ -214,6 +279,7 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
+                    highlighted: activeFocus ? true : false
                     onClicked: {
                         gapi.cancelCMDSign();
                         dialogSignCMD.close()
@@ -221,8 +287,16 @@ Item {
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                         mainFormID.propertyPageLoader.forceActiveFocus()
                     }
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: okButton
+                    KeyNavigation.down: okButton
+                    KeyNavigation.right: okButton
+                    KeyNavigation.backtab: textLinkCMD.propertyText
+                    KeyNavigation.up: textLinkCMD.propertyText
                 }
                 Button {
+                    id: okButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
@@ -231,15 +305,30 @@ Item {
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     enabled: textFieldMobileNumber.acceptableInput && textFieldPin.acceptableInput
+                    highlighted: activeFocus ? true : false
                     onClicked: {
                         signCMD()
                     }
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: rectPopUp
+                    KeyNavigation.down: rectPopUp
+                    KeyNavigation.right: rectPopUp
+                    KeyNavigation.backtab: cancelButton
+                    KeyNavigation.up: cancelButton
                 }
             }
         }
         onRejected:{
             // Reject CMD Popup's only with ESC key
             dialogSignCMD.open()
+        }
+        onOpened: {
+            rectPopUp.forceActiveFocus()
+        }
+        onClosed: {
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
         }
     }
     Dialog {
@@ -261,7 +350,7 @@ Item {
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: true
+            font.bold: rectPopUpProgress.activeFocus
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
@@ -278,6 +367,7 @@ Item {
         }
 
         Item {
+            id: rectPopUpProgress
             width: parent.width
             height: rectMessageTop.height + rectReturnCode.height + progressBarIndeterminate.height
             anchors.top: progressBar.bottom
@@ -289,6 +379,14 @@ Item {
                     signCMDConfirm()
                 }
             }
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
+                             + labelConfirmOfAddressProgressTextTitle.text
+            KeyNavigation.tab: textMessageTop.propertyText
+            KeyNavigation.down: textMessageTop.propertyText
+            KeyNavigation.right: textMessageTop.propertyText
+            KeyNavigation.backtab: buttonCMDProgressConfirm
+            KeyNavigation.up: buttonCMDProgressConfirm
 
             Item {
                 id: rectMessageTop
@@ -305,6 +403,11 @@ Item {
                     propertyText.wrapMode: Text.WordWrap
                     propertyText.height: parent.height
                     propertyText.width: parent.width
+                    KeyNavigation.tab: labelCMDText
+                    KeyNavigation.down: labelCMDText
+                    KeyNavigation.right: labelCMDText
+                    KeyNavigation.backtab: rectPopUpProgress
+                    KeyNavigation.up: rectPopUpProgress
                 }
             }
             Item {
@@ -321,10 +424,18 @@ Item {
                                                    qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI"))
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
+                    font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
                     width: parent.width
                     wrapMode: Text.Wrap
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: text
+                    KeyNavigation.tab: textReturnCode
+                    KeyNavigation.down: textReturnCode
+                    KeyNavigation.right: textReturnCode
+                    KeyNavigation.backtab: textMessageTop.propertyText
+                    KeyNavigation.up: textMessageTop.propertyText
                 }
             }
             Item {
@@ -342,10 +453,18 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
+                    font.bold: activeFocus
                     color: Constants.COLOR_TEXT_BODY
                     height: parent.height
                     width: parent.width * 0.5
                     anchors.bottom: parent.bottom
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: text
+                    KeyNavigation.tab: textFieldReturnCode
+                    KeyNavigation.down: textFieldReturnCode
+                    KeyNavigation.right: textFieldReturnCode
+                    KeyNavigation.backtab: labelCMDText
+                    KeyNavigation.up: labelCMDText
                 }
                 TextField {
                     id: textFieldReturnCode
@@ -356,9 +475,17 @@ Item {
                     validator: RegExpValidator { regExp: /^[0-9]{6}$/ }
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.bold: activeFocus
                     clip: false
                     anchors.left: textReturnCode.right
                     anchors.bottom: parent.bottom
+                    Accessible.role: Accessible.EditableText
+                    Accessible.name: text
+                    KeyNavigation.tab: closeButton
+                    KeyNavigation.down: closeButton
+                    KeyNavigation.right: closeButton
+                    KeyNavigation.backtab: textReturnCode
+                    KeyNavigation.up: textReturnCode
                 }
             }
 
@@ -390,13 +517,19 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
+                highlighted: activeFocus ? true : false
                 onClicked: {
                     gapi.cancelCMDSign();
                     dialogCMDProgress.close()
                     rectReturnCode.visible = false
-                    mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-                    mainFormID.propertyPageLoader.forceActiveFocus()
                 }
+                Accessible.role: Accessible.Button
+                Accessible.name: text
+                KeyNavigation.tab: buttonCMDProgressConfirm
+                KeyNavigation.down: buttonCMDProgressConfirm
+                KeyNavigation.right: buttonCMDProgressConfirm
+                KeyNavigation.backtab: textFieldReturnCode
+                KeyNavigation.up: textFieldReturnCode
             }
             Button {
                 property var isOpenFile: false
@@ -411,17 +544,29 @@ Item {
                 font.capitalization: Font.MixedCase
                 enabled: textFieldReturnCode.acceptableInput || isOpenFile
                 visible: false
+                highlighted: activeFocus ? true : false
                 onClicked: {
                     signCMDConfirm()
                 }
+                Accessible.role: Accessible.Button
+                Accessible.name: text
+                KeyNavigation.tab: textMessageTop.propertyText
+                KeyNavigation.down: textMessageTop.propertyText
+                KeyNavigation.right: textMessageTop.propertyText
+                KeyNavigation.backtab: closeButton
+                KeyNavigation.up: closeButton
             }
         }
         onOpened: {
-            closeButton.forceActiveFocus()
+            rectPopUpProgress.forceActiveFocus()
         }
         onRejected:{
             // Reject CMD Popup's only with ESC key
             dialogCMDProgress.open()
+        }
+        onClosed: {
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
         }
     }
 
@@ -561,6 +706,7 @@ Item {
             /*console.log("Open Url Externally: " + propertyOutputSignedFile)*/
             Qt.openUrlExternally(propertyOutputSignedFile)
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
         }
     }
 }

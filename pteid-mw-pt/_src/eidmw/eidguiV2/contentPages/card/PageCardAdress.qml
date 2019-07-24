@@ -616,7 +616,7 @@ PageCardAdressForm {
                     propertyText.text: ""
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    propertyText.font.pixelSize: activeFocus ? Constants.SIZE_TEXT_LABEL+10 : Constants.SIZE_TEXT_LABEL
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
                     height: parent.height
                     width: parent.width
                     propertyText.height: parent.height
