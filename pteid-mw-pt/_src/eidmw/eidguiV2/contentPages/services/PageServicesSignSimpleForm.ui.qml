@@ -308,6 +308,7 @@ Item {
                 text: qsTranslate("PageServicesSign","STR_SIGN_LAST")
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 font.family: lato.name
+                font.bold: activeFocus
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.capitalization: Font.MixedCase
                 enabled: fileLoaded
