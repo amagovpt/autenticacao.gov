@@ -36,10 +36,10 @@ PageDefinitionsSCAPForm {
         var isOnEntityTab = index === 1
 
 
-        if (isOnEntitiesTab && isTabSelected === false) {
+        if (event.key == Qt.Key_Escape && isOnEntitiesTab && isTabSelected === false) {
             propertyTabButtonEntities.forceActiveFocus()
             isTabSelected = true
-        } else if (isOnEntityTab && isTabSelected === false) {
+        } else if (event.key == Qt.Key_Escape && isOnEntityTab && isTabSelected === false) {
             propertyTabButtonCompanies.forceActiveFocus()
             isTabSelected = true
         } else {
@@ -57,7 +57,6 @@ PageDefinitionsSCAPForm {
             propertyBusyIndicator.running = false
             isCardPresent = true
             propertyButtonLoadEntityAttributes.enabled = isCardPresent && isAnyEntitySelected()
-            propertyTabButtonEntities.forceActiveFocus()
         }
         onSignalCardAccessError: {
             console.log("Definitions SCAP Signature --> onSignalCardAccessError")
@@ -357,11 +356,6 @@ PageDefinitionsSCAPForm {
                 }
             }
             propertyBusyIndicatorAttributes.running = false
-
-            if(propertyTabButtonEntities.focus)
-                propertyTabButtonEntities.forceActiveFocus()
-            if(propertyTabButtonCompanies.focus)
-                propertyCompaniesText.forceActiveFocus()
         }
         onSignalRemoveSCAPAttributesSucess: {
             console.log("Definitions SCAP - Signal SCAP Signal Remove SCAP Attributes Sucess")
@@ -496,6 +490,14 @@ PageDefinitionsSCAPForm {
                     propertyListViewEntities.currentIndex++
                 }
             }
+            Keys.onBacktabPressed: {
+                checkboxSel.focus = true
+                if(propertyListViewEntities.currentIndex == 0){
+                    propertyEntitiesText.forceActiveFocus()
+                }else{
+                    propertyListViewEntities.currentIndex--
+                }
+            }
             color:  propertyListViewEntities.currentIndex === index && propertyListViewEntities.focus
                     ? Constants.COLOR_MAIN_DARK_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
 
@@ -565,6 +567,13 @@ PageDefinitionsSCAPForm {
                         : propertyButtonRemoveCompanyAttributes.forceActiveFocus()
                 }else{
                     propertyListViewCompanies.currentIndex++
+                }
+            }
+            Keys.onBacktabPressed: {
+                if(propertyListViewCompanies.currentIndex == 0){
+                    propertyCompaniesText.forceActiveFocus()
+                }else{
+                    propertyListViewCompanies.currentIndex--
                 }
             }
             color:  propertyListViewCompanies.currentIndex === index && propertyListViewCompanies.focus
@@ -795,6 +804,7 @@ PageDefinitionsSCAPForm {
         gapi.startCardReading()
         propertyBusyIndicatorAttributes.running = true
         isLoadingAttributes = false
+        propertyTabButtonEntities.forceActiveFocus()
         gapi.startGettingEntities()
     }
 
