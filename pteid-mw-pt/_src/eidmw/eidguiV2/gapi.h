@@ -370,6 +370,7 @@ public slots:
     // used to check if a path is a directory or a file from QML
     bool isDirectory(QString path);
     bool isFile(QString path);
+    bool fileExists(QString path);
     QList<QString> getFilesFromDirectory(QString path);
 
 signals:

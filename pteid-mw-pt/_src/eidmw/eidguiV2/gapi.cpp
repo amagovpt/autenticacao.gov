@@ -1690,6 +1690,7 @@ void GAPI::closePdfPreview(QString filePath)
 }
 void GAPI::closeAllPdfPreviews() 
 {
+    qDebug() << "closeAllPdfPreviews";
     image_provider_pdf->closeAllDocs();
 }
 
@@ -1746,6 +1747,12 @@ bool GAPI::isDirectory(QString path) {
 bool GAPI::isFile(QString path) {
     QFileInfo fi(path);
     return fi.isFile();
+}
+
+// Checks if the given file status or path corresponds to an existing file or directory.
+bool GAPI::fileExists(QString path) {
+    QFileInfo check_file(path);
+    return check_file.exists();
 }
 
 QList<QString> GAPI::getFilesFromDirectory(QString path) {
@@ -3013,14 +3020,10 @@ QString GAPI::getCachePath(void){
 
 bool GAPI::customSignImageExist(void){
     QString path = m_Settings.getPteidCachedir() + "/CustomSignPicture.png";
-    QFileInfo check_file(path);
-    // check if file exists and if yes: Is it really a file and no directory?
-    if (check_file.exists()) {
-        return true;
-    } else {
-        return false;
-    }
+    return fileExists(path);
 }
+
+//check if file exists and if yes: Is it really a file and no directory?
 
 void GAPI::customSignRemove(void){
     QString path = m_Settings.getPteidCachedir() + "/CustomSignPicture.png";
