@@ -156,7 +156,7 @@ Item {
                         font.bold: activeFocus
                         visible: true
                         Accessible.role: Accessible.ComboBox
-                        Accessible.name: textReader.text
+                        Accessible.name: currentText
                         KeyNavigation.tab: checkboxEnablePinpad
                         KeyNavigation.down: checkboxEnablePinpad
                         KeyNavigation.right: checkboxEnablePinpad

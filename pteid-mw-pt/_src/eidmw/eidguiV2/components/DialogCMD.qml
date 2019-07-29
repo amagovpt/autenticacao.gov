@@ -34,6 +34,7 @@ Item {
         onSignalUpdateProgressStatus: {
             console.log("CMD sign change --> update progress status with text = " + statusMessage)
             textMessageTop.propertyText.text = statusMessage
+            textMessageTop.propertyAccessibleText = statusMessage
             textMessageTop.propertyText.forceActiveFocus()
         }
     }
@@ -48,7 +49,6 @@ Item {
             + mainView.width * 0.5 - dialogSignCMD.width * 0.5
         y: parent.height 
         modal: true
-        focus: true
 
         header: Label {
             id: labelTextTitle
@@ -158,7 +158,7 @@ Item {
                         }
                     }
                     Accessible.role: Accessible.ComboBox
-                    Accessible.name: text
+                    Accessible.name: currentText
                     KeyNavigation.tab: textFieldMobileNumber
                     KeyNavigation.down: textFieldMobileNumber
                     KeyNavigation.right: textFieldMobileNumber
@@ -184,7 +184,7 @@ Item {
                         propertyPageLoader.propertyBackupMobileNumber = textFieldMobileNumber.text
                     }
                     Accessible.role: Accessible.EditableText
-                    Accessible.name: text
+                    Accessible.name: placeholderText
                     KeyNavigation.tab: textPinNew
                     KeyNavigation.down: textPinNew
                     KeyNavigation.right: textPinNew
@@ -233,7 +233,7 @@ Item {
                     anchors.left: textPinNew.right
                     anchors.bottom: parent.bottom
                     Accessible.role: Accessible.EditableText
-                    Accessible.name: text
+                    Accessible.name: placeholderText
                     KeyNavigation.tab: textLinkCMD.propertyText
                     KeyNavigation.down: textLinkCMD.propertyText
                     KeyNavigation.right: textLinkCMD.propertyText
@@ -256,7 +256,7 @@ Item {
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    propertyAccessibleText: qsTr("STR_SIGN_CMD_URL") + 'https://www.autenticacao.gov.pt/cmd-pedido-chave'
+                    propertyAccessibleText: qsTranslate("PageServicesSign","STR_SIGN_CMD_URL")
                     propertyLinkUrl: 'https://www.autenticacao.gov.pt/cmd-pedido-chave'
                     KeyNavigation.tab: cancelButton
                     KeyNavigation.down: cancelButton
@@ -341,10 +341,9 @@ Item {
             + mainView.width * 0.5 - dialogCMDProgress.width * 0.5
         y: parent.height
         modal: true
-        focus: true
 
         header: Label {
-            id: labelConfirmOfAddressProgressTextTitle
+            id: labelTextTitleProgress
             text: qsTranslate("PageServicesSign","STR_SIGN_CMD")
             visible: true
             elide: Label.ElideRight
@@ -381,7 +380,7 @@ Item {
             }
             Accessible.role: Accessible.AlertMessage
             Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
-                             + labelConfirmOfAddressProgressTextTitle.text
+                             + labelTextTitleProgress.text
             KeyNavigation.tab: textMessageTop.propertyText
             KeyNavigation.down: textMessageTop.propertyText
             KeyNavigation.right: textMessageTop.propertyText
@@ -480,7 +479,7 @@ Item {
                     anchors.left: textReturnCode.right
                     anchors.bottom: parent.bottom
                     Accessible.role: Accessible.EditableText
-                    Accessible.name: text
+                    Accessible.name: placeholderText
                     KeyNavigation.tab: closeButton
                     KeyNavigation.down: closeButton
                     KeyNavigation.right: closeButton
@@ -550,9 +549,9 @@ Item {
                 }
                 Accessible.role: Accessible.Button
                 Accessible.name: text
-                KeyNavigation.tab: textMessageTop.propertyText
-                KeyNavigation.down: textMessageTop.propertyText
-                KeyNavigation.right: textMessageTop.propertyText
+                KeyNavigation.tab: rectPopUpProgress
+                KeyNavigation.down: rectPopUpProgress
+                KeyNavigation.right: rectPopUpProgress
                 KeyNavigation.backtab: closeButton
                 KeyNavigation.up: closeButton
             }
