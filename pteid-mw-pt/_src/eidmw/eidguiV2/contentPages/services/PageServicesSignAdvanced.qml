@@ -1284,7 +1284,10 @@ PageServicesSignAdvancedForm {
         propertyBusyIndicator.running = true
         gapi.startCardReading()
     }
-
+    Component.onDestruction: {
+        console.log("PageServicesSignAdvanced destruction")
+        if(gapi) gapi.closeAllPdfPreviews();
+    }
     function loadUnfinishedSignature() {
         // Load backup data about unfinished advanced signature
         propertyRadioButtonPADES.checked = propertyPageLoader.propertyBackupFormatPades
@@ -1297,9 +1300,11 @@ PageServicesSignAdvancedForm {
         filesModel.clear()
         for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
         {
-            filesModel.append({
-                                  "fileUrl": propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl
-                              })
+            if(gapi.fileExists(propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl)){
+                filesModel.append({
+                                      "fileUrl": propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl
+                                  })
+            }
         }
 
         propertySpinBoxControl.value = propertyPageLoader.propertyBackupPage

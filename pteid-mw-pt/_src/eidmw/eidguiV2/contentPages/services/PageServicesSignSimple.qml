@@ -648,7 +648,7 @@ PageServicesSignSimpleForm {
     }
     Component.onDestruction: {
         console.log("PageServicesSignSimple destruction")
-        gapi.closeAllPdfPreviews();
+        if(gapi) gapi.closeAllPdfPreviews();
     }
     function updateIndicators(pageCount){
         propertySpinBoxControl.up.indicator.visible = true
