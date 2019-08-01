@@ -23,11 +23,10 @@ PageServicesSignSimpleForm {
         onSignalGenericError: {
             propertyBusyIndicator.running = false
         }
-        
+
         onSignalPdfSignSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             signsuccess_dialog.open()
-            titleText.forceActiveFocus()
             propertyBusyIndicator.running = false
         }
         onSignalPdfSignFail: {
@@ -174,12 +173,9 @@ PageServicesSignSimpleForm {
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: activeFocus
+            font.bold: rectPopUp.activeFocus
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
-            KeyNavigation.tab: labelText
-            KeyNavigation.right: labelText
-            KeyNavigation.down: labelText
         }
 
         Item {
@@ -195,6 +191,14 @@ PageServicesSignSimpleForm {
                     signSuccessShowSignedFile()
                 }
             }
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
+                             + titleText.text + labelText.text
+            KeyNavigation.tab: closeButton
+            KeyNavigation.down: closeButton
+            KeyNavigation.right: closeButton
+            KeyNavigation.backtab: openFileButton
+            KeyNavigation.up: openFileButton
 
             Item {
                 id: rectLabelText
@@ -211,11 +215,6 @@ PageServicesSignSimpleForm {
                     height: parent.height
                     width: parent.width - 48
                     wrapMode: Text.Wrap
-                    KeyNavigation.tab: closeButton
-                    KeyNavigation.right: closeButton
-                    KeyNavigation.down: closeButton
-                    KeyNavigation.backtab: titleText
-                    KeyNavigation.up: titleText
                 }
             }
         }
@@ -236,11 +235,14 @@ PageServicesSignSimpleForm {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
                     KeyNavigation.tab: openFileButton
+                    KeyNavigation.down: openFileButton
                     KeyNavigation.right: openFileButton
-                    KeyNavigation.backtab: labelText
-                    KeyNavigation.up: labelText
-                    highlighted: activeFocus
+                    KeyNavigation.backtab: rectPopUp
+                    KeyNavigation.up: rectPopUp
+                    highlighted: activeFocus ? true : false
                     onClicked: {
                         signsuccess_dialog.close()
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
@@ -255,11 +257,14 @@ PageServicesSignSimpleForm {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
-                    KeyNavigation.tab: titleText
-                    KeyNavigation.right: titleText
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: rectPopUp
+                    KeyNavigation.down: rectPopUp
+                    KeyNavigation.right: rectPopUp
                     KeyNavigation.backtab: closeButton
                     KeyNavigation.up: closeButton
-                    highlighted: activeFocus
+                    highlighted: activeFocus ? true : false
                     onClicked: {
                         signSuccessShowSignedFile()
                     }
@@ -273,6 +278,9 @@ PageServicesSignSimpleForm {
         onClosed: {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             mainFormID.propertyPageLoader.forceActiveFocus()
+        }
+        onOpened: {
+            rectPopUp.forceActiveFocus()
         }
     }
 
@@ -295,7 +303,7 @@ PageServicesSignSimpleForm {
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: true
+            font.bold: rectPopUpError.activeFocus
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
@@ -304,7 +312,13 @@ PageServicesSignSimpleForm {
             width: signerror_dialog.availableWidth
             height: 50
             Accessible.role: Accessible.AlertMessage
-            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") + titleTextError.text + text_sign_error.text
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
+                             + titleTextError.text + text_sign_error.text
+            KeyNavigation.tab: closeButtonError
+            KeyNavigation.right: closeButtonError
+            KeyNavigation.down: closeButtonError
+            KeyNavigation.backtab: closeButtonError
+            KeyNavigation.up: closeButtonError
             Text {
                 id: text_sign_error
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -336,11 +350,27 @@ PageServicesSignSimpleForm {
                         signerror_dialog.close()
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     }
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: rectPopUpError
+                    KeyNavigation.down: rectPopUpError
+                    KeyNavigation.right: rectPopUpError
+                    KeyNavigation.backtab: rectPopUpError
+                    KeyNavigation.up: rectPopUpError
+                    highlighted: activeFocus
                 }
             }
         }
         onOpened: {
             rectPopUpError.forceActiveFocus()
+        }
+        onRejected:{
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
+        }
+        onClosed: {
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
         }
     }
 
@@ -488,7 +518,7 @@ PageServicesSignSimpleForm {
                         qsTranslate("Popup Card","STR_POPUP_ERROR")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_NO_CMD_SUPPORT")
-                
+
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                 mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
                 return;
@@ -664,13 +694,13 @@ PageServicesSignSimpleForm {
             propertySpinBoxControl.down.indicator.enabled = false
         }
     }
-	function openSignedFile(){
+    function openSignedFile(){
         if (Qt.platform.os === "windows") {
-			if (propertyOutputSignedFile.substring(0, 2) == "//" ){
-				propertyOutputSignedFile = "file:" + propertyOutputSignedFile
-			}else{
-				propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
-			}
+            if (propertyOutputSignedFile.substring(0, 2) == "//" ){
+                propertyOutputSignedFile = "file:" + propertyOutputSignedFile
+            }else{
+                propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+            }
         }else{
             propertyOutputSignedFile = "file://" + propertyOutputSignedFile
         }
@@ -678,7 +708,7 @@ PageServicesSignSimpleForm {
         Qt.openUrlExternally(propertyOutputSignedFile)
     }
     function signSuccessShowSignedFile(){
-		openSignedFile()
+        openSignedFile()
         signsuccess_dialog.close()
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
     }
