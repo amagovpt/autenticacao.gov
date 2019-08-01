@@ -517,6 +517,7 @@ PageDefinitionsSCAPForm {
                     entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
                     propertyButtonLoadEntityAttributes.enabled = isAnyEntitySelected() && isCardPresent
                     propertyButtonLoadEntityAttributesOAuth.enabled = isAnyEntitySelected()
+                    propertyListViewEntities.currentIndex = index
                 }
                 onFocusChanged: {
                     if(focus) propertyListViewEntities.currentIndex = index
