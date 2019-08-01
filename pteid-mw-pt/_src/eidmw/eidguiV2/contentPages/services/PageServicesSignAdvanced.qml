@@ -83,7 +83,6 @@ PageServicesSignAdvancedForm {
         onSignalPdfSignSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             signsuccess_dialog.open()
-            titleText.forceActiveFocus()
             propertyBusyIndicator.running = false
             // test time stamp
             if(error_code == GAPI.SignMessageTimestampFailed){
@@ -286,12 +285,9 @@ PageServicesSignAdvancedForm {
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: activeFocus
+            font.bold: rectPopUp.activeFocus
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
-            KeyNavigation.tab: labelText.text === "" ? labelOpenText : labelText
-            KeyNavigation.right: labelText.text === "" ? labelOpenText : labelText
-            KeyNavigation.down: labelText.text === "" ? labelOpenText : labelText
         }
         Item {
             id: rectPopUp
@@ -306,6 +302,14 @@ PageServicesSignAdvancedForm {
                     signSuccessShowSignedFile()
                 }
             }
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
+                             + titleText.text + labelText.text + labelOpenText.text
+            KeyNavigation.tab: closeButton
+            KeyNavigation.down: closeButton
+            KeyNavigation.right: closeButton
+            KeyNavigation.backtab: openFileButton
+            KeyNavigation.up: openFileButton
 
             Item {
                 id: rectLabelText
@@ -321,11 +325,6 @@ PageServicesSignAdvancedForm {
                     height: parent.height
                     width: parent.width - 48
                     wrapMode: Text.Wrap
-                    KeyNavigation.tab: labelOpenText
-                    KeyNavigation.right: labelOpenText
-                    KeyNavigation.down: labelOpenText
-                    KeyNavigation.backtab: titleText
-                    KeyNavigation.up: titleText
                 }
             }
             Item {
@@ -351,11 +350,6 @@ PageServicesSignAdvancedForm {
                     height: parent.height
                     width: parent.width - 48
                     wrapMode: Text.Wrap
-                    KeyNavigation.tab: closeButton
-                    KeyNavigation.right: closeButton
-                    KeyNavigation.down: closeButton
-                    KeyNavigation.backtab: labelText.text === "" ? titleText : labelText
-                    KeyNavigation.up: labelText.text === "" ? titleText : labelText
                 }
             }
         }
@@ -380,11 +374,13 @@ PageServicesSignAdvancedForm {
                         signsuccess_dialog.close()
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     }
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
                     KeyNavigation.tab: openFileButton
                     KeyNavigation.down: openFileButton
                     KeyNavigation.right: openFileButton
-                    KeyNavigation.backtab: labelOpenText
-                    KeyNavigation.up: labelOpenText
+                    KeyNavigation.backtab: rectPopUp
+                    KeyNavigation.up: rectPopUp
                     highlighted: activeFocus
                 }
                 Button {
@@ -399,9 +395,11 @@ PageServicesSignAdvancedForm {
                     onClicked: {
                         signSuccessShowSignedFile()
                     }
-                    KeyNavigation.tab: titleText
-                    KeyNavigation.down: titleText
-                    KeyNavigation.right: titleText
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: rectPopUp
+                    KeyNavigation.down: rectPopUp
+                    KeyNavigation.right: rectPopUp
                     KeyNavigation.backtab: closeButton
                     KeyNavigation.up: closeButton
                     highlighted: activeFocus
@@ -415,6 +413,9 @@ PageServicesSignAdvancedForm {
         onClosed: {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             mainFormID.propertyPageLoader.forceActiveFocus()
+        }
+        onOpened: {
+            rectPopUp.forceActiveFocus()
         }
     }
 
@@ -437,7 +438,7 @@ PageServicesSignAdvancedForm {
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: true
+            font.bold: rectPopUpError.activeFocus
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
@@ -446,7 +447,13 @@ PageServicesSignAdvancedForm {
             width: signerror_dialog.availableWidth
             height: 50
             Accessible.role: Accessible.AlertMessage
-            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") + titleTextError.text + text_sign_error.text
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
+                             + titleTextError.text + text_sign_error.text
+            KeyNavigation.tab: closeButtonError
+            KeyNavigation.right: closeButtonError
+            KeyNavigation.down: closeButtonError
+            KeyNavigation.backtab: closeButtonError
+            KeyNavigation.up: closeButtonError
             Text {
                 id: text_sign_error
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -478,6 +485,14 @@ PageServicesSignAdvancedForm {
                         signerror_dialog.close()
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     }
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: rectPopUpError
+                    KeyNavigation.down: rectPopUpError
+                    KeyNavigation.right: rectPopUpError
+                    KeyNavigation.backtab: rectPopUpError
+                    KeyNavigation.up: rectPopUpError
+                    highlighted: activeFocus
                 }
             }
         }
@@ -1279,7 +1294,7 @@ PageServicesSignAdvancedForm {
 
     Component.onCompleted: {
         console.log("Page Services Sign Advanced mainWindowCompleted")
-        
+
         propertyPageLoader.propertyBackupFromSignaturePage = false
         propertyBusyIndicator.running = true
         gapi.startCardReading()
