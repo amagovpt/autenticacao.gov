@@ -164,11 +164,7 @@ PageCardAdressForm {
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 if(Constants.USE_SDK_PIN_UI_POPUP){
-                    var triesLeft = gapi.verifyAddressPin("")
-                    if (triesLeft === 3) {
-                        propertyBusyIndicator.running = true
-                        gapi.startReadingAddress()
-                    }
+                    gapi.verifyAddressPin("")
                 }else{
                     dialogTestPin.open()
                     textFieldPin.text = ""
@@ -317,7 +313,7 @@ PageCardAdressForm {
                 return;
             }
 
-            var triesLeft = gapi.verifyAddressPin(textFieldPin.text)
+            var triesLeft = gapi.doVerifyAddressPin(textFieldPin.text)
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             if (triesLeft === 3) {
                 propertyBusyIndicator.running = true

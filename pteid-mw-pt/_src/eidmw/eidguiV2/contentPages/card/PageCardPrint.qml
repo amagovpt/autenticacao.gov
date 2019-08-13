@@ -321,8 +321,7 @@ PageCardPrintForm {
     propertySwitchAddress{
         onCheckedChanged: {
             if(propertySwitchAddress.checked){
-                var triesLeft = 0
-                triesLeft = gapi.verifyAddressPin("")
+                gapi.verifyAddressPin("")
             }
         }
     }
