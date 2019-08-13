@@ -2,7 +2,7 @@
 ## Introdução
 ### Objectivos
 
-O objectivo deste projecto é disponibilizar uma nova versão de middleware que facilite e potencie a utilização do cartão de cidadão. 
+O objectivo deste projecto é disponibilizar uma nova versão de middleware que facilite e potencie a utilização do cartão de cidadão.
 
 ## SDK
 
@@ -30,7 +30,7 @@ Existem SDK's para as linguagens C, C++, JAVA, .NET e C#.
 
    ```bash
    cd eidmw
-   qmake pteid-mw.pro 
+   qmake pteid-mw.pro
    make
    ```
 
@@ -57,20 +57,27 @@ Será assim necessário compilar as seguintes bibliotecas:
 - libpng - http://www.libpng.org/pub/png/libpng.html
 - openjpeg - https://www.openjpeg.org/
 
-Para o caso do Qt 5.6 estão disponíveis binários pré-compilados, poderá ser utilizado o instalador disponível em:  https://download.qt.io/archive/online_installers/2.0/qt-unified-windows-x86-2.0.3-online.exe
+Para o caso do Qt estão disponíveis binários pré-compilados, poderá ser utilizado o instalador disponível em:  `https://download.qt.io/archive/online_installers/2.0/`
 
-Ferramentas adicionais a instalar: 
+Ferramentas adicionais a instalar:
 
 - 7-zip
-- Java JDK
-- Swigwin 2.0.12 - disponível em  https://sourceforge.net/projects/swig/files/swigwin/swigwin-2.0.12/
 - Windows Platform SDK
+- Visual Studio
+- doxygen - disponível em http://www.doxygen.nl/download.html
+- Swigwin 2.0.12 - disponível em  https://sourceforge.net/projects/swig/files/swigwin/swigwin-2.0.12/
+- Java JDK
+- wix - disponível em https://wixtoolset.org/releases/
+- Microsoft Merge Modules
+
 
 Após configurado o ambiente conforme acima descrito, efetuar os seguintes passos:
 
 1. Clonar repositório
 2. Configurar os caminhos para as dependências (x86 e x64) e ferramentas no ficheiro `pteid-mw-pt\windows\set_path_autenticacao.gov.bat`
-3. Abrir a Solução de VS2013 através do script `pteid-mw-pt\windows\ezbuild_sln_autenticacao.gov.bat`
-4. Seleccionar a configuração "Release | Win32" ou "Release | x64"
-5. Compilar o projecto através do menu "Build solution" 
+3. Abrir a Solução de VS2013 através do script `pteid-mw-pt\windows\ezbuild_sln_autenticacao.gov.bat
+4. Seleccionar a configuração `Release | Win32` ou `Release | x64`
+5. Compilar o projecto através do menu `Build solution`
+
+Em alternativa, pode ser editado o script `pteid-mw-pt\windows\ezbuild_sln_autenticacao.gov.bat` para compilar na consola. As instruções estão no próprio ficheiro.
 
