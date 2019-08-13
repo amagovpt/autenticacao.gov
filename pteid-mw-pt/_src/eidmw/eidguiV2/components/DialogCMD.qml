@@ -7,7 +7,7 @@ import "../scripts/Functions.js" as Functions
 
 Item {       
     y: parent.height * 0.5 - dialogSignCMD.height * 0.5
-    
+
     Connections {
         target: gapi
         onSignalOpenCMDSucess: {
@@ -20,12 +20,14 @@ Item {
         onSignalCloseCMDSucess: {
             console.log("Signal Close CMD Sucess")
             progressBarIndeterminate.visible = false
+            rectReturnCode.visible = false
             rectLabelCMDText.visible = true
             buttonCMDProgressConfirm.visible = true
             buttonCMDProgressConfirm.text = qsTranslate("Popup File","STR_POPUP_FILE_OPEN")
         }
         onSignalUpdateProgressBar: {
             console.log("CMD sign change --> update progress bar with value = " + value)
+            rectReturnCode.visible = false
             progressBar.value = value
             if(value === 100) {
                 progressBarIndeterminate.visible = false
@@ -33,6 +35,7 @@ Item {
         }
         onSignalUpdateProgressStatus: {
             console.log("CMD sign change --> update progress status with text = " + statusMessage)
+            rectReturnCode.visible = false
             textMessageTop.propertyText.text = statusMessage
             textMessageTop.propertyAccessibleText = statusMessage
             textMessageTop.propertyText.forceActiveFocus()
