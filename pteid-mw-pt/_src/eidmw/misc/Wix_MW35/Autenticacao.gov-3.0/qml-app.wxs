@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <?define var.QMLDIR=..\..\..\_Binaries35\x64\VC9\Release\qml-app\ ?>
+  <?define var.QMLDIR=$(env.PTEID_DIR_QML_x64) ?>
+  <?define var.QMLDIROUTPUT=..\..\..\_Binaries35\x64\VC9\Release\qml-app\ ?>
   <?define var.PTEID_QT_PRINTSUPPORT=$(env.PTEID_DIR_QT_4_X64)\plugins\printsupport\?>
   <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\VC9\Release\ ?>
     <Fragment>
@@ -18,7 +19,7 @@
                     <File Id="fil54F2A8534F90BD016136AAAC44C0161D" KeyPath="yes" Source="$(var.QMLDIR)\opengl32sw.dll" />
                 </Component>
                 <Component Id="cmpF7D4B937B6CC948CB191AA956CEEE7B0" Guid="{EF253B94-DE9C-490F-8E8A-11E8A7C0F4B9}">
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A676C" KeyPath="yes" Source="$(var.QMLDIR)\pteidguiV2.exe" />
+                    <File Id="fil532B63275F24DCA11F229D2F2A4A676C" KeyPath="yes" Source="$(var.QMLDIROUTPUT)\pteidguiV2.exe" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6718" Source="..\..\..\eidguiV2\eidmw_nl.qm" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6719" Source="..\..\..\eidguiV2\eidmw_en.qm" />
                 </Component>
@@ -28,7 +29,7 @@
               </Component>
               
               <Component Id="cmp205F6ABD67D347B295ED34E09FF4D703" Guid="{205F6ABD-67D3-47B2-95ED-34E09FF4D703}">
-                <File Id="fil205F6ABD67D347B295ED34E09FF4D703" KeyPath="yes" Source="$(var.QMLDIR)\cmdServices.dll" />
+                <File Id="fil205F6ABD67D347B295ED34E09FF4D703" KeyPath="yes" Source="$(var.QMLDIROUTPUT)\cmdServices.dll" />
               </Component>
               
               <Component Id="cmpCD39109FC2894B59A1000D1879FA000C" Guid="{CD39109F-C289-4B59-A100-0D1879FA000C}">

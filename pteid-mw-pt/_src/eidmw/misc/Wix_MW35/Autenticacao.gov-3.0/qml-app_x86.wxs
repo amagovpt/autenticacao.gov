@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <?define var.QMLDIR=..\..\..\_Binaries35\Win32\VC9\Release\qml-app\ ?>
+  <?define var.QMLDIR=$(env.PTEID_DIR_QML) ?>
+  <?define var.QMLDIROUTPUT=..\..\..\_Binaries35\Win32\VC9\Release\qml-app\ ?>
   <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\VC9\Release\ ?>
     <Fragment>
         <DirectoryRef Id="APPLICATIONROOTFOLDER">
@@ -38,7 +39,7 @@
 		    <ComponentRef Id="PteidGuiShortcut"/>
 			<ComponentRef Id="RegisterPteidAutoStart"/>
             <Component Id="cmp5DF3FF25B92E00276E2DAC6ACBEE3EAC" Directory="APPLICATIONROOTFOLDER" Guid="{FDC53750-BA21-4E2E-99F6-B0DA7A1C0B3D}">
-                <File Id="filCC878DC615BAE204217B0ABF742A5D81" KeyPath="yes" Source="$(var.QMLDIR)\cmdServices.dll" />
+                <File Id="filCC878DC615BAE204217B0ABF742A5D81" KeyPath="yes" Source="$(var.QMLDIROUTPUT)\cmdServices.dll" />
             </Component>
             <Component Id="cmpD94D987CD7CEE5C9E964633DD52E7305" Directory="APPLICATIONROOTFOLDER" Guid="{A747CEB7-27BB-49DF-BA08-7E09BC6CBFF8}">
                 <File Id="fil5A03D03833CC9B3BB9FCCB5FE1121279" KeyPath="yes" Source="$(var.QMLDIR)\d3dcompiler_47.dll" />
@@ -56,7 +57,7 @@
                 <File Id="fil3CBCB4A9EED52796624FC6C8977CC71C" KeyPath="yes" Source="$(env.PTEID_POPPLER_QT5)\poppler-qt5-win32\poppler-qt5.dll" />
             </Component>
             <Component Id="cmpF7D4B937B6CC948CB191AA956CEEE7B0" Directory="APPLICATIONROOTFOLDER" Guid="{7502708F-3CCF-4D23-8540-6AD5BCBC7EDD}">
-                    <File Id="fil532B63275F24DCA11F229D2F2A4A676C" KeyPath="yes" Source="$(var.QMLDIR)\pteidguiV2.exe" />
+                    <File Id="fil532B63275F24DCA11F229D2F2A4A676C" KeyPath="yes" Source="$(var.QMLDIROUTPUT)\pteidguiV2.exe" />
 					          <File Id="fil532B63275F24DCA11F229D2F2A4A6718" Source="..\..\..\eidguiV2\eidmw_nl.qm" />
                     <File Id="fil532B63275F24DCA11F229D2F2A4A6719" Source="..\..\..\eidguiV2\eidmw_en.qm" />
             </Component>
