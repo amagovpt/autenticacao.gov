@@ -15,7 +15,7 @@ Item {
             progressBarIndeterminate.visible = false
             rectReturnCode.visible = true
             buttonCMDProgressConfirm.visible = true
-            textMessageTop.propertyText.forceActiveFocus()
+            textFieldReturnCode.forceActiveFocus()
         }
         onSignalCloseCMDSucess: {
             console.log("Signal Close CMD Sucess")
@@ -24,6 +24,7 @@ Item {
             rectLabelCMDText.visible = true
             buttonCMDProgressConfirm.visible = true
             buttonCMDProgressConfirm.text = qsTranslate("Popup File","STR_POPUP_FILE_OPEN")
+            buttonCMDProgressConfirm.forceActiveFocus()
         }
         onSignalUpdateProgressBar: {
             console.log("CMD sign change --> update progress bar with value = " + value)
@@ -81,17 +82,42 @@ Item {
             Accessible.role: Accessible.AlertMessage
             Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
                              + labelTextTitle.text
-            KeyNavigation.tab: textMessageTopLogin
-            KeyNavigation.down: textMessageTopLogin
-            KeyNavigation.right: textMessageTopLogin
+            KeyNavigation.tab: textLinkCMD.propertyText
+            KeyNavigation.down: textLinkCMD.propertyText
+            KeyNavigation.right: textLinkCMD.propertyText
             KeyNavigation.backtab: okButton
             KeyNavigation.up: okButton
 
+            Item {
+                id: rectMessage
+                width: parent.width
+                height: 25
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: rectPopUp.top
+                Link {
+                    id: textLinkCMD
+                    width: parent.width
+                    propertyText.text: "<a href='https://www.autenticacao.gov.pt/cmd-pedido-chave'>"
+                            + qsTranslate("PageServicesSign","STR_SIGN_CMD_URL")
+                    propertyText.font.italic: true
+                    propertyText.verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    propertyAccessibleText: qsTranslate("PageServicesSign","STR_SIGN_CMD_URL")
+                    propertyLinkUrl: 'https://www.autenticacao.gov.pt/cmd-pedido-chave'
+                    KeyNavigation.tab: textMessageTopLogin
+                    KeyNavigation.down: textMessageTopLogin
+                    KeyNavigation.right: textMessageTopLogin
+                    KeyNavigation.backtab: rectPopUp
+                    KeyNavigation.up: rectPopUp
+                }
+            }
             Item {
                 id: rectMessageTopLogin
                 width: parent.width
                 height: 50
                 anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: rectMessage.bottom
                 Text {
                     id: textMessageTopLogin
                     text: qsTranslate("PageServicesSign","STR_SIGN_INSERT_LOGIN")
@@ -106,12 +132,12 @@ Item {
                     anchors.bottom: parent.bottom
                     wrapMode: Text.WordWrap
                     Accessible.role: Accessible.StaticText
-                    Accessible.name: text
-                    KeyNavigation.tab: textPinCurrent
-                    KeyNavigation.down: textPinCurrent
-                    KeyNavigation.right: textPinCurrent
-                    KeyNavigation.backtab: rectPopUp
-                    KeyNavigation.up: rectPopUp
+                    Accessible.name: text + textMobileNumber.text + textPin.text
+                    KeyNavigation.tab: comboBoxIndicative
+                    KeyNavigation.down: comboBoxIndicative
+                    KeyNavigation.right: comboBoxIndicative
+                    KeyNavigation.backtab: textLinkCMD.propertyText
+                    KeyNavigation.up: textLinkCMD.propertyText
                 }
             }
             Item {
@@ -121,7 +147,7 @@ Item {
                 anchors.top: rectMessageTopLogin.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
-                    id: textPinCurrent
+                    id: textMobileNumber
                     text: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
@@ -132,13 +158,6 @@ Item {
                     height: parent.height
                     width: parent.width * 0.3
                     anchors.bottom: parent.bottom
-                    Accessible.role: Accessible.StaticText
-                    Accessible.name: text
-                    KeyNavigation.tab: comboBoxIndicative
-                    KeyNavigation.down: comboBoxIndicative
-                    KeyNavigation.right: comboBoxIndicative
-                    KeyNavigation.backtab: textMessageTopLogin
-                    KeyNavigation.up: textMessageTopLogin
                 }
                 ComboBox {
                     id: comboBoxIndicative
@@ -151,7 +170,7 @@ Item {
                     font.capitalization: Font.MixedCase
                     font.bold: activeFocus
                     visible: true
-                    anchors.left: textPinCurrent.right
+                    anchors.left: textMobileNumber.right
                     anchors.bottom: parent.bottom
                     onCurrentIndexChanged: {
                         if(comboBoxIndicative.currentIndex >= 0){
@@ -165,8 +184,8 @@ Item {
                     KeyNavigation.tab: textFieldMobileNumber
                     KeyNavigation.down: textFieldMobileNumber
                     KeyNavigation.right: textFieldMobileNumber
-                    KeyNavigation.backtab: textPinCurrent
-                    KeyNavigation.up: textPinCurrent
+                    KeyNavigation.backtab: textLinkCMD.propertyText
+                    KeyNavigation.up: textLinkCMD.propertyText
                 }
                 TextField {
                     id: textFieldMobileNumber
@@ -187,10 +206,10 @@ Item {
                         propertyPageLoader.propertyBackupMobileNumber = textFieldMobileNumber.text
                     }
                     Accessible.role: Accessible.EditableText
-                    Accessible.name: placeholderText
-                    KeyNavigation.tab: textPinNew
-                    KeyNavigation.down: textPinNew
-                    KeyNavigation.right: textPinNew
+                    Accessible.name: textMobileNumber.text
+                    KeyNavigation.tab: textFieldPin
+                    KeyNavigation.down: textFieldPin
+                    KeyNavigation.right: textFieldPin
                     KeyNavigation.backtab: comboBoxIndicative
                     KeyNavigation.up: comboBoxIndicative
                 }
@@ -202,7 +221,7 @@ Item {
                 anchors.top: rectMobilNumber.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
-                    id: textPinNew
+                    id: textPin
                     text: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
@@ -213,13 +232,6 @@ Item {
                     height: parent.height
                     width: parent.width * 0.3
                     anchors.bottom: parent.bottom
-                    Accessible.role: Accessible.StaticText
-                    Accessible.name: text
-                    KeyNavigation.tab: textFieldPin
-                    KeyNavigation.down: textFieldPin
-                    KeyNavigation.right: textFieldPin
-                    KeyNavigation.backtab: textFieldMobileNumber
-                    KeyNavigation.up: textFieldMobileNumber
                 }
                 TextField {
                     id: textFieldPin
@@ -233,39 +245,22 @@ Item {
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.bold: activeFocus
                     clip: false
-                    anchors.left: textPinNew.right
+                    anchors.left: textPin.right
                     anchors.bottom: parent.bottom
                     Accessible.role: Accessible.EditableText
-                    Accessible.name: placeholderText
-                    KeyNavigation.tab: textLinkCMD.propertyText
-                    KeyNavigation.down: textLinkCMD.propertyText
-                    KeyNavigation.right: textLinkCMD.propertyText
-                    KeyNavigation.backtab: textPinNew
-                    KeyNavigation.up: textPinNew
-                }
-            }
-            Item {
-                id: rectMessage
-                width: parent.width
-                height: 50
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: rectPin.bottom
-                Link {
-                    id: textLinkCMD
-                    width: parent.width
-                    propertyText.text: "<a href='https://www.autenticacao.gov.pt/cmd-pedido-chave'>"
-                            + qsTranslate("PageServicesSign","STR_SIGN_CMD_URL")
-                    propertyText.font.italic: true
-                    propertyText.verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    propertyAccessibleText: qsTranslate("PageServicesSign","STR_SIGN_CMD_URL")
-                    propertyLinkUrl: 'https://www.autenticacao.gov.pt/cmd-pedido-chave'
+                    Accessible.name: textPin.text
                     KeyNavigation.tab: cancelButton
                     KeyNavigation.down: cancelButton
                     KeyNavigation.right: cancelButton
-                    KeyNavigation.backtab: textFieldPin
-                    KeyNavigation.up: textFieldPin
+                    KeyNavigation.backtab: textFieldMobileNumber
+                    KeyNavigation.up: textFieldMobileNumber
+
+                    Keys.onEnterPressed: {
+                        if(okButton.enabled) signCMD()
+                    }
+                    Keys.onReturnPressed: {
+                        if(okButton.enabled) signCMD()
+                    }
                 }
             }
             Item {
@@ -290,13 +285,27 @@ Item {
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                         mainFormID.propertyPageLoader.forceActiveFocus()
                     }
+                    Keys.onEnterPressed: {
+                        gapi.cancelCMDSign();
+                        dialogSignCMD.close()
+                        textFieldPin.text = ""
+                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                        mainFormID.propertyPageLoader.forceActiveFocus()
+                    }
+                    Keys.onReturnPressed: {
+                        gapi.cancelCMDSign();
+                        dialogSignCMD.close()
+                        textFieldPin.text = ""
+                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                        mainFormID.propertyPageLoader.forceActiveFocus()
+                    }
                     Accessible.role: Accessible.Button
                     Accessible.name: text
                     KeyNavigation.tab: okButton
                     KeyNavigation.down: okButton
                     KeyNavigation.right: okButton
-                    KeyNavigation.backtab: textLinkCMD.propertyText
-                    KeyNavigation.up: textLinkCMD.propertyText
+                    KeyNavigation.backtab: textFieldPin
+                    KeyNavigation.up: textFieldPin
                 }
                 Button {
                     id: okButton
@@ -310,6 +319,12 @@ Item {
                     enabled: textFieldMobileNumber.acceptableInput && textFieldPin.acceptableInput
                     highlighted: activeFocus ? true : false
                     onClicked: {
+                        signCMD()
+                    }
+                    Keys.onEnterPressed: {
+                        signCMD()
+                    }
+                    Keys.onReturnPressed: {
                         signCMD()
                     }
                     Accessible.role: Accessible.Button
@@ -327,7 +342,7 @@ Item {
             dialogSignCMD.open()
         }
         onOpened: {
-            rectPopUp.forceActiveFocus()
+            textFieldMobileNumber.forceActiveFocus()
         }
         onClosed: {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
@@ -460,13 +475,6 @@ Item {
                     height: parent.height
                     width: parent.width * 0.5
                     anchors.bottom: parent.bottom
-                    Accessible.role: Accessible.StaticText
-                    Accessible.name: text
-                    KeyNavigation.tab: textFieldReturnCode
-                    KeyNavigation.down: textFieldReturnCode
-                    KeyNavigation.right: textFieldReturnCode
-                    KeyNavigation.backtab: labelCMDText
-                    KeyNavigation.up: labelCMDText
                 }
                 TextField {
                     id: textFieldReturnCode
@@ -482,12 +490,19 @@ Item {
                     anchors.left: textReturnCode.right
                     anchors.bottom: parent.bottom
                     Accessible.role: Accessible.EditableText
-                    Accessible.name: placeholderText
+                    Accessible.name: textReturnCode.text
                     KeyNavigation.tab: closeButton
                     KeyNavigation.down: closeButton
                     KeyNavigation.right: closeButton
-                    KeyNavigation.backtab: textReturnCode
-                    KeyNavigation.up: textReturnCode
+                    KeyNavigation.backtab: labelCMDText
+                    KeyNavigation.up: labelCMDText
+
+                    Keys.onEnterPressed: {
+                        if(buttonCMDProgressConfirm.enabled) signCMDConfirm()
+                    }
+                    Keys.onReturnPressed: {
+                        if(buttonCMDProgressConfirm.enabled) signCMDConfirm()
+                    }
                 }
             }
 
@@ -525,6 +540,16 @@ Item {
                     dialogCMDProgress.close()
                     rectReturnCode.visible = false
                 }
+                Keys.onEnterPressed: {
+                    gapi.cancelCMDSign();
+                    dialogCMDProgress.close()
+                    rectReturnCode.visible = false
+                }
+                Keys.onReturnPressed: {
+                    gapi.cancelCMDSign();
+                    dialogCMDProgress.close()
+                    rectReturnCode.visible = false
+                }
                 Accessible.role: Accessible.Button
                 Accessible.name: text
                 KeyNavigation.tab: buttonCMDProgressConfirm
@@ -548,6 +573,12 @@ Item {
                 visible: false
                 highlighted: activeFocus ? true : false
                 onClicked: {
+                    signCMDConfirm()
+                }
+                Keys.onEnterPressed: {
+                    signCMDConfirm()
+                }
+                Keys.onReturnPressed: {
                     signCMDConfirm()
                 }
                 Accessible.role: Accessible.Button
