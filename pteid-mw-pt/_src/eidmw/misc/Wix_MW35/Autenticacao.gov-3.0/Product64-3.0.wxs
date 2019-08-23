@@ -154,20 +154,21 @@
 			<Component Id="Certs" Guid="{750F471B-6A83-4118-A0AF-2A138B770AD6}">
 		        <File Source="..\..\certs\CartaodeCidadao001.der" KeyPath="yes" />
 		        <File Source="..\..\certs\CartaodeCidadao002.der" />
-                <File Source="..\..\certs\CartaodeCidadao003.der" />
+            <File Source="..\..\certs\CartaodeCidadao003.der" />
 		        <File Source="..\..\certs\ECRaizEstado_MC.der" />
 		        <File Source="..\..\certs\Multicert_Root_01.der" />
 		        <File Source="..\..\certs\BaltimoreCyberTrustRoot.der" />
 		        <File Source="..\..\certs\GlobalChambersignRoot-2008.der" />
-                <File Source="..\..\certs\COMODORSACertificationAuthority.der" />
 			</Component>
-
 			<Component Id="CertCC004" Guid="{08EF0B6A-2989-429F-846C-EED6F241D192}">
 			   <File Source="..\..\certs\CartaodeCidadao004.der" />
 			</Component>
 			<Component Id="CertCC005" Guid="{5B16D2AD-B893-4F5D-8192-BD9ED4F6D920}">
 				<File Source="..\..\certs\CartaodeCidadao005.der" />
 			</Component>
+      <Component Id="SectigoRootCert" Guid="{3405AC06-63D5-4D08-A5C1-E1229F8A5E20}" >
+        <File Source="..\..\certs\Usertrust_RSA_Certification_Authority.der" />
+      </Component>
 			
 		</DirectoryRef>
 
@@ -531,6 +532,7 @@
 				<ComponentRef Id="Certs"/>
 				<ComponentRef Id="CertCC004"/>
 				<ComponentRef Id="CertCC005"/>
+        <ComponentRef Id="SectigoRootCert"/>
 				<ComponentRef Id="CACerts"/>
 				<ComponentRef Id="CrlDir"/>
 				<ComponentRef Id="HttpDir"/>
