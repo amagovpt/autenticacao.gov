@@ -319,7 +319,7 @@ namespace eIDMW
         curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_file.c_str());
 #elif __APPLE__
         std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
-        curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_file);
+        curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_file.c_str());
 #endif
         curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L); // for DEBUG
 
@@ -334,7 +334,7 @@ namespace eIDMW
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
         if (http_code != 200)
         {
-            MWLOG(LEV_ERROR, MOD_APL, "OAuthAttribues: Server response http code: %d with error: %s", http_code, responseBuffer);
+            MWLOG(LEV_ERROR, MOD_APL, "OAuthAttribues: Server response http code: %d with error: %s", http_code, responseBuffer.c_str());
             curl_easy_cleanup(curl);
             return OAuthGenericError;
         }
