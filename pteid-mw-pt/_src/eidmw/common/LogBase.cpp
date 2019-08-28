@@ -33,6 +33,10 @@
 #include <Shlobj.h>
 #endif
 
+#ifdef __APPLE__
+#include <mach-o/dyld.h>  //For _NSGetExecutablePath
+#endif
+
 #ifndef WIN32
 #include "PCSC/wintypes.h"
 #include "sys/stat.h"
@@ -811,13 +815,13 @@ bool CLog::writeLineHeaderW(tLOG_Level level,const int line,const wchar_t *file)
 	std::wstring timestamp;
 	getLocalTimeW(timestamp);	
 
-	/* Get the name of the file that started this process*/
+	/* Get the full path of the executable file that started this process */
 #ifdef WIN32
 	wchar_t baseName[512];
 	memset(baseName, 0, sizeof(baseName));
 	DWORD baseNamseSize = 0;
 	baseNamseSize = GetModuleFileNameW(NULL, baseName, sizeof(baseName));
-	if (baseNamseSize == 0){
+	if (baseNamseSize == 0) {
 		lstrcpy(baseName, L"Unknown name");
 	}
 #elif __linux__
@@ -825,7 +829,11 @@ bool CLog::writeLineHeaderW(tLOG_Level level,const int line,const wchar_t *file)
 	memset(baseName, 0, sizeof(baseName));
 	readlink("/proc/self/exe", baseName, sizeof(baseName));
 #elif __APPLE__
-	#error "Test add the name of the executable that started an process"
+	uint32_t buf_len = PATH_MAX;
+	char baseName[buf_len];
+	memset(baseName, 0, sizeof(baseName));
+	_NSGetExecutablePath(baseName, &buf_len);
+
 #endif
 	
 	if(lPreviousOpenFailed > 0)
@@ -874,18 +882,22 @@ bool CLog::writeLineHeaderA(tLOG_Level level_in,const int line,const char *file)
 	getLocalTimeA(timestamp);
 
 	/* Get the name of the file that started this process*/
-	char baseName[512];
-	memset(baseName, 0, sizeof(baseName));
+
 #ifdef WIN32
 	DWORD baseNamseSize = 0;
 	baseNamseSize = GetModuleFileNameA(NULL, baseName, sizeof(baseName));
-	if (baseNamseSize == 0){
+	if (baseNamseSize == 0) {
 		strcpy(baseName, "Unknown name");
 	}
 #elif __linux__
+	char baseName[512];
+	memset(baseName, 0, sizeof(baseName));
 	readlink("/proc/self/exe", baseName, sizeof(baseName));
 #elif __APPLE__
-	#error Test add the name of the executable that started an process
+	uint32_t buf_len = PATH_MAX;
+	char baseName[buf_len];
+	memset(baseName, 0, sizeof(baseName));
+	_NSGetExecutablePath(baseName, &buf_len);
 #endif
 
 	if(lPreviousOpenFailed > 0)
