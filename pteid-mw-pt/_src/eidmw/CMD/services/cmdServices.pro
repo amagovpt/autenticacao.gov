@@ -57,5 +57,4 @@ SOURCES += \
             CMDSignature.cpp \
             soapC.cpp \
             soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp \
-
-!macx: SOURCES += stdsoap2.cpp
+            stdsoap2.cpp
