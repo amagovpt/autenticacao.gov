@@ -207,17 +207,32 @@
 :: BUILD
 :: =====
 @if "%DEBUG%"=="1" goto debug
+@if "%OUTPUTLOG%"=="1" goto outputlog
 
 :build
-@echo [INFO] Building "%SOLUTION% ..."
-@"%PTEID_DIR_VS%\Common7\IDE\devenv.exe" "%SOLUTION%" /clean "Release|Win32"
-@"%PTEID_DIR_VS%\Common7\IDE\devenv.exe" "%SOLUTION%" /build "Release|Win32"
+echo [INFO] Building "%SOLUTION% ..."
+"%PTEID_DIR_VS%\Common7\IDE\devenv.exe" "%SOLUTION%" /clean "Release|Win32"
+"%PTEID_DIR_VS%\Common7\IDE\devenv.exe" "%SOLUTION%" /build "Release|Win32"
 
-@if "%SKIP_X64_DEPS_CHECK%"=="1" goto skip_64_build
+if "%SKIP_X64_DEPS_CHECK%"=="1" goto skip_64_build
 
-@"%PTEID_DIR_VS%\Common7\IDE\devenv.exe" "%SOLUTION%" /clean "Release|x64"
-@"%PTEID_DIR_VS%\Common7\IDE\devenv.exe" "%SOLUTION%" /build "Release|x64"
+"%PTEID_DIR_VS%\Common7\IDE\devenv.exe" "%SOLUTION%" /clean "Release|x64"
+"%PTEID_DIR_VS%\Common7\IDE\devenv.exe" "%SOLUTION%" /build "Release|x64"
 :skip_64_build
+
+@echo [INFO] Done...
+@goto end
+
+:outputlog
+echo [INFO] Building "%SOLUTION% ..."
+"%PTEID_DIR_VS%\Common7\IDE\devenv.com" "%SOLUTION%" /clean "Release|Win32"
+"%PTEID_DIR_VS%\Common7\IDE\devenv.com" "%SOLUTION%" /build "Release|Win32"
+
+if "%SKIP_X64_DEPS_CHECK%"=="1" goto skip_64_build_output_log
+
+"%PTEID_DIR_VS%\Common7\IDE\devenv.com" "%SOLUTION%" /clean "Release|x64"
+"%PTEID_DIR_VS%\Common7\IDE\devenv.com" "%SOLUTION%" /build "Release|x64"
+:skip_64_build_output_log
 
 @echo [INFO] Done...
 @goto end
