@@ -17,7 +17,7 @@ Existem SDK's para as linguagens C, C++, JAVA, .NET e C#.
    As dependências para a compilação do Middleware em Linux (nomes de pacotes para a distribuição Ubuntu18), são as seguintes:
 
    ```bash
-   sudo apt install libpcsclite-dev libpoppler-qt5-dev libzip-dev libopenjp2-7-dev libpng-dev openjdk-8-jdk qtbase5-dev qt5-qmake qtbase5-private-dev qt5-default qtdeclarative5-dev qtquickcontrols2-5-dev qml-module-qtquick-controls2 libssl1.0-dev libxerces-c-dev libxml-security-c-dev swig libcurl4-nss-dev
+   sudo apt install libpcsclite-dev libpoppler-qt5-dev libzip-dev libopenjp2-7-dev libpng-dev openjdk-8-jdk qtbase5-dev qt5-qmake qtbase5-private-dev qt5-default qtdeclarative5-dev qtquickcontrols2-5-dev qml-module-qtquick-controls2 libssl1.0-dev libxerces-c-dev libxml-security-c-dev swig libcurl4-nss-dev libnsspem
    ```
 
 2. Clonar o repositório
@@ -40,7 +40,7 @@ Existem SDK's para as linguagens C, C++, JAVA, .NET e C#.
    make install
    ```
 
-   A aplicação utilitária será instalada em: /usr/local/bin/pteidgui
+   A aplicação utilitária será instalada em: /usr/local/bin/eidguiV2
 
 ### Windows
 
