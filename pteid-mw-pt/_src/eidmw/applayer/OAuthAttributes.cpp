@@ -312,8 +312,8 @@ namespace eIDMW
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseBuffer);
 
 #ifdef __linux__
-        char * ca_path = "/etc/ssl/certs";
-        curl_easy_setopt(curl, CURLOPT_CAPATH, ca_path);
+        std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
+        curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_file.c_str());
 #elif WIN32
         std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR)) + "\\cacerts.pem";
         curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_file.c_str());
