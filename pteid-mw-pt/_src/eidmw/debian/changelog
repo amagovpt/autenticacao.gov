@@ -1,3 +1,10 @@
+pteid-mw (3.0.19svn7000-1) UNRELEASED; urgency=medium
+
+  * Accessibility improvements in the GUI application
+  * Support for loading SCAP attributes using Chave Movel
+  * New feature: export photo in PNG or JPEG format
+
+ -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Tue, 03 Sep 2019 11:43:29 +0100
 pteid-mw (3.0.16svn5840-3) UNRELEASED; urgency=medium
 
   * SCAP Signature improvements
