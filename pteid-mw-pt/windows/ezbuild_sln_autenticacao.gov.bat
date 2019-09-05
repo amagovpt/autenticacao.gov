@@ -23,16 +23,24 @@ echo OUTPUTLOG=%OUTPUTLOG%
 echo MW_VERSION=%MW_VERSION%
 echo SKIP_X64_DEPS_CHECK=%SKIP_X64_DEPS_CHECK%
 
-:: Crete versions file for the Windows binaries
+:: Create versions file for the Windows binaries
 :: This versions are the real version of the middleware
 for /f "delims== tokens=1,2" %%G in (%~dp0..\_src\eidmw\release_data) do set %%G=%%H
 
+:: Get revision number from git history
+for /f %%i in ('git rev-list --count HEAD') do set REVISION_NUM=%%i
+set REVISION_NUM_STRING="%REVISION_NUM%"
+for /f %%i in ('git rev-parse --short HEAD') do set REVISION_HASH=%%i
+set REVISION_HASH_STRING="%REVISION_HASH%"
+
+:: Get revision number to WiX toolset
 set OUTPUT_FILE=%~dp0..\_src\eidmw\release_data.wxs
 echo ^<Include^> > "%OUTPUT_FILE%"
 echo ^<?define RevisionNumber=%REVISION_NUM%?^> >> "%OUTPUT_FILE%"
 echo ^<?define PTeidProductVersion=%PTEID_PRODUCT_VERSION%?^> >> "%OUTPUT_FILE%"
 echo ^</Include^> >> "%OUTPUT_FILE%"
 
+:: Get revision number to header files
 set OUTPUT_FILE=%~dp0..\_src\eidmw\release_data.h
 echo #ifndef __RELEASE_DATA_H__ > "%OUTPUT_FILE%"
 echo #define __RELEASE_DATA_H__ >> "%OUTPUT_FILE%"
@@ -44,6 +52,7 @@ echo #define BASE_VERSION2            %PTEID_MINOR% >> "%OUTPUT_FILE%"
 echo #define BASE_VERSION3            %PTEID_PATCH% >> "%OUTPUT_FILE%"
 echo #define REVISION_NUM             %REVISION_NUM% >> "%OUTPUT_FILE%"
 echo #define REVISION_NUM_STRING      "%REVISION_NUM%" >> "%OUTPUT_FILE%"
+echo #define REVISION_HASH_STRING     %REVISION_HASH_STRING% >> "%OUTPUT_FILE%"
 echo #endif //__RELEASE_DATA_H__ >>  "%OUTPUT_FILE%"
 
 
