@@ -35,7 +35,9 @@ pteid-poppler/Build
 pkcs11/Build
 _Builds/Autenticacao.gov.sdf
 _Builds/Autenticacao.gov.v12.suo
+_Builds/Autenticacao.gov.opensdf
 eidguiV2/Release
+eidguiV2/GeneratedFiles
 
 # GeneratedFiles #
 ###################
