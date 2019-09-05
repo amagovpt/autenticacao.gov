@@ -366,7 +366,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 
 	//Add name and version of the Signature Creation App to the Build_Prop->App Dictionary
 	build_prop_app.dictAdd(copyString("REx"), obj1.initString(
-		new GooString(PTEID_PRODUCT_VERSION "-" SVN_REVISION_STR)));
+		new GooString(PTEID_PRODUCT_VERSION "-" REVISION_NUM_STRING)));
 	build_prop_app.dictAdd(copyString("Name"), obj1.initName("Portugal eID Middleware"));
 #ifdef _WIN32	
 	build_prop_app.dictAdd(copyString("OS"), obj1.initName("Win"));

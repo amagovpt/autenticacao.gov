@@ -1,4 +1,4 @@
-for /f "delims== tokens=1,2" %%G in (%~dp0..\svn_revision) do set %%G=%%H
+for /f "delims== tokens=1,2" %%G in (%~dp0..\release_data) do set %%G=%%H
 
 set OUTPUT_FILE=%~dp0Properties\AssemblyInfo.cs
 
@@ -11,12 +11,12 @@ echo [assembly: AssemblyDescription("")]			>> "%OUTPUT_FILE%"
 echo [assembly: AssemblyConfiguration("")]			>> "%OUTPUT_FILE%"
 echo [assembly: AssemblyCompany("Portuguese Government")]		>> "%OUTPUT_FILE%"
 echo [assembly: AssemblyProduct("pteidlib_dotnet")]	>> "%OUTPUT_FILE%"
-echo [assembly: AssemblyCopyright("Copyright (C) 2017")]	>> "%OUTPUT_FILE%"
+echo [assembly: AssemblyCopyright("%COPYRIGHT%")]	>> "%OUTPUT_FILE%"
 echo [assembly: AssemblyTrademark("")]				>> "%OUTPUT_FILE%"
 echo [assembly: AssemblyCulture("")]				>> "%OUTPUT_FILE%"
 echo [assembly: ComVisible(false)]				>> "%OUTPUT_FILE%"
 echo [assembly: Guid("a69697fa-c784-4923-8476-2ee828accae8")]	>> "%OUTPUT_FILE%"
-echo [assembly: AssemblyVersion("%PTEID_PRODUCT_VERSION%.%SVN_REVISION%")]	>> "%OUTPUT_FILE%"
-echo [assembly: AssemblyFileVersion("%PTEID_PRODUCT_VERSION%.%SVN_REVISION%")]	>> "%OUTPUT_FILE%"
+echo [assembly: AssemblyVersion("%PTEID_PRODUCT_VERSION%.%REVISION_NUM%")]	>> "%OUTPUT_FILE%"
+echo [assembly: AssemblyFileVersion("%PTEID_PRODUCT_VERSION%.%REVISION_NUM%")]	>> "%OUTPUT_FILE%"
 
 exit 0

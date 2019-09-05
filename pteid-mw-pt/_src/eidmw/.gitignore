@@ -27,3 +27,5 @@ bin/
 # Credentials #
 ###################
 eidguiV2/credentials.h
+/release_data.wxs
+/release_data.h

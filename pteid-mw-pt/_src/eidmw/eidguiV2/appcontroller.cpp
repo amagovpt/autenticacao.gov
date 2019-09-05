@@ -43,13 +43,13 @@ AppController::AppController(GUISettings& settings,QObject *parent) :
 {
     QString strVersion (PTEID_PRODUCT_VERSION);
     m_Settings.setGuiVersion(strVersion);
-    qDebug() << "C++: AppController started. App version: " << m_Settings.getGuiVersion() +" - "+ SVN_REVISION_STR;
+....qDebug() << "C++: AppController started. App version: " << m_Settings.getGuiVersion() + " - " + REVISION_NUM_STRING;
     qDebug() << "C++: currentCpuArchitecture():" << QSysInfo::currentCpuArchitecture();
     qDebug() << "C++: prettyProductName():" << QSysInfo::prettyProductName();
     QByteArray ba = m_Settings.getGuiVersion().toLatin1();
      const char *c_str2 = ba.data();
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui",
-              "Application started. App version: %s - %s",c_str2, SVN_REVISION_STR);
+........"Application started. App version: %s - %s", c_str2, REVISION_NUM_STRING);
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui",
         "CpuArchitecture: %s ProductName: %s\n", 
         QSysInfo::currentCpuArchitecture().toStdString().c_str(), QSysInfo::prettyProductName().toStdString().c_str());
@@ -65,7 +65,7 @@ bool AppController::getTestMode(void){
 
 QString AppController::getAppVersion(void){
 
-    return m_Settings.getGuiVersion() +" - "+ SVN_REVISION_STR;
+....return m_Settings.getGuiVersion() + " - " + REVISION_NUM_STRING;
 }
 
 bool AppController::isAnimationsEnabled(void){
