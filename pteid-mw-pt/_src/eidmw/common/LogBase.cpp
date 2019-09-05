@@ -881,9 +881,11 @@ bool CLog::writeLineHeaderA(tLOG_Level level_in,const int line,const char *file)
 	std::string timestamp;
 	getLocalTimeA(timestamp);
 
-	/* Get the name of the file that started this process*/
+	/* Get the full path of the executable file that started this process */
 
 #ifdef WIN32
+	char baseName[512];
+	memset(baseName, 0, sizeof(baseName));
 	DWORD baseNamseSize = 0;
 	baseNamseSize = GetModuleFileNameA(NULL, baseName, sizeof(baseName));
 	if (baseNamseSize == 0) {
