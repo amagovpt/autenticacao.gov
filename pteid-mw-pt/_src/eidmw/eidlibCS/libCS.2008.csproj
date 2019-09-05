@@ -255,6 +255,36 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\XMLUserData.cs">
       <Link>GeneratedFiles\XMLUserData.cs</Link>
     </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\src\Pteid.cs">
+      <Link>Pteid.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\src\PteidException.cs">
+      <Link>PteidException.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\src\PTEIDPin.cs">
+      <Link>PTEIDPin.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\src\PTEID_ADDR.cs">
+      <Link>PTEID_ADDR.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\src\PTEID_Certif.cs">
+      <Link>PTEID_Certif.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\src\PTEID_ID.cs">
+      <Link>PTEID_ID.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\src\PTEID_PIC.cs">
+      <Link>PTEID_PIC.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\src\PTEID_Proxy_Info.cs">
+      <Link>PTEID_Proxy_Info.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\src\PTEID_RSAPublicKey.cs">
+      <Link>PTEID_RSAPublicKey.cs</Link>
+    </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\src\PTEID_TokenInfo.cs">
+      <Link>PTEID_TokenInfo.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

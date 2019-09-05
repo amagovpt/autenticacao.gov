@@ -7,6 +7,35 @@
 ###################
 Makefile
 CMD/services/Makefile.cmdServices
+CMD/services/Build
+_Binaries35
+applayer/Build
+clean_mdrv_keys/Build
+common/Build
+dialogs/dialogsWin32/Build
+eidlib/Build
+eidlib/docs
+eidlib/cppdocs.zip
+eidlibCS/GeneratedFiles
+eidlibCS/obj
+eidlibCS/Properties
+eidlibCS_Wrapper/Build
+eidlibCS_Wrapper/GeneratedFiles
+eidlibCS_Wrapper/pteidlibCS_Wrapper.2008.vcxproj.user
+eidlibJava_Wrapper/pteidlibJava_Wrapper.2008.vcxproj.user
+eidlibJava_Wrapper/Build
+eidlibJava_Wrapper/javadocs.zip
+eidlibJava_Wrapper/javadocs
+eidlibJava/Build
+cardlayer/Build
+minidriver/makemsi/Release
+misc/Wix_MW35/MarkHidden/Build
+misc/Wix_MW35/Autenticacao.gov-3.0/obj
+pteid-poppler/Build
+pkcs11/Build
+_Builds/Autenticacao.gov.sdf
+_Builds/Autenticacao.gov.v12.suo
+eidguiV2/Release
 
 # GeneratedFiles #
 ###################
