@@ -2,10 +2,10 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:difx="http://schemas.microsoft.com/wix/DifxAppExtension"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-  <?include ..\..\..\svn_revision.wxs ?>
+  <?include ..\..\..\release_data.wxs ?>
 
   <?define var.ProductVersion = 3.0.$(var.RevisionNumber)?>
-  <?define var.OfficialProductVersion = 3.0.19 ?>
+  <?define var.OfficialProductVersion = $(var.PTeidProductVersion) ?>
 
   <?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
   <?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F20$(var.RevisionNumber)}?>

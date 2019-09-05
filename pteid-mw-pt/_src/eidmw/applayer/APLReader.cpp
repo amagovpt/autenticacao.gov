@@ -623,7 +623,7 @@ void CAppLayer::updateVersion()
 		conf_BuildNbr.ChangeLookupBehaviour(APL_Config::USER_ONLY);
 		long build = conf_BuildNbr.getLong();
 
-		conf_BuildNbr.setLong(SVN_REVISION);
+		conf_BuildNbr.setLong(REVISION_NUM);
 	}
 	catch(...) //If the update failed, we will try next time
 	{
