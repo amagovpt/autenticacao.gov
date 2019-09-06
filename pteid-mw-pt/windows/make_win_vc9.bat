@@ -1,3 +1,4 @@
+set startTime=%time%
 @if %MW_VERSION% == 2 (
   @call "%~dp0set_path_vc9.bat"
   @set SOLUTION=%~dp0..\_src\eidmw\_Builds\PteidEasyBuild.2008.sln
@@ -243,4 +244,6 @@ if "%SKIP_X64_DEPS_CHECK%"=="1" goto skip_64_build_output_log
 @goto end
 
 :end
+echo Start Time: %startTime%
+echo Finish Time: %time%
 pause

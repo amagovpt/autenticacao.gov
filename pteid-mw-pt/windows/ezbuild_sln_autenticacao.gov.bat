@@ -37,6 +37,7 @@ set REVISION_HASH_STRING="%REVISION_HASH%"
 set OUTPUT_FILE=%~dp0..\_src\eidmw\release_data.wxs
 echo ^<Include^> > "%OUTPUT_FILE%"
 echo ^<?define RevisionNumber=%REVISION_NUM%?^> >> "%OUTPUT_FILE%"
+echo ^<?define PteidMinor=%PTEID_MINOR%?^> >> "%OUTPUT_FILE%"
 echo ^<?define PTeidProductVersion=%PTEID_PRODUCT_VERSION%?^> >> "%OUTPUT_FILE%"
 echo ^</Include^> >> "%OUTPUT_FILE%"
 
