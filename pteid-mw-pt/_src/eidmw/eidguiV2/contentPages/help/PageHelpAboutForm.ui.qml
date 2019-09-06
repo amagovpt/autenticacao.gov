@@ -7,6 +7,8 @@ import "../../components" as Components
 Item {
     property alias propertyTextLinkCC: textLinkCC
     property alias propertyTextVersion: textVersion
+    property alias propertyTextRevision: textRevision
+    property alias propertyTextCopyright: textCopyright
     property alias propertyMainItem: textAppName
 
     anchors.fill: parent
@@ -36,8 +38,8 @@ Item {
             KeyNavigation.tab: textDescription
             KeyNavigation.down: textDescription
             KeyNavigation.right: textDescription
-            KeyNavigation.backtab: textDevByAgency
-            KeyNavigation.up: textDevByAgency
+            KeyNavigation.backtab: textCopyright
+            KeyNavigation.up: textCopyright
         }
         Text {
             id: textDescription
@@ -64,11 +66,26 @@ Item {
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             Accessible.role: Accessible.Row
             Accessible.name: text
+            KeyNavigation.tab: textRevision
+            KeyNavigation.down: textRevision
+            KeyNavigation.right: textRevision
+            KeyNavigation.backtab: textDescription
+            KeyNavigation.up: textDescription
+        }
+        Text {
+            id: textRevision
+            font.pixelSize: Constants.SIZE_TEXT_BODY
+            font.family: lato.name
+            font.bold: textRevision.focus ? true : false
+            anchors.top: textVersion.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            Accessible.role: Accessible.Row
+            Accessible.name: text
             KeyNavigation.tab: textDifficult
             KeyNavigation.down: textDifficult
             KeyNavigation.right: textDifficult
-            KeyNavigation.backtab: textDescription
-            KeyNavigation.up: textDescription
+            KeyNavigation.backtab: textVersion
+            KeyNavigation.up: textVersion
         }
         Text {
             id: textDifficult
@@ -76,23 +93,23 @@ Item {
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
             font.bold: textDifficult.focus ? true : false
-            anchors.top: textVersion.bottom
+            anchors.top: textRevision.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             Accessible.role: Accessible.Row
             Accessible.name: text
             KeyNavigation.tab: textLinkCC.propertyText
             KeyNavigation.down: textLinkCC.propertyText
             KeyNavigation.right: textLinkCC.propertyText
-            KeyNavigation.backtab: textVersion
-            KeyNavigation.up: textVersion
+            KeyNavigation.backtab: textRevision
+            KeyNavigation.up: textRevision
         }
-    Components.Link {
-        id: textLinkCC
-        width: parent.width
-        anchors.top: textDifficult.bottom
+        Components.Link {
+            id: textLinkCC
+            width: parent.width
+            anchors.top: textDifficult.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             propertyText.text: "<a href='https://www.autenticacao.gov.pt/o-cartao-de-cidadao'>" +
-        "https://www.autenticacao.gov.pt/o-cartao-de-cidadao" + "</a>"
+                               "https://www.autenticacao.gov.pt/o-cartao-de-cidadao" + "</a>"
             propertyAccessibleText: qsTranslate("PageHelpAbout","STR_HELP_CC_SELECT")
             propertyAccessibleDescription:  qsTranslate("PageHelpAbout","STR_HELP_CC_SELECT")
             propertyLinkUrl: 'https://www.autenticacao.gov.pt/o-cartao-de-cidadao'
@@ -102,16 +119,16 @@ Item {
             KeyNavigation.left: textDifficult
             KeyNavigation.backtab: textDifficult
             KeyNavigation.up: textDifficult
-    }
+        }
 
-    Text {
-        id: textDevBy
-        text: qsTranslate("PageHelpAbout","STR_HELP_DEV_BY")
-        font.pixelSize: Constants.SIZE_TEXT_BODY
-        font.family: lato.name
+        Text {
+            id: textDevBy
+            text: qsTranslate("PageHelpAbout","STR_HELP_DEV_BY")
+            font.pixelSize: Constants.SIZE_TEXT_BODY
+            font.family: lato.name
             font.bold: textDevBy.focus ? true : false
-        anchors.top: textLinkCC.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            anchors.top: textLinkCC.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             Accessible.role: Accessible.Row
             Accessible.name: text
             KeyNavigation.tab: textDevByAgency
@@ -120,46 +137,64 @@ Item {
             KeyNavigation.left: textLinkCC.propertyText
             KeyNavigation.backtab: textLinkCC.propertyText
             KeyNavigation.up: textLinkCC.propertyText
-    }
+        }
 
-    Text {
-        id: textDevByAgency
-        text: qsTranslate("PageHelpAbout","STR_HELP_DEV_AGENCY")
-        font.pixelSize: Constants.SIZE_TEXT_BODY
-        font.family: lato.name
+        Text {
+            id: textDevByAgency
+            text: qsTranslate("PageHelpAbout","STR_HELP_DEV_AGENCY")
+            font.pixelSize: Constants.SIZE_TEXT_BODY
+            font.family: lato.name
             font.bold: textDevByAgency.focus ? true : false
-        anchors.top: textDevBy.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-        width: parent.width
-        wrapMode: Text.Wrap
+            anchors.top: textDevBy.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            width: parent.width
+            wrapMode: Text.Wrap
+            Accessible.role: Accessible.Row
+            Accessible.name: text
+            KeyNavigation.tab: textCopyright
+            KeyNavigation.down: textCopyright
+            KeyNavigation.right: textCopyright
+            KeyNavigation.backtab: textDevBy
+            KeyNavigation.up: textDevBy
+        }
+        Text {
+            id: textCopyright
+            font.pixelSize: Constants.SIZE_TEXT_BODY
+            font.family: lato.name
+            font.bold: textCopyright.focus ? true : false
+            width: parent.width
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: textDevByAgency.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            wrapMode: Text.Wrap
             Accessible.role: Accessible.Row
             Accessible.name: text
             KeyNavigation.tab: propertyMainItem
             KeyNavigation.down: propertyMainItem
             KeyNavigation.right: propertyMainItem
-            KeyNavigation.backtab: textDevBy
-            KeyNavigation.up: textDevBy
-    }
+            KeyNavigation.backtab: textDevByAgency
+            KeyNavigation.up: textDevByAgency
+        }
 
-    Image {
-        id: imageCC
-        y: parent.height * 0.1
-        width: Constants.SIZE_IMAGE_LOGO_CC_WIDTH
-        height: Constants.SIZE_IMAGE_LOGO_CC_HEIGHT
-        anchors.horizontalCenter: parent.horizontalCenter
-        fillMode: Image.PreserveAspectFit
-        source: "../../images/logo_CC.png"
-        anchors.top: textDevByAgency.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-    }
-    Image {
-        id: imageSupported
-        width: parent.width
-        anchors.horizontalCenter: parent.horizontalCenter
-        fillMode: Image.PreserveAspectFit
-        source: "../../images/logo_compete2020.png"
-        anchors.top: imageCC.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-    }
+        Image {
+            id: imageCC
+            y: parent.height * 0.1
+            width: Constants.SIZE_IMAGE_LOGO_CC_WIDTH
+            height: Constants.SIZE_IMAGE_LOGO_CC_HEIGHT
+            anchors.horizontalCenter: parent.horizontalCenter
+            fillMode: Image.PreserveAspectFit
+            source: "../../images/logo_CC.png"
+            anchors.top: textCopyright.bottom
+            anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
+        }
+        Image {
+            id: imageSupported
+            width: parent.width
+            anchors.horizontalCenter: parent.horizontalCenter
+            fillMode: Image.PreserveAspectFit
+            source: "../../images/logo_compete2020.png"
+            anchors.top: imageCC.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+        }
     }
 }

@@ -16,6 +16,9 @@ PageHelpAboutForm {
     Component.onCompleted: {
         propertyTextVersion.text = qsTranslate("PageHelpAbout","STR_HELP_APP_VERSION") + " : "
                 + controler.getAppVersion()
+        propertyTextRevision.text = qsTranslate("PageHelpAbout","STR_HELP_APP_REVISION") + " : "
+                + "<i>" + controler.getAppRevision() + "</i>"
+        propertyTextCopyright.text = controler.getAppCopyright()
         propertyMainItem.forceActiveFocus()
     }
 }
