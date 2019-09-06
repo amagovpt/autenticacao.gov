@@ -1,4 +1,4 @@
-# Middleware Oficial de Identificação Eletrónica em Portugal - Cartão de Cidadão, da Chave Móvel Digital e Sistema de Certificação de atributos profissionais
+﻿# Middleware Oficial de Identificação Eletrónica em Portugal - Cartão de Cidadão, da Chave Móvel Digital e Sistema de Certificação de atributos profissionais
 ## Introdução
 ### Objectivos
 
@@ -7,7 +7,7 @@ O objectivo deste projecto é disponibilizar uma nova versão de middleware que 
 ## SDK
 
 Está disponível um SDK, com o objetivo de disponibilizar a integração com outras aplicações, das funcionalidades desenvolvidas no âmbito deste projeto.
-Existem SDK's para as linguagens C, C++, JAVA, .NET e C#.
+Existem SDK's para as linguagens C, C++, JAVA e C#.
 
 ## Compilar o Middleware do Cartão de Cidadão
 
