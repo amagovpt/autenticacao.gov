@@ -37,6 +37,8 @@ public slots:
     void restoreScreen(void);
     Q_INVOKABLE QVariant getCursorPos();
     QString getAppVersion(void);
+    QString getAppRevision(void);
+    QString getAppCopyright(void);
     bool isAnimationsEnabled(void);
     bool getNotShowHelpStartUp(void);
     bool getTestMode(void);
@@ -115,7 +117,7 @@ public slots:
     void flushCache();
     void getPteidCacheSize();
     void getScapCacheSize();
-    
+
 private:
     GUISettings&    m_Settings;
     bool LoadTranslationFile(QString NewLanguage );
@@ -153,7 +155,7 @@ signals:
     void signalAutoUpdateAvailable(QString release_notes, QString installed_version, QString remote_version);
     void signalAutoUpdateProgress(int value);
     void signalStartUpdate(QString filename);
-    void signalRemovePteidCacheSuccess(); 
+    void signalRemovePteidCacheSuccess();
     void signalRemovePteidCacheFail();
     void signalCacheNotReadable();
     void signalCacheNotWritable();

@@ -2,6 +2,7 @@
 ###################
 *.o
 *.a
+*.user
 
 # Makefiles #
 ###################
@@ -21,8 +22,6 @@ eidlibCS/obj
 eidlibCS/Properties
 eidlibCS_Wrapper/Build
 eidlibCS_Wrapper/GeneratedFiles
-eidlibCS_Wrapper/pteidlibCS_Wrapper.2008.vcxproj.user
-eidlibJava_Wrapper/pteidlibJava_Wrapper.2008.vcxproj.user
 eidlibJava_Wrapper/Build
 eidlibJava_Wrapper/javadocs.zip
 eidlibJava_Wrapper/javadocs

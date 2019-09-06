@@ -739,54 +739,54 @@
 <context>
     <name>PageCardAdress</name>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="358"/>
-        <location filename="contentPages/card/PageCardAdress.qml" line="587"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="354"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="583"/>
         <source>STR_ADDRESS_CHANGE_CONFIRMATION</source>
         <translation>Address Confirmation</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="389"/>
-        <location filename="contentPages/card/PageCardAdress.qml" line="397"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="385"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="393"/>
         <source>STR_ADDRESS_CHANGE_TEXT</source>
         <translation>If you have requested a change of address, enter the process number and secret code received by mail. If you want to change your address, click</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="391"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="387"/>
         <source>STR_ADDRESS_CHANGE_TEXT_LINK</source>
         <translation>here</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="415"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="411"/>
         <source>STR_ADDRESS_CHANGE_NUMBER</source>
         <translation>Process Number</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="439"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="435"/>
         <source>STR_ADDRESS_CHANGE_NUMBER_OP</source>
         <translation>Process number?</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="465"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="461"/>
         <source>STR_ADDRESS_CHANGE_CODE</source>
         <translation>Address Confirmation Code</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="489"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="485"/>
         <source>STR_ADDRESS_CHANGE_CODE_OP</source>
         <translation>Address Confirmation Code?</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="517"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="513"/>
         <source>STR_ADDRESS_CHANGE_CANCEL</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="540"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="536"/>
         <source>STR_ADDRESS_CHANGE_CONFIRM</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="670"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="666"/>
         <source>STR_ADDRESS_CHANGE_OK</source>
         <translation>OK</translation>
     </message>
@@ -1496,29 +1496,29 @@
 <context>
     <name>PageHelpAbout</name>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="44"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="45"/>
         <source>STR_HELP_TITLE</source>
         <translation>Portuguese Identification Card Management Software</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="75"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="91"/>
         <source>STR_HELP_LINK</source>
         <oldsource>STR_HELP_</oldsource>
         <translation>For information or support about this software please visit</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="96"/>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="97"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="112"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="113"/>
         <source>STR_HELP_CC_SELECT</source>
         <translation>https://www.autenticacao.gov.pt/o-cartao-de-cidadao</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="109"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="125"/>
         <source>STR_HELP_DEV_BY</source>
         <translation>Developed by the Portuguese State</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="127"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="143"/>
         <source>STR_HELP_DEV_AGENCY</source>
         <translation>(Agência para a Modernização Administrativa, IP e Instituto dos Registos e do Notariado, IP)</translation>
     </message>
@@ -1527,11 +1527,16 @@
         <source>STR_HELP_APP_VERSION</source>
         <translation>Version</translation>
     </message>
+    <message>
+        <location filename="contentPages/help/PageHelpAbout.qml" line="19"/>
+        <source>STR_HELP_APP_REVISION</source>
+        <translation>Revision</translation>
+    </message>
 </context>
 <context>
     <name>PageHelpDocOnline</name>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="29"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="30"/>
         <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="31"/>
         <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="40"/>
         <location filename="contentPages/home/PageHomeForm.ui.qml" line="32"/>
@@ -1683,39 +1688,39 @@
 <context>
     <name>PageServicesSign</name>
     <message>
-        <location filename="components/DialogCMD.qml" line="55"/>
-        <location filename="components/DialogCMD.qml" line="347"/>
+        <location filename="components/DialogCMD.qml" line="59"/>
+        <location filename="components/DialogCMD.qml" line="365"/>
         <source>STR_SIGN_CMD</source>
         <translation>Sign with Chave Móvel Digital</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="94"/>
+        <location filename="components/DialogCMD.qml" line="123"/>
         <source>STR_SIGN_INSERT_LOGIN</source>
         <translation>Enter information</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="122"/>
+        <location filename="components/DialogCMD.qml" line="151"/>
         <source>STR_SIGN_CMD_MOVEL_NUM</source>
         <translation>Mobile number</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="173"/>
+        <location filename="components/DialogCMD.qml" line="195"/>
         <source>STR_SIGN_CMD_MOVEL_NUM_OP</source>
         <translation>Number</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="203"/>
+        <location filename="components/DialogCMD.qml" line="225"/>
         <source>STR_SIGN_CMD_PIN</source>
         <translation>Signature PIN</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="226"/>
+        <location filename="components/DialogCMD.qml" line="241"/>
         <source>STR_SIGN_CMD_PIN_OP</source>
         <translation>PIN</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="254"/>
-        <location filename="components/DialogCMD.qml" line="259"/>
+        <location filename="components/DialogCMD.qml" line="101"/>
+        <location filename="components/DialogCMD.qml" line="106"/>
         <source>STR_SIGN_CMD_URL</source>
         <translation>Click to know the Chave Móvel Digital</translation>
     </message>
@@ -1725,7 +1730,7 @@
         <translation>Files successfully signed</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="422"/>
+        <location filename="components/DialogCMD.qml" line="440"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="343"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="210"/>
         <source>STR_SIGN_OPEN</source>
@@ -1748,7 +1753,7 @@
         <translation>Please check your Internet connection and try again.</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="423"/>
+        <location filename="components/DialogCMD.qml" line="441"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="341"/>
         <source>STR_SIGN_OPEN_MULTI</source>
         <translation>Open folder with signed file(s) ?</translation>
@@ -1836,16 +1841,16 @@
         <translation>Verify that the file is not corrupted and check the type of signature selected.</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="277"/>
-        <location filename="components/DialogCMD.qml" line="514"/>
+        <location filename="components/DialogCMD.qml" line="275"/>
+        <location filename="components/DialogCMD.qml" line="532"/>
         <source>STR_CMD_POPUP_CANCEL</source>
         <oldsource>STR_ADDRESS_CHANGE_CANCEL</oldsource>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="302"/>
-        <location filename="components/DialogCMD.qml" line="539"/>
-        <location filename="components/DialogCMD.qml" line="668"/>
+        <location filename="components/DialogCMD.qml" line="314"/>
+        <location filename="components/DialogCMD.qml" line="567"/>
+        <location filename="components/DialogCMD.qml" line="702"/>
         <source>STR_CMD_POPUP_CONFIRM</source>
         <oldsource>STR_ADDRESS_CHANGE_CONFIRM</oldsource>
         <translation>OK</translation>
@@ -1876,7 +1881,7 @@
         <translation>Error reading PDF file. Please check the format of the file.</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="450"/>
+        <location filename="components/DialogCMD.qml" line="468"/>
         <source>STR_SIGN_CMD_CODE</source>
         <translation>Enter the code</translation>
     </message>
@@ -1896,7 +1901,7 @@
         <translation>One or more selected attributes are not active. Please clear a cache and reload its attributes</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="473"/>
+        <location filename="components/DialogCMD.qml" line="484"/>
         <source>STR_SIGN_CMD_CODE_OP</source>
         <translation>Code</translation>
     </message>
@@ -2289,7 +2294,7 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="145"/>
-        <location filename="contentPages/card/PageCardAdress.qml" line="179"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="175"/>
         <location filename="contentPages/card/PageCardIdentify.qml" line="124"/>
         <location filename="contentPages/card/PageCardIdentify.qml" line="146"/>
         <location filename="contentPages/card/PageCardIdentify.qml" line="154"/>
@@ -2346,7 +2351,7 @@
         <translation>Citizen card inserted</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="181"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="177"/>
         <location filename="contentPages/card/PageCardIdentify.qml" line="156"/>
         <location filename="contentPages/card/PageCardNotes.qml" line="111"/>
         <location filename="contentPages/card/PageCardOtherData.qml" line="124"/>
@@ -2403,10 +2408,10 @@
     </message>
     <message>
         <location filename="PageLoader.qml" line="80"/>
-        <location filename="components/DialogCMD.qml" line="79"/>
-        <location filename="components/DialogCMD.qml" line="382"/>
-        <location filename="contentPages/card/PageCardAdress.qml" line="374"/>
-        <location filename="contentPages/card/PageCardAdress.qml" line="596"/>
+        <location filename="components/DialogCMD.qml" line="83"/>
+        <location filename="components/DialogCMD.qml" line="400"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="370"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="592"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="306"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="450"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="195"/>
@@ -2462,7 +2467,7 @@
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="25"/>
+        <location filename="components/DialogCMD.qml" line="26"/>
         <location filename="contentPages/card/PageCardIdentify.qml" line="270"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="110"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="390"/>
@@ -2480,7 +2485,7 @@
 <context>
     <name>Popup PIN</name>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="207"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="203"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="272"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="160"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="307"/>
@@ -2491,19 +2496,19 @@
         <translation>PIN verification</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="259"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="255"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="679"/>
         <source>STR_POPUP_CARD_PIN_VERIFY_ADDRESS</source>
         <translation>Check the Address Pin</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="280"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="276"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="681"/>
         <source>STR_POPUP_CARD_PIN_ADDRESS</source>
         <translation>Address PIN</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="295"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="291"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="233"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="380"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="395"/>
@@ -2511,20 +2516,20 @@
         <translation>Current PIN?</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="327"/>
-        <location filename="contentPages/card/PageCardAdress.qml" line="720"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="323"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="716"/>
         <source>STR_POPUP_CARD_PIN_ADDRESS_BLOCKED</source>
         <translation>Address PIN is blocked</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="331"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="327"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="327"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="580"/>
         <source>STR_POPUP_CARD_PIN_WRONG</source>
         <translation>PIN verification failed</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="333"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="329"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="264"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="278"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="292"/>
@@ -2538,7 +2543,7 @@
         <translation>Remain</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="335"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="331"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="266"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="280"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="294"/>
@@ -2685,7 +2690,7 @@
         <translation>This PIN is used for change and read of address.</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdress.qml" line="718"/>
+        <location filename="contentPages/card/PageCardAdress.qml" line="714"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="923"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="498"/>
         <source>STR_POPUP_ERROR</source>

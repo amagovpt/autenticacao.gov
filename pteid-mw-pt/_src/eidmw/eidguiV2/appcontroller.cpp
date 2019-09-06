@@ -43,15 +43,18 @@ AppController::AppController(GUISettings& settings,QObject *parent) :
 {
     QString strVersion (PTEID_PRODUCT_VERSION);
     m_Settings.setGuiVersion(strVersion);
-    qDebug() << "C++: AppController started. App version: " << m_Settings.getGuiVersion() + " - " + REVISION_NUM_STRING;
+    qDebug() << "C++: AppController started. App version: " << m_Settings.getGuiVersion()
+                + " - " + REVISION_NUM_STRING + " [ " + REVISION_HASH_STRING + " ]";;
     qDebug() << "C++: currentCpuArchitecture():" << QSysInfo::currentCpuArchitecture();
     qDebug() << "C++: prettyProductName():" << QSysInfo::prettyProductName();
     QByteArray ba = m_Settings.getGuiVersion().toLatin1();
-     const char *c_str2 = ba.data();
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui","Application started. App version: %s - %s", c_str2, REVISION_NUM_STRING);
+    const char *c_str2 = ba.data();
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui", "App started. %s - %s [%s]",
+              c_str2, REVISION_NUM_STRING, REVISION_HASH_STRING);
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui",
-        "CpuArchitecture: %s ProductName: %s\n", 
-        QSysInfo::currentCpuArchitecture().toStdString().c_str(), QSysInfo::prettyProductName().toStdString().c_str());
+              "CpuArch: %s ProductName: %s\n",
+              QSysInfo::currentCpuArchitecture().toStdString().c_str(),
+              QSysInfo::prettyProductName().toStdString().c_str());
 }
 
 void AppController::restoreScreen(void){
@@ -64,7 +67,17 @@ bool AppController::getTestMode(void){
 
 QString AppController::getAppVersion(void){
 
-	return m_Settings.getGuiVersion() + " - " + REVISION_NUM_STRING + " [ " + REVISION_HASH_STRING + " ]";
+    return m_Settings.getGuiVersion() + " - " + REVISION_NUM_STRING;
+}
+
+QString AppController::getAppRevision(void){
+
+    return REVISION_HASH_STRING;
+}
+
+QString AppController::getAppCopyright(void){
+
+    return PTEID_COPYRIGHT;
 }
 
 bool AppController::isAnimationsEnabled(void){
@@ -254,7 +267,7 @@ void AppController::startRequest(QUrl url){
     }
 
     reply = qnam.get(QNetworkRequest(url));
-	QTimer::singleShot(download_duration, this, SLOT(cancelDownload()));
+    QTimer::singleShot(download_duration, this, SLOT(cancelDownload()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(httpError(QNetworkReply::NetworkError)));
     connect(reply, SIGNAL(finished()),
@@ -273,9 +286,9 @@ void AppController::startUpdateRequest(QUrl url){
         return;
     }
 
-	int download_duration = 300000;
+    int download_duration = 300000;
     reply = qnam.get(QNetworkRequest(url));
-	QTimer::singleShot(download_duration, this, SLOT(cancelUpdateDownload()));
+    QTimer::singleShot(download_duration, this, SLOT(cancelUpdateDownload()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(httpUpdateError(QNetworkReply::NetworkError)));
     connect(reply, SIGNAL(finished()),
@@ -397,9 +410,9 @@ void AppController::RunPackage(std::string pkg, std::string distro){
 
     //guarantees null-terminating string
     path.push_back(0);
-    
+
     LPWSTR path_pointer = (wchar_t *) path.c_str();
-    
+
     if (!CreateProcess(NULL, path_pointer, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)){
         qDebug() << "autoUpdate process failed to start";
         qDebug() << QString::fromStdString("Error: " + GetLastError());
@@ -596,7 +609,7 @@ bool AppController::VerifyUpdates(std::string filedata)
         emit signalAutoUpdateFail(GAPI::GenericError);
         return false;
     }
-    
+
     cJSON *dist_json = cJSON_GetObjectItem(dists_json, distrover.c_str());
     if (!cJSON_IsObject(dist_json))
     {
@@ -638,7 +651,7 @@ bool AppController::VerifyUpdates(std::string filedata)
 
     qDebug() << "local_version:" << QString::number(local_version.major) << QString::number(local_version.minor) << QString::number(local_version.release);
     qDebug() << "remote_version:" << QString::number(remote_version.major) << QString::number(remote_version.minor) << QString::number(remote_version.release);
-    
+
     if (compareVersions(local_version, remote_version) <= 0)
     {
         qDebug() << "C++: No updates available at the moment";
@@ -646,7 +659,7 @@ bool AppController::VerifyUpdates(std::string filedata)
         return false;
     }
     qDebug() << "C++: updates available";
-    
+
     cJSON *versions_array_json = cJSON_GetObjectItem(json, "versions");
     if (!cJSON_IsArray(versions_array_json))
     {
@@ -731,7 +744,7 @@ std::string AppController::VerifyOS(std::string param)
     {
         goto done;
     }
-    
+
 #ifdef WIN32
     distrostr = "windows";
     distrostr += QSysInfo::WordSize == 64 ? "64" : "32";
@@ -739,7 +752,7 @@ std::string AppController::VerifyOS(std::string param)
     distrostr = "osx";
 #else
 
-    
+
     if (!osFile.exists())
     {
         qDebug() << "Not Linux or too old distro!";
@@ -788,7 +801,7 @@ std::string AppController::VerifyOS(std::string param)
         {
             distrostr = "suse";
         }
-        
+
         distrostr += QSysInfo::WordSize == 64 ? "64" : "32";
     }
 #endif
@@ -810,7 +823,7 @@ bool AppController::ChooseVersion(std::string distro, std::string arch, cJSON *d
     downloadurl.append(configurl);
 
 #ifdef WIN32
-    
+
 #elif __APPLE__
 
 #else
@@ -1131,15 +1144,15 @@ void getOutlookVersion(std::wstring &version) {
     DWORD dwType = REG_SZ;
     WCHAR abValueDat[23];
     DWORD dwValDatLen = sizeof(abValueDat);
-	try
-	{
-		ReadReg(HKEY_CLASSES_ROOT, L"Outlook.Application\\CurVer", L"", &dwType, abValueDat, &dwValDatLen);
-	}
-	catch (...)
-	{
+    try
+    {
+        ReadReg(HKEY_CLASSES_ROOT, L"Outlook.Application\\CurVer", L"", &dwType, abValueDat, &dwValDatLen);
+    }
+    catch (...)
+    {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Outlook CurVer registry does not exist");
-		return;
-	}
+        return;
+    }
 
     if (wcslen(abValueDat) <= 20)
     {
@@ -1174,17 +1187,17 @@ bool AppController::getOutlookSuppressNameChecks(void) {
         DWORD abValueDat(0);
         DWORD dwValDatLen(sizeof(abValueDat));
         DWORD dwType = REG_DWORD;
-		try
-		{
-			ReadReg(HKEY_CURRENT_USER, regName.c_str(), L"SupressNameChecks", &dwType, &abValueDat, &dwValDatLen);
-		}
-		catch (...)
-		{
+        try
+        {
+            ReadReg(HKEY_CURRENT_USER, regName.c_str(), L"SupressNameChecks", &dwType, &abValueDat, &dwValDatLen);
+        }
+        catch (...)
+        {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Outlook SupressNameChecks registry does not exist");
-		}
+        }
         return abValueDat == 1;
     }
-    
+
     return false;
 #endif
 
