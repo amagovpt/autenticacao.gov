@@ -356,7 +356,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 	signature_dict->dictAdd(copyString("Type"), obj3.initName("Sig"));
 
 	signature_dict->dictAdd(copyString("Contents"), obj1.initString(sig_content));
-	signature_dict->dictAdd(copyString("SubFilter"), obj1.initName("adbe.pkcs7.detached"));
+	signature_dict->dictAdd(copyString("SubFilter"), obj1.initName("ETSI.CAdES.detached"));
 
 	char * name_latin1 = utf8_to_latin1(signer_info->name);
 	signature_dict->dictAdd(copyString("Name"), obj1.initString(new GooString(name_latin1)));
