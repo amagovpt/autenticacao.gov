@@ -1,0 +1,98 @@
+{
+    "distributions": {
+        "ubuntu18": {
+            "latestVersion": "3.0.16",
+            "package": "Autenticacao.gov_Ubuntu_18_x64.deb"
+        },
+        "windows32": {
+            "latestVersion": "3.0.19",
+            "package": "Autenticacao.gov_Win_x86.msi"
+        },
+        "windows64": {
+            "latestVersion": "3.0.19",
+            "package": "Autenticacao.gov_Win_x64.msi"
+        },
+        "fedora32": {
+            "latestVersion": "0.0.0",
+            "package": ""
+        },
+        "fedora64": {
+            "latestVersion": "3.0.16",
+            "package": "Autenticacao.gov_Fedora_x64.rpm"
+        },
+        "suse32": {
+            "latestVersion": "0.0.0",
+            "package": ""
+        },
+        "suse64": {
+            "latestVersion": "2.4.6",
+            "package": "Autenticacao.gov_OpenSUSE_x64.rpm"
+        },
+        "osx": {
+            "latestVersion": "3.0.19",
+            "package": "Autenticacao.gov_MacOS.pkg"
+        }
+    },
+    "versions": [
+        {
+            "version": "3.0.19",
+            "date": "2019-08-26",
+            "release_notes": [
+                "Acessibilidade na aplicação Autenticação.gov",
+                "Possibilidade de obter atributos SCAP usando Chave Móvel",
+                "Nova funcionalidade: exportar foto em formato PNG ou JPEG"
+            ]
+        },
+        {
+            "version": "3.0.18",
+            "date": "2019-06-04",
+            "release_notes": [
+                "Correção na leitura de certificados e verificação do estado do cartão em Windows",
+                "Nova funcionalidade - Assinatura CMD de múltiplos ficheiros em lote"
+            ]
+        },
+        {
+            "version": "3.0.17",
+            "date": "2019-04-12",
+            "release_notes": [
+                "Correção na funcionalidade de assinatura de PDF com Cartão de Cidadão",
+                "Configuração do Microsoft Outlook integrada na aplicação",
+                "Suporte a servidor de proxy na assinatura SCAP",
+                "Possibilidade de selecionar a pasta de instalação do Software"
+            ]
+        },
+        {
+            "version": "3.0.16",
+            "date": "2019-01-29",
+            "release_notes": [
+                "Melhorias na funcionalidade de assinatura SCAP",
+                "Suporte a cartões com chaves RSA de 3072 bits"
+            ]
+        },
+        {
+            "version": "3.0.15",
+            "date": "2018-09-07",
+            "release_notes": [
+                "Correcção na assinatura de PDF",
+                "Correcções de interface gráfico na assinatura CMD"
+            ]
+        },
+        {
+            "version": "3.0.13",
+            "date": "2018-06-26",
+            "release_notes": [
+                "Correcção na funcionalidade de alteração de morada",
+                "Correcções nas funcionalidades de assinatura SCAP e com Chave Móvel"
+            ]
+        },
+        {
+            "version": "3.0.10",
+            "date": "2018-04-02",
+            "release_notes": [
+                "Novo interface gráfico",
+                "Assinatura com Cartão de Cidadão e Chave Móvel integradas numa só aplicação",
+                "Assinatura SCAP com Cartão de Cidadão e Chave Móvel"
+            ]
+        }
+    ]
+}
