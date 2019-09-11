@@ -416,7 +416,7 @@ namespace eIDMW
 			}
 		}
 
-		if (equal_filename_count == 0){
+		if (equal_filename_count == 0) {
 			//clean_filename is not part of the vector, make sure it's added to it
 			unique_filenames.push_back(std::make_pair(clean_filename, equal_filename_count));
 		}
@@ -432,11 +432,11 @@ namespace eIDMW
 		return final_path;
 	}
 
-	std::string PDFSignature::getDocName(bool cmd_trim) {
+	std::string PDFSignature::getDocName() {
 		char * pdf_filename = Basename((char *)m_pdf_file_path);
 		std::string clean_filename = CPathUtil::remove_ext_from_basename(pdf_filename);
 
-		return (clean_filename.size() > 44  && cmd_trim ? clean_filename.substr(0, 44) : clean_filename);
+		return clean_filename;
 	}
 
 	int PDFSignature::signFiles(const char *location,

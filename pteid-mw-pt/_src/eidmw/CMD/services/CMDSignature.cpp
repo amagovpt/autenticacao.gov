@@ -5,6 +5,7 @@
 #include "PDFSignature.h"
 #include "cmdServices.h"
 #include <QByteArray>
+#include <QString>
 #include <QCryptographicHash>
 #include "eidlibException.h"
 
@@ -225,7 +226,10 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
             }
             /* Calculate hash */
             hashByteArray = pdf->getHash();
-            DocName = pdf->getDocName();
+            QString fullDocName = QString::fromUtf8(pdf->getDocName().c_str());
+
+            //Truncate docName to the first 44 UTF-8 characters not bytes
+            DocName = fullDocName.left(44).toStdString();
             signDocNames.push_back(DocName);
 
             CByteArray *signatureInput = new CByteArray(sha256SigPrefix, sizeof(sha256SigPrefix));
@@ -305,7 +309,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
         {
             PDFSignature *pdf = m_pdf_handlers[i]->getPdfSignature();
             // output filename should not be trimmed
-            filenames.push_back(new std::string(pdf->getDocName(false) + ".pdf")); 
+            filenames.push_back(new std::string(pdf->getDocName() + ".pdf"));
         }
 
         if (m_pdf_handlers.size() > 1)
