@@ -9,6 +9,12 @@ O objectivo deste projecto é disponibilizar uma nova versão de middleware que 
 Está disponível um SDK, com o objetivo de disponibilizar a integração com outras aplicações, das funcionalidades desenvolvidas no âmbito deste projeto.
 Existem SDK's para as linguagens C, C++, JAVA e C#.
 
+Poderá aceder ao manual no seguinte URL: 
+
+A documentação da API disponibilizada pelo SDK está disponível nos seguintes URLs: 
+
+[Manual do SDK](pteid-mw-pt/docs/Manual_de_SDK.pdf)
+
 ## Compilar o Middleware do Cartão de Cidadão
 
 ### Linux
