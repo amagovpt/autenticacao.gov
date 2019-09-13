@@ -28,8 +28,8 @@
 #include "scapsignature.h"
 #include "../dialogs/dialogs.h"
 
-#include "../applayer/OAuthAttributes.h"
-#include "../applayer/AttributeFactory.h"
+#include "OAuthAttributes.h"
+#include "AttributeFactory.h"
 
 /* For filenames we need to maintain latin-1 or UTF-8 native encoding */
 //This macro's argument is a QString
