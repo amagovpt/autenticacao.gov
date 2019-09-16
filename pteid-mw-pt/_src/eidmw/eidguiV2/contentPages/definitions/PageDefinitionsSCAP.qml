@@ -427,7 +427,7 @@ PageDefinitionsSCAPForm {
         }
         onSignalEndOAuth: {
             cmdLoadDialog.close()
-            // Error codes from OAuthResult in applayer/OAuthAttributes.h
+            // Error codes from OAuthResult in OAuthAttributes.h
             switch (oauthResult){
             case 0://OAuthSuccess
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
