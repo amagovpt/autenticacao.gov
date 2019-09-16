@@ -4,14 +4,14 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 	<?include ..\..\..\release_data.wxs ?>
 
-	<?define var.ProductVersion = 3.$(var.PteidMinor).$(var.RevisionNumber)?>
+	<?define var.ProductVersion = $(var.PteidMajor).$(var.PteidMinor).$(var.PteidRevisionNumber)?>
 	<?define var.OfficialProductVersion = $(var.PTeidProductVersion) ?>
 
 	<?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
-	<?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F20$(var.RevisionNumber)}?>
+	<?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F20$(var.PteidRevisionNumber)}?>
 	<?define var.ProductGuidGeneric ={824563DE-75AD-4166-9DC0-B6482F2?????}?>
 	<!--<?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F2DED5A})?>-->
-	<?define var.ProductName =Autenticação.Gov $(var.OfficialProductVersion) (build $(var.RevisionNumber))?>
+	<?define var.ProductName =Autenticação.Gov $(var.OfficialProductVersion) (build $(var.PteidRevisionNumber))?>
 
 	<?define var.PackageCode="*"?>
 
@@ -27,7 +27,7 @@
 				 InstallerVersion="405"
 				 Keywords="Portugal e-ID Middleware Installer"
 				 Platform="x64"
-			     Comments="Portuguese eID Middleware $(var.OfficialProductVersion) Revision $(var.RevisionNumber)"
+			     Comments="Portuguese eID Middleware $(var.OfficialProductVersion) Revision $(var.PteidRevisionNumber)"
 				 Manufacturer="Portuguese Government"
 				 Compressed="yes"
 				 InstallPrivileges="elevated" />
