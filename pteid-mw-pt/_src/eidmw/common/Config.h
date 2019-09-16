@@ -209,14 +209,15 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GUITOOL_FILESAVE          L"default_save_path"        //string; path, ""(default)
 #define EIDMW_CNF_GUITOOL_STARTUPDATE       L"start_autoupdate"         //number; 0=no, 1=yes(default)
 
-#define EIDMW_CNF_SECTION_XSIGN			L"xsign"					//section for xsign
-#define EIDMW_CNF_XSIGN_TSAURL			L"tsa_url"					//string URL of the Timestamp Server
-#define EIDMW_CNF_XSIGN_ONLINE			L"online"					//number; 0=no(default), 1=yes
-#define EIDMW_CNF_XSIGN_WORKINGDIR		L"working_dir"				//string working directory
-#define EIDMW_CNF_XSIGN_TIMEOUT			L"timeout"					//number;
+#define EIDMW_CNF_SECTION_XSIGN             L"xsign"                    //section for xsign
+#define EIDMW_CNF_XSIGN_TSAURL              L"tsa_url"                  //string URL of the Timestamp Server
+#define EIDMW_CNF_XSIGN_ONLINE              L"online"                   //number; 0=no(default), 1=yes
+#define EIDMW_CNF_XSIGN_WORKINGDIR          L"working_dir"              //string working directory
+#define EIDMW_CNF_XSIGN_TIMEOUT             L"timeout"                  //number;
 
-#define EIDMW_CNF_SECTION_AUTOUPDATES       L"autoupdates"            //section with the autoupdates parameters
-#define EIDMW_CNF_AUTOUPDATES_URL      L"serverurl"       //string
+#define EIDMW_CNF_SECTION_AUTOUPDATES       L"autoupdates"              //section with the autoupdates parameters
+#define EIDMW_CNF_AUTOUPDATES_URL           L"serverurl"                //string
+#define EIDMW_CNF_AUTOUPDATES_VERIFY_URL    L"serververifyurl"          //string
 
 namespace eIDMW
 {
@@ -379,6 +380,7 @@ public:
 
     //AutoUpdates
     static const struct Param_Str EIDMW_CONFIG_PARAM_AUTOUPDATES_URL;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_AUTOUPDATES_VERIFY_URL;
 
 private:
     //below info if not needed any more when the ini-file is hard-coded.

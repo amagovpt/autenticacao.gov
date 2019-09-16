@@ -109,8 +109,9 @@ namespace eIDMW
   const struct CConfig::Param_Num CConfig::EIDMW_CONFIG_PARAM_XSIGN_TIMEOUT 		=	{EIDMW_CNF_SECTION_XSIGN,	EIDMW_CNF_XSIGN_TIMEOUT,	30};
 
 //AutoUpdates
-  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_URL      =       {EIDMW_CNF_SECTION_AUTOUPDATES, EIDMW_CNF_AUTOUPDATES_URL, L"https://svn.gov.pt/projects/ccidadao/repository/middleware-offline/tags/builds/lastversion/"};
-  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER      =       {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_SAM_SERVER, L"pki.cartaodecidadao.pt:443"};
+  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_URL      =       {EIDMW_CNF_SECTION_AUTOUPDATES, EIDMW_CNF_AUTOUPDATES_URL, L"https://www.autenticacao.gov.pt/documents/" };
+  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_VERIFY_URL = { EIDMW_CNF_SECTION_AUTOUPDATES, EIDMW_CNF_AUTOUPDATES_VERIFY_URL, L"https://www.autenticacao.gov.pt/documents/10179/11461/" };
+  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER = { EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_SAM_SERVER, L"pki.cartaodecidadao.pt:443" };
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_OTP_SERVER      =       {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_OTP_SERVER, L"otp.cartaodecidadao.pt:443"};
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_SCAP_HOST       =       {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_SCAP_HOST, L"scap.autenticacao.gov.pt" };
   

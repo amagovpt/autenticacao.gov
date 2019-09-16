@@ -142,7 +142,7 @@ void AppController::autoUpdates(){
     }
 
     std::string remoteversion;
-    eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_URL);
+    eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_VERIFY_URL);
     remoteversion.append(config.getString());
     remoteversion.append("version.json");
     url = remoteversion.c_str();

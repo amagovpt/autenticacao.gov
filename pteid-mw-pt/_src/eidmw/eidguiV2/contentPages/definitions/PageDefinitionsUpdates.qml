@@ -55,7 +55,7 @@ PageDefinitionsUpdatesForm {
             propertyTextDescriptionText.forceActiveFocus()
         }
         onSignalAutoUpdateProgress: {
-            propertyProgressBar.indeterminate = false
+            propertyProgressBar.indeterminate = true
             propertyProgressBar.visible = true
             propertyProgressBar.value = value
             if (propertyButtonCancelUpdate.visible == false) {
@@ -121,7 +121,7 @@ PageDefinitionsUpdatesForm {
             console.log("propertyButtonStartUpdate clicked")
             propertyTextDescription.forceActiveFocus()
             propertyProgressBar.visible = true
-            propertyProgressBar.indeterminate = false
+            propertyProgressBar.indeterminate = true
             propertyButtonSearch.visible = false
             propertyButtonStartUpdate.visible = false //instant hide it after press guarantees that user never accidentally clicks two times
             controler.startUpdate()
