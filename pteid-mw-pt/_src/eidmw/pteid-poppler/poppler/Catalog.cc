@@ -270,17 +270,45 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 	Object *signature_dict = new Object();
 	Object acroform;
 
-        useCCLogo = isCCSignature;
+    useCCLogo = isCCSignature;
 
 	char date_outstr[200];
 	time_t t;
 	struct tm *tmp_date;
+	long timezone_offset = 0;
 	double r0=0, r1=0, r2=0, r3=0;
 
 	t = time(NULL);
 	tmp_date = localtime(&t);
+#ifdef _WIN32
+	const char * tzoffset_fmt = "{0:s}{1:c}{2:02d}'{3:02d}'";
 	//Date String for visible signature
+	strftime(date_outstr, sizeof(date_outstr), "%Y.%m.%d %H:%M:%S", tmp_date);
+	_get_timezone(&timezone_offset);
+	if (tmp_date->tm_isdst)
+	{
+		long dst_bias = 0;
+		_get_dstbias(&dst_bias);
+
+		timezone_offset += dst_bias;
+	}
+	long positive_offset = timezone_offset < 0 ? -timezone_offset : timezone_offset;
+	int off_hours_utc = (positive_offset / 60) / 60;
+	int off_minutes_utc = (positive_offset / 60) % 60;
+	
+	// This looks wrong, but it is correct:  The offset is the difference
+	// between UTC and the local time zone, so it is a positive value if
+	// the local time zone is behind UTC.
+	char timezone_sign = timezone_offset > 0 ? '-' : '+';
+
+	GooString * date_with_timezone = GooString::format(tzoffset_fmt, date_outstr, timezone_sign, off_hours_utc, off_minutes_utc);
+	memset(date_outstr, 0, sizeof(date_outstr));
+
+	strftime(date_outstr, sizeof(date_outstr), "D:%Y%m%d%H%M%S", tmp_date);
+	GooString * pdf_date = GooString::format(tzoffset_fmt, date_outstr, timezone_sign, off_hours_utc, off_minutes_utc);
+#else
 	strftime(date_outstr, sizeof(date_outstr), "%Y.%m.%d %H:%M:%S %z", tmp_date);
+#endif
 
 	signature_field.initDict(xref);
 	Object obj1, obj2, obj3, obj4, obj5, obj6, ref_to_dict;
@@ -322,15 +350,16 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 
 	int rotate_signature = page_obj->getRotate();
 
-        if (signer_info->attribute_provider == NULL) {
-            addSignatureAppearance(&signature_field, signer_info, date_outstr,
+    if (signer_info->attribute_provider == NULL) {
+			addSignatureAppearance(&signature_field, signer_info, date_with_timezone->getCString(),
                      location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
-        }else{
-            addSignatureAppearanceSCAP(&signature_field, signer_info, date_outstr,
+    }
+	else {
+		addSignatureAppearanceSCAP(&signature_field, signer_info, date_with_timezone->getCString(),
                      location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
-        }
+    }
 
-	memset(date_outstr, 0, sizeof(date_outstr));
+	//memset(date_outstr, 0, sizeof(date_outstr));
 
 	Ref *refFirstPage = firstPageRef != NULL ? firstPageRef: &(pageRefs[page-1]);
 
@@ -385,11 +414,13 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 
 	const char *rea = reason != NULL ? utf8_to_latin1(reason): "";
 	signature_dict->dictAdd(copyString("Reason"), obj1.initString(new GooString(rea)));
+	/* TODO: initialize pdf_date for Mac and Linux
 	if (strftime(date_outstr, sizeof(date_outstr), "D:%Y%m%d%H%M%S+00'00'", tmp_date) == 0) {
                fprintf(stderr, "strftime returned 0");
-        }
-	else
-		signature_dict->dictAdd(copyString("M"), obj1.initString(new GooString(date_outstr)));
+    }
+	else */
+	
+	signature_dict->dictAdd(copyString("M"), obj1.initString(pdf_date));
 
 	signature_dict->dictAdd(copyString("Prop_Build"), &build_prop);
 	signature_dict->dictAdd(copyString("Filter"), obj1.initName("Adobe.PPKLite"));
