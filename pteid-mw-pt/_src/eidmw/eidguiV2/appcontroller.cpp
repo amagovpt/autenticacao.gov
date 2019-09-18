@@ -155,20 +155,6 @@ void AppController::autoUpdates(){
          return;
     }
 
-    std::string tmpfile;
-    tmpfile.append(QDir::tempPath().toStdString());
-    tmpfile.append("/");
-    tmpfile.append(fileName.toStdString());
-
-    file = new QFile(QString::fromUtf8((tmpfile.c_str())));
-    if (!file->open(QIODevice::WriteOnly)) {
-        qDebug() << "C++: Unable to save the file";
-        delete file;
-        file = 0;
-        emit signalAutoUpdateFail(GAPI::UnableSaveFile);
-        return;
-    }
-
     // schedule the request
     httpRequestAborted = false;
     startRequest(url);
@@ -196,7 +182,7 @@ void AppController::startUpdate(){
     if (!file->open(QIODevice::WriteOnly)) {
        qDebug() << "C++: Unable to save the file";
         delete file;
-        file = 0;
+        file = nullptr;
         emit signalAutoUpdateFail(GAPI::UnableSaveFile);
         return;
     }
@@ -554,12 +540,8 @@ void AppController::httpReadyRead()
 
     QByteArray data = reply->readAll();
     QString qsdata(data);
-    filedata = qsdata.toStdString();
-
-    //Write to file
-    if (file)
-        file->write(data);
-
+    //Write to memory
+    filedata += qsdata.toStdString();
 }
 
 void AppController::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
