@@ -6,4 +6,4 @@ The file "eidlibcompat.h" contains the retrocompatibility API
 and should not be used for developing new applications.
 
 For more detailed API information and examples of how to use the SDK 
-visit https://svn.gov.pt/projects/ccidadao
+visit https://github.com/amagovpt/autenticacao.gov
