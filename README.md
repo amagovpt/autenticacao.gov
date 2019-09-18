@@ -15,6 +15,10 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
 
 [Manual do SDK](pteid-mw-pt/docs/Manual_de_SDK.pdf)
 
+[Documentação Técnica do SDK Java](pteid-mw-pt/_src/eidmw/eidlibJava_Wrapper/javadocs)
+
+[Documentação Técnica do  SDK C++](pteid-mw-pt/_src/eidmw/eidlib/docs/html)
+
 ## Compilar o Middleware do Cartão de Cidadão
 
 ### Linux
