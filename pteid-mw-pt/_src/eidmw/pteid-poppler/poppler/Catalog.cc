@@ -269,19 +269,21 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 	Object build_prop_app;
 	Object *signature_dict = new Object();
 	Object acroform;
+    const char * tzoffset_fmt = "{0:s}{1:c}{2:02d}'{3:02d}'";
 
     useCCLogo = isCCSignature;
 
-	char date_outstr[200];
-	time_t t;
-	struct tm *tmp_date;
-	long timezone_offset = 0;
-	double r0=0, r1=0, r2=0, r3=0;
+    char date_outstr[200];
+    time_t t;
+    struct tm *tmp_date;
+    long timezone_offset = 0;
+    double r0=0, r1=0, r2=0, r3=0;
 
-	t = time(NULL);
-	tmp_date = localtime(&t);
+    t = time(NULL);
+    tmp_date = localtime(&t);
+    
 #ifdef _WIN32
-	const char * tzoffset_fmt = "{0:s}{1:c}{2:02d}'{3:02d}'";
+
 	//Date String for visible signature
 	strftime(date_outstr, sizeof(date_outstr), "%Y.%m.%d %H:%M:%S", tmp_date);
 	_get_timezone(&timezone_offset);
@@ -307,7 +309,19 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 	strftime(date_outstr, sizeof(date_outstr), "D:%Y%m%d%H%M%S", tmp_date);
 	GooString * pdf_date = GooString::format(tzoffset_fmt, date_outstr, timezone_sign, off_hours_utc, off_minutes_utc);
 #else
-	strftime(date_outstr, sizeof(date_outstr), "%Y.%m.%d %H:%M:%S %z", tmp_date);
+
+    strftime(date_outstr, sizeof(date_outstr), "%Y.%m.%d %H:%M:%S %z", tmp_date);
+    GooString * date_with_timezone = new GooString(date_outstr);
+    memset(date_outstr, 0, sizeof(date_outstr));
+
+    timezone_offset = tmp_date->tm_gmtoff;
+    char timezone_sign = timezone_offset > 0 ? '+' : '-';
+    int off_hours_utc = (timezone_offset / 60) / 60;
+    int off_minutes_utc = (timezone_offset / 60) % 60;
+
+    strftime(date_outstr, sizeof(date_outstr), "D:%Y%m%d%H%M%S", tmp_date);
+    GooString * pdf_date = GooString::format(tzoffset_fmt, date_outstr, timezone_sign, off_hours_utc, off_minutes_utc);
+
 #endif
 
 	signature_field.initDict(xref);
