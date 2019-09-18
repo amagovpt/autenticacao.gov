@@ -61,7 +61,9 @@ SOURCES += main.cpp \
     proxyinfo.cpp \
     totp_gen.cpp \
     singleapplication.cpp \
-    cJSON_1_7_12.c
+    cJSON_1_7_12.c \
+    AttributeFactory.cpp \
+    OAuthAttributes.cpp
 
 INCLUDEPATH += /usr/include/poppler/qt5/
 INCLUDEPATH += ../CMD/services
@@ -82,7 +84,8 @@ macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2q/lib/
 macx: LIBS += -L/usr/local/Cellar/poppler/0.53.0/lib/
 
 unix:!macx: LIBS += -Wl,-rpath-link,../lib
-LIBS += -L../lib -lpteidcommon -lpteidapplayer -lpteidlib  -lssl -lcrypto -lpoppler-qt5 -lCMDServices
+LIBS += -L../lib -lpteidcommon -lpteidapplayer -lpteidlib  \
+        -lssl -lcrypto -lpoppler-qt5 -lCMDServices -lcurl
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -146,4 +149,7 @@ HEADERS += \
     certificates.h \
     singleapplication.h \
     singleapplication_p.h \
-    cJSON_1_7_12.h
+    cJSON_1_7_12.h \
+    AttributeFactory.h \
+    OAuthAttributes.h
+
