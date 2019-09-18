@@ -320,7 +320,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
     int off_minutes_utc = (timezone_offset / 60) % 60;
 
     strftime(date_outstr, sizeof(date_outstr), "D:%Y%m%d%H%M%S", tmp_date);
-    GooString * pdf_date = GooString::format(tzoffset_fmt, date_outstr, timezone_sign, off_hours_utc, off_minutes_utc);
+    GooString * pdf_date = GooString::format(tzoffset_fmt, date_outstr, timezone_sign, abs(off_hours_utc), abs(off_minutes_utc));
 
 #endif
 
