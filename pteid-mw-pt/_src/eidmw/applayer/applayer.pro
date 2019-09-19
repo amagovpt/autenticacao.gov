@@ -107,9 +107,7 @@ HEADERS += \
 	SSLConnection.h \
 	PNGConverter.h \
 	J2KHelper.h \
-	PDFSignature.h \
-	AttributeFactory.h \
-	OAuthAttributes.h
+	PDFSignature.h
 
 SOURCES += \
 	APLCertif.cpp        \
@@ -141,9 +139,7 @@ SOURCES += \
 	SAM.cpp \
 	OCSP.cpp \
 	PNGConverter.cpp \
-	J2KHelper.cpp \
-	AttributeFactory.cpp \
-	OAuthAttributes.cpp
+	J2KHelper.cpp
 
 # Disable annoying and mostly useless gcc warning
 QMAKE_CXXFLAGS += -Wno-write-strings
