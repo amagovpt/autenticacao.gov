@@ -4,6 +4,12 @@
 
 O objectivo deste projecto é disponibilizar uma nova versão de middleware que facilite e potencie a utilização do cartão de cidadão.
 
+## Manual de Utilização
+
+O manual pretende descrever todas as funcionalidades providenciadas pelo middleware do Cartão de Cidadão.
+
+[Manual de Utilização (pdf)](docs/Manual_de_Utilizacao.pdf)
+
 ## SDK
 
 Está disponível um SDK, com o objetivo de disponibilizar a integração com outras aplicações, das funcionalidades desenvolvidas no âmbito deste projeto.
@@ -13,11 +19,11 @@ Poderá aceder ao manual no seguinte URL:
 
 A documentação da API disponibilizada pelo SDK está disponível nos seguintes URLs: 
 
-[Manual do SDK](pteid-mw-pt/docs/Manual_de_SDK.pdf)
+[Manual do SDK (pdf)](docs/Manual_de_SDK.pdf)
 
-[Documentação Técnica do SDK Java](pteid-mw-pt/_src/eidmw/eidlibJava_Wrapper/javadocs)
+[Documentação Técnica do SDK C++](https://amagovpt.github.io/autenticacao.gov/sdk/cpp/)
 
-[Documentação Técnica do  SDK C++](pteid-mw-pt/_src/eidmw/eidlib/docs/html)
+[Documentação Técnica do SDK Java](https://amagovpt.github.io/autenticacao.gov/sdk/java/)
 
 ## Compilar o Middleware do Cartão de Cidadão
 
