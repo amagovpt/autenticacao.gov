@@ -246,7 +246,6 @@
     <ClCompile Include="SSLConnection.cpp" />
     <ClCompile Include="TsaClient.cpp" />
     <ClCompile Include="XadesSignature.cpp" />
-    <ClCompile Include="XMLParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APLCard.h" />
@@ -267,13 +266,6 @@
     <ClInclude Include="CRLFetcher.h" />
     <ClInclude Include="cryptoFramework.h" />
     <ClInclude Include="cryptoFwkPteid.h" />
-    <ClInclude Include="eidmw_EIDTagHandler.h" />
-    <ClInclude Include="eidmw_EIDTag_processors.h" />
-    <ClInclude Include="eidmw_EIDXmlParser.h" />
-    <ClInclude Include="eidmw_TagProcessor.h" />
-    <ClInclude Include="eidmw_XMLParser.h" />
-    <ClInclude Include="eidmw_XML_datastorage.h" />
-    <ClInclude Include="eidmw_XML_DefHandler.h" />
     <ClInclude Include="J2KHelper.h" />
     <ClInclude Include="MiscUtil.h" />
     <ClInclude Include="OCSP.h" />

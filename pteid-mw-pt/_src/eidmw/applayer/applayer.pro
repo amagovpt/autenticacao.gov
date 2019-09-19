@@ -90,13 +90,6 @@ HEADERS += \
 	CardFile.h \
 	CertStatusCache.h \
 	cryptoFramework.h \
-	eidmw_EIDTagHandler.h \
-	eidmw_EIDTag_processors.h \
-	eidmw_EIDXmlParser.h \
-	eidmw_TagProcessor.h \
-	eidmw_XML_datastorage.h \
-	eidmw_XML_DefHandler.h \
-	eidmw_XMLParser.h \
 	MiscUtil.h \
 	CardPteid.h	    \
 	CardPteidDef.h   \
@@ -131,7 +124,6 @@ SOURCES += \
 	cryptoFramework.cpp  \
 	cryptoFwkPteid.cpp   \
 	APLCard.cpp          \ 
-	XMLParser.cpp   	\
 	MiscUtil.cpp \
 	PhotoPteid.cpp \
 	APLPublicKey.cpp \

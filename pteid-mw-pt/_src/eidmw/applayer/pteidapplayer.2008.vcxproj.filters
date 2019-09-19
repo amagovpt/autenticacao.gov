@@ -93,9 +93,6 @@
     <ClCompile Include="XadesSignature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="XMLParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ScapSSLConnection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -159,27 +156,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cryptoFwkPteid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eidmw_EIDTag_processors.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eidmw_EIDTagHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eidmw_EIDXmlParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eidmw_TagProcessor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eidmw_XML_datastorage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eidmw_XML_DefHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="eidmw_XMLParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MiscUtil.h">

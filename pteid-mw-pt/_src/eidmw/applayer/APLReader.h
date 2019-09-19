@@ -407,7 +407,6 @@ friend APL_ReaderContext &CAppLayer::getReader(const char *readerName); /**< Thi
 
 class TLVParser;
 class CSVParser;
-class EIDMW_EIDMemParser;
 
 }
 

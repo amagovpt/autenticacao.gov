@@ -40,7 +40,6 @@
 #include "MWException.h"
 #include "cryptoFwkPteid.h"
 #include "CertStatusCache.h"
-#include "eidmw_EIDXmlParser.h"
 
 #include "../_Builds/pteidversions.h"
 
