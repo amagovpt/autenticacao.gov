@@ -15,6 +15,7 @@ clean_mdrv_keys/Build
 common/Build
 dialogs/dialogsWin32/Build
 eidlib/Build
+eidlib/docs
 eidlib/cppdocs.zip
 eidlibCS/GeneratedFiles
 eidlibCS/obj
@@ -22,6 +23,7 @@ eidlibCS/Properties
 eidlibCS_Wrapper/Build
 eidlibCS_Wrapper/GeneratedFiles
 eidlibJava_Wrapper/Build
+eidlibJava_Wrapper/javadocs
 eidlibJava_Wrapper/javadocs.zip
 eidlibJava_Wrapper/Release/BuildLog.htm
 eidlibJava/Build
