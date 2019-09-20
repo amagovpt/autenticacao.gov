@@ -2010,7 +2010,7 @@ void GAPI::startPingSCAP() {
     // schedule the request
     httpRequestAborted = httpRequestSuccess = false;
 
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance startPingSCAP");
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Start Ping SCAP");
 
     const char * as_endpoint = "/CCC-REST/rest/scap/pingSCAP";
 
@@ -2045,7 +2045,7 @@ void GAPI::startPingSCAP() {
 
     if (!proxy_host.empty() && proxy_port != 0)
     {
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "PingSCAP: using manual proxy config");
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "PingSCAP: using manual proxy config");
         qDebug() << "C++: PingSCAP: using manual proxy config";
         proxy.setType(QNetworkProxy::HttpProxy);
         proxy.setHostName(QString::fromStdString(proxy_host));
@@ -2062,7 +2062,7 @@ void GAPI::startPingSCAP() {
     else if (!m_pac_url.isEmpty())
     {
         std::string proxy_port_str;
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "PingSCAP: using system proxy config");
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "PingSCAP: using system proxy config");
         qDebug() << "C++: PingSCAP: using system proxy config";
         PTEID_GetProxyFromPac(m_pac_url.toUtf8().constData(),
             url.toString().toUtf8().constData(), &proxy_host, &proxy_port_str);
@@ -2102,7 +2102,7 @@ void GAPI::httpFinished()
             emit signalSCAPPingFail();
             QString strLog = QString("PingSCAP:: Http request failed to: ");
             strLog += reply->url().toString();
-            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", strLog.toStdString().c_str());
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature", strLog.toStdString().c_str());
         } else {
             qDebug() << "C++: signalSCAPPingSuccess";
             httpRequestAborted = false;
@@ -2160,6 +2160,7 @@ void GAPI::getSCAPEntities() {
     std::vector<ns3__AttributeSupplierType *> entities = scapServices.getAttributeSuppliers();
 
     if (entities.size() == 0){
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Get SCAP Entities returned zero");
         emit signalSCAPDefinitionsServiceFail(ScapGenericError, false);
         return;
     }
@@ -2226,7 +2227,7 @@ void GAPI::initScapAppId(){
 void GAPI::getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth) {
 
     QList<QString> attribute_list;
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getSCAPEntityAttributes");
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "GetCardInstance getSCAPEntityAttributes");
     PTEID_EIDCard * card = NULL;
     if (useOAuth){
         emit signalBeginOAuth();
@@ -2235,6 +2236,7 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth) {
         getCardInstance(card);
     }
     if (!useOAuth && card == NULL) {
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SCAP Company Attributes Loaded Error!");
         emit signalCompanyAttributesLoadedError();
         return;
     }
@@ -2262,7 +2264,8 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth) {
         std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), false);
 
         if (childAttributes.size() == 0) {
-            qDebug() << "Zero child attributes in AttributeResponseValues!";
+            qDebug() << "Zero Entities child attributes in AttributeResponseValues!";
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Zero Entities child attributes in AttributeResponseValues!");
             emit signalEntityAttributesLoadedError();
             return;
         }
@@ -2280,7 +2283,7 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth) {
 
 void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
 
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getSCAPCompanyAttributes");
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "GetCardInstance getSCAPCompanyAttributes");
     PTEID_EIDCard * card = NULL;
     QList<QString> attribute_list;
     if (useOAuth){
@@ -2290,6 +2293,7 @@ void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
         getCardInstance(card);
     }
     if (!useOAuth && card == NULL) {
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Auth error");
         emit signalCompanyAttributesLoadedError();
         return;
     }
@@ -2316,10 +2320,11 @@ void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
         std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
         std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), false);
 
-        /*PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Attribute from supplier: %s containing %d child attributes", attrSupplier.c_str(), childAttributes.size());*/
+        /*PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Attribute from supplier: %s containing %d child attributes", attrSupplier.c_str(), childAttributes.size());*/
 
         if (childAttributes.size() == 0) {
-            qDebug() << "Zero child attributes in AttributeResponseValues!";
+            qDebug() << "Zero Company child attributes in AttributeResponseValues!";
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Zero Company child attributes in AttributeResponseValues");
             emit signalCompanyAttributesLoadedError();
             return;
         }
@@ -2337,7 +2342,7 @@ void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
 
 void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
 
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getSCAPAttributesFromCache");
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "GetCardInstance getSCAPAttributesFromCache");
     PTEID_EIDCard * card = NULL;
     std::vector<ns2__AttributesType *> attributes;
     QList<QString> attribute_list;
@@ -2383,7 +2388,7 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
     bool has_read_permissions = true;
 
     // Delete SCAP secretkey to get a new one
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance removeSCAPAttributesFromCache");
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "GetCardInstance removeSCAPAttributesFromCache");
     PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card != NULL) {
@@ -2397,7 +2402,7 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
 #endif
     if (!dir.isReadable())
     {
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
             "No read permissions: SCAP cache directory!");
         qDebug() << "C++: Cache folder does not have read permissions! ";
         has_read_permissions = false;
@@ -2428,6 +2433,8 @@ bool GAPI::prepareSCAPCache() {
     // Tries to create if does not exist
     if (!scapCache.mkpath(s_scapCacheDir)) {
         qDebug() << "couldn't create SCAP cache folder";
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+            "Couldn't create SCAP cache folder");
         emit signalCacheFolderNotCreated();
         hasPermissions = false;
     }
@@ -2437,11 +2444,15 @@ bool GAPI::prepareSCAPCache() {
 #endif
     if (!scapCacheDir.isWritable()) {
         qDebug() << "SCAP cache not writable";
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+            "SCAP cache not writable");
         emit signalCacheNotWritable();
         hasPermissions = false;
     }
     if (!scapCacheDir.isReadable()) {
         qDebug() << "SCAP cache not readable";
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+            "SCAP cache not readable");
         emit signalCacheNotReadable(0); // isCompanies parameter not used
         hasPermissions = false;
     }
@@ -2460,7 +2471,7 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
     try
     {
         unsigned long ReaderCount = ReaderSet.readerCount();
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance Card Reader count =  %ld", ReaderCount);
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "GetCardInstance Card Reader count =  %ld", ReaderCount);
         unsigned long ReaderIdx = 0;
         long CardIdx = 0;
         unsigned long tempReaderIndex = 0;

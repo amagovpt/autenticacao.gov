@@ -120,16 +120,19 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
     if (successful == GAPI::ScapSucess) {
         parent->signCMDFinished(ERR_NONE);
         parent->signalCloseCMDSucess();
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui", "SCAP CMD ScapSucess");
     }
     else if (successful == GAPI::ScapTimeOutError) {
         qDebug() << "Error in SCAP service Timeout!";
         parent->signalSCAPServiceTimeout();
         parent->signCMDFinished(SCAP_SERVICE_ERROR_CODE);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "SCAP CMD ScapTimeOutError:%d",successful);
     }
     else {
         qDebug() << "Error in SCAP Signature with CMD service!";
         parent->signalSCAPServiceFail(successful);
         parent->signCMDFinished(SCAP_SERVICE_ERROR_CODE);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "SCAP CMD Error:%d",successful);
     }
 
     parent->signalUpdateProgressBar(100);
@@ -199,18 +202,22 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
                         useCustomImage, m_jpeg_scaled_data);
             if (successful == GAPI::ScapSucess) {
                 parent->signalPdfSignSucess(parent->SignMessageOK);
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "ScapSignature", "SCAP CC ScapSuccess");
             }
             else if (successful == GAPI::ScapTimeOutError) {
                 qDebug() << "Error in SCAP service Timeout!";
                 parent->signalSCAPServiceTimeout();
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SCAP CC ScapTimeOutError:%d",successful);
             }
             else {
                 qDebug() << "Error in SCAP Signature service!";
                 parent->signalSCAPServiceFail(successful);
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SCAP CC Error:%d",successful);
             }
         }
         else {
             parent->signalSCAPServiceFail(GAPI::ScapGenericError);
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SCAP CC ScapGenericError");
         }
                 
     }
@@ -239,6 +246,11 @@ std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
 
 	char * ca_path = NULL;
 	std::string cacerts_file;
+
+    //Define appropriate network timeouts
+    sp->recv_timeout = RECV_TIMEOUT;
+    sp->send_timeout = SEND_TIMEOUT;
+    sp->connect_timeout = CONNECT_TIMEOUT;
 
 #ifdef __linux__
 	ca_path = "/etc/ssl/certs";
@@ -269,10 +281,6 @@ std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
 	std::string port = settings.getScapServerPort().toStdString();
 	std::string sup_endpoint = std::string("https://") + settings.getScapServerHost().toStdString() + ":" + port + as_endpoint;
 
-    //Define appropriate network timeouts
-    sp->recv_timeout = RECV_TIMEOUT;
-    sp->send_timeout = SEND_TIMEOUT;
-    sp->connect_timeout = CONNECT_TIMEOUT;
 
 	std::string proxy_host;
     long proxy_port = 0;

@@ -519,7 +519,8 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
     /*qDebug() << "m_secretKey = " << m_secretKey.data();*/
 
     std::string new_totp = generateTOTP(m_secretKey);
-    /*eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Generated TOTP: %s", new_totp.c_str());*/
+    /*eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
+     * "Generated TOTP: %s", new_totp.c_str());*/
     authorizationRequest.TOTP = new_totp;
 
     SignatureDetails sigDetails;
@@ -530,6 +531,8 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
         qDebug() << "getCitizenSignatureDetails() returned success!";
     } else {
         qDebug() << "getCitizenSignatureDetails() returned error!";
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                  "Get Citizen signature details returned error: %d",ret);
         return GAPI::ScapGenericError;
     }
 
@@ -575,6 +578,8 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
             qDebug() << "SOAP Fault returned: TODO print fault message";
         }
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                  "Error returned by calling Authorization in SoapBindingProxy(). Error code: %d", rc);
         return GAPI::ScapGenericError;
     }
     else {
@@ -583,9 +588,12 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
         //Check for Success Status
         if (authorizationResponse.Status->Code != "00" || authorizationResponse.TransactionList == NULL) {
             qDebug() << "authorizationService returned error";
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                      "AuthorizationService returned error. error code: %s and message: %s",
+                      authorizationResponse.Status->Code.c_str(),
+                      authorizationResponse.Status->Message.c_str());
             return GAPI::ScapGenericError;
         }
-
         else {
 
             std::vector<ns1__TransactionType *> transactionList =
@@ -713,7 +721,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
 
                     if (!tempFile->open()) {
-                        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "PDF Signature error: Error creating temporary file");
+                        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "PDF Signature error: Error creating temporary file");
                         return GAPI::ScapGenericError;
                     }
                     outputPath = strdup(tempFile->fileName().toStdString().c_str());
@@ -752,7 +760,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                                 useCustomImage, m_jpeg_scaled_data);
 
                 if (signatureHash.size() == 0) {
-                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "openSCAPSignature() failed!");
+                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Open SCAP Signature failed! signatureHash invalid!");
                     return GAPI::ScapGenericError;
                 }
 
@@ -778,7 +786,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                         throw PTEID_Exception(e.GetError());
                     }
                 }else{
-                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "callSCAPSignatureService() failed!");
+                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Call SCAP Signature Service failed! signature len invalid");
                     return GAPI::ScapGenericError;
                 }
                 // Apply the next signature over the current one's output file
