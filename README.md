@@ -31,7 +31,7 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
 ### Linux
 
 1. Instalação das dependências.
-   As dependências para a compilação do Middleware em Linux (nomes de pacotes para a distribuição Ubuntu18), são as seguintes:
+   As dependências para a compilação do Middleware em Linux (nomes de pacotes válidos para a distribuição Ubuntu 18.04), são as seguintes:
 
    ```bash
    sudo apt install libpcsclite-dev libpoppler-qt5-dev libzip-dev libopenjp2-7-dev libpng-dev openjdk-8-jdk qtbase5-dev qt5-qmake qtbase5-private-dev qt5-default qtdeclarative5-dev qtquickcontrols2-5-dev qml-module-qtquick-controls2 libssl1.0-dev libxerces-c-dev libxml-security-c-dev swig libcurl4-nss-dev libnsspem
