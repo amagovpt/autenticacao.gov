@@ -1162,7 +1162,7 @@ bool AppController::getOutlookSuppressNameChecks(void) {
     {
         if (version.compare(L"9") == 0)
         {
-            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Can't write to Outlook 2000 (version 9) without admin privileges");
+            PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Can't write to Outlook 2000 (version 9) without admin privileges");
             return false;
         }
         std::wstring regName(L"Software\\Microsoft\\Office\\" + version + L".0\\Outlook\\Security");
@@ -1175,7 +1175,7 @@ bool AppController::getOutlookSuppressNameChecks(void) {
         }
         catch (...)
         {
-            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Outlook SupressNameChecks registry does not exist");
+            PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Outlook SupressNameChecks registry does not exist");
         }
         return abValueDat == 1;
     }
