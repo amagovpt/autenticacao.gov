@@ -1,7 +1,7 @@
 {
     "distributions": {
         "ubuntu18": {
-            "latestVersion": "3.0.16",
+            "latestVersion": "3.0.19",
             "package": "10179/11962/Autenticacao.gov_Ubuntu_18_x64.deb"
         },
         "windows32": {
