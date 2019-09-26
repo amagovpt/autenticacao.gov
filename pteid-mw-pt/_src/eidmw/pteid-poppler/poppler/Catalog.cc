@@ -1414,32 +1414,31 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
             int lines = 0;
             int size_attr = 0;
 
+            // Check if text fit it the height left in the rectangle seal
+            // Starting from text size 8 to 4
             int heightLeft = (2 - linesName) * font_size
                     + (2 - linesAttributeProvider) * font_size_medium
-                    + ( 2 - linesReason) * font_size;
+                    + ( 2 - linesReason) * font_size
                     + ( 1 - linesLocation) * font_size_medium;
 
             for (int i = 8; i >= 4; i--){
+                size_attr = i;
                 switch (i) {
                     case 8:
                         lines = 1 + heightLeft / i;
                         attribute_name_length = 77.0;
-                        size_attr = i;
                         break;
                     case 7:
                         lines = 2 + heightLeft / i;
                         attribute_name_length = 68.0;
-                        size_attr = i;
                         break;
                     case 6:
                         lines = 2 + heightLeft / i ;
                         attribute_name_length = 58.0;
-                        size_attr = i;
                         break;
                     case 5:
                         lines = 3 + heightLeft / i;
                         attribute_name_length = 48.0;
-                        size_attr = i;
                         break;
                     default:
                         lines = 4 + heightLeft / 4;
