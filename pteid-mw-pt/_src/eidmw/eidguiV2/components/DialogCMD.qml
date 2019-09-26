@@ -5,7 +5,10 @@ import QtQuick.Controls 2.1
 import "../scripts/Constants.js" as Constants
 import "../scripts/Functions.js" as Functions
 
-Item {       
+Item {
+    // Center dialog in the main view
+    x: - mainMenuView.width - subMenuView.width
+        + mainView.width * 0.5 - dialogCMDProgress.width * 0.5
     y: parent.height * 0.5 - dialogSignCMD.height * 0.5
 
     Connections {
@@ -48,10 +51,6 @@ Item {
         width: 600
         height: 300
         font.family: lato.name
-        // Center dialog in the main view
-        x: - mainMenuView.width - subMenuView.width
-            + mainView.width * 0.5 - dialogSignCMD.width * 0.5
-        y: parent.height 
         modal: true
 
         header: Label {
@@ -354,10 +353,6 @@ Item {
         width: 600
         height: 300
         font.family: lato.name
-        // Center dialog in the main view
-        x: - mainMenuView.width - subMenuView.width
-            + mainView.width * 0.5 - dialogCMDProgress.width * 0.5
-        y: parent.height
         modal: true
 
         header: Label {
