@@ -428,8 +428,8 @@ SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *k
 	int buf_len = _scprintf(challenge_format, challenge, kicc);
 	challenge_params = (char *) malloc(buf_len + 1);
 #else
-	//TODO: use snprintf to retrieve the needed buffer space
-	challenge_params = (char *) malloc(5*1024);
+	int buf_len = snprintf(0, 0, challenge_format, challenge, kicc);
+	challenge_params = (char *) malloc(buf_len + 1);
 #endif
 
 	sprintf(challenge_params, challenge_format, challenge, kicc);
@@ -670,8 +670,9 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 			p->card_auth_public_key, p->certificateChain, p->version);
 		post_dhparams = (char *) malloc(buf_len +2);
 #else
-		//TODO: use snprintf to determine needed allocation;
-		post_dhparams = (char *) malloc(5*1024);
+		int buf_len = snprintf(0, 0, dh_params_template, secretCode, process, p->dh_p, p->dh_q, p->dh_g, p->cvc_ca_public_key,
+			p->card_auth_public_key, p->certificateChain, p->version);
+		post_dhparams = (char *) malloc(buf_len +1);
 
 #endif
 		sprintf(post_dhparams, dh_params_template,
