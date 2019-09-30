@@ -8,7 +8,7 @@ ADMINISTRATIVA
 ![](Pictures/100000000000040000000240EB1F3932CFA5BD00.png){width="17cm"
 height="9.562cm"}
 
-  ------------------------ ----------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ----------
+
   Histórico de Revisões:
   Versão
   0.1
@@ -30,13 +30,11 @@ height="9.562cm"}
   3.06
   3.07
   3.08
-  ------------------------ ----------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ----------
 
-[]{#anchor}Introdução
-=====================
+# Introdução
 
 Este manual pretende descrever todas as funcionalidades providenciadas
-pelo *middleware* do Cartão de Cidadão.
+pelo _middleware_ do Cartão de Cidadão.
 
 O *middleware* do Cartão de Cidadão, pode definir-se como a “camada” de
 software entre o computador e o seu Cartão de Cidadão. Através do
@@ -62,14 +60,12 @@ Este manual abrange três áreas fundamentais da utilização do
     automatizada em ambientes Windows e configuração em ambientes
     empresariais;
 
-[]{#anchor-1}Download, instalação e remoção do middleware
-=========================================================
+# Download, instalação e remoção do middleware
 
 Neste ponto são apresentadas as instruções para a instalação e remoção
 do *middleware* do Cartão de Cidadão.
 
-[]{#anchor-2}Sistemas Operativos oficialmente suportados
---------------------------------------------------------
+## Sistemas Operativos oficialmente suportados
 
 A lista de sistemas operativos suportados, nas suas arquiteturas de 32 e
 64 bits, são:
@@ -86,8 +82,7 @@ A lista de sistemas operativos suportados, nas suas arquiteturas de 32 e
 -   Sistemas operativos Apple:
 -   Mac OSX Yosemite e superiores
 
-[]{#anchor-3}Download do pacote de instalação do middleware
------------------------------------------------------------
+## Download do pacote de instalação do middleware
 
 Para obter o pacote de instalação do *middleware*, deverá aceder ao
 sítio oficial do Cartão de Cidadão
@@ -95,7 +90,9 @@ sítio oficial do Cartão de Cidadão
 
 ![Ilustração 1:
 Download](Pictures/1000020100000738000003D020B7A4F18CED4777.png "fig:"){width="15cm"
-height="7.922cm"}Se escolher na barra de navegação a seguinte opção
+height="7.922cm"}
+
+Se escolher na barra de navegação a seguinte opção
 “Cartão de Cidadão” → “Aplicação do Cartão de Cidadão” através dos dados
 fornecidos pelo navegador será efetuada uma tentativa de identificar o
 sistema operativo e na área de conteúdos do lado direito será
@@ -117,8 +114,7 @@ download](Pictures/1000000000000709000003C86BE7CEAF2324F9DF.png "fig:"){width="1
 height="8.061cm"}Após efetuado o download da respetiva versão, avance
 para o ponto seguinte – Instalação do Middleware.
 
-[]{#anchor-4}Instalação do *middleware* 
-----------------------------------------
+## Instalação do *middleware*
 
 As instruções apresentadas de seguida pressupõem que o ficheiro de
 instalação do *middleware* foi descarregado previamente da Internet.
@@ -129,7 +125,7 @@ Para a instalação do *middleware* do Cartão de Cidadão, deverão ser
 executados os passos descritos nos pontos seguintes, relativos ao
 sistema operativo utilizado.
 
-### []{#anchor-5}Instalação em Microsoft Windows 
+### Instalação em Microsoft Windows
 
 1.  Executar o pacote de instalação: Após ter descarregado o ficheiro de
     instalação, deverá fazer duplo clique sobre este, surgindo um ecrã
@@ -139,7 +135,7 @@ sistema operativo utilizado.
 Windows](Pictures/10000000000001F300000183FD58FF9DF4EB6E42.png){width="13.018cm"
 height="10.095cm"}
 
-1.  Neste ecrã, deverá premir o botão ***Seguinte*** e marcar a caixa
+2.  Neste ecrã, deverá premir o botão ***Seguinte*** e marcar a caixa
     (com um certo com um clique no botão do rato no lado esquerdo), para
     aceitar os termos e condições da aplicação.
 
@@ -147,19 +143,19 @@ height="10.095cm"}
 Windows](Pictures/10000201000001F00000018114D6BF6F72AA9078.png){width="12.726cm"
 height="9.878cm"}
 
-1.  Neste passo, poderá escolher a pasta onde deseja instalar o
+3.  Neste passo, poderá escolher a pasta onde deseja instalar o
     *middleware*. Se desejar alterar a pasta predefinida, carrege em
     **Alterar **e, na janela que surgir, navegue até à pasta de destino
     e carregue **OK**. Para continuar a instalação na pasta de destino,
     deverá premir o botão ***Seguinte***.
-2.  Deverá aparecer também um ecrã com a opção de **Instalar**, deverá
+4.  Deverá aparecer também um ecrã com a opção de **Instalar**, deverá
     premir esse botão.
-3.  Após a conclusão deste assistente, este solicitará a reinicialização
+5.  Após a conclusão deste assistente, este solicitará a reinicialização
     do computador.
-4.  No próximo arranque do Windows a instalação do *middleware* estará
+6.  No próximo arranque do Windows a instalação do *middleware* estará
     finalizada.
 
-### []{#anchor-6}Instalação em Linux
+### Instalação em Linux
 
 Algumas distribuições de Linux, disponibilizam um gestor de aplicações -
 “*Software Center*” - onde é possível instalar o software através de um
@@ -172,9 +168,10 @@ opção através da linha de comandos.
 
 Instalação através do *Software Center*:
 
-1.  ![Ilustração 5: Instalação da aplicação em
+![Ilustração 5: Instalação da aplicação em
     Linux](Pictures/10000000000002DF0000028D85FBE5CE09FCC6B7.png "fig:"){width="12.34cm"
-    height="10.963cm"}Executar o pacote de instalação: Após ter
+    height="10.963cm"}
+1.  Executar o pacote de instalação: Após ter
     descarregado o ficheiro de instalação, deverá fazer duplo clique
     sobre este. Descarregado o ficheiro de instalação, deverá fazer
     duplo clique sobre este. O sistema deverá apresentar o ecrã de
@@ -184,10 +181,11 @@ Instalação através do *Software Center*:
     seguintes são apresentados os ecrãs utilizando Linux Caixa Mágica 22
     LTS.
 
-2.  ![Ilustração 6: Instalação da aplicação em Linux ( 2
+![Ilustração 6: Instalação da aplicação em Linux ( 2
     )](Pictures/10000000000002CC0000003E39E3909BB0533689.png "fig:"){width="12.629cm"
-    height="1.094cm"}Deverá premir o botão ***Instalar*** para
-    prosseguir.
+    height="1.094cm"}
+
+2.  Deverá premir o botão ***Instalar*** para prosseguir.
 3.  Será pedida a introdução da sua senha de utilizador. (É necessário
     que tenha privilégios de administração da máquina)
 
@@ -195,57 +193,56 @@ Instalação através do *Software Center*:
 )](Pictures/100000000000028500000102C18B1E5C2263D540.png){width="11.13cm"
 height="4.45cm"}
 
-1.  Após a conclusão do passo acima, a instalação do *middleware* está
+4.  Após a conclusão do passo acima, a instalação do *middleware* está
     terminada.
-2.  Recomenda-se a reinicialização do sistema para assegurar o bom
+5.  Recomenda-se a reinicialização do sistema para assegurar o bom
     funcionamento do software.
 
-Instalação através da linha de comandos:
+#### Instalação através da linha de comandos:
 
 1.  Execute o comando de instalação de software no sistema, consoante o
     gestor de pacotes utilizado pelo seu sistema.\
     Gestor de pacotes baseado em ficheiros .deb, execute o comando:
 
-  --------------------------
   sudo dpkg -i pteid\*.deb
-  --------------------------
 
-  ---------------------------
   sudo rpm -ivh pteid\*.rpm
-  ---------------------------
 
 1.  Após este passo, o *middleware* terá sido instalado no computador.
 2.  Aconselha-se a reiniciar o sistema para assegurar o bom
     funcionamento do *middleware*.
 
-### []{#anchor-7}Instalação em Mac OS
+### Instalação em Mac OS
 
 1.  Executar o instalador: após ter descarregado o ficheiro de
     instalação, deverá fazer duplo clique sobre este, surgindo um ecrã
     semelhante ao apresentado de seguida:
-2.  ![Ilustração 9: Instalação da aplicação em MAC OS ( 3
+
+![Ilustração 9: Instalação da aplicação em MAC OS ( 3
     )](Pictures/10000201000002DC0000022661AA2048853BD15F.png "fig:"){width="11.278cm"
-    height="7.955cm"}![Ilustração 8: Instalação da aplicação em MAC OS (
+    height="7.955cm"}
+
+![Ilustração 8: Instalação da aplicação em MAC OS (
     2
     )](Pictures/100000000000026E000001BA72070383198814DB.png "fig:"){width="12.386cm"
-    height="8.8cm"}Escolher a opção ***Continuar***. Em seguida é
-    necessário ler e aceitar os termos da licença do software.
+    height="8.8cm"}
 
-1.  A partir deste ponto no assistente deverá premir o botão
-    ***Continu****ar*** até concluir a instalação.
-2.  Após a conclusão deste assistente, o *middleware* estará instalado
+2.  Escolher a opção ***Continuar***. Em seguida é
+    necessário ler e aceitar os termos da licença do software.
+3.  A partir deste ponto no assistente deverá premir o botão
+    ***Continuar*** até concluir a instalação.
+4.  Após a conclusão deste assistente, o *middleware* estará instalado
     no computador. Neste momento a aplicação utilitária
     “Autenticacão.Gov” já estará disponível na pasta Aplicações /
     *Applications*
 
-[]{#anchor-8}Remoção do m*iddleware* 
--------------------------------------
+## Remoção do m*iddleware*
 
 Para proceder à remoção do *middleware* do Cartão de Cidadão, deverão
 ser executados os passos descritos nos pontos seguintes, relativos ao
 sistema operativo utilizado.
 
-### []{#anchor-9}Remoção em Microsoft Windows
+### Remoção em Microsoft Windows
 
 1.  Aceda ao Painel de Controle;
 2.  Selecione a Opção Adicionar ou Remover Programas;
@@ -259,7 +256,7 @@ sistema operativo utilizado.
     Recomenda-se que o computador seja reiniciado no final destes
     passos.
 
-### []{#anchor-10}Remoção em Linux
+### Remoção em Linux
 
 Algumas distribuições de Linux, disponibilizam um gestor de aplicações -
 “*Software Center*” - onde é possível remover o software através de um
@@ -270,7 +267,7 @@ em Linux Caixa Mágica 22 LTS.
 Em alternativa, o *middleware* poderá também ser removido recorrendo à
 opção através da linha de comandos.
 
-Remoção através do *Software Center*
+#### Remoção através do *Software Center*
 
 Este ecrã varia consoante a distribuição que está a utilizar, no
 entanto, as opções são semelhantes em qualquer distribuição. Nos ecrãs
@@ -283,13 +280,13 @@ seguintes são apresentados os ecrãs utilizando Linux Caixa Mágica 22 LTS
 ](Pictures/10000000000004B60000032F04BF06DB1FB42361.png){width="13.543cm"
 height="9.151cm"}
 
-1.  Prima o botão ***Instalado*** na barra superior
+2.  Prima o botão ***Instalado*** na barra superior
 
 ![Ilustração 12: Remoção da aplicação em Linux ( 2
 )](Pictures/100002010000024D000000796E7DC00907B94012.png){width="12.809cm"
 height="2.632cm"}
 
-1.  Digite “pteid” na caixa de pesquisa disponível na barra superior.
+3.  Digite “pteid” na caixa de pesquisa disponível na barra superior.
     Deverá ser apresentado na zona de resultados o pacote “Cartão de
     Cidadão”
 
@@ -297,51 +294,44 @@ height="2.632cm"}
 )](Pictures/10000000000002DE000000F4264255BF3D7EBBFB.png){width="12.569cm"
 height="4.179cm"}
 
-1.  Selecione o pacote “Cartão de Cidadão”, e Prima o botão
+4.  Selecione o pacote “Cartão de Cidadão”, e Prima o botão
     ***Remover***
 
 ![Ilustração 14: Remoção da aplicação em Linux ( 4
 )](Pictures/10000201000002DC00000096E48B605BCBB379B3.png){width="12.989cm"
 height="2.66cm"}
 
-1.  Será pedida a introdução da sua senha de utilizador. É necessário
+5.  Será pedida a introdução da sua senha de utilizador. É necessário
     que tenha privilégios de administração da máquina.
 
 ![Ilustração 15: Remoção da aplicação em Linux ( 5
 )](Pictures/100000000000028500000102C18B1E5C2263D540.png){width="12.261cm"
 height="4.902cm"}
 
-1.  Após a conclusão do passo acima a o processo de desinstalação do
+6.  Após a conclusão do passo acima a o processo de desinstalação do
     *middleware* está terminado.
 
-Remoção através da linha de comandos
+#### Remoção através da linha de comandos
 
 1.  Execute o comando de remoção de software no sistema, consoante o
     gestor de pacotes utilizado pelo seu sistema.\
     Gestor de pacotes baseado em ficheiros .deb, execute o comando:
 
-  ------------------------
    sudo dpkg -r pteid-mw
-  ------------------------
 
-  -----------------------
    sudo rpm -U pteid-mw
-  -----------------------
 
-1.  Após este passo, o *middleware* terá sido removido do computador.
+2.  Após este passo, o *middleware* terá sido removido do computador.
 
-### []{#anchor-11}Remoção em MacOS
+### Remoção em MacOS
 
 1.  Abra a aplicação Terminal no MacOS
 2.  Execute o seguinte comando para desinstalar todos os ficheiros do
     Middleware.
 
-  ------------------------------------------
    sudo /usr/local/bin/pteid\_uninstall.sh
-  ------------------------------------------
 
-[]{#anchor-12}Aplicação Utilitária “Autenticação.Gov”
-=====================================================
+# Aplicação Utilitária “Autenticação.Gov”
 
 A aplicação Utilitária “Autenticação.Gov” pode ser utilizada para
 visualizar e gerir os dados no Cartão de Cidadão e assinar documentos
@@ -378,8 +368,7 @@ consoante o tipo de sistema operativo:
 -   Em MAC OS, surgirá na localização escolhida pelo utilizador durante
     o processo de instalação.
 
-[]{#anchor-13}Apresentação da Aplicação
----------------------------------------
+## Apresentação da Aplicação
 
 A aplicação é composta por 4 áreas principais de interação:
 
@@ -389,27 +378,26 @@ A aplicação é composta por 4 áreas principais de interação:
     especificas de cada opção do menu principal;
 -   **Menu configurações e ajuda:** São disponibilizadas os menus de
     configuração e ajuda;
--   ![Ilustração 17: Áreas principais de interação da
-    aplicação](Pictures/1000020100000400000002405212E8ADFB27AFC1.png "fig:"){width="17.05cm"
-    height="9.601cm"}**Área de trabalho:** Área de visualização de dados
+-   **Área de trabalho:** Área de visualização de dados
     do cartão de Cidadão e área de trabalho para os menus de assinatura
     e segurança.
 
-[]{#anchor-14}Funcionalidades da aplicação
-------------------------------------------
+![Ilustração 17: Áreas principais de interação da
+        aplicação](Pictures/1000020100000400000002405212E8ADFB27AFC1.png "fig:"){width="17.05cm"
+        height="9.601cm"}
+
+## Funcionalidades da aplicação
 
 As funcionalidades da aplicação estão divididas, em três menus
 principais: Menu Cartão, Menu Assinatura e Menu Segurança.
 
-### 
-
-### []{#anchor-15}Menu Cartão
+### Menu Cartão
 
 Permite visualizar a informação de identidade e foto do cidadão,
 visualizar a morada do cidadão e confirmar a alteração de morada, edição
 das notas, bem como, imprimir os dados do Cartão de Cidadão.
 
-#### []{#anchor-16}Identidade
+#### Identidade
 
 Permite visualizar os dados de identificação e foto do cidadão presentes
 no cartão de cidadão.
@@ -418,21 +406,21 @@ no cartão de cidadão.
 Cidadão](Pictures/100002010000040000000240A83422F2047C6ABF.png){width="16.882cm"
 height="9.449cm"}
 
-#### []{#anchor-17}Outros dados
+#### Outros dados
 
 Permite visualizar outros dados do cartão do cidadão e verificar o
 estados do Cartão de Cidadão.
 
-#### ![Ilustração 19: Outros dados](Pictures/1000020100000400000002404E87BA6507F8B1BF.png "fig:"){width="16.738cm" height="9.449cm"}
+![Ilustração 19: Outros dados](Pictures/1000020100000400000002404E87BA6507F8B1BF.png "fig:"){width="16.738cm" height="9.449cm"}
 
-#### []{#anchor-18}Morada e Alteração de morada
+#### Morada e Alteração de morada
 
 Dentro do separador “Morada” é possível visualizar a morada atual e
 completar o processo de alteração da morada. Esta última funcionalidade
 requer uma ligação à Internet. Por favor certifique-se que está ligado
-antes de iniciar o processo. ** **
+antes de iniciar o processo.
 
-**Nota: **Durante o processo de alteração de morada, o cidadão terá de
+** Nota:** Durante o processo de alteração de morada, o cidadão terá de
 se autenticar, por isso deverá ter presente e desbloqueado o seu PIN de
 autenticação.
 
@@ -440,13 +428,17 @@ Para concluir um eventual processo de alteração de morada, siga os
 seguintes passos:
 
 1.  Clique no botão “Confirmar”;
-2.  ![Ilustração 21: Introduzir dados na confirmar de alteração de
+
+![Ilustração 21: Introduzir dados na confirmar de alteração de
     morada
     ](Pictures/10000201000004010000023D6BDE5CB95C7D77D4.png "fig:"){width="16.133cm"
-    height="9.017cm"}![Ilustração 20: Confirmar alteração de
+    height="9.017cm"}
+
+![Ilustração 20: Confirmar alteração de
     morada](Pictures/10000201000004000000024090B9C6F5314BAAEE.png "fig:"){width="16.131cm"
-    height="9.04cm"}Insira o número de processo e o código secreto que
-    recebeu pelo correio, e clique em Confirmar;
+    height="9.04cm"}
+
+2.  Insira o número de processo e o código secreto que recebeu pelo correio, e clique em Confirmar;
 3.  Aguarde processamento do pedido. Será efetuada uma ligação ao
     serviço de alteração de morada e será pedido o seu PIN de
     autenticação para obter os dados da nova morada e em seguida a nova
@@ -456,41 +448,36 @@ seguintes passos:
     e não desligue a internet, enquanto o processo não estiver
     terminado.**
 
-4.  ![Ilustração 22: Pedido de confirmação em
+![Ilustração 22: Pedido de confirmação em
     processamento](Pictures/1000020100000401000002408191D300DE058D7B.png "fig:"){width="16.131cm"
-    height="9.07cm"}Verifique o resultado da operação e siga as
-    instruções:
+    height="9.07cm"}
 
--   -   **Erro. Ocorreu um erro durante a alteração de morada:**
+4.  Verifique o resultado da operação e siga as instruções:
 
-<!-- -->
+   - **Erro. Ocorreu um erro durante a alteração de morada:**
+      - **Processo de alteração de morada não foi concluído**.
+      - **Erro na comunicação**.
+      - **Verifique se introduziu corretamente o número de processo e código de confirmação**.
+      - **Verifique que tem o certificado de autenticação válido**.
+   - **A morada foi actualizada com sucesso:**
+     - Caso a operação tenha sucesso, uma mensagem de Confirmação de alteração de morada com sucesso será mostrada.
 
--   -   -   **Processo de alteração de morada não foi concluído**.
-
-    -   -   Erro na comunicação
-        -   **Verifique se introduziu corretamente o número de processo
-            e código de confirmação**.
-        -   **Verifique que tem o certificado de autenticação válido**.
-
-E em outras mensagens, sem descrição do erro, deverá tentar novamente e,
+     E em outras mensagens, sem descrição do erro, deverá tentar novamente e,
 caso o erro persista, contactar a Linha Cartão de Cidadão através do
 número **211 950 500** ou do E-mail: **cartaodecidadao@irn.mj.pt** .
 (Tenha consigo as mensagens de erro e respectivos códigos de erro e o
 número de processo de Alteração de Morada) .
 
--   -   
 
--   ![Ilustração 24: Erro na alteração de
+![Ilustração 24: Erro na alteração de
     morada](Pictures/1000020100000400000002403DFEAEAEB2BC87B8.png "fig:"){width="16.559cm"
-    height="9.313cm"}**A morada foi actualizada com sucesso: **Caso a
-    operação tenha sucesso, uma mensagem de Confirmação de alteração de
-    morada com sucesso será mostrada.
+    height="9.313cm"}
 
 ![Ilustração 25: Sucesso na alteração de
 morada](Pictures/10000201000003FB0000023FB85F38C5733E386F.png){width="16.559cm"
 height="9.35cm"}
 
-#### []{#anchor-19}Notas
+#### Notas
 
 A aplicação permite editar as notas gravadas no cartão do cidadão.
 
@@ -503,7 +490,7 @@ informação que entenda pertinente e de acesso livre.
 notas](Pictures/100002010000040000000240A1BC1847939FEFD8.png){width="17.27cm"
 height="9.714cm"}
 
-#### []{#anchor-20}Imprimir
+#### Imprimir
 
 A aplicação permite a exportação dos dados do Cartão de Cidadão para um
 documento no formato PDF ou a impressão direta do documento.
@@ -526,7 +513,7 @@ Para executar estas operações deverá executar os seguintes passos:
     ](Pictures/10000000000002A10000033D4E38CB4476EBCABB.png){width="15.939cm"
     height="19.74cm"}
 
-### []{#anchor-21}Assinatura digital
+### Assinatura digital
 
 A aplicação permite assinar digitalmente, de forma nativa ficheiros PDF.
 A assinatura digital em documentos PDF foi desenvolvida de acordo com a
@@ -549,11 +536,7 @@ outras opções.
 digital](Pictures/10000000000003FF000002405F4D6669DB676A3E.png){width="17.074cm"
 height="9.613cm"}
 
-#### []{#anchor-22}Simples
-
-<!-- -->
-
-<!-- -->
+#### Simples
 
 ![Ilustração 30: Selecionar documento PDF na assinatura
 simples](Pictures/100002010000040000000240A5EFFC3341A3A0E8.png){width="17.171cm"
@@ -568,7 +551,7 @@ simples](Pictures/10000201000005A00000036C990590F65FCA2B69.png "fig:"){width="16
 height="10.201cm"}Por fim, carregar no botão “Assinar com Cartão de
 Cidadão” ou “Assinar com Chave Móvel Digital”.
 
-#### []{#anchor-23}Avançada
+#### Avançada
 
 ![Ilustração 32: Selecionar ficheiro PDF para assinar na assinatura
 avançada](Pictures/10000201000005A00000036C0D86F1070C5DA2B3.png){width="16.76cm"
@@ -582,10 +565,10 @@ assinatura são apresentadas no ecrã seguinte:
 -   **Selecionar ficheiros:** Abre uma nova janela que permitirá
     selecionar os documentos a serem assinados. É possível adicionar e
     remover ficheiros individualmente ou todos.
--   Pré-visualização da assinatura: Permite visualizar o documento a ser
+-   **Pré-visualização da assinatura:** Permite visualizar o documento a ser
     assinado, bem como a pré-visualização da própria assinatura. A
     pré-visualização existe apenas para assinatura de ficheiros PDF.
--   Configurações:
+-   **Configurações:**
 
     -   **Tipo: **Tipo de assinatura – campo obrigatório – permite
         selecionar assinatura de ficheiros:
@@ -594,12 +577,12 @@ assinatura são apresentadas no ecrã seguinte:
         -   **Outros ficheiros:** Pacote CCSIGN com *XML Advanced
             Electronic Signatures* (XadES).
 
-    -   Motivo: Motivo da assinatura – campo opcional – permite ao
+    -   **Motivo:** Motivo da assinatura – campo opcional – permite ao
         signatário indicar o motivo da sua assinatura.
-    -   Localização: Local onde a assinatura foi efetuada – campo
+    -   **Localização:** Local onde a assinatura foi efetuada – campo
         opcional - permite ao signatário indicar o local onde esta
         assinatura foi efetuada.
-    -   Adicionar selo temporal: Adiciona um selo temporal, provando a
+    -   **Adicionar selo temporal:** Adiciona um selo temporal, provando a
         data à qual a assinatura foi efetuada. Esta é a única forma de
         provar que o documento existia a determinada hora, pois é
         aplicada ao documento a data e hora que este está a ser
@@ -607,7 +590,7 @@ assinatura são apresentadas no ecrã seguinte:
         selo visível é a hora local do computador onde foi efetuada a
         assinatura e pode não coincidir com a hora do selo temporal
         (obtida a partir de um servidor remoto).
-    -   Adicionar atributos profissionais: A funcionalidade de
+    -   **Adicionar atributos profissionais:** A funcionalidade de
         assinatura de profissionais permite ao cidadão autenticar-se na
         qualidade das funções que desempenha na sociedade enquanto
         profissional qualificado. No capitulo [3.2.4.2](#anchor-24) é
@@ -615,12 +598,11 @@ assinatura são apresentadas no ecrã seguinte:
         profissionais. Para mais informações consulte o seguinte
         *website*:
 
-        -   
-            <https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais>
+        <https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais>
 
-    -   Visível: Permite que a assinatura fique visível no documento
+    -   **Visível:** Permite que a assinatura fique visível no documento
         PDF.
-    -   Página: Poderá escolher a página onde será apresentada a
+    -   **Página:** Poderá escolher a página onde será apresentada a
         assinatura ou escolher a opção “última”, para assinar na última
         página.
 
@@ -628,9 +610,9 @@ assinatura são apresentadas no ecrã seguinte:
 assinatura](Pictures/10000201000005A00000036CE6A9817E640C4FF1.png){width="16.972cm"
 height="10.419cm"}
 
-#### ![Ilustração 34: Aspeto final da assinatura](Pictures/10000201000005A00000036CFE101B383A63F824.png "fig:"){width="13.127cm" height="7.985cm"}
+![Ilustração 34: Aspeto final da assinatura](Pictures/10000201000005A00000036CFE101B383A63F824.png "fig:"){width="13.127cm" height="7.985cm"}
 
-#### []{#anchor-25}Introdução de chave
+#### Introdução de chave
 
 A assinatura digital permite ao titular de um **Cartão de Cidadão** ou
 da **Chave Móvel Digital**, por vontade própria, assinar com a chave
@@ -651,7 +633,7 @@ introduzir as respetivas credenciais, conforme a figura seguinte.
 Digital](Pictures/1000020100000401000002404412905C9EE4C4F1.png){width="15.439cm"
 height="8.729cm"}
 
-#### []{#anchor-26}Verificação de assinatura digital em documento PDF
+#### Verificação de assinatura digital em documento PDF
 
 Após aplicar uma assinatura digital num documento, esta deverá ser
 identificada automaticamente ao abrir o documento em *Adobe Reader*. A
@@ -672,22 +654,19 @@ criptográficas da mesma.
 digital](Pictures/1000000000000201000001C1300DE51083ABC706.png){width="11.391cm"
 height="9.968cm"}
 
-### []{#anchor-27}Segurança
+### Segurança
 
 A aplicação permite efetuar operações relativas a segurança do Cartão de
 Cidadão.
 
-#### []{#anchor-28}Certificados
+#### Certificados
 
 Neste menu é possível visualizar os certificados do Estado e do cidadão.
 
 ![Ilustração 39: Visualização do
-certificados](Pictures/100000000000040000000240763AD2A15C0DC530.png){width="16.898cm"
-height="9.751cm"}
+certificados](Pictures/100000000000040000000240763AD2A15C0DC530.png){width="16.898cm" height="9.751cm"}
 
-#### 
-
-#### []{#anchor-29}Código PIN
+#### Código PIN
 
 Neste menu é possível verificar e alterar os códigos PIN do Cartão de
 Cidadão.
@@ -701,15 +680,15 @@ Cidadão.
 
 ![Ilustração 40: Verificar e modificar códigos
 PIN](Pictures/10000000000004000000024059BEBA03BD4ACA83.png "fig:"){width="16.914cm"
-height="9.513cm"}![Ilustração 41: Janela para modificar códigos
+height="9.513cm"}
+
+![Ilustração 41: Janela para modificar códigos
 PIN](Pictures/10000000000001C2000000FCB7CEE2191FF726CF.png "fig:"){width="11.906cm"
 height="6.668cm"}
 
-### 
+### Configurações
 
-### []{#anchor-30}Configurações
-
-#### []{#anchor-31}Personalização da Assinatura
+#### Personalização da Assinatura
 
 Neste menu é possível personalizar a assinatura digital, substituindo a
 imagem do cartão do cidadão por uma imagem à escolha do utilizador.
@@ -726,7 +705,7 @@ O tamanho recomendado para a imagem é de 185 x 41px.
 digital](Pictures/10000000000003FC0000023D0A1AE74C79BFF05C.png){width="17.085cm"
 height="9.95cm"}
 
-#### []{#anchor-24}Atributos Profissionais
+#### Atributos Profissionais
 
 O Sistema de Certificação de Atributos Profissionais (SCAP) permite ao
 cidadão, através do Cartão de Cidadão ou da Chave Móvel Digital, assinar
@@ -744,9 +723,9 @@ Para mais informações, consulte o seguinte *website*:
 
 ![Ilustração : Carregar atributos
 profissionais](Pictures/10000201000004000000024000F6F246FA98C712.png "fig:"){width="16.879cm"
-height="9.703cm"}Seguidamente, deverá clicar num dos botões de
-carregamento de atributos, consoante pretenda, respetivamente, carregar
-os atributos com o Cartão de Cidadão ou Chave Móvel Digital (CMD):
+height="9.703cm"}
+
+Seguidamente, deverá clicar num dos botões de carregamento de atributos, consoante pretenda, respetivamente, carregar os atributos com o Cartão de Cidadão ou Chave Móvel Digital (CMD):
 
 -   Carregar com Cartão de Cidadão: após selecionar este botão, deverá
     introduzir o PIN de autenticação e aguardar pelo carregamento de
@@ -767,7 +746,7 @@ os atributos com o Cartão de Cidadão ou Chave Móvel Digital (CMD):
 Digital.](Pictures/1000020100000774000004376F21EF6AEA6791A2.png){width="16.879cm"
 height="9.703cm"}
 
-#### []{#anchor-32}Configuração da aplicação
+#### Configuração da aplicação
 
 Nesta janela é possível configurar alguns aspetos do funcionamento da
 aplicação:
@@ -775,18 +754,16 @@ aplicação:
 **Leitor de Cartões: **Permite selecionar o leitor de cartões a
 utilizar.
 
-Existe também uma opção que permite ativar ou desativar a funcionalidade
-PINPAD[^1] nos leitores. Se esta opção estiver desativada, os leitores
-com PINPAD terão comportamento idêntico aos leitores sem PINPAD;
+Existe também uma opção que permite ativar ou desativar a funcionalidade PINPAD (Os leitores com PINPAD são os leitores de cartões que possuem teclado para introdução segura do código PIN) nos leitores. Se esta opção estiver desativada, os leitores com PINPAD terão comportamento idêntico aos leitores sem PINPAD;
 
 **Início:** Opções relativas ao arranque da aplicação;
 
 Atualizações automáticas: Permite ativar ou desativar a verificação de
 novas atualizações quando se inicia a aplicação.
 
-**Idioma: **Selecionar o idioma da aplicação;
+**Idioma:** Selecionar o idioma da aplicação;
 
-**Aparência: **Opções relativas a aparência da aplicação;
+**Aparência:** Opções relativas a aparência da aplicação;
 
 Modo diagnóstico: Permite ativar ou desativar o modo de diagnóstico da
 aplicação. Este modo eleva o nível de detalhe do *log *para *debug*, o
@@ -796,7 +773,7 @@ suporte na resolução do problema.
 Aceleração gráfica: Permite ativar ou desativar a aceleração gráfica na
 aplicação.
 
-**Configurações de rede: **Opções relativas a configuração de servidor
+**Configurações de rede:** Opções relativas a configuração de servidor
 de proxy. Em redes onde o acesso à Internet só é possível através de
 servidor de *proxy* HTTP/S será necessário configurar as seguintes
 informações de acesso:** **
@@ -806,14 +783,14 @@ informações de acesso:** **
         um *script* de auto configuração (*Proxy Autoconfig), *esta
         configuração será automaticamente utilizada pelo Middleware.
     -   **Servidor proxy:** Endereço IP / Hostname / Porto
-    -   **Autenticação proxy: **Credenciais de acesso (se necessário)
+    -   **Autenticação proxy:** Credenciais de acesso (se necessário)
 
 ![Ilustração 45: Janela de configurações da aplicação (com Modo de
 diagnóstico
 ativo)](Pictures/1000020100000402000002416AAF7044C967F6DF.png){width="17.052cm"
 height="8.754cm"}
 
-#### []{#anchor-33}Configuração de assinaturas
+#### Configuração de assinaturas
 
 Nesta janela é possível configurar alguns aspetos relativos à assinatura
 com o cartão de cidadão:
@@ -821,39 +798,40 @@ com o cartão de cidadão:
 Certificados: Opções relativas ao registo e remoção de certificados
 durante a inserção e remoção do cartão;
 
-**Serviço de Selos Temporais: **Configurar um serviço de selos temporais
+**Serviço de Selos Temporais:** Configurar um serviço de selos temporais
 personalizado;
 
-**Microsoft Office (Windows): **Configurações relativas a assinaturas em
+**Microsoft Office (Windows):** Configurações relativas a assinaturas em
 aplicações do Microsoft Office;
 
 ![Ilustração 46: Janela de configurações de
 assinaturas](Pictures/10000000000003FC0000023E5250DEEB53C7E6D1.png){width="17.052cm"
 height="8.754cm"}
 
-#### []{#anchor-34}Dados da aplicação
+#### Dados da aplicação
 
 Neste separador é possível apagar os dados de cache armazenados das
 leituras dos cartões e do carregamento de atributos profissionais e
 empresariais.
 
-#### []{#anchor-35}Atualizações
+#### Atualizações
 
 Nesta janela é possível verificar manualmente se existem atualizações
 para o middleware. Caso existam atualizações, e se o utilizador o
 pretender, o download do instalador do middleware é feito
 automaticamente e em seguida iniciado o processo de instalação.
 
-### []{#anchor-36}Ajuda
+### Ajuda
 
 ![Ilustração 47: Janela Acerca
 ](Pictures/1000000000000400000002402F7525F32A27EFF2.png "fig:"){width="16.935cm"
-height="9.525cm"}A janela ajuda fornece um resumo das funcionalidades da
+height="9.525cm"}
+
+A janela ajuda fornece um resumo das funcionalidades da
 aplicação, indica o caminho para chegar a este mesmo manual e a página
 de suporte da aplicação.
 
-[]{#anchor-37}Integração com aplicações
-=======================================
+# Integração com aplicações
 
 A instalação do *middleware* em Windows permite que, ao introduzir um
 cartão de Cidadão no leitor, os certificados deste fiquem
@@ -878,7 +856,7 @@ assinatura digital e autenticação nas seguintes aplicações:
 
 Autenticação:
 
-****- Internet Explorer
+- Internet Explorer
 
 - Mozilla Firefox
 
@@ -897,8 +875,7 @@ Linux: /usr/local/lib/libpteidpkcs11.so
 
 MAC OS: /usr/local/lib/libpteidpkcs11.dylib
 
-[]{#anchor-38}Assinatura digital na suite Microsoft Office
-----------------------------------------------------------
+## Assinatura digital na suite Microsoft Office
 
 Nesta secção é apresentada a assinatura digital de documentos em
 ficheiros *Office*, nomeadamente, nas aplicações: *Word*, *Excel* e
@@ -927,8 +904,7 @@ height="7.011cm"}
 Poderá encontrar informação mais detalhada no seguinte link:
 <https://support.office.com/pt-pt/article/Adicionar-ou-remover-uma-assinatura-digital-nos-ficheiros-do-Office-70d26dc9-be10-46f1-8efa-719c8b3f1a2d>
 
-[]{#anchor-39}Assinatura digital na suite *LibreOffice / OpenOffice*
---------------------------------------------------------------------
+## Assinatura digital na suite *LibreOffice / OpenOffice*
 
 Nesta secção é apresentada a assinatura digital de documentos em
 ficheiros *LibreOffice*, nomeadamente, nas aplicações, *Calc*, *Write* e
@@ -946,10 +922,11 @@ digital de email com Mozilla Thunderbird](#anchor-40)**
 Para assinar digitalmente um documento, deverá efetuar os seguintes
 passos:
 
-1.  ![Ilustração 49: Assinatura em
+![Ilustração 49: Assinatura em
     LibreOffice](Pictures/100000000000024500000190800F178DF051F170.png "fig:"){width="15cm"
-    height="10.326cm"}Aceder ao menu “Ficheiro” → “Assinaturas
-    Digitais...”
+    height="10.326cm"}
+
+1.  Aceder ao menu “Ficheiro” → “Assinaturas Digitais...”
 2.  Aparecerá a janela com as assinaturas digitais do documento. Caso
     não exista ainda nenhuma assinatura, a lista aparecerá vazia
     conforme a imagem abaixo. Clique no botão “Assinar documento...”
@@ -959,12 +936,13 @@ passos:
     imagem abaixo:
 4.  Clique em “Aceitar” e introduza o seu PIN de assinatura na respetiva
     janela.
-5.  ![Ilustração 50: Assinatura em
-    *LibreOffice (2)*](Pictures/1000000000000391000001A6B4BE2A932BE7A212.png "fig:"){width="15cm"
-    height="6.932cm"}O documento ficará assinado digitalmente.
 
-[]{#anchor-41}Assinatura digital de email com *Microsoft Outlook*
------------------------------------------------------------------
+![Ilustração 50: Assinatura em *LibreOffice (2)*](Pictures/1000000000000391000001A6B4BE2A932BE7A212.png "fig:"){width="15cm"
+    height="6.932cm"}
+
+5.  O documento ficará assinado digitalmente.
+
+## Assinatura digital de email com *Microsoft Outlook*
 
 A assinatura eletrónica no *Outlook*, por omissão, obriga a que o
 certificado digital inclua o endereço de email, e este corresponda com o
@@ -976,8 +954,10 @@ assinaturas digitais no *Outlook*, é assim necessário desativar esta
 validação através da alteração das configurações no sistema operativo.
 
 ![](Pictures/10000000000003FD0000023DB2B28158C61F3300.png "fig:"){width="13.76cm"
-height="8.146cm"}Para desativar a **correspondência com endereço de
-email do certificado digital, **deve seguir as instruções
+height="8.146cm"}
+
+Para desativar a **correspondência com endereço de
+email do certificado digital**, deve seguir as instruções
 disponibilizadas no *website* da Microsoft:
 
 - Versão PT: <http://support.microsoft.com/kb/276597/pt>
@@ -994,10 +974,10 @@ seguida, estão divididos em **configuração**, consistindo na
 configuração inicial necessária, e **assinatura**, consistindo na
 assinatura propriamente.
 
-Nota: As imagens apresentadas são referentes ao *Microsoft Outlook
+**Nota:** As imagens apresentadas são referentes ao *Microsoft Outlook
 2016*.
 
-**Configuração – **Esta operação é realizada apenas uma vez.
+**Configuração** – Esta operação é realizada apenas uma vez.
 
 1.  Assegurar que a correspondência com endereço de email do certificado
     digital está desativada, conforme instruções acima.
@@ -1006,39 +986,43 @@ Nota: As imagens apresentadas são referentes ao *Microsoft Outlook
 ![](Pictures/1000000000000079000001A77A0FB57A35AD1C15.png){width="3.635cm"
 height="9.338cm"}
 
-1.  ![Ilustração 53: Assinatura em
-    *Outlook (2)*](Pictures/10000000000000E50000014BF7BFE0BFC0C5BE30.png "fig:"){width="5.849cm"
-    height="8.454cm"}Clicar em “Centro de Confiança”
-2.  Selecionar a secção “Definições do Centro de Fidedignidade”
-3.  ![Ilustração 54: Assinatura em
+![Ilustração 53: Assinatura em *Outlook (2)*](Pictures/10000000000000E50000014BF7BFE0BFC0C5BE30.png "fig:"){width="5.849cm" height="8.454cm"}
+
+3.  Clicar em “Centro de Confiança”
+4.  Selecionar a secção “Definições do Centro de Fidedignidade”
+
+![Ilustração 54: Assinatura em
     Outlook (3)](Pictures/10000000000003B0000002A968C517FBA18BCE31.png "fig:"){width="13.741cm"
     height="9.91cm"}Nesta secção, selecionar a opção “Adicionar a
     assinatura digital às mensagens a enviar” e clicar no botão
     “Definições”
 
+5.  Nesta secção, selecionar a opção “Adicionar a assinatura digital às mensagens
+a enviar” e clicar no botão “Definições”
+6.  Adicione uma descrição a esta configuração, p. ex.: “Assinatura com Cartão de
+Cidadão” e clique no botão “Escolher” para selecionar o certificado.
+
 ![Ilustração 55: Assinatura em *Outlook
 (4)*](Pictures/10000000000003AF000002A35B22B9E7F0A40921.png){width="13.725cm"
 height="9.82cm"}
 
-1.  ![Ilustração 56: Assinatura em Outlook: Escolha do
+![Ilustração 56: Assinatura em Outlook: Escolha do
     certificado](Pictures/10000000000001BE00000187027F40CEC72C90C1.png "fig:"){width="10.612cm"
     height="8.758cm"}Adicione uma descrição a esta configuração, p. ex.:
     “Assinatura com Cartão de Cidadão” e clique no botão “Escolher” para
     selecionar o certificado.
-2.  Selecione o seu certificado de assinatura e clique em OK.
-3.  Clique em OK em todas as janelas de configuração abertas. A
+
+7.  Selecione o seu certificado de assinatura e clique em OK.
+8.  Clique em OK em todas as janelas de configuração abertas. A
     configuração está terminada.
 
-**Assinatura - **a efetuar cada vez que pretenda enviar um email
+**Assinatura** - a efetuar cada vez que pretenda enviar um email
 assinado.
 
 1.  Ao clicar em “Enviar”, será solicitado o PIN de assinatura e o seu
     email será assinado e enviado.
 
-<!-- -->
-
-[]{#anchor-40}Assinatura digital de email com Mozilla Thunderbird
------------------------------------------------------------------
+## Assinatura digital de email com Mozilla Thunderbird
 
 Para poder assinar digitalmente um email no Thunderbird, é necessário
 inicialmente efetuar a respetiva configuração. Os passos descritos de
@@ -1046,7 +1030,7 @@ seguida, estão divididos em **configuração**, consistindo na
 configuração inicial necessária, e **assinatura**, consistindo na
 assinatura propriamente dita.
 
-**Configuração – **Esta configuração é necessária efetuar uma única vez
+**Configuração** – Esta configuração é necessária efetuar uma única vez
 e os passos descritos aplicam-se também à configuração dos certificados
 em Firefox
 
@@ -1067,7 +1051,7 @@ em Firefox
     **Em Windows:** C:\\Windows\\System32\\pteidpkcs11.dll (Windows
     32-bits) C:\\Windows\\SysWOW64\\pteidpkcs11.dll (Windows 64-bits)
 
-    Em Linux: /usr/local/lib/libpteidpkcs11.so
+    **Em Linux:** /usr/local/lib/libpteidpkcs11.so
 
     **Em MacOS:** /usr/local/lib/libpteidpkcs11.dylib
 
@@ -1078,45 +1062,43 @@ em Firefox
 (3)](Pictures/10000000000001D80000013FC9469D3D7387FAFC.png){width="12.497cm"
 height="8.467cm"}
 
-1.  Voltando ao ecrã anterior (“Configurações” → “Segurança”), clique
+5.  Voltando ao ecrã anterior (“Configurações” → “Segurança”), clique
     agora na Opção “Selecionar”
 
 ![Ilustração 61: Assinatura de E-mail com Mozilla Thunderbird
 (4)](Pictures/10000000000003250000008FB6FD87CA6E4C76FD.png){width="15cm"
 height="2.663cm"}
 
-1.  Selecione o Certificado com a descrição “CARTAO DE CIDADAO:CITIZEN
+6.  Selecione o Certificado com a descrição “CARTAO DE CIDADAO:CITIZEN
     SIGNATURE CERTIFICATE”
-2.  ![Ilustração 62: Assinatura de E-mail com Mozilla
+7.  ![Ilustração 62: Assinatura de E-mail com Mozilla
     Thunderbird (5)](Pictures/10000000000001F1000000E12B772122FD13867D.png "fig:"){width="13.146cm"
     height="5.981cm"}Adicionar um certificado da PKI do Cartão de
     Cidadão. No gestor de certificados do *ThunderBird*, aceder ao
     separador “ Autoridade” e clicar em “Importar...”.
-3.  Clique em OK em todas as janelas de configuração abertas. A
+8.  Clique em OK em todas as janelas de configuração abertas. A
     configuração está terminada.
 
-Assinatura - a efetuar cada vez que pretenda enviar um email assinado.
+**Assinatura** - a efetuar cada vez que pretenda enviar um email assinado.
 
 1.  Abra a janela de composição de email
 2.  Clique na caixa de opções “Segurança” e clique em “Assinar
     digitalmente esta mensagem”. Esta opção ficará ativa.
-3.  ![Ilustração 63: Assinatura de E-mail com Mozilla
-    Thunderbird (6)](Pictures/10000000000001B20000008D7A6C614FB37B996A.png "fig:"){width="11.506cm"
-    height="3.734cm"} Ao clicar em “Enviar”, será solicitado o PIN de
-    assinatura e o seu email será assinado e enviado.
 
-[]{#anchor-42}Autenticação em portais WEB
------------------------------------------
+![Ilustração 63: Assinatura de E-mail com Mozilla
+    Thunderbird (6)](Pictures/10000000000001B20000008D7A6C614FB37B996A.png "fig:"){width="11.506cm"
+    height="3.734cm"}
+3.  Ao clicar em “Enviar”, será solicitado o PIN de assinatura e o seu email será assinado e enviado.
+
+## Autenticação em portais WEB
 
 Existem duas formas de se autenticar perante um portal web utilizando o
 Cartão de Cidadão:
 
 -   Autenticação por certificado cliente através do navegador
--   Autenticação por certificado através do portal
-    **Autenticação.gov.pt**
+-   Autenticação por certificado através do portal **Autenticação.gov.pt**
 
-A forma de autenticação depende totalmente da configuração do website,
-não sendo possível ao utilizador escolher uma ou outra forma.
+A forma de autenticação depende totalmente da configuração do website, não sendo possível ao utilizador escolher uma ou outra forma.
 
 A **Autenticação por certificado cliente através do navegador**, tende a
 ser descontinuada, visto a apresentar desvantagens na recolha de dados,
@@ -1133,23 +1115,19 @@ Para o *Mozilla Firefox* em qualquer Sistema Operativo é necessário
 efetuar algumas configurações tal como descrito na secção: [Assinatura
 digital de email com Mozilla Thunderbird](#anchor-40)
 
-A **autenticação por certificado através do portal autenticação.gov.pt
-**não exige a instalação do middleware mas sim do plugin
-**Autenticação.Gov**.
+A **autenticação por certificado através do portal autenticação.gov.pt não exige a instalação do middleware mas sim do plugin **Autenticação.Gov**.
 
 Para mais informação, consulte esta página de ajuda:
 
--   <https://autenticacao.gov.pt/fa/ajuda/autenticacaogovpt.aspx>
+- <https://autenticacao.gov.pt/fa/ajuda/autenticacaogovpt.aspx>
 
 De forma a que a configuração do seu computador suporte qualquer uma das
 alternativas, recomenda-se que instale o *middleware* no seu computador
 e também o plugin **Autenticação.Gov**.
 
-[]{#anchor-43}Resolução de Problemas
-====================================
+# Resolução de Problemas
 
-[]{#anchor-44}Exibida mensagem de erro quando se tenta adicionar o módulo PKCS\#11 no *Firefox / Thunderbird*
--------------------------------------------------------------------------------------------------------------
+## Exibida mensagem de erro quando se tenta adicionar o módulo PKCS\#11 no *Firefox / Thunderbird*
 
 Para que consiga adicionar o módulo PKCS\#11 no Firefox tem de ter um
 leitor de cartões instalado no seu computador.
@@ -1160,15 +1138,14 @@ antes de adicionar o módulo PKCS\#11.
 Caso esteja a utilizar uma versão de Mac ou Linux a 64-bit terá de
 utilizar uma versão 64-bit do Firefox / Thunderbird.
 
-[]{#anchor-45}Não é possível adicionar o módulo PKCS\#11 ao *Adobe Acrobat Reader* em Mac. 
--------------------------------------------------------------------------------------------
+## Não é possível adicionar o módulo PKCS\#11 ao *Adobe Acrobat Reader* em Mac.
+
 
 Em versões anteriores do Adobe Acrobat Reader para MacOS não é possível
 adicionar o módulo PKCS\#11. Recomendamos a atualização do *Adobe
 Acrobat Reader* para a versão **DC**.
 
-[]{#anchor-46}Impossibilidade de assinatura com *Adobe Reader*, *Microsoft Office* e *LibreOffice*.
----------------------------------------------------------------------------------------------------
+## Impossibilidade de assinatura com *Adobe Reader*, *Microsoft Office* e *LibreOffice*.
 
 Deverá aceder ao ficheiro “pteidmdrv.inf”, presente por defeito na
 diretoria “ C:\\ProgramFiles\\PTeID Minidriver” (ou na directoria
@@ -1181,12 +1158,10 @@ selecionar a pasta “drivers” que esta na diretoria “
 C:\\Windows\\System32 “
 
 ![Ilustração 65: Impossibilidade de assinatura (2)](Pictures/10000000000001A8000000E240FA91ADB9D3056A.png "fig:"){width="11.218cm" height="5.98cm"}
----------------------------------------------------------------------------------------------------------------------------------------------------
 
-[]{#anchor-47}O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão
--------------------------------------------------------------------------------------------------------
+## O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão
 
-### []{#anchor-48}Windows
+### Windows
 
 1.  Verifique se o leitor de cartões é compatível com o standard PC/SC
     (consulte a documentação do leitor de cartões ou contacte o
@@ -1210,7 +1185,7 @@ e\) Encerre a aplicação do Cartão de Cidadão
 
 f\) Volte a inserir o leitor e abra novamente a aplicação.
 
-### []{#anchor-49}Linux
+### Linux
 
 1.  Verifique se o leitor de cartões é compatível com o standard PC/SC
     (consulte a documentação do leitor ou contacte o fabricante)
@@ -1233,8 +1208,7 @@ d\) Caso obtenha uma mensagem de erro é possível que o daemon não esteja
 instalado. Utilize o seu gestor de pacotes para instalar o pcscd (por
 vezes já vem incluído no pacote pcsc-lite)
 
-[]{#anchor-50}Não são detetados quaisquer certificados durante a tentativa de assinatura na suite LibreOffice / Apache OpenOffice
----------------------------------------------------------------------------------------------------------------------------------
+## Não são detetados quaisquer certificados durante a tentativa de assinatura na suite LibreOffice / Apache OpenOffice
 
 A suite *LibreOffice / OpenOffice* em Linux, utiliza as configurações da
 aplicação
@@ -1252,8 +1226,7 @@ Para mais informações consultar a página de ajuda:[]{#anchor-51}
 
 -   <https://help.libreoffice.org/Common/Applying_Digital_Signatures/pt>
 
-[]{#anchor-52}Problemas com placas gráficas integradas em windows
------------------------------------------------------------------
+## Problemas com placas gráficas integradas em windows
 
 No caso da aplicação não arrancar ou existir problemas gŕaficos,
 recomenda-se testar desabilitar a aceleração gráfica por hardware.
@@ -1277,11 +1250,9 @@ graphics\_accelaration = 1 // Aceleração gráfica activada
 
 graphics\_accelaration = 0 // Aceleração gráfica desactivada
 
-[]{#anchor-53}Instruções de configuração em ambientes empresariais
-==================================================================
+# Instruções de configuração em ambientes empresariais
 
-[]{#anchor-54}Configurações através de chaves de registo Windows
-----------------------------------------------------------------
+## Configurações através de chaves de registo Windows
 
 As configurações do software Autenticação.gov são guardadas em Windows
 em chaves de registo sendo que as alterações feitas pelo utilizador no
@@ -1305,23 +1276,22 @@ sub-chaves da chave raiz:
 
 HKLM\\Software\\PTEID
 
-  ----------------------------------------- ---------------------------------------- -------------------------------------------------------------------------------------------------
   Nome da Chave                             Tipo de valor                            Descrição
 
   logging\\log\_level                       string (*debug, info, warning, error*)   Nível de detalhe do log do Middleware. Valor por omissão: *error*
 
   logging\\log\_dirname                     string                                   Directoria onde são gerados os ficheiros de log do Middleware. Valor por omissão: *C:\\Program*
-                                                                                     
+
                                                                                      Files\\ Portugal Identity Card
 
   xsign\\tsa\_url                           string                                   Servidor de timestamps usado na assinatura de documentos no
-                                                                                     
+
                                                                                      formato http(s)://HOST:PORTO
-                                                                                     
+
                                                                                      Valor por omissão:
-                                                                                     
+
                                                                                      http://ts.cartaodecidadao.pt/tsa
-                                                                                     
+
                                                                                      /server
 
   configuretool\\registrate\_certificate    Numérico (REG\_DWORD) (0 / 1)            Registar certificados no Windows com a inserção do cartão. Valor por omissão: *1 (Sim)*
@@ -1335,16 +1305,15 @@ HKLM\\Software\\PTEID
   proxy\\proxy\_port                        Numérico (REG\_DWORD) (1 a 65535)        Porto TCP do servidor de proxy
 
   certificatecache\\cert\_cache\_validity   Numérico (REG\_DWORD)                    Tempo de cache local (em
-                                                                                     
-                                                                                     segundos) do estado de
-                                                                                     
-                                                                                     validade dos certificados
-                                                                                     
-                                                                                     Valor por omissão: 60
-  ----------------------------------------- ---------------------------------------- -------------------------------------------------------------------------------------------------
 
-[]{#anchor-55}Configurações através de ficheiro de configuração em Linux e MacOS
---------------------------------------------------------------------------------
+                                                                                     segundos) do estado de
+
+                                                                                     validade dos certificados
+
+                                                                                     Valor por omissão: 60
+
+
+## Configurações através de ficheiro de configuração em Linux e MacOS
 
 As configurações do software Autenticação.gov são guardadas em Linux e
 MacOS são efectuadas num ficheiro de configuração. Este ficheiro de
@@ -1361,8 +1330,7 @@ configuração a ser indicada por uma tag. Os valores que se podem
 especificar em cada tag são os que foram indicados na tabela anterior
 referente às chaves de registo.
 
-[]{#anchor-56}Instalação automatizada em ambientes Windows
-----------------------------------------------------------
+## Instalação automatizada em ambientes Windows
 
 Para instalar o software de forma automatizada é necessário seguir o
 seguinte procedimento (com permissões de administrador):
@@ -1396,8 +1364,7 @@ seguinte procedimento (com permissões de administrador):
     Se se pretende evitar o reinício do sistema após a instalação deve
     ser adicionado ao comando o parâmetro */norestart*
 
-[]{#anchor-57}Informação sobre servidores de Proxy em Windows
--------------------------------------------------------------
+## Informação sobre servidores de Proxy em Windows
 
 O software tem neste momento uma limitação com alguns tipos de
 servidores de proxy designadamente com autenticação NTLM ou Kerberos.
@@ -1408,8 +1375,4 @@ atributos profissionais ou assinatura com Chave Móvel) será necessário
 nestes ambientes uma reconfiguração de rede ou o uso de uma proxy aberta
 ou com autenticação Basic.
 
-[]{#anchor-58}Notas do Utilizador
-=================================
-
-[^1]: Os leitores com PINPAD são os leitores de cartões que possuem
-    teclado para introdução segura do código PIN.
+# Notas do Utilizador
