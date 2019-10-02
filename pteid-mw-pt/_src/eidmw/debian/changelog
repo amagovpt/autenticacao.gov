@@ -1,115 +1,122 @@
+pteid-mw (3.0.20+git20190930-e547bd9d-1) UNRELEASED; urgency=medium
+
+  * Address change bugfix for cards issued since May 2019
+  * Claimed time in PDF signature is specified using the correct timezone
+  * CMD signature bugfix related to UTF-8 document names
+
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Mon, 30 Sep 2019 11:52:09 +0100
 pteid-mw (3.0.19svn7000-1) UNRELEASED; urgency=medium
 
   * Accessibility improvements in the GUI application
   * Support for loading SCAP attributes using Chave Movel
   * New feature: export photo in PNG or JPEG format
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Tue, 03 Sep 2019 11:43:29 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Tue, 03 Sep 2019 11:43:29 +0100
 pteid-mw (3.0.16svn5840-3) UNRELEASED; urgency=medium
 
   * SCAP Signature improvements
   * Support for new 3072-bit RSA smartcards
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 08 Feb 2019 12:28:55 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 08 Feb 2019 12:28:55 +0100
 pteid-mw (3.0.15svn5575-1) UNRELEASED; urgency=medium
 
   * PDF signature bugfix
   * Linux GTK plugin fix
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Wed, 05 Sep 2018 12:28:55 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Wed, 05 Sep 2018 12:28:55 +0100
 pteid-mw (3.0.13svn5530-1) UNRELEASED; urgency=medium
 
   * Address Change Bugfix
   * Various SCAP related fixes
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 28 Jun 2018 12:28:55 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 28 Jun 2018 12:28:55 +0100
 pteid-mw (3.0.12svn5475-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 5437 - New V3 GUI application with CMD signature feature
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 10 May 2018 10:48:55 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 10 May 2018 10:48:55 +0100
 pteid-mw (2.4.11svn5339-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 5339 - Disable checking of the address file hash in SOD only if the card was issued in a specific range of dates
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 15 Feb 2018 10:48:55 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 15 Feb 2018 10:48:55 +0100
 
 pteid-mw (2.4.11svn5334-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 5334 - Disable checking of the address file hash contained and other minor bugfixes 
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 15 Feb 2018 10:48:55 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 15 Feb 2018 10:48:55 +0100
 
 pteid-mw (2.4.6svn5239-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 5239 - PKCS#1 fixes and new ECRaizEstado Certificate
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 27 Oct 2017 11:32:55 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 27 Oct 2017 11:32:55 +0100
 pteid-mw (2.4.4svn5176-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 5176 - Public Release supporting new cert chain with 10 year citizen certificates
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 28 Sep 2017 16:37:50 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 28 Sep 2017 16:37:50 +0100
 
 pteid-mw (2.4.0svn4973-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 4973
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 25 Jul 2017 15:09:50 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 25 Jul 2017 15:09:50 +0100
 
 pteid-mw (2.4.0svn4672-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 4672
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 27 Apr 2017 15:09:50 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 27 Apr 2017 15:09:50 +0100
 
 pteid-mw (2.4.0svn4662-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 4662
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 21 Apr 2017 15:09:50 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 21 Apr 2017 15:09:50 +0100
 
 pteid-mw (2.4.0svn4654-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 4654 - Major improvements
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 20 Apr 2017 12:16:50 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 20 Apr 2017 12:16:50 +0100
 
 pteid-mw (2.4.0svn4301-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 4301 - Major improvements
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 22 Dec 2016 15:25:59 +0000
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 22 Dec 2016 15:25:59 +0000
 
 pteid-mw (2.3.0svn3890-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 3890
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Wed, 06 Apr 2016 15:56:00 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Wed, 06 Apr 2016 15:56:00 +0100
 
 pteid-mw (2.3.0svn3886-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 3886
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 22 Jan 2016 16:23:18 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 22 Jan 2016 16:23:18 +0100
 
 pteid-mw (2.3.0svn3788-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 3788
   * Add new mimetype and SCAP and DSS bundled apps	
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 05 Dec 2014 16:23:18 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 05 Dec 2014 16:23:18 +0100
 
 pteid-mw (2.3.0svn3716-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 3716
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Wed, 22 Oct 2014 15:54:18 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Wed, 22 Oct 2014 15:54:18 +0100
 
 pteid-mw (2.2.0svn3696-1) UNRELEASED; urgency=medium
 
   * Update to SVN revision 3696
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Mon, 29 Sep 2014 15:54:18 +0100
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Mon, 29 Sep 2014 15:54:18 +0100
 
 pteid-mw (2.2.0svn3577-1ubuntu5) UNRELEASED; urgency=medium
 
@@ -141,13 +148,13 @@ pteid-mw (2.1.2svn3271-1) horn; urgency=low
 
   * New SVN snapshot - revision 3271
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 31 Jan 2013 18:43:30 +0000
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Thu, 31 Jan 2013 18:43:30 +0000
 
 pteid-mw (2.0.0svn3246-2) horn; urgency=low
 
   * Remove unneeded files installed from bundled xml-security
 
- -- Andre Guerreiro <andre.guerreiro@caixamagica.pt>  Tue, 15 Jan 2013 10:58:00 +0000
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Tue, 15 Jan 2013 10:58:00 +0000
 
 pteid-mw (2.0.0svn3246-1) horn; urgency=low
 
