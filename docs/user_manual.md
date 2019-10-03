@@ -1243,42 +1243,17 @@ sub-chaves da chave raiz:
 
 HKLM\\Software\\PTEID
 
-  Nome da Chave                             Tipo de valor                            Descrição
-
-  logging\\log\_level                       string (*debug, info, warning, error*)   Nível de detalhe do log do Middleware. Valor por omissão: *error*
-
-  logging\\log\_dirname                     string                                   Directoria onde são gerados os ficheiros de log do Middleware. Valor por omissão: *C:\\Program*
-
-                                                                                     Files\\ Portugal Identity Card
-
-  xsign\\tsa\_url                           string                                   Servidor de timestamps usado na assinatura de documentos no
-
-                                                                                     formato http(s)://HOST:PORTO
-
-                                                                                     Valor por omissão:
-
-                                                                                     http://ts.cartaodecidadao.pt/tsa
-
-                                                                                     /server
-
-  configuretool\\registrate\_certificate    Numérico (REG\_DWORD) (0 / 1)            Registar certificados no Windows com a inserção do cartão. Valor por omissão: *1 (Sim)*
-
-  configuretool\\remove\_certificate        Numérico (REG\_DWORD) (0 / 1)            Remover certificados do Windows com a remoção do cartão. Valor por omissão: *0 (Não)*
-
-  proxy\\use\_system\_proxy                 Numérico (REG\_DWORD) (0 / 1)            Utilizar servidor de proxy definido no Windows/ MacOS. Valor por omissão: 0 (Não)
-
-  proxy\\proxy\_host                        string (hostname ou endereço IP)         Endereço do servidor de proxy
-
-  proxy\\proxy\_port                        Numérico (REG\_DWORD) (1 a 65535)        Porto TCP do servidor de proxy
-
-  certificatecache\\cert\_cache\_validity   Numérico (REG\_DWORD)                    Tempo de cache local (em
-
-                                                                                     segundos) do estado de
-
-                                                                                     validade dos certificados
-
-                                                                                     Valor por omissão: 60
-
+| Nome da Chave                        | Tipo de valor                                                          | Descrição                                                                                                                                              |
+|--------------------------------------|------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| logging\log_level                    | String<br>(debug, info, warning, error)                                | Nível de detalhe do log do Middleware.<br>Valor por omissão: error                                                                                     |
+| logging\log_dirname                  | String                                                                 | Directoria onde são gerados os ficheiros de log do Middleware.<br>Valor por omissão: C:\Program Files\ Portugal Identity Card                          |
+| xsign\tsa_url                        | String                                                                 | Servidor de timestamps usado na assinatura de documentos no formato http(s)://HOST:PORTO<br>Valor por omissão: http://ts.cartaodecidadao.pt/tsa/server |
+| configuretool\registrate_certificate | Numérico<br>(REG_DWORD) (0 / 1)                                        | Registar certificados no Windows com a inserção do cartão.<br>Valor por omissão: 1 (Sim)                                                               |
+| configuretool\remove_certificate     | Numérico<br>(REG_DWORD) (0 / 1)                                        | Remover certificados do Windows com a remoção do cartão.<br>Valor por omissão: 0 (Não)                                                                 |
+| proxy\use_system_proxy               | Numérico<br>(REG_DWORD) (0 / 1)                                        | Utilizar servidor de proxy definido no Windows / MacOS.<br>Valor por omissão: 0 (Não)                                                                   |
+| proxy\proxy_host                     | String<br>(hostname ou endereço IP)                                    | Endereço do servidor de proxy                                                                                                                          |
+| proxy\proxy_port                     | Numérico<br>(REG_DWORD) (1 a 65535)                                    | Porto TCP do servidor de proxy                                                                                                                         |
+| certificatecache\cert_cache_validity | Numérico<br>(REG_DWORD)                                                   | Tempo de cache local (em segundos) do estado de validade dos certificados.<br>Valor por omissão: 60                                                    |
 
 ## Configurações através de ficheiro de configuração em Linux e MacOS
 
