@@ -1,14 +1,10 @@
 # Manual de Utilização do Middleware do Cartão de Cidadão
 
-<p align="center">
 ![Ilustração: Cartão de Cidadão](Pictures/CartaoCidadao.png
   "Cartão de Cidadão")
-</p>
 
-<p align="center">
 ![Ilustração: Aplicação Autenticação.gov](Pictures/Autenticação.Gov_Home.png
   "Aplicação Autenticação.gov")
-</p>
 
 # Introdução
 
@@ -67,10 +63,8 @@ Para obter o pacote de instalação do *middleware*, deverá aceder ao
 sítio oficial do Cartão de Cidadão em
 [http://www.autenticacao.gov.pt](http://www.autenticacao.gov.pt/)
 
-<p align="center">
 ![Ilustração: Download](Pictures/Portal_Autenticacao.Gov_Download_options.png
   "Download")
-</p>
 
 Se escolher na barra de navegação a seguinte opção
 “Cartão de Cidadão” → “Aplicação do Cartão de Cidadão” através dos dados
@@ -89,10 +83,8 @@ Utilização, carregue
 à lista de todos os pacotes de instalação dos sistemas operativos
 suportados e manual de utilização (imagem na página seguinte).
 
-<p align="center">
 ![Ilustração: Opções de download](Pictures/Portal_Autenticacao.Gov_Download.png
   "Opções de download")
-</p>
 
 Após efetuado o download da respetiva versão, avance
 para o ponto seguinte – Instalação do Middleware.
@@ -114,20 +106,15 @@ sistema operativo utilizado.
     instalação, deverá fazer duplo clique sobre este, surgindo um ecrã
     semelhante aos apresentados de seguida:
 
-    <p align="center">
     ![Ilustração: Instalação da aplicação em Windows](Pictures/Autenticação.Gov_Intalacao.png
       "Instalação da aplicação em Windows")
-    </p>
-
 
 2.  Neste ecrã, deverá premir o botão ***Seguinte*** e marcar a caixa
     (com um certo com um clique no botão do rato no lado esquerdo), para
     aceitar os termos e condições da aplicação.
 
-    <p align="center">
     ![Ilustração: Instalação da aplicação em Windows](Pictures/Autenticação.Gov_Instalacao_termos.png
       "Instalação da aplicação em Windows")
-    </p>
 
 3.  Neste passo, poderá escolher a pasta onde deseja instalar o
     *middleware*. Se desejar alterar a pasta predefinida, carrege em
@@ -154,10 +141,8 @@ opção através da linha de comandos.
 
 Instalação através do *Software Center*:
 
-<p align="center">
 ![Ilustração: Instalação da aplicação em Linux](Pictures/Autenticação.Gov_Intalacao_Linux.png
   "Instalação da aplicação em Linux")
-</p>
 
 1.  Executar o pacote de instalação: Após ter
     descarregado o ficheiro de instalação, deverá fazer duplo clique
@@ -169,19 +154,15 @@ Instalação através do *Software Center*:
     seguintes são apresentados os ecrãs utilizando Linux Caixa Mágica 22
     LTS.
 
-<p align="center">
 ![Ilustração: Instalação da aplicação em Linux](Pictures/Autenticação.Gov_Intalacao_Linux2.png
   "Instalação da aplicação em Linux")
-</p>
 
 2.  Deverá premir o botão ***Instalar*** para prosseguir.
 3.  Será pedida a introdução da sua senha de utilizador. (É necessário
     que tenha privilégios de administração da máquina)
 
-<p align="center">
 ![Ilustração: Instalação_Linux](Pictures/Autenticação.Gov_Intalacao_Linux3.png
   "Instalação_Linux")
-</p>
 
 4.  Após a conclusão do passo acima, a instalação do *middleware* está
     terminada.
@@ -208,18 +189,14 @@ Instalação através do *Software Center*:
     instalação, deverá fazer duplo clique sobre este, surgindo um ecrã
     semelhante ao apresentado de seguida:
 
-    <p align="center">
     ![Ilustração: Instalação da aplicação em macOS](Pictures/Autenticação.Gov_Intalacao_MacOS.png
       "Instalação da aplicação em macOS")
-    </p>
 
 2.  Escolher a opção ***Continuar***. Em seguida é
     necessário ler e aceitar os termos da licença do software.
 
-    <p align="center">
     ![Ilustração: Instalação da aplicação em macOS](Pictures/Autenticação.Gov_Intalacao_MacOS2.png
       "Instalação da aplicação em macOS")
-    </p>
 
 3.  A partir deste ponto no assistente deverá premir o botão
     ***Continuar*** até concluir a instalação.
@@ -239,10 +216,8 @@ sistema operativo utilizado.
 1.  Aceda ao Painel de Controle;
 2.  Selecione a Opção Adicionar ou Remover Programas;
 
-    <p align="center">
     ![Ilustração: Remoção da aplicação em Windows](Pictures/Autenticação.Gov_Desinstalar.png
       "Remoção da aplicação em Windows")
-    </p>
 
 3.   No ecrã apresentado, selecione o programa Cartão de
     Cidadão, conforme apresentado na janela seguinte:
@@ -272,41 +247,31 @@ seguintes são apresentados os ecrãs utilizando Linux Caixa Mágica 22 LTS
 1.  Abra o *Software Center* (Menu Aplicações → Ferramentas do Sistema →
     Administração → Caixa Magica Software Center)
 
-    <p align="center">
     ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux.png
       "Remoção da aplicação em Linux")
-    </p>
 
 2.  Prima o botão ***Instalado*** na barra superior
 
-    <p align="center">
     ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux2.png
       "Remoção da aplicação em Linux")
-    </p>
 
 3.  Digite “pteid” na caixa de pesquisa disponível na barra superior.
     Deverá ser apresentado na zona de resultados o pacote “Cartão de
     Cidadão”
 
-    <p align="center">
     ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux3.png
       "Remoção da aplicação em Linux")
-    </p>
 
 4.  Selecione o pacote “Cartão de Cidadão”, e Prima o botão ***Remover***
 
-    <p align="center">
     ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux4.png
       "Remoção da aplicação em Linux")
-    </p>
 
 5.  Será pedida a introdução da sua senha de utilizador. É necessário
     que tenha privilégios de administração da máquina.
 
-    <p align="center">
     ![Ilustração: Apresentação da aplicação](Pictures/Autenticação.Gov_Desinstalar_Linux5.png
       "Apresentação da aplicação")
-    </p>
 
 6.  Após a conclusão do passo acima a o processo de desinstalação do
     *middleware* está terminado.
@@ -337,10 +302,8 @@ A aplicação Utilitária “Autenticação.Gov” pode ser utilizada para
 visualizar e gerir os dados no Cartão de Cidadão e assinar documentos
 digitais.
 
-<p align="center">
 ![Ilustração: Apresentação da aplicação](Pictures/Autenticação.Gov_Home.png
    "Apresentação da aplicação")
-</p>
 
 Nesta aplicação poderá efetuar as seguintes operações:
 
@@ -383,10 +346,8 @@ A aplicação é composta por 4 áreas principais de interação:
     do cartão de Cidadão e área de trabalho para os menus de assinatura
     e segurança.
 
-<p align="center">
 ![Ilustração: Áreas principais de interação da aplicação](Pictures/Autenticação.Gov_Card.png
   "Áreas principais de interação da aplicação")
-  </p>
 
 ## Funcionalidades da aplicação
 
@@ -404,20 +365,16 @@ das notas, bem como, imprimir os dados do Cartão de Cidadão.
 Permite visualizar os dados de identificação e foto do cidadão presentes
 no cartão de cidadão.
 
-<p align="center">
 ![Ilustração: Identidade do Cidadão](Pictures/Autenticação.Gov_Identidade.png
   "Identidade do Cidadão")
-</p>
 
 #### Outros dados
 
 Permite visualizar outros dados do cartão do cidadão e verificar o
 estados do Cartão de Cidadão.
 
-<p align="center">
 ![Ilustração: Outros dados](Pictures/Autenticação.Gov_Outros_Dados.png
   "Outros dados")
-</p>
 
 #### Morada e Alteração de morada
 
@@ -435,17 +392,13 @@ seguintes passos:
 
 1.  Clique no botão “Confirmar”;
 
-<p align="center">
 ![Ilustração: Introduzir dados na confirmar de alteração de morada    ](Pictures/Autenticação.Gov_Morada.png
   "Introduzir dados na confirmar de alteração de morada")
-</p>
 
 2.  Insira o número de processo e o código secreto que recebeu pelo correio, e clique em Confirmar;
 
-<p align="center">
 ![Ilustração: Confirmar alteração de morada](Pictures/Autenticação.Gov_morada2.png
    "Confirmar alteração de morada")
-</p>
 
 3.  Aguarde processamento do pedido. Será efetuada uma ligação ao
     serviço de alteração de morada e será pedido o seu PIN de
@@ -456,20 +409,16 @@ seguintes passos:
     e não desligue a internet, enquanto o processo não estiver
     terminado.**
 
-    <p align="center">
     ![Ilustração: Pedido de confirmação em processamento](Pictures/Autenticação.Gov_morada3.png
        "Pedido de confirmação em processamento")
-    </p>
 
 4.  Verifique o resultado da operação e siga as instruções:
 
    - **Erro. Ocorreu um erro durante a alteração de morada:**
       - **Processo de alteração de morada não foi concluído**.
 
-      <p align="center">
       ![Ilustração: Erro na alteração de morada](Pictures/Autenticação.Gov_Alteracao_morada_erro_n_confirmada.png
         "Erro na alteração de morada")
-      </p>
 
       - **Erro na comunicação**.
       - **Verifique se introduziu corretamente o número de processo e código de confirmação**.
@@ -477,18 +426,14 @@ seguintes passos:
 
       E em outras mensagens, sem descrição do erro, deverá tentar novamente e, caso o erro persista, contactar a Linha Cartão de Cidadão através do  número **211 950 500** ou do E-mail: **cartaodecidadao@irn.mj.pt**. (Tenha consigo as mensagens de erro e respectivos códigos de erro e o número de processo de Alteração de Morada).
 
-      <p align="center">
       ![Ilustração: Erro na alteração de morada](Pictures/Autenticação.Gov_Alteracao_morada_erro.png
         "Erro na alteração de morada")
-      </p>
 
    - **A morada foi actualizada com sucesso:**
      - Caso a operação tenha sucesso, uma mensagem de Confirmação de alteração de morada com sucesso será mostrada.
 
-     <p align="center">
      ![Ilustração: Sucesso na alteração de morada](Pictures/Autenticação.Gov_Alteracao_morada_sucesso.png
        "Sucesso na alteração de morada")
-     </p>
 
 #### Notas
 
@@ -499,10 +444,8 @@ exemplo, inserir informação sobre contactos em caso de urgência,
 indicações sobre alergias, medicação, grupo sanguíneo ou outra qualquer
 informação que entenda pertinente e de acesso livre.
 
-<p align="center">
 ![Ilustração: Editar notas](Pictures/Autenticação.Gov_Notas.png
    "Editar notas")
-</p>
 
 #### Imprimir
 
@@ -516,18 +459,14 @@ Para executar estas operações deverá executar os seguintes passos:
 2.  Na área de trabalho deverá selecionar os grupos de campos a incluir
     no documento e selecionar a opção “Imprimir” ou “gerar PDF”.
 
-    <p align="center">
     ![Ilustração: Opções de exportação de PDF ou impressão](Pictures/Autenticação.Gov_Print.png
       Opções de exportação de PDF ou impressão)
-    </p>
 
     O documento a ser exportado e/ou impresso terá um aspeto gráfico
     conforme a imagem seguinte.
 
-    <p align="center">
     ![Ilustração: Exemplo de exportação de PDF](Pictures/Autenticação.Gov_print_pdf.png
       "Exemplo de exportação de PDF]")
-    </p>
 
 ### Assinatura digital
 
@@ -548,36 +487,28 @@ qualquer documento com possibilidade de assinar vários documentos ao
 mesmo tempo, adicionar atributos profissionais, bem como configurar
 outras opções.
 
-<p align="center">
 ![Ilustração: Menu de assinatura digital](Pictures/Autenticação.Gov_assinatura.png
   "Menu de assinatura digital")
-</p>
 
 #### Simples
 
-<p align="center">
 ![Ilustração: Selecionar documento PDF na assinatura simples](Pictures/Autenticação.Gov_assinatura_simples.png
   "Selecionar documento PDF na assinatura simples")
-</p>
 
 Neste modo, assinatura simples, apenas é possível selecionar a página e
 mover a assinatura digital para o local pretendido, conforme a figura
 seguinte
 
-<p align="center">
 ![Ilustração: Selecionar opções na assinatura simples](Pictures/Autenticação.Gov_assinatura_simples2.png
   "Selecionar opções na assinatura simples")
-</p>
 
 Por fim, carregar no botão “Assinar com Cartão de
 Cidadão” ou “Assinar com Chave Móvel Digital”.
 
 #### Avançada
 
-<p align="center">
 ![Ilustração: Selecionar ficheiro PDF para assinar na assinatura avançada](Pictures/Autenticação.Gov_assinatura_avancada.png
   "Selecionar ficheiro PDF para assinar na assinatura avançada")
-</p>
 
 Neste modo, é possível selecionar um conjunto de opções e mover a
 assinatura digital para o local pretendido. Após a seleção dos
@@ -628,10 +559,8 @@ assinatura são apresentadas no ecrã seguinte:
         assinatura ou escolher a opção “última”, para assinar na última
         página.
 
-<p align="center">
 ![Ilustração: Selecionar opções de assinatura](Pictures/Autenticação.Gov_assinatura_avancada2.png
   "Selecionar opções de assinatura")
-</p>
 
 Após selecionar as opções pretendidas, na área indicada na figura anterior, arraste a
 pré-visualização da assinatura para a localização pretendida e de seguida prima o
@@ -642,10 +571,8 @@ procedimento de assinatura (ver capitulo 3.2.2.3 - Introdução de chave).
 Em seguida é apresentado uma mensagem a indicar se a assinatura digital foi
 efetuada com sucesso.
 
-<p align="center">
 ![Ilustração: Aspeto final da assinatura](Pictures/Autenticação.GOV_Assinatura_exemplo.png
   "Aspeto final da assinatura")
-</p>
 
 #### Introdução de chave
 
@@ -658,19 +585,15 @@ Cartão de Cidadão, ao selecionar a opção “Assinar com Cartão de
 Cidadão”, deverá introduzir o PIN de assinatura, conforme a figura
 seguinte.
 
-<p align="center">
 ![Ilustração: Assinatura digital com a chave pessoal do Cartão de Cidadão](Pictures/Autenticação.Gov_assinatura_cc.png
   "Assinatura digital com a chave pessoal do Cartão de Cidadão")
-</p>
 
 No caso, de pretender assinar com a Chave Móvel
 Digital, ao selecionar a opção “Assinar com Chave Móvel Digital”, deverá
 introduzir as respetivas credenciais, conforme a figura seguinte.
 
-<p align="center">
 ![Ilustração: Assinatura digital com a Chave Móvel Digital](Pictures/Autenticação.Gov_assinatura_cmd.png
   "Assinatura digital com a Chave Móvel Digital")
-</p>
 
 #### Verificação de assinatura digital em documento PDF
 
@@ -679,10 +602,8 @@ identificada automaticamente ao abrir o documento em *Adobe Reader*. A
 imagem seguinte ilustra o *Adobe Reader* com um documento PDF que inclui
 a assinatura efetuada no passo anterior:
 
-<p align="center">
 ![Ilustração: Assinatura de exemplo](Pictures/Autenticação.Gov_assinatura_sample.png
   "Assinatura de exemplo")
-</p>
 
 Embora a assinatura esteja visível (dado que a opção foi selecionada no
 momento da assinatura), a assinatura deverá ser sempre validada no
@@ -690,10 +611,8 @@ painel de assinaturas, dado que permite a visualização do estado da
 assinatura tendo em conta a cadeia de confiança e as propriedades
 criptográficas da mesma.
 
-<p align="center">
 ![Ilustração: Validação da assinatura digital](Pictures/Autenticação.Gov_assinatura_verify.png
   "Validação da assinatura digital")
-</p>
 
 ### Segurança
 
@@ -704,10 +623,8 @@ Cidadão.
 
 Neste menu é possível visualizar os certificados do Estado e do cidadão.
 
-<p align="center">
 ![Ilustração: Visualização do certificados](Pictures/Autenticação.Gov_certificados.png
   "Visualização do certificados")
-</p>
 
 #### Código PIN
 
@@ -721,15 +638,11 @@ Cidadão.
 -   **PIN de Morada:** Este PIN é usado para alteração e leitura de
     morada.
 
-<p align="center">
 ![Ilustração: Verificar e modificar códigos PIN](Pictures/Autenticação.Gov_codigos_pin.png
   "Verificar e modificar códigos PIN")
-  </p>
 
-<p align="center">
 ![Ilustração: Janela para modificar códigos PIN](Pictures/Autenticação.Gov_Mudar_Pin.png
   "Janela para modificar códigos")
-</p>
 
 ### Configurações
 
@@ -746,10 +659,8 @@ utilizador.
 
 O tamanho recomendado para a imagem é de 185 x 41px.
 
-<p align="center">
 ![Ilustração: Personalização da Assinatura digital](Pictures/Autenticação.Gov_personalizar_assinatura.png
   "Personalização da Assinatura digital")
-</p>
 
 #### Atributos Profissionais
 
@@ -769,10 +680,8 @@ Em primeiro lugar, selecione o tipo de atributos:
     são carregados automaticamente, quando clicar no botão de
     carregamento de atributos.
 
-    <p align="center">
     ![Ilustração: Carregar atributos profissionais](Pictures/Autenticação.Gov_scap.png
       "Carregar atributos profissionais")
-    </p>
 
 Seguidamente, deverá clicar num dos botões de carregamento de atributos, consoante pretenda, respetivamente, carregar os atributos com o Cartão de Cidadão ou Chave Móvel Digital (CMD):
 
@@ -791,9 +700,8 @@ Seguidamente, deverá clicar num dos botões de carregamento de atributos, conso
     Se concluiu a autenticação com sucesso, pode regressar à aplicação e
     aguardar pelo carregamento de atributos.
 
-    <p align="center">![Ilustração: Página de autenticação com Chave Móvel Digital.](Pictures/Autenticação.Gov_cmd.png
+    ![Ilustração: Página de autenticação com Chave Móvel Digital.](Pictures/Autenticação.Gov_cmd.png
       "Página de autenticação com Chave Móvel Digital.")
-    </p>
 
 #### Configuração da aplicação
 
@@ -834,10 +742,8 @@ informações de acesso:** **
     -   **Servidor proxy:** Endereço IP / Hostname / Porto
     -   **Autenticação proxy:** Credenciais de acesso (se necessário)
 
-<p align="center">
 ![Ilustração: Janela de configurações da aplicação (com Modo de diagnóstico ativo)](Pictures/Autenticação.Gov_configuração.png
   "Janela de configurações da aplicação (com Modo de diagnóstico ativo)")
-</p>
 
 #### Configuração de assinaturas
 
@@ -853,10 +759,8 @@ personalizado;
 **Microsoft Office (Windows):** Configurações relativas a assinaturas em
 aplicações do Microsoft Office;
 
-<p align="center">
 ![Ilustração: Janela de configurações de assinaturas](Pictures/Autenticação.Gov_configuração_assinaturas.png
   "Janela de configurações de assinaturas")
-</p>
 
 #### Dados da aplicação
 
@@ -873,10 +777,8 @@ automaticamente e em seguida iniciado o processo de instalação.
 
 ### Ajuda
 
-<p align="center">
 ![Ilustração: Janela Acerca](Pictures/Autenticação.Gov_acerca.png
   "Janela Acerca")
-</p>
 
 A janela ajuda fornece um resumo das funcionalidades da
 aplicação, indica o caminho para chegar a este mesmo manual e a página
@@ -940,10 +842,8 @@ passos:
     selecionar a opção “Adicionar uma assinatura Digital”, conforme a
     imagem abaixo:
 
-<p align="center">
 ![Ilustração: Assinatura em Microsoft Office](Pictures/Autenticação.Gov_microsoft_office.png
   "Assinatura em Microsoft Office")
-</p>
 
 1.  Aparecerá uma mensagem específica da aplicação que está a utilizar
     (*Word*, *Excel* ou *Powerpoint*), clique em OK.
@@ -977,10 +877,8 @@ passos:
 
 1.  Aceder ao menu “Ficheiro” → “Assinaturas Digitais”
 
-    <p align="center">
     ![Ilustração: Assinatura em LibreOffice](Pictures/Autenticação.Gov_libre_office.png
       "Assinatura em LibreOffice")
-    </p>
 
 2.  Aparecerá a janela com as assinaturas digitais do documento. Caso
     não exista ainda nenhuma assinatura, a lista aparecerá vazia
@@ -994,10 +892,8 @@ passos:
 
 5.  O documento ficará assinado digitalmente.
 
-    <p align="center">
     ![Ilustração: Assinatura em LibreOffice](Pictures/Autenticação.Gov_libre_office.png
       "Assinatura em LibreOffice)
-    </p>
 
 ## Assinatura digital de email com *Microsoft Outlook*
 
@@ -1010,10 +906,8 @@ endereço de email. Desta forma, para que seja possível efetuar
 assinaturas digitais no *Outlook*, é assim necessário desativar esta
 validação através da alteração das configurações no sistema operativo.
 
-  <p align="center">
   ![Ilustração: Localização da opção para desativar a correspondência de e-mails nos certificado no Microsoft Outlook](Pictures/Autenticação.Gov_configuração_assinaturas.png
     "Localização da opção para desativar a correspondência de e-mails nos certificado no Microsoft Outlook")
-  </p>
 
 Para desativar a **correspondência com endereço de
 email do certificado digital**, deve seguir as instruções
@@ -1042,24 +936,18 @@ assinatura propriamente.
     digital está desativada, conforme instruções acima.
 2.  No Outlook, aceder ao menu “Ficheiro” → “Opções”
 
-    <p align="center">
     ![Ilustração: Assinatura em Outlook](Pictures/Autenticação.Gov_outlook.png
       "Assinatura em Outlook")
-    </p>
 
 3.  Clicar em “Centro de Confiança”
 
-    <p align="center">
     ![Ilustração: Assinatura em Outlook](Pictures/Autenticação.Gov_outlook2.png
       "Assinatura em Outlook")
-    </p>
 
 4.  Selecionar a secção “Definições do Centro de Fidedignidade”
 
-    <p align="center">
     ![Ilustração: Assinatura em Outlook](Pictures/Autenticação.Gov_outlook3.png
       "Assinatura em Outlook")
-    </p>
 
     Nesta secção, selecionar a opção “Adicionar a
     assinatura digital às mensagens a enviar” e clicar no botão
@@ -1068,18 +956,14 @@ assinatura propriamente.
 5.  Nesta secção, selecionar a opção “Adicionar a assinatura digital às mensagens
 a enviar” e clicar no botão “Definições”
 
-    <p align="center">
     ![Ilustração: Assinatura em Outlook](Pictures/Autenticação.Gov_outlook4.png
       "Assinatura em Outlook")
-    </p>
 
 6.  Adicione uma descrição a esta configuração, p. ex.: “Assinatura com Cartão de
 Cidadão” e clique no botão “Escolher” para selecionar o certificado.
 
-    <p align="center">
     ![Ilustração: Assinatura em Outlook: Escolha do certificado](Pictures/Autenticação.Gov_outlook5.png
       "Escolha do certificado")
-    </p>
 
     Adicione uma descrição a esta configuração, p. ex.:
     “Assinatura com Cartão de Cidadão” e clique no botão “Escolher” para
@@ -1095,10 +979,8 @@ assinado.
 9.  Ao clicar em “Enviar”, será solicitado o PIN de assinatura e o seu
     email será assinado e enviado.
 
-    <p align="center">
     ![Ilustração: Assinatura em Outlook: Escolha do certificado](Pictures/Autenticação.Gov_outlook6.png
       "Assinatura em Outlook: Escolha do certificado")
-    </p>
 
 ## Assinatura digital de email com Mozilla Thunderbird
 
@@ -1115,17 +997,13 @@ em Firefox
 1.  Abra a janela de escrita de email, clique na caixa de opções
     “Segurança” e clique em “Assinar digitalmente esta mensagem”
 
-    <p align="center">
     ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticação.Gov_thunderbird.png
       "Assinatura de E-mail com Mozilla Thunderbird")
-    </p>
 
     Será apresentada uma mensagem informando que é necessário configurar os certificados antes de utilizar as funcionalidades de segurança. Clique em “Sim”.
 
-    <p align="center">
     ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticação.Gov_thunderbird2.png
       "Assinatura de E-mail com Mozilla Thunderbird")
-    </p>
 
 3.  No ecrã seguinte, clique no botão “Dispositivos de
     Segurança”
@@ -1142,26 +1020,20 @@ em Firefox
     Após carregado o módulo, deverá ter uma entrada “CARTAO DE CIDADAO”
     conforme a imagem abaixo. Clique em OK.
 
-    <p align="center">
     ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticação.Gov_thunderbird3.png
       "Assinatura de E-mail com Mozilla Thunderbird")
-    </p>
 
 5.  Voltando ao ecrã anterior (“Configurações” → “Segurança”), clique
     agora na Opção “Selecionar”
 
-    <p align="center">
     ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticação.Gov_thunderbird4.png
       "Assinatura de E-mail com Mozilla Thunderbird")
-    </p>
 
 6.  Selecione o Certificado com a descrição “CARTAO DE CIDADAO:CITIZEN
     SIGNATURE CERTIFICATE”
 
-    <p align="center">
     ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticação.Gov_thunderbird5.png
       "Assinatura de E-mail com Mozilla Thunderbird")
-    </p>
 
 7.  Adicionar um certificado da PKI do Cartão de
     Cidadão. No gestor de certificados do *ThunderBird*, aceder ao
@@ -1175,10 +1047,8 @@ em Firefox
 2.  Clique na caixa de opções “Segurança” e clique em “Assinar
     digitalmente esta mensagem”. Esta opção ficará ativa.
 
-    <p align="center">
     ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticação.Gov_thunderbird6.png
       "Assinatura de E-mail com Mozilla Thunderbird")
-    </p>
 
 3.  Ao clicar em “Enviar”, será solicitado o PIN de assinatura e o seu email será assinado e enviado.
 
@@ -1207,10 +1077,8 @@ Para o *Mozilla Firefox* em qualquer Sistema Operativo é necessário
 efetuar algumas configurações tal como descrito na secção: [Assinatura
 digital de email com Mozilla Thunderbird](#anchor-40)
 
-<p align="center">
 ![Ilustração: Impossibilidade de assinatura](Pictures/Autenticação.Gov_web_impossibilidade.png
   "Impossibilidade de assinatura")
-</p>
 
 
 A **autenticação por certificado através do portal autenticação.gov.pt não exige a instalação do middleware mas sim do plugin **Autenticação.Gov**.
@@ -1255,10 +1123,8 @@ imagem seguinte) com o título “ Ficheiros Necessários”, na qual terá de
 selecionar a pasta “drivers” que esta na diretoria “
 C:\\Windows\\System32 “
 
-<p align="center">
 ![Ilustração: Impossibilidade de assinatura](Pictures/Autenticação.Gov_web_impossibilidade2.png
   "Impossibilidade de assinatura")
-</p>
 
 ## O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão
 
