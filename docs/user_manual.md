@@ -77,10 +77,9 @@ Nos casos dos sistemas operativos Linux, não é possível identificar a
 distribuição, deste modo será apresentada a lista das distribuições
 suportadas para a arquitetura detetada.
 
-A hiperligação “*Para instalar outras versões ou aceder aos Manuais de
-Utilização, carregue
-*[*aqui*](https://www.autenticacao.gov.pt/cc-software)” permite o acesso
-à lista de todos os pacotes de instalação dos sistemas operativos
+A hiperligação “[*Para instalar outras versões ou aceder aos Manuais de
+Utilização, carregue aqui*](https://www.autenticacao.gov.pt/cc-software)”
+permite o acesso à lista de todos os pacotes de instalação dos sistemas operativos
 suportados e manual de utilização (imagem na página seguinte).
 
 ![Ilustração: Opções de download](Pictures/Portal_Autenticacao.Gov_Download.png
@@ -118,7 +117,7 @@ sistema operativo utilizado.
 
 3.  Neste passo, poderá escolher a pasta onde deseja instalar o
     *middleware*. Se desejar alterar a pasta predefinida, carrege em
-    **Alterar **e, na janela que surgir, navegue até à pasta de destino
+    **Alterar** e na janela que surgir, navegue até à pasta de destino
     e carregue **OK**. Para continuar a instalação na pasta de destino,
     deverá premir o botão ***Seguinte***.
 4.  Deverá aparecer também um ecrã com a opção de **Instalar**, deverá
@@ -172,12 +171,12 @@ Instalação através do *Software Center*:
 #### Instalação através da linha de comandos:
 
 1.  Execute o comando de instalação de software no sistema, consoante o
-    gestor de pacotes utilizado pelo seu sistema.\
+    gestor de pacotes utilizado pelo seu sistema.
     Gestor de pacotes baseado em ficheiros .deb, execute o comando:
 
-  sudo dpkg -i pteid\*.deb
+        sudo dpkg -i pteid\*.deb
 
-  sudo rpm -ivh pteid\*.rpm
+        sudo rpm -ivh pteid\*.rpm
 
 1.  Após este passo, o *middleware* terá sido instalado no computador.
 2.  Aconselha-se a reiniciar o sistema para assegurar o bom
@@ -189,14 +188,14 @@ Instalação através do *Software Center*:
     instalação, deverá fazer duplo clique sobre este, surgindo um ecrã
     semelhante ao apresentado de seguida:
 
-    ![Ilustração: Instalação da aplicação em macOS](Pictures/Autenticação.Gov_Intalacao_MacOS.png
-      "Instalação da aplicação em macOS"){:.center}
+    ![Ilustração: Instalação da aplicação em MacOS](Pictures/Autenticação.Gov_Intalacao_MacOS.png
+      "Instalação da aplicação em MacOS"){:.center}
 
 2.  Escolher a opção ***Continuar***. Em seguida é
     necessário ler e aceitar os termos da licença do software.
 
-    ![Ilustração: Instalação da aplicação em macOS](Pictures/Autenticação.Gov_Intalacao_MacOS2.png
-      "Instalação da aplicação em macOS"){:.center}
+    ![Ilustração: Instalação da aplicação em MacOS](Pictures/Autenticação.Gov_Intalacao_MacOS2.png
+      "Instalação da aplicação em MacOS"){:.center}
 
 3.  A partir deste ponto no assistente deverá premir o botão
     ***Continuar*** até concluir a instalação.
@@ -230,7 +229,7 @@ sistema operativo utilizado.
 ### Remoção em Linux
 
 Algumas distribuições de Linux, disponibilizam um gestor de aplicações -
-“*Software Center*” - onde é possível remover o software através de um
+“**Software Center**” - onde é possível remover o software através de um
 assistente gráfico. Este ecrã poderá variar consoante a distribuição,
 neste manual apresenta-se as imagens da utilização do *Software Center*
 em Linux Caixa Mágica 22 LTS.
@@ -238,7 +237,7 @@ em Linux Caixa Mágica 22 LTS.
 Em alternativa, o *middleware* poderá também ser removido recorrendo à
 opção através da linha de comandos.
 
-#### Remoção através do *Software Center*
+#### Remoção através do Software Center
 
 Este ecrã varia consoante a distribuição que está a utilizar, no
 entanto, as opções são semelhantes em qualquer distribuição. Nos ecrãs
@@ -282,9 +281,9 @@ seguintes são apresentados os ecrãs utilizando Linux Caixa Mágica 22 LTS
     gestor de pacotes utilizado pelo seu sistema.\
     Gestor de pacotes baseado em ficheiros .deb, execute o comando:
 
-   sudo dpkg -r pteid-mw
+        sudo dpkg -r pteid-mw
 
-   sudo rpm -U pteid-mw
+        sudo rpm -U pteid-mw
 
 2.  Após este passo, o *middleware* terá sido removido do computador.
 
@@ -294,7 +293,7 @@ seguintes são apresentados os ecrãs utilizando Linux Caixa Mágica 22 LTS
 2.  Execute o seguinte comando para desinstalar todos os ficheiros do
     Middleware.
 
-   sudo /usr/local/bin/pteid\_uninstall.sh
+        sudo /usr/local/bin/pteid\_uninstall.sh
 
 # Aplicação Utilitária “Autenticação.Gov”
 
@@ -735,7 +734,7 @@ de proxy. Em redes onde o acesso à Internet só é possível através de
 servidor de *proxy* HTTP/S será necessário configurar as seguintes
 informações de acesso:** **
 
--   -   **Proxy de sistema (Windows e MacOs)**. Ao selecionar esta opção
+-   -   **Proxy de sistema (Windows e MacOS)**. Ao selecionar esta opção
         e se estiver definida uma configuração de *proxy* de sistema ou
         um *script* de auto configuração (*Proxy Autoconfig), *esta
         configuração será automaticamente utilizada pelo Middleware.
@@ -807,7 +806,7 @@ assinatura digital e autenticação nas seguintes aplicações:
 
 - Mozilla Thunderbird
 
-Autenticação:
+**Autenticação**:
 
 - Internet Explorer
 
@@ -824,9 +823,9 @@ ser utilizado.
 
 **Windows:** C:\\Windows\\System32\\pteidpkcs11.dll
 
-Linux: /usr/local/lib/libpteidpkcs11.so
+**Linux**: /usr/local/lib/libpteidpkcs11.so
 
-MAC OS: /usr/local/lib/libpteidpkcs11.dylib
+**MacOS**: /usr/local/lib/libpteidpkcs11.dylib
 
 ## Assinatura digital na suite Microsoft Office
 
@@ -845,12 +844,12 @@ passos:
 ![Ilustração: Assinatura em Microsoft Office](Pictures/Autenticação.Gov_microsoft_office.png
   "Assinatura em Microsoft Office"){:.center}
 
-1.  Aparecerá uma mensagem específica da aplicação que está a utilizar
+3.  Aparecerá uma mensagem específica da aplicação que está a utilizar
     (*Word*, *Excel* ou *Powerpoint*), clique em OK.
-2.  Na Caixa de diálogo “Assinar”, introduza o “Objetivo” da assinatura.
-3.  Clique em assinar e introduza o seu Pin de assinatura na respetiva
+4.  Na Caixa de diálogo “Assinar”, introduza o “Objetivo” da assinatura.
+5.  Clique em assinar e introduza o seu Pin de assinatura na respetiva
     janela.
-4.  O documento ficará assinado digitalmente, e ficará só de leitura de
+6.  O documento ficará assinado digitalmente, e ficará só de leitura de
     forma a impossibilitar alterações ao mesmo.
 
 Poderá encontrar informação mais detalhada no seguinte link:
@@ -892,8 +891,8 @@ passos:
 
 5.  O documento ficará assinado digitalmente.
 
-    ![Ilustração: Assinatura em LibreOffice](Pictures/Autenticação.Gov_libre_office.png
-      "Assinatura em LibreOffice){:.center}
+  ![Ilustração: Assinatura em LibreOffice](Pictures/Autenticação.Gov_libre_office2.png
+  "Assinatura em LibreOffice"){:.center}
 
 ## Assinatura digital de email com *Microsoft Outlook*
 
@@ -1081,7 +1080,7 @@ digital de email com Mozilla Thunderbird](#anchor-40)
   "Impossibilidade de assinatura"){:.center}
 
 
-A **autenticação por certificado através do portal autenticação.gov.pt não exige a instalação do middleware mas sim do plugin **Autenticação.Gov**.
+A autenticação por certificado através do portal autenticação.gov.pt não exige a instalação do middleware mas sim do plugin **Autenticação.Gov**.
 
 Para mais informação, consulte esta página de ajuda:
 
@@ -1120,8 +1119,7 @@ o menu de opções do ficheiro e selecionar a opção “Instalar”.
 
 Após a escolha desta opção, poderá aparecer uma janela de diálogo (Ver
 imagem seguinte) com o título “ Ficheiros Necessários”, na qual terá de
-selecionar a pasta “drivers” que esta na diretoria “
-C:\\Windows\\System32 “
+selecionar a pasta “drivers” que esta na diretoria “C:\\Windows\\System32“
 
 ![Ilustração: Impossibilidade de assinatura](Pictures/Autenticação.Gov_web_impossibilidade2.png
   "Impossibilidade de assinatura"){:.center}
@@ -1138,19 +1136,18 @@ C:\\Windows\\System32 “
 3.  Verifique se o serviço “Cartão Inteligente” (Smart Card) está
     iniciado:
 
-a\) Aceda ao Painel de Controlo | Ferramentas de Administração
+    a\) Aceda ao Painel de Controlo | Ferramentas de Administração
 
-b\) Clique em Serviços
+    b\) Clique em Serviços
 
-c\) Verifique se o serviço “Cartão Inteligente” (Smart Card) está
-iniciado (Started). Caso não esteja, clique com o botão direito no
-serviço e clique em Start.
+    c\) Verifique se o serviço “Cartão Inteligente” (Smart Card) está iniciado (Started).
+    Caso não esteja, clique com o botão direito no serviço e clique em Start.
 
-d\) Desligue o leitor do computador
+    d\) Desligue o leitor do computador
 
-e\) Encerre a aplicação do Cartão de Cidadão
+    e\) Encerre a aplicação do Cartão de Cidadão
 
-f\) Volte a inserir o leitor e abra novamente a aplicação.
+    f\) Volte a inserir o leitor e abra novamente a aplicação.
 
 ### Linux
 
@@ -1160,18 +1157,18 @@ f\) Volte a inserir o leitor e abra novamente a aplicação.
     instalados (consulte a documentação do leitor)
 3.  Verifique se o pcsc daemon está instalado e em execução:
 
-a\) Numa janela de terminal execute o seguinte comando:
+    a\) Numa janela de terminal execute o seguinte comando:
 
- *ps aux*
+        ps aux
 
-b\) Procure uma referência ao processo pcscd
+    b\) Procure uma referência ao processo pcscd
 
-c\) Caso não esteja listado por favor inicie o serviço através do
+    c\) Caso não esteja listado por favor inicie o serviço através do
 comando:
 
- * sudo /etc/init.d/pcscd start*
+        sudo /etc/init.d/pcscd start
 
-d\) Caso obtenha uma mensagem de erro é possível que o daemon não esteja
+    d\) Caso obtenha uma mensagem de erro é possível que o daemon não esteja
 instalado. Utilize o seu gestor de pacotes para instalar o pcscd (por
 vezes já vem incluído no pacote pcsc-lite)
 
@@ -1200,22 +1197,22 @@ recomenda-se testar desabilitar a aceleração gráfica por hardware.
 
 O procedimento para desabilitar a aceleração gráfica por hardware
 consiste em adicionar às variáveis de ambiente do sistema a variável
-QT\_OPENGL com o valor software.
+**QT_OPENGL** com o valor **software**.
 
 Em alternativa é possivel configurar essa opção usando as configurações
-do software Autenticação.gov via chave de registo em , em:
+do software Autenticação.gov via chave de registo em, em:
 
 HKEY\_CURRENT\_USER\\Software\\PTEID\\configuretool\\graphics\_accelaration
 
-graphics\_accelaration = 1 // Aceleração gráfica activada
+    graphics_accelaration = 1 // Aceleração gráfica activada
 
-graphics\_accelaration = 0 // Aceleração gráfica desactivada
+    graphics_accelaration = 0 // Aceleração gráfica desactivada
 
 Em Linux, no ficheiro \~/.config/pteid.conf na secção “configuretool”
 
-graphics\_accelaration = 1 // Aceleração gráfica activada
+    graphics_accelaration = 1 // Aceleração gráfica activada
 
-graphics\_accelaration = 0 // Aceleração gráfica desactivada
+    graphics_accelaration = 0 // Aceleração gráfica desactivada
 
 # Instruções de configuração em ambientes empresariais
 
@@ -1234,9 +1231,9 @@ utilizadores da máquina após a instalação do software.
 
 **Nota:** Não se devem nunca remover ou alterar os seguintes registos:
 
-HKLM\\Software\\PTEID\\general\\install\_dirname
+    HKLM\\Software\\PTEID\\general\\install\_dirname
 
-HKLM\\Software\\PTEID\\general\\certs\_dir
+    HKLM\\Software\\PTEID\\general\\certs\_dir
 
 Todas as chaves listadas na tabela seguinte devem ser criadas como
 sub-chaves da chave raiz:
@@ -1261,11 +1258,11 @@ As configurações do software Autenticação.gov são guardadas em Linux e
 MacOS são efectuadas num ficheiro de configuração. Este ficheiro de
 configuração está localizado no seguinte caminho:
 
-Linux: \$HOME/.config/pteid.conf
+**Linux:** $HOME/.config/pteid.conf
 
-MacOS: \$HOME/Library/Preferences/pteid.conf
+**MacOS:** $HOME/Library/Preferences/pteid.conf
 
-onde \$HOME indica a directoria Home do utilizador de sistema.
+onde $HOME indica a directoria Home do utilizador de sistema.
 
 O formato do ficheiro é do tipo .conf com a respectiva secção de
 configuração a ser indicada por uma tag. Os valores que se podem
@@ -1282,8 +1279,7 @@ seguinte procedimento (com permissões de administrador):
     ao “Local Computer” através da ferramenta MMC ou através do seguinte
     comando:
 
-    *****certmgr -add AMA\_codesigning.cer -c -s -r localMachine
-    TrustedPublisher*****
+        certmgr -add AMA\_codesigning.cer -c -s -r localMachine TrustedPublisher
 
     O certificado é fornecido como anexo a este documento PDF ou em
     alternativa pode ser obtido a partir do instalador MSI visualizando
@@ -1301,7 +1297,7 @@ seguinte procedimento (com permissões de administrador):
 3.  Tendo já obtido o instalador em formato MSI podemos instalar o
     software sem interacção com o utilizador usando o seguinte comando:
 
-    msiexec /i Autenticacao.gov-xxx.msi /qn
+        msiexec /i Autenticacao.gov-xxx.msi /qn
 
     Se se pretende evitar o reinício do sistema após a instalação deve
     ser adicionado ao comando o parâmetro */norestart*
@@ -1318,3 +1314,18 @@ nestes ambientes uma reconfiguração de rede ou o uso de uma proxy aberta
 ou com autenticação Basic.
 
 # Notas do Utilizador
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+_________________
+
+Desenvolvido pelo Estado Português<br>
+(Agência para a Modernização Administrativa, IP e Instituto dos Registos e do Notariado, IP)<br>
+© Copyright (C) 2010-2019
