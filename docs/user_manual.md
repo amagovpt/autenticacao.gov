@@ -103,7 +103,7 @@ sistema operativo utilizado.
 
     ![Ilustração: Instalação da aplicação em Windows](Pictures/Autenticação.Gov_Intalacao.png "Instalação da aplicação em Windows"){:.center}
 
-2.  Neste ecrã, deverá premir o botão ***Seguinte*** e marcar a caixa
+2.  Neste ecrã, deverá premir o botão **Seguinte** e marcar a caixa
     (com um certo, clicando no botão esquerdo do rato), para
     aceitar os termos e condições da aplicação.
 
@@ -113,7 +113,7 @@ sistema operativo utilizado.
     *middleware*. Se desejar alterar a pasta predefinida, carrege em
     **Alterar** e na janela que surgir, navegue até à pasta de destino
     e carregue **OK**. Para continuar a instalação na pasta de destino,
-    deverá premir o botão ***Seguinte***.
+    deverá premir o botão **Seguinte**.
 4.  Deverá aparecer também um ecrã com a opção de **Instalar**, deverá
     premir esse botão.
 5.  Após a conclusão deste assistente, este solicitará a reinicialização
@@ -146,7 +146,7 @@ Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linh
 
 ![Ilustração: Instalação da aplicação em Linux](Pictures/Autenticação.Gov_Intalacao_Linux2.png "Instalação da aplicação em Linux"){:.center}
 
-2.  Deverá premir o botão ***Instalar*** para prosseguir.
+2.  Deverá premir o botão **Instalar** para prosseguir.
 3.  Será pedida a introdução da sua senha de utilizador. (É necessário
     que tenha privilégios de administração da máquina)
 
@@ -182,13 +182,13 @@ Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linh
 
     ![Ilustração: Instalação da aplicação em MacOS](Pictures/Autenticação.Gov_Intalacao_MacOS.png "Instalação da aplicação em MacOS"){:.center}
 
-2.  Escolher a opção ***Continuar***. Em seguida é
+2.  Escolher a opção **Continuar**. Em seguida é
     necessário ler e aceitar os termos da licença do software.
 
     ![Ilustração: Instalação da aplicação em MacOS](Pictures/Autenticação.Gov_Intalacao_MacOS2.png "Instalação da aplicação em MacOS"){:.center}
 
 3.  A partir deste ponto no assistente deverá premir o botão
-    ***Continuar*** até concluir a instalação.
+    **Continuar** até concluir a instalação.
 4.  Após a conclusão deste assistente, o *middleware* estará instalado
     no computador. Neste momento a aplicação utilitária
     “Autenticacão.Gov” já estará disponível na pasta Aplicações /
@@ -235,7 +235,7 @@ seguintes são apresentados os ecrãs utilizando Linux Caixa Mágica 22 LTS
 
     ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux.png "Remoção da aplicação em Linux"){:.center}
 
-2.  Prima o botão ***Instalado*** na barra superior.
+2.  Prima o botão **Instalado** na barra superior.
 
     ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux2.png "Remoção da aplicação em Linux"){:.center}
 
@@ -245,7 +245,7 @@ seguintes são apresentados os ecrãs utilizando Linux Caixa Mágica 22 LTS
 
     ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux3.png "Remoção da aplicação em Linux"){:.center}
 
-4.  Selecione o pacote “Cartão de Cidadão” e prima o botão ***Remover***.
+4.  Selecione o pacote “Cartão de Cidadão” e prima o botão **Remover**.
 
     ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux4.png "Remoção da aplicação em Linux"){:.center}
 
