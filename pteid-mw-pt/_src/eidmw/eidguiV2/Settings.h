@@ -61,6 +61,7 @@ public:
         , m_bShowAnimations(false)
         , m_bGraphicsAccel(false)
         , m_bUseCustomSignature(false)
+        , m_bPinpadEnabled(false)
         , m_bStartMinimized(false)
         , m_bStartAutoupdate(false)
         , m_bDebugMode(false)
@@ -73,8 +74,6 @@ public:
         , m_bRemoveCert(false)
         , m_strExePath("")
         , m_test_mode(false)
-        , m_bPinpadEnabled(false)
-
     {
         //----------------------------------------------------------
         // Check always what is set in the registry
