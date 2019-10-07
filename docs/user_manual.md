@@ -144,17 +144,16 @@ Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linh
     seguintes são apresentados os ecrãs utilizando Linux Caixa Mágica 22
     LTS.
 
-![Ilustração: Instalação da aplicação em Linux](Pictures/Autenticação.Gov_Intalacao_Linux2.png "Instalação da aplicação em Linux"){:.center}
-
 2.  Deverá premir o botão **Instalar** para prosseguir.
-3.  Será pedida a introdução da sua senha de utilizador. (É necessário
+   ![Ilustração: Instalação da aplicação em Linux](Pictures/Autenticação.Gov_Intalacao_Linux2.png "Instalação da aplicação em Linux"){:.center}
+4.  Será pedida a introdução da sua senha de utilizador. (É necessário
     que tenha privilégios de administração da máquina)
 
-![Ilustração: Instalação_Linux](Pictures/Autenticação.Gov_Intalacao_Linux3.png "Instalação_Linux"){:.center}
+    ![Ilustração: Instalação_Linux](Pictures/Autenticação.Gov_Intalacao_Linux3.png "Instalação_Linux"){:.center}
 
-4.  Após a conclusão do passo acima, a instalação do *middleware* está
+5.  Após a conclusão do passo acima, a instalação do *middleware* está
     terminada.
-5.  Recomenda-se a reinicialização do sistema para assegurar o bom
+6.  Recomenda-se a reinicialização do sistema para assegurar o bom
     funcionamento do *middleware*.
 
 #### Instalação através da linha de comandos:
@@ -719,7 +718,7 @@ assinatura digital e autenticação nas seguintes aplicações:
 **Autenticação:**
 
 - [Internet Explorer](#autentica%c3%a7%c3%a3o-em-portais-web)
-- Mozilla Firefox
+- [Mozilla Firefox](#assinatura-digital-de-email-com-mozilla-thunderbird)
 
 Além das aplicações acima referidas, o *middleware* disponibiliza
 suporte criptográfico às aplicações com interface \#PKCS11 ou suporte
