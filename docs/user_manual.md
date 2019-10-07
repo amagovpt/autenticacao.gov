@@ -70,19 +70,19 @@ sistema operativo e na área de conteúdos do lado direito será
 apresentada uma hiperligação que permite efetuar o descarregamento do
 pacote de instalação adequado ao seu sistema.
 
-Nos casos dos sistemas operativos Linux, não é possível identificar a
+Nos casos dos sistemas operativos *Linux*, não é possível identificar a
 distribuição, deste modo será apresentada a lista das distribuições
 suportadas para a arquitetura detetada.
 
-A hiperligação “[*Para instalar outras versões ou aceder aos Manuais de
-Utilização, carregue aqui*](https://www.autenticacao.gov.pt/cc-software)”
+A hiperligação “*Para instalar outras versões ou aceder aos Manuais de
+Utilização, carregue* [*aqui*](https://www.autenticacao.gov.pt/cc-software)”
 permite o acesso à lista de todos os pacotes de instalação dos sistemas operativos
 suportados e manual de utilização.
 
 ![Ilustração: Opções de download](Pictures/Portal_Autenticacao.Gov_Download.png "Opções de download"){:.center}
 
 Após efetuado o download da respetiva versão, avance
-para o ponto seguinte – Instalação do middleware.
+para o ponto seguinte – Instalação do *middleware*.
 
 ## Instalação do *middleware*
 
@@ -409,7 +409,7 @@ seguintes passos:
 
       
 
-    - **A morada foi actualizada com sucesso:**
+    - **A morada foi atualizada com sucesso:**
       - Caso a operação tenha sucesso, uma mensagem de Confirmação de alteração de morada com sucesso será mostrada.
 
         ![Ilustração: Sucesso na alteração de morada](Pictures/Autenticação.Gov_Alteracao_morada_sucesso.png "Sucesso na alteração de morada"){:.center}
