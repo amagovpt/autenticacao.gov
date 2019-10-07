@@ -118,7 +118,7 @@ sistema operativo utilizado.
     premir esse botão.
 5.  Após a conclusão deste assistente, este solicitará a reinicialização
     do computador.
-6.  No próximo arranque do Windows a instalação do *middleware* estará
+6.  No próximo arranque do *Windows* a instalação do *middleware* estará
     finalizada.
 
 ### Instalação em Linux
