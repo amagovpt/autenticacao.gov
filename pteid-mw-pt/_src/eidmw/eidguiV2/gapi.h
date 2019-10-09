@@ -178,7 +178,6 @@ private:
 
 class GAPI : public QObject
 {
-    #define SCAP_SERVICE_ERROR_CODE -10
     #define TIMERREADERLIST 5000
     Q_OBJECT
     Q_PROPERTY(QMap<IDInfoKey, QString> m_data
