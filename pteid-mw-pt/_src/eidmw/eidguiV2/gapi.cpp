@@ -574,10 +574,13 @@ void GAPI::showChangeAddressDialog(long code)
         error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CONNECTION_ERROR") + "<br><br>" +
             tr("STR_PROXY_UNSUPPORTED");
         break;
-
-    case 1121:
-    case 1122:
+    case SAM_PROCESS_NUMBER_ERROR_1:
+    case SAM_PROCESS_NUMBER_ERROR_2:
         error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CHANGE_ADDRESS_CHECK_PROCESS_NUMBER");
+        sam_error_code = code;
+        break;
+    case SAM_PROCESS_EXPIRED_ERROR:
+        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CHANGE_ADDRESS_CHECK_PROCESS_EXPIRED");
         sam_error_code = code;
         break;
     case EIDMW_SAM_UNCONFIRMED_CHANGE:
@@ -601,7 +604,7 @@ void GAPI::showChangeAddressDialog(long code)
 
     if (code == EIDMW_SAM_UNCONFIRMED_CHANGE){
         error_msg += "<br><br>" + support_string_wait_5min;
-    } else if (code != 0){
+    } else if (code != 0 && code != SAM_PROCESS_EXPIRED_ERROR){
         error_msg += "<br><br>" + support_string;
     }
 
@@ -968,7 +971,7 @@ void GAPI::cancelCMDSign() {
 }
 void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
     QString outputFile, int page, double coord_x, double coord_y,
-    QString reason, QString location, double isTimestamp, double isSmall)
+    QString reason, QString location, bool isTimestamp, bool isSmall)
 {
     /*qDebug() << "signOpenCMD! MobileNumber = " << mobileNumber << " secret_code = " << secret_code <<
     " loadedFilePaths = " << loadedFilePaths <<

@@ -36,7 +36,7 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
    ```bash
    sudo apt install libpcsclite-dev libpoppler-qt5-dev libzip-dev libopenjp2-7-dev libpng-dev openjdk-8-jdk qtbase5-dev qt5-qmake qtbase5-private-dev qt5-default qtdeclarative5-dev qtquickcontrols2-5-dev qml-module-qtquick-controls2 libssl1.0-dev libxerces-c-dev libxml-security-c-dev swig libcurl4-nss-dev libnsspem
    ```
-
+   
 2. Clonar o repositório
 
    ```bash
@@ -58,6 +58,9 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
    ```
 
    A aplicação utilitária será instalada em: /usr/local/bin/eidguiV2
+   
+   As dependências para a execução do Middleware na distribuição Ubuntu 18.04 estão disponíveis em "Depends" no seguinte URL: [Dependências](pteid-mw-pt/_src/eidmw/debian/control)
+   
 
 ### Windows
 

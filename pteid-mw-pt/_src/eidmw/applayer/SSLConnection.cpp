@@ -425,14 +425,14 @@ SignedChallengeResponse * SSLConnection::do_SAM_2ndpost(char *challenge, char *k
 	MWLOG(LEV_DEBUG, MOD_APL, L"SSLConnection: running do_SAM_2ndpost()");
 
 #ifdef _WIN32
-	int buf_len = _scprintf(challenge_format, challenge, kicc);
-	challenge_params = (char *) malloc(buf_len + 1);
+	int buf_len = _scprintf(challenge_format, challenge, kicc) + 1;
+	challenge_params = (char *) malloc(buf_len);
+	snprintf(challenge_params, buf_len, challenge_format, challenge, kicc);
 #else
-	int buf_len = snprintf(0, 0, challenge_format, challenge, kicc);
-	challenge_params = (char *) malloc(buf_len + 1);
+	int ret = asprintf(&challenge_params, challenge_format, challenge, kicc);
+	MWLOG(LEV_DEBUG, MOD_APL, "challenge_params contains string of len=%d", ret);
 #endif
 
-	sprintf(challenge_params, challenge_format, challenge, kicc);
 	endpoint = ENDPOINT_07;
 
 	MWLOG(LEV_DEBUG, MOD_APL, "POSTing request: %s", challenge_params);
@@ -669,15 +669,14 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 		int buf_len = _scprintf(dh_params_template,secretCode, process, p->dh_p, p->dh_q, p->dh_g, p->cvc_ca_public_key,
 			p->card_auth_public_key, p->certificateChain, p->version);
 		post_dhparams = (char *) malloc(buf_len +2);
-#else
-		int buf_len = snprintf(0, 0, dh_params_template, secretCode, process, p->dh_p, p->dh_q, p->dh_g, p->cvc_ca_public_key,
-			p->card_auth_public_key, p->certificateChain, p->version);
-		post_dhparams = (char *) malloc(buf_len +1);
-
-#endif
 		sprintf(post_dhparams, dh_params_template,
 			secretCode, process, p->dh_p, p->dh_q, p->dh_g, p->cvc_ca_public_key,
 			p->card_auth_public_key, p->certificateChain, p->version);
+#else
+		int ret = asprintf(&post_dhparams, dh_params_template, secretCode, process, p->dh_p, p->dh_q, p->dh_g, p->cvc_ca_public_key,
+			p->card_auth_public_key, p->certificateChain, p->version);
+		MWLOG(LEV_DEBUG, MOD_APL, "post_dhparams contains string of len=%d", ret);
+#endif
 
 		endpoint = "/changeaddress";
 	}

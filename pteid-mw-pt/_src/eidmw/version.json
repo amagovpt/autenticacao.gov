@@ -1,7 +1,7 @@
 {
     "distributions": {
         "ubuntu18": {
-            "latestVersion": "3.0.19",
+            "latestVersion": "3.0.20",
             "package": "10179/11962/Autenticacao.gov_Ubuntu_18_x64.deb"
         },
         "windows32": {
@@ -29,11 +29,20 @@
             "package": "10179/11962/Autenticacao.gov_OpenSUSE_x64.rpm"
         },
         "osx": {
-            "latestVersion": "3.0.19",
+            "latestVersion": "3.0.20",
             "package": "10179/11955/Autenticacao.gov_MacOS.pkg"
         }
     },
     "versions": [
+		{
+            "version": "3.0.20",
+            "date": "2019-10-01",
+            "release_notes": [
+                "Correção na funcionalidade de confirmação de morada",
+				"Atributo data/hora do computador na assinatura PDF passa a incluir indicação do fuso horário",
+				"Correção na assinatura CMD - suporte melhorado para nomes de ficheiros com caracteres UTF-8"
+            ]
+        },
         {
             "version": "3.0.19",
             "date": "2019-08-26",

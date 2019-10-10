@@ -19,6 +19,7 @@ class ScapSettings
     #define SCAP_ATTRIBUTES_EXPIRED     401
     #define SCAP_ZERO_ATTRIBUTES        402
     #define SCAP_ATTRIBUTES_NOT_VALID   403
+    #define SCAP_SERVICE_ERROR_CODE     404
 
 public:
     //------------------------------------------------------

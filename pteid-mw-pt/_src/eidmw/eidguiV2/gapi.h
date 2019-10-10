@@ -178,7 +178,6 @@ private:
 
 class GAPI : public QObject
 {
-    #define SCAP_SERVICE_ERROR_CODE -10
     #define TIMERREADERLIST 5000
     Q_OBJECT
     Q_PROPERTY(QMap<IDInfoKey, QString> m_data
@@ -319,7 +318,7 @@ public slots:
     void cancelCMDSign();
     void signOpenCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePath,
                   QString outputFile, int page, double coord_x, double coord_y, QString reason, QString location,
-                 double isTimestamp, double isSmall);
+                 bool isTimestamp, bool isSmall);
     void signCloseCMD(QString sms_token, QList<int> attribute_list);
     void doOpenSignCMD(CMDSignature *cmd_signature, CmdParams &cmdParams, SignParams &signParams);
     void doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token);

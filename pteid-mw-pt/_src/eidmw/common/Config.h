@@ -144,7 +144,6 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GENERAL_SCAP_PORT     L"scap_port"
 #define EIDMW_CNF_GENERAL_SCAP_APIKEY   L"scap_apikey"
 #define EIDMW_CNF_GENERAL_SCAP_APPID    L"scap_appid"
-#define EIDMW_CNF_GENERAL_SHOW_JAVA_APPS L"show_java_apps"
 #define EIDMW_CNF_GENERAL_CMD_HOST      L"cmd_host"
 #define EIDMW_CNF_GENERAL_CMD_APPID     L"cmd_appid"
 #define EIDMW_CNF_GENERAL_CMD_USERID    L"cmd_userid"
@@ -302,7 +301,6 @@ public:
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_BUILDNBR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_OTP_SERVER;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER;
-    static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_SHOW_JAVA_APPS;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_PINPAD_ENABLED;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_HOST;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_PORT;

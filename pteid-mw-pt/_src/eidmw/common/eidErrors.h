@@ -224,6 +224,11 @@
 #define EIDMW_SAM_PROXY_AUTH_FAILED     0xe1d01d12
 #define EIDMW_SAM_PROXY_UNSUPPORTED     0xe1d01d13
 
+// SAM error codes
+#define SAM_PROCESS_NUMBER_ERROR_1      1121
+#define SAM_PROCESS_NUMBER_ERROR_2      1122
+#define SAM_PROCESS_EXPIRED_ERROR       1123
+
 //Errors related to CVC authentication and Secure Messaging
 #define EIDMW_ERR_CVC_GENERIC_ERROR       0xe1d01f01
 #define EIDMW_ERR_CVC_PERMISSION_DENIED   0xe1d01f02

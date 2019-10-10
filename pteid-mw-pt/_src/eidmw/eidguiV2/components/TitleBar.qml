@@ -113,9 +113,7 @@ Item {
                 rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
                 verticalCenter: parent.verticalCenter
             }
-            source: mouseAreaFullScreentButton.containsMouse ?
-                        "../images/titleBar/maximize_hover.png" :
-                        "../images/titleBar/maximize.png"
+            source: getFullScreentButtonIcon() 
             MouseArea {
                 id: mouseAreaFullScreentButton
                 anchors.fill: parent
@@ -177,6 +175,19 @@ Item {
             mainWindow.showMaximized()
         }
     }
+
+    function getFullScreentButtonIcon(){
+        if(mainWindow.visibility === Window.Maximized ){
+            return mouseAreaFullScreentButton.containsMouse ?
+                    "../images/titleBar/restore_hover.png" :
+                    "../images/titleBar/restore.png"
+        }else{
+            return mouseAreaFullScreentButton.containsMouse ?
+                    "../images/titleBar/maximize_hover.png" :
+                    "../images/titleBar/maximize.png"
+        }        
+    }
+
     function quitApplication() {
         //mainWindow.hide()
         gapi.quitApplication()

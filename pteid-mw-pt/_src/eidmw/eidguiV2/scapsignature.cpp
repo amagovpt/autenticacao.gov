@@ -120,19 +120,22 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
     if (successful == GAPI::ScapSucess) {
         parent->signCMDFinished(ERR_NONE);
         parent->signalCloseCMDSucess();
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui", "SCAP CMD ScapSucess");
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "ScapSignature",
+                  "SCAP CMD ScapSucess");
     }
     else if (successful == GAPI::ScapTimeOutError) {
-        qDebug() << "Error in SCAP service Timeout!";
+        qDebug() << "Error in SCAP service Timeout with CMD service!";
         parent->signalSCAPServiceTimeout();
         parent->signCMDFinished(SCAP_SERVICE_ERROR_CODE);
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "SCAP CMD ScapTimeOutError:%d",successful);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                  "SCAP CMD Error. ScapTimeOutError");
     }
     else {
         qDebug() << "Error in SCAP Signature with CMD service!";
         parent->signalSCAPServiceFail(successful);
         parent->signCMDFinished(SCAP_SERVICE_ERROR_CODE);
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "SCAP CMD Error:%d",successful);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                  "SCAP CMD Error. ScapPdfSignResult = %d",successful);
     }
 
     parent->signalUpdateProgressBar(100);
@@ -202,22 +205,26 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
                         useCustomImage, m_jpeg_scaled_data);
             if (successful == GAPI::ScapSucess) {
                 parent->signalPdfSignSucess(parent->SignMessageOK);
-                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "ScapSignature", "SCAP CC ScapSuccess");
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "ScapSignature",
+                          "SCAP CC ScapSuccess");
             }
             else if (successful == GAPI::ScapTimeOutError) {
                 qDebug() << "Error in SCAP service Timeout!";
                 parent->signalSCAPServiceTimeout();
-                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SCAP CC ScapTimeOutError:%d",successful);
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                          "SCAP CC ScapTimeOutError");
             }
             else {
                 qDebug() << "Error in SCAP Signature service!";
                 parent->signalSCAPServiceFail(successful);
-                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SCAP CC Error:%d",successful);
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                          "SCAP CC Error. ScapPdfSignResult = %d",successful);
             }
         }
         else {
             parent->signalSCAPServiceFail(GAPI::ScapGenericError);
-            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SCAP CC ScapGenericError");
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                      "SCAP CC Card Generic Error");
         }
                 
     }
