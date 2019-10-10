@@ -457,6 +457,12 @@ seguintes passos:
 
 4.  Verifique o resultado da operação e siga as instruções:
 
+    - **A morada foi atualizada com sucesso:**
+
+      Caso a operação tenha sucesso, uma mensagem de Confirmação de alteração de morada com sucesso será mostrada.
+
+        ![Ilustração: Sucesso na alteração de morada](Pictures/Autenticação.Gov_Alteracao_morada_sucesso.png "Sucesso na alteração de morada"){:.center}
+
     - **Erro. Ocorreu um erro durante a alteração de morada:**
 
       Caso a aplicação não consiga efetuar a confirmação da alteração de morada será mostrada uma mensagem de erro e respetivo código, que deverá anotar.
@@ -464,21 +470,22 @@ seguintes passos:
         Nas seguintes mensagens de erro:
 
       - **Processo de alteração de morada não foi concluído**.
+
+        Caso a aplicação não consiga efetuar a confirmação da alteração de morada será mostrada uma mensagem de erro, que deverá anotar. Deverá aguardar cerca de 5 minutos e tentar novamente e, caso o erro persista, contactar a Linha Cartão de Cidadão através do número 211 950 500 ou do E-mail: cartaodecidadao@irn.mj.pt . (Tenha consigo as mensagens de erro e o número de processo de Alteração de Morada)
+
         ![Ilustração: Erro na alteração de morada](Pictures/Autenticação.Gov_Alteracao_morada_erro_n_confirmada.png "Erro na alteração de morada"){:.center}
 
-      - **Erro na comunicação**.
-      - **Verifique se introduziu corretamente o número de processo e código de confirmação**.
-      ![Ilustração: Erro na alteração de morada](Pictures/Autenticação.Gov_Alteracao_morada_erro.png "Erro na alteração de morada"){:.center}
-      - **Verifique que tem o certificado de autenticação válido**.
+      - **Erro na comunicação.**
 
-      E em outras mensagens, sem descrição do erro, deverá tentar novamente e, caso o erro persista, contactar a Linha Cartão de Cidadão através do  número **211 950 500** ou do E-mail: **cartaodecidadao@irn.mj.pt**. (Tenha consigo as mensagens de erro e respectivos códigos de erro e o número de processo de Alteração de Morada).
+      - **Verifique se introduziu corretamente o número de processo e código de confirmação.**
 
+      - **Verifique que tem o certificado de autenticação válido.**
 
+        E em outras mensagens, sem descrição do erro, deverá tentar novamente seguindo as instruções e, caso o erro persista, contactar a Linha Cartão de Cidadão através do  número **211 950 500** ou do E-mail: **cartaodecidadao@irn.mj.pt**. (Tenha consigo as mensagens de erro e respectivos códigos de erro e o número de processo de Alteração de Morada).
 
-    - **A morada foi atualizada com sucesso:**
-      - Caso a operação tenha sucesso, uma mensagem de Confirmação de alteração de morada com sucesso será mostrada.
+        A imagem seguinte é um exemplo da mensagem de erro.
 
-        ![Ilustração: Sucesso na alteração de morada](Pictures/Autenticação.Gov_Alteracao_morada_sucesso.png "Sucesso na alteração de morada"){:.center}
+        ![Ilustração: Erro na alteração de morada](Pictures/Autenticação.Gov_Alteracao_morada_erro.png "Erro na alteração de morada"){:.center}
 
 #### Notas
 
@@ -713,6 +720,13 @@ novas atualizações quando se inicia a aplicação.
 aplicação. Este modo eleva o nível de detalhe do *log* para *debug*, o
 que, em caso de problemas com a aplicação, pode ajudar a equipa de
 suporte na resolução do problema.
+
+  Os ficheiros de log por omissão são criados nas seguintes localizações e tem
+  como nome o prefixo .PTEID:
+
+      Windows: C:\Program Files\Portugal Identity Card\log\
+      MacOS: Directoria Home do utilizador i.e.: /Users/Utilizador/
+      Linux: Directoria Home do utilizador i.e.: /home/Utilizador/
 
 - **Aceleração gráfica**: Permite ativar ou desativar a aceleração gráfica na
 aplicação.
@@ -1110,23 +1124,29 @@ Para mais informações consultar a página de ajuda:
 
 ## Problemas com placas gráficas integradas em *Windows*
 
-No caso da aplicação não arrancar ou existirem problemas gráficos, recomenda-se testar desabilitar a aceleração gráfica por hardware.
+No caso de existirem problemas gráficos, recomenda-se testar desabilitar a aceleração gráfica por hardware. No menu Definições / Configuração da aplicação / Aceleração é possivel ativar ou desativar a aceleração gráfica na aplicação.
 
-O procedimento para desabilitar a aceleração gráfica por hardware consiste em adicionar às variáveis de ambiente do sistema a variável **QT_OPENGL** com o valor **software**.
+No caso da aplicação não arrancar, o procedimento para desabilitar a aceleração gráfica por hardware consiste em adicionar às variáveis de ambiente do sistema a variável **QT_OPENGL** com o valor **software**. Em alternativa é possivel configurar essa opção usando as configurações do software Autenticação.gov.
 
-Em alternativa é possivel configurar essa opção usando as configurações do software Autenticação.gov via chave de registo em, em:
+Em **Windows** na chave de registo:
+HKEY_CURRENT_USER\Software\PTEID\configuretool\graphics_accelaration
 
-HKEY\_CURRENT\_USER\\Software\\PTEID\\configuretool\\graphics\_accelaration
+    graphics_accelaration = 1 // Aceleração gráfica activada
+
+    graphics_accelaration = 0 // Aceleração gráfica desactivada
+
+Em **Linux**, no ficheiro $HOME/.config/pteid.conf na secção “configuretool”
 
     graphics_accelaration = 1 // Aceleração gráfica activada
 
     graphics_accelaration = 0 // Aceleração gráfica desactivada
 
-Em Linux, no ficheiro \~/.config/pteid.conf na secção “configuretool”
+Em **MacOS**, no ficheiro $HOME/Library/Preferences/pteid.conf na secção “configuretool”
 
-    graphics_accelaration = 1 // Aceleração gráfica activada
+        graphics_accelaration = 1 // Aceleração gráfica activada
 
-    graphics_accelaration = 0 // Aceleração gráfica desactivada
+        graphics_accelaration = 0 // Aceleração gráfica desactivada
+
 
 # Instruções de configuração em ambientes empresariais
 
@@ -1185,7 +1205,7 @@ onde **$HOME** indica a directoria Home do utilizador de sistema.
 O formato do ficheiro é do tipo .conf com a respectiva secção de
 configuração a ser indicada por uma tag. Os valores que se podem
 especificar em cada tag são os que foram indicados na tabela anterior
-referente às chaves de registo.
+referente às [Configurações através de chaves de registo Windows](#configura%c3%a7%c3%b5es-atrav%c3%a9s-de-chaves-de-registo-windows).
 
 ## Instalação automatizada em ambientes Windows
 
@@ -1219,17 +1239,25 @@ seguinte procedimento (com permissões de administrador):
     Se se pretende evitar o reinício do sistema após a instalação deve
     ser adicionado ao comando o parâmetro */norestart* .
 
-## Informação sobre servidores de Proxy em *Windows*
+## Informação sobre servidores de Proxy
+
+### Configuração em *Windows*
+
+Se a máquina em questão tiver um proxy correctamente configurado no Windows, seja por
+IP/Hostname + Porto ou por script de autoconfiguração (PAC file) não é necessária qualquer
+configuração no MW.
 
 O software tem neste momento uma limitação com alguns tipos de
 servidores de proxy designadamente com autenticação NTLM ou Kerberos.
-
 Para utilizar as funcionalidades que exigem acesso à Internet
 (confirmação de morada, validação de certificados, assinatura com
 atributos profissionais ou assinatura com Chave Móvel) será necessário
 nestes ambientes uma reconfiguração de rede ou o uso de uma proxy aberta
 ou com autenticação Basic.
 
+### Configuração em *MacOS*
+
+Em MacOS é suportada a proxy do sistema mas apenas se for configurada por IP/Hostname + Porto
 
 _________________
 
