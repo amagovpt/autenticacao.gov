@@ -61,9 +61,11 @@
         <file>contentPages/definitions/PageDefinitionsSignatureForm.ui.qml</file>
         <file>images/titleBar/maximize.png</file>
         <file>images/titleBar/minimize.png</file>
+        <file>images/titleBar/restore.png</file>
         <file>images/titleBar/quit.png</file>
         <file>images/titleBar/maximize_hover.png</file>
         <file>images/titleBar/minimize_hover.png</file>
+        <file>images/titleBar/restore_hover.png</file>
         <file>images/titleBar/quit_hover.png</file>
         <file>images/remove_file.png</file>
         <file>images/remove_file_hover.png</file>
