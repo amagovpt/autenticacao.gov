@@ -968,7 +968,7 @@ void GAPI::cancelCMDSign() {
 }
 void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
     QString outputFile, int page, double coord_x, double coord_y,
-    QString reason, QString location, double isTimestamp, double isSmall)
+    QString reason, QString location, bool isTimestamp, bool isSmall)
 {
     /*qDebug() << "signOpenCMD! MobileNumber = " << mobileNumber << " secret_code = " << secret_code <<
     " loadedFilePaths = " << loadedFilePaths <<
