@@ -69,7 +69,7 @@
   - [Configurações através de ficheiro de configuração em Linux e MacOS](#configura%c3%a7%c3%b5es-atrav%c3%a9s-de-ficheiro-de-configura%c3%a7%c3%a3o-em-linux-e-macos)
   - [Instalação automatizada em ambientes Windows](#instala%c3%a7%c3%a3o-automatizada-em-ambientes-windows)
   - [Informação sobre servidores de Proxy em *Windows*](#informa%c3%a7%c3%a3o-sobre-servidores-de-proxy-em-windows)
-  
+
 
 # Introdução
 
@@ -231,7 +231,7 @@ Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linh
     Gestor de pacotes baseado em ficheiros .deb, execute o comando:
 
         sudo dpkg -i pteid\*.deb
-        
+
     Gestor de pacotes baseado em ficheiros .rpm, execute o comando:
 
         sudo rpm -ivh pteid\*.rpm
@@ -458,9 +458,9 @@ seguintes passos:
 4.  Verifique o resultado da operação e siga as instruções:
 
     - **Erro. Ocorreu um erro durante a alteração de morada:**
-  
+
       Caso a aplicação não consiga efetuar a confirmação da alteração de morada será mostrada uma mensagem de erro e respetivo código, que deverá anotar.
-      
+
         Nas seguintes mensagens de erro:
 
       - **Processo de alteração de morada não foi concluído**.
@@ -473,7 +473,7 @@ seguintes passos:
 
       E em outras mensagens, sem descrição do erro, deverá tentar novamente e, caso o erro persista, contactar a Linha Cartão de Cidadão através do  número **211 950 500** ou do E-mail: **cartaodecidadao@irn.mj.pt**. (Tenha consigo as mensagens de erro e respectivos códigos de erro e o número de processo de Alteração de Morada).
 
-      
+
 
     - **A morada foi atualizada com sucesso:**
       - Caso a operação tenha sucesso, uma mensagem de Confirmação de alteração de morada com sucesso será mostrada.
@@ -564,11 +564,11 @@ Neste modo, é possível selecionar um conjunto de opções e mover a assinatura
         - **Outros ficheiros:** Pacote CCSIGN com *XML Advanced Electronic Signatures* (XadES).
 
     - **Motivo:** Motivo da assinatura – campo opcional – permite ao signatário indicar o motivo da sua assinatura.
-  
+
     - **Localização:** Local onde a assinatura foi efetuada – campo opcional - permite ao signatário indicar o local onde esta assinatura foi efetuada.
-  
+
     - **Adicionar selo temporal:** Adiciona um selo temporal, provando a data à qual a assinatura foi efetuada. Esta é a única forma de provar que o documento existia a determinada hora, pois é aplicada ao documento a data e hora que este está a ser assinado, de forma segura. Note-se que a hora apresentada no selo visível é a hora local do computador onde foi efetuada a assinatura e pode não coincidir com a hora do selo temporal (obtida a partir de um servidor remoto).
-  
+
     - **Adicionar atributos profissionais:** A funcionalidade de assinatura de profissionais permite ao cidadão autenticar-se na qualidade das funções que desempenha na sociedade enquanto profissional qualificado. Na secção [Atributos Profissionais](#atributos-profissionais) é indicado o procedimento para carregar os atributos profissionais.\
     Para mais informações consulte o seguinte *website*:
 
@@ -847,7 +847,7 @@ passos:
 1.  Aceder ao menu **Ficheiro** → **Assinaturas Digitais**.
 
 2.  Aparecerá a janela com as assinaturas digitais do documento. Caso não exista ainda nenhuma assinatura, a lista aparecerá vazia conforme a imagem abaixo. Clique no botão **Assinar documento...** .
-    
+
     ![Ilustração: Assinatura em LibreOffice](Pictures/Autenticação.Gov_libre_office.png "Assinatura em LibreOffice"){:.center}
 3.  Será apresentada uma janela para seleção do certificado. Deverá
     selecionar o certificado que tem o seu nome e emitido por “**EC de
@@ -860,7 +860,7 @@ passos:
 
 5.  O documento ficará assinado digitalmente.
 
-  
+
 
 ## Assinatura digital de email com *Microsoft Outlook*
 
@@ -917,7 +917,7 @@ assinatura propriamente.
     ![Ilustração: Assinatura em Outlook: Escolha do certificado](Pictures/Autenticação.Gov_outlook5.png "Escolha do certificado"){:.center}
 
 7.  Selecione o seu certificado de assinatura e clique em **OK**.
-   
+
 8.  Clique em **OK** em todas as janelas de configuração abertas. A
     configuração está terminada.
 
@@ -954,9 +954,9 @@ em *Firefox*.
 4.  Clique no botão **Carregar**, e selecione o módulo **PKCS\#11**, que se
     encontra numa das seguintes localizações:
 
-    **Em Windows:** 
+    **Em Windows:**
     - C:\\Windows\\System32\\pteidpkcs11.dll (Windows
-    32-bits) 
+    32-bits)
     - C:\\Windows\\SysWOW64\\pteidpkcs11.dll (Windows 64-bits)
 
     **Em Linux:** /usr/local/lib/libpteidpkcs11.so
@@ -1068,7 +1068,7 @@ selecionar a pasta “drivers” que esta na diretoria “C:\\Windows\\System32�
 1.  Verifique se o leitor de cartões é compatível com o standard PC/SC (consulte a documentação do leitor de cartões ou contacte o fabricante).
 
 2.  Verifique se os controladores do leitor estão corretamente instalados (consulte a documentação do leitor de cartões).
-   
+
 3.  Verifique se o serviço “Cartão Inteligente” (Smart Card) está iniciado:\
     a\) Aceda ao **Painel de Controlo** | **Ferramentas de Administração**\
     b\) Clique em **Serviços**\
@@ -1137,34 +1137,38 @@ em chaves de registo sendo que as alterações feitas pelo utilizador no
 interface gráfico se sobrepõem aos valores predefinidos e ficam
 guardadas em sub-chaves de:
 
-HKCU\\Software\\PTEID
+    HKCU\Software\PTEID
 
 Pode-se no entanto configurar de forma padronizada uma instalação
 adicionando alguns valores no registo do *Windows* para todos os
-utilizadores da máquina após a instalação do software.
+utilizadores da máquina após a instalação do software, usando as chaves listadas
+na tabela seguinte que devem ser criadas como sub-chaves da chave raiz:
+
+    HKLM\Software\PTEID
 
 **Nota:** Não se devem nunca remover ou alterar os seguintes registos:
 
-    HKLM\\Software\\PTEID\\general\\install\_dirname
+        HKLM\Software\PTEID\general\install_dirname
 
-    HKLM\\Software\\PTEID\\general\\certs\_dir
-
-Todas as chaves listadas na tabela seguinte devem ser criadas como
-sub-chaves da chave raiz:
-
-    HKLM\\Software\\PTEID
-
-| Nome da Chave                        | Tipo de valor                                                          | Descrição                                                                                                                                              |
-|--------------------------------------|------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| logging\log_level                    | String<br>(debug, info, warning, error)                                | Nível de detalhe do log do *middleware*.<br>Valor por omissão: error                                                                                     |
-| logging\log_dirname                  | String                                                                 | Directoria onde são gerados os ficheiros de log do *middleware*.<br>Valor por omissão: C:\Program Files\ Portugal Identity Card                          |
-| xsign\tsa_url                        | String                                                                 | Servidor de timestamps usado na assinatura de documentos no formato http(s)://HOST:PORTO<br>Valor por omissão: http://ts.cartaodecidadao.pt/tsa/server |
-| configuretool\registrate_certificate | Numérico<br>(REG_DWORD) (0 / 1)                                        | Registar certificados no Windows com a inserção do cartão.<br>Valor por omissão: 1 (Sim)                                                               |
-| configuretool\remove_certificate     | Numérico<br>(REG_DWORD) (0 / 1)                                        | Remover certificados do Windows com a remoção do cartão.<br>Valor por omissão: 0 (Não)                                                                 |
-| proxy\use_system_proxy               | Numérico<br>(REG_DWORD) (0 / 1)                                        | Utilizar servidor de proxy definido no Windows / MacOS.<br>Valor por omissão: 0 (Não)                                                                   |
-| proxy\proxy_host                     | String<br>(hostname ou endereço IP)                                    | Endereço do servidor de proxy                                                                                                                          |
-| proxy\proxy_port                     | Numérico<br>(REG_DWORD) (1 a 65535)                                    | Porto TCP do servidor de proxy                                                                                                                         |
-| certificatecache\cert_cache_validity | Numérico<br>(REG_DWORD)                                                   | Tempo de cache local (em segundos) do estado de validade dos certificados.<br>Valor por omissão: 60                                                    |
+        HKLM\Software\PTEID\general\certs_dir
+| Chave            | Valor                  | Tipo                                 | Descrição                                                                                                                                          |
+|------------------|------------------------|--------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| logging          | log_level              | string (debug, info, warning, error) | Nível de detalhe do log do Middleware. Valor por omissão: error                                                                                    |
+| logging          | log_dirname            | string                               | Directoria onde são gerados os ficheiros de log do Middleware. Valor por omissão: C:\Program Files\Portugal Identity Card\log                      |
+| logging          | log_prefix             | string                               | Prefixo do nome dos ficheiros de log. Valor por omissão:.PTEID_                                                                                    |
+| general          | install_dirname        | string                               | Directoria onde é instalado o Middleware.  Valor por omissão: C:\Program Files\Portugal Identity Card                                              |
+| general          | cache_dirname          | string                               | Directoria onde é guardada a cache do Middleware.  Valor por omissão: C:\Users\[User]\AppData\Roaming\.pteid-ng                                    |
+| general          | scap_host              | String                               | Hostname do serviço de Atributos Profissionais (SCAP) Valor por omissão:scap.autenticacao.gov.pt                                                   |
+| general          | scap_port              | Número (1 a 65535)                   | Porto do serviço de Atributos Profissionais (SCAP)                                                                                                 |
+| general          | use_pinpad             | Número (0 / 1)                       | Usar funcionalidade de PINPAD Valor por omissão: 1 (ativo)                                                                                         |
+| configuretool    | start_with_windows     | Numérico (0 / 1)                     | Arrancar a aplicação com o Windows Valor por omissão: 1 (ativo)                                                                                    |
+| configuretool    | registrate_certificate | Numérico (0 / 1)                     | Registar certificados no Windows com a inserção do cartão.  Valor por omissão: 1 (Sim)                                                             |
+| configuretool    | remove_certificate     | Numérico (0 / 1)                     | Remover certificados do Windows com a remoção do cartão.  Valor por omissão: 0 (Não)                                                               |
+| proxy            | use_system_proxy       | Numérico (0 / 1)                     | Utilizar servidor de proxy definido no Windows/ MacOS.  Valor por omissão: 0 (Não)                                                                 |
+| proxy            | proxy_host             | string  (hostname ou endereço IP)    | Endereço do servidor de proxy                                                                                                                      |
+| proxy            | proxy_port             | Numérico (1 a 65535)                 | Porto TCP do servidor de proxy                                                                                                                     |
+| certificatecache | cert_cache_validity    | Numérico (0 a 65535)                 | Tempo de cache local (em segundos) do estado de validade dos certificados Valor por omissão: 60                                                    |
+| xsign            | tsa_url                | string                               | Servidor de timestamps usado na assinatura de documentos no formato http(s)://HOST:PORTO Valor por omissão:http://ts.cartaodecidadao.pt/tsa/server |
 
 ## Configurações através de ficheiro de configuração em Linux e MacOS
 
