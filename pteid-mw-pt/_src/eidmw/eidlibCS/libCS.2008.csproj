@@ -213,9 +213,6 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_XmlUserRequestedInfo.cs">
       <Link>GeneratedFiles\PTEID_XmlUserRequestedInfo.cs</Link>
     </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\SWIGTYPE_p_f_p_void_int__void.cs">
-      <Link>GeneratedFiles\SWIGTYPE_p_f_p_void_int__void.cs</Link>
-    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\SWIGTYPE_p_void.cs">
       <Link>GeneratedFiles\SWIGTYPE_p_void.cs</Link>
     </Compile>
