@@ -141,8 +141,8 @@ Nos casos dos sistemas operativos *Linux*, não é possível identificar a
 distribuição, deste modo será apresentada a lista das distribuições
 suportadas para a arquitetura detetada.
 
-A hiperligação “*Para instalar outras versões ou aceder aos Manuais de
-Utilização, carregue* [*aqui*](https://www.autenticacao.gov.pt/cc-software)”
+A hiperligação “[*Para instalar outras versões ou aceder aos Manuais de
+Utilização, carregue aqui*](https://www.autenticacao.gov.pt/cc-software)”
 permite o acesso à lista de todos os pacotes de instalação dos sistemas operativos
 suportados e manual de utilização.
 
@@ -344,7 +344,7 @@ seguintes são apresentados os ecrãs utilizando Linux Caixa Mágica 22 LTS
 2.  Execute o seguinte comando para desinstalar todos os ficheiros do
     *middleware*.
 
-        sudo /usr/local/bin/pteid\_uninstall.sh
+        sudo /usr/local/bin/pteid_uninstall.sh
 
 # Aplicação Utilitária “Autenticação.Gov”
 
@@ -555,15 +555,17 @@ Por fim, carregar no botão **Assinar com Cartão de Cidadão** ou **Assinar com
 
 Assinatura digital de um documento PDF ou outro qualquer documento com possibilidade de assinar vários documentos ao mesmo tempo, adicionar atributos profissionais, bem como configurar outras opções.
 
-Os ficheiros a assinar podem ser arrastados para a área de pré-visualização. Pode também clicar na área de pré-visualização ou no botão **Adicionar ficheiros** e selecionar manualmente os ficheiros. Será exibida uma janela para selecionar os ficheiros que pretende assinar. Os ficheiros selecionados serão apresentados na janela “Escolha os ficheiros”.
-
-![Ilustração: Selecionar ficheiro PDF para assinar na assinatura avançada](Pictures/Autenticação.Gov_assinatura_avancada.png "Selecionar ficheiro PDF para assinar na assinatura avançada"){:.center}
-
-Neste modo, é possível selecionar um conjunto de opções e mover a assinatura digital para o local pretendido. Após a seleção dos ficheiros, deverá selecionar as opções da assinatura. As configurações da assinatura são apresentadas no ecrã seguinte:
+Os ficheiros a assinar podem ser arrastados para a área de pré-visualização. Pode também clicar na área de pré-visualização ou no botão **Adicionar ficheiros** e selecionar manualmente os ficheiros. Será exibida uma janela para selecionar os ficheiros que pretende assinar. Os ficheiros selecionados serão apresentados na janela “Escolha os ficheiros”, como podemos visualizar na imagem seguinte.
 
 - **Selecionar ficheiros:** Abre uma nova janela que permitirá selecionar os documentos a serem assinados. É possível adicionar e remover ficheiros individualmente ou todos.
 - **Pré-visualização da assinatura:** Permite visualizar o documento a ser assinado, bem como a pré-visualização da própria assinatura. A pré-visualização existe apenas para assinatura de ficheiros PDF.
+
+  ![Ilustração: Selecionar ficheiro PDF para assinar na assinatura avançada](Pictures/Autenticação.Gov_assinatura_avancada.png "Selecionar ficheiro PDF para assinar na assinatura avançada"){:.center}
+
+
 - **Configurações:**
+
+    Neste modo, é possível selecionar um conjunto de opções e mover a assinatura digital para o local pretendido. Após a seleção dos ficheiros, deverá selecionar as opções da assinatura. As configurações da assinatura são as seguintes e podem ser visualizadas na imagem seguinte:
 
     - **Tipo:** Tipo de assinatura – campo obrigatório – permite selecionar assinatura de ficheiros:
 
@@ -582,12 +584,18 @@ Neste modo, é possível selecionar um conjunto de opções e mover a assinatura
         <https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais>
 
     - **Visível:** Permite que a assinatura fique visível no documento PDF.
-    - **Página:** Poderá escolher a página onde será apresentada a assinatura ou escolher a opção **Última**, para assinar na última página.
 
-![Ilustração: Selecionar opções de assinatura](Pictures/Autenticação.Gov_assinatura_avancada2.png "Selecionar opções de assinatura"){:.center}
+    - **Página:** Poderá escolher a página onde será apresentada a assinatura.
+
+    - **Última** Poderá escolher a última página para apresentadar a assinatura.
+
+    ![Ilustração: Selecionar opções de assinatura](Pictures/Autenticação.Gov_assinatura_avancada2.png "Selecionar opções de assinatura"){:.center}
 
 Após selecionar as opções pretendidas, na área indicada na figura anterior, arraste a pré-visualização da assinatura para a localização pretendida e de seguida prima o botão **Assinar com Cartão de Cidadão** ou **Assinar com Chave Móvel Digital**.
+
 Após clicar em **Assinar** deverá escolher a localização da pasta e do ficheiro onde guardar o ficheiro assinado (Não é possível substituir o ficheiro original) e seguir o procedimento de assinatura (ver secção [Introdução de chave](#introdu%c3%a7%c3%a3o-de-chave)). Em seguida é apresentado uma mensagem a indicar se a assinatura digital foi efetuada com sucesso.
+
+A imagem seguinte é um exemplo de um ficheiro assinado com a aplicação **Autenticação.Gov**.
 
 ![Ilustração: Aspeto final da assinatura](Pictures/Autenticação.GOV_Assinatura_exemplo.png "Aspeto final da assinatura"){:.center}
 
@@ -609,7 +617,7 @@ introduzir as respetivas credenciais, conforme a figura seguinte.
 
 ![Ilustração: Assinatura digital com a Chave Móvel Digital](Pictures/Autenticação.Gov_assinatura_cmd.png "Assinatura digital com a Chave Móvel Digital"){:.center}
 
-#### Verificação de assinatura digital em documento PDF
+#### Verificação de assinatura digital em documento PDF em Windows
 
 Após aplicar uma assinatura digital num documento, esta deverá ser
 identificada automaticamente ao abrir o documento em *Adobe Reader*. A
@@ -618,7 +626,7 @@ a assinatura efetuada no passo anterior:
 
 ![Ilustração: Assinatura de exemplo](Pictures/Autenticação.Gov_assinatura_sample.png "Assinatura de exemplo"){:.center}
 
-Embora a assinatura esteja visível (dado que a opção foi selecionada no
+Mesmo quando a assinatura não esteja visível (se a opção "Visível" não for selecionada no
 momento da assinatura), a assinatura deverá ser sempre validada no
 painel de assinaturas, dado que permite a visualização do estado da
 assinatura tendo em conta a cadeia de confiança e as propriedades
@@ -649,9 +657,9 @@ Cidadão.
 -   **PIN de Morada:** Este PIN é usado para alteração e leitura de
     morada.
 
-![Ilustração: Verificar e modificar códigos PIN](Pictures/Autenticação.Gov_codigos_pin.png "Verificar e modificar códigos PIN"){:.center}
+    ![Ilustração: Verificar e modificar códigos PIN](Pictures/Autenticação.Gov_codigos_pin.png "Verificar e modificar códigos PIN"){:.center}
 
-![Ilustração: Janela para modificar códigos PIN](Pictures/Autenticação.Gov_Mudar_Pin.png "Janela para modificar códigos"){:.center}
+    ![Ilustração: Janela para modificar códigos PIN](Pictures/Autenticação.Gov_Mudar_Pin.png "Janela para modificar códigos"){:.center}
 
 ### Configurações
 
@@ -702,7 +710,7 @@ Seguidamente, deverá clicar num dos botões de carregamento de atributos, conso
 #### Configuração da aplicação
 
 Nesta janela é possível configurar alguns aspetos do funcionamento da
-aplicação:
+aplicação, nomeadamente:
 
 - **Leitor de Cartões:** Permite selecionar o leitor de cartões a utilizar.\
   Existe também uma opção que permite ativar ou desativar a funcionalidade PINPAD (Os leitores com PINPAD são os leitores de cartões que possuem teclado para introdução segura do código PIN) nos leitores. Se esta opção estiver desativada, os leitores com PINPAD terão comportamento idêntico aos leitores sem PINPAD.
@@ -742,6 +750,9 @@ informações de acesso:
     -   **Servidor proxy:** Endereço IP / Hostname / Porto.
     -   **Autenticação proxy:** Credenciais de acesso (se necessário).
 
+A imagem seguinte permite visualizar o menu de configurações da aplicação
+(com Modo de diagnóstico ativo)
+
 ![Ilustração: Janela de configurações da aplicação (com Modo de diagnóstico ativo)](Pictures/Autenticação.Gov_configuração.png "Janela de configurações da aplicação (com Modo de diagnóstico ativo)"){:.center}
 
 #### Configuração de assinaturas
@@ -757,6 +768,8 @@ personalizado.
 
 - **Microsoft Office (Windows):** Configurações relativas a assinaturas em
 aplicações do Microsoft Office.
+
+A imagem seguinte permite visualizar o menu de configurações de assinaturas.
 
 ![Ilustração: Janela de configurações de assinaturas](Pictures/Autenticação.Gov_configuração_assinaturas.png "Janela de configurações de assinaturas"){:.center}
 
@@ -811,7 +824,9 @@ suporte. A localização deste ficheiro, depende do sistema operativo a
 ser utilizado.
 
 **Windows:** C:\\Windows\\System32\\pteidpkcs11.dll\
+
 **Linux:** /usr/local/lib/libpteidpkcs11.so\
+
 **MacOS:** /usr/local/lib/libpteidpkcs11.dylib
 
 ## Assinatura digital na suite *Microsoft Office*
