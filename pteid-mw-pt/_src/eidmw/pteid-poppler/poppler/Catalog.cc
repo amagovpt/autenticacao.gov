@@ -340,7 +340,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 	obj4.initArray (xref);
 	
 	//Visible Signature location 
-	if (rect)
+	if (rect->isValid())
 	{
 		//Check if signature height (y2 - y1) is less than 90 considering rounding errors
 		small_signature_format = (rect->y2 - rect->y1) - 90.0 < -0.00001;
@@ -364,14 +364,17 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 
 	int rotate_signature = page_obj->getRotate();
 
-    if (signer_info->attribute_provider == NULL) {
-			addSignatureAppearance(&signature_field, signer_info, date_with_timezone->getCString(),
-                     location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
-    }
-	else {
-		addSignatureAppearanceSCAP(&signature_field, signer_info, date_with_timezone->getCString(),
-                     location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
-    }
+	//Only add signature appearance for "visible" signatures
+	if (rect->isValid()) {
+		if (signer_info->attribute_provider == NULL) {
+			addSignatureAppearance(&signature_field, signer_info, date_outstr,
+				location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
+		}
+		else {
+			addSignatureAppearanceSCAP(&signature_field, signer_info, date_outstr,
+				location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
+		}
+	}
 
 	//memset(date_outstr, 0, sizeof(date_outstr));
 
