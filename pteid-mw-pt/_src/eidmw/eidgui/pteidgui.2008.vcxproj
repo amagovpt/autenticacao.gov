@@ -99,7 +99,7 @@
     <ClCompile>
       <AdditionalOptions>-Zm200 -w34100 -w34189 -Zm200 -w34100 -w34189 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\GeneratedFiles;..\_Builds;..\common;..\dialogs;..\eidlib;$(PTEID_DIR_CAIRO)\include;$(PTEID_DIR_QT_4)\include;$(PTEID_DIR_QT_4)\include\QtGui;$(PTEID_DIR_QT_4)\include\QtCore;$(PTEID_DIR_QT_4)\include\QtNetwork;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;..\_Builds;..\common;..\dialogs;..\eidlib;$(PTEID_DIR_CAIRO)\include;$(PTEID_DIR_QT_5)\include;$(PTEID_DIR_QT_5)\include\QtGui;$(PTEID_DIR_QT_5)\include\QtCore;$(PTEID_DIR_QT_5)\include\QtNetwork;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PTEID_35;MEMORY_LEAKS_CHECK;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG;_WINDOWS;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
@@ -121,7 +121,7 @@
       <AdditionalDependencies>Cryptui.lib;Crypt32.lib;qtmaind.lib;QtGuid4.lib;QtCored4.lib;QtNetworkd4.lib;cairo.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidlibCpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).exe</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_CAIRO)\lib;$(PTEID_DIR_QT_4)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_CAIRO)\lib;$(PTEID_DIR_QT_5)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -141,7 +141,7 @@
     <ClCompile>
       <AdditionalOptions>-Zm200 -w34100 -w34189 -Zm200 -w34100 -w34189 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\GeneratedFiles;..\_Builds;..\common;..\dialogs;..\eidlib;$(PTEID_DIR_CAIRO_X64)\include;$(PTEID_DIR_QT_4_X64)\include;$(PTEID_DIR_QT_4_X64)\include\QtGui;$(PTEID_DIR_QT_4_X64)\include\QtCore;$(PTEID_DIR_QT_4_X64)\include\QtNetwork;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;..\_Builds;..\common;..\dialogs;..\eidlib;$(PTEID_DIR_CAIRO_X64)\include;$(PTEID_DIR_QT_5_X64)\include;$(PTEID_DIR_QT_5_X64)\include\QtGui;$(PTEID_DIR_QT_5_X64)\include\QtCore;$(PTEID_DIR_QT_5_X64)\include\QtNetwork;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PTEID_35;MEMORY_LEAKS_CHECK;_DEBUG;_WINDOWS;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
@@ -163,7 +163,7 @@
       <AdditionalDependencies>Cryptui.lib;Crypt32.lib;qtmaind.lib;QtGuid4.lib;QtCored4.lib;QtNetworkd4.lib;cairo.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidlibCpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).exe</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_CAIRO_X64)\lib;$(PTEID_DIR_QT_4_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_CAIRO_X64)\lib;$(PTEID_DIR_QT_5_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -186,7 +186,7 @@
     <ClCompile>
       <AdditionalOptions>-Zm200 -w34100 -w34189 -Zm200 -w34100 -w34189 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>.\GeneratedFiles;..\_Builds;..\common;..\dialogs;..\eidlib;..\;$(PTEID_DIR_QT_4)\include;$(PTEID_DIR_QT_4)\include\QtGui;$(PTEID_DIR_QT_4)\include\QtCore;$(PTEID_DIR_QT_4)\include\QtNetwork;$(PTEID_DIR_QT_4)\include\QtWidgets;$(PTEID_DIR_QT_4)\include\QtPrintSupport;$(PTEID_DIR_QT_4)\include\QtConcurrent;$(PTEID_DIR_QT_4)\include\QtANGLE;$(PTEID_POPPLER_QT5)\poppler-0.52.0\qt5\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;..\_Builds;..\common;..\dialogs;..\eidlib;..\;$(PTEID_DIR_QT_5)\include;$(PTEID_DIR_QT_5)\include\QtGui;$(PTEID_DIR_QT_5)\include\QtCore;$(PTEID_DIR_QT_5)\include\QtNetwork;$(PTEID_DIR_QT_5)\include\QtWidgets;$(PTEID_DIR_QT_5)\include\QtPrintSupport;$(PTEID_DIR_QT_5)\include\QtConcurrent;$(PTEID_DIR_QT_5)\include\QtANGLE;$(PTEID_POPPLER_QT5)\poppler-0.52.0\qt5\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PTEID_35;QT_NO_DEBUG;NDEBUG;_WINDOWS;WIN32;_CRT_NONSTDC_NO_DEPRECATE;QT_LARGEFILE_SUPPORT;QT_DLL;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT;QAPPLICATION_CLASS=QApplication;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
@@ -207,7 +207,7 @@
       <AdditionalDependencies>Cryptui.lib;Crypt32.lib;qtmain.lib;Qt5Gui.lib;Qt5Core.lib;Qt5Network.lib;Qt5Widgets.lib;Qt5PrintSupport.lib;Qt5Concurrent.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidlib.lib;poppler-qt5.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).exe</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_POPPLER_QT5)\bin\win32;$(PTEID_DIR_QT_4)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_POPPLER_QT5)\bin\win32;$(PTEID_DIR_QT_5)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile />
       <SubSystem>Windows</SubSystem>
@@ -233,7 +233,7 @@
     <ClCompile>
       <AdditionalOptions>-Zm200 -w34100 -w34189 -Zm200 -w34100 -w34189 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>..\;.\GeneratedFiles;..\_Builds;..\common;..\dialogs;..\eidlib;$(PTEID_DIR_QT_4_X64)\include;$(PTEID_DIR_QT_4_X64)\include\QtGui;$(PTEID_DIR_QT_4_X64)\include\QtCore;$(PTEID_DIR_QT_4_X64)\include\QtNetwork;$(PTEID_DIR_QT_4_X64)\include\QtWidgets;$(PTEID_DIR_QT_4_X64)\include\QtPrintSupport;$(PTEID_POPPLER_QT5)\poppler-0.52.0\qt5\src;$(PTEID_DIR_QT_4_X64)\include\QtConcurrent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;.\GeneratedFiles;..\_Builds;..\common;..\dialogs;..\eidlib;$(PTEID_DIR_QT_5_X64)\include;$(PTEID_DIR_QT_5_X64)\include\QtGui;$(PTEID_DIR_QT_5_X64)\include\QtCore;$(PTEID_DIR_QT_5_X64)\include\QtNetwork;$(PTEID_DIR_QT_5_X64)\include\QtWidgets;$(PTEID_DIR_QT_5_X64)\include\QtPrintSupport;$(PTEID_POPPLER_QT5)\poppler-0.52.0\qt5\src;$(PTEID_DIR_QT_5_X64)\include\QtConcurrent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PTEID_35;QT_NO_DEBUG;NDEBUG;_WINDOWS;WIN32;_CRT_NONSTDC_NO_DEPRECATE;QT_LARGEFILE_SUPPORT;QT_DLL;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT;QAPPLICATION_CLASS=QApplication;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
@@ -255,7 +255,7 @@
       <AdditionalDependencies>Cryptui.lib;Crypt32.lib;qtmain.lib;Qt5Gui.lib;Qt5Core.lib;Qt5Network.lib;Qt5Widgets.lib;Qt5PrintSupport.lib;Qt5Concurrent.lib;poppler-qt5.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).exe</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_POPPLER_QT5)\bin\x64;$(PTEID_DIR_QT_4_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_POPPLER_QT5)\bin\x64;$(PTEID_DIR_QT_5_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile />
       <SubSystem>Windows</SubSystem>
@@ -401,110 +401,110 @@
   <ItemGroup>
     <CustomBuild Include="AutoUpdates.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="CardInformation.h" />
     <CustomBuild Include="ChangeAddressDialog.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="dlgAbout.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="dlgOptions.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="dlgprint.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="dlgsignature.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
@@ -519,125 +519,125 @@
     <ClInclude Include="genpur.h" />
     <CustomBuild Include="httpwindow.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="mainwnd.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="mylistview.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="PDFSignWindow.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="picturepopup.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="singleapplication.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="singleapplication_p.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
@@ -647,167 +647,167 @@
   <ItemGroup>
     <CustomBuild Include="ChangeAddressDialog.ui">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="dlgAbout.ui">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="dlgOptions.ui">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="dlgPrint.ui">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="dlgSignature.ui">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="eidgui.qrc">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Rcc%27ing eidgui.qrc...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\rcc.exe -name "%(Filename)" -no-compress ".\%(Filename).qrc" -o .\GeneratedFiles\qrc_%(Filename).cpp
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\rcc.exe -name "%(Filename)" -no-compress ".\%(Filename).qrc" -o .\GeneratedFiles\qrc_%(Filename).cpp
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\eidgui.qrc;.\Images\Background_ForeignersBack.jpg;.\Images\Background_ForeignersFront.jpg;.\Images\Background_IDBack.jpg;.\Images\Background_IDFront.jpg;.\Images\Background_KidsBack.jpg;.\Images\Background_KidsFront.jpg;.\Images\Background_SisBack.jpg;.\Images\Background_SisFront.jpg;.\Images\Female.png;.\Images\Icons\Chip.png;.\Images\Icons\Clear.png;.\Images\Icons\Exit.png;.\Images\Icons\ICO_CARD_EID_PLAIN_16x16.png;.\Images\Icons\Open.png;.\Images\Icons\Options.png;.\Images\Icons\Print.png;.\Images\Icons\Save.png;.\Images\Icons\Zoom_IN.png;.\Images\Icons\Zoom_OUT.png;.\Images\Icons\reader_card.png;.\Images\Icons\reader_error.png;.\Images\Icons\reader_nocard.png;.\Images\Icons\reader_question.png;.\Images\Male.png;.\Images\a-z_identiteitskaart_logo.png;.\Images\schild_de.jpg;.\Images\schild_en.jpg;.\Images\schild_fr.jpg;.\Images\schild_nl.jpg;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\qrc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Rcc%27ing eidgui.qrc...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\rcc.exe -name "%(Filename)" -no-compress ".\%(Filename).qrc" -o .\GeneratedFiles\qrc_%(Filename).cpp
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\rcc.exe -name "%(Filename)" -no-compress ".\%(Filename).qrc" -o .\GeneratedFiles\qrc_%(Filename).cpp
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\eidgui.qrc;.\Images\Background_ForeignersBack.jpg;.\Images\Background_ForeignersFront.jpg;.\Images\Background_IDBack.jpg;.\Images\Background_IDFront.jpg;.\Images\Background_KidsBack.jpg;.\Images\Background_KidsFront.jpg;.\Images\Background_SisBack.jpg;.\Images\Background_SisFront.jpg;.\Images\Female.png;.\Images\Icons\Chip.png;.\Images\Icons\Clear.png;.\Images\Icons\Exit.png;.\Images\Icons\ICO_CARD_EID_PLAIN_16x16.png;.\Images\Icons\Open.png;.\Images\Icons\Options.png;.\Images\Icons\Print.png;.\Images\Icons\Save.png;.\Images\Icons\Zoom_IN.png;.\Images\Icons\Zoom_OUT.png;.\Images\Icons\reader_card.png;.\Images\Icons\reader_error.png;.\Images\Icons\reader_nocard.png;.\Images\Icons\reader_question.png;.\Images\Male.png;.\Images\a-z_identiteitskaart_logo.png;.\Images\schild_de.jpg;.\Images\schild_en.jpg;.\Images\schild_fr.jpg;.\Images\schild_nl.jpg;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\qrc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Rcc%27ing eidgui.qrc...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\rcc.exe -name "%(Filename)" -no-compress ".\%(Filename).qrc" -o .\GeneratedFiles\qrc_%(Filename).cpp
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\rcc.exe -name "%(Filename)" -no-compress ".\%(Filename).qrc" -o .\GeneratedFiles\qrc_%(Filename).cpp
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\eidgui.qrc;.\Images\Background_ForeignersBack.jpg;.\Images\Background_ForeignersFront.jpg;.\Images\Background_IDBack.jpg;.\Images\Background_IDFront.jpg;.\Images\Background_KidsBack.jpg;.\Images\Background_KidsFront.jpg;.\Images\Background_SisBack.jpg;.\Images\Background_SisFront.jpg;.\Images\Female.png;.\Images\Icons\Chip.png;.\Images\Icons\Clear.png;.\Images\Icons\Exit.png;.\Images\Icons\ICO_CARD_EID_PLAIN_16x16.png;.\Images\Icons\Open.png;.\Images\Icons\Options.png;.\Images\Icons\Print.png;.\Images\Icons\Save.png;.\Images\Icons\Zoom_IN.png;.\Images\Icons\Zoom_OUT.png;.\Images\Icons\reader_card.png;.\Images\Icons\reader_error.png;.\Images\Icons\reader_nocard.png;.\Images\Icons\reader_question.png;.\Images\Male.png;.\Images\a-z_identiteitskaart_logo.png;.\Images\schild_de.jpg;.\Images\schild_en.jpg;.\Images\schild_fr.jpg;.\Images\schild_nl.jpg;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\qrc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Rcc%27ing eidgui.qrc...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\rcc.exe -name "%(Filename)" -no-compress ".\%(Filename).qrc" -o .\GeneratedFiles\qrc_%(Filename).cpp
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\rcc.exe -name "%(Filename)" -no-compress ".\%(Filename).qrc" -o .\GeneratedFiles\qrc_%(Filename).cpp
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\eidgui.qrc;.\Images\Background_ForeignersBack.jpg;.\Images\Background_ForeignersFront.jpg;.\Images\Background_IDBack.jpg;.\Images\Background_IDFront.jpg;.\Images\Background_KidsBack.jpg;.\Images\Background_KidsFront.jpg;.\Images\Background_SisBack.jpg;.\Images\Background_SisFront.jpg;.\Images\Female.png;.\Images\Icons\Chip.png;.\Images\Icons\Clear.png;.\Images\Icons\Exit.png;.\Images\Icons\ICO_CARD_EID_PLAIN_16x16.png;.\Images\Icons\Open.png;.\Images\Icons\Options.png;.\Images\Icons\Print.png;.\Images\Icons\Save.png;.\Images\Icons\Zoom_IN.png;.\Images\Icons\Zoom_OUT.png;.\Images\Icons\reader_card.png;.\Images\Icons\reader_error.png;.\Images\Icons\reader_nocard.png;.\Images\Icons\reader_question.png;.\Images\Male.png;.\Images\a-z_identiteitskaart_logo.png;.\Images\schild_de.jpg;.\Images\schild_en.jpg;.\Images\schild_fr.jpg;.\Images\schild_nl.jpg;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\qrc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="mainwnd.ui">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="PDFSignWindow.ui">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="picturepopup.ui">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_4)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Uic%27ing %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_4_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\uic.exe -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
     </CustomBuild>

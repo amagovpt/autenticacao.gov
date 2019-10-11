@@ -41,8 +41,8 @@
       <?define var.PTEID_DIR_MSM=$(env.PTEID_DIR_MSM)?>
     <?endif?>
 
-    <?define var.PTEID_QT_IMAGEFORMATS=$(env.PTEID_DIR_QT_4)\plugins\imageformats\?>
-    <?define var.PTEID_QT_PRINTSUPPORT=$(env.PTEID_DIR_QT_4)\plugins\printsupport\?>
+    <?define var.PTEID_QT_IMAGEFORMATS=$(env.PTEID_DIR_QT_5)\plugins\imageformats\?>
+    <?define var.PTEID_QT_PRINTSUPPORT=$(env.PTEID_DIR_QT_5)\plugins\printsupport\?>
 
     <!-- Choose the target runtime to use: -->
     <!-- hack: Checking the solution file that was loaded with the visual studio -->
@@ -185,7 +185,7 @@
 
     <DirectoryRef Id="QT5PLATFORMS">
       <Component Id="qt5PlatformDll" Guid="{C65667C8-D72C-4CD4-BF7F-1D2DAC5B0BDA}">
-        <File Id="qwindows.dll" Name="qwindows.dll" KeyPath="yes" Source="$(env.PTEID_DIR_QT_4)\plugins\platforms\qwindows.dll" />
+        <File Id="qwindows.dll" Name="qwindows.dll" KeyPath="yes" Source="$(env.PTEID_DIR_QT_5)\plugins\platforms\qwindows.dll" />
       </Component>
     </DirectoryRef>
 
@@ -326,13 +326,13 @@
 
       <Component Id="Qt" Guid="{AF5AF018-EE70-4EA9-98BA-9C2947F19060}" SharedDllRefCount="yes">
         <!-- QT5  -->
-        <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5Core.dll" KeyPath="yes" />
-        <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5Gui.dll" />
-        <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5Network.dll" />
-        <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5Widgets.dll" />
-        <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5Xml.dll" />
-        <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5Concurrent.dll" />
-        <File Source="$(env.PTEID_DIR_QT_4)\bin\Qt5PrintSupport.dll" />
+        <File Source="$(env.PTEID_DIR_QT_5)\bin\Qt5Core.dll" KeyPath="yes" />
+        <File Source="$(env.PTEID_DIR_QT_5)\bin\Qt5Gui.dll" />
+        <File Source="$(env.PTEID_DIR_QT_5)\bin\Qt5Network.dll" />
+        <File Source="$(env.PTEID_DIR_QT_5)\bin\Qt5Widgets.dll" />
+        <File Source="$(env.PTEID_DIR_QT_5)\bin\Qt5Xml.dll" />
+        <File Source="$(env.PTEID_DIR_QT_5)\bin\Qt5Concurrent.dll" />
+        <File Source="$(env.PTEID_DIR_QT_5)\bin\Qt5PrintSupport.dll" />
         
       </Component>
 

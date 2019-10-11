@@ -1,11 +1,11 @@
-@echo [INFO] Input PTEID_DIR_QT_4_X64=%PTEID_DIR_QT_4_X64%
+@echo [INFO] Input PTEID_DIR_QT_5_X64=%PTEID_DIR_QT_5_X64%
 
 ::---- tools
 @set FILE_TO_FIND_TOOLS="bin\rcc.exe" "bin\uic.exe" "bin\moc.exe"
 @echo [INFO] Looking for files: %FILE_TO_FIND_TOOLS%
 
 @set FILE_NOT_FOUND_TOOLS=
-@for %%i in (%FILE_TO_FIND_TOOLS%) do @if not exist "%PTEID_DIR_QT_4_X64%\%%~i" set FILE_NOT_FOUND_TOOLS=%%~i
+@for %%i in (%FILE_TO_FIND_TOOLS%) do @if not exist "%PTEID_DIR_QT_5_X64%\%%~i" set FILE_NOT_FOUND_TOOLS=%%~i
 @if NOT "%FILE_NOT_FOUND_TOOLS%"=="" goto fail
 
 ::---- includes
@@ -13,7 +13,7 @@
 @echo [INFO] Looking for files: %FILE_TO_FIND_INC%
 
 @set FILE_NOT_FOUND_INC=
-@for %%i in (%FILE_TO_FIND_INC%) do @if not exist "%PTEID_DIR_QT_4_X64%\%%~i" set FILE_NOT_FOUND_INC=%%~i
+@for %%i in (%FILE_TO_FIND_INC%) do @if not exist "%PTEID_DIR_QT_5_X64%\%%~i" set FILE_NOT_FOUND_INC=%%~i
 @if NOT "%FILE_NOT_FOUND_INC%"=="" goto fail
 
 ::---- lib
@@ -21,11 +21,11 @@
 @echo [INFO] Looking for files: %FILE_TO_FIND_LIB%
 
 @set FILE_NOT_FOUND_LIB=
-@for %%i in (%FILE_TO_FIND_LIB%) do @if not exist "%PTEID_DIR_QT_4_X64%\%%~i" set FILE_NOT_FOUND_LIB=%%~i
+@for %%i in (%FILE_TO_FIND_LIB%) do @if not exist "%PTEID_DIR_QT_5_X64%\%%~i" set FILE_NOT_FOUND_LIB=%%~i
 @if NOT "%FILE_NOT_FOUND_LIB%"=="" goto fail
 
 :sucess
-@echo        Found in "%PTEID_DIR_QT_4_X64%"
+@echo        Found in "%PTEID_DIR_QT_5_X64%"
 @exit /B 0
 
 :fail

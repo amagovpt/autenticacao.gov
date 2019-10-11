@@ -1,5 +1,5 @@
 @echo [INFO] Input PTEID_DIR_DOXYGEN=%PTEID_DIR_DOXYGEN%
-@set FILE_TO_FIND="bin\doxygen.exe"
+@set FILE_TO_FIND="doxygen.exe"
 @echo [INFO] Looking for files: %FILE_TO_FIND%
 
 @set FILE_NOT_FOUND=

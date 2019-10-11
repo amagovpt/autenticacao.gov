@@ -7,9 +7,16 @@ set startTime=%time%
   @set SOLUTION=%~dp0..\_src\eidmw\_Builds\Autenticacao.gov.sln
 )
 
-
-
 @set CHECKS=%~dp0Checks
+
+:: Check Doxygen
+::=============
+@call "%CHECKS%\PathDoxygen.bat"
+@if %ERRORLEVEL%==0 goto find_doxygen
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_DOXYGEN
+@goto end
+:find_doxygen
+@echo [INFO] Using PTEID_DIR_DOXYGEN=%PTEID_DIR_DOXYGEN%
 
 :: Check Visual Studio
 :: ========================
@@ -74,14 +81,14 @@ set startTime=%time%
 :find_mssdk
 @echo [INFO] Using PTEID_DIR_PLATFORMSDK=%PTEID_DIR_PLATFORMSDK%
 
-:: Check QT 4
+:: Check QT 5
 :: ==================
-@call "%CHECKS%\PathQt4.bat"
-@if %ERRORLEVEL%==0 goto find_qt4
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_QT_4
+@call "%CHECKS%\PathQt5.bat"
+@if %ERRORLEVEL%==0 goto find_qt5
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_QT_5
 @goto end
-:find_qt4
-@echo [INFO] Using PTEID_DIR_QT_4=%PTEID_DIR_QT_4%
+:find_qt5
+@echo [INFO] Using PTEID_DIR_QT_5=%PTEID_DIR_QT_5%
 
 :: Check OpenSSL 0.9.8
 :: ====================
@@ -140,14 +147,14 @@ set startTime=%time%
 
 @if "%SKIP_X64_DEPS_CHECK%"=="1" goto skip_64_deps
 
-:: Check QT 4 X64
+:: Check QT 5 X64
 :: ==================
-@call "%CHECKS%\PathQt4_x64.bat"
-@if %ERRORLEVEL%==0 goto find_qt4_x64
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_QT_4_X64
+@call "%CHECKS%\PathQt5_x64.bat"
+@if %ERRORLEVEL%==0 goto find_qt5_x64
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_QT_5_X64
 @goto end
-:find_qt4_x64
-@echo [INFO] Using PTEID_DIR_QT_4_X64=%PTEID_DIR_QT_4_X64%
+:find_qt5_x64
+@echo [INFO] Using PTEID_DIR_QT_5_X64=%PTEID_DIR_QT_5_X64%
 
 :: Check OpenSSL 0.9.8 X64
 :: ====================
@@ -194,7 +201,7 @@ set startTime=%time%
 :find_openjpeg_x64
 @echo [INFO] Using PTEID_DIR_OPENJPEG_X64=%PTEID_DIR_OPENJPEG_X64%
 
-:: Curl X64
+:: Check Curl X64
 ::=============
 @call "%CHECKS%\PathCurl_x64.bat"
 @if %ERRORLEVEL%==0 goto find_curl_x64

@@ -41,9 +41,9 @@
 			<?define var.PTEID_DIR_MSM=$(env.PTEID_DIR_MSM)?>
 		<?endif?>
 
-    <?define var.PTEID_QT_PLATFORMPLUGINS=$(env.PTEID_DIR_QT_4_X64)\plugins\platforms\?>
-    <?define var.PTEID_QT_IMAGEFORMATS=$(env.PTEID_DIR_QT_4_X64)\plugins\imageformats\?>
-    <?define var.PTEID_QT_PRINTSUPPORT=$(env.PTEID_DIR_QT_4_X64)\plugins\printsupport\?>
+    <?define var.PTEID_QT_PLATFORMPLUGINS=$(env.PTEID_DIR_QT_5_X64)\plugins\platforms\?>
+    <?define var.PTEID_QT_IMAGEFORMATS=$(env.PTEID_DIR_QT_5_X64)\plugins\imageformats\?>
+    <?define var.PTEID_QT_PRINTSUPPORT=$(env.PTEID_DIR_QT_5_X64)\plugins\printsupport\?>
 	    
     
     <!-- Choose the target runtime to use: -->
@@ -301,13 +301,13 @@
 
 				<Component Id="Qt" Guid="{AF5AF018-EE70-4EA9-98BA-9C2947F19060}" SharedDllRefCount="yes">
           <!-- QT5  -->
-          <File Source="$(env.PTEID_DIR_QT_4_X64)\bin\Qt5Core.dll" KeyPath="yes" />
-          <File Source="$(env.PTEID_DIR_QT_4_X64)\bin\Qt5Gui.dll" />
-          <File Source="$(env.PTEID_DIR_QT_4_X64)\bin\Qt5Network.dll" />
-          <File Source="$(env.PTEID_DIR_QT_4_X64)\bin\Qt5Widgets.dll" />
-          <File Source="$(env.PTEID_DIR_QT_4_X64)\bin\Qt5Xml.dll" />
-          <File Source="$(env.PTEID_DIR_QT_4_X64)\bin\Qt5Concurrent.dll" />
-          <File Source="$(env.PTEID_DIR_QT_4_X64)\bin\Qt5PrintSupport.dll" />
+          <File Source="$(env.PTEID_DIR_QT_5_X64)\bin\Qt5Core.dll" KeyPath="yes" />
+          <File Source="$(env.PTEID_DIR_QT_5_X64)\bin\Qt5Gui.dll" />
+          <File Source="$(env.PTEID_DIR_QT_5_X64)\bin\Qt5Network.dll" />
+          <File Source="$(env.PTEID_DIR_QT_5_X64)\bin\Qt5Widgets.dll" />
+          <File Source="$(env.PTEID_DIR_QT_5_X64)\bin\Qt5Xml.dll" />
+          <File Source="$(env.PTEID_DIR_QT_5_X64)\bin\Qt5Concurrent.dll" />
+          <File Source="$(env.PTEID_DIR_QT_5_X64)\bin\Qt5PrintSupport.dll" />
 				</Component>
 
 				<Component Id="License" Guid="{C00AF621-E882-4805-BA9C-B90AA5DBBCB6}" SharedDllRefCount="yes">
