@@ -3,7 +3,7 @@
   <String Id="Lang" Overridable="yes">2070</String>
   <String Id="Langpref" Overridable="yes">pt</String>
   <String Id="StartApp" Overridable="yes">Lançar a aplicação utilitária</String>
-  <String Id="MinOs" Overridable="yes">Este Instalador precisa no mínimo de um sistema Windows 2000</String>
+  <String Id="MinOs" Overridable="yes">Este Instalador precisa no mínimo de um sistema Windows 7</String>
   <String Id="PteidRuntime" Overridable="yes">Autenticação.Gov 3.0</String>
   <String Id="PteidRuntimeDesc" Overridable="yes">Este módulo é necessário para utilizar o Cartão de Cidadão.</String>
   <String Id="PteidGui" Overridable="yes">Aplicação Utilitária</String>

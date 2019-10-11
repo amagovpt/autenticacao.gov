@@ -9,8 +9,6 @@
 
   <?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
   <?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F20$(var.PteidRevisionNumber)}?>
-  <?define var.ProductGuidGeneric ={824563DE-75AD-4166-9DC0-B6482F2?????}?>
-  <!--<?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F2DED5A})?>-->
   <?define var.ProductName =Autenticação.Gov $(var.OfficialProductVersion) (build $(var.PteidRevisionNumber))?>
 
   <?define var.PackageCode="*"?>
