@@ -74,7 +74,7 @@ Item {
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
-                font.bold: notesTextDescription.focus ? true : false
+                font.bold: notesTextDescription.activeFocus ? true : false
                 color: Constants.COLOR_MAIN_PRETO
                 anchors.top: notesText.bottom
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE

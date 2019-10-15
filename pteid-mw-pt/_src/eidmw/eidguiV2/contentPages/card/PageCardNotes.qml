@@ -27,7 +27,15 @@ PageCardNotesForm {
         }
         onSignalPersoDataLoaded: {
             console.log("QML: onSignalPersoDataLoaded!")
-            propertyEditNotes.text = persoNotes
+            mainFormID.propertyPageLoader.propertyLoadedText = persoNotes;
+
+            if(mainFormID.propertyPageLoader.propertyUnsavedNotes){
+                propertyEditNotes.text = mainFormID.propertyPageLoader.propertyBackupText;
+            }
+            else{
+                propertyEditNotes.text = mainFormID.propertyPageLoader.propertyLoadedText;
+            }
+
             propertyBusyIndicator.running = false
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                 propertyNotesText.forceActiveFocus()
@@ -112,6 +120,7 @@ PageCardNotesForm {
                 propertyEditNotes.text = ""
             }
 
+            mainFormID.propertyPageLoader.propertyUnsavedNotes = false
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
@@ -122,6 +131,10 @@ PageCardNotesForm {
             ensureVisible(propertyEditNotes.cursorRectangle)
         }
         onTextChanged: {
+            // check for unsaved notes
+            mainFormID.propertyPageLoader.propertyUnsavedNotes 
+                = (propertyEditNotes.text != mainFormID.propertyPageLoader.propertyLoadedText);
+
             var strLenght = gapi.getStringByteLength(propertyEditNotes.text);
             propertyProgressBar.value = strLenght / (Constants.PAGE_NOTES_MAX_NOTES_LENGHT)
             var progressBarPerCentText = propertyProgressBar.value * 100
@@ -153,7 +166,10 @@ PageCardNotesForm {
 
     propertySaveNotes{
         onClicked: {
-            gapi.startWritingPersoNotes(propertyEditNotes.text)
+            gapi.startWritingPersoNotes(propertyEditNotes.text);
+            mainFormID.propertyPageLoader.propertyUnsavedNotes = false;
+            propertyBackupText = "";
+            propertyLoadedText = "";
         }
     }
 
@@ -175,5 +191,11 @@ PageCardNotesForm {
     Component.onCompleted: {
         propertyBusyIndicator.running = true
         gapi.startReadingPersoNotes()
+    }
+
+    Component.onDestruction: {
+        if ( mainFormID.propertyPageLoader.propertyUnsavedNotes ){
+            mainFormID.propertyPageLoader.propertyBackupText = propertyEditNotes.text;
+        }
     }
 }

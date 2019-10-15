@@ -37,6 +37,11 @@ Loader{
 
     property bool propertyForceFocus: false
 
+    // Backup data about unsaved notes
+    property bool propertyUnsavedNotes: false
+    property string propertyBackupText: ""
+    property string propertyLoadedText: ""
+
     ListModel {
         id: backupfilesModel
     }

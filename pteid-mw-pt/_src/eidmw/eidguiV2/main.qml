@@ -346,6 +346,167 @@ Load language error. Please reinstall the application"
         }
     }
 
+    Dialog {
+        id: unsaved_notes_dialog
+        width: 400
+        height: 200
+        visible: false
+        font.family: lato.name
+
+        // to save last menu pressed before dialog opens
+        property int index: -1
+        property string url: ""
+        property int menu: -1
+
+        // Center dialog in the main view
+        x: parent.width * 0.5 - unsaved_notes_dialog.width * 0.5
+        y: parent.height * 0.5 - unsaved_notes_dialog.height * 0.5
+
+        header: Label {
+            id: titleText
+            text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_TITLE")
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: rectPopUp.activeFocus
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
+            color: Constants.COLOR_MAIN_BLUE
+        }
+
+        Item {
+            id: rectPopUp
+            width: unsaved_notes_dialog.availableWidth
+            height: 50
+
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES") + titleText.text + labelText.text
+
+            Keys.enabled: true
+            KeyNavigation.tab: rejectButton
+            KeyNavigation.down: rejectButton
+            KeyNavigation.right: rejectButton
+            KeyNavigation.backtab: continueButton
+            KeyNavigation.up: continueButton
+
+            Item {
+                id: rectLabelText
+                width: parent.width
+                height: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: labelText
+                    text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_DESCRIPTION")
+                    font.bold: activeFocus
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width - 48
+                    wrapMode: Text.Wrap
+                }
+            }
+        }
+
+        Item {
+            width: unsaved_notes_dialog.availableWidth
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            y: 80
+            Item {
+                width: parent.width
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.horizontalCenter: parent.horizontalCenter
+                Button {
+                    id: rejectButton
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_LEAVE")
+                    anchors.left: parent.left
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: continueButton
+                    KeyNavigation.down: continueButton
+                    KeyNavigation.right: continueButton
+                    KeyNavigation.backtab: rectPopUp
+                    KeyNavigation.up: rectPopUp
+                    highlighted: activeFocus ? true : false
+                    onClicked: {
+                        unsaved_notes_dialog.reject()
+                    }
+                    Keys.onReturnPressed: {
+                        unsaved_notes_dialog.reject()
+                    }
+                }
+                Button {
+                    id: continueButton
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_STAY")
+                    anchors.right: parent.right
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: rectPopUp
+                    KeyNavigation.down: rectPopUp
+                    KeyNavigation.right: rectPopUp
+                    KeyNavigation.backtab: rejectButton
+                    KeyNavigation.up: rejectButton
+                    highlighted: activeFocus ? true : false
+                    onClicked: {
+                        unsaved_notes_dialog.accept()
+                    }
+                    Keys.onReturnPressed: {
+                        unsaved_notes_dialog.accept()
+                    }
+                }
+            }
+        }
+        onRejected:{
+            // user rejected unsaved notes
+            mainFormID.propertyPageLoader.propertyBackupText = ""
+            mainFormID.propertyPageLoader.propertyUnsavedNotes = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+
+            // go to where the user pressed before note saving dialog opened
+            switch(unsaved_notes_dialog.menu){
+                case Constants.MAIN_MENU_PRESSED:
+                    mainMenuPressed(unsaved_notes_dialog.index);
+                    break;
+                case Constants.SUB_MENU_PRESSED:
+                    subMenuPressed(unsaved_notes_dialog.index,unsaved_notes_dialog.url);
+                    break;
+                case Constants.MAIN_BOTTOM_MENU_PRESSED:
+                    mainMenuBottomPressed(unsaved_notes_dialog.index);
+                    break;
+                case Constants.HOME_ICON_PRESSED:
+                    Functions.goToHome();
+                    break;
+                case Constants.KEY_NAVIGATION_EXIT_NOTES:
+                    mainFormID.propertyPageLoader.propertyForceFocus = false
+                    mainFormID.propertyPageLoader.source = ""
+                    mainFormID.propertyPageLoader.source = unsaved_notes_dialog.url
+                    mainFormID.propertySubMenuListView.forceActiveFocus()
+                    break;
+            }
+        }
+        onClosed: {
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+        }
+        onAccepted: {
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
+        }
+        onOpened: {
+            rectPopUp.forceActiveFocus()
+        }
+
+    }
+
+
     MainForm {
         id: mainFormID
         property bool isAnimationFinished: mainFormID.propertyPageLoader.propertyAnimationExtendedFinished
@@ -701,6 +862,12 @@ Load language error. Please reinstall the application"
         ]
         Keys.onPressed: {
             console.log("Main Menu Key Pressed: " + event.key)
+            // if backing out of notes, using keys
+            if(mainFormID.propertySubMenuListView.focus){
+                var CARD_NOTES_URL = "contentPages/card/PageCardNotes.qml"
+                mainWindow.handleUnsavedNotes(mainFormID.propertySubMenuListView.currentIndex, CARD_NOTES_URL, Constants.KEY_NAVIGATION_EXIT_NOTES)
+            }
+
             if(propertyImageLogoBottom.focus){
                 mainFormID.propertyMainMenuListView.currentIndex = 0
                 mainFormID.propertyMainMenuListView.forceActiveFocus()
@@ -754,10 +921,10 @@ Load language error. Please reinstall the application"
         }
         propertyImageLogo {
             onClicked: {
-                mainFormID.state = Constants.MenuState.HOME
-                propertySubMenuListView.currentIndex = -1
-                propertyMainMenuListView.currentIndex = -1
-                propertyMainMenuBottomListView.currentIndex = -1
+                // if there are no unsaved notes
+                if(!handleUnsavedNotes(-1, "", Constants.HOME_ICON_PRESSED)){
+                    Functions.goToHome()
+                }
             }
         }
         propertyImageLogoBottom {
@@ -1215,6 +1382,11 @@ Load language error. Please reinstall the application"
     }
 
     function mainMenuPressed(index){
+        // if there are unsaved notes
+        if(handleUnsavedNotes(index,"", Constants.MAIN_MENU_PRESSED)){
+            return
+        }
+
         mainFormID.propertyMainMenuBottomListView.currentIndex = -1
         mainFormID.propertyMainMenuListView.currentIndex = index
 
@@ -1246,6 +1418,11 @@ Load language error. Please reinstall the application"
     }
 
     function subMenuPressed(index, url){
+        // if there are unsaved notes
+        if(handleUnsavedNotes(index,url,Constants.SUB_MENU_PRESSED)){
+            return
+        } 
+
         mainFormID.propertySubMenuListView.currentIndex = index
         console.log("Sub Menu index = " + index);
         console.log("Sub Menu Pressed Expand Sub Menu" + mainFormID.propertySubMenuListView.model.get(0).expand)
@@ -1266,6 +1443,11 @@ Load language error. Please reinstall the application"
     }
 
     function mainMenuBottomPressed(index){
+        // if there are unsaved notes
+        if(handleUnsavedNotes(index,"",Constants.MAIN_BOTTOM_MENU_PRESSED)){
+            return
+        }
+
         // Do not select any option
         mainFormID.propertyMainMenuListView.currentIndex = -1
         mainFormID.propertyMainMenuBottomListView.currentIndex = index
@@ -1293,5 +1475,19 @@ Load language error. Please reinstall the application"
 
         console.log("Main Menu Bottom index = " + index);
         mainFormID.propertySubMenuListView.forceActiveFocus()
+    }
+
+    function handleUnsavedNotes(index, url, menu){
+        if ( mainFormID.propertyPageLoader.propertyUnsavedNotes ){
+            // Unsaved notes dialog
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+            unsaved_notes_dialog.open()
+            unsaved_notes_dialog.visible = true
+            unsaved_notes_dialog.index = index
+            unsaved_notes_dialog.url = url
+            unsaved_notes_dialog.menu = menu
+        }
+
+        return mainFormID.propertyPageLoader.propertyUnsavedNotes
     }
 }
