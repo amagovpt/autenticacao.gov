@@ -359,17 +359,18 @@ PageDefinitionsSCAPForm {
         }
         onSignalRemoveSCAPAttributesSucess: {
             console.log("Definitions SCAP - Signal SCAP Signal Remove SCAP Attributes Sucess")
-            propertyBusyIndicatorAttributes.running = false
-               mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("PageDataApp","STR_CLEAR_CACHE")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC")
-
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
-            if(isCompanies == false){
-                gapi.startGettingEntities()
-                propertyBusyIndicator.running = true
+            if (isLoadingAttributes == false) {
+                propertyBusyIndicatorAttributes.running = false
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC")
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                if(isCompanies == false){
+                    gapi.startGettingEntities()
+                    propertyBusyIndicator.running = true
+                }
             }
         }
         onSignalRemoveSCAPAttributesFail: {
