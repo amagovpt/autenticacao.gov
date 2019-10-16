@@ -87,7 +87,8 @@ std::vector<ns2__AttributesType *>
     }
     return m_attributesList;
 }
-std::vector<ns2__AttributesType *>
+// Not used: Load attributes from cache only from a unique citizen NIC
+/*std::vector<ns2__AttributesType *>
     ScapServices::loadAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies) {
 
     std::vector<ns2__AttributesType *> attributesType;
@@ -108,7 +109,7 @@ std::vector<ns2__AttributesType *>
     }
 
     return attributesType;
-}
+}*/
 
 std::vector<ns2__AttributesType *>
     ScapServices::reloadAttributesFromCache() {
@@ -384,6 +385,8 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
             ret = proxy.Attributes(endpoint.c_str(), soap_action, attr_request, attr_response);
             if (ret != SOAP_OK) {
                 qDebug() << "Error returned by calling Attributes in SoapBindingProxy(). Error code: " << ret;
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                          "Error returned by calling Attributes in SoapBindingProxy. Error code: %d",ret);
                 parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
                 soap_destroy(&sp);
                 soap_end(&sp);
@@ -452,6 +455,8 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
         if (ret != 0) {
             qDebug() << "Error reading AttributeResponseType! Malformed XML response";
             std::cerr << "Error reading AttributeResponseType! Malformed XML response" << std::endl;
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                      "Error reading AttributeResponseType! Malformed XML response. Error Code: %d",ret);
             parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
             //FIXME: mem leak
             //soap_destroy(&soap2);
@@ -537,8 +542,11 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
         //soap_done(&soap2);
     }
     catch(const std::exception &ex) {
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                         "Error in getAttributes(): %s", ex.what());
+
         parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
-        qDebug() << "reqAttributeSupplierListType ERROR << - TODO: improve error handling" << ex.what();
+        qDebug() << "Error in getAttributes():" << ex.what();
     }
 
     return result;

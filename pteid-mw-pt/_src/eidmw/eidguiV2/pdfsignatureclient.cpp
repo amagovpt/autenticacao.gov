@@ -150,8 +150,11 @@ int getCitizenSignatureDetails(QString filepath, SignatureDetails &sigDetails)
     // Get PDF File
     QFile file(filepath);
 
-    if (!file.open(QIODevice::ReadOnly))
+    if (!file.open(QIODevice::ReadOnly)){
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                  "Error opening file");
         return GAPI::ScapGenericError; // Error opening file
+    }
 
     QByteArray needle = QByteArray::fromRawData(needleValues, strlen(needleValues));
     QByteArray fileByteArray = file.readAll();
@@ -159,7 +162,9 @@ int getCitizenSignatureDetails(QString filepath, SignatureDetails &sigDetails)
 
     int indexOfNeedle = fileByteArray.lastIndexOf(needle);
     if (indexOfNeedle < 0) {
-        qDebug() << "Could not find signature contents string: " << pdfBinaryLen;
+        qDebug() << "Could not find signature contents string. Len = " << pdfBinaryLen;
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                  "Could not find signature contents string. Len = %d",pdfBinaryLen);
         return GAPI::ScapGenericError;
     }
     indexOfNeedle += needle.length();
@@ -175,7 +180,9 @@ int getCitizenSignatureDetails(QString filepath, SignatureDetails &sigDetails)
     }
 
     if (endOfNeedle == 0) {
-        qDebug() << "Could not find contents string (2): " << pdfBinaryLen;
+        qDebug() << "Could not find contents string (2). Len = %d" << pdfBinaryLen;
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                  "Could not find signature contents string (2). Len = %d",pdfBinaryLen);
         return GAPI::ScapGenericError;
     }
     QByteArray signatureContents = fileByteArray.mid(indexOfNeedle, endOfNeedle - indexOfNeedle);
@@ -184,8 +191,11 @@ int getCitizenSignatureDetails(QString filepath, SignatureDetails &sigDetails)
 
     loadPkcs7Object(signatureContentsBinary, sigDetails);
 
-    if (sigDetails.signing_certificate.size() == 0)
+    if (sigDetails.signing_certificate.size() == 0){
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                  "Signing certificate size returned zero");
         return GAPI::ScapGenericError;
+    }
     else
         return GAPI::ScapSucess;
 }
@@ -463,7 +473,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 			, "ScapSignature"
 			, "Error in signPDF: Gsoap returned %d "
 			, ret);
-		qDebug() << "signPDF() returned error!";
+        qDebug() << "signPDF() returned error!" << ret;
 		return GAPI::ScapGenericError;
 	}
 
@@ -576,7 +586,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
         qDebug() << "Error returned by calling Authorization in SoapBindingProxy(). Error code: " << rc;
         if (rc == SOAP_FAULT) {
 
-            qDebug() << "SOAP Fault returned: TODO print fault message";
+            qDebug() << "SOAP Fault returned. Error code: " << rc;
         }
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
                   "Error returned by calling Authorization in SoapBindingProxy(). Error code: %d", rc);

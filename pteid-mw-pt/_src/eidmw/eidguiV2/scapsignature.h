@@ -48,7 +48,8 @@ public:
 		std::vector<int> selected_attributes, bool useCustomImage, QByteArray &m_jpeg_scaled_data);
 
     std::vector<ns2__AttributesType *> loadAttributesFromCache(bool isCompanies);
-    std::vector<ns2__AttributesType *> loadAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies);
+    // Not used: Load attributes from cache only from a unique citizen NIC
+    //std::vector<ns2__AttributesType *> loadAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies);
     std::vector<ns2__AttributesType *> reloadAttributesFromCache();
     bool removeAttributesFromCache();
     void cancelGetAttributesWithCMD();
