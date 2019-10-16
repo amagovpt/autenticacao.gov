@@ -71,6 +71,12 @@ Item {
             }
             Text {
                 id: modeText
+                property string propertyTestModeText: controler.getTestMode() ?
+                    "  [" + qsTr("STR_RUN_MODE") + "]" + controler.autoTr : ""
+                property string propertyDebugModeText: controler.getDebugModeValue() ?
+                    "  [" + qsTr("STR_RUN_DEBUG_MODE") + "]" + controler.autoTr : ""
+
+                text: propertyTestModeText + propertyDebugModeText
                 anchors.left: categoryText.right
                 anchors {
                     verticalCenter: parent.verticalCenter
