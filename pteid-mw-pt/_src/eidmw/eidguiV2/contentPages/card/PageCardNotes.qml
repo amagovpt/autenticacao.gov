@@ -84,6 +84,7 @@ PageCardNotesForm {
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
 
             propertyEditNotes.text = ""
+            enableInput(false)
             propertyBusyIndicator.running = false
         }
 
@@ -103,6 +104,7 @@ PageCardNotesForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
                 propertyEditNotes.text = ""
+                enableInput(false)
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
@@ -111,6 +113,7 @@ PageCardNotesForm {
                         qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
                 gapi.startReadingPersoNotes()
+                enableInput(true)
             }
             else{
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
@@ -118,6 +121,7 @@ PageCardNotesForm {
                 mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
                         qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
                 propertyEditNotes.text = ""
+                enableInput(false)
             }
 
             mainFormID.propertyPageLoader.propertyUnsavedNotes = false
@@ -185,6 +189,10 @@ PageCardNotesForm {
     {
         for (var p in item)
             console.log(p + ": " + item[p]);
+    }
+    function enableInput(b){
+        propertyEditNotes.enabled = b
+        propertySaveNotes.enabled = b
     }
 
 
