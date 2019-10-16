@@ -213,9 +213,14 @@ public:
     enum ScapPdfSignResult { ScapTimeOutError, ScapGenericError, ScapAttributesExpiredError, ScapZeroAttributesError,
                              ScapNotValidAttributesError, ScapSucess };
 
+    enum ScapAttrType {ScapAttrEntities, ScapAttrCompanies, ScapAttrAll};
+    enum ScapAttrDescription {ScapAttrDescriptionShort, ScapAttrDescriptionLong};
+
     enum PinUsage { AuthPin, SignPin, AddressPin };
 
     Q_ENUMS(ScapPdfSignResult)
+    Q_ENUMS(ScapAttrType)
+    Q_ENUMS(ScapAttrDescription)
     Q_ENUMS(CardAccessError)
     Q_ENUMS(eCustomEventType)
     Q_ENUMS(IDInfoKey)
@@ -280,8 +285,8 @@ public slots:
     /* SCAP Methods  */
     void startGettingEntities();
     void startGettingCompanyAttributes(bool useOAuth);
-    void startLoadingAttributesFromCache(int isCompanies, bool isShortDescription);
-    void startRemovingAttributesFromCache(int isCompanies);
+    void startLoadingAttributesFromCache(int scapAttrType, bool isShortDescription);
+    void startRemovingAttributesFromCache(int scapAttrType);
     void startGettingEntityAttributes(QList<int> entity_index, bool useOAuth);
     void startPingSCAP();
 
@@ -421,9 +426,9 @@ signals:
     void signalPrinterPrintFail();
     void signalPrinterPrintFail(int error_code);
     void signalLanguageChangedError();
-    void signalRemoveSCAPAttributesSucess(int isCompanies);
-    void signalRemoveSCAPAttributesFail(int isCompanies);
-    void signalCacheNotReadable(int isCompanies);
+    void signalRemoveSCAPAttributesSucess(int scapAttrType);
+    void signalRemoveSCAPAttributesFail(int scapAttrType);
+    void signalCacheNotReadable(int scapAttrType);
 	void signalCacheNotWritable();
 	void signalCacheFolderNotCreated();
 
@@ -439,11 +444,10 @@ private:
     void getSCAPCompanyAttributes(bool OAuth);
     QString translateCMDErrorCode(int errorCode);
 
-    //querytype - 0 = Entities, 1 = Companies, 2 = All Attributes 
-    void getSCAPAttributesFromCache(int queryType, bool isShortDescription);
-    //querytype - 0 = Entities, 1 = Companies
-    void removeSCAPAttributesFromCache(int queryType);
-	bool prepareSCAPCache();
+    //scapAttrType : 0 = Entities, 1 = Companies, 2 = All Attributes
+    void getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription);
+    void removeSCAPAttributesFromCache(int scapAttrType);
+    bool prepareSCAPCache(int scapAttrType);
     void getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth);
     void doCancelCMDSign();
     void doSignSCAP(SCAPSignParams params);

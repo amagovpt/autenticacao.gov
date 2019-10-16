@@ -2122,12 +2122,12 @@ void GAPI::startReadingAddress() {
     QtConcurrent::run(this, &GAPI::getAddressFile);
 }
 
-void GAPI::startLoadingAttributesFromCache(int isCompanies, bool isShortDescription) {
-    QtConcurrent::run(this, &GAPI::getSCAPAttributesFromCache, isCompanies, isShortDescription);
+void GAPI::startLoadingAttributesFromCache(int scapAttrType, bool isShortDescription) {
+    QtConcurrent::run(this, &GAPI::getSCAPAttributesFromCache, scapAttrType, isShortDescription);
 }
 
-void GAPI::startRemovingAttributesFromCache(int isCompanies) {
-    QtConcurrent::run(this, &GAPI::removeSCAPAttributesFromCache, isCompanies);
+void GAPI::startRemovingAttributesFromCache(int scapAttrType) {
+    QtConcurrent::run(this, &GAPI::removeSCAPAttributesFromCache, scapAttrType);
 }
 
 void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, double location_x,
@@ -2221,7 +2221,7 @@ void GAPI::initScapAppId(){
         QString request_uuid = QUuid::createUuid().toString();
         appIDstring = request_uuid.midRef(1, request_uuid.size() - 2).toString();
         settings.setAppID(appIDstring);
-        removeSCAPAttributesFromCache(0);
+        removeSCAPAttributesFromCache(ScapAttrAll);
     }
 }
 
@@ -2250,7 +2250,7 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth) {
     foreach(supplier_id, entityIDs) {
         supplier_ids.push_back(supplier_id);
     }
-    if (!prepareSCAPCache()){
+    if (!prepareSCAPCache(ScapAttrEntities)){
         return;
     }
     std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, card, supplier_ids, useOAuth);
@@ -2302,7 +2302,7 @@ void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
     initScapAppId();
 
     std::vector<int> supplierIDs;
-    if (!prepareSCAPCache()) {
+    if (!prepareSCAPCache(ScapAttrCompanies)) {
         return;
     }
     std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, card, supplierIDs, useOAuth);
@@ -2341,7 +2341,9 @@ void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
 }
 
 
-void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
+void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription) {
+
+    qDebug() << "getSCAPAttributesFromCache scapAttrType: " << scapAttrType;
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "GetCardInstance getSCAPAttributesFromCache");
     PTEID_EIDCard * card = NULL;
@@ -2349,11 +2351,11 @@ void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
     QList<QString> attribute_list;
 
     //Card is only required for loading entities and companies seperately...
-    //This is a hack to support loading attributes without NIC in the context of CMD 
-    if (queryType < 2) {
-        attributes = scapServices.loadAttributesFromCache(queryType == 1);
+    if (scapAttrType != ScapAttrAll) {
+        attributes = scapServices.loadAttributesFromCache(scapAttrType == ScapAttrCompanies);
     }
-    else if (queryType == 2) {
+    // Loading all attributes without NIC
+    else {
         attributes = scapServices.reloadAttributesFromCache();
     }
 
@@ -2371,17 +2373,17 @@ void GAPI::getSCAPAttributesFromCache(int queryType, bool isShortDescription) {
             attribute_list.append(QString::fromStdString(childAttributes.at(j + 1)));
         }
     }
-    if (queryType == 0)
+    if (scapAttrType == ScapAttrEntities)
         emit signalEntityAttributesLoaded(attribute_list);
-    else if (queryType == 1)
+    else if (scapAttrType == ScapAttrCompanies)
         emit signalCompanyAttributesLoaded(attribute_list);
-    else if (queryType == 2)
+    else if (scapAttrType == ScapAttrAll)
         emit signalAttributesLoaded(attribute_list);
 }
 
-void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
+void GAPI::removeSCAPAttributesFromCache(int scapAttrType) {
 
-    qDebug() << "removeSCAPAttributesFromCache : " << isCompanies;
+    qDebug() << "removeSCAPAttributesFromCache scapAttrType: " << scapAttrType;
 
     ScapSettings settings;
     QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
@@ -2389,7 +2391,8 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
     bool has_read_permissions = true;
 
     // Delete SCAP secretkey to get a new one
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "GetCardInstance removeSCAPAttributesFromCache");
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
+              "GetCardInstance removeSCAPAttributesFromCache");
     PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card != NULL) {
@@ -2407,7 +2410,7 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
             "No read permissions: SCAP cache directory!");
         qDebug() << "C++: Cache folder does not have read permissions! ";
         has_read_permissions = false;
-        emit signalCacheNotReadable(isCompanies);
+        emit signalCacheNotReadable(scapAttrType);
     }
 #ifdef WIN32
     qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
@@ -2420,12 +2423,12 @@ void GAPI::removeSCAPAttributesFromCache(int isCompanies) {
         return;
 
     if (error_code == true)
-        emit signalRemoveSCAPAttributesSucess(isCompanies);
+        emit signalRemoveSCAPAttributesSucess(scapAttrType);
     else
-        emit signalRemoveSCAPAttributesFail(isCompanies);
+        emit signalRemoveSCAPAttributesFail(scapAttrType);
 }
 
-bool GAPI::prepareSCAPCache() {
+bool GAPI::prepareSCAPCache(int scapAttrType) {
     ScapSettings settings;
     QString s_scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
     QFileInfo scapCacheDir(s_scapCacheDir);
@@ -2454,7 +2457,7 @@ bool GAPI::prepareSCAPCache() {
         qDebug() << "SCAP cache not readable";
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
             "SCAP cache not readable");
-        emit signalCacheNotReadable(0); // isCompanies parameter not used
+        emit signalCacheNotReadable(scapAttrType);
         hasPermissions = false;
     }
 #ifdef WIN32

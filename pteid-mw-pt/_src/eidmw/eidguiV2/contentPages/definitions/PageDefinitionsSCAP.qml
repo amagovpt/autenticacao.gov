@@ -204,8 +204,9 @@ PageDefinitionsSCAPForm {
 
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
-            // Load attributes from cache (Entities, isShortDescription)
-            gapi.startLoadingAttributesFromCache(0, 0)
+            // Load attributes from cache (Entities, ShortDescription)
+            gapi.startLoadingAttributesFromCache(GAPI.ScapAttrEntities,
+                                                 GAPI.ScapAttrDescriptionShort)
             propertyBusyIndicator.running = false
         }
         onSignalSCAPPingSuccess: {
@@ -274,8 +275,9 @@ PageDefinitionsSCAPForm {
                                              });
             }
 
-            // Load attributes from cache (Entities, isShortDescription)
-            gapi.startLoadingAttributesFromCache(0, 0)
+            // Load attributes from cache (Entities, ShortDescription)
+            gapi.startLoadingAttributesFromCache(GAPI.ScapAttrEntities,
+                                                 GAPI.ScapAttrDescriptionShort)
             propertyBusyIndicator.running = false
             propertyBusyIndicatorAttributes.running = false
         }
@@ -313,9 +315,10 @@ PageDefinitionsSCAPForm {
                     }
                 }
             }
-            //Load attributes from cache (Companies, isShortDescription)
+            //Load attributes from cache (Companies, ShortDescription)
             propertyBusyIndicatorAttributes.running = false
-            gapi.startLoadingAttributesFromCache(1, 0)
+            gapi.startLoadingAttributesFromCache(GAPI.ScapAttrCompanies,
+                                                 GAPI.ScapAttrDescriptionShort)
         }
         onSignalCompanyAttributesLoaded: {
             console.log("Definitions SCAP - Signal SCAP company attributes loaded")
@@ -367,7 +370,7 @@ PageDefinitionsSCAPForm {
                         qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC")
                 mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
                 mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
-                if(isCompanies == false){
+                if(scapAttrType != GAPI.ScapAttrCompanies){
                     gapi.startGettingEntities()
                     propertyBusyIndicator.running = true
                 }
@@ -383,7 +386,7 @@ PageDefinitionsSCAPForm {
 
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
-            if(isCompanies == false){
+            if(scapAttrType != GAPI.ScapAttrCompanies){
                 gapi.startGettingEntities()
                 propertyBusyIndicator.running = true
             }
@@ -398,7 +401,7 @@ PageDefinitionsSCAPForm {
             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
 
-            if(isCompanies == false){
+            if(scapAttrType != GAPI.ScapAttrCompanies){
                 gapi.startGettingEntities()
                 propertyBusyIndicator.running = true
             }

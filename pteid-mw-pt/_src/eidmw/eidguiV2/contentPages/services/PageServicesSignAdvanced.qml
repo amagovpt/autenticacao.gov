@@ -853,8 +853,9 @@ PageServicesSignAdvancedForm {
                 propertyTextAttributesMsg.visible = true
                 propertyMouseAreaTextAttributesMsg.enabled = true
                 propertyMouseAreaTextAttributesMsg.z = 1
-                // Load attributes from cache (all, isShortDescription)
-                gapi.startLoadingAttributesFromCache(2, 1)
+                // Load attributes from cache (all, LongDescription)
+                gapi.startLoadingAttributesFromCache(GAPI.ScapAttrAll,
+                                                     GAPI.ScapAttrDescriptionLong)
             }else{
                 console.log("propertySwitchSignAdd not checked")
                 entityAttributesModel.clear()

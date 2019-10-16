@@ -170,7 +170,7 @@ PageDefinitionsDataForm {
         onClicked: {
             console.log("propertyButtonRemoveSCAPCache clicked");
             propertyBusyIndicator.running = true;
-            gapi.startRemovingAttributesFromCache(0)
+            gapi.startRemovingAttributesFromCache(GAPI.ScapAttrAll)
         }
     }
 
