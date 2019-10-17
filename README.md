@@ -8,7 +8,7 @@ O objectivo deste projecto é disponibilizar uma nova versão de middleware que 
 
 O manual pretende descrever todas as funcionalidades providenciadas pelo middleware do Cartão de Cidadão.
 
-[Manual de Utilização (pdf)](docs/Manual_de_Utilizacao.pdf)
+[Manual de Utilização (pdf)](docs/Manual_de_Utilizacao_v3.pdf)
 
 ## SDK
 
