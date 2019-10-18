@@ -267,10 +267,6 @@
         <Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[APPLICATIONROOTFOLDER]"/>
       </Component>
 
-      <Component Id="Icon" Guid="{5B657BAD-8CFC-4E42-AF8C-13338C50D784}" SharedDllRefCount="yes">
-        <File Source="..\..\..\eidgui\eid.ico" KeyPath="yes" />
-      </Component>
-
       <Component Id="CACerts" Guid="{b0fb28de-54ac-45b0-a565-1dce90ffe080}">
         <File Source="..\..\certs\cacerts.pem" KeyPath="yes"/>
       </Component>
@@ -420,7 +416,6 @@
 
       <!-- Program Files -->
       <ComponentRef Id="RootFolder"/>
-      <ComponentRef Id="Icon" />
       <ComponentRef Id="EidStore"/>
       <ComponentRef Id="Certs"/>
       <ComponentRef Id="CertCC004"/>
