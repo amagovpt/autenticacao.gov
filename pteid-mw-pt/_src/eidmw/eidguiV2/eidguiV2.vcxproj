@@ -305,10 +305,6 @@ echo "**************************************************************************
     <ClCompile Include="totp_gen.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="debug\qrc_resources.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="pdfsignatureclient.cpp" />
     <ClCompile Include="release\qrc_resources.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

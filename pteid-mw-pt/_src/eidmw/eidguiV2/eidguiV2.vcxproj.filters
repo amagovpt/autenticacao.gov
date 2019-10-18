@@ -101,17 +101,14 @@
     <ClCompile Include="cJSON_1_7_12.c">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="OAuthAttributes.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="AttributeFactory.cpp">
-      <Filter>Generated Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OAuthAttributes.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="debug\qrc_resources.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="release\qrc_resources.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
