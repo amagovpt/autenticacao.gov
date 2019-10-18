@@ -1,4 +1,4 @@
-﻿# Middleware Oficial de Identificação Eletrónica em Portugal - Cartão de Cidadão, da Chave Móvel Digital e Sistema de Certificação de atributos profissionais
+# Middleware Oficial de Identificação Eletrónica em Portugal - Cartão de Cidadão, da Chave Móvel Digital e Sistema de Certificação de atributos profissionais
 ## Introdução
 ### Objectivos
 
@@ -88,6 +88,7 @@ Ferramentas adicionais a instalar:
 - Swigwin 2.0.12 - disponível em  https://sourceforge.net/projects/swig/files/swigwin/swigwin-2.0.12/
 - Java JDK
 - wix - disponível em https://wixtoolset.org/releases/
+- Wix Visual Studio Extension - https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2013Extension
 - Microsoft Merge Modules
 
 
