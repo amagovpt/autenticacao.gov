@@ -87,9 +87,8 @@ Ferramentas adicionais a instalar:
 - doxygen - disponível em http://www.doxygen.nl/download.html
 - Swigwin 2.0.12 - disponível em  https://sourceforge.net/projects/swig/files/swigwin/swigwin-2.0.12/
 - Java JDK
-- wix - disponível em https://wixtoolset.org/releases/
+- Wix - disponível em https://wixtoolset.org/releases/
 - Wix Visual Studio Extension - https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2013Extension
-- Microsoft Merge Modules
 
 
 Após configurado o ambiente conforme acima descrito, efetuar os seguintes passos:
