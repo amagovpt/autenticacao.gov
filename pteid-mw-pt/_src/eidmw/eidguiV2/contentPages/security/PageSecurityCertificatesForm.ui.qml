@@ -13,6 +13,7 @@ Item {
 
     property alias propertyAcordion: acordion
     property alias propertyRectEntity: rectEntity
+    property alias propertyRectBottom: rectBottom
     property alias propertyBusyIndicator: busyIndicator
 
     Item {
