@@ -1055,14 +1055,15 @@ QString GAPI::getCardActivation() {
         //Network access errors (OCSP/CRL)
         if (certificateStatus == PTEID_CERTIF_STATUS_CONNECT)
             return QString(tr("STR_CARD_CONNECTION_ERROR"));
-        else if (certificateStatus == PTEID_CERTIF_STATUS_ERROR || certificateStatus == PTEID_CERTIF_STATUS_ISSUER || certificateStatus == PTEID_CERTIF_STATUS_UNKNOWN)
+        else if (certificateStatus == PTEID_CERTIF_STATUS_ERROR
+                 || certificateStatus == PTEID_CERTIF_STATUS_ISSUER
+                 || certificateStatus == PTEID_CERTIF_STATUS_UNKNOWN)
             return QString(tr("STR_CARD_VALIDATION_ERROR"));
-    }
-    //Else If state active AND validity not expired AND certificate suspended or revoked
-    else if (card->isActive() && !isExpiredDate(eid_file.getValidityEndDate())
-        && (certificateStatus == PTEID_CERTIF_STATUS_SUSPENDED || certificateStatus == PTEID_CERTIF_STATUS_REVOKED))
-    {
-        return QString(tr("STR_CARD_CANCELED"));
+        else if (certificateStatus == PTEID_CERTIF_STATUS_SUSPENDED
+                 || certificateStatus == PTEID_CERTIF_STATUS_REVOKED)
+            return QString(tr("STR_CARD_CANCELED"));
+        else if(certificateStatus == PTEID_CERTIF_STATUS_EXPIRED)
+            return QString(tr("STR_CARD_EXPIRED_CERT"));
     }
     //Else If state active AND validity expired
     else if (card->isActive() && isExpiredDate(eid_file.getValidityEndDate()))
@@ -1073,6 +1074,10 @@ QString GAPI::getCardActivation() {
     else if (!card->isActive())
     {
         return QString(tr("STR_CARD_NOT_ACTIVE"));
+    }
+    else
+    {
+        return QString(tr("STR_CARD_STATUS_FAIL"));
     }
     END_TRY_CATCH
 }
@@ -2475,7 +2480,7 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
     try
     {
         unsigned long ReaderCount = ReaderSet.readerCount();
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "GetCardInstance Card Reader count =  %ld", ReaderCount);
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance Card Reader count =  %ld", ReaderCount);
         unsigned long ReaderIdx = 0;
         long CardIdx = 0;
         unsigned long tempReaderIndex = 0;
