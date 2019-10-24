@@ -62,6 +62,34 @@ PageSecurityCertificatesForm {
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
             propertyBusyIndicator.running = false
         }
+        onSignalCardChanged: {
+            console.log("Security Certificates onSignalCardChanged")
+            if (error_code == GAPI.ET_CARD_REMOVED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
+                clearFields()
+            }
+            else if (error_code == GAPI.ET_CARD_CHANGED) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
+                propertyBusyIndicator.running = true
+                gapi.startfillCertificateList()
+            }
+            else{
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
+                clearFields()
+            }
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+        }
         onSignalCertificatesChanged: {
 
             console.log("Certificates Added: "+ certificatesMap.levelCount)
@@ -239,5 +267,11 @@ PageSecurityCertificatesForm {
         }
 
         return strCertStatus
+    }
+    function clearFields(){
+        for (var i = 0; i < propertyRectBottom.children.length; i++){
+            propertyAcordion.model = []
+            propertyRectBottom.children[i].children[0].propertyDateField.text = ""
+        }
     }
 }

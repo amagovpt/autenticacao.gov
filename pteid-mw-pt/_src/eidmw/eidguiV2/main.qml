@@ -364,7 +364,7 @@ Load language error. Please reinstall the application"
 
         header: Label {
             id: titleText
-            text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_TITLE")
+            text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_TITLE") + controler.autoTr
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
@@ -395,7 +395,7 @@ Load language error. Please reinstall the application"
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: labelText
-                    text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_DESCRIPTION")
+                    text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_DESCRIPTION") + controler.autoTr
                     font.bold: activeFocus
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
@@ -419,7 +419,7 @@ Load language error. Please reinstall the application"
                     id: rejectButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
-                    text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_LEAVE")
+                    text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_LEAVE") + controler.autoTr
                     anchors.left: parent.left
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
@@ -443,7 +443,7 @@ Load language error. Please reinstall the application"
                     id: continueButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
-                    text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_STAY")
+                    text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_STAY") + controler.autoTr
                     anchors.right: parent.right
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
@@ -909,13 +909,9 @@ Load language error. Please reinstall the application"
             mainFormID.propertyMainMenuListView.currentIndex = -1
             mainFormID.propertyMainMenuBottomListView.currentIndex = -1
             console.log("MainForm Completed testmode: "+controler.getTestMode())
-            if (controler.getTestMode()) {
-                mainFormID.propertyTitleBarContainer.propertyModeText.text = "   [ " + qsTr("STR_RUN_MODE") + " ]" + controler.autoTr
-            }
 
             console.log("debugMode: " + controler.getDebugModeValue())
             if (controler.getDebugModeValue()) {
-                mainFormID.propertyTitleBarContainer.propertyModeText.text += "   [ " + qsTr("STR_RUN_DEBUG_MODE") + " ]" + controler.autoTr
                 mainFormID.propertyTitleBarContainer.propertyTitleBar.color = Constants.COLOR_TITLEBAR_DEBUG
             }
         }
