@@ -6,25 +6,27 @@ O objectivo deste projecto é disponibilizar uma nova versão de middleware que 
 
 ## Manual de Utilização
 
-O manual pretende descrever todas as funcionalidades providenciadas pelo middleware do Cartão de Cidadão.
+O Manual de Utilização pretende descrever todas as funcionalidades providenciadas pelo middleware do Cartão de Cidadão.
 
-[Manual de Utilização (pdf)](docs/Manual_de_Utilizacao_v3.pdf)
+[Manual de Utilização (online)](https://amagovpt.github.io/autenticacao.gov/user_manual.html)
+
+[Manual de Utilização (download pdf)](docs/Manual_de_Utilizacao_v3.pdf)
 
 ## SDK
 
 Está disponível um SDK, com o objetivo de disponibilizar a integração com outras aplicações, das funcionalidades desenvolvidas no âmbito deste projeto.
 Existem SDK's para as linguagens C, C++, JAVA e C#.
 
-Poderá aceder ao manual no seguinte URL: 
+Poderá aceder ao manual no seguinte URL:
 
-[Manual do SDK (pdf)](docs/Manual_de_SDK.pdf)
+[Manual do SDK (download pdf)](docs/Manual_de_SDK.pdf)
 
-A documentação da API disponibilizada pelo SDK está disponível nos seguintes URLs: 
+A documentação da API disponibilizada pelo SDK está disponível nos seguintes URLs:
 
 
-[Documentação Técnica do SDK C++](https://amagovpt.github.io/autenticacao.gov/sdk/cpp/)
+[Documentação Técnica do SDK C++ (online)](https://amagovpt.github.io/autenticacao.gov/sdk/cpp/)
 
-[Documentação Técnica do SDK Java](https://amagovpt.github.io/autenticacao.gov/sdk/java/)
+[Documentação Técnica do SDK Java (online)](https://amagovpt.github.io/autenticacao.gov/sdk/java/)
 
 ## Compilar o Middleware do Cartão de Cidadão
 
@@ -36,7 +38,7 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
    ```bash
    sudo apt install libpcsclite-dev libpoppler-qt5-dev libzip-dev libopenjp2-7-dev libpng-dev openjdk-8-jdk qtbase5-dev qt5-qmake qtbase5-private-dev qt5-default qtdeclarative5-dev qtquickcontrols2-5-dev qml-module-qtquick-controls2 libssl1.0-dev libxerces-c-dev libxml-security-c-dev swig libcurl4-nss-dev libnsspem
    ```
-   
+
 2. Clonar o repositório
 
    ```bash
@@ -58,9 +60,9 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
    ```
 
    A aplicação utilitária será instalada em: /usr/local/bin/eidguiV2
-   
+
    As dependências para a execução do Middleware na distribuição Ubuntu 18.04 estão disponíveis em "Depends" no seguinte URL: [Dependências](pteid-mw-pt/_src/eidmw/debian/control)
-   
+
 
 ### Windows
 
@@ -103,4 +105,3 @@ Em alternativa, pode ser editado o script `pteid-mw-pt\windows\ezbuild_sln_auten
 
 ## Contactos
 Para questões, sugestões ou comentários envie um e-mail para info.cidadao@ama.pt.
-
