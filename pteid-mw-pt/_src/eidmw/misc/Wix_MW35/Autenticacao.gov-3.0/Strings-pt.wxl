@@ -20,4 +20,5 @@
   <String Id="msierrSecureObjectsUnknownType" Overridable="yes">Unknown object type [3], error: [2]</String>
   <String Id="AdminNeeded" Overridable="yes">Necessita de privilégios de Administrador para instalar este produto</String>
   <String Id="NoDowngrade" Overridable="yes">Versão mais recente já instalada.</String>
+  <String Id="InstallDirDlgDescription">Clique em Seguinte para instalar na pasta predefinida ou clique em Alterar.</String>
 </WixLocalization>
