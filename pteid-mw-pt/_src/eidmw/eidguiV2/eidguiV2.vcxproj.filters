@@ -117,9 +117,6 @@
     <None Include="scripts\Constants.js">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="fonts\karma\Karma-Medium.ttf">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="fonts\lato\Lato-Regular.ttf">
       <Filter>Resource Files</Filter>
     </None>

@@ -22,7 +22,6 @@ Window {
 
     title: "Autenticação.Gov"
 
-    FontLoader { id: karma; source: "qrc:/fonts/karma/Karma-Medium.ttf" }
     FontLoader { id: lato; source: "qrc:/fonts/lato/Lato-Regular.ttf" }
 
     onWidthChanged: {
@@ -1041,6 +1040,7 @@ Load language error. Please reinstall the application"
                             Constants.COLOR_TEXT_MAIN_MENU_DEFAULT
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
+                font.family: lato.name
                 font.capitalization: Font.AllUppercase
                 font.weight: mouseAreaMainMenu.containsMouse
                              || mainFormID.propertyMainMenuListView.currentIndex === index
@@ -1308,6 +1308,7 @@ Load language error. Please reinstall the application"
                 color: Functions.getSubNameColor(index, mouseAreaSubMenu.containsMouse)
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
+                font.family: lato.name
                 font.weight: mouseAreaSubMenu.containsMouse ?
                                  Font.Bold :
                                  Font.Normal

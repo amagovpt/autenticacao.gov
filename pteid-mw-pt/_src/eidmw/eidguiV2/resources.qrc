@@ -13,7 +13,6 @@
         <file>contentPages/card/PageCardNotes.qml</file>
         <file>contentPages/card/PageCardNotesForm.ui.qml</file>
         <file>PageLoader.qml</file>
-        <file>fonts/karma/Karma-Medium.ttf</file>
         <file>fonts/lato/Lato-Regular.ttf</file>
         <file>MainMenuModel.qml</file>
         <file>SubMenuModel.qml</file>

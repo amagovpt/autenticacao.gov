@@ -141,6 +141,7 @@ Item {
                         height: flickable.height
                         focus: true
                         wrapMode: TextEdit.Wrap
+                        font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         color: Constants.COLOR_TEXT_BODY
                         Accessible.editable: true

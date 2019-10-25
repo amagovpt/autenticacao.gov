@@ -63,6 +63,7 @@ Item {
             currentIndex: 0
             TabButton {
                 id: tabButtonAuth
+                font.family: lato.name
                 text: qsTranslate("Popup PIN","STR_PIN_AUTH")
                 rightPadding: 2
                 leftPadding: 2
@@ -90,6 +91,7 @@ Item {
             }
             TabButton {
                 id: tabButtonSign
+                font.family: lato.name
                 text: qsTranslate("Popup PIN","STR_PIN_SIGN")
                 rightPadding: 2
                 leftPadding: 2
@@ -117,6 +119,7 @@ Item {
             }
             TabButton {
                 id: tabButtonAddress
+                font.family: lato.name
                 text: qsTranslate("Popup PIN","STR_PIN_ADDRESS")
                 rightPadding: 2
                 leftPadding: 2

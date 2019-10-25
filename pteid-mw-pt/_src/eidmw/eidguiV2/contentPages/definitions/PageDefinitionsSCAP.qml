@@ -535,12 +535,14 @@ PageDefinitionsSCAPForm {
                 Text {
                     id: entityText
                     text: '<b>' + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITY") + '</b> ' + entityName
+                    font.family: lato.name
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
                 Text {
                     id: attrTitle
                     text: '<b>'+ qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTR") + '</b>'
+                    font.family: lato.name
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
@@ -549,6 +551,7 @@ PageDefinitionsSCAPForm {
                     width: parent.width
                     wrapMode: Text.WordWrap
                     text: attribute
+                    font.family: lato.name
                 }
             }
         }
@@ -595,12 +598,14 @@ PageDefinitionsSCAPForm {
                 Text {
                     id: entityText
                     text: '<b>' + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITY") + '</b> ' + entityName
+                    font.family: lato.name
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
                 Text {
                     id: attrTitle
                     text: '<b>'+ qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTR") + '</b>'
+                    font.family: lato.name
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
@@ -609,6 +614,7 @@ PageDefinitionsSCAPForm {
                     width: parent.width
                     wrapMode: Text.WordWrap
                     text: attribute
+                    font.family: lato.name
                 }
             }
 

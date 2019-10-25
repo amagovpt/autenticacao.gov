@@ -71,6 +71,7 @@ Item {
                 text: qsTranslate("PageDefinitionsSCAP",
                                   "STR_SCAP_ATTRIBUTES_ENTITIES")
                 font.bold: activeFocus ? true : false
+                font.family: lato.name
                 rightPadding: 2
                 leftPadding: 2
                 Accessible.role: Accessible.MenuItem
@@ -86,6 +87,7 @@ Item {
                 text: qsTranslate("PageDefinitionsSCAP",
                                   "STR_SCAP_ATTRIBUTES_COMPANY")
                 font.bold: activeFocus? true : false
+                font.family: lato.name
                 rightPadding: 2
                 leftPadding: 2
                 Accessible.role: Accessible.MenuItem

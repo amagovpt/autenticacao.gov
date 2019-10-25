@@ -1117,6 +1117,7 @@ PageServicesSignAdvancedForm {
                     text: fileUrl
                     width: parent.width - iconRemove.width - Constants.SIZE_LISTVIEW_IMAGE_SPACE
                     x: Constants.SIZE_LISTVIEW_IMAGE_SPACE * 0.5
+                    font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
