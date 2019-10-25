@@ -10,7 +10,7 @@ PageHelpDocOnlineForm {
 
     propertyButtonDownload{
         onClicked: {
-            Qt.openUrlExternally("https://www.autenticacao.gov.pt/documents/10179/11465/Manual+de+Utiliza%C3%A7%C3%A3o+da+Aplica%C3%A7%C3%A3o+do+Cart%C3%A3o+de+Cidad%C3%A3o+v3/");
+            Qt.openUrlExternally("https://amagovpt.github.io/autenticacao.gov/Manual_de_Utilizacao_v3.pdf");
         }
     }
 
