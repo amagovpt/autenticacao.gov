@@ -1174,18 +1174,19 @@ guardadas em sub-chaves de:
 
     HKCU\Software\PTEID
 
-Pode-se no entanto configurar de forma padronizada uma instalação
+**Nota:** Não se devem nunca remover ou alterar os seguintes registos:
+
+    HKLM\Software\PTEID\general\install_dirname
+
+    HKLM\Software\PTEID\general\certs_dir
+
+Pode-se, no entanto, configurar de forma padronizada uma instalação
 adicionando alguns valores no registo do *Windows* para todos os
 utilizadores da máquina após a instalação do software, usando as chaves listadas
 na tabela seguinte que devem ser criadas como sub-chaves da chave raiz:
 
     HKLM\Software\PTEID
 
-**Nota:** Não se devem nunca remover ou alterar os seguintes registos:
-
-        HKLM\Software\PTEID\general\install_dirname
-
-        HKLM\Software\PTEID\general\certs_dir
 | Chave            | Valor                  | Tipo                                 | Descrição                                                                                                                                          |
 |------------------|------------------------|--------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
 | logging          | log_level              | string (debug, info, warning, error) | Nível de detalhe do log do Middleware. Valor por omissão: error                                                                                    |
