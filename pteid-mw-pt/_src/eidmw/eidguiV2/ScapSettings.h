@@ -110,6 +110,15 @@ public:
         config.setString(array.toHex());
     }
 
+    void resetScapKeys()
+    {
+        std::string str = "scap_apikey_";
+        const char* pName = str.c_str();
+        eIDMW::PTEID_Config config(pName, L"general", L"");
+        config.DeleteKeysByPrefix();
+        setAppID("");
+    }
+
     std::string getSecretKey(QString nic) {
 
         QString nic_no_check = nic;

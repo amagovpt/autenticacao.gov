@@ -2222,11 +2222,12 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, boo
 void GAPI::initScapAppId(){
     ScapSettings settings;
     if (settings.getAppID() == ""){
+        // Remove cache from older SCAP implementation
+        removeSCAPAttributesFromCache(ScapAttrAll);
         QString appIDstring;
         QString request_uuid = QUuid::createUuid().toString();
         appIDstring = request_uuid.midRef(1, request_uuid.size() - 2).toString();
         settings.setAppID(appIDstring);
-        removeSCAPAttributesFromCache(ScapAttrAll);
     }
 }
 
@@ -2389,21 +2390,16 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
 void GAPI::removeSCAPAttributesFromCache(int scapAttrType) {
 
     qDebug() << "removeSCAPAttributesFromCache scapAttrType: " << scapAttrType;
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
+              "GetCardInstance removeSCAPAttributesFromCache");
 
     ScapSettings settings;
     QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
     QDir dir(scapCacheDir);
     bool has_read_permissions = true;
 
-    // Delete SCAP secretkey to get a new one
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
-              "GetCardInstance removeSCAPAttributesFromCache");
-    PTEID_EIDCard * card = NULL;
-    getCardInstance(card);
-    if (card != NULL) {
-        QString citizenNIC(card->getID().getCivilianIdNumber());
-        settings.setSecretKey("", citizenNIC);
-    }
+    // Delete all SCAP secretkey's and SCAP AppID
+    settings.resetScapKeys();
 
 #ifdef WIN32
     extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
@@ -2421,13 +2417,13 @@ void GAPI::removeSCAPAttributesFromCache(int scapAttrType) {
     qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
 #endif
 
-    bool error_code = false;
-    error_code = scapServices.removeAttributesFromCache();
+    bool status = false;
+    status = scapServices.removeAttributesFromCache();
 
     if (!has_read_permissions)
         return;
 
-    if (error_code == true)
+    if (status == true)
         emit signalRemoveSCAPAttributesSucess(scapAttrType);
     else
         emit signalRemoveSCAPAttributesFail(scapAttrType);
