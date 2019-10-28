@@ -265,6 +265,17 @@ void APL_Config::setString(const char *csValue, bool system)
 	CConfig::SetString((system?CConfig::SYSTEM:CConfig::USER),m_name,m_section,m_strwvalue);
 }
 
+
+void APL_Config::DeleteKeysByPrefix(bool system)
+{
+	if(m_numtype)
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+
+	m_strwvalue=utilStringWiden(m_strvalue);
+
+	CConfig::DeleteKeysByPrefix((system?CConfig::SYSTEM:CConfig::USER),m_name,m_section);
+}
+
 void APL_Config::setWString(const wchar_t *csValue, bool system)
 {
 	if(m_numtype)

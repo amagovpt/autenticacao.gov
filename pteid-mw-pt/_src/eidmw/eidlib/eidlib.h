@@ -1465,6 +1465,7 @@ public:
     PTEIDSDK_API long getLong();					/**< Return the numerical value (Throw exception for string parameter) */
 
     PTEIDSDK_API void setString(const char *csValue);	/**< Set the string value (Throw exception for numerical parameter) */
+	PTEIDSDK_API void DeleteKeysByPrefix();  	/**< Reset the strings with some prefix (Throw exception for numerical parameter) */
 	PTEIDSDK_API void setLong(long lValue);				/**< Set the numerical value (Throw exception for string parameter) */
 
 private:

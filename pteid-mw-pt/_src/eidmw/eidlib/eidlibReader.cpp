@@ -927,6 +927,20 @@ void PTEID_Config::setString(const char *csValue)
 	}
 }
 
+void PTEID_Config::DeleteKeysByPrefix()
+{
+	try
+	{
+		APL_Config *pimpl=static_cast<APL_Config *>(m_impl);
+
+		return pimpl->DeleteKeysByPrefix(false);
+	}
+	catch(CMWException &e)
+	{
+		throw PTEID_Exception::THROWException(e);
+	}
+}
+
 void PTEID_Config::setLong(long lValue)
 {
 	try

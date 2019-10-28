@@ -718,6 +718,34 @@ bool CDataFile::DeleteKey(t_Str szKey, t_Str szFromSection)
 	return false;
 }
 
+// DeletePrefixKey
+// Delete keys with some prefix in a specific section. Returns the number
+// of keys sucessfully deleted.
+size_t CDataFile::DeleteKeysByPrefix(t_Str szKey, t_Str szFromSection)
+{
+    if(!LoadAndLock())
+        return false;
+
+    KeyItor k_pos;
+    t_Section* pSection;
+    size_t nCounter = 0;
+    int i=0;
+
+    if ( (pSection = GetSection(szFromSection)) == NULL )
+        return false;
+
+    for (k_pos = pSection->Keys.begin(); k_pos < pSection->Keys.end(); k_pos++)
+    {
+        if ( (*k_pos).szKey.size() != 0 && CompareNoCaseN( (*k_pos).szKey, szKey, szKey.length() ) == 0 )
+        {
+            pSection->Keys.erase(k_pos);
+            k_pos--;
+            nCounter++;
+        }
+    }
+    return nCounter;
+}
+
 // CreateKey
 // Given a key, a value and a section, this function will attempt to locate the
 // Key within the given section, and if it finds it, change the keys value to
@@ -950,6 +978,18 @@ int CompareNoCase(t_Str str1, t_Str str2)
   return _stricmp(utilStringNarrow(str1).c_str(), utilStringNarrow(str2).c_str());	
 #else
   return strcasecmp(utilStringNarrow(str1).c_str(), utilStringNarrow(str2).c_str());
+#endif
+}
+
+// CompareNoCaseN
+// This function simply does a lowercase compare for the first n bytes against the
+// two strings, returning 0 if they match.
+int CompareNoCaseN(t_Str str1, t_Str str2, size_t n)
+{
+#ifdef WIN32
+  return _strnicmp(utilStringNarrow(str1).c_str(), utilStringNarrow(str2).c_str());
+#else
+  return strncasecmp(utilStringNarrow(str1).c_str(), utilStringNarrow(str2).c_str(), n);
 #endif
 }
 

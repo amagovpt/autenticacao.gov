@@ -308,6 +308,26 @@ void CConfig::SetString(tLocation location,const struct Param_Str param,const st
     }
   };
 
+void CConfig::DeleteKeysByPrefix(tLocation location,
+              const std::wstring &csName,
+              const std::wstring &czSection) {
+    CAutoMutex autoMutex(&m_Mutex);
+
+    if (! bIsInitialized) Init();
+
+    if (location == SYSTEM)
+    {
+	  o_systemDataFile.DeleteKeysByPrefix(csName,czSection);
+      if( ! o_systemDataFile.Save() )
+        throw CMWEXCEPTION(EIDMW_CONF);
+    } else {
+	  o_userDataFile.DeleteKeysByPrefix(csName,czSection);
+      if( ! o_userDataFile.Save())
+        throw CMWEXCEPTION(EIDMW_CONF);
+    }
+};
+
+
 void CConfig::SetLong(tLocation location,const struct Param_Num param,long lValue)
 {
 	return(SetLong(location,param.csParam,param.csSection,lValue));

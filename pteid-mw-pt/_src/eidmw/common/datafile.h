@@ -141,6 +141,7 @@ typedef SectionList::iterator SectionItor;
 /////////////////////////////////////////////////////////////////////////////////
 t_Str	GetNextWord(t_Str& CommandLine);
 int		CompareNoCase(t_Str str1, t_Str str2);
+int		CompareNoCaseN(t_Str str1, t_Str str2, size_t n);
 void	Trim(t_Str& szStr);
 int		WriteLn(FILE *stream, wchar_t* fmt, ...);
 
@@ -217,6 +218,9 @@ public:
 
 				// DeleteKey: Deletes a given key from a specific section
 	bool		DeleteKey(t_Str szKey, t_Str szFromSection = t_Str(L""));
+
+				// DeleteKeysByPrefix: Deletes keys with some prefix from a specific section
+	size_t		DeleteKeysByPrefix(t_Str szKey, t_Str szFromSection = t_Str(L""));
 
 				// DeleteSection: Deletes a given section.
 	bool		DeleteSection(t_Str szSection);
