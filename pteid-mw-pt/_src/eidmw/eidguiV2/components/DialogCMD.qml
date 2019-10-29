@@ -403,7 +403,7 @@ Item {
             Item {
                 id: rectMessageTop
                 width: parent.width
-                height: 70
+                height: 75
                 anchors.horizontalCenter: parent.horizontalCenter
                 Link {
                     id: textMessageTop

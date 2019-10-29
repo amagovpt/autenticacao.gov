@@ -617,7 +617,7 @@ void GAPI::showSignCMDDialog(long error_code)
     QString error_msg;
     QString support_string = tr("STR_CMD_ERROR_MSG");
 
-    if (error_code == 0){
+    if (error_code == 0 || error_code == EIDMW_TIMESTAMP_ERROR){
         PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "CMD signature op finished with sucess");
     } else {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "CMD signature op finished with error code 0x%08x", error_code);
@@ -661,12 +661,15 @@ void GAPI::showSignCMDDialog(long error_code)
     case EIDMW_PERMISSION_DENIED:
         error_msg = tr("STR_SIGN_FILE_PERMISSION_FAIL");
         break;
+    case EIDMW_TIMESTAMP_ERROR:
+        error_msg =  tr("STR_CMD_SUCESS") + "<br><br>" + tr("STR_TIME_STAMP_FAILED");
+        break;
     default:
         error_msg = tr("STR_CMD_LOGIN_ERROR");
         break;
     }
 
-    if (error_code != 0)
+    if (error_code != 0 && error_code != EIDMW_TIMESTAMP_ERROR)
         error_msg += "<br><br>" + support_string;
 
     qDebug() << error_msg;
@@ -833,7 +836,7 @@ void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
 
     signCMDFinished(ret);
     signalUpdateProgressBar(100);
-    if (ret == 0)
+    if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR)
     {
         emit signalCloseCMDSucess();
     }
