@@ -367,11 +367,11 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 	//Only add signature appearance for "visible" signatures
 	if (rect->isValid()) {
 		if (signer_info->attribute_provider == NULL) {
-			addSignatureAppearance(&signature_field, signer_info, date_outstr,
+			addSignatureAppearance(&signature_field, signer_info, date_with_timezone->getCString(),
 				location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
 		}
 		else {
-			addSignatureAppearanceSCAP(&signature_field, signer_info, date_outstr,
+			addSignatureAppearanceSCAP(&signature_field, signer_info, date_with_timezone->getCString(),
 				location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
 		}
 	}
