@@ -16,7 +16,7 @@ Item {
         readOnly: true
         selectByMouse: true
         selectByKeyboard: true
-        textFormat: Text.AutoText
+        textFormat: Text.RichText
         font.pixelSize: Constants.SIZE_TEXT_BODY
         font.italic: false
         font.family: lato.name

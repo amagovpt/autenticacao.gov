@@ -84,7 +84,6 @@ Item {
                                                    "STR_UPDATE_TEXT")
                     propertyText.font.bold: activeFocus || textDescription.activeFocus
                     propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    propertyText.textFormat: Text.RichText
                     width: parent.width
                     height: parent.height
                     Accessible.role: Accessible.TitleBar
