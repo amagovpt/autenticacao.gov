@@ -987,7 +987,7 @@ int CompareNoCase(t_Str str1, t_Str str2)
 int CompareNoCaseN(t_Str str1, t_Str str2, size_t n)
 {
 #ifdef WIN32
-  return _strnicmp(utilStringNarrow(str1).c_str(), utilStringNarrow(str2).c_str());
+  return _strnicmp(utilStringNarrow(str1).c_str(), utilStringNarrow(str2).c_str(), n);
 #else
   return strncasecmp(utilStringNarrow(str1).c_str(), utilStringNarrow(str2).c_str(), n);
 #endif

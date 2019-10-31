@@ -2412,7 +2412,7 @@ void GAPI::removeSCAPAttributesFromCache(int scapAttrType) {
 
     qDebug() << "removeSCAPAttributesFromCache scapAttrType: " << scapAttrType;
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
-              "GetCardInstance removeSCAPAttributesFromCache");
+        "Remove SCAP Attributes From Cache scapAttrType = %d", scapAttrType);
 
     ScapSettings settings;
     QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";

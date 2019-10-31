@@ -288,7 +288,7 @@ void CConfig::SetString(tLocation location,const struct Param_Str param,const st
 	return(SetString(location,param.csParam,param.csSection,csValue));
 }
 
-  void CConfig::SetString(tLocation location, 
+void CConfig::SetString(tLocation location, 
 			  const std::wstring &csName, 
 			  const std::wstring &czSection, 
 			  const std::wstring &csValue) {
@@ -306,7 +306,12 @@ void CConfig::SetString(tLocation location,const struct Param_Str param,const st
       if( ! o_userDataFile.Save())
         throw CMWEXCEPTION(EIDMW_CONF);
     }
-  };
+};
+
+void CConfig::DeleteKeysByPrefix(tLocation location, const struct Param_Str param)
+{
+    return(DeleteKeysByPrefix(location, param.csParam, param.csSection));
+};
 
 void CConfig::DeleteKeysByPrefix(tLocation location,
               const std::wstring &csName,
