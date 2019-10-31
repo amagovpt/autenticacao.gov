@@ -51,6 +51,10 @@ CMDSignature::~CMDSignature()
     delete cmdService;
 }
 
+std::string CMDSignature::getEndpoint()
+{
+    return CMDServices::getEndpoint();
+}
 void CMDSignature::cancelRequest()
 {
     cmdService->cancelRequest();

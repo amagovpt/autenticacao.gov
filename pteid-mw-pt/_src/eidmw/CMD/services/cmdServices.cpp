@@ -118,8 +118,7 @@ CMDServices::CMDServices(std::string basicAuthUser, std::string basicAuthPasswor
         return;
 
     const char *new_endpoint = NULL;
-    std::string cmd_host = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_HOST));
-    std::string cmd_endpoint = "https://" + cmd_host + ENDPOINT_CC_MOVEL_SIGNATURE;
+    std::string cmd_endpoint = getEndpoint();
       
     new_endpoint = cmd_endpoint.c_str();
 
@@ -143,6 +142,13 @@ CMDServices::~CMDServices() {
     soap_end( sp );
 
     setSoap( NULL );
+}
+
+
+std::string CMDServices::getEndpoint() {
+    std::string cmd_host = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_HOST));
+    std::string cmd_endpoint = "https://" + cmd_host + ENDPOINT_CC_MOVEL_SIGNATURE;
+    return cmd_endpoint;
 }
 
 /*  *********************************************************

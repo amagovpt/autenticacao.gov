@@ -58,6 +58,8 @@ namespace eIDMW {
             PTEIDCMD_API char * getCertificateCitizenName();
             PTEIDCMD_API char * getCertificateCitizenID();
 
+            PTEIDCMD_API static std::string getEndpoint();
+
             std::string m_string_signature;
             std::string m_string_certificate;
 

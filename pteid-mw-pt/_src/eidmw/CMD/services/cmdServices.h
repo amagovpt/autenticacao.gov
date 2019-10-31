@@ -55,6 +55,8 @@ class CMDServices {
         // ValidateOtp
         int getSignatures(CMDProxyInfo proxyInfo, std::string in_code, std::vector<CByteArray *> out_signature );
 
+        static std::string getEndpoint();
+
     protected:
         soap *getSoap();
         void setSoap( soap * );

@@ -55,15 +55,33 @@ GAPI::GAPI(QObject *parent) :
     m_timerReaderList->start(TIMERREADERLIST);
 }
 
-
 CMDProxyInfo GAPI::buildProxyInfo() {
     ProxyInfo proxyinfo;
 
+    std::string endpoint = CMDSignature::getEndpoint();
     CMDProxyInfo cmd_proxyinfo;
 
-    if (proxyinfo.getProxyHost().size() > 0) {
+    if (proxyinfo.isSystemProxy())
+    {
+        std::string proxy_host;
+        long proxy_port;
+        proxyinfo.getProxyForHost(endpoint, &proxy_host, &proxy_port);
+        if (proxy_host.size() > 0)
+        {
+            cmd_proxyinfo.host = proxy_host.c_str();
+            cmd_proxyinfo.port = proxy_port;
+
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui",
+                "buildProxyInfo: Using System pacfile configured Proxy: host=%s, port=%ld",
+                proxy_host.c_str(), proxy_port);
+        }
+    } else if (proxyinfo.getProxyHost().size() > 0) {
         cmd_proxyinfo.host = proxyinfo.getProxyHost().toStdString();
         cmd_proxyinfo.port = proxyinfo.getProxyPort().toLong();
+
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui",
+            "buildProxyInfo: Using Application/System manual configured Proxy: host=%s, port=%ld",
+            cmd_proxyinfo.host.c_str(), cmd_proxyinfo.port);
 
         if (proxyinfo.getProxyUser().size() > 0) {
             cmd_proxyinfo.user = proxyinfo.getProxyUser().toStdString();
