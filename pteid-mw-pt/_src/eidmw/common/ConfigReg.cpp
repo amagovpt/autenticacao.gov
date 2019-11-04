@@ -43,8 +43,6 @@ Class to set and get configuration-data from the registry(Windows) or the ini-fi
 #include "Util.h"
 
 
-
-
 const wchar_t *SC_CONF_REG = L"Software\\PTEID";
 
 namespace eIDMW
@@ -475,6 +473,119 @@ long CConfig::GetLong(tLocation location, const std::wstring & csName, const std
     }
 }
 
+#define MAX_KEY_LENGTH 255
+#define MAX_VALUE_NAME 16383
+
+/** Delete in the configuration a parameter with some prefix of the type STRING
+
+\retval EIMDW_NOT_OK            exception; when section   is not found
+\retval EIDMW_ERR_PARAM_BAD     exception; when parameter could not be modified
+
+\sa GetString(), DelString,   SetLong(), GetLong(), DelLong()
+*************************************************************************************/
+void CConfig::DeleteKeysByPrefix(
+    tLocation location,                     /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
+    const std::wstring &csName,             /**< In:    parameter name */
+    const std::wstring &czSection          /**< In:    the configuration-section where you can find above specified parameter */
+    )
+{
+    wchar_t     wcsKeyRegName[MAX_PATH];
+
+    LONG        lRes;
+    HKEY        hRegKeyTree;
+    HKEY        hRegKey;
+    TCHAR       achClass[MAX_PATH] = TEXT("");      // buffer for class name 
+    DWORD       cchClassName = MAX_PATH;            // size of class string 
+    DWORD       cSubKeys = 0;                       // number of subkeys 
+    DWORD       cbMaxSubKey;                        // longest subkey size 
+    DWORD       cchMaxClass;                        // longest class string 
+    DWORD       cValues;                            // number of values for key 
+    DWORD       cchMaxValue;                        // longest value name 
+    DWORD       cbMaxValueData;                     // longest value data 
+    DWORD       cbSecurityDescriptor;               // size of security descriptor 
+    FILETIME    ftLastWriteTime;                    // last write time 
+    DWORD       i, retCode;
+    TCHAR       achValue[MAX_VALUE_NAME];
+    DWORD       cchValue = MAX_VALUE_NAME;
+
+    if (location == SYSTEM)
+        hRegKeyTree = HKEY_LOCAL_MACHINE;
+    else
+        hRegKeyTree = HKEY_CURRENT_USER;
+
+    //--- Open the KeyInfo entry
+    swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName) / sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
+    lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_READ, &hRegKey);
+    if (lRes != ERROR_SUCCESS){
+        RegCloseKey(hRegKey);
+        throw CMWEXCEPTION(EIDMW_CONF);
+    }
+    else 
+    {
+        // Get the class name and the value count. 
+        retCode = RegQueryInfoKey(
+            hRegKey,                    // key handle 
+            achClass,                // buffer for class name 
+            &cchClassName,           // size of class string 
+            NULL,                    // reserved 
+            &cSubKeys,               // number of subkeys 
+            &cbMaxSubKey,            // longest subkey size 
+            &cchMaxClass,            // longest class string 
+            &cValues,                // number of values for this key 
+            &cchMaxValue,            // longest value name 
+            &cbMaxValueData,         // longest value data 
+            &cbSecurityDescriptor,   // security descriptor 
+            &ftLastWriteTime);       // last write time 
+
+        // Enumerate the key values. 
+        if (cValues)
+        {
+            for (i = 0, retCode = ERROR_SUCCESS; i<cValues; i++)
+            {
+                cchValue = MAX_VALUE_NAME;
+                achValue[0] = '\0';
+                lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_READ, &hRegKey);
+                if (lRes != ERROR_SUCCESS){
+                    RegCloseKey(hRegKey);
+                    throw CMWEXCEPTION(EIDMW_CONF);
+                }
+
+                retCode = RegEnumValue(hRegKey, 
+                    i,
+                    achValue,
+                    &cchValue,
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL);
+
+                if (retCode == ERROR_SUCCESS)
+                {
+                    if (CompareNoCaseN(achValue, csName, csName.size()) == 0){
+                        //--- Open the KeyInfo entry
+                        lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_SET_VALUE, &hRegKey);
+                        if (lRes != ERROR_SUCCESS){
+                            RegCloseKey(hRegKey);
+                            throw CMWEXCEPTION(EIDMW_CONF);
+                        }
+                        //--- delete the value
+                        lRes = RegDeleteValue(hRegKey, achValue);
+                        if (lRes != ERROR_SUCCESS){
+                            RegCloseKey(hRegKey);
+                            throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+                        }
+                        else 
+                        {
+                            i--;
+                            cValues--;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    RegCloseKey(hRegKey);
+}
 
 /** Modify/add into the configuration a parameter of the type STRING
 

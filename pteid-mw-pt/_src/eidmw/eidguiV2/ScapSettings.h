@@ -115,8 +115,15 @@ public:
         std::string str = "scap_apikey_";
         const char* pName = str.c_str();
         eIDMW::PTEID_Config config(pName, L"general", L"");
-        config.DeleteKeysByPrefix();
-        setAppID("");
+        try{
+            setAppID("");
+            config.DeleteKeysByPrefix();
+        }
+        catch (...)
+        {
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
+                "DeleteKeys Fail");
+        }
     }
 
     std::string getSecretKey(QString nic) {
