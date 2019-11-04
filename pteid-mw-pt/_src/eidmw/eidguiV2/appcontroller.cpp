@@ -55,6 +55,7 @@ AppController::AppController(GUISettings& settings,QObject *parent) :
               "CpuArch: %s ProductName: %s\n",
               QSysInfo::currentCpuArchitecture().toStdString().c_str(),
               QSysInfo::prettyProductName().toStdString().c_str());
+    file = NULL;
 }
 
 void AppController::restoreScreen(void){
@@ -203,52 +204,31 @@ void AppController::startRequest(QUrl url){
         return;
     }
 
-    eIDMW::PTEID_Config config_pacfile(eIDMW::PTEID_PARAM_PROXY_PACFILE);
-    const char * pacfile_url = config_pacfile.getString();
-
-    if (pacfile_url != NULL && strlen(pacfile_url) > 0)
-    {
-        m_pac_url = QString(pacfile_url);
-    }
-
-    eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_HOST);
-    eIDMW::PTEID_Config config2(eIDMW::PTEID_PARAM_PROXY_PORT);
-    eIDMW::PTEID_Config config_username(eIDMW::PTEID_PARAM_PROXY_USERNAME);
-    eIDMW::PTEID_Config config_pwd(eIDMW::PTEID_PARAM_PROXY_PWD);
-
-    std::string proxy_host = config.getString();
-    std::string proxy_username = config_username.getString();
-    std::string proxy_pwd = config_pwd.getString();
-    long proxy_port = config2.getLong();
-
     //allow up to 1 minutes to fetch remote version
     int download_duration = 60000;
 
-    if (!proxy_host.empty() && proxy_port != 0)
+    ProxyInfo proxyinfo;
+    proxy.setType(QNetworkProxy::HttpProxy);
+    if (proxyinfo.isAutoConfig())
     {
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "Autoupdates: using manual proxy config");
-        qDebug() << "C++: Autoupdates: using manual proxy config";
-        proxy.setType(QNetworkProxy::HttpProxy);
-        proxy.setHostName(QString::fromStdString(proxy_host));
-        proxy.setPort(proxy_port);
-
-        if (!proxy_username.empty())
+        std::string proxy_host;
+        long proxy_port;
+        proxyinfo.getProxyForHost(url.toString().toUtf8().constData(), &proxy_host, &proxy_port);
+        if (proxy_host.size() > 0)
         {
-            proxy.setUser(QString::fromStdString(proxy_username));
-            proxy.setPassword(QString::fromStdString(proxy_pwd));
+            proxy.setHostName(QString::fromStdString(proxy_host));
+            proxy.setPort(proxy_port);
         }
-
         QNetworkProxy::setApplicationProxy(proxy);
     }
-    else if (!m_pac_url.isEmpty())
+    else if (proxyinfo.isManualConfig())
     {
-        std::string proxy_port_str;
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Autoupdates: using system proxy config");
-        qDebug() << "C++: Autoupdates: using system proxy config";
-        PTEID_GetProxyFromPac(m_pac_url.toUtf8().constData(), url.toString().toUtf8().constData(), &proxy_host, &proxy_port_str);
-        proxy.setType(QNetworkProxy::HttpProxy);
-        proxy.setHostName(QString::fromStdString(proxy_host));
-        proxy.setPort(atol(proxy_port_str.c_str()));
+        proxy.setHostName(proxyinfo.getProxyHost());
+        proxy.setPort(proxyinfo.getProxyPort().toLong());
+        if (proxyinfo.getProxyUser().size() > 0) {
+            proxy.setUser(proxyinfo.getProxyUser());
+            proxy.setPassword(proxyinfo.getProxyPwd());
+        }
         QNetworkProxy::setApplicationProxy(proxy);
     }
 
@@ -462,7 +442,7 @@ void AppController::updateUpdateDataReadProgress(qint64 bytesRead, qint64 totalB
 
 void AppController::httpError(QNetworkReply::NetworkError networkError)
 {
-    qDebug() << "C++: httpError";
+    qDebug() << "C++: httpError:" << networkError;
 
     switch(networkError){
         case QNetworkReply::NetworkError::NoError:
