@@ -293,31 +293,20 @@ std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
     long proxy_port = 0;
 	//Proxy support using the gsoap BindingProxy
     ProxyInfo m_proxyInfo;
-    qDebug() << "signPDF: Read Proxy data: getProxyHost= " << m_proxyInfo.getProxyHost().toUtf8().constData()
-        << "size=" << m_proxyInfo.getProxyPort().toLong()
-        << "proxyInfo.getProxyHost().size()= " << m_proxyInfo.getProxyHost().size();
 	
-    if (m_proxyInfo.isSystemProxy())
+    if (m_proxyInfo.isAutoConfig())
 	{
 		m_proxyInfo.getProxyForHost(sup_endpoint, &proxy_host, &proxy_port);
 		if (proxy_host.size() > 0)
 		{
 			sp->proxy_host = proxy_host.c_str();
 			sp->proxy_port = proxy_port;
-
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", 
-                "getAttributeSuppliers: Using System Proxy: host=%s, port=%ld", 
-                m_proxyInfo.getProxyHost().toUtf8().constData(), m_proxyInfo.getProxyPort().toLong());
 		}
 	}
-	else if (m_proxyInfo.getProxyHost().size() > 0)
+	else if (m_proxyInfo.isManualConfig())
 	{
 		sp->proxy_host = strdup(m_proxyInfo.getProxyHost().toUtf8().constData());
 		sp->proxy_port = m_proxyInfo.getProxyPort().toLong();
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", 
-            "getAttributeSuppliers: Using Manual Proxy: host=%s, port=%ld", 
-            m_proxyInfo.getProxyHost().toUtf8().constData(), m_proxyInfo.getProxyPort().toLong());
-
 		if (m_proxyInfo.getProxyUser().size() > 0)
 		{
 			sp->proxy_userid = strdup(m_proxyInfo.getProxyUser().toUtf8().constData());

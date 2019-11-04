@@ -487,30 +487,17 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
 	proxy.soap_endpoint = s_endpoint.c_str();
 
-
-    qDebug() << "signPDF: Read Proxy data: getProxyHost= " << proxyInfo.getProxyHost().toUtf8().constData() 
-        << "size=" << proxyInfo.getProxyPort().toLong() 
-        << "proxyInfo.getProxyHost().size()= " << proxyInfo.getProxyHost().size();
-
-    if (proxyInfo.isSystemProxy()) 
+    if (proxyInfo.isAutoConfig()) 
     {
         proxyInfo.getProxyForHost(s_endpoint, &proxy_host, &proxy_port);
 		if (proxy_host.size() > 0) {
 			sp->proxy_host = proxy_host.c_str();
 			sp->proxy_port = proxy_port;
-
-			eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
-                "signPDF: Using System Proxy: host=%s, port=%ld", 
-                proxyInfo.getProxyHost().toUtf8().constData(), proxyInfo.getProxyPort().toLong());
-		}
+         }
 	}
-	else if (proxyInfo.getProxyHost().size() > 0) {
+	else if (proxyInfo.isManualConfig()) {
         sp->proxy_host = strdup(proxyInfo.getProxyHost().toUtf8().constData());
 		sp->proxy_port = proxyInfo.getProxyPort().toLong();
-		eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
-            "signPDF: Using Manual Proxy: host=%s, port=%ld", 
-            proxyInfo.getProxyHost().toUtf8().constData(), proxyInfo.getProxyPort().toLong());
-
 		if (proxyInfo.getProxyUser().size() > 0) {
             sp->proxy_userid = strdup(proxyInfo.getProxyUser().toUtf8().constData());
             sp->proxy_passwd = strdup(proxyInfo.getProxyPwd().toUtf8().constData());

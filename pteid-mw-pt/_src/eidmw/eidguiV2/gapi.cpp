@@ -61,7 +61,7 @@ CMDProxyInfo GAPI::buildProxyInfo() {
     std::string endpoint = CMDSignature::getEndpoint();
     CMDProxyInfo cmd_proxyinfo;
 
-    if (proxyinfo.isSystemProxy())
+    if (proxyinfo.isAutoConfig())
     {
         std::string proxy_host;
         long proxy_port;
@@ -70,19 +70,10 @@ CMDProxyInfo GAPI::buildProxyInfo() {
         {
             cmd_proxyinfo.host = proxy_host.c_str();
             cmd_proxyinfo.port = proxy_port;
-
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui",
-                "buildProxyInfo: Using System pacfile configured Proxy: host=%s, port=%ld",
-                proxy_host.c_str(), proxy_port);
         }
-    } else if (proxyinfo.getProxyHost().size() > 0) {
+    } else if (proxyinfo.isManualConfig()) {
         cmd_proxyinfo.host = proxyinfo.getProxyHost().toStdString();
         cmd_proxyinfo.port = proxyinfo.getProxyPort().toLong();
-
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui",
-            "buildProxyInfo: Using Application/System manual configured Proxy: host=%s, port=%ld",
-            cmd_proxyinfo.host.c_str(), cmd_proxyinfo.port);
-
         if (proxyinfo.getProxyUser().size() > 0) {
             cmd_proxyinfo.user = proxyinfo.getProxyUser().toStdString();
             cmd_proxyinfo.pwd = proxyinfo.getProxyPwd().toStdString();
