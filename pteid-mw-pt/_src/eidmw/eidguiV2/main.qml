@@ -918,7 +918,10 @@ Load language error. Please reinstall the application"
             onClicked: {
                 // if there are no unsaved notes
                 if(!handleUnsavedNotes(-1, "", Constants.HOME_ICON_PRESSED)){
-                    Functions.goToHome()
+                    mainFormID.state = Constants.MenuState.HOME
+                    propertySubMenuListView.currentIndex = -1
+                    propertyMainMenuListView.currentIndex = -1
+                    propertyMainMenuBottomListView.currentIndex = -1
                 }
             }
         }
