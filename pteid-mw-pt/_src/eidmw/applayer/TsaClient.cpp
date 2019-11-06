@@ -192,20 +192,20 @@ namespace eIDMW
 			/* Check for errors */
 			if (res != CURLE_OK) 
 			{
-				MWLOG(LEV_ERROR, MOD_APL, "Timestamping error in HTTP POST request. LibcURL returned %s",
+				MWLOG(LEV_ERROR, MOD_APL, "Timestamp error in HTTP POST request. LibcURL returned %s",
 					curl_easy_strerror(res));
 			}
 			else
 			{
 				long http_code = 0;
 				curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-				if (http_code == 200 && res != CURLE_ABORTED_BY_CALLBACK)
+				if (http_code == 200)
 				{
-						MWLOG(LEV_DEBUG, MOD_APL, "Timestamping Succeeded.");
+						MWLOG(LEV_DEBUG, MOD_APL, "Timestamp request Succeeded.");
 				}
 				else 
 				{
-					MWLOG(LEV_ERROR, MOD_APL, "Timestamping Fail.");
+					MWLOG(LEV_ERROR, MOD_APL, "Timestamp request Failed. HTTP error: %ld", http_code);
 				}
 			}
 

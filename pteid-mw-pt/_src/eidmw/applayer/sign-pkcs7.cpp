@@ -182,7 +182,7 @@ typedef unsigned int
 int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_len)
 {
 
-	TS_RESP *tsp = d2i_TS_RESP(NULL, (const unsigned char**)&token, token_len);
+	TS_RESP *tsresp = d2i_TS_RESP(NULL, (const unsigned char**)&token, token_len);
 
 #ifdef DEBUG
     BIO *bio_out;
@@ -190,22 +190,26 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 
     BIO_set_fp(bio_out, stderr, BIO_NOCLOSE);
 
-    TS_RESP_print_bio(bio_out, tsp);
+	TS_RESP_print_bio(bio_out, tsresp);
 #endif
 
-    TS_VERIFY_CTX * verify_ctx = TS_VERIFY_CTX_new();
-    verify_ctx->flags = TS_VFY_VERSION;
-
-    if(TS_RESP_verify_response(verify_ctx, tsp) != 1) {
-
-        MWLOG(LEV_ERROR, MOD_APL, "Failed to verify TS response! Details: %s", 
-            ERR_error_string(ERR_get_error(), NULL));
-        return 1;
-    }
-	if (tsp != NULL)
+	if (tsresp != NULL)
 	{
+		TS_VERIFY_CTX * verify_ctx = TS_VERIFY_CTX_new();
+		verify_ctx->flags = TS_VFY_VERSION;
 
-		PKCS7* token = tsp->token;
+		if (TS_RESP_verify_response(verify_ctx, tsresp) != 1) {
+
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to verify TS response! Details: %s",
+				ERR_error_string(ERR_get_error(), NULL));
+
+			TS_RESP_free(tsresp);
+			return 1;
+		}
+
+		TS_VERIFY_CTX_free(verify_ctx);
+
+		PKCS7* token = tsresp->token;
 
 		int p7_len = i2d_PKCS7(token, NULL);
 		unsigned char *p7_der = (unsigned char *)OPENSSL_malloc(p7_len);
@@ -215,6 +219,7 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 		if (!PKCS7_type_is_signed(token))
 		{
 			MWLOG(LEV_ERROR, MOD_APL, L"Error in timestamp token: not signed!");
+			TS_RESP_free(tsresp);
 			return 1;
 		}
 
@@ -225,11 +230,12 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 		int rc = PKCS7_add_attribute(sinfo, NID_id_smime_aa_timeStampToken,
 				V_ASN1_SEQUENCE, value);
 
+		TS_RESP_free(tsresp);
 	}
 	else
 	{
 		MWLOG(LEV_ERROR, MOD_APL,
-			L"Error decoding timestamp token! The TSA is returning bogus data or we have proxy issues and we are getting HTML messages here");
+			L"Error decoding timestamp token! Incorrect ASN.1 data");
 		return 1;
 	}
 
@@ -522,7 +528,7 @@ int getSignedData_pkcs7( unsigned char *signature, unsigned int signatureLen
     if (timestamp) {
         TSAClient tsp;
         unsigned char *digest_tp = (unsigned char *)malloc( SHA256_LEN );
-        if ( NULL == digest_tp ){
+        if ( NULL == digest_tp ) {
             TRACE_ERR( "digest_tp: malloc failed" );
             return 2;
         }
@@ -534,7 +540,7 @@ int getSignedData_pkcs7( unsigned char *signature, unsigned int signatureLen
         tsresp = tsp.getResponse();
 
         if (tsresp.Size() == 0) {
-            MWLOG( LEV_ERROR, MOD_APL, L"PKCS7 Sign: Timestamp Error - response is empty\n" );
+            MWLOG( LEV_ERROR, MOD_APL, L"getSignedData_pkcs7: Timestamp Error - response is empty" );
             return_code = 1;
         } else {
             timestamp_token = tsresp.GetBytes();
