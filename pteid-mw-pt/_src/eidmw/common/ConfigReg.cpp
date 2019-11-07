@@ -484,6 +484,14 @@ long CConfig::GetLong(tLocation location, const std::wstring & csName, const std
 \sa GetString(), DelString,   SetLong(), GetLong(), DelLong()
 *************************************************************************************/
 void CConfig::DeleteKeysByPrefix(
+    tLocation location,
+    const struct Param_Str param
+    )
+{
+    return(DeleteKeysByPrefix(location, param.csParam, param.csSection));
+}
+
+void CConfig::DeleteKeysByPrefix(
     tLocation location,                     /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
     const std::wstring &csName,             /**< In:    parameter name */
     const std::wstring &czSection          /**< In:    the configuration-section where you can find above specified parameter */

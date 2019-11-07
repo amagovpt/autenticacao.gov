@@ -278,6 +278,7 @@ public:
 
 	static void           SetString(tLocation location, const struct Param_Str param, const std::wstring &csValue);
     static void           SetString(tLocation location, const std::wstring &csName, const std::wstring &czSection, const std::wstring &csValue);
+    static void           DeleteKeysByPrefix(tLocation location, const struct Param_Str param);
 	static void           DeleteKeysByPrefix(tLocation location, const std::wstring &csName, const std::wstring &czSection);
     static void           SetLong(  tLocation location, const struct Param_Num param, long lValue);
     static void           SetLong(  tLocation location, const std::wstring &csName, const std::wstring &czSection, long lValue);
