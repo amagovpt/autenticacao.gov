@@ -632,6 +632,38 @@ cleanup:
 #undef WHERE
 
 /****************************************************************************************************/
+PIN_CACHE_POLICY_TYPE GetAuthPinCachePolicyType() {
+    PIN_CACHE_POLICY_TYPE defaultCachePolicyType = PinCacheNone;
+    DWORD           dwRet;
+    DWORD           dwType;
+    HKEY            hKey;
+    DWORD           dwValue = 0;
+    DWORD           cbValue;
+
+    dwRet = RegOpenKeyEx(HKEY_CURRENT_USER, TEXT("Software\\PTEID\\general"), 0, KEY_READ, &hKey);
+    if (dwRet != ERROR_SUCCESS){
+        LogTrace(LOGTYPE_INFO, "GetAuthPinCachePolicyType", "Error in RegOpenKeyEx. Error code: %d", dwRet);
+        return defaultCachePolicyType;
+    }
+
+    cbValue = sizeof(dwValue);
+
+    dwType = REG_DWORD;
+    dwRet = RegQueryValueEx(hKey,
+        TEXT("auth_pin_cache_normal"),
+        NULL,
+        &dwType, 
+        (LPBYTE)&dwValue, 
+        &cbValue);
+    if ((dwRet != ERROR_SUCCESS)){
+        LogTrace(LOGTYPE_INFO, "GetAuthPinCachePolicyType", "Error in RegQueryValueEx. Error code: %d", dwRet);
+        RegCloseKey(hKey);
+        return defaultCachePolicyType;
+    }
+
+    RegCloseKey(hKey);
+    return (dwValue == 1 ? PinCacheNormal : PinCacheNone);
+}
 
 #define WHERE "CardGetPinInfo"
 DWORD CardGetPinInfo(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
@@ -676,14 +708,14 @@ DWORD CardGetPinInfo(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pd
 	if (dwFlags == ROLE_NONREP) 
 		pinInfo.PinPurpose                        = NonRepudiationPin;
 	/**********************************************
-	*  Pin chache policy
+	*  Pin cache policy
 	**********************************************/   
 	pinInfo.PinCachePolicy.dwVersion              = PIN_CACHE_POLICY_CURRENT_VERSION;
 	pinInfo.PinCachePolicy.dwPinCachePolicyInfo   = 0;
 	pinInfo.PinCachePolicy.PinCachePolicyType     = PinCacheNone;
-	if (dwFlags == ROLE_DIGSIG) 
-		pinInfo.PinCachePolicy.PinCachePolicyType = PinCacheNormal;
-	if (dwFlags == ROLE_NONREP) 
+	if (dwFlags == ROLE_DIGSIG)
+		pinInfo.PinCachePolicy.PinCachePolicyType = GetAuthPinCachePolicyType();
+	if (dwFlags == ROLE_NONREP)
 		pinInfo.PinCachePolicy.PinCachePolicyType = PinCacheNone;
 
 	/*********************************************
