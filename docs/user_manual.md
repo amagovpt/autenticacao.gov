@@ -1,12 +1,11 @@
-# Manual de Utilização do Middleware do Cartão de Cidadão
+# Manual de Utilização do Middleware do Cartão de Cidadão <!-- omit in toc -->
 
 ![Ilustração: Cartão de Cidadão](Pictures/CartaoCidadao.png "Cartão de Cidadão"){:.center}
 
 ![Ilustração: Aplicação Autenticação.gov](Pictures/Autenticação.Gov_Home.png "Aplicação Autenticação.gov"){:.center}
 
 
-# Tabela de conteúdos
-
+# Tabela de conteúdos <!-- omit in toc -->
 
 - [Introdução](#introdu%c3%a7%c3%a3o)
 - [Download, instalação e remoção do middleware](#download-instala%c3%a7%c3%a3o-e-remo%c3%a7%c3%a3o-do-middleware)
@@ -15,13 +14,14 @@
   - [Instalação do *middleware*](#instala%c3%a7%c3%a3o-do-middleware)
     - [Instalação em Microsoft Windows](#instala%c3%a7%c3%a3o-em-microsoft-windows)
     - [Instalação em Linux](#instala%c3%a7%c3%a3o-em-linux)
-      - [Instalação através do *Software Center*:](#instala%c3%a7%c3%a3o-atrav%c3%a9s-do-software-center)
-      - [Instalação através da linha de comandos:](#instala%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos)
+      - [Instalação através do *Software Center*](#instala%c3%a7%c3%a3o-atrav%c3%a9s-do-software-center)
+      - [Instalação através da linha de comandos](#instala%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos)
     - [Instalação em Mac OS](#instala%c3%a7%c3%a3o-em-mac-os)
   - [Remoção do middleware](#remo%c3%a7%c3%a3o-do-middleware)
-    - [Remoção em Microsoft Windows](#remo%c3%a7%c3%a3o-em-microsoft-windows)
+    - [Remoção em *Microsoft Windows 7*](#remo%c3%a7%c3%a3o-em-microsoft-windows-7)
+    - [Remoção em *Microsoft Windows 10*](#remo%c3%a7%c3%a3o-em-microsoft-windows-10)
     - [Remoção em Linux](#remo%c3%a7%c3%a3o-em-linux)
-      - [Remoção através do Software Center](#remo%c3%a7%c3%a3o-atrav%c3%a9s-do-software-center)
+      - [Remoção através do *Software Center*](#remo%c3%a7%c3%a3o-atrav%c3%a9s-do-software-center)
       - [Remoção através da linha de comandos](#remo%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos)
     - [Remoção em MacOS](#remo%c3%a7%c3%a3o-em-macos)
 - [Aplicação Utilitária “Autenticação.Gov”](#aplica%c3%a7%c3%a3o-utilit%c3%a1ria-autentica%c3%a7%c3%a3ogov)
@@ -37,7 +37,7 @@
       - [Simples](#simples)
       - [Avançada](#avan%c3%a7ada)
       - [Introdução de chave](#introdu%c3%a7%c3%a3o-de-chave)
-      - [Verificação de assinatura digital em documento PDF](#verifica%c3%a7%c3%a3o-de-assinatura-digital-em-documento-pdf)
+      - [Verificação de assinatura digital em documento PDF em Windows](#verifica%c3%a7%c3%a3o-de-assinatura-digital-em-documento-pdf-em-windows)
     - [Segurança](#seguran%c3%a7a)
       - [Certificados](#certificados)
       - [Código PIN](#c%c3%b3digo-pin)
@@ -60,15 +60,13 @@
   - [Não é possível adicionar o módulo PKCS\#11 ao *Adobe Acrobat Reader* em *MacOS*](#n%c3%a3o-%c3%a9-poss%c3%advel-adicionar-o-m%c3%b3dulo-pkcs11-ao-adobe-acrobat-reader-em-macos)
   - [Impossibilidade de assinatura com *Adobe Reader*, *Microsoft Office* e *LibreOffice*](#impossibilidade-de-assinatura-com-adobe-reader-microsoft-office-e-libreoffice)
   - [O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão](#o-leitor-de-cart%c3%b5es-est%c3%a1-instalado-mas-n%c3%a3o-%c3%a9-detetado-pela-aplica%c3%a7%c3%a3o-do-cart%c3%a3o-de-cidad%c3%a3o)
-    - [Windows](#windows)
-    - [Linux](#linux)
   - [Não são detetados quaisquer certificados durante a tentativa de assinatura na suite *LibreOffice / Apache OpenOffice*](#n%c3%a3o-s%c3%a3o-detetados-quaisquer-certificados-durante-a-tentativa-de-assinatura-na-suite-libreoffice--apache-openoffice)
   - [Problemas com placas gráficas integradas em *Windows*](#problemas-com-placas-gr%c3%a1ficas-integradas-em-windows)
 - [Instruções de configuração em ambientes empresariais](#instru%c3%a7%c3%b5es-de-configura%c3%a7%c3%a3o-em-ambientes-empresariais)
   - [Configurações através de chaves de registo Windows](#configura%c3%a7%c3%b5es-atrav%c3%a9s-de-chaves-de-registo-windows)
   - [Configurações através de ficheiro de configuração em Linux e MacOS](#configura%c3%a7%c3%b5es-atrav%c3%a9s-de-ficheiro-de-configura%c3%a7%c3%a3o-em-linux-e-macos)
   - [Instalação automatizada em ambientes Windows](#instala%c3%a7%c3%a3o-automatizada-em-ambientes-windows)
-  - [Informação sobre servidores de Proxy em *Windows*](#informa%c3%a7%c3%a3o-sobre-servidores-de-proxy-em-windows)
+  - [Informação sobre servidores de Proxy](#informa%c3%a7%c3%a3o-sobre-servidores-de-proxy)
 
 
 # Introdução
@@ -114,7 +112,7 @@ A lista de sistemas operativos suportados, nas suas arquiteturas de 32 e
     -   Microsoft Windows 7
     -   Microsoft Windows 8
     -   Microsoft Windows 8.1
-    -   Windows 10
+    -   Microsoft Windows 10
 -   Distribuições de Linux suportadas:
     -   Fedora 28 e superiores
     -   OpenSuse Leap 15 e superiores
@@ -168,7 +166,7 @@ sistema operativo utilizado.
     instalação, deverá fazer duplo clique sobre este, surgindo um ecrã
     semelhante aos apresentados de seguida:
 
-    ![Ilustração: Instalação da aplicação em Windows](Pictures/Autenticação.Gov_Intalacao.png "Instalação da aplicação em Windows"){:.center}
+    ![Ilustração: Instalação da aplicação em Windows](Pictures/Autenticação.Gov_Instalacao.png "Instalação da aplicação em Windows"){:.center}
 
 2.  Neste ecrã, deverá premir o botão **Seguinte** e marcar a caixa
     (com um certo, clicando no botão esquerdo do rato), para
@@ -193,14 +191,12 @@ sistema operativo utilizado.
 Algumas distribuições de Linux, disponibilizam um gestor de aplicações -
 “*Software Center*” - onde é possível instalar o software através de um
 assistente gráfico. Este ecrã poderá variar consoante a distribuição,
-neste manual apresenta-se as imagens da utilização do *Software Center*
-em Linux Caixa Mágica 22 LTS.
+neste manual apresenta-se as imagens da utilização do *Ubuntu Software*
+em Linux Ubuntu 18.04.3 LTS.
 
 Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linha de comandos](#instala%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos).
 
-#### Instalação através do *Software Center*:
-
-![Ilustração: Instalação da aplicação em Linux](Pictures/Autenticação.Gov_Intalacao_Linux.png "Instalação da aplicação em Linux"){:.center}
+#### Instalação através do *Software Center*
 
 1.  Executar o pacote de instalação: Após ter
     descarregado o ficheiro de instalação, deverá fazer duplo clique
@@ -208,22 +204,22 @@ Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linh
     gestão de aplicações - “Software Center” - para a instalação do
     software. Este ecrã varia consoante a distribuição que está a
     utilizar, no entanto, as opções são semelhantes em todos. Nos ecrãs
-    seguintes são apresentados os ecrãs utilizando Linux Caixa Mágica 22
-    LTS.
+    seguintes são apresentados os ecrãs utilizando Linux Ubuntu 18.04.3 LTS.
+
+    ![Ilustração: Instalação da aplicação em Linux](Pictures/Autenticação.Gov_Instalacao_Linux.png "Instalação da aplicação em Linux"){:.center}
 
 2.  Deverá premir o botão **Instalar** para prosseguir.
-   ![Ilustração: Instalação da aplicação em Linux](Pictures/Autenticação.Gov_Intalacao_Linux2.png "Instalação da aplicação em Linux"){:.center}
-4.  Será pedida a introdução da sua senha de utilizador. (É necessário
+3.  Será pedida a introdução da sua senha de utilizador. (É necessário
     que tenha privilégios de administração da máquina)
 
-    ![Ilustração: Instalação_Linux](Pictures/Autenticação.Gov_Intalacao_Linux3.png "Instalação_Linux"){:.center}
+    ![Ilustração: Instalação_Linux](Pictures/Autenticação.Gov_Instalacao_Linux3.png "Instalação_Linux"){:.center}
 
-5.  Após a conclusão do passo acima, a instalação do *middleware* está
+4.  Após a conclusão do passo acima, a instalação do *middleware* está
     terminada.
-6.  Recomenda-se a reinicialização do sistema para assegurar o bom
+5.  Recomenda-se a reinicialização do sistema para assegurar o bom
     funcionamento do *middleware*.
 
-#### Instalação através da linha de comandos:
+#### Instalação através da linha de comandos
 
 1.  Execute o comando de instalação de software no sistema, consoante o
     gestor de pacotes utilizado pelo seu sistema.
@@ -246,12 +242,12 @@ Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linh
     instalação, deverá fazer duplo clique sobre este, surgindo um ecrã
     semelhante ao apresentado de seguida:
 
-    ![Ilustração: Instalação da aplicação em MacOS](Pictures/Autenticação.Gov_Intalacao_MacOS.png "Instalação da aplicação em MacOS"){:.center}
+    ![Ilustração: Instalação da aplicação em MacOS](Pictures/Autenticação.Gov_Instalacao_MacOS.png "Instalação da aplicação em MacOS"){:.center}
 
 2.  Escolher a opção **Continuar**. Em seguida é
     necessário ler e aceitar os termos da licença do software.
 
-    ![Ilustração: Instalação da aplicação em MacOS](Pictures/Autenticação.Gov_Intalacao_MacOS2.png "Instalação da aplicação em MacOS"){:.center}
+    ![Ilustração: Instalação da aplicação em MacOS](Pictures/Autenticação.Gov_Instalacao_MacOS2.png "Instalação da aplicação em MacOS"){:.center}
 
 3.  A partir deste ponto no assistente deverá premir o botão
     **Continuar** até concluir a instalação.
@@ -266,15 +262,47 @@ Para proceder à remoção do *middleware* do Cartão de Cidadão, deverão
 ser executados os passos descritos nos pontos seguintes, relativos ao
 sistema operativo utilizado.
 
-### Remoção em Microsoft Windows
+### Remoção em *Microsoft Windows 7*
 
 1.  Aceda ao **Painel de Controlo**.
 2.  Selecione a **Opção Adicionar ou Remover Programas**.
-3.  Selecione o programa **Cartão de Cidadão**, conforme apresentado na janela seguinte:
+3.  Selecione o programa **Autenticação.Gov**, conforme apresentado na janela seguinte:
 
       ![Ilustração: Remoção da aplicação em Windows](Pictures/Autenticação.Gov_Desinstalar.png "Remoção da aplicação em Windows"){:.center}
 
-4.  Clique em **Remover**. Confirme todas as janelas de diálogo que irão
+4.  Clique em **Desinstalar**. Confirme todas as janelas de diálogo que irão
+    surgir.
+5.  Após estes passos, o *middleware* estará removido do computador.
+    Recomenda-se que o computador seja reiniciado no final destes
+    passos.
+
+### Remoção em *Microsoft Windows 10*
+#### Através do Painel de Controlo <!-- omit in toc -->
+
+1.  Aceda ao **Painel de Controlo**.
+2.  Selecione a **Opção Adicionar ou Remover Programas**.
+3.  Selecione o programa **Autenticação.Gov**, conforme apresentado na janela seguinte:
+
+      ![Ilustração: Remoção da aplicação em Windows](Pictures/Autenticação.Gov_Desinstalar_Win10.png "Remoção da aplicação em Windows 10 Painel Controlo"){:.center}
+
+4.  Clique em **Desinstalar**. Confirme todas as janelas de diálogo que irão
+    surgir.
+5.  Após estes passos, o *middleware* estará removido do computador.
+    Recomenda-se que o computador seja reiniciado no final destes
+    passos.
+
+#### Através das Definições do *Windows* <!-- omit in toc -->
+
+1.  Aceda a **Menu Iniciar** -> **Definições do Windows**.
+2.  Prima o botão **Aplicações** (Desinstalar, predefinições, funcionalidades opcionais):
+
+      ![Ilustração: Definições em Windows](Pictures/Definições_Windows_janela.png "Definições Windows 10"){:.center}
+
+3.  Procure a aplicação **Autenticação.Gov**; selecione a aplicação e pressione **Desinstalar**, conforme apresentado na figura seguinte:
+
+      ![Ilustração: Remoção da aplicação em Windows](Pictures/Autenticação.Gov_Add_Remove_janela.png "Remoção da aplicação em Windows 10"){:.center}
+
+4.  Clique em **Desinstalar**. Confirme todas as janelas de diálogo que irão
     surgir.
 5.  Após estes passos, o *middleware* estará removido do computador.
     Recomenda-se que o computador seja reiniciado no final destes
@@ -285,19 +313,18 @@ sistema operativo utilizado.
 Algumas distribuições de Linux, disponibilizam um gestor de aplicações -
 “**Software Center**” - onde é possível remover o software através de um
 assistente gráfico. Este ecrã poderá variar consoante a distribuição,
-neste manual apresenta-se as imagens da utilização do *Software Center*
-em Linux Caixa Mágica 22 LTS.
+neste manual apresenta-se as imagens da utilização do *Ubuntu Software*
+em Linux Ubuntu 18.04.3 LTS.
 
 Em alternativa, o *middleware* poderá também ser [removido recorrendo à linha de comandos](#remo%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos).
 
-#### Remoção através do Software Center
+#### Remoção através do *Software Center*
 
 Este ecrã varia consoante a distribuição que está a utilizar, no
 entanto, as opções são semelhantes em qualquer distribuição. Nos ecrãs
-seguintes são apresentados os ecrãs utilizando Linux Caixa Mágica 22 LTS
+seguintes são apresentados os ecrãs utilizando Linux Ubuntu 18.04.3 LTS.
 
-1.  Abra o *Software Center* (Menu Aplicações → Ferramentas do Sistema →
-    Administração → Caixa Magica Software Center).
+1.  Abra o **Ubuntu Software** (Menu Aplicações → Ubuntu Software).
 
     ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux.png "Remoção da aplicação em Linux"){:.center}
 
@@ -305,13 +332,11 @@ seguintes são apresentados os ecrãs utilizando Linux Caixa Mágica 22 LTS
 
     ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux2.png "Remoção da aplicação em Linux"){:.center}
 
-3.  Digite “pteid” na caixa de pesquisa disponível na barra superior.
-    Deverá ser apresentado na zona de resultados o pacote “Cartão de
-    Cidadão”.
+3.  Localize o pacote **pteid-mw** e prima o botão **Remover**.
 
     ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux3.png "Remoção da aplicação em Linux"){:.center}
 
-4.  Selecione o pacote “Cartão de Cidadão” e prima o botão **Remover**.
+4.  Confirme a operação, voltando a primir o botão **Remover**.
 
     ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux4.png "Remoção da aplicação em Linux"){:.center}
 
@@ -1100,7 +1125,7 @@ selecionar a pasta “drivers” que esta na diretoria “C:\\Windows\\System32�
 
 ## O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão
 
-### Windows
+### Windows <!-- omit in toc -->
 
 1.  Verifique se o leitor de cartões é compatível com o standard PC/SC (consulte a documentação do leitor de cartões ou contacte o fabricante).
 
@@ -1115,7 +1140,7 @@ selecionar a pasta “drivers” que esta na diretoria “C:\\Windows\\System32�
     e\) Encerre a aplicação do Cartão de Cidadão.\
     f\) Volte a inserir o leitor e abra novamente a aplicação.
 
-### Linux
+### Linux <!-- omit in toc -->
 
 1.  Verifique se o leitor de cartões é compatível com o standard PC/SC (consulte a documentação do leitor ou contacte o fabricante).
 2.  Verifique se os controladores do leitor estão corretamente instalados (consulte a documentação do leitor).
@@ -1265,7 +1290,7 @@ seguinte procedimento (com permissões de administrador):
 
 ## Informação sobre servidores de Proxy
 
-### Configuração em *Windows*
+### Configuração em *Windows* <!-- omit in toc -->
 
 Se a máquina em questão tiver um proxy correctamente configurado no Windows, seja por
 IP/Hostname + Porto ou por script de autoconfiguração (PAC file) não é necessária qualquer
@@ -1279,7 +1304,7 @@ atributos profissionais ou assinatura com Chave Móvel) será necessário
 nestes ambientes uma reconfiguração de rede ou o uso de uma proxy aberta
 ou com autenticação Basic.
 
-### Configuração em *MacOS*
+### Configuração em *MacOS* <!-- omit in toc -->
 
 Em MacOS é suportada a proxy do sistema mas apenas se for configurada por IP/Hostname + Porto
 
