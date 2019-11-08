@@ -198,7 +198,7 @@ bool CReader::Connect()
 		long pinpadEnabled = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PINPAD_ENABLED);
 		if (pinpadEnabled==1 && m_oPinpad->UsePinpad())
 		{
-			MWLOG(LEV_DEBUG, MOD_CAL, L"Using Pinpad reader.");
+			MWLOG(LEV_DEBUG, MOD_CAL, L"Using Pinpad reader. pinpadEnabled=%ld", pinpadEnabled);
 			m_poCard->setPinpadHandler(m_oPinpad->getPinpadHandler());
 
 		}
