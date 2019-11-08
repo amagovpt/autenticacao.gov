@@ -138,6 +138,8 @@ void AppController::autoUpdates(){
 
     if (qnam.networkAccessible() == QNetworkAccessManager::NotAccessible){
         qDebug() << "C++: autoUpdates No Internet Connection";
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "AppController::autoUpdates: No Internet Connection");
         emit signalAutoUpdateFail(GAPI::NetworkError);
         return;
     }
@@ -182,6 +184,8 @@ void AppController::startUpdate(){
     file = new QFile(QString::fromUtf8((tmpfile.c_str())));
     if (!file->open(QIODevice::WriteOnly)) {
        qDebug() << "C++: Unable to save the file";
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+           "AppController::startUpdate: Unable to save the file.");
         delete file;
         file = nullptr;
         emit signalAutoUpdateFail(GAPI::UnableSaveFile);
@@ -200,6 +204,8 @@ void AppController::startRequest(QUrl url){
 
     if (qnam.networkAccessible() == QNetworkAccessManager::NotAccessible){
         qDebug() << "C++: startRequest No Internet Connection";
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "AppController::startRequest: No Internet Connection.");
         emit signalAutoUpdateFail(GAPI::NetworkError);
         return;
     }
@@ -248,6 +254,8 @@ void AppController::startUpdateRequest(QUrl url){
 
     if (qnam.networkAccessible() == QNetworkAccessManager::NotAccessible){
         qDebug() << "C++: startUpdateRequest No Internet Connection";
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "AppController::startUpdateRequest: No Internet Connection.");
         emit signalAutoUpdateFail(GAPI::NetworkError);
         return;
     }
@@ -276,10 +284,14 @@ void AppController::httpUpdateFinished(){
             delete file;
             file = 0;
             qDebug() << "C++: httpUpdateRequestAborted";
+            PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui",
+                "AppController::httpUpdateFinished: The update request was aborted.");
         }
 
         if (!userCanceled){
             //network failure occurred when downloading
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "AppController::httpUpdateFinished: Network failure occurred while downloading.");
             emit signalAutoUpdateFail(GAPI::NetworkError);
         }
 
@@ -382,6 +394,8 @@ void AppController::RunPackage(std::string pkg, std::string distro){
     if (!CreateProcess(NULL, path_pointer, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)){
         qDebug() << "autoUpdate process failed to start";
         qDebug() << QString::fromStdString("Error: " + GetLastError());
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "AppController::RunPackage: Failed to start update process: %d.", GetLastError());
         emit signalAutoUpdateFail(GAPI::InstallFailed);
     } else {
         PTEID_ReleaseSDK();
@@ -443,6 +457,8 @@ void AppController::updateUpdateDataReadProgress(qint64 bytesRead, qint64 totalB
 void AppController::httpError(QNetworkReply::NetworkError networkError)
 {
     qDebug() << "C++: httpError:" << networkError;
+    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+        "AppController::httpError: QNetworkReply::NetworkError = %d", networkError);
 
     switch(networkError){
         case QNetworkReply::NetworkError::NoError:
@@ -458,6 +474,8 @@ void AppController::httpError(QNetworkReply::NetworkError networkError)
 void AppController::httpUpdateError(QNetworkReply::NetworkError networkError)
 {
     qDebug() << "C++: httpUpdateError";
+    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+        "AppController::httpUpdateError: QNetworkReply::NetworkError = %d", networkError);
 
     switch(networkError){
         case QNetworkReply::NetworkError::NoError:
@@ -482,6 +500,8 @@ void AppController::httpFinished()
         }
         reply->deleteLater();
         reply = 0;
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "AppController::httpFinished: The update request was aborted.");
         emit signalAutoUpdateFail(GAPI::NetworkError);
         return;
     }
