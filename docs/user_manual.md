@@ -467,19 +467,27 @@ seguintes passos:
 
       Caso a aplicação não consiga efetuar a confirmação da alteração de morada será mostrada uma mensagem de erro e respetivo código, que deverá anotar.
 
-        Nas seguintes mensagens de erro:
+      Nas seguintes mensagens de erro:
 
-      - **Processo de alteração de morada não foi concluído**.
+      - **Processo de alteração de morada não foi concluído. A morada foi alterada no cartão mas não foi confirmada pelos serviços centrais.**
 
         Caso a aplicação não consiga efetuar a confirmação da alteração de morada será mostrada uma mensagem de erro, que deverá anotar. Deverá aguardar cerca de 5 minutos e tentar novamente e, caso o erro persista, contactar a Linha Cartão de Cidadão através do número 211 950 500 ou do E-mail: cartaodecidadao@irn.mj.pt . (Tenha consigo as mensagens de erro e o número de processo de Alteração de Morada)
 
         ![Ilustração: Erro na alteração de morada](Pictures/Autenticação.Gov_Alteracao_morada_erro_n_confirmada.png "Erro na alteração de morada"){:.center}
+
+      - **O prazo de confirmação da alteração de morada expirou. Por favor efetue um novo pedido através dos balcões de atendimento ou do portal ePortugal.**
+
+        Neste caso deverá efectuar um novo pedido através dos balcões de atendimento ou do portal ePortugal.
+
+      Nas seguintes mensagens de erro:
 
       - **Erro na comunicação.**
 
       - **Verifique se introduziu corretamente o número de processo e código de confirmação.**
 
       - **Verifique que tem o certificado de autenticação válido.**
+
+      - **Verifique que tem a última versão da aplicação.**
 
         E em outras mensagens, sem descrição do erro, deverá tentar novamente seguindo as instruções e, caso o erro persista, contactar a Linha Cartão de Cidadão através do  número **211 950 500** ou do E-mail: **cartaodecidadao@irn.mj.pt**. (Tenha consigo as mensagens de erro e respectivos códigos de erro e o número de processo de Alteração de Morada).
 
