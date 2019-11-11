@@ -51,6 +51,7 @@ eidguiV2/qmake_qmake_immediate.qrc
 eidguiV2/qrc_qmake_qmake_immediate.cpp
 eidguiV2/qrc_resources.cpp
 eidlibJava/class/
+minidriver/Build/
 jar/
 lib/
 bin/
