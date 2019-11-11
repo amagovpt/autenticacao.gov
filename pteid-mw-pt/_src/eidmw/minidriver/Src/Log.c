@@ -197,6 +197,10 @@ void LogTrace(int info, const char *pWhere, const char *format,... )
 
 	FILE           *fp = NULL;
 
+	if (info == LOGTYPE_NONE)
+	{
+		return;
+	}
 	switch (g_uiLogLevel)
 	{
 	case LOGTYPE_ERROR:
@@ -207,14 +211,14 @@ void LogTrace(int info, const char *pWhere, const char *format,... )
 		break;
 
 	case LOGTYPE_WARNING:
-		if ( info == LOGTYPE_WARNING )
+		if ( info <= LOGTYPE_WARNING )
 		{
 			iLog++;
 		}
 		break;
 
 	case LOGTYPE_INFO:
-		if ( info == LOGTYPE_INFO )
+		if ( info <= LOGTYPE_INFO )
 		{
 			iLog++;
 		}
