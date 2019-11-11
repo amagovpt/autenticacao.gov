@@ -24,5 +24,6 @@ extern DWORD            PteidGetPubKey(PCARD_DATA  pCardData, DWORD cbCertif, PB
 extern DWORD            PteidCreateMSRoots(PCARD_DATA  pCardData, DWORD *pcbMSRoots, PBYTE *ppbMSRoots);
 extern BYTE				translateCertType(DWORD dwCertSpec);
 extern BOOL runningUnderService();
+extern BOOL             ReadReg(LPCTSTR szSubKey, LPCTSTR szValueName, LPDWORD lpType, LPBYTE pbOutput, LPDWORD lpcbOutputSize);
 
 #endif

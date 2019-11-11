@@ -632,39 +632,25 @@ cleanup:
 #undef WHERE
 
 /****************************************************************************************************/
+#define WHERE "GetAuthPinCachePolicyType"
 PIN_CACHE_POLICY_TYPE GetAuthPinCachePolicyType() {
     PIN_CACHE_POLICY_TYPE defaultCachePolicyType = PinCacheNone;
-    DWORD           dwRet;
-    DWORD           dwType;
-    HKEY            hKey;
     DWORD           dwValue = 0;
-    DWORD           cbValue;
+    DWORD           cbValue = sizeof(DWORD);
 
-    dwRet = RegOpenKeyEx(HKEY_CURRENT_USER, TEXT("Software\\PTEID\\general"), 0, KEY_READ, &hKey);
-    if (dwRet != ERROR_SUCCESS){
-        LogTrace(LOGTYPE_INFO, "GetAuthPinCachePolicyType", "Error in RegOpenKeyEx. Error code: %d", dwRet);
-        return defaultCachePolicyType;
-    }
-
-    cbValue = sizeof(dwValue);
-
-    dwType = REG_DWORD;
-    dwRet = RegQueryValueEx(hKey,
+    DWORD dwRet = ReadReg(
+        TEXT("Software\\PTEID\\general"),
         TEXT("auth_pin_cache_normal"),
         NULL,
-        &dwType, 
-        (LPBYTE)&dwValue, 
+        (LPBYTE)&dwValue,
         &cbValue);
-    if ((dwRet != ERROR_SUCCESS)){
-        LogTrace(LOGTYPE_INFO, "GetAuthPinCachePolicyType", "Error in RegQueryValueEx. Error code: %d", dwRet);
-        RegCloseKey(hKey);
+    if (!dwRet)
         return defaultCachePolicyType;
-    }
-
-    RegCloseKey(hKey);
-    return (dwValue == 1 ? PinCacheNormal : PinCacheNone);
+    else
+        return (dwValue == 1 ? PinCacheNormal : PinCacheNone);
 }
 
+/****************************************************************************************************/
 #define WHERE "CardGetPinInfo"
 DWORD CardGetPinInfo(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
 {

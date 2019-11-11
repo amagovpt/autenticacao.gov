@@ -320,3 +320,98 @@ cleanup:
 	return (dwReturn);
 }
 
+/****************************************************************************************************/
+/* ReadReg reads the registry for the specified key and value name. The key will try to read from 
+ * HKEY_CURRENT_USER and if it fails it will try to read from HKEY_LOCAL_MACHINE.
+ *
+ * Parameters: 
+ * LPCWSTR szSubKey : string with the name of the registry subkey to be opened.
+ * LPCWSTR szValueName : string with the name of the registry value.
+ * LPDWORD lpType : A pointer to a variable that receives a code indicating the type of data stored 
+ *          in the specified value. Consult Win32 documentation.
+ * LPBYTE pbOutput : Pointer to buffer where value read will be stored.
+ * LPDWORD lpcbOutputSize : Pointer to variable wich stores the size in bytes of pbOutput buffer.
+ *          After the call it store the number of bytes read.
+ *
+ * Return: TRUE if the value was read successfully, FALSE otherwise.
+*/
+#define WHERE "ReadReg"
+BOOL ReadReg(LPCTSTR szSubKey, LPCTSTR szValueName, LPDWORD lpType, LPBYTE pbOutput, LPDWORD lpcbOutputSize)
+{
+#ifdef UNICODE
+    LogTrace(LOGTYPE_INFO, WHERE, "Key=%S ValueName=%S", szSubKey, szValueName);
+#else
+    LogTrace(LOGTYPE_INFO, WHERE, "Key=%s ValueName=%s", szSubKey, szValueName);
+#endif
+    HKEY        hKey;
+    DWORD       dwRet;
+    REGSAM      flag = KEY_READ | KEY_WOW64_64KEY;
+    BYTE        *pbValueCU = NULL;
+    BYTE        *pbValueLM = NULL;;
+    DWORD       dwData = 0;
+    BOOL        bValueReadSuccess = FALSE;
+
+    pbValueCU = (BYTE *)malloc(*lpcbOutputSize);
+    dwRet = RegOpenKeyEx(HKEY_CURRENT_USER, szSubKey, 0, flag, &hKey);
+    if (dwRet != ERROR_SUCCESS)
+    {
+        LogTrace(LOGTYPE_WARNING, WHERE, "RegOpenKeyEx for CU returned [0x%x]", dwRet);
+        goto localmachine;
+    }
+
+    dwData = *lpcbOutputSize;
+    dwRet = RegQueryValueEx(hKey,
+        szValueName,
+        NULL,
+        NULL,
+        (LPBYTE)pbValueCU,
+        &dwData);
+
+    if (dwRet == ERROR_SUCCESS && dwData != 0) {
+        StringCchCopyA(pbOutput, *lpcbOutputSize, pbValueCU);
+        bValueReadSuccess = TRUE;
+        goto cleanup;
+    }
+    else
+    {
+        LogTrace(LOGTYPE_WARNING, WHERE, "RegQueryValueEx for CU returned [0x%x]", dwRet);
+        RegCloseKey(hKey);
+        goto localmachine;
+    }
+
+
+localmachine:
+    pbValueLM = (BYTE *)malloc(*lpcbOutputSize);
+    dwRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szSubKey, 0, flag, &hKey);
+    if (dwRet != ERROR_SUCCESS)
+    {
+        LogTrace(LOGTYPE_WARNING, WHERE, "RegOpenKeyEx for LM returned [0x%x]", dwRet);
+        goto cleanup;
+    }
+
+    dwData = *lpcbOutputSize;
+    dwRet = RegQueryValueEx(hKey,
+        szValueName,
+        NULL,
+        NULL,
+        (LPBYTE)pbValueLM,
+        &dwData);
+
+    if (dwRet == ERROR_SUCCESS && dwData != 0) {
+        StringCchCopyA(pbOutput, *lpcbOutputSize, pbValueLM);
+        bValueReadSuccess = TRUE;
+    }
+    else
+    {
+        LogTrace(LOGTYPE_WARNING, WHERE, "RegQueryValueEx for LM returned [0x%x]", dwRet);
+    }
+    RegCloseKey(hKey);
+    goto cleanup;
+
+cleanup:
+    if (pbValueCU)
+        free(pbValueCU);
+    if (pbValueLM)
+        free(pbValueLM);
+    return bValueReadSuccess;
+}
