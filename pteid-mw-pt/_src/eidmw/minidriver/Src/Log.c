@@ -44,14 +44,17 @@ unsigned int   g_uiLogLevel      = LOGTYPE_INFO;
 /****************************************************************************************************/
 void LogInit()
 {
-	DWORD       dwRet;
-	HKEY        hKey;
 	BYTE        lpData[MAX_LOG_DIR_NAME];
-	DWORD       dwData = 0; 
+	DWORD       dwData = sizeof(lpData); 
 
-	dwRet = RegOpenKeyEx (HKEY_LOCAL_MACHINE, TEXT("Software\\PTEID\\Logging"), 0, KEY_READ, &hKey);
+	BOOL dwRet = ReadReg(
+        TEXT("Software\\PTEID\\logging"),
+        TEXT("log_level"),
+        NULL,
+        (LPBYTE)&lpData,
+        &dwData);
 
-	if (dwRet != ERROR_SUCCESS) {
+	if (!dwRet) {
 		//If the registry key is not defined write the logfile in TMP directory
 		dwRet = GetEnvironmentVariable("TMP", lpData, MAX_LOG_DIR_NAME);
 		if (dwRet > 0 && dwRet <= MAX_LOG_DIR_NAME)
@@ -62,16 +65,7 @@ void LogInit()
 		return;
 	}
 
-	// getting log_level
-	dwData = sizeof(lpData);
-	dwRet = RegQueryValueEx( hKey,
-		TEXT("log_level"),
-		NULL,
-		NULL,
-		(LPBYTE) lpData,
-		&dwData );
-
-	if (dwRet == ERROR_SUCCESS) {
+	if (dwRet) {
 		// log_level found
 		// Read loglevels from registry and map on pteid middleware loglevels
 		// debug   -> LOGTYPE_TRACE
@@ -94,14 +88,14 @@ void LogInit()
 
 	//getting log_dirname
 	dwData = sizeof(lpData);
-	dwRet = RegQueryValueEx( hKey,
-		TEXT("log_dirname"),
-		NULL,
-		NULL,
-		(LPBYTE) lpData,
-		&dwData );
+	dwRet = ReadReg(
+        TEXT("Software\\PTEID\\logging"),
+        TEXT("log_dirname"),
+        NULL,
+        (LPBYTE)&lpData,
+        &dwData);
 
-	if (dwRet == ERROR_SUCCESS && dwData != 0) {
+	if (dwRet && dwData != 0) {
 		// log_dirname found
 		// we are not sure the string is null-terminated
 		if (dwData == sizeof(lpData))
@@ -120,28 +114,19 @@ void LogInit()
 
 void PteidLogInit()
 {
-    DWORD 		dwRet;
-    HKEY 		hKey;
     BYTE        lpData[512];
-    DWORD       dwData = 0;
+    DWORD       dwData = sizeof(lpData);
 
     printf("\nRetrieving the data...");
 
-    dwRet = RegOpenKeyEx (HKEY_LOCAL_MACHINE, TEXT("Software\\PTEID\\Logging"), 0, KEY_READ, &hKey);
-    if (dwRet != ERROR_SUCCESS) {
-    	// Key not found - return
-    	return;
-    }
+    BOOL dwRet = ReadReg(
+        TEXT("Software\\PTEID\\logging"),
+        TEXT("log_level"),
+        NULL,
+        (LPBYTE)&lpData,
+        &dwData);
 
-    // getting log_level
-    dwData = sizeof(lpData);
-    dwRet = RegQueryValueEx( hKey,
-                             TEXT("log_level"),
-                             NULL,
-                             NULL,
-                             (LPBYTE) lpData,
-                             &dwData );
-    if (dwRet == ERROR_SUCCESS) {
+    if (dwRet) {
     	// log_level found
         // Read loglevels from registry and map on pteid middleware loglevels
     	// debug   -> LOGTYPE_TRACE
@@ -162,14 +147,14 @@ void PteidLogInit()
     }
     //getting log_dirname
     dwData = sizeof(lpData);
-    dwRet = RegQueryValueEx( hKey,
-                             TEXT("log_dirname"),
-                             NULL,
-                             NULL,
-                             (LPBYTE) lpData,
-                             &dwData );
-    if (dwRet == ERROR_SUCCESS
-    		&& dwData != 0) {
+    dwRet = ReadReg(
+        TEXT("Software\\PTEID\\logging"),
+        TEXT("log_dirname"),
+        NULL,
+        (LPBYTE)&lpData,
+        &dwData);
+
+    if (dwRet && dwData != 0) {
     	// log_dirname found
     	// we are not sure the string is null-terminated
     	lpData[dwData/sizeof(TCHAR) -  1] = '\0';
