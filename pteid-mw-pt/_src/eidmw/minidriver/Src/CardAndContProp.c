@@ -638,7 +638,7 @@ PIN_CACHE_POLICY_TYPE GetAuthPinCachePolicyType() {
     DWORD           dwValue = 0;
     DWORD           cbValue = sizeof(DWORD);
 
-    DWORD dwRet = ReadReg(
+    BOOL dwRet = ReadReg(
         TEXT("Software\\PTEID\\general"),
         TEXT("auth_pin_cache_normal"),
         NULL,
