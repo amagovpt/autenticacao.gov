@@ -33,6 +33,7 @@ Item {
     property alias propertyTextFieldAutUser: textFieldAutUser
     property alias propertyTextFieldAutPass: textFieldAutPass
     property alias propertySettingsScroll: settingsScroll
+    property alias propertyRowMain: rowMain
     anchors.fill: parent
 
     Item {
@@ -91,10 +92,15 @@ Item {
                     KeyNavigation.down: textSelectReader
                     KeyNavigation.right: textSelectReader
 
-                    // Move to last component at the page. If change this value have to also update
-                    // the workaround to scroll the page automatically when navigating with keyboard
+                    // If this component is changed, the workaround to scroll the page automatically with
+                    // keyboard navigation has to be updated also;
+                    // this is located in PageDefinitionsApp.qml - function handleKeyPressed
+                    Keys.onPressed: {
+                        handleKeyPressed(event.key, textReader)
+                    }
                     KeyNavigation.backtab: textFieldAutPass
                     KeyNavigation.up: textFieldAutPass
+                    KeyNavigation.left: textFieldAutPass
                 }
 
                 DropShadow {
@@ -136,11 +142,15 @@ Item {
                         wrapMode: Text.WordWrap
                         Accessible.role: Accessible.TitleBar
                         Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key,textSelectReader)
+                        }
                         KeyNavigation.tab: comboBoxReader
                         KeyNavigation.down: comboBoxReader
                         KeyNavigation.right: comboBoxReader
                         KeyNavigation.backtab: textReader
                         KeyNavigation.up: textReader
+                        KeyNavigation.left: textReader
                         text: qsTranslate("PageDefinitionsApp", "STR_SELECT_READER") + controler.autoTr
                     }
 
@@ -157,11 +167,16 @@ Item {
                         visible: true
                         Accessible.role: Accessible.ComboBox
                         Accessible.name: currentText
+                        Keys.onPressed: {
+                            if (event.key != Qt.Key_Down)
+                                handleKeyPressed(event.key, comboBoxReader)
+                        }
                         KeyNavigation.tab: checkboxEnablePinpad
                         KeyNavigation.down: checkboxEnablePinpad
                         KeyNavigation.right: checkboxEnablePinpad
                         KeyNavigation.backtab: textSelectReader
                         KeyNavigation.up: textSelectReader
+                        KeyNavigation.left: textSelectReader
                     }
 
                     CheckBox {
@@ -177,11 +192,15 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, checkboxEnablePinpad)
+                        }
                         KeyNavigation.tab: dateAppStart
                         KeyNavigation.down: dateAppStart
                         KeyNavigation.right: dateAppStart
                         KeyNavigation.backtab: comboBoxReader
                         KeyNavigation.up: comboBoxReader
+                        KeyNavigation.left: comboBoxReader
                     }
                 }
             }
@@ -206,11 +225,15 @@ Item {
                     text: qsTranslate("PageDefinitionsApp","STR_START_TITLE") + controler.autoTr
                     Accessible.role: Accessible.TitleBar
                     Accessible.name: text
+                    Keys.onPressed: {
+                        handleKeyPressed(event.key, dateAppStart)
+                    }
                     KeyNavigation.tab: checkboxAutoStart
                     KeyNavigation.down: checkboxAutoStart
                     KeyNavigation.right: checkboxAutoStart
                     KeyNavigation.backtab: checkboxEnablePinpad
                     KeyNavigation.up: checkboxEnablePinpad
+                    KeyNavigation.left: checkboxEnablePinpad
                 }
                 DropShadow {
                     anchors.fill: rectAppStartCheckBox
@@ -250,11 +273,15 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, checkboxAutoStart)
+                        }
                         KeyNavigation.tab: startAutoupdateText
                         KeyNavigation.down: startAutoupdateText
                         KeyNavigation.right: startAutoupdateText
                         KeyNavigation.backtab: dateAppStart
                         KeyNavigation.up: dateAppStart
+                        KeyNavigation.left: dateAppStart
                     }
                 }
             }
@@ -279,11 +306,15 @@ Item {
                     text: qsTranslate("PageDefinitionsApp","STR_START_AUTOUPDATES_TITLE") + controler.autoTr
                     Accessible.role: Accessible.TitleBar
                     Accessible.name: text
+                    Keys.onPressed: {
+                        handleKeyPressed(event.key, startAutoupdateText)
+                    }
                     KeyNavigation.tab: checkboxStartAutoupdate
                     KeyNavigation.down: checkboxStartAutoupdate
                     KeyNavigation.right: checkboxStartAutoupdate
                     KeyNavigation.backtab: checkboxAutoStart
                     KeyNavigation.up: checkboxAutoStart
+                    KeyNavigation.left: checkboxAutoStart
                 }
                 DropShadow {
                     anchors.fill: rectStartAutoupdateCheckbox
@@ -323,11 +354,15 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, checkboxStartAutoupdate)
+                        }
                         KeyNavigation.tab: dateAppLanguage
                         KeyNavigation.down: dateAppLanguage
                         KeyNavigation.right: dateAppLanguage
                         KeyNavigation.backtab: startAutoupdateText
                         KeyNavigation.up: startAutoupdateText
+                        KeyNavigation.left: startAutoupdateText
                     }
                 }
             }
@@ -354,11 +389,15 @@ Item {
                     text: qsTranslate("PageDefinitionsApp","STR_LANGUAGE_TITLE") + controler.autoTr
                     Accessible.role: Accessible.TitleBar
                     Accessible.name: text
+                    Keys.onPressed: {
+                        handleKeyPressed(event.key, dateAppLanguage)
+                    }
                     KeyNavigation.tab: radioButtonPT
                     KeyNavigation.down: radioButtonPT
                     KeyNavigation.right: radioButtonPT
                     KeyNavigation.backtab: checkboxStartAutoupdate
                     KeyNavigation.up: checkboxStartAutoupdate
+                    KeyNavigation.left: checkboxStartAutoupdate
                 }
 
                 DropShadow {
@@ -403,11 +442,15 @@ Item {
                             font.bold: activeFocus
                             Accessible.role: Accessible.RadioButton
                             Accessible.name: text
+                            Keys.onPressed: {
+                                handleKeyPressed(event.key, radioButtonPT)
+                            }
                             KeyNavigation.tab: radioButtonUK
                             KeyNavigation.down: radioButtonUK
                             KeyNavigation.right: radioButtonUK
                             KeyNavigation.backtab: dateAppLanguage
                             KeyNavigation.up: dateAppLanguage
+                            KeyNavigation.left: dateAppLanguage
                         }
                     }
                     Rectangle {
@@ -426,11 +469,15 @@ Item {
                             font.bold: activeFocus
                             Accessible.role: Accessible.RadioButton
                             Accessible.name: text
+                            Keys.onPressed: {
+                                handleKeyPressed(event.key, radioButtonUK)
+                            }
                             KeyNavigation.tab: dateAppLook
                             KeyNavigation.down: dateAppLook
                             KeyNavigation.right: dateAppLook
                             KeyNavigation.backtab: radioButtonPT
                             KeyNavigation.up: radioButtonPT
+                            KeyNavigation.left: radioButtonPT
                         }
                     }
                 }
@@ -457,11 +504,15 @@ Item {
                                       "STR_APP_LOOK_TITLE") + controler.autoTr
                     Accessible.role: Accessible.TitleBar
                     Accessible.name: text
+                    Keys.onPressed: {
+                        handleKeyPressed(event.key, dateAppLook)
+                    }
                     KeyNavigation.tab: checkboxShowAnime
                     KeyNavigation.down: checkboxShowAnime
                     KeyNavigation.right: checkboxShowAnime
                     KeyNavigation.backtab: radioButtonUK
                     KeyNavigation.up: radioButtonUK
+                    KeyNavigation.left: radioButtonUK
                 }
                 DropShadow {
                     anchors.fill: rectAppLookCheckBox
@@ -502,11 +553,15 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, checkboxShowAnime)
+                        }
                         KeyNavigation.tab: dateDebugMode
                         KeyNavigation.down: dateDebugMode
                         KeyNavigation.right: dateDebugMode
                         KeyNavigation.backtab: dateAppLook
                         KeyNavigation.up: dateAppLook
+                        KeyNavigation.left: dateAppLook
                     }
                 }
             }
@@ -532,11 +587,15 @@ Item {
                     text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_TITLE") + controler.autoTr
                     Accessible.role: Accessible.TitleBar
                     Accessible.name: text
+                    Keys.onPressed: {
+                        handleKeyPressed(event.key, dateDebugMode)
+                    }
                     KeyNavigation.tab: debugModeTextField
                     KeyNavigation.down: debugModeTextField
                     KeyNavigation.right: debugModeTextField
                     KeyNavigation.backtab: checkboxShowAnime
                     KeyNavigation.up: checkboxShowAnime
+                    KeyNavigation.left: checkboxShowAnime
                 }
 
                 DropShadow {
@@ -578,11 +637,15 @@ Item {
                         wrapMode: Text.WordWrap
                         Accessible.role: Accessible.TitleBar
                         Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, debugModeTextField)
+                        }
                         KeyNavigation.tab: checkboxDebugMode
                         KeyNavigation.down: checkboxDebugMode
                         KeyNavigation.right: checkboxDebugMode
                         KeyNavigation.backtab: dateDebugMode
                         KeyNavigation.up: dateDebugMode
+                        KeyNavigation.left: dateDebugMode
                         text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_DESCRIPTION") + controler.autoTr
                     }
 
@@ -599,11 +662,15 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, checkboxDebugMode)
+                        }
                         KeyNavigation.tab: dateAppGraphics
                         KeyNavigation.down: dateAppGraphics
                         KeyNavigation.right: dateAppGraphics
                         KeyNavigation.backtab: debugModeTextField
                         KeyNavigation.up: debugModeTextField
+                        KeyNavigation.left: debugModeTextField
                     }
                 }
             }
@@ -631,11 +698,15 @@ Item {
                                       "STR_APP_GRAPHICS_TITLE") + controler.autoTr
                     Accessible.role: Accessible.TitleBar
                     Accessible.name: text
+                    Keys.onPressed: {
+                        handleKeyPressed(event.key, dateAppGraphics)
+                    }
                     KeyNavigation.tab: graphicsTextField
                     KeyNavigation.down: graphicsTextField
                     KeyNavigation.right: graphicsTextField
                     KeyNavigation.backtab: checkboxDebugMode
                     KeyNavigation.up: checkboxDebugMode
+                    KeyNavigation.left: checkboxDebugMode
                 }
                 DropShadow {
                     anchors.fill: rectAppGraphicsCheckBox
@@ -677,11 +748,15 @@ Item {
                         wrapMode: Text.WordWrap
                         Accessible.role: Accessible.TitleBar
                         Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, graphicsTextField)
+                        }
                         KeyNavigation.tab: checkboxAccelGraphics
                         KeyNavigation.down: checkboxAccelGraphics
                         KeyNavigation.right: checkboxAccelGraphics
                         KeyNavigation.backtab: dateAppGraphics
                         KeyNavigation.up: dateAppGraphics
+                        KeyNavigation.left: dateAppGraphics
                     }
                     CheckBox {
                         id: checkboxAccelGraphics
@@ -698,11 +773,15 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, checkboxAccelGraphics)
+                        }
                         KeyNavigation.tab: dateAppNetwork
                         KeyNavigation.down: dateAppNetwork
                         KeyNavigation.right: dateAppNetwork
                         KeyNavigation.backtab: graphicsTextField
                         KeyNavigation.up: graphicsTextField
+                        KeyNavigation.left: graphicsTextField
                     }
                 }
             }
@@ -729,11 +808,15 @@ Item {
                                       "STR_NETWORK_TITLE") + controler.autoTr
                     Accessible.role: Accessible.TitleBar
                     Accessible.name: text
+                    Keys.onPressed: {
+                        handleKeyPressed(event.key, dateAppNetwork)
+                    }
                     KeyNavigation.tab: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
                     KeyNavigation.down: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
                     KeyNavigation.right: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
                     KeyNavigation.backtab: checkboxAccelGraphics
                     KeyNavigation.up: checkboxAccelGraphics
+                    KeyNavigation.left: checkboxAccelGraphics
                 }
                 DropShadow {
                     anchors.fill: rectAppNetworkCheckBox
@@ -777,11 +860,15 @@ Item {
                         checked: false
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, checkboxSystemProxy)
+                        }
                         KeyNavigation.tab: checkboxProxy
                         KeyNavigation.down: checkboxProxy
                         KeyNavigation.right: checkboxProxy
                         KeyNavigation.backtab: dateAppNetwork
                         KeyNavigation.up: dateAppNetwork
+                        KeyNavigation.left: dateAppNetwork
                     }
 
                     CheckBox {
@@ -798,11 +885,15 @@ Item {
                         checked: false
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, checkboxProxy)
+                        }
                         KeyNavigation.tab: checkboxProxy.checked ? textFieldAdress : checkboxAutProxy
                         KeyNavigation.down: checkboxProxy.checked ? textFieldAdress : checkboxAutProxy
                         KeyNavigation.right: checkboxProxy.checked ? textFieldAdress : checkboxAutProxy
                         KeyNavigation.backtab: checkboxSystemProxy
                         KeyNavigation.up: checkboxSystemProxy
+                        KeyNavigation.left: checkboxSystemProxy
                     }
                     Item {
                         id: boxAppAdress
@@ -834,6 +925,7 @@ Item {
                             KeyNavigation.right: textFieldPort
                             KeyNavigation.backtab: checkboxProxy
                             KeyNavigation.up: checkboxProxy
+                            KeyNavigation.left: checkboxProxy
                         }
                     }
                     Item {
@@ -867,6 +959,7 @@ Item {
                             KeyNavigation.right: checkboxAutProxy
                             KeyNavigation.backtab: textFieldAdress
                             KeyNavigation.up: textFieldAdress
+                            KeyNavigation.left: textFieldAdress
                         }
                     }
                     CheckBox {
@@ -884,11 +977,18 @@ Item {
                         checked: false
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
+                        // If this component is changed, the workaround to scroll the page automatically with
+                        // keyboard navigation has to be updated also;
+                        // this is located in PageDefinitionsApp.qml - function handleKeyPressed
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, checkboxAutProxy)
+                        }
                         KeyNavigation.tab: checkboxAutProxy.checked? textFieldAutUser: textReader
                         KeyNavigation.down: checkboxAutProxy.checked? textFieldAutUser: textReader
                         KeyNavigation.right: checkboxAutProxy.checked? textFieldAutUser: textReader
                         KeyNavigation.backtab: textFieldPort
                         KeyNavigation.up: textFieldPort
+                        KeyNavigation.left: textFieldPort
                     }
                     Item {
                         id: boxAppAutUser
@@ -917,6 +1017,7 @@ Item {
                             KeyNavigation.right: textFieldAutPass
                             KeyNavigation.backtab: checkboxAutProxy
                             KeyNavigation.up: checkboxAutProxy
+                            KeyNavigation.left: checkboxAutProxy
                         }
                     }
                     Item {
@@ -942,11 +1043,18 @@ Item {
                             opacity: checkboxAutProxy.checked ? 1.0 : Constants.OPACITY_DEFINITIONS_APP_OPTION_DISABLED
                             Accessible.role: Accessible.EditableText
                             Accessible.name: text
+                            // If this component is changed, the workaround to scroll the page automatically with
+                            // keyboard navigation has to be updated also;
+                            // this is located in PageDefinitionsApp.qml - function handleKeyPressed
+                            Keys.onPressed: {
+                                handleKeyPressed(event.key,textFieldAutPass)
+                            }
                             KeyNavigation.tab: textReader
                             KeyNavigation.down: textReader
                             KeyNavigation.right: textReader
                             KeyNavigation.backtab: textFieldAutUser
                             KeyNavigation.up: textFieldAutUser
+                            KeyNavigation.left: textFieldAutUser
                         }
                     }
                 }

@@ -226,3 +226,10 @@ var MenuState = Object.freeze({
 
 var ARROW_RIGHT = "images/arrow-right_white_AMA.png"
 var ARROW_RIGHT_HOVER = "images/arrow-right_hover.png"
+
+var FLICK_Y_VELOCITY = 250
+var FLICK_Y_VELOCITY_MAX = 2500
+
+var DIRECTION_DOWN = -1;
+var DIRECTION_UP = 1;
+var NO_DIRECTION = 0;
