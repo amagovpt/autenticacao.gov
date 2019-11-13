@@ -319,6 +319,7 @@ cleanup:
 
 	return (dwReturn);
 }
+#undef WHERE
 
 /****************************************************************************************************/
 /* ReadReg reads the registry for the specified key and value name. The key will try to read from 
@@ -415,3 +416,4 @@ cleanup:
         free(pbValueLM);
     return bValueReadSuccess;
 }
+#undef WHERE
