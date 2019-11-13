@@ -151,6 +151,10 @@ CByteArray ACR83Pinpad::PinCmd(tPinOperation operation,
 		return PinpadControl((unsigned long)ioctl2, b2, operation,
                             ucPinType, pin.csLabel, wndGeometry);
 	}
+	else {
+		MWLOG(LEV_ERROR, MOD_CAL, L"PIN operation PIN_OP_RESET_NO_PUK not supported for ACR83 Pinpad!");
+		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+	}
 }
 
 }
