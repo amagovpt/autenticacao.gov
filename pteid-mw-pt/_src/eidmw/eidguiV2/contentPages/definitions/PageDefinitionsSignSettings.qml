@@ -22,12 +22,29 @@ PageDefinitionsSignSettingsForm {
     }
 
     propertyCheckboxRegister{
-        onCheckedChanged: propertyCheckboxRegister.checked ? gapi.setRegCertValue(true) :
-                                                             gapi.setRegCertValue(false)
+        onCheckedChanged: {
+            propertyCheckboxRegister.checked ? gapi.setRegCertValue(true) :
+                                               gapi.setRegCertValue(false)
+            if (propertyCheckboxRegister.enabled) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTranslate("Popup Card","STR_POPUP_REGISTER_CERTIFICATE") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            }
+        }
     }
     propertyCheckboxRemove{
-        onCheckedChanged: propertyCheckboxRemove.checked ? gapi.setRemoveCertValue(true) :
-                                                           gapi.setRemoveCertValue(false)
+        onCheckedChanged: {
+            propertyCheckboxRemove.checked ? gapi.setRemoveCertValue(true) :
+                                             gapi.setRemoveCertValue(false)
+
+            if (propertyCheckboxRemove.enabled) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTranslate("Popup Card","STR_POPUP_REMOVE_CERTIFICATE") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            }
+        }
     }
     propertyCheckboxDisable{
         onCheckedChanged: controler.setOutlookSuppressNameChecks(propertyCheckboxDisable.checked);
@@ -49,9 +66,13 @@ PageDefinitionsSignSettingsForm {
     Component.onCompleted: {
         console.log("Page definitionsSignSettings onCompleted")
 
+        propertyCheckboxRegister.enabled = false
+        propertyCheckboxRemove.enabled = false
         if (Qt.platform.os === "windows") {
             propertyCheckboxRegister.checked = gapi.getRegCertValue()
             propertyCheckboxRemove.checked = gapi.getRemoveCertValue()
+            propertyCheckboxRegister.enabled = true
+            propertyCheckboxRemove.enabled = true
         }else{
             propertyRectAppCertificates.visible = false
             propertyRectAppTimeStamp.anchors.top = propertyRectAppCertificates.top
