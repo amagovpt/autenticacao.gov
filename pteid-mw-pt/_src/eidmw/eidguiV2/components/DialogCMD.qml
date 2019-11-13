@@ -193,6 +193,7 @@ Item {
                     font.italic: textFieldMobileNumber.text === "" ? true: false
                     placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM_OP") + "?"
                     validator: RegExpValidator { regExp: /[0-9]+/ }
+                    maximumLength: 15
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.bold: activeFocus
