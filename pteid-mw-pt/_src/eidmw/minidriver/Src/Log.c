@@ -178,7 +178,7 @@ void LogTrace(int info, const char *pWhere, const char *format,... )
 	unsigned int   uiYear;
 
 	va_list        listArg;
-	int            iLog = 0;
+	BOOL           bShouldLog = FALSE;
 
 	FILE           *fp = NULL;
 
@@ -191,26 +191,26 @@ void LogTrace(int info, const char *pWhere, const char *format,... )
 	case LOGTYPE_ERROR:
 		if ( info == LOGTYPE_ERROR )
 		{
-			iLog++;
+			bShouldLog = TRUE;
 		}
 		break;
 
 	case LOGTYPE_WARNING:
 		if ( info <= LOGTYPE_WARNING )
 		{
-			iLog++;
+			bShouldLog = TRUE;
 		}
 		break;
 
 	case LOGTYPE_INFO:
 		if ( info <= LOGTYPE_INFO )
 		{
-			iLog++;
+			bShouldLog = TRUE;
 		}
 		break;
 
 	case LOGTYPE_TRACE:
-		iLog++;
+		bShouldLog = TRUE;
 		break;
 
 	default:
@@ -218,7 +218,7 @@ void LogTrace(int info, const char *pWhere, const char *format,... )
 		break;
 	}
 
-	if ( iLog == 0 )
+	if (!bShouldLog)
 	{
 		return;
 	}
