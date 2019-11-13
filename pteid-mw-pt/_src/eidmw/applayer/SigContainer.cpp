@@ -11,7 +11,6 @@
 #include <fstream>
 #include <cstring>
 #ifndef _WIN32
-//This has to be explicitly included in gcc4.7
 #include <unistd.h>
 #endif
 
