@@ -149,7 +149,7 @@ PageServicesSignSimpleForm {
             console.log("Receive signal onSignalPdfSourceChanged pdfWidth = "+pdfWidth+" pdfHeight = "+pdfHeight);
             propertyPDFPreview.propertyPdfOriginalWidth=pdfWidth
             propertyPDFPreview.propertyPdfOriginalHeight=pdfHeight
-            propertyPDFPreview.updateSignPreview(0,0) //arguments not used
+            propertyPDFPreview.updateSignPreview()
             propertyBusyIndicator.running = false
         }
     }
@@ -384,7 +384,7 @@ PageServicesSignSimpleForm {
         }
         onDropped: {
             // Update sign preview position variables to be used to send to sdk
-            propertyPDFPreview.updateSignPreview(drop.x,drop.y)
+            propertyPDFPreview.updateSignPreview()
             //TODO: Validate files type
             if(filesArray.length > 1){
                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =

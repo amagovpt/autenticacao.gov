@@ -253,7 +253,7 @@ PageServicesSignAdvancedForm {
             console.log("Receive signal onSignalPdfSourceChanged pdfWidth = "+pdfWidth+" pdfHeight = "+pdfHeight);
             propertyPDFPreview.propertyPdfOriginalWidth=pdfWidth
             propertyPDFPreview.propertyPdfOriginalHeight=pdfHeight
-            propertyPDFPreview.updateSignPreview(0,0) //arguments not used
+            propertyPDFPreview.updateSignPreview()
             propertyPDFPreview.setSignPreview(propertyPageLoader.propertyBackupCoordX * propertyPDFPreview.propertyBackground.width,propertyPageLoader.propertyBackupCoordY * propertyPDFPreview.propertyBackground.height)
         }
     }
@@ -536,7 +536,7 @@ PageServicesSignAdvancedForm {
         }
         onDropped: {
             // Update sign preview position variables to be used to send to sdk
-            propertyPDFPreview.updateSignPreview(drop.x,drop.y)
+            propertyPDFPreview.updateSignPreview()
             propertyPageLoader.propertyBackupCoordX = propertyPDFPreview.propertyDragSigRect.x / propertyPDFPreview.propertyBackground.width
             propertyPageLoader.propertyBackupCoordY = propertyPDFPreview.propertyDragSigRect.y / propertyPDFPreview.propertyBackground.height
 
@@ -583,7 +583,7 @@ PageServicesSignAdvancedForm {
                 var coord_x = -1
                 var coord_y = -1
                 if(propertyCheckSignShow.checked){
-                    propertyPDFPreview.updateSignPreview(0,0) //arguments not used
+                    propertyPDFPreview.updateSignPreview()
                     coord_x = propertyPDFPreview.propertyCoordX
                     //coord_y must be the lower left corner of the signature rectangle
                     coord_y = propertyPDFPreview.propertyCoordY
@@ -663,7 +663,7 @@ PageServicesSignAdvancedForm {
                 var coord_x = -1
                 var coord_y = -1
                 if(propertyCheckSignShow.checked){
-                    propertyPDFPreview.updateSignPreview(0,0) //arguments not used
+                    propertyPDFPreview.updateSignPreview()
                     coord_x = propertyPDFPreview.propertyCoordX
                     //coord_y must be the lower left corner of the signature rectangle
                     coord_y = propertyPDFPreview.propertyCoordY

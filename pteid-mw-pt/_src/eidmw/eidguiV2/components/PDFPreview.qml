@@ -282,7 +282,7 @@ Rectangle {
             }
         }
     }
-    function updateSignPreview(droped_x,droped_y){
+    function updateSignPreview(){
 
         dragTarget.coord_x = (dragSigRect.x) / background_image.width
         dragTarget.coord_y = (dragSigRect.y + dragSigRect.height) / background_image.height
@@ -309,7 +309,7 @@ Rectangle {
 
         y = y - diff
         setSignPreview(x, y)
-        updateSignPreview(x, y)
+        updateSignPreview()
     }
 
     function moveDown(positions) {
@@ -327,7 +327,7 @@ Rectangle {
         var x = dragSigRect.x
         var y = dragSigRect.y + diff
         setSignPreview(x, y)
-        updateSignPreview(x, y)
+        updateSignPreview()
     }
 
     function moveLeft(positions) {
@@ -342,7 +342,7 @@ Rectangle {
 
         x = x - diff
         setSignPreview(x, y)
-        updateSignPreview(x, y)
+        updateSignPreview()
     }
 
     function moveRight(positions) {
@@ -360,7 +360,7 @@ Rectangle {
         var x = dragSigRect.x + diff
         var y = dragSigRect.y
         setSignPreview(x, y)
-        updateSignPreview(x, y)
+        updateSignPreview()
     }
 
     // this is a hack to make screen reader say x and y positions

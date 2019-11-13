@@ -651,7 +651,7 @@ Item {
         if (typeof propertyCheckSignReduced !== "undefined")
             isSmallSignature = propertyCheckSignReduced.checked
 
-        propertyPDFPreview.updateSignPreview(0,0) //arguments not used
+        propertyPDFPreview.updateSignPreview()
         var coord_x = -1
         var coord_y = -1
         if(typeof propertyCheckSignShow !== "undefined"){
