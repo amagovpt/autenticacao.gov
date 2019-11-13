@@ -149,6 +149,7 @@ PageServicesSignSimpleForm {
             console.log("Receive signal onSignalPdfSourceChanged pdfWidth = "+pdfWidth+" pdfHeight = "+pdfHeight);
             propertyPDFPreview.propertyPdfOriginalWidth=pdfWidth
             propertyPDFPreview.propertyPdfOriginalHeight=pdfHeight
+            propertyPDFPreview.updateSignPreview(0,0) //arguments not used
             propertyBusyIndicator.running = false
         }
     }
