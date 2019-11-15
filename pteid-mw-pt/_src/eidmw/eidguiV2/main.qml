@@ -1364,23 +1364,6 @@ Load language error. Please reinstall the application"
         }
     }
 
-    function getSubMenuName(index){
-        if(mainFormID.propertyMainMenuListView.currentIndex != -1){
-            return "Sub Menu de "
-                    + qsTranslate("MainMenuModel", mainFormID.propertyMainMenuListView.model.get(
-                                      mainFormID.propertyMainMenuListView.currentIndex).name )
-                    + controler.autoTr
-
-        }else if(mainFormID.propertyMainMenuBottomListView.currentIndex != -1){
-            return "Sub Menu de "
-                    + qsTranslate("MainMenuModel", mainFormID.propertyMainMenuBottomListView.model.get(
-                                      mainFormID.propertyMainMenuBottomListView.currentIndex).name )
-                    + controler.autoTr
-        } else {
-            return ""
-        }
-    }
-
     function mainMenuPressed(index){
         // if there are unsaved notes
         if(handleUnsavedNotes(index,"", Constants.MAIN_MENU_PRESSED)){
