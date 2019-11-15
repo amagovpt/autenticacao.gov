@@ -8,6 +8,7 @@ Column {
     height: parent.height
 
     property alias model: columnRepeater.model
+    property var dataModel
 
     Repeater {
         id: columnRepeater
@@ -117,6 +118,7 @@ Column {
         }
     }
     function selectOption(modelData){
+        dataModel = modelData
         textEntity.propertyDateField.text= modelData.entity
         textAuth.propertyDateField.text  = modelData.auth
         textValid.propertyDateField.text = modelData.valid 

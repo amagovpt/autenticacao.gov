@@ -346,6 +346,7 @@ public slots:
 
     void setEventCallbacks( void );
     void startfillCertificateList ( void );
+    void viewCardCertificate(QString issuedBy, QString issuedTo);
     void startGetCardActivation ( void );
 
     void initTranslation();

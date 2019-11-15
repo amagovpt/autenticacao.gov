@@ -2941,6 +2941,53 @@ void GAPI::cleanupCallbackData(void)
     g_cleaningCallback = false;
 }
 
+void GAPI::viewCardCertificate(QString issuedBy, QString issuedTo) {
+#ifdef WIN32
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) {
+        qDebug() << "Error: inspectCardCertificate should not be called if card is not inserted!";
+        return;
+    }
+    PTEID_Certificates&	 certificates = card->getCertificates();
+    size_t nCerts = certificates.countAll();
+    for (size_t i = 0; i < nCerts; i++)
+    {
+        PTEID_Certificate &cert = certificates.getCert(i);
+        std::wstring issuerName = utilStringWiden(cert.getIssuerName());
+        std::wstring ownerName = utilStringWiden(cert.getOwnerName());
+        if (issuerName == issuedBy.toStdWString() && ownerName == issuedTo.toStdWString())
+        {
+            PTEID_ByteArray certData = cert.getCertData();
+            PCCERT_CONTEXT pCertContext = CertCreateCertificateContext(
+                X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
+                certData.GetBytes(),
+                certData.Size());
+            if (!pCertContext)
+            {
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, 
+                    "eidgui", "inspectCardCertificate: Error creating cert context: %d", GetLastError());
+                return;
+            }
+
+            HWND appWindow = GetForegroundWindow();
+            CryptUIDlgViewContext(
+                CERT_STORE_CERTIFICATE_CONTEXT,
+                pCertContext,
+                appWindow,
+                NULL,
+                0,
+                NULL);
+            if (pCertContext)
+            {
+                CertFreeCertificateContext(pCertContext);
+            }
+            break;
+        }
+    }
+#endif
+}
+
 void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap)
 {
     QVariantMap certificatesMapChildren;

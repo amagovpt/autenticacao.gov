@@ -222,13 +222,26 @@ PageSecurityCertificatesForm {
                 propertyAcordion.selectOption(initialOption)
             }
             propertyBusyIndicator.running = false
+            propertyButtonViewCertificate.enabled = true
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                 propertyRectEntity.forceActiveFocus()
+        }
+    }
+
+    propertyButtonViewCertificate {
+        onClicked: {
+            console.log("View certificate button clicked")
+            gapi.viewCardCertificate(propertyAcordion.dataModel.auth, propertyAcordion.dataModel.entity)
         }
     }
     Component.onCompleted: {
         console.log("Page Security Certificates Completed")
         propertyBusyIndicator.running = true
+
+        if (Qt.platform.os === "windows") {
+            propertyButtonViewCertificate.visible = true
+        }
+
         gapi.startfillCertificateList()
     }
     function getCertStatus(certStatus){
@@ -269,6 +282,7 @@ PageSecurityCertificatesForm {
         return strCertStatus
     }
     function clearFields(){
+        propertyButtonViewCertificate.enabled = false
         for (var i = 0; i < propertyRectBottom.children.length; i++){
             propertyAcordion.model = []
             propertyRectBottom.children[i].children[0].propertyDateField.text = ""

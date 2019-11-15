@@ -350,7 +350,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="227"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="108"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="123"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="672"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="673"/>
         <location filename="gapi.cpp" line="1475"/>
         <source>STR_DOCUMENT_NUMBER</source>
         <translation>Número de documento</translation>
@@ -1399,7 +1399,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="226"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="104"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="122"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="671"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="672"/>
         <source>STR_CUSTOM_SIGN_BY</source>
         <translation>Assinado por</translation>
     </message>
@@ -1653,88 +1653,98 @@
 <context>
     <name>PageSecurityCertificates</name>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="250"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="265"/>
         <source>STR_STATUS_NETWORK_ERROR</source>
         <translation>Não foi possível validar o certificado. Verifique a ligação à internet</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="244"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="259"/>
         <source>STR_STATUS_REVOKED</source>
         <translation>Revogado</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="262"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="277"/>
         <source>STR_STATUS_EXPIRED</source>
         <translation>Expirado</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="247"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="262"/>
         <source>STR_STATUS_SUSPENDED</source>
         <translation>Inativo ou Suspenso</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="253"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="268"/>
         <source>STR_STATUS_ISSUER</source>
         <translation>Falta um emissor na cadeia de certificados</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="256"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="271"/>
         <source>STR_STATUS_ERROR</source>
         <translation>Não foi possível validar o certificado. Verifique a ligação à internet</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="259"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="274"/>
         <source>STR_STATUS_VALID</source>
         <translation>Válido</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="236"/>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="241"/>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="265"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="251"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="256"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="280"/>
         <source>STR_STATUS_UNKNOWN</source>
         <translation>Desconhecido</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="67"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="69"/>
         <source>STR_CERTIFICATES_SELECT</source>
         <translation>Selecione o certificado</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="101"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="96"/>
+        <source>STR_CERTIFICATES_SELECTED</source>
+        <translation>Dados do certificado selecionado:</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="120"/>
         <source>STR_CERTIFICATES_ENTITY</source>
         <translation>Cidadão / Entidade</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="123"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="142"/>
         <source>STR_CERTIFICATES_ENTITY_ISSUER</source>
         <translation>Entidade Emissora</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="145"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="164"/>
         <source>STR_CERTIFICATES_VALID_FROM</source>
         <translation>Válido desde</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="167"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="188"/>
         <source>STR_CERTIFICATES_VALID_UNTIL</source>
         <translation>Válido até</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="189"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="210"/>
         <source>STR_CERTIFICATES_KEY_SIZE</source>
         <translation>Tamanho da chave</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="211"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="232"/>
         <source>STR_CERTIFICATES_STATE</source>
         <translation>Estado do certificado</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="258"/>
+        <source>STR_OPEN_CERTIFICATE</source>
+        <translation>Ver certificado</translation>
     </message>
 </context>
 <context>
     <name>PageServicesSign</name>
     <message>
         <location filename="components/DialogCMD.qml" line="58"/>
-        <location filename="components/DialogCMD.qml" line="360"/>
+        <location filename="components/DialogCMD.qml" line="361"/>
         <source>STR_SIGN_CMD</source>
         <translation>Assinar com Chave Móvel Digital</translation>
     </message>
@@ -1754,12 +1764,12 @@
         <translation>Número</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="224"/>
+        <location filename="components/DialogCMD.qml" line="225"/>
         <source>STR_SIGN_CMD_PIN</source>
         <translation>PIN de Assinatura</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="240"/>
+        <location filename="components/DialogCMD.qml" line="241"/>
         <source>STR_SIGN_CMD_PIN_OP</source>
         <translation>PIN</translation>
     </message>
@@ -1775,9 +1785,9 @@
         <translation>Ficheiros assinados com sucesso</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="435"/>
+        <location filename="components/DialogCMD.qml" line="436"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="343"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="210"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="211"/>
         <source>STR_SIGN_OPEN</source>
         <translation>Abrir ficheiro assinado ?</translation>
     </message>
@@ -1798,20 +1808,20 @@
         <translation>Por favor verifique a sua ligação a internet e volte a tentar.</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="436"/>
+        <location filename="components/DialogCMD.qml" line="437"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="341"/>
         <source>STR_SIGN_OPEN_MULTI</source>
         <translation>Abrir diretório com ficheiro(s) assinado(s) ?</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="437"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="302"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="303"/>
         <source>STR_SIGN_FAIL</source>
         <translation>Falha na assinatura de PDF</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1237"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="620"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="621"/>
         <source>STR_LOAD_ENCRYPTED_PDF_ERROR_MSG</source>
         <translation>Ficheiro PDF não suportado ou encriptado. A assinatura PDF não suporta ficheiros PDF encriptados.</translation>
     </message>
@@ -1876,7 +1886,7 @@
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1229"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="611"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="612"/>
         <source>STR_LOAD_PDF_ERROR</source>
         <translation>Erro</translation>
     </message>
@@ -1886,16 +1896,16 @@
         <translation>Verifique que o ficheiro não está corrompido e verifique o tipo de assinatura seleccionado.</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="274"/>
-        <location filename="components/DialogCMD.qml" line="527"/>
+        <location filename="components/DialogCMD.qml" line="275"/>
+        <location filename="components/DialogCMD.qml" line="528"/>
         <source>STR_CMD_POPUP_CANCEL</source>
         <oldsource>STR_ADDRESS_CHANGE_CANCEL</oldsource>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="313"/>
-        <location filename="components/DialogCMD.qml" line="562"/>
-        <location filename="components/DialogCMD.qml" line="697"/>
+        <location filename="components/DialogCMD.qml" line="314"/>
+        <location filename="components/DialogCMD.qml" line="563"/>
+        <location filename="components/DialogCMD.qml" line="698"/>
         <source>STR_CMD_POPUP_CONFIRM</source>
         <oldsource>STR_ADDRESS_CHANGE_CONFIRM</oldsource>
         <translation>OK</translation>
@@ -1914,19 +1924,19 @@
         <translation>Falha ao assinar o ficheiro com o código de erro</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="233"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="234"/>
         <source>STR_POPUP_FILE_CANCEL</source>
         <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1241"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="615"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="624"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="616"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="625"/>
         <source>STR_LOAD_PDF_ERROR_MSG</source>
         <translation>Erro ao ler o ficheiro PDF. Verifique o formato do ficheiro.</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="463"/>
+        <location filename="components/DialogCMD.qml" line="464"/>
         <source>STR_SIGN_CMD_CODE</source>
         <translation>Introduza o código</translation>
     </message>
@@ -1946,13 +1956,13 @@
         <translation>Um ou mais atributos selecionados não se encontram ativos. Por favor, limpe a cache e recarregue os seus atributos</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="479"/>
+        <location filename="components/DialogCMD.qml" line="480"/>
         <source>STR_SIGN_CMD_CODE_OP</source>
         <translation>Código</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="282"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="172"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="173"/>
         <source>STR_SIGN_SUCESS</source>
         <translation>Ficheiro assinado com sucesso</translation>
     </message>
@@ -2224,7 +2234,7 @@
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="76"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="82"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="88"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="518"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="519"/>
         <location filename="main.qml" line="86"/>
         <location filename="main.qml" line="96"/>
         <location filename="main.qml" line="105"/>
@@ -2239,7 +2249,7 @@
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1005"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="520"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="521"/>
         <source>STR_POPUP_NO_CMD_SUPPORT</source>
         <translation>A aplicação instalada não possui suporte para o serviço de Chave Móvel Digital.</translation>
     </message>
@@ -2462,13 +2472,13 @@
     <message>
         <location filename="PageLoader.qml" line="85"/>
         <location filename="components/DialogCMD.qml" line="82"/>
-        <location filename="components/DialogCMD.qml" line="395"/>
+        <location filename="components/DialogCMD.qml" line="396"/>
         <location filename="contentPages/card/PageCardAdress.qml" line="370"/>
         <location filename="contentPages/card/PageCardAdress.qml" line="592"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="306"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="450"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="195"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="315"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="196"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="316"/>
         <location filename="main.qml" line="256"/>
         <source>STR_SHOW_WINDOWS</source>
         <translation>Mostrar janela</translation>
@@ -2488,7 +2498,7 @@
     <name>Popup File</name>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="145"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="390"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="391"/>
         <source>STR_POPUP_FILE_UNIQUE</source>
         <translation>Arraste um único ficheiro</translation>
     </message>
@@ -2517,7 +2527,7 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="147"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="392"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="393"/>
         <source>STR_POPUP_FILE_UNIQUE_MULTI</source>
         <translation>Para assinar múltiplos ficheiros use a opção assinatura avançada</translation>
     </message>
@@ -2534,7 +2544,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="270"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="110"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="390"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="255"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="256"/>
         <source>STR_POPUP_FILE_OPEN</source>
         <translation>Abrir</translation>
     </message>
@@ -2755,13 +2765,13 @@
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="714"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="924"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="498"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="499"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Erro</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="926"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="500"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="501"/>
         <source>STR_POPUP_CARD_PIN_SIGN_BLOCKED</source>
         <translation>PIN da assinatura bloqueado!</translation>
     </message>

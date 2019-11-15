@@ -14,7 +14,9 @@ Item {
     property alias propertyAcordion: acordion
     property alias propertyRectEntity: rectEntity
     property alias propertyRectBottom: rectBottom
+    property alias propertyButtonViewCertificate: buttonViewCertificate
     property alias propertyBusyIndicator: busyIndicator
+    property int rowVSpace: Constants.SIZE_ROW_V_SPACE * 0.8
 
     Item {
         id: main
@@ -83,12 +85,27 @@ Item {
                 anchors.margins: 10
             }
         }
+        
+        Text {
+            id: titleSelectedBox
+            x: Constants.SIZE_TEXT_FIELD_H_SPACE
+            font.pixelSize: Constants.SIZE_TEXT_LABEL
+            font.family: lato.name
+            color: Constants.COLOR_TEXT_LABEL
+            height: Constants.SIZE_TEXT_LABEL
+            text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_SELECTED")
+            anchors.top: rectTop.bottom
+            anchors.topMargin: 1.95 * Constants.SIZE_ROW_V_SPACE
+        }
         Item{
             id: rectBottom
             width: parent.width
-            height: parent.height * 0.65
-            anchors.top: rectTop.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            height: parent.height * 0.65 - titleSelectedBox.height 
+                - 2 * Constants.SIZE_ROW_V_SPACE 
+                - Constants.SIZE_TEXT_V_SPACE
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: titleSelectedBox.bottom
+            anchors.topMargin: 0.9 * Constants.SIZE_TEXT_V_SPACE
 
             Item{
                 id: rectEntity
@@ -96,6 +113,8 @@ Item {
                 height: Constants.SIZE_TEXT_LABEL
                         + Constants.SIZE_TEXT_V_SPACE
                         + 2 * Constants.SIZE_TEXT_FIELD
+                anchors.top: parent.top
+                anchors.topMargin: rowVSpace
                 Components.LabelTextBoxForm{
                     id: textEntity
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_ENTITY")
@@ -117,7 +136,7 @@ Item {
                         + Constants.SIZE_TEXT_V_SPACE
                         + 2 * Constants.SIZE_TEXT_FIELD
                 anchors.top: rectEntity.bottom
-                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                anchors.topMargin: rowVSpace
                 Components.LabelTextBoxForm{
                     id: textAuth
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_ENTITY_ISSUER")
@@ -134,12 +153,12 @@ Item {
             }
             Item{
                 id: rectValid
-                width: parent.width
+                width: (parent.width-Constants.SIZE_ROW_H_SPACE) / 2 
                 height: Constants.SIZE_TEXT_LABEL
                         + Constants.SIZE_TEXT_V_SPACE
                         + 2 * Constants.SIZE_TEXT_FIELD
                 anchors.top: rectAuth.bottom
-                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                anchors.topMargin: rowVSpace
                 Components.LabelTextBoxForm{
                     id: textValid
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_VALID_FROM")
@@ -156,12 +175,14 @@ Item {
             }
             Item{
                 id: rectUntil
-                width: parent.width
+                width: (parent.width-Constants.SIZE_ROW_H_SPACE) / 2 
                 height: Constants.SIZE_TEXT_LABEL
                         + Constants.SIZE_TEXT_V_SPACE
                         + 2 * Constants.SIZE_TEXT_FIELD
-                anchors.top: rectValid.bottom
-                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                anchors.top: rectAuth.bottom
+                anchors.left: rectValid.right
+                anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                anchors.topMargin: rowVSpace
                 Components.LabelTextBoxForm{
                     id: textUntil
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_VALID_UNTIL")
@@ -183,7 +204,7 @@ Item {
                         + Constants.SIZE_TEXT_V_SPACE
                         + 2 * Constants.SIZE_TEXT_FIELD
                 anchors.top: rectUntil.bottom
-                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                anchors.topMargin: rowVSpace
                 Components.LabelTextBoxForm{
                     id: textKey
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_KEY_SIZE")
@@ -205,7 +226,7 @@ Item {
                         + Constants.SIZE_TEXT_V_SPACE
                         + 2 * Constants.SIZE_TEXT_FIELD
                 anchors.top: rectKey.bottom
-                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                anchors.topMargin: rowVSpace
                 Components.LabelTextBoxForm{
                     id: textStatus
                     propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_STATE")
@@ -214,12 +235,40 @@ Item {
                 }
                 Accessible.role: Accessible.Row
                 Accessible.name: textStatus.accessibleText
-                KeyNavigation.tab: rectEntity
-                KeyNavigation.down: rectEntity
-                KeyNavigation.right: rectEntity
+                KeyNavigation.tab: (buttonViewCertificate.visible ? buttonViewCertificate : rectEntity)
+                KeyNavigation.down: (buttonViewCertificate.visible ? buttonViewCertificate : rectEntity)
+                KeyNavigation.right: (buttonViewCertificate.visible ? buttonViewCertificate : rectEntity)
                 KeyNavigation.left: rectKey
                 KeyNavigation.backtab: rectKey
                 KeyNavigation.up: rectKey
+            }
+            Item {
+                id: rectViewCertificate
+                width: parent.width
+                height: Constants.HEIGHT_BOTTOM_COMPONENT + Constants.SIZE_TEXT_V_SPACE
+                anchors.top: rectStatus.bottom
+                anchors.topMargin: 0.5 * Constants.SIZE_ROW_V_SPACE
+
+                Button {
+                    id: buttonViewCertificate
+                    visible: false
+                    enabled: false
+                    width: Constants.WIDTH_BUTTON
+                    height:Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("PageSecurityCertificates","STR_OPEN_CERTIFICATE")
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    highlighted: activeFocus
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: rectEntity
+                    KeyNavigation.down: rectEntity
+                    KeyNavigation.right: rectEntity
+                    KeyNavigation.up: rectStatus
+                }
             }
         }
     }
