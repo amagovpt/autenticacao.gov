@@ -88,7 +88,6 @@ Item {
         
         Text {
             id: titleSelectedBox
-            x: Constants.SIZE_TEXT_FIELD_H_SPACE
             font.pixelSize: Constants.SIZE_TEXT_LABEL
             font.family: lato.name
             color: Constants.COLOR_TEXT_LABEL
