@@ -2,6 +2,7 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 import QtGraphicalEffects 1.0
 import QtQuick.Controls 2.1
+import eidguiV2 1.0
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -12,9 +13,11 @@ Item {
     visible: true
 
     property alias propertyAcordion: acordion
+    property alias propertyFileDialogOutput: fileDialogOutput
     property alias propertyRectEntity: rectEntity
     property alias propertyRectBottom: rectBottom
     property alias propertyButtonViewCertificate: buttonViewCertificate
+    property alias propertyButtonExportCertificate: buttonExportCertificate
     property alias propertyBusyIndicator: busyIndicator
     property int rowVSpace: Constants.SIZE_ROW_V_SPACE * 0.8
 
@@ -29,6 +32,12 @@ Item {
             anchors.centerIn: parent
             // BusyIndicator should be on top of all other content
             z: 1
+        }
+
+        FileSaveDialog {
+            id: fileDialogOutput
+            title: qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
+            nameFilters: ["DER encoded binary X.509 (*.CER)", "All files (*)"]
         }
 
         Item {
@@ -124,9 +133,9 @@ Item {
                 KeyNavigation.tab: rectAuth
                 KeyNavigation.down: rectAuth
                 KeyNavigation.right: rectAuth
-                KeyNavigation.left: rectStatus
-                KeyNavigation.backtab: rectStatus
-                KeyNavigation.up: rectStatus
+                KeyNavigation.left: buttonExportCertificate
+                KeyNavigation.backtab: buttonExportCertificate
+                KeyNavigation.up: buttonExportCertificate
             }
             Item{
                 id: rectAuth
@@ -256,7 +265,28 @@ Item {
                     height:Constants.HEIGHT_BOTTOM_COMPONENT
                     text: qsTranslate("PageSecurityCertificates","STR_OPEN_CERTIFICATE")
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.left: parent.left
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    highlighted: activeFocus
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: buttonExportCertificate
+                    KeyNavigation.down: buttonExportCertificate
+                    KeyNavigation.right: buttonExportCertificate
+                    KeyNavigation.up: rectStatus
+                }
+
+                Button {
+                    id: buttonExportCertificate
+                    enabled: false
+                    width: Constants.WIDTH_BUTTON
+                    height:Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("PageSecurityCertificates","STR_EXPORT_CERTIFICATE")
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: (buttonViewCertificate.visible ? undefined : parent.horizontalCenter)
+                    anchors.right: (buttonViewCertificate.visible ? parent.right : undefined)
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
@@ -266,7 +296,7 @@ Item {
                     KeyNavigation.tab: rectEntity
                     KeyNavigation.down: rectEntity
                     KeyNavigation.right: rectEntity
-                    KeyNavigation.up: rectStatus
+                    KeyNavigation.up: buttonViewCertificate
                 }
             }
         }

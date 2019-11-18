@@ -347,6 +347,7 @@ public slots:
     void setEventCallbacks( void );
     void startfillCertificateList ( void );
     void viewCardCertificate(QString issuedBy, QString issuedTo);
+    void exportCardCertificate(QString issuedBy, QString issuedTo, QString outputPath);
     void startGetCardActivation ( void );
 
     void initTranslation();
@@ -437,6 +438,8 @@ signals:
     void signalImportCertificatesFail();
     void signalRemoveCertificatesFail();
 
+    void signalExportCertificates(bool success);
+
 private:
     bool LoadTranslationFile( QString NewLanguage );
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
@@ -467,6 +470,8 @@ private:
     void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);
     void fillCertificateList (void );
     void getCertificateAuthStatus(void );
+    int findCardCertificate(QString issuedBy, QString issuedTo);
+    void doExportCardCertificate(QString issuedBy, QString issuedTo, QString outputPath);
     void getCardInstance(PTEID_EIDCard *&new_card);
     bool useCustomSignature(void);
     void stopAllEventCallbacks(void);

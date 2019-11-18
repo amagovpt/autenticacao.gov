@@ -5,6 +5,7 @@
     <name>GAPI</name>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="328"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="233"/>
         <location filename="gapi.cpp" line="315"/>
         <source>STR_POPUP_SUCESS</source>
         <translation>Sucesso</translation>
@@ -1653,91 +1654,106 @@
 <context>
     <name>PageSecurityCertificates</name>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="265"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="293"/>
         <source>STR_STATUS_NETWORK_ERROR</source>
         <translation>Não foi possível validar o certificado. Verifique a ligação à internet</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="259"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="287"/>
         <source>STR_STATUS_REVOKED</source>
         <translation>Revogado</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="277"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="305"/>
         <source>STR_STATUS_EXPIRED</source>
         <translation>Expirado</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="262"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="290"/>
         <source>STR_STATUS_SUSPENDED</source>
         <translation>Inativo ou Suspenso</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="268"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="235"/>
+        <source>STR_EXPORT_CERTIFICATE_SUCCESS</source>
+        <translation>O certificado foi exporado para ficheiro com sucesso.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="241"/>
+        <source>STR_EXPORT_CERTIFICATE_FAILED</source>
+        <translation>Ocorreu um erro ao exportar o certificado para ficheiro.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="296"/>
         <source>STR_STATUS_ISSUER</source>
         <translation>Falta um emissor na cadeia de certificados</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="271"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="299"/>
         <source>STR_STATUS_ERROR</source>
         <translation>Não foi possível validar o certificado. Verifique a ligação à internet</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="274"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="302"/>
         <source>STR_STATUS_VALID</source>
         <translation>Válido</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="251"/>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="256"/>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="280"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="279"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="284"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="308"/>
         <source>STR_STATUS_UNKNOWN</source>
         <translation>Desconhecido</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="69"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="78"/>
         <source>STR_CERTIFICATES_SELECT</source>
         <translation>Selecione o certificado</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="96"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="104"/>
         <source>STR_CERTIFICATES_SELECTED</source>
         <translation>Dados do certificado selecionado:</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="120"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="128"/>
         <source>STR_CERTIFICATES_ENTITY</source>
         <translation>Cidadão / Entidade</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="142"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="150"/>
         <source>STR_CERTIFICATES_ENTITY_ISSUER</source>
         <translation>Entidade Emissora</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="164"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="172"/>
         <source>STR_CERTIFICATES_VALID_FROM</source>
         <translation>Válido desde</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="188"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="196"/>
         <source>STR_CERTIFICATES_VALID_UNTIL</source>
         <translation>Válido até</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="210"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="218"/>
         <source>STR_CERTIFICATES_KEY_SIZE</source>
         <translation>Tamanho da chave</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="232"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="240"/>
         <source>STR_CERTIFICATES_STATE</source>
         <translation>Estado do certificado</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="258"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="266"/>
         <source>STR_OPEN_CERTIFICATE</source>
         <translation>Ver certificado</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="286"/>
+        <source>STR_EXPORT_CERTIFICATE</source>
+        <translation>Exportar para ficheiro</translation>
     </message>
 </context>
 <context>
@@ -2213,6 +2229,7 @@
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="44"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="50"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="56"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="239"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="51"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="57"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="63"/>
@@ -2505,6 +2522,7 @@
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="204"/>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="45"/>
+        <location filename="contentPages/security/PageSecurityCertificatesForm.ui.qml" line="39"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="931"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="103"/>
         <location filename="contentPages/services/PageServicesSignAdvancedForm.ui.qml" line="109"/>

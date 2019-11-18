@@ -223,15 +223,45 @@ PageSecurityCertificatesForm {
             }
             propertyBusyIndicator.running = false
             propertyButtonViewCertificate.enabled = true
+            propertyButtonExportCertificate.enabled = true
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                 propertyRectEntity.forceActiveFocus()
         }
+        onSignalExportCertificates: {
+            if (success) {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("GAPI","STR_POPUP_SUCESS")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("PageSecurityCertificates","STR_EXPORT_CERTIFICATE_SUCCESS")
+            }
+            else {
+                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                        qsTranslate("Popup Card","STR_POPUP_ERROR")
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                        qsTranslate("PageSecurityCertificates","STR_EXPORT_CERTIFICATE_FAILED")
+            }
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+        }
     }
+
 
     propertyButtonViewCertificate {
         onClicked: {
             console.log("View certificate button clicked")
             gapi.viewCardCertificate(propertyAcordion.dataModel.auth, propertyAcordion.dataModel.entity)
+        }
+    }
+    propertyButtonExportCertificate {
+        onClicked: {
+            console.log("Export certificate button clicked")
+            propertyFileDialogOutput.open()
+        }
+    }
+    propertyFileDialogOutput {
+        onAccepted: {
+            var outputFile = propertyFileDialogOutput.fileUrl.toString()
+            outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
+            gapi.exportCardCertificate(propertyAcordion.dataModel.auth, propertyAcordion.dataModel.entity, outputFile)
         }
     }
     Component.onCompleted: {
@@ -283,6 +313,7 @@ PageSecurityCertificatesForm {
     }
     function clearFields(){
         propertyButtonViewCertificate.enabled = false
+        propertyButtonExportCertificate.enabled = false
         for (var i = 0; i < propertyRectBottom.children.length; i++){
             propertyAcordion.model = []
             propertyRectBottom.children[i].children[0].propertyDateField.text = ""

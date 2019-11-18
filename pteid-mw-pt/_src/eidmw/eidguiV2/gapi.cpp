@@ -2941,13 +2941,15 @@ void GAPI::cleanupCallbackData(void)
     g_cleaningCallback = false;
 }
 
-void GAPI::viewCardCertificate(QString issuedBy, QString issuedTo) {
-#ifdef WIN32
+/* findCardCertificate returns the index i of the certificate to be obtained with certificates.getCert(i).
+    This is because the copy constructor for PTEID_Certificate is not implemented.
+*/
+int GAPI::findCardCertificate(QString issuedBy, QString issuedTo) {
     PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card == NULL) {
         qDebug() << "Error: inspectCardCertificate should not be called if card is not inserted!";
-        return;
+        return -1;
     }
     PTEID_Certificates&	 certificates = card->getCertificates();
     size_t nCerts = certificates.countAll();
@@ -2958,35 +2960,83 @@ void GAPI::viewCardCertificate(QString issuedBy, QString issuedTo) {
         std::wstring ownerName = utilStringWiden(cert.getOwnerName());
         if (issuerName == issuedBy.toStdWString() && ownerName == issuedTo.toStdWString())
         {
-            PTEID_ByteArray certData = cert.getCertData();
-            PCCERT_CONTEXT pCertContext = CertCreateCertificateContext(
-                X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-                certData.GetBytes(),
-                certData.Size());
-            if (!pCertContext)
-            {
-                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, 
-                    "eidgui", "inspectCardCertificate: Error creating cert context: %d", GetLastError());
-                return;
-            }
-
-            HWND appWindow = GetForegroundWindow();
-            CryptUIDlgViewContext(
-                CERT_STORE_CERTIFICATE_CONTEXT,
-                pCertContext,
-                appWindow,
-                NULL,
-                0,
-                NULL);
-            if (pCertContext)
-            {
-                CertFreeCertificateContext(pCertContext);
-            }
-            break;
+            return i;
         }
+    }
+}
+void GAPI::viewCardCertificate(QString issuedBy, QString issuedTo) {
+#ifdef WIN32
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) {
+        qDebug() << "Error: inspectCardCertificate should not be called if card is not inserted!";
+        return;
+    }
+    PTEID_Certificates&	 certificates = card->getCertificates();
+    int certIdx = findCardCertificate(issuedBy, issuedTo);
+    if (certIdx < 0)
+    {
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR,
+            "eidgui", "viewCardCertificate: could not find certificate");
+        return;
+    }
+    PTEID_Certificate& cert = certificates.getCert(certIdx);
+    PTEID_ByteArray certData = cert.getCertData();
+    PCCERT_CONTEXT pCertContext = CertCreateCertificateContext(
+        X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
+        certData.GetBytes(),
+        certData.Size());
+    if (!pCertContext)
+    {
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, 
+            "eidgui", "inspectCardCertificate: Error creating cert context: %d", GetLastError());
+        return;
+    }
+
+    HWND appWindow = GetForegroundWindow();
+    CryptUIDlgViewContext(
+        CERT_STORE_CERTIFICATE_CONTEXT,
+        pCertContext,
+        appWindow,
+        NULL,
+        0,
+        NULL);
+    if (pCertContext)
+    {
+        CertFreeCertificateContext(pCertContext);
     }
 #endif
 }
+void GAPI::exportCardCertificate(QString issuedBy, QString issuedTo, QString outputPath) {
+    QtConcurrent::run(this, &GAPI::doExportCardCertificate, issuedBy, issuedTo, outputPath);
+}
+void GAPI::doExportCardCertificate(QString issuedBy, QString issuedTo, QString outputPath) {
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) {
+        qDebug() << "Error: inspectCardCertificate should not be called if card is not inserted!";
+        emit signalExportCertificates(false);
+        return;
+    }
+    PTEID_Certificates&	 certificates = card->getCertificates();
+    int certIdx = findCardCertificate(issuedBy, issuedTo);
+    if (certIdx < 0)
+    {
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR,
+            "eidgui", "doExportCardCertificate: could not find certificate");
+        emit signalExportCertificates(false);
+        return;
+    }
+    PTEID_Certificate& cert = certificates.getCert(certIdx);
+    PTEID_ByteArray certData = cert.getCertData();
+
+    QFile file(outputPath);
+    file.open(QIODevice::WriteOnly);
+    int bytesWritten = file.write((const char *)certData.GetBytes(), certData.Size());
+    file.close();
+    emit signalExportCertificates(bytesWritten == certData.Size());
+}
+
 
 void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap)
 {
