@@ -2,7 +2,7 @@
 
 ![Ilustração: Cartão de Cidadão](Pictures/CartaoCidadao.png "Cartão de Cidadão"){:.center}
 
-![Ilustração: Aplicação Autenticação.gov](Pictures/Autenticação.Gov_Home.png "Aplicação Autenticação.gov"){:.center}
+![Ilustração: Aplicação Autenticação.gov](Pictures/Autenticacao.Gov_Home.png "Aplicação Autenticação.gov"){:.center}
 
 
 # Tabela de conteúdos <!-- omit in toc -->
@@ -68,6 +68,8 @@
   - [Instalação automatizada em ambientes Windows](#instala%c3%a7%c3%a3o-automatizada-em-ambientes-windows)
   - [Informação sobre servidores de Proxy](#informa%c3%a7%c3%a3o-sobre-servidores-de-proxy)
 
+<!-- DO NOT REMOVE the next comment. It is here so the script to generate the pdf version of this manual knows where the content starts and to ignore the table of contents. -->
+<!-- Content_begin -->
 
 # Introdução
 
@@ -166,13 +168,13 @@ sistema operativo utilizado.
     instalação, deverá fazer duplo clique sobre este, surgindo um ecrã
     semelhante aos apresentados de seguida:
 
-    ![Ilustração: Instalação da aplicação em Windows](Pictures/Autenticação.Gov_Instalacao.png "Instalação da aplicação em Windows"){:.center}
+    ![Ilustração: Instalação da aplicação em Windows](Pictures/Autenticacao.Gov_Instalacao.png "Instalação da aplicação em Windows"){:.center}
 
 2.  Neste ecrã, deverá premir o botão **Seguinte** e marcar a caixa
     (com um certo, clicando no botão esquerdo do rato), para
     aceitar os termos e condições da aplicação.
 
-    ![Ilustração: Instalação da aplicação em Windows](Pictures/Autenticação.Gov_Instalacao_termos.png "Instalação da aplicação em Windows"){:.center}
+    ![Ilustração: Instalação da aplicação em Windows](Pictures/Autenticacao.Gov_Instalacao_termos.png "Instalação da aplicação em Windows"){:.center}
 
 3.  Neste passo, poderá escolher a pasta onde deseja instalar o
     *middleware*. Se desejar alterar a pasta predefinida, carrege em
@@ -206,13 +208,13 @@ Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linh
     utilizar, no entanto, as opções são semelhantes em todos. Nos ecrãs
     seguintes são apresentados os ecrãs utilizando Linux Ubuntu 18.04.3 LTS.
 
-    ![Ilustração: Instalação da aplicação em Linux](Pictures/Autenticação.Gov_Instalacao_Linux.png "Instalação da aplicação em Linux"){:.center}
+    ![Ilustração: Instalação da aplicação em Linux](Pictures/Autenticacao.Gov_Instalacao_Linux.png "Instalação da aplicação em Linux"){:.center}
 
 2.  Deverá premir o botão **Instalar** para prosseguir.
 3.  Será pedida a introdução da sua senha de utilizador. (É necessário
     que tenha privilégios de administração da máquina)
 
-    ![Ilustração: Instalação_Linux](Pictures/Autenticação.Gov_Instalacao_Linux3.png "Instalação_Linux"){:.center}
+    ![Ilustração: Instalação_Linux](Pictures/Autenticacao.Gov_Instalacao_Linux3.png "Instalação_Linux"){:.center}
 
 4.  Após a conclusão do passo acima, a instalação do *middleware* está
     terminada.
@@ -226,11 +228,11 @@ Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linh
 
     Gestor de pacotes baseado em ficheiros .deb, execute o comando:
 
-        sudo dpkg -i pteid\*.deb
+    `sudo dpkg -i pteid\*.deb`
 
     Gestor de pacotes baseado em ficheiros .rpm, execute o comando:
 
-        sudo rpm -ivh pteid\*.rpm
+    `sudo rpm -ivh pteid\*.rpm`
 
 2.  Após este passo, o *middleware* terá sido instalado no computador.
 3.  Recomenda-se a reinicialização do sistema para assegurar o bom
@@ -242,12 +244,12 @@ Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linh
     instalação, deverá fazer duplo clique sobre este, surgindo um ecrã
     semelhante ao apresentado de seguida:
 
-    ![Ilustração: Instalação da aplicação em MacOS](Pictures/Autenticação.Gov_Instalacao_MacOS.png "Instalação da aplicação em MacOS"){:.center}
+    ![Ilustração: Instalação da aplicação em MacOS](Pictures/Autenticacao.Gov_Instalacao_MacOS.png "Instalação da aplicação em MacOS"){:.center}
 
 2.  Escolher a opção **Continuar**. Em seguida é
     necessário ler e aceitar os termos da licença do software.
 
-    ![Ilustração: Instalação da aplicação em MacOS](Pictures/Autenticação.Gov_Instalacao_MacOS2.png "Instalação da aplicação em MacOS"){:.center}
+    ![Ilustração: Instalação da aplicação em MacOS](Pictures/Autenticacao.Gov_Instalacao_MacOS2.png "Instalação da aplicação em MacOS"){:.center}
 
 3.  A partir deste ponto no assistente deverá premir o botão
     **Continuar** até concluir a instalação.
@@ -268,7 +270,7 @@ sistema operativo utilizado.
 2.  Selecione a **Opção Adicionar ou Remover Programas**.
 3.  Selecione o programa **Autenticação.Gov**, conforme apresentado na janela seguinte:
 
-      ![Ilustração: Remoção da aplicação em Windows](Pictures/Autenticação.Gov_Desinstalar.png "Remoção da aplicação em Windows"){:.center}
+      ![Ilustração: Remoção da aplicação em Windows](Pictures/Autenticacao.Gov_Desinstalar.png "Remoção da aplicação em Windows"){:.center}
 
 4.  Clique em **Desinstalar**. Confirme todas as janelas de diálogo que irão
     surgir.
@@ -283,7 +285,7 @@ sistema operativo utilizado.
 2.  Selecione a **Opção Adicionar ou Remover Programas**.
 3.  Selecione o programa **Autenticação.Gov**, conforme apresentado na janela seguinte:
 
-      ![Ilustração: Remoção da aplicação em Windows](Pictures/Autenticação.Gov_Desinstalar_Win10.png "Remoção da aplicação em Windows 10 Painel Controlo"){:.center}
+      ![Ilustração: Remoção da aplicação em Windows](Pictures/Autenticacao.Gov_Desinstalar_Win10.png "Remoção da aplicação em Windows 10 Painel Controlo"){:.center}
 
 4.  Clique em **Desinstalar**. Confirme todas as janelas de diálogo que irão
     surgir.
@@ -296,11 +298,11 @@ sistema operativo utilizado.
 1.  Aceda a **Menu Iniciar** -> **Definições do Windows**.
 2.  Prima o botão **Aplicações** (Desinstalar, predefinições, funcionalidades opcionais):
 
-      ![Ilustração: Definições em Windows](Pictures/Definições_Windows_janela.png "Definições Windows 10"){:.center}
+      ![Ilustração: Definições em Windows](Pictures/Definicoes_Windows_janela.png "Definições Windows 10"){:.center}
 
 3.  Procure a aplicação **Autenticação.Gov**; selecione a aplicação e pressione **Desinstalar**, conforme apresentado na figura seguinte:
 
-      ![Ilustração: Remoção da aplicação em Windows](Pictures/Autenticação.Gov_Add_Remove_janela.png "Remoção da aplicação em Windows 10"){:.center}
+      ![Ilustração: Remoção da aplicação em Windows](Pictures/Autenticacao.Gov_Add_Remove_janela.png "Remoção da aplicação em Windows 10"){:.center}
 
 4.  Clique em **Desinstalar**. Confirme todas as janelas de diálogo que irão
     surgir.
@@ -326,24 +328,24 @@ seguintes são apresentados os ecrãs utilizando Linux Ubuntu 18.04.3 LTS.
 
 1.  Abra o **Ubuntu Software** (Menu Aplicações → Ubuntu Software).
 
-    ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux.png "Remoção da aplicação em Linux"){:.center}
+    ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticacao.Gov_Desinstalar_Linux.png "Remoção da aplicação em Linux"){:.center}
 
 2.  Prima o botão **Instalado** na barra superior.
 
-    ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux2.png "Remoção da aplicação em Linux"){:.center}
+    ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticacao.Gov_Desinstalar_Linux2.png "Remoção da aplicação em Linux"){:.center}
 
 3.  Localize o pacote **pteid-mw** e prima o botão **Remover**.
 
-    ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux3.png "Remoção da aplicação em Linux"){:.center}
+    ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticacao.Gov_Desinstalar_Linux3.png "Remoção da aplicação em Linux"){:.center}
 
 4.  Confirme a operação, voltando a primir o botão **Remover**.
 
-    ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticação.Gov_Desinstalar_Linux4.png "Remoção da aplicação em Linux"){:.center}
+    ![Ilustração: Remoção da aplicação em Linux](Pictures/Autenticacao.Gov_Desinstalar_Linux4.png "Remoção da aplicação em Linux"){:.center}
 
 5.  Será pedida a introdução da sua senha de utilizador. É necessário
     que tenha privilégios de administração da máquina.
 
-    ![Ilustração: Apresentação da aplicação](Pictures/Autenticação.Gov_Desinstalar_Linux5.png "Apresentação da aplicação"){:.center}
+    ![Ilustração: Apresentação da aplicação](Pictures/Autenticacao.Gov_Desinstalar_Linux5.png "Apresentação da aplicação"){:.center}
 
 6.  Após a conclusão do passo acima a o processo de desinstalação do
     *middleware* está terminado.
@@ -355,11 +357,11 @@ seguintes são apresentados os ecrãs utilizando Linux Ubuntu 18.04.3 LTS.
 
     Gestor de pacotes baseado em ficheiros .deb, execute o comando:
 
-        sudo dpkg -r pteid-mw
+    `sudo dpkg -r pteid-mw`
 
     Gestor de pacotes baseado em ficheiros .rpm, execute o comando:
 
-        sudo rpm -U pteid-mw
+    `sudo rpm -U pteid-mw`
 
 2.  Após este passo, o *middleware* terá sido removido do computador.
 
@@ -369,7 +371,7 @@ seguintes são apresentados os ecrãs utilizando Linux Ubuntu 18.04.3 LTS.
 2.  Execute o seguinte comando para desinstalar todos os ficheiros do
     *middleware*.
 
-        sudo /usr/local/bin/pteid_uninstall.sh
+    `sudo /usr/local/bin/pteid_uninstall.sh`
 
 # Aplicação Utilitária “Autenticação.Gov”
 
@@ -377,7 +379,7 @@ A aplicação utilitária “Autenticação.Gov” pode ser utilizada para
 visualizar e gerir os dados no Cartão de Cidadão e assinar documentos
 digitais.
 
-![Ilustração: Apresentação da aplicação](Pictures/Autenticação.Gov_Home.png "Apresentação da aplicação"){:.center}
+![Ilustração: Apresentação da aplicação](Pictures/Autenticacao.Gov_Home.png "Apresentação da aplicação"){:.center}
 
 Nesta aplicação poderá efetuar as seguintes operações:
 
@@ -420,7 +422,7 @@ A aplicação é composta por 4 áreas principais de interação:
     do Cartão de Cidadão e área de trabalho para os menus de assinatura
     e segurança.
 
-![Ilustração: Áreas principais de interação da aplicação](Pictures/Autenticação.Gov_Card.png "Áreas principais de interação da aplicação"){:.center}
+![Ilustração: Áreas principais de interação da aplicação](Pictures/Autenticacao.Gov_Card.png "Áreas principais de interação da aplicação"){:.center}
 
 ## Funcionalidades da aplicação
 
@@ -438,14 +440,14 @@ das notas, bem como imprimir os dados do Cartão de Cidadão.
 Permite visualizar os dados de identificação e foto do cidadão presentes
 no Cartão de Cidadão.
 
-![Ilustração: Identidade do Cidadão](Pictures/Autenticação.Gov_Identidade.png "Identidade do Cidadão"){:.center}
+![Ilustração: Identidade do Cidadão](Pictures/Autenticacao.Gov_Identidade.png "Identidade do Cidadão"){:.center}
 
 #### Outros dados
 
 Permite visualizar outros dados do cartão do cidadão e verificar o
 estado do Cartão de Cidadão.
 
-![Ilustração: Outros dados](Pictures/Autenticação.Gov_Outros_Dados.png "Outros dados"){:.center}
+![Ilustração: Outros dados](Pictures/Autenticacao.Gov_Outros_Dados.png "Outros dados"){:.center}
 
 #### Morada e Alteração de morada
 
@@ -463,11 +465,11 @@ seguintes passos:
 
 1.  Clique no botão **Confirmar**.
 
-    ![Ilustração: Introduzir dados na confirmar de alteração de morada    ](Pictures/Autenticação.Gov_Morada.png "Introduzir dados na confirmar de alteração de morada"){:.center}
+    ![Ilustração: Introduzir dados na confirmar de alteração de morada    ](Pictures/Autenticacao.Gov_Morada.png "Introduzir dados na confirmar de alteração de morada"){:.center}
 
 2.  Insira o número de processo e o código secreto que recebeu pelo correio, e clique em **Confirmar**.
 
-    ![Ilustração: Confirmar alteração de morada](Pictures/Autenticação.Gov_morada2.png "Confirmar alteração de morada"){:.center}
+    ![Ilustração: Confirmar alteração de morada](Pictures/Autenticacao.Gov_morada2.png "Confirmar alteração de morada"){:.center}
 
 3.  Aguarde o processamento do pedido. Será efetuada uma ligação ao
     serviço de alteração de morada e será pedido o seu PIN de
@@ -478,7 +480,7 @@ seguintes passos:
     e não desligue a internet, enquanto o processo não estiver
     terminado.**
 
-    ![Ilustração: Pedido de confirmação em processamento](Pictures/Autenticação.Gov_morada3.png "Pedido de confirmação em processamento"){:.center}
+    ![Ilustração: Pedido de confirmação em processamento](Pictures/Autenticacao.Gov_morada3.png "Pedido de confirmação em processamento"){:.center}
 
 4.  Verifique o resultado da operação e siga as instruções:
 
@@ -486,7 +488,7 @@ seguintes passos:
 
       Caso a operação tenha sucesso, uma mensagem de Confirmação de alteração de morada com sucesso será mostrada.
 
-        ![Ilustração: Sucesso na alteração de morada](Pictures/Autenticação.Gov_Alteracao_morada_sucesso.png "Sucesso na alteração de morada"){:.center}
+        ![Ilustração: Sucesso na alteração de morada](Pictures/Autenticacao.Gov_Alteracao_morada_sucesso.png "Sucesso na alteração de morada"){:.center}
 
     - **Erro. Ocorreu um erro durante a alteração de morada:**
 
@@ -498,7 +500,7 @@ seguintes passos:
 
         Caso a aplicação não consiga efetuar a confirmação da alteração de morada será mostrada uma mensagem de erro, que deverá anotar. Deverá aguardar cerca de 5 minutos e tentar novamente e, caso o erro persista, contactar a Linha Cartão de Cidadão através do número 211 950 500 ou do E-mail: cartaodecidadao@irn.mj.pt . (Tenha consigo as mensagens de erro e o número de processo de Alteração de Morada)
 
-        ![Ilustração: Erro na alteração de morada](Pictures/Autenticação.Gov_Alteracao_morada_erro_n_confirmada.png "Erro na alteração de morada"){:.center}
+        ![Ilustração: Erro na alteração de morada](Pictures/Autenticacao.Gov_Alteracao_morada_erro_n_confirmada.png "Erro na alteração de morada"){:.center}
 
       - **O prazo de confirmação da alteração de morada expirou. Por favor efetue um novo pedido através dos balcões de atendimento ou do portal ePortugal.**
 
@@ -518,7 +520,7 @@ seguintes passos:
 
         A imagem seguinte é um exemplo da mensagem de erro.
 
-        ![Ilustração: Erro na alteração de morada](Pictures/Autenticação.Gov_Alteracao_morada_erro.png "Erro na alteração de morada"){:.center}
+        ![Ilustração: Erro na alteração de morada](Pictures/Autenticacao.Gov_Alteracao_morada_erro.png "Erro na alteração de morada"){:.center}
 
 #### Notas
 
@@ -529,7 +531,7 @@ exemplo, inserir informação sobre contactos em caso de urgência,
 indicações sobre alergias, medicação, grupo sanguíneo ou outra qualquer
 informação que entenda pertinente e de acesso livre.
 
-![Ilustração: Editar notas](Pictures/Autenticação.Gov_Notas.png "Editar notas"){:.center}
+![Ilustração: Editar notas](Pictures/Autenticacao.Gov_Notas.png "Editar notas"){:.center}
 
 #### Imprimir
 
@@ -543,12 +545,12 @@ Para executar estas operações deverá executar os seguintes passos:
 2.  Na área de trabalho deverá selecionar os grupos de campos a incluir
     no documento e selecionar a opção **Imprimir** ou **Gerar PDF**.
 
-    ![Ilustração: Opções de exportação de PDF ou impressão](Pictures/Autenticação.Gov_Print.png "Opções de exportação de PDF ou impressão"){:.center}
+    ![Ilustração: Opções de exportação de PDF ou impressão](Pictures/Autenticacao.Gov_Print.png "Opções de exportação de PDF ou impressão"){:.center}
 
     O documento a ser exportado e/ou impresso terá um aspeto gráfico
     conforme a imagem seguinte.
 
-    ![Ilustração: Exemplo de exportação de PDF](Pictures/Autenticação.Gov_print_pdf.png "Exemplo de exportação de PDF]"){:.center}
+    ![Ilustração: Exemplo de exportação de PDF](Pictures/Autenticacao.Gov_print_pdf.png "Exemplo de exportação de PDF]"){:.center}
 
 ### Assinatura digital
 
@@ -568,7 +570,7 @@ qualquer documento com possibilidade de assinar vários documentos ao
 mesmo tempo, adicionar atributos profissionais, bem como configurar
 outras opções.
 
-![Ilustração: Menu de assinatura digital](Pictures/Autenticação.Gov_assinatura.png "Menu de assinatura digital"){:.center}
+![Ilustração: Menu de assinatura digital](Pictures/Autenticacao.Gov_assinatura.png "Menu de assinatura digital"){:.center}
 
 #### Simples
 
@@ -576,11 +578,11 @@ Assinatura digital simples de um único documento PDF.\
 O ficheiro a assinar pode ser arrastado para a área de pré-visualização. Pode também clicar na área de pré-visualização ou no botão **Adicionar ficheiro** e selecionar manualmente o ficheiro. Será exibida uma janela para selecionar o ficheiro que
 pretende assinar.
 
-![Ilustração: Selecionar documento PDF na assinatura simples](Pictures/Autenticação.Gov_assinatura_simples.png "Selecionar documento PDF na assinatura simples"){:.center}
+![Ilustração: Selecionar documento PDF na assinatura simples](Pictures/Autenticacao.Gov_assinatura_simples.png "Selecionar documento PDF na assinatura simples"){:.center}
 
 Neste modo, assinatura simples, apenas é possível selecionar a página e mover a assinatura digital para o local pretendido, conforme a figura seguinte.
 
-![Ilustração: Selecionar opções na assinatura simples](Pictures/Autenticação.Gov_assinatura_simples2.png "Selecionar opções na assinatura simples"){:.center}
+![Ilustração: Selecionar opções na assinatura simples](Pictures/Autenticacao.Gov_assinatura_simples2.png "Selecionar opções na assinatura simples"){:.center}
 
 Por fim, carregar no botão **Assinar com Cartão de Cidadão** ou **Assinar com Chave Móvel Digital**.
 
@@ -593,7 +595,7 @@ Os ficheiros a assinar podem ser arrastados para a área de pré-visualização.
 - **Selecionar ficheiros:** Abre uma nova janela que permitirá selecionar os documentos a serem assinados. É possível adicionar e remover ficheiros individualmente ou todos.
 - **Pré-visualização da assinatura:** Permite visualizar o documento a ser assinado, bem como a pré-visualização da própria assinatura. A pré-visualização existe apenas para assinatura de ficheiros PDF.
 
-  ![Ilustração: Selecionar ficheiro PDF para assinar na assinatura avançada](Pictures/Autenticação.Gov_assinatura_avancada.png "Selecionar ficheiro PDF para assinar na assinatura avançada"){:.center}
+  ![Ilustração: Selecionar ficheiro PDF para assinar na assinatura avançada](Pictures/Autenticacao.Gov_assinatura_avancada.png "Selecionar ficheiro PDF para assinar na assinatura avançada"){:.center}
 
 
 - **Configurações:**
@@ -622,7 +624,7 @@ Os ficheiros a assinar podem ser arrastados para a área de pré-visualização.
 
     - **Última** Poderá escolher a última página para apresentadar a assinatura.
 
-    ![Ilustração: Selecionar opções de assinatura](Pictures/Autenticação.Gov_assinatura_avancada2.png "Selecionar opções de assinatura"){:.center}
+    ![Ilustração: Selecionar opções de assinatura](Pictures/Autenticacao.Gov_assinatura_avancada2.png "Selecionar opções de assinatura"){:.center}
 
 Após selecionar as opções pretendidas, na área indicada na figura anterior, arraste a pré-visualização da assinatura para a localização pretendida e de seguida prima o botão **Assinar com Cartão de Cidadão** ou **Assinar com Chave Móvel Digital**.
 
@@ -630,7 +632,7 @@ Após clicar em **Assinar** deverá escolher a localização da pasta e do fiche
 
 A imagem seguinte é um exemplo de um ficheiro assinado com a aplicação **Autenticação.Gov**.
 
-![Ilustração: Aspeto final da assinatura](Pictures/Autenticação.GOV_Assinatura_exemplo.png "Aspeto final da assinatura"){:.center}
+![Ilustração: Aspeto final da assinatura](Pictures/Autenticacao.Gov_Assinatura_exemplo.png "Aspeto final da assinatura"){:.center}
 
 #### Introdução de chave
 
@@ -642,13 +644,13 @@ No caso de pretender assinar com a chave pessoal existente no seu
 Cartão de Cidadão, ao selecionar a opção **Assinar com Cartão de Cidadão**, deverá introduzir o PIN de assinatura, conforme a figura
 seguinte.
 
-![Ilustração: Assinatura digital com a chave pessoal do Cartão de Cidadão](Pictures/Autenticação.Gov_assinatura_cc.png "Assinatura digital com a chave pessoal do Cartão de Cidadão"){:.center}
+![Ilustração: Assinatura digital com a chave pessoal do Cartão de Cidadão](Pictures/Autenticacao.Gov_assinatura_cc.png "Assinatura digital com a chave pessoal do Cartão de Cidadão"){:.center}
 
 No caso, de pretender assinar com a Chave Móvel
 Digital, ao selecionar a opção **Assinar com Chave Móvel Digital**, deverá
 introduzir as respetivas credenciais, conforme a figura seguinte.
 
-![Ilustração: Assinatura digital com a Chave Móvel Digital](Pictures/Autenticação.Gov_assinatura_cmd.png "Assinatura digital com a Chave Móvel Digital"){:.center}
+![Ilustração: Assinatura digital com a Chave Móvel Digital](Pictures/Autenticacao.Gov_assinatura_cmd.png "Assinatura digital com a Chave Móvel Digital"){:.center}
 
 #### Verificação de assinatura digital em documento PDF em Windows
 
@@ -657,7 +659,7 @@ identificada automaticamente ao abrir o documento em *Adobe Reader*. A
 imagem seguinte ilustra o *Adobe Reader* com um documento PDF que inclui
 a assinatura efetuada no passo anterior:
 
-![Ilustração: Assinatura de exemplo](Pictures/Autenticação.Gov_assinatura_sample.png "Assinatura de exemplo"){:.center}
+![Ilustração: Assinatura de exemplo](Pictures/Autenticacao.Gov_assinatura_sample.png "Assinatura de exemplo"){:.center}
 
 Mesmo quando a assinatura não esteja visível (se a opção "Visível" não for selecionada no
 momento da assinatura), a assinatura deverá ser sempre validada no
@@ -665,7 +667,7 @@ painel de assinaturas, dado que permite a visualização do estado da
 assinatura tendo em conta a cadeia de confiança e as propriedades
 criptográficas da mesma.
 
-![Ilustração: Validação da assinatura digital](Pictures/Autenticação.Gov_assinatura_verify.png "Validação da assinatura digital"){:.center}
+![Ilustração: Validação da assinatura digital](Pictures/Autenticacao.Gov_assinatura_verify.png "Validação da assinatura digital"){:.center}
 
 ### Segurança
 
@@ -676,7 +678,7 @@ Cidadão.
 
 Neste menu é possível visualizar os certificados do Estado e do cidadão.
 
-![Ilustração: Visualização do certificados](Pictures/Autenticação.Gov_certificados.png "Visualização do certificados"){:.center}
+![Ilustração: Visualização do certificados](Pictures/Autenticacao.Gov_certificados.png "Visualização do certificados"){:.center}
 
 #### Código PIN
 
@@ -690,9 +692,9 @@ Cidadão.
 -   **PIN de Morada:** Este PIN é usado para alteração e leitura de
     morada.
 
-    ![Ilustração: Verificar e modificar códigos PIN](Pictures/Autenticação.Gov_codigos_pin.png "Verificar e modificar códigos PIN"){:.center}
+    ![Ilustração: Verificar e modificar códigos PIN](Pictures/Autenticacao.Gov_codigos_pin.png "Verificar e modificar códigos PIN"){:.center}
 
-    ![Ilustração: Janela para modificar códigos PIN](Pictures/Autenticação.Gov_Mudar_Pin.png "Janela para modificar códigos"){:.center}
+    ![Ilustração: Janela para modificar códigos PIN](Pictures/Autenticacao.Gov_Mudar_Pin.png "Janela para modificar códigos"){:.center}
 
 ### Configurações
 
@@ -705,7 +707,7 @@ O botão **Adicionar assinatura** permite selecionar uma imagem que será utiliz
 
 O tamanho recomendado para a imagem é de 185 x 41px.
 
-![Ilustração: Personalização da Assinatura digital](Pictures/Autenticação.Gov_personalizar_assinatura.png "Personalização da Assinatura digital"){:.center}
+![Ilustração: Personalização da Assinatura digital](Pictures/Autenticacao.Gov_personalizar_assinatura.png "Personalização da Assinatura digital"){:.center}
 
 #### Atributos Profissionais
 
@@ -719,7 +721,7 @@ Em primeiro lugar, selecione o tipo de atributos:
 -   **No caso dos “Atributos Profissionais”** selecione a(s) entidade(s) fornecedora(s) dos seus atributos profissionais que pretende carregar atributos e clique em **Carregar atributos**.
 -   **No caso dos “Atributos Empresariais”** os atributos do utilizador são carregados automaticamente, quando clicar no botão de carregamento de atributos.
 
-    ![Ilustração: Carregar atributos profissionais](Pictures/Autenticação.Gov_scap.png     "Carregar atributos profissionais"){:.center}
+    ![Ilustração: Carregar atributos profissionais](Pictures/Autenticacao.Gov_scap.png     "Carregar atributos profissionais"){:.center}
 
 Seguidamente, deverá clicar num dos botões de carregamento de atributos, consoante pretenda, respetivamente, carregar os atributos com o Cartão de Cidadão ou Chave Móvel Digital (CMD):
 
@@ -738,7 +740,7 @@ Seguidamente, deverá clicar num dos botões de carregamento de atributos, conso
     Se concluiu a autenticação com sucesso, pode regressar à aplicação e
     aguardar pelo carregamento de atributos.
 
-    ![Ilustração: Página de autenticação com Chave Móvel Digital.](Pictures/Autenticação.Gov_cmd.png "Página de autenticação com Chave Móvel Digital."){:.center}
+    ![Ilustração: Página de autenticação com Chave Móvel Digital.](Pictures/Autenticacao.Gov_cmd.png "Página de autenticação com Chave Móvel Digital."){:.center}
 
 #### Configuração da aplicação
 
@@ -765,9 +767,11 @@ suporte na resolução do problema.
   Os ficheiros de log por omissão são criados nas seguintes localizações e tem
   como nome o prefixo .PTEID:
 
-      Windows: C:\Program Files\Portugal Identity Card\log\
-      MacOS: Directoria Home do utilizador i.e.: /Users/Utilizador/
-      Linux: Directoria Home do utilizador i.e.: /home/Utilizador/
+    `Windows: C:\Program Files\Portugal Identity Card\log\`
+
+    `MacOS: Directoria Home do utilizador i.e.: /Users/Utilizador/`
+
+    `Linux: Directoria Home do utilizador i.e.: /home/Utilizador/`
 
 - **Aceleração gráfica**: Permite ativar ou desativar a aceleração gráfica na
 aplicação.
@@ -786,7 +790,7 @@ informações de acesso:
 A imagem seguinte permite visualizar o menu de configurações da aplicação
 (com Modo de diagnóstico ativo)
 
-![Ilustração: Janela de configurações da aplicação (com Modo de diagnóstico ativo)](Pictures/Autenticação.Gov_configuração.png "Janela de configurações da aplicação (com Modo de diagnóstico ativo)"){:.center}
+![Ilustração: Janela de configurações da aplicação (com Modo de diagnóstico ativo)](Pictures/Autenticacao.Gov_configuracao.png "Janela de configurações da aplicação (com Modo de diagnóstico ativo)"){:.center}
 
 #### Configuração de assinaturas
 
@@ -804,7 +808,7 @@ aplicações do Microsoft Office.
 
 A imagem seguinte permite visualizar o menu de configurações de assinaturas.
 
-![Ilustração: Janela de configurações de assinaturas](Pictures/Autenticação.Gov_configuração_assinaturas.png "Janela de configurações de assinaturas"){:.center}
+![Ilustração: Janela de configurações de assinaturas](Pictures/Autenticacao.Gov_configuracao_assinaturas.png "Janela de configurações de assinaturas"){:.center}
 
 #### Dados da aplicação
 
@@ -823,7 +827,7 @@ automaticamente e em seguida iniciado o processo de instalação.
 
 A janela ajuda fornece um resumo das funcionalidades da aplicação, indica o caminho para chegar a este mesmo manual e a página de suporte da aplicação.
 
-![Ilustração: Janela Acerca](Pictures/Autenticação.Gov_acerca.png "Janela Acerca"){:.center}
+![Ilustração: Janela Acerca](Pictures/Autenticacao.Gov_acerca.png "Janela Acerca"){:.center}
 
 # Integração com aplicações
 
@@ -856,11 +860,11 @@ configurar a localização do ficheiro do *middleware*, que permite o
 suporte. A localização deste ficheiro, depende do sistema operativo a
 ser utilizado.
 
-**Windows:** C:\\Windows\\System32\\pteidpkcs11.dll\
+**Windows:** `C:\Windows\System32\pteidpkcs11.dll\`
 
-**Linux:** /usr/local/lib/libpteidpkcs11.so\
+**Linux:** `/usr/local/lib/libpteidpkcs11.so\`
 
-**MacOS:** /usr/local/lib/libpteidpkcs11.dylib
+**MacOS:** `/usr/local/lib/libpteidpkcs11.dylib`
 
 ## Assinatura digital na suite *Microsoft Office*
 
@@ -876,7 +880,7 @@ passos:
     selecionar a opção **Adicionar uma assinatura Digital**, conforme a
     imagem abaixo:
 
-    ![Ilustração: Assinatura em Microsoft Office](Pictures/Autenticação.Gov_microsoft_office.png "Assinatura em Microsoft Office"){:.center}
+    ![Ilustração: Assinatura em Microsoft Office](Pictures/Autenticacao.Gov_microsoft_office.png "Assinatura em Microsoft Office"){:.center}
 
 3.  Aparecerá uma mensagem específica da aplicação que está a utilizar (*Word*, *Excel* ou *Powerpoint*), clique em **OK**.
 4.  Na Caixa de diálogo **Assinar**, introduza o **Objetivo** da assinatura.
@@ -910,13 +914,13 @@ passos:
 
 2.  Aparecerá a janela com as assinaturas digitais do documento. Caso não exista ainda nenhuma assinatura, a lista aparecerá vazia conforme a imagem abaixo. Clique no botão **Assinar documento...** .
 
-    ![Ilustração: Assinatura em LibreOffice](Pictures/Autenticação.Gov_libre_office.png "Assinatura em LibreOffice"){:.center}
+    ![Ilustração: Assinatura em LibreOffice](Pictures/Autenticacao.Gov_libre_office.png "Assinatura em LibreOffice"){:.center}
 3.  Será apresentada uma janela para seleção do certificado. Deverá
     selecionar o certificado que tem o seu nome e emitido por “**EC de
     Assinatura Digital Qualificada do Cartão...**” conforme ilustrado na
     imagem abaixo:
 
-    ![Ilustração: Assinatura em LibreOffice](Pictures/Autenticação.Gov_libre_office2.png "Assinatura em LibreOffice"){:.center}
+    ![Ilustração: Assinatura em LibreOffice](Pictures/Autenticacao.Gov_libre_office2.png "Assinatura em LibreOffice"){:.center}
 4.  Clique em **Aceitar** e introduza o seu PIN de assinatura na respetiva
     janela.
 
@@ -935,7 +939,7 @@ endereço de email. Desta forma, para que seja possível efetuar
 assinaturas digitais no *Outlook*, é assim necessário desativar esta
 validação através da alteração das configurações no sistema operativo.
 
-  ![Ilustração: Localização da opção para desativar a correspondência de e-mails nos certificado no Microsoft Outlook](Pictures/Autenticação.Gov_configuração_assinaturas.png "Localização da opção para desativar a correspondência de e-mails nos certificado no Microsoft Outlook"){:.center}
+  ![Ilustração: Localização da opção para desativar a correspondência de e-mails nos certificado no Microsoft Outlook](Pictures/Autenticacao.Gov_configuracao_assinaturas.png "Localização da opção para desativar a correspondência de e-mails nos certificado no Microsoft Outlook"){:.center}
 
 Para **desativar a correspondência com endereço de email do certificado digital**, deve seguir as instruções disponibilizadas no *website* da *Microsoft*:
 
@@ -960,23 +964,23 @@ assinatura propriamente.
     digital está desativada, conforme instruções acima.
 2.  No Outlook, aceder ao menu **Ficheiro** → **Opções**
 
-    ![Ilustração: Assinatura em Outlook](Pictures/Autenticação.Gov_outlook.png "Assinatura em Outlook"){:.center}
+    ![Ilustração: Assinatura em Outlook](Pictures/Autenticacao.Gov_outlook.png "Assinatura em Outlook"){:.center}
 
 3.  Clicar em **Centro de Confiança**.
 
-    ![Ilustração: Assinatura em Outlook](Pictures/Autenticação.Gov_outlook2.png "Assinatura em Outlook"){:.center}
+    ![Ilustração: Assinatura em Outlook](Pictures/Autenticacao.Gov_outlook2.png "Assinatura em Outlook"){:.center}
 
 4.  Selecionar a secção **Definições do Centro de Fidedignidade**.
 
-    ![Ilustração: Assinatura em Outlook](Pictures/Autenticação.Gov_outlook3.png "Assinatura em Outlook"){:.center}
+    ![Ilustração: Assinatura em Outlook](Pictures/Autenticacao.Gov_outlook3.png "Assinatura em Outlook"){:.center}
 
 5.  Nesta secção, selecionar a opção **Adicionar a assinatura digital às mensagens a enviar** e clicar no botão **Definições**
 
-    ![Ilustração: Assinatura em Outlook](Pictures/Autenticação.Gov_outlook4.png "Assinatura em Outlook"){:.center}
+    ![Ilustração: Assinatura em Outlook](Pictures/Autenticacao.Gov_outlook4.png "Assinatura em Outlook"){:.center}
 
 6.  Adicione uma descrição a esta configuração, p. ex.: “Assinatura com Cartão de Cidadão” e clique no botão **Escolher** para selecionar o certificado.
 
-    ![Ilustração: Assinatura em Outlook: Escolha do certificado](Pictures/Autenticação.Gov_outlook5.png "Escolha do certificado"){:.center}
+    ![Ilustração: Assinatura em Outlook: Escolha do certificado](Pictures/Autenticacao.Gov_outlook5.png "Escolha do certificado"){:.center}
 
 7.  Selecione o seu certificado de assinatura e clique em **OK**.
 
@@ -989,7 +993,7 @@ assinado.
 1.  Ao clicar em **Enviar**, será solicitado o PIN de assinatura e o seu
     email será assinado e enviado.
 
-    ![Ilustração: Assinatura em Outlook: Escolha do certificado](Pictures/Autenticação.Gov_outlook6.png
+    ![Ilustração: Assinatura em Outlook: Escolha do certificado](Pictures/Autenticacao.Gov_outlook6.png
       "Assinatura em Outlook: Escolha do certificado"){:.center}
 
 ## Assinatura digital de email com Mozilla Thunderbird
@@ -1006,11 +1010,11 @@ em *Firefox*.
 
 1.  Abra a janela de escrita de email, clique na caixa de opções **Segurança** e clique em **Assinar digitalmente esta mensagem**.
 
-    ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticação.Gov_thunderbird.png "Assinatura de E-mail com Mozilla Thunderbird"){:.center}
+    ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticacao.Gov_thunderbird.png "Assinatura de E-mail com Mozilla Thunderbird"){:.center}
 
     Será apresentada uma mensagem informando que é necessário configurar os certificados antes de utilizar as funcionalidades de segurança. Clique em **Sim**.
 
-    ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticação.Gov_thunderbird2.png "Assinatura de E-mail com Mozilla Thunderbird"){:.center}
+    ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticacao.Gov_thunderbird2.png "Assinatura de E-mail com Mozilla Thunderbird"){:.center}
 
 3.  No ecrã seguinte, clique no botão **Dispositivos de Segurança**.
 4.  Clique no botão **Carregar**, e selecione o módulo **PKCS\#11**, que se
@@ -1028,16 +1032,16 @@ em *Firefox*.
     Após carregado o módulo, deverá ter uma entrada "**CARTAO DE CIDADAO**"
     conforme a imagem abaixo. Clique em **OK**.
 
-    ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticação.Gov_thunderbird3.png "Assinatura de E-mail com Mozilla Thunderbird"){:.center}
+    ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticacao.Gov_thunderbird3.png "Assinatura de E-mail com Mozilla Thunderbird"){:.center}
 
 5.  Voltando ao ecrã anterior (**“Configurações”** → **“Segurança”**), clique
     agora na opção **Selecionar**.
 
-    ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticação.Gov_thunderbird4.png "Assinatura de E-mail com Mozilla Thunderbird"){:.center}
+    ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticacao.Gov_thunderbird4.png "Assinatura de E-mail com Mozilla Thunderbird"){:.center}
 
 6.  Selecione o Certificado com a descrição "**CARTAO DE CIDADAO:CITIZEN SIGNATURE CERTIFICATE**".
 
-    ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticação.Gov_thunderbird5.png "Assinatura de E-mail com Mozilla Thunderbird"){:.center}
+    ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticacao.Gov_thunderbird5.png "Assinatura de E-mail com Mozilla Thunderbird"){:.center}
 
 7.  Adicionar um certificado da PKI do Cartão de Cidadão. No gestor de certificados do *ThunderBird*, aceder ao separador **Autoridade** e clicar em **Importar...** .
 8.  Clique em **OK** em todas as janelas de configuração abertas. A configuração está terminada.
@@ -1047,7 +1051,7 @@ em *Firefox*.
 1.  Abra a janela de composição de email.
 2.  Clique na caixa de opções **Segurança** e clique em **Assinar digitalmente esta mensagem**. Esta opção ficará ativa.
 
-    ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticação.Gov_thunderbird6.png "Assinatura de E-mail com Mozilla Thunderbird"){:.center}
+    ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticacao.Gov_thunderbird6.png "Assinatura de E-mail com Mozilla Thunderbird"){:.center}
 
 3.  Ao clicar em **Enviar**, será solicitado o PIN de assinatura e o seu email será assinado e enviado.
 
@@ -1075,7 +1079,7 @@ configuração uma vez registado o certificado de autenticação do Cidadão.
 Para o *Mozilla Firefox* em qualquer Sistema Operativo é necessário
 efetuar algumas configurações tal como descrito na secção [Assinatura digital de email com *Mozilla Thunderbird*](#assinatura-digital-de-email-com-mozilla-thunderbird).
 
-![Ilustração: Impossibilidade de assinatura](Pictures/Autenticação.Gov_web_impossibilidade.png
+![Ilustração: Impossibilidade de assinatura](Pictures/Autenticacao.Gov_web_impossibilidade.png
   "Impossibilidade de assinatura"){:.center}
 
 
@@ -1120,7 +1124,7 @@ Após a escolha desta opção, poderá aparecer uma janela de diálogo (Ver
 imagem seguinte) com o título “Ficheiros Necessários”, na qual terá de
 selecionar a pasta “drivers” que esta na diretoria “C:\\Windows\\System32“.
 
-![Ilustração: Impossibilidade de assinatura](Pictures/Autenticação.Gov_web_impossibilidade2.png
+![Ilustração: Impossibilidade de assinatura](Pictures/Autenticacao.Gov_web_impossibilidade2.png
   "Impossibilidade de assinatura"){:.center}
 
 ## O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão
@@ -1148,13 +1152,13 @@ selecionar a pasta “drivers” que esta na diretoria “C:\\Windows\\System32�
 
     a\) Numa janela de terminal execute o seguinte comando:
 
-        ps aux
+    `ps aux`
 
     b\) Procure uma referência ao processo pcscd.\
     c\) Caso não esteja listado por favor inicie o serviço através do
 comando:
 
-        sudo /etc/init.d/pcscd start
+    `sudo /etc/init.d/pcscd start`
 
     d\) Caso obtenha uma mensagem de erro é possível que o daemon não esteja
 instalado. Utilize o seu gestor de pacotes para instalar o pcscd (por
@@ -1177,23 +1181,24 @@ No caso de existirem problemas gráficos, recomenda-se testar desabilitar a acel
 No caso da aplicação não arrancar, o procedimento para desabilitar a aceleração gráfica por hardware consiste em adicionar às variáveis de ambiente do sistema a variável **QT_OPENGL** com o valor **software**. Em alternativa é possivel configurar essa opção usando as configurações do software Autenticação.gov.
 
 Em **Windows** na chave de registo:
-HKEY_CURRENT_USER\Software\PTEID\configuretool\graphics_accelaration
 
-    graphics_accelaration = 1 // Aceleração gráfica activada
+**HKEY\_CURRENT\_USER\\Software\\PTEID\\configuretool\\graphics\_accelaration**
 
-    graphics_accelaration = 0 // Aceleração gráfica desactivada
+`graphics_accelaration = 1 // Aceleração gráfica ativada`
 
-Em **Linux**, no ficheiro $HOME/.config/pteid.conf na secção “configuretool”
+`graphics_accelaration = 0 // Aceleração gráfica desativada`
 
-    graphics_accelaration = 1 // Aceleração gráfica activada
+Em **Linux**, no ficheiro **$HOME/.config/pteid.conf na secção** “configuretool”
 
-    graphics_accelaration = 0 // Aceleração gráfica desactivada
+`graphics_accelaration = 1 // Aceleração gráfica ativada`
 
-Em **MacOS**, no ficheiro $HOME/Library/Preferences/pteid.conf na secção “configuretool”
+`graphics_accelaration = 0 // Aceleração gráfica desativada`
 
-        graphics_accelaration = 1 // Aceleração gráfica activada
+Em **MacOS**, no ficheiro **$HOME/Library/Preferences/pteid.conf** na secção “configuretool”
 
-        graphics_accelaration = 0 // Aceleração gráfica desactivada
+`graphics_accelaration = 1 // Aceleração gráfica ativada`
+
+`graphics_accelaration = 0 // Aceleração gráfica desativada`
 
 
 # Instruções de configuração em ambientes empresariais
@@ -1205,40 +1210,148 @@ em chaves de registo sendo que as alterações feitas pelo utilizador no
 interface gráfico se sobrepõem aos valores predefinidos e ficam
 guardadas em sub-chaves de:
 
-    HKCU\Software\PTEID
+`HKCU\Software\PTEID`
 
 **Nota:** Não se devem nunca remover ou alterar os seguintes registos:
 
-    HKLM\Software\PTEID\general\install_dirname
+`HKLM\Software\PTEID\general\install_dirname`
 
-    HKLM\Software\PTEID\general\certs_dir
+`HKLM\Software\PTEID\general\certs_dir`
 
 Pode-se, no entanto, configurar de forma padronizada uma instalação
 adicionando alguns valores no registo do *Windows* para todos os
 utilizadores da máquina após a instalação do software, usando as chaves listadas
-na tabela seguinte que devem ser criadas como sub-chaves da chave raiz:
+abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
 
-    HKLM\Software\PTEID
+`HKLM\Software\PTEID\logging\log_level`
+- **Tipo**: String (debug, info, warning, error)
+- **Descrição**: Nível de detalhe do log do Middleware.
+- **Valor por omissão**: error
 
-| Chave            | Valor                  | Tipo                                 | Descrição                                                                                                                                          |
-|------------------|------------------------|--------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| logging          | log_level              | string (debug, info, warning, error) | Nível de detalhe do log do Middleware. Valor por omissão: error                                                                                    |
-| logging          | log_dirname            | string                               | Directoria onde são gerados os ficheiros de log do Middleware. Valor por omissão: C:\Program Files\Portugal Identity Card\log                      |
-| logging          | log_prefix             | string                               | Prefixo do nome dos ficheiros de log. Valor por omissão:.PTEID_                                                                                    |
-| general          | install_dirname        | string                               | Directoria onde é instalado o Middleware.  Valor por omissão: C:\Program Files\Portugal Identity Card                                              |
-| general          | cache_dirname          | string                               | Directoria onde é guardada a cache do Middleware.  Valor por omissão: C:\Users\[User]\AppData\Roaming\.pteid-ng                                    |
-| general          | scap_host              | String                               | Hostname do serviço de Atributos Profissionais (SCAP) Valor por omissão:scap.autenticacao.gov.pt                                                   |
-| general          | scap_port              | Número (1 a 65535)                   | Porto do serviço de Atributos Profissionais (SCAP)                                                                                                 |
-| general          | use_pinpad             | Número (0 / 1)                       | Usar funcionalidade de PINPAD Valor por omissão: 1 (ativo)                                                                                         |
-| general         | auth_pin_cache_normal             | Número (0 / 1)                       | Permitir cache do PIN de autenticação via minidriver. Valor por omissão: 0 (Não)                                                                                         |
-| configuretool    | start_with_windows     | Numérico (0 / 1)                     | Arrancar a aplicação com o Windows Valor por omissão: 1 (ativo)                                                                                    |
-| configuretool    | registrate_certificate | Numérico (0 / 1)                     | Registar certificados no Windows com a inserção do cartão.  Valor por omissão: 1 (Sim)                                                             |
-| configuretool    | remove_certificate     | Numérico (0 / 1)                     | Remover certificados do Windows com a remoção do cartão.  Valor por omissão: 0 (Não)                                                               |
-| proxy            | use_system_proxy       | Numérico (0 / 1)                     | Utilizar servidor de proxy definido no Windows/ MacOS.  Valor por omissão: 0 (Não)                                                                 |
-| proxy            | proxy_host             | string  (hostname ou endereço IP)    | Endereço do servidor de proxy                                                                                                                      |
-| proxy            | proxy_port             | Numérico (1 a 65535)                 | Porto TCP do servidor de proxy                                                                                                                     |
-| certificatecache | cert_cache_validity    | Numérico (0 a 65535)                 | Tempo de cache local (em segundos) do estado de validade dos certificados Valor por omissão: 60                                                    |
-| xsign            | tsa_url                | string                               | Servidor de timestamps usado na assinatura de documentos no formato http(s)://HOST:PORTO Valor por omissão:http://ts.cartaodecidadao.pt/tsa/server |
+---
+
+`HKLM\Software\PTEID\logging\log_dirname`
+  - **Tipo**: String
+  - **Descrição**: Directoria onde são gerados os ficheiros de log do Middleware.
+  - **Valor por omissão**: `C:\Program Files\Portugal Identity Card\log`
+
+---
+
+`HKLM\Software\PTEID\logging\log_prefix`
+  - **Tipo**: String
+  - **Descrição**: Prefixo do nome dos ficheiros de log.
+  - **Valor por omissão**: `.PTEID_`
+
+---
+
+`HKLM\Software\PTEID\general\install_dirname`
+
+  - **Tipo**: String
+  - **Descrição**: Directoria onde é instalado o Middleware.
+  - **Valor por omissão**: `C:\Program Files\Portugal Identity Card`
+
+---
+
+`HKLM\Software\PTEID\general\cache_dirname`
+
+  - **Tipo**: String
+  - **Descrição**: Directoria onde é guardada a cache do Middleware.
+  - **Valor por omissão**: `C:\Users\[User]\AppData\Roaming\.pteid-ng`
+
+---
+
+`HKLM\Software\PTEID\general\scap_host`
+
+  - **Tipo**: String
+  - **Descrição**: Hostname do serviço de Atributos Profissionais (SCAP).
+  - **Valor por omissão**: `scap.autenticacao.gov.pt`
+
+---
+
+`HKLM\Software\PTEID\general\scap_port`
+
+  - **Tipo**: Número (1 a 65535)
+  - **Descrição**: Porto do serviço de Atributos Profissionais (SCAP).
+
+---
+
+`HKLM\Software\PTEID\general\use_pinpad`
+
+  - **Tipo**: Número (0 / 1)
+  - **Descrição**:  Usar funcionalidade de PINPAD.
+  - **Valor por omissão**: 1 (Sim)
+
+---
+
+`HKLM\Software\PTEID\general\auth_pin_cache_normal`
+
+  - **Tipo**: Número (0 / 1)
+  - **Descrição**:  Permitir cache do PIN de autenticação via minidriver.
+  - **Valor por omissão**: 0 (Não)
+
+---
+
+`HKLM\Software\PTEID\configuretool\start_with_windows`
+
+  - **Tipo**: Número (0 / 1)
+  - **Descrição**:  Arrancar a aplicação com o Windows.
+  - **Valor por omissão**: 1 (Sim)
+
+---
+
+`HKLM\Software\PTEID\configuretool\registrate_certificate`
+
+  - **Tipo**: Número (0 / 1)
+  - **Descrição**:  Registar certificados no Windows com a inserção do cartão.
+  - **Valor por omissão**: 1 (Sim)
+
+---
+
+`HKLM\Software\PTEID\configuretool\remove_certificate`
+
+  - **Tipo**: Número (0 / 1)
+  - **Descrição**:  Remover certificados do Windows com a remoção do cartão.
+  - **Valor por omissão**: 0 (Não)
+
+---
+
+`HKLM\Software\PTEID\proxy\use_system_proxy`
+
+  - **Tipo**: Número (0 / 1)
+  - **Descrição**:  Utilizar servidor de proxy definido no Windows/ MacOS.
+  - **Valor por omissão**: 0 (Não)
+
+---
+
+`HKLM\Software\PTEID\proxy\proxy_host`
+
+  - **Tipo**: String (hostname ou endereço IP)
+  - **Descrição**:  Endereço do servidor de proxy.
+
+---
+
+`HKLM\Software\PTEID\proxy\proxy_port`
+
+  - **Tipo**: Número (1 a 65535)
+  - **Descrição**:  Porto TCP do servidor de proxy.
+
+---
+
+`HKLM\Software\PTEID\certificatecache\cert_cache_validity`
+
+  - **Tipo**: Número (0 a 65535)
+  - **Descrição**:  Tempo de cache local (em segundos) do estado de validade dos certificados.
+  - **Valor por omissão**: 60
+
+---
+
+`HKLM\Software\PTEID\xsign\tsa_url`
+
+  - **Tipo**: String
+  - **Descrição**:  Servidor de timestamps usado na assinatura de documentos no formato `http(s)://HOST:PORTO`
+  - **Valor por omissão**: `http://ts.cartaodecidadao.pt/tsa/server`
+
+---
 
 ## Configurações através de ficheiro de configuração em Linux e MacOS
 
@@ -1246,9 +1359,9 @@ As configurações do software Autenticação.gov são guardadas em Linux e
 MacOS são efectuadas num ficheiro de configuração. Este ficheiro de
 configuração está localizado no seguinte caminho:
 
-**Linux:** $HOME/.config/pteid.conf
+**Linux:** `$HOME/.config/pteid.conf`
 
-**MacOS:** $HOME/Library/Preferences/pteid.conf
+**MacOS:** `$HOME/Library/Preferences/pteid.conf`
 
 onde **$HOME** indica a directoria Home do utilizador de sistema.
 
@@ -1267,7 +1380,7 @@ seguinte procedimento (com permissões de administrador):
     ao “Local Computer” através da ferramenta MMC ou através do seguinte
     comando:
 
-        certmgr -add AMA\_codesigning.cer -c -s -r localMachine TrustedPublisher
+    `certmgr -add AMA\_codesigning.cer -c -s -r localMachine TrustedPublisher`
 
     O certificado pode ser obtido a partir do instalador MSI visualizando
     a assinatura do ficheiro no menu de contexto em:
@@ -1284,7 +1397,7 @@ seguinte procedimento (com permissões de administrador):
 3.  Tendo já obtido o instalador em formato MSI podemos instalar o
     software sem interacção com o utilizador usando o seguinte comando:
 
-        msiexec /i Autenticacao.gov-xxx.msi /qn
+    `msiexec /i Autenticacao.gov-xxx.msi /qn`
 
     Se se pretende evitar o reinício do sistema após a instalação deve
     ser adicionado ao comando o parâmetro */norestart* .
@@ -1309,6 +1422,7 @@ ou com autenticação Basic.
 
 Em MacOS é suportada a proxy do sistema mas apenas se for configurada por IP/Hostname + Porto
 
+<!-- End_of_content -->
 _________________
 
 Desenvolvido pelo Estado Português<br>
