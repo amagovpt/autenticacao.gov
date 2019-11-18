@@ -254,6 +254,7 @@ PageSecurityCertificatesForm {
     propertyButtonExportCertificate {
         onClicked: {
             console.log("Export certificate button clicked")
+            propertyFileDialogOutput.filename = "cert.der"
             propertyFileDialogOutput.open()
         }
     }

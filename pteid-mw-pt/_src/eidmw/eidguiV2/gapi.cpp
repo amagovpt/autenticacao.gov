@@ -2956,13 +2956,14 @@ int GAPI::findCardCertificate(QString issuedBy, QString issuedTo) {
     for (size_t i = 0; i < nCerts; i++)
     {
         PTEID_Certificate &cert = certificates.getCert(i);
-        std::wstring issuerName = utilStringWiden(cert.getIssuerName());
-        std::wstring ownerName = utilStringWiden(cert.getOwnerName());
-        if (issuerName == issuedBy.toStdWString() && ownerName == issuedTo.toStdWString())
+        std::string issuerName = cert.getIssuerName();
+        std::string ownerName = cert.getOwnerName();
+        if (issuerName == issuedBy.toUtf8().constData() && ownerName == issuedTo.toUtf8().constData())
         {
             return i;
         }
     }
+    return -1;
 }
 void GAPI::viewCardCertificate(QString issuedBy, QString issuedTo) {
 #ifdef WIN32
