@@ -1304,7 +1304,7 @@ Load language error. Please reinstall the application"
                 }
             }
             Accessible.role: Accessible.Button
-            Accessible.name: getSubMenuName(index)
+            Accessible.name: Functions.getSubMenuName(index)
 
             Text {
                 text: qsTranslate("MainMenuModel", subName)
