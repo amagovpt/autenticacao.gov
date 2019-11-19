@@ -354,13 +354,13 @@
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="673"/>
         <location filename="gapi.cpp" line="1475"/>
         <source>STR_DOCUMENT_NUMBER</source>
-        <translation>Número de documento</translation>
+        <translation>Número de Documento</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="404"/>
         <location filename="gapi.cpp" line="1476"/>
         <source>STR_VALIDITY_DATE</source>
-        <translation>Data de validade</translation>
+        <translation>Data de Validade</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="456"/>
@@ -417,7 +417,7 @@
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="137"/>
         <location filename="gapi.cpp" line="1513"/>
         <source>STR_DELIVERY_DATE</source>
-        <translation>Data de emissão</translation>
+        <translation>Data de Emissão</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="162"/>
@@ -429,19 +429,19 @@
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="231"/>
         <location filename="gapi.cpp" line="1525"/>
         <source>STR_CARD_STATE</source>
-        <translation>Estado do cartão</translation>
+        <translation>Estado do Cartão</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="181"/>
         <location filename="gapi.cpp" line="1517"/>
         <source>STR_DOCUMENT_TYPE</source>
-        <translation>Tipo de documento</translation>
+        <translation>Tipo de Documento</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="206"/>
         <location filename="gapi.cpp" line="1519"/>
         <source>STR_DELIVERY_LOCATION</source>
-        <translation>Local de pedido</translation>
+        <translation>Local de Pedido</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="1536"/>
@@ -562,7 +562,7 @@
         <location filename="gapi.cpp" line="1561"/>
         <source>STR_HOUSE_BUILDING_NUM</source>
         <oldsource>Ab. Building Type</oldsource>
-        <translation>Nº da porta</translation>
+        <translation>Nº da Porta</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="106"/>

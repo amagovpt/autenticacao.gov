@@ -302,7 +302,7 @@
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="156"/>
         <source>STR_PHOTO</source>
-        <translation>Citizen photo</translation>
+        <translation>Citizen Photo</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="173"/>
@@ -342,7 +342,7 @@
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="360"/>
         <location filename="gapi.cpp" line="1471"/>
         <source>STR_DATE_OF_BIRTH</source>
-        <translation>Date of birth</translation>
+        <translation>Date of Birth</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="385"/>
@@ -395,7 +395,7 @@
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="54"/>
         <location filename="gapi.cpp" line="1503"/>
         <source>STR_VAT_NUM</source>
-        <translation>VAT identification no.</translation>
+        <translation>VAT Identification no.</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="73"/>
@@ -437,7 +437,7 @@
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="181"/>
         <location filename="gapi.cpp" line="1517"/>
         <source>STR_DOCUMENT_TYPE</source>
-        <translation>Document type</translation>
+        <translation>Document Type</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="206"/>
@@ -502,7 +502,7 @@
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="270"/>
         <location filename="gapi.cpp" line="1553"/>
         <source>STR_STREET_TYPE</source>
-        <translation>Street type</translation>
+        <translation>Street Type</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="334"/>
@@ -564,7 +564,7 @@
         <location filename="gapi.cpp" line="1561"/>
         <source>STR_HOUSE_BUILDING_NUM</source>
         <oldsource>Ab. Building Type</oldsource>
-        <translation>House/building no.</translation>
+        <translation>House/Building no.</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrintForm.ui.qml" line="106"/>
