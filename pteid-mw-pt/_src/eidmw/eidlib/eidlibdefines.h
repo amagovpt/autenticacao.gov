@@ -88,6 +88,11 @@ enum PTEID_FileType
 	PTEID_FILETYPE_CSV
 };
 
+
+/**
+    Enumeration that includes all the configuration values of pteid-mw
+    They are grouped in different sections: general, logging, certcache, proxy, guitool, xsign
+  */
 enum PTEID_Param
 {
 	//GENERAL
@@ -175,4 +180,3 @@ enum PTEID_LogLevel
 }
 
 #endif //__EIDLIBDEFINES_H__
-

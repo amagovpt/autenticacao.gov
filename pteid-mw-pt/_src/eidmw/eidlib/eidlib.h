@@ -236,9 +236,12 @@ class PTEID_Card;
 
 class CByteArray;
 
-/******************************************************************************//**
-  * This class is used to receive/pass bytes array from/to different method in the SDK.
-  *********************************************************************************/
+/**
+  * Class used to receive and supply an array of bytes from/to different methods in the SDK.
+  *
+  *  Memory management note - instances of this class will not own the char arrays that are supplied to 
+  *  it in the constructor or Append() methods as this class will perform copies of the input arrays 
+  */
 class PTEID_ByteArray : public PTEID_Object
 {
 	public:
@@ -310,13 +313,17 @@ class PTEID_ByteArray : public PTEID_Object
 
 class PhotoPteid;
 
+/**
+   Class that represents the Citizen photograph stored in a pteid card
+*/
+
 class PTEID_Photo : public PTEID_Object
 {
 public:
 	PTEIDSDK_API virtual ~PTEID_Photo();												/**< Destructor */
 
-	PTEIDSDK_API PTEID_ByteArray& getphotoRAW();
-	PTEIDSDK_API PTEID_ByteArray& getphoto();
+	PTEIDSDK_API PTEID_ByteArray& getphotoRAW();   /**< Retrieve the byte contents of the photo as stored in the card in JPEG-2000 format */
+	PTEIDSDK_API PTEID_ByteArray& getphoto();      /**< Retrieve the byte contents of the photo converted to PNG format for maximum compatibility */
 	PTEIDSDK_API PTEID_ByteArray& getphotoCbeff();
 	PTEIDSDK_API PTEID_ByteArray& getphotoFacialrechdr();
 	PTEIDSDK_API PTEID_ByteArray& getphotoFacialinfo();
@@ -331,6 +338,11 @@ private:
 
 
 class APLPublicKey;
+
+/**
+   Class that represents the card authentication public key - to be used in a mutual authentication process (1024 bit RSA key)
+   This key is totally unrelated to the citizen authentication key which is present in the authentication certificate
+*/
 
 class PTEID_PublicKey : public PTEID_Object
 {
@@ -348,7 +360,7 @@ private:
 };
 
 /**
-  * This define give an easy access to singleton (no declaration/instantiation is needed).
+  * This define give an easy access to the PTEID_ReaderSet singleton (no declaration/instantiation is needed).
   *
   * Usage : ReaderSet.SomeMethod().
   */
@@ -361,7 +373,7 @@ private:
 
 /**
   * Release the SDK.
-  * THIS MUST BE CALLED WHEN THE SDK IS NOT NEEDED ANYMORE AND BEFORE THE APPLICATION IS CALLED.
+  * THIS MUST BE CALLED WHEN THE SDK IS NOT NEEDED ANYMORE AND BEFORE THE CALLING APPLICATION EXITS.
   * IF NOT RELEASE PROPERLY, AN EXCEPTION PTEID_ExReleaseNeeded IS THROWN.
   */
 #define PTEID_ReleaseSDK() PTEID_ReaderSet::releaseSDK()
@@ -737,6 +749,10 @@ class PTEID_XmlUserRequestedInfo;
 class PTEID_CCXML_Doc;
 class PDFSignature;
 
+/**
+	Helper class for the PTEID_EIDCard::SignPDF() methods - it defines multiple options that affect the signature operation
+	e.g Signature in batch mode, adding a cryptographic timestamp, small format visible signature and custom image in the visible signature
+*/
 
 class PTEID_PDFSignature
 {
@@ -797,8 +813,8 @@ public:
 
 	PTEIDSDK_API PTEID_CCXML_Doc& getXmlCCDoc(PTEID_XmlUserRequestedInfo& userRequestedInfo);
 	PTEIDSDK_API PTEID_EId& getID();							/**< Get the id document */
-	PTEIDSDK_API PTEID_Address& getAddr();					/**< Get the Address document */
-	PTEIDSDK_API PTEID_Sod& getSod();							/**< Get the sod document */
+	PTEIDSDK_API PTEID_Address& getAddr();					    /**< Get the Address document */
+	PTEIDSDK_API PTEID_Sod& getSod();							/**< Get the SOD document */
 	PTEIDSDK_API PTEID_CardVersionInfo& getVersionInfo();		/**< Get the info document  */
 	PTEIDSDK_API bool writePersonalNotes(const PTEID_ByteArray &out,PTEID_Pin *pin=NULL,const char *csPinCode="");
 	PTEIDSDK_API bool clearPersonalNotes(PTEID_Pin *pin=NULL,const char *csPinCode="");
@@ -812,29 +828,35 @@ public:
 
 	PTEIDSDK_API PTEID_PublicKey& getRootCAPubKey();		/**< Get the CVC CA public key that this card uses to verify the CVC key */
 	PTEIDSDK_API bool isActive();
-	PTEIDSDK_API void doSODCheck(bool check);			/**< enable/disable the checking of the data against the sod*/
-	PTEIDSDK_API bool Activate(const char *pinCode, PTEID_ByteArray &BCDDate, bool blockActivationPIN); 	/**< Activate the pteid card */
+	PTEIDSDK_API void doSODCheck(bool check);			/**< Enable/disable the verification of ID and address data against the SOD file */
+
+	/**
+	Activate the Pteid card by writing the contents of the supplied PTEID_ByteArray in the card TRACE file
+	    @param IN BCDDate - content to be written in the activation flag file (limited to 8 bytes) - recommended way to use is to supply the current date in BCD format (Binary coded decimal)
+	    @param IN pinCode - Activation PIN value
+	    @param IN blockActivationPIN - Boolean flag used in test mode to avoid blocking the Activation PIN after first use
+	*/
+	PTEIDSDK_API bool Activate(const char *pinCode, PTEID_ByteArray &BCDDate, bool blockActivationPIN);
 
 
-	    /** Produce Xades Signature of Arbitrary Contents (from memory or local files)
-	    *
-	    *  The next 4 Methods return an UTF-8 encoded byte array containing a full XAdES or XAdES-T
-	    *  signature of the content supplied (either as pointer to a memory buffer
-	    *  or as local file paths) signed by the Citizen Signature Key.
-	    *  These method perform interactive PIN authentication if needed
-	    *
-	    *  @param IN paths is an array of null-terminated strings representing absolute paths in
-	    *  the local filesystem. Those files content (hashed with SHA-1 algorithm) will be the input data for the RSA signature
-	    *  @param IN n_paths is the number of elements in the paths array
-	    **/
-	     PTEIDSDK_API PTEID_ByteArray SignXades(const char *output_path, const char * const* paths, unsigned int n_paths); /** Return a Xades signature as a UTF-8 string (supports multiple files)*/
+	/** Produce XAdES Signature of Arbitrary Contents (from local files)
+	*
+	*  The following 6 methods return an UTF-8 encoded byte array containing a full XAdES-B, XAdES-T or XAdES-A
+	*  signature of the content supplied as local file paths signed by the Citizen Signature Key.
+	*  These methods perform interactive PIN authentication if needed
+	*
+	*  @param IN paths is an array of null-terminated strings representing absolute paths in
+	*  the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
+	*  @param IN n_paths is the number of elements in the paths array
+	**/
+	     PTEIDSDK_API PTEID_ByteArray SignXades(const char *output_path, const char * const* paths, unsigned int n_paths); /**< Return a XAdES-B signature as a UTF-8 string (supports multiple files)*/
 
-	     PTEIDSDK_API PTEID_ByteArray SignXadesT(const char *output_path, const char * const* path, unsigned int n_paths); /** Return a Xades-T signature as a UTF-8 string (supports multiple files)*/
-	     PTEIDSDK_API PTEID_ByteArray SignXadesA(const char *output_path, const char * const* path, unsigned int n_paths); /** Return a Xades-T signature as a UTF-8 string (supports multiple files)*/
+	     PTEIDSDK_API PTEID_ByteArray SignXadesT(const char *output_path, const char * const* path, unsigned int n_paths); /**< Return a XAdES-T signature as a UTF-8 string (supports multiple files)*/
+	     PTEIDSDK_API PTEID_ByteArray SignXadesA(const char *output_path, const char * const* path, unsigned int n_paths); /**< Return a XAdES-A signature as a UTF-8 string (supports multiple files)*/
 
-	     PTEIDSDK_API void SignXadesIndividual(const char *output_path,  const char * const* paths, unsigned int n_paths); /** Store the XAdes signature in individual zip containers  */
-	     PTEIDSDK_API void SignXadesTIndividual(const char *output_path, const char * const* paths, unsigned int n_paths); /** Store the Xades-T signature in individual zip containers  */
-		 PTEIDSDK_API void SignXadesAIndividual(const char *output_path, const char * const* paths, unsigned int n_paths);
+	     PTEIDSDK_API void SignXadesIndividual(const char *output_path,  const char * const* paths, unsigned int n_paths); /**< Store the XAdES-B signatures in individual zip containers  */
+	     PTEIDSDK_API void SignXadesTIndividual(const char *output_path, const char * const* paths, unsigned int n_paths); /**< Store the XAdES-T signatures in individual zip containers  */
+		 PTEIDSDK_API void SignXadesAIndividual(const char *output_path, const char * const* paths, unsigned int n_paths); /**< Store the XAdES-A signatures in individual zip containers  */
 
 			
 	/**
@@ -851,30 +873,24 @@ public:
 	    PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason,
 			const char *outfile_path);
 
-		/**
-		* PDF Signature with location by coordinates (expressed in percentage of page height/width). The coordinate system has its origin in the top left corner of the page
-	 	* @param sig_handler: this defines the input file and some signature options
-	 	* @param page: in case of visible signature it defines the page where the signature will appear
-	 	* @param coord_x: X coordinate of the signature location (percentage of page width)
-	 	* @param coord_y: Y coordinate of the signature location (percentage of page height)
-	 	* @param location: Signature metadata field
-	 	* @param reason: Signature metadata field
-	 	* @param outfile_path: Native Filesystem path of the ouput file
-	 	**/
+	/**
+	* PDF Signature with location by coordinates (expressed in percentage of page height/width). The coordinate system has its origin in the top left corner of the page
+	* @param sig_handler: this defines the input file and some signature options
+	* @param page: in case of visible signature it defines the page where the signature will appear
+	* @param coord_x: X coordinate of the signature location (percentage of page width)
+	* @param coord_y: Y coordinate of the signature location (percentage of page height)
+	* @param location: Location field in the added signature metadata
+	* @param reason: Signature metadata field
+	* @param outfile_path: Native Filesystem path of the ouput file
+	**/
 	    PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
 			const char *outfile_path);
 
-	     /* Change the OTP/EMV-CAP PIN through interaction with the appropriate HTTPS server
-	      * Note: This method SHOULD be always called before any change to the Authentication PIN
-	      * because the two PINs are the same from the user's perspective
-	      *
-	      */
-	     //PTEIDSDK_API bool ChangeCapPin(const char *new_pin);
-
 #if !defined SWIG
-        typedef void(*t_address_change_callback)(void *, int);
-        PTEIDSDK_API void ChangeAddress(char *secretCode, char *process, t_address_change_callback callback, void *callback_data);
-#endif
+	    typedef void (*t_address_change_callback)(void *, int);
+
+	    PTEIDSDK_API void ChangeAddress(char *secretCode, char *process, t_address_change_callback callback, void *callback_data);
+#endif    
 
 protected:
 	PTEID_EIDCard(const SDK_Context *context,APL_Card *impl);		/**< For internal use : Constructor */
@@ -892,7 +908,7 @@ friend PTEIDSDK_API long ::PTEID_CVC_Init(const unsigned char *pucCert, int iCer
 
 class APL_XmlUserRequestedInfo;
 /******************************************************************************//**
-  * This class will contain information about the data to be returned in the xml file.
+  * This class will contain information about the data to be included in the XML file returned by PTEID_EIDCard::getXmlCCDoc
   *********************************************************************************/
 class PTEID_XmlUserRequestedInfo : public PTEID_Object
 {
@@ -1029,15 +1045,15 @@ friend PTEID_CardVersionInfo& PTEID_EIDCard::getVersionInfo();	/**< For internal
 class APL_SodEid;
 
 /******************************************************************************//**
-  * Class for the sod document on a EID Card.
+  * Class for the SOD document on an EID Card.
   * You can get such an object from PTEID_EIDCard::getSod().
   *********************************************************************************/
 class PTEID_Sod : public PTEID_Biometric
 {
 public:
 	PTEIDSDK_API virtual ~PTEID_Sod();				/**< Destructor */
-
-	PTEIDSDK_API const PTEID_ByteArray& getData();		/**< Return the sod itself */
+	/** Return the SOD data - it contains a PKCS#7 signed object as described in ICAO Doc 9303 - "Machine Readable Travel Documents"  */
+	PTEIDSDK_API const PTEID_ByteArray& getData();	
 
 private:
 	PTEID_Sod(const PTEID_Sod& doc);				/**< Copy not allowed - not implemented */
@@ -1051,7 +1067,7 @@ friend PTEID_Sod& PTEID_EIDCard::getSod();		/**< For internal use : This method 
 class APL_DocEId;
 
 /******************************************************************************//**
-  * Class for the id document on a EID Card.
+  * Class for the ID document on a EID Card.
   * You can get such an object from PTEID_EIDCard::getID().
   *********************************************************************************/
 class PTEID_EId : public PTEID_XMLDoc
@@ -1111,9 +1127,6 @@ class PTEID_Address : public PTEID_XMLDoc
 public:
 	PTEIDSDK_API virtual ~PTEID_Address();							/**< Destructor */
 
-	//PTEIDSDK_API const char *getAddressVersion();					/**< Return Address Version field */
-	//PTEIDSDK_API const char *getStreet();							/**< Return Street field */
-	//PTEIDSDK_API const char *getZipCode();						/**< Return Zip Code field */
 	PTEIDSDK_API	bool isNationalAddress();						/**< is the address a portuguese address? */
 	PTEIDSDK_API	const char *getCountryCode();						/**<residence country */
 
@@ -1138,6 +1151,7 @@ public:
 	PTEIDSDK_API	const char *getPostalLocality();				/**< Return field PostalLocality */
 	PTEIDSDK_API	const char *getGeneratedAddressCode();			/**< Return field Address Code */
 
+	// The following 6 getter methods are only relevant for foreign addresses
 	PTEIDSDK_API 	const char *getForeignCountry();
 	PTEIDSDK_API 	const char *getForeignAddress();
 	PTEIDSDK_API 	const char *getForeignCity();
@@ -1433,9 +1447,11 @@ friend PTEID_Certificate &PTEID_Certificates::addCertificate(PTEID_ByteArray &ce
 
 class APL_Config;
 
-/**********************************************************************************
-  * Class to access the config parameters.
-  *********************************************************************************/
+/**
+  * Class to access and modify the config parameters of pteid-mw. 
+    These parameters are persisted in the Windows Registry under the HKEY_CURRENT_USER\Software\PTEID key
+    or in the pteid.conf file of the current user (on Linux and MacOS systems)
+  */
 class PTEID_Config : public PTEID_Object
 {
 public:
@@ -1465,7 +1481,7 @@ public:
     PTEIDSDK_API long getLong();					/**< Return the numerical value (Throw exception for string parameter) */
 
     PTEIDSDK_API void setString(const char *csValue);	/**< Set the string value (Throw exception for numerical parameter) */
-	PTEIDSDK_API void DeleteKeysByPrefix();  	/**< Reset the strings with some prefix (Throw exception for numerical parameter) */
+    PTEIDSDK_API void DeleteKeysByPrefix();  	/**< Reset the strings with some prefix (Throw exception for numerical parameter) */
 	PTEIDSDK_API void setLong(long lValue);				/**< Set the numerical value (Throw exception for string parameter) */
 
 private:
