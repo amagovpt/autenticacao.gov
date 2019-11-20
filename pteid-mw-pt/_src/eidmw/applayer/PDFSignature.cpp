@@ -788,14 +788,25 @@ namespace eIDMW
 
         PDFWriteMode pdfWriteMode =
             m_incrementalMode ? writeForceIncremental : writeForceRewrite;
-#ifdef WIN32
-		std::string utf8Filename(m_outputName->getCString());
-		std::wstring utf16Filename = utilStringWiden(utf8Filename);
 
-		int final_ret = m_doc->saveAs((wchar_t *)utf16Filename.c_str(), pdfWriteMode);
+		std::string utf8Filename(m_outputName->getCString());
+        std::string utf8FilenameTmp = utf8Filename.substr(0, utf8Filename.length() - 4); // remove extension
+        // using "_tmp" as suffix may not be a good idea since it is a common suffix
+        // and we do not want to overwrite existing file.
+        utf8FilenameTmp += "_12k4kjn124.pdf";
+#ifdef WIN32
+        std::wstring utf16FilenameTmp = utilStringWiden(utf8FilenameTmp);
+        int final_ret = m_doc->saveAs((wchar_t *)utf16FilenameTmp.c_str(), pdfWriteMode);
 #else
-		int final_ret = m_doc->saveAs(m_outputName, pdfWriteMode);
+        int final_ret = m_doc->saveAs(utf8FilenameTmp.c_str(), pdfWriteMode);
 #endif
+        PDFDoc *tmpDoc = makePDFDoc(utf8FilenameTmp.c_str());
+        GooString outputFilename(utf8Filename.c_str());
+        tmpDoc->saveAs(&outputFilename);
+        delete tmpDoc;
+        tmpDoc = NULL;
+        remove(utf8FilenameTmp.c_str());
+
         m_signStarted = false;
 
         free((void *)signature_contents);
