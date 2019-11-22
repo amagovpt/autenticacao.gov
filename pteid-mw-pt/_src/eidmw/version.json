@@ -5,11 +5,11 @@
             "package": "10179/11962/Autenticacao.gov_Ubuntu_18_x64.deb"
         },
         "windows32": {
-            "latestVersion": "3.0.19",
+            "latestVersion": "3.0.21",
             "package": "10179/12084/Autenticacao.gov_Win_x86.msi"
         },
         "windows64": {
-            "latestVersion": "3.0.19",
+            "latestVersion": "3.0.21",
             "package": "10179/12084/Autenticacao.gov_Win_x64.msi"
         },
         "fedora32": {
@@ -35,6 +35,16 @@
     },
     "versions": [
 		{
+            "version": "3.0.21",
+            "date": "2019-11-21",
+            "release_notes": [
+                "Correcção do carregamento da pteidlib no SDK Java e C#. Issue GH-2",
+				"Notas do Cartão: Adicionado popup para avisar que as notas não foram gravadas no cartão se o Cidadão tentar sair do menu sem gravar",
+				"Na alteração de morada foi adicionada mensagem de erro a indicar que o pedido está expirado se for o caso",
+				"Auto-Updates: As actualizações automáticas passaram a ser efetuadas exclusivamente via portal autenticacão.gov.pt"
+            ]
+        },
+	{
             "version": "3.0.20",
             "date": "2019-10-01",
             "release_notes": [
