@@ -798,7 +798,8 @@ namespace eIDMW
         std::wstring utf16FilenameTmp = utilStringWiden(utf8FilenameTmp);
         int final_ret = m_doc->saveAs((wchar_t *)utf16FilenameTmp.c_str(), pdfWriteMode);
 #else
-        int final_ret = m_doc->saveAs(utf8FilenameTmp.c_str(), pdfWriteMode);
+        GooString tmpFilename(utf8FilenameTmp.c_str());
+        int final_ret = m_doc->saveAs(&tmpFilename, pdfWriteMode);
 #endif
         PDFDoc *tmpDoc = makePDFDoc(utf8FilenameTmp.c_str());
         GooString outputFilename(utf8Filename.c_str());
