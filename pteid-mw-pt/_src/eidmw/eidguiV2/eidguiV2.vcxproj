@@ -165,7 +165,7 @@ echo "**************************************************************************
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libcurl.lib;qtmain.lib;Crypt32.lib;shell32.lib;ssleay32.lib;libeay32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteid-poppler.lib;pteidDlgsWin32.lib;cmdServices.lib;xsec_1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcurl.lib;Cryptui.lib;qtmain.lib;Crypt32.lib;shell32.lib;ssleay32.lib;libeay32.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteid-poppler.lib;pteidDlgsWin32.lib;cmdServices.lib;xsec_1.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(PTEID_DIR_CURL)\lib;$(PTEID_XMLSECURITY)\Build\Win32\VC10\Release No Xalan;$(PTEID_POPPLER_QT5)\bin\win32;$(PTEID_DIR_OPENSSL_098)\lib\;$(PTEID_DIR_QT_5)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
