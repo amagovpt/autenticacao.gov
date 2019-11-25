@@ -821,10 +821,13 @@ namespace eIDMW
         int final_ret = m_doc->saveAs((wchar_t *)utf16FilenameTmp.c_str(), pdfWriteMode);
 #else
         char tmpFilename[L_tmpnam];
-        tmpnam(tmpFilename);
+        if (!tmpnam(tmpFilename)) {
+            MWLOG(LEV_ERROR, MOD_APL, "signClose: Error occurred generating tmp filename");
+            throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+        }
         std::string utf8FilenameTmp = tmpFilename;
-        GooString tmpFilename(utf8FilenameTmp.c_str());
-        int final_ret = m_doc->saveAs(&tmpFilename, pdfWriteMode);
+        GooString tmpFilenameGoo(utf8FilenameTmp.c_str());
+        int final_ret = m_doc->saveAs(&tmpFilenameGoo, pdfWriteMode);
 #endif
         PDFDoc *tmpDoc = makePDFDoc(utf8FilenameTmp.c_str());
         GooString outputFilename(utf8Filename.c_str());
