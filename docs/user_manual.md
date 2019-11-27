@@ -606,7 +606,7 @@ Os ficheiros a assinar podem ser arrastados para a área de pré-visualização.
     - **Tipo:** Tipo de assinatura – campo obrigatório – permite selecionar assinatura de ficheiros:
 
         - **PDF:** PAdES (*PDF Advanced Electronic Signatures*)
-        - **Outros ficheiros:** Pacote CCSIGN com *XML Advanced Electronic Signatures* (XadES).
+        - **Outros ficheiros:** Pacote ASiC com *XML Advanced Electronic Signatures* (XadES).
 
     - **Motivo:** Motivo da assinatura – campo opcional – permite ao signatário indicar o motivo da sua assinatura.
 
