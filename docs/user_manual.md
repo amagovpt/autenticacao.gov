@@ -395,10 +395,8 @@ Nesta aplicação poderá efetuar as seguintes operações:
 -   Gestão de PINs (Testar PIN, Alterar PIN).
 
 O aspeto e comportamentos da aplicação é semelhante nos três tipos de
-sistemas operativos, à exceção de algumas funcionalidades de registo de
-certificados. Esta está apenas disponível em Windows, visto, esta
-funcionalidade nativa, ser específica do sistema operativo Microsoft
-Windows.
+sistemas operativos, à exceção de algumas funcionalidades que estão apenas disponíveis em Windows, visto serem
+funcionalidades nativas ou configurações específicas do ambiente Windows.
 
 O atalho para a aplicação fica disponível em localizações diferentes
 consoante o tipo de sistema operativo:
@@ -433,12 +431,13 @@ principais: Menu Cartão, Menu Assinatura e Menu Segurança.
 
 Permite visualizar a informação de identidade e foto do cidadão,
 visualizar a morada do cidadão e confirmar a alteração de morada, edição
-das notas, bem como imprimir os dados do Cartão de Cidadão.
+das notas, bem como imprimir os dados do Cartão de Cidadão. A foto do cidadão
+pode ser exportada para um ficheiro.
 
 #### Identidade
 
 Permite visualizar os dados de identificação e foto do cidadão presentes
-no Cartão de Cidadão.
+no Cartão de Cidadão. Através desta página é ainda possível exportar foto do cidadão.
 
 ![Ilustração: Identidade do Cidadão](Pictures/Autenticacao.Gov_Identidade.png "Identidade do Cidadão"){:.center}
 
@@ -605,7 +604,7 @@ Os ficheiros a assinar podem ser arrastados para a área de pré-visualização.
     - **Tipo:** Tipo de assinatura – campo obrigatório – permite selecionar assinatura de ficheiros:
 
         - **PDF:** PAdES (*PDF Advanced Electronic Signatures*)
-        - **Outros ficheiros:** Pacote CCSIGN com *XML Advanced Electronic Signatures* (XadES).
+        - **Outros ficheiros:** Pacote ASiC com *XML Advanced Electronic Signatures* (XadES).
 
     - **Motivo:** Motivo da assinatura – campo opcional – permite ao signatário indicar o motivo da sua assinatura.
 

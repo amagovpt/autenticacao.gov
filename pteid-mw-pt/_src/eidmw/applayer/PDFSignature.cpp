@@ -757,48 +757,77 @@ namespace eIDMW
 
     int PDFSignature::signClose(CByteArray signature) {
 
-        if ( !m_signStarted ) {
-            MWLOG( LEV_DEBUG, MOD_APL, "signClose: Signature not started" );
+        if (!m_signStarted) {
+            MWLOG(LEV_DEBUG, MOD_APL, "signClose: Signature not started");
             return -1;
         }
 
         const char *signature_contents = NULL;
 
-        if ( NULL == m_doc ) {
-            fprintf( stderr, "NULL m_doc\n" );
+        if (NULL == m_doc) {
+            fprintf(stderr, "NULL m_doc\n");
 
-            if ( m_pkcs7 != NULL ) 
-            	PKCS7_free( m_pkcs7 );
+            if (m_pkcs7 != NULL)
+                PKCS7_free(m_pkcs7);
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
 
         int return_code =
-            getSignedData_pkcs7( (unsigned char*)signature.GetBytes()
-                                , signature.Size()
-                                , m_signerInfo
-                                , m_timestamp
-                                , m_pkcs7
-                                , &signature_contents );
+            getSignedData_pkcs7((unsigned char*)signature.GetBytes()
+            , signature.Size()
+            , m_signerInfo
+            , m_timestamp
+            , m_pkcs7
+            , &signature_contents);
 
         //Don't report "unknown error" exception in the case of timestamp error     
         if (return_code > 1)
-        	throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+            throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 
-        m_doc->closeSignature( signature_contents );
+        m_doc->closeSignature(signature_contents);
 
         PDFWriteMode pdfWriteMode =
             m_incrementalMode ? writeForceIncremental : writeForceRewrite;
 
-		std::string utf8Filename(m_outputName->getCString());
-        std::string utf8FilenameTmp = utf8Filename.substr(0, utf8Filename.length() - 4); // remove extension
-        // using "_tmp" as suffix may not be a good idea since it is a common suffix
-        // and we do not want to overwrite existing file.
-        utf8FilenameTmp += "_12k4kjn124.pdf";
+        std::string utf8Filename(m_outputName->getCString());
+        // Create and save pdf to temp file to allow overwrite of original file
 #ifdef WIN32
+        TCHAR tmpPathBuffer[MAX_PATH];
+        DWORD lengthCopied = GetTempPath(MAX_PATH, tmpPathBuffer);
+        if (lengthCopied > MAX_PATH)
+        {
+            MWLOG(LEV_ERROR, MOD_APL, "signClose: tmpPath does not fit in buffer");
+            throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+        }
+        if (lengthCopied == 0)
+        {
+            MWLOG(LEV_ERROR, MOD_APL, "signClose: Error occurred getting tmpPath: %d", GetLastError());
+            throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+        }
+        TCHAR tmpFilename[L_tmpnam];
+        if (!GetTempFileName(tmpPathBuffer,
+            TEXT("tmp"),
+            0,
+            tmpFilename)) {
+            MWLOG(LEV_ERROR, MOD_APL, "signClose: Error occurred GetTempFileName: %d", GetLastError());
+            throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+        }
+    #ifdef UNICODE
+        std::string utf8FilenameTmp = utilStringNarrow(tmpFilename);
+    #else
+        std::string utf8FilenameTmp = tmpFilename;
+    #endif
         std::wstring utf16FilenameTmp = utilStringWiden(utf8FilenameTmp);
         int final_ret = m_doc->saveAs((wchar_t *)utf16FilenameTmp.c_str(), pdfWriteMode);
 #else
-        int final_ret = m_doc->saveAs(utf8FilenameTmp.c_str(), pdfWriteMode);
+        char tmpFilename[L_tmpnam];
+        if (!tmpnam(tmpFilename)) {
+            MWLOG(LEV_ERROR, MOD_APL, "signClose: Error occurred generating tmp filename");
+            throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+        }
+        std::string utf8FilenameTmp = tmpFilename;
+        GooString tmpFilenameGoo(utf8FilenameTmp.c_str());
+        int final_ret = m_doc->saveAs(&tmpFilenameGoo, pdfWriteMode);
 #endif
         PDFDoc *tmpDoc = makePDFDoc(utf8FilenameTmp.c_str());
         GooString outputFilename(utf8Filename.c_str());
