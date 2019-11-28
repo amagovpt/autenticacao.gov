@@ -287,8 +287,6 @@
       <Component Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
 		<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlib.dll" />
-        <File Id="libeay32A" Source="$(env.PTEID_DIR_OPENSSL_098)\bin\libeay32.dll" />
-        <File Id="ssleay32A" Source="$(env.PTEID_DIR_OPENSSL_098)\bin\ssleay32.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll" />
@@ -299,7 +297,12 @@
       <Component Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44D4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
         <File Source="$(env.PTEID_DIR_XERCES_31)\bin\xerces-c_3_1.dll" KeyPath="yes"/>
       </Component>
-      
+      <Component Id="libeay32A" Guid="{3AAFC0CD-FDCB-4F7B-9EB7-7B2E31477691}" SharedDllRefCount="yes">
+        <File Id="libeay32A" Source="$(env.PTEID_DIR_OPENSSL_098)\bin\libeay32.dll" KeyPath="yes"/>
+      </Component>
+      <Component Id="ssleay32A" Guid="{6DBB15A3-6EA1-4869-B133-7D8E1321B56C}" SharedDllRefCount="yes">
+        <File Id="ssleay32A" Source="$(env.PTEID_DIR_OPENSSL_098)\bin\ssleay32.dll" KeyPath="yes"/>
+      </Component>
       <Component Id="Libpng" Guid="{561A9E2E-CA9C-4D45-A9D4-950E1CE6BA3A}" SharedDllRefCount="yes">
         <File Source="$(env.PTEID_DIR_LIBPNG)\bin\libpng16.dll" KeyPath="yes"/>
       </Component>
@@ -434,6 +437,8 @@
 
       <!-- System32 -->
       <ComponentRef Id="Runtime35"/>
+      <ComponentRef Id="libeay32A"/>
+      <ComponentRef Id="ssleay32A"/>
       <!-- <ComponentRef Id="Runtime35ThirdPartyOpenSSL"/> -->
       <ComponentRef Id="Runtime35ThirdPartyXerces"/>
 
