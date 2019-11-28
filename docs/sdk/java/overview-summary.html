@@ -68,7 +68,7 @@
 </a></div>
 <!-- ========= END OF TOP NAVBAR ========= -->
 <div class="header">
-<h1 class="title">Version: 3.1.0</h1>
+<h1 class="title">Version: 3.0.21</h1>
 </div>
 <div class="header">
 <div class="subTitle">
@@ -254,7 +254,7 @@ PTEID_Address address;
 (...)
 PTEID_Pins pins = card.getPins();
 PTEID_Pin pin = pins.getPinByPinRef(PTEID_Pin.ADDR_PIN);
-if (pin.verifyPin(â€œâ€?, triesLeft, true){
+if (pin.verifyPin("", triesLeft, true){
     address = card.getAddr();
     String countryCode = address.getCountryCode();
     String district = address.getDistrict();
@@ -271,7 +271,7 @@ if (pin.verifyPin(â€œâ€?, triesLeft, true){
 // read personal notes
 String pdata = card.getID().getPersoData();
 // write personal notes
-String notes = â€œa few notesâ€?;
+String notes = "a few notes";
 PTEID_ByteArray pb = new PTEID_ByteArray(notes.getBytes(), notes.getBytes().length);
 boolean bOk = card.writePersonalNotes(personalNotes, card.getPins().getPinByPinRef(PTEID_Pin.AUTH_PIN));
 (...)
@@ -379,7 +379,7 @@ new PTEID_Config(PTEID_PARAM_XSIGN_TIMEOUT).setLong(60); // allow a timeout of 6
    </a>
    to validate a XAdES signature.
   </p>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js">
   </script>
   <script>
    hljs.initHighlightingOnLoad();

@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Portuguese eID Middleware SDK
-   &#160;<span id="projectnumber">Version: 3.1.0</span>
+   &#160;<span id="projectnumber">Version: 3.0.21</span>
    </div>
   </td>
  </tr>
@@ -363,7 +363,14 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Activate the pteid card </p>
+<p>Activate the Pteid card by writing the contents of the supplied <a class="el" href="classeIDMW_1_1PTEID__ByteArray.html">PTEID_ByteArray</a> in the card TRACE file </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">IN</td><td>BCDDate - content to be written in the activation flag file (limited to 8 bytes) - recommended way to use is to supply the current date in BCD format (Binary coded decimal) </td></tr>
+    <tr><td class="paramname">IN</td><td>pinCode - Activation PIN value </td></tr>
+    <tr><td class="paramname">IN</td><td>blockActivationPIN - Boolean flag used in test mode to avoid blocking the Activation PIN after first use </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -382,7 +389,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>enable/disable the checking of the data against the sod </p>
+<p>Enable/disable the verification of ID and address data against the SOD file </p>
 
 </div>
 </div>
@@ -545,7 +552,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the sod document </p>
+<p>Get the SOD document </p>
 
 </div>
 </div>
@@ -699,7 +706,7 @@ Additional Inherited Members</h2></td></tr>
     <tr><td class="paramname">page</td><td>in case of visible signature it defines the page where the signature will appear </td></tr>
     <tr><td class="paramname">coord_x</td><td>X coordinate of the signature location (percentage of page width) </td></tr>
     <tr><td class="paramname">coord_y</td><td>Y coordinate of the signature location (percentage of page height) </td></tr>
-    <tr><td class="paramname">location</td><td>Signature metadata field </td></tr>
+    <tr><td class="paramname">location</td><td>Location field in the added signature metadata </td></tr>
     <tr><td class="paramname">reason</td><td>Signature metadata field </td></tr>
     <tr><td class="paramname">outfile_path</td><td>Native Filesystem path of the ouput file </td></tr>
   </table>
@@ -739,12 +746,12 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Produce Xades Signature of Arbitrary Contents (from memory or local files)</p>
-<p>The next 4 Methods return an UTF-8 encoded byte array containing a full XAdES or XAdES-T signature of the content supplied (either as pointer to a memory buffer or as local file paths) signed by the Citizen Signature Key. These method perform interactive PIN authentication if needed</p>
+<p>Produce XAdES Signature of Arbitrary Contents (from local files)</p>
+<p>The following 6 methods return an UTF-8 encoded byte array containing a full XAdES-B, XAdES-T or XAdES-A signature of the content supplied as local file paths signed by the Citizen Signature Key. These methods perform interactive PIN authentication if needed</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">IN</td><td>paths is an array of null-terminated strings representing absolute paths in the local filesystem. Those files content (hashed with SHA-1 algorithm) will be the input data for the RSA signature </td></tr>
-    <tr><td class="paramname">IN</td><td>n_paths is the number of elements in the paths array </td></tr>
+    <tr><td class="paramname">IN</td><td>paths is an array of null-terminated strings representing absolute paths in the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature </td></tr>
+    <tr><td class="paramname">IN</td><td>n_paths is the number of elements in the paths arrayReturn a XAdES-B signature as a UTF-8 string (supports multiple files) </td></tr>
   </table>
   </dd>
 </dl>
@@ -782,7 +789,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return a Xades-T signature as a UTF-8 string (supports multiple files) </p>
+<p>Return a XAdES-A signature as a UTF-8 string (supports multiple files) </p>
 
 </div>
 </div>
@@ -817,7 +824,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Store the Xades-T signature in individual zip containers </p>
+<p>Store the XAdES-A signatures in individual zip containers </p>
 
 </div>
 </div>
@@ -852,7 +859,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return a Xades-T signature as a UTF-8 string (supports multiple files) </p>
+<p>Store the XAdES-B signatures in individual zip containers </p>
 
 </div>
 </div>
@@ -887,7 +894,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return a Xades signature as a UTF-8 string (supports multiple files) </p>
+<p>Return a XAdES-T signature as a UTF-8 string (supports multiple files) </p>
 
 </div>
 </div>
@@ -922,7 +929,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Store the XAdes signature in individual zip containers </p>
+<p>Store the XAdES-T signatures in individual zip containers </p>
 
 </div>
 </div>

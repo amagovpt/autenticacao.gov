@@ -127,14 +127,15 @@ var NAVTREEINDEX0 =
 "classeIDMW_1_1PTEID__Certificates.html#af3dff12b771c58c94e80265b223acc2c":[2,0,0,7,9],
 "classeIDMW_1_1PTEID__Config.html":[2,0,0,8],
 "classeIDMW_1_1PTEID__Config.html#a2a4f69189f02ab26aba800d378b7d518":[2,0,0,8,0],
+"classeIDMW_1_1PTEID__Config.html#a762f6bf96cd43a814826592cc342649a":[2,0,0,8,5],
 "classeIDMW_1_1PTEID__Config.html#a8a447e4236233053279fdd4d5ea20b59":[2,0,0,8,1],
-"classeIDMW_1_1PTEID__Config.html#a92d9ff4f6fcaeb669739fc0c619fbc3c":[2,0,0,8,5],
+"classeIDMW_1_1PTEID__Config.html#a92d9ff4f6fcaeb669739fc0c619fbc3c":[2,0,0,8,6],
 "classeIDMW_1_1PTEID__Config.html#a9df15bbd38946d12fe04b265b02d80fd":[2,0,0,8,4],
 "classeIDMW_1_1PTEID__Config.html#abcfafc76ca582a839aa2c12e18f566c5":[2,0,0,8,3],
-"classeIDMW_1_1PTEID__Config.html#ac13a66bfde0e4cf984aef63cee40afbd":[2,0,0,8,8],
-"classeIDMW_1_1PTEID__Config.html#ae3c09d588fede39f66f1433a3b946e33":[2,0,0,8,6],
+"classeIDMW_1_1PTEID__Config.html#ac13a66bfde0e4cf984aef63cee40afbd":[2,0,0,8,9],
+"classeIDMW_1_1PTEID__Config.html#ae3c09d588fede39f66f1433a3b946e33":[2,0,0,8,7],
 "classeIDMW_1_1PTEID__Config.html#aef06246ded36943e4bbbdc51e4444ad6":[2,0,0,8,2],
-"classeIDMW_1_1PTEID__Config.html#af34a9d1b496525230ba376923d143ce3":[2,0,0,8,7],
+"classeIDMW_1_1PTEID__Config.html#af34a9d1b496525230ba376923d143ce3":[2,0,0,8,8],
 "classeIDMW_1_1PTEID__Crypto.html":[2,0,0,9],
 "classeIDMW_1_1PTEID__Crypto.html#aaf8467cdcb3ce3eefe3f712f1ff85fe4":[2,0,0,9,1],
 "classeIDMW_1_1PTEID__Crypto.html#acc94f0caa8eed9ccbce91fbdec08402e":[2,0,0,9,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "classeIDMW_1_1PTEID__ExParamRange.html#aabe004014ae748f7488cd22f9d9c3e19":[2,0,0,26,1],
 "classeIDMW_1_1PTEID__ExReaderSetChanged.html":[2,0,0,27],
 "classeIDMW_1_1PTEID__ExReaderSetChanged.html#a9bac568502b71a8931bd058c710c8d4b":[2,0,0,27,1],
-"classeIDMW_1_1PTEID__ExReaderSetChanged.html#ac7fc10238e9b5e24bf8016c7d5864b5f":[2,0,0,27,0],
-"classeIDMW_1_1PTEID__ExReleaseNeeded.html":[2,0,0,28]
+"classeIDMW_1_1PTEID__ExReaderSetChanged.html#ac7fc10238e9b5e24bf8016c7d5864b5f":[2,0,0,27,0]
 };

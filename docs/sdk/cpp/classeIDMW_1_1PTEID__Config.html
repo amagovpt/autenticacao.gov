@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Portuguese eID Middleware SDK
-   &#160;<span id="projectnumber">Version: 3.1.0</span>
+   &#160;<span id="projectnumber">Version: 3.0.21</span>
    </div>
   </td>
  </tr>
@@ -93,6 +93,8 @@ $(document).ready(function(){initNavTree('classeIDMW_1_1PTEID__Config.html','');
 <div class="title">eIDMW::PTEID_Config Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;eidlib.h&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -112,6 +114,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a92d9ff4f6fcaeb669739fc0c619fbc3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac13a66bfde0e4cf984aef63cee40afbd"><td class="memItemLeft" align="right" valign="top">PTEIDSDK_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeIDMW_1_1PTEID__Config.html#ac13a66bfde0e4cf984aef63cee40afbd">setString</a> (const char *csValue)</td></tr>
 <tr class="separator:ac13a66bfde0e4cf984aef63cee40afbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a762f6bf96cd43a814826592cc342649a"><td class="memItemLeft" align="right" valign="top">PTEIDSDK_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeIDMW_1_1PTEID__Config.html#a762f6bf96cd43a814826592cc342649a">DeleteKeysByPrefix</a> ()</td></tr>
+<tr class="separator:a762f6bf96cd43a814826592cc342649a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af34a9d1b496525230ba376923d143ce3"><td class="memItemLeft" align="right" valign="top">PTEIDSDK_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeIDMW_1_1PTEID__Config.html#af34a9d1b496525230ba376923d143ce3">setLong</a> (long lValue)</td></tr>
 <tr class="separator:af34a9d1b496525230ba376923d143ce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classeIDMW_1_1PTEID__Object"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classeIDMW_1_1PTEID__Object')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classeIDMW_1_1PTEID__Object.html">eIDMW::PTEID_Object</a></td></tr>
@@ -157,7 +161,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:ad774cbc9eed36911fd462b670a776075 inherit pro_attribs_classeIDMW_1_1PTEID__Object"><td class="memItemLeft" align="right" valign="top">SDK_Context *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeIDMW_1_1PTEID__Object.html#ad774cbc9eed36911fd462b670a776075">m_context</a></td></tr>
 <tr class="separator:ad774cbc9eed36911fd462b670a776075 inherit pro_attribs_classeIDMW_1_1PTEID__Object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class to access and modify the config parameters of pteid-mw. These parameters are persisted in the Windows Registry under the HKEY_CURRENT_USER\Software\PTEID key or in the pteid.conf file of the current user (on Linux and MacOS systems) </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a2a4f69189f02ab26aba800d378b7d518"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2a4f69189f02ab26aba800d378b7d518">&#9670;&nbsp;</a></span>PTEID_Config() <span class="overload">[1/4]</span></h2>
 
@@ -309,6 +315,24 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a762f6bf96cd43a814826592cc342649a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a762f6bf96cd43a814826592cc342649a">&#9670;&nbsp;</a></span>DeleteKeysByPrefix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PTEIDSDK_API void eIDMW::PTEID_Config::DeleteKeysByPrefix </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Reset the strings with some prefix (Throw exception for numerical parameter) </p>
+
+</div>
+</div>
 <a id="a92d9ff4f6fcaeb669739fc0c619fbc3c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a92d9ff4f6fcaeb669739fc0c619fbc3c">&#9670;&nbsp;</a></span>getLong()</h2>
 
