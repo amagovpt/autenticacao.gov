@@ -395,10 +395,8 @@ Nesta aplicação poderá efetuar as seguintes operações:
 -   Gestão de PINs (Testar PIN, Alterar PIN).
 
 O aspeto e comportamentos da aplicação é semelhante nos três tipos de
-sistemas operativos, à exceção de algumas funcionalidades de registo de
-certificados. Esta está apenas disponível em Windows, visto, esta
-funcionalidade nativa, ser específica do sistema operativo Microsoft
-Windows.
+sistemas operativos, à exceção de algumas funcionalidades que estão apenas disponíveis em Windows, visto serem
+funcionalidades nativas ou configurações específicas do ambiente Windows.
 
 O atalho para a aplicação fica disponível em localizações diferentes
 consoante o tipo de sistema operativo:
