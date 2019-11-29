@@ -124,28 +124,6 @@ CByteArray APL_Card::sendAPDU(const CByteArray& cmd)
 	return out;
 }
 
-/*
-CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey)
-{
-	if(m_reader->isVirtualReader()) //Virtual Reader
-		return CByteArray();
-
-	CByteArray out;
-	BEGIN_CAL_OPERATION(m_reader)
-	tPrivKey signing_key;
-    //Private key IDs can be found with pkcs15-tool --list-keys from OpenSC package
-	if (signatureKey)
-		signing_key = m_reader->getCalReader()->GetPrivKeyByID(0x46);
-	else
-		signing_key = m_reader->getCalReader()->GetPrivKeyByID(0x45);
-
-	out = m_reader->getCalReader()->Sign(signing_key, SIGN_ALGO_RSA_PKCS, oData);
-	END_CAL_OPERATION(m_reader)
-
-	return out;
-}
-*/
-
 CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey, bool use_sha256)
 {
 	CByteArray out;

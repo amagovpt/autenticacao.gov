@@ -359,35 +359,12 @@ void APL_ReaderContext::CalLock()
 
 	m_cal_lock=true;
 
-	//try
-	//{
-	//	if(!isVirtualReader())
-	//		m_calreader->Lock();
-	//}
-	//catch(...)
-	//{
-	//	m_cal_lock=false;
-	//	m_cal_mutex.Unlock();
-	//	throw;
-	//}
 }
 
 void APL_ReaderContext::CalUnlock()
 {
 	if(!m_cal_lock)
 		throw CMWEXCEPTION(EIDMW_ERR_BAD_TRANSACTION);
-
-	//try
-	//{
-	//	if(!isVirtualReader())
-	//		m_calreader->Unlock();
-	//}
-	//catch(...)
-	//{
-	//	m_cal_lock=false;
-	//	m_cal_mutex.Unlock();
-	//	throw;
-	//}
 
 	m_cal_lock=false;
 

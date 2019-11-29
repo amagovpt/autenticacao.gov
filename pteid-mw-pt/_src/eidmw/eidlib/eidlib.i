@@ -861,7 +861,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") getEIDCard		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") BeginTransaction	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") EndTransaction	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") isVirtualReader	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") SetEventCallback	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") StopEventCallback	JAVA_CODE_THROW
 
