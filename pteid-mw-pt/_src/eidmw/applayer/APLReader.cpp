@@ -613,14 +613,13 @@ void CAppLayer::readerListInit(bool bForceRefresh)
 	}
 }
 
-//Update the version
+//Update the stored revision/build number
 void CAppLayer::updateVersion()
 {
 	try
 	{
 		APL_Config conf_BuildNbr(CConfig::EIDMW_CONFIG_PARAM_GENERAL_BUILDNBR);
 		conf_BuildNbr.ChangeLookupBehaviour(APL_Config::USER_ONLY);
-		long build = conf_BuildNbr.getLong();
 
 		conf_BuildNbr.setLong(REVISION_NUM);
 	}
