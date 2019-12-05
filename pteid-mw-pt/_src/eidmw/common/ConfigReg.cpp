@@ -47,6 +47,7 @@ const wchar_t *SC_CONF_REG = L"Software\\PTEID";
 
 namespace eIDMW
 { 
+bool CConfig::bTestModeEnabled = false;
 
 //constructor
 CConfig::CConfig(void)

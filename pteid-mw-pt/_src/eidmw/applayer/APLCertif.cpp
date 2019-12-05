@@ -227,7 +227,7 @@ void APL_Certifs::init(APL_SmartCard *card) {
 	m_certs_dir = certs_dir.getString();
 
 	//Load test certificates from different directory
-	if (strstr(sam_server.getString(), "teste") != NULL)
+    if (CConfig::isTestModeEnabled())
 		m_certs_dir = certs_dir_test.getString();
 
 	m_cryptoFwk=AppLayer.getCryptoFwk();

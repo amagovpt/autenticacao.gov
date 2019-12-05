@@ -295,6 +295,11 @@ void APL_Config::setLong(long lValue, bool system)
 	CConfig::SetLong((system?CConfig::SYSTEM:CConfig::USER),m_name,m_section,lValue);
 }
 
+void APL_Config::setTestMode(bool bTestMode)
+{
+	CConfig::SetTestMode(bTestMode);
+}
+
 void APL_Config::getSpecialValue()
 {
 	if(m_numtype)

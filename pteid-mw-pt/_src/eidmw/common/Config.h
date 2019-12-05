@@ -287,6 +287,8 @@ public:
     static void           DelString(tLocation location, const std::wstring &csName, const std::wstring &czSection);
     static void           DelLong(  tLocation location, const struct Param_Num param);
     static void           DelLong(  tLocation location, const std::wstring &csName, const std::wstring &czSection);
+    static bool isTestModeEnabled() { return bTestModeEnabled; }
+    static void SetTestMode(bool bTestMode) { bTestModeEnabled = bTestMode; return;}
 
 	//GENERAL
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR;
@@ -393,6 +395,8 @@ private:
     static CDataFile o_systemDataFile;
 
     static CMutex m_Mutex;	/**< Mutex for exclusive access */
+
+    static bool bTestModeEnabled;
 #ifdef WIN32
 #pragma warning(pop)
 #endif

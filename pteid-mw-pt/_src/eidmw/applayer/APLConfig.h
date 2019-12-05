@@ -55,6 +55,7 @@ public:
     EIDMW_APL_API void setString(const char *csValue, bool system=false);
     EIDMW_APL_API void setWString(const wchar_t *csValue, bool system=false);
 	EIDMW_APL_API void setLong(long lValue, bool system=false);
+    EIDMW_APL_API static void setTestMode(bool bTestMode);
     
 	enum tLookupBehaviour
     {

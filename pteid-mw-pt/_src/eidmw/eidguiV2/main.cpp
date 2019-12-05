@@ -14,7 +14,6 @@ using namespace eIDMW;
 int main(int argc, char *argv[])
 {
     int retValue = 0;
-    bool test_mode = false;
     const char * default_sam_server = NULL;
 
 	SingleApplication app(argc, argv);
@@ -46,16 +45,16 @@ int main(int argc, char *argv[])
 
     if (argc == 2 && strcmp(argv[1], "-test") == 0)
     {
-        test_mode = true;
+        PTEID_Config::SetTestMode(true);
         default_sam_server = strdup(sam_server.getString());
         sam_server.setString("pki.teste.cartaodecidadao.pt:443");
-        settings.setTestMode( test_mode );
-        if(test_mode)
-            qDebug() << "Starting App in test mode";
+        settings.setTestMode( true );
+        qDebug() << "Starting App in test mode";
     }
     else
     {
         //Force production mode
+        PTEID_Config::SetTestMode(false);
         sam_server.setString("pki.cartaodecidadao.pt:443");
     }
 

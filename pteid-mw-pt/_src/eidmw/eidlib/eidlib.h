@@ -1483,6 +1483,7 @@ public:
     PTEIDSDK_API void setString(const char *csValue);	/**< Set the string value (Throw exception for numerical parameter) */
     PTEIDSDK_API void DeleteKeysByPrefix();  	/**< Reset the strings with some prefix (Throw exception for numerical parameter) */
 	PTEIDSDK_API void setLong(long lValue);				/**< Set the numerical value (Throw exception for string parameter) */
+    PTEIDSDK_API static void SetTestMode(bool bTestMode);				/**< Set the test mode */
 
 private:
 	PTEID_Config(const PTEID_Config& config);				/**< Copy not allowed - not implemented */

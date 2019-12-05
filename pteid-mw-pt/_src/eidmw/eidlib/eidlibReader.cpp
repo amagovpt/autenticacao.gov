@@ -955,6 +955,18 @@ void PTEID_Config::setLong(long lValue)
 	}
 }
 
+void PTEID_Config::SetTestMode(bool bTestMode)
+{
+    try
+    {
+        CConfig::SetTestMode(bTestMode);
+    }
+    catch(CMWException &e)
+    {
+        throw PTEID_Exception::THROWException(e);
+    }
+}
+
 void PTEID_GetProxyFromPac(const char *pacFile, const char *url, std::string *proxy_host, std::string *proxy_port)
 {
 #ifdef WIN32

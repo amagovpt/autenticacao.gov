@@ -39,6 +39,7 @@ namespace eIDMW
 { 
 
   bool bIsInitialized = false;
+  bool CConfig::bTestModeEnabled = false;
 
   CDataFile CConfig::o_userDataFile;
   CDataFile CConfig::o_systemDataFile;
