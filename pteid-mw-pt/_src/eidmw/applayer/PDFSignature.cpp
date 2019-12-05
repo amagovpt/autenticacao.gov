@@ -1,3 +1,16 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2012-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2013 Vasco Dias - <vasco.dias@caixamagica.pt>
+ * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #include "poppler/Error.h"
 #include "poppler/PDFDoc.h"
 #include "poppler/Page.h"

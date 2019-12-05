@@ -1,3 +1,12 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2018-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 /*
         stdsoap2.h 2.8.49
 

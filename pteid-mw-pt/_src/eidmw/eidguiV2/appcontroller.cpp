@@ -1,3 +1,15 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #include "appcontroller.h"
 #include <QObject>
 #include <QCursor>

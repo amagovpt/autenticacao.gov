@@ -1,3 +1,14 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #ifndef APPCONTROLLER_H
 #define APPCONTROLLER_H
 

@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2014 André Guerreiro - <aguerreiro1985@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #include "ByteArray.h"
 
 namespace eIDMW

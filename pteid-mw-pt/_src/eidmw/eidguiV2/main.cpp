@@ -1,3 +1,14 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
+ * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>

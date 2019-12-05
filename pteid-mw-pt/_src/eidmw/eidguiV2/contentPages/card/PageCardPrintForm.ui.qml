@@ -1,3 +1,13 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 import QtQuick 2.6
 import QtQuick.Controls 2.1
 import QtGraphicalEffects 1.0

@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #ifndef ERRORCONNECTION_H_
 #define ERRORCONNECTION_H_
 

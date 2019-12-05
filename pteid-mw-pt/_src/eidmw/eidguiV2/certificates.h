@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #ifndef CERTIFICATES_H
 #define CERTIFICATES_H
 

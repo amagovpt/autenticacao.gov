@@ -1,13 +1,21 @@
-/**
-*
-**  PTeID Middleware Project.
-**  Copyright (C) 2011-2012
-**  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
-**
-**  XAdES and XAdES-T signature generator and validator
-**
-*/
+/*-****************************************************************************
 
+ * Copyright (C) 2012-2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012 Vasco Silva - <vasco.silva@caixamagica.pt>
+ * Copyright (C) 2013 Vasco Dias - <vasco.dias@caixamagica.pt>
+ * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
+/*
+ *  XAdES and XAdES-T signature generator and validator
+ *
+*/
 
 #include <iostream>
 #include <fstream>

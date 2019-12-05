@@ -1,3 +1,13 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2012, 2017, 2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012 Rui Martinho - <rui.martinho@ama.pt>
+ * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
     
 #include <cstdio>
 #include <cstring>

@@ -1,3 +1,13 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #include "CMDSignature.h"
 #include "eidlib.h"
 #include "eidErrors.h"

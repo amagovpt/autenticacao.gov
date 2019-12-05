@@ -1,3 +1,15 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2012-2014, 2016-2017 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012 Vasco Silva - <vasco.silva@caixamagica.pt>
+ * Copyright (C) 2013 Vasco Dias - <vasco.dias@caixamagica.pt>
+ * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #ifndef XADESSIG_H
 #define XADESSIG_H
 #include <xercesc/dom/DOM.hpp>

@@ -1,3 +1,15 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2012-2014, 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #ifndef __PDF_SIGNATURE_H
 #define __PDF_SIGNATURE_H
 

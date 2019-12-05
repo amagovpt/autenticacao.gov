@@ -1,3 +1,14 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017-2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2018 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
+ * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 /****************************************************************************
 **
 ** Copyright (C) 2015 The Qt Company Ltd.

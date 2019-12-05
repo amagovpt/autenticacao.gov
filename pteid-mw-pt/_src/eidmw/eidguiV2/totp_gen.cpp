@@ -1,3 +1,13 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2018-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ * Copyright (C) 2018-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

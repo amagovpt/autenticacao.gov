@@ -1,3 +1,12 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 /******************************************************************************//**
 * Compatibility layer
 	

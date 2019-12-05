@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 // stdafx.h : include file for standard system include files,
 // or project specific include files that are used frequently, but
 // are changed infrequently

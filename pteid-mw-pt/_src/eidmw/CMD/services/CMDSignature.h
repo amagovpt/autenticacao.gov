@@ -1,3 +1,13 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2017, 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #ifndef PDF_SIGNATURE_CLI_H
 #define PDF_SIGNATURE_CLI_H
 

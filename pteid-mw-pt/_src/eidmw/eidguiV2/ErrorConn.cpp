@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #include "ErrorConn.h"
 #include "SCAP-services-v3/SCAPH.h"
 

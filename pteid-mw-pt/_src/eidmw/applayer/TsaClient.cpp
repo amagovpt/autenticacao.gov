@@ -1,3 +1,13 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2013-2014, 2016-2017, 2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2013 Vasco Dias - <vasco.dias@caixamagica.pt>
+ * Copyright (C) 2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 
 //cURL for Timestamping
 #include <curl/curl.h>

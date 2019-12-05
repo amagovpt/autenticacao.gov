@@ -1,3 +1,13 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #ifndef CMD_CLIENT_H
 #define CMD_CLIENT_H
 

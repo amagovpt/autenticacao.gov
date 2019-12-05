@@ -1,3 +1,13 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2012-2013, 2017 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #include <openssl/x509.h>
 #include <openssl/pkcs7.h>
 #include <vector>

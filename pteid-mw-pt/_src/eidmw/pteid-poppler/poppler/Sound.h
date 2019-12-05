@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2012 André Guerreiro - <aguerreiro1985@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 /* Sound.h - an object that holds the sound structure
  * Copyright (C) 2006-2007, Pino Toscano <pino@kde.org>
  *

@@ -1,3 +1,14 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 import QtQuick 2.6
 import QtQuick.Controls 2.1
 

@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2012 André Guerreiro - <aguerreiro1985@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 /* This file is part of Libspectre.
  * 
  * Copyright (C) 2007 Albert Astals Cid <aacid@kde.org>

@@ -1,13 +1,17 @@
-/* ***************************************************************************
+/*-****************************************************************************
+
+ * Copyright (C) 2016-2017 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2016 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  *
- *  PTeID Middleware Project.
- *  Copyright (C) 2016 - 2017
- *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
- *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
+/*
  *  Secure Messaging implementation for cards with IAS applet V3
  *  It mostly follows the open specification CWA 14890-1 specifically its chapter 9 
  *  It uses Diffie-Hellman key exchange, Retail MAC and 3DES-CBC for encryption
- **/
+*/
 
 
 #include <openssl/dh.h>

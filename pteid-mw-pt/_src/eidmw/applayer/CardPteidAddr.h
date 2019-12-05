@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #ifndef CARDPTEIDADDR_H_INCLUDED
 #define CARDPTEIDADDR_H_INCLUDED
 

@@ -1,3 +1,14 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #ifndef GAPI_H
 #define GAPI_H
 

@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2012, 2014, 2016 André Guerreiro - <aguerreiro1985@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 /* poppler/poppler-config.h.  Generated from poppler-config.h.in by configure.  */
 //================================================= -*- mode: c++ -*- ====
 //

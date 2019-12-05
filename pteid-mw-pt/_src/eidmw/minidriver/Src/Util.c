@@ -1,3 +1,13 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
+ * Copyright (C) 2011, 2016, 2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 /* ****************************************************************************
 
 * eID Middleware Project.

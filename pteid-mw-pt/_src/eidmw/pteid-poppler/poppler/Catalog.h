@@ -1,3 +1,13 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2012-2014, 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 //========================================================================
 //
 // Catalog.h

@@ -1,3 +1,14 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2012-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 
 #include <cstdio>
 #include <cstring>

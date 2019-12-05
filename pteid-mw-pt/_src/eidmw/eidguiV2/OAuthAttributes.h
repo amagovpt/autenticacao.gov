@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #ifndef OAUTH_ATTRIBUTES_H_
 #define OAUTH_ATTRIBUTES_H_
 

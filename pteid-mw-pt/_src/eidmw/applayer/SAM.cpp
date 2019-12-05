@@ -1,12 +1,15 @@
-/* ****************************************************************************
+/*-****************************************************************************
+
+ * Copyright (C) 2014, 2016-2017 André Guerreiro - <aguerreiro1985@gmail.com>
  *
- *  PTeID Middleware Project.
- *  Copyright (C) 2014 - 2017
- *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
- *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
+/*
  *  Card interaction necessary for the Change Address Operation
  *  mainly Diffie-Hellman key agreement and mutual authentication with CVC certificates
- **/
+ */
 
 #include "APLCard.h"
 #include "APLCardPteid.h"

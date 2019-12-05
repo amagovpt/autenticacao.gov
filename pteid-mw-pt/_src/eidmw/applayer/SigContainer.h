@@ -1,3 +1,13 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2012, 2014, 2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012 Rui Martinho - <rui.martinho@ama.pt>
+ * Copyright (C) 2018 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #ifndef SIGCONTAINER_H
 #define SIGCONTAINER_H
 

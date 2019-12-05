@@ -2,6 +2,10 @@
 
  * eID Middleware Project.
  * Copyright (C) 2008-2009 FedICT.
+ * Copyright (C) 2019 Caixa Magica Software.
+ * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
+ * Copyright (C) 2011-2012, 2017, 2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2011 lmcm - <lmcm@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version

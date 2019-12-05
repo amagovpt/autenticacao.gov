@@ -1,3 +1,14 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 //STD Library
 #include <iostream>
 #include <string>

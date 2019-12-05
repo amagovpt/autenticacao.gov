@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #include <string.h>
 #include <string>
 

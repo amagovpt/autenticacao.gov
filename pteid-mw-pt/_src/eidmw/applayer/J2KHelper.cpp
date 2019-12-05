@@ -1,3 +1,12 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ * Copyright (C) 2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #include <stdlib.h>
 
 #include "J2KHelper.h"

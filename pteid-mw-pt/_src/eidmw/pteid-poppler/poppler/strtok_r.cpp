@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2012 André Guerreiro - <aguerreiro1985@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 /* Reentrant string tokenizer.  Generic version.
    Copyright (C) 1991,1996-1999,2001,2004 Free Software Foundation, Inc.
    This file is part of the GNU C Library.

@@ -1,9 +1,15 @@
-/* ****************************************************************************
+/*-****************************************************************************
+
+ * Copyright (C) 2012-2014, 2016-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012 Vasco Silva - <vasco.silva@caixamagica.pt>
+ * Copyright (C) 2016 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ * Copyright (C) 2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
- *  PTeID Middleware Project.
- *  Copyright (C) 2011 - 2017
- *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
- *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
+/*
  *  HTTPS Client with Client Certificate Authentication for PT-eID Middleware
  *  It provides the communication protocol to the Address Change WebServices
  *

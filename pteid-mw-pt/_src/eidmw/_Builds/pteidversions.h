@@ -1,3 +1,14 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
+ * Copyright (C) 2011-2014, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012 lmcm - <lmcm@caixamagica.pt>
+ * Copyright (C) 2018-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #ifndef __PTEID_VERSION_H__
 #define __PTEID_VERSION_H__
 

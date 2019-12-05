@@ -1,12 +1,19 @@
-/* ****************************************************************************
+/*-****************************************************************************
+
+ * Copyright (C) 2012, 2014, 2016-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2016 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
- *  PTeID Middleware Project.
- *  Copyright (C) 2012-2019
- *  Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
+/* 
  *  Signature container for XAdES signature file and associated signed file(s) -
  *  It should be compliant with the ASiC specification EN 319 162-1 -
  *  https://www.etsi.org/deliver/etsi_en/319100_319199/31916201/01.01.01_60/en_31916201v010101p.pdf
- */
+*/
 
 #include <fstream>
 #include <cstring>

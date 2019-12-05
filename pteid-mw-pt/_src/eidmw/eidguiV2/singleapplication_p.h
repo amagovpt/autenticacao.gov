@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 // The MIT License (MIT)
 //
 // Copyright (c) Itay Grudev 2015 - 2016

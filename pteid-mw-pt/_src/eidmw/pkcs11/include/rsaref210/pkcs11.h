@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 /* pkcs11.h include file for PKCS #11.  2001 June 25 */
 
 #ifndef _PKCS11_H_

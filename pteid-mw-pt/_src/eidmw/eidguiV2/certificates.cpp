@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2017, 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #include "certificates.h"
 #include <QObject>
 #include <QDebug>

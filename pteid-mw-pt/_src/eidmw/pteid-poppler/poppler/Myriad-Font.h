@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2012, 2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ *
+ * Licensed under the EUPL V.1.1
+
+****************************************************************************-*/
+
 #ifndef __MYRIAD_FONT_H__
 #define __MYRIAD_FONT_H__
 
