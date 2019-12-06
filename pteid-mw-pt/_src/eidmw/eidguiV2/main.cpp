@@ -8,6 +8,7 @@
 #include "gapi.h"
 #include "eidlib.h"
 #include "singleapplication.h"
+#include <QDesktopWidget> 
 
 using namespace eIDMW;
 
@@ -16,6 +17,18 @@ int main(int argc, char *argv[])
     int retValue = 0;
     bool test_mode = false;
     const char * default_sam_server = NULL;
+    //QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling); Uncomment after migration to Qt 5.12
+    
+    {
+        // Delete this block after migration to Qt 5.12
+        // QApplication::desktop() requires the creation of a QApplication first, so a temp is created. 
+        // The setting of the env var must be done before the application instance is contructed
+        QApplication temp(argc, argv);
+        double scale = QApplication::desktop()->logicalDpiX() / 96.0;
+        std::string scaleAsString = std::to_string(scale);
+        QByteArray scaleAsQByteArray(scaleAsString.c_str(), (int)scaleAsString.length());
+        qputenv("QT_SCALE_FACTOR", scaleAsQByteArray);
+    }
 
 	SingleApplication app(argc, argv);
 

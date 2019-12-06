@@ -112,6 +112,7 @@
             <Directory Id="CSHARP_SDK" Name="dotnet"/>
           </Directory>
           <Directory Id="WEBDIR" Name="web"/>
+          <Directory Id="FONTSDIR" Name="fonts"/>
           <Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
 
         </Directory>
@@ -226,6 +227,12 @@
       <Component Id="OAuthPages" Guid="{08F97C8A-7A73-427F-B0F1-86D26ECBAA7E}">
         <File Source="..\..\web\AutenticacaoGov.html" KeyPath="yes" />
         <File Source="..\..\web\AutenticacaoGov_failed.html" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="FONTSDIR">
+      <Component Id="LatoFont" Guid="{d2c0624a-1839-11ea-8d71-362b9e155667}">
+        <File Source="..\..\..\eidguiV2\fonts\lato\Lato-Regular.ttf" KeyPath="yes" />
       </Component>
     </DirectoryRef>
     
@@ -431,6 +438,7 @@
       <ComponentRef Id="License"/>
       <ComponentRef Id="LogDir"/>
       <ComponentRef Id="OAuthPages"/>
+      <ComponentRef Id="LatoFont"/>
 
       <!-- System32 -->
       <ComponentRef Id="Runtime35"/>

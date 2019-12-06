@@ -3303,3 +3303,14 @@ std::string GAPI::getCMDBasicAuthPassword() {
     }
     return CMD_BASIC_AUTH_PASSWORD;
 }
+
+QString GAPI::getFontFile(QString font) {
+    std::string fontFile = "file:///";
+    fontFile.append(utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR)));
+    if (font.compare("lato") == 0)
+    {
+        fontFile.append("\\fonts\\Lato-Regular.ttf");
+        return QString(fontFile.c_str());
+    }
+    return "";
+}

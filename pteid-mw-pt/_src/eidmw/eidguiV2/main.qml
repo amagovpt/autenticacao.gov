@@ -22,8 +22,11 @@ Window {
 
     title: "Autenticação.Gov"
 
-    FontLoader { id: lato; source: "qrc:/fonts/lato/Lato-Regular.ttf" }
-
+    FontLoader { 
+        id: lato;
+        source: gapi.getFontFile("lato")
+     }
+    
     onWidthChanged: {
         console.log("Resizing app width: " + width + "height" + height)
         mainFormID.propertyMainMenuView.width = Functions.getMainMenuWidth(width)
@@ -153,6 +156,7 @@ Load language error. Please reinstall the application"
             bottomPadding: 0
             font.bold: activeFocus
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
+            font.family: lato.name
             color: Constants.COLOR_MAIN_BLUE
             KeyNavigation.tab: textAutoupdate
             KeyNavigation.down: textAutoupdate
@@ -198,6 +202,7 @@ Load language error. Please reinstall the application"
             anchors.left: parent.left
             text: qsTranslate("Popup File", "STR_POPUP_FILE_CANCEL")
             font.capitalization: Font.MixedCase
+            font.family: lato.name
             KeyNavigation.tab: buttonInstallUpdate
             KeyNavigation.right: buttonInstallUpdate
             KeyNavigation.up: textAutoupdate
@@ -216,6 +221,7 @@ Load language error. Please reinstall the application"
             anchors.right: parent.right
             text: qsTr("STR_UPDATE_INSTALL_BUTTON")
             font.capitalization: Font.MixedCase
+            font.family: lato.name
             KeyNavigation.tab: labelTextTitle
             KeyNavigation.right: labelTextTitle
             KeyNavigation.left: buttonCancelUpdate
@@ -264,6 +270,7 @@ Load language error. Please reinstall the application"
             bottomPadding: 0
             font.bold: true
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
+            font.family: lato.name
             color: Constants.COLOR_MAIN_BLUE
         }
         Item {
