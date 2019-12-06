@@ -19,6 +19,8 @@ Existem SDK's para as linguagens C, C++, JAVA e C#.
 
 Poderá aceder ao manual no seguinte URL:
 
+[Manual do SDK (online)](https://amagovpt.github.io/autenticacao.gov/manual_sdk.html)
+
 [Manual do SDK (download pdf)](docs/Manual_de_SDK.pdf)
 
 A documentação da API disponibilizada pelo SDK está disponível nos seguintes URLs:
