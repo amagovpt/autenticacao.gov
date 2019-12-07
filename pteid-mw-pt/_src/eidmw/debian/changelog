@@ -1,3 +1,9 @@
+pteid-mw (3.0.21+git20191206-3795abb9-1) UNRELEASED; urgency=medium
+
+  * Version is now 3.0.21
+  * The current use of libxml-security-c-dev depends on a version lower than 2.0
+
+ -- Marcos Marado <mindboosternoori@gmail.com>  Sun, 07 Dec 2019 18:17:12 +0100
 pteid-mw (3.0.20+git20190930-e547bd9d-1) UNRELEASED; urgency=medium
 
   * Address change bugfix for cards issued since May 2019

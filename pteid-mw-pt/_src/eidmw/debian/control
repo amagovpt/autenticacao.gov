@@ -18,7 +18,7 @@ Build-Depends: debhelper (>= 7.0.50~),
                qml-module-qtquick-controls2,	
                libssl1.0-dev,
                libxerces-c-dev,
-               libxml-security-c-dev,
+               libxml-security-c-dev (< 2),
                swig,
                libcurl4-nss-dev
 Standards-Version: 3.9.1
