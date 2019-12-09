@@ -51,6 +51,14 @@ Window {
     }
     onYChanged: {
     }
+    onClosing:{
+        // check for unsaved notes when closing application
+        close.accepted = false;
+        if(!handleUnsavedNotes(-1,"", Constants.QUIT_APPLICATION)){
+            gapi.quitApplication();
+        }
+
+    }
 
     Connections {
         target: controler
@@ -502,6 +510,8 @@ Load language error. Please reinstall the application"
                     mainFormID.propertyPageLoader.source = unsaved_notes_dialog.url
                     mainFormID.propertySubMenuListView.forceActiveFocus()
                     break;
+                case Constants.QUIT_APPLICATION:
+                    gapi.quitApplication()
             }
         }
         onClosed: {

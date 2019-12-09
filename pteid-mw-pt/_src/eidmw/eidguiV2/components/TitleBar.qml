@@ -156,7 +156,7 @@ Item {
                 id: mouseAreaQuitButton
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked: quitApplication()
+                onClicked: mainWindow.close()
             }
         }
         MouseArea {
@@ -205,8 +205,4 @@ Item {
         }        
     }
 
-    function quitApplication() {
-        //mainWindow.hide()
-        gapi.quitApplication()
-    }
 }
