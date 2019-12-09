@@ -3306,11 +3306,19 @@ std::string GAPI::getCMDBasicAuthPassword() {
 
 QString GAPI::getFontFile(QString font) {
     std::string fontFile = "file:///";
-    fontFile.append(utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR)));
+#ifdef WIN32
+    fontFile.append(utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR))).append("\\fonts\\");
+#else
+    fontFile.append("usr/local/share/fonts/");
+#endif
+
     if (font.compare("lato") == 0)
     {
-        fontFile.append("\\fonts\\Lato-Regular.ttf");
-        return QString(fontFile.c_str());
+        fontFile.append("Lato-Regular.ttf");
     }
-    return "";
+    else{
+        return "";
+    }
+
+    return QString(fontFile.c_str());
 }
