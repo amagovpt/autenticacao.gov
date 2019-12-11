@@ -413,6 +413,7 @@ signals:
     void signalCardChanged(const int error_code);
     void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage);
     void signalCertificatesChanged(const QVariantMap certificatesMap);
+    void signalCertificatesFail();
     void signalShowCardActivation(QString statusMessage);
     void signalTestPinFinished(int triesLeft, int pin);
     void signalModifyPinFinished(int triesLeft, int pin);

@@ -3145,10 +3145,13 @@ void GAPI::fillCertificateList(void)
     buildTree(certificates.getCert(PTEID_Certificate::CITIZEN_SIGN), noIssuer, certificatesMap);
     if (noIssuer)
     {
-        qDebug() << "fillCertificateList failed because certificate chain couldn't be completed!";
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "Certificate chain couldn't be completed!");
+        qDebug() << "Certificate chain couldn't be completed!";
+        emit signalCertificatesFail();
+    } else {
+        emit signalCertificatesChanged(certificatesMap);
     }
 
-    emit signalCertificatesChanged(certificatesMap);
     END_TRY_CATCH
 }
 

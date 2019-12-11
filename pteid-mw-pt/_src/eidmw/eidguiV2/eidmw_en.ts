@@ -5,7 +5,7 @@
     <name>GAPI</name>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="339"/>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="244"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="259"/>
         <location filename="gapi.cpp" line="327"/>
         <source>STR_POPUP_SUCESS</source>
         <translation>Success</translation>
@@ -193,7 +193,7 @@
     <message>
         <location filename="gapi.cpp" line="686"/>
         <source>STR_TIME_STAMP_FAILED</source>
-        <translation type="unfinished">But the timestamp could not be applied.</translation>
+        <translation>But the timestamp could not be applied.</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="767"/>
@@ -1601,48 +1601,48 @@
         <translation>The Autenticação.Gov application allows keyboard navigation and supports the use of a screen reader.</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="97"/>
+        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="93"/>
         <source>STR_HELP_ACCESSIBILITY_MENUS</source>
         <oldsource>STR_HELP_ACCESSIBILITY_TOPIC</oldsource>
         <translation>The keys used to navigate through the menus are:</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="107"/>
+        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="103"/>
         <source>STR_HELP_ACCESSIBILITY_MENUS_1</source>
         <translation>TAB or down arrow - select and read next option.</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="112"/>
+        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="108"/>
         <source>STR_HELP_ACCESSIBILITY_MENUS_2</source>
         <translation>SHIFT-TAB or up arrow - select and read previous option.</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="117"/>
+        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="113"/>
         <source>STR_HELP_ACCESSIBILITY_MENUS_3</source>
         <translation>ENTER or right arrow - enter selected menu option and read first suboption.</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="146"/>
+        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="137"/>
         <source>STR_HELP_ACCESSIBILITY_PAGES</source>
         <translation>The keys used to navigate in the pages are:</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="166"/>
+        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="157"/>
         <source>STR_HELP_ACCESSIBILITY_PAGES_1</source>
         <translation>ESC - exit the page.</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="156"/>
+        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="147"/>
         <source>STR_HELP_ACCESSIBILITY_PAGES_2</source>
         <translation>TAB, down arrow or right arrow - select and read next element.</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="161"/>
+        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="152"/>
         <source>STR_HELP_ACCESSIBILITY_PAGES_3</source>
         <translation>SHIT-TAB, up arrow or left arrow - select the previous element.</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="171"/>
+        <location filename="contentPages/help/PageHelpAccessibilityForm.ui.qml" line="162"/>
         <source>STR_HELP_ACCESSIBILITY_PAGES_4</source>
         <translation>The keys ENTER or SPACE activate the buttons.</translation>
     </message>
@@ -1737,54 +1737,60 @@
 <context>
     <name>PageSecurityCertificates</name>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="305"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="320"/>
         <source>STR_STATUS_NETWORK_ERROR</source>
         <translation>Could not validate certificate. Please check your Internet connection.</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="299"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="314"/>
         <source>STR_STATUS_REVOKED</source>
         <translation>Revoked</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="317"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="332"/>
         <source>STR_STATUS_EXPIRED</source>
         <translation>Expired</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="302"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="317"/>
         <source>STR_STATUS_SUSPENDED</source>
         <translation>Inactive or Suspended</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="246"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="112"/>
+        <source>STR_CERT_CHAIN_ERROR</source>
+        <oldsource>STR__CERT_CHAIN_ERROR</oldsource>
+        <translation>Certificate chain couldn&apos;t be completed!</translation>
+    </message>
+    <message>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="261"/>
         <source>STR_EXPORT_CERTIFICATE_SUCCESS</source>
         <translation>The certificate was successfully exported to file.</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="252"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="267"/>
         <source>STR_EXPORT_CERTIFICATE_FAILED</source>
         <translation>An error occurred while exporting certificate to file.</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="308"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="323"/>
         <source>STR_STATUS_ISSUER</source>
         <translation>An issuer is missing in the certificate chain</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="311"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="326"/>
         <source>STR_STATUS_ERROR</source>
         <translation>Could not validate certificate. Please check your Internet connection.</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="314"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="329"/>
         <source>STR_STATUS_VALID</source>
         <translation>Valid</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="291"/>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="296"/>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="320"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="306"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="311"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="335"/>
         <source>STR_STATUS_UNKNOWN</source>
         <translation>Unknown</translation>
     </message>
@@ -2312,7 +2318,8 @@
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="55"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="61"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="67"/>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="250"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="110"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="265"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="61"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="67"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="73"/>
@@ -2586,12 +2593,12 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSignSettings.qml" line="38"/>
         <source>STR_POPUP_REGISTER_CERTIFICATE</source>
-        <translation type="unfinished">Certificate Register</translation>
+        <translation>Certificate Register</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSignSettings.qml" line="51"/>
         <source>STR_POPUP_REMOVE_CERTIFICATE</source>
-        <translation type="unfinished">Certificate Removal</translation>
+        <translation>Certificate Removal</translation>
     </message>
 </context>
 <context>

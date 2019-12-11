@@ -101,6 +101,21 @@ PageSecurityCertificatesForm {
             mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
             mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
         }
+        onSignalCertificatesFail: {
+            propertyBusyIndicator.running = false
+            propertyButtonViewCertificate.enabled = false
+            propertyButtonExportCertificate.enabled = false
+
+            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
+                    qsTranslate("Popup Card","STR_POPUP_ERROR")
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
+                    qsTranslate("PageSecurityCertificates","STR_CERT_CHAIN_ERROR")
+
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+        }
+
         onSignalCertificatesChanged: {
 
             console.log("Certificates Added: "+ certificatesMap.levelCount)
