@@ -866,27 +866,32 @@
         <translation>Gravar Notas</translation>
     </message>
     <message>
-        <location filename="main.qml" line="386"/>
+        <location filename="main.qml" line="388"/>
         <source>STR_UNSAVED_NOTES_TITLE</source>
-        <translation>Notas</translation>
+        <translation>Alterações de notas não gravadas</translation>
     </message>
     <message>
-        <location filename="main.qml" line="401"/>
+        <location filename="main.qml" line="403"/>
         <source>STR_UNSAVED_NOTES</source>
         <translation>Notas por gravar</translation>
     </message>
     <message>
-        <location filename="main.qml" line="417"/>
+        <location filename="main.qml" line="420"/>
+        <source>STR_UNSAVED_NOTES_DESCRIPTION_EXIT</source>
+        <translation>Pressione &quot;Permanecer&quot; para continuar a editar as notas ou &quot;Sair&quot; para sair da aplicação sem gravar as notas.</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="421"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION</source>
         <translation>Pressione &quot;Permanecer&quot; para continuar a editar as notas ou &quot;Sair&quot; para sair desta página sem guardar as notas.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="441"/>
+        <location filename="main.qml" line="445"/>
         <source>STR_UNSAVED_NOTES_LEAVE</source>
         <translation>Sair</translation>
     </message>
     <message>
-        <location filename="main.qml" line="465"/>
+        <location filename="main.qml" line="469"/>
         <source>STR_UNSAVED_NOTES_STAY</source>
         <translation>Permanecer</translation>
     </message>

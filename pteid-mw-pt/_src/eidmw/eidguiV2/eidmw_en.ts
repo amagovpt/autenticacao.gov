@@ -868,27 +868,32 @@
         <translation>Save Notes</translation>
     </message>
     <message>
-        <location filename="main.qml" line="386"/>
+        <location filename="main.qml" line="388"/>
         <source>STR_UNSAVED_NOTES_TITLE</source>
-        <translation>Notes</translation>
+        <translation>Unsaved changes in personal notes</translation>
     </message>
     <message>
-        <location filename="main.qml" line="401"/>
+        <location filename="main.qml" line="403"/>
         <source>STR_UNSAVED_NOTES</source>
         <translation>Unsaved Notes</translation>
     </message>
     <message>
-        <location filename="main.qml" line="417"/>
+        <location filename="main.qml" line="420"/>
+        <source>STR_UNSAVED_NOTES_DESCRIPTION_EXIT</source>
+        <translation>Press &quot;Stay&quot; to continue editing notes or press &quot;Leave&quot; to exit the aplication without saving the notes.</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="421"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION</source>
         <translation>Press &quot;Stay&quot; to continue editing notes or press &quot;Leave&quot; to exit this page without saving the notes.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="441"/>
+        <location filename="main.qml" line="445"/>
         <source>STR_UNSAVED_NOTES_LEAVE</source>
         <translation>Leave</translation>
     </message>
     <message>
-        <location filename="main.qml" line="465"/>
+        <location filename="main.qml" line="469"/>
         <source>STR_UNSAVED_NOTES_STAY</source>
         <translation>Stay</translation>
     </message>

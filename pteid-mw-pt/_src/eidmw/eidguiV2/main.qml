@@ -371,6 +371,8 @@ Load language error. Please reinstall the application"
         height: 200
         visible: false
         font.family: lato.name
+        modal: true
+        closePolicy: Popup.CloseOnEscape
 
         // to save last menu pressed before dialog opens
         property int index: -1
@@ -414,7 +416,9 @@ Load language error. Please reinstall the application"
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: labelText
-                    text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_DESCRIPTION") + controler.autoTr
+                    text: unsaved_notes_dialog.menu == Constants.QUIT_APPLICATION ?
+                            qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_DESCRIPTION_EXIT") + controler.autoTr :
+                            qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_DESCRIPTION") + controler.autoTr
                     font.bold: activeFocus
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
