@@ -670,12 +670,13 @@ criptográficas da mesma.
 
 ### Segurança
 
-A aplicação permite efetuar operações relativas a segurança do Cartão de
+A aplicação permite efetuar operações relativas à segurança do Cartão de
 Cidadão.
 
 #### Certificados
 
-Neste menu é possível visualizar os certificados do Estado e do cidadão.
+Neste menu é possível verificar os certificados do Cidadão e a cadeia de confiança formada pelas várias Entidades de Certificação do Cartão de Cidadão e do Estado Português.
+O preenchimento do campo "Estado do certificado" corresponde a uma validação junto da Infraestrutura do Cartão de Cidadão e como tal exige ligação à Internet.
 
 ![Ilustração: Visualização do certificados](Pictures/Autenticacao.Gov_certificados.png "Visualização do certificados"){:.center}
 
@@ -746,7 +747,7 @@ Seguidamente, deverá clicar num dos botões de carregamento de atributos, conso
 Nesta janela é possível configurar alguns aspetos do funcionamento da
 aplicação, nomeadamente:
 
-- **Leitor de Cartões:** Permite selecionar o leitor de cartões a utilizar.\
+- **Leitor de Cartões:** Permite selecionar o leitor de cartões a utilizar.
   Existe também uma opção que permite ativar ou desativar a funcionalidade PINPAD (Os leitores com PINPAD são os leitores de cartões que possuem teclado para introdução segura do código PIN) nos leitores. Se esta opção estiver desativada, os leitores com PINPAD terão comportamento idêntico aos leitores sem PINPAD.
 
 - **Início:** Opções relativas ao arranque da aplicação.
