@@ -250,6 +250,9 @@
     <None Include="contentPages\definitions\PageDefinitionsData.qml" />
     <None Include="contentPages\services\PageServicesSignHelp.qml" />
     <None Include="contentPages\services\PageServicesSignHelpForm.ui.qml" />
+    <None Include="contentPages\help\PageHelpAccessibility.qml" />
+    <None Include="contentPages\help\PageHelpAccessibilityForm.ui.qml" />
+    <None Include="components\TextRow.qml" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="gapi.h">

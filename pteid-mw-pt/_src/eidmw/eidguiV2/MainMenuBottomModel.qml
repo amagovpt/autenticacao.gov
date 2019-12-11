@@ -61,6 +61,11 @@ ListModel {
                 url: "contentPages/help/PageHelpDocOnline.qml"
             },
             ListElement {
+                subName: QT_TR_NOOP("STR_MENU_ACCESSIBILITY")
+                expand: false
+                url: "contentPages/help/PageHelpAccessibility.qml"
+            },
+            ListElement {
                 subName: QT_TR_NOOP("STR_MENU_ABOUT")
                 expand: false
                 url: "contentPages/help/PageHelpAbout.qml"

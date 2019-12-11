@@ -20,6 +20,8 @@
         <file>contentPages/help/PageHelpAboutForm.ui.qml</file>
         <file>contentPages/help/PageHelpDocOnline.qml</file>
         <file>contentPages/help/PageHelpDocOnlineForm.ui.qml</file>
+        <file>contentPages/help/PageHelpAccessibility.qml</file>
+        <file>contentPages/help/PageHelpAccessibilityForm.ui.qml</file>
         <file>contentPages/home/PageHome.qml</file>
         <file>contentPages/home/PageHomeForm.ui.qml</file>
         <file>images/logo_autenticacao_gov.png</file>
@@ -93,5 +95,6 @@
         <file>appicon.ico</file>
         <file>images/arrow-down_hover.png</file>
         <file>images/arrow-down_AMA.png</file>
+        <file>components/TextRow.qml</file>
     </qresource>
 </RCC>

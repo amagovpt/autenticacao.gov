@@ -119,13 +119,14 @@ Rectangle {
             }
             Button {
                 id: imageLogoBottom
-                text: "Autenticação Gov"
+                text: Accessible.name
                 width: imageLogo.width
                 height: imageLogo.height
                 y: imageLogo.y
                 anchors.horizontalCenter: parent.horizontalCenter
                 opacity: 0
                 Accessible.role: Accessible.Button
+                Accessible.name: qsTranslate("main","STR_IMAGE_LOGO_ACCESSIBLE_NAME")
                 Keys.onBacktabPressed: {
                     mainMenuBottomListView.currentIndex = 1
                     mainMenuBottomListView.forceActiveFocus()

@@ -215,6 +215,9 @@ var HEIGHT_DOC_ONLINE_ROW_TOP_INC_RELATIVE = 0.40
 // Help Doc About
 var HEIGHT_HELP_ABOUT_ROW_TOP_V_RELATIVE = 0.10
 var HEIGHT_HELP_ABOUT_ROW_TOP_INC_RELATIVE = 0.40
+// Help Accessibility
+var HEIGHT_HELP_ACCESSIBILITY_ROW_TOP_V_RELATIVE = 0.07
+var HEIGHT_HELP_ACCESSIBILITY_ROW_TOP_INC_RELATIVE = 0.40
 
 // Creates a JS Enum, making it impossible to update
 var MenuState = Object.freeze({
