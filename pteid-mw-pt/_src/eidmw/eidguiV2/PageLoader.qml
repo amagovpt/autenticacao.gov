@@ -141,6 +141,8 @@ Loader{
             }
         }
         onClosed: {
+            // return to normal main window opacity
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             setReturnFocus(propertyGeneralPopUpRetSubMenu)
         }
         onOpened: {
@@ -159,5 +161,16 @@ Loader{
         } else {
             mainFormID.propertySubMenuListView.forceActiveFocus()
         }
+    }
+
+    function activateGeneralPopup(titlePopup, bodyPopup, returnToSubMenuWhenClosed){
+        titleText.text = titlePopup
+        labelText.propertyText.text = bodyPopup
+        mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = returnToSubMenuWhenClosed;
+
+        // reduce main window opacity
+        mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+        generalPopUp.visible = true;
+        rectPopUp.forceActiveFocus();
     }
 }

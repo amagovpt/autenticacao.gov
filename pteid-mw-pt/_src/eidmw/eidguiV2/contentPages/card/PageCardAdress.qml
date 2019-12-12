@@ -86,48 +86,29 @@ PageCardAdressForm {
         }
         onSignalCardAccessError: {
             console.log("Card Adress onSignalCardAccessError"+ error_code)
-            
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+            var bodyPopup = ""
             if (error_code == GAPI.NoReaderFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
             }
             else if (error_code == GAPI.NoCardFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_NO_CARD")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD")
             }
             else if (error_code == GAPI.SodCardReadError) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
+                bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
             }
             else if (error_code == GAPI.CardUserPinCancel) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
             }
-			else if (error_code == GAPI.CardPinTimeout) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
+            else if (error_code == GAPI.CardPinTimeout) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
             }
             else {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
             propertyButtonConfirmOfAddress.enabled = false
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
-            
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
+
             propertyDistrict.propertyDateField.text = ""
             propertyMunicipality.propertyDateField.text = ""
             propertyParish.propertyDateField.text = ""
@@ -152,13 +133,10 @@ PageCardAdressForm {
         onSignalCardChanged: {
             console.log("Card Adress onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                var bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
+
                 propertyDistrict.propertyDateField.text = ""
                 propertyMunicipality.propertyDateField.text = ""
                 propertyParish.propertyDateField.text = ""
@@ -182,13 +160,9 @@ PageCardAdressForm {
                 }
             }
             else{
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+                var bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
             }
         }
         onSignalTestPinFinished: {
@@ -703,7 +677,7 @@ PageCardAdressForm {
             labelConfirmOfAddressProgressTextTitle.forceActiveFocus()
         }
     }
-    
+
     propertyButtonConfirmOfAddress{
         onClicked: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
@@ -721,12 +695,9 @@ PageCardAdressForm {
         }else{
             if(Constants.USE_SDK_PIN_UI_POPUP){
                 if (gapi.doGetTriesLeftAddressPin() === 0) {
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("Popup PIN","STR_POPUP_ERROR")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_ADDRESS_BLOCKED")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                    mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                    var titlePopup = qsTranslate("Popup PIN","STR_POPUP_ERROR")
+                    var bodyPopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_ADDRESS_BLOCKED")
+                    mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
                 }else{
                     gapi.verifyAddressPin("")
                 }

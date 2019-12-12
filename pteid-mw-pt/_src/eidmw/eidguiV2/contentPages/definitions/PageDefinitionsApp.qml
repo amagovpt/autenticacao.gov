@@ -60,12 +60,9 @@ PageDefinitionsAppForm {
             controler.setPinpadEnabledValue(propertyCheckboxEnablePinpad.checked) 
 
             if (propertyCheckboxEnablePinpad.enabled) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("PageDefinitionsApp","STR_USE_PINPAD") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_RESTART_APP") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                var titlePopup = qsTranslate("PageDefinitionsApp","STR_USE_PINPAD") + controler.autoTr
+                var bodyPopup = qsTranslate("Popup Card","STR_POPUP_RESTART_APP") + controler.autoTr
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
         }
     }
@@ -113,14 +110,14 @@ PageDefinitionsAppForm {
             var debugFilename = controler.setDebugModeValue(propertyCheckBoxDebugMode.checked)
 
             if (propertyCheckBoxDebugMode.enabled) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTranslate("Popup Card","STR_POPUP_DEBUG_MODE") + controler.autoTr
+                var titlePopup = qsTranslate("Popup Card","STR_POPUP_DEBUG_MODE") + controler.autoTr
+                var bodyPopup = ""
                 if (debugFilename === "") {
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
+                    bodyPopup = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
                 } else {
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card", "STR_POPUP_WIN_DEBUG_FILE_ERROR").arg(debugFilename) + controler.autoTr
+                    bodyPopup = qsTranslate("Popup Card", "STR_POPUP_WIN_DEBUG_FILE_ERROR").arg(debugFilename) + controler.autoTr
                 }
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
         }
     }
@@ -133,12 +130,9 @@ PageDefinitionsAppForm {
                 controler.setGraphicsAccelValue(false)
             }
             if(propertyCheckboxAccelGraphics.enabled){
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ACCEL_GRAPHICS") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_RESTART_APP") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                var titlePopup = qsTranslate("Popup Card","STR_POPUP_ACCEL_GRAPHICS") + controler.autoTr
+                var bodyPopup = qsTranslate("Popup Card","STR_POPUP_RESTART_APP") + controler.autoTr
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
         }
     }

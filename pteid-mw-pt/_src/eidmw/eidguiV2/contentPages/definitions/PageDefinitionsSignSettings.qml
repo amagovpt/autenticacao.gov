@@ -35,10 +35,9 @@ PageDefinitionsSignSettingsForm {
             propertyCheckboxRegister.checked ? gapi.setRegCertValue(true) :
                                                gapi.setRegCertValue(false)
             if (propertyCheckboxRegister.enabled) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTranslate("Popup Card","STR_POPUP_REGISTER_CERTIFICATE") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                var titlePopup = qsTranslate("Popup Card","STR_POPUP_REGISTER_CERTIFICATE") + controler.autoTr
+                var bodyPopup = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
         }
     }
@@ -48,10 +47,9 @@ PageDefinitionsSignSettingsForm {
                                              gapi.setRemoveCertValue(false)
 
             if (propertyCheckboxRemove.enabled) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTranslate("Popup Card","STR_POPUP_REMOVE_CERTIFICATE") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                var titlePopup = qsTranslate("Popup Card","STR_POPUP_REMOVE_CERTIFICATE") + controler.autoTr
+                var bodyPopup = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
         }
     }

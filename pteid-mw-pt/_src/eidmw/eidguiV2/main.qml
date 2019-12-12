@@ -69,13 +69,10 @@ Window {
             mainWindow.activateWindow();
         }
         onSignalLanguageChangedError: {
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    "Erro / Error"
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    "Erro na leitura dos idiomas. Por favor, reinstale a aplicação <br/>
+            var titlePopup = "Erro / Error"
+            var bodyPopup = "Erro na leitura dos idiomas. Por favor, reinstale a aplicação <br/>
 Load language error. Please reinstall the application"
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
 
         property var autoUpdate: true
@@ -102,40 +99,28 @@ Load language error. Please reinstall the application"
         target: gapi
         onSignalGenericError: {
             console.log("Signal onSignalGenericError")
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("Popup Card","STR_POPUP_ERROR")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("Popup Card","STR_GENERIC_ERROR_MSG") + "<br/><br/>" +
-                    qsTranslate("Popup Card","STR_ERROR_CODE") + error_code
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+            var bodyPopup = qsTranslate("Popup Card","STR_GENERIC_ERROR_MSG") + "<br/><br/>" +
+                            qsTranslate("Popup Card","STR_ERROR_CODE") + error_code
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalImportCertificatesFail: {
             console.log("Signal onSignalImportCertificatesFail")
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("Popup Card","STR_POPUP_ERROR")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("Popup Card","STR_CERTIFICATES_IMPORT_ERROR_MSG")
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+            var bodyPopup = qsTranslate("Popup Card","STR_CERTIFICATES_IMPORT_ERROR_MSG")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalRemoveCertificatesFail: {
             console.log("Signal onSignalRemoveCertificatesFail")
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("Popup Card","STR_POPUP_ERROR")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("Popup Card","STR_CERTIFICATES_REMOVE_ERROR_MSG")
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+            var bodyPopup = qsTranslate("Popup Card","STR_CERTIFICATES_REMOVE_ERROR_MSG")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalLanguageChangedError: {
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    "Erro / Error"
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    "Erro na leitura dos idiomas. Por favor, reinstale a aplicação <br/>
+            var titlePopup = "Erro / Error"
+            var bodyPopup = "Erro na leitura dos idiomas. Por favor, reinstale a aplicação <br/>
 Load language error. Please reinstall the application"
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
 
         onSignalReaderContext: {

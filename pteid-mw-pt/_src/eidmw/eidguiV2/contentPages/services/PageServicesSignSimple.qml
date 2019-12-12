@@ -58,50 +58,30 @@ PageServicesSignSimpleForm {
         onSignalCardAccessError: {
             console.log("Sign simple Page onSignalCardAccessError")
             if(cardLoaded){
+                var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+                var bodyPopup = ""
                 if (error_code == GAPI.NoReaderFound) {
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("Popup Card","STR_POPUP_ERROR")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
+                    bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
                 }
                 else if (error_code == GAPI.NoCardFound) {
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("Popup Card","STR_POPUP_ERROR")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("Popup Card","STR_POPUP_NO_CARD")
+                    bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD")
                 }
                 else if (error_code == GAPI.SodCardReadError) {
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("Popup Card","STR_POPUP_ERROR")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
+                    bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
                 }
                 else if (error_code == GAPI.CardUserPinCancel) {
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("Popup Card","STR_POPUP_ERROR")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
+                    bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
                 }
                 else if(error_code == GAPI.PinBlocked) {
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("Popup Card","STR_POPUP_ERROR")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("Popup Card","STR_POPUP_CARD_PIN_BLOCKED")
+                    bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_PIN_BLOCKED")
                 }
                 else if (error_code == GAPI.CardPinTimeout) {
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("Popup Card","STR_POPUP_ERROR")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
+                    bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
                 }
                 else {
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("Popup Card","STR_POPUP_ERROR")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
+                    bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
                 }
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
                 if(error_code != GAPI.CardUserPinCancel && error_code != GAPI.CardPinTimeout)
                     cardLoaded = false
             }
@@ -124,34 +104,26 @@ PageServicesSignSimpleForm {
         }
         onSignalCardChanged: {
             console.log("Services Sign Simple onSignalCardChanged")
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+            var bodyPopup = ""
             if (error_code == GAPI.ET_CARD_REMOVED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 propertyPDFPreview.propertyDragSigSignedByNameText.text =
                         qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
                 propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
                 cardLoaded = false
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
                 cardLoaded = true
                 gapi.startCardReading()
             }
             else{
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
                 cardLoaded = false
             }
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
     }
     Connections {
@@ -398,12 +370,9 @@ PageServicesSignSimpleForm {
             propertyPDFPreview.updateSignPreview()
             //TODO: Validate files type
             if(filesArray.length > 1){
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE_MULTI")
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                var titlePopup = qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE")
+                var bodyPopup = qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE_MULTI")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
 
             }else if(filesArray.length == 1){
                 // Needed because the PDFPreview
@@ -506,12 +475,9 @@ PageServicesSignSimpleForm {
         onClicked: {
             console.log("Sign with CC")
             if (gapi.doGetTriesLeftSignPin() === 0) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup PIN","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SIGN_BLOCKED")
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                var titlePopup = qsTranslate("Popup PIN","STR_POPUP_ERROR")
+                var bodyPopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SIGN_BLOCKED")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }else{
                 var outputFile = filesModel.get(0).fileUrl
                 //Check if filename has extension and remove it.
@@ -526,13 +492,10 @@ PageServicesSignSimpleForm {
         onClicked: {
             console.log("Sign with CMD")
             if (!gapi.checkCMDSupport()) {
-                 mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_NO_CMD_SUPPORT")
+                var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+                var bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CMD_SUPPORT")
 
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
                 return;
             }
             var outputFile = filesModel.get(0).fileUrl
@@ -619,25 +582,21 @@ PageServicesSignSimpleForm {
                     filesModel.remove(filesModel.count-1)
                     fileLoaded = false
                     propertyPDFPreview.propertyBackground.source = ""
-                    mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR")
+                    var titlePopup = qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR")
+                    var bodyPopup = ""
                     if(pageCount === -1){
                         console.log("Error loading pdf file")
-                        mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                                qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR_MSG")
+                        bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR_MSG")
 
                     }else if(pageCount === -2){
                         console.log("Error loading pdf encrypted file")
-                        mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                                qsTranslate("PageServicesSign","STR_LOAD_ENCRYPTED_PDF_ERROR_MSG")
+                        bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_ENCRYPTED_PDF_ERROR_MSG")
                     }else{
                         console.log("Generic Error loading pdf file")
-                        mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                                qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR_MSG")
+                        bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR_MSG")
                     }
 
-                    mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                    mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                    mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
                 }
             }
         }

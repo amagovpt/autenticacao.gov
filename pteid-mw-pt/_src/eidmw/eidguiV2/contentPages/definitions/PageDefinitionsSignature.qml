@@ -54,45 +54,27 @@ PageDefinitionsSignatureForm {
         }
         onSignalCardAccessError: {
             console.log("Definitions Signature --> onSignalCardAccessError")
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
+            var bodyPopup = ""
             if (error_code == GAPI.NoReaderFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER") + controler.autoTr
             }
             else if (error_code == GAPI.NoCardFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_NO_CARD") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD") + controler.autoTr
             }
             else if (error_code == GAPI.SodCardReadError) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR") + controler.autoTr
             }
             else if (error_code == GAPI.CardUserPinCancel) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED") + controler.autoTr
             }
-			else if (error_code == GAPI.CardPinTimeout) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
+            else if (error_code == GAPI.CardPinTimeout) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT") + controler.autoTr
             }
             else {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR") + controler.autoTr
             }
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
 
             propertySigReasonText.text = propertySigReasonTextCustom.text = "{" + qsTr("STR_CUSTOM_SIGN_REASON") + "}"
             propertySigSignedByText.text = propertySigSignedByTextCustom.text = qsTr("STR_CUSTOM_SIGN_BY") + ": "
@@ -106,12 +88,13 @@ PageDefinitionsSignatureForm {
         }
         onSignalCardChanged: {
             console.log("Definitions Signature --> onSignalCardChanged")
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
+            var bodyPopup = ""
+            var returnSubMenuWhenClosed = false
             if (error_code == GAPI.ET_CARD_REMOVED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED") + controler.autoTr
+                returnSubMenuWhenClosed = true;
+
                 propertySigReasonText.text = "{" + qsTr("STR_CUSTOM_SIGN_REASON") + "}"
                 propertySigSignedByText.text = qsTr("STR_CUSTOM_SIGN_BY") + ": "
                 propertySigSignedByNameText.text = ""
@@ -121,23 +104,16 @@ PageDefinitionsSignatureForm {
                 propertySigWaterImg.source = propertySigWaterImgCustom.source = "qrc:/images/pteid_signature_watermark.jpg"
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED") + controler.autoTr
                 propertyBusyIndicator.running = true
                 gapi.startCardReading()
             }
             else{
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN") + controler.autoTr
+                returnSubMenuWhenClosed = true;
             }
 
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, returnSubMenuWhenClosed)
         }
     }
 
@@ -150,12 +126,9 @@ PageDefinitionsSignatureForm {
         }
         onDropped: {
             if(filesArray.length > 1){
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE_MULTI")
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                var titlePopup = qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE")
+                var bodyPopup = qsTranslate("Popup File","STR_POPUP_FILE_UNIQUE_MULTI")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }else{
                 /*console.log("Adding file: " + filesArray[0])*/
                 var path =  filesArray[0]

@@ -64,7 +64,7 @@ PageDefinitionsSCAPForm {
             propertyBusyIndicator.running = false
         }
         onSignalCardDataChanged: {
-            console.log("Definitions SCAP Signature --> Data Changed")            
+            console.log("Definitions SCAP Signature --> Data Changed")
             propertyBusyIndicator.running = false
             isCardPresent = true
             propertyButtonLoadEntityAttributes.enabled = isCardPresent && isAnyEntitySelected()
@@ -72,6 +72,8 @@ PageDefinitionsSCAPForm {
         onSignalCardAccessError: {
             console.log("Definitions SCAP Signature --> onSignalCardAccessError")
             isCardPresent = false
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
+            var bodyPopup = ""
             if (error_code == GAPI.NoReaderFound) {
                 return;
             }
@@ -79,84 +81,61 @@ PageDefinitionsSCAPForm {
                 return;
             }
             else if (error_code == GAPI.SodCardReadError) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR") + controler.autoTr
             }
             else if (error_code == GAPI.CardUserPinCancel) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                            qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED") + controler.autoTr
                }
             else if (error_code == GAPI.CardPinTimeout) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT") + controler.autoTr
             }
             else {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR") + controler.autoTr
             }
             propertyButtonLoadEntityAttributes.enabled = isCardPresent && isAnyEntitySelected()
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             propertyBusyIndicatorAttributes.running = false
             propertyBusyIndicator.running = false
             propertyTabButtonEntities.forceActiveFocus()
         }
         onSignalCardChanged: {
             console.log("Definitions SCAP Signature --> onSignalCardChanged")
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
+            var bodyPopup = ""
             if (error_code == GAPI.ET_CARD_REMOVED) {
                 isCardPresent = false
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED") + controler.autoTr
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 isCardPresent = true
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED") + controler.autoTr
                 propertyBusyIndicator.running = true
                 gapi.startCardReading()
             }
             else{
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN") + controler.autoTr
             }
             propertyButtonLoadEntityAttributes.enabled = isCardPresent && isAnyEntitySelected()
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalSCAPDefinitionsServiceFail: {
             isLoadingAttributes = false
             console.log("Definitions SCAP - Signal SCAP service fail Code = "
                         + pdfsignresult + " isCompany = " + isCompany)
             cmdLoadDialog.close()
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
 
+            var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
+            var bodyPopup = ""
             if(isCompany === true){
                 if(pdfsignresult == GAPI.ScapAttributesExpiredError){
                     console.log("ScapAttributesExpiredError")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ATTRIBUTES_EXPIRED")
+                    bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ATTRIBUTES_EXPIRED")
                             + " "
                             + "<a href=\"https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais\">"
                             + "https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
                 }else if(pdfsignresult == GAPI.ScapZeroAttributesError){
                     console.log("ScapZeroAttributesError")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES")
+                    bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES")
                             + " "
                             + "<a href=\"https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais\">"
                             + "https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
@@ -191,8 +170,7 @@ PageDefinitionsSCAPForm {
                 }
                 console.log(popupMsg)
                 if(pdfsignresult == GAPI.ScapAttributesExpiredError){
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_FIRST")
+                    bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_FIRST")
                             + " " + popupMsg + " "
                             + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_SECOND")
                             + "\n\n"
@@ -200,8 +178,7 @@ PageDefinitionsSCAPForm {
                             + " " + popupMsg + "."
                 }else if(pdfsignresult == GAPI.ScapZeroAttributesError){
                     console.log("ScapZeroAttributesError")
-                    mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                            qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST")
+                    bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST")
                             + " " + popupMsg + "."
                             + "\n\n" + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND")
                             + " " + popupMsg + "."
@@ -213,8 +190,7 @@ PageDefinitionsSCAPForm {
 
             popupMsg = ""
 
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             // Load attributes from cache (Entities, ShortDescription)
             gapi.startLoadingAttributesFromCache(GAPI.ScapAttrEntities,
                                                  GAPI.ScapAttrDescriptionShort)
@@ -222,28 +198,22 @@ PageDefinitionsSCAPForm {
         }
         onSignalSCAPPingSuccess: {
             console.log("Definitions SCAP Signature -->Signal SCAP ping success")
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("PageDefinitionsSCAP","STR_SCAP_SERVICE_FAIL_FIRST")
+            var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
+            var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_SERVICE_FAIL_FIRST")
                     + "\n\n"
                     + qsTranslate("PageDefinitionsSCAP","STR_SCAP_SERVICE_FAIL_SECOND")
-             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             // Load attributes from cache (Entities, isShortDescription)
             propertyBusyIndicatorAttributes.running = false
             propertyBusyIndicator.running = false
         }
         onSignalSCAPPingFail: {
             console.log("Definitions SCAP - Signal SCAP ping fail")
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("PageDefinitionsSCAP","STR_SCAP_PING_FAIL_FIRST")
+            var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
+            var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_PING_FAIL_FIRST")
                     + "\n\n"
                     + qsTranslate("PageDefinitionsSCAP","STR_SCAP_PING_FAIL_SECOND")
-             mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             // Load attributes from cache (Entities, isShortDescription)
             propertyBusyIndicator.running = false
             propertyBusyIndicatorAttributes.running = false
@@ -251,26 +221,19 @@ PageDefinitionsSCAPForm {
         onSignalEntityAttributesLoadedError: {
             isLoadingAttributes = false
             console.log("Definitions SCAP - Signal SCAP entities loaded error")
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("PageDefinitionsSCAP","STR_SCAP_LOAD_ENTITIES_ERROR")
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
+            var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_LOAD_ENTITIES_ERROR")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             if(propertyBar.currentIndex == 0)
                 propertyBusyIndicatorAttributes.running = false
             propertyListViewEntities.forceActiveFocus()
-
         }
         onSignalCompanyAttributesLoadedError: {
             isLoadingAttributes = false
             console.log("Definitions SCAP - Signal SCAP company loaded error")
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("PageDefinitionsSCAP","STR_SCAP_LOAD_COMPANY_ERROR")
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
+            var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_LOAD_COMPANY_ERROR")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             if(propertyBar.currentIndex == 1)
                 propertyBusyIndicatorAttributes.running = false
         }
@@ -335,13 +298,9 @@ PageDefinitionsSCAPForm {
             console.log("Definitions SCAP - Signal SCAP company attributes loaded")
             if (isLoadingAttributes) {
                 isLoadingAttributes = false
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("GAPI","STR_POPUP_SUCESS")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_LOADED")
-            
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                var titlePopup = qsTranslate("GAPI","STR_POPUP_SUCESS")
+                var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_LOADED")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
             companyAttributesModel.clear()
             for(var i = 0; i < attribute_list.length; i=i+3)
@@ -375,12 +334,9 @@ PageDefinitionsSCAPForm {
             console.log("Definitions SCAP - Signal SCAP Signal Remove SCAP Attributes Sucess")
             if (isLoadingAttributes == false) {
                 propertyBusyIndicatorAttributes.running = false
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("PageDataApp","STR_CLEAR_CACHE")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC")
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+                var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
                 if(scapAttrType != GAPI.ScapAttrCompanies){
                     gapi.startGettingEntities()
                     propertyBusyIndicator.running = true
@@ -390,13 +346,9 @@ PageDefinitionsSCAPForm {
         onSignalRemoveSCAPAttributesFail: {
             console.log("Definitions SCAP - Signal Remove SCAP Attributes Fail")
             propertyBusyIndicatorAttributes.running = false
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("PageDataApp","STR_CLEAR_CACHE")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("PageDataApp","STR_CLEAR_CACHE_FAIL")
-
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_FAIL")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             if(scapAttrType != GAPI.ScapAttrCompanies){
                 gapi.startGettingEntities()
                 propertyBusyIndicator.running = true
@@ -404,14 +356,9 @@ PageDefinitionsSCAPForm {
         }
         onSignalCacheNotReadable:{
             propertyBusyIndicatorAttributes.running = false;
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("PageDataApp","STR_CLEAR_CACHE")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
-
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
-
+            var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            var titlePopup = qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             if(scapAttrType != GAPI.ScapAttrCompanies){
                 gapi.startGettingEntities()
                 propertyBusyIndicator.running = true
@@ -419,23 +366,15 @@ PageDefinitionsSCAPForm {
         }
         onSignalCacheNotWritable:{
             propertyBusyIndicatorAttributes.running = false;
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("PageDataApp","STR_CLEAR_CACHE")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("PageDataApp","STR_CACHE_NOT_WRITABLE")
-
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_NOT_WRITABLE")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalCacheFolderNotCreated:{
             propertyBusyIndicatorAttributes.running = false;
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("PageDataApp","STR_CLEAR_CACHE")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("PageDataApp","STR_CACHE_FOLDER_NOT_CREATED")
-
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_FOLDER_NOT_CREATED")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalBeginOAuth: { 
             cmdLoadDialog.open()
@@ -444,38 +383,28 @@ PageDefinitionsSCAPForm {
             cmdLoadDialog.close()
             // Error codes from OAuthResult in OAuthAttributes.h
             switch (oauthResult){
-            case 0://OAuthSuccess
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("PageDefinitionsSCAP","STR_LOADING_SCAP_ATTRIBUTES")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("OAuth","STR_OAUTH_SUCCESS_SCAP")
-                break;
-            case 1://OAuthTimeoutError
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("OAuth","STR_OAUTH_TIMEOUT")
-                break;
-            case 2://OAuthGenericError  
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("OAuth","STR_OAUTH_GENERIC_ERROR")
-            case 3://OAuthConnectionError
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("OAuth","STR_OAUTH_CONNECTION_ERROR")
-                break;
-            case 4://OAuthCancelled
-                console.log("oauth - cancelado")
-                return;
+                case 0://OAuthSuccess
+                    var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_LOADING_SCAP_ATTRIBUTES")
+                    var bodyPopup = qsTranslate("OAuth","STR_OAUTH_SUCCESS_SCAP")
+                    break;
+                case 1://OAuthTimeoutError
+                    var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+                    var bodyPopup = qsTranslate("OAuth","STR_OAUTH_TIMEOUT")
+                    break;
+                case 2://OAuthGenericError
+                    var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+                    var bodyPopup = qsTranslate("OAuth","STR_OAUTH_GENERIC_ERROR")
+                case 3://OAuthConnectionError
+                    var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+                    var bodyPopup = qsTranslate("OAuth","STR_OAUTH_CONNECTION_ERROR")
+                    break;
+                case 4://OAuthCancelled
+                    console.log("oauth - cancelado")
+                    return;
             }
             if (oauthResult != 0)
                 propertyBusyIndicatorAttributes.running = false
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
-                
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
     }
 

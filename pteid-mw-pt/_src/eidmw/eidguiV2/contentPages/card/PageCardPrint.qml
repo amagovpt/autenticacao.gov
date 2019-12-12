@@ -161,27 +161,26 @@ PageCardPrintForm {
             propertyBusyIndicator.running = false
         }
         onSignalPdfPrintFail: {
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTr("STR_PRINT_CREATE_PDF")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  qsTr("STR_PRINT_CREATE_PDF_FAIL")
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            var titlePopup = qsTr("STR_PRINT_CREATE_PDF")
+            var bodyPopup = qsTr("STR_PRINT_CREATE_PDF_FAIL")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalPrinterPrintSucess: {
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTr("STR_PRINT_PRINTER")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTr("STR_PRINT_PRINTER_SUCESS")
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            var titlePopup = qsTr("STR_PRINT_PRINTER")
+            var bodyPopup = qsTr("STR_PRINT_PRINTER_SUCESS")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalPrinterPrintFail: {
             console.log("got error on printer print failed "  + error_code)
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text = qsTr("STR_PRINT_PRINTER")
+            var titlePopup = qsTr("STR_PRINT_PRINTER")
+            var bodyPopup = ""
             if (error_code == GAPI.NoPrinterAvailable) {
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  qsTr("STR_PRINT_NO_PRINTER_AVAILABLE")
+                bodyPopup = qsTr("STR_PRINT_NO_PRINTER_AVAILABLE")
             } else {
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =  qsTr("STR_PRINT_PRINTER_FAIL")
+                bodyPopup = qsTr("STR_PRINT_PRINTER_FAIL")
             }
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+
         }
         onSignalCardDataChanged: {
             console.log("Data Card Print --> Data Changed")
@@ -201,90 +200,60 @@ PageCardPrintForm {
         }
         onSignalCardAccessError: {
             console.log("Card Print Page onSignalCardAccessError")
-            
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+            var bodyPopup = ""
             if (error_code == GAPI.NoReaderFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
                 disableComponents()
             }
             else if (error_code == GAPI.NoCardFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_NO_CARD")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD")
                 disableComponents()
             }
             else if (error_code == GAPI.SodCardReadError) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
+                bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
                 disableComponents()
             }
             else if (error_code == GAPI.CardUserPinCancel) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
             }
-			else if (error_code == GAPI.CardPinTimeout) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
+            else if (error_code == GAPI.CardPinTimeout) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
             }
             else {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
-            
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
             propertyBusyIndicator.running = false
         }
         onSignalCardChanged: {
             console.log("Card Print Page onSignalCardChanged")
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+            var bodyPopup = ""
+            var returnSubMenuWhenClosed = false
             if (error_code == GAPI.ET_CARD_REMOVED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
+                returnSubMenuWhenClosed = true;
                 disableComponents()
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                         qsTranslate("Popup Card","STR_POPUP_CARD_READ")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
                 gapi.startCardReading()
             }
             else{
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
+                returnSubMenuWhenClosed = true;
                 disableComponents()
 
             }
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, returnSubMenuWhenClosed)
         }
         onSignalTestPinFinished: {
             if (triesLeft === 3) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                var titlePopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
+                var bodyPopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }else {
                 propertySwitchAddress.checked = false
             }

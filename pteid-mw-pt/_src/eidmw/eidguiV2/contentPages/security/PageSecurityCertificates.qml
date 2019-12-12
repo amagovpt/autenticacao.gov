@@ -32,88 +32,56 @@ PageSecurityCertificatesForm {
         }
         onSignalCardAccessError: {
             console.log("Security Pin Codes onSignalCardAccessError")
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+            var bodyPopup = ""
             if (error_code == GAPI.NoReaderFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
             }
             else if (error_code == GAPI.NoCardFound) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_NO_CARD")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD")
             }
             else if (error_code == GAPI.SodCardReadError) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
+                bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
             }
             else if (error_code == GAPI.CardUserPinCancel) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
             }
-			else if (error_code == GAPI.CardPinTimeout) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
+            else if (error_code == GAPI.CardPinTimeout) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
             }
             else {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
             propertyBusyIndicator.running = false
         }
         onSignalCardChanged: {
             console.log("Security Certificates onSignalCardChanged")
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
+            var bodyPopup = ""
             if (error_code == GAPI.ET_CARD_REMOVED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 clearFields()
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
                 gapi.startfillCertificateList()
             }
             else{
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
                 clearFields()
             }
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
         }
         onSignalCertificatesFail: {
             propertyBusyIndicator.running = false
             propertyButtonViewCertificate.enabled = false
             propertyButtonExportCertificate.enabled = false
 
-            mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                    qsTranslate("Popup Card","STR_POPUP_ERROR")
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                    qsTranslate("PageSecurityCertificates","STR_CERT_CHAIN_ERROR")
-
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+            var bodyPopup = qsTranslate("PageSecurityCertificates","STR_CERT_CHAIN_ERROR")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
         }
 
         onSignalCertificatesChanged: {
@@ -255,18 +223,14 @@ PageSecurityCertificatesForm {
         }
         onSignalExportCertificates: {
             if (success) {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("GAPI","STR_POPUP_SUCESS")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("PageSecurityCertificates","STR_EXPORT_CERTIFICATE_SUCCESS")
+                var titlePopup = qsTranslate("GAPI","STR_POPUP_SUCESS")
+                var bodyPopup = qsTranslate("PageSecurityCertificates","STR_EXPORT_CERTIFICATE_SUCCESS")
             }
             else {
-                mainFormID.propertyPageLoader.propertyGeneralTitleText.text =
-                        qsTranslate("Popup Card","STR_POPUP_ERROR")
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text =
-                        qsTranslate("PageSecurityCertificates","STR_EXPORT_CERTIFICATE_FAILED")
+                var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+                var bodyPopup = qsTranslate("PageSecurityCertificates","STR_EXPORT_CERTIFICATE_FAILED")
             }
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
     }
 
