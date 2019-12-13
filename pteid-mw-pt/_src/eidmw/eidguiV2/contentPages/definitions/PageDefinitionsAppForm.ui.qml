@@ -603,13 +603,13 @@ Item {
                             KeyNavigation.backtab: checkboxShowAnime
                             KeyNavigation.up: checkboxShowAnime
                             KeyNavigation.left: checkboxShowAnime
-                            text: "Escalar aplicação:"
+                            text: qsTranslate("PageDefinitionsApp", "STR_SCALE_APPLICATION_TITLE") + controler.autoTr
                         }
 
                         CheckBox {
                             id: checkboxUseSystemScale
                             enabled: false
-                            text: "Usar configuração do sistema" + controler.autoTr
+                            text: qsTranslate("PageDefinitionsApp", "STR_USE_SYSTEM_SETTING") + controler.autoTr
                             height: 25
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD

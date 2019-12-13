@@ -863,27 +863,27 @@
         <translation>Save Notes</translation>
     </message>
     <message>
-        <location filename="main.qml" line="366"/>
+        <location filename="main.qml" line="374"/>
         <source>STR_UNSAVED_NOTES_TITLE</source>
         <translation>Notes</translation>
     </message>
     <message>
-        <location filename="main.qml" line="381"/>
+        <location filename="main.qml" line="389"/>
         <source>STR_UNSAVED_NOTES</source>
         <translation>Unsaved Notes</translation>
     </message>
     <message>
-        <location filename="main.qml" line="397"/>
+        <location filename="main.qml" line="405"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION</source>
         <translation>Press &quot;Stay&quot; to continue editing notes or press &quot;Leave&quot; to exit this page without saving the notes.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="421"/>
+        <location filename="main.qml" line="429"/>
         <source>STR_UNSAVED_NOTES_LEAVE</source>
         <translation>Leave</translation>
     </message>
     <message>
-        <location filename="main.qml" line="445"/>
+        <location filename="main.qml" line="453"/>
         <source>STR_UNSAVED_NOTES_STAY</source>
         <translation>Stay</translation>
     </message>
@@ -1047,82 +1047,93 @@
 <context>
     <name>PageDefinitionsApp</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="88"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="90"/>
         <source>STR_CARD_READER_TITLE</source>
         <translation>Card reader</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="154"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="156"/>
         <source>STR_SELECT_READER</source>
         <translation>Select</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="225"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="227"/>
         <source>STR_START_TITLE</source>
         <translation>Startup</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="267"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="269"/>
         <source>STR_AUTO_START_OP</source>
         <translation>Activate on startup</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="306"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="308"/>
         <source>STR_START_AUTOUPDATES_TITLE</source>
         <translation>Automatic updates</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="348"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="350"/>
         <source>STR_CARD_READER_TEXT</source>
         <translation>Enable checking of new updates on application start.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="389"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="391"/>
         <source>STR_LANGUAGE_TITLE</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="437"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="439"/>
         <source>STR_PT_NAME_OP</source>
         <translation>Português</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="464"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="466"/>
         <source>STR_UK_NAME_OP</source>
         <translation>English</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="503"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="505"/>
         <source>STR_APP_LOOK_TITLE</source>
         <translation>Layout</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="546"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="555"/>
         <source>STR_SHOW_ANIME_OP</source>
         <translation>Enable animations</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="587"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="606"/>
+        <source>STR_SCALE_APPLICATION_TITLE</source>
+        <oldsource>STR_SCALE_APPLICATION</oldsource>
+        <translation>Change application scale:</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="612"/>
+        <source>STR_USE_SYSTEM_SETTING</source>
+        <translation type="unfinished">Use system scale settings</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="683"/>
         <source>STR_DEBUG_MODE_TITLE</source>
         <translation>Debug mode</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="649"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="745"/>
         <source>STR_DEBUG_MODE_DESCRIPTION</source>
         <translation>Please enable debug mode if you encounter problems with the application.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="655"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="751"/>
         <source>STR_DEBUG_MODE_ENABLE</source>
         <translation>Enable debug mode</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="697"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="793"/>
         <source>STR_APP_GRAPHICS_TITLE</source>
         <translation>Graphic acceleration</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="764"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="860"/>
         <source>STR_ACCEL_ENABLE</source>
         <translation>Enable graphic acceleration</translation>
     </message>
@@ -1157,58 +1168,58 @@
         <translation>URL?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="807"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="903"/>
         <source>STR_NETWORK_TITLE</source>
         <translation>Network settings</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="851"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="947"/>
         <source>STR_NETWORK_SYSTEM_PROXY_OP</source>
         <translation>Use system proxy</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="876"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="972"/>
         <source>STR_NETWORK_PROXY_OP</source>
         <translation>Configure proxy server</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="910"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1006"/>
         <source>STR_NETWORK_PROXY_ADDRESS_OP</source>
         <translation>Host?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="943"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1039"/>
         <source>STR_NETWORK_PROXY_PORT_OP</source>
         <translation>Port?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="968"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1064"/>
         <source>STR_NETWORK_AUTH_OP</source>
         <translation>Configure proxy authentication</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1004"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1100"/>
         <source>STR_NETWORK_AUTH_USERNAME_OP</source>
         <translation>Username?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1035"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1131"/>
         <source>STR_NETWORK_AUTH_PASSWORD_OP</source>
         <translation>Password?</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="53"/>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="185"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="187"/>
         <source>STR_USE_PINPAD</source>
         <translation>Use PINPAD functionality</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="260"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="290"/>
         <source>STR_ACCEL_GRAPHICS_TEXT</source>
         <translation>Graphics acceleration driver version (OpenGL)</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="262"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="292"/>
         <source>STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION</source>
         <translation>Please try disabling graphical acceleration if you encounter problems with application graphics.</translation>
     </message>
@@ -1656,22 +1667,22 @@
 <context>
     <name>PageSecurityCertificates</name>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="293"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="294"/>
         <source>STR_STATUS_NETWORK_ERROR</source>
         <translation>Could not validate certificate. Please check your Internet connection.</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="287"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="288"/>
         <source>STR_STATUS_REVOKED</source>
         <translation>Revoked</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="305"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="306"/>
         <source>STR_STATUS_EXPIRED</source>
         <translation>Expired</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="290"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="291"/>
         <source>STR_STATUS_SUSPENDED</source>
         <translation>Inactive or Suspended</translation>
     </message>
@@ -1686,24 +1697,24 @@
         <translation>An error occurred while exporting certificate to file.</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="296"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="297"/>
         <source>STR_STATUS_ISSUER</source>
         <translation>An issuer is missing in the certificate chain</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="299"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="300"/>
         <source>STR_STATUS_ERROR</source>
         <translation>Could not validate certificate. Please check your Internet connection.</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="302"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="303"/>
         <source>STR_STATUS_VALID</source>
         <translation>Valid</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="279"/>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="284"/>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="308"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="280"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="285"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="309"/>
         <source>STR_STATUS_UNKNOWN</source>
         <translation>Unknown</translation>
     </message>
@@ -2254,9 +2265,9 @@
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="82"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="88"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="519"/>
-        <location filename="main.qml" line="86"/>
-        <location filename="main.qml" line="96"/>
-        <location filename="main.qml" line="105"/>
+        <location filename="main.qml" line="90"/>
+        <location filename="main.qml" line="100"/>
+        <location filename="main.qml" line="109"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Error</translation>
     </message>
@@ -2445,51 +2456,53 @@
         <translation>Application error! Please reinstall the application</translation>
     </message>
     <message>
-        <location filename="main.qml" line="88"/>
+        <location filename="main.qml" line="92"/>
         <source>STR_GENERIC_ERROR_MSG</source>
         <translation>Please try again. If this error persists, contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="89"/>
+        <location filename="main.qml" line="93"/>
         <source>STR_ERROR_CODE</source>
         <translation>Error code = </translation>
     </message>
     <message>
-        <location filename="main.qml" line="98"/>
+        <location filename="main.qml" line="102"/>
         <source>STR_CERTIFICATES_IMPORT_ERROR_MSG</source>
         <translation>Error importing certificates</translation>
     </message>
     <message>
-        <location filename="main.qml" line="107"/>
+        <location filename="main.qml" line="111"/>
         <source>STR_CERTIFICATES_REMOVE_ERROR_MSG</source>
         <translation>Error removing certificates</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="105"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="129"/>
         <source>STR_POPUP_DEBUG_MODE</source>
         <translation>Debug mode</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="55"/>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="107"/>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="128"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="104"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="114"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="131"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="152"/>
         <location filename="contentPages/definitions/PageDefinitionsSignSettings.qml" line="30"/>
         <location filename="contentPages/definitions/PageDefinitionsSignSettings.qml" line="43"/>
         <source>STR_POPUP_RESTART_APP</source>
         <translation>It is necessary to restart the application for this change to take effect. Please restart the application.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="109"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="133"/>
         <source>STR_POPUP_WIN_DEBUG_FILE_ERROR</source>
         <translation>Error when removing the debug file %1. Please check if you have write permissions.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="126"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="150"/>
         <source>STR_POPUP_ACCEL_GRAPHICS</source>
         <translation>Graphic acceleration</translation>
     </message>
     <message>
-        <location filename="PageLoader.qml" line="85"/>
+        <location filename="PageLoader.qml" line="86"/>
         <location filename="components/DialogCMD.qml" line="82"/>
         <location filename="components/DialogCMD.qml" line="396"/>
         <location filename="contentPages/card/PageCardAdress.qml" line="370"/>
@@ -2498,7 +2511,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="450"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="196"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="316"/>
-        <location filename="main.qml" line="256"/>
+        <location filename="main.qml" line="263"/>
         <source>STR_SHOW_WINDOWS</source>
         <translation>Show windows</translation>
     </message>
@@ -2555,7 +2568,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="251"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="91"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="368"/>
-        <location filename="main.qml" line="199"/>
+        <location filename="main.qml" line="204"/>
         <source>STR_POPUP_FILE_CANCEL</source>
         <translation>Cancel</translation>
     </message>
@@ -2819,37 +2832,37 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="main.qml" line="150"/>
+        <location filename="main.qml" line="154"/>
         <source>STR_AUTOUPDATE_TITLE</source>
         <translation>Update Available</translation>
     </message>
     <message>
-        <location filename="main.qml" line="173"/>
+        <location filename="main.qml" line="178"/>
         <source>STR_AUTOUPDATE_TEXT</source>
         <translation>A new version of the application is available. Press Open to open the Updates page.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="174"/>
+        <location filename="main.qml" line="179"/>
         <source>STR_DISABLE_AUTOUPDATE_INFO</source>
         <translation>To disable the checking for updates on application start, go to Application settings menu.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="217"/>
+        <location filename="main.qml" line="223"/>
         <source>STR_UPDATE_INSTALL_BUTTON</source>
         <translation>Open</translation>
     </message>
     <message>
-        <location filename="main.qml" line="261"/>
+        <location filename="main.qml" line="268"/>
         <source>STR_WARNING</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="main.qml" line="280"/>
+        <location filename="main.qml" line="288"/>
         <source>STR_MULTIPLE_CARDS_DETECTED</source>
         <translation>Multiple cards detected</translation>
     </message>
     <message>
-        <location filename="main.qml" line="318"/>
+        <location filename="main.qml" line="326"/>
         <source>STR_CHANGE_READER_INFO</source>
         <translation>To change the reader later, go to the application settings menu.</translation>
     </message>
