@@ -75,17 +75,7 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 
 	int Width = 420;
 	int Height = 263;
-
-    // Get scaling. Component sizes should be proportional to dialog size
-    HDC hdc = GetDC(NULL);
-    FLOAT horizontalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSX));
-    FLOAT verticalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSY));
-    ReleaseDC(0, hdc);
-    horizontalDPI = horizontalDPI / 96.f;
-    verticalDPI = verticalDPI / 96.f;
-
-    Height *= verticalDPI;
-    Width  *= horizontalDPI;
+	ScaleDimensions(&Width, &Height);
 
     if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
 	{

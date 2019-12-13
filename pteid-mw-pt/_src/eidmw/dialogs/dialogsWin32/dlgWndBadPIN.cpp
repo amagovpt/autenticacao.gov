@@ -88,6 +88,7 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 
 	int window_height = 280;
 	int window_width = 420;
+	ScaleDimensions(&window_width, &window_height);
 
 	// Added for accessibility
 	tmpTitle += szHeader;
@@ -98,11 +99,17 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 		RECT clientRect;
 		GetClientRect( m_hWnd, &clientRect );
 
+		int buttonWidth = 0.22 * window_width;
+		int buttonHeight = 0.12 * window_height;
+		int buttonX = clientRect.right - 0.24 * window_width;
+		int buttonY = clientRect.bottom - 0.24 * window_height;
+		int buttonSpacing = 0.04 * buttonWidth;
+
 		if( RemainingTries == 0 )
 		{
 			OK_Btn = CreateWindow(
 				L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-				clientRect.right - 100, clientRect.bottom - 65, 72, 24, 
+				buttonX, buttonY, buttonWidth, buttonHeight, 
 				m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL );
 			SendMessage(OK_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
 		}
@@ -110,13 +117,13 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 		{
 			Retry_Btn = CreateWindow(
 				L"BUTTON", GETSTRING_DLG(Retry), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-				clientRect.right - 180, clientRect.bottom - 65, 72, 24, 
+				buttonX - buttonWidth - buttonSpacing, buttonY, buttonWidth, buttonHeight, 
 				m_hWnd, (HMENU)IDB_RETRY, m_hInstance, NULL );
 			SendMessage(Retry_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
 
 			Cancel_Btn = CreateWindow(
 				L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-				clientRect.right - 100, clientRect.bottom - 65, 72, 24, 
+				buttonX, buttonY, buttonWidth, buttonHeight, 
 				m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL );
 			SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
 		}
@@ -124,7 +131,7 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 		//Message is vertically centered 
 		HWND hStaticText = CreateWindow( 
 			L"STATIC", szBody, WS_CHILD | WS_VISIBLE | SS_CENTER, 
-			0, clientRect.bottom / 2, clientRect.right, 22, 
+			0, clientRect.bottom / 2, clientRect.right, window_height * 0.08, 
 			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
 		SendMessage( hStaticText, WM_SETFONT, (WPARAM)TextFont, 0 );
 

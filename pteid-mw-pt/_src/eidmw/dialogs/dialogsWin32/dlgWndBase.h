@@ -56,6 +56,7 @@ protected:
 	void KillWindow( );
 	virtual void Destroy();
 	HFONT loadFontFromResource(int font_pointsize, bool isBold);
+	void ScaleDimensions(int *width, int *height);
 
 protected:
 	HDC			m_hDC;					// Private GDI Device Context

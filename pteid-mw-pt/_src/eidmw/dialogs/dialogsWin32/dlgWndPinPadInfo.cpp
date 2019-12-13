@@ -69,17 +69,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 	
     int window_width = 420;
     int window_height = 280;
-
-    // Get scaling. Component sizes should be proportional to dialog size
-    HDC hdc = GetDC(NULL);
-    FLOAT horizontalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSX));
-    FLOAT verticalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSY));
-    ReleaseDC(0, hdc);
-    horizontalDPI = horizontalDPI / 96.f;
-    verticalDPI = verticalDPI / 96.f;
-
-    window_height *= verticalDPI;
-    window_width *= horizontalDPI;
+    ScaleDimensions(&window_width, &window_height);
 
     if (CreateWnd(tmpTitle.c_str(), window_width, window_height, IDI_APPICON, Parent))
 	{

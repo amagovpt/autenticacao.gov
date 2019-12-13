@@ -277,6 +277,20 @@ void Win32Dialog::close()
 	m_ModalHold = false;							// Sets Keyboard Focus To The Window
 }
 
+void Win32Dialog::ScaleDimensions(int *width, int *height)
+{
+	// Get scaling. Component sizes should be proportional to dialog size
+	HDC hdc = GetDC(NULL);
+	FLOAT horizontalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSX));
+	FLOAT verticalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSY));
+	ReleaseDC(0, hdc);
+	horizontalDPI = horizontalDPI / 96.f;
+	verticalDPI = verticalDPI / 96.f;
+
+	*width *= horizontalDPI;
+	*height *= verticalDPI;
+}
+
 void Win32Dialog::CreateBitapMask( HBITMAP & BmpSource, HBITMAP & BmpMask )
 {
 	BITMAP bm;
