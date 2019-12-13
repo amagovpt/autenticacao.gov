@@ -97,6 +97,28 @@ PageDefinitionsAppForm {
                           }
     }
 
+    propertyCheckboxUseSystemScale {
+        onCheckedChanged: {
+            controler.setUseSystemScaleValue(propertyCheckboxUseSystemScale.checked)
+            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
+            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+        }
+    }
+    propertyComboBoxScaling.onActivated:  {
+        console.log("propertyComboBoxScaling onActivated index = "
+                    + propertyComboBoxScaling.currentIndex)
+        controler.setApplicationScaleValue(propertyComboBoxScaling.currentIndex)
+        mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
+        mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+        mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+    }
+    propertyComboBoxScaling.onModelChanged: {
+        propertyComboBoxScaling.currentIndex = controler.getApplicationScaleValue()
+        console.log("propertyComboBoxScaling onModelChanged index = "
+                    + propertyComboBoxScaling.currentIndex)
+    }
+
     propertyCheckBoxDebugMode {
         onCheckedChanged: {
             var debugFilename = controler.setDebugModeValue(propertyCheckBoxDebugMode.checked)
@@ -198,9 +220,14 @@ PageDefinitionsAppForm {
 
         if (Qt.platform.os === "windows") {
             propertyCheckboxAutoStart.checked = controler.getStartAutoValue()
+
+            propertyCheckboxUseSystemScale.checked = controler.getUseSystemScaleValue()
         }else{
             propertyRectAppStart.visible = false
             propertyRectStartAutoupdate.anchors.top = propertyRectReader.bottom
+
+            propertyCheckboxUseSystemScale.visible = false
+            propertyComboBoxScaling.anchors.left = propertyComboBoxScaling.parent.left
         }
 
         propertyCheckboxStartAutoupdate.checked = controler.getStartAutoupdateValue()
@@ -285,6 +312,8 @@ PageDefinitionsAppForm {
         mainFormID.propertyPageLoader.forceActiveFocus()
     }
     function handleKeyPressed(key, callingObject){
+        if (propertyComboBoxScaling.focus)
+                    return;
         var direction = getDirection(key)
         switch(direction){
             case Constants.DIRECTION_UP:

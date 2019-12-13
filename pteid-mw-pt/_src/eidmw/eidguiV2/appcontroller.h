@@ -78,11 +78,15 @@ public slots:
     bool getShowNotificationValue(void);
     bool getShowPictureValue(void);
     bool getShowAnimationsValue(void);
+    bool getUseSystemScaleValue(void);
+    int  getApplicationScaleValue(void);
     bool getGraphicsAccelValue(void);
 
     void setShowNotificationValue(bool bShowNotification);
     void setShowPictureValue(bool bShowPicture);
     void setShowAnimationsValue(bool bShowAnimations);
+    void setUseSystemScaleValue(bool bUseSystemScale);
+    void setApplicationScaleValue(int iScale);
     void setGraphicsAccelValue(bool bGraphicsAccel);
 
     QString getTimeStampHostValue (void);
@@ -117,6 +121,8 @@ public slots:
     void flushCache();
     void getPteidCacheSize();
     void getScapCacheSize();
+
+    QString getFontFile(QString font);
 
 private:
     GUISettings&    m_Settings;

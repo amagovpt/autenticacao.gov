@@ -958,6 +958,12 @@ bool AppController::getShowPictureValue (void){
 bool AppController::getShowAnimationsValue(void){
     return m_Settings.getShowAnimations();
 }
+bool AppController::getUseSystemScaleValue(void) {
+    return m_Settings.getUseSystemScale();
+}
+int AppController::getApplicationScaleValue(void) {
+    return m_Settings.getApplicationScale();
+}
 bool AppController::getGraphicsAccelValue(void){
     return m_Settings.getGraphicsAccel();
 }
@@ -971,6 +977,12 @@ void AppController::setShowPictureValue (bool bShowPicture){
 }
 void AppController::setShowAnimationsValue(bool bShowAnimations){
     m_Settings.setShowAnimations(bShowAnimations);
+}
+void AppController::setUseSystemScaleValue(bool bUseSystemScale) {
+    m_Settings.setUseSystemScale(bUseSystemScale);
+}
+void AppController::setApplicationScaleValue(int iScale) {
+    m_Settings.setApplicationScale(iScale);
 }
 void AppController::setGraphicsAccelValue(bool bGraphicsAccel){
     m_Settings.setAccelGraphics(bGraphicsAccel);
@@ -1212,4 +1224,23 @@ void AppController::setOutlookSuppressNameChecks(bool bDisabledMatching) {
     }
 #endif
     (void)bDisabledMatching;
+}
+
+QString AppController::getFontFile(QString font) {
+    std::string fontFile = "file:///";
+#ifdef WIN32
+    fontFile.append(utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR))).append("\\fonts\\");
+#else
+    fontFile.append("usr/local/share/fonts/");
+#endif
+
+    if (font.compare("lato") == 0)
+    {
+        fontFile.append("Lato-Regular.ttf");
+    }
+    else{
+        return "";
+    }
+
+    return QString(fontFile.c_str());
 }

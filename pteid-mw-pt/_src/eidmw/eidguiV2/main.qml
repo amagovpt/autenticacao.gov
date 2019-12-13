@@ -24,7 +24,7 @@ Window {
 
     FontLoader { 
         id: lato;
-        source: gapi.getFontFile("lato")
+        source: controler.getFontFile("lato")
      }
     
     onWidthChanged: {

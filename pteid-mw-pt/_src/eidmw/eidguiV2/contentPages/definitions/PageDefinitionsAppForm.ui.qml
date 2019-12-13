@@ -8,6 +8,8 @@ import "../../components" as Components
 
 Item {
     property alias propertyComboBoxReader: comboBoxReader
+    property alias propertyCheckboxUseSystemScale: checkboxUseSystemScale
+    property alias propertyComboBoxScaling: comboBoxScaling
     property alias propertyRectReader: rectReader
     property alias propertyTextReader: textReader
     property alias propertyCheckboxEnablePinpad: checkboxEnablePinpad
@@ -485,7 +487,7 @@ Item {
             Item {
                 id: rectAppLook
                 width: parent.width
-                height: dateAppLook.height + rectAppLookCheckBox.height + 3*Constants.SIZE_TEXT_V_SPACE
+                height: dateAppLook.height + rectAppLooks.height + 3*Constants.SIZE_TEXT_V_SPACE
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 anchors.top: rectAppLanguage.bottom
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
@@ -515,18 +517,18 @@ Item {
                     KeyNavigation.left: radioButtonUK
                 }
                 DropShadow {
-                    anchors.fill: rectAppLookCheckBox
+                    anchors.fill: rectAppLooks
                     horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
                     verticalOffset: Constants.FORM_SHADOW_V_OFFSET
                     radius: Constants.FORM_SHADOW_RADIUS
                     samples: Constants.FORM_SHADOW_SAMPLES
                     color: Constants.COLOR_FORM_SHADOW
-                    source: rectAppLookCheckBox
+                    source: rectAppLooks
                     spread: Constants.FORM_SHADOW_SPREAD
                     opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
                 }
                 RectangularGlow {
-                    anchors.fill: rectAppLookCheckBox
+                    anchors.fill: rectAppLooks
                     glowRadius: Constants.FORM_GLOW_RADIUS
                     spread: Constants.FORM_GLOW_SPREAD
                     color: Constants.COLOR_FORM_GLOW
@@ -534,34 +536,127 @@ Item {
                     opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
                 }
                 Rectangle {
-                    id: rectAppLookCheckBox
+                    id: rectAppLooks
                     width: parent.width
-                    color: "white"
-                    height: 25 + Constants.SIZE_TEXT_V_SPACE
+                    height: rectAppAnimationsCheckBox.height + rectAppScaling.height + Constants.SIZE_TEXT_V_SPACE
                     anchors.top: dateAppLook.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
-                    CheckBox {
-                        id: checkboxShowAnime
-                        text: qsTranslate("PageDefinitionsApp",
-                                          "STR_SHOW_ANIME_OP") + controler.autoTr
-                        height: 25
-                        font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.capitalization: Font.MixedCase
-                        font.bold: activeFocus
-                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                        Accessible.role: Accessible.CheckBox
-                        Accessible.name: text
-                        Keys.onPressed: {
-                            handleKeyPressed(event.key, checkboxShowAnime)
+
+                    Rectangle {
+                        id: rectAppAnimationsCheckBox
+                        width: parent.width
+                        color: "white"
+                        height: 25 + Constants.SIZE_TEXT_V_SPACE
+                        anchors.top: rectAppLooks.top
+
+                        CheckBox {
+                            id: checkboxShowAnime
+                            text: qsTranslate("PageDefinitionsApp",
+                                            "STR_SHOW_ANIME_OP") + controler.autoTr
+                            height: 25
+                            font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
+                            font.bold: activeFocus
+                            anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                            Accessible.role: Accessible.CheckBox
+                            Accessible.name: text
+                            Keys.onPressed: {
+                                handleKeyPressed(event.key, checkboxShowAnime)
+                            }
+                            KeyNavigation.tab: textSelectScaling
+                            KeyNavigation.down: textSelectScaling
+                            KeyNavigation.right: textSelectScaling
+                            KeyNavigation.backtab: dateAppLook
+                            KeyNavigation.up: dateAppLook
+                            KeyNavigation.left: dateAppLook
                         }
-                        KeyNavigation.tab: dateDebugMode
-                        KeyNavigation.down: dateDebugMode
-                        KeyNavigation.right: dateDebugMode
-                        KeyNavigation.backtab: dateAppLook
-                        KeyNavigation.up: dateAppLook
-                        KeyNavigation.left: dateAppLook
+                    }
+
+                    Rectangle {
+                        id: rectAppScaling
+                        width: parent.width
+                        color: "white"
+                        height: 4 * Constants.SIZE_TEXT_FIELD + 2*Constants.SIZE_TEXT_V_SPACE
+                        anchors.top: rectAppAnimationsCheckBox.bottom
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
+                        Text {
+                            id: textSelectScaling
+                            x: 10
+                            y: Constants.SIZE_TEXT_V_SPACE
+                            font.capitalization: Font.MixedCase
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.family: lato.name
+                            font.bold: activeFocus
+                            color: Constants.COLOR_TEXT_BODY
+                            wrapMode: Text.WordWrap
+                            Accessible.role: Accessible.TitleBar
+                            Accessible.name: text
+                            Keys.onPressed: {
+                                handleKeyPressed(event.key,textSelectReader)
+                            }
+                            KeyNavigation.tab: checkboxUseSystemScale.visible ? checkboxUseSystemScale : comboBoxScaling
+                            KeyNavigation.down: checkboxUseSystemScale.visible ? checkboxUseSystemScale : comboBoxScaling
+                            KeyNavigation.right: checkboxUseSystemScale.visible ? checkboxUseSystemScale : comboBoxScaling
+                            KeyNavigation.backtab: checkboxShowAnime
+                            KeyNavigation.up: checkboxShowAnime
+                            KeyNavigation.left: checkboxShowAnime
+                            text: "Escalar aplicação:"
+                        }
+
+                        CheckBox {
+                            id: checkboxUseSystemScale
+                            text: "Usar configuração do sistema" + controler.autoTr
+                            height: 25
+                            font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
+                            font.bold: activeFocus
+                            anchors.top: textSelectScaling.bottom
+                            anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                            Accessible.role: Accessible.CheckBox
+                            Accessible.name: text
+                            Keys.onPressed: {
+                                handleKeyPressed(event.key, checkboxShowAnime)
+                            }
+                            KeyNavigation.tab: comboBoxScaling
+                            KeyNavigation.down: comboBoxScaling
+                            KeyNavigation.right: comboBoxScaling
+                            KeyNavigation.backtab: textSelectScaling
+                            KeyNavigation.up: textSelectScaling
+                            KeyNavigation.left: textSelectScaling
+                        }
+
+                        ComboBox {
+                            id: comboBoxScaling
+                            enabled: !checkboxUseSystemScale.checked
+                            height: 3 * Constants.SIZE_TEXT_FIELD
+                            anchors.left: checkboxUseSystemScale.right
+                            anchors.leftMargin: Constants.SIZE_TEXT_V_SPACE
+                            anchors.right: rectAppScaling.right
+                            anchors.rightMargin: Constants.SIZE_TEXT_V_SPACE
+                            anchors.top: textSelectScaling.bottom
+                            font.family: lato.name
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.capitalization: Font.MixedCase
+                            font.bold: activeFocus
+                            visible: true
+                            Accessible.role: Accessible.ComboBox
+                            Accessible.name: currentText
+                            Keys.onPressed: {
+                                if (event.key != Qt.Key_Down)
+                                    handleKeyPressed(event.key, comboBoxReader)
+                            }
+                            KeyNavigation.tab: dateDebugMode
+                            KeyNavigation.down: dateDebugMode
+                            KeyNavigation.right: dateDebugMode
+                            KeyNavigation.backtab: checkboxUseSystemScale.visible ? checkboxUseSystemScale : textSelectScaling
+                            KeyNavigation.up: checkboxUseSystemScale.visible ? checkboxUseSystemScale : textSelectScaling
+                            KeyNavigation.left: checkboxUseSystemScale.visible ? checkboxUseSystemScale : textSelectScaling
+                            model: ["100%", "125%", "150%", "175%"] // each increment must be 25%
+                        }
                     }
                 }
             }
@@ -593,9 +688,9 @@ Item {
                     KeyNavigation.tab: debugModeTextField
                     KeyNavigation.down: debugModeTextField
                     KeyNavigation.right: debugModeTextField
-                    KeyNavigation.backtab: checkboxShowAnime
-                    KeyNavigation.up: checkboxShowAnime
-                    KeyNavigation.left: checkboxShowAnime
+                    KeyNavigation.backtab: comboBoxScaling
+                    KeyNavigation.up: comboBoxScaling
+                    KeyNavigation.left: comboBoxScaling
                 }
 
                 DropShadow {
@@ -715,7 +810,7 @@ Item {
                     radius: Constants.FORM_SHADOW_RADIUS
                     samples: Constants.FORM_SHADOW_SAMPLES
                     color: Constants.COLOR_FORM_SHADOW
-                    source: rectAppLookCheckBox
+                    source: rectAppLooks
                     spread: Constants.FORM_SHADOW_SPREAD
                     opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
                 }
