@@ -100,9 +100,11 @@ PageDefinitionsAppForm {
     propertyCheckboxUseSystemScale {
         onCheckedChanged: {
             controler.setUseSystemScaleValue(propertyCheckboxUseSystemScale.checked)
-            mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-            mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            if (propertyCheckboxUseSystemScale.enabled) {
+                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
+                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
+                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+            }
         }
     }
     propertyComboBoxScaling.onActivated:  {
@@ -222,6 +224,7 @@ PageDefinitionsAppForm {
             propertyCheckboxAutoStart.checked = controler.getStartAutoValue()
 
             propertyCheckboxUseSystemScale.checked = controler.getUseSystemScaleValue()
+            propertyCheckboxUseSystemScale.enabled = true
         }else{
             propertyRectAppStart.visible = false
             propertyRectStartAutoupdate.anchors.top = propertyRectReader.bottom

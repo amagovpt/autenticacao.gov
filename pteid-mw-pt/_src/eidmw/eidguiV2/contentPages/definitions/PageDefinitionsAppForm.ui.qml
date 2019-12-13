@@ -608,6 +608,7 @@ Item {
 
                         CheckBox {
                             id: checkboxUseSystemScale
+                            enabled: false
                             text: "Usar configuração do sistema" + controler.autoTr
                             height: 25
                             font.family: lato.name

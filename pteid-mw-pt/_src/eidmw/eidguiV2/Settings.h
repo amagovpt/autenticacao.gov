@@ -186,7 +186,7 @@ public:
             long UseSystemScale = config.getLong();
             if ( 0 != UseSystemScale )
             {
-                setApplicationScale(UseSystemScale);
+                setUseSystemScale(UseSystemScale);
             }
         }
         //----------------------------------------------------------
