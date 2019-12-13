@@ -648,8 +648,14 @@ void GAPI::showSignCMDDialog(long error_code)
     case 0:
         error_msg = tr("STR_CMD_SUCESS");
         break;
-    case SCAP_SERVICE_ERROR_CODE:
+    case SCAP_GENERIC_ERROR_CODE:
         error_msg = tr("STR_SCAP_SIGNATURE_ERROR");
+        break;
+    case SCAP_CLOCK_ERROR_CODE:
+        error_msg = tr("STR_SCAP_CLOCK_ERROR");
+        break;
+    case SCAP_SECRETKEY_ERROR_CODE:
+        error_msg = tr("STR_SCAP_SECRETKEY_ERROR");
         break;
     case -1:
         error_msg = tr("STR_CMD_TIMEOUT_ERROR");
@@ -690,7 +696,10 @@ void GAPI::showSignCMDDialog(long error_code)
         break;
     }
 
-    if (error_code != 0 && error_code != EIDMW_TIMESTAMP_ERROR)
+    if (error_code != 0
+            && error_code != EIDMW_TIMESTAMP_ERROR
+            && error_code != SCAP_SECRETKEY_ERROR_CODE
+            && error_code != SCAP_CLOCK_ERROR_CODE)
         error_msg += "<br><br>" + support_string;
 
     qDebug() << error_msg;

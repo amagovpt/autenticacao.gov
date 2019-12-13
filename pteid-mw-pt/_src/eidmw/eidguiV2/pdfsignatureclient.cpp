@@ -20,6 +20,7 @@
 #include "eidlibdefines.h"
 #include "Util.h"
 #include "Config.h"
+#include "totp_gen.h"
 
 //applayer and common headers
 #include "MiscUtil.h"
@@ -53,9 +54,6 @@ PDFSignatureClient::PDFSignatureClient()
     }
 
 }
-
-//Implemented in totp_gen.cpp
-std::string generateTOTP(std::string secretKey);
 
 /*
 TODO:
@@ -441,6 +439,19 @@ int PDFSignatureClient::closeSCAPSignature(unsigned char * scap_signature, unsig
     return sig_handler->signClose(baSCAPSignature);
 }
 
+typedef int (*ParseHeaderFn)(struct soap*, const char*, const char*);
+
+static ParseHeaderFn pParseHeader = nullptr;
+static QString httpDate = "";
+
+static int ParseHeader(struct soap * soap, const char * key, const char * val)
+{
+    if (!soap_tag_cmp(key, "Date"))
+    {
+          httpDate = soap_strdup(soap, val);
+    }
+    return pParseHeader(soap, key, val);
+}
 
 int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QString filepath,
                                 QString citizenName, QString citizenId,int ltv, bool isCC,
@@ -577,6 +588,10 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
     qDebug() << "SCAP PDFSignatureClient:: Authorization endpoint: " << proxy.soap_endpoint;
             
+    pParseHeader = proxy.soap->fparsehdr;
+
+    proxy.soap->fparsehdr = ParseHeader;
+
     int rc = proxy.Authorization(&authorizationRequest, authorizationResponse);
 
     if (rc != SOAP_OK) {
@@ -593,7 +608,44 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
         qDebug() << "Authorization service returned SOAP_OK";
 
         //Check for Success Status
-        if (authorizationResponse.Status->Code != "00" || authorizationResponse.TransactionList == NULL) {
+        if (authorizationResponse.Status->Code == "802") {
+            qDebug() << "authorizationService returned error 802";
+            {
+                QDateTime serverTime = QDateTime::fromString(httpDate, Qt::RFC2822Date);
+                long local = time(nullptr);
+                long server = serverTime.toSecsSinceEpoch();
+                qDebug() << "local: " << local << "server: " << server;
+
+                if (abs(difftime(local,server)) > SCAP_MAX_CLOCK_DIF){
+                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                              "AuthorizationService returned error. error code: "
+                              "%s message: %s tLocal: %ld tServer: %ld",
+                              authorizationResponse.Status->Code.c_str(),
+                              authorizationResponse.Status->Message.c_str(),
+                              local,
+                              server);
+                    return GAPI::ScapClockError;
+                }else{
+                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                              "AuthorizationService returned error. error code: %s message: %s",
+                              authorizationResponse.Status->Code.c_str(),
+                              authorizationResponse.Status->Message.c_str());
+                    return GAPI::ScapSecretKeyError;
+                }
+            }
+        }
+        if (authorizationResponse.Status->Code == "803"
+                || authorizationResponse.Status->Code == "805") {
+            qDebug() << "authorizationService returned error 803 or 805";
+            {
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                          "AuthorizationService returned error. error code: %s message: %s",
+                          authorizationResponse.Status->Code.c_str(),
+                          authorizationResponse.Status->Message.c_str());
+                return GAPI::ScapSecretKeyError;
+            }
+        }
+        else if (authorizationResponse.Status->Code != "00" || authorizationResponse.TransactionList == NULL) {
             qDebug() << "authorizationService returned error";
             PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
                       "AuthorizationService returned error. error code: %s and message: %s",

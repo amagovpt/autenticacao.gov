@@ -340,13 +340,12 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
             fullname = (*attributesMap)[CitizenAttribute::COMPLETENAME].c_str();
             idNumber = (*attributesMap)[CitizenAttribute::NIC].c_str();
         }
-        std::string secretKey = settings.getSecretKey(idNumber);
 
         ns3__PersonalDataType * citizen = soap_new_req_ns3__PersonalDataType(&sp, fullname.toStdString(), idNumber.toStdString());
 
         //Last param secretKey can be NULL, because we may not have a secretKey stored in configuration (??)
         ns2__AttributeRequestType * attr_request = soap_new_set_ns2__AttributeRequestType(
-            &sp, cleanUuid.toStdString(), citizen, suppliers, &allEnterprises, &appID, &appName, secretKey.size() > 0 ? &secretKey : NULL);
+            &sp, cleanUuid.toStdString(), citizen, suppliers, &allEnterprises, &appID, &appName, nullptr);
 
         std::stringstream ss;
         if (!useOAuth) {

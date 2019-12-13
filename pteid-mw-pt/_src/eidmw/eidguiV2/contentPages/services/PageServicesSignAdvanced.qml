@@ -135,7 +135,21 @@ PageServicesSignAdvancedForm {
                 console.log("ScapAttributesExpiredError")
                 signerror_dialog.propertySignFailDialogText.text =
                         qsTranslate("PageServicesSign","STR_SCAP_NOT_VALID_ATTRIBUTES")
-            } else {
+            }
+            else if(pdfsignresult === GAPI.ScapClockError){
+                console.log("ScapClockError")
+                signerror_dialog.propertySignFailDialogText.text =
+                        qsTranslate("GAPI","STR_SCAP_CLOCK_ERROR")
+            }
+            else if(pdfsignresult === GAPI.ScapSecretKeyError){
+                console.log("ScapSecretKeyError")
+                signerror_dialog.propertySignFailDialogText.text =
+                        qsTranslate("GAPI","STR_SCAP_SECRETKEY_ERROR")
+                closeButtonError.visible = false
+                buttonLoadAttr.visible = true
+                buttonCancelAttr.visible = true
+            }
+            else {
                 console.log("ScapGenericError")
                 gapi.startPingSCAP()
             }
@@ -434,11 +448,11 @@ PageServicesSignAdvancedForm {
             Accessible.role: Accessible.AlertMessage
             Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
                              + titleTextError.text + text_sign_error.text
-            KeyNavigation.tab: closeButtonError
-            KeyNavigation.right: closeButtonError
-            KeyNavigation.down: closeButtonError
-            KeyNavigation.backtab: closeButtonError
-            KeyNavigation.up: closeButtonError
+            KeyNavigation.tab: closeButtonError.visible ? closeButtonError: buttonLoadAttr
+            KeyNavigation.right: closeButtonError.visible ? closeButtonError: buttonLoadAttr
+            KeyNavigation.down: closeButtonError.visible ? closeButtonError: buttonLoadAttr
+            KeyNavigation.backtab: closeButtonError.visible ? closeButtonError: buttonLoadAttr
+            KeyNavigation.up: closeButtonError.visible ? closeButtonError: buttonLoadAttr
             Text {
                 id: text_sign_error
                 font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -462,7 +476,56 @@ PageServicesSignAdvancedForm {
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
                     text: "OK"
+                    visible: true
                     anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    onClicked: {
+                        signerror_dialog.close()
+                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                    }
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: rectPopUpError
+                    KeyNavigation.down: rectPopUpError
+                    KeyNavigation.right: rectPopUpError
+                    KeyNavigation.backtab: rectPopUpError
+                    KeyNavigation.up: rectPopUpError
+                    highlighted: activeFocus
+                }
+                Button {
+                    id: buttonLoadAttr
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("PageServicesSign","STR_LOAD_SCAP_ATTRIBUTES")
+                    visible: false
+                    anchors.right: parent.right
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    onClicked: {
+                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                        gapi.startRemovingAttributesFromCache(GAPI.ScapAttrAll)
+                        signerror_dialog.close()
+                        jumpToDefinitionsSCAP()
+                    }
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: rectPopUpError
+                    KeyNavigation.down: rectPopUpError
+                    KeyNavigation.right: rectPopUpError
+                    KeyNavigation.backtab: rectPopUpError
+                    KeyNavigation.up: rectPopUpError
+                    highlighted: activeFocus
+                }
+                Button {
+                    id: buttonCancelAttr
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("PageServicesSign","STR_POPUP_CANCEL")
+                    visible: false
+                    anchors.left: parent.left
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase

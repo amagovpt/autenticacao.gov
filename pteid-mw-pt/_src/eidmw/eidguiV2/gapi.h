@@ -222,7 +222,7 @@ public:
                            UnableSaveFile, InstallFailed, NetworkError};
 
     enum ScapPdfSignResult { ScapTimeOutError, ScapGenericError, ScapAttributesExpiredError, ScapZeroAttributesError,
-                             ScapNotValidAttributesError, ScapSucess };
+                             ScapNotValidAttributesError, ScapClockError, ScapSecretKeyError, ScapSucess };
 
     enum ScapAttrType {ScapAttrEntities, ScapAttrCompanies, ScapAttrAll};
     enum ScapAttrDescription {ScapAttrDescriptionShort, ScapAttrDescriptionLong};
@@ -408,6 +408,7 @@ signals:
     void signalUpdateProgressStatus(const QString statusMessage);
     void addressChangeFinished(long return_code);
     void signCMDFinished(long error_code);
+    void signalShowLoadAttrButton();
     void signalOpenCMDSucess();
     void signalCloseCMDSucess();
     void signalCardChanged(const int error_code);

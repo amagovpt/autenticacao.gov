@@ -137,14 +137,27 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
     else if (successful == GAPI::ScapTimeOutError) {
         qDebug() << "Error in SCAP service Timeout with CMD service!";
         parent->signalSCAPServiceTimeout();
-        parent->signCMDFinished(SCAP_SERVICE_ERROR_CODE);
+        parent->signCMDFinished(SCAP_GENERIC_ERROR_CODE);
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
                   "SCAP CMD Error. ScapTimeOutError");
+    }
+    else if (successful == GAPI::ScapClockError) {
+        qDebug() << "Error in SCAP service Clock Error with CMD service!";
+        parent->signCMDFinished(SCAP_CLOCK_ERROR_CODE);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                  "SCAP CMD Error. ScapClockError");
+    }
+    else if (successful == GAPI::ScapSecretKeyError) {
+        qDebug() << "Error in SCAP service SecretKey Error with CMD service!";
+        parent->signalShowLoadAttrButton();
+        parent->signCMDFinished(SCAP_SECRETKEY_ERROR_CODE);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                  "SCAP CMD Error. ScapSecretKeyError");
     }
     else {
         qDebug() << "Error in SCAP Signature with CMD service!";
         parent->signalSCAPServiceFail(successful);
-        parent->signCMDFinished(SCAP_SERVICE_ERROR_CODE);
+        parent->signCMDFinished(SCAP_GENERIC_ERROR_CODE);
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
                   "SCAP CMD Error. ScapPdfSignResult = %d",successful);
     }
@@ -224,6 +237,18 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
                 parent->signalSCAPServiceTimeout();
                 PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
                           "SCAP CC ScapTimeOutError");
+            }
+            else if (successful == GAPI::ScapClockError) {
+                qDebug() << "Error in SCAP service Clock Error!";
+                parent->signalSCAPServiceFail(successful);
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                          "SCAP CC ScapClockError");
+            }
+            else if (successful == GAPI::ScapSecretKeyError) {
+                qDebug() << "Error in SCAP service SecretKey Error!";
+                parent->signalSCAPServiceFail(successful);
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                          "SCAP CC ScapSecretKeyError");
             }
             else {
                 qDebug() << "Error in SCAP Signature service!";

@@ -52,7 +52,12 @@ Item {
             rectReturnCode.visible = false
             textMessageTop.propertyText.text = statusMessage
             textMessageTop.propertyAccessibleText = statusMessage
-            textMessageTop.propertyText.forceActiveFocus()
+            textMessageTop.forceActiveFocus()
+        }
+        onSignalShowLoadAttrButton:{
+            buttonSCAPLoadAttributes.visible = true
+            rectLabelCMDText.visible = true
+            labelCMDText.text = qsTranslate("Popup File","STR_POPUP_LOAD_SCAP_ATTR")
         }
     }
 
@@ -405,9 +410,9 @@ Item {
             Accessible.role: Accessible.AlertMessage
             Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
                              + labelTextTitleProgress.text
-            KeyNavigation.tab: textMessageTop.propertyText
-            KeyNavigation.down: textMessageTop.propertyText
-            KeyNavigation.right: textMessageTop.propertyText
+            KeyNavigation.tab: textMessageTop
+            KeyNavigation.down: textMessageTop
+            KeyNavigation.right: textMessageTop
             KeyNavigation.backtab: buttonCMDProgressConfirm
             KeyNavigation.up: buttonCMDProgressConfirm
 
@@ -426,9 +431,10 @@ Item {
                     propertyText.wrapMode: Text.WordWrap
                     propertyText.height: parent.height
                     propertyText.width: parent.width
-                    KeyNavigation.tab: labelCMDText
-                    KeyNavigation.down: labelCMDText
-                    KeyNavigation.right: labelCMDText
+                    propertyText.font.bold: activeFocus? true : false
+                    KeyNavigation.tab: rectLabelCMDText.visible ? labelCMDText : (rectReturnCode.visible ? textFieldReturnCode:closeButton)
+                    KeyNavigation.down: rectLabelCMDText.visible ? labelCMDText : (rectReturnCode.visible ? textFieldReturnCode:closeButton)
+                    KeyNavigation.right: rectLabelCMDText.visible ? labelCMDText : (rectReturnCode.visible ? textFieldReturnCode:closeButton)
                     KeyNavigation.backtab: rectPopUpProgress
                     KeyNavigation.up: rectPopUpProgress
                 }
@@ -443,7 +449,7 @@ Item {
                 visible: false
                 Text {
                     id: labelCMDText
-                    text: (filesModel.count == 1 ? qsTranslate("PageServicesSign","STR_SIGN_OPEN") : 
+                    text: (filesModel.count == 1 ? qsTranslate("PageServicesSign","STR_SIGN_OPEN") :
                                                    qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI"))
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
@@ -454,11 +460,11 @@ Item {
                     wrapMode: Text.Wrap
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
-                    KeyNavigation.tab: textReturnCode
-                    KeyNavigation.down: textReturnCode
-                    KeyNavigation.right: textReturnCode
-                    KeyNavigation.backtab: textMessageTop.propertyText
-                    KeyNavigation.up: textMessageTop.propertyText
+                    KeyNavigation.tab: closeButton
+                    KeyNavigation.down: closeButton
+                    KeyNavigation.right: closeButton
+                    KeyNavigation.backtab: textMessageTop
+                    KeyNavigation.up: textMessageTop
                 }
             }
             Item {
@@ -558,9 +564,9 @@ Item {
                 }
                 Accessible.role: Accessible.Button
                 Accessible.name: text
-                KeyNavigation.tab: buttonCMDProgressConfirm
-                KeyNavigation.down: buttonCMDProgressConfirm
-                KeyNavigation.right: buttonCMDProgressConfirm
+                KeyNavigation.tab: buttonCMDProgressConfirm.visible ? buttonCMDProgressConfirm : buttonSCAPLoadAttributes
+                KeyNavigation.down: buttonCMDProgressConfirm.visible ? buttonCMDProgressConfirm : buttonSCAPLoadAttributes
+                KeyNavigation.right: buttonCMDProgressConfirm.visible ? buttonCMDProgressConfirm : buttonSCAPLoadAttributes
                 KeyNavigation.backtab: textFieldReturnCode
                 KeyNavigation.up: textFieldReturnCode
             }
@@ -586,6 +592,35 @@ Item {
                 }
                 Keys.onReturnPressed: {
                     signCMDConfirm()
+                }
+                Accessible.role: Accessible.Button
+                Accessible.name: text
+                KeyNavigation.tab: rectPopUpProgress
+                KeyNavigation.down: rectPopUpProgress
+                KeyNavigation.right: rectPopUpProgress
+                KeyNavigation.backtab: closeButton
+                KeyNavigation.up: closeButton
+            }
+            Button {
+                id: buttonSCAPLoadAttributes
+                width: Constants.WIDTH_BUTTON
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                text: qsTranslate("PageServicesSign","STR_LOAD_SCAP_ATTRIBUTES")
+                anchors.right: parent.right
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                font.capitalization: Font.MixedCase
+                enabled: textFieldReturnCode.acceptableInput || isOpenFile
+                visible: false
+                highlighted: activeFocus ? true : false
+                onClicked: {
+                    loadSCAPAttributes()
+                }
+                Keys.onEnterPressed: {
+                    loadSCAPAttributes()
+                }
+                Keys.onReturnPressed: {
+                    loadSCAPAttributes()
                 }
                 Accessible.role: Accessible.Button
                 Accessible.name: text
@@ -706,6 +741,7 @@ Item {
         dialogSignCMD.close()
         buttonCMDProgressConfirm.visible = false
         buttonCMDProgressConfirm.text = qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
+        buttonSCAPLoadAttributes.visible = false
         dialogCMDProgress.open()
     }
     function signCMDConfirm(){
@@ -747,5 +783,11 @@ Item {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             mainFormID.propertyPageLoader.forceActiveFocus()
         }
+    }
+    function loadSCAPAttributes(){
+        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+        dialogCMDProgress.close()
+        gapi.startRemovingAttributesFromCache(GAPI.ScapAttrAll)
+        jumpToDefinitionsSCAP()
     }
 }

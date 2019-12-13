@@ -29,7 +29,13 @@ class ScapSettings
     #define SCAP_ATTRIBUTES_EXPIRED     401
     #define SCAP_ZERO_ATTRIBUTES        402
     #define SCAP_ATTRIBUTES_NOT_VALID   403
-    #define SCAP_SERVICE_ERROR_CODE     404
+
+    #define SCAP_GENERIC_ERROR_CODE     404
+    #define SCAP_CLOCK_ERROR_CODE       405
+    #define SCAP_SECRETKEY_ERROR_CODE   406
+
+    #define SCAP_MAX_CLOCK_DIF          5*60    // 5 minutos
+
 
 public:
     //------------------------------------------------------
