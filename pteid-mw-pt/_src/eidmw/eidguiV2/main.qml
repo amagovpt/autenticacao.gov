@@ -24,6 +24,7 @@ Window {
 
     FontLoader { 
         id: lato;
+        name: "Lato" // This avoids printing error on application start
         source: controler.getFontFile("lato")
      }
     
