@@ -23,6 +23,7 @@
 #include "resource.h"
 #include "../langUtil.h"
 #include "Log.h"
+#include "Config.h"
 
 TD_WNDMAP WndMap;
 Win32Dialog *Win32Dialog::Active_lpWnd = NULL;
@@ -92,8 +93,15 @@ Win32Dialog::Win32Dialog(const wchar_t *appName)
 	m_fonthandle = NULL;
 	m_appName=_wcsdup(appName);
 
-	TextFontHeader = loadFontFromResource(16 *.75, true);
-	TextFont = loadFontFromResource(14 * .75, false);
+	int fontSizeHeader = 16 * .75;
+	int fontSize = 14 * .75;
+
+	// Scale font based on horizontal DPI
+	ScaleDimensions(&fontSizeHeader, NULL); 
+	ScaleDimensions(&fontSize, NULL);
+
+	TextFontHeader = loadFontFromResource(fontSizeHeader, true);
+	TextFont = loadFontFromResource(fontSize, false);
 }
 
 Win32Dialog::~Win32Dialog()
@@ -279,13 +287,39 @@ void Win32Dialog::close()
 
 void Win32Dialog::ScaleDimensions(int *width, int *height)
 {
-	// Get scaling. Component sizes should be proportional to dialog size
-	HDC hdc = GetDC(NULL);
-	FLOAT horizontalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSX));
-	FLOAT verticalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSY));
-	ReleaseDC(0, hdc);
-	horizontalDPI = horizontalDPI / 96.f;
-	verticalDPI = verticalDPI / 96.f;
+	FLOAT horizontalDPI;
+	FLOAT verticalDPI;
+
+	// A dummy variable is introduced so that this function can be called with only one parameter
+	int dummyDimension = 0; 
+	if (width == NULL)
+	{
+		width = &dummyDimension;
+	}
+	if (height == NULL)
+	{
+		height = &dummyDimension;
+	}
+
+	long configUseSystemScale = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_USESYSTEMSCALE);
+	if (configUseSystemScale != 0)
+	{
+		// Get system scaling.
+		HDC hdc = GetDC(NULL);
+		horizontalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSX));
+		verticalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSY));
+		ReleaseDC(0, hdc);
+
+		horizontalDPI = horizontalDPI / 96.f;
+		verticalDPI = verticalDPI / 96.f;
+	}
+	else
+	{
+		// Scale using application configuration
+		long configScale = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_APPLICATIONSCALE);
+		horizontalDPI = 1.0f + 0.25f * (float)configScale; // scale works with increments in 25%
+		verticalDPI = horizontalDPI;
+	}
 
 	*width *= horizontalDPI;
 	*height *= verticalDPI;
