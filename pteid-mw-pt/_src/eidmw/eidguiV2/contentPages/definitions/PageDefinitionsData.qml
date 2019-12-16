@@ -29,6 +29,9 @@ PageDefinitionsDataForm {
         onSignalGenericError: {
             propertyBusyIndicator.running = false
         }
+        onSignalCardDataChanged: {
+            propertyBusyIndicator.running = false
+        }
         onSignalCardAccessError: {
             console.log("Definitions SCAP Signature --> onSignalCardAccessError")
             propertyBusyIndicator.running = false;
