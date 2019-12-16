@@ -1,11 +1,3 @@
-/*-****************************************************************************
-
- * Copyright (C) 2012 André Guerreiro - <aguerreiro1985@gmail.com>
- *
- * Licensed under the EUPL V.1.1
-
-****************************************************************************-*/
-
 // Needs OpenSSL 1.0 or a patched older version
 // Patches available at http://opentsa.org 
 #include <openssl/ts.h>

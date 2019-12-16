@@ -1,10 +1,3 @@
-/*-****************************************************************************
-
- * Copyright (C) 2012 André Guerreiro - <aguerreiro1985@gmail.com>
- *
- * Licensed under the EUPL V.1.1
-
-****************************************************************************-*/
 
 #ifndef CAIRO_RESCALE_BOX_H
 #define CAIRO_RESCALE_BOX_H

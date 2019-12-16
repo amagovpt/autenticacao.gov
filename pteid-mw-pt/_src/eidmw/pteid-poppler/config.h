@@ -1,11 +1,3 @@
-/*-****************************************************************************
-
- * Copyright (C) 2012 André Guerreiro - <aguerreiro1985@gmail.com>
- *
- * Licensed under the EUPL V.1.1
-
-****************************************************************************-*/
-
 /* config.h.  Generated from config.h.in by configure.  */
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 

@@ -1,10 +1,3 @@
-/*-****************************************************************************
-
- * Copyright (C) 2012 André Guerreiro - <aguerreiro1985@gmail.com>
- *
- * Licensed under the EUPL V.1.1
-
-****************************************************************************-*/
 
 // Copied from gunicomp.h in GLib:
 // 	s/[G]_UNICODE_MAX_TABLE_INDEX/UNICODE_MAX_TABLE_INDEX/g

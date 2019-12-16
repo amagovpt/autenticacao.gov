@@ -1,10 +1,3 @@
-/*-****************************************************************************
-
- * Copyright (C) 2012 André Guerreiro - <aguerreiro1985@gmail.com>
- *
- * Licensed under the EUPL V.1.1
-
-****************************************************************************-*/
 
 /* PageTransition.cc
  * Copyright (C) 2005, Net Integration Technologies, Inc.

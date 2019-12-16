@@ -1,13 +1,3 @@
-/*-****************************************************************************
-
- * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
- * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
- *
- * Licensed under the EUPL V.1.1
-
-****************************************************************************-*/
-
 /*
         stdsoap2.h 2.8.60
 

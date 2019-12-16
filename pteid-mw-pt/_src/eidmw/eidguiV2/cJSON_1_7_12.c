@@ -1,11 +1,3 @@
-/*-****************************************************************************
-
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
- *
- * Licensed under the EUPL V.1.1
-
-****************************************************************************-*/
-
 /*
   Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
 
