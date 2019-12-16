@@ -123,6 +123,7 @@ public slots:
     void getScapCacheSize();
 
     QString getFontFile(QString font);
+    static void initApplicationScale();
 
 private:
     GUISettings&    m_Settings;

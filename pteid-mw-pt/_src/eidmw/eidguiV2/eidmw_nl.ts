@@ -1103,22 +1103,22 @@
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="597"/>
         <source>STR_SCALE_APPLICATION_TITLE</source>
         <oldsource>STR_SCALE_APPLICATION</oldsource>
-        <translation type="unfinished">Escala da aplicação:</translation>
+        <translation>Escala da aplicação:</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="658"/>
         <source>STR_SCALE_APPLICATION_DESC</source>
-        <translation type="unfinished">Estas configurações permitem alterar o tamanho do texto e janelas da aplicação.</translation>
+        <translation>Estas configurações permitem alterar o tamanho do texto e janelas da aplicação.</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="664"/>
         <source>STR_USE_SYSTEM_SETTING</source>
-        <translation type="unfinished">Usar configurações do sistema.</translation>
+        <translation>Usar configurações do sistema.</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="712"/>
         <source>STR_MANUAL_SCALING</source>
-        <translation type="unfinished">Configuração manual:</translation>
+        <translation>Configuração manual:</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="764"/>

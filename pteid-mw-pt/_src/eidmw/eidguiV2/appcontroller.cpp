@@ -1245,3 +1245,50 @@ QString AppController::getFontFile(QString font) {
 
     return QString(fontFile.c_str());
 }
+
+// This function should be called before instantiating a QApplication
+void AppController::initApplicationScale() {
+    double scale = 1;
+
+    eIDMW::PTEID_Config configScale(eIDMW::PTEID_PARAM_GUITOOL_APPLICATIONSCALE);
+    eIDMW::PTEID_Config configUseSystemScale(eIDMW::PTEID_PARAM_GUITOOL_USESYSTEMSCALE);
+
+    int scaleSetting = configScale.getLong();
+    bool useSystemScale = configUseSystemScale.getLong() != 0;
+
+    if (!useSystemScale)
+    {
+        qDebug() << "Using application scaling.";
+        scale = 1 + 0.25 * scaleSetting; // scale levels are in 25% increments
+    }
+    else
+    {
+        qDebug() << "Using system scaling.";
+#ifdef WIN32
+        // Get DPI from window with cursor where aplication window will be rendered
+        POINT cursorPos;
+        if (!GetPhysicalCursorPos(&cursorPos)) {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error occurred getting cursor position: %d", GetLastError());
+            return;
+        }
+        HWND hCursorWnd = WindowFromPoint(cursorPos);
+        HDC hdc = GetDC(hCursorWnd);
+        FLOAT horizontalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSX));
+        ReleaseDC(0, hdc);
+
+        scale = horizontalDPI / 96.0; 
+
+        // set scale setting to the system scale so it can be displayed in the application settings
+        // convert to scale levels used in the application settings
+        int scaleLevel = round((scale - 1) / 0.25);
+        configScale.setLong(scaleLevel);
+#else
+        // System scale in application can only be configured in Windows
+#endif
+    }
+    std::string scaleAsString = std::to_string(scale);
+    QByteArray scaleAsQByteArray(scaleAsString.c_str(), (int)scaleAsString.length());
+    qDebug() << "Application scaling: " << scale;
+    if (!qputenv("QT_SCALE_FACTOR", scaleAsQByteArray))
+        qDebug() << "Erro QT_SCALE_FACTOR";
+}

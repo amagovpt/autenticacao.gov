@@ -1105,22 +1105,22 @@
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="597"/>
         <source>STR_SCALE_APPLICATION_TITLE</source>
         <oldsource>STR_SCALE_APPLICATION</oldsource>
-        <translation type="unfinished">Application scale:</translation>
+        <translation>Application scale:</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="658"/>
         <source>STR_SCALE_APPLICATION_DESC</source>
-        <translation type="unfinished">This settings allow to change the size of the text and windows in the application.</translation>
+        <translation>This settings allow to change the size of the text and windows in the application.</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="664"/>
         <source>STR_USE_SYSTEM_SETTING</source>
-        <translation type="unfinished">Use system scale settings.</translation>
+        <translation>Use system scale settings.</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="712"/>
         <source>STR_MANUAL_SCALING</source>
-        <translation type="unfinished">Manual configuration:</translation>
+        <translation>Manual configuration:</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="764"/>
