@@ -166,7 +166,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="goo\FixedPoint.cc" />
     <ClCompile Include="goo\gfile.cc" />
     <ClCompile Include="goo\gmem.cc" />
     <ClCompile Include="goo\gmempp.cc" />
@@ -175,10 +174,6 @@
     <ClCompile Include="goo\GooString.cc" />
     <ClCompile Include="goo\GooTimer.cc" />
     <ClCompile Include="goo\gstrtod.cc" />
-    <ClCompile Include="goo\ImgWriter.cc" />
-    <ClCompile Include="goo\JpegWriter.cc" />
-    <ClCompile Include="goo\PNGWriter.cc" />
-    <ClCompile Include="goo\TiffWriter.cc" />
     <ClCompile Include="poppler\Annot.cc" />
     <ClCompile Include="poppler\Array.cc" />
     <ClCompile Include="poppler\BuiltinFont.cc" />
@@ -226,12 +221,10 @@
     <ClCompile Include="poppler\Stream.cc" />
     <ClCompile Include="poppler\ViewerPreferences.cc" />
     <ClCompile Include="poppler\win_iconv.c" />
-    <ClCompile Include="poppler\XpdfPluginAPI.cc" />
     <ClCompile Include="poppler\XRef.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
-    <ClInclude Include="goo\FixedPoint.h" />
     <ClInclude Include="goo\gfile.h" />
     <ClInclude Include="goo\gmem.h" />
     <ClInclude Include="goo\GooHash.h" />
@@ -243,10 +236,6 @@
     <ClInclude Include="goo\gstrtod.h" />
     <ClInclude Include="goo\gtypes.h" />
     <ClInclude Include="goo\gtypes_p.h" />
-    <ClInclude Include="goo\ImgWriter.h" />
-    <ClInclude Include="goo\JpegWriter.h" />
-    <ClInclude Include="goo\PNGWriter.h" />
-    <ClInclude Include="goo\TiffWriter.h" />
     <ClInclude Include="poppler\Annot.h" />
     <ClInclude Include="poppler\Array.h" />
     <ClInclude Include="poppler\BuiltinFontTables.h" />
@@ -290,7 +279,6 @@
     <ClInclude Include="poppler\Stream.h" />
     <ClInclude Include="poppler\ViewerPreferences.h" />
     <ClInclude Include="poppler\win_iconv.h" />
-    <ClInclude Include="poppler\XpdfPluginAPI.h" />
     <ClInclude Include="poppler\XRef.h" />
   </ItemGroup>
   <ItemGroup>

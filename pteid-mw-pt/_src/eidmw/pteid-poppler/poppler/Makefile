@@ -61,8 +61,7 @@ SOURCES =		\
 	Sound.cc	\
 	BuiltinFont.cc	\
 	BuiltinFontTables.cc \
-	FontEncodingTables.cc \
-	XpdfPluginAPI.cc        
+	FontEncodingTables.cc
 #	UnicodeMap.cc		\
 #	CMap.cc			\
 #	Gfx.cc 			\

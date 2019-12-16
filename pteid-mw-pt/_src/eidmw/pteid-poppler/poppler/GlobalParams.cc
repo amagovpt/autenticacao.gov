@@ -70,9 +70,6 @@
 #include "CMap.h"
 #include "BuiltinFontTables.h"
 #include "FontEncodingTables.h"
-#ifdef ENABLE_PLUGINS
-#  include "XpdfPluginAPI.h"
-#endif
 #include "GlobalParams.h"
 #include "GfxFont.h"
 
