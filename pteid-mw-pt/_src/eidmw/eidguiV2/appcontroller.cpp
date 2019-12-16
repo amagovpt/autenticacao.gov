@@ -1258,12 +1258,12 @@ void AppController::initApplicationScale() {
 
     if (!useSystemScale)
     {
-        qDebug() << "Using application scaling.";
+        qDebug() << "C++: Using application scaling.";
         scale = 1 + 0.25 * scaleSetting; // scale levels are in 25% increments
     }
     else
     {
-        qDebug() << "Using system scaling.";
+        qDebug() << "C++: Using system scaling.";
 #ifdef WIN32
         // Get DPI from window with cursor where aplication window will be rendered
         POINT cursorPos;
@@ -1291,7 +1291,7 @@ void AppController::initApplicationScale() {
     }
     std::string scaleAsString = std::to_string(scale);
     QByteArray scaleAsQByteArray(scaleAsString.c_str(), (int)scaleAsString.length());
-    qDebug() << "Application scaling: " << scale;
+    qDebug() << "C++: Application scaling: " << scale;
     if (!qputenv("QT_SCALE_FACTOR", scaleAsQByteArray))
-        qDebug() << "Erro QT_SCALE_FACTOR";
+        qDebug() << "C++: Erro QT_SCALE_FACTOR";
 }

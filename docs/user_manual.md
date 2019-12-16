@@ -758,6 +758,8 @@ novas atualizações quando se inicia a aplicação.
 
 - **Aparência:** Opções relativas à aparência da aplicação.
 
+- **Escala da aplicação:** Opções relativas ao tamanho do texto e outros componentes da aplicação.
+
 - **Modo diagnóstico**: Permite ativar ou desativar o modo de diagnóstico da
 aplicação. Este modo eleva o nível de detalhe do *log* para *debug*, o
 que, em caso de problemas com a aplicação, pode ajudar a equipa de
