@@ -35,6 +35,7 @@
 #include "Config.h"
 #include "Util.h"
 
+
 using namespace eIDMW;
 
 #define TRIES_LEFT_ERROR    1000
@@ -1108,11 +1109,9 @@ QString GAPI::getCardActivation() {
     {
         return QString(tr("STR_CARD_NOT_ACTIVE"));
     }
-    else
-    {
-        return QString(tr("STR_CARD_STATUS_FAIL"));
-    }
     END_TRY_CATCH
+
+    return QString(tr("STR_CARD_STATUS_FAIL"));
 }
 
 QPixmap PhotoImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)

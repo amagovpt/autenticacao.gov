@@ -27,6 +27,7 @@ PageCardOtherDataForm {
         target: gapi
         onSignalGenericError: {
             propertyBusyIndicator.running = false
+            propertyTextBoxCardState.propertyDateField.enabled = false
         }
         onSignalCardDataChanged: {
             console.log("Data Card Identify --> Data Changed")
@@ -40,13 +41,16 @@ PageCardOtherDataForm {
             propertyTextBoxDocumentType.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Documenttype)
             propertyTextBoxPlaceOfRequest.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.PlaceOfRequest)
             propertyTextBoxCardState.propertyDateField.text = ""
+            propertyTextBoxCardState.propertyDateField.enabled = true
             mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                 propertyRectTaxNum.forceActiveFocus()
         }
         onSignalShowCardActivation: {
             propertyBusyIndicator.running = false
-            propertyTextBoxCardState.propertyDateField.text = statusMessage
+            if (propertyTextBoxCardState.propertyDateField.enabled){
+                propertyTextBoxCardState.propertyDateField.text = statusMessage
+            }
         }
 
         onSignalCardAccessError: {
@@ -81,6 +85,7 @@ PageCardOtherDataForm {
             propertyTextBoxDocumentType.propertyDateField.text = ""
             propertyTextBoxPlaceOfRequest.propertyDateField.text = ""
             propertyTextBoxCardState.propertyDateField.text = ""
+            propertyTextBoxCardState.propertyDateField.enabled = false
             propertyBusyIndicator.running = false
         }
         onSignalCardChanged: {
@@ -110,6 +115,7 @@ PageCardOtherDataForm {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
                 returnSubMenuWhenClosed = true;
             }
+            propertyTextBoxCardState.propertyDateField.enabled = false
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, returnSubMenuWhenClosed)
         }
     }
