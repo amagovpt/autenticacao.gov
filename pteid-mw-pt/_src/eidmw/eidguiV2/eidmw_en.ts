@@ -1102,38 +1102,48 @@
         <translation>Enable animations</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="606"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="597"/>
         <source>STR_SCALE_APPLICATION_TITLE</source>
         <oldsource>STR_SCALE_APPLICATION</oldsource>
-        <translation>Change application scale:</translation>
+        <translation type="unfinished">Application scale:</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="612"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="658"/>
+        <source>STR_SCALE_APPLICATION_DESC</source>
+        <translation type="unfinished">This settings allow to change the size of the text and windows in the application.</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="664"/>
         <source>STR_USE_SYSTEM_SETTING</source>
-        <translation type="unfinished">Use system scale settings</translation>
+        <translation type="unfinished">Use system scale settings.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="683"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="712"/>
+        <source>STR_MANUAL_SCALING</source>
+        <translation type="unfinished">Manual configuration:</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="764"/>
         <source>STR_DEBUG_MODE_TITLE</source>
         <translation>Debug mode</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="745"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="826"/>
         <source>STR_DEBUG_MODE_DESCRIPTION</source>
         <translation>Please enable debug mode if you encounter problems with the application.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="751"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="832"/>
         <source>STR_DEBUG_MODE_ENABLE</source>
         <translation>Enable debug mode</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="793"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="874"/>
         <source>STR_APP_GRAPHICS_TITLE</source>
         <translation>Graphic acceleration</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="860"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="941"/>
         <source>STR_ACCEL_ENABLE</source>
         <translation>Enable graphic acceleration</translation>
     </message>
@@ -1168,42 +1178,42 @@
         <translation>URL?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="903"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="984"/>
         <source>STR_NETWORK_TITLE</source>
         <translation>Network settings</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="947"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1028"/>
         <source>STR_NETWORK_SYSTEM_PROXY_OP</source>
         <translation>Use system proxy</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="972"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1053"/>
         <source>STR_NETWORK_PROXY_OP</source>
         <translation>Configure proxy server</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1006"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1087"/>
         <source>STR_NETWORK_PROXY_ADDRESS_OP</source>
         <translation>Host?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1039"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1120"/>
         <source>STR_NETWORK_PROXY_PORT_OP</source>
         <translation>Port?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1064"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1145"/>
         <source>STR_NETWORK_AUTH_OP</source>
         <translation>Configure proxy authentication</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1100"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1181"/>
         <source>STR_NETWORK_AUTH_USERNAME_OP</source>
         <translation>Username?</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1131"/>
+        <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="1212"/>
         <source>STR_NETWORK_AUTH_PASSWORD_OP</source>
         <translation>Password?</translation>
     </message>

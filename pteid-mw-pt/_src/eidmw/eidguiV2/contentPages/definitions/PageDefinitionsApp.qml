@@ -230,7 +230,7 @@ PageDefinitionsAppForm {
             propertyRectStartAutoupdate.anchors.top = propertyRectReader.bottom
 
             propertyCheckboxUseSystemScale.visible = false
-            propertyComboBoxScaling.anchors.left = propertyComboBoxScaling.parent.left
+            propertyComboBoxScaling.width = propertyComboBoxScaling.parent.width - propertyTextManualScaling.width - 2*10- Constants.SIZE_TEXT_V_SPACE
         }
 
         propertyCheckboxStartAutoupdate.checked = controler.getStartAutoupdateValue()
