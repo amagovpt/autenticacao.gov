@@ -1284,6 +1284,9 @@ void AppController::initApplicationScale() {
         configScale.setLong(scaleLevel);
 #else
         // System scale in application can only be configured in Windows
+
+        // System scale is the default so set it to false (only relevant the first time the application runs)
+        configUseSystemScale.setLong(0);
 #endif
     }
     std::string scaleAsString = std::to_string(scale);
