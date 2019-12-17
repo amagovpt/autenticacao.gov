@@ -95,6 +95,8 @@ PageCardNotesForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titleMessage, statusMessage, false);
             if (success) {
                 mainFormID.propertyPageLoader.propertyUnsavedNotes = false;
+                propertyBackupText = "";
+                propertyLoadedText = "";
             }
         }
         onSignalCardChanged: {
@@ -162,14 +164,6 @@ PageCardNotesForm {
         }
     }
 
-    propertySaveNotes{
-        onClicked: {
-            gapi.startWritingPersoNotes(propertyEditNotes.text);
-            propertyBackupText = "";
-            propertyLoadedText = "";
-        }
-    }
-
     function ensureVisible(r)
     {
         if (propertyFlickNotes.contentY >= r.y){
@@ -186,6 +180,9 @@ PageCardNotesForm {
     function enableInput(b){
         propertyEditNotes.enabled = b
         propertySaveNotes.enabled = b
+    }
+    function startWritingNotes(){
+        gapi.startWritingPersoNotes(propertyEditNotes.text);
     }
 
 

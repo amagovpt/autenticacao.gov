@@ -258,6 +258,15 @@ Item {
                 KeyNavigation.right: notesText
                 KeyNavigation.backtab: progressBar
                 KeyNavigation.up: progressBar
+                Keys.onEnterPressed: {
+                    startWritingNotes();
+                }
+                Keys.onReturnPressed: {
+                    startWritingNotes();
+                }
+                onClicked:{
+                    startWritingNotes();
+                }
             }
         }
     }
