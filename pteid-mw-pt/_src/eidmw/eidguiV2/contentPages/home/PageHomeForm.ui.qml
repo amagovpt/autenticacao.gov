@@ -230,6 +230,8 @@ Item {
                 KeyNavigation.right: reminderCheckBox
                 KeyNavigation.backtab: textLinks
                 KeyNavigation.up: textLinks
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
             }
         }
 

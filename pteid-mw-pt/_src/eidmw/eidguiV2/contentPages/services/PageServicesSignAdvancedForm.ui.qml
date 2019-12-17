@@ -243,6 +243,8 @@ Item {
                         KeyNavigation.right: buttonRemoveAll
                         KeyNavigation.backtab: button_signCMD
                         KeyNavigation.up: button_signCMD
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
                     }
                     Button {
                         id: buttonRemoveAll
@@ -263,6 +265,8 @@ Item {
                         KeyNavigation.right: titleConf
                         KeyNavigation.backtab: buttonAdd
                         KeyNavigation.up: buttonAdd
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
                     }
                 }
             }
@@ -1007,6 +1011,8 @@ Item {
                     KeyNavigation.right: button_signCMD.enabled ? button_signCMD : buttonAdd
                     KeyNavigation.backtab: checkSignReduced
                     KeyNavigation.up: checkSignReduced
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
                 Button {
                     id: button_signCMD
@@ -1027,6 +1033,8 @@ Item {
                     KeyNavigation.right: buttonAdd
                     KeyNavigation.backtab: button_signCC
                     KeyNavigation.up: button_signCC
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
             }
         }

@@ -239,6 +239,8 @@ Item {
                                 listViewEntities.currentIndex = listViewEntities.count -1
                             }
                         }
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
                     }
                     Button {
                         id: buttonLoadEntityAttributes
@@ -254,6 +256,8 @@ Item {
                         enabled: isAnyEntitySelected()
                         Accessible.role: Accessible.Button
                         Accessible.name: text
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
                     }
                     Button {
                         id: buttonLoadEntityAttributesOAuth
@@ -271,6 +275,8 @@ Item {
                         Accessible.name: text
                         KeyNavigation.tab: entitiesText
                         KeyNavigation.backtab: buttonLoadEntityAttributes.enabled ? buttonLoadEntityAttributes : buttonRemoveEntityAttributes
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
                     }
                 }
             }
@@ -396,6 +402,8 @@ Item {
                                 companiesText.forceActiveFocus()
                             }
                         }
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
                     }
                     Button {
                         id: buttonLoadCompanyAttributes
@@ -411,6 +419,8 @@ Item {
                         enabled: isCardPresent
                         Accessible.role: Accessible.Button
                         Accessible.name: text
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
                     }
                     Button {
                         id: buttonLoadCompanyAttributesOAuth
@@ -427,6 +437,8 @@ Item {
                         Accessible.name: text
                         KeyNavigation.tab: companiesText
                         KeyNavigation.backtab: buttonLoadCompanyAttributes.enabled ? buttonLoadCompanyAttributes : buttonRemoveCompanyAttributes
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
                     }
                 }
             }

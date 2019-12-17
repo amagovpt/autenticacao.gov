@@ -286,6 +286,8 @@ Item {
                     KeyNavigation.down: buttonExportCertificate
                     KeyNavigation.right: buttonExportCertificate
                     KeyNavigation.up: rectStatus
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
 
                 Button {
@@ -307,6 +309,8 @@ Item {
                     KeyNavigation.down: rectEntity
                     KeyNavigation.right: rectEntity
                     KeyNavigation.up: buttonViewCertificate
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
             }
         }

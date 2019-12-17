@@ -175,6 +175,8 @@ Item {
                     KeyNavigation.right: fileLoaded ? pdfPreviewArea : textSpinBox
                     KeyNavigation.backtab: titlePre
                     KeyNavigation.up: titlePre
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
                 Components.PDFPreview {
                     id: pdfPreviewArea
@@ -366,6 +368,8 @@ Item {
                 KeyNavigation.right: button_signCC
                 KeyNavigation.backtab: checkLastPage
                 KeyNavigation.up: checkLastPage
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
             }
         }
         Item{
@@ -393,6 +397,8 @@ Item {
                 KeyNavigation.right: button_signCMD
                 KeyNavigation.backtab: buttonRemove
                 KeyNavigation.up: buttonRemove
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
             }
             Button {
                 id: button_signCMD
@@ -413,6 +419,8 @@ Item {
                 KeyNavigation.right: titlePre
                 KeyNavigation.backtab: button_signCC
                 KeyNavigation.up: button_signCC
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
             }
         }
     }

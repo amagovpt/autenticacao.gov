@@ -180,6 +180,8 @@ Item {
                         KeyNavigation.left: remoteVersion
                         KeyNavigation.backtab: remoteVersion
                         KeyNavigation.up: remoteVersion
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
                     }
                 }
             }
@@ -237,6 +239,8 @@ Item {
                     KeyNavigation.left: textDescription
                     KeyNavigation.backtab: textDescription
                     KeyNavigation.up: textDescription
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
             }
             Item {
@@ -264,6 +268,8 @@ Item {
                     KeyNavigation.left: buttonSearch
                     KeyNavigation.backtab: buttonSearch
                     KeyNavigation.up: buttonSearch
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
             }
 

@@ -294,6 +294,8 @@ Item {
                 KeyNavigation.right: buttonPdf
                 KeyNavigation.backtab: switchPdfSign
                 KeyNavigation.up: switchPdfSign
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
 
             }
         }
@@ -321,6 +323,8 @@ Item {
                 KeyNavigation.right: titleSelectData
                 KeyNavigation.backtab: buttonPrint
                 KeyNavigation.up: buttonPrint
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
 
             }
         }

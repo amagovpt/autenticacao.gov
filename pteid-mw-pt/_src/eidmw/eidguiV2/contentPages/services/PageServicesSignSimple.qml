@@ -231,6 +231,8 @@ PageServicesSignSimpleForm {
                         signsuccess_dialog.close()
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     }
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
                 Button {
                     id: openFileButton
@@ -252,6 +254,8 @@ PageServicesSignSimpleForm {
                     onClicked: {
                         signSuccessShowSignedFile()
                     }
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
             }
         }
@@ -342,6 +346,8 @@ PageServicesSignSimpleForm {
                     KeyNavigation.backtab: rectPopUpError
                     KeyNavigation.up: rectPopUpError
                     highlighted: activeFocus
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
             }
         }

@@ -208,6 +208,8 @@ Item {
                         KeyNavigation.right: rectSex
                         KeyNavigation.backtab: photoImage
                         KeyNavigation.up: photoImage
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
                     }
                     FileSaveDialog {
                         id: savePhotoDialogOutput
@@ -272,6 +274,8 @@ Item {
                             KeyNavigation.right: jpegButton
                             KeyNavigation.backtab: cancelExport
                             KeyNavigation.up: cancelExport
+                            Keys.onEnterPressed: clicked()
+                            Keys.onReturnPressed: clicked()
                         }
 
                         Button {
@@ -293,6 +297,8 @@ Item {
                             KeyNavigation.right: cancelExport
                             KeyNavigation.backtab: photoImage
                             KeyNavigation.up: photoImage
+                            Keys.onEnterPressed: clicked()
+                            Keys.onReturnPressed: clicked()
                         }
                     }
                 }

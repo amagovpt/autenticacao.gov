@@ -211,6 +211,8 @@ Load language error. Please reinstall the application"
             onClicked: {
                 autoUpdateDialog.close()
             }
+            Keys.onEnterPressed: clicked()
+            Keys.onReturnPressed: clicked()
         }
         Button {
             id: buttonInstallUpdate
@@ -241,6 +243,8 @@ Load language error. Please reinstall the application"
                                                     autoUpdateDialog.update_installed_version,
                                                     autoUpdateDialog.update_remote_version)
             }
+            Keys.onEnterPressed: clicked()
+            Keys.onReturnPressed: clicked()
         }
         onRejected: {
             autoUpdateDialog.open()
@@ -443,9 +447,8 @@ Load language error. Please reinstall the application"
                     onClicked: {
                         unsaved_notes_dialog.reject()
                     }
-                    Keys.onReturnPressed: {
-                        unsaved_notes_dialog.reject()
-                    }
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
                 Button {
                     id: continueButton
@@ -467,9 +470,8 @@ Load language error. Please reinstall the application"
                     onClicked: {
                         unsaved_notes_dialog.accept()
                     }
-                    Keys.onReturnPressed: {
-                        unsaved_notes_dialog.accept()
-                    }
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
             }
         }
@@ -1033,6 +1035,8 @@ Load language error. Please reinstall the application"
                         mainFormID.propertyMainMenuListView.currentIndex++
                     }
                 }
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
                 onClicked: {
                     console.log(index)
                     mainMenuPressed(index)
@@ -1201,6 +1205,8 @@ Load language error. Please reinstall the application"
                     }
 
                 }
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
                 onFocusChanged: {
                     if(focus === true){
                         mainFormID.propertyMainMenuListView.currentIndex = -1
@@ -1307,6 +1313,8 @@ Load language error. Please reinstall the application"
                 Keys.onBacktabPressed: {
                     moveSelectionUp()
                 }
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
                 onFocusChanged: {
                     if(focus === true){
                         mainFormID.propertySubMenuListView.currentIndex = index

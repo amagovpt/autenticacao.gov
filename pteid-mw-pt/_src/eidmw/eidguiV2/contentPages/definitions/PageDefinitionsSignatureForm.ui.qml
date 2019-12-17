@@ -477,6 +477,8 @@ Item {
                         KeyNavigation.right: buttonAdd
                         KeyNavigation.backtab: radioButtonCustom
                         KeyNavigation.up: radioButtonCustom
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
                     }
                 }
                 Item {
@@ -504,6 +506,8 @@ Item {
                         KeyNavigation.right: radioButtonDefault
                         KeyNavigation.backtab: buttonRemove
                         KeyNavigation.up: buttonRemove
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
                     }
                 }
             }

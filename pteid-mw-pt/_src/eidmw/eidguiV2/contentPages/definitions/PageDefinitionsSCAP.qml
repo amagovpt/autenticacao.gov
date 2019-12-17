@@ -640,6 +640,8 @@ PageDefinitionsSCAPForm {
                 propertyBusyIndicatorAttributes.running = false
 
             }
+            Keys.onEnterPressed: clicked()
+            Keys.onReturnPressed: clicked()
         }
         onOpened: {
             labelTextTitle.forceActiveFocus()

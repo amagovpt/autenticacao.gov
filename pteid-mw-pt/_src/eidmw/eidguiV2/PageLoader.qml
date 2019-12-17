@@ -134,6 +134,8 @@ Loader{
                 KeyNavigation.right: rectPopUp
                 KeyNavigation.backtab: rectPopUp
                 KeyNavigation.up: rectPopUp
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
                 highlighted: activeFocus ? true : false
                 onClicked: {
                     generalPopUp.close()

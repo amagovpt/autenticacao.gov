@@ -381,6 +381,8 @@ PageServicesSignAdvancedForm {
                     KeyNavigation.backtab: rectPopUp
                     KeyNavigation.up: rectPopUp
                     highlighted: activeFocus
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
                 Button {
                     id: openFileButton
@@ -402,6 +404,8 @@ PageServicesSignAdvancedForm {
                     KeyNavigation.backtab: closeButton
                     KeyNavigation.up: closeButton
                     highlighted: activeFocus
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
             }
         }
@@ -493,6 +497,8 @@ PageServicesSignAdvancedForm {
                     KeyNavigation.backtab: rectPopUpError
                     KeyNavigation.up: rectPopUpError
                     highlighted: activeFocus
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
                 Button {
                     id: buttonLoadAttr
@@ -518,6 +524,8 @@ PageServicesSignAdvancedForm {
                     KeyNavigation.backtab: rectPopUpError
                     KeyNavigation.up: rectPopUpError
                     highlighted: activeFocus
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
                 Button {
                     id: buttonCancelAttr
@@ -541,6 +549,8 @@ PageServicesSignAdvancedForm {
                     KeyNavigation.backtab: rectPopUpError
                     KeyNavigation.up: rectPopUpError
                     highlighted: activeFocus
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
             }
         }

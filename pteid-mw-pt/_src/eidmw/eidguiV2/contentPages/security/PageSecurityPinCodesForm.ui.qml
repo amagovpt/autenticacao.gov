@@ -246,6 +246,8 @@ Item {
                             KeyNavigation.down: buttonModifyAuth
                             KeyNavigation.right: buttonModifyAuth
                             KeyNavigation.up: rowStateAuth
+                            Keys.onEnterPressed: clicked()
+                            Keys.onReturnPressed: clicked()
                         }
                     }
                     Item{
@@ -269,6 +271,8 @@ Item {
                             KeyNavigation.down: rowAuth
                             KeyNavigation.right: rowAuth
                             KeyNavigation.up: buttonTestAuth
+                            Keys.onEnterPressed: clicked()
+                            Keys.onReturnPressed: clicked()
                         }
                     }
                 }
@@ -355,6 +359,8 @@ Item {
                             KeyNavigation.down: buttonModifySign
                             KeyNavigation.right: buttonModifySign
                             KeyNavigation.up: rowStateSign
+                            Keys.onEnterPressed: clicked()
+                            Keys.onReturnPressed: clicked()
                         }
                     }
                     Item{
@@ -378,6 +384,8 @@ Item {
                             KeyNavigation.down: rowSign
                             KeyNavigation.right: rowSign
                             KeyNavigation.up: buttonTestSign
+                            Keys.onEnterPressed: clicked()
+                            Keys.onReturnPressed: clicked()
                         }
                     }
                 }
@@ -463,6 +471,8 @@ Item {
                             KeyNavigation.down: buttonModifyAddress
                             KeyNavigation.right: buttonModifyAddress
                             KeyNavigation.up: rowStateAddress
+                            Keys.onEnterPressed: clicked()
+                            Keys.onReturnPressed: clicked()
                         }
                     }
                     Item{
@@ -486,6 +496,8 @@ Item {
                             KeyNavigation.down: rowAddress
                             KeyNavigation.right: rowAddress
                             KeyNavigation.up: buttonTestAddress
+                            Keys.onEnterPressed: clicked()
+                            Keys.onReturnPressed: clicked()
                         }
                     }
                 }
