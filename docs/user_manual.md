@@ -594,7 +594,7 @@ Assinatura digital de um documento PDF ou outro qualquer documento com possibili
 Os ficheiros a assinar podem ser arrastados para a área de pré-visualização. Pode também clicar na área de pré-visualização ou no botão **Adicionar ficheiros** e selecionar manualmente os ficheiros. Será exibida uma janela para selecionar os ficheiros que pretende assinar. Os ficheiros selecionados serão apresentados na janela “Escolha os ficheiros”, como podemos visualizar na imagem seguinte.
 
 - **Selecionar ficheiros:** Abre uma nova janela que permitirá selecionar os documentos a serem assinados. É possível adicionar e remover ficheiros individualmente ou todos.
-- **Pré-visualização da assinatura:** Permite visualizar o documento a ser assinado, bem como a pré-visualização da própria assinatura. A pré-visualização existe apenas para assinatura de ficheiros PDF.
+- **Pré-visualização da assinatura:** Permite visualizar o documento a ser assinado, bem como a pré-visualização da própria assinatura. A pré-visualização existe apenas para assinatura do tipo **PDF**.
 
   ![Ilustração: Selecionar ficheiro PDF para assinar na assinatura avançada](Pictures/Autenticacao.Gov_assinatura_avancada.png "Selecionar ficheiro PDF para assinar na assinatura avançada"){:.center}
 
@@ -605,29 +605,32 @@ Os ficheiros a assinar podem ser arrastados para a área de pré-visualização.
 
     - **Tipo:** Tipo de assinatura – campo obrigatório – permite selecionar assinatura de ficheiros:
 
-        - **PDF:** PAdES (*PDF Advanced Electronic Signatures*)
-        - **Outros ficheiros:** Pacote ASiC com *XML Advanced Electronic Signatures* (XadES).
+        - **PDF:** PAdES (*PDF Advanced Electronic Signatures*). Disponível para assinaturas com **Cartão de Cidadão** e **Chave Móvel Digital**.
+        - **Outros ficheiros:** Pacote ASiC com *XML Advanced Electronic Signatures* (XadES). Disponível para assinaturas com **Cartão de Cidadão**.
 
-    - **Motivo:** Motivo da assinatura – campo opcional – permite ao signatário indicar o motivo da sua assinatura.
+    - **Motivo:** Motivo da assinatura – campo opcional – permite ao signatário indicar o motivo da sua assinatura. Disponível para assinaturas do tipo **PDF**.
 
-    - **Localização:** Local onde a assinatura foi efetuada – campo opcional - permite ao signatário indicar o local onde esta assinatura foi efetuada.
+    - **Localização:** Local onde a assinatura foi efetuada – campo opcional - permite ao signatário indicar o local onde esta assinatura foi efetuada. Disponível para assinaturas do tipo **PDF**.
 
-    - **Adicionar selo temporal:** Adiciona um selo temporal, provando a data à qual a assinatura foi efetuada. Esta é a única forma de provar que o documento existia a determinada hora, pois é aplicada ao documento a data e hora que este está a ser assinado, de forma segura. Note-se que a hora apresentada no selo visível é a hora local do computador onde foi efetuada a assinatura e pode não coincidir com a hora do selo temporal (obtida a partir de um servidor remoto).
+    - **Adicionar selo temporal:** Adiciona um selo temporal, provando a data à qual a assinatura foi efetuada. Esta é a única forma de provar que o documento existia a determinada hora, pois é aplicada ao documento a data e hora que este está a ser assinado, de forma segura. Note-se que a hora apresentada no selo visível é a hora local do computador onde foi efetuada a assinatura e pode não coincidir com a hora do selo temporal (obtida a partir de um servidor remoto). Disponível para assinaturas do tipo **PDF** e **Outros Ficheiros**.
 
-    - **Adicionar atributos profissionais:** A funcionalidade de assinatura de profissionais permite ao cidadão autenticar-se na qualidade das funções que desempenha na sociedade enquanto profissional qualificado. Na secção [Atributos Profissionais](#atributos-profissionais) é indicado o procedimento para carregar os atributos profissionais.
+    - **Adicionar atributos profissionais:** A funcionalidade de assinatura de profissionais permite ao cidadão autenticar-se na qualidade das funções que desempenha na sociedade enquanto profissional qualificado. Na secção [Atributos Profissionais](#atributos-profissionais) é indicado o procedimento para carregar os atributos profissionais. Disponível para assinaturas do tipo **PDF**.
+
     Para mais informações consulte o seguinte *website*:
 
         <https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais>
 
-    - **Visível:** Permite que a assinatura fique visível no documento PDF.
+    - **Visível:** Permite que a assinatura fique visível no documento PDF. Disponível para assinaturas do tipo **PDF**.
 
-    - **Página:** Poderá escolher a página onde será apresentada a assinatura.
+    - **Página:** Poderá escolher a página onde será apresentada a assinatura. Disponível para assinaturas do tipo **PDF**.
 
-    - **Última** Poderá escolher a última página para apresentadar a assinatura.
+    - **Última** Poderá escolher a última página para apresentadar a assinatura. Disponível para assinaturas do tipo **PDF**.
 
     ![Ilustração: Selecionar opções de assinatura](Pictures/Autenticacao.Gov_assinatura_avancada2.png "Selecionar opções de assinatura"){:.center}
 
 Após selecionar as opções pretendidas, na área indicada na figura anterior, arraste a pré-visualização da assinatura para a localização pretendida e de seguida prima o botão **Assinar com Cartão de Cidadão** ou **Assinar com Chave Móvel Digital**.
+
+O botão **Assinar com Cartão de Cidadão** só está disponível quando o Cartão de Cidadão estiver inserido no leitor de cartões e for correctamente lido pela aplicação. O botão **Assinar com Chave Móvel Digital** só está disponível mas assinaturas do tipo **PDF**.
 
 Após clicar em **Assinar** deverá escolher a localização da pasta e do ficheiro onde guardar o ficheiro assinado (Não é possível substituir o ficheiro original) e seguir o procedimento de assinatura (ver secção [Introdução de chave](#introdu%c3%a7%c3%a3o-de-chave)). Em seguida é apresentado uma mensagem a indicar se a assinatura digital foi efetuada com sucesso.
 
