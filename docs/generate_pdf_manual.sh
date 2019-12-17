@@ -10,7 +10,7 @@ sed 's/{:.center}//g' user_manual_no_header_no_footer.md > user_manual_filtered.
 
 #generate pdf from ast
 echo "Generating pdf manual."
-pandoc -f gfm user_manual_filtered.md -o user_manual.pdf --template=template.tex --pdf-engine=pdflatex --toc --number-sections --variable version=$VERSION --variable date=$NOW
+pandoc -f gfm user_manual_filtered.md -o Manual_de_Utilizacao_v3.pdf --template=template.tex --pdf-engine=pdflatex --toc --number-sections --variable version=$VERSION --variable date=$NOW
 
 if [ $? -eq 0 ]
 then echo "Done. PDF file user_manual.pdf created."

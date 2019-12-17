@@ -267,10 +267,11 @@ sistema operativo utilizado.
 ### Remoção em *Microsoft Windows 7*
 
 1.  Aceda ao **Painel de Controlo**.
-2.  Selecione a **Opção Adicionar ou Remover Programas**.
-3.  Selecione o programa **Autenticação.Gov**, conforme apresentado na janela seguinte:
 
-      ![Ilustração: Remoção da aplicação em Windows](Pictures/Autenticacao.Gov_Desinstalar.png "Remoção da aplicação em Windows"){:.center}
+2.  Selecione a **Opção Adicionar ou Remover Programas**.
+
+3.  Selecione o programa **Autenticação.Gov**, conforme apresentado na janela seguinte:
+![Ilustração: Remoção da aplicação em Windows](Pictures/Autenticacao.Gov_Desinstalar.png "Remoção da aplicação em Windows"){:.center}
 
 4.  Clique em **Desinstalar**. Confirme todas as janelas de diálogo que irão
     surgir.
@@ -282,10 +283,11 @@ sistema operativo utilizado.
 #### Através do Painel de Controlo <!-- omit in toc -->
 
 1.  Aceda ao **Painel de Controlo**.
-2.  Selecione a **Opção Adicionar ou Remover Programas**.
-3.  Selecione o programa **Autenticação.Gov**, conforme apresentado na janela seguinte:
 
-      ![Ilustração: Remoção da aplicação em Windows](Pictures/Autenticacao.Gov_Desinstalar_Win10.png "Remoção da aplicação em Windows 10 Painel Controlo"){:.center}
+2.  Selecione a **Opção Adicionar ou Remover Programas**.
+
+3.  Selecione o programa **Autenticação.Gov**, conforme apresentado na janela seguinte:
+![Ilustração: Remoção da aplicação em Windows](Pictures/Autenticacao.Gov_Desinstalar_Win10.png "Remoção da aplicação em Windows 10 Painel Controlo"){:.center}
 
 4.  Clique em **Desinstalar**. Confirme todas as janelas de diálogo que irão
     surgir.
@@ -573,7 +575,7 @@ outras opções.
 
 #### Simples
 
-Assinatura digital simples de um único documento PDF.\
+Assinatura digital simples de um único documento PDF.
 O ficheiro a assinar pode ser arrastado para a área de pré-visualização. Pode também clicar na área de pré-visualização ou no botão **Adicionar ficheiro** e selecionar manualmente o ficheiro. Será exibida uma janela para selecionar o ficheiro que
 pretende assinar.
 
@@ -612,7 +614,7 @@ Os ficheiros a assinar podem ser arrastados para a área de pré-visualização.
 
     - **Adicionar selo temporal:** Adiciona um selo temporal, provando a data à qual a assinatura foi efetuada. Esta é a única forma de provar que o documento existia a determinada hora, pois é aplicada ao documento a data e hora que este está a ser assinado, de forma segura. Note-se que a hora apresentada no selo visível é a hora local do computador onde foi efetuada a assinatura e pode não coincidir com a hora do selo temporal (obtida a partir de um servidor remoto).
 
-    - **Adicionar atributos profissionais:** A funcionalidade de assinatura de profissionais permite ao cidadão autenticar-se na qualidade das funções que desempenha na sociedade enquanto profissional qualificado. Na secção [Atributos Profissionais](#atributos-profissionais) é indicado o procedimento para carregar os atributos profissionais.\
+    - **Adicionar atributos profissionais:** A funcionalidade de assinatura de profissionais permite ao cidadão autenticar-se na qualidade das funções que desempenha na sociedade enquanto profissional qualificado. Na secção [Atributos Profissionais](#atributos-profissionais) é indicado o procedimento para carregar os atributos profissionais.
     Para mais informações consulte o seguinte *website*:
 
         <https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais>
@@ -1043,7 +1045,7 @@ em *Firefox*.
 
     ![Ilustração: Assinatura de E-mail com Mozilla Thunderbird](Pictures/Autenticacao.Gov_thunderbird5.png "Assinatura de E-mail com Mozilla Thunderbird"){:.center}
 
-7.  Adicionar um certificado da PKI do Cartão de Cidadão. No gestor de certificados do *ThunderBird*, aceder ao separador **Autoridade** e clicar em **Importar...** .
+7.  Adicionar um certificado da PKI do Cartão de Cidadão. No gestor de certificados do *ThunderBird*, aceder ao separador **Autoridade** e clicar em **Importar**.
 8.  Clique em **OK** em todas as janelas de configuração abertas. A configuração está terminada.
 
 **Assinatura** - a efetuar cada vez que pretenda enviar um email assinado.
@@ -1135,13 +1137,19 @@ selecionar a pasta “drivers” que esta na diretoria “C:\\Windows\\System32�
 
 2.  Verifique se os controladores do leitor estão corretamente instalados (consulte a documentação do leitor de cartões).
 
-3.  Verifique se o serviço “Cartão Inteligente” (Smart Card) está iniciado:\
-    a\) Aceda ao **Painel de Controlo** | **Ferramentas de Administração**\
-    b\) Clique em **Serviços**\
+3.  Verifique se o serviço “Cartão Inteligente” (Smart Card) está iniciado:
+
+    a\) Aceda ao **Painel de Controlo** | **Ferramentas de Administração**
+
+    b\) Clique em **Serviços**
+
     c\) Verifique se o serviço “**Cartão Inteligente**” (Smart Card) está iniciado (Started).
-    Caso não esteja, clique com o botão direito no serviço e clique em **Start**.\
-    d\) Desligue o leitor do computador.\
-    e\) Encerre a aplicação do Cartão de Cidadão.\
+    Caso não esteja, clique com o botão direito no serviço e clique em **Start**.
+
+    d\) Desligue o leitor do computador.
+
+    e\) Encerre a aplicação do Cartão de Cidadão.
+
     f\) Volte a inserir o leitor e abra novamente a aplicação.
 
 ### Linux <!-- omit in toc -->
@@ -1154,7 +1162,8 @@ selecionar a pasta “drivers” que esta na diretoria “C:\\Windows\\System32�
 
     `ps aux`
 
-    b\) Procure uma referência ao processo pcscd.\
+    b\) Procure uma referência ao processo pcscd.
+
     c\) Caso não esteja listado por favor inicie o serviço através do
 comando:
 
