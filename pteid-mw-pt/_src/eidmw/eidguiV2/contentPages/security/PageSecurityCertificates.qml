@@ -305,9 +305,12 @@ PageSecurityCertificatesForm {
     function clearFields(){
         propertyButtonViewCertificate.enabled = false
         propertyButtonExportCertificate.enabled = false
+        propertyAcordion.model = []
         for (var i = 0; i < propertyRectBottom.children.length; i++){
-            propertyAcordion.model = []
-            propertyRectBottom.children[i].children[0].propertyDateField.text = ""
+            var child = propertyRectBottom.children[i].children[0]
+            if (child.type == "LabelTextBox"){
+                child.propertyDateField.text = ""
+            }
         }
     }
 }

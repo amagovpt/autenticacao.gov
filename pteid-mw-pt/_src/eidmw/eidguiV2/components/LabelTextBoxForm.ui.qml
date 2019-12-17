@@ -22,6 +22,7 @@ Item {
                                     + (dateField.length
                                     ? dateField.text
                                     : qsTranslate("GAPI", "STR_EMPTY_FIELD"))
+    property string type: "LabelTextBox"
 
     Text {
         id: dateText
