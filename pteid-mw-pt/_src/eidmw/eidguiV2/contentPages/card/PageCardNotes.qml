@@ -21,7 +21,7 @@ PageCardNotesForm {
 
     Keys.onPressed: {
         console.log("PageCardNotesForm onPressed:" + event.key)
-        if(propertyEditNotes.focus === false){
+        if(propertyEditNotes.focus === false  && !event.isAutoRepeat){
             Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
         } else {
             if(Functions.detectBackKeysTextEdit(event.key)) {
@@ -55,14 +55,24 @@ PageCardNotesForm {
             console.log("Card Notes onSignalCardAccessError")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
+            var returnSubMenuWhenClosed = false
             if (error_code == GAPI.NoReaderFound) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
+                returnSubMenuWhenClosed = true
+                propertyEditNotes.text = ""
+                enableInput(false)
             }
             else if (error_code == GAPI.NoCardFound) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD")
+                returnSubMenuWhenClosed = true
+                propertyEditNotes.text = ""
+                enableInput(false)
             }
             else if (error_code == GAPI.SodCardReadError) {
                 bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
+                returnSubMenuWhenClosed = true
+                propertyEditNotes.text = ""
+                enableInput(false)
             }
             else if (error_code == GAPI.CardUserPinCancel) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
@@ -72,16 +82,20 @@ PageCardNotesForm {
             }
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
+                returnSubMenuWhenClosed = true
+                propertyEditNotes.text = ""
+                enableInput(false)
             }
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true);
-            propertyEditNotes.text = ""
-            enableInput(false)
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, returnSubMenuWhenClosed);
             propertyBusyIndicator.running = false
         }
 
 
         onSignalSetPersoDataFile: {
             mainFormID.propertyPageLoader.activateGeneralPopup(titleMessage, statusMessage, false);
+            if (success) {
+                mainFormID.propertyPageLoader.propertyUnsavedNotes = false;
+            }
         }
         onSignalCardChanged: {
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
@@ -151,7 +165,6 @@ PageCardNotesForm {
     propertySaveNotes{
         onClicked: {
             gapi.startWritingPersoNotes(propertyEditNotes.text);
-            mainFormID.propertyPageLoader.propertyUnsavedNotes = false;
             propertyBackupText = "";
             propertyLoadedText = "";
         }

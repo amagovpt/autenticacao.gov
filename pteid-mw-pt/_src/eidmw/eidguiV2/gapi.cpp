@@ -325,11 +325,11 @@ void GAPI::setPersoDataFile(QString text) {
         
 
         qDebug() << "Personal notes successfully written!";
-        emit signalSetPersoDataFile(tr("STR_POPUP_SUCESS"), tr("STR_PERSONAL_NOTES_SUCESS"));
+        emit signalSetPersoDataFile(tr("STR_POPUP_SUCESS"), tr("STR_PERSONAL_NOTES_SUCESS"), true);
 
     } catch (PTEID_Exception& e) {
         qDebug() << "Error writing personal notes!";
-        emit signalSetPersoDataFile(tr("STR_POPUP_ERROR"), tr("STR_PERSONAL_NOTES_ERROR"));
+        emit signalSetPersoDataFile(tr("STR_POPUP_ERROR"), tr("STR_PERSONAL_NOTES_ERROR"), false);
     }
 
 }
