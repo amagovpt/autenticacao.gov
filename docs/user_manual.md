@@ -1142,18 +1142,26 @@ selecionar a pasta “drivers” que esta na diretoria “C:\\Windows\\System32�
 
 3.  Verifique se o serviço “Cartão Inteligente” (Smart Card) está iniciado:
 
-    a\) Aceda ao **Painel de Controlo** | **Ferramentas de Administração**
+
+    a\) Aceda ao **Painel de Controlo** e em seguida aceda a **Ferramentas de Administração**
 
     b\) Clique em **Serviços**
 
-    c\) Verifique se o serviço “**Cartão Inteligente**” (Smart Card) está iniciado (Started).
-    Caso não esteja, clique com o botão direito no serviço e clique em **Start**.
+    c\) Verifique se o serviço “**Cartão Inteligente**” (Smart Card) está iniciado (Started). Caso não esteja, clique com o botão direito no serviço e clique em **Start**.
 
     d\) Desligue o leitor do computador.
 
     e\) Encerre a aplicação do Cartão de Cidadão.
 
     f\) Volte a inserir o leitor e abra novamente a aplicação.
+
+4.  Se estiver a usar uma ligação a uma máquina remota e prentende partilhar o leitor de cartões, verifique se:
+
+    a\) Está a ligar o leitor de cartões no computador local
+
+    b\) Escolheu o **Smart Card** na lista de dispositivos e recursos locais que pretende utilizar na ligação remota (Ver imagem seguinte).
+
+![Ilustração: Ligação a máquina remota e partilha de leitor de cartões](Pictures/Autenticacao.Gov_Ligacao_Remota_SmartCard.png "Ligação a máquina remota e partilha de leitor de cartões"){:.center}
 
 ### Linux <!-- omit in toc -->
 
