@@ -13,6 +13,8 @@ import QtQuick.Layouts 1.3
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
+import "../../scripts/Functions.js" as Functions
+
 import "../../components" as Components
 
 Item {
@@ -79,23 +81,19 @@ Item {
                 Accessible.role: Accessible.MenuItem
                 Accessible.name: text
                 KeyNavigation.tab: tabButtonSign
-                KeyNavigation.right: tabButtonSign
-                KeyNavigation.left: tabButtonAddress
-                Keys.onUpPressed: {}
-                Keys.onDownPressed: {
-                    stackLayout.currentIndex = 0
-                    bar.currentIndex = 0
-                    rowAuth.forceActiveFocus()
+                KeyNavigation.down: tabButtonSign
+                KeyNavigation.up: tabButtonAddress
+                Keys.onLeftPressed: {
+                    Functions.detectBackKeys(Qt.Key_Left, Constants.MenuState.SUB_MENU)
+                }
+                Keys.onRightPressed: {
+                    setStackLayoutIndex(0)
                 }
                 Keys.onReturnPressed: {
-                    stackLayout.currentIndex = 0
-                    bar.currentIndex = 0
-                    rowAuth.forceActiveFocus()
+                    setStackLayoutIndex(0)
                 }
                 Keys.onSpacePressed: {
-                    stackLayout.currentIndex = 0
-                    bar.currentIndex = 0
-                    rowAuth.forceActiveFocus()
+                    setStackLayoutIndex(0)
                 }
             }
             TabButton {
@@ -107,23 +105,19 @@ Item {
                 Accessible.role: Accessible.MenuItem
                 Accessible.name: text
                 KeyNavigation.tab: tabButtonAddress
-                KeyNavigation.right: tabButtonAddress
-                KeyNavigation.left: tabButtonAuth
-                Keys.onUpPressed: {}
-                Keys.onDownPressed: {
-                    stackLayout.currentIndex = 1
-                    bar.currentIndex = 1
-                    rowSign.forceActiveFocus()
+                KeyNavigation.down: tabButtonAddress
+                KeyNavigation.up: tabButtonAuth
+                Keys.onLeftPressed: {
+                    Functions.detectBackKeys(Qt.Key_Left, Constants.MenuState.SUB_MENU)
+                }
+                Keys.onRightPressed: {
+                    setStackLayoutIndex(1)
                 }
                 Keys.onReturnPressed: {
-                    stackLayout.currentIndex = 1
-                    bar.currentIndex = 1
-                    rowSign.forceActiveFocus()
+                    setStackLayoutIndex(1)
                 }
                 Keys.onSpacePressed: {
-                    stackLayout.currentIndex = 1
-                    bar.currentIndex = 1
-                    rowSign.forceActiveFocus()
+                    setStackLayoutIndex(1)
                 }
             }
             TabButton {
@@ -135,23 +129,19 @@ Item {
                 Accessible.role: Accessible.MenuItem
                 Accessible.name: text
                 KeyNavigation.tab: tabButtonAuth
-                KeyNavigation.right: tabButtonAuth
-                KeyNavigation.left: tabButtonSign
-                Keys.onUpPressed: {}
-                Keys.onDownPressed: {
-                    stackLayout.currentIndex = 2
-                    bar.currentIndex = 2
-                    rowAddress.forceActiveFocus()
+                KeyNavigation.down: tabButtonAuth
+                KeyNavigation.up: tabButtonSign
+                Keys.onLeftPressed: {
+                    Functions.detectBackKeys(Qt.Key_Left, Constants.MenuState.SUB_MENU)
+                }
+                Keys.onRightPressed: {
+                    setStackLayoutIndex(2)
                 }
                 Keys.onReturnPressed: {
-                    stackLayout.currentIndex = 2
-                    bar.currentIndex = 2
-                    rowAddress.forceActiveFocus()
+                    setStackLayoutIndex(2)
                 }
                 Keys.onSpacePressed: {
-                    stackLayout.currentIndex = 2
-                    bar.currentIndex = 2
-                    rowAddress.forceActiveFocus()
+                    setStackLayoutIndex(2)
                 }
             }
             Accessible.role: Accessible.MenuBar
@@ -503,5 +493,10 @@ Item {
                 }
             }
         }
+    }
+    function setStackLayoutIndex(index){
+        stackLayout.currentIndex = bar.currentIndex = index
+        var rows = [rowAuth,rowSign,rowAddress]
+        rows[index].forceActiveFocus()
     }
 }
