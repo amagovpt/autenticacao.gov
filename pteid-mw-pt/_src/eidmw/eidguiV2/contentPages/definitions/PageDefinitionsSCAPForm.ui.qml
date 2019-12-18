@@ -88,6 +88,9 @@ Item {
                 Accessible.role: Accessible.MenuItem
                 Accessible.name: text
                 KeyNavigation.tab: tabButtonCompanies
+                KeyNavigation.down: tabButtonCompanies
+                KeyNavigation.up: tabButtonCompanies
+                Keys.onRightPressed: tabDetectKeys(event.key)
                 // @disable-check M222
                 Keys.onReturnPressed: tabDetectKeys(event.key)
                 // @disable-check M222
@@ -104,6 +107,9 @@ Item {
                 Accessible.role: Accessible.MenuItem
                 Accessible.name: text
                 KeyNavigation.tab: tabButtonEntities
+                KeyNavigation.down: tabButtonEntities
+                KeyNavigation.up: tabButtonEntities
+                Keys.onRightPressed: tabDetectKeys(event.key)
                 // @disable-check M222
                 Keys.onReturnPressed: tabDetectKeys(event.key)
                 // @disable-check M222
@@ -139,8 +145,24 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         Accessible.role: Accessible.StaticText
                         Accessible.name: text
-                        KeyNavigation.tab: listViewEntities.count
-                                           > 0 ? listViewEntities : linkScapEntities
+                        Keys.onTabPressed: focusNextVisibleElement()
+                        Keys.onDownPressed: focusNextVisibleElement()
+                        KeyNavigation.up: buttonLoadEntityAttributesOAuth.enabled ?
+                                                buttonLoadEntityAttributesOAuth : buttonRemoveEntityAttributes
+                        KeyNavigation.backtab: buttonLoadEntityAttributesOAuth.enabled ?
+                                                    buttonLoadEntityAttributesOAuth : buttonRemoveEntityAttributes
+
+                        function focusNextVisibleElement(){
+                            if (listViewEntities.count > 0) {
+                                listViewEntities.forceActiveFocus()
+                            }
+                            else if (propertyPageLoader.propertyBackupFromSignaturePage) {
+                                linkScapEntities.forceActiveFocus()
+                            }
+                            else {
+                                buttonRemoveEntityAttributes.forceActiveFocus()
+                            }
+                        }
                     }
                 }
                 Item {
@@ -174,7 +196,8 @@ Item {
                         Accessible.name: qsTranslate(
                                              "PageDefinitionsSCAP",
                                              "STR_SCAP_ATTRIBUTES_ENTITIES_MSG")
-                        KeyNavigation.tab: linkScapEntities
+                        KeyNavigation.tab:  propertyPageLoader.propertyBackupFromSignaturePage ?
+                                                    linkScapEntities : buttonRemoveEntityAttributes
                     }
                 }
 
@@ -203,10 +226,9 @@ Item {
                         font.underline: mouseArealinkScapEntities.containsMouse
                         font.bold: activeFocus
                         KeyNavigation.tab: buttonRemoveEntityAttributes
-                        Keys.onBacktabPressed: {
-                            listViewEntities.forceActiveFocus()
-                            listViewEntities.currentIndex = listViewEntities.count -1
-                        }
+                        Keys.onDownPressed: buttonRemoveEntityAttributes
+                        Keys.onUpPressed: goToLastEntity()
+                        Keys.onBacktabPressed: goToLastEntity()
                     }
                 }
                 Item {
@@ -230,15 +252,10 @@ Item {
                         enabled: true
                         Accessible.role: Accessible.Button
                         Accessible.name: text
-                        KeyNavigation.tab: buttonLoadEntityAttributes.enabled ? buttonLoadEntityAttributes : buttonLoadEntityAttributesOAuth
-                        Keys.onBacktabPressed: {
-                            if (linkScapEntities.visible)
-                                linkScapEntities.forceActiveFocus()
-                            else {
-                                listViewEntities.forceActiveFocus()
-                                listViewEntities.currentIndex = listViewEntities.count -1
-                            }
-                        }
+                        KeyNavigation.down: buttonLoadEntityAttributes.enabled ?
+                                                    buttonLoadEntityAttributes : propertyEntitiesText
+                        Keys.onUpPressed: goToLastEntity()
+                        Keys.onBacktabPressed: goToLastEntity()
                         Keys.onEnterPressed: clicked()
                         Keys.onReturnPressed: clicked()
                     }
@@ -256,6 +273,9 @@ Item {
                         enabled: isAnyEntitySelected()
                         Accessible.role: Accessible.Button
                         Accessible.name: text
+                        KeyNavigation.down: buttonLoadEntityAttributesOAuth.enabled ?
+                                                    buttonLoadEntityAttributesOAuth : propertyEntitiesText
+                        KeyNavigation.up: buttonRemoveEntityAttributes
                         Keys.onEnterPressed: clicked()
                         Keys.onReturnPressed: clicked()
                     }
@@ -274,7 +294,11 @@ Item {
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.tab: entitiesText
-                        KeyNavigation.backtab: buttonLoadEntityAttributes.enabled ? buttonLoadEntityAttributes : buttonRemoveEntityAttributes
+                        KeyNavigation.down:entitiesText
+                        KeyNavigation.up: buttonLoadEntityAttributes.enabled ?
+                                                buttonLoadEntityAttributes : buttonRemoveEntityAttributes
+                        KeyNavigation.backtab: buttonLoadEntityAttributes.enabled ?
+                                                    buttonLoadEntityAttributes : buttonRemoveEntityAttributes
                         Keys.onEnterPressed: clicked()
                         Keys.onReturnPressed: clicked()
                     }
@@ -301,8 +325,20 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         Accessible.role: Accessible.StaticText
                         Accessible.name: text
-                        KeyNavigation.tab: listViewCompanies.count
-                                           > 0 ? listViewCompanies : linkScapCompanies
+                        Keys.onTabPressed: focusNextVisibleCompanyElement()
+                        Keys.onDownPressed: focusNextVisibleCompanyElement()
+
+                        function focusNextVisibleCompanyElement(){
+                            if (listViewCompanies.count > 0) {
+                                listViewCompanies.forceActiveFocus()
+                            }
+                            else if (propertyPageLoader.propertyBackupFromSignaturePage) {
+                                linkScapCompanies.forceActiveFocus()
+                            }
+                            else {
+                                buttonRemoveCompanyAttributes.forceActiveFocus()
+                            }
+                        }
                     }
                 }
                 Item {
@@ -336,7 +372,10 @@ Item {
                         Accessible.name: qsTranslate(
                                              "PageDefinitionsSCAP",
                                              "STR_SCAP_ATTRIBUTES_COMPANY_MSG")
-                        KeyNavigation.tab: linkScapCompanies
+                        KeyNavigation.tab:  propertyPageLoader.propertyBackupFromSignaturePage ?
+                                                    linkScapCompanies : buttonRemoveCompanyAttributes
+                        KeyNavigation.down: propertyPageLoader.propertyBackupFromSignaturePage ?
+                                                    linkScapCompanies : buttonRemoveCompanyAttributes
                     }
                 }
 
@@ -365,9 +404,12 @@ Item {
                         color: Constants.COLOR_MAIN_BLUE
                         visible: propertyPageLoader.propertyBackupFromSignaturePage
                         KeyNavigation.tab: buttonRemoveCompanyAttributes
+                        KeyNavigation.down: buttonRemoveCompanyAttributes
+                        Keys.onUpPressed:{
+                            goToLastCompany()
+                        }
                         Keys.onBacktabPressed: {
-                            listViewCompanies.forceActiveFocus()
-                            listViewCompanies.currentIndex = listViewCompanies.count -1
+                            goToLastCompany()
                         }
                     }
                 }
@@ -391,16 +433,15 @@ Item {
                         enabled: true
                         Accessible.role: Accessible.Button
                         Accessible.name: text
-                        KeyNavigation.tab: buttonLoadCompanyAttributes.enabled ? buttonLoadCompanyAttributes : buttonLoadCompanyAttributesOAuth
+                        KeyNavigation.tab: buttonLoadCompanyAttributes.enabled ?
+                                                buttonLoadCompanyAttributes : buttonLoadCompanyAttributesOAuth
+                        KeyNavigation.down: buttonLoadCompanyAttributes.enabled ?
+                                                buttonLoadCompanyAttributes : buttonLoadCompanyAttributesOAuth
+                        Keys.onUpPressed: {
+                            goToLastCompany()
+                        }
                         Keys.onBacktabPressed: {
-                            if (linkScapCompanies.visible)
-                                linkScapCompanies.forceActiveFocus()
-                            else if (listViewCompanies.count > 0) {
-                                listViewCompanies.forceActiveFocus()
-                                listViewCompanies.currentIndex = listViewCompanies.count -1
-                            } else {
-                                companiesText.forceActiveFocus()
-                            }
+                            goToLastCompany()
                         }
                         Keys.onEnterPressed: clicked()
                         Keys.onReturnPressed: clicked()
@@ -419,6 +460,8 @@ Item {
                         enabled: isCardPresent
                         Accessible.role: Accessible.Button
                         Accessible.name: text
+                        KeyNavigation.down: buttonLoadCompanyAttributesOAuth
+                        KeyNavigation.up: buttonRemoveCompanyAttributes
                         Keys.onEnterPressed: clicked()
                         Keys.onReturnPressed: clicked()
                     }
@@ -436,12 +479,36 @@ Item {
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.tab: companiesText
-                        KeyNavigation.backtab: buttonLoadCompanyAttributes.enabled ? buttonLoadCompanyAttributes : buttonRemoveCompanyAttributes
+                        KeyNavigation.down: companiesText
+                        KeyNavigation.up: buttonLoadCompanyAttributes.enabled ?
+                                                buttonLoadCompanyAttributes : buttonRemoveCompanyAttributes
+                        KeyNavigation.backtab: buttonLoadCompanyAttributes.enabled ?
+                                                buttonLoadCompanyAttributes : buttonRemoveCompanyAttributes
                         Keys.onEnterPressed: clicked()
                         Keys.onReturnPressed: clicked()
                     }
                 }
             }
+        }
+    }
+    function goToLastEntity(){
+        if (linkScapEntities.visible)
+            linkScapEntities.forceActiveFocus()
+        else if (listViewEntities.count > 0) {
+            listViewEntities.forceActiveFocus()
+            listViewEntities.currentIndex = listViewEntities.count -1
+        } else {
+            entitiesText.forceActiveFocus()
+        }
+    }
+    function goToLastCompany(){
+        if (linkScapCompanies.visible)
+            linkScapCompanies.forceActiveFocus()
+        else if (listViewCompanies.count > 0) {
+            listViewCompanies.forceActiveFocus()
+            listViewCompanies.currentIndex = listViewCompanies.count -1
+        } else {
+            companiesText.forceActiveFocus()
         }
     }
 }

@@ -47,10 +47,12 @@ PageDefinitionsSCAPForm {
         var isOnEntityTab = index === 1
 
 
-        if (event.key == Qt.Key_Escape && isOnEntitiesTab && isTabSelected === false) {
+        if ((event.key == Qt.Key_Escape || event.key == Qt.Key_Left)
+                    && isOnEntitiesTab && isTabSelected === false) {
             propertyTabButtonEntities.forceActiveFocus()
             isTabSelected = true
-        } else if (event.key == Qt.Key_Escape && isOnEntityTab && isTabSelected === false) {
+        } else if ((event.key == Qt.Key_Escape || event.key == Qt.Key_Left)
+                            && isOnEntityTab && isTabSelected === false) {
             propertyTabButtonCompanies.forceActiveFocus()
             isTabSelected = true
         } else {
@@ -425,22 +427,16 @@ PageDefinitionsSCAPForm {
                 checkboxSel.focus = true
             }
             Keys.onTabPressed: {
-                checkboxSel.focus = true
-                if(propertyListViewEntities.currentIndex == propertyListViewEntities.count -1){
-                    propertylinkScapEntities.visible
-                        ? propertylinkScapEntities.forceActiveFocus()
-                        : propertyButtonRemoveEntityAttributes.forceActiveFocus()
-                }else{
-                    propertyListViewEntities.currentIndex++
-                }
+                focusForward();
+            }
+            Keys.onDownPressed: {
+                focusForward();
             }
             Keys.onBacktabPressed: {
-                checkboxSel.focus = true
-                if(propertyListViewEntities.currentIndex == 0){
-                    propertyEntitiesText.forceActiveFocus()
-                }else{
-                    propertyListViewEntities.currentIndex--
-                }
+                focusBackward();
+            }
+            Keys.onUpPressed: {
+                focusBackward();
             }
             color:  propertyListViewEntities.currentIndex === index && propertyListViewEntities.focus
                     ? Constants.COLOR_MAIN_DARK_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
@@ -492,6 +488,24 @@ PageDefinitionsSCAPForm {
                     wrapMode: Text.WordWrap
                     text: attribute
                     font.family: lato.name
+                }
+            }
+            function focusForward(){
+                checkboxSel.focus = true
+                if(propertyListViewEntities.currentIndex == propertyListViewEntities.count -1){
+                    propertylinkScapEntities.visible
+                        ? propertylinkScapEntities.forceActiveFocus()
+                        : propertyButtonRemoveEntityAttributes.forceActiveFocus()
+                }else{
+                    propertyListViewEntities.currentIndex++
+                }
+            }
+            function focusBackward(){
+                checkboxSel.focus = true
+                if(propertyListViewEntities.currentIndex == 0){
+                    propertyEntitiesText.forceActiveFocus()
+                }else{
+                    propertyListViewEntities.currentIndex--
                 }
             }
         }
@@ -800,13 +814,13 @@ PageDefinitionsSCAPForm {
     }
     function tabDetectKeys(key) {
         if(propertyTabButtonEntities.focus)
-            if(key===Qt.Key_Return || key===Qt.Key_Space){
+            if(key===Qt.Key_Return || key===Qt.Key_Space || key===Qt.Key_Right){
                 propertyStackLayout.currentIndex = propertyBar.currentIndex = 0
                 propertyEntitiesText.forceActiveFocus()
                 isTabSelected = false
             }
         if(propertyTabButtonCompanies.focus)
-            if(key===Qt.Key_Return || key===Qt.Key_Space){
+            if(key===Qt.Key_Return || key===Qt.Key_Space || key===Qt.Key_Right){
                 propertyStackLayout.currentIndex = propertyBar.currentIndex = 1
                 propertyCompaniesText.forceActiveFocus()
                 isTabSelected = false
