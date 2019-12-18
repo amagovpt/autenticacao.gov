@@ -2799,7 +2799,7 @@
     <message>
         <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="181"/>
         <source>STR_PIN_AUTH_TEXT</source>
-        <translation>Este PIN é usado para se autenticar em sites e aplicações que suportem o Cartão de Cidadão.</translation>
+        <translation>O PIN de autenticação é usado para se autenticar em sites e aplicações que suportem o Cartão de Cidadão.</translation>
     </message>
     <message>
         <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="236"/>
@@ -2820,12 +2820,12 @@
     <message>
         <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="290"/>
         <source>STR_PIN_SIGN_TEXT</source>
-        <translation>Este PIN é usado para assinar documentos ou transações em aplicações que suportem o Cartão de Cidadão.</translation>
+        <translation>O PIN de assinatura é usado para assinar documentos ou transações em aplicações que suportem o Cartão de Cidadão.</translation>
     </message>
     <message>
         <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="399"/>
         <source>STR_PIN_ADDRESS_TEXT</source>
-        <translation>Este PIN é usado para alteração e leitura de morada.</translation>
+        <translation>O PIN de morada é usado para alteração e leitura de morada.</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="698"/>

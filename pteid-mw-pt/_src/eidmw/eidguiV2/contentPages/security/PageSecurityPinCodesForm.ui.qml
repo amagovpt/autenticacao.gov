@@ -162,7 +162,7 @@ Item {
                     width: parent.width
                     height: Constants.SIZE_TEXT_LABEL
                             + Constants.SIZE_TEXT_V_SPACE
-                            + 2 * Constants.SIZE_TEXT_FIELD
+                            + 3 * Constants.SIZE_TEXT_FIELD
                     Text {
                         id: authText
                         anchors.topMargin: Constants.SIZE_TEXT_BODY
@@ -275,7 +275,7 @@ Item {
                     width: parent.width
                     height: Constants.SIZE_TEXT_LABEL
                             + Constants.SIZE_TEXT_V_SPACE
-                            + 2 * Constants.SIZE_TEXT_FIELD
+                            + 3 * Constants.SIZE_TEXT_FIELD
                     Text {
                         id: signText
                         anchors.topMargin: Constants.SIZE_TEXT_BODY
@@ -388,7 +388,7 @@ Item {
                     width: parent.width
                     height: Constants.SIZE_TEXT_LABEL
                             + Constants.SIZE_TEXT_V_SPACE
-                            + 2 * Constants.SIZE_TEXT_FIELD
+                            + 3 * Constants.SIZE_TEXT_FIELD
                     Text {
                         id: addrText
                         anchors.topMargin: Constants.SIZE_TEXT_BODY

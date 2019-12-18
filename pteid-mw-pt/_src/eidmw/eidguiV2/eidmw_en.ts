@@ -2801,7 +2801,7 @@
     <message>
         <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="181"/>
         <source>STR_PIN_AUTH_TEXT</source>
-        <translation>This PIN is used to authenticate to sites and applications that support the Citizen Card.</translation>
+        <translation>The authentication PIN is used to authenticate to sites and applications that support the Citizen Card.</translation>
     </message>
     <message>
         <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="236"/>
@@ -2822,12 +2822,12 @@
     <message>
         <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="290"/>
         <source>STR_PIN_SIGN_TEXT</source>
-        <translation>This PIN is used to sign documents or transactions in applications that support the Citizen Card.</translation>
+        <translation>The signature PIN is used to sign documents or transactions in applications that support the Citizen Card.</translation>
     </message>
     <message>
         <location filename="contentPages/security/PageSecurityPinCodesForm.ui.qml" line="399"/>
         <source>STR_PIN_ADDRESS_TEXT</source>
-        <translation>This PIN is used for change and read of address.</translation>
+        <translation>The address PIN is used for change and read of address.</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="698"/>
