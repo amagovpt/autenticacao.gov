@@ -255,6 +255,8 @@ Item {
                 KeyNavigation.right: mainFormID.propertyImageLogoBottom
                 KeyNavigation.backtab: buttonDownload
                 KeyNavigation.up: buttonDownload
+                Keys.onEnterPressed: reminderCheckBox.checked = !reminderCheckBox.checked
+                Keys.onReturnPressed: reminderCheckBox.checked = !reminderCheckBox.checked
             }
         }
     }

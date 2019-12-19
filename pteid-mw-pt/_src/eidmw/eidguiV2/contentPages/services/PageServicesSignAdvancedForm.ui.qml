@@ -391,6 +391,8 @@ Item {
                             KeyNavigation.right: radioButtonXADES
                             KeyNavigation.backtab: textFormatSign
                             KeyNavigation.up: textFormatSign
+                            Keys.onEnterPressed: toggleRadio(radioButtonPADES)
+                            Keys.onReturnPressed: toggleRadio(radioButtonPADES)
                             contentItem: Text {
                                 text: radioButtonPADES.text
                                 leftPadding: 22
@@ -443,6 +445,8 @@ Item {
                             KeyNavigation.right: textFieldReason
                             KeyNavigation.backtab: radioButtonPADES
                             KeyNavigation.up: radioButtonPADES
+                            Keys.onEnterPressed: toggleRadio(radioButtonXADES)
+                            Keys.onReturnPressed: toggleRadio(radioButtonXADES)
                             contentItem: Text {
                                 text: radioButtonXADES.text
                                 leftPadding: 22
@@ -532,6 +536,8 @@ Item {
                         KeyNavigation.right: switchSignAdd
                         KeyNavigation.backtab: textFieldLocal
                         KeyNavigation.up: textFieldLocal
+                        Keys.onEnterPressed: toggleSwitch(switchSignTemp)
+                        Keys.onReturnPressed: toggleSwitch(switchSignTemp)
                     }
                     Switch {
                         id: switchSignAdd
@@ -550,6 +556,8 @@ Item {
                         KeyNavigation.right: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
                         KeyNavigation.backtab: switchSignTemp
                         KeyNavigation.up: switchSignTemp
+                        Keys.onEnterPressed: toggleSwitch(switchSignAdd)
+                        Keys.onReturnPressed: toggleSwitch(switchSignAdd)
                     }
                     Item {
                         id: rectangleEntities
@@ -921,6 +929,8 @@ Item {
                         KeyNavigation.right: checkSignShow
                         KeyNavigation.backtab: textSpinBox
                         KeyNavigation.up: textSpinBox
+                        Keys.onEnterPressed: toggleSwitch(checkLastPage)
+                        Keys.onReturnPressed: toggleSwitch(checkLastPage)
                     }
                 }
             }
@@ -955,6 +965,8 @@ Item {
                         KeyNavigation.right: checkSignReduced
                         KeyNavigation.backtab: checkLastPage
                         KeyNavigation.up: checkLastPage
+                        Keys.onEnterPressed: toggleSwitch(checkSignShow)
+                        Keys.onReturnPressed: toggleSwitch(checkSignShow)
                     }
                 }
                 Item {
@@ -981,6 +993,8 @@ Item {
                         KeyNavigation.right: button_signCC.enabled ? button_signCC : button_signCMD
                         KeyNavigation.backtab: checkSignShow
                         KeyNavigation.up: checkSignShow
+                        Keys.onEnterPressed: toggleSwitch(checkSignReduced)
+                        Keys.onReturnPressed: toggleSwitch(checkSignReduced)
                     }
                 }
             }

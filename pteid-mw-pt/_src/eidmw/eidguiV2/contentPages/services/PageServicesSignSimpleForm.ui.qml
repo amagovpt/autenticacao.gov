@@ -332,6 +332,8 @@ Item {
                 KeyNavigation.right: buttonRemove
                 KeyNavigation.backtab: textSpinBox
                 KeyNavigation.up: textSpinBox
+                Keys.onEnterPressed: checkLastPage.checked = !checkLastPage.checked
+                Keys.onReturnPressed: checkLastPage.checked = !checkLastPage.checked
             }
         }
     }

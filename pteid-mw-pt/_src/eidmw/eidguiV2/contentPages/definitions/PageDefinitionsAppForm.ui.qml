@@ -213,6 +213,8 @@ Item {
                         KeyNavigation.backtab: comboBoxReader
                         KeyNavigation.up: comboBoxReader
                         KeyNavigation.left: comboBoxReader
+                        Keys.onEnterPressed: toggleSwitch(checkboxEnablePinpad)
+                        Keys.onReturnPressed: toggleSwitch(checkboxEnablePinpad)
                     }
                 }
             }
@@ -294,6 +296,8 @@ Item {
                         KeyNavigation.backtab: dateAppStart
                         KeyNavigation.up: dateAppStart
                         KeyNavigation.left: dateAppStart
+                        Keys.onEnterPressed: toggleSwitch(checkboxAutoStart)
+                        Keys.onReturnPressed: toggleSwitch(checkboxAutoStart)
                     }
                 }
             }
@@ -375,6 +379,8 @@ Item {
                         KeyNavigation.backtab: startAutoupdateText
                         KeyNavigation.up: startAutoupdateText
                         KeyNavigation.left: startAutoupdateText
+                        Keys.onEnterPressed: toggleSwitch(checkboxStartAutoupdate)
+                        Keys.onReturnPressed: toggleSwitch(checkboxStartAutoupdate)
                     }
                 }
             }
@@ -463,6 +469,8 @@ Item {
                             KeyNavigation.backtab: dateAppLanguage
                             KeyNavigation.up: dateAppLanguage
                             KeyNavigation.left: dateAppLanguage
+                            Keys.onEnterPressed: toggleRadio(radioButtonPT)
+                            Keys.onReturnPressed: toggleRadio(radioButtonPT)
                         }
                     }
                     Rectangle {
@@ -490,6 +498,8 @@ Item {
                             KeyNavigation.backtab: radioButtonPT
                             KeyNavigation.up: radioButtonPT
                             KeyNavigation.left: radioButtonPT
+                            Keys.onEnterPressed: toggleRadio(radioButtonUK)
+                            Keys.onReturnPressed: toggleRadio(radioButtonUK)
                         }
                     }
                 }
@@ -574,6 +584,8 @@ Item {
                         KeyNavigation.backtab: dateAppLook
                         KeyNavigation.up: dateAppLook
                         KeyNavigation.left: dateAppLook
+                        Keys.onEnterPressed: toggleSwitch(checkboxShowAnime)
+                        Keys.onReturnPressed: toggleSwitch(checkboxShowAnime)
                     }
                 }
             }
@@ -683,6 +695,8 @@ Item {
                         KeyNavigation.backtab: debugModeTextField
                         KeyNavigation.up: debugModeTextField
                         KeyNavigation.left: debugModeTextField
+                        Keys.onEnterPressed: toggleSwitch(checkboxDebugMode)
+                        Keys.onReturnPressed: toggleSwitch(checkboxDebugMode)
                     }
                 }
             }
@@ -794,6 +808,8 @@ Item {
                         KeyNavigation.backtab: graphicsTextField
                         KeyNavigation.up: graphicsTextField
                         KeyNavigation.left: graphicsTextField
+                        Keys.onEnterPressed: toggleSwitch(checkboxAccelGraphics)
+                        Keys.onReturnPressed: toggleSwitch(checkboxAccelGraphics)
                     }
                 }
             }
@@ -881,6 +897,8 @@ Item {
                         KeyNavigation.backtab: dateAppNetwork
                         KeyNavigation.up: dateAppNetwork
                         KeyNavigation.left: dateAppNetwork
+                        Keys.onEnterPressed: toggleSwitch(checkboxSystemProxy)
+                        Keys.onReturnPressed: toggleSwitch(checkboxSystemProxy)
                     }
 
                     CheckBox {
@@ -906,6 +924,8 @@ Item {
                         KeyNavigation.backtab: checkboxSystemProxy
                         KeyNavigation.up: checkboxSystemProxy
                         KeyNavigation.left: checkboxSystemProxy
+                        Keys.onEnterPressed: toggleSwitch(checkboxProxy)
+                        Keys.onReturnPressed: toggleSwitch(checkboxProxy)
                     }
                     Item {
                         id: boxAppAdress
@@ -1001,6 +1021,8 @@ Item {
                         KeyNavigation.backtab: textFieldPort
                         KeyNavigation.up: textFieldPort
                         KeyNavigation.left: textFieldPort
+                        Keys.onEnterPressed: toggleSwitch(checkboxAutProxy)
+                        Keys.onReturnPressed: toggleSwitch(checkboxAutProxy)
                     }
                     Item {
                         id: boxAppAutUser

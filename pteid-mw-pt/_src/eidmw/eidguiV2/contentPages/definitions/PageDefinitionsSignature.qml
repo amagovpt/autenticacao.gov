@@ -272,4 +272,8 @@ PageDefinitionsSignatureForm {
 
         return time
     }
+    function toggleRadio(element){
+        if(!element.checked)
+            element.checked = true
+    }
 }

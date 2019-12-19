@@ -123,6 +123,8 @@ Item {
                 KeyNavigation.right: radioButtonCustom
                 KeyNavigation.backtab: buttonAdd
                 KeyNavigation.up: buttonAdd
+                Keys.onEnterPressed: toggleRadio(radioButtonDefault)
+                Keys.onReturnPressed: toggleRadio(radioButtonDefault)
             }
 
             Rectangle {
@@ -300,6 +302,8 @@ Item {
                 KeyNavigation.right: buttonRemove
                 KeyNavigation.backtab: radioButtonDefault
                 KeyNavigation.up: radioButtonDefault
+                Keys.onEnterPressed: toggleRadio(radioButtonCustom)
+                Keys.onReturnPressed: toggleRadio(radioButtonCustom)
             }
             Rectangle {
                 id: rectPreCustom

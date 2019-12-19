@@ -1541,4 +1541,11 @@ PageServicesSignAdvancedForm {
         mainFormID.propertySubMenuListView.currentIndex = 1
         mainFormID.propertyPageLoader.source = "/contentPages/definitions/PageDefinitionsSCAP.qml"
     }
+    function toggleSwitch(element) {
+        element.checked = !element.checked
+    }
+    function toggleRadio(element) {
+        if(!element.checked)
+            element.checked = true
+    }
 }

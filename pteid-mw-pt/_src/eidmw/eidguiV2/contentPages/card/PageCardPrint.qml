@@ -347,4 +347,7 @@ PageCardPrintForm {
         createsuccess_dialog.close()
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
     }
+    function toggleSwitch(element){
+        element.checked = !element.checked
+    }
 }
