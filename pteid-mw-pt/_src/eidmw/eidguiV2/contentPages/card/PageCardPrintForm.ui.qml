@@ -114,7 +114,7 @@ Item {
                 id: switchBasic
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 text: qsTranslate("GAPI","STR_BASIC_INFORMATION_UPPERCASE")
-                font.bold: focus ? true : false
+                font.bold: activeFocus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -130,7 +130,7 @@ Item {
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchBasic.bottom
                 text: qsTranslate("GAPI","STR_ADDITIONAL_INFORMATION_UPPERCASE")
-                font.bold: focus ? true : false
+                font.bold: activeFocus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -146,7 +146,7 @@ Item {
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchAdditional.bottom
                 text: qsTranslate("GAPI","STR_ADDRESS_UPPERCASE")
-                font.bold: focus ? true : false
+                font.bold: activeFocus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -162,7 +162,7 @@ Item {
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchAddress.bottom
                 text: qsTranslate("GAPI","STR_PERSONAL_NOTES_UPPERCASE")
-                font.bold: focus ? true : false
+                font.bold: activeFocus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -178,7 +178,7 @@ Item {
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchNotes.bottom
                 text: qsTranslate("GAPI","STR_PRINT_DATE")
-                font.bold: focus ? true : false
+                font.bold: activeFocus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -250,7 +250,7 @@ Item {
                 id: switchPdfSign
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 text: qsTranslate("PageCardPrint","STR_PRINT_SIGN_PDF")
-                font.bold: focus ? true : false
+                font.bold: activeFocus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD

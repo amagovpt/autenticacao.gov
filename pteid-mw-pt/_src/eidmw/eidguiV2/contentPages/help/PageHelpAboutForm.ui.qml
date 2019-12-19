@@ -41,7 +41,7 @@ Item {
             font.pixelSize: Constants.SIZE_TEXT_TITLE
             color: Constants.COLOR_TEXT_TITLE
             font.family: lato.name
-            font.bold: activeFocus ? true : false
+            font.bold: activeFocus
             Accessible.role: Accessible.TitleBar
             Accessible.name: text
             KeyNavigation.tab: textDescription
@@ -55,7 +55,7 @@ Item {
             text: qsTranslate("PageHelpAbout","STR_HELP_TITLE")
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            font.bold: textDescription.focus ? true : false
+            font.bold: activeFocus
             anchors.top: textAppName.bottom
             anchors.topMargin: Constants.SIZE_TEXT_BODY
             Accessible.role: Accessible.Row
@@ -70,7 +70,7 @@ Item {
             id: textVersion
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            font.bold: textVersion.focus ? true : false
+            font.bold: activeFocus
             anchors.top: textDescription.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             Accessible.role: Accessible.Row
@@ -85,7 +85,7 @@ Item {
             id: textRevision
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            font.bold: textRevision.focus ? true : false
+            font.bold: activeFocus
             anchors.top: textVersion.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             Accessible.role: Accessible.Row
@@ -101,7 +101,7 @@ Item {
             text: qsTranslate("PageHelpAbout","STR_HELP_LINK") + ": "
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            font.bold: textDifficult.focus ? true : false
+            font.bold: activeFocus
             anchors.top: textRevision.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             Accessible.role: Accessible.Row
@@ -135,7 +135,7 @@ Item {
             text: qsTranslate("PageHelpAbout","STR_HELP_DEV_BY")
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            font.bold: textDevBy.focus ? true : false
+            font.bold: activeFocus
             anchors.top: textLinkCC.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             Accessible.role: Accessible.Row
@@ -153,7 +153,7 @@ Item {
             text: qsTranslate("PageHelpAbout","STR_HELP_DEV_AGENCY")
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            font.bold: textDevByAgency.focus ? true : false
+            font.bold: activeFocus
             anchors.top: textDevBy.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             width: parent.width
@@ -170,7 +170,7 @@ Item {
             id: textCopyright
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
-            font.bold: textCopyright.focus ? true : false
+            font.bold: activeFocus
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: textDevByAgency.bottom
