@@ -126,8 +126,8 @@ Item {
                 KeyNavigation.tab: buttonHidedAdd
                 KeyNavigation.down: buttonHidedAdd
                 KeyNavigation.right: buttonHidedAdd
-                KeyNavigation.backtab: button_signCMD
-                KeyNavigation.up: button_signCMD
+                KeyNavigation.backtab: button_signCMD.enabled ? button_signCMD : buttonHidedAdd
+                KeyNavigation.up: button_signCMD.enabled ? button_signCMD : buttonHidedAdd
             }
 
             Rectangle {
