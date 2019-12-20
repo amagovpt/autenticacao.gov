@@ -67,49 +67,62 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 	tmpTitle += szHeader;
 	tmpTitle += szPIN;
 
+
 	int window_height = 280;
 	int window_width = 420;
+	ScaleDimensions(&window_width, &window_height);
 
 	if( CreateWnd( tmpTitle.c_str() , window_width, window_height, IDI_APPICON, Parent ) )
 	{
+
 		RECT clientRect;
 		GetClientRect( m_hWnd, &clientRect );
 
-		//OK Button
+		int buttonWidth = window_width * 0.22;
+		int buttonHeight = window_height * 0.12;
+		int rightMargin = 16;
+		int buttonY = clientRect.bottom - window_height * 0.035 - buttonHeight;
+        int buttonSpacing = 0.03 * window_width;
+
 		OK_Btn = CreateWindow(
 			L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-			clientRect.right - 200, clientRect.bottom - 65, 82, 24, 
-			m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL );
+            clientRect.right - buttonWidth * 2 - rightMargin - buttonSpacing, buttonY, buttonWidth, buttonHeight,
+			m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL);
 
 		//OK button is disabled by default
 		EnableWindow(OK_Btn, false);
 
-		//Cancel Button
 		Cancel_Btn = CreateWindow(
 			L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-			clientRect.right - 110, clientRect.bottom - 65, 82, 24, 
-			m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL );
+			clientRect.right - buttonWidth - rightMargin, buttonY, buttonWidth, buttonHeight,
+			m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL);
 
 
 		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_PASSWORD;
 		if( pinInfo.ulFlags & PIN_FLAG_DIGITS )
 			dwStyle |= ES_NUMBER;
 
-		LONG pinTop = clientRect.bottom - 130;
-		LONG pinLeft = clientRect.right - 190;
+		LONG pinTop = clientRect.bottom - window_height * 0.45;
+		LONG pinLeft = clientRect.right - window_width * 0.45;
+
+        int editWidth = 0.4 * window_width;
+        int editHeight = 0.1 * window_height;
 
 		HWND hTextEdit = CreateWindowEx( WS_EX_CLIENTEDGE,
 			L"EDIT", L"", dwStyle, 
-			pinLeft, pinTop, 160, 26, 
+            pinLeft, pinTop, editWidth, editHeight,
 			m_hWnd, (HMENU)IDC_EDIT, m_hInstance, NULL );
 		SendMessage( hTextEdit, EM_LIMITTEXT, m_ulPinMaxLen, 0 );
 
-		int labelsX = 55;
+		int labelsX = window_width * 0.10;
+
+        int textWidth = window_width * 0.45;
+        int textHeight = window_height * 0.1;
 
 		//This is vertically aligned with hTextEdit
 		HWND hStaticText = CreateWindow( 
 			L"STATIC", szPIN, WS_CHILD | WS_VISIBLE | SS_LEFT, 
-			labelsX, pinTop, 170, 26,
+            labelsX, pinTop, textWidth, textHeight,
 			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
 
 		/*

@@ -42,7 +42,11 @@ data.files += misc/certs/*
 web.path += /usr/local/share/pteid-mw/www
 web.files += misc/web/*
 
+fonts.path += /usr/local/share/fonts/
+fonts.files += eidguiV2/fonts/lato/Lato-Regular.ttf
+
 INSTALLS += data \
-	        web
+	        web \
+	        fonts
 
 TARGET = pteid-mw

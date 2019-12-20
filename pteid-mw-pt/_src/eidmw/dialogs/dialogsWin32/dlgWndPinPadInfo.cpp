@@ -72,7 +72,11 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 	tmpTitle += m_szMessage;
 	tmpTitle += GETSTRING_DLG(PinpadCanBeDisabled);
 	
-	if (CreateWnd(tmpTitle.c_str(), 420, 280, IDI_APPICON, Parent))
+    int window_width = 420;
+    int window_height = 280;
+    ScaleDimensions(&window_width, &window_height);
+
+    if (CreateWnd(tmpTitle.c_str(), window_width, window_height, IDI_APPICON, Parent))
 	{
 		/*
 		if( PinPusage == DLG_PIN_SIGN )
@@ -124,29 +128,29 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 			SetTextColor(m_hDC, RGB(0x3C, 0x5D, 0xBC));
 
 			GetClientRect( m_hWnd, &rect );
-			rect.left += 20;
-			rect.top = 32;
-			rect.right -= 8;
-			rect.bottom = 136 - 8;
+			rect.left += 0.05 * rect.right;
+            rect.right -= 0.05 * rect.right;
+			rect.top = 0.11 * rect.bottom;
+			rect.bottom = 0.40 * rect.bottom;
 			SetBkColor( m_hDC, RGB(255,255,255));
 			SelectObject( m_hDC, TextFontHeader );
 			DrawText( m_hDC, m_szHeader, -1, &rect, DT_WORDBREAK );
 
 			//Change top header dimensions
 			GetClientRect( m_hWnd, &rect );
-			rect.left += 20;
-			rect.top = 60;
-			rect.right -= 20;
-			rect.bottom = rect.bottom - 60;
+            rect.left += 0.05 * rect.right;
+            rect.right -= 0.05 * rect.right;
+			rect.top = 0.22 * rect.bottom;
+			rect.bottom = 0.78 * rect.bottom;
 			SetBkColor(m_hDC, RGB(255, 255, 255));
 			SelectObject( m_hDC, TextFont );
 			DrawText( m_hDC, m_szMessage, -1, &rect, DT_WORDBREAK );
 
             //Pinpad disable warning
             GetClientRect(m_hWnd, &rect);
-            rect.left += 20;
-            rect.top = rect.bottom - 60;
-            rect.right -= 20;
+            rect.left += 0.05 * rect.right;
+            rect.right -= 0.05 * rect.right;
+            rect.top = 0.78 * rect.bottom;
             rect.bottom = rect.bottom;
             SetBkColor(m_hDC, RGB(255, 255, 255));
             SelectObject(m_hDC, TextFont);

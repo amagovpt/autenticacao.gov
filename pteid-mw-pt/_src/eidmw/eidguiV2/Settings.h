@@ -64,6 +64,8 @@ public:
     GUISettings( void )
         : m_GuiLanguage("nl")
         , m_bShowAnimations(false)
+        , m_bUseSystemScale(false)
+        , m_iApplicationScale(0)
         , m_bGraphicsAccel(false)
         , m_bUseCustomSignature(false)
         , m_bPinpadEnabled(false)
@@ -179,6 +181,28 @@ public:
             if ( 0 != ShowAnimations )
             {
                 setShowAnimations(true);
+            }
+        }
+        //----------------------------------------------------------
+        // check UseSystemApplicationScale
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_USESYSTEMSCALE);
+            long UseSystemScale = config.getLong();
+            if ( 0 != UseSystemScale )
+            {
+                setUseSystemScale(UseSystemScale);
+            }
+        }
+        //----------------------------------------------------------
+        // check ApplicationScale
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_APPLICATIONSCALE);
+            long Scale = config.getLong();
+            if ( 0 != Scale )
+            {
+                setApplicationScale(Scale);
             }
         }
         //----------------------------------------------------------
@@ -430,9 +454,29 @@ public:
     {
         return m_bShowAnimations;
     }
+    bool getUseSystemScale( void )
+    {
+        return m_bUseSystemScale;
+    }
+    int getApplicationScale( void )
+    {
+        return m_iApplicationScale;
+    }
     bool getGraphicsAccel( void )
     {
         return m_bGraphicsAccel;
+    }
+    void setUseSystemScale(  bool bUseSystemScale )
+    {
+        m_bUseSystemScale = bUseSystemScale;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_USESYSTEMSCALE);
+        config.setLong(bUseSystemScale);
+    }
+    void setApplicationScale(  int iApplicationScale )
+    {
+        m_iApplicationScale = iApplicationScale;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_APPLICATIONSCALE);
+        config.setLong(iApplicationScale);
     }
     void setShowAnimations(  bool bShowAnimations )
     {
@@ -684,6 +728,8 @@ private:
 
     QString m_GuiLanguage;          //!< the GUI language
     bool    m_bShowAnimations;      //!< the GUI Animations
+    int     m_bUseSystemScale;      //!< use the system scale
+    int     m_iApplicationScale;    //!< the GUI scale
     bool    m_bGraphicsAccel;       //!< the Graphics Acceleration
     bool    m_bUseCustomSignature;  //!< the GUI use custom signature image
     bool    m_bPinpadEnabled;       //!< use Pinpad functionality when supported by readers (T/F)

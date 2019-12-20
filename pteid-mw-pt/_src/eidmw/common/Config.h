@@ -205,6 +205,8 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GUITOOL_SHOWNOTIFICATION  L"show_notification"        //number; 0=no, 1=yes(default)
 #define EIDMW_CNF_GUITOOL_USECUSTOMSIGN     L"use_custom_sign"          //number; 0=no(default), 1=yes
 #define EIDMW_CNF_GUITOOL_SHOWANIMATIONS    L"show_animations"          //number; 0=no, 1=yes(default)
+#define EIDMW_CNF_GUITOOL_USESYSTEMSCALE    L"use_system_scale"         //number; 0=no(default), 1=yes
+#define EIDMW_CNF_GUITOOL_APPLICATIONSCALE  L"scale"                    //number; 0=100%(default), 1=125%, 2=150%,... (25% increments)
 #define EIDMW_CNF_GUITOOL_GRAPHICSACCEL     L"graphics_accelaration"    //number; 0=no, 1=yes(default)
 #define EIDMW_CNF_GUITOOL_SHOWSTARTUPHELP   L"not_show_startup_help"    //number; 0=no(default), 1=yes
 #define EIDMW_CNF_GUITOOL_SHOWTBAR          L"show_toolbar"             //number; 0=no, 1=yes
@@ -371,6 +373,8 @@ public:
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWNOTIFICATION;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_USECUSTOMSIGN;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWANIMATIONS;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_USESYSTEMSCALE;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_APPLICATIONSCALE;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_GRAPHICSACCEL;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWSTARTUPHELP;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWTBAR;

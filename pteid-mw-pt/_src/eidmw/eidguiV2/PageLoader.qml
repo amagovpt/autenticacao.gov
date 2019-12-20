@@ -76,6 +76,7 @@ Loader{
             bottomPadding: 0
             font.bold: rectPopUp.activeFocus ? true : false
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
+            font.family: lato.name
             color: Constants.COLOR_MAIN_BLUE
         }
         Item {

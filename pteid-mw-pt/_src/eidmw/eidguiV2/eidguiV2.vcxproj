@@ -143,6 +143,9 @@ copy %PTEID_CREDENTIALS_FILE% "$(ProjectDir)\credentials.h"
 echo "*********************************************************************************"
 </Command>
     </PreBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -192,6 +195,9 @@ copy "$(ProjectDir)\credentials.h.template" "$(ProjectDir)\credentials.h"
 copy %PTEID_CREDENTIALS_FILE% "$(ProjectDir)\credentials.h"
 echo "*********************************************************************************"</Command>
     </PreBuildEvent>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

@@ -19,6 +19,7 @@
 #include "gapi.h"
 #include "eidlib.h"
 #include "singleapplication.h"
+#include <QDesktopWidget> 
 
 using namespace eIDMW;
 
@@ -27,14 +28,16 @@ int main(int argc, char *argv[])
     int retValue = 0;
     const char * default_sam_server = NULL;
 
+    AppController::initApplicationScale();
+
 	SingleApplication app(argc, argv);
 
     PTEID_InitSDK();
-
-	// GUISettings init
-	GUISettings settings;
-	// AppController init
-	AppController controller(settings);
+	
+    // GUISettings init
+    GUISettings settings;
+    // AppController init
+    AppController controller(settings);
 
 	if (settings.getGraphicsAccel()){
 		qDebug() << "C++: Starting App with graphics acceleration";
