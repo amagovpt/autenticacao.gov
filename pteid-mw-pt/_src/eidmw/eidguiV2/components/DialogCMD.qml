@@ -150,9 +150,9 @@ Item {
                     wrapMode: Text.WordWrap
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text + textMobileNumber.text + textPin.text
-                    KeyNavigation.tab: comboBoxIndicative
-                    KeyNavigation.down: comboBoxIndicative
-                    KeyNavigation.right: comboBoxIndicative
+                    KeyNavigation.tab: controler.isAccessibilityActive() ? textMobileNumber : comboBoxIndicative
+                    KeyNavigation.down: controler.isAccessibilityActive() ? textMobileNumber : comboBoxIndicative
+                    KeyNavigation.right: controler.isAccessibilityActive() ? textMobileNumber : comboBoxIndicative
                     KeyNavigation.backtab: textLinkCMD.propertyText
                     KeyNavigation.up: textLinkCMD.propertyText
                 }
@@ -175,6 +175,13 @@ Item {
                     height: parent.height
                     width: parent.width * 0.3
                     anchors.bottom: parent.bottom
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: textMobileNumber.text
+                    KeyNavigation.tab: comboBoxIndicative
+                    KeyNavigation.down: comboBoxIndicative
+                    KeyNavigation.right: comboBoxIndicative
+                    KeyNavigation.backtab: textMessageTopLogin
+                    KeyNavigation.up: textMessageTopLogin
                 }
                 ComboBox {
                     id: comboBoxIndicative
@@ -201,8 +208,8 @@ Item {
                     KeyNavigation.tab: textFieldMobileNumber
                     KeyNavigation.down: textFieldMobileNumber
                     KeyNavigation.right: textFieldMobileNumber
-                    KeyNavigation.backtab: textLinkCMD.propertyText
-                    KeyNavigation.up: textLinkCMD.propertyText
+                    KeyNavigation.backtab: controler.isAccessibilityActive() ? textMobileNumber : textLinkCMD.propertyText
+                    KeyNavigation.up: controler.isAccessibilityActive() ? textMobileNumber : textLinkCMD.propertyText
                 }
                 TextField {
                     id: textFieldMobileNumber
@@ -225,9 +232,9 @@ Item {
                     }
                     Accessible.role: Accessible.EditableText
                     Accessible.name: textMobileNumber.text
-                    KeyNavigation.tab: textFieldPin
-                    KeyNavigation.down: textFieldPin
-                    KeyNavigation.right: textFieldPin
+                    KeyNavigation.tab: controler.isAccessibilityActive() ? textPin : textFieldPin
+                    KeyNavigation.down: controler.isAccessibilityActive() ? textPin : textFieldPin
+                    KeyNavigation.right: controler.isAccessibilityActive() ? textPin : textFieldPin
                     KeyNavigation.backtab: comboBoxIndicative
                     KeyNavigation.up: comboBoxIndicative
                 }
@@ -238,6 +245,7 @@ Item {
                 height: 50
                 anchors.top: rectMobilNumber.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
+
                 Text {
                     id: textPin
                     text: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN")
@@ -250,7 +258,15 @@ Item {
                     height: parent.height
                     width: parent.width * 0.3
                     anchors.bottom: parent.bottom
+                    Accessible.name: textPin.text
+                    Accessible.role: Accessible.StaticText
+                    KeyNavigation.tab: textFieldPin
+                    KeyNavigation.down: textFieldPin
+                    KeyNavigation.right: textFieldPin
+                    KeyNavigation.backtab: textFieldMobileNumber
+                    KeyNavigation.up: textFieldMobileNumber
                 }
+
                 TextField {
                     id: textFieldPin
                     width: parent.width * 0.7
@@ -258,7 +274,7 @@ Item {
                     font.italic: textFieldPin.text === "" ? true: false
                     placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN_OP") + "?"
                     validator: RegExpValidator { regExp: /[0-9]{4,8}/ }
-                    echoMode : TextInput.Password
+                    echoMode : TextInput.Normal
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.bold: activeFocus
@@ -270,14 +286,38 @@ Item {
                     KeyNavigation.tab: cancelButton
                     KeyNavigation.down: cancelButton
                     KeyNavigation.right: cancelButton
-                    KeyNavigation.backtab: textFieldMobileNumber
-                    KeyNavigation.up: textFieldMobileNumber
-
+                    KeyNavigation.backtab: controler.isAccessibilityActive() ? textPin : textFieldMobileNumber
+                    KeyNavigation.up: controler.isAccessibilityActive() ? textPin : textFieldMobileNumber
+                    onFocusChanged: {
+                        if (activeFocus) {
+                            // reset PIN text when focus is gained
+                            textFieldPin.text = ""
+                            textFieldPin.echoMode = TextInput.Normal
+                            accessibilityTimer.start()
+                        }
+                    }
                     Keys.onEnterPressed: {
                         if(okButton.enabled) signCMD()
                     }
                     Keys.onReturnPressed: {
                         if(okButton.enabled) signCMD()
+                    }
+                }
+                /*
+                  Workaround for the problem of the screen-reader not reading the name of the TextField
+                  if its echoMode is set to 'Password':
+                    set the initial echoMode to 'Normal'.
+                    use a timer(delay) to let the screen-reader start reading the TextField's name,
+                    then set the echoMode to 'Password' and force the update of the changed property.
+                */
+                Timer {
+                    id: accessibilityTimer
+                    interval: 100
+                    repeat: false
+                    running: false
+                    onTriggered: {
+                        textFieldPin.echoMode = TextInput.Password
+                        controler.forceAccessibilityUpdate(textFieldPin)
                     }
                 }
             }
@@ -360,7 +400,12 @@ Item {
             dialogSignCMD.open()
         }
         onOpened: {
-            textFieldMobileNumber.forceActiveFocus()
+            if (controler.isAccessibilityActive()) {
+                textMobileNumber.forceActiveFocus();
+            }
+            else {
+                textFieldMobileNumber.forceActiveFocus();
+            }
         }
         onClosed: {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS

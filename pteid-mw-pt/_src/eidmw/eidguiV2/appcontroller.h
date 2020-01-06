@@ -128,6 +128,8 @@ public slots:
     void flushCache();
     void getPteidCacheSize();
     void getScapCacheSize();
+    void forceAccessibilityUpdate(QObject *obj);
+    bool isAccessibilityActive();
 
 private:
     GUISettings&    m_Settings;

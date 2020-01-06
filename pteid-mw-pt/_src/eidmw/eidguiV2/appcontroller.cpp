@@ -15,6 +15,7 @@
 #include <QCursor>
 #include <QDebug>
 #include <QtConcurrent>
+#include <QAccessible>
 
 #include <fstream>
 #include <sstream>
@@ -1224,4 +1225,18 @@ void AppController::setOutlookSuppressNameChecks(bool bDisabledMatching) {
     }
 #endif
     (void)bDisabledMatching;
+}
+void AppController::forceAccessibilityUpdate(QObject *obj) {
+    /*
+        Create a focus-gained event and notify the accessibility framework to force the active
+        assistive tool (screen-reader) to reload the object's accessible properties.
+    */
+    if (isAccessibilityActive()) {
+        QAccessibleEvent ev(obj, QAccessible::Focus);
+        QAccessible::updateAccessibility(&ev);
+    }
+    return;
+}
+bool AppController::isAccessibilityActive(){
+    return QAccessible::isActive();
 }
