@@ -5,6 +5,7 @@
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
+ * Copyright (C) 2020 José Pinto - <jose.pinto@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.1
 
@@ -15,6 +16,7 @@
 #include <QCursor>
 #include <QDebug>
 #include <QtConcurrent>
+#include <QAccessible>
 
 #include <fstream>
 #include <sstream>
@@ -1306,4 +1308,19 @@ void AppController::initApplicationScale() {
     qDebug() << "C++: Application scaling: " << scale;
     if (!qputenv("QT_SCALE_FACTOR", scaleAsQByteArray))
         qDebug() << "C++: Erro QT_SCALE_FACTOR";
+}
+
+void AppController::forceAccessibilityUpdate(QObject *obj) {
+    /*
+        Create a focus-gained event and notify the accessibility framework to force the active
+        assistive tool (screen-reader) to reload the object's accessible properties.
+    */
+    if (isAccessibilityActive()) {
+        QAccessibleEvent ev(obj, QAccessible::Focus);
+        QAccessible::updateAccessibility(&ev);
+    }
+    return;
+}
+bool AppController::isAccessibilityActive(){
+    return QAccessible::isActive();
 }

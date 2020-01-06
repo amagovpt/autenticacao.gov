@@ -117,6 +117,8 @@ Item {
                     KeyNavigation.right: checkboxRemove
                     KeyNavigation.backtab: dateAppCertificates
                     KeyNavigation.up: dateAppCertificates
+                    Keys.onEnterPressed: toggleSwitch(checkboxRegister)
+                    Keys.onReturnPressed: toggleSwitch(checkboxRegister)
                 }
                 CheckBox {
                     id: checkboxRemove
@@ -137,6 +139,8 @@ Item {
                     KeyNavigation.right: dateAppTimeStamp
                     KeyNavigation.backtab: checkboxRegister
                     KeyNavigation.up: checkboxRegister
+                    Keys.onEnterPressed: toggleSwitch(checkboxRemove)
+                    Keys.onReturnPressed: toggleSwitch(checkboxRemove)
                 }
             }
         }
@@ -214,6 +218,8 @@ Item {
                     KeyNavigation.right: checkboxTimeStamp.checked ? textFieldTimeStamp : (rectOffice.visible ? textOfficeTitle: dateAppTimeStamp)
                     KeyNavigation.backtab: dateAppTimeStamp
                     KeyNavigation.up: dateAppTimeStamp
+                    Keys.onEnterPressed: toggleSwitch(checkboxTimeStamp)
+                    Keys.onReturnPressed: toggleSwitch(checkboxTimeStamp)
                 }
                 Item {
                     id: boxAppTimeStamp
@@ -327,6 +333,8 @@ Item {
                     KeyNavigation.right: checkboxRegister.visible ? dateAppCertificates : checkboxTimeStamp
                     KeyNavigation.backtab: textOfficeTitle
                     KeyNavigation.up: textOfficeTitle
+                    Keys.onEnterPressed: toggleSwitch(checkboxDisable)
+                    Keys.onReturnPressed: toggleSwitch(checkboxDisable)
                 }
             }
         }

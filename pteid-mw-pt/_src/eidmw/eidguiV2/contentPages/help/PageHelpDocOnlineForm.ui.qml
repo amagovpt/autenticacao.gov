@@ -226,6 +226,8 @@ Item {
                 KeyNavigation.right: reminderCheckBox
                 KeyNavigation.backtab: textLinks
                 KeyNavigation.up: textLinks
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
             }
         }
 
@@ -249,6 +251,8 @@ Item {
                 KeyNavigation.right: propertyMainItem
                 KeyNavigation.backtab: buttonDownload
                 KeyNavigation.up: buttonDownload
+                Keys.onEnterPressed: reminderCheckBox.checked = !reminderCheckBox.checked
+                Keys.onReturnPressed: reminderCheckBox.checked = !reminderCheckBox.checked
             }
         }
     }

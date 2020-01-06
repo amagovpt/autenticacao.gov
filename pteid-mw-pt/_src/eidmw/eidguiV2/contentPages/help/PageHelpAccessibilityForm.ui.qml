@@ -119,10 +119,10 @@ Item {
             anchors.topMargin: 2 * Constants.SIZE_TEXT_BODY
             width: parent.width
             height: text3.height + row4.propertyRowText.height + row5.propertyRowText.height
-                            + row6.propertyRowText.height + text4.height
+                            + row6.propertyRowText.height + row7.propertyRowText.height
             Accessible.role: Accessible.Row
             Accessible.name: text3.text + row4.propertyRowText.text + row5.propertyRowText.text
-                                    + row6.propertyRowText.text + text4.text
+                                    + row6.propertyRowText.text + row7.propertyRowText.text
             KeyNavigation.tab: textTitle
             KeyNavigation.down: textTitle
             KeyNavigation.right: textTitle

@@ -132,6 +132,8 @@ public slots:
     void flushCache();
     void getPteidCacheSize();
     void getScapCacheSize();
+    void forceAccessibilityUpdate(QObject *obj);
+    bool isAccessibilityActive();
 
     QString getFontFile(QString font);
     static void initApplicationScale();

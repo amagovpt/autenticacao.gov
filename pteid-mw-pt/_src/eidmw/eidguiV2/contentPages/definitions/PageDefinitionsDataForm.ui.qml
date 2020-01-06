@@ -181,6 +181,8 @@ Item {
                             KeyNavigation.right: dateSCAPCache
                             KeyNavigation.backtab: cacheAppSizeTextField
                             KeyNavigation.up: cacheAppSizeTextField
+                            Keys.onEnterPressed: clicked()
+                            Keys.onReturnPressed: clicked()
                         }
                     }
                 }
@@ -318,6 +320,8 @@ Item {
                             KeyNavigation.right: propertyMainItem
                             KeyNavigation.backtab: cacheSCAPSizeTextField
                             KeyNavigation.up: cacheSCAPSizeTextField
+                            Keys.onEnterPressed: clicked()
+                            Keys.onReturnPressed: clicked()
                         }
                     }
                 }

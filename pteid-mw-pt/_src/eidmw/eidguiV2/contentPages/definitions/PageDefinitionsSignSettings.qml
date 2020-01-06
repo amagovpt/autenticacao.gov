@@ -109,4 +109,7 @@ PageDefinitionsSignSettingsForm {
 
         console.log("Page definitionsSignSettings onCompleted finished")
     }
+    function toggleSwitch(element){
+        element.checked = !element.checked
+    }
 }

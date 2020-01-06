@@ -113,6 +113,8 @@ PageCardPrintForm {
                         createsuccess_dialog.close()
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     }
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
                 Button {
                     id: openButton
@@ -131,6 +133,8 @@ PageCardPrintForm {
                     onClicked: {
                         showCreatedFile()
                     }
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
             }
         }
@@ -342,5 +346,8 @@ PageCardPrintForm {
         Qt.openUrlExternally(outputFile)
         createsuccess_dialog.close()
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+    }
+    function toggleSwitch(element){
+        element.checked = !element.checked
     }
 }

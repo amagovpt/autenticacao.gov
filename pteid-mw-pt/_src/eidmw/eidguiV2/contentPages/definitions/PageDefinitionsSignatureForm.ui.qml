@@ -123,6 +123,8 @@ Item {
                 KeyNavigation.right: radioButtonCustom
                 KeyNavigation.backtab: buttonAdd
                 KeyNavigation.up: buttonAdd
+                Keys.onEnterPressed: toggleRadio(radioButtonDefault)
+                Keys.onReturnPressed: toggleRadio(radioButtonDefault)
             }
 
             Rectangle {
@@ -300,6 +302,8 @@ Item {
                 KeyNavigation.right: buttonRemove
                 KeyNavigation.backtab: radioButtonDefault
                 KeyNavigation.up: radioButtonDefault
+                Keys.onEnterPressed: toggleRadio(radioButtonCustom)
+                Keys.onReturnPressed: toggleRadio(radioButtonCustom)
             }
             Rectangle {
                 id: rectPreCustom
@@ -477,6 +481,8 @@ Item {
                         KeyNavigation.right: buttonAdd
                         KeyNavigation.backtab: radioButtonCustom
                         KeyNavigation.up: radioButtonCustom
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
                     }
                 }
                 Item {
@@ -504,6 +510,8 @@ Item {
                         KeyNavigation.right: radioButtonDefault
                         KeyNavigation.backtab: buttonRemove
                         KeyNavigation.up: buttonRemove
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
                     }
                 }
             }

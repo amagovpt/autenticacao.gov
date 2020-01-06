@@ -126,8 +126,8 @@ Item {
                 KeyNavigation.tab: buttonHidedAdd
                 KeyNavigation.down: buttonHidedAdd
                 KeyNavigation.right: buttonHidedAdd
-                KeyNavigation.backtab: button_signCMD
-                KeyNavigation.up: button_signCMD
+                KeyNavigation.backtab: button_signCMD.enabled ? button_signCMD : buttonHidedAdd
+                KeyNavigation.up: button_signCMD.enabled ? button_signCMD : buttonHidedAdd
             }
 
             Rectangle {
@@ -175,6 +175,8 @@ Item {
                     KeyNavigation.right: fileLoaded ? pdfPreviewArea : textSpinBox
                     KeyNavigation.backtab: titlePre
                     KeyNavigation.up: titlePre
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
                 Components.PDFPreview {
                     id: pdfPreviewArea
@@ -330,6 +332,8 @@ Item {
                 KeyNavigation.right: buttonRemove
                 KeyNavigation.backtab: textSpinBox
                 KeyNavigation.up: textSpinBox
+                Keys.onEnterPressed: checkLastPage.checked = !checkLastPage.checked
+                Keys.onReturnPressed: checkLastPage.checked = !checkLastPage.checked
             }
         }
     }
@@ -366,6 +370,8 @@ Item {
                 KeyNavigation.right: button_signCC
                 KeyNavigation.backtab: checkLastPage
                 KeyNavigation.up: checkLastPage
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
             }
         }
         Item{
@@ -393,6 +399,8 @@ Item {
                 KeyNavigation.right: button_signCMD
                 KeyNavigation.backtab: buttonRemove
                 KeyNavigation.up: buttonRemove
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
             }
             Button {
                 id: button_signCMD
@@ -413,6 +421,8 @@ Item {
                 KeyNavigation.right: titlePre
                 KeyNavigation.backtab: button_signCC
                 KeyNavigation.up: button_signCC
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
             }
         }
     }

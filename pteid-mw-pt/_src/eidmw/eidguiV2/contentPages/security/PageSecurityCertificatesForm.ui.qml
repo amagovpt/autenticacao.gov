@@ -253,9 +253,9 @@ Item {
                 }
                 Accessible.role: Accessible.Row
                 Accessible.name: textStatus.accessibleText
-                KeyNavigation.tab: (buttonViewCertificate.visible ? buttonViewCertificate : rectEntity)
-                KeyNavigation.down: (buttonViewCertificate.visible ? buttonViewCertificate : rectEntity)
-                KeyNavigation.right: (buttonViewCertificate.visible ? buttonViewCertificate : rectEntity)
+                KeyNavigation.tab: (buttonViewCertificate.visible ? buttonViewCertificate : buttonExportCertificate)
+                KeyNavigation.down: (buttonViewCertificate.visible ? buttonViewCertificate : buttonExportCertificate)
+                KeyNavigation.right: (buttonViewCertificate.visible ? buttonViewCertificate : buttonExportCertificate)
                 KeyNavigation.left: rectKey
                 KeyNavigation.backtab: rectKey
                 KeyNavigation.up: rectKey
@@ -286,6 +286,8 @@ Item {
                     KeyNavigation.down: buttonExportCertificate
                     KeyNavigation.right: buttonExportCertificate
                     KeyNavigation.up: rectStatus
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
 
                 Button {
@@ -307,6 +309,8 @@ Item {
                     KeyNavigation.down: rectEntity
                     KeyNavigation.right: rectEntity
                     KeyNavigation.up: buttonViewCertificate
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
                 }
             }
         }

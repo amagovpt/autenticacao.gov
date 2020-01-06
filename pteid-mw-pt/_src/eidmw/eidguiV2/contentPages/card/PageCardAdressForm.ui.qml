@@ -547,6 +547,8 @@ Item {
                 KeyNavigation.right: rectNacionalDistrict
                 KeyNavigation.backtab: rectConfirmationOfAddressText
                 KeyNavigation.up: rectConfirmationOfAddressText
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
             }
         }
     }

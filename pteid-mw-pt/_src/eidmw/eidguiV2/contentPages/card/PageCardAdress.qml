@@ -513,6 +513,8 @@ PageCardAdressForm {
                 KeyNavigation.right: okButton
                 KeyNavigation.backtab: textFieldConfirmAddress
                 KeyNavigation.up: textFieldConfirmAddress
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
             }
             Button {
                 id: okButton
@@ -540,6 +542,8 @@ PageCardAdressForm {
                 KeyNavigation.right: rectPopUp
                 KeyNavigation.backtab: cancelButton
                 KeyNavigation.up: cancelButton
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
             }
         }
         onRejected:{
@@ -667,6 +671,8 @@ PageCardAdressForm {
                 KeyNavigation.right: textMessageTop.propertyText
                 KeyNavigation.backtab: textMessageTop.propertyText
                 KeyNavigation.up: textMessageTop.propertyText
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
             }
         }
         onRejected:{

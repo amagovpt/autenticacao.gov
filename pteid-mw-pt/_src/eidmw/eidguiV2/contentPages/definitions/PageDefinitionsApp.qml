@@ -361,4 +361,11 @@ PageDefinitionsAppForm {
         // a smooth flick velocity
         return 200 + Constants.FLICK_Y_VELOCITY_MAX * (1 - propertyRowMain.visibleArea.heightRatio)
     }
+    function toggleSwitch(element){
+        element.checked = !element.checked
+    }
+    function toggleRadio(element){
+        if (!element.checked)
+            element.checked = true
+    }
 }

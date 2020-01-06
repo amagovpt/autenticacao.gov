@@ -114,7 +114,7 @@ Item {
                 id: switchBasic
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 text: qsTranslate("GAPI","STR_BASIC_INFORMATION_UPPERCASE")
-                font.bold: focus ? true : false
+                font.bold: activeFocus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -124,13 +124,15 @@ Item {
                 KeyNavigation.right: switchAdditional
                 KeyNavigation.backtab: titleSelectData
                 KeyNavigation.up: titleSelectData
+                Keys.onEnterPressed: toggleSwitch(switchBasic)
+                Keys.onReturnPressed: toggleSwitch(switchBasic)
             }
             Switch {
                 id: switchAdditional
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchBasic.bottom
                 text: qsTranslate("GAPI","STR_ADDITIONAL_INFORMATION_UPPERCASE")
-                font.bold: focus ? true : false
+                font.bold: activeFocus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -140,13 +142,15 @@ Item {
                 KeyNavigation.right: switchAddress
                 KeyNavigation.backtab: switchBasic
                 KeyNavigation.up: switchBasic
+                Keys.onEnterPressed: toggleSwitch(switchAdditional)
+                Keys.onReturnPressed: toggleSwitch(switchAdditional)
             }
             Switch {
                 id: switchAddress
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchAdditional.bottom
                 text: qsTranslate("GAPI","STR_ADDRESS_UPPERCASE")
-                font.bold: focus ? true : false
+                font.bold: activeFocus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -156,13 +160,15 @@ Item {
                 KeyNavigation.right: switchNotes
                 KeyNavigation.backtab: switchAdditional
                 KeyNavigation.up: switchAdditional
+                Keys.onEnterPressed: toggleSwitch(switchAddress)
+                Keys.onReturnPressed: toggleSwitch(switchAddress)
             }
             Switch {
                 id: switchNotes
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchAddress.bottom
                 text: qsTranslate("GAPI","STR_PERSONAL_NOTES_UPPERCASE")
-                font.bold: focus ? true : false
+                font.bold: activeFocus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -172,13 +178,15 @@ Item {
                 KeyNavigation.right: switchPrintDate
                 KeyNavigation.backtab: switchAddress
                 KeyNavigation.up: switchAddress
+                Keys.onEnterPressed: toggleSwitch(switchNotes)
+                Keys.onReturnPressed: toggleSwitch(switchNotes)
             }
             Switch {
                 id: switchPrintDate
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 anchors.top: switchNotes.bottom
                 text: qsTranslate("GAPI","STR_PRINT_DATE")
-                font.bold: focus ? true : false
+                font.bold: activeFocus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -188,6 +196,8 @@ Item {
                 KeyNavigation.right: titleOptions
                 KeyNavigation.backtab: switchNotes
                 KeyNavigation.up: switchNotes
+                Keys.onEnterPressed: toggleSwitch(switchPrintDate)
+                Keys.onReturnPressed: toggleSwitch(switchPrintDate)
             }
         }
     }
@@ -250,7 +260,7 @@ Item {
                 id: switchPdfSign
                 height: Constants.HEIGHT_SWITCH_COMPONENT
                 text: qsTranslate("PageCardPrint","STR_PRINT_SIGN_PDF")
-                font.bold: focus ? true : false
+                font.bold: activeFocus ? true : false
                 enabled: true
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -261,6 +271,8 @@ Item {
                 KeyNavigation.right: buttonPrint
                 KeyNavigation.backtab: titleOptions
                 KeyNavigation.up: titleOptions
+                Keys.onEnterPressed: toggleSwitch(switchPdfSign)
+                Keys.onReturnPressed: toggleSwitch(switchPdfSign)
             }
         }
     }
@@ -294,6 +306,8 @@ Item {
                 KeyNavigation.right: buttonPdf
                 KeyNavigation.backtab: switchPdfSign
                 KeyNavigation.up: switchPdfSign
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
 
             }
         }
@@ -321,6 +335,8 @@ Item {
                 KeyNavigation.right: titleSelectData
                 KeyNavigation.backtab: buttonPrint
                 KeyNavigation.up: buttonPrint
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
 
             }
         }
