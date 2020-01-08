@@ -29,6 +29,8 @@
 #include "eidlibException.h"
 #include "eidlibdefines.h"
 
+#include "certsupdate.h"
+
 class AppController : public QObject
 {
     Q_OBJECT
@@ -57,6 +59,11 @@ public slots:
     void initTranslation(void);
     bool getAutoCardReadingValue(void);
     void setAutoCardReadingValue (bool bAutoCardReading );
+
+
+    // Auto updates certificates
+    void autoUpdatesCerts(void);
+    void startUpdateCerts(void);
 
     void autoUpdates(void);
     void startRequest(QUrl url);
@@ -126,6 +133,7 @@ public slots:
     void updateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
     void cancelUpdateDownload();
     void userCancelledUpdateDownload();
+    void userCancelledUpdateCertsDownload();
     void httpUpdateFinished();
     void httpUpdateReadyRead();
     void updateUpdateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
@@ -162,6 +170,9 @@ private:
     QString release_notes;
     QString remote_version;
     QString installed_version;
+
+    CertsUpdate certsUpdate;
+
 protected:
     QTranslator m_translator;
 
@@ -169,10 +180,15 @@ signals:
     void signalRestoreWindows();
     void languageChanged();
     void signalLanguageChangedError();
-    void signalAutoUpdateFail(int error_code);
-    void signalAutoUpdateAvailable(QString release_notes, QString installed_version, QString remote_version);
-    void signalAutoUpdateProgress(int value);
-    void signalStartUpdate(QString filename);
+
+    // Autoupdates
+    void signalAutoUpdateFail(int updateType, int error_code);
+    void signalAutoUpdateAvailable(int updateType, QString release_notes,
+                                   QString installed_version, QString remote_version, QString certs_list);
+    void signalAutoUpdateProgress(int updateType, int value);
+    void signalStartUpdate(int updateType, QString filename);
+    void signalAutoUpdateSuccess(int updateType);
+
     void signalRemovePteidCacheSuccess();
     void signalRemovePteidCacheFail();
     void signalCacheNotReadable();

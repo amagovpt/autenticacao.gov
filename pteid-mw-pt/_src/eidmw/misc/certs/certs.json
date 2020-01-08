@@ -1,0 +1,16 @@
+{
+    "certs": {
+            "cert1": "BaltimoreCyberTrustRoot.der",
+            "cert2": "cacerts.pem",
+            "cert3": "CartaodeCidadao001.der",
+            "cert4": "CartaodeCidadao002.der",
+            "cert5": "CartaodeCidadao003.der",
+            "cert6": "CartaodeCidadao004.der",
+            "cert7": "CartaodeCidadao005.der",
+            "cert8": "COMODORSACertificationAuthority.der",
+            "cert9": "ECRaizEstado_MC.der",
+            "cert10": "GlobalChambersignRoot-2008.der",
+            "cert11": "Multicert_Root_01.der",
+            "cert12": "Usertrust_RSA_Certification_Authority.der"
+        }
+}

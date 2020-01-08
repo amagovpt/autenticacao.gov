@@ -51,6 +51,7 @@ SOURCES += main.cpp \
     SCAP-services-v3/SCAPAuthorizationServiceSoapBindingProxy.cpp \
     SCAP-services-v3/SCAPC.cpp \
     SCAP-services-v3/SCAPSignatureServiceSoapBindingProxy.cpp \
+    certsUpdate.cpp \
     pdfsignatureclient.cpp \
     ErrorConn.cpp \
     stdsoap2.cpp \
@@ -144,6 +145,7 @@ HEADERS += \
     appcontroller.h \
     gapi.h \
     filesavedialog.h \
+    certsUpdate.h \
     scapsignature.h \
     Settings.h \
     certificates.h \

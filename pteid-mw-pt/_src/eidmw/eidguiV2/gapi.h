@@ -221,6 +221,8 @@ public:
     enum AutoUpdateMessage {GenericError, NoUpdatesAvailable, DownloadFailed, DownloadCancelled, LinuxNotSupported, UpdatesAvailable,
                            UnableSaveFile, InstallFailed, NetworkError};
 
+    enum AutoUpdateType {AutoUpdateNoExist, AutoUpdateApp, AutoUpdateCerts,AutoUpdateBoth };
+
     enum ScapPdfSignResult { ScapTimeOutError, ScapGenericError, ScapAttributesExpiredError, ScapZeroAttributesError,
                              ScapNotValidAttributesError, ScapClockError, ScapSecretKeyError, ScapSucess };
 
@@ -240,6 +242,7 @@ public:
     Q_ENUMS(SignMessage)
     Q_ENUMS(PrintMessage)
     Q_ENUMS(AutoUpdateMessage)
+    Q_ENUMS(AutoUpdateType)
     Q_ENUMS(PinUsage)
 
 

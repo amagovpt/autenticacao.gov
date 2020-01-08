@@ -79,22 +79,45 @@ Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
 
-        property var autoUpdate: true
+        property var autoUpdateApp: true
+        property var autoUpdateCerts: true
+
         onSignalAutoUpdateAvailable: {
-            if(autoUpdate){
-                console.log("There is an update available.")
-                autoUpdate = false
-                autoUpdateDialog.update_release_notes = release_notes
-                autoUpdateDialog.update_installed_version = installed_version
-                autoUpdateDialog.update_remote_version = remote_version
-                autoUpdateDialog.open()
-                labelTextTitle.forceActiveFocus();
+            console.log("mainpage onSignalAutoUpdateAvailable")
+
+            if(updateType == GAPI.AutoUpdateApp){
+                if(autoUpdateApp){
+                    autoUpdateApp = false
+                    autoUpdateDialog.update_release_notes = release_notes
+                    autoUpdateDialog.update_installed_version = installed_version
+                    autoUpdateDialog.update_remote_version = remote_version
+                    autoUpdateDialog.update_type = autoUpdateDialog.update_type + updateType
+                    autoUpdateDialog.open()
+                    labelTextTitle.forceActiveFocus();
+                }
+            } else {
+                if(autoUpdateCerts){
+                    autoUpdateCerts = false
+                    autoUpdateDialog.update_type = autoUpdateDialog.update_type + updateType
+                    autoUpdateDialog.update_certs_list = certs_list
+                    autoUpdateDialog.open()
+                    labelTextTitle.forceActiveFocus();
+                }
             }
         }
+
         onSignalAutoUpdateFail: {
-            if(autoUpdate){
-                console.log("No updates or startup auto update failed.")
-                autoUpdate = false
+            console.log("No updates or startup auto update failed.")
+            if(updateType == GAPI.AutoUpdateApp){
+                console.log("No App updates or startup auto update failed.")
+                if(autoUpdateApp){
+                    autoUpdateApp = false
+                }
+            } else {
+                console.log("No Certs updates or startup auto update failed.")
+                if(autoUpdateCerts){
+                    autoUpdateCerts = false
+                }
             }
         }
     }
@@ -143,6 +166,11 @@ Load language error. Please reinstall the application"
         property string update_release_notes: ""
         property string update_installed_version: ""
         property string update_remote_version: ""
+        property string update_certs_list: ""
+        property int update_type: 0
+        property var isAutoUpdatePopupOpen: false
+        property alias propertyTextAutoupdate: textAutoupdate.text
+
 
         id: autoUpdateDialog
         width: 400
@@ -180,8 +208,6 @@ Load language error. Please reinstall the application"
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textAutoupdate
-                    text: qsTr("STR_AUTOUPDATE_TEXT") + "\n\n"
-                        + qsTr("STR_DISABLE_AUTOUPDATE_INFO")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: activeFocus ? Constants.SIZE_TEXT_LABEL_FOCUS : Constants.SIZE_TEXT_LABEL
@@ -244,13 +270,43 @@ Load language error. Please reinstall the application"
                 mainFormID.propertySubMenuListView.forceActiveFocus()
 
                 //re-emit signal for PageDefinitionsUpdatesForm
-                controler.signalAutoUpdateAvailable(autoUpdateDialog.update_release_notes,
-                                                    autoUpdateDialog.update_installed_version,
-                                                    autoUpdateDialog.update_remote_version)
+                if(autoUpdateDialog.update_type == GAPI.AutoUpdateApp
+                        || autoUpdateDialog.update_type == GAPI.AutoUpdateBoth){
+                    controler.signalAutoUpdateAvailable(GAPI.AutoUpdateApp,
+                                                        autoUpdateDialog.update_release_notes,
+                                                        autoUpdateDialog.update_installed_version,
+                                                        autoUpdateDialog.update_remote_version,
+                                                        "")
+                }
+                if(autoUpdateDialog.update_type == GAPI.AutoUpdateCerts
+                        || autoUpdateDialog.update_type == GAPI.AutoUpdateBoth){
+                    controler.signalAutoUpdateAvailable(GAPI.AutoUpdateCerts,
+                                                        "",
+                                                        "",
+                                                        "",
+                                                        autoUpdateDialog.update_certs_list)
+                }
+
+                autoUpdateDialog.isAutoUpdatePopupOpen = false
+
             }
         }
         onRejected: {
             autoUpdateDialog.open()
+        }
+        onOpened: {
+            autoUpdateDialog.isAutoUpdatePopupOpen = true
+
+            if(autoUpdateDialog.update_type == GAPI.AutoUpdateApp) {
+                propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_TEXT") + "\n\n"
+                        + qsTranslate("PageDefinitionsUpdates","STR_DISABLE_AUTOUPDATE_INFO")
+            } else if(autoUpdateDialog.update_type == GAPI.AutoUpdateApp){
+                propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_CERTS_TEXT") + "\n\n"
+                        + qsTranslate("PageDefinitionsUpdates","STR_DISABLE_AUTOUPDATE_INFO")
+            } else {
+                propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_MULTI_TEXT") + "\n\n"
+                        + qsTranslate("PageDefinitionsUpdates","STR_DISABLE_AUTOUPDATE_INFO")
+            }
         }
     }
 
@@ -1380,6 +1436,7 @@ Load language error. Please reinstall the application"
         gapi.setAppAsDlgParent()
         if(controler.getStartAutoupdateValue()){
             controler.autoUpdates()
+            controler.autoUpdatesCerts()
         }
     }
 

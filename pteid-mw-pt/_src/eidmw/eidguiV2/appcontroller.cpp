@@ -39,6 +39,7 @@
 #endif
 
 #include "gapi.h"
+#include "certsupdate.h"
 
 #define N_RELEASE_NOTES 3
 
@@ -152,10 +153,11 @@ void AppController::autoUpdates(){
         qDebug() << "C++: autoUpdates No Internet Connection";
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
             "AppController::autoUpdates: No Internet Connection");
-        emit signalAutoUpdateFail(GAPI::NetworkError);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::NetworkError);
         return;
     }
 
+    // Auto update App
     std::string remoteversion;
     eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_VERIFY_URL);
     remoteversion.append(config.getString());
@@ -166,13 +168,43 @@ void AppController::autoUpdates(){
     fileName = fileInfo.fileName();
     if (fileName.isEmpty())
     {
-         emit signalAutoUpdateFail(GAPI::GenericError);
+         emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
          return;
     }
 
     // schedule the request
     httpRequestAborted = false;
     startRequest(url);
+}
+
+void AppController::autoUpdatesCerts(){
+    qDebug() << "C++: Starting autoUpdates Certs";
+
+    if (qnam.networkAccessible() == QNetworkAccessManager::NotAccessible){
+        qDebug() << "C++: autoUpdates No Internet Connection";
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "AppController::autoUpdates: No Internet Connection");
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::NetworkError);
+        return;
+    }
+
+    // Auto update Certificates
+    std::string remoteCerts;
+    eIDMW::PTEID_Config configCert(eIDMW::PTEID_PARAM_AUTOUPDATES_CERTS_URL);
+    remoteCerts.append(configCert.getString());
+    remoteCerts.append("certs.json");
+    url = remoteCerts.c_str();
+
+    QFileInfo fileInfo(url.path());
+    fileName = fileInfo.fileName();
+    if (fileName.isEmpty())
+    {
+         emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
+         return;
+    }
+
+    certsUpdate.setAppController(this);
+    certsUpdate.startRequest(url);
 }
 
 void AppController::startUpdate(){
@@ -184,7 +216,7 @@ void AppController::startUpdate(){
 
     if (fileName.isEmpty())
     {
-         emit signalAutoUpdateFail(GAPI::GenericError);
+         emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
     }
     QFile::remove(fileName);
 
@@ -200,15 +232,25 @@ void AppController::startUpdate(){
            "AppController::startUpdate: Unable to save the file.");
         delete file;
         file = nullptr;
-        emit signalAutoUpdateFail(GAPI::UnableSaveFile);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::UnableSaveFile);
         return;
     }
 
-    emit signalStartUpdate(fileName);
+    emit signalStartUpdate(GAPI::AutoUpdateApp, fileName);
 
     // schedule the request
     httpUpdateRequestAborted = false;
     startUpdateRequest(url);
+}
+
+void AppController::startUpdateCerts(){
+    qDebug() << "C++: startUpdateCerts";
+    certsUpdate.startUpdate();
+}
+
+void AppController::userCancelledUpdateCertsDownload(){
+    qDebug() << "C++: userCancelledUpdateCertsDownload";
+    certsUpdate.userCancelledUpdateDownload();
 }
 
 void AppController::startRequest(QUrl url){
@@ -218,7 +260,7 @@ void AppController::startRequest(QUrl url){
         qDebug() << "C++: startRequest No Internet Connection";
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
             "AppController::startRequest: No Internet Connection.");
-        emit signalAutoUpdateFail(GAPI::NetworkError);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::NetworkError);
         return;
     }
 
@@ -268,7 +310,7 @@ void AppController::startUpdateRequest(QUrl url){
         qDebug() << "C++: startUpdateRequest No Internet Connection";
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
             "AppController::startUpdateRequest: No Internet Connection.");
-        emit signalAutoUpdateFail(GAPI::NetworkError);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::NetworkError);
         return;
     }
 
@@ -304,7 +346,7 @@ void AppController::httpUpdateFinished(){
             //network failure occurred when downloading
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                 "AppController::httpUpdateFinished: Network failure occurred while downloading.");
-            emit signalAutoUpdateFail(GAPI::NetworkError);
+            emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::NetworkError);
         }
 
         reply->deleteLater();
@@ -314,7 +356,7 @@ void AppController::httpUpdateFinished(){
     if (!file){
         reply->deleteLater();
         reply = 0;
-        emit signalAutoUpdateFail(GAPI::DownloadFailed);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::DownloadFailed);
         return;
     }
     file->flush();
@@ -324,7 +366,7 @@ void AppController::httpUpdateFinished(){
     if (reply->error())
     {
         file->remove();
-        emit signalAutoUpdateFail(GAPI::NetworkError);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::NetworkError);
     }
     else if (!redirectionTarget.isNull())
     {
@@ -408,7 +450,7 @@ void AppController::RunPackage(std::string pkg, std::string distro){
         qDebug() << QString::fromStdString("Error: " + GetLastError());
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
             "AppController::RunPackage: Failed to start update process: %d.", GetLastError());
-        emit signalAutoUpdateFail(GAPI::InstallFailed);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::InstallFailed);
     } else {
         PTEID_ReleaseSDK();
         exit(0);
@@ -462,7 +504,7 @@ void AppController::updateUpdateDataReadProgress(qint64 bytesRead, qint64 totalB
         return;
 
     qint64 valueFloat = (quint64)((double) (bytesRead * 100 / totalBytes ));
-    emit signalAutoUpdateProgress((int)valueFloat);
+    emit signalAutoUpdateProgress(GAPI::AutoUpdateApp, (int)valueFloat);
 
 }
 
@@ -502,7 +544,7 @@ void AppController::httpUpdateError(QNetworkReply::NetworkError networkError)
 
 void AppController::httpFinished()
 {
-    qDebug() << "C++: httpFinished";
+    qDebug() << "C++: httpFinished httpRequestAborted = " << httpRequestAborted;
     if (httpRequestAborted) {
         if (file) {
             file->close();
@@ -514,7 +556,7 @@ void AppController::httpFinished()
         reply = 0;
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
             "AppController::httpFinished: The update request was aborted.");
-        emit signalAutoUpdateFail(GAPI::NetworkError);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::NetworkError);
         return;
     }
 
@@ -522,7 +564,7 @@ void AppController::httpFinished()
     if (reply->error()) {
         qDebug() << "C++: reply error";
         file->remove();
-        emit signalAutoUpdateFail(GAPI::NetworkError);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::NetworkError);
         QString strLog = QString("AutoUpdates:: Download failed: ");
         strLog += reply->url().toString();
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", strLog.toStdString().c_str() );
@@ -592,7 +634,7 @@ bool AppController::VerifyUpdates(std::string filedata)
     if (!cJSON_IsObject(json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: may be a syntax error.");
-        emit signalAutoUpdateFail(GAPI::GenericError);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return false;
     }
 
@@ -600,7 +642,7 @@ bool AppController::VerifyUpdates(std::string filedata)
     if (!cJSON_IsObject(dists_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get distributions object.");
-        emit signalAutoUpdateFail(GAPI::GenericError);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return false;
     }
 
@@ -608,7 +650,7 @@ bool AppController::VerifyUpdates(std::string filedata)
     if (!cJSON_IsObject(dist_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get object for this distribution (%s)", distrover.c_str());
-        emit signalAutoUpdateFail(GAPI::GenericError);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return false;
     }
 
@@ -616,7 +658,7 @@ bool AppController::VerifyUpdates(std::string filedata)
     if (!cJSON_IsString(latestVersion_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get latestVersion for this distribution.", distrover.c_str());
-        emit signalAutoUpdateFail(GAPI::GenericError);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return false;
     }
     remote_version = latestVersion_json->valuestring;
@@ -627,7 +669,7 @@ bool AppController::VerifyUpdates(std::string filedata)
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
             "AutoUpdates::VerifyUpdates: Wrong data returned from server or Proxy HTML error!");
         qDebug() << "C++: AutoUpdates::VerifyUpdates: Wrong data returned from server or Proxy HTML error!";
-        emit signalAutoUpdateFail(GAPI::GenericError);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return false;
     }
 
@@ -649,7 +691,7 @@ bool AppController::VerifyUpdates(std::string filedata)
     if (compareVersions(local_version, remote_version) <= 0)
     {
         qDebug() << "C++: No updates available at the moment";
-        emit signalAutoUpdateFail(GAPI::NoUpdatesAvailable);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::NoUpdatesAvailable);
         return false;
     }
     qDebug() << "C++: updates available";
@@ -658,7 +700,7 @@ bool AppController::VerifyUpdates(std::string filedata)
     if (!cJSON_IsArray(versions_array_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get array of versions.");
-        emit signalAutoUpdateFail(GAPI::GenericError);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return false;
     }
     int latestVerIdx;
@@ -668,14 +710,14 @@ bool AppController::VerifyUpdates(std::string filedata)
         if (!cJSON_IsObject(version_json))
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get version object at index %d", latestVerIdx);
-            emit signalAutoUpdateFail(GAPI::GenericError);
+            emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
             return false;
         }
         cJSON *version_number_json = cJSON_GetObjectItem(version_json, "version");
         if (!cJSON_IsString(version_number_json))
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get version number from version at %d", latestVerIdx);
-            emit signalAutoUpdateFail(GAPI::GenericError);
+            emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
             return false;
         }
         if (strcmp(version_number_json->valuestring, latestVersion_json->valuestring) == 0)
@@ -696,7 +738,7 @@ bool AppController::VerifyUpdates(std::string filedata)
          || !cJSON_IsArray(version_release_notes_json))
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not parse some key/value of version object at %d", i);
-            emit signalAutoUpdateFail(GAPI::GenericError);
+            emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
             return false;
         }
         release_notes += "<p>";
@@ -708,7 +750,7 @@ bool AppController::VerifyUpdates(std::string filedata)
             if (!cJSON_IsString(release_note_json))
             {
                 PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not parse release note %d of version obj %d", rlsNoteIdx, i);
-                emit signalAutoUpdateFail(GAPI::GenericError);
+                emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
                 return false;
             }
             release_notes += QString("- ") + release_note_json->valuestring + QString("<br/>");
@@ -825,7 +867,7 @@ bool AppController::ChooseVersion(std::string distro, std::string arch, cJSON *d
     if (distro == "unsupported")
     {
        qDebug() << "C++: Your Linux distribution is not supported by Auto-updates";
-       emit signalAutoUpdateFail(GAPI::LinuxNotSupported);
+       emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::LinuxNotSupported);
        return false;
     }
 #endif
@@ -834,7 +876,7 @@ bool AppController::ChooseVersion(std::string distro, std::string arch, cJSON *d
     if (!cJSON_IsString(package_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get package_json for this distribution.");
-        emit signalAutoUpdateFail(GAPI::GenericError);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return false;
     }
     downloadurl.append(package_json->valuestring);
@@ -848,7 +890,7 @@ void AppController::updateWindows(std::string uri, std::string distro)
     urli = uri;
     getdistro = distro;
 
-    emit signalAutoUpdateAvailable(release_notes, installed_version, remote_version);
+    emit signalAutoUpdateAvailable(GAPI::AutoUpdateApp, release_notes, installed_version, remote_version,"");
 }
 
 void AppController::cancelDownload()
@@ -863,7 +905,7 @@ void AppController::cancelDownload()
     if (qnam.networkAccessible() == QNetworkAccessManager::NotAccessible){
         qDebug() << "C++: cancelDownload No Internet Connection";
 
-        emit signalAutoUpdateFail(GAPI::NetworkError);
+        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::NetworkError);
         return;
     }
 }
@@ -879,7 +921,7 @@ void AppController::userCancelledUpdateDownload()
         reply->abort();
     }
 
-    emit signalAutoUpdateFail(GAPI::DownloadCancelled);
+    emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::DownloadCancelled);
 }
 
 void AppController::cancelUpdateDownload()
