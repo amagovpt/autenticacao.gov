@@ -81,27 +81,33 @@ Load language error. Please reinstall the application"
 
         property var autoUpdateApp: true
         property var autoUpdateCerts: true
+        property var isAutoUpdateAlreadyDetected: false
 
         onSignalAutoUpdateAvailable: {
-            console.log("mainpage onSignalAutoUpdateAvailable")
-
             if(updateType == GAPI.AutoUpdateApp){
                 if(autoUpdateApp){
-                    autoUpdateApp = false
+
                     autoUpdateDialog.update_release_notes = release_notes
                     autoUpdateDialog.update_installed_version = installed_version
                     autoUpdateDialog.update_remote_version = remote_version
-                    autoUpdateDialog.update_type = autoUpdateDialog.update_type + updateType
+
+                    autoUpdateDialog.update_type = isAutoUpdateAlreadyDetected ? GAPI.AutoUpdateBoth : updateType
+                    isAutoUpdateAlreadyDetected = true
+                    autoUpdateApp = false
                     autoUpdateDialog.open()
                     labelTextTitle.forceActiveFocus();
                 }
             } else {
                 if(autoUpdateCerts){
-                    autoUpdateCerts = false
-                    autoUpdateDialog.update_type = autoUpdateDialog.update_type + updateType
+
                     autoUpdateDialog.update_certs_list = certs_list
+
+                    autoUpdateDialog.update_type = isAutoUpdateAlreadyDetected ? GAPI.AutoUpdateBoth : updateType
+                    isAutoUpdateAlreadyDetected = true
+                    autoUpdateCerts = false
                     autoUpdateDialog.open()
                     labelTextTitle.forceActiveFocus();
+
                 }
             }
         }
@@ -168,13 +174,12 @@ Load language error. Please reinstall the application"
         property string update_remote_version: ""
         property string update_certs_list: ""
         property int update_type: 0
-        property var isAutoUpdatePopupOpen: false
         property alias propertyTextAutoupdate: textAutoupdate.text
-
+        property alias propertyOpenTextAutoupdate: openTextAutoupdate.text
 
         id: autoUpdateDialog
-        width: 400
-        height: 200
+        width: 500
+        height: 300
         font.family: lato.name
         // Center dialog in the main view
         x: parent.width * 0.5 - width * 0.5
@@ -213,6 +218,33 @@ Load language error. Please reinstall the application"
                     font.pixelSize: activeFocus ? Constants.SIZE_TEXT_LABEL_FOCUS : Constants.SIZE_TEXT_LABEL
                     font.bold: activeFocus
                     font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width
+                    anchors.bottom: parent.bottom
+                    wrapMode: Text.WordWrap
+                    KeyNavigation.tab: buttonCancelUpdate
+                    KeyNavigation.down: buttonCancelUpdate
+                    KeyNavigation.up: labelTextTitle
+                    KeyNavigation.backtab: labelTextTitle
+                }
+            }
+            Item {
+                id: rectOpenMessage
+                width: parent.width
+                height: 50
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: rectMessage.bottom
+                Text {
+                    id: openTextAutoupdate
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: activeFocus ? Constants.SIZE_TEXT_LABEL_FOCUS : Constants.SIZE_TEXT_LABEL
+                    font.bold: activeFocus
+                    font.family: lato.name
+                    text: qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_OPEN_TEXT") + "\n\n"
+                          + qsTranslate("PageDefinitionsUpdates","STR_DISABLE_AUTOUPDATE_INFO")
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
                     width: parent.width
@@ -287,25 +319,19 @@ Load language error. Please reinstall the application"
                                                         autoUpdateDialog.update_certs_list)
                 }
 
-                autoUpdateDialog.isAutoUpdatePopupOpen = false
-
             }
         }
         onRejected: {
             autoUpdateDialog.open()
         }
         onOpened: {
-            autoUpdateDialog.isAutoUpdatePopupOpen = true
-
             if(autoUpdateDialog.update_type == GAPI.AutoUpdateApp) {
-                propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_TEXT") + "\n\n"
-                        + qsTranslate("PageDefinitionsUpdates","STR_DISABLE_AUTOUPDATE_INFO")
-            } else if(autoUpdateDialog.update_type == GAPI.AutoUpdateApp){
-                propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_CERTS_TEXT") + "\n\n"
-                        + qsTranslate("PageDefinitionsUpdates","STR_DISABLE_AUTOUPDATE_INFO")
+                propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_TEXT")
+            } else if(autoUpdateDialog.update_type == GAPI.AutoUpdateCerts){
+                propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_CERTS_TEXT")
             } else {
-                propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_MULTI_TEXT") + "\n\n"
-                        + qsTranslate("PageDefinitionsUpdates","STR_DISABLE_AUTOUPDATE_INFO")
+                propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_MULTI_TEXT")
+
             }
         }
     }
@@ -1435,7 +1461,7 @@ Load language error. Please reinstall the application"
         mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
         gapi.setAppAsDlgParent()
         if(controler.getStartAutoupdateValue()){
-            controler.autoUpdates()
+            controler.autoUpdateApp()
             controler.autoUpdatesCerts()
         }
     }

@@ -195,7 +195,7 @@ PageDefinitionsUpdatesForm {
             propertyButtonSearch.visible = false
             propertyTextDescription.text =
                     qsTranslate("PageDefinitionsUpdates","STR_UPDATE_VERSION_LOOKUP")
-            controler.autoUpdates()
+            controler.autoUpdateApp()
         }
     }
     propertyButtonStartUpdate {
@@ -206,7 +206,7 @@ PageDefinitionsUpdatesForm {
             propertyProgressBar.indeterminate = true
             propertyButtonSearch.visible = false
             propertyButtonStartUpdate.visible = false //instant hide it after press guarantees that user never accidentally clicks two times
-            controler.startUpdate()
+            controler.startUpdateApp()
         }
     }
     propertyButtonCancelUpdate {

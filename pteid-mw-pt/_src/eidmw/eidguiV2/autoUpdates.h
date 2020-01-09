@@ -6,8 +6,8 @@
 
 ****************************************************************************-*/
 
-#ifndef CERTSUPDATE_H
-#define CERTSUPDATE_H
+#ifndef AUTOUPDATES_H
+#define AUTOUPDATES_H
 
 #include <QObject>
 #include <QVariant>
@@ -29,12 +29,12 @@
 
 class AppController;
 
-class CertsUpdate : public QObject
+class AutoUpdates : public QObject
 {
     Q_OBJECT
 public:
-    CertsUpdate(){}
-    CertsUpdate(AppController* AppController)
+    AutoUpdates(){}
+    AutoUpdates(AppController* AppController)
         : m_AppController(AppController)
     {
     }
@@ -45,37 +45,36 @@ public:
         return m_AppController;
     }
 
-public slots:
+    void initRequest(int updateType);
     void startRequest(QUrl url);
     void startUpdate();
-    void startUpdateRequest(QUrl url);
+    void userCancelledUpdateDownload();
 
+public slots:
+
+    // Public slots to process the configuration file
     void cancelDownload();
     void httpError(QNetworkReply::NetworkError networkError);
     void httpFinished();
     void httpReadyRead();
     void updateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
 
+    // Public slots to process the update file
     void cancelUpdateDownload();
     void httpUpdateError(QNetworkReply::NetworkError networkError);
     void httpUpdateFinished();
     void httpUpdateReadyRead();
     void updateUpdateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
 
-    bool VerifyUpdates(std::string filedata);
-    bool ChooseVersion(cJSON *dist_json);
-    void updateWindows(std::string uri);
-    void RunPackage(std::string pkg);
-    void userCancelledUpdateDownload();
-
 private:
     AppController*   m_AppController;
+    int m_updateType;
     QUrl url;
     QNetworkProxy proxy;
     QNetworkAccessManager qnam;
     QNetworkReply *reply;
     QFile *file;
-    QString m_pac_url;
+
     bool httpRequestAborted;
     bool httpUpdateRequestAborted;
     bool userCanceled;
@@ -87,7 +86,23 @@ private:
     QString remote_version;
     QString installed_version;
 
+    // Private methods to process the configuration file
+    bool VerifyAppUpdates(std::string filedata);
+    bool VerifyCertsUpdates(std::string filedata);
 
+    bool ChooseCertificates(cJSON *certs_json);
+    bool ChooseAppVersion(std::string distro, std::string arch, cJSON *dist_json);
+
+    std::string VerifyOS(std::string param);
+
+
+    void updateWindows(std::string uri, std::string distro);
+
+    // Private methods to process the update file
+    void startUpdateRequest(QUrl url);
+
+    void RunAppPackage(std::string pkg, std::string distro);
+    void RunCertsPackage(std::string pkg);
 };
 
-#endif //CERTSUPDATE_H
+#endif //AUTOUPDATES_H

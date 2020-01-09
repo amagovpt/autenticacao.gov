@@ -29,7 +29,7 @@
 #include "eidlibException.h"
 #include "eidlibdefines.h"
 
-#include "certsupdate.h"
+#include "autoUpdates.h"
 
 class AppController : public QObject
 {
@@ -65,15 +65,8 @@ public slots:
     void autoUpdatesCerts(void);
     void startUpdateCerts(void);
 
-    void autoUpdates(void);
-    void startRequest(QUrl url);
-    void startUpdateRequest(QUrl url);
-    bool VerifyUpdates(std::string filedata);
-    std::string VerifyOS(std::string param);
-    bool ChooseVersion(std::string distro, std::string arch, cJSON *dist_json);
-    void updateWindows(std::string uri, std::string distro);
-    void RunPackage(std::string pkg, std::string distro);
-    void startUpdate(void);
+    void autoUpdateApp(void);
+    void startUpdateApp(void);
 
     bool getStartAutoupdateValue(void);
     void setStartAutoupdateValue(bool bStartAutoupdate);
@@ -125,18 +118,7 @@ public slots:
     bool getOutlookSuppressNameChecks(void);
     void setOutlookSuppressNameChecks(bool bDisabledMatching);
 
-    void cancelDownload();
-    void httpError(QNetworkReply::NetworkError networkError);
-    void httpUpdateError(QNetworkReply::NetworkError networkError);
-    void httpFinished();
-    void httpReadyRead();
-    void updateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
-    void cancelUpdateDownload();
-    void userCancelledUpdateDownload();
     void userCancelledUpdateCertsDownload();
-    void httpUpdateFinished();
-    void httpUpdateReadyRead();
-    void updateUpdateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
     void flushCache();
     void getPteidCacheSize();
     void getScapCacheSize();
@@ -154,24 +136,8 @@ private:
     qint64 dirSize(QString dirPath, QString nameFilter);
     QString formatSize(qint64 size);
 
-    QUrl url;
-    QNetworkProxy proxy;
-    QNetworkAccessManager qnam;
-    QNetworkReply *reply;
-    QFile *file;
-    QString m_pac_url;
-    bool httpRequestAborted;
-    bool httpUpdateRequestAborted;
-    bool userCanceled;
-    std::string filedata;
-    std::string urli;
-    std::string getdistro;
-    QString fileName;
-    QString release_notes;
-    QString remote_version;
-    QString installed_version;
-
-    CertsUpdate certsUpdate;
+    AutoUpdates certsUpdate;
+    AutoUpdates appUpdate;
 
 protected:
     QTranslator m_translator;
