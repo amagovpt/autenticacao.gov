@@ -686,10 +686,43 @@ void AutoUpdates::RunCertsPackage(std::string pkg){
 
     qDebug() << QString::fromStdString("pkgpath " + pkgpath);
 
-    qDebug() << "C++: RunPackage finish";
-    getAppController()->signalAutoUpdateSuccess(m_updateType);
+#ifdef WIN32
+    #error "TODO: Install certificate"
+#elif __APPLE__
+    #error "TODO: Install certificate"
+#else
+    eIDMW::PTEID_Config certs_dir(eIDMW::PTEID_PARAM_GENERAL_CERTS_DIR);
+    std::string  certs_dir_str = certs_dir.getString();
 
-    // TODO: Install certificate
+    QProcess *proc = new QProcess(this);
+    proc->waitForFinished();
+
+    QString cmd = "pkexec /bin/cp " + QString::fromStdString(pkgpath) + " " + QString::fromStdString(certs_dir_str);
+
+    proc->start(cmd);
+
+    if(!proc->waitForStarted()) //default wait time 30 sec
+    {
+        qDebug() << "C++ AUTO UPDATES: cannot start process ";
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                  "AutoUpdates::RunCertsPackage: Cannot execute: %s",cmd.toStdString().c_str());
+        getAppController()->signalAutoUpdateFail(m_updateType,GAPI::InstallFailed);
+    }
+
+    proc->waitForFinished();
+    proc->setProcessChannelMode(QProcess::MergedChannels);
+
+    if(proc->exitStatus() == QProcess::NormalExit
+            && proc->exitCode() == QProcess::NormalExit){
+        getAppController()->signalAutoUpdateSuccess(m_updateType);
+    } else {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                  "AutoUpdates::RunCertsPackage: Cannot copy file: %s",cmd.toStdString().c_str());
+        getAppController()->signalAutoUpdateFail(m_updateType,GAPI::InstallFailed);
+    }
+    qDebug() << "C++: RunCertsPackage finish";
+
+#endif
 }
 
 void AutoUpdates::userCancelledUpdateDownload()
