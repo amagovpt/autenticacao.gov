@@ -137,21 +137,21 @@ Rectangle {
                     id: sigReasonText
                     font.pixelSize: propertySigLineHeight
                     font.italic: true
-                    height: propertySigLineHeight
+                    height: propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     text: ""
                     anchors.top: dragSigRect.top
-                    anchors.topMargin: propertySigLineHeight * 0.60
+                    anchors.topMargin: propertySigLineHeight * 0.40
                     x: 2
                     visible: false
                 }
 
                 Image {
                     id: dragSigWaterImage
-                    height: dragSigRect.height * 0.4
+                    height: propertyReducedChecked ? dragSigRect.height * 0.8 : dragSigRect.height * 0.4
                     fillMode: Image.PreserveAspectFit
                     anchors.top: sigReasonText.bottom
                     anchors.topMargin: 2
@@ -161,7 +161,7 @@ Rectangle {
                 Text {
                     id: sigSignedByText
                     font.pixelSize:propertySigLineHeight
-                    height: propertySigLineHeight
+                    height: propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigReasonText.bottom
@@ -172,7 +172,7 @@ Rectangle {
                 Text {
                     id: sigSignedByNameText
                     font.pixelSize: propertySigLineHeight
-                    height: propertySigLineHeight
+                    height: propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - sigSignedByText.paintedWidth - 6
                     clip: true
                     font.family: lato.name
@@ -187,7 +187,7 @@ Rectangle {
                 Text {
                     id: sigNumIdText
                     font.pixelSize: propertySigLineHeight
-                    height: propertySigLineHeight
+                    height: propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
                     font.family: lato.name
@@ -200,20 +200,20 @@ Rectangle {
                 Text {
                     id: sigDateText
                     font.pixelSize: propertySigLineHeight
-                    height: propertySigLineHeight
+                    height: propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigNumIdText.bottom
-                    text: getData()
+                    text: qsTranslate("PageServicesSign", "STR_SIGN_DATE") + ": " + getData()
                     x: 2
                     visible: false
                 }
                 Text {
                     id: sigLocationText
                     font.pixelSize: propertySigLineHeight
-                    height: propertySigLineHeight
+                    height: propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
                     font.family: lato.name
@@ -229,7 +229,7 @@ Rectangle {
                     height: dragSigRect.height * 0.3
                     fillMode: Image.PreserveAspectFit
                     anchors.top: sigLocationText.bottom
-                    anchors.topMargin: parent.height * 0.1
+                    anchors.topMargin: Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     x: 2
                     visible: false
                 }
@@ -263,13 +263,11 @@ Rectangle {
                     if(propertyReducedChecked){
                         propertySigLineHeight = propertyDragSigRect.height * 0.2
                         propertyDragSigImg.height = 0
-                        propertyDragSigWaterImg.height = 0
                     }else{
                         propertySigLineHeight = propertyDragSigRect.height * 0.1
-                        propertyDragSigReasonText.height = propertySigLineHeight
-                        propertyDragSigLocationText.height = propertySigLineHeight
+                        propertyDragSigReasonText.height = propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                        propertyDragSigLocationText.height = propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                         propertyDragSigImg.height = propertyDragSigRect.height * 0.3
-                        propertyDragSigWaterImg.height = propertyDragSigRect.height * 0.4
                     }
                 }
             }
@@ -391,7 +389,7 @@ Rectangle {
     }
 
     function getData(){
-        var time = Qt.formatDateTime(new Date(), "yy.MM.dd hh:mm:ss")
+        var time = Qt.formatDateTime(new Date(), "yyyy.MM.dd hh:mm:ss")
 
         function pad(number, length){
             var str = "" + number

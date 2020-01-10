@@ -215,8 +215,8 @@ PageServicesSignAdvancedForm {
                     + gapi.getDataCardIdentifyValue(GAPI.Givenname)
                     + " " +  gapi.getDataCardIdentifyValue(GAPI.Surname)
 
-            propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
-                    + gapi.getDataCardIdentifyValue(GAPI.Documentnum)
+            propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_NIC") + ": "
+                    + gapi.getDataCardIdentifyValue(GAPI.NIC)
             propertyBusyIndicator.running = false
             cardLoaded = true
             propertyButtonAdd.forceActiveFocus()
@@ -229,7 +229,7 @@ PageServicesSignAdvancedForm {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 propertyPDFPreview.propertyDragSigSignedByNameText.text =
                         qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
-                propertyPDFPreview.propertyDragSigNumIdText.text =  qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
+                propertyPDFPreview.propertyDragSigNumIdText.text =  qsTranslate("GAPI","STR_NIC") + ": "
                 cardLoaded = false
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
@@ -755,7 +755,8 @@ PageServicesSignAdvancedForm {
     }
     propertyTextFieldLocal{
         onTextChanged: {
-            propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text
+            propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text === "" ? "" :
+                qsTranslate("PageServicesSign", "STR_SIGN_LOCATION") + ": " + propertyTextFieldLocal.text
             propertyPageLoader.propertyBackupReason = propertyTextFieldLocal.text
         }
     }
@@ -771,16 +772,15 @@ PageServicesSignAdvancedForm {
                 propertyPDFPreview.propertyDragSigReasonText.text = ""
                 propertyPDFPreview.propertyDragSigLocationText.text = ""
                 propertyPDFPreview.propertyDragSigImg.height = 0
-                propertyPDFPreview.propertyDragSigWaterImg.height = 0
             }else{
                 propertyPDFPreview.propertySigHidth = 90
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.1
-                propertyPDFPreview.propertyDragSigReasonText.height = propertyPDFPreview.propertySigLineHeight
-                propertyPDFPreview.propertyDragSigLocationText.height = propertyPDFPreview.propertySigLineHeight
+                propertyPDFPreview.propertyDragSigReasonText.height = propertyPDFPreview.propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                propertyPDFPreview.propertyDragSigLocationText.height = propertyPDFPreview.propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                 propertyPDFPreview.propertyDragSigReasonText.text = propertyTextFieldReason.text
-                propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text
+                propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text === "" ? "" :
+                    qsTranslate("PageServicesSign", "STR_SIGN_LOCATION") + ": " + propertyTextFieldLocal.text
                 propertyPDFPreview.propertyDragSigImg.height = propertyPDFPreview.propertyDragSigRect.height * 0.3
-                propertyPDFPreview.propertyDragSigWaterImg.height = propertyPDFPreview.propertyDragSigRect.height * 0.4
             }
         }
     }

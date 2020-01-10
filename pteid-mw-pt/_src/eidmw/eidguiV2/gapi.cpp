@@ -2728,6 +2728,7 @@ void GAPI::connectToCard() {
     cardData[NISS] = QString::fromUtf8(eid_file.getSocialSecurityNumber());
     cardData[NSNS] = QString::fromUtf8(eid_file.getHealthNumber());
     cardData[NIF] = QString::fromUtf8(eid_file.getTaxNo());
+    cardData[NIC] = QString::fromUtf8(eid_file.getCivilianIdNumber());
 
     //Load photo into a QPixmap
     PTEID_ByteArray& photo = eid_file.getPhotoObj().getphoto();

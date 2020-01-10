@@ -96,8 +96,8 @@ PageServicesSignSimpleForm {
                     + gapi.getDataCardIdentifyValue(GAPI.Givenname)
                     + " " +  gapi.getDataCardIdentifyValue(GAPI.Surname)
 
-            propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
-                    + gapi.getDataCardIdentifyValue(GAPI.Documentnum)
+            propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_NIC") + ": "
+                    + gapi.getDataCardIdentifyValue(GAPI.NIC)
             propertyBusyIndicator.running = false
             cardLoaded = true
             propertyButtonHidedAdd.forceActiveFocus()
@@ -110,7 +110,7 @@ PageServicesSignSimpleForm {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 propertyPDFPreview.propertyDragSigSignedByNameText.text =
                         qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
-                propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
+                propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_NIC") + ": "
                 cardLoaded = false
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
@@ -646,7 +646,7 @@ PageServicesSignSimpleForm {
 
         propertyPDFPreview.propertyDragSigSignedByNameText.text =
                 qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
-        propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
+        propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_NIC")+ ": "
 
         //  CMD load backup mobile data
         //textFieldMobileNumber.text = propertyPageLoader.propertyBackupMobileNumber

@@ -155,6 +155,12 @@
         <translation>Falha na assinatura com atributos profissionais. Por favor volte a carregar os atributos profissionais.</translation>
     </message>
     <message>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="218"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="232"/>
+        <source>STR_NIC</source>
+        <translation>Num. de Identificação</translation>
+    </message>
+    <message>
         <location filename="gapi.cpp" line="662"/>
         <source>STR_CMD_TIMEOUT_ERROR</source>
         <translation>O serviço está indisponível neste momento</translation>
@@ -360,8 +366,6 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="43"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="82"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="101"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="218"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="232"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="99"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="113"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="649"/>
@@ -2010,6 +2014,12 @@
         <translation>Pacote ASiC com XML Advanced Electronic Signatures (XAdES)</translation>
     </message>
     <message>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="759"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="782"/>
+        <source>STR_SIGN_LOCATION</source>
+        <translation>Localização</translation>
+    </message>
+    <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="990"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1022"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1056"/>
@@ -2313,6 +2323,11 @@
         <location filename="components/PDFPreview.qml" line="89"/>
         <source>STR_SIGN_NAV_DESCRIPTION</source>
         <translation>Arraste o selo de assinatura</translation>
+    </message>
+    <message>
+        <location filename="components/PDFPreview.qml" line="209"/>
+        <source>STR_SIGN_DATE</source>
+        <translation>Data</translation>
     </message>
 </context>
 <context>

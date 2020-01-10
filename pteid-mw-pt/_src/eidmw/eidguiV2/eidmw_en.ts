@@ -162,6 +162,12 @@
         <translation>Fail at PDF signature with professional attributes. Please reload professional attributes.</translation>
     </message>
     <message>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="218"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="232"/>
+        <source>STR_NIC</source>
+        <translation>Identification number</translation>
+    </message>
+    <message>
         <location filename="gapi.cpp" line="665"/>
         <source>STR_CMD_GET_CERTIFICATE_ERROR</source>
         <oldsource>STR_GET_CERTIFICATE_ERROR</oldsource>
@@ -362,8 +368,6 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="43"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="82"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="101"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="218"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="232"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="99"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="113"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="649"/>
@@ -2012,6 +2016,12 @@
         <translation>ASiC container with XML Advanced Electronic Signatures (XAdES)</translation>
     </message>
     <message>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="759"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="782"/>
+        <source>STR_SIGN_LOCATION</source>
+        <translation>Location</translation>
+    </message>
+    <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="990"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1022"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1056"/>
@@ -2315,6 +2325,11 @@
         <location filename="components/PDFPreview.qml" line="89"/>
         <source>STR_SIGN_NAV_DESCRIPTION</source>
         <translation>Move the signature seal</translation>
+    </message>
+    <message>
+        <location filename="components/PDFPreview.qml" line="209"/>
+        <source>STR_SIGN_DATE</source>
+        <translation>Date</translation>
     </message>
 </context>
 <context>
