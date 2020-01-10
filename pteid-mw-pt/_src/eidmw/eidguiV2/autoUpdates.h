@@ -38,7 +38,7 @@ public:
         : m_AppController(AppController)
     {
     }
-    AppController* setAppController(AppController* AppController){
+    void setAppController(AppController* AppController){
         m_AppController = AppController;
     }
     AppController* getAppController(void){
@@ -87,11 +87,11 @@ private:
     QString installed_version;
 
     // Private methods to process the configuration file
-    bool VerifyAppUpdates(std::string filedata);
-    bool VerifyCertsUpdates(std::string filedata);
+    void VerifyAppUpdates(std::string filedata);
+    void VerifyCertsUpdates(std::string filedata);
 
-    bool ChooseCertificates(cJSON *certs_json);
-    bool ChooseAppVersion(std::string distro, std::string arch, cJSON *dist_json);
+    void ChooseCertificates(cJSON *certs_json);
+    void ChooseAppVersion(std::string distro, std::string arch, cJSON *dist_json);
 
     std::string VerifyOS(std::string param);
 

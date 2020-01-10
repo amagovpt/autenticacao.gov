@@ -56,6 +56,9 @@
     <ClCompile Include="scapsignature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="autoUpdates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="stdsoap2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -75,6 +78,9 @@
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_autoUpdates.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_singleapplication.cpp">
@@ -268,6 +274,9 @@
       <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="singleapplication.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="autoUpdates.h">
       <Filter>Generated Files</Filter>
     </CustomBuild>
   </ItemGroup>

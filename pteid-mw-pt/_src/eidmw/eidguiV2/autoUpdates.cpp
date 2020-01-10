@@ -148,7 +148,7 @@ void AutoUpdates::startRequest(QUrl url){
     return;
 }
 
-bool AutoUpdates::VerifyCertsUpdates(std::string filedata)
+void AutoUpdates::VerifyCertsUpdates(std::string filedata)
 {
     qDebug() << "C++ AUTO UPDATES: VerifyCertsUpdates";
 
@@ -160,7 +160,7 @@ bool AutoUpdates::VerifyCertsUpdates(std::string filedata)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing certs.json: may be a syntax error.");
         getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
-        return false;
+        return;
     }
 
     cJSON *certs_json = cJSON_GetObjectItem(json, "certs");
@@ -168,10 +168,10 @@ bool AutoUpdates::VerifyCertsUpdates(std::string filedata)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing certs.json: Could not get certs object.");
         getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
-        return false;
+        return;
     }
 
-    return ChooseCertificates(certs_json);
+    ChooseCertificates(certs_json);
 }
 
 int compareVersions(PteidVersion v1, PteidVersion v2)
@@ -188,7 +188,7 @@ int compareVersions(PteidVersion v1, PteidVersion v2)
     return ret;
 }
 
-bool AutoUpdates::VerifyAppUpdates(std::string filedata)
+void AutoUpdates::VerifyAppUpdates(std::string filedata)
 {
     qDebug() << "C++ AUTO UPDATES: VerifyAppUpdates";
 
@@ -206,7 +206,7 @@ bool AutoUpdates::VerifyAppUpdates(std::string filedata)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: may be a syntax error.");
         getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
-        return false;
+        return;
     }
 
     cJSON *dists_json = cJSON_GetObjectItem(json, "distributions");
@@ -214,7 +214,7 @@ bool AutoUpdates::VerifyAppUpdates(std::string filedata)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get distributions object.");
         getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
-        return false;
+        return;
     }
 
     cJSON *dist_json = cJSON_GetObjectItem(dists_json, distrover.c_str());
@@ -222,7 +222,7 @@ bool AutoUpdates::VerifyAppUpdates(std::string filedata)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get object for this distribution (%s)", distrover.c_str());
         getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
-        return false;
+        return;
     }
 
     cJSON *latestVersion_json = cJSON_GetObjectItem(dist_json, "latestVersion");
@@ -230,7 +230,7 @@ bool AutoUpdates::VerifyAppUpdates(std::string filedata)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get latestVersion for this distribution.", distrover.c_str());
         getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
-        return false;
+        return;
     }
     remote_version = latestVersion_json->valuestring;
 
@@ -241,7 +241,7 @@ bool AutoUpdates::VerifyAppUpdates(std::string filedata)
             "AutoUpdates::VerifyAppUpdates: Wrong data returned from server or Proxy HTML error!");
         qDebug() << "C++ AUTO UPDATES VerifyUpdates: Wrong data returned from server or Proxy HTML error!";
         getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
-        return false;
+        return;
     }
 
     //Parse local version into PteidVersion
@@ -263,7 +263,7 @@ bool AutoUpdates::VerifyAppUpdates(std::string filedata)
     {
         qDebug() << "C++ AUTO UPDATES: No updates available at the moment";
         getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::NoUpdatesAvailable);
-        return false;
+        return;
     }
     qDebug() << "C++ AUTO UPDATES: updates available";
 
@@ -272,7 +272,7 @@ bool AutoUpdates::VerifyAppUpdates(std::string filedata)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get array of versions.");
         getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
-        return false;
+        return;
     }
     int latestVerIdx;
     for (latestVerIdx = 0; latestVerIdx < cJSON_GetArraySize(versions_array_json); latestVerIdx++)
@@ -282,14 +282,14 @@ bool AutoUpdates::VerifyAppUpdates(std::string filedata)
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get version object at index %d", latestVerIdx);
             getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
-            return false;
+            return;
         }
         cJSON *version_number_json = cJSON_GetObjectItem(version_json, "version");
         if (!cJSON_IsString(version_number_json))
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get version number from version at %d", latestVerIdx);
             getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
-            return false;
+            return;
         }
         if (strcmp(version_number_json->valuestring, latestVersion_json->valuestring) == 0)
             break;
@@ -310,7 +310,7 @@ bool AutoUpdates::VerifyAppUpdates(std::string filedata)
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not parse some key/value of version object at %d", i);
             getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
-            return false;
+            return;
         }
         release_notes += "<p>";
         release_notes += QString("<h3>Versão estável ") + version_number_json->valuestring + QString(":</h3>");
@@ -322,7 +322,7 @@ bool AutoUpdates::VerifyAppUpdates(std::string filedata)
             {
                 PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not parse release note %d of version obj %d", rlsNoteIdx, i);
                 getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
-                return false;
+                return;
             }
             release_notes += QString("- ") + release_note_json->valuestring + QString("<br/>");
         }
@@ -331,7 +331,7 @@ bool AutoUpdates::VerifyAppUpdates(std::string filedata)
 
     qDebug() << release_notes;
 
-    return ChooseAppVersion(distrover, archver, dist_json);
+    ChooseAppVersion(distrover, archver, dist_json);
 }
 
 std::string AutoUpdates::VerifyOS(std::string param)
@@ -420,7 +420,7 @@ done:
         return archstr;
 }
 
-bool AutoUpdates::ChooseAppVersion(std::string distro, std::string arch, cJSON *dist_json)
+void AutoUpdates::ChooseAppVersion(std::string distro, std::string arch, cJSON *dist_json)
 {
     qDebug() << "C++ AUTO UPDATES: ChooseAppVersion";
 
@@ -449,14 +449,14 @@ bool AutoUpdates::ChooseAppVersion(std::string distro, std::string arch, cJSON *
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get package_json for this distribution.");
         getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
-        return false;
+        return;
     }
     downloadurl.append(package_json->valuestring);
     updateWindows(downloadurl, distro);
-    return true;
+    return;
 }
 
-bool AutoUpdates::ChooseCertificates(cJSON *certs_json)
+void AutoUpdates::ChooseCertificates(cJSON *certs_json)
 {
     qDebug() << "C++ AUTO UPDATES: ChooseCertificates";
 
@@ -482,7 +482,7 @@ bool AutoUpdates::ChooseCertificates(cJSON *certs_json)
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing certs.json: Could not get cert index = %d", certIdx);
             getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
-            return false;
+            return;
         }
 
         std::string  file_name_temp;
@@ -490,19 +490,19 @@ bool AutoUpdates::ChooseCertificates(cJSON *certs_json)
         file_name_temp.append(cert_json->valuestring);
 
         if(QFile::exists(QString::fromUtf8(file_name_temp.c_str()))){
-            qDebug() << "Cert exists";
+            qDebug() << "Cert exists: " << QString::fromUtf8(file_name_temp.c_str());
         } else{
-            qDebug() << "Cert does not exists";
+            qDebug() << "Cert does not exists: " << QString::fromUtf8(file_name_temp.c_str());
             QString cert = cert_json->valuestring;
             std::string  downloadurl_temp;
             downloadurl.append(configurl);
             downloadurl.append(cert_json->valuestring);
+            fileName = cert_json->valuestring;
             qDebug() << "downloadurl : " << QString::fromUtf8(downloadurl.c_str());
+            updateWindows(downloadurl, "");
             break; // TODO: Download more than one certificate
         }
     }
-    updateWindows(downloadurl, "");
-    return true;
 }
 
 void AutoUpdates::updateWindows(std::string uri, std::string distro)
@@ -637,7 +637,7 @@ void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
         qDebug() << QString::fromStdString("Error: " + GetLastError());
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                   "AppController::RunPackage: Failed to start update process: %d.", GetLastError());
-        emit signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::InstallFailed);
+        getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::InstallFailed);
     } else {
         PTEID_ReleaseSDK();
         exit(0);
@@ -687,7 +687,24 @@ void AutoUpdates::RunCertsPackage(std::string pkg){
     qDebug() << QString::fromStdString("pkgpath " + pkgpath);
 
 #ifdef WIN32
-    #error "TODO: Install certificate"
+    eIDMW::PTEID_Config certs_dir(eIDMW::PTEID_PARAM_GENERAL_CERTS_DIR);
+    std::string  certs_dir_str = certs_dir.getString();
+    certs_dir_str.append("\\");
+    certs_dir_str.append(fileName.toStdString());
+
+    qDebug() << "C++ AUTO UPDATES: " << QString::fromStdString(pkgpath);
+    qDebug() << "C++ AUTO UPDATES: " << QString::fromStdString(certs_dir_str);
+
+    if(QFile::copy(QString::fromStdString(pkgpath), QString::fromStdString(certs_dir_str)) == true)
+    {
+        getAppController()->signalAutoUpdateSuccess(m_updateType);
+    }
+    else {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "AutoUpdates::RunCertsPackage: Cannot copy file: %s", fileName);
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::InstallFailed);
+    }
+
 #elif __APPLE__
     #error "TODO: Install certificate"
 #else
@@ -720,9 +737,9 @@ void AutoUpdates::RunCertsPackage(std::string pkg){
                   "AutoUpdates::RunCertsPackage: Cannot copy file: %s",cmd.toStdString().c_str());
         getAppController()->signalAutoUpdateFail(m_updateType,GAPI::InstallFailed);
     }
-    qDebug() << "C++: RunCertsPackage finish";
 
 #endif
+    qDebug() << "C++: RunCertsPackage finish";
 }
 
 void AutoUpdates::userCancelledUpdateDownload()
