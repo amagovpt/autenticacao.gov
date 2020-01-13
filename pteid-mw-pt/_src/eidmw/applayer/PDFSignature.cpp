@@ -831,7 +831,7 @@ namespace eIDMW
         std::string utf8FilenameTmp = tmpFilename;
     #endif
         std::wstring utf16FilenameTmp = utilStringWiden(utf8FilenameTmp);
-        int final_ret = m_doc->saveAs((wchar_t *)utf16FilenameTmp.c_str(), pdfWriteMode);
+        int tmp_ret = m_doc->saveAs((wchar_t *)utf16FilenameTmp.c_str(), pdfWriteMode);
 #else
         char tmpFilename[L_tmpnam];
         if (!tmpnam(tmpFilename)) {
@@ -840,11 +840,11 @@ namespace eIDMW
         }
         std::string utf8FilenameTmp = tmpFilename;
         GooString tmpFilenameGoo(utf8FilenameTmp.c_str());
-        int final_ret = m_doc->saveAs(&tmpFilenameGoo, pdfWriteMode);
+        int tmp_ret = m_doc->saveAs(&tmpFilenameGoo, pdfWriteMode);
 #endif
         PDFDoc *tmpDoc = makePDFDoc(utf8FilenameTmp.c_str());
         GooString outputFilename(utf8Filename.c_str());
-        tmpDoc->saveAs(&outputFilename);
+        int final_ret = tmpDoc->saveAs(&outputFilename);
         delete tmpDoc;
         tmpDoc = NULL;
         remove(utf8FilenameTmp.c_str());
@@ -862,7 +862,14 @@ namespace eIDMW
         PKCS7_free( m_pkcs7 );
         m_pkcs7 = NULL;
 
-		if (final_ret == errPermission || final_ret == errOpenFile){
+        if (tmp_ret == errPermission || tmp_ret == errOpenFile){
+            throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
+        }
+        else if (tmp_ret != errNone) {
+            throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+        }
+
+        if (final_ret == errPermission || final_ret == errOpenFile){
             throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
         }
         else if (final_ret != errNone) {
