@@ -1376,7 +1376,7 @@ abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
 ## Configurações através de ficheiro de configuração em Linux e MacOS
 
 As configurações do software Autenticação.gov são guardadas em Linux e
-MacOS são efectuadas num ficheiro de configuração. Este ficheiro de
+MacOS num ficheiro de configuração. Este ficheiro de
 configuração está localizado no seguinte caminho:
 
 **Linux:** `$HOME/.config/pteid.conf`
@@ -1385,9 +1385,9 @@ configuração está localizado no seguinte caminho:
 
 onde **$HOME** indica a directoria Home do utilizador de sistema.
 
-O formato do ficheiro é do tipo .conf com a respectiva secção de
+O formato do ficheiro segue o [formato INI](https://en.wikipedia.org/wiki/INI_file) com a respectiva secção de
 configuração a ser indicada por uma tag. Os valores que se podem
-especificar em cada tag são os que foram indicados na tabela anterior
+especificar em cada secção/tag são os que foram indicados na tabela anterior
 referente às [Configurações através de chaves de registo Windows](#configura%c3%a7%c3%b5es-atrav%c3%a9s-de-chaves-de-registo-windows).
 
 ## Instalação automatizada em ambientes Windows
