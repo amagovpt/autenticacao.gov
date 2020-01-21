@@ -13,9 +13,6 @@
 #include <iostream>
 #include <string>
 
-#include <QUuid>
-#include <QByteArray>
-
 #include "cmdServices.h"
 #include "cmdErrors.h"
 #include "BasicHttpBinding_USCORECCMovelSignature.nsmap"
@@ -139,6 +136,7 @@ CMDServices::CMDServices(std::string basicAuthUser, std::string basicAuthPasswor
 
     m_basicAuthUser = basicAuthUser;
     m_basicAuthPassword = basicAuthPassword;
+
     setApplicationID(applicationId);
 }
 
@@ -304,6 +302,45 @@ void CMDServices::enableBasicAuthentication() {
     }
     m_soap->userid = m_basicAuthUser.c_str();
     m_soap->passwd = m_basicAuthPassword.c_str();
+}
+
+/*  *******************************************************************************************************************
+****
+**** GetCertificateWithPin
+****
+******************************************************************************************************************* */
+
+/*  *********************************************************
+***    CMDServices::get_GetCertificateRequest()       ***
+********************************************************* */
+_ns2__GetCertificateWithPin *CMDServices::get_GetCertificateWithPinRequest(soap *sp, std::string in_applicationID
+                                                                    , std::string *in_userId, std::string *in_pin) {
+    _ns2__GetCertificateWithPin *send = soap_new__ns2__GetCertificateWithPin(sp);
+    if (NULL == send) return send;
+
+    send->applicationId = encode_base64(sp, in_applicationID);
+    send->userId = in_userId;
+    send->signaturePin = in_pin;
+
+    return send;
+}
+
+/*  *********************************************************
+***    CMDServices::checkGetCertificateResponse()     ***
+********************************************************* */
+int CMDServices::checkGetCertificateWithPinResponse(
+    _ns2__GetCertificateWithPinResponse *response){
+    if (response == NULL){
+        MWLOG_ERR(logBuf, "Null response");
+        return ERR_NULL_HANDLER;
+    }
+
+    if (response->GetCertificateWithPinResult == NULL){
+        MWLOG_ERR(logBuf, "Null GetCertificateWithPinResult");
+        return ERR_GET_CERTIFICATE;
+    }
+
+    return ERR_NONE;
 }
 
 /*  *******************************************************************************************************************
@@ -738,8 +775,10 @@ int CMDServices::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response )
         return statusCode;
     }
 
-    if ( response->ValidateOtpResult->Signature == NULL && response->ValidateOtpResult->ArrayOfHashStructure == NULL) {
-        MWLOG_ERR( logBuf, "Null Signature" );
+    if ( response->ValidateOtpResult->Signature == NULL 
+        && response->ValidateOtpResult->ArrayOfHashStructure == NULL
+        && response->ValidateOtpResult->certificate == NULL) {
+        MWLOG_ERR( logBuf, "Null Signature and Certificate" );
         return ERR_NULL_HANDLER;
     }
 
@@ -755,7 +794,7 @@ int CMDServices::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response )
                     response->ValidateOtpResult->Signature->__size);
             return ERR_SIZE;
         }
-    } else {
+    } else if (response->ValidateOtpResult->ArrayOfHashStructure != NULL ){
         // CMD with multiple files
         if (response->ValidateOtpResult->ArrayOfHashStructure->HashStructure.size() <= 0) {
             MWLOG_ERR( logBuf, "Number of hash structures is invalid: %lu",
@@ -774,6 +813,14 @@ int CMDServices::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response )
             }
         }
     }
+    else {
+        // Get CMD certificate
+        if (response->ValidateOtpResult->certificate->size() <= 0) {
+            MWLOG_ERR(logBuf, "Certificate size is invalid: %lu",
+                response->ValidateOtpResult->certificate->size());
+            return ERR_SIZE;
+        }
+    }
 
     return ERR_NONE;
 }
@@ -781,9 +828,7 @@ int CMDServices::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response )
 /*  *********************************************************
     ***    CMDServices::ValidateOtp()                     ***
     ********************************************************* */
-int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
-                            , std::vector<unsigned char *> *outSignature
-                            , std::vector<unsigned int> *outSignatureLen) {
+int CMDServices::sendValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, _ns2__ValidateOtpResponse &response) {
     soap *sp = getSoap();
     if ( sp == NULL ) {
         MWLOG_ERR( logBuf, "Null soap" );
@@ -816,7 +861,6 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
     /*
         Call ValidateOtp service
     */
-    _ns2__ValidateOtpResponse response;
     int ret;
     ret = proxy.ValidateOtp( NULL, NULL, send, response );
 
@@ -833,6 +877,17 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
     /* Validate response */
     ret = checkValidateOtpResponse( &response );
     if ( ret != ERR_NONE ) return ret;
+
+    return ERR_NONE;
+}
+
+int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
+                            , std::vector<unsigned char *> *outSignature
+                            , std::vector<unsigned int> *outSignatureLen) {
+
+    _ns2__ValidateOtpResponse response;
+    int ret = sendValidateOtp(proxyInfo, in_code, response);
+    if (ret != ERR_NONE) return ret;
 
     /* Set signature */
     if ( ( outSignature != NULL ) && ( outSignatureLen != NULL ) ) {
@@ -880,6 +935,22 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
     return ERR_NONE;
 }
 
+int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
+                           , std::string *outCertificate) {
+    _ns2__ValidateOtpResponse response;
+    int ret = sendValidateOtp(proxyInfo, in_code, response);
+    if (ret != ERR_NONE) return ret;
+
+    /* Set certificate */
+    if (outCertificate == NULL) {
+        MWLOG_ERR(logBuf, "Null outCertificate");
+        return ERR_NULL_HANDLER;
+    }
+
+    *outCertificate = *(response.ValidateOtpResult->certificate);
+    return ERR_NONE;
+}
+
 /*  *******************************************************************************************************************
     ****
     **** Public methods
@@ -887,8 +958,113 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
     ******************************************************************************************************************* */
 
 /*  *********************************************************
-    ***    CMDServices::getCertificate()                  ***
+    ***    CMDServices::askForCertificate()                  ***
     ********************************************************* */
+int CMDServices::askForCertificate(CMDProxyInfo proxyInfo, std::string in_userId, std::string in_pin) {
+    soap *sp = getSoap();
+    if (sp == NULL) {
+        MWLOG_ERR(logBuf, "Null soap");
+        return ERR_NULL_HANDLER;
+    }
+    enableBasicAuthentication();
+
+    if (in_userId.empty()) {
+        MWLOG_ERR(logBuf, "Empty userId");
+        return ERR_INV_USERID;
+    }
+
+    if (in_pin.empty()) {
+        MWLOG_ERR(logBuf, "Empty pin");
+        return ERR_INV_USERPIN;
+    }
+
+    /*
+    ProcessID initialization
+    */
+    setProcessID(STR_EMPTY);
+
+    const char *endPoint = getEndPoint();
+    CMDSignatureGsoapProxy proxy(sp, proxyInfo);
+    proxy.soap_endpoint = endPoint;
+
+    /*
+    Get GetCertificateWithPin request
+    */
+    _ns2__GetCertificateWithPin *send = get_GetCertificateWithPinRequest(sp, getApplicationID(), &in_userId, &in_pin);
+    if (send == NULL){
+        MWLOG_ERR(logBuf, "NULL send parameters");
+        return ERR_NULL_HANDLER;
+    }
+
+    /*
+    Call GetCertificateWithPin service
+    */
+    _ns2__GetCertificateWithPinResponse response;
+    int ret;
+    ret = proxy.GetCertificateWithPin(NULL, NULL, send, response);
+
+    /* Clean pointers before exit */
+    if (send->applicationId != NULL) {
+        if (send->applicationId->__ptr != NULL)
+            free(send->applicationId->__ptr);
+    }
+
+    /* Handling errors */
+    if (handleError(proxy, ret) != ERR_NONE) return ret;
+
+    /* Validate response */
+    ret = checkGetCertificateWithPinResponse(&response);
+    if (ret != ERR_NONE) return ret;
+
+    /* Save ProcessId */
+    setProcessID(*response.GetCertificateWithPinResult->ProcessId);
+
+    return ERR_NONE;
+}
+
+/*  *********************************************************
+***    CMDServices::getCMDCertificate()                  ***
+********************************************************* */
+int CMDServices::getCMDCertificate(CMDProxyInfo proxyInfo, std::string in_code,
+                                    std::vector<CByteArray> &out_cb)   {
+    CByteArray empty_certificate;
+
+    if (in_code.empty()) {
+        MWLOG_ERR(logBuf, "Empty otp");
+        return ERR_INV_USERID;
+    }
+
+    std::string certificate;
+    
+    int ret = ValidateOtp(proxyInfo, in_code, &certificate);
+    if (ret != ERR_NONE){
+        MWLOG_ERR(logBuf, "ValidateOtp failed");
+        return ret;
+    }
+
+    std::vector<std::string> certs = toPEM((char *)certificate.c_str(), certificate.size());
+
+    for (size_t i = 0; i != certs.size(); i++)
+    {
+        CByteArray ba;
+        unsigned char *der = NULL;
+        int derLen = PEM_to_DER((char *)certs.at(i).c_str(), &der);
+
+        if (derLen < 0) {
+            MWLOG_ERR(logBuf, "PEM -> DER conversion failed - len: %d", derLen);
+            return ERR_INV_CERTIFICATE;
+
+        }
+        ba.Append((const unsigned char *)der, (unsigned long)derLen);
+        out_cb.push_back(ba);
+    }
+
+    return ERR_NONE;
+}
+
+/*  *********************************************************
+***    CMDServices::getCertificate()                  ***
+********************************************************* */
 int CMDServices::getCertificate(CMDProxyInfo proxyInfo, std::string in_userId,
                                  std::vector<CByteArray> &out_cb)   {
     CByteArray empty_certificate;

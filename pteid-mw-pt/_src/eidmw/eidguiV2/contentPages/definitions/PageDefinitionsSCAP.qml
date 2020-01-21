@@ -144,6 +144,7 @@ PageDefinitionsSCAPForm {
                 }else {
                     console.log("ScapGenericError")
                     gapi.startPingSCAP()
+                    return
                 }
             }else{
                 var attributeList = []
@@ -187,6 +188,7 @@ PageDefinitionsSCAPForm {
                 }else {
                     console.log("ScapGenericError")
                     gapi.startPingSCAP()
+                    return
                 }
             }
 

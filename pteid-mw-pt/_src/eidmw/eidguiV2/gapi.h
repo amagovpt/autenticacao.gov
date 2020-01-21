@@ -26,6 +26,7 @@
 #include <QPrintDialog>
 #include "Settings.h"
 #include "certificates.h"
+#include "cmdCertificates.h"
 #include <unordered_map>
 
 //MW libraries
@@ -229,6 +230,8 @@ public:
 
     enum PinUsage { AuthPin, SignPin, AddressPin };
 
+    enum CmdDialogClass { Sign, RegisterCert, AskToRegisterCert };
+
     Q_ENUMS(ScapPdfSignResult)
     Q_ENUMS(ScapAttrType)
     Q_ENUMS(ScapAttrDescription)
@@ -241,7 +244,7 @@ public:
     Q_ENUMS(PrintMessage)
     Q_ENUMS(AutoUpdateMessage)
     Q_ENUMS(PinUsage)
-
+    Q_ENUMS(CmdDialogClass)
 
     bool isAddressLoaded() {return m_addressLoaded; }
 
@@ -260,6 +263,7 @@ public:
     }
     GUISettings    m_Settings;
     CERTIFICATES    m_Certificates;
+    CMDCertificates *m_cmdCertificates;
 
 public slots:
     // Slots to Gui request values
@@ -332,6 +336,7 @@ public slots:
     void changeAddress(QString process, QString secret_code);
     void doChangeAddress(const char *process, const char *secret_code);
     void cancelCMDSign();
+    void cancelCMDRegisterCert();
     void signOpenCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePath,
                   QString outputFile, int page, double coord_x, double coord_y, QString reason, QString location,
                  bool isTimestamp, bool isSmall);
@@ -347,9 +352,6 @@ public slots:
     void showChangeAddressDialog(long code);
     void showSignCMDDialog(long error_code);
     bool checkCMDSupport();
-    std::string getCMDBasicAuthAppId();
-    std::string getCMDBasicAuthUserId();
-    std::string getCMDBasicAuthPassword();
 
     QString getCardActivation();
     QString getDataCardIdentifyValue(GAPI::IDInfoKey key);
@@ -374,6 +376,9 @@ public slots:
     void setRemoveCertValue(bool bRemoveCert);
     bool getRegCertValue(void);
     bool getRemoveCertValue(void);
+    void registerCMDCertOpen(QString mobileNumber, QString pin);
+    void registerCMDCertClose(QString otp);
+    QVariantList getRegisteredCmdPhoneNumbers();
 
     void cancelDownload();
     void httpFinished();
@@ -408,9 +413,10 @@ signals:
     void signalUpdateProgressStatus(const QString statusMessage);
     void addressChangeFinished(long return_code);
     void signCMDFinished(long error_code);
+    void signalValidateOtp();
     void signalShowLoadAttrButton();
-    void signalOpenCMDSucess();
-    void signalCloseCMDSucess();
+    void signalShowMessage(QString msg);
+    void signalOpenFile();
     void signalCardChanged(const int error_code);
     void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage, bool success);
     void signalCertificatesChanged(const QVariantMap certificatesMap);
@@ -467,6 +473,7 @@ private:
     bool prepareSCAPCache(int scapAttrType);
     void getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth);
     void doCancelCMDSign();
+    void doCancelCMDRegisterCert();
     void doSignSCAP(SCAPSignParams params);
     void getPersoDataFile();
     void setPersoDataFile(QString text);
@@ -490,7 +497,8 @@ private:
     void stopAllEventCallbacks(void);
     void cleanupCallbackData(void);
     void initScapAppId(void);
-    CMDProxyInfo buildProxyInfo();
+    void doRegisterCMDCertOpen(QString mobileNumber, QString pin);
+    void doRegisterCMDCertClose(QString otp);
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;

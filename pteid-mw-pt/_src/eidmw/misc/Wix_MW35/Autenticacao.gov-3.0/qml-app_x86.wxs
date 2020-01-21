@@ -38,9 +38,6 @@
         <ComponentGroup Id="qmlAppComponentGroup">
 		    <ComponentRef Id="PteidGuiShortcut"/>
 			<ComponentRef Id="RegisterPteidAutoStart"/>
-            <Component Id="cmp5DF3FF25B92E00276E2DAC6ACBEE3EAC" Directory="APPLICATIONROOTFOLDER" Guid="{FDC53750-BA21-4E2E-99F6-B0DA7A1C0B3D}">
-                <File Id="filCC878DC615BAE204217B0ABF742A5D81" KeyPath="yes" Source="$(var.QMLDIROUTPUT)\cmdServices.dll" />
-            </Component>
             <Component Id="cmpD94D987CD7CEE5C9E964633DD52E7305" Directory="APPLICATIONROOTFOLDER" Guid="{A747CEB7-27BB-49DF-BA08-7E09BC6CBFF8}">
                 <File Id="fil5A03D03833CC9B3BB9FCCB5FE1121279" KeyPath="yes" Source="$(var.QMLDIR)\d3dcompiler_47.dll" />
             </Component>

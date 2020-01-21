@@ -19,635 +19,541 @@ import "../scripts/Functions.js" as Functions
 import eidguiV2 1.0
 
 Item {
-    // Center dialog in the main view
-    x: - mainMenuView.width - subMenuView.width
-        + mainView.width * 0.5 - dialogCMDProgress.width * 0.5
-    y: parent.height * 0.5 - dialogSignCMD.height * 0.5
+    property var dialogType;
+    property bool signSingleFile;
+    
+    /* #################################################################### *
+     * #                             Signals                              # *
+    /* #################################################################### */
 
     Connections {
         target: gapi
-        onSignalOpenCMDSucess: {
-            console.log("Signal Open CMD Sucess")
-            progressBarIndeterminate.visible = false
-            rectReturnCode.visible = true
-            buttonCMDProgressConfirm.visible = true
+
+        onSignalValidateOtp: {
+            console.log("Signal Validate OTP")
+            dialogContent.state = Constants.DLG_STATE.VALIDATE_OTP;
             textFieldReturnCode.forceActiveFocus()
         }
-        onSignalCloseCMDSucess: {
-            console.log("Signal Close CMD Sucess")
-            progressBarIndeterminate.visible = false
-            rectReturnCode.visible = false
-            rectLabelCMDText.visible = true
-            buttonCMDProgressConfirm.visible = true
-            buttonCMDProgressConfirm.text = qsTranslate("Popup File","STR_POPUP_FILE_OPEN")
-            buttonCMDProgressConfirm.forceActiveFocus()
+        onSignalShowMessage: {
+            console.log("Signal Show Message: " + msg)
+            dialogContent.state = Constants.DLG_STATE.SHOW_MESSAGE;
+            labelCMDText.text = msg
+            labelCMDText.forceActiveFocus()
+        }
+        onSignalOpenFile: {
+            console.log("Signal Open File")
+            dialogContent.state = Constants.DLG_STATE.OPEN_FILE;
         }
         onSignalUpdateProgressBar: {
             console.log("CMD sign change --> update progress bar with value = " + value)
-            rectReturnCode.visible = false
             progressBar.value = value
-            if(value === 100) {
-                progressBarIndeterminate.visible = false
-            }
         }
         onSignalUpdateProgressStatus: {
             console.log("CMD sign change --> update progress status with text = " + statusMessage)
-            rectReturnCode.visible = false
-            textMessageTop.propertyText.text = statusMessage
-            textMessageTop.propertyAccessibleText = statusMessage
+            textMessageTop.text = statusMessage
             textMessageTop.forceActiveFocus()
         }
-        onSignalShowLoadAttrButton:{
-            buttonSCAPLoadAttributes.visible = true
-            rectLabelCMDText.visible = true
-            labelCMDText.text = qsTranslate("Popup File","STR_POPUP_LOAD_SCAP_ATTR")
+        onSignalShowLoadAttrButton: {
+            console.log("Signal show load attributes button")
+            dialogContent.state = Constants.DLG_STATE.LOAD_ATTRIBUTES;
         }
     }
 
+    /* #################################################################### *
+     * #                                UI                                # *
+    /* #################################################################### */
+    
+    id: dialogContainer
+    // This dialog can be instantiated anywhere but the parent will always
+    // be the mainWindow so that the dialog is centered
+    parent: mainWindow.contentItem
+    anchors.fill: parent
+
     Dialog {
-        id: dialogSignCMD
+        id: cmdDialog
         width: 600
         height: 300
         font.family: lato.name
+        // Center dialog in the main view
+        x: parent.width * 0.5 - cmdDialog.width * 0.5
+        y: parent.height * 0.5 - cmdDialog.height * 0.5 - Constants.TITLE_BAR_SIZE
         modal: true
 
         header: Label {
-            id: labelTextTitle
-            text: qsTranslate("PageServicesSign","STR_SIGN_CMD")
+            id: dialogTitle
             visible: true
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: rectPopUp.activeFocus
+            font.bold: dialogContent.activeFocus
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
         }
+        contentItem: Item {
+            property var next : labelCMDText
 
-        Item {
-            id: rectPopUp
-            width: parent.width
-            height: rectMessageTopLogin.height + rectMobilNumber.height + rectPin.height
-
+            id: dialogContent
+            height: parent.height
             Keys.enabled: true
             Keys.onPressed: {
-                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return
-                        && textFieldMobileNumber.length !== 0 && textFieldPin.length !== 0)
+                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
                 {
-                    signCMD()
+                    confirmDlg()
                 }
             }
             Accessible.role: Accessible.AlertMessage
             Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
-                             + labelTextTitle.text
-            KeyNavigation.tab: textLinkCMD.propertyText
-            KeyNavigation.down: textLinkCMD.propertyText
-            KeyNavigation.right: textLinkCMD.propertyText
-            KeyNavigation.backtab: okButton
-            KeyNavigation.up: okButton
+                             + dialogTitle.text
+            KeyNavigation.tab: next
+            KeyNavigation.down: next
+            KeyNavigation.right: next
+            KeyNavigation.backtab: buttonConfirm.enabled ? buttonConfirm : buttonCancel
+            KeyNavigation.up: buttonConfirm.enabled ? buttonConfirm : buttonCancel
+            KeyNavigation.left: buttonConfirm.enabled ? buttonConfirm : buttonCancel
 
             Item {
-                id: rectMessage
+                id: rectMessageTopLogin
                 width: parent.width
-                height: 25
+                height: childrenRect.height
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: rectPopUp.top
+                anchors.top: parent.top
                 Link {
-                    id: textLinkCMD
+                    id: linkCMD
                     width: parent.width
+                    height: 25
+                    visible: false
                     propertyText.text: "<a href='https://www.autenticacao.gov.pt/cmd-pedido-chave'>"
                             + qsTranslate("PageServicesSign","STR_SIGN_CMD_URL")
                     propertyText.font.italic: true
                     propertyText.verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.top: parent.top
                     propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    propertyText.font.bold: activeFocus
                     propertyAccessibleText: qsTranslate("PageServicesSign","STR_SIGN_CMD_URL")
                     propertyLinkUrl: 'https://www.autenticacao.gov.pt/cmd-pedido-chave'
-                    KeyNavigation.tab: textMessageTopLogin
-                    KeyNavigation.down: textMessageTopLogin
-                    KeyNavigation.right: textMessageTopLogin
-                    KeyNavigation.backtab: rectPopUp
-                    KeyNavigation.up: rectPopUp
+                    KeyNavigation.tab: comboBoxMobileNumber.visible ? comboBoxMobileNumber : labelCMDText
+                    KeyNavigation.down: comboBoxMobileNumber.visible ? comboBoxMobileNumber : labelCMDText
+                    KeyNavigation.right: comboBoxMobileNumber.visible ? comboBoxMobileNumber : labelCMDText
+                    KeyNavigation.backtab: dialogContent
+                    KeyNavigation.up: dialogContent
+
                 }
-            }
-            Item {
-                id: rectMessageTopLogin
-                width: parent.width
-                height: 50
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: rectMessage.bottom
-                Text {
-                    id: textMessageTopLogin
-                    text: qsTranslate("PageServicesSign","STR_SIGN_INSERT_LOGIN")
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    font.bold: activeFocus
-                    color: Constants.COLOR_TEXT_LABEL
-                    height: parent.height
+                ProgressBar {
+                    id: progressBar
                     width: parent.width
-                    anchors.bottom: parent.bottom
-                    wrapMode: Text.WordWrap
-                    Accessible.role: Accessible.StaticText
-                    Accessible.name: text + textMobileNumber.text + textPin.text
-                    KeyNavigation.tab: controler.isAccessibilityActive() ? textMobileNumber : comboBoxIndicative
-                    KeyNavigation.down: controler.isAccessibilityActive() ? textMobileNumber : comboBoxIndicative
-                    KeyNavigation.right: controler.isAccessibilityActive() ? textMobileNumber : comboBoxIndicative
-                    KeyNavigation.backtab: textLinkCMD.propertyText
-                    KeyNavigation.up: textLinkCMD.propertyText
+                    anchors.top: parent.top
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    to: 100
+                    value: 0
+                    indeterminate: false
+                    visible: false
+                    z:1
                 }
-            }
-            Item {
-                id: rectMobilNumber
-                width: parent.width
-                height: 50
-                anchors.top: rectMessageTopLogin.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
                 Text {
-                    id: textMobileNumber
-                    text: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM")
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    font.bold: activeFocus
-                    color: Constants.COLOR_TEXT_BODY
-                    height: parent.height
-                    width: parent.width * 0.3
-                    anchors.bottom: parent.bottom
-                    Accessible.role: Accessible.StaticText
-                    Accessible.name: textMobileNumber.text
-                    KeyNavigation.tab: comboBoxIndicative
-                    KeyNavigation.down: comboBoxIndicative
-                    KeyNavigation.right: comboBoxIndicative
-                    KeyNavigation.backtab: textMessageTopLogin
-                    KeyNavigation.up: textMessageTopLogin
-                }
-                ComboBox {
-                    id: comboBoxIndicative
-                    width: parent.width * 0.4
-                    height: parent.height
-                    anchors.verticalCenter: parent.verticalCenter
-                    model: PhoneCountriesCodeListModel{}
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.capitalization: Font.MixedCase
-                    font.bold: activeFocus
-                    visible: true
-                    anchors.left: textMobileNumber.right
-                    anchors.bottom: parent.bottom
-                    onCurrentIndexChanged: {
-                        if(comboBoxIndicative.currentIndex >= 0){
-                            propertyPageLoader.propertyBackupMobileIndicatorIndex = comboBoxIndicative.currentIndex
-                        }else{
-                            comboBoxIndicative.currentIndex = propertyPageLoader.propertyBackupMobileIndicatorIndex
-                        }
-                    }
-                    Accessible.role: Accessible.ComboBox
-                    Accessible.name: currentText
-                    KeyNavigation.tab: textFieldMobileNumber
-                    KeyNavigation.down: textFieldMobileNumber
-                    KeyNavigation.right: textFieldMobileNumber
-                    KeyNavigation.backtab: controler.isAccessibilityActive() ? textMobileNumber : textLinkCMD.propertyText
-                    KeyNavigation.up: controler.isAccessibilityActive() ? textMobileNumber : textLinkCMD.propertyText
-                }
-                TextField {
-                    id: textFieldMobileNumber
-                    width: parent.width * 0.25
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.italic: textFieldMobileNumber.text === "" ? true: false
-                    placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM_OP") + "?"
-                    validator: RegExpValidator { regExp: /[0-9]+/ }
-                    maximumLength: 15
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.bold: activeFocus
-                    clip: false
-                    anchors.left: comboBoxIndicative.right
-                    anchors.leftMargin:  parent.width * 0.05
-                    anchors.bottom: parent.bottom
-                    onEditingFinished: {
-                        // CMD load backup mobile data
-                        propertyPageLoader.propertyBackupMobileNumber = textFieldMobileNumber.text
-                    }
-                    Accessible.role: Accessible.EditableText
-                    Accessible.name: textMobileNumber.text
-                    KeyNavigation.tab: controler.isAccessibilityActive() ? textPin : textFieldPin
-                    KeyNavigation.down: controler.isAccessibilityActive() ? textPin : textFieldPin
-                    KeyNavigation.right: controler.isAccessibilityActive() ? textPin : textFieldPin
-                    KeyNavigation.backtab: comboBoxIndicative
-                    KeyNavigation.up: comboBoxIndicative
-                }
-            }
-            Item {
-                id: rectPin
-                width: parent.width
-                height: 50
-                anchors.top: rectMobilNumber.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Text {
-                    id: textPin
-                    text: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN")
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    font.bold: activeFocus
-                    color: Constants.COLOR_TEXT_BODY
-                    height: parent.height
-                    width: parent.width * 0.3
-                    anchors.bottom: parent.bottom
-                    Accessible.name: textPin.text
-                    Accessible.role: Accessible.StaticText
-                    KeyNavigation.tab: textFieldPin
-                    KeyNavigation.down: textFieldPin
-                    KeyNavigation.right: textFieldPin
-                    KeyNavigation.backtab: textFieldMobileNumber
-                    KeyNavigation.up: textFieldMobileNumber
-                }
-
-                TextField {
-                    id: textFieldPin
-                    width: parent.width * 0.7
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.italic: textFieldPin.text === "" ? true: false
-                    placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN_OP") + "?"
-                    validator: RegExpValidator { regExp: /[0-9]{4,8}/ }
-                    echoMode : TextInput.Normal
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.bold: activeFocus
-                    clip: false
-                    anchors.left: textPin.right
-                    anchors.bottom: parent.bottom
-                    Accessible.role: Accessible.EditableText
-                    Accessible.name: textPin.text
-                    KeyNavigation.tab: cancelButton
-                    KeyNavigation.down: cancelButton
-                    KeyNavigation.right: cancelButton
-                    KeyNavigation.backtab: controler.isAccessibilityActive() ? textPin : textFieldMobileNumber
-                    KeyNavigation.up: controler.isAccessibilityActive() ? textPin : textFieldMobileNumber
-                    onFocusChanged: {
-                        if (activeFocus) {
-                            // reset PIN text when focus is gained
-                            textFieldPin.text = ""
-                            textFieldPin.echoMode = TextInput.Normal
-                            accessibilityTimer.start()
-                        }
-                    }
-                    Keys.onEnterPressed: {
-                        if(okButton.enabled) signCMD()
-                    }
-                    Keys.onReturnPressed: {
-                        if(okButton.enabled) signCMD()
-                    }
-                }
-                /*
-                  Workaround for the problem of the screen-reader not reading the name of the TextField
-                  if its echoMode is set to 'Password':
-                    set the initial echoMode to 'Normal'.
-                    use a timer(delay) to let the screen-reader start reading the TextField's name,
-                    then set the echoMode to 'Password' and force the update of the changed property.
-                */
-                Timer {
-                    id: accessibilityTimer
-                    interval: 100
-                    repeat: false
-                    running: false
-                    onTriggered: {
-                        textFieldPin.echoMode = TextInput.Password
-                        controler.forceAccessibilityUpdate(textFieldPin)
-                    }
-                }
-            }
-            Item {
-                width: dialogSignCMD.availableWidth
-                height: Constants.HEIGHT_BOTTOM_COMPONENT
-                anchors.horizontalCenter: parent.horizontalCenter
-                y: 190
-                Button {
-                    id: cancelButton
-                    width: Constants.WIDTH_BUTTON
-                    height: Constants.HEIGHT_BOTTOM_COMPONENT
-                    text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CANCEL")
-                    anchors.left: parent.left
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.family: lato.name
-                    font.capitalization: Font.MixedCase
-                    highlighted: activeFocus ? true : false
-                    onClicked: {
-                        gapi.cancelCMDSign();
-                        dialogSignCMD.close()
-                        textFieldPin.text = ""
-                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-                        mainFormID.propertyPageLoader.forceActiveFocus()
-                    }
-                    Keys.onEnterPressed: {
-                        gapi.cancelCMDSign();
-                        dialogSignCMD.close()
-                        textFieldPin.text = ""
-                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-                        mainFormID.propertyPageLoader.forceActiveFocus()
-                    }
-                    Keys.onReturnPressed: {
-                        gapi.cancelCMDSign();
-                        dialogSignCMD.close()
-                        textFieldPin.text = ""
-                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-                        mainFormID.propertyPageLoader.forceActiveFocus()
-                    }
-                    Accessible.role: Accessible.Button
-                    Accessible.name: text
-                    KeyNavigation.tab: okButton
-                    KeyNavigation.down: okButton
-                    KeyNavigation.right: okButton
-                    KeyNavigation.backtab: textFieldPin
-                    KeyNavigation.up: textFieldPin
-                }
-                Button {
-                    id: okButton
-                    width: Constants.WIDTH_BUTTON
-                    height: Constants.HEIGHT_BOTTOM_COMPONENT
-                    text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
-                    anchors.right: parent.right
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.family: lato.name
-                    font.capitalization: Font.MixedCase
-                    enabled: textFieldMobileNumber.acceptableInput && textFieldPin.acceptableInput
-                    highlighted: activeFocus ? true : false
-                    onClicked: {
-                        signCMD()
-                    }
-                    Keys.onEnterPressed: {
-                        signCMD()
-                    }
-                    Keys.onReturnPressed: {
-                        signCMD()
-                    }
-                    Accessible.role: Accessible.Button
-                    Accessible.name: text
-                    KeyNavigation.tab: rectPopUp
-                    KeyNavigation.down: rectPopUp
-                    KeyNavigation.right: rectPopUp
-                    KeyNavigation.backtab: cancelButton
-                    KeyNavigation.up: cancelButton
-                }
-            }
-        }
-        onRejected:{
-            // Reject CMD Popup's only with ESC key
-            dialogSignCMD.open()
-        }
-        onOpened: {
-            if (controler.isAccessibilityActive()) {
-                textMobileNumber.forceActiveFocus();
-            }
-            else {
-                textFieldMobileNumber.forceActiveFocus();
-            }
-        }
-        onClosed: {
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-            mainFormID.propertyPageLoader.forceActiveFocus()
-        }
-    }
-    Dialog {
-        id: dialogCMDProgress
-        width: 600
-        height: 300
-        font.family: lato.name
-        modal: true
-
-        header: Label {
-            id: labelTextTitleProgress
-            text: qsTranslate("PageServicesSign","STR_SIGN_CMD")
-            visible: true
-            elide: Label.ElideRight
-            padding: 24
-            bottomPadding: 0
-            font.bold: rectPopUpProgress.activeFocus
-            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
-            color: Constants.COLOR_MAIN_BLUE
-        }
-        ProgressBar {
-            id: progressBar
-            width: parent.width
-            anchors.horizontalCenter: parent.horizontalCenter
-            height: 20
-            to: 100
-            value: 0
-            visible: true
-            indeterminate: false
-            z:1
-        }
-
-        Item {
-            id: rectPopUpProgress
-            width: parent.width
-            height: rectMessageTop.height + rectReturnCode.height + progressBarIndeterminate.height
-            anchors.top: progressBar.bottom
-
-            Keys.enabled: true
-            Keys.onPressed: {
-                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return && buttonCMDProgressConfirm.visible == true)
-                {
-                    signCMDConfirm()
-                }
-            }
-            Accessible.role: Accessible.AlertMessage
-            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
-                             + labelTextTitleProgress.text
-            KeyNavigation.tab: textMessageTop
-            KeyNavigation.down: textMessageTop
-            KeyNavigation.right: textMessageTop
-            KeyNavigation.backtab: buttonCMDProgressConfirm
-            KeyNavigation.up: buttonCMDProgressConfirm
-
-            Item {
-                id: rectMessageTop
-                width: parent.width
-                height: 75
-                anchors.horizontalCenter: parent.horizontalCenter
-                Link {
                     id: textMessageTop
-                    width: parent.width
-                    height: parent.height
-                    propertyText.text: ""
-                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    propertyText.color: Constants.COLOR_TEXT_LABEL
-                    propertyText.wrapMode: Text.WordWrap
-                    propertyText.height: parent.height
-                    propertyText.width: parent.width
-                    propertyText.font.bold: activeFocus? true : false
-                    KeyNavigation.tab: rectLabelCMDText.visible ? labelCMDText : (rectReturnCode.visible ? textFieldReturnCode:closeButton)
-                    KeyNavigation.down: rectLabelCMDText.visible ? labelCMDText : (rectReturnCode.visible ? textFieldReturnCode:closeButton)
-                    KeyNavigation.right: rectLabelCMDText.visible ? labelCMDText : (rectReturnCode.visible ? textFieldReturnCode:closeButton)
-                    KeyNavigation.backtab: rectPopUpProgress
-                    KeyNavigation.up: rectPopUpProgress
-                }
-            }
-            Item {
-                id: rectLabelCMDText
-                width: parent.width
-                height: 50
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: rectMessageTop.bottom
-                anchors.topMargin: -15
-                visible: false
-                Text {
-                    id: labelCMDText
-                    text: (filesModel.count == 1 ? qsTranslate("PageServicesSign","STR_SIGN_OPEN") :
-                                                   qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI"))
+                    height: 25
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.top: linkCMD.visible ? linkCMD.bottom : progressBar.bottom
+                    anchors.topMargin: linkCMD.visible ? Constants.SIZE_ROW_V_SPACE : 0
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
-                    height: parent.height
                     width: parent.width
-                    wrapMode: Text.Wrap
-                    Accessible.role: Accessible.StaticText
-                    Accessible.name: text
-                    KeyNavigation.tab: closeButton
-                    KeyNavigation.down: closeButton
-                    KeyNavigation.right: closeButton
-                    KeyNavigation.backtab: textMessageTop
-                    KeyNavigation.up: textMessageTop
+                    wrapMode: Text.WordWrap
                 }
             }
             Item {
-                id: rectReturnCode
+                id: dataFieldsRect
+                anchors.top: rectMessageTopLogin.bottom
+                height: parent.height
                 width: parent.width
-                height: 50
-                anchors.top: rectMessageTop.bottom
-                anchors.topMargin: -15
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: false
-                Text {
-                    id: textReturnCode
-                    text: qsTranslate("PageServicesSign","STR_SIGN_CMD_CODE") + ":"
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    font.bold: activeFocus
-                    color: Constants.COLOR_TEXT_BODY
-                    height: parent.height
-                    width: parent.width * 0.5
-                    anchors.bottom: parent.bottom
-                }
-                TextField {
-                    id: textFieldReturnCode
-                    width: parent.width * 0.5
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.italic: textFieldReturnCode.text === "" ? true: false
-                    placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_CODE_OP") + "?"
-                    validator: RegExpValidator { regExp: /^[0-9]{6}$/ }
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    font.bold: activeFocus
-                    clip: false
-                    anchors.left: textReturnCode.right
-                    anchors.bottom: parent.bottom
-                    Accessible.role: Accessible.EditableText
-                    Accessible.name: textReturnCode.text
-                    KeyNavigation.tab: closeButton
-                    KeyNavigation.down: closeButton
-                    KeyNavigation.right: closeButton
-                    KeyNavigation.backtab: labelCMDText
-                    KeyNavigation.up: labelCMDText
-
-                    Keys.onEnterPressed: {
-                        if(buttonCMDProgressConfirm.enabled) signCMDConfirm()
+                visible: true
+                Item {
+                    id: rectMobileNumber
+                    width: parent.width
+                    height: 50
+                    anchors.top: parent.top
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: false
+                    Text {
+                        id: textMobileNumber
+                        text: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM")
+                        verticalAlignment: Text.AlignVCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        font.family: lato.name
+                        font.bold: activeFocus
+                        color: Constants.COLOR_TEXT_BODY
+                        height: parent.height
+                        width: parent.width * 0.3
+                        anchors.bottom: parent.bottom
                     }
-                    Keys.onReturnPressed: {
-                        if(buttonCMDProgressConfirm.enabled) signCMDConfirm()
+                    PhoneCountriesCodeListModel{id: phoneCountryCodeList}
+                    ComboBox {
+                        id: comboBoxMobileNumber
+                        width: parent.width * 0.4
+                        height: parent.height
+                        anchors.verticalCenter: parent.verticalCenter
+                        model: phoneCountryCodeList
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        visible: true
+                        anchors.left: textMobileNumber.right
+                        anchors.bottom: parent.bottom
+                        onCurrentIndexChanged: {
+                            if(dialogContent.state == Constants.DLG_STATE.SIGN_FORM) {
+                                if(comboBoxMobileNumber.currentIndex >= 0){
+                                    propertyPageLoader.propertyBackupMobileIndicatorIndex = comboBoxMobileNumber.currentIndex
+                                }else{
+                                    comboBoxMobileNumber.currentIndex = propertyPageLoader.propertyBackupMobileIndicatorIndex
+                                }
+                            }
+                        }
+                        Accessible.role: Accessible.ComboBox
+                        Accessible.name: currentText
+                        KeyNavigation.tab: textFieldMobileNumber
+                        KeyNavigation.right: textFieldMobileNumber
+                        KeyNavigation.backtab: linkCMD
+                        KeyNavigation.left: linkCMD
+                    }
+                    TextField {
+                        id: textFieldMobileNumber
+                        width: parent.width * 0.25
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.italic: textFieldMobileNumber.text === "" ? true: false
+                        placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM_OP") + "?"
+                        validator: RegExpValidator { regExp: /[0-9]+/ }
+                        maximumLength: 15
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        clip: false
+                        anchors.left: comboBoxMobileNumber.right
+                        anchors.leftMargin:  parent.width * 0.05
+                        anchors.bottom: parent.bottom
+                        onEditingFinished: {
+                            // CMD load backup mobile data
+                            propertyPageLoader.propertyBackupMobileNumber = textFieldMobileNumber.text
+                        }
+                        Accessible.role: Accessible.EditableText
+                        Accessible.name: textMessageTop.text + textMobileNumber.text
+                        KeyNavigation.tab: textFieldPin
+                        KeyNavigation.down: textFieldPin
+                        KeyNavigation.right: textFieldPin
+                        KeyNavigation.up: comboBoxMobileNumber
+                    }
+                }
+                Item {
+                    id: rectPin
+                    width: parent.width
+                    height: 50
+                    anchors.top: rectMobileNumber.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: false
+                    Text {
+                        id: textPin
+                        text: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN")
+                        verticalAlignment: Text.AlignVCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        font.family: lato.name
+                        font.bold: activeFocus
+                        color: Constants.COLOR_TEXT_BODY
+                        height: parent.height
+                        width: parent.width * 0.3
+                        anchors.bottom: parent.bottom
+                    }
+                    TextField {
+                        id: textFieldPin
+                        width: parent.width * 0.7
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.italic: textFieldPin.text === "" ? true: false
+                        placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN_OP") + "?"
+                        validator: RegExpValidator { regExp: /[0-9]{4,8}/ }
+                        echoMode : TextInput.Normal
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.bold: activeFocus
+                        clip: false
+                        anchors.left: textPin.right
+                        anchors.bottom: parent.bottom
+                        Accessible.role: Accessible.EditableText
+                        Accessible.name: textPin.text
+                        //KeyNavigation.backtab: textFieldMobileNumber
+                        //KeyNavigation.up: textFieldMobileNumber
+                        onFocusChanged: {
+                            if (activeFocus) {
+                                // reset PIN text when focus is gained
+                                textFieldPin.text = ""
+                                textFieldPin.echoMode = TextInput.Normal
+                                accessibilityTimer.start()
+                            }
+                        }
+
+                        Keys.onEnterPressed: {
+                            confirmDlg()
+                        }
+                        Keys.onReturnPressed: {
+                            confirmDlg()
+                        }
+                    }
+                    /*
+                      Workaround for the problem of the screen-reader not reading the name of the TextField
+                      if its echoMode is set to 'Password':
+                        set the initial echoMode to 'Normal'.
+                        use a timer(delay) to let the screen-reader start reading the TextField's name,
+                        then set the echoMode to 'Password' and force the update of the changed property.
+                    */
+                    Timer {
+                        id: accessibilityTimer
+                        interval: 100
+                        repeat: false
+                        running: false
+                        onTriggered: {
+                            textFieldPin.echoMode = TextInput.Password
+                            controler.forceAccessibilityUpdate(textFieldPin)
+                        }
+                    }
+
+                }
+                Item {
+                    id: rectReturnCode
+                    width: parent.width
+                    height: 50
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: false
+                    Text {
+                        id: textReturnCode
+                        text: qsTranslate("PageServicesSign","STR_SIGN_CMD_CODE") + ":"
+                        verticalAlignment: Text.AlignVCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        font.family: lato.name
+                        font.bold: activeFocus
+                        color: Constants.COLOR_TEXT_BODY
+                        height: parent.height
+                        width: parent.width * 0.5
+                        anchors.bottom: parent.bottom
+                    }
+                    TextField {
+                        id: textFieldReturnCode
+                        width: parent.width * 0.5
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.italic: textFieldReturnCode.text === "" ? true: false
+                        placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_CODE_OP") + "?"
+                        validator: RegExpValidator { regExp: /^[0-9]{6}$/ }
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.bold: activeFocus
+                        clip: false
+                        anchors.left: textReturnCode.right
+                        anchors.bottom: parent.bottom
+                        Accessible.role: Accessible.EditableText
+                        Accessible.name: textMessageTop.text + textReturnCode.text
+                        Keys.onEnterPressed: {
+                            confirmDlg()
+                        }
+                        Keys.onReturnPressed: {
+                            confirmDlg()
+                        }
                     }
                 }
             }
-
             ProgressBar {
                 id: progressBarIndeterminate
                 width: parent.width
-                anchors.top: rectReturnCode.bottom
+                anchors.top: parent.verticalCenter
+                anchors.topMargin: 50
                 anchors.horizontalCenter: parent.horizontalCenter
-                height: 20
                 to: 100
                 value: 0
-                visible: true
                 indeterminate: true
+                visible: false
                 z:1
             }
+            Text {
+                id: labelCMDText
+                visible: false
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                font.bold: activeFocus
+                color: Constants.COLOR_TEXT_LABEL
+                anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
+                height: 50
+                width: parent.width
+                wrapMode: Text.Wrap
+                Accessible.role: Accessible.StaticText
+                Accessible.name: textMessageTop.text + "\n" + text
+                KeyNavigation.tab: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)
+                KeyNavigation.down: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)
+                KeyNavigation.right: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)
+                Keys.onEnterPressed: {
+                    confirmDlg()
+                }
+                Keys.onReturnPressed: {
+                    confirmDlg()
+                }
+            }
+            CheckBox {
+                id: checkboxDontAskAgain
+                text: qsTr("STR_REGISTER_CMD_CERT_DONT_ASK_AGAIN")
+                height: 25
+                visible: false
+                font.family: lato.name
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.capitalization: Font.MixedCase
+                font.bold: activeFocus
+                checked: !controler.getAskToRegisterCmdCertValue()
+                anchors.top: labelCMDText.bottom
+                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                Accessible.role: Accessible.CheckBox
+                Accessible.name: text
+                onClicked: {
+                    controler.setAskToRegisterCmdCertValue(!checkboxDontAskAgain.checked)
+                }
+            }
+
+            states: [
+                State {
+                    name: Constants.DLG_STATE.ASK_TO_REGISTER_CERT
+                    PropertyChanges {target: dialogContent; next: linkCMD}
+                    PropertyChanges {target: linkCMD; visible: true}
+                    PropertyChanges {target: checkboxDontAskAgain; visible: true}
+                    PropertyChanges {target: buttonCancel; prev: checkboxDontAskAgain}
+                    PropertyChanges {target: labelCMDText; visible: true; text: qsTr("STR_REGISTER_CMD_CERT_DESC")}
+                    PropertyChanges {target: buttonConfirm; text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_BUTTON") }
+                    PropertyChanges {target: dialogTitle; restoreEntryValues : false; text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_TITLE")}
+                },
+                State {
+                    name: Constants.DLG_STATE.REGISTER_FORM
+                    PropertyChanges {target: linkCMD; visible: true}
+                    PropertyChanges {target: rectMobileNumber; visible: true}
+                    PropertyChanges {target: textFieldMobileNumber; visible: true; focus: true}
+                    PropertyChanges {target: rectPin; visible: true}
+                    PropertyChanges {target: textMessageTop; text: qsTranslate("PageServicesSign","STR_SIGN_INSERT_LOGIN")}
+                    PropertyChanges {
+                        target: dialogTitle
+                        restoreEntryValues : false
+                        text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_TITLE")
+                    }
+                    PropertyChanges {target: buttonCancel; prev: textFieldPin}
+                    PropertyChanges {target: buttonConfirm; enabled: textFieldMobileNumber.acceptableInput && textFieldPin.acceptableInput}
+                    PropertyChanges {target: dialogContent; next: linkCMD}
+                },
+                State {
+                    name: Constants.DLG_STATE.SIGN_FORM
+                    PropertyChanges {target: linkCMD; visible: true}
+                    PropertyChanges {target: rectMobileNumber; visible: true}
+                    PropertyChanges {target: textFieldMobileNumber; visible: true; focus: true}
+                    PropertyChanges {target: rectPin; visible: true}
+                    PropertyChanges {target: textMessageTop; text: qsTranslate("PageServicesSign","STR_SIGN_INSERT_LOGIN")}
+                    PropertyChanges {
+                        target: dialogTitle
+                        restoreEntryValues : false
+                        text: qsTranslate("PageServicesSign","STR_SIGN_CMD")
+                    }
+                    PropertyChanges {target: buttonCancel; prev: textFieldPin}
+                    PropertyChanges {target: buttonConfirm; enabled: textFieldMobileNumber.acceptableInput && textFieldPin.acceptableInput}
+                    PropertyChanges {target: dialogContent; next: linkCMD}
+                },
+                State {
+                    name: Constants.DLG_STATE.PROGRESS
+                    PropertyChanges {target: dataFieldsRect; visible: false}
+                    PropertyChanges {target: buttonConfirm; visible: false}
+                    PropertyChanges {target: progressBar; visible: true}
+                    PropertyChanges {target: progressBarIndeterminate; visible: true}
+                },
+                State {
+                    name: Constants.DLG_STATE.VALIDATE_OTP
+                    PropertyChanges {target: progressBar; visible: true}
+                    PropertyChanges {target: rectReturnCode; visible: true}
+                    PropertyChanges {target: buttonCancel; prev: textFieldReturnCode}
+                    PropertyChanges {target: dialogContent; next: textFieldReturnCode}
+                    PropertyChanges {target: buttonConfirm; enabled: textFieldReturnCode.acceptableInput}
+                },
+                State {
+                    name: Constants.DLG_STATE.LOAD_ATTRIBUTES
+                    PropertyChanges {target: buttonConfirm; text: qsTranslate("PageServicesSign","STR_LOAD_SCAP_ATTRIBUTES")}
+                    PropertyChanges {
+                        target: labelCMDText;
+                        visible: true;
+                        text: qsTranslate("Popup File","STR_POPUP_LOAD_SCAP_ATTR")
+                    }
+                },
+                State {
+                    name: Constants.DLG_STATE.SHOW_MESSAGE
+                    PropertyChanges {target: labelCMDText; visible: true}
+                    PropertyChanges {target: progressBar; visible: true}
+                },
+                State {
+                    name: Constants.DLG_STATE.OPEN_FILE
+                    PropertyChanges {target: buttonConfirm; text: qsTranslate("Popup File","STR_POPUP_FILE_OPEN")}
+                    PropertyChanges {target: progressBar; visible: true}
+                    PropertyChanges {
+                        target: labelCMDText
+                        visible: true
+                        text: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN") : 
+                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI")
+                    }
+                }
+            ]
         }
 
-        Item {
-            width: dialogCMDProgress.availableWidth
-            height: Constants.HEIGHT_BOTTOM_COMPONENT
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: 190
+        footer: Rectangle {
+            id: bottomRow
+            height: Constants.HEIGHT_BOTTOM_COMPONENT + Constants.SIZE_ROW_V_SPACE
+            
             Button {
-                id: closeButton
+                property var prev: labelCMDText
+                id: buttonCancel
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CANCEL")
+                visible: dialogContent.state != Constants.DLG_STATE.SHOW_MESSAGE
                 anchors.left: parent.left
+                anchors.leftMargin: cmdDialog.padding
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
-                highlighted: activeFocus ? true : false
+                highlighted: activeFocus
                 onClicked: {
-                    gapi.cancelCMDSign();
-                    dialogCMDProgress.close()
-                    rectReturnCode.visible = false
+                    dialogContainer.close()
                 }
-                Keys.onEnterPressed: {
-                    gapi.cancelCMDSign();
-                    dialogCMDProgress.close()
-                    rectReturnCode.visible = false
-                }
-                Keys.onReturnPressed: {
-                    gapi.cancelCMDSign();
-                    dialogCMDProgress.close()
-                    rectReturnCode.visible = false
-                }
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
                 Accessible.role: Accessible.Button
                 Accessible.name: text
-                KeyNavigation.tab: buttonCMDProgressConfirm.visible ? buttonCMDProgressConfirm : buttonSCAPLoadAttributes
-                KeyNavigation.down: buttonCMDProgressConfirm.visible ? buttonCMDProgressConfirm : buttonSCAPLoadAttributes
-                KeyNavigation.right: buttonCMDProgressConfirm.visible ? buttonCMDProgressConfirm : buttonSCAPLoadAttributes
-                KeyNavigation.backtab: textFieldReturnCode
-                KeyNavigation.up: textFieldReturnCode
+                KeyNavigation.tab: buttonConfirm
+                KeyNavigation.down: buttonConfirm
+                KeyNavigation.right: buttonConfirm
+                KeyNavigation.backtab: prev
+                KeyNavigation.up: prev
+                KeyNavigation.left: prev
             }
             Button {
-                property var isOpenFile: false
-
-                id: buttonCMDProgressConfirm
+                id: buttonConfirm
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                 text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
                 anchors.right: parent.right
+                anchors.rightMargin: cmdDialog.padding
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 font.capitalization: Font.MixedCase
-                enabled: textFieldReturnCode.acceptableInput || isOpenFile
-                visible: false
-                highlighted: activeFocus ? true : false
+                highlighted: activeFocus
                 onClicked: {
-                    signCMDConfirm()
+                    confirmDlg()
                 }
-                Keys.onEnterPressed: {
-                    signCMDConfirm()
-                }
-                Keys.onReturnPressed: {
-                    signCMDConfirm()
-                }
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
                 Accessible.role: Accessible.Button
                 Accessible.name: text
-                KeyNavigation.tab: rectPopUpProgress
-                KeyNavigation.down: rectPopUpProgress
-                KeyNavigation.right: rectPopUpProgress
-                KeyNavigation.backtab: closeButton
-                KeyNavigation.up: closeButton
+                KeyNavigation.backtab: buttonCancel.visible ? buttonCancel : labelCMDText
+                KeyNavigation.up: buttonCancel.visible ? buttonCancel : labelCMDText
+                KeyNavigation.left: buttonCancel.visible ? buttonCancel : labelCMDText
             }
             Button {
                 id: buttonSCAPLoadAttributes
@@ -679,33 +585,116 @@ Item {
                 KeyNavigation.up: closeButton
             }
         }
+
         onOpened: {
-            rectPopUpProgress.forceActiveFocus()
+            if (dialogContent.state == Constants.DLG_STATE.ASK_TO_REGISTER_CERT)
+                dialogContent.forceActiveFocus()
+            else
+                textFieldMobileNumber.forceActiveFocus();
         }
         onRejected:{
-            // Reject CMD Popup's only with ESC key
-            dialogCMDProgress.open()
-        }
-        onClosed: {
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-            mainFormID.propertyPageLoader.forceActiveFocus()
+            cmdDialog.open()
         }
     }
 
-    Component.onCompleted: {
-        textFieldMobileNumber.text = propertyPageLoader.propertyBackupMobileNumber
-    }
+    /* #################################################################### *
+     * #                            Functions                             # *
+    /* #################################################################### */
 
-    function open() {
-        buttonCMDProgressConfirm.isOpenFile = false
-        dialogSignCMD.open()
+    /* ############## Dialog ############## */
+    function open(type) {
+        dialogType = type
         mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+
+        if (type == GAPI.RegisterCert) {
+            dialogContent.state = Constants.DLG_STATE.REGISTER_FORM
+        }
+        else if (type == GAPI.Sign) {
+            dialogContent.state = Constants.DLG_STATE.SIGN_FORM
+        }
+        else if (type == GAPI.AskToRegisterCert) {
+            dialogContent.state = Constants.DLG_STATE.ASK_TO_REGISTER_CERT
+        }
+        else {
+            console.log("Error: invalid cmd dialog type: " + type)
+            dialogContent.state = Constants.DLG_STATE.SHOW_MESSAGE
+            labelCMDText.text = qsTranslate("GAPI", "STR_POPUP_ERROR")
+        }
+
+        cmdDialog.open()
     }
+
+    function confirmDlg() {
+        if (!buttonConfirm.enabled)
+            return;
+        
+        switch(dialogContent.state){
+        case Constants.DLG_STATE.REGISTER_FORM:
+            registerCMDCertOpen();
+            break;
+        case Constants.DLG_STATE.SIGN_FORM:
+            signCMD()
+            break;
+        case Constants.DLG_STATE.VALIDATE_OTP:
+            if (dialogType == GAPI.RegisterCert)
+                registerCMDCertClose()
+            else if (dialogType == GAPI.Sign)
+                signCMDConfirm()
+            break;
+        case Constants.DLG_STATE.LOAD_ATTRIBUTES:
+            loadSCAPAttributes()
+            break;
+        case Constants.DLG_STATE.SHOW_MESSAGE:
+            close()
+            break;
+        case Constants.DLG_STATE.OPEN_FILE:
+            openSignedFiles()
+            break;
+        case Constants.DLG_STATE.ASK_TO_REGISTER_CERT:
+            close()
+            open(GAPI.RegisterCert)
+            break;
+        }
+    }
+
     function close() {
-        dialogSignCMD.close()
-        dialogCMDProgress.close()
+        clearInputFields()
+        cmdDialog.close()
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+        mainFormID.propertyPageLoader.forceActiveFocus()
+        if(dialogContent.state == Constants.DLG_STATE.PROGRESS && dialogType == GAPI.Sign) {
+            gapi.cancelCMDSign()
+        }
+        if(dialogContent.state == Constants.DLG_STATE.PROGRESS && dialogType == GAPI.RegisterCert) {
+            gapi.cancelCMDRegisterCert()
+        }
     }
+
+    function clearInputFields() {
+        textFieldMobileNumber.text = ""
+        textFieldPin.text = ""
+        textFieldReturnCode.text = ""
+    }
+    /* ############## Register Certificate ############## */
+
+    function registerCMDCertOpen() {
+        dialogContent.state = Constants.DLG_STATE.PROGRESS
+
+        var countryCode = comboBoxMobileNumber.currentText.substring(0, comboBoxMobileNumber.currentText.indexOf(' '));
+        var mobileNumber = countryCode + " " + textFieldMobileNumber.text
+        var pin = textFieldPin.text
+        gapi.registerCMDCertOpen(mobileNumber, pin)
+    }
+
+    function registerCMDCertClose() {
+        dialogContent.state = Constants.DLG_STATE.PROGRESS
+
+        var otp = textFieldReturnCode.text
+        gapi.registerCMDCertClose(otp)
+    }
+
+    /* ############## Signature  ############## */
+
     function signCMD(){
         var loadedFilePaths = []
         for (var fileIndex = 0; fileIndex < filesModel.count; fileIndex++) {
@@ -713,7 +702,8 @@ Item {
         }
         
         var outputFile = ""
-        if (filesModel.count == 1) {
+        signSingleFile = (filesModel.count == 1)
+        if (signSingleFile) {
             outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
         }
         else {
@@ -763,12 +753,11 @@ Item {
         console.log("Signing in position coord_x: " + coord_x
                     + " and coord_y: "+coord_y)
 
-        var countryCode = comboBoxIndicative.currentText.substring(0, comboBoxIndicative.currentText.indexOf(' '));
+        var countryCode = comboBoxMobileNumber.currentText.substring(0, comboBoxMobileNumber.currentText.indexOf(' '));
         var mobileNumber = countryCode + " " + textFieldMobileNumber.text
-
         propertyOutputSignedFile = outputFile
-        rectLabelCMDText.visible = false
 
+        dialogContent.state = Constants.DLG_STATE.PROGRESS
         if (typeof propertySwitchSignAdd !== "undefined" && propertySwitchSignAdd.checked) {
             gapi.signOpenScapWithCMD(mobileNumber,textFieldPin.text,
                                      loadedFilePaths,outputFile,page,
@@ -781,60 +770,42 @@ Item {
                              reason,location,
                              isTimestamp, isSmallSignature)
         }
+    }
 
-        progressBarIndeterminate.visible = true
-        progressBar.visible = true
-        textFieldPin.text = ""
-        textFieldReturnCode.text = ""
-        dialogSignCMD.close()
-        buttonCMDProgressConfirm.visible = false
-        buttonCMDProgressConfirm.text = qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
-        buttonSCAPLoadAttributes.visible = false
-        dialogCMDProgress.open()
-    }
     function signCMDConfirm(){
+        dialogContent.state = Constants.DLG_STATE.PROGRESS
         /*console.log("Send sms_token : " + textFieldReturnCode.text)*/
-        buttonCMDProgressConfirm.isOpenFile = true
-        if( progressBar.value < 100) {
-            var attributeList = []
-            //CMD with SCAP attributes
-            if (typeof propertySwitchSignAdd !== "undefined" && propertySwitchSignAdd.checked) {
-                var count = 0
-                for (var i = 0; i < entityAttributesModel.count; i++){
-                    if(entityAttributesModel.get(i).checkBoxAttr == true) {
-                        attributeList[count] = i
-                        count++
-                    }
+        var attributeList = []
+        //CMD with SCAP attributes
+        if (typeof propertySwitchSignAdd !== "undefined" && propertySwitchSignAdd.checked) {
+            var count = 0
+            for (var i = 0; i < entityAttributesModel.count; i++){
+                if(entityAttributesModel.get(i).checkBoxAttr == true) {
+                    attributeList[count] = i
+                    count++
                 }
             }
-            gapi.signCloseCMD(textFieldReturnCode.text, attributeList)
-            progressBarIndeterminate.visible = true
-            rectReturnCode.visible = false
-            buttonCMDProgressConfirm.visible = false
-            textFieldReturnCode.text = ""
-            dialogCMDProgress.open()
         }
-        else
-        {
-            dialogCMDProgress.close()
-            if (Qt.platform.os === "windows") {
-                if (propertyOutputSignedFile.substring(0, 2) == "//" ){
-                    propertyOutputSignedFile = "file:" + propertyOutputSignedFile
-                }else{
-                    propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
-                }
-            }else{
-                propertyOutputSignedFile = "file://" + propertyOutputSignedFile
-            }
-            /*console.log("Open Url Externally: " + propertyOutputSignedFile)*/
-            Qt.openUrlExternally(propertyOutputSignedFile)
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-            mainFormID.propertyPageLoader.forceActiveFocus()
-        }
+        gapi.signCloseCMD(textFieldReturnCode.text, attributeList)
     }
+
+    function openSignedFiles() {
+        if (Qt.platform.os === "windows") {
+            if (propertyOutputSignedFile.substring(0, 2) == "//" ){
+                propertyOutputSignedFile = "file:" + propertyOutputSignedFile
+            }else{
+                propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+            }
+        }else{
+            propertyOutputSignedFile = "file://" + propertyOutputSignedFile
+        }
+        /*console.log("Open Url Externally: " + propertyOutputSignedFile)*/
+        Qt.openUrlExternally(propertyOutputSignedFile)
+        close()
+    }
+
     function loadSCAPAttributes(){
-        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-        dialogCMDProgress.close()
+        close()
         gapi.startRemovingAttributesFromCache(GAPI.ScapAttrAll)
         jumpToDefinitionsSCAP()
     }

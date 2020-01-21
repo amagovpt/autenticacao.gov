@@ -28,6 +28,7 @@
 #include "resource.h"
 #include "../langUtil.h"
 #include "Log.h"
+#include <wingdi.h>
 #include "Config.h"
 
 TD_WNDMAP WndMap;
@@ -135,6 +136,13 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 	DWORD		dwStyle;				// Window Style
 	RECT		WindowRect;				// Grabs Rectangle Upper Left / Lower Right Values
 	RECT		DeskRect;
+
+	HDC hDc = GetDC(Parent);
+	float dpiX = GetDeviceCaps(hDc, LOGPIXELSX) / 96.0f;
+	float dpiY = GetDeviceCaps(hDc, LOGPIXELSY) / 96.0f;
+	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> Win32Dialog::CreateWnd dpiX=%.6f dpiY=%.6f", dpiX, dpiY);
+	width = (int)(dpiX * width);
+	height = (int)(dpiY * height);
 
 	WindowRect.left = (long)0;			// Set Left Value To 0
 	WindowRect.right = (long)width;		// Set Right Value To Requested Width

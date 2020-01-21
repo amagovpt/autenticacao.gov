@@ -227,7 +227,15 @@ void AppController::startRequest(QUrl url){
     //allow up to 1 minutes to fetch remote version
     int download_duration = 60000;
 
+
     ProxyInfo proxyinfo;
+    long proxyinfo_port;
+    try {
+        proxyinfo_port = std::stol(proxyinfo.getProxyPort());
+    }
+    catch (...) {
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing proxy port to number value.");
+    }
     proxy.setType(QNetworkProxy::HttpProxy);
     if (proxyinfo.isAutoConfig())
     {
@@ -243,11 +251,11 @@ void AppController::startRequest(QUrl url){
     }
     else if (proxyinfo.isManualConfig())
     {
-        proxy.setHostName(proxyinfo.getProxyHost());
-        proxy.setPort(proxyinfo.getProxyPort().toLong());
+        proxy.setHostName(QString::fromStdString(proxyinfo.getProxyHost()));
+        proxy.setPort(proxyinfo_port);
         if (proxyinfo.getProxyUser().size() > 0) {
-            proxy.setUser(proxyinfo.getProxyUser());
-            proxy.setPassword(proxyinfo.getProxyPwd());
+            proxy.setUser(QString::fromStdString(proxyinfo.getProxyUser()));
+            proxy.setPassword(QString::fromStdString(proxyinfo.getProxyPwd()));
         }
         QNetworkProxy::setApplicationProxy(proxy);
     }
@@ -960,6 +968,12 @@ bool AppController::getDebugModeValue (void){
 QString AppController::setDebugModeValue (bool bDebugMode) {
 
     return m_Settings.setDebugMode(bDebugMode);
+}
+bool AppController::getAskToRegisterCmdCertValue(void){
+    return m_Settings.getAskToRegisterCmdCert();
+}
+void AppController::setAskToRegisterCmdCertValue(bool bAskToRegisterCmdCert){
+    return m_Settings.setAskToRegisterCmdCert(bAskToRegisterCmdCert);
 }
 bool AppController::getShowNotificationValue (void){
 

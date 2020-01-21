@@ -32,9 +32,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="proxyinfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="filesavedialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -278,7 +275,7 @@
     <ClInclude Include="SCAP-services-v3\SCAPAttributeClientServiceBindingProxy.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="credentials.h">
+    <ClInclude Include="cJSON_1_7_12.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="cJSON_1_7_12.h">

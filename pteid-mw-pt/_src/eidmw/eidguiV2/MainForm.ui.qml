@@ -40,6 +40,8 @@ Rectangle {
 
     property alias propertyImageLogoBottom: imageLogoBottom
 
+    property alias propertyCmdDialog: cmdDialog
+
     property bool propertShowAnimation: true
 
     border.width: Constants.APP_BORDER
@@ -246,5 +248,8 @@ Rectangle {
                     }
             }
         }
+    }
+    Components.DialogCMD {
+        id: cmdDialog
     }
 }

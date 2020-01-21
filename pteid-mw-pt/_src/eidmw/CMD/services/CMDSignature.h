@@ -12,7 +12,7 @@
 #define PDF_SIGNATURE_CLI_H
 
 #include "eidlib.h"
-#include <QByteArray>
+#include "ByteArray.h"
 
 #include "cmdErrors.h"
 #define IS_NETWORK_ERROR(error)    IS_SOAP_ERROR(error)
@@ -37,6 +37,8 @@ namespace eIDMW {
 
     class CMDProxyInfo {
         public:
+            PTEIDCMD_API static CMDProxyInfo buildProxyInfo();
+
             std::string host;
             long port;
             std::string user;
@@ -50,6 +52,9 @@ namespace eIDMW {
 			PTEIDCMD_API ~CMDSignature();
 
             //proxyinfo parameter is saved in m_proxyInfo so that we can reuse it later in signClose()
+            // signOpen used to sign hash
+            PTEIDCMD_API int signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin, CByteArray &in_hash, std::string docname);
+            // this signOpen should be used to sign PDFs
 			PTEIDCMD_API int signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin
                         , int page
                         , double coord_x, double coord_y
@@ -63,7 +68,7 @@ namespace eIDMW {
             PTEIDCMD_API void add_pdf_handler(PTEID_PDFSignature *in_pdf_handler);
             PTEIDCMD_API void clear_pdf_handlers();
             PTEIDCMD_API void set_string_handler(std::string in_docname_handle,
-                                                 QByteArray in_array_handler);
+                                                 CByteArray in_array_handler);
 
             PTEIDCMD_API char * getCertificateCitizenName();
             PTEIDCMD_API char * getCertificateCitizenID();
@@ -77,11 +82,12 @@ namespace eIDMW {
             CMDServices *cmdService;
             std::vector<PTEID_PDFSignature*> m_pdf_handlers;
             std::string m_docname_handle;
-            QByteArray m_array_handler;
+            CByteArray m_array_handler;
 
             std::string m_userId;
             std::string m_pin;
             std::string m_receiveCode;
+            bool m_computeHash = true;
             CMDProxyInfo m_proxyInfo;
             int cli_getCertificate( std::string in_userId );
             int cli_sendDataToSign( std::string in_pin );

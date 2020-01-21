@@ -11,6 +11,7 @@
 
 import QtQuick 2.6
 import QtQuick.Controls 2.1
+import eidguiV2 1.0
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -50,7 +51,7 @@ PageServicesSignSimpleForm {
             } else {
                 signerror_dialog.propertySignFailDialogText.text = qsTranslate("PageServicesSign","STR_SIGN_GENERIC_ERROR") + " " + error_code
             }
-            dialogSignCMD.close()
+            cmdDialog.close()
             signerror_dialog.visible = true
             propertyBusyIndicator.running = false
             propertyOutputSignedFile = ""
@@ -135,9 +136,6 @@ PageServicesSignSimpleForm {
             propertyPDFPreview.updateSignPreview()
             propertyBusyIndicator.running = false
         }
-    }
-    Components.DialogCMD{
-        id: dialogSignCMD
     }
 
     Dialog {
@@ -433,7 +431,7 @@ PageServicesSignSimpleForm {
     }
     propertyFileDialogCMDOutput {
         onAccepted: {
-            dialogSignCMD.open()
+            propertyCmdDialog.open(GAPI.Sign)
         }
     }
 

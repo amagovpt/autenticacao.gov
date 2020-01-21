@@ -85,6 +85,12 @@ typedef enum {
 	DLG_PIN_ADDRESS,
 } DlgPinUsage;
 
+typedef enum {
+	DLG_USERID_UNKNOWN,
+	DLG_USERID_MOBILE,						// Ask for mobile number
+	DLG_USERID_MOBILE_FIXED,				// Mobile number is known and fixed
+} DlgUserIdType;
+
 const unsigned char PIN_FLAG_DIGITS = 1;
 	
 #ifdef WIN32
@@ -103,7 +109,7 @@ typedef struct {
 	unsigned long long ulFlags;     // PIN_FLAG_DIGITS, ...
 } DlgPinInfo;	
 #endif
-	
+
 typedef enum {
 	DLG_ICON_NONE,
 	DLG_ICON_INFO,
@@ -218,6 +224,37 @@ DLGS_EXPORT DlgRet DlgDisplayPinpadInfo(DlgPinOperation operation,
 */
 DLGS_EXPORT void DlgClosePinpadInfo(unsigned long ulHandle);
 
+/************************************************************************************
+* CMD dialogs
+************************************************************************************/
+#ifdef WIN32
+/**
+* Ask for user ID and PIN to perform CMD operation
+* - DlgUserIdType: CMD user identification can be made with mobile phone, e-mail or Twitter
+* (only DLG_USERID_MOBILE and DLG_USERID_MOBILE_FIXED are supported). If using
+* DLG_USERID_MOBILE_FIXED, the csUserId is used as input. Otherwise it is used for output.
+* - pinUsage: CMD can be used for authentication or signature. (only DLG_PIN_SIGN is supported)
+* Returns: DLG_OK if all went fine,
+*          DLG_BAD_PARAM or DLG_ERR otherwise
+*/
+
+DLGS_EXPORT DlgRet DlgAskCMD(DlgUserIdType userIdType, DlgPinUsage pinUsage,
+	wchar_t *csUserId, unsigned long ulUserIdBufferLen,
+	wchar_t *csPin, unsigned long ulPinBufferLen, 
+	const wchar_t *csUserName = NULL, unsigned long ulUserNameBufferLen = 0, void *wndGeometry = 0);
+
+/**
+* Ask for OTP to perform CMD operation
+* - csDocname should be a null-terminated string
+* Returns: DLG_OK if all went fine,
+*          DLG_BAD_PARAM or DLG_ERR otherwise
+*/
+
+DLGS_EXPORT DlgRet DlgAskCMDOtp(wchar_t *csOtp, unsigned long ulOtpBufferLen, 
+	wchar_t *csDocname, void *wndGeometry = 0);
+#endif
+
+/************************************************************************************/
 /**
 * Set the parent window of the dialogs.
 * The dialogs will be modal relative to the app window

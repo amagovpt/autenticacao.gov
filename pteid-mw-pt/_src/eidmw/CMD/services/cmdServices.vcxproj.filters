@@ -38,11 +38,14 @@
     <ClCompile Include="soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cmdCertificates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="credentials.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CCMovelSignature.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cmdErrors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -62,6 +65,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="soapBasicHttpBinding_USCORECCMovelSignatureProxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cmdCertificates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="credentials.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

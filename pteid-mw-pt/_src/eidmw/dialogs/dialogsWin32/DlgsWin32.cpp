@@ -30,6 +30,8 @@
 #include "dlgWndAskPINs.h"
 #include "dlgWndBadPIN.h"
 #include "dlgWndPinpadInfo.h"
+#include "dlgWndAskCmd.h"
+#include "dlgWndAskCmdOtp.h"
 #include "resource.h"
 #include "../langUtil.h"
 #include "Config.h"
@@ -445,4 +447,122 @@ DLGS_EXPORT void eIDMW::DlgClosePinpadInfo( unsigned long ulHandle )
 	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgClosePinpadInfo() returns");
 }
 
+DLGS_EXPORT DlgRet eIDMW::DlgAskCMD(
+			DlgUserIdType userIdUsage, DlgPinUsage pinUsage,
+			wchar_t *csUserId, unsigned long ulUserIdBufferLen,
+			wchar_t *csPin, unsigned long ulPinBufferLen,
+			const wchar_t *csUserName, unsigned long ulUserNameBufferLen, void * wndGeometry)
+{
+	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgAskCMD() called with arguments DlgUserIdUsage: %d, DlgPinUsage: %d",
+		userIdUsage, pinUsage);
 
+	CLang::ResetInit();				// Reset language to take into account last change
+
+	dlgWndAskCmd *dlg = NULL;
+
+	try
+	{
+		// The only user identification supported is the mobile number
+		if (userIdUsage != DLG_USERID_MOBILE && userIdUsage != DLG_USERID_MOBILE_FIXED)
+		{
+			MWLOG(LEV_ERROR, MOD_DLG, L"  --> DlgAskCMD() returns DLG_BAD_PARAM (only userId supported is mobile number)");
+			return DLG_BAD_PARAM;
+		}
+		if ((userIdUsage != DLG_USERID_MOBILE_FIXED && ulUserIdBufferLen < 16) || ulPinBufferLen < 9)
+		{
+			MWLOG(LEV_ERROR, MOD_DLG, L"  --> DlgAskCMD() returns DLG_BAD_PARAM: buffer does not have enough size");
+			return DLG_BAD_PARAM;
+		}
+
+		std::wstring PINName;
+
+		std::wstring sMessage;
+
+		switch (pinUsage)
+		{
+		case DLG_PIN_SIGN:
+			sMessage += GETSTRING_DLG(Caution);
+			sMessage += L" ";
+			sMessage += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronicWithCmd);
+			break;
+		default:
+			MWLOG(LEV_ERROR, MOD_DLG, L"  --> DlgAskCMD() returns DLG_BAD_PARAM");
+			return DLG_BAD_PARAM;
+		}
+
+		std::wstring userName;
+		std::wstring userId;
+		if (userIdUsage == DLG_USERID_MOBILE_FIXED)
+		{
+			userName.append(csUserName, ulUserNameBufferLen);
+			userId.append(csUserId, ulUserIdBufferLen);
+		}
+		dlg = new dlgWndAskCmd(userIdUsage, pinUsage, sMessage, PINName, 
+			&userId, &userName, appWindow);
+		if (dlg->exec())
+		{
+			eIDMW::DlgRet dlgResult = dlg->dlgResult;
+			if (userIdUsage != DLG_USERID_MOBILE_FIXED)
+			{
+				wcscpy_s(csUserId, ulUserIdBufferLen, dlg->UserIdResult);
+			}
+			wcscpy_s(csPin, ulPinBufferLen, dlg->PinResult);
+
+			delete dlg;
+			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskCMD() returns DLG_OK");
+			return DLG_OK;
+		}
+		delete dlg;
+	}
+	catch (...)
+	{
+		if (dlg)
+			delete dlg;
+		MWLOG(LEV_ERROR, MOD_DLG, L"  --> DlgAskCMD() returns DLG_ERR");
+		return DLG_ERR;
+	}
+	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskCMD() returns DLG_CANCEL");
+	return DLG_CANCEL;
+}
+
+DLGS_EXPORT DlgRet eIDMW::DlgAskCMDOtp(wchar_t *csOtp, unsigned long ulOtpBufferLen,
+	wchar_t *csDocname, void *wndGeometry)
+{
+	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgAskCMDOtp() called");
+
+	CLang::ResetInit();				// Reset language to take into account last change
+
+	dlgWndAskCmdOtp *dlg = NULL;
+
+	if (ulOtpBufferLen < 7)
+	{
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskCMDOtp() returns DLG_BAD_PARAM: otp buffer must have len of 6 chars");
+        return DLG_BAD_PARAM;
+	}
+	try
+	{
+		std::wstring sMessage;
+		sMessage += GETSTRING_DLG(InsertOtp);
+
+		dlg = new dlgWndAskCmdOtp(sMessage, csDocname, appWindow);
+		if (dlg->exec())
+		{
+			eIDMW::DlgRet dlgResult = dlg->dlgResult;
+			wcscpy_s(csOtp, ulOtpBufferLen, dlg->OtpResult);
+
+			delete dlg;
+			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskCMDOtp() returns DLG_OK");
+			return DLG_OK;
+		}
+		delete dlg;
+	}
+	catch (...)
+	{
+		if (dlg)
+			delete dlg;
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskCMDOtp() returns DLG_ERR");
+		return DLG_ERR;
+	}
+	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskCMDOtp() returns DLG_CANCEL");
+	return DLG_CANCEL;
+}

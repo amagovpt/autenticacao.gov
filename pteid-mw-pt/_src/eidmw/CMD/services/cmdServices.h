@@ -55,6 +55,9 @@ class CMDServices {
         // GetCertificate
         int getCertificate(CMDProxyInfo proxyInfo, std::string in_userId, std::vector<CByteArray> &out_certificate );
 
+        // GetCertificateWithPin
+        int askForCertificate(CMDProxyInfo proxyInfo, std::string in_userId, std::string in_pin);
+
         // CCMovelSign
 		int ccMovelSign(CMDProxyInfo proxyInfo, unsigned char * in_hash, std::string docName, std::string in_pin);
 
@@ -64,6 +67,7 @@ class CMDServices {
 
         // ValidateOtp
         int getSignatures(CMDProxyInfo proxyInfo, std::string in_code, std::vector<CByteArray *> out_signature );
+        int getCMDCertificate(CMDProxyInfo proxyInfo, std::string in_code, std::vector<CByteArray> &out_certificate);
 
         static std::string getEndpoint();
 
@@ -89,7 +93,6 @@ class CMDServices {
         soap *m_soap;
         std::string m_applicationID;
         std::string m_processID;
-        std::string m_pin;
         std::string m_userId; // this is the phone number.
         std::string m_basicAuthUser;
         std::string m_basicAuthPassword;
@@ -119,7 +122,11 @@ class CMDServices {
         // ValidateOtp
         int ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
                         , std::vector<unsigned char *> *outSignature
-                        , std::vector<unsigned int> *outSignatureLen );
+                        , std::vector<unsigned int> *outSignatureLen);
+        int ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
+                        , std::string *outCertificate);
+
+        int sendValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, _ns2__ValidateOtpResponse &response);
 
         _ns2__ValidateOtp *get_ValidateOtpRequest( soap *sp
                                                  , std::string in_applicationID
@@ -128,13 +135,22 @@ class CMDServices {
 
         int checkValidateOtpResponse( _ns2__ValidateOtpResponse *response );
 
-        _ns2__GetCertificate *get_GetCertificateRequest(  soap *sp
-                                                , std::string in_applicationID
-                                                , std::string *in_userId );
+        // GetCertificate
+        _ns2__GetCertificate *get_GetCertificateRequest(soap *sp
+            , std::string in_applicationID
+            , std::string *in_userId);
 
-        int checkGetCertificateResponse( _ns2__GetCertificateResponse *response );
+        int checkGetCertificateResponse(_ns2__GetCertificateResponse *response);
         int GetCertificate(CMDProxyInfo proxyInfo, std::string in_userId
-                            , char **out_certificate, int *out_certificateLen );
+            , char **out_certificate, int *out_certificateLen);
+
+        // GetCertificateWithPin
+        _ns2__GetCertificateWithPin *get_GetCertificateWithPinRequest(soap *sp
+                                                , std::string in_applicationID
+                                                , std::string *in_userId
+                                                , std::string *in_pin);
+
+        int checkGetCertificateWithPinResponse( _ns2__GetCertificateWithPinResponse *response );
 };
 
 }

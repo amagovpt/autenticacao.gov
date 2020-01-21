@@ -34,7 +34,7 @@
 #include "credentials.h"
 #include "Config.h"
 #include "Util.h"
-
+#include "proxyinfo.h"
 
 using namespace eIDMW;
 
@@ -52,8 +52,11 @@ GAPI::GAPI(QObject *parent) :
     image_provider = new PhotoImageProvider();
     image_provider_pdf = new PDFPreviewImageProvider();
 
-    cmd_signature = new eIDMW::CMDSignature(getCMDBasicAuthUserId(), getCMDBasicAuthPassword(), getCMDBasicAuthAppId());
-
+    cmd_signature = new eIDMW::CMDSignature(CMDCredentials::getCMDBasicAuthUserId(),
+                                            CMDCredentials::getCMDBasicAuthPassword(), 
+                                            CMDCredentials::getCMDBasicAuthAppId());
+    CMDProxyInfo proxyInfo = CMDProxyInfo::buildProxyInfo();
+    m_cmdCertificates =  new eIDMW::CMDCertificates(proxyInfo);
     m_addressLoaded = false;
     m_shortcutFlag = 0;
 
@@ -66,36 +69,6 @@ GAPI::GAPI(QObject *parent) :
     m_timerReaderList = new QTimer(this);
     connect(m_timerReaderList, SIGNAL(timeout()), this, SLOT(updateReaderList()));
     m_timerReaderList->start(TIMERREADERLIST);
-}
-
-CMDProxyInfo GAPI::buildProxyInfo() {
-    ProxyInfo proxyinfo;
-
-    std::string endpoint = CMDSignature::getEndpoint();
-    CMDProxyInfo cmd_proxyinfo;
-
-    if (proxyinfo.isAutoConfig())
-    {
-        std::string proxy_host;
-        long proxy_port;
-        proxyinfo.getProxyForHost(endpoint, &proxy_host, &proxy_port);
-        if (proxy_host.size() > 0)
-        {
-            cmd_proxyinfo.host = proxy_host.c_str();
-            cmd_proxyinfo.port = proxy_port;
-        }
-    } else if (proxyinfo.isManualConfig()) {
-        cmd_proxyinfo.host = proxyinfo.getProxyHost().toStdString();
-        cmd_proxyinfo.port = proxyinfo.getProxyPort().toLong();
-        if (proxyinfo.getProxyUser().size() > 0) {
-            cmd_proxyinfo.user = proxyinfo.getProxyUser().toStdString();
-            cmd_proxyinfo.pwd = proxyinfo.getProxyPwd().toStdString();
-        }
-    }
-
-    qDebug() << "buildProxyInfo is returning host= " << QString::fromStdString(cmd_proxyinfo.host) << " port= " << cmd_proxyinfo.port;
-    qDebug() << "buildProxyInfo proxy authentication: " <<  (cmd_proxyinfo.user.size() > 0 ? "YES" : "NO" );
-    return cmd_proxyinfo;
 }
 
 void GAPI::initTranslation() {
@@ -697,14 +670,19 @@ void GAPI::showSignCMDDialog(long error_code)
         break;
     }
 
-    if (error_code != 0
+    if (error_code != 0 
             && error_code != EIDMW_TIMESTAMP_ERROR
             && error_code != SCAP_SECRETKEY_ERROR_CODE
-            && error_code != SCAP_CLOCK_ERROR_CODE)
+            && error_code != SCAP_CLOCK_ERROR_CODE) {
+        // If there is error show message screen
         error_msg += "<br><br>" + support_string;
-
+        signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "!");
+        signalShowMessage(error_msg);
+    }
+    else{
+        signalUpdateProgressStatus(error_msg);
+    }
     qDebug() << error_msg;
-    signalUpdateProgressStatus(error_msg);
 }
 
 void GAPI::changeAddressPin(QString currentPin, QString newPin) {
@@ -808,7 +786,7 @@ void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdParams &cmdParams, Sign
 
     BEGIN_TRY_CATCH
         signalUpdateProgressBar(25);
-    CMDProxyInfo proxyInfo = buildProxyInfo();
+    CMDProxyInfo proxyInfo = CMDProxyInfo::buildProxyInfo();
     ret = cmd_signature->signOpen(proxyInfo, cmdParams.mobileNumber.toStdString(), cmdParams.secret_code.toStdString(),
         signParams.page,
         signParams.coord_x, signParams.coord_y,
@@ -833,7 +811,7 @@ void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdParams &cmdParams, Sign
 
     signalUpdateProgressBar(50);
     signalUpdateProgressStatus(tr("STR_CMD_LOGIN_SUCESS"));
-    emit signalOpenCMDSucess();
+    emit signalValidateOtp();
 }
 
 void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
@@ -869,7 +847,7 @@ void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
     signalUpdateProgressBar(100);
     if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR)
     {
-        emit signalCloseCMDSucess();
+        emit signalOpenFile();
     }
 }
 
@@ -3227,6 +3205,95 @@ bool GAPI::getRemoveCertValue(void){
     return m_Settings.getRemoveCert();
 }
 
+QVariantList GAPI::getRegisteredCmdPhoneNumbers() {
+    QVariantList regCmdNumList;
+    
+    std::vector<std::string> phoneNums;
+    m_cmdCertificates->GetRegisteredPhoneNumbers(&phoneNums);
+
+    for (size_t i = 0; i < phoneNums.size(); i++)
+    {
+        regCmdNumList << phoneNums[i].c_str();
+    }
+    return regCmdNumList;
+}
+
+void GAPI::doCancelCMDRegisterCert() {
+    m_cmdCertificates->CancelImport();
+}
+void GAPI::cancelCMDRegisterCert() {
+#ifdef WIN32
+    QtConcurrent::run(this, &GAPI::doCancelCMDRegisterCert);
+#endif
+}
+
+void GAPI::registerCMDCertOpen(QString mobileNumber, QString pin) {
+#ifdef WIN32
+    QtConcurrent::run(this, &GAPI::doRegisterCMDCertOpen, mobileNumber, pin);
+#endif
+}
+void GAPI::doRegisterCMDCertOpen(QString mobileNumber, QString pin) {
+#ifdef WIN32
+    qDebug() << "Register CMD Cert of number " << mobileNumber;
+    signalUpdateProgressBar(25);
+    signalUpdateProgressStatus(tr("STR_CMD_CONNECTING"));
+    int res = m_cmdCertificates->ImportCertificatesOpen(mobileNumber.toStdString(), pin.toStdString());
+
+    QString error_msg;
+    // errors in cmdErrors.h
+    switch (res) {
+    case ERR_NONE:
+        error_msg = tr("STR_CMD_LOGIN_SUCESS");
+        signalUpdateProgressBar(50);
+        signalUpdateProgressStatus(error_msg);
+        emit signalValidateOtp();
+        return;
+    case SOAP_TCP_ERROR:
+        error_msg = tr("STR_VERIFY_INTERNET");
+        break;
+    case ERR_GET_CERTIFICATE:
+        error_msg = tr("STR_CMD_GET_CERTIFICATE_ERROR");
+        break;
+    default:
+        error_msg = tr("STR_CERT_REG_ERROR");
+    }
+    signalUpdateProgressBar(100);
+    signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "!");
+    emit signalShowMessage(error_msg);
+#endif
+}
+void GAPI::registerCMDCertClose(QString otp) {
+#ifdef WIN32
+    QtConcurrent::run(this, &GAPI::doRegisterCMDCertClose, otp);
+#endif
+}
+void GAPI::doRegisterCMDCertClose(QString otp) {
+#ifdef WIN32
+    signalUpdateProgressBar(75);
+    signalUpdateProgressStatus(tr("STR_CMD_SENDING_CODE"));
+    int res = m_cmdCertificates->ImportCertificatesClose(otp.toStdString());
+
+    QString top_msg = tr("STR_POPUP_ERROR") + "!";
+    QString error_msg;
+    // errors in cmdErrors.h
+    switch (res) {
+    case ERR_NONE:
+        top_msg = tr("STR_POPUP_SUCESS") + "!";
+        error_msg = tr("STR_CERT_REG_SUCC");
+        break;
+    case SOAP_TCP_ERROR:
+        error_msg = tr("STR_VERIFY_INTERNET");
+        break;
+    default:
+        error_msg = tr("STR_CERT_REG_ERROR");
+    }
+
+    signalUpdateProgressBar(100);
+    signalUpdateProgressStatus(top_msg);
+    emit signalShowMessage(error_msg);
+#endif
+}
+
 void GAPI::quitApplication(void) {
     try
     {
@@ -3302,28 +3369,4 @@ bool GAPI::checkCMDSupport() {
 #else
     return false;
 #endif
-}
-
-std::string GAPI::getCMDBasicAuthAppId() {
-    std::string regAppId = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_APPID));
-    if (regAppId != "default_value") {
-        return regAppId;
-    }
-    return CMD_BASIC_AUTH_APPID;
-}
-
-std::string GAPI::getCMDBasicAuthUserId() {
-    std::string regUserId = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_USERID));
-    if (regUserId != "default_value") {
-        return regUserId;
-    }
-    return CMD_BASIC_AUTH_USERID;
-}
-
-std::string GAPI::getCMDBasicAuthPassword() {
-    std::string regPassword = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_PASSWORD));
-    if (regPassword != "default_value") {
-        return regPassword;
-    }
-    return CMD_BASIC_AUTH_PASSWORD;
 }

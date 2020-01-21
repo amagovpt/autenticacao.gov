@@ -46,6 +46,11 @@ Item {
         Keys.onReturnPressed: Qt.openUrlExternally(propertyLinkUrl)
 
     }
+    Accessible.role: Accessible.Link
+    Accessible.name: propertyAccessibleText
+    Accessible.description: propertyAccessibleDescription
+    Keys.onSpacePressed: Qt.openUrlExternally(propertyLinkUrl)
+    Keys.onReturnPressed: Qt.openUrlExternally(propertyLinkUrl)
     MouseArea {
         id: mouseArea
         anchors.fill: linkText

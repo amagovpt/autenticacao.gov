@@ -299,6 +299,8 @@
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCS_Wrapper.dll"/>
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)cmdServices.dll" />
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)cmdKsp.dll" />
       </Component>
 
       <Component Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44D4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
@@ -406,6 +408,7 @@
             <RegistryValue Type="integer" Name="automatic_cardreading" Value="1"/>
             <RegistryValue Type="integer" Name="cardreader" Value="0"/>
             <RegistryValue Type="integer" Name="registrate_certificate" Value="1"/>
+            <RegistryValue Type="integer" Name="ask_register_cmd_cert" Value="1"/>
           </RegistryKey>
         </RegistryKey>
 
@@ -522,6 +525,11 @@
               Execute="deferred"
               />
 
+    <Binary SourceFile="$(var.PTEID_BUILD_FOLDER_X86)cmdKspConfig.exe" Id="cmdKspConfig"/>
+    <CustomAction BinaryKey="cmdKspConfig" Execute="deferred" Return="check" Impersonate="no" ExeCommand="-register" Id="KSPRegister"/>
+    <CustomAction BinaryKey="cmdKspConfig" Execute="deferred" Return="check" Impersonate="no" ExeCommand="-unregister" Id="KSPUnregister"/>
+    <CustomAction BinaryKey="cmdKspConfig" Execute="deferred" Return="check" Impersonate="yes" ExeCommand="-removeCerts" Id="KSPRemoveCmdCerts"/>
+    
     <?if $(var.PTEID_TARGET_RUNTIME) = VCR8 ?>
     <Binary Id="MarkHidden" SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>
     <Binary Id="CleanMdrvKeys" SourceFile="$(var.PTEID_BUILD_FOLDER_X86)clean_mdrv_keys.exe"/>
@@ -538,6 +546,9 @@
       <Custom Action="IsPrivileged" Before="LaunchConditions">Not Privileged</Custom>
       <Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
       <Custom Action="CleanMinidriverKeys" After="RemoveRegistryValues">NOT Installed</Custom>
+      <Custom Action="KSPRegister" After="InstallFiles">NOT Installed AND NOT REMOVE</Custom>
+      <Custom Action="KSPUnregister" Before="InstallFinalize">(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")</Custom>
+      <Custom Action="KSPRemoveCmdCerts" Before="InstallFinalize">(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")</Custom>
       <ScheduleReboot After="InstallFinalize">NOT Installed</ScheduleReboot>
     </InstallExecuteSequence>
 

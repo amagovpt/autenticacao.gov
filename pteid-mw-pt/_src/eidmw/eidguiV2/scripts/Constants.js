@@ -229,6 +229,17 @@ var MenuState = Object.freeze({
     NORMAL:     "STATE_NORMAL"
 })
 
+var DLG_STATE = Object.freeze({
+    REGISTER_FORM:          "0",
+    SIGN_FORM:              "1",
+    PROGRESS:               "2",
+    VALIDATE_OTP:           "3",
+    SHOW_MESSAGE:           "4",
+    OPEN_FILE:              "5",
+    LOAD_ATTRIBUTES:        "6",
+    ASK_TO_REGISTER_CERT:   "7"
+})
+
 var ARROW_RIGHT = "images/arrow-right_white_AMA.png"
 var ARROW_RIGHT_HOVER = "images/arrow-right_hover.png"
 

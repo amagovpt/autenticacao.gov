@@ -83,6 +83,9 @@ public slots:
     bool getDebugModeValue(void);
     QString setDebugModeValue(bool bDebugMode);
 
+    bool getAskToRegisterCmdCertValue(void);
+    void setAskToRegisterCmdCertValue(bool bAskToRegisterCmdCert);
+
     QString getGuiLanguageString(void);
     void setGuiLanguageString (QString language);
 

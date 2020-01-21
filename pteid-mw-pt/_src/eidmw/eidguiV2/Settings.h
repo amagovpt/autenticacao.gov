@@ -73,6 +73,7 @@ public:
         , m_bStartAutoupdate(false)
         , m_bDebugMode(false)
         , m_bNotShowStartUpHelp(false)
+        , m_bAskToRegisterCmdCert(false)
         , m_bShowPicture(false)
         , m_bShowNotification(false)
         , m_bAutoCardReading(false)
@@ -139,6 +140,19 @@ public:
 
         //----------------------------------------------------------
         // check debug mode
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ASKREGCMDCERT);
+            long askRegCmdCert = config.getLong();
+
+            if (0 != askRegCmdCert)
+            {
+                setAskToRegisterCmdCert(true);
+            }
+        }
+
+        //----------------------------------------------------------
+        // check ask register Cmd cert
         //----------------------------------------------------------
         {
             eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_LOGGING_LEVEL);
@@ -434,6 +448,16 @@ public:
             #endif
         }
         return QString("");
+    }
+    bool getAskToRegisterCmdCert(void)
+    {
+        return m_bAskToRegisterCmdCert;
+    }
+    void setAskToRegisterCmdCert(bool bAskToRegisterCmdCert)
+    {
+        m_bAskToRegisterCmdCert = bAskToRegisterCmdCert;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ASKREGCMDCERT);
+        config.setLong(m_bAskToRegisterCmdCert);
     }
 
     bool getShowPicture( void )
@@ -737,6 +761,7 @@ private:
     bool    m_bStartAutoupdate;     //!< check for updates when starting the app (T/F)
     bool    m_bDebugMode;           //!< debug mode enabled (T/F)
     bool    m_bNotShowStartUpHelp;  //!< the GUI Show Help	bool	m_bStartMinimized;              //!< startup minimized (T/F)
+    bool    m_bAskToRegisterCmdCert;//!< the GUI will ask to register the CMD cert on start (T/F)
     bool    m_bShowPicture;         //!< show the picture (T/F)
     bool    m_bShowNotification;    //!< show the notification (T/F)
     bool    m_bAutoCardReading;     //!< read the inserted card at startup (T/F)

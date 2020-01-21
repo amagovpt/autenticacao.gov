@@ -693,12 +693,12 @@ PageServicesSignAdvancedForm {
     }
     propertyFileDialogCMDOutput {
         onAccepted: {
-            dialogSignCMD.open()
+            dialogSignCMD.open(GAPI.Sign)
         }
     }
     propertyFileDialogBatchCMDOutput {
         onAccepted: {
-            dialogSignCMD.open()
+            dialogSignCMD.open(GAPI.Sign)
         }
     }
     propertyFileDialogBatchOutput {

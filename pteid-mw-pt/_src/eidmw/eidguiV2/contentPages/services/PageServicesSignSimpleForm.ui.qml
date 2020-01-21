@@ -43,6 +43,7 @@ Item {
     property alias propertyTextSpinBox: textSpinBox
     property alias propertySpinBoxControl: spinBoxControl
     property alias propertyCheckLastPage: checkLastPage
+    property alias propertyCmdDialog : cmdDialog
 
     BusyIndicator {
        id: busyIndicator
@@ -425,5 +426,8 @@ Item {
                 Keys.onReturnPressed: clicked()
             }
         }
+    }
+    Components.DialogCMD {
+        id: cmdDialog
     }
 }

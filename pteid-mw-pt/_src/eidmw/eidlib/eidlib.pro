@@ -43,7 +43,8 @@ HEADERS += eidlib.h \
            eidlibException.h \
            InternalUtil.h \
            dialogs.h \
-           Util.h
+           Util.h \
+           proxyinfo.h
 
 SOURCES += eidlibCard.cpp \
            eidlibCrypto.cpp \
@@ -51,5 +52,6 @@ SOURCES += eidlibCard.cpp \
            eidlibReader.cpp \
            eidlibException.cpp \
 	   eidlibxades.cpp \
-           InternalUtil.cpp
+           InternalUtil.cpp \
+           proxyinfo.cpp
 

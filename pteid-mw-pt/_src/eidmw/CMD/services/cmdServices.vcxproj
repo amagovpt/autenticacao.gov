@@ -154,7 +154,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL_098)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;$(PTEID_DIR_QT_5)\include;$(PTEID_DIR_QT_5)\include\QtCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL_098)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
@@ -164,9 +164,9 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>Qt5Core.lib;libeay32.lib;ssleay32.lib;pteidcommon.lib;pteidapplayer.lib;pteidlib.lib;WS2_32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\qml-app\$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_QT_5)\lib;$(PTEID_DIR_OPENSSL_098)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Crypt32.lib;libeay32.lib;ssleay32.lib;pteidcommon.lib;pteidapplayer.lib;pteidlib.lib;WS2_32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
+      <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_OPENSSL_098)\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -179,11 +179,21 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>echo "*********************************************************************************"
+echo "Copying credentials file from: %PTEID_CREDENTIALS_FILE%"
+copy "$(ProjectDir)\credentials.h.template" "$(ProjectDir)\credentials.h"
+copy %PTEID_CREDENTIALS_FILE% "$(ProjectDir)\credentials.h"
+echo "*********************************************************************************"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>echo "*********************************************************************************"
+echo "Copying credentials file from: %PTEID_CREDENTIALS_FILE%"
+copy "$(ProjectDir)\credentials.h.template" "$(ProjectDir)\credentials.h"
+copy %PTEID_CREDENTIALS_FILE% "$(ProjectDir)\credentials.h"
+echo "*********************************************************************************"</Command>
     </PreBuildEvent>
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
@@ -195,7 +205,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL_098)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;$(PTEID_DIR_QT_5)\include;$(PTEID_DIR_QT_5)\include\QtCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL_098)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -204,9 +214,9 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>WS2_32.Lib;libeay32.lib;ssleay32.lib;pteidcommon.lib;pteidapplayer.lib;pteidlib.lib;Qt5Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\qml-app\$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_QT_5_X64)\lib;$(PTEID_DIR_OPENSSL_098_X64)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Crypt32.lib;WS2_32.Lib;libeay32.lib;ssleay32.lib;pteidcommon.lib;pteidapplayer.lib;pteidlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
+      <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_OPENSSL_098_X64)\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -224,17 +234,20 @@
     <ResourceCompile Include="cmdServices.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cmdCertificates.cpp" />
     <ClCompile Include="cmdServices.cpp" />
     <ClCompile Include="CMDSignature.cpp" />
+    <ClCompile Include="credentials.cpp" />
     <ClCompile Include="soapC.cpp" />
     <ClCompile Include="soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp" />
     <ClCompile Include="stdsoap2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CCMovelSignature.h" />
+    <ClInclude Include="cmdCertificates.h" />
     <ClInclude Include="cmdErrors.h" />
     <ClInclude Include="cmdServices.h" />
     <ClInclude Include="CMDSignature.h" />
+    <ClInclude Include="credentials.h" />
     <ClInclude Include="soapH.h" />
     <ClInclude Include="soapStub.h" />
     <ClInclude Include="soapBasicHttpBinding_USCORECCMovelSignatureProxy.h" />

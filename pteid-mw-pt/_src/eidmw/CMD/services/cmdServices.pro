@@ -41,6 +41,32 @@ macx:INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2q/include/
 
 unix: DEFINES += __UNIX__ WITH_OPENSSL
 
+# Copy one file to the destination directory
+defineTest(copyFileToDestDir) {
+    file = $$1
+    dir = $$2
+    message(Copying one file from: $$file to $$dir)
+    system (pwd $$quote($$file) $$escape_expand(\\n\\t))
+    system ($$QMAKE_COPY_FILE $$quote($$file) $$quote($$dir) $$escape_expand(\\n\\t))
+}
+
+# Set here the path to the credentials file
+PTEID_CREDENTIALS_FILE =
+
+isEmpty(PTEID_CREDENTIALS_FILE) {
+        message(*****************************************************************************)
+        message(**                              WARNING                                    **)
+        message(*****************************************************************************)
+        message(Do not copy credentials file. Using the credentials file template)
+        copyFileToDestDir($$PWD/credentials.h.template, $$PWD/credentials.h)
+    } else {
+        message(*****************************************************************************)
+        message(**                              WARNING                                    **)
+        message(*****************************************************************************)
+        message(Copying the credentials file )
+        copyFileToDestDir($$PTEID_CREDENTIALS_FILE, $$PWD/credentials.h)
+    }
+
 # Input
 HEADERS += \
             cmdErrors.h \
@@ -51,10 +77,12 @@ HEADERS += \
             soapStub.h \
             soapBasicHttpBinding_USCORECCMovelSignatureProxy.h \
             stdsoap2.h \
+            credentials.h
 
 SOURCES += \
             cmdServices.cpp \
             CMDSignature.cpp \
             soapC.cpp \
             soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp \
-            stdsoap2.cpp
+            stdsoap2.cpp \
+            credentials.cpp

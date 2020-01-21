@@ -12,6 +12,7 @@ import QtQuick.Controls 2.1
 
 import "../../scripts/Constants.js" as Constants
 import "../../scripts/Functions.js" as Functions
+import "../../components" as Components
 
 //Import C++ defined enums
 import eidguiV2 1.0
@@ -23,9 +24,6 @@ PageDefinitionsSignSettingsForm {
         Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
     }
 
-    Connections {
-        target: gapi
-    }
     Connections {
         target: controler
     }
@@ -68,7 +66,12 @@ PageDefinitionsSignSettingsForm {
                               controler.setTimeStampHostValue("http://ts.cartaodecidadao.pt/tsa/server")
                               propertyTextFieldTimeStamp.text = ""
                           }
-    }   
+    }
+    propertyLoadCMDCertsButton {
+        onClicked: {
+            mainFormID.propertyCmdDialog.open(GAPI.RegisterCert)
+        }
+    }
 
     Component.onCompleted: {
         console.log("Page definitionsSignSettings onCompleted")
@@ -99,6 +102,7 @@ PageDefinitionsSignSettingsForm {
                 propertyCheckboxDisable.checked = controler.getOutlookSuppressNameChecks()
         } else {
             propertyRectOffice.visible = false
+            propertyRectLoadCMDCerts.visible = false
         }
         
         if(propertyRectAppCertificates.visible){

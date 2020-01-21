@@ -14,10 +14,10 @@
 #include "StringOps.h"
 #include "PDFSignature.h"
 #include "cmdServices.h"
-#include <QByteArray>
-#include <QString>
-#include <QCryptographicHash>
 #include "eidlibException.h"
+#include "proxyinfo.h"
+#include "Util.h"
+#include "Hash.h"
 
 static char logBuf[512];
 
@@ -45,6 +45,42 @@ void printData(char *msg, unsigned char *data, unsigned int dataLen)
     }
     printf("\n");
 }
+
+    CMDProxyInfo CMDProxyInfo::buildProxyInfo() {
+        ProxyInfo proxyinfo;
+
+        std::string endpoint = CMDSignature::getEndpoint();
+        CMDProxyInfo cmd_proxyinfo;
+
+        if (proxyinfo.isAutoConfig())
+        {
+            std::string proxy_host;
+            long proxy_port;
+            proxyinfo.getProxyForHost(endpoint, &proxy_host, &proxy_port);
+            if (proxy_host.size() > 0)
+            {
+                cmd_proxyinfo.host = proxy_host.c_str();
+                cmd_proxyinfo.port = proxy_port;
+            }
+        }
+        else if (proxyinfo.isManualConfig()) {
+            cmd_proxyinfo.host = proxyinfo.getProxyHost();
+            try {
+                cmd_proxyinfo.port = std::stol(proxyinfo.getProxyPort());
+            }
+            catch (...) {
+                MWLOG_ERR(logBuf, "Error parsing proxy port to number value.");
+            }
+            if (proxyinfo.getProxyUser().size() > 0) {
+                cmd_proxyinfo.user = proxyinfo.getProxyUser();
+                cmd_proxyinfo.pwd = proxyinfo.getProxyPwd();
+            }
+        }
+
+        MWLOG_DEBUG(logBuf, "buildProxyInfo is returning host=%s, port=%lu", cmd_proxyinfo.host.c_str(), cmd_proxyinfo.port);
+        MWLOG_DEBUG(logBuf, "buildProxyInfo proxy authentication? %s", (cmd_proxyinfo.user.size() > 0 ? "YES" : "NO"));
+        return cmd_proxyinfo;
+    }
 
     CMDSignature::CMDSignature(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId) {
         cmdService = new CMDServices(basicAuthUser, basicAuthPassword, applicationId);
@@ -86,7 +122,7 @@ void CMDSignature::clear_pdf_handlers()
 }
 
 void CMDSignature::set_string_handler(std::string in_docname_handle,
-                                      QByteArray in_array_handler)
+                                      CByteArray in_array_handler)
 {
     m_docname_handle = in_docname_handle;
     m_array_handler = in_array_handler;
@@ -108,7 +144,7 @@ char *CMDSignature::getCertificateCitizenID()
 
 int CMDSignature::cli_getCertificate(std::string in_userId)
 {
-    if (m_pdf_handlers.empty() && (m_docname_handle.size() == 0 || m_array_handler.size() == 0))
+    if (m_pdf_handlers.empty() && m_array_handler.Size() == 0)
     {
         MWLOG_ERR(logBuf, "NULL handler");
         return ERR_NULL_PDF_HANDLER;
@@ -163,12 +199,7 @@ int CMDSignature::cli_getCertificate(std::string in_userId)
     else
     {
         CByteArray externCertificate = certificates.at(0);
-
-        QByteArray ba((const char *)externCertificate.GetBytes(),
-                      externCertificate.Size());
-
-        QByteArray temp = ba.toHex(0);
-        m_string_certificate = temp.toStdString();
+        m_string_certificate = externCertificate.ToString(false, false);
         if (isDBG)
         {
             printData((char *)"\n Certificate: ",
@@ -186,7 +217,7 @@ int CMDSignature::cli_getCertificate(std::string in_userId)
 int CMDSignature::cli_sendDataToSign(std::string in_pin)
 {
 
-    if (m_pdf_handlers.empty() && (m_docname_handle.size() == 0 || m_array_handler.size() == 0))
+    if (m_pdf_handlers.empty() && m_array_handler.Size() == 0)
     {
         MWLOG_ERR(logBuf, "NULL handler");
         return ERR_NULL_PDF_HANDLER;
@@ -240,10 +271,10 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
             }
             /* Calculate hash */
             hashByteArray = pdf->getHash();
-            QString fullDocName = QString::fromUtf8(pdf->getDocName().c_str());
+            DocName = pdf->getDocName();
 
             //Truncate docName to the first 44 UTF-8 characters not bytes
-            DocName = fullDocName.left(44).toStdString();
+            truncateUtf8String(DocName, 44);
             signDocNames.push_back(DocName);
 
             CByteArray *signatureInput = new CByteArray(sha256SigPrefix, sizeof(sha256SigPrefix));
@@ -254,17 +285,20 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
     }
     else
     {
-        /* Calculate hash */
-        QCryptographicHash sha256(QCryptographicHash::Sha256);
-        sha256.addData(m_array_handler);
+        if (m_computeHash)
+        {
+            /* Calculate hash */
+            CHash hash;
+            hashByteArray = hash.Hash(tHashAlgo::ALGO_SHA256, m_array_handler);
+        }
+        else
+        {
+            hashByteArray = m_array_handler;
+        }
 
-        QByteArray res = sha256.result();
-
-        // convert to std::string
-        std::string in(res.toStdString());
-
-        hashByteArray.Append(in);
         DocName = m_docname_handle;
+        //Truncate docName to the first 44 UTF-8 characters not bytes
+        truncateUtf8String(DocName, 44);
         signDocNames.push_back(DocName);
 
         CByteArray *signatureInput = new CByteArray(sha256SigPrefix, sizeof(sha256SigPrefix));
@@ -286,7 +320,7 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
     }
 
     int ret;
-    if (m_pdf_handlers.size() == 1 || (m_docname_handle.size() > 0 && m_array_handler.size() > 0))
+    if (m_pdf_handlers.size() == 1 || m_array_handler.Size() > 0)
         ret = cmdService->ccMovelSign(m_proxyInfo, signatureInputsBytes[0], signDocNames[0], userPin);
     else
         ret = cmdService->ccMovelMultipleSign(m_proxyInfo, signatureInputsBytes, signDocNames, userPin);
@@ -307,6 +341,14 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
 /*  *********************************************************
     ***    CMDSignature::signOpen()                       ***
     ********************************************************* */
+int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin, CByteArray &in_hash, std::string docname)
+{
+    set_string_handler(docname, in_hash);
+    clear_pdf_handlers();
+    m_computeHash = false;
+    return signOpen(proxyinfo, in_userId, in_pin, 0, 0, 0, NULL, NULL, NULL);
+}
+
 int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin, int page, double coord_x, double coord_y, const char *location, const char *reason, const char *outfile_path)
 {
     m_proxyInfo = proxyinfo;
@@ -374,7 +416,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
 int CMDSignature::cli_getSignatures(std::string in_code,
                                     std::vector<PTEID_ByteArray *> out_sign)
 {
-    if (m_pdf_handlers.empty() && (m_docname_handle.size() == 0 || m_array_handler.size() == 0))
+    if (m_pdf_handlers.empty() && m_array_handler.Size() == 0)
     {
         MWLOG_ERR(logBuf, "NULL pdf_handlers");
         return ERR_NULL_PDF_HANDLER;
@@ -424,7 +466,7 @@ int CMDSignature::cli_getSignatures(std::string in_code,
 int CMDSignature::signClose(std::string in_code)
 {
     std::vector<PTEID_ByteArray *> signatures;
-    if (m_pdf_handlers.size() > 0 || (m_docname_handle.size() > 0 && m_array_handler.size() > 0))
+    if (m_pdf_handlers.size() > 0 || m_array_handler.Size() > 0)
     {
         for (size_t i = 0; i < (std::max)(m_pdf_handlers.size(), std::size_t{1}); i++)
         {
@@ -485,9 +527,8 @@ int CMDSignature::signClose(std::string in_code)
                       (unsigned char *)m_docname_handle.c_str(), m_docname_handle.size());
         }
 
-        QByteArray ba((const char *)signatures[0]->GetBytes(), signatures[0]->Size());
-        QByteArray temp = ba.toHex(0);
-        m_string_signature = temp.toStdString();
+        CByteArray ba(signatures[0]->GetBytes(), signatures[0]->Size());
+        m_string_signature = ba.ToString(false, false);
     }
 
     return ERR_NONE;

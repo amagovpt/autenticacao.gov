@@ -14,6 +14,7 @@
 #include "qfileinfo.h"
 #include "qfile.h"
 #include <string.h>
+#include <codecvt>
 
 #include "ScapSettings.h"
 #include "gapi.h"
@@ -517,11 +518,17 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
          }
 	}
 	else if (proxyInfo.isManualConfig()) {
-        sp->proxy_host = strdup(proxyInfo.getProxyHost().toUtf8().constData());
-		sp->proxy_port = proxyInfo.getProxyPort().toLong();
+        sp->proxy_host = strdup(proxyInfo.getProxyHost().c_str());
+        try {
+            proxy_port = std::stol(proxyInfo.getProxyPort());
+         }
+        catch (...) {
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Error parsing proxy port to number value.");
+        }
+        sp->proxy_port = proxy_port;
 		if (proxyInfo.getProxyUser().size() > 0) {
-            sp->proxy_userid = strdup(proxyInfo.getProxyUser().toUtf8().constData());
-            sp->proxy_passwd = strdup(proxyInfo.getProxyPwd().toUtf8().constData());
+            sp->proxy_userid = strdup(proxyInfo.getProxyUser().c_str());
+            sp->proxy_passwd = strdup(proxyInfo.getProxyPwd().c_str());
 		}
 
 	}

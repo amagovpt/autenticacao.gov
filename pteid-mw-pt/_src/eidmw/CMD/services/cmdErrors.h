@@ -44,5 +44,6 @@
 #define SOAP_ERR_OTP_VALIDATION_ERROR       816 // NOT TESTED
 #define SOAP_ERR_INACTIVE_SERVICE           817 // NOT TESTED
 #define SOAP_ERR_GENERIC                    900 // NOT TESTED
+#define SOAP_TCP_ERROR                      28
 
 #endif /* CMD_ERRORS_H */

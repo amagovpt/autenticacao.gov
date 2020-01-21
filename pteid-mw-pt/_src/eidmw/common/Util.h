@@ -55,6 +55,9 @@ EIDMW_CMN_API bool StartsWith(const char *csData, const char *csSearch);
 
 EIDMW_CMN_API char *bin2AsciiHex(const unsigned char * pData, unsigned long ulLen);
 
+// Get the first n utf8 encoded chars in a string 
+EIDMW_CMN_API void truncateUtf8String(std::string &utf8String, size_t numberOfChars);
+
 #ifdef WIN32
 // Read/Write Registry value
 EIDMW_CMN_API void ReadReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD *dwType, void* output, DWORD *outputSize);

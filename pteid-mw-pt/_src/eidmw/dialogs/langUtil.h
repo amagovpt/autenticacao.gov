@@ -37,7 +37,7 @@
 namespace eIDMW
 {
 
-class CLang
+class DLGS_EXPORT CLang
 {
 public:
 	static tLanguage GetLang()			{ if(!ms_InitOk) Init(); return ms_Lang; }

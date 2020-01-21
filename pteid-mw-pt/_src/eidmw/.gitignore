@@ -13,6 +13,8 @@ _Binaries35
 applayer/Build
 clean_mdrv_keys/Build
 common/Build
+cmd-ksp/Config/Build
+cmd-ksp/Provider/Build
 dialogs/dialogsWin32/Build
 eidlib/Build
 eidlib/docs
@@ -28,6 +30,7 @@ eidlibJava_Wrapper/javadocs.zip
 eidlibJava_Wrapper/Release/BuildLog.htm
 eidlibJava/Build
 cardlayer/Build
+minidriver/Build
 minidriver/makemsi/Release
 misc/Wix_MW35/MarkHidden/Build
 misc/Wix_MW35/Autenticacao.gov-3.0/obj
@@ -58,6 +61,6 @@ bin/
 
 # Credentials #
 ###################
-eidguiV2/credentials.h
+CMD/services/credentials.h
 /release_data.wxs
 /release_data.h

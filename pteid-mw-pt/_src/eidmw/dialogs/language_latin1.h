@@ -86,6 +86,7 @@ DEFINE_LANG_STR(PinBlocked) = {L"PIN blocked", L"PIN bloqueado", L"", L""};
 DEFINE_LANG_STR(PinpadInfo) = {L"Pinpad info", L"Pinpad info", L"", L""};
 DEFINE_LANG_STR(Message) = {L"Message", L"Mensagem", L"", L""};
 DEFINE_LANG_STR(SignaturePin) = {L"Signature PIN", L"PIN de assinatura", L"", L""};
+DEFINE_LANG_STR(SignaturePinCmd) = {L"Chave Móvel Digital's Signature PIN", L"PIN de assinatura da Chave Móvel Digital", L"", L""};
 DEFINE_LANG_STR(ActivationPin) = {L"Activation PIN", L"Código de ativação", L"", L""};
 DEFINE_LANG_STR(AuthenticationPin) = {L"Authentication PIN", L"PIN de autenticação", L"", L""};
 DEFINE_LANG_STR(AddressPin) = {L"Address PIN", L"PIN de morada", L"", L""};
@@ -93,6 +94,7 @@ DEFINE_LANG_STR(UnknownPin) = {L"Unknown PIN", L"PIN desconhecido", L"", L""};
 DEFINE_LANG_STR(PleaseEnterTheCorrectEidCard) = {L"Please enter the correct eID card.", L"Introduza um cartão válido.", L"", L""};
 DEFINE_LANG_STR(Caution) = {L"Caution:", L"Atenção:", L"", L""};
 DEFINE_LANG_STR(YouAreAboutToMakeALegallyBindingElectronic) = {L"You are about to make a legally binding electronic signature with your identity card.", L"Vai realizar uma assinatura eletrónica válida com o seu Cartão de Cidadão.", L"", L""};
+DEFINE_LANG_STR(YouAreAboutToMakeALegallyBindingElectronicWithCmd) = { L"You are about to make a legally binding electronic signature with Chave Móvel Digital.", L"Vai realizar uma assinatura eletrónica válida com a Chave Móvel Digital.", L"", L"" };
 DEFINE_LANG_STR(PleaseEnterYourPin) = {L"Please enter your PIN", L"Introduza o código PIN", L"", L""};
 DEFINE_LANG_STR(PleaseEnterYourPinOnThePinpadReader) = {L"Please enter your PIN on the pinpad reader.", L"Por favor, introduza o PIN no seu leitor PINPAD.", L"", L""};
 DEFINE_LANG_STR(ToContinueOrClickTheCancelButton) = {L"to continue or click the Cancel button.", L"para continuar ou clique em cancelar", L"", L""};
@@ -114,6 +116,12 @@ DEFINE_LANG_STR(UnlockDialogInstructions) = {L"1) Enter your PUK code and press 
 DEFINE_LANG_STR(UnlockWithoutPUKInstructions) = {L"1) Enter your new PIN and press 'OK'. \n2) Enter your new PIN again and press 'OK'.",
 												 L"1) Por favor introduza o seu novo PIN e pressione 'OK'\n2) Introduza novamente o seu novo PIN e pressione 'OK'.", L"", L""};
 DEFINE_LANG_STR(PinpadCanBeDisabled) = { L"The pinpad functionality can be disabled in Application Configuration. Check manual.", L"A funcionalidade PINPAD pode ser desativada na Configuração da Aplicação. Ver manual.", L"", L"" };
+DEFINE_LANG_STR(MobileNumber) = { L"Mobile number", L"Número de telemóvel", L"", L"" };
+DEFINE_LANG_STR(InsertOtp) = { L"Enter the code that was sent via SMS to your mobile phone.", L"Insira o código que foi enviado via SMS para o seu telemóvel.", L"", L"" };
+DEFINE_LANG_STR(SecurityCode) = { L"Security code", L"Código de segurança", L"", L"" };
+DEFINE_LANG_STR(SigningDataWithIdentifier) = { L"Signing data with identifier:", L"Assinatura de dados com identificador:", L"", L"" };
+DEFINE_LANG_STR(TheChosenCertificateIsFrom) = { L"Signing with certificate from ", L"Assinatura com certificado de", L"", L"" };
+DEFINE_LANG_STR(AssociatedWithNumber) = { L"with associated mobile number", L"com número de telemóvel associado", L"", L"" };
 #define GETSTRING_DLG(code) LANG_STR_ ## code[CLang::GetLang()]
 #ifndef WIN32
 #define GETQSTRING_DLG(code) QString::fromWCharArray(LANG_STR_ ## code[CLang::GetLang()])

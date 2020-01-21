@@ -136,12 +136,8 @@
       <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <PreBuildEvent>
-      <Command>echo "*********************************************************************************"
-echo "Copying credentials file from: %PTEID_CREDENTIALS_FILE%"
-copy "$(ProjectDir)\credentials.h.template" "$(ProjectDir)\credentials.h"
-copy %PTEID_CREDENTIALS_FILE% "$(ProjectDir)\credentials.h"
-echo "*********************************************************************************"
-</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
@@ -189,11 +185,8 @@ echo "**************************************************************************
       <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <PreBuildEvent>
-      <Command>echo "*********************************************************************************"
-echo "Copying credentials file from: %PTEID_CREDENTIALS_FILE%"
-copy "$(ProjectDir)\credentials.h.template" "$(ProjectDir)\credentials.h"
-copy %PTEID_CREDENTIALS_FILE% "$(ProjectDir)\credentials.h"
-echo "*********************************************************************************"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
@@ -282,7 +275,6 @@ echo "**************************************************************************
     <ClCompile Include="certificates.cpp" />
     <ClCompile Include="cJSON_1_7_12.c" />
     <ClCompile Include="OAuthAttributes.cpp" />
-    <ClCompile Include="proxyinfo.cpp" />
     <ClCompile Include="ErrorConn.cpp" />
     <ClCompile Include="filesavedialog.cpp" />
     <ClCompile Include="gapi.cpp" />
@@ -431,6 +423,7 @@ echo "**************************************************************************
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">RCC resources.qrc</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\qrc_resources.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\qrc_resources.cpp;%(Outputs)</Outputs>
+      <SubType>Designer</SubType>
     </CustomBuild>
     <CustomBuild Include="filesavedialog.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
@@ -484,7 +477,6 @@ echo "**************************************************************************
   <ItemGroup>
     <ClInclude Include="AttributeFactory.h" />
     <ClInclude Include="cJSON_1_7_12.h" />
-    <ClInclude Include="credentials.h" />
     <ClInclude Include="OAuthAttributes.h" />
     <ClInclude Include="SCAP-services-v3\SCAPAttributeClientServiceBindingProxy.h" />
   </ItemGroup>

@@ -28,10 +28,6 @@
                 <File Id="fil48C559BBDD3B4248A68139D6F45AE5D4" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Xml.dll" />
               </Component>
               
-              <Component Id="cmp205F6ABD67D347B295ED34E09FF4D703" Guid="{205F6ABD-67D3-47B2-95ED-34E09FF4D703}">
-                <File Id="fil205F6ABD67D347B295ED34E09FF4D703" KeyPath="yes" Source="$(var.QMLDIROUTPUT)\cmdServices.dll" />
-              </Component>
-              
               <Component Id="cmpCD39109FC2894B59A1000D1879FA000C" Guid="{CD39109F-C289-4B59-A100-0D1879FA000C}">
                 <File Id="filCD39109FC2894B59A1000D1879FA000C" KeyPath="yes" Source="$(var.QMLDIR)\Qt5PrintSupport.dll" />
               </Component>
@@ -3481,7 +3477,6 @@
             <ComponentRef Id="cmpDF93FDBD7C9AE17BEC1F7261F28B52CC" />
             <ComponentRef Id="cmp7F40CCD4FD162222E744B7B74F9DF5A3" />
             <ComponentRef Id="cmp48C559BBDD3B4248A68139D6F45AE5D4" />
-            <ComponentRef Id="cmp205F6ABD67D347B295ED34E09FF4D703" />
             <ComponentRef Id="cmpCD39109FC2894B59A1000D1879FA000C" />
           </ComponentGroup>
     </Fragment>

@@ -19,6 +19,8 @@ import QtQuick.Window 2.2
 import "scripts/Functions.js" as Functions
 import "scripts/Constants.js" as Constants
 
+import "components/" as Components
+
 //Import C++ defined enums
 import eidguiV2 1.0
 
@@ -95,6 +97,9 @@ Load language error. Please reinstall the application"
             if(autoUpdate){
                 console.log("No updates or startup auto update failed.")
                 autoUpdate = false
+                if(Qt.platform.os === "windows" && controler.getAskToRegisterCmdCertValue()){
+                    mainFormID.propertyCmdDialog.open(GAPI.AskToRegisterCert)
+                }
             }
         }
     }
@@ -139,6 +144,7 @@ Load language error. Please reinstall the application"
             readerContext.open()
         }
     }
+
     Dialog {
         property string update_release_notes: ""
         property string update_installed_version: ""
@@ -216,6 +222,9 @@ Load language error. Please reinstall the application"
             highlighted: activeFocus
             onClicked: {
                 autoUpdateDialog.close()
+                if(Qt.platform.os === "windows" && controler.getAskToRegisterCmdCertValue()){
+                    mainFormID.propertyCmdDialog.open(GAPI.AskToRegisterCert)
+                }
             }
             Keys.onEnterPressed: clicked()
             Keys.onReturnPressed: clicked()
@@ -923,7 +932,8 @@ Load language error. Please reinstall the application"
             }else{
                 mainFormID.propertyMainMenuView.width = mainWindow.width
             }
-            mainFormID.propertyImageLogoBottom.forceActiveFocus()
+            if (!controler.getAskToRegisterCmdCertValue())
+                mainFormID.propertyImageLogoBottom.forceActiveFocus()
 
             // Do not select any option
             mainFormID.propertyMainMenuListView.currentIndex = -1
@@ -1388,6 +1398,9 @@ Load language error. Please reinstall the application"
         gapi.setAppAsDlgParent()
         if(controler.getStartAutoupdateValue()){
             controler.autoUpdates()
+        } else if(Qt.platform.os === "windows" && controler.getAskToRegisterCmdCertValue()){
+            mainFormID.propertyCmdDialog.open(GAPI.AskToRegisterCert)
+            labelAskRegisterCmdCertDialogTitle.forceActiveFocus()
         }
     }
 
@@ -1451,7 +1464,6 @@ Load language error. Please reinstall the application"
 
         }
     }
-
     function mainMenuBottomPressed(index){
         // if there are unsaved notes
         if(handleUnsavedNotes(index,"",Constants.MAIN_BOTTOM_MENU_PRESSED)){

@@ -304,6 +304,19 @@ char* bin2AsciiHex(const unsigned char * pData, unsigned long ulLen)
     return pszHex;
 }
 
+// implementation adapted from https://stackoverflow.com/a/32936928 
+void truncateUtf8String(std::string &utf8String, size_t numberOfChars)
+{
+    const char *ptr = utf8String.c_str();
+    size_t count = 0;
+    size_t byteIdx = 0;
+    while (*ptr && count < numberOfChars) {
+        count += (*ptr++ & 0xC0) != 0x80;
+        byteIdx++;
+    }
+    utf8String = utf8String.substr(0, byteIdx);
+}
+
 #ifdef WIN32
 void ReadReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD *dwType, void* output, DWORD *outputSize) {
     HKEY hKey;

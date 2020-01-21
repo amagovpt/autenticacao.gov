@@ -225,6 +225,7 @@
     <ClCompile Include="eidlibReader.cpp" />
     <ClCompile Include="eidlibxades.cpp" />
     <ClCompile Include="InternalUtil.cpp" />
+    <ClCompile Include="proxyinfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="eidlib.h">
