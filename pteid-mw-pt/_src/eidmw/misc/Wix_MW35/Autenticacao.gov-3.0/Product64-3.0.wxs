@@ -283,13 +283,6 @@
 					<File Source="$(env.PTEID_DIR_OPENSSL_098)\bin\ssleay32.dll" KeyPath="yes"/>
 				</Component>
 
-				<Component Win64="no" Id="libeay32A" Guid="{3AAFC0CD-FDCB-4F7B-9EB7-7B2E31477691}" SharedDllRefCount="yes">
-					<File Source="$(env.PTEID_DIR_OPENSSL_098)\bin\libeay32.dll" KeyPath="yes"/>
-				</Component>
-				<Component Win64="no" Id="ssleay32A" Guid="{6DBB15A3-6EA1-4869-B133-7D8E1321B56C}" SharedDllRefCount="yes">
-					<File Source="$(env.PTEID_DIR_OPENSSL_098)\bin\ssleay32.dll" KeyPath="yes"/>
-				</Component>
-
 				<!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
 			<Component Win64="no" Id="Poppler" Guid="{3C54AC04-E71D-4DC3-9525-21C3BF3BDD9A}">
         <File Id="pteid_poppler.dll" Name="pteid-poppler.dll" KeyPath="yes" Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-poppler.dll"/>
@@ -342,13 +335,6 @@
 			      <File Id="pteidDlgsWin32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidDlgsWin32.dll" />
 			      <File Id="cmdServices_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)cmdServices.dll" />
             <File Id="cmdKsp_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)cmdKsp.dll" />
-				</Component>
-
-				<Component Id="libeay32A_64" Guid="{A3F78E8A-9C48-49B6-9823-0C6014134C31}" SharedDllRefCount="yes">
-					<File Id="libeay_64.dll" Source="$(env.PTEID_DIR_OPENSSL_098_X64)\bin\libeay32.dll" KeyPath="yes"/>
-				</Component>
-				<Component Id="ssleay32A_64" Guid="{A50E4162-B721-44C0-B2A1-D13ED7DE924C}" SharedDllRefCount="yes">
-					<File Id="ssleay_64.dll" Source="$(env.PTEID_DIR_OPENSSL_098_X64)\bin\ssleay32.dll" KeyPath="yes"/>
 				</Component>
 
 				<Component Id="libeay32A_64" Guid="{A3F78E8A-9C48-49B6-9823-0C6014134C31}" SharedDllRefCount="yes">
