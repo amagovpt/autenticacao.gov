@@ -77,8 +77,10 @@ void printData(char *msg, unsigned char *data, unsigned int dataLen)
             }
         }
 
-        MWLOG_DEBUG(logBuf, "buildProxyInfo is returning host=%s, port=%lu", cmd_proxyinfo.host.c_str(), cmd_proxyinfo.port);
-        MWLOG_DEBUG(logBuf, "buildProxyInfo proxy authentication? %s", (cmd_proxyinfo.user.size() > 0 ? "YES" : "NO"));
+        if (proxyinfo.isAutoConfig() || proxyinfo.isManualConfig()){
+            MWLOG_DEBUG(logBuf, "buildProxyInfo is returning host=%s, port=%lu", cmd_proxyinfo.host.c_str(), cmd_proxyinfo.port);
+            MWLOG_DEBUG(logBuf, "buildProxyInfo proxy authentication? %s", (cmd_proxyinfo.user.size() > 0 ? "YES" : "NO"));
+        }
         return cmd_proxyinfo;
     }
 

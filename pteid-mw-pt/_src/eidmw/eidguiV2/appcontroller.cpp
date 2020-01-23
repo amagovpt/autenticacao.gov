@@ -229,13 +229,6 @@ void AppController::startRequest(QUrl url){
 
 
     ProxyInfo proxyinfo;
-    long proxyinfo_port;
-    try {
-        proxyinfo_port = std::stol(proxyinfo.getProxyPort());
-    }
-    catch (...) {
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing proxy port to number value.");
-    }
     proxy.setType(QNetworkProxy::HttpProxy);
     if (proxyinfo.isAutoConfig())
     {
@@ -251,6 +244,13 @@ void AppController::startRequest(QUrl url){
     }
     else if (proxyinfo.isManualConfig())
     {
+        long proxyinfo_port;
+        try {
+            proxyinfo_port = std::stol(proxyinfo.getProxyPort());
+        }
+        catch (...) {
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing proxy port to number value.");
+        }
         proxy.setHostName(QString::fromStdString(proxyinfo.getProxyHost()));
         proxy.setPort(proxyinfo_port);
         if (proxyinfo.getProxyUser().size() > 0) {
