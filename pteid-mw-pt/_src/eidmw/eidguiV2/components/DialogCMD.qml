@@ -555,35 +555,6 @@ Item {
                 KeyNavigation.up: buttonCancel.visible ? buttonCancel : labelCMDText
                 KeyNavigation.left: buttonCancel.visible ? buttonCancel : labelCMDText
             }
-            Button {
-                id: buttonSCAPLoadAttributes
-                width: Constants.WIDTH_BUTTON
-                height: Constants.HEIGHT_BOTTOM_COMPONENT
-                text: qsTranslate("PageServicesSign","STR_LOAD_SCAP_ATTRIBUTES")
-                anchors.right: parent.right
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                font.capitalization: Font.MixedCase
-                enabled: textFieldReturnCode.acceptableInput || isOpenFile
-                visible: false
-                highlighted: activeFocus ? true : false
-                onClicked: {
-                    loadSCAPAttributes()
-                }
-                Keys.onEnterPressed: {
-                    loadSCAPAttributes()
-                }
-                Keys.onReturnPressed: {
-                    loadSCAPAttributes()
-                }
-                Accessible.role: Accessible.Button
-                Accessible.name: text
-                KeyNavigation.tab: rectPopUpProgress
-                KeyNavigation.down: rectPopUpProgress
-                KeyNavigation.right: rectPopUpProgress
-                KeyNavigation.backtab: closeButton
-                KeyNavigation.up: closeButton
-            }
         }
 
         onOpened: {
