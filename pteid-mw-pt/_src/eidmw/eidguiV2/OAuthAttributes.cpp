@@ -113,6 +113,7 @@ namespace eIDMW
         faAuthReq.append("?client_id=").append(m_oauthClientId);
         faAuthReq.append("&response_type=").append(RESPONSE_TYPE);
         faAuthReq.append("&redirect_uri=").append("http://127.0.0.1:").append(std::to_string(listeningPort));
+        faAuthReq.append("&hidden_tabs=cc");
         faAuthReq.append("&scope=");
         for (auto const& attr : m_attributes)
         {
