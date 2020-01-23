@@ -3280,6 +3280,7 @@ void GAPI::doRegisterCMDCertClose(QString otp) {
     case ERR_NONE:
         top_msg = tr("STR_POPUP_SUCESS") + "!";
         error_msg = tr("STR_CERT_REG_SUCC");
+        m_Settings.setAskToRegisterCmdCert(false);
         break;
     case SOAP_TCP_ERROR:
         error_msg = tr("STR_VERIFY_INTERNET");
