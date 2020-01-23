@@ -1026,9 +1026,9 @@ em *Firefox*.
     encontra numa das seguintes localizações:
 
     **Em Windows:**
-    - C:\\Windows\\System32\\pteidpkcs11.dll (Windows
+    - C:\\Windows\\SysWOW64\\pteidpkcs11.dll (Windows
     32-bits)
-    - C:\\Windows\\SysWOW64\\pteidpkcs11.dll (Windows 64-bits)
+    - C:\\Windows\\System32\\pteidpkcs11.dll (Windows 64-bits)
 
     **Em Linux:** /usr/local/lib/libpteidpkcs11.so
 
