@@ -1400,7 +1400,6 @@ Load language error. Please reinstall the application"
             controler.autoUpdates()
         } else if(Qt.platform.os === "windows" && controler.getAskToRegisterCmdCertValue()){
             mainFormID.propertyCmdDialog.open(GAPI.AskToRegisterCert)
-            labelAskRegisterCmdCertDialogTitle.forceActiveFocus()
         }
     }
 

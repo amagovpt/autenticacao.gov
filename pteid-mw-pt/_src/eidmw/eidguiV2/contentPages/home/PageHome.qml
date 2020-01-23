@@ -33,7 +33,7 @@ PageHomeForm {
 
     Component.onCompleted: {
         propertyReminderCheckBox.checked = controler.getNotShowHelpStartUp()
-        if(!askRegisterCmdCertDialog.visible)
+        if(!propertyCmdDialog.visible)
             propertyMainItem.forceActiveFocus()
     }
 }
