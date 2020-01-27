@@ -29,6 +29,8 @@
 #include "eidlibException.h"
 #include "eidlibdefines.h"
 
+#include "autoUpdates.h"
+
 class AppController : public QObject
 {
     Q_OBJECT
@@ -58,15 +60,13 @@ public slots:
     bool getAutoCardReadingValue(void);
     void setAutoCardReadingValue (bool bAutoCardReading );
 
-    void autoUpdates(void);
-    void startRequest(QUrl url);
-    void startUpdateRequest(QUrl url);
-    bool VerifyUpdates(std::string filedata);
-    std::string VerifyOS(std::string param);
-    bool ChooseVersion(std::string distro, std::string arch, cJSON *dist_json);
-    void updateWindows(std::string uri, std::string distro);
-    void RunPackage(std::string pkg, std::string distro);
-    void startUpdate(void);
+
+    // Auto updates certificates
+    void autoUpdatesCerts(void);
+    void startUpdateCerts(void);
+
+    void autoUpdateApp(void);
+    void startUpdateApp(void);
 
     bool getStartAutoupdateValue(void);
     void setStartAutoupdateValue(bool bStartAutoupdate);
@@ -121,17 +121,7 @@ public slots:
     bool getOutlookSuppressNameChecks(void);
     void setOutlookSuppressNameChecks(bool bDisabledMatching);
 
-    void cancelDownload();
-    void httpError(QNetworkReply::NetworkError networkError);
-    void httpUpdateError(QNetworkReply::NetworkError networkError);
-    void httpFinished();
-    void httpReadyRead();
-    void updateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
-    void cancelUpdateDownload();
-    void userCancelledUpdateDownload();
-    void httpUpdateFinished();
-    void httpUpdateReadyRead();
-    void updateUpdateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
+    void userCancelledUpdateCertsDownload();
     void flushCache();
     void getPteidCacheSize();
     void getScapCacheSize();
@@ -151,22 +141,9 @@ private:
     qint64 dirSize(QString dirPath, QString nameFilter);
     QString formatSize(qint64 size);
 
-    QUrl url;
-    QNetworkProxy proxy;
-    QNetworkAccessManager qnam;
-    QNetworkReply *reply;
-    QFile *file;
-    QString m_pac_url;
-    bool httpRequestAborted;
-    bool httpUpdateRequestAborted;
-    bool userCanceled;
-    std::string filedata;
-    std::string urli;
-    std::string getdistro;
-    QString fileName;
-    QString release_notes;
-    QString remote_version;
-    QString installed_version;
+    AutoUpdates certsUpdate;
+    AutoUpdates appUpdate;
+
 protected:
     QTranslator m_translator;
 
@@ -174,10 +151,15 @@ signals:
     void signalRestoreWindows();
     void languageChanged();
     void signalLanguageChangedError();
-    void signalAutoUpdateFail(int error_code);
-    void signalAutoUpdateAvailable(QString release_notes, QString installed_version, QString remote_version);
-    void signalAutoUpdateProgress(int value);
-    void signalStartUpdate(QString filename);
+
+    // Autoupdates
+    void signalAutoUpdateFail(int updateType, int error_code);
+    void signalAutoUpdateAvailable(int updateType, QString release_notes,
+                                   QString installed_version, QString remote_version, QString certs_list);
+    void signalAutoUpdateProgress(int updateType, int value);
+    void signalStartUpdate(int updateType, QString filename);
+    void signalAutoUpdateSuccess(int updateType);
+
     void signalRemovePteidCacheSuccess();
     void signalRemovePteidCacheFail();
     void signalCacheNotReadable();

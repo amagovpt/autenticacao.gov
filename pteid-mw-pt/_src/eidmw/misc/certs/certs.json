@@ -1,0 +1,14 @@
+{
+    "certs": {
+            "cert_CC01": "/CartaodeCidadao001.der",
+            "cert_CC02": "/CartaodeCidadao002.der",
+            "cert_CC03": "/CartaodeCidadao003.der",
+            "cert_CC04": "/CartaodeCidadao004.der",
+            "cert_CC05": "/CartaodeCidadao005.der",
+	    "cert_ECRE": "/ECRaizEstado_MC.der",
+            "cert_MULTICERT": "/Multicert_Root_01.der",
+	    "cert_Baltimore_Cyber_Trust": "/BaltimoreCyberTrustRoot.der",
+            "cert_Global_Chamber_Sign": "/GlobalChambersignRoot-2008.der",
+            "cert_User_Trust": "/Usertrust_RSA_Certification_Authority.der"
+        }
+}

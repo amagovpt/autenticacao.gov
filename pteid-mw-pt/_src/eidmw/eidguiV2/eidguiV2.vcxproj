@@ -291,6 +291,7 @@
     <ClCompile Include="GeneratedFiles\Release\moc_gapi.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_filesavedialog.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp" />
+    <ClCompile Include="GeneratedFiles\Release\moc_autoUpdates.cpp" />
     <ClCompile Include="SCAP-services-v3\SCAPAttributeClientServiceBindingProxy.cpp" />
     <ClCompile Include="scapcompanies.cpp" />
     <ClCompile Include="SCAP-services-v3\SCAPAttributeSupplierBindingProxy.cpp" />
@@ -298,6 +299,7 @@
     <ClCompile Include="SCAP-services-v3\SCAPC.cpp" />
     <ClCompile Include="SCAP-services-v3\SCAPSignatureServiceSoapBindingProxy.cpp" />
     <ClCompile Include="scapsignature.cpp" />
+    <ClCompile Include="autoUpdates.cpp" />
     <ClCompile Include="singleapplication.cpp" />
     <ClCompile Include="stdsoap2.cpp" />
     <ClCompile Include="totp_gen.cpp" />
@@ -436,6 +438,16 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="appcontroller.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+			</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
+		  </Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="autoUpdates.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 			</Command>
