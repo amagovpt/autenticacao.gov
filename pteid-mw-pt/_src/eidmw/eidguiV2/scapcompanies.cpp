@@ -224,6 +224,43 @@ bool ScapServices::removeAttributesFromCache() {
     }
 }
 
+/* http_post_header and http_send_header functions are adapted/copied from stdsoap2.cpp
+ * here to add the authorization token to the HTTP header. 
+ * Instead of using the field of the soap struct http_extra_header, we point fposthdr to 
+ * http_post_header where the token is added. This is because when using proxy the header
+ * is sent in the CONNECT and set to NULL afterwards.
+ */
+int http_send_header(struct soap *soap, const char *s)
+{
+    const char *t;
+    do
+    {
+        t = strchr(s, '\n'); /* disallow \n in HTTP headers */
+        if (!t)
+            t = s + strlen(s);
+        if (soap_send_raw(soap, s, t - s))
+            return soap->error;
+        s = t + 1;
+    } while (*t);
+    return SOAP_OK;
+}
+std::string oauthToken;
+int http_post_header(struct soap *soap, const char *key, const char *val)
+{
+    if (key != NULL && strcmp(key, "SOAPAction") == 0)
+    {
+        http_post_header(soap, "Authorization", oauthToken.c_str());
+    }
+    if (key)
+    {
+        if (http_send_header(soap, key))
+            return soap->error;
+        if (val && (soap_send_raw(soap, ": ", 2) || http_send_header(soap, val)))
+            return soap->error;
+    }
+    return soap_send_raw(soap, "\r\n", 2);
+}
+
 std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eIDMW::PTEID_EIDCard *card, std::vector<int> supplier_ids, bool useOAuth) {
 
     std::vector<ns2__AttributesType *> result;
@@ -383,13 +420,46 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
         }
         else
         {
-            std::string authorizationHeader = "Authorization: " + oauth.getToken();
-            sp.http_extra_header = authorizationHeader.c_str();
-            AttributeClientServiceBindingProxy proxy(&sp);
+            // Add the authorization token in http_post_header
+            sp.fposthdr = http_post_header;
+            oauthToken = oauth.getToken();
             std::string endpoint("https://");
             endpoint.append(scapAddr);
             endpoint.append(c_endpoint);
             const char * soap_action = c_soapAction;
+
+            ProxyInfo m_proxyInfo;
+            std::string proxy_host;
+            long proxy_port = 0;
+            if (m_proxyInfo.isAutoConfig())
+            {
+                m_proxyInfo.getProxyForHost(endpoint, &proxy_host, &proxy_port);
+                if (proxy_host.size() > 0)
+                {
+                    sp.proxy_host = proxy_host.c_str();
+                    sp.proxy_port = proxy_port;
+                }
+            }
+            else if (m_proxyInfo.isManualConfig())
+            {
+                long proxyinfo_port;
+                try {
+                    proxyinfo_port = std::stol(m_proxyInfo.getProxyPort());
+                }
+                catch (...) {
+                    eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapCompanies", "Error parsing proxy port to number value.");
+                }
+                sp.proxy_host = strdup(m_proxyInfo.getProxyHost().c_str());
+                sp.proxy_port = proxyinfo_port;
+
+                if (m_proxyInfo.getProxyUser().size() > 0)
+                {
+                    sp.proxy_userid = strdup(m_proxyInfo.getProxyUser().c_str());
+                    sp.proxy_passwd = strdup(m_proxyInfo.getProxyPwd().c_str());
+                }
+            }
+            
+            AttributeClientServiceBindingProxy proxy(&sp);
             ns2__AttributeResponseType attr_response;
             ret = proxy.Attributes(endpoint.c_str(), soap_action, attr_request, attr_response);
             if (ret != SOAP_OK) {

@@ -22,6 +22,7 @@
 #include "Config.h"
 #include "MiscUtil.h"
 #include "APLConfig.h"
+#include "proxyinfo.h"
 
 #ifdef WIN32
 #include <windows.h>
@@ -330,6 +331,29 @@ namespace eIDMW
         std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
         curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_file.c_str());
 #endif
+        ProxyInfo proxyInfo;
+        std::string proxyHost;
+        long proxyPort;
+        if (proxyInfo.isAutoConfig())
+        {
+            proxyInfo.getProxyForHost(apiEndpoint, &proxyHost, &proxyPort);
+            if (proxyHost.size() > 0)
+            {
+                curl_easy_setopt(curl, CURLOPT_PROXY, proxyHost.c_str());
+                curl_easy_setopt(curl, CURLOPT_PROXYPORT, proxyPort);
+            }
+        }
+        else if (proxyInfo.isManualConfig())
+        {
+            std::string proxyHostAndPort(proxyInfo.getProxyHost() + ":" + proxyInfo.getProxyPort());
+            curl_easy_setopt(curl, CURLOPT_PROXY, proxyHostAndPort.c_str());
+            if (proxyInfo.getProxyUser().size() > 0)
+            {
+                std::string proxyUserAndPwd(proxyInfo.getProxyUser() + ":" + proxyInfo.getProxyPwd());
+                curl_easy_setopt(curl, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
+                curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, proxyUserAndPwd.c_str());
+            }
+        }
         curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L); // for DEBUG
 
         CURLcode res = curl_easy_perform(curl);
