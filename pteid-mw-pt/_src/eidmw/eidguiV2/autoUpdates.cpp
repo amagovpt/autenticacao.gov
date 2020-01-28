@@ -447,7 +447,7 @@ void AutoUpdates::ChooseAppVersion(std::string distro, std::string arch, cJSON *
     {
        qDebug() << "C++ AUTO UPDATES: Your Linux distribution is not supported by Auto-updates";
        getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::LinuxNotSupported);
-       return false;
+       return;
     }
 #endif
     //Name of the msi/deb/rpm will be distro specific

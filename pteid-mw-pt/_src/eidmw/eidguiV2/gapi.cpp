@@ -56,7 +56,9 @@ GAPI::GAPI(QObject *parent) :
                                             CMDCredentials::getCMDBasicAuthPassword(), 
                                             CMDCredentials::getCMDBasicAuthAppId());
     CMDProxyInfo proxyInfo = CMDProxyInfo::buildProxyInfo();
+#ifdef WIN32
     m_cmdCertificates =  new eIDMW::CMDCertificates(proxyInfo);
+#endif
     m_addressLoaded = false;
     m_shortcutFlag = 0;
 
@@ -3205,9 +3207,10 @@ bool GAPI::getRemoveCertValue(void){
     return m_Settings.getRemoveCert();
 }
 
+#ifdef WIN32
 QVariantList GAPI::getRegisteredCmdPhoneNumbers() {
     QVariantList regCmdNumList;
-    
+
     std::vector<std::string> phoneNums;
     m_cmdCertificates->GetRegisteredPhoneNumbers(&phoneNums);
 
@@ -3217,9 +3220,12 @@ QVariantList GAPI::getRegisteredCmdPhoneNumbers() {
     }
     return regCmdNumList;
 }
+#endif
 
 void GAPI::doCancelCMDRegisterCert() {
+#ifdef WIN32
     m_cmdCertificates->CancelImport();
+#endif
 }
 void GAPI::cancelCMDRegisterCert() {
 #ifdef WIN32

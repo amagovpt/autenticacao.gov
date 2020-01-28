@@ -381,7 +381,9 @@ public slots:
     bool getRemoveCertValue(void);
     void registerCMDCertOpen(QString mobileNumber, QString pin);
     void registerCMDCertClose(QString otp);
+#ifdef WIN32
     QVariantList getRegisteredCmdPhoneNumbers();
+#endif
 
     void cancelDownload();
     void httpFinished();

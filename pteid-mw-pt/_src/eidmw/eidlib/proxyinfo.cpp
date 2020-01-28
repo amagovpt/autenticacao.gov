@@ -47,7 +47,7 @@ ProxyInfo::ProxyInfo()
     }
 
 #else
-    std::string proxy_host = config.getString();
+    std::string proxy_host = config_host.getString();
     std::string proxy_username = config_username.getString();
     std::string proxy_pwd = config_pwd.getString();
     std::string pacfile;
