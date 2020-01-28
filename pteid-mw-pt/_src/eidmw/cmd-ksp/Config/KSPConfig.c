@@ -213,7 +213,7 @@ RegisterProvider(
     //
     ntStatus = BCryptRegisterProvider(
                     CMDKSP_PROVIDER_NAME,
-                    0,                          // Flags: fail if provider is already registered
+					CRYPT_OVERWRITE,          // Flags: Overwrite any existing registration information for this provider
                     &KSPProvider
                     );
     if (!NT_SUCCESS(ntStatus))
