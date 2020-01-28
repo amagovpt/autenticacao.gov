@@ -367,7 +367,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
         {
             PDFSignature *pdf = m_pdf_handlers[i]->getPdfSignature();
             // output filename should not be trimmed
-            filenames.push_back(new std::string(pdf->getDocName() + ".pdf"));
+            filenames.push_back(new std::string(pdf->getDocName()));
         }
 
         if (m_pdf_handlers.size() > 1)
