@@ -129,6 +129,7 @@ public slots:
     bool isAccessibilityActive();
 
     QString getFontFile(QString font);
+    QStringList getFilesFromClipboard();
     static void initApplicationScale();
 
 private:

@@ -576,7 +576,7 @@ outras opções.
 #### Simples
 
 Assinatura digital simples de um único documento PDF.
-O ficheiro a assinar pode ser arrastado para a área de pré-visualização. Pode também clicar na área de pré-visualização ou no botão **Adicionar ficheiro** e selecionar manualmente o ficheiro. Será exibida uma janela para selecionar o ficheiro que
+O ficheiro a assinar pode ser selecionado arrastando-o para a área de pré-visualização ou utilizando a combinação de teclas **CTRL+V**. Pode também clicar na área de pré-visualização ou no botão **Adicionar ficheiro** e selecionar manualmente o ficheiro. Será exibida uma janela para selecionar o ficheiro que
 pretende assinar.
 
 ![Ilustração: Selecionar documento PDF na assinatura simples](Pictures/Autenticacao.Gov_assinatura_simples.png "Selecionar documento PDF na assinatura simples"){:.center}
@@ -591,7 +591,7 @@ Por fim, carregar no botão **Assinar com Cartão de Cidadão** ou **Assinar com
 
 Assinatura digital de um documento PDF ou outro qualquer documento com possibilidade de assinar vários documentos ao mesmo tempo, adicionar atributos profissionais, bem como configurar outras opções.
 
-Os ficheiros a assinar podem ser arrastados para a área de pré-visualização. Pode também clicar na área de pré-visualização ou no botão **Adicionar ficheiros** e selecionar manualmente os ficheiros. Será exibida uma janela para selecionar os ficheiros que pretende assinar. Os ficheiros selecionados serão apresentados na janela “Escolha os ficheiros”, como podemos visualizar na imagem seguinte.
+Os ficheiros a assinar podem ser selecionados arrastando-os para a área de pré-visualização ou utilizando a combinação de teclas **CTRL+V**. Pode também clicar na área de pré-visualização ou no botão **Adicionar ficheiros** e selecionar manualmente os ficheiros. Será exibida uma janela para selecionar os ficheiros que pretende assinar. Os ficheiros selecionados serão apresentados na janela “Escolha os ficheiros”, como podemos visualizar na imagem seguinte.
 
 - **Selecionar ficheiros:** Abre uma nova janela que permitirá selecionar os documentos a serem assinados. É possível adicionar e remover ficheiros individualmente ou todos.
 - **Pré-visualização da assinatura:** Permite visualizar o documento a ser assinado, bem como a pré-visualização da própria assinatura. A pré-visualização existe apenas para assinatura do tipo **PDF**.

@@ -60,6 +60,11 @@ PageServicesSignAdvancedForm {
         } else {
             propertyPDFPreview.forceActiveFocus()
         }
+        // CTRL + V
+        if ((event.key == Qt.Key_V) && (event.modifiers & Qt.ControlModifier)){
+            filesArray = controler.getFilesFromClipboard();
+            propertyDropArea.dropped(filesArray);
+        }
 
     }
     Connections {

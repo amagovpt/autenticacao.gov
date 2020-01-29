@@ -28,6 +28,11 @@ PageServicesSignSimpleForm {
     Keys.onPressed: {
         console.log("PageServicesSignSimpleForm onPressed:" + event.key)
         Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+        // CTRL + V
+        if ((event.key == Qt.Key_V) && (event.modifiers & Qt.ControlModifier)){
+            filesArray = controler.getFilesFromClipboard();
+            propertyDropArea.dropped(filesArray);
+        }
     }
 
     Connections {

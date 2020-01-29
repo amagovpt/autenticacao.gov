@@ -16,6 +16,8 @@
 #include <QDebug>
 #include <QtConcurrent>
 #include <QAccessible>
+#include <QClipboard>
+#include <QGuiApplication>
 
 #include <fstream>
 #include <sstream>
@@ -610,4 +612,11 @@ void AppController::forceAccessibilityUpdate(QObject *obj) {
 
 bool AppController::isAccessibilityActive(){
 	return QAccessible::isActive();
+}
+
+QStringList AppController::getFilesFromClipboard(){
+    const QClipboard *clipboard = QGuiApplication::clipboard();
+    QStringList filenames = clipboard->text().split(QRegExp("\n"));
+
+    return filenames;
 }
