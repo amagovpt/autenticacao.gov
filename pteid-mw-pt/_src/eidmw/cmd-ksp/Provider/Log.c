@@ -196,10 +196,10 @@ void LogTrace(int info, const char *pWhere, const char *format, ...)
 
         /* Converts date/time to string */
         _snprintf(timebuf, sizeof(timebuf)
-            , "%02d/%02d/%04d - %02d:%02d:%02d"
-            , t->tm_mday
-            , t->tm_mon + 1
+            , "%04d-%02d-%02d %02d:%02d:%02d"
             , uiYear
+            , t->tm_mon + 1
+            , t->tm_mday
             , t->tm_hour
             , t->tm_min
             , t->tm_sec);
@@ -214,7 +214,7 @@ void LogTrace(int info, const char *pWhere, const char *format, ...)
     fp = fopen(g_szLogFile, "a");
     if (fp != NULL)
     {
-        fprintf(fp, "%s %d %d %s| %s %30s|%s\n", baseName, GetCurrentProcessId(), GetCurrentThreadId(), timebuf, getLogLevelLabel(info), pWhere, buffer);
+        fprintf(fp, "%s - %s - %ld|%ld - KSP(%s) - %s: %s\n", baseName, timebuf, GetCurrentProcessId(), GetCurrentThreadId(), pWhere, getLogLevelLabel(info), buffer);
         fflush(fp);
         fclose(fp);
     }

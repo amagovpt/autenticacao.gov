@@ -46,8 +46,6 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 {
     DWORD lpdwProcessId;
     GetWindowThreadProcessId(hwnd, &lpdwProcessId);
-    LogTrace(LOGTYPE_INFO, "EnumWindowsProcPID", "GetWindowThreadProcessId=0x%x", lpdwProcessId);
-
     CHAR lpClassName[256];
     if (GetClassName(
         hwnd,
@@ -57,7 +55,6 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
         LogTrace(LOGTYPE_ERROR, "EnumWindowsProcPID", "Error getting window class name.");
         return TRUE;
     }
-    LogTrace(LOGTYPE_INFO, "EnumWindowsProcPID", "lpClassName=%s", lpClassName);
 
     if (lpdwProcessId == GetCurrentProcessId() &&
         strcmp(lpClassName, (const char*)lParam) == 0)
