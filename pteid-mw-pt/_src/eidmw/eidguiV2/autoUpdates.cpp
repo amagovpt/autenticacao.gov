@@ -689,36 +689,24 @@ void AutoUpdates::RunCertsPackage(QStringList certs){
     qDebug() << "C++ AUTO UPDATES: RunCertsPackage filename";
 
     // TODO: test with Ubunto < 17
-    QString filesToCopy;
-    for (int i = 0; i < certs.length(); i++){
-        filesToCopy.append(QDir::tempPath());
-        filesToCopy.append("/");
-        filesToCopy.append(certs.at(i));
-        filesToCopy.append(" ");
-    }
-
     eIDMW::PTEID_Config certs_dir(eIDMW::PTEID_PARAM_GENERAL_CERTS_DIR);
     QString  certs_dir_str = QString::fromStdString(certs_dir.getString());
 
 #ifdef WIN32
     certs_dir_str.append("\\");
-    QString copyTarget;
 
-    qDebug() << "C++ AUTO UPDATES: " << certs_dir_str;
-
-    for (int i = 0; i < filesToCopy.at(i); i++){
-        copyTarget.append(certs_dir_str);
-        copyTarget.append(filesToCopy.at(i));
-        qDebug() << "C++ AUTO UPDATES: " << copyTarget;
-
-        if(QFile::copy(filesToCopy.at(i), copyTarget) == false)
+    QString copySourceDir = QDir::tempPath() + "/";
+    QString copyTargetDir = certs_dir_str;
+    QString certificateFileName;
+    for (int i = 0; i < certs.length(); i++){
+        certificateFileName = certs.at(i);
+        if (QFile::copy(copySourceDir + certificateFileName, copyTargetDir + certificateFileName) == false)
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                "AutoUpdates::RunCertsPackage: Cannot copy file: %s", fileName);
+                "AutoUpdates::RunCertsPackage: Cannot copy file: %s", certificateFileName.toStdString().c_str());
             getAppController()->signalAutoUpdateFail(m_updateType, GAPI::InstallFailed);
             return;
         }
-        copyTarget.clear();
     }
     getAppController()->signalAutoUpdateSuccess(m_updateType);
 
@@ -726,6 +714,13 @@ void AutoUpdates::RunCertsPackage(QStringList certs){
 #elif __APPLE__
     #error "TODO: Install certificate"
 #else
+    QString filesToCopy;
+    for (int i = 0; i < certs.length(); i++){
+        filesToCopy.append(QDir::tempPath());
+        filesToCopy.append("/");
+        filesToCopy.append(certs.at(i));
+        filesToCopy.append(" ");
+    }
 
     QProcess *proc = new QProcess(this);
     proc->waitForFinished();
