@@ -802,7 +802,6 @@ namespace eIDMW
         PDFWriteMode pdfWriteMode =
             m_incrementalMode ? writeForceIncremental : writeForceRewrite;
 
-        std::string utf8Filename(m_outputName->getCString());
         // Create and save pdf to temp file to allow overwrite of original file
 #ifdef WIN32
         TCHAR tmpPathBuffer[MAX_PATH];
@@ -817,7 +816,7 @@ namespace eIDMW
             MWLOG(LEV_ERROR, MOD_APL, "signClose: Error occurred getting tmpPath: %d", GetLastError());
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
-        TCHAR tmpFilename[L_tmpnam];
+        TCHAR tmpFilename[MAX_PATH];
         if (!GetTempFileName(tmpPathBuffer,
             TEXT("tmp"),
             0,
@@ -832,6 +831,8 @@ namespace eIDMW
     #endif
         std::wstring utf16FilenameTmp = utilStringWiden(utf8FilenameTmp);
         int tmp_ret = m_doc->saveAs((wchar_t *)utf16FilenameTmp.c_str(), pdfWriteMode);
+        PDFDoc *tmpDoc = makePDFDoc(utf8FilenameTmp.c_str());
+        int final_ret = tmpDoc->saveAs((wchar_t *)utilStringWiden(m_outputName->getCString()).c_str());
 #else
         char tmpFilename[L_tmpnam];
         if (!tmpnam(tmpFilename)) {
@@ -841,10 +842,9 @@ namespace eIDMW
         std::string utf8FilenameTmp = tmpFilename;
         GooString tmpFilenameGoo(utf8FilenameTmp.c_str());
         int tmp_ret = m_doc->saveAs(&tmpFilenameGoo, pdfWriteMode);
-#endif
         PDFDoc *tmpDoc = makePDFDoc(utf8FilenameTmp.c_str());
-        GooString outputFilename(utf8Filename.c_str());
-        int final_ret = tmpDoc->saveAs(&outputFilename);
+        int final_ret = tmpDoc->saveAs(m_outputName);
+#endif
         delete tmpDoc;
         tmpDoc = NULL;
         remove(utf8FilenameTmp.c_str());
