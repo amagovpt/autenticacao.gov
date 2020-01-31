@@ -159,8 +159,6 @@ void AutoUpdates::VerifyCertsUpdates(std::string filedata)
 {
     qDebug() << "C++ AUTO UPDATES: VerifyCertsUpdates";
 
-    qDebug() << QString::fromUtf8(filedata.c_str());;
-
     // certs.json parsing
     cJSON *json = cJSON_Parse(filedata.c_str());
     if (!cJSON_IsObject(json))
@@ -459,7 +457,9 @@ void AutoUpdates::ChooseAppVersion(std::string distro, std::string arch, cJSON *
         return;
     }
     downloadurl.append(package_json->valuestring);
-    updateWindows(downloadurl, distro);
+    urlList.clear();
+    urlList.append(QString::fromStdString(downloadurl));
+    updateWindows(distro);
     return;
 }
 
@@ -467,13 +467,13 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
 {
     qDebug() << "C++ AUTO UPDATES: ChooseCertificates";
 
+    urlList.clear();
+    fileNames.clear();
+    fileIdx = 0;
     std::string downloadurl;
 
     eIDMW::PTEID_Config configCert(eIDMW::PTEID_PARAM_AUTOUPDATES_CERTS_URL);
     std::string configurl = configCert.getString();
-
-    int certCount = cJSON_GetArraySize(certs_json);
-    qDebug() << certCount;
 
     int certIdx;
     QString cert;
@@ -499,38 +499,42 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
         if(QFile::exists(QString::fromUtf8(file_name_temp.c_str()))){
             qDebug() << "Cert exists: " << QString::fromUtf8(file_name_temp.c_str());
         } else{
-            qDebug() << "Cert does not exists: " << QString::fromUtf8(file_name_temp.c_str());
+            qDebug() << "Cert does not exist: " << QString::fromUtf8(file_name_temp.c_str());
             QString cert = cert_json->valuestring;
-            std::string  downloadurl_temp;
+
             downloadurl.append(configurl);
             downloadurl.append(cert_json->valuestring);
-            fileName = cert_json->valuestring;
+
             qDebug() << "downloadurl : " << QString::fromUtf8(downloadurl.c_str());
-            updateWindows(downloadurl, "");
-            break; // TODO: Download more than one certificate
+            urlList.append(QString::fromStdString(downloadurl));
+            downloadurl.clear();
         }
+    }
+    if(urlList.length() > 0){
+        updateWindows();
+    } else {
+        getAppController()->signalAutoUpdateNotAvailable();
     }
 }
 
-void AutoUpdates::updateWindows(std::string uri, std::string distro)
+void AutoUpdates::updateWindows(std::string distro)
 {
-    qDebug() << "C++ AUTO UPDATES: There are updates available press Install do perform the updates.";
-    urli = uri;
+    qDebug() << "C++ AUTO UPDATES: There are updates available press Install to perform the updates.";
     getdistro = distro;
 
     if(m_updateType == GAPI::AutoUpdateApp){
-        getAppController()->signalAutoUpdateAvailable(m_updateType, release_notes, installed_version, remote_version,QString::fromUtf8(uri.c_str()));
+        getAppController()->signalAutoUpdateAvailable(m_updateType, release_notes, installed_version, remote_version, urlList.at(0));
     } else{
-        getAppController()->signalAutoUpdateAvailable(m_updateType, "", "", "",QString::fromUtf8(uri.c_str()));
+        getAppController()->signalAutoUpdateAvailable(m_updateType, "", "", "", getCertListAsString());
     }
 }
 
 void AutoUpdates::startUpdate()
 {
-    qDebug() << "C++ AUTO UPDATES: startUpdate";
-    url = urli.c_str();
+    url = urlList.at(fileIdx);
     QFileInfo fileInfo(url.path());
     fileName = fileInfo.fileName();
+    fileNames.append(fileName);
 
     if (fileName.isEmpty())
     {
@@ -681,48 +685,52 @@ void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
     qDebug() << "C++ AUTO UPDATES: RunPackage finish";
 }
 
-void AutoUpdates::RunCertsPackage(std::string pkg){
+void AutoUpdates::RunCertsPackage(QStringList certs){
     qDebug() << "C++ AUTO UPDATES: RunCertsPackage filename";
 
-    std::string pkgpath;
     // TODO: test with Ubunto < 17
+    QString filesToCopy;
+    for (int i = 0; i < certs.length(); i++){
+        filesToCopy.append(QDir::tempPath());
+        filesToCopy.append("/");
+        filesToCopy.append(certs.at(i));
+        filesToCopy.append(" ");
+    }
 
-    pkgpath.append(QDir::tempPath().toStdString());
-    pkgpath.append("/");
-    pkgpath.append(pkg);
-
-    qDebug() << QString::fromStdString("pkgpath " + pkgpath);
+    eIDMW::PTEID_Config certs_dir(eIDMW::PTEID_PARAM_GENERAL_CERTS_DIR);
+    QString  certs_dir_str = QString::fromStdString(certs_dir.getString());
 
 #ifdef WIN32
-    eIDMW::PTEID_Config certs_dir(eIDMW::PTEID_PARAM_GENERAL_CERTS_DIR);
-    std::string  certs_dir_str = certs_dir.getString();
     certs_dir_str.append("\\");
-    certs_dir_str.append(fileName.toStdString());
+    QString copyTarget;
 
-    qDebug() << "C++ AUTO UPDATES: " << QString::fromStdString(pkgpath);
-    qDebug() << "C++ AUTO UPDATES: " << QString::fromStdString(certs_dir_str);
+    qDebug() << "C++ AUTO UPDATES: " << certs_dir_str;
 
-    if(QFile::copy(QString::fromStdString(pkgpath), QString::fromStdString(certs_dir_str)) == true)
-    {
-        getAppController()->signalAutoUpdateSuccess(m_updateType);
+    for (int i = 0; i < filesToCopy.at(i); i++){
+        copyTarget.append(certs_dir_str);
+        copyTarget.append(filesToCopy.at(i));
+        qDebug() << "C++ AUTO UPDATES: " << copyTarget;
+
+        if(QFile::copy(filesToCopy.at(i), copyTarget) == false)
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "AutoUpdates::RunCertsPackage: Cannot copy file: %s", fileName);
+            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::InstallFailed);
+            return;
+        }
+        copyTarget.clear();
     }
-    else {
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-            "AutoUpdates::RunCertsPackage: Cannot copy file: %s", fileName);
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::InstallFailed);
-    }
+    getAppController()->signalAutoUpdateSuccess(m_updateType);
+
 
 #elif __APPLE__
     #error "TODO: Install certificate"
 #else
-    eIDMW::PTEID_Config certs_dir(eIDMW::PTEID_PARAM_GENERAL_CERTS_DIR);
-    std::string  certs_dir_str = certs_dir.getString();
 
     QProcess *proc = new QProcess(this);
     proc->waitForFinished();
 
-    QString cmd = "pkexec /bin/cp " + QString::fromStdString(pkgpath) + " " + QString::fromStdString(certs_dir_str);
-
+    QString cmd = "pkexec /bin/cp " + filesToCopy + certs_dir_str;
     proc->start(cmd);
 
     if(!proc->waitForStarted()) //default wait time 30 sec
@@ -959,7 +967,15 @@ void AutoUpdates::httpUpdateFinished(){
         if(m_updateType == GAPI::AutoUpdateApp){
             RunAppPackage(fileName.toStdString(), getdistro);
         } else{
-            RunCertsPackage(fileName.toStdString());
+            if(fileIdx == urlList.length() - 1){
+                qDebug() << "Downloads complete";
+                RunCertsPackage(fileNames);
+            }
+            else{
+                fileIdx++;
+                startUpdate();
+                return;
+            }
         }
     }
 
@@ -987,4 +1003,20 @@ void AutoUpdates::updateUpdateDataReadProgress(qint64 bytesRead, qint64 totalByt
 
     qint64 valueFloat = (quint64)((double) (bytesRead * 100 / totalBytes ));
     getAppController()->signalAutoUpdateProgress(m_updateType,(int)valueFloat);
+}
+
+QString AutoUpdates::getCertListAsString(){
+    // returns a string with the names of certificates to be downloaded
+    QString stringURLs;
+    QUrl url_tmp;
+    QFileInfo fileInfo_tmp;
+    QString fileName_tmp;
+    for(int i = 0; i < urlList.length(); i++){
+        url_tmp = urlList.at(i);
+        fileInfo_tmp = QFileInfo(url_tmp.path());
+        fileName_tmp = fileInfo_tmp.fileName();
+        stringURLs.append(fileName_tmp);
+        stringURLs.append(" ");
+    }
+    return stringURLs;
 }

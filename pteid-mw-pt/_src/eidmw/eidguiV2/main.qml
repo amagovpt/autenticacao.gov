@@ -100,7 +100,7 @@ Load language error. Please reinstall the application"
                     labelTextTitle.forceActiveFocus();
                 }
             } else {
-                if(autoUpdateCerts){
+                if(autoUpdateCerts && !isAutoUpdateAlreadyDetected){
 
                     autoUpdateDialog.update_certs_list = certs_list
 

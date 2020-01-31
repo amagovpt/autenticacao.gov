@@ -74,13 +74,14 @@ private:
     QNetworkAccessManager qnam;
     QNetworkReply *reply;
     QFile *file;
-
+    int fileIdx = 0;
     bool httpRequestAborted;
     bool httpUpdateRequestAborted;
     bool userCanceled;
     std::string filedata;
-    std::string urli;
+    QStringList urlList;
     std::string getdistro;
+    QStringList fileNames;
     QString fileName;
     QString release_notes;
     QString remote_version;
@@ -95,14 +96,15 @@ private:
 
     std::string VerifyOS(std::string param);
 
+    QString getCertListAsString();
 
-    void updateWindows(std::string uri, std::string distro);
+    void updateWindows(std::string distro = "");
 
     // Private methods to process the update file
     void startUpdateRequest(QUrl url);
 
     void RunAppPackage(std::string pkg, std::string distro);
-    void RunCertsPackage(std::string pkg);
+    void RunCertsPackage(QStringList certs);
 };
 
 #endif //AUTOUPDATES_H

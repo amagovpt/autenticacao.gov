@@ -157,6 +157,7 @@ signals:
     void signalAutoUpdateFail(int updateType, int error_code);
     void signalAutoUpdateAvailable(int updateType, QString release_notes,
                                    QString installed_version, QString remote_version, QString certs_list);
+    void signalAutoUpdateNotAvailable();
     void signalAutoUpdateProgress(int updateType, int value);
     void signalStartUpdate(int updateType, QString filename);
     void signalAutoUpdateSuccess(int updateType);

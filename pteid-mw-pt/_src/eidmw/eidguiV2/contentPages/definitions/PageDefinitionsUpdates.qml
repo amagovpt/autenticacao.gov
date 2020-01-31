@@ -167,6 +167,16 @@ PageDefinitionsUpdatesForm {
                 propertyTextDescriptionTextCerts.forceActiveFocus()
             }
         }
+        onSignalAutoUpdateNotAvailable: {
+            console.log("PageDefinitionsUpdates onSignalAutoUpdateNotAvailable")
+            propertyTextDescriptionCerts.text =
+                            qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_NO_UPDATES")
+            propertyButtonSearchCerts.visible = true
+            propertyProgressBarCerts.visible = false
+            propertyProgressBarCerts.value = 0
+            propertyProgressBarCerts.indeterminate = false
+            propertyTextDescriptionTextCerts.forceActiveFocus()
+        }
         onSignalStartUpdate: {
             console.log("onSignalStartUpdate updateType = " + updateType)
             if(updateType == GAPI.AutoUpdateApp){
