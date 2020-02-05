@@ -1479,7 +1479,8 @@ Load language error. Please reinstall the application"
         if (controler.getStartAutoupdateValue()) {
             controler.autoUpdateApp()
             controler.autoUpdatesCerts()
-        } else if(Qt.platform.os === "windows" && controler.getAskToRegisterCmdCertValue()){
+        }
+        if(Qt.platform.os === "windows" && controler.getAskToRegisterCmdCertValue()){
             mainFormID.propertyCmdDialog.open(GAPI.AskToRegisterCert)
         }
     }
