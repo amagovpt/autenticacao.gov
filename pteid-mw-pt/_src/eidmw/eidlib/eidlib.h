@@ -506,11 +506,6 @@ class PTEID_EIDCard;
 class PTEID_ReaderContext : public PTEID_Object
 {
 public:
-	/**
-	  * Construct using a fileType and fileName.
-	  *		No physical reader are connected (m_reader=NULL)
-	  */
-
 	PTEIDSDK_API virtual ~PTEID_ReaderContext();	/**< Destructor */
 
 	/**
@@ -615,18 +610,30 @@ public:
  	/**
 	 * Send an APDU command to the card and get the result.
 	 * @param cmd is the apdu command
-	 * @return a PTEID_ByteArray containing the result
+	 * @return A PTEID_ByteArray containing the result
 	 */
     PTEIDSDK_API virtual PTEID_ByteArray sendAPDU(const PTEID_ByteArray& cmd);
 
+ 	/**
+	 * Raw RSA signature with PCKS #1 padding. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to @b true.
+	 * @param data holds the data to be signed, at most 32 bytes.
+	 * @param signatureKey whether to use the 'Signature key'.
+	 * @return A PTEID_ByteArray containing the signed data.
+	 */
     PTEIDSDK_API virtual PTEID_ByteArray Sign(const PTEID_ByteArray& data, bool signatureKey=false);
 
+ 	/**
+	 * Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash). By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to @b true.
+	 * @param data holds the data to be signed, it should be 32 bytes.
+	 * @param signatureKey whether to use the 'Signature key'.
+	 * @return A PTEID_ByteArray containing the signed data.
+	 */
     PTEIDSDK_API virtual PTEID_ByteArray SignSHA256(const PTEID_ByteArray& data, bool signatureKey=false);
 
  	/**
 	 * Read a File from the card.
 	 * @param fileID is the path of the file
-	 * @param ulOffset is the offset to begins the reading
+	 * @param ulOffset is the offset to begin the reading
 	 * @param ulMaxLength is the maximum length of bytes to read
 	 * @return A PTEID_ByteArray with the content of the file
 	 **/
@@ -636,7 +643,7 @@ public:
 	 * Write a file to the card.
 	 * @param fileID is the path of the file
 	 * @param oData contents the bytes to write
-	 * @param ulOffset is the offset to begins the writing
+	 * @param ulOffset is the offset to begin the writing
 	 **/
 	PTEIDSDK_API virtual bool writeFile(const char *fileID, const PTEID_ByteArray& oData,unsigned long ulOffset=0);
 
@@ -841,31 +848,71 @@ public:
 
 	/**
 	Activate the Pteid card by writing the contents of the supplied PTEID_ByteArray in the card TRACE file
-	    @param IN BCDDate - content to be written in the activation flag file (limited to 8 bytes) - recommended way to use is to supply the current date in BCD format (Binary coded decimal)
-	    @param IN pinCode - Activation PIN value
-	    @param IN blockActivationPIN - Boolean flag used in test mode to avoid blocking the Activation PIN after first use
+	    @param BCDDate content to be written in the activation flag file (limited to 8 bytes) - recommended way to use is to supply the current date in BCD format (Binary coded decimal)
+	    @param pinCode Activation PIN value
+	    @param blockActivationPIN Boolean flag used in test mode to avoid blocking the Activation PIN after first use
 	*/
 	PTEIDSDK_API bool Activate(const char *pinCode, PTEID_ByteArray &BCDDate, bool blockActivationPIN);
 
+    /**
+    * Produce a XAdES-B Signature of the files indicated by the parameter @e paths and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter @e output_path.
+    *
+    * @param paths is an array of null-terminated strings representing absolute paths in
+    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
+    * @param n_paths is the number of elements in the @e paths array
+    * @param output_path points to the resulting container
+    **/
+    PTEIDSDK_API PTEID_ByteArray SignXades(const char *output_path, const char * const* paths, unsigned int n_paths); 
 
-	/** Produce XAdES Signature of Arbitrary Contents (from local files)
-	*
-	*  The following 6 methods return an UTF-8 encoded byte array containing a full XAdES-B, XAdES-T or XAdES-A
-	*  signature of the content supplied as local file paths signed by the Citizen Signature Key.
-	*  These methods perform interactive PIN authentication if needed
-	*
-	*  @param IN paths is an array of null-terminated strings representing absolute paths in
-	*  the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
-	*  @param IN n_paths is the number of elements in the paths array
-	**/
-	     PTEIDSDK_API PTEID_ByteArray SignXades(const char *output_path, const char * const* paths, unsigned int n_paths); /**< Return a XAdES-B signature as a UTF-8 string (supports multiple files)*/
+    /**
+    * Produce a XAdES-T Signature of the files indicated by the parameter @e paths and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter @e output_path.
+    *
+    * @param paths is an array of null-terminated strings representing absolute paths in
+    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
+    * @param n_paths is the number of elements in the @e paths array
+    * @param output_path points to the resulting container
+    **/
+    PTEIDSDK_API PTEID_ByteArray SignXadesT(const char *output_path, const char * const* path, unsigned int n_paths);
 
-	     PTEIDSDK_API PTEID_ByteArray SignXadesT(const char *output_path, const char * const* path, unsigned int n_paths); /**< Return a XAdES-T signature as a UTF-8 string (supports multiple files)*/
-	     PTEIDSDK_API PTEID_ByteArray SignXadesA(const char *output_path, const char * const* path, unsigned int n_paths); /**< Return a XAdES-A signature as a UTF-8 string (supports multiple files)*/
+    /**
+    * Produce a XAdES-A Signature of the files indicated by the parameter @e paths and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter @e output_path.
+    *
+    * @param paths is an array of null-terminated strings representing absolute paths in
+    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
+    * @param n_paths is the number of elements in the @e paths array
+    * @param output_path points to the resulting container
+    **/
+    PTEIDSDK_API PTEID_ByteArray SignXadesA(const char *output_path, const char * const* path, unsigned int n_paths); 
 
-	     PTEIDSDK_API void SignXadesIndividual(const char *output_path,  const char * const* paths, unsigned int n_paths); /**< Store the XAdES-B signatures in individual zip containers  */
-	     PTEIDSDK_API void SignXadesTIndividual(const char *output_path, const char * const* paths, unsigned int n_paths); /**< Store the XAdES-T signatures in individual zip containers  */
-		 PTEIDSDK_API void SignXadesAIndividual(const char *output_path, const char * const* paths, unsigned int n_paths); /**< Store the XAdES-A signatures in individual zip containers  */
+    /**
+    * Produce XAdES-B Signatures of the files indicated by the parameter @e paths and stores each of the results in an individual ASiC container in a zip format.
+    *
+    * @param paths is an array of null-terminated strings representing absolute paths in
+    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
+    * @param n_paths is the number of elements in the @e paths array
+    * @param output_path directory of the created ASiC containers
+    **/
+    PTEIDSDK_API void SignXadesIndividual(const char *output_path,  const char * const* paths, unsigned int n_paths);
+
+    /**
+    * Produce XAdES-T Signatures of the files indicated by the parameter @e paths and stores each of the results in an individual ASiC container in a zip format.
+    *
+    * @param paths is an array of null-terminated strings representing absolute paths in
+    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
+    * @param n_paths is the number of elements in the @e paths array
+    * @param output_path directory of the created ASiC containers
+    **/
+    PTEIDSDK_API void SignXadesTIndividual(const char *output_path, const char * const* paths, unsigned int n_paths);
+
+    /**
+    * Produce XAdES-A Signatures of the files indicated by the parameter @e paths and stores each of the results in an individual ASiC container in a zip format.
+    *
+    * @param paths is an array of null-terminated strings representing absolute paths in
+    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
+    * @param n_paths is the number of elements in the @e paths array
+    * @param output_path directory of the created ASiC containers
+    **/
+    PTEIDSDK_API void SignXadesAIndividual(const char *output_path, const char * const* paths, unsigned int n_paths); 
 
 			
 	/**
@@ -1386,7 +1433,7 @@ public:
 
 	PTEIDSDK_API const char *getLabel();				/**< Return the label of the certificate */
 	PTEIDSDK_API unsigned long getID();				/**< Return the id of the certificate */
-	PTEIDSDK_API PTEID_CertifStatus getStatus();			/** OCSP/CRL validation status */
+	PTEIDSDK_API PTEID_CertifStatus getStatus();			/**< OCSP/CRL validation status */
 
 	PTEIDSDK_API PTEID_CertifType getType();			/**< Return the type of the certificate */
 
