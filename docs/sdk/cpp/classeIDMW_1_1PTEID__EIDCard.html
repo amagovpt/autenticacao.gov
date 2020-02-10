@@ -193,11 +193,9 @@ PTEIDSDK_API void&#160;</td><td class="memItemRight" valign="bottom"><b>ChangeAd
 <tr class="separator:a403c4c61ca15180ccf17a22ef87ca4da inherit pub_methods_classeIDMW_1_1PTEID__Card"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc6fa19c404f4aba1ddd3cc409553132 inherit pub_methods_classeIDMW_1_1PTEID__Card"><td class="memItemLeft" align="right" valign="top">virtual PTEIDSDK_API <a class="el" href="classeIDMW_1_1PTEID__ByteArray.html">PTEID_ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeIDMW_1_1PTEID__Card.html#adc6fa19c404f4aba1ddd3cc409553132">sendAPDU</a> (const <a class="el" href="classeIDMW_1_1PTEID__ByteArray.html">PTEID_ByteArray</a> &amp;cmd)</td></tr>
 <tr class="separator:adc6fa19c404f4aba1ddd3cc409553132 inherit pub_methods_classeIDMW_1_1PTEID__Card"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adce24a549c92ae0376c95b018b565941 inherit pub_methods_classeIDMW_1_1PTEID__Card"><td class="memItemLeft" align="right" valign="top"><a id="adce24a549c92ae0376c95b018b565941"></a>
-virtual PTEIDSDK_API <a class="el" href="classeIDMW_1_1PTEID__ByteArray.html">PTEID_ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Sign</b> (const <a class="el" href="classeIDMW_1_1PTEID__ByteArray.html">PTEID_ByteArray</a> &amp;data, bool signatureKey=false)</td></tr>
+<tr class="memitem:adce24a549c92ae0376c95b018b565941 inherit pub_methods_classeIDMW_1_1PTEID__Card"><td class="memItemLeft" align="right" valign="top">virtual PTEIDSDK_API <a class="el" href="classeIDMW_1_1PTEID__ByteArray.html">PTEID_ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeIDMW_1_1PTEID__Card.html#adce24a549c92ae0376c95b018b565941">Sign</a> (const <a class="el" href="classeIDMW_1_1PTEID__ByteArray.html">PTEID_ByteArray</a> &amp;data, bool signatureKey=false)</td></tr>
 <tr class="separator:adce24a549c92ae0376c95b018b565941 inherit pub_methods_classeIDMW_1_1PTEID__Card"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1abe5c70d6af2b1d9382cd29a87cc57e inherit pub_methods_classeIDMW_1_1PTEID__Card"><td class="memItemLeft" align="right" valign="top"><a id="a1abe5c70d6af2b1d9382cd29a87cc57e"></a>
-virtual PTEIDSDK_API <a class="el" href="classeIDMW_1_1PTEID__ByteArray.html">PTEID_ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><b>SignSHA256</b> (const <a class="el" href="classeIDMW_1_1PTEID__ByteArray.html">PTEID_ByteArray</a> &amp;data, bool signatureKey=false)</td></tr>
+<tr class="memitem:a1abe5c70d6af2b1d9382cd29a87cc57e inherit pub_methods_classeIDMW_1_1PTEID__Card"><td class="memItemLeft" align="right" valign="top">virtual PTEIDSDK_API <a class="el" href="classeIDMW_1_1PTEID__ByteArray.html">PTEID_ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeIDMW_1_1PTEID__Card.html#a1abe5c70d6af2b1d9382cd29a87cc57e">SignSHA256</a> (const <a class="el" href="classeIDMW_1_1PTEID__ByteArray.html">PTEID_ByteArray</a> &amp;data, bool signatureKey=false)</td></tr>
 <tr class="separator:a1abe5c70d6af2b1d9382cd29a87cc57e inherit pub_methods_classeIDMW_1_1PTEID__Card"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2c538c31cd53c8bca9911d3fb3d1c6d inherit pub_methods_classeIDMW_1_1PTEID__Card"><td class="memItemLeft" align="right" valign="top">virtual PTEIDSDK_API <a class="el" href="classeIDMW_1_1PTEID__ByteArray.html">PTEID_ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeIDMW_1_1PTEID__Card.html#af2c538c31cd53c8bca9911d3fb3d1c6d">readFile</a> (const char *fileID, unsigned long ulOffset=0, unsigned long ulMaxLength=0)</td></tr>
 <tr class="separator:af2c538c31cd53c8bca9911d3fb3d1c6d inherit pub_methods_classeIDMW_1_1PTEID__Card"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -365,9 +363,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Activate the Pteid card by writing the contents of the supplied <a class="el" href="classeIDMW_1_1PTEID__ByteArray.html">PTEID_ByteArray</a> in the card TRACE file </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">IN</td><td>BCDDate - content to be written in the activation flag file (limited to 8 bytes) - recommended way to use is to supply the current date in BCD format (Binary coded decimal) </td></tr>
-    <tr><td class="paramname">IN</td><td>pinCode - Activation PIN value </td></tr>
-    <tr><td class="paramname">IN</td><td>blockActivationPIN - Boolean flag used in test mode to avoid blocking the Activation PIN after first use </td></tr>
+    <tr><td class="paramname">BCDDate</td><td>content to be written in the activation flag file (limited to 8 bytes) - recommended way to use is to supply the current date in BCD format (Binary coded decimal) </td></tr>
+    <tr><td class="paramname">pinCode</td><td>Activation PIN value </td></tr>
+    <tr><td class="paramname">blockActivationPIN</td><td>Boolean flag used in test mode to avoid blocking the Activation PIN after first use </td></tr>
   </table>
   </dd>
 </dl>
@@ -746,12 +744,12 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Produce XAdES Signature of Arbitrary Contents (from local files)</p>
-<p>The following 6 methods return an UTF-8 encoded byte array containing a full XAdES-B, XAdES-T or XAdES-A signature of the content supplied as local file paths signed by the Citizen Signature Key. These methods perform interactive PIN authentication if needed</p>
+<p>Produce a XAdES-B Signature of the files indicated by the parameter <em>paths</em> and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter <em>output_path</em>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">IN</td><td>paths is an array of null-terminated strings representing absolute paths in the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature </td></tr>
-    <tr><td class="paramname">IN</td><td>n_paths is the number of elements in the paths arrayReturn a XAdES-B signature as a UTF-8 string (supports multiple files) </td></tr>
+    <tr><td class="paramname">paths</td><td>is an array of null-terminated strings representing absolute paths in the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature </td></tr>
+    <tr><td class="paramname">n_paths</td><td>is the number of elements in the <em>paths</em> array </td></tr>
+    <tr><td class="paramname">output_path</td><td>points to the resulting container </td></tr>
   </table>
   </dd>
 </dl>
@@ -789,7 +787,15 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return a XAdES-A signature as a UTF-8 string (supports multiple files) </p>
+<p>Produce a XAdES-A Signature of the files indicated by the parameter <em>paths</em> and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter <em>output_path</em>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">paths</td><td>is an array of null-terminated strings representing absolute paths in the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature </td></tr>
+    <tr><td class="paramname">n_paths</td><td>is the number of elements in the <em>paths</em> array </td></tr>
+    <tr><td class="paramname">output_path</td><td>points to the resulting container </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -824,7 +830,15 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Store the XAdES-A signatures in individual zip containers </p>
+<p>Produce XAdES-A Signatures of the files indicated by the parameter <em>paths</em> and stores each of the results in an individual ASiC container in a zip format.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">paths</td><td>is an array of null-terminated strings representing absolute paths in the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature </td></tr>
+    <tr><td class="paramname">n_paths</td><td>is the number of elements in the <em>paths</em> array </td></tr>
+    <tr><td class="paramname">output_path</td><td>directory of the created ASiC containers </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -859,7 +873,15 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Store the XAdES-B signatures in individual zip containers </p>
+<p>Produce XAdES-B Signatures of the files indicated by the parameter <em>paths</em> and stores each of the results in an individual ASiC container in a zip format.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">paths</td><td>is an array of null-terminated strings representing absolute paths in the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature </td></tr>
+    <tr><td class="paramname">n_paths</td><td>is the number of elements in the <em>paths</em> array </td></tr>
+    <tr><td class="paramname">output_path</td><td>directory of the created ASiC containers </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -894,7 +916,15 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return a XAdES-T signature as a UTF-8 string (supports multiple files) </p>
+<p>Produce a XAdES-T Signature of the files indicated by the parameter <em>paths</em> and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter <em>output_path</em>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">paths</td><td>is an array of null-terminated strings representing absolute paths in the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature </td></tr>
+    <tr><td class="paramname">n_paths</td><td>is the number of elements in the <em>paths</em> array </td></tr>
+    <tr><td class="paramname">output_path</td><td>points to the resulting container </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -929,7 +959,15 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Store the XAdES-T signatures in individual zip containers </p>
+<p>Produce XAdES-T Signatures of the files indicated by the parameter <em>paths</em> and stores each of the results in an individual ASiC container in a zip format.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">paths</td><td>is an array of null-terminated strings representing absolute paths in the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature </td></tr>
+    <tr><td class="paramname">n_paths</td><td>is the number of elements in the <em>paths</em> array </td></tr>
+    <tr><td class="paramname">output_path</td><td>directory of the created ASiC containers </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

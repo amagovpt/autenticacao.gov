@@ -114,6 +114,12 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PTEID_ReaderSet</span>
 extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class in pt.gov.cartaodecidadao">PTEID_Object</a></pre>
+<div class="block">This is a singleton class that is the starting point to get all other objects.<br>
+ You get an instance from the static instance() method (or using the define ReaderSet).<br>
+ Then you get a READER                                                  (PTEID_ReaderContext)<br>
+                -&gt; from this reader, you a CARD                              (PTEID_Card or derived class)<br>
+                        -&gt; from this card, you get DOCUMENT          (PTEID_XMLDoc or derived class)<br>
+                                -&gt; ...</div>
 </li>
 </ul>
 </div>
@@ -177,7 +183,9 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#flushCache--">flushCache</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#flushCache--">flushCache</a></span>()</code>
+<div class="block">Flush the cache</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected static long</code></td>
@@ -185,67 +193,121 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html" title="class in pt.gov.cartaodecidadao">PTEID_ReaderContext</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#getReader--">getReader</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#getReader--">getReader</a></span>()</code>
+<div class="block">Return the first readercontext with a card.<br>
+                If no card is present, return the firs reader.<br>
+                If no reader exist, throw an exception PTEID_ExNoReader.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html" title="class in pt.gov.cartaodecidadao">PTEID_ReaderContext</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#getReaderByCardSerialNumber-java.lang.String-">getReaderByCardSerialNumber</a></span>(java.lang.String&nbsp;cardSerialNumber)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#getReaderByCardSerialNumber-java.lang.String-">getReaderByCardSerialNumber</a></span>(java.lang.String&nbsp;cardSerialNumber)</code>
+<div class="block">Return the reader containing the card with this SN.<br>
+                If no card with this SN is found, throw an exception PTEID_ExParamRange.</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html" title="class in pt.gov.cartaodecidadao">PTEID_ReaderContext</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#getReaderByName-java.lang.String-">getReaderByName</a></span>(java.lang.String&nbsp;readerName)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#getReaderByName-java.lang.String-">getReaderByName</a></span>(java.lang.String&nbsp;readerName)</code>
+<div class="block">Get the reader by its name.</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html" title="class in pt.gov.cartaodecidadao">PTEID_ReaderContext</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#getReaderByNum-long-">getReaderByNum</a></span>(long&nbsp;ulIndex)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#getReaderByNum-long-">getReaderByNum</a></span>(long&nbsp;ulIndex)</code>
+<div class="block">Get the reader by its Index.<br>
+ Throw PTEID_ExParamRange exception if the index is out of range.</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#getReaderName-long-">getReaderName</a></span>(long&nbsp;ulIndex)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#getReaderName-long-">getReaderName</a></span>(long&nbsp;ulIndex)</code>
+<div class="block">Get the name of the reader by its Index.<br>
+ Throw PTEID_ExParamRange exception if the index is out of range.</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#initSDK--">initSDK</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#initSDK--">initSDK</a></span>()</code>
+<div class="block">Init the SDK (Optional).<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#initSDK-boolean-">initSDK</a></span>(boolean&nbsp;bManageTestCard)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#initSDK-boolean-">initSDK</a></span>(boolean&nbsp;bManageTestCard)</code>
+<div class="block">Init the SDK (Optional).<br></div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html" title="class in pt.gov.cartaodecidadao">PTEID_ReaderSet</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#instance--">instance</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#instance--">instance</a></span>()</code>
+<div class="block">Return the singleton object (create it at first use)</div>
+</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#isReadersChanged--">isReadersChanged</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#isReadersChanged--">isReadersChanged</a></span>()</code>
+<div class="block">Return true if readers has been added or removed</div>
+</td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#readerCount--">readerCount</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#readerCount--">readerCount</a></span>()</code>
+<div class="block">Return the number of card readers connected to the computer.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#readerCount-boolean-">readerCount</a></span>(boolean&nbsp;bForceRefresh)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#readerCount-boolean-">readerCount</a></span>(boolean&nbsp;bForceRefresh)</code>
+<div class="block">Return the number of card readers connected to the computer.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>java.lang.String[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#readerList--">readerList</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#readerList--">readerList</a></span>()</code>
+<div class="block">Get the list of the reader.<br>
+ Return an array of const char *<br>
+ The last pointer is NULL<br>
+ Usage : const char * const *ppList=PTEID_ReaderSet::readerList();<br>
+         for(const char * const *ppName=ppList;*ppName!=NULL;ppName++) {...}<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>java.lang.String[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#readerList-boolean-">readerList</a></span>(boolean&nbsp;bForceRefresh)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#readerList-boolean-">readerList</a></span>(boolean&nbsp;bForceRefresh)</code>
+<div class="block">Get the list of the reader.<br>
+ Return an array of const char *<br>
+ The last pointer is NULL<br>
+ Usage : const char * const *ppList=PTEID_ReaderSet::readerList();<br>
+         for(const char * const *ppName=ppList;*ppName!=NULL;ppName++) {...}<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#releaseReaders--">releaseReaders</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#releaseReaders--">releaseReaders</a></span>()</code>
+<div class="block">Release the readers (Useful if readers had changed).<br>
+ <br>
+ <br>
+ <br></div>
+</td>
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#releaseReaders-boolean-">releaseReaders</a></span>(boolean&nbsp;bAllReference)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#releaseReaders-boolean-">releaseReaders</a></span>(boolean&nbsp;bAllReference)</code>
+<div class="block">Release the readers (Useful if readers had changed).<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#releaseSDK--">releaseSDK</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html#releaseSDK--">releaseSDK</a></span>()</code>
+<div class="block">Release the SDK</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -337,6 +399,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>instance</h4>
 <pre>public static&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html" title="class in pt.gov.cartaodecidadao">PTEID_ReaderSet</a>&nbsp;instance()
                                 throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the singleton object (create it at first use)</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -351,7 +414,11 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>initSDK</h4>
 <pre>public static&nbsp;void&nbsp;initSDK(boolean&nbsp;bManageTestCard)
                     throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Init the SDK (Optional).<br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>bManageTestCard</code> - If true the applayer must ask if test cards are allowed (used for compatibility with old C API).<br></dd>
+<dd><code>bManageTestCard</code> - If false other applications (ex. gui) take that into their scope</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -365,6 +432,8 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>initSDK</h4>
 <pre>public static&nbsp;void&nbsp;initSDK()
                     throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Init the SDK (Optional).<br>
+ <br></div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -379,6 +448,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>releaseSDK</h4>
 <pre>public static&nbsp;void&nbsp;releaseSDK()
                        throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Release the SDK</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -393,7 +463,13 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>releaseReaders</h4>
 <pre>public&nbsp;void&nbsp;releaseReaders(boolean&nbsp;bAllReference)
                     throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Release the readers (Useful if readers had changed).<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>bAllReference</code> - If true all the invalid reference/pointer are destroyed.<br></dd>
+<dd><code>bAllReference</code> - PUT THIS PARAMETER TO TRUE IS THREAD UNSAFE.<br></dd>
+<dd><code>bAllReference</code> - You have to be sure that you will not use any old reference/pointer after this release</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -407,6 +483,10 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>releaseReaders</h4>
 <pre>public&nbsp;void&nbsp;releaseReaders()
                     throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Release the readers (Useful if readers had changed).<br>
+ <br>
+ <br>
+ <br></div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -421,6 +501,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>isReadersChanged</h4>
 <pre>public&nbsp;boolean&nbsp;isReadersChanged()
                          throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return true if readers has been added or removed</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -435,7 +516,15 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>readerList</h4>
 <pre>public&nbsp;java.lang.String[]&nbsp;readerList(boolean&nbsp;bForceRefresh)
                               throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the list of the reader.<br>
+ Return an array of const char *<br>
+ The last pointer is NULL<br>
+ Usage : const char * const *ppList=PTEID_ReaderSet::readerList();<br>
+         for(const char * const *ppName=ppList;*ppName!=NULL;ppName++) {...}<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>bForceRefresh</code> - force the reconnection to the lower layer to see if reader list have changed</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -449,6 +538,12 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>readerList</h4>
 <pre>public&nbsp;java.lang.String[]&nbsp;readerList()
                               throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the list of the reader.<br>
+ Return an array of const char *<br>
+ The last pointer is NULL<br>
+ Usage : const char * const *ppList=PTEID_ReaderSet::readerList();<br>
+         for(const char * const *ppName=ppList;*ppName!=NULL;ppName++) {...}<br>
+ <br></div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -463,6 +558,9 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>getReader</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html" title="class in pt.gov.cartaodecidadao">PTEID_ReaderContext</a>&nbsp;getReader()
                               throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the first readercontext with a card.<br>
+                If no card is present, return the firs reader.<br>
+                If no reader exist, throw an exception PTEID_ExNoReader.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -477,6 +575,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>getReaderByName</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html" title="class in pt.gov.cartaodecidadao">PTEID_ReaderContext</a>&nbsp;getReaderByName(java.lang.String&nbsp;readerName)
                                     throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the reader by its name.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -491,7 +590,11 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>readerCount</h4>
 <pre>public&nbsp;long&nbsp;readerCount(boolean&nbsp;bForceRefresh)
                  throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the number of card readers connected to the computer.<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>bForceRefresh</code> - force the reconnection to the lower layer to see if reader list have changed</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -505,6 +608,8 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>readerCount</h4>
 <pre>public&nbsp;long&nbsp;readerCount()
                  throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the number of card readers connected to the computer.<br>
+ <br></div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -519,6 +624,8 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>getReaderName</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getReaderName(long&nbsp;ulIndex)
                                throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the name of the reader by its Index.<br>
+ Throw PTEID_ExParamRange exception if the index is out of range.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -533,6 +640,8 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>getReaderByNum</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html" title="class in pt.gov.cartaodecidadao">PTEID_ReaderContext</a>&nbsp;getReaderByNum(long&nbsp;ulIndex)
                                    throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the reader by its Index.<br>
+ Throw PTEID_ExParamRange exception if the index is out of range.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -547,6 +656,8 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>getReaderByCardSerialNumber</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html" title="class in pt.gov.cartaodecidadao">PTEID_ReaderContext</a>&nbsp;getReaderByCardSerialNumber(java.lang.String&nbsp;cardSerialNumber)
                                                 throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the reader containing the card with this SN.<br>
+                If no card with this SN is found, throw an exception PTEID_ExParamRange.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -561,6 +672,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>flushCache</h4>
 <pre>public&nbsp;boolean&nbsp;flushCache()
                    throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Flush the cache</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>

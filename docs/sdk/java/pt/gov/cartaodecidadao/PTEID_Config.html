@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -114,6 +114,9 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PTEID_Config</span>
 extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class in pt.gov.cartaodecidadao">PTEID_Object</a></pre>
+<div class="block">Class to access and modify the config parameters of pteid-mw. <br>
+     These parameters are persisted in the Windows Registry under the HKEY_CURRENT_USERkey<br>
+     or in the pteid.conf file of the current user (on Linux and MacOS systems)</div>
 </li>
 </ul>
 </div>
@@ -154,19 +157,25 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#PTEID_Config-pt.gov.cartaodecidadao.PTEID_Param-">PTEID_Config</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_Param.html" title="class in pt.gov.cartaodecidadao">PTEID_Param</a>&nbsp;Param)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#PTEID_Config-pt.gov.cartaodecidadao.PTEID_Param-">PTEID_Config</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_Param.html" title="class in pt.gov.cartaodecidadao">PTEID_Param</a>&nbsp;Param)</code>
+<div class="block">Create object to access parameter Param.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#PTEID_Config-java.lang.String-java.lang.String-java.lang.String-">PTEID_Config</a></span>(java.lang.String&nbsp;csName,
             java.lang.String&nbsp;czSection,
-            java.lang.String&nbsp;csDefaultValue)</code>&nbsp;</td>
+            java.lang.String&nbsp;csDefaultValue)</code>
+<div class="block">Create object to access a string parameter.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#PTEID_Config-java.lang.String-SWIGTYPE_p_wchar_t-SWIGTYPE_p_wchar_t-">PTEID_Config</a></span>(java.lang.String&nbsp;csName,
             SWIGTYPE_p_wchar_t&nbsp;czSection,
-            SWIGTYPE_p_wchar_t&nbsp;csDefaultValue)</code>&nbsp;</td>
+            SWIGTYPE_p_wchar_t&nbsp;csDefaultValue)</code>
+<div class="block">Create object to access a string parameter.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -189,7 +198,9 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#DeleteKeysByPrefix--">DeleteKeysByPrefix</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#DeleteKeysByPrefix--">DeleteKeysByPrefix</a></span>()</code>
+<div class="block">Reset the strings with some prefix (Throw exception for numerical parameter)</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
@@ -201,19 +212,33 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#getLong--">getLong</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#getLong--">getLong</a></span>()</code>
+<div class="block">Return the numerical value (Throw exception for string parameter)</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#getString--">getString</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#getString--">getString</a></span>()</code>
+<div class="block">Return the string value (Throw exception for numerical parameter)</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#setLong-int-">setLong</a></span>(int&nbsp;lValue)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#setLong-int-">setLong</a></span>(int&nbsp;lValue)</code>
+<div class="block">Set the numerical value (Throw exception for string parameter)</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#setString-java.lang.String-">setString</a></span>(java.lang.String&nbsp;csValue)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#setString-java.lang.String-">setString</a></span>(java.lang.String&nbsp;csValue)</code>
+<div class="block">Set the string value (Throw exception for numerical parameter)</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html#SetTestMode-boolean-">SetTestMode</a></span>(boolean&nbsp;bTestMode)</code>
+<div class="block">Set the test mode</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -261,6 +286,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <li class="blockList">
 <h4>PTEID_Config</h4>
 <pre>public&nbsp;PTEID_Config(<a href="../../../pt/gov/cartaodecidadao/PTEID_Param.html" title="class in pt.gov.cartaodecidadao">PTEID_Param</a>&nbsp;Param)</pre>
+<div class="block">Create object to access parameter Param.</div>
 </li>
 </ul>
 <a name="PTEID_Config-java.lang.String-java.lang.String-java.lang.String-">
@@ -272,6 +298,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <pre>public&nbsp;PTEID_Config(java.lang.String&nbsp;csName,
                     java.lang.String&nbsp;czSection,
                     java.lang.String&nbsp;csDefaultValue)</pre>
+<div class="block">Create object to access a string parameter.</div>
 </li>
 </ul>
 <a name="PTEID_Config-java.lang.String-SWIGTYPE_p_wchar_t-SWIGTYPE_p_wchar_t-">
@@ -283,6 +310,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <pre>public&nbsp;PTEID_Config(java.lang.String&nbsp;csName,
                     SWIGTYPE_p_wchar_t&nbsp;czSection,
                     SWIGTYPE_p_wchar_t&nbsp;csDefaultValue)</pre>
+<div class="block">Create object to access a string parameter.</div>
 </li>
 </ul>
 </li>
@@ -336,6 +364,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>getString</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getString()
                            throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the string value (Throw exception for numerical parameter)</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -350,6 +379,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>getLong</h4>
 <pre>public&nbsp;int&nbsp;getLong()
             throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the numerical value (Throw exception for string parameter)</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -364,6 +394,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>setString</h4>
 <pre>public&nbsp;void&nbsp;setString(java.lang.String&nbsp;csValue)
                throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Set the string value (Throw exception for numerical parameter)</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -377,20 +408,32 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <li class="blockList">
 <h4>DeleteKeysByPrefix</h4>
 <pre>public&nbsp;void&nbsp;DeleteKeysByPrefix()</pre>
+<div class="block">Reset the strings with some prefix (Throw exception for numerical parameter)</div>
 </li>
 </ul>
 <a name="setLong-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setLong</h4>
 <pre>public&nbsp;void&nbsp;setLong(int&nbsp;lValue)
              throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Set the numerical value (Throw exception for string parameter)</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
+</li>
+</ul>
+<a name="SetTestMode-boolean-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SetTestMode</h4>
+<pre>public static&nbsp;void&nbsp;SetTestMode(boolean&nbsp;bTestMode)</pre>
+<div class="block">Set the test mode</div>
 </li>
 </ul>
 </li>

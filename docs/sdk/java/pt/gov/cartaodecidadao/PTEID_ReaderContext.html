@@ -114,6 +114,13 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PTEID_ReaderContext</span>
 extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class in pt.gov.cartaodecidadao">PTEID_Object</a></pre>
+<div class="block">This class represent a reader.<br>
+ You get reader object from the ReaderSet<br>
+                either by its index (getReaderByNum) or by its name (getReaderByName).<br>
+ Once you have a reader object, you can check if a card is present (isCardPresent).<br>
+ Then you can ask which type of card is in the reader with getCardType()<br>
+                and then get a card object using one of this method :<br>
+                        getCard or getEIDCard.</div>
 </li>
 </ul>
 </div>
@@ -169,7 +176,9 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#BeginTransaction--">BeginTransaction</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#BeginTransaction--">BeginTransaction</a></span>()</code>
+<div class="block">Begin a transaction with the reader</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -183,7 +192,9 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#EndTransaction--">EndTransaction</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#EndTransaction--">EndTransaction</a></span>()</code>
+<div class="block">End the transaction</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
@@ -191,11 +202,22 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class in pt.gov.cartaodecidadao">PTEID_Card</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#getCard--">getCard</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#getCard--">getCard</a></span>()</code>
+<div class="block">Get the card in the reader.<br>
+                Instantiation is made regarding the type of the card<br>
+                        (PTEID_EIDCard).<br>
+ <br>
+ If no card is present in the reader, exception PTEID_ExNoCardPresent is thrown.<br>
+ If the card type is not supported, exception PTEID_ExCardTypeUnknown is thrown.</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_CardType.html" title="class in pt.gov.cartaodecidadao">PTEID_CardType</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#getCardType--">getCardType</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#getCardType--">getCardType</a></span>()</code>
+<div class="block">Return the type of the card in the reader.<br>
+ <br>
+ Throw PTEID_ExNoCardPresent exception if no card is present.</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected static long</code></td>
@@ -203,19 +225,32 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html" title="class in pt.gov.cartaodecidadao">PTEID_EIDCard</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#getEIDCard--">getEIDCard</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#getEIDCard--">getEIDCard</a></span>()</code>
+<div class="block">Get the EIDcard in the reader.<br>
+                Instantiation is made regarding the type of the card<br>
+                        (PTEID_EIDCard).<br>
+ <br>
+ If no card is present in the reader, exception PTEID_ExNoCardPresent is thrown.<br>
+ If the card is not an EIDcard, exception PTEID_ExCardBadType is thrown.</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#getName--">getName</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#getName--">getName</a></span>()</code>
+<div class="block">Return the name of the reader.</div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#isCardChanged-pt.gov.cartaodecidadao.PTEID_ulwrapper-">isCardChanged</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ulwrapper.html" title="class in pt.gov.cartaodecidadao">PTEID_ulwrapper</a>&nbsp;ulOldId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#isCardChanged-pt.gov.cartaodecidadao.PTEID_ulwrapper-">isCardChanged</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ulwrapper.html" title="class in pt.gov.cartaodecidadao">PTEID_ulwrapper</a>&nbsp;ulOldId)</code>
+<div class="block">Return true if a card has changed since the last called (with the same ulOldId parameter).</div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#isCardPresent--">isCardPresent</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#isCardPresent--">isCardPresent</a></span>()</code>
+<div class="block">Return true if a card is present and false otherwise.</div>
+</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -223,20 +258,34 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#releaseCard--">releaseCard</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#releaseCard--">releaseCard</a></span>()</code>
+<div class="block">Release the card.<br>
+ <br>
+ <br>
+ <br></div>
+</td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#releaseCard-boolean-">releaseCard</a></span>(boolean&nbsp;bAllReference)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#releaseCard-boolean-">releaseCard</a></span>(boolean&nbsp;bAllReference)</code>
+<div class="block">Release the card.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#SetEventCallback-pt.gov.cartaodecidadao.Callback-java.lang.Object-">SetEventCallback</a></span>(<a href="../../../pt/gov/cartaodecidadao/Callback.html" title="interface in pt.gov.cartaodecidadao">Callback</a>&nbsp;callback,
-                java.lang.Object&nbsp;pvRef)</code>&nbsp;</td>
+                java.lang.Object&nbsp;pvRef)</code>
+<div class="block">Specify a callback function to be called each time a<br>
+ card is inserted/remove in/from this reader.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#StopEventCallback-long-">StopEventCallback</a></span>(long&nbsp;ulHandle)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html#StopEventCallback-long-">StopEventCallback</a></span>(long&nbsp;ulHandle)</code>
+<div class="block">To tell that the callbacks are not longer needed.<br></div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -339,6 +388,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>getName</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getName()
                          throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the name of the reader.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -353,6 +403,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>isCardPresent</h4>
 <pre>public&nbsp;boolean&nbsp;isCardPresent()
                       throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return true if a card is present and false otherwise.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -376,7 +427,13 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>releaseCard</h4>
 <pre>public&nbsp;void&nbsp;releaseCard(boolean&nbsp;bAllReference)
                  throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Release the card.<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>bAllReference</code> - If true all the invalid reference/pointer are destroyed.<br></dd>
+<dd><code>bAllReference</code> - PUT THIS PARAMETER TO TRUE IS THREAD UNSAFE.<br></dd>
+<dd><code>bAllReference</code> - You have to be sure that you will not use any old reference/pointer after this release</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -390,6 +447,10 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>releaseCard</h4>
 <pre>public&nbsp;void&nbsp;releaseCard()
                  throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Release the card.<br>
+ <br>
+ <br>
+ <br></div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -404,6 +465,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>isCardChanged</h4>
 <pre>public&nbsp;boolean&nbsp;isCardChanged(<a href="../../../pt/gov/cartaodecidadao/PTEID_ulwrapper.html" title="class in pt.gov.cartaodecidadao">PTEID_ulwrapper</a>&nbsp;ulOldId)
                       throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return true if a card has changed since the last called (with the same ulOldId parameter).</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -418,6 +480,9 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>getCardType</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_CardType.html" title="class in pt.gov.cartaodecidadao">PTEID_CardType</a>&nbsp;getCardType()
                            throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the type of the card in the reader.<br>
+ <br>
+ Throw PTEID_ExNoCardPresent exception if no card is present.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -432,6 +497,12 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>getCard</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class in pt.gov.cartaodecidadao">PTEID_Card</a>&nbsp;getCard()
                    throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the card in the reader.<br>
+                Instantiation is made regarding the type of the card<br>
+                        (PTEID_EIDCard).<br>
+ <br>
+ If no card is present in the reader, exception PTEID_ExNoCardPresent is thrown.<br>
+ If the card type is not supported, exception PTEID_ExCardTypeUnknown is thrown.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -446,6 +517,12 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>getEIDCard</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html" title="class in pt.gov.cartaodecidadao">PTEID_EIDCard</a>&nbsp;getEIDCard()
                          throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the EIDcard in the reader.<br>
+                Instantiation is made regarding the type of the card<br>
+                        (PTEID_EIDCard).<br>
+ <br>
+ If no card is present in the reader, exception PTEID_ExNoCardPresent is thrown.<br>
+ If the card is not an EIDcard, exception PTEID_ExCardBadType is thrown.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -461,7 +538,12 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <pre>public&nbsp;long&nbsp;SetEventCallback(<a href="../../../pt/gov/cartaodecidadao/Callback.html" title="interface in pt.gov.cartaodecidadao">Callback</a>&nbsp;callback,
                              java.lang.Object&nbsp;pvRef)
                       throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Specify a callback function to be called each time a<br>
+ card is inserted/remove in/from this reader.<br>
+ <br></div>
 <dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A handle can be used to stop the callbacks when they are no longer needed.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -475,7 +557,10 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>StopEventCallback</h4>
 <pre>public&nbsp;void&nbsp;StopEventCallback(long&nbsp;ulHandle)
                        throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">To tell that the callbacks are not longer needed.<br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>ulHandle</code> - is the handle return by SetEventCallback</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -489,6 +574,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>BeginTransaction</h4>
 <pre>public&nbsp;void&nbsp;BeginTransaction()
                       throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Begin a transaction with the reader</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -503,6 +589,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>EndTransaction</h4>
 <pre>public&nbsp;void&nbsp;EndTransaction()
                     throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">End the transaction</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>

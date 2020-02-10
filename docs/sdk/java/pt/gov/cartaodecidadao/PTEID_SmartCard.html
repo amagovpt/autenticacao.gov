@@ -123,6 +123,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PTEID_SmartCard</span>
 extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class in pt.gov.cartaodecidadao">PTEID_Card</a></pre>
+<div class="block">Abstract base class for Smart card.</div>
 </li>
 </ul>
 </div>
@@ -207,57 +208,98 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html#readFile-java.lang.String-pt.gov.cartaodecidadao.PTEID_ByteArray-">readFile</a></span>(java.lang.String&nbsp;fileID,
-        <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;in)</code>&nbsp;</td>
+        <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;in)</code>
+<div class="block">Read a File from the card.<br>
+ <br>
+ If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html#readFile-java.lang.String-pt.gov.cartaodecidadao.PTEID_ByteArray-pt.gov.cartaodecidadao.PTEID_Pin-">readFile</a></span>(java.lang.String&nbsp;fileID,
         <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;in,
-        <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin)</code>&nbsp;</td>
+        <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin)</code>
+<div class="block">Read a File from the card.<br>
+ <br>
+ If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html#readFile-java.lang.String-pt.gov.cartaodecidadao.PTEID_ByteArray-pt.gov.cartaodecidadao.PTEID_Pin-java.lang.String-">readFile</a></span>(java.lang.String&nbsp;fileID,
         <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;in,
         <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin,
-        java.lang.String&nbsp;csPinCode)</code>&nbsp;</td>
+        java.lang.String&nbsp;csPinCode)</code>
+<div class="block">Read a File from the card.<br>
+ <br>
+ If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html#selectApplication-pt.gov.cartaodecidadao.PTEID_ByteArray-">selectApplication</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;applicationId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html#selectApplication-pt.gov.cartaodecidadao.PTEID_ByteArray-">selectApplication</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;applicationId)</code>
+<div class="block">Select an application from the card</div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html#sendAPDU-pt.gov.cartaodecidadao.PTEID_ByteArray-">sendAPDU</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;cmd)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html#sendAPDU-pt.gov.cartaodecidadao.PTEID_ByteArray-">sendAPDU</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;cmd)</code>
+<div class="block">Send an APDU command to the card and get the result.<br></div>
+</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html#sendAPDU-pt.gov.cartaodecidadao.PTEID_ByteArray-pt.gov.cartaodecidadao.PTEID_Pin-">sendAPDU</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;cmd,
-        <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin)</code>&nbsp;</td>
+        <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin)</code>
+<div class="block">Send an APDU command to the card and get the result.<br></div>
+</td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html#sendAPDU-pt.gov.cartaodecidadao.PTEID_ByteArray-pt.gov.cartaodecidadao.PTEID_Pin-java.lang.String-">sendAPDU</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;cmd,
         <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin,
-        java.lang.String&nbsp;csPinCode)</code>&nbsp;</td>
+        java.lang.String&nbsp;csPinCode)</code>
+<div class="block">Send an APDU command to the card and get the result.<br></div>
+</td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html#writeFile-java.lang.String-pt.gov.cartaodecidadao.PTEID_ByteArray-">writeFile</a></span>(java.lang.String&nbsp;fileID,
-         <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;out)</code>&nbsp;</td>
+         <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;out)</code>
+<div class="block">Write a file to the card.<br>
+ Throw PTEID_ExCmdNotAllowed exception you're not allowed to write the file.<br>
+ <br>
+ If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html#writeFile-java.lang.String-pt.gov.cartaodecidadao.PTEID_ByteArray-pt.gov.cartaodecidadao.PTEID_Pin-">writeFile</a></span>(java.lang.String&nbsp;fileID,
          <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;out,
-         <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin)</code>&nbsp;</td>
+         <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin)</code>
+<div class="block">Write a file to the card.<br>
+ Throw PTEID_ExCmdNotAllowed exception you're not allowed to write the file.<br>
+ <br>
+ If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html#writeFile-java.lang.String-pt.gov.cartaodecidadao.PTEID_ByteArray-pt.gov.cartaodecidadao.PTEID_Pin-java.lang.String-">writeFile</a></span>(java.lang.String&nbsp;fileID,
          <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;out,
          <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin,
-         java.lang.String&nbsp;csPinCode)</code>&nbsp;</td>
+         java.lang.String&nbsp;csPinCode)</code>
+<div class="block">Write a file to the card.<br>
+ Throw PTEID_ExCmdNotAllowed exception you're not allowed to write the file.<br>
+ <br>
+ If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -265,7 +307,13 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
          <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;out,
          <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin,
          java.lang.String&nbsp;csPinCode,
-         long&nbsp;inOffset)</code>&nbsp;</td>
+         long&nbsp;inOffset)</code>
+<div class="block">Write a file to the card.<br>
+ Throw PTEID_ExCmdNotAllowed exception you're not allowed to write the file.<br>
+ <br>
+ If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.<br>
+ <br></div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -364,6 +412,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
 <h4>selectApplication</h4>
 <pre>public&nbsp;void&nbsp;selectApplication(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;applicationId)
                        throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Select an application from the card</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -380,7 +429,14 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
                                 <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin,
                                 java.lang.String&nbsp;csPinCode)
                          throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Send an APDU command to the card and get the result.<br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>cmd</code> - is the apdu command<br></dd>
+<dd><code>pin</code> - is the pin to ask for writing<br></dd>
+<dd><code>csPinCode</code> - is the code of the pin (it will be asked if needed and not set)<br></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a PTEID_ByteArray containing the result</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -395,7 +451,14 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;sendAPDU(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;cmd,
                                 <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin)
                          throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Send an APDU command to the card and get the result.<br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>cmd</code> - is the apdu command<br></dd>
+<dd><code>pin</code> - is the pin to ask for writing<br>
+ <br></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a PTEID_ByteArray containing the result</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -409,9 +472,16 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
 <h4>sendAPDU</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;sendAPDU(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;cmd)
                          throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Send an APDU command to the card and get the result.<br></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#sendAPDU-pt.gov.cartaodecidadao.PTEID_ByteArray-">sendAPDU</a></code>&nbsp;in class&nbsp;<code><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class in pt.gov.cartaodecidadao">PTEID_Card</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>cmd</code> - is the apdu command<br>
+ <br>
+ <br></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a PTEID_ByteArray containing the result</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -428,7 +498,16 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
                     <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin,
                     java.lang.String&nbsp;csPinCode)
              throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Read a File from the card.<br>
+ <br>
+ If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileID</code> - is the path of the file<br></dd>
+<dd><code>in</code> - return the file<br></dd>
+<dd><code>pin</code> - is the pin to ask for reading<br></dd>
+<dd><code>csPinCode</code> - is the code of the pin (it will be asked if needed and not set)</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -444,7 +523,15 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
                     <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;in,
                     <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin)
              throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Read a File from the card.<br>
+ <br>
+ If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileID</code> - is the path of the file<br></dd>
+<dd><code>in</code> - return the file<br></dd>
+<dd><code>pin</code> - is the pin to ask for reading<br></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -459,7 +546,15 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
 <pre>public&nbsp;int&nbsp;readFile(java.lang.String&nbsp;fileID,
                     <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;in)
              throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Read a File from the card.<br>
+ <br>
+ If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileID</code> - is the path of the file<br></dd>
+<dd><code>in</code> - return the file<br>
+ <br></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -477,7 +572,18 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
                          java.lang.String&nbsp;csPinCode,
                          long&nbsp;inOffset)
                   throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Write a file to the card.<br>
+ Throw PTEID_ExCmdNotAllowed exception you're not allowed to write the file.<br>
+ <br>
+ If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileID</code> - is the path of the file<br></dd>
+<dd><code>out</code> - contents the bytes to write<br></dd>
+<dd><code>pin</code> - is the pin to ask for writing<br></dd>
+<dd><code>csPinCode</code> - is the code of the pin (it will be asked if needed and not set)<br></dd>
+<dd><code>inOffset</code> - is the offset of the data to be written to the file</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -494,7 +600,17 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
                          <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin,
                          java.lang.String&nbsp;csPinCode)
                   throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Write a file to the card.<br>
+ Throw PTEID_ExCmdNotAllowed exception you're not allowed to write the file.<br>
+ <br>
+ If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileID</code> - is the path of the file<br></dd>
+<dd><code>out</code> - contents the bytes to write<br></dd>
+<dd><code>pin</code> - is the pin to ask for writing<br></dd>
+<dd><code>csPinCode</code> - is the code of the pin (it will be asked if needed and not set)<br></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -510,7 +626,17 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
                          <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;out,
                          <a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;pin)
                   throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Write a file to the card.<br>
+ Throw PTEID_ExCmdNotAllowed exception you're not allowed to write the file.<br>
+ <br>
+ If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileID</code> - is the path of the file<br></dd>
+<dd><code>out</code> - contents the bytes to write<br></dd>
+<dd><code>pin</code> - is the pin to ask for writing<br>
+ <br></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -525,9 +651,19 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
 <pre>public&nbsp;boolean&nbsp;writeFile(java.lang.String&nbsp;fileID,
                          <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;out)
                   throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Write a file to the card.<br>
+ Throw PTEID_ExCmdNotAllowed exception you're not allowed to write the file.<br>
+ <br>
+ If no pin is passed and a pin is needed by the card, the pin code will be asked anyway.<br>
+ <br></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#writeFile-java.lang.String-pt.gov.cartaodecidadao.PTEID_ByteArray-">writeFile</a></code>&nbsp;in class&nbsp;<code><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class in pt.gov.cartaodecidadao">PTEID_Card</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileID</code> - is the path of the file<br></dd>
+<dd><code>out</code> - contents the bytes to write<br>
+ <br>
+ <br></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -542,6 +678,8 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
 <pre>public&nbsp;long&nbsp;pinCount()
               throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
 <dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the number of pins on the card.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -556,6 +694,8 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Pins.html" title="class in pt.gov.cartaodecidadao">PTEID_Pins</a>&nbsp;getPins()
                    throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
 <dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an object to access all the pins on the card.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -570,6 +710,8 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
 <pre>public&nbsp;long&nbsp;certificateCount()
                       throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
 <dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the number of certificate on the card.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -584,6 +726,8 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class i
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificates</a>&nbsp;getCertificates()
                                    throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
 <dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an object to access all the certificates on the card.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>

@@ -1,4 +1,4 @@
-### Java SDK Examples
+### Java SDK Examples.
 Make sure that the JNI library is explicitly loaded using the following code (this implements the wrapper functions for Java)
 ```java
 package pteidsample;

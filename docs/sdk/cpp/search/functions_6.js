@@ -100,6 +100,7 @@ var searchData=
   ['getsod',['getSod',['../classeIDMW_1_1PTEID__EIDCard.html#abba277c5ef18ce080aa6f8495cdd3795',1,'eIDMW::PTEID_EIDCard']]],
   ['getsoftmasknumber',['getSoftmaskNumber',['../classeIDMW_1_1PTEID__CardVersionInfo.html#ae271f3cc0ea0d00efe5743591f848606',1,'eIDMW::PTEID_CardVersionInfo']]],
   ['getsoftmaskversion',['getSoftmaskVersion',['../classeIDMW_1_1PTEID__CardVersionInfo.html#a95ebbb7319270795e1a6aa8002a84a60',1,'eIDMW::PTEID_CardVersionInfo']]],
+  ['getstatus',['getStatus',['../classeIDMW_1_1PTEID__Certificate.html#acc3b7d7c7095844fda0e6a0ccf27cedf',1,'eIDMW::PTEID_Certificate']]],
   ['getstreetname',['getStreetName',['../classeIDMW_1_1PTEID__Address.html#af865ed47143d397452bc1267dfd732e1',1,'eIDMW::PTEID_Address']]],
   ['getstreettype',['getStreetType',['../classeIDMW_1_1PTEID__Address.html#abe94863da01435e9d98a50f66e5a69ae',1,'eIDMW::PTEID_Address']]],
   ['getstring',['getString',['../classeIDMW_1_1PTEID__Config.html#ae3c09d588fede39f66f1433a3b946e33',1,'eIDMW::PTEID_Config']]],

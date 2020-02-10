@@ -127,6 +127,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PTEID_Exception</span>
 extends java.lang.Exception</pre>
+<div class="block">Base class for the PTEID SDK Exceptions</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#pt.gov.cartaodecidadao.PTEID_Exception">Serialized Form</a></dd>
@@ -170,7 +171,9 @@ extends java.lang.Exception</pre>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html#PTEID_Exception-int-">PTEID_Exception</a></span>(int&nbsp;lError)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html#PTEID_Exception-int-">PTEID_Exception</a></span>(int&nbsp;lError)</code>
+<div class="block">Constructor - Need error code that comes from eidErrors.h</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected </code></td>
@@ -206,11 +209,15 @@ extends java.lang.Exception</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html#GetError--">GetError</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html#GetError--">GetError</a></span>()</code>
+<div class="block">Return the error code</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html#GetMessage--">GetMessage</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html#GetMessage--">GetMessage</a></span>()</code>
+<div class="block">Returns the error message based on the error code</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -247,7 +254,7 @@ extends java.lang.Exception</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>swigCMemOwn</h4>
-<pre>protected&nbsp;boolean swigCMemOwn</pre>
+<pre>protected transient&nbsp;boolean swigCMemOwn</pre>
 </li>
 </ul>
 </li>
@@ -275,6 +282,7 @@ extends java.lang.Exception</pre>
 <li class="blockList">
 <h4>PTEID_Exception</h4>
 <pre>public&nbsp;PTEID_Exception(int&nbsp;lError)</pre>
+<div class="block">Constructor - Need error code that comes from eidErrors.h</div>
 </li>
 </ul>
 </li>
@@ -323,6 +331,7 @@ extends java.lang.Exception</pre>
 <li class="blockList">
 <h4>GetError</h4>
 <pre>public&nbsp;int&nbsp;GetError()</pre>
+<div class="block">Return the error code</div>
 </li>
 </ul>
 <a name="GetMessage--">
@@ -332,6 +341,7 @@ extends java.lang.Exception</pre>
 <li class="blockList">
 <h4>GetMessage</h4>
 <pre>public&nbsp;java.lang.String&nbsp;GetMessage()</pre>
+<div class="block">Returns the error message based on the error code</div>
 </li>
 </ul>
 </li>

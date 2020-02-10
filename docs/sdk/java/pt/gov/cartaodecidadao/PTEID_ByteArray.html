@@ -114,6 +114,10 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PTEID_ByteArray</span>
 extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class in pt.gov.cartaodecidadao">PTEID_Object</a></pre>
+<div class="block">Class used to receive and supply an array of bytes from/to different methods in the SDK.<br>
+ <br>
+  Memory management note - instances of this class will not own the char arrays that are supplied to <br>
+  it in the constructor or Append() methods as this class will perform copies of the input arrays</div>
 </li>
 </ul>
 </div>
@@ -149,12 +153,17 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#PTEID_ByteArray--">PTEID_ByteArray</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#PTEID_ByteArray--">PTEID_ByteArray</a></span>()</code>
+<div class="block">Default constructor</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#PTEID_ByteArray-byte:A-long-">PTEID_ByteArray</a></span>(byte[]&nbsp;pucData,
-               long&nbsp;ulSize)</code>&nbsp;</td>
+               long&nbsp;ulSize)</code>
+<div class="block">Constructor - initialize a byte array with an array of unsigned char.<br>
+ <br></div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected </code></td>
@@ -163,7 +172,9 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#PTEID_ByteArray-pt.gov.cartaodecidadao.PTEID_ByteArray-">PTEID_ByteArray</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;bytearray)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#PTEID_ByteArray-pt.gov.cartaodecidadao.PTEID_ByteArray-">PTEID_ByteArray</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;bytearray)</code>
+<div class="block">Copy constructor</div>
+</td>
 </tr>
 </table>
 </li>
@@ -183,19 +194,28 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#Append-byte:A-long-">Append</a></span>(byte[]&nbsp;pucData,
-      long&nbsp;ulSize)</code>&nbsp;</td>
+      long&nbsp;ulSize)</code>
+<div class="block">Append data to the byte array.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#Append-pt.gov.cartaodecidadao.PTEID_ByteArray-">Append</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#Append-pt.gov.cartaodecidadao.PTEID_ByteArray-">Append</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)</code>
+<div class="block">Append data to the byte array.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#assign-pt.gov.cartaodecidadao.PTEID_ByteArray-">assign</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;bytearray)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#assign-pt.gov.cartaodecidadao.PTEID_ByteArray-">assign</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;bytearray)</code>
+<div class="block">Copy content of bytearray.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#Clear--">Clear</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#Clear--">Clear</a></span>()</code>
+<div class="block">Remove the data from the byte array.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -203,7 +223,9 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#Equals-pt.gov.cartaodecidadao.PTEID_ByteArray-">Equals</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#Equals-pt.gov.cartaodecidadao.PTEID_ByteArray-">Equals</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)</code>
+<div class="block">Return true if the content of data is the same as this.</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
@@ -211,7 +233,10 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#GetBytes--">GetBytes</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#GetBytes--">GetBytes</a></span>()</code>
+<div class="block">Return the array of bytes in the object.<br>
+ If Size() == 0, then NULL is returned.</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>protected static long</code></td>
@@ -220,15 +245,21 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#GetStringAt-long-long-">GetStringAt</a></span>(long&nbsp;ulOffset,
-           long&nbsp;ulLen)</code>&nbsp;</td>
+           long&nbsp;ulLen)</code>
+<div class="block">Get a string from buffer at ulOffset position and with ulLen size.</div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#Size--">Size</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#Size--">Size</a></span>()</code>
+<div class="block">Return the number of bytes in the array.</div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#writeToFile-java.lang.String-">writeToFile</a></span>(java.lang.String&nbsp;csFilePath)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html#writeToFile-java.lang.String-">writeToFile</a></span>(java.lang.String&nbsp;csFilePath)</code>
+<div class="block">Writing the binary content to a file.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -276,6 +307,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <li class="blockList">
 <h4>PTEID_ByteArray</h4>
 <pre>public&nbsp;PTEID_ByteArray()</pre>
+<div class="block">Default constructor</div>
 </li>
 </ul>
 <a name="PTEID_ByteArray-pt.gov.cartaodecidadao.PTEID_ByteArray-">
@@ -285,6 +317,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <li class="blockList">
 <h4>PTEID_ByteArray</h4>
 <pre>public&nbsp;PTEID_ByteArray(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;bytearray)</pre>
+<div class="block">Copy constructor</div>
 </li>
 </ul>
 <a name="PTEID_ByteArray-byte:A-long-">
@@ -295,6 +328,13 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>PTEID_ByteArray</h4>
 <pre>public&nbsp;PTEID_ByteArray(byte[]&nbsp;pucData,
                        long&nbsp;ulSize)</pre>
+<div class="block">Constructor - initialize a byte array with an array of unsigned char.<br>
+ <br></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>pucData</code> - is the byte array<br></dd>
+<dd><code>ulSize</code> - is the size of the array</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -348,6 +388,13 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>Append</h4>
 <pre>public&nbsp;void&nbsp;Append(byte[]&nbsp;pucData,
                    long&nbsp;ulSize)</pre>
+<div class="block">Append data to the byte array.<br>
+ <br></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>pucData</code> - is the byte array<br></dd>
+<dd><code>ulSize</code> - is the size of the array</dd>
+</dl>
 </li>
 </ul>
 <a name="Append-pt.gov.cartaodecidadao.PTEID_ByteArray-">
@@ -357,6 +404,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <li class="blockList">
 <h4>Append</h4>
 <pre>public&nbsp;void&nbsp;Append(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)</pre>
+<div class="block">Append data to the byte array.</div>
 </li>
 </ul>
 <a name="Clear--">
@@ -366,6 +414,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <li class="blockList">
 <h4>Clear</h4>
 <pre>public&nbsp;void&nbsp;Clear()</pre>
+<div class="block">Remove the data from the byte array.</div>
 </li>
 </ul>
 <a name="Equals-pt.gov.cartaodecidadao.PTEID_ByteArray-">
@@ -375,6 +424,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <li class="blockList">
 <h4>Equals</h4>
 <pre>public&nbsp;boolean&nbsp;Equals(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)</pre>
+<div class="block">Return true if the content of data is the same as this.</div>
 </li>
 </ul>
 <a name="Size--">
@@ -384,6 +434,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <li class="blockList">
 <h4>Size</h4>
 <pre>public&nbsp;long&nbsp;Size()</pre>
+<div class="block">Return the number of bytes in the array.</div>
 </li>
 </ul>
 <a name="GetBytes--">
@@ -393,6 +444,8 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <li class="blockList">
 <h4>GetBytes</h4>
 <pre>public&nbsp;byte[]&nbsp;GetBytes()</pre>
+<div class="block">Return the array of bytes in the object.<br>
+ If Size() == 0, then NULL is returned.</div>
 </li>
 </ul>
 <a name="GetStringAt-long-long-">
@@ -403,6 +456,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>GetStringAt</h4>
 <pre>public&nbsp;java.lang.String&nbsp;GetStringAt(long&nbsp;ulOffset,
                                     long&nbsp;ulLen)</pre>
+<div class="block">Get a string from buffer at ulOffset position and with ulLen size.</div>
 </li>
 </ul>
 <a name="writeToFile-java.lang.String-">
@@ -412,6 +466,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <li class="blockList">
 <h4>writeToFile</h4>
 <pre>public&nbsp;boolean&nbsp;writeToFile(java.lang.String&nbsp;csFilePath)</pre>
+<div class="block">Writing the binary content to a file.</div>
 </li>
 </ul>
 <a name="assign-pt.gov.cartaodecidadao.PTEID_ByteArray-">
@@ -421,6 +476,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <li class="blockList">
 <h4>assign</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;assign(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;bytearray)</pre>
+<div class="block">Copy content of bytearray.</div>
 </li>
 </ul>
 </li>

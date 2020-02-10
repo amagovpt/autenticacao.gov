@@ -105,19 +105,32 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_Address.html" title="class in pt.gov.cartaodecidadao">PTEID_Address</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Class for the Address document on a EID Card.<br>
+ You can get such an object from PTEID_EIDCard::getAddr().</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_Biometric.html" title="class in pt.gov.cartaodecidadao">PTEID_Biometric</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Abstract base class for the biometric documents.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Class used to receive and supply an array of bytes from/to different methods in the SDK.<br>
+ <br>
+  Memory management note - instances of this class will not own the char arrays that are supplied to <br>
+  it in the constructor or Append() methods as this class will perform copies of the input arrays</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html" title="class in pt.gov.cartaodecidadao">PTEID_Card</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Abstract base class for all the card type supported.<br>
+ The PTEID_ReaderContext::getCard() method will return such an object.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_CardType.html" title="class in pt.gov.cartaodecidadao">PTEID_CardType</a></td>
@@ -125,7 +138,10 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_CardVersionInfo.html" title="class in pt.gov.cartaodecidadao">PTEID_CardVersionInfo</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Class for the info document.<br>
+ You can get such an object from PTEID_EIDCard::getVersionInfo().</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_CCXML_Doc.html" title="class in pt.gov.cartaodecidadao">PTEID_CCXML_Doc</a></td>
@@ -133,11 +149,15 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Class that represents one certificate.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificates</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Container class for all certificates on the card.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_CertifStatus.html" title="class in pt.gov.cartaodecidadao">PTEID_CertifStatus</a></td>
@@ -149,19 +169,29 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_Config.html" title="class in pt.gov.cartaodecidadao">PTEID_Config</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Class to access and modify the config parameters of pteid-mw.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class in pt.gov.cartaodecidadao">PTEID_Crypto</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Abstract base class for the cryptographic documents.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_EId.html" title="class in pt.gov.cartaodecidadao">PTEID_EId</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Class for the ID document on a EID Card.<br>
+ You can get such an object from PTEID_EIDCard::getID().</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html" title="class in pt.gov.cartaodecidadao">PTEID_EIDCard</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">This class represents a Portugal EID card.<br>
+ To get such an object you have to ask it from the ReaderContext.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_FileType.html" title="class in pt.gov.cartaodecidadao">PTEID_FileType</a></td>
@@ -177,31 +207,47 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_MemoryCard.html" title="class in pt.gov.cartaodecidadao">PTEID_MemoryCard</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Abstract base class for Memory card.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class in pt.gov.cartaodecidadao">PTEID_Object</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Base class for the object of PTEID SDK (Can not be instantiated).</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_Param.html" title="class in pt.gov.cartaodecidadao">PTEID_Param</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Enumeration that includes all the configuration values of pteid-mw<br>
+     They are grouped in different sections: general, logging, certcache, proxy, guitool, xsign</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_PDFSignature.html" title="class in pt.gov.cartaodecidadao">PTEID_PDFSignature</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Helper class for the PTEID_EIDCard::SignPDF() methods - it defines multiple options that affect the signature operation<br>
+        e.g Signature in batch mode, adding a cryptographic timestamp, small format visible signature and custom image in the visible signature</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_Photo.html" title="class in pt.gov.cartaodecidadao">PTEID_Photo</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Class that represents the Citizen photograph stored in a pteid card</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Class that represent one Pin.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pins.html" title="class in pt.gov.cartaodecidadao">PTEID_Pins</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Container class for all pins on the card.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_PinUsage.html" title="class in pt.gov.cartaodecidadao">PTEID_PinUsage</a></td>
@@ -209,15 +255,33 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_PublicKey.html" title="class in pt.gov.cartaodecidadao">PTEID_PublicKey</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Class that represents the card authentication public key - to be used in a mutual authentication process (1024 bit RSA key)<br>
+    This key is totally unrelated to the citizen authentication key which is present in the authentication certificate</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderContext.html" title="class in pt.gov.cartaodecidadao">PTEID_ReaderContext</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">This class represent a reader.<br>
+ You get reader object from the ReaderSet<br>
+                either by its index (getReaderByNum) or by its name (getReaderByName).<br>
+ Once you have a reader object, you can check if a card is present (isCardPresent).<br>
+ Then you can ask which type of card is in the reader with getCardType()<br>
+                and then get a card object using one of this method :<br>
+                        getCard or getEIDCard.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ReaderSet.html" title="class in pt.gov.cartaodecidadao">PTEID_ReaderSet</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">This is a singleton class that is the starting point to get all other objects.<br>
+ You get an instance from the static instance() method (or using the define ReaderSet).<br>
+ Then you get a READER                                                  (PTEID_ReaderContext)<br>
+                -&gt; from this reader, you a CARD                              (PTEID_Card or derived class)<br>
+                        -&gt; from this card, you get DOCUMENT          (PTEID_XMLDoc or derived class)<br>
+                                -&gt; ...</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ScapConnection.html" title="class in pt.gov.cartaodecidadao">PTEID_ScapConnection</a></td>
@@ -225,11 +289,16 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="class in pt.gov.cartaodecidadao">PTEID_SmartCard</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Abstract base class for Smart card.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_Sod.html" title="class in pt.gov.cartaodecidadao">PTEID_Sod</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Class for the SOD document on an EID Card.<br>
+ You can get such an object from PTEID_EIDCard::getSod().</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ulwrapper.html" title="class in pt.gov.cartaodecidadao">PTEID_ulwrapper</a></td>
@@ -237,11 +306,15 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_XMLDoc.html" title="class in pt.gov.cartaodecidadao">PTEID_XMLDoc</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Abstract base class for all the documents.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_XmlUserRequestedInfo.html" title="class in pt.gov.cartaodecidadao">PTEID_XmlUserRequestedInfo</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">This class will contain information about the data to be included in the XML file returned by PTEID_EIDCard::getXmlCCDoc</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/pteidlibJava_Wrapper.html" title="class in pt.gov.cartaodecidadao">pteidlibJava_Wrapper</a></td>
@@ -264,11 +337,22 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExBadTransaction.html" title="class in pt.gov.cartaodecidadao">PTEID_ExBadTransaction</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception class Bad Transaction (error code = EIDMW_ERR_BAD_TRANSACTION)<br>
+ <br>
+        Throw when a class/function is not used correctly<br>
+ Used in : - PTEID_ReaderContext::Lock()<br>
+                          - PTEID_ReaderContext::Unlock()</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExBadUsage.html" title="class in pt.gov.cartaodecidadao">PTEID_ExBadUsage</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception class Bad Usage (error code = EIDMW_ERR_BAD_USAGE)<br>
+ <br>
+        Throw when a class/function is not used correctly<br>
+ Used in : - PTEID_Crl class</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExCardBadType.html" title="class in pt.gov.cartaodecidadao">PTEID_ExCardBadType</a></td>
@@ -280,11 +364,18 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExCardTypeUnknown.html" title="class in pt.gov.cartaodecidadao">PTEID_ExCardTypeUnknown</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception class Card Type Unknown (error code = EIDMW_ERR_CARDTYPE_UNKNOWN)<br>
+ <br>
+        Throw when the card type is not supported<br>
+ Used in : - PTEID_ReaderContext::getCard()</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Base class for the PTEID SDK Exceptions</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExCertNoIssuer.html" title="class in pt.gov.cartaodecidadao">PTEID_ExCertNoIssuer</a></td>
@@ -292,15 +383,29 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExCertNoRoot.html" title="class in pt.gov.cartaodecidadao">PTEID_ExCertNoRoot</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception class Certificate No OCSP responder (error code = EIDMW_ERR_CERT_NOROOT)<br>
+ <br>
+        Throw when ask for the Root<br>
+ Used in : - PTEID_Certificate::getRoot()</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExCmdNotAllowed.html" title="class in pt.gov.cartaodecidadao">PTEID_ExCmdNotAllowed</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception class Command Not Allowed (error code = EIDMW_ERR_CMD_NOT_ALLOWED)<br>
+ <br>
+        Throw when the command asked is not allowed<br>
+ Used in : - PTEID_SmartCard::writeFile(const char *fileID,const PTEID_ByteArray &amp;out,PTEID_Pin *pin,const char *csPinCode)</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExCmdNotSupported.html" title="class in pt.gov.cartaodecidadao">PTEID_ExCmdNotSupported</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception class Command Not Supported (error code = EIDMW_ERR_NOT_SUPPORTED)<br>
+ <br>
+        Throw when the command asked is not supported by the card</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExDocTypeUnknown.html" title="class in pt.gov.cartaodecidadao">PTEID_ExDocTypeUnknown</a></td>
@@ -308,19 +413,45 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExFileTypeUnknown.html" title="class in pt.gov.cartaodecidadao">PTEID_ExFileTypeUnknown</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception class File Type Unknown (error code = EIDMW_ERR_FILETYPE_UNKNOWN)<br>
+ <br>
+        Throw when the Raw Data type doesn't exist for this card<br>
+ Used in : - PTEID_Card::getRawData(PTEID_RawDataType type)</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExNoCardPresent.html" title="class in pt.gov.cartaodecidadao">PTEID_ExNoCardPresent</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception class No Card Present (error code = EIDMW_ERR_NO_CARD)<br>
+ <br>
+        Throw when no card is present<br>
+ Used in : - PTEID_ReaderContext::getCardType()<br>
+           - PTEID_ReaderContext::getCard()<br>
+           - PTEID_ReaderContext::getEIDCard()</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExNoReader.html" title="class in pt.gov.cartaodecidadao">PTEID_ExNoReader</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception class No reader (error code = EIDMW_ERR_NO_READER)<br>
+ <br>
+        Throw when the reader set is empty<br>
+ Used in : - PTEID_Object::checkContextStillOk()</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExParamRange.html" title="class in pt.gov.cartaodecidadao">PTEID_ExParamRange</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception class Bad Parameter Range (error code = EIDMW_ERR_PARAM_RANGE)<br>
+ <br>
+        Throw when the element ask is out of range<br>
+ Used in : - PTEID_ReaderSet::getReaderName(unsigned long ulIndex)<br>
+           - PTEID_ReaderSet::getReaderByNum(unsigned long ulIndex)<br>
+           - PTEID_Certificate::getChildren(unsigned long ulIndex)<br>
+           - PTEID_Certificates::getCertByNumber(unsigned long ulIndex)<br>
+           - PTEID_Pins::getPinByNumber(unsigned long ulIndex)</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExReaderSetChanged.html" title="class in pt.gov.cartaodecidadao">PTEID_ExReaderSetChanged</a></td>
@@ -328,15 +459,33 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExReleaseNeeded.html" title="class in pt.gov.cartaodecidadao">PTEID_ExReleaseNeeded</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception class Release Needed (error code = EIDMW_ERR_RELEASE_NEEDED)<br>
+ <br>
+        Throw when the application close without calling the PTEID_RealeaseSDK</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExSOD.html" title="class in pt.gov.cartaodecidadao">PTEID_ExSOD</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception class SOD error error codes:<br>
+ <br>
+        EIDMW_SOD_UNEXPECTED_VALUE<br>
+                EIDMW_SOD_UNEXPECTED_ASN1_TAG<br>
+                EIDMW_SOD_UNEXPECTED_ALGO_OID<br>
+                EIDMW_SOD_ERR_HASH_NO_MATCH_ID<br>
+                EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS<br>
+                EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE<br>
+                EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY<br>
+ <br>
+        Throw when the SOD is not correct</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../pt/gov/cartaodecidadao/PTEID_ExUnknown.html" title="class in pt.gov.cartaodecidadao">PTEID_ExUnknown</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception class Release Needed (error code = EIDMW_ERR_UNKNOWN)</div>
+</td>
 </tr>
 </tbody>
 </table>

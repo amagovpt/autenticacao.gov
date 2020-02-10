@@ -17,8 +17,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":9,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":9,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":42,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -124,6 +124,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PTEID_EIDCard</span>
 extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="class in pt.gov.cartaodecidadao">PTEID_SmartCard</a></pre>
+<div class="block">This class represents a Portugal EID card.<br>
+ To get such an object you have to ask it from the ReaderContext.</div>
 </li>
 </ul>
 </div>
@@ -172,7 +174,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -181,7 +183,9 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#Activate-java.lang.String-pt.gov.cartaodecidadao.PTEID_ByteArray-boolean-">Activate</a></span>(java.lang.String&nbsp;pinCode,
         <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;BCDDate,
-        boolean&nbsp;blockActivationPIN)</code>&nbsp;</td>
+        boolean&nbsp;blockActivationPIN)</code>
+<div class="block">Activate the Pteid card by writing the contents of the supplied PTEID_ByteArray in the card TRACE file<br></div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -202,7 +206,9 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#doSODCheck-boolean-">doSODCheck</a></span>(boolean&nbsp;check)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#doSODCheck-boolean-">doSODCheck</a></span>(boolean&nbsp;check)</code>
+<div class="block">Enable/disable the verification of ID and address data against the SOD file</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
@@ -210,19 +216,27 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Address.html" title="class in pt.gov.cartaodecidadao">PTEID_Address</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getAddr--">getAddr</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getAddr--">getAddr</a></span>()</code>
+<div class="block">Get the Address document</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getAuthentication--">getAuthentication</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getAuthentication--">getAuthentication</a></span>()</code>
+<div class="block">Return the authentication certificate from the card</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getCA--">getCA</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getCA--">getCA</a></span>()</code>
+<div class="block">Return the ca certificate from the card</div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getCert-pt.gov.cartaodecidadao.PTEID_CertifType-">getCert</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_CertifType.html" title="class in pt.gov.cartaodecidadao">PTEID_CertifType</a>&nbsp;type)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getCert-pt.gov.cartaodecidadao.PTEID_CertifType-">getCert</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_CertifType.html" title="class in pt.gov.cartaodecidadao">PTEID_CertifType</a>&nbsp;type)</code>
+<div class="block">Return certificate by type from the card</div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected static long</code></td>
@@ -230,27 +244,39 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_EId.html" title="class in pt.gov.cartaodecidadao">PTEID_EId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getID--">getID</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getID--">getID</a></span>()</code>
+<div class="block">Get the id document</div>
+</td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getRoot--">getRoot</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getRoot--">getRoot</a></span>()</code>
+<div class="block">Return the root certificate from the card</div>
+</td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_PublicKey.html" title="class in pt.gov.cartaodecidadao">PTEID_PublicKey</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getRootCAPubKey--">getRootCAPubKey</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getRootCAPubKey--">getRootCAPubKey</a></span>()</code>
+<div class="block">Get the CVC CA public key that this card uses to verify the CVC key</div>
+</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getSignature--">getSignature</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getSignature--">getSignature</a></span>()</code>
+<div class="block">Return the signature certificate from the card</div>
+</td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Sod.html" title="class in pt.gov.cartaodecidadao">PTEID_Sod</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getSod--">getSod</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getSod--">getSod</a></span>()</code>
+<div class="block">Get the SOD document</div>
+</td>
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_CardVersionInfo.html" title="class in pt.gov.cartaodecidadao">PTEID_CardVersionInfo</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getVersionInfo--">getVersionInfo</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#getVersionInfo--">getVersionInfo</a></span>()</code>
+<div class="block">Get the info document</div>
+</td>
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_CCXML_Doc.html" title="class in pt.gov.cartaodecidadao">PTEID_CCXML_Doc</a></code></td>
@@ -272,7 +298,9 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
        double&nbsp;coord_y,
        java.lang.String&nbsp;location,
        java.lang.String&nbsp;reason,
-       java.lang.String&nbsp;outfile_path)</code>&nbsp;</td>
+       java.lang.String&nbsp;outfile_path)</code>
+<div class="block">PDF Signature with location by coordinates (expressed in percentage of page height/width).</div>
+</td>
 </tr>
 <tr id="i22" class="altColor">
 <td class="colFirst"><code>int</code></td>
@@ -282,43 +310,62 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
        boolean&nbsp;is_landscape,
        java.lang.String&nbsp;location,
        java.lang.String&nbsp;reason,
-       java.lang.String&nbsp;outfile_path)</code>&nbsp;</td>
+       java.lang.String&nbsp;outfile_path)</code>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;
+<div class="block"><span class="deprecationComment">use the SignPDF function with location coordinates instead</span></div>
+</div>
+</td>
 </tr>
 <tr id="i23" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#SignXades-java.lang.String-java.lang.String:A-long-">SignXades</a></span>(java.lang.String&nbsp;output_path,
          java.lang.String[]&nbsp;paths,
-         long&nbsp;n_paths)</code>&nbsp;</td>
+         long&nbsp;n_paths)</code>
+<div class="block">Produce a XAdES-B Signature of the files indicated by the parameter <i>paths</i> and stores the results in one ASiC container in a zip format.</div>
+</td>
 </tr>
 <tr id="i24" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#SignXadesA-java.lang.String-java.lang.String:A-long-">SignXadesA</a></span>(java.lang.String&nbsp;output_path,
           java.lang.String[]&nbsp;path,
-          long&nbsp;n_paths)</code>&nbsp;</td>
+          long&nbsp;n_paths)</code>
+<div class="block">Produce a XAdES-A Signature of the files indicated by the parameter <i>paths</i> and stores the results in one ASiC container in a zip format.</div>
+</td>
 </tr>
 <tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#SignXadesAIndividual-java.lang.String-java.lang.String:A-long-">SignXadesAIndividual</a></span>(java.lang.String&nbsp;output_path,
                     java.lang.String[]&nbsp;paths,
-                    long&nbsp;n_paths)</code>&nbsp;</td>
+                    long&nbsp;n_paths)</code>
+<div class="block">Produce XAdES-A Signatures of the files indicated by the parameter <i>paths</i> and stores each of the results in an individual ASiC container in a zip format.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#SignXadesIndividual-java.lang.String-java.lang.String:A-long-">SignXadesIndividual</a></span>(java.lang.String&nbsp;output_path,
                    java.lang.String[]&nbsp;paths,
-                   long&nbsp;n_paths)</code>&nbsp;</td>
+                   long&nbsp;n_paths)</code>
+<div class="block">Produce XAdES-B Signatures of the files indicated by the parameter <i>paths</i> and stores each of the results in an individual ASiC container in a zip format.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i27" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#SignXadesT-java.lang.String-java.lang.String:A-long-">SignXadesT</a></span>(java.lang.String&nbsp;output_path,
           java.lang.String[]&nbsp;path,
-          long&nbsp;n_paths)</code>&nbsp;</td>
+          long&nbsp;n_paths)</code>
+<div class="block">Produce a XAdES-T Signature of the files indicated by the parameter <i>paths</i> and stores the results in one ASiC container in a zip format.</div>
+</td>
 </tr>
 <tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_EIDCard.html#SignXadesTIndividual-java.lang.String-java.lang.String:A-long-">SignXadesTIndividual</a></span>(java.lang.String&nbsp;output_path,
                     java.lang.String[]&nbsp;paths,
-                    long&nbsp;n_paths)</code>&nbsp;</td>
+                    long&nbsp;n_paths)</code>
+<div class="block">Produce XAdES-T Signatures of the files indicated by the parameter <i>paths</i> and stores each of the results in an individual ASiC container in a zip format.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i29" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -448,6 +495,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 <h4>getID</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_EId.html" title="class in pt.gov.cartaodecidadao">PTEID_EId</a>&nbsp;getID()
                 throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the id document</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -462,6 +510,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 <h4>getAddr</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Address.html" title="class in pt.gov.cartaodecidadao">PTEID_Address</a>&nbsp;getAddr()
                       throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the Address document</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -475,6 +524,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 <li class="blockList">
 <h4>getSod</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Sod.html" title="class in pt.gov.cartaodecidadao">PTEID_Sod</a>&nbsp;getSod()</pre>
+<div class="block">Get the SOD document</div>
 </li>
 </ul>
 <a name="getVersionInfo--">
@@ -485,6 +535,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 <h4>getVersionInfo</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_CardVersionInfo.html" title="class in pt.gov.cartaodecidadao">PTEID_CardVersionInfo</a>&nbsp;getVersionInfo()
                                      throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the info document</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -601,6 +652,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 <h4>getCert</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a>&nbsp;getCert(<a href="../../../pt/gov/cartaodecidadao/PTEID_CertifType.html" title="class in pt.gov.cartaodecidadao">PTEID_CertifType</a>&nbsp;type)
                           throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return certificate by type from the card</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -615,6 +667,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 <h4>getRoot</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a>&nbsp;getRoot()
                           throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the root certificate from the card</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -629,6 +682,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 <h4>getCA</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a>&nbsp;getCA()
                         throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the ca certificate from the card</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -643,6 +697,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 <h4>getSignature</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a>&nbsp;getSignature()
                                throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the signature certificate from the card</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -657,6 +712,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 <h4>getAuthentication</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a>&nbsp;getAuthentication()
                                     throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the authentication certificate from the card</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -671,6 +727,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 <h4>getRootCAPubKey</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_PublicKey.html" title="class in pt.gov.cartaodecidadao">PTEID_PublicKey</a>&nbsp;getRootCAPubKey()
                                 throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the CVC CA public key that this card uses to verify the CVC key</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -699,6 +756,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
 <h4>doSODCheck</h4>
 <pre>public&nbsp;void&nbsp;doSODCheck(boolean&nbsp;check)
                 throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Enable/disable the verification of ID and address data against the SOD file</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -715,7 +773,12 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
                         <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;BCDDate,
                         boolean&nbsp;blockActivationPIN)
                  throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Activate the Pteid card by writing the contents of the supplied PTEID_ByteArray in the card TRACE file<br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>BCDDate</code> - content to be written in the activation flag file (limited to 8 bytes) - recommended way to use is to supply the current date in BCD format (Binary coded decimal)<br></dd>
+<dd><code>pinCode</code> - Activation PIN value<br></dd>
+<dd><code>blockActivationPIN</code> - Boolean flag used in test mode to avoid blocking the Activation PIN after first use</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -731,7 +794,14 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
                                  java.lang.String[]&nbsp;paths,
                                  long&nbsp;n_paths)
                           throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Produce a XAdES-B Signature of the files indicated by the parameter <i>paths</i> and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter <i>output_path</i>.<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>paths</code> - is an array of null-terminated strings representing absolute paths in<br>
+ the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature<br></dd>
+<dd><code>n_paths</code> - is the number of elements in the <i>paths</i> array<br></dd>
+<dd><code>output_path</code> - points to the resulting container</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -747,7 +817,13 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
                                   java.lang.String[]&nbsp;path,
                                   long&nbsp;n_paths)
                            throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Produce a XAdES-T Signature of the files indicated by the parameter <i>paths</i> and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter <i>output_path</i>.<br>
+ <br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>n_paths</code> - is the number of elements in the <i>paths</i> array<br></dd>
+<dd><code>output_path</code> - points to the resulting container</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -763,7 +839,13 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
                                   java.lang.String[]&nbsp;path,
                                   long&nbsp;n_paths)
                            throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Produce a XAdES-A Signature of the files indicated by the parameter <i>paths</i> and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter <i>output_path</i>.<br>
+ <br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>n_paths</code> - is the number of elements in the <i>paths</i> array<br></dd>
+<dd><code>output_path</code> - points to the resulting container</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -779,7 +861,14 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
                                 java.lang.String[]&nbsp;paths,
                                 long&nbsp;n_paths)
                          throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Produce XAdES-B Signatures of the files indicated by the parameter <i>paths</i> and stores each of the results in an individual ASiC container in a zip format.<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>paths</code> - is an array of null-terminated strings representing absolute paths in<br>
+ the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature<br></dd>
+<dd><code>n_paths</code> - is the number of elements in the <i>paths</i> array<br></dd>
+<dd><code>output_path</code> - directory of the created ASiC containers</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -795,7 +884,14 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
                                  java.lang.String[]&nbsp;paths,
                                  long&nbsp;n_paths)
                           throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Produce XAdES-T Signatures of the files indicated by the parameter <i>paths</i> and stores each of the results in an individual ASiC container in a zip format.<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>paths</code> - is an array of null-terminated strings representing absolute paths in<br>
+ the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature<br></dd>
+<dd><code>n_paths</code> - is the number of elements in the <i>paths</i> array<br></dd>
+<dd><code>output_path</code> - directory of the created ASiC containers</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -811,7 +907,14 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
                                  java.lang.String[]&nbsp;paths,
                                  long&nbsp;n_paths)
                           throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Produce XAdES-A Signatures of the files indicated by the parameter <i>paths</i> and stores each of the results in an individual ASiC container in a zip format.<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>paths</code> - is an array of null-terminated strings representing absolute paths in<br>
+ the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature<br></dd>
+<dd><code>n_paths</code> - is the number of elements in the <i>paths</i> array<br></dd>
+<dd><code>output_path</code> - directory of the created ASiC containers</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -831,7 +934,17 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
                    java.lang.String&nbsp;reason,
                    java.lang.String&nbsp;outfile_path)
             throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">use the SignPDF function with location coordinates instead</span></div>
+<div class="block">PDF Signature with location by page sector (the portrait A4 page is split into 18 cells: 6 lines and 3 columns) <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>sig_handler:</code> - this defines the input file and some signature options<br></dd>
+<dd><code>page:</code> - in case of visible signature it defines the page where the signature will appear<br></dd>
+<dd><code>page_sector:</code> - position in the signature grid, between 1 to 18 for Portrait documents and 1 to 20 for Landscape ones<br></dd>
+<dd><code>is_landscape:</code> - is unused parameter, the SDK now detects document orientation automatically <br></dd>
+<dd><code>location:</code> - Signature metadata field<br></dd>
+<dd><code>reason:</code> - Signature metadata field<br></dd>
+<dd><code>outfile_path:</code> - Native Filesystem path of the ouput file<br></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -851,7 +964,16 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_SmartCard.html" title="cl
                    java.lang.String&nbsp;reason,
                    java.lang.String&nbsp;outfile_path)
             throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">PDF Signature with location by coordinates (expressed in percentage of page height/width). The coordinate system has its origin in the top left corner of the page<br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>sig_handler:</code> - this defines the input file and some signature options<br></dd>
+<dd><code>page:</code> - in case of visible signature it defines the page where the signature will appear<br></dd>
+<dd><code>coord_x:</code> - X coordinate of the signature location (percentage of page width)<br></dd>
+<dd><code>coord_y:</code> - Y coordinate of the signature location (percentage of page height)<br></dd>
+<dd><code>location:</code> - Location field in the added signature metadata<br></dd>
+<dd><code>reason:</code> - Signature metadata field<br></dd>
+<dd><code>outfile_path:</code> - Native Filesystem path of the ouput file</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>

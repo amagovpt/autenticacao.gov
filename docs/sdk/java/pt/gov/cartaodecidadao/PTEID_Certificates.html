@@ -124,6 +124,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PTEID_Certificates</span>
 extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class in pt.gov.cartaodecidadao">PTEID_Crypto</a></pre>
+<div class="block">Container class for all certificates on the card.</div>
 </li>
 </ul>
 </div>
@@ -179,7 +180,9 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#addCertificate-pt.gov.cartaodecidadao.PTEID_ByteArray-">addCertificate</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;cert)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#addCertificate-pt.gov.cartaodecidadao.PTEID_ByteArray-">addCertificate</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;cert)</code>
+<div class="block">Add a new certificate to the store.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -187,11 +190,15 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#countAll--">countAll</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#countAll--">countAll</a></span>()</code>
+<div class="block">The number of certificates (on the card or not)</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#countFromCard--">countFromCard</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#countFromCard--">countFromCard</a></span>()</code>
+<div class="block">The number of certificates on the card</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -203,23 +210,37 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#getAuthentication--">getAuthentication</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#getAuthentication--">getAuthentication</a></span>()</code>
+<div class="block">Return the authentication certificate from the card</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#getCA--">getCA</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#getCA--">getCA</a></span>()</code>
+<div class="block">Return the ca certificate from the card</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#getCert-long-">getCert</a></span>(long&nbsp;ulIndexAll)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#getCert-long-">getCert</a></span>(long&nbsp;ulIndexAll)</code>
+<div class="block">Return the certificate with the number ulIndexAll.<br>
+ <br>
+ ATTENTION ulIndexAll and ulIndexCard are two different index.<br>
+ Index will change if new certificates are added with addCert().</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#getCert-pt.gov.cartaodecidadao.PTEID_CertifType-">getCert</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_CertifType.html" title="class in pt.gov.cartaodecidadao">PTEID_CertifType</a>&nbsp;type)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#getCert-pt.gov.cartaodecidadao.PTEID_CertifType-">getCert</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_CertifType.html" title="class in pt.gov.cartaodecidadao">PTEID_CertifType</a>&nbsp;type)</code>
+<div class="block">Return the certificate by type.</div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#getCertFromCard-long-">getCertFromCard</a></span>(long&nbsp;ulIndexCard)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#getCertFromCard-long-">getCertFromCard</a></span>(long&nbsp;ulIndexCard)</code>
+<div class="block">Get the ulIndex certificate from the card.<br>
+ Throw PTEID_ExParamRange exception if the index is out of range.</div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected static long</code></td>
@@ -227,11 +248,15 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#getRoot--">getRoot</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#getRoot--">getRoot</a></span>()</code>
+<div class="block">Return the root certificate from the card</div>
+</td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#getSignature--">getSignature</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Certificates.html#getSignature--">getSignature</a></span>()</code>
+<div class="block">Return the signature certificate from the card</div>
+</td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -341,6 +366,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>countFromCard</h4>
 <pre>public&nbsp;long&nbsp;countFromCard()
                    throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">The number of certificates on the card</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -355,6 +381,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>countAll</h4>
 <pre>public&nbsp;long&nbsp;countAll()
               throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">The number of certificates (on the card or not)</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -369,6 +396,8 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getCertFromCard</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a>&nbsp;getCertFromCard(long&nbsp;ulIndexCard)
                                   throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the ulIndex certificate from the card.<br>
+ Throw PTEID_ExParamRange exception if the index is out of range.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -383,6 +412,10 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getCert</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a>&nbsp;getCert(long&nbsp;ulIndexAll)
                           throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the certificate with the number ulIndexAll.<br>
+ <br>
+ ATTENTION ulIndexAll and ulIndexCard are two different index.<br>
+ Index will change if new certificates are added with addCert().</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -397,6 +430,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getCert</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a>&nbsp;getCert(<a href="../../../pt/gov/cartaodecidadao/PTEID_CertifType.html" title="class in pt.gov.cartaodecidadao">PTEID_CertifType</a>&nbsp;type)
                           throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the certificate by type.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -411,6 +445,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getRoot</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a>&nbsp;getRoot()
                           throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the root certificate from the card</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -425,6 +460,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getCA</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a>&nbsp;getCA()
                         throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the ca certificate from the card</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -439,6 +475,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getSignature</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a>&nbsp;getSignature()
                                throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the signature certificate from the card</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -453,6 +490,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getAuthentication</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a>&nbsp;getAuthentication()
                                     throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the authentication certificate from the card</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -467,6 +505,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>addCertificate</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Certificate.html" title="class in pt.gov.cartaodecidadao">PTEID_Certificate</a>&nbsp;addCertificate(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;cert)
                                  throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Add a new certificate to the store.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>

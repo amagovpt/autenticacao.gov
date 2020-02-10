@@ -124,6 +124,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PTEID_Pin</span>
 extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class in pt.gov.cartaodecidadao">PTEID_Crypto</a></pre>
+<div class="block">Class that represent one Pin.</div>
 </li>
 </ul>
 </div>
@@ -202,7 +203,12 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
          java.lang.String&nbsp;csPin2,
          <a href="../../../pt/gov/cartaodecidadao/PTEID_ulwrapper.html" title="class in pt.gov.cartaodecidadao">PTEID_ulwrapper</a>&nbsp;ulRemaining,
          java.lang.String&nbsp;PinName,
-         boolean&nbsp;bShowDlg)</code>&nbsp;</td>
+         boolean&nbsp;bShowDlg)</code>
+<div class="block">Ask the card to change the pin.<br>
+ <br>
+ if csPin1 or csPin2 are empty, a popup will ask for the codes.<br>
+ <br></div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -218,39 +224,59 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getFlags--">getFlags</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getFlags--">getFlags</a></span>()</code>
+<div class="block">Get the flags of the pin</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getId--">getId</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getId--">getId</a></span>()</code>
+<div class="block">Get the id of the pin</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getIndex--">getIndex</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getIndex--">getIndex</a></span>()</code>
+<div class="block">Get the index of the pin</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getLabel--">getLabel</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getLabel--">getLabel</a></span>()</code>
+<div class="block">Get the label of the pin</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getLabelById-long-">getLabelById</a></span>(long&nbsp;id)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getLabelById-long-">getLabelById</a></span>(long&nbsp;id)</code>
+<div class="block">Get the label of the pin by Id</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getPinRef--">getPinRef</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getPinRef--">getPinRef</a></span>()</code>
+<div class="block">Get the pinref value of the pin</div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getTriesLeft--">getTriesLeft</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getTriesLeft--">getTriesLeft</a></span>()</code>
+<div class="block">Return the remaining tries for entering the correct pin.<br>
+ <br>
+ <br></div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getType--">getType</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getType--">getType</a></span>()</code>
+<div class="block">Get the type of the pin</div>
+</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_PinUsage.html" title="class in pt.gov.cartaodecidadao">PTEID_PinUsage</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getUsageCode--">getUsageCode</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#getUsageCode--">getUsageCode</a></span>()</code>
+<div class="block">Get the usage code of the pin</div>
+</td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -263,7 +289,10 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html#verifyPin-java.lang.String-pt.gov.cartaodecidadao.PTEID_ulwrapper-boolean-">verifyPin</a></span>(java.lang.String&nbsp;csPin,
          <a href="../../../pt/gov/cartaodecidadao/PTEID_ulwrapper.html" title="class in pt.gov.cartaodecidadao">PTEID_ulwrapper</a>&nbsp;ulRemaining,
-         boolean&nbsp;bShowDlg)</code>&nbsp;</td>
+         boolean&nbsp;bShowDlg)</code>
+<div class="block">Ask the card to verify the pin.<br>
+ <br></div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -404,6 +433,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getIndex</h4>
 <pre>public&nbsp;long&nbsp;getIndex()
               throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the index of the pin</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -418,6 +448,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getType</h4>
 <pre>public&nbsp;long&nbsp;getType()
              throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the type of the pin</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -432,6 +463,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getId</h4>
 <pre>public&nbsp;long&nbsp;getId()
            throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the id of the pin</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -446,6 +478,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getPinRef</h4>
 <pre>public&nbsp;long&nbsp;getPinRef()
                throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the pinref value of the pin</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -460,6 +493,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getUsageCode</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_PinUsage.html" title="class in pt.gov.cartaodecidadao">PTEID_PinUsage</a>&nbsp;getUsageCode()
                             throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the usage code of the pin</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -474,6 +508,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getFlags</h4>
 <pre>public&nbsp;long&nbsp;getFlags()
               throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the flags of the pin</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -488,6 +523,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getLabel</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getLabel()
                           throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the label of the pin</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -501,6 +537,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <li class="blockList">
 <h4>getLabelById</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getLabelById(long&nbsp;id)</pre>
+<div class="block">Get the label of the pin by Id</div>
 </li>
 </ul>
 <a name="unlockPin-java.lang.String-java.lang.String-pt.gov.cartaodecidadao.PTEID_ulwrapper-long-">
@@ -528,7 +565,12 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getTriesLeft</h4>
 <pre>public&nbsp;int&nbsp;getTriesLeft()
                  throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the remaining tries for entering the correct pin.<br>
+ <br>
+ <br></div>
 <dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the number of remaining tries in the other case</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -544,7 +586,16 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
                          <a href="../../../pt/gov/cartaodecidadao/PTEID_ulwrapper.html" title="class in pt.gov.cartaodecidadao">PTEID_ulwrapper</a>&nbsp;ulRemaining,
                          boolean&nbsp;bShowDlg)
                   throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Ask the card to verify the pin.<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>csPin</code> - is the pin code to verify (if csPin is empty, a popup will ask for the code)<br></dd>
+<dd><code>ulRemaining</code> - return the remaining tries (only if verifying failed)<br></dd>
+<dd><code>bShowDlg</code> - flag used to either show or not a dialog where the user inserts the pin (default=true)<br>
+ <br></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if success and false if failed</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -562,7 +613,18 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
                          java.lang.String&nbsp;PinName,
                          boolean&nbsp;bShowDlg)
                   throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Ask the card to change the pin.<br>
+ <br>
+ if csPin1 or csPin2 are empty, a popup will ask for the codes.<br>
+ <br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>csPin1</code> - is the old pin code<br></dd>
+<dd><code>csPin2</code> - is the new pin code<br></dd>
+<dd><code>ulRemaining</code> - return the remaining tries (only when operation failed)<br>
+ <br></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if success and false if failed</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>

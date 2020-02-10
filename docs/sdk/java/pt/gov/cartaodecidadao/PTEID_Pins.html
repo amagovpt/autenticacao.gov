@@ -124,6 +124,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PTEID_Pins</span>
 extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class in pt.gov.cartaodecidadao">PTEID_Crypto</a></pre>
+<div class="block">Container class for all pins on the card.</div>
 </li>
 </ul>
 </div>
@@ -179,7 +180,9 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pins.html#count--">count</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pins.html#count--">count</a></span>()</code>
+<div class="block">The number of pins on the card</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -195,11 +198,17 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pins.html#getPinByNumber-long-">getPinByNumber</a></span>(long&nbsp;ulIndex)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pins.html#getPinByNumber-long-">getPinByNumber</a></span>(long&nbsp;ulIndex)</code>
+<div class="block">Get the pin by its Index.<br>
+ Throw PTEID_ExParamRange exception if the index is out of range.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pins.html#getPinByPinRef-long-">getPinByPinRef</a></span>(long&nbsp;pinRef)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Pins.html#getPinByPinRef-long-">getPinByPinRef</a></span>(long&nbsp;pinRef)</code>
+<div class="block">Get the pin by its pin reference.<br>
+ Throw PTEID_ExParamRange exception if the index is out of range.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -305,6 +314,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>count</h4>
 <pre>public&nbsp;long&nbsp;count()
            throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">The number of pins on the card</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -319,6 +329,8 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getPinByNumber</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;getPinByNumber(long&nbsp;ulIndex)
                          throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the pin by its Index.<br>
+ Throw PTEID_ExParamRange exception if the index is out of range.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -333,6 +345,8 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Crypto.html" title="class
 <h4>getPinByPinRef</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_Pin.html" title="class in pt.gov.cartaodecidadao">PTEID_Pin</a>&nbsp;getPinByPinRef(long&nbsp;pinRef)
                          throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Get the pin by its pin reference.<br>
+ Throw PTEID_ExParamRange exception if the index is out of range.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>

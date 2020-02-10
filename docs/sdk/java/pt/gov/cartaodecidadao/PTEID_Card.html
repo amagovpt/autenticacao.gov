@@ -118,6 +118,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PTEID_Card</span>
 extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class in pt.gov.cartaodecidadao">PTEID_Object</a></pre>
+<div class="block">Abstract base class for all the card type supported.<br>
+ The PTEID_ReaderContext::getCard() method will return such an object.</div>
 </li>
 </ul>
 </div>
@@ -185,55 +187,77 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_CardType.html" title="class in pt.gov.cartaodecidadao">PTEID_CardType</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#getType--">getType</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#getType--">getType</a></span>()</code>
+<div class="block">Return the type of the card</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#readFile-java.lang.String-">readFile</a></span>(java.lang.String&nbsp;fileID)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#readFile-java.lang.String-">readFile</a></span>(java.lang.String&nbsp;fileID)</code>
+<div class="block">Read a File from the card.<br></div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#readFile-java.lang.String-long-">readFile</a></span>(java.lang.String&nbsp;fileID,
-        long&nbsp;ulOffset)</code>&nbsp;</td>
+        long&nbsp;ulOffset)</code>
+<div class="block">Read a File from the card.<br></div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#readFile-java.lang.String-long-long-">readFile</a></span>(java.lang.String&nbsp;fileID,
         long&nbsp;ulOffset,
-        long&nbsp;ulMaxLength)</code>&nbsp;</td>
+        long&nbsp;ulMaxLength)</code>
+<div class="block">Read a File from the card.<br></div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#sendAPDU-pt.gov.cartaodecidadao.PTEID_ByteArray-">sendAPDU</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;cmd)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#sendAPDU-pt.gov.cartaodecidadao.PTEID_ByteArray-">sendAPDU</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;cmd)</code>
+<div class="block">Send an APDU command to the card and get the result.<br></div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#Sign-pt.gov.cartaodecidadao.PTEID_ByteArray-">Sign</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#Sign-pt.gov.cartaodecidadao.PTEID_ByteArray-">Sign</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)</code>
+<div class="block">Raw RSA signature with PCKS #1 padding.</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#Sign-pt.gov.cartaodecidadao.PTEID_ByteArray-boolean-">Sign</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data,
-    boolean&nbsp;signatureKey)</code>&nbsp;</td>
+    boolean&nbsp;signatureKey)</code>
+<div class="block">Raw RSA signature with PCKS #1 padding.</div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#SignSHA256-pt.gov.cartaodecidadao.PTEID_ByteArray-">SignSHA256</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#SignSHA256-pt.gov.cartaodecidadao.PTEID_ByteArray-">SignSHA256</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)</code>
+<div class="block">Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash).</div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#SignSHA256-pt.gov.cartaodecidadao.PTEID_ByteArray-boolean-">SignSHA256</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data,
-          boolean&nbsp;signatureKey)</code>&nbsp;</td>
+          boolean&nbsp;signatureKey)</code>
+<div class="block">Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash).</div>
+</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#writeFile-java.lang.String-pt.gov.cartaodecidadao.PTEID_ByteArray-">writeFile</a></span>(java.lang.String&nbsp;fileID,
-         <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;oData)</code>&nbsp;</td>
+         <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;oData)</code>
+<div class="block">Write a file to the card.<br></div>
+</td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#writeFile-java.lang.String-pt.gov.cartaodecidadao.PTEID_ByteArray-long-">writeFile</a></span>(java.lang.String&nbsp;fileID,
          <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;oData,
-         long&nbsp;ulOffset)</code>&nbsp;</td>
+         long&nbsp;ulOffset)</code>
+<div class="block">Write a file to the card.<br></div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -325,6 +349,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>getType</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_CardType.html" title="class in pt.gov.cartaodecidadao">PTEID_CardType</a>&nbsp;getType()
                        throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Return the type of the card</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
@@ -339,7 +364,12 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>sendAPDU</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;sendAPDU(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;cmd)
                          throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Send an APDU command to the card and get the result.<br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>cmd</code> - is the apdu command<br></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A PTEID_ByteArray containing the result</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -354,7 +384,13 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;Sign(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data,
                             boolean&nbsp;signatureKey)
                      throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Raw RSA signature with PCKS #1 padding. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to <b>true</b>.<br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>data</code> - holds the data to be signed, at most 32 bytes.<br></dd>
+<dd><code>signatureKey</code> - whether to use the 'Signature key'.<br></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A PTEID_ByteArray containing the signed data.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -368,7 +404,13 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>Sign</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;Sign(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)
                      throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Raw RSA signature with PCKS #1 padding. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to <b>true</b>.<br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>data</code> - holds the data to be signed, at most 32 bytes.<br>
+ <br></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A PTEID_ByteArray containing the signed data.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -382,6 +424,14 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>SignSHA256</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;SignSHA256(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data,
                                   boolean&nbsp;signatureKey)</pre>
+<div class="block">Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash). By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to <b>true</b>.<br></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>data</code> - holds the data to be signed, it should be 32 bytes.<br></dd>
+<dd><code>signatureKey</code> - whether to use the 'Signature key'.<br></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A PTEID_ByteArray containing the signed data.</dd>
+</dl>
 </li>
 </ul>
 <a name="SignSHA256-pt.gov.cartaodecidadao.PTEID_ByteArray-">
@@ -391,6 +441,14 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <li class="blockList">
 <h4>SignSHA256</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;SignSHA256(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)</pre>
+<div class="block">Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash). By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to <b>true</b>.<br></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>data</code> - holds the data to be signed, it should be 32 bytes.<br>
+ <br></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A PTEID_ByteArray containing the signed data.</dd>
+</dl>
 </li>
 </ul>
 <a name="readFile-java.lang.String-long-long-">
@@ -403,7 +461,14 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
                                 long&nbsp;ulOffset,
                                 long&nbsp;ulMaxLength)
                          throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Read a File from the card.<br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileID</code> - is the path of the file<br></dd>
+<dd><code>ulOffset</code> - is the offset to begin the reading<br></dd>
+<dd><code>ulMaxLength</code> - is the maximum length of bytes to read<br></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A PTEID_ByteArray with the content of the file</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -418,7 +483,14 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;readFile(java.lang.String&nbsp;fileID,
                                 long&nbsp;ulOffset)
                          throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Read a File from the card.<br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileID</code> - is the path of the file<br></dd>
+<dd><code>ulOffset</code> - is the offset to begin the reading<br>
+ <br></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A PTEID_ByteArray with the content of the file</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -432,7 +504,14 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>readFile</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;readFile(java.lang.String&nbsp;fileID)
                          throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Read a File from the card.<br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileID</code> - is the path of the file<br>
+ <br>
+ <br></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A PTEID_ByteArray with the content of the file</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -448,7 +527,12 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
                          <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;oData,
                          long&nbsp;ulOffset)
                   throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Write a file to the card.<br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileID</code> - is the path of the file<br></dd>
+<dd><code>oData</code> - contents the bytes to write<br></dd>
+<dd><code>ulOffset</code> - is the offset to begin the writing</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
@@ -463,7 +547,11 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <pre>public&nbsp;boolean&nbsp;writeFile(java.lang.String&nbsp;fileID,
                          <a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;oData)
                   throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
+<div class="block">Write a file to the card.<br></div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileID</code> - is the path of the file<br></dd>
+<dd><code>oData</code> - contents the bytes to write<br></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></code></dd>
 </dl>
