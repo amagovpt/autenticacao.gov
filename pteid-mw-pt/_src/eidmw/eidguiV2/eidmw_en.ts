@@ -1026,9 +1026,9 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="83"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="98"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="109"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="116"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="123"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="110"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="117"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="124"/>
         <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="172"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="341"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="353"/>
@@ -1040,7 +1040,7 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="84"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="110"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="111"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="342"/>
         <source>STR_CLEAR_CACHE_SUCC</source>
         <translation>Files in cache successfully deleted</translation>
@@ -1051,21 +1051,21 @@
         <translation>Error while clearing cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="117"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="118"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="354"/>
         <source>STR_CLEAR_CACHE_FAIL</source>
         <translation>Error while removing cache</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="99"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="124"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="125"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="364"/>
         <source>STR_CACHE_NOT_READABLE</source>
         <translation>You don&apos;t have permissions to read cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="128"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="131"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="129"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="132"/>
         <source>STR_SIZE_OF_CACHE</source>
         <translation>Cache size:</translation>
     </message>
@@ -1167,7 +1167,7 @@
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="620"/>
         <source>STR_SCALE_APPLICATION_TITLE</source>
         <oldsource>STR_SCALE_APPLICATION</oldsource>
-        <translation>Application scale:</translation>
+        <translation type="unfinished">Application scale</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="680"/>
@@ -1559,7 +1559,7 @@
 <context>
     <name>PageDefinitionsUpdates</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="135"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="134"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="204"/>
         <source>STR_UPDATE_BUTTON_START</source>
         <translation>Install</translation>
@@ -1576,7 +1576,7 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="36"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="141"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="140"/>
         <source>STR_UPDATE_NO_UPDATES</source>
         <translation>No updates available at the moment.</translation>
     </message>
@@ -1606,18 +1606,18 @@
         <translation>Certificate update successful.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="111"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="110"/>
         <source>STR_UPDATED_CERTIFICATES</source>
         <oldsource>STR_UPDATE_CERTIFICATES</oldsource>
         <translation>Certificate update successful</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="155"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="154"/>
         <source>STR_UPDATE_CERTS_AVAILABLE</source>
         <translation>A new update is available. Press Install to perform the update.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="244"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="243"/>
         <source>STR_UPDATE_CERTS_VERSION_LOOKUP</source>
         <translation>Searching for new certificates.</translation>
     </message>
@@ -1664,35 +1664,35 @@
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="136"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="135"/>
         <source>STR_VERSION</source>
         <translation>version</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="159"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="158"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="608"/>
         <source>STR_UPDATE_CERTS_BUTTON_START</source>
         <translation>Install</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="164"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="176"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="163"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="175"/>
         <source>STR_UPDATE_CERTS_NO_UPDATES</source>
         <translation>No updates of certificates available at the moment</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="210"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="209"/>
         <source>STR_UPDATE_VERSION_LOOKUP</source>
         <translation>Searching for new version.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="126"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="125"/>
         <source>STR_UPDATE_AVAILABLE</source>
         <translation>A new update is available. Press Install do perform the update.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="189"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="196"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="188"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="195"/>
         <source>STR_UPDATE_STARTING_DOWNLOAD</source>
         <translation>Downloading</translation>
     </message>
@@ -2704,7 +2704,7 @@
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="158"/>
         <location filename="contentPages/definitions/PageDefinitionsSignSettings.qml" line="37"/>
         <location filename="contentPages/definitions/PageDefinitionsSignSettings.qml" line="49"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="112"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="111"/>
         <source>STR_POPUP_RESTART_APP</source>
         <translation>It is necessary to restart the application for this change to take effect. Please restart the application.</translation>
     </message>

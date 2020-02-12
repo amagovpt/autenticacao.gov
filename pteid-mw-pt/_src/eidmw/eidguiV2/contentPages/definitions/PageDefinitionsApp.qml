@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
@@ -109,9 +109,9 @@ PageDefinitionsAppForm {
         onCheckedChanged: {
             controler.setUseSystemScaleValue(propertyCheckboxUseSystemScale.checked)
             if (propertyCheckboxUseSystemScale.enabled) {
-                mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
-                mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-                mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+                var titlePopup = qsTranslate("PageDefinitionsApp","STR_SCALE_APPLICATION_TITLE") + controler.autoTr
+                var bodyPopup = qsTranslate("Popup Card","STR_POPUP_RESTART_APP") + controler.autoTr
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
         }
     }
