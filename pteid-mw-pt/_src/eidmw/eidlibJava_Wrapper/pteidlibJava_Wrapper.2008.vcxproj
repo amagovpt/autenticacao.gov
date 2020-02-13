@@ -223,13 +223,13 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\eidlib\eidlib.i">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_SWIG)\swig.exe -c++ -java -package pt.gov.cartaodecidadao -o .\GeneratedFiles\eidlibJava_Wrapper.cpp -outdir .\GeneratedFiles "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_SWIG)\swig.exe -c++ -java -package pt.gov.cartaodecidadao -doxygen -o .\GeneratedFiles\eidlibJava_Wrapper.cpp -outdir .\GeneratedFiles "%(FullPath)"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\eidlibJava_Wrapper.cpp;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_SWIG)\swig.exe -c++ -java -package pt.gov.cartaodecidadao -o .\GeneratedFiles\eidlibJava_Wrapper.cpp -outdir .\GeneratedFiles "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_SWIG)\swig.exe -c++ -java -package pt.gov.cartaodecidadao -doxygen -o .\GeneratedFiles\eidlibJava_Wrapper.cpp -outdir .\GeneratedFiles "%(FullPath)"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\eidlibJava_Wrapper.cpp;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_SWIG)\swig.exe -c++ -java -package pt.gov.cartaodecidadao -o .\GeneratedFiles\eidlibJava_Wrapper.cpp -outdir .\GeneratedFiles "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_SWIG)\swig.exe -c++ -java -package pt.gov.cartaodecidadao -doxygen -o .\GeneratedFiles\eidlibJava_Wrapper.cpp -outdir .\GeneratedFiles "%(FullPath)"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\eidlibJava_Wrapper.cpp;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_SWIG)\swig.exe -c++ -java -package pt.gov.cartaodecidadao -o .\GeneratedFiles\eidlibJava_Wrapper.cpp -outdir .\GeneratedFiles "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_SWIG)\swig.exe -c++ -java -package pt.gov.cartaodecidadao -doxygen -o .\GeneratedFiles\eidlibJava_Wrapper.cpp -outdir .\GeneratedFiles "%(FullPath)"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\eidlibJava_Wrapper.cpp;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>

@@ -89,7 +89,7 @@ Ferramentas adicionais a instalar:
 - Windows Platform SDK
 - Visual Studio
 - doxygen - disponível em http://www.doxygen.nl/download.html
-- Swigwin 2.0.12 - disponível em  https://sourceforge.net/projects/swig/files/swigwin/swigwin-2.0.12/
+- Swigwin 4.0.1 - disponível em  https://sourceforge.net/projects/swig/files/swigwin/swigwin-4.0.1/
 - Java JDK
 - Wix - disponível em https://wixtoolset.org/releases/
 - Wix Visual Studio Extension - https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2013Extension

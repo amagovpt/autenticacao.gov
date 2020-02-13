@@ -38,7 +38,7 @@ PREPROCESS_FILES=../eidlib/eidlib.i
 preprocess.name = execute swig to generate java and c++ wrapper
 preprocess.input = PREPROCESS_FILES
 preprocess.output = ./GeneratedFiles/eidlibJava_Wrapper.cpp
-preprocess.commands = swig -c++ -java -package pt.gov.cartaodecidadao -o ./GeneratedFiles/eidlibJava_Wrapper.cpp -outdir ./GeneratedFiles ../eidlib/eidlib.i
+preprocess.commands = swig -c++ -java -package pt.gov.cartaodecidadao -doxygen -o ./GeneratedFiles/eidlibJava_Wrapper.cpp -outdir ./GeneratedFiles ../eidlib/eidlib.i
 QMAKE_EXTRA_COMPILERS += preprocess
 preprocess.variable_out+=SOURCES
 }

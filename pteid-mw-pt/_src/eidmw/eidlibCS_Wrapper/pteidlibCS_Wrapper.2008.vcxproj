@@ -210,16 +210,16 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\eidlib\eidlib.i">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_SWIG)\swig.exe -c++ -csharp -namespace pt.portugal.eid -dllimport pteidlibCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_SWIG)\swig.exe -c++ -csharp -namespace pt.portugal.eid -dllimport pteidlibCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG2_CSHARP -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\eidlibCS_Wrapper.cpp;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_SWIG)\swig.exe -c++ -csharp -namespace pt.portugal.eid -dllimport pteidlibCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_SWIG)\swig.exe -c++ -csharp -namespace pt.portugal.eid -dllimport pteidlibCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG2_CSHARP -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\eidlibCS_Wrapper.cpp;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_SWIG)\swig.exe -c++ -csharp -namespace pt.portugal.eid -dllimport pteidlibCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_SWIG)\swig.exe -c++ -csharp -namespace pt.portugal.eid -dllimport pteidlibCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG2_CSHARP -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\eidlibCS_Wrapper.cpp;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_SWIG)\swig.exe -c++ -csharp -namespace pt.portugal.eid -dllimport pteidlibCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_SWIG)\swig.exe -c++ -csharp -namespace pt.portugal.eid -dllimport pteidlibCS_Wrapper -o .\GeneratedFiles\eidlibCS_Wrapper.cpp -DSWIG2_CSHARP -DSWIG_CSHARP_NO_STRING_HELPER -outdir .\GeneratedFiles "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\eidlibCS_Wrapper.cpp;%(Outputs)</Outputs>
     </CustomBuild>
