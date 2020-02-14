@@ -27,6 +27,8 @@ PageHelpAboutForm {
                 + controler.getAppVersion()
         propertyTextRevision.text = qsTranslate("PageHelpAbout","STR_HELP_APP_REVISION") + " : "
                 + "<i>" + controler.getAppRevision() + "</i>"
+        propertyTextCertsUpdate.text = qsTranslate("PageHelpAbout","STR_HELP_APP_CERTS_UPDATE") + " : "
+                + controler.getAppCertsUpdate()
         propertyTextCopyright.text = controler.getAppCopyright()
         propertyMainItem.forceActiveFocus()
     }

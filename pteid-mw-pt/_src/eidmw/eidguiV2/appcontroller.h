@@ -51,6 +51,8 @@ public slots:
     Q_INVOKABLE QVariant getCursorPos();
     QString getAppVersion(void);
     QString getAppRevision(void);
+    void updateCertslog(void);
+    QString getAppCertsUpdate(void);
     QString getAppCopyright(void);
     bool isAnimationsEnabled(void);
     bool getNotShowHelpStartUp(void);
@@ -139,6 +141,8 @@ private:
     bool removePteidCache();
     void doGetPteidCacheSize();
     void doGetScapCacheSize();
+    QString getPteidCacheDir();
+    void checkUpdateCertslog(void);
     qint64 dirSize(QString dirPath, QString nameFilter);
     QString formatSize(qint64 size);
 

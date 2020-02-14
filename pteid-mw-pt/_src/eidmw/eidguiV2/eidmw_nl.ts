@@ -2,6 +2,14 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="pt_PT">
 <context>
+    <name>AppController</name>
+    <message>
+        <location filename="appcontroller.cpp" line="140"/>
+        <source>STR_CERTS_UPDATE_LOG_ERROR</source>
+        <translation>Erro na leitura do ficheiro de log.</translation>
+    </message>
+</context>
+<context>
     <name>DialogCMD</name>
     <message>
         <location filename="components/DialogCMD.qml" line="402"/>
@@ -918,32 +926,32 @@
         <translation>Gravar Notas</translation>
     </message>
     <message>
-        <location filename="main.qml" line="474"/>
+        <location filename="main.qml" line="471"/>
         <source>STR_UNSAVED_NOTES_TITLE</source>
         <translation>Notas</translation>
     </message>
     <message>
-        <location filename="main.qml" line="489"/>
+        <location filename="main.qml" line="486"/>
         <source>STR_UNSAVED_NOTES</source>
         <translation>Notas por gravar</translation>
     </message>
     <message>
-        <location filename="main.qml" line="506"/>
+        <location filename="main.qml" line="503"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION_EXIT</source>
         <translation>Pressione &quot;Permanecer&quot; para continuar a editar as notas ou &quot;Sair&quot; para sair da aplicação sem guardar as notas.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="507"/>
+        <location filename="main.qml" line="504"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION</source>
         <translation>Pressione &quot;Permanecer&quot; para continuar a editar as notas ou &quot;Sair&quot; para sair desta página sem guardar as notas.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="531"/>
+        <location filename="main.qml" line="528"/>
         <source>STR_UNSAVED_NOTES_LEAVE</source>
         <translation>Sair</translation>
     </message>
     <message>
-        <location filename="main.qml" line="554"/>
+        <location filename="main.qml" line="551"/>
         <source>STR_UNSAVED_NOTES_STAY</source>
         <translation>Permanecer</translation>
     </message>
@@ -1024,9 +1032,9 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="83"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="98"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="110"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="117"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="124"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="109"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="116"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="123"/>
         <location filename="contentPages/definitions/PageDefinitionsDataForm.ui.qml" line="172"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="341"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="353"/>
@@ -1038,7 +1046,7 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="84"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="111"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="110"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="342"/>
         <source>STR_CLEAR_CACHE_SUCC</source>
         <translation>Ficheiros em cache apagados com sucesso</translation>
@@ -1049,21 +1057,21 @@
         <translation>Erro ao apagar a cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="118"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="117"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="354"/>
         <source>STR_CLEAR_CACHE_FAIL</source>
         <translation>Erro ao apagar cache</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="99"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="125"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="124"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="364"/>
         <source>STR_CACHE_NOT_READABLE</source>
         <translation>Não tem permissões para leitura da cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="129"/>
-        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="132"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="128"/>
+        <location filename="contentPages/definitions/PageDefinitionsData.qml" line="131"/>
         <source>STR_SIZE_OF_CACHE</source>
         <translation>Tamanho da cache:</translation>
     </message>
@@ -1162,10 +1170,11 @@
         <translation>Activar animações</translation>
     </message>
     <message>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="112"/>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="620"/>
         <source>STR_SCALE_APPLICATION_TITLE</source>
         <oldsource>STR_SCALE_APPLICATION</oldsource>
-        <translation type="unfinished">Escala da aplicação</translation>
+        <translation>Escala da aplicação</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsAppForm.ui.qml" line="680"/>
@@ -1605,6 +1614,7 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="110"/>
+        <location filename="main.qml" line="89"/>
         <source>STR_UPDATED_CERTIFICATES</source>
         <oldsource>STR_UPDATE_CERTIFICATES</oldsource>
         <translation>Atualização de certificados com sucesso</translation>
@@ -1696,6 +1706,7 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="48"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="276"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="130"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="468"/>
         <source>STR_UPDATE_TEXT</source>
@@ -1712,13 +1723,13 @@
         <translation>Existe uma versão mais recente da aplicação.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="250"/>
+        <location filename="main.qml" line="251"/>
         <source>STR_AUTOUPDATE_OPEN_TEXT</source>
         <oldsource>STR_AUTOUPDATE_SUB_TEXT</oldsource>
         <translation>Clique em Abrir para prosseguir para a página de atualizações.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="251"/>
+        <location filename="main.qml" line="252"/>
         <source>STR_DISABLE_AUTOUPDATE_INFO</source>
         <translation>Pode desativar a verificação de atualizações ao iniciar a aplicação no menu Configurações da aplicação.</translation>
     </message>
@@ -1728,37 +1739,36 @@
         <translation>Existe uma atualização de certificados.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="344"/>
         <source>STR_AUTOUPDATE_MULTI_TEXT</source>
-        <translation>Existe uma versão mais recente da aplicação e atualizações de certificados.</translation>
+        <translation type="vanished">Existe uma versão mais recente da aplicação e atualizações de certificados.</translation>
     </message>
 </context>
 <context>
     <name>PageHelpAbout</name>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="55"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="56"/>
         <source>STR_HELP_TITLE</source>
         <translation>Aplicação Oficial do Cartão de Cidadão Português</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="101"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="117"/>
         <source>STR_HELP_LINK</source>
         <oldsource>STR_HELP_</oldsource>
         <translation>Caso tenha dificuldades na utilização desta aplicação consulte</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="122"/>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="123"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="138"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="139"/>
         <source>STR_HELP_CC_SELECT</source>
         <translation>https://www.autenticacao.gov.pt/o-cartao-de-cidadao</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="135"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="151"/>
         <source>STR_HELP_DEV_BY</source>
         <translation>Desenvolvido pelo Estado Português</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="153"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="169"/>
         <source>STR_HELP_DEV_AGENCY</source>
         <translation>(Agência para a Modernização Administrativa, IP e Instituto dos Registos e do Notariado, IP)</translation>
     </message>
@@ -1771,6 +1781,12 @@
         <location filename="contentPages/help/PageHelpAbout.qml" line="28"/>
         <source>STR_HELP_APP_REVISION</source>
         <translation>Revisão</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="274"/>
+        <location filename="contentPages/help/PageHelpAbout.qml" line="30"/>
+        <source>STR_HELP_APP_CERTS_UPDATE</source>
+        <translation>Última atualização dos certificados</translation>
     </message>
 </context>
 <context>
@@ -1852,7 +1868,7 @@
 <context>
     <name>PageHelpDocOnline</name>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="40"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="41"/>
         <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="41"/>
         <location filename="contentPages/help/PageHelpDocOnlineForm.ui.qml" line="50"/>
         <location filename="contentPages/home/PageHomeForm.ui.qml" line="42"/>
@@ -2497,9 +2513,9 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1056"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="67"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="504"/>
-        <location filename="main.qml" line="138"/>
-        <location filename="main.qml" line="145"/>
-        <location filename="main.qml" line="151"/>
+        <location filename="main.qml" line="139"/>
+        <location filename="main.qml" line="146"/>
+        <location filename="main.qml" line="152"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Erro</translation>
     </message>
@@ -2670,22 +2686,22 @@
         <translation>Erro da aplicação! Por favor reinstale a aplicação</translation>
     </message>
     <message>
-        <location filename="main.qml" line="139"/>
+        <location filename="main.qml" line="140"/>
         <source>STR_GENERIC_ERROR_MSG</source>
         <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="140"/>
+        <location filename="main.qml" line="141"/>
         <source>STR_ERROR_CODE</source>
         <translation>Código de erro = </translation>
     </message>
     <message>
-        <location filename="main.qml" line="146"/>
+        <location filename="main.qml" line="147"/>
         <source>STR_CERTIFICATES_IMPORT_ERROR_MSG</source>
         <translation>Erro ao importar certificados</translation>
     </message>
     <message>
-        <location filename="main.qml" line="152"/>
+        <location filename="main.qml" line="153"/>
         <source>STR_CERTIFICATES_REMOVE_ERROR_MSG</source>
         <translation>Erro ao remover certificados</translation>
     </message>
@@ -2696,13 +2712,14 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="64"/>
-        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="112"/>
+        <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="113"/>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="122"/>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="140"/>
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="158"/>
         <location filename="contentPages/definitions/PageDefinitionsSignSettings.qml" line="37"/>
         <location filename="contentPages/definitions/PageDefinitionsSignSettings.qml" line="49"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="111"/>
+        <location filename="main.qml" line="90"/>
         <source>STR_POPUP_RESTART_APP</source>
         <translation>É necessário reiniciar a aplicação para esta alteração ter efeito. Por favor reinicie a aplicação.</translation>
     </message>
@@ -2725,7 +2742,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="458"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="182"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="306"/>
-        <location filename="main.qml" line="361"/>
+        <location filename="main.qml" line="358"/>
         <source>STR_SHOW_WINDOWS</source>
         <translation>Mostrar janela</translation>
     </message>
@@ -2782,7 +2799,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="230"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="102"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="372"/>
-        <location filename="main.qml" line="271"/>
+        <location filename="main.qml" line="272"/>
         <source>STR_POPUP_FILE_CANCEL</source>
         <translation>Cancelar</translation>
     </message>
@@ -3057,7 +3074,7 @@
         <translation type="obsolete">Não mostrar esta mensagem novamente.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="196"/>
+        <location filename="main.qml" line="197"/>
         <source>STR_AUTOUPDATE_TITLE</source>
         <translation>Atualização disponível</translation>
     </message>
@@ -3070,22 +3087,22 @@
         <translation type="vanished">Pode desativar a verificação de atualizações ao iniciar a aplicação no menu Configurações da aplicação.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="295"/>
+        <location filename="main.qml" line="296"/>
         <source>STR_UPDATE_INSTALL_BUTTON</source>
         <translation>Abrir</translation>
     </message>
     <message>
-        <location filename="main.qml" line="366"/>
+        <location filename="main.qml" line="363"/>
         <source>STR_WARNING</source>
         <translation>Aviso</translation>
     </message>
     <message>
-        <location filename="main.qml" line="386"/>
+        <location filename="main.qml" line="383"/>
         <source>STR_MULTIPLE_CARDS_DETECTED</source>
         <translation>Múltiplos cartões detectados</translation>
     </message>
     <message>
-        <location filename="main.qml" line="424"/>
+        <location filename="main.qml" line="421"/>
         <source>STR_CHANGE_READER_INFO</source>
         <translation>Para alterar essa opção mais tarde, vá para o menu de configuração da aplicação.</translation>
     </message>

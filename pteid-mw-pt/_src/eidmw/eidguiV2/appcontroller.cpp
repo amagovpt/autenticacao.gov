@@ -31,6 +31,7 @@
 #ifdef WIN32
 #include <windows.h>
 #include <stdio.h>
+#include <time.h>
 #include <QSysInfo>
 #include <QNetworkProxy>
 #endif
@@ -71,6 +72,7 @@ AppController::AppController(GUISettings& settings,QObject *parent) :
               "CpuArch: %s ProductName: %s\n",
               QSysInfo::currentCpuArchitecture().toStdString().c_str(),
               QSysInfo::prettyProductName().toStdString().c_str());
+    checkUpdateCertslog();
 }
 
 void AppController::restoreScreen(void){
@@ -89,6 +91,61 @@ QString AppController::getAppVersion(void){
 QString AppController::getAppRevision(void){
 
     return REVISION_HASH_STRING;
+}
+
+void AppController::checkUpdateCertslog(){
+
+    QString updateCertsLog = m_Settings.getPteidCachedir() + "/updateCertsLog.txt";
+    QFile file(updateCertsLog);
+
+    // Check if certs update log exist.
+    if(!file.open(QIODevice::ReadOnly))
+    {
+        updateCertslog();
+    }
+    file.close();
+}
+
+void AppController::updateCertslog(){
+
+    QString updateCertsLog = m_Settings.getPteidCachedir() + "/updateCertsLog.txt";
+    QFile file(updateCertsLog);
+    if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        // We're going to streaming text to the file
+        char date_string[20];
+        QTextStream stream(&file);
+        time_t _tm =time(nullptr);
+        struct tm * t = localtime ( &_tm );
+        strftime(date_string, 20, "%H:%M:%S %d-%m-%Y", t);
+        stream << date_string;
+        file.close();
+    } else {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                  "AutoUpdates::RunCertsPackage: Error Writing updateCertsLog.txt :%s",
+                  updateCertsLog.toStdString().c_str());
+    }
+}
+
+QString AppController::getAppCertsUpdate(void){
+
+    QString updateCertsLog = m_Settings.getPteidCachedir() + "/updateCertsLog.txt";
+    QFile file(updateCertsLog);
+
+    if(!file.open(QIODevice::ReadOnly))
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                  "AutoUpdates::getAppCertsUpdate: Error Reading updateCertsLog.txt :%s",
+                  updateCertsLog.toStdString().c_str());
+        return tr("STR_CERTS_UPDATE_LOG_ERROR");
+    }
+
+    QTextStream instream(&file);
+    QString line = instream.readLine();
+
+    file.close();
+
+    return line;
 }
 
 QString AppController::getAppCopyright(void){
@@ -380,6 +437,11 @@ bool AppController::removePteidCache() {
 
 void AppController::getPteidCacheSize() {
     QtConcurrent::run(this, &AppController::doGetPteidCacheSize);
+}
+
+QString AppController::getPteidCacheDir() {
+    GUISettings settings;
+    return settings.getPteidCachedir();
 }
 
 void AppController::doGetPteidCacheSize() {

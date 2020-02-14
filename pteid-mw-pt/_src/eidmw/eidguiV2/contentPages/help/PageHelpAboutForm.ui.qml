@@ -17,6 +17,7 @@ Item {
     property alias propertyTextLinkCC: textLinkCC
     property alias propertyTextVersion: textVersion
     property alias propertyTextRevision: textRevision
+    property alias propertyTextCertsUpdate: textCertsUpdate
     property alias propertyTextCopyright: textCopyright
     property alias propertyMainItem: textAppName
 
@@ -90,6 +91,21 @@ Item {
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             Accessible.role: Accessible.Row
             Accessible.name: text
+            KeyNavigation.tab: textCertsUpdate
+            KeyNavigation.down: textCertsUpdate
+            KeyNavigation.right: textCertsUpdate
+            KeyNavigation.backtab: textVersion
+            KeyNavigation.up: textVersion
+        }
+        Text {
+            id: textCertsUpdate
+            font.pixelSize: Constants.SIZE_TEXT_BODY
+            font.family: lato.name
+            font.bold: activeFocus
+            anchors.top: textRevision.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            Accessible.role: Accessible.Row
+            Accessible.name: text
             KeyNavigation.tab: textDifficult
             KeyNavigation.down: textDifficult
             KeyNavigation.right: textDifficult
@@ -98,19 +114,19 @@ Item {
         }
         Text {
             id: textDifficult
-            text: qsTranslate("PageHelpAbout","STR_HELP_LINK") + ": "
+            text: qsTranslate("PageHelpAbout","STR_HELP_LINK") + " : "
             font.pixelSize: Constants.SIZE_TEXT_BODY
             font.family: lato.name
             font.bold: activeFocus
-            anchors.top: textRevision.bottom
+            anchors.top: textCertsUpdate.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             Accessible.role: Accessible.Row
             Accessible.name: text
             KeyNavigation.tab: textLinkCC.propertyText
             KeyNavigation.down: textLinkCC.propertyText
             KeyNavigation.right: textLinkCC.propertyText
-            KeyNavigation.backtab: textRevision
-            KeyNavigation.up: textRevision
+            KeyNavigation.backtab: textCertsUpdate
+            KeyNavigation.up: textCertsUpdate
         }
         Components.Link {
             id: textLinkCC

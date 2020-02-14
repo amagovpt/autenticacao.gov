@@ -270,5 +270,9 @@ PageDefinitionsUpdatesForm {
         console.log("Page definitionsUpdate onCompleted")
         propertyMainItem.forceActiveFocus()
         console.log("Page definitionsUpdate onCompleted finished")
+        propertyTextDescriptionCerts.text =
+                qsTranslate("PageHelpAbout","STR_HELP_APP_CERTS_UPDATE") + " : "
+                + controler.getAppCertsUpdate()
+                + ". " + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
     }
 }

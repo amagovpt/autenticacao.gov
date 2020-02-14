@@ -85,31 +85,32 @@ Load language error. Please reinstall the application"
         property var autoUpdateCerts: true
         property var isAutoUpdateAlreadyDetected: false
 
+        onSignalAutoUpdateSuccess: {
+            var titlePopup = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES")
+            var bodyPopup = qsTranslate("Popup Card","STR_POPUP_RESTART_APP")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+        }
         onSignalAutoUpdateAvailable: {
             if(updateType == GAPI.AutoUpdateApp){
                 if(autoUpdateApp){
-
                     autoUpdateDialog.update_release_notes = release_notes
                     autoUpdateDialog.update_installed_version = installed_version
                     autoUpdateDialog.update_remote_version = remote_version
-
-                    autoUpdateDialog.update_type = isAutoUpdateAlreadyDetected ? GAPI.AutoUpdateBoth : updateType
+                    autoUpdateDialog.update_type = updateType
                     isAutoUpdateAlreadyDetected = true
                     autoUpdateApp = false
                     autoUpdateDialog.open()
                     labelTextTitle.forceActiveFocus();
                 }
-            } else {
+            }
+            else {
                 if(autoUpdateCerts && !isAutoUpdateAlreadyDetected){
-
                     autoUpdateDialog.update_certs_list = certs_list
-
-                    autoUpdateDialog.update_type = isAutoUpdateAlreadyDetected ? GAPI.AutoUpdateBoth : updateType
+                    autoUpdateDialog.update_type = updateType
                     isAutoUpdateAlreadyDetected = true
                     autoUpdateCerts = false
                     autoUpdateDialog.open()
                     labelTextTitle.forceActiveFocus();
-
                 }
             }
         }
@@ -311,16 +312,14 @@ Load language error. Please reinstall the application"
                 mainFormID.propertySubMenuListView.forceActiveFocus()
 
                 //re-emit signal for PageDefinitionsUpdatesForm
-                if(autoUpdateDialog.update_type == GAPI.AutoUpdateApp
-                        || autoUpdateDialog.update_type == GAPI.AutoUpdateBoth){
+                if(autoUpdateDialog.update_type == GAPI.AutoUpdateApp){
                     controler.signalAutoUpdateAvailable(GAPI.AutoUpdateApp,
                                                         autoUpdateDialog.update_release_notes,
                                                         autoUpdateDialog.update_installed_version,
                                                         autoUpdateDialog.update_remote_version,
                                                         "")
                 }
-                if(autoUpdateDialog.update_type == GAPI.AutoUpdateCerts
-                        || autoUpdateDialog.update_type == GAPI.AutoUpdateBoth){
+                if(autoUpdateDialog.update_type == GAPI.AutoUpdateCerts){
                     controler.signalAutoUpdateAvailable(GAPI.AutoUpdateCerts,
                                                         "",
                                                         "",
@@ -336,13 +335,11 @@ Load language error. Please reinstall the application"
             autoUpdateDialog.open()
         }
         onOpened: {
+            console.log("GAPI.AutoUpdateApp = " + GAPI.AutoUpdateApp)
             if(autoUpdateDialog.update_type == GAPI.AutoUpdateApp) {
                 propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_TEXT")
-            } else if(autoUpdateDialog.update_type == GAPI.AutoUpdateCerts){
-                propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_CERTS_TEXT")
             } else {
-                propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_MULTI_TEXT")
-
+                propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_CERTS_TEXT")
             }
         }
     }

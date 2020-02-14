@@ -523,9 +523,18 @@ void AutoUpdates::updateWindows(std::string distro)
     getdistro = distro;
 
     if(m_updateType == GAPI::AutoUpdateApp){
-        getAppController()->signalAutoUpdateAvailable(m_updateType, release_notes, installed_version, remote_version, urlList.at(0));
-    } else{
-        getAppController()->signalAutoUpdateAvailable(m_updateType, "", "", "", getCertListAsString());
+        getAppController()->signalAutoUpdateAvailable(
+            m_updateType, release_notes, installed_version, remote_version, urlList.at(0));
+    }
+    else{
+#ifdef WIN32
+        // Start update automatically
+        getAppController()->startUpdateCerts();
+#else
+        // Show popup about update because the root password is needed.
+        getAppController()->signalAutoUpdateAvailable(
+            m_updateType, "", "", "", getCertListAsString());
+#endif
     }
 }
 
@@ -691,6 +700,7 @@ void AutoUpdates::RunCertsPackage(QStringList certs){
     // TODO: test with Ubunto < 17
     eIDMW::PTEID_Config certs_dir(eIDMW::PTEID_PARAM_GENERAL_CERTS_DIR);
     QString  certs_dir_str = QString::fromStdString(certs_dir.getString());
+    bool bUpdateCertsSuccess;
 
 #ifdef WIN32
     certs_dir_str.append("\\");
@@ -702,14 +712,16 @@ void AutoUpdates::RunCertsPackage(QStringList certs){
         certificateFileName = certs.at(i);
         if (QFile::copy(copySourceDir + certificateFileName, copyTargetDir + certificateFileName) == false)
         {
+            bUpdateCertsSuccess = false;
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                 "AutoUpdates::RunCertsPackage: Cannot copy file: %s", certificateFileName.toStdString().c_str());
-            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::InstallFailed);
-            return;
+        }
+        else {
+            bUpdateCertsSuccess = true;
+            PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
+                "AutoUpdates::RunCertsPackage: Copy file success: %s", certificateFileName.toStdString().c_str());
         }
     }
-    getAppController()->signalAutoUpdateSuccess(m_updateType);
-
 
 #elif __APPLE__
     #error "TODO: Install certificate"
@@ -733,22 +745,31 @@ void AutoUpdates::RunCertsPackage(QStringList certs){
         qDebug() << "C++ AUTO UPDATES: cannot start process ";
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                   "AutoUpdates::RunCertsPackage: Cannot execute: %s",cmd.toStdString().c_str());
-        getAppController()->signalAutoUpdateFail(m_updateType,GAPI::InstallFailed);
-    }
-
-    proc->waitForFinished();
-    proc->setProcessChannelMode(QProcess::MergedChannels);
-
-    if(proc->exitStatus() == QProcess::NormalExit
-            && proc->exitCode() == QProcess::NormalExit){
-        getAppController()->signalAutoUpdateSuccess(m_updateType);
+        bUpdateCertsSuccess = false;
     } else {
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                  "AutoUpdates::RunCertsPackage: Cannot copy file: %s",cmd.toStdString().c_str());
+
+        proc->waitForFinished();
+        proc->setProcessChannelMode(QProcess::MergedChannels);
+
+        if(proc->exitStatus() == QProcess::NormalExit
+                && proc->exitCode() == QProcess::NormalExit){
+            bUpdateCertsSuccess = true;
+            PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
+                      "AutoUpdates::RunCertsPackage: Copy file(s) success: %s",cmd.toStdString().c_str());
+        } else {
+            bUpdateCertsSuccess = false;
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                      "AutoUpdates::RunCertsPackage: Cannot copy file(s): %s",cmd.toStdString().c_str());
+        }
+    }
+#endif
+
+    if(bUpdateCertsSuccess){
+        getAppController()->signalAutoUpdateSuccess(m_updateType);
+        getAppController()->updateCertslog();
+    } else {
         getAppController()->signalAutoUpdateFail(m_updateType,GAPI::InstallFailed);
     }
-
-#endif
     qDebug() << "C++: RunCertsPackage finish";
 }
 
