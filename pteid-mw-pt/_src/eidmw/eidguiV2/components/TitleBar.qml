@@ -75,7 +75,7 @@ Item {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
                 }
-                text: mainWindow.title
+                text: mainWindow.title + " v" + controler.getAppVersion().split("-")[0]
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 color: "white"
