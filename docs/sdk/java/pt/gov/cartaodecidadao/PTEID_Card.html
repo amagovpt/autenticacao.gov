@@ -221,27 +221,27 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#Sign-pt.gov.cartaodecidadao.PTEID_ByteArray-">Sign</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)</code>
-<div class="block">Raw RSA signature with PCKS #1 padding.</div>
+<div class="block">Raw RSA signature with PCKS #1 padding.<br></div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#Sign-pt.gov.cartaodecidadao.PTEID_ByteArray-boolean-">Sign</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data,
     boolean&nbsp;signatureKey)</code>
-<div class="block">Raw RSA signature with PCKS #1 padding.</div>
+<div class="block">Raw RSA signature with PCKS #1 padding.<br></div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#SignSHA256-pt.gov.cartaodecidadao.PTEID_ByteArray-">SignSHA256</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)</code>
-<div class="block">Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash).</div>
+<div class="block">Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash).<br></div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../pt/gov/cartaodecidadao/PTEID_Card.html#SignSHA256-pt.gov.cartaodecidadao.PTEID_ByteArray-boolean-">SignSHA256</a></span>(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data,
           boolean&nbsp;signatureKey)</code>
-<div class="block">Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash).</div>
+<div class="block">Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash).<br></div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
@@ -384,11 +384,11 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;Sign(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data,
                             boolean&nbsp;signatureKey)
                      throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
-<div class="block">Raw RSA signature with PCKS #1 padding. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to <b>true</b>.<br></div>
+<div class="block">Raw RSA signature with PCKS #1 padding.<br></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - holds the data to be signed, at most 32 bytes.<br></dd>
-<dd><code>signatureKey</code> - whether to use the 'Signature key'.<br></dd>
+<dd><code>signatureKey</code> - whether to use the 'Signature key'. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to <b>true</b>.<br></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A PTEID_ByteArray containing the signed data.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -404,7 +404,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>Sign</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;Sign(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)
                      throws <a href="../../../pt/gov/cartaodecidadao/PTEID_Exception.html" title="class in pt.gov.cartaodecidadao">PTEID_Exception</a></pre>
-<div class="block">Raw RSA signature with PCKS #1 padding. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to <b>true</b>.<br></div>
+<div class="block">Raw RSA signature with PCKS #1 padding.<br></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - holds the data to be signed, at most 32 bytes.<br>
@@ -424,11 +424,11 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <h4>SignSHA256</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;SignSHA256(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data,
                                   boolean&nbsp;signatureKey)</pre>
-<div class="block">Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash). By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to <b>true</b>.<br></div>
+<div class="block">Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash).<br></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - holds the data to be signed, it should be 32 bytes.<br></dd>
-<dd><code>signatureKey</code> - whether to use the 'Signature key'.<br></dd>
+<dd><code>signatureKey</code> - whether to use the 'Signature key'. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to <b>true</b>.<br></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A PTEID_ByteArray containing the signed data.</dd>
 </dl>
@@ -441,7 +441,7 @@ extends <a href="../../../pt/gov/cartaodecidadao/PTEID_Object.html" title="class
 <li class="blockList">
 <h4>SignSHA256</h4>
 <pre>public&nbsp;<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;SignSHA256(<a href="../../../pt/gov/cartaodecidadao/PTEID_ByteArray.html" title="class in pt.gov.cartaodecidadao">PTEID_ByteArray</a>&nbsp;data)</pre>
-<div class="block">Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash). By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to <b>true</b>.<br></div>
+<div class="block">Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash).<br></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - holds the data to be signed, it should be 32 bytes.<br>

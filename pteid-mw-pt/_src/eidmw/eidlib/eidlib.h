@@ -615,17 +615,17 @@ public:
     PTEIDSDK_API virtual PTEID_ByteArray sendAPDU(const PTEID_ByteArray& cmd);
 
  	/**
-	 * Raw RSA signature with PCKS #1 padding. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to @b true.
+	 * Raw RSA signature with PCKS #1 padding.
 	 * @param data holds the data to be signed, at most 32 bytes.
-	 * @param signatureKey whether to use the 'Signature key'.
+	 * @param signatureKey whether to use the 'Signature key'. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to @b true.
 	 * @return A PTEID_ByteArray containing the signed data.
 	 */
     PTEIDSDK_API virtual PTEID_ByteArray Sign(const PTEID_ByteArray& data, bool signatureKey=false);
 
  	/**
-	 * Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash). By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to @b true.
+	 * Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash).
 	 * @param data holds the data to be signed, it should be 32 bytes.
-	 * @param signatureKey whether to use the 'Signature key'.
+	 * @param signatureKey whether to use the 'Signature key'. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to @b true.
 	 * @return A PTEID_ByteArray containing the signed data.
 	 */
     PTEIDSDK_API virtual PTEID_ByteArray SignSHA256(const PTEID_ByteArray& data, bool signatureKey=false);
