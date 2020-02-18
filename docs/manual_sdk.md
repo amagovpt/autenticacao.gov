@@ -18,6 +18,7 @@
 - [Procedimentos](#procedimentos)
   - [Pré-condições](#pr%c3%a9-condi%c3%a7%c3%b5es)
   - [Inicialização / Finalização do SDK](#inicializa%c3%a7%c3%a3o--finaliza%c3%a7%c3%a3o-do-sdk)
+  - [Configurar modo teste](#configurar-modo-teste)
   - [Acesso ao *smartcard* Cartão de Cidadão](#acesso-ao-smartcard-cart%c3%a3o-de-cidad%c3%a3o)
     - [Eventos de inserção / remoção de cartões](#eventos-de-inser%c3%a7%c3%a3o--remo%c3%a7%c3%a3o-de-cart%c3%b5es)
   - [Dados pessoais do cidadão](#dados-pessoais-do-cidad%c3%a3o)
@@ -296,6 +297,33 @@ namespace PTEIDSample {
 		}
 	}
 }
+```
+
+## Configurar modo teste
+
+Para alterar as configurações de forma a utilizar o modo teste, para usar cartões de teste, deve usar-se a função estática **SetTestMode(*bool* bTestMode)** da classe **PTEID_Config**.
+
+Com o valor do parâmetro *bTestMode* a *true*, os seguintes exemplos ativam o modo de teste.
+
+1.  Exemplo C++
+
+```c++
+(...)
+PTEID_Config::SetTestMode(true);
+```
+
+1.  Exemplo Java
+
+```java
+(...)
+PTEID_Config.SetTestMode(true);
+```
+
+2.  Exemplo C\#
+
+```c
+(...)
+PTEID_Config.SetTestMode(true);
 ```
 
 ## Acesso ao *smartcard* Cartão de Cidadão
