@@ -857,8 +857,7 @@ void AutoUpdates::httpFinished()
         {
             url = newUrl;
             reply->deleteLater();
-            file->open(QIODevice::WriteOnly);
-            file->resize(0);
+            filedata.clear();
             startRequest(url);
             return;
         }
