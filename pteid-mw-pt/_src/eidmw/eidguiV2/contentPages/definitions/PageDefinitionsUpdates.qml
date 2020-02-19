@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017, 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017 - 2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
@@ -30,7 +30,8 @@ PageDefinitionsUpdatesForm {
             var tempTextDescription = ""
             if (error_code == GAPI.GenericError) {
                 tempTextDescription =
-                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_ERROR") + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
+                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_ERROR")
+                        + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
             }else if (error_code == GAPI.NoUpdatesAvailable) {
                 tempTextDescription =
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_NO_UPDATES")
@@ -48,7 +49,8 @@ PageDefinitionsUpdatesForm {
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
             }else if (error_code == GAPI.InstallFailed) {
                 tempTextDescription =
-                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL") + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
+                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL")
+                        + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
             }else if (error_code == GAPI.NetworkError) {
                 tempTextDescription =
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_NETWORK_ERROR")
@@ -98,7 +100,9 @@ PageDefinitionsUpdatesForm {
             }
         }
         onSignalAutoUpdateSuccess: {
-            propertyTextDescriptionCerts.text = qsTranslate("PageDefinitionsUpdates","STR_UPDATE_SUCCESS")
+            propertyTextDescriptionCerts.text =
+                    qsTranslate("PageDefinitionsUpdates","STR_UPDATE_SUCCESS")
+                    + "<br><br>" + qsTranslate("Popup Card","STR_POPUP_RESTART_APP")
             propertyProgressBarCerts.visible = false
             propertyProgressBarCerts.value = 0
             propertyProgressBarCerts.indeterminate = false
@@ -161,6 +165,9 @@ PageDefinitionsUpdatesForm {
                 } else {
                     propertyTextDescriptionCerts.text =
                             qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_NO_UPDATES")
+                            + " " + qsTranslate("PageHelpAbout","STR_HELP_APP_CERTS_UPDATE") + " : "
+                            + controler.getAppCertsUpdate()
+                            + ". " + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
                     propertyButtonSearchCerts.visible = true
                 }
                 propertyProgressBarCerts.visible = false
@@ -172,7 +179,10 @@ PageDefinitionsUpdatesForm {
         onSignalAutoUpdateNotAvailable: {
             console.log("PageDefinitionsUpdates onSignalAutoUpdateNotAvailable")
             propertyTextDescriptionCerts.text =
-                            qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_NO_UPDATES")
+                    qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_NO_UPDATES")
+                    + " " +qsTranslate("PageHelpAbout","STR_HELP_APP_CERTS_UPDATE") + " : "
+                    + controler.getAppCertsUpdate()
+                    + ". " + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
             propertyButtonSearchCerts.visible = true
             propertyProgressBarCerts.visible = false
             propertyProgressBarCerts.value = 0
@@ -273,6 +283,7 @@ PageDefinitionsUpdatesForm {
         propertyTextDescriptionCerts.text =
                 qsTranslate("PageHelpAbout","STR_HELP_APP_CERTS_UPDATE") + " : "
                 + controler.getAppCertsUpdate()
-                + ". " + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
+                + ". "
+                + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
     }
 }

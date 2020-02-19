@@ -926,32 +926,32 @@
         <translation>Gravar Notas</translation>
     </message>
     <message>
-        <location filename="main.qml" line="471"/>
+        <location filename="main.qml" line="480"/>
         <source>STR_UNSAVED_NOTES_TITLE</source>
         <translation>Notas</translation>
     </message>
     <message>
-        <location filename="main.qml" line="486"/>
+        <location filename="main.qml" line="495"/>
         <source>STR_UNSAVED_NOTES</source>
         <translation>Notas por gravar</translation>
     </message>
     <message>
-        <location filename="main.qml" line="503"/>
+        <location filename="main.qml" line="512"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION_EXIT</source>
         <translation>Pressione &quot;Permanecer&quot; para continuar a editar as notas ou &quot;Sair&quot; para sair da aplicação sem guardar as notas.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="504"/>
+        <location filename="main.qml" line="513"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION</source>
         <translation>Pressione &quot;Permanecer&quot; para continuar a editar as notas ou &quot;Sair&quot; para sair desta página sem guardar as notas.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="528"/>
+        <location filename="main.qml" line="537"/>
         <source>STR_UNSAVED_NOTES_LEAVE</source>
         <translation>Sair</translation>
     </message>
     <message>
-        <location filename="main.qml" line="551"/>
+        <location filename="main.qml" line="560"/>
         <source>STR_UNSAVED_NOTES_STAY</source>
         <translation>Permanecer</translation>
     </message>
@@ -1566,7 +1566,7 @@
 <context>
     <name>PageDefinitionsUpdates</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="134"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="138"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="204"/>
         <source>STR_UPDATE_BUTTON_START</source>
         <translation>Instalar</translation>
@@ -1582,61 +1582,63 @@
         <translation>Ocorreu um erro.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="36"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="140"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="37"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="144"/>
         <source>STR_UPDATE_NO_UPDATES</source>
         <translation>Não existem atualizações de momento.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="39"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="40"/>
         <source>STR_UPDATE_LINUX_NOT_SUPPORTED</source>
         <translation>A sua distribuição Linux não é suportada pelas Atualizações Automáticas</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="42"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="43"/>
         <source>STR_UPDATE_SAVE_FILE</source>
         <translation>Impossível guardar o ficheiro.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="45"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="46"/>
         <source>STR_UPDATE_DOWNLOAD_FAIL</source>
         <translation>A Transferência falhou.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="51"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="52"/>
+        <location filename="main.qml" line="136"/>
         <source>STR_UPDATE_INSTALL_FAIL</source>
-        <translation>Falha na instalação da actualização.</translation>
+        <translation>Falha na instalação de um ou mais certificados.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="101"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="104"/>
         <source>STR_UPDATE_SUCCESS</source>
         <translation>Atualização de certificados com sucesso.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="110"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="114"/>
         <location filename="main.qml" line="89"/>
         <source>STR_UPDATED_CERTIFICATES</source>
         <oldsource>STR_UPDATE_CERTIFICATES</oldsource>
         <translation>Atualização de certificados com sucesso</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="154"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="158"/>
         <source>STR_UPDATE_CERTS_AVAILABLE</source>
         <translation>Existe uma atualização de certificados. Clique em Instalar para prosseguir.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="243"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="253"/>
         <source>STR_UPDATE_CERTS_VERSION_LOOKUP</source>
         <translation>A procura de novos certificados.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="33"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="51"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="34"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="53"/>
+        <location filename="main.qml" line="137"/>
         <source>STR_CONTACT_SUPPORT</source>
         <translation>Por favor tente novamente. Caso o erro persista, contacte-nos por email para &lt;a href=&quot;mailto:info.cidadao@ama.pt&quot;&gt;info.cidadao@ama.pt&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="54"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="56"/>
         <source>STR_UPDATE_NETWORK_ERROR</source>
         <translation>Por favor verifique a sua ligação a internet e volte a tentar.</translation>
     </message>
@@ -1672,41 +1674,43 @@
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="135"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="139"/>
         <source>STR_VERSION</source>
         <translation>versão</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="158"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="162"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="608"/>
         <source>STR_UPDATE_CERTS_BUTTON_START</source>
         <translation>Instalar</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="163"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="175"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="167"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="182"/>
         <source>STR_UPDATE_CERTS_NO_UPDATES</source>
-        <translation>Não existem atualizações de certificados de momento</translation>
+        <translation>Não existem atualizações de certificados de momento.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="209"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="219"/>
         <source>STR_UPDATE_VERSION_LOOKUP</source>
         <translation>A procura de nova versão.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="125"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="129"/>
         <source>STR_UPDATE_AVAILABLE</source>
         <translation>Existe uma atualização disponí­vel. Clique em Instalar para prosseguir</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="188"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="195"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="198"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="205"/>
         <source>STR_UPDATE_STARTING_DOWNLOAD</source>
         <translation>A transferir</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="48"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="276"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="49"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="170"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="185"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="287"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="130"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="468"/>
         <source>STR_UPDATE_TEXT</source>
@@ -1718,23 +1722,28 @@
         <translation>Procurar atualizações</translation>
     </message>
     <message>
-        <location filename="main.qml" line="340"/>
+        <location filename="main.qml" line="349"/>
         <source>STR_AUTOUPDATE_TEXT</source>
         <translation>Existe uma versão mais recente da aplicação.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="251"/>
+        <location filename="main.qml" line="260"/>
         <source>STR_AUTOUPDATE_OPEN_TEXT</source>
         <oldsource>STR_AUTOUPDATE_SUB_TEXT</oldsource>
         <translation>Clique em Abrir para prosseguir para a página de atualizações.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="252"/>
+        <location filename="main.qml" line="135"/>
+        <source>STR_UPDATE_CERTIFICATES_FAIL</source>
+        <translation>Falha na atualização dos certificados.</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="261"/>
         <source>STR_DISABLE_AUTOUPDATE_INFO</source>
         <translation>Pode desativar a verificação de atualizações ao iniciar a aplicação no menu Configurações da aplicação.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="342"/>
+        <location filename="main.qml" line="351"/>
         <source>STR_AUTOUPDATE_CERTS_TEXT</source>
         <translation>Existe uma atualização de certificados.</translation>
     </message>
@@ -1783,7 +1792,9 @@
         <translation>Revisão</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="274"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="168"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="183"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="284"/>
         <location filename="contentPages/help/PageHelpAbout.qml" line="30"/>
         <source>STR_HELP_APP_CERTS_UPDATE</source>
         <translation>Última atualização dos certificados</translation>
@@ -2513,9 +2524,9 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1056"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="67"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="504"/>
-        <location filename="main.qml" line="139"/>
-        <location filename="main.qml" line="146"/>
-        <location filename="main.qml" line="152"/>
+        <location filename="main.qml" line="148"/>
+        <location filename="main.qml" line="155"/>
+        <location filename="main.qml" line="161"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Erro</translation>
     </message>
@@ -2686,22 +2697,22 @@
         <translation>Erro da aplicação! Por favor reinstale a aplicação</translation>
     </message>
     <message>
-        <location filename="main.qml" line="140"/>
+        <location filename="main.qml" line="149"/>
         <source>STR_GENERIC_ERROR_MSG</source>
         <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="141"/>
+        <location filename="main.qml" line="150"/>
         <source>STR_ERROR_CODE</source>
         <translation>Código de erro = </translation>
     </message>
     <message>
-        <location filename="main.qml" line="147"/>
+        <location filename="main.qml" line="156"/>
         <source>STR_CERTIFICATES_IMPORT_ERROR_MSG</source>
         <translation>Erro ao importar certificados</translation>
     </message>
     <message>
-        <location filename="main.qml" line="153"/>
+        <location filename="main.qml" line="162"/>
         <source>STR_CERTIFICATES_REMOVE_ERROR_MSG</source>
         <translation>Erro ao remover certificados</translation>
     </message>
@@ -2718,7 +2729,8 @@
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="158"/>
         <location filename="contentPages/definitions/PageDefinitionsSignSettings.qml" line="37"/>
         <location filename="contentPages/definitions/PageDefinitionsSignSettings.qml" line="49"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="111"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="105"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="115"/>
         <location filename="main.qml" line="90"/>
         <source>STR_POPUP_RESTART_APP</source>
         <translation>É necessário reiniciar a aplicação para esta alteração ter efeito. Por favor reinicie a aplicação.</translation>
@@ -2742,7 +2754,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="458"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="182"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="306"/>
-        <location filename="main.qml" line="358"/>
+        <location filename="main.qml" line="367"/>
         <source>STR_SHOW_WINDOWS</source>
         <translation>Mostrar janela</translation>
     </message>
@@ -2799,7 +2811,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="230"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="102"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="372"/>
-        <location filename="main.qml" line="272"/>
+        <location filename="main.qml" line="281"/>
         <source>STR_POPUP_FILE_CANCEL</source>
         <translation>Cancelar</translation>
     </message>
@@ -3074,7 +3086,7 @@
         <translation type="obsolete">Não mostrar esta mensagem novamente.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="197"/>
+        <location filename="main.qml" line="206"/>
         <source>STR_AUTOUPDATE_TITLE</source>
         <translation>Atualização disponível</translation>
     </message>
@@ -3087,22 +3099,22 @@
         <translation type="vanished">Pode desativar a verificação de atualizações ao iniciar a aplicação no menu Configurações da aplicação.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="296"/>
+        <location filename="main.qml" line="305"/>
         <source>STR_UPDATE_INSTALL_BUTTON</source>
         <translation>Abrir</translation>
     </message>
     <message>
-        <location filename="main.qml" line="363"/>
+        <location filename="main.qml" line="372"/>
         <source>STR_WARNING</source>
         <translation>Aviso</translation>
     </message>
     <message>
-        <location filename="main.qml" line="383"/>
+        <location filename="main.qml" line="392"/>
         <source>STR_MULTIPLE_CARDS_DETECTED</source>
         <translation>Múltiplos cartões detectados</translation>
     </message>
     <message>
-        <location filename="main.qml" line="421"/>
+        <location filename="main.qml" line="430"/>
         <source>STR_CHANGE_READER_INFO</source>
         <translation>Para alterar essa opção mais tarde, vá para o menu de configuração da aplicação.</translation>
     </message>

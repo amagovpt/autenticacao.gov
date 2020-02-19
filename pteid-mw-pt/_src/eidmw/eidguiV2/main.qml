@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
@@ -91,26 +91,30 @@ Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalAutoUpdateAvailable: {
-            if(updateType == GAPI.AutoUpdateApp){
-                if(autoUpdateApp){
-                    autoUpdateDialog.update_release_notes = release_notes
-                    autoUpdateDialog.update_installed_version = installed_version
-                    autoUpdateDialog.update_remote_version = remote_version
-                    autoUpdateDialog.update_type = updateType
-                    isAutoUpdateAlreadyDetected = true
-                    autoUpdateApp = false
-                    autoUpdateDialog.open()
-                    labelTextTitle.forceActiveFocus();
+            // Do not show dialog when update page is open
+            if(mainFormID.propertyMainMenuBottomListView.currentIndex != 0
+                    && mainFormID.propertySubMenuListView.currentIndex != 5){
+                if(updateType == GAPI.AutoUpdateApp){
+                    if(autoUpdateApp){
+                        autoUpdateDialog.update_release_notes = release_notes
+                        autoUpdateDialog.update_installed_version = installed_version
+                        autoUpdateDialog.update_remote_version = remote_version
+                        autoUpdateDialog.update_type = updateType
+                        isAutoUpdateAlreadyDetected = true
+                        autoUpdateApp = false
+                        autoUpdateDialog.open()
+                        labelTextTitle.forceActiveFocus();
+                    }
                 }
-            }
-            else {
-                if(autoUpdateCerts && !isAutoUpdateAlreadyDetected){
-                    autoUpdateDialog.update_certs_list = certs_list
-                    autoUpdateDialog.update_type = updateType
-                    isAutoUpdateAlreadyDetected = true
-                    autoUpdateCerts = false
-                    autoUpdateDialog.open()
-                    labelTextTitle.forceActiveFocus();
+                else {
+                    if(autoUpdateCerts && !isAutoUpdateAlreadyDetected){
+                        autoUpdateDialog.update_certs_list = certs_list
+                        autoUpdateDialog.update_type = updateType
+                        isAutoUpdateAlreadyDetected = true
+                        autoUpdateCerts = false
+                        autoUpdateDialog.open()
+                        labelTextTitle.forceActiveFocus();
+                    }
                 }
             }
         }
@@ -127,6 +131,12 @@ Load language error. Please reinstall the application"
                 console.log("No Certs updates or startup auto update failed.")
                 if(autoUpdateCerts) {
                     autoUpdateCerts = false
+                }
+                if (error_code == GAPI.InstallFailed){
+                    var titlePopup = qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTIFICATES_FAIL")
+                    var bodyPopup = qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL")
+                            + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
+                    mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
                 }
             }
         }
@@ -248,8 +258,7 @@ Load language error. Please reinstall the application"
                     font.pixelSize: activeFocus ? Constants.SIZE_TEXT_LABEL_FOCUS : Constants.SIZE_TEXT_LABEL
                     font.bold: activeFocus
                     font.family: lato.name
-                    text: qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_OPEN_TEXT") + "\n\n"
-                          + qsTranslate("PageDefinitionsUpdates","STR_DISABLE_AUTOUPDATE_INFO")
+                    text: qsTranslate("PageDefinitionsUpdates","STR_DISABLE_AUTOUPDATE_INFO")
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
                     width: parent.width
@@ -338,8 +347,10 @@ Load language error. Please reinstall the application"
             console.log("GAPI.AutoUpdateApp = " + GAPI.AutoUpdateApp)
             if(autoUpdateDialog.update_type == GAPI.AutoUpdateApp) {
                 propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_TEXT")
+                + " " + qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_OPEN_TEXT")
             } else {
                 propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_CERTS_TEXT")
+                + " " + qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_OPEN_TEXT")
             }
         }
     }

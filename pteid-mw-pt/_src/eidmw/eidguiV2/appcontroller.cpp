@@ -1,6 +1,6 @@
 /*****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
@@ -113,11 +113,11 @@ void AppController::updateCertslog(){
     if(file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         // We're going to streaming text to the file
-        char date_string[20];
+        char date_string[25];
         QTextStream stream(&file);
         time_t _tm =time(nullptr);
         struct tm * t = localtime ( &_tm );
-        strftime(date_string, 20, "%H:%M:%S %d-%m-%Y", t);
+        strftime(date_string, 25, "%H:%M do dia %d-%m-%Y", t);
         stream << date_string;
         file.close();
     } else {

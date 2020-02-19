@@ -105,6 +105,7 @@ void AutoUpdates::startRequest(QUrl url) {
     qDebug() << "C++ AUTO UPDATES: startRequest: " << url;
 
     file = NULL;
+    filedata.clear();
     httpRequestAborted = false;
 
     //allow up to 1 minutes to fetch remote version
@@ -112,35 +113,35 @@ void AutoUpdates::startRequest(QUrl url) {
 
     ProxyInfo proxyinfo;
     proxy.setType(QNetworkProxy::HttpProxy);
-	if (proxyinfo.isAutoConfig())
-	{
-		std::string proxy_host;
-		long proxy_port;
-		proxyinfo.getProxyForHost(url.toString().toUtf8().constData(), &proxy_host, &proxy_port);
-		if (proxy_host.size() > 0)
-		{
-			proxy.setHostName(QString::fromStdString(proxy_host));
-			proxy.setPort(proxy_port);
-		}
-		QNetworkProxy::setApplicationProxy(proxy);
-	}
-	else if (proxyinfo.isManualConfig())
-	{
-		long proxyinfo_port;
-		try {
-			proxyinfo_port = std::stol(proxyinfo.getProxyPort());
-		}
-		catch (...) {
-			eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing proxy port to number value.");
-		}
-		proxy.setHostName(QString::fromStdString(proxyinfo.getProxyHost()));
-		proxy.setPort(proxyinfo_port);
-		if (proxyinfo.getProxyUser().size() > 0) {
-			proxy.setUser(QString::fromStdString(proxyinfo.getProxyUser()));
-			proxy.setPassword(QString::fromStdString(proxyinfo.getProxyPwd()));
-		}
-		QNetworkProxy::setApplicationProxy(proxy);
-	}
+    if (proxyinfo.isAutoConfig())
+    {
+        std::string proxy_host;
+        long proxy_port;
+        proxyinfo.getProxyForHost(url.toString().toUtf8().constData(), &proxy_host, &proxy_port);
+        if (proxy_host.size() > 0)
+        {
+            proxy.setHostName(QString::fromStdString(proxy_host));
+            proxy.setPort(proxy_port);
+        }
+        QNetworkProxy::setApplicationProxy(proxy);
+    }
+    else if (proxyinfo.isManualConfig())
+    {
+        long proxyinfo_port;
+        try {
+            proxyinfo_port = std::stol(proxyinfo.getProxyPort());
+        }
+        catch (...) {
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing proxy port to number value.");
+        }
+        proxy.setHostName(QString::fromStdString(proxyinfo.getProxyHost()));
+        proxy.setPort(proxyinfo_port);
+        if (proxyinfo.getProxyUser().size() > 0) {
+            proxy.setUser(QString::fromStdString(proxyinfo.getProxyUser()));
+            proxy.setPassword(QString::fromStdString(proxyinfo.getProxyPwd()));
+        }
+        QNetworkProxy::setApplicationProxy(proxy);
+    }
 
     reply = qnam.get(QNetworkRequest(url));
     QTimer::singleShot(download_duration, this, SLOT(cancelDownload()));
@@ -468,6 +469,7 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
     qDebug() << "C++ AUTO UPDATES: ChooseCertificates";
 
     urlList.clear();
+    hashList.clear();
     fileNames.clear();
     fileIdx = 0;
     std::string downloadurl;
@@ -496,21 +498,23 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
         file_name_temp.append(certs_dir_str);
         file_name_temp.append(cert_json->valuestring);
 
-        if(QFile::exists(QString::fromUtf8(file_name_temp.c_str()))){
+        if(QFile::exists(QString::fromUtf8(file_name_temp.c_str()))
+                && validateHash(QString::fromUtf8(file_name_temp.c_str()),
+                                QString::fromStdString(cert_json->string))){
             qDebug() << "Cert exists: " << QString::fromUtf8(file_name_temp.c_str());
         } else{
-            qDebug() << "Cert does not exist: " << QString::fromUtf8(file_name_temp.c_str());
-            QString cert = cert_json->valuestring;
+            qDebug() << "Cert does not exist or invalid: " << QString::fromUtf8(file_name_temp.c_str());
 
             downloadurl.append(configurl);
             downloadurl.append(cert_json->valuestring);
 
             qDebug() << "downloadurl : " << QString::fromUtf8(downloadurl.c_str());
             urlList.append(QString::fromStdString(downloadurl));
+            hashList.append(QString::fromStdString(cert_json->string));
             downloadurl.clear();
         }
     }
-    if(urlList.length() > 0){
+    if(urlList.length() > 0 && hashList.length() > 0){
         updateWindows();
     } else {
         getAppController()->signalAutoUpdateNotAvailable();
@@ -700,7 +704,8 @@ void AutoUpdates::RunCertsPackage(QStringList certs){
     // TODO: test with Ubunto < 17
     eIDMW::PTEID_Config certs_dir(eIDMW::PTEID_PARAM_GENERAL_CERTS_DIR);
     QString  certs_dir_str = QString::fromStdString(certs_dir.getString());
-    bool bUpdateCertsSuccess;
+    bool bUpdateCertsSuccess = false;
+    bool bHaveFilesToCopy = false;
 
 #ifdef WIN32
     certs_dir_str.append("\\");
@@ -708,18 +713,21 @@ void AutoUpdates::RunCertsPackage(QStringList certs){
     QString copySourceDir = QDir::tempPath() + "/";
     QString copyTargetDir = certs_dir_str;
     QString certificateFileName;
-    for (int i = 0; i < certs.length(); i++){
-        certificateFileName = certs.at(i);
-        if (QFile::copy(copySourceDir + certificateFileName, copyTargetDir + certificateFileName) == false)
-        {
-            bUpdateCertsSuccess = false;
-            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                "AutoUpdates::RunCertsPackage: Cannot copy file: %s", certificateFileName.toStdString().c_str());
-        }
-        else {
-            bUpdateCertsSuccess = true;
-            PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
-                "AutoUpdates::RunCertsPackage: Copy file success: %s", certificateFileName.toStdString().c_str());
+    if(certs.length() > 0){
+        bUpdateCertsSuccess = true;
+        for (int i = 0; i < certs.length(); i++){
+            certificateFileName = certs.at(i);
+            if (validateHash(copySourceDir + certificateFileName, hashList.at(i)) == false
+                || QFile::copy(copySourceDir + certificateFileName, copyTargetDir + certificateFileName) == false)
+            {
+                bUpdateCertsSuccess = false; // Keep install another files but show popup with error message
+                PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                    "AutoUpdates::RunCertsPackage: Cannot copy file or certificate invalid: %s", certificateFileName.toStdString().c_str());
+            }
+            else {
+                PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
+                    "AutoUpdates::RunCertsPackage: Copy file success: %s", certificateFileName.toStdString().c_str());
+            }
         }
     }
 
@@ -727,39 +735,50 @@ void AutoUpdates::RunCertsPackage(QStringList certs){
     #error "TODO: Install certificate"
 #else
     QString filesToCopy;
-    for (int i = 0; i < certs.length(); i++){
-        filesToCopy.append(QDir::tempPath());
-        filesToCopy.append("/");
-        filesToCopy.append(certs.at(i));
-        filesToCopy.append(" ");
+    if(certs.length() > 0){
+        bUpdateCertsSuccess = true;
+        for (int i = 0; i < certs.length(); i++){
+            QString certificateFileName;
+            certificateFileName = QDir::tempPath() + "/" + certs.at(i);
+            if(validateHash(certificateFileName, hashList.at(i))){
+                    bHaveFilesToCopy= true;
+                    filesToCopy.append(QDir::tempPath());
+                    filesToCopy.append("/");
+                    filesToCopy.append(certs.at(i));
+                    filesToCopy.append(" ");
+            } else {
+                    bUpdateCertsSuccess = false;
+            }
+        }
     }
 
-    QProcess *proc = new QProcess(this);
-    proc->waitForFinished();
-
-    QString cmd = "pkexec /bin/cp " + filesToCopy + certs_dir_str;
-    proc->start(cmd);
-
-    if(!proc->waitForStarted()) //default wait time 30 sec
-    {
-        qDebug() << "C++ AUTO UPDATES: cannot start process ";
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                  "AutoUpdates::RunCertsPackage: Cannot execute: %s",cmd.toStdString().c_str());
-        bUpdateCertsSuccess = false;
-    } else {
-
+    if(bHaveFilesToCopy){
+        QProcess *proc = new QProcess(this);
         proc->waitForFinished();
-        proc->setProcessChannelMode(QProcess::MergedChannels);
 
-        if(proc->exitStatus() == QProcess::NormalExit
-                && proc->exitCode() == QProcess::NormalExit){
-            bUpdateCertsSuccess = true;
-            PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
-                      "AutoUpdates::RunCertsPackage: Copy file(s) success: %s",cmd.toStdString().c_str());
-        } else {
-            bUpdateCertsSuccess = false;
+        QString cmd = "pkexec /bin/cp " + filesToCopy + certs_dir_str;
+        proc->start(cmd);
+
+        if(!proc->waitForStarted()) //default wait time 30 sec
+        {
+            qDebug() << "C++ AUTO UPDATES: cannot start process ";
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                      "AutoUpdates::RunCertsPackage: Cannot copy file(s): %s",cmd.toStdString().c_str());
+                      "AutoUpdates::RunCertsPackage: Cannot execute: %s",cmd.toStdString().c_str());
+            bUpdateCertsSuccess = false;
+        } else {
+
+            proc->waitForFinished();
+            proc->setProcessChannelMode(QProcess::MergedChannels);
+
+            if(proc->exitStatus() == QProcess::NormalExit
+                    && proc->exitCode() == QProcess::NormalExit){
+                PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
+                          "AutoUpdates::RunCertsPackage: Copy file(s) success: %s",cmd.toStdString().c_str());
+            } else {
+                bUpdateCertsSuccess = false;
+                PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                          "AutoUpdates::RunCertsPackage: Cannot copy file(s): %s",cmd.toStdString().c_str());
+            }
         }
     }
 #endif
@@ -771,6 +790,33 @@ void AutoUpdates::RunCertsPackage(QStringList certs){
         getAppController()->signalAutoUpdateFail(m_updateType,GAPI::InstallFailed);
     }
     qDebug() << "C++: RunCertsPackage finish";
+}
+
+bool AutoUpdates::validateHash(QString certPath, QString hashString){
+
+    QFile f(certPath);
+    if (!f.open(QFile::ReadOnly)){
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                  "AutoUpdates::getAppCertsUpdate: Error Reading Certificate file :%s",
+                  certPath.toStdString().c_str());
+        return false;
+    }
+
+    QTextStream in(&f);
+
+    QByteArray DataFile = f.readAll();
+
+    QString hash = QString(QCryptographicHash::hash((DataFile),QCryptographicHash::Sha256).toHex());
+
+    if (QString::compare(hash, hashString, Qt::CaseInsensitive)){
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "AutoUpdates::validateHash: Certificate invalid: %s %s %s ",
+                  certPath.toStdString().c_str(),hashString.toStdString().c_str(),hash.toStdString().c_str());
+        return false;
+    }
+    else {
+        return true;
+    }
 }
 
 void AutoUpdates::userCancelledUpdateDownload()

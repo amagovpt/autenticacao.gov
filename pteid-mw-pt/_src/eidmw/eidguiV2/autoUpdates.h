@@ -80,6 +80,7 @@ private:
     bool userCanceled;
     std::string filedata;
     QStringList urlList;
+    QStringList hashList;
     std::string getdistro;
     QStringList fileNames;
     QString fileName;
@@ -105,6 +106,7 @@ private:
 
     void RunAppPackage(std::string pkg, std::string distro);
     void RunCertsPackage(QStringList certs);
+    bool validateHash(QString certPath, QString hash);
 };
 
 #endif //AUTOUPDATES_H
