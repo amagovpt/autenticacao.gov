@@ -34,7 +34,7 @@
 @set PTEID_DIR_PLATFORMSDK=C:\Program Files (x86)\Windows Kits\8.1
 @set PTEID_DIR_VS=C:\Program Files (x86)\Microsoft Visual Studio 12.0
 @set PTEID_DIR_DOXYGEN=C:\Program Files\doxygen-1.8.15.windows.x64.bin
-@set PTEID_DIR_SWIG=C:\swigwin-2.0.12
+@set PTEID_DIR_SWIG=C:\swigwin-4.0.1
 @set PTEID_DIR_JDK=C:\Program Files\Java\jdk1.8.0_231
 @set PTEID_DIR_WIX=C:\Program Files (x86)\WiX Toolset v3.10
 @set PTEID_DIR_MSM=C:\Program Files (x86)\Common Files\Merge Modules
