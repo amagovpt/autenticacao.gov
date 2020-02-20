@@ -651,9 +651,6 @@ PageServicesSignSimpleForm {
                 qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
         propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_NIC")+ ": "
 
-        //  CMD load backup mobile data
-        //textFieldMobileNumber.text = propertyPageLoader.propertyBackupMobileNumber
-
         gapi.startCardReading()
     }
     Component.onDestruction: {

@@ -447,7 +447,7 @@ Item {
                     name: Constants.DLG_STATE.SIGN_FORM
                     PropertyChanges {target: linkCMD; visible: true}
                     PropertyChanges {target: rectMobileNumber; visible: true}
-                    PropertyChanges {target: textFieldMobileNumber; visible: true; focus: true}
+                    PropertyChanges {target: textFieldMobileNumber; visible: true; focus: true; text: propertyPageLoader.propertyBackupMobileNumber}
                     PropertyChanges {target: rectPin; visible: true}
                     PropertyChanges {target: textMessageTop; text: qsTranslate("PageServicesSign","STR_SIGN_INSERT_LOGIN")}
                     PropertyChanges {
@@ -642,7 +642,6 @@ Item {
     }
 
     function clearInputFields() {
-        textFieldMobileNumber.text = ""
         textFieldPin.text = ""
         textFieldReturnCode.text = ""
     }
