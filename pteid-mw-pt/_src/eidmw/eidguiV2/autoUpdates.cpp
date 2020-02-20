@@ -498,6 +498,24 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
         file_name_temp.append(certs_dir_str);
         file_name_temp.append(cert_json->valuestring);
 
+        QDir dir(QString::fromStdString(certs_dir_str));
+        if (!dir.exists())
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "AutoUpdates::RunCertsPackage: Certs dir do not exist! %s",certs_dir.getString());
+            qDebug() << "C++: AutoUpdates::RunCertsPackage: Certs dir do not exist!";
+            getAppController()->signalAutoUpdateFail(m_updateType,GAPI::InstallFailed);
+            return;
+        }
+        if (!dir.isReadable())
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "AutoUpdates::RunCertsPackage: Certs dir not have read permissions! %s",certs_dir.getString());
+            qDebug() << "C++: AutoUpdates::RunCertsPackage: Certs dir not have read permissions!";
+            getAppController()->signalAutoUpdateFail(m_updateType,GAPI::InstallFailed);
+            return;
+        }
+
         if(QFile::exists(QString::fromUtf8(file_name_temp.c_str()))
                 && validateHash(QString::fromUtf8(file_name_temp.c_str()),
                                 QString::fromStdString(cert_json->string))){
@@ -722,7 +740,7 @@ void AutoUpdates::RunCertsPackage(QStringList certs){
             {
                 bUpdateCertsSuccess = false; // Keep install another files but show popup with error message
                 PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                    "AutoUpdates::RunCertsPackage: Cannot copy file or certificate invalid: %s", certificateFileName.toStdString().c_str());
+                    "AutoUpdates::RunCertsPackage: Cannot copy file: %s", certificateFileName.toStdString().c_str());
             }
             else {
                 PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
