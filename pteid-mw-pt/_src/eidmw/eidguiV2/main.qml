@@ -1479,6 +1479,32 @@ Load language error. Please reinstall the application"
             }
         }
     }
+    Item {
+        width:  mainFormID.propertyMainMenuView.width
+        height: Constants.SIZE_TEXT_LABEL
+        anchors {
+            bottom: parent.bottom
+            left: parent.left
+            bottomMargin: Constants.SIZE_ROW_V_SPACE
+        }
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.pixelSize: Constants.SIZE_TEXT_LABEL
+            font.family: lato.name
+            color: Constants.COLOR_MAIN_DARK_GRAY
+            text: "Versão " + controler.getAppVersion().split("-")[0]
+            MouseArea {
+                id: mouseAreaMainMenu
+                anchors.fill: parent
+                hoverEnabled: true
+                onClicked:{
+                    mainMenuBottomPressed(1)
+                    subMenuPressed(2, mainFormID.propertyMainMenuBottomListView.model.get(1).subdata.get(2).url)
+                }
+                z:1 // MouseArea above buttons
+            }
+        }
+    }
 
     Component.onCompleted: {
         console.log("Window mainWindow Completed")
