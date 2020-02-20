@@ -24,40 +24,54 @@
 
 using namespace eIDMW;
 
-#define RESULT_BUFFER_SIZE 128
+#define RESULT_BUFFER_SIZE 10
 
 class dlgWndAskCmd : public Win32Dialog
 {
+    struct DlgButtonData {
+        bool btnHovered;
+        bool btnEnabled;
+        bool mouseTracking;
+    };
+    DlgButtonData okBtnProcData;
+    DlgButtonData cancelBtnProcData;
+
+    struct DlgTextFieldData {
+        DlgButtonData *okBtnProcData; // used to check if enabled to determine border color
+        bool textFieldUpdated;
+        HWND hwnd;
+    };
+    DlgTextFieldData textFieldData;
+
     void GetResult();
     bool AreFieldsFilled();
-    HWND OK_Btn;
-    HWND Cancel_Btn;
+    HWND hStaticBox;
+    HWND hStaticBoxText;
+    HWND hStaticBoxTextBold;
+    HWND hTextEditOut;
 
     HBRUSH hbrBkgnd;
 
-    unsigned int m_ulUserIdMinLen;
-    unsigned int m_ulUserIdMaxLen;
-    unsigned int m_ulPinMinLen;
-    unsigned int m_ulPinMaxLen;
-    const wchar_t * szHeader;
-    const wchar_t * szPIN;
+    unsigned int m_ulOutMinLen;
+    unsigned int m_ulOutMaxLen;
+    std::wstring title;
 
 
 public:
-    dlgWndAskCmd(DlgUserIdType userIdUsage, DlgPinUsage pinUsage,
-        std::wstring & Header, std::wstring & PINName,
-        std::wstring *userId = NULL, std::wstring *userName = NULL,
+    dlgWndAskCmd(bool isValidateOtp,
+        std::wstring & Header,
+        std::wstring *inId = NULL, std::wstring *userName = NULL,
         HWND Parent = NULL);
     virtual ~dlgWndAskCmd();
 
-    wchar_t UserIdResult[RESULT_BUFFER_SIZE];
-    wchar_t PinResult[RESULT_BUFFER_SIZE];
+    wchar_t OutResult[RESULT_BUFFER_SIZE];
 
     virtual LRESULT ProcecEvent
         (UINT		uMsg,			// Message For This Window
         WPARAM		wParam,			// Additional Message Information
         LPARAM		lParam);		// Additional Message Information
-
-private:
-    static const std::wstring m_phoneAreaCodes[235];
+    
+    static LRESULT CALLBACK DlgButtonProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
+    static LRESULT CALLBACK DlgEditProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 };
+

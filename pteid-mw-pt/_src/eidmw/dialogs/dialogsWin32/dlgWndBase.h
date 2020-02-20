@@ -24,11 +24,20 @@
 
 #include "stdafx.h"
 #include "../dialogs.h"
+#include <vector>
 
 #pragma once
 
 using namespace std;
 using namespace eIDMW;
+
+
+#define BLUE                 RGB(0x3C, 0x5D, 0xBC)
+#define LIGHTBLUE            RGB(0x9D, 0xAE, 0xDD)
+#define DARKBLUE             RGB(0x36, 0x53, 0xA9)
+#define GREY                 RGB(0xD6, 0xD7, 0xD7)
+#define LIGHTGREY            RGB(0xF1, 0xF1, 0xF2)
+#define WHITE                RGB(0xFF, 0xFF, 0xFF)
 
 class Win32Dialog
 {
@@ -59,7 +68,8 @@ protected:
 	bool CreateWnd( const wchar_t* title, int width, int height, int Icon = 0 , HWND Parent = NULL );
 	void KillWindow( );
 	virtual void Destroy();
-	HFONT loadFontFromResource(int font_pointsize, bool isBold);
+	void loadFontsFromResources();
+	HFONT createDlgFont(int font_pointsize, int fontWeight);
 	void ScaleDimensions(int *width, int *height);
 
 protected:
@@ -68,12 +78,13 @@ protected:
 	HWND		m_parent;				// Holds Our Parent Window Handle
 	HINSTANCE	m_hInstance;			// Instance to our Module(DLL)
 	bool		m_ModalHold;			// Wheither it's modal or not
+	HFONT TextFontTitle;
 	HFONT TextFontHeader;
 	HFONT TextFont;
 
 private:
 	wchar_t*	m_appName;				// Name of the Window Class
-	HANDLE      m_fonthandle;
+	std::vector<HANDLE>		m_fonthandle;
 
 };
 

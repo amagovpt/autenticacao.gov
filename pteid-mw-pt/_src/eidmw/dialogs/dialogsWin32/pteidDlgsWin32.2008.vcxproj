@@ -157,7 +157,7 @@
       <PreprocessorDefinitions>PTEID_35;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>pteidcommon.lib;psapi.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pteidcommon.lib;psapi.lib;crypt32.lib;ComCtl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -186,7 +186,7 @@
       <PreprocessorDefinitions>PTEID_35;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>pteidcommon.lib;psapi.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pteidcommon.lib;psapi.lib;crypt32.lib;ComCtl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -202,11 +202,11 @@
     <ClCompile Include="..\langUtil.cpp" />
     <ClCompile Include="DlgsWin32.cpp" />
     <ClCompile Include="dlgWndAskCmd.cpp" />
-    <ClCompile Include="dlgWndAskCmdOtp.cpp" />
     <ClCompile Include="dlgWndAskPIN.cpp" />
     <ClCompile Include="dlgWndAskPINs.cpp" />
     <ClCompile Include="dlgWndBadPIN.cpp" />
     <ClCompile Include="dlgWndBase.cpp" />
+    <ClCompile Include="dlgWndCmdMsg.cpp" />
     <ClCompile Include="dlgWndPinPadInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -214,18 +214,20 @@
     <ClInclude Include="..\language.h" />
     <ClInclude Include="..\langUtil.h" />
     <ClInclude Include="dlgWndAskCmd.h" />
-    <ClInclude Include="dlgWndAskCmdOtp.h" />
     <ClInclude Include="dlgWndAskPIN.h" />
     <ClInclude Include="dlgWndAskPINs.h" />
     <ClInclude Include="dlgWndBadPIN.h" />
     <ClInclude Include="dlgWndBase.h" />
+    <ClInclude Include="dlgWndCmdMsg.h" />
     <ClInclude Include="dlgWndPinPadInfo.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DlgsWin32.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Images\error.ico" />
     <Image Include="Images\ICO_BELPIC.ico" />
     <Image Include="Images\ICO_CARD_INFO_64x64.bmp" />
     <Image Include="Images\ICO_CARD_NOK_64x64.bmp" />
@@ -233,12 +235,21 @@
     <Image Include="Images\ICO_CARD_QUESTION_64x64.bmp" />
     <Image Include="Images\ICO_CARD_SIGN_128x128.bmp" />
     <Image Include="Images\ICO_CARD_WARNING_64x64.bmp" />
+    <Image Include="Images\warning.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\common\pteidcommon.2008.vcxproj">
       <Project>{39710980-b40e-4b06-b8e8-d86b125007f3}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="..\..\eidguiV2\fonts\lato\Lato-Black.ttf" />
+    <Font Include="..\..\eidguiV2\fonts\lato\Lato-Bold.ttf" />
+    <Font Include="..\..\eidguiV2\fonts\lato\Lato-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\loading.avi" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

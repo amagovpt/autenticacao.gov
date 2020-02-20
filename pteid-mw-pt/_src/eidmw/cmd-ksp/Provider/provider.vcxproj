@@ -199,6 +199,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="KSP.cpp" />
+    <ClCompile Include="KSPDlgHelper.cpp" />
     <ClCompile Include="KSPHelper.cpp" />
     <ClCompile Include="Log.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</CompileAs>
@@ -210,6 +211,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\KSP.h" />
+    <ClInclude Include="..\Inc\KSPDlgHelper.h" />
     <ClInclude Include="..\Inc\log.h" />
     <ClInclude Include="language.h" />
   </ItemGroup>

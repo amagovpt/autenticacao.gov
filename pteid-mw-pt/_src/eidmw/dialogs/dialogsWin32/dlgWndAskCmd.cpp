@@ -20,6 +20,7 @@
 
 #include <algorithm>    // std::max
 #include "stdafx.h"
+#include <Commctrl.h>
 #include "dlgWndAskCmd.h"
 #include "resource.h"
 #include "../langUtil.h"
@@ -29,442 +30,269 @@
 #define IDC_STATIC 0
 #define IDB_OK 1
 #define IDB_CANCEL 2
-#define IDC_EDIT_USERID 3
-#define IDC_EDIT_PIN 4
-#define IDC_EDIT 5
-#define IDC_EDIT_AREACODE 6
+#define IDC_EDIT 3
+#define IDC_STATIC_BOX 4
 
 #define MAX_USERNAME_LENGTH 90
 
-const std::wstring dlgWndAskCmd::m_phoneAreaCodes[235] = {
-    L"+351 - Portugal",
-    L"+55 - Brazil",
-    L"+34 - Spain",
-    L"+93 - Afghanistan",
-    L"+355 - Albania",
-    L"+213 - Algeria",
-    L"+684 - American Samoa",
-    L"+376 - Andorra",
-    L"+244 - Angola",
-    L"+809 - Anguilla",
-    L"+268 - Antigua",
-    L"+54 - Argentina",
-    L"+374 - Armenia",
-    L"+297 - Aruba",
-    L"+247 - Ascension Island",
-    L"+61 - Australia",
-    L"+672 - Australian External Territories",
-    L"+43 - Austria",
-    L"+994 - Azerbaijan",
-    L"+242 - Bahamas",
-    L"+246 - Barbados",
-    L"+973 - Bahrain",
-    L"+880 - Bangladesh",
-    L"+375 - Belarus",
-    L"+32 - Belgium",
-    L"+501 - Belize",
-    L"+229 - Benin",
-    L"+809 - Bermuda",
-    L"+975 - Bhutan",
-    L"+284 - British Virgin Islands",
-    L"+591 - Bolivia",
-    L"+387 - Bosnia and Hercegovina",
-    L"+267 - Botswana",
-    L"+55 - Brazil",
-    L"+284 - British V.I.",
-    L"+673 - Brunei Darussalm",
-    L"+359 - Bulgaria",
-    L"+226 - Burkina Faso",
-    L"+257 - Burundi",
-    L"+855 - Cambodia",
-    L"+237 - Cameroon",
-    L"+1 - Canada",
-    L"+238 - CapeVerde Islands",
-    L"+1 - Caribbean Nations",
-    L"+345 - Cayman Islands",
-    L"+238 - Cape Verdi",
-    L"+236 - Central African Republic",
-    L"+235 - Chad",
-    L"+56 - Chile",
-    L"+86 - China (People's Republic)",
-    L"+886 - China-Taiwan",
-    L"+57 - Colombia",
-    L"+269 - Comoros and Mayotte",
-    L"+242 - Congo",
-    L"+506 - Costa Rica",
-    L"+385 - Croatia",
-    L"+53 - Cuba",
-    L"+357 - Cyprus",
-    L"+420 - Czech Republic",
-    L"+45 - Denmark",
-    L"+246 - Diego Garcia",
-    L"+767 - Dominca",
-    L"+809 - Dominican Republic",
-    L"+253 - Djibouti",
-    L"+593 - Ecuador",
-    L"+20 - Egypt",
-    L"+503 - El Salvador",
-    L"+240 - Equatorial Guinea",
-    L"+291 - Eritrea",
-    L"+372 - Estonia",
-    L"+251 - Ethiopia",
-    L"+500 - Falkland Islands",
-    L"+298 - Faroe (Faeroe) Islands (Denmark)",
-    L"+679 - Fiji",
-    L"+358 - Finland",
-    L"+33 - France",
-    L"+596 - French Antilles",
-    L"+594 - French Guiana",
-    L"+241 - Gabon (Gabonese Republic)",
-    L"+220 - Gambia",
-    L"+995 - Georgia",
-    L"+49 - Germany",
-    L"+233 - Ghana",
-    L"+350 - Gibraltar",
-    L"+30 - Greece",
-    L"+299 - Greenland",
-    L"+473 - Grenada/Carricou",
-    L"+671 - Guam",
-    L"+502 - Guatemala",
-    L"+224 - Guinea",
-    L"+245 - Guinea-Bissau",
-    L"+592 - Guyana",
-    L"+509 - Haiti",
-    L"+504 - Honduras",
-    L"+852 - Hong Kong",
-    L"+36 - Hungary",
-    L"+354 - Iceland",
-    L"+91 - India",
-    L"+62 - Indonesia",
-    L"+98 - Iran",
-    L"+964 - Iraq",
-    L"+353 - Ireland (Irish Republic; Eire)",
-    L"+972 - Israel",
-    L"+39 - Italy",
-    L"+225 - Ivory Coast (La Cote d'Ivoire)",
-    L"+876 - Jamaica",
-    L"+81 - Japan",
-    L"+962 - Jordan",
-    L"+7 - Kazakhstan",
-    L"+254 - Kenya",
-    L"+855 - Khmer Republic (Cambodia/Kampuchea)",
-    L"+686 - Kiribati Republic (Gilbert Islands)",
-    L"+82 - Korea, Republic of (South Korea)",
-    L"+850 - Korea, People's Republic of (North Korea)",
-    L"+965 - Kuwait",
-    L"+996 - Kyrgyz Republic",
-    L"+371 - Latvia",
-    L"+856 - Laos",
-    L"+961 - Lebanon",
-    L"+266 - Lesotho",
-    L"+231 - Liberia",
-    L"+370 - Lithuania",
-    L"+218 - Libya",
-    L"+423 - Liechtenstein",
-    L"+352 - Luxembourg",
-    L"+853 - Macao",
-    L"+389 - Macedonia",
-    L"+261 - Madagascar",
-    L"+265 - Malawi",
-    L"+60 - Malaysia",
-    L"+960 - Maldives",
-    L"+223 - Mali",
-    L"+356 - Malta",
-    L"+692 - Marshall Islands",
-    L"+596 - Martinique (French Antilles)",
-    L"+222 - Mauritania",
-    L"+230 - Mauritius",
-    L"+269 - Mayolte",
-    L"+52 - Mexico",
-    L"+691 - Micronesia (F.S. of Polynesia)",
-    L"+373 - Moldova",
-    L"+33 - Monaco",
-    L"+976 - Mongolia",
-    L"+473 - Montserrat",
-    L"+212 - Morocco",
-    L"+258 - Mozambique",
-    L"+95 - Myanmar (former Burma)",
-    L"+264 - Namibia (former South-West Africa)",
-    L"+674 - Nauru",
-    L"+977 - Nepal",
-    L"+31 - Netherlands",
-    L"+599 - Netherlands Antilles",
-    L"+869 - Nevis",
-    L"+687 - New Caledonia",
-    L"+64 - New Zealand",
-    L"+505 - Nicaragua",
-    L"+227 - Niger",
-    L"+234 - Nigeria",
-    L"+683 - Niue",
-    L"+850 - North Korea",
-    L"+1 670 - North Mariana Islands (Saipan)",
-    L"+47 - Norway",
-    L"+968 - Oman",
-    L"+92 - Pakistan",
-    L"+680 - Palau",
-    L"+507 - Panama",
-    L"+675 - Papua New Guinea",
-    L"+595 - Paraguay",
-    L"+51 - Peru",
-    L"+63 - Philippines",
-    L"+48 - Poland",
-    L"+1 787 - Puerto Rico",
-    L"+974 - Qatar",
-    L"+262 - Reunion (France)",
-    L"+40 - Romania",
-    L"+7 - Russia",
-    L"+250 - Rwanda (Rwandese Republic)",
-    L"+670 - Saipan",
-    L"+378 - San Marino",
-    L"+239 - Sao Tome and Principe",
-    L"+966 - Saudi Arabia",
-    L"+221 - Senegal",
-    L"+381 - Serbia and Montenegro",
-    L"+248 - Seychelles",
-    L"+232 - Sierra Leone",
-    L"+65 - Singapore",
-    L"+421 - Slovakia",
-    L"+386 - Slovenia",
-    L"+677 - Solomon Islands",
-    L"+252 - Somalia",
-    L"+27 - South Africa",
-    L"+34 - Spain",
-    L"+94 - Sri Lanka",
-    L"+290 - St. Helena",
-    L"+869 - St. Kitts/Nevis",
-    L"+508 - St. Pierre &(et) Miquelon (France)",
-    L"+249 - Sudan",
-    L"+597 - Suritext",
-    L"+268 - Swaziland",
-    L"+46 - Sweden",
-    L"+41 - Switzerland",
-    L"+963 - Syrian Arab Republic (Syria)",
-    L"+689 - Tahiti (French Polynesia)",
-    L"+886 - Taiwan",
-    L"+7 - Tajikistan",
-    L"+255 - Tanzania (includes Zanzibar)",
-    L"+66 - Thailand",
-    L"+228 - Togo (Togolese Republic)",
-    L"+690 - Tokelau",
-    L"+676 - Tonga",
-    L"+1 868 - Trinidad and Tobago",
-    L"+216 - Tunisia",
-    L"+90 - Turkey",
-    L"+993 - Turkmenistan",
-    L"+688 - Tuvalu (Ellice Islands)",
-    L"+256 - Uganda",
-    L"+380 - Ukraine",
-    L"+971 - United Arab Emirates",
-    L"+44 - United Kingdom",
-    L"+598 - Uruguay",
-    L"+1 - USA",
-    L"+7 - Uzbekistan",
-    L"+678 - Vanuatu (New Hebrides)",
-    L"+39 - Vatican City",
-    L"+58 - Venezuela",
-    L"+84 - Viet Nam",
-    L"+1 340 - Virgin Islands",
-    L"+681 - Wallis and Futuna",
-    L"+685 - Western Samoa",
-    L"+381 - Yemen (People's Democratic Republic of)",
-    L"+967 - Yemen Arab Republic (North Yemen)",
-    L"+381 - Yugoslavia (discontinued)",
-    L"+243 - Zaire",
-    L"+260 - Zambia",
-    L"+263 - Zimbabwe"
-};
-
-dlgWndAskCmd::dlgWndAskCmd(DlgUserIdType userIdUsage, DlgPinUsage pinUsage,
-    std::wstring & Header, std::wstring & PINName, std::wstring *userId,
+dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
+    std::wstring & Header, std::wstring *inId,
     std::wstring *userName, HWND Parent) : Win32Dialog(L"WndAskCmd")
 {
     hbrBkgnd = NULL;
-    UserIdResult[0] = ' ';
-    UserIdResult[1] = (char)0;
-    PinResult[0] = ' ';
-    PinResult[1] = (char)0;
+    OutResult[0] = ' ';
+    OutResult[1] = (char)0;
+    
+    textFieldData.okBtnProcData = &okBtnProcData;
+    textFieldData.textFieldUpdated = false;
+    okBtnProcData.btnHovered = false;
+    okBtnProcData.btnEnabled = false;
+    okBtnProcData.mouseTracking = false;
+    cancelBtnProcData.btnHovered = false;
+    cancelBtnProcData.btnEnabled = true;
+    cancelBtnProcData.mouseTracking = false;
 
     std::wstring tmpTitle = L"";
 
-    // Length of PINs for CMD
-    m_ulPinMinLen = 4;
-    m_ulPinMaxLen = 8;
-
-    // Assume the userId is the mobile number.
-    bool userIdIsNumeric = (userIdUsage == DLG_USERID_MOBILE);
-    m_ulUserIdMinLen = 0;
-    m_ulUserIdMaxLen = 15;
-
-    szHeader = Header.c_str();
-    szPIN = PINName.c_str();
+    // Length of OTP/PIN for CMD
+    m_ulOutMinLen = (isValidateOtp ? 6 : 4);
+    m_ulOutMaxLen = (isValidateOtp ? 6 : 8);
 
     // Added for accessibility
-    tmpTitle += szHeader;
-    tmpTitle += szPIN;
+    tmpTitle += Header.c_str();
 
-    int Height = 263;
-    int Width = 700;
+    int Height = 360;
+    int Width = 430;
     ScaleDimensions(&Width, &Height);
+
+    title = GETSTRING_DLG(SigningWith);
+    title.append(L" Chave Móvel Digital");
 
     if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
     {
         RECT clientRect;
         GetClientRect(m_hWnd, &clientRect);
+        textFieldData.hwnd = m_hWnd;
 
-        int buttonWidth = clientRect.right * 0.1;
-        int buttonHeight = clientRect.bottom * 0.1;
+        int buttonWidth = clientRect.right * 0.43;
+        int buttonHeight = clientRect.bottom * 0.08;
+        int contentX = clientRect.right * 0.05;
+        int contentWidth = clientRect.right - 2 * contentX;
+        int textBoxY = clientRect.bottom * 0.35;
+        int boxHeight = clientRect.bottom * 0.23;
+        int editOutY = clientRect.bottom * 0.63;
+        int editOutLabelHeight = clientRect.bottom * 0.06;
 
-        OK_Btn = CreateWindow(
-            L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-            clientRect.right * 0.74, clientRect.bottom * 0.85, buttonWidth, buttonHeight,
+        HWND OK_Btn = CreateWindow(
+            L"BUTTON", GETSTRING_DLG(Confirm), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT | BS_OWNERDRAW,
+            clientRect.right * 0.52, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
             m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL);
-        EnableWindow(OK_Btn, false);
 
-        Cancel_Btn = CreateWindow(
-            L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-            clientRect.right * 0.85, clientRect.bottom * 0.85, buttonWidth, buttonHeight,
+        HWND  Cancel_Btn = CreateWindow(
+            L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT | BS_OWNERDRAW,
+            clientRect.right * 0.05, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
             m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL);
 
+        EnableWindow(OK_Btn, okBtnProcData.btnEnabled);
+        EnableWindow(Cancel_Btn, cancelBtnProcData.btnEnabled);
+        SetWindowSubclass(OK_Btn, dlgWndAskCmd::DlgButtonProc, 0, (DWORD_PTR)&okBtnProcData);
+        SetWindowSubclass(Cancel_Btn, dlgWndAskCmd::DlgButtonProc, 0, (DWORD_PTR)&cancelBtnProcData);
+
         DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER;
-        if (userIdIsNumeric)
-            dwStyle |= ES_NUMBER;
 
-        int editFieldsX = clientRect.right / 2 +20;
-        int editFieldsWidth = 300;
-        int comboboxWidth = 200;
-        int labelWidth = clientRect.right / 2 - 100;
-        int spacing = 5;
-        int editUserIdY = clientRect.bottom - 135;
-        int labelsX = clientRect.right * 0.08;
-        if (userIdUsage == DLG_USERID_MOBILE)
+        int headerY = clientRect.bottom * 0.18;
+        HWND hStaticHeader = CreateWindow(
+            L"STATIC", Header.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
+            contentX,
+            headerY,
+            contentWidth,
+            clientRect.bottom * 0.15,
+            m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
+        SendMessage(hStaticHeader, WM_SETFONT, (WPARAM)(isValidateOtp ? TextFont : TextFontHeader), 0);
+
+        std::wstring boxText;
+        if (!isValidateOtp)
         {
-            // make space for area code
-            editFieldsX = clientRect.right / 2 - 100;
-            editFieldsWidth = editFieldsX + 170;
-
-            labelWidth = 180;
-            // combo box for the are code
-            HWND hComboboxAreaCode = CreateWindowEx(WS_EX_CLIENTEDGE,
-                L"Combobox", L"", CBS_DROPDOWNLIST | CBS_HASSTRINGS | WS_CHILD | WS_OVERLAPPED | WS_VISIBLE | WS_VSCROLL,
-                editFieldsX, editUserIdY, comboboxWidth, 26,
-                m_hWnd, (HMENU)IDC_EDIT_AREACODE, m_hInstance, NULL);
-            SendMessage(hComboboxAreaCode, WM_SETFONT, (WPARAM)TextFont, 0);
-
-            // load the item list
-            for (const std::wstring &item : m_phoneAreaCodes)
-            {
-                SendMessage(hComboboxAreaCode, (UINT)CB_ADDSTRING, (WPARAM)0, (LPARAM)item.c_str());
-            }
-            SendMessage(hComboboxAreaCode, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
-        }
-        else if (userIdUsage == DLG_USERID_MOBILE_FIXED)
-        {
-            editFieldsWidth = clientRect.right * 0.21;
             *userName = userName->substr(0, MAX_USERNAME_LENGTH);
-            int textHeight =clientRect.bottom * 0.23;
-            std::wstring mobileNumberFixedString = GETSTRING_DLG(TheChosenCertificateIsFrom);
-            mobileNumberFixedString += L" ";
-            mobileNumberFixedString += userName->c_str();
-            mobileNumberFixedString += L", ";
-            mobileNumberFixedString += GETSTRING_DLG(AssociatedWithNumber);
-            mobileNumberFixedString += L" ";
-            mobileNumberFixedString += userId->c_str();
-            mobileNumberFixedString += L".";
-
-            editUserIdY = clientRect.bottom * 0.38;
-            HWND hStaticTextUserId = CreateWindow(
-                L"STATIC", mobileNumberFixedString.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
-                labelsX,
-                editUserIdY, 
-                clientRect.right-2*labelsX,
-                textHeight,
-                m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-            SendMessage(hStaticTextUserId, WM_SETFONT, (WPARAM)TextFont, 0);
+            boxText = GETSTRING_DLG(TheChosenCertificateIsFrom);
+            boxText += L" ";
+            boxText += userName->c_str();
+            boxText += L", ";
+            boxText += GETSTRING_DLG(AssociatedWithNumber);
+            boxText += L" ";
+            boxText += inId->c_str();
+            boxText += L".";
         }
-        if (userIdUsage != DLG_USERID_MOBILE_FIXED)
+        else {
+            boxText += GETSTRING_DLG(SigningDataWithIdentifier);
+        }
+        hStaticBox = CreateWindow(
+            L"STATIC", NULL, WS_CHILD | WS_VISIBLE | SS_LEFT,
+            contentX,
+            textBoxY,
+            contentWidth,
+            boxHeight,
+            m_hWnd, (HMENU)IDC_STATIC_BOX, m_hInstance, NULL);
+
+        hStaticBoxText= CreateWindow(
+            L"STATIC", boxText.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
+            contentX + contentWidth * 0.05,
+            textBoxY + boxHeight * 0.12,
+            contentWidth*0.9,
+            boxHeight*0.76,
+            m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
+        SendMessage(hStaticBoxText, WM_SETFONT, (WPARAM)TextFont, 0);
+
+        if (isValidateOtp)
         {
-            HWND hTextEditUserId = CreateWindowEx(WS_EX_CLIENTEDGE,
-                L"EDIT", L"", dwStyle,
-                editFieldsX + (userIdUsage == DLG_USERID_MOBILE ? comboboxWidth + spacing : 0),
-                editUserIdY,
-                editFieldsWidth - (userIdUsage == DLG_USERID_MOBILE ? comboboxWidth + spacing : 0), 26,
-                m_hWnd, (HMENU)IDC_EDIT_USERID, m_hInstance, NULL);
-            SendMessage(hTextEditUserId, EM_LIMITTEXT, m_ulUserIdMaxLen, 0);
-            SendMessage(hTextEditUserId, WM_SETFONT, (WPARAM)TextFont, 0);
-
-            HWND hStaticTextUserId = CreateWindow(
-                L"STATIC", GETSTRING_DLG(MobileNumber), WS_CHILD | WS_VISIBLE | SS_LEFT,
-                labelsX, editUserIdY + 4, labelWidth, 22,
+            std::wstring docId;
+            docId.append(L"\"").append(*inId).append(L"\"");
+            hStaticBoxTextBold = CreateWindow(
+                L"STATIC", docId.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
+                contentX + contentWidth * 0.05,
+                textBoxY + boxHeight * 0.33,
+                contentWidth*0.9,
+                boxHeight*0.65,
                 m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-            SendMessage(hStaticTextUserId, WM_SETFONT, (WPARAM)TextFont, 0);
+            SendMessage(hStaticBoxTextBold, WM_SETFONT, (WPARAM)TextFontHeader, 0);
         }
 
-        dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_PASSWORD | ES_NUMBER;
+        dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_NUMBER;
 
-        int editPinY = clientRect.bottom * 0.66;
-        HWND hTextEditPin = CreateWindowEx(WS_EX_CLIENTEDGE,
-            L"EDIT", L"", dwStyle,
-            clientRect.right * 0.74, editPinY, editFieldsWidth, buttonHeight,
-            m_hWnd, (HMENU)IDC_EDIT_PIN, m_hInstance, NULL);
-        SendMessage(hTextEditPin, EM_LIMITTEXT, m_ulPinMaxLen, 0);
+        if (!isValidateOtp)
+        {
+            dwStyle |= ES_PASSWORD;
+        }
 
-        HWND hStaticTextPin = CreateWindow(
-            L"STATIC", GETSTRING_DLG(SignaturePinCmd), WS_CHILD | WS_VISIBLE | SS_LEFT,
-            labelsX, editPinY + 4, clientRect.right - 2*labelsX - editFieldsWidth, clientRect.bottom * 0.16,
+        int editFieldHeight = clientRect.bottom * 0.05;
+        std::wstring textEditLabel = (isValidateOtp ? GETSTRING_DLG(InsertSecurityCode) : GETSTRING_DLG(SignaturePinCmd));
+        HWND hStaticTextOut = CreateWindow(
+            L"STATIC", textEditLabel.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
+            contentX, editOutY, contentWidth, clientRect.bottom * 0.08,
             m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
 
-        SendMessage(hStaticTextPin, WM_SETFONT, (WPARAM)TextFont, 0);
+        hTextEditOut = CreateWindowEx(NULL,
+            L"EDIT", L"", dwStyle,
+            clientRect.right * 0.05 + contentWidth*0.05, // shift to the right and draw the box in the right place
+            editOutY + editOutLabelHeight + clientRect.bottom * 0.04, // shift down 
+            contentWidth*0.9,
+            editFieldHeight,
+            m_hWnd, (HMENU)IDC_EDIT, m_hInstance, NULL);
 
-        SendMessage(hTextEditPin, WM_SETFONT, (WPARAM)TextFont, 0);
+        // okBtnProcData is passed to test if it is enabled to determine border color
+        SetWindowSubclass(hTextEditOut, dlgWndAskCmd::DlgEditProc, 0, (DWORD_PTR)&textFieldData);
 
+        SendMessage(hTextEditOut, EM_LIMITTEXT, m_ulOutMaxLen, 0);
+        SendMessage(hStaticTextOut, WM_SETFONT, (WPARAM)TextFont, 0);
+        SendMessage(hTextEditOut, WM_SETFONT, (WPARAM)TextFont, 0);
         SendMessage(OK_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
         SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
 
-        if (userIdUsage == DLG_USERID_MOBILE_FIXED)
-        {
-            SetFocus(GetDlgItem(m_hWnd, IDC_EDIT_PIN));
-        }
-        else
-        {
-            SetFocus(GetDlgItem(m_hWnd, IDC_EDIT_USERID));
-        }
-
+        SetFocus(GetDlgItem(m_hWnd, IDC_EDIT));
     }
 }
 
 dlgWndAskCmd::~dlgWndAskCmd()
 {
-    EnableWindow(m_parent, TRUE);
     KillWindow();
 }
 
 void dlgWndAskCmd::GetResult()
 {
-    wchar_t nameBuf[RESULT_BUFFER_SIZE];
-    int areaCodeIndex;
-    std::wstring userIdString;
-    // if we have combobox, add the area code to the userId String before reading the mobile number
-    if (GetDlgItem(m_hWnd, IDC_EDIT_AREACODE))
-    {
-        areaCodeIndex  = SendMessage(GetDlgItem(m_hWnd, IDC_EDIT_AREACODE), CB_GETCURSEL, 0, 0);
-        userIdString = m_phoneAreaCodes[areaCodeIndex];
-        int codeEnd = userIdString.find('-');
-        userIdString = userIdString.substr(0, codeEnd);
-    }
-
-    // ensure both userid and pin fit in buffers
-    long len = (std::max)((long)SendMessage(GetDlgItem(m_hWnd, IDC_EDIT_USERID), WM_GETTEXTLENGTH, 0, 0) + (long)userIdString.length(),
-                          (long)SendMessage(GetDlgItem(m_hWnd, IDC_EDIT_PIN), WM_GETTEXTLENGTH, 0, 0));
+    wchar_t outBuf[RESULT_BUFFER_SIZE];
+    long len = (long)SendMessage(GetDlgItem(m_hWnd, IDC_EDIT), WM_GETTEXTLENGTH, 0, 0);
     if (len < RESULT_BUFFER_SIZE)
     {
-        SendMessage(GetDlgItem(m_hWnd, IDC_EDIT_USERID), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf);
-        userIdString += nameBuf;
-        wcscpy_s(UserIdResult, userIdString.c_str());
-
-        SendMessage(GetDlgItem(m_hWnd, IDC_EDIT_PIN), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf);
-        wcscpy_s(PinResult, nameBuf);
+        SendMessage(GetDlgItem(m_hWnd, IDC_EDIT), WM_GETTEXT, (WPARAM)(sizeof(outBuf)), (LPARAM)outBuf);
+        wcscpy_s(OutResult, outBuf);
     }
 }
+
+
+LRESULT CALLBACK dlgWndAskCmd::DlgButtonProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
+{
+    DlgButtonData *btnProcData = (DlgButtonData *)dwRefData;
+    switch (uMsg)
+    {
+
+    case WM_MOUSEMOVE:
+    {
+        if (!btnProcData->mouseTracking)
+        {
+            // start tracking if we aren't already
+            TRACKMOUSEEVENT tme;
+            tme.cbSize = sizeof(TRACKMOUSEEVENT);
+            tme.dwFlags = TME_HOVER | TME_LEAVE;
+            tme.hwndTrack = hWnd;
+            tme.dwHoverTime = 1;
+            btnProcData->mouseTracking = TrackMouseEvent(&tme);
+        }
+        return 0;
+    }
+    case WM_MOUSEHOVER:
+    {
+        btnProcData->mouseTracking = false;
+        btnProcData->btnHovered = true;
+        InvalidateRect(hWnd, NULL, TRUE);
+        UpdateWindow(hWnd);
+        return 0;
+    }
+
+    case WM_MOUSELEAVE:
+    {
+        btnProcData->mouseTracking = false;
+        btnProcData->btnHovered = false;
+        InvalidateRect(hWnd, NULL, TRUE);
+        UpdateWindow(hWnd);
+        return 0;
+    }
+    default:
+
+        break;
+    }
+
+    return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+}
+
+LRESULT CALLBACK dlgWndAskCmd::DlgEditProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
+{
+    DlgTextFieldData *textFieldProcData = (DlgTextFieldData *)dwRefData;
+    switch (uMsg)
+    {
+    case WM_PRINTCLIENT:
+    case WM_PAINT:
+    {
+        // Do not repaint if textField was not updated (it will paint the rectangle over the text)
+        if (textFieldProcData->textFieldUpdated)
+        {
+            break;
+        }
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
+
+        RECT rectDlg;
+        GetClientRect(textFieldProcData->hwnd, &rectDlg);
+
+        RECT rectEdit;
+        GetClientRect(hWnd, &rectEdit);
+        
+        HPEN pen = CreatePen(PS_INSIDEFRAME, 2, (textFieldProcData->okBtnProcData->btnEnabled? BLUE : GREY));
+        SelectObject(hdc, pen);
+        SetBkMode(hdc, TRANSPARENT);
+
+        Rectangle(hdc, rectEdit.left - rectDlg.right*0.05, rectEdit.top - rectDlg.bottom * 0.03, rectEdit.right + rectDlg.right*0.05, rectEdit.bottom + rectDlg.bottom*0.03);
+
+        EndPaint(hWnd, &ps);
+        textFieldProcData->textFieldUpdated = true;
+        break;
+    }
+    default:
+        break;
+    }
+
+    return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+}
+
 
 LRESULT dlgWndAskCmd::ProcecEvent
 (UINT		uMsg,			// Message For This Window
@@ -480,22 +308,25 @@ LPARAM		lParam)		// Additional Message Information
     {
         switch (LOWORD(wParam))
         {
-        case IDC_EDIT_USERID:
+        case IDC_EDIT:
         {
             if (EN_CHANGE == HIWORD(wParam))
             {
-                EnableWindow(GetDlgItem(m_hWnd, IDOK), ((unsigned int)AreFieldsFilled()));
-            }
-            return TRUE;
-        }
+                textFieldData.textFieldUpdated = false;
+                okBtnProcData.btnEnabled = AreFieldsFilled();
+                EnableWindow(GetDlgItem(m_hWnd, IDOK), ((unsigned int)okBtnProcData.btnEnabled));
+                InvalidateRect(hTextEditOut, NULL, TRUE);
+                UpdateWindow(hTextEditOut);
 
-        case IDC_EDIT_PIN:
-        {
-            if (EN_CHANGE == HIWORD(wParam))
-            {
-                EnableWindow(GetDlgItem(m_hWnd, IDOK), ((unsigned int)AreFieldsFilled()));
+                /* Simulate a mouse click in TextEditOut to rewrite the text 
+                   which was erased by redrawing the text field */
+                // The click should be at the rightmost point of the textfield
+                GetClientRect(hTextEditOut, &rect);
+                LPARAM lParam = MAKELPARAM(rect.right, rect.bottom / 2);
+                PostMessage(hTextEditOut, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
+                PostMessage(hTextEditOut, WM_LBUTTONUP, MK_LBUTTON, lParam);
             }
-            return TRUE;
+            return 0;
         }
 
         case IDB_OK:
@@ -527,24 +358,20 @@ LPARAM		lParam)		// Additional Message Information
     //Set the TextColor for the subwindows hTextEdit and hStaticText
     case WM_CTLCOLORSTATIC:
     {
-        //TODO: grey button
-        COLORREF grey = RGB(0xD6, 0xD7, 0xD7);
-        COLORREF white = RGB(0xFF, 0xFF, 0xFF);
         HDC hdcStatic = (HDC)wParam;
-        SetTextColor(hdcStatic, RGB(0x3C, 0x5D, 0xBC));
 
         MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskCmd::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
-        if ((HWND)lParam == OK_Btn || (HWND)lParam == Cancel_Btn)
+        if ((HWND)lParam == hStaticBox || (HWND)lParam == hStaticBoxText || (HWND)lParam == hStaticBoxTextBold)
         {
-            SetBkColor(hdcStatic, grey);
-            return (INT_PTR)CreateSolidBrush(grey);
+            SetBkColor(hdcStatic, LIGHTGREY);
+            return (INT_PTR)CreateSolidBrush(LIGHTGREY);
         }
 
-        SetBkColor(hdcStatic, white);
+        SetBkColor(hdcStatic, WHITE);
 
         if (hbrBkgnd == NULL)
         {
-            hbrBkgnd = CreateSolidBrush(white);
+            hbrBkgnd = CreateSolidBrush(WHITE);
         }
 
         return (INT_PTR)hbrBkgnd;
@@ -557,24 +384,66 @@ LPARAM		lParam)		// Additional Message Information
 
         //Change top header dimensions
         GetClientRect(m_hWnd, &rect);
-        rect.left = rect.right * 0.08;
-        rect.top = rect.bottom * 0.08;
+        rect.left = rect.right * 0.05;
+        rect.top = rect.bottom * 0.05;
         rect.right -= rect.left;
         rect.bottom = rect.bottom * 0.25;
 
         SetBkColor(m_hDC, RGB(255, 255, 255));
-        SelectObject(m_hDC, TextFontHeader);
+        SelectObject(m_hDC, TextFontTitle);
         MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
 
         //The first call is needed to calculate the needed bounding rectangle
-        DrawText(m_hDC, szHeader, -1, &rect, DT_WORDBREAK | DT_CALCRECT);
-        DrawText(m_hDC, szHeader, -1, &rect, DT_WORDBREAK);
+        DrawText(m_hDC, title.c_str(), -1, &rect, DT_WORDBREAK | DT_CALCRECT);
+        DrawText(m_hDC, title.c_str(), -1, &rect, DT_WORDBREAK);
 
         EndPaint(m_hWnd, &ps);
 
         SetForegroundWindow(m_hWnd);
 
         return 0;
+    }
+
+    case WM_DRAWITEM:
+    {
+        LPDRAWITEMSTRUCT pDIS = (LPDRAWITEMSTRUCT)lParam;
+        switch (pDIS->CtlID) {
+        case IDB_CANCEL:
+        case IDB_OK:
+            if (pDIS->CtlID == IDB_CANCEL)
+            {
+                SetTextColor(pDIS->hDC, BLUE);
+                SetBkColor(pDIS->hDC, (cancelBtnProcData.btnHovered ? GREY : LIGHTGREY));
+            }
+            else if (pDIS->CtlID == IDB_OK)
+            {
+                SetTextColor(pDIS->hDC, WHITE);
+                if (okBtnProcData.btnEnabled)
+                {
+                    SetBkColor(pDIS->hDC, (okBtnProcData.btnHovered ? DARKBLUE : BLUE));
+                }
+                else
+                {
+                    SetBkColor(pDIS->hDC, LIGHTBLUE);
+                }
+            }
+
+            wchar_t textBuf[12];
+            SendMessage(GetDlgItem(m_hWnd, pDIS->CtlID), WM_GETTEXT, (WPARAM)(sizeof(textBuf)), (LPARAM)textBuf);
+            std::wstring textString(textBuf);
+
+            SelectObject(pDIS->hDC, TextFontHeader);
+            SetTextAlign(pDIS->hDC, TA_CENTER | VTA_CENTER);
+
+            ExtTextOut(pDIS->hDC,
+                pDIS->rcItem.right / 2,
+                pDIS->rcItem.bottom / 4,
+                ETO_OPAQUE | ETO_CLIPPED, &pDIS->rcItem, textString.c_str(), textString.length(), NULL);
+            DrawEdge(pDIS->hDC, &pDIS->rcItem, (pDIS->itemState & ODS_SELECTED ? EDGE_SUNKEN : NULL), BF_RECT);
+
+            return TRUE;
+        }
+        break;
     }
 
     case WM_ACTIVATE:
@@ -647,8 +516,6 @@ LPARAM		lParam)		// Additional Message Information
 
 bool dlgWndAskCmd::AreFieldsFilled()
 {
-    long userIdLen = (long)SendMessage(GetDlgItem(m_hWnd, IDC_EDIT_USERID), WM_GETTEXTLENGTH, 0, 0);
-    long pinLen = (long)SendMessage(GetDlgItem(m_hWnd, IDC_EDIT_PIN), WM_GETTEXTLENGTH, 0, 0);
-
-    return userIdLen >= m_ulUserIdMinLen && pinLen >= m_ulPinMinLen;
+    long outLen = (long)SendMessage(GetDlgItem(m_hWnd, IDC_EDIT), WM_GETTEXTLENGTH, 0, 0);
+    return outLen >= m_ulOutMinLen;
 }

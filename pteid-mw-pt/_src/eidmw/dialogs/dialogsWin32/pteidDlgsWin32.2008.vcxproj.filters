@@ -39,7 +39,7 @@
     <ClCompile Include="dlgWndAskCmd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dlgWndAskCmdOtp.cpp">
+    <ClCompile Include="dlgWndCmdMsg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,7 +74,10 @@
     <ClInclude Include="dlgWndAskCmd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dlgWndAskCmdOtp.h">
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dlgWndCmdMsg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -105,5 +108,22 @@
     <Image Include="Images\ICO_CARD_WARNING_64x64.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Images\error.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\warning.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\icon2.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="..\..\eidguiV2\fonts\lato\Lato-Regular.ttf" />
+    <Font Include="..\..\eidguiV2\fonts\lato\Lato-Black.ttf" />
+    <Font Include="..\..\eidguiV2\fonts\lato\Lato-Bold.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\loading.avi" />
   </ItemGroup>
 </Project>

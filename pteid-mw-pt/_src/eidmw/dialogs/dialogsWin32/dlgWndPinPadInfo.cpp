@@ -133,7 +133,7 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 			rect.top = 0.11 * rect.bottom;
 			rect.bottom = 0.40 * rect.bottom;
 			SetBkColor( m_hDC, RGB(255,255,255));
-			SelectObject( m_hDC, TextFontHeader );
+			SelectObject( m_hDC, TextFontTitle );
 			DrawText( m_hDC, m_szHeader, -1, &rect, DT_WORDBREAK );
 
 			//Change top header dimensions

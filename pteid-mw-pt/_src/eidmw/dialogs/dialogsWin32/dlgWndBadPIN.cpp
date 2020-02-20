@@ -230,7 +230,7 @@ LRESULT dlgWndBadPIN::ProcecEvent
 			rect.right -= 20;
 			rect.bottom -= 60;
 			SetBkColor(m_hDC, RGB(255, 255, 255));
-			SelectObject(m_hDC, TextFontHeader);
+			SelectObject(m_hDC, TextFontTitle);
 			DrawText(m_hDC, szHeader, -1, &rect, DT_WORDBREAK);
 
 			EndPaint(m_hWnd, &ps);

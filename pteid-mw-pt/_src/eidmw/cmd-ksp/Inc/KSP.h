@@ -400,23 +400,6 @@ CMDKSP_KEY *
 CmdKspValidateKeyHandle(
 __in    NCRYPT_KEY_HANDLE hKey);
 
-SECURITY_STATUS
-CmdKspOpenDialogSign(
-__in    const wchar_t *userId,
-__in    unsigned long userIdLen,
-__out   wchar_t *pin,
-__in    unsigned long pinLen,
-__in    const wchar_t *userName,
-__in    unsigned long userNameLen,
-__in    HWND parentWindow);
-
-SECURITY_STATUS
-CmdKspOpenDialogOtp(
-__out   wchar_t *otp,
-__in    unsigned long otpLen,
-__in    LPWSTR pszDocname,
-__in    HWND parentWindow);
-
 void
 getDocName(
 __in    HWND hParentWindow,

@@ -85,11 +85,13 @@ typedef enum {
 	DLG_PIN_ADDRESS,
 } DlgPinUsage;
 
+#ifdef WIN32
 typedef enum {
-	DLG_USERID_UNKNOWN,
-	DLG_USERID_MOBILE,						// Ask for mobile number
-	DLG_USERID_MOBILE_FIXED,				// Mobile number is known and fixed
-} DlgUserIdType;
+	DLG_CMD_PROGRESS,
+	DLG_CMD_ERROR_MSG,
+	DLG_CMD_WARNING_MSG,
+} DlgCmdMsgType;
+#endif
 
 const unsigned char PIN_FLAG_DIGITS = 1;
 	
@@ -229,29 +231,30 @@ DLGS_EXPORT void DlgClosePinpadInfo(unsigned long ulHandle);
 ************************************************************************************/
 #ifdef WIN32
 /**
-* Ask for user ID and PIN to perform CMD operation
-* - DlgUserIdType: CMD user identification can be made with mobile phone, e-mail or Twitter
-* (only DLG_USERID_MOBILE and DLG_USERID_MOBILE_FIXED are supported). If using
-* DLG_USERID_MOBILE_FIXED, the csUserId is used as input. Otherwise it is used for output.
-* - pinUsage: CMD can be used for authentication or signature. (only DLG_PIN_SIGN is supported)
-* Returns: DLG_OK if all went fine,
-*          DLG_BAD_PARAM or DLG_ERR otherwise
+* Show CMD dialog to obtain CMD PIN or OTP during signature.
+* - isValidateOtp: true if dialog should ask for OTP
+* - csOut: buffer to obtain PIN or OTP (depending on isValidateOtp)
+* - csInId: string with mobile number or document name/hash (depending on isValidateOtp)
+* - csUserName: buffer with the user name (used when obtaining PIN)
 */
 
-DLGS_EXPORT DlgRet DlgAskCMD(DlgUserIdType userIdType, DlgPinUsage pinUsage,
-	wchar_t *csUserId, unsigned long ulUserIdBufferLen,
-	wchar_t *csPin, unsigned long ulPinBufferLen, 
+DLGS_EXPORT DlgRet DlgAskInputCMD(bool isValidateOtp,
+	wchar_t *csOut, unsigned long ulOutBufferLen, wchar_t *csInId = NULL,
 	const wchar_t *csUserName = NULL, unsigned long ulUserNameBufferLen = 0, void *wndGeometry = 0);
 
-/**
-* Ask for OTP to perform CMD operation
-* - csDocname should be a null-terminated string
-* Returns: DLG_OK if all went fine,
-*          DLG_BAD_PARAM or DLG_ERR otherwise
-*/
 
-DLGS_EXPORT DlgRet DlgAskCMDOtp(wchar_t *csOtp, unsigned long ulOtpBufferLen, 
-	wchar_t *csDocname, void *wndGeometry = 0);
+/**
+ * Show CMD dialog for output message or activity progress.
+ * - msgType: if it is dlg for activity progress or show warning/error msg
+ * - message: message to show
+ * Returns: DLG_CANCEL if user canceled activity
+ */
+DLGS_EXPORT DlgRet DlgCMDMessage(DlgCmdMsgType msgType, const wchar_t *message);
+
+/**
+* Close the CMD message dialog
+*/
+DLGS_EXPORT void DlgCloseCMDMessage();
 #endif
 
 /************************************************************************************/

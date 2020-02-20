@@ -47,8 +47,9 @@ typedef enum {
 
 DEFINE_LANG_STR(Yes) = {L"&Yes", L"&Sim", L"", L""};
 DEFINE_LANG_STR(No) = {L"&No", L"&Nao", L"", L""};
-DEFINE_LANG_STR(Ok) = {L"&OK", L"&OK", L"O&k", L"&Ok"};
-DEFINE_LANG_STR(Cancel) = {L"&Cancel", L"&Cancelar", L"", L""};
+DEFINE_LANG_STR(Confirm) = {L"CONFIRM", L"CONFIRMAR", L"", L""};
+DEFINE_LANG_STR(Ok) = {L"OK", L"OK", L"O&k", L"&Ok"};
+DEFINE_LANG_STR(Cancel) = {L"CANCEL", L"CANCELAR", L"", L""};
 DEFINE_LANG_STR(CancelNo) = {L"&Cancel (No)", L"&Cancelar (Nao)", L"", L""};
 DEFINE_LANG_STR(Pin) = {L"PIN", L"PIN", L"", L""};
 DEFINE_LANG_STR(Puk) = {L"PUK", L"PUK", L"", L""};
@@ -86,13 +87,13 @@ DEFINE_LANG_STR(PinBlocked) = {L"PIN blocked", L"PIN bloqueado", L"", L""};
 DEFINE_LANG_STR(PinpadInfo) = {L"Pinpad info", L"Pinpad info", L"", L""};
 DEFINE_LANG_STR(Message) = {L"Message", L"Mensagem", L"", L""};
 DEFINE_LANG_STR(SignaturePin) = {L"Signature PIN", L"PIN de assinatura", L"", L""};
-DEFINE_LANG_STR(SignaturePinCmd) = {L"Chave Móvel Digital's Signature PIN", L"PIN de assinatura da Chave Móvel Digital", L"", L""};
+DEFINE_LANG_STR(SignaturePinCmd) = {L"Insert Chave Móvel Digital's Signature PIN", L"Inserir PIN da assinatura da Chave Móvel Digital", L"", L""};
 DEFINE_LANG_STR(ActivationPin) = {L"Activation PIN", L"Código de ativação", L"", L""};
 DEFINE_LANG_STR(AuthenticationPin) = {L"Authentication PIN", L"PIN de autenticação", L"", L""};
 DEFINE_LANG_STR(AddressPin) = {L"Address PIN", L"PIN de morada", L"", L""};
 DEFINE_LANG_STR(UnknownPin) = {L"Unknown PIN", L"PIN desconhecido", L"", L""};
 DEFINE_LANG_STR(PleaseEnterTheCorrectEidCard) = {L"Please enter the correct eID card.", L"Introduza um cartão válido.", L"", L""};
-DEFINE_LANG_STR(Caution) = {L"Caution:", L"Atenção:", L"", L""};
+DEFINE_LANG_STR(Caution) = {L"CAUTION:", L"ATENÇÃO:", L"", L""};
 DEFINE_LANG_STR(YouAreAboutToMakeALegallyBindingElectronic) = {L"You are about to make a legally binding electronic signature with your identity card.", L"Vai realizar uma assinatura eletrónica válida com o seu Cartão de Cidadão.", L"", L""};
 DEFINE_LANG_STR(YouAreAboutToMakeALegallyBindingElectronicWithCmd) = { L"You are about to make a legally binding electronic signature with Chave Móvel Digital.", L"Vai realizar uma assinatura eletrónica válida com a Chave Móvel Digital.", L"", L"" };
 DEFINE_LANG_STR(PleaseEnterYourPin) = {L"Please enter your PIN", L"Introduza o código PIN", L"", L""};
@@ -117,11 +118,13 @@ DEFINE_LANG_STR(UnlockWithoutPUKInstructions) = {L"1) Enter your new PIN and pre
 												 L"1) Por favor introduza o seu novo PIN e pressione 'OK'\n2) Introduza novamente o seu novo PIN e pressione 'OK'.", L"", L""};
 DEFINE_LANG_STR(PinpadCanBeDisabled) = { L"The pinpad functionality can be disabled in Application Configuration. Check manual.", L"A funcionalidade PINPAD pode ser desativada na Configuração da Aplicação. Ver manual.", L"", L"" };
 DEFINE_LANG_STR(MobileNumber) = { L"Mobile number", L"Número de telemóvel", L"", L"" };
-DEFINE_LANG_STR(InsertOtp) = { L"Enter the code that was sent via SMS to your mobile phone.", L"Insira o código que foi enviado via SMS para o seu telemóvel.", L"", L"" };
-DEFINE_LANG_STR(SecurityCode) = { L"Security code", L"Código de segurança", L"", L"" };
+DEFINE_LANG_STR(InsertOtp) = { L"To validate the authentication, insert in the next 5 minutes the security code that was sent to your mobile phone.", L"Para validar a autenticação, insira nos próximos 5 minutos o código de segurança que foi enviado para o seu telemóvel.", L"", L"" };
+DEFINE_LANG_STR(InsertSecurityCode) = { L"Insert the temporary security code", L"Inserir código de segurança temporário", L"", L"" };
 DEFINE_LANG_STR(SigningDataWithIdentifier) = { L"Signing data with identifier:", L"Assinatura de dados com identificador:", L"", L"" };
 DEFINE_LANG_STR(TheChosenCertificateIsFrom) = { L"Signing with certificate from ", L"Assinatura com certificado de", L"", L"" };
 DEFINE_LANG_STR(AssociatedWithNumber) = { L"with associated mobile number", L"com número de telemóvel associado", L"", L"" };
+DEFINE_LANG_STR(Error) = {L"ERROR", L"ERRO", L"", L""};
+DEFINE_LANG_STR(PleaseWait) = {L"PLEASE WAIT", L"POR FAVOR AGUARDE", L"", L""};
 #define GETSTRING_DLG(code) LANG_STR_ ## code[CLang::GetLang()]
 #ifndef WIN32
 #define GETQSTRING_DLG(code) QString::fromWCharArray(LANG_STR_ ## code[CLang::GetLang()])

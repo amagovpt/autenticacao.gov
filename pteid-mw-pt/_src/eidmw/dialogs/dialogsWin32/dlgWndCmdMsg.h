@@ -20,32 +20,38 @@
 
 #include "stdafx.h"
 #include "../dialogs.h"
+#include <string>
+#include <vector>
 
 using namespace eIDMW;
 
-#define RESULT_BUFFER_SIZE 128
-
-class dlgWndAskCmdOtp : public Win32Dialog
+class dlgWndCmdMsg : public Win32Dialog
 {
-    void GetResult();
-    HWND OK_Btn;
-    HWND Cancel_Btn;
+    struct DlgButtonData {
+        bool btnHovered;
+        bool mouseTracking;
+    };
+    DlgButtonData btnProcData;
+
+    HWND hwndImage;
+    HICON imageIco;
+
+    DlgCmdMsgType type;
 
     HBRUSH hbrBkgnd;
-
-    unsigned int m_ulOtpLen;
-    const wchar_t * szHeader;
-
-    std::wstring buildDocnameIdentifierString(wchar_t *csDocname);
+    std::wstring title;
 
 public:
-    dlgWndAskCmdOtp(std::wstring & Header, wchar_t *csDocname, HWND Parent = NULL);
-    virtual ~dlgWndAskCmdOtp();
-
-    wchar_t OtpResult[RESULT_BUFFER_SIZE];
+    dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND Parent = NULL);
+    virtual ~dlgWndCmdMsg();
 
     virtual LRESULT ProcecEvent
         (UINT		uMsg,			// Message For This Window
         WPARAM		wParam,			// Additional Message Information
         LPARAM		lParam);		// Additional Message Information
+    
+    void stopExec();
+
+    static LRESULT CALLBACK DlgButtonProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 };
+

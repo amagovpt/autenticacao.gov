@@ -255,7 +255,7 @@ LRESULT dlgWndAskPIN::ProcecEvent
 			rect.bottom = rect.top + 10;
 
 			SetBkColor(m_hDC, RGB(255, 255, 255));
-			SelectObject(m_hDC, TextFontHeader);
+			SelectObject(m_hDC, TextFontTitle);
 			MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
 			
 			//The first call is needed to calculate the needed bounding rectangle

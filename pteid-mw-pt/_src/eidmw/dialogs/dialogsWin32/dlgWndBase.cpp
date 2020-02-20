@@ -36,37 +36,41 @@ Win32Dialog *Win32Dialog::Active_lpWnd = NULL;
 HWND Win32Dialog::Active_hWnd = NULL;
 extern HMODULE g_hDLLInstance;// = (HMODULE)NULL;
 
-HFONT Win32Dialog::loadFontFromResource(int font_pointsize, bool isBold) {
-	/*
-	const char * szFontFile = "Lato-Regular.ttf";
-	int nResults = AddFontResourceA(szFontFile); 		// font file name
-	*/
+void Win32Dialog::loadFontsFromResources() {    
+    std::vector<HRSRC> res;
+    res.push_back(FindResource(m_hInstance,
+        MAKEINTRESOURCE(IDR_MYFONT), L"BINARY"));
+    res.push_back(FindResource(m_hInstance,
+        MAKEINTRESOURCE(IDR_MYFONT_BOLD), L"BINARY"));
+    res.push_back(FindResource(m_hInstance,
+        MAKEINTRESOURCE(IDR_MYFONT_BLACK), L"BINARY"));
 
-	if (m_fonthandle == NULL) {
-	
-	HRSRC res = FindResource(m_hInstance,
-		MAKEINTRESOURCE(IDR_MYFONT), L"BINARY");
-	if (res)
-	{
-		HGLOBAL mem = LoadResource(m_hInstance, res);
-		void *data = LockResource(mem);
-		size_t len = SizeofResource(m_hInstance, res);
+    for (size_t i = 0; i < res.size(); i++)
+    {
+        HANDLE fontHandle = NULL;
+        if (res[i])
+        {
+            HGLOBAL mem = LoadResource(m_hInstance, res[i]);
+            void *data = LockResource(mem);
+            size_t len = SizeofResource(m_hInstance, res[i]);
 
-		DWORD nFonts;
-		m_fonthandle = AddFontMemResourceEx(
-			data,       	// font resource
-			len,       	// number of bytes in font resource 
-			NULL,          	// Reserved. Must be 0.
-			&nFonts      	// number of fonts installed
-			);
+            DWORD nFonts;
+            fontHandle = AddFontMemResourceEx(
+                data,       	// font resource
+                len,       	// number of bytes in font resource 
+                NULL,          	// Reserved. Must be 0.
+                &nFonts      	// number of fonts installed
+                );
 
-		if (m_fonthandle == 0)
-		{
-			MWLOG(LEV_ERROR, MOD_DLG, L"  --> Win32Dialog::loadFontFromResource failed!");
-		}
-	}
-	}
+        }
+        if (fontHandle == NULL)
+        {
+            MWLOG(LEV_ERROR, MOD_DLG, L"  --> Win32Dialog::loadFontsFromResources failed loading font (res[%d])", i);
+        }
+    }
+}
 
+HFONT Win32Dialog::createDlgFont(int font_pointsize, int fontWeight) {
 	HFONT TextFont;
 
 	LOGFONT lf;
@@ -74,10 +78,19 @@ HFONT Win32Dialog::loadFontFromResource(int font_pointsize, bool isBold) {
 	HDC screen = GetDC(0);
 
 	lf.lfHeight = -MulDiv(font_pointsize, GetDeviceCaps(screen, LOGPIXELSY), 72);
-	lf.lfWeight = isBold ? FW_BOLD : FW_NORMAL;
+	lf.lfWeight = fontWeight;
 	lf.lfOutPrecision = OUT_TT_ONLY_PRECIS;
 
-	wcscpy_s(lf.lfFaceName, L"Lato Regular");
+	if (fontWeight == FW_BLACK)
+	{
+		wcscpy_s(lf.lfFaceName, L"Lato Black");
+	}
+	else if (fontWeight == FW_BOLD) {
+		wcscpy_s(lf.lfFaceName, L"Lato Bold");
+	}
+	else {
+		wcscpy_s(lf.lfFaceName, L"Lato Regular");
+	}
 
 	TextFont = CreateFont(lf.lfHeight, lf.lfWidth,
 		lf.lfEscapement, lf.lfOrientation, lf.lfWeight,
@@ -96,18 +109,19 @@ Win32Dialog::Win32Dialog(const wchar_t *appName)
 	m_hInstance = g_hDLLInstance;	// Grab An Instance From our DLL module to become able to Create our windows for/from
 	//m_appName = "DialogBase";		// Application Core-Name
 	dlgResult = eIDMW::DLG_CANCEL;	// Dialog Result
-	m_fonthandle = NULL;
 	m_appName=_wcsdup(appName);
 
-	int fontSizeHeader = 16 * .75;
+	int fontSizeTitle = 20 * .75;
 	int fontSize = 14 * .75;
 
 	// Scale font based on horizontal DPI
-	ScaleDimensions(&fontSizeHeader, NULL); 
+	ScaleDimensions(&fontSizeTitle, NULL); 
 	ScaleDimensions(&fontSize, NULL);
 
-	TextFontHeader = loadFontFromResource(fontSizeHeader, true);
-	TextFont = loadFontFromResource(fontSize, false);
+	loadFontsFromResources();
+	TextFontTitle = createDlgFont(fontSizeTitle, FW_BLACK);
+	TextFontHeader = createDlgFont(fontSize, FW_BOLD);
+	TextFont = createDlgFont(fontSize, FW_REGULAR);
 }
 
 Win32Dialog::~Win32Dialog()
@@ -212,7 +226,6 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 		return false;
 	}
 
-	EnableWindow(Parent, FALSE);
 	m_parent = Parent;
 	SetWindowLong(m_hWnd, GWL_STYLE, 0);  //remove all window styles, check MSDN for details
 

@@ -23,6 +23,7 @@ Abstract:
 #include <ncrypt.h>
 #include "../inc/KSP.h"
 #include "../Inc/log.h"
+#include "../Inc/KSPDlgHelper.h"
 #include "CMDSignature.h"
 #include "proxyinfo.h"
 #include "credentials.h"
@@ -1524,24 +1525,24 @@ cleanup:
 #define PIN_BUFFER_SIZE 9
 #define OTP_BUFFER_SIZE 7     // OTP is 6 digit
 
-bool checkCmdErrorAndShowDlg(HWND hWnd, bool proxyUsed, int error)
+bool checkCmdErrorAndShowDlg(HWND hWnd, bool proxyUsed, int error, HWND parentWindow)
 {
     std::wstring msg;
     if (error == SOAP_TCP_ERROR)
     {
-        msg = (proxyUsed ? GETSTRING_DLG(PossibleProxyError) : GETSTRING_DLG(ConnectionError));
+        msg += (proxyUsed ? GETSTRING_DLG(PossibleProxyError) : GETSTRING_DLG(ConnectionError));
     }
     else if (error == SOAP_ERR_INVALID_OTP)
     {
-        msg = GETSTRING_DLG(InvalidPinOrOtp);
+        msg += GETSTRING_DLG(InvalidPinOrOtp);
     }
-    if (msg.size() > 0)
+    else if (error == SOAP_ERR_OTP_VALIDATION_ERROR)
     {
-        MessageBoxW(
-            hWnd,
-            msg.c_str(),
-            GETSTRING_DLG(Error),
-            MB_OK | MB_ICONERROR);
+        msg += GETSTRING_DLG(OtpValidationFailed);
+    }
+    if (!msg.empty())
+    {
+        CmdKspOpenDialogError(msg.c_str(), DlgCmdMsgType::DLG_CMD_WARNING_MSG, parentWindow);
     }
     return error != ERR_NONE;
 }
@@ -1698,14 +1699,31 @@ __in    DWORD   dwFlags)
         CMDSignature cmd_signature(CMDCredentials::getCMDBasicAuthUserId(),
                                    CMDCredentials::getCMDBasicAuthPassword(),
                                    CMDCredentials::getCMDBasicAuthAppId());
-        
+
         CMDProxyInfo cmd_proxyinfo = CMDProxyInfo::buildProxyInfo();
 
         CByteArray hashBytes((const unsigned char *)pbHashValue, cbHashValue);
         char docnameBuffer[DOCNAME_BUFFER_SIZE];
         getDocName(pKey->hWnd, pKey->pszProcessBaseName, docnameBuffer, DOCNAME_BUFFER_SIZE, pbHashValue, cbHashValue);
-        int ret = cmd_signature.signOpen(cmd_proxyinfo, mobileNumber, pin, hashBytes, docnameBuffer);
-        if (checkCmdErrorAndShowDlg(pKey->hWnd, cmd_proxyinfo.host.size() > 0, ret))
+
+        int ret;
+        {
+            CmdSignThread signOpenThread(&cmd_proxyinfo, &cmd_signature, mobileNumber, pin, hashBytes, docnameBuffer);
+            signOpenThread.Start();
+
+            // Blocks until user cancels or thread returns
+            Status = CmdKspOpenDialogProgress(false, pKey->hWnd);
+
+            if (Status != ERROR_SUCCESS)
+            {
+                LogTrace(LOGTYPE_WARNING, "KSPSignHash", "CmdKspOpenDialogProgress (pin) returned with Status=%d.", Status);
+                signOpenThread.Stop();
+                goto cleanup;
+            }
+            ret = signOpenThread.GetSignResult();
+        }
+
+        if (checkCmdErrorAndShowDlg(pKey->hWnd, cmd_proxyinfo.host.size() > 0, ret, pKey->hWnd))
         {
             LogTrace(LOGTYPE_ERROR, "KSPSignHash", "Error in signOpen: %d.", ret);
             Status = NTE_INTERNAL_ERROR;
@@ -1732,8 +1750,23 @@ __in    DWORD   dwFlags)
 
         std::wstring otpW(csOtp);
         std::string otp = utilStringNarrow(otpW);
-        ret = cmd_signature.signClose(otp);
-        if (checkCmdErrorAndShowDlg(pKey->hWnd, cmd_proxyinfo.host.size() > 0, ret))
+        {
+            CmdSignThread signCloseThread(&cmd_signature, otp);
+            signCloseThread.Start();
+
+            // Blocks until user cancels or thread returns
+            Status = CmdKspOpenDialogProgress(true, pKey->hWnd);
+
+            if (Status != ERROR_SUCCESS)
+            {
+                LogTrace(LOGTYPE_WARNING, "KSPSignHash", "CmdKspOpenDialogProgress (otp) returned with Status=%d.", Status);
+                signCloseThread.Stop();
+                goto cleanup;
+            }
+            ret = signCloseThread.GetSignResult();
+        }
+
+        if (checkCmdErrorAndShowDlg(pKey->hWnd, cmd_proxyinfo.host.size() > 0, ret, pKey->hWnd))
         {
             LogTrace(LOGTYPE_ERROR, "KSPSignHash", "Error in signClose: %d.", ret);
             Status = NTE_INTERNAL_ERROR;

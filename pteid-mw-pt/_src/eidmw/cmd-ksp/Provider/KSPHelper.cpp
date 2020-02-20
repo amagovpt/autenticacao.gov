@@ -34,7 +34,6 @@ Implementation Note:
 #include <strsafe.h>
 #include "..\inc\KSP.h"
 #include "..\Inc\log.h"
-#include "dialogs.h"
 #include "psapi.h"
 #include <codecvt>
 #include "Util.h"
@@ -465,95 +464,6 @@ __inout CMDKSP_KEY *pKey)
         delete[] pKey->pszProcessBaseName;
     }
     return Status;
-}
-
-
-/******************************************************************************
-*
-* DESCRIPTION : Opens a dialog for the user to introduce the mobile number and
-*               the PIN for CMD signature
-*
-* INPUTS :
-*               unsigned long userIdLen        Size of userId buffer
-*               unsigned long pinLen           Size of pin buffer
-*               HWND parentWindow              Handle to parent window
-* OUTPUTS :
-*               wchar_t *userId    Mobile number introduced
-*               wchar_t *pin       PIN introduced
-* RETURN :
-*               ERROR_SUCCESS          The function was successful.
-*/
-SECURITY_STATUS
-CmdKspOpenDialogSign(
-__in    const wchar_t *userId,
-__in    unsigned long userIdLen,
-__out   wchar_t *pin,
-__in    unsigned long pinLen,
-__in    const wchar_t *userName,
-__in    unsigned long userNameLen,
-__in    HWND parentWindow)
-{
-    if (parentWindow == NULL)
-    {
-        parentWindow = GetActiveWindow();
-    }
-    LogTrace(LOGTYPE_INFO, "CmdKspOpenDialogSign", "appWindow = [0x%08x]", parentWindow);
-    SetApplicationWindow(parentWindow);
-    DlgRet ret = DlgAskCMD(DlgUserIdType::DLG_USERID_MOBILE_FIXED, DlgPinUsage::DLG_PIN_SIGN,
-        (wchar_t *)userId, userIdLen, pin, pinLen, userName, userNameLen);
-    if (ret == DLG_OK)
-    {
-        return ERROR_SUCCESS;
-    }
-    else if (ret == DLG_CANCEL)
-    {
-        return NTE_USER_CANCELLED;
-    }
-    else
-    {
-        return NTE_INTERNAL_ERROR;
-    }
-}
-
-/******************************************************************************
-*
-* DESCRIPTION : Opens a dialog for the user to introduce the OTP
-*
-* INPUTS :
-*               unsigned long otpLen       Size of OTP buffer
-*               HWND parentWindow          Handle to parent window
-*               LPWSTR pszDocname          Null-terminated string with the document id
-* OUTPUTS :
-*               wchar_t *otp               OTP introduced by the user
-* RETURN :
-*               ERROR_SUCCESS          The function was successful.
-*/
-SECURITY_STATUS
-CmdKspOpenDialogOtp(
-__out   wchar_t *otp,
-__in    unsigned long otpLen,
-__in    LPWSTR pszDocname,
-__in    HWND parentWindow)
-{
-    if (parentWindow == NULL)
-    {
-        parentWindow = GetActiveWindow();
-    }
-    LogTrace(LOGTYPE_INFO, "CmdKspOpenDialogValidateOtp", "appWindow = [0x%08x]", parentWindow);
-    SetApplicationWindow(parentWindow);
-    DlgRet ret = DlgAskCMDOtp(otp, otpLen, pszDocname);
-    if (ret == DLG_OK)
-    {
-        return ERROR_SUCCESS;
-    }
-    else if (ret == DLG_CANCEL)
-    {
-        return NTE_USER_CANCELLED;
-    }
-    else
-    {
-        return NTE_INTERNAL_ERROR;
-    }
 }
 
 std::wstring GetApplicationName(LPSTR lpProcessName) {
