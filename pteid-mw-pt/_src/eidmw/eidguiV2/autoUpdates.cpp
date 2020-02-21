@@ -498,7 +498,11 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
         file_name_temp.append(certs_dir_str);
         file_name_temp.append(cert_json->valuestring);
 
+#ifdef WIN32
+        QDir dir(QString::fromLatin1(certs_dir_str.c_str()));
+#else
         QDir dir(QString::fromStdString(certs_dir_str));
+#endif
         if (!dir.exists())
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
@@ -515,10 +519,15 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
             getAppController()->signalAutoUpdateFail(m_updateType,GAPI::InstallFailed);
             return;
         }
-
-        if(QFile::exists(QString::fromUtf8(file_name_temp.c_str()))
-                && validateHash(QString::fromUtf8(file_name_temp.c_str()),
+#ifdef WIN32
+        if(QFile::exists(QString::fromLatin1(file_name_temp.c_str()))
+                && validateHash(QString::fromLatin1(file_name_temp.c_str()),
                                 QString::fromStdString(cert_json->string))){
+#else
+        if(QFile::exists(QString::fromStdString(file_name_temp))
+                && validateHash(QString::fromStdString(file_name_temp),
+                                QString::fromStdString(cert_json->string))){
+#endif
             qDebug() << "Cert exists: " << QString::fromUtf8(file_name_temp.c_str());
         } else{
             qDebug() << "Cert does not exist or invalid: " << QString::fromUtf8(file_name_temp.c_str());
@@ -719,9 +728,15 @@ void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
 void AutoUpdates::RunCertsPackage(QStringList certs){
     qDebug() << "C++ AUTO UPDATES: RunCertsPackage filename";
 
-    // TODO: test with Ubunto < 17
-    eIDMW::PTEID_Config certs_dir(eIDMW::PTEID_PARAM_GENERAL_CERTS_DIR);
-    QString  certs_dir_str = QString::fromStdString(certs_dir.getString());
+    eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_CERTS_DIR);
+    std::string certs_dir_std = config.getString();
+
+#ifdef WIN32
+    QString  certs_dir_str = QString::fromLatin1(certs_dir_std.c_str());
+#else
+    QString  certs_dir_str = QString::fromStdString(certs_dir_std);
+#endif
+
     bool bUpdateCertsSuccess = false;
     bool bHaveFilesToCopy = false;
 
