@@ -1490,12 +1490,13 @@ Load language error. Please reinstall the application"
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
             font.pixelSize: Constants.SIZE_TEXT_LABEL
+            font.bold: mouseAreaVersionLabel.containsMouse
             font.family: lato.name
             color: Constants.COLOR_MAIN_DARK_GRAY
             text: qsTranslate("PageHelpAbout","STR_HELP_APP_VERSION") + controler.autoTr
                     + " " + controler.getAppVersion().split("-")[0]
             MouseArea {
-                id: mouseAreaMainMenu
+                id: mouseAreaVersionLabel
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked:{
