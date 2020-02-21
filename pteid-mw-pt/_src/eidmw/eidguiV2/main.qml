@@ -1492,7 +1492,8 @@ Load language error. Please reinstall the application"
             font.pixelSize: Constants.SIZE_TEXT_LABEL
             font.family: lato.name
             color: Constants.COLOR_MAIN_DARK_GRAY
-            text: "Versão " + controler.getAppVersion().split("-")[0]
+            text: qsTranslate("PageHelpAbout","STR_HELP_APP_VERSION") + controler.autoTr
+                    + " " + controler.getAppVersion().split("-")[0]
             MouseArea {
                 id: mouseAreaMainMenu
                 anchors.fill: parent
