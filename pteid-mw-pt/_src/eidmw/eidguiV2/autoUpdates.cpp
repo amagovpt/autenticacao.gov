@@ -496,7 +496,7 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
 
         std::string  file_name_temp;
         file_name_temp.append(certs_dir_str);
-        file_name_temp.append(cert_json->valuestring);
+        file_name_temp.append(cert_json->string);
 
 #ifdef WIN32
         QDir dir(QString::fromLatin1(certs_dir_str.c_str()));
@@ -522,22 +522,22 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
 #ifdef WIN32
         if(QFile::exists(QString::fromLatin1(file_name_temp.c_str()))
                 && validateHash(QString::fromLatin1(file_name_temp.c_str()),
-                                QString::fromStdString(cert_json->string))){
+                                QString::fromStdString(cert_json->valuestring))){
 #else
         if(QFile::exists(QString::fromStdString(file_name_temp))
                 && validateHash(QString::fromStdString(file_name_temp),
-                                QString::fromStdString(cert_json->string))){
+                                QString::fromStdString(cert_json->valuestring))){
 #endif
             qDebug() << "Cert exists: " << QString::fromUtf8(file_name_temp.c_str());
         } else{
             qDebug() << "Cert does not exist or invalid: " << QString::fromUtf8(file_name_temp.c_str());
 
             downloadurl.append(configurl);
-            downloadurl.append(cert_json->valuestring);
+            downloadurl.append(cert_json->string);
 
             qDebug() << "downloadurl : " << QString::fromUtf8(downloadurl.c_str());
             urlList.append(QString::fromStdString(downloadurl));
-            hashList.append(QString::fromStdString(cert_json->string));
+            hashList.append(QString::fromStdString(cert_json->valuestring));
             downloadurl.clear();
         }
     }
