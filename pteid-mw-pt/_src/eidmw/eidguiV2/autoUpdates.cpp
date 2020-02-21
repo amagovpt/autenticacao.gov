@@ -112,7 +112,9 @@ void AutoUpdates::startRequest(QUrl url) {
     int download_duration = 60000;
 
     ProxyInfo proxyinfo;
+    proxy = QNetworkProxy(); // reset Proxy
     proxy.setType(QNetworkProxy::HttpProxy);
+
     if (proxyinfo.isAutoConfig())
     {
         std::string proxy_host;
@@ -123,7 +125,6 @@ void AutoUpdates::startRequest(QUrl url) {
             proxy.setHostName(QString::fromStdString(proxy_host));
             proxy.setPort(proxy_port);
         }
-        QNetworkProxy::setApplicationProxy(proxy);
     }
     else if (proxyinfo.isManualConfig())
     {
@@ -140,8 +141,8 @@ void AutoUpdates::startRequest(QUrl url) {
             proxy.setUser(QString::fromStdString(proxyinfo.getProxyUser()));
             proxy.setPassword(QString::fromStdString(proxyinfo.getProxyPwd()));
         }
-        QNetworkProxy::setApplicationProxy(proxy);
     }
+    QNetworkProxy::setApplicationProxy(proxy);
 
     reply = qnam.get(QNetworkRequest(url));
     QTimer::singleShot(download_duration, this, SLOT(cancelDownload()));

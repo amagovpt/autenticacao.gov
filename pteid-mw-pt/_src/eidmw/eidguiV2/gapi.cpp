@@ -2061,11 +2061,12 @@ void GAPI::startPingSCAP() {
     //10 second timeout
     int network_timeout = 10000;
 
+    proxy = QNetworkProxy();
+    proxy.setType(QNetworkProxy::HttpProxy);
     if (!proxy_host.empty() && proxy_port != 0)
     {
         eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "PingSCAP: using manual proxy config");
         qDebug() << "C++: PingSCAP: using manual proxy config";
-        proxy.setType(QNetworkProxy::HttpProxy);
         proxy.setHostName(QString::fromStdString(proxy_host));
         proxy.setPort(proxy_port);
 
@@ -2074,8 +2075,6 @@ void GAPI::startPingSCAP() {
             proxy.setUser(QString::fromStdString(proxy_username));
             proxy.setPassword(QString::fromStdString(proxy_pwd));
         }
-
-        QNetworkProxy::setApplicationProxy(proxy);
     }
     else if (!m_pac_url.isEmpty())
     {
@@ -2084,11 +2083,10 @@ void GAPI::startPingSCAP() {
         qDebug() << "C++: PingSCAP: using system proxy config";
         PTEID_GetProxyFromPac(m_pac_url.toUtf8().constData(),
             url.toString().toUtf8().constData(), &proxy_host, &proxy_port_str);
-        proxy.setType(QNetworkProxy::HttpProxy);
         proxy.setHostName(QString::fromStdString(proxy_host));
         proxy.setPort(atol(proxy_port_str.c_str()));
-        QNetworkProxy::setApplicationProxy(proxy);
     }
+    QNetworkProxy::setApplicationProxy(proxy);
 
     reply = qnam.get(QNetworkRequest(url));
 
