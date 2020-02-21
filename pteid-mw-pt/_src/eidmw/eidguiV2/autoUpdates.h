@@ -57,14 +57,14 @@ public slots:
     void httpError(QNetworkReply::NetworkError networkError);
     void httpFinished();
     void httpReadyRead();
-    void updateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
+    void updateDataReadProgress();
 
     // Public slots to process the update file
     void cancelUpdateDownload();
     void httpUpdateError(QNetworkReply::NetworkError networkError);
     void httpUpdateFinished();
     void httpUpdateReadyRead();
-    void updateUpdateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
+    void updateUpdateDataReadProgress(/*qint64 bytesRead, qint64 totalBytes*/);
 
 private:
     AppController*   m_AppController;

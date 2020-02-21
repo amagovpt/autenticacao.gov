@@ -153,7 +153,7 @@ void AutoUpdates::startRequest(QUrl url) {
     connect(reply, SIGNAL(readyRead()),
             this, SLOT(httpReadyRead()));
     connect(reply, SIGNAL(downloadProgress(qint64,qint64)),
-            this, SLOT(updateDataReadProgress(qint64,qint64)));
+            this, SLOT(updateDataReadProgress()));
     return;
 }
 
@@ -626,8 +626,10 @@ void AutoUpdates::startUpdateRequest(QUrl url){
             this, SLOT(httpUpdateFinished()));
     connect(reply, SIGNAL(readyRead()),
             this, SLOT(httpUpdateReadyRead()));
+    // TODO : For now the Autenticacao.gov server do not send content length header.
+    //        So we are using a indeterminate progress bar.
     connect(reply, SIGNAL(downloadProgress(qint64,qint64)),
-            this, SLOT(updateUpdateDataReadProgress(qint64,qint64)));
+            this, SLOT(updateUpdateDataReadProgress(/*qint64,qint64*/)));
 }
 
 void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
@@ -964,7 +966,7 @@ void AutoUpdates::httpReadyRead()
     filedata += qsdata.toStdString();
 }
 
-void AutoUpdates::updateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
+void AutoUpdates::updateDataReadProgress()
 {
     if (httpRequestAborted)
         return;
@@ -1090,14 +1092,16 @@ void AutoUpdates::httpUpdateReadyRead()
         file->write(reply->readAll());
 }
 
-void AutoUpdates::updateUpdateDataReadProgress(qint64 bytesRead, qint64 totalBytes)
+void AutoUpdates::updateUpdateDataReadProgress(/*qint64 bytesRead, qint64 totalBytes*/)
 {
     qDebug() << "C++ AUTO UPDATES: updateUpdateDataReadProgress";
     if (httpUpdateRequestAborted)
         return;
 
-    qint64 valueFloat = (quint64)((double) (bytesRead * 100 / totalBytes ));
-    getAppController()->signalAutoUpdateProgress(m_updateType,(int)valueFloat);
+    // if(totalBytes > 0)
+    //    valueFloat = (quint64)((double) (bytesRead * 100 / totalBytes ));
+
+    getAppController()->signalAutoUpdateProgress(m_updateType/*,(int)valueFloat*/);
 }
 
 QString AutoUpdates::getCertListAsString(){

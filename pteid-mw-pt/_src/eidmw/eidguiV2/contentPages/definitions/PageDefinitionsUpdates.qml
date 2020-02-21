@@ -86,14 +86,14 @@ PageDefinitionsUpdatesForm {
             if(updateType == GAPI.AutoUpdateApp){
                 propertyProgressBar.indeterminate = true
                 propertyProgressBar.visible = true
-                propertyProgressBar.value = value
+                //propertyProgressBar.value = value
                 if (propertyButtonCancelUpdate.visible == false) {
                     propertyButtonCancelUpdate.visible = true
                 }
             } else {
                 propertyProgressBarCerts.indeterminate = true
                 propertyProgressBarCerts.visible = true
-                propertyProgressBarCerts.value = value
+                //propertyProgressBarCerts.value = value
                 if (propertyButtonCancelUpdateCerts.visible == false) {
                     propertyButtonCancelUpdateCerts.visible = true
                 }
