@@ -9,7 +9,7 @@
 //
 
 #include "../../_Builds/pteidversions.h"
-#include "afxres.h"
+#include "windows.h"
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
