@@ -142,22 +142,22 @@ Item {
                         font.pixelSize: propertySigLineHeight * 0.8
                         font.italic: true
                         height: propertySigLineHeight
-                        width: parent.width - 4
+                        width: parent.width - 2 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         clip: true
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_LABEL
                         text: ""
-                        anchors.topMargin: 2
-                        x: 2
+                        anchors.topMargin: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                     }
                     Image {
                         id: dragSigWaterImage
-                        height: propertySigLineHeight * 4
-                        fillMode: Image.PreserveAspectFit
+                        height: propertySigLineHeight * 3
+                        width: parent.width * 0.15
                         anchors.top: sigReasonText.bottom
-                        anchors.topMargin: 2
-                        x: 2
+                        anchors.topMargin: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                     }
                     Text {
@@ -168,14 +168,14 @@ Item {
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigReasonText.bottom
                         text: ""
-                        x: 2
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                     }
                     Text {
                         id: sigSignedByNameText
                         font.pixelSize: propertySigLineHeight * 0.8
                         height: propertySigLineHeight
-                        width: parent.width - sigSignedByText.paintedWidth - 6
+                        width: parent.width - sigSignedByText.paintedWidth - 3 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         clip: true
                         font.family: lato.name
                         font.bold: true
@@ -183,56 +183,57 @@ Item {
                         anchors.top: sigReasonText.bottom
                         anchors.left: sigSignedByText.right
                         text: ""
-                        x: 2
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                     }
                     Text {
                         id: sigNumIdText
                         font.pixelSize: propertySigLineHeight * 0.8
                         height: propertySigLineHeight
-                        width: parent.width - 4
+                        width: parent.width - 2 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         clip: true
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigSignedByText.bottom
                         text: ""
-                        x: 2
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                     }
                     Text {
                         id: sigDateText
                         font.pixelSize: propertySigLineHeight * 0.8
                         height: propertySigLineHeight
-                        width: parent.width - 4
+                        width: parent.width - 2 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         clip: true
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigNumIdText.bottom
-                        x: 2
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                     }
                     Text {
                         id: sigLocationText
                         font.pixelSize: propertySigLineHeight * 0.8
                         height: propertySigLineHeight
-                        width: parent.width - 4
+                        width: parent.width - 2 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         clip: true
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigDateText.bottom
                         text: ""
-                        x: 2
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                     }
 
                     Image {
                         id: dragSigImage
-                        height: propertySigLineHeight * 3
-                        fillMode: Image.PreserveAspectFit
+                        height: parent.height * 0.25
+                        width: parent.width * 0.5
                         anchors.top: sigLocationText.bottom
                         anchors.topMargin: parent.height * 0.1
-                        x: 2
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
+                        mipmap: true
                     }
                 }
             }
@@ -330,23 +331,23 @@ Item {
                         font.pixelSize: propertySigLineHeight * 0.8
                         font.italic: true
                         height: propertySigLineHeight
-                        width: parent.width - 4
+                        width: parent.width - 2 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         clip: true
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_LABEL
                         text: ""
-                        anchors.topMargin: 2
-                        x: 2
+                        anchors.topMargin: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                         opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
                     }
                     Image {
                         id: dragSigWaterImageCustom
-                        height: propertySigLineHeight * 4
-                        fillMode: Image.PreserveAspectFit
+                        height: propertySigLineHeight * 3
+                        width: parent.width * 0.15
                         anchors.top: sigReasonTextCustom.bottom
-                        anchors.topMargin: 2
-                        x: 2
+                        anchors.topMargin: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                         opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
                     }
@@ -357,7 +358,7 @@ Item {
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigReasonTextCustom.bottom
-                        x: 2
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                         opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
                     }
@@ -372,7 +373,7 @@ Item {
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigReasonTextCustom.bottom
                         anchors.left: sigSignedByTextCustom.right
-                        x: 2
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                         opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
                     }
@@ -380,12 +381,12 @@ Item {
                         id: sigNumIdTextCustom
                         font.pixelSize: propertySigLineHeight * 0.8
                         height: propertySigLineHeight
-                        width: parent.width - 4
+                        width: parent.width - 2 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         clip: true
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigSignedByTextCustom.bottom
-                        x: 2
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                         opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
                     }
@@ -393,12 +394,12 @@ Item {
                         id: sigDateTextCustom
                         font.pixelSize: propertySigLineHeight * 0.8
                         height: propertySigLineHeight
-                        width: parent.width - 4
+                        width: parent.width - 2 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         clip: true
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigNumIdTextCustom.bottom
-                        x: 2
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                         opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
                     }
@@ -406,30 +407,30 @@ Item {
                         id: sigLocationTextCustom
                         font.pixelSize: propertySigLineHeight * 0.8
                         height: propertySigLineHeight
-                        width: parent.width - 4
+                        width: parent.width - 2 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         clip: true
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigDateTextCustom.bottom
-                        x: 2
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                         opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
                     }
                     Rectangle {
                         id: rectPreCustomImage
-                        width: 189
-                        height: 45
+                        height: parent.height * 0.3
+                        width: parent.width * 0.5
                         anchors.top: sigLocationTextCustom.bottom
                         anchors.topMargin: parent.height * 0.1
-                        x: 2
+                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                         border.width : 2
                         border.color : Constants.COLOR_MAIN_SOFT_GRAY
 
                         Image {
                             id: imagePreCustom
-                            width: 185
-                            height: 41
+                            width: parent.width - 2 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
+                            height: parent.height - 2 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                             antialiasing: true
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
@@ -440,7 +441,7 @@ Item {
                     }
                     Text {
                         id: textDragMsgImg
-                        width: parent.width - rectPreCustomImage.width
+                        width: parent.width - rectPreCustomImage.width - 3 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         text: qsTranslate("PageDefinitionsSignature",
                                           "STR_CUSTOM_SIGN_FILE_LOAD")
                         font.bold: true

@@ -33,19 +33,12 @@ PageDefinitionsSignatureForm {
         onSignalCardDataChanged: {
             console.log("Definitions Signature --> Data Changed")
             //console.trace();
-            propertySigReasonText.text = propertySigReasonTextCustom.text = "{" + qsTr("STR_CUSTOM_SIGN_REASON") + "}"
-            propertySigSignedByText.text = propertySigSignedByTextCustom.text =qsTr("STR_CUSTOM_SIGN_BY") + ": "
 
             propertySigSignedByNameText.text = propertySigSignedByNameTextCustom.text =
                     gapi.getDataCardIdentifyValue(GAPI.Givenname) + " " +  gapi.getDataCardIdentifyValue(GAPI.Surname)
-
-
-            propertySigNumIdText.text = propertySigNumIdTextCustom.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
+            propertySigNumIdText.text = propertySigNumIdTextCustom.text = qsTranslate("GAPI","STR_NIC") + ": "
                     + gapi.getDataCardIdentifyValue(GAPI.Documentnum)
             propertySigLocationText.text = propertySigLocationTextCustom.text ="{" + qsTr("STR_CUSTOM_SIGN_LOCATION") + "}"
-
-            propertySigImg.source = "qrc:/images/logo_CC.png"
-            propertySigWaterImg.source = propertySigWaterImgCustom.source = "qrc:/images/pteid_signature_watermark.jpg"
 
             propertyBusyIndicator.running = false
             mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
@@ -75,15 +68,7 @@ PageDefinitionsSignatureForm {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR") + controler.autoTr
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
-
-            propertySigReasonText.text = propertySigReasonTextCustom.text = "{" + qsTr("STR_CUSTOM_SIGN_REASON") + "}"
-            propertySigSignedByText.text = propertySigSignedByTextCustom.text = qsTr("STR_CUSTOM_SIGN_BY") + ": "
-            propertySigSignedByNameText.text = propertySigSignedByNameTextCustom.text = ""
-            propertySigNumIdText.text = propertySigNumIdTextCustom.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
-            propertySigLocationText.text = propertySigLocationTextCustom.text = "{" + qsTr("STR_CUSTOM_SIGN_LOCATION") + "}"
-            propertySigImg.source = "qrc:/images/logo_CC.png"
-            propertySigWaterImg.source = propertySigWaterImgCustom.source = "qrc:/images/pteid_signature_watermark.jpg"
-
+            clearFields()
             propertyBusyIndicator.running = false
         }
         onSignalCardChanged: {
@@ -94,14 +79,7 @@ PageDefinitionsSignatureForm {
             if (error_code == GAPI.ET_CARD_REMOVED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED") + controler.autoTr
                 returnSubMenuWhenClosed = true;
-
-                propertySigReasonText.text = "{" + qsTr("STR_CUSTOM_SIGN_REASON") + "}"
-                propertySigSignedByText.text = qsTr("STR_CUSTOM_SIGN_BY") + ": "
-                propertySigSignedByNameText.text = ""
-                propertySigNumIdText.text = qsTranslate("GAPI","STR_DOCUMENT_NUMBER") + ": "
-                propertySigLocationText.text = "{" + qsTr("STR_CUSTOM_SIGN_LOCATION") + "}"
-                propertySigImg.source = "qrc:/images/logo_CC.png"
-                propertySigWaterImg.source = propertySigWaterImgCustom.source = "qrc:/images/pteid_signature_watermark.jpg"
+                clearFields()
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED") + controler.autoTr
@@ -230,8 +208,9 @@ PageDefinitionsSignatureForm {
         console.log("Page Definitions Signature mainWindowCompleted")
         propertyBusyIndicator.running = true
         gapi.startCardReading()
-        propertySigDateText.text = propertySigDateTextCustom.text =getData()
-
+        propertySigDateText.text = propertySigDateTextCustom.text =
+                qsTranslate("PageServicesSign", "STR_SIGN_DATE") + ": " + getDate()
+        clearFields()
         if(gapi.getUseCustomSignature()){
             propertyRadioButtonDefault.checked = false
             propertyRadioButtonCustom.checked = true
@@ -252,7 +231,7 @@ PageDefinitionsSignatureForm {
         if(mainFormID.propertyPageLoader.propertyForceFocus)
             propertyRadioButtonDefault.forceActiveFocus()
     }
-    function getData(){
+    function getDate(){
         var time = Qt.formatDateTime(new Date(), "yy.MM.dd hh:mm:ss")
 
         function pad(number, length){
@@ -275,5 +254,14 @@ PageDefinitionsSignatureForm {
     function toggleRadio(element){
         if(!element.checked)
             element.checked = true
+    }
+    function clearFields(){
+        propertySigReasonText.text = propertySigReasonTextCustom.text = "{" + qsTr("STR_CUSTOM_SIGN_REASON") + "}"
+        propertySigSignedByText.text = propertySigSignedByTextCustom.text = qsTr("STR_CUSTOM_SIGN_BY") + ": "
+        propertySigSignedByNameText.text = propertySigSignedByNameTextCustom.text = ""
+        propertySigNumIdText.text = propertySigNumIdTextCustom.text = qsTranslate("GAPI","STR_NIC") + ": "
+        propertySigLocationText.text = propertySigLocationTextCustom.text = "{" + qsTr("STR_CUSTOM_SIGN_LOCATION") + "}"
+        propertySigImg.source = "qrc:/images/pdf_document_header.png"
+        propertySigWaterImg.source = propertySigWaterImgCustom.source = "qrc:/images/pteid_signature_watermark.jpg"
     }
 }

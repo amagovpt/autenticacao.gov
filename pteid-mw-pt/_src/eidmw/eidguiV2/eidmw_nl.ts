@@ -28,7 +28,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="305"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="226"/>
         <location filename="gapi.cpp" line="303"/>
-        <location filename="gapi.cpp" line="3287"/>
+        <location filename="gapi.cpp" line="3285"/>
         <source>STR_POPUP_SUCESS</source>
         <translation>Sucesso</translation>
     </message>
@@ -41,8 +41,8 @@
         <location filename="components/DialogCMD.qml" line="592"/>
         <location filename="gapi.cpp" line="307"/>
         <location filename="gapi.cpp" line="681"/>
-        <location filename="gapi.cpp" line="3267"/>
-        <location filename="gapi.cpp" line="3282"/>
+        <location filename="gapi.cpp" line="3265"/>
+        <location filename="gapi.cpp" line="3280"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Erro</translation>
     </message>
@@ -95,8 +95,8 @@
         <location filename="gapi.cpp" line="556"/>
         <location filename="gapi.cpp" line="647"/>
         <location filename="gapi.cpp" line="773"/>
-        <location filename="gapi.cpp" line="3258"/>
-        <location filename="gapi.cpp" line="3292"/>
+        <location filename="gapi.cpp" line="3256"/>
+        <location filename="gapi.cpp" line="3290"/>
         <source>STR_VERIFY_INTERNET</source>
         <translation>Por favor certifique-se que está ligado à internet</translation>
     </message>
@@ -183,6 +183,8 @@
         <translation>Falha na assinatura com atributos profissionais. Por favor volte a carregar os atributos profissionais.</translation>
     </message>
     <message>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="39"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="262"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="223"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="237"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="105"/>
@@ -198,7 +200,7 @@
     </message>
     <message>
         <location filename="gapi.cpp" line="640"/>
-        <location filename="gapi.cpp" line="3261"/>
+        <location filename="gapi.cpp" line="3259"/>
         <source>STR_CMD_GET_CERTIFICATE_ERROR</source>
         <oldsource>STR_GET_CERTIFICATE_ERROR</oldsource>
         <translation>Registo inexistente ou subscrição da assinatura digital inativa. Verifique se a subscrição da assinatura digital está ativada em &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;</translation>
@@ -251,20 +253,20 @@
     </message>
     <message>
         <location filename="gapi.cpp" line="815"/>
-        <location filename="gapi.cpp" line="3252"/>
+        <location filename="gapi.cpp" line="3250"/>
         <source>STR_CMD_LOGIN_SUCESS</source>
         <translation>Login com sucesso. Aguarde a recepção do código enviado por SMS!</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="932"/>
         <location filename="gapi.cpp" line="995"/>
-        <location filename="gapi.cpp" line="3245"/>
+        <location filename="gapi.cpp" line="3243"/>
         <source>STR_CMD_CONNECTING</source>
         <translation>Conectando com o servidor</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="1032"/>
-        <location filename="gapi.cpp" line="3279"/>
+        <location filename="gapi.cpp" line="3277"/>
         <source>STR_CMD_SENDING_CODE</source>
         <translation>Enviando código de confirmação para o servidor</translation>
     </message>
@@ -309,13 +311,13 @@
         <translation>Não foi possivel verificar o estado do Cartão. Por favor, dirija-se a um serviço competente para a emissão de cartões de Cidadão.</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="3264"/>
-        <location filename="gapi.cpp" line="3295"/>
+        <location filename="gapi.cpp" line="3262"/>
+        <location filename="gapi.cpp" line="3293"/>
         <source>STR_CERT_REG_ERROR</source>
         <translation>Ocorreu um erro no registo do certificado.</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="3288"/>
+        <location filename="gapi.cpp" line="3286"/>
         <source>STR_CERT_REG_SUCC</source>
         <translation>O certificado foi registado com sucesso.</translation>
     </message>
@@ -409,9 +411,6 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="401"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="43"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="82"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="101"/>
         <location filename="gapi.cpp" line="1475"/>
         <source>STR_DOCUMENT_NUMBER</source>
         <translation>Número de Documento</translation>
@@ -926,32 +925,32 @@
         <translation>Gravar Notas</translation>
     </message>
     <message>
-        <location filename="main.qml" line="480"/>
+        <location filename="main.qml" line="482"/>
         <source>STR_UNSAVED_NOTES_TITLE</source>
         <translation>Notas</translation>
     </message>
     <message>
-        <location filename="main.qml" line="495"/>
+        <location filename="main.qml" line="497"/>
         <source>STR_UNSAVED_NOTES</source>
         <translation>Notas por gravar</translation>
     </message>
     <message>
-        <location filename="main.qml" line="512"/>
+        <location filename="main.qml" line="514"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION_EXIT</source>
         <translation>Pressione &quot;Permanecer&quot; para continuar a editar as notas ou &quot;Sair&quot; para sair da aplicação sem guardar as notas.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="513"/>
+        <location filename="main.qml" line="515"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION</source>
         <translation>Pressione &quot;Permanecer&quot; para continuar a editar as notas ou &quot;Sair&quot; para sair desta página sem guardar as notas.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="537"/>
+        <location filename="main.qml" line="539"/>
         <source>STR_UNSAVED_NOTES_LEAVE</source>
         <translation>Sair</translation>
     </message>
     <message>
-        <location filename="main.qml" line="560"/>
+        <location filename="main.qml" line="562"/>
         <source>STR_UNSAVED_NOTES_STAY</source>
         <translation>Permanecer</translation>
     </message>
@@ -1512,16 +1511,12 @@
 <context>
     <name>PageDefinitionsSignature</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="36"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="79"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="98"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="259"/>
         <source>STR_CUSTOM_SIGN_REASON</source>
         <translation>Motivo da assinatura</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="37"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="80"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="99"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="260"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="219"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="236"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="101"/>
@@ -1531,9 +1526,8 @@
         <translation>Assinado por</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="45"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="83"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="102"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="41"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="263"/>
         <source>STR_CUSTOM_SIGN_LOCATION</source>
         <translation>Localização da assinatura</translation>
     </message>
@@ -1543,22 +1537,22 @@
         <translation>Usar assinatura padrão</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="281"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="283"/>
         <source>STR_CUSTOM_SIGN_CUSTOM_TITLE</source>
         <translation>Usar assinatura personalizada</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="444"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="447"/>
         <source>STR_CUSTOM_SIGN_FILE_LOAD</source>
-        <translation>Arraste a imagem da assinatura personalizada ou clique para procurar o ficheiro ( Recomendado 185 x 41 px)</translation>
+        <translation>Arraste a imagem da assinatura personalizada ou clique para procurar o ficheiro (Recomendado 185 x 41 px)</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="468"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="471"/>
         <source>STR_CUSTOM_SIGN_REMOVE_BUTTON</source>
         <translation>Remover imagem</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="498"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="501"/>
         <source>STR_CUSTOM_SIGN_ADD_BUTTON</source>
         <translation>Adicionar imagem</translation>
     </message>
@@ -1604,7 +1598,7 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="52"/>
-        <location filename="main.qml" line="136"/>
+        <location filename="main.qml" line="137"/>
         <source>STR_UPDATE_INSTALL_FAIL</source>
         <translation>Falha na instalação de um ou mais certificados.</translation>
     </message>
@@ -1633,7 +1627,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="34"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="53"/>
-        <location filename="main.qml" line="137"/>
+        <location filename="main.qml" line="138"/>
         <source>STR_CONTACT_SUPPORT</source>
         <translation>Por favor tente novamente. Caso o erro persista, contacte-nos por email para &lt;a href=&quot;mailto:info.cidadao@ama.pt&quot;&gt;info.cidadao@ama.pt&lt;/a&gt;.</translation>
     </message>
@@ -1727,13 +1721,14 @@
         <translation>Existe uma versão mais recente da aplicação.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="260"/>
+        <location filename="main.qml" line="350"/>
+        <location filename="main.qml" line="353"/>
         <source>STR_AUTOUPDATE_OPEN_TEXT</source>
         <oldsource>STR_AUTOUPDATE_SUB_TEXT</oldsource>
         <translation>Clique em Abrir para prosseguir para a página de atualizações.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="135"/>
+        <location filename="main.qml" line="136"/>
         <source>STR_UPDATE_CERTIFICATES_FAIL</source>
         <translation>Falha na atualização dos certificados.</translation>
     </message>
@@ -1743,7 +1738,7 @@
         <translation>Pode desativar a verificação de atualizações ao iniciar a aplicação no menu Configurações da aplicação.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="351"/>
+        <location filename="main.qml" line="352"/>
         <source>STR_AUTOUPDATE_CERTS_TEXT</source>
         <translation>Existe uma atualização de certificados.</translation>
     </message>
@@ -1783,6 +1778,7 @@
     </message>
     <message>
         <location filename="contentPages/help/PageHelpAbout.qml" line="26"/>
+        <location filename="main.qml" line="1496"/>
         <source>STR_HELP_APP_VERSION</source>
         <translation>Versão</translation>
     </message>
@@ -2496,6 +2492,7 @@
     </message>
     <message>
         <location filename="components/PDFPreview.qml" line="209"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="212"/>
         <source>STR_SIGN_DATE</source>
         <translation>Data</translation>
     </message>
@@ -2515,7 +2512,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="395"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="399"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="402"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="57"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="50"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="35"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="82"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="230"/>
@@ -2524,9 +2521,9 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1056"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="67"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="504"/>
-        <location filename="main.qml" line="148"/>
-        <location filename="main.qml" line="155"/>
-        <location filename="main.qml" line="161"/>
+        <location filename="main.qml" line="149"/>
+        <location filename="main.qml" line="156"/>
+        <location filename="main.qml" line="162"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Erro</translation>
     </message>
@@ -2549,7 +2546,7 @@
         <location filename="contentPages/card/PageCardOtherData.qml" line="61"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="210"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="41"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="60"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="53"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="38"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="45"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="188"/>
@@ -2564,7 +2561,7 @@
         <location filename="contentPages/card/PageCardOtherData.qml" line="64"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="214"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="44"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="63"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="56"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="41"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="48"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="191"/>
@@ -2580,7 +2577,7 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="222"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="50"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="89"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="69"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="62"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="47"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="54"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="200"/>
@@ -2596,7 +2593,7 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="225"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="53"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="92"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="72"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="65"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="50"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="57"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="203"/>
@@ -2612,7 +2609,7 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="218"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="47"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="86"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="66"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="59"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="44"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="51"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="194"/>
@@ -2628,7 +2625,7 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="228"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="56"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="95"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="75"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="68"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="53"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="60"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="206"/>
@@ -2645,7 +2642,7 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="235"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="64"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="105"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="91"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="76"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="60"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="231"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="113"/>
@@ -2660,7 +2657,7 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="239"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="67"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="109"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="95"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="80"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="63"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="234"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="116"/>
@@ -2674,7 +2671,7 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="244"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="70"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="113"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="107"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="85"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="67"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="241"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="123"/>
@@ -2689,7 +2686,7 @@
         <location filename="contentPages/card/PageCardPrint.qml" line="249"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="75"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="118"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="112"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="90"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="72"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="247"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="129"/>
@@ -2697,22 +2694,22 @@
         <translation>Erro da aplicação! Por favor reinstale a aplicação</translation>
     </message>
     <message>
-        <location filename="main.qml" line="149"/>
+        <location filename="main.qml" line="150"/>
         <source>STR_GENERIC_ERROR_MSG</source>
         <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="150"/>
+        <location filename="main.qml" line="151"/>
         <source>STR_ERROR_CODE</source>
         <translation>Código de erro = </translation>
     </message>
     <message>
-        <location filename="main.qml" line="156"/>
+        <location filename="main.qml" line="157"/>
         <source>STR_CERTIFICATES_IMPORT_ERROR_MSG</source>
         <translation>Erro ao importar certificados</translation>
     </message>
     <message>
-        <location filename="main.qml" line="162"/>
+        <location filename="main.qml" line="163"/>
         <source>STR_CERTIFICATES_REMOVE_ERROR_MSG</source>
         <translation>Erro ao remover certificados</translation>
     </message>
@@ -2754,7 +2751,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="458"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="182"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="306"/>
-        <location filename="main.qml" line="367"/>
+        <location filename="main.qml" line="369"/>
         <source>STR_SHOW_WINDOWS</source>
         <translation>Mostrar janela</translation>
     </message>
@@ -2772,7 +2769,7 @@
 <context>
     <name>Popup File</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="129"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="107"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="382"/>
         <source>STR_POPUP_FILE_UNIQUE</source>
         <translation>Arraste um único ficheiro</translation>
@@ -2790,7 +2787,7 @@
         <translation>Escolha a pasta e o nome do ficheiro de destino</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="252"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="254"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="66"/>
         <source>STR_POPUP_FILE_INPUT</source>
         <translation>Escolha o ficheiro</translation>
@@ -2802,7 +2799,7 @@
         <translation>Escolha a pasta de destino dos ficheiros</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="130"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="108"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="383"/>
         <source>STR_POPUP_FILE_UNIQUE_MULTI</source>
         <translation>Para assinar múltiplos ficheiros use a opção assinatura avançada</translation>
@@ -3086,7 +3083,7 @@
         <translation type="obsolete">Não mostrar esta mensagem novamente.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="206"/>
+        <location filename="main.qml" line="207"/>
         <source>STR_AUTOUPDATE_TITLE</source>
         <translation>Atualização disponível</translation>
     </message>
@@ -3104,17 +3101,17 @@
         <translation>Abrir</translation>
     </message>
     <message>
-        <location filename="main.qml" line="372"/>
+        <location filename="main.qml" line="374"/>
         <source>STR_WARNING</source>
         <translation>Aviso</translation>
     </message>
     <message>
-        <location filename="main.qml" line="392"/>
+        <location filename="main.qml" line="394"/>
         <source>STR_MULTIPLE_CARDS_DETECTED</source>
         <translation>Múltiplos cartões detectados</translation>
     </message>
     <message>
-        <location filename="main.qml" line="430"/>
+        <location filename="main.qml" line="432"/>
         <source>STR_CHANGE_READER_INFO</source>
         <translation>Para alterar essa opção mais tarde, vá para o menu de configuração da aplicação.</translation>
     </message>
