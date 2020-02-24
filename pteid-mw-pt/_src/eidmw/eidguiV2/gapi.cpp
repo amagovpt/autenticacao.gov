@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
@@ -2062,11 +2062,12 @@ void GAPI::startPingSCAP() {
     int network_timeout = 10000;
 
     proxy = QNetworkProxy();
-    proxy.setType(QNetworkProxy::HttpProxy);
+
     if (!proxy_host.empty() && proxy_port != 0)
     {
         eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "PingSCAP: using manual proxy config");
         qDebug() << "C++: PingSCAP: using manual proxy config";
+        proxy.setType(QNetworkProxy::HttpProxy);
         proxy.setHostName(QString::fromStdString(proxy_host));
         proxy.setPort(proxy_port);
 
@@ -2083,6 +2084,7 @@ void GAPI::startPingSCAP() {
         qDebug() << "C++: PingSCAP: using system proxy config";
         PTEID_GetProxyFromPac(m_pac_url.toUtf8().constData(),
             url.toString().toUtf8().constData(), &proxy_host, &proxy_port_str);
+        proxy.setType(QNetworkProxy::HttpProxy);
         proxy.setHostName(QString::fromStdString(proxy_host));
         proxy.setPort(atol(proxy_port_str.c_str()));
     }

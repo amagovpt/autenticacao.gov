@@ -113,7 +113,6 @@ void AutoUpdates::startRequest(QUrl url) {
 
     ProxyInfo proxyinfo;
     proxy = QNetworkProxy(); // reset Proxy
-    proxy.setType(QNetworkProxy::HttpProxy);
 
     if (proxyinfo.isAutoConfig())
     {
@@ -122,6 +121,7 @@ void AutoUpdates::startRequest(QUrl url) {
         proxyinfo.getProxyForHost(url.toString().toUtf8().constData(), &proxy_host, &proxy_port);
         if (proxy_host.size() > 0)
         {
+            proxy.setType(QNetworkProxy::HttpProxy);
             proxy.setHostName(QString::fromStdString(proxy_host));
             proxy.setPort(proxy_port);
         }
@@ -135,6 +135,7 @@ void AutoUpdates::startRequest(QUrl url) {
         catch (...) {
             eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing proxy port to number value.");
         }
+        proxy.setType(QNetworkProxy::HttpProxy);
         proxy.setHostName(QString::fromStdString(proxyinfo.getProxyHost()));
         proxy.setPort(proxyinfo_port);
         if (proxyinfo.getProxyUser().size() > 0) {
