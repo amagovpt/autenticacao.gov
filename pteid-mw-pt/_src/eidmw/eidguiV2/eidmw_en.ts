@@ -28,7 +28,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="305"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="226"/>
         <location filename="gapi.cpp" line="303"/>
-        <location filename="gapi.cpp" line="3285"/>
+        <location filename="gapi.cpp" line="3287"/>
         <source>STR_POPUP_SUCESS</source>
         <translation>Success</translation>
     </message>
@@ -41,8 +41,8 @@
         <location filename="components/DialogCMD.qml" line="592"/>
         <location filename="gapi.cpp" line="307"/>
         <location filename="gapi.cpp" line="681"/>
-        <location filename="gapi.cpp" line="3265"/>
-        <location filename="gapi.cpp" line="3280"/>
+        <location filename="gapi.cpp" line="3267"/>
+        <location filename="gapi.cpp" line="3282"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Error</translation>
     </message>
@@ -102,8 +102,8 @@
         <location filename="gapi.cpp" line="556"/>
         <location filename="gapi.cpp" line="647"/>
         <location filename="gapi.cpp" line="773"/>
-        <location filename="gapi.cpp" line="3256"/>
-        <location filename="gapi.cpp" line="3290"/>
+        <location filename="gapi.cpp" line="3258"/>
+        <location filename="gapi.cpp" line="3292"/>
         <source>STR_VERIFY_INTERNET</source>
         <translation>Please make sure you are connected to the Internet</translation>
     </message>
@@ -202,7 +202,7 @@
     </message>
     <message>
         <location filename="gapi.cpp" line="640"/>
-        <location filename="gapi.cpp" line="3259"/>
+        <location filename="gapi.cpp" line="3261"/>
         <source>STR_CMD_GET_CERTIFICATE_ERROR</source>
         <oldsource>STR_GET_CERTIFICATE_ERROR</oldsource>
         <translation>Non-existent registration or inactive digital signature subscription. Verify that digital signature subscription is enabled on &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;</translation>
@@ -255,20 +255,20 @@
     </message>
     <message>
         <location filename="gapi.cpp" line="815"/>
-        <location filename="gapi.cpp" line="3250"/>
+        <location filename="gapi.cpp" line="3252"/>
         <source>STR_CMD_LOGIN_SUCESS</source>
         <translation>Login successfully. Wait for the code sent by SMS!</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="932"/>
         <location filename="gapi.cpp" line="995"/>
-        <location filename="gapi.cpp" line="3243"/>
+        <location filename="gapi.cpp" line="3245"/>
         <source>STR_CMD_CONNECTING</source>
         <translation>Connecting to the server</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="1032"/>
-        <location filename="gapi.cpp" line="3277"/>
+        <location filename="gapi.cpp" line="3279"/>
         <source>STR_CMD_SENDING_CODE</source>
         <translation>Sending confirmation code to the server</translation>
     </message>
@@ -308,13 +308,13 @@
         <translation>The Citizen Card was not activated.</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="3262"/>
-        <location filename="gapi.cpp" line="3293"/>
+        <location filename="gapi.cpp" line="3264"/>
+        <location filename="gapi.cpp" line="3295"/>
         <source>STR_CERT_REG_ERROR</source>
         <translation>An error occured while registering the certificate.</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="3286"/>
+        <location filename="gapi.cpp" line="3288"/>
         <source>STR_CERT_REG_SUCC</source>
         <translation>The certificate was succesfully registered.</translation>
     </message>
@@ -927,32 +927,32 @@
         <translation>Save Notes</translation>
     </message>
     <message>
-        <location filename="main.qml" line="482"/>
+        <location filename="main.qml" line="483"/>
         <source>STR_UNSAVED_NOTES_TITLE</source>
         <translation>Notes</translation>
     </message>
     <message>
-        <location filename="main.qml" line="497"/>
+        <location filename="main.qml" line="498"/>
         <source>STR_UNSAVED_NOTES</source>
         <translation>Unsaved Notes</translation>
     </message>
     <message>
-        <location filename="main.qml" line="514"/>
+        <location filename="main.qml" line="515"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION_EXIT</source>
         <translation>Press &quot;Stay&quot; to continue editing notes or press &quot;Leave&quot; to exit application without saving the notes.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="515"/>
+        <location filename="main.qml" line="516"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION</source>
         <translation>Press &quot;Stay&quot; to continue editing notes or press &quot;Leave&quot; to exit this page without saving the notes.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="539"/>
+        <location filename="main.qml" line="540"/>
         <source>STR_UNSAVED_NOTES_LEAVE</source>
         <translation>Leave</translation>
     </message>
     <message>
-        <location filename="main.qml" line="562"/>
+        <location filename="main.qml" line="563"/>
         <source>STR_UNSAVED_NOTES_STAY</source>
         <translation>Stay</translation>
     </message>
@@ -1539,22 +1539,22 @@
         <translation>Use default signature</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="283"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="282"/>
         <source>STR_CUSTOM_SIGN_CUSTOM_TITLE</source>
         <translation>Use custom signature</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="447"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="445"/>
         <source>STR_CUSTOM_SIGN_FILE_LOAD</source>
         <translation>Drag the custom signature image file or click to browse the file (Recommended 185 x 41 px)</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="471"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="469"/>
         <source>STR_CUSTOM_SIGN_REMOVE_BUTTON</source>
         <translation>Remove image</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="501"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="499"/>
         <source>STR_CUSTOM_SIGN_ADD_BUTTON</source>
         <translation>Add Image</translation>
     </message>
@@ -1718,13 +1718,13 @@
         <translation>Check for updates</translation>
     </message>
     <message>
-        <location filename="main.qml" line="349"/>
+        <location filename="main.qml" line="350"/>
         <source>STR_AUTOUPDATE_TEXT</source>
         <translation>A new version of the application is available.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="350"/>
-        <location filename="main.qml" line="353"/>
+        <location filename="main.qml" line="351"/>
+        <location filename="main.qml" line="354"/>
         <source>STR_AUTOUPDATE_OPEN_TEXT</source>
         <oldsource>STR_AUTOUPDATE_SUB_TEXT</oldsource>
         <translation>Press Open to open the Updates page.</translation>
@@ -1735,12 +1735,12 @@
         <translation>Certificates update failed.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="261"/>
+        <location filename="main.qml" line="262"/>
         <source>STR_DISABLE_AUTOUPDATE_INFO</source>
         <translation>To disable the checking for updates on application start, go to Application settings menu.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="352"/>
+        <location filename="main.qml" line="353"/>
         <source>STR_AUTOUPDATE_CERTS_TEXT</source>
         <translation>A new update is available.</translation>
     </message>
@@ -1780,7 +1780,7 @@
     </message>
     <message>
         <location filename="contentPages/help/PageHelpAbout.qml" line="26"/>
-        <location filename="main.qml" line="1496"/>
+        <location filename="main.qml" line="1497"/>
         <source>STR_HELP_APP_VERSION</source>
         <translation>Version</translation>
     </message>
@@ -2525,7 +2525,7 @@
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="504"/>
         <location filename="main.qml" line="149"/>
         <location filename="main.qml" line="156"/>
-        <location filename="main.qml" line="162"/>
+        <location filename="main.qml" line="163"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Error</translation>
     </message>
@@ -2697,6 +2697,7 @@
     </message>
     <message>
         <location filename="main.qml" line="150"/>
+        <location filename="main.qml" line="158"/>
         <source>STR_GENERIC_ERROR_MSG</source>
         <translation>Please try again. If this error persists, contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
@@ -2708,10 +2709,10 @@
     <message>
         <location filename="main.qml" line="157"/>
         <source>STR_CERTIFICATES_IMPORT_ERROR_MSG</source>
-        <translation>Error importing certificates</translation>
+        <translation>Error importing certificates.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="163"/>
+        <location filename="main.qml" line="164"/>
         <source>STR_CERTIFICATES_REMOVE_ERROR_MSG</source>
         <translation>Error removing certificates</translation>
     </message>
@@ -2753,7 +2754,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="458"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="182"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="306"/>
-        <location filename="main.qml" line="369"/>
+        <location filename="main.qml" line="370"/>
         <source>STR_SHOW_WINDOWS</source>
         <translation>Show windows</translation>
     </message>
@@ -2789,7 +2790,7 @@
         <translation>Choose the folder and the name of the destination file</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="254"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignatureForm.ui.qml" line="253"/>
         <location filename="contentPages/services/PageServicesSignSimpleForm.ui.qml" line="66"/>
         <source>STR_POPUP_FILE_INPUT</source>
         <translation>Choose file</translation>
@@ -2810,7 +2811,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="230"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="102"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="372"/>
-        <location filename="main.qml" line="281"/>
+        <location filename="main.qml" line="282"/>
         <source>STR_POPUP_FILE_CANCEL</source>
         <translation>Cancel</translation>
     </message>
@@ -3085,7 +3086,7 @@
         <translation type="vanished">Do not show this message again.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="207"/>
+        <location filename="main.qml" line="208"/>
         <source>STR_AUTOUPDATE_TITLE</source>
         <translation>Update Available</translation>
     </message>
@@ -3098,22 +3099,22 @@
         <translation type="vanished">To disable the checking for updates on application start, go to Application settings menu.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="305"/>
+        <location filename="main.qml" line="306"/>
         <source>STR_UPDATE_INSTALL_BUTTON</source>
         <translation>Open</translation>
     </message>
     <message>
-        <location filename="main.qml" line="374"/>
+        <location filename="main.qml" line="375"/>
         <source>STR_WARNING</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="main.qml" line="394"/>
+        <location filename="main.qml" line="395"/>
         <source>STR_MULTIPLE_CARDS_DETECTED</source>
         <translation>Multiple cards detected</translation>
     </message>
     <message>
-        <location filename="main.qml" line="432"/>
+        <location filename="main.qml" line="433"/>
         <source>STR_CHANGE_READER_INFO</source>
         <translation>To change the reader later, go to the application settings menu.</translation>
     </message>

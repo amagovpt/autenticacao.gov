@@ -155,6 +155,7 @@ Load language error. Please reinstall the application"
             console.log("Signal onSignalImportCertificatesFail")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = qsTranslate("Popup Card","STR_CERTIFICATES_IMPORT_ERROR_MSG")
+                + "<br/><br/>" + qsTranslate("Popup Card","STR_GENERIC_ERROR_MSG")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalRemoveCertificatesFail: {
