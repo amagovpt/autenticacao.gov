@@ -589,7 +589,8 @@ QString AppController::getFontFile(QString font) {
     eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_INSTALLDIR);
     fontFile.append(config.getString()).append("\\fonts\\");
 #else
-    fontFile.append("usr/local/share/fonts/");
+    const QString executable_dir = m_Settings.getExePath()+"/";
+    fontFile.append(executable_dir.toStdString());
 #endif
 
     if (font.compare("lato") == 0)
