@@ -67,8 +67,8 @@ Item {
         id: itemForeignCitizen
         visible: false
         height: rowNacionalDistrict.height + rowMunicipality.height + rowCivilParish.height
-                + rowAbbreviationStreetType.height + rowDoorNo.height + rowPlace.height + rowZip4.height
-                + 6 * Constants.SIZE_ROW_V_SPACE
+                + rowAbbreviationStreetType.height + rowStreetType.height + rowDoorNo.height
+                + rowPlace.height + rowZip4.height + 7 * Constants.SIZE_ROW_V_SPACE
         width: parent.width
         anchors.top: rowTop.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
@@ -185,8 +185,8 @@ Item {
         id: itemNationalCitizen
         visible: true
         height: rowNacionalDistrict.height + rowMunicipality.height + rowCivilParish.height
-                + rowAbbreviationStreetType.height + rowDoorNo.height + rowPlace.height + rowZip4.height
-                + 6 * Constants.SIZE_ROW_V_SPACE
+                + rowAbbreviationStreetType.height + rowStreetType.height + rowDoorNo.height
+                + rowPlace.height + rowZip4.height + 7 * Constants.SIZE_ROW_V_SPACE
         width: parent.width
         anchors.top: rowTop.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
@@ -272,9 +272,8 @@ Item {
 
             Item {
                 id: rectStreetType
-                width: (parent.width - Constants.SIZE_ROW_H_SPACE) * 0.15
+                width: parent.width
                 height: parent.height
-                anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 Components.LabelTextBoxForm {
                     id: textBoxStreetType
                     propertyDateText.text: qsTranslate("GAPI","STR_STREET_TYPE")
@@ -285,15 +284,22 @@ Item {
                 KeyNavigation.tab: rectStreetName
                 KeyNavigation.down: rectStreetName
                 KeyNavigation.right: rectStreetName
-                KeyNavigation.backtab: rectMunicipality
-                KeyNavigation.up: rectMunicipality
+                KeyNavigation.backtab: rectCivilParish
+                KeyNavigation.up: rectCivilParish
             }
+        }
+
+        Item {
+            id: rowStreetType
+            width: parent.width
+            height: Constants.HEIGHT_TEXT_BOX
+            anchors.top: rowAbbreviationStreetType.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+
             Item {
                 id: rectStreetName
-                width: (parent.width - Constants.SIZE_ROW_H_SPACE) * 0.85
+                width: parent.width
                 height: parent.height
-                anchors.left: rectStreetType.right
-                anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 Components.LabelTextBoxForm {
                     id: textBoxStreetName
                     propertyDateText.text: qsTranslate("GAPI","STR_STREET_NAME")
@@ -313,7 +319,7 @@ Item {
             id: rowDoorNo
             width: parent.width
             height: Constants.HEIGHT_TEXT_BOX
-            anchors.top: rowAbbreviationStreetType.bottom
+            anchors.top: rowStreetType.bottom
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
             Item {

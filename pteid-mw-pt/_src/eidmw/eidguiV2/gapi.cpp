@@ -1378,7 +1378,8 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     }
     double page_height = painter.device()->height();
     double page_width = painter.device()->width();
-    double half_page = (page_width - 2 * page_margin) / 2;
+    double full_page = (page_width - 2 * page_margin);
+    double half_page = full_page / 2;
     double third_of_page = (page_width - 2 * page_margin) / 3;
 
     //Font setup
@@ -1547,15 +1548,15 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
             pos_y = (std::max)((std::max)(new_height_left, new_height_right), pos_y + LINE_HEIGHT);
 
             new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_CIVIL_PARISH"),
-                QString::fromUtf8(addressFile.getCivilParish()), half_page, 0, true, page_width);
+                QString::fromUtf8(addressFile.getCivilParish()), full_page, 0, true, page_width);
             pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
 
             drawSingleField(painter, pos_x, pos_y, tr("STR_STREET_TYPE"),
-                QString::fromUtf8(addressFile.getStreetType()), (half_page / 2), 0, true, (half_page / 2));
+                QString::fromUtf8(addressFile.getStreetType()), full_page, 0, true, page_width);
+            pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
 
-            new_height_left = drawSingleField(painter, pos_x + (half_page / 2), pos_y, tr("STR_STREET_NAME"),
-                QString::fromUtf8(addressFile.getStreetName()), 3 * (half_page / 2),
-                field_margin, true, 3 * (half_page / 2));
+            new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_STREET_NAME"),
+                QString::fromUtf8(addressFile.getStreetName()), full_page, 0, true, page_width);
             pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
 
             new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_HOUSE_BUILDING_NUM"),
