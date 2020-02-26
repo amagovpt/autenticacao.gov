@@ -498,6 +498,7 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
 
         std::string  file_name_temp;
         file_name_temp.append(certs_dir_str);
+        file_name_temp.append("/");
         file_name_temp.append(cert_json->string);
 
 #ifdef WIN32
