@@ -2247,6 +2247,11 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth) {
 
     QList<QString> attribute_list;
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "GetCardInstance getSCAPEntityAttributes");
+
+    if (!prepareSCAPCache(ScapAttrEntities)){
+        return;
+    }
+
     PTEID_EIDCard * card = NULL;
     if (useOAuth){
         emit signalBeginOAuth();
@@ -2268,9 +2273,7 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth) {
     foreach(supplier_id, entityIDs) {
         supplier_ids.push_back(supplier_id);
     }
-    if (!prepareSCAPCache(ScapAttrEntities)){
-        return;
-    }
+
     std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, card, supplier_ids, useOAuth);
 
     if (attributes.size() == 0) {
@@ -2303,6 +2306,11 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth) {
 void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "GetCardInstance getSCAPCompanyAttributes");
+
+    if (!prepareSCAPCache(ScapAttrCompanies)) {
+        return;
+    }
+
     PTEID_EIDCard * card = NULL;
     QList<QString> attribute_list;
     if (useOAuth){
@@ -2320,9 +2328,7 @@ void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
     initScapAppId();
 
     std::vector<int> supplierIDs;
-    if (!prepareSCAPCache(ScapAttrCompanies)) {
-        return;
-    }
+
     std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, card, supplierIDs, useOAuth);
 
     if (attributes.size() == 0)
@@ -2364,6 +2370,11 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
     qDebug() << "getSCAPAttributesFromCache scapAttrType: " << scapAttrType;
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "GetCardInstance getSCAPAttributesFromCache");
+
+    if (!prepareSCAPCache(ScapAttrCompanies)) {
+        return;
+    }
+
     PTEID_EIDCard * card = NULL;
     std::vector<ns2__AttributesType *> attributes;
     QList<QString> attribute_list;

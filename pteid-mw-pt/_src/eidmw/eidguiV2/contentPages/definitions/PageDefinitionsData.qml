@@ -95,7 +95,7 @@ PageDefinitionsDataForm {
         onSignalCacheNotReadable:{
             updateCacheSize();
             propertyBusyIndicator.running = false;
-            var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
             var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
@@ -113,14 +113,14 @@ PageDefinitionsDataForm {
         onSignalRemovePteidCacheFail:{
             updateCacheSize();
             propertyBusyIndicator.running = false;
-            var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
             var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_FAIL")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalCacheNotReadable:{
             updateCacheSize();
             propertyBusyIndicator.running = false;
-            var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
             var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }

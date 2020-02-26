@@ -350,7 +350,7 @@ PageDefinitionsSCAPForm {
         onSignalRemoveSCAPAttributesFail: {
             console.log("Definitions SCAP - Signal Remove SCAP Attributes Fail")
             propertyBusyIndicatorAttributes.running = false
-            var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
             var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_FAIL")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             if(scapAttrType != GAPI.ScapAttrCompanies){
@@ -360,8 +360,8 @@ PageDefinitionsSCAPForm {
         }
         onSignalCacheNotReadable:{
             propertyBusyIndicatorAttributes.running = false;
-            var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
-            var titlePopup = qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
+            var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
+            var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             if(scapAttrType != GAPI.ScapAttrCompanies){
                 gapi.startGettingEntities()
@@ -370,13 +370,13 @@ PageDefinitionsSCAPForm {
         }
         onSignalCacheNotWritable:{
             propertyBusyIndicatorAttributes.running = false;
-            var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
             var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_NOT_WRITABLE")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalCacheFolderNotCreated:{
             propertyBusyIndicatorAttributes.running = false;
-            var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
             var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_FOLDER_NOT_CREATED")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
