@@ -143,11 +143,6 @@ namespace eIDMW
 			generate_asn1_request_struct(input, false);
 		}
 
-#ifdef _WIN32
-		curl_global_init(CURL_GLOBAL_WIN32);
-#else
-		curl_global_init(CURL_GLOBAL_NOTHING);
-#endif
 		curl = curl_easy_init();
 
 		if (curl)
@@ -223,7 +218,6 @@ namespace eIDMW
 
 			/* always cleanup */ 
 			curl_easy_cleanup(curl);
-			curl_global_cleanup();
 
 		}
 
