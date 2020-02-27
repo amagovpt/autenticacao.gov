@@ -463,8 +463,12 @@ namespace eIDMW
 		//PIN-Caching is ON after the first signature
 		else
 		{
+			 bool throwTimestampError = false;
+			 bool cachedPin = false;
 			 for (unsigned int i = 0; i < m_files_to_sign.size(); i++)
 			 {
+				try
+				{
 				 char *current_file = m_files_to_sign.at(i).first;
 				 std::string f = generateFinalPath(outfile_path,
 						 current_file);
@@ -474,12 +478,34 @@ namespace eIDMW
 				 if (m_files_to_sign.at(i).second)
 				 	m_page = m_doc->getNumPages();
 
-				rc += signSingleFile(location, reason, f.c_str(), isCardSign);
-				if (i == 0)
-					 m_card->getCalReader()->setSSO(true);
+					rc += signSingleFile(location, reason, f.c_str(), isCardSign);
 
+					// Enable PIN cache
+					if (!cachedPin) {
+						cachedPin = true;
+						m_card->getCalReader()->setSSO(true);
+					}
+				}
+				catch (CMWException e)
+				{
+					if (e.GetError() != EIDMW_TIMESTAMP_ERROR){
+						m_card->getCalReader()->setSSO(false);
+						throw e;
+					}
+
+					// Enable PIN cache
+					if (!cachedPin) {
+						cachedPin = true;
+						m_card->getCalReader()->setSSO(true);
+					}
+					m_timestamp = false; // disable timetamp for the next files
+					throwTimestampError = true;
+				}
 			 }
 			 m_card->getCalReader()->setSSO(false);
+
+			if (throwTimestampError)
+				throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
 		}
 
 		return rc;

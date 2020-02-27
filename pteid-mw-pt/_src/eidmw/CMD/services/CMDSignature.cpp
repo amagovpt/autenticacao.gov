@@ -18,6 +18,7 @@
 #include "proxyinfo.h"
 #include "Util.h"
 #include "Hash.h"
+#include "eidErrors.h"
 
 static char logBuf[512];
 
@@ -491,20 +492,22 @@ int CMDSignature::signClose(std::string in_code)
 
     if (m_pdf_handlers.size())
     {
-
+        bool throwTimestampError = false;
         int ret_had_errors = ERR_NONE;
         for (size_t i = 0; i < m_pdf_handlers.size(); i++)
         {
-            PDFSignature *pdf = m_pdf_handlers[i]->getPdfSignature();
-            // TODO: look for signature with right id and match it
-            CByteArray signature_cba(signatures[i]->GetBytes(), signatures[i]->Size());
-
             try{
+                PDFSignature *pdf = m_pdf_handlers[i]->getPdfSignature();
+                // TODO: look for signature with right id and match it
+                CByteArray signature_cba(signatures[i]->GetBytes(), signatures[i]->Size());
+
                 ret = pdf->signClose(signature_cba);
             }
             catch (CMWException &e) {
-                e.GetError();
-                throw PTEID_Exception(e.GetError());
+                if (e.GetError() != EIDMW_TIMESTAMP_ERROR){
+                    throw PTEID_Exception(e.GetError());
+                }
+                throwTimestampError = true;
             }
 
             if (ret != ERR_NONE)
@@ -517,6 +520,10 @@ int CMDSignature::signClose(std::string in_code)
                 printData((char *)"\nSignature: ", (unsigned char *)signatures[i]->GetBytes(), signatures[i]->Size());
             }
         }
+
+        if (throwTimestampError)
+            throw PTEID_Exception(EIDMW_TIMESTAMP_ERROR);
+
         if (ret_had_errors != ERR_NONE)
             return ERR_SIGN_CLOSE;
     }
