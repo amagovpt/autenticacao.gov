@@ -31,6 +31,8 @@
 
 #include "autoUpdates.h"
 
+#define STR_LOCALTIME_MAX_SIZE   23
+
 class AppController : public QObject
 {
     Q_OBJECT

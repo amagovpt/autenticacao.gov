@@ -111,6 +111,7 @@ Item {
             KeyNavigation.right: textDifficult
             KeyNavigation.backtab: textVersion
             KeyNavigation.up: textVersion
+            textFormat: Text.PlainText
         }
         Text {
             id: textDifficult

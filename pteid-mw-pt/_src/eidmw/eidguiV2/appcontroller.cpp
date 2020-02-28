@@ -113,11 +113,11 @@ void AppController::updateCertslog(){
     if(file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         // We're going to streaming text to the file
-        char date_string[25];
+        char date_string[STR_LOCALTIME_MAX_SIZE];
         QTextStream stream(&file);
         time_t _tm =time(nullptr);
         struct tm * t = localtime ( &_tm );
-        strftime(date_string, 25, "%H:%M do dia %d-%m-%Y", t);
+        strftime(date_string, STR_LOCALTIME_MAX_SIZE, "%H:%M do dia %d-%m-%Y", t);
         stream << date_string;
         file.close();
     } else {
@@ -141,7 +141,8 @@ QString AppController::getAppCertsUpdate(void){
     }
 
     QTextStream instream(&file);
-    QString line = instream.readLine();
+
+    QString line = instream.readLine(STR_LOCALTIME_MAX_SIZE);
 
     file.close();
 
