@@ -165,6 +165,8 @@ namespace eIDMW
             goto cleanup;
         }
 
+        RemoveOlderUserCerts(pCertContext);
+
         if (!CertAddCertificateContextToStore(hMyStore, pCertContext, CERT_STORE_ADD_REPLACE_EXISTING, NULL)) {
             MWLOG_ERR(logBuf, "Error adding certificate to store: 0x%x\n", GetLastError());
             goto cleanup;
@@ -326,5 +328,65 @@ namespace eIDMW
             return false;
         }
         return true;
+    }
+
+    void CMDCertificates::RemoveOlderUserCerts(PCCERT_CONTEXT pTargetCert) {
+        HCERTSTORE hMyStore = CertOpenSystemStore(NULL, L"MY");
+
+        DWORD dwSubjectLen = CertGetNameStringW(
+            pTargetCert,
+            CERT_NAME_SIMPLE_DISPLAY_TYPE,
+            0,
+            NULL,
+            NULL,
+            0);
+
+        PWSTR csTargetSubject = new WCHAR[dwSubjectLen];
+        CertGetNameStringW(
+            pTargetCert,
+            CERT_NAME_SIMPLE_DISPLAY_TYPE,
+            0,
+            NULL,
+            csTargetSubject,
+            dwSubjectLen);
+
+        PWSTR csCandidateSubject = new WCHAR[dwSubjectLen];
+
+        PCCERT_CONTEXT pCert = NULL;
+        while (pCert = CertFindCertificateInStore(
+            hMyStore,
+            X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
+            0,
+            CERT_FIND_ISSUER_STR,
+            L"EC de Chave Móvel Digital",
+            pCert
+            ))
+        {
+            CertGetNameStringW(
+                pCert,
+                CERT_NAME_SIMPLE_DISPLAY_TYPE,
+                0,
+                NULL,
+                csCandidateSubject,
+                dwSubjectLen);
+
+            if (wcscmp(csTargetSubject, csCandidateSubject) == 0)
+            {
+                if (!CertDuplicateCertificateContext(pCert))
+                {
+                    MWLOG_ERR(logBuf, "CertDuplicateCertificateContext failed with error code 0x%08x", GetLastError());
+                    goto cleanup;
+                }
+                if (!CertDeleteCertificateFromStore(pCert))
+                {
+                    MWLOG_ERR(logBuf, "CertDeleteCertificateFromStore failed with error code 0x%08x", GetLastError());
+                    goto cleanup;
+                }
+            }
+        }
+
+    cleanup:
+        delete[] csTargetSubject;
+        delete[] csCandidateSubject;
     }
 }

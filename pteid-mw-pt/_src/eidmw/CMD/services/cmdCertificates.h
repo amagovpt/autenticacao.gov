@@ -29,6 +29,7 @@ namespace eIDMW {
         bool StoreAuthorityCerts(PCCERT_CONTEXT pCertContext, unsigned char KeyUsageBits);
         bool SetPrivateKeyContainerInfo(PCCERT_CONTEXT pCertContext, unsigned char KeyUsageBits, std::string mobileNumber);
         bool SetCertificateFriendlyName(PCCERT_CONTEXT pCertContext, std::string mobileNumber);
+        void RemoveOlderUserCerts(PCCERT_CONTEXT pCertContext);
 
         CMDProxyInfo m_proxyInfo;
         CMDServices *m_cmdService;
