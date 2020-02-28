@@ -665,7 +665,7 @@ void GAPI::showSignCMDDialog(long error_code)
         error_msg = tr("STR_SIGN_FILE_PERMISSION_FAIL");
         break;
     case EIDMW_TIMESTAMP_ERROR:
-        error_msg =  tr("STR_CMD_SUCESS") + "<br><br>" + tr("STR_TIME_STAMP_FAILED");
+        error_msg = tr("STR_CMD_SUCESS") + " " + tr("STR_TIME_STAMP_FAILED");
         break;
     default:
         error_msg = tr("STR_CMD_LOGIN_ERROR");
