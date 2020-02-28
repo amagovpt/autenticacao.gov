@@ -8,7 +8,7 @@
  * Copyright (C) 2012, 2014, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2012 Rui Martinho - <rui.martinho@ama.pt>
  * Copyright (C) 2016 Luiz Lemos - <luiz.lemos@caixamagica.pt>
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -111,7 +111,7 @@ namespace eIDMW
   const struct CConfig::Param_Num CConfig::EIDMW_CONFIG_PARAM_GUITOOL_REMOVECERTIF	=	{EIDMW_CNF_SECTION_GUITOOL, EIDMW_CNF_GUITOOL_REMOVECERTIF,		0};
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GUITOOL_FILESAVE		=   {EIDMW_CNF_SECTION_GUITOOL, EIDMW_CNF_GUITOOL_FILESAVE,			L""};
   const struct CConfig::Param_Num CConfig::EIDMW_CONFIG_PARAM_GUITOOL_STARTUPDATE	=	{EIDMW_CNF_SECTION_GUITOOL, EIDMW_CNF_GUITOOL_STARTUPDATE, 		1};
-  const struct CConfig::Param_Num CConfig::EIDMW_CONFIG_PARAM_GUITOOL_ASKREGCMDCERT =	{EIDMW_CNF_SECTION_GUITOOL, EIDMW_CNF_GUITOOL_ASKREGCMDCERT, 0 };
+  const struct CConfig::Param_Num CConfig::EIDMW_CONFIG_PARAM_GUITOOL_ASKREGCMDCERT =	{EIDMW_CNF_SECTION_GUITOOL, EIDMW_CNF_GUITOOL_ASKREGCMDCERT,	1};
 
 //XSIGN
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_XSIGN_TSAURL = {EIDMW_CNF_SECTION_XSIGN, EIDMW_CNF_XSIGN_TSAURL,	L"http://ts.cartaodecidadao.pt/tsa/server"};

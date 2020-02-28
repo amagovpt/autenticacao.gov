@@ -28,7 +28,7 @@
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="305"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="226"/>
         <location filename="gapi.cpp" line="303"/>
-        <location filename="gapi.cpp" line="3298"/>
+        <location filename="gapi.cpp" line="3299"/>
         <source>STR_POPUP_SUCESS</source>
         <translation>Success</translation>
     </message>
@@ -41,8 +41,8 @@
         <location filename="components/DialogCMD.qml" line="592"/>
         <location filename="gapi.cpp" line="307"/>
         <location filename="gapi.cpp" line="681"/>
-        <location filename="gapi.cpp" line="3278"/>
-        <location filename="gapi.cpp" line="3293"/>
+        <location filename="gapi.cpp" line="3279"/>
+        <location filename="gapi.cpp" line="3294"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Error</translation>
     </message>
@@ -102,8 +102,8 @@
         <location filename="gapi.cpp" line="556"/>
         <location filename="gapi.cpp" line="647"/>
         <location filename="gapi.cpp" line="773"/>
-        <location filename="gapi.cpp" line="3269"/>
-        <location filename="gapi.cpp" line="3303"/>
+        <location filename="gapi.cpp" line="3270"/>
+        <location filename="gapi.cpp" line="3304"/>
         <source>STR_VERIFY_INTERNET</source>
         <translation>Please make sure you are connected to the Internet</translation>
     </message>
@@ -202,7 +202,7 @@
     </message>
     <message>
         <location filename="gapi.cpp" line="640"/>
-        <location filename="gapi.cpp" line="3272"/>
+        <location filename="gapi.cpp" line="3273"/>
         <source>STR_CMD_GET_CERTIFICATE_ERROR</source>
         <oldsource>STR_GET_CERTIFICATE_ERROR</oldsource>
         <translation>Non-existent registration or inactive digital signature subscription. Verify that digital signature subscription is enabled on &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;</translation>
@@ -255,20 +255,20 @@
     </message>
     <message>
         <location filename="gapi.cpp" line="815"/>
-        <location filename="gapi.cpp" line="3263"/>
+        <location filename="gapi.cpp" line="3264"/>
         <source>STR_CMD_LOGIN_SUCESS</source>
         <translation>Login successfully. Wait for the code sent by SMS!</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="932"/>
         <location filename="gapi.cpp" line="995"/>
-        <location filename="gapi.cpp" line="3256"/>
+        <location filename="gapi.cpp" line="3257"/>
         <source>STR_CMD_CONNECTING</source>
         <translation>Connecting to the server</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="1032"/>
-        <location filename="gapi.cpp" line="3290"/>
+        <location filename="gapi.cpp" line="3291"/>
         <source>STR_CMD_SENDING_CODE</source>
         <translation>Sending confirmation code to the server</translation>
     </message>
@@ -308,13 +308,13 @@
         <translation>The Citizen Card was not activated.</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="3275"/>
-        <location filename="gapi.cpp" line="3306"/>
+        <location filename="gapi.cpp" line="3276"/>
+        <location filename="gapi.cpp" line="3307"/>
         <source>STR_CERT_REG_ERROR</source>
         <translation>An error occured while registering the certificate.</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="3299"/>
+        <location filename="gapi.cpp" line="3300"/>
         <source>STR_CERT_REG_SUCC</source>
         <translation>The certificate was succesfully registered.</translation>
     </message>
@@ -325,22 +325,22 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="229"/>
-        <location filename="gapi.cpp" line="1544"/>
+        <location filename="gapi.cpp" line="1545"/>
         <source>STR_MUNICIPALITY</source>
         <translation>Municipality</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="254"/>
-        <location filename="gapi.cpp" line="1549"/>
+        <location filename="gapi.cpp" line="1550"/>
         <source>STR_CIVIL_PARISH</source>
         <translation>Civil Parish</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1434"/>
-        <location filename="gapi.cpp" line="1498"/>
-        <location filename="gapi.cpp" line="1534"/>
-        <location filename="gapi.cpp" line="1618"/>
-        <location filename="gapi.cpp" line="1649"/>
+        <location filename="gapi.cpp" line="1435"/>
+        <location filename="gapi.cpp" line="1499"/>
+        <location filename="gapi.cpp" line="1535"/>
+        <location filename="gapi.cpp" line="1619"/>
+        <location filename="gapi.cpp" line="1650"/>
         <source>STR_PRINTED_ON</source>
         <translation>Printed on</translation>
     </message>
@@ -350,19 +350,19 @@
         <translation>Printing Date</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1440"/>
+        <location filename="gapi.cpp" line="1441"/>
         <source>STR_BASIC_INFORMATION</source>
         <translation>IDENTITY</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="85"/>
-        <location filename="gapi.cpp" line="1458"/>
+        <location filename="gapi.cpp" line="1459"/>
         <source>STR_GIVEN_NAME</source>
         <translation>Given Name(s)</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="107"/>
-        <location filename="gapi.cpp" line="1462"/>
+        <location filename="gapi.cpp" line="1463"/>
         <source>STR_SURNAME</source>
         <translation>Surname(s)</translation>
     </message>
@@ -389,37 +389,37 @@
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="322"/>
-        <location filename="gapi.cpp" line="1467"/>
+        <location filename="gapi.cpp" line="1468"/>
         <source>STR_GENDER</source>
         <translation>Gender</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="340"/>
-        <location filename="gapi.cpp" line="1468"/>
+        <location filename="gapi.cpp" line="1469"/>
         <source>STR_HEIGHT</source>
         <translation>Height</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="358"/>
-        <location filename="gapi.cpp" line="1469"/>
+        <location filename="gapi.cpp" line="1470"/>
         <source>STR_NATIONALITY</source>
         <translation>Nationality</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="376"/>
-        <location filename="gapi.cpp" line="1471"/>
+        <location filename="gapi.cpp" line="1472"/>
         <source>STR_DATE_OF_BIRTH</source>
         <translation>Date of Birth</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="401"/>
-        <location filename="gapi.cpp" line="1475"/>
+        <location filename="gapi.cpp" line="1476"/>
         <source>STR_DOCUMENT_NUMBER</source>
         <translation>Document Number</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="420"/>
-        <location filename="gapi.cpp" line="1476"/>
+        <location filename="gapi.cpp" line="1477"/>
         <source>STR_VALIDITY_DATE</source>
         <translation>Validity Date</translation>
     </message>
@@ -430,177 +430,177 @@
         <translation>Affiliation</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1480"/>
+        <location filename="gapi.cpp" line="1481"/>
         <source>STR_FATHER</source>
         <translation>Father</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1483"/>
+        <location filename="gapi.cpp" line="1484"/>
         <source>STR_MOTHER</source>
         <translation>Mother</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardIdentifyForm.ui.qml" line="511"/>
-        <location filename="gapi.cpp" line="1488"/>
+        <location filename="gapi.cpp" line="1489"/>
         <source>STR_NOTES</source>
         <translation>Notes</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1500"/>
+        <location filename="gapi.cpp" line="1501"/>
         <source>STR_ADDITIONAL_INFORMATION</source>
         <translation>OTHER DATA</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="63"/>
-        <location filename="gapi.cpp" line="1503"/>
+        <location filename="gapi.cpp" line="1504"/>
         <source>STR_VAT_NUM</source>
         <translation>VAT Identification no.</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="82"/>
-        <location filename="gapi.cpp" line="1505"/>
+        <location filename="gapi.cpp" line="1506"/>
         <source>STR_SOCIAL_SECURITY_NUM</source>
         <translation>Social Security no.</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="101"/>
-        <location filename="gapi.cpp" line="1507"/>
+        <location filename="gapi.cpp" line="1508"/>
         <source>STR_NATIONAL_HEALTH_NUM</source>
         <translation>National Health System no.</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="127"/>
-        <location filename="gapi.cpp" line="1523"/>
+        <location filename="gapi.cpp" line="1524"/>
         <source>STR_CARD_VERSION</source>
         <translation>Card Version</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="146"/>
-        <location filename="gapi.cpp" line="1513"/>
+        <location filename="gapi.cpp" line="1514"/>
         <source>STR_DELIVERY_DATE</source>
         <translation>Delivery Date</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="171"/>
-        <location filename="gapi.cpp" line="1511"/>
+        <location filename="gapi.cpp" line="1512"/>
         <source>STR_DELIVERY_ENTITY</source>
         <translation>Delivery Entity</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="240"/>
-        <location filename="gapi.cpp" line="1525"/>
+        <location filename="gapi.cpp" line="1526"/>
         <source>STR_CARD_STATE</source>
         <translation>Card State</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="190"/>
-        <location filename="gapi.cpp" line="1517"/>
+        <location filename="gapi.cpp" line="1518"/>
         <source>STR_DOCUMENT_TYPE</source>
         <translation>Document Type</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardOtherDataForm.ui.qml" line="215"/>
-        <location filename="gapi.cpp" line="1519"/>
+        <location filename="gapi.cpp" line="1520"/>
         <source>STR_DELIVERY_LOCATION</source>
         <translation>Delivery Location</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1536"/>
+        <location filename="gapi.cpp" line="1537"/>
         <source>STR_ADDRESS</source>
         <translation>ADDRESS</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="85"/>
-        <location filename="gapi.cpp" line="1585"/>
+        <location filename="gapi.cpp" line="1586"/>
         <source>STR_FOREIGN_COUNTRY</source>
         <translation>Country</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="103"/>
-        <location filename="gapi.cpp" line="1601"/>
+        <location filename="gapi.cpp" line="1602"/>
         <source>STR_FOREIGN_ADDRESS</source>
         <translation>Address</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="121"/>
-        <location filename="gapi.cpp" line="1589"/>
+        <location filename="gapi.cpp" line="1590"/>
         <source>STR_FOREIGN_CITY</source>
         <translation>City</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="140"/>
-        <location filename="gapi.cpp" line="1587"/>
+        <location filename="gapi.cpp" line="1588"/>
         <source>STR_FOREIGN_REGION</source>
         <translation>Region</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="159"/>
-        <location filename="gapi.cpp" line="1594"/>
+        <location filename="gapi.cpp" line="1595"/>
         <source>STR_FOREIGN_LOCALITY</source>
         <translation>Locality</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="178"/>
-        <location filename="gapi.cpp" line="1596"/>
+        <location filename="gapi.cpp" line="1597"/>
         <source>STR_FOREIGN_POSTAL_CODE</source>
         <translation>ZIP</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="204"/>
-        <location filename="gapi.cpp" line="1542"/>
+        <location filename="gapi.cpp" line="1543"/>
         <source>STR_DISTRICT</source>
         <translation>District</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="432"/>
-        <location filename="gapi.cpp" line="1576"/>
+        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="438"/>
+        <location filename="gapi.cpp" line="1577"/>
         <source>STR_ZIP_CODE</source>
         <translation>Zip Code</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="280"/>
-        <location filename="gapi.cpp" line="1553"/>
+        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="279"/>
+        <location filename="gapi.cpp" line="1554"/>
         <source>STR_STREET_TYPE</source>
         <translation>Street Type</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="344"/>
-        <location filename="gapi.cpp" line="1563"/>
+        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="350"/>
+        <location filename="gapi.cpp" line="1564"/>
         <source>STR_FLOOR</source>
         <translation>Floor</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="363"/>
-        <location filename="gapi.cpp" line="1565"/>
+        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="369"/>
+        <location filename="gapi.cpp" line="1566"/>
         <source>STR_SIDE</source>
         <translation>Side</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="388"/>
-        <location filename="gapi.cpp" line="1569"/>
+        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="394"/>
+        <location filename="gapi.cpp" line="1570"/>
         <source>STR_PLACE</source>
         <translation>Place</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="478"/>
-        <location filename="gapi.cpp" line="1578"/>
+        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="484"/>
+        <location filename="gapi.cpp" line="1579"/>
         <source>STR_POSTAL_LOCALITY</source>
         <translation>Postal Locality</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="407"/>
-        <location filename="gapi.cpp" line="1571"/>
+        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="413"/>
+        <location filename="gapi.cpp" line="1572"/>
         <source>STR_LOCALITY</source>
         <translation>Locality</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1620"/>
-        <location filename="gapi.cpp" line="1645"/>
+        <location filename="gapi.cpp" line="1621"/>
+        <location filename="gapi.cpp" line="1646"/>
         <source>STR_PERSONAL_NOTES</source>
         <translation>NOTES</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="1419"/>
+        <location filename="gapi.cpp" line="1420"/>
         <source>STR_PERSONAL_DATA</source>
         <oldsource>PERSONAL DATA</oldsource>
         <translation>PERSONAL DATA</translation>
@@ -612,15 +612,15 @@
         <translation>Country</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="299"/>
-        <location filename="gapi.cpp" line="1556"/>
+        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="305"/>
+        <location filename="gapi.cpp" line="1558"/>
         <source>STR_STREET_NAME</source>
         <oldsource>Ab. street type</oldsource>
         <translation>Street Name</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="325"/>
-        <location filename="gapi.cpp" line="1561"/>
+        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="331"/>
+        <location filename="gapi.cpp" line="1562"/>
         <source>STR_HOUSE_BUILDING_NUM</source>
         <oldsource>Ab. Building Type</oldsource>
         <translation>House/Building no.</translation>
@@ -647,8 +647,8 @@
     </message>
     <message>
         <location filename="components/LabelTextBoxForm.ui.qml" line="24"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="449"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="548"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="448"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="547"/>
         <source>STR_EMPTY_FIELD</source>
         <translation>Empty field</translation>
     </message>
@@ -787,38 +787,38 @@
 <context>
     <name>OAuth</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="397"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="396"/>
         <source>STR_OAUTH_TIMEOUT</source>
         <translation>The authentication process timed out.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="404"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="403"/>
         <source>STR_OAUTH_CONNECTION_ERROR</source>
         <translation>A conecction error has occured during the authentication process.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="401"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="400"/>
         <source>STR_OAUTH_GENERIC_ERROR</source>
         <translation>An error has occured during the authentication process.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="393"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="392"/>
         <source>STR_OAUTH_SUCCESS_SCAP</source>
         <oldsource>STR_OAUTH_SUCCESS</oldsource>
         <translation>Authentication finished. Please wait while the attributes are loading.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="603"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="602"/>
         <source>STR_OAUTH</source>
         <translation>Chave Móvel Digital Authentication</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="626"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="625"/>
         <source>STR_CONTINUE_IN_BROWSER</source>
         <translation>Continue the authentication process in the default Web browser, please.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="649"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="648"/>
         <source>STR_ABORT_AUTH</source>
         <translation>Cancel</translation>
     </message>
@@ -878,12 +878,12 @@
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="505"/>
+        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="511"/>
         <source>STR_ADDRESS_CHANGE_CONFIRMATION_TEXT</source>
         <translation>In order to complete any change of address process click on the &quot;Confirm&quot; button</translation>
     </message>
     <message>
-        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="533"/>
+        <location filename="contentPages/card/PageCardAdressForm.ui.qml" line="539"/>
         <source>STR_ADDRESS_CHANGE_BUTTON</source>
         <translation>Confirm</translation>
     </message>
@@ -1056,8 +1056,8 @@
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="123"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="353"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="363"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="374"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="380"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="373"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="379"/>
         <source>STR_PERMISSIONS_CACHE</source>
         <translation>Invalid cache permissions</translation>
     </message>
@@ -1107,12 +1107,12 @@
         <translation>The professional attributes cache stores attributes previously loaded, avoiding a new connection to the server</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="375"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="374"/>
         <source>STR_CACHE_NOT_WRITABLE</source>
         <translation>You don&apos;t have permissions to write in cache</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="381"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="380"/>
         <source>STR_CACHE_FOLDER_NOT_CREATED</source>
         <translation>Cache folder could not be created</translation>
     </message>
@@ -1269,7 +1269,7 @@
     </message>
     <message>
         <location filename="components/DialogCMD.qml" line="427"/>
-        <location filename="contentPages/definitions/PageDefinitionsSignSettingsForm.ui.qml" line="440"/>
+        <location filename="contentPages/definitions/PageDefinitionsSignSettingsForm.ui.qml" line="438"/>
         <source>STR_REGISTER_CMD_CERT_BUTTON</source>
         <translation>Register</translation>
     </message>
@@ -1419,19 +1419,19 @@
         <translation>Attributes successfully loaded</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="392"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="391"/>
         <source>STR_LOADING_SCAP_ATTRIBUTES</source>
         <translation>Loading attributes</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="476"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="557"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="475"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="556"/>
         <source>STR_SCAP_ENTITY</source>
         <translation>Entity:</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="483"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="564"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="482"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="563"/>
         <source>STR_SCAP_ATTR</source>
         <translation>Attributes:</translation>
     </message>
@@ -1500,6 +1500,11 @@
         <location filename="contentPages/definitions/PageDefinitionsSignSettingsForm.ui.qml" line="323"/>
         <source>STR_DISABLE_EMAIL_MATCH</source>
         <translation>Enable e-mail signatures in Outlook</translation>
+    </message>
+    <message>
+        <location filename="contentPages/definitions/PageDefinitionsSignSettingsForm.ui.qml" line="467"/>
+        <source>STR_CMD_REGISTER_REMENBER</source>
+        <translation>Do not show window to register at startup again</translation>
     </message>
     <message>
         <source>STR_CERT_REG_SUCC</source>
@@ -1761,24 +1766,24 @@
         <translation>Portuguese Identification Card Management Software</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="117"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="118"/>
         <source>STR_HELP_LINK</source>
         <oldsource>STR_HELP_</oldsource>
         <translation>For information or support about this software please visit</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="138"/>
         <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="139"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="140"/>
         <source>STR_HELP_CC_SELECT</source>
         <translation>https://www.autenticacao.gov.pt/o-cartao-de-cidadao</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="151"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="152"/>
         <source>STR_HELP_DEV_BY</source>
         <translation>Developed by the Portuguese State</translation>
     </message>
     <message>
-        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="169"/>
+        <location filename="contentPages/help/PageHelpAboutForm.ui.qml" line="170"/>
         <source>STR_HELP_DEV_AGENCY</source>
         <translation>(Agência para a Modernização Administrativa, IP e Instituto dos Registos e do Notariado, IP)</translation>
     </message>
@@ -2515,9 +2520,9 @@
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="38"/>
         <location filename="contentPages/definitions/PageDefinitionsData.qml" line="91"/>
         <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="77"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="396"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="400"/>
-        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="403"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="395"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="399"/>
+        <location filename="contentPages/definitions/PageDefinitionsSCAP.qml" line="402"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="50"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="35"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="82"/>

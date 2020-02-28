@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
- * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2019 - 2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * Licensed under the EUPL V.1.1
 
@@ -28,6 +28,7 @@ Item {
     property alias propertyRectOffice: rectOffice
     property alias propertyRectLoadCMDCerts: rectLoadCMDCerts
     property alias propertyLoadCMDCertsButton: loadCMDCertsButton
+    property alias propertyCheckboxCMDRegRemember: checkboxCMDRegRemember
 
     anchors.fill: parent
 
@@ -71,8 +72,8 @@ Item {
                 KeyNavigation.tab: checkboxRegister
                 KeyNavigation.down: checkboxRegister
                 KeyNavigation.right: checkboxRegister
-                KeyNavigation.backtab: loadCMDCertsButton
-                KeyNavigation.up: loadCMDCertsButton
+                KeyNavigation.backtab: checkboxCMDRegRemember
+                KeyNavigation.up: checkboxCMDRegRemember
             }
             DropShadow {
                 anchors.fill: rectAppCertificatesCheckBox
@@ -348,7 +349,6 @@ Item {
             height: textLoadCMDCertsTitle.height + rectLoadCMDCertsSettings.height
                     + 3*Constants.SIZE_TEXT_V_SPACE
 
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.top: rectOffice.bottom // in Windows, rectOffice is visible
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
 
@@ -397,24 +397,20 @@ Item {
                             * Constants.SIZE_TEXT_V_SPACE
                 anchors.top: textLoadCMDCertsTitle.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-
-                Rectangle {
+                Item {
                     id: rectLoadCMDCertsText
-                    width: (parent.width-2*Constants.SIZE_ROW_H_SPACE)
-                    color: "white"
+                    width: parent.width - Constants.SIZE_TEXT_FIELD_H_SPACE
+                    x: Constants.SIZE_TEXT_FIELD_H_SPACE
                     height: loadCMDCertsText.height + 2
                             * Constants.SIZE_TEXT_V_SPACE
                     anchors.top: parent.top
                     anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-                    anchors.left: parent.left
-                    anchors.right: parent.right
                     Text {
                         id: loadCMDCertsText
-                        x: Constants.SIZE_TEXT_FIELD_H_SPACE
                         font.family: lato.name
                         font.bold: activeFocus
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        width: parent.width- Constants.SIZE_ROW_H_SPACE
+                        width: parent.width
                         text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_TEXT") + controler.autoTr
                         wrapMode: Text.WordWrap
                         Accessible.role: Accessible.TitleBar
@@ -426,34 +422,60 @@ Item {
                         KeyNavigation.up: textLoadCMDCertsTitle
                     }
                 }
-                Rectangle {
+                Item {
                     id: rectLoadCMDCertsButton
-                    width: (parent.width-2*Constants.SIZE_ROW_H_SPACE)
-                    color: "white"
+                    width: parent.width * 0.3
+                    x: Constants.SIZE_TEXT_FIELD_H_SPACE
                     height: loadCMDCertsButton.height
                     anchors.top: rectLoadCMDCertsText.bottom
-                    anchors.right: parent.right
-                    anchors.left: parent.left
-                    anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                    anchors.leftMargin: 100
                     Button {
                         id: loadCMDCertsButton
                         text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_BUTTON") + controler.autoTr
                         height: Constants.HEIGHT_BOTTOM_COMPONENT
-                        width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE) * 0.50
+                        width: Constants.WIDTH_BUTTON
                         highlighted: activeFocus
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         font.bold: activeFocus
-                        anchors.left: parent.left
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        KeyNavigation.tab: checkboxCMDRegRemember
+                        KeyNavigation.down: checkboxCMDRegRemember
+                        KeyNavigation.right: checkboxCMDRegRemember
+                        KeyNavigation.backtab: loadCMDCertsText
+                        KeyNavigation.up: loadCMDCertsText
+                    }
+                }
+                Item {
+                    id: rectLoadCMDCertsRemember
+                    width: parent.width * 0.7 - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+                    height: loadCMDCertsButton.height
+                    anchors.top: rectLoadCMDCertsText.bottom
+                    anchors.right: parent.right
+
+                    CheckBox {
+                        id: checkboxCMDRegRemember
+                        text: qsTranslate(
+                                  "PageDefinitionsSignSettings",
+                                  "STR_CMD_REGISTER_REMENBER") + controler.autoTr
+                        height: 25
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: dateAppCertificates
                         KeyNavigation.down: dateAppCertificates
                         KeyNavigation.right: dateAppCertificates
-                        KeyNavigation.backtab: loadCMDCertsText
-                        KeyNavigation.up: loadCMDCertsText
+                        KeyNavigation.backtab: loadCMDCertsButton
+                        KeyNavigation.up: loadCMDCertsButton
+                        Keys.onEnterPressed: toggleSwitch(checkboxDisable)
+                        Keys.onReturnPressed: toggleSwitch(checkboxDisable)
                     }
                 }
             }

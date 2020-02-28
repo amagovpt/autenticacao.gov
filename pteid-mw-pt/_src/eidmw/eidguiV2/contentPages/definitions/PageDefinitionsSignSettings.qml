@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
- * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2019 - 2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * Licensed under the EUPL V.1.1
 
@@ -67,6 +67,10 @@ PageDefinitionsSignSettingsForm {
                               propertyTextFieldTimeStamp.text = ""
                           }
     }
+    propertyCheckboxCMDRegRemember{
+        onCheckedChanged: controler.setAskToRegisterCmdCertValue(!propertyCheckboxCMDRegRemember.checked)
+    }
+
     propertyLoadCMDCertsButton {
         onClicked: {
             mainFormID.propertyCmdDialog.open(GAPI.RegisterCert)
@@ -102,6 +106,11 @@ PageDefinitionsSignSettingsForm {
                 propertyCheckboxDisable.checked = controler.getOutlookSuppressNameChecks()
         } else {
             propertyRectOffice.visible = false
+        }
+
+        if (Qt.platform.os === "windows") {
+            propertyCheckboxCMDRegRemember.checked = !controler.getAskToRegisterCmdCertValue()
+        } else {
             propertyRectLoadCMDCerts.visible = false
         }
         
