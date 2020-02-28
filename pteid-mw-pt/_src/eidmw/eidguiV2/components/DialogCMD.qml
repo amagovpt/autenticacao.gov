@@ -27,6 +27,7 @@ Item {
     /* #################################################################### */
 
     Connections {
+        enabled: cmdDialog.visible
         target: gapi
 
         onSignalValidateOtp: {
