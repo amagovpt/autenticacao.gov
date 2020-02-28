@@ -335,18 +335,18 @@ namespace eIDMW
 
         DWORD dwSubjectLen = CertGetNameStringW(
             pTargetCert,
-            CERT_NAME_SIMPLE_DISPLAY_TYPE,
+            CERT_NAME_ATTR_TYPE,
             0,
-            NULL,
+            szOID_DEVICE_SERIAL_NUMBER,
             NULL,
             0);
 
         PWSTR csTargetSubject = new WCHAR[dwSubjectLen];
         CertGetNameStringW(
             pTargetCert,
-            CERT_NAME_SIMPLE_DISPLAY_TYPE,
+            CERT_NAME_ATTR_TYPE,
             0,
-            NULL,
+            szOID_DEVICE_SERIAL_NUMBER,
             csTargetSubject,
             dwSubjectLen);
 
@@ -364,9 +364,9 @@ namespace eIDMW
         {
             CertGetNameStringW(
                 pCert,
-                CERT_NAME_SIMPLE_DISPLAY_TYPE,
+                CERT_NAME_ATTR_TYPE,
                 0,
-                NULL,
+                szOID_DEVICE_SERIAL_NUMBER,
                 csCandidateSubject,
                 dwSubjectLen);
 
