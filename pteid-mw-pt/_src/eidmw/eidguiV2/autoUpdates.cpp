@@ -378,9 +378,8 @@ std::string AutoUpdates::VerifyOS(std::string param)
     if (!osFile.open(QFile::ReadOnly | QFile::Text))
         goto done;
 
-    rx = QRegExp("NAME=\"(.*)\"");
+    rx = QRegExp("NAME=\"?(\\w+)\"?");
     content = osFile.readAll();
-    rx.setMinimal(true);
     rx.indexIn(content);
     list = rx.capturedTexts();
     if (list.size() > 1)
