@@ -120,7 +120,8 @@ PageDefinitionsSignatureForm {
                     if (!result.saveToFile(urlCustomImage)){
                         console.error('Unknown error saving to',urlCustomImage);
                     }
-                });
+                },
+                Qt.size(185,41));
             }
         }
         onExited: {
@@ -145,7 +146,8 @@ PageDefinitionsSignatureForm {
                 if (!result.saveToFile(urlCustomImage)){
                     console.error('Unknown error saving to',urlCustomImage);
                 }
-            });
+            },
+            Qt.size(185,41));
 
         }
         onRejected: {
