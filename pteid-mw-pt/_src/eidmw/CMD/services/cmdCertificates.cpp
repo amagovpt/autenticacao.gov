@@ -9,25 +9,35 @@ static char logBuf[512];
 namespace eIDMW
 {
 
-    CMDCertificates::CMDCertificates(CMDProxyInfo proxyinfo) :
-        m_proxyInfo(proxyinfo)
+    CMDCertificates::CMDCertificates()
     {
-        m_cmdService = new CMDServices(CMDCredentials::getCMDBasicAuthUserId(),
-                                       CMDCredentials::getCMDBasicAuthPassword(),
-                                       CMDCredentials::getCMDBasicAuthAppId());
+        m_cmdService = NULL;
     }
 
     CMDCertificates::~CMDCertificates()
     {
-        delete m_cmdService;
+        if (m_cmdService)
+        {
+            delete m_cmdService;
+        }
         for (auto cert : m_certificates) {
             delete cert;
         }
     }
 
     int CMDCertificates::ImportCertificatesOpen(std::string mobileNumber, std::string pin) {
+
+        if (m_cmdService)
+        {
+            delete m_cmdService;
+        }
+        m_cmdService = new CMDServices(CMDCredentials::getCMDBasicAuthUserId(),
+                                       CMDCredentials::getCMDBasicAuthPassword(),
+                                       CMDCredentials::getCMDBasicAuthAppId());
+
+        CMDProxyInfo proxyInfo = CMDProxyInfo::buildProxyInfo();
         m_mobileNumber = mobileNumber;
-        int ret = m_cmdService->askForCertificate(m_proxyInfo, mobileNumber, pin);
+        int ret = m_cmdService->askForCertificate(proxyInfo, mobileNumber, pin);
         return ret;
     }
 
@@ -125,9 +135,9 @@ namespace eIDMW
     Fetch the CMD certificate chain associated with the user with the given mobileNumber
     ******************************************************************************/
     int CMDCertificates::fetchCertificates(std::string otp) {
-
+        CMDProxyInfo proxyInfo = CMDProxyInfo::buildProxyInfo();
         std::vector<CByteArray> certificates;
-        int ret = m_cmdService->getCMDCertificate(m_proxyInfo, otp, certificates);
+        int ret = m_cmdService->getCMDCertificate(proxyInfo, otp, certificates);
         if (ret != ERR_NONE)
             return ret;
 

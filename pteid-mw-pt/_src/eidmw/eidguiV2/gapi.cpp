@@ -55,9 +55,8 @@ GAPI::GAPI(QObject *parent) :
     cmd_signature = new eIDMW::CMDSignature(CMDCredentials::getCMDBasicAuthUserId(),
                                             CMDCredentials::getCMDBasicAuthPassword(), 
                                             CMDCredentials::getCMDBasicAuthAppId());
-    CMDProxyInfo proxyInfo = CMDProxyInfo::buildProxyInfo();
 #ifdef WIN32
-    m_cmdCertificates =  new eIDMW::CMDCertificates(proxyInfo);
+    m_cmdCertificates =  new eIDMW::CMDCertificates();
 #endif
     m_addressLoaded = false;
     m_shortcutFlag = 0;

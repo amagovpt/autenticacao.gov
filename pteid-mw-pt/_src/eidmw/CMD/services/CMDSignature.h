@@ -92,6 +92,9 @@ namespace eIDMW {
             int cli_getCertificate( std::string in_userId );
             int cli_sendDataToSign( std::string in_pin );
             int cli_getSignatures(std::string in_code, std::vector<PTEID_ByteArray *> out_sign);
+            std::string m_basicAuthUser;
+            std::string m_basicAuthPassword;
+            std::string m_applicationId;
     };
 }
 

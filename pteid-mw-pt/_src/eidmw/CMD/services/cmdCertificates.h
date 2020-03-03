@@ -16,7 +16,7 @@ namespace eIDMW {
     class PTEIDCMD_API CMDCertificates
     {
     public:
-        CMDCertificates(CMDProxyInfo proxyinfo);
+        CMDCertificates();
         ~CMDCertificates();
         int ImportCertificatesOpen(std::string mobileNumber, std::string pin);
         int ImportCertificatesClose(std::string otp);
@@ -31,7 +31,6 @@ namespace eIDMW {
         bool SetCertificateFriendlyName(PCCERT_CONTEXT pCertContext, std::string mobileNumber);
         void RemoveOlderUserCerts(PCCERT_CONTEXT pCertContext);
 
-        CMDProxyInfo m_proxyInfo;
         CMDServices *m_cmdService;
         std::vector<std::string *> m_certificates;
         std::string m_mobileNumber;

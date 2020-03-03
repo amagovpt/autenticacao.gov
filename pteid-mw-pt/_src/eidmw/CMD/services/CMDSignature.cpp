@@ -86,18 +86,27 @@ void printData(char *msg, unsigned char *data, unsigned int dataLen)
     }
 
     CMDSignature::CMDSignature(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId) {
-        cmdService = new CMDServices(basicAuthUser, basicAuthPassword, applicationId);
+        m_basicAuthUser = basicAuthUser;
+        m_basicAuthPassword = basicAuthPassword;
+        m_applicationId = applicationId;
+        cmdService = NULL;
     }
 
-    CMDSignature::CMDSignature(std::string userId, std::string password, std::string applicationId, PTEID_PDFSignature *in_pdf_handler) {
+    CMDSignature::CMDSignature(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId, PTEID_PDFSignature *in_pdf_handler) {
+        m_basicAuthUser = basicAuthUser;
+        m_basicAuthPassword = basicAuthPassword;
+        m_applicationId = applicationId;
+        cmdService = NULL;
         m_pdf_handlers.push_back(in_pdf_handler);
-        cmdService = new CMDServices(userId, password, applicationId);
     }
 
 CMDSignature::~CMDSignature()
 {
     m_pdf_handlers.clear();
-    delete cmdService;
+    if (cmdService)
+    {
+        delete cmdService;
+    }
 }
 
 std::string CMDSignature::getEndpoint()
@@ -354,6 +363,11 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
 
 int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin, int page, double coord_x, double coord_y, const char *location, const char *reason, const char *outfile_path)
 {
+    if (cmdService)
+    {
+        delete cmdService;
+    }
+    cmdService = new CMDServices(m_basicAuthUser, m_basicAuthPassword, m_applicationId);
     m_proxyInfo = proxyinfo;
 
     int ret = cli_getCertificate(in_userId);
