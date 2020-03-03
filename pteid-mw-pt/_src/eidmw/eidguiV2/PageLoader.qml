@@ -63,6 +63,7 @@ Loader{
         visible: false
 
         font.family: lato.name
+        modal: true
         // Center dialog in the main view
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - generalPopUp.width * 0.5

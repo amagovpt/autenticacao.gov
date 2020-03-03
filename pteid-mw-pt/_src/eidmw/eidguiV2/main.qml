@@ -362,6 +362,7 @@ Load language error. Please reinstall the application"
         height: 250
         visible: false
         font.family: lato.name
+        modal: true
         // Center dialog in the main view
         x: parent.width * 0.5 - readerContext.width * 0.5
         y: parent.height * 0.5 - readerContext.height * 0.5

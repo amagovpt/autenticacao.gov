@@ -149,6 +149,7 @@ PageServicesSignSimpleForm {
         height: 200
         visible: false
         font.family: lato.name
+        modal: true
         // Center dialog in the main view
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - signsuccess_dialog.width * 0.5
@@ -263,8 +264,7 @@ PageServicesSignSimpleForm {
             }
         }
         onRejected:{
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-            mainFormID.propertyPageLoader.forceActiveFocus()
+            signsuccess_dialog.open()
         }
         onClosed: {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
@@ -281,6 +281,7 @@ PageServicesSignSimpleForm {
         height: 200
         visible: false
         font.family: lato.name
+        modal: true
         // Center dialog in the main view
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - signerror_dialog.width * 0.5
@@ -358,8 +359,7 @@ PageServicesSignSimpleForm {
             rectPopUpError.forceActiveFocus()
         }
         onRejected:{
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-            mainFormID.propertyPageLoader.forceActiveFocus()
+            signerror_dialog.open()
         }
         onClosed: {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS

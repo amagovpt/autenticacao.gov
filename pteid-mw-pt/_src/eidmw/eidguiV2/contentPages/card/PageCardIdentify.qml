@@ -165,6 +165,7 @@ PageCardIdentifyForm {
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - createsuccess_dialog.width * 0.5
         y: parent.height * 0.5 - createsuccess_dialog.height * 0.5
+        modal: true
 
         header: Label {
             id: createdSuccTitle
@@ -267,8 +268,7 @@ PageCardIdentifyForm {
             }
         }
         onRejected:{
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-            mainFormID.propertyPageLoader.forceActiveFocus()
+            createsuccess_dialog.open()
         }
         onClosed: {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
