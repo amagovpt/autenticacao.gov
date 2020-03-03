@@ -119,9 +119,9 @@ PageDefinitionsAppForm {
         console.log("propertyComboBoxScaling onActivated index = "
                     + propertyComboBoxScaling.currentIndex)
         controler.setApplicationScaleValue(propertyComboBoxScaling.currentIndex)
-        mainFormID.propertyPageLoader.propertyGeneralPopUpLabelText.text = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
-        mainFormID.propertyPageLoader.propertyGeneralPopUp.visible = true;
-        mainFormID.propertyPageLoader.propertyRectPopUp.forceActiveFocus();
+        var titlePopup = qsTranslate("PageDefinitionsApp","STR_SCALE_APPLICATION_TITLE") + controler.autoTr
+        var bodyPopup = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
+        mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
     }
     propertyComboBoxScaling.onModelChanged: {
         propertyComboBoxScaling.currentIndex = controler.getApplicationScaleValue()

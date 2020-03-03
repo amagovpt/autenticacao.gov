@@ -381,6 +381,7 @@ PageDefinitionsSCAPForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalBeginOAuth: { 
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             cmdLoadDialog.open()
         }
         onSignalEndOAuth: {
@@ -666,6 +667,7 @@ PageDefinitionsSCAPForm {
             cmdLoadDialog.open()
         }
         onClosed: {
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyTabButtonEntities.forceActiveFocus()
         }
 

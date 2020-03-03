@@ -145,6 +145,7 @@ PageCardIdentifyForm {
 
         onSignalSaveCardPhotoFinished: {
             if(success) {
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 createsuccess_dialog.open()
                 createdSuccTitle.forceActiveFocus()
             } else {
