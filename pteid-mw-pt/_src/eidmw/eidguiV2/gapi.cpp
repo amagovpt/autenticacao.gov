@@ -611,7 +611,7 @@ void GAPI::showChangeAddressDialog(long code)
 
 void GAPI::showSignCMDDialog(long error_code)
 {
-    QString error_msg;
+    QString message;
     QString support_string = tr("STR_CMD_ERROR_MSG");
 
     if (error_code == 0 || error_code == EIDMW_TIMESTAMP_ERROR){
@@ -622,69 +622,76 @@ void GAPI::showSignCMDDialog(long error_code)
     switch (error_code)
     {
     case 0:
-        error_msg = tr("STR_CMD_SUCESS");
+        message = tr("STR_CMD_SUCESS");
         break;
     case SCAP_GENERIC_ERROR_CODE:
-        error_msg = tr("STR_SCAP_SIGNATURE_ERROR");
+        message = tr("STR_SCAP_SIGNATURE_ERROR");
         break;
     case SCAP_CLOCK_ERROR_CODE:
-        error_msg = tr("STR_SCAP_CLOCK_ERROR");
+        message = tr("STR_SCAP_CLOCK_ERROR");
         break;
     case SCAP_SECRETKEY_ERROR_CODE:
-        error_msg = tr("STR_SCAP_SECRETKEY_ERROR");
+        message = tr("STR_SCAP_SECRETKEY_ERROR");
         break;
     case -1:
-        error_msg = tr("STR_CMD_TIMEOUT_ERROR");
+        message = tr("STR_CMD_TIMEOUT_ERROR");
         break;
     case ERR_GET_CERTIFICATE:
-        error_msg = tr("STR_CMD_GET_CERTIFICATE_ERROR");
+        message = tr("STR_CMD_GET_CERTIFICATE_ERROR");
         break;
     case HTTP_PROXY_AUTH_REQUIRED:
-        error_msg = tr("STR_CMD_PROXY_AUTH_ERROR");
+        message = tr("STR_CMD_PROXY_AUTH_ERROR");
         break;
     case SOAP_TCP_ERROR:
-        error_msg = tr("STR_CONNECTION_ERROR") + "<br><br>" +
+        message = tr("STR_CONNECTION_ERROR") + "<br><br>" +
             tr("STR_VERIFY_INTERNET");
         break;
     case SOAP_ERR_SERVICE_FAIL:
-        error_msg = tr("STR_CMD_SERVICE_FAIL");
+        message = tr("STR_CMD_SERVICE_FAIL");
         break;
     case SOAP_ERR_INVALID_PIN:
-        error_msg = tr("STR_CMD_INVALID_PIN");
+        message = tr("STR_CMD_INVALID_PIN");
         break;
     case SOAP_ERR_INVALID_OTP:
-        error_msg = tr("STR_CMD_INVALID_OTP");
+        message = tr("STR_CMD_INVALID_OTP");
         break;
     case SOAP_ERR_OTP_VALIDATION_ERROR:
-        error_msg = tr("STR_CMD_OTP_VALIDATION_ERROR");
+        message = tr("STR_CMD_OTP_VALIDATION_ERROR");
         break;
     case SOAP_ERR_INACTIVE_SERVICE:
-        error_msg = tr("STR_CMD_INACTIVE_SERVICE");
+        message = tr("STR_CMD_INACTIVE_SERVICE");
         break;
     case EIDMW_PERMISSION_DENIED:
-        error_msg = tr("STR_SIGN_FILE_PERMISSION_FAIL");
+        message = tr("STR_SIGN_FILE_PERMISSION_FAIL");
         break;
     case EIDMW_TIMESTAMP_ERROR:
-        error_msg = tr("STR_CMD_SUCESS") + " " + tr("STR_TIME_STAMP_FAILED");
+        message = tr("STR_CMD_SUCESS") + " " + tr("STR_TIME_STAMP_FAILED");
         break;
     default:
-        error_msg = tr("STR_CMD_LOGIN_ERROR");
+        message = tr("STR_CMD_LOGIN_ERROR");
         break;
     }
 
-    if (error_code != 0 
-            && error_code != EIDMW_TIMESTAMP_ERROR
-            && error_code != SCAP_SECRETKEY_ERROR_CODE
-            && error_code != SCAP_CLOCK_ERROR_CODE) {
+    if (error_code != 0){
         // If there is error show message screen
-        error_msg += "<br><br>" + support_string;
-        signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "!");
-        signalShowMessage(error_msg);
+        if (error_code == EIDMW_TIMESTAMP_ERROR){
+            signalUpdateProgressStatus(message);
+        } else if (error_code == SCAP_SECRETKEY_ERROR_CODE
+                || error_code == SCAP_CLOCK_ERROR_CODE) {
+            signalUpdateProgressStatus(message);
+        } else {
+            message += "<br><br>" + support_string;
+            signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "!");
+            signalShowMessage(message);
+        }
     }
     else{
-        signalUpdateProgressStatus(error_msg);
+        // Success
+        signalUpdateProgressStatus(message);
     }
-    qDebug() << error_msg;
+
+    qDebug() << "Show Sign CMD Dialog - Error code: " << error_code
+             << "Message: " << message;
 }
 
 void GAPI::changeAddressPin(QString currentPin, QString newPin) {

@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
- * Copyright (C) 2018-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2018-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.1
@@ -488,9 +488,11 @@ Item {
                     name: Constants.DLG_STATE.SHOW_MESSAGE
                     PropertyChanges {target: labelCMDText; visible: true}
                     PropertyChanges {target: progressBar; visible: true}
+                    PropertyChanges {target: progressBarIndeterminate; visible: false}
                 },
                 State {
                     name: Constants.DLG_STATE.OPEN_FILE
+                    PropertyChanges {target: labelCMDText; visible: true}
                     PropertyChanges {target: buttonConfirm; text: qsTranslate("Popup File","STR_POPUP_FILE_OPEN")}
                     PropertyChanges {target: progressBar; visible: true}
                     PropertyChanges {
