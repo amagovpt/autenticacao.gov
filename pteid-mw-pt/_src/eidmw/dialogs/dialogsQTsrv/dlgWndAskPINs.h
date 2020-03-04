@@ -70,7 +70,6 @@ private slots:
 	void on_txtNewPIN2_textChanged( const QString & );
 	void on_txtPIN_Keypad_textChanged( const QString & );
 	void FinalCheck();
-	void NextField();
 
 	void on_tbtClear_clicked();
 };
