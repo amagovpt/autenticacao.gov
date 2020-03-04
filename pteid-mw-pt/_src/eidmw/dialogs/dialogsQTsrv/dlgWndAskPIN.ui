@@ -250,6 +250,9 @@
    <property name="enabled">
     <bool>false</bool>
    </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>220</x>
@@ -301,9 +304,6 @@
    </property>
    <property name="text">
     <string>&amp;Cancel</string>
-   </property>
-   <property name="autoDefault">
-    <bool>true</bool>
    </property>
    <property name="flat">
     <bool>false</bool>
