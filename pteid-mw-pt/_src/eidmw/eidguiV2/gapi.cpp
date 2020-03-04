@@ -2125,11 +2125,14 @@ void GAPI::httpFinished()
             httpRequestAborted = true;
             httpRequestSuccess = false;
             emit signalSCAPPingFail();
-            QString strLog = QString("PingSCAP:: Http request failed to: ");
+            QString strLog = QString("PingSCAP: Http request FAIL to: ");
             strLog += reply->url().toString();
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature", strLog.toStdString().c_str());
         } else {
             qDebug() << "C++: signalSCAPPingSuccess";
+            QString strLog = QString("PingSCAP: Http request SUCCESS to: ");
+            strLog += reply->url().toString();
+            PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "ScapSignature", strLog.toStdString().c_str());
             httpRequestAborted = false;
             httpRequestSuccess = true;
             emit signalSCAPPingSuccess();

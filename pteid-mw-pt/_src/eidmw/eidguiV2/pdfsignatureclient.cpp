@@ -603,17 +603,30 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
     if (rc != SOAP_OK) {
         qDebug() << "Error returned by calling Authorization in SoapBindingProxy(). Error code: " << rc;
-        if (rc == SOAP_FAULT) {
 
-            qDebug() << "SOAP Fault returned. Error code: " << rc;
+        if (rc == SOAP_FAULT) {
+            if (proxy.soap->fault != NULL && proxy.soap->fault->faultstring != NULL)
+                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                                 "Error returned by calling Authorization in SoapBindingProxy() returned SOAP Fault: %s",
+                                 proxy.soap->fault->faultstring);
+            return GAPI::ScapGenericError;
+        } else if (rc == SOAP_EOF) {
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                             "Error returned by calling Authorization in SoapBindingProxy(). Error code: %d", rc);
+            return GAPI::ScapTimeOutError;
+        } else if (rc == SOAP_TCP_ERROR) {
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                             "Error returned by calling Authorization in SoapBindingProxy(). Error code: %d", rc);
+            return GAPI::ScapTimeOutError;
+        } else {
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                      "Error returned by calling Authorization in SoapBindingProxy(). Error code: %d", rc);
+            return GAPI::ScapGenericError;
         }
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                  "Error returned by calling Authorization in SoapBindingProxy(). Error code: %d", rc);
-        return GAPI::ScapGenericError;
+
     }
     else {
         qDebug() << "Authorization service returned SOAP_OK";
-
         //Check for Success Status
         if (authorizationResponse.Status->Code == "802") {
             qDebug() << "authorizationService returned error 802";
@@ -650,6 +663,36 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                           authorizationResponse.Status->Code.c_str(),
                           authorizationResponse.Status->Message.c_str());
                 return GAPI::ScapSecretKeyError;
+            }
+        }
+        if (authorizationResponse.Status->Code == "401") {
+            qDebug() << "authorizationService returned error 401";
+            {
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                          "AuthorizationService returned error. error code: %s message: %s",
+                          authorizationResponse.Status->Code.c_str(),
+                          authorizationResponse.Status->Message.c_str());
+                return GAPI::ScapAttributesExpiredError;
+            }
+        }
+        if (authorizationResponse.Status->Code == "402") {
+            qDebug() << "authorizationService returned error 402";
+            {
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                          "AuthorizationService returned error. error code: %s message: %s",
+                          authorizationResponse.Status->Code.c_str(),
+                          authorizationResponse.Status->Message.c_str());
+                return GAPI::ScapZeroAttributesError;
+            }
+        }
+        if (authorizationResponse.Status->Code == "403") {
+            qDebug() << "authorizationService returned error 403";
+            {
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                          "AuthorizationService returned error. error code: %s message: %s",
+                          authorizationResponse.Status->Code.c_str(),
+                          authorizationResponse.Status->Message.c_str());
+                return GAPI::ScapNotValidAttributesError;
             }
         }
         else if (authorizationResponse.Status->Code != "00" || authorizationResponse.TransactionList == NULL) {
