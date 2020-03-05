@@ -71,8 +71,8 @@ public:
     /* Wait for launched threads to finish */
     static void waitForAll();
 
-    /* Wait for threads and terminate after sec seconds */
-    static void waitForAllAndTerminate(int sec = 10);
+    /* Wait for threads for at most sec seconds. Returns false if timeout, true otherwise. */
+    static bool waitForAll(int sec);
 private:
     static void cleanFutureList();
 

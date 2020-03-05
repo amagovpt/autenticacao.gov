@@ -20,7 +20,7 @@ void Concurrent::waitForAll()
         future.waitForFinished();
 }
 
-void Concurrent::waitForAllAndTerminate(int sec)
+bool Concurrent::waitForAll(int sec)
 {
     int timeleft = sec;
     int timestep = 1; // Polling frequency
@@ -36,15 +36,13 @@ void Concurrent::waitForAllAndTerminate(int sec)
         }
 
         if (allFinished)
-            return;
+            return true;
 
         QThread::sleep(timestep);
         timeleft -= timestep;
     }
 
-    // Threads did not finished and timeout occured: exit process
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui", "Exiting application after timeout. Some threads may not have been correctly finished.");
-    exit(0);
+    return false;
 }
 
 void Concurrent::cleanFutureList()

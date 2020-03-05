@@ -3344,7 +3344,12 @@ void GAPI::quitApplication(void) {
 
     }
     catch (...) {}
-    Concurrent::waitForAllAndTerminate();
+    if (!Concurrent::waitForAll(30)) {
+        // Threads did not finished and timeout occured: exit process
+        // Some threads may not have been correctly finished.
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui",
+            "Exiting application after timeout.");
+    }
     qApp->quit();
 }
 
