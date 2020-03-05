@@ -2,7 +2,7 @@
 
  * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ * Copyright (C) 2018-2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
@@ -14,7 +14,6 @@
 #include <QString>
 #include <QVector>
 #include <QDate>
-#include <QtConcurrent>
 #include <cstdio>
 #include <QQuickImageProvider>
 #include <QPrinter>
@@ -35,6 +34,7 @@
 #include "Config.h"
 #include "Util.h"
 #include "proxyinfo.h"
+#include "concurrent.h"
 
 using namespace eIDMW;
 
@@ -309,7 +309,7 @@ void GAPI::setPersoDataFile(QString text) {
 }
 
 void GAPI::verifyAuthPin(QString pin_value) {
-    QtConcurrent::run(this, &GAPI::doVerifyAuthPin, pin_value);
+    Concurrent::run(this, &GAPI::doVerifyAuthPin, pin_value);
 }
 unsigned int  GAPI::doVerifyAuthPin(QString pin_value) {
     setAppAsDlgParent();
@@ -337,7 +337,7 @@ unsigned int  GAPI::doVerifyAuthPin(QString pin_value) {
 }
 
 void GAPI::getTriesLeftAuthPin() {
-    QtConcurrent::run(this, &GAPI::doGetTriesLeftAuthPin);
+    Concurrent::run(this, &GAPI::doGetTriesLeftAuthPin);
 }
 unsigned int GAPI::doGetTriesLeftAuthPin() {
     setAppAsDlgParent();
@@ -365,7 +365,7 @@ unsigned int GAPI::doGetTriesLeftAuthPin() {
 }
 
 void GAPI::verifySignPin(QString pin_value) {
-    QtConcurrent::run(this, &GAPI::doVerifySignPin, pin_value);
+    Concurrent::run(this, &GAPI::doVerifySignPin, pin_value);
 }
 unsigned int  GAPI::doVerifySignPin(QString pin_value) {
     setAppAsDlgParent();
@@ -393,7 +393,7 @@ unsigned int  GAPI::doVerifySignPin(QString pin_value) {
 }
 
 void GAPI::getTriesLeftSignPin() {
-    QtConcurrent::run(this, &GAPI::doGetTriesLeftSignPin);
+    Concurrent::run(this, &GAPI::doGetTriesLeftSignPin);
 }
 unsigned int GAPI::doGetTriesLeftSignPin() {
     setAppAsDlgParent();
@@ -421,7 +421,7 @@ unsigned int GAPI::doGetTriesLeftSignPin() {
 }
 
 void GAPI::verifyAddressPin(QString pin_value) {
-    QtConcurrent::run(this, &GAPI::doVerifyAddressPin, pin_value);
+    Concurrent::run(this, &GAPI::doVerifyAddressPin, pin_value);
 }
 unsigned int GAPI::doVerifyAddressPin(QString pin_value) {
     setAppAsDlgParent();
@@ -449,7 +449,7 @@ unsigned int GAPI::doVerifyAddressPin(QString pin_value) {
 }
 
 void GAPI::getTriesLeftAddressPin() {
-    QtConcurrent::run(this, &GAPI::doGetTriesLeftAddressPin);
+    Concurrent::run(this, &GAPI::doGetTriesLeftAddressPin);
 }
 unsigned int GAPI::doGetTriesLeftAddressPin() {
     setAppAsDlgParent();
@@ -477,7 +477,7 @@ unsigned int GAPI::doGetTriesLeftAddressPin() {
 }
 
 void GAPI::changeAuthPin(QString currentPin, QString newPin) {
-    QtConcurrent::run(this, &GAPI::doChangeAuthPin, currentPin, newPin);
+    Concurrent::run(this, &GAPI::doChangeAuthPin, currentPin, newPin);
 }
 unsigned int GAPI::doChangeAuthPin(QString currentPin, QString newPin) {
     setAppAsDlgParent();
@@ -505,7 +505,7 @@ unsigned int GAPI::doChangeAuthPin(QString currentPin, QString newPin) {
 }
 
 void GAPI::changeSignPin(QString currentPin, QString newPin) {
-    QtConcurrent::run(this, &GAPI::doChangeSignPin, currentPin, newPin);
+    Concurrent::run(this, &GAPI::doChangeSignPin, currentPin, newPin);
 }
 unsigned int GAPI::doChangeSignPin(QString currentPin, QString newPin) {
     setAppAsDlgParent();
@@ -694,7 +694,7 @@ void GAPI::showSignCMDDialog(long error_code)
 }
 
 void GAPI::changeAddressPin(QString currentPin, QString newPin) {
-    QtConcurrent::run(this, &GAPI::doChangeAddressPin, currentPin, newPin);
+    Concurrent::run(this, &GAPI::doChangeAddressPin, currentPin, newPin);
 }
 unsigned int GAPI::doChangeAddressPin(QString currentPin, QString newPin) {
     unsigned long tries_left = TRIES_LEFT_ERROR;
@@ -767,7 +767,7 @@ void GAPI::changeAddress(QString process, QString secret_code)
 
     char *processUtf8 = strdup(process.toUtf8().constData());
     char *secret_codeUtf8 = strdup(secret_code.toUtf8().constData());
-    QtConcurrent::run(this, &GAPI::doChangeAddress, processUtf8, secret_codeUtf8);
+    Concurrent::run(this, &GAPI::doChangeAddress, processUtf8, secret_codeUtf8);
 }
 
 QString GAPI::translateCMDErrorCode(int errorCode) {
@@ -977,7 +977,7 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<
 
         cmd_signature->add_pdf_handler(cmd_pdfSignature);
     }
-    QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, cmdParams, signParams);
+    Concurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, cmdParams, signParams);
 
 }
 
@@ -985,7 +985,7 @@ void GAPI::doCancelCMDSign() {
     cmd_signature->cancelRequest();
 }
 void GAPI::cancelCMDSign() {
-    QtConcurrent::run(this, &GAPI::doCancelCMDSign);
+    Concurrent::run(this, &GAPI::doCancelCMDSign);
 }
 void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
     QString outputFile, int page, double coord_x, double coord_y,
@@ -1028,7 +1028,7 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QList<QString>
 
         cmd_signature->add_pdf_handler(cmd_pdfSignature);
     }
-    QtConcurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, cmdParams, signParams);
+    Concurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, cmdParams, signParams);
 }
 
 void GAPI::signCloseCMD(QString sms_token, QList<int> attribute_list)
@@ -1038,10 +1038,10 @@ void GAPI::signCloseCMD(QString sms_token, QList<int> attribute_list)
     signalUpdateProgressStatus(tr("STR_CMD_SENDING_CODE"));
 
     if (attribute_list.size() > 0)
-        QtConcurrent::run(this, &GAPI::doCloseSignCMDWithSCAP, cmd_signature, sms_token, attribute_list);
+        Concurrent::run(this, &GAPI::doCloseSignCMDWithSCAP, cmd_signature, sms_token, attribute_list);
 
     else
-        QtConcurrent::run(this, &GAPI::doCloseSignCMD, cmd_signature, sms_token);
+        Concurrent::run(this, &GAPI::doCloseSignCMD, cmd_signature, sms_token);
 }
 
 QString GAPI::getCardActivation() {
@@ -1126,7 +1126,7 @@ void GAPI::startPrintPDF(QString outputFile, bool isBasicInfo, bool isAddicional
     bool isAddress, bool isNotes, bool isPrintDate, bool isSign) {
 
     PrintParams params = { outputFile, isBasicInfo, isAddicionalInfo, isAddress, isNotes, isPrintDate, isSign };
-    QtConcurrent::run(this, &GAPI::doPrintPDF, params);
+    Concurrent::run(this, &GAPI::doPrintPDF, params);
 }
 
 void GAPI::startPrint(QString outputFile, bool isBasicInfo, bool isAddicionalInfo,
@@ -1218,7 +1218,7 @@ void GAPI::doPrintPDF(PrintParams &params) {
             return;
         }
 
-        QFuture<bool> new_thread = QtConcurrent::run(this, &GAPI::doSignPrintPDF, nativepdftmp,
+        QFuture<bool> new_thread = Concurrent::run(this, &GAPI::doSignPrintPDF, nativepdftmp,
             originalOutputFile);
 
         res = new_thread.result();
@@ -1687,7 +1687,7 @@ void GAPI::startSigningPDF(QString loadedFilePath, QString outputFile, int page,
     QList<QString> loadedFilePaths = { loadedFilePath };
     SignParams params = { loadedFilePaths, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isSmall };
     QFuture<void> future =
-        QtConcurrent::run(this, &GAPI::doSignPDF, params);
+        Concurrent::run(this, &GAPI::doSignPDF, params);
 
 }
 
@@ -1697,7 +1697,7 @@ void GAPI::startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outp
     SignParams params = { loadedFileBatchPath, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isSmall };
 
     QFuture<void> future =
-        QtConcurrent::run(this, &GAPI::doSignBatchPDF, params);
+        Concurrent::run(this, &GAPI::doSignBatchPDF, params);
 }
 
 int GAPI::getPDFpageCount(QString loadedFilePath) {
@@ -1721,7 +1721,7 @@ void GAPI::closeAllPdfPreviews()
 
 void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp) {
     QFuture<void> future =
-        QtConcurrent::run(this, &GAPI::doSignXADES, loadedFilePath, outputFile, isTimestamp);
+        Concurrent::run(this, &GAPI::doSignXADES, loadedFilePath, outputFile, isTimestamp);
 
 }
 
@@ -1730,7 +1730,7 @@ void GAPI::startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString ou
     SignParams params = { loadedFileBatchPath, outputFile, 0, 0, 0, "", "", isTimestamp, 0 };
 
     QFuture<void> future =
-        QtConcurrent::run(this, &GAPI::doSignBatchXADES, params);
+        Concurrent::run(this, &GAPI::doSignBatchXADES, params);
 }
 
 void GAPI::doSignBatchXADES(SignParams &params) {
@@ -1931,7 +1931,7 @@ QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, c
         << pTest.width() << " - height : " << pTest.height();
     emit signalPdfSourceChanged(pTest.width(), pTest.height());
 
-    QFuture<QPixmap> future = QtConcurrent::run(this, &PDFPreviewImageProvider::renderPdf, page, requestedSize);
+    QFuture<QPixmap> future = Concurrent::run(this, &PDFPreviewImageProvider::renderPdf, page, requestedSize);
 
     QPixmap p = future.result();
     size->setHeight(p.height());
@@ -2001,16 +2001,16 @@ void PDFPreviewImageProvider::closeAllDocs() {
 
 void GAPI::startCardReading() {
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "StartCardReading connectToCard");
-    QFuture<void> future = QtConcurrent::run(this, &GAPI::connectToCard);
+    QFuture<void> future = Concurrent::run(this, &GAPI::connectToCard);
 
 }
 
 void GAPI::startSavingCardPhoto(QString outputFile) {
-    QFuture<void> future = QtConcurrent::run(this, &GAPI::doSaveCardPhoto, outputFile);
+    QFuture<void> future = Concurrent::run(this, &GAPI::doSaveCardPhoto, outputFile);
 }
 
 void GAPI::startWritingPersoNotes(QString text) {
-    QFuture<void> future = QtConcurrent::run(this, &GAPI::setPersoDataFile, text);
+    QFuture<void> future = Concurrent::run(this, &GAPI::setPersoDataFile, text);
 }
 
 int GAPI::getStringByteLength(QString text) {
@@ -2019,15 +2019,15 @@ int GAPI::getStringByteLength(QString text) {
 }
 
 void GAPI::startGettingEntities() {
-    QtConcurrent::run(this, &GAPI::getSCAPEntities);
+    Concurrent::run(this, &GAPI::getSCAPEntities);
 }
 
 void GAPI::startGettingCompanyAttributes(bool useOauth) {
-    QtConcurrent::run(this, &GAPI::getSCAPCompanyAttributes, useOauth);
+    Concurrent::run(this, &GAPI::getSCAPCompanyAttributes, useOauth);
 }
 
 void GAPI::startGettingEntityAttributes(QList<int> entities_index, bool useOAuth) {
-    QtConcurrent::run(this, &GAPI::getSCAPEntityAttributes, entities_index, useOAuth);
+    Concurrent::run(this, &GAPI::getSCAPEntityAttributes, entities_index, useOAuth);
 }
 
 void GAPI::startPingSCAP() {
@@ -2142,19 +2142,19 @@ void GAPI::httpFinished()
 }
 
 void GAPI::startReadingPersoNotes() {
-    QFuture<void> future = QtConcurrent::run(this, &GAPI::getPersoDataFile);
+    QFuture<void> future = Concurrent::run(this, &GAPI::getPersoDataFile);
 }
 
 void GAPI::startReadingAddress() {
-    QtConcurrent::run(this, &GAPI::getAddressFile);
+    Concurrent::run(this, &GAPI::getAddressFile);
 }
 
 void GAPI::startLoadingAttributesFromCache(int scapAttrType, bool isShortDescription) {
-    QtConcurrent::run(this, &GAPI::getSCAPAttributesFromCache, scapAttrType, isShortDescription);
+    Concurrent::run(this, &GAPI::getSCAPAttributesFromCache, scapAttrType, isShortDescription);
 }
 
 void GAPI::startRemovingAttributesFromCache(int scapAttrType) {
-    QtConcurrent::run(this, &GAPI::removeSCAPAttributesFromCache, scapAttrType);
+    Concurrent::run(this, &GAPI::removeSCAPAttributesFromCache, scapAttrType);
 }
 
 void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, double location_x,
@@ -2164,7 +2164,7 @@ void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, doubl
     SCAPSignParams signParams = { inputPDF, outputPDF, page, location_x, location_y,
         location, reason, ltv, attribute_index };
 
-    QtConcurrent::run(this, &GAPI::doSignSCAP, signParams);
+    Concurrent::run(this, &GAPI::doSignSCAP, signParams);
 }
 
 void GAPI::doSignSCAP(SCAPSignParams params) {
@@ -3031,7 +3031,7 @@ void GAPI::viewCardCertificate(QString issuedBy, QString issuedTo) {
 #endif
 }
 void GAPI::exportCardCertificate(QString issuedBy, QString issuedTo, QString outputPath) {
-    QtConcurrent::run(this, &GAPI::doExportCardCertificate, issuedBy, issuedTo, outputPath);
+    Concurrent::run(this, &GAPI::doExportCardCertificate, issuedBy, issuedTo, outputPath);
 }
 void GAPI::doExportCardCertificate(QString issuedBy, QString issuedTo, QString outputPath) {
     PTEID_EIDCard * card = NULL;
@@ -3117,12 +3117,12 @@ void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificat
 }
 
 void GAPI::startfillCertificateList(void) {
-    QtConcurrent::run(this, &GAPI::fillCertificateList);
+    Concurrent::run(this, &GAPI::fillCertificateList);
 }
 
 void GAPI::startGetCardActivation(void) {
 
-    QtConcurrent::run(this, &GAPI::getCertificateAuthStatus);
+    Concurrent::run(this, &GAPI::getCertificateAuthStatus);
 }
 
 void GAPI::getCertificateAuthStatus(void)
@@ -3250,13 +3250,13 @@ void GAPI::doCancelCMDRegisterCert() {
 }
 void GAPI::cancelCMDRegisterCert() {
 #ifdef WIN32
-    QtConcurrent::run(this, &GAPI::doCancelCMDRegisterCert);
+    Concurrent::run(this, &GAPI::doCancelCMDRegisterCert);
 #endif
 }
 
 void GAPI::registerCMDCertOpen(QString mobileNumber, QString pin) {
 #ifdef WIN32
-    QtConcurrent::run(this, &GAPI::doRegisterCMDCertOpen, mobileNumber, pin);
+    Concurrent::run(this, &GAPI::doRegisterCMDCertOpen, mobileNumber, pin);
 #endif
 }
 void GAPI::doRegisterCMDCertOpen(QString mobileNumber, QString pin) {
@@ -3291,7 +3291,7 @@ void GAPI::doRegisterCMDCertOpen(QString mobileNumber, QString pin) {
 }
 void GAPI::registerCMDCertClose(QString otp) {
 #ifdef WIN32
-    QtConcurrent::run(this, &GAPI::doRegisterCMDCertClose, otp);
+    Concurrent::run(this, &GAPI::doRegisterCMDCertClose, otp);
 #endif
 }
 void GAPI::doRegisterCMDCertClose(QString otp) {
@@ -3344,6 +3344,7 @@ void GAPI::quitApplication(void) {
 
     }
     catch (...) {}
+    Concurrent::waitForAllAndTerminate();
     qApp->quit();
 }
 

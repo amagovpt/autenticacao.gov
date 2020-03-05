@@ -274,6 +274,7 @@
     <ClCompile Include="AttributeFactory.cpp" />
     <ClCompile Include="certificates.cpp" />
     <ClCompile Include="cJSON_1_7_12.c" />
+    <ClCompile Include="concurrent.cpp" />
     <ClCompile Include="OAuthAttributes.cpp" />
     <ClCompile Include="ErrorConn.cpp" />
     <ClCompile Include="filesavedialog.cpp" />
@@ -489,6 +490,7 @@
   <ItemGroup>
     <ClInclude Include="AttributeFactory.h" />
     <ClInclude Include="cJSON_1_7_12.h" />
+    <ClInclude Include="concurrent.h" />
     <ClInclude Include="OAuthAttributes.h" />
     <ClInclude Include="SCAP-services-v3\SCAPAttributeClientServiceBindingProxy.h" />
   </ItemGroup>

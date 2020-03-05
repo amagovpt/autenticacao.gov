@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2017-2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
- * Copyright (C) 2018 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2018-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
@@ -156,7 +156,10 @@ Item {
                 id: mouseAreaQuitButton
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked: mainWindow.close()
+                onClicked: {
+                    mainWindow.visible = false
+                    mainWindow.close()
+                }
             }
         }
         MouseArea {

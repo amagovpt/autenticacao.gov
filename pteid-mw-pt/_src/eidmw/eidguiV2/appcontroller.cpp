@@ -3,7 +3,7 @@
  * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
- * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ * Copyright (C) 2018-2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.1
@@ -14,7 +14,6 @@
 #include <QObject>
 #include <QCursor>
 #include <QDebug>
-#include <QtConcurrent>
 #include <QAccessible>
 #include <QClipboard>
 #include <QGuiApplication>
@@ -44,6 +43,7 @@
 
 #include "gapi.h"
 #include "autoUpdates.h"
+#include "concurrent.h"
 
 #define N_RELEASE_NOTES 3
 
@@ -385,7 +385,7 @@ void AppController::setProxyPwdValue (QString const& proxy_pwd){
 }
 
 void AppController::flushCache(){
-    QtConcurrent::run(this, &AppController::doFlushCache);
+    Concurrent::run(this, &AppController::doFlushCache);
 }
 
 void AppController::doFlushCache(){
@@ -438,7 +438,7 @@ bool AppController::removePteidCache() {
 
 
 void AppController::getPteidCacheSize() {
-    QtConcurrent::run(this, &AppController::doGetPteidCacheSize);
+    Concurrent::run(this, &AppController::doGetPteidCacheSize);
 }
 
 QString AppController::getPteidCacheDir() {
@@ -453,7 +453,7 @@ void AppController::doGetPteidCacheSize() {
 }
 
 void AppController::getScapCacheSize() {
-    QtConcurrent::run(this, &AppController::doGetScapCacheSize);
+    Concurrent::run(this, &AppController::doGetScapCacheSize);
 }
 
 void AppController::doGetScapCacheSize() {

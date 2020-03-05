@@ -110,6 +110,9 @@
     <ClCompile Include="OAuthAttributes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="concurrent.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="release\qrc_resources.cpp">
@@ -294,6 +297,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="AttributeFactory.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="concurrent.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
