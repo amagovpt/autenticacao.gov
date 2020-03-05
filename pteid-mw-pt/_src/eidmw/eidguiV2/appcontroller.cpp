@@ -117,7 +117,7 @@ void AppController::updateCertslog(){
         QTextStream stream(&file);
         time_t _tm =time(nullptr);
         struct tm * t = localtime ( &_tm );
-        strftime(date_string, STR_LOCALTIME_MAX_SIZE, "%H:%M do dia %d-%m-%Y", t);
+        strftime(date_string, STR_LOCALTIME_MAX_SIZE, "%H:%M ON_DAY %d-%m-%Y", t);
         stream << date_string;
         file.close();
     } else {
@@ -144,6 +144,7 @@ QString AppController::getAppCertsUpdate(void){
 
     QString line = instream.readLine(STR_LOCALTIME_MAX_SIZE);
 
+    line.replace("ON_DAY", tr("STR_ON_DAY"));
     file.close();
 
     return line;
