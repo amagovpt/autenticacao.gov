@@ -270,7 +270,7 @@ Item {
                         font.capitalization: Font.MixedCase
                         highlighted: activeFocus ? true : false
                         anchors.horizontalCenter: parent.horizontalCenter
-                        enabled: isAnyEntitySelected()
+                        enabled: false
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.down: buttonLoadEntityAttributesOAuth.enabled ?
@@ -290,7 +290,7 @@ Item {
                         font.capitalization: Font.MixedCase
                         highlighted: activeFocus ? true : false
                         anchors.right: parent.right
-                        enabled: isAnyEntitySelected()
+                        enabled: false
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.tab: entitiesText
@@ -457,7 +457,7 @@ Item {
                         font.capitalization: Font.MixedCase
                         highlighted: activeFocus ? true : false
                         anchors.horizontalCenter: parent.horizontalCenter
-                        enabled: isCardPresent
+                        enabled: false
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.down: buttonLoadCompanyAttributesOAuth
@@ -476,6 +476,7 @@ Item {
                         font.capitalization: Font.MixedCase
                         highlighted: activeFocus ? true : false
                         anchors.right: parent.right
+                        enabled: !isLoadingCache
                         Accessible.role: Accessible.Button
                         Accessible.name: text
                         KeyNavigation.tab: companiesText

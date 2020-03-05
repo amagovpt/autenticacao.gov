@@ -2309,7 +2309,7 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth) {
         }
     }
 
-    emit signalEntityAttributesLoaded(attribute_list);
+    emit signalEntityAttributesLoaded(attribute_list, false);
 }
 
 
@@ -2371,7 +2371,7 @@ void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
         }
     }
 
-    emit signalCompanyAttributesLoaded(attribute_list);
+    emit signalCompanyAttributesLoaded(attribute_list, false);
 }
 
 
@@ -2413,9 +2413,9 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
         }
     }
     if (scapAttrType == ScapAttrEntities)
-        emit signalEntityAttributesLoaded(attribute_list);
+        emit signalEntityAttributesLoaded(attribute_list, true);
     else if (scapAttrType == ScapAttrCompanies)
-        emit signalCompanyAttributesLoaded(attribute_list);
+        emit signalCompanyAttributesLoaded(attribute_list, true);
     else if (scapAttrType == ScapAttrAll)
         emit signalAttributesLoaded(attribute_list);
 }

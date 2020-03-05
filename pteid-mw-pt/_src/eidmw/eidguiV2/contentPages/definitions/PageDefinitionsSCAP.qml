@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
@@ -23,6 +23,7 @@ PageDefinitionsSCAPForm {
     property string popupMsg: ""
     property bool isCardPresent: false
     property bool isLoadingAttributes: false
+    property bool isLoadingCache: false
     property bool isTabSelected: true
 
     Keys.onRightPressed: {
@@ -69,7 +70,10 @@ PageDefinitionsSCAPForm {
             console.log("Definitions SCAP Signature --> Data Changed")
             propertyBusyIndicator.running = false
             isCardPresent = true
-            propertyButtonLoadEntityAttributes.enabled = isCardPresent && isAnyEntitySelected()
+            propertyButtonLoadEntityAttributes.enabled =
+                    !isLoadingCache && isCardPresent && isAnyEntitySelected()
+            propertyButtonLoadCompanyAttributes.enabled =
+                    !isLoadingCache && isCardPresent
         }
         onSignalCardAccessError: {
             console.log("Definitions SCAP Signature --> onSignalCardAccessError")
@@ -94,7 +98,10 @@ PageDefinitionsSCAPForm {
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR") + controler.autoTr
             }
-            propertyButtonLoadEntityAttributes.enabled = isCardPresent && isAnyEntitySelected()
+            propertyButtonLoadEntityAttributes.enabled =
+                    !isLoadingCache && isCardPresent && isAnyEntitySelected()
+            propertyButtonLoadCompanyAttributes.enabled =
+                    !isLoadingCache && isCardPresent
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             propertyBusyIndicatorAttributes.running = false
             propertyBusyIndicator.running = false
@@ -117,7 +124,8 @@ PageDefinitionsSCAPForm {
             else{
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN") + controler.autoTr
             }
-            propertyButtonLoadEntityAttributes.enabled = isCardPresent && isAnyEntitySelected()
+            propertyButtonLoadEntityAttributes.enabled =
+                    !isLoadingCache && isCardPresent && isAnyEntitySelected()
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalSCAPDefinitionsServiceFail: {
@@ -196,6 +204,7 @@ PageDefinitionsSCAPForm {
 
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             // Load attributes from cache (Entities, ShortDescription)
+            isLoadingCache = true
             gapi.startLoadingAttributesFromCache(GAPI.ScapAttrEntities,
                                                  GAPI.ScapAttrDescriptionShort)
             propertyBusyIndicator.running = false
@@ -254,6 +263,7 @@ PageDefinitionsSCAPForm {
             }
 
             // Load attributes from cache (Entities, ShortDescription)
+            isLoadingCache = true
             gapi.startLoadingAttributesFromCache(GAPI.ScapAttrEntities,
                                                  GAPI.ScapAttrDescriptionShort)
             propertyBusyIndicator.running = false
@@ -300,8 +310,9 @@ PageDefinitionsSCAPForm {
         }
         onSignalCompanyAttributesLoaded: {
             console.log("Definitions SCAP - Signal SCAP company attributes loaded")
-            if (isLoadingAttributes) {
-                isLoadingAttributes = false
+            if(isFromCache){
+                isLoadingCache = false
+            } else {
                 var titlePopup = qsTranslate("GAPI","STR_POPUP_SUCESS")
                 var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_LOADED")
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
@@ -458,8 +469,10 @@ PageDefinitionsSCAPForm {
                 anchors.top: parent.top
                 onCheckedChanged: {
                     entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
-                    propertyButtonLoadEntityAttributes.enabled = isAnyEntitySelected() && isCardPresent
-                    propertyButtonLoadEntityAttributesOAuth.enabled = isAnyEntitySelected()
+                    propertyButtonLoadEntityAttributes.enabled =
+                            !isLoadingCache && isCardPresent && isAnyEntitySelected()
+                    propertyButtonLoadEntityAttributesOAuth.enabled =
+                            !isLoadingCache && isAnyEntitySelected()
                     propertyListViewEntities.currentIndex = index
                 }
                 onFocusChanged: {
@@ -767,6 +780,9 @@ PageDefinitionsSCAPForm {
     propertyBar{
         onCurrentIndexChanged: {
             propertyStackLayout.currentIndex = propertyBar.currentIndex
+            if(propertyStackLayout.currentIndex == 0
+                    && entityAttributesModel.count == 0)
+                gapi.startGettingEntities()
         }
     }
     Component.onCompleted: {

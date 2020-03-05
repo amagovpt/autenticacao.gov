@@ -440,8 +440,8 @@ signals:
     void signalSCAPServiceTimeout();
     void signalSCAPPingFail();
     void signalSCAPPingSuccess();
-    void signalCompanyAttributesLoaded(const QList<QString> attribute_list);
-    void signalEntityAttributesLoaded(const QList<QString> attribute_list);
+    void signalCompanyAttributesLoaded(const QList<QString> attribute_list, bool isFromCache);
+    void signalEntityAttributesLoaded(const QList<QString> attribute_list, bool isFromCache);
     void signalAttributesLoaded(const QList<QString> attribute_list);
     void signalCompanyAttributesLoadedError();
     void signalEntityAttributesLoadedError();
