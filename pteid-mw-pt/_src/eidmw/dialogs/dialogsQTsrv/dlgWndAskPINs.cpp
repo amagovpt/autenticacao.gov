@@ -71,9 +71,6 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 
 	QString Title;
 
-
-    this->setWindowIcon( QIcon( ":/Resources/ICO_CARD_EID_PLAIN_16x16.png" ) );
-
     if (PINName.contains("PUK"))
     {
         Title+= QString::fromWCharArray(GETSTRING_DLG(Unblock));

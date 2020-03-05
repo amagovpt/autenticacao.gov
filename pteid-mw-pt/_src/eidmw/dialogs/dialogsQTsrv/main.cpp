@@ -609,16 +609,8 @@ int main(int argc, char *argv[])
 							break;
 						case DLG_PIN_OP_CHANGE:
 							qsMessage = GETQSTRING_DLG(ChangeYourPin);
-							qsMessage += " \"";
-							if( !qsPinName.isEmpty() )
-							{
-								qsMessage += qsPinName;
-							}
-							else
-							{
-								qsMessage += GETQSTRING_DLG(Pin);
-							}
-							qsMessage += "\" ";
+							qsMessage += " ";
+
 							qsMessage += GETQSTRING_DLG(OnTheReader);
 							if(!qsReader.isEmpty())
 							{

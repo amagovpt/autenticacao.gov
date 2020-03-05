@@ -50,7 +50,6 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 
 	QString Title;
 
-	this->setWindowIcon( QIcon( ":/Resources/ICO_CARD_EID_PLAIN_16x16.png" ) );
 /*
 	if( PinPusage == DLG_PIN_SIGN )
 	{
@@ -90,13 +89,6 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 	ui.btnCancel->setText( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
 	ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
     ui.btnCancel->setStyleSheet("QPushButton {background-color: #D6D7D7; color: #333333;}");
-
-
-    /*if( PinPusage == DLG_PIN_SIGN )
-		this->setStyleSheet("background-image: url(:/Resources/bg_SignaturePin.png);");
-	else
-		this->setStyleSheet("background-image: url(:/Resources/bg_AuthenticationPin.png);");
-        */
 
 	m_ulPinMinLen = pinInfo.ulMinLen;
 	m_ulPinMaxLen = pinInfo.ulMaxLen;

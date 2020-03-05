@@ -38,15 +38,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 	ui.setupUi(this);
     setFixedSize(417, 259);
 
-    /*if(PINName.contains("Assinatura", Qt::CaseInsensitive))
-        this->setStyleSheet("background-image: url(:/Resources/bg_SignaturePin.png);");
-    else
-        this->setStyleSheet("background-image: url(:/Resources/bg_AuthenticationPin.png);");
-        */
-
 	QString Title="";
-
-	this->setWindowIcon( QIcon(":/Resources/ICO_CARD_EID_PLAIN_16x16.png") );
 
     if (operation == DLG_PIN_OP_CHANGE)
         Title+= QString::fromWCharArray(GETSTRING_DLG(ChangeYourPin));
@@ -61,12 +53,11 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
     parent->setWindowFlags(Qt::Window | Qt::FramelessWindowHint );
 
     Type_WndGeometry WndGeometry;
-    if ( getWndCenterPos( pParentWndGeometry
-                        , QApplication::desktop()->width(), QApplication::desktop()->height()
-                        , this->width(), this->height()
-                        , &WndGeometry ) ){
-        parent->move( WndGeometry.x, WndGeometry.y );
-    }/* if ( getWndCenterPos( pParentWndGeometry, ... ) ) */
+    if ( getWndCenterPos( pParentWndGeometry,
+                          QApplication::desktop()->width(), QApplication::desktop()->height(),
+                          this->width(), this->height(), &WndGeometry ) ) {
+        parent->move(WndGeometry.x, WndGeometry.y);
+    }
 
 	QString tmpHeader;
 	
@@ -74,7 +65,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
 
     ui.label_2->setText( tmpHeader );
     ui.label_2->setAccessibleName( tmpHeader );
-    ui.label_2->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt; }");
+    ui.label_2->setStyleSheet("QLabel { color : #3C5DBC; font-size:14pt; font-weight:600 }");
     ui.label->wordWrap();
 
     QString label;
@@ -84,12 +75,12 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
     }
     else
     {
-    	label = QString::fromWCharArray(GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader));
+    	label = Message;
     }
 
     ui.label->setText(label);
     ui.label->setAccessibleName(label);
-    ui.label->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt; }");
+    ui.label->setStyleSheet("QLabel { color : #3C5DBC; font-size:10pt; }");
 	m_ulHandle = ulHandle;
 
     QString labelDisablePinpad = QString::fromWCharArray(GETSTRING_DLG(PinpadCanBeDisabled));
