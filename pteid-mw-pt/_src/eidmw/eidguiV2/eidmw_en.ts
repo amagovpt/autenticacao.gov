@@ -786,7 +786,7 @@
     <message>
         <location filename="MainMenuModel.qml" line="74"/>
         <source>STR_MENU_PIN_CODES</source>
-        <translation>Pin codes</translation>
+        <translation>PIN codes</translation>
     </message>
 </context>
 <context>
@@ -2906,7 +2906,7 @@
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="529"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="704"/>
         <source>STR_POPUP_CARD_REMAIN</source>
-        <translation>Remain</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="316"/>
@@ -2920,7 +2920,7 @@
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="531"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="706"/>
         <source>STR_POPUP_CARD_TRIES</source>
-        <translation>tries.</translation>
+        <translation>tries left.</translation>
     </message>
     <message>
         <location filename="contentPages/card/PageCardPrint.qml" line="259"/>
