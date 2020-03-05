@@ -744,6 +744,7 @@ PageDefinitionsSCAPForm {
     propertyButtonRemoveCompanyAttributes {
         onClicked: {
             console.log("propertyButtonRemoveCompanyAttributes clicked!")
+            isLoadingAttributes = isLoadingCache = false
             companyAttributesModel.clear()
             entityAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
@@ -756,6 +757,7 @@ PageDefinitionsSCAPForm {
     propertyButtonRemoveEntityAttributes {
         onClicked: {
             console.log("propertyButtonRemoveEntityAttributes clicked!")
+            isLoadingAttributes = isLoadingCache = false
             companyAttributesModel.clear()
             entityAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
@@ -781,7 +783,8 @@ PageDefinitionsSCAPForm {
         onCurrentIndexChanged: {
             propertyStackLayout.currentIndex = propertyBar.currentIndex
             if(propertyStackLayout.currentIndex == 0
-                    && entityAttributesModel.count == 0)
+                    && entityAttributesModel.count == 0
+                    || isLoadingCache == true)
                 gapi.startGettingEntities()
         }
     }
