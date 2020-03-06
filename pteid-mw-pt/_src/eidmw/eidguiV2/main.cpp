@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 	//QQuickStyle::setStyle("Universal");
 	//QQuickStyle::setStyle("Default");
 
-	QQmlApplicationEngine engine;
+    QQmlApplicationEngine *engine = new QQmlApplicationEngine();
 
     PTEID_Config sam_server(PTEID_PARAM_GENERAL_SAM_SERVER);
 
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
     }
 
     // Embedding C++ Objects into QML with Context Properties
-    QQmlContext* ctx = engine.rootContext();
+    QQmlContext* ctx = engine->rootContext();
     ctx->setContextProperty("gapi", &gapi);
     ctx->setContextProperty("controler", &controller);
     ctx->setContextProperty("image_provider_pdf", gapi.image_provider_pdf);
@@ -92,15 +92,15 @@ int main(int argc, char *argv[])
     qmlRegisterType<FileSaveDialog>("eidguiV2", 1, 0, "FileSaveDialog");
 
 
-    engine.addImageProvider("myimageprovider", gapi.buildImageProvider());
-    engine.addImageProvider("pdfpreview_imageprovider", gapi.buildPdfImageProvider());
+    engine->addImageProvider("myimageprovider", gapi.buildImageProvider());
+    engine->addImageProvider("pdfpreview_imageprovider", gapi.buildPdfImageProvider());
 
     // Load translation files
     gapi.initTranslation();
     controller.initTranslation();
 
     // Load main QML file
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine->load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     // Each starting instance will make the running instance to restore.
     QObject::connect(
