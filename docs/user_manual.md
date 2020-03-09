@@ -1309,7 +1309,8 @@ abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
 
   - **Tipo**: Número (0 / 1)
   - **Descrição**:  Permitir cache do PIN de autenticação via minidriver.
-  - **Valor por omissão**: 0 (Não)
+  - **Valor por omissão**: 0 (Não). Para versões anteriores à 3.1.0 o valor por omissão é 1.
+  - **Configurável a partir da versão**: 3.1.0
 
 ---
 
