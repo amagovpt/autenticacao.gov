@@ -37,7 +37,8 @@ SOURCES += main.cpp \
     singleapplication.cpp \
     cJSON_1_7_12.c \
     AttributeFactory.cpp \
-    OAuthAttributes.cpp
+    OAuthAttributes.cpp \
+    concurrent.cpp
 
 INCLUDEPATH += /usr/include/poppler/qt5/
 INCLUDEPATH += ../CMD/services
@@ -128,4 +129,5 @@ HEADERS += \
     singleapplication_p.h \
     cJSON_1_7_12.h \
     AttributeFactory.h \
-    OAuthAttributes.h
+    OAuthAttributes.h \
+    concurrent.h
