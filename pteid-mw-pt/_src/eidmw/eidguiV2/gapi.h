@@ -225,7 +225,7 @@ public:
     enum AutoUpdateType {AutoUpdateNoExist, AutoUpdateApp, AutoUpdateCerts };
 
     enum ScapPdfSignResult { ScapTimeOutError, ScapGenericError, ScapAttributesExpiredError, ScapZeroAttributesError,
-                             ScapNotValidAttributesError, ScapClockError, ScapSecretKeyError, ScapSucess };
+                             ScapNotValidAttributesError, ScapClockError, ScapSecretKeyError, ScapMultiEntityError, ScapSucess };
 
     enum ScapAttrType {ScapAttrEntities, ScapAttrCompanies, ScapAttrAll};
     enum ScapAttrDescription {ScapAttrDescriptionShort, ScapAttrDescriptionLong};
@@ -440,8 +440,8 @@ signals:
     void signalSCAPServiceTimeout();
     void signalSCAPPingFail();
     void signalSCAPPingSuccess();
-    void signalCompanyAttributesLoaded(const QList<QString> attribute_list, bool isFromCache);
-    void signalEntityAttributesLoaded(const QList<QString> attribute_list, bool isFromCache);
+    void signalCompanyAttributesLoaded(const QList<QString> attribute_list);
+    void signalEntityAttributesLoaded(const QList<QString> attribute_list);
     void signalAttributesLoaded(const QList<QString> attribute_list);
     void signalCompanyAttributesLoadedError();
     void signalEntityAttributesLoadedError();

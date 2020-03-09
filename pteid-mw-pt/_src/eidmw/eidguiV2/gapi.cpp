@@ -2290,26 +2290,7 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth) {
         return;
     }
 
-    for (uint i = 0; i < attributes.size(); i++) {
-
-        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
-        std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), false);
-
-        if (childAttributes.size() == 0) {
-            qDebug() << "Zero Entities child attributes in AttributeResponseValues!";
-            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Zero Entities child attributes in AttributeResponseValues!");
-            emit signalEntityAttributesLoadedError();
-            return;
-        }
-
-        for (uint j = 0; j < childAttributes.size(); j = j + 2) {
-            attribute_list.append(QString::fromStdString(attrSupplier));
-            attribute_list.append(QString::fromStdString(childAttributes.at(j)));
-            attribute_list.append(QString::fromStdString(childAttributes.at(j + 1)));
-        }
-    }
-
-    emit signalEntityAttributesLoaded(attribute_list, false);
+    getSCAPAttributesFromCache(false,false);
 }
 
 
@@ -2346,32 +2327,7 @@ void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
         return;
     }
 
-    for (uint i = 0; i < attributes.size(); i++)
-    {
-        //Skip malformed AttributeResponseValues element
-        if (attributes.at(i)->ATTRSupplier == NULL) {
-            continue;
-        }
-        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
-        std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), false);
-
-        /*PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Attribute from supplier: %s containing %d child attributes", attrSupplier.c_str(), childAttributes.size());*/
-
-        if (childAttributes.size() == 0) {
-            qDebug() << "Zero Company child attributes in AttributeResponseValues!";
-            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Zero Company child attributes in AttributeResponseValues");
-            emit signalCompanyAttributesLoadedError();
-            return;
-        }
-
-        for (uint j = 0; j < childAttributes.size(); j = j + 2) {
-            attribute_list.append(QString::fromStdString(attrSupplier));
-            attribute_list.append(QString::fromStdString(childAttributes.at(j)));
-            attribute_list.append(QString::fromStdString(childAttributes.at(j + 1)));
-        }
-    }
-
-    emit signalCompanyAttributesLoaded(attribute_list, false);
+    getSCAPAttributesFromCache(true,false);
 }
 
 
@@ -2385,7 +2341,6 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
         return;
     }
 
-    PTEID_EIDCard * card = NULL;
     std::vector<ns2__AttributesType *> attributes;
     QList<QString> attribute_list;
 
@@ -2413,9 +2368,9 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
         }
     }
     if (scapAttrType == ScapAttrEntities)
-        emit signalEntityAttributesLoaded(attribute_list, true);
+        emit signalEntityAttributesLoaded(attribute_list);
     else if (scapAttrType == ScapAttrCompanies)
-        emit signalCompanyAttributesLoaded(attribute_list, true);
+        emit signalCompanyAttributesLoaded(attribute_list);
     else if (scapAttrType == ScapAttrAll)
         emit signalAttributesLoaded(attribute_list);
 }

@@ -261,7 +261,8 @@ int http_post_header(struct soap *soap, const char *key, const char *val)
     return soap_send_raw(soap, "\r\n", 2);
 }
 
-std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eIDMW::PTEID_EIDCard *card, std::vector<int> supplier_ids, bool useOAuth) {
+std::vector<ns2__AttributesType *> ScapServices::getAttributes(
+        GAPI *parent, eIDMW::PTEID_EIDCard *card, std::vector<int> supplier_ids, bool useOAuth) {
 
     std::vector<ns2__AttributesType *> result;
     ScapSettings settings;
@@ -546,7 +547,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
 
         unsigned int resp_size = attr_response.AttributeResponseValues.size();
 
-        //std::cerr << "Got response from converting XML to object. Size: " << resp_size  << std::endl;
+        std::cerr << "Got response from converting XML to object. Size: " << resp_size  << std::endl;
         
         if (resp_size > 0) {
 
@@ -555,37 +556,62 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
                 settings.setSecretKey(*attr_response.SecretKey, idNumber);
             }
 
-            ns2__AttributesType * parentAttribute = attr_response.AttributeResponseValues.at(0);
-            std::string resultCode = parentAttribute->ResponseResult->ResultCode;
+            int getAttr = SCAP_ATTRIBUTES_OK;
+            bool getAttrHaveChilds = false;
 
-            int resultCodeValue = atoi(resultCode.c_str());
+            for(int k = 0; k < (int)resp_size; k++){
+                ns2__AttributesType * parentAttribute = attr_response.AttributeResponseValues.at((unsigned long)k);
+                std::string resultCode = parentAttribute->ResponseResult->ResultCode;
 
-            if (resultCodeValue != SCAP_ATTRIBUTES_OK)
-            {
-                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                                 "Error in getAttributes(): Result Code: %d", resultCodeValue);
-                qDebug() << "Error in getAttributes(): Result Code: " << resultCodeValue ;
+                int resultCodeValue = atoi(resultCode.c_str());
 
-                if(resultCodeValue == SCAP_ATTRIBUTES_EXPIRED){
-                    parent->signalSCAPDefinitionsServiceFail(GAPI::ScapAttributesExpiredError, allEnterprises);
-                }else if(resultCodeValue == SCAP_ZERO_ATTRIBUTES){
-                    parent->signalSCAPDefinitionsServiceFail(GAPI::ScapZeroAttributesError, allEnterprises);
-                }else if(resultCodeValue == SCAP_ATTRIBUTES_NOT_VALID){
-                    parent->signalSCAPDefinitionsServiceFail(GAPI::ScapNotValidAttributesError, allEnterprises);
-                }else{
-                    parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
+                if (resultCodeValue != SCAP_ATTRIBUTES_OK)
+                {
+                    eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                                     "Error in getAttributes(): Result Code: %d", resultCodeValue);
+                    qDebug() << "Error in getAttributes(): Result Code: " << resultCodeValue ;
+                    getAttr = resultCodeValue;
+                } else {
+                    std::vector<ns5__SignatureType *> childs = parentAttribute->SignedAttributes->ns3__SignatureAttribute;
+                    if (parentAttribute->SignedAttributes == NULL || childs.size() == 0) {
+                        qDebug() << "Zero child attributes in AttributeResponseValues!";
+                        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                                  "Zero child attributes in AttributeResponseValues!");
+                    } else {
+                        qDebug() << "getAttributes(): Attributes response!";
+                        getAttrHaveChilds = true;
+                    }
                 }
-                //FIXME: mem leak
-                //soap_destroy(&soap2);
-                //soap_end(&soap2);
-                //soap_done(&soap2);
-                return result;
             }
 
-            std::vector<ns5__SignatureType *> childs = parentAttribute->SignedAttributes->ns3__SignatureAttribute;
-            if (parentAttribute->SignedAttributes == NULL || childs.size() == 0) {
-                qDebug() << "getAttributes(): Empty attributes response!";
-                parent->signalCompanyAttributesLoadedError();
+            if(getAttr != SCAP_ATTRIBUTES_OK){
+                if(resp_size > 1 && getAttrHaveChilds == true){
+                    // Keep going and cache the file. At least loaded one attribute.
+                    parent->signalSCAPDefinitionsServiceFail(GAPI::ScapMultiEntityError, allEnterprises);
+                }else{
+                    if(getAttr == SCAP_ATTRIBUTES_EXPIRED){
+                        parent->signalSCAPDefinitionsServiceFail(GAPI::ScapAttributesExpiredError, allEnterprises);
+                    }else if(getAttr == SCAP_ZERO_ATTRIBUTES){
+                        parent->signalSCAPDefinitionsServiceFail(GAPI::ScapZeroAttributesError, allEnterprises);
+                    }else if(getAttr == SCAP_ATTRIBUTES_NOT_VALID){
+                        parent->signalSCAPDefinitionsServiceFail(GAPI::ScapNotValidAttributesError, allEnterprises);
+                    }else{
+                        parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
+                    }
+                    //FIXME: mem leak
+                    //soap_destroy(&soap2);
+                    //soap_end(&soap2);
+                    //soap_done(&soap2);
+                    return result;
+                }
+            }
+
+            if(getAttrHaveChilds == false){
+                if(allEnterprises) {
+                    parent->signalCompanyAttributesLoadedError();
+                }else{
+                    parent->signalEntityAttributesLoadedError();
+                }
                 //FIXME: mem leak
                 //soap_destroy(&soap2);
                 //soap_end(&soap2);
@@ -605,7 +631,6 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(GAPI *parent, eID
 				parent->signalCacheNotWritable();
             }
         } else {
-
             if(allEnterprises) {
                 parent->signalCompanyAttributesLoadedError();
             }else{

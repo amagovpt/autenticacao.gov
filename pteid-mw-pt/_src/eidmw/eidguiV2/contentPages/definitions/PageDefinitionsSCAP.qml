@@ -158,6 +158,7 @@ PageDefinitionsSCAPForm {
                 var attributeList = []
                 var totalCount = 0
                 var count = 0
+                popupMsg = ""
 
                 for (var i = 0; i < entityAttributesModel.count; i++){
                     if(entityAttributesModel.get(i).checkBoxAttr == true){
@@ -172,7 +173,7 @@ PageDefinitionsSCAPForm {
                             if(count == totalCount-1){
                                 popupMsg += " e "
                             }else{
-                                popupMsg += " , "
+                                popupMsg += ", "
                             }
                         }
                         popupMsg += entityAttributesModel.get(i).entityName
@@ -180,18 +181,26 @@ PageDefinitionsSCAPForm {
                     }
                 }
                 console.log(popupMsg)
-                if(pdfsignresult == GAPI.ScapAttributesExpiredError){
+                if(pdfsignresult == GAPI.ScapMultiEntityError){
+                    titlePopup = qsTranslate("PageDefinitionsSCAP","STR_WARNING")
+                    bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_MULTI_ENTITIES_FIRST")
+                            + " " + popupMsg + " "
+                            + qsTranslate("PageDefinitionsSCAP","STR_SCAP_MULTI_ENTITIES_SECOND")
+                            + "<br><br>"
+                            + qsTranslate("PageDefinitionsSCAP","STR_SCAP_MULTI_ENTITIES_THIRD")
+                }else if(pdfsignresult == GAPI.ScapAttributesExpiredError){
                     bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_FIRST")
                             + " " + popupMsg + " "
                             + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_SECOND")
-                            + "\n\n"
+                            + "<br><br>"
                             + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_THIRD")
                             + " " + popupMsg + "."
                 }else if(pdfsignresult == GAPI.ScapZeroAttributesError){
                     console.log("ScapZeroAttributesError")
                     bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST")
                             + " " + popupMsg + "."
-                            + "\n\n" + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND")
+                            + "<br><br>"
+                            + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND")
                             + " " + popupMsg + "."
                 }else {
                     console.log("ScapGenericError")
@@ -271,6 +280,7 @@ PageDefinitionsSCAPForm {
         }
         onSignalEntityAttributesLoaded:{
             console.log("Definitions SCAP - Signal SCAP Entity attributes loaded")
+            console.log(attribute_list)
             if(entityAttributesModel.count == 0){
                 for(var i = 0; i < attribute_list.length; i=i+3)
                 {
@@ -286,7 +296,13 @@ PageDefinitionsSCAPForm {
                 {
                     for (var j = 0; j < entityAttributesModel.count; j++){
                         if(entityAttributesModel.get(j).entityName === attribute_list[i]){
-                            entityAttributesModel.set(j, {"entityName": attribute_list[i], "attribute":""})
+                            entityAttributesModel.set(j, {
+                                "entityName": attribute_list[i],
+                                "attribute":""})
+                        } else {
+                            entityAttributesModel.set(j, {
+                                "entityName": entityAttributesModel.get(j).entityName,
+                                "attribute":""})
                         }
                     }
                 }
@@ -310,13 +326,7 @@ PageDefinitionsSCAPForm {
         }
         onSignalCompanyAttributesLoaded: {
             console.log("Definitions SCAP - Signal SCAP company attributes loaded")
-            if(isFromCache){
-                isLoadingCache = false
-            } else {
-                var titlePopup = qsTranslate("GAPI","STR_POPUP_SUCESS")
-                var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_LOADED")
-                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-            }
+            isLoadingCache = false
             companyAttributesModel.clear()
             for(var i = 0; i < attribute_list.length; i=i+3)
             {
