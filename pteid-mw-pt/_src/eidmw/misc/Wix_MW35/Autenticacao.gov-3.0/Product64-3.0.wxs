@@ -52,6 +52,7 @@
 		<WixVariable Id="WixUILicenseRtf" Value="..\..\..\misc\licenses\License_pt.rtf" />
 		<WixVariable Id="WixUIBannerBmp" Value="..\..\..\misc\Wix_MW35\new_banner.bmp" />
 		<WixVariable Id="WixUIDialogBmp" Value="..\..\..\misc\Wix_MW35\dlgbmp.bmp" />
+		<WixVariable Id="WixUISupportPerUser" Value="0" />
 
 		<Condition Message="!(loc.MinOs)">
       <![CDATA[
@@ -92,7 +93,7 @@
 
 			<Directory Id="ProgramFiles64Folder">
       
-				<Directory Id="APPLICATIONROOTFOLDER" Name="Portugal Identity Card">
+				<Directory Id="APPLICATIONFOLDER" Name="Portugal Identity Card">
           
           <Directory Id="EIDSTORE" Name="eidstore">
 						<Directory Id="CERTSDIR" Name="certs"/>
@@ -237,12 +238,12 @@
 				</Component>
 			</DirectoryRef>
 
-			<DirectoryRef Id="APPLICATIONROOTFOLDER">
+			<DirectoryRef Id="APPLICATIONFOLDER">
 
 				<Component Id="RootFolder" Guid="{2FB5D279-50BD-49ed-98D9-3D043520F450}">
 					<CreateFolder/>
-					<Environment Id="PATH" Action="set" Part="last" Permanent="no" System="yes" Name="PATH" Value="[APPLICATIONROOTFOLDER]"/>
-					<Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[APPLICATIONROOTFOLDER]"/>
+					<Environment Id="PATH" Action="set" Part="last" Permanent="no" System="yes" Name="PATH" Value="[APPLICATIONFOLDER]"/>
+					<Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[APPLICATIONFOLDER]"/>
 				</Component>
 				
 				<Component Id="CACerts" Guid="{b0fb28de-54ac-45b0-a565-1dce90ffe080}">
@@ -478,15 +479,15 @@
 
 						<RegistryKey Key="general" Action="createAndRemoveOnUninstall">
 							<RegistryValue Type="string" Name="language" Value="nl"/>
-							<RegistryValue Type="string" Name="install_dirname" Value="[APPLICATIONROOTFOLDER]"/>
-							<RegistryValue Type="string" Name="certs_dir" Value="[APPLICATIONROOTFOLDER]eidstore\certs"/>
-            	<RegistryValue Type="string" Name="certs_dir_test" Value="[APPLICATIONROOTFOLDER]eidstore\certs_test"/>
-							<RegistryValue Type="string" Name="web_dir" Value="[APPLICATIONROOTFOLDER]web"/>
+							<RegistryValue Type="string" Name="install_dirname" Value="[APPLICATIONFOLDER]"/>
+							<RegistryValue Type="string" Name="certs_dir" Value="[APPLICATIONFOLDER]eidstore\certs"/>
+            	<RegistryValue Type="string" Name="certs_dir_test" Value="[APPLICATIONFOLDER]eidstore\certs_test"/>
+							<RegistryValue Type="string" Name="web_dir" Value="[APPLICATIONFOLDER]web"/>
 							<RegistryValue Type="integer" Name="show_java_apps" Value="0"/>
 						</RegistryKey>
 
 						<RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="string" Name="log_dirname" Value="[APPLICATIONROOTFOLDER]log"/>
+							<RegistryValue Type="string" Name="log_dirname" Value="[APPLICATIONFOLDER]log"/>
 						</RegistryKey>
 
 						<RegistryKey Key="configuretool" Action="createAndRemoveOnUninstall">
@@ -509,11 +510,11 @@
           <RegistryKey Root="HKLM" Key="SOFTWARE\PTEID">
             <RegistryKey Key="general" Action="createAndRemoveOnUninstall">
 							<RegistryValue Type="string" Name="language" Value="nl"/>
-							<RegistryValue Type="string" Name="install_dirname" Value="[APPLICATIONROOTFOLDER]"/>
-							<RegistryValue Type="string" Name="certs_dir" Value="[APPLICATIONROOTFOLDER]eidstore\certs"/>
+							<RegistryValue Type="string" Name="install_dirname" Value="[APPLICATIONFOLDER]"/>
+							<RegistryValue Type="string" Name="certs_dir" Value="[APPLICATIONFOLDER]eidstore\certs"/>
 						</RegistryKey>
             <RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
-							<RegistryValue Type="string" Name="log_dirname" Value="[APPLICATIONROOTFOLDER]log"/>
+							<RegistryValue Type="string" Name="log_dirname" Value="[APPLICATIONFOLDER]log"/>
 						</RegistryKey>
           	<RegistryKey Key="certificatecache" Action="createAndRemoveOnUninstall">
 							<RegistryValue Type="string" Name="cert_cachefile" Value="[AppDataFolder].pteid-ng\.cache.csc"/>
@@ -534,6 +535,7 @@
 					 Description="!(loc.PteidRuntimeDesc)"
 					 Absent="disallow"
 					 Level="1"
+					 AllowAdvertise="no"
              >
 
 				<Feature Id="VCRedist" Title="$(var.VCRT_TITLE)" AllowAdvertise="no" Display="hidden" Level="1">
@@ -557,7 +559,6 @@
 				<ComponentRef Id="DirectoryCache"/>
 				<ComponentRef Id="License"/>
 				<ComponentRef Id="LogDir"/>
-        <ComponentGroupRef Id="qmlAppComponentGroup"/>
         <!-- System32 -->
 
 				<ComponentRef Id="Runtime35"/>
@@ -579,8 +580,10 @@
 				<Feature Id="GUI"
 						  Title="!(loc.PteidGui)"
 						  Description="!(loc.PteidGuiDescr)"
-						  Level="1">
+						  Level="1"
+						  AllowAdvertise="no">
          
+                    <ComponentGroupRef Id="qmlAppComponentGroup"/>
                     <ComponentRef Id="Libpng"/>
                     <ComponentRef Id="Libpng_64"/>
             
@@ -608,13 +611,14 @@
 						  Title="!(loc.Crypto)"
 						  Description="!(loc.CryptoDescr)"
 						  Level="1"
+						  AllowAdvertise="no"
                 >
 					<ComponentRef Id="SCardSvrService"/>
 					<ComponentRef Id="pkcs11"/>
 					<ComponentRef Id="pkcs11_64"/>
 
 					<!-- Shortcuts -->
-					<Feature Id="Install_Minidriver" Level="0" Title="!(loc.Minidriver)" Description="!(loc.MinidriverDescr)">
+					<Feature Id="Install_Minidriver" Level="0" Title="!(loc.Minidriver)" Description="!(loc.MinidriverDescr)" AllowAdvertise="no">
 						<ComponentRef Id="pteidmdrv"/>
 						<ComponentRef Id="CertPropService"/>
             <ComponentRef Id="pteidmdrvsystem32"/>
@@ -643,18 +647,29 @@
 			Return="ignore"
 			Execute="deferred"/>
 
+    <!-- WixUI_Advanced defaults to "[ProgramFilesFolder][ApplicationFolderName]" which is wrong for x64 applications.
+    Fix the path with an override. https://github.com/wixtoolset/issues/issues/5908 -->
+    <CustomAction Id="WixSetDefaultPerMachineFolderPerArch" Property="WixPerMachineFolder" Value="[ProgramFiles64Folder][ApplicationFolderName]" Execute="immediate"/>
+    <InstallExecuteSequence>
+      <Custom Action="WixSetDefaultPerMachineFolderPerArch" Before="WixSetPerMachineFolder" />
+    </InstallExecuteSequence>
+    <InstallUISequence>
+      <Custom Action="WixSetDefaultPerMachineFolderPerArch" Before="WixSetPerMachineFolder" />
+    </InstallUISequence>
+    
 			<UI>
-				<Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTFOLDER" />
-        <UIRef Id="WixUI_InstallDir" />
+				<Property Id="ApplicationFolderName" Value="Portugal Identity Card" />
+        <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
+        <UIRef Id="WixUI_Advanced" />
         <UIRef Id="WixUI_ErrorProgressText" />
       </UI>
 
-			<CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[APPLICATIONROOTFOLDER]" />
+			<CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" />
 
 			<CustomAction Id="SetCacheDirHidden"
 							Impersonate="no"
 							BinaryKey="MarkHidden"
-							ExeCommand="&quot;[APPLICATIONROOTFOLDER].cache&quot;"
+							ExeCommand="&quot;[APPLICATIONFOLDER].cache&quot;"
 							Execute="deferred"
 							Return="asyncNoWait"
 					/>
@@ -662,17 +677,6 @@
 			<CustomAction Id="IsPrivileged" Error="!(loc.AdminNeeded)" />
 			<CustomAction Id="PreventDowngrading" Error="!(loc.NoDowngrade)" />
 			<Property Id="RUNDLLPATH" Value="C:\Windows\System32\rundll32.exe"> </Property>
-
-			<CustomAction
-			Id="MinidriverManualInstall"
-			Property="RUNDLLPATH"
-			ExeCommand="setupapi.dll,InstallHinfSection DefaultInstall.ntamd64 0 [APPLICATIONROOTFOLDER]\PTeID Minidriver\pteidmdrv.inf"
-					Impersonate="no"
-					Return="check"
-					Execute="deferred"
-					
-					/>
-
 
 			<CustomAction BinaryKey="cmdKspConfig" Execute="deferred" Return="check" Impersonate="no" ExeCommand="-register" Id="KSPRegister"/>
 			<CustomAction BinaryKey="cmdKspConfig" Execute="deferred" Return="check" Impersonate="no" ExeCommand="-unregister" Id="KSPUnregister"/>
@@ -684,7 +688,6 @@
 				<Custom Action="IsPrivileged" Before="LaunchConditions">Not Privileged</Custom>
 	      <Custom Action="SetCacheDirHidden"  After="InstallFiles">NOT Installed</Custom>
 	      <Custom Action="CleanMinidriverKeys" After="RemoveRegistryValues">NOT Installed</Custom>
-	      <Custom Action="MinidriverManualInstall" After="InstallFiles"> NOT Installed and VersionNT >= 601</Custom>
 	      <Custom Action="KSPRegister" After="InstallFiles">NOT Installed AND NOT REMOVE</Custom>
 	      <Custom Action="KSPUnregister" Before="InstallFinalize">(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")</Custom>
 	      <Custom Action="KSPRemoveCmdCerts" Before="InstallFinalize">(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")</Custom>

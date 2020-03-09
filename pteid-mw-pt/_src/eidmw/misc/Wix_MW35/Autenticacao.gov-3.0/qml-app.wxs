@@ -5,7 +5,7 @@
   <?define var.PTEID_QT_PRINTSUPPORT=$(env.PTEID_DIR_QT_5_X64)\plugins\printsupport\?>
   <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\VC9\Release\ ?>
     <Fragment>
-        <DirectoryRef Id="APPLICATIONROOTFOLDER">
+        <DirectoryRef Id="APPLICATIONFOLDER">
                 <Component Id="cmpCC914190102D9CDC82EA7078F7C9EBC4" Guid="{D3354F32-A827-4C36-8989-67BD0450E7B4}">
                     <File Id="fil980E5FBB643F571E77169394A9917ABF" KeyPath="yes" Source="$(var.QMLDIR)\D3Dcompiler_47.dll" />
                 </Component>
@@ -2612,14 +2612,14 @@
 			<Shortcut Id="eidguiV2StartMenuShortcut"
 							  Name="Autenticação.gov"
 							  Description="!(loc.PteidGuiDescr)"
-							  Target="[APPLICATIONROOTFOLDER]pteidguiV2.exe"
+							  Target="[APPLICATIONFOLDER]pteidguiV2.exe"
 							  WorkingDirectory="eidguiV2Dir"/>
 
 			<Shortcut Id="eidguiV2Shortcut"
                 Name="Autenticação.Gov"
                 Directory="DesktopFolder"
                 Description="!(loc.PteidGuiDescr)"
-                Target="[APPLICATIONROOTFOLDER]pteidguiV2.exe"
+                Target="[APPLICATIONFOLDER]pteidguiV2.exe"
                 WorkingDirectory="EIDGUIV2DIR"/>
           
 					<RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
@@ -2628,7 +2628,7 @@
 				
 		<Component Id="RegisterPteidAutoStart" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA6}">
           <RegistryKey Root="HKCU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run">
-            <RegistryValue Type="string" Name="pteid" Value="&quot;[APPLICATIONROOTFOLDER]pteidguiV2.exe&quot;"/>
+            <RegistryValue Type="string" Name="pteid" Value="&quot;[APPLICATIONFOLDER]pteidguiV2.exe&quot;"/>
           </RegistryKey>
         </Component>
 		

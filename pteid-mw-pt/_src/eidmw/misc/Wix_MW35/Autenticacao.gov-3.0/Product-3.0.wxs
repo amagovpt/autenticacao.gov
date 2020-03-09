@@ -53,6 +53,7 @@
     <WixVariable Id="WixUILicenseRtf" Value="..\..\..\misc\licenses\License_pt.rtf" />
     <WixVariable Id="WixUIBannerBmp" Value="..\..\..\misc\Wix_MW35\new_banner.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="..\..\..\misc\Wix_MW35\dlgbmp.bmp" />
+    <WixVariable Id="WixUISupportPerUser" Value="0" />
 
     <Condition Message="!(loc.MinOs)">
       <![CDATA[
@@ -95,7 +96,7 @@
       </Directory>
 
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="APPLICATIONROOTFOLDER" Name="Portugal Identity Card">
+        <Directory Id="APPLICATIONFOLDER" Name="Portugal Identity Card">
 
           <Directory Id="EIDSTORE" Name="eidstore">
             <Directory Id="CERTSDIR" Name="certs"/>
@@ -266,12 +267,12 @@
       </Component>
     </DirectoryRef>
 
-    <DirectoryRef Id="APPLICATIONROOTFOLDER">
+    <DirectoryRef Id="APPLICATIONFOLDER">
 
       <Component Id="RootFolder" Guid="{2FB5D279-50BD-49ED-98D9-3D043520F450}" KeyPath="yes">
         <CreateFolder/>
-        <Environment Id="PATH" Action="set" Part="last" Permanent="no" System="yes" Name="PATH" Value="[APPLICATIONROOTFOLDER]"/>
-        <Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[APPLICATIONROOTFOLDER]"/>
+        <Environment Id="PATH" Action="set" Part="last" Permanent="no" System="yes" Name="PATH" Value="[APPLICATIONFOLDER]"/>
+        <Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[APPLICATIONFOLDER]"/>
       </Component>
 
       <Component Id="CACerts" Guid="{b0fb28de-54ac-45b0-a565-1dce90ffe080}">
@@ -388,15 +389,15 @@
 
           <RegistryKey Key="general" Action="createAndRemoveOnUninstall">
             <RegistryValue Type="string" Name="language" Value="nl"/>
-            <RegistryValue Type="string" Name="install_dirname" Value="[APPLICATIONROOTFOLDER]"/>
-            <RegistryValue Type="string" Name="certs_dir" Value="[APPLICATIONROOTFOLDER]eidstore\certs"/>
-            <RegistryValue Type="string" Name="certs_dir_test" Value="[APPLICATIONROOTFOLDER]eidstore\certs_test"/>
-            <RegistryValue Type="string" Name="web_dir" Value="[APPLICATIONROOTFOLDER]web"/>
+            <RegistryValue Type="string" Name="install_dirname" Value="[APPLICATIONFOLDER]"/>
+            <RegistryValue Type="string" Name="certs_dir" Value="[APPLICATIONFOLDER]eidstore\certs"/>
+            <RegistryValue Type="string" Name="certs_dir_test" Value="[APPLICATIONFOLDER]eidstore\certs_test"/>
+            <RegistryValue Type="string" Name="web_dir" Value="[APPLICATIONFOLDER]web"/>
             <RegistryValue Type="integer" Name="show_java_apps" Value="0" />
           </RegistryKey>
 
           <RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
-            <RegistryValue Type="string" Name="log_dirname" Value="[APPLICATIONROOTFOLDER]log"/>
+            <RegistryValue Type="string" Name="log_dirname" Value="[APPLICATIONFOLDER]log"/>
           </RegistryKey>
 
           <RegistryKey Key="configuretool" Action="createAndRemoveOnUninstall">
@@ -421,6 +422,7 @@
              Description="!(loc.PteidRuntimeDesc)"
              Absent="disallow"
              Level="1"
+             AllowAdvertise="no"
              >
 
       <Feature Id="VCRedist" Title="$(var.VCRT_TITLE)" AllowAdvertise="no" Display="hidden" Level="1">
@@ -438,7 +440,6 @@
       <ComponentRef Id="CrlDir"/>
       <ComponentRef Id="HttpDir"/>
 
-      <ComponentGroupRef Id="qmlAppComponentGroup"/>
 
       <ComponentRef Id="DirectoryCache"/>
       <ComponentRef Id="License"/>
@@ -462,7 +463,9 @@
                 Title="!(loc.PteidGui)"
                 Description="!(loc.PteidGuiDescr)"
                 Level="1"
+                AllowAdvertise="no"
                 >
+        <ComponentGroupRef Id="qmlAppComponentGroup"/>
         <ComponentRef Id="Libpng"/>
         <ComponentRef Id="Openjpeg"/>
         <ComponentRef Id="Libzip"/>
@@ -479,11 +482,12 @@
       <Feature Id="Crypto"
                 Title="!(loc.Crypto)"
                 Description="!(loc.CryptoDescr)"
-                Level="1">
+                Level="1"
+                AllowAdvertise="no">
         <ComponentRef Id="SCardSvrService"/>
         <ComponentRef Id="pkcs11"/>
         <!-- Shortcuts -->
-        <Feature Id="Install_Minidriver" Title="!(loc.Minidriver)" Description="!(loc.MinidriverDescr)" Level="0">
+        <Feature Id="Install_Minidriver" Title="!(loc.Minidriver)" Description="!(loc.MinidriverDescr)" Level="0" AllowAdvertise="no">
           <ComponentRef Id="pteidmdrv"/>
           <ComponentRef Id="CertPropService"/>
           <ComponentRef Id="pteidmdrvsystem32"/>
@@ -495,10 +499,11 @@
     </Feature>
 
     <!--    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="!(loc.StartApp)" />-->
-
+  
     <UI>
-      <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTFOLDER" />
-      <UIRef Id="WixUI_InstallDir" />
+      <Property Id="ApplicationFolderName" Value="Portugal Identity Card" />
+      <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
+      <UIRef Id="WixUI_Advanced" />
       <UIRef Id="WixUI_ErrorProgressText" />
 
       <!--
@@ -507,12 +512,12 @@
 -->
     </UI>
 
-    <CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[APPLICATIONROOTFOLDER]" />
+    <CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" />
 
     <CustomAction Id="SetCacheDirHidden"
                   Impersonate="no"
                   BinaryKey="MarkHidden"
-                  ExeCommand="&quot;[APPLICATIONROOTFOLDER].cache&quot;"
+                  ExeCommand="&quot;[APPLICATIONFOLDER].cache&quot;"
                   Execute="deferred"
                   Return="asyncNoWait"
                   />
