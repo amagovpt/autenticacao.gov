@@ -168,11 +168,13 @@ PageCardPrintForm {
             var titlePopup = qsTr("STR_PRINT_CREATE_PDF")
             var bodyPopup = qsTr("STR_PRINT_CREATE_PDF_FAIL")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            propertyBusyIndicator.running = false
         }
         onSignalPrinterPrintSucess: {
             var titlePopup = qsTr("STR_PRINT_PRINTER")
             var bodyPopup = qsTr("STR_PRINT_PRINTER_SUCESS")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            propertyBusyIndicator.running = false
         }
         onSignalPrinterPrintFail: {
             console.log("got error on printer print failed "  + error_code)
@@ -185,6 +187,7 @@ PageCardPrintForm {
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
 
+            propertyBusyIndicator.running = false
         }
         onSignalCardDataChanged: {
             console.log("Data Card Print --> Data Changed")
@@ -280,6 +283,7 @@ PageCardPrintForm {
                                propertySwitchNotes.checked,
                                propertySwitchPrintDate.checked,
                                propertySwitchPdfSign.checked)
+            propertyBusyIndicator.running = true
         }
     }
 
