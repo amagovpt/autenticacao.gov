@@ -165,26 +165,25 @@ sistema operativo utilizado.
 ### Instalação em Microsoft Windows
 
 1.  Executar o pacote de instalação: Após ter descarregado o ficheiro de
-    instalação, deverá fazer duplo clique sobre este, surgindo um ecrã
-    semelhante aos apresentados de seguida:
+    instalação, deverá fazer duplo clique sobre este.
 
-    ![Ilustração: Instalação da aplicação em Windows](Pictures/Autenticacao.Gov_Instalacao.png "Instalação da aplicação em Windows"){:.center}
-
-2.  Neste ecrã, deverá premir o botão **Seguinte** e marcar a caixa
-    (com um certo, clicando no botão esquerdo do rato), para
-    aceitar os termos e condições da aplicação.
+2.  No primeiro ecrã interativo, deverá marcar a caixa para aceitar os termos e condições da aplicação. Para uma instalação simples, pressione **Instalar** (prossiga para o passo 5). Para uma instalação avançada, pressione **Avançadas**. A instalação avançada permite configurar o caminho para a pasta de instalação e as funcionalidades a serem instaladas.
 
     ![Ilustração: Instalação da aplicação em Windows](Pictures/Autenticacao.Gov_Instalacao_termos.png "Instalação da aplicação em Windows"){:.center}
 
-3.  Neste passo, poderá escolher a pasta onde deseja instalar o
+3.  Após selecionar **Avançadas**, poderá escolher a pasta onde deseja instalar o
     *middleware*. Se desejar alterar a pasta predefinida, carrege em
     **Alterar** e na janela que surgir, navegue até à pasta de destino
     e carregue **OK**. Para continuar a instalação na pasta de destino,
     deverá premir o botão **Seguinte**.
-4.  Deverá aparecer também um ecrã com a opção de **Instalar**, deverá
-    premir esse botão.
+
+4.  Deverá aparecer um ecrã para escolher as funcionalidades a serem instaladas. As funcionalidades são representadas numa árvore em que cada funcionalidade possui um botão para a incluir ou excluir da instalação. Ao selecionar uma funcionalidade, será apresentada a sua descrição e o espaço necessário para a sua instalação. Para instalar as funcionalidades selecionadas, clique em **Instalar**.
+
+    ![Ilustração: Instalação da aplicação em Windows](Pictures/Autenticacao.Gov_Instalacao_funcionalidades.png "Instalação da aplicação em Windows"){:.center}
+
 5.  Após a conclusão deste assistente, este solicitará a reinicialização
     do computador.
+
 6.  No próximo arranque do *Windows* a instalação do *middleware* estará
     finalizada.
 
