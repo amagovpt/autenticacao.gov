@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="pt-PT" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <!-- Increase space for feature descriptions -->
+  <UI Dialog="AdvancedWelcomeEulaDlg" Control="Title" Width="280"/>
+  
+  <!-- Increase space for feature descriptions -->
+  <UI Dialog="FeaturesDlg" Control="Tree" Height="100"/>
+  <UI Dialog="FeaturesDlg" Control="ItemDescription" Height="36" Y="160"/>
+</WixLocalization>

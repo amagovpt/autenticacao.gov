@@ -33,6 +33,7 @@
     <EmbeddedResource Include="Strings-pt.wxl">
       <Link>Strings-pt.wxl</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="ui-config.wxl" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixDifxAppExtension">
