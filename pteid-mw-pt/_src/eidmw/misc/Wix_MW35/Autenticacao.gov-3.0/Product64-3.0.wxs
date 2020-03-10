@@ -577,34 +577,29 @@
 				<ComponentRef Id="RegistryPteidSystem"/>
         <ComponentRef Id="RegistryPteidSystem32"/>
         
+        <ComponentRef Id="Libpng"/>
+        <ComponentRef Id="Libpng_64"/>
+        <ComponentRef Id="Openjpeg"/>
+        <ComponentRef Id="Openjpeg_64"/>
+        <ComponentRef Id="Libzip"/>
+        <ComponentRef Id="Libzip_64"/>
+        <ComponentRef Id="Curl"/>
+        <ComponentRef Id="Curl_64"/>
+        <ComponentRef Id="Poppler"/>
+        <ComponentRef Id="Poppler_64"/>
+        <ComponentRef Id="XMLSecurity"/>
+        <ComponentRef Id="XMLSecurity_64"/>
+
+        <ComponentRef Id="Cpp_SDK_component"/>
+        <ComponentRef Id="Java_SDK_Component"/>
+        <ComponentRef Id="CSharp_SDK_Component"/>
+
 				<Feature Id="GUI"
 						  Title="!(loc.PteidGui)"
 						  Description="!(loc.PteidGuiDescr)"
 						  Level="1"
 						  AllowAdvertise="no">
-         
                     <ComponentGroupRef Id="qmlAppComponentGroup"/>
-                    <ComponentRef Id="Libpng"/>
-                    <ComponentRef Id="Libpng_64"/>
-            
-					<ComponentRef Id="Openjpeg"/>
-					<ComponentRef Id="Openjpeg_64"/>
-
-                    <ComponentRef Id="Libzip"/>
-                    <ComponentRef Id="Libzip_64"/>
-
-					<ComponentRef Id="Curl"/>
-					<ComponentRef Id="Curl_64"/>
-          <ComponentRef Id="Poppler"/>
-					<ComponentRef Id="Poppler_64"/>
-
-					<ComponentRef Id="XMLSecurity"/>
-					<ComponentRef Id="XMLSecurity_64"/>
-
-          <ComponentRef Id="Cpp_SDK_component"/>
-					<ComponentRef Id="Java_SDK_Component"/>
-					<ComponentRef Id="CSharp_SDK_Component"/>
-
 				</Feature>
 
 				<Feature Id="Crypto"
