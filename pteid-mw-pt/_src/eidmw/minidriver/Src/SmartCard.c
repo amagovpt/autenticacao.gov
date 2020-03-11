@@ -196,7 +196,7 @@ DWORD PteidAuthenticate(PCARD_DATA  pCardData,
    if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
    {
       dwReturn = SCARD_W_WRONG_CHV;
-      LogTrace(LOGTYPE_ERROR, WHERE, "CardAuthenticatePin Failed: [0x%02X][0x%02X]", SW1, SW2);
+      LogTrace(LOGTYPE_ERROR, WHERE, "VERIFY PIN Failed! SW12: [0x%02X][0x%02X]", SW1, SW2);
 
       if ( ((SW1 == 0x63) && ((SW2 & 0xF0) == 0xC0)) )
       {
@@ -206,7 +206,7 @@ DWORD PteidAuthenticate(PCARD_DATA  pCardData,
             *pcAttemptsRemaining = (SW2 & 0x0F);
          }
       }
-      else if ( (SW1 == 0x69) && (SW2 == 0x83) )
+      else if ((SW1 == 0x69) && (SW2 == 0x83 || SW2 == 0x84))
       {
          dwReturn = SCARD_W_CHV_BLOCKED;
 		 LogTrace(LOGTYPE_ERROR, WHERE, "PIN with ID %d is blocked, watch out!!", (int)pin_id);
@@ -454,9 +454,10 @@ DWORD PteidAuthenticateExternal(
 							*pcAttemptsRemaining = (SW2 & 0x0F);
 						}
 					}
-					else if ( (SW1 == 0x69) && (SW2 == 0x83) )
+					else if ((SW1 == 0x69) && (SW2 == 0x83 || SW2 == 0x84))
 					{
-						LogTrace(LOGTYPE_ERROR, WHERE, "Card Blocked, watch out!!");
+						dwReturn = SCARD_W_CHV_BLOCKED;
+						LogTrace(LOGTYPE_ERROR, WHERE, "PIN with ID %d is blocked, watch out!!", (int)pin_id);
 					}
 				}
 				else

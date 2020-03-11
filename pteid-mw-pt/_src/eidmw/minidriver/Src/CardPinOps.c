@@ -257,12 +257,6 @@ DWORD WINAPI   CardAuthenticateEx
 		}
 	}
 
-	//dwReturn = PteidMSE(pCardData, PinId);
-	//if ( dwReturn != SCARD_S_SUCCESS )
-	//{
-	//	LogTrace(LOGTYPE_ERROR, WHERE, "MSE: [0x%02X]", dwReturn);
-	//	CLEANUP(dwReturn);
-	//}
 	/* External Pin?  */
 	dwReturn = CardGetProperty(pCardData, 
 		CP_CARD_PIN_INFO, 
