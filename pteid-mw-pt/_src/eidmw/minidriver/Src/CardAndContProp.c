@@ -653,6 +653,7 @@ PIN_CACHE_POLICY_TYPE GetAuthPinCachePolicyType() {
     else
         return (dwValue == 1 ? PinCacheNormal : PinCacheNone);
 }
+#undef WHERE
 
 /****************************************************************************************************/
 #define WHERE "CardGetPinInfo"
