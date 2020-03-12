@@ -455,6 +455,30 @@
 						Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (GemSafe) 1"/>
 					<RemoveRegistryKey Root="HKLM" Action="removeOnInstall"
 						Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\_Portugal eID (IAS) 1"/>
+					<RemoveRegistryKey Root="HKLM" Action="removeOnUninstall"
+						Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 1"/>
+					<RemoveRegistryKey Root="HKLM" Action="removeOnUninstall"
+						Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 2"/>
+					<RemoveRegistryKey Root="HKLM" Action="removeOnUninstall"
+						Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 3"/>
+					<RemoveRegistryKey Root="HKLM" Action="removeOnUninstall"
+						Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 4"/>
+					<RemoveRegistryKey Root="HKLM" Action="removeOnUninstall"
+						Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS) 1"/>
+					<RemoveRegistryKey Root="HKLM" Action="removeOnUninstall"
+						Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS) 2"/>
+					<RemoveRegistryKey Root="HKLM" Action="removeOnUninstall"
+						Key="SOFTWARE\WOW6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 1"/>
+					<RemoveRegistryKey Root="HKLM" Action="removeOnUninstall"
+						Key="SOFTWARE\WOW6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 2"/>
+					<RemoveRegistryKey Root="HKLM" Action="removeOnUninstall"
+						Key="SOFTWARE\WOW6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 3"/>
+					<RemoveRegistryKey Root="HKLM" Action="removeOnUninstall"
+						Key="SOFTWARE\WOW6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (GemSafe) 4"/>
+					<RemoveRegistryKey Root="HKLM" Action="removeOnUninstall"
+						Key="SOFTWARE\WOW6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS) 1"/>
+					<RemoveRegistryKey Root="HKLM" Action="removeOnUninstall"
+						Key="SOFTWARE\WOW6432Node\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS) 2"/>
 					
 					<RegistryKey Root="HKLM"
 					   Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid (Gemsafe)"
