@@ -181,10 +181,13 @@ public:
 signals:
     Q_SIGNAL void signalPdfSourceChanged(int pdfWidth, int pdfHeight);
 private:
+    void doCloseDoc(QString filePath);
+    void doCloseAllDocs();
     QPixmap renderPdf(int page,const QSize &requestedSize);
     QPixmap renderPDFPage(unsigned int page);
     std::unordered_map<std::string, Poppler::Document *> m_docs; // all loaded pdfs (remain open)
     std::string m_filePath; // file in preview
+    QMutex renderMutex;
 };
 
 

@@ -38,13 +38,13 @@ PageServicesSignSimpleForm {
     Connections {
         target: gapi
         onSignalGenericError: {
-            propertyBusyIndicator.running = false
+            propertyBusyIndicatorRunning = false
         }
 
         onSignalPdfSignSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             signsuccess_dialog.open()
-            propertyBusyIndicator.running = false
+            propertyBusyIndicatorRunning = false
         }
         onSignalPdfSignFail: {
             console.log("Sign failed with error code: " + error_code)
@@ -58,7 +58,7 @@ PageServicesSignSimpleForm {
             }
             cmdDialog.close()
             signerror_dialog.visible = true
-            propertyBusyIndicator.running = false
+            propertyBusyIndicatorRunning = false
             propertyOutputSignedFile = ""
         }
         onSignalCardAccessError: {
@@ -91,7 +91,7 @@ PageServicesSignSimpleForm {
                 if(error_code != GAPI.CardUserPinCancel && error_code != GAPI.CardPinTimeout)
                     cardLoaded = false
             }
-            propertyBusyIndicator.running = false
+            propertyBusyIndicatorRunning = false
             propertyButtonHidedAdd.forceActiveFocus()
         }
         onSignalCardDataChanged: {
@@ -104,7 +104,7 @@ PageServicesSignSimpleForm {
 
             propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_NIC") + ": "
                     + gapi.getDataCardIdentifyValue(GAPI.NIC)
-            propertyBusyIndicator.running = false
+            propertyBusyIndicatorRunning = false
             cardLoaded = true
             propertyButtonHidedAdd.forceActiveFocus()
         }
@@ -121,7 +121,7 @@ PageServicesSignSimpleForm {
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
-                propertyBusyIndicator.running = true
+                propertyBusyIndicatorRunning = true
                 cardLoaded = true
                 gapi.startCardReading()
             }
@@ -139,7 +139,6 @@ PageServicesSignSimpleForm {
             propertyPDFPreview.propertyPdfOriginalWidth=pdfWidth
             propertyPDFPreview.propertyPdfOriginalHeight=pdfHeight
             propertyPDFPreview.updateSignPreview()
-            propertyBusyIndicator.running = false
         }
     }
 
@@ -404,7 +403,6 @@ PageServicesSignSimpleForm {
     }
     propertyFileDialogOutput {
         onAccepted: {
-            propertyBusyIndicator.running = true
             var loadedFilePath = filesModel.get(0).fileUrl
             var isTimestamp = false
             var outputFile = propertyFileDialogOutput.fileUrl.toString()
@@ -529,14 +527,7 @@ PageServicesSignSimpleForm {
             if(filesModel.count === 0){
                 fileLoaded = false
                 propertyPDFPreview.propertyBackground.source = ""
-                propertyPDFPreview.propertyDragSigImg.visible = false
-                propertyPDFPreview.propertyDragSigSignedByText.visible = false
-                propertyPDFPreview.propertyDragSigSignedByNameText.visible = false
-                propertyPDFPreview.propertyDragSigNumIdText.visible = false
-                propertyPDFPreview.propertyDragSigDateText.visible = false
-                propertyPDFPreview.propertyDragSigImg.visible = false
             }else{
-                propertyBusyIndicator.running = true
                 var loadedFilePath = filesModel.get(0).fileUrl
                 var pageCount = gapi.getPDFpageCount(loadedFilePath)
 
@@ -578,16 +569,8 @@ PageServicesSignSimpleForm {
                     }else{
                         propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
                     }
-                    propertyPDFPreview.propertyDragSigImg.visible = true
                     propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
-                    propertyPDFPreview.propertyDragSigWaterImg.visible = true
-                    propertyPDFPreview.propertyDragSigSignedByText.visible = true
-                    propertyPDFPreview.propertyDragSigSignedByNameText.visible = true
-                    propertyPDFPreview.propertyDragSigNumIdText.visible = true
-                    propertyPDFPreview.propertyDragSigDateText.visible = true
-                    propertyPDFPreview.propertyDragSigImg.visible = true
                 }else{
-                    propertyBusyIndicator.running = false
                     filesModel.remove(filesModel.count-1)
                     fileLoaded = false
                     propertyPDFPreview.propertyBackground.source = ""
@@ -635,6 +618,7 @@ PageServicesSignSimpleForm {
                 propertyPDFPreview.propertyBackground.source =
                         "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
             }
+
         }
     }
     Component.onCompleted: {
@@ -645,7 +629,7 @@ PageServicesSignSimpleForm {
                         });
 
         console.log("Page Services Sign Simple mainWindowCompleted")
-        propertyBusyIndicator.running = true
+        propertyBusyIndicatorRunning = true
 
         propertyPDFPreview.propertyDragSigSignedByNameText.text =
                 qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "

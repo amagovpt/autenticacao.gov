@@ -26,9 +26,9 @@ Item {
     property variant filesArray:[]
     property bool fileLoaded: false
     property bool cardLoaded: false
+    property bool propertyBusyIndicatorRunning: false
 
     property alias propertyMainItem: mainItem
-    property alias propertyBusyIndicator: busyIndicator
     property alias propertyPDFPreview: pdfPreviewArea
     property alias propertyFileDialog: fileDialog
     property alias propertyFileDialogOutput: fileDialogOutput
@@ -47,7 +47,7 @@ Item {
 
     BusyIndicator {
        id: busyIndicator
-       running: false
+       running: propertyBusyIndicatorRunning || pdfPreviewArea.propertyBackground.status == Image.Loading
        anchors.centerIn: parent
        // BusyIndicator should be on top of all other content
        z: 1

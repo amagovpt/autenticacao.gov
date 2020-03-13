@@ -70,7 +70,7 @@ PageServicesSignAdvancedForm {
     Connections {
         target: gapi
         onSignalGenericError: {
-            propertyBusyIndicator.running = false
+            propertyBusyIndicatorRunning = false
         }
         onSignalAttributesLoaded:{
             console.log("Sign advanced - Signal SCAP attributes loaded")
@@ -91,7 +91,7 @@ PageServicesSignAdvancedForm {
                 entityAttributesModel.get(i).checkBoxAttr = propertyPageLoader.attributeListBackup[i]
             }
 
-            propertyBusyIndicator.running = false
+            propertyBusyIndicatorRunning = false
             propertyListViewEntities.currentIndex = 0
             entityAttributesModel.count > 0
                     ? propertyListViewEntities.forceActiveFocus()
@@ -100,7 +100,7 @@ PageServicesSignAdvancedForm {
         onSignalPdfSignSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             signsuccess_dialog.open()
-            propertyBusyIndicator.running = false
+            propertyBusyIndicatorRunning = false
             // test time stamp
             if(error_code == GAPI.SignMessageTimestampFailed){
                 if(propertyListViewFiles.count > 1){
@@ -126,7 +126,7 @@ PageServicesSignAdvancedForm {
             }
             dialogSignCMD.close()
             signerror_dialog.visible = true
-            propertyBusyIndicator.running = false
+            propertyBusyIndicatorRunning = false
             propertyOutputSignedFile = ""
         }
         onSignalSCAPServiceTimeout: {
@@ -159,14 +159,14 @@ PageServicesSignAdvancedForm {
                 gapi.startPingSCAP()
             }
             signerror_dialog.visible = true
-            propertyBusyIndicator.running = false
+            propertyBusyIndicatorRunning = false
             propertyOutputSignedFile = ""
         }
         onSignalSCAPPingSuccess: {
             signerror_dialog.propertySignFailDialogText.text =
                     qsTranslate("PageServicesSign","STR_SIGN_SCAP_SERVICE_FAIL")
             signerror_dialog.visible = true
-            propertyBusyIndicator.running = false
+            propertyBusyIndicatorRunning = false
             propertyOutputSignedFile = ""
         }
         onSignalSCAPPingFail: {
@@ -176,7 +176,7 @@ PageServicesSignAdvancedForm {
                     + "\n\n"
                     + qsTranslate("PageServicesSign","STR_SCAP_PING_FAIL_SECOND")
             signerror_dialog.visible = true
-            propertyBusyIndicator.running = false
+            propertyBusyIndicatorRunning = false
             propertyOutputSignedFile = ""
         }
         onSignalCardAccessError: {
@@ -209,7 +209,7 @@ PageServicesSignAdvancedForm {
                 if(error_code != GAPI.CardUserPinCancel && error_code != GAPI.CardPinTimeout)
                     cardLoaded = false
             }
-            propertyBusyIndicator.running = false
+            propertyBusyIndicatorRunning = false
             propertyButtonAdd.forceActiveFocus()
         }
         onSignalCardDataChanged: {
@@ -222,7 +222,7 @@ PageServicesSignAdvancedForm {
 
             propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_NIC") + ": "
                     + gapi.getDataCardIdentifyValue(GAPI.NIC)
-            propertyBusyIndicator.running = false
+            propertyBusyIndicatorRunning = false
             cardLoaded = true
             propertyButtonAdd.forceActiveFocus()
         }
@@ -239,7 +239,7 @@ PageServicesSignAdvancedForm {
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
-                propertyBusyIndicator.running = true
+                propertyBusyIndicatorRunning = true
                 cardLoaded = true
                 gapi.startCardReading()
             }
@@ -632,7 +632,6 @@ PageServicesSignAdvancedForm {
 
     propertyFileDialogOutput {
         onAccepted: {
-            propertyBusyIndicator.running = true
             var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogOutput.fileUrl.toString()
@@ -708,7 +707,6 @@ PageServicesSignAdvancedForm {
     }
     propertyFileDialogBatchOutput {
         onAccepted: {
-            propertyBusyIndicator.running = true
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogBatchOutput.folder.toString()
             outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
@@ -905,7 +903,7 @@ PageServicesSignAdvancedForm {
             propertyPageLoader.propertyBackupSignAdd = propertySwitchSignAdd.checked
             if(propertySwitchSignAdd.checked){
                 console.log("propertySwitchSignAdd checked")
-                propertyBusyIndicator.running = true
+                propertyBusyIndicatorRunning = true
                 propertySwitchSignTemp.checked = false
                 propertySwitchSignTemp.enabled = false
                 propertyCheckSignShow.checked = true
@@ -1217,14 +1215,6 @@ PageServicesSignAdvancedForm {
                 fileLoaded = false
                 propertyTextDragMsgImg.visible = true
                 propertyPDFPreview.propertyBackground.source = ""
-                propertyPDFPreview.propertyDragSigImg.visible = false
-                propertyPDFPreview.propertyDragSigReasonText.visible = false
-                propertyPDFPreview.propertyDragSigSignedByText.visible = false
-                propertyPDFPreview.propertyDragSigSignedByNameText.visible = false
-                propertyPDFPreview.propertyDragSigNumIdText.visible = false
-                propertyPDFPreview.propertyDragSigDateText.visible = false
-                propertyPDFPreview.propertyDragSigLocationText.visible = false
-                propertyPDFPreview.propertyDragSigImg.visible = false
                 propertyButtonAdd.forceActiveFocus()
             }
             else {
@@ -1236,7 +1226,6 @@ PageServicesSignAdvancedForm {
                     var pageCount = gapi.getPDFpageCount(loadedFilePath)
                     if(pageCount > 0){
                         propertyTextSpinBox.maximumLength = maxTextInputLength(pageCount)
-                        propertyBusyIndicator.running = true
                         if(propertyCheckLastPage.checked==true
                                 || propertySpinBoxControl.value > pageCount)
                             propertySpinBoxControl.value = pageCount
@@ -1257,17 +1246,7 @@ PageServicesSignAdvancedForm {
                         }else{
                             propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
                         }
-                        propertyPDFPreview.propertyDragSigImg.visible = true
                         propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
-                        propertyPDFPreview.propertyDragSigWaterImg.visible = true
-                        propertyPDFPreview.propertyDragSigReasonText.visible = true
-                        propertyPDFPreview.propertyDragSigSignedByText.visible = true
-                        propertyPDFPreview.propertyDragSigSignedByNameText.visible = true
-                        propertyPDFPreview.propertyDragSigNumIdText.visible = true
-                        propertyPDFPreview.propertyDragSigDateText.visible = true
-                        propertyPDFPreview.propertyDragSigLocationText.visible = true
-                        propertyPDFPreview.propertyDragSigImg.visible = true
-                        propertyBusyIndicator.running = false
                     }else{
                         filesModel.remove(propertyListViewFiles.count-1)
                         var titlePopup = qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR")
@@ -1339,7 +1318,7 @@ PageServicesSignAdvancedForm {
         console.log("Page Services Sign Advanced mainWindowCompleted")
 
         propertyPageLoader.propertyBackupFromSignaturePage = false
-        propertyBusyIndicator.running = true
+        propertyBusyIndicatorRunning = true
         gapi.startCardReading()
     }
     Component.onDestruction: {

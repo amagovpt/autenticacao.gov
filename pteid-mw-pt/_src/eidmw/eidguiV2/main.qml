@@ -1039,6 +1039,7 @@ Load language error. Please reinstall the application"
             onClicked: {
                 // if there are no unsaved notes
                 if(!handleUnsavedNotes(-1, "", Constants.HOME_ICON_PRESSED)){
+                    mainFormID.propertyPageLoader.source = ""
                     mainFormID.state = Constants.MenuState.HOME
                     propertySubMenuListView.currentIndex = -1
                     propertyMainMenuListView.currentIndex = -1
@@ -1548,10 +1549,12 @@ Load language error. Please reinstall the application"
         }
         // Open the content page of the first item of the new sub menu
         mainFormID.propertyPageLoader.propertyForceFocus = false
-        mainFormID.state = Constants.MenuState.NORMAL
         mainFormID.propertyPageLoader.source =
                 mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
         mainFormID.propertySubMenuListView.currentIndex = 0
+        /* Setting the state should be done after setting the source: changing the state causes the PDFPreview to call 
+           another (unnecessary) requestPixmap if the signature pages are loaded. */
+        mainFormID.state = Constants.MenuState.NORMAL
 
         /*console.log("Main Menu index = " + index);
         console.log("Set focus sub menu")
@@ -1576,10 +1579,12 @@ Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.source = url
         }else{
             mainFormID.propertyPageLoader.propertyForceFocus = true
-            mainFormID.state = Constants.MenuState.NORMAL
             //var temp = url
             mainFormID.propertyPageLoader.source = ""
             mainFormID.propertyPageLoader.source = url
+            /* Setting the state should be done after setting the source: changing the state causes the PDFPreview to call 
+                another (unnecessary) requestPixmap if the signature pages are loaded. */
+            mainFormID.state = Constants.MenuState.NORMAL
 
         }
     }
@@ -1609,10 +1614,12 @@ Load language error. Please reinstall the application"
         }
         // Open the content page of the first item of the new sub menu
         mainFormID.propertyPageLoader.propertyForceFocus = false
-        mainFormID.state = Constants.MenuState.NORMAL
         mainFormID.propertyPageLoader.source =
                 mainFormID.propertyMainMenuBottomListView.model.get(index).subdata.get(0).url
         mainFormID.propertySubMenuListView.currentIndex = 0
+        /* Setting the state should be done after setting the source: changing the state causes the PDFPreview to call 
+           another (unnecessary) requestPixmap if the signature pages are loaded. */
+        mainFormID.state = Constants.MenuState.NORMAL
 
         console.log("Main Menu Bottom index = " + index);
         mainFormID.propertySubMenuListView.forceActiveFocus()

@@ -1926,14 +1926,7 @@ QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, c
         newdoc->setRenderBackend(Poppler::Document::RenderBackend::SplashBackend);
     }
 
-    QPixmap pTest = renderPDFPage(page);
-    qDebug() << "PDFPreviewImageProvider sending signal signalPdfSourceChanged width : "
-        << pTest.width() << " - height : " << pTest.height();
-    emit signalPdfSourceChanged(pTest.width(), pTest.height());
-
-    QFuture<QPixmap> future = Concurrent::run(this, &PDFPreviewImageProvider::renderPdf, page, requestedSize);
-
-    QPixmap p = future.result();
+    QPixmap p = renderPdf(page, requestedSize);
     size->setHeight(p.height());
     size->setWidth(p.width());
 
@@ -1941,8 +1934,12 @@ QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, c
 }
 
 QPixmap PDFPreviewImageProvider::renderPdf(int page, const QSize &requestedSize) {
+    QPixmap pTest = renderPDFPage(page);
+    qDebug() << "PDFPreviewImageProvider sending signal signalPdfSourceChanged width : "
+        << pTest.width() << " - height : " << pTest.height();
+    emit signalPdfSourceChanged(pTest.width(), pTest.height());
 
-    QPixmap p = renderPDFPage(page).scaled(requestedSize.width(), requestedSize.height(),
+    QPixmap p = pTest.scaled(requestedSize.width(), requestedSize.height(),
         Qt::KeepAspectRatio, Qt::SmoothTransformation);
     return p;
 }
@@ -1954,6 +1951,12 @@ QSize PDFPreviewImageProvider::getPageSize(int page) {
 
 QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
 {
+    renderMutex.lock();
+    if (m_docs.empty())
+    {
+        qDebug() << "Pdf to be rendered was unloaded!";
+        return QPixmap();
+    }
     // Document starts at page 0 in the poppler-qt5 API
     Poppler::Page *popplerPage = m_docs.at(m_filePath)->page(page - 1);
 
@@ -1971,6 +1974,7 @@ QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
     //image.save("/tmp/pteid_preview.png");
 
     delete popplerPage;
+    renderMutex.unlock();
 
     if (!image.isNull()) {
         return QPixmap::fromImage(image);
@@ -1982,14 +1986,23 @@ QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
 }
 
 void PDFPreviewImageProvider::closeDoc(QString filePath) {
+    Concurrent::run(this, &PDFPreviewImageProvider::doCloseDoc, filePath);
+}
+void PDFPreviewImageProvider::closeAllDocs() {
+    Concurrent::run(this, &PDFPreviewImageProvider::doCloseAllDocs);
+}
+void PDFPreviewImageProvider::doCloseDoc(QString filePath) {
+    renderMutex.lock();
     std::string filePathStd = filePath.toStdString();
     if (m_docs.find(filePathStd) != m_docs.end())
     {
         delete m_docs.at(filePathStd);
         m_docs.erase(filePathStd);
     }
+    renderMutex.unlock();
 }
-void PDFPreviewImageProvider::closeAllDocs() {
+void PDFPreviewImageProvider::doCloseAllDocs() {
+    renderMutex.lock();
     std::unordered_map<std::string, Poppler::Document *>::iterator it = m_docs.begin();
     while (it != m_docs.end())
     {
@@ -1997,6 +2010,7 @@ void PDFPreviewImageProvider::closeAllDocs() {
         it++;
     }
     m_docs.clear();
+    renderMutex.unlock();
 }
 
 void GAPI::startCardReading() {

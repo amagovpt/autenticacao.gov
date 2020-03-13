@@ -111,7 +111,7 @@ Rectangle {
             sourceSize.height: dragTarget.height
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-
+            asynchronous: true
 
             Rectangle {
                 width: dragSigRect.width + 2 * Constants.FOCUS_BORDER
@@ -122,7 +122,7 @@ Rectangle {
                 border.color: pdfPreview.activeFocus || positionText.activeFocus ? Constants.COLOR_MAIN_DARK_GRAY
                              : Constants.COLOR_GREY_BUTTON_BACKGROUND
                 opacity: 0.7
-                visible: width >= Constants.FOCUS_BORDER ? true : false
+                visible: width >= Constants.FOCUS_BORDER && background_image.status != Image.Null
             }
             Item {
                 id: dragSigRect
@@ -132,6 +132,7 @@ Rectangle {
                         / (propertyPdfOriginalHeight / propertyConvertPixelToPts)
 
                 Drag.active: dragArea.drag.active
+                opacity: background_image.status == Image.Ready ? 1.0 : 0.0
 
                 Text {
                     id: sigReasonText
@@ -146,7 +147,6 @@ Rectangle {
                     anchors.top: dragSigRect.top
                     anchors.topMargin: propertySigLineHeight * 0.40
                     x: 2
-                    visible: false
                 }
 
                 Image {
@@ -156,7 +156,6 @@ Rectangle {
                     anchors.top: sigReasonText.bottom
                     anchors.topMargin: 2
                     x: 2
-                    visible: false
                 }
                 Text {
                     id: sigSignedByText
@@ -167,7 +166,6 @@ Rectangle {
                     anchors.top: sigReasonText.bottom
                     text: ""
                     x: 2
-                    visible: false
                 }
                 Text {
                     id: sigSignedByNameText
@@ -182,7 +180,6 @@ Rectangle {
                     anchors.left: sigSignedByText.right
                     text: ""
                     x: 2
-                    visible: false
                 }
                 Text {
                     id: sigNumIdText
@@ -195,7 +192,6 @@ Rectangle {
                     anchors.top: sigSignedByText.bottom
                     text: ""
                     x: 2
-                    visible: false
                 }
                 Text {
                     id: sigDateText
@@ -208,7 +204,6 @@ Rectangle {
                     anchors.top: sigNumIdText.bottom
                     text: qsTranslate("PageServicesSign", "STR_SIGN_DATE") + ": " + getData()
                     x: 2
-                    visible: false
                 }
                 Text {
                     id: sigLocationText
@@ -221,7 +216,6 @@ Rectangle {
                     anchors.top: sigDateText.bottom
                     text: ""
                     x: 2
-                    visible: false
                 }
 
                 Image {
@@ -231,7 +225,6 @@ Rectangle {
                     anchors.top: sigLocationText.bottom
                     anchors.topMargin: Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     x: 2
-                    visible: false
                 }
 
                 MouseArea {
@@ -290,6 +283,7 @@ Rectangle {
             }
         }
     }
+
     function updateSignPreview(){
 
         dragTarget.coord_x = (dragSigRect.x) / background_image.width
