@@ -2783,6 +2783,9 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
             pCallBackData->getMainWnd()->setAddressLoaded(false);
             pCallBackData->getMainWnd()->resetReaderSelected();
 
+            PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui",
+                "Card inserted with serial number: %s", readerContext.getEIDCard().getVersionInfo().getSerialNumber());
+
             //------------------------------------
             // register certificates when needed
             //------------------------------------
