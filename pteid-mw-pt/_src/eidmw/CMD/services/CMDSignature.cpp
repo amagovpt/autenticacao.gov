@@ -319,6 +319,15 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
         signatureInputsBytes.push_back(signatureInput->GetBytes());
     }
 
+    // make document names sent to cmd service unique
+    std::vector<std::string *> docNamesPtrs;
+    for (size_t i = 0; i < signDocNames.size(); i++)
+    {
+        docNamesPtrs.push_back(&signDocNames[i]);
+    }
+
+    CPathUtil::generate_unique_filenames("", docNamesPtrs, "");
+
     if (0 == hashByteArray.Size())
     {
         MWLOG_ERR(logBuf, "getHash failed\n");

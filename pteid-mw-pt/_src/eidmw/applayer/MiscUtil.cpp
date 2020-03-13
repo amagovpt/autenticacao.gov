@@ -847,7 +847,11 @@ void CPathUtil::generate_unique_filenames(const char *folder, std::vector<std::s
 			filenames_counter.push_back(std::make_pair(basename, equal_filename_count));
 		}
 
-		std::string final_path = string(folder) + PATH_SEP + clean_filename;
+		std::string final_path = "";
+		if(string(folder).size() != 0)
+			final_path = string(folder) + PATH_SEP;
+
+		final_path += clean_filename;
 		if(equal_filename_count > 0) {
 			final_path += "_" + std::to_string(equal_filename_count);
 		}
