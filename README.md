@@ -87,6 +87,7 @@ Ferramentas adicionais a instalar:
 
 - 7-zip
 - Windows Platform SDK
+- Windows Cryptographic Provider Development Kit
 - Visual Studio
 - doxygen - disponível em http://www.doxygen.nl/download.html
 - Swigwin 4.0.1 - disponível em  https://sourceforge.net/projects/swig/files/swigwin/swigwin-4.0.1/

@@ -81,6 +81,15 @@ set startTime=%time%
 :find_mssdk
 @echo [INFO] Using PTEID_DIR_PLATFORMSDK=%PTEID_DIR_PLATFORMSDK%
 
+:: Check MS Cryptographic Provider Development Kit
+:: ==========================
+@call "%CHECKS%\PathCRYPTPDK.bat"
+@if %ERRORLEVEL%==0 goto find_cpdk
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_CRYPTPDK
+@goto end
+:find_cpdk
+@echo [INFO] Using PTEID_DIR_CRYPTPDK=%PTEID_DIR_CRYPTPDK%
+
 :: Check QT 5
 :: ==================
 @call "%CHECKS%\PathQt5.bat"
