@@ -14,6 +14,7 @@
 #include <QQmlContext>
 #include <QQuickStyle>
 #include <QIcon>
+#include <QProcess>
 #include "appcontroller.h"
 #include "filesavedialog.h"
 #include "gapi.h"
@@ -112,6 +113,15 @@ int main(int argc, char *argv[])
     retValue = app.exec();
 
     PTEID_ReleaseSDK();
+
+    if (retValue == RESTART_EXIT_CODE) {
+        QProcess proc;
+        QString cmd;
+        for (QString arg : QCoreApplication::arguments()) {
+            cmd.append(arg).append(" ");
+        }
+        proc.startDetached(cmd);
+    }
 
     return retValue;
 }

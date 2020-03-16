@@ -43,6 +43,9 @@
 #include "OAuthAttributes.h"
 #include "AttributeFactory.h"
 
+#define SUCCESS_EXIT_CODE 0
+#define RESTART_EXIT_CODE  1
+
 /* For filenames we need to maintain latin-1 or UTF-8 native encoding */
 //This macro's argument is a QString
 
@@ -394,7 +397,7 @@ public slots:
     void cancelDownload();
     void httpFinished();
 
-    void quitApplication();
+    void quitApplication(bool restart = false);
     void forgetAllCertificates( void );
     void forgetCertificates(QString const& reader);
 

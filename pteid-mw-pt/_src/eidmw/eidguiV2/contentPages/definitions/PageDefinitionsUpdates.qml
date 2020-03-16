@@ -119,9 +119,8 @@ PageDefinitionsUpdatesForm {
             propertyButtonCancelUpdateCerts.visible = false
             propertyReleaseNoteScrollViewCerts.visible = false
             propertyReleaseScrollViewTextCerts.visible = false
-            var titlePopup = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES")
-            var bodyPopup = qsTranslate("Popup Card","STR_POPUP_RESTART_APP")
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            restart_dialog.headerTitle = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES") + controler.autoTr
+            restart_dialog.open()
         }
         onSignalAutoUpdateAvailable: {
             console.log("PageDefinitionsUpdates onSignalAutoUpdateAvailable")

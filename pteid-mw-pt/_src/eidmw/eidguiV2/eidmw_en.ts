@@ -1981,6 +1981,11 @@
         <source>STR_POPUP_FILE_INPUT_MULTI</source>
         <translation>Choose files</translation>
     </message>
+    <message>
+        <location filename="main.qml" line="558"/>
+        <source>STR_POPUP_RESTART_NOW</source>
+        <translation>Restart now</translation>
+    </message>
 </context>
 <context>
     <name>Popup PIN</name>
@@ -2128,10 +2133,32 @@
 <context>
     <name>main</name>
     <message>
+        <source>STR_REGISTER_CMD_CERT_TITLE</source>
+        <translation type="vanished">Register Chave Móvel Digital&apos;s certificate</translation>
+    </message>
+    <message>
+        <source>STR_REGISTER_CMD_CERT_DESC</source>
+        <translation type="vanished">Registering your Chave Móvel Digital certificate allows signing with CMD in some third-party applications. It is possible to register the certificate at any time in &quot;Signatures configuration&quot;.</translation>
+    </message>
+    <message>
+        <source>STR_REGISTER_CMD_CERT_DONT_ASK_AGAIN</source>
+        <translation type="vanished">Do not show this message again.</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="207"/>
         <source>STR_AUTOUPDATE_TITLE</source>
         <translation>Update Available</translation>
     </message>
     <message>
+        <source>STR_AUTOUPDATE_TEXT</source>
+        <translation type="vanished">A new version of the application is available. Press Open to open the Updates page.</translation>
+    </message>
+    <message>
+        <source>STR_DISABLE_AUTOUPDATE_INFO</source>
+        <translation type="vanished">To disable the checking for updates on application start, go to Application settings menu.</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="305"/>
         <source>STR_UPDATE_INSTALL_BUTTON</source>
         <translation>Open</translation>
     </message>

@@ -86,9 +86,8 @@ Load language error. Please reinstall the application"
         property var isAutoUpdateAlreadyDetected: false
 
         onSignalAutoUpdateSuccess: {
-            var titlePopup = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES")
-            var bodyPopup = qsTranslate("Popup Card","STR_POPUP_RESTART_APP")
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            restart_dialog.headerTitle = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES") + controler.autoTr
+            restart_dialog.open()
         }
         onSignalAutoUpdateAvailable: {
             // Do not show dialog when update page is open
@@ -662,6 +661,131 @@ Load language error. Please reinstall the application"
             readerContext.open()
         }
     }
+
+    Dialog {
+        property alias headerTitle: restartDlgTitle.text
+
+        id: restart_dialog
+        width: 400
+        height: 200
+        visible: false
+        font.family: lato.name
+        modal: true
+        closePolicy: Popup.CloseOnEscape
+
+        // Center dialog in the main view
+        x: parent.width * 0.5 - restart_dialog.width * 0.5
+        y: parent.height * 0.5 - restart_dialog.height * 0.5
+
+        header: Label {
+            id: restartDlgTitle
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: rectRestartPopUp.activeFocus
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
+            color: Constants.COLOR_MAIN_BLUE
+        }
+
+        Item {
+            id: rectRestartPopUp
+            width: parent.width
+            height: 50
+
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: restartDlgTitle.text + labelRestartText.text
+
+            Keys.enabled: true
+            KeyNavigation.tab: cancelButton
+            KeyNavigation.down: cancelButton
+            KeyNavigation.right: cancelButton
+            KeyNavigation.backtab: restartButton
+            KeyNavigation.up: restartButton
+
+            Item {
+                id: rectRestartLabelText
+                width: parent.width
+                height: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: labelRestartText
+                    text: qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
+                    font.bold: activeFocus
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width - 48
+                    wrapMode: Text.Wrap
+                }
+            }
+        }
+
+        Item {
+            width: parent.width
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: 80
+            Item {
+                width: parent.width
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.horizontalCenter: parent.horizontalCenter
+                Button {
+                    id: cancelButton
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("Popup File", "STR_POPUP_FILE_CANCEL") + controler.autoTr
+                    anchors.left: parent.left
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: restartButton
+                    KeyNavigation.down: restartButton
+                    KeyNavigation.right: restartButton
+                    KeyNavigation.backtab: rectRestartPopUp
+                    KeyNavigation.up: rectRestartPopUp
+                    highlighted: activeFocus
+                    onClicked: {
+                        restart_dialog.close()
+                    }
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
+                }
+                Button {
+                    id: restartButton
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("Popup File", "STR_POPUP_RESTART_NOW") + controler.autoTr
+                    anchors.right: parent.right
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: rectRestartPopUp
+                    KeyNavigation.down: rectRestartPopUp
+                    KeyNavigation.right: rectRestartPopUp
+                    KeyNavigation.backtab: cancelButton
+                    KeyNavigation.up: cancelButton
+                    highlighted: activeFocus
+                    onClicked: {
+                        gapi.quitApplication(true)
+                    }
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
+                }
+            }
+        }
+        onOpened: {
+            rectRestartPopUp.forceActiveFocus()
+        }
+        onClosed: {
+            mainFormID.propertyPageLoader.forceActiveFocus()
+        }
+    }
+
 
     Dialog {
         id: unsaved_notes_dialog

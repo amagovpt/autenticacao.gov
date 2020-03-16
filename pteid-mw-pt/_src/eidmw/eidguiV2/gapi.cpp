@@ -3351,7 +3351,7 @@ void GAPI::doRegisterCMDCertClose(QString otp) {
 #endif
 }
 
-void GAPI::quitApplication(void) {
+void GAPI::quitApplication(bool restart) {
     try
     {
         if (m_Settings.getRemoveCert())
@@ -3379,7 +3379,8 @@ void GAPI::quitApplication(void) {
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui",
             "Exiting application after timeout.");
     }
-    qApp->quit();
+    qApp->exit((restart ? RESTART_EXIT_CODE : SUCCESS_EXIT_CODE));
+
 }
 
 //*****************************************************
