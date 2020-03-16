@@ -106,7 +106,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Windows Kits\8.0\Cryptographic Provider Development Kit\Include;C:\Program Files\Windows Kits\8.0\Cryptographic Provider Development Kit\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_CRYPTPDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PROVIDER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -117,7 +117,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>userenv.lib;crypt32.lib;bcrypt_provider.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\Windows Kits\8.0\Cryptographic Provider Development Kit\Lib\win8\x86;C:\Program Files\Windows Kits\8.0\Cryptographic Provider Development Kit\Lib\win8\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CRYPTPDK)\Lib\win8\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>SampleKSP.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -130,7 +130,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Windows Kits\8.0\Cryptographic Provider Development Kit\Include;C:\Program Files\Windows Kits\8.0\Cryptographic Provider Development Kit\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_CRYPTPDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PROVIDER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -141,7 +141,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>userenv.lib;crypt32.lib;bcrypt_provider.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\Windows Kits\8.0\Cryptographic Provider Development Kit\Lib\win8\x64;C:\Program Files\Windows Kits\8.0\Cryptographic Provider Development Kit\Lib\win8\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CRYPTPDK)\Lib\win8\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>SampleKSP.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -150,7 +150,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Windows Kits\8.0\Cryptographic Provider Development Kit\Include;C:\Program Files\Windows Kits\8.0\Cryptographic Provider Development Kit\Include;..\..\CMD\services\;..\..\common\;..\..\eidlib\;..\..\dialogs\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_CRYPTPDK)\Include;..\..\CMD\services\;..\..\common\;..\..\eidlib\;..\..\dialogs\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PROVIDER_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
@@ -160,7 +160,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>userenv.lib;crypt32.lib;bcrypt_provider.lib;cmdServices.lib;pteidlib.lib;pteidcommon.lib;pteidDlgsWin32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\Windows Kits\8.0\Cryptographic Provider Development Kit\Lib\win8\x86;C:\Program Files\Windows Kits\8.0\Cryptographic Provider Development Kit\Lib\win8\x86;..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CRYPTPDK)\Lib\win8\x86;..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>KSP.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -176,7 +176,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Windows Kits\8.0\Cryptographic Provider Development Kit\Include;C:\Program Files\Windows Kits\8.0\Cryptographic Provider Development Kit\Include;..\..\CMD\services\;..\..\common\;..\..\eidlib\;..\..\dialogs\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_CRYPTPDK)\Include;..\..\CMD\services\;..\..\common\;..\..\eidlib\;..\..\dialogs\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PROVIDER_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
@@ -186,7 +186,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>userenv.lib;crypt32.lib;bcrypt_provider.lib;cmdServices.lib;pteidlib.lib;pteidcommon.lib;pteidDlgsWin32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\Windows Kits\8.0\Cryptographic Provider Development Kit\Lib\win8\x64;C:\Program Files\Windows Kits\8.0\Cryptographic Provider Development Kit\Lib\win8\x64;..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CRYPTPDK)\Lib\win8\x64;..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>KSP.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
