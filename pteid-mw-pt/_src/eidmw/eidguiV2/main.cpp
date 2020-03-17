@@ -116,11 +116,14 @@ int main(int argc, char *argv[])
 
     if (retValue == RESTART_EXIT_CODE) {
         QProcess proc;
-        QString cmd;
+        QString cmd("\"");
         for (QString arg : QCoreApplication::arguments()) {
             cmd.append(arg).append(" ");
         }
-        proc.startDetached(cmd);
+        cmd.append("\"");
+        if (!proc.startDetached(cmd)){
+            qDebug() << "Error restarting application: could not start process.";
+        }
     }
 
     return retValue;
