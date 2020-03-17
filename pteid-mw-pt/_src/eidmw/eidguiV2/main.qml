@@ -70,9 +70,12 @@ Window {
         target: controler
         onSignalRestoreWindows: {
             console.log("Signal onSignalRestoreWindows")
+            // Minimize window in case it was just hidden (it would remain hidden otherwise)
+            mainWindow.showMinimized()
+
             mainWindow.raise();
             mainWindow.show();
-            mainWindow.activateWindow();
+            mainWindow.requestActivate();
         }
         onSignalLanguageChangedError: {
             var titlePopup = "Erro / Error"
