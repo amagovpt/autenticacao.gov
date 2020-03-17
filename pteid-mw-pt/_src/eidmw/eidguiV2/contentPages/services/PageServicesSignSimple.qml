@@ -403,6 +403,7 @@ PageServicesSignSimpleForm {
     }
     propertyFileDialogOutput {
         onAccepted: {
+            propertyBusyIndicatorRunning = true
             var loadedFilePath = filesModel.get(0).fileUrl
             var isTimestamp = false
             var outputFile = propertyFileDialogOutput.fileUrl.toString()

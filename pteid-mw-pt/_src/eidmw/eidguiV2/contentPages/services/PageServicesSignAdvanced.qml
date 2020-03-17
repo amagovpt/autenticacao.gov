@@ -632,6 +632,7 @@ PageServicesSignAdvancedForm {
 
     propertyFileDialogOutput {
         onAccepted: {
+            propertyBusyIndicatorRunning = true
             var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogOutput.fileUrl.toString()
@@ -707,6 +708,7 @@ PageServicesSignAdvancedForm {
     }
     propertyFileDialogBatchOutput {
         onAccepted: {
+            propertyBusyIndicatorRunning = true
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogBatchOutput.folder.toString()
             outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
