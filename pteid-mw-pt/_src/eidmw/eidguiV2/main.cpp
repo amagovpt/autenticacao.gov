@@ -120,6 +120,7 @@ int main(int argc, char *argv[])
         for (QString arg : QCoreApplication::arguments()) {
             cmd.append(arg).append(" ");
         }
+        cmd = cmd.remove(cmd.length()-1,1); // remove last space
         cmd.append("\"");
         if (!proc.startDetached(cmd)){
             qDebug() << "Error restarting application: could not start process.";
