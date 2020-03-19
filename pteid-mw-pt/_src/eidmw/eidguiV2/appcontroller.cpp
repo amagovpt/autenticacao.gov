@@ -586,11 +586,12 @@ void AppController::setOutlookSuppressNameChecks(bool bDisabledMatching) {
 }
 
 QString AppController::getFontFile(QString font) {
-    std::string fontFile = "file:///";
 #ifdef WIN32
+    std::string fontFile = "file:///";
     eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_INSTALLDIR);
     fontFile.append(config.getString()).append("\\fonts\\");
 #else
+    std::string fontFile = "file://";
     const QString executable_dir = m_Settings.getExePath()+"/";
     fontFile.append(executable_dir.toStdString());
 #endif
