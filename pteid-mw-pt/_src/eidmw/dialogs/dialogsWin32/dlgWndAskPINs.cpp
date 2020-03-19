@@ -6,7 +6,7 @@
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2012 lmcm - <lmcm@caixamagica.pt>
  * Copyright (C) 2014, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -120,7 +120,7 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 				m_hWnd, (HMENU)IDC_EDIT_PIN1, m_hInstance, NULL);
 
 			SendMessage(hTextEdit1, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
-			SendMessage(hTextEdit1, WM_SETFONT, (WPARAM)TextFont, 0);
+			SendMessage(hTextEdit1, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
 		}
 
 		dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_PASSWORD;
@@ -150,7 +150,7 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 				L"STATIC", oldPin_label.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
                 labelsX, clientRect.bottom - 0.52*Height, textWidth, textHeight,
 				m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-			SendMessage(hStaticText1, WM_SETFONT, (WPARAM)TextFont, 0);
+			SendMessage(hStaticText1, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
 		}
 
 		HWND hStaticText2 = CreateWindow(
@@ -164,14 +164,14 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
 
 
-		SendMessage(hStaticText2, WM_SETFONT, (WPARAM)TextFont, 0);
-		SendMessage(hStaticText3, WM_SETFONT, (WPARAM)TextFont, 0);
+		SendMessage(hStaticText2, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
+		SendMessage(hStaticText3, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
 		
-		SendMessage(hTextEdit2, WM_SETFONT, (WPARAM)TextFont, 0);
-		SendMessage(hTextEdit3, WM_SETFONT, (WPARAM)TextFont, 0);
+		SendMessage(hTextEdit2, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
+		SendMessage(hTextEdit3, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
 
-		SendMessage(OK_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
-		SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
+		SendMessage(OK_Btn, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
+		SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
 
 		SetFocus(GetDlgItem(m_hWnd, IDC_EDIT));
 
@@ -355,12 +355,12 @@ LRESULT dlgWndAskPINs::ProcecEvent
 			rect.right -= 20;
 
 			SetBkColor(m_hDC, RGB(255, 255, 255));
-			SelectObject(m_hDC, TextFontTitle);
+			SelectObject(m_hDC, PteidControls::StandardFontHeader);
 			DrawText(m_hDC, szHeader, -1, &rect, DT_WORDBREAK);
 
 			if (DrawError)
 			{
-				SelectObject(m_hDC, TextFont);
+				SelectObject(m_hDC, PteidControls::StandardFont);
 				SetTextColor(m_hDC, RGB(255, 0, 0));
 
 				GetClientRect(m_hWnd, &rect);

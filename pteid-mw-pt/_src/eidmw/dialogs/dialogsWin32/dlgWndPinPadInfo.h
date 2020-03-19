@@ -31,7 +31,7 @@ class dlgWndPinpadInfo : public Win32Dialog
 {
 	//HBITMAP ImagePIN;
 	//HBITMAP ImagePIN_Mask;
-	//HFONT TextFont;
+	//HFONT PteidControls::StandardFont;
 	
 	wchar_t * m_szHeader;
 	wchar_t * m_szMessage;

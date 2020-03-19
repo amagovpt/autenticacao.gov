@@ -5,7 +5,7 @@
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -25,7 +25,6 @@
 
 #include "stdafx.h"
 #include "dlgWndBase.h"
-#include "resource.h"
 #include "../langUtil.h"
 #include "Log.h"
 #include <wingdi.h>
@@ -35,71 +34,6 @@ TD_WNDMAP WndMap;
 Win32Dialog *Win32Dialog::Active_lpWnd = NULL;
 HWND Win32Dialog::Active_hWnd = NULL;
 extern HMODULE g_hDLLInstance;// = (HMODULE)NULL;
-
-void Win32Dialog::loadFontsFromResources() {    
-    std::vector<HRSRC> res;
-    res.push_back(FindResource(m_hInstance,
-        MAKEINTRESOURCE(IDR_MYFONT), L"BINARY"));
-    res.push_back(FindResource(m_hInstance,
-        MAKEINTRESOURCE(IDR_MYFONT_BOLD), L"BINARY"));
-    res.push_back(FindResource(m_hInstance,
-        MAKEINTRESOURCE(IDR_MYFONT_BLACK), L"BINARY"));
-
-    for (size_t i = 0; i < res.size(); i++)
-    {
-        HANDLE fontHandle = NULL;
-        if (res[i])
-        {
-            HGLOBAL mem = LoadResource(m_hInstance, res[i]);
-            void *data = LockResource(mem);
-            size_t len = SizeofResource(m_hInstance, res[i]);
-
-            DWORD nFonts;
-            fontHandle = AddFontMemResourceEx(
-                data,       	// font resource
-                len,       	// number of bytes in font resource 
-                NULL,          	// Reserved. Must be 0.
-                &nFonts      	// number of fonts installed
-                );
-
-        }
-        if (fontHandle == NULL)
-        {
-            MWLOG(LEV_ERROR, MOD_DLG, L"  --> Win32Dialog::loadFontsFromResources failed loading font (res[%d])", i);
-        }
-    }
-}
-
-HFONT Win32Dialog::createDlgFont(int font_pointsize, int fontWeight) {
-	HFONT TextFont;
-
-	LOGFONT lf;
-	memset(&lf, 0, sizeof(lf));
-	HDC screen = GetDC(0);
-
-	lf.lfHeight = -MulDiv(font_pointsize, GetDeviceCaps(screen, LOGPIXELSY), 72);
-	lf.lfWeight = fontWeight;
-	lf.lfOutPrecision = OUT_TT_ONLY_PRECIS;
-
-	if (fontWeight == FW_BLACK)
-	{
-		wcscpy_s(lf.lfFaceName, L"Lato Black");
-	}
-	else if (fontWeight == FW_BOLD) {
-		wcscpy_s(lf.lfFaceName, L"Lato Bold");
-	}
-	else {
-		wcscpy_s(lf.lfFaceName, L"Lato Regular");
-	}
-
-	TextFont = CreateFont(lf.lfHeight, lf.lfWidth,
-		lf.lfEscapement, lf.lfOrientation, lf.lfWeight,
-		lf.lfItalic, lf.lfUnderline, lf.lfStrikeOut, lf.lfCharSet,
-		lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality,
-		lf.lfPitchAndFamily, lf.lfFaceName);
-
-	return TextFont;
-}
 
 Win32Dialog::Win32Dialog(const wchar_t *appName)
 {
@@ -118,10 +52,9 @@ Win32Dialog::Win32Dialog(const wchar_t *appName)
 	ScaleDimensions(&fontSizeTitle, NULL); 
 	ScaleDimensions(&fontSize, NULL);
 
-	loadFontsFromResources();
-	TextFontTitle = createDlgFont(fontSizeTitle, FW_BLACK);
-	TextFontHeader = createDlgFont(fontSize, FW_BOLD);
-	TextFont = createDlgFont(fontSize, FW_REGULAR);
+	PteidControls::StandardFontHeader = PteidControls::CreatePteidFont(fontSizeTitle, FW_BLACK, m_hInstance);
+	PteidControls::StandardFontBold = PteidControls::CreatePteidFont(fontSize, FW_BOLD, m_hInstance);
+	PteidControls::StandardFont = PteidControls::CreatePteidFont(fontSize, FW_REGULAR, m_hInstance);
 }
 
 Win32Dialog::~Win32Dialog()

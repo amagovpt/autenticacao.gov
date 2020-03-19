@@ -200,6 +200,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\langUtil.cpp" />
+    <ClCompile Include="components\button.cpp" />
+    <ClCompile Include="components\font.cpp" />
     <ClCompile Include="DlgsWin32.cpp" />
     <ClCompile Include="dlgWndAskCmd.cpp" />
     <ClCompile Include="dlgWndAskPIN.cpp" />
@@ -213,6 +215,7 @@
     <ClInclude Include="..\dialogs.h" />
     <ClInclude Include="..\language.h" />
     <ClInclude Include="..\langUtil.h" />
+    <ClInclude Include="components\pteidControls.h" />
     <ClInclude Include="dlgWndAskCmd.h" />
     <ClInclude Include="dlgWndAskPIN.h" />
     <ClInclude Include="dlgWndAskPINs.h" />

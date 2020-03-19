@@ -5,7 +5,7 @@
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2012, 2014, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -86,9 +86,9 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 		CreateBitapMask( ImagePIN, ImagePIN_Mask );
 		*/
 
-		//TextFont = GetSystemFont();
+		//PteidControls::StandardFont = GetSystemFont();
 
-		SendMessage( Parent, WM_SETFONT, (WPARAM)TextFont, 0 );
+		SendMessage( Parent, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0 );
 	}
 
 }
@@ -133,7 +133,7 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 			rect.top = 0.11 * rect.bottom;
 			rect.bottom = 0.40 * rect.bottom;
 			SetBkColor( m_hDC, RGB(255,255,255));
-			SelectObject( m_hDC, TextFontTitle );
+			SelectObject( m_hDC, PteidControls::StandardFontHeader );
 			DrawText( m_hDC, m_szHeader, -1, &rect, DT_WORDBREAK );
 
 			//Change top header dimensions
@@ -143,7 +143,7 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 			rect.top = 0.22 * rect.bottom;
 			rect.bottom = 0.78 * rect.bottom;
 			SetBkColor(m_hDC, RGB(255, 255, 255));
-			SelectObject( m_hDC, TextFont );
+			SelectObject( m_hDC, PteidControls::StandardFont );
 			DrawText( m_hDC, m_szMessage, -1, &rect, DT_WORDBREAK );
 
             //Pinpad disable warning
@@ -153,7 +153,7 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
             rect.top = 0.78 * rect.bottom;
             rect.bottom = rect.bottom;
             SetBkColor(m_hDC, RGB(255, 255, 255));
-            SelectObject(m_hDC, TextFont);
+            SelectObject(m_hDC, PteidControls::StandardFont);
             DrawText(m_hDC, GETSTRING_DLG(PinpadCanBeDisabled), -1, &rect, DT_WORDBREAK);
 
 			EndPaint( m_hWnd, &ps );

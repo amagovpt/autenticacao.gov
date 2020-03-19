@@ -42,6 +42,12 @@
     <ClCompile Include="dlgWndCmdMsg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="components\button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dialogs.h">
@@ -80,6 +86,9 @@
     <ClInclude Include="dlgWndCmdMsg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="components\pteidControls.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DlgsWin32.rc">
@@ -112,9 +121,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Images\warning.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="images\icon2.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

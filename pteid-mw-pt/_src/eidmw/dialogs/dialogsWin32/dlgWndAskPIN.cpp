@@ -6,7 +6,7 @@
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2012, 2014, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2012 lmcm - <lmcm@caixamagica.pt>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -132,11 +132,11 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 			m_hWnd, (HMENU)IDC_STATIC2, m_hInstance, NULL);
 			*/
 
-		SendMessage(hTextEdit, WM_SETFONT, (WPARAM)TextFont, 0);
-		SendMessage(hStaticText, WM_SETFONT, (WPARAM)TextFont, 0 );
+		SendMessage(hTextEdit, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
+		SendMessage(hStaticText, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0 );
 
-		SendMessage(OK_Btn, WM_SETFONT, (WPARAM)TextFont, 0 );
-		SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)TextFont, 0 );
+		SendMessage(OK_Btn, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0 );
+		SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0 );
 
 		HBITMAP ImagePIN;
 		if( PinPusage == DLG_PIN_SIGN )
@@ -255,7 +255,7 @@ LRESULT dlgWndAskPIN::ProcecEvent
 			rect.bottom = rect.top + 10;
 
 			SetBkColor(m_hDC, RGB(255, 255, 255));
-			SelectObject(m_hDC, TextFontTitle);
+			SelectObject(m_hDC, PteidControls::StandardFontHeader);
 			MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
 			
 			//The first call is needed to calculate the needed bounding rectangle

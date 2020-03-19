@@ -1,7 +1,7 @@
 /* ****************************************************************************
 
 * eID Middleware Project.
-* Copyright (C) 2008-2009 FedICT.
+* Copyright (C) 2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
 *
 * This is free software; you can redistribute it and/or modify it
 * under the terms of the GNU Lesser General Public License version
@@ -36,9 +36,6 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
     std::wstring tmpTitle = L"";
     tmpTitle.append(message);
 
-    btnProcData.btnHovered = false;
-    btnProcData.mouseTracking = false;
-
     type = msgType;
 
     dlgResult = DLG_OK;
@@ -59,14 +56,10 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
         int buttonWidth = clientRect.right * 0.43;
         int buttonHeight = clientRect.bottom * 0.08;
 
-        // TODO: on hover feedback like in dlgWndAskCmd
-        HWND Cancel_Btn = CreateWindow(
-            L"BUTTON", 
-            (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS ? GETSTRING_DLG(Cancel) : GETSTRING_DLG(Ok)),
-            WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT | BS_OWNERDRAW,
+        btnProcData.text = (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS ? GETSTRING_DLG(Cancel) : GETSTRING_DLG(Ok));
+        HWND Cancel_Btn = PteidControls::CreateButton(
             (clientRect.right - buttonWidth) / 2, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
-            m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL);
-        SetWindowSubclass(Cancel_Btn, dlgWndCmdMsg::DlgButtonProc, 0, (DWORD_PTR)&btnProcData);
+            m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &btnProcData);
 
         int imgWidth = clientRect.right * 0.25;
         int imgHeight = imgWidth;
@@ -100,14 +93,14 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
             WS_CHILD | WS_VISIBLE | SS_CENTER,
             0, textTopY, clientRect.right, clientRect.bottom * 0.08,
             m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-        SendMessage(hStaticTextTop, WM_SETFONT, (WPARAM)TextFontHeader, 0);
+        SendMessage(hStaticTextTop, WM_SETFONT, (WPARAM)PteidControls::StandardFontBold, 0);
 
         int textBottomY = clientRect.bottom * 0.62;
         HWND hStaticTextBottom = CreateWindow(
             L"STATIC", message, WS_CHILD | WS_VISIBLE | SS_CENTER,
             0, textBottomY, clientRect.right, clientRect.bottom * 0.08,
             m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-        SendMessage(hStaticTextBottom, WM_SETFONT, (WPARAM)TextFont, 0);
+        SendMessage(hStaticTextBottom, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
     }
 }
 
@@ -122,52 +115,6 @@ dlgWndCmdMsg::~dlgWndCmdMsg()
         DestroyIcon(imageIco);
     }
     KillWindow();
-}
-
-// TODO: this function is repeated in dlgWndAskCmd.cpp. The code for the button should be refactored in an independent window class
-LRESULT CALLBACK dlgWndCmdMsg::DlgButtonProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
-{
-    DlgButtonData *btnProcData = (DlgButtonData *)dwRefData;
-    switch (uMsg)
-    {
-
-    case WM_MOUSEMOVE:
-    {
-        if (!btnProcData->mouseTracking)
-        {
-            // start tracking if we aren't already
-            TRACKMOUSEEVENT tme;
-            tme.cbSize = sizeof(TRACKMOUSEEVENT);
-            tme.dwFlags = TME_HOVER | TME_LEAVE;
-            tme.hwndTrack = hWnd;
-            tme.dwHoverTime = 1;
-            btnProcData->mouseTracking = TrackMouseEvent(&tme);
-        }
-        return 0;
-    }
-    case WM_MOUSEHOVER:
-    {
-        btnProcData->mouseTracking = false;
-        btnProcData->btnHovered = true;
-        InvalidateRect(hWnd, NULL, TRUE);
-        UpdateWindow(hWnd);
-        return 0;
-    }
-
-    case WM_MOUSELEAVE:
-    {
-        btnProcData->mouseTracking = false;
-        btnProcData->btnHovered = false;
-        InvalidateRect(hWnd, NULL, TRUE);
-        UpdateWindow(hWnd);
-        return 0;
-    }
-    default:
-
-        break;
-    }
-
-    return DefSubclassProc(hWnd, uMsg, wParam, lParam);
 }
 
 LRESULT dlgWndCmdMsg::ProcecEvent
@@ -230,7 +177,7 @@ LPARAM		lParam)		// Additional Message Information
         rect.bottom = rect.bottom * 0.25;
 
         SetBkColor(m_hDC, WHITE);
-        SelectObject(m_hDC, TextFontTitle);
+        SelectObject(m_hDC, PteidControls::StandardFontHeader);
         MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
 
         //The first call is needed to calculate the needed bounding rectangle
@@ -249,21 +196,7 @@ LPARAM		lParam)		// Additional Message Information
         LPDRAWITEMSTRUCT pDIS = (LPDRAWITEMSTRUCT)lParam;
         switch (pDIS->CtlID) {
         case IDB_CANCEL:
-            SetTextColor(pDIS->hDC, BLUE);
-            SetBkColor(pDIS->hDC, (btnProcData.btnHovered? GREY : LIGHTGREY));
-            wchar_t textBuf[12];
-            SendMessage(GetDlgItem(m_hWnd, pDIS->CtlID), WM_GETTEXT, (WPARAM)(sizeof(textBuf)), (LPARAM)textBuf);
-            std::wstring textString(textBuf);
-
-            SelectObject(pDIS->hDC, TextFontHeader);
-            SetTextAlign(pDIS->hDC, TA_CENTER | VTA_CENTER);
-
-            ExtTextOut(pDIS->hDC,
-                pDIS->rcItem.right / 2,
-                pDIS->rcItem.bottom / 4,
-                ETO_OPAQUE | ETO_CLIPPED, &pDIS->rcItem, textString.c_str(), textString.length(), NULL);
-            DrawEdge(pDIS->hDC, &pDIS->rcItem, (pDIS->itemState & ODS_SELECTED ? EDGE_SUNKEN : NULL), BF_RECT);
-            break;
+            PteidControls::DrawButton(uMsg, wParam, lParam, &btnProcData);
         }
         return TRUE;
     }

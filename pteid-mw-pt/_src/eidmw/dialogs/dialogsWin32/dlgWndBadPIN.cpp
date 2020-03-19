@@ -6,7 +6,7 @@
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2012 lmcm - <lmcm@caixamagica.pt>
  * Copyright (C) 2014, 2016, 2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -117,7 +117,7 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 				L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
 				buttonX, buttonY, buttonWidth, buttonHeight, 
 				m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL );
-			SendMessage(OK_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
+			SendMessage(OK_Btn, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
 		}
 		else
 		{
@@ -125,13 +125,13 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 				L"BUTTON", GETSTRING_DLG(Retry), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
 				buttonX - buttonWidth - buttonSpacing, buttonY, buttonWidth, buttonHeight, 
 				m_hWnd, (HMENU)IDB_RETRY, m_hInstance, NULL );
-			SendMessage(Retry_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
+			SendMessage(Retry_Btn, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
 
 			Cancel_Btn = CreateWindow(
 				L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
 				buttonX, buttonY, buttonWidth, buttonHeight, 
 				m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL );
-			SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
+			SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
 		}
 
 		//Message is vertically centered 
@@ -139,7 +139,7 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 			L"STATIC", szBody, WS_CHILD | WS_VISIBLE | SS_CENTER, 
 			0, clientRect.bottom / 2, clientRect.right, window_height * 0.08, 
 			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
-		SendMessage( hStaticText, WM_SETFONT, (WPARAM)TextFont, 0 );
+		SendMessage( hStaticText, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0 );
 
 	}
 }
@@ -230,7 +230,7 @@ LRESULT dlgWndBadPIN::ProcecEvent
 			rect.right -= 20;
 			rect.bottom -= 60;
 			SetBkColor(m_hDC, RGB(255, 255, 255));
-			SelectObject(m_hDC, TextFontTitle);
+			SelectObject(m_hDC, PteidControls::StandardFontHeader);
 			DrawText(m_hDC, szHeader, -1, &rect, DT_WORDBREAK);
 
 			EndPaint(m_hWnd, &ps);

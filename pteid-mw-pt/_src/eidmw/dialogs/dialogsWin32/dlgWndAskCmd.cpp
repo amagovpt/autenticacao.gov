@@ -1,7 +1,7 @@
 /* ****************************************************************************
 
 * eID Middleware Project.
-* Copyright (C) 2008-2009 FedICT.
+* Copyright (C) 2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
 *
 * This is free software; you can redistribute it and/or modify it
 * under the terms of the GNU Lesser General Public License version
@@ -42,15 +42,6 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
     hbrBkgnd = NULL;
     OutResult[0] = ' ';
     OutResult[1] = (char)0;
-    
-    textFieldData.okBtnProcData = &okBtnProcData;
-    textFieldData.textFieldUpdated = false;
-    okBtnProcData.btnHovered = false;
-    okBtnProcData.btnEnabled = false;
-    okBtnProcData.mouseTracking = false;
-    cancelBtnProcData.btnHovered = false;
-    cancelBtnProcData.btnEnabled = true;
-    cancelBtnProcData.mouseTracking = false;
 
     std::wstring tmpTitle = L"";
 
@@ -83,20 +74,21 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         int editOutY = clientRect.bottom * 0.63;
         int editOutLabelHeight = clientRect.bottom * 0.06;
 
-        HWND OK_Btn = CreateWindow(
-            L"BUTTON", GETSTRING_DLG(Confirm), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT | BS_OWNERDRAW,
+        textFieldData.okBtnProcData = &okBtnProcData;
+        textFieldData.textFieldUpdated = false;
+
+        okBtnProcData.highlight = true;
+        okBtnProcData.enabled = false;
+        okBtnProcData.text = GETSTRING_DLG(Confirm);
+        cancelBtnProcData.text = GETSTRING_DLG(Cancel);
+
+        HWND OK_Btn = PteidControls::CreateButton(
             clientRect.right * 0.52, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
-            m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL);
+            m_hWnd, (HMENU)IDB_OK, m_hInstance, &okBtnProcData);
 
-        HWND  Cancel_Btn = CreateWindow(
-            L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT | BS_OWNERDRAW,
+        HWND Cancel_Btn = PteidControls::CreateButton(
             clientRect.right * 0.05, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
-            m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL);
-
-        EnableWindow(OK_Btn, okBtnProcData.btnEnabled);
-        EnableWindow(Cancel_Btn, cancelBtnProcData.btnEnabled);
-        SetWindowSubclass(OK_Btn, dlgWndAskCmd::DlgButtonProc, 0, (DWORD_PTR)&okBtnProcData);
-        SetWindowSubclass(Cancel_Btn, dlgWndAskCmd::DlgButtonProc, 0, (DWORD_PTR)&cancelBtnProcData);
+            m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &cancelBtnProcData);
 
         DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER;
 
@@ -108,7 +100,7 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
             contentWidth,
             clientRect.bottom * 0.15,
             m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-        SendMessage(hStaticHeader, WM_SETFONT, (WPARAM)(isValidateOtp ? TextFont : TextFontHeader), 0);
+        SendMessage(hStaticHeader, WM_SETFONT, (WPARAM)(isValidateOtp ? PteidControls::StandardFont : PteidControls::StandardFontBold), 0);
 
         std::wstring boxText;
         if (!isValidateOtp)
@@ -141,7 +133,7 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
             contentWidth*0.9,
             boxHeight*0.76,
             m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-        SendMessage(hStaticBoxText, WM_SETFONT, (WPARAM)TextFont, 0);
+        SendMessage(hStaticBoxText, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
 
         if (isValidateOtp)
         {
@@ -154,7 +146,7 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
                 contentWidth*0.9,
                 boxHeight*0.65,
                 m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-            SendMessage(hStaticBoxTextBold, WM_SETFONT, (WPARAM)TextFontHeader, 0);
+            SendMessage(hStaticBoxTextBold, WM_SETFONT, (WPARAM)PteidControls::StandardFontBold, 0);
         }
 
         dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_NUMBER;
@@ -183,10 +175,8 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         SetWindowSubclass(hTextEditOut, dlgWndAskCmd::DlgEditProc, 0, (DWORD_PTR)&textFieldData);
 
         SendMessage(hTextEditOut, EM_LIMITTEXT, m_ulOutMaxLen, 0);
-        SendMessage(hStaticTextOut, WM_SETFONT, (WPARAM)TextFont, 0);
-        SendMessage(hTextEditOut, WM_SETFONT, (WPARAM)TextFont, 0);
-        SendMessage(OK_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
-        SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
+        SendMessage(hStaticTextOut, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
+        SendMessage(hTextEditOut, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
 
         SetFocus(GetDlgItem(m_hWnd, IDC_EDIT));
     }
@@ -206,52 +196,6 @@ void dlgWndAskCmd::GetResult()
         SendMessage(GetDlgItem(m_hWnd, IDC_EDIT), WM_GETTEXT, (WPARAM)(sizeof(outBuf)), (LPARAM)outBuf);
         wcscpy_s(OutResult, outBuf);
     }
-}
-
-
-LRESULT CALLBACK dlgWndAskCmd::DlgButtonProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
-{
-    DlgButtonData *btnProcData = (DlgButtonData *)dwRefData;
-    switch (uMsg)
-    {
-
-    case WM_MOUSEMOVE:
-    {
-        if (!btnProcData->mouseTracking)
-        {
-            // start tracking if we aren't already
-            TRACKMOUSEEVENT tme;
-            tme.cbSize = sizeof(TRACKMOUSEEVENT);
-            tme.dwFlags = TME_HOVER | TME_LEAVE;
-            tme.hwndTrack = hWnd;
-            tme.dwHoverTime = 1;
-            btnProcData->mouseTracking = TrackMouseEvent(&tme);
-        }
-        return 0;
-    }
-    case WM_MOUSEHOVER:
-    {
-        btnProcData->mouseTracking = false;
-        btnProcData->btnHovered = true;
-        InvalidateRect(hWnd, NULL, TRUE);
-        UpdateWindow(hWnd);
-        return 0;
-    }
-
-    case WM_MOUSELEAVE:
-    {
-        btnProcData->mouseTracking = false;
-        btnProcData->btnHovered = false;
-        InvalidateRect(hWnd, NULL, TRUE);
-        UpdateWindow(hWnd);
-        return 0;
-    }
-    default:
-
-        break;
-    }
-
-    return DefSubclassProc(hWnd, uMsg, wParam, lParam);
 }
 
 LRESULT CALLBACK dlgWndAskCmd::DlgEditProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
@@ -276,7 +220,7 @@ LRESULT CALLBACK dlgWndAskCmd::DlgEditProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
         RECT rectEdit;
         GetClientRect(hWnd, &rectEdit);
         
-        HPEN pen = CreatePen(PS_INSIDEFRAME, 2, (textFieldProcData->okBtnProcData->btnEnabled? BLUE : GREY));
+        HPEN pen = CreatePen(PS_INSIDEFRAME, 2, (textFieldProcData->okBtnProcData->enabled? BLUE : GREY));
         SelectObject(hdc, pen);
         SetBkMode(hdc, TRANSPARENT);
 
@@ -313,8 +257,8 @@ LPARAM		lParam)		// Additional Message Information
             if (EN_CHANGE == HIWORD(wParam))
             {
                 textFieldData.textFieldUpdated = false;
-                okBtnProcData.btnEnabled = AreFieldsFilled();
-                EnableWindow(GetDlgItem(m_hWnd, IDOK), ((unsigned int)okBtnProcData.btnEnabled));
+                okBtnProcData.enabled = AreFieldsFilled();
+                EnableWindow(GetDlgItem(m_hWnd, IDOK), ((unsigned int)okBtnProcData.enabled));
                 InvalidateRect(hTextEditOut, NULL, TRUE);
                 UpdateWindow(hTextEditOut);
 
@@ -390,7 +334,7 @@ LPARAM		lParam)		// Additional Message Information
         rect.bottom = rect.bottom * 0.25;
 
         SetBkColor(m_hDC, RGB(255, 255, 255));
-        SelectObject(m_hDC, TextFontTitle);
+        SelectObject(m_hDC, PteidControls::StandardFontHeader);
         MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
 
         //The first call is needed to calculate the needed bounding rectangle
@@ -409,41 +353,10 @@ LPARAM		lParam)		// Additional Message Information
         LPDRAWITEMSTRUCT pDIS = (LPDRAWITEMSTRUCT)lParam;
         switch (pDIS->CtlID) {
         case IDB_CANCEL:
+            return PteidControls::DrawButton(uMsg, wParam, lParam, &cancelBtnProcData);
         case IDB_OK:
-            if (pDIS->CtlID == IDB_CANCEL)
-            {
-                SetTextColor(pDIS->hDC, BLUE);
-                SetBkColor(pDIS->hDC, (cancelBtnProcData.btnHovered ? GREY : LIGHTGREY));
-            }
-            else if (pDIS->CtlID == IDB_OK)
-            {
-                SetTextColor(pDIS->hDC, WHITE);
-                if (okBtnProcData.btnEnabled)
-                {
-                    SetBkColor(pDIS->hDC, (okBtnProcData.btnHovered ? DARKBLUE : BLUE));
-                }
-                else
-                {
-                    SetBkColor(pDIS->hDC, LIGHTBLUE);
-                }
-            }
-
-            wchar_t textBuf[12];
-            SendMessage(GetDlgItem(m_hWnd, pDIS->CtlID), WM_GETTEXT, (WPARAM)(sizeof(textBuf)), (LPARAM)textBuf);
-            std::wstring textString(textBuf);
-
-            SelectObject(pDIS->hDC, TextFontHeader);
-            SetTextAlign(pDIS->hDC, TA_CENTER | VTA_CENTER);
-
-            ExtTextOut(pDIS->hDC,
-                pDIS->rcItem.right / 2,
-                pDIS->rcItem.bottom / 4,
-                ETO_OPAQUE | ETO_CLIPPED, &pDIS->rcItem, textString.c_str(), textString.length(), NULL);
-            DrawEdge(pDIS->hDC, &pDIS->rcItem, (pDIS->itemState & ODS_SELECTED ? EDGE_SUNKEN : NULL), BF_RECT);
-
-            return TRUE;
+            return PteidControls::DrawButton(uMsg, wParam, lParam, &okBtnProcData);
         }
-        break;
     }
 
     case WM_ACTIVATE:

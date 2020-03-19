@@ -5,7 +5,7 @@
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -25,6 +25,7 @@
 #include "stdafx.h"
 #include "../dialogs.h"
 #include <vector>
+#include "components\pteidControls.h"
 
 #pragma once
 
@@ -68,8 +69,6 @@ protected:
 	bool CreateWnd( const wchar_t* title, int width, int height, int Icon = 0 , HWND Parent = NULL );
 	void KillWindow( );
 	virtual void Destroy();
-	void loadFontsFromResources();
-	HFONT createDlgFont(int font_pointsize, int fontWeight);
 	void ScaleDimensions(int *width, int *height);
 
 protected:
@@ -78,9 +77,7 @@ protected:
 	HWND		m_parent;				// Holds Our Parent Window Handle
 	HINSTANCE	m_hInstance;			// Instance to our Module(DLL)
 	bool		m_ModalHold;			// Wheither it's modal or not
-	HFONT TextFontTitle;
-	HFONT TextFontHeader;
-	HFONT TextFont;
+
 
 private:
 	wchar_t*	m_appName;				// Name of the Window Class
