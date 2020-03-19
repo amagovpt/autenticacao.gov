@@ -29,11 +29,6 @@
 #include "appcontroller.h"
 #include "gapi.h"
 
-//MW libraries
-#include "eidlib.h"
-#include "eidErrors.h"
-#include "eidlibException.h"
-
 #ifdef WIN32
 #include <windows.h>
 #include <stdio.h>
@@ -45,6 +40,12 @@
 
 #ifndef WIN32
 #include <unistd.h>
+#endif
+
+//Authorization functions for Certificates update
+#ifdef __APPLE__
+#include <Security/Authorization.h>
+#include <Security/AuthorizationTags.h>
 #endif
 
 #include "proxyinfo.h"
@@ -729,7 +730,89 @@ void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
     qDebug() << "C++ AUTO UPDATES: RunPackage finish";
 }
 
-void AutoUpdates::RunCertsPackage(QStringList certs){
+#ifdef __APPLE__
+
+/* Helper function for the helper function :) */
+QByteArray readOriginalFile(QString &path) {
+    QFile origin_file(path);
+
+    if (!origin_file.open(QIODevice::ReadOnly)) {
+       PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "readOriginalFile() Failed to open file %s!", path.toUtf8().data());
+       return QByteArray();
+    }
+
+   return origin_file.readAll();
+}
+
+/* Helper function to elevate privileges in MacOS and copy a file to a root owned directory */
+
+bool copyFileWithAuthorization(QString &cert_filepath, QString &destination_path) {
+    AuthorizationRef authorization_ref = NULL;
+
+   //Create AuthorizationItem for the dialog
+
+    OSStatus status = AuthorizationCreate(
+      NULL,
+      kAuthorizationEmptyEnvironment,
+      kAuthorizationFlagDefaults,
+      &authorization_ref);
+
+    if (status != errAuthorizationSuccess) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "copyFileWithAuthorization: AuthorizationCreate() failed with error code: %d", status);
+        return false;
+    }
+
+    AuthorizationExternalForm form;
+    status = AuthorizationMakeExternalForm(authorization_ref, &form);
+
+    if (status != errAuthorizationSuccess) 
+       return false;
+
+   QFileInfo fi(cert_filepath);
+   QString destination_full = destination_path + fi.fileName();
+
+   char command_buf[1024];
+
+   //Create the file if needed and open for writing
+   snprintf(command_buf, sizeof(command_buf), "/usr/libexec/authopen -extauth -c -w %s", destination_full.toUtf8().data());
+
+   FILE * destination_pipe = popen(command_buf, "w");
+
+   if (destination_pipe == NULL) {
+       PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "copyFileWithAuthorization: Failed to open pipe to 'authopen' (%d - %s)", errno, strerror(errno));
+   }
+   else {
+
+        fwrite(form.bytes, kAuthorizationExternalFormLength, 1, destination_pipe);
+        fflush(destination_pipe);
+
+        QByteArray file_content = readOriginalFile(cert_filepath);
+
+        if (file_content.size() == 0) {
+            return false;
+        }
+
+        fwrite(file_content.data(), file_content.size(), 1, destination_pipe);
+        fflush(destination_pipe);
+
+        //Close the pipe and wait for the authopen process to finish
+        int rc = pclose(destination_pipe);
+
+        if (rc != 0) {
+           PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "copyFileWithAuthorization: authopen process exited with error code %d", rc);
+        }
+
+        return rc == 0;
+
+   }
+
+}
+
+
+#endif
+
+void AutoUpdates::RunCertsPackage(QStringList certs) {
     qDebug() << "C++ AUTO UPDATES: RunCertsPackage filename";
 
     eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_CERTS_DIR);
@@ -769,10 +852,33 @@ void AutoUpdates::RunCertsPackage(QStringList certs){
     }
 
 #elif __APPLE__
-    #error "TODO: Install certificate"
+    if (certs.length() > 0) {
+        bUpdateCertsSuccess = true;
+        for (int i = 0; i < certs.length(); i++) {
+            QString certificate_path = QDir::tempPath() + "/" + certs.at(i);
+            if (validateHash(certificate_path, hashList.at(i))) {
+               
+               bUpdateCertsSuccess = copyFileWithAuthorization(certificate_path, certs_dir_str);
+               if (!bUpdateCertsSuccess)
+                  break;
+           
+            }
+            else {
+                bUpdateCertsSuccess = false;
+                //Hash failure just abort because we don't want to support partially correct updates
+                 PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                    "AutoUpdates::RunCertsPackage: invalid hash for downloaded file %s",
+                                                 certificate_path.toStdString().c_str());
+                
+                break;
+            }
+
+        }
+    }
+
 #else
     QString filesToCopy;
-    if(certs.length() > 0){
+    if (certs.length() > 0){
         bUpdateCertsSuccess = true;
         for (int i = 0; i < certs.length(); i++){
             QString certificateFileName;
@@ -834,7 +940,7 @@ bool AutoUpdates::validateHash(QString certPath, QString hashString){
     QFile f(certPath);
     if (!f.open(QFile::ReadOnly)){
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                  "AutoUpdates::getAppCertsUpdate: Error Reading Certificate file :%s",
+                  "AutoUpdates::validateHash: Error Reading Certificate file :%s",
                   certPath.toStdString().c_str());
         return false;
     }
