@@ -25,11 +25,13 @@
 #ifndef __PINPAD3_H__
 #define __PINPAD3_H__
 
+#ifdef __APPLE__
+#include <PCSC/winscard.h>
+#include <PCSC/wintypes.h>
+#else
 #include <winscard.h>
-
-#ifndef _WIN32
-#include "wintypes.h"
 #endif
+
 
 #ifndef CM_IOCTL_GET_FEATURE_REQUEST
 #define CM_IOCTL_GET_FEATURE_REQUEST SCARD_CTL_CODE(3400) //Definition from reader.h in pcsclite

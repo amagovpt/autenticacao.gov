@@ -12,7 +12,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
-#include <winscard.h>
+
 #include <string>
 
 #include "GempcPinpad.h"

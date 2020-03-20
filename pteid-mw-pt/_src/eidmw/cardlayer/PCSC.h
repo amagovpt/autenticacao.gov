@@ -36,11 +36,9 @@ Takes care of
 #include "CardLayerConst.h"
 #include "InternalConst.h"
 
-#include <winscard.h>
-
 #ifndef WIN32
-
-#include "wintypes.h"
+#include <PCSC/winscard.h>
+#include <PCSC/wintypes.h>
 #include "Reader.h"
 
 #ifndef SCARD_READERSTATE_A
@@ -49,7 +47,11 @@ Takes care of
 
 #ifndef SCARD_READERSTATEA
 #define SCARD_READERSTATEA SCARD_READERSTATE_A
+#else
+#include <winscard.h>
 #endif
+
+
 // needed for pcsclite version earlier than 1.4
 #ifndef SCARD_E_NO_READERS_AVAILABLE
 #define SCARD_E_NO_READERS_AVAILABLE 0x8010002E /** Cannot find smart card reader */

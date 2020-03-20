@@ -28,11 +28,13 @@
 extern "C" {
 #endif
 
+#ifdef __APPLE__
+#include <PCSC/winscard.h>
+#include <PCSC/wintypes.h>
+#else
 #include <winscard.h>
-
-#ifndef WIN32
-#include "wintypes.h"
 #endif
+
 
 
 /////////////////////////////////// CCID things ///////////////////////////////

@@ -42,7 +42,12 @@
 #include "../common/ByteArray.h"
 #include "../common/Thread.h"
 
+#ifndef WIN32
+#include <PCSC/winscard.h>
+#include <PCSC/wintypes.h>
+#else
 #include <winscard.h>
+#endif
 #include <iostream>
 #include <vector>
 

@@ -12,7 +12,13 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
+
+#ifdef __APPLE__
+#include <PCSC/winscard.h>
+#include <PCSC/wintypes.h>
+#else
 #include <winscard.h>
+#endif
 
 #include "ACR83Pinpad.h"
 #include "Context.h"
