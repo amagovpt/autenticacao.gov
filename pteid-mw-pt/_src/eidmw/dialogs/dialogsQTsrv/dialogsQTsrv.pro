@@ -44,11 +44,8 @@ DESTDIR = ../../bin
 ###
 LIBS = -L../../lib \
 	-l$${DLGLIB} \	
-	-l$${COMMONLIB} \
-	-lssl
+	-l$${COMMONLIB}
 	
-macx: LIBS +=-lcrypto
-
 LIBS += -lpthread 
 
 !macx:LIBS += -Wl,-R,"'\$\$ORIGIN/$${LINK_RELATIVE_PATH}'"
