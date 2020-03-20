@@ -51,7 +51,7 @@ LIBS += ../lib/libpteid-poppler.a
 macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2q/lib/ \
 	    -L/usr/local/Cellar/xerces-c/3.1.2/lib/ \
 	    -L/usr/local/Cellar/libzip/1.5.1/lib/ \
-            -L/usr/local/Cellar/libpng/1.6.34/lib/ \
+            -L/usr/local/Cellar/libpng/1.6.37/lib/ \
             -L/usr/local/Cellar/openjpeg/2.3.0/lib \
 	    -L/usr/local/Cellar/xml-security-c/1.7.3/lib/
 macx: LIBS += -Wl,-framework -Wl,CoreFoundation
@@ -59,7 +59,8 @@ macx: LIBS += -Wl,-framework -Wl,SystemConfiguration
 macx: LIBS += -Wl,-framework -Wl,CoreServices
 macx: LIBS += -liconv
 macx: INCLUDEPATH +=/usr/local/Cellar/openssl/1.0.2q/include /usr/local/Cellar/libzip/1.5.1/include /usr/local/Cellar/openjpeg/2.3.0/include/openjpeg-2.3/ /usr/local/Cellar/xml-security-c/1.7.3/include/ /usr/local/Cellar/xerces-c/3.1.2/include
-macx: INCLUDEPATH += /System/Library/Frameworks/CFNetwork.framework/Headers
+macx: INCLUDEPATH += /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/CFNetwork.framework/Versions/Current/Headers/
+macx: INCLUDEPATH += /usr/local/Cellar/libpng/1.6.37/include
 !macx: INCLUDEPATH += /usr/include/openjpeg-2.3 /usr/include/libpng16
 
 isEmpty(EMULATE_CARDLAYER) {
