@@ -13777,30 +13777,22 @@ int MYRIAD_ITALIC_WIDTHS[] =
 };
 
 
-
 unsigned int getWidth(unsigned char c, MyriadFontType ft)
 {
 
 	switch(ft)
 	{
 		case MYRIAD_REGULAR:
-			if (c < sizeof(MYRIAD_REGULAR_WIDTHS))
-				return MYRIAD_REGULAR_WIDTHS[c];
-			else
-				return 0;
+			return MYRIAD_REGULAR_WIDTHS[c];
+
 		case MYRIAD_ITALIC:
-			if (c < sizeof(MYRIAD_ITALIC_WIDTHS))
-				return MYRIAD_ITALIC_WIDTHS[c];
-			else
-				return 0;
+			return MYRIAD_ITALIC_WIDTHS[c];
+
 		case MYRIAD_BOLD:
-			if (c < sizeof(MYRIAD_BOLD_WIDTHS))
-				return MYRIAD_BOLD_WIDTHS[c];
-			else
-				return 0;
+			return MYRIAD_BOLD_WIDTHS[c];
 	}
 
-	fprintf(stderr, "Shouldnt be reached!\n");
+	fprintf(stderr, "Illegal MyriadFontType arg: shouldn't be reached!\n");
 	return 0;
 
 }
