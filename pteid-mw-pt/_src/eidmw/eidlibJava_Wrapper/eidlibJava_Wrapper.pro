@@ -60,7 +60,7 @@ LIBS +=	-l$${DLGLIB}
 LIBS +=	-l$${CARDLAYERLIB}
 LIBS +=	-l$${APPLAYERLIB}
 
-macx: INCLUDEPATH += /System/Library/Frameworks/JavaVM.framework/Headers/ /usr/local/Cellar/openssl/1.0.2q/include/
+macx: INCLUDEPATH += /Library/Java/JavaVirtualMachines/jdk-11.0.6.jdk/Contents/Home/include/ /Library/Java/JavaVirtualMachines/jdk-11.0.6.jdk/Contents/Home/include/darwin/ /usr/local/Cellar/openssl/1.0.2q/include/
 macx: LIB += -Wl,-framework -Wl,Java
 
 DEPENDPATH += .
