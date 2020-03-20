@@ -389,6 +389,26 @@ void APL_EIDCard::invalidateAddressSOD()
 	}
 }
 
+// Is the Cert Validity tolerance legal measure still in effect ?
+bool SCV_tolerance_active()
+{
+    //Get current time
+    time_t t = std::time(nullptr);
+
+    const char * time_limit = "2020-07-01";
+    char current_date[16];
+    if (std::strftime(current_date, sizeof(current_date), "%Y-%m-%d", std::localtime(&t))) {
+        if (strcmp(time_limit, current_date) > 0) {
+            MWLOG(LEV_DEBUG, MOD_APL, L"Cert Validity Tolerance is active!");
+            return true;
+        }
+    }
+
+    MWLOG(LEV_DEBUG, MOD_APL,
+        L"Cert Validity Tolerance is NOT active because the legal current date is after the limit of the exceptional measure!");
+    return false;
+}
+
 APL_EidFile_Sod *APL_EIDCard::getFileSod()
 {
 	if(!m_FileSod)
@@ -396,7 +416,28 @@ APL_EidFile_Sod *APL_EIDCard::getFileSod()
 		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
 		if(!m_FileSod)
 		{
+			const char * expiry_date = NULL;
+			CByteArray ba_validityEndDate;     //Validity date read from card if needed
 			m_FileSod=new APL_EidFile_Sod(this);
+
+			if (m_FileID) {
+				expiry_date = m_FileID->getValidityEndDate();
+			}
+			else {
+				//Read the validity end date directly from cardlayer to avoid recursive calls from APL_EidFile_ID::getValidityEndDate
+
+				unsigned long bytes_read = 
+				  this->readFile(PTEID_FILE_ID, ba_validityEndDate, PTEIDNG_FIELD_ID_POS_ValidityEndDate, PTEIDNG_FIELD_ID_LEN_ValidityEndDate);
+				MWLOG(LEV_DEBUG, MOD_APL, L"Read %lu bytes from card for ValidityEndDate", bytes_read);
+
+				ba_validityEndDate.TrimRight('\0');
+				MWLOG(LEV_DEBUG, MOD_APL, L"ValidityEndDate freshly read: %s", ba_validityEndDate.GetBytes());
+				expiry_date = (char *)ba_validityEndDate.GetBytes();
+			}
+
+			m_FileSod->setCertificateValidityException(
+				       SCV_tolerance_active() && isCardExpirationDateTolerated(expiry_date));
+
 		}
 	}
 	return m_FileSod;
