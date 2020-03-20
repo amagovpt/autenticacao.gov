@@ -21,7 +21,6 @@ DESTDIR = ./../../lib
 DEPENDPATH += .
 
 macx: LIBS +=	-L/usr/local/Cellar/openssl/1.0.2q/lib/ \
-                /Users/yosemite/Downloads/gsoap_2.8.49/gsoap-2.8/gsoap/libgsoapssl++.a \
                 -lz \
                 -lssl \
 		-lcrypto
