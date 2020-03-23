@@ -177,7 +177,7 @@ QString AppController::getNewsLog(void){
     if(!file.open(QIODevice::ReadOnly))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                  "AppController::getAskToShowNewsValue: Error Reading updateNewsLog.txt :%s",
+                  "AppController::getNewsLog: Error Reading updateNewsLog.txt :%s",
                   updateNewsLog.toStdString().c_str());
         return "";
     }

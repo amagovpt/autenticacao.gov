@@ -262,7 +262,6 @@ std::vector<NewsEntry> AutoUpdates::ChooseNews()
 {
     qDebug() << "C++ AUTO UPDATES: ChooseNews";
 
-    //TODO: check if already read news -> if entry.id in file of read news
     std::vector<NewsEntry> filteredNews;
     NewsEntry entry;
     std::string firstString;
