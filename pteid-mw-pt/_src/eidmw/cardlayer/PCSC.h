@@ -47,8 +47,6 @@ Takes care of
 
 #ifndef SCARD_READERSTATEA
 #define SCARD_READERSTATEA SCARD_READERSTATE_A
-#else
-#include <winscard.h>
 #endif
 
 
@@ -68,7 +66,8 @@ Takes care of
 #ifndef SCARD_ATTR_VENDOR_IFD_VERSION
 #define SCARD_ATTR_VENDOR_IFD_VERSION	 ((DWORD)0x00010102)
 #endif
-
+#else
+#include <winscard.h>
 #endif
 
 #define IOCTL_SMARTCARD_SET_CARD_TYPE	SCARD_CTL_CODE(2060)
