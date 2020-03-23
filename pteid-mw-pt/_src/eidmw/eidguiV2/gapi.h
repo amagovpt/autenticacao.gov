@@ -225,7 +225,7 @@ public:
     enum AutoUpdateMessage {GenericError, NoUpdatesAvailable, DownloadFailed, DownloadCancelled, LinuxNotSupported, UpdatesAvailable,
                            UnableSaveFile, InstallFailed, NetworkError};
 
-    enum AutoUpdateType {AutoUpdateNoExist, AutoUpdateApp, AutoUpdateCerts };
+    enum AutoUpdateType {AutoUpdateNoExist, AutoUpdateApp, AutoUpdateCerts, AutoUpdateNews};
 
     enum ScapPdfSignResult { ScapTimeOutError, ScapGenericError, ScapAttributesExpiredError, ScapZeroAttributesError,
                              ScapNotValidAttributesError, ScapClockError, ScapSecretKeyError, ScapMultiEntityError, ScapSucess };

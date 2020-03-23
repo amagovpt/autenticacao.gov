@@ -54,7 +54,10 @@ public slots:
     QString getAppVersion(void);
     QString getAppRevision(void);
     void updateCertslog(void);
-    QString getAppCertsUpdate(void);
+    QString getCertsLog(void);
+    void updateNewsLog(void);
+    QString getNewsLog(void);
+    bool isToShowNews(QString id);
     QString getAppCopyright(void);
     bool isAnimationsEnabled(void);
     bool getNotShowHelpStartUp(void);
@@ -71,6 +74,8 @@ public slots:
 
     void autoUpdateApp(void);
     void startUpdateApp(void);
+
+    void autoUpdatesNews(void);
 
     bool getStartAutoupdateValue(void);
     void setStartAutoupdateValue(bool bStartAutoupdate);
@@ -150,6 +155,7 @@ private:
 
     AutoUpdates certsUpdate;
     AutoUpdates appUpdate;
+    AutoUpdates newsUpdate;
 
 protected:
     QTranslator m_translator;
@@ -161,9 +167,11 @@ signals:
 
     // Autoupdates
     void signalAutoUpdateFail(int updateType, int error_code);
-    void signalAutoUpdateAvailable(int updateType, QString release_notes,
-                                   QString installed_version, QString remote_version, QString certs_list);
-    void signalAutoUpdateNotAvailable();
+    void signalAutoUpdateAvailable(int updateType,
+                                   QString arg1,
+                                   QString arg2,
+                                   QString arg3,
+                                   QString url_list);
     void signalAutoUpdateProgress(int updateType/*, int value*/);
     void signalStartUpdate(int updateType, QString filename);
     void signalAutoUpdateSuccess(int updateType);

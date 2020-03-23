@@ -17,12 +17,11 @@
 <context>
     <name>DialogCMD</name>
     <message>
-        <location filename="components/DialogCMD.qml" line="403"/>
         <source>STR_REGISTER_CMD_CERT_DONT_ASK_AGAIN</source>
-        <translation>Do not show this message again.</translation>
+        <translation type="vanished">Do not show this message again.</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="427"/>
+        <location filename="components/DialogCMD.qml" line="428"/>
         <source>STR_REGISTER_CMD_CERT_DESC</source>
         <translation>Registering your Chave Móvel Digital certificate allows signing with CMD in some third-party applications. It is possible to register the certificate at any time in &quot;Signatures configuration&quot;.</translation>
     </message>
@@ -32,7 +31,7 @@
     <message>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="226"/>
         <location filename="gapi.cpp" line="302"/>
-        <location filename="gapi.cpp" line="3263"/>
+        <location filename="gapi.cpp" line="3280"/>
         <source>STR_POPUP_SUCESS</source>
         <translation>Success</translation>
     </message>
@@ -42,11 +41,11 @@
         <translation>Personal notes successfully written!</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="595"/>
+        <location filename="components/DialogCMD.qml" line="604"/>
         <location filename="gapi.cpp" line="306"/>
         <location filename="gapi.cpp" line="683"/>
-        <location filename="gapi.cpp" line="3243"/>
-        <location filename="gapi.cpp" line="3258"/>
+        <location filename="gapi.cpp" line="3260"/>
+        <location filename="gapi.cpp" line="3275"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Error</translation>
     </message>
@@ -106,8 +105,8 @@
         <location filename="gapi.cpp" line="555"/>
         <location filename="gapi.cpp" line="646"/>
         <location filename="gapi.cpp" line="779"/>
-        <location filename="gapi.cpp" line="3234"/>
-        <location filename="gapi.cpp" line="3268"/>
+        <location filename="gapi.cpp" line="3251"/>
+        <location filename="gapi.cpp" line="3285"/>
         <source>STR_VERIFY_INTERNET</source>
         <translation>Please make sure you are connected to the Internet</translation>
     </message>
@@ -200,13 +199,13 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="237"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="105"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="119"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="652"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="637"/>
         <source>STR_NIC</source>
         <translation>Identification number</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="639"/>
-        <location filename="gapi.cpp" line="3237"/>
+        <location filename="gapi.cpp" line="3254"/>
         <source>STR_CMD_GET_CERTIFICATE_ERROR</source>
         <oldsource>STR_GET_CERTIFICATE_ERROR</oldsource>
         <translation>Non-existent registration or inactive digital signature subscription. Verify that digital signature subscription is enabled on &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;</translation>
@@ -259,20 +258,20 @@
     </message>
     <message>
         <location filename="gapi.cpp" line="821"/>
-        <location filename="gapi.cpp" line="3228"/>
+        <location filename="gapi.cpp" line="3245"/>
         <source>STR_CMD_LOGIN_SUCESS</source>
         <translation>Login successfully. Wait for the code sent by SMS!</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="938"/>
         <location filename="gapi.cpp" line="1001"/>
-        <location filename="gapi.cpp" line="3221"/>
+        <location filename="gapi.cpp" line="3238"/>
         <source>STR_CMD_CONNECTING</source>
         <translation>Connecting to the server</translation>
     </message>
     <message>
         <location filename="gapi.cpp" line="1038"/>
-        <location filename="gapi.cpp" line="3255"/>
+        <location filename="gapi.cpp" line="3272"/>
         <source>STR_CMD_SENDING_CODE</source>
         <translation>Sending confirmation code to the server</translation>
     </message>
@@ -312,13 +311,13 @@
         <translation>The Citizen Card was not activated.</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="3240"/>
-        <location filename="gapi.cpp" line="3271"/>
+        <location filename="gapi.cpp" line="3257"/>
+        <location filename="gapi.cpp" line="3288"/>
         <source>STR_CERT_REG_ERROR</source>
         <translation>An error occured while registering the certificate.</translation>
     </message>
     <message>
-        <location filename="gapi.cpp" line="3264"/>
+        <location filename="gapi.cpp" line="3281"/>
         <source>STR_CERT_REG_SUCC</source>
         <translation>The certificate was succesfully registered.</translation>
     </message>
@@ -931,32 +930,32 @@
         <translation>Save Notes</translation>
     </message>
     <message>
-        <location filename="main.qml" line="484"/>
+        <location filename="main.qml" line="688"/>
         <source>STR_UNSAVED_NOTES_TITLE</source>
         <translation>Notes</translation>
     </message>
     <message>
-        <location filename="main.qml" line="499"/>
+        <location filename="main.qml" line="703"/>
         <source>STR_UNSAVED_NOTES</source>
         <translation>Unsaved Notes</translation>
     </message>
     <message>
-        <location filename="main.qml" line="516"/>
+        <location filename="main.qml" line="720"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION_EXIT</source>
         <translation>Press &quot;Stay&quot; to continue editing notes or press &quot;Leave&quot; to exit application without saving the notes.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="517"/>
+        <location filename="main.qml" line="721"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION</source>
         <translation>Press &quot;Stay&quot; to continue editing notes or press &quot;Leave&quot; to exit this page without saving the notes.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="541"/>
+        <location filename="main.qml" line="745"/>
         <source>STR_UNSAVED_NOTES_LEAVE</source>
         <translation>Leave</translation>
     </message>
     <message>
-        <location filename="main.qml" line="564"/>
+        <location filename="main.qml" line="768"/>
         <source>STR_UNSAVED_NOTES_STAY</source>
         <translation>Stay</translation>
     </message>
@@ -1262,8 +1261,8 @@
         <translation>Chave Móvel Digital</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="429"/>
-        <location filename="components/DialogCMD.qml" line="441"/>
+        <location filename="components/DialogCMD.qml" line="430"/>
+        <location filename="components/DialogCMD.qml" line="442"/>
         <source>STR_REGISTER_CMD_CERT_TITLE</source>
         <translation>Register Chave Móvel Digital&apos;s certificate</translation>
     </message>
@@ -1273,7 +1272,7 @@
         <translation>Registering the certificate associated to your Chave Móvel Digital allows signing with CMD in some third-party applications.</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="428"/>
+        <location filename="components/DialogCMD.qml" line="429"/>
         <location filename="contentPages/definitions/PageDefinitionsSignSettingsForm.ui.qml" line="434"/>
         <source>STR_REGISTER_CMD_CERT_BUTTON</source>
         <translation>Register</translation>
@@ -1556,7 +1555,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="236"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="101"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="118"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="651"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="636"/>
         <source>STR_CUSTOM_SIGN_BY</source>
         <translation>Signed by</translation>
     </message>
@@ -1595,7 +1594,7 @@
 <context>
     <name>PageDefinitionsUpdates</name>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="138"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="146"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="204"/>
         <source>STR_UPDATE_BUTTON_START</source>
         <translation>Install</translation>
@@ -1611,63 +1610,64 @@
         <translation>An error occured.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="37"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="144"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="38"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="152"/>
         <source>STR_UPDATE_NO_UPDATES</source>
         <translation>No updates available at the moment.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="40"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="45"/>
         <source>STR_UPDATE_LINUX_NOT_SUPPORTED</source>
         <translation>Your Linux distribution is not supported by Automatic Updates</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="43"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="48"/>
         <source>STR_UPDATE_SAVE_FILE</source>
         <translation>Unable to save the update.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="46"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="51"/>
         <source>STR_UPDATE_DOWNLOAD_FAIL</source>
         <translation>Download failed.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="52"/>
-        <location filename="main.qml" line="137"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="57"/>
+        <location filename="main.qml" line="143"/>
         <source>STR_UPDATE_INSTALL_FAIL</source>
         <translation>The installation of one or more certificates failed.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="104"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="112"/>
         <source>STR_UPDATE_SUCCESS</source>
         <translation>Certificate update successful.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="114"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="122"/>
         <location filename="main.qml" line="89"/>
         <source>STR_UPDATED_CERTIFICATES</source>
         <oldsource>STR_UPDATE_CERTIFICATES</oldsource>
         <translation>Certificate update successful</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="158"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="166"/>
         <source>STR_UPDATE_CERTS_AVAILABLE</source>
         <translation>A new update is available. Press Install to perform the update.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="253"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="248"/>
         <source>STR_UPDATE_CERTS_VERSION_LOOKUP</source>
         <translation>Searching for new certificates.</translation>
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="34"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="53"/>
-        <location filename="main.qml" line="138"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="58"/>
+        <location filename="main.qml" line="144"/>
+        <location filename="main.qml" line="152"/>
         <source>STR_CONTACT_SUPPORT</source>
         <translation>Please try again. If this error persists email us at  &lt;a href=&quot;mailto:info.cidadao@ama.pt&quot;&gt;info.cidadao@ama.pt&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="56"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="61"/>
         <source>STR_UPDATE_NETWORK_ERROR</source>
         <translation>Please check your Internet connection and try again.</translation>
     </message>
@@ -1703,43 +1703,43 @@
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="139"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="147"/>
         <source>STR_VERSION</source>
         <translation>version</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="162"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="170"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="608"/>
         <source>STR_UPDATE_CERTS_BUTTON_START</source>
         <translation>Install</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="167"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="182"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="41"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="175"/>
         <source>STR_UPDATE_CERTS_NO_UPDATES</source>
         <translation>No updates of certificates available at the moment.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="219"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="214"/>
         <source>STR_UPDATE_VERSION_LOOKUP</source>
         <translation>Searching for new version.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="129"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="137"/>
         <source>STR_UPDATE_AVAILABLE</source>
         <translation>A new update is available. Press Install do perform the update.</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="198"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="205"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="193"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="200"/>
         <source>STR_UPDATE_STARTING_DOWNLOAD</source>
         <translation>Downloading</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="49"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="170"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="185"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="287"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="54"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="81"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="178"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="282"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="130"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdatesForm.ui.qml" line="468"/>
         <source>STR_UPDATE_TEXT</source>
@@ -1751,31 +1751,47 @@
         <translation>Check for updates</translation>
     </message>
     <message>
-        <location filename="main.qml" line="350"/>
+        <location filename="main.qml" line="377"/>
         <source>STR_AUTOUPDATE_TEXT</source>
         <translation>A new version of the application is available.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="351"/>
-        <location filename="main.qml" line="354"/>
+        <location filename="main.qml" line="378"/>
+        <location filename="main.qml" line="381"/>
         <source>STR_AUTOUPDATE_OPEN_TEXT</source>
         <oldsource>STR_AUTOUPDATE_SUB_TEXT</oldsource>
         <translation>Press Open to open the Updates page.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="136"/>
+        <location filename="main.qml" line="142"/>
         <source>STR_UPDATE_CERTIFICATES_FAIL</source>
         <translation>Certificates update failed.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="262"/>
+        <location filename="main.qml" line="150"/>
+        <location filename="main.qml" line="151"/>
+        <source>STR_UPDATE_NEWS_FAIL</source>
+        <translation>News update failed.</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="282"/>
         <source>STR_DISABLE_AUTOUPDATE_INFO</source>
         <translation>To disable the checking for updates on application start, go to Application settings menu.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="353"/>
+        <location filename="main.qml" line="380"/>
         <source>STR_AUTOUPDATE_CERTS_TEXT</source>
         <translation>A new update is available.</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="391"/>
+        <source>STR_AUTOUPDATENEWS_KNOW_MORE</source>
+        <translation>Click here to know more</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="494"/>
+        <source>STR_AUTOUPDATENEWS_URL</source>
+        <translation>Click to know more</translation>
     </message>
     <message>
         <source>STR_AUTOUPDATE_MULTI_TEXT</source>
@@ -1813,7 +1829,7 @@
     </message>
     <message>
         <location filename="contentPages/help/PageHelpAbout.qml" line="26"/>
-        <location filename="main.qml" line="1498"/>
+        <location filename="main.qml" line="1703"/>
         <source>STR_HELP_APP_VERSION</source>
         <translation>Version</translation>
     </message>
@@ -1823,9 +1839,9 @@
         <translation>Revision</translation>
     </message>
     <message>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="168"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="183"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="284"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="79"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="176"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="279"/>
         <location filename="contentPages/help/PageHelpAbout.qml" line="30"/>
         <source>STR_HELP_APP_CERTS_UPDATE</source>
         <translation>Last certificate update</translation>
@@ -2093,45 +2109,45 @@
 <context>
     <name>PageServicesSign</name>
     <message>
-        <location filename="components/DialogCMD.qml" line="457"/>
+        <location filename="components/DialogCMD.qml" line="458"/>
         <source>STR_SIGN_CMD</source>
         <translation>Sign with Chave Móvel Digital</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="437"/>
-        <location filename="components/DialogCMD.qml" line="453"/>
+        <location filename="components/DialogCMD.qml" line="438"/>
+        <location filename="components/DialogCMD.qml" line="454"/>
         <source>STR_SIGN_INSERT_LOGIN</source>
         <translation>Enter information</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="182"/>
+        <location filename="components/DialogCMD.qml" line="183"/>
         <source>STR_SIGN_CMD_MOVEL_NUM</source>
         <translation>Mobile number</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="227"/>
+        <location filename="components/DialogCMD.qml" line="228"/>
         <source>STR_SIGN_CMD_MOVEL_NUM_OP</source>
         <translation>Number</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="257"/>
+        <location filename="components/DialogCMD.qml" line="258"/>
         <source>STR_SIGN_CMD_PIN</source>
         <translation>Signature PIN</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="273"/>
+        <location filename="components/DialogCMD.qml" line="274"/>
         <source>STR_SIGN_CMD_PIN_OP</source>
         <translation>PIN</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="480"/>
+        <location filename="components/DialogCMD.qml" line="481"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="513"/>
         <source>STR_LOAD_SCAP_ATTRIBUTES</source>
         <translation>Load attributes</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="127"/>
-        <location filename="components/DialogCMD.qml" line="133"/>
+        <location filename="components/DialogCMD.qml" line="128"/>
+        <location filename="components/DialogCMD.qml" line="134"/>
         <source>STR_SIGN_CMD_URL</source>
         <translation>Click to know the Chave Móvel Digital</translation>
     </message>
@@ -2141,9 +2157,9 @@
         <translation>Files successfully signed</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="501"/>
+        <location filename="components/DialogCMD.qml" line="502"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="348"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="198"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="197"/>
         <source>STR_SIGN_OPEN</source>
         <translation>Open signed file ?</translation>
     </message>
@@ -2164,31 +2180,31 @@
         <translation>Please check your Internet connection and try again.</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="502"/>
+        <location filename="components/DialogCMD.qml" line="503"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="346"/>
         <source>STR_SIGN_OPEN_MULTI</source>
         <translation>Open folder with signed file(s) ?</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="446"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="294"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="293"/>
         <source>STR_SIGN_FAIL</source>
         <translation>PDF signature failed</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1280"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="602"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1261"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="586"/>
         <source>STR_LOAD_ENCRYPTED_PDF_ERROR_MSG</source>
         <translation>Unsupported or encrypted PDF file. The PDF signature does not support encrypted PDF files.</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1506"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1487"/>
         <source>STR_FILE_UPLOAD_FAIL</source>
         <translatorcomment>This message is shown when a user attempts to add multiple time same files</translatorcomment>
         <translation>File submission failure</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1507"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1488"/>
         <source>STR_FILE_ALREADY_UPLOADED</source>
         <translation>File(s) already submitted</translation>
     </message>
@@ -2246,7 +2262,7 @@
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1103"/>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1385"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1366"/>
         <source>STR_SIGN_DROP_MULTI</source>
         <translation>Drag here files to be signed or click here to find files</translation>
     </message>
@@ -2256,24 +2272,24 @@
         <translation>No preview available</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1273"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="594"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1254"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="578"/>
         <source>STR_LOAD_PDF_ERROR</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1277"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1258"/>
         <source>STR_LOAD_ADVANCED_PDF_ERROR_MSG</source>
         <translation>Verify that the file is not corrupted and check the type of signature selected.</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="517"/>
+        <location filename="components/DialogCMD.qml" line="518"/>
         <source>STR_CMD_POPUP_CANCEL</source>
         <oldsource>STR_ADDRESS_CHANGE_CANCEL</oldsource>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="543"/>
+        <location filename="components/DialogCMD.qml" line="548"/>
         <source>STR_CMD_POPUP_CONFIRM</source>
         <oldsource>STR_ADDRESS_CHANGE_CONFIRM</oldsource>
         <translation>OK</translation>
@@ -2292,19 +2308,19 @@
         <translation>Failed to sign file with error code</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="221"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="220"/>
         <source>STR_POPUP_FILE_CANCEL</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1283"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="598"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="605"/>
+        <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1264"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="582"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="589"/>
         <source>STR_LOAD_PDF_ERROR_MSG</source>
         <translation>Error reading PDF file. Please check the format of the file.</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="330"/>
+        <location filename="components/DialogCMD.qml" line="331"/>
         <source>STR_SIGN_CMD_CODE</source>
         <translation>Enter the code</translation>
     </message>
@@ -2324,13 +2340,13 @@
         <translation>One or more selected attributes are not active. Please clear a cache and reload its attributes</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="346"/>
+        <location filename="components/DialogCMD.qml" line="347"/>
         <source>STR_SIGN_CMD_CODE_OP</source>
         <translation>Code</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="287"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="160"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="159"/>
         <source>STR_SIGN_SUCESS</source>
         <translation>File successfully signed</translation>
     </message>
@@ -2526,7 +2542,7 @@
         <translation>Move the signature seal</translation>
     </message>
     <message>
-        <location filename="components/PDFPreview.qml" line="209"/>
+        <location filename="components/PDFPreview.qml" line="205"/>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="214"/>
         <source>STR_SIGN_DATE</source>
         <translation>Date</translation>
@@ -2555,10 +2571,10 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="185"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1056"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="67"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="504"/>
-        <location filename="main.qml" line="149"/>
-        <location filename="main.qml" line="156"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="503"/>
         <location filename="main.qml" line="163"/>
+        <location filename="main.qml" line="170"/>
+        <location filename="main.qml" line="177"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Error</translation>
     </message>
@@ -2585,7 +2601,7 @@
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1057"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="505"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="504"/>
         <source>STR_POPUP_NO_CMD_SUPPORT</source>
         <translation>The installed application does not have support for the Chave Móvel Digital service.</translation>
     </message>
@@ -2729,23 +2745,23 @@
         <translation>Application error! Please reinstall the application</translation>
     </message>
     <message>
-        <location filename="main.qml" line="150"/>
-        <location filename="main.qml" line="158"/>
+        <location filename="main.qml" line="164"/>
+        <location filename="main.qml" line="172"/>
         <source>STR_GENERIC_ERROR_MSG</source>
         <translation>Please try again. If this error persists, contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="151"/>
+        <location filename="main.qml" line="165"/>
         <source>STR_ERROR_CODE</source>
         <translation>Error code = </translation>
     </message>
     <message>
-        <location filename="main.qml" line="157"/>
+        <location filename="main.qml" line="171"/>
         <source>STR_CERTIFICATES_IMPORT_ERROR_MSG</source>
         <translation>Error importing certificates.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="164"/>
+        <location filename="main.qml" line="178"/>
         <source>STR_CERTIFICATES_REMOVE_ERROR_MSG</source>
         <translation>Error removing certificates</translation>
     </message>
@@ -2762,8 +2778,8 @@
         <location filename="contentPages/definitions/PageDefinitionsApp.qml" line="158"/>
         <location filename="contentPages/definitions/PageDefinitionsSignSettings.qml" line="37"/>
         <location filename="contentPages/definitions/PageDefinitionsSignSettings.qml" line="49"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="105"/>
-        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="115"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="113"/>
+        <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="123"/>
         <location filename="main.qml" line="90"/>
         <source>STR_POPUP_RESTART_APP</source>
         <translation>It is necessary to restart the application for this change to take effect. Please restart the application.</translation>
@@ -2780,14 +2796,14 @@
     </message>
     <message>
         <location filename="PageLoader.qml" line="97"/>
-        <location filename="components/DialogCMD.qml" line="106"/>
+        <location filename="components/DialogCMD.qml" line="107"/>
         <location filename="contentPages/card/PageCardAdress.qml" line="355"/>
         <location filename="contentPages/card/PageCardAdress.qml" line="581"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="311"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="459"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="183"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="307"/>
-        <location filename="main.qml" line="371"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="182"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="306"/>
+        <location filename="main.qml" line="575"/>
         <source>STR_SHOW_WINDOWS</source>
         <translation>Show windows</translation>
     </message>
@@ -2806,7 +2822,7 @@
     <name>Popup File</name>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="107"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="382"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="381"/>
         <source>STR_POPUP_FILE_UNIQUE</source>
         <translation>Drag a single file</translation>
     </message>
@@ -2836,7 +2852,7 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="108"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="383"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="382"/>
         <source>STR_POPUP_FILE_UNIQUE_MULTI</source>
         <translation>To sign multiple files use the advanced signature page</translation>
     </message>
@@ -2844,21 +2860,21 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="232"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="103"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="373"/>
-        <location filename="main.qml" line="282"/>
+        <location filename="main.qml" line="304"/>
         <source>STR_POPUP_FILE_CANCEL</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="496"/>
+        <location filename="components/DialogCMD.qml" line="497"/>
         <location filename="contentPages/card/PageCardIdentify.qml" line="253"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="124"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="397"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="245"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="244"/>
         <source>STR_POPUP_FILE_OPEN</source>
         <translation>Open</translation>
     </message>
     <message>
-        <location filename="components/DialogCMD.qml" line="484"/>
+        <location filename="components/DialogCMD.qml" line="485"/>
         <source>STR_POPUP_LOAD_SCAP_ATTR</source>
         <translation>Do you want to open the attribute load page?</translation>
     </message>
@@ -3073,13 +3089,13 @@
     <message>
         <location filename="contentPages/card/PageCardAdress.qml" line="704"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="986"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="487"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="486"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Error</translation>
     </message>
     <message>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="987"/>
-        <location filename="contentPages/services/PageServicesSignSimple.qml" line="488"/>
+        <location filename="contentPages/services/PageServicesSignSimple.qml" line="487"/>
         <source>STR_POPUP_CARD_PIN_SIGN_BLOCKED</source>
         <translation>Signature PIN is blocked</translation>
     </message>
@@ -3119,7 +3135,7 @@
         <translation type="vanished">Do not show this message again.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="208"/>
+        <location filename="main.qml" line="222"/>
         <source>STR_AUTOUPDATE_TITLE</source>
         <translation>Update Available</translation>
     </message>
@@ -3132,22 +3148,27 @@
         <translation type="vanished">To disable the checking for updates on application start, go to Application settings menu.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="306"/>
+        <location filename="main.qml" line="327"/>
         <source>STR_UPDATE_INSTALL_BUTTON</source>
         <translation>Open</translation>
     </message>
     <message>
-        <location filename="main.qml" line="376"/>
+        <location filename="main.qml" line="531"/>
+        <source>STR_UPDATENEWS_OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="main.qml" line="580"/>
         <source>STR_WARNING</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="main.qml" line="396"/>
+        <location filename="main.qml" line="600"/>
         <source>STR_MULTIPLE_CARDS_DETECTED</source>
         <translation>Multiple cards detected</translation>
     </message>
     <message>
-        <location filename="main.qml" line="434"/>
+        <location filename="main.qml" line="638"/>
         <source>STR_CHANGE_READER_INFO</source>
         <translation>To change the reader later, go to the application settings menu.</translation>
     </message>
@@ -3163,6 +3184,12 @@
         <location filename="MainForm.ui.qml" line="131"/>
         <source>STR_IMAGE_LOGO_ACCESSIBLE_NAME</source>
         <translation>In menu help, there is a submenu named Accessibility, containing a brief explanation on how to navigate in this application.</translation>
+    </message>
+    <message>
+        <location filename="components/DialogCMD.qml" line="404"/>
+        <location filename="main.qml" line="507"/>
+        <source>STR_DONT_ASK_AGAIN</source>
+        <translation>Don&apos;t show this message again</translation>
     </message>
 </context>
 </TS>

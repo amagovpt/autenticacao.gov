@@ -96,9 +96,9 @@ Load language error. Please reinstall the application"
                     && mainFormID.propertySubMenuListView.currentIndex != 5){
                 if(updateType == GAPI.AutoUpdateApp){
                     if(autoUpdateApp){
-                        autoUpdateDialog.update_release_notes = release_notes
-                        autoUpdateDialog.update_installed_version = installed_version
-                        autoUpdateDialog.update_remote_version = remote_version
+                        autoUpdateDialog.update_release_notes = arg1
+                        autoUpdateDialog.update_installed_version = arg2
+                        autoUpdateDialog.update_remote_version = arg3
                         autoUpdateDialog.update_type = updateType
                         isAutoUpdateAlreadyDetected = true
                         autoUpdateApp = false
@@ -106,15 +106,21 @@ Load language error. Please reinstall the application"
                         labelTextTitle.forceActiveFocus();
                     }
                 }
-                else {
+                else if(updateType == GAPI.AutoUpdateCerts){
                     if(autoUpdateCerts && !isAutoUpdateAlreadyDetected){
-                        autoUpdateDialog.update_certs_list = certs_list
+                        autoUpdateDialog.update_certs_list = url_list
                         autoUpdateDialog.update_type = updateType
                         isAutoUpdateAlreadyDetected = true
                         autoUpdateCerts = false
                         autoUpdateDialog.open()
                         labelTextTitle.forceActiveFocus();
                     }
+                }
+                else if(updateType == GAPI.AutoUpdateNews){
+                    autoUpdateNews.propertyTextTitleAutoUpdateNews = arg1
+                    autoUpdateNews.propertytextAutoUpdateNews = arg2
+                    autoUpdateNews.propertyLinkNews = url_list
+                    autoUpdateNews.open()
                 }
             }
         }
@@ -191,16 +197,16 @@ Load language error. Please reinstall the application"
         property string update_certs_list: ""
         property int update_type: 0
         property alias propertyTextAutoupdate: textAutoupdate.text
-        property alias propertyOpenTextAutoupdate: openTextAutoupdate.text
 
         id: autoUpdateDialog
-        width: 500
-        height: 300
+        width: Constants.DIALOG_WIDTH
+        height: Constants.DIALOG_HEIGHT
         font.family: lato.name
         // Center dialog in the main view
-        x: parent.width * 0.5 - width * 0.5
-        y: parent.height * 0.5 - height * 0.5
+        x: parent.width * 0.5 - width * 0.5 - Constants.DIALOG_CASCATE_X
+        y: parent.height * 0.5 - height * 0.5 - Constants.DIALOG_CASCATE_X
         modal: true
+        z: Constants.DIALOG_CASCATE_BOTTON
 
         header: Label {
             id: labelTextTitle
@@ -215,6 +221,10 @@ Load language error. Please reinstall the application"
             color: Constants.COLOR_MAIN_BLUE
             KeyNavigation.tab: textAutoupdate
             KeyNavigation.down: textAutoupdate
+            KeyNavigation.right: textAutoupdate
+            KeyNavigation.left: buttonInstallUpdate
+            KeyNavigation.backtab: buttonInstallUpdate
+            KeyNavigation.up: buttonInstallUpdate
         }
 
         Item {
@@ -239,10 +249,12 @@ Load language error. Please reinstall the application"
                     width: parent.width
                     anchors.bottom: parent.bottom
                     wrapMode: Text.WordWrap
-                    KeyNavigation.tab: buttonCancelUpdate
-                    KeyNavigation.down: buttonCancelUpdate
-                    KeyNavigation.up: labelTextTitle
+                    KeyNavigation.tab: openTextAutoupdate
+                    KeyNavigation.down: openTextAutoupdate
+                    KeyNavigation.right: openTextAutoupdate
+                    KeyNavigation.left: labelTextTitle
                     KeyNavigation.backtab: labelTextTitle
+                    KeyNavigation.up: labelTextTitle
                 }
             }
             Item {
@@ -267,8 +279,10 @@ Load language error. Please reinstall the application"
                     wrapMode: Text.WordWrap
                     KeyNavigation.tab: buttonCancelUpdate
                     KeyNavigation.down: buttonCancelUpdate
-                    KeyNavigation.up: labelTextTitle
-                    KeyNavigation.backtab: labelTextTitle
+                    KeyNavigation.right: buttonCancelUpdate
+                    KeyNavigation.left: textAutoupdate
+                    KeyNavigation.backtab: textAutoupdate
+                    KeyNavigation.up: textAutoupdate
                 }
             }
         }
@@ -283,15 +297,14 @@ Load language error. Please reinstall the application"
             font.capitalization: Font.MixedCase
             font.family: lato.name
             KeyNavigation.tab: buttonInstallUpdate
+            KeyNavigation.down: buttonInstallUpdate
             KeyNavigation.right: buttonInstallUpdate
-            KeyNavigation.up: textAutoupdate
-            KeyNavigation.backtab: textAutoupdate
+            KeyNavigation.left: openTextAutoupdate
+            KeyNavigation.backtab: openTextAutoupdate
+            KeyNavigation.up: openTextAutoupdate
             highlighted: activeFocus
             onClicked: {
                 autoUpdateDialog.close()
-                if(Qt.platform.os === "windows" && controler.getAskToRegisterCmdCertValue()){
-                    mainFormID.propertyCmdDialog.open(GAPI.AskToRegisterCert)
-                }
             }
             Keys.onEnterPressed: clicked()
             Keys.onReturnPressed: clicked()
@@ -307,9 +320,11 @@ Load language error. Please reinstall the application"
             font.capitalization: Font.MixedCase
             font.family: lato.name
             KeyNavigation.tab: labelTextTitle
+            KeyNavigation.down: labelTextTitle
             KeyNavigation.right: labelTextTitle
             KeyNavigation.left: buttonCancelUpdate
             KeyNavigation.backtab: buttonCancelUpdate
+            KeyNavigation.up: buttonCancelUpdate
             highlighted: activeFocus
             onClicked: {
                 autoUpdateDialog.close()
@@ -346,12 +361,196 @@ Load language error. Please reinstall the application"
         }
         onOpened: {
             console.log("GAPI.AutoUpdateApp = " + GAPI.AutoUpdateApp)
+            if(!autoUpdateNews.visible && !mainFormID.propertyCmdDialog.isVisible()){
+                labelTextTitle.forceActiveFocus()
+            }
+
             if(autoUpdateDialog.update_type == GAPI.AutoUpdateApp) {
                 propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_TEXT")
                 + " " + qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_OPEN_TEXT")
             } else {
                 propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_CERTS_TEXT")
                 + " " + qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_OPEN_TEXT")
+            }
+        }
+    }
+
+    Dialog {
+        property alias propertyTextTitleAutoUpdateNews: textTitleAutoUpdateNews.text
+        property alias propertytextAutoUpdateNews: textAutoUpdateNews.text
+        property alias propertyLinkNews: linkNews.propertyLinkUrl
+        property string propertyUrl: "<a href='" + propertyLinkNews + "'>"
+                                     + qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATENEWS_KNOW_MORE")
+        id: autoUpdateNews
+        width: Constants.DIALOG_WIDTH
+        height: Constants.DIALOG_HEIGHT
+        font.family: lato.name
+        // Center dialog in the main view
+        x: parent.width * 0.5 - width * 0.5 + Constants.DIALOG_CASCATE_X
+        y: parent.height * 0.5 - height * 0.5 + Constants.DIALOG_CASCATE_Y
+        modal: true
+        z: Constants.DIALOG_CASCATE_TOP
+
+        header: Label {
+            id: textTitleAutoUpdateNews
+            text: ""
+            visible: true
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: activeFocus
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
+            font.family: lato.name
+            color: Constants.COLOR_MAIN_BLUE
+            KeyNavigation.tab: textAutoUpdateNews
+            KeyNavigation.down: textAutoUpdateNews
+            KeyNavigation.right: textAutoUpdateNews
+            KeyNavigation.left: buttonAutoUpdateNewsClose
+            KeyNavigation.backtab: buttonAutoUpdateNewsClose
+            KeyNavigation.up: buttonAutoUpdateNewsClose
+        }
+
+        Item {
+            width: parent.width
+            height: parent.height
+
+            Rectangle {
+                id: rectFieldFlick
+                width: parent.width
+                height: parent.height - (rectNewsLink.visible ? rectNewsLink.height: 10)
+                        - Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.horizontalCenter: parent.horizontalCenter
+                opacity: 1
+
+                Flickable {
+                    id: flickable
+                    width: parent.width
+                    height: parent.height
+                    boundsBehavior: Flickable.StopAtBounds
+                    maximumFlickVelocity: 2500
+                    flickableDirection: Flickable.VerticalFlick
+                    contentWidth: textAutoUpdateNews.paintedWidth
+                    contentHeight: textAutoUpdateNews.paintedHeight
+                    clip: true
+
+                    Label {
+                        id: textAutoUpdateNews
+                        text: ""
+                        width: flickable.width - scrollBar.width
+                        height: flickable.height
+                        wrapMode: TextEdit.Wrap
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.bold: activeFocus
+                        color: Constants.COLOR_TEXT_BODY
+                        visible: true
+                        textFormat: "RichText"
+                        Accessible.role: Accessible.StaticText
+                        KeyNavigation.tab: linkNews
+                        KeyNavigation.down: linkNews
+                        KeyNavigation.right: linkNews
+                        KeyNavigation.left: textTitleAutoUpdateNews
+                        KeyNavigation.backtab: textTitleAutoUpdateNews
+                        KeyNavigation.up: textTitleAutoUpdateNews
+                    }
+
+                    ScrollBar.vertical: ScrollBar {
+                        id: scrollBar
+                        visible: true
+                        hoverEnabled: true
+                        active: true
+                        width: Constants.SIZE_TEXT_FIELD_H_SPACE
+                    }
+                    MouseArea {
+                        id: mouseAreaFlickable
+                        anchors.fill: parent
+                    }
+                }
+            }
+            Item {
+                id: rectNewsLink
+                width: parent.width
+                height: 40
+                anchors.top: rectFieldFlick.bottom
+                anchors.topMargin: 10
+                opacity: 0.5
+                visible: linkNews.propertyLinkUrl.length > 0
+                Components.Link {
+                    id: linkNews
+                    width: parent.width
+                    height: parent.height
+                    visible: true
+                    propertyText.text: autoUpdateNews.propertyUrl
+                    propertyText.font.italic: true
+                    propertyText.verticalAlignment: Text.AlignVCenter
+                    anchors.top: parent.top
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    propertyText.font.bold: activeFocus
+                    propertyAccessibleText: qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATENEWS_URL")
+                    KeyNavigation.tab: checkboxDontAskAgain
+                    KeyNavigation.down: checkboxDontAskAgain
+                    KeyNavigation.right: checkboxDontAskAgain
+                    KeyNavigation.left: textAutoUpdateNews
+                    KeyNavigation.backtab: textAutoUpdateNews
+                    KeyNavigation.up: textAutoUpdateNews
+                }
+            }
+        }
+
+        CheckBox {
+            id: checkboxDontAskAgain
+            text: qsTranslate("main","STR_DONT_ASK_AGAIN")
+            height: 25
+            visible: true
+            font.family: lato.name
+            font.pixelSize: Constants.SIZE_TEXT_FIELD
+            font.capitalization: Font.MixedCase
+            font.bold: activeFocus
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 10
+            anchors.left: parent.left
+            Accessible.role: Accessible.CheckBox
+            Accessible.name: text
+        }
+        Button {
+            id: buttonAutoUpdateNewsClose
+            width: Constants.WIDTH_BUTTON
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            font.pixelSize: Constants.SIZE_TEXT_FIELD
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            text: qsTr("STR_UPDATENEWS_OK")
+            font.capitalization: Font.MixedCase
+            font.family: lato.name
+            KeyNavigation.tab: textTitleAutoUpdateNews
+            KeyNavigation.down: textTitleAutoUpdateNews
+            KeyNavigation.right: textTitleAutoUpdateNews
+            KeyNavigation.left: checkboxDontAskAgain
+            KeyNavigation.backtab: checkboxDontAskAgain
+            KeyNavigation.up: checkboxDontAskAgain
+            highlighted: activeFocus
+            onClicked: {
+                autoUpdateNews.close()
+                if(mainFormID.propertyCmdDialog.isVisible()){
+                    mainFormID.propertyCmdDialog.close()
+                    mainFormID.propertyCmdDialog.open(GAPI.AskToRegisterCert)
+                } else if(autoUpdateDialog.visible){
+                    autoUpdateDialog.close()
+                    autoUpdateDialog.open()
+                }
+            }
+            Keys.onEnterPressed: clicked()
+            Keys.onReturnPressed: clicked()
+        }
+        onRejected: {
+            autoUpdateNews.open()
+        }
+        onOpened: {
+            console.log("GAPI.AutoUpdateApp = " + GAPI.AutoUpdateApp)
+            textTitleAutoUpdateNews.forceActiveFocus()
+        }
+        onClosed: {
+            if(checkboxDontAskAgain.checked) {
+                controler.updateNewsLog()
             }
         }
     }
@@ -1518,6 +1717,7 @@ Load language error. Please reinstall the application"
         if (controler.getStartAutoupdateValue()) {
             controler.autoUpdateApp()
             controler.autoUpdatesCerts()
+            controler.autoUpdatesNews()
         }
         if(Qt.platform.os === "windows" && controler.getAskToRegisterCmdCertValue()){
             mainFormID.propertyCmdDialog.open(GAPI.AskToRegisterCert)
