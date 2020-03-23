@@ -133,6 +133,9 @@ Load language error. Please reinstall the application"
                 if(autoUpdateApp){
                     autoUpdateApp = false
                 }
+            }
+            else if(updateType == GAPI.AutoUpdateNews){
+                console.log("No News updates or startup auto update failed.")
             } else {
                 console.log("No Certs updates or startup auto update failed.")
                 if(autoUpdateCerts) {
