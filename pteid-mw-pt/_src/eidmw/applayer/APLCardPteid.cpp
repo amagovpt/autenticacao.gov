@@ -42,8 +42,7 @@
 #include "StringOps.h"
 #include "APLConfig.h"
 
-
-using namespace std;
+#include <ctime>
 
 namespace eIDMW
 {
