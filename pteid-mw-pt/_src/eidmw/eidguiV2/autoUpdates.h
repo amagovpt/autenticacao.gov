@@ -27,6 +27,16 @@
 #include "eidlibException.h"
 #include "eidlibdefines.h"
 
+struct NewsEntry
+{
+    std::string id;
+    std::string title;
+    std::string first_day;
+    std::string last_day;
+    std::string text;
+    std::string link;
+};
+
 class AppController;
 
 class AutoUpdates : public QObject
@@ -49,6 +59,7 @@ public:
     void startRequest(QUrl url);
     void startUpdate();
     void userCancelledUpdateDownload();
+    QString getActiveNewsId();
 
 public slots:
 
@@ -87,11 +98,19 @@ private:
     QString release_notes;
     QString remote_version;
     QString installed_version;
+    std::vector<NewsEntry> m_news;
+    QString m_newsTitle;
+    QString m_newsBody;
+    QString m_newsUrl;
+    QString m_newsId;
 
     // Private methods to process the configuration file
     void VerifyAppUpdates(std::string filedata);
     void VerifyCertsUpdates(std::string filedata);
+    void VerifyNewsUpdates(std::string filedata);
 
+    void parseNews(std::string filedata);
+    std::vector<NewsEntry> ChooseNews();
     void ChooseCertificates(cJSON *certs_json);
     void ChooseAppVersion(std::string distro, std::string arch, cJSON *dist_json);
 
@@ -99,7 +118,7 @@ private:
 
     QString getCertListAsString();
 
-    void updateWindows(std::string distro = "");
+    void updateWindows();
 
     // Private methods to process the update file
     void startUpdateRequest(QUrl url);

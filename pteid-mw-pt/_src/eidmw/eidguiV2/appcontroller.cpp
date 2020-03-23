@@ -127,7 +127,7 @@ void AppController::updateCertslog(){
     }
 }
 
-QString AppController::getAppCertsUpdate(void){
+QString AppController::getCertsLog(void){
 
     QString updateCertsLog = m_Settings.getPteidCachedir() + "/updateCertsLog.txt";
     QFile file(updateCertsLog);
@@ -135,7 +135,7 @@ QString AppController::getAppCertsUpdate(void){
     if(!file.open(QIODevice::ReadOnly))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                  "AutoUpdates::getAppCertsUpdate: Error Reading updateCertsLog.txt :%s",
+                  "AutoUpdates::getCertsLog: Error Reading updateCertsLog.txt :%s",
                   updateCertsLog.toStdString().c_str());
         return tr("STR_CERTS_UPDATE_LOG_ERROR");
     }
@@ -148,6 +148,50 @@ QString AppController::getAppCertsUpdate(void){
     file.close();
 
     return line;
+}
+
+void AppController::updateNewsLog(){
+
+    QString updateNewsLog = m_Settings.getPteidCachedir() + "/updateNewsLog.txt";
+    QFile file(updateNewsLog);
+
+    QString id = newsUpdate.getActiveNewsId();
+
+    if(file.open(QIODevice::WriteOnly | QIODevice::Append))
+    {
+        QTextStream stream(&file);
+        stream << id << ",";
+        file.close();
+    } else {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                  "AppController::updateNewsLog: Error Writing updateNewsLog.txt :%s",
+                  updateNewsLog.toStdString().c_str());
+    }
+}
+
+QString AppController::getNewsLog(void){
+
+    QString updateNewsLog = m_Settings.getPteidCachedir() + "/updateNewsLog.txt";
+    QFile file(updateNewsLog);
+
+    if(!file.open(QIODevice::ReadOnly))
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                  "AppController::getAskToShowNewsValue: Error Reading updateNewsLog.txt :%s",
+                  updateNewsLog.toStdString().c_str());
+        return "";
+    }
+
+    QTextStream instream(&file);
+    QString line = instream.readLine();
+    file.close();
+
+    return line;
+}
+
+bool AppController::isToShowNews(QString id){
+
+    return !getNewsLog().split(",").contains(id);
 }
 
 QString AppController::getAppCopyright(void){
@@ -219,6 +263,13 @@ void AppController::autoUpdatesCerts(){
 
     certsUpdate.setAppController(this);
     certsUpdate.initRequest(GAPI::AutoUpdateCerts);
+}
+
+void AppController::autoUpdatesNews(){
+    qDebug() << "C++: Starting autoUpdates News";
+
+    newsUpdate.setAppController(this);
+    newsUpdate.initRequest(GAPI::AutoUpdateNews);
 }
 
 void AppController::startUpdateApp(){

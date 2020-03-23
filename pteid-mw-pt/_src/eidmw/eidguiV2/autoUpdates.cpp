@@ -18,6 +18,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <cstring>
+#include <time.h>
 
 //MW libraries
 #include "eidlib.h"
@@ -74,7 +75,7 @@ void AutoUpdates::initRequest(int updateType){
         qDebug() << "C++ AUTO UPDATES: startRequest No Internet Connection";
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
             "AutoUpdates::startRequest: No Internet Connection.");
-        getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateCerts, GAPI::NetworkError);
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NetworkError);
         return;
     }
 
@@ -84,10 +85,15 @@ void AutoUpdates::initRequest(int updateType){
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_VERIFY_URL);
         remoteversion.append(config.getString());
         remoteversion.append("version.json");
-    } else{
+    }
+    else if(m_updateType == GAPI::AutoUpdateCerts){
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_CERTS_URL);
         remoteversion.append(config.getString());
         remoteversion.append("certs.json");
+    } else {
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_NEWS_URL);
+        remoteversion.append(config.getString());
+        remoteversion.append("news.json");
     }
 
     url = remoteversion.c_str();
@@ -183,6 +189,212 @@ void AutoUpdates::VerifyCertsUpdates(std::string filedata)
     ChooseCertificates(certs_json);
 }
 
+void AutoUpdates::VerifyNewsUpdates(std::string filedata)
+{
+    qDebug() << "C++ AUTO UPDATES: VerifyNewsUpdates";
+
+    parseNews(filedata);
+    m_news = ChooseNews(); // Filter active news
+
+    //should be only one
+    if(m_news.size() > 0)
+    {
+        NewsEntry selectedEntry = m_news.at(0);
+        // if there are more than one active news entry select highest id
+        for(size_t i = 1; i < m_news.size(); i++)
+        {
+            NewsEntry entry = m_news.at(i);
+            if(std::stoi(entry.id) == std::stoi(selectedEntry.id)){
+                PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing news.json: ID duplicate.");
+                getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+                return;
+            }
+
+            if(std::stoi(entry.id) > std::stoi(selectedEntry.id))
+                selectedEntry = entry;
+        }
+
+        if(getAppController()->isToShowNews(QString::fromStdString(selectedEntry.id)))
+        {
+            qDebug() << "C++: AutoUpdates ChooseNews: active news entry with id: " << QString::fromStdString(selectedEntry.id);
+            m_newsTitle = QString::fromStdString(selectedEntry.title);
+            m_newsBody = QString::fromStdString(selectedEntry.text);
+            m_newsUrl = QString::fromStdString(selectedEntry.link);
+            m_newsId = QString::fromStdString(selectedEntry.id);
+            updateWindows();
+            return;
+        }
+    }
+    getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NoUpdatesAvailable);
+}
+
+QString AutoUpdates::getActiveNewsId(void)
+{
+    return m_newsId;
+}
+
+time_t getTimeFromString(std::string stringTime){
+    // expects time string to be of format: YYYY-MM-DD
+    std::stringstream stream(stringTime);
+    std::string segment;
+    std::vector<std::string> splitTime;
+
+    while(std::getline(stream, segment, '-'))
+    {
+       splitTime.push_back(segment);
+    }
+
+    int year = std::stoi(splitTime.at(0));
+    int month = std::stoi(splitTime.at(1));
+    int day = std::stoi(splitTime.at(2));
+
+    struct tm  tm;
+    time_t rawtime;
+    time ( &rawtime );
+    tm = *localtime ( &rawtime );
+    tm.tm_year = year - 1900;
+    tm.tm_mon = month - 1;
+    tm.tm_mday = day;
+    return mktime(&tm);
+}
+
+std::vector<NewsEntry> AutoUpdates::ChooseNews()
+{
+    qDebug() << "C++ AUTO UPDATES: ChooseNews";
+
+    //TODO: check if already read news -> if entry.id in file of read news
+    std::vector<NewsEntry> filteredNews;
+    NewsEntry entry;
+    std::string firstString;
+    std::string lastString;
+    time_t firstTime;
+    time_t lastTime;
+    time_t currentTime = time(0);
+
+    // Filter active news
+    for (size_t i = 0; i < m_news.size(); i++)
+    {
+        entry = m_news.at(i);
+        firstString = entry.first_day;
+        lastString = entry.last_day;
+
+        firstTime = getTimeFromString(firstString);
+        lastTime = getTimeFromString(lastString);
+
+        if (difftime(currentTime,firstTime) >= 0 && difftime(lastTime,currentTime) >= 0)
+        {
+            filteredNews.push_back(entry);
+        }
+    }
+
+    return filteredNews;
+}
+
+void AutoUpdates::parseNews(std::string data){
+    // parses news.json file into vector of NewsEntry's
+    cJSON *json = cJSON_Parse(data.c_str());
+    if (!cJSON_IsObject(json))
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing news.json: may be a syntax error.");
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        return;
+    }
+
+    cJSON *news_json = cJSON_GetObjectItem(json, "news");
+    if (!cJSON_IsArray(news_json))
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing news.json: Could not get news array.");
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        return;
+    }
+
+    for (int i = 0; i < cJSON_GetArraySize(news_json); i++)
+    {
+        NewsEntry newsEntry;
+
+        cJSON *new_json = cJSON_GetArrayItem(news_json, i);
+        if (!cJSON_IsObject(new_json))
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "Error parsing news.json: on news entry number %d", i);
+            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+            return;
+        }
+
+        //get id
+        cJSON *new_jsonID = cJSON_GetObjectItem(new_json, "id");
+        if (!cJSON_IsString(new_jsonID))
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "Error parsing news.json: Could not get id on news entry number %d", i);
+            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+            return;
+        }
+
+        //get title
+        cJSON *new_jsonTitle = cJSON_GetObjectItem(new_json, "title");
+        if (!cJSON_IsString(new_jsonTitle))
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "Error parsing news.json: Could not get title on news entry number %d", i);
+            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+            return;
+        }
+
+        //get begin date as string
+        cJSON *new_jsonBegin = cJSON_GetObjectItem(new_json, "first_day");
+        if (!cJSON_IsString(new_jsonBegin))
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "Error parsing news.json: Could not get begin date on news entry number %d", i);
+            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+            return;
+        }
+
+        //get end date as string
+        cJSON *new_jsonEnd = cJSON_GetObjectItem(new_json, "last_day");
+        if (!cJSON_IsString(new_jsonEnd))
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "Error parsing news.json: Could not get end date on news entry number %d", i);
+            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+            return;
+        }
+
+        //get text as string
+        cJSON *new_jsonText = cJSON_GetObjectItem(new_json, "text");
+        if (!cJSON_IsString(new_jsonText))
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "Error parsing news.json: Could not get text on news entry number %d", i);
+            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+            return;
+        }
+
+        //get link as string. Link is optional
+        cJSON *new_jsonLink = cJSON_GetObjectItem(new_json, "link");
+        if (new_jsonLink != NULL && !cJSON_IsString(new_jsonLink))
+        {
+          PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+              "Error parsing news.json: Could not get link on news entry number %d", i);
+          getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+          return;
+        }
+
+        newsEntry.id = std::string(new_jsonID->valuestring);
+        newsEntry.title = std::string(new_jsonTitle->valuestring);
+        newsEntry.first_day = std::string(new_jsonBegin->valuestring);
+        newsEntry.last_day = std::string(new_jsonEnd->valuestring);
+        newsEntry.text = std::string(new_jsonText->valuestring);
+        if(new_jsonLink)
+            newsEntry.link = std::string(new_jsonLink->valuestring);
+        else
+            newsEntry.link = "";
+
+        m_news.push_back(newsEntry);
+    }
+}
+
 int compareVersions(PteidVersion v1, PteidVersion v2)
 {
 
@@ -214,7 +426,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
     if (!cJSON_IsObject(json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: may be a syntax error.");
-        getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
         return;
     }
 
@@ -222,7 +434,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
     if (!cJSON_IsObject(dists_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get distributions object.");
-        getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
         return;
     }
 
@@ -230,7 +442,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
     if (!cJSON_IsObject(dist_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get object for this distribution (%s)", distrover.c_str());
-        getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
         return;
     }
 
@@ -238,7 +450,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
     if (!cJSON_IsString(latestVersion_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get latestVersion for this distribution.", distrover.c_str());
-        getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
         return;
     }
     remote_version = latestVersion_json->valuestring;
@@ -249,7 +461,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
             "AutoUpdates::VerifyAppUpdates: Wrong data returned from server or Proxy HTML error!");
         qDebug() << "C++ AUTO UPDATES VerifyUpdates: Wrong data returned from server or Proxy HTML error!";
-        getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
         return;
     }
 
@@ -270,17 +482,17 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
 
     if (compareVersions(local_version, remote_version) <= 0)
     {
-        qDebug() << "C++ AUTO UPDATES: No updates available at the moment";
-        getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::NoUpdatesAvailable);
+        qDebug() << "C++ AUTO UPDATES: No App updates available at the moment";
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NoUpdatesAvailable);
         return;
     }
-    qDebug() << "C++ AUTO UPDATES: updates available";
+    qDebug() << "C++ AUTO UPDATES: app updates available";
 
     cJSON *versions_array_json = cJSON_GetObjectItem(json, "versions");
     if (!cJSON_IsArray(versions_array_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get array of versions.");
-        getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
         return;
     }
     int latestVerIdx;
@@ -290,14 +502,14 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
         if (!cJSON_IsObject(version_json))
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get version object at index %d", latestVerIdx);
-            getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
+            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
             return;
         }
         cJSON *version_number_json = cJSON_GetObjectItem(version_json, "version");
         if (!cJSON_IsString(version_number_json))
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get version number from version at %d", latestVerIdx);
-            getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
+            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
             return;
         }
         if (strcmp(version_number_json->valuestring, latestVersion_json->valuestring) == 0)
@@ -318,7 +530,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
          || !cJSON_IsArray(version_release_notes_json))
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not parse some key/value of version object at %d", i);
-            getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
+            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
             return;
         }
         release_notes += "<p>";
@@ -330,7 +542,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
             if (!cJSON_IsString(release_note_json))
             {
                 PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not parse release note %d of version obj %d", rlsNoteIdx, i);
-                getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
+                getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
                 return;
             }
             release_notes += QString("- ") + release_note_json->valuestring + QString("<br/>");
@@ -447,7 +659,7 @@ void AutoUpdates::ChooseAppVersion(std::string distro, std::string arch, cJSON *
     if (distro == "unsupported")
     {
        qDebug() << "C++ AUTO UPDATES: Your Linux distribution is not supported by Auto-updates";
-       getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::LinuxNotSupported);
+       getAppController()->signalAutoUpdateFail(m_updateType, GAPI::LinuxNotSupported);
        return;
     }
 #endif
@@ -456,13 +668,14 @@ void AutoUpdates::ChooseAppVersion(std::string distro, std::string arch, cJSON *
     if (!cJSON_IsString(package_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get package_json for this distribution.");
-        getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
         return;
     }
     downloadurl.append(package_json->valuestring);
     urlList.clear();
     urlList.append(QString::fromStdString(downloadurl));
-    updateWindows(distro);
+    getdistro = distro;
+    updateWindows();
     return;
 }
 
@@ -547,28 +760,33 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
     if(urlList.length() > 0 && hashList.length() > 0){
         updateWindows();
     } else {
-        getAppController()->signalAutoUpdateNotAvailable();
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NoUpdatesAvailable);
     }
 }
 
-void AutoUpdates::updateWindows(std::string distro)
+void AutoUpdates::updateWindows()
 {
-    qDebug() << "C++ AUTO UPDATES: There are updates available press Install to perform the updates.";
-    getdistro = distro;
+    qDebug() << "C++ AUTO UPDATES: There are updates available";
 
     if(m_updateType == GAPI::AutoUpdateApp){
-        getAppController()->signalAutoUpdateAvailable(
+        // Show popup about app update
+                getAppController()->signalAutoUpdateAvailable(
             m_updateType, release_notes, installed_version, remote_version, urlList.at(0));
     }
-    else{
+    else if(m_updateType == GAPI::AutoUpdateCerts){
 #ifdef WIN32
-        // Start update automatically
+        // Start update certs automatically
         getAppController()->startUpdateCerts();
 #else
-        // Show popup about update because the root password is needed.
+        // Show popup about certs update because the root password is needed.
         getAppController()->signalAutoUpdateAvailable(
             m_updateType, "", "", "", getCertListAsString());
 #endif
+    }
+    else if(m_updateType == GAPI::AutoUpdateNews){
+        // Show popup about news
+        getAppController()->signalAutoUpdateAvailable(
+            m_updateType, m_newsTitle, m_newsBody,"", m_newsUrl);
     }
 }
 
@@ -597,7 +815,7 @@ void AutoUpdates::startUpdate()
            "AutoUpdates::startUpdate: Unable to save the file.");
         delete file;
         file = nullptr;
-        getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateCerts, GAPI::UnableSaveFile);
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::UnableSaveFile);
         return;
     }
 
@@ -693,7 +911,7 @@ void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
         qDebug() << QString::fromStdString("Error: " + GetLastError());
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                   "AppController::RunPackage: Failed to start update process: %d.", GetLastError());
-        getAppController()->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::InstallFailed);
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::InstallFailed);
     } else {
         PTEID_ReleaseSDK();
         exit(0);
@@ -998,9 +1216,9 @@ void AutoUpdates::cancelDownload()
 
 void AutoUpdates::httpError(QNetworkReply::NetworkError networkError)
 {
-    qDebug() << "C++ AUTO UPDATES: httpError" << networkError;
+    qDebug() << "C++ AUTO UPDATES type = " << m_updateType <<  "httpError " << networkError;
     PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-        "AutoUpdates::httpError: QNetworkReply::NetworkError = %d", networkError);
+        "AutoUpdates type=%d httpError QNetworkReply::NetworkError = %d", m_updateType, networkError);
 
     switch(networkError){
         case QNetworkReply::NetworkError::NoError:
@@ -1054,8 +1272,11 @@ void AutoUpdates::httpFinished()
     qDebug() << "C++ AUTO UPDATES: httpFinished";
     if(m_updateType == GAPI::AutoUpdateApp){
         VerifyAppUpdates(filedata);
-    } else{
+    }
+    else if(m_updateType == GAPI::AutoUpdateCerts){
         VerifyCertsUpdates(filedata);
+    } else {
+        VerifyNewsUpdates(filedata);
     }
 }
 

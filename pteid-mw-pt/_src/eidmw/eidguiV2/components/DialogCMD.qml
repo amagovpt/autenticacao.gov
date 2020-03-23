@@ -77,8 +77,9 @@ Item {
         font.family: lato.name
         // Center dialog in the main view
         x: parent.width * 0.5 - cmdDialog.width * 0.5
-        y: parent.height * 0.5 - cmdDialog.height * 0.5 - Constants.TITLE_BAR_SIZE
+        y: parent.height * 0.5 - cmdDialog.height * 0.5
         modal: true
+        z: Constants.DIALOG_CASCATE_MIDDLE
 
         header: Label {
             id: dialogTitle
@@ -400,7 +401,7 @@ Item {
             }
             CheckBox {
                 id: checkboxDontAskAgain
-                text: qsTr("STR_REGISTER_CMD_CERT_DONT_ASK_AGAIN")
+                text: qsTranslate("main","STR_DONT_ASK_AGAIN")
                 height: 25
                 visible: false
                 font.family: lato.name
@@ -524,6 +525,10 @@ Item {
                 highlighted: activeFocus
                 onClicked: {
                     dialogContainer.close()
+                    if(autoUpdateDialog.visible){
+                        autoUpdateDialog.close()
+                        autoUpdateDialog.open()
+                    }
                 }
                 Keys.onEnterPressed: clicked()
                 Keys.onReturnPressed: clicked()
@@ -576,6 +581,10 @@ Item {
     /* #################################################################### */
 
     /* ############## Dialog ############## */
+     function isVisible(){
+         return cmdDialog.visible
+     }
+
     function open(type) {
         dialogType = type
         mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS

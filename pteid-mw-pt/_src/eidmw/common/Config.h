@@ -228,7 +228,8 @@ replace $install by string in install parameter
 #define EIDMW_CNF_SECTION_AUTOUPDATES       L"autoupdates"              //section with the autoupdates parameters
 #define EIDMW_CNF_AUTOUPDATES_URL           L"serverurl"                //string
 #define EIDMW_CNF_AUTOUPDATES_VERIFY_URL    L"serververifyurl"          //string
-#define EIDMW_CNF_AUTOUPDATES_CERTS_URL     L"servercertsurl"          //string
+#define EIDMW_CNF_AUTOUPDATES_CERTS_URL     L"servercertsurl"           //string
+#define EIDMW_CNF_AUTOUPDATES_NEWS_URL      L"servernewsurl"            //string
 
 namespace eIDMW
 {
@@ -399,6 +400,7 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_AUTOUPDATES_URL;
     static const struct Param_Str EIDMW_CONFIG_PARAM_AUTOUPDATES_VERIFY_URL;
     static const struct Param_Str EIDMW_CONFIG_PARAM_AUTOUPDATES_CERTS_URL;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_AUTOUPDATES_NEWS_URL;
 
 private:
     //below info if not needed any more when the ini-file is hard-coded.

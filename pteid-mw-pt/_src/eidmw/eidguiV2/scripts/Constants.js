@@ -4,6 +4,15 @@
 // Program options
 var USE_SDK_PIN_UI_POPUP = true
 
+// Start Popup options
+var DIALOG_WIDTH = 600
+var DIALOG_HEIGHT = 300
+var DIALOG_CASCATE_X = 10
+var DIALOG_CASCATE_Y = 10
+var DIALOG_CASCATE_TOP = 2
+var DIALOG_CASCATE_MIDDLE = 1
+var DIALOG_CASCATE_BOTTON = 0
+
 // Border
 var APP_BORDER = 1
 
