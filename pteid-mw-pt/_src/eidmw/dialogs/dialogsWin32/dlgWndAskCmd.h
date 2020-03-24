@@ -32,12 +32,7 @@ class dlgWndAskCmd : public Win32Dialog
     ButtonData okBtnProcData;
     ButtonData cancelBtnProcData;
 
-    struct DlgTextFieldData {
-        ButtonData *okBtnProcData; // used to check if enabled to determine border color
-        bool textFieldUpdated;
-        HWND hwnd;
-    };
-    DlgTextFieldData textFieldData;
+    TextFieldData textFieldData;
 
     void GetResult();
     bool AreFieldsFilled();
@@ -48,8 +43,6 @@ class dlgWndAskCmd : public Win32Dialog
 
     HBRUSH hbrBkgnd;
 
-    unsigned int m_ulOutMinLen;
-    unsigned int m_ulOutMaxLen;
     std::wstring title;
 
 

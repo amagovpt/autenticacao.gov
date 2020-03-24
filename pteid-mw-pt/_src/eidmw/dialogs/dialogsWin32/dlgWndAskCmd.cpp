@@ -32,6 +32,8 @@
 #define IDB_CANCEL 2
 #define IDC_EDIT 3
 #define IDC_STATIC_BOX 4
+#define IDC_STATIC_BOX_TEXT 5
+#define IDC_STATIC_OTP 6
 
 #define MAX_USERNAME_LENGTH 90
 
@@ -44,10 +46,6 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
     OutResult[1] = (char)0;
 
     std::wstring tmpTitle = L"";
-
-    // Length of OTP/PIN for CMD
-    m_ulOutMinLen = (isValidateOtp ? 6 : 4);
-    m_ulOutMaxLen = (isValidateOtp ? 6 : 8);
 
     // Added for accessibility
     tmpTitle += Header.c_str();
@@ -63,22 +61,19 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
     {
         RECT clientRect;
         GetClientRect(m_hWnd, &clientRect);
-        textFieldData.hwnd = m_hWnd;
+        //textFieldData.hwnd = m_hWnd;
 
-        int buttonWidth = clientRect.right * 0.43;
-        int buttonHeight = clientRect.bottom * 0.08;
-        int contentX = clientRect.right * 0.05;
-        int contentWidth = clientRect.right - 2 * contentX;
-        int textBoxY = clientRect.bottom * 0.35;
-        int boxHeight = clientRect.bottom * 0.23;
-        int editOutY = clientRect.bottom * 0.63;
-        int editOutLabelHeight = clientRect.bottom * 0.06;
-
-        textFieldData.okBtnProcData = &okBtnProcData;
-        textFieldData.textFieldUpdated = false;
+        int buttonWidth = (int)(clientRect.right * 0.43);
+        int buttonHeight = (int)(clientRect.bottom * 0.08);
+        int contentX = (int)(clientRect.right * 0.05);
+        int contentWidth = (int)(clientRect.right - 2 * contentX);
+        int textBoxY = (int)(clientRect.bottom * 0.35);
+        int boxHeight = (int)(clientRect.bottom * 0.23);
+        int editOutY = (int)(clientRect.bottom * 0.61);
+        int editOutLabelHeight = (int)(clientRect.bottom * 0.06);
 
         okBtnProcData.highlight = true;
-        okBtnProcData.enabled = false;
+        okBtnProcData.setEnabled(false);
         okBtnProcData.text = GETSTRING_DLG(Confirm);
         cancelBtnProcData.text = GETSTRING_DLG(Cancel);
 
@@ -132,7 +127,7 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
             textBoxY + boxHeight * 0.12,
             contentWidth*0.9,
             boxHeight*0.76,
-            m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
+            m_hWnd, (HMENU)IDC_STATIC_BOX_TEXT, m_hInstance, NULL);
         SendMessage(hStaticBoxText, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
 
         if (isValidateOtp)
@@ -145,40 +140,31 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
                 textBoxY + boxHeight * 0.33,
                 contentWidth*0.9,
                 boxHeight*0.65,
-                m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
+                m_hWnd, (HMENU)IDC_STATIC_OTP, m_hInstance, NULL);
             SendMessage(hStaticBoxTextBold, WM_SETFONT, (WPARAM)PteidControls::StandardFontBold, 0);
         }
 
-        dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_NUMBER;
-
+        int editFieldHeight = clientRect.bottom * 0.15;
         if (!isValidateOtp)
         {
-            dwStyle |= ES_PASSWORD;
+            textFieldData.title = GETSTRING_DLG(SignaturePinCmd);
+            textFieldData.isPassword = true;
+            textFieldData.minLength = 4;
+            textFieldData.maxLength = 8;
         }
-
-        int editFieldHeight = clientRect.bottom * 0.05;
-        std::wstring textEditLabel = (isValidateOtp ? GETSTRING_DLG(InsertSecurityCode) : GETSTRING_DLG(SignaturePinCmd));
-        HWND hStaticTextOut = CreateWindow(
-            L"STATIC", textEditLabel.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
-            contentX, editOutY, contentWidth, clientRect.bottom * 0.08,
-            m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-
-        hTextEditOut = CreateWindowEx(NULL,
-            L"EDIT", L"", dwStyle,
-            clientRect.right * 0.05 + contentWidth*0.05, // shift to the right and draw the box in the right place
-            editOutY + editOutLabelHeight + clientRect.bottom * 0.04, // shift down 
-            contentWidth*0.9,
+        else
+        {
+            textFieldData.title = GETSTRING_DLG(InsertSecurityCode);
+            textFieldData.minLength = 6;
+            textFieldData.maxLength = 6;
+        }
+        hTextEditOut = PteidControls::CreateTextField(
+            contentX,
+            editOutY + editOutLabelHeight, 
+            contentWidth,
             editFieldHeight,
-            m_hWnd, (HMENU)IDC_EDIT, m_hInstance, NULL);
-
-        // okBtnProcData is passed to test if it is enabled to determine border color
-        SetWindowSubclass(hTextEditOut, dlgWndAskCmd::DlgEditProc, 0, (DWORD_PTR)&textFieldData);
-
-        SendMessage(hTextEditOut, EM_LIMITTEXT, m_ulOutMaxLen, 0);
-        SendMessage(hStaticTextOut, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
-        SendMessage(hTextEditOut, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
-
-        SetFocus(GetDlgItem(m_hWnd, IDC_EDIT));
+            m_hWnd, (HMENU)IDC_EDIT, m_hInstance, &textFieldData);
+        SetFocus(textFieldData.getTextFieldWnd());
     }
 }
 
@@ -190,53 +176,13 @@ dlgWndAskCmd::~dlgWndAskCmd()
 void dlgWndAskCmd::GetResult()
 {
     wchar_t outBuf[RESULT_BUFFER_SIZE];
-    long len = (long)SendMessage(GetDlgItem(m_hWnd, IDC_EDIT), WM_GETTEXTLENGTH, 0, 0);
+    long len = (long)SendMessage(textFieldData.getTextFieldWnd(), WM_GETTEXTLENGTH, 0, 0);
     if (len < RESULT_BUFFER_SIZE)
     {
-        SendMessage(GetDlgItem(m_hWnd, IDC_EDIT), WM_GETTEXT, (WPARAM)(sizeof(outBuf)), (LPARAM)outBuf);
+        SendMessage(textFieldData.getTextFieldWnd(), WM_GETTEXT, (WPARAM)(sizeof(outBuf)), (LPARAM)outBuf);
         wcscpy_s(OutResult, outBuf);
     }
 }
-
-LRESULT CALLBACK dlgWndAskCmd::DlgEditProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
-{
-    DlgTextFieldData *textFieldProcData = (DlgTextFieldData *)dwRefData;
-    switch (uMsg)
-    {
-    case WM_PRINTCLIENT:
-    case WM_PAINT:
-    {
-        // Do not repaint if textField was not updated (it will paint the rectangle over the text)
-        if (textFieldProcData->textFieldUpdated)
-        {
-            break;
-        }
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hWnd, &ps);
-
-        RECT rectDlg;
-        GetClientRect(textFieldProcData->hwnd, &rectDlg);
-
-        RECT rectEdit;
-        GetClientRect(hWnd, &rectEdit);
-        
-        HPEN pen = CreatePen(PS_INSIDEFRAME, 2, (textFieldProcData->okBtnProcData->enabled? BLUE : GREY));
-        SelectObject(hdc, pen);
-        SetBkMode(hdc, TRANSPARENT);
-
-        Rectangle(hdc, rectEdit.left - rectDlg.right*0.05, rectEdit.top - rectDlg.bottom * 0.03, rectEdit.right + rectDlg.right*0.05, rectEdit.bottom + rectDlg.bottom*0.03);
-
-        EndPaint(hWnd, &ps);
-        textFieldProcData->textFieldUpdated = true;
-        break;
-    }
-    default:
-        break;
-    }
-
-    return DefSubclassProc(hWnd, uMsg, wParam, lParam);
-}
-
 
 LRESULT dlgWndAskCmd::ProcecEvent
 (UINT		uMsg,			// Message For This Window
@@ -256,27 +202,18 @@ LPARAM		lParam)		// Additional Message Information
         {
             if (EN_CHANGE == HIWORD(wParam))
             {
-                textFieldData.textFieldUpdated = false;
-                okBtnProcData.enabled = AreFieldsFilled();
-                EnableWindow(GetDlgItem(m_hWnd, IDOK), ((unsigned int)okBtnProcData.enabled));
-                InvalidateRect(hTextEditOut, NULL, TRUE);
-                UpdateWindow(hTextEditOut);
-
-                /* Simulate a mouse click in TextEditOut to rewrite the text 
-                   which was erased by redrawing the text field */
-                // The click should be at the rightmost point of the textfield
-                GetClientRect(hTextEditOut, &rect);
-                LPARAM lParam = MAKELPARAM(rect.right, rect.bottom / 2);
-                PostMessage(hTextEditOut, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
-                PostMessage(hTextEditOut, WM_LBUTTONUP, MK_LBUTTON, lParam);
+                okBtnProcData.setEnabled(textFieldData.isAcceptableInput());
             }
             return 0;
         }
 
         case IDB_OK:
-            GetResult();
-            dlgResult = eIDMW::DLG_OK;
-            close();
+            if (okBtnProcData.isEnabled())
+            {
+                GetResult();
+                dlgResult = eIDMW::DLG_OK;
+                close();
+            }
             return TRUE;
 
         case IDB_CANCEL:
@@ -348,17 +285,6 @@ LPARAM		lParam)		// Additional Message Information
         return 0;
     }
 
-    case WM_DRAWITEM:
-    {
-        LPDRAWITEMSTRUCT pDIS = (LPDRAWITEMSTRUCT)lParam;
-        switch (pDIS->CtlID) {
-        case IDB_CANCEL:
-            return PteidControls::DrawButton(uMsg, wParam, lParam, &cancelBtnProcData);
-        case IDB_OK:
-            return PteidControls::DrawButton(uMsg, wParam, lParam, &okBtnProcData);
-        }
-    }
-
     case WM_ACTIVATE:
     {
         MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskCmd::ProcecEvent WM_ACTIVATE (wParam=%X, lParam=%X)", wParam, lParam);
@@ -420,15 +346,7 @@ LPARAM		lParam)		// Additional Message Information
     }
 
     default:
-    {
-        return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
-    }
+        break;
     }
     return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
-}
-
-bool dlgWndAskCmd::AreFieldsFilled()
-{
-    long outLen = (long)SendMessage(GetDlgItem(m_hWnd, IDC_EDIT), WM_GETTEXTLENGTH, 0, 0);
-    return outLen >= m_ulOutMinLen;
 }

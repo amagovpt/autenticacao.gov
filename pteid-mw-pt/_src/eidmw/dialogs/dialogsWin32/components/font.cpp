@@ -24,16 +24,16 @@
 #include "../resource.h"
 #include "Log.h"
 
-BOOL PteidControls::bFontsLoaded = false;
+BOOL PteidControls::Font_bFontsLoaded = false;
 
 HFONT PteidControls::StandardFontHeader = NULL;
 HFONT PteidControls::StandardFontBold = NULL;
 HFONT PteidControls::StandardFont = NULL;
 
 HFONT PteidControls::CreatePteidFont(int fontPointSize, int fontWeight, HINSTANCE hInstance) {
-    if (!bFontsLoaded)
+    if (!Font_bFontsLoaded)
     {
-        LoadFontsFromResources(hInstance);
+        Font_LoadFontsFromResources(hInstance);
     }
     HFONT TextFont;
 
@@ -65,7 +65,7 @@ HFONT PteidControls::CreatePteidFont(int fontPointSize, int fontWeight, HINSTANC
     return TextFont;
 }
 
-void PteidControls::LoadFontsFromResources(HINSTANCE hInstance) {
+void PteidControls::Font_LoadFontsFromResources(HINSTANCE hInstance) {
     std::vector<HRSRC> res;
     res.push_back(FindResource(hInstance,
         MAKEINTRESOURCE(IDR_MYFONT), L"BINARY"));
@@ -94,11 +94,11 @@ void PteidControls::LoadFontsFromResources(HINSTANCE hInstance) {
         }
         if (fontHandle == NULL)
         {
-            MWLOG(LEV_ERROR, MOD_DLG, L"  --> PteidControls::LoadFontsFromResources failed loading font (res[%d])", i);
+            MWLOG(LEV_ERROR, MOD_DLG, L"  --> PteidControls::Font_LoadFontsFromResources failed loading font (res[%d])", i);
         }
         else
         {
-            bFontsLoaded = TRUE;
+            Font_bFontsLoaded = TRUE;
         }
     }
 }

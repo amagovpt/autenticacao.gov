@@ -23,6 +23,7 @@
 
 #include "../../dialogs.h"
 #include <Commctrl.h>
+#include <stdint.h>
 
 #define BLUE                 RGB(0x3C, 0x5D, 0xBC)
 #define LIGHTBLUE            RGB(0x9D, 0xAE, 0xDD)
@@ -40,13 +41,33 @@ using namespace eIDMW;
     the control and should be passed as argument when drawing the control.
     */
 struct ButtonData {
-    bool enabled = true;
+    bool isEnabled() { return this->enabled; }
+    void setEnabled(bool enabled);
     bool highlight = false;
-    LPCTSTR text;
+    LPCTSTR text = NULL;
+    HWND getButtonWnd() { return this->hButtonWnd; }
 
 private:
+    bool enabled = true;
     bool hovered = false;
     bool mouseTracking = false;
+    HWND hButtonWnd = NULL;
+
+    friend class PteidControls;
+};
+
+struct TextFieldData {
+    bool enabled = true;
+    LPCTSTR title = NULL;
+    size_t minLength = 0;
+    size_t maxLength = UINTMAX_MAX;
+    bool isPassword = false;
+
+    bool isAcceptableInput() { return this->acceptableInput; }
+    HWND getTextFieldWnd() { return this->hTextFieldWnd; }
+private:
+    bool acceptableInput = false;
+    HWND hTextFieldWnd = NULL;
 
     friend class PteidControls;
 };
@@ -56,18 +77,21 @@ public:
     /* Create functions */
     static HWND  CreateButton(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, ButtonData *btnData);
     static HFONT CreatePteidFont(int fontPointSize, int fontWeight, HINSTANCE hInstance);
+    static HWND  CreateTextField(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, TextFieldData *textFieldData);
 
     /* Set the fonts to be used by the controls. If not set, the controls will defaults to a system font. */
     static HFONT StandardFontHeader;
     static HFONT StandardFontBold;
     static HFONT StandardFont;
 
-    static BOOL DrawButton(UINT uMsg, WPARAM wParam, LPARAM lParam, ButtonData *btnData);
 private:
-    static LRESULT CALLBACK ButtonProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
+    static LRESULT CALLBACK Button_Container_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
+    static LRESULT CALLBACK Button_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
+    static LRESULT CALLBACK TextField_Container_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 
-    static void LoadFontsFromResources(HINSTANCE hInstance);
-    static BOOL bFontsLoaded;
-    static BOOL bStandardFontsInitialized;
+    static void Font_LoadFontsFromResources(HINSTANCE hInstance);
+    static BOOL Font_bFontsLoaded;
+
+    static BOOL TextField_IsAcceptableInput(TextFieldData *textFieldData);
 };
 #endif

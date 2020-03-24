@@ -201,6 +201,7 @@
   <ItemGroup>
     <ClCompile Include="..\langUtil.cpp" />
     <ClCompile Include="components\button.cpp" />
+    <ClCompile Include="components\editField.cpp" />
     <ClCompile Include="components\font.cpp" />
     <ClCompile Include="DlgsWin32.cpp" />
     <ClCompile Include="dlgWndAskCmd.cpp" />

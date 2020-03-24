@@ -191,16 +191,6 @@ LPARAM		lParam)		// Additional Message Information
         return 0;
     }
 
-    case WM_DRAWITEM:
-    {
-        LPDRAWITEMSTRUCT pDIS = (LPDRAWITEMSTRUCT)lParam;
-        switch (pDIS->CtlID) {
-        case IDB_CANCEL:
-            PteidControls::DrawButton(uMsg, wParam, lParam, &btnProcData);
-        }
-        return TRUE;
-    }
-
     case WM_ACTIVATE:
     {
         MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_ACTIVATE (wParam=%X, lParam=%X)", wParam, lParam);
@@ -244,10 +234,9 @@ LPARAM		lParam)		// Additional Message Information
     }
 
     default:
-    {
-        return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
+        break;
     }
-    }
+    return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
 }
 
 void dlgWndCmdMsg::stopExec()
