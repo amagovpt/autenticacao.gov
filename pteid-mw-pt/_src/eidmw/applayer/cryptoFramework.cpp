@@ -548,21 +548,20 @@ bool APL_CryptoFwk::VerifyHash(const CByteArray &data, const CByteArray &hash, c
 
 	if(!GetHash(data,algorithm,&baCalculatedHash))
 	{
-		MWLOG(LEV_ERROR, MOD_APL, "VerifyHash error baCalculatedHash: %s", baCalculatedHash.ToString(true, false).c_str());
 		return false;
 	}
 
 	ret = memcmp(baCalculatedHash.GetBytes(), hash.GetBytes(), hash.Size());
 
-	if (ret){
-		MWLOG(LEV_DEBUG, MOD_APL, "The calculated hash is different from the given hash: %s %s",
+	if (ret) {
+		MWLOG(LEV_DEBUG, MOD_APL, "The calculated hash doesn't match the given hash: %s %s",
 			baCalculatedHash.ToString(true, false).c_str(), hash.ToString(true, false).c_str());
 	} else {
-		MWLOG(LEV_DEBUG, MOD_APL, "The calculated hash is equal from the given hash: %s %s",
+		MWLOG(LEV_DEBUG, MOD_APL, "The calculated hash is equal to the given hash: %s %s",
 			baCalculatedHash.ToString(true, false).c_str(), hash.ToString(true, false).c_str());
 	}
 
-	//If the hash calculate is the same as the given hash, it's ok
+	//If the calculated hash is the same as the given hash, it's OK
 	return ret == 0;
 }
 
