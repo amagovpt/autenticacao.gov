@@ -398,13 +398,13 @@ bool SCV_tolerance_active()
     char current_date[16];
     if (std::strftime(current_date, sizeof(current_date), "%Y-%m-%d", std::localtime(&t))) {
         if (strcmp(time_limit, current_date) > 0) {
-            MWLOG(LEV_DEBUG, MOD_APL, L"Cert Validity Tolerance is active!");
+            MWLOG(LEV_DEBUG, MOD_APL, "Cert Validity Tolerance is active!");
             return true;
         }
     }
 
     MWLOG(LEV_DEBUG, MOD_APL,
-        L"Cert Validity Tolerance is NOT active because the legal current date is after the limit of the exceptional measure!");
+        "Cert Validity Tolerance is NOT active because the legal current date is after the limit of the exceptional measure!");
     return false;
 }
 
@@ -427,10 +427,10 @@ APL_EidFile_Sod *APL_EIDCard::getFileSod()
 
 				unsigned long bytes_read = 
 				  this->readFile(PTEID_FILE_ID, ba_validityEndDate, PTEIDNG_FIELD_ID_POS_ValidityEndDate, PTEIDNG_FIELD_ID_LEN_ValidityEndDate);
-				MWLOG(LEV_DEBUG, MOD_APL, L"Read %lu bytes from card for ValidityEndDate", bytes_read);
+				MWLOG(LEV_DEBUG, MOD_APL, "Read %lu bytes from card for ValidityEndDate", bytes_read);
 
 				ba_validityEndDate.TrimRight('\0');
-				MWLOG(LEV_DEBUG, MOD_APL, L"ValidityEndDate freshly read: %s", ba_validityEndDate.GetBytes());
+				MWLOG(LEV_DEBUG, MOD_APL, "ValidityEndDate freshly read: %s", ba_validityEndDate.GetBytes());
 				expiry_date = (char *)ba_validityEndDate.GetBytes();
 			}
 
