@@ -29,7 +29,7 @@
 
 struct NewsEntry
 {
-    std::string id;
+    int id;
     std::string title;
     std::string first_day;
     std::string last_day;

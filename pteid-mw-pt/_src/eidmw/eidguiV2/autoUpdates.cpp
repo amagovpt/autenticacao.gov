@@ -204,23 +204,23 @@ void AutoUpdates::VerifyNewsUpdates(std::string filedata)
         for(size_t i = 1; i < m_news.size(); i++)
         {
             NewsEntry entry = m_news.at(i);
-            if(std::stoi(entry.id) == std::stoi(selectedEntry.id)){
+            if(entry.id == selectedEntry.id){
                 PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing news.json: ID duplicate.");
                 getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
                 return;
             }
 
-            if(std::stoi(entry.id) > std::stoi(selectedEntry.id))
+            if(entry.id > selectedEntry.id)
                 selectedEntry = entry;
         }
 
-        if(getAppController()->isToShowNews(QString::fromStdString(selectedEntry.id)))
+        if(getAppController()->isToShowNews(QString::number(selectedEntry.id)))
         {
-            qDebug() << "C++: AutoUpdates ChooseNews: active news entry with id: " << QString::fromStdString(selectedEntry.id);
+            qDebug() << "C++: AutoUpdates ChooseNews: active news entry with id: " << QString::number(selectedEntry.id);
             m_newsTitle = QString::fromStdString(selectedEntry.title);
             m_newsBody = QString::fromStdString(selectedEntry.text);
             m_newsUrl = QString::fromStdString(selectedEntry.link);
-            m_newsId = QString::fromStdString(selectedEntry.id);
+            m_newsId = QString::number(selectedEntry.id);
             updateWindows();
             return;
         }
@@ -239,14 +239,28 @@ time_t getTimeFromString(std::string stringTime){
     std::string segment;
     std::vector<std::string> splitTime;
 
+    int year, month, day;
     while(std::getline(stream, segment, '-'))
     {
        splitTime.push_back(segment);
     }
 
-    int year = std::stoi(splitTime.at(0));
-    int month = std::stoi(splitTime.at(1));
-    int day = std::stoi(splitTime.at(2));
+    if(splitTime.size() != 3)
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "Error parsing news.json: bad date format (expected YYYY-MM-DD) - maybe bad separator");
+        return NULL;
+    }
+    try {
+        year = std::stoi(splitTime.at(0));
+        month = std::stoi(splitTime.at(1));
+        day = std::stoi(splitTime.at(2));
+    }
+    catch (const std::invalid_argument &ex) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "Error parsing news.json: bad date format (expected YYYY-MM-DD) - bad year, month or day");
+        return NULL;
+    }
 
     struct tm  tm;
     time_t rawtime;
@@ -280,7 +294,7 @@ std::vector<NewsEntry> AutoUpdates::ChooseNews()
         firstTime = getTimeFromString(firstString);
         lastTime = getTimeFromString(lastString);
 
-        if (difftime(currentTime,firstTime) >= 0 && difftime(lastTime,currentTime) >= 0)
+        if (firstTime && lastTime && difftime(currentTime,firstTime) >= 0 && difftime(lastTime,currentTime) >= 0)
         {
             filteredNews.push_back(entry);
         }
@@ -374,13 +388,21 @@ void AutoUpdates::parseNews(std::string data){
         cJSON *new_jsonLink = cJSON_GetObjectItem(new_json, "link");
         if (new_jsonLink != NULL && !cJSON_IsString(new_jsonLink))
         {
-          PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-              "Error parsing news.json: Could not get link on news entry number %d", i);
-          getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
-          return;
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "Error parsing news.json: Could not get link on news entry number %d", i);
+            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+            return;
         }
 
-        newsEntry.id = std::string(new_jsonID->valuestring);
+        try{
+            newsEntry.id = std::stoi(new_jsonID->valuestring);
+        }
+        catch (const std::invalid_argument &ex) {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                 "Error parsing news.json: bad id. (expected 'id':'n', n being an integer)");
+            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+            return;
+        }
         newsEntry.title = std::string(new_jsonTitle->valuestring);
         newsEntry.first_day = std::string(new_jsonBegin->valuestring);
         newsEntry.last_day = std::string(new_jsonEnd->valuestring);
