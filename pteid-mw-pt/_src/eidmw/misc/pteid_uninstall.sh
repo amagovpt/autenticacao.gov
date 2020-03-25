@@ -4,7 +4,7 @@
 #Check if being run on MacOS ??
 
 #Kill running processes
-killall -9 pteidgui 2> /dev/null
+killall -9 eidguiV2 2> /dev/null
 killall -9 pteiddialogsQTsrv 2> /dev/null
 
 #Delete pteid files and directories
@@ -22,8 +22,10 @@ rm -f /usr/local/lib/libpng16.16.dylib
 rm -f /usr/local/lib/libopenjp2.7.dylib
 rm -f /usr/local/lib/liblcms2.2.dylib
 rm -f /usr/local/lib/libjpeg.8.dylib
+rm -f /usr/local/lib/libtiff.5.dylib
 rm -f /usr/local/lib/libfreetype.6.dylib
 rm -f /usr/local/lib/libfontconfig.1.dylib
+rm -f /usr/local/lib/libzip.5.dylib
 rm -f /usr/local/lib/libcurl.4.dylib
 
 rm -rf /usr/local/lib/pteid_jni/
