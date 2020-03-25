@@ -85,11 +85,9 @@ PageSecurityCertificatesForm {
         }
 
         onSignalCertificatesChanged: {
-
-            console.log("Certificates Added: "+ certificatesMap.levelCount)
+            console.log("Certificate chain levels: "+ certificatesMap.levelCount)
             var initialOption
-            if(certificatesMap.levelCount === 5){ // Production Card
-                console.log("Detected Production Card")
+            if(certificatesMap.levelCount === 5){
                 propertyAcordion.model = [
                             {
                                 'entity': certificatesMap.level4.OwnerName,
@@ -158,11 +156,70 @@ PageSecurityCertificatesForm {
                                 ]
                             }
                         ]
-                // Init Date Field with the signature certificate 
+                // Init Date Field with the signature certificate
                 initialOption = propertyAcordion.model[0].children[0].children[0].children[1].children[0]
-                propertyAcordion.selectOption(initialOption)
-            }else{
-                console.log("test Production Card")
+            } else if(certificatesMap.levelCount === 4){
+                propertyAcordion.model = [
+                            {
+                                'entity': certificatesMap.level3.OwnerName,
+                                'auth': certificatesMap.level3.IssuerName,
+                                'valid': certificatesMap.level3.ValidityBegin,
+                                'until':certificatesMap.level3.ValidityEnd,
+                                'key': certificatesMap.level3.KeyLength,
+                                'status': getCertStatus(certificatesMap.level3.Status),
+                                'children': [
+                                    {
+                                        'entity': certificatesMap.level2.OwnerName,
+                                        'auth': certificatesMap.level2.IssuerName,
+                                        'valid': certificatesMap.level2.ValidityBegin,
+                                        'until':certificatesMap.level2.ValidityEnd,
+                                        'key': certificatesMap.level2.KeyLength,
+                                        'status': getCertStatus(certificatesMap.level2.Status),
+                                        'children': [
+                                            {
+                                                'entity': certificatesMap.level1.OwnerName,
+                                                'auth': certificatesMap.level1.IssuerName,
+                                                'valid': certificatesMap.level1.ValidityBegin,
+                                                'until':certificatesMap.level1.ValidityEnd,
+                                                'key': certificatesMap.level1.KeyLength,
+                                                'status': getCertStatus(certificatesMap.level1.Status),
+                                                'children': [
+                                                    {
+                                                        'entity': certificatesMap.level0.OwnerName,
+                                                        'auth': certificatesMap.level0.IssuerName,
+                                                        'valid': certificatesMap.level0.ValidityBegin,
+                                                        'until':certificatesMap.level0.ValidityEnd,
+                                                        'key': certificatesMap.level0.KeyLength,
+                                                        'status': getCertStatus(certificatesMap.level0.Status),
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                'entity': certificatesMap.levelB1.OwnerName,
+                                                'auth': certificatesMap.levelB1.IssuerName,
+                                                'valid': certificatesMap.levelB1.ValidityBegin,
+                                                'until':certificatesMap.levelB1.ValidityEnd,
+                                                'key': certificatesMap.levelB1.KeyLength,
+                                                'status': getCertStatus(certificatesMap.levelB1.Status),
+                                                'children': [
+                                                    {
+                                                        'entity': certificatesMap.levelB0.OwnerName,
+                                                        'auth': certificatesMap.levelB0.IssuerName,
+                                                        'valid': certificatesMap.levelB0.ValidityBegin,
+                                                        'until':certificatesMap.levelB0.ValidityEnd,
+                                                        'key': certificatesMap.levelB0.KeyLength,
+                                                        'status': getCertStatus(certificatesMap.levelB0.Status),
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                // Init Date Field with the signature certificate
+                initialOption = propertyAcordion.model[0].children[0].children[1].children[0]
+            } else if(certificatesMap.levelCount === 3){
                 propertyAcordion.model = [
                             {
                                 'entity': certificatesMap.level2.OwnerName,
@@ -211,10 +268,19 @@ PageSecurityCertificatesForm {
                                 ]
                             }
                         ]
-                // Init Date Field with the signature certificate 
+                // Init Date Field with the signature certificate
                 initialOption = propertyAcordion.model[0].children[1].children[0]
-                propertyAcordion.selectOption(initialOption)
+            } else {
+                propertyBusyIndicator.running = false
+                propertyButtonViewCertificate.enabled = false
+                propertyButtonExportCertificate.enabled = false
+                var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+                var bodyPopup = qsTranslate("PageSecurityCertificates","STR_CERT_CHAIN_ERROR")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
+                return
             }
+
+            propertyAcordion.selectOption(initialOption)
             propertyBusyIndicator.running = false
             propertyButtonViewCertificate.enabled = true
             propertyButtonExportCertificate.enabled = true
