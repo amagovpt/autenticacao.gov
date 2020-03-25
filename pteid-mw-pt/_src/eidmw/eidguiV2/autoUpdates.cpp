@@ -206,7 +206,6 @@ void AutoUpdates::VerifyNewsUpdates(std::string filedata)
             NewsEntry entry = m_news.at(i);
             if(entry.id == selectedEntry.id){
                 PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing news.json: ID duplicate.");
-                getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
                 return;
             }
 
@@ -216,7 +215,7 @@ void AutoUpdates::VerifyNewsUpdates(std::string filedata)
 
         if(getAppController()->isToShowNews(QString::number(selectedEntry.id)))
         {
-            qDebug() << "C++: AutoUpdates ChooseNews: active news entry with id: " << QString::number(selectedEntry.id);
+            qDebug() << "C++ AUTO UPDATES: Active news entry with id: " << QString::number(selectedEntry.id);
             m_newsTitle = QString::fromStdString(selectedEntry.title);
             m_newsBody = QString::fromStdString(selectedEntry.text);
             m_newsUrl = QString::fromStdString(selectedEntry.link);
@@ -309,7 +308,6 @@ void AutoUpdates::parseNews(std::string data){
     if (!cJSON_IsObject(json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing news.json: may be a syntax error.");
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
         return;
     }
 
@@ -317,7 +315,6 @@ void AutoUpdates::parseNews(std::string data){
     if (!cJSON_IsArray(news_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing news.json: Could not get news array.");
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
         return;
     }
 
@@ -330,7 +327,6 @@ void AutoUpdates::parseNews(std::string data){
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                 "Error parsing news.json: on news entry number %d", i);
-            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
             return;
         }
 
@@ -340,7 +336,6 @@ void AutoUpdates::parseNews(std::string data){
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                 "Error parsing news.json: Could not get id on news entry number %d", i);
-            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
             return;
         }
 
@@ -350,7 +345,6 @@ void AutoUpdates::parseNews(std::string data){
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                 "Error parsing news.json: Could not get title on news entry number %d", i);
-            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
             return;
         }
 
@@ -360,7 +354,6 @@ void AutoUpdates::parseNews(std::string data){
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                 "Error parsing news.json: Could not get begin date on news entry number %d", i);
-            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
             return;
         }
 
@@ -370,7 +363,6 @@ void AutoUpdates::parseNews(std::string data){
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                 "Error parsing news.json: Could not get end date on news entry number %d", i);
-            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
             return;
         }
 
@@ -380,7 +372,6 @@ void AutoUpdates::parseNews(std::string data){
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                 "Error parsing news.json: Could not get text on news entry number %d", i);
-            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
             return;
         }
 
@@ -390,7 +381,6 @@ void AutoUpdates::parseNews(std::string data){
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                 "Error parsing news.json: Could not get link on news entry number %d", i);
-            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
             return;
         }
 
@@ -400,7 +390,6 @@ void AutoUpdates::parseNews(std::string data){
         catch (const std::invalid_argument &ex) {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                  "Error parsing news.json: bad id. (expected 'id':'n', n being an integer)");
-            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
             return;
         }
         newsEntry.title = std::string(new_jsonTitle->valuestring);
