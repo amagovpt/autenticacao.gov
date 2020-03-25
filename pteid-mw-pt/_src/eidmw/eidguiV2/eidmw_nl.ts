@@ -29,7 +29,7 @@
 <context>
     <name>GAPI</name>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="226"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="292"/>
         <location filename="gapi.cpp" line="302"/>
         <location filename="gapi.cpp" line="3280"/>
         <source>STR_POPUP_SUCESS</source>
@@ -928,32 +928,32 @@
         <translation>Gravar Notas</translation>
     </message>
     <message>
-        <location filename="main.qml" line="688"/>
+        <location filename="main.qml" line="686"/>
         <source>STR_UNSAVED_NOTES_TITLE</source>
         <translation>Notas</translation>
     </message>
     <message>
-        <location filename="main.qml" line="703"/>
+        <location filename="main.qml" line="701"/>
         <source>STR_UNSAVED_NOTES</source>
         <translation>Notas por gravar</translation>
     </message>
     <message>
-        <location filename="main.qml" line="720"/>
+        <location filename="main.qml" line="718"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION_EXIT</source>
         <translation>Pressione &quot;Permanecer&quot; para continuar a editar as notas ou &quot;Sair&quot; para sair da aplicação sem guardar as notas.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="721"/>
+        <location filename="main.qml" line="719"/>
         <source>STR_UNSAVED_NOTES_DESCRIPTION</source>
         <translation>Pressione &quot;Permanecer&quot; para continuar a editar as notas ou &quot;Sair&quot; para sair desta página sem guardar as notas.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="745"/>
+        <location filename="main.qml" line="743"/>
         <source>STR_UNSAVED_NOTES_LEAVE</source>
         <translation>Sair</translation>
     </message>
     <message>
-        <location filename="main.qml" line="768"/>
+        <location filename="main.qml" line="766"/>
         <source>STR_UNSAVED_NOTES_STAY</source>
         <translation>Permanecer</translation>
     </message>
@@ -1630,7 +1630,7 @@
     </message>
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="57"/>
-        <location filename="main.qml" line="143"/>
+        <location filename="main.qml" line="146"/>
         <source>STR_UPDATE_INSTALL_FAIL</source>
         <translation>Falha na instalação de um ou mais certificados.</translation>
     </message>
@@ -1659,8 +1659,7 @@
     <message>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="34"/>
         <location filename="contentPages/definitions/PageDefinitionsUpdates.qml" line="58"/>
-        <location filename="main.qml" line="144"/>
-        <location filename="main.qml" line="152"/>
+        <location filename="main.qml" line="147"/>
         <source>STR_CONTACT_SUPPORT</source>
         <translation>Por favor tente novamente. Caso o erro persista, contacte-nos por email para &lt;a href=&quot;mailto:info.cidadao@ama.pt&quot;&gt;info.cidadao@ama.pt&lt;/a&gt;.</translation>
     </message>
@@ -1749,45 +1748,43 @@
         <translation>Procurar atualizações</translation>
     </message>
     <message>
-        <location filename="main.qml" line="377"/>
+        <location filename="main.qml" line="372"/>
         <source>STR_AUTOUPDATE_TEXT</source>
         <translation>Existe uma versão mais recente da aplicação.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="378"/>
-        <location filename="main.qml" line="381"/>
+        <location filename="main.qml" line="373"/>
+        <location filename="main.qml" line="376"/>
         <source>STR_AUTOUPDATE_OPEN_TEXT</source>
         <oldsource>STR_AUTOUPDATE_SUB_TEXT</oldsource>
         <translation>Clique em Abrir para prosseguir para a página de atualizações.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="142"/>
+        <location filename="main.qml" line="145"/>
         <source>STR_UPDATE_CERTIFICATES_FAIL</source>
         <translation>Falha na atualização dos certificados.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="150"/>
-        <location filename="main.qml" line="151"/>
         <source>STR_UPDATE_NEWS_FAIL</source>
-        <translation>Falha na atualização de Notícias.</translation>
+        <translation type="vanished">Falha na atualização de Notícias.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="282"/>
+        <location filename="main.qml" line="277"/>
         <source>STR_DISABLE_AUTOUPDATE_INFO</source>
         <translation>Pode desativar a verificação de atualizações ao iniciar a aplicação no menu Configurações da aplicação.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="380"/>
+        <location filename="main.qml" line="375"/>
         <source>STR_AUTOUPDATE_CERTS_TEXT</source>
         <translation>Existe uma atualização de certificados.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="391"/>
+        <location filename="main.qml" line="386"/>
         <source>STR_AUTOUPDATENEWS_KNOW_MORE</source>
         <translation>Clique aqui para saber mais</translation>
     </message>
     <message>
-        <location filename="main.qml" line="494"/>
+        <location filename="main.qml" line="491"/>
         <source>STR_AUTOUPDATENEWS_URL</source>
         <translation>Clique para saber mais</translation>
     </message>
@@ -1827,7 +1824,7 @@
     </message>
     <message>
         <location filename="contentPages/help/PageHelpAbout.qml" line="26"/>
-        <location filename="main.qml" line="1703"/>
+        <location filename="main.qml" line="1701"/>
         <source>STR_HELP_APP_VERSION</source>
         <translation>Versão</translation>
     </message>
@@ -1996,60 +1993,61 @@
 <context>
     <name>PageSecurityCertificates</name>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="284"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="350"/>
         <source>STR_STATUS_NETWORK_ERROR</source>
         <translation>Não foi possível validar o certificado. Verifique a ligação à internet</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="278"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="344"/>
         <source>STR_STATUS_REVOKED</source>
         <translation>Revogado</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="296"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="362"/>
         <source>STR_STATUS_EXPIRED</source>
         <translation>Expirado</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="281"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="347"/>
         <source>STR_STATUS_SUSPENDED</source>
         <translation>Inativo ou Suspenso</translation>
     </message>
     <message>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="83"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="278"/>
         <source>STR_CERT_CHAIN_ERROR</source>
         <oldsource>STR__CERT_CHAIN_ERROR</oldsource>
         <translation>Não foi possível completar a cadeia de certificados!</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="227"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="293"/>
         <source>STR_EXPORT_CERTIFICATE_SUCCESS</source>
         <translation>O certificado foi exporado para ficheiro com sucesso.</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="231"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="297"/>
         <source>STR_EXPORT_CERTIFICATE_FAILED</source>
         <translation>Ocorreu um erro ao exportar o certificado para ficheiro.</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="287"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="353"/>
         <source>STR_STATUS_ISSUER</source>
         <translation>Falta um emissor na cadeia de certificados</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="290"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="356"/>
         <source>STR_STATUS_ERROR</source>
         <translation>Não foi possível validar o certificado. Verifique a ligação à internet</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="293"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="359"/>
         <source>STR_STATUS_VALID</source>
         <translation>Válido</translation>
     </message>
     <message>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="270"/>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="275"/>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="299"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="336"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="341"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="365"/>
         <source>STR_STATUS_UNKNOWN</source>
         <translation>Desconhecido</translation>
     </message>
@@ -2564,15 +2562,16 @@
         <location filename="contentPages/definitions/PageDefinitionsSignature.qml" line="50"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="35"/>
         <location filename="contentPages/security/PageSecurityCertificates.qml" line="82"/>
-        <location filename="contentPages/security/PageSecurityCertificates.qml" line="230"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="277"/>
+        <location filename="contentPages/security/PageSecurityCertificates.qml" line="296"/>
         <location filename="contentPages/security/PageSecurityPinCodes.qml" line="42"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="185"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="1056"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="67"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="503"/>
-        <location filename="main.qml" line="163"/>
-        <location filename="main.qml" line="170"/>
-        <location filename="main.qml" line="177"/>
+        <location filename="main.qml" line="158"/>
+        <location filename="main.qml" line="165"/>
+        <location filename="main.qml" line="172"/>
         <source>STR_POPUP_ERROR</source>
         <translation>Erro</translation>
     </message>
@@ -2743,23 +2742,23 @@
         <translation>Erro da aplicação! Por favor reinstale a aplicação</translation>
     </message>
     <message>
-        <location filename="main.qml" line="164"/>
-        <location filename="main.qml" line="172"/>
+        <location filename="main.qml" line="159"/>
+        <location filename="main.qml" line="167"/>
         <source>STR_GENERIC_ERROR_MSG</source>
         <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="165"/>
+        <location filename="main.qml" line="160"/>
         <source>STR_ERROR_CODE</source>
         <translation>Código de erro = </translation>
     </message>
     <message>
-        <location filename="main.qml" line="171"/>
+        <location filename="main.qml" line="166"/>
         <source>STR_CERTIFICATES_IMPORT_ERROR_MSG</source>
         <translation>Erro ao importar certificados.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="178"/>
+        <location filename="main.qml" line="173"/>
         <source>STR_CERTIFICATES_REMOVE_ERROR_MSG</source>
         <translation>Erro ao remover certificados</translation>
     </message>
@@ -2801,7 +2800,7 @@
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="459"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="182"/>
         <location filename="contentPages/services/PageServicesSignSimple.qml" line="306"/>
-        <location filename="main.qml" line="575"/>
+        <location filename="main.qml" line="573"/>
         <source>STR_SHOW_WINDOWS</source>
         <translation>Mostrar janela</translation>
     </message>
@@ -2858,7 +2857,7 @@
         <location filename="contentPages/card/PageCardIdentify.qml" line="232"/>
         <location filename="contentPages/card/PageCardPrint.qml" line="103"/>
         <location filename="contentPages/services/PageServicesSignAdvanced.qml" line="373"/>
-        <location filename="main.qml" line="304"/>
+        <location filename="main.qml" line="299"/>
         <source>STR_POPUP_FILE_CANCEL</source>
         <translation>Cancelar</translation>
     </message>
@@ -3133,7 +3132,7 @@
         <translation type="obsolete">Não mostrar esta mensagem novamente.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="222"/>
+        <location filename="main.qml" line="217"/>
         <source>STR_AUTOUPDATE_TITLE</source>
         <translation>Atualização disponível</translation>
     </message>
@@ -3146,27 +3145,27 @@
         <translation type="vanished">Pode desativar a verificação de atualizações ao iniciar a aplicação no menu Configurações da aplicação.</translation>
     </message>
     <message>
-        <location filename="main.qml" line="327"/>
+        <location filename="main.qml" line="322"/>
         <source>STR_UPDATE_INSTALL_BUTTON</source>
         <translation>Abrir</translation>
     </message>
     <message>
-        <location filename="main.qml" line="531"/>
+        <location filename="main.qml" line="524"/>
         <source>STR_UPDATENEWS_OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="main.qml" line="580"/>
+        <location filename="main.qml" line="578"/>
         <source>STR_WARNING</source>
         <translation>Aviso</translation>
     </message>
     <message>
-        <location filename="main.qml" line="600"/>
+        <location filename="main.qml" line="598"/>
         <source>STR_MULTIPLE_CARDS_DETECTED</source>
         <translation>Múltiplos cartões detectados</translation>
     </message>
     <message>
-        <location filename="main.qml" line="638"/>
+        <location filename="main.qml" line="636"/>
         <source>STR_CHANGE_READER_INFO</source>
         <translation>Para alterar essa opção mais tarde, vá para o menu de configuração da aplicação.</translation>
     </message>
@@ -3185,7 +3184,7 @@
     </message>
     <message>
         <location filename="components/DialogCMD.qml" line="404"/>
-        <location filename="main.qml" line="507"/>
+        <location filename="main.qml" line="504"/>
         <source>STR_DONT_ASK_AGAIN</source>
         <translation>Não mostrar esta mensagem novamente</translation>
     </message>
