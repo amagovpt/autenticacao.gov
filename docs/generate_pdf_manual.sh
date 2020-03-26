@@ -13,7 +13,7 @@ echo "Generating pdf manual."
 pandoc -f gfm user_manual_filtered.md -o Manual_de_Utilizacao_v3.pdf --template=template.tex --pdf-engine=pdflatex --toc --number-sections --variable version=$VERSION --variable date=$NOW
 
 if [ $? -eq 0 ]
-then echo "Done. PDF file user_manual.pdf created."
+then echo "Done. PDF file Manual_de_Utilizacao_v3.pdf created."
 else
     echo "An error has ocurred. PDF file was not created."
 fi

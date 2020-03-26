@@ -8,11 +8,11 @@ perl -p0e "s/.*Content_begin -->//s" manual_sdk.md > manual_sdk_no_header.md
 
 #generate pdf from ast
 echo "Generating pdf manual."
-pandoc -f gfm manual_sdk_no_header.md -o Manual_de_SDK_novo.pdf --template=template_sdk.tex --toc --number-sections --variable version=$VERSION --variable date=$NOW --pdf-engine=xelatex --listings --variable colorlinks=true
+pandoc -f gfm manual_sdk_no_header.md -o Manual_de_SDK.pdf --template=template_sdk.tex --toc --number-sections --variable version=$VERSION --variable date=$NOW --pdf-engine=xelatex --listings --variable colorlinks=true
 
 
 if [ $? -eq 0 ]
-then echo "Done. PDF file manual_sdk.pdf created."
+then echo "Done. PDF file Manual_de_SDK.pdf created."
 else
     echo "An error has ocurred. PDF file was not created."
 fi
