@@ -226,11 +226,17 @@ bool AppController::LoadTranslationFile(QString NewLanguage)
 {
 
     QString strTranslationFile;
+    QString translations_dir;
     strTranslationFile = QString("eidmw_") + NewLanguage;
 
     qDebug() << "C++: AppController LoadTranslationFile" << strTranslationFile << m_Settings.getExePath();
+#ifdef __APPLE__
+    translations_dir = m_Settings.getExePath()+"/../Resources/";
+#else
+    translations_dir = m_Settings.getExePath()+"/";
+#endif    
 
-    if (!m_translator.load(strTranslationFile,m_Settings.getExePath()+"/"))
+    if (!m_translator.load(strTranslationFile,translations_dir))
     {
         // this should not happen, since we've built the menu with the translation filenames
         strTranslationFile = QString("eidmw_") + STR_DEF_GUILANGUAGE;
@@ -643,7 +649,10 @@ QString AppController::getFontFile(QString font) {
     fontFile.append(config.getString()).append("\\fonts\\");
 #else
     std::string fontFile = "file://";
-    const QString executable_dir = m_Settings.getExePath()+"/";
+    QString executable_dir = m_Settings.getExePath()+"/";
+#ifdef __APPLE__
+    executable_dir.append("../Resources/");
+#endif
     fontFile.append(executable_dir.toStdString());
 #endif
 
