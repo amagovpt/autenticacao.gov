@@ -28,7 +28,8 @@ using namespace eIDMW;
 
 class dlgWndCmdMsg : public Win32Dialog
 {
-    ButtonData btnProcData;
+    PteidControls::TextData titleData, textTopData, textBottomData;
+    PteidControls::ButtonData btnProcData;
 
     HWND hwndImage;
     HICON imageIco;
@@ -36,7 +37,6 @@ class dlgWndCmdMsg : public Win32Dialog
     DlgCmdMsgType type;
 
     HBRUSH hbrBkgnd;
-    std::wstring title;
 
 public:
     dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND Parent = NULL);

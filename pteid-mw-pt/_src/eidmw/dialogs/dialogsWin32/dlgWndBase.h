@@ -32,13 +32,7 @@
 using namespace std;
 using namespace eIDMW;
 
-
-#define BLUE                 RGB(0x3C, 0x5D, 0xBC)
-#define LIGHTBLUE            RGB(0x9D, 0xAE, 0xDD)
-#define DARKBLUE             RGB(0x36, 0x53, 0xA9)
-#define GREY                 RGB(0xD6, 0xD7, 0xD7)
-#define LIGHTGREY            RGB(0xF1, 0xF1, 0xF2)
-#define WHITE                RGB(0xFF, 0xFF, 0xFF)
+#define PTEID_EDIT_FIELD_WITH_TITLE_HEIGHT   63
 
 class Win32Dialog
 {

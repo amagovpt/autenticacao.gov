@@ -27,13 +27,14 @@
 #include "Log.h"
 #include "Config.h"
 
-#define IDC_STATIC 0
+#define IDC_STATIC_HEADER 0
 #define IDB_OK 1
 #define IDB_CANCEL 2
 #define IDC_EDIT 3
 #define IDC_STATIC_BOX 4
 #define IDC_STATIC_BOX_TEXT 5
 #define IDC_STATIC_OTP 6
+#define IDC_STATIC_TITLE 7
 
 #define MAX_USERNAME_LENGTH 90
 
@@ -54,14 +55,10 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
     int Width = 430;
     ScaleDimensions(&Width, &Height);
 
-    title = GETSTRING_DLG(SigningWith);
-    title.append(L" Chave Móvel Digital");
-
     if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
     {
         RECT clientRect;
         GetClientRect(m_hWnd, &clientRect);
-        //textFieldData.hwnd = m_hWnd;
 
         int buttonWidth = (int)(clientRect.right * 0.43);
         int buttonHeight = (int)(clientRect.bottom * 0.08);
@@ -71,32 +68,42 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         int boxHeight = (int)(clientRect.bottom * 0.23);
         int editOutY = (int)(clientRect.bottom * 0.61);
         int editOutLabelHeight = (int)(clientRect.bottom * 0.06);
+        int titleY = (int)(clientRect.bottom * 0.05);
+        int editFieldHeight = PTEID_EDIT_FIELD_WITH_TITLE_HEIGHT;
 
-        okBtnProcData.highlight = true;
-        okBtnProcData.setEnabled(false);
-        okBtnProcData.text = GETSTRING_DLG(Confirm);
-        cancelBtnProcData.text = GETSTRING_DLG(Cancel);
+        // TITLE
+        std::wstring title = GETSTRING_DLG(SigningWith);
+        title.append(L" Chave Móvel Digital");
 
-        HWND OK_Btn = PteidControls::CreateButton(
-            clientRect.right * 0.52, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
-            m_hWnd, (HMENU)IDB_OK, m_hInstance, &okBtnProcData);
+        titleData.text = title.c_str();
+        titleData.font = PteidControls::StandardFontHeader;
+        titleData.color = BLUE;
+        HWND hTitle = PteidControls::CreateText(
+            contentX, titleY,
+            contentWidth, clientRect.bottom * 0.15,
+            m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
 
-        HWND Cancel_Btn = PteidControls::CreateButton(
-            clientRect.right * 0.05, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
-            m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &cancelBtnProcData);
-
-        DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER;
-
+        // HEADER
         int headerY = clientRect.bottom * 0.18;
-        HWND hStaticHeader = CreateWindow(
-            L"STATIC", Header.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
-            contentX,
-            headerY,
-            contentWidth,
-            clientRect.bottom * 0.15,
-            m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-        SendMessage(hStaticHeader, WM_SETFONT, (WPARAM)(isValidateOtp ? PteidControls::StandardFont : PteidControls::StandardFontBold), 0);
+        headerData.font = (isValidateOtp ? PteidControls::StandardFont : PteidControls::StandardFontBold);
+        headerData.text = Header.c_str();
+        HWND hHeader = PteidControls::CreateText(
+            contentX, headerY,
+            contentWidth, clientRect.bottom * 0.15,
+            m_hWnd, (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
 
+        // BOX W/ TEXT
+
+        // box
+        hStaticBox = CreateWindow(
+            L"STATIC", NULL, WS_CHILD | WS_VISIBLE,
+            contentX,
+            textBoxY,
+            contentWidth,
+            boxHeight,
+            m_hWnd, (HMENU)IDC_STATIC_BOX, m_hInstance, NULL);
+
+        // text
         std::wstring boxText;
         if (!isValidateOtp)
         {
@@ -113,38 +120,30 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         else {
             boxText += GETSTRING_DLG(SigningDataWithIdentifier);
         }
-        hStaticBox = CreateWindow(
-            L"STATIC", NULL, WS_CHILD | WS_VISIBLE | SS_LEFT,
-            contentX,
-            textBoxY,
-            contentWidth,
-            boxHeight,
-            m_hWnd, (HMENU)IDC_STATIC_BOX, m_hInstance, NULL);
 
-        hStaticBoxText= CreateWindow(
-            L"STATIC", boxText.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
-            contentX + contentWidth * 0.05,
-            textBoxY + boxHeight * 0.12,
-            contentWidth*0.9,
-            boxHeight*0.76,
-            m_hWnd, (HMENU)IDC_STATIC_BOX_TEXT, m_hInstance, NULL);
-        SendMessage(hStaticBoxText, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
+        boxTextData.backgroundColor = LIGHTGREY;
+        boxTextData.text = boxText.c_str();
+        HWND hBoxText = PteidControls::CreateText(
+            contentX + contentWidth * 0.03, textBoxY + boxHeight * 0.12,
+            contentWidth*0.94, boxHeight*0.75,
+            m_hWnd, (HMENU)IDC_STATIC_BOX_TEXT, m_hInstance, &boxTextData);
 
+        // docId
         if (isValidateOtp)
         {
             std::wstring docId;
             docId.append(L"\"").append(*inId).append(L"\"");
-            hStaticBoxTextBold = CreateWindow(
-                L"STATIC", docId.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
-                contentX + contentWidth * 0.05,
-                textBoxY + boxHeight * 0.33,
-                contentWidth*0.9,
-                boxHeight*0.65,
-                m_hWnd, (HMENU)IDC_STATIC_OTP, m_hInstance, NULL);
-            SendMessage(hStaticBoxTextBold, WM_SETFONT, (WPARAM)PteidControls::StandardFontBold, 0);
+
+            docIdTextData.backgroundColor = LIGHTGREY;
+            docIdTextData.font = PteidControls::StandardFontBold;
+            docIdTextData.text = docId.c_str();
+            HWND hDocIdText = PteidControls::CreateText(
+                contentX + contentWidth * 0.03, textBoxY + boxHeight * 0.33,
+                contentWidth*0.94, boxHeight*0.65,
+                m_hWnd, (HMENU)IDC_STATIC_OTP, m_hInstance, &docIdTextData);
         }
 
-        int editFieldHeight = clientRect.bottom * 0.15;
+        // TEXT EDIT
         if (!isValidateOtp)
         {
             textFieldData.title = GETSTRING_DLG(SignaturePinCmd);
@@ -158,13 +157,27 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
             textFieldData.minLength = 6;
             textFieldData.maxLength = 6;
         }
-        hTextEditOut = PteidControls::CreateTextField(
+        HWND hTextEdit = PteidControls::CreateTextField(
             contentX,
             editOutY + editOutLabelHeight, 
             contentWidth,
             editFieldHeight,
             m_hWnd, (HMENU)IDC_EDIT, m_hInstance, &textFieldData);
         SetFocus(textFieldData.getTextFieldWnd());
+
+        // BUTTONS
+        okBtnProcData.highlight = true;
+        okBtnProcData.setEnabled(false);
+        okBtnProcData.text = GETSTRING_DLG(Confirm);
+        cancelBtnProcData.text = GETSTRING_DLG(Cancel);
+
+        HWND OK_Btn = PteidControls::CreateButton(
+            clientRect.right * 0.52, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
+            m_hWnd, (HMENU)IDB_OK, m_hInstance, &okBtnProcData);
+
+        HWND Cancel_Btn = PteidControls::CreateButton(
+            clientRect.right * 0.05, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
+            m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &cancelBtnProcData);
     }
 }
 
@@ -242,7 +255,7 @@ LPARAM		lParam)		// Additional Message Information
         HDC hdcStatic = (HDC)wParam;
 
         MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskCmd::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
-        if ((HWND)lParam == hStaticBox || (HWND)lParam == hStaticBoxText || (HWND)lParam == hStaticBoxTextBold)
+        if ((HWND)lParam == hStaticBox)
         {
             SetBkColor(hdcStatic, LIGHTGREY);
             return (INT_PTR)CreateSolidBrush(LIGHTGREY);
@@ -261,22 +274,8 @@ LPARAM		lParam)		// Additional Message Information
     case WM_PAINT:
     {
         m_hDC = BeginPaint(m_hWnd, &ps);
-        SetTextColor(m_hDC, RGB(0x3C, 0x5D, 0xBC));
 
-        //Change top header dimensions
-        GetClientRect(m_hWnd, &rect);
-        rect.left = rect.right * 0.05;
-        rect.top = rect.bottom * 0.05;
-        rect.right -= rect.left;
-        rect.bottom = rect.bottom * 0.25;
-
-        SetBkColor(m_hDC, RGB(255, 255, 255));
-        SelectObject(m_hDC, PteidControls::StandardFontHeader);
         MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
-
-        //The first call is needed to calculate the needed bounding rectangle
-        DrawText(m_hDC, title.c_str(), -1, &rect, DT_WORDBREAK | DT_CALCRECT);
-        DrawText(m_hDC, title.c_str(), -1, &rect, DT_WORDBREAK);
 
         EndPaint(m_hWnd, &ps);
 

@@ -25,6 +25,7 @@
 #include <Commctrl.h>
 #include <stdint.h>
 
+#define BLACK                RGB(0x00, 0x00, 0x00)
 #define BLUE                 RGB(0x3C, 0x5D, 0xBC)
 #define LIGHTBLUE            RGB(0x9D, 0xAE, 0xDD)
 #define DARKBLUE             RGB(0x36, 0x53, 0xA9)
@@ -35,46 +36,53 @@
 
 using namespace eIDMW;
 
-/* Control Data structures: the public members are used to set properties of the control.
-    It should be managed by the creator of the control. 
-    During creation, it is binded to the control window returned, i.e., it will keep the state of
-    the control and should be passed as argument when drawing the control.
-    */
-struct ButtonData {
-    bool isEnabled() { return this->enabled; }
-    void setEnabled(bool enabled);
-    bool highlight = false;
-    LPCTSTR text = NULL;
-    HWND getButtonWnd() { return this->hButtonWnd; }
-
-private:
-    bool enabled = true;
-    bool hovered = false;
-    bool mouseTracking = false;
-    HWND hButtonWnd = NULL;
-
-    friend class PteidControls;
-};
-
-struct TextFieldData {
-    bool enabled = true;
-    LPCTSTR title = NULL;
-    size_t minLength = 0;
-    size_t maxLength = UINTMAX_MAX;
-    bool isPassword = false;
-
-    bool isAcceptableInput() { return this->acceptableInput; }
-    HWND getTextFieldWnd() { return this->hTextFieldWnd; }
-private:
-    bool acceptableInput = false;
-    HWND hTextFieldWnd = NULL;
-
-    friend class PteidControls;
-};
-
 class PteidControls {
 public:
+    /* Control Data structures: the public members are used to set properties of the control.
+        It should be managed by the creator of the control. 
+        During creation, it is binded to the control window returned, i.e., it will keep the state of
+        the control and should be passed as argument when drawing the control.
+        */
+    struct TextData {
+        LPCTSTR text = TEXT("");
+        HFONT font = PteidControls::StandardFont;
+        COLORREF color = BLACK;
+        COLORREF backgroundColor = WHITE;
+        bool horizontalCentered = false;
+    };
+    struct ButtonData {
+        bool isEnabled() { return this->enabled; }
+        void setEnabled(bool enabled);
+        bool highlight = false;
+        LPCTSTR text = NULL;
+        HWND getButtonWnd() { return this->hButtonWnd; }
+
+    private:
+        bool enabled = true;
+        bool hovered = false;
+        bool mouseTracking = false;
+        HWND hButtonWnd = NULL;
+
+        friend class PteidControls;
+    };
+
+    struct TextFieldData {
+        LPCTSTR title = NULL;
+        size_t minLength = 0;
+        size_t maxLength = UINTMAX_MAX;
+        bool isPassword = false;
+
+        bool isAcceptableInput() { return this->acceptableInput; }
+        HWND getTextFieldWnd() { return this->hTextFieldWnd; }
+    private:
+        bool acceptableInput = false;
+        HWND hTextFieldWnd = NULL;
+
+        friend class PteidControls;
+    };
+
     /* Create functions */
+    static HWND  CreateText(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, TextData *textData);
     static HWND  CreateButton(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, ButtonData *btnData);
     static HFONT CreatePteidFont(int fontPointSize, int fontWeight, HINSTANCE hInstance);
     static HWND  CreateTextField(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, TextFieldData *textFieldData);
@@ -85,6 +93,7 @@ public:
     static HFONT StandardFont;
 
 private:
+    static LRESULT CALLBACK Text_Container_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
     static LRESULT CALLBACK Button_Container_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
     static LRESULT CALLBACK Button_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
     static LRESULT CALLBACK TextField_Container_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);

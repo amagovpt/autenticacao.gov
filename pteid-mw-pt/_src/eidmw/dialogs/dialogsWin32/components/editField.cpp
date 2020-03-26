@@ -26,13 +26,13 @@
 #define BORDER_PADDING_X 10
 #define BORDER_PADDING_Y 10
 
-#define TITLE_SPACE 10
+#define TITLE_SPACE 7
 
 HWND PteidControls::CreateTextField(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, TextFieldData *textFieldData) {
     if ((textFieldData->title == NULL && nHeight < 40) || 
-        (textFieldData->title != NULL && nHeight < 65))
+        (textFieldData->title != NULL && nHeight < 63))
     {
-        MWLOG(LEV_WARN, MOD_DLG, L"  --> PteidControls::CreateTextField height should be >= 40 without title or >= 65 with title (on 100% scaling). Text may be cropped otherwise.");
+        MWLOG(LEV_WARN, MOD_DLG, L"  --> PteidControls::CreateTextField height should be >= 40 without title or >= 65 with title. Text may be cropped otherwise.");
     }
 
     // CONTAINER
@@ -77,8 +77,6 @@ HWND PteidControls::CreateTextField(int x, int y, int nWidth, int nHeight, HWND 
         BORDER_PADDING_X, editControlY,
         nWidth - 2 * BORDER_PADDING_X, editControlHeight,
         hContainer, hMenu, hInstance, NULL);
-
-    EnableWindow(hEditField, textFieldData->enabled);
 
     SendMessage(hEditField, EM_LIMITTEXT, textFieldData->maxLength, 0);
     SendMessage(hEditField, WM_SETFONT, (WPARAM)StandardFont, 0);

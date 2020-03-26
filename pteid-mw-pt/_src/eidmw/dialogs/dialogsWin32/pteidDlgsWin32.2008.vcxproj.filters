@@ -51,6 +51,9 @@
     <ClCompile Include="components\editField.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="components\text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dialogs.h">

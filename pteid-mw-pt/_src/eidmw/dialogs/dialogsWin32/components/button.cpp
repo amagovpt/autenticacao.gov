@@ -21,12 +21,12 @@
 #include "pteidControls.h"
 #include <tchar.h>
 
-void ButtonData::setEnabled(bool enabled) {
+void PteidControls::ButtonData::setEnabled(bool enabled) {
     this->enabled = enabled;
     EnableWindow(this->hButtonWnd, enabled);
 }
 
-HWND PteidControls::CreateButton(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, ButtonData *btnData) {
+HWND PteidControls::CreateButton(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, PteidControls::ButtonData *btnData) {
 
     // CONTAINER
     HWND hContainer = CreateWindow(

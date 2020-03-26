@@ -26,9 +26,11 @@
 #include "Log.h"
 
 #define IDI_ICON 0
-#define IDC_STATIC 1
-#define IDB_CANCEL 2
-#define IDC_ANIMATION 3
+#define IDB_CANCEL 1
+#define IDC_STATIC_TITLE 2
+#define IDC_STATIC_TEXT_TOP 3
+#define IDC_STATIC_TEXT_BOTTOM 4
+#define IDC_ANIMATION 5
 
 dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND Parent) : Win32Dialog(L"WndAskCmd")
 {
@@ -45,26 +47,36 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
 
     ScaleDimensions(&Width, &Height);
 
-    title = GETSTRING_DLG(SigningWith);
-    title.append(L" Chave Móvel Digital");
-
     if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
     {
         RECT clientRect;
         GetClientRect(m_hWnd, &clientRect);
 
-        int buttonWidth = clientRect.right * 0.43;
-        int buttonHeight = clientRect.bottom * 0.08;
-
-        btnProcData.text = (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS ? GETSTRING_DLG(Cancel) : GETSTRING_DLG(Ok));
-        HWND Cancel_Btn = PteidControls::CreateButton(
-            (clientRect.right - buttonWidth) / 2, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
-            m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &btnProcData);
-
-        int imgWidth = clientRect.right * 0.25;
+        int buttonWidth = (int)(clientRect.right * 0.43);
+        int buttonHeight = (int)(clientRect.bottom * 0.08);
+        int imgWidth = (int)(clientRect.right * 0.25);
         int imgHeight = imgWidth;
-        int imgX = (clientRect.right - imgWidth) / 2 ;
-        int imgY = clientRect.bottom * 0.18;
+        int imgX = (int)((clientRect.right - imgWidth) / 2 );
+        int imgY = (int)(clientRect.bottom * 0.18);
+        int titleY = (int)(clientRect.bottom * 0.05);
+        int titleX = (int)(clientRect.right * 0.05);
+        int contentWidth = (int)(clientRect.right * 0.9);
+        int textTopY = (int)(clientRect.bottom * 0.55);
+        int textBottomY = (int)(clientRect.bottom * 0.62);
+
+        // TITLE
+        std::wstring title = GETSTRING_DLG(SigningWith);
+        title.append(L" Chave Móvel Digital");
+
+        titleData.text = title.c_str();
+        titleData.font = PteidControls::StandardFontHeader;
+        titleData.color = BLUE;
+        HWND hTitle = PteidControls::CreateText(
+            titleX, titleY,
+            contentWidth, clientRect.bottom * 0.15,
+            m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
+
+        // ANIMATION / IMAGE
         if (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS)
         {
             hwndImage = Animate_Create(m_hWnd, IDC_ANIMATION, ACS_AUTOPLAY | ACS_CENTER | WS_CHILD, m_hInstance);
@@ -86,21 +98,27 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
             SendMessage(hwndImage, STM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)imageIco);
         }
 
-        int textTopY = clientRect.bottom * 0.55;
-        HWND hStaticTextTop = CreateWindow(
-            L"STATIC",
-            (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS ? GETSTRING_DLG(PleaseWait) : GETSTRING_DLG(Error)),
-            WS_CHILD | WS_VISIBLE | SS_CENTER,
+        // TEXT TOP
+        textTopData.text = (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS ? GETSTRING_DLG(PleaseWait) : GETSTRING_DLG(Error));
+        textTopData.horizontalCentered = true;
+        textTopData.font = PteidControls::StandardFontBold;
+        HWND hTextTop = PteidControls::CreateText(
             0, textTopY, clientRect.right, clientRect.bottom * 0.08,
-            m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-        SendMessage(hStaticTextTop, WM_SETFONT, (WPARAM)PteidControls::StandardFontBold, 0);
-
-        int textBottomY = clientRect.bottom * 0.62;
-        HWND hStaticTextBottom = CreateWindow(
-            L"STATIC", message, WS_CHILD | WS_VISIBLE | SS_CENTER,
+            m_hWnd, (HMENU)IDC_STATIC_TEXT_TOP, m_hInstance, &textTopData);
+            
+        // TEXT BOTTOM
+        textBottomData.text = message;
+        textBottomData.horizontalCentered = true;
+        
+        HWND hTextBottom = PteidControls::CreateText(
             0, textBottomY, clientRect.right, clientRect.bottom * 0.08,
-            m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-        SendMessage(hStaticTextBottom, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
+            m_hWnd, (HMENU)IDC_STATIC_TEXT_BOTTOM, m_hInstance, &textBottomData);
+
+        // BUTTON
+        btnProcData.text = (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS ? GETSTRING_DLG(Cancel) : GETSTRING_DLG(Ok));
+        HWND Cancel_Btn = PteidControls::CreateButton(
+            (clientRect.right - buttonWidth) / 2, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
+            m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &btnProcData);
     }
 }
 
@@ -167,22 +185,8 @@ LPARAM		lParam)		// Additional Message Information
     case WM_PAINT:
     {
         m_hDC = BeginPaint(m_hWnd, &ps);
-        SetTextColor(m_hDC, BLUE);
 
-        //Change top header dimensions
-        GetClientRect(m_hWnd, &rect);
-        rect.left = rect.right * 0.05;
-        rect.top = rect.bottom * 0.05;
-        rect.right -= rect.left;
-        rect.bottom = rect.bottom * 0.25;
-
-        SetBkColor(m_hDC, WHITE);
-        SelectObject(m_hDC, PteidControls::StandardFontHeader);
         MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
-
-        //The first call is needed to calculate the needed bounding rectangle
-        DrawText(m_hDC, title.c_str(), -1, &rect, DT_WORDBREAK | DT_CALCRECT);
-        DrawText(m_hDC, title.c_str(), -1, &rect, DT_WORDBREAK);
 
         EndPaint(m_hWnd, &ps);
 

@@ -29,22 +29,15 @@ using namespace eIDMW;
 
 class dlgWndAskCmd : public Win32Dialog
 {
-    ButtonData okBtnProcData;
-    ButtonData cancelBtnProcData;
-
-    TextFieldData textFieldData;
+    PteidControls::TextData titleData, headerData, boxTextData, docIdTextData;
+    PteidControls::TextFieldData textFieldData;
+    PteidControls::ButtonData okBtnProcData, cancelBtnProcData;
 
     void GetResult();
     bool AreFieldsFilled();
     HWND hStaticBox;
-    HWND hStaticBoxText;
-    HWND hStaticBoxTextBold;
-    HWND hTextEditOut;
 
     HBRUSH hbrBkgnd;
-
-    std::wstring title;
-
 
 public:
     dlgWndAskCmd(bool isValidateOtp,
