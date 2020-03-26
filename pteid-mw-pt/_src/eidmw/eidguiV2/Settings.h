@@ -269,10 +269,7 @@ public:
         {
             eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTWIN);
             long AutoStartup = config.getLong();
-            if ( 0 != AutoStartup )
-            {
-                setAutoStartup(true);
-            }
+            setAutoStartup(0 != AutoStartup);
         }
         //----------------------------------------------------------
         // check card reader to use
