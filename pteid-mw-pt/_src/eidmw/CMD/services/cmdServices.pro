@@ -20,23 +20,19 @@ QT -= gui
 DESTDIR = ./../../lib
 DEPENDPATH += .
 
-macx: LIBS +=	-L/usr/local/Cellar/openssl/1.0.2q/lib/ \
-                -lz \
-                -lssl \
-		-lcrypto
+macx: LIBS +=	-L/usr/local/ssl/lib/ -lz
 
 QMAKE_CXXFLAGS += -fvisibility=hidden
 
 LIBS += -L./../../lib \
         -l$${COMMONLIB} \
         -l$${APPLAYERLIB} \
-        -l$${CARDLAYERLIB} \
         -lpteidlib \
         -lssl \
         -lcrypto
         
 INCLUDEPATH += . ../../eidlib/ ../../common ../../applayer ../../cardlayer
-macx:INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2q/include/
+macx:INCLUDEPATH += /usr/local/ssl/include
 
 unix: DEFINES += __UNIX__ WITH_OPENSSL
 
