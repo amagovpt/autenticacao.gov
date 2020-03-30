@@ -50,6 +50,7 @@ dialogs/dialogsQTsrv/moc_*
 dialogs/dialogsQTsrv/ui_*
 eidguiV2/build
 eidguiV2/eidguiV2
+eidguiV2/eidguiV2.app
 eidguiV2/qmake_qmake_immediate.qrc
 eidguiV2/qrc_qmake_qmake_immediate.cpp
 eidguiV2/qrc_resources.cpp
