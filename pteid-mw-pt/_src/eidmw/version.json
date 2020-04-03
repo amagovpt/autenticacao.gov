@@ -4,12 +4,16 @@
             "latestVersion": "3.0.20",
             "package": "10179/11962/Autenticacao.gov_Ubuntu_18_x64.deb"
         },
+        "ubuntu19": {
+            "latestVersion": "3.1.0",
+            "package": "XXXX/YYYY/Autenticacao.gov_Ubuntu_19_x64.deb"
+        },
         "windows32": {
-            "latestVersion": "3.0.21",
+            "latestVersion": "3.1.0",
             "package": "10179/12084/Autenticacao.gov_Win_x86.msi"
         },
         "windows64": {
-            "latestVersion": "3.0.21",
+            "latestVersion": "3.1.0",
             "package": "10179/12084/Autenticacao.gov_Win_x64.msi"
         },
         "fedora32": {
@@ -17,7 +21,7 @@
             "package": ""
         },
         "fedora64": {
-            "latestVersion": "3.0.16",
+            "latestVersion": "3.1.0",
             "package": "10179/11962/Autenticacao.gov_Fedora_x64.rpm"
         },
         "suse32": {
@@ -25,15 +29,26 @@
             "package": ""
         },
         "suse64": {
-            "latestVersion": "2.4.6",
+            "latestVersion": "3.1.0",
             "package": "10179/11962/Autenticacao.gov_OpenSUSE_x64.rpm"
         },
         "osx": {
-            "latestVersion": "3.0.20",
+            "latestVersion": "3.1.0",
             "package": "10179/11955/Autenticacao.gov_MacOS.pkg"
         }
     },
     "versions": [
+		{
+            "version": "3.1.0",
+            "date": "2020-03-10",
+            "release_notes": [
+                         "Assinatura Chave Móvel Digital em aplicações do Windows (Adobe Reader, MS Office e outras aplicações terceiras.) via CryptoApi",
+                         "Actualização de certificados automaticamente através da própria aplicação",
+                         "Suporte a ecrãs de High DPI - a aplicação respeita as configurações de scaling do Windows ou as configurações manuais escolhidas pelo utilizador no menu definições",
+                         "Adicionada uma opção de registo (Windows) para fazer cache ao PIN de autenticação de formar a repor o funcionamento das versões anteriores",
+                         "Possibilidade de exportar certificados do cidadão para ficheiro e visualizar com o Viewer nativo do Windows no menu Certificados"
+            ]
+        },
 		{
             "version": "3.0.21",
             "date": "2019-11-21",
