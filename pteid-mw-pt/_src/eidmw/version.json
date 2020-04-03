@@ -42,8 +42,9 @@
             "version": "3.1.0",
             "date": "2020-03-10",
             "release_notes": [
-                         "Assinatura Chave Móvel Digital em aplicações do Windows (Adobe Reader, MS Office e outras aplicações terceiras.) via CryptoApi",
-                         "Actualização de certificados automaticamente através da própria aplicação",
+                         "Assinatura Chave Móvel Digital em aplicações Windows via Crypto API (Adobe Reader, MS Office e outras aplicações terceiras)",
+                         "Actualização de certificados da PKI do CC através da própria aplicação",
+                         "Nova janela popup para divulgação de notícias de interesse geral no arranque da aplicação",
                          "Suporte a ecrãs de High DPI - a aplicação respeita as configurações de scaling do Windows ou as configurações manuais escolhidas pelo utilizador no menu definições",
                          "Adicionada uma opção de registo (Windows) para fazer cache ao PIN de autenticação de formar a repor o funcionamento das versões anteriores",
                          "Possibilidade de exportar certificados do cidadão para ficheiro e visualizar com o Viewer nativo do Windows no menu Certificados"
