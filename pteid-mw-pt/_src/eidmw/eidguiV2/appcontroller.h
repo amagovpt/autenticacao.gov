@@ -150,6 +150,7 @@ private:
     void doGetScapCacheSize();
     QString getPteidCacheDir();
     void checkUpdateCertslog(void);
+    void checkUpdateNewslog(void);
     qint64 dirSize(QString dirPath, QString nameFilter);
     QString formatSize(qint64 size);
 

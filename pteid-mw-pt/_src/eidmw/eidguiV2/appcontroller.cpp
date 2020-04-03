@@ -73,6 +73,7 @@ AppController::AppController(GUISettings& settings,QObject *parent) :
               QSysInfo::currentCpuArchitecture().toStdString().c_str(),
               QSysInfo::prettyProductName().toStdString().c_str());
     checkUpdateCertslog();
+    checkUpdateNewslog();
 }
 
 void AppController::restoreScreen(void){
@@ -148,6 +149,24 @@ QString AppController::getCertsLog(void){
     file.close();
 
     return line;
+}
+
+void AppController::checkUpdateNewslog(){
+
+    QString updateNewsLog = m_Settings.getPteidCachedir() + "/updateNewsLog.txt";
+
+    // Create updateNewsLog.txt file if it does not exist.
+    if(!QFile::exists(updateNewsLog))
+    {
+        QFile file(updateNewsLog);
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "AppController::checkUpdateNewslog: Error Creating updateNewsLog.txt");
+            return;
+        }
+        file.close();
+    }
 }
 
 void AppController::updateNewsLog(){
