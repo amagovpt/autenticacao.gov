@@ -53,12 +53,13 @@
   - [Assinatura digital na suite *Microsoft Office*](#assinatura-digital-na-suite-microsoft-office)
   - [Assinatura digital na suite *LibreOffice / OpenOffice*](#assinatura-digital-na-suite-libreoffice--openoffice)
   - [Assinatura digital de email com *Microsoft Outlook*](#assinatura-digital-de-email-com-microsoft-outlook)
+  - [Assinatura digital com Chave Móvel Digital](#assinatura-digital-com-chave-m%c3%b3vel-digital)
   - [Assinatura digital de email com Mozilla Thunderbird](#assinatura-digital-de-email-com-mozilla-thunderbird)
   - [Autenticação em portais WEB](#autentica%c3%a7%c3%a3o-em-portais-web)
 - [Resolução de Problemas](#resolu%c3%a7%c3%a3o-de-problemas)
   - [Exibida mensagem de erro quando se tenta adicionar o módulo PKCS\#11 no *Firefox / Thunderbird*](#exibida-mensagem-de-erro-quando-se-tenta-adicionar-o-m%c3%b3dulo-pkcs11-no-firefox--thunderbird)
   - [Não é possível adicionar o módulo PKCS\#11 ao *Adobe Acrobat Reader* em *MacOS*](#n%c3%a3o-%c3%a9-poss%c3%advel-adicionar-o-m%c3%b3dulo-pkcs11-ao-adobe-acrobat-reader-em-macos)
-  - [Impossibilidade de assinatura com *Adobe Reader*, *Microsoft Office* e *LibreOffice*](#impossibilidade-de-assinatura-com-adobe-reader-microsoft-office-e-libreoffice)
+  - [Impossibilidade de assinatura em *Adobe Reader*, *Microsoft Office* e *LibreOffice* com Cartão de Cidadão](#impossibilidade-de-assinatura-em-adobe-reader-microsoft-office-e-libreoffice-com-cart%c3%a3o-de-cidad%c3%a3o)
   - [O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão](#o-leitor-de-cart%c3%b5es-est%c3%a1-instalado-mas-n%c3%a3o-%c3%a9-detetado-pela-aplica%c3%a7%c3%a3o-do-cart%c3%a3o-de-cidad%c3%a3o)
   - [Não são detetados quaisquer certificados durante a tentativa de assinatura na suite *LibreOffice / Apache OpenOffice*](#n%c3%a3o-s%c3%a3o-detetados-quaisquer-certificados-durante-a-tentativa-de-assinatura-na-suite-libreoffice--apache-openoffice)
   - [Problemas com placas gráficas integradas em *Windows*](#problemas-com-placas-gr%c3%a1ficas-integradas-em-windows)
@@ -812,6 +813,8 @@ personalizado.
 - **Microsoft Office (Windows):** Configurações relativas a assinaturas em
 aplicações do Microsoft Office.
 
+- **Chave Móvel Digital (Windows):** Permite registar o certificado associado à sua conta da Chave Móvel Digital. Para saber mais consulte a secção [Assinatura digital com Chave Móvel Digital](#assinatura-digital-com-chave-m%c3%b3vel-digital).
+
 A imagem seguinte permite visualizar o menu de configurações de assinaturas.
 
 ![Ilustração: Janela de configurações de assinaturas](Pictures/Autenticacao.Gov_configuracao_assinaturas.png "Janela de configurações de assinaturas"){:.center}
@@ -840,7 +843,9 @@ A janela ajuda fornece um resumo das funcionalidades da aplicação, indica o ca
 O *middleware* permite a interação com outras aplicações do sistema operativo, disponibilizando duas funcionalidades: Autenticação e Assinatura Digital.
 
 A instalação do *middleware* em Windows permite que, ao introduzir um Cartão de Cidadão no leitor, os certificados deste fiquem automaticamente registados no sistema operativo, ficando assim as funcionalidades de autenticação e assinatura disponíveis às aplicações
-que utilizam a camada criptográfica do sistema operativo. Alguns exemplos dessas aplicações são: *Microsoft Word*, *Microsoft Excel* e *Microsoft Outlook*.
+que utilizam a camada criptográfica do sistema operativo. Alguns exemplos dessas aplicações são: *Microsoft Word*, *Microsoft Excel*, *Microsoft Outlook* e *Adobe Acrobat Reader*.
+
+Nessas aplicações é também possível assinar com a Chave Móvel Digital. Para tal, siga o procedimento descrito em [Assinatura digital com Chave Móvel Digital](#assinatura-digital-com-chave-m%c3%b3vel-digital).
 
 Nos pontos seguintes será explicada a utilização das funcionalidades de
 assinatura digital e autenticação nas seguintes aplicações:
@@ -1002,6 +1007,31 @@ assinado.
     ![Ilustração: Assinatura em Outlook: Escolha do certificado](Pictures/Autenticacao.Gov_outlook6.png
       "Assinatura em Outlook: Escolha do certificado"){:.center}
 
+## Assinatura digital com Chave Móvel Digital
+
+Pode assinar documentos com a Chave Móvel Digital no Windows em aplicações como *Microsoft Word*, *Microsoft Excel*, *Microsoft Outlook* e *Adobe Acrobat Reader*. O procedimento é muito semelhante aos descritos nas secções anteriores mas difere em dois aspetos:
+
+**Registo do certificado** –  deverá registar o certificado associado à sua Chave Móvel Digital.
+
+Terá que registar novamente o certificado no caso de ainda não ter registado o seu certificado após a última subscrição da Assinatura da Chave Móvel Digital ou o certificado atualmente registado ter expirado.
+
+1. No separador [Configuração de assinaturas](#configura%c3%a7%c3%a3o-de-assinaturas) da aplicação “Autenticacão.Gov” há um segmento destinado a configurações da Chave Móvel Digital com um botão **Registar**. Pressione o botão para abrir uma janela de registo do certificado.
+
+2. Insira o número de telemóvel associado à sua conta da Chave Móvel Digital e o PIN de Assinatura da Chave Móvel Digital e pressione **OK**.
+
+3. Se as credenciais inseridas no passo anterior estavam corretas, deverá receber um SMS no número de telémovel associado com um código que deverá introduzir para concluir o processo de registo do certificado.
+
+**Assinatura** – Similar à assinatura com o Cartão de Cidadão com as seguintes diferenças:
+
+- Durante a configuração ou assinatura, deverá escolher o certificado emitido por `EC de Chave Móvel Digital de Assinatura Digital Qualificada do Cartão de Cidadão X` (onde "X" é um número representado com 5 dígitos).
+
+![Ilustração: Janela para assinar em *Microsoft Word*.](Pictures/Assinar_Word_CMD.png)
+![Ilustração: Janela para assinar em *Adobe Acrobat Reader DC*.](Pictures/Assinar_Adobe_CMD.png)
+
+
+- Em vez de ser pedido o PIN de assinatura do cartão, será aberta uma janela onde, tal como no registo do certificado, deverá introduzir o seu PIN de assinatura da Chave Móvel Digital. Se o PIN estiver correto, deverá receber um SMS com o código de confirmação que deverá introduzir na janela para concluir a assinatura.
+
+
 ## Assinatura digital de email com Mozilla Thunderbird
 
 Para poder assinar digitalmente um email no *Thunderbird*, é necessário
@@ -1119,7 +1149,7 @@ Em versões anteriores do *Adobe Acrobat Reader* para *MacOS* não é possível
 adicionar o módulo PKCS\#11. Recomendamos a atualização do *Adobe
 Acrobat Reader* para a versão **DC**.
 
-## Impossibilidade de assinatura com *Adobe Reader*, *Microsoft Office* e *LibreOffice*
+## Impossibilidade de assinatura em *Adobe Reader*, *Microsoft Office* e *LibreOffice* com Cartão de Cidadão
 
 Deverá aceder ao ficheiro “pteidmdrv.inf”, presente por defeito na
 diretoria “ C:\\ProgramFiles\\PTeID Minidriver” (ou na directoria
