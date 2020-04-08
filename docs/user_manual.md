@@ -863,17 +863,17 @@ assinatura digital e autenticação nas seguintes aplicações:
 - [Mozilla Firefox](#assinatura-digital-de-email-com-mozilla-thunderbird)
 
 Além das aplicações acima referidas, o *middleware* disponibiliza
-suporte criptográfico às aplicações com interface \#PKCS11 ou suporte
+suporte criptográfico às aplicações com interface PKCS\#11 ou suporte
 criptográfico nativo do sistema operativo.
 
-No caso das aplicações com suporte \#PKCS11, geralmente é necessário
+No caso das aplicações com suporte PKCS\#11, geralmente é necessário
 configurar a localização do ficheiro do *middleware*, que permite o
 suporte. A localização deste ficheiro, depende do sistema operativo a
 ser utilizado.
 
-**Windows:** `C:\Windows\System32\pteidpkcs11.dll\`
+**Windows:** `C:\Windows\System32\pteidpkcs11.dll`
 
-**Linux:** `/usr/local/lib/libpteidpkcs11.so\`
+**Linux:** `/usr/local/lib/libpteidpkcs11.so`
 
 **MacOS:** `/usr/local/lib/libpteidpkcs11.dylib`
 
@@ -941,7 +941,7 @@ passos:
 
 ## Assinatura digital de email com *Microsoft Outlook*
 
-A assinatura eletrónica no *Outlook*, por omissão, obriga a que o
+A assinatura digital no *Outlook*, por omissão, obriga a que o
 certificado digital inclua o endereço de email, e este corresponda com o
 email que se pretende assinar.
 
@@ -1009,27 +1009,27 @@ assinado.
 
 ## Assinatura digital com Chave Móvel Digital
 
-Pode assinar documentos com a Chave Móvel Digital no Windows em aplicações como *Microsoft Word*, *Microsoft Excel*, *Microsoft Outlook* e *Adobe Acrobat Reader*. O procedimento é muito semelhante aos descritos nas secções anteriores mas difere em dois aspetos:
+Pode assinar documentos ou emails com a Chave Móvel Digital no Windows em aplicações como *Microsoft Word*, *Microsoft Excel*, *Microsoft Outlook* e *Adobe Acrobat Reader*. O procedimento é muito semelhante aos descritos nas secções anteriores mas difere em dois aspetos:
 
-**Registo do certificado** –  deverá registar o certificado associado à sua Chave Móvel Digital.
-
-Terá que registar novamente o certificado no caso de ainda não ter registado o seu certificado após a última subscrição da Assinatura da Chave Móvel Digital ou o certificado atualmente registado ter expirado.
+**Registo do certificado** –  deverá registar no Windows o certificado associado à sua Chave Móvel Digital.
 
 1. No separador [Configuração de assinaturas](#configura%c3%a7%c3%a3o-de-assinaturas) da aplicação “Autenticacão.Gov” há um segmento destinado a configurações da Chave Móvel Digital com um botão **Registar**. Pressione o botão para abrir uma janela de registo do certificado.
 
 2. Insira o número de telemóvel associado à sua conta da Chave Móvel Digital e o PIN de Assinatura da Chave Móvel Digital e pressione **OK**.
 
-3. Se as credenciais inseridas no passo anterior estavam corretas, deverá receber um SMS no número de telémovel associado com um código que deverá introduzir para concluir o processo de registo do certificado.
+3. Se as credenciais inseridas no passo anterior estavam corretas, deverá receber um SMS no número de telemóvel associado com um código que deverá introduzir para concluir o processo de registo do certificado.
 
-**Assinatura** – Similar à assinatura com o Cartão de Cidadão com as seguintes diferenças:
+No caso de ainda não ter registado o seu certificado após uma re-ativação da Assinatura da Chave Móvel Digital ou o certificado atualmente registado estar expirado terá de repetir o procedimento de registo.
 
-- Durante a configuração ou assinatura, deverá escolher o certificado emitido por `EC de Chave Móvel Digital de Assinatura Digital Qualificada do Cartão de Cidadão X` (onde "X" é um número representado com 5 dígitos).
+**Assinatura** – similar à assinatura com o Cartão de Cidadão com as seguintes diferenças:
+
+- Durante a configuração ou no momento da assinatura, deverá escolher o certificado emitido por `EC de Chave Móvel Digital de Assinatura Digital Qualificada do Cartão de Cidadão X` (onde "X" é um número com 5 dígitos, por exemplo 00001 ou 00002).
 
 ![Ilustração: Janela para assinar em *Microsoft Word*.](Pictures/Assinar_Word_CMD.png)
 ![Ilustração: Janela para assinar em *Adobe Acrobat Reader DC*.](Pictures/Assinar_Adobe_CMD.png)
 
 
-- Em vez de ser pedido o PIN de assinatura do cartão, será aberta uma janela onde, tal como no registo do certificado, deverá introduzir o seu PIN de assinatura da Chave Móvel Digital. Se o PIN estiver correto, deverá receber um SMS com o código de confirmação que deverá introduzir na janela para concluir a assinatura.
+- Após confirmar na aplicação em uso que pretende assinar será mostrada uma janela onde, tal como no registo do certificado, deverá introduzir o seu PIN de assinatura da Chave Móvel Digital. Se o PIN estiver correto, deverá receber um SMS com o código de confirmação que deverá introduzir na janela para concluir a assinatura.
 
 
 ## Assinatura digital de email com Mozilla Thunderbird
@@ -1175,15 +1175,15 @@ selecionar a pasta “drivers” que esta na diretoria “C:\\Windows\\System32�
 
 
     a\) Aceda ao **Painel de Controlo** e em seguida aceda a **Ferramentas de Administração**
-
+    
     b\) Clique em **Serviços**
-
+    
     c\) Verifique se o serviço “**Cartão Inteligente**” (Smart Card) está iniciado (Started). Caso não esteja, clique com o botão direito no serviço e clique em **Start**.
-
+    
     d\) Desligue o leitor do computador.
-
+    
     e\) Encerre a aplicação do Cartão de Cidadão.
-
+    
     f\) Volte a inserir o leitor e abra novamente a aplicação.
 
 4.  Se estiver a usar uma ligação a uma máquina remota e prentende partilhar o leitor de cartões, verifique se:
