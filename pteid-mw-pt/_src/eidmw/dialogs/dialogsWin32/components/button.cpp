@@ -29,7 +29,8 @@ void PteidControls::ButtonData::setEnabled(bool enabled) {
 HWND PteidControls::CreateButton(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, PteidControls::ButtonData *btnData) {
 
     // CONTAINER
-    HWND hContainer = CreateWindow(
+    HWND hContainer = CreateWindowEx(
+        WS_EX_CONTROLPARENT,
         WC_STATIC,
         L"",
         WS_CHILD | WS_VISIBLE,
@@ -92,6 +93,33 @@ LRESULT CALLBACK PteidControls::Button_Proc(HWND hWnd, UINT uMsg, WPARAM wParam,
         return 0;
     }
 
+    case WM_KEYDOWN:
+    {
+        // If enter is pressed when button has focus, send click
+        // More info: https://support.microsoft.com/en-in/help/102589/how-to-use-the-enter-key-from-edit-controls-in-a-dialog-box
+        if (wParam == VK_RETURN) {
+            SendMessage(hWnd, BM_CLICK, 0, 0);
+            return 0;
+        }
+        return 0;
+    }
+
+    case WM_GETDLGCODE:
+    {
+        if (wParam == VK_RETURN)
+        {
+            return (DLGC_WANTALLKEYS | DefSubclassProc(hWnd, uMsg, wParam, lParam));
+        }
+        break;
+    }
+
+    case WM_SETFOCUS:
+    case WM_KILLFOCUS:
+    {
+        // If focus changed, repaint
+        InvalidateRect(GetParent(hWnd), NULL, TRUE);
+        break;
+    }
     default:
 
         break;
@@ -119,7 +147,7 @@ LRESULT CALLBACK PteidControls::Button_Container_Proc(HWND hWnd, UINT uMsg, WPAR
             SetTextColor(pDIS->hDC, WHITE);
             if (btnData->enabled)
             {
-                SetBkColor(pDIS->hDC, (btnData->hovered ? DARKBLUE : BLUE));
+                SetBkColor(pDIS->hDC, (btnData->hovered || GetFocus() == btnData->hButtonWnd ? DARKBLUE : BLUE));
             }
             else
             {
@@ -131,7 +159,7 @@ LRESULT CALLBACK PteidControls::Button_Container_Proc(HWND hWnd, UINT uMsg, WPAR
             if (btnData->enabled)
             {
                 SetTextColor(pDIS->hDC, BLUE);
-                SetBkColor(pDIS->hDC, (btnData->hovered ? DARKGREY : GREY));
+                SetBkColor(pDIS->hDC, (btnData->hovered || GetFocus() == btnData->hButtonWnd ? DARKGREY : GREY));
             }
             else
             {
@@ -140,13 +168,27 @@ LRESULT CALLBACK PteidControls::Button_Container_Proc(HWND hWnd, UINT uMsg, WPAR
             }
         }
 
+        // If the button has focus, draw border around it
+        if (GetFocus() == btnData->hButtonWnd)
+        {
+            int borderWidth = 2;
+            HPEN pen = CreatePen(PS_INSIDEFRAME, borderWidth, BLACK);
+            SelectObject(pDIS->hDC, pen);
+            Rectangle(pDIS->hDC,
+                pDIS->rcItem.left,
+                pDIS->rcItem.top,
+                pDIS->rcItem.right,
+                pDIS->rcItem.bottom);
+            InflateRect(&pDIS->rcItem, -borderWidth, -borderWidth); // do not draw button over the border
+            DeleteObject(pen);
+        }
         SetTextAlign(pDIS->hDC, TA_CENTER | VTA_CENTER);
 
         ExtTextOut(pDIS->hDC,
             pDIS->rcItem.right / 2,
             pDIS->rcItem.bottom / 4,
             ETO_OPAQUE | ETO_CLIPPED, &pDIS->rcItem, btnData->text, _tcslen(btnData->text), NULL);
-        DrawEdge(pDIS->hDC, &pDIS->rcItem, (pDIS->itemState & ODS_SELECTED ? EDGE_SUNKEN : NULL), BF_RECT);
+
         break;
     }
     default:

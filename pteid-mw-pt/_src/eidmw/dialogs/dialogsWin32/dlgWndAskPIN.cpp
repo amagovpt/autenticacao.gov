@@ -33,10 +33,10 @@
 #include "Config.h"
 #include "resource.h"
 
-#define IDC_STATIC 0
-#define IDB_OK 1
-#define IDB_CANCEL 2
-#define IDC_STATIC2 3
+#define IDC_STATIC_TITLE  0
+#define IDB_OK IDOK
+#define IDB_CANCEL IDCANCEL
+#define IDC_STATIC_HEADER 3
 #define IMG_SIZE 128
 #define IDC_EDIT 3
 
@@ -47,18 +47,12 @@ std::wstring lang = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGU
 dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring & Header, std::wstring & PINName, HWND Parent )
 :Win32Dialog(L"WndAskPIN")
 {
-	hbrBkgnd = NULL;
 	PinResult[0] = ' ';
 	PinResult[1] = (char)0;
 
 	std::wstring tmpTitle = L"";
 
 	tmpTitle += GETSTRING_DLG(VerifyingPinCode);
-
-
-	//Max Length of PINs for PTEID cards as currently defined by INCM personalization
-	m_ulPinMinLen = 4;
-	m_ulPinMaxLen = 8;
 
 	szHeader = Header.c_str();
 	szPIN = PINName.c_str();
@@ -68,8 +62,8 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 	tmpTitle += szPIN;
 
 
-	int window_height = 280;
-	int window_width = 420;
+	int window_height = 230;
+	int window_width = 430;
 	ScaleDimensions(&window_width, &window_height);
 
 	if( CreateWnd( tmpTitle.c_str() , window_width, window_height, IDI_APPICON, Parent ) )
@@ -78,74 +72,70 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 		RECT clientRect;
 		GetClientRect( m_hWnd, &clientRect );
 
-		int buttonWidth = window_width * 0.22;
-		int buttonHeight = window_height * 0.12;
-		int rightMargin = 16;
-		int buttonY = clientRect.bottom - window_height * 0.035 - buttonHeight;
-        int buttonSpacing = 0.03 * window_width;
+		int contentX = (int)(clientRect.right * 0.05);
+		int paddingY = (int)(clientRect.bottom * 0.078);
+		int contentWidth = (int)(clientRect.right - 2 * contentX);
+		int titleHeight = (int)(clientRect.right * 0.15);
+		int headerY = clientRect.bottom * 0.25;
+		int headerHeight = (int)(clientRect.bottom * 0.2);
+		int pinY = (int)(clientRect.bottom * 0.45);
+		int editFieldHeight = (int)(clientRect.bottom * 0.22);
+		int buttonWidth = (int)(clientRect.right * 0.43);
+		int buttonHeight = (int)(clientRect.bottom * 0.125);
+		int buttonY = (int)(clientRect.bottom - paddingY - buttonHeight);
+		int buttonSpacing = contentWidth - 2 * buttonWidth;
 
-		OK_Btn = CreateWindow(
-			L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-            clientRect.right - buttonWidth * 2 - rightMargin - buttonSpacing, buttonY, buttonWidth, buttonHeight,
-			m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL);
+		// TITLE
+		std::wstring title = GETSTRING_DLG(SigningWith);
+		title.append(L" ");
+		title.append(szPIN);
 
-		//OK button is disabled by default
-		EnableWindow(OK_Btn, false);
+		titleData.text = title.c_str();
+		titleData.font = PteidControls::StandardFontHeader;
+		titleData.color = BLUE;
+		HWND hTitle = PteidControls::CreateText(
+			contentX, paddingY,
+			contentWidth, titleHeight,
+			m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
 
-		Cancel_Btn = CreateWindow(
-			L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-			clientRect.right - buttonWidth - rightMargin, buttonY, buttonWidth, buttonHeight,
-			m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL);
+		// HEADER
+		headerData.font = PteidControls::StandardFontBold;
+		headerData.text = Header.c_str();
+		HWND hHeader = PteidControls::CreateText(
+			contentX, headerY,
+			contentWidth, headerHeight,
+			m_hWnd, (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
 
+		// TEXT EDIT
+		textFieldData.title = szPIN;
+		textFieldData.isPassword = true;
+		//Max Length of PINs for PTEID cards as currently defined by INCM personalization
+		textFieldData.minLength = 4;
+		textFieldData.maxLength = 8;
 
-		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_PASSWORD;
-		if( pinInfo.ulFlags & PIN_FLAG_DIGITS )
-			dwStyle |= ES_NUMBER;
+		if (pinInfo.ulFlags & PIN_FLAG_DIGITS)
+			textFieldData.isNumeric = true;
 
-		LONG pinTop = clientRect.bottom - window_height * 0.45;
-		LONG pinLeft = clientRect.right - window_width * 0.45;
+		HWND hTextEdit = PteidControls::CreateTextField(
+			contentX, pinY,
+			contentWidth, editFieldHeight,
+			m_hWnd, (HMENU)IDC_EDIT, m_hInstance, &textFieldData);
+		SetFocus(textFieldData.getTextFieldWnd());
 
-        int editWidth = 0.4 * window_width;
-        int editHeight = 0.1 * window_height;
+		// BUTTONS
+		okBtnProcData.highlight = true;
+		okBtnProcData.setEnabled(false);
+		okBtnProcData.text = GETSTRING_DLG(Confirm);
+		cancelBtnProcData.text = GETSTRING_DLG(Cancel);
 
-		HWND hTextEdit = CreateWindowEx( WS_EX_CLIENTEDGE,
-			L"EDIT", L"", dwStyle, 
-            pinLeft, pinTop, editWidth, editHeight,
-			m_hWnd, (HMENU)IDC_EDIT, m_hInstance, NULL );
-		SendMessage( hTextEdit, EM_LIMITTEXT, m_ulPinMaxLen, 0 );
+		HWND Cancel_Btn = PteidControls::CreateButton(
+			contentX, buttonY, buttonWidth, buttonHeight,
+			m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &cancelBtnProcData);
 
-		int labelsX = window_width * 0.10;
+		HWND OK_Btn = PteidControls::CreateButton(
+			contentX + buttonWidth + buttonSpacing, buttonY, buttonWidth, buttonHeight,
+			m_hWnd, (HMENU)IDB_OK, m_hInstance, &okBtnProcData);
 
-        int textWidth = window_width * 0.45;
-        int textHeight = window_height * 0.1;
-
-		//This is vertically aligned with hTextEdit
-		HWND hStaticText = CreateWindow( 
-			L"STATIC", szPIN, WS_CHILD | WS_VISIBLE | SS_LEFT, 
-            labelsX, pinTop, textWidth, textHeight,
-			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
-
-		/*
-		HWND hStaticText2 = CreateWindow(
-			L"STATIC", szHeader, WS_CHILD | WS_VISIBLE | SS_CENTER,
-			20, 0, window_width - 40, 40,
-			m_hWnd, (HMENU)IDC_STATIC2, m_hInstance, NULL);
-			*/
-
-		SendMessage(hTextEdit, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
-		SendMessage(hStaticText, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0 );
-
-		SendMessage(OK_Btn, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0 );
-		SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0 );
-
-		HBITMAP ImagePIN;
-		if( PinPusage == DLG_PIN_SIGN )
-			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP2) );
-		else
-			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP1) );
-		//CreateBitapMask( ImagePIN, ImagePIN_Mask );
-
-		SetFocus(GetDlgItem( m_hWnd, IDC_EDIT ));
 	}
 }
 
@@ -158,10 +148,10 @@ dlgWndAskPIN::~dlgWndAskPIN()
 void dlgWndAskPIN::GetPinResult()
 {
 	wchar_t nameBuf[128];
-	long len = (long)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT ), WM_GETTEXTLENGTH, 0, 0 );
+	long len = (long)SendMessage(textFieldData.getTextFieldWnd(), WM_GETTEXTLENGTH, 0, 0);
 	if( len < 128 )
 	{
-		SendMessage( GetDlgItem( m_hWnd, IDC_EDIT ), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf );
+		SendMessage(textFieldData.getTextFieldWnd(), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf);
 		wcscpy_s( PinResult, nameBuf );
 	}
 }
@@ -184,16 +174,18 @@ LRESULT dlgWndAskPIN::ProcecEvent
 				{
 					if( EN_CHANGE == HIWORD(wParam) )
 					{
-						long len = (long)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT ), WM_GETTEXTLENGTH, 0, 0 );
-						EnableWindow( GetDlgItem( m_hWnd, IDOK ), ( (unsigned int)len >= m_ulPinMinLen ) );
+						okBtnProcData.setEnabled(textFieldData.isAcceptableInput());
 					}
 					return TRUE;
 				}
 
 				case IDB_OK:
-					GetPinResult();
-					dlgResult = eIDMW::DLG_OK;
-					close();
+					if (okBtnProcData.isEnabled()) 
+					{
+						GetPinResult();
+						dlgResult = eIDMW::DLG_OK;
+						close();
+					}
 					return TRUE;
 
 				case IDB_CANCEL:
@@ -216,51 +208,11 @@ LRESULT dlgWndAskPIN::ProcecEvent
 			break;
 		}
 
-		//Set the TextColor for the subwindows hTextEdit and hStaticText
-		case WM_CTLCOLORSTATIC:
-		{
-			//TODO: grey button
-			COLORREF grey = RGB(0xD6, 0xD7, 0xD7);
-			COLORREF white = RGB(0xFF, 0xFF, 0xFF);
-			HDC hdcStatic = (HDC)wParam;
-			SetTextColor(hdcStatic, RGB(0x3C, 0x5D, 0xBC));
-
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
-			if ((HWND)lParam == OK_Btn || (HWND)lParam == Cancel_Btn)
-			{
-				SetBkColor(hdcStatic, grey);
-				return (INT_PTR)CreateSolidBrush(grey);
-			}
-
-			SetBkColor(hdcStatic, white);
-
-			if (hbrBkgnd == NULL)
-			{
-				hbrBkgnd = CreateSolidBrush(white);
-			}
-
-			return (INT_PTR)hbrBkgnd;
-		}
-
 		case WM_PAINT:
 		{
 			m_hDC = BeginPaint( m_hWnd, &ps );
-			SetTextColor(m_hDC, RGB(0x3C, 0x5D, 0xBC));
 
-			//Change top header dimensions
-			GetClientRect( m_hWnd, &rect );
-			rect.left += 55;
-			rect.top = 20;
-			rect.right -= 20;
-			rect.bottom = rect.top + 10;
-
-			SetBkColor(m_hDC, RGB(255, 255, 255));
-			SelectObject(m_hDC, PteidControls::StandardFontHeader);
 			MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
-			
-			//The first call is needed to calculate the needed bounding rectangle
-			DrawText(m_hDC, szHeader, -1, &rect, DT_WORDBREAK | DT_CALCRECT);
-			DrawText(m_hDC, szHeader, -1, &rect, DT_WORDBREAK);
 
 			EndPaint( m_hWnd, &ps );
 
@@ -279,12 +231,6 @@ LRESULT dlgWndAskPIN::ProcecEvent
 		{
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_NCACTIVATE (wParam=%X, lParam=%X)",wParam,lParam);
 
-			//if( !IsIconic( m_hWnd ) && m_ModalHold && Active_hWnd == m_hWnd )
-			//{
-			//	ShowWindow( m_hWnd, SW_SHOW );
-			//	SetFocus( m_hWnd );
-			//	return 0;
-			//}
 			if(!wParam)
 			{
 				SetFocus( m_hWnd );
@@ -303,14 +249,6 @@ LRESULT dlgWndAskPIN::ProcecEvent
 		{
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_KILLFOCUS (wParam=%X, lParam=%X)",wParam,lParam);
 
-			//if( !IsIconic( m_hWnd ) && m_ModalHold && Active_hWnd == m_hWnd )
-			//{
-			//	if( GetParent((HWND)wParam ) != m_hWnd )
-			//	{
-			//		SetFocus( m_hWnd );
-			//		return 0;
-			//	}
-			//}
 			break;
 		}
 

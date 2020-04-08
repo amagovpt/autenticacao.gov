@@ -32,8 +32,6 @@
 using namespace std;
 using namespace eIDMW;
 
-#define PTEID_EDIT_FIELD_WITH_TITLE_HEIGHT   63
-
 class Win32Dialog
 {
 public:

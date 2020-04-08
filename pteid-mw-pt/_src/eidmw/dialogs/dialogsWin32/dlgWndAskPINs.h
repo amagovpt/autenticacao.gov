@@ -31,22 +31,14 @@ class dlgWndAskPINs : public Win32Dialog
 {
 	void GetPinResult();
 	bool CheckPin2Result();
-	//void SetHeaderText(const wchar_t * txt);
-	HWND OK_Btn;
-	HWND Cancel_Btn;
-	HBRUSH hbrBkgnd;
 
+	PteidControls::TextData titleData, headerTextData, errorTextData;
+	PteidControls::TextFieldData textFieldData1, textFieldData2, textFieldData3;
+	PteidControls::ButtonData okBtnProcData, cancelBtnProcData;
 
-	bool DrawError;
 	bool m_dontAskPIN1;
-	unsigned int m_ulPinMaxLen;
 	unsigned char m_UK_InputField;
 
-	bool InputField1_OK, InputField2_OK, InputField3_OK;
-	unsigned int m_ulPin1MinLen;
-	unsigned int m_ulPin1MaxLen;
-	unsigned int m_ulPin2MinLen;
-	unsigned int m_ulPin2MaxLen;
 	const wchar_t * szHeader;
 	const wchar_t * szPIN;
 

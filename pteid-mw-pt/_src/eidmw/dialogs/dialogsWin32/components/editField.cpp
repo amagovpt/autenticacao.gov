@@ -36,7 +36,8 @@ HWND PteidControls::CreateTextField(int x, int y, int nWidth, int nHeight, HWND 
     }
 
     // CONTAINER
-    HWND hContainer = CreateWindow(
+    HWND hContainer = CreateWindowEx(
+        WS_EX_CONTROLPARENT,
         WC_STATIC,
         L"",
         WS_CHILD | WS_VISIBLE,
@@ -65,11 +66,12 @@ HWND PteidControls::CreateTextField(int x, int y, int nWidth, int nHeight, HWND 
     }
 
     // TEXT FIELD
-    DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_NUMBER;
+    DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP;
     if (textFieldData->isPassword)
-    {
         dwStyle |= ES_PASSWORD;
-    }
+    if (textFieldData->isNumeric)
+        dwStyle |= ES_NUMBER;
+
     HWND hEditField = CreateWindow(
         WC_EDIT,
         L"",
@@ -77,6 +79,7 @@ HWND PteidControls::CreateTextField(int x, int y, int nWidth, int nHeight, HWND 
         BORDER_PADDING_X, editControlY,
         nWidth - 2 * BORDER_PADDING_X, editControlHeight,
         hContainer, hMenu, hInstance, NULL);
+    SetWindowSubclass(hEditField, TextField_Proc, 0, (DWORD_PTR)textFieldData);
 
     SendMessage(hEditField, EM_LIMITTEXT, textFieldData->maxLength, 0);
     SendMessage(hEditField, WM_SETFONT, (WPARAM)StandardFont, 0);
@@ -117,7 +120,18 @@ LRESULT CALLBACK PteidControls::TextField_Container_Proc(HWND hWnd, UINT uMsg, W
         RECT rectContainer;
         GetClientRect(hWnd, &rectContainer);
 
-        HPEN pen = CreatePen(PS_INSIDEFRAME, 2, (textFieldData->acceptableInput ? BLUE : GREY));
+        COLORREF borderColor;
+        if (textFieldData->acceptableInput)
+        {
+            borderColor = (textFieldData->hTextFieldWnd == GetFocus() ? DARKBLUE : BLUE);
+        }
+        else
+        {
+            borderColor = (textFieldData->hTextFieldWnd == GetFocus() ? DARKGREY : GREY);
+        }
+
+        int penWidth = (textFieldData->hTextFieldWnd == GetFocus() ? 3 : 2);
+        HPEN pen = CreatePen(PS_INSIDEFRAME, penWidth, borderColor);
         SelectObject(hdc, pen);
         SetBkMode(hdc, TRANSPARENT);
 
@@ -145,6 +159,24 @@ LRESULT CALLBACK PteidControls::TextField_Container_Proc(HWND hWnd, UINT uMsg, W
     return DefSubclassProc(hWnd, uMsg, wParam, lParam);
 }
 
+LRESULT CALLBACK PteidControls::TextField_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
+{
+    TextFieldData *textFieldData = (TextFieldData *)dwRefData;
+    switch (uMsg)
+    {
+    case WM_SETFOCUS:
+    case WM_KILLFOCUS:
+    {
+        // If focus changed, repaint
+        InvalidateRect(GetParent(hWnd), NULL, TRUE);
+        break;
+    }
+    default:
+        break;
+    }
+
+    return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+}
 
 BOOL PteidControls::TextField_IsAcceptableInput(TextFieldData *textFieldData){
     BOOL isAcceptableInput;

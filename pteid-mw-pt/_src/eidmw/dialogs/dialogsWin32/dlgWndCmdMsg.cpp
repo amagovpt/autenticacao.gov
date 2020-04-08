@@ -26,7 +26,7 @@
 #include "Log.h"
 
 #define IDI_ICON 0
-#define IDB_CANCEL 1
+#define IDB_CANCEL IDCANCEL
 #define IDC_STATIC_TITLE 2
 #define IDC_STATIC_TEXT_TOP 3
 #define IDC_STATIC_TEXT_BOTTOM 4
@@ -52,17 +52,17 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
         RECT clientRect;
         GetClientRect(m_hWnd, &clientRect);
 
-        int buttonWidth = (int)(clientRect.right * 0.43);
-        int buttonHeight = (int)(clientRect.bottom * 0.08);
+        int titleX = (int)(clientRect.right * 0.05);
+        int titleY = (int)(clientRect.bottom * 0.05);
+        int contentWidth = (int)(clientRect.right * 0.9);
+        int textTopY = (int)(clientRect.bottom * 0.55);
         int imgWidth = (int)(clientRect.right * 0.25);
         int imgHeight = imgWidth;
         int imgX = (int)((clientRect.right - imgWidth) / 2 );
         int imgY = (int)(clientRect.bottom * 0.18);
-        int titleY = (int)(clientRect.bottom * 0.05);
-        int titleX = (int)(clientRect.right * 0.05);
-        int contentWidth = (int)(clientRect.right * 0.9);
-        int textTopY = (int)(clientRect.bottom * 0.55);
         int textBottomY = (int)(clientRect.bottom * 0.62);
+        int buttonWidth = (int)(clientRect.right * 0.43);
+        int buttonHeight = (int)(clientRect.bottom * 0.08);
 
         // TITLE
         std::wstring title = GETSTRING_DLG(SigningWith);
@@ -119,6 +119,7 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
         HWND Cancel_Btn = PteidControls::CreateButton(
             (clientRect.right - buttonWidth) / 2, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
             m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &btnProcData);
+        SetFocus(btnProcData.getButtonWnd());
     }
 }
 

@@ -30,8 +30,12 @@
 #include "Log.h"
 
 
-#define IDB_OK 1
-#define IDB_CANCEL 2
+#define IDB_OK IDOK
+#define IDB_CANCEL IDCANCEL
+#define IDC_STATIC_TITLE 3
+#define IDC_STATIC_HEADER 4
+#define IDC_STATIC_WARNING 5
+#define IDC_ANIMATION 6
 
 dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusage, 
 		DlgPinOperation operation, const std::wstring & csReader, 
@@ -39,19 +43,14 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 :Win32Dialog(L"WndPinpadInfo")
 
 {
-	m_szHeader=NULL;
-	m_szMessage=NULL;
-
 	m_ModalHold = true;
-	m_szMessage = _wcsdup( Message.c_str() );
 
 	m_ulHandle = ulHandle;
 
 	std::wstring tmpTitle = L"";
 
 	// Added for accessibility
-	m_szHeader = _wcsdup(PinName.c_str());
-	tmpTitle += m_szHeader;
+	//tmpTitle += m_szHeader;
 
 	switch (operation)
 	{
@@ -69,26 +68,63 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 			break;
 	}
 
-	tmpTitle += m_szMessage;
+	tmpTitle += Message.c_str();
 	tmpTitle += GETSTRING_DLG(PinpadCanBeDisabled);
 	
-    int window_width = 420;
-    int window_height = 280;
-    ScaleDimensions(&window_width, &window_height);
+	int window_width = 430;
+	int window_height = 360;
+	ScaleDimensions(&window_width, &window_height);
 
-    if (CreateWnd(tmpTitle.c_str(), window_width, window_height, IDI_APPICON, Parent))
+	if (CreateWnd(tmpTitle.c_str(), window_width, window_height, IDI_APPICON, Parent))
 	{
-		/*
-		if( PinPusage == DLG_PIN_SIGN )
-			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP2) );
-		else
-			ImagePIN = LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_BITMAP1) );
-		CreateBitapMask( ImagePIN, ImagePIN_Mask );
-		*/
+		RECT clientRect;
+		GetClientRect(m_hWnd, &clientRect);
 
-		//PteidControls::StandardFont = GetSystemFont();
+		int contentX = (int)(clientRect.right * 0.05);
+		int paddingY = (int)(clientRect.bottom * 0.05);
+		int contentWidth = (int)(clientRect.right - 2 * contentX);
+		int titleHeight = (int)(clientRect.right * 0.15);
+		int imgWidth = (int)(clientRect.right * 0.25);
+		int imgHeight = imgWidth;
+		int imgX = (int)((clientRect.right - imgWidth) / 2);
+		int imgY = (int)(clientRect.bottom * 0.18);
+		int headerY = (int)(clientRect.bottom * 0.55);
+		int headerHeight = (int)(clientRect.bottom * 0.2);
+		int warningY = (int)(clientRect.bottom * 0.75);
+		int headerFontSize = 14 * .75;
+		ScaleDimensions(&headerFontSize, NULL);
 
-		SendMessage( Parent, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0 );
+		// TITLE
+		titleData.text = PinName.c_str();
+		titleData.font = PteidControls::StandardFontHeader;
+		titleData.color = BLUE;
+		HWND hTitle = PteidControls::CreateText(
+			contentX, paddingY,
+			contentWidth, titleHeight,
+			m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
+
+		// ANIMATION
+		hwndAnim = Animate_Create(m_hWnd, IDC_ANIMATION, ACS_AUTOPLAY | ACS_CENTER | WS_CHILD, m_hInstance);
+		SetWindowPos(hwndAnim, 0, imgX, imgY, imgWidth, imgHeight, SWP_NOZORDER | SWP_SHOWWINDOW);
+		Animate_Open(hwndAnim, MAKEINTRESOURCE(IDR_AVI1));
+
+		// HEADER
+		headerFont = PteidControls::CreatePteidFont(headerFontSize, FW_BOLD, m_hInstance);
+		headerData.font = headerFont;
+		headerData.text = Message.c_str();
+		headerData.horizontalCentered = true;
+		HWND hHeader = PteidControls::CreateText(
+			contentX, headerY,
+			contentWidth, headerHeight,
+			m_hWnd, (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
+
+		// WARNING "Pinpad functionality can be disabled"
+		warningTextData.text = GETSTRING_DLG(PinpadCanBeDisabled);
+		warningTextData.horizontalCentered = true;
+		HWND hWarning = PteidControls::CreateText(
+			contentX, warningY,
+			contentWidth, headerHeight,
+			m_hWnd, (HMENU)IDC_STATIC_WARNING, m_hInstance, &warningTextData);
 	}
 
 }
@@ -96,19 +132,11 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 
 dlgWndPinpadInfo::~dlgWndPinpadInfo()
 {
-    EnableWindow(m_parent, TRUE);
+	DeleteObject(headerFont);
+	DeleteObject(hbrBkgnd);
+	Animate_Close(hwndAnim);
+	EnableWindow(m_parent, TRUE);
 	KillWindow( );
-
-	if(m_szHeader)
-	{
-		free(m_szHeader);
-		m_szHeader=NULL;
-	}
-	if(m_szMessage)
-	{
-		free(m_szMessage);
-		m_szMessage=NULL;
-	}
 }
 
 LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
@@ -120,41 +148,21 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 
 	switch( uMsg )
 	{
+	case WM_CTLCOLORSTATIC:
+	{
+		HDC hdcStatic = (HDC)wParam;
+		//MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
+		SetBkColor(hdcStatic, WHITE);
+		if (hbrBkgnd == NULL)
+		{
+			hbrBkgnd = CreateSolidBrush(WHITE);
+		}
 
+		return (INT_PTR)hbrBkgnd;
+	}
 	case WM_PAINT:
 		{
 			m_hDC = BeginPaint( m_hWnd, &ps );
-
-			SetTextColor(m_hDC, RGB(0x3C, 0x5D, 0xBC));
-
-			GetClientRect( m_hWnd, &rect );
-			rect.left += 0.05 * rect.right;
-            rect.right -= 0.05 * rect.right;
-			rect.top = 0.11 * rect.bottom;
-			rect.bottom = 0.40 * rect.bottom;
-			SetBkColor( m_hDC, RGB(255,255,255));
-			SelectObject( m_hDC, PteidControls::StandardFontHeader );
-			DrawText( m_hDC, m_szHeader, -1, &rect, DT_WORDBREAK );
-
-			//Change top header dimensions
-			GetClientRect( m_hWnd, &rect );
-            rect.left += 0.05 * rect.right;
-            rect.right -= 0.05 * rect.right;
-			rect.top = 0.22 * rect.bottom;
-			rect.bottom = 0.78 * rect.bottom;
-			SetBkColor(m_hDC, RGB(255, 255, 255));
-			SelectObject( m_hDC, PteidControls::StandardFont );
-			DrawText( m_hDC, m_szMessage, -1, &rect, DT_WORDBREAK );
-
-            //Pinpad disable warning
-            GetClientRect(m_hWnd, &rect);
-            rect.left += 0.05 * rect.right;
-            rect.right -= 0.05 * rect.right;
-            rect.top = 0.78 * rect.bottom;
-            rect.bottom = rect.bottom;
-            SetBkColor(m_hDC, RGB(255, 255, 255));
-            SelectObject(m_hDC, PteidControls::StandardFont);
-            DrawText(m_hDC, GETSTRING_DLG(PinpadCanBeDisabled), -1, &rect, DT_WORDBREAK);
 
 			EndPaint( m_hWnd, &ps );
 
@@ -204,6 +212,6 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 }
 
 void dlgWndPinpadInfo::stopExec() {
-    m_ModalHold = false;
-    PostMessage(m_hWnd, WM_CLOSE, 0, 0);
+	m_ModalHold = false;
+	PostMessage(m_hWnd, WM_CLOSE, 0, 0);
 }

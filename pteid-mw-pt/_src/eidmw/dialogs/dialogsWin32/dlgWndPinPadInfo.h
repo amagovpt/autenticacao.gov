@@ -29,12 +29,12 @@ using namespace eIDMW;
 
 class dlgWndPinpadInfo : public Win32Dialog
 {
-	//HBITMAP ImagePIN;
-	//HBITMAP ImagePIN_Mask;
-	//HFONT PteidControls::StandardFont;
-	
-	wchar_t * m_szHeader;
-	wchar_t * m_szMessage;
+
+	PteidControls::TextData titleData, headerData, warningTextData;
+	HWND hwndAnim;
+	HFONT headerFont;
+	HBRUSH hbrBkgnd;
+
 	unsigned long m_ulHandle;
 
 public:

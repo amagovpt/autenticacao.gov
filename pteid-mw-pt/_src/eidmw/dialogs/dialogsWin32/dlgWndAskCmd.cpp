@@ -28,8 +28,8 @@
 #include "Config.h"
 
 #define IDC_STATIC_HEADER 0
-#define IDB_OK 1
-#define IDB_CANCEL 2
+#define IDB_OK IDOK
+#define IDB_CANCEL IDCANCEL
 #define IDC_EDIT 3
 #define IDC_STATIC_BOX 4
 #define IDC_STATIC_BOX_TEXT 5
@@ -60,16 +60,17 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         RECT clientRect;
         GetClientRect(m_hWnd, &clientRect);
 
-        int buttonWidth = (int)(clientRect.right * 0.43);
-        int buttonHeight = (int)(clientRect.bottom * 0.08);
         int contentX = (int)(clientRect.right * 0.05);
         int contentWidth = (int)(clientRect.right - 2 * contentX);
+        int titleY = (int)(clientRect.bottom * 0.05);
+        int titleHeight = (int)(clientRect.bottom * 0.15);
         int textBoxY = (int)(clientRect.bottom * 0.35);
         int boxHeight = (int)(clientRect.bottom * 0.23);
         int editOutY = (int)(clientRect.bottom * 0.61);
         int editOutLabelHeight = (int)(clientRect.bottom * 0.06);
-        int titleY = (int)(clientRect.bottom * 0.05);
-        int editFieldHeight = PTEID_EDIT_FIELD_WITH_TITLE_HEIGHT;
+        int editFieldHeight = (int)(clientRect.bottom * 0.14);
+        int buttonWidth = (int)(clientRect.right * 0.43);
+        int buttonHeight = (int)(clientRect.bottom * 0.08);
 
         // TITLE
         std::wstring title = GETSTRING_DLG(SigningWith);
@@ -80,7 +81,7 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         titleData.color = BLUE;
         HWND hTitle = PteidControls::CreateText(
             contentX, titleY,
-            contentWidth, clientRect.bottom * 0.15,
+            contentWidth, titleHeight,
             m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
 
         // HEADER
@@ -89,7 +90,7 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         headerData.text = Header.c_str();
         HWND hHeader = PteidControls::CreateText(
             contentX, headerY,
-            contentWidth, clientRect.bottom * 0.15,
+            contentWidth, titleHeight,
             m_hWnd, (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
 
         // BOX W/ TEXT
@@ -97,10 +98,8 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         // box
         hStaticBox = CreateWindow(
             L"STATIC", NULL, WS_CHILD | WS_VISIBLE,
-            contentX,
-            textBoxY,
-            contentWidth,
-            boxHeight,
+            contentX, textBoxY,
+            contentWidth, boxHeight,
             m_hWnd, (HMENU)IDC_STATIC_BOX, m_hInstance, NULL);
 
         // text
@@ -157,6 +156,7 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
             textFieldData.minLength = 6;
             textFieldData.maxLength = 6;
         }
+        textFieldData.isNumeric = true;
         HWND hTextEdit = PteidControls::CreateTextField(
             contentX,
             editOutY + editOutLabelHeight, 
@@ -171,13 +171,14 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         okBtnProcData.text = GETSTRING_DLG(Confirm);
         cancelBtnProcData.text = GETSTRING_DLG(Cancel);
 
+        HWND Cancel_Btn = PteidControls::CreateButton(
+            clientRect.right * 0.05, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
+            m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &cancelBtnProcData);
+
         HWND OK_Btn = PteidControls::CreateButton(
             clientRect.right * 0.52, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
             m_hWnd, (HMENU)IDB_OK, m_hInstance, &okBtnProcData);
 
-        HWND Cancel_Btn = PteidControls::CreateButton(
-            clientRect.right * 0.05, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
-            m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &cancelBtnProcData);
     }
 }
 
@@ -249,7 +250,7 @@ LPARAM		lParam)		// Additional Message Information
         break;
     }
 
-    //Set the TextColor for the subwindows hTextEdit and hStaticText
+    //Set the TextColor for the box
     case WM_CTLCOLORSTATIC:
     {
         HDC hdcStatic = (HDC)wParam;

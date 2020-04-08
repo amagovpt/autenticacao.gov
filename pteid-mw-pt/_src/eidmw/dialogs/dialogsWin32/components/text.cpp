@@ -43,6 +43,8 @@ HWND PteidControls::CreateText(int x, int y, int nWidth, int nHeight, HWND hWndP
         hContainer, hMenu, hInstance, NULL);
     SendMessage(hText, WM_SETFONT, (WPARAM)textData->font, 0);
 
+    textData->hTextWnd = hText;
+
     return hContainer;
 }
 

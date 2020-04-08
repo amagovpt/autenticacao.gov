@@ -33,6 +33,7 @@
 #define LIGHTGREY            RGB(0xF1, 0xF1, 0xF2)
 #define DARKGREY             RGB(0xC9, 0xC9, 0xC9)
 #define WHITE                RGB(0xFF, 0xFF, 0xFF)
+#define RED                  RGB(0xCC, 0x00, 0x00)
 
 using namespace eIDMW;
 
@@ -49,6 +50,12 @@ public:
         COLORREF color = BLACK;
         COLORREF backgroundColor = WHITE;
         bool horizontalCentered = false;
+        HWND getWnd() { return this->hTextWnd; }
+
+    private:
+        HWND hTextWnd = NULL;
+
+        friend class PteidControls;
     };
     struct ButtonData {
         bool isEnabled() { return this->enabled; }
@@ -71,6 +78,7 @@ public:
         size_t minLength = 0;
         size_t maxLength = UINTMAX_MAX;
         bool isPassword = false;
+        bool isNumeric = false;
 
         bool isAcceptableInput() { return this->acceptableInput; }
         HWND getTextFieldWnd() { return this->hTextFieldWnd; }
@@ -97,6 +105,7 @@ private:
     static LRESULT CALLBACK Button_Container_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
     static LRESULT CALLBACK Button_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
     static LRESULT CALLBACK TextField_Container_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
+    static LRESULT CALLBACK TextField_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 
     static void Font_LoadFontsFromResources(HINSTANCE hInstance);
     static BOOL Font_bFontsLoaded;
