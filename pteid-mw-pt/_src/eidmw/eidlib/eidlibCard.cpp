@@ -1277,20 +1277,24 @@ PTEIDSDK_API long PTEID_ChangePIN(unsigned char PinId, char *pszOldPin, char *ps
 	const char *a1 = pszOldPin, *a2 = pszNewPin;
 	unsigned long int tries = -1;
 
-	if (readerContext!=NULL){
+	if (readerContext!=NULL) {
 		if (PinId != 1 && PinId != 129 && PinId != 130 && PinId != 131){
 			return PTEID_OK;
 		}
 
 		PTEID_Pins &pins = readerContext->getEIDCard().getPins();
-		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++){
+		for (unsigned long pinIdx=0; pinIdx < pins.count(); pinIdx++) {
 			PTEID_Pin&	pin	= pins.getPinByNumber(pinIdx);
-			if (pin.getPinRef() == PinId)
-				if (pin.changePin(pszOldPin ,pszNewPin, tries, pin.getLabel())){
+			if (pin.getPinRef() == PinId) {
+				if (pin.changePin(pszOldPin ,pszNewPin, tries, pin.getLabel())) {
 					*triesLeft = pin.getTriesLeft();
 					return PTEID_OK;
-				} else
+				}
+				else
 					return -1;
+			}
+			else
+				return PTEID_E_BAD_PARAM;
 		}
 	}
 
