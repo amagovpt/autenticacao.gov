@@ -777,16 +777,42 @@ class PTEID_PDFSignature
 		PTEIDSDK_API PTEID_PDFSignature(const char *input_path);
 		PTEIDSDK_API ~PTEID_PDFSignature();
 
-        PTEIDSDK_API void setFileSigning(char *input_path);
+		/**
+		 *  Set the PDF file to sign - it can be supplied either with this method or through the class constructor 
+		 **/
+		PTEIDSDK_API void setFileSigning(char *input_path);
+		/**
+		 * Add a file to a batch mode signature - this means the signature PIN introduced when the first signature is performed
+		 * is cached in memory for the minimum time needed to sign the complete set of files
+		 * @param input_path: Absolute path for a PDF file to be signed in batch mode
+		 **/
 		PTEIDSDK_API void addToBatchSigning(char *input_path);
 		PTEIDSDK_API void addToBatchSigning(char *input_path, bool last_page);
 		PTEIDSDK_API int getPageCount();
 		PTEIDSDK_API int getOtherPageCount(const char *input_path);
+		/**
+		 * Use this method to apply a cryptographic timestamp for the signature(s) - Internet connection is required
+		 * By default the implementation will use the official Cartão de Cidadão TSA at ts.cartaodecidadao.pt
+		 * Information about request limits described at https://pki.cartaodecidadao.pt - in section "Serviço de Selos Temporais"
+		 * Using PTEID_Config with parameter PTEID_PARAM_XSIGN_TSAURL a different TSA may be specified
+		 **/
 		PTEIDSDK_API void enableTimestamp();
+		/**
+		 * Use a smaller format for the visible signature which is 50% smaller in height but as wide as the regular format
+		 * The default "Cartão de Cidadão" logo or a custom image supplied via setCustomImage() will not be included
+		 **/
 		PTEIDSDK_API void enableSmallSignatureFormat();
 		PTEIDSDK_API bool isLandscapeFormat();
+		/**
+		 * @deprecated - method related to visible signature using sectors  
+		 **/
 		PTEIDSDK_API char *getOccupiedSectors(int page);
 		PTEIDSDK_API void setCustomImage(unsigned char *image_data, unsigned long image_length);
+		/**
+	     * Use this method to change the image that's used on the bottom of the visible signature
+	     * This image will replace the default "Cartão de Cidadão" logo
+	     * @param image_data - image data in JPEG format (recommended size: 185x41 px)
+	     **/
 		PTEIDSDK_API void setCustomImage(const PTEID_ByteArray &image_data);
 
 		PTEIDSDK_API PDFSignature *getPdfSignature();
