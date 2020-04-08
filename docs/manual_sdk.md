@@ -1027,14 +1027,17 @@ Exemplo C++:
 PTEID_EIDCard &card = readerContext.getEIDCard();
 //Ficheiro PDF a assinar
 PTEID_PDFSignature signature("/home/user/input.pdf");
+/* Adicionar uma imagem customizada à assinatura visível
+   O array de bytes image_data deve ser uma imagem em formato
+   JPEG com as dimensões recomendadas (185x41 px) */
+PTEID_ByteArray jpeg_data(image_data, image_length);
+
+signature.setCustomImage(jpeg_data);
+
 signature.enableSmallSignatureFormat();
 //Assinatura com selo temporal
 signature.enableTimestamp();
 
-// Adicionar uma imagem customizada à assinatura visível
-/* O pointer image_data deve apontar para uma imagem em formato
-   JPEG de dimensões recomendadas (185x41 px) */
-signature.setCustomImage(unsigned char *image_data, unsigned long image_length);
 
 /* Assinatura utilizando localização precisa: os parâmetros pos_x e pos_y
    indicam a localização em percentagem da largura e altura da página */
