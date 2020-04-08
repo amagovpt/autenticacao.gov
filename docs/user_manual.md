@@ -53,6 +53,7 @@
   - [Assinatura digital na suite *Microsoft Office*](#assinatura-digital-na-suite-microsoft-office)
   - [Assinatura digital na suite *LibreOffice / OpenOffice*](#assinatura-digital-na-suite-libreoffice--openoffice)
   - [Assinatura digital de email com *Microsoft Outlook*](#assinatura-digital-de-email-com-microsoft-outlook)
+  - [Assinatura digital em *Adobe Acrobat Reader*](#assinatura-digital-em-adobe-acrobat-reader)
   - [Assinatura digital com Chave Móvel Digital](#assinatura-digital-com-chave-m%c3%b3vel-digital)
   - [Assinatura digital de email com Mozilla Thunderbird](#assinatura-digital-de-email-com-mozilla-thunderbird)
   - [Autenticação em portais WEB](#autentica%c3%a7%c3%a3o-em-portais-web)
@@ -1007,6 +1008,22 @@ assinado.
     ![Ilustração: Assinatura em Outlook: Escolha do certificado](Pictures/Autenticacao.Gov_outlook6.png
       "Assinatura em Outlook: Escolha do certificado"){:.center}
 
+## Assinatura digital em *Adobe Acrobat Reader*
+
+Para assinar um documento aberto no *Adobe Acrobat Reader* deve:
+
+1. Aceder ao separadaor **Ferramentas** e selecionar **Certificados**.
+
+2. Clique em **Assinar Digitalmente** na barra horizontal por cima do documento.
+
+3. Clique e arraste o rato para determinar a posição do selo de assinatura no documento.
+
+4. Escolha o seu certificado de assinatura, emitido por `EC de Assinatura Digital Qualificada do Cartão de Cidadão X` (onde "X" é um número com 4 dígitos, por exemplo 0010), e carregue **Continuar**.
+
+5. Clique em **Assinar** e escolha o nome e local onde deseja guardar o documento assinado.
+
+6. Para concluir, introduza o seu PIN de assinatura.
+
 ## Assinatura digital com Chave Móvel Digital
 
 Pode assinar documentos ou emails com a Chave Móvel Digital no Windows em aplicações como *Microsoft Word*, *Microsoft Excel*, *Microsoft Outlook* e *Adobe Acrobat Reader*. O procedimento é muito semelhante aos descritos nas secções anteriores mas difere em dois aspetos:
@@ -1026,8 +1043,6 @@ No caso de ainda não ter registado o seu certificado após uma re-ativação da
 - Durante a configuração ou no momento da assinatura, deverá escolher o certificado emitido por `EC de Chave Móvel Digital de Assinatura Digital Qualificada do Cartão de Cidadão X` (onde "X" é um número com 5 dígitos, por exemplo 00001 ou 00002).
 
 ![Ilustração: Janela para assinar em *Microsoft Word*.](Pictures/Assinar_Word_CMD.png)
-![Ilustração: Janela para assinar em *Adobe Acrobat Reader DC*.](Pictures/Assinar_Adobe_CMD.png)
-
 
 - Após confirmar na aplicação em uso que pretende assinar será mostrada uma janela onde, tal como no registo do certificado, deverá introduzir o seu PIN de assinatura da Chave Móvel Digital. Se o PIN estiver correto, deverá receber um SMS com o código de confirmação que deverá introduzir na janela para concluir a assinatura.
 
