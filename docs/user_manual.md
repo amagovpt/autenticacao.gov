@@ -1018,7 +1018,7 @@ Para assinar um documento aberto no *Adobe Acrobat Reader* deve:
 
 3. Clique e arraste o rato para determinar a posição do selo de assinatura no documento.
 
-4. Escolha o seu certificado de assinatura, emitido por `EC de Assinatura Digital Qualificada do Cartão de Cidadão X` (onde "X" é um número com 4 dígitos, por exemplo 0010), e carregue **Continuar**.
+4. Escolha o seu certificado de assinatura, emitido por **EC de Assinatura Digital Qualificada do Cartão de Cidadão X** (onde "X" é um número com 4 dígitos, por exemplo 0010), e carregue **Continuar**.
 
 5. Clique em **Assinar** e escolha o nome e local onde deseja guardar o documento assinado.
 
@@ -1040,7 +1040,7 @@ No caso de ainda não ter registado o seu certificado após uma re-ativação da
 
 **Assinatura** – similar à assinatura com o Cartão de Cidadão com as seguintes diferenças:
 
-- Durante a configuração ou no momento da assinatura, deverá escolher o certificado emitido por `EC de Chave Móvel Digital de Assinatura Digital Qualificada do Cartão de Cidadão X` (onde "X" é um número com 5 dígitos, por exemplo 00001 ou 00002).
+- Durante a configuração ou no momento da assinatura, deverá escolher o certificado emitido por **EC de Chave Móvel Digital de Assinatura Digital Qualificada do Cartão de Cidadão X** (onde "X" é um número com 5 dígitos, por exemplo 00001 ou 00002).
 
 ![Ilustração: Janela para assinar em *Microsoft Word*.](Pictures/Assinar_Word_CMD.png)
 
