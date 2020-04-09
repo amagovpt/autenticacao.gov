@@ -76,7 +76,7 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 		int paddingY = (int)(clientRect.bottom * 0.078);
 		int contentWidth = (int)(clientRect.right - 2 * contentX);
 		int titleHeight = (int)(clientRect.right * 0.15);
-		int headerY = clientRect.bottom * 0.25;
+		int headerY = (int)(clientRect.bottom * 0.25);
 		int headerHeight = (int)(clientRect.bottom * 0.2);
 		int pinY = (int)(clientRect.bottom * 0.45);
 		int editFieldHeight = (int)(clientRect.bottom * 0.22);
@@ -162,7 +162,6 @@ LRESULT dlgWndAskPIN::ProcecEvent
 				LPARAM		lParam )		// Additional Message Information
 {
 	PAINTSTRUCT ps;
-	RECT rect;
 
 	switch( uMsg )
 	{ 

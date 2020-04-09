@@ -64,6 +64,7 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         int contentWidth = (int)(clientRect.right - 2 * contentX);
         int titleY = (int)(clientRect.bottom * 0.05);
         int titleHeight = (int)(clientRect.bottom * 0.15);
+        int headerY = (int)(clientRect.bottom * 0.18);
         int textBoxY = (int)(clientRect.bottom * 0.35);
         int boxHeight = (int)(clientRect.bottom * 0.23);
         int editOutY = (int)(clientRect.bottom * 0.61);
@@ -85,7 +86,6 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
             m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
 
         // HEADER
-        int headerY = clientRect.bottom * 0.18;
         headerData.font = (isValidateOtp ? PteidControls::StandardFont : PteidControls::StandardFontBold);
         headerData.text = Header.c_str();
         HWND hHeader = PteidControls::CreateText(
@@ -123,8 +123,8 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         boxTextData.backgroundColor = LIGHTGREY;
         boxTextData.text = boxText.c_str();
         HWND hBoxText = PteidControls::CreateText(
-            contentX + contentWidth * 0.03, textBoxY + boxHeight * 0.12,
-            contentWidth*0.94, boxHeight*0.75,
+            (int)(contentX + contentWidth * 0.03), (int)(textBoxY + boxHeight * 0.12),
+            (int)(contentWidth * 0.94), (int)(boxHeight * 0.75),
             m_hWnd, (HMENU)IDC_STATIC_BOX_TEXT, m_hInstance, &boxTextData);
 
         // docId
@@ -137,8 +137,8 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
             docIdTextData.font = PteidControls::StandardFontBold;
             docIdTextData.text = docId.c_str();
             HWND hDocIdText = PteidControls::CreateText(
-                contentX + contentWidth * 0.03, textBoxY + boxHeight * 0.33,
-                contentWidth*0.94, boxHeight*0.65,
+                (int)(contentX + contentWidth * 0.03), (int)(textBoxY + boxHeight * 0.33),
+                (int)(contentWidth * 0.94), (int)(boxHeight * 0.65),
                 m_hWnd, (HMENU)IDC_STATIC_OTP, m_hInstance, &docIdTextData);
         }
 
@@ -172,11 +172,11 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         cancelBtnProcData.text = GETSTRING_DLG(Cancel);
 
         HWND Cancel_Btn = PteidControls::CreateButton(
-            clientRect.right * 0.05, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
+            (int)(clientRect.right * 0.05), (int)(clientRect.bottom * 0.87), buttonWidth, buttonHeight,
             m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &cancelBtnProcData);
 
         HWND OK_Btn = PteidControls::CreateButton(
-            clientRect.right * 0.52, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
+            (int)(clientRect.right * 0.52), (int)(clientRect.bottom * 0.87), buttonWidth, buttonHeight,
             m_hWnd, (HMENU)IDB_OK, m_hInstance, &okBtnProcData);
 
     }
@@ -204,7 +204,6 @@ WPARAM		wParam,			// Additional Message Information
 LPARAM		lParam)		// Additional Message Information
 {
     PAINTSTRUCT ps;
-    RECT rect;
 
     switch (uMsg)
     {

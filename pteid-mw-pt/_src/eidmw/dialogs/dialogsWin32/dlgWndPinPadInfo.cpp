@@ -91,7 +91,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 		int headerY = (int)(clientRect.bottom * 0.55);
 		int headerHeight = (int)(clientRect.bottom * 0.2);
 		int warningY = (int)(clientRect.bottom * 0.75);
-		int headerFontSize = 14 * .75;
+		int headerFontSize = (int)(14 * .75);
 		ScaleDimensions(&headerFontSize, NULL);
 
 		// TITLE
@@ -144,7 +144,6 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 									LPARAM		lParam )		// Additional Message Information
 {
 	PAINTSTRUCT ps;
-	RECT rect;
 
 	switch( uMsg )
 	{

@@ -58,16 +58,16 @@ public:
         friend class PteidControls;
     };
     struct ButtonData {
-        bool isEnabled() { return this->enabled; }
-        void setEnabled(bool enabled);
-        bool highlight = false;
+        BOOL isEnabled() { return this->enabled; }
+        void setEnabled(BOOL enabled);
+        BOOL highlight = FALSE;
         LPCTSTR text = NULL;
         HWND getButtonWnd() { return this->hButtonWnd; }
 
     private:
-        bool enabled = true;
-        bool hovered = false;
-        bool mouseTracking = false;
+        BOOL enabled = TRUE;
+        BOOL hovered = FALSE;
+        BOOL mouseTracking = FALSE;
         HWND hButtonWnd = NULL;
 
         friend class PteidControls;
@@ -77,13 +77,13 @@ public:
         LPCTSTR title = NULL;
         size_t minLength = 0;
         size_t maxLength = UINTMAX_MAX;
-        bool isPassword = false;
-        bool isNumeric = false;
+        BOOL isPassword = FALSE;
+        BOOL isNumeric = FALSE;
 
-        bool isAcceptableInput() { return this->acceptableInput; }
+        BOOL isAcceptableInput() { return this->acceptableInput; }
         HWND getTextFieldWnd() { return this->hTextFieldWnd; }
     private:
-        bool acceptableInput = false;
+        BOOL acceptableInput = FALSE;
         HWND hTextFieldWnd = NULL;
 
         friend class PteidControls;

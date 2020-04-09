@@ -181,6 +181,6 @@ LRESULT CALLBACK PteidControls::TextField_Proc(HWND hWnd, UINT uMsg, WPARAM wPar
 BOOL PteidControls::TextField_IsAcceptableInput(TextFieldData *textFieldData){
     BOOL isAcceptableInput;
     LRESULT textLen = (LRESULT)SendMessage(textFieldData->hTextFieldWnd, WM_GETTEXTLENGTH, 0, 0);
-    isAcceptableInput = (textLen >= textFieldData->minLength && textLen <= textFieldData->maxLength);
+    isAcceptableInput = ((size_t)textLen >= textFieldData->minLength && (size_t)textLen <= textFieldData->maxLength);
     return isAcceptableInput;
 }

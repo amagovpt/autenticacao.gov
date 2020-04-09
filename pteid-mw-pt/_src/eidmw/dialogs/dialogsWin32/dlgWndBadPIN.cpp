@@ -177,7 +177,6 @@ LRESULT dlgWndBadPIN::ProcecEvent
 				LPARAM		lParam )		// Additional Message Information
 {
 	PAINTSTRUCT ps;
-	RECT rect;
 
 	switch( uMsg )
 	{

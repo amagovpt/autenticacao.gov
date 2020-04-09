@@ -21,7 +21,7 @@
 #include "pteidControls.h"
 #include <tchar.h>
 
-void PteidControls::ButtonData::setEnabled(bool enabled) {
+void PteidControls::ButtonData::setEnabled(BOOL enabled) {
     this->enabled = enabled;
     EnableWindow(this->hButtonWnd, enabled);
 }
@@ -187,7 +187,7 @@ LRESULT CALLBACK PteidControls::Button_Container_Proc(HWND hWnd, UINT uMsg, WPAR
         ExtTextOut(pDIS->hDC,
             pDIS->rcItem.right / 2,
             pDIS->rcItem.bottom / 4,
-            ETO_OPAQUE | ETO_CLIPPED, &pDIS->rcItem, btnData->text, _tcslen(btnData->text), NULL);
+            ETO_OPAQUE | ETO_CLIPPED, &pDIS->rcItem, btnData->text, (UINT)_tcslen(btnData->text), NULL);
 
         break;
     }

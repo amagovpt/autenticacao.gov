@@ -73,7 +73,7 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
         titleData.color = BLUE;
         HWND hTitle = PteidControls::CreateText(
             titleX, titleY,
-            contentWidth, clientRect.bottom * 0.15,
+            contentWidth, (int)(clientRect.bottom * 0.15),
             m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
 
         // ANIMATION / IMAGE
@@ -103,7 +103,7 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
         textTopData.horizontalCentered = true;
         textTopData.font = PteidControls::StandardFontBold;
         HWND hTextTop = PteidControls::CreateText(
-            0, textTopY, clientRect.right, clientRect.bottom * 0.08,
+            0, textTopY, clientRect.right, (int)(clientRect.bottom * 0.08),
             m_hWnd, (HMENU)IDC_STATIC_TEXT_TOP, m_hInstance, &textTopData);
             
         // TEXT BOTTOM
@@ -111,13 +111,13 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
         textBottomData.horizontalCentered = true;
         
         HWND hTextBottom = PteidControls::CreateText(
-            0, textBottomY, clientRect.right, clientRect.bottom * 0.08,
+            0, textBottomY, clientRect.right, (int)(clientRect.bottom * 0.08),
             m_hWnd, (HMENU)IDC_STATIC_TEXT_BOTTOM, m_hInstance, &textBottomData);
 
         // BUTTON
         btnProcData.text = (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS ? GETSTRING_DLG(Cancel) : GETSTRING_DLG(Ok));
         HWND Cancel_Btn = PteidControls::CreateButton(
-            (clientRect.right - buttonWidth) / 2, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
+            (int)((clientRect.right - buttonWidth) / 2), (int)(clientRect.bottom * 0.87), buttonWidth, buttonHeight,
             m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &btnProcData);
         SetFocus(btnProcData.getButtonWnd());
     }
@@ -142,7 +142,6 @@ WPARAM		wParam,			// Additional Message Information
 LPARAM		lParam)		// Additional Message Information
 {
     PAINTSTRUCT ps;
-    RECT rect;
 
     switch (uMsg)
     {

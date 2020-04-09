@@ -45,8 +45,8 @@ Win32Dialog::Win32Dialog(const wchar_t *appName)
 	dlgResult = eIDMW::DLG_CANCEL;	// Dialog Result
 	m_appName=_wcsdup(appName);
 
-	int fontSizeTitle = 20 * .75;
-	int fontSize = 14 * .75;
+	int fontSizeTitle = (int)(20 * .75);
+	int fontSize = (int)(14 * .75);
 
 	// Scale font based on horizontal DPI
 	ScaleDimensions(&fontSizeTitle, NULL); 
@@ -280,8 +280,10 @@ void Win32Dialog::ScaleDimensions(int *width, int *height)
 		verticalDPI = horizontalDPI;
 	}
 
-	*width *= horizontalDPI;
-	*height *= verticalDPI;
+	FLOAT fWidth = *width * horizontalDPI;
+	FLOAT fHeight = *height * verticalDPI;
+	*width = (int)fWidth;
+	*height = (int)fHeight;
 }
 
 void Win32Dialog::CreateBitapMask( HBITMAP & BmpSource, HBITMAP & BmpMask )

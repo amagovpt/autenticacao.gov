@@ -86,7 +86,7 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 		int paddingY = (int)(clientRect.bottom * 0.04);
 		int contentWidth = (int)(clientRect.right - 2 * contentX);
 		int titleHeight = (int)(clientRect.right * 0.12);
-		int headerY = clientRect.bottom * 0.16;
+		int headerY = (int)(clientRect.bottom * 0.16);
 		int errorHeight = (int)(clientRect.bottom * 0.1);
 		int editFieldY = (int)(clientRect.bottom * 0.26);
 		int editFieldSpacing = (int)(clientRect.bottom * 0.03);
@@ -212,7 +212,6 @@ LRESULT dlgWndAskPINs::ProcecEvent
 				LPARAM		lParam )		// Additional Message Information
 {
 	PAINTSTRUCT ps;
-	RECT rect;
 
 	switch( uMsg )
 	{
