@@ -174,13 +174,7 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 		case WM_CREATE:
 		{
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndPinpadInfo::ProcecEvent WM_CLOSE (wParam=%X, lParam=%X)",wParam,lParam);
-
-			HMENU hSysMenu;
-
-			hSysMenu = GetSystemMenu( m_hWnd, FALSE);
-			EnableMenuItem( hSysMenu, 2, MF_BYPOSITION | MF_GRAYED );
-
-			return 1;
+			break;
 		}
 
 		case WM_CLOSE:
@@ -204,7 +198,7 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 
 		default:
 		{
-			return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
+			break;
 		}
 	}
 	return DefWindowProc( m_hWnd, uMsg, wParam, lParam );

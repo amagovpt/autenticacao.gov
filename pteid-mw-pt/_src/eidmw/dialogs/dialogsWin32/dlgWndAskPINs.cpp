@@ -152,9 +152,10 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 
 		// text field 3
 		textFieldData3.title = GETSTRING_DLG(ConfirmNewPin);
-		textFieldData3.isPassword = true;
-		textFieldData3.minLength = 4;
-		textFieldData3.maxLength = 8;
+		textFieldData3.isPassword = textFieldData2.isPassword;
+		textFieldData3.minLength = textFieldData2.minLength;
+		textFieldData3.maxLength = textFieldData2.maxLength;
+		textFieldData3.isNumeric = textFieldData2.isNumeric;
 		HWND hTextEdit3 = PteidControls::CreateTextField(
 			contentX, editFieldY + 2 * (editFieldHeight + editFieldSpacing),
 			contentWidth, editFieldHeight,
@@ -232,12 +233,13 @@ LRESULT dlgWndAskPINs::ProcecEvent
 				return TRUE;
 
 				case IDB_OK:
-					TCHAR PINBuf[16];
-					TCHAR PINConfirmBuf[16];
-					SendMessage(textFieldData2.getTextFieldWnd(), WM_GETTEXT, (WPARAM)(sizeof(PINBuf)), (LPARAM)PINBuf);
-					SendMessage(textFieldData3.getTextFieldWnd(), WM_GETTEXT, (WPARAM)(sizeof(PINConfirmBuf)), (LPARAM)PINConfirmBuf);
 					if (okBtnProcData.isEnabled())
 					{
+						TCHAR PINBuf[16];
+						TCHAR PINConfirmBuf[16];
+						SendMessage(textFieldData2.getTextFieldWnd(), WM_GETTEXT, (WPARAM)(sizeof(PINBuf)), (LPARAM)PINBuf);
+						SendMessage(textFieldData3.getTextFieldWnd(), WM_GETTEXT, (WPARAM)(sizeof(PINConfirmBuf)), (LPARAM)PINConfirmBuf);
+						// If PINs do not match show error message
 						if (_tcscmp(PINBuf, PINConfirmBuf) != 0)
 						{
 							ShowWindow(errorTextData.getWnd(), SW_SHOW);
@@ -250,7 +252,6 @@ LRESULT dlgWndAskPINs::ProcecEvent
 					return TRUE;
 
 				case IDB_CANCEL:
-					//strcpy( PinResult, "" );
 					dlgResult = eIDMW::DLG_CANCEL;
 					close();
 					return TRUE;
@@ -300,14 +301,7 @@ LRESULT dlgWndAskPINs::ProcecEvent
 		case WM_CREATE:
 		{
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPINs::ProcecEvent WM_CREATE (wParam=%X, lParam=%X)",wParam,lParam);
-
-			HMENU hSysMenu;
-
-			hSysMenu = GetSystemMenu( m_hWnd, FALSE );
-			EnableMenuItem( hSysMenu, 2, MF_BYPOSITION | MF_GRAYED );
-			SendMessage( m_hWnd, DM_SETDEFID, (WPARAM)IDC_EDIT_PIN1, (LPARAM) 0); 
-
-			return 1;
+			break;
 		}
 
 
@@ -330,7 +324,7 @@ LRESULT dlgWndAskPINs::ProcecEvent
 
 		default:
 		{
-			return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
+			break;
 		}
 	}
 	return DefWindowProc( m_hWnd, uMsg, wParam, lParam );

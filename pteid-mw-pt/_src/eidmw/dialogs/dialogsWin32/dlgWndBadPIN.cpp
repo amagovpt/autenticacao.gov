@@ -186,20 +186,20 @@ LRESULT dlgWndBadPIN::ProcecEvent
 			{
 			case IDB_OK:
 				dlgResult = eIDMW::DLG_OK;
-					close();
-					return TRUE;
-				case IDB_CANCEL:
-					dlgResult = eIDMW::DLG_CANCEL;
-					close();
-					return TRUE;
+				close();
+				return TRUE;
+			case IDB_CANCEL:
+				dlgResult = eIDMW::DLG_CANCEL;
+				close();
+				return TRUE;
 
-				case IDB_RETRY:
-					dlgResult = eIDMW::DLG_RETRY;
-					close();
-					return TRUE;
+			case IDB_RETRY:
+				dlgResult = eIDMW::DLG_RETRY;
+				close();
+				return TRUE;
 
-				default:
-					return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
+			default:
+				return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
 			}
 		}
 
@@ -216,7 +216,7 @@ LRESULT dlgWndBadPIN::ProcecEvent
 		case WM_CTLCOLORSTATIC:
 		{
 			HDC hdcStatic = (HDC)wParam;
-			//MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
+			//MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndBadPIN::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
 			SetBkColor(hdcStatic, WHITE);
 			if (hbrBkgnd == NULL)
 			{
@@ -268,16 +268,8 @@ LRESULT dlgWndBadPIN::ProcecEvent
 		case WM_CREATE:
 		{
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndBadPIN::ProcecEvent WM_CREATE (wParam=%X, lParam=%X)",wParam,lParam);
-
-			HMENU hSysMenu;
-
-			hSysMenu = GetSystemMenu( m_hWnd, FALSE );
-			EnableMenuItem( hSysMenu, 2, MF_BYPOSITION | MF_GRAYED );
-
-			return 1;
+			break;
 		}
-
-
 		case WM_CLOSE:
 		{
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndBadPIN::ProcecEvent WM_CLOSE (wParam=%X, lParam=%X)",wParam,lParam);
@@ -297,7 +289,7 @@ LRESULT dlgWndBadPIN::ProcecEvent
 
 		default:
 		{
-			return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
+			break;
 		}
 	}
 	return DefWindowProc( m_hWnd, uMsg, wParam, lParam );

@@ -317,14 +317,7 @@ LPARAM		lParam)		// Additional Message Information
     case WM_CREATE:
     {
         MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskCmd::ProcecEvent WM_CREATE (wParam=%X, lParam=%X)", wParam, lParam);
-
-        HMENU hSysMenu;
-
-        hSysMenu = GetSystemMenu(m_hWnd, FALSE);
-        EnableMenuItem(hSysMenu, 3, MF_BYPOSITION | MF_GRAYED);
-        SendMessage(m_hWnd, DM_SETDEFID, (WPARAM)IDC_EDIT, (LPARAM)0);
-
-        return DefWindowProc((HWND)((CREATESTRUCT *)lParam)->lpCreateParams, uMsg, wParam, lParam);
+        break;
     }
 
     case WM_CLOSE:
