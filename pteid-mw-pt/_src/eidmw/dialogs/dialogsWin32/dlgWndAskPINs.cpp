@@ -146,9 +146,9 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 			m_hWnd, (HMENU)IDC_EDIT_PIN2, m_hInstance, &textFieldData2);
 
 		if (!m_dontAskPIN1)
-			SetFocus(textFieldData1.getTextFieldWnd());
+			SetFocus(textFieldData1.getMainWnd());
 		else 
-			SetFocus(textFieldData2.getTextFieldWnd());
+			SetFocus(textFieldData2.getMainWnd());
 
 		// text field 3
 		textFieldData3.title = GETSTRING_DLG(ConfirmNewPin);
@@ -168,7 +168,7 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 			contentX, errorY,
 			contentWidth, errorHeight,
 			m_hWnd, (HMENU)IDC_STATIC_ERROR, m_hInstance, &errorTextData);
-		ShowWindow(errorTextData.getWnd(), SW_HIDE);
+		ShowWindow(errorTextData.getMainWnd(), SW_HIDE);
 
 		// BUTTONS
 		okBtnProcData.highlight = true;
@@ -199,10 +199,10 @@ void dlgWndAskPINs::GetPinResult()
 	long len = (long)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN1 ), WM_GETTEXTLENGTH, 0, 0 );
 	if( len < 128 )
 	{
-		SendMessage( textFieldData1.getTextFieldWnd(), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf );
+		SendMessage( textFieldData1.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf );
 		wcscpy_s( Pin1Result, nameBuf );
 
-		SendMessage(textFieldData2.getTextFieldWnd(), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf);
+		SendMessage(textFieldData2.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf);
 		wcscpy_s( Pin2Result, nameBuf );
 	}
 }
@@ -237,12 +237,12 @@ LRESULT dlgWndAskPINs::ProcecEvent
 					{
 						TCHAR PINBuf[16];
 						TCHAR PINConfirmBuf[16];
-						SendMessage(textFieldData2.getTextFieldWnd(), WM_GETTEXT, (WPARAM)(sizeof(PINBuf)), (LPARAM)PINBuf);
-						SendMessage(textFieldData3.getTextFieldWnd(), WM_GETTEXT, (WPARAM)(sizeof(PINConfirmBuf)), (LPARAM)PINConfirmBuf);
+						SendMessage(textFieldData2.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(PINBuf)), (LPARAM)PINBuf);
+						SendMessage(textFieldData3.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(PINConfirmBuf)), (LPARAM)PINConfirmBuf);
 						// If PINs do not match show error message
 						if (_tcscmp(PINBuf, PINConfirmBuf) != 0)
 						{
-							ShowWindow(errorTextData.getWnd(), SW_SHOW);
+							ShowWindow(errorTextData.getMainWnd(), SW_SHOW);
 							return TRUE;
 						}
 						GetPinResult();

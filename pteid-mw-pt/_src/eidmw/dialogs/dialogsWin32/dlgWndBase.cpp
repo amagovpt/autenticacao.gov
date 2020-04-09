@@ -52,9 +52,14 @@ Win32Dialog::Win32Dialog(const wchar_t *appName)
 	ScaleDimensions(&fontSizeTitle, NULL); 
 	ScaleDimensions(&fontSize, NULL);
 
-	PteidControls::StandardFontHeader = PteidControls::CreatePteidFont(fontSizeTitle, FW_BLACK, m_hInstance);
-	PteidControls::StandardFontBold = PteidControls::CreatePteidFont(fontSize, FW_BOLD, m_hInstance);
-	PteidControls::StandardFont = PteidControls::CreatePteidFont(fontSize, FW_REGULAR, m_hInstance);
+	if (PteidControls::StandardFontHeader == NULL)
+		PteidControls::StandardFontHeader = PteidControls::CreatePteidFont(fontSizeTitle, FW_BLACK, m_hInstance);
+
+	if (PteidControls::StandardFontBold == NULL)
+		PteidControls::StandardFontBold = PteidControls::CreatePteidFont(fontSize, FW_BOLD, m_hInstance);
+
+	if (PteidControls::StandardFont == NULL)
+		PteidControls::StandardFont = PteidControls::CreatePteidFont(fontSize, FW_REGULAR, m_hInstance);
 }
 
 Win32Dialog::~Win32Dialog()
@@ -361,7 +366,13 @@ void Win32Dialog::KillWindow( void )							// Properly Kill The Window
 	WndMap.erase( m_hWnd );
 	if( Active_hWnd == m_hWnd )
 		Active_hWnd = NULL;
-	
+
+	if (m_hbrBkgnd)
+	{
+		DeleteObject(m_hbrBkgnd);
+		m_hbrBkgnd = NULL;
+	}
+
 	m_hInstance = NULL;								// Set hInstance To NULL
 	m_hWnd = NULL;									// Set hWnd To NULL
 	Destroy();

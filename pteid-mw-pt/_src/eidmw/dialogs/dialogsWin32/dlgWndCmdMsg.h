@@ -36,8 +36,6 @@ class dlgWndCmdMsg : public Win32Dialog
 
     DlgCmdMsgType type;
 
-    HBRUSH hbrBkgnd;
-
 public:
     dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND Parent = NULL);
     virtual ~dlgWndCmdMsg();

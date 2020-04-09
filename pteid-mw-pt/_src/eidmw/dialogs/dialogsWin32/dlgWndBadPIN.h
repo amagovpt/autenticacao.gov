@@ -32,7 +32,6 @@ class dlgWndBadPIN : public Win32Dialog
 	PteidControls::TextData titleData, headerData;
 	PteidControls::ButtonData okBtnData, retryBtnData, cancelBtnData;
 	HICON imageIco;
-	HBRUSH hbrBkgnd;
 
 public:
 	dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries, HWND Parent = NULL );

@@ -133,7 +133,6 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 dlgWndPinpadInfo::~dlgWndPinpadInfo()
 {
 	DeleteObject(headerFont);
-	DeleteObject(hbrBkgnd);
 	Animate_Close(hwndAnim);
 	EnableWindow(m_parent, TRUE);
 	KillWindow( );
@@ -152,12 +151,12 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 		HDC hdcStatic = (HDC)wParam;
 		//MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
 		SetBkColor(hdcStatic, WHITE);
-		if (hbrBkgnd == NULL)
+		if (m_hbrBkgnd == NULL)
 		{
-			hbrBkgnd = CreateSolidBrush(WHITE);
+			m_hbrBkgnd = CreateSolidBrush(WHITE);
 		}
 
-		return (INT_PTR)hbrBkgnd;
+		return (INT_PTR)m_hbrBkgnd;
 	}
 	case WM_PAINT:
 		{

@@ -69,6 +69,7 @@ protected:
 	HWND		m_parent;				// Holds Our Parent Window Handle
 	HINSTANCE	m_hInstance;			// Instance to our Module(DLL)
 	bool		m_ModalHold;			// Wheither it's modal or not
+	HBRUSH		m_hbrBkgnd;				// Handle to background brush
 
 
 private:

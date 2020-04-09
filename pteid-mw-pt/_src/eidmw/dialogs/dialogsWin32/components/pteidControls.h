@@ -44,36 +44,40 @@ public:
         During creation, it is binded to the control window returned, i.e., it will keep the state of
         the control and should be passed as argument when drawing the control.
         */
-    struct TextData {
+    struct ControlData {
+        // Base virtual class of control data structures
+        HWND getMainWnd() { return this->hMainWnd; }
+
+    protected:
+        HWND hMainWnd = NULL; // Main window of the control (for example, the button or edit HWND. not the container)
+        HBRUSH hbrBkgnd = NULL;
+    };
+
+    struct TextData : ControlData {
         LPCTSTR text = TEXT("");
         HFONT font = PteidControls::StandardFont;
         COLORREF color = BLACK;
         COLORREF backgroundColor = WHITE;
         bool horizontalCentered = false;
-        HWND getWnd() { return this->hTextWnd; }
-
-    private:
-        HWND hTextWnd = NULL;
 
         friend class PteidControls;
     };
-    struct ButtonData {
+
+    struct ButtonData : ControlData {
         BOOL isEnabled() { return this->enabled; }
         void setEnabled(BOOL enabled);
         BOOL highlight = FALSE;
         LPCTSTR text = NULL;
-        HWND getButtonWnd() { return this->hButtonWnd; }
 
     private:
         BOOL enabled = TRUE;
         BOOL hovered = FALSE;
         BOOL mouseTracking = FALSE;
-        HWND hButtonWnd = NULL;
 
         friend class PteidControls;
     };
 
-    struct TextFieldData {
+    struct TextFieldData : ControlData {
         LPCTSTR title = NULL;
         size_t minLength = 0;
         size_t maxLength = UINTMAX_MAX;
@@ -81,10 +85,8 @@ public:
         BOOL isNumeric = FALSE;
 
         BOOL isAcceptableInput() { return this->acceptableInput; }
-        HWND getTextFieldWnd() { return this->hTextFieldWnd; }
     private:
         BOOL acceptableInput = FALSE;
-        HWND hTextFieldWnd = NULL;
 
         friend class PteidControls;
     };

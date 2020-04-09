@@ -33,7 +33,6 @@ class dlgWndPinpadInfo : public Win32Dialog
 	PteidControls::TextData titleData, headerData, warningTextData;
 	HWND hwndAnim;
 	HFONT headerFont;
-	HBRUSH hbrBkgnd;
 
 	unsigned long m_ulHandle;
 

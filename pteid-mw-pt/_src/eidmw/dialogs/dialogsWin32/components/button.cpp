@@ -23,7 +23,7 @@
 
 void PteidControls::ButtonData::setEnabled(BOOL enabled) {
     this->enabled = enabled;
-    EnableWindow(this->hButtonWnd, enabled);
+    EnableWindow(this->hMainWnd, enabled);
 }
 
 HWND PteidControls::CreateButton(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, PteidControls::ButtonData *btnData) {
@@ -50,7 +50,7 @@ HWND PteidControls::CreateButton(int x, int y, int nWidth, int nHeight, HWND hWn
     EnableWindow(hButton, btnData->enabled);
     SendMessage(hButton, WM_SETFONT, (WPARAM)StandardFontBold, 0);
     
-    btnData->hButtonWnd = hButton;
+    btnData->hMainWnd = hButton;
 
     return hButton;
 }
@@ -147,7 +147,7 @@ LRESULT CALLBACK PteidControls::Button_Container_Proc(HWND hWnd, UINT uMsg, WPAR
             SetTextColor(pDIS->hDC, WHITE);
             if (btnData->enabled)
             {
-                SetBkColor(pDIS->hDC, (btnData->hovered || GetFocus() == btnData->hButtonWnd ? DARKBLUE : BLUE));
+                SetBkColor(pDIS->hDC, (btnData->hovered || GetFocus() == btnData->hMainWnd ? DARKBLUE : BLUE));
             }
             else
             {
@@ -159,7 +159,7 @@ LRESULT CALLBACK PteidControls::Button_Container_Proc(HWND hWnd, UINT uMsg, WPAR
             if (btnData->enabled)
             {
                 SetTextColor(pDIS->hDC, BLUE);
-                SetBkColor(pDIS->hDC, (btnData->hovered || GetFocus() == btnData->hButtonWnd ? DARKGREY : GREY));
+                SetBkColor(pDIS->hDC, (btnData->hovered || GetFocus() == btnData->hMainWnd ? DARKGREY : GREY));
             }
             else
             {
@@ -169,7 +169,7 @@ LRESULT CALLBACK PteidControls::Button_Container_Proc(HWND hWnd, UINT uMsg, WPAR
         }
 
         // If the button has focus, draw border around it
-        if (GetFocus() == btnData->hButtonWnd)
+        if (GetFocus() == btnData->hMainWnd)
         {
             int borderWidth = 2;
             HPEN pen = CreatePen(PS_INSIDEFRAME, borderWidth, BLACK);

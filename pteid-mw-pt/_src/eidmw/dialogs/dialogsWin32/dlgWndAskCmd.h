@@ -37,8 +37,6 @@ class dlgWndAskCmd : public Win32Dialog
     bool AreFieldsFilled();
     HWND hStaticBox;
 
-    HBRUSH hbrBkgnd;
-
 public:
     dlgWndAskCmd(bool isValidateOtp,
         std::wstring & Header,

@@ -42,7 +42,6 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
     std::wstring & Header, std::wstring *inId,
     std::wstring *userName, HWND Parent) : Win32Dialog(L"WndAskCmd")
 {
-    hbrBkgnd = NULL;
     OutResult[0] = ' ';
     OutResult[1] = (char)0;
 
@@ -163,7 +162,7 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
             contentWidth,
             editFieldHeight,
             m_hWnd, (HMENU)IDC_EDIT, m_hInstance, &textFieldData);
-        SetFocus(textFieldData.getTextFieldWnd());
+        SetFocus(textFieldData.getMainWnd());
 
         // BUTTONS
         okBtnProcData.highlight = true;
@@ -190,10 +189,10 @@ dlgWndAskCmd::~dlgWndAskCmd()
 void dlgWndAskCmd::GetResult()
 {
     wchar_t outBuf[RESULT_BUFFER_SIZE];
-    long len = (long)SendMessage(textFieldData.getTextFieldWnd(), WM_GETTEXTLENGTH, 0, 0);
+    long len = (long)SendMessage(textFieldData.getMainWnd(), WM_GETTEXTLENGTH, 0, 0);
     if (len < RESULT_BUFFER_SIZE)
     {
-        SendMessage(textFieldData.getTextFieldWnd(), WM_GETTEXT, (WPARAM)(sizeof(outBuf)), (LPARAM)outBuf);
+        SendMessage(textFieldData.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(outBuf)), (LPARAM)outBuf);
         wcscpy_s(OutResult, outBuf);
     }
 }
@@ -255,20 +254,23 @@ LPARAM		lParam)		// Additional Message Information
         HDC hdcStatic = (HDC)wParam;
 
         MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskCmd::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
+        SetBkColor(hdcStatic, TRANSPARENT);
         if ((HWND)lParam == hStaticBox)
         {
-            SetBkColor(hdcStatic, LIGHTGREY);
-            return (INT_PTR)CreateSolidBrush(LIGHTGREY);
+            if (m_hbrBkgnd != NULL)
+            {
+                DeleteObject(m_hbrBkgnd);
+            }
+            m_hbrBkgnd = CreateSolidBrush(LIGHTGREY);
+            return (INT_PTR)m_hbrBkgnd;
         }
 
-        SetBkColor(hdcStatic, WHITE);
-
-        if (hbrBkgnd == NULL)
+        if (m_hbrBkgnd == NULL)
         {
-            hbrBkgnd = CreateSolidBrush(WHITE);
+            m_hbrBkgnd = CreateSolidBrush(WHITE);
         }
 
-        return (INT_PTR)hbrBkgnd;
+        return (INT_PTR)m_hbrBkgnd;
     }
 
     case WM_PAINT:

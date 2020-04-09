@@ -142,7 +142,7 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 			HWND okBtn = PteidControls::CreateButton(
 				contentX + (contentWidth - buttonWidth) / 2, buttonY, buttonWidth, buttonHeight,
 				m_hWnd, (HMENU)IDB_OK, m_hInstance, &okBtnData);
-			SetFocus(okBtnData.getButtonWnd());
+			SetFocus(okBtnData.getMainWnd());
 		} 
 		else
 		{
@@ -153,7 +153,7 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 			HWND cancelBtn = PteidControls::CreateButton(
 				contentX, buttonY, buttonWidth, buttonHeight,
 				m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &cancelBtnData);
-			SetFocus(cancelBtnData.getButtonWnd());
+			SetFocus(cancelBtnData.getMainWnd());
 
 			HWND RetryBtn = PteidControls::CreateButton(
 				contentX + buttonWidth + buttonSpacing, buttonY, buttonWidth, buttonHeight,
@@ -218,12 +218,12 @@ LRESULT dlgWndBadPIN::ProcecEvent
 			HDC hdcStatic = (HDC)wParam;
 			//MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndBadPIN::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
 			SetBkColor(hdcStatic, WHITE);
-			if (hbrBkgnd == NULL)
+			if (m_hbrBkgnd == NULL)
 			{
-				hbrBkgnd = CreateSolidBrush(WHITE);
+				m_hbrBkgnd = CreateSolidBrush(WHITE);
 			}
 
-			return (INT_PTR)hbrBkgnd;
+			return (INT_PTR)m_hbrBkgnd;
 		}
 
 		case WM_PAINT:

@@ -120,7 +120,7 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 			contentX, pinY,
 			contentWidth, editFieldHeight,
 			m_hWnd, (HMENU)IDC_EDIT, m_hInstance, &textFieldData);
-		SetFocus(textFieldData.getTextFieldWnd());
+		SetFocus(textFieldData.getMainWnd());
 
 		// BUTTONS
 		okBtnProcData.highlight = true;
@@ -148,10 +148,10 @@ dlgWndAskPIN::~dlgWndAskPIN()
 void dlgWndAskPIN::GetPinResult()
 {
 	wchar_t nameBuf[128];
-	long len = (long)SendMessage(textFieldData.getTextFieldWnd(), WM_GETTEXTLENGTH, 0, 0);
+	long len = (long)SendMessage(textFieldData.getMainWnd(), WM_GETTEXTLENGTH, 0, 0);
 	if( len < 128 )
 	{
-		SendMessage(textFieldData.getTextFieldWnd(), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf);
+		SendMessage(textFieldData.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf);
 		wcscpy_s( PinResult, nameBuf );
 	}
 }

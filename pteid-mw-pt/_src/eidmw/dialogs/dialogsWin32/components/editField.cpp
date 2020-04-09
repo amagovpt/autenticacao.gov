@@ -84,7 +84,7 @@ HWND PteidControls::CreateTextField(int x, int y, int nWidth, int nHeight, HWND 
     SendMessage(hEditField, EM_LIMITTEXT, textFieldData->maxLength, 0);
     SendMessage(hEditField, WM_SETFONT, (WPARAM)StandardFont, 0);
 
-    textFieldData->hTextFieldWnd = hEditField;
+    textFieldData->hMainWnd = hEditField;
 
     return hContainer;
 }
@@ -109,7 +109,11 @@ LRESULT CALLBACK PteidControls::TextField_Container_Proc(HWND hWnd, UINT uMsg, W
     case WM_CTLCOLORSTATIC:
     {
         // Title should have white background
-        return (INT_PTR)CreateSolidBrush(WHITE);
+        if (textFieldData->hbrBkgnd == NULL)
+        {
+            textFieldData->hbrBkgnd = CreateSolidBrush(WHITE);
+        }
+        return (INT_PTR)textFieldData->hbrBkgnd;
     }
     case WM_PRINTCLIENT:
     case WM_PAINT:
@@ -123,14 +127,14 @@ LRESULT CALLBACK PteidControls::TextField_Container_Proc(HWND hWnd, UINT uMsg, W
         COLORREF borderColor;
         if (textFieldData->acceptableInput)
         {
-            borderColor = (textFieldData->hTextFieldWnd == GetFocus() ? DARKBLUE : BLUE);
+            borderColor = (textFieldData->hMainWnd == GetFocus() ? DARKBLUE : BLUE);
         }
         else
         {
-            borderColor = (textFieldData->hTextFieldWnd == GetFocus() ? DARKGREY : GREY);
+            borderColor = (textFieldData->hMainWnd == GetFocus() ? DARKGREY : GREY);
         }
 
-        int penWidth = (textFieldData->hTextFieldWnd == GetFocus() ? 3 : 2);
+        int penWidth = (textFieldData->hMainWnd == GetFocus() ? 3 : 2);
         HPEN pen = CreatePen(PS_INSIDEFRAME, penWidth, borderColor);
         SelectObject(hdc, pen);
         SetBkMode(hdc, TRANSPARENT);
@@ -149,8 +153,17 @@ LRESULT CALLBACK PteidControls::TextField_Container_Proc(HWND hWnd, UINT uMsg, W
             rectContainer.right,
             rectContainer.bottom);
 
+        DeleteObject(pen);
         EndPaint(hWnd, &ps);
         break;
+    }
+
+    case WM_DESTROY:
+    {
+        if (textFieldData->hbrBkgnd)
+        {
+            DeleteObject(textFieldData->hbrBkgnd);
+        }
     }
     default:
         break;
@@ -180,7 +193,7 @@ LRESULT CALLBACK PteidControls::TextField_Proc(HWND hWnd, UINT uMsg, WPARAM wPar
 
 BOOL PteidControls::TextField_IsAcceptableInput(TextFieldData *textFieldData){
     BOOL isAcceptableInput;
-    LRESULT textLen = (LRESULT)SendMessage(textFieldData->hTextFieldWnd, WM_GETTEXTLENGTH, 0, 0);
+    LRESULT textLen = (LRESULT)SendMessage(textFieldData->hMainWnd, WM_GETTEXTLENGTH, 0, 0);
     isAcceptableInput = ((size_t)textLen >= textFieldData->minLength && (size_t)textLen <= textFieldData->maxLength);
     return isAcceptableInput;
 }

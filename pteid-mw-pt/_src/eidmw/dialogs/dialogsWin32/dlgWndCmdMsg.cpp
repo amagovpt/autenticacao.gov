@@ -34,7 +34,6 @@
 
 dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND Parent) : Win32Dialog(L"WndAskCmd")
 {
-    hbrBkgnd = NULL;
     std::wstring tmpTitle = L"";
     tmpTitle.append(message);
 
@@ -119,7 +118,7 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
         HWND Cancel_Btn = PteidControls::CreateButton(
             (int)((clientRect.right - buttonWidth) / 2), (int)(clientRect.bottom * 0.87), buttonWidth, buttonHeight,
             m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &btnProcData);
-        SetFocus(btnProcData.getButtonWnd());
+        SetFocus(btnProcData.getMainWnd());
     }
 }
 
@@ -174,12 +173,12 @@ LPARAM		lParam)		// Additional Message Information
         HDC hdcStatic = (HDC)wParam;
         //MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
         SetBkColor(hdcStatic, WHITE);
-        if (hbrBkgnd == NULL)
+        if (m_hbrBkgnd == NULL)
         {
-            hbrBkgnd = CreateSolidBrush(WHITE);
+            m_hbrBkgnd = CreateSolidBrush(WHITE);
         }
 
-        return (INT_PTR)hbrBkgnd;
+        return (INT_PTR)m_hbrBkgnd;
     }
 
     case WM_PAINT:
