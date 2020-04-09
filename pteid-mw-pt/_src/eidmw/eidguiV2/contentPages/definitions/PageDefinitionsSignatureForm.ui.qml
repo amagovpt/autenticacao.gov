@@ -431,8 +431,8 @@ Item {
                             id: imagePreCustom
                             width: parent.width - 2 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                             height: parent.height - 2 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
-                            antialiasing: true
-                            anchors.horizontalCenter: parent.horizontalCenter
+                            fillMode: Image.PreserveAspectFit
+                            mipmap: true
                             anchors.verticalCenter: parent.verticalCenter
                             visible: fileLoaded
                             opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED

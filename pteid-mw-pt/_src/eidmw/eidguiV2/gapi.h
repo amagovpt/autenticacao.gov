@@ -378,6 +378,7 @@ public slots:
     void updateReaderList( void );
     void setUseCustomSignature (bool UseCustomSignature);
     bool getUseCustomSignature(void);
+    bool saveCustomImageToCache(QString url);
     void setRegCertValue(bool bRegCert);
     void setRemoveCertValue(bool bRemoveCert);
     bool getRegCertValue(void);

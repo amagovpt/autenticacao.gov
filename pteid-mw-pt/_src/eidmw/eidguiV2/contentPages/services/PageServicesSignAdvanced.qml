@@ -1237,17 +1237,6 @@ PageServicesSignAdvancedForm {
                         propertyPDFPreview.propertyBackground.cache = false
                         propertyPDFPreview.propertyBackground.source =
                                 "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
-                        var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.png"
-                        if(gapi.getUseCustomSignature() && gapi.customSignImageExist()){
-                            if (Qt.platform.os === "windows") {
-                                urlCustomImage = "file:///"+urlCustomImage
-                            }else{
-                                urlCustomImage = "file://"+urlCustomImage
-                            }
-                            propertyPDFPreview.propertyDragSigImg.source = urlCustomImage
-                        }else{
-                            propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
-                        }
                         propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
                     }else{
                         filesModel.remove(propertyListViewFiles.count-1)
@@ -1321,6 +1310,17 @@ PageServicesSignAdvancedForm {
 
         propertyPageLoader.propertyBackupFromSignaturePage = false
         propertyBusyIndicatorRunning = true
+        var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture_qml.jpg"
+        if(gapi.getUseCustomSignature() && gapi.customSignImageExist()){
+            if (Qt.platform.os === "windows") {
+                urlCustomImage = "file:///"+urlCustomImage
+            }else{
+                urlCustomImage = "file://"+urlCustomImage
+            }
+            propertyPDFPreview.propertyDragSigImg.source = urlCustomImage
+        }else{
+            propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
+        }
         gapi.startCardReading()
     }
     Component.onDestruction: {

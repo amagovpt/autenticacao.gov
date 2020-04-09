@@ -224,6 +224,8 @@ Rectangle {
                     fillMode: Image.PreserveAspectFit
                     anchors.top: sigLocationText.bottom
                     anchors.topMargin: Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    cache: false
                     x: 2
                 }
 

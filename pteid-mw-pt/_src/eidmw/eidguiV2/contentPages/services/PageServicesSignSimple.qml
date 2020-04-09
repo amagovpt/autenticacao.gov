@@ -559,17 +559,6 @@ PageServicesSignSimpleForm {
                     }
                     updateIndicators(pageCount)
 
-                    var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.png"
-                    if(gapi.getUseCustomSignature() && gapi.customSignImageExist()){
-                        if (Qt.platform.os === "windows") {
-                            urlCustomImage = "file:///"+urlCustomImage
-                        }else{
-                            urlCustomImage = "file://"+urlCustomImage
-                        }
-                        propertyPDFPreview.propertyDragSigImg.source = urlCustomImage
-                    }else{
-                        propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
-                    }
                     propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
                 }else{
                     filesModel.remove(filesModel.count-1)
@@ -636,6 +625,17 @@ PageServicesSignSimpleForm {
                 qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
         propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_NIC")+ ": "
 
+        var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture_qml.jpg"
+        if(gapi.getUseCustomSignature() && gapi.customSignImageExist()){
+            if (Qt.platform.os === "windows") {
+                urlCustomImage = "file:///"+urlCustomImage
+            }else{
+                urlCustomImage = "file://"+urlCustomImage
+            }
+            propertyPDFPreview.propertyDragSigImg.source = urlCustomImage
+        }else{
+            propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
+        }
         gapi.startCardReading()
     }
     Component.onDestruction: {

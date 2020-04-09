@@ -115,13 +115,12 @@ PageDefinitionsSignatureForm {
                 filesModel.append({
                                       "fileUrl": path
                                   })
-                var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.png"
-                propertyImagePreCustom.grabToImage(function(result){
-                    if (!result.saveToFile(urlCustomImage)){
-                        console.error('Unknown error saving to',urlCustomImage);
-                    }
-                },
-                Qt.size(185,41));
+
+                if(!gapi.saveCustomImageToCache(path,
+                                Qt.size(propertyImagePreCustom.sourceSize.width,
+                                        propertyImagePreCustom.sourceSize.height))){
+                    console.error("Error saving img: ", path);
+                }
             }
         }
         onExited: {
@@ -141,14 +140,11 @@ PageDefinitionsSignatureForm {
                                   "fileUrl": path
                               })
 
-            var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.png"
-            propertyImagePreCustom.grabToImage(function(result){
-                if (!result.saveToFile(urlCustomImage)){
-                    console.error('Unknown error saving to',urlCustomImage);
-                }
-            },
-            Qt.size(185,41));
-
+            if(!gapi.saveCustomImageToCache(path,
+                            Qt.size(propertyImagePreCustom.sourceSize.width,
+                                    propertyImagePreCustom.sourceSize.height))){
+                console.error("Error saving img: ", path);
+            }
         }
         onRejected: {
             console.log("Canceled")
@@ -221,7 +217,7 @@ PageDefinitionsSignatureForm {
             propertyRadioButtonCustom.checked = false
         }
         if(gapi.customSignImageExist()){
-            var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.png"
+            var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture_qml.jpg"
             if (Qt.platform.os === "windows") {
                 urlCustomImage = "file:///"+urlCustomImage
             }else{

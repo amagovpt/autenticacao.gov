@@ -3142,39 +3142,80 @@ QString GAPI::getCachePath(void){
 }
 
 bool GAPI::customSignImageExist(void){
-    QString path = m_Settings.getPteidCachedir() + "/CustomSignPicture.png";
+    QString path = m_Settings.getPteidCachedir() + "/CustomSignPicture.jpg";
     return fileExists(path);
 }
 
 //check if file exists and if yes: Is it really a file and no directory?
 
 void GAPI::customSignRemove(void){
-    QString path = m_Settings.getPteidCachedir() + "/CustomSignPicture.png";
+    QString path = m_Settings.getPteidCachedir() + "/CustomSignPicture.jpg";
     QFile file(path);
     file.remove();
 }
 
 bool GAPI::useCustomSignature(void){
-    // Detect Custom Signature Image
-    m_custom_image = QImage(m_Settings.getPteidCachedir() + "/CustomSignPicture.png");
+    QString customImagePath = m_Settings.getPteidCachedir() + "/CustomSignPicture.jpg";
+    m_custom_image = QImage(customImagePath);
+
     if (m_Settings.getUseCustomSignature() && !m_custom_image.isNull())
     {
         qDebug() << "Using Custom Picture to sign a PDF";
         QBuffer buffer(&m_jpeg_scaled_data);
         buffer.open(QIODevice::WriteOnly);
-        //Save the generated image as high-quality JPEG data
-        QImage generated_img(m_Settings.getPteidCachedir() + "/CustomSignPicture.png");
-        QImage final_img(generated_img.size(), QImage::Format_RGB32);
-        // Fill background with white
-        final_img.fill(QColor(Qt::white).rgb());
-        QPainter painter(&final_img);
-        painter.drawImage(0, 0, generated_img);
-        final_img.save(&buffer, "JPG", 100);
+        m_custom_image.save(&buffer, "JPG", 100);
         return true;
     }else{
         qDebug() << "Using default Picture to CC sign";
         return false;
     }
+}
+bool GAPI::saveCustomImageToCache(QString url){
+    QString customImagePathCache = m_Settings.getPteidCachedir() + "/CustomSignPicture.jpg";
+
+    if (QFile::exists(customImagePathCache))
+    {
+        QFile::remove(customImagePathCache);
+    }
+
+    QUrl source = QUrl(url);
+    QImage custom_image = QImage(source.toLocalFile());
+
+    // keep original resolution image to display in the application
+    QString customImagePathCacheQml = m_Settings.getPteidCachedir() + "/CustomSignPicture_qml.jpg";
+    if (QFile::exists(customImagePathCacheQml))
+    {
+        QFile::remove(customImagePathCacheQml);
+    }
+    custom_image.save(customImagePathCacheQml, "JPG", 100);
+
+    int MAX_IMAGE_HEIGHT = 41;
+    int MAX_IMAGE_WIDTH = 185;
+    float RECOMMENDED_RATIO = MAX_IMAGE_HEIGHT / (float) MAX_IMAGE_WIDTH;
+    float ACTUAL_RATIO = custom_image.height() / (float) custom_image.width();
+
+    // Only scale image when needed
+    if(custom_image.height() != MAX_IMAGE_HEIGHT || custom_image.width() != MAX_IMAGE_WIDTH)
+    {
+        // Fit custom image to available space, keeping aspect ratio
+        if (ACTUAL_RATIO >= RECOMMENDED_RATIO)
+            custom_image = custom_image.scaledToHeight(MAX_IMAGE_HEIGHT, Qt::SmoothTransformation);
+        else
+            custom_image = custom_image.scaledToWidth(MAX_IMAGE_WIDTH, Qt::SmoothTransformation);
+    }
+
+    // Create blank image
+    QImage final_img = QImage(MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT, QImage::Format_RGB32);
+    final_img.fill(QColor(Qt::white).rgb());
+    QPainter painter(&final_img);
+
+    // Center scaled custom image in the white background
+    int position_x = (int) ((MAX_IMAGE_WIDTH/2) - custom_image.width()/2);
+    int position_y = (int) ((MAX_IMAGE_HEIGHT/2) - custom_image.height()/2);
+    painter.drawImage(position_x, position_y, custom_image);
+
+    // Save custom image in cache, ready to be applied in a signature
+    return final_img.save(customImagePathCache, "JPG", 100);
 }
 void GAPI::setUseCustomSignature(bool UseCustomSignature){
 
