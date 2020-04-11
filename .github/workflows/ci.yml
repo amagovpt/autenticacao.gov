@@ -1,0 +1,20 @@
+name: CI
+on: [push]
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v1
+
+    - name: Install deps
+      run: apt update && apt install qmake
+
+    - name: QMake
+      run: qmake
+
+    - name: Make
+      run: make -j16
