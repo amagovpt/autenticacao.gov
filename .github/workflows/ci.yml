@@ -15,3 +15,6 @@ jobs:
 
     - name: Make
       run: cd pteid-mw-pt/_src/eidmw && qmake pteid-mw.pro && make
+
+    - name: Install
+      run: make install
