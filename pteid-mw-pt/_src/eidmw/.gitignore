@@ -4,7 +4,7 @@
 *.a
 *.user
 
-# Makefiles #
+# Makefiles and other build artifacts #
 ###################
 Makefile
 CMD/services/Makefile.cmdServices
@@ -59,6 +59,10 @@ minidriver/Build/
 jar/
 lib/
 bin/
+
+# Files generated on MacOS
+###################
+.DS_Store
 
 # Credentials #
 ###################
