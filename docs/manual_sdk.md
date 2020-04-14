@@ -1,6 +1,6 @@
 # Manual do SDK – Middleware do Cartão de Cidadão <!-- omit in toc -->
 
-# Versão 3.0 <!-- omit in toc -->
+# Versão 3 <!-- omit in toc -->
 
 ![](Pictures/CartaoCidadao.png)
 
