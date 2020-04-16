@@ -205,6 +205,7 @@
     <ClCompile Include="components\font.cpp" />
     <ClCompile Include="components\text.cpp" />
     <ClCompile Include="DlgsWin32.cpp" />
+    <ClCompile Include="dlgUtil.cpp" />
     <ClCompile Include="dlgWndAskCmd.cpp" />
     <ClCompile Include="dlgWndAskPIN.cpp" />
     <ClCompile Include="dlgWndAskPINs.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="dlgWndPinPadInfo.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="dlgUtil.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DlgsWin32.rc" />

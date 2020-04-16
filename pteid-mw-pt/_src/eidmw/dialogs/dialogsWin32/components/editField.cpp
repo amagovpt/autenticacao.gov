@@ -21,12 +21,14 @@
 #include "pteidControls.h"
 #include <tchar.h>
 #include "Log.h"
+#include "../dlgUtil.h"
 
 // Space between text and border
 #define BORDER_PADDING_X 10
 #define BORDER_PADDING_Y 10
 
-#define TITLE_SPACE 7
+#define TITLE_HEIGHT 18
+#define TITLE_MARGIN 4
 
 HWND PteidControls::CreateTextField(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, TextFieldData *textFieldData) {
     if ((textFieldData->title == NULL && nHeight < 40) || 
@@ -34,6 +36,14 @@ HWND PteidControls::CreateTextField(int x, int y, int nWidth, int nHeight, HWND 
     {
         MWLOG(LEV_WARN, MOD_DLG, L"  --> PteidControls::CreateTextField height should be >= 40 without title or >= 65 with title. Text may be cropped otherwise.");
     }
+
+    int scaledBorderPaddingX = BORDER_PADDING_X;
+    int scaledBorderPaddingY = BORDER_PADDING_Y;
+    ScaleDimensions(&scaledBorderPaddingX, &scaledBorderPaddingY);
+    int scaledTitleSpace = TITLE_MARGIN;
+    ScaleDimensions(NULL, &scaledTitleSpace);
+    int scaledTitleHeight = TITLE_HEIGHT;
+    ScaleDimensions(NULL, &scaledTitleHeight);
 
     // CONTAINER
     HWND hContainer = CreateWindowEx(
@@ -46,23 +56,22 @@ HWND PteidControls::CreateTextField(int x, int y, int nWidth, int nHeight, HWND 
     SetWindowSubclass(hContainer, TextField_Container_Proc, 0, (DWORD_PTR)textFieldData);
 
     // TITLE
-    int editControlY = BORDER_PADDING_Y;
-    int editControlHeight = nHeight - 2 * BORDER_PADDING_Y;
+    int editControlY = scaledBorderPaddingY;
+    int editControlHeight = nHeight - 2 * scaledBorderPaddingY;
     if (textFieldData->title)
     {
-        TEXTMETRIC tm;
-        HDC hdc = GetDC(hWndParent);
-        GetTextMetrics(hdc, &tm);
+        /* scaledTitleSpace is included in height for safety (just in case scaling
+         * is not working properly or due to rounding errors in font size) */
         HWND hTitle = CreateWindow(
             WC_STATIC,
             textFieldData->title,
             WS_CHILD | WS_VISIBLE | SS_LEFT,
-            0, 0, nWidth, tm.tmHeight + TITLE_SPACE,
+            0, 0, nWidth, scaledTitleHeight + scaledTitleSpace,
             hContainer, hMenu + 1, hInstance, NULL);
 
         SendMessage(hTitle, WM_SETFONT, (WPARAM)PteidControls::StandardFont, 0);
-        editControlHeight -= tm.tmHeight + TITLE_SPACE;
-        editControlY += tm.tmHeight + TITLE_SPACE;
+        editControlHeight -= scaledTitleHeight + scaledTitleSpace;
+        editControlY += scaledTitleHeight + scaledTitleSpace;
     }
 
     // TEXT FIELD
@@ -76,8 +85,8 @@ HWND PteidControls::CreateTextField(int x, int y, int nWidth, int nHeight, HWND 
         WC_EDIT,
         L"",
         dwStyle,
-        BORDER_PADDING_X, editControlY,
-        nWidth - 2 * BORDER_PADDING_X, editControlHeight,
+        scaledBorderPaddingX, editControlY,
+        nWidth - 2 * scaledBorderPaddingX, editControlHeight,
         hContainer, hMenu, hInstance, NULL);
     SetWindowSubclass(hEditField, TextField_Proc, 0, (DWORD_PTR)textFieldData);
 
@@ -135,16 +144,19 @@ LRESULT CALLBACK PteidControls::TextField_Container_Proc(HWND hWnd, UINT uMsg, W
         }
 
         int penWidth = (textFieldData->hMainWnd == GetFocus() ? 3 : 2);
+        ScaleDimensions(&penWidth, NULL);
         HPEN pen = CreatePen(PS_INSIDEFRAME, penWidth, borderColor);
         SelectObject(hdc, pen);
         SetBkMode(hdc, TRANSPARENT);
 
         int topBorder = rectContainer.top;
+        int scaledTitleSpace = TITLE_MARGIN;
+        ScaleDimensions(NULL, &scaledTitleSpace);
         if (textFieldData->title)
         {
-            TEXTMETRIC tm;
-            GetTextMetrics(hdc, &tm);
-            topBorder += tm.tmHeight + TITLE_SPACE;
+            int scaledTitleHeight = TITLE_HEIGHT;
+            ScaleDimensions(NULL, &scaledTitleHeight);
+            topBorder += scaledTitleHeight + scaledTitleSpace;
         }
 
         Rectangle(hdc, 

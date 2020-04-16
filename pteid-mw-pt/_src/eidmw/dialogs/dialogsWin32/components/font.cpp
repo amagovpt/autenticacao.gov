@@ -23,6 +23,7 @@
 #include <wingdi.h>
 #include "../resource.h"
 #include "Log.h"
+#include "../dlgUtil.h"
 
 BOOL PteidControls::Font_bFontsLoaded = false;
 
@@ -41,7 +42,9 @@ HFONT PteidControls::CreatePteidFont(int fontPointSize, int fontWeight, HINSTANC
     memset(&lf, 0, sizeof(lf));
     HDC screen = GetDC(0);
 
-    lf.lfHeight = -MulDiv(fontPointSize, GetDeviceCaps(screen, LOGPIXELSY), 72);
+    int fontSize = fontPointSize;
+    ScaleDimensions(NULL, &fontSize);
+    lf.lfHeight = -fontSize;
     lf.lfWeight = fontWeight;
     lf.lfOutPrecision = OUT_TT_ONLY_PRECIS;
 
@@ -81,7 +84,7 @@ void PteidControls::Font_LoadFontsFromResources(HINSTANCE hInstance) {
         {
             HGLOBAL mem = LoadResource(hInstance, res[i]);
             void *data = LockResource(mem);
-            size_t len = SizeofResource(hInstance, res[i]);
+            DWORD len = SizeofResource(hInstance, res[i]);
 
             DWORD nFonts;
             fontHandle = AddFontMemResourceEx(

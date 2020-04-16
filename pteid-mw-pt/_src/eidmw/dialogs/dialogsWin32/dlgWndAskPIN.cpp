@@ -64,7 +64,6 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 
 	int window_height = 230;
 	int window_width = 430;
-	ScaleDimensions(&window_width, &window_height);
 
 	if( CreateWnd( tmpTitle.c_str() , window_width, window_height, IDI_APPICON, Parent ) )
 	{
@@ -79,7 +78,7 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 		int headerY = (int)(clientRect.bottom * 0.25);
 		int headerHeight = (int)(clientRect.bottom * 0.2);
 		int pinY = (int)(clientRect.bottom * 0.45);
-		int editFieldHeight = (int)(clientRect.bottom * 0.22);
+		int editFieldHeight = (int)(clientRect.bottom * 0.26);
 		int buttonWidth = (int)(clientRect.right * 0.43);
 		int buttonHeight = (int)(clientRect.bottom * 0.125);
 		int buttonY = (int)(clientRect.bottom - paddingY - buttonHeight);

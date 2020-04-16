@@ -52,7 +52,6 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
 
     int Height = 360;
     int Width = 430;
-    ScaleDimensions(&Width, &Height);
 
     if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
     {
@@ -68,7 +67,7 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         int boxHeight = (int)(clientRect.bottom * 0.23);
         int editOutY = (int)(clientRect.bottom * 0.61);
         int editOutLabelHeight = (int)(clientRect.bottom * 0.06);
-        int editFieldHeight = (int)(clientRect.bottom * 0.14);
+        int editFieldHeight = (int)(clientRect.bottom * 0.165);
         int buttonWidth = (int)(clientRect.right * 0.43);
         int buttonHeight = (int)(clientRect.bottom * 0.08);
 

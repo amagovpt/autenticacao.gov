@@ -28,7 +28,7 @@
 #include "../langUtil.h"
 #include "Log.h"
 #include <wingdi.h>
-#include "Config.h"
+#include "dlgUtil.h"
 
 TD_WNDMAP WndMap;
 Win32Dialog *Win32Dialog::Active_lpWnd = NULL;
@@ -45,12 +45,8 @@ Win32Dialog::Win32Dialog(const wchar_t *appName)
 	dlgResult = eIDMW::DLG_CANCEL;	// Dialog Result
 	m_appName=_wcsdup(appName);
 
-	int fontSizeTitle = (int)(20 * .75);
-	int fontSize = (int)(14 * .75);
-
-	// Scale font based on horizontal DPI
-	ScaleDimensions(&fontSizeTitle, NULL); 
-	ScaleDimensions(&fontSize, NULL);
+	int fontSizeTitle = 20;
+	int fontSize = 14;
 
 	if (PteidControls::StandardFontHeader == NULL)
 		PteidControls::StandardFontHeader = PteidControls::CreatePteidFont(fontSizeTitle, FW_BLACK, m_hInstance);
@@ -89,12 +85,7 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 	RECT		WindowRect;				// Grabs Rectangle Upper Left / Lower Right Values
 	RECT		DeskRect;
 
-	HDC hDc = GetDC(Parent);
-	float dpiX = GetDeviceCaps(hDc, LOGPIXELSX) / 96.0f;
-	float dpiY = GetDeviceCaps(hDc, LOGPIXELSY) / 96.0f;
-	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> Win32Dialog::CreateWnd dpiX=%.6f dpiY=%.6f", dpiX, dpiY);
-	width = (int)(dpiX * width);
-	height = (int)(dpiY * height);
+	ScaleDimensions(&width, &height);
 
 	WindowRect.left = (long)0;			// Set Left Value To 0
 	WindowRect.right = (long)width;		// Set Right Value To Requested Width
@@ -247,48 +238,6 @@ void Win32Dialog::close()
 	//ShowWindow( m_hWnd, SW_MINIMIZE );					// Show The Window
 
 	m_ModalHold = false;							// Sets Keyboard Focus To The Window
-}
-
-void Win32Dialog::ScaleDimensions(int *width, int *height)
-{
-	FLOAT horizontalDPI;
-	FLOAT verticalDPI;
-
-	// A dummy variable is introduced so that this function can be called with only one parameter
-	int dummyDimension = 0; 
-	if (width == NULL)
-	{
-		width = &dummyDimension;
-	}
-	if (height == NULL)
-	{
-		height = &dummyDimension;
-	}
-
-	long configUseSystemScale = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_USESYSTEMSCALE);
-	if (configUseSystemScale != 0)
-	{
-		// Get system scaling.
-		HDC hdc = GetDC(NULL);
-		horizontalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSX));
-		verticalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSY));
-		ReleaseDC(0, hdc);
-
-		horizontalDPI = horizontalDPI / 96.f;
-		verticalDPI = verticalDPI / 96.f;
-	}
-	else
-	{
-		// Scale using application configuration
-		long configScale = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_APPLICATIONSCALE);
-		horizontalDPI = 1.0f + 0.25f * (float)configScale; // scale works with increments in 25%
-		verticalDPI = horizontalDPI;
-	}
-
-	FLOAT fWidth = *width * horizontalDPI;
-	FLOAT fHeight = *height * verticalDPI;
-	*width = (int)fWidth;
-	*height = (int)fHeight;
 }
 
 void Win32Dialog::CreateBitapMask( HBITMAP & BmpSource, HBITMAP & BmpMask )

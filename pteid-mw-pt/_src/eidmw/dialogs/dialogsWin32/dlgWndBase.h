@@ -61,7 +61,6 @@ protected:
 	bool CreateWnd( const wchar_t* title, int width, int height, int Icon = 0 , HWND Parent = NULL );
 	void KillWindow( );
 	virtual void Destroy();
-	void ScaleDimensions(int *width, int *height);
 
 protected:
 	HDC			m_hDC;					// Private GDI Device Context

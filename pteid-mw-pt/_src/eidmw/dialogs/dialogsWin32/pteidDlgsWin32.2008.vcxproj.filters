@@ -54,6 +54,9 @@
     <ClCompile Include="components\text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dlgUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dialogs.h">
@@ -93,6 +96,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="components\pteidControls.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dlgUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

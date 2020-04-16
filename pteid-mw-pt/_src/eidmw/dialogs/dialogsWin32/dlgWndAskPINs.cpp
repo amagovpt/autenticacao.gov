@@ -75,7 +75,6 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 
 	int Width = 430;
 	int Height = 360;
-	ScaleDimensions(&Width, &Height);
 
 	if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
 	{
@@ -88,12 +87,12 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 		int titleHeight = (int)(clientRect.right * 0.12);
 		int headerY = (int)(clientRect.bottom * 0.16);
 		int errorHeight = (int)(clientRect.bottom * 0.1);
-		int editFieldY = (int)(clientRect.bottom * 0.26);
+		int editFieldY = (int)(clientRect.bottom * 0.24);
 		int editFieldSpacing = (int)(clientRect.bottom * 0.03);
-		int editFieldHeight = (int)(clientRect.bottom * 0.14);
-		int errorY = (int)(clientRect.bottom * 0.785);
+		int editFieldHeight = (int)(clientRect.bottom * 0.165);
+		int errorY = (int)(clientRect.bottom * 0.8);
 		int buttonWidth = (int)(clientRect.right * 0.43);
-		int buttonHeight = (int)(clientRect.bottom * 0.08);
+		int buttonHeight = (int)(clientRect.bottom * 0.085);
 		int buttonY = (int)(clientRect.bottom - paddingY - buttonHeight);
 		int buttonSpacing = contentWidth - 2 * buttonWidth;
 

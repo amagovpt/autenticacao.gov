@@ -78,7 +78,6 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 
 	int window_height = 360;
 	int window_width = 430;
-	ScaleDimensions(&window_width, &window_height);
 
 	// Added for accessibility
 	tmpTitle += title;

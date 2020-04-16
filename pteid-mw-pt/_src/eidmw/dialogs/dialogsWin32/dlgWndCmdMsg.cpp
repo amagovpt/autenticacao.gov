@@ -44,8 +44,6 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
     int Height = 360;
     int Width = 430;
 
-    ScaleDimensions(&Width, &Height);
-
     if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
     {
         RECT clientRect;

@@ -29,7 +29,6 @@
 #include "../langUtil.h"
 #include "Log.h"
 
-
 #define IDB_OK IDOK
 #define IDB_CANCEL IDCANCEL
 #define IDC_STATIC_TITLE 3
@@ -73,7 +72,6 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 	
 	int window_width = 430;
 	int window_height = 360;
-	ScaleDimensions(&window_width, &window_height);
 
 	if (CreateWnd(tmpTitle.c_str(), window_width, window_height, IDI_APPICON, Parent))
 	{
@@ -91,8 +89,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 		int headerY = (int)(clientRect.bottom * 0.55);
 		int headerHeight = (int)(clientRect.bottom * 0.2);
 		int warningY = (int)(clientRect.bottom * 0.75);
-		int headerFontSize = (int)(14 * .75);
-		ScaleDimensions(&headerFontSize, NULL);
+		int headerFontSize = 14;
 
 		// TITLE
 		titleData.text = PinName.c_str();
