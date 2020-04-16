@@ -33,11 +33,18 @@
             "package": "10179/11962/Autenticacao.gov_OpenSUSE_x64.rpm"
         },
         "osx": {
-            "latestVersion": "3.1.0",
+            "latestVersion": "3.1.1",
             "package": "10179/11955/Autenticacao.gov_MacOS.pkg"
         }
     },
     "versions": [
+                {
+            "version": "3.1.1",
+            "date": "2020-04-15",
+            "release_notes": [
+                         "Correcção no instalador para MacOS"
+            ]
+        },
 		{
             "version": "3.1.0",
             "date": "2020-03-10",
