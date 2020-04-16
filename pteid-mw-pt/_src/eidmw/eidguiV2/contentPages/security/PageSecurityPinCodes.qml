@@ -81,7 +81,6 @@ PageSecurityPinCodesForm {
             propertyButtonTestSign.enabled = true
             propertyButtonModifyAddress.enabled = true
             propertyButtonTestAddress.enabled = true
-            propertyBusyIndicator.running = false
             propertyBusyIndicator.running = true
             switch(protertyStackLayout.currentIndex) {
             case 0:
@@ -546,6 +545,8 @@ PageSecurityPinCodesForm {
     propertyButtonModifyAuth{
         onClicked: {
             if(Constants.USE_SDK_PIN_UI_POPUP){
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+                propertyBusyIndicator.running = true
                 gapi.changeAuthPin("","")
             }else{
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
@@ -561,6 +562,8 @@ PageSecurityPinCodesForm {
     propertyButtonTestAuth{
         onClicked: {
             if(Constants.USE_SDK_PIN_UI_POPUP){
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+                propertyBusyIndicator.running = true
                 gapi.verifyAuthPin("")
             }else{
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
@@ -575,6 +578,8 @@ PageSecurityPinCodesForm {
     propertyButtonModifySign{
         onClicked: {
             if(Constants.USE_SDK_PIN_UI_POPUP){
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+                propertyBusyIndicator.running = true
                 gapi.changeSignPin("","")
             }else{
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
@@ -590,6 +595,8 @@ PageSecurityPinCodesForm {
     propertyButtonTestSign{
         onClicked: {
             if(Constants.USE_SDK_PIN_UI_POPUP){
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+                propertyBusyIndicator.running = true
                 gapi.verifySignPin("")
             }else{
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
@@ -603,6 +610,8 @@ PageSecurityPinCodesForm {
     propertyButtonModifyAddress{
         onClicked: {
             if(Constants.USE_SDK_PIN_UI_POPUP){
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+                propertyBusyIndicator.running = true
                 gapi.changeAddressPin("","")
             }else{
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
@@ -618,6 +627,8 @@ PageSecurityPinCodesForm {
     propertyButtonTestAddress{
         onClicked: {
             if(Constants.USE_SDK_PIN_UI_POPUP){
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+                propertyBusyIndicator.running = true
                 gapi.verifyAddressPin("")
             }else{
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS

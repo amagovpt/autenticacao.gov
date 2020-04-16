@@ -71,6 +71,7 @@ PageServicesSignAdvancedForm {
         target: gapi
         onSignalGenericError: {
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalAttributesLoaded:{
             console.log("Sign advanced - Signal SCAP attributes loaded")
@@ -98,7 +99,6 @@ PageServicesSignAdvancedForm {
                     : propertyTextAttributesMsg.forceActiveFocus()
         }
         onSignalPdfSignSucess: {
-            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             signsuccess_dialog.open()
             propertyBusyIndicatorRunning = false
             // test time stamp
@@ -127,6 +127,7 @@ PageServicesSignAdvancedForm {
             dialogSignCMD.close()
             signerror_dialog.visible = true
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyOutputSignedFile = ""
         }
         onSignalSCAPServiceTimeout: {
@@ -160,6 +161,7 @@ PageServicesSignAdvancedForm {
             }
             signerror_dialog.visible = true
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyOutputSignedFile = ""
         }
         onSignalSCAPPingSuccess: {
@@ -167,6 +169,7 @@ PageServicesSignAdvancedForm {
                     qsTranslate("PageServicesSign","STR_SIGN_SCAP_SERVICE_FAIL")
             signerror_dialog.visible = true
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyOutputSignedFile = ""
         }
         onSignalSCAPPingFail: {
@@ -177,6 +180,7 @@ PageServicesSignAdvancedForm {
                     + qsTranslate("PageServicesSign","STR_SCAP_PING_FAIL_SECOND")
             signerror_dialog.visible = true
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyOutputSignedFile = ""
         }
         onSignalCardAccessError: {
@@ -210,6 +214,7 @@ PageServicesSignAdvancedForm {
                     cardLoaded = false
             }
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyButtonAdd.forceActiveFocus()
         }
         onSignalCardDataChanged: {
@@ -633,6 +638,7 @@ PageServicesSignAdvancedForm {
     propertyFileDialogOutput {
         onAccepted: {
             propertyBusyIndicatorRunning = true
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogOutput.fileUrl.toString()
@@ -709,6 +715,7 @@ PageServicesSignAdvancedForm {
     propertyFileDialogBatchOutput {
         onAccepted: {
             propertyBusyIndicatorRunning = true
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             var isTimestamp = propertySwitchSignTemp.checked
             var outputFile = propertyFileDialogBatchOutput.folder.toString()
             outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))

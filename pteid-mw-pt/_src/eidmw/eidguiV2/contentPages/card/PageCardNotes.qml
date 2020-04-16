@@ -182,6 +182,7 @@ PageCardNotesForm {
         propertySaveNotes.enabled = b
     }
     function startWritingNotes(){
+        mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
         gapi.startWritingPersoNotes(propertyEditNotes.text);
     }
 
