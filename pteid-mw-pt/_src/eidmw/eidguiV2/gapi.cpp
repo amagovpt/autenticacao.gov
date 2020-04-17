@@ -3187,7 +3187,13 @@ bool GAPI::saveCustomImageToCache(QString url){
     {
         QFile::remove(customImagePathCacheQml);
     }
-    custom_image.save(customImagePathCacheQml, "JPG", 100);
+    // set white background so png images with transparency are displayed
+    // in the application as they appear in the real signature seal
+    QImage customImageWhiteBg(custom_image.width(), custom_image.height(), QImage::Format_RGB32);
+    customImageWhiteBg.fill(QColor(Qt::white).rgb());
+    QPainter painterAux(&customImageWhiteBg);
+    painterAux.drawImage(0, 0, custom_image);
+    customImageWhiteBg.save(customImagePathCacheQml, "JPG", 100);
 
     int MAX_IMAGE_HEIGHT = 41;
     int MAX_IMAGE_WIDTH = 185;
