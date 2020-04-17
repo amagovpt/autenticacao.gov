@@ -3149,9 +3149,11 @@ bool GAPI::customSignImageExist(void){
 //check if file exists and if yes: Is it really a file and no directory?
 
 void GAPI::customSignRemove(void){
-    QString path = m_Settings.getPteidCachedir() + "/CustomSignPicture.jpg";
-    QFile file(path);
-    file.remove();
+    QStringList paths = {m_Settings.getPteidCachedir() + "/CustomSignPicture.jpg",
+                         m_Settings.getPteidCachedir() + "/CustomSignPicture_qml.jpg"};
+
+    for (int i = 0; i < paths.size(); i++)
+        QFile::remove(paths.at(i));
 }
 
 bool GAPI::useCustomSignature(void){
