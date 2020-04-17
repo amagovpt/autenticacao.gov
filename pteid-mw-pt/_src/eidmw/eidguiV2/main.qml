@@ -1370,6 +1370,7 @@ Load language error. Please reinstall the application"
                 if(!handleUnsavedNotes(-1, "", Constants.HOME_ICON_PRESSED)){
                     mainFormID.propertyPageLoader.source = ""
                     mainFormID.state = Constants.MenuState.HOME
+                    mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     propertySubMenuListView.currentIndex = -1
                     propertyMainMenuListView.currentIndex = -1
                     propertyMainMenuBottomListView.currentIndex = -1
@@ -1860,6 +1861,7 @@ Load language error. Please reinstall the application"
             return
         }
 
+        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         mainFormID.propertyMainMenuBottomListView.currentIndex = -1
         mainFormID.propertyMainMenuListView.currentIndex = index
 
@@ -1898,6 +1900,7 @@ Load language error. Please reinstall the application"
             return
         } 
 
+        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         mainFormID.propertySubMenuListView.currentIndex = index
         console.log("Sub Menu index = " + index);
         console.log("Sub Menu Pressed Expand Sub Menu" + mainFormID.propertySubMenuListView.model.get(0).expand)
@@ -1924,6 +1927,7 @@ Load language error. Please reinstall the application"
             return
         }
 
+        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         // Do not select any option
         mainFormID.propertyMainMenuListView.currentIndex = -1
         mainFormID.propertyMainMenuBottomListView.currentIndex = index
