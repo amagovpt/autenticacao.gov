@@ -1980,7 +1980,6 @@
         <translation>Escolha os ficheiros</translation>
     </message>
     <message>
-        <location filename="main.qml" line="558"/>
         <source>STR_POPUP_RESTART_NOW</source>
         <translation>Reiniciar agora</translation>
     </message>
