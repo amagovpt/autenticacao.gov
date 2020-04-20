@@ -10,6 +10,7 @@
 
 import QtQuick 2.6
 import QtQuick.Controls 2.1
+import QtGraphicalEffects 1.0
 
 /* Constants imports */
 import "../scripts/Constants.js" as Constants
@@ -317,13 +318,13 @@ Item {
                             controler.forceAccessibilityUpdate(textFieldPin)
                         }
                     }
-
                 }
                 Item {
                     id: rectReturnCode
                     width: parent.width
                     height: 50
-                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.top: parent.top
+                    anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible: false
                     Text {
@@ -360,6 +361,26 @@ Item {
                         Keys.onReturnPressed: {
                             confirmDlg()
                         }
+                    }
+                }
+                Rectangle {
+                    id: rectSendSMS
+                    width: parent.width
+                    height: textSendSMS.paintedHeight + cmdDialog.padding
+                    anchors.bottom: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: false
+                    color: 'white'
+                    
+                    Text {
+                        id: textSendSMS
+                        width: parent.width
+                        anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                        anchors.rightMargin: Constants.SIZE_ROW_H_SPACE
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTranslate("PageServicesSign","STR_SEND_SMS_DESC")
+                        wrapMode: Text.WordWrap
+                        horizontalAlignment: Text.AlignJustify
                     }
                 }
             }
@@ -471,6 +492,7 @@ Item {
                 State {
                     name: Constants.DLG_STATE.VALIDATE_OTP
                     PropertyChanges {target: progressBar; visible: true}
+                    PropertyChanges {target: rectSendSMS; visible: true}
                     PropertyChanges {target: rectReturnCode; visible: true}
                     PropertyChanges {target: buttonCancel; prev: textFieldReturnCode}
                     PropertyChanges {target: dialogContent; next: textFieldReturnCode}
@@ -534,12 +556,38 @@ Item {
                 Keys.onReturnPressed: clicked()
                 Accessible.role: Accessible.Button
                 Accessible.name: text
-                KeyNavigation.tab: buttonConfirm
-                KeyNavigation.down: buttonConfirm
-                KeyNavigation.right: buttonConfirm
+                KeyNavigation.tab: buttonSendSMS
+                KeyNavigation.down: buttonSendSMS
+                KeyNavigation.right: buttonSendSMS
                 KeyNavigation.backtab: prev
                 KeyNavigation.up: prev
                 KeyNavigation.left: prev
+            }
+            Button {
+                id: buttonSendSMS
+                visible: rectSendSMS.visible
+                width: Constants.WIDTH_BUTTON
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                text: qsTranslate("main","STR_SEND_BY_SMS_BUTTON")
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                font.capitalization: Font.MixedCase
+                highlighted: activeFocus
+                onClicked: {
+                    gapi.sendSmsCmd()
+                    buttonSendSMS.enabled = false
+                }
+                Keys.onEnterPressed: clicked()
+                Keys.onReturnPressed: clicked()
+                Accessible.role: Accessible.Button
+                Accessible.name: text
+                KeyNavigation.tab: buttonConfirm
+                KeyNavigation.down: buttonConfirm
+                KeyNavigation.right: buttonConfirm
+                KeyNavigation.backtab: buttonCancel
+                KeyNavigation.up: buttonCancel
+                KeyNavigation.left: buttonCancel
             }
             Button {
                 id: buttonConfirm
@@ -559,9 +607,9 @@ Item {
                 Keys.onReturnPressed: clicked()
                 Accessible.role: Accessible.Button
                 Accessible.name: text
-                KeyNavigation.backtab: buttonCancel.visible ? buttonCancel : labelCMDText
-                KeyNavigation.up: buttonCancel.visible ? buttonCancel : labelCMDText
-                KeyNavigation.left: buttonCancel.visible ? buttonCancel : labelCMDText
+                KeyNavigation.backtab: buttonSendSMS
+                KeyNavigation.up: buttonSendSMS
+                KeyNavigation.left: buttonSendSMS
             }
         }
 

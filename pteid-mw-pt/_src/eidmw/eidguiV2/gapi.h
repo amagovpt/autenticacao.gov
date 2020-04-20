@@ -353,6 +353,8 @@ public slots:
     void signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
                        QString outputFile, int page, double coord_x, double coord_y,
                        QString reason, QString location);
+    void sendSmsCmd();
+    void doSendSmsCmd(CMDSignature *cmd_signature);
 
     static void addressChangeCallback(void *, int);
     void showChangeAddressDialog(long code);

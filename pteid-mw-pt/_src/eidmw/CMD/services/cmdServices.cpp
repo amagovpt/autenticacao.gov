@@ -826,6 +826,34 @@ int CMDServices::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response )
 }
 
 /*  *********************************************************
+***    CMDServices::checkForceSmsResponse()        ***
+********************************************************* */
+int CMDServices::checkForceSmsResponse(_ns2__ForceSMSResponse *response){
+    if (response == NULL){
+        MWLOG_ERR(logBuf, "Null response");
+        return ERR_NULL_HANDLER;
+    }
+
+    if (response->ForceSMSResult == NULL){
+        MWLOG_ERR(logBuf, "Null ForceSMSResult");
+        return ERR_NULL_DATA;
+    }
+
+    if (response->ForceSMSResult->Code == NULL){
+        MWLOG_ERR(logBuf, "Null ForceSMSResult Code");
+        return ERR_NULL_DATA;
+    }
+
+    int statusCode = atoi(response->ForceSMSResult->Code->c_str());
+    if (IS_SOAP_ERROR(statusCode)) {
+        MWLOG_ERR(logBuf, "ForceSMSResult SOAP Error Code %d", statusCode);
+        return statusCode;
+    }
+
+    return ERR_NONE;
+}
+
+/*  *********************************************************
     ***    CMDServices::ValidateOtp()                     ***
     ********************************************************* */
 int CMDServices::sendValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, _ns2__ValidateOtpResponse &response) {
@@ -1156,5 +1184,55 @@ int CMDServices::getSignatures(CMDProxyInfo proxyInfo, std::string in_code, std:
     return ERR_NONE;
 }
 
+/*  *********************************************************
+***    CMDServices::forceSMS()                    ***
+********************************************************* */
+int CMDServices::forceSMS(CMDProxyInfo proxyInfo, std::string in_userId){
+    soap *sp = getSoap();
+    if (sp == NULL) {
+        MWLOG_ERR(logBuf, "Null soap");
+        return ERR_NULL_HANDLER;
+    }
+    enableBasicAuthentication();
 
+    std::string processId = getProcessID();
+    const char *endPoint = getEndPoint();
+
+    CMDSignatureGsoapProxy proxy(sp, proxyInfo);
+    proxy.soap_endpoint = endPoint;
+
+    /*
+    Get ForceSMS request
+    */
+    _ns2__ForceSMS *send = soap_new__ns2__ForceSMS(sp);
+    if (send == NULL){
+        MWLOG_ERR(logBuf, "Null send parameters");
+        return ERR_NULL_HANDLER;
+    }
+    send->processId = &processId;
+    send->applicationId = encode_base64(sp, getApplicationID());
+    send->citizenId = &in_userId;
+
+    /*
+    Call ForceSMS service
+    */
+    int ret;
+    _ns2__ForceSMSResponse response;
+    ret = proxy.ForceSMS(NULL, NULL, send, response);
+
+    /* Clean pointers before exit */
+    if (send->applicationId != NULL){
+        if (send->applicationId->__ptr != NULL)
+            free(send->applicationId->__ptr);
+    }
+
+    /* Handling errors */
+    if (handleError(proxy, ret) != ERR_NONE) return ret;
+
+    /* Validate response */
+    ret = checkForceSmsResponse(&response);
+    if (ret != ERR_NONE) return ret;
+
+    return ERR_NONE;
+}
 }

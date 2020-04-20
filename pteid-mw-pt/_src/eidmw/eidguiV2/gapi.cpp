@@ -1044,6 +1044,14 @@ void GAPI::signCloseCMD(QString sms_token, QList<int> attribute_list)
         Concurrent::run(this, &GAPI::doCloseSignCMD, cmd_signature, sms_token);
 }
 
+void GAPI::sendSmsCmd() {
+    Concurrent::run(this, &GAPI::doSendSmsCmd, cmd_signature);
+}
+void GAPI::doSendSmsCmd(CMDSignature *cmd_signature) {
+    int ret = cmd_signature->sendSms();
+    // TODO: update status
+}
+
 QString GAPI::getCardActivation() {
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getCardActivation");
 

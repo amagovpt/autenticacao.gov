@@ -64,6 +64,7 @@ namespace eIDMW {
 
 			PTEIDCMD_API int signClose(std::string in_code);
             PTEIDCMD_API void cancelRequest();
+            PTEIDCMD_API int sendSms();
             PTEIDCMD_API void set_pdf_handler(PTEID_PDFSignature *in_pdf_handler);
             PTEIDCMD_API void add_pdf_handler(PTEID_PDFSignature *in_pdf_handler);
             PTEIDCMD_API void clear_pdf_handlers();
