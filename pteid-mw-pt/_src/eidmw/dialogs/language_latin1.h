@@ -118,7 +118,7 @@ DEFINE_LANG_STR(UnlockWithoutPUKInstructions) = {L"1) Enter your new PIN and pre
 												 L"1) Por favor introduza o seu novo PIN e pressione 'OK'\n2) Introduza novamente o seu novo PIN e pressione 'OK'.", L"", L""};
 DEFINE_LANG_STR(PinpadCanBeDisabled) = { L"The pinpad functionality can be disabled in Application Configuration. Check manual.", L"A funcionalidade PINPAD pode ser desativada na Configuração da Aplicação. Ver manual.", L"", L"" };
 DEFINE_LANG_STR(MobileNumber) = { L"Mobile number", L"Número de telemóvel", L"", L"" };
-DEFINE_LANG_STR(InsertOtp) = { L"To validate the authentication, insert in the next 5 minutes the security code that was sent to your mobile phone.", L"Para validar a autenticação, insira nos próximos 5 minutos o código de segurança que foi enviado para o seu telemóvel.", L"", L"" };
+DEFINE_LANG_STR(InsertOtp) = { L"To confirm the signature, insert in the next 5 minutes the security code that was sent to your mobile phone.", L"Para confirmar a assinatura, insira nos próximos 5 minutos o código de segurança que foi enviado para o seu telemóvel.", L"", L"" };
 DEFINE_LANG_STR(InsertSecurityCode) = { L"Insert the temporary security code", L"Inserir código de segurança temporário", L"", L"" };
 DEFINE_LANG_STR(SigningDataWithIdentifier) = { L"Signing data with identifier:", L"Assinatura de dados com identificador:", L"", L"" };
 DEFINE_LANG_STR(TheChosenCertificateIsFrom) = { L"Signing with certificate from ", L"Assinatura com certificado de", L"", L"" };
