@@ -52,12 +52,12 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
         int titleX = (int)(clientRect.right * 0.05);
         int titleY = (int)(clientRect.bottom * 0.05);
         int contentWidth = (int)(clientRect.right * 0.9);
-        int textTopY = (int)(clientRect.bottom * 0.55);
+        int textTopY = (int)(clientRect.bottom * 0.62);
         int imgWidth = (int)(clientRect.right * 0.25);
         int imgHeight = imgWidth;
         int imgX = (int)((clientRect.right - imgWidth) / 2 );
-        int imgY = (int)(clientRect.bottom * 0.18);
-        int textBottomY = (int)(clientRect.bottom * 0.62);
+        int imgY = (int)(clientRect.bottom * 0.23);
+        int textBottomY = (int)(clientRect.bottom * 0.70);
         int buttonWidth = (int)(clientRect.right * 0.43);
         int buttonHeight = (int)(clientRect.bottom * 0.08);
 

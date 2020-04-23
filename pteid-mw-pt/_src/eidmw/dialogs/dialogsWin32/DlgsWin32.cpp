@@ -134,49 +134,47 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 	try
 	{
 		std::wstring PINName;
-        PINName = getPinName( usage, csPinName );
-
+		PINName = getPinName( usage, csPinName );
+		std::wstring title = PINName;
 		std::wstring sMessage;
+
 		switch( operation )
 		{
 		case DLG_PIN_OP_VERIFY:
 			switch( usage )
 			{
 			case DLG_PIN_AUTH:
-
-				sMessage += GETSTRING_DLG(PleaseEnterYourPin);
-				sMessage += L", ";
-				sMessage += GETSTRING_DLG(InOrderToAuthenticateYourself);
+				title = GETSTRING_DLG(AuthenticateWith);
 				break;
 			case DLG_PIN_SIGN:
+				title = GETSTRING_DLG(SigningWith);
 				sMessage += GETSTRING_DLG(Caution);
 				sMessage += L" ";
 				sMessage += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronic);
 
 				break;
 			case DLG_PIN_ADDRESS:
-				sMessage += GETSTRING_DLG(PleaseEnterYourPin);
+				title = GETSTRING_DLG(ReadAddressFrom);
 				break;
-
+			case DLG_PIN_ACTIVATE:
+				title = GETSTRING_DLG(ActivationPinOf);
 			default:
 				sMessage += L"----Default PIN Type????----";
 				sMessage += L"\n";
 				break;
 			}
+			title.append(L" ");
+			title.append(GETSTRING_DLG(CitizenCard));
 			break;
 		case DLG_PIN_OP_UNBLOCK_NO_CHANGE:
 			sMessage = GETSTRING_DLG(PleaseEnterYourPuk);
 			sMessage += L", ";
-			sMessage = GETSTRING_DLG(ToUnblock);
+			sMessage += GETSTRING_DLG(ToUnblock);
 			sMessage += L" ";
-			sMessage = GETSTRING_DLG(Your);
-			sMessage += L" \"";
-			if( wcslen(csPinName)==0 )
-				sMessage += csPinName;
-			else
-				sMessage += GETSTRING_DLG(Pin);
-			sMessage += L"\"\n";
-
+			sMessage += GETSTRING_DLG(Your);
+			sMessage += L" ";
+			sMessage += getPinName(usage, csPinName);
+			sMessage += L".";
 			break;
 		default:
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskPin() returns DLG_BAD_PARAM");
@@ -184,7 +182,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 			break;
 		}
 
-		dlg = new dlgWndAskPIN(pinInfo, usage, sMessage, PINName, appWindow);
+		dlg = new dlgWndAskPIN(pinInfo, usage, title, sMessage, PINName, appWindow);
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
@@ -219,30 +217,36 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 	dlgWndAskPINs *dlg = NULL;
 	try
 	{
-		std::wstring PINName;
+		std::wstring title;
 		std::wstring Header;
 		bool isUnlock = true;
 
 		switch( operation )
 		{
 		case DLG_PIN_OP_CHANGE:
-            PINName = getPinName( usage, csPinName );
+			title = GETSTRING_DLG(Change);
+			title += L" ";
+			title += getPinName(usage, csPinName);
+			title += L".";
 
 			Header = GETSTRING_DLG(EnterYour);
 			Header += L" ";
-			Header += PINName;
+			Header += getPinName(usage, csPinName);
 			Header += L" ";
+			Header += GETSTRING_DLG(OfCitizenCard);
+			Header += L".";
 			isUnlock = false;
 			break;
 		case DLG_PIN_OP_UNBLOCK_CHANGE:
-			Header = GETSTRING_DLG(UnlockDialogHeader);
-			PINName = getPinName(usage, csPinName);
-			break;
 		case DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK:
-			//This message doesn't mention introducing any PUK
-			Header = GETSTRING_DLG(UnblockPinHeader);
-			PINName = getPinName(usage, csPinName);
-			MWLOG(LEV_DEBUG, MOD_DLG, L"dlgsWin32: Performing operation UNBLOCK_CHANGE_NO_PUK");
+			MWLOG(LEV_DEBUG, MOD_DLG, L"dlgsWin32: Performing operation=%d", operation);
+			title = GETSTRING_DLG(Unblock);
+			title += L" ";
+			title += getPinName(usage, csPinName);
+
+			Header = (operation == DLG_PIN_OP_CHANGE ? GETSTRING_DLG(UnlockDialogHeader) :
+														GETSTRING_DLG(UnblockPinHeader));
+			Header += L".";
 			break;
 		default:
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskPins() returns DLG_BAD_PARAM");
@@ -250,7 +254,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation,
 			break;
 		}
 
-		dlg = new dlgWndAskPINs(pin1Info, pin2Info, Header, PINName, isUnlock, operation == DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK, appWindow);
+		dlg = new dlgWndAskPINs(pin1Info, pin2Info, Header, title, isUnlock, operation == DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK, appWindow);
 		if( dlg->exec() )
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
@@ -327,25 +331,9 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 
 	try
 	{
-		std::wstring PINName;
-		switch( usage )
-		{
-		case DLG_PIN_UNKNOWN:
-			if( wcslen(csPinName)==0 )
-			{
-				MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgDisplayPinpadInfo() returns DLG_BAD_PARAM");
-				return DLG_BAD_PARAM;
-			}
-			PINName = csPinName;
-			break;
-		default:
-			if( wcslen(csPinName)==0 )
-				PINName = GETSTRING_DLG(Pin);
-			else
-				PINName = csPinName;
-			break;
-		}
-
+		std::wstring title = getPinName(usage, csPinName);
+		title += L" ";
+		title += GETSTRING_DLG(OfCitizenCard);
 		std::wstring sMessage;
 		if(wcslen(csMessage)!=0)
 		{
@@ -356,8 +344,25 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 			switch( operation )
 			{
 			case DLG_PIN_OP_VERIFY:
-					sMessage = GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader);
+				switch (usage)
+				{
+				case DLG_PIN_AUTH:
+					title = GETSTRING_DLG(AuthenticateWith);
 					break;
+				case DLG_PIN_SIGN:
+					title = GETSTRING_DLG(SigningWith);
+					break;
+				case DLG_PIN_ADDRESS:
+					title = GETSTRING_DLG(ReadAddressFrom);
+					break;
+				case DLG_PIN_ACTIVATE:
+					title = GETSTRING_DLG(ActivationPinOf);
+					break;
+				}
+				title.append(L" ");
+				title.append(GETSTRING_DLG(CitizenCard));
+				sMessage = GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader);
+				break;
 			case DLG_PIN_OP_UNBLOCK_NO_CHANGE:
 				sMessage = GETSTRING_DLG(PleaseEnterYourPukOnThePinpadReader);
 	
@@ -366,10 +371,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 				sMessage += L" ";
 				sMessage += GETSTRING_DLG(Your);
 				sMessage += L" \"";
-				if( wcslen(csPinName)!=0 )
-					sMessage += csPinName;
-				else
-					sMessage += GETSTRING_DLG(Pin);
+				sMessage += getPinName(usage, csPinName);
 				sMessage += L"\"\n";
 
 				break;
@@ -378,12 +380,13 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 				sMessage += L"\n";
 				break;
 			case DLG_PIN_OP_UNBLOCK_CHANGE:
-				sMessage = L"\n";
-				sMessage += GETSTRING_DLG(UnlockDialogInstructions);
-				break;
 			case DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK:
+				title = GETSTRING_DLG(UnblockPinHeader);
+				title += L": ";
+				title += getPinName(usage, csPinName);
 				sMessage = L"\n";
-				sMessage += GETSTRING_DLG(UnlockWithoutPUKInstructions);
+				sMessage += (operation == DLG_PIN_OP_UNBLOCK_CHANGE ?
+								GETSTRING_DLG(UnlockDialogInstructions) : GETSTRING_DLG(UnlockWithoutPUKInstructions));
 				break;
 			default:
 				MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgDisplayPinpadInfo() returns DLG_BAD_PARAM");
@@ -391,22 +394,10 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation,
 				break;
 			}
 		}
-		//Small hack for the PIN unlock dialog :)
-		std::wstring pin_name_label;
-		if (operation == DLG_PIN_OP_UNBLOCK_CHANGE || operation == DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK)
-		{
-		 pin_name_label +=  GETSTRING_DLG(UnblockPinHeader);
-		 pin_name_label += L": ";
-		 pin_name_label += csPinName;
-		}
-		else {
-			pin_name_label = PINName;
-		}
 
-		//QString buf = "dlg num: " + QString().setNum( dlgPinPadInfoCollectorIndex );
 		dlgPinPadInfoCollectorIndex++;
 		dlgModal = new dlgWndPinpadInfo(dlgPinPadInfoCollectorIndex, usage,
-			operation, csReader, pin_name_label, sMessage, appWindow);
+			operation, csReader, title, sMessage, appWindow);
 
 		dlgPinPadInfoCollector.insert(TD_WNDPINPAD_PAIR(dlgPinPadInfoCollectorIndex, dlgModal));
 		if (pulHandle)

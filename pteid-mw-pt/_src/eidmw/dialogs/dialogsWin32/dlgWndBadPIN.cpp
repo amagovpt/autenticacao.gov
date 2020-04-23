@@ -66,7 +66,7 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 	else
 	{
 		header = GETSTRING_DLG(IncorrectPin);
-		header += L" ";
+		header += L"\n";
 		wchar_t triesBuf[32];
 		_itow_s(RemainingTries, triesBuf, 128, 10);
 		header += triesBuf;
@@ -96,7 +96,7 @@ dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries
 		int imgHeight = imgWidth;
 		int imgX = (int)((clientRect.right - imgWidth) / 2);
 		int imgY = (int)(clientRect.bottom * 0.25);
-		int headerY = (int)(clientRect.bottom * 0.7);
+		int headerY = (int)(clientRect.bottom * 0.65);
 		int headerHeight = (int)(clientRect.bottom * 0.15);
 		int buttonWidth = (int)(clientRect.right * 0.43);
 		int buttonHeight = (int)(clientRect.bottom * 0.08);

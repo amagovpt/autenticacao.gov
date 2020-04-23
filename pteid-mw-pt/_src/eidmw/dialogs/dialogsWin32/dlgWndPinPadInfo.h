@@ -39,7 +39,7 @@ class dlgWndPinpadInfo : public Win32Dialog
 public:
 	dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage usage, 
 		DlgPinOperation operation, const std::wstring & csReader, 
-		const std::wstring & PinName, const std::wstring & Message, HWND Parent = NULL );
+		const std::wstring & title, const std::wstring & Message, HWND Parent = NULL );
 	virtual ~dlgWndPinpadInfo();
 
 	virtual LRESULT ProcecEvent

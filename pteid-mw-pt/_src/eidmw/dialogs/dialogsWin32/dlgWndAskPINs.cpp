@@ -50,7 +50,7 @@
 
 std::wstring langchange = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
-dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & PINName, bool isUnlock, bool dontAskPUK, HWND Parent)
+dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & title, bool isUnlock, bool dontAskPUK, HWND Parent)
 :Win32Dialog(L"WndAskPINs")
 {
 	Pin1Result[0] = ' ';
@@ -59,16 +59,10 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 	Pin2Result[1] = (char)0;
 	m_dontAskPIN1 = dontAskPUK;
 
-	std::wstring tmpTitle = L"";
-	
-	if (isUnlock)
-		tmpTitle += GETSTRING_DLG(Unblock);
-	else
-		tmpTitle += GETSTRING_DLG(RenewingPinCode);
+	std::wstring tmpTitle = title;
 
-	szHeader = const_cast<wchar_t *>(Header.c_str());
 	// Added for accessibility
-	tmpTitle += szHeader;
+	tmpTitle += Header;
 	tmpTitle += isUnlock ? GETSTRING_DLG(Puk) : GETSTRING_DLG(CurrentPin);
 	tmpTitle += GETSTRING_DLG(NewPin);
 	tmpTitle += GETSTRING_DLG(ConfirmNewPin);
@@ -97,7 +91,6 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstr
 		int buttonSpacing = contentWidth - 2 * buttonWidth;
 
 		// TITLE
-		std::wstring title = (isUnlock ? GETSTRING_DLG(Unblock) : GETSTRING_DLG(RenewingPinCode));
 		titleData.text = title.c_str();
 		titleData.font = PteidControls::StandardFontHeader;
 		titleData.color = BLUE;

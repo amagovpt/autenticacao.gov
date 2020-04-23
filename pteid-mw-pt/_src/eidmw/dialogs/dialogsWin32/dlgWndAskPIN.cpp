@@ -44,23 +44,17 @@ std::wstring lang = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGU
 
 
 
-dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring & Header, std::wstring & PINName, HWND Parent )
+dlgWndAskPIN::dlgWndAskPIN(DlgPinInfo pinInfo, DlgPinUsage PinUsage, std::wstring & title, std::wstring & Header, std::wstring & PINName, HWND Parent)
 :Win32Dialog(L"WndAskPIN")
 {
 	PinResult[0] = ' ';
 	PinResult[1] = (char)0;
 
-	std::wstring tmpTitle = L"";
-
-	tmpTitle += GETSTRING_DLG(VerifyingPinCode);
-
-	szHeader = Header.c_str();
-	szPIN = PINName.c_str();
-	
 	// Added for accessibility
-	tmpTitle += szHeader;
-	tmpTitle += szPIN;
-
+	std::wstring tmpTitle = L"";
+	tmpTitle += title;	
+	tmpTitle += Header;
+	tmpTitle += PINName;
 
 	int window_height = 230;
 	int window_width = 430;
@@ -80,15 +74,11 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 		int pinY = (int)(clientRect.bottom * 0.45);
 		int editFieldHeight = (int)(clientRect.bottom * 0.26);
 		int buttonWidth = (int)(clientRect.right * 0.43);
-		int buttonHeight = (int)(clientRect.bottom * 0.125);
+		int buttonHeight = (int)(clientRect.bottom * 0.13);
 		int buttonY = (int)(clientRect.bottom - paddingY - buttonHeight);
 		int buttonSpacing = contentWidth - 2 * buttonWidth;
 
 		// TITLE
-		std::wstring title = GETSTRING_DLG(SigningWith);
-		title.append(L" ");
-		title.append(szPIN);
-
 		titleData.text = title.c_str();
 		titleData.font = PteidControls::StandardFontHeader;
 		titleData.color = BLUE;
@@ -106,7 +96,7 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstr
 			m_hWnd, (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
 
 		// TEXT EDIT
-		textFieldData.title = szPIN;
+		textFieldData.title = PINName.c_str();
 		textFieldData.isPassword = true;
 		//Max Length of PINs for PTEID cards as currently defined by INCM personalization
 		textFieldData.minLength = 4;

@@ -184,9 +184,12 @@ LRESULT CALLBACK PteidControls::Button_Container_Proc(HWND hWnd, UINT uMsg, WPAR
         }
         SetTextAlign(pDIS->hDC, TA_CENTER | VTA_CENTER);
 
+        SIZE sizText;
+        GetTextExtentPoint(pDIS->hDC, btnData->text, (int)_tcslen(btnData->text), &sizText);
+
         ExtTextOut(pDIS->hDC,
             pDIS->rcItem.right / 2,
-            pDIS->rcItem.bottom / 4,
+            pDIS->rcItem.bottom / 2 - sizText.cy / 2,
             ETO_OPAQUE | ETO_CLIPPED, &pDIS->rcItem, btnData->text, (UINT)_tcslen(btnData->text), NULL);
 
         break;

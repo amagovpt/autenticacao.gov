@@ -38,7 +38,7 @@
 
 dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusage, 
 		DlgPinOperation operation, const std::wstring & csReader, 
-		const std::wstring & PinName, const std::wstring & Message, HWND Parent)
+		const std::wstring & title, const std::wstring & Message, HWND Parent)
 :Win32Dialog(L"WndPinpadInfo")
 
 {
@@ -46,29 +46,10 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 
 	m_ulHandle = ulHandle;
 
-	std::wstring tmpTitle = L"";
-
-	// Added for accessibility
-	//tmpTitle += m_szHeader;
-
-	switch (operation)
-	{
-		case DLG_PIN_OP_VERIFY:
-			tmpTitle += GETSTRING_DLG(VerifyingPinCode);
-			break;
-		case DLG_PIN_OP_CHANGE:
-			tmpTitle += GETSTRING_DLG(RenewingPinCode);
-			break;
-
-		case DLG_PIN_OP_UNBLOCK_CHANGE:
-		case DLG_PIN_OP_UNBLOCK_NO_CHANGE:
-		case DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK:
-			tmpTitle += GETSTRING_DLG(UnblockPinHeader);
-			break;
-	}
-
+	LPCTSTR warningText = GETSTRING_DLG(PinpadCanBeDisabled);
+	std::wstring tmpTitle = title;
 	tmpTitle += Message.c_str();
-	tmpTitle += GETSTRING_DLG(PinpadCanBeDisabled);
+	tmpTitle += warningText;
 	
 	int window_width = 430;
 	int window_height = 360;
@@ -92,7 +73,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 		int headerFontSize = 14;
 
 		// TITLE
-		titleData.text = PinName.c_str();
+		titleData.text = title.c_str();
 		titleData.font = PteidControls::StandardFontHeader;
 		titleData.color = BLUE;
 		HWND hTitle = PteidControls::CreateText(
@@ -116,7 +97,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 			m_hWnd, (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
 
 		// WARNING "Pinpad functionality can be disabled"
-		warningTextData.text = GETSTRING_DLG(PinpadCanBeDisabled);
+		warningTextData.text = warningText;
 		warningTextData.horizontalCentered = true;
 		HWND hWarning = PteidControls::CreateText(
 			contentX, warningY,

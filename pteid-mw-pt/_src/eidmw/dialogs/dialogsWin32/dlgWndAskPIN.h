@@ -36,12 +36,9 @@ class dlgWndAskPIN : public Win32Dialog
 	PteidControls::ButtonData okBtnProcData, cancelBtnProcData;
 	
 	bool m_UseKeypad;
-	const wchar_t * szHeader;
-	const wchar_t * szPIN;
-
 
 public:
-	dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring & Header, std::wstring & PINName, HWND Parent = NULL );
+	dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring & title, std::wstring & Header, std::wstring & PINName, HWND Parent = NULL );
 	virtual ~dlgWndAskPIN();
 
 	wchar_t PinResult[128];
