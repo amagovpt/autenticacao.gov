@@ -497,6 +497,7 @@ Item {
                     PropertyChanges {target: buttonCancel; prev: textFieldReturnCode}
                     PropertyChanges {target: dialogContent; next: textFieldReturnCode}
                     PropertyChanges {target: buttonConfirm; enabled: textFieldReturnCode.acceptableInput}
+                    PropertyChanges {target: buttonSendSMS; enabled: true}
                 },
                 State {
                     name: Constants.DLG_STATE.LOAD_ATTRIBUTES
@@ -575,8 +576,8 @@ Item {
                 font.capitalization: Font.MixedCase
                 highlighted: activeFocus
                 onClicked: {
-                    gapi.sendSmsCmd()
                     buttonSendSMS.enabled = false
+                    gapi.sendSmsCmd(dialogType)
                 }
                 Keys.onEnterPressed: clicked()
                 Keys.onReturnPressed: clicked()

@@ -399,4 +399,9 @@ namespace eIDMW
         delete[] csTargetSubject;
         delete[] csCandidateSubject;
     }
+
+    int CMDCertificates::sendSms() {
+        CMDProxyInfo proxyInfo = CMDProxyInfo::buildProxyInfo();
+        return m_cmdService->forceSMS(proxyInfo, m_mobileNumber);
+    }
 }

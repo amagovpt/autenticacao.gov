@@ -1044,11 +1044,18 @@ void GAPI::signCloseCMD(QString sms_token, QList<int> attribute_list)
         Concurrent::run(this, &GAPI::doCloseSignCMD, cmd_signature, sms_token);
 }
 
-void GAPI::sendSmsCmd() {
-    Concurrent::run(this, &GAPI::doSendSmsCmd, cmd_signature);
+void GAPI::sendSmsCmd(CmdDialogClass dialogType) {
+    Concurrent::run(this, &GAPI::doSendSmsCmd, dialogType);
 }
-void GAPI::doSendSmsCmd(CMDSignature *cmd_signature) {
-    int ret = cmd_signature->sendSms();
+void GAPI::doSendSmsCmd(CmdDialogClass dialogType) {
+    if (dialogType == GAPI::RegisterCert)
+    {
+        m_cmdCertificates->sendSms();
+    }
+    else if (dialogType == GAPI::Sign)
+    {
+        cmd_signature->sendSms();
+    }
     // TODO: update status
 }
 
