@@ -29,19 +29,22 @@ using namespace eIDMW;
 
 class dlgWndAskCmd : public Win32Dialog
 {
-    PteidControls::TextData titleData, headerData, boxTextData, docIdTextData;
+    PteidControls::TextData titleData, headerData, boxTextData, docIdTextData, sendSmsTextData;
     PteidControls::TextFieldData textFieldData;
-    PteidControls::ButtonData okBtnProcData, cancelBtnProcData;
+    PteidControls::ButtonData okBtnProcData, cancelBtnProcData, sendSmsBtnData;
 
     void GetResult();
     bool AreFieldsFilled();
     HWND hStaticBox;
+    HWND hSendSmsBox;
+
+    void(*m_fSendSmsCallback)(void);
 
 public:
     dlgWndAskCmd(bool isValidateOtp,
         std::wstring & Header,
         std::wstring *inId = NULL, std::wstring *userName = NULL,
-        HWND Parent = NULL);
+        HWND Parent = NULL, void(*fSendSmsCallback)(void) = NULL);
     virtual ~dlgWndAskCmd();
 
     wchar_t OutResult[RESULT_BUFFER_SIZE];

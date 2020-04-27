@@ -26,6 +26,7 @@
 #include "../langUtil.h"
 #include "Log.h"
 #include "Config.h"
+#include "dlgUtil.h"
 
 #define IDC_STATIC_HEADER 0
 #define IDB_OK IDOK
@@ -35,13 +36,17 @@
 #define IDC_STATIC_BOX_TEXT 5
 #define IDC_STATIC_OTP 6
 #define IDC_STATIC_TITLE 7
+#define IDC_SEND_SMS_BOX 8
+#define IDB_SEND_SMS 9
+#define IDC_SEND_SMS_TEXT 10
 
 #define MAX_USERNAME_LENGTH 90
 
 dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
     std::wstring & Header, std::wstring *inId,
-    std::wstring *userName, HWND Parent) : Win32Dialog(L"WndAskCmd")
+    std::wstring *userName, HWND Parent, void(*fSendSmsCallback)(void)) : Win32Dialog(L"WndAskCmd")
 {
+    m_fSendSmsCallback = fSendSmsCallback;
     OutResult[0] = ' ';
     OutResult[1] = (char)0;
 
@@ -50,7 +55,7 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
     // Added for accessibility
     tmpTitle += Header.c_str();
 
-    int Height = 360;
+    int Height = (isValidateOtp ? 440 : 360);
     int Width = 430;
 
     if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
@@ -60,16 +65,20 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
 
         int contentX = (int)(clientRect.right * 0.05);
         int contentWidth = (int)(clientRect.right - 2 * contentX);
-        int titleY = (int)(clientRect.bottom * 0.05);
-        int titleHeight = (int)(clientRect.bottom * 0.15);
-        int headerY = (int)(clientRect.bottom * 0.18);
-        int textBoxY = (int)(clientRect.bottom * 0.35);
-        int boxHeight = (int)(clientRect.bottom * 0.23);
-        int editOutY = (int)(clientRect.bottom * 0.61);
+        int paddingY = contentX;
+        int titleHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.12 : 0.14));
+        int headerY = (int)(titleHeight + paddingY);
+        int textBoxY = (int)(clientRect.bottom * (isValidateOtp ? 0.29 : 0.35));
+        int boxHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.18 : 0.23));
+        int editOutY = (int)(clientRect.bottom * (isValidateOtp ? 0.65 : 0.58));
         int editOutLabelHeight = (int)(clientRect.bottom * 0.06);
-        int editFieldHeight = (int)(clientRect.bottom * 0.165);
+        int editFieldHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.135 : 0.165));
         int buttonWidth = (int)(clientRect.right * 0.43);
-        int buttonHeight = (int)(clientRect.bottom * 0.08);
+        int buttonHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.066 : 0.08));
+        int buttonY = (int)(clientRect.bottom - paddingY - buttonHeight);
+        //send SMS box
+        int sendSmsBoxY = (int)(textBoxY + boxHeight + paddingY);
+        int sendSmsButtonX = (int)(1.5 * contentX + contentWidth - buttonWidth);
 
         // TITLE
         std::wstring title = GETSTRING_DLG(SigningWith);
@@ -79,7 +88,7 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         titleData.font = PteidControls::StandardFontHeader;
         titleData.color = BLUE;
         HWND hTitle = PteidControls::CreateText(
-            contentX, titleY,
+            contentX, paddingY,
             contentWidth, titleHeight,
             m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
 
@@ -140,6 +149,32 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
                 m_hWnd, (HMENU)IDC_STATIC_OTP, m_hInstance, &docIdTextData);
         }
 
+        // SEND SMS BOX
+        if (isValidateOtp)
+        {
+            hSendSmsBox = CreateWindow(
+                L"STATIC", NULL, WS_CHILD | WS_VISIBLE,
+                contentX, sendSmsBoxY,
+                contentWidth, buttonHeight + 2 * paddingY,
+                m_hWnd, (HMENU)IDC_SEND_SMS_BOX, m_hInstance, NULL);
+
+            std::wstring sendSmsText;
+            sendSmsText = GETSTRING_DLG(ToSendSmsPress);
+            sendSmsText += L" \"";
+            sendSmsText += GETSTRING_DLG(SendSms);
+            sendSmsText += L"\".";
+            sendSmsTextData.text = sendSmsText.c_str();
+            HWND hSendSmsText = PteidControls::CreateText(
+                1.5 * contentX, sendSmsBoxY + 0.77 * paddingY,
+                contentWidth - buttonWidth - contentX, buttonHeight + 2 * paddingY,
+                m_hWnd, (HMENU)IDC_SEND_SMS_TEXT, m_hInstance, &sendSmsTextData);
+
+            sendSmsBtnData.text = GETSTRING_DLG(SendSms);
+            HWND hSendSmsButton = PteidControls::CreateButton(
+                sendSmsButtonX, sendSmsBoxY + paddingY, buttonWidth - contentX, buttonHeight,
+                m_hWnd, (HMENU)IDB_SEND_SMS, m_hInstance, &sendSmsBtnData);
+        }
+
         // TEXT EDIT
         if (!isValidateOtp)
         {
@@ -170,11 +205,11 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         cancelBtnProcData.text = GETSTRING_DLG(Cancel);
 
         HWND Cancel_Btn = PteidControls::CreateButton(
-            (int)(clientRect.right * 0.05), (int)(clientRect.bottom * 0.87), buttonWidth, buttonHeight,
+            contentX, buttonY, buttonWidth, buttonHeight,
             m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &cancelBtnProcData);
 
         HWND OK_Btn = PteidControls::CreateButton(
-            (int)(clientRect.right * 0.52), (int)(clientRect.bottom * 0.87), buttonWidth, buttonHeight,
+            (int)(clientRect.right - buttonWidth - contentX), buttonY, buttonWidth, buttonHeight,
             m_hWnd, (HMENU)IDB_OK, m_hInstance, &okBtnProcData);
 
     }
@@ -232,6 +267,13 @@ LPARAM		lParam)		// Additional Message Information
             close();
             return TRUE;
 
+        case IDB_SEND_SMS:
+            sendSmsBtnData.setEnabled(false);
+            if (m_fSendSmsCallback)
+                m_fSendSmsCallback();
+            SetFocus(textFieldData.getMainWnd());
+            return TRUE;
+
         default:
             return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
         }
@@ -254,13 +296,13 @@ LPARAM		lParam)		// Additional Message Information
 
         MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskCmd::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
         SetBkColor(hdcStatic, TRANSPARENT);
-        if ((HWND)lParam == hStaticBox)
+        if ((HWND)lParam == hStaticBox || (HWND)lParam == hSendSmsBox)
         {
             if (m_hbrBkgnd != NULL)
             {
                 DeleteObject(m_hbrBkgnd);
             }
-            m_hbrBkgnd = CreateSolidBrush(LIGHTGREY);
+            m_hbrBkgnd = CreateSolidBrush(((HWND)lParam == hSendSmsBox ? WHITE : LIGHTGREY));
             return (INT_PTR)m_hbrBkgnd;
         }
 
@@ -277,6 +319,22 @@ LPARAM		lParam)		// Additional Message Information
         m_hDC = BeginPaint(m_hWnd, &ps);
 
         MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
+
+        // Paint the Send Sms Box
+        int penWidth = 2;
+        ScaleDimensions(&penWidth, NULL);
+        HPEN pen = CreatePen(PS_INSIDEFRAME, penWidth, LIGHTGREY);
+        SelectObject(m_hDC, pen);
+        SetBkMode(m_hDC, TRANSPARENT);
+        RECT rectSmsBoxInClientCoord;
+        GetClientRect(hSendSmsBox, &rectSmsBoxInClientCoord);
+        MapWindowPoints(hSendSmsBox, m_hWnd, (LPPOINT)&rectSmsBoxInClientCoord, 2);
+        Rectangle(m_hDC,
+            rectSmsBoxInClientCoord.left - penWidth,
+            rectSmsBoxInClientCoord.top - penWidth,
+            rectSmsBoxInClientCoord.right + penWidth,
+            rectSmsBoxInClientCoord.bottom + penWidth);
+        DeleteObject(pen);
 
         EndPaint(m_hWnd, &ps);
 

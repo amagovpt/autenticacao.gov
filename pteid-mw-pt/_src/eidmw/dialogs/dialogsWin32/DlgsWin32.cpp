@@ -443,7 +443,7 @@ DLGS_EXPORT void eIDMW::DlgClosePinpadInfo( unsigned long ulHandle )
 DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(
 			bool isValidateOtp,
 			wchar_t *csOut, unsigned long ulOutBufferLen, wchar_t *csInId,
-			const wchar_t *csUserName, unsigned long ulUserNameBufferLen, void * wndGeometry)
+			const wchar_t *csUserName, unsigned long ulUserNameBufferLen, void(*fSendSmsCallback)(void))
 {
 	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgAskCMD() called with arguments isValidateOtp=%d", isValidateOtp);
 
@@ -474,7 +474,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(
 			sMessage += GETSTRING_DLG(InsertOtp);
 		}
 
-		dlg = new dlgWndAskCmd(isValidateOtp, sMessage, &userId, &userName, appWindow);
+		dlg = new dlgWndAskCmd(isValidateOtp, sMessage, &userId, &userName, appWindow, fSendSmsCallback);
 		if (dlg->exec())
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;

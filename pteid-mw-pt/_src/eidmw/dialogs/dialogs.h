@@ -236,11 +236,12 @@ DLGS_EXPORT void DlgClosePinpadInfo(unsigned long ulHandle);
 * - csOut: buffer to obtain PIN or OTP (depending on isValidateOtp)
 * - csInId: string with mobile number or document name/hash (depending on isValidateOtp)
 * - csUserName: buffer with the user name (used when obtaining PIN)
+* - fSendSmsCallback: callback function to send request for SMS to CMD service
 */
 
 DLGS_EXPORT DlgRet DlgAskInputCMD(bool isValidateOtp,
 	wchar_t *csOut, unsigned long ulOutBufferLen, wchar_t *csInId = NULL,
-	const wchar_t *csUserName = NULL, unsigned long ulUserNameBufferLen = 0, void *wndGeometry = 0);
+	const wchar_t *csUserName = NULL, unsigned long ulUserNameBufferLen = 0, void (*fSendSmsCallback)(void) = NULL);
 
 
 /**
