@@ -151,6 +151,8 @@ public:
 	  */
 	CReader *getCalReader() const;
 
+	virtual void setSSO(bool enable = false);
+
 protected:
 	/**
 	  * Constructor

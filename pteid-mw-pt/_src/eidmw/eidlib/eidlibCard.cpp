@@ -121,6 +121,16 @@ PTEID_ByteArray PTEID_Card::sendAPDU(const PTEID_ByteArray& cmd)
 	return out;
 }
 
+void PTEID_Card::SetSSO(bool enable)
+{
+	BEGIN_TRY_CATCH
+
+	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
+	pcard->setSSO(enable);
+
+	END_TRY_CATCH
+}
+
 PTEID_ByteArray PTEID_Card::Sign(const PTEID_ByteArray& data, bool signatureKey)
 {
 	PTEID_ByteArray out;
