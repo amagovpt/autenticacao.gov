@@ -1,0 +1,14 @@
+[requires]
+libzip/1.5.1@bincrafters/stable
+libcurl/7.61.1@bincrafters/stable
+openjpeg/2.3.1
+libpng/1.6.37
+zlib/1.2.11
+OpenSSL/latest_1.0.2x@conan/stable
+
+[generators]
+deploy
+
+[options]
+*:shared=True
+libzip:with_bzip2=False
