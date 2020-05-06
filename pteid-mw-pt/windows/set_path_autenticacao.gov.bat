@@ -1,11 +1,11 @@
 :: Compiled / external libs
 ::==============================
 @set PTEID_POPPLER_QT5=C:\git\tools\build-scripts\windows\external-libs\poppler\poppler-buildroot\
-@set PTEID_XMLSECURITY=C:\git\tools\build-scripts\windows\external-libs\xml-security-c-1.7.3\
 
 
 :: Compiled / external libs x86
 ::==============================
+@set PTEID_XMLSECURITY=C:\git\tools\build-scripts\windows\external-libs\xml-security-c-1.7.3\
 @set PTEID_DIR_QML=C:\git\tools\build-scripts\windows\external-libs\qt5.9.1\Win32\VC9\Release\qml-app
 @set PTEID_DIR_QT_5=C:\Qt-5.9-win32\
 @set PTEID_DIR_OPENSSL_098=C:\git\tools\build-scripts\windows\external-libs\openssl-1.0.2p-win32
@@ -18,6 +18,7 @@
 
 :: Compiled / external libs x64
 ::==============================
+@set PTEID_XMLSECURITY_X64=C:\git\tools\build-scripts\windows\external-libs\xml-security-c-1.7.3-win64\
 @set PTEID_DIR_QML_X64=C:\git\tools\build-scripts\windows\external-libs\qt5.9.1\x64\VC9\Release\qml-app
 @set PTEID_DIR_QT_5_X64=C:\Qt-5.9\5.9.1\msvc2013_64
 @set PTEID_DIR_OPENSSL_098_X64=C:\git\tools\build-scripts\windows\external-libs\openssl-1.0.2p-win64
