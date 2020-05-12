@@ -61,6 +61,7 @@ Window {
         // check for unsaved notes when closing application
         close.accepted = false;
         if(!handleUnsavedNotes(-1,"", Constants.QUIT_APPLICATION)){
+            mainWindow.visible = false;
             gapi.quitApplication();
         }
 

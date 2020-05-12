@@ -157,7 +157,6 @@ Item {
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
-                    mainWindow.visible = false
                     mainWindow.close()
                 }
             }
