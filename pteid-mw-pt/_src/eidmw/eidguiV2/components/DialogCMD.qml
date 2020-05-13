@@ -202,6 +202,7 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         visible: true
+                        popup.z: Constants.DIALOG_CASCATE_MIDDLE
                         anchors.left: textMobileNumber.right
                         anchors.bottom: parent.bottom
                         onCurrentIndexChanged: {
