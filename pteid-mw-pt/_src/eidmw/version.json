@@ -2,19 +2,23 @@
     "distributions": {
         "ubuntu18": {
             "latestVersion": "3.0.20",
-            "package": "10179/11962/Autenticacao.gov_Ubuntu_18_x64.deb"
+            "package": "20126/78595/Autenticacao.gov_Ubuntu_18_x64.deb"
         },
         "ubuntu19": {
             "latestVersion": "3.1.0",
-            "package": "10179/11962/Autenticacao.gov_Ubuntu_19_x64.deb"
+            "package": "20126/78595/Autenticacao.gov_Ubuntu_19_x64.deb"
+        },
+        "ubuntu20": {
+            "latestVersion": "3.1.0",
+            "package": "20126/78595/Autenticacao.gov_Ubuntu_20_x64.deb"
         },
         "windows32": {
             "latestVersion": "3.1.0",
-            "package": "10179/12084/Autenticacao.gov_Win_x86.msi"
+            "package": "20126/78595/Autenticacao.gov_Win_x86.msi"
         },
         "windows64": {
             "latestVersion": "3.1.0",
-            "package": "10179/12084/Autenticacao.gov_Win_x64.msi"
+            "package": "20126/78595/Autenticacao.gov_Win_x64.msi"
         },
         "fedora32": {
             "latestVersion": "0.0.0",
@@ -22,7 +26,7 @@
         },
         "fedora64": {
             "latestVersion": "3.1.0",
-            "package": "10179/11962/Autenticacao.gov_Fedora_x64.rpm"
+            "package": "20126/78595/Autenticacao.gov_Fedora_x64.rpm"
         },
         "suse32": {
             "latestVersion": "0.0.0",
@@ -30,11 +34,11 @@
         },
         "suse64": {
             "latestVersion": "3.1.0",
-            "package": "10179/11962/Autenticacao.gov_OpenSUSE_x64.rpm"
+            "package": "20126/78595/Autenticacao.gov_OpenSUSE_x64.rpm"
         },
         "osx": {
             "latestVersion": "3.1.1",
-            "package": "10179/11955/Autenticacao.gov_MacOS.pkg"
+            "package": "20126/78595/Autenticacao.gov_MacOS.pkg"
         }
     },
     "versions": [
