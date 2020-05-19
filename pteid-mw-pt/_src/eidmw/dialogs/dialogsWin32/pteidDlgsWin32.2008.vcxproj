@@ -234,14 +234,9 @@
     <ResourceCompile Include="DlgsWin32.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Images\autenticacao.bmp" />
     <Image Include="Images\error.ico" />
     <Image Include="Images\ICO_BELPIC.ico" />
-    <Image Include="Images\ICO_CARD_INFO_64x64.bmp" />
-    <Image Include="Images\ICO_CARD_NOK_64x64.bmp" />
-    <Image Include="Images\ICO_CARD_PIN_128x128.bmp" />
-    <Image Include="Images\ICO_CARD_QUESTION_64x64.bmp" />
-    <Image Include="Images\ICO_CARD_SIGN_128x128.bmp" />
-    <Image Include="Images\ICO_CARD_WARNING_64x64.bmp" />
     <Image Include="Images\warning.ico" />
   </ItemGroup>
   <ItemGroup>

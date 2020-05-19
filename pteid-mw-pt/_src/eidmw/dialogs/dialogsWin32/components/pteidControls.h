@@ -57,7 +57,6 @@ public:
         LPCTSTR text = TEXT("");
         HFONT font = PteidControls::StandardFont;
         COLORREF color = BLACK;
-        COLORREF backgroundColor = WHITE;
         bool horizontalCentered = false;
 
         friend class PteidControls;

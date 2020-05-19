@@ -29,6 +29,7 @@
 #include "Log.h"
 #include <wingdi.h>
 #include "dlgUtil.h"
+#include "resource.h"
 
 TD_WNDMAP WndMap;
 Win32Dialog *Win32Dialog::Active_lpWnd = NULL;
@@ -56,6 +57,11 @@ Win32Dialog::Win32Dialog(const wchar_t *appName)
 
 	if (PteidControls::StandardFont == NULL)
 		PteidControls::StandardFont = PteidControls::CreatePteidFont(fontSize, FW_REGULAR, m_hInstance);
+
+	int iconWidth = 36;
+	int iconHeight = 36;
+	ScaleDimensions(&iconWidth, &iconHeight);
+	m_hAppIcon = (HBITMAP)LoadImage(m_hInstance, MAKEINTRESOURCE(IDB_BITMAP3), IMAGE_BITMAP, iconWidth, iconHeight, NULL);
 }
 
 Win32Dialog::~Win32Dialog()
@@ -466,3 +472,21 @@ LRESULT Win32Dialog::ProcecEvent
 	return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
 }
 
+void Win32Dialog::DrawApplicationIcon(HDC hdc, HWND hwnd)
+{
+	BITMAP bitmap;
+	HDC hdcMem = CreateCompatibleDC(m_hDC);
+	HGDIOBJ oldBitmap = SelectObject(hdcMem, m_hAppIcon);
+
+	RECT rect;
+	GetClientRect(m_hWnd, &rect);
+	int iconMarginX = 21;
+	int iconMarginY = 15;
+    ScaleDimensions(&iconMarginX, &iconMarginY);
+
+	GetObject(m_hAppIcon, sizeof(bitmap), &bitmap);
+    BitBlt(m_hDC, rect.right - bitmap.bmWidth - iconMarginX, iconMarginY, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
+
+	SelectObject(hdcMem, oldBitmap);
+	DeleteObject(hdcMem);
+}

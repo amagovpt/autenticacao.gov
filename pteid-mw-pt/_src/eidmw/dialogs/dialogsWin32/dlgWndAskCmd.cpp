@@ -127,7 +127,6 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
             boxText += GETSTRING_DLG(SigningDataWithIdentifier);
         }
 
-        boxTextData.backgroundColor = LIGHTGREY;
         boxTextData.text = boxText.c_str();
         HWND hBoxText = PteidControls::CreateText(
             (int)(contentX + contentWidth * 0.03), (int)(textBoxY + boxHeight * 0.12),
@@ -140,7 +139,6 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
             std::wstring docId;
             docId.append(L"\"").append(*inId).append(L"\"");
 
-            docIdTextData.backgroundColor = LIGHTGREY;
             docIdTextData.font = PteidControls::StandardFontBold;
             docIdTextData.text = docId.c_str();
             HWND hDocIdText = PteidControls::CreateText(
@@ -319,6 +317,8 @@ LPARAM		lParam)		// Additional Message Information
         m_hDC = BeginPaint(m_hWnd, &ps);
 
         MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
+
+        DrawApplicationIcon(m_hDC, m_hWnd);
 
         // Paint the Send Sms Box
         int penWidth = 2;

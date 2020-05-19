@@ -111,28 +111,13 @@
     <Image Include="Images\ICO_BELPIC.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Images\ICO_CARD_INFO_64x64.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\ICO_CARD_NOK_64x64.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\ICO_CARD_PIN_128x128.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\ICO_CARD_QUESTION_64x64.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\ICO_CARD_SIGN_128x128.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\ICO_CARD_WARNING_64x64.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Images\error.ico">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Images\warning.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\autenticacao.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

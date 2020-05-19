@@ -185,6 +185,8 @@ LPARAM		lParam)		// Additional Message Information
 
         MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
 
+        DrawApplicationIcon(m_hDC, m_hWnd);
+
         EndPaint(m_hWnd, &ps);
 
         SetForegroundWindow(m_hWnd);

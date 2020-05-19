@@ -140,6 +140,8 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 		{
 			m_hDC = BeginPaint( m_hWnd, &ps );
 
+			DrawApplicationIcon(m_hDC, m_hWnd);
+
 			EndPaint( m_hWnd, &ps );
 
 			SetForegroundWindow( m_hWnd );

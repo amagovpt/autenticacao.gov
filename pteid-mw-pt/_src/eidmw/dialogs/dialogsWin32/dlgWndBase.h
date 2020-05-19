@@ -61,6 +61,7 @@ protected:
 	bool CreateWnd( const wchar_t* title, int width, int height, int Icon = 0 , HWND Parent = NULL );
 	void KillWindow( );
 	virtual void Destroy();
+	void DrawApplicationIcon(HDC hdc, HWND hwnd);
 
 protected:
 	HDC			m_hDC;					// Private GDI Device Context
@@ -69,7 +70,7 @@ protected:
 	HINSTANCE	m_hInstance;			// Instance to our Module(DLL)
 	bool		m_ModalHold;			// Wheither it's modal or not
 	HBRUSH		m_hbrBkgnd;				// Handle to background brush
-
+	HBITMAP		m_hAppIcon;				// Application icon bitmap
 
 private:
 	wchar_t*	m_appName;				// Name of the Window Class

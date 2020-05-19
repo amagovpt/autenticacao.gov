@@ -58,7 +58,7 @@ LRESULT CALLBACK PteidControls::Text_Container_Proc(HWND hWnd, UINT uMsg, WPARAM
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
 
-        SetBkColor(hdc, textFieldData->backgroundColor);
+        SetBkMode(hdc, TRANSPARENT);
 
         EndPaint(hWnd, &ps);
         return 0;
@@ -69,7 +69,7 @@ LRESULT CALLBACK PteidControls::Text_Container_Proc(HWND hWnd, UINT uMsg, WPARAM
 
         HDC hdc = (HDC)wParam;
 
-        SetBkColor(hdc, textFieldData->backgroundColor);
+        SetBkMode(hdc, TRANSPARENT);
         SetTextColor(hdc, textFieldData->color);
 
         return(LRESULT)GetStockObject(NULL_BRUSH);

@@ -131,6 +131,14 @@ IDR_AVI1                AVI                     "Images\\loading.avi"
 // remains consistent on all systems.
 IDI_ICON1               ICON                    "Images\\warning.ico"
 IDI_ICON2               ICON                    "Images\\error.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP3             BITMAP                  "Images\\autenticacao.bmp"
+
 #endif    // Portuguese (Portugal) resources
 /////////////////////////////////////////////////////////////////////////////
 
