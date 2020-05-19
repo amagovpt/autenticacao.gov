@@ -31,6 +31,7 @@ PageCardAdressForm {
         target: gapi
         onSignalGenericError: {
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalAddressLoaded: {
             console.log("Address --> Data Changed")
@@ -62,6 +63,7 @@ PageCardAdressForm {
             }
 
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
 
             propertyButtonConfirmOfAddress.enabled = true
 
@@ -153,6 +155,7 @@ PageCardAdressForm {
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 if(Constants.USE_SDK_PIN_UI_POPUP){
+                    mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                     gapi.verifyAddressPin("")
                 }else{
                     dialogTestPin.open()
@@ -297,7 +300,7 @@ PageCardAdressForm {
                 gapi.startReadingAddress()
                 return;
             }
-
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             var triesLeft = gapi.doVerifyAddressPin(textFieldPin.text)
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             if (triesLeft === 3) {
@@ -705,6 +708,8 @@ PageCardAdressForm {
                     var bodyPopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_ADDRESS_BLOCKED")
                     mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
                 }else{
+                    propertyBusyIndicator.running = true
+                    mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                     gapi.verifyAddressPin("")
                 }
             }else{

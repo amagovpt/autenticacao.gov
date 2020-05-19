@@ -65,9 +65,11 @@ PageDefinitionsSCAPForm {
         target: gapi
         onSignalGenericError: {
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalCardDataChanged: {
             console.log("Definitions SCAP Signature --> Data Changed")
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyBusyIndicator.running = false
             isCardPresent = true
             propertyButtonLoadEntityAttributes.enabled =
@@ -700,6 +702,7 @@ PageDefinitionsSCAPForm {
         onClicked: {
             console.log("ButtonLoadCompanyAttributes clicked!")
             isLoadingAttributes = true
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             propertyBusyIndicatorAttributes.running = true
             propertyPageLoader.attributeListBackup = []
             gapi.startGettingCompanyAttributes(false)
@@ -718,6 +721,7 @@ PageDefinitionsSCAPForm {
     propertyButtonLoadEntityAttributes {
         onClicked: {
             console.log("ButtonLoadEntityAttributes clicked!")
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             propertyBusyIndicatorAttributes.running = true
             isLoadingAttributes = true
             var attributeList = []

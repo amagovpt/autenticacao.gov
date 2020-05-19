@@ -37,6 +37,8 @@ __in    const wchar_t *message,
 __in    DlgCmdMsgType msgType,
 __in    HWND parentWindow);
 
+void sendSmsCallback();
+
 class CmdSignThread : public CThread
 {
 public:
@@ -47,10 +49,12 @@ public:
     void Stop(unsigned long ulSleepFrequency = 100);
 
     int GetSignResult();
+    /* FIXME: cmdSignature is a static member because it needs to be accessed globally (to be used by sendSmsCallback()).
+              This means that this class is not thread safe as cmdSignature is shared between instances. */
+    static CMDSignature *cmdSignature;
 
 private:
     CMDProxyInfo *m_cmd_proxyinfo;
-    CMDSignature *m_cmdSignature;
     std::string m_mobileNumber;
     std::string m_pin;
     std::string m_otp;

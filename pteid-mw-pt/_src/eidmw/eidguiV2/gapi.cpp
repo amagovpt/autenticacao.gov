@@ -1044,6 +1044,21 @@ void GAPI::signCloseCMD(QString sms_token, QList<int> attribute_list)
         Concurrent::run(this, &GAPI::doCloseSignCMD, cmd_signature, sms_token);
 }
 
+void GAPI::sendSmsCmd(CmdDialogClass dialogType) {
+    Concurrent::run(this, &GAPI::doSendSmsCmd, dialogType);
+}
+void GAPI::doSendSmsCmd(CmdDialogClass dialogType) {
+    if (dialogType == GAPI::RegisterCert)
+    {
+        m_cmdCertificates->sendSms();
+    }
+    else if (dialogType == GAPI::Sign)
+    {
+        cmd_signature->sendSms();
+    }
+    // TODO: update status
+}
+
 QString GAPI::getCardActivation() {
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getCardActivation");
 
@@ -3343,7 +3358,7 @@ void GAPI::doRegisterCMDCertClose(QString otp) {
 #endif
 }
 
-void GAPI::quitApplication(void) {
+void GAPI::quitApplication(bool restart) {
     try
     {
         if (m_Settings.getRemoveCert())
@@ -3371,7 +3386,8 @@ void GAPI::quitApplication(void) {
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui",
             "Exiting application after timeout.");
     }
-    qApp->quit();
+    qApp->exit((restart ? RESTART_EXIT_CODE : SUCCESS_EXIT_CODE));
+
 }
 
 //*****************************************************

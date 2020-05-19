@@ -29,18 +29,17 @@ using namespace eIDMW;
 
 class dlgWndPinpadInfo : public Win32Dialog
 {
-	//HBITMAP ImagePIN;
-	//HBITMAP ImagePIN_Mask;
-	//HFONT TextFont;
-	
-	wchar_t * m_szHeader;
-	wchar_t * m_szMessage;
+
+	PteidControls::TextData titleData, headerData, warningTextData;
+	HWND hwndAnim;
+	HFONT headerFont;
+
 	unsigned long m_ulHandle;
 
 public:
 	dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage usage, 
 		DlgPinOperation operation, const std::wstring & csReader, 
-		const std::wstring & PinName, const std::wstring & Message, HWND Parent = NULL );
+		const std::wstring & title, const std::wstring & Message, HWND Parent = NULL );
 	virtual ~dlgWndPinpadInfo();
 
 	virtual LRESULT ProcecEvent

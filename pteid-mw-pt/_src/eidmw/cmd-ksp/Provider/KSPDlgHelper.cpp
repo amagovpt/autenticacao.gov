@@ -76,7 +76,7 @@ __in    HWND parentWindow)
     }
     LogTrace(LOGTYPE_INFO, "CmdKspOpenDialogValidateOtp", "appWindow = [0x%08x]", parentWindow);
     SetApplicationWindow(parentWindow);
-    DlgRet ret = DlgAskInputCMD(true, otp, otpLen, (wchar_t *)pszDocname);
+    DlgRet ret = DlgAskInputCMD(true, otp, otpLen, (wchar_t *)pszDocname, NULL, 0, sendSmsCallback);
     if (ret == DLG_OK)
     {
         return ERROR_SUCCESS;
@@ -132,10 +132,19 @@ __in    HWND parentWindow)
     return;
 }
 
+void sendSmsCallback()
+{
+    if (CmdSignThread::cmdSignature)
+    {
+        CmdSignThread::cmdSignature->sendSms();
+    }
+}
+
+CMDSignature *CmdSignThread::cmdSignature = NULL;
 CmdSignThread::CmdSignThread(CMDProxyInfo *cmd_proxyinfo, CMDSignature *cmdSignature, std::string mobileNumber, std::string pin, CByteArray hash, char* docname)
 {
     m_cmd_proxyinfo = cmd_proxyinfo;
-    m_cmdSignature = cmdSignature;
+    CmdSignThread::cmdSignature = cmdSignature;
     m_mobileNumber = mobileNumber;
     m_pin = pin;
     m_hash = hash;
@@ -145,7 +154,7 @@ CmdSignThread::CmdSignThread(CMDProxyInfo *cmd_proxyinfo, CMDSignature *cmdSigna
 
 CmdSignThread::CmdSignThread(CMDSignature *cmdSignature, std::string otp)
 {
-    m_cmdSignature = cmdSignature;
+    CmdSignThread::cmdSignature = cmdSignature;
     m_otp = otp;
     m_isValidateOtp = true;
 }
@@ -155,11 +164,11 @@ void CmdSignThread::Run()
     CMDProxyInfo cmd_proxyinfo = CMDProxyInfo::buildProxyInfo();
     if (m_isValidateOtp)
     {
-        m_signResult = m_cmdSignature->signClose(m_otp);
+        m_signResult = cmdSignature->signClose(m_otp);
     }
     else
     {
-        m_signResult = m_cmdSignature->signOpen(cmd_proxyinfo, m_mobileNumber, m_pin, m_hash, m_docname);
+        m_signResult = cmdSignature->signOpen(cmd_proxyinfo, m_mobileNumber, m_pin, m_hash, m_docname);
     }
     DlgCloseCMDMessage();
 }
@@ -167,9 +176,9 @@ void CmdSignThread::Run()
 void CmdSignThread::Stop(unsigned long ulSleepFrequency)
 {
     LogTrace(LOGTYPE_INFO, "CmdSignThread::Stop()", "Stop() called");
-    if (m_cmdSignature)
+    if (cmdSignature)
     {
-        m_cmdSignature->cancelRequest();
+        cmdSignature->cancelRequest();
     }
     WaitTillStopped(ulSleepFrequency);
 }

@@ -18,33 +18,11 @@
 
 **************************************************************************** */
 
-#include "stdafx.h"
-#include "../dialogs.h"
-#include <string>
-#include <vector>
-#include "components\pteidControls.h"
+#ifndef __DLG_UTIL_H__
+#define __DLG_UTIL_H__
 
-using namespace eIDMW;
-
-class dlgWndCmdMsg : public Win32Dialog
+namespace eIDMW
 {
-    PteidControls::TextData titleData, textTopData, textBottomData;
-    PteidControls::ButtonData btnProcData;
-
-    HWND hwndImage;
-    HICON imageIco;
-
-    DlgCmdMsgType type;
-
-public:
-    dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND Parent = NULL);
-    virtual ~dlgWndCmdMsg();
-
-    virtual LRESULT ProcecEvent
-        (UINT		uMsg,			// Message For This Window
-        WPARAM		wParam,			// Additional Message Information
-        LPARAM		lParam);		// Additional Message Information
-    
-    void stopExec();
-};
-
+    void ScaleDimensions(int *width, int *height);
+}
+#endif //__LANGUTIL_H__

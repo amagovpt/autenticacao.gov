@@ -5,7 +5,7 @@
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -30,23 +30,15 @@ using namespace eIDMW;
 class dlgWndAskPIN : public Win32Dialog
 {
 	void GetPinResult();
-	//HBITMAP ImagePIN;
-	//HBITMAP ImagePIN_Mask;
 
-	HWND OK_Btn;
-	HWND Cancel_Btn;
-
-	HBRUSH hbrBkgnd;
+	PteidControls::TextData titleData, headerData;
+	PteidControls::TextFieldData textFieldData;
+	PteidControls::ButtonData okBtnProcData, cancelBtnProcData;
 	
-	unsigned int m_ulPinMinLen;
-	unsigned int m_ulPinMaxLen;
 	bool m_UseKeypad;
-	const wchar_t * szHeader;
-	const wchar_t * szPIN;
-
 
 public:
-	dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring & Header, std::wstring & PINName, HWND Parent = NULL );
+	dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring & title, std::wstring & Header, std::wstring & PINName, HWND Parent = NULL );
 	virtual ~dlgWndAskPIN();
 
 	wchar_t PinResult[128];

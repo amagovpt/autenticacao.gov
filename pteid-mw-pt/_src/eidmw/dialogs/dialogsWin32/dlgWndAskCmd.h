@@ -1,7 +1,7 @@
 /* ****************************************************************************
 
 * eID Middleware Project.
-* Copyright (C) 2008-2009 FedICT.
+* Copyright (C) 2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
 *
 * This is free software; you can redistribute it and/or modify it
 * under the terms of the GNU Lesser General Public License version
@@ -21,6 +21,7 @@
 #include "stdafx.h"
 #include "../dialogs.h"
 #include <string>
+#include "components\pteidControls.h"
 
 using namespace eIDMW;
 
@@ -28,40 +29,22 @@ using namespace eIDMW;
 
 class dlgWndAskCmd : public Win32Dialog
 {
-    struct DlgButtonData {
-        bool btnHovered;
-        bool btnEnabled;
-        bool mouseTracking;
-    };
-    DlgButtonData okBtnProcData;
-    DlgButtonData cancelBtnProcData;
-
-    struct DlgTextFieldData {
-        DlgButtonData *okBtnProcData; // used to check if enabled to determine border color
-        bool textFieldUpdated;
-        HWND hwnd;
-    };
-    DlgTextFieldData textFieldData;
+    PteidControls::TextData titleData, headerData, boxTextData, docIdTextData, sendSmsTextData;
+    PteidControls::TextFieldData textFieldData;
+    PteidControls::ButtonData okBtnProcData, cancelBtnProcData, sendSmsBtnData;
 
     void GetResult();
     bool AreFieldsFilled();
     HWND hStaticBox;
-    HWND hStaticBoxText;
-    HWND hStaticBoxTextBold;
-    HWND hTextEditOut;
+    HWND hSendSmsBox;
 
-    HBRUSH hbrBkgnd;
-
-    unsigned int m_ulOutMinLen;
-    unsigned int m_ulOutMaxLen;
-    std::wstring title;
-
+    void(*m_fSendSmsCallback)(void);
 
 public:
     dlgWndAskCmd(bool isValidateOtp,
         std::wstring & Header,
         std::wstring *inId = NULL, std::wstring *userName = NULL,
-        HWND Parent = NULL);
+        HWND Parent = NULL, void(*fSendSmsCallback)(void) = NULL);
     virtual ~dlgWndAskCmd();
 
     wchar_t OutResult[RESULT_BUFFER_SIZE];
@@ -71,7 +54,6 @@ public:
         WPARAM		wParam,			// Additional Message Information
         LPARAM		lParam);		// Additional Message Information
     
-    static LRESULT CALLBACK DlgButtonProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
     static LRESULT CALLBACK DlgEditProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 };
 

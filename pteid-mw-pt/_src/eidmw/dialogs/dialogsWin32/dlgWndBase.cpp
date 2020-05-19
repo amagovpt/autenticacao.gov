@@ -5,7 +5,7 @@
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -25,81 +25,16 @@
 
 #include "stdafx.h"
 #include "dlgWndBase.h"
-#include "resource.h"
 #include "../langUtil.h"
 #include "Log.h"
 #include <wingdi.h>
-#include "Config.h"
+#include "dlgUtil.h"
+#include "resource.h"
 
 TD_WNDMAP WndMap;
 Win32Dialog *Win32Dialog::Active_lpWnd = NULL;
 HWND Win32Dialog::Active_hWnd = NULL;
 extern HMODULE g_hDLLInstance;// = (HMODULE)NULL;
-
-void Win32Dialog::loadFontsFromResources() {    
-    std::vector<HRSRC> res;
-    res.push_back(FindResource(m_hInstance,
-        MAKEINTRESOURCE(IDR_MYFONT), L"BINARY"));
-    res.push_back(FindResource(m_hInstance,
-        MAKEINTRESOURCE(IDR_MYFONT_BOLD), L"BINARY"));
-    res.push_back(FindResource(m_hInstance,
-        MAKEINTRESOURCE(IDR_MYFONT_BLACK), L"BINARY"));
-
-    for (size_t i = 0; i < res.size(); i++)
-    {
-        HANDLE fontHandle = NULL;
-        if (res[i])
-        {
-            HGLOBAL mem = LoadResource(m_hInstance, res[i]);
-            void *data = LockResource(mem);
-            size_t len = SizeofResource(m_hInstance, res[i]);
-
-            DWORD nFonts;
-            fontHandle = AddFontMemResourceEx(
-                data,       	// font resource
-                len,       	// number of bytes in font resource 
-                NULL,          	// Reserved. Must be 0.
-                &nFonts      	// number of fonts installed
-                );
-
-        }
-        if (fontHandle == NULL)
-        {
-            MWLOG(LEV_ERROR, MOD_DLG, L"  --> Win32Dialog::loadFontsFromResources failed loading font (res[%d])", i);
-        }
-    }
-}
-
-HFONT Win32Dialog::createDlgFont(int font_pointsize, int fontWeight) {
-	HFONT TextFont;
-
-	LOGFONT lf;
-	memset(&lf, 0, sizeof(lf));
-	HDC screen = GetDC(0);
-
-	lf.lfHeight = -MulDiv(font_pointsize, GetDeviceCaps(screen, LOGPIXELSY), 72);
-	lf.lfWeight = fontWeight;
-	lf.lfOutPrecision = OUT_TT_ONLY_PRECIS;
-
-	if (fontWeight == FW_BLACK)
-	{
-		wcscpy_s(lf.lfFaceName, L"Lato Black");
-	}
-	else if (fontWeight == FW_BOLD) {
-		wcscpy_s(lf.lfFaceName, L"Lato Bold");
-	}
-	else {
-		wcscpy_s(lf.lfFaceName, L"Lato Regular");
-	}
-
-	TextFont = CreateFont(lf.lfHeight, lf.lfWidth,
-		lf.lfEscapement, lf.lfOrientation, lf.lfWeight,
-		lf.lfItalic, lf.lfUnderline, lf.lfStrikeOut, lf.lfCharSet,
-		lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality,
-		lf.lfPitchAndFamily, lf.lfFaceName);
-
-	return TextFont;
-}
 
 Win32Dialog::Win32Dialog(const wchar_t *appName)
 {
@@ -111,17 +46,22 @@ Win32Dialog::Win32Dialog(const wchar_t *appName)
 	dlgResult = eIDMW::DLG_CANCEL;	// Dialog Result
 	m_appName=_wcsdup(appName);
 
-	int fontSizeTitle = 20 * .75;
-	int fontSize = 14 * .75;
+	int fontSizeTitle = 20;
+	int fontSize = 14;
 
-	// Scale font based on horizontal DPI
-	ScaleDimensions(&fontSizeTitle, NULL); 
-	ScaleDimensions(&fontSize, NULL);
+	if (PteidControls::StandardFontHeader == NULL)
+		PteidControls::StandardFontHeader = PteidControls::CreatePteidFont(fontSizeTitle, FW_BLACK, m_hInstance);
 
-	loadFontsFromResources();
-	TextFontTitle = createDlgFont(fontSizeTitle, FW_BLACK);
-	TextFontHeader = createDlgFont(fontSize, FW_BOLD);
-	TextFont = createDlgFont(fontSize, FW_REGULAR);
+	if (PteidControls::StandardFontBold == NULL)
+		PteidControls::StandardFontBold = PteidControls::CreatePteidFont(fontSize, FW_BOLD, m_hInstance);
+
+	if (PteidControls::StandardFont == NULL)
+		PteidControls::StandardFont = PteidControls::CreatePteidFont(fontSize, FW_REGULAR, m_hInstance);
+
+	int iconWidth = 36;
+	int iconHeight = 36;
+	ScaleDimensions(&iconWidth, &iconHeight);
+	m_hAppIcon = (HBITMAP)LoadImage(m_hInstance, MAKEINTRESOURCE(IDB_BITMAP3), IMAGE_BITMAP, iconWidth, iconHeight, NULL);
 }
 
 Win32Dialog::~Win32Dialog()
@@ -151,12 +91,7 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 	RECT		WindowRect;				// Grabs Rectangle Upper Left / Lower Right Values
 	RECT		DeskRect;
 
-	HDC hDc = GetDC(Parent);
-	float dpiX = GetDeviceCaps(hDc, LOGPIXELSX) / 96.0f;
-	float dpiY = GetDeviceCaps(hDc, LOGPIXELSY) / 96.0f;
-	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> Win32Dialog::CreateWnd dpiX=%.6f dpiY=%.6f", dpiX, dpiY);
-	width = (int)(dpiX * width);
-	height = (int)(dpiY * height);
+	ScaleDimensions(&width, &height);
 
 	WindowRect.left = (long)0;			// Set Left Value To 0
 	WindowRect.right = (long)width;		// Set Right Value To Requested Width
@@ -311,46 +246,6 @@ void Win32Dialog::close()
 	m_ModalHold = false;							// Sets Keyboard Focus To The Window
 }
 
-void Win32Dialog::ScaleDimensions(int *width, int *height)
-{
-	FLOAT horizontalDPI;
-	FLOAT verticalDPI;
-
-	// A dummy variable is introduced so that this function can be called with only one parameter
-	int dummyDimension = 0; 
-	if (width == NULL)
-	{
-		width = &dummyDimension;
-	}
-	if (height == NULL)
-	{
-		height = &dummyDimension;
-	}
-
-	long configUseSystemScale = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_USESYSTEMSCALE);
-	if (configUseSystemScale != 0)
-	{
-		// Get system scaling.
-		HDC hdc = GetDC(NULL);
-		horizontalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSX));
-		verticalDPI = static_cast<FLOAT>(GetDeviceCaps(hdc, LOGPIXELSY));
-		ReleaseDC(0, hdc);
-
-		horizontalDPI = horizontalDPI / 96.f;
-		verticalDPI = verticalDPI / 96.f;
-	}
-	else
-	{
-		// Scale using application configuration
-		long configScale = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_APPLICATIONSCALE);
-		horizontalDPI = 1.0f + 0.25f * (float)configScale; // scale works with increments in 25%
-		verticalDPI = horizontalDPI;
-	}
-
-	*width *= horizontalDPI;
-	*height *= verticalDPI;
-}
-
 void Win32Dialog::CreateBitapMask( HBITMAP & BmpSource, HBITMAP & BmpMask )
 {
 	BITMAP bm;
@@ -426,7 +321,13 @@ void Win32Dialog::KillWindow( void )							// Properly Kill The Window
 	WndMap.erase( m_hWnd );
 	if( Active_hWnd == m_hWnd )
 		Active_hWnd = NULL;
-	
+
+	if (m_hbrBkgnd)
+	{
+		DeleteObject(m_hbrBkgnd);
+		m_hbrBkgnd = NULL;
+	}
+
 	m_hInstance = NULL;								// Set hInstance To NULL
 	m_hWnd = NULL;									// Set hWnd To NULL
 	Destroy();
@@ -571,3 +472,21 @@ LRESULT Win32Dialog::ProcecEvent
 	return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
 }
 
+void Win32Dialog::DrawApplicationIcon(HDC hdc, HWND hwnd)
+{
+	BITMAP bitmap;
+	HDC hdcMem = CreateCompatibleDC(m_hDC);
+	HGDIOBJ oldBitmap = SelectObject(hdcMem, m_hAppIcon);
+
+	RECT rect;
+	GetClientRect(m_hWnd, &rect);
+	int iconMarginX = 21;
+	int iconMarginY = 15;
+    ScaleDimensions(&iconMarginX, &iconMarginY);
+
+	GetObject(m_hAppIcon, sizeof(bitmap), &bitmap);
+    BitBlt(m_hDC, rect.right - bitmap.bmWidth - iconMarginX, iconMarginY, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
+
+	SelectObject(hdcMem, oldBitmap);
+	DeleteObject(hdcMem);
+}

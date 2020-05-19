@@ -157,7 +157,7 @@
       <PreprocessorDefinitions>PTEID_35;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>pteidcommon.lib;psapi.lib;crypt32.lib;ComCtl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pteidcommon.lib;psapi.lib;crypt32.lib;ComCtl32.lib;Dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -186,7 +186,7 @@
       <PreprocessorDefinitions>PTEID_35;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>pteidcommon.lib;psapi.lib;crypt32.lib;ComCtl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pteidcommon.lib;psapi.lib;crypt32.lib;ComCtl32.lib;Dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -200,7 +200,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\langUtil.cpp" />
+    <ClCompile Include="components\button.cpp" />
+    <ClCompile Include="components\editField.cpp" />
+    <ClCompile Include="components\font.cpp" />
+    <ClCompile Include="components\text.cpp" />
     <ClCompile Include="DlgsWin32.cpp" />
+    <ClCompile Include="dlgUtil.cpp" />
     <ClCompile Include="dlgWndAskCmd.cpp" />
     <ClCompile Include="dlgWndAskPIN.cpp" />
     <ClCompile Include="dlgWndAskPINs.cpp" />
@@ -213,6 +218,7 @@
     <ClInclude Include="..\dialogs.h" />
     <ClInclude Include="..\language.h" />
     <ClInclude Include="..\langUtil.h" />
+    <ClInclude Include="components\pteidControls.h" />
     <ClInclude Include="dlgWndAskCmd.h" />
     <ClInclude Include="dlgWndAskPIN.h" />
     <ClInclude Include="dlgWndAskPINs.h" />
@@ -222,19 +228,15 @@
     <ClInclude Include="dlgWndPinPadInfo.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="dlgUtil.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DlgsWin32.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Images\autenticacao.bmp" />
     <Image Include="Images\error.ico" />
     <Image Include="Images\ICO_BELPIC.ico" />
-    <Image Include="Images\ICO_CARD_INFO_64x64.bmp" />
-    <Image Include="Images\ICO_CARD_NOK_64x64.bmp" />
-    <Image Include="Images\ICO_CARD_PIN_128x128.bmp" />
-    <Image Include="Images\ICO_CARD_QUESTION_64x64.bmp" />
-    <Image Include="Images\ICO_CARD_SIGN_128x128.bmp" />
-    <Image Include="Images\ICO_CARD_WARNING_64x64.bmp" />
     <Image Include="Images\warning.ico" />
   </ItemGroup>
   <ItemGroup>

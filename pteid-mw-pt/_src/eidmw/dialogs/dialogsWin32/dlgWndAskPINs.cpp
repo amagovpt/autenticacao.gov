@@ -6,7 +6,7 @@
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2012 lmcm - <lmcm@caixamagica.pt>
  * Copyright (C) 2014, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -30,14 +30,16 @@
 #include "../langUtil.h"
 #include "Log.h"
 #include "Config.h"
+#include <tchar.h>
 
-#define IDC_STATIC 0
-#define IDB_OK 1
-#define IDB_CANCEL 2
+#define IDC_STATIC_HEADER 0
+#define IDB_OK IDOK
+#define IDB_CANCEL IDCANCEL
 #define IDC_EDIT_PIN1 3
 #define IDC_EDIT_PIN2 4
 #define IDC_EDIT_PIN3 5
-#define IDC_EDIT 3
+#define IDC_STATIC_TITLE 6
+#define IDC_STATIC_ERROR 7
 
 #define KP_BTN_SIZE 48
 #define KP_LBL_SIZE 24
@@ -48,139 +50,138 @@
 
 std::wstring langchange = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
-dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & PINName, bool isUnlock, bool dontAskPUK, HWND Parent)
+dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & title, bool isUnlock, bool dontAskPUK, HWND Parent)
 :Win32Dialog(L"WndAskPINs")
 {
-	hbrBkgnd = NULL;
-	InputField1_OK = InputField2_OK = InputField3_OK = false;
 	Pin1Result[0] = ' ';
 	Pin1Result[1] = (char)0;
 	Pin2Result[0] = ' ';
 	Pin2Result[1] = (char)0;
-	DrawError = false;
 	m_dontAskPIN1 = dontAskPUK;
 
-	std::wstring tmpTitle = L"";
-	
-	if (isUnlock)
-		tmpTitle += GETSTRING_DLG(Unblock);
-	else
-		tmpTitle += GETSTRING_DLG(RenewingPinCode);
+	std::wstring tmpTitle = title;
 
-	m_ulPinMaxLen = 8;
-	m_ulPin1MinLen = 4;
-	m_ulPin1MaxLen = 8;
-
-
-	szHeader = const_cast<wchar_t *>(Header.c_str());
 	// Added for accessibility
-	tmpTitle += szHeader;
+	tmpTitle += Header;
 	tmpTitle += isUnlock ? GETSTRING_DLG(Puk) : GETSTRING_DLG(CurrentPin);
 	tmpTitle += GETSTRING_DLG(NewPin);
 	tmpTitle += GETSTRING_DLG(ConfirmNewPin);
 
-	int Width = 420;
-	int Height = 263;
-	ScaleDimensions(&Width, &Height);
+	int Width = 430;
+	int Height = 360;
 
-    if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
+	if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
 	{
 		RECT clientRect;
 		GetClientRect(m_hWnd, &clientRect);
 
-		int buttonWidth = Width * 0.22;
-		int buttonHeight = Height * 0.12;
-		int rightMargin = Width * 0.04;
-		int buttonY = clientRect.bottom - Height * 0.035 - buttonHeight;
-        int buttonSpacing = 0.03 * Width;
+		int contentX = (int)(clientRect.right * 0.05);
+		int paddingY = (int)(clientRect.bottom * 0.04);
+		int contentWidth = (int)(clientRect.right - 2 * contentX);
+		int titleHeight = (int)(clientRect.right * 0.12);
+		int headerY = (int)(clientRect.bottom * 0.16);
+		int errorHeight = (int)(clientRect.bottom * 0.1);
+		int editFieldY = (int)(clientRect.bottom * 0.24);
+		int editFieldSpacing = (int)(clientRect.bottom * 0.03);
+		int editFieldHeight = (int)(clientRect.bottom * 0.165);
+		int errorY = (int)(clientRect.bottom * 0.8);
+		int buttonWidth = (int)(clientRect.right * 0.43);
+		int buttonHeight = (int)(clientRect.bottom * 0.085);
+		int buttonY = (int)(clientRect.bottom - paddingY - buttonHeight);
+		int buttonSpacing = contentWidth - 2 * buttonWidth;
 
-		OK_Btn = CreateWindow(
-			L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-			clientRect.right - buttonWidth * 2 - rightMargin-buttonSpacing, buttonY, buttonWidth, buttonHeight,
-			m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL);
-		EnableWindow(OK_Btn, false);
+		// TITLE
+		titleData.text = title.c_str();
+		titleData.font = PteidControls::StandardFontHeader;
+		titleData.color = BLUE;
+		HWND hTitle = PteidControls::CreateText(
+			contentX, paddingY,
+			contentWidth, titleHeight,
+			m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
 
-		Cancel_Btn = CreateWindow(
-			L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-			clientRect.right - buttonWidth - rightMargin, buttonY, buttonWidth, buttonHeight,
-			m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL);
+		// HEADER TEXT
+		headerTextData.text = Header.c_str();
+		headerTextData.font = PteidControls::StandardFontBold;
+		HWND hHeader= PteidControls::CreateText(
+			contentX, headerY,
+			contentWidth, errorHeight,
+			m_hWnd, (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerTextData);
 
-		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_PASSWORD;
+		// TEXT EDIT
+		// text field 1
+		textFieldData1.title = isUnlock ? GETSTRING_DLG(Puk) : GETSTRING_DLG(CurrentPin);
+		textFieldData1.isPassword = true;
+		textFieldData1.minLength = 4;
+		textFieldData1.maxLength = 8;
+
 		if (pinInfo1.ulFlags & PIN_FLAG_DIGITS)
-			dwStyle |= ES_NUMBER;
-
-        int editWidth = 0.4 * Width;
-        int editHeight = 0.1 * Height;
-        int editX = clientRect.right / 2 + Width * 0.05;
+			textFieldData1.isNumeric = true;
 
 		if (!m_dontAskPIN1) {
-			HWND hTextEdit1 = CreateWindowEx(WS_EX_CLIENTEDGE,
-				L"EDIT", L"", dwStyle,
-                editX, clientRect.bottom - 0.54 * Height, editWidth, editHeight,
-				m_hWnd, (HMENU)IDC_EDIT_PIN1, m_hInstance, NULL);
-
-			SendMessage(hTextEdit1, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
-			SendMessage(hTextEdit1, WM_SETFONT, (WPARAM)TextFont, 0);
+			HWND hTextEdit1 = PteidControls::CreateTextField(
+				contentX, editFieldY,
+				contentWidth, editFieldHeight,
+				m_hWnd, (HMENU)IDC_EDIT_PIN1, m_hInstance, &textFieldData1);
 		}
 
-		dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_PASSWORD;
+		// text field 2
+		textFieldData2.title = GETSTRING_DLG(NewPin);
+		textFieldData2.isPassword = true;
+		textFieldData2.minLength = 4;
+		textFieldData2.maxLength = 8;
 		if (pinInfo2.ulFlags & PIN_FLAG_DIGITS)
-			dwStyle |= ES_NUMBER;
+			textFieldData2.isNumeric = true;
 
-		HWND hTextEdit2 = CreateWindowEx(WS_EX_CLIENTEDGE,
-			L"EDIT", L"", dwStyle,
-            editX, clientRect.bottom - 0.43 * Height, editWidth, editHeight,
-			m_hWnd, (HMENU)IDC_EDIT_PIN2, m_hInstance, NULL);
-		SendMessage(hTextEdit2, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
+		HWND hTextEdit2 = PteidControls::CreateTextField(
+			contentX, editFieldY + editFieldHeight + editFieldSpacing,
+			contentWidth, editFieldHeight,
+			m_hWnd, (HMENU)IDC_EDIT_PIN2, m_hInstance, &textFieldData2);
 
-		HWND hTextEdit3 = CreateWindowEx(WS_EX_CLIENTEDGE,
-			L"EDIT", L"", dwStyle,
-            editX, clientRect.bottom - 0.32 * Height, editWidth, editHeight,
-			m_hWnd, (HMENU)IDC_EDIT_PIN3, m_hInstance, NULL);
-		SendMessage(hTextEdit3, EM_LIMITTEXT, m_ulPin1MaxLen, 0);
+		if (!m_dontAskPIN1)
+			SetFocus(textFieldData1.getMainWnd());
+		else 
+			SetFocus(textFieldData2.getMainWnd());
 
-		std::wstring oldPin_label = isUnlock ? GETSTRING_DLG(Puk) : GETSTRING_DLG(CurrentPin);
-		
-        int labelsX = Width * 0.10;
-        int textWidth = clientRect.right / 2 - 0.1 * Width;
-        int textHeight = Height * 0.08;
+		// text field 3
+		textFieldData3.title = GETSTRING_DLG(ConfirmNewPin);
+		textFieldData3.isPassword = textFieldData2.isPassword;
+		textFieldData3.minLength = textFieldData2.minLength;
+		textFieldData3.maxLength = textFieldData2.maxLength;
+		textFieldData3.isNumeric = textFieldData2.isNumeric;
+		HWND hTextEdit3 = PteidControls::CreateTextField(
+			contentX, editFieldY + 2 * (editFieldHeight + editFieldSpacing),
+			contentWidth, editFieldHeight,
+			m_hWnd, (HMENU)IDC_EDIT_PIN3, m_hInstance, &textFieldData3);
 
-		if (!m_dontAskPIN1) {
-			HWND hStaticText1 = CreateWindow(
-				L"STATIC", oldPin_label.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
-                labelsX, clientRect.bottom - 0.52*Height, textWidth, textHeight,
-				m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-			SendMessage(hStaticText1, WM_SETFONT, (WPARAM)TextFont, 0);
-		}
+		// ERROR TEXT
+		errorTextData.text = GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical);
+		errorTextData.color = RED;
+		HWND hError= PteidControls::CreateText(
+			contentX, errorY,
+			contentWidth, errorHeight,
+			m_hWnd, (HMENU)IDC_STATIC_ERROR, m_hInstance, &errorTextData);
+		ShowWindow(errorTextData.getMainWnd(), SW_HIDE);
 
-		HWND hStaticText2 = CreateWindow(
-			L"STATIC", GETSTRING_DLG(NewPin), WS_CHILD | WS_VISIBLE | SS_LEFT,
-            labelsX, clientRect.bottom - 0.41*Height, textWidth, textHeight,
-			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
+		// BUTTONS
+		okBtnProcData.highlight = true;
+		okBtnProcData.setEnabled(false);
+		okBtnProcData.text = GETSTRING_DLG(Confirm);
+		cancelBtnProcData.text = GETSTRING_DLG(Cancel);
 
-		HWND hStaticText3 = CreateWindow(
-			L"STATIC", GETSTRING_DLG(ConfirmNewPin), WS_CHILD | WS_VISIBLE | SS_LEFT,
-            labelsX, clientRect.bottom - 0.30*Height, textWidth, textHeight,
-			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
+		HWND Cancel_Btn = PteidControls::CreateButton(
+			contentX, buttonY, buttonWidth, buttonHeight,
+			m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &cancelBtnProcData);
 
-
-		SendMessage(hStaticText2, WM_SETFONT, (WPARAM)TextFont, 0);
-		SendMessage(hStaticText3, WM_SETFONT, (WPARAM)TextFont, 0);
-		
-		SendMessage(hTextEdit2, WM_SETFONT, (WPARAM)TextFont, 0);
-		SendMessage(hTextEdit3, WM_SETFONT, (WPARAM)TextFont, 0);
-
-		SendMessage(OK_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
-		SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
-
-		SetFocus(GetDlgItem(m_hWnd, IDC_EDIT));
+		HWND OK_Btn = PteidControls::CreateButton(
+			contentX + buttonWidth + buttonSpacing, buttonY, buttonWidth, buttonHeight,
+			m_hWnd, (HMENU)IDB_OK, m_hInstance, &okBtnProcData);
 
 	}
 }
 
 dlgWndAskPINs::~dlgWndAskPINs()
 {
-    EnableWindow(m_parent, TRUE);
+	EnableWindow(m_parent, TRUE);
 	KillWindow( );
 }
 
@@ -190,48 +191,13 @@ void dlgWndAskPINs::GetPinResult()
 	long len = (long)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN1 ), WM_GETTEXTLENGTH, 0, 0 );
 	if( len < 128 )
 	{
-		SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN1 ), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf );
+		SendMessage( textFieldData1.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf );
 		wcscpy_s( Pin1Result, nameBuf );
 
-		SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN2 ), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf );
+		SendMessage(textFieldData2.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf);
 		wcscpy_s( Pin2Result, nameBuf );
 	}
 }
-
-bool dlgWndAskPINs::CheckPin2Result()
-{
-	wchar_t PINBuf[128];
-	wchar_t PINBuf2[128];
-	long len = (long)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN2 ), WM_GETTEXTLENGTH, 0, 0 );
-	if( len < 128 )
-	{
-		SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN2 ), WM_GETTEXT, (WPARAM)(sizeof(PINBuf)), (LPARAM)PINBuf );
-		wcscpy_s( PINBuf2, PINBuf );
-	}
-	len = (long)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN3 ), WM_GETTEXTLENGTH, 0, 0 );
-	if( len < 128 )
-	{
-		SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN3 ), WM_GETTEXT, (WPARAM)(sizeof(PINBuf)), (LPARAM)PINBuf );
-	}
-	if( wcscoll( PINBuf, PINBuf2 ) == 0 )
-		return true;
-	return false;
-}
-
-/*
-void dlgWndAskPINs::SetHeaderText(const wchar_t * txt)
-{
-	RECT rect;
-	szHeader = txt;
-	GetClientRect( m_hWnd, &rect );
-	rect.bottom -= 40;
-	rect.top = rect.bottom - IMG_SIZE + 32;
-	rect.left += 286;
-	rect.right -= 20;
-	InvalidateRect( m_hWnd, &rect, TRUE );
-	UpdateWindow( m_hWnd );
-}
-*/
 
 LRESULT dlgWndAskPINs::ProcecEvent
 			(	UINT		uMsg,			// Message For This Window
@@ -239,7 +205,6 @@ LRESULT dlgWndAskPINs::ProcecEvent
 				LPARAM		lParam )		// Additional Message Information
 {
 	PAINTSTRUCT ps;
-	RECT rect;
 
 	switch( uMsg )
 	{
@@ -247,52 +212,31 @@ LRESULT dlgWndAskPINs::ProcecEvent
 		{
 			switch( LOWORD(wParam) )
 			{
-				case IDC_EDIT_PIN1: // == IDC_EDIT
+			case IDC_EDIT_PIN1:
+			case IDC_EDIT_PIN2:
+			case IDC_EDIT_PIN3:
+				if (EN_CHANGE == HIWORD(wParam))
 				{
-					if (EN_CHANGE == HIWORD(wParam))
-					{
-
-						unsigned int len = (unsigned int)SendMessage(GetDlgItem(m_hWnd, IDC_EDIT_PIN1), WM_GETTEXTLENGTH, 0, 0);
-						InputField1_OK = len >= m_ulPin1MinLen;
-						EnableWindow(GetDlgItem(m_hWnd, IDOK), ((InputField1_OK || m_dontAskPIN1) && InputField2_OK && InputField3_OK));
-
-					}
-					return TRUE;
+					okBtnProcData.setEnabled(
+						(m_dontAskPIN1 || textFieldData1.isAcceptableInput()) &&
+						textFieldData2.isAcceptableInput() && 
+						textFieldData3.isAcceptableInput());
 				}
-				case IDC_EDIT_PIN2:
-				{
-					if( EN_CHANGE == HIWORD(wParam) )
-					{
-						unsigned int len = (unsigned int)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN2 ), WM_GETTEXTLENGTH, 0, 0 );
-						InputField2_OK = len >= m_ulPin1MinLen;
-						EnableWindow(GetDlgItem(m_hWnd, IDOK), ((InputField1_OK || m_dontAskPIN1) && InputField2_OK && InputField3_OK));
-					}
-					return TRUE;
-				}
-				case IDC_EDIT_PIN3:
-				{
-					if( EN_CHANGE == HIWORD(wParam) )
-					{
-						unsigned int len = (unsigned int)SendMessage( GetDlgItem( m_hWnd, IDC_EDIT_PIN3 ), WM_GETTEXTLENGTH, 0, 0 );
-						InputField3_OK = len >= m_ulPin1MinLen;
-						EnableWindow(GetDlgItem(m_hWnd, IDOK), ((InputField1_OK || m_dontAskPIN1) && InputField2_OK && InputField3_OK));
-					}
-					return TRUE;
-				}
+				return TRUE;
 
 				case IDB_OK:
-					
-					if( !CheckPin2Result() )
+					if (okBtnProcData.isEnabled())
 					{
-						DrawError = true;
-						GetClientRect( m_hWnd, &rect );
-						rect.bottom -= 36;
-						rect.top = rect.bottom - 30;
-						InvalidateRect( m_hWnd, &rect, TRUE );
-						UpdateWindow( m_hWnd );
-					}
-					else
-					{
+						TCHAR PINBuf[16];
+						TCHAR PINConfirmBuf[16];
+						SendMessage(textFieldData2.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(PINBuf)), (LPARAM)PINBuf);
+						SendMessage(textFieldData3.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(PINConfirmBuf)), (LPARAM)PINConfirmBuf);
+						// If PINs do not match show error message
+						if (_tcscmp(PINBuf, PINConfirmBuf) != 0)
+						{
+							ShowWindow(errorTextData.getMainWnd(), SW_SHOW);
+							return TRUE;
+						}
 						GetPinResult();
 						dlgResult = eIDMW::DLG_OK;
 						close();
@@ -300,7 +244,6 @@ LRESULT dlgWndAskPINs::ProcecEvent
 					return TRUE;
 
 				case IDB_CANCEL:
-					//strcpy( PinResult, "" );
 					dlgResult = eIDMW::DLG_CANCEL;
 					close();
 					return TRUE;
@@ -317,59 +260,11 @@ LRESULT dlgWndAskPINs::ProcecEvent
 			break;
 		}
 
-		//Set the TextColor for the subwindows hTextEdit and hStaticText
-		case WM_CTLCOLORSTATIC:
-		{
-			//TODO: grey button
-			COLORREF grey = RGB(0xD6, 0xD7, 0xD7);
-			COLORREF white = RGB(0xFF, 0xFF, 0xFF);
-			HDC hdcStatic = (HDC)wParam;
-			SetTextColor(hdcStatic, RGB(0x3C, 0x5D, 0xBC));
-
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPINs::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
-			if ((HWND)lParam == OK_Btn || (HWND)lParam == Cancel_Btn)
-			{
-				SetBkColor(hdcStatic, grey);
-				return (INT_PTR)CreateSolidBrush(grey);
-			}
-
-			SetBkColor(hdcStatic, white);
-
-			if (hbrBkgnd == NULL)
-			{
-				hbrBkgnd = CreateSolidBrush(white);
-			}
-
-			return (INT_PTR)hbrBkgnd;
-		}
-
 		case WM_PAINT:
 		{
 			m_hDC = BeginPaint(m_hWnd, &ps);
-			SetTextColor(m_hDC, RGB(0x3C, 0x5D, 0xBC));
-			
-			GetClientRect(m_hWnd, &rect);
-			rect.bottom -= 60;
-			rect.top = 20;
-			rect.left += 55;
-			rect.right -= 20;
 
-			SetBkColor(m_hDC, RGB(255, 255, 255));
-			SelectObject(m_hDC, TextFontTitle);
-			DrawText(m_hDC, szHeader, -1, &rect, DT_WORDBREAK);
-
-			if (DrawError)
-			{
-				SelectObject(m_hDC, TextFont);
-				SetTextColor(m_hDC, RGB(255, 0, 0));
-
-				GetClientRect(m_hWnd, &rect);
-				rect.left += 10;
-				rect.bottom -= 36;
-				rect.top = rect.bottom - 30;
-
-				DrawText(m_hDC, GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical), -1, &rect, DT_SINGLELINE | DT_VCENTER);
-			}
+			DrawApplicationIcon(m_hDC, m_hWnd);
 
 			EndPaint(m_hWnd, &ps);
 
@@ -400,14 +295,7 @@ LRESULT dlgWndAskPINs::ProcecEvent
 		case WM_CREATE:
 		{
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPINs::ProcecEvent WM_CREATE (wParam=%X, lParam=%X)",wParam,lParam);
-
-			HMENU hSysMenu;
-
-			hSysMenu = GetSystemMenu( m_hWnd, FALSE );
-			EnableMenuItem( hSysMenu, 2, MF_BYPOSITION | MF_GRAYED );
-			SendMessage( m_hWnd, DM_SETDEFID, (WPARAM)IDC_EDIT_PIN1, (LPARAM) 0); 
-
-			return 1;
+			break;
 		}
 
 
@@ -430,7 +318,7 @@ LRESULT dlgWndAskPINs::ProcecEvent
 
 		default:
 		{
-			return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
+			break;
 		}
 	}
 	return DefWindowProc( m_hWnd, uMsg, wParam, lParam );

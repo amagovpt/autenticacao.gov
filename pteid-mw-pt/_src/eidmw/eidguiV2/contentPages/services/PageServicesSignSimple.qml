@@ -39,12 +39,14 @@ PageServicesSignSimpleForm {
         target: gapi
         onSignalGenericError: {
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
 
         onSignalPdfSignSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             signsuccess_dialog.open()
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalPdfSignFail: {
             console.log("Sign failed with error code: " + error_code)
@@ -59,6 +61,7 @@ PageServicesSignSimpleForm {
             cmdDialog.close()
             signerror_dialog.visible = true
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyOutputSignedFile = ""
         }
         onSignalCardAccessError: {
@@ -92,6 +95,7 @@ PageServicesSignSimpleForm {
                     cardLoaded = false
             }
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyButtonHidedAdd.forceActiveFocus()
         }
         onSignalCardDataChanged: {
@@ -105,6 +109,7 @@ PageServicesSignSimpleForm {
             propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_NIC") + ": "
                     + gapi.getDataCardIdentifyValue(GAPI.NIC)
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             cardLoaded = true
             propertyButtonHidedAdd.forceActiveFocus()
         }
@@ -403,6 +408,7 @@ PageServicesSignSimpleForm {
     }
     propertyFileDialogOutput {
         onAccepted: {
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             propertyBusyIndicatorRunning = true
             var loadedFilePath = filesModel.get(0).fileUrl
             var isTimestamp = false

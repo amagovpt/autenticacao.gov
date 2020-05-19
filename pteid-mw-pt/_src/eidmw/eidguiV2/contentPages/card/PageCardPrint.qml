@@ -151,12 +151,14 @@ PageCardPrintForm {
         target: gapi
         onSignalGenericError: {
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalPdfPrintSignSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             createsuccess_dialog.visible = true
             createdSuccTitle.forceActiveFocus()
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalPdfPrintSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
@@ -232,6 +234,7 @@ PageCardPrintForm {
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalCardChanged: {
             console.log("Card Print Page onSignalCardChanged")
@@ -270,7 +273,8 @@ PageCardPrintForm {
 
     propertyFileDialogOutput {
         onAccepted: {
-
+            if (propertySwitchPdfSign.checked)
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             outputFile = propertyFileDialogOutput.fileUrl.toString()
             console.log("Output filename on Accepted: " + outputFile)
             
@@ -309,6 +313,7 @@ PageCardPrintForm {
     propertySwitchAddress{
         onCheckedChanged: {
             if(propertySwitchAddress.checked){
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 gapi.verifyAddressPin("")
             }
         }

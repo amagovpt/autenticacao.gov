@@ -65,6 +65,9 @@ class CMDServices {
 		int ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigned char *> in_hashs,
                                 std::vector<std::string> docNames, std::string in_pin);
 
+        // ForceSMS
+        int forceSMS(CMDProxyInfo proxyInfo, std::string in_userId);
+
         // ValidateOtp
         int getSignatures(CMDProxyInfo proxyInfo, std::string in_code, std::vector<CByteArray *> out_signature );
         int getCMDCertificate(CMDProxyInfo proxyInfo, std::string in_code, std::vector<CByteArray> &out_certificate);
@@ -151,6 +154,9 @@ class CMDServices {
                                                 , std::string *in_pin);
 
         int checkGetCertificateWithPinResponse( _ns2__GetCertificateWithPinResponse *response );
+
+        // ForceSMS
+        int checkForceSmsResponse(_ns2__ForceSMSResponse *response);
 };
 
 }
