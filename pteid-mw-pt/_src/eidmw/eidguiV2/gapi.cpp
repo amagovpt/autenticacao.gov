@@ -1048,6 +1048,7 @@ void GAPI::sendSmsCmd(CmdDialogClass dialogType) {
     Concurrent::run(this, &GAPI::doSendSmsCmd, dialogType);
 }
 void GAPI::doSendSmsCmd(CmdDialogClass dialogType) {
+#ifdef WIN32
     if (dialogType == GAPI::RegisterCert)
     {
         m_cmdCertificates->sendSms();
@@ -1056,6 +1057,9 @@ void GAPI::doSendSmsCmd(CmdDialogClass dialogType) {
     {
         cmd_signature->sendSms();
     }
+#else
+    cmd_signature->sendSms();
+#endif
     // TODO: update status
 }
 
