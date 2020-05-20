@@ -26,6 +26,7 @@
 **************************************************************************** */
 #include "PteidCard.h"
 #include "../common/Log.h"
+#include "../common/Config.h"
 #include "../CardLayer.h"
 
 #ifdef __GNUC__
@@ -764,6 +765,10 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
 	tCacheInfo certCache = {CERT_CACHE, 0};
 	tCacheInfo check16Cache = {CHECK_16_CACHE, 0}; // Check 16 bytes at offset 0
 	tCacheInfo checkSerial = {CHECK_SERIAL, 0}; // Check if the card serial nr is present
+
+	long cache_enabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
+	if (!cache_enabled)
+		return dontCache;
 
     // csPath -> file ID ... FIXME get the right IDs
 	unsigned int uiFileID = 0;

@@ -817,6 +817,10 @@
         <source>STR_CACHE_FOLDER_NOT_CREATED</source>
         <translation>Cache folder could not be created</translation>
     </message>
+    <message>
+        <source>STR_TOGGLE_CACHE_CHECKBOX</source>
+        <translation>Use card data cache</translation>
+    </message>
 </context>
 <context>
     <name>PageDefinitionsApp</name>

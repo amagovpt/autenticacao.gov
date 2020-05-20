@@ -22,6 +22,7 @@ Item {
     property alias propertyButtonRemoveSCAPCache: buttonRemoveSCAPCache
     property alias propertyCacheAppSizeTextField : cacheAppSizeTextField
     property alias propertyCacheSCAPSizeTextField : cacheSCAPSizeTextField
+    property alias propertyCheckboxEnableCache : checkboxEnableCache
 
     property alias propertyMainItem: dateAppCache
 
@@ -54,7 +55,7 @@ Item {
         Item{
             id: rectAppCache
             width: parent.width
-            height: 5*Constants.SIZE_TEXT_FIELD + 3*Constants.SIZE_ROW_V_SPACE
+            height: dateAppCache.height + rowAppCache.height
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
 
@@ -99,12 +100,16 @@ Item {
             Rectangle {
                 id: rowAppCache
                 width: parent.width
-                height: 4*Constants.SIZE_TEXT_FIELD + 3*Constants.SIZE_ROW_V_SPACE
+                height: Constants.SIZE_ROW_V_SPACE
+                        + rectAppCacheDesc.height
+                        + rectEnableCache.height
+                        + rectAppCacheRemove.height
+                        + buttonRemoveAppCache.height
                 anchors.top: dateAppCache.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                 Rectangle {
                     id: rectAppCacheDesc
-                    height: 2*Constants.SIZE_TEXT_FIELD
+                    height: 2*Constants.SIZE_TEXT_FIELD + Constants.SIZE_TEXT_FIELD_V_SPACE
                     width: parent.width - 2*Constants.SIZE_ROW_H_SPACE
                     anchors.top: rowAppCache.top
                     anchors.topMargin: Constants.SIZE_ROW_V_SPACE
@@ -122,20 +127,48 @@ Item {
                         wrapMode: Text.WordWrap
                         Accessible.role: Accessible.StaticText
                         Accessible.name: text
-                        KeyNavigation.tab: cacheAppSizeTextField
-                        KeyNavigation.down: cacheAppSizeTextField
-                        KeyNavigation.right: cacheAppSizeTextField
+                        KeyNavigation.tab: checkboxEnableCache
+                        KeyNavigation.down: checkboxEnableCache
+                        KeyNavigation.right: checkboxEnableCache
                         KeyNavigation.backtab: dateAppCache
                         KeyNavigation.up: dateAppCache
                     }
                 }
 
                 Rectangle {
+                    id: rectEnableCache
+                    height: 2*Constants.SIZE_TEXT_FIELD
+                    width: parent.width - 2*Constants.SIZE_ROW_H_SPACE
+                    anchors.top: rectAppCacheDesc.bottom
+                    anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                    anchors.left: parent.left
+                    anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                    CheckBox {
+                        id: checkboxEnableCache
+                        height: parent.height
+                        text: qsTranslate("PageDataApp","STR_TOGGLE_CACHE_CHECKBOX") + controler.autoTr
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        font.bold: checkboxEnableCache.activeFocus
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        checked: controler.getEnablePteidCache()
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        KeyNavigation.tab: rectAppCacheText
+                        KeyNavigation.down: rectAppCacheText
+                        KeyNavigation.right: rectAppCacheText
+                        KeyNavigation.backtab: cacheAppTextField
+                        KeyNavigation.up: cacheAppTextField
+                    }
+                }
+                Rectangle {
                     id: rectAppCacheRemove
                     width: parent.width
                     height: 2*Constants.SIZE_TEXT_FIELD
-                    anchors.top: rectAppCacheDesc.bottom
-                    anchors.topMargin: Constants.SIZE_ROW_V_SPACE 
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: Constants.SIZE_ROW_V_SPACE
                 
                     Rectangle {
                         id: rectAppCacheText
@@ -155,9 +188,9 @@ Item {
                             topPadding: Constants.SIZE_ROW_V_SPACE
                             Accessible.role: Accessible.StaticText
                             Accessible.name: text
-                            KeyNavigation.tab: buttonRemoveAppCache
-                            KeyNavigation.down: buttonRemoveAppCache
-                            KeyNavigation.right: buttonRemoveAppCache
+                            KeyNavigation.tab: buttonRemoveAppCache.enabled ? buttonRemoveAppCache : dateSCAPCache
+                            KeyNavigation.down: buttonRemoveAppCache.enabled ? buttonRemoveAppCache : dateSCAPCache
+                            KeyNavigation.right: buttonRemoveAppCache.enabled ? buttonRemoveAppCache : dateSCAPCache
                             KeyNavigation.backtab: cacheAppTextField
                             KeyNavigation.up: cacheAppTextField
                         }
@@ -176,6 +209,7 @@ Item {
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
                             highlighted: activeFocus ? true : false
+                            enabled: controler.getEnablePteidCache();
                             KeyNavigation.tab: dateSCAPCache
                             KeyNavigation.down: dateSCAPCache
                             KeyNavigation.right: dateSCAPCache

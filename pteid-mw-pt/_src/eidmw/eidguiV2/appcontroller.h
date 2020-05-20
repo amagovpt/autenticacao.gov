@@ -131,6 +131,8 @@ public slots:
     void setOutlookSuppressNameChecks(bool bDisabledMatching);
 
     void userCancelledUpdateCertsDownload();
+    void setEnablePteidCache(bool bEnabled);
+    bool getEnablePteidCache();
     void flushCache();
     void getPteidCacheSize();
     void getScapCacheSize();

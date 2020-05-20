@@ -31,6 +31,7 @@ PageDefinitionsDataForm {
         }
         onSignalCardDataChanged: {
             propertyBusyIndicator.running = false
+            updateCacheSize();
         }
         onSignalCardAccessError: {
             console.log("Definitions SCAP Signature --> onSignalCardAccessError")
@@ -105,30 +106,52 @@ PageDefinitionsDataForm {
 
         onSignalRemovePteidCacheSuccess:{
             updateCacheSize();
-            propertyBusyIndicator.running = false;
-            var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
-            var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC")
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            if (propertyCheckboxEnableCache.checked)
+            {
+                propertyBusyIndicator.running = false;
+                var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+                var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            }
         }
         onSignalRemovePteidCacheFail:{
             updateCacheSize();
-            propertyBusyIndicator.running = false;
-            var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
-            var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_FAIL")
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            if (propertyCheckboxEnableCache.checked)
+            {
+                propertyBusyIndicator.running = false;
+                var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
+                var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_FAIL")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            }
         }
         onSignalCacheNotReadable:{
             updateCacheSize();
-            propertyBusyIndicator.running = false;
-            var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
-            var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            if (propertyCheckboxEnableCache.checked)
+            {
+                propertyBusyIndicator.running = false;
+                var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
+                var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            }
         }
         onSignalAppCacheSize:{
             propertyCacheAppSizeTextField.text  = qsTranslate("PageDataApp", "STR_SIZE_OF_CACHE") + " " + cacheSize;
         }
         onSignalScapCacheSize:{
             propertyCacheSCAPSizeTextField.text  = qsTranslate("PageDataApp", "STR_SIZE_OF_CACHE") + " " + cacheSize;
+        }
+    }
+
+    propertyCheckboxEnableCache{
+        onCheckedChanged: {
+            var bEnabled = propertyCheckboxEnableCache.checked;
+            controler.setEnablePteidCache(bEnabled);
+            //clear cache when it is disabled
+            if(!bEnabled)
+            {
+                controler.flushCache();
+            }
+            propertyButtonRemoveAppCache.enabled = bEnabled;
         }
     }
 

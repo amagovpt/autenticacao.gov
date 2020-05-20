@@ -698,6 +698,18 @@ public:
         config.setString(proxy_pwd.toUtf8());
     }
 
+    void setEnablePteidCache(bool bEnabled)
+    {
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_CACHE_ENABLED);
+        config.setLong(bEnabled);
+    }
+
+    bool getEnablePteidCache()
+    {
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_CACHE_ENABLED);
+        return config.getLong();
+    }
+
     QString getProxyUsername()
     {
         return m_proxy_username;

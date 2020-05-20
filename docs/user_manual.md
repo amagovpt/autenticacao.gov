@@ -1344,6 +1344,14 @@ abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
 
 ---
 
+`HKLM\Software\PTEID\general\cache_enabled`
+
+  - **Tipo**: Número (0 / 1)
+  - **Descrição**: Ativar (1) ou desativar (0) a cache do Middleware relativa aos dados do Cartão do Cidadão.
+  - **Valor por omissão**: 1 (ativa)
+
+---
+
 `HKLM\Software\PTEID\general\scap_host`
 
   - **Tipo**: String

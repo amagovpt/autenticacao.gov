@@ -139,6 +139,7 @@ replace $install by string in install parameter
 #define EIDMW_CNF_SECTION_GENERAL       L"general"              //section with the general pupose parameters
 #define EIDMW_CNF_GENERAL_INSTALLDIR    L"install_dirname"      //string, directory of the basic eid software; �c:/Program Files/pteid/�
 #define EIDMW_CNF_GENERAL_CACHEDIR      L"cache_dirname"        //string, cache directory for card-file; $common/pteid/crlcache/
+#define EIDMW_CNF_GENERAL_CACHE_ENABLED L"cache_enabled"
 #define EIDMW_CNF_GENERAL_CERTSDIR      L"certs_dir"
 #define EIDMW_CNF_GENERAL_CERTSDIR_TEST L"certs_dir_test"
 #define EIDMW_CNF_GENERAL_WEBDIR        L"web_dir"
@@ -309,6 +310,7 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_INSTALL_SDK_DIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CACHEDIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR_TEST;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_WEB_DIR;

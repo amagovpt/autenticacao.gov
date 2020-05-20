@@ -815,6 +815,10 @@
         <source>STR_CACHE_FOLDER_NOT_CREATED</source>
         <translation>Criação da diretoria da cache falhou</translation>
     </message>
+    <message>
+        <source>STR_TOGGLE_CACHE_CHECKBOX</source>
+        <translation>Utilizar cache de dados do cartão</translation>
+    </message>
 </context>
 <context>
     <name>PageDefinitionsApp</name>
