@@ -57,6 +57,7 @@
   - [Assinatura digital com Chave Móvel Digital](#assinatura-digital-com-chave-m%c3%b3vel-digital)
   - [Assinatura digital de email com Mozilla Thunderbird](#assinatura-digital-de-email-com-mozilla-thunderbird)
   - [Autenticação em portais WEB](#autentica%c3%a7%c3%a3o-em-portais-web)
+    - [Configurar autenticação para *Mozilla Firefox*](#configurar-autentica%c3%a7%c3%a3o-para-mozilla-firefox)
 - [Resolução de Problemas](#resolu%c3%a7%c3%a3o-de-problemas)
   - [Exibida mensagem de erro quando se tenta adicionar o módulo PKCS\#11 no *Firefox / Thunderbird*](#exibida-mensagem-de-erro-quando-se-tenta-adicionar-o-m%c3%b3dulo-pkcs11-no-firefox--thunderbird)
   - [Não é possível adicionar o módulo PKCS\#11 ao *Adobe Acrobat Reader* em *MacOS*](#n%c3%a3o-%c3%a9-poss%c3%advel-adicionar-o-m%c3%b3dulo-pkcs11-ao-adobe-acrobat-reader-em-macos)
@@ -1128,11 +1129,7 @@ Explorer*, *Microsoft Edge* e *Google Chrome* não exigem nenhuma
 configuração uma vez registado o certificado de autenticação do Cidadão.
 
 Para o *Mozilla Firefox* em qualquer Sistema Operativo é necessário
-efetuar algumas configurações tal como descrito na secção [Assinatura digital de email com *Mozilla Thunderbird*](#assinatura-digital-de-email-com-mozilla-thunderbird).
-
-![Ilustração: Impossibilidade de assinatura](Pictures/Autenticacao.Gov_web_impossibilidade.png
-  "Impossibilidade de assinatura"){:.center}
-
+efetuar algumas configurações descritas em [Configurar autenticação para *Mozilla Firefox*](#configurar-autentica%c3%a7%c3%a3o-para-mozilla-firefox).
 
 A autenticação por certificado através do portal autenticação.gov.pt não exige a instalação do middleware mas sim do plugin **Autenticação.Gov**.
 
@@ -1143,6 +1140,24 @@ Para mais informação, consulte esta página de ajuda:
 De forma a que a configuração do seu computador suporte qualquer uma das
 alternativas, recomenda-se que instale o *middleware* no seu computador
 e também o plugin **Autenticação.Gov**.
+
+
+### Configurar autenticação para *Mozilla Firefox*
+
+Para configurar o *Mozilla Firefox* tem que carregar o módulo PKCS\#11 do Cartão do Cidadão.
+
+Na versão 73.0.1 (para outras versões deverá ser semelhante):
+
+1. Nas opções do *Mozilla Firefox* aceda a **Privacidade e Segurança**. Pode aceder diretamente inserindo `about:preferences#privacy` na barra de endereço.
+
+2. Navegue até ao final da página e, na secção **Certificados**, carregue em **Dispositivos de segurança...** para abrir a janela "Gestor de dispositivos".
+
+![Ilustração: Carregar PKCS\#11 no Mozilla Firefox](Pictures/Firefox_carregar_pkcs11.png
+  "Carregar PKCS\#11 no Mozilla Firefox"){:.center}
+
+3. Pressione **Carregar**. Preencha o nome do módulo, por exemplo "PKCS\#11 do Cartao de Cidadao" (evite o "ç" e "ã"). Seguidamente, carregue em **Procurar...** e navegue até ao módulo PKCS#11 do Cartão de Cidadão, cuja localização se encontra descrita na secção [Integração com aplicações](#integra%c3%a7%c3%a3o-com-aplica%c3%a7%c3%b5es).
+
+4. Pressione **Ok** nas janelas abertas para terminar.
 
 # Resolução de Problemas
 
@@ -1170,6 +1185,9 @@ Deverá aceder ao ficheiro “pteidmdrv.inf”, presente por defeito na
 diretoria “ C:\\ProgramFiles\\PTeID Minidriver” (ou na directoria
 selecionada durante a instalação). Após ter aberto a directoria, abra
 o menu de opções do ficheiro e selecionar a opção **Instalar**.
+
+![Ilustração: Impossibilidade de assinatura](Pictures/Autenticacao.Gov_web_impossibilidade.png
+  "Impossibilidade de assinatura"){:.center}
 
 Após a escolha desta opção, poderá aparecer uma janela de diálogo (Ver
 imagem seguinte) com o título “Ficheiros Necessários”, na qual terá de
