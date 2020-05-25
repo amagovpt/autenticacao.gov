@@ -1,3 +1,6 @@
+# Visual Studio cache/options directory
+.vs/
+
 # Compiled source #
 ###################
 *.o
