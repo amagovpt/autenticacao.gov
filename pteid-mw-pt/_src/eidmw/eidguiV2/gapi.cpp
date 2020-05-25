@@ -548,6 +548,8 @@ void GAPI::showChangeAddressDialog(long code)
     {
     case 0:
         error_msg = tr("STR_CHANGE_ADDRESS_SUCESS");
+        //Reload address data in case of successful address change
+        startReadingAddress();
         break;
         //The error code for connection error is common between SAM and OTP
     case EIDMW_OTP_CONNECTION_ERROR:
@@ -604,8 +606,6 @@ void GAPI::showChangeAddressDialog(long code)
 
     qDebug() << error_msg;
     signalUpdateProgressStatus(error_msg);
-
-    //TODO: Reload card information in case of successful address change
 }
 
 void GAPI::showSignCMDDialog(long error_code)
