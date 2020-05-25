@@ -16,8 +16,8 @@ import QtQuick.Controls.Material 2.1
 import QtQuick.Controls.Universal 2.1
 import QtQuick.Window 2.2
 
-import "scripts/Functions.js" as Functions
 import "scripts/Constants.js" as Constants
+import "scripts/Functions.js" as Functions
 
 import "components/" as Components
 
