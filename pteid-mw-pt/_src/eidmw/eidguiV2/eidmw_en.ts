@@ -180,7 +180,7 @@
     </message>
     <message>
         <source>STR_CMD_LOGIN_SUCESS</source>
-        <translation type="unfinished">Login successfully. Use the security code generated in the mobile app of Autenticação Gov.</translation>
+        <translation>Login successfully. Use the security code sent to your mobile phone.</translation>
     </message>
     <message>
         <source>STR_CMD_CONNECTING</source>
@@ -1125,7 +1125,7 @@
         <translation>Enable e-mail signatures in Outlook</translation>
     </message>
     <message>
-        <source>STR_CMD_REGISTER_REMENBER</source>
+        <source>STR_CMD_REGISTER_REMEMBER</source>
         <translation>Do not show window to register at startup again</translation>
     </message>
 </context>
@@ -1845,7 +1845,7 @@
     </message>
     <message>
         <source>STR_SEND_SMS_DESC</source>
-        <translation type="unfinished">To send the security code by SMS press &quot;Send by SMS&quot;.</translation>
+        <translation>To send a new security code by SMS press &quot;Send by SMS&quot;.</translation>
     </message>
 </context>
 <context>

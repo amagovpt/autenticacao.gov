@@ -178,7 +178,7 @@
     </message>
     <message>
         <source>STR_CMD_LOGIN_SUCESS</source>
-        <translation type="unfinished">Login com sucesso. Utilize o código de segurança gerado na aplicação móvel do Autenticação Gov.</translation>
+        <translation>Login com sucesso. Utilize o código de segurança enviado para o seu telemóvel.</translation>
     </message>
     <message>
         <source>STR_CMD_CONNECTING</source>
@@ -1123,8 +1123,8 @@
         <translation>Permitir assinatura de e-mails no Outlook</translation>
     </message>
     <message>
-        <source>STR_CMD_REGISTER_REMENBER</source>
-        <translation>Não voltar a mostrar janela para registrar no arranque</translation>
+        <source>STR_CMD_REGISTER_REMEMBER</source>
+        <translation>Não voltar a mostrar janela para registar no arranque</translation>
     </message>
 </context>
 <context>
@@ -1843,7 +1843,7 @@
     </message>
     <message>
         <source>STR_SEND_SMS_DESC</source>
-        <translation type="unfinished">Para enviar o código de segurança por SMS clique &quot;Enviar por SMS&quot;.</translation>
+        <translation>Para enviar novo código de segurança por SMS clique &quot;Enviar por SMS&quot;.</translation>
     </message>
 </context>
 <context>

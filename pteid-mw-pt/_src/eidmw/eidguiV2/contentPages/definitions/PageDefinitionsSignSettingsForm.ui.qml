@@ -460,7 +460,7 @@ Item {
                         id: checkboxCMDRegRemember
                         text: qsTranslate(
                                   "PageDefinitionsSignSettings",
-                                  "STR_CMD_REGISTER_REMENBER") + controler.autoTr
+                                  "STR_CMD_REGISTER_REMEMBER") + controler.autoTr
                         height: 25
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
