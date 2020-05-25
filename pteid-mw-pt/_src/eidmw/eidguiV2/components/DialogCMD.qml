@@ -578,6 +578,7 @@ Item {
                 highlighted: activeFocus
                 onClicked: {
                     buttonSendSMS.enabled = false
+                    textFieldReturnCode.forceActiveFocus()
                     gapi.sendSmsCmd(dialogType)
                 }
                 Keys.onEnterPressed: clicked()
