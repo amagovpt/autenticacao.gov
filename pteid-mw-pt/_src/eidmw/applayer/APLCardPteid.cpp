@@ -394,7 +394,7 @@ bool SCV_tolerance_active()
     //Get current time
     time_t t = std::time(nullptr);
 
-    const char * time_limit = "2020-07-01";
+    const char * time_limit = "2020-10-31";
     char current_date[16];
     if (std::strftime(current_date, sizeof(current_date), "%Y-%m-%d", std::localtime(&t))) {
         if (strcmp(time_limit, current_date) > 0) {
