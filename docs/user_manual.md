@@ -618,9 +618,9 @@ Os ficheiros a assinar podem ser selecionados arrastando-os para a área de pré
 
     - **Adicionar atributos profissionais:** A funcionalidade de assinatura de profissionais permite ao cidadão autenticar-se na qualidade das funções que desempenha na sociedade enquanto profissional qualificado. Na secção [Atributos Profissionais](#atributos-profissionais) é indicado o procedimento para carregar os atributos profissionais. Disponível para assinaturas do tipo **PDF**.
 
-    Para mais informações consulte o seguinte *website*:
+Para mais informações, consulte o seguinte *website*:
 
-        <https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais>
+<https://www.autenticacao.gov.pt/atributos-profissionais/scap>
 
     - **Visível:** Permite que a assinatura fique visível no documento PDF. Disponível para assinaturas do tipo **PDF**.
 
@@ -721,7 +721,7 @@ O tamanho recomendado para a imagem é de 185 x 41px.
 O Sistema de Certificação de Atributos Profissionais (SCAP) permite ao cidadão, através do Cartão de Cidadão ou da Chave Móvel Digital, assinar um documento na qualidade das funções que desempenha enquanto profissional.
 Para mais informações, consulte o seguinte *website*:
 
-<https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais>
+<https://www.autenticacao.gov.pt/atributos-profissionais/scap>
 
 Em primeiro lugar, selecione o tipo de atributos:
 
