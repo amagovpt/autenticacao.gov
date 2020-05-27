@@ -565,8 +565,6 @@ __in    DWORD cbHash)
         LogTrace(LOGTYPE_WARNING, "getDocName", "Cannot get window title.");
         goto cleanup;
     }
-    LogTrace(LOGTYPE_INFO, "getDocName", "Window title = %S", pszTitle);
-
     title = pszTitle;
 
     // In Excel, Word and Adobe Acrobat Reader the docname comes before the last " - "
