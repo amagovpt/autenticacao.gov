@@ -278,6 +278,7 @@ PageDefinitionsSCAPForm {
             gapi.startLoadingAttributesFromCache(GAPI.ScapAttrEntities,
                                                  GAPI.ScapAttrDescriptionShort)
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyBusyIndicatorAttributes.running = false
         }
         onSignalEntityAttributesLoaded:{
@@ -323,6 +324,7 @@ PageDefinitionsSCAPForm {
             }
             //Load attributes from cache (Companies, ShortDescription)
             propertyBusyIndicatorAttributes.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             gapi.startLoadingAttributesFromCache(GAPI.ScapAttrCompanies,
                                                  GAPI.ScapAttrDescriptionShort)
         }
@@ -356,6 +358,7 @@ PageDefinitionsSCAPForm {
                 }
             }
             propertyBusyIndicatorAttributes.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalRemoveSCAPAttributesSucess: {
             console.log("Definitions SCAP - Signal SCAP Signal Remove SCAP Attributes Sucess")
