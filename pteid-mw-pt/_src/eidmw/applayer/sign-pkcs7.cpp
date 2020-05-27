@@ -36,8 +36,11 @@
 #include <openssl/sha.h>
 #include <openssl/ts.h>
 
+#include "ess_asn1.h"
+
 #define SHA1_LEN 20
 #define SHA256_LEN 32
+#define SHA512_LEN 64
 
 #ifdef WIN32
     #define _TRACE_(to, format, ... )           { fprintf( to, "%s, %s(), %d - ", __FILE__, __FUNCTION__, __LINE__ ); \
@@ -107,6 +110,7 @@ unsigned char *dump_signature(PKCS7 * sig_struct, int *length)
 }
 #endif
 
+#if 0
 void add_signed_time(PKCS7_SIGNER_INFO *si)
 {
 	ASN1_UTCTIME *sign_time;
@@ -117,33 +121,55 @@ void add_signed_time(PKCS7_SIGNER_INFO *si)
 	PKCS7_add_signed_attribute(si,NID_pkcs9_signingTime,
 			V_ASN1_UTCTIME,(char *)sign_time);
 }
+#endif
 
+
+unsigned int SHA512_Wrapper(unsigned char *data, unsigned long data_len, unsigned char *digest)
+{
+
+	EVP_MD_CTX *cmd_ctx = EVP_MD_CTX_new();
+ 	unsigned int md_len = 0;
+ 
+ 	//Calculate the hash from the data
+	EVP_DigestInit(cmd_ctx, EVP_sha512());
+	EVP_DigestUpdate(cmd_ctx, data, data_len);
+	EVP_DigestFinal(cmd_ctx, digest, &md_len);
+ 
+	EVP_MD_CTX_free(cmd_ctx);
+
+ 	return md_len;
+
+}
 
 unsigned int SHA256_Wrapper(unsigned char *data, unsigned long data_len, unsigned char *digest)
 {
 
-	EVP_MD_CTX cmd_ctx;
-	unsigned int md_len = 0;
+	EVP_MD_CTX *cmd_ctx = EVP_MD_CTX_new();
+ 	unsigned int md_len = 0;
+ 
+ 	//Calculate the hash from the data
+	EVP_DigestInit(cmd_ctx, EVP_sha256());
+	EVP_DigestUpdate(cmd_ctx, data, data_len);
+	EVP_DigestFinal(cmd_ctx, digest, &md_len);
+ 
+	EVP_MD_CTX_free(cmd_ctx);
 
-	//Calculate the hash from the data
-	EVP_DigestInit(&cmd_ctx, EVP_sha256());
-	EVP_DigestUpdate(&cmd_ctx, data, data_len);
-    EVP_DigestFinal(&cmd_ctx, digest, &md_len);
-
-	return md_len;
+ 	return md_len;
 
 }
 
 unsigned int SHA1_Wrapper(unsigned char *data, unsigned long data_len, unsigned char *digest)
 {
 
-	EVP_MD_CTX cmd_ctx;
-	unsigned int md_len = 0;
-
-	//Calculate the hash from the data
-	EVP_DigestInit(&cmd_ctx, EVP_sha1());
-	EVP_DigestUpdate(&cmd_ctx, data, data_len);
-    EVP_DigestFinal(&cmd_ctx, digest, &md_len);
+	EVP_MD_CTX *cmd_ctx = EVP_MD_CTX_new();
+ 	unsigned int md_len = 0;
+ 
+ 	//Calculate the hash from the data
+	EVP_DigestInit(cmd_ctx, EVP_sha1());
+	EVP_DigestUpdate(cmd_ctx, data, data_len);
+	EVP_DigestFinal(cmd_ctx, digest, &md_len);
+ 
+	EVP_MD_CTX_free(cmd_ctx);
 
 	return md_len;
 
@@ -195,19 +221,10 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 
 	TS_RESP *tsresp = d2i_TS_RESP(NULL, (const unsigned char**)&token, token_len);
 
-#ifdef DEBUG
-    BIO *bio_out;
-    bio_out = BIO_new(BIO_s_file());
-
-    BIO_set_fp(bio_out, stderr, BIO_NOCLOSE);
-
-	TS_RESP_print_bio(bio_out, tsresp);
-#endif
-
 	if (tsresp != NULL)
 	{
 		TS_VERIFY_CTX * verify_ctx = TS_VERIFY_CTX_new();
-		verify_ctx->flags = TS_VFY_VERSION;
+		TS_VERIFY_CTX_set_flags(verify_ctx, TS_VFY_VERSION);
 
 		if (TS_RESP_verify_response(verify_ctx, tsresp) != 1) {
 
@@ -220,7 +237,7 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 
 		TS_VERIFY_CTX_free(verify_ctx);
 
-		PKCS7* token = tsresp->token;
+		PKCS7* token = TS_RESP_get_token(tsresp);
 
 		int p7_len = i2d_PKCS7(token, NULL);
 		unsigned char *p7_der = (unsigned char *)OPENSSL_malloc(p7_len);
@@ -254,72 +271,37 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 
 }
 
-
-void add_signingCertificate(PKCS7_SIGNER_INFO *si, X509 *x509, unsigned char * cert_data, unsigned long cert_len)
+void add_signingCertificate(PKCS7_SIGNER_INFO *signer_info, X509 *signing_cert)
 {
+
 	ASN1_STRING *seq = NULL;
-	unsigned char cert_sha256_sum[SHA256_LEN];
 	unsigned char *p, *pp = NULL;
 	int len;
+	int ret = 0;
 	int signed_string_nid = -1;
-	ESS_SIGNING_CERT *sc = NULL;
-	ESS_CERT_ID *cid;
 
-	GENERAL_NAME * name = NULL;
+	ESS_SIGNING_CERT_V2 * sc = NULL;
+	const int issuer_needed = 1;
 
-	SHA256_Wrapper(cert_data, cert_len, cert_sha256_sum);
+	sc = ESS_SIGNING_CERT_V2_new_init(EVP_sha256(), signing_cert, NULL,
+                                                  issuer_needed);
 
-	/* Create the SigningCertificateV2 attribute. */
+	if (sc == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, L"Failed to build ESS_SIGNING_CERT_V2 object!");
+		goto err;
+	}
 
-	if (!(sc = ESS_SIGNING_CERT_new()))
-		goto end;
+	ret = ESS_SIGNING_CERT_V2_add(signer_info, sc);
+    MWLOG(LEV_DEBUG, MOD_APL, "ESS_SIGNING_CERT_V2_add() returned %d", ret);
 
-	/* Adding the signing certificate id. */
-	if (!(cid = ESS_CERT_ID_new()))
-		goto end;
-	if (!ASN1_OCTET_STRING_set(cid->hash, cert_sha256_sum,
-		sizeof(cert_sha256_sum)))
-		goto end;
+    if (!ret)
+        goto err;
 
-	//Add Issuer and Serial Number
+    return;
+	
+	err:
+		MWLOG(LEV_ERROR, MOD_APL, L"Failed to add SigningCertificateV2 attribute.");
 
-	if (!(cid->issuer_serial = ESS_ISSUER_SERIAL_new()))
-		goto end;
-                /* Creating general name from the certificate issuer. */
-	if (!(name = GENERAL_NAME_new()))
-		goto end;
-		name->type = GEN_DIRNAME;
-	if (!(name->d.dirn = X509_NAME_dup(x509->cert_info->issuer)))
-		goto end;
-	if (!sk_GENERAL_NAME_push(cid->issuer_serial->issuer, name))
-		goto end;
-
-	cid->issuer_serial->serial = X509_get_serialNumber(x509);
-
-	if (!sk_ESS_CERT_ID_push(sc->cert_ids, cid))
-		goto end;
-
-	/* Add SigningCertificateV2 signed attribute to the signer info. */
-
-	len = i2d_ESS_SIGNING_CERT(sc, NULL);
-	if (!(pp = (unsigned char *) OPENSSL_malloc(len))) goto end;
-
-	p = pp;
-	i2d_ESS_SIGNING_CERT(sc, &p);
-	if (!(seq = ASN1_STRING_new()) || !ASN1_STRING_set(seq, pp, len))
-		goto end;
-
-	OPENSSL_free(pp); pp = NULL;
-
-	signed_string_nid = OBJ_create("1.2.840.113549.1.9.16.2.47",
-		"id-aa-signingCertificateV2",
-		"id-aa-signingCertificateV2");
-
-	PKCS7_add_signed_attribute(si, signed_string_nid, V_ASN1_SEQUENCE, seq);
-	return;
-
-	end:
-	MWLOG(LEV_ERROR, MOD_APL, L"Failed to add SigningCertificateV2 attribute.");
 }
 
 void addCardCertificateChain(PKCS7 *p7) 
@@ -386,14 +368,14 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
         goto err_hashCalculate;
     }
 
-    if ( 0 == dataLen ){
+    if ( 0 == dataLen ) {
         TRACE_ERR( "Invalid dataLen" );
         isError = true;
 
         goto err_hashCalculate;
     }
 
-    if ( NULL == p7 ){
+    if ( NULL == p7 ) {
         TRACE_ERR( "Null p7" );
 
         isError = true;
@@ -401,14 +383,14 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
     }
 
     x509 = DER_to_X509( certificate.GetBytes(), certificate.Size() );
-    if ( NULL == x509){
+    if ( NULL == x509) {
         MWLOG(LEV_ERROR, MOD_APL, "computeHash_pkcs7() - Error decoding certificate data!");
         isError = true;
         goto err_hashCalculate;
 	}
 
     out = (unsigned char *)malloc( SHA256_LEN );
-    if ( NULL == out ){
+    if ( NULL == out ) {
         TRACE_ERR( "Null out" );
 
         isError = true;
@@ -451,12 +433,12 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
         addExternalCertificateChain(p7, ca_certificates);
     }
 
-    PKCS7_set_detached( p7, 1);
+    PKCS7_set_detached(p7, 1);
 
     hash_fn( data, dataLen, out);
 
     /* Add the signing time and digest authenticated attributes */
-    //With authenticated attributes
+    // With authenticated attributes
     PKCS7_add_signed_attribute( signer_info
                                 , NID_pkcs9_contentType
                                 , V_ASN1_OBJECT
@@ -468,13 +450,11 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
 
     /*
         Add signing-certificate v2 attribute according to the
-        specification ETSI TS 103 172 v2.1.1 - section 6.3.1
+        PAdES specification ETSI TS 103 172 v2.1.1 - section 6.3.1
     */
-    add_signingCertificate(signer_info
-                            , x509
-                            , certificate.GetBytes(), certificate.Size() );
+    add_signingCertificate(signer_info, x509);
 
-    if ( !timestamp ) add_signed_time( signer_info );
+    //if ( !timestamp ) add_signed_time( signer_info );
 
     auth_attr_len = ASN1_item_i2d( (ASN1_VALUE *)signer_info->auth_attr
                                     , &attr_buf
@@ -505,7 +485,8 @@ int getSignedData_pkcs7( unsigned char *signature, unsigned int signatureLen
                         , PKCS7_SIGNER_INFO *signer_info
                         , bool timestamp
                         , PKCS7 *p7
-                        , const char **signature_contents ){
+                        , const char **signature_contents )
+{
     int return_code = 0;
     unsigned char *timestamp_token = NULL;
     int tsp_token_len = 0;

@@ -145,7 +145,6 @@ PageCardIdentifyForm {
 
         onSignalSaveCardPhotoFinished: {
             if(success) {
-                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 createsuccess_dialog.open()
                 createdSuccTitle.forceActiveFocus()
             } else {
@@ -166,7 +165,6 @@ PageCardIdentifyForm {
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - createsuccess_dialog.width * 0.5
         y: parent.height * 0.5 - createsuccess_dialog.height * 0.5
-        modal: true
 
         header: Label {
             id: createdSuccTitle
@@ -269,7 +267,8 @@ PageCardIdentifyForm {
             }
         }
         onRejected:{
-            createsuccess_dialog.open()
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
         }
         onClosed: {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
@@ -279,7 +278,7 @@ PageCardIdentifyForm {
 
     propertySavePhotoDialogOutput {
         onAccepted: {
-            outputFile = propertySavePhotoDialogOutput.fileUrl.toString()
+            outputFile = propertySavePhotoDialogOutput.file.toString()
             console.log("Saving photo to: " + outputFile)
             
             var file = decodeURIComponent(Functions.stripFilePrefix(outputFile))
@@ -318,16 +317,16 @@ PageCardIdentifyForm {
 
     propertyPngButton {
         onClicked: {
-            propertySavePhotoDialogOutput.filename = "FotoDoCidadao.png"
-            propertySavePhotoDialogOutput.nameFilters = ["PNG (*.png)"]
+            propertySavePhotoDialogOutput.currentFile = propertySavePhotoDialogOutput.folder + "/FotoDoCidadao.png"
+            propertySavePhotoDialogOutput.nameFilters = ["PNG (*.png)"];
             propertySavePhotoDialogOutput.open();
         }
     }
 
     propertyJpegButton {
         onClicked: {
-            propertySavePhotoDialogOutput.filename = "FotoDoCidadao.jpg"
-            propertySavePhotoDialogOutput.nameFilters = ["JPEG (*.jpg *.jpeg *.jpe *.jfif)"]
+            propertySavePhotoDialogOutput.currentFile = propertySavePhotoDialogOutput.folder + "/FotoDoCidadao.jpg"
+            propertySavePhotoDialogOutput.nameFilters = ["JPEG (*.jpg)"];
             propertySavePhotoDialogOutput.open();
         }
     }

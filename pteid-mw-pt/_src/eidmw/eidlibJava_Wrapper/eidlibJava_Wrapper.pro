@@ -70,8 +70,8 @@ INCLUDEPATH += ../dialogs
 INCLUDEPATH += ../common
 INCLUDEPATH += ../cardlayer
 INCLUDEPATH += ../eidlib
-INCLUDEPATH += /usr/lib/jvm/java-8-openjdk-amd64/include
-INCLUDEPATH += /usr/lib/jvm/java-8-openjdk-amd64/include/linux
+INCLUDEPATH += /usr/lib/jvm/java-11-openjdk-amd64/include
+INCLUDEPATH += /usr/lib/jvm/java-11-openjdk-amd64/include/linux
 
 macx:INCLUDEPATH += /usr/local/include
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}

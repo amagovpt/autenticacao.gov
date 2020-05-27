@@ -16,7 +16,6 @@
 #include <QIcon>
 #include <QProcess>
 #include "appcontroller.h"
-#include "filesavedialog.h"
 #include "gapi.h"
 #include "eidlib.h"
 #include "singleapplication.h"
@@ -32,6 +31,8 @@ int main(int argc, char *argv[])
     AppController::initApplicationScale();
 
 	SingleApplication app(argc, argv);
+
+	app.setOrganizationName("Portuguese State");
 
     PTEID_InitSDK();
 	
@@ -89,9 +90,6 @@ int main(int argc, char *argv[])
     ctx->setContextProperty("gapi", &gapi);
     ctx->setContextProperty("controler", &controller);
     ctx->setContextProperty("image_provider_pdf", gapi.image_provider_pdf);
-
-    qmlRegisterType<FileSaveDialog>("eidguiV2", 1, 0, "FileSaveDialog");
-
 
     engine->addImageProvider("myimageprovider", gapi.buildImageProvider());
     engine->addImageProvider("pdfpreview_imageprovider", gapi.buildPdfImageProvider());

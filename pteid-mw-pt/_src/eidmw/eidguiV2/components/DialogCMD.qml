@@ -8,7 +8,7 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
+import QtQuick 2.7
 import QtQuick.Controls 2.1
 import QtGraphicalEffects 1.0
 
@@ -737,10 +737,10 @@ Item {
         var outputFile = ""
         signSingleFile = (filesModel.count == 1)
         if (signSingleFile) {
-            outputFile = propertyFileDialogCMDOutput.fileUrl.toString()
+            outputFile = propertyFileDialogCMDOutput.file.toString()
         }
         else {
-            outputFile = propertyFileDialogBatchCMDOutput.fileUrl.toString()
+            outputFile = propertyFileDialogBatchCMDOutput.folder.toString()
         }
         outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
 

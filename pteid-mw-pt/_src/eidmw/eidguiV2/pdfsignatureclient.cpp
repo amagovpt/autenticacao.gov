@@ -66,13 +66,15 @@ ns1__AttributeType *convertAttributeType(ns3__AttributeType *, soap *);
 unsigned int SHA256_Wrapper(unsigned char *data, unsigned long data_len, unsigned char *digest)
 {
 
-    EVP_MD_CTX cmd_ctx;
+    EVP_MD_CTX *cmd_ctx = EVP_MD_CTX_new();
     unsigned int md_len = 0;
-
+ 
     //Calculate the hash from the data
-    EVP_DigestInit(&cmd_ctx, EVP_sha256());
-    EVP_DigestUpdate(&cmd_ctx, data, data_len);
-    EVP_DigestFinal(&cmd_ctx, digest, &md_len);
+    EVP_DigestInit(cmd_ctx, EVP_sha256());
+    EVP_DigestUpdate(cmd_ctx, data, data_len);
+    EVP_DigestFinal(cmd_ctx, digest, &md_len);
+ 
+    EVP_MD_CTX_free(cmd_ctx);
 
     return md_len;
 

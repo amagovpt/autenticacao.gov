@@ -1,3 +1,11 @@
+pteid-mw (3.1.0+git20200226) UNRELEASED; urgency=medium
+
+  * CC PKI certificates update feature
+  * GUI scaling options to better support high-DPI screens
+  * Export certificate feature
+  * Accessibility improvements
+
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Wed, 26 Feb 2020 17:11:26 +0100
 pteid-mw (3.0.20+git20190930-e547bd9d-1) UNRELEASED; urgency=medium
 
   * Address change bugfix for cards issued since May 2019

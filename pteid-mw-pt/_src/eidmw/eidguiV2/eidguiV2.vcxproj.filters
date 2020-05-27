@@ -32,9 +32,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="filesavedialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gapi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -69,9 +66,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_gapi.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_filesavedialog.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp">
@@ -116,6 +110,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="release\qrc_resources.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cJSON_1_7_12.c">
       <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -178,9 +175,6 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="SubMenuModel.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="main.cpp">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="main.qml">
@@ -262,9 +256,6 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="gapi.h">
-      <Filter>Generated Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="filesavedialog.h">
       <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="appcontroller.h">

@@ -412,7 +412,7 @@ PageServicesSignSimpleForm {
             propertyBusyIndicatorRunning = true
             var loadedFilePath = filesModel.get(0).fileUrl
             var isTimestamp = false
-            var outputFile = propertyFileDialogOutput.fileUrl.toString()
+            var outputFile = propertyFileDialogOutput.file.toString()
             outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
 
             var page = 1
@@ -449,7 +449,7 @@ PageServicesSignSimpleForm {
 
         onAccepted: {
             /*console.log("You chose file(s): " + propertyFileDialog.fileUrls)*/
-            var path = propertyFileDialog.fileUrls[0];
+            var path = propertyFileDialog.file.toString();
             path = decodeURIComponent(Functions.stripFilePrefix(path))
             /*console.log("Adding file: " + path)*/
             var newFileUrl = {"fileUrl": path}
@@ -494,10 +494,8 @@ PageServicesSignSimpleForm {
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }else{
                 var outputFile = filesModel.get(0).fileUrl
-                //Check if filename has extension and remove it.
-                if( outputFile.lastIndexOf('.') > 0)
-                    var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'));
-                propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
+                var prefix = (Qt.platform.os === "windows" ? "file:///" : "file://");
+                propertyFileDialogOutput.currentFile = prefix + Functions.replaceFileSuffix(outputFile, "_signed.pdf")
                 propertyFileDialogOutput.open()
             }
         }
@@ -513,10 +511,8 @@ PageServicesSignSimpleForm {
                 return;
             }
             var outputFile = filesModel.get(0).fileUrl
-            //Check if filename has extension and remove it.
-            if( outputFile.lastIndexOf('.') > 0)
-                var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'));
-            propertyFileDialogCMDOutput.filename = outputFile + "_signed.pdf";
+            var prefix = (Qt.platform.os === "windows" ? "file:///" : "file://");
+            propertyFileDialogCMDOutput.currentFile = prefix + Functions.replaceFileSuffix(outputFile, "_signed.pdf")
             propertyFileDialogCMDOutput.open()
         }
     }

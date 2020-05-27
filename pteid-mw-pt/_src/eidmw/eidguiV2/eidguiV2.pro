@@ -6,9 +6,6 @@ macx: ICON = appicon.icns
 
 QT += quick quickcontrols2 concurrent
 
-#Needed for the FileSaveDialog class
-QT += core-private
-QT += gui-private
 QT += widgets
 QT += printsupport
 
@@ -31,7 +28,6 @@ SOURCES += main.cpp \
     stdsoap2.cpp \
     scapsignature.cpp \
     scapcompanies.cpp \
-    filesavedialog.cpp \
     certificates.cpp \
     totp_gen.cpp \
     singleapplication.cpp \
@@ -123,7 +119,6 @@ INSTALLS += target translations fonts
 HEADERS += \
     appcontroller.h \
     gapi.h \
-    filesavedialog.h \
     autoUpdates.h \
     scapsignature.h \
     Settings.h \

@@ -1,7 +1,7 @@
 #
 # spec file for package pteid-mw
 #
-# Copyright (c) 2011-2018 Caixa Magica Software
+# Copyright (c) 2011-2019 Caixa Magica Software
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -13,8 +13,6 @@
 # published by the Open Source Initiative.
 
 
-# norootforbuild
-
 #Disable suse-specific checks: there is no way to disable just the lib64 check
 %if 0%{?suse_version}
 %ifarch x86_64
@@ -22,8 +20,8 @@
 %endif
 %endif
 
-%define svn_revision 6072
-%define app_version  3.0.17
+%define git_revision git20200226
+%define app_version 3.1.0
 
 Name:           pteid-mw
 BuildRequires:  pcsc-lite-devel make swig
@@ -33,13 +31,13 @@ Requires:       pcsc-lite curl
 
 
 %if 0%{?suse_version}
-BuildRequires:  libcurl-devel libxerces-c-devel libopenssl-devel
+BuildRequires:  libcurl-devel libxerces-c-devel libopenssl-1_1-devel
 
 Requires: pcsc-ccid xerces-c libqt5-qtquickcontrols libqt5-qtgraphicaleffects
 %endif
 
 %if 0%{?suse_version}
-BuildRequires:  java-1_8_0-openjdk-devel
+BuildRequires:  java-11-openjdk-devel
 BuildRequires:  libpoppler-qt5-devel
 BuildRequires:  libqt5-qtbase-devel
 BuildRequires:  libqt5-qttools-devel
@@ -47,17 +45,22 @@ BuildRequires:  libqt5-qtdeclarative-devel
 BuildRequires:  libqt5-qtquickcontrols2
 BuildRequires:  libQt5QuickControls2-devel
 BuildRequires:  libQt5Gui-private-headers-devel
+# Make sure that we don't run the OpenSUSE brp scripts - we don't comply with a lot of the checks...
+BuildRequires:	-brp-check-suse
+BuildRequires:	-post-build-checks
+BuildRequires:	-rpmlint
 
 BuildRequires:  libxml-security-c-devel
 %endif
 
 %if 0%{?fedora} || 0%{?centos_ver}
-BuildRequires:  java-1.8.0-openjdk-devel
+BuildRequires:  java-11-openjdk-devel
 Requires:       poppler-qt5
 Requires:       pcsc-lite-ccid
 Requires:       qt5
 
 BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtbase-private-devel
 BuildRequires:  qt5-qtdeclarative-devel
 BuildRequires:  qt5-qtquickcontrols2-devel
 BuildRequires:  qt5-qttools-devel
@@ -67,8 +70,8 @@ BuildRequires:  libpng-devel
 
 BuildRequires:  xml-security-c-devel
 BuildRequires:  poppler-qt5-devel
-BuildRequires:  cairo-devel gcc gcc-c++ xerces-c-devel
-BuildRequires:  qt-devel pcsc-lite-ccid curl-devel
+BuildRequires:  gcc gcc-c++ xerces-c-devel
+BuildRequires:  qt-devel curl-devel
 
 BuildRequires:  openssl-devel
 
@@ -78,30 +81,23 @@ Conflicts:  cartao_de_cidadao
 
 License:        GPLv2+
 Group:          System/Libraries
-Version:        %{app_version}.%{svn_revision}
-%if 0%{?fedora}
-Release:        1%{?dist}
-%else
+Version:        %{app_version}.%{git_revision}
 Release:        1
-%endif
 Summary:        Portuguese eID middleware
-Url:            https://svn.gov.pt/projects/ccidadao/
+Url:            https://github.com/amagovpt/autenticacao.gov
 Vendor:         Portuguese Government
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-Source0:        pteid-mw_%{app_version}svn%{svn_revision}.tar.xz
+Source0:        pteid-mw_%{app_version}+%{git_revision}.tar.xz
 Source1:        pteid-mw-gui.desktop
 Source2:        pteid-scalable.svg
 Source3:        pteid-signature.png
 
-Patch0:         support-openssl-1.1.patch
-Patch1:         fix-qt5.11-build-qicon.patch
-Patch2:         openssl1.1-support-eidguiV2.patch
+#Patch0:         xml-security-2.patch
+#Patch1:         fix-qt5.11-build-qicon.patch
+#Patch2:         openssl1.1-support-eidguiV2.patch
 %if 0%{?suse_version}
-BuildRequires:  update-desktop-files unzip
+BuildRequires:  update-desktop-files
 %endif
-
-#Blame xml-security so
-#AutoReq: no
 
 Requires(post): /usr/bin/gtk-update-icon-cache
 Requires(postun): /usr/bin/gtk-update-icon-cache
@@ -112,28 +108,25 @@ Requires(postun): /usr/bin/gtk-update-icon-cache
  (Cartão de Cidadão) and Chave Móvel Digital in order to authenticate securely
  in certain websites and sign documents.
 %prep
-%setup -q -n pteid-mw_%{app_version}svn%{svn_revision}
+%setup -q -n pteid-mw_%{app_version}-%{git_revision}
 
-%if 0%{?fedora} || 0%{?suse_version}
-%patch0 -p0
-%patch1 -p0
-%patch2 -p0
-%endif
+#%if 0%{?fedora} < 30
+#%patch0 -R -p0
+#%endif
 
 
 %build
 %if 0%{?suse_version}
 %ifarch x86_64
 #./configure --lib+=-L/usr/lib64
-qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/include/ /usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/include/linux/" pteid-mw.pro
+qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib64/jvm/java-11-openjdk-11/include/ /usr/lib64/jvm/java-11-openjdk-11/include/linux/" pteid-mw.pro
 %else
-qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib/jvm/java-1.8.0-openjdk-1.8.0/include/ /usr/lib/jvm/java-1.8.0-openjdk-1.8.0/include/linux/" pteid-mw.pro
+qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib/jvm/java-11-openjdk-11/include/ /usr/lib/jvm/java-11-openjdk-11/include/linux/" pteid-mw.pro
 %endif
 %endif
 
 %if 0%{?fedora} || 0%{?centos_ver}
-# ./configure_fedora.sh
-qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib/jvm/java-1.8.0-openjdk/include/ /usr/lib/jvm/java-1.8.0-openjdk/include/linux/" pteid-mw.pro
+qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib/jvm/java-11-openjdk/include/ /usr/lib/jvm/java-11-openjdk/include/linux/" pteid-mw.pro
 %endif
 
 make %{?jobs:-j%jobs}
@@ -171,6 +164,7 @@ install -m 755 eidguiV2/eidguiV2 $RPM_BUILD_ROOT/usr/local/bin/eidguiV2
 install -m 755 -p bin/pteiddialogsQTsrv $RPM_BUILD_ROOT/usr/local/bin/pteiddialogsQTsrv
 install -m 644 -p eidguiV2/eidmw_en.qm $RPM_BUILD_ROOT/usr/local/bin/
 install -m 644 -p eidguiV2/eidmw_nl.qm $RPM_BUILD_ROOT/usr/local/bin/
+install -m 644 -p eidguiV2/fonts/lato/Lato-Regular.ttf $RPM_BUILD_ROOT/usr/local/bin/
 
 mkdir -p $RPM_BUILD_ROOT/usr/share/applications
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/usr/share/applications
@@ -279,6 +273,7 @@ fi
 /usr/local/bin/pteiddialogsQTsrv
 /usr/local/bin/eidmw_en.qm
 /usr/local/bin/eidmw_nl.qm
+/usr/local/bin/Lato-Regular.ttf
 /usr/local/include/*
 /usr/share/applications/*
 /usr/share/icons/*
@@ -286,6 +281,21 @@ fi
 /usr/local/share/certs
 
 %changelog
+* Wed Feb 26 2020 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+  - CC PKI certificates self-update
+  - GUI scaling options to better support high-DPI screens
+  - New feature: Export certificate to file
+  - Accessibility improvements
+
+* Fri Sep 13 2019 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+  Accessibility improvements in the GUI application
+  Support for loading SCAP attributes using Chave Movel
+  New feature: export photo in PNG or JPEG format
+
+* Wed May 29 2019 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+  SCAP Signature improvements
+  Improved support for new 3072-bit RSA smartcards
+
 * Tue Apr 16 2019 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   PDF Signature fixes
   Proxy support in SCAP signature

@@ -10,6 +10,7 @@
 
 import QtQuick 2.6
 import QtQuick.Controls 2.1
+import Qt.labs.platform 1.0
 import QtGraphicalEffects 1.0
 import eidguiV2 1.0
 
@@ -211,12 +212,12 @@ Item {
                         Keys.onEnterPressed: clicked()
                         Keys.onReturnPressed: clicked()
                     }
-                    FileSaveDialog {
+                    FileDialog {
                         id: savePhotoDialogOutput
                         title: qsTranslate("Popup File",
                                            "STR_POPUP_FILE_OUTPUT")
-                        filename: "FotoDoCidadao"
-                        nameFilters: ["PNG (*.png)", "JPEG (*.jpg,*.jpeg,*.jpe,*.jfif)"]
+                        fileMode: FileDialog.SaveFile
+                        folder: StandardPaths.writableLocation(StandardPaths.HomeLocation)
                     }
 
                     Rectangle {

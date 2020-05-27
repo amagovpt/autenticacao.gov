@@ -310,13 +310,13 @@ PageSecurityCertificatesForm {
     propertyButtonExportCertificate {
         onClicked: {
             console.log("Export certificate button clicked")
-            propertyFileDialogOutput.filename = "cert.der"
+            propertyFileDialogOutput.currentFile = propertyFileDialogOutput.folder + "/cert.der"
             propertyFileDialogOutput.open()
         }
     }
     propertyFileDialogOutput {
         onAccepted: {
-            var outputFile = propertyFileDialogOutput.fileUrl.toString()
+            var outputFile = propertyFileDialogOutput.file.toString()
             outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
             gapi.exportCardCertificate(propertyAcordion.dataModel.auth, propertyAcordion.dataModel.entity, outputFile)
         }

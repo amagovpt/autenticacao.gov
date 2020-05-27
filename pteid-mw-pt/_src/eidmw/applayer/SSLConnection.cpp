@@ -32,16 +32,12 @@
 #include <cstring>
 #include <string>
 
-
 /* OpenSSL headers */
 #include <openssl/bio.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 
 
-#ifdef WIN32
-#define snprintf _snprintf
-#endif
 
 namespace eIDMW
 {
@@ -65,11 +61,14 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 	    return 0;
     }
 
+    /*
 	if (type != NID_md5_sha1)
 	{
 		fprintf(stderr, "rsa_sign(): Called with wrong input type, it should be NID_md5_sha1!\n");
 		return 0;
 	}
+	*/
+	MWLOG(LEV_DEBUG, MOD_APL, "SSLConnection.rsa_sign() called with type=%d", type);
 
 	CByteArray to_sign(m, m_len);
 	CByteArray signed_data;
@@ -77,7 +76,7 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 	try
 	{
 		//Sign with Authentication Key
-		signed_data = card->Sign(to_sign, false, false);
+		signed_data = card->Sign(to_sign, false, m_len == SHA256_DIGEST_LENGTH);
 	}
 	catch (CMWException &e)
 	{
@@ -98,6 +97,11 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 	else
 		return 0;
 
+}
+
+unsigned long SSLConnection::getKeyLength() {
+	APL_Certif *auth_cert = m_certs->getCert(APL_CERTIF_TYPE_AUTHENTICATION);
+	return auth_cert->getKeyLength();
 }
 
 
@@ -189,6 +193,7 @@ void SSLConnection::loadCertChain(X509_STORE *store, APL_Certif * authentication
 		}
 		pCert = NULL;
 		certif = issuer;
+		MWLOG(LEV_DEBUG, MOD_APL, "Added certificate with subject: %s", certif->getLabel());
 		i++;
 	}
 
@@ -873,6 +878,25 @@ BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_po
         return cbio;
 }
 
+char * tlsVersionString(int version) {
+
+	switch (version) {
+#ifdef TLS1_3_VERSION
+		case TLS1_3_VERSION:
+			return "1.3";
+#endif
+		case TLS1_2_VERSION:
+			return "1.2";
+		case TLS1_1_VERSION:
+			return "1.1";
+		case TLS1_VERSION:
+			return "1.0";
+		default:
+			return "undefined";
+	}
+
+}
+
 /**
  * Connect to a host using an encrypted stream
  */
@@ -888,12 +912,17 @@ void SSLConnection::connect_encrypted(char* host_and_port)
 		
 	long proxy_port = 0;
 
-    /* Set up the SSL pointers */
+    /* Negotiate with the server the TLS version used, as we're not limited to TLS 1.1 anymore  */
+    SSL_CTX *ctx = SSL_CTX_new(TLS_client_method());
 
-    /* TLS v1.2 is not supported at the moment as it uses different hash functions for the client challenge */
-    SSL_CTX *ctx = SSL_CTX_new(TLSv1_1_client_method());
+    //Set available signature algorithms for client authentication
+    SSL_CTX_set1_client_sigalgs_list(ctx, "RSA+SHA256:RSA+SHA1");
 
     SSL_CTX_set_mode(ctx, SSL_MODE_AUTO_RETRY);
+
+    //Override the compile-time security level to be able to connect to production SAM server with weak DH params
+    //On Ubuntu 20.04 the default value is 2: see SSL_CTX_set_security_level() manpage
+    SSL_CTX_set_security_level(ctx, 1);
 
     APL_Card *card = AppLayer.getReader().getCard();
 
@@ -920,12 +949,9 @@ void SSLConnection::connect_encrypted(char* host_and_port)
     SSL_CTX_set_options(ctx, SSL_OP_NO_TICKET | SSL_OP_NO_SSLv2);
     SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
 
-    //This needs OpenSSL 1.0.2
-#if (OPENSSL_VERSION_NUMBER >= 0x10002000L)
 	X509_VERIFY_PARAM *vpm = SSL_CTX_get0_param(ctx);
 	//Verify hostname in the server-provided certificate
 	X509_VERIFY_PARAM_set1_host(vpm, m_host, 0);
-#endif
 
     //Get Proxy configuration
 	APL_Config config_proxy_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
@@ -986,12 +1012,29 @@ void SSLConnection::connect_encrypted(char* host_and_port)
 
     RSA *rsa = RSA_new();
 
-    rsa->flags |= RSA_FLAG_SIGN_VER;
+    //Generate a dummy private key with the same size as the one residing in the smartcard
+    int rc = 0;
+    BIGNUM * bn = BN_new();
+    //RSA_F4 is the exponent value = 65537 (0x10001)
+    rc = BN_set_word(bn, RSA_F4);
 
-    RSA_METHOD *current_method = (RSA_METHOD *)RSA_PKCS1_SSLeay();
-    current_method->rsa_sign = eIDMW::rsa_sign;
-    current_method->flags |= RSA_FLAG_SIGN_VER;
-    current_method->flags |= RSA_METHOD_FLAG_NO_CHECK;
+    // Generate key
+    unsigned long key_bits = getKeyLength();
+    MWLOG(LEV_DEBUG, MOD_APL, "Generating dummy key with %lu bits", key_bits);
+
+    rc = RSA_generate_key_ex(rsa, (int)key_bits, bn, NULL);
+
+    if (rc != 1) {
+    	long openssl_error = ERR_get_error();
+    	MWLOG(LEV_ERROR, MOD_APL, "Dummy key generation failed. OpenSSL error: %s", ERR_error_string(openssl_error, NULL));
+    	throw CMWEXCEPTION(translate_openssl_error(openssl_error));
+    }
+
+
+    RSA_METHOD * current_method = (RSA_METHOD *) RSA_get_default_method();
+
+    RSA_meth_set_sign(current_method, eIDMW::rsa_sign);
+    RSA_meth_set_flags(current_method, RSA_METHOD_FLAG_NO_CHECK);
 
     RSA_set_method(rsa, current_method);
 
@@ -1013,18 +1056,11 @@ void SSLConnection::connect_encrypted(char* host_and_port)
 		throw CMWEXCEPTION(translate_openssl_error(openssl_error));
     }
 
-}
+    SSL_SESSION * session = SSL_get_session(m_ssl_connection);
 
-int validate_hex_number(char *str)
-{
-        int i = 0;
-        while(str[i])
-        {
-            if (!isxdigit(str[i++]))
-               return 0;
-        }
+    MWLOG(LEV_DEBUG, MOD_APL, "TLS protocol version used: %s",
+    	     tlsVersionString(SSL_SESSION_get_protocol_version(session)));
 
-        return 1;
 }
 
 
@@ -1415,4 +1451,5 @@ bool SSLConnection::InitSAMConnection()
 
     return true;
 }
+
 }

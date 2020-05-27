@@ -37,7 +37,6 @@ PageCardPrintForm {
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - createsuccess_dialog.width * 0.5
         y: parent.height * 0.5 - createsuccess_dialog.height * 0.5
-        modal: true
 
         header: Label {
             id: createdSuccTitle
@@ -140,7 +139,8 @@ PageCardPrintForm {
             }
         }
         onRejected:{
-            createsuccess_dialog.open()
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
         }
         onClosed: {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
@@ -151,14 +151,12 @@ PageCardPrintForm {
         target: gapi
         onSignalGenericError: {
             propertyBusyIndicator.running = false
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalPdfPrintSignSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             createsuccess_dialog.visible = true
             createdSuccTitle.forceActiveFocus()
             propertyBusyIndicator.running = false
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalPdfPrintSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
@@ -170,13 +168,11 @@ PageCardPrintForm {
             var titlePopup = qsTr("STR_PRINT_CREATE_PDF")
             var bodyPopup = qsTr("STR_PRINT_CREATE_PDF_FAIL")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-            propertyBusyIndicator.running = false
         }
         onSignalPrinterPrintSucess: {
             var titlePopup = qsTr("STR_PRINT_PRINTER")
             var bodyPopup = qsTr("STR_PRINT_PRINTER_SUCESS")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-            propertyBusyIndicator.running = false
         }
         onSignalPrinterPrintFail: {
             console.log("got error on printer print failed "  + error_code)
@@ -189,7 +185,6 @@ PageCardPrintForm {
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
 
-            propertyBusyIndicator.running = false
         }
         onSignalCardDataChanged: {
             console.log("Data Card Print --> Data Changed")
@@ -234,7 +229,6 @@ PageCardPrintForm {
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
             propertyBusyIndicator.running = false
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalCardChanged: {
             console.log("Card Print Page onSignalCardChanged")
@@ -273,9 +267,8 @@ PageCardPrintForm {
 
     propertyFileDialogOutput {
         onAccepted: {
-            if (propertySwitchPdfSign.checked)
-                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-            outputFile = propertyFileDialogOutput.fileUrl.toString()
+
+            outputFile = propertyFileDialogOutput.file.toString()
             console.log("Output filename on Accepted: " + outputFile)
             
             outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
@@ -287,13 +280,12 @@ PageCardPrintForm {
                                propertySwitchNotes.checked,
                                propertySwitchPrintDate.checked,
                                propertySwitchPdfSign.checked)
-            propertyBusyIndicator.running = true
         }
     }
 
     propertyButtonPdf {
         onClicked: {
-            propertyFileDialogOutput.filename = propertySwitchPdfSign.checked ? "CartaoCidadao_signed.pdf" : "CartaoCidadao.pdf"
+            propertyFileDialogOutput.currentFile = propertyFileDialogOutput.folder + (propertySwitchPdfSign.checked ? "/CartaoCidadao_signed.pdf" : "/CartaoCidadao.pdf")
             propertyFileDialogOutput.open()
         }
     }
@@ -313,7 +305,6 @@ PageCardPrintForm {
     propertySwitchAddress{
         onCheckedChanged: {
             if(propertySwitchAddress.checked){
-                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 gapi.verifyAddressPin("")
             }
         }

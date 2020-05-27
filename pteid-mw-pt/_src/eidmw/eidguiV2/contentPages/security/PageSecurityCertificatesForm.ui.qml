@@ -12,6 +12,7 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 import QtGraphicalEffects 1.0
 import QtQuick.Controls 2.1
+import Qt.labs.platform 1.0
 import eidguiV2 1.0
 
 /* Constants imports */
@@ -44,10 +45,12 @@ Item {
             z: 1
         }
 
-        FileSaveDialog {
+        FileDialog {
             id: fileDialogOutput
             title: qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
-            nameFilters: ["DER encoded binary X.509 (*.CER)", "All files (*)"]
+            nameFilters: ["DER encoded binary X.509 (*.DER)", "All files (*)"]
+            fileMode: FileDialog.SaveFile
+            folder: StandardPaths.writableLocation(StandardPaths.HomeLocation)
         }
 
         Item {

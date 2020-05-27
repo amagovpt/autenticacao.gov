@@ -82,6 +82,7 @@ class SSLConnection
 		APL_Certif * loadCertsFromCard(SSL_CTX *ctx);
 		void loadCertChain(X509_STORE *store, APL_Certif * authentication_cert);
 		void loadAllRootCerts(X509_STORE *store);
+		unsigned long getKeyLength();
 
 		char *m_session_cookie;
 

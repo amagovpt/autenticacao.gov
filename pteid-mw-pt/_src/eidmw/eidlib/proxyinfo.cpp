@@ -30,11 +30,11 @@ ProxyInfo::ProxyInfo()
     std::wstring proxy_usernameW = eIDMW::utilStringWiden(config_username.getString());
     std::wstring proxy_pwdW = eIDMW::utilStringWiden(config_pwd.getString());
 
-    std::u16string proxy_host_u16(proxy_hostW.begin(), proxy_hostW.end());
-    std::u16string proxy_username_u16(proxy_usernameW.begin(), proxy_usernameW.end());
-    std::u16string proxy_pwd_16(proxy_pwdW.begin(), proxy_pwdW.end());
+    std::wstring proxy_host_u16(proxy_hostW.begin(), proxy_hostW.end());
+    std::wstring proxy_username_u16(proxy_usernameW.begin(), proxy_usernameW.end());
+    std::wstring proxy_pwd_16(proxy_pwdW.begin(), proxy_pwdW.end());
 
-    std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> convert;
     std::string proxy_host = convert.to_bytes(proxy_host_u16);
     std::string proxy_username = convert.to_bytes(proxy_username_u16);
     std::string proxy_pwd = convert.to_bytes(proxy_pwd_16);
@@ -42,7 +42,7 @@ ProxyInfo::ProxyInfo()
     std::string pacfile;
     if (config_pacfile.getString()) {
         std::wstring pacfileW = eIDMW::utilStringWiden(config_pacfile.getString());
-        std::u16string pacfile_16(pacfileW.begin(), pacfileW.end());
+        std::wstring pacfile_16(pacfileW.begin(), pacfileW.end());
         pacfile = convert.to_bytes(pacfile_16);
     }
 

@@ -641,7 +641,7 @@ PageServicesSignAdvancedForm {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
             var isTimestamp = propertySwitchSignTemp.checked
-            var outputFile = propertyFileDialogOutput.fileUrl.toString()
+            var outputFile = propertyFileDialogOutput.file.toString()
             outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
             if (propertyRadioButtonPADES.checked) {
                 var page = propertySpinBoxControl.value
@@ -945,9 +945,9 @@ PageServicesSignAdvancedForm {
 
         onAccepted: {
             /*console.log("You chose file(s): " + propertyFileDialog.fileUrls)*/
-            console.log("Num files: " + propertyFileDialog.fileUrls.length)
+            console.log("Num files: " + propertyFileDialog.files.length)
 
-            updateUploadedFiles(propertyFileDialog.fileUrls)
+            updateUploadedFiles(propertyFileDialog.files)
 
             // Force scroll and focus to the last item addded
             forceScrollandFocus()
@@ -994,61 +994,39 @@ PageServicesSignAdvancedForm {
                 var bodyPopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SIGN_BLOCKED")
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }else{
+                var prefix = (Qt.platform.os === "windows" ? "file:///" : "file://");
                 if (propertyListViewFiles.count == 1){
-                    propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
-                    if (propertyRadioButtonPADES.checked) {
-                        if(propertySwitchSignAdd.checked){
-                            if(numberOfAttributesSelected() == 0) {
-                                var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
-                                var bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
-                                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-                            }
-                            else {
-                                var outputFile = propertyListViewFiles.model.get(0).fileUrl
-                                //Check if filename has extension and remove it.
-                                if( outputFile.lastIndexOf('.') > 0)
-                                    var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
-                                propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
-                                propertyFileDialogOutput.open()
-                            }
-                        }else{
-                            var outputFile =  propertyListViewFiles.model.get(0).fileUrl
-                            //Check if filename has extension and remove it.
-                            if( outputFile.lastIndexOf('.') > 0)
-                                var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
-                            propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
-                            propertyFileDialogOutput.open()
-                        }
-                    }
-                    else {
-                        var outputFile = propertyListViewFiles.model.get(0).fileUrl
-                        //Check if filename has extension and remove it.
-                        if( outputFile.lastIndexOf('.') > 0)
-                            var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
+                    propertyFileDialogOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
 
-                        propertyFileDialogOutput.filename = outputFile + "_xadessign.asics"
-                        propertyFileDialogOutput.open()
+                    //PAdES with SCAP switch checked but no attributes selected
+                    if(propertyRadioButtonPADES.checked && propertySwitchSignAdd.checked
+                                                        && numberOfAttributesSelected() == 0)
+                    {
+                        var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+                        var bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
+                        mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                        return
                     }
+
+                    var outputFile = propertyListViewFiles.model.get(0).fileUrl
+                    var newSuffix = propertyRadioButtonPADES.checked ? "_signed.pdf" : "_xadessign.asics"
+                    propertyFileDialogOutput.currentFile = prefix + Functions.replaceFileSuffix(outputFile, newSuffix)
+                    propertyFileDialogOutput.open()
+
                 }else{
                     if (propertySwitchSignAdd.checked){
                         var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
                         var bodyPopup = qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
                         mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
                     }else{
-                        var outputFile = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
-                        //Check if filename has extension and remove it.
-                        if( outputFile.lastIndexOf('.') > 0)
-                            var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
-                        //Check if filename has file name and remove it.
-                        if( outputFile.lastIndexOf('/') > 0)
-                            var outputFile = outputFile.substring(0, outputFile.lastIndexOf('/'))
-
                         if(propertyRadioButtonPADES.checked){
                             propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
                             propertyFileDialogBatchOutput.open()
                         }else{
-
-                            propertyFileDialogOutput.filename = outputFile + "/" + "xadessign.asice"
+                            var outputFolderPath = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
+                            if(outputFolderPath.lastIndexOf('/') >= 0)
+                                outputFolderPath = outputFolderPath.substring(0, outputFolderPath.lastIndexOf('/'))
+                            propertyFileDialogOutput.currentFile = prefix + outputFolderPath + "/xadessign.asice";
                             propertyFileDialogOutput.open()
                         }
                     }
@@ -1076,12 +1054,13 @@ PageServicesSignAdvancedForm {
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
             else {
+                var prefix = (Qt.platform.os === "windows" ? "file:///" : "file://")
                 if (propertyListViewFiles.count == 1){
                     var outputFile =  filesModel.get(0).fileUrl
                     //Check if filename has extension and remove it.
                     if( outputFile.lastIndexOf('.') > 0)
                         var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
-                    propertyFileDialogCMDOutput.filename = outputFile + "_signed.pdf"
+                    propertyFileDialogCMDOutput.currentFile = prefix + outputFile + "_signed.pdf"
                     propertyFileDialogCMDOutput.open()
                 }else{
                     propertyFileDialogBatchCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")

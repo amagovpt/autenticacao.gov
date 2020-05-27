@@ -99,23 +99,23 @@ set startTime=%time%
 :find_qt5
 @echo [INFO] Using PTEID_DIR_QT_5=%PTEID_DIR_QT_5%
 
-:: Check OpenSSL 0.9.8
+:: Check OpenSSL
 :: ====================
-@call "%CHECKS%\PathOpenssl098.bat"
-@if %ERRORLEVEL%==0 goto find_openssl_098
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_OPENSSL_098
+@call "%CHECKS%\PathOpenssl.bat"
+@if %ERRORLEVEL%==0 goto find_openssl
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_OPENSSL
 @goto end
-:find_openssl_098
-@echo [INFO] Using PTEID_DIR_OPENSSL_098=%PTEID_DIR_OPENSSL_098%
+:find_openssl
+@echo [INFO] Using PTEID_DIR_OPENSSL=%PTEID_DIR_OPENSSL%
 
-:: Check Xerces 3.1
+:: Check Xerces
 :: ==================
-@call "%CHECKS%\PathXerces31.bat"
-@if %ERRORLEVEL%==0 goto find_xerces_31
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_XERCES_31
+@call "%CHECKS%\PathXerces.bat"
+@if %ERRORLEVEL%==0 goto find_xerces
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_XERCES
 @goto end
-:find_xerces_31
-@echo [INFO] Using PTEID_DIR_XERCES_31=%PTEID_DIR_XERCES_31%
+:find_xerces
+@echo [INFO] Using PTEID_DIR_XERCES=%PTEID_DIR_XERCES%
 
 :: Check Zlib
 :: ==================
@@ -144,6 +144,15 @@ set startTime=%time%
 :find_openjpeg
 @echo [INFO] Using PTEID_DIR_OPENJPEG=%PTEID_DIR_OPENJPEG%
 
+:: Check Jpeg
+:: ==================
+@call "%CHECKS%\PathJpeg.bat"
+@if %ERRORLEVEL%==0 goto find_jpeg
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_JPEG
+@goto end
+:find_jpeg
+@echo [INFO] Using PTEID_DIR_OPENJPEG=%PTEID_DIR_JPEG%
+
 :: Curl
 ::=============
 @call "%CHECKS%\PathCurl.bat"
@@ -165,23 +174,23 @@ set startTime=%time%
 :find_qt5_x64
 @echo [INFO] Using PTEID_DIR_QT_5_X64=%PTEID_DIR_QT_5_X64%
 
-:: Check OpenSSL 0.9.8 X64
+:: Check OpenSSL X64
 :: ====================
-@call "%CHECKS%\PathOpenssl098_x64.bat"
-@if %ERRORLEVEL%==0 goto find_openssl_098_x64
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_OPENSSL_098_X64
+@call "%CHECKS%\PathOpenssl_x64.bat"
+@if %ERRORLEVEL%==0 goto find_openssl_x64
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_OPENSSL_X64
 @goto end
-:find_openssl_098_x64
-@echo [INFO] Using PTEID_DIR_OPENSSL_098_X64=%PTEID_DIR_OPENSSL_098_X64%
+:find_openssl_x64
+@echo [INFO] Using PTEID_DIR_OPENSSL_X64=%PTEID_DIR_OPENSSL_X64%
 
-:: Check Xerces 3.1 X64
+:: Check Xerces X64
 :: ==================
-@call "%CHECKS%\PathXerces31_x64.bat"
-@if %ERRORLEVEL%==0 goto find_xerces_31_x64
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_XERCES_31_X64
+@call "%CHECKS%\PathXerces_x64.bat"
+@if %ERRORLEVEL%==0 goto find_xerces_x64
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_XERCES_X64
 @goto end
-:find_xerces_31_x64
-@echo [INFO] Using PTEID_DIR_XERCES_31_X64=%PTEID_DIR_XERCES_31_X64%
+:find_xerces_x64
+@echo [INFO] Using PTEID_DIR_XERCES_X64=%PTEID_DIR_XERCES_X64%
 
 :: Check Zlib  X64
 :: ================== 
@@ -209,6 +218,15 @@ set startTime=%time%
 @goto end
 :find_openjpeg_x64
 @echo [INFO] Using PTEID_DIR_OPENJPEG_X64=%PTEID_DIR_OPENJPEG_X64%
+
+:: Check Jpeg X64
+:: ==================
+@call "%CHECKS%\PathJpeg_x64.bat"
+@if %ERRORLEVEL%==0 goto find_jpeg_x64
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_JPEG_X64
+@goto end
+:find_jpeg_x64
+@echo [INFO] Using PTEID_DIR_JPEG_X64=%PTEID_DIR_JPEG_X64%
 
 :: Check Curl X64
 ::=============

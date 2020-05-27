@@ -1477,7 +1477,7 @@ APL_CertifStatus APL_Certif::getStatus()
 {
 	APL_ValidationLevel crl=APL_VALIDATION_LEVEL_NONE;
 	APL_ValidationLevel ocsp=APL_VALIDATION_LEVEL_MANDATORY;
-		MWLOG(LEV_DEBUG, MOD_APL, "APL_Certif::getStatus for certificate. Certificate Label: %s", this->getLabel());
+	MWLOG(LEV_DEBUG, MOD_APL, "APL_Certif::getStatus for certificate. Certificate Label: %s", this->getLabel());
         /*MWLOG(LEV_DEBUG, MOD_APL, "APL_Certif::getStatus for cert: %s", this->getOwnerName());*/
 
 	return getStatus(crl, ocsp);
@@ -1904,7 +1904,8 @@ APL_CertifStatus APL_OcspResponse::getResponse(CByteArray *response)
 	}
 	else
 	{
-		status=m_cryptoFwk->GetOCSPResponse(m_uri.c_str(),*m_certid,m_response);
+		/* XX: OpenSSL 1.1 migration: this condition is never hit  */
+	//	status=m_cryptoFwk->GetOCSPResponse(m_uri.c_str(),*m_certid,m_response);
 	}
 
 	if(response)

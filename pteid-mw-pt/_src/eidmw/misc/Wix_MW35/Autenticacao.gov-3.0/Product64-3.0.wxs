@@ -133,8 +133,8 @@
 	      <?elseif $(var.PTEID_TARGET_RUNTIME) = VCR9 ?>
 		        <!-- VC9 runtime -->
 		        <?define var.VCRT_TITLE="VC++ 9.0 runtime" ?>
-		        <Merge Id="VCRT1"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC120_CRT_x64.msm" Language="0" DiskId="1" />
-                <Merge Id="VCRT2"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC120_CRT_x86.msm" Language="0" DiskId="1" />
+		        <Merge Id="VCRT1"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC141_CRT_x64.msm" Language="0" DiskId="1" />
+                <Merge Id="VCRT2"        SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC141_CRT_x86.msm" Language="0" DiskId="1" />
 	      <?endif?>
       
 			</Directory>
@@ -283,11 +283,11 @@
 					<File Source="$(var.PTEID_BUILD_FOLDER_X86)cmdKsp.dll" />
 				</Component>
 
-				<Component Win64="no" Id="libeay32A" Guid="{3AAFC0CD-FDCB-4F7B-9EB7-7B2E31477691}" SharedDllRefCount="yes">
-					<File Source="$(env.PTEID_DIR_OPENSSL_098)\bin\libeay32.dll" KeyPath="yes"/>
+				<Component Win64="no" Id="libcrypto" Guid="{3AAFC0CD-FDCB-4F7B-9EB7-7B2E31477691}" SharedDllRefCount="yes">
+					<File Source="$(env.PTEID_DIR_OPENSSL)\bin\libcrypto-1_1.dll" KeyPath="yes"/>
 				</Component>
-				<Component Win64="no" Id="ssleay32A" Guid="{6DBB15A3-6EA1-4869-B133-7D8E1321B56C}" SharedDllRefCount="yes">
-					<File Source="$(env.PTEID_DIR_OPENSSL_098)\bin\ssleay32.dll" KeyPath="yes"/>
+				<Component Win64="no" Id="libssl" Guid="{6DBB15A3-6EA1-4869-B133-7D8E1321B56C}" SharedDllRefCount="yes">
+					<File Source="$(env.PTEID_DIR_OPENSSL)\bin\libssl-1_1.dll" KeyPath="yes"/>
 				</Component>
 
 				<!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
@@ -296,7 +296,7 @@
       </Component>
 
 				<Component Win64="no" Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
-          			<File Source="$(env.PTEID_DIR_XERCES_31)\Build\Win32\VC12\Release\xerces-c_3_1.dll" KeyPath="yes"/>
+                               <File Source="$(env.PTEID_DIR_XERCES)\bin\xerces-c_3_2.dll" KeyPath="yes"/>
 				</Component>
                 
                 <Component Win64="no" Id="Libpng" Guid="7763EFEE-ACE6-438E-96D3-4A2126102895" SharedDllRefCount="yes">
@@ -312,8 +312,8 @@
                 </Component>
                 
 				<!--Our Build of LibCurl - custom build options to remove unneeded features-->
-				<Component Win64="no" Id="Curl" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFA}" SharedDllRefCount="yes">
-					<File Source="$(env.PTEID_DIR_CURL)\bin\libcurl.dll" KeyPath="no" />
+				<Component Win64="no" Id="Curl" Guid="{A2ED6BF8-0C22-4EB8-8A57-ED8327A4133C}" SharedDllRefCount="yes">
+					<File Source="$(env.PTEID_DIR_CURL)\bin\libcurl769.dll" KeyPath="no" />
 				</Component>
 
                 <Component Win64="no" Id="pteidmdrvsystem32" Guid="{9C571B6F-E4E0-47AF-812D-E51CFA406F67}" Permanent="no">
@@ -321,7 +321,7 @@
                 </Component>
 
 				<Component Win64="no" Id="XMLSecurity" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F65" SharedDllRefCount="yes">
-          			<File Source="$(env.PTEID_XMLSECURITY)\Build\Win32\VC10\Release No Xalan\xsec_1_7.dll" KeyPath="yes" />
+                               <File Source="$(env.PTEID_XMLSECURITY)\lib\xsec_2_0.dll" KeyPath="yes" />
 				</Component>
 
 				<Component Win64="no" Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
@@ -344,11 +344,11 @@
             <File Id="cmdKsp_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)cmdKsp.dll" />
 				</Component>
 
-				<Component Id="libeay32A_64" Guid="{A3F78E8A-9C48-49B6-9823-0C6014134C31}" SharedDllRefCount="yes">
-					<File Id="libeay_64.dll" Source="$(env.PTEID_DIR_OPENSSL_098_X64)\bin\libeay32.dll" KeyPath="yes"/>
+				<Component Id="libcrypto_64" Guid="{A3F78E8A-9C48-49B6-9823-0C6014134C31}" SharedDllRefCount="yes">
+					<File Id="libeay_64.dll" Source="$(env.PTEID_DIR_OPENSSL_X64)\bin\libcrypto-1_1-x64.dll" KeyPath="yes"/>
 				</Component>
-				<Component Id="ssleay32A_64" Guid="{A50E4162-B721-44C0-B2A1-D13ED7DE924C}" SharedDllRefCount="yes">
-					<File Id="ssleay_64.dll" Source="$(env.PTEID_DIR_OPENSSL_098_X64)\bin\ssleay32.dll" KeyPath="yes"/>
+				<Component Id="libssl_64" Guid="{A50E4162-B721-44C0-B2A1-D13ED7DE924C}" SharedDllRefCount="yes">
+					<File Id="ssleay_64.dll" Source="$(env.PTEID_DIR_OPENSSL_X64)\bin\libssl-1_1-x64.dll" KeyPath="yes"/>
 				</Component>
 
 				<Component Id="pkcs11_64" Guid="{3C4751D6-D92C-40ab-8FA5-3A1DF1D927EA}" SharedDllRefCount="yes" Win64="yes">
@@ -356,7 +356,7 @@
 				</Component>
 
 				<Component Id="XMLSecurity_64" Guid="EF7A30DC-47CC-4385-832A-8E871EF69F66" SharedDllRefCount="yes">
-          			<File Id="xsec_1_6_64.dll" Source="$(env.PTEID_XMLSECURITY)\Build\x64\VC10\Release No Xalan\xsec_1_7.dll" KeyPath="yes" />
+                               <File Id="xsec_2_0_64.dll" Source="$(env.PTEID_XMLSECURITY_X64)\lib\xsec_2_0.dll" KeyPath="yes" />
 				</Component>
 
 				<!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
@@ -369,7 +369,7 @@
         </Component>
 
 				<Component Id="Runtime35ThirdPartyXerces_64" Guid="{B1EBF9C5-1A6F-44d4-AA80-DE55AAF052FF}" SharedDllRefCount="yes">
-         			 <File Id="xercesc_3_1_64.dll" Source="$(env.PTEID_DIR_XERCES_31_X64)\Build\Win64\VC12\Release\xerces-c_3_1.dll" KeyPath="yes"/>
+                                <File Id="xercesc_3_2_64.dll" Source="$(env.PTEID_DIR_XERCES_X64)\bin\xerces-c_3_2.dll" KeyPath="yes"/>
 				</Component>
                 
                 <Component Id="Libpng_64" Guid="{88D3D0A3-24C6-4AC7-AC2C-F6F8FF1BABA8}" SharedDllRefCount="yes">
@@ -385,8 +385,8 @@
                 </Component>
                 
 				<!--Our Build of LibCurl - custom build options to remove unneeded features-->
-				<Component Id="Curl_64" Guid="{1BA8207B-BEC4-43e3-93FA-AE9D25117CFB}" SharedDllRefCount="yes">
-					<File Id="libcurl_64.dll" Source="$(env.PTEID_DIR_CURL_X64)\bin\libcurl.dll" KeyPath="no" />
+				<Component Id="Curl_64" Guid="{F28087B4-420B-4CC3-862F-6CF6BA5B7C80}" SharedDllRefCount="yes">
+					<File Id="libcurl769_64.dll" Source="$(env.PTEID_DIR_CURL_X64)\bin\libcurl769.dll" KeyPath="no" />
 				</Component>
 
 			</DirectoryRef>
@@ -596,11 +596,11 @@
 				<ComponentRef Id="Runtime35"/>
 				<ComponentRef Id="Runtime35_64"/>
 
-				<ComponentRef Id="libeay32A"/>
-				<ComponentRef Id="ssleay32A"/>
+				<ComponentRef Id="libcrypto"/>
+				<ComponentRef Id="libssl"/>
 
-				<ComponentRef Id="libeay32A_64"/>
-				<ComponentRef Id="ssleay32A_64"/>
+				<ComponentRef Id="libcrypto_64"/>
+				<ComponentRef Id="libssl_64"/>
         
 				<ComponentRef Id="Runtime35ThirdPartyXerces"/>
 				<ComponentRef Id="Runtime35ThirdPartyXerces_64"/>

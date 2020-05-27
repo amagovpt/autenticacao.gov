@@ -11,7 +11,7 @@
 
 import QtQuick 2.6
 import QtQuick.Controls 2.1
-import QtQuick.Dialogs 1.0
+import Qt.labs.platform 1.0
 import QtGraphicalEffects 1.0
 import eidguiV2 1.0
 
@@ -64,21 +64,25 @@ Item {
         FileDialog {
             id: fileDialog
             title: qsTranslate("Popup File","STR_POPUP_FILE_INPUT")
-            folder: shortcuts.home
+            folder: StandardPaths.writableLocation(StandardPaths.HomeLocation)
             modality : Qt.WindowModal
-            selectMultiple: false
-            nameFilters: [ "PDF document (*.pdf)", "All files (*)" ]
+            fileMode: FileDialog.OpenFile
+            nameFilters: ["PDF (*.pdf)", "All files (*)"]
             Component.onCompleted: visible = false
         }
-        FileSaveDialog {
+        FileDialog {
             id: fileDialogOutput
             title: qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
             nameFilters: ["PDF (*.pdf)", "All files (*)"]
+            folder: fileDialog.folder
+            fileMode: FileDialog.SaveFile
         }
-        FileSaveDialog {
+        FileDialog {
             id: fileDialogCMDOutput
             title: qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
             nameFilters: ["PDF (*.pdf)", "All files (*)"]
+            folder: fileDialog.folder
+            fileMode: FileDialog.SaveFile
         }
 
         Item{

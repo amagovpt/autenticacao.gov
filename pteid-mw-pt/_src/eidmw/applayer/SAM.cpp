@@ -117,10 +117,13 @@ char * SAM::_getCVCPublicKey()
 	unsigned char * mod_bytes = cvc_modulus.GetBytes();
 	unsigned char * exp_bytes = cvc_exponent.GetBytes();
 
-	key_tmp->n = BN_bin2bn(mod_bytes+offset_mod,
-                                 128, key_tmp->n);
-	key_tmp->e = BN_bin2bn(exp_bytes+offset_exp,
-                                 3, key_tmp->e);
+	BIGNUM *rsa_n = BN_new();
+	BIGNUM *rsa_e = BN_new();
+
+	BN_bin2bn(mod_bytes+offset_mod, 128, rsa_n);
+	BN_bin2bn(exp_bytes+offset_exp, 3, rsa_e);
+
+	RSA_set0_key(key_tmp, rsa_n, rsa_e, NULL);
 
 	EVP_PKEY_assign_RSA(evp_key, key_tmp);
 	 
@@ -129,6 +132,8 @@ char * SAM::_getCVCPublicKey()
 	cvc_key = (char *)malloc(out_len);
 
 	binToHex(rsa_der, der_len, cvc_key, out_len);
+
+	RSA_free(key_tmp);
 	free(rsa_der);
 
 	return cvc_key;
@@ -147,8 +152,14 @@ char * SAM::_getCardAuthPublicKey()
 	unsigned char * mod_bytes = key->getModulus()->GetBytes();
 	unsigned char * exp_bytes = key->getExponent()->GetBytes();
 
-	key_tmp->n = BN_bin2bn(mod_bytes, key->getModulus()->Size(), key_tmp->n);
-	key_tmp->e = BN_bin2bn(exp_bytes, key->getExponent()->Size(), key_tmp->e);
+	BIGNUM *rsa_n = BN_new();
+	BIGNUM *rsa_e = BN_new();
+
+	BN_bin2bn(mod_bytes, key->getModulus()->Size(), rsa_n);
+	BN_bin2bn(exp_bytes, key->getExponent()->Size(), rsa_e);
+
+	RSA_set0_key(key_tmp, rsa_n, rsa_e, NULL);
+
 	EVP_PKEY_assign_RSA(evp_key, key_tmp);
 
 	int der_len = i2d_PUBKEY(evp_key, &rsa_der);
@@ -158,6 +169,7 @@ char * SAM::_getCardAuthPublicKey()
 
 	binToHex(rsa_der, der_len, card_auth_pubkey, out_len);
 
+	RSA_free(key_tmp);
 	free(rsa_der);
 	return card_auth_pubkey;
 }
@@ -325,39 +337,46 @@ char *SAM::getPK_IFD_AUT(CByteArray &cvc_cert)
 	}
 	memcpy(signature, ptr+4, sizeof(signature));
 
-    //Build CVC CA public key     
-    RSA * pubkey = RSA_new();
-    pubkey->n = BN_bin2bn(m_ca_cvc_modulus.GetBytes(), 128, NULL); // BN_hex2bn(&pubkey->n, ca_mod);
-    pubkey->e = BN_bin2bn(m_ca_cvc_exponent.GetBytes(), 3, NULL); // BN_hex2bn(&pubkey->n, ca_mod);
+	//Build CVC CA public key
+	RSA * pubkey = RSA_new();
 
-    if (pubkey->n == NULL || pubkey->e == NULL)
-    {
-    	MWLOG(LEV_ERROR, MOD_APL, L"Failed to parse bignums into public key struct!" );
-    	return NULL;
-    }
+	BIGNUM *rsa_n = BN_new();
+	BIGNUM *rsa_e = BN_new();
+	BN_bin2bn(m_ca_cvc_modulus.GetBytes(), 128, rsa_n);
+	BN_bin2bn(m_ca_cvc_exponent.GetBytes(), 3, rsa_e);
 
-    int ret = RSA_public_decrypt(sizeof(signature), signature, decrypted_data, pubkey, RSA_NO_PADDING);
+	RSA_set0_key(pubkey, rsa_n, rsa_e, NULL);
 
-    if (ret == -1)
-    {
-      	MWLOG(LEV_ERROR, MOD_APL, L"Error decrypting CVC signature: %ld\n", ERR_get_error());
-      	return NULL;
-    }
+	/*
+	if (pubkey->n == NULL || pubkey->e == NULL)
+	{
+		MWLOG(LEV_ERROR, MOD_APL, L"Failed to parse bignums into public key struct!" );
+		return NULL;
+	}
+	*/
 
-    char CHR[8];
+	int ret = RSA_public_decrypt(sizeof(signature), signature, decrypted_data, pubkey, RSA_NO_PADDING);
 
-    //These 12 bytes are used to identify the PK.IFD.AUT. Its value is:
+	if (ret == -1)
+	{
+		MWLOG(LEV_ERROR, MOD_APL, L"Error decrypting CVC signature: %ld\n", ERR_get_error());
+		return NULL;
+	}
+
+	char CHR[8];
+
+	//These 12 bytes are used to identify the PK.IFD.AUT. Its value is:
 	//Filler (0–4 bytes) || SN.IFD (8–12 bytes)
-    const int chr_offset = 10+4;
-    memcpy(CHR, decrypted_data+chr_offset, sizeof(CHR));
+	const int chr_offset = 10+4;
+	memcpy(CHR, decrypted_data+chr_offset, sizeof(CHR));
 
-    char * chr_string = (char *) malloc(sizeof(CHR)*2+1);
+	char * chr_string = (char *) malloc(sizeof(CHR)*2+1);
 
-    binToHex((const unsigned char *)CHR, sizeof(CHR), chr_string, 8*2+1);
+	binToHex((const unsigned char *)CHR, sizeof(CHR), chr_string, 8*2+1);
 
-    //fprintf(stderr, "Certificate Holder reference (IFD): %s\n", chr_string);
+	//fprintf(stderr, "Certificate Holder reference (IFD): %s\n", chr_string);
 
-    return chr_string;
+	return chr_string;
 }
 
 

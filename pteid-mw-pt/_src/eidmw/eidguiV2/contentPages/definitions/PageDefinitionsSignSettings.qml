@@ -111,6 +111,12 @@ PageDefinitionsSignSettingsForm {
         } else {
             propertyRectLoadCMDCerts.visible = false
         }
+
+        if (Qt.platform.os === "windows") {
+            propertyCheckboxCMDRegRemember.checked = !controler.getAskToRegisterCmdCertValue()
+        } else {
+            propertyRectLoadCMDCerts.visible = false
+        }
         
         if(propertyRectAppCertificates.visible){
             propertyDateAppCertificates.forceActiveFocus()
