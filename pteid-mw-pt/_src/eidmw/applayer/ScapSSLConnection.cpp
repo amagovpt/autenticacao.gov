@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2019-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * Licensed under the EUPL V.1.1
 
@@ -76,8 +76,8 @@ namespace eIDMW
 
 		}
 
-                MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: Server reply (size=%d): \n", bytes_read);
-                /*MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: Server reply (size=%d): \n%s\n", bytes_read, buffer.buf);*/
+		MWLOG(LEV_DEBUG, MOD_APL, "Server reply (size=%d): \n", bytes_read);
+		/*MWLOG(LEV_DEBUG, MOD_APL, "Server reply (size=%d): \n%s\n", bytes_read, buffer.buf);*/
 
 		return buffer.buf;
 	}

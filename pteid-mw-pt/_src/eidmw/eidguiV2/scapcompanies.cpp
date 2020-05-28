@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * Licensed under the EUPL V.1.1
@@ -488,7 +488,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
         
         eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG , "ScapSignature",
                         "ACService returned: %s",
-                        ( !scapResult.empty() ? scapResult.c_str() : "Null SCAP result" ));
+                        ( !scapResult.empty() ? "SCAP result is not null" : "Null SCAP result" ));
 
         // Remove request answer headers
         std::string replyString = scapResult;
