@@ -943,8 +943,8 @@ Item {
                     id: rectAppGraphicsCheckBox
                     width: parent.width
                     color: "white"
-                    height: graphicsTextField.height + checkboxAccelGraphics.height
-                            + 3 * Constants.SIZE_TEXT_V_SPACE
+                    height: graphicsTextField.height + graphicsInfoTextField.height + checkboxAccelGraphics.height
+                            + 4 * Constants.SIZE_TEXT_V_SPACE
                     anchors.top: dateAppGraphics.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
@@ -963,12 +963,50 @@ Item {
                         Keys.onPressed: {
                             handleKeyPressed(event.key, graphicsTextField)
                         }
-                        KeyNavigation.tab: checkboxAccelGraphics
-                        KeyNavigation.down: checkboxAccelGraphics
-                        KeyNavigation.right: checkboxAccelGraphics
+                        KeyNavigation.tab: graphicsInfoTextField
+                        KeyNavigation.down: graphicsInfoTextField
+                        KeyNavigation.right: graphicsInfoTextField
                         KeyNavigation.backtab: dateAppGraphics
                         KeyNavigation.up: dateAppGraphics
                         KeyNavigation.left: dateAppGraphics
+                    }
+                    Text {
+                        id: graphicsInfoTextField
+                        x: 10
+                        text: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + controler.autoTr
+                        anchors.top: graphicsTextField.bottom
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                        font.capitalization: Font.MixedCase
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.bold: activeFocus
+                        wrapMode: Text.WordWrap
+                        Accessible.name: text
+                        KeyNavigation.tab: textLink
+                        KeyNavigation.down: textLink
+                        KeyNavigation.right: textLink
+                        KeyNavigation.backtab: graphicsTextField
+                        KeyNavigation.up: graphicsTextField
+                        KeyNavigation.left: graphicsTextField
+                    }
+                    Components.Link {
+                        id: textLink
+                        anchors.left: graphicsInfoTextField.right
+                        anchors.verticalCenter: graphicsInfoTextField.verticalCenter
+                        width: parent.width
+                        propertyText.text: "<a href='https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-com-placas-gr%c3%a1ficas-integradas-em-windows'>" +
+                                           qsTranslate("PageDefinitionsApp", "STR_HERE") + controler.autoTr + "</a>."
+                        propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-com-placas-gr%c3%a1ficas-integradas-em-windows'
+                        propertyText.font.capitalization: Font.MixedCase
+                        propertyText.font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        propertyText.font.family: lato.name
+                        propertyText.font.bold: activeFocus
+                        KeyNavigation.tab: checkboxAccelGraphics
+                        KeyNavigation.down: checkboxAccelGraphics
+                        KeyNavigation.right: checkboxAccelGraphics
+                        KeyNavigation.left: graphicsInfoTextField
+                        KeyNavigation.backtab: graphicsInfoTextField
+                        KeyNavigation.up: graphicsInfoTextField
                     }
                     CheckBox {
                         id: checkboxAccelGraphics
@@ -981,7 +1019,7 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         font.bold: activeFocus
-                        anchors.top: graphicsTextField.bottom
+                        anchors.top: graphicsInfoTextField.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text

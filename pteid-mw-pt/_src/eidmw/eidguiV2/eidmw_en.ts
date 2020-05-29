@@ -989,6 +989,14 @@
         <source>STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION</source>
         <translation>Please try disabling graphical acceleration if you encounter problems with application graphics.</translation>
     </message>
+    <message>
+        <source>STR_HERE</source>
+        <translation>here</translation>
+    </message>
+    <message>
+        <source>STR_MORE_INFO</source>
+        <translation>For more information click </translation>
+    </message>
 </context>
 <context>
     <name>PageDefinitionsSCAP</name>

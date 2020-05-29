@@ -987,6 +987,14 @@
         <source>STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION</source>
         <translation>Por favor experimente desativar a aceleração gráfica se detectar problemas com os gráficos da aplicação.</translation>
     </message>
+    <message>
+        <source>STR_HERE</source>
+        <translation>aqui</translation>
+    </message>
+    <message>
+        <source>STR_MORE_INFO</source>
+        <translation>Para mais informação clique </translation>
+    </message>
 </context>
 <context>
     <name>PageDefinitionsSCAP</name>
