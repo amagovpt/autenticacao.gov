@@ -48,6 +48,9 @@ public:
         : m_AppController(AppController)
     {
     }
+    ~AutoUpdates() {
+        delete qnam;
+    }
     void setAppController(AppController* AppController){
         m_AppController = AppController;
     }
