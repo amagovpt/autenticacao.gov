@@ -37,12 +37,20 @@ int main(int argc, char *argv[])
 	// AppController init
 	AppController controller(settings);
 
-	if (settings.getGraphicsAccel()) {
-		qDebug() << "C++: Starting App with graphics acceleration";
-	}
-	else {
+	if (settings.getGraphicsAccel() == 0)
+	{
 		qDebug() << "C++: Starting App without graphics acceleration";
 		QCoreApplication::setAttribute(Qt::AA_UseSoftwareOpenGL);
+	}
+#ifdef WIN32
+	else if (settings.getGraphicsAccel() == 2) {
+		qDebug() << "C++: Starting App with ANGLE emulation for OpenGL";
+		QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
+	}
+#endif
+	else
+	{
+		qDebug() << "C++: Starting App with graphics acceleration";
 	}
 
 	SingleApplication app(argc, argv);

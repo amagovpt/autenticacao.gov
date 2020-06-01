@@ -103,14 +103,14 @@ public slots:
     bool getShowAnimationsValue(void);
     bool getUseSystemScaleValue(void);
     int  getApplicationScaleValue(void);
-    bool getGraphicsAccelValue(void);
+    int  getGraphicsAccelValue(void);
 
     void setShowNotificationValue(bool bShowNotification);
     void setShowPictureValue(bool bShowPicture);
     void setShowAnimationsValue(bool bShowAnimations);
     void setUseSystemScaleValue(bool bUseSystemScale);
     void setApplicationScaleValue(int iScale);
-    void setGraphicsAccelValue(bool bGraphicsAccel);
+    void setGraphicsAccelValue(int iGraphicsAccel);
 
     QString getTimeStampHostValue (void);
     void setTimeStampHostValue (QString const& timeStamp_host);

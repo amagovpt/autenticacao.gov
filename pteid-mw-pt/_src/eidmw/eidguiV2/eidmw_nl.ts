@@ -901,7 +901,7 @@
     </message>
     <message>
         <source>STR_ACCEL_ENABLE</source>
-        <translation>Activar aceleração gráfica</translation>
+        <translation type="vanished">Activar aceleração gráfica</translation>
     </message>
     <message>
         <source>STR_CERTIFICATES_TITLE</source>
@@ -985,7 +985,7 @@
     </message>
     <message>
         <source>STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION</source>
-        <translation>Por favor experimente desativar a aceleração gráfica se detectar problemas com os gráficos da aplicação.</translation>
+        <translation>Por favor experimente alterar o modo de renderização gráfica se detectar problemas com os gráficos da aplicação.</translation>
     </message>
     <message>
         <source>STR_HERE</source>
@@ -994,6 +994,22 @@
     <message>
         <source>STR_MORE_INFO</source>
         <translation>Para mais informação clique </translation>
+    </message>
+    <message>
+        <source>STR_ACCEL_MODE</source>
+        <translation>Modo de renderização gráfica:</translation>
+    </message>
+    <message>
+        <source>STR_SOFTWARE_OPENGL</source>
+        <translation>Software (OpenGL)</translation>
+    </message>
+    <message>
+        <source>STR_HARDWARE</source>
+        <translation>Hardware (Placa gráfica)</translation>
+    </message>
+    <message>
+        <source>STR_SOFTWARE_DIRECT3D</source>
+        <translation>Software (Direct3D)</translation>
     </message>
 </context>
 <context>

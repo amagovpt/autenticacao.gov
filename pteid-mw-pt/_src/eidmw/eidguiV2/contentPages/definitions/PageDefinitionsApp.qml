@@ -145,17 +145,20 @@ PageDefinitionsAppForm {
         }
     }
 
-    propertyCheckboxAccelGraphics{
-        onCheckedChanged: {
-            if(propertyCheckboxAccelGraphics.checked){
-                controler.setGraphicsAccelValue(true)
-            }else{
-                controler.setGraphicsAccelValue(false)
-            }
-            if(propertyCheckboxAccelGraphics.enabled){
-                restart_dialog.headerTitle = qsTranslate("Popup Card","STR_POPUP_ACCEL_GRAPHICS") + controler.autoTr
-                restart_dialog.open()
-            }
+    propertyComboboxAccelGraphics{
+        onActivated:  {
+            console.log("propertyComboboxAccelGraphics onActivated index = "
+                        + propertyComboboxAccelGraphics.currentIndex)
+            controler.setGraphicsAccelValue(propertyComboboxAccelGraphics.currentIndex)
+            restart_dialog.headerTitle = qsTranslate("Popup Card","STR_POPUP_ACCEL_GRAPHICS") + controler.autoTr
+            restart_dialog.open()
+        }
+        onModelChanged: {
+            console.log("propertyComboboxAccelGraphics onModelChanged index = "
+                        + propertyComboboxAccelGraphics.currentIndex)
+            propertyComboboxAccelGraphics.currentIndex = controler.getGraphicsAccelValue();
+            console.log("propertyComboboxAccelGraphics onModelChanged index = "
+                        + propertyComboboxAccelGraphics.currentIndex)
         }
     }
     propertyCheckboxSystemProxy{
@@ -234,6 +237,9 @@ PageDefinitionsAppForm {
 
             propertyCheckboxUseSystemScale.visible = false
             propertyComboBoxScaling.width = propertyComboBoxScaling.parent.width - propertyTextManualScaling.width - 2*10- Constants.SIZE_TEXT_V_SPACE
+
+            // Only Windows supports ANGLE option
+            propertyComboboxAccelGraphics.model = propertyComboboxAccelGraphics.model.slice(0,-1)
         }
 
         propertyCheckboxStartAutoupdate.checked = controler.getStartAutoupdateValue()
@@ -255,9 +261,6 @@ PageDefinitionsAppForm {
             propertyCheckBoxDebugMode.checked = false
         }
         propertyCheckBoxDebugMode.enabled = true
-
-        propertyCheckboxAccelGraphics.checked = controler.getGraphicsAccelValue();
-        propertyCheckboxAccelGraphics.enabled = true;
 
         updatePages()
 

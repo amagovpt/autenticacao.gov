@@ -394,7 +394,7 @@ bool AppController::getUseSystemScaleValue(void) {
 int AppController::getApplicationScaleValue(void) {
     return m_Settings.getApplicationScale();
 }
-bool AppController::getGraphicsAccelValue(void){
+int AppController::getGraphicsAccelValue(void){
     return m_Settings.getGraphicsAccel();
 }
 void AppController::setShowNotificationValue (bool bShowNotification){
@@ -414,8 +414,8 @@ void AppController::setUseSystemScaleValue(bool bUseSystemScale) {
 void AppController::setApplicationScaleValue(int iScale) {
     m_Settings.setApplicationScale(iScale);
 }
-void AppController::setGraphicsAccelValue(bool bGraphicsAccel){
-    m_Settings.setAccelGraphics(bGraphicsAccel);
+void AppController::setGraphicsAccelValue(int iGraphicsAccel){
+    m_Settings.setAccelGraphics(iGraphicsAccel);
 }
 QString AppController::getTimeStampHostValue (void){
     return m_Settings.getTimeStampHost();

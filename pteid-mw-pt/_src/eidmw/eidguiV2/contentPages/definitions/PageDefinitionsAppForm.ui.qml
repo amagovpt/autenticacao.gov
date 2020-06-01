@@ -38,7 +38,7 @@ Item {
     property alias propertyCheckboxShowAnime: checkboxShowAnime
     property alias propertyCheckBoxDebugMode: checkboxDebugMode
     property alias propertyGraphicsTextField: graphicsTextField
-    property alias propertyCheckboxAccelGraphics: checkboxAccelGraphics
+    property alias propertyComboboxAccelGraphics: comboboxAccelGraphics
     property alias propertyRectAppNetworkCheckBox: rectAppNetworkCheckBox
     property alias propertyCheckboxSystemProxy: checkboxSystemProxy
     property alias propertyCheckboxProxy: checkboxProxy
@@ -927,7 +927,7 @@ Item {
                     radius: Constants.FORM_SHADOW_RADIUS
                     samples: Constants.FORM_SHADOW_SAMPLES
                     color: Constants.COLOR_FORM_SHADOW
-                    source: rectAppLooks
+                    source: rectAppGraphicsCheckBox
                     spread: Constants.FORM_SHADOW_SPREAD
                     opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
                 }
@@ -943,7 +943,7 @@ Item {
                     id: rectAppGraphicsCheckBox
                     width: parent.width
                     color: "white"
-                    height: graphicsTextField.height + graphicsInfoTextField.height + checkboxAccelGraphics.height
+                    height: graphicsTextField.height + graphicsInfoTextField.height + comboboxAccelGraphics.height
                             + 4 * Constants.SIZE_TEXT_V_SPACE
                     anchors.top: dateAppGraphics.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
@@ -1001,39 +1001,64 @@ Item {
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_FIELD
                         propertyText.font.family: lato.name
                         propertyText.font.bold: activeFocus
-                        KeyNavigation.tab: checkboxAccelGraphics
-                        KeyNavigation.down: checkboxAccelGraphics
-                        KeyNavigation.right: checkboxAccelGraphics
+                        KeyNavigation.tab: textGraphicsRendering
+                        KeyNavigation.down: textGraphicsRendering
+                        KeyNavigation.right: textGraphicsRendering
                         KeyNavigation.left: graphicsInfoTextField
                         KeyNavigation.backtab: graphicsInfoTextField
                         KeyNavigation.up: graphicsInfoTextField
                     }
-                    CheckBox {
-                        id: checkboxAccelGraphics
-                        enabled: false
-                        text: qsTranslate("PageDefinitionsApp",
-                                          "STR_ACCEL_ENABLE")
-                              + controler.autoTr
-                        height: 25
+                    Text {
+                        id: textGraphicsRendering
+                        x: 10
+                        font.capitalization: Font.MixedCase
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.bold: activeFocus
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.verticalCenter: comboboxAccelGraphics.verticalCenter
+                        wrapMode: Text.WordWrap
+                        Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key,textSelectReader)
+                        }
+                        KeyNavigation.tab: comboboxAccelGraphics
+                        KeyNavigation.down: comboboxAccelGraphics
+                        KeyNavigation.right: comboboxAccelGraphics
+                        KeyNavigation.backtab: textLink
+                        KeyNavigation.up: textLink
+                        KeyNavigation.left: textLink
+                        text: qsTranslate("PageDefinitionsApp", "STR_ACCEL_MODE") + controler.autoTr
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    ComboBox {
+                        id: comboboxAccelGraphics
+                        enabled: true
+                        height: 3 * Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         font.bold: activeFocus
+                        anchors.left: textGraphicsRendering.right
+                        anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
                         anchors.top: graphicsInfoTextField.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                        Accessible.role: Accessible.CheckBox
-                        Accessible.name: text
+                        Accessible.role: Accessible.ComboBox
+                        Accessible.name: currentText
                         Keys.onPressed: {
-                            handleKeyPressed(event.key, checkboxAccelGraphics)
+                            handleKeyPressed(event.key, comboboxAccelGraphics)
                         }
+                        model: [
+                            qsTranslate("PageDefinitionsApp", "STR_SOFTWARE_OPENGL") + controler.autoTr,
+                            qsTranslate("PageDefinitionsApp", "STR_HARDWARE") + controler.autoTr,
+                            qsTranslate("PageDefinitionsApp", "STR_SOFTWARE_DIRECT3D") + controler.autoTr
+                        ]
                         KeyNavigation.tab: dateAppNetwork
-                        KeyNavigation.down: dateAppNetwork
                         KeyNavigation.right: dateAppNetwork
-                        KeyNavigation.backtab: graphicsTextField
-                        KeyNavigation.up: graphicsTextField
-                        KeyNavigation.left: graphicsTextField
-                        Keys.onEnterPressed: toggleSwitch(checkboxAccelGraphics)
-                        Keys.onReturnPressed: toggleSwitch(checkboxAccelGraphics)
+                        KeyNavigation.backtab: textGraphicsRendering
+                        KeyNavigation.left: textGraphicsRendering
                     }
                 }
             }
@@ -1066,9 +1091,9 @@ Item {
                     KeyNavigation.tab: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
                     KeyNavigation.down: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
                     KeyNavigation.right: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
-                    KeyNavigation.backtab: checkboxAccelGraphics
-                    KeyNavigation.up: checkboxAccelGraphics
-                    KeyNavigation.left: checkboxAccelGraphics
+                    KeyNavigation.backtab: comboboxAccelGraphics
+                    KeyNavigation.up: comboboxAccelGraphics
+                    KeyNavigation.left: comboboxAccelGraphics
                 }
                 DropShadow {
                     anchors.fill: rectAppNetworkCheckBox

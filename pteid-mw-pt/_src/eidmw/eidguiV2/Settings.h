@@ -66,7 +66,7 @@ public:
         , m_bShowAnimations(false)
         , m_bUseSystemScale(false)
         , m_iApplicationScale(0)
-        , m_bGraphicsAccel(false)
+        , m_iGraphicsAccel(0)
         , m_bUseCustomSignature(false)
         , m_bPinpadEnabled(false)
         , m_bStartMinimized(false)
@@ -225,10 +225,7 @@ public:
         {
             eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_GRAPHICSACCEL);
             long AccelGraphics = config.getLong();
-            if ( 0 != AccelGraphics )
-            {
-                setAccelGraphics(true);
-            }
+            setAccelGraphics(AccelGraphics);
         }
         //----------------------------------------------------------
         // check USECUSTOMSIGNATURE
@@ -483,9 +480,9 @@ public:
     {
         return m_iApplicationScale;
     }
-    bool getGraphicsAccel( void )
+    int getGraphicsAccel( void )
     {
-        return m_bGraphicsAccel;
+        return m_iGraphicsAccel;
     }
     void setUseSystemScale(  bool bUseSystemScale )
     {
@@ -505,11 +502,11 @@ public:
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWANIMATIONS);
         config.setLong(m_bShowAnimations);
     }
-    void setAccelGraphics(  bool bGraphicsAccel )
+    void setAccelGraphics(  int iGraphicsAccel )
     {
-        m_bGraphicsAccel = bGraphicsAccel;
+        m_iGraphicsAccel = iGraphicsAccel;
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_GRAPHICSACCEL);
-        config.setLong(m_bGraphicsAccel);
+        config.setLong(m_iGraphicsAccel);
     }
     bool getUseCustomSignature( void )
     {
@@ -763,7 +760,7 @@ private:
     bool    m_bShowAnimations;      //!< the GUI Animations
     int     m_bUseSystemScale;      //!< use the system scale
     int     m_iApplicationScale;    //!< the GUI scale
-    bool    m_bGraphicsAccel;       //!< the Graphics Acceleration
+    int     m_iGraphicsAccel;       //!< the Graphics Acceleration 0=Software, 1=Hardware, 2=ANGLE
     bool    m_bUseCustomSignature;  //!< the GUI use custom signature image
     bool    m_bPinpadEnabled;       //!< use Pinpad functionality when supported by readers (T/F)
     bool    m_bStartMinimized;      //!< startup minimized (T/F)
