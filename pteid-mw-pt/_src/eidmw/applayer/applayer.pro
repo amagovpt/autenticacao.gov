@@ -50,9 +50,9 @@ LIBS += ../lib/libpteid-poppler.a
 macx: LIBS += -L/usr/local/Cellar/openssl/1.0.2r/lib/ \
 	    -L/usr/local/Cellar/xerces-c/3.1.2/lib/ \
 	    -L/usr/local/Cellar/libzip/1.5.1/lib/ \
-        -L/usr/local/Cellar/libpng/1.6.36/lib/ \
+        -L/usr/local/Cellar/libpng/1.6.36/lib \
         -L/usr/local/Cellar/openjpeg/2.3.1/lib \
-	    -L/usr/local/Cellar/xml-security-c/1.7.3/lib/
+	    -L/usr/local/Cellar/xml-security-c/1.7.3/lib \
 	    -L/usr/local/Cellar/curl/7.69.1/lib/
 macx: LIBS += -Wl,-framework -Wl,CoreFoundation
 macx: LIBS += -Wl,-framework -Wl,SystemConfiguration
