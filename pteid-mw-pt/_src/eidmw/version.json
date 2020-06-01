@@ -13,11 +13,11 @@
             "package": "20126/78595/Autenticacao.gov_Ubuntu_20_x64.deb"
         },
         "windows32": {
-            "latestVersion": "3.1.0",
+            "latestVersion": "3.1.2",
             "package": "20126/78595/Autenticacao.gov_Win_x86.msi"
         },
         "windows64": {
-            "latestVersion": "3.1.0",
+            "latestVersion": "3.1.2",
             "package": "20126/78595/Autenticacao.gov_Win_x64.msi"
         },
         "fedora32": {
@@ -42,6 +42,13 @@
         }
     },
     "versions": [
+        {
+            "version": "3.1.2",
+            "date": "2020-06-01",
+            "release_notes": [
+                         "Atualização de certificados"
+            ]
+        },
                 {
             "version": "3.1.1",
             "date": "2020-05-20",
