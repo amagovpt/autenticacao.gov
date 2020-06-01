@@ -143,14 +143,14 @@ PageDefinitionsSCAPForm {
                     console.log("ScapAttributesExpiredError")
                     bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ATTRIBUTES_EXPIRED")
                             + " "
-                            + "<a href=\"https://www.autenticacao.gov.pt/atributos-profissionais/scap\">"
-                            + "https://www.autenticacao.gov.pt/atributos-profissionais/scap"
+                            + "<a href=\"https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais\">"
+                            + "https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
                 }else if(pdfsignresult == GAPI.ScapZeroAttributesError){
                     console.log("ScapZeroAttributesError")
                     bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES")
                             + " "
-                            + "<a href=\"https://www.autenticacao.gov.pt/atributos-profissionais/scap\">"
-                            + "https://www.autenticacao.gov.pt/atributos-profissionais/scap"
+                            + "<a href=\"https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais\">"
+                            + "https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
                 }else {
                     console.log("ScapGenericError")
                     gapi.startPingSCAP()
