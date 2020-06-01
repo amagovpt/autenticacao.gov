@@ -71,7 +71,11 @@ void AutoUpdates::initRequest(int updateType){
 
     m_updateType=updateType;
 
-    if (qnam.networkAccessible() == QNetworkAccessManager::NotAccessible){
+    if(!qnam){
+        qnam = new QNetworkAccessManager(this);
+    }
+
+    if (!qnam || qnam->networkAccessible() == QNetworkAccessManager::NotAccessible){
         qDebug() << "C++ AUTO UPDATES: startRequest No Internet Connection";
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
             "AutoUpdates::startRequest: No Internet Connection.");
@@ -152,7 +156,7 @@ void AutoUpdates::startRequest(QUrl url) {
     }
     QNetworkProxy::setApplicationProxy(proxy);
 
-    reply = qnam.get(QNetworkRequest(url));
+    reply = qnam->get(QNetworkRequest(url));
     QTimer::singleShot(download_duration, this, SLOT(cancelDownload()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(httpError(QNetworkReply::NetworkError)));
@@ -839,7 +843,7 @@ void AutoUpdates::startUpdate()
 void AutoUpdates::startUpdateRequest(QUrl url){
     qDebug() << "C++ AUTO UPDATES: startUpdateRequest";
 
-    if (qnam.networkAccessible() == QNetworkAccessManager::NotAccessible){
+    if (qnam->networkAccessible() == QNetworkAccessManager::NotAccessible){
         qDebug() << "C++ AUTO UPDATES: startUpdateRequest No Internet Connection";
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
             "AutoUpdates::startUpdateRequest: No Internet Connection.");
@@ -848,7 +852,7 @@ void AutoUpdates::startUpdateRequest(QUrl url){
     }
 
     int download_duration = 300000;
-    reply = qnam.get(QNetworkRequest(url));
+    reply = qnam->get(QNetworkRequest(url));
     QTimer::singleShot(download_duration, this, SLOT(cancelUpdateDownload()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(httpUpdateError(QNetworkReply::NetworkError)));
@@ -1216,7 +1220,7 @@ void AutoUpdates::cancelDownload()
         reply->abort();
     }
 
-    if (qnam.networkAccessible() == QNetworkAccessManager::NotAccessible){
+    if (qnam->networkAccessible() == QNetworkAccessManager::NotAccessible){
         qDebug() << "C++ AUTO UPDATES: cancelDownload No Internet Connection";
 
         getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NetworkError);

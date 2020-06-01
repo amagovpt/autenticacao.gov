@@ -82,7 +82,7 @@ private:
     int m_updateType;
     QUrl url;
     QNetworkProxy proxy;
-    QNetworkAccessManager qnam;
+    QNetworkAccessManager *qnam = NULL;
     QNetworkReply *reply;
     QFile *file;
     int fileIdx = 0;
