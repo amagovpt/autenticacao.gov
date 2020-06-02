@@ -227,10 +227,10 @@ PageDefinitionsUpdatesForm {
     }
     propertyButtonCancelUpdate {
         onClicked: {
-            console.log("propertyButtonCancelUpdate clicked")
+            console.log("propertyButtonCancelAppUpdate clicked")
             propertyProgressBar.visible = false
             propertyButtonSearch.visible = true
-            controler.userCancelledUpdateDownload()
+            controler.userCancelledUpdateAppDownload()
             propertyTextDescription.forceActiveFocus()
         }
     }

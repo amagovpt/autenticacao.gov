@@ -312,6 +312,11 @@ void AppController::userCancelledUpdateCertsDownload(){
     certsUpdate.userCancelledUpdateDownload();
 }
 
+void AppController::userCancelledUpdateAppDownload(){
+    qDebug() << "C++: userCancelledUpdateAppDownload";
+    appUpdate.userCancelledUpdateDownload();
+}
+
 QVariant AppController::getCursorPos()
 {
     return QVariant(QCursor::pos());
