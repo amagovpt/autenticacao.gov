@@ -960,7 +960,7 @@ Para **desativar a correspondência com endereço de email do certificado digita
 
 - Versão EN (original): <http://support.microsoft.com/kb/276597/>
 
-Alternativamente, poderá selecionar a opção **Desativar correspondência de e-mails nos certificado no Outlook** nas **Configurações de assinaturas** da aplicação do Cartão de Cidadão.
+Alternativamente, poderá selecionar a opção **Permitir assinatura de e-mails no Outlook** no submenu **Configuração de assinaturas** da aplicação do Cartão de Cidadão.
 
 Para poder assinar digitalmente um email no *Outlook*, é necessário
 inicialmente efetuar a respetiva configuração. Os passos descritos de
