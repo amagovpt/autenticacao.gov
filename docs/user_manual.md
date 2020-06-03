@@ -7,69 +7,69 @@
 
 # Tabela de conteúdos <!-- omit in toc -->
 
-- [Introdução](#introdu%c3%a7%c3%a3o)
-- [Download, instalação e remoção do middleware](#download-instala%c3%a7%c3%a3o-e-remo%c3%a7%c3%a3o-do-middleware)
+- [Introdução](#introdução)
+- [Download, instalação e remoção do middleware](#download-instalação-e-remoção-do-middleware)
   - [Sistemas Operativos oficialmente suportados](#sistemas-operativos-oficialmente-suportados)
-  - [Download do pacote de instalação do middleware](#download-do-pacote-de-instala%c3%a7%c3%a3o-do-middleware)
-  - [Instalação do *middleware*](#instala%c3%a7%c3%a3o-do-middleware)
-    - [Instalação em Microsoft Windows](#instala%c3%a7%c3%a3o-em-microsoft-windows)
-    - [Instalação em Linux](#instala%c3%a7%c3%a3o-em-linux)
-      - [Instalação através do *Software Center*](#instala%c3%a7%c3%a3o-atrav%c3%a9s-do-software-center)
-      - [Instalação através da linha de comandos](#instala%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos)
-    - [Instalação em Mac OS](#instala%c3%a7%c3%a3o-em-mac-os)
-  - [Remoção do middleware](#remo%c3%a7%c3%a3o-do-middleware)
-    - [Remoção em *Microsoft Windows 7*](#remo%c3%a7%c3%a3o-em-microsoft-windows-7)
-    - [Remoção em *Microsoft Windows 10*](#remo%c3%a7%c3%a3o-em-microsoft-windows-10)
-    - [Remoção em Linux](#remo%c3%a7%c3%a3o-em-linux)
-      - [Remoção através do *Software Center*](#remo%c3%a7%c3%a3o-atrav%c3%a9s-do-software-center)
-      - [Remoção através da linha de comandos](#remo%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos)
-    - [Remoção em MacOS](#remo%c3%a7%c3%a3o-em-macos)
-- [Aplicação Utilitária “Autenticação.Gov”](#aplica%c3%a7%c3%a3o-utilit%c3%a1ria-autentica%c3%a7%c3%a3ogov)
-  - [Apresentação da Aplicação](#apresenta%c3%a7%c3%a3o-da-aplica%c3%a7%c3%a3o)
-  - [Funcionalidades da aplicação](#funcionalidades-da-aplica%c3%a7%c3%a3o)
-    - [Menu Cartão](#menu-cart%c3%a3o)
+  - [Download do pacote de instalação do middleware](#download-do-pacote-de-instalação-do-middleware)
+  - [Instalação do *middleware*](#instalação-do-middleware)
+    - [Instalação em Microsoft Windows](#instalação-em-microsoft-windows)
+    - [Instalação em Linux](#instalação-em-linux)
+      - [Instalação através do *Software Center*](#instalação-através-do-software-center)
+      - [Instalação através da linha de comandos](#instalação-através-da-linha-de-comandos)
+    - [Instalação em Mac OS](#instalação-em-mac-os)
+  - [Remoção do middleware](#remoção-do-middleware)
+    - [Remoção em *Microsoft Windows 7*](#remoção-em-microsoft-windows-7)
+    - [Remoção em *Microsoft Windows 10*](#remoção-em-microsoft-windows-10)
+    - [Remoção em Linux](#remoção-em-linux)
+      - [Remoção através do *Software Center*](#remoção-através-do-software-center)
+      - [Remoção através da linha de comandos](#remoção-através-da-linha-de-comandos)
+    - [Remoção em MacOS](#remoção-em-macos)
+- [Aplicação Utilitária “Autenticação.Gov”](#aplicação-utilitária-autenticaçãogov)
+  - [Apresentação da Aplicação](#apresentação-da-aplicação)
+  - [Funcionalidades da aplicação](#funcionalidades-da-aplicação)
+    - [Menu Cartão](#menu-cartão)
       - [Identidade](#identidade)
       - [Outros dados](#outros-dados)
-      - [Morada e Alteração de morada](#morada-e-altera%c3%a7%c3%a3o-de-morada)
+      - [Morada e Alteração de morada](#morada-e-alteração-de-morada)
       - [Notas](#notas)
       - [Imprimir](#imprimir)
     - [Assinatura digital](#assinatura-digital)
       - [Simples](#simples)
-      - [Avançada](#avan%c3%a7ada)
-      - [Introdução de chave](#introdu%c3%a7%c3%a3o-de-chave)
-      - [Verificação de assinatura digital em documento PDF em Windows](#verifica%c3%a7%c3%a3o-de-assinatura-digital-em-documento-pdf-em-windows)
-    - [Segurança](#seguran%c3%a7a)
+      - [Avançada](#avançada)
+      - [Introdução de chave](#introdução-de-chave)
+      - [Verificação de assinatura digital em documento PDF em Windows](#verificação-de-assinatura-digital-em-documento-pdf-em-windows)
+    - [Segurança](#segurança)
       - [Certificados](#certificados)
-      - [Código PIN](#c%c3%b3digo-pin)
-    - [Configurações](#configura%c3%a7%c3%b5es)
-      - [Personalização da Assinatura](#personaliza%c3%a7%c3%a3o-da-assinatura)
+      - [Código PIN](#código-pin)
+    - [Configurações](#configurações)
+      - [Personalização da Assinatura](#personalização-da-assinatura)
       - [Atributos Profissionais](#atributos-profissionais)
-      - [Configuração da aplicação](#configura%c3%a7%c3%a3o-da-aplica%c3%a7%c3%a3o)
-      - [Configuração de assinaturas](#configura%c3%a7%c3%a3o-de-assinaturas)
-      - [Dados da aplicação](#dados-da-aplica%c3%a7%c3%a3o)
-      - [Atualizações](#atualiza%c3%a7%c3%b5es)
+      - [Configuração da aplicação](#configuração-da-aplicação)
+      - [Configuração de assinaturas](#configuração-de-assinaturas)
+      - [Dados da aplicação](#dados-da-aplicação)
+      - [Atualizações](#atualizações)
     - [Ajuda](#ajuda)
-- [Integração com aplicações](#integra%c3%a7%c3%a3o-com-aplica%c3%a7%c3%b5es)
+- [Integração com aplicações](#integração-com-aplicações)
   - [Assinatura digital na suite *Microsoft Office*](#assinatura-digital-na-suite-microsoft-office)
   - [Assinatura digital na suite *LibreOffice / OpenOffice*](#assinatura-digital-na-suite-libreoffice--openoffice)
   - [Assinatura digital de email com *Microsoft Outlook*](#assinatura-digital-de-email-com-microsoft-outlook)
   - [Assinatura digital em *Adobe Acrobat Reader*](#assinatura-digital-em-adobe-acrobat-reader)
-  - [Assinatura digital com Chave Móvel Digital](#assinatura-digital-com-chave-m%c3%b3vel-digital)
+  - [Assinatura digital com Chave Móvel Digital](#assinatura-digital-com-chave-móvel-digital)
   - [Assinatura digital de email com Mozilla Thunderbird](#assinatura-digital-de-email-com-mozilla-thunderbird)
-  - [Autenticação em portais WEB](#autentica%c3%a7%c3%a3o-em-portais-web)
-    - [Configurar autenticação para *Mozilla Firefox*](#configurar-autentica%c3%a7%c3%a3o-para-mozilla-firefox)
-- [Resolução de Problemas](#resolu%c3%a7%c3%a3o-de-problemas)
-  - [Exibida mensagem de erro quando se tenta adicionar o módulo PKCS\#11 no *Firefox / Thunderbird*](#exibida-mensagem-de-erro-quando-se-tenta-adicionar-o-m%c3%b3dulo-pkcs11-no-firefox--thunderbird)
-  - [Não é possível adicionar o módulo PKCS\#11 ao *Adobe Acrobat Reader* em *MacOS*](#n%c3%a3o-%c3%a9-poss%c3%advel-adicionar-o-m%c3%b3dulo-pkcs11-ao-adobe-acrobat-reader-em-macos)
-  - [Impossibilidade de assinatura em *Adobe Reader*, *Microsoft Office* e *LibreOffice* com Cartão de Cidadão](#impossibilidade-de-assinatura-em-adobe-reader-microsoft-office-e-libreoffice-com-cart%c3%a3o-de-cidad%c3%a3o)
-  - [O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão](#o-leitor-de-cart%c3%b5es-est%c3%a1-instalado-mas-n%c3%a3o-%c3%a9-detetado-pela-aplica%c3%a7%c3%a3o-do-cart%c3%a3o-de-cidad%c3%a3o)
-  - [Não são detetados quaisquer certificados durante a tentativa de assinatura na suite *LibreOffice / Apache OpenOffice*](#n%c3%a3o-s%c3%a3o-detetados-quaisquer-certificados-durante-a-tentativa-de-assinatura-na-suite-libreoffice--apache-openoffice)
-  - [Problemas com placas gráficas integradas em *Windows*](#problemas-com-placas-gr%c3%a1ficas-integradas-em-windows)
-- [Instruções de configuração em ambientes empresariais](#instru%c3%a7%c3%b5es-de-configura%c3%a7%c3%a3o-em-ambientes-empresariais)
-  - [Configurações através de chaves de registo Windows](#configura%c3%a7%c3%b5es-atrav%c3%a9s-de-chaves-de-registo-windows)
-  - [Configurações através de ficheiro de configuração em Linux e MacOS](#configura%c3%a7%c3%b5es-atrav%c3%a9s-de-ficheiro-de-configura%c3%a7%c3%a3o-em-linux-e-macos)
-  - [Instalação automatizada em ambientes Windows](#instala%c3%a7%c3%a3o-automatizada-em-ambientes-windows)
-  - [Informação sobre servidores de Proxy](#informa%c3%a7%c3%a3o-sobre-servidores-de-proxy)
+  - [Autenticação em portais WEB](#autenticação-em-portais-web)
+    - [Configurar autenticação para *Mozilla Firefox*](#configurar-autenticação-para-mozilla-firefox)
+- [Resolução de Problemas](#resolução-de-problemas)
+  - [Exibida mensagem de erro quando se tenta adicionar o módulo PKCS\#11 no *Firefox / Thunderbird*](#exibida-mensagem-de-erro-quando-se-tenta-adicionar-o-módulo-pkcs11-no-firefox--thunderbird)
+  - [Não é possível adicionar o módulo PKCS\#11 ao *Adobe Acrobat Reader* em *MacOS*](#não-é-possível-adicionar-o-módulo-pkcs11-ao-adobe-acrobat-reader-em-macos)
+  - [Impossibilidade de assinatura em *Adobe Reader*, *Microsoft Office* e *LibreOffice* com Cartão de Cidadão](#impossibilidade-de-assinatura-em-adobe-reader-microsoft-office-e-libreoffice-com-cartão-de-cidadão)
+  - [O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão](#o-leitor-de-cartões-está-instalado-mas-não-é-detetado-pela-aplicação-do-cartão-de-cidadão)
+  - [Não são detetados quaisquer certificados durante a tentativa de assinatura na suite *LibreOffice / Apache OpenOffice*](#não-são-detetados-quaisquer-certificados-durante-a-tentativa-de-assinatura-na-suite-libreoffice--apache-openoffice)
+  - [Problemas com placas gráficas integradas em *Windows*](#problemas-com-placas-gráficas-integradas-em-windows)
+- [Instruções de configuração em ambientes empresariais](#instruções-de-configuração-em-ambientes-empresariais)
+  - [Configurações através de chaves de registo Windows](#configurações-através-de-chaves-de-registo-windows)
+  - [Configurações através de ficheiro de configuração em Linux e MacOS](#configurações-através-de-ficheiro-de-configuração-em-linux-e-macos)
+  - [Instalação automatizada em ambientes Windows](#instalação-automatizada-em-ambientes-windows)
+  - [Informação sobre servidores de Proxy](#informação-sobre-servidores-de-proxy)
 
 <!-- DO NOT REMOVE the next comment. It is here so the script to generate the pdf version of this manual knows where the content starts and to ignore the table of contents. -->
 <!-- Content_begin -->
@@ -782,8 +782,8 @@ suporte na resolução do problema.
 
     `Linux: Directoria Home do utilizador i.e.: /home/Utilizador/`
 
-- **Aceleração gráfica**: Permite ativar ou desativar a aceleração gráfica na
-aplicação.
+- **Aceleração gráfica**: Permite ativar escolher o modo de renderização gráfica da
+aplicação. A opção *"Hardware (Placa gráfica)"* deverá oferecer um melhor desempenho, mas em caso de problemas poderá ser necessário configurar uma opção alternativa (ver secção [Problemas com placas gráficas em Windows](#problemas-com-placas-gráficas-integradas-em-windows).)
 
 - **Configurações de rede:** Opções relativas à configuração de servidor
 de proxy. Em redes onde o acesso à Internet só é possível através de
@@ -1260,30 +1260,24 @@ Para mais informações consultar a página de ajuda:
 
 ## Problemas com placas gráficas integradas em *Windows*
 
-No caso de existirem problemas gráficos, recomenda-se testar desabilitar a aceleração gráfica por hardware. No menu Definições / Configuração da aplicação / Aceleração é possivel ativar ou desativar a aceleração gráfica na aplicação.
+No caso de existirem problemas gráficos, recomenda-se alterar o modo de renderização gráfica. Pode fazê-lo na secção Aceleração gráfica do submenu [Configuração da aplicação](#configuração-da-aplicação).
 
-No caso da aplicação não arrancar, o procedimento para desabilitar a aceleração gráfica por hardware consiste em adicionar às variáveis de ambiente do sistema a variável **QT_OPENGL** com o valor **software**. Em alternativa é possivel configurar essa opção usando as configurações do software Autenticação.gov.
+No caso da aplicação não arrancar, é possivel alterar essa opção usando as configurações do software Autenticação.gov.
 
-Em **Windows** na chave de registo:
+Para tal, deve alterar a seguinte configuração conforme descrito no capítulo [Instruções de configuração em ambientes empresariais](#instruções-de-configuração-em-ambientes-empresariais): 
 
-**HKEY\_CURRENT\_USER\\Software\\PTEID\\configuretool\\graphics\_accelaration**
+- Em **Windows**, a chave de registo 
+  
+  **HKEY\_CURRENT\_USER\\Software\\PTEID\\configuretool\\graphics\_accelaration**;
 
-`graphics_accelaration = 1 // Aceleração gráfica ativada`
+- Em **Linux**, a chave com nome "graphics_accelaration" na secção “configuretool” do ficheiro **$HOME/.config/pteid.conf**;
 
-`graphics_accelaration = 0 // Aceleração gráfica desativada`
+- Em **MacOS**, a chave com nome "graphics_accelaration" na secção “configuretool” do ficheiro **$HOME/Library/Preferences/pteid.conf**.
 
-Em **Linux**, no ficheiro **$HOME/.config/pteid.conf na secção** “configuretool”
-
-`graphics_accelaration = 1 // Aceleração gráfica ativada`
-
-`graphics_accelaration = 0 // Aceleração gráfica desativada`
-
-Em **MacOS**, no ficheiro **$HOME/Library/Preferences/pteid.conf** na secção “configuretool”
-
-`graphics_accelaration = 1 // Aceleração gráfica ativada`
-
-`graphics_accelaration = 0 // Aceleração gráfica desativada`
-
+Os valores que a chave pode tomar são:
+- 0 para renderização por Software (OpenGL);
+- 1 para aceleração gráfica (Placa gráfica);
+- Em Windowsa apenas, 2 para rederização por Software (ANGLE, que emula o OpenGL usando Direct3D).
 
 # Instruções de configuração em ambientes empresariais
 
@@ -1381,6 +1375,14 @@ abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
   - **Descrição**:  Permitir cache do PIN de autenticação via minidriver.
   - **Valor por omissão**: 0 (Não). Para versões anteriores à 3.1.0 o valor por omissão é 1.
   - **Configurável a partir da versão**: 3.1.0
+
+---
+
+`HKLM\Software\PTEID\configuretool\graphics_accelaration`
+
+  - **Tipo**: Número (0 / 1 / 2 (somente em Windows))
+  - **Descrição**:  Modo de renderização gráfica. 0 para renderização por Software (OpenGL), 1 para aceleração gráfica (Placa gráfica) ou 2 para rederização por Software (ANGLE que emula o OpenGL usando Direct3D).
+  - **Valor por omissão**: 1 (Placa gráfica)
 
 ---
 
