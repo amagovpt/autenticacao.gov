@@ -503,6 +503,7 @@ PageDefinitionsSCAPForm {
                     id: entityText
                     text: '<b>' + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITY") + '</b> ' + entityName
                     font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
@@ -510,6 +511,7 @@ PageDefinitionsSCAPForm {
                     id: attrTitle
                     text: '<b>'+ qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTR") + '</b>'
                     font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
@@ -519,6 +521,7 @@ PageDefinitionsSCAPForm {
                     wrapMode: Text.WordWrap
                     text: attribute
                     font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                 }
             }
             function focusForward(){
@@ -584,6 +587,7 @@ PageDefinitionsSCAPForm {
                     id: entityText
                     text: '<b>' + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITY") + '</b> ' + entityName
                     font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
@@ -591,6 +595,7 @@ PageDefinitionsSCAPForm {
                     id: attrTitle
                     text: '<b>'+ qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTR") + '</b>'
                     font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
@@ -600,6 +605,7 @@ PageDefinitionsSCAPForm {
                     wrapMode: Text.WordWrap
                     text: attribute
                     font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                 }
             }
 
