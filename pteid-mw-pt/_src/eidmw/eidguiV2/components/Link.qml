@@ -35,7 +35,7 @@ Item {
         color: Constants.COLOR_TEXT_BODY
         visible: parent.visible
         font.underline: mouseArea.containsMouse
-        onLinkActivated: Qt.openUrlExternally(link)
+        onLinkActivated: Qt.openUrlExternally(propertyLinkUrl)
         wrapMode: Text.WordWrap
 
         Accessible.role: Accessible.Link
@@ -56,6 +56,7 @@ Item {
         anchors.fill: linkText
         enabled: linkRect.visible
         acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-        cursorShape: linkText.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+        cursorShape: (linkText.hoveredLink != "" &&
+                      linkText.hoveredLink != "dummy-link") ? Qt.PointingHandCursor : Qt.ArrowCursor
     }
 }
