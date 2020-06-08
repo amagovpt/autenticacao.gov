@@ -376,6 +376,8 @@ Item {
                     Text {
                         id: textSendSMS
                         width: parent.width
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        font.family: lato.name
                         anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                         anchors.rightMargin: Constants.SIZE_ROW_H_SPACE
                         anchors.verticalCenter: parent.verticalCenter
