@@ -88,6 +88,9 @@ PageDefinitionsSCAPForm {
             else if (error_code == GAPI.NoCardFound) {
                 return;
             }
+            else if (error_code == GAPI.CardUnknownCard) {
+                return;
+            }
             else if (error_code == GAPI.SodCardReadError) {
                 bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR") + controler.autoTr
             }

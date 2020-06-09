@@ -2547,7 +2547,7 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                 case PTEID_CARDTYPE_UNKNOWN:
                 {
                     selectedReaderIndex = -1;
-                    emit signalCardAccessError(CardUnknownError);
+                    emit signalCardAccessError(CardUnknownCard);
                     break;
                 }
                 default:
@@ -2576,7 +2576,7 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                     case PTEID_CARDTYPE_UNKNOWN:
                     {
                         selectedReaderIndex = -1;
-                        emit signalCardAccessError(CardUnknownError);
+                        emit signalCardAccessError(CardUnknownCard);
                         break;
                     }
                     default:
