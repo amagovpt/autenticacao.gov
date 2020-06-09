@@ -427,7 +427,7 @@ PageCardAdressForm {
                     anchors.left: textPinCurrent.right
                     anchors.bottom: parent.bottom
                     focus: true
-
+                    validator: RegExpValidator { regExp: /[a-zA-Z0-9]+/ }
                     Accessible.role: Accessible.EditableText
                     Accessible.name: placeholderText
                     KeyNavigation.tab: textPinNew
@@ -476,7 +476,7 @@ PageCardAdressForm {
                     clip: false
                     anchors.left: textPinNew.right
                     anchors.bottom: parent.bottom
-
+                    validator: RegExpValidator { regExp: /[a-zA-Z0-9]+/ }
                     Accessible.role: Accessible.EditableText
                     Accessible.name: placeholderText
                     KeyNavigation.tab: cancelButton
