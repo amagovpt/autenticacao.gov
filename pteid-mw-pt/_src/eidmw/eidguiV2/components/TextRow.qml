@@ -15,6 +15,7 @@ RowLayout {
     anchors.topMargin: 0.5 * Constants.SIZE_TEXT_BODY
     width: parent.width
     TextBullet {
+        Layout.fillHeight: true
     }
     Text {
         id: rowText

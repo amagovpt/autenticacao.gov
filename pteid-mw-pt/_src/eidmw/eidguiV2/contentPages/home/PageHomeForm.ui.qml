@@ -111,6 +111,7 @@ Item {
                 width: parent.width
 
                 Components.TextBullet {
+                    Layout.fillHeight: true
                 }
                 Text {
                     id: text3
@@ -133,6 +134,7 @@ Item {
                 width: parent.width
 
                 Components.TextBullet {
+                    Layout.fillHeight: true
                 }
                 Text {
                     id: text4
@@ -155,6 +157,7 @@ Item {
                 width: parent.width
 
                 Components.TextBullet {
+                    Layout.fillHeight: true
                 }
                 Text {
                     id: text5
@@ -177,6 +180,7 @@ Item {
                 width: parent.width
 
                 Components.TextBullet {
+                    Layout.fillHeight: true
                 }
                 Text {
                     id: text6
@@ -243,8 +247,7 @@ Item {
             CheckBox {
                 id: reminderCheckBox
                 text: qsTranslate("PageHelpDocOnline", "STR_HOME_REMINDER")
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.alignment: Qt.AlignHCenter
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
                 enabled: true
