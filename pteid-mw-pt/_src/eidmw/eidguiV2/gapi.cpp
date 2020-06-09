@@ -2303,8 +2303,8 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth) {
         getCardInstance(card);
     }
     if (!useOAuth && card == NULL) {
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SCAP Company Attributes Loaded Error!");
-        emit signalCompanyAttributesLoadedError();
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SCAP Entities Attributes Loaded Error!");
+        emit signalEntityAttributesLoadedError();
         return;
     }
 
@@ -2344,7 +2344,7 @@ void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
         getCardInstance(card);
     }
     if (!useOAuth && card == NULL) {
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Auth error");
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "SCAP Companies Attributes Loaded Error!");
         emit signalCompanyAttributesLoadedError();
         return;
     }
