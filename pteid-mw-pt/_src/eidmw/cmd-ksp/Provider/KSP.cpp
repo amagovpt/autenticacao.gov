@@ -1540,6 +1540,12 @@ bool checkCmdErrorAndShowDlg(HWND hWnd, bool proxyUsed, int error, HWND parentWi
     {
         msg += GETSTRING_DLG(OtpValidationFailed);
     }
+    else if (error == ERR_GET_CERTIFICATE)
+    {
+        msg += GETSTRING_DLG(InvalidCertificate);
+        msg += L"\n";
+        msg += GETSTRING_DLG(VerifyIfDigitalSignatureIsActive);
+    }
     if (!msg.empty())
     {
         CmdKspOpenDialogError(msg.c_str(), DlgCmdMsgType::DLG_CMD_WARNING_MSG, parentWindow);

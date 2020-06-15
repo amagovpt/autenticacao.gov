@@ -108,7 +108,7 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
         textBottomData.horizontalCentered = true;
         
         HWND hTextBottom = PteidControls::CreateText(
-            0, textBottomY, clientRect.right, (int)(clientRect.bottom * 0.08),
+            titleX, textBottomY, contentWidth, (int)(clientRect.bottom * 0.16),
             m_hWnd, (HMENU)IDC_STATIC_TEXT_BOTTOM, m_hInstance, &textBottomData);
 
         // BUTTON
