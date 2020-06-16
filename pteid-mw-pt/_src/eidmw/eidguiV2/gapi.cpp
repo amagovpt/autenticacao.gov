@@ -2255,9 +2255,13 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, boo
                 QString subAttributesValues;
                 for (uint subAttributePos = 0; subAttributePos < mainAttributeObject->SubAttributeList->SubAttribute.size(); subAttributePos++){
                     ns3__SubAttributeType * subAttribute = mainAttributeObject->SubAttributeList->SubAttribute.at(subAttributePos);
-
-                    QString subDescription(subAttribute->Description->c_str());
-                    QString subValue(subAttribute->Value->c_str());
+					QString subDescription, subValue;
+					if (subAttribute->Description != NULL) {
+						subDescription += subAttribute->Description->c_str();
+					}
+					if (subAttribute->Value != NULL) {
+						subValue += subAttribute->Value->c_str();
+					}
                     subAttributesValues.append(subDescription + ": " + subValue + ", ");
                 }
                 // Chop 2 to remove last 2 chars (', ')

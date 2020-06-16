@@ -852,10 +852,14 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                     if (mainAttribute->SubAttributeList != NULL) {
                         for (uint ii = 0; ii < mainAttribute->SubAttributeList->SubAttribute.size(); ii++) {
                             ns1__SubAttributeType *acSubAttr = mainAttribute->SubAttributeList->SubAttribute.at(ii);
-                            if(ii != 0)signDetailsReason.append("; ");
-                            signDetailsReason.append(QString::fromStdString(acSubAttr->Description->c_str()));
+                            if(ii != 0) signDetailsReason.append("; ");
+							if (acSubAttr->Description != NULL) {
+								signDetailsReason.append(QString::fromStdString(acSubAttr->Description->c_str()));
+							}
                             signDetailsReason.append(": ");
-                            signDetailsReason.append(QString::fromStdString(acSubAttr->Value->c_str()));
+							if (acSubAttr->Value != NULL) {
+								signDetailsReason.append(QString::fromStdString(acSubAttr->Value->c_str()));
+							}
                         }
                     }
                     signatureInfo.setReason(strdup(signDetailsReason.toStdString().c_str()));
