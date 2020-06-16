@@ -1546,6 +1546,12 @@ bool checkCmdErrorAndShowDlg(HWND hWnd, bool proxyUsed, int error, HWND parentWi
         msg += L"\n";
         msg += GETSTRING_DLG(VerifyIfDigitalSignatureIsActive);
     }
+    else if (error == ERR_INV_CERTIFICATE)
+    {
+        msg += GETSTRING_DLG(InvalidCertificate);
+        msg += L"\n";
+        msg += GETSTRING_DLG(RegisterCertificateAgain);
+    }
     if (!msg.empty())
     {
         CmdKspOpenDialogError(msg.c_str(), DlgCmdMsgType::DLG_CMD_WARNING_MSG, parentWindow);
@@ -1666,6 +1672,7 @@ __in    DWORD   dwFlags)
     // This block tells the compiler the objects instantiated here won't be used after the label cleanup
     // (see compiler error C2362)
     {
+        PTEID_InitSDK();
         std::wstring registeredMobileNumber = pKey->pszMobileNumber;
         unsigned long ulPinBufferLen = PIN_BUFFER_SIZE;
         wchar_t csPin[PIN_BUFFER_SIZE];
@@ -1714,7 +1721,7 @@ __in    DWORD   dwFlags)
 
         int ret;
         {
-            CmdSignThread signOpenThread(&cmd_proxyinfo, &cmd_signature, mobileNumber, pin, hashBytes, docnameBuffer);
+            CmdSignThread signOpenThread(&cmd_proxyinfo, &cmd_signature, mobileNumber, pin, hashBytes, docnameBuffer, pKey->pCert);
             signOpenThread.Start();
 
             // Blocks until user cancels or thread returns
@@ -1808,6 +1815,7 @@ cleanup:
     {
         delete[] csSubject;
     }
+    PTEID_ReleaseSDK();
     return Status;
 }
 

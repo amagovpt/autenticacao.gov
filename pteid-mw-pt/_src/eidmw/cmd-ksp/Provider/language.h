@@ -15,6 +15,7 @@ DEFINE_LANG_STR(ConnectingWithServer) = { L"Connecting with server.", L"A conect
 DEFINE_LANG_STR(SendingOtp) = { L"Sending confirmation code to server.", L"Enviando o código de confirmação para o servidor.", L"", L"" };
 DEFINE_LANG_STR(InvalidCertificate) = { L"Invalid certificate.", L"Certificado inválido.", L"", L"" };
 DEFINE_LANG_STR(VerifyIfDigitalSignatureIsActive) = { L"Verify that the digital signature subscription of the Chave Móvel Digital is active in http://www.autenticacao.gov.pt.", L"Verifique que a subscrição da assinatura digital da Chave Móvel Digital está ativada em http://www.autenticacao.gov.pt.", L"", L"" };
+DEFINE_LANG_STR(RegisterCertificateAgain) = { L"Please try to register your CMD certificate in the application again.", L"Por favor, tente registar novamente o seu certificado da CMD na aplicação.", L"", L"" };
 }
 
 #endif // __CMDKSP_LANGUAGE_H__

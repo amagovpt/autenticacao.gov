@@ -42,7 +42,7 @@ void sendSmsCallback();
 class CmdSignThread : public CThread
 {
 public:
-    CmdSignThread(CMDProxyInfo *cmd_proxyinfo, CMDSignature *cmdSignature, std::string mobileNumber, std::string pin, CByteArray hash, char* docname);
+    CmdSignThread(CMDProxyInfo *cmd_proxyinfo, CMDSignature *cmdSignature, std::string mobileNumber, std::string pin, CByteArray hash, char* docname, PCCERT_CONTEXT pCert);
     CmdSignThread(CMDSignature *cmdSignature, std::string otp);
 
     void Run();
@@ -59,6 +59,7 @@ private:
     std::string m_pin;
     std::string m_otp;
     CByteArray m_hash;
+    PCCERT_CONTEXT m_pCert;
     char* m_docname;
     bool m_isValidateOtp;
 

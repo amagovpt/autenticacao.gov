@@ -902,16 +902,31 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
            goto cleanup;
     	}
 
-    	APL_EIDCard *pcard = dynamic_cast<APL_EIDCard *>(m_card);
     	//Create new store to verify the OCSP responder certificate
     	store = X509_STORE_new();
 
-        for (int i = 0; i < pcard->getCertificates()->countSODCAs(); i++) {
-			APL_Certif * sod_ca = pcard->getCertificates()->getSODCA(i);
-			X509 *pX509 = NULL;
-			const unsigned char *p = sod_ca->getData().GetBytes();
+		std::vector<APL_Certif *> certsToLoad;
+		APL_Certifs eidstore;
+		if (m_card)
+		{
+			APL_EIDCard *pcard = dynamic_cast<APL_EIDCard *>(m_card);
+			for (int i = 0; i < pcard->getCertificates()->countSODCAs(); i++) {
+				certsToLoad.push_back(pcard->getCertificates()->getSODCA(i));
+			}
+		}
+		else
+		{
+			for (int i = 0; i < eidstore.countAll(); i++) {
+				certsToLoad.push_back(eidstore.getCert(i));
+			}
+		}
 
-			pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
+		for (int i = 0; i < certsToLoad.size(); i++) {
+			APL_Certif * ca = certsToLoad.at(i);
+			X509 *pX509 = NULL;
+			const unsigned char *p = ca->getData().GetBytes();
+
+			pX509 = d2i_X509(&pX509, &p, ca->getData().Size());
 			X509_STORE_add_cert(store, pX509);
         }
 

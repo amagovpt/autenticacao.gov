@@ -177,10 +177,8 @@ public:
 
 	/**
 	  * Return the crypto framework object
-	  *
-	  * NOT for using outside the library (NO EXPORT)
 	  */
-	APL_CryptoFwkPteid *getCryptoFwk() const;
+	EIDMW_APL_API APL_CryptoFwkPteid *getCryptoFwk() const;
 
 	/**
 	  * Return the Certificate status cache object
