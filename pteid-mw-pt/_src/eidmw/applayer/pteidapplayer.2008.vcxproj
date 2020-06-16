@@ -92,7 +92,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_CURL)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_DIR_OPENSSL)\include;$(PTEID_DIR_PLATFORMSDK)\include;$(PTEID_DIR_ZLIB)\include;$(PTEID_DIR_LIBPNG)\include;$(PTEID_DIR_OPENJPEG)\include\openjpeg-2.3;$(PTEID_DIR_LIBZIP)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_CURL)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_DIR_OPENSSL)\include;$(PTEID_DIR_ZLIB)\include;$(PTEID_DIR_LIBPNG)\include;$(PTEID_DIR_OPENJPEG)\include\openjpeg-2.3;$(PTEID_DIR_LIBZIP)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PTEID_35;WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -121,7 +121,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_CURL)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_DIR_OPENSSL)\include;$(PTEID_DIR_PLATFORMSDK)\include;$(PTEID_DIR_ZLIB)\include;$(PTEID_DIR_LIBPNG)\include;$(PTEID_DIR_OPENJPEG)\include\openjpeg-2.3;$(PTEID_DIR_LIBZIP)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_CURL)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_DIR_OPENSSL)\include;$(PTEID_DIR_ZLIB)\include;$(PTEID_DIR_LIBPNG)\include;$(PTEID_DIR_OPENJPEG)\include\openjpeg-2.3;$(PTEID_DIR_LIBZIP)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
@@ -155,7 +155,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY_X64)\include;$(PTEID_DIR_CURL_X64)\include;$(PTEID_DIR_XERCES_X64)\include;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_PLATFORMSDK)\include;$(PTEID_DIR_ZLIB_X64)\include;$(PTEID_DIR_LIBPNG_X64)\include;$(PTEID_DIR_OPENJPEG_X64)\include\openjpeg-2.3;$(PTEID_DIR_LIBZIP_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY_X64)\include;$(PTEID_DIR_CURL_X64)\include;$(PTEID_DIR_XERCES_X64)\include;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_ZLIB_X64)\include;$(PTEID_DIR_LIBPNG_X64)\include;$(PTEID_DIR_OPENJPEG_X64)\include\openjpeg-2.3;$(PTEID_DIR_LIBZIP_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PTEID_35;WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -187,7 +187,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY_X64)\include;$(PTEID_DIR_CURL_X64)\include;$(PTEID_DIR_XERCES_X64)\include;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_PLATFORMSDK)\include;$(PTEID_DIR_ZLIB_X64)\include;$(PTEID_DIR_LIBPNG_X64)\include;$(PTEID_DIR_OPENJPEG_X64)\include\openjpeg-2.3;$(PTEID_DIR_LIBZIP_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY_X64)\include;$(PTEID_DIR_CURL_X64)\include;$(PTEID_DIR_XERCES_X64)\include;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_ZLIB_X64)\include;$(PTEID_DIR_LIBPNG_X64)\include;$(PTEID_DIR_OPENJPEG_X64)\include\openjpeg-2.3;$(PTEID_DIR_LIBZIP_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />

@@ -33,7 +33,6 @@
 :: Tools
 ::======
 @set PTEID_DIR_7ZIP=C:\Program Files\7-Zip
-@set PTEID_DIR_PLATFORMSDK=C:\Program Files (x86)\Windows Kits\8.1
 @set PTEID_DIR_CRYPTPDK=C:\Program Files (x86)\Windows Kits\8.0\Cryptographic Provider Development Kit
 @set PTEID_DIR_VS=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community
 @set PTEID_DIR_DOXYGEN=C:\Program Files\doxygen-1.8.15.windows.x64.bin

@@ -72,15 +72,6 @@ set startTime=%time%
 :find_msm
 @echo [INFO] Using PTEID_DIR_MSM=%PTEID_DIR_MSM%
 
-:: Check MS Platform SDK
-:: ==========================
-@call "%CHECKS%\PathPSdk.bat"
-@if %ERRORLEVEL%==0 goto find_mssdk
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_PLATFORMSDK
-@goto end
-:find_mssdk
-@echo [INFO] Using PTEID_DIR_PLATFORMSDK=%PTEID_DIR_PLATFORMSDK%
-
 :: Check MS Cryptographic Provider Development Kit
 :: ==========================
 @call "%CHECKS%\PathCRYPTPDK.bat"
