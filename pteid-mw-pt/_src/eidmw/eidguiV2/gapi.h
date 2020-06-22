@@ -513,6 +513,10 @@ private:
     void initScapAppId(void);
     void doRegisterCMDCertOpen(QString mobileNumber, QString pin);
     void doRegisterCMDCertClose(QString otp);
+    void drawSectionHeader(QPainter &painter, double pos_x, double pos_y, QString section_name);
+    void drawPrintingDate(QPainter &painter, QString printing_date);
+    double checkNewPageAndPrint(QPrinter &printer, QPainter &painter, double current_y, double remaining_height, double max_height, bool print_date = false, QString date_label = "");
+    double drawSingleField(QPainter &painter, double pos_x, double pos_y, QString name, QString value, double line_length, int field_margin = 15, bool is_bounded_rect = false, double bound_width = 360);
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;
@@ -530,6 +534,7 @@ private:
     int m_shortcutFlag;
     QString m_shortcutInputPDF;
     signed int selectedReaderIndex = -1;
+    double print_scale_factor = 1;
 
     tCallBackHandles		m_callBackHandles;
     tCallBackData			m_callBackData;

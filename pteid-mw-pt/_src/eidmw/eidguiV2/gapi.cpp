@@ -1259,16 +1259,21 @@ void GAPI::doPrintPDF(PrintParams &params) {
 static QPen black_pen;
 static QPen blue_pen;
 
-double drawSingleField(QPainter &painter, double pos_x, double pos_y, QString name, QString value, double line_length, int field_margin = 15, bool is_bounded_rect = false, double bound_width = 360)
+double GAPI::drawSingleField(QPainter &painter, double pos_x, double pos_y, QString name, QString value, double line_length, int field_margin, bool is_bounded_rect, double bound_width)
 {
     painter.setPen(blue_pen);
 
+    // apply scale factor to default values
+    if (field_margin == 15)
+        field_margin *= print_scale_factor;
+    if (bound_width == 360)
+        bound_width *= print_scale_factor;
     if (field_margin == 0){
-        line_length -= 15;
+        line_length -= 15 * print_scale_factor;
     }
 
     painter.drawText(QPointF(pos_x + field_margin, pos_y), name);
-    pos_y += 7;
+    pos_y += 7 * print_scale_factor;
 
     painter.drawLine(QPointF(pos_x + field_margin, pos_y), QPointF(pos_x + (line_length - field_margin), pos_y));
     painter.setPen(black_pen);
@@ -1277,19 +1282,19 @@ double drawSingleField(QPainter &painter, double pos_x, double pos_y, QString na
         int flags = Qt::TextWordWrap | Qt::TextWrapAnywhere;
         int textFlags = Qt::TextWordWrap;
         QFontMetricsF fm = painter.fontMetrics();
-        QRectF bounding_rect = fm.boundingRect(QRectF(pos_x + field_margin, pos_y, bound_width - 2 * field_margin, 500), flags, value);
+        QRectF bounding_rect = fm.boundingRect(QRectF(pos_x + field_margin, pos_y, bound_width - 2 * field_margin, 500 * print_scale_factor), flags, value);
 
         painter.drawText(bounding_rect.adjusted(0, 0, 0, 0), textFlags, value);
-        pos_y += bounding_rect.height() + 15;
+        pos_y += bounding_rect.height() + 15 * print_scale_factor;
     } else {
-        pos_y += 15;
+        pos_y += 15 * print_scale_factor;
         painter.drawText(QPointF(pos_x + field_margin, pos_y), value);
     }
 
     return pos_y;
 }
 
-void drawSectionHeader(QPainter &painter, double pos_x, double pos_y, QString section_name)
+void GAPI::drawSectionHeader(QPainter &painter, double pos_x, double pos_y, QString section_name)
 {
     QFont header_font("DIN Light");
     header_font.setPointSize(11);
@@ -1302,15 +1307,15 @@ void drawSectionHeader(QPainter &painter, double pos_x, double pos_y, QString se
     painter.setBrush(light_grey);
     painter.setPen(light_grey);
 
-    painter.drawRoundedRect(QRectF(pos_x, pos_y, 250, 30), 10.0, 10.0);
+    painter.drawRoundedRect(QRectF(pos_x, pos_y, 250 * print_scale_factor, 30 * print_scale_factor), 10.0 * print_scale_factor, 10.0 * print_scale_factor);
     painter.setPen(black_pen);
 
-    painter.drawText(pos_x + 20, pos_y + 20, section_name);
+    painter.drawText(pos_x + 20 * print_scale_factor, pos_y + 20 * print_scale_factor, section_name);
 
     painter.setFont(regular_font);
 }
 
-void drawPrintingDate(QPainter &painter, QString printing_date){
+void GAPI::drawPrintingDate(QPainter &painter, QString printing_date){
     QFont date_font("DIN Medium");
     date_font.setPointSize(8);
     date_font.setBold(false);
@@ -1319,7 +1324,11 @@ void drawPrintingDate(QPainter &painter, QString printing_date){
 
     printing_date += " " + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm");
     painter.setFont(date_font);
-    painter.drawText(QRectF(painter.device()->width() - 225, painter.device()->height() - 25, 200, 100), Qt::TextWordWrap, printing_date);
+    painter.drawText(QRectF(painter.device()->width() - 225 * print_scale_factor,
+                            painter.device()->height() - 25 * print_scale_factor,
+                            200 * print_scale_factor,
+                            100 * print_scale_factor),
+                    Qt::TextWordWrap, printing_date);
 
     painter.setFont(regular_font);
 }
@@ -1346,10 +1355,10 @@ QString getTextFromLines(QStringList lines, int start, int stop){
     return text_lines.join("\n");
 }
 
-double checkNewPageAndPrint(QPrinter &printer, QPainter &painter, double current_y, double remaining_height, double max_height, bool print_date = false, QString date_label = ""){
+double GAPI::checkNewPageAndPrint(QPrinter &printer, QPainter &painter, double current_y, double remaining_height, double max_height, bool print_date, QString date_label){
     if (current_y + remaining_height > max_height){
         printer.newPage();
-        current_y = 50;
+        current_y = 50 * print_scale_factor;
         if (print_date)
         {
             drawPrintingDate(painter, date_label);
@@ -1363,11 +1372,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     qDebug() << "drawpdf! outputFile = " << params.outputFile <<
         "isBasicInfo = " << params.isBasicInfo << "isAddicionalInfo" << params.isAddicionalInfo << "isAddress"
         << params.isAddress << "isNotes = " << params.isNotes << "isPrintDate = " << params.isPrintDate << "isSign = " << params.isSign;
-    //gives a bit of left margin
-    double page_margin = 33.5;
-    double pos_x = page_margin, pos_y = 0;
-    bool res = false;
-    int field_margin = 15;
+
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance drawpdf");
 
     BEGIN_TRY_CATCH;
@@ -1380,7 +1385,8 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     PTEID_EId &eid_file = card->getID();
 
     //QPrinter printer;
-    printer.setResolution(96);
+    print_scale_factor = printer.resolution() / 96.0;
+
     printer.setColorMode(QPrinter::Color);
     printer.setPaperSize(QPrinter::A4);
 
@@ -1396,11 +1402,18 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
     //Start drawing
     QPainter painter;
+    bool res = false;
     res = painter.begin(&printer);
     if (res == false){
         qDebug() << "Start drawing return error: " << res;
         return false;
     }
+
+    //gives a bit of left margin
+    double page_margin = 33.5 * print_scale_factor;
+    double pos_x = page_margin, pos_y = 0;
+    int field_margin = 15 * print_scale_factor;
+
     double page_height = painter.device()->height();
     double page_width = painter.device()->width();
     double full_page = (page_width - 2 * page_margin);
@@ -1409,11 +1422,11 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
     //Font setup
     QFont din_font("DIN Medium");
-    din_font.setPixelSize(18);
+    din_font.setPixelSize(18 * print_scale_factor);
 
     //  Include header as png pixmap
     QPixmap header = loadHeader();
-    QRectF headerImgRect = QRectF(pos_x, pos_y, 359.0, 75.0);
+    QRectF headerImgRect = QRectF(pos_x, pos_y, 359.0 * print_scale_factor, 75.0 * print_scale_factor);
     painter.drawPixmap(headerImgRect, header, QRect(0.0, 0.0, header.width(), header.height()));
 
     //  //Alternative using the QtSVG module, not enabled for now because the rendering is far from perfect
@@ -1429,15 +1442,15 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     blue_pen.setColor(QColor(78, 138, 190));
     painter.setPen(blue_pen);
 
-    int line_length = 487;
+    int line_length = 487 * print_scale_factor;
     //Horizontal separator below the CC logo
     painter.drawLine(QPointF(pos_x, pos_y), QPointF(pos_x + line_length, pos_y));
-    pos_y += 25;
+    pos_y += 25 * print_scale_factor;
 
     //Change text color
     blue_pen = painter.pen();
 
-    const double LINE_HEIGHT = 45.0;
+    const double LINE_HEIGHT = 45.0 * print_scale_factor;
 
     //    din_font.setBold(true);
     painter.setFont(din_font);
@@ -1445,15 +1458,15 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     painter.drawText(QPointF(pos_x, pos_y), tr("STR_PERSONAL_DATA"));
 
     pos_y += field_margin;
-    int circle_radius = 6;
+    int circle_radius = 6 * print_scale_factor;
 
     painter.setPen(black_pen);
     //Reset font
-    din_font.setPixelSize(10);
+    din_font.setPixelSize(10 * print_scale_factor);
     din_font.setBold(false);
     painter.setFont(din_font);
 
-    pos_y += 30;
+    pos_y += 30 * print_scale_factor;
 
     if (params.isPrintDate)
     {
@@ -1472,14 +1485,14 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
         QPixmap pixmap_photo;
         pixmap_photo.loadFromData(photo.GetBytes(), photo.Size(), "PNG");
 
-        const int img_height = 200;
+        const int img_height = 200 * print_scale_factor;
 
         //Scale height if needed
         QPixmap scaled = pixmap_photo.scaledToHeight(img_height, Qt::SmoothTransformation);
 
-        painter.drawPixmap(QPointF(pos_x + 500, pos_y - 80), scaled);
+        painter.drawPixmap(QPointF(pos_x + 500 * print_scale_factor, pos_y - 80 * print_scale_factor), scaled);
 
-        pos_y += 50;
+        pos_y += 50 * print_scale_factor;
 
         double new_pos_y = drawSingleField(painter, pos_x, pos_y, tr("STR_GIVEN_NAME"),
             QString::fromUtf8(eid_file.getGivenName()), half_page, 0, true, half_page);
@@ -1520,11 +1533,11 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     if (params.isAddicionalInfo)
     {
         //height of this section, if spacing between fields change update this value
-        double min_section_height = 235;
+        double min_section_height = 235 * print_scale_factor;
         pos_y = checkNewPageAndPrint(printer, painter, pos_y, min_section_height, page_height, params.isPrintDate, tr("STR_PRINTED_ON"));
 
         drawSectionHeader(painter, pos_x, pos_y, tr("STR_ADDITIONAL_INFORMATION"));
-        pos_y += 50;
+        pos_y += 50 * print_scale_factor;
 
         drawSingleField(painter, pos_x, pos_y, tr("STR_VAT_NUM"),
             QString::fromUtf8(eid_file.getTaxNo()), third_of_page, 0);
@@ -1550,17 +1563,17 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
             QString::fromUtf8(eid_file.getDocumentVersion()), half_page, 0);
         drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_CARD_STATE"),
             getCardActivation(), half_page, field_margin, true, half_page);
-        pos_y += 50;
+        pos_y += 50 * print_scale_factor;
     }
 
     if (params.isAddress)
     {
         //height of this section, if spacing between fields change update this value
-        double min_section_height = 350;
+        double min_section_height = 350 * print_scale_factor;
         pos_y = checkNewPageAndPrint(printer, painter, pos_y, min_section_height, page_height, params.isPrintDate, tr("STR_PRINTED_ON"));
 
         drawSectionHeader(painter, pos_x, pos_y, tr("STR_ADDRESS"));
-        pos_y += 50;
+        pos_y += 50 * print_scale_factor;
 
         PTEID_Address &addressFile = card->getAddr();
 
@@ -1627,7 +1640,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
             drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_ADDRESS"),
                 QString::fromUtf8(addressFile.getForeignAddress()), half_page, 0, true, page_width);
         }
-        pos_y += 80;
+        pos_y += 80 * print_scale_factor;
     }
 
     if (params.isNotes)
@@ -1638,18 +1651,18 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
         if (perso_data.size() > 0)
         {
-            pos_x = 30; //gives a bit of left margin
-            pos_y += 50;
+            pos_x = 30 * print_scale_factor; //gives a bit of left margin
+            pos_y += 50 * print_scale_factor;
 
             pos_y = checkNewPageAndPrint(printer, painter, pos_y, 0, page_height, params.isPrintDate, tr("STR_PRINTED_ON"));
 
             drawSectionHeader(painter, pos_x, pos_y, tr("STR_PERSONAL_NOTES"));
 
-            pos_y += 50;
+            pos_y += 50 * print_scale_factor;
 
             QStringList lines = perso_data.split("\n", QString::KeepEmptyParts);
 
-            const int TEXT_LINE_HEIGHT = 20;
+            const int TEXT_LINE_HEIGHT = 20 * print_scale_factor;
 
             int line_count = lines.length();
             double height_to_print = TEXT_LINE_HEIGHT * line_count;
@@ -1664,12 +1677,12 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
                 line_index_stop = line_index_start + (page_remaining_space / TEXT_LINE_HEIGHT);
 
-                if (page_remaining_space < 50 && height_to_print > 0)
+                if (page_remaining_space < 50 * print_scale_factor && height_to_print > 0)
                 {
                     printer.newPage();
-                    pos_y = 50;
+                    pos_y = 50 * print_scale_factor;
                     drawSectionHeader(painter, pos_x, pos_y, tr("STR_PERSONAL_NOTES"));
-                    pos_y += 50;
+                    pos_y += 50 * print_scale_factor;
                     if (params.isPrintDate)
                     {
                         drawPrintingDate(painter, tr("STR_PRINTED_ON"));
