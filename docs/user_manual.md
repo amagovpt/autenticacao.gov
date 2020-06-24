@@ -1,4 +1,4 @@
-# Manual de Utilização do Middleware do Cartão de Cidadão <!-- omit in toc -->
+# Manual da Aplicação Autenticação.gov para computador <!-- omit in toc -->
 
 ![Ilustração: Cartão de Cidadão](Pictures/CartaoCidadao.png "Cartão de Cidadão"){:.center}
 
@@ -8,16 +8,16 @@
 # Tabela de conteúdos <!-- omit in toc -->
 
 - [Introdução](#introdução)
-- [Download, instalação e remoção do middleware](#download-instalação-e-remoção-do-middleware)
+- [Download, instalação e remoção da aplicação](#download-instalação-e-remoção-da-aplicação)
   - [Sistemas Operativos oficialmente suportados](#sistemas-operativos-oficialmente-suportados)
-  - [Download do pacote de instalação do middleware](#download-do-pacote-de-instalação-do-middleware)
-  - [Instalação do *middleware*](#instalação-do-middleware)
+  - [Download do pacote de instalação da aplicação](#download-do-pacote-de-instalação-da-aplicação)
+  - [Instalação da aplicação](#instalação-da-aplicação)
     - [Instalação em Microsoft Windows](#instalação-em-microsoft-windows)
     - [Instalação em Linux](#instalação-em-linux)
       - [Instalação através do *Software Center*](#instalação-através-do-software-center)
       - [Instalação através da linha de comandos](#instalação-através-da-linha-de-comandos)
     - [Instalação em Mac OS](#instalação-em-mac-os)
-  - [Remoção do middleware](#remoção-do-middleware)
+  - [Remoção da aplicação](#remoção-da-aplicação)
     - [Remoção em *Microsoft Windows 7*](#remoção-em-microsoft-windows-7)
     - [Remoção em *Microsoft Windows 10*](#remoção-em-microsoft-windows-10)
     - [Remoção em Linux](#remoção-em-linux)
@@ -76,24 +76,22 @@
 
 # Introdução
 
-Este manual pretende descrever todas as funcionalidades providenciadas
-pelo _middleware_ do Cartão de Cidadão.
+NOTA: A partir da versão 3.2.0, houve uma alteração de nomenclatura no manual. As referências a "Middleware do Cartão de Cidadão" foram substituídas por "aplicação Autenticação.gov para computador", excepto quando o termo "*middleware*" é mais apropriado.
 
-O *middleware* do Cartão de Cidadão, pode definir-se como a “camada” de
-software entre o computador e o seu Cartão de Cidadão. Através do
-*middleware* são disponibilizadas ao sistema operativo e aplicações
-funcionalidades de autenticação e assinatura eletrónica.
+Este manual pretende descrever todas as funcionalidades providenciadas pela aplicação Autenticação.gov para computador.
 
-Além do *middleware*, existe também uma aplicação para a gestão do seu
-Cartão de Cidadão, onde poderá visualizar as suas informações, editar as
-suas notas, modificar os seus *PIN* pessoais e assinar digitalmente
+A instalação da aplicação Autenticação.gov para computador inclui o *middleware* do Cartão de Cidadão. Este *middleware* pode definir-se como a “camada” de
+software entre o computador e o seu Cartão de Cidadão e é através deste que são disponibilizadas ao sistema operativo e aplicações funcionalidades de autenticação e assinatura eletrónica.
+
+A aplicação Autenticação.gov para computador permite a gestão do seu
+Cartão de Cidadão. Nesta poderá visualizar as suas informações, editar as
+suas notas, modificar os seus *PIN*s pessoais e assinar digitalmente
 ficheiros.
 
-Este manual abrange três áreas fundamentais da utilização do
-*middleware*:
+Este manual pode-se dividir nas seguintes fundamentais áreas de utilização:
 
 -   Na primeira área (no capítulo dois), aborda o descarregamento,
-    instalação e remoção do *middleware*;
+    instalação e remoção da aplicação;
 -   Na segunda área (no capítulo três), descreve as funcionalidades da
     aplicação de gestão do Cartão de Cidadão e de assinatura digital de
     ficheiros;
@@ -103,10 +101,10 @@ Este manual abrange três áreas fundamentais da utilização do
     automatizada em ambientes Windows e configuração em ambientes
     empresariais;
 
-# Download, instalação e remoção do middleware
+# Download, instalação e remoção da aplicação
 
 Neste ponto são apresentadas as instruções para a instalação e remoção
-do *middleware* do Cartão de Cidadão.
+da aplicação Autenticação.gov para computador.
 
 ## Sistemas Operativos oficialmente suportados
 
@@ -125,18 +123,16 @@ A lista de sistemas operativos suportados, nas suas arquiteturas de 32 e
 -   Sistemas operativos Apple:
     -   Mac OSX Yosemite e superiores
 
-## Download do pacote de instalação do middleware
+## Download do pacote de instalação da aplicação
 
-Para obter o pacote de instalação do *middleware*, deverá aceder ao
+Para obter o pacote de instalação da aplicação, deverá aceder ao
 sítio oficial do Cartão de Cidadão em
-[http://www.autenticacao.gov.pt](http://www.autenticacao.gov.pt/)
+[http://www.autenticacao.gov.pt](http://www.autenticacao.gov.pt/) e pressionar "Descarregar" no quadrado com título "Aplicação Autenticação.gov".
 
-![Ilustração: Download](Pictures/Portal_Autenticacao.Gov_Download_options.png "Download"){:.center}
+![Ilustração: Download](Pictures/Portal_Autenticacao.Gov_Homepage.png "Download"){:.center}
 
-Se escolher na barra de navegação a seguinte opção
-“Cartão de Cidadão” → “Aplicação do Cartão de Cidadão” através dos dados
-fornecidos pelo navegador será efetuada uma tentativa de identificar o
-sistema operativo e na área de conteúdos do lado direito será
+Ao clicar no link "aplicação Autenticação.gov para computador" será efetuada uma tentativa de identificar o sistema operativo através dos dados
+fornecidos pelo navegador e na área de conteúdos do lado direito será
 apresentada uma hiperligação que permite efetuar o descarregamento do
 pacote de instalação adequado ao seu sistema.
 
@@ -144,24 +140,21 @@ Nos casos dos sistemas operativos *Linux*, não é possível identificar a
 distribuição, deste modo será apresentada a lista das distribuições
 suportadas para a arquitetura detetada.
 
-A hiperligação “[*Para instalar outras versões ou aceder aos Manuais de
-Utilização, carregue aqui*](https://www.autenticacao.gov.pt/cc-software)”
-permite o acesso à lista de todos os pacotes de instalação dos sistemas operativos
-suportados e manual de utilização.
+Esta página contém a lista de todos os pacotes de instalação dos sistemas operativos oficialmente suportados e manuais de utilização.
 
 ![Ilustração: Opções de download](Pictures/Portal_Autenticacao.Gov_Download.png "Opções de download"){:.center}
 
 Após efetuado o download da respetiva versão, avance
-para o ponto seguinte – Instalação do *middleware*.
+para o ponto seguinte – Instalação da aplicação.
 
-## Instalação do *middleware*
+## Instalação da aplicação
 
 As instruções apresentadas de seguida pressupõem que o ficheiro de
-instalação do *middleware* foi descarregado previamente da Internet.
+instalação da aplicação foi descarregado previamente da Internet.
 Caso não tenha sido, efetue os passos descritos no ponto anterior –
-Download do pacote de instalação do *middleware*.
+Download do pacote de instalação da aplicação.
 
-Para a instalação do *middleware* do Cartão de Cidadão, deverão ser
+Para a instalação da aplicação Autenticação.gov para computador, deverão ser
 executados os passos descritos nos pontos seguintes, relativos ao
 sistema operativo utilizado.
 
@@ -174,8 +167,7 @@ sistema operativo utilizado.
 
     ![Ilustração: Instalação da aplicação em Windows](Pictures/Autenticacao.Gov_Instalacao_termos.png "Instalação da aplicação em Windows"){:.center}
 
-3.  Após selecionar **Avançadas**, poderá escolher a pasta onde deseja instalar o
-    *middleware*. Se desejar alterar a pasta predefinida, carrege em
+3.  Após selecionar **Avançadas**, poderá escolher a pasta onde deseja instalar a aplicação. Se desejar alterar a pasta predefinida, carrege em
     **Alterar** e na janela que surgir, navegue até à pasta de destino
     e carregue **OK**. Para continuar a instalação na pasta de destino,
     deverá premir o botão **Seguinte**.
@@ -187,7 +179,7 @@ sistema operativo utilizado.
 5.  Após a conclusão deste assistente, este solicitará a reinicialização
     do computador.
 
-6.  No próximo arranque do *Windows* a instalação do *middleware* estará
+6.  No próximo arranque do *Windows* a instalação da aplicação estará
     finalizada.
 
 ### Instalação em Linux
@@ -198,7 +190,7 @@ assistente gráfico. Este ecrã poderá variar consoante a distribuição,
 neste manual apresenta-se as imagens da utilização do *Ubuntu Software*
 em Linux Ubuntu 18.04.3 LTS.
 
-Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linha de comandos](#instala%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos).
+Em alternativa, a aplicação poderá também ser [instalada recorrendo à linha de comandos](#instala%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos).
 
 #### Instalação através do *Software Center*
 
@@ -218,10 +210,10 @@ Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linh
 
     ![Ilustração: Instalação_Linux](Pictures/Autenticacao.Gov_Instalacao_Linux3.png "Instalação_Linux"){:.center}
 
-4.  Após a conclusão do passo acima, a instalação do *middleware* está
+4.  Após a conclusão do passo acima, a instalação da aplicação está
     terminada.
 5.  Recomenda-se a reinicialização do sistema para assegurar o bom
-    funcionamento do *middleware*.
+    funcionamento da aplicação.
 
 #### Instalação através da linha de comandos
 
@@ -236,9 +228,9 @@ Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linh
 
     `sudo rpm -ivh pteid\*.rpm`
 
-2.  Após este passo, o *middleware* terá sido instalado no computador.
+2.  Após este passo, a aplicação terá sido instalada no computador.
 3.  Recomenda-se a reinicialização do sistema para assegurar o bom
-    funcionamento do *middleware*.
+    funcionamento da aplicação.
 
 ### Instalação em Mac OS
 
@@ -255,14 +247,15 @@ Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linh
 
 3.  A partir deste ponto no assistente deverá premir o botão
     **Continuar** até concluir a instalação.
-4.  Após a conclusão deste assistente, o *middleware* estará instalado
+    
+4.  Após a conclusão deste assistente, a aplicação estará instalada
     no computador. Neste momento a aplicação utilitária
     “Autenticacão.Gov” já estará disponível na pasta Aplicações /
     *Applications*.
 
-## Remoção do middleware
+## Remoção da aplicação
 
-Para proceder à remoção do *middleware* do Cartão de Cidadão, deverão
+Para proceder à remoção da aplicação do Cartão de Cidadão, deverão
 ser executados os passos descritos nos pontos seguintes, relativos ao
 sistema operativo utilizado.
 
@@ -277,7 +270,8 @@ sistema operativo utilizado.
 
 4.  Clique em **Desinstalar**. Confirme todas as janelas de diálogo que irão
     surgir.
-5.  Após estes passos, o *middleware* estará removido do computador.
+
+5.  Após estes passos, a aplicação estará removida do computador.
     Recomenda-se que o computador seja reiniciado no final destes
     passos.
 
@@ -293,7 +287,7 @@ sistema operativo utilizado.
 
 4.  Clique em **Desinstalar**. Confirme todas as janelas de diálogo que irão
     surgir.
-5.  Após estes passos, o *middleware* estará removido do computador.
+5.  Após estes passos, a aplicação estará removida do computador.
     Recomenda-se que o computador seja reiniciado no final destes
     passos.
 
@@ -310,7 +304,7 @@ sistema operativo utilizado.
 
 4.  Clique em **Desinstalar**. Confirme todas as janelas de diálogo que irão
     surgir.
-5.  Após estes passos, o *middleware* estará removido do computador.
+5.  Após estes passos, a aplicação estará removida do computador.
     Recomenda-se que o computador seja reiniciado no final destes
     passos.
 
@@ -322,7 +316,7 @@ assistente gráfico. Este ecrã poderá variar consoante a distribuição,
 neste manual apresenta-se as imagens da utilização do *Ubuntu Software*
 em Linux Ubuntu 18.04.3 LTS.
 
-Em alternativa, o *middleware* poderá também ser [removido recorrendo à linha de comandos](#remo%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos).
+Em alternativa, a aplicação poderá também ser [removida recorrendo à linha de comandos](#remo%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos).
 
 #### Remoção através do *Software Center*
 
@@ -351,8 +345,8 @@ seguintes são apresentados os ecrãs utilizando Linux Ubuntu 18.04.3 LTS.
 
     ![Ilustração: Apresentação da aplicação](Pictures/Autenticacao.Gov_Desinstalar_Linux5.png "Apresentação da aplicação"){:.center}
 
-6.  Após a conclusão do passo acima a o processo de desinstalação do
-    *middleware* está terminado.
+6.  Após a conclusão do passo acima a o processo de desinstalação da
+    aplicação está terminado.
 
 #### Remoção através da linha de comandos
 
@@ -367,13 +361,12 @@ seguintes são apresentados os ecrãs utilizando Linux Ubuntu 18.04.3 LTS.
 
     `sudo rpm -U pteid-mw`
 
-2.  Após este passo, o *middleware* terá sido removido do computador.
+2.  Após este passo, a aplicação terá sido removida do computador.
 
 ### Remoção em MacOS
 
 1.  Abra a aplicação "**Terminal**" no MacOS.
-2.  Execute o seguinte comando para desinstalar todos os ficheiros do
-    *middleware*.
+2.  Execute o seguinte comando para desinstalar todos os ficheiros da aplicação.
 
     `sudo /usr/local/bin/pteid_uninstall.sh`
 
@@ -792,7 +785,7 @@ informações de acesso:
     -   **Proxy de sistema (Windows e MacOS)**. Ao selecionar esta opção
         e se estiver definida uma configuração de *proxy* de sistema ou
         um *script* de auto configuração (*Proxy Autoconfig*), esta
-        configuração será automaticamente utilizada pelo *middleware*.
+        configuração será automaticamente utilizada pela aplicação e por outras aplicações que usem o *middleware* do cartão de cidadão.
     -   **Servidor proxy:** Endereço IP / Hostname / Porto.
     -   **Autenticação proxy:** Credenciais de acesso (se necessário).
 
@@ -830,8 +823,8 @@ empresariais.
 #### Atualizações
 
 Nesta janela é possível verificar manualmente se existem atualizações
-para o *middleware*. Caso existam atualizações, e se o utilizador o
-pretender, o download do instalador do *middleware* é feito
+para a aplicação. Caso existam atualizações, e se o utilizador o
+pretender, o download do instalador da aplicação é feito
 automaticamente e em seguida iniciado o processo de instalação.
 
 ### Ajuda
@@ -842,7 +835,7 @@ A janela ajuda fornece um resumo das funcionalidades da aplicação, indica o ca
 
 # Integração com aplicações
 
-O *middleware* permite a interação com outras aplicações do sistema operativo, disponibilizando duas funcionalidades: Autenticação e Assinatura Digital.
+O *middleware* do Cartão de Cidadão, instalado com a aplicação Autenticação.Gov, permite a interação com outras aplicações do sistema operativo, disponibilizando duas funcionalidades: Autenticação e Assinatura Digital.
 
 A instalação do *middleware* em Windows permite que, ao introduzir um Cartão de Cidadão no leitor, os certificados deste fiquem automaticamente registados no sistema operativo, ficando assim as funcionalidades de autenticação e assinatura disponíveis às aplicações
 que utilizam a camada criptográfica do sistema operativo. Alguns exemplos dessas aplicações são: *Microsoft Word*, *Microsoft Excel*, *Microsoft Outlook* e *Adobe Acrobat Reader*.
@@ -869,7 +862,7 @@ suporte criptográfico às aplicações com interface PKCS\#11 ou suporte
 criptográfico nativo do sistema operativo.
 
 No caso das aplicações com suporte PKCS\#11, geralmente é necessário
-configurar a localização do ficheiro do *middleware*, que permite o
+configurar a localização do ficheiro da aplicação, que permite o
 suporte. A localização deste ficheiro, depende do sistema operativo a
 ser utilizado.
 
@@ -1013,7 +1006,7 @@ assinado.
 
 Para assinar um documento aberto no *Adobe Acrobat Reader* deve:
 
-1. Aceder ao separadaor **Ferramentas** e selecionar **Certificados**.
+1. Aceder ao separador **Ferramentas** e selecionar **Certificados**.
 
 2. Clique em **Assinar Digitalmente** na barra horizontal por cima do documento.
 
@@ -1122,7 +1115,7 @@ ser descontinuada, visto a apresentar desvantagens na recolha de dados,
 no entanto alguns sítios ainda utilizam esta forma.
 
 Para poder utilizar este método de autenticação, tem de ter
-obrigatoriamente o *middleware* instalado no seu computador.
+obrigatoriamente a aplicação instalada no seu computador.
 
 Neste caso utilizando Sistema Operativo *Windows* os browsers *Internet
 Explorer*, *Microsoft Edge* e *Google Chrome* não exigem nenhuma
@@ -1131,14 +1124,14 @@ configuração uma vez registado o certificado de autenticação do Cidadão.
 Para o *Mozilla Firefox* em qualquer Sistema Operativo é necessário
 efetuar algumas configurações descritas em [Configurar autenticação para *Mozilla Firefox*](#configurar-autentica%c3%a7%c3%a3o-para-mozilla-firefox).
 
-A autenticação por certificado através do portal autenticação.gov.pt não exige a instalação do middleware mas sim do plugin **Autenticação.Gov**.
+A autenticação por certificado através do portal autenticação.gov.pt não exige a instalação da aplicação mas sim do plugin **Autenticação.Gov**.
 
 Para mais informação, consulte esta página de ajuda:
 
 - <https://autenticacao.gov.pt/fa/ajuda/autenticacaogovpt.aspx>
 
 De forma a que a configuração do seu computador suporte qualquer uma das
-alternativas, recomenda-se que instale o *middleware* no seu computador
+alternativas, recomenda-se que instale a aplicação no seu computador
 e também o plugin **Autenticação.Gov**.
 
 
@@ -1303,14 +1296,14 @@ abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
 
 `HKLM\Software\PTEID\logging\log_level`
 - **Tipo**: String (debug, info, warning, error)
-- **Descrição**: Nível de detalhe do log do Middleware.
+- **Descrição**: Nível de detalhe do log do Middleware e da aplicação.
 - **Valor por omissão**: error
 
 ---
 
 `HKLM\Software\PTEID\logging\log_dirname`
   - **Tipo**: String
-  - **Descrição**: Directoria onde são gerados os ficheiros de log do Middleware.
+  - **Descrição**: Directoria onde são gerados os ficheiros de log do Middleware e da aplicação.
   - **Valor por omissão**: `C:\Program Files\Portugal Identity Card\log`
 
 ---
@@ -1325,7 +1318,7 @@ abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
 `HKLM\Software\PTEID\general\install_dirname`
 
   - **Tipo**: String
-  - **Descrição**: Directoria onde é instalado o Middleware.
+  - **Descrição**: Directoria onde é instalado o Middleware e a aplicação.
   - **Valor por omissão**: `C:\Program Files\Portugal Identity Card`
 
 ---
@@ -1333,7 +1326,7 @@ abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
 `HKLM\Software\PTEID\general\cache_dirname`
 
   - **Tipo**: String
-  - **Descrição**: Directoria onde é guardada a cache do Middleware.
+  - **Descrição**: Directoria onde é guardada a cache do Middleware e da aplicação.
   - **Valor por omissão**: `C:\Users\[User]\AppData\Roaming\.pteid-ng`
 
 ---
@@ -1341,7 +1334,7 @@ abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
 `HKLM\Software\PTEID\general\cache_enabled`
 
   - **Tipo**: Número (0 / 1)
-  - **Descrição**: Ativar (1) ou desativar (0) a cache do Middleware relativa aos dados do Cartão do Cidadão.
+  - **Descrição**: Ativar (1) ou desativar (0) a cache relativa aos dados do Cartão do Cidadão.
   - **Valor por omissão**: 1 (ativa)
 
 ---
