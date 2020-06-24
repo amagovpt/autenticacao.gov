@@ -81,7 +81,7 @@ NOTA: A partir da versão 3.2.0, houve uma alteração de nomenclatura no manual
 Este manual pretende descrever todas as funcionalidades providenciadas pela aplicação Autenticação.gov para computador.
 
 A instalação da aplicação Autenticação.gov para computador inclui o *middleware* do Cartão de Cidadão. Este *middleware* pode definir-se como a “camada” de
-software entre o computador e o seu Cartão de Cidadão e é através deste que são disponibilizadas ao sistema operativo e aplicações funcionalidades de autenticação e assinatura eletrónica.
+software entre o computador e o seu Cartão de Cidadão e é através deste que são disponibilizadas ao sistema operativo e outras aplicações funcionalidades de autenticação e assinatura eletrónica.
 
 A aplicação Autenticação.gov para computador permite a gestão do seu
 Cartão de Cidadão. Nesta poderá visualizar as suas informações, editar as
@@ -127,7 +127,7 @@ A lista de sistemas operativos suportados, nas suas arquiteturas de 32 e
 
 Para obter o pacote de instalação da aplicação, deverá aceder ao
 sítio oficial do Cartão de Cidadão em
-[http://www.autenticacao.gov.pt](http://www.autenticacao.gov.pt/) e pressionar "Descarregar" no quadrado com título "Aplicação Autenticação.gov".
+[http://www.autenticacao.gov.pt](http://www.autenticacao.gov.pt/) e pressionar "Descarregar" no rectângulo com título "Aplicação Autenticação.gov".
 
 ![Ilustração: Download](Pictures/Portal_Autenticacao.Gov_Homepage.png "Download"){:.center}
 
@@ -220,13 +220,14 @@ Em alternativa, a aplicação poderá também ser [instalada recorrendo à linha
 1.  Execute o comando de instalação de software no sistema, consoante o
     gestor de pacotes utilizado pelo seu sistema.
 
-    Gestor de pacotes baseado em ficheiros .deb, execute o comando:
+    Sistema baseado em pacotes .deb, execute o comando:
 
-    `sudo dpkg -i pteid\*.deb`
+    `sudo apt install ./Autenticacao.gov\*.deb`
 
-    Gestor de pacotes baseado em ficheiros .rpm, execute o comando:
+    Sistema baseado em pacotes .rpm, execute o comando:
 
-    `sudo rpm -ivh pteid\*.rpm`
+    `dnf install Autenticacao.gov\*.rpm` em Fedora ou
+    `zypper install Autenticacao.gov\*.rpm` em OpenSUSE
 
 2.  Após este passo, a aplicação terá sido instalada no computador.
 3.  Recomenda-se a reinicialização do sistema para assegurar o bom
