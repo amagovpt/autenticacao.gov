@@ -72,6 +72,7 @@ AppController::AppController(GUISettings& settings,QObject *parent) :
               "CpuArch: %s ProductName: %s\n",
               QSysInfo::currentCpuArchitecture().toStdString().c_str(),
               QSysInfo::prettyProductName().toStdString().c_str());
+    createCacheDir();
     checkUpdateCertslog();
     checkUpdateNewslog();
 }
@@ -532,6 +533,15 @@ void AppController::getPteidCacheSize() {
 QString AppController::getPteidCacheDir() {
     GUISettings settings;
     return settings.getPteidCachedir();
+}
+
+void AppController::createCacheDir(){
+    QDir dir(m_Settings.getPteidCachedir());
+    if(!dir.mkpath(".")){
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                  "AppController::createCacheDir: Error creating cache directory :%s",
+                  m_Settings.getPteidCachedir().toStdString().c_str());
+    }
 }
 
 void AppController::doGetPteidCacheSize() {
