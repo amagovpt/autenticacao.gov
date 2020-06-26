@@ -13,11 +13,11 @@
             "package": "20126/78595/Autenticacao.gov_Ubuntu_20_x64.deb"
         },
         "windows32": {
-            "latestVersion": "3.1.2",
+            "latestVersion": "3.2.0",
             "package": "20126/78595/Autenticacao.gov_Win_x86.msi"
         },
         "windows64": {
-            "latestVersion": "3.1.2",
+            "latestVersion": "3.2.0",
             "package": "20126/78595/Autenticacao.gov_Win_x64.msi"
         },
         "fedora32": {
@@ -42,6 +42,17 @@
         }
     },
     "versions": [
+		{
+			"version": "3.2.0",
+            "date": "2020-06-25",
+            "release_notes": [
+                         "Atualização de componentes técnicos da aplicação entre os quais QT e OpenSSL",
+						 "Redesenho de interface nas janelas de introdução de PIN do CC",
+						 "Assinatura com Chave Móvel - possibilidade de forçar o re-envio de OTP por SMS",
+						 "Validações extra na janela de confirmação de morada",
+						 "Opção adicional na configuração de renderização gráfica - Software OpenGL ou Direct3D"
+            ]
+		},
         {
             "version": "3.1.2",
             "date": "2020-06-01",
