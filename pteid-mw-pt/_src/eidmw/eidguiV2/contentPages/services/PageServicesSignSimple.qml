@@ -421,7 +421,7 @@ PageServicesSignSimpleForm {
             var reason = ""
             var location = ""
 
-            var isSmallSignature = false
+            var isSmallSignature = propertyCheckSignReduced.checked
 
             var coord_x = propertyPDFPreview.propertyCoordX
 
@@ -611,6 +611,23 @@ PageServicesSignSimpleForm {
                         "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
             }
 
+        }
+    }
+    propertyCheckSignReduced{
+        onCheckedChanged: {
+            if(propertyCheckSignReduced.checked){
+                propertyPDFPreview.propertySigHidth = 45
+                propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.2
+                propertyPDFPreview.propertyDragSigReasonText.height = 0
+                propertyPDFPreview.propertyDragSigLocationText.height = 0
+                propertyPDFPreview.propertyDragSigImg.height = 0
+            }else{
+                propertyPDFPreview.propertySigHidth = 90
+                propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.1
+                propertyPDFPreview.propertyDragSigReasonText.height = propertyPDFPreview.propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                propertyPDFPreview.propertyDragSigLocationText.height = propertyPDFPreview.propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                propertyPDFPreview.propertyDragSigImg.height = propertyPDFPreview.propertyDragSigRect.height * 0.3
+            }
         }
     }
     Component.onCompleted: {

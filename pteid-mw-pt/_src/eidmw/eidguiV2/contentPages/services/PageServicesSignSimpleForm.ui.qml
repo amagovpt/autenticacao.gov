@@ -39,6 +39,7 @@ Item {
     property alias propertyButtonSignWithCC: button_signCC
     property alias propertyButtonSignCMD: button_signCMD
     property alias propertyDropArea: dropArea
+    property alias propertyCheckSignReduced: checkSignReduced
 
     property alias propertyTextSpinBox: textSpinBox
     property alias propertySpinBoxControl: spinBoxControl
@@ -190,7 +191,7 @@ Item {
                     x: Constants.FOCUS_BORDER
                     y: Constants.FOCUS_BORDER
                     propertyDragSigRect.visible: true
-                    propertyReducedChecked : false
+                    propertyReducedChecked : checkSignReduced.checked
                     KeyNavigation.tab: textSpinBox
                     KeyNavigation.down: textSpinBox
                     KeyNavigation.right: textSpinBox
@@ -317,7 +318,7 @@ Item {
         }
         Item {
             id: itemLastPage
-            width: parent.width * 0.4
+            width: parent.width * 0.2
             height: parent.height
             anchors.left: itemCheckPage.right
             anchors.top: parent.top
@@ -332,13 +333,41 @@ Item {
                 enabled: fileLoaded
                 Accessible.role: Accessible.CheckBox
                 Accessible.name: qsTranslate("PageServicesSign","STR_SIGN_LAST")
-                KeyNavigation.tab: buttonRemove
-                KeyNavigation.down: buttonRemove
-                KeyNavigation.right: buttonRemove
+                KeyNavigation.tab: checkSignReduced
+                KeyNavigation.down: checkSignReduced
+                KeyNavigation.right: checkSignReduced
                 KeyNavigation.backtab: textSpinBox
                 KeyNavigation.up: textSpinBox
                 Keys.onEnterPressed: checkLastPage.checked = !checkLastPage.checked
                 Keys.onReturnPressed: checkLastPage.checked = !checkLastPage.checked
+            }
+        }
+        Item {
+            id: itemCheckSignReduced
+            width: parent.width * 0.2
+            height: parent.height
+            anchors.top: parent.top
+            anchors.left: itemLastPage.right
+
+            Switch {
+                id: checkSignReduced
+                text: qsTranslate("PageServicesSign",
+                                    "STR_SIGN_REDUCED")
+                height: Constants.HEIGHT_SWITCH_COMPONENT
+                font.family: lato.name
+                font.bold: activeFocus
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.capitalization: Font.MixedCase
+                enabled: fileLoaded
+                Accessible.role: Accessible.CheckBox
+                Accessible.name: text
+                KeyNavigation.tab: buttonRemove
+                KeyNavigation.down: buttonRemove
+                KeyNavigation.right: buttonRemove
+                KeyNavigation.backtab: checkLastPage
+                KeyNavigation.up: checkLastPage
+                Keys.onEnterPressed: checkSignReduced.checked = !checkSignReduced.checked
+                Keys.onReturnPressed: checkSignReduced.checked = !checkSignReduced.checked
             }
         }
     }
@@ -373,8 +402,8 @@ Item {
                 KeyNavigation.tab: button_signCC
                 KeyNavigation.down: button_signCC
                 KeyNavigation.right: button_signCC
-                KeyNavigation.backtab: checkLastPage
-                KeyNavigation.up: checkLastPage
+                KeyNavigation.backtab: checkSignReduced
+                KeyNavigation.up: checkSignReduced
                 Keys.onEnterPressed: clicked()
                 Keys.onReturnPressed: clicked()
             }
