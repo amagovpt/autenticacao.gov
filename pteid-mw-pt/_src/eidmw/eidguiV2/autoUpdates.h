@@ -129,6 +129,7 @@ private:
     void RunAppPackage(std::string pkg, std::string distro);
     void RunCertsPackage(QStringList certs);
     bool validateHash(QString certPath, QString hash);
+    bool verifyPackageSignature(std::string &pkg);
 };
 
 #endif //AUTOUPDATES_H

@@ -26,7 +26,7 @@ PageDefinitionsUpdatesForm {
     Connections {
         target: controler
         onSignalAutoUpdateFail: {
-            console.log("onSignalAutoUpdateFail updateType: " + updateType + "error_code: " + error_code)
+            console.log("onSignalAutoUpdateFail updateType: " + updateType + ", error_code: " + error_code)
             var tempTextDescription = ""
             if (error_code == GAPI.GenericError) {
                 tempTextDescription =

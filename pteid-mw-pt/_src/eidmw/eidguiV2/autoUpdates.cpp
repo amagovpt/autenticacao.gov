@@ -32,6 +32,8 @@
 
 #ifdef WIN32
 #include <windows.h>
+#include <SoftPub.h>
+#include <wintrust.h>
 #include <stdio.h>
 #include <QSysInfo>
 #include <QNetworkProxy>
@@ -878,6 +880,13 @@ void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
 
     qDebug() << QString::fromStdString("pkgpath " + pkgpath);
 
+    if (!verifyPackageSignature(pkgpath))
+    {
+        qDebug() << "Package signature invalid!";
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        return;
+    }
+
 #ifdef WIN32
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
@@ -1460,4 +1469,158 @@ QString AutoUpdates::getCertListAsString(){
         stringURLs.append(" ");
     }
     return stringURLs;
+}
+
+bool AutoUpdates::verifyPackageSignature(std::string &pkg) {
+#ifdef WIN32
+    bool result = false;
+    LONG lStatus;
+    DWORD dwLastError;
+
+    std::wstring pkgW = utilStringWiden(pkg.c_str());
+
+    // Initialize the WINTRUST_FILE_INFO structure.
+    WINTRUST_FILE_INFO FileData;
+    memset(&FileData, 0, sizeof(FileData));
+    FileData.cbStruct = sizeof(WINTRUST_FILE_INFO);
+    FileData.pcwszFilePath = pkgW.c_str();
+    FileData.hFile = NULL;
+    FileData.pgKnownSubject = NULL;
+
+    GUID WVTPolicyGUID = WINTRUST_ACTION_GENERIC_VERIFY_V2;
+    WINTRUST_DATA WinTrustData;
+
+    // Initialize the WinVerifyTrust input data structure.
+
+    // Default all fields to 0.
+    memset(&WinTrustData, 0, sizeof(WinTrustData));
+    WinTrustData.cbStruct = sizeof(WinTrustData);
+
+    // Use default code signing EKU.
+    WinTrustData.pPolicyCallbackData = NULL;
+
+    // No data to pass to SIP.
+    WinTrustData.pSIPClientData = NULL;
+
+    // Disable WVT UI.
+    WinTrustData.dwUIChoice = WTD_UI_NONE;
+
+    // No revocation checking.
+    WinTrustData.fdwRevocationChecks = WTD_REVOKE_NONE;
+
+    // Verify an embedded signature on a file.
+    WinTrustData.dwUnionChoice = WTD_CHOICE_FILE;
+
+    // Verify action.
+    WinTrustData.dwStateAction = WTD_STATEACTION_VERIFY;
+
+    // Verification sets this value.
+    WinTrustData.hWVTStateData = NULL;
+
+    // Not used.
+    WinTrustData.pwszURLReference = NULL;
+
+    // This is not applicable if there is no UI because it changes 
+    // the UI to accommodate running applications instead of 
+    // installing applications.
+    WinTrustData.dwUIContext = 0;
+
+    // Set pFile.
+    WinTrustData.pFile = &FileData;
+
+    // WinVerifyTrust verifies signatures as specified by the GUID 
+    // and Wintrust_Data.
+    lStatus = WinVerifyTrust(
+        NULL,
+        &WVTPolicyGUID,
+        &WinTrustData);
+
+    switch (lStatus)
+    {
+    case ERROR_SUCCESS:
+        /*
+        Signed file:
+            - Hash that represents the subject is trusted.
+
+            - Trusted publisher without any verification errors.
+
+            - UI was disabled in dwUIChoice. No publisher or
+                time stamp chain errors.
+
+            - UI was enabled in dwUIChoice and the user clicked
+                "Yes" when asked to install and run the signed
+                subject.
+        */
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "The file \"%S\" is signed and the signature was verified.\n", pkgW.c_str());
+        result = true;
+        break;
+
+    case TRUST_E_NOSIGNATURE:
+        // The file was not signed or had a signature 
+        // that was not valid.
+
+        // Get the reason for no signature.
+        dwLastError = GetLastError();
+        if (TRUST_E_NOSIGNATURE == dwLastError ||
+            TRUST_E_SUBJECT_FORM_UNKNOWN == dwLastError ||
+            TRUST_E_PROVIDER_UNKNOWN == dwLastError)
+        {
+            // The file was not signed.
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "The file \"%S\" is not signed.\n", pkgW.c_str());
+        }
+        else
+        {
+            // The signature was not valid or there was an error 
+            // opening the file.
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "An unknown error occurred trying to verify the signature of the \"%S\" file.\n", pkgW.c_str());
+        }
+
+        break;
+
+    case TRUST_E_EXPLICIT_DISTRUST:
+        // The hash that represents the subject or the publisher 
+        // is not allowed by the admin or user.
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "The signature is present, but specifically disallowed.\n");
+        break;
+
+    case TRUST_E_SUBJECT_NOT_TRUSTED:
+        // The user clicked "No" when asked to install and run.
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "The signature is present, but not trusted.\n");
+        break;
+
+    case CRYPT_E_SECURITY_SETTINGS:
+        /*
+        The hash that represents the subject or the publisher
+        was not explicitly trusted by the admin and the
+        admin policy has disabled user trust. No signature,
+        publisher or time stamp errors.
+        */
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "CRYPT_E_SECURITY_SETTINGS - The hash "
+            "representing the subject or the publisher wasn't "
+            "explicitly trusted by the admin and admin policy "
+            "has disabled user trust. No signature, publisher "
+            "or timestamp errors.\n");
+        break;
+
+    default:
+        // The UI was disabled in dwUIChoice or the admin policy 
+        // has disabled user trust. lStatus contains the 
+        // publisher or time stamp chain error.
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error in verifying file %S is: 0x%x.\n",
+            pkgW.c_str(), lStatus);
+        break;
+    }
+
+    // Any hWVTStateData must be released by a call with close.
+    WinTrustData.dwStateAction = WTD_STATEACTION_CLOSE;
+
+    lStatus = WinVerifyTrust(
+        NULL,
+        &WVTPolicyGUID,
+        &WinTrustData);
+
+    return result;
+#else
+    return true;
+#endif
 }
