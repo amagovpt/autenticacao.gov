@@ -616,13 +616,13 @@ Para mais informações, consulte o seguinte *website*:
 
 <https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais>
 
-    - **Visível:** Permite que a assinatura fique visível no documento PDF. Disponível para assinaturas do tipo **PDF**.
+- **Visível:** Permite que a assinatura fique visível no documento PDF. Disponível para assinaturas do tipo **PDF**.
 
-    - **Página:** Poderá escolher a página onde será apresentada a assinatura. Disponível para assinaturas do tipo **PDF**.
+- **Página:** Poderá escolher a página onde será apresentada a assinatura. Disponível para assinaturas do tipo **PDF**.
 
-    - **Última** Poderá escolher a última página para apresentadar a assinatura. Disponível para assinaturas do tipo **PDF**.
+- **Última:** Poderá escolher a última página para apresentadar a assinatura. Disponível para assinaturas do tipo **PDF**.
 
-    ![Ilustração: Selecionar opções de assinatura](Pictures/Autenticacao.Gov_assinatura_avancada2.png "Selecionar opções de assinatura"){:.center}
+![Ilustração: Selecionar opções de assinatura](Pictures/Autenticacao.Gov_assinatura_avancada2.png "Selecionar opções de assinatura"){:.center}
 
 Após selecionar as opções pretendidas, na área indicada na figura anterior, arraste a pré-visualização da assinatura para a localização pretendida e de seguida prima o botão **Assinar com Cartão de Cidadão** ou **Assinar com Chave Móvel Digital**.
 
