@@ -103,7 +103,7 @@ std::vector<ns3__AttributeType*> ScapServices::getSelectedAttributes(std::vector
 *  SCAP signature with citizen signature using CMD
 */
 void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepath, int selected_page,
-        double location_x, double location_y, QString &location, QString &reason, int ltv_years,
+        double location_x, double location_y, QString &location, QString &reason, bool isTimestamp,
         std::vector<int> attributes_index, CmdSignedFileDetails cmd_details,
         bool useCustomImage, QByteArray &m_jpeg_scaled_data) {
 
@@ -120,7 +120,7 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
     int successful;
     try{
          successful = scap_signature_client.signPDF(m_proxyInfo, savefilepath, cmd_details.signedCMDFile, cmd_details.citizenName,
-            cmd_details.citizenId, ltv_years, false, PDFSignatureInfo(selected_page, location_x, location_y,
+            cmd_details.citizenId, isTimestamp, false, PDFSignatureInfo(selected_page, location_x, location_y,
             false, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes,
             useCustomImage, m_jpeg_scaled_data);
     }
@@ -168,7 +168,7 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
 }
 
 void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QString &savefilepath, int selected_page,
-    double location_x, double location_y, QString &location, QString &reason, int ltv_years,
+    double location_x, double location_y, QString &location, QString &reason, bool isTimestamp,
     std::vector<int> attributes_index, bool useCustomImage, QByteArray &m_jpeg_scaled_data )
 {
     // Sets user selected file save path
@@ -225,7 +225,7 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
             ProxyInfo m_proxyInfo;
             int successful = scap_signature_client.signPDF(
                         m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
-                        QString(citizenId), ltv_years, true, PDFSignatureInfo(selected_page, location_x, location_y,
+                        QString(citizenId), isTimestamp, true, PDFSignatureInfo(selected_page, location_x, location_y,
                         false, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes,
                         useCustomImage, m_jpeg_scaled_data);
             if (successful == GAPI::ScapSucess) {

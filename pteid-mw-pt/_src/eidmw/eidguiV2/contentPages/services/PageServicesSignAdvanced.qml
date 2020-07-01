@@ -679,7 +679,7 @@ PageServicesSignAdvancedForm {
                     }
                     console.log("QML AttributeList: ", attributeList)
                     gapi.startSigningSCAP(loadedFilePath, outputFile, page, coord_x, coord_y,
-                                          location,reason,0, attributeList)
+                                          location,reason, isTimestamp, attributeList)
                 } else {
 
                     gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
@@ -913,8 +913,6 @@ PageServicesSignAdvancedForm {
             if(propertySwitchSignAdd.checked){
                 console.log("propertySwitchSignAdd checked")
                 propertyBusyIndicatorRunning = true
-                propertySwitchSignTemp.checked = false
-                propertySwitchSignTemp.enabled = false
                 propertyCheckSignShow.checked = true
                 propertyCheckSignShow.enabled = false
                 propertyCheckSignReduced.checked = false
@@ -929,7 +927,6 @@ PageServicesSignAdvancedForm {
             }else{
                 console.log("propertySwitchSignAdd not checked")
                 entityAttributesModel.clear()
-                propertySwitchSignTemp.enabled = true
                 propertyCheckSignReduced.enabled = true
                 propertyCheckSignShow.enabled = true
                 propertyRadioButtonXADES.enabled = true

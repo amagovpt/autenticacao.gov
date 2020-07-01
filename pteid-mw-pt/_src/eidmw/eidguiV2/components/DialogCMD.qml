@@ -797,7 +797,7 @@ Item {
             gapi.signOpenScapWithCMD(mobileNumber,textFieldPin.text,
                                      loadedFilePaths,outputFile,page,
                                      coord_x, coord_y,
-                                     reason,location)
+                                     reason,location, isTimestamp)
         } else {
             gapi.signOpenCMD(mobileNumber,textFieldPin.text,
                              loadedFilePaths,outputFile,page,

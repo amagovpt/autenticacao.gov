@@ -3794,6 +3794,8 @@ ssl_auth_init(struct soap *soap)
 #endif
     if (!soap->ctx)
       return soap_set_receiver_error(soap, "SSL/TLS error", "Can't setup context", SOAP_SSL_ERROR);
+
+    SSL_CTX_set_security_level(soap->ctx, 1);
     /* The following alters the behavior of SSL read/write: */
 #if 0
     SSL_CTX_set_mode(soap->ctx, SSL_MODE_ENABLE_PARTIAL_WRITE | SSL_MODE_AUTO_RETRY);

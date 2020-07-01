@@ -895,7 +895,7 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
 
         scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
             m_scap_params.location_x, m_scap_params.location_y,
-            m_scap_params.location, m_scap_params.reason, 0, attrs, cmd_details,
+            m_scap_params.location, m_scap_params.reason, m_scap_params.isTimestamp, attrs, cmd_details,
             useCustomSignature(), m_jpeg_scaled_data);
 
         for (size_t i = 0; i < cmd_pdfSignatures.size(); i++)
@@ -928,7 +928,7 @@ QString generateTempFile() {
 
 void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
     QString outputFile, int page, double coord_x, double coord_y,
-    QString reason, QString location) {
+    QString reason, QString location, bool isTimestamp) {
 
     qDebug() << "signOpenScapWithCMD! MobileNumber = " << mobileNumber << " secret_code = " << secret_code <<
         " loadedFilePaths = " << loadedFilePaths <<
@@ -948,7 +948,7 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<
     m_scap_params.location_y = coord_y;
     m_scap_params.location = location;
     m_scap_params.reason = reason;
-
+    m_scap_params.isTimestamp = isTimestamp;
 
     CmdParams cmdParams;
     SignParams signParams;
@@ -2204,8 +2204,7 @@ void GAPI::startRemovingAttributesFromCache(int scapAttrType) {
 }
 
 void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, double location_x,
-    double location_y, QString location, QString reason, int ltv,
-    QList<int> attribute_index) {
+    double location_y, QString location, QString reason, bool ltv, QList<int> attribute_index) {
 
     SCAPSignParams signParams = { inputPDF, outputPDF, page, location_x, location_y,
         location, reason, ltv, attribute_index };
@@ -2224,7 +2223,7 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
 
     scapServices.executeSCAPSignature(this, params.inputPDF, params.outputPDF, params.page,
         params.location_x, params.location_y, params.location, params.reason,
-        params.ltv, attrs, useCustomSignature(), m_jpeg_scaled_data);
+        params.isTimestamp, attrs, useCustomSignature(), m_jpeg_scaled_data);
     END_TRY_CATCH
 }
 

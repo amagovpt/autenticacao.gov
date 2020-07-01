@@ -260,7 +260,7 @@ ns1__AttributeType *convertAttributeType(ns3__AttributeType *attributeType, soap
 QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const char *outputPath,
                                                  std::string certChain, QString citizenName, QString citizenId,
                                                  QString attributeSupplier,  QString attribute,
-                                                 PDFSignatureInfo signatureInfo, bool isVisible, bool isCC,
+                                                 PDFSignatureInfo signatureInfo, bool isVisible, bool isTimestamp, bool isCC,
                                                  bool useCustomImage, QByteArray &m_jpeg_scaled_data)
 {
     qDebug() << "openSCAPSignature inputFile: " << inputFile << " outputPath: " << outputPath;
@@ -268,6 +268,12 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
     local_pdf_handler = new PTEID_PDFSignature(inputFile);
 
     PDFSignature *sig_handler = local_pdf_handler->getPdfSignature();
+
+    if (isTimestamp)
+    {
+        sig_handler->enableTimestamp();
+    }
+    
 	
 	if (useCustomImage && isVisible) {
 		const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(
@@ -457,7 +463,7 @@ static int ParseHeader(struct soap * soap, const char * key, const char * val)
 }
 
 int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QString filepath,
-                                QString citizenName, QString citizenId,int ltv, bool isCC,
+                                QString citizenName, QString citizenId, bool isTimestamp, bool isCC,
                                 PDFSignatureInfo signatureInfo, std::vector<ns3__AttributeType *> &attributeTypeList,
                                 bool useCustomImage, QByteArray &m_jpeg_scaled_data)
 {
@@ -869,9 +875,11 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                     signatureInfo.setLocation(strdup(signOriginalLocation.toStdString().c_str()));
                 }
 
+                // Only the last signature should be timestamped
+                bool isLast = (i == transactionList.size() - 1);
                 signatureHash = openSCAPSignature(inputPath, outputPath,
                                 transaction->AttributeSupplierCertificateChain, citizenName, citizenId,
-                                attributeSupplierListString, attributeListString, signatureInfo, isVisible, isCC, 
+                                attributeSupplierListString, attributeListString, signatureInfo, isVisible, isTimestamp && isLast, isCC,
                                 useCustomImage, m_jpeg_scaled_data);
 
                 if (signatureHash.size() == 0) {
