@@ -3,7 +3,7 @@
  * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
- * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ * Copyright (C) 2018-2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.1
 
@@ -240,6 +240,8 @@ public:
 
     enum CmdDialogClass { Sign, RegisterCert, AskToRegisterCert };
 
+    enum ShortcutId { ShortcutIdNone, ShortcutIdSignSimple, ShortcutIdSignAdvanced};
+
     Q_ENUMS(ScapPdfSignResult)
     Q_ENUMS(ScapAttrType)
     Q_ENUMS(ScapAttrDescription)
@@ -254,6 +256,7 @@ public:
     Q_ENUMS(AutoUpdateType)
     Q_ENUMS(PinUsage)
     Q_ENUMS(CmdDialogClass)
+    Q_ENUMS(ShortcutId)
 
     bool isAddressLoaded() {return m_addressLoaded; }
 
@@ -261,10 +264,6 @@ public:
     QQuickImageProvider * buildPdfImageProvider() { return image_provider_pdf; }
 
     PDFPreviewImageProvider * image_provider_pdf;
-
-    //This flag is used to start the application in specific subpage
-    void setShortcutFlag(int value) { m_shortcutFlag = value; }
-    void setShortcutPDFPath(QString &inputPdf) { m_shortcutInputPDF = inputPdf ;}
 
     // Do not forget to declare your class to the QML system.
     static void declareQMLTypes() {
@@ -288,8 +287,6 @@ public slots:
     void startReadingPersoNotes();
     void startWritingPersoNotes(QString text);
     void startReadingAddress();
-    int getShortcutFlag() {return m_shortcutFlag; }
-	QString getShortcutInputPDF() {	return m_shortcutInputPDF.replace(QChar('\\'), QChar('/')); }
     void startPrintPDF(QString outputFile, bool isBasicInfo,bool isAdditionalInfo,
                        bool isAddress,bool isNotes,bool isPrintDate,bool isSign);
     void startPrint(QString outputFile, bool isBasicInfo,bool isAdditionalInfo,
@@ -305,6 +302,22 @@ public slots:
 
 	void startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp);
 	void startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, bool isTimestamp);
+
+    //This flag is used to start the application in specific subpage
+    // 1 = Advanced Signature
+    void setShortcutFlag(ShortcutId value) { m_shortcutFlag = value; }
+    void addShortcutPath(QString path) { m_shortcutPaths.append(path.replace(QChar('\\'), QChar('/'))); };
+    void setShortcutLocation(QString location) { m_shortcutLocation = location; }
+    void setShortcutReason(QString reason) { m_shortcutReason = reason; }
+    void setShortcutTsa(bool useTsa) { m_shortcutTsa = useTsa; }
+    void setShortcutOutput(QString output) { m_shortcutOutput = output; }
+    int getShortcutFlag() { return m_shortcutFlag; }
+    QList<QString> getShortcutPaths() { return m_shortcutPaths; }
+    QString getShortcutLocation() { return m_shortcutLocation; }
+    QString getShortcutReason() { return m_shortcutReason; }
+    QString getShortcutOutput() { return m_shortcutOutput; }
+    QString getAbsolutePath(QString path);
+    bool getShortcutTsa() { return m_shortcutTsa; }
 
     /* SCAP Methods  */
     void startGettingEntities();
@@ -531,8 +544,12 @@ private:
 
     QString m_persoData;
     bool m_addressLoaded;
-    int m_shortcutFlag;
-    QString m_shortcutInputPDF;
+    ShortcutId m_shortcutFlag;
+    QList<QString> m_shortcutPaths;
+    QString m_shortcutLocation;
+    QString m_shortcutReason;
+    QString m_shortcutOutput;
+    bool m_shortcutTsa = false;
     signed int selectedReaderIndex = -1;
     double print_scale_factor = 1;
 

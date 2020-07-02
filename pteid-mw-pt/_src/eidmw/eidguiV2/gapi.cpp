@@ -59,7 +59,7 @@ GAPI::GAPI(QObject *parent) :
     m_cmdCertificates =  new eIDMW::CMDCertificates();
 #endif
     m_addressLoaded = false;
-    m_shortcutFlag = 0;
+    m_shortcutFlag = ShortcutIdNone;
 
     // Create callbacks for all readers at the startup
     setEventCallbacks();
@@ -3463,4 +3463,13 @@ bool GAPI::checkCMDSupport() {
 #else
     return false;
 #endif
+}
+
+QString GAPI::getAbsolutePath(QString path) {
+    QFileInfo fileInfo(path);
+    if (fileInfo.exists() && fileInfo.isRelative())
+    {
+        return fileInfo.absoluteFilePath();
+    }
+    return path;
 }

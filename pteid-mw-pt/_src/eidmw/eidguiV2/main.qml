@@ -1329,20 +1329,6 @@ Load language error. Please reinstall the application"
                 mainFormID.state = Constants.MenuState.FIRST_RUN
             }
 
-            //Open Advanced Signature on startup
-            if (gapi.getShortcutFlag() > 0) {
-                //mainFormID.propertyMainMenuView.width = mainWindow.width
-                mainFormID.propertyMainMenuListView.currentIndex = 1
-                mainFormID.propertySubMenuListView.currentIndex = 1
-
-                mainFormID.state = Constants.MenuState.EXPAND
-                // Clean the content page
-                mainFormID.propertyPageLoader.source = "contentPages/services/PageServicesSignAdvanced.qml"
-                //TODO: we shouldn't need this to make sure the contentPage gets the expanded space
-                mainWindow.setWidth(Constants.SCREEN_MINIMUM_WIDTH + 1)
-                return;
-            }
-
             if ( mainFormID.state === Constants.MenuState.FIRST_RUN){
                 console.log("Runing First time" + mainWindow.width)
                 mainFormID.propertyMainMenuView.width = mainWindow.width * 2 * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
@@ -1363,6 +1349,25 @@ Load language error. Please reinstall the application"
             console.log("debugMode: " + controler.getDebugModeValue())
             if (controler.getDebugModeValue()) {
                 mainFormID.propertyTitleBarContainer.propertyTitleBar.color = Constants.COLOR_TITLEBAR_DEBUG
+            }
+
+            // Take shortcut to submenu
+            if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignSimple) {
+                mainFormID.propertShowAnimation = false
+                mainMenuPressed(1)
+                subMenuPressed(1, "contentPages/services/PageServicesSignSimple.qml")
+                //TODO: we shouldn't need this to make sure the contentPage gets the expanded space
+                mainWindow.setWidth(Constants.SCREEN_MINIMUM_WIDTH + 1)
+                mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
+                return
+            } else if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignAdvanced) {
+                mainFormID.propertShowAnimation = false
+                mainMenuPressed(1)
+                subMenuPressed(2, "contentPages/services/PageServicesSignAdvanced.qml")
+                //TODO: we shouldn't need this to make sure the contentPage gets the expanded space
+                mainWindow.setWidth(Constants.SCREEN_MINIMUM_WIDTH + 1)
+                mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
+                return
             }
         }
         propertyImageLogo {

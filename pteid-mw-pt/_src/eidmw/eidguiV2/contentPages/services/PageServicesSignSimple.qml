@@ -495,6 +495,17 @@ PageServicesSignSimpleForm {
             }else{
                 var outputFile = filesModel.get(0).fileUrl
                 var prefix = (Qt.platform.os === "windows" ? "file:///" : "file://");
+
+                // If application was started with signSimple and output option from command line
+                var shortcutOutput = getShortcutOutput()
+                if (shortcutOutput) {
+                    outputFile = outputFile.substring(outputFile.lastIndexOf('/')+1, outputFile.length - 1)
+                    outputFile = prefix + shortcutOutput + Functions.replaceFileSuffix(outputFile, "_signed.pdf")
+                    propertyFileDialogOutput.file = outputFile
+                    propertyFileDialogOutput.accepted()
+                    gapi.setShortcutOutput("")
+                    return;
+                }
                 propertyFileDialogOutput.currentFile = prefix + Functions.replaceFileSuffix(outputFile, "_signed.pdf")
                 propertyFileDialogOutput.open()
             }
@@ -512,6 +523,16 @@ PageServicesSignSimpleForm {
             }
             var outputFile = filesModel.get(0).fileUrl
             var prefix = (Qt.platform.os === "windows" ? "file:///" : "file://");
+            // If application was started with signSimple and output option from command line
+            var shortcutOutput = getShortcutOutput()
+            if (shortcutOutput) {
+                outputFile = outputFile.substring(outputFile.lastIndexOf('/')+1, outputFile.length - 1)
+                outputFile = prefix + shortcutOutput + Functions.replaceFileSuffix(outputFile, "_signed.pdf")
+                propertyFileDialogCMDOutput.file = outputFile
+                propertyFileDialogCMDOutput.accepted()
+                gapi.setShortcutOutput("")
+                return;
+            }
             propertyFileDialogCMDOutput.currentFile = prefix + Functions.replaceFileSuffix(outputFile, "_signed.pdf")
             propertyFileDialogCMDOutput.open()
         }
@@ -631,10 +652,10 @@ PageServicesSignSimpleForm {
         }
     }
     Component.onCompleted: {
-        if (gapi.getShortcutFlag() > 0)
+        if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignSimple)
             filesModel.append(
                         {
-                            "fileUrl": gapi.getShortcutInputPDF()
+                            "fileUrl": gapi.getShortcutPaths()[0]
                         });
 
         console.log("Page Services Sign Simple mainWindowCompleted")
@@ -659,7 +680,10 @@ PageServicesSignSimpleForm {
     }
     Component.onDestruction: {
         console.log("PageServicesSignSimple destruction")
-        if(gapi) gapi.closeAllPdfPreviews();
+        if(gapi) {
+            gapi.closeAllPdfPreviews();
+            gapi.setShortcutOutput("")
+        }
     }
     function updateIndicators(pageCount){
         propertySpinBoxControl.up.indicator.visible = true
@@ -706,5 +730,16 @@ PageServicesSignSimpleForm {
     function maxTextInputLength(num){
         //given number of pages returns maximum length that TextInput should accept
         return Math.ceil(Math.log(num + 1) / Math.LN10);
+    }
+
+    function getShortcutOutput() {
+        var output = gapi.getShortcutOutput()
+        if (output == "")
+            return null
+        output = gapi.getAbsolutePath(output)
+        if (output.charAt(output.length - 1) != "/") {
+            output += "/"
+        }
+        return output
     }
 }
