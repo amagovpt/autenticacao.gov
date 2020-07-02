@@ -32,6 +32,7 @@
 #include <vector>
 #include "Mutex.h"
 
+#include "Export.h"
 
 // Mutex.h includes windows.h and that conflicts with the openssl defines
 #if defined(__WINCRYPT_H__)
@@ -107,7 +108,6 @@ void loadWindowsRootCertificates(X509_STORE *store);
   * Abstract class for cryptographic features 
   *
   * The goal of this class is to provide facilities to openSSL usage
-  * This is only for internal use, no export is foreseen. 
   *
   *********************************************************************************/
 class APL_CryptoFwk
@@ -216,7 +216,7 @@ public:
 	  * @return true if Validation OK
 	  * @return false if Revoked or Unknown
 	  */
-	FWK_CertifStatus OCSPValidation(const CByteArray &cert, const CByteArray &issuer, CByteArray *response=NULL);
+	EIDMW_APL_API FWK_CertifStatus OCSPValidation(const CByteArray &cert, const CByteArray &issuer, CByteArray *response=NULL);
 
 	/**
 	  * Send a OCSP request and get the response
