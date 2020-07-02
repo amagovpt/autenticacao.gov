@@ -2261,12 +2261,14 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, boo
             childrensList.push_back(name.c_str());
 
             std::string description = mainAttributeObject->Description->c_str();
-            if (!isShortDescription) {
+			if (!isShortDescription) {
 
-                QString subAttributes(" (");
-                QString subAttributesValues;
-                for (uint subAttributePos = 0; subAttributePos < mainAttributeObject->SubAttributeList->SubAttribute.size(); subAttributePos++){
-                    ns3__SubAttributeType * subAttribute = mainAttributeObject->SubAttributeList->SubAttribute.at(subAttributePos);
+				QString subAttributes(" (");
+				QString subAttributesValues;
+				uint subAttributePos = 0;
+
+				while (mainAttributeObject->SubAttributeList != NULL && subAttributePos < mainAttributeObject->SubAttributeList->SubAttribute.size()) {
+					ns3__SubAttributeType * subAttribute = mainAttributeObject->SubAttributeList->SubAttribute.at(subAttributePos);
 					QString subDescription, subValue;
 					if (subAttribute->Description != NULL) {
 						subDescription += subAttribute->Description->c_str();
@@ -2274,15 +2276,16 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, boo
 					if (subAttribute->Value != NULL) {
 						subValue += subAttribute->Value->c_str();
 					}
-                    subAttributesValues.append(subDescription + ": " + subValue + ", ");
-                }
-                // Chop 2 to remove last 2 chars (', ')
-                subAttributesValues.chop(2);
-                subAttributes.append(subAttributesValues + ")");
+					subAttributesValues.append(subDescription + ": " + subValue + ", ");
+					subAttributePos++;
+				}
+				// Chop 2 to remove last 2 chars (', ')
+				subAttributesValues.chop(2);
+				subAttributes.append(subAttributesValues + ")");
 
-                /* qDebug() << "Sub attributes : " << subAttributes; */
-                description += subAttributes.toStdString();
-            }
+				/* qDebug() << "Sub attributes : " << subAttributes; */
+				description += subAttributes.toStdString();
+			}
 
             childrensList.push_back(description.c_str());
         }
