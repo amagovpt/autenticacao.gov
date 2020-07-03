@@ -880,6 +880,8 @@ if (pin.verifyPin("", ref triesLeft, true){
 	if (!bResult && -1 == triesLeft) return;
 }
 ```
+**Nota:** Se o primeiro parâmetro do método verifyPin for a string vazia, será aberta uma janela para introdução do PIN. Caso contrário, o primeiro parâmetro deverá ser a string com o PIN a ser verificado. Esta lógica aplica-se de modo análogo aos dois primeiros argumentos do método changePin.
+
 
 ## Assinatura Digital
 
