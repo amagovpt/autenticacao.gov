@@ -1277,6 +1277,9 @@ PageServicesSignAdvancedForm {
 
         if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignAdvanced){
             var paths = gapi.getShortcutPaths()
+            for(var i = 0; i < paths.length; i++) {
+                paths[i] = gapi.getAbsolutePath(paths[i])
+            }
             updateUploadedFiles(paths)
 
             propertyTextFieldLocal.text = gapi.getShortcutLocation()
