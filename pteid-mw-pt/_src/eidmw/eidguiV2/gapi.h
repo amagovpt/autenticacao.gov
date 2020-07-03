@@ -303,8 +303,7 @@ public slots:
 	void startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp);
 	void startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, bool isTimestamp);
 
-    //This flag is used to start the application in specific subpage
-    // 1 = Advanced Signature
+    //This flag is used to start the application in specific signature subpage
     void setShortcutFlag(ShortcutId value) { m_shortcutFlag = value; }
     void addShortcutPath(QString path) { m_shortcutPaths.append(path.replace(QChar('\\'), QChar('/'))); };
     void setShortcutLocation(QString location) { m_shortcutLocation = location; }

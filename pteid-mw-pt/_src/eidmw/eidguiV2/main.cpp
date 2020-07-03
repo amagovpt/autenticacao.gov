@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
     if (mode == "")
     {
         if(!parser.parse(QCoreApplication::arguments())) {
-            qDebug() << "ERROR: " << parser.errorText().toStdString().c_str();
+            qDebug() << "ERROR: default no-arguments mode: " << parser.errorText().toStdString().c_str();
             gapi.quitApplication();
             PTEID_ReleaseSDK();
             exit(1);
@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
         parser.addOption(outputOption);
 
         if(!parser.parse(QCoreApplication::arguments())) {
-            qDebug() << "ERROR: " << parser.errorText().toStdString().c_str();
+            qDebug() << "ERROR: " << mode << ": " << parser.errorText().toStdString().c_str();
             gapi.quitApplication();
             PTEID_ReleaseSDK();
             exit(1);
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
         args = parser.positionalArguments(); // some option values were interpreted as positional args before. call this again
         if (args.size() < 2)
         {
-            qDebug() << "ERROR: No input files were provided.";
+            qDebug() << "ERROR: " << mode << ": " << "No input files were provided.";
             gapi.quitApplication();
             PTEID_ReleaseSDK();
             exit(1);
