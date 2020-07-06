@@ -1273,6 +1273,46 @@ Os valores que a chave pode tomar são:
 - 1 para aceleração gráfica (Placa gráfica);
 - Em Windowsa apenas, 2 para rederização por Software (ANGLE, que emula o OpenGL usando Direct3D).
 
+# Interface de linha de comandos
+
+**Nota:** Esta funcionalidade só está disponível a partir da versão 3.3.0 da aplicação.
+
+Quando executada a partir da linha de comandos, a aplicação Autenticação.gov para computador aceita alguns modos e opções descritos nas seguintes subsecções.
+
+## Consultar ajuda e versão
+
+A opção *--help* (ou *-h*) permite, para cada modo,  consultar as opções disponíveis na linha de comandos.
+
+A versão instalada pode ser consultada com *--version* (ou *-v*).
+
+Exemplo (Linux):
+```
+$ eidguiV2 -h
+```
+
+## Atalho para submenus de assinatura 
+
+Com os modos *signSimple* e *signAdvanced* é possível inicar a aplicação no submenu de assinatura simples e avançada, respetivamente.
+
+O modo *signSimple* requer o caminho do ficheiro a ser carregado para assinatura. As seguintes opções são suportadas:
+
+- *--destino DESTINO* (*-d DESTINO*): configura a pasta de destino do ficheiro assinado.A pasta de destino não será pedida ao utilizador no momento da assinatura.
+
+
+O modo *signAdvanced* requer uma lista com de caminhos dos ficheiros a serem carregados para assinatura. Em adição à opção *--destino*, suporta ainda as seguintes opções:
+- *--tsa*: ativa a assinatura com timestamp no submenu da Assinatura Avançada;
+- *--motivo MOTIVO* (*-m MOTIVO*): configura o motivo da assinatura; 
+- *--localidade LOCALIDADE* (*-l LOCALIDADE*): configura a localidade da assinatura.
+
+Exemplos (Linux):
+```
+$ eidguiV2 signSimple -d /home/user/Documents/ ficheiro.pdf
+```
+```
+$ eidguiV2 signAdvanced --tsa -m "motivo" -l "localidade" -d /home/user/Documents/ \
+ficheiro1.pdf ... ficheiroN.pdf
+```
+
 # Instruções de configuração em ambientes empresariais
 
 ## Configurações através de chaves de registo Windows
