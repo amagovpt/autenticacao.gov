@@ -95,6 +95,9 @@ unsigned long APL_Card::readFile(const char *csPath, CByteArray &oData, unsigned
         oData = m_reader->getCalReader()->ReadFile(csPath,ulOffset,(ulMaxLength==0 ? FULL_FILE : ulMaxLength));
 	} catch(CMWException &e){
 		m_reader->CalUnlock();
+		if (e.GetError() == EIDMW_ERR_INCOMPATIBLE_READER)
+			throw e;
+
 		return 0;
     } catch(...){
 		m_reader->CalUnlock();

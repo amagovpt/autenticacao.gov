@@ -550,6 +550,8 @@ long CPCSC::PcscToErr(unsigned long lPcscErr)
 		lRet = EIDMW_ERR_CARD_SHARING; break;
 	case SCARD_E_NOT_TRANSACTED:
 		lRet = EIDMW_ERR_NOT_TRANSACTED; break;
+	case 0x45d:
+		lRet = EIDMW_ERR_INCOMPATIBLE_READER; break;
 	}
 
 	return lRet;

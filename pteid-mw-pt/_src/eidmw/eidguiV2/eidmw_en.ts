@@ -1970,6 +1970,10 @@
         <source>STR_POPUP_REMOVE_CERTIFICATE</source>
         <translation>Certificate Removal</translation>
     </message>
+    <message>
+        <source>STR_POPUP_INCOMPATIBLE_READER</source>
+        <translation type="unfinished">The reader may be incompatible with this card. Try to update the reader&apos;s driver or a different reader if possible.&lt;br&gt;If this error persists, contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
+    </message>
 </context>
 <context>
     <name>Popup File</name>

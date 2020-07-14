@@ -100,6 +100,9 @@ PageDefinitionsSCAPForm {
             else if (error_code == GAPI.CardPinTimeout) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT") + controler.autoTr
             }
+            else if (error_code == GAPI.IncompatibleReader) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
+            }
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR") + controler.autoTr
             }

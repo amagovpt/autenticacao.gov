@@ -1968,6 +1968,10 @@
         <source>STR_POPUP_REMOVE_CERTIFICATE</source>
         <translation>Remoção de certificados</translation>
     </message>
+    <message>
+        <source>STR_POPUP_INCOMPATIBLE_READER</source>
+        <translation type="unfinished">Leitor possivelmente incompatível com este cartão. Se possível, experimente atualizar o controlador do seu leitor ou um leitor diferente.&lt;br&gt;Caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
+    </message>
 </context>
 <context>
     <name>Popup File</name>

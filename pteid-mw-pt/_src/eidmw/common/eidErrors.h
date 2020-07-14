@@ -115,6 +115,10 @@
  *  on Mac OS X when multiple apps are access the card simultaneously) */
 #define EIDMW_ERR_NOT_TRANSACTED       0xe1d00210
 
+/** Incompatible reader.
+ * E.g. incompatibility with new card, protocol or other. */
+#define EIDMW_ERR_INCOMPATIBLE_READER  0xe1d0022C
+
 // Internal errors (caused by the middleware)
 
 /** An internal limit has been reached */

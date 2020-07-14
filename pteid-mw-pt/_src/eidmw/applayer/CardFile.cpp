@@ -190,6 +190,11 @@ tCardFileStatus APL_CardFile::LoadData(bool bForceReload)
 				m_status=CARDFILESTATUS_ERROR_NOFILE;
 				return m_status;
 			}
+			if (err == EIDMW_ERR_INCOMPATIBLE_READER)
+			{
+				MWLOG(LEV_ERROR, MOD_APL, "LoadData: Reader is incompatible with card.");
+				throw e;
+			}
 
 			MWLOG(LEV_ERROR, MOD_APL, "LoadData: Could not read file : %s - Error : 0x%x", m_path.c_str(),e.GetError());
 			throw e;

@@ -185,6 +185,10 @@ QString GAPI::getAddressField(AddressInfoKey key) {
 { \
     emit signalCardAccessError(PinBlocked); \
     } \
+    else if (errorCode == EIDMW_ERR_INCOMPATIBLE_READER) \
+{ \
+    emit signalCardAccessError(IncompatibleReader); \
+    } \
     else if (errorCode == EIDMW_ERR_TIMEOUT) \
 { \
     emit signalCardAccessError(CardPinTimeout); \
