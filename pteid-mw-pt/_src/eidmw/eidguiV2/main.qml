@@ -74,6 +74,8 @@ Window {
             // Minimize window in case it was just hidden (it would remain hidden otherwise)
             mainWindow.showMinimized()
 
+            if (Qt.platform.os === "osx")
+                mainWindow.flags = Qt.Window | Qt.CustomizeWindowHint | Qt.FramelessWindowHint;
             mainWindow.raise();
             mainWindow.show();
             mainWindow.requestActivate();

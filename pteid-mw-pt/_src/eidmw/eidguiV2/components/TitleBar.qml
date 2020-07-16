@@ -116,7 +116,11 @@ Item {
                 id: mouseAreaMinimizeButton
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked: mainWindow.showMinimized()
+                onClicked:{
+                    if (Qt.platform.os === "osx")
+                        mainWindow.flags = Qt.Window | Qt.CustomizeWindowHint | Qt.WindowMinMaxButtonsHint;
+                    mainWindow.showMinimized();
+                }
             }
         }
         Image {
