@@ -32,6 +32,7 @@
 
 XERCES_CPP_NAMESPACE_USE
 
+#if _XSEC_VERSION_FULL >= 20000L
 namespace eIDMW
 {
 
@@ -39,7 +40,6 @@ namespace eIDMW
 // Utility functions used in XadesSignature needed to support xml-security >= 2.0.0
 // The various makeQName functions became internal to xml-security
 
-#if _XSEC_VERSION_FULL >= 20000L
     // --------------------------------------------------------------------------------
 
     //           Make a QName
