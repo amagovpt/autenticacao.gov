@@ -69,20 +69,25 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
 
 ### Windows
 
-Instruções para compilação em Windows (Visual Studio 2013)
+Instruções para compilação em Windows (Visual Studio 2017)
 
 É importante assegurar que as dependências são compiladas com a mesma versão de Visual Studio que será usada para compilar o Middleware.
 Será assim necessário compilar as seguintes bibliotecas (versões utilizadas para a última release Windows):
 
 - openSSL 1.1.1 - https://www.openssl.org/source/openssl-1.1.1f.tar.gz
-- xerces-c - https://xerces.apache.org/xerces-c/build-3.html
-- libcurl - https://curl.haxx.se/download.html
-- zlib - http://www.zlib.net/zlib-1.2.11.tar.gz
-- libzip - https://libzip.org/download/
-- libpng - http://www.libpng.org/pub/png/libpng.html
-- openjpeg - https://www.openjpeg.org/
+- xerces-c 3.2.3 - https://xerces.apache.org/xerces-c/build-3.html
+- libcurl 7.69.1 - https://curl.haxx.se/download.html
+- zlib 1.2.11 - http://www.zlib.net/zlib-1.2.11.tar.gz
+- libzip 1.5.2 - https://libzip.org/download/
+- libpng 1.6.37 - http://www.libpng.org/pub/png/libpng.html
+- openjpeg 2.3 - https://www.openjpeg.org/
+- libxml-security-c 2.0.2 - http://archive.apache.org/dist/santuario/c-library/xml-security-c-2.0.2.zip
 
-Para o caso do Qt5 (versão igual ou superior a 5.9) estão disponíveis binários pré-compilados, poderá ser utilizado o instalador disponível em:  `https://download.qt.io/archive/online_installers/2.0/`
+Para compilar a aplicação GUI, projeto disponível em eidmw/eidguiV2, é necessária uma dependência adicional:
+
+- poppler-qt5 0.87 - https://poppler.freedesktop.org/
+
+Para o caso do Qt5 (versão igual ou superior a 5.12) estão disponíveis binários pré-compilados, poderá ser utilizado o instalador disponível em:  `https://download.qt.io/archive/online_installers/2.0/`
 
 Ferramentas adicionais a instalar:
 
@@ -94,14 +99,14 @@ Ferramentas adicionais a instalar:
 - Swigwin 4.0.1 - disponível em  https://sourceforge.net/projects/swig/files/swigwin/swigwin-4.0.1/
 - Java JDK
 - Wix - disponível em https://wixtoolset.org/releases/
-- Wix Visual Studio Extension - https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2013Extension
+- Wix Visual Studio Extension - https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2017Extension
 
 
 Após configurado o ambiente conforme acima descrito, efetuar os seguintes passos:
 
 1. Clonar repositório
 2. Configurar os caminhos para as dependências (x86 e x64) e ferramentas no ficheiro `pteid-mw-pt\windows\set_path_autenticacao.gov.bat`
-3. Abrir a Solução de VS2013 através do script `pteid-mw-pt\windows\ezbuild_sln_autenticacao.gov.bat
+3. Abrir a Solução de VS2017 através do script `pteid-mw-pt\windows\ezbuild_sln_autenticacao.gov.bat
 4. Seleccionar a configuração `Release | Win32` ou `Release | x64`
 5. Compilar o projecto através do menu `Build solution`
 
