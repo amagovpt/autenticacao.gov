@@ -1045,7 +1045,7 @@ Para assinar um documento aberto no *Adobe Acrobat Reader DC*, em MacOS, deve pr
 
     ![Ilustração: Janela para assinar em *Microsoft Word*.](Pictures/Autenticacao.Gov_macos_adobe_libpath.png)
 
-Se o seu cartão de cidadão estiver inserido no leitor e o módulo tiver sido adicionado com sucesso, os certificados ficarão disponíveis e visiveis como na imagem seguinte.
+Se o seu cartão de cidadão estiver inserido no leitor e o módulo tiver sido adicionado com sucesso, ao pressionar **Atualizar** os certificados ficarão disponíveis e visíveis conforme na imagem seguinte. No caso dos certificados não ficarem disponíveis como na imagem, verifique que o cartão está inserido no leitor, reinicie o *Adobe Acrobat Reader DC* e volte a verificar.
 
 ![Ilustração: Janela para assinar em *Microsoft Word*.](Pictures/Autenticacao.Gov_macos_adobe_pkcs11_2.png)
 
