@@ -860,7 +860,7 @@ assinatura digital e autenticação nas seguintes aplicações:
 **Autenticação:**
 
 - [Internet Explorer](#autentica%c3%a7%c3%a3o-em-portais-web)
-- [Mozilla Firefox](#assinatura-digital-de-email-com-mozilla-thunderbird)
+- [Mozilla Firefox](#configurar-autenticação-para-mozilla-firefox)
 
 Além das aplicações acima referidas, o *middleware* disponibiliza
 suporte criptográfico às aplicações com interface PKCS\#11 ou suporte
