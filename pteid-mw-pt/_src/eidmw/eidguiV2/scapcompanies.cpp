@@ -41,7 +41,7 @@ std::vector<ns2__AttributesType *> loadCacheFile(QString &filePath) {
     std::istream * istream = &replyStream;
 
     soap * soap2 = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
-    soap_set_namespaces(soap2, namespaces);
+    soap_set_namespaces(soap2, SCAP_namespaces);
 
     soap2->is = istream;
 
@@ -283,6 +283,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
 
         soap sp;
         soap_init2(&sp, SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
+        soap_set_namespaces(&sp, SCAP_namespaces);
         
         long ret;
         if (useOAuth) {
@@ -388,7 +389,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
         std::stringstream ss;
         if (!useOAuth) {
             sp.os = &ss;
-            if (soap_write_ns2__AttributeRequestType(&sp, attr_request))
+            if (soap_write__ns2__AttributeRequest(&sp, attr_request))
             {
                 qDebug() << "Error serializing AttributeRequest!";
             }
@@ -524,7 +525,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
         soap soap2;
         soap_init2(&soap2, SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
 
-        soap_set_namespaces(&soap2, namespaces);
+        soap_set_namespaces(&soap2, SCAP_namespaces);
 
         soap2.is = istream;
 
