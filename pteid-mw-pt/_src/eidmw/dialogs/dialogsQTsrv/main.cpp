@@ -27,6 +27,7 @@
 #include <QtCore>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QFontDatabase>
 
 #include <sys/ipc.h>
 #include <sys/shm.h>
@@ -109,7 +110,7 @@ QString getPinName( DlgPinUsage usage, wchar_t *inPinName ) {
             PinName = GETQSTRING_DLG(AddressPin);
             break;
 
-        DLG_PIN_UNKNOWN:
+        case DLG_PIN_UNKNOWN:
             if ( inPinName == NULL ) {
                 PinName = GETQSTRING_DLG(UnknownPin);
             } else {
@@ -180,9 +181,14 @@ int main(int argc, char *argv[])
 	QCoreApplication::addLibraryPath(QString("/Applications/Autentica\xC3\xA7\xC3\xA3o.gov.app/Contents/PlugIns/"));
 	#endif
 
+	QString fontFile = ":/fonts/lato/Lato-Regular.ttf";
 	if(iFunctionIndex == DLG_ASK_PIN)
 	{
 		QApplication a(argc, argv);
+		int id = QFontDatabase::addApplicationFont(fontFile);
+		QFont font(QFontDatabase::applicationFontFamilies(id).at(0));
+		a.setFont(font);
+		a.setWindowIcon(QIcon(":/images/appicon.ico"));
 
 		// attach to the segment and get a pointer
 		DlgAskPINArguments *oData = NULL;
@@ -203,15 +209,21 @@ int main(int argc, char *argv[])
 					switch( oData->usage )
 					{
 						case DLG_PIN_AUTH:
-                            Header = GETQSTRING_DLG(PleaseEnterYourPin);
-							Header += ", ";
-							Header += GETQSTRING_DLG(InOrderToAuthenticateYourself);
+							Header = GETQSTRING_DLG(AuthenticateWith);
+							Header += " ";
+							Header += GETQSTRING_DLG(CitizenCard);
 							Header += "\n";
 							break;
 						case DLG_PIN_SIGN:
-							Header = GETQSTRING_DLG(Caution);
+							Header = GETQSTRING_DLG(SigningWith);
 							Header += " ";
-							Header += GETQSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronic);
+							Header += GETQSTRING_DLG(CitizenCard);
+							Header += "\n";
+							break;
+						case DLG_PIN_ADDRESS:
+							Header = GETQSTRING_DLG(ReadAddressFrom);
+							Header += " ";
+							Header += GETQSTRING_DLG(CitizenCard);
 							Header += "\n";
 							break;
 						default:
@@ -278,6 +290,11 @@ int main(int argc, char *argv[])
 	else if (iFunctionIndex == DLG_ASK_PINS )
 	{
 		QApplication a(argc, argv);
+		int id = QFontDatabase::addApplicationFont(fontFile);
+		QFont font(QFontDatabase::applicationFontFamilies(id).at(0));
+		a.setFont(font);
+		a.setWindowIcon(QIcon(":/images/appicon.ico"));
+
 		// attach to the segment and get a pointer
 		DlgAskPINsArguments *oData = NULL;
 		SharedMem oShMemory;
@@ -287,63 +304,26 @@ int main(int argc, char *argv[])
 		dlgWndAskPINs *dlg = NULL;
 		try
 		{
-			QString PINName;
 			QString Header;
-			Header = GETQSTRING_DLG(EnterYour);
-			Header += " ";
-
+			QString tr_pin = getPinName( oData->usage, oData->pinName );
 			switch( oData->operation )
 			{
 				case DLG_PIN_OP_CHANGE:
-					if( oData->usage == DLG_PIN_UNKNOWN )
-					{
-						PINName = QString::fromWCharArray(oData->pinName);
-					}
-					else
-					{
-						PINName = GETQSTRING_DLG(Pin);
-					}
+					Header = GETQSTRING_DLG(Change);
+					Header += " ";
+					Header += tr_pin;
 					break;
 				case DLG_PIN_OP_UNBLOCK_CHANGE:
-					Header = GETQSTRING_DLG(PleaseEnterYourPuk);
-					Header += ", ";
-					Header = GETQSTRING_DLG(ToUnblock);
+					Header = GETQSTRING_DLG(Unblock);
 					Header += " ";
-					Header = GETQSTRING_DLG(Your);
-					Header += " \"";
-
-				//	if( oData->usage == DLG_PIN_UNKNOWN )
-				//	{
-			    //			PINName = QString::fromWCharArray(oData->pinName);
-				//	}
-				//	else
-				//	{
-						PINName = GETQSTRING_DLG(Puk);
-				//	}
+					Header += tr_pin;
+					tr_pin = GETQSTRING_DLG(Puk);
 					break;
 				default:
 					oData->returnValue = DLG_BAD_PARAM;
 					oShMemory.Detach((void *)oData);
 					return 0;
-					break;
 			}
-
-            PINName = getPinName( oData->usage, oData->pinName );
-            Header += PINName;
-
-			Header += " ";
-			QString tr_pin;
-
-			if (oData->operation == DLG_PIN_OP_UNBLOCK_CHANGE)
-			{
-				Header = GETQSTRING_DLG(UnlockDialogHeader);
-				tr_pin = QString("PUK");
-			}
-			else
-			{
-				tr_pin = PINName;
-			}
-
 			dlg = new dlgWndAskPINs(oData->pin1Info,
 					oData->pin2Info,
 					Header,
@@ -378,6 +358,10 @@ int main(int argc, char *argv[])
 	else if (iFunctionIndex == DLG_BAD_PIN)
 	{
 		QApplication a(argc, argv);
+		int id = QFontDatabase::addApplicationFont(fontFile);
+		QFont font(QFontDatabase::applicationFontFamilies(id).at(0));
+		a.setFont(font);
+		a.setWindowIcon(QIcon(":/images/appicon.ico"));
 
 		// attach to the segment and get a pointer
 		DlgBadPinArguments *oData = NULL;
@@ -529,6 +513,10 @@ int main(int argc, char *argv[])
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process started (pin=%ls, usage=%ld, operation=%ld)", argv[0],oInfoData->pinName,  oInfoData->usage, oInfoData->operation);
 
 			QApplication a(argc, argv);
+			int id = QFontDatabase::addApplicationFont(fontFile);
+			QFont font(QFontDatabase::applicationFontFamilies(id).at(0));
+			a.setFont(font);
+			a.setWindowIcon(QIcon(":/images/appicon.ico"));
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : QApplication created", argv[0]);
 
 			// attach to the segment and get a pointer
@@ -549,49 +537,10 @@ int main(int argc, char *argv[])
 					switch( oInfoData->operation )
 					{
 						case DLG_PIN_OP_VERIFY:
-							switch( oInfoData->usage )
-							{
-								case DLG_PIN_AUTH:
-									qsMessage = GETQSTRING_DLG(PleaseEnterYourPinOnThePinpadReader);
-									if(!qsReader.isEmpty())
-									{
-										qsMessage += " \"";
-										qsMessage += qsReader;
-										qsMessage += "\"";
-									}
-									qsMessage += ", ";
-									qsMessage += GETQSTRING_DLG(InOrderToAuthenticateYourself);
-									qsMessage += "\n";
-									break;
-								case DLG_PIN_SIGN:
-									qsMessage += GETQSTRING_DLG(PleaseEnterYourPinOnThePinpadReader);
-									if(!qsReader.isEmpty())
-									{
-										qsMessage += " \"";
-										qsMessage += qsReader;
-										qsMessage += "\"";
-									}
-									break;
-								default:
-									qsMessage = GETQSTRING_DLG(PleaseEnterYourPinOnThePinpadReader);
-									if(!qsReader.isEmpty())
-									{
-										qsMessage += " \"";
-										qsMessage += qsReader;
-										qsMessage += "\"";
-									}
-									qsMessage += "\n";
-									break;
-							}
+							qsMessage = GETQSTRING_DLG(PleaseEnterYourPinOnThePinpadReader);
 							break;
 						case DLG_PIN_OP_UNBLOCK_NO_CHANGE:
 							qsMessage = GETQSTRING_DLG(PleaseEnterYourPukOnThePinpadReader);
-							if(!qsReader.isEmpty())
-							{
-								qsMessage += " \"";
-								qsMessage += qsReader;
-								qsMessage += "\"";
-							}
 							qsMessage += ", ";
 							qsMessage = GETQSTRING_DLG(ToUnblock);
 							qsMessage += " ";
@@ -608,44 +557,14 @@ int main(int argc, char *argv[])
 							qsMessage += "\"\n";
 							break;
 						case DLG_PIN_OP_CHANGE:
-							qsMessage = GETQSTRING_DLG(ChangeYourPin);
-							qsMessage += " ";
-
-							qsMessage += GETQSTRING_DLG(OnTheReader);
-							if(!qsReader.isEmpty())
-							{
-								qsMessage += " \"";
-								qsMessage += qsReader;
-								qsMessage += "\"";
-							}
-							qsMessage += "\n";
 							qsMessage += GETQSTRING_DLG(EnterOldNewVerify);
 							qsMessage += "\n";
 							break;
 						case DLG_PIN_OP_UNBLOCK_CHANGE:
-							qsMessage = GETQSTRING_DLG(PleaseEnterYourPuk);
-							qsMessage += ", ";
-							qsMessage = GETQSTRING_DLG(ToUnblock);
-							qsMessage += " ";
-							qsMessage = GETQSTRING_DLG(Your);
-							qsMessage += " \"";
-							if( !qsPinName.isEmpty() )
-							{
-								qsMessage += qsPinName;
-							}
-							else
-							{
-								qsMessage += GETQSTRING_DLG(Pin);
-							}
-							qsMessage += "\" ";
-							qsMessage += GETQSTRING_DLG(OnTheReader);
-							if(!qsReader.isEmpty())
-							{
-								qsMessage += " \"";
-								qsMessage += qsReader;
-								qsMessage += "\"";
-							}
-							qsMessage += "\n";
+							qsMessage = GETQSTRING_DLG(UnlockDialogInstructions);
+							break;
+						case DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK:
+							qsMessage = GETQSTRING_DLG(UnlockWithoutPUKInstructions);
 							break;
 						default:
 							oInfoData->returnValue = DLG_BAD_PARAM;

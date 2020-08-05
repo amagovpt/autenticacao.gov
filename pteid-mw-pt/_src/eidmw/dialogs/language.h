@@ -50,12 +50,13 @@ typedef enum {
 
 DEFINE_LANG_STR(Yes) = {L"&Yes", L"&Sim", L"", L""};
 DEFINE_LANG_STR(No) = {L"&No", L"&Nao", L"", L""};
+DEFINE_LANG_STR(Confirm) = {L"CONFIRM", L"CONFIRMAR", L"", L""};
 DEFINE_LANG_STR(Ok) = {L"&OK", L"&OK", L"O&k", L"&Ok"};
-DEFINE_LANG_STR(Cancel) = {L"&Cancel", L"&Cancelar", L"", L""};
+DEFINE_LANG_STR(Cancel) = {L"CANCEL", L"CANCELAR", L"", L""};
 DEFINE_LANG_STR(CancelNo) = {L"&Cancel (No)", L"&Cancelar (Nao)", L"", L""};
 DEFINE_LANG_STR(Pin) = {L"PIN", L"PIN", L"", L""};
 DEFINE_LANG_STR(Puk) = {L"PUK", L"PUK", L"", L""};
-DEFINE_LANG_STR(Retry) = {L"&Retry", L"Repetir", L"", L""};
+DEFINE_LANG_STR(Retry) = {L"RETRY", L"REPETIR", L"", L""};
 DEFINE_LANG_STR(Always) = {L"&Always", L"&Sempre", L"", L""};
 DEFINE_LANG_STR(Never) = {L"Ne&ver", L"Nunca", L"", L""};
 DEFINE_LANG_STR(Application) = {L"Application:", L"Aplicacao:", L"", L""};
@@ -63,9 +64,13 @@ DEFINE_LANG_STR(Function) = {L"Function:", L"Funcao:", L"", L""};
 DEFINE_LANG_STR(EnterYourPin) = {L"Enter your PIN", L"Introduza o PIN", L"", L""};
 DEFINE_LANG_STR(Asking) = {L"Asking", L"Pedir", L"", L""};
 DEFINE_LANG_STR(SigningWith) = {L"Signing with", L"Assinar com", L"", L""};
+DEFINE_LANG_STR(AuthenticateWith) = {L"Authenticate with", L"Autenticar com", L"", L""};
+DEFINE_LANG_STR(ReadAddressFrom) = {L"Read address from", L"Ler morada do", L"", L""};
+DEFINE_LANG_STR(CitizenCard) = {L"Citizen Card", L"Cartão de Cidadão", L"", L""};
+DEFINE_LANG_STR(OfCitizenCard) = {L"of the Citizen Card", L"do Cartão de Cidadão", L"", L""};
 DEFINE_LANG_STR(EnterYour) = {L"Enter your", L"Introduza o seu", L"", L""};
 DEFINE_LANG_STR(ForVerification) = {L"for verification", L"voor verificatie", L"", L""};
-DEFINE_LANG_STR(Unblock) = {L"Unblock PIN code", L"Desbloquear código PIN", L"", L""};
+DEFINE_LANG_STR(Unblock) = {L"Unblock", L"Desbloquear", L"", L""};
 DEFINE_LANG_STR(ToUnblock) = {L"to unblock", L"para desbloquear", L"", L""};
 DEFINE_LANG_STR(UnblockPinHeader) = {L"Unblock PIN code", L"Desbloquear código PIN", L"", L""};
 DEFINE_LANG_STR(UnlockDialogHeader) = {L"To unlock your PIN code you must know the matching PUK code", L"Para desbloquear o PIN terá de saber qual o respectivo código de desbloqueio", L"", L""};
@@ -74,12 +79,13 @@ DEFINE_LANG_STR(AndSigning) = {L"and signing", L"e assinar", L"", L""};
 DEFINE_LANG_STR(AndSign) = {L"and sign", L"e assinar", L"", L""};
 DEFINE_LANG_STR(RenewingPinCode) = {L"Renewing PIN code.", L"Renovar código PIN.", L"", L""};
 DEFINE_LANG_STR(VerifyingPinCode) = { L"Verify PIN code.", L"Verificar código PIN.", L"", L""};
+DEFINE_LANG_STR(Change) = {L"Change", L"Alterar", L"", L""};
 DEFINE_LANG_STR(CurrentPin) = {L"Current PIN", L"PIN Actual", L"", L""};
 DEFINE_LANG_STR(NewPin) = {L"New PIN", L"Novo PIN", L"", L""};
 DEFINE_LANG_STR(ConfirmNewPin) = {L"Confirm new PIN", L"Confirmar novo PIN", L"", L""};
 DEFINE_LANG_STR(EnterYourNewPinCode) = {L"Enter your New PIN code", L"Introduza o novo código PIN", L"", L""};
 DEFINE_LANG_STR(EnterYourNewPinCodeAgainToConfirm) = {L"Enter your New PIN code again to confirm", L"Introduza novamente o novo código PIN", L"", L""};
-DEFINE_LANG_STR(ErrorTheNewPinCodesAreNotIdentical) = {L"Error: The new PIN codes are not identical", L"Erro: os novos PINs não são iguais", L"", L""};
+DEFINE_LANG_STR(ErrorTheNewPinCodesAreNotIdentical) = {L"PINs do no match.", L"PINs não correspondem.", L"", L""};
 DEFINE_LANG_STR(RetryEnterYourNewPinCode) = {L"Retry: Enter your New PIN code", L"Repetir: Introduza o novo código PIN", L"", L""};
 DEFINE_LANG_STR(Bad) = {L"Bad", L"Erro", L"Erreur", L"Fehler"};
 DEFINE_LANG_STR(Notification) = {L"Notification", L"Atenção", L"", L""};
@@ -94,7 +100,7 @@ DEFINE_LANG_STR(AuthenticationPin) = {L"Authentication PIN", L"PIN de autentica�
 DEFINE_LANG_STR(AddressPin) = {L"Address PIN", L"PIN de morada", L"", L""};
 DEFINE_LANG_STR(UnknownPin) = {L"Unknown PIN", L"PIN desconhecido", L"", L""};
 DEFINE_LANG_STR(PleaseEnterTheCorrectEidCard) = {L"Please enter the correct eID card.", L"Introduza um cartão válido.", L"", L""};
-DEFINE_LANG_STR(Caution) = {L"Caution:", L"Atenção:", L"Attention:", L"Achtung:"};
+DEFINE_LANG_STR(Caution) = {L"CAUTION:", L"ATENÇÃO:", L"", L""};
 DEFINE_LANG_STR(YouAreAboutToMakeALegallyBindingElectronic) = {L"You are about to make a legally binding electronic signature with your identity card.", L"Vai realizar uma assinatura eletrónica válida com o seu Cartão de Cidadão.", L"", L""};
 DEFINE_LANG_STR(PleaseEnterYourPin) = {L"Please enter your PIN", L"Introduza o código PIN", L"", L""};
 DEFINE_LANG_STR(PleaseEnterYourPinOnThePinpadReader) = {L"Please enter your PIN on the pinpad reader.", L"Por favor, introduza o PIN no seu leitor PINPAD.", L"", L""};
@@ -117,6 +123,7 @@ DEFINE_LANG_STR(UnlockDialogInstructions) = {L"1) Enter your PUK code and press 
 DEFINE_LANG_STR(UnlockWithoutPUKInstructions) = {L"1) Enter your new PIN and press 'OK'. \n2) Enter your new PIN again and press 'OK'.",
 												 L"1) Por favor introduza o seu novo PIN e pressione 'OK'\n2) Introduza novamente o seu novo PIN e pressione 'OK'.", L"", L""};
 DEFINE_LANG_STR(PinpadCanBeDisabled) = { L"The pinpad functionality can be disabled in Application Configuration. Check manual.", L"A funcionalidade PINPAD pode ser desativada na Configuração da Aplicação. Ver manual.", L"", L"" };
+DEFINE_LANG_STR(IncorrectPin) = {L"The PIN of the Citizen Card is incorrect.", L"O PIN do Cartão de Cidadão introduzido está incorrecto.", L"", L""};
 #define GETSTRING_DLG(code) LANG_STR_ ## code[CLang::GetLang()]
 #ifndef WIN32
 #define GETQSTRING_DLG(code) QString::fromWCharArray(LANG_STR_ ## code[CLang::GetLang()])

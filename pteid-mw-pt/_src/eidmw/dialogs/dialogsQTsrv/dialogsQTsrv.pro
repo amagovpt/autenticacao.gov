@@ -70,3 +70,7 @@ SOURCES += main.cpp \
            dlgWndAskPINs.cpp  \
            dlgWndBadPIN.cpp \
 	   dlgWndPinpadInfo.cpp
+
+RESOURCES += resources.qrc
+
+macx: ICON = images/appicon.icns

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>416</width>
-    <height>258</height>
+    <width>480</width>
+    <height>250</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -217,8 +217,8 @@
   <widget class="QLabel" name="lblPINName">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>100</y>
+     <x>25</x>
+     <y>90</y>
      <width>271</width>
      <height>71</height>
     </rect>
@@ -233,13 +233,26 @@
     <string>PIN</string>
    </property>
   </widget>
+  <widget class="QLabel" name="lblAttention">
+   <property name="geometry">
+    <rect>
+     <x>25</x>
+     <y>50</y>
+     <width>430</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color : #000000; font-size:12pt; font-weight:500; background:rgba(0,0,0,0)</string>
+   </property>
+  </widget>
   <widget class="QLineEdit" name="txtPIN">
    <property name="geometry">
     <rect>
-     <x>310</x>
-     <y>130</y>
-     <width>75</width>
-     <height>25</height>
+     <x>25</x>
+     <y>140</y>
+     <width>430</width>
+     <height>35</height>
     </rect>
    </property>
    <property name="echoMode">
@@ -250,26 +263,26 @@
    <property name="enabled">
     <bool>false</bool>
    </property>
-   <property name="default">
-    <bool>true</bool>
-   </property>
    <property name="geometry">
     <rect>
-     <x>220</x>
-     <y>200</y>
-     <width>75</width>
-     <height>25</height>
+     <x>253</x>
+     <y>197</y>
+     <width>203</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="text">
     <string>&amp;OK</string>
    </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QLabel" name="lblHeader">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>20</y>
+     <x>25</x>
+     <y>10</y>
      <width>371</width>
      <height>71</height>
     </rect>
@@ -279,9 +292,6 @@
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-image: url(:/Resources/alpha.png);</string>
    </property>
    <property name="text">
     <string>Enter you PIN</string>
@@ -296,10 +306,10 @@
   <widget class="QPushButton" name="btnCancel">
    <property name="geometry">
     <rect>
-     <x>310</x>
-     <y>200</y>
-     <width>75</width>
-     <height>25</height>
+     <x>25</x>
+     <y>197</y>
+     <width>203</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="text">
@@ -341,9 +351,24 @@
     </item>
    </layout>
   </widget>
+  <widget class="QLabel" name="lblImage">
+   <property name="geometry">
+    <rect>
+     <x>415</x>
+     <y>15</y>
+     <width>40</width>
+     <height>40</height>
+    </rect>
+   </property>
+    <property name="alignment">
+     <enum>Qt::AlignCenter</enum>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>btnOk</sender>

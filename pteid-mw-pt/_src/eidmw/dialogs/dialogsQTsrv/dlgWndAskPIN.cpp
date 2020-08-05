@@ -49,67 +49,68 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 	}
 
 	QString Title;
-
-/*
-	if( PinPusage == DLG_PIN_SIGN )
-	{
-		Title+=QString::fromWCharArray(GETSTRING_DLG(SigningWith));
-		Title+= ": ";
-	}
-	else
-	{
-		Title+=QString::fromWCharArray(GETSTRING_DLG(Asking));
-		Title+= " ";
-	}
-	Title+= PINName;
-*/
 	Title = QString::fromWCharArray(GETSTRING_DLG(VerifyingPinCode));
 	this->setWindowTitle(Title);
 	this->setAccessibleName(Title);
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint );
 
-	ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
-	ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(EnterYourPin)) );
-    ui.lblHeader->setStyleSheet("QLabel { color : #3C5DBC; font-size:16pt; font-weight:600 }");
+	// HEADER
+	if( Header.isEmpty() )
+		Header = QString::fromWCharArray(GETSTRING_DLG(EnterYourPin));
 
-	ui.lblPINName->setText( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
-	ui.lblPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
-    ui.lblPINName->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt; }");
+	ui.lblHeader->setText( Header );
+	ui.lblHeader->setAccessibleName( Header );
+	ui.lblHeader->setStyleSheet("QLabel { color : #3C5DBC; font-size:16pt; font-weight:800; background:rgba(0,0,0,0)}");
 
-	ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
-	ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin)) );
-    ui.lblPINName_2->setStyleSheet("QLabel { color : #3C5DBC; font-size:16pt; }");
+	// ICON
+	QPixmap pix(":/images/autenticacao.bmp");
+	ui.lblImage->setPixmap(pix);
+	ui.lblImage->setScaledContents(true);
 
+	// SIGNATURE WARNING LABEL
+	if( PinPusage == DLG_PIN_SIGN )
+	{
+		QString attentionText = QString::fromWCharArray(GETSTRING_DLG(Caution)) + " "
+			+ QString::fromWCharArray(GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronic));
+		ui.lblAttention->setText( attentionText );
+		ui.lblAttention->setAccessibleName( attentionText );
+		ui.lblAttention->setWordWrap(true);
+	}
 
-	ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
-	ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
-    ui.btnOk->setStyleSheet("QPushButton {background-color: #D6D7D7; color: #333333;}");
+	// PIN NAME LABEL
+	if( PINName.isEmpty() )
+		PINName = QString::fromWCharArray(GETSTRING_DLG(AuthenticationPin));
 
+	ui.lblPINName->setText( PINName );
+	ui.lblPINName->setAccessibleName( PINName );
+	ui.lblPINName->setStyleSheet("QLabel { color : #000000; font-size:12pt; }");
 
+	ui.lblPINName_2->setText( PINName );
+	ui.lblPINName_2->setAccessibleName( PINName );
+	ui.lblPINName_2->setStyleSheet("QLabel { color : #3C5DBC; font-size:16pt; }");
+
+	// OK BUTTON
+	ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Confirm)) );
+	ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Confirm)) );
+	ui.btnOk->setStyleSheet("QPushButton {background-color: rgba(60, 93, 188, 0.7); color: #ffffff; border-radius: 0}\
+QPushButton:hover{background-color: #2C3DAC}");
+
+	// CANCEL BUTTON
 	ui.btnCancel->setText( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
 	ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
-    ui.btnCancel->setStyleSheet("QPushButton {background-color: #D6D7D7; color: #333333;}");
+	ui.btnCancel->setStyleSheet("QPushButton {background-color: #D6D7D7; color: #3C5DBC; border-radius: 0}\
+QPushButton:hover{background-color: #C6C7C7}");
 
+	// PIN TEXT EDIT
 	m_ulPinMinLen = pinInfo.ulMinLen;
 	m_ulPinMaxLen = pinInfo.ulMaxLen;
-
-	m_UseKeypad = UseKeypad;
-
-	ui.fraPIN_Keypad->setVisible( false );
-
-	if( !PINName.isEmpty() )
-	{
-		ui.lblPINName->setText( PINName );
-		ui.lblPINName->setAccessibleName( PINName );
-	}
-	if( !Header.isEmpty() )
-	{
-		ui.lblHeader->setText( Header );
-		ui.lblHeader->setAccessibleName( Header );
-	}
-
 	//Max Length of PINs for PTEID cards as currently defined by INCM personalization
 	ui.txtPIN->setMaxLength( 8 );
+	ui.txtPIN->setStyleSheet("QLineEdit {border: 2px solid #D6D7D7; padding-left: 10px}\
+QLineEdit:focus {border: 3px solid #D6D7D7;}");
+
+	m_UseKeypad = UseKeypad;
+	ui.fraPIN_Keypad->setVisible( false );
 	setFixedSize(this->width(), this->height());
 
     Type_WndGeometry WndGeometry;
@@ -140,7 +141,17 @@ std::wstring dlgWndAskPIN::getPIN()
 
 void dlgWndAskPIN::on_txtPIN_textChanged( const QString & text )
 {
-	ui.btnOk->setEnabled( (unsigned) text.length() >= m_ulPinMinLen );
+	bool bEnable = (unsigned) text.length() >= m_ulPinMinLen;
+	QString colorButton = "rgba(60, 93, 188, 0.7)"; //blue with transparency
+	QString colorInputTextBox = "#D6D7D7"; //grey
+	if (bEnable)
+		colorButton = colorInputTextBox = "#3C5DBC"; //blue
+
+	ui.btnOk->setEnabled(bEnable);
+	ui.txtPIN->setStyleSheet("QLineEdit {border: 2px solid " + colorInputTextBox + "; padding-left: 10px}\
+QLineEdit:focus {border: 3px  solid " + colorInputTextBox + ";}");
+	ui.btnOk->setStyleSheet("QPushButton {background-color: " + colorButton + "; color: #ffffff; border-radius: 0}\
+QPushButton:hover{background-color: #2C3DAC}");
 }
 
 void dlgWndAskPIN::on_txtPIN_2_textChanged( const QString & text )

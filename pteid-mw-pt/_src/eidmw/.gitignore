@@ -51,6 +51,7 @@ eidguiV2/GeneratedFiles
 eidlibJava_Wrapper/GeneratedFiles/
 dialogs/dialogsQTsrv/moc_*
 dialogs/dialogsQTsrv/ui_*
+dialogs/dialogsQTsrv/qrc_resources.cpp
 eidguiV2/build
 eidguiV2/eidguiV2
 eidguiV2/eidguiV2.app
