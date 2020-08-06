@@ -1302,8 +1302,6 @@ No caso de existirem problemas gráficos, recomenda-se alterar o modo de renderi
 
 No caso da aplicação não arrancar, é possivel alterar essa opção usando as configurações do software Autenticação.gov.
 
-Para tal, deve alterar a seguinte configuração conforme descrito no capítulo [Instruções de configuração em ambientes empresariais](#instruções-de-configuração-em-ambientes-empresariais): 
-
 - Em **Windows**, a chave de registo 
   
   **HKEY\_CURRENT\_USER\\Software\\PTEID\\configuretool\\graphics\_accelaration**;
@@ -1315,7 +1313,9 @@ Para tal, deve alterar a seguinte configuração conforme descrito no capítulo 
 Os valores que a chave pode tomar são:
 - 0 para renderização por Software (OpenGL);
 - 1 para aceleração gráfica (Placa gráfica);
-- Em Windowsa apenas, 2 para rederização por Software (ANGLE, que emula o OpenGL usando Direct3D).
+- 2 (Exclusivo para Windows) para renderização por Software (ANGLE, que emula o OpenGL usando Direct3D).
+
+Em ambiente empresariais deve alterar a seguinte configuração conforme descrito no capítulo [Instruções de configuração em ambientes empresariais](#instruções-de-configuração-em-ambientes-empresariais).
 
 # Interface de linha de comandos
 
