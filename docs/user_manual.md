@@ -1340,7 +1340,7 @@ Com os modos *signSimple* e *signAdvanced* é possível inicar a aplicação no 
 
 O modo *signSimple* requer o caminho do ficheiro a ser carregado para assinatura. As seguintes opções são suportadas:
 
-- *--destino DESTINO* (*-d DESTINO*): configura a pasta de destino do ficheiro assinado.A pasta de destino não será pedida ao utilizador no momento da assinatura.
+- *--destino DESTINO* (*-d DESTINO*): configura a pasta de destino do ficheiro assinado. A pasta de destino não será pedida ao utilizador no momento da assinatura.
 
 
 O modo *signAdvanced* requer uma lista com de caminhos dos ficheiros a serem carregados para assinatura. Em adição à opção *--destino*, suporta ainda as seguintes opções:
@@ -1355,6 +1355,16 @@ $ eidguiV2 signSimple -d /home/user/Documents/ ficheiro.pdf
 ```
 $ eidguiV2 signAdvanced --tsa -m "motivo" -l "localidade" -d /home/user/Documents/ \
 ficheiro1.pdf ... ficheiroN.pdf
+```
+
+Exemplo (Windows):
+```
+$ "C:\Program Files\Portugal Identity Card\pteidguiV2.exe" signSimple -d /home/user/Documents/ ficheiro.pdf
+```
+
+**Nota:** As opções passadas por parâmetros, que contêm um caracter espaço, devem ser colocadas entre aspas. Por exemplo (Linux):
+```
+$ eidguiV2 signSimple -d /home/user/Documents/ "ficheiro para assinar.pdf"
 ```
 
 # Instruções de configuração em ambientes empresariais
