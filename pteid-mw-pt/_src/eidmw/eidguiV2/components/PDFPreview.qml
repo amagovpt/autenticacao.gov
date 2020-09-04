@@ -282,6 +282,9 @@ Rectangle {
             onWidthChanged: {
                 dragSigRect.x = dragTarget.lastCoord_x / dragTarget.lastScreenWidth * background_image.width
                 dragSigRect.y = dragTarget.lastCoord_y / dragTarget.lastScreenHeight * background_image.height
+
+                propertyPageLoader.propertyBackupBackgroundWidth = background_image.width
+                propertyPageLoader.propertyBackupBackgroundHeight = background_image.height
             }
         }
     }

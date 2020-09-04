@@ -266,7 +266,10 @@ PageServicesSignAdvancedForm {
             propertyPDFPreview.propertyPdfOriginalWidth=pdfWidth
             propertyPDFPreview.propertyPdfOriginalHeight=pdfHeight
             propertyPDFPreview.updateSignPreview()
-            propertyPDFPreview.setSignPreview(propertyPageLoader.propertyBackupCoordX * propertyPDFPreview.propertyBackground.width,propertyPageLoader.propertyBackupCoordY * propertyPDFPreview.propertyBackground.height)
+            propertyPDFPreview.setSignPreview(
+                        propertyPageLoader.propertyBackupCoordX * propertyPageLoader.propertyBackupBackgroundWidth,
+                        propertyPageLoader.propertyBackupCoordY * propertyPageLoader.propertyBackupBackgroundHeight)
+
         }
     }
 

@@ -36,6 +36,8 @@ Loader{
     property bool propertyBackupSignShow: true
     property double propertyBackupCoordX: 0
     property double propertyBackupCoordY: 0
+    property double propertyBackupBackgroundWidth: 0
+    property double propertyBackupBackgroundHeight: 0
     property bool propertyBackupSignReduced: false
     property int propertyBackupPage: 1
     property bool propertyBackupLastPage: false
