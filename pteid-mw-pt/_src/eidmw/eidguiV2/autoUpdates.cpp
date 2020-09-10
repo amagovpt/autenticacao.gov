@@ -1078,8 +1078,17 @@ void AutoUpdates::RunCertsPackage(QStringList certs) {
         bUpdateCertsSuccess = true;
         for (int i = 0; i < certs.length(); i++){
             certificateFileName = certs.at(i);
-            if (validateHash(copySourceDir + certificateFileName, hashList.at(i)) == false
-                || QFile::copy(copySourceDir + certificateFileName, copyTargetDir + certificateFileName) == false)
+            if (validateHash(copySourceDir + certificateFileName, hashList.at(i)) == false)
+            {
+                bUpdateCertsSuccess = false; // Keep install another files but show popup with error message
+                PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                    "AutoUpdates::RunCertsPackage: failed to validate hash for file: %s", certificateFileName.toStdString().c_str());
+                continue;
+            }
+
+            if (QFile::exists(copyTargetDir + certificateFileName)) QFile::remove(copyTargetDir + certificateFileName);
+
+            if (QFile::copy(copySourceDir + certificateFileName, copyTargetDir + certificateFileName) == false)
             {
                 bUpdateCertsSuccess = false; // Keep install another files but show popup with error message
                 PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
