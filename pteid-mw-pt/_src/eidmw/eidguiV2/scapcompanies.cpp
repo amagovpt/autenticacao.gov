@@ -295,9 +295,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
             std::string cacerts_file;
 #ifdef __linux__
             ca_path = "/etc/ssl/certs";
-#elif WIN32
-            cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR)) + "\\cacerts.pem";
-#elif __APPLE__
+#else
             cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
 #endif
             ret = soap_ssl_client_context(&sp, SOAP_SSL_DEFAULT,

@@ -321,16 +321,9 @@ namespace eIDMW
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_write_data);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseBuffer);
 
-#ifdef __linux__
         std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
         curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_file.c_str());
-#elif WIN32
-        std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR)) + "\\cacerts.pem";
-        curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_file.c_str());
-#elif __APPLE__
-        std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
-        curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_file.c_str());
-#endif
+
         ProxyInfo proxyInfo;
         std::string proxyHost;
         long proxyPort;

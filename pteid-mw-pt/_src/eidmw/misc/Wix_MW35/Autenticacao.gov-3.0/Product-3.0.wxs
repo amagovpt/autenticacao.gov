@@ -184,6 +184,7 @@
         <File Source="..\..\certs\Multicert_Root_01.der" />
         <File Source="..\..\certs\BaltimoreCyberTrustRoot.der" />
         <File Source="..\..\certs\GlobalChambersignRoot-2008.der" />
+        <File Source="..\..\certs\cacerts.pem" />
       </Component>
 
       <Component Id="CertCC004" Guid="{08EF0B6A-2989-429F-846C-EED6F241D192}">
@@ -278,10 +279,6 @@
         <CreateFolder/>
         <Environment Id="PATH" Action="set" Part="last" Permanent="no" System="yes" Name="PATH" Value="[APPLICATIONFOLDER]"/>
         <Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[APPLICATIONFOLDER]"/>
-      </Component>
-
-      <Component Id="CACerts" Guid="{b0fb28de-54ac-45b0-a565-1dce90ffe080}">
-        <File Source="..\..\certs\cacerts.pem" KeyPath="yes"/>
       </Component>
 
       <Component Id="License" Guid="{C00AF621-E882-4805-BA9C-B90AA5DBBCB6}" SharedDllRefCount="yes">
@@ -443,7 +440,6 @@
       <ComponentRef Id="CertCC006"/>
       <ComponentRef Id="ECRaizEstado002"/>
       <ComponentRef Id="SectigoRootCert"/>
-      <ComponentRef Id="CACerts"/>
       <ComponentRef Id="CrlDir"/>
       <ComponentRef Id="HttpDir"/>
 

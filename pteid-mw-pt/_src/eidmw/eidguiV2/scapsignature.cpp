@@ -299,10 +299,7 @@ std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
 #ifdef __linux__
 	ca_path = "/etc/ssl/certs";
 	//Load CA certificates from file provided with pteid-mw
-#elif WIN32
-	cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR)) + "/cacerts.pem";
-	//TODO
-#elif __APPLE__
+#else
 	cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
 #endif
 
