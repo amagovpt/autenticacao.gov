@@ -4,7 +4,7 @@
  * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 
@@ -99,6 +99,8 @@ namespace eIDMW
 
 		EIDMW_APL_API void setSCAPAttributes(const char * citizenName, const char * citizenId,
 	                      const char * attributeSupplier, const char * attributeName);
+
+        EIDMW_APL_API bool addLtv();
 
 	private:
 		void parseCitizenDataFromCert(CByteArray &certData);

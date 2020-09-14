@@ -24,6 +24,7 @@
 #include "Log.h"
 #include "Util.h"
 #include "APLConfig.h"
+#include "cryptoFwkPteid.h"
 
 #include <string>
 
@@ -34,6 +35,7 @@
 #include <openssl/bio.h>
 #include <openssl/x509.h>
 #include "sign-pkcs7.h"
+#include "TsaClient.h"
 
 namespace eIDMW
 {
@@ -877,6 +879,8 @@ namespace eIDMW
 
         m_signStarted = false;
 
+        addLtv();
+
         free((void *)signature_contents);
 
         delete m_outputName;
@@ -906,5 +910,142 @@ namespace eIDMW
             throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
         }
         return return_code;
+    }
+
+    bool PDFSignature::addLtv() {
+
+        PDFDoc *doc = makePDFDoc(m_outputName->getCString());
+
+        /* Compute SHA1 of signature contents to add as key of VRI dict. */
+        unsigned char *signatureContents = NULL;
+        int length = doc->getSignatureContents(&signatureContents); // TODO: iterate over signatures
+        APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
+        CByteArray contentBytes(signatureContents, length), hash;
+        cryptoFwk->GetHashSha1(contentBytes, &hash);
+        std::vector<const char *> vriKeyVector;
+        const char *hexHash = bin2AsciiHex(hash.GetBytes(), hash.Size());
+        vriKeyVector.push_back(hexHash);
+
+        std::vector<ValidationDataElement *> validationData;
+
+        PKCS7 *p7 = NULL;
+        p7 = d2i_PKCS7(NULL, (const unsigned char**)&signatureContents, length);
+        if (p7 == NULL)
+        {
+            MWLOG(LEV_ERROR, MOD_APL,
+                L"Error decoding signature content.");
+            return false;
+        }
+        
+        STACK_OF(X509) *certs = NULL;
+
+        int i = OBJ_obj2nid(p7->type);
+        if (i == NID_pkcs7_signed) {
+            certs = p7->d.sign->cert;
+        }
+        else if (i == NID_pkcs7_signedAndEnveloped) {
+            certs = p7->d.signed_and_enveloped->cert;
+        }
+
+        /* Iterate over the certificates in this signature and add them to DSS.*/
+        for (i = 0; certs && i < sk_X509_num(certs); i++) {
+            unsigned char *certBytes = NULL;
+            X509 *cert = sk_X509_value(certs, i);
+            //X509_print_fp(stdout, cert); //DEBUG
+            unsigned int len = i2d_X509(cert, &certBytes);
+            if (len < 0)
+            {
+                MWLOG(LEV_ERROR, MOD_APL, "Failed to parse certificate in signature.");
+                return false;
+            }
+
+            ValidationDataElement *certElem = new ValidationDataElement(certBytes, len, ValidationDataElement::CERT, vriKeyVector);
+
+            validationData.push_back(certElem);
+
+            /* If not Root CA, check OCSP response for the current certificate and, if OK, add
+            response to validation data. */
+            if (i < sk_X509_num(certs) - 1)
+            {
+                unsigned char *issuerCertBytes = NULL;
+                X509 *issuerCert = sk_X509_value(certs, i + 1); // Warning: this assumes chain order. Is it always true?
+                unsigned int issuerLen = i2d_X509(issuerCert, &issuerCertBytes);
+                if (len < 0)
+                {
+                    MWLOG(LEV_ERROR, MOD_APL, "Failed to parse an issuer certificate in signature.");
+                    return false;
+                }
+
+                CByteArray certDataByteArray(certBytes, len);
+                CByteArray issuerCertDataByteArray(issuerCertBytes, issuerLen);
+                CByteArray response;
+                FWK_CertifStatus status = cryptoFwk->OCSPValidation(certDataByteArray, issuerCertDataByteArray, &response);
+                if (status == FWK_CERTIF_STATUS_REVOKED)
+                {
+                    MWLOG(LEV_WARN, MOD_APL, "OCSP validation of certificate is false.");
+                    return false;
+                }
+                else if (status != FWK_CERTIF_STATUS_VALID)
+                {
+                    // TODO: CRL in case there is OCSP error
+                    continue;
+                }
+
+                //const char *hexOCSP = bin2AsciiHex(response.GetBytes(), response.Size()); //DEBUG
+                //printf("\n\n OCSP RESPONSE:\n\n%s\n\n", hexOCSP);
+
+                ValidationDataElement *ocspResponseElem = new ValidationDataElement(response.GetBytes(), response.Size(), ValidationDataElement::OCSP, vriKeyVector);
+                validationData.push_back(ocspResponseElem);
+            }
+
+        }
+
+        doc->addDSS(validationData);
+
+        GooString output("C:\\Users\\Miguel Figueira\\Desktop\\teste\\CartaoCidadao_teste.pdf"); //DEBUG
+        //doc->saveAs(&output, writeForceIncremental);
+
+        doc->prepareTimestamp();
+        unsigned char *to_sign = NULL;
+        unsigned long len = doc->getSigByteArray(&to_sign, true);
+        
+        TSAClient tsp;
+
+        //Compute SHA-256 of the signed digest
+        CByteArray data(to_sign, len);
+        CByteArray hashToBeSigned;
+        cryptoFwk->GetHash(data, FWK_ALGO_SHA256, &hashToBeSigned);
+
+        tsp.timestamp_data(hashToBeSigned.GetBytes(), hashToBeSigned.Size());
+        CByteArray tsresp = tsp.getResponse();
+
+        unsigned char *timestamp_token = NULL;
+        int tsp_token_len = 0;
+
+        if (tsresp.Size() == 0) {
+            MWLOG(LEV_ERROR, MOD_APL, "LTV: Timestamp Error - response is empty");
+            return false;
+        }
+
+        timestamp_token = tsresp.GetBytes();
+        tsp_token_len = tsresp.Size();
+        
+		unsigned char *tsToken = NULL;
+		int tsTokenLen = 0;
+        if (!getTokenFromTsResponse(timestamp_token, tsp_token_len, &tsToken, &tsTokenLen)) {
+            MWLOG(LEV_ERROR, MOD_APL, "LTV: Error getting TimeStampToken from respnse.");
+            return false;
+        }
+
+        const char *hexToken = bin2AsciiHex(tsToken, tsTokenLen);
+		
+        doc->closeSignature((const char *)hexToken);
+        doc->saveAs(&output, writeForceIncremental);
+
+        delete hexHash;
+        delete hexToken;
+        if (to_sign) free(to_sign);
+
+        return true;
     }
 }

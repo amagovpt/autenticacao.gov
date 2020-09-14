@@ -46,6 +46,7 @@
 #endif
 
 #include <stdio.h>
+#include <vector>
 #include "XRef.h"
 #include "Catalog.h"
 #include "Page.h"
@@ -68,6 +69,53 @@ enum PDFWriteMode {
   writeStandard,
   writeForceRewrite,
   writeForceIncremental
+};
+
+
+POPPLER_API class ValidationDataElement
+{
+public:
+    enum ValidationDataType
+    {
+        OCSP,
+        CRL,
+        CERT
+    };
+
+    ValidationDataElement(unsigned char *data, size_t dataSize, ValidationDataType type, std::vector<const char *> &vriHashKeys) {
+        this->data = new unsigned char[dataSize];
+        memcpy((char*)this->data, (char*)data, dataSize);
+        this->dataSize = dataSize;
+        this->type = type;
+        this->vriHashKeys = vriHashKeys;
+    }
+
+    ~ValidationDataElement()
+    {
+        delete [] this->data;
+    }
+
+    unsigned char * getData() {
+        return data;
+    }
+
+    size_t getSize() {
+        return dataSize;
+    }
+
+    ValidationDataType getType() {
+        return type;
+    }
+
+    std::vector<const char *> &getVriHashKeys() {
+        return vriHashKeys;
+    }
+
+private:
+    unsigned char *data;
+    size_t dataSize;
+    ValidationDataType type;
+    std::vector<const char *> vriHashKeys;
 };
 
 //------------------------------------------------------------------------
@@ -188,6 +236,11 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
 
   POPPLER_API void closeSignature(const char *signature_contents);
   POPPLER_API unsigned int getSignedVersionLen();
+
+  // LTV related methods // TODO: merge addDSS with prepareTimestamp into prepareLtv
+  POPPLER_API void addDSS(std::vector<ValidationDataElement *> validationData);
+  POPPLER_API void prepareTimestamp();
+  //POPPLER_API void closeLtv(const char *signature_contents);
 
   /* End of PTEID Changes */
 

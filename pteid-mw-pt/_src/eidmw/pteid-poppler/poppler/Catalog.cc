@@ -560,7 +560,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
  * (Estimated Max Size - Actual_Size of /ByteRange Entry)
  */
 int Catalog::setSignatureByteRange(unsigned long sig_contents_offset, unsigned
-		long estimated_len, unsigned long filesize) {
+		long estimated_len, unsigned long filesize, Object *signature_dict, Ref *signature_dict_ref) {
 	unsigned int padded_byterange_len = 100;
 	Object obj, obj2;
 	char tmp[100];
@@ -575,7 +575,18 @@ int Catalog::setSignatureByteRange(unsigned long sig_contents_offset, unsigned
 
 	obj.arrayAdd(obj2.initInt(off4)); //This is correct if the updated ByteRange has the same number of chars
 
-	m_sig_dict->dictSet("ByteRange", &obj);
+    if (signature_dict)
+    {
+        m_sig_dict = signature_dict;
+
+        if (signature_dict_ref)
+        {
+            m_sig_ref.gen = signature_dict_ref->gen;
+            m_sig_ref.num = signature_dict_ref->num;
+        }
+    }
+
+    m_sig_dict->dictSet("ByteRange", &obj);
 
 	int actual_size = snprintf(tmp, sizeof(tmp),
 		       	"/ByteRange [0 %d %d %d ] ", off2, off3, off4);

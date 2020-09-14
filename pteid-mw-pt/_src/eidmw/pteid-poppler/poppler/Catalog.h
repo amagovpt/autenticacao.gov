@@ -132,7 +132,7 @@ public:
   GBool addSigRefToPage(Ref *, Object* sig_ref);
 
   int setSignatureByteRange(unsigned long sig_contents_offset, unsigned long estimated_len,
-		  unsigned long filesize);
+		  unsigned long filesize, Object *signature_dict = NULL, Ref *signature_dict_ref = NULL);
 
   // Get number of pages.
   int getNumPages();

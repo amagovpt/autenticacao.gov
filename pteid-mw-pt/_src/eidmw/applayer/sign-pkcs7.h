@@ -40,4 +40,6 @@ int getSignedData_pkcs7( unsigned char *signature, unsigned int signatureLen
                         , bool timestamp
                         , PKCS7 *p7
                         , const char **signature_contents );
+
+bool getTokenFromTsResponse(unsigned char *tsResp, int tsRespLen, unsigned char **outToken, int *outTokenLen);
 }

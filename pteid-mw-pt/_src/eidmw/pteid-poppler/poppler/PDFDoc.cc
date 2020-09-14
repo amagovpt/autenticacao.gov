@@ -49,6 +49,7 @@
 #pragma implementation
 #endif
 
+#include <iostream>
 #include <ctype.h>
 #include <locale.h>
 #include <stdio.h>
@@ -800,6 +801,139 @@ unsigned long PDFDoc::getSigByteArray(unsigned char **byte_array, bool increment
 void PDFDoc::closeSignature(const char *signature_contents)
 {
   	getCatalog()->closeSignature(signature_contents, ESTIMATED_LEN);
+}
+
+void PDFDoc::addDSS(std::vector<ValidationDataElement *> validationData)
+{
+    Object ocspArrayObj, crlArrayObj, certArrayObj;
+    ocspArrayObj.initArray(xref);
+    crlArrayObj.initArray(xref);
+    certArrayObj.initArray(xref);
+
+    // VRI
+    Object vriObj;
+    vriObj.initDict(xref);
+
+    Ref vriRef = xref->addIndirectObject(&vriObj);
+    Object vriRefObj;
+    vriRefObj.initRef(vriRef.num, vriRef.gen);
+
+    // DSS
+    Object dssDictObj;
+    dssDictObj.initDict(xref);
+    dssDictObj.dictAdd(copyString("VRI"), &vriRefObj);
+    dssDictObj.dictAdd(copyString("OCSPs"), &ocspArrayObj);
+    dssDictObj.dictAdd(copyString("CRLs"), &crlArrayObj);
+    dssDictObj.dictAdd(copyString("Certs"), &certArrayObj);
+
+    Object catalogObj, dssRefObj;
+    Ref dssRef = xref->addIndirectObject(&dssDictObj);
+    dssRefObj.initRef(dssRef.num, dssRef.gen);
+
+
+    // Add updated catalog
+    xref->getCatalog(&catalogObj);
+    catalogObj.dictAdd(copyString("DSS"), &dssRefObj);
+    Ref catRef;
+    catRef.gen = xref->getRootGen();
+    catRef.num = xref->getRootNum();
+    xref->setModifiedObject(&catalogObj, catRef);
+
+    // Add validation data to DSS dictionary and VRI
+    for (size_t i = 0; i < validationData.size(); i++)
+    {
+        Object streamDictObj, streamObj;
+        streamDictObj.initDict(xref);
+        MemStream *stream = new MemStream((char *)validationData[i]->getData(), 0, validationData[i]->getSize(), &streamDictObj);
+        streamObj.initStream(stream);
+
+        Ref streamRef = xref->addIndirectObject(&streamObj);
+        
+        Object streamRefObj;
+        streamRefObj.initRef(streamRef.num, streamRef.gen);
+
+        char *vriPointerType;
+
+        switch (validationData[i]->getType())
+        {
+            case ValidationDataElement::OCSP:
+                ocspArrayObj.arrayAdd(&streamRefObj);
+                vriPointerType = "OCSP";
+                break;
+
+            case ValidationDataElement::CRL:
+                crlArrayObj.arrayAdd(&streamRefObj);
+                vriPointerType = "CRL";
+                break;
+
+            case ValidationDataElement::CERT:
+                certArrayObj.arrayAdd(&streamRefObj);
+                vriPointerType = "Cert";
+                break;
+        }
+
+        /* Each validation datum can be used to validate different objects
+         and, for that reason, be present in multiple vri entries. */
+        Object vriEntry;
+        for (auto const& key : validationData[i]->getVriHashKeys())
+        {
+            vriObj.dictLookup(key, &vriEntry);
+
+            if (vriEntry.isNull())
+            {
+                vriEntry.initDict(xref);
+                vriObj.dictAdd((char *)key, &vriEntry);
+            }
+
+            Object vriPointerArrayObj;
+
+            vriEntry.dictLookup(vriPointerType, &vriPointerArrayObj);
+            if (vriPointerArrayObj.isNull())
+            {
+                vriPointerArrayObj.initArray(xref);
+                vriEntry.dictAdd(vriPointerType, &vriPointerArrayObj);
+            }
+            vriPointerArrayObj.arrayAdd(&streamRefObj);
+        }
+    }
+}
+
+void PDFDoc::prepareTimestamp()
+{
+    Object *timestampDictObj = new Object();
+    Object obj;
+    timestampDictObj->initSignatureDict(xref);
+    timestampDictObj->dictAdd(copyString("Type"), obj.initName("DocTimeStamp"));
+    timestampDictObj->dictAdd(copyString("Filter"), obj.initName("Adobe.PPKLite"));
+    timestampDictObj->dictAdd(copyString("SubFilter"), obj.initName("ETSI.RFC3161"));
+
+    /* Placeholder for contents needed to compute ByteRange */
+    std::string contentsStr(ESTIMATED_LEN, '0');
+    GooString *contents = new GooString(contentsStr.c_str());
+    contents->setHexString();
+
+    timestampDictObj->dictAdd(copyString("Contents"), obj.initString(contents));
+
+    Ref timestampRef = xref->addIndirectObject(timestampDictObj);
+    MemOutStream mem_stream(this->fileSize + ESTIMATED_LEN);
+    OutStream * str = &mem_stream;
+    saveIncrementalUpdate(str);
+
+    const char needle[] = "/ETSI.RFC3161 /Contents ";
+    unsigned char *haystack = mem_stream.getData();
+    long found = (long)memmem(haystack, mem_stream.size(), needle, sizeof(needle) - 1);
+    if (found == 0)
+    {
+        error(errInternal, -1, "addTimestamp: can't find signature offset. Aborting timestamping!");
+        return;
+    }
+    m_sig_offset = found - (long)haystack + sizeof(needle) - 1;
+
+    getCatalog()->setSignatureByteRange(m_sig_offset, ESTIMATED_LEN, mem_stream.size(), timestampDictObj);
+
+    /* This is needed to avoid crash due to saveIncrementalUpdate call. 
+    TODO: verify if it is still needed after full implementation. */
+    xref->setModifiedObject(timestampDictObj, timestampRef);
 }
 
 unsigned int PDFDoc::getSignedVersionLen()

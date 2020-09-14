@@ -486,6 +486,8 @@ const EVP_MD *APL_CryptoFwk::ConvertAlgorithm(FWK_HashAlgo algo)
 		return EVP_md5();
 	case FWK_ALGO_SHA1:
 		return EVP_sha1();
+	case FWK_ALGO_SHA256:
+		return EVP_sha256();
 	default:
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	}
