@@ -60,7 +60,7 @@ LIBS +=	-l$${DLGLIB}
 LIBS +=	-l$${CARDLAYERLIB}
 LIBS +=	-l$${APPLAYERLIB}
 
-macx: INCLUDEPATH += /Library/Java/JavaVirtualMachines/jdk-11.0.6.jdk/Contents/Home/include/ /Library/Java/JavaVirtualMachines/jdk-11.0.6.jdk/Contents/Home/include/darwin/ /usr/local/Cellar/openssl/1.0.2q/include/
+macx: INCLUDEPATH += /Library/Java/JavaVirtualMachines/jdk-11.0.6.jdk/Contents/Home/include/ /Library/Java/JavaVirtualMachines/jdk-11.0.6.jdk/Contents/Home/include/darwin/ $$DEPS_DIR/openssl/include
 macx: LIB += -Wl,-framework -Wl,Java
 
 DEPENDPATH += .
@@ -73,14 +73,12 @@ INCLUDEPATH += ../eidlib
 INCLUDEPATH += /usr/lib/jvm/java-11-openjdk-amd64/include
 INCLUDEPATH += /usr/lib/jvm/java-11-openjdk-amd64/include/linux
 
-macx:INCLUDEPATH += /usr/local/include
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 
 DEFINES += EIDMW_EIDLIB_EXPORTS
 
 # Input
 
-#macx: SOURCES += GeneratedFiles/eidlibJava_Wrapper.cpp
 SOURCES += ../eidlib/eidlibCard.cpp
 SOURCES += ../eidlib/eidlibCrypto.cpp
 SOURCES += ../eidlib/eidlibDoc.cpp

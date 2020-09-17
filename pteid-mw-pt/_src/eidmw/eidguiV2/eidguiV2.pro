@@ -49,12 +49,12 @@ OBJECTS_DIR = build
 MOC_DIR = build
 
 #Include paths for MacOS third-party libraries
-macx: INCLUDEPATH += /usr/local/ssl/include
-macx: INCLUDEPATH += /usr/local/Cellar/poppler/0.53.0/include/poppler/qt5/
-macx: INCLUDEPATH += /usr/local/Cellar/curl/7.69.1/include
-macx: LIBS += -L/usr/local/ssl/lib/
-macx: LIBS += -L/usr/local/Cellar/poppler/0.53.0/lib/
-macx: LIBS += -L/usr/local/Cellar/curl/7.69.1/lib/
+macx: INCLUDEPATH += $$DEPS_DIR/openssl/include
+macx: INCLUDEPATH += $$DEPS_DIR/poppler-0.90.1/include/poppler/qt5/
+macx: INCLUDEPATH += $$DEPS_DIR/libcurl/include
+macx: LIBS += -L$$DEPS_DIR/openssl/lib/
+macx: LIBS += -L$$DEPS_DIR/poppler-0.90.1/lib/
+macx: LIBS += -L$$DEPS_DIR/libcurl/lib/
 macx: LIBS += -Wl,-framework -Wl,Security
 
 unix:!macx: LIBS += -Wl,-rpath-link,../lib
