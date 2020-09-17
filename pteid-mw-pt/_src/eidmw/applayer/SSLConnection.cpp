@@ -37,6 +37,12 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 
+// select() socket function
+#ifdef WIN32
+#include <winsock.h>
+#else
+#include <sys/select.h>
+#endif
 
 
 namespace eIDMW
