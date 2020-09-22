@@ -805,6 +805,11 @@ void PDFDoc::closeSignature(const char *signature_contents)
 
 void PDFDoc::addDSS(std::vector<ValidationDataElement *> validationData)
 {
+    /* Write and fill content with placeholder for the byterange. */
+    MemOutStream mem_stream(this->fileSize + ESTIMATED_LEN);
+    OutStream * str = &mem_stream;
+    saveIncrementalUpdate(str);
+
     Object ocspArrayObj, crlArrayObj, certArrayObj;
     ocspArrayObj.initArray(xref);
     crlArrayObj.initArray(xref);
@@ -826,18 +831,8 @@ void PDFDoc::addDSS(std::vector<ValidationDataElement *> validationData)
     dssDictObj.dictAdd(copyString("CRLs"), &crlArrayObj);
     dssDictObj.dictAdd(copyString("Certs"), &certArrayObj);
 
-    Object catalogObj, dssRefObj;
     Ref dssRef = xref->addIndirectObject(&dssDictObj);
-    dssRefObj.initRef(dssRef.num, dssRef.gen);
-
-
-    // Add updated catalog
-    xref->getCatalog(&catalogObj);
-    catalogObj.dictAdd(copyString("DSS"), &dssRefObj);
-    Ref catRef;
-    catRef.gen = xref->getRootGen();
-    catRef.num = xref->getRootNum();
-    xref->setModifiedObject(&catalogObj, catRef);
+    getCatalog()->addDSSEntry(&dssRef);
 
     // Add validation data to DSS dictionary and VRI
     for (size_t i = 0; i < validationData.size(); i++)
@@ -900,6 +895,8 @@ void PDFDoc::addDSS(std::vector<ValidationDataElement *> validationData)
 
 void PDFDoc::prepareTimestamp()
 {
+    signature_mode = gTrue;
+    getCatalog()->setIncrementalSignature(true);
     Object *timestampDictObj = new Object();
     Object obj;
     timestampDictObj->initSignatureDict(xref);
@@ -915,6 +912,19 @@ void PDFDoc::prepareTimestamp()
     timestampDictObj->dictAdd(copyString("Contents"), obj.initString(contents));
 
     Ref timestampRef = xref->addIndirectObject(timestampDictObj);
+
+    /* Add signature to signature fields in AcroForm. */
+    Ref *firstPageRef = getCatalog()->getPageRef(1);
+    Object signatureField, timestampRefObj;
+    signatureField.initDict(xref);
+    getCatalog()->fillSignatureField(&signatureField, NULL, 0, firstPageRef);
+    timestampRefObj.initRef(timestampRef.num, timestampRef.gen);
+    signatureField.dictAdd(copyString("V"), &timestampRefObj);
+    Ref sigFieldRef = xref->addIndirectObject(&signatureField);
+
+    getCatalog()->addSigFieldToAcroForm(&sigFieldRef, NULL);
+
+    /* Write and fill content with placeholder for the byterange. */
     MemOutStream mem_stream(this->fileSize + ESTIMATED_LEN);
     OutStream * str = &mem_stream;
     saveIncrementalUpdate(str);
@@ -934,6 +944,7 @@ void PDFDoc::prepareTimestamp()
     /* This is needed to avoid crash due to saveIncrementalUpdate call. 
     TODO: verify if it is still needed after full implementation. */
     xref->setModifiedObject(timestampDictObj, timestampRef);
+
 }
 
 unsigned int PDFDoc::getSignedVersionLen()

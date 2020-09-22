@@ -826,10 +826,35 @@ namespace eIDMW
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 
         m_doc->closeSignature(signature_contents);
+        save();
 
+        delete m_doc;
+        m_doc = makePDFDoc(m_outputName->getCString());
+
+        addLtv();
+
+        m_signStarted = false;
+
+        free((void *)signature_contents);
+
+        delete m_outputName;
+        m_outputName = NULL;
+
+        delete m_doc;
+        m_doc = NULL;
+
+        PKCS7_free( m_pkcs7 );
+        m_pkcs7 = NULL;
+
+        if (return_code == 1) {
+            throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
+        }
+        return return_code;
+    }
+
+    void PDFSignature::save() {
         PDFWriteMode pdfWriteMode =
             m_incrementalMode ? writeForceIncremental : writeForceRewrite;
-
         // Create and save pdf to temp file to allow overwrite of original file
 #ifdef WIN32
         TCHAR tmpPathBuffer[MAX_PATH];
@@ -852,11 +877,11 @@ namespace eIDMW
             MWLOG(LEV_ERROR, MOD_APL, "signClose: Error occurred GetTempFileName: %d", GetLastError());
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
-    #ifdef UNICODE
+#ifdef UNICODE
         std::string utf8FilenameTmp = utilStringNarrow(tmpFilename);
-    #else
+#else
         std::string utf8FilenameTmp = tmpFilename;
-    #endif
+#endif
         std::wstring utf16FilenameTmp = utilStringWiden(utf8FilenameTmp);
         int tmp_ret = m_doc->saveAs((wchar_t *)utf16FilenameTmp.c_str(), pdfWriteMode);
         PDFDoc *tmpDoc = makePDFDoc(utf8FilenameTmp.c_str());
@@ -877,44 +902,26 @@ namespace eIDMW
         tmpDoc = NULL;
         remove(utf8FilenameTmp.c_str());
 
-        m_signStarted = false;
-
-        addLtv();
-
-        free((void *)signature_contents);
-
-        delete m_outputName;
-        m_outputName = NULL;
-
-        delete m_doc;
-        m_doc = NULL;
-
-        PKCS7_free( m_pkcs7 );
-        m_pkcs7 = NULL;
-
-        if (tmp_ret == errPermission || tmp_ret == errOpenFile){
+        if (tmp_ret == errPermission || tmp_ret == errOpenFile) {
             throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
         }
         else if (tmp_ret != errNone) {
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
 
-        if (final_ret == errPermission || final_ret == errOpenFile){
+        if (final_ret == errPermission || final_ret == errOpenFile) {
             throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
         }
         else if (final_ret != errNone) {
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
-
-        if (return_code == 1) {
-            throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
-        }
-        return return_code;
     }
 
     bool PDFSignature::addLtv() {
 
-        PDFDoc *doc = makePDFDoc(m_outputName->getCString());
+        m_incrementalMode = true;
+
+        PDFDoc *doc = m_doc;
 
         /* Compute SHA1 of signature contents to add as key of VRI dict. */
         unsigned char *signatureContents = NULL;
@@ -945,6 +952,35 @@ namespace eIDMW
         }
         else if (i == NID_pkcs7_signedAndEnveloped) {
             certs = p7->d.signed_and_enveloped->cert;
+        }
+
+        /* Add validation data for signature timestamp */
+        ASN1_TYPE *asn1TokenType = NULL;
+        STACK_OF(PKCS7_SIGNER_INFO) * signer_info = PKCS7_get_signer_info(p7);
+        asn1TokenType = PKCS7_get_attribute(sk_PKCS7_SIGNER_INFO_value(signer_info, 0), NID_id_smime_aa_timeStampToken);
+        if (asn1TokenType != NULL && asn1TokenType->type == V_ASN1_SEQUENCE)
+        {
+            PKCS7 *ts_p7 = NULL;
+            const unsigned char *token_der = asn1TokenType->value.asn1_string->data;
+            int token_len = asn1TokenType->value.asn1_string->length;
+            ts_p7 = d2i_PKCS7(NULL, &token_der, token_len);
+
+            if (ts_p7 != NULL)
+            {
+                STACK_OF(X509) *ts_certs = NULL;
+                int i = OBJ_obj2nid(ts_p7->type);
+                if (i == NID_pkcs7_signed) {
+                    ts_certs = ts_p7->d.sign->cert;
+                }
+                else if (i == NID_pkcs7_signedAndEnveloped) {
+                    ts_certs = ts_p7->d.signed_and_enveloped->cert;
+                }
+
+                for (size_t i = 0; i < sk_X509_num(ts_certs); i++)
+                {
+                    sk_X509_push(certs, sk_X509_value(ts_certs, i));
+                }
+            }
         }
 
         /* Iterate over the certificates in this signature and add them to DSS.*/
@@ -1001,9 +1037,7 @@ namespace eIDMW
         }
 
         doc->addDSS(validationData);
-
-        GooString output("C:\\Users\\Miguel Figueira\\Desktop\\teste\\CartaoCidadao_teste.pdf"); //DEBUG
-        //doc->saveAs(&output, writeForceIncremental);
+        save();
 
         doc->prepareTimestamp();
         unsigned char *to_sign = NULL;
@@ -1040,7 +1074,7 @@ namespace eIDMW
         const char *hexToken = bin2AsciiHex(tsToken, tsTokenLen);
 		
         doc->closeSignature((const char *)hexToken);
-        doc->saveAs(&output, writeForceIncremental);
+        save();
 
         delete hexHash;
         delete hexToken;

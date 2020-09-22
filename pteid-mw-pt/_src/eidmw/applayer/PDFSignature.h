@@ -110,6 +110,7 @@ namespace eIDMW
 		PDFRectangle computeSigLocationFromSectorLandscape(double, double, int);
 		int signSingleFile(const char *location, const char *reason,
             const char *outfile_path, bool isCardSign);
+        void save();
 
 		/* Certificate Data*/
 		CByteArray m_certificate;

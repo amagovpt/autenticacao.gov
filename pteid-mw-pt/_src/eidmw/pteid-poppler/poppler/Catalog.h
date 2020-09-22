@@ -160,6 +160,11 @@ public:
   void addSignatureAppearance(Object *parent, int, int);
   void closeSignature(const char *signature_contents, unsigned long len);
 
+  void addDSSEntry(Ref *dssRef);
+  /* Fill the following keys of the signature field dictionary: Type, SubType, FT, F, SigSector, Rect, T and P.*/
+  void fillSignatureField(Object *signatureFieldDict, PDFRectangle *rect, int sig_sector, Ref *refFirstPage);
+  void addSigFieldToAcroForm(Ref *sigFieldRef, Ref *refFirstPage);
+
   // Get a page.
   Page *getPage(int i);
 

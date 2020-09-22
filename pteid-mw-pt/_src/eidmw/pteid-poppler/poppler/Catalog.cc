@@ -267,6 +267,146 @@ fallback:
 
 #endif
 
+void Catalog::addDSSEntry(Ref *dssRef)
+{
+    Object dssRefObj;
+    dssRefObj.initRef(dssRef->num, dssRef->gen);
+    catDict.dictAdd(copyString("DSS"), &dssRefObj);
+    Ref catRef;
+    catRef.gen = xref->getRootGen();
+    catRef.num = xref->getRootNum();
+    xref->setModifiedObject(&catDict, catRef);
+}
+
+void Catalog::fillSignatureField(Object *signature_field, PDFRectangle *rect, int sig_sector, Ref *refFirstPage)
+{
+    Object obj1, obj2, obj3, obj4;
+
+    /* Fill the signature formfield dict key-value pairs */
+    signature_field->dictAdd(copyString("Type"), obj1.initName("Annot"));
+    signature_field->dictAdd(copyString("Subtype"), obj2.initName("Widget"));
+    signature_field->dictAdd(copyString("FT"), obj3.initName("Sig"));
+
+    /* Annotation Flags: Hidden and Locked (bits 1 and 8 counting from
+     * lowest order bit as 1)  */
+    signature_field->dictAdd(copyString("F"), obj3.initInt(132));
+    signature_field->dictAdd(copyString("SigSector"), obj3.initInt(sig_sector));
+
+    obj4.initArray(xref);
+
+    //Visible Signature location 
+    double r0 = 0, r1 = 0, r2 = 0, r3 = 0;
+    if (rect && rect->isValid())
+    {
+        //Check if signature height (y2 - y1) is less than 90 considering rounding errors
+        small_signature_format = (rect->y2 - rect->y1) - 90.0 < -0.00001;
+
+        r0 = rect->x1;
+        r1 = rect->y1;
+        r2 = rect->x2;
+        r3 = rect->y2;
+    }
+    obj4.arrayAdd(obj2.initReal(r0));
+    obj4.arrayAdd(obj2.initReal(r1));
+    obj4.arrayAdd(obj2.initReal(r2));
+    obj4.arrayAdd(obj2.initReal(r3));
+
+    signature_field->dictAdd(copyString("Rect"), &obj4);
+
+    signature_field->dictAdd(copyString("T"), obj2.initString(GooString::format("Signature{0:ud}",
+        getBigRandom())));
+
+    Object ref_to_first_page;
+    ref_to_first_page.initRef(refFirstPage->num, refFirstPage->gen);
+
+    signature_field->dictAdd(copyString("P"), &ref_to_first_page);
+}
+
+void Catalog::addSigFieldToAcroForm(Ref *sig_ref, Ref *refFirstPage)
+{
+    Object acroform, local_acroForm, fields_array, ref_to_sig, obj;
+
+    ref_to_sig.initRef(sig_ref->num, sig_ref->gen);
+
+    if (refFirstPage)
+    {
+        addSigRefToPage(refFirstPage, &ref_to_sig);
+    }
+
+    catDict.dictLookup("AcroForm", &local_acroForm);
+
+    Object acroForm_ref;
+
+    //PDF File has no AcroForm dict, we need to create it
+    if (!local_acroForm.isDict())
+    {
+
+        Object fields;
+        acroform.initDict(xref);
+        fields.initArray(xref);
+
+        acroform.dictAdd(copyString("Fields"), &fields);
+        acroform.dictAdd(copyString("SigFlags"), obj.initInt(3));
+        //catDict.dictAdd(copyString("AcroForm"), &acroform);
+        local_acroForm = acroform;
+    }
+    else
+    {
+        catDict.dictLookupNF("AcroForm", &acroForm_ref);
+
+        fprintf(stderr, "local_acroform is a dict!\n");
+        setSigFlags(&local_acroForm, 3);
+
+    }
+
+    Object o1;
+    o1.initNull();
+    //Remove NeedApperances field if present
+    local_acroForm.dictSet("NeedAppearances", &o1);
+
+    local_acroForm.dictLookup("Fields", &fields_array);
+    if (fields_array.isArray())
+    {
+        Object fields_ref;
+        local_acroForm.dictLookupNF("Fields", &fields_ref);
+        fields_array.arrayAdd(&ref_to_sig);
+
+        if (fields_ref.isRef())
+        {
+            xref->setModifiedObject(&fields_array, fields_ref.getRef());
+
+        }
+    }
+
+    //Set the catalog object as modified to force rewrite
+    Ref catalog_ref;
+    catalog_ref.gen = xref->getRootGen();
+    catalog_ref.num = xref->getRootNum();
+    catDict.dictAdd(copyString("AcroForm"), &local_acroForm);
+
+    //By the spec we should be handling the case
+    //where the acroform object is compressed and we're doing 
+    //an incremental update to sign. For now it works as is...
+    /*
+    if (m_is_compressed) // && is_incremental
+    {
+        DeflateStream *str = new DeflateStream(&catDict);
+        Object obj_stream;
+        obj_stream.initStream(str);
+        xref->addIndirectObject(&obj_stream);
+    }
+    */
+    if (acroForm_ref.isRef())
+    {
+        xref->setModifiedObject(&local_acroForm, acroForm_ref.getRef());
+        fprintf(stderr, "AcroForm is an indirect object so we'll just update it...\n");
+
+    }
+
+    else
+        xref->setModifiedObject(&catDict, catalog_ref);
+
+}
 
 //TODO: Too long, split this into 2 functions at least
 void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_info, Ref *firstPageRef,
@@ -287,7 +427,6 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
     time_t t;
     struct tm *tmp_date;
     long timezone_offset = 0;
-    double r0=0, r1=0, r2=0, r3=0;
 
     t = time(NULL);
     tmp_date = localtime(&t);
@@ -334,41 +473,10 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 
 #endif
 
-	signature_field.initDict(xref);
-	Object obj1, obj2, obj3, obj4, obj5, obj6, ref_to_dict;
-
-	/* Fill the signature formfield dict key-value pairs */
-	signature_field.dictAdd(copyString("Type"), obj1.initName("Annot"));
-	signature_field.dictAdd(copyString("Subtype"), obj2.initName("Widget"));
-	signature_field.dictAdd(copyString("FT"), obj3.initName("Sig"));
-
-	/* Annotation Flags: Hidden and Locked (bits 1 and 8 counting from
-	 * lowest order bit as 1)  */
-	signature_field.dictAdd(copyString("F"), obj3.initInt(132));
-	signature_field.dictAdd(copyString("SigSector"), obj3.initInt(sig_sector));
-
-	obj4.initArray (xref);
-	
-	//Visible Signature location 
-	if (rect->isValid())
-	{
-		//Check if signature height (y2 - y1) is less than 90 considering rounding errors
-		small_signature_format = (rect->y2 - rect->y1) - 90.0 < -0.00001;
-				
-		r0=rect->x1;
-		r1=rect->y1;
-		r2=rect->x2;
-		r3=rect->y2;
-	}
-	obj4.arrayAdd (obj2.initReal(r0));
-	obj4.arrayAdd (obj2.initReal(r1));
-	obj4.arrayAdd (obj2.initReal(r2));
-	obj4.arrayAdd (obj2.initReal(r3));
-
-	signature_field.dictAdd(copyString("Rect"), &obj4);
-
-	signature_field.dictAdd(copyString("T"), obj2.initString(GooString::format("Signature{0:ud}", 
-					getBigRandom())));
+    Ref *refFirstPage = firstPageRef != NULL ? firstPageRef : &(pageRefs[page - 1]);
+    signature_field.initDict(xref);
+    fillSignatureField(&signature_field, rect, sig_sector, refFirstPage);
+	Object obj1, obj2, obj3, ref_to_dict;
 
 	Page *page_obj = getPage(page);
 
@@ -376,21 +484,20 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 
 	//Only add signature appearance for "visible" signatures
 	if (rect->isValid()) {
+        int x = rect->x2 - rect->x1 - 1;
+        int y = rect->y2 - rect->y1 - 1;
 		if (signer_info->attribute_provider == NULL) {
 			addSignatureAppearance(&signature_field, signer_info, date_with_timezone->getCString(),
-				location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
+				location, reason, x, y, img_data, img_length, rotate_signature, isPTLanguage);
 		}
 		else {
 			addSignatureAppearanceSCAP(&signature_field, signer_info, date_with_timezone->getCString(),
-				location, reason, r2-r0 - 1, r3-r1 -1, img_data, img_length, rotate_signature, isPTLanguage);
+				location, reason, x, y, img_data, img_length, rotate_signature, isPTLanguage);
 		}
 	}
 
 	//memset(date_outstr, 0, sizeof(date_outstr));
 
-	Ref *refFirstPage = firstPageRef != NULL ? firstPageRef: &(pageRefs[page-1]);
-
-	Object ref_to_first_page;
 	/*
 	  Init a placeholder string;
 	  This needs to be present in preparation phase to make sure all the
@@ -401,9 +508,6 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 	memset(placeholder, '0', PLACEHOLDER_LEN);
 	placeholder[PLACEHOLDER_LEN] = '\0';
 
-	ref_to_first_page.initRef(refFirstPage->num, refFirstPage->gen);
-
-	signature_field.dictAdd(copyString("P"), &ref_to_first_page);
 
 	signature_dict->initSignatureDict(xref);
 	
@@ -465,84 +569,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 
 	Ref sig_ref = xref->addIndirectObject(&signature_field);
 
-	Object local_acroForm, fields_array, ref_to_sig;
-
-	ref_to_sig.initRef(sig_ref.num, sig_ref.gen);
-
-	addSigRefToPage(refFirstPage, &ref_to_sig);
-
-	catDict.dictLookup("AcroForm", &local_acroForm);
-
-	Object acroForm_ref;
-
-	//PDF File has no AcroForm dict, we need to create it
-	if (!local_acroForm.isDict())
-	{
-
-		Object fields;
-		acroform.initDict(xref);
-		fields.initArray(xref);
-
-		acroform.dictAdd(copyString("Fields"), &fields);
-		acroform.dictAdd(copyString("SigFlags"), obj2.initInt(3));
-		//catDict.dictAdd(copyString("AcroForm"), &acroform);
-		local_acroForm = acroform;
-	}
-	else
-	{
-		catDict.dictLookupNF("AcroForm", &acroForm_ref);
-		
-		fprintf(stderr, "local_acroform is a dict!\n");
-		setSigFlags(&local_acroForm, 3);
-
-	}
-
-	Object o1;
-	o1.initNull();
-	//Remove NeedApperances field if present
-	local_acroForm.dictSet("NeedAppearances", &o1);
-
-	local_acroForm.dictLookup("Fields", &fields_array);
-	if (fields_array.isArray())
-	{
-		Object fields_ref;
-		local_acroForm.dictLookupNF("Fields", &fields_ref);
-		fields_array.arrayAdd(&ref_to_sig);
-
-		if (fields_ref.isRef())
-		{
-			xref->setModifiedObject(&fields_array, fields_ref.getRef());
-
-		}
-	}
-
-	//Set the catalog object as modified to force rewrite
-	Ref catalog_ref;
-	catalog_ref.gen = xref->getRootGen();
-	catalog_ref.num = xref->getRootNum();
-	catDict.dictAdd(copyString("AcroForm"), &local_acroForm);
-
-	//By the spec we should be handling the case
-	//where the acroform object is compressed and we're doing 
-	//an incremental update to sign. For now it works as is...
-	/*
-	if (m_is_compressed) // && is_incremental
-	{
-		DeflateStream *str = new DeflateStream(&catDict);
-		Object obj_stream;
-		obj_stream.initStream(str);
-		xref->addIndirectObject(&obj_stream);
-	}
-	*/
-	if (acroForm_ref.isRef())
-	{
-		xref->setModifiedObject(&local_acroForm, acroForm_ref.getRef());
-		fprintf(stderr, "AcroForm is an indirect object so we'll just update it...\n");
-
-	}
-
-	else
-		xref->setModifiedObject(&catDict, catalog_ref);
+	addSigFieldToAcroForm(&sig_ref, refFirstPage);
 
 	gfree(placeholder);
 
