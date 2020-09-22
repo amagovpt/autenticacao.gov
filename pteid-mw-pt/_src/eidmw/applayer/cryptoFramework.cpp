@@ -1028,7 +1028,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Iss
 		goto cleanup;
 	}
 
-    pCertID = OCSP_cert_to_id(0, pX509_Cert, pX509_Issuer);
+    pCertID = OCSP_cert_to_id(EVP_sha256(), pX509_Cert, pX509_Issuer);
     if (!pCertID)
 	{
 		eStatus = FWK_CERTIF_STATUS_ERROR;
