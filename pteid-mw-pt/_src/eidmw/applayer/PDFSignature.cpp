@@ -921,6 +921,6 @@ namespace eIDMW
     {
 
         PAdESExtender padesExtender(this);
-        return padesExtender.addLTV();
+        return padesExtender.addLTA();
     }
 }
