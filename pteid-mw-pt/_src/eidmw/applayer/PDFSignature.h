@@ -19,6 +19,7 @@
 
 #include "ByteArray.h"
 #include "APLCard.h"
+#include "PAdESExtender.h"
 #include <openssl/pkcs7.h>
 
 class PDFRectangle;
@@ -156,6 +157,8 @@ namespace eIDMW
         /* Fields for SCAP signature */
         const char * m_attributeSupplier;
         const char * m_attributeName;
+
+        friend class PAdESExtender;
 	};
 
 }
