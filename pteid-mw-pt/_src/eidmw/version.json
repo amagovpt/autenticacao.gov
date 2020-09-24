@@ -13,11 +13,11 @@
             "package": "20126/78595/Autenticacao.gov_Ubuntu_20_x64.deb"
         },
         "windows32": {
-            "latestVersion": "3.2.0",
+            "latestVersion": "3.3.0",
             "package": "20126/78595/Autenticacao.gov_Win_x86.msi"
         },
         "windows64": {
-            "latestVersion": "3.2.0",
+            "latestVersion": "3.3.0",
             "package": "20126/78595/Autenticacao.gov_Win_x64.msi"
         },
         "fedora32": {
@@ -42,61 +42,73 @@
         }
     },
     "versions": [
-		{
-			"version": "3.2.0",
+        {
+            "version": "3.3.0",
+            "date": "2020-09-24",
+            "release_notes": [
+                "Auto-update dos certificados root",
+                "Melhorar mensagens sobre erros de comunicação",
+                "Auto-update verifica se o instalador está assinado",
+                "Assinatura SCAP com possibilidade de adicionar selo temporal",
+                "Assinatura simples com opção para usar selo de assinatura com tamanho reduzido",
+                "Interface de linha de comandos, para assinatura de ficheiros"
+            ]
+        },
+        {
+            "version": "3.2.0",
             "date": "2020-06-25",
             "release_notes": [
-                         "Atualização de componentes técnicos da aplicação entre os quais QT e OpenSSL",
-						 "Redesenho de interface nas janelas de introdução de PIN do CC",
-						 "Assinatura com Chave Móvel - possibilidade de forçar o re-envio de OTP por SMS",
-						 "Validações extra na janela de confirmação de morada",
-						 "Opção adicional na configuração de renderização gráfica - Software OpenGL ou Direct3D"
+                "Atualização de componentes técnicos da aplicação entre os quais QT e OpenSSL",
+                "Redesenho de interface nas janelas de introdução de PIN do CC",
+                "Assinatura com Chave Móvel - possibilidade de forçar o re-envio de OTP por SMS",
+                "Validações extra na janela de confirmação de morada",
+                "Opção adicional na configuração de renderização gráfica - Software OpenGL ou Direct3D"
             ]
-		},
+        },
         {
             "version": "3.1.2",
             "date": "2020-06-01",
             "release_notes": [
-                         "Atualização de certificados"
+                "Atualização de certificados"
             ]
         },
-                {
+        {
             "version": "3.1.1",
             "date": "2020-05-20",
             "release_notes": [
-                         "Correcção no instalador para MacOS",
-                         "Correcção na alteração de morada em Ubuntu 20.04"
+                "Correcção no instalador para MacOS",
+                "Correcção na alteração de morada em Ubuntu 20.04"
             ]
         },
-		{
+        {
             "version": "3.1.0",
             "date": "2020-03-10",
             "release_notes": [
-                         "Assinatura Chave Móvel Digital em aplicações Windows via Crypto API (Adobe Reader, MS Office e outras aplicações terceiras)",
-                         "Actualização de certificados da PKI do CC através da própria aplicação",
-                         "Nova janela popup para divulgação de notícias de interesse geral no arranque da aplicação",
-                         "Suporte a ecrãs de High DPI - a aplicação respeita as configurações de scaling do Windows ou as configurações manuais escolhidas pelo utilizador no menu definições",
-                         "Adicionada uma opção de registo (Windows) para fazer cache ao PIN de autenticação de formar a repor o funcionamento das versões anteriores",
-                         "Possibilidade de exportar certificados do cidadão para ficheiro e visualizar com o Viewer nativo do Windows no menu Certificados"
+                "Assinatura Chave Móvel Digital em aplicações Windows via Crypto API (Adobe Reader, MS Office e outras aplicações terceiras)",
+                "Actualização de certificados da PKI do CC através da própria aplicação",
+                "Nova janela popup para divulgação de notícias de interesse geral no arranque da aplicação",
+                "Suporte a ecrãs de High DPI - a aplicação respeita as configurações de scaling do Windows ou as configurações manuais escolhidas pelo utilizador no menu definições",
+                "Adicionada uma opção de registo (Windows) para fazer cache ao PIN de autenticação de formar a repor o funcionamento das versões anteriores",
+                "Possibilidade de exportar certificados do cidadão para ficheiro e visualizar com o Viewer nativo do Windows no menu Certificados"
             ]
         },
-		{
+        {
             "version": "3.0.21",
             "date": "2019-11-21",
             "release_notes": [
                 "Correcção do carregamento da pteidlib no SDK Java e C#. Issue GH-2",
-				"Notas do Cartão: Adicionado popup para avisar que as notas não foram gravadas no cartão se o Cidadão tentar sair do menu sem gravar",
-				"Na alteração de morada foi adicionada mensagem de erro a indicar que o pedido está expirado se for o caso",
-				"Auto-Updates: As actualizações automáticas passaram a ser efetuadas exclusivamente via portal autenticacão.gov.pt"
+                "Notas do Cartão: Adicionado popup para avisar que as notas não foram gravadas no cartão se o Cidadão tentar sair do menu sem gravar",
+                "Na alteração de morada foi adicionada mensagem de erro a indicar que o pedido está expirado se for o caso",
+                "Auto-Updates: As actualizações automáticas passaram a ser efetuadas exclusivamente via portal autenticacão.gov.pt"
             ]
         },
-	{
+        {
             "version": "3.0.20",
             "date": "2019-10-01",
             "release_notes": [
                 "Correção na funcionalidade de confirmação de morada",
-				"Atributo data/hora do computador na assinatura PDF passa a incluir indicação do fuso horário",
-				"Correção na assinatura CMD - suporte melhorado para nomes de ficheiros com caracteres UTF-8"
+                "Atributo data/hora do computador na assinatura PDF passa a incluir indicação do fuso horário",
+                "Correção na assinatura CMD - suporte melhorado para nomes de ficheiros com caracteres UTF-8"
             ]
         },
         {
