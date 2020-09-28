@@ -48,6 +48,7 @@
             "release_notes": [
                 "Auto-update dos certificados root",
                 "Melhorar mensagens sobre erros de comunicação",
+				"[MacOS] Correção na assinatura de documentos PDF - preview de documentos com fonts de sistema",
                 "Auto-update verifica se o instalador está assinado",
                 "Assinatura SCAP com possibilidade de adicionar selo temporal",
                 "Assinatura simples com opção para usar selo de assinatura com tamanho reduzido",
