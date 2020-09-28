@@ -85,23 +85,30 @@ void GAPI::initTranslation() {
 bool GAPI::LoadTranslationFile(QString NewLanguage)
 {
     QString strTranslationFile;
+    QString translations_dir;
     strTranslationFile = QString("eidmw_") + NewLanguage;
 
-    qDebug() << "C++: GAPI LoadTranslationFile" << strTranslationFile << m_Settings.getExePath();
+#ifdef __APPLE__
+    translations_dir = m_Settings.getExePath()+"/../Resources/";
+#else
+    translations_dir = m_Settings.getExePath()+"/";
+#endif
 
-    if (!m_translator.load(strTranslationFile,m_Settings.getExePath()+"/"))
+    qDebug() << "C++: GAPI LoadTranslationFile" << strTranslationFile << translations_dir;
+
+    if (!m_translator.load(strTranslationFile,translations_dir))
     {
         // this should not happen, since we've built the menu with the translation filenames
         strTranslationFile = QString("eidmw_") + STR_DEF_GUILANGUAGE;
         //try load default translation file
-        qDebug() << "C++: AppController GAPI" << strTranslationFile << m_Settings.getExePath();
-        if (!m_translator.load(strTranslationFile,m_Settings.getExePath()+"/"))
+        qDebug() << "C++: GAPI LoadTranslationFile" << strTranslationFile << translations_dir;
+        if (!m_translator.load(strTranslationFile,translations_dir))
         {
             // this should not happen too, since we've built the menu with the translation filenames
-            qDebug() << "C++: AppController Load Default Translation File Error";
+            qDebug() << "C++: GAPI Load Default Translation File Error";
             return false;
         }
-        qDebug() << "C++: AppController Loaded Default Translation File";
+        qDebug() << "C++: GAPI Loaded Default Translation File";
         qApp->installTranslator(&m_translator);
         return false;
     }
