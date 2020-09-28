@@ -1488,7 +1488,7 @@
     </message>
     <message>
         <source>STR_EXPORT_CERTIFICATE_SUCCESS</source>
-        <translation>O certificado foi exporado para ficheiro com sucesso.</translation>
+        <translation>O certificado foi exportado para ficheiro com sucesso.</translation>
     </message>
     <message>
         <source>STR_EXPORT_CERTIFICATE_FAILED</source>
