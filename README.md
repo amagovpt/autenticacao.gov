@@ -36,10 +36,15 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
 ### Linux
 
 1. Instalação das dependências.
-   As dependências para a compilação do Middleware em Linux (nomes de pacotes válidos para a distribuição Ubuntu 19.10), são as seguintes:
+   As dependências para a compilação do Middleware em Linux (nomes de pacotes válidos para a distribuição Ubuntu 20.04), são as seguintes:
 
    ```bash
-   sudo apt install libpcsclite-dev libpoppler-qt5-dev libzip-dev libopenjp2-7-dev libpng-dev openjdk-11-jdk qtbase5-dev qt5-qmake qtbase5-private-dev qt5-default qtdeclarative5-dev qtquickcontrols2-5-dev qml-module-qtquick-controls2 libssl-dev libxerces-c-dev libxml-security-c-dev swig libcurl4-nss-dev libnsspem
+   sudo apt install build-essential libpcsclite-dev libpoppler-qt5-dev libzip-dev libopenjp2-7-dev libpng-dev openjdk-11-jdk qtbase5-dev qt5-qmake qtbase5-private-dev qt5-default qtdeclarative5-dev qtquickcontrols2-5-dev qml-module-qtquick-controls2 libssl-dev libxerces-c-dev libxml-security-c-dev swig libcurl4-nss-dev
+   ```
+
+   As dependências para execução do Middleware em Linux (nomes de pacotes válidos para a distribuição Ubuntu 20.04), são as seguintes:
+   ```bash
+   sudo apt install pcscd qml-module-qt-labs-folderlistmodel qml-module-qt-labs-settings qml-module-qt-labs-platform qml-module-qtgraphicaleffects qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qtquick-layouts qml-module-qtquick-templates2 qml-module-qtquick-window2 qml-module-qtquick2 qt5-gtk-platformtheme libnsspem
    ```
 
 2. Clonar o repositório
@@ -51,7 +56,7 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
 3. Compilar o projecto na directoria eidmw
 
    ```bash
-   cd eidmw
+   cd pteid-mw-pt/_src/eidmw
    qmake pteid-mw.pro
    make
    ```
@@ -59,12 +64,12 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
 4. Caso pretenda instalar a aplicação
 
    ```bash
-   make install
+   make install && sudo ldconfig
    ```
 
    A aplicação utilitária será instalada em: /usr/local/bin/eidguiV2
 
-   As dependências para a execução do Middleware na distribuição Ubuntu 19.10 estão disponíveis em "Depends" no seguinte URL: [Dependências](pteid-mw-pt/_src/eidmw/debian/control)
+   As dependências para a execução do Middleware na distribuição Ubuntu 20.04 estão disponíveis em "Depends" no seguinte URL: [Dependências](pteid-mw-pt/_src/eidmw/debian/control)
 
 
 ### Windows
