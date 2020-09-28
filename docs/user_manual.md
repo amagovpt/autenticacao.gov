@@ -65,7 +65,7 @@
   - [Impossibilidade de assinatura em *Adobe Reader*, *Microsoft Office* e *LibreOffice* com Cartão de Cidadão](#impossibilidade-de-assinatura-em-adobe-reader-microsoft-office-e-libreoffice-com-cartão-de-cidadão)
   - [O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão](#o-leitor-de-cartões-está-instalado-mas-não-é-detetado-pela-aplicação-do-cartão-de-cidadão)
   - [Não são detetados quaisquer certificados durante a tentativa de assinatura na suite *LibreOffice / Apache OpenOffice*](#não-são-detetados-quaisquer-certificados-durante-a-tentativa-de-assinatura-na-suite-libreoffice--apache-openoffice)
-  - [Problemas com placas gráficas integradas em *Windows*](#problemas-com-placas-gráficas-integradas-em-windows)
+  - [Problemas com placas gráficas integradas](#problemas-com-placas-gráficas-integradas)
 - [Interface de linha de comandos](#interface-de-linha-de-comandos)
   - [Consultar ajuda e versão](#consultar-ajuda-e-versão)
   - [Atalho para submenus de assinatura](#atalho-para-submenus-de-assinatura)
@@ -1296,7 +1296,7 @@ Para mais informações consultar a página de ajuda:
 
 -   <https://help.libreoffice.org/Common/Applying_Digital_Signatures/pt>
 
-## Problemas com placas gráficas integradas em *Windows*
+## Problemas com placas gráficas integradas
 
 No caso de existirem problemas gráficos, recomenda-se alterar o modo de renderização gráfica. Pode fazê-lo na secção Aceleração gráfica do submenu [Configuração da aplicação](#configuração-da-aplicação).
 
