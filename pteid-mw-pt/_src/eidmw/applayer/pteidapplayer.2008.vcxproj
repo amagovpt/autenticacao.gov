@@ -229,6 +229,7 @@
     <ClCompile Include="CardPteid.cpp" />
     <ClCompile Include="CertStatusCache.cpp" />
     <ClCompile Include="cJSON.c" />
+    <ClCompile Include="PAdESExtender.cpp" />
     <ClCompile Include="PNGConverter.cpp" />
     <ClCompile Include="CRLFetcher.cpp" />
     <ClCompile Include="cryptoFramework.cpp" />
@@ -266,6 +267,7 @@
     <ClInclude Include="CardPteidDef.h" />
     <ClInclude Include="CertStatusCache.h" />
     <ClInclude Include="cJSON.h" />
+    <ClInclude Include="PAdESExtender.h" />
     <ClInclude Include="PNGConverter.h" />
     <ClInclude Include="CRLFetcher.h" />
     <ClInclude Include="cryptoFramework.h" />

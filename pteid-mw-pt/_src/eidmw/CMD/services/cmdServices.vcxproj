@@ -155,7 +155,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\pteid-poppler;$(PTEID_DIR_OPENSSL)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
@@ -206,7 +206,7 @@ echo "**************************************************************************
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL_X64)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL_X64)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;..\..\pteid-poppler;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>

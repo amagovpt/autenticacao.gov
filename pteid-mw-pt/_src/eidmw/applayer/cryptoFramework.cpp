@@ -648,7 +648,7 @@ FWK_CertifStatus APL_CryptoFwk::OCSPValidation(const CByteArray &cert, const CBy
 	return GetOCSPResponse(cert,issuer,pResponse);
 }
 
-FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const CByteArray &cert, const CByteArray &issuer, CByteArray *pResponse)
+FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const CByteArray &cert, const CByteArray &issuer, CByteArray *pResponse, bool verifyResponse)
 {
 	bool bResponseOk = false;
 	const unsigned char *pucCert=NULL;
@@ -676,7 +676,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const CByteArray &cert, const CB
 
 	try
 	{
-		eStatus=GetOCSPResponse(pX509_Cert,pX509_Issuer,&pOcspResponse);
+		eStatus=GetOCSPResponse(pX509_Cert,pX509_Issuer,&pOcspResponse, verifyResponse);
 		if(eStatus!=FWK_CERTIF_STATUS_CONNECT && eStatus!=FWK_CERTIF_STATUS_ERROR)
 			bResponseOk=true;
 	}
@@ -1009,7 +1009,7 @@ cleanup:
     return eStatus;
 }
 
-FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Issuer, OCSP_RESPONSE **pResponse)
+FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Issuer, OCSP_RESPONSE **pResponse, bool verifyResponse)
 {
 	if(pX509_Cert==NULL || pX509_Issuer==NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
@@ -1034,6 +1034,9 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Iss
 		eStatus = FWK_CERTIF_STATUS_ERROR;
 		goto cleanup;
 	}
+
+    if (!verifyResponse)
+        pX509_Issuer = NULL;
 
 	eStatus=GetOCSPResponse(pUrlResponder,pCertID,pResponse,pX509_Issuer);
 

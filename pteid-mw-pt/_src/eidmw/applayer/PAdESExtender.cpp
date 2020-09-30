@@ -9,11 +9,11 @@
 #include "PAdESExtender.h"
 
 #include "cryptoFwkPteid.h"
-#include "poppler/PDFDoc.h"
 #include "Log.h"
 #include "Util.h"
 #include "TsaClient.h"
 #include "sign-pkcs7.h"
+#include <unordered_map> 
 
 namespace eIDMW
 {
@@ -32,6 +32,7 @@ namespace eIDMW
         PDFDoc *doc = m_signedPdfDoc->m_doc;
         doc->prepareTimestamp();
         unsigned char *to_sign = NULL;
+        const char *hexToken = NULL;
         unsigned long len = doc->getSigByteArray(&to_sign, true);
 
         TSAClient tsp;
@@ -65,7 +66,6 @@ namespace eIDMW
             goto cleanup;
         }
 
-        const char *hexToken = NULL;
         hexToken = bin2AsciiHex(tsToken, tsTokenLen);
 
         doc->closeSignature((const char *)hexToken);
@@ -89,19 +89,19 @@ namespace eIDMW
         m_signedPdfDoc->m_incrementalMode = true;
 
         PDFDoc *doc = m_signedPdfDoc->m_doc;
+        APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
+
+        std::unordered_map<unsigned long, ValidationDataElement *> certsInDoc;
 
         /* Compute SHA1 of signature contents to add as key of VRI dict. */
         unsigned char *signatureContents = NULL;
         int length = doc->getSignatureContents(&signatureContents); // TODO: iterate over signatures
-        APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
+
+        /* Compute SHA1 hash of signature to be added as VRI key. */
         CByteArray contentBytes(signatureContents, length), hash;
         cryptoFwk->GetHashSha1(contentBytes, &hash);
-        std::vector<const char *> vriKeyVector;
         const char *hexHash = NULL;
         hexHash = bin2AsciiHex(hash.GetBytes(), hash.Size());
-        vriKeyVector.push_back(hexHash);
-
-        std::vector<ValidationDataElement *> validationData;
 
         PKCS7 *p7 = NULL;
         p7 = d2i_PKCS7(NULL, (const unsigned char**)&signatureContents, length);
@@ -115,11 +115,11 @@ namespace eIDMW
 
         STACK_OF(X509) *certs = NULL;
 
-        int i = OBJ_obj2nid(p7->type);
-        if (i == NID_pkcs7_signed) {
+        int type = OBJ_obj2nid(p7->type);
+        if (type == NID_pkcs7_signed) {
             certs = p7->d.sign->cert;
         }
-        else if (i == NID_pkcs7_signedAndEnveloped) {
+        else if (type == NID_pkcs7_signedAndEnveloped) {
             certs = p7->d.signed_and_enveloped->cert;
         }
 
@@ -137,11 +137,11 @@ namespace eIDMW
             if (ts_p7 != NULL)
             {
                 STACK_OF(X509) *ts_certs = NULL;
-                int i = OBJ_obj2nid(ts_p7->type);
-                if (i == NID_pkcs7_signed) {
+                int type = OBJ_obj2nid(ts_p7->type);
+                if (type == NID_pkcs7_signed) {
                     ts_certs = ts_p7->d.sign->cert;
                 }
-                else if (i == NID_pkcs7_signedAndEnveloped) {
+                else if (type == NID_pkcs7_signedAndEnveloped) {
                     ts_certs = ts_p7->d.signed_and_enveloped->cert;
                 }
 
@@ -153,7 +153,7 @@ namespace eIDMW
         }
 
         /* Iterate over the certificates in this signature and add them to DSS.*/
-        for (i = 0; certs && i < sk_X509_num(certs); i++) {
+        for (size_t i = 0; certs && i < sk_X509_num(certs); i++) {
             unsigned char *certBytes = NULL;
             X509 *cert = sk_X509_value(certs, i);
             //X509_print_fp(stdout, cert); //DEBUG
@@ -164,55 +164,86 @@ namespace eIDMW
                 return false;
             }
 
-            ValidationDataElement *certElem = new ValidationDataElement(certBytes, len, ValidationDataElement::CERT, vriKeyVector);
-
-            validationData.push_back(certElem);
-
-            /* If not Root CA, check OCSP response for the current certificate and, if OK, add
-            response to validation data. */
-            if (i < sk_X509_num(certs) - 1)
+            ValidationDataElement *certElem;
+            unsigned long uniqueCertId = X509_issuer_and_serial_hash(cert);
+            if (certsInDoc.find(uniqueCertId) == certsInDoc.end())
             {
-                unsigned char *issuerCertBytes = NULL;
-                X509 *issuerCert = sk_X509_value(certs, i + 1); // Warning: this assumes chain order. Is it always true?
-                unsigned int issuerLen = i2d_X509(issuerCert, &issuerCertBytes);
-                if (len < 0)
-                {
-                    MWLOG(LEV_ERROR, MOD_APL, "Failed to parse an issuer certificate in signature.");
-                    success = false;
-                    goto cleanup;
-                }
-
-                CByteArray certDataByteArray(certBytes, len);
-                CByteArray issuerCertDataByteArray(issuerCertBytes, issuerLen);
-                CByteArray response;
-                FWK_CertifStatus status = cryptoFwk->OCSPValidation(certDataByteArray, issuerCertDataByteArray, &response);
-                if (status == FWK_CERTIF_STATUS_REVOKED)
-                {
-                    MWLOG(LEV_WARN, MOD_APL, "OCSP validation of certificate is false.");
-                    success = false;
-                    goto cleanup;
-                }
-                else if (status != FWK_CERTIF_STATUS_VALID)
-                {
-                    // TODO: CRL in case there is OCSP error
-                    continue;
-                }
-
-                //const char *hexOCSP = bin2AsciiHex(response.GetBytes(), response.Size()); //DEBUG
-                //printf("\n\n OCSP RESPONSE:\n\n%s\n\n", hexOCSP);
-
-                ValidationDataElement *ocspResponseElem = new ValidationDataElement(response.GetBytes(), response.Size(), ValidationDataElement::OCSP, vriKeyVector);
-                validationData.push_back(ocspResponseElem);
+                /* If the cert has not been added to validation data, create new element. */
+                certElem = new ValidationDataElement(certBytes, len, ValidationDataElement::CERT);
+                certsInDoc.insert(std::pair<unsigned long, ValidationDataElement *>(uniqueCertId, certElem));
             }
-
+            else
+            {
+                certElem = certsInDoc.at(uniqueCertId);
+            }
+            certElem->addVriKey(hexHash);
         }
 
-        doc->addDSS(validationData);
+        //
+        
+        /* Copy map to validationData vector */
+        for (auto const& cert : certsInDoc)
+            m_validationData.push_back(cert.second);
+
+        /* For the certificates to validate, look for the issuer certificate (such that the subject name is
+        equal to the subject name of the current certificate) and add the revocation data. */
+        size_t validationDataSize = m_validationData.size();
+        for (size_t i = 0; i <  validationDataSize; i++)
+        {
+            size_t subjLen = m_validationData[i]->getSize();
+            CByteArray certDataByteArray(m_validationData[i]->getData(), subjLen);
+            
+            size_t j;
+            CByteArray issuerCertDataByteArray;
+            size_t issuerLen;
+            
+            bool foundIssuer = false;
+            for (j = 0; j < validationDataSize; j++)
+            {
+                issuerLen = m_validationData[j]->getSize();
+                issuerCertDataByteArray.ClearContents();
+                issuerCertDataByteArray.Append(m_validationData[j]->getData(), issuerLen);
+
+                if (cryptoFwk->isIssuer(certDataByteArray, issuerCertDataByteArray)) {
+                    foundIssuer = true;
+                    break;
+                }
+            }
+
+            /*Root CA or could not find issuer.*/
+            if (i == j || !foundIssuer)
+                continue;
+
+            CByteArray response;
+            FWK_CertifStatus status = cryptoFwk->GetOCSPResponse(certDataByteArray, issuerCertDataByteArray, &response, false);
+            if (status == FWK_CERTIF_STATUS_REVOKED || status == FWK_CERTIF_STATUS_SUSPENDED)
+            {
+                MWLOG(LEV_WARN, MOD_APL, "OCSP validation: revoked certificate.");
+                success = false;
+                goto cleanup;
+            }
+            else if (status == FWK_CERTIF_STATUS_ERROR)
+            {
+                // TODO: CRL in case there is OCSP error
+                continue;
+            }
+
+            ValidationDataElement *ocspResponseElem = new ValidationDataElement(response.GetBytes(), response.Size(), ValidationDataElement::OCSP);
+            m_validationData.push_back(ocspResponseElem);
+        }
+
+        doc->addDSS(m_validationData);
         m_signedPdfDoc->save();
 
     cleanup:
         if (hexHash)
             delete hexHash;
+
+        if (!m_calledFromLtaMethod)
+        {
+            for (auto const& validationElem : m_validationData)
+                delete validationElem;
+        }
         
         return success;
     }
@@ -220,12 +251,27 @@ namespace eIDMW
     bool PAdESExtender::addLTA()
     {
         // TODO: verify if LT first. Extend if not
+        m_calledFromLtaMethod = true;
+
+        bool success = true;
         if (!addLT())
-            return false;
+        {
+            success = false;
+            goto cleanup;
+        }
         
         if (!addT())
-            return false;
+        {
+            success = false;
+            goto cleanup;
+        }
 
-        return true;
+    cleanup:
+        for (auto const& validationElem : m_validationData)
+            delete validationElem;
+
+        m_calledFromLtaMethod = false;
+
+        return success;
     }
 }

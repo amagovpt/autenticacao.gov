@@ -46,7 +46,7 @@
 #endif
 
 #include <stdio.h>
-#include <vector>
+#include <unordered_set>
 #include "XRef.h"
 #include "Catalog.h"
 #include "Page.h"
@@ -82,12 +82,11 @@ public:
         CERT
     };
 
-    ValidationDataElement(unsigned char *data, size_t dataSize, ValidationDataType type, std::vector<const char *> &vriHashKeys) {
+    ValidationDataElement(unsigned char *data, size_t dataSize, ValidationDataType type) {
         this->data = new unsigned char[dataSize];
         memcpy((char*)this->data, (char*)data, dataSize);
         this->dataSize = dataSize;
         this->type = type;
-        this->vriHashKeys = vriHashKeys;
     }
 
     ~ValidationDataElement()
@@ -107,7 +106,11 @@ public:
         return type;
     }
 
-    std::vector<const char *> &getVriHashKeys() {
+    void addVriKey(const char *key) {
+        vriHashKeys.insert(key);
+    }
+
+    std::unordered_set<const char *> &getVriHashKeys() {
         return vriHashKeys;
     }
 
@@ -115,7 +118,7 @@ private:
     unsigned char *data;
     size_t dataSize;
     ValidationDataType type;
-    std::vector<const char *> vriHashKeys;
+    std::unordered_set<const char *> vriHashKeys;
 };
 
 //------------------------------------------------------------------------

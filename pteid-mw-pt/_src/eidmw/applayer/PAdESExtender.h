@@ -9,7 +9,9 @@
 #ifndef __PADES_EXTENDER_H
 #define __PADES_EXTENDER_H
 
+#include <vector>
 #include "PDFSignature.h"
+#include "poppler/PDFDoc.h"
 
 namespace eIDMW
 {
@@ -26,6 +28,8 @@ namespace eIDMW
 
     private:
         PDFSignature *m_signedPdfDoc;
+        std::vector<ValidationDataElement*> m_validationData;
+        bool m_calledFromLtaMethod;
     };
 }
 #endif
