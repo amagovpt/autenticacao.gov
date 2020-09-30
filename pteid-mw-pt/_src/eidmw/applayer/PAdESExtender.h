@@ -11,10 +11,13 @@
 
 #include <vector>
 #include "PDFSignature.h"
-#include "poppler/PDFDoc.h"
+
+/* Forward declaration of ValidationDataElement defined in pteid-poppler. */
+class ValidationDataElement;
 
 namespace eIDMW
 {
+
     /* PAdESExtender allows to extend the level of an existing PAdES signed document. 
     This can be done in a incremental way without breaking the existing signature. */
     class PAdESExtender

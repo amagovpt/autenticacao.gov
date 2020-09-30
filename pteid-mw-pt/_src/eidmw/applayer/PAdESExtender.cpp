@@ -13,6 +13,7 @@
 #include "Util.h"
 #include "TsaClient.h"
 #include "sign-pkcs7.h"
+#include "poppler/PDFDoc.h"
 #include <unordered_map> 
 
 namespace eIDMW
