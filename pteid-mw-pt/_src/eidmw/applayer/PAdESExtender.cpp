@@ -13,6 +13,7 @@
 #include "Util.h"
 #include "TsaClient.h"
 #include "sign-pkcs7.h"
+#include "CRLFetcher.h"
 #include "poppler/PDFDoc.h"
 #include <unordered_map> 
 
@@ -211,23 +212,39 @@ namespace eIDMW
                 }
             }
 
-            /*Root CA or could not find issuer.*/
-            if (i == j || !foundIssuer)
+            /*Root CA.*/
+            if (i == j)
                 continue;
 
             CByteArray response;
-            FWK_CertifStatus status = cryptoFwk->GetOCSPResponse(certDataByteArray, issuerCertDataByteArray, &response, false);
+            FWK_CertifStatus status;
+            if (foundIssuer)
+            {
+                status = cryptoFwk->GetOCSPResponse(certDataByteArray, issuerCertDataByteArray, &response, false);
+            }
+
             if (status == FWK_CERTIF_STATUS_REVOKED || status == FWK_CERTIF_STATUS_SUSPENDED)
             {
                 MWLOG(LEV_WARN, MOD_APL, "OCSP validation: revoked certificate.");
                 success = false;
                 goto cleanup;
             }
-            else if (status == FWK_CERTIF_STATUS_ERROR)
+            else if (!foundIssuer || status == FWK_CERTIF_STATUS_ERROR)
             {
-                // TODO: CRL in case there is OCSP error
+                /* Use CRL if there is no OCSP response. */
+                CRLFetcher crlFetcher;
+                std::string crlUrl;
+                if (!cryptoFwk->GetCDPUrl(certDataByteArray, crlUrl)) 
+                {
+                    MWLOG(LEV_WARN, MOD_APL, "Error getting CRL URL from certificate.");
+                    continue;
+                }
+                CByteArray crl = crlFetcher.fetch_CRL_file(crlUrl.c_str());
+                ValidationDataElement *ocspResponseElem = new ValidationDataElement(crl.GetBytes(), crl.Size(), ValidationDataElement::CRL);
+                m_validationData.push_back(ocspResponseElem);
                 continue;
             }
+
 
             ValidationDataElement *ocspResponseElem = new ValidationDataElement(response.GetBytes(), response.Size(), ValidationDataElement::OCSP);
             m_validationData.push_back(ocspResponseElem);
