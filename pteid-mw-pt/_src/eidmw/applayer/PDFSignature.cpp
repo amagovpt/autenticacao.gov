@@ -828,9 +828,6 @@ namespace eIDMW
         m_doc->closeSignature(signature_contents);
         save();
 
-        delete m_doc;
-        m_doc = makePDFDoc(m_outputName->getCString());
-
         addLtv();
 
         m_signStarted = false;
@@ -902,6 +899,9 @@ namespace eIDMW
         tmpDoc = NULL;
         remove(utf8FilenameTmp.c_str());
 
+        delete m_doc;
+        m_doc = makePDFDoc(m_outputName->getCString());
+
         if (tmp_ret == errPermission || tmp_ret == errOpenFile) {
             throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
         }
@@ -921,6 +921,13 @@ namespace eIDMW
     {
 
         PAdESExtender padesExtender(this);
-        return padesExtender.addLTA();
+        if (m_timestamp)
+        {
+            return padesExtender.addLTA();
+        }
+        else
+        {
+            return false;;
+        }
     }
 }

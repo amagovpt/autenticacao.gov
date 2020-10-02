@@ -95,94 +95,103 @@ namespace eIDMW
 
         std::unordered_map<unsigned long, ValidationDataElement *> certsInDoc;
 
-        /* Compute SHA1 of signature contents to add as key of VRI dict. */
-        unsigned char *signatureContents = NULL;
-        int length = doc->getSignatureContents(&signatureContents); // TODO: iterate over signatures
-
-        /* Compute SHA1 hash of signature to be added as VRI key. */
-        CByteArray contentBytes(signatureContents, length), hash;
-        cryptoFwk->GetHashSha1(contentBytes, &hash);
         const char *hexHash = NULL;
-        hexHash = bin2AsciiHex(hash.GetBytes(), hash.Size());
-
-        PKCS7 *p7 = NULL;
-        p7 = d2i_PKCS7(NULL, (const unsigned char**)&signatureContents, length);
-        if (p7 == NULL)
-        {
-            MWLOG(LEV_ERROR, MOD_APL,
-                L"Error decoding signature content.");
-            success = false;
-            goto cleanup;
-        }
-
-        STACK_OF(X509) *certs = NULL;
-
-        int type = OBJ_obj2nid(p7->type);
-        if (type == NID_pkcs7_signed) {
-            certs = p7->d.sign->cert;
-        }
-        else if (type == NID_pkcs7_signedAndEnveloped) {
-            certs = p7->d.signed_and_enveloped->cert;
-        }
-
-        /* Add validation data for signature timestamp */
-        ASN1_TYPE *asn1TokenType = NULL;
-        STACK_OF(PKCS7_SIGNER_INFO) * signer_info = PKCS7_get_signer_info(p7);
-        asn1TokenType = PKCS7_get_attribute(sk_PKCS7_SIGNER_INFO_value(signer_info, 0), NID_id_smime_aa_timeStampToken);
-        if (asn1TokenType != NULL && asn1TokenType->type == V_ASN1_SEQUENCE)
-        {
-            PKCS7 *ts_p7 = NULL;
-            const unsigned char *token_der = asn1TokenType->value.asn1_string->data;
-            int token_len = asn1TokenType->value.asn1_string->length;
-            ts_p7 = d2i_PKCS7(NULL, &token_der, token_len);
-
-            if (ts_p7 != NULL)
-            {
-                STACK_OF(X509) *ts_certs = NULL;
-                int type = OBJ_obj2nid(ts_p7->type);
-                if (type == NID_pkcs7_signed) {
-                    ts_certs = ts_p7->d.sign->cert;
-                }
-                else if (type == NID_pkcs7_signedAndEnveloped) {
-                    ts_certs = ts_p7->d.signed_and_enveloped->cert;
-                }
-
-                for (size_t i = 0; i < sk_X509_num(ts_certs); i++)
-                {
-                    sk_X509_push(certs, sk_X509_value(ts_certs, i));
-                }
-            }
-        }
-
-        /* Iterate over the certificates in this signature and add them to DSS.*/
-        for (size_t i = 0; certs && i < sk_X509_num(certs); i++) {
-            unsigned char *certBytes = NULL;
-            X509 *cert = sk_X509_value(certs, i);
-            //X509_print_fp(stdout, cert); //DEBUG
-            unsigned int len = i2d_X509(cert, &certBytes);
-            if (len < 0)
-            {
-                MWLOG(LEV_ERROR, MOD_APL, "Failed to parse certificate in signature.");
-                return false;
-            }
-
-            ValidationDataElement *certElem;
-            unsigned long uniqueCertId = X509_issuer_and_serial_hash(cert);
-            if (certsInDoc.find(uniqueCertId) == certsInDoc.end())
-            {
-                /* If the cert has not been added to validation data, create new element. */
-                certElem = new ValidationDataElement(certBytes, len, ValidationDataElement::CERT);
-                certsInDoc.insert(std::pair<unsigned long, ValidationDataElement *>(uniqueCertId, certElem));
-            }
-            else
-            {
-                certElem = certsInDoc.at(uniqueCertId);
-            }
-            certElem->addVriKey(hexHash);
-        }
-
-        //
+        unsigned char *signatureContents = NULL;
+        std::unordered_set<int> sigIndexes = doc->getSignaturesIndexesUntilLastTimestamp();
         
+        for (auto const& idx : sigIndexes)
+        {
+            /* Compute SHA1 of signature contents to add as key of VRI dict. */
+            int length = doc->getSignatureContents(&signatureContents, idx);
+            if (length <= 0)
+            {
+                MWLOG(LEV_ERROR, MOD_APL,
+                    L"Error getting signature content.");
+                continue;
+            }
+
+            /* Compute SHA1 hash of signature to be added as VRI key. */
+            CByteArray contentBytes(signatureContents, length), hash;
+            cryptoFwk->GetHashSha1(contentBytes, &hash);
+            hexHash = bin2AsciiHex(hash.GetBytes(), hash.Size());
+
+            PKCS7 *p7 = NULL;
+            p7 = d2i_PKCS7(NULL, (const unsigned char**)&signatureContents, length);
+            if (p7 == NULL)
+            {
+                MWLOG(LEV_ERROR, MOD_APL,
+                    L"Error decoding signature content.");
+                continue;
+            }
+
+            STACK_OF(X509) *certs = NULL;
+
+            int type = OBJ_obj2nid(p7->type);
+            if (type == NID_pkcs7_signed) {
+                certs = p7->d.sign->cert;
+            }
+            else if (type == NID_pkcs7_signedAndEnveloped) {
+                certs = p7->d.signed_and_enveloped->cert;
+            }
+
+            /* Add validation data for signature timestamp */
+            ASN1_TYPE *asn1TokenType = NULL;
+            STACK_OF(PKCS7_SIGNER_INFO) * signer_info = PKCS7_get_signer_info(p7);
+            asn1TokenType = PKCS7_get_attribute(sk_PKCS7_SIGNER_INFO_value(signer_info, 0), NID_id_smime_aa_timeStampToken);
+            if (asn1TokenType != NULL && asn1TokenType->type == V_ASN1_SEQUENCE)
+            {
+                PKCS7 *ts_p7 = NULL;
+                const unsigned char *token_der = asn1TokenType->value.asn1_string->data;
+                int token_len = asn1TokenType->value.asn1_string->length;
+                ts_p7 = d2i_PKCS7(NULL, &token_der, token_len);
+
+                if (ts_p7 != NULL)
+                {
+                    STACK_OF(X509) *ts_certs = NULL;
+                    int type = OBJ_obj2nid(ts_p7->type);
+                    if (type == NID_pkcs7_signed) {
+                        ts_certs = ts_p7->d.sign->cert;
+                    }
+                    else if (type == NID_pkcs7_signedAndEnveloped) {
+                        ts_certs = ts_p7->d.signed_and_enveloped->cert;
+                    }
+
+                    for (size_t i = 0; i < sk_X509_num(ts_certs); i++)
+                    {
+                        sk_X509_push(certs, sk_X509_value(ts_certs, i));
+                    }
+                }
+            }
+
+            /* Iterate over the certificates in this signature and add them to DSS.*/
+            for (size_t i = 0; certs && i < sk_X509_num(certs); i++) {
+                unsigned char *certBytes = NULL;
+                X509 *cert = sk_X509_value(certs, i);
+
+                unsigned int len = i2d_X509(cert, &certBytes);
+                if (len < 0)
+                {
+                    MWLOG(LEV_ERROR, MOD_APL, "Failed to parse certificate in signature.");
+                    success = false;
+                    goto cleanup;
+                }
+
+                ValidationDataElement *certElem;
+                unsigned long uniqueCertId = X509_issuer_and_serial_hash(cert);
+                if (certsInDoc.find(uniqueCertId) == certsInDoc.end())
+                {
+                    /* If the cert has not been added to validation data, create new element. */
+                    certElem = new ValidationDataElement(certBytes, len, ValidationDataElement::CERT);
+                    certsInDoc.insert(std::pair<unsigned long, ValidationDataElement *>(uniqueCertId, certElem));
+                }
+                else
+                {
+                    certElem = certsInDoc.at(uniqueCertId);
+                }
+                certElem->addVriKey(hexHash);
+            }
+        }
+
         /* Copy map to validationData vector */
         for (auto const& cert : certsInDoc)
             m_validationData.push_back(cert.second);
@@ -240,8 +249,8 @@ namespace eIDMW
                     continue;
                 }
                 CByteArray crl = crlFetcher.fetch_CRL_file(crlUrl.c_str());
-                ValidationDataElement *ocspResponseElem = new ValidationDataElement(crl.GetBytes(), crl.Size(), ValidationDataElement::CRL);
-                m_validationData.push_back(ocspResponseElem);
+                ValidationDataElement *crlElem = new ValidationDataElement(crl.GetBytes(), crl.Size(), ValidationDataElement::CRL);
+                m_validationData.push_back(crlElem);
                 continue;
             }
 

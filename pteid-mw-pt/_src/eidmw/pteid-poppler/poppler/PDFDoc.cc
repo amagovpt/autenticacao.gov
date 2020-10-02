@@ -567,10 +567,41 @@ GBool PDFDoc::isReaderEnabled()
 
 }
 
+std::unordered_set<int> PDFDoc::getSignaturesIndexesUntilLastTimestamp()
+{
+    std::unordered_set<int> indexes;
+    Object *acro_form = getCatalog()->getAcroForm();
+    Object fields, f, sig_dict, type, obj1;
+    if (acro_form->isNull())
+        return indexes;
+    acro_form->dictLookup("Fields", &fields);
 
-//TODO: The next 2 methods consider only the first signature they happen to find
-// in the file
-int PDFDoc::getSignatureContents(unsigned char **contents)
+    // FIXME: this assumes the references for the latest signatures are appended to the
+    // Fields dict. Most PDF creators should append.
+    for (int i = fields.arrayGetLength()-1; i >= 0; i--) 
+    {
+        fields.arrayGet(i, &f);
+
+        f.dictLookup("Type", &type);
+        f.dictLookup("FT", &obj1);
+        if (strcmp(type.getName(), "Annot") == 0
+            && strcmp(obj1.getName(), "Sig") == 0)
+        {
+            indexes.insert(i);
+
+            f.dictLookup("V", &sig_dict);
+            sig_dict.dictLookup("Type", &type);
+            sig_dict.dictLookup("SubFilter", &obj1);
+            if (strcmp(type.getName(), "DocTimeStamp") == 0
+                && strcmp(obj1.getName(), "ETSI.RFC3161") == 0)
+                break;
+        }
+    }
+
+    return indexes;
+}
+
+int PDFDoc::getSignatureContents(unsigned char **contents, int sigIdx)
 {
 	Object *acro_form = getCatalog()->getAcroForm();
 	Object fields, f, sig_dict, contents_obj, type, obj1;
@@ -580,7 +611,8 @@ int PDFDoc::getSignatureContents(unsigned char **contents)
 	acro_form->dictLookup("Fields", &fields);
 	
 	//Find the Signature Field and retrieve /Contents
-	for (int i = 0; i != fields.arrayGetLength(); i++)
+    int idx = -1;
+	for (int i = fields.arrayGetLength()-1; i >= 0; i--)
 	{
 	    fields.arrayGet(i, &f);
 
@@ -589,24 +621,27 @@ int PDFDoc::getSignatureContents(unsigned char **contents)
 	    if (strcmp(type.getName(), "Annot") == 0
 			    && strcmp(obj1.getName(), "Sig") == 0)
 	    {
-		f.dictLookup("V", &sig_dict);
-		sig_dict.dictLookup("Contents", &contents_obj);
-		if (contents_obj.isString())
-		{
-		   GooString *str = contents_obj.getString();
-		   int ret = str->getLength();	
-		   *contents = (unsigned char *)malloc(ret);
-		   memcpy(*contents, str->getCString(), ret);
-		   return ret;
-		}
+			idx++;
+			f.dictLookup("V", &sig_dict);
+			sig_dict.dictLookup("Contents", &contents_obj);
+			if (contents_obj.isString() && idx == sigIdx)
+			{
+				GooString *str = contents_obj.getString();
+				int ret = str->getLength();	
+				*contents = (unsigned char *)malloc(ret);
+				memcpy(*contents, str->getCString(), ret);
+				return ret;
+			}
 
-	    }
+		}
 
 	}
 
 	return 0;
 }
 
+//TODO: The next method considers only the first signature it happens to find
+// in the file
 Object *PDFDoc::getByteRange()
 {
 
@@ -930,20 +965,25 @@ void PDFDoc::prepareTimestamp()
     saveIncrementalUpdate(str);
 
     const char needle[] = "/ETSI.RFC3161 /Contents ";
-    unsigned char *haystack = mem_stream.getData();
-    long found = (long)memmem(haystack, mem_stream.size(), needle, sizeof(needle) - 1);
-    if (found == 0)
+    unsigned char *streamPtr = mem_stream.getData();
+    unsigned char *haystack = streamPtr;
+    unsigned char *found = 0;
+    unsigned char *needlePtr = 0;
+    /* Find the last occurence of needle */
+    while (needlePtr = (unsigned char *)memmem(haystack, mem_stream.size(), needle, sizeof(needle) - 1))
+    {
+        found = needlePtr;
+        haystack = found + sizeof(needle);
+    }
+    
+    if (found == NULL)
     {
         error(errInternal, -1, "addTimestamp: can't find signature offset. Aborting timestamping!");
         return;
     }
-    m_sig_offset = found - (long)haystack + sizeof(needle) - 1;
+    m_sig_offset = (long)found - (long)streamPtr + sizeof(needle) - 1;
 
-    getCatalog()->setSignatureByteRange(m_sig_offset, ESTIMATED_LEN, mem_stream.size(), timestampDictObj);
-
-    /* This is needed to avoid crash due to saveIncrementalUpdate call. 
-    TODO: verify if it is still needed after full implementation. */
-    xref->setModifiedObject(timestampDictObj, timestampRef);
+    getCatalog()->setSignatureByteRange(m_sig_offset, ESTIMATED_LEN, mem_stream.size(), timestampDictObj, &timestampRef);
 
 }
 
