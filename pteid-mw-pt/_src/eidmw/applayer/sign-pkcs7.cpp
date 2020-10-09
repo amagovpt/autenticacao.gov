@@ -315,11 +315,7 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 void add_signingCertificate(PKCS7_SIGNER_INFO *signer_info, X509 *signing_cert)
 {
 
-	ASN1_STRING *seq = NULL;
-	unsigned char *p, *pp = NULL;
-	int len;
 	int ret = 0;
-	int signed_string_nid = -1;
 
 	ESS_SIGNING_CERT_V2 * sc = NULL;
 	const int issuer_needed = 1;
