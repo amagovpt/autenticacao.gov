@@ -11,6 +11,7 @@
 #include "cryptoFwkPteid.h"
 #include "Log.h"
 #include "Util.h"
+#include "APLCertif.h"
 #include "TsaClient.h"
 #include "sign-pkcs7.h"
 #include "CRLFetcher.h"
@@ -83,6 +84,24 @@ namespace eIDMW
         return success;
     }
 
+	bool PAdESExtender::findIssuerInEidStore(APL_CryptoFwkPteid * cryptoFwk, CByteArray &certif_ba, CByteArray &issuer_ba) {
+		bool issuer_found = false;
+		APL_Certifs eidstore;
+
+		for (unsigned long i = 0; i != eidstore.countAll(); i++) {
+			const CByteArray & candidate_issuer = eidstore.getCert(i)->getData();
+			if (cryptoFwk->isIssuer(certif_ba, candidate_issuer)) {
+				issuer_found = true;
+				certif_ba = candidate_issuer;
+				MWLOG(LEV_INFO, MOD_APL, "Found issuer in eidstore: %s", eidstore.getCert(i)->getOwnerName());
+				break;
+			}
+
+		}
+
+		return issuer_found;
+	}
+
     bool PAdESExtender::addLT()
     {
         // TODO: verify if T first. Extend if not
@@ -106,7 +125,7 @@ namespace eIDMW
             if (length <= 0)
             {
                 MWLOG(LEV_ERROR, MOD_APL,
-                    L"Error getting signature content.");
+                    "addLT(): Error getting signature content.");
                 continue;
             }
 
@@ -120,7 +139,7 @@ namespace eIDMW
             if (p7 == NULL)
             {
                 MWLOG(LEV_ERROR, MOD_APL,
-                    L"Error decoding signature content.");
+                    "addLT(): Error decoding signature content.");
                 continue;
             }
 
@@ -171,7 +190,7 @@ namespace eIDMW
                 unsigned int len = i2d_X509(cert, &certBytes);
                 if (len < 0)
                 {
-                    MWLOG(LEV_ERROR, MOD_APL, "Failed to parse certificate in signature.");
+                    MWLOG(LEV_ERROR, MOD_APL, "addLT(): Failed to parse certificate in signature.");
                     success = false;
                     goto cleanup;
                 }
@@ -225,19 +244,32 @@ namespace eIDMW
             if (i == j)
                 continue;
 
+			if (!foundIssuer) {
+				//Try to find issuer in SOD CA certificates
+				foundIssuer = findIssuerInEidStore(cryptoFwk, certDataByteArray, issuerCertDataByteArray);
+			}
+
             CByteArray response;
             FWK_CertifStatus status;
             if (foundIssuer)
             {
                 status = cryptoFwk->GetOCSPResponse(certDataByteArray, issuerCertDataByteArray, &response, false);
             }
+			else {
+				MWLOG(LEV_WARN, MOD_APL, "Couldn't find issuer for cert # %lu. Revocation info is going to be fetched from CRL", 
+					i);
+			}
 
             if (status == FWK_CERTIF_STATUS_REVOKED || status == FWK_CERTIF_STATUS_SUSPENDED)
             {
-                MWLOG(LEV_WARN, MOD_APL, "OCSP validation: revoked certificate.");
+                MWLOG(LEV_WARN, MOD_APL, "addLT(): OCSP validation: revoked certificate.");
                 success = false;
                 goto cleanup;
             }
+			else if (status == FWK_CERTIF_STATUS_UNKNOWN) {
+				MWLOG(LEV_WARN, MOD_APL, "addLT(): OCSP server returned unknown status so it's either a server error or the request is buggy or uses unsupported algorithm/feature");
+
+			}
             else if (!foundIssuer || status == FWK_CERTIF_STATUS_ERROR)
             {
                 /* Use CRL if there is no OCSP response. */
@@ -245,7 +277,7 @@ namespace eIDMW
                 std::string crlUrl;
                 if (!cryptoFwk->GetCDPUrl(certDataByteArray, crlUrl)) 
                 {
-                    MWLOG(LEV_WARN, MOD_APL, "Error getting CRL URL from certificate.");
+                    MWLOG(LEV_WARN, MOD_APL, "addLT(): Couldn't parse CRL URL from certificate.");
                     continue;
                 }
                 CByteArray crl = crlFetcher.fetch_CRL_file(crlUrl.c_str());

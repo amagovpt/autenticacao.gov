@@ -30,6 +30,7 @@ namespace eIDMW
         EIDMW_APL_API bool addLTA();
 
     private:
+		bool findIssuerInEidStore(APL_CryptoFwkPteid * cryptoFwk, CByteArray &certif_ba, CByteArray &issuer_ba);
         PDFSignature *m_signedPdfDoc;
         std::vector<ValidationDataElement*> m_validationData;
         bool m_calledFromLtaMethod;

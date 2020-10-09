@@ -1009,6 +1009,23 @@ cleanup:
     return eStatus;
 }
 
+/*
+   As of October 2020 we consider CC and PKI OCSP servers to be outdated as
+   they use RSA-SHA1 signatures by default
+   These servers are:
+   ocsp.cmd.cartaodecidadao.pt
+   ocsp.asc.cartaodecidadao.pt
+   ocsp.auc.cartaodecidadao.pt
+   ocsp.root.cartaodecidadao.pt
+
+   We use the non-standard workaround of using a SHA-256 CertID element in the request to avoid this behaviour
+   For other OCSP responders we use the "universally accepted" SHA-1 CertID
+   TODO: we should remove the workaround once the returned OCSP responses are signed with RSA-SHA256
+*/
+bool isOutdatedOCSPResponder(char *ocsp_url) {
+	return strstr(ocsp_url, "cartaodecidadao.pt") != NULL;
+}
+
 FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Issuer, OCSP_RESPONSE **pResponse, bool verifyResponse)
 {
 	if(pX509_Cert==NULL || pX509_Issuer==NULL)
@@ -1028,7 +1045,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Iss
 		goto cleanup;
 	}
 
-    pCertID = OCSP_cert_to_id(EVP_sha256(), pX509_Cert, pX509_Issuer);
+    pCertID = OCSP_cert_to_id(isOutdatedOCSPResponder(pUrlResponder) ? EVP_sha256(): EVP_sha1(), pX509_Cert, pX509_Issuer);
     if (!pCertID)
 	{
 		eStatus = FWK_CERTIF_STATUS_ERROR;
