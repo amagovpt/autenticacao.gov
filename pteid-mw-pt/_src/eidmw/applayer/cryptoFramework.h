@@ -45,10 +45,10 @@
 #endif
 #include "APLCard.h"
 
-#include "openssl/evp.h"
-#include "openssl/ocsp.h"
-#include "openssl/ssl.h"
-#include "openssl/bio.h"
+#include <openssl/evp.h>
+#include <openssl/ocsp.h>
+#include <openssl/ssl.h>
+#include <openssl/bio.h>
 
 namespace eIDMW
 {

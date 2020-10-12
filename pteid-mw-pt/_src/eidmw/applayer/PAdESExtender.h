@@ -31,6 +31,7 @@ namespace eIDMW
 
     private:
 		bool findIssuerInEidStore(APL_CryptoFwkPteid * cryptoFwk, CByteArray &certif_ba, CByteArray &issuer_ba);
+		void addOCSPCertToValidationData(CByteArray &ocsp_response_ba);
         PDFSignature *m_signedPdfDoc;
         std::vector<ValidationDataElement*> m_validationData;
         bool m_calledFromLtaMethod;

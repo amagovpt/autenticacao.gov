@@ -13,9 +13,15 @@
 #include "Util.h"
 #include "APLCertif.h"
 #include "TsaClient.h"
+#include "MiscUtil.h"
 #include "sign-pkcs7.h"
 #include "CRLFetcher.h"
 #include "poppler/PDFDoc.h"
+
+#include <openssl/pkcs7.h>
+#include <openssl/x509.h>
+#include <openssl/ocsp.h>
+
 #include <unordered_map> 
 
 namespace eIDMW
@@ -92,7 +98,8 @@ namespace eIDMW
 			const CByteArray & candidate_issuer = eidstore.getCert(i)->getData();
 			if (cryptoFwk->isIssuer(certif_ba, candidate_issuer)) {
 				issuer_found = true;
-				certif_ba = candidate_issuer;
+				issuer_ba.ClearContents();
+				issuer_ba.Append(candidate_issuer);
 				MWLOG(LEV_INFO, MOD_APL, "Found issuer in eidstore: %s", eidstore.getCert(i)->getOwnerName());
 				break;
 			}
@@ -100,6 +107,37 @@ namespace eIDMW
 		}
 
 		return issuer_found;
+	}
+
+	void PAdESExtender::addOCSPCertToValidationData(CByteArray &ocsp_response_ba) {
+		MWLOG(LEV_DEBUG, MOD_APL, "Entering new function %s", __FUNCTION__);
+		const unsigned char *p = ocsp_response_ba.GetBytes();
+		ValidationDataElement *vde = NULL; 
+		OCSP_RESPONSE *resp = d2i_OCSP_RESPONSE(NULL, &p, ocsp_response_ba.Size());
+		
+
+		if (resp != NULL) {
+			OCSP_BASICRESP * basic_resp = OCSP_response_get1_basic(resp);
+			if (basic_resp != NULL) {
+				const STACK_OF(X509) * certs = OCSP_resp_get0_certs(basic_resp);
+				for (size_t i = 0; certs && i < sk_X509_num(certs); i++) {
+					MWLOG(LEV_DEBUG, MOD_APL, "Adding one certificate to DSS from OCSP response");
+					X509 *cert = sk_X509_value(certs, i);
+					unsigned char * der_data = NULL;
+					int data_len = X509_to_DER(cert, &der_data);
+					vde = new ValidationDataElement(der_data, data_len, ValidationDataElement::CERT);
+					m_validationData.push_back(vde);
+
+				}
+
+			}
+
+		}
+		else {
+			MWLOG(LEV_WARN, MOD_APL, "%s: Failed to decode OCSP response!", __FUNCTION__);
+		}
+		
+
 	}
 
     bool PAdESExtender::addLT()
@@ -226,6 +264,8 @@ namespace eIDMW
             size_t j;
             CByteArray issuerCertDataByteArray;
             size_t issuerLen;
+
+			MWLOG(LEV_DEBUG, MOD_APL, "### %s: adding revocation info for certificate: %s", __FUNCTION__, certificate_subject_from_der(certDataByteArray));
             
             bool foundIssuer = false;
             for (j = 0; j < validationDataSize; j++)
@@ -245,8 +285,14 @@ namespace eIDMW
                 continue;
 
 			if (!foundIssuer) {
-				//Try to find issuer in SOD CA certificates
+				//Try to find issuer in eidstore certificates
 				foundIssuer = findIssuerInEidStore(cryptoFwk, certDataByteArray, issuerCertDataByteArray);
+				if (foundIssuer) {
+					auto *vde = 
+						new ValidationDataElement(issuerCertDataByteArray.GetBytes(), issuerCertDataByteArray.Size(), ValidationDataElement::CERT);
+					m_validationData.push_back(vde);
+				}
+
 			}
 
             CByteArray response;
@@ -268,6 +314,7 @@ namespace eIDMW
             }
 			else if (status == FWK_CERTIF_STATUS_UNKNOWN) {
 				MWLOG(LEV_WARN, MOD_APL, "addLT(): OCSP server returned unknown status so it's either a server error or the request is buggy or uses unsupported algorithm/feature");
+				//TODO: do we add this OCSP or fallback to CRL ??
 
 			}
             else if (!foundIssuer || status == FWK_CERTIF_STATUS_ERROR)
@@ -286,10 +333,12 @@ namespace eIDMW
                 continue;
             }
 
+			addOCSPCertToValidationData(response);
 
             ValidationDataElement *ocspResponseElem = new ValidationDataElement(response.GetBytes(), response.Size(), ValidationDataElement::OCSP);
             m_validationData.push_back(ocspResponseElem);
-        }
+        
+		}  //End of outer loop
 
         doc->addDSS(m_validationData);
         m_signedPdfDoc->save();
