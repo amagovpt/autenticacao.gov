@@ -1030,7 +1030,7 @@ PTEID_EIDCard &card = readerContext.getEIDCard();
 //Ficheiro PDF a assinar
 PTEID_PDFSignature signature("/home/user/input.pdf");
 /* Adicionar uma imagem customizada à assinatura visível
-   O array de bytes image_data deve ser uma imagem em formato
+   O array de bytes image_data deve conter uma imagem em formato
    JPEG com as dimensões recomendadas (185x41 px) */
 PTEID_ByteArray jpeg_data(image_data, image_length);
 
@@ -1047,9 +1047,8 @@ const char * location = "Lisboa, Portugal";
 const char * reason = "Concordo com o conteudo do documento";
 int page = 1;
 
-//Para páginas A4 verticais este valor pode variar no intervalo [0-1]
+//Estes valores podem variar no intervalo [0-1]
 double pos_x = 0.1;
-//Para páginas A4 verticais este valor pode variar no intervalo [0-1]
 double pos_y = 0.1;
 card.SignPDF(signature,  page, pos_x, pos_y, location, reason, output_file);
 ```
@@ -1100,12 +1099,14 @@ output = card.Sign(data_to_sign, true);
 
 ### Multi-assinatura com uma única introdução de PIN
 
-Esta funcionalidade permite assinar vários ficheiros introduzindo o PIN
-somente uma vez. Deverá ser utilizado o método **addToBatchSigning()**.
+Esta funcionalidade permite assinar vários documentos PDF introduzindo o PIN
+somente uma vez. O selo visual de assinatura será aplicado na mesma página e localização em todos
+os documentos, sendo que a localização é especificada tal como na assinatura simples.
+Deverá ser utilizado o método **addToBatchSigning()** para construir a lista de documentos a assinar.
 
 Será apresentado apenas um exemplo C++ para esta funcionalidade embora
 os wrappers Java e C\# contenham exactamente as mesmas classes e métodos
-necessários **PTEID_PDFSignature()**.
+necessários na classe **PTEID_PDFSignature()**.
 
 Exemplo C++
 
@@ -1114,21 +1115,24 @@ Exemplo C++
 (...)
 PTEID_EIDCard &card = readerContext.getEIDCard();
 //Ficheiro PDF a assinar
-PTEID_PDFSignature signature("/home/user/input.pdf");
+PTEID_PDFSignature signature("/home/user/first-file-to-sign.pdf");
 
 //Para realizar uma assinatura em batch adicionar todos os ficheiros usando o seguinte método antes de invocar o card.SignPDF()
-signature.addToBatchSigning( "Other_File.pdf" );
-signature.addToBatchSigning( "Yet_Another_FILE.pdf" );
+signature.addToBatchSigning("Other_File.pdf");
+signature.addToBatchSigning("Yet_Another_FILE.pdf");
 (...)
-int sector = 1;
+
 int page = 1;
-bool is_landscape = false;
+//Estes valores podem variar no intervalo [0-1], ver exemplos anteriores
+double pos_x = 0.1;
+double pos_y = 0.1;
+
 const char * location = "Lisboa, Portugal";
 const char * reason = "Concordo com o conteudo do documento";
 
 //Para uma assinatura em batch, este parâmetro aponta para a directoria de destino
-const char * output = "/home/user/output_signed.pdf";
-card.SignPDF(signature,  page, sector, is_landscape, location, reason, output_file);
+const char * output_folder = "/home/user/signed-documents/";
+card.SignPDF(signature,  page, pos_x, pos_y, location, reason, output_folder);
 (...)
 ```
 
