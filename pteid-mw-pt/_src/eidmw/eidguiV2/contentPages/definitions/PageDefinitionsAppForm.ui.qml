@@ -6,7 +6,7 @@
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 

@@ -5,7 +5,7 @@
  * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 

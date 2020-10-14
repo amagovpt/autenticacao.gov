@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Rui Martinho - <rui.martinho@ama.pt>
  * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 

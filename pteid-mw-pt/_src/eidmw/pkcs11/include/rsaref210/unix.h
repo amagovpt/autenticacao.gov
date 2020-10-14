@@ -2,7 +2,7 @@
 
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 

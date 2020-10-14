@@ -4,7 +4,7 @@
  * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 

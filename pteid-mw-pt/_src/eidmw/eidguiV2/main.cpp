@@ -5,7 +5,7 @@
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 

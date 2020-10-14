@@ -3,7 +3,7 @@
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 

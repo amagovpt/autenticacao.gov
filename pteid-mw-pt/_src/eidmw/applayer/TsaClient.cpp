@@ -4,7 +4,7 @@
  * Copyright (C) 2013 Vasco Dias - <vasco.dias@caixamagica.pt>
  * Copyright (C) 2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
