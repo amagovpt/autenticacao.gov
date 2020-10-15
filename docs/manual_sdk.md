@@ -131,7 +131,7 @@ bits, são:
 
   - Sistemas operativos Apple MacOS:
 
-     - Versões Yosemite (10.10) e superiores.
+     - MacOS Sierra (10.12) e superiores
 
 ## Linguagens de programação
 
@@ -164,7 +164,7 @@ instalação e executar.
 As bibliotecas C++ (pteidlibCpp.lib e respectivos *header files*), Java
 e C\# ficarão disponíveis por defeito em `C:\Program Files\PortugalIdentity Card\sdk\`
 ou na directoria seleccionada durante a instalação da aplicação,
-neste caso a SDK estará disponível em `{directoria_seleccionada}\sdk\` .
+neste caso o SDK estará disponível em `{directoria_seleccionada}\sdk\` .
 
 ### Linux
 
@@ -176,29 +176,8 @@ disponíveis em `/usr/local/lib` e os respectivos C++
 *header files* estão em `/usr/local/include`
 
 Se a instalação for feita a partir do código fonte disponível em
-<https://github.com/amagovpt/autenticacao.gov> será necessário instalar as
-seguintes dependências (pacotes Ubuntu 18.04, para outras distribuições
-Linux os nomes serão diferentes):
-
-  - libpcsclite-dev
-  - libpoppler-qt5-dev
-  - openjdk-8-jdk
-  - qtbase5-dev
-  - qt5-qmake
-  - qtbase5-private-dev
-  - libxerces-c-dev
-  - libxml-security-c-dev
-  - swig
-  - libcurl4-nss-dev
-  - zlib1g-dev
-  - libpng-dev
-  - libopenjp2-7-dev
-  - libzip-dev
-  - qt5-default
-  - qtdeclarative5-dev
-  - qtquickcontrols2-5-dev
-  - qml-module-qtquick-controls2
-  - libssl1.0-dev
+<https://github.com/amagovpt/autenticacao.gov> devem ser seguidas as
+instruções de compilação que constam do ficheiro README do projeto.
 
 ### MacOS
 
@@ -264,8 +243,8 @@ package pteidsample;
 import pt.gov.cartaodecidadao.*;
 (...)
 /* NOTA: o bloco estático seguinte é estritamente necessário uma vez
-que é preciso arregar explicitamente a biblioteca JNI que implementa
-as funcionalidades disponível pelo wrapper Java.*/
+que é preciso carregar explicitamente a biblioteca JNI que implementa
+as funcionalidades do wrapper Java.*/
 
 static {
 	try {
@@ -301,7 +280,7 @@ namespace PTEIDSample {
 
 ## Configurar modo teste
 
-Para alterar as configurações de forma a utilizar o modo teste, para usar cartões de teste, deve usar-se a função estática **SetTestMode(*bool* bTestMode)** da classe **PTEID_Config**.
+Para alterar as configurações de forma a utilizar o modo teste, para usar cartões de teste, deve usar-se o método estático **SetTestMode(*bool* bTestMode)** da classe **PTEID_Config**.
 
 Com o valor do parâmetro *bTestMode* a *true*, os seguintes exemplos ativam o modo de teste.
 
@@ -420,9 +399,9 @@ aplicação.
 Para tal é necessário invocar o método **SetEventCallback()** no objecto
 **PTEID_ReaderContext** associado ao leitor que se pretende monitorizar.
 
-A função de *callback* definida deve ter a seguinte assinatura:
+A função de *callback* definida deve ter a seguinte assinatura em C++:
 
-`void callback (long lRet, unsigned long ulState, void \*callbackData)` em C++
+`void callback (long lRet, unsigned long ulState, void *callbackData)`
 
 O parâmetro *ulState* é a combinação de dois valores:
 
@@ -500,7 +479,7 @@ ficheiros. Destacam-se os seguintes ficheiros:
   - ficheiro de morada – contém a morada do cidadão, este ficheiro é
     de acesso condicionado
   - ficheiros de certificados do cidadão – contêm os certificados de
-    assinatura/autenticação do cidadão.
+    assinatura e autenticação do cidadão.
   - ficheiros de certificados CA's.
   - ficheiro de notas pessoais – é um ficheiro de leitura livre e de
     escrita condicionada onde o cidadão pode colocar até 1000 *bytes*.
@@ -644,7 +623,7 @@ Para ler as notas pessoais deverá ser utilizado o método
 **PTEID_EIDCard.readPersonalNotes()**. Para a escrita de dados deverá ser
 utilizado o método **PTEID_EIDCard.writePersonalNotes()**, sendo necessária
 a introdução do PIN de autenticação. Neste momento, as notas pessoais
-têm um limite de 1000 caracteres.
+têm um limite de 1000 bytes (codificação recomendada: UTF-8).
 
 1.  Exemplo C++
 
@@ -1334,6 +1313,7 @@ Em todos os casos é sempre possível obter um
 código de erro numérico para todos os erros que estão tipificados nos
 métodos do MW através da chamada ao método **GetError()** da classe
 **PTEID_Exception**.
+Através do método GetMessage() é possível obter uma descrição legível do erro (em língua inglesa)
 
 As constantes numéricas dos códigos de erro
 estão expostas às aplicações em:
@@ -1402,9 +1382,9 @@ diálogo de PIN errado que é mostrado.
 
 ## Códigos de Erro
 
-Em vez de lançar excepções, a *SDK* para linguagem C mantém a
+Em vez de lançar excepções, as funções de compatibilidade para linguagem C mantêm a
 compatibilidade com versões anteriores em que são devolvidos os códigos
-descritos nas seguintes tabelas. Os códigos retornados pela SDK estão
+descritos nas seguintes tabelas. Os códigos retornados pelo SDK estão
 apresentados na seguinte tabela, também presentes no ficheiro
 *eidlibcompat.h*.
 
