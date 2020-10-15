@@ -125,7 +125,7 @@ A lista de sistemas operativos suportados, nas suas arquiteturas de 32 e
     -   OpenSuse Leap 15 e superiores
     -   Ubuntu 18.04 e superiores
 -   Sistemas operativos Apple:
-    -   Mac OSX Yosemite e superiores
+    -   Mac OSX Sierra (10.12) e superiores
 
 ## Download do pacote de instalação da aplicação
 
