@@ -89,7 +89,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <CustomBuildStep>
       <Message>javac...</Message>
-      <Command>"%25PTEID_DIR_JDK%25\bin\javac.exe" -verbose -d class ..\eidlibJava_Wrapper\GeneratedFiles\*.java</Command>
+      <Command>"%25PTEID_DIR_JDK%25\bin\javac.exe" -encoding utf8 -verbose -d class ..\eidlibJava_Wrapper\GeneratedFiles\*.java</Command>
       <Outputs>$(ProjectName).class;%(Outputs)</Outputs>
     </CustomBuildStep>
     <ClCompile>
@@ -118,7 +118,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <CustomBuildStep>
       <Message>javac...</Message>
-      <Command>"%25PTEID_DIR_JDK%25\bin\javac.exe" -verbose -d class ..\eidlibJava_Wrapper\GeneratedFiles\*.java</Command>
+      <Command>"%25PTEID_DIR_JDK%25\bin\javac.exe" -encoding utf8 -verbose -d class ..\eidlibJava_Wrapper\GeneratedFiles\*.java</Command>
       <Outputs>$(ProjectName).class;%(Outputs)</Outputs>
     </CustomBuildStep>
     <Midl>
@@ -149,7 +149,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <CustomBuildStep>
       <Message>javac...</Message>
-      <Command>"%25PTEID_DIR_JDK%25\bin\javac.exe" -verbose -d class ..\eidlibJava_Wrapper\GeneratedFiles\*.java
+      <Command>"%25PTEID_DIR_JDK%25\bin\javac.exe" -encoding utf8 -verbose -d class ..\eidlibJava_Wrapper\GeneratedFiles\*.java
 </Command>
       <Outputs>$(ProjectName).class;%(Outputs)</Outputs>
     </CustomBuildStep>
@@ -172,7 +172,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <CustomBuildStep>
       <Message>javac...</Message>
-      <Command>"%25PTEID_DIR_JDK%25\bin\javac.exe" -verbose -d class ..\eidlibJava_Wrapper\src\*.java ..\eidlibJava_Wrapper\GeneratedFiles\*.java
+      <Command>"%25PTEID_DIR_JDK%25\bin\javac.exe" -encoding utf8 -verbose -d class ..\eidlibJava_Wrapper\src\*.java ..\eidlibJava_Wrapper\GeneratedFiles\*.java
 </Command>
       <Outputs>$(ProjectName).class;%(Outputs)</Outputs>
     </CustomBuildStep>
