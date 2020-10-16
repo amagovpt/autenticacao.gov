@@ -1530,6 +1530,7 @@ PageServicesSignAdvancedForm {
             propertyOutputSignedFile =
                     propertyOutputSignedFile.substring(0, propertyOutputSignedFile.lastIndexOf('/'))
             if (propertyListViewFiles.count == 1){
+                var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
                 gapi.startSigningXADES(loadedFilePath, outputFile, isTimestamp)
             }else{
                 var batchFilesArray = []
