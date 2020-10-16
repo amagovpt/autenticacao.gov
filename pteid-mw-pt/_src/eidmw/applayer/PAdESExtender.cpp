@@ -289,7 +289,7 @@ namespace eIDMW
 				foundIssuer = findIssuerInEidStore(cryptoFwk, certDataByteArray, issuerCertDataByteArray);
 				if (foundIssuer) {
 					auto *vde = 
-						new ValidationDataElement(issuerCertDataByteArray.GetBytes(), issuerCertDataByteArray.Size(), ValidationDataElement::CERT);
+						new ValidationDataElement(issuerCertDataByteArray.GetBytes(), issuerCertDataByteArray.Size(), ValidationDataElement::CERT, m_validationData[i]->getVriHashKeys());
 					m_validationData.push_back(vde);
 				}
 
@@ -328,14 +328,14 @@ namespace eIDMW
                     continue;
                 }
                 CByteArray crl = crlFetcher.fetch_CRL_file(crlUrl.c_str());
-                ValidationDataElement *crlElem = new ValidationDataElement(crl.GetBytes(), crl.Size(), ValidationDataElement::CRL);
+                ValidationDataElement *crlElem = new ValidationDataElement(crl.GetBytes(), crl.Size(), ValidationDataElement::CRL, m_validationData[i]->getVriHashKeys());
                 m_validationData.push_back(crlElem);
                 continue;
             }
 
 			addOCSPCertToValidationData(response);
 
-            ValidationDataElement *ocspResponseElem = new ValidationDataElement(response.GetBytes(), response.Size(), ValidationDataElement::OCSP);
+            ValidationDataElement *ocspResponseElem = new ValidationDataElement(response.GetBytes(), response.Size(), ValidationDataElement::OCSP, m_validationData[i]->getVriHashKeys());
             m_validationData.push_back(ocspResponseElem);
         
 		}  //End of outer loop

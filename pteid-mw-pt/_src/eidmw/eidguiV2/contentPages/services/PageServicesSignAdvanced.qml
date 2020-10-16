@@ -27,16 +27,29 @@ PageServicesSignAdvancedForm {
     property string propertyOutputSignedFile : ""
 
     ToolTip {
+        property var maxWidth: 500
         id: controlToolTip
-        timeout: Constants.TOOLTIP_TIMEOUT_MS
-        contentItem: Text {
-            text: controlToolTip.text
-            font: controlToolTip.font
-            color: Constants.COLOR_MAIN_PRETO
-        }
+        contentItem: 
+            Text {
+                id: tooltipText
+                text: controlToolTip.text
+                font: controlToolTip.font
+                color: Constants.COLOR_MAIN_PRETO
+                wrapMode: Text.WordWrap
+                onTextChanged: {
+                    controlToolTip.width = Math.min(controlToolTip.maxWidth, controlToolTip.implicitWidth)
+                }
+            }
+        
         background: Rectangle {
             border.color: Constants.COLOR_MAIN_DARK_GRAY
             color: Constants.COLOR_MAIN_SOFT_GRAY
+        }
+
+        Timer {
+            id: tooltipExitTimer
+            interval: Constants.TOOLTIP_TIMEOUT_MS
+            onTriggered: controlToolTip.close()
         }
     }
     Keys.onRightPressed: {
@@ -590,6 +603,9 @@ PageServicesSignAdvancedForm {
             controlToolTip.y = propertyMouseAreaToolTipY + 22
             controlToolTip.open()
         }
+        onExited: {
+            tooltipExitTimer.start()
+        }
     }
     propertyMouseAreaToolTipXades{
         onEntered: {
@@ -598,6 +614,28 @@ PageServicesSignAdvancedForm {
             controlToolTip.x = propertyMouseAreaToolTipXadesX - controlToolTip.width * 0.5
             controlToolTip.y = propertyMouseAreaToolTipY + 22
             controlToolTip.open()
+        }
+        onExited: {
+            tooltipExitTimer.start()
+        }
+    }
+    propertyMouseAreaToolTipLTV{
+        onEntered: {
+            controlToolTip.close()
+            controlToolTip.text = qsTranslate("PageServicesSign","STR_LTV_TOOLTIP")
+            controlToolTip.x = propertyMouseAreaToolTipLTVX - controlToolTip.width * 0.5
+            controlToolTip.y = propertyCheckboxLTV.mapToItem(controlToolTip.parent,0,0).y - controlToolTip.height
+            controlToolTip.open()
+        }
+        onExited: {
+            tooltipExitTimer.start()
+        }
+    }
+
+    propertyCheckboxLTV {
+        onEnabledChanged: {
+            if (!propertyCheckboxLTV.enabled)
+                propertyCheckboxLTV.checked = false
         }
     }
 
@@ -1475,7 +1513,7 @@ PageServicesSignAdvancedForm {
             var reason = propertyTextFieldReason.text
             var location = propertyTextFieldLocal.text
             var isSmallSignature = propertyCheckSignReduced.checked
-
+            var isLTV = propertyCheckboxLTV.checked
             var coord_x = -1
             var coord_y = -1
             if(propertyCheckSignShow.checked){
@@ -1511,7 +1549,7 @@ PageServicesSignAdvancedForm {
                                             location,reason, isTimestamp, attributeList)
                 } else {
                     gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
-                                            reason, location, isTimestamp, isSmallSignature)
+                                            reason, location, isTimestamp, isLTV, isSmallSignature)
                 }
             } else {
                 var batchFilesArray = []
@@ -1522,7 +1560,7 @@ PageServicesSignAdvancedForm {
                 // remove duplicate fileUrls
                 batchFilesArray = batchFilesArray.filter(onlyUnique);
                 gapi.startSigningBatchPDF(batchFilesArray, outputFile, page, coord_x, coord_y,
-                                        reason, location, isTimestamp, isSmallSignature)
+                                        reason, location, isTimestamp, isLTV, isSmallSignature)
             }
         }
         else {

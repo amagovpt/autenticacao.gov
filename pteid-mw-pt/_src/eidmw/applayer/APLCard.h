@@ -73,6 +73,12 @@ enum APL_RawDataType
 	APL_RAWDATA_PERSO_DATA
 };
 
+enum APL_SignatureLevel
+{
+    LEVEL_BASIC,
+    LEVEL_TIMESTAMP,
+    LEVEL_LTV
+};
 
 class CReader;
 class PDFSignature;

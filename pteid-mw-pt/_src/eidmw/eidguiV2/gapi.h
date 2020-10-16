@@ -33,6 +33,7 @@
 #include "eidlib.h"
 #include "eidErrors.h"
 #include "eidlibException.h"
+#include "PDFSignature.h"
 
 #include "CMDSignature.h"
 #include "cmdErrors.h"
@@ -143,6 +144,7 @@ public:
     QString reason;
     QString location;
     bool isTimestamp;
+    bool isLtv;
     bool isSmallSignature;
 };
 
@@ -242,6 +244,8 @@ public:
 
     enum ShortcutId { ShortcutIdNone, ShortcutIdSignSimple, ShortcutIdSignAdvanced};
 
+    enum SignLevel { LevelBasic, LevelTimestamp, LevelLTV };
+
     Q_ENUMS(ScapPdfSignResult)
     Q_ENUMS(ScapAttrType)
     Q_ENUMS(ScapAttrDescription)
@@ -256,6 +260,7 @@ public:
     Q_ENUMS(AutoUpdateType)
     Q_ENUMS(PinUsage)
     Q_ENUMS(CmdDialogClass)
+    Q_ENUMS(SignatureLevel)
     Q_ENUMS(ShortcutId)
 
     bool isAddressLoaded() {return m_addressLoaded; }
@@ -293,9 +298,9 @@ public slots:
                        bool isAddress, bool isNotes, bool isPrintDate, bool isSign);
     //This method should be used by basic and advanced signature modes
     void startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
-                         QString reason, QString location, bool isTimestamp, bool isSmall);
+                         QString reason, QString location, bool isTimestamp, bool isLtv, bool isSmall);
     void startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outputFile, int page, double coord_x, double coord_y,
-                         QString reason, QString location, bool isTimestamp, bool isSmall);
+                         QString reason, QString location, bool isTimestamp, bool isLtv, bool isSmall);
     int getPDFpageCount(QString loadedFilePath);
     void closePdfPreview(QString filePath);
     void closeAllPdfPreviews();
@@ -360,7 +365,7 @@ public slots:
     void cancelCMDRegisterCert();
     void signOpenCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePath,
                   QString outputFile, int page, double coord_x, double coord_y, QString reason, QString location,
-                 bool isTimestamp, bool isSmall);
+                 bool isTimestamp, bool isLTV, bool isSmall);
     void signCloseCMD(QString sms_token, QList<int> attribute_list);
     void doOpenSignCMD(CMDSignature *cmd_signature, CmdParams &cmdParams, SignParams &signParams);
     void doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token);

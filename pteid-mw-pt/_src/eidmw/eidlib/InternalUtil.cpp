@@ -130,4 +130,22 @@ tLOG_Level ConvertLogLevel(PTEID_LogLevel level)
 	}
 }
 
+APL_SignatureLevel ConvertSignatureLevel(PTEID_SignatureLevel level)
+{
+    switch (level)
+    {
+    case PTEID_LEVEL_BASIC:
+        return LEVEL_BASIC;
+
+    case PTEID_LEVEL_TIMESTAMP:
+        return LEVEL_TIMESTAMP;
+
+    case PTEID_LEVEL_LTV:
+        return LEVEL_LTV;
+
+    default:
+        return LEVEL_BASIC;
+    }
+}
+
 }

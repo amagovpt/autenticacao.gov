@@ -1869,6 +1869,14 @@
         <source>STR_SEND_SMS_DESC</source>
         <translation>Para enviar novo código de segurança por SMS clique &quot;Enviar por SMS&quot;.</translation>
     </message>
+    <message>
+        <source>STR_SIGN_ADD_LTV</source>
+        <translation>Adicionar LTV</translation>
+    </message>
+    <message>
+        <source>STR_LTV_TOOLTIP</source>
+        <translation>A Validação de longo prazo (LTV) inclui provas da validade da cadeia de certificados utilizados na assinatura que permite no futuro confirmar que a assinatura era válida na hora em que o documento foi assinado. Para mais informações, consulte o manual da aplicação.</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>

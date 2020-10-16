@@ -47,6 +47,7 @@
 
 #include <stdio.h>
 #include <unordered_set>
+#include <string>
 #include "XRef.h"
 #include "Catalog.h"
 #include "Page.h"
@@ -89,6 +90,14 @@ public:
         this->type = type;
     }
 
+    ValidationDataElement(unsigned char *data, size_t dataSize, ValidationDataType type, std::unordered_set<std::string> &vriHashKeys) 
+        : ValidationDataElement(data, dataSize, type) {
+
+        for (auto const& key : vriHashKeys)
+            addVriKey(key.c_str());
+
+    }
+
     ~ValidationDataElement()
     {
         delete [] this->data;
@@ -110,7 +119,7 @@ public:
         vriHashKeys.insert(key);
     }
 
-    std::unordered_set<const char *> &getVriHashKeys() {
+    std::unordered_set<std::string> &getVriHashKeys() {
         return vriHashKeys;
     }
 
@@ -118,7 +127,7 @@ private:
     unsigned char *data;
     size_t dataSize;
     ValidationDataType type;
-    std::unordered_set<const char *> vriHashKeys;
+    std::unordered_set<std::string> vriHashKeys;
 };
 
 //------------------------------------------------------------------------

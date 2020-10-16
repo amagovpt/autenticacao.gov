@@ -907,12 +907,12 @@ void PDFDoc::addDSS(std::vector<ValidationDataElement *> validationData)
         Object vriEntry;
         for (auto const& key : validationData[i]->getVriHashKeys())
         {
-            vriObj.dictLookup(key, &vriEntry);
+            vriObj.dictLookup(key.c_str(), &vriEntry);
 
             if (vriEntry.isNull())
             {
                 vriEntry.initDict(xref);
-                vriObj.dictAdd((char *)key, &vriEntry);
+                vriObj.dictAdd((char *)key.c_str(), &vriEntry);
             }
 
             Object vriPointerArrayObj;

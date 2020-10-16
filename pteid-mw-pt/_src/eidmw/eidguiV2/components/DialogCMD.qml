@@ -759,6 +759,10 @@ Item {
         if (typeof propertySwitchSignTemp !== "undefined")
             isTimestamp = propertySwitchSignTemp.checked
 
+        var isLTV = false
+        if (typeof propertyCheckboxLTV !== "undefined")
+            isLTV = propertyCheckboxLTV.checked
+
         var reason = ""
         if (typeof propertyTextFieldReason !== "undefined")
             reason = propertyTextFieldReason.text
@@ -805,7 +809,7 @@ Item {
                              loadedFilePaths,outputFile,page,
                              coord_x,coord_y,
                              reason,location,
-                             isTimestamp, isSmallSignature)
+                             isTimestamp, isLTV, isSmallSignature)
         }
     }
 

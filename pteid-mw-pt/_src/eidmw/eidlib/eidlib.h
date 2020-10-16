@@ -797,6 +797,9 @@ class PTEID_PDFSignature
 		 * Using PTEID_Config with parameter PTEID_PARAM_XSIGN_TSAURL a different TSA may be specified
 		 **/
 		PTEIDSDK_API void enableTimestamp();
+
+		PTEIDSDK_API void setSignatureLevel(PTEID_SignatureLevel);
+
 		/**
 		 * Use a smaller format for the visible signature which is 50% smaller in height but as wide as the regular format
 		 * The default "Cartão de Cidadão" logo or a custom image supplied via setCustomImage() will not be included

@@ -70,7 +70,7 @@ namespace eIDMW
 		m_attributeSupplier = NULL;
 		m_attributeName = NULL;
 		m_batch_mode = true;
-		m_timestamp = false;
+		m_level = LEVEL_BASIC;
 		m_isLandscape = false;
 		m_small_signature = false;
 		my_custom_image.img_data = NULL;
@@ -99,7 +99,7 @@ namespace eIDMW
         m_attributeSupplier = NULL;
 		m_attributeName = NULL;
         m_batch_mode = false;
-        m_timestamp = false;
+        m_level = LEVEL_BASIC;
         m_isLandscape = false;
         m_small_signature = false;
         my_custom_image.img_data = NULL;
@@ -153,7 +153,7 @@ namespace eIDMW
 		m_attributeSupplier = NULL;
 		m_attributeName = NULL;
 		m_batch_mode = false;
-		m_timestamp = false;
+		m_level = LEVEL_BASIC;
 		m_isLandscape = false;
 		m_small_signature = false;
 		my_custom_image.img_data = NULL;
@@ -175,7 +175,12 @@ namespace eIDMW
 
 	void PDFSignature::enableTimestamp()
 	{
-		m_timestamp = true;
+		m_level = LEVEL_TIMESTAMP;
+	}
+
+	void PDFSignature::setSignatureLevel(APL_SignatureLevel level) 
+	{
+		m_level = level;
 	}
 
 	void PDFSignature::enableSmallSignature()
@@ -500,7 +505,7 @@ namespace eIDMW
 						cachedPin = true;
 						m_card->getCalReader()->setSSO(true);
 					}
-					m_timestamp = false; // disable timetamp for the next files
+					m_level = LEVEL_BASIC; // disable timetamp for the next files
 					throwTimestampError = true;
 				}
 			 }
@@ -786,10 +791,12 @@ namespace eIDMW
         /* Calculate hash */
         m_pkcs7 = PKCS7_new();
 
+        bool timestamp = (m_level == LEVEL_TIMESTAMP || m_level == LEVEL_LTV);
+
         CByteArray in_hash = computeHash_pkcs7( data, dataLen
                                                 , certificate
                                                 , certificate_cas
-                                                , m_timestamp
+                                                , timestamp
                                                 , m_pkcs7
                                                 , &m_signerInfo 
                                                 , isCardSign);
@@ -813,11 +820,13 @@ namespace eIDMW
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
 
+        bool timestamp = (m_level == LEVEL_TIMESTAMP || m_level == LEVEL_LTV);
+
         int return_code =
             getSignedData_pkcs7((unsigned char*)signature.GetBytes()
             , signature.Size()
             , m_signerInfo
-            , m_timestamp
+            , timestamp
             , m_pkcs7
             , &signature_contents);
 
@@ -828,7 +837,12 @@ namespace eIDMW
         m_doc->closeSignature(signature_contents);
         save();
 
-        addLtv();
+        if (m_level == LEVEL_LTV)
+        {
+            if(!addLtv()) {
+                return_code = 1;
+            }
+        }
 
         m_signStarted = false;
 
@@ -919,15 +933,7 @@ namespace eIDMW
 
     bool PDFSignature::addLtv() 
     {
-
         PAdESExtender padesExtender(this);
-        if (m_timestamp)
-        {
-            return padesExtender.addLTA();
-        }
-        else
-        {
-            return false;;
-        }
+        return padesExtender.addLTA();
     }
 }
