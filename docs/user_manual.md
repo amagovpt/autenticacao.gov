@@ -612,7 +612,7 @@ Os ficheiros a assinar podem ser selecionados arrastando-os para a área de pré
 
     - **Localização:** Local onde a assinatura foi efetuada – campo opcional - permite ao signatário indicar o local onde esta assinatura foi efetuada. Disponível para assinaturas do tipo **PDF**.
 
-    - **Adicionar selo temporal:** Adiciona um selo temporal, provando a data à qual a assinatura foi efetuada. Esta é a única forma de provar que o documento existia a determinada hora, pois é aplicada ao documento a data e hora que este está a ser assinado, de forma segura. Note-se que a hora apresentada no selo visível é a hora local do computador onde foi efetuada a assinatura e pode não coincidir com a hora do selo temporal (obtida a partir de um servidor remoto). Disponível para assinaturas do tipo **PDF** e **Outros Ficheiros**.
+    - **Adicionar selo temporal:** Adiciona um selo temporal, provando a data à qual a assinatura foi efetuada. Esta é a única forma de provar que o documento existia a determinada hora, pois é aplicada ao documento a data e hora que este está a ser assinado, de forma segura. Note-se que a hora apresentada no selo visível é a hora local do computador onde foi efetuada a assinatura e pode não coincidir com a hora do selo temporal (obtida a partir de um servidor remoto). Disponível para assinaturas do tipo **PDF** e **Outros Ficheiros**. [Ver tópico Serviço de Selos Temporais na página Configuração de assinaturas](#configuração-de-assinaturas)
 
     - **Adicionar atributos profissionais:** A funcionalidade de assinatura de profissionais permite ao cidadão autenticar-se na qualidade das funções que desempenha na sociedade enquanto profissional qualificado. Na secção [Atributos Profissionais](#atributos-profissionais) é indicado o procedimento para carregar os atributos profissionais. Disponível para assinaturas do tipo **PDF**.
 
@@ -809,6 +809,23 @@ durante a inserção e remoção do cartão.
 
 - **Serviço de Selos Temporais:** Configurar um serviço de selos temporais
 personalizado.
+
+    A aplicação permite seleccionar uma servidor diferente para a obtenção de
+    selos temporais, uma vez que o servidor por defeito do Cartão do Cidadão
+    ([http://ts.cartaodecidadao.pt/tsa/server](http://ts.cartaodecidadao.pt/tsa/server))
+    tem um limite máximo de 20 pedidos em cada período de 20 minutos que
+    se podem efectuar. Se este valor for excedido o serviço será bloqueado durante 24 horas, 
+    sem prejuízo de outras consequências em caso de repetição de situações de bloqueio. 
+    (para mais informações sobre o serviço de selo temporal/timestamps
+    do Cartão do Cidadão, consulte a página
+    [https://pki.cartaodecidadao.pt](https://pki.cartaodecidadao.pt)).
+
+    Para usar um servidor diferente basta introduzir o url do servidor na caixa de texto.
+
+    Após esta configuração tanto as assinaturas de documentos PDF (PAdES)
+    bem como a assinaturas em formato XAdES vão usar este novo servidor
+    configurado para obter os selos temporais ao assinar.
+
 
 - **Microsoft Office (Windows):** Configurações relativas a assinaturas em
 aplicações do Microsoft Office.

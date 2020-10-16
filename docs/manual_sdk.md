@@ -1121,7 +1121,9 @@ O SDK permite seleccionar uma servidor diferente para a obtenção de
 selos temporais, uma vez que o servidor por defeito do Cartão do Cidadão
 ([http://ts.cartaodecidadao.pt/tsa/server](http://ts.cartaodecidadao.pt/tsa/server))
 tem um limite máximo de 20 pedidos em cada período de 20 minutos que
-se podem efectuar (para mais informações sobre o serviço de selo temporal/timestamps
+se podem efectuar. Se este valor for excedido o serviço será bloqueado durante 24 horas, 
+sem prejuízo de outras consequências em caso de repetição de situações de bloqueio. 
+(para mais informações sobre o serviço de selo temporal/timestamps
 do Cartão do Cidadão, consulte a página
 [https://pki.cartaodecidadao.pt](https://pki.cartaodecidadao.pt)).
 
