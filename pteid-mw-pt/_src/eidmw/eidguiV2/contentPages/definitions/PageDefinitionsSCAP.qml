@@ -189,23 +189,24 @@ PageDefinitionsSCAPForm {
                     }
                 }
                 console.log(popupMsg)
+
                 if(pdfsignresult == GAPI.ScapMultiEntityError){
                     titlePopup = qsTranslate("PageDefinitionsSCAP","STR_WARNING")
                     bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_MULTI_ENTITIES_FIRST")
                             + " " + popupMsg + " "
-                            + qsTranslate("PageDefinitionsSCAP","STR_SCAP_MULTI_ENTITIES_SECOND")
+                            + "<b>" + qsTranslate("PageDefinitionsSCAP","STR_SCAP_MULTI_ENTITIES_SECOND") + "</b>"
                             + "<br><br>"
                             + qsTranslate("PageDefinitionsSCAP","STR_SCAP_MULTI_ENTITIES_THIRD")
                 }else if(pdfsignresult == GAPI.ScapAttributesExpiredError){
                     bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_FIRST")
                             + " " + popupMsg + " "
-                            + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_SECOND")
+                            + "<b>" + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_SECOND") + "</b>"
                             + "<br><br>"
                             + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_THIRD")
                             + " " + popupMsg + "."
                 }else if(pdfsignresult == GAPI.ScapZeroAttributesError){
                     console.log("ScapZeroAttributesError")
-                    bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST")
+                    bodyPopup = "<b>" + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST") + "</b>"
                             + " " + popupMsg + "."
                             + "<br><br>"
                             + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND")
@@ -220,10 +221,8 @@ PageDefinitionsSCAPForm {
             popupMsg = ""
 
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-            // Load attributes from cache (Entities, ShortDescription)
-            isLoadingCache = true
-            gapi.startLoadingAttributesFromCache(GAPI.ScapAttrEntities,
-                                                 GAPI.ScapAttrDescriptionShort)
+
+            propertyBusyIndicatorAttributes.running = false
             propertyBusyIndicator.running = false
         }
         onSignalSCAPPingSuccess: {
