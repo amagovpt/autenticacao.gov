@@ -20,8 +20,8 @@
 %endif
 %endif
 
-%define git_revision git20200226
-%define app_version 3.1.0
+%define git_revision git20201016
+%define app_version 3.3.0
 
 Name:           pteid-mw
 BuildRequires:  pcsc-lite-devel make swig
@@ -92,9 +92,6 @@ Source1:        pteid-mw-gui.desktop
 Source2:        pteid-scalable.svg
 Source3:        pteid-signature.png
 
-#Patch0:         xml-security-2.patch
-#Patch1:         fix-qt5.11-build-qicon.patch
-#Patch2:         openssl1.1-support-eidguiV2.patch
 %if 0%{?suse_version}
 BuildRequires:  update-desktop-files
 %endif
@@ -109,10 +106,6 @@ Requires(postun): /usr/bin/gtk-update-icon-cache
  in certain websites and sign documents.
 %prep
 %setup -q -n pteid-mw_%{app_version}-%{git_revision}
-
-#%if 0%{?fedora} < 30
-#%patch0 -R -p0
-#%endif
 
 
 %build
@@ -281,6 +274,11 @@ fi
 /usr/local/share/certs
 
 %changelog
+* Fri Oct 16 2020 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+  - SCAP signature with timestamp is a new option
+  - Small format signature in simple signature menu
+  - Commandline interface in the GUI app as a shortcut for signature features
+
 * Wed Feb 26 2020 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   - CC PKI certificates self-update
   - GUI scaling options to better support high-DPI screens

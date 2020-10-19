@@ -1,3 +1,15 @@
+pteid-mw (3.3.0+git20201016) UNRELEASED; urgency=medium
+
+  * SCAP signature with timestamp is a new option
+  * Small format signature in simple signature menu
+  * Commandline interface in the GUI app as a shortcut for signature features
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Fri, 16 Oct 2020 12:20:26 +0100
+pteid-mw (3.1.1+git20200520) UNRELEASED; urgency=medium
+
+  * Address change bugfix for Ubuntu 20.04 - TLS connection error
+  * Fix regression in certificate status for inactive/suspended certificates
+
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Wed, 20 May 2020 12:20:26 +0100
 pteid-mw (3.1.0+git20200226) UNRELEASED; urgency=medium
 
   * CC PKI certificates update feature
