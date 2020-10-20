@@ -40,6 +40,7 @@
     - [Leitura dos certificados digitais presentes no cartão de cidadão](#leitura-dos-certificados-digitais-presentes-no-cart%c3%a3o-de-cidad%c3%a3o)
   - [Sessão segura](#sess%c3%a3o-segura)
 - [Tratamento de erros](#tratamento-de-erros)
+- [API PKCS#11](#api-pkcs11)
 - [Compatibilidade com o SDK da versão 1](#compatibilidade-com-o-sdk-da-vers%c3%a3o-1)
   - [Métodos removidos](#m%c3%a9todos-removidos)
   - [Diferenças no comportamento de alguns métodos](#diferen%c3%a7as-no-comportamento-de-alguns-m%c3%a9todos)
@@ -55,17 +56,10 @@ middleware versão 3 do Cartão de Cidadão.
 
 Esta versão do SDK disponibiliza a mesma interface (API) que a
 disponibilizada na versão 1 e 2 do SDK. Desta forma, pretende-se obter a
-retro-compatibilidade entre versões anteriores do SDK. Embora a API
+retro-compatibilidade com versões anteriores do SDK. Embora a API
 anterior continue disponível, esta é desaconselhada pois a nova API
 cobre a maior parte dos casos de uso da anterior e tem funcionalidades
 novas.
-
-Para obter informação detalhada sobre a API do middleware da versão 1
-deverá consultar o
-["*Manual técnico do Middleware Cartão de Cidadão*"- versão 1.61](https://www.autenticacao.gov.pt/documents/10179/11463/Manual+Técnico+do+Middleware+do+Cartão+de+Cidadão/07e69665-9f1a-41c8-b3f5-c6b2e182d697).
-
-Na secção [**Tratamento de Erros**](#tratamento-de-erros) as diferenças existentes
-na implementação desta API.
 
 A secção [**Compatibilidade com o SDK da versão 1**](#compatibilidade-com-o-sdk-da-vers%c3%a3o-1)
 contém informações relativamente à continuação da
@@ -1326,6 +1320,68 @@ estão expostas às aplicações em:
 
   - Java: membros públicos da interface **pteidlib_JavaWrapperConstants**
   com o prefixo EIDMW
+
+# API PKCS#11
+
+É possível o acesso aos certificados e operações associadas do CC através de uma API standard e multi-plataforma para dispositivos criptográficos
+que está descrita na norma PKCS#11([http://docs.oasis-open.org/pkcs11/pkcs11-base/v2.40/os/pkcs11-base-v2.40-os.html](http://docs.oasis-open.org/pkcs11/pkcs11-base/v2.40/os/pkcs11-base-v2.40-os.html)).
+
+
+Aplicações que possam utilizar vários tipos de certificados e/ou dispositivos de autenticação/assinatura podem deste modo aceder às operações disponibilizadas
+pelo CC através de uma API comum se tiverem em conta as especificidades que indicamos em seguida.
+
+Por exemplo em aplicações Java é possível utilizar o módulo pteid-pkcs11 incluído no middleware do CC através do *Security Provider* "SunPKCS11"
+da seguinte forma:
+
+```Java
+    /* Exemplo de carregamento do "token" PKCS#11 que permite aceder às operações do CC */
+    
+    /*
+       O ficheiro de configuração indicado no método configure() serve para indicar o caminho no
+       sistema atual onde se encontra o módulo PKCS#11 que pretendemos carregar.
+       Por exemplo, num sistema Linux a configuração deve ter o seguinte conteúdo:
+       
+       name = PortugaleId
+       library = /usr/local/lib/libpteidpkcs11.so
+
+       Para sistemas Windows a propriedade library deve ter o valor C:\Windows\System32\pteidpkcs11.dll
+       e em MacOS /usr/local/lib/libpteidpkcs11.dylib
+    */
+    Provider p = Security.getProvider("SunPKCS11");
+    p = p.configure(config_file);
+
+    Security.addProvider(p);
+
+    Keystore ks = KeyStore.getInstance ("PKCS11", p);
+    try {
+
+       // Initialize the PKCS#11 token
+       ks.load (null, null);
+
+    }
+    catch (IOException | NoSuchAlgorithmException | CertificateException e) {
+      System.err.println ("Exception while initializing PKCS#11 token:" + e );
+    }
+
+    /* O 2º parâmetro password que para outros módulos seria passado no método getKey()
+       não corresponde ao PIN que protege o uso da chave privada do CC e por isso deve ser passado a null
+       O módulo pteid-pkcs11 vai gerir internamente os pedidos de PIN ao utilizador através de
+       janelas de diálogo idênticas às que são usadas nos métodos de assinatura do SDK, p.ex. 
+       PTEID_EIDCard.Sign()
+
+       Se pretender utilizar a chave privada de autenticação a label que se deve passar ao 
+       método getKey() será "CITIZEN AUTHENTICATION CERTIFICATE" */
+
+    Key key_handle = ks.getKey("CITIZEN SIGNATURE CERTIFICATE", null);
+
+    /* Os algoritmos de assinatura suportados pelo Cartão de Cidadão via PKCS#11 são 
+       os seguintes e podem ser especificados através do método Signature.getInstance():
+       - SHA256withRSA (recomendado)
+       - SHA1withRSA
+    */
+
+```
+
 
 # Compatibilidade com o SDK da versão 1
 
