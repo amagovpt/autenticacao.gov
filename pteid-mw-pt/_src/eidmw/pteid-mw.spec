@@ -149,6 +149,9 @@ mkdir -p $RPM_BUILD_ROOT/usr/local/share/certs/
 install -m 755 -p misc/certs/*.der $RPM_BUILD_ROOT/usr/local/share/certs/
 install -m 755 -p misc/certs/*.pem $RPM_BUILD_ROOT/usr/local/share/certs/
 
+mkdir -p $RPM_BUILD_ROOT/usr/local/share/pteid-mw/www/
+install -m 755 -p misc/web/*.html $RPM_BUILD_ROOT/usr/local/share/pteid-mw/www/
+
 mkdir -p $RPM_BUILD_ROOT/usr/local/lib/pteid_jni/
 install -m 755 -p jar/pteidlibj.jar $RPM_BUILD_ROOT/usr/local/lib/pteid_jni/
 
