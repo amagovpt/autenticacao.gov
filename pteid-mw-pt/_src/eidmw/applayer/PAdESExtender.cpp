@@ -22,8 +22,6 @@
 #include <openssl/x509.h>
 #include <openssl/ocsp.h>
 
-#include <unordered_map> 
-
 namespace eIDMW
 {
     PAdESExtender::PAdESExtender(PDFSignature *signedPdfDoc) 
@@ -112,7 +110,6 @@ namespace eIDMW
 	void PAdESExtender::addOCSPCertToValidationData(CByteArray &ocsp_response_ba) {
 		MWLOG(LEV_DEBUG, MOD_APL, "Entering new function %s", __FUNCTION__);
 		const unsigned char *p = ocsp_response_ba.GetBytes();
-		ValidationDataElement *vde = NULL; 
 		OCSP_RESPONSE *resp = d2i_OCSP_RESPONSE(NULL, &p, ocsp_response_ba.Size());
 		
 
@@ -125,9 +122,8 @@ namespace eIDMW
 					X509 *cert = sk_X509_value(certs, i);
 					unsigned char * der_data = NULL;
 					int data_len = X509_to_DER(cert, &der_data);
-					vde = new ValidationDataElement(der_data, data_len, ValidationDataElement::CERT);
-					m_validationData.push_back(vde);
-
+					ValidationDataElement vde(der_data, data_len, ValidationDataElement::CERT);
+					addValidationElement(vde);
 				}
 
 			}
@@ -140,6 +136,33 @@ namespace eIDMW
 
 	}
 
+    ValidationDataElement* PAdESExtender::addValidationElement(ValidationDataElement &elem)
+    {
+   
+        if (elem.getType() == ValidationDataElement::CERT)
+        {
+            X509 *pX509 = NULL;
+            const unsigned char * data = elem.getData();
+            int size = elem.getSize();
+            pX509 = d2i_X509(&pX509, &data, size);
+
+            signed long uniqueCertId = X509_issuer_and_serial_hash(pX509);
+            if (m_certsInDoc.find(uniqueCertId) != m_certsInDoc.end())
+            {
+                return m_certsInDoc.at(uniqueCertId);
+            }
+
+            /* If the cert has not been added to validation data, create new element. */
+            ValidationDataElement *newElem = new ValidationDataElement(elem);
+            m_certsInDoc.insert(std::pair<unsigned long, ValidationDataElement *>(uniqueCertId, newElem));
+            m_validationData.push_back(newElem);
+            return newElem;
+        }
+        ValidationDataElement *newElem = new ValidationDataElement(elem);
+        m_validationData.push_back(newElem);
+        return newElem;
+    }
+
     bool PAdESExtender::addLT()
     {
         // TODO: verify if T first. Extend if not
@@ -149,8 +172,6 @@ namespace eIDMW
 
         PDFDoc *doc = m_signedPdfDoc->m_doc;
         APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
-
-        std::unordered_map<unsigned long, ValidationDataElement *> certsInDoc;
 
         const char *hexHash = NULL;
         unsigned char *signatureContents = NULL;
@@ -233,31 +254,19 @@ namespace eIDMW
                     goto cleanup;
                 }
 
-                ValidationDataElement *certElem;
-                unsigned long uniqueCertId = X509_issuer_and_serial_hash(cert);
-                if (certsInDoc.find(uniqueCertId) == certsInDoc.end())
-                {
-                    /* If the cert has not been added to validation data, create new element. */
-                    certElem = new ValidationDataElement(certBytes, len, ValidationDataElement::CERT);
-                    certsInDoc.insert(std::pair<unsigned long, ValidationDataElement *>(uniqueCertId, certElem));
-                }
-                else
-                {
-                    certElem = certsInDoc.at(uniqueCertId);
-                }
-                certElem->addVriKey(hexHash);
+                ValidationDataElement certElem(certBytes, len, ValidationDataElement::CERT);
+                ValidationDataElement *addedElem = addValidationElement(certElem);
+                addedElem->addVriKey(hexHash);
             }
         }
 
-        /* Copy map to validationData vector */
-        for (auto const& cert : certsInDoc)
-            m_validationData.push_back(cert.second);
-
         /* For the certificates to validate, look for the issuer certificate (such that the subject name is
         equal to the subject name of the current certificate) and add the revocation data. */
-        size_t validationDataSize = m_validationData.size();
-        for (size_t i = 0; i <  validationDataSize; i++)
+        for (size_t i = 0; i < m_validationData.size(); i++)
         {
+            if (m_validationData[i]->getType() != ValidationDataElement::CERT)
+                continue;
+            
             size_t subjLen = m_validationData[i]->getSize();
             CByteArray certDataByteArray(m_validationData[i]->getData(), subjLen);
             
@@ -268,8 +277,11 @@ namespace eIDMW
 			MWLOG(LEV_DEBUG, MOD_APL, "### %s: adding revocation info for certificate: %s", __FUNCTION__, certificate_subject_from_der(certDataByteArray));
             
             bool foundIssuer = false;
-            for (j = 0; j < validationDataSize; j++)
+            for (j = 0; j < m_validationData.size(); j++)
             {
+                if (m_validationData[j]->getType() != ValidationDataElement::CERT)
+                    continue;
+
                 issuerLen = m_validationData[j]->getSize();
                 issuerCertDataByteArray.ClearContents();
                 issuerCertDataByteArray.Append(m_validationData[j]->getData(), issuerLen);
@@ -288,9 +300,9 @@ namespace eIDMW
 				//Try to find issuer in eidstore certificates
 				foundIssuer = findIssuerInEidStore(cryptoFwk, certDataByteArray, issuerCertDataByteArray);
 				if (foundIssuer) {
-					auto *vde = 
-						new ValidationDataElement(issuerCertDataByteArray.GetBytes(), issuerCertDataByteArray.Size(), ValidationDataElement::CERT, m_validationData[i]->getVriHashKeys());
-					m_validationData.push_back(vde);
+                    ValidationDataElement vde(issuerCertDataByteArray.GetBytes(), 
+                        issuerCertDataByteArray.Size(), ValidationDataElement::CERT, m_validationData[i]->getVriHashKeys());
+					addValidationElement(vde);
 				}
 
 			}
@@ -328,15 +340,15 @@ namespace eIDMW
                     continue;
                 }
                 CByteArray crl = crlFetcher.fetch_CRL_file(crlUrl.c_str());
-                ValidationDataElement *crlElem = new ValidationDataElement(crl.GetBytes(), crl.Size(), ValidationDataElement::CRL, m_validationData[i]->getVriHashKeys());
-                m_validationData.push_back(crlElem);
+                ValidationDataElement crlElem(crl.GetBytes(), crl.Size(), ValidationDataElement::CRL, m_validationData[i]->getVriHashKeys());
+                addValidationElement(crlElem);
                 continue;
             }
 
 			addOCSPCertToValidationData(response);
 
-            ValidationDataElement *ocspResponseElem = new ValidationDataElement(response.GetBytes(), response.Size(), ValidationDataElement::OCSP, m_validationData[i]->getVriHashKeys());
-            m_validationData.push_back(ocspResponseElem);
+            ValidationDataElement ocspResponseElem(response.GetBytes(), response.Size(), ValidationDataElement::OCSP, m_validationData[i]->getVriHashKeys());
+            addValidationElement(ocspResponseElem);
         
 		}  //End of outer loop
 

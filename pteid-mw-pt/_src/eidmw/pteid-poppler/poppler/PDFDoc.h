@@ -95,7 +95,17 @@ public:
 
         for (auto const& key : vriHashKeys)
             addVriKey(key.c_str());
+    }
 
+    ValidationDataElement(const ValidationDataElement &vde)
+    {
+        this->data = new unsigned char[vde.dataSize];
+        memcpy((char*)this->data, (char*)vde.data, vde.dataSize);
+        this->dataSize = vde.dataSize;
+        this->type = vde.type;
+
+        for (auto const& key : vde.vriHashKeys)
+            addVriKey(key.c_str());
     }
 
     ~ValidationDataElement()
