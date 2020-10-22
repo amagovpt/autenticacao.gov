@@ -66,6 +66,7 @@
   - [O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão](#o-leitor-de-cartões-está-instalado-mas-não-é-detetado-pela-aplicação-do-cartão-de-cidadão)
   - [Não são detetados quaisquer certificados durante a tentativa de assinatura na suite *LibreOffice / Apache OpenOffice*](#não-são-detetados-quaisquer-certificados-durante-a-tentativa-de-assinatura-na-suite-libreoffice--apache-openoffice)
   - [Problemas com placas gráficas integradas](#problemas-com-placas-gráficas-integradas)
+  - [Aplicação não arranca](#aplicação-não-arranca)
 - [Interface de linha de comandos](#interface-de-linha-de-comandos)
   - [Consultar ajuda e versão](#consultar-ajuda-e-versão)
   - [Atalho para submenus de assinatura](#atalho-para-submenus-de-assinatura)
@@ -779,9 +780,25 @@ suporte na resolução do problema.
     `MacOS: Directoria Home do utilizador i.e.: /Users/Utilizador/`
 
     `Linux: Directoria Home do utilizador i.e.: /home/Utilizador/`
+  
+    **No caso da aplicação não arrancar**, é possivel alterar essa opção usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
+
+    - Em **Windows**, a chave de registo: **HKEY\_CURRENT\_USER\\Software\\PTEID\\logging\\log_level**;
+
+    - Em **Linux**, a chave com nome "log_level" na secção logging do ficheiro **$HOME/.config/pteid.conf**;
+
+    - Em **MacOS**, a chave com nome "log_level" na secção logging do ficheiro **$HOME/Library/Preferences/pteid.conf**.
+
+    Os valores que a chave pode tomar são:
+    - debug ( em caso de problemas com a aplicação, pode ajudar a equipa de suporte na resolução do problema )
+    - info 
+    - warning 
+    - error (default)
+
+    Em ambiente empresariais deve alterar a seguinte configuração conforme descrito no capítulo [Instruções de configuração em ambientes empresariais](#instruções-de-configuração-em-ambientes-empresariais).
 
 - **Aceleração gráfica**: Permite ativar escolher o modo de renderização gráfica da
-aplicação. A opção *"Hardware (Placa gráfica)"* deverá oferecer um melhor desempenho, mas em caso de problemas poderá ser necessário configurar uma opção alternativa (ver secção [Problemas com placas gráficas em Windows](#problemas-com-placas-gráficas-integradas-em-windows).)
+aplicação. A opção *"Hardware (Placa gráfica)"* deverá oferecer um melhor desempenho, mas em caso de problemas poderá ser necessário configurar uma opção alternativa (ver secção [Problemas com placas gráficas em Windows](#problemas-com-placas-gráficas-integradas).)
 
 - **Configurações de rede:** Opções relativas à configuração de servidor
 de proxy. Em redes onde o acesso à Internet só é possível através de
@@ -1317,11 +1334,9 @@ Para mais informações consultar a página de ajuda:
 
 No caso de existirem problemas gráficos, recomenda-se alterar o modo de renderização gráfica. Pode fazê-lo na secção Aceleração gráfica do submenu [Configuração da aplicação](#configuração-da-aplicação).
 
-No caso da aplicação não arrancar, é possivel alterar essa opção usando as configurações do software Autenticação.gov.
+**No caso da aplicação não arrancar**, é possivel alterar essa opção usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
 
-- Em **Windows**, a chave de registo 
-  
-  **HKEY\_CURRENT\_USER\\Software\\PTEID\\configuretool\\graphics\_accelaration**;
+- Em **Windows**, a chave de registo **HKEY\_CURRENT\_USER\\Software\\PTEID\\configuretool\\graphics\_accelaration**;
 
 - Em **Linux**, a chave com nome "graphics_accelaration" na secção “configuretool” do ficheiro **$HOME/.config/pteid.conf**;
 
@@ -1333,6 +1348,12 @@ Os valores que a chave pode tomar são:
 - 2 (Exclusivo para Windows) para renderização por Software (ANGLE, que emula o OpenGL usando Direct3D).
 
 Em ambiente empresariais deve alterar a seguinte configuração conforme descrito no capítulo [Instruções de configuração em ambientes empresariais](#instruções-de-configuração-em-ambientes-empresariais).
+
+## Aplicação não arranca
+
+No caso da aplicação não arrancar e consequentemente não ser possivel alterar as configurações da aplicação na aplicação, é possivel alterar as opções da aplicação usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
+
+Uma causa que pode causar problemas está relacionado com a placa gráfica do computador [Problemas com placas gráficas em Windows](#problemas-com-placas-gráficas-integradas).
 
 # Interface de linha de comandos
 
@@ -1395,17 +1416,20 @@ guardadas em sub-chaves de:
 
 `HKCU\Software\PTEID`
 
+Pode-se, no entanto, configurar de forma padronizada uma instalação
+adicionando alguns valores no registo do *Windows* para todos os
+utilizadores da máquina após a instalação do software, usando as chaves listadas
+abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
+
 **Nota:** Não se devem nunca remover ou alterar os seguintes registos:
 
 `HKLM\Software\PTEID\general\install_dirname`
 
 `HKLM\Software\PTEID\general\certs_dir`
 
-Pode-se, no entanto, configurar de forma padronizada uma instalação
-adicionando alguns valores no registo do *Windows* para todos os
-utilizadores da máquina após a instalação do software, usando as chaves listadas
-abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
+Os seguintes registos podem ser adicionados:
 
+---
 `HKLM\Software\PTEID\logging\log_level`
 - **Tipo**: String (debug, info, warning, error)
 - **Descrição**: Nível de detalhe do log do Middleware e da aplicação.
@@ -1424,14 +1448,6 @@ abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
   - **Tipo**: String
   - **Descrição**: Prefixo do nome dos ficheiros de log.
   - **Valor por omissão**: `.PTEID_`
-
----
-
-`HKLM\Software\PTEID\general\install_dirname`
-
-  - **Tipo**: String
-  - **Descrição**: Directoria onde é instalado o Middleware e a aplicação.
-  - **Valor por omissão**: `C:\Program Files\Portugal Identity Card`
 
 ---
 
