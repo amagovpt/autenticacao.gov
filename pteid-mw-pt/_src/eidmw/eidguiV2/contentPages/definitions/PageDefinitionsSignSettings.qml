@@ -3,7 +3,7 @@
  * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2019 - 2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -33,9 +33,8 @@ PageDefinitionsSignSettingsForm {
             propertyCheckboxRegister.checked ? gapi.setRegCertValue(true) :
                                                gapi.setRegCertValue(false)
             if (propertyCheckboxRegister.enabled) {
-                var titlePopup = qsTranslate("Popup Card","STR_POPUP_REGISTER_CERTIFICATE") + controler.autoTr
-                var bodyPopup = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
-                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                restart_dialog.headerTitle = qsTranslate("Popup Card","STR_POPUP_REGISTER_CERTIFICATE") + controler.autoTr
+                restart_dialog.open()
             }
         }
     }
@@ -45,9 +44,8 @@ PageDefinitionsSignSettingsForm {
                                              gapi.setRemoveCertValue(false)
 
             if (propertyCheckboxRemove.enabled) {
-                var titlePopup = qsTranslate("Popup Card","STR_POPUP_REMOVE_CERTIFICATE") + controler.autoTr
-                var bodyPopup = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
-                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                restart_dialog.headerTitle = qsTranslate("Popup Card","STR_POPUP_REMOVE_CERTIFICATE") + controler.autoTr
+                restart_dialog.open()
             }
         }
     }
@@ -106,6 +104,12 @@ PageDefinitionsSignSettingsForm {
                 propertyCheckboxDisable.checked = controler.getOutlookSuppressNameChecks()
         } else {
             propertyRectOffice.visible = false
+        }
+
+        if (Qt.platform.os === "windows") {
+            propertyCheckboxCMDRegRemember.checked = !controler.getAskToRegisterCmdCertValue()
+        } else {
+            propertyRectLoadCMDCerts.visible = false
         }
 
         if (Qt.platform.os === "windows") {

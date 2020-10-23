@@ -42,6 +42,21 @@
     <ClCompile Include="dlgWndCmdMsg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="components\button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\editField.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dlgUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dialogs.h">
@@ -80,6 +95,12 @@
     <ClInclude Include="dlgWndCmdMsg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="components\pteidControls.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dlgUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DlgsWin32.rc">
@@ -90,31 +111,13 @@
     <Image Include="Images\ICO_BELPIC.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Images\ICO_CARD_INFO_64x64.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\ICO_CARD_NOK_64x64.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\ICO_CARD_PIN_128x128.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\ICO_CARD_QUESTION_64x64.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\ICO_CARD_SIGN_128x128.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\ICO_CARD_WARNING_64x64.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Images\error.ico">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Images\warning.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="images\icon2.ico">
+    <Image Include="Images\autenticacao.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

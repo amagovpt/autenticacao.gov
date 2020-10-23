@@ -5,7 +5,7 @@
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -37,7 +37,6 @@ PageCardPrintForm {
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - createsuccess_dialog.width * 0.5
         y: parent.height * 0.5 - createsuccess_dialog.height * 0.5
-        modal: true
 
         header: Label {
             id: createdSuccTitle
@@ -140,7 +139,8 @@ PageCardPrintForm {
             }
         }
         onRejected:{
-            createsuccess_dialog.open()
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
         }
         onClosed: {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
@@ -168,13 +168,11 @@ PageCardPrintForm {
             var titlePopup = qsTr("STR_PRINT_CREATE_PDF")
             var bodyPopup = qsTr("STR_PRINT_CREATE_PDF_FAIL")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-            propertyBusyIndicator.running = false
         }
         onSignalPrinterPrintSucess: {
             var titlePopup = qsTr("STR_PRINT_PRINTER")
             var bodyPopup = qsTr("STR_PRINT_PRINTER_SUCESS")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-            propertyBusyIndicator.running = false
         }
         onSignalPrinterPrintFail: {
             console.log("got error on printer print failed "  + error_code)
@@ -187,7 +185,6 @@ PageCardPrintForm {
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
 
-            propertyBusyIndicator.running = false
         }
         onSignalCardDataChanged: {
             console.log("Data Card Print --> Data Changed")
@@ -226,6 +223,9 @@ PageCardPrintForm {
             }
             else if (error_code == GAPI.CardPinTimeout) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
+            }
+            else if (error_code == GAPI.IncompatibleReader) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
             }
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
@@ -271,7 +271,7 @@ PageCardPrintForm {
     propertyFileDialogOutput {
         onAccepted: {
 
-            outputFile = propertyFileDialogOutput.fileUrl.toString()
+            outputFile = propertyFileDialogOutput.file.toString()
             console.log("Output filename on Accepted: " + outputFile)
             
             outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
@@ -283,13 +283,12 @@ PageCardPrintForm {
                                propertySwitchNotes.checked,
                                propertySwitchPrintDate.checked,
                                propertySwitchPdfSign.checked)
-            propertyBusyIndicator.running = true
         }
     }
 
     propertyButtonPdf {
         onClicked: {
-            propertyFileDialogOutput.filename = propertySwitchPdfSign.checked ? "CartaoCidadao_signed.pdf" : "CartaoCidadao.pdf"
+            propertyFileDialogOutput.currentFile = propertyFileDialogOutput.folder + (propertySwitchPdfSign.checked ? "/CartaoCidadao_signed.pdf" : "/CartaoCidadao.pdf")
             propertyFileDialogOutput.open()
         }
     }

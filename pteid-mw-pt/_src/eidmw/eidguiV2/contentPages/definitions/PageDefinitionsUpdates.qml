@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -26,7 +26,7 @@ PageDefinitionsUpdatesForm {
     Connections {
         target: controler
         onSignalAutoUpdateFail: {
-            console.log("onSignalAutoUpdateFail updateType: " + updateType + "error_code: " + error_code)
+            console.log("onSignalAutoUpdateFail updateType: " + updateType + ", error_code: " + error_code)
             var tempTextDescription = ""
             if (error_code == GAPI.GenericError) {
                 tempTextDescription =
@@ -119,9 +119,8 @@ PageDefinitionsUpdatesForm {
             propertyButtonCancelUpdateCerts.visible = false
             propertyReleaseNoteScrollViewCerts.visible = false
             propertyReleaseScrollViewTextCerts.visible = false
-            var titlePopup = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES")
-            var bodyPopup = qsTranslate("Popup Card","STR_POPUP_RESTART_APP")
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            restart_dialog.headerTitle = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES") + controler.autoTr
+            restart_dialog.open()
         }
         onSignalAutoUpdateAvailable: {
             console.log("PageDefinitionsUpdates onSignalAutoUpdateAvailable")
@@ -228,10 +227,10 @@ PageDefinitionsUpdatesForm {
     }
     propertyButtonCancelUpdate {
         onClicked: {
-            console.log("propertyButtonCancelUpdate clicked")
+            console.log("propertyButtonCancelAppUpdate clicked")
             propertyProgressBar.visible = false
             propertyButtonSearch.visible = true
-            controler.userCancelledUpdateDownload()
+            controler.userCancelledUpdateAppDownload()
             propertyTextDescription.forceActiveFocus()
         }
     }

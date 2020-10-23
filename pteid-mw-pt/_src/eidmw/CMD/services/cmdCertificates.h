@@ -22,6 +22,7 @@ namespace eIDMW {
         int ImportCertificatesClose(std::string otp);
         void CancelImport();
         void GetRegisteredPhoneNumbers(std::vector<std::string> *phoneNumsOut);
+        int sendSms();
 
     private:
         int fetchCertificates(std::string otp);

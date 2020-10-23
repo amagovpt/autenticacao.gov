@@ -6,7 +6,7 @@
  * Copyright (C) 2018-2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -72,6 +72,7 @@ AppController::AppController(GUISettings& settings,QObject *parent) :
               "CpuArch: %s ProductName: %s\n",
               QSysInfo::currentCpuArchitecture().toStdString().c_str(),
               QSysInfo::prettyProductName().toStdString().c_str());
+    createCacheDir();
     checkUpdateCertslog();
     checkUpdateNewslog();
 }
@@ -248,20 +249,21 @@ bool AppController::LoadTranslationFile(QString NewLanguage)
     QString translations_dir;
     strTranslationFile = QString("eidmw_") + NewLanguage;
 
-    qDebug() << "C++: AppController LoadTranslationFile" << strTranslationFile << m_Settings.getExePath();
 #ifdef __APPLE__
     translations_dir = m_Settings.getExePath()+"/../Resources/";
 #else
     translations_dir = m_Settings.getExePath()+"/";
-#endif    
+#endif
+
+    qDebug() << "C++: AppController LoadTranslationFile" << strTranslationFile << translations_dir;
 
     if (!m_translator.load(strTranslationFile,translations_dir))
     {
         // this should not happen, since we've built the menu with the translation filenames
         strTranslationFile = QString("eidmw_") + STR_DEF_GUILANGUAGE;
         //try load default translation file
-        qDebug() << "C++: AppController LoadTranslationFile" << strTranslationFile << m_Settings.getExePath();
-        if (!m_translator.load(strTranslationFile,m_Settings.getExePath()+"/"))
+        qDebug() << "C++: AppController LoadTranslationFile" << strTranslationFile << translations_dir;
+        if (!m_translator.load(strTranslationFile,translations_dir))
         {
             // this should not happen too, since we've built the menu with the translation filenames
             qDebug() << "C++: AppController Load Default Translation File Error";
@@ -310,6 +312,11 @@ void AppController::startUpdateCerts(){
 void AppController::userCancelledUpdateCertsDownload(){
     qDebug() << "C++: userCancelledUpdateCertsDownload";
     certsUpdate.userCancelledUpdateDownload();
+}
+
+void AppController::userCancelledUpdateAppDownload(){
+    qDebug() << "C++: userCancelledUpdateAppDownload";
+    appUpdate.userCancelledUpdateDownload();
 }
 
 QVariant AppController::getCursorPos()
@@ -394,7 +401,7 @@ bool AppController::getUseSystemScaleValue(void) {
 int AppController::getApplicationScaleValue(void) {
     return m_Settings.getApplicationScale();
 }
-bool AppController::getGraphicsAccelValue(void){
+int AppController::getGraphicsAccelValue(void){
     return m_Settings.getGraphicsAccel();
 }
 void AppController::setShowNotificationValue (bool bShowNotification){
@@ -414,8 +421,8 @@ void AppController::setUseSystemScaleValue(bool bUseSystemScale) {
 void AppController::setApplicationScaleValue(int iScale) {
     m_Settings.setApplicationScale(iScale);
 }
-void AppController::setGraphicsAccelValue(bool bGraphicsAccel){
-    m_Settings.setAccelGraphics(bGraphicsAccel);
+void AppController::setGraphicsAccelValue(int iGraphicsAccel){
+    m_Settings.setAccelGraphics(iGraphicsAccel);
 }
 QString AppController::getTimeStampHostValue (void){
     return m_Settings.getTimeStampHost();
@@ -458,6 +465,13 @@ QString AppController::getProxyPwdValue (void){
 }
 void AppController::setProxyPwdValue (QString const& proxy_pwd){
     m_Settings.setProxyPwd(proxy_pwd);
+}
+void AppController::setEnablePteidCache (bool bEnabled){
+    m_Settings.setEnablePteidCache(bEnabled);
+}
+
+bool AppController::getEnablePteidCache (){
+    return m_Settings.getEnablePteidCache();
 }
 
 void AppController::flushCache(){
@@ -520,6 +534,15 @@ void AppController::getPteidCacheSize() {
 QString AppController::getPteidCacheDir() {
     GUISettings settings;
     return settings.getPteidCachedir();
+}
+
+void AppController::createCacheDir(){
+    QDir dir(m_Settings.getPteidCachedir());
+    if(!dir.mkpath(".")){
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                  "AppController::createCacheDir: Error creating cache directory :%s",
+                  m_Settings.getPteidCachedir().toStdString().c_str());
+    }
 }
 
 void AppController::doGetPteidCacheSize() {

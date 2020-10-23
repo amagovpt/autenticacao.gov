@@ -109,6 +109,7 @@ enum PTEID_Param
 	PTEID_PARAM_GENERAL_INSTALLDIR,		//string, directory of the basic eid software;
 	PTEID_PARAM_GENERAL_CACHEDIR,		//string, cache directory for card-file;
 	PTEID_PARAM_GENERAL_PTEID_CACHEDIR,
+	PTEID_PARAM_GENERAL_PTEID_CACHE_ENABLED,
 	PTEID_PARAM_GENERAL_CERTS_DIR,
 	PTEID_PARAM_GENERAL_LANGUAGE,		//string, user language: en, pt
 	PTEID_PARAM_GENERAL_SAM_SERVER,
@@ -169,7 +170,7 @@ enum PTEID_Param
     PTEID_PARAM_GUITOOL_SHOWANIMATIONS,     //number; 0=no(default), 1=yes
     PTEID_PARAM_GUITOOL_USESYSTEMSCALE,     //number; 0=100%(default), 1=125%, 2=150%,... (25% increments)
     PTEID_PARAM_GUITOOL_APPLICATIONSCALE,   //number; 0=100%(default), 1=125%, 2=150%,... (25% increments)
-    PTEID_PARAM_GUITOOL_GRAPHICSACCEL,      //number; 0=no(default), 1=yes
+    PTEID_PARAM_GUITOOL_GRAPHICSACCEL,      //number; 0=no, 1=yes(default)
     PTEID_PARAM_GUITOOL_SHOWSTARTUPHELP,    //number; 0=no(default), 1=yes
 
 	//PROXY

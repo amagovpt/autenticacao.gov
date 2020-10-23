@@ -40,6 +40,7 @@
     - [Leitura dos certificados digitais presentes no cartão de cidadão](#leitura-dos-certificados-digitais-presentes-no-cart%c3%a3o-de-cidad%c3%a3o)
   - [Sessão segura](#sess%c3%a3o-segura)
 - [Tratamento de erros](#tratamento-de-erros)
+- [API PKCS#11](#api-pkcs11)
 - [Compatibilidade com o SDK da versão 1](#compatibilidade-com-o-sdk-da-vers%c3%a3o-1)
   - [Métodos removidos](#m%c3%a9todos-removidos)
   - [Diferenças no comportamento de alguns métodos](#diferen%c3%a7as-no-comportamento-de-alguns-m%c3%a9todos)
@@ -55,17 +56,10 @@ middleware versão 3 do Cartão de Cidadão.
 
 Esta versão do SDK disponibiliza a mesma interface (API) que a
 disponibilizada na versão 1 e 2 do SDK. Desta forma, pretende-se obter a
-retro-compatibilidade entre versões anteriores do SDK. Embora a API
+retro-compatibilidade com versões anteriores do SDK. Embora a API
 anterior continue disponível, esta é desaconselhada pois a nova API
 cobre a maior parte dos casos de uso da anterior e tem funcionalidades
 novas.
-
-Para obter informação detalhada sobre a API do middleware da versão 1
-deverá consultar o
-["*Manual técnico do Middleware Cartão de Cidadão*"- versão 1.61](https://www.autenticacao.gov.pt/documents/10179/11463/Manual+Técnico+do+Middleware+do+Cartão+de+Cidadão/07e69665-9f1a-41c8-b3f5-c6b2e182d697).
-
-Na secção [**Tratamento de Erros**](#tratamento-de-erros) as diferenças existentes
-na implementação desta API.
 
 A secção [**Compatibilidade com o SDK da versão 1**](#compatibilidade-com-o-sdk-da-vers%c3%a3o-1)
 contém informações relativamente à continuação da
@@ -131,7 +125,7 @@ bits, são:
 
   - Sistemas operativos Apple MacOS:
 
-     - Versões Yosemite (10.10) e superiores.
+     - MacOS Sierra (10.12) e superiores
 
 ## Linguagens de programação
 
@@ -164,7 +158,7 @@ instalação e executar.
 As bibliotecas C++ (pteidlibCpp.lib e respectivos *header files*), Java
 e C\# ficarão disponíveis por defeito em `C:\Program Files\PortugalIdentity Card\sdk\`
 ou na directoria seleccionada durante a instalação da aplicação,
-neste caso a SDK estará disponível em `{directoria_seleccionada}\sdk\` .
+neste caso o SDK estará disponível em `{directoria_seleccionada}\sdk\` .
 
 ### Linux
 
@@ -176,29 +170,8 @@ disponíveis em `/usr/local/lib` e os respectivos C++
 *header files* estão em `/usr/local/include`
 
 Se a instalação for feita a partir do código fonte disponível em
-<https://github.com/amagovpt/autenticacao.gov> será necessário instalar as
-seguintes dependências (pacotes Ubuntu 18.04, para outras distribuições
-Linux os nomes serão diferentes):
-
-  - libpcsclite-dev
-  - libpoppler-qt5-dev
-  - openjdk-8-jdk
-  - qtbase5-dev
-  - qt5-qmake
-  - qtbase5-private-dev
-  - libxerces-c-dev
-  - libxml-security-c-dev
-  - swig
-  - libcurl4-nss-dev
-  - zlib1g-dev
-  - libpng-dev
-  - libopenjp2-7-dev
-  - libzip-dev
-  - qt5-default
-  - qtdeclarative5-dev
-  - qtquickcontrols2-5-dev
-  - qml-module-qtquick-controls2
-  - libssl1.0-dev
+<https://github.com/amagovpt/autenticacao.gov> devem ser seguidas as
+instruções de compilação que constam do ficheiro README do projeto.
 
 ### MacOS
 
@@ -264,8 +237,8 @@ package pteidsample;
 import pt.gov.cartaodecidadao.*;
 (...)
 /* NOTA: o bloco estático seguinte é estritamente necessário uma vez
-que é preciso arregar explicitamente a biblioteca JNI que implementa
-as funcionalidades disponível pelo wrapper Java.*/
+que é preciso carregar explicitamente a biblioteca JNI que implementa
+as funcionalidades do wrapper Java.*/
 
 static {
 	try {
@@ -301,7 +274,7 @@ namespace PTEIDSample {
 
 ## Configurar modo teste
 
-Para alterar as configurações de forma a utilizar o modo teste, para usar cartões de teste, deve usar-se a função estática **SetTestMode(*bool* bTestMode)** da classe **PTEID_Config**.
+Para alterar as configurações de forma a utilizar o modo teste, para usar cartões de teste, deve usar-se o método estático **SetTestMode(*bool* bTestMode)** da classe **PTEID_Config**.
 
 Com o valor do parâmetro *bTestMode* a *true*, os seguintes exemplos ativam o modo de teste.
 
@@ -420,9 +393,9 @@ aplicação.
 Para tal é necessário invocar o método **SetEventCallback()** no objecto
 **PTEID_ReaderContext** associado ao leitor que se pretende monitorizar.
 
-A função de *callback* definida deve ter a seguinte assinatura:
+A função de *callback* definida deve ter a seguinte assinatura em C++:
 
-`void callback (long lRet, unsigned long ulState, void \*callbackData)` em C++
+`void callback (long lRet, unsigned long ulState, void *callbackData)`
 
 O parâmetro *ulState* é a combinação de dois valores:
 
@@ -500,7 +473,7 @@ ficheiros. Destacam-se os seguintes ficheiros:
   - ficheiro de morada – contém a morada do cidadão, este ficheiro é
     de acesso condicionado
   - ficheiros de certificados do cidadão – contêm os certificados de
-    assinatura/autenticação do cidadão.
+    assinatura e autenticação do cidadão.
   - ficheiros de certificados CA's.
   - ficheiro de notas pessoais – é um ficheiro de leitura livre e de
     escrita condicionada onde o cidadão pode colocar até 1000 *bytes*.
@@ -644,7 +617,7 @@ Para ler as notas pessoais deverá ser utilizado o método
 **PTEID_EIDCard.readPersonalNotes()**. Para a escrita de dados deverá ser
 utilizado o método **PTEID_EIDCard.writePersonalNotes()**, sendo necessária
 a introdução do PIN de autenticação. Neste momento, as notas pessoais
-têm um limite de 1000 caracteres.
+têm um limite de 1000 bytes (codificação recomendada: UTF-8).
 
 1.  Exemplo C++
 
@@ -880,6 +853,8 @@ if (pin.verifyPin("", ref triesLeft, true){
 	if (!bResult && -1 == triesLeft) return;
 }
 ```
+**Nota:** Se o primeiro parâmetro do método verifyPin for a string vazia, será aberta uma janela para introdução do PIN. Caso contrário, o primeiro parâmetro deverá ser a string com o PIN a ser verificado. Esta lógica aplica-se de modo análogo aos dois primeiros argumentos do método changePin.
+
 
 ## Assinatura Digital
 
@@ -1028,7 +1003,7 @@ PTEID_EIDCard &card = readerContext.getEIDCard();
 //Ficheiro PDF a assinar
 PTEID_PDFSignature signature("/home/user/input.pdf");
 /* Adicionar uma imagem customizada à assinatura visível
-   O array de bytes image_data deve ser uma imagem em formato
+   O array de bytes image_data deve conter uma imagem em formato
    JPEG com as dimensões recomendadas (185x41 px) */
 PTEID_ByteArray jpeg_data(image_data, image_length);
 
@@ -1045,9 +1020,8 @@ const char * location = "Lisboa, Portugal";
 const char * reason = "Concordo com o conteudo do documento";
 int page = 1;
 
-//Para páginas A4 verticais este valor pode variar no intervalo [0-1]
+//Estes valores podem variar no intervalo [0-1]
 double pos_x = 0.1;
-//Para páginas A4 verticais este valor pode variar no intervalo [0-1]
 double pos_y = 0.1;
 card.SignPDF(signature,  page, pos_x, pos_y, location, reason, output_file);
 ```
@@ -1098,12 +1072,14 @@ output = card.Sign(data_to_sign, true);
 
 ### Multi-assinatura com uma única introdução de PIN
 
-Esta funcionalidade permite assinar vários ficheiros introduzindo o PIN
-somente uma vez. Deverá ser utilizado o método **addToBatchSigning()**.
+Esta funcionalidade permite assinar vários documentos PDF introduzindo o PIN
+somente uma vez. O selo visual de assinatura será aplicado na mesma página e localização em todos
+os documentos, sendo que a localização é especificada tal como na assinatura simples.
+Deverá ser utilizado o método **addToBatchSigning()** para construir a lista de documentos a assinar.
 
 Será apresentado apenas um exemplo C++ para esta funcionalidade embora
 os wrappers Java e C\# contenham exactamente as mesmas classes e métodos
-necessários **PTEID_PDFSignature()**.
+necessários na classe **PTEID_PDFSignature()**.
 
 Exemplo C++
 
@@ -1112,21 +1088,24 @@ Exemplo C++
 (...)
 PTEID_EIDCard &card = readerContext.getEIDCard();
 //Ficheiro PDF a assinar
-PTEID_PDFSignature signature("/home/user/input.pdf");
+PTEID_PDFSignature signature("/home/user/first-file-to-sign.pdf");
 
 //Para realizar uma assinatura em batch adicionar todos os ficheiros usando o seguinte método antes de invocar o card.SignPDF()
-signature.addToBatchSigning( "Other_File.pdf" );
-signature.addToBatchSigning( "Yet_Another_FILE.pdf" );
+signature.addToBatchSigning("Other_File.pdf");
+signature.addToBatchSigning("Yet_Another_FILE.pdf");
 (...)
-int sector = 1;
+
 int page = 1;
-bool is_landscape = false;
+//Estes valores podem variar no intervalo [0-1], ver exemplos anteriores
+double pos_x = 0.1;
+double pos_y = 0.1;
+
 const char * location = "Lisboa, Portugal";
 const char * reason = "Concordo com o conteudo do documento";
 
 //Para uma assinatura em batch, este parâmetro aponta para a directoria de destino
-const char * output = "/home/user/output_signed.pdf";
-card.SignPDF(signature,  page, sector, is_landscape, location, reason, output_file);
+const char * output_folder = "/home/user/signed-documents/";
+card.SignPDF(signature,  page, pos_x, pos_y, location, reason, output_folder);
 (...)
 ```
 
@@ -1136,7 +1115,9 @@ O SDK permite seleccionar uma servidor diferente para a obtenção de
 selos temporais, uma vez que o servidor por defeito do Cartão do Cidadão
 ([http://ts.cartaodecidadao.pt/tsa/server](http://ts.cartaodecidadao.pt/tsa/server))
 tem um limite máximo de 20 pedidos em cada período de 20 minutos que
-se podem efectuar (para mais informações sobre o serviço de selo temporal/timestamps
+se podem efectuar. Se este valor for excedido o serviço será bloqueado durante 24 horas, 
+sem prejuízo de outras consequências em caso de repetição de situações de bloqueio. 
+(para mais informações sobre o serviço de selo temporal/timestamps
 do Cartão do Cidadão, consulte a página
 [https://pki.cartaodecidadao.pt](https://pki.cartaodecidadao.pt)).
 
@@ -1328,6 +1309,7 @@ Em todos os casos é sempre possível obter um
 código de erro numérico para todos os erros que estão tipificados nos
 métodos do MW através da chamada ao método **GetError()** da classe
 **PTEID_Exception**.
+Através do método GetMessage() é possível obter uma descrição legível do erro (em língua inglesa)
 
 As constantes numéricas dos códigos de erro
 estão expostas às aplicações em:
@@ -1338,6 +1320,68 @@ estão expostas às aplicações em:
 
   - Java: membros públicos da interface **pteidlib_JavaWrapperConstants**
   com o prefixo EIDMW
+
+# API PKCS#11
+
+É possível o acesso aos certificados e operações associadas do CC através de uma API standard e multi-plataforma para dispositivos criptográficos
+que está descrita na norma PKCS#11([http://docs.oasis-open.org/pkcs11/pkcs11-base/v2.40/os/pkcs11-base-v2.40-os.html](http://docs.oasis-open.org/pkcs11/pkcs11-base/v2.40/os/pkcs11-base-v2.40-os.html)).
+
+
+Aplicações que possam utilizar vários tipos de certificados e/ou dispositivos de autenticação/assinatura podem deste modo aceder às operações disponibilizadas
+pelo CC através de uma API comum se tiverem em conta as especificidades que indicamos em seguida.
+
+Por exemplo em aplicações Java é possível utilizar o módulo pteid-pkcs11 incluído no middleware do CC através do *Security Provider* "SunPKCS11"
+da seguinte forma:
+
+```Java
+    /* Exemplo de carregamento do "token" PKCS#11 que permite aceder às operações do CC */
+    
+    /*
+       O ficheiro de configuração indicado no método configure() serve para indicar o caminho no
+       sistema atual onde se encontra o módulo PKCS#11 que pretendemos carregar.
+       Por exemplo, num sistema Linux a configuração deve ter o seguinte conteúdo:
+       
+       name = PortugaleId
+       library = /usr/local/lib/libpteidpkcs11.so
+
+       Para sistemas Windows a propriedade library deve ter o valor C:\Windows\System32\pteidpkcs11.dll
+       e em MacOS /usr/local/lib/libpteidpkcs11.dylib
+    */
+    Provider p = Security.getProvider("SunPKCS11");
+    p = p.configure(config_file);
+
+    Security.addProvider(p);
+
+    Keystore ks = KeyStore.getInstance ("PKCS11", p);
+    try {
+
+       // Initialize the PKCS#11 token
+       ks.load (null, null);
+
+    }
+    catch (IOException | NoSuchAlgorithmException | CertificateException e) {
+      System.err.println ("Exception while initializing PKCS#11 token:" + e );
+    }
+
+    /* O 2º parâmetro password que para outros módulos seria passado no método getKey()
+       não corresponde ao PIN que protege o uso da chave privada do CC e por isso deve ser passado a null
+       O módulo pteid-pkcs11 vai gerir internamente os pedidos de PIN ao utilizador através de
+       janelas de diálogo idênticas às que são usadas nos métodos de assinatura do SDK, p.ex. 
+       PTEID_EIDCard.Sign()
+
+       Se pretender utilizar a chave privada de autenticação a label que se deve passar ao 
+       método getKey() será "CITIZEN AUTHENTICATION CERTIFICATE" */
+
+    Key key_handle = ks.getKey("CITIZEN SIGNATURE CERTIFICATE", null);
+
+    /* Os algoritmos de assinatura suportados pelo Cartão de Cidadão via PKCS#11 são 
+       os seguintes e podem ser especificados através do método Signature.getInstance():
+       - SHA256withRSA (recomendado)
+       - SHA1withRSA
+    */
+
+```
+
 
 # Compatibilidade com o SDK da versão 1
 
@@ -1396,9 +1440,9 @@ diálogo de PIN errado que é mostrado.
 
 ## Códigos de Erro
 
-Em vez de lançar excepções, a *SDK* para linguagem C mantém a
+Em vez de lançar excepções, as funções de compatibilidade para linguagem C mantêm a
 compatibilidade com versões anteriores em que são devolvidos os códigos
-descritos nas seguintes tabelas. Os códigos retornados pela SDK estão
+descritos nas seguintes tabelas. Os códigos retornados pelo SDK estão
 apresentados na seguinte tabela, também presentes no ficheiro
 *eidlibcompat.h*.
 

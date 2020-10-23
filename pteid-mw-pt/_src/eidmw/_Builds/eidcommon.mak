@@ -22,17 +22,14 @@ isEmpty(PREFIX_DIR){
 
 DEFINES += 'EIDMW_PREFIX=$${PREFIX_DIR}'
 
+macx:DEPS_DIR = $$(HOME)/mw-thirdparty-libs/
+macx:message(MacOS third-party libs should be at $$DEPS_DIR)
+
 ## preset the BIN install directory depending on the given prefix
 ## preset the LIB install directory relative to the bin directory
 INSTALL_DIR_BIN = $${PREFIX_DIR}/bin
 INSTALL_DIR_LIB = $${PREFIX_DIR}/lib
 INSTALL_DIR_INCLUDE = $${PREFIX_DIR}/include
-
-
-isEmpty(JDK_INCLUDE_DIR){
-  unix:!macx: JDK_INCLUDE_DIR += /usr/local/j2sdk1.4.2_17/include
-  unix:!macx: JDK_INCLUDE_DIR += /usr/local/j2sdk1.4.2_17/include/linux
-}
 
 CONFIG += c++11
 
@@ -45,11 +42,6 @@ isEmpty(PCSC_INCLUDE_DIR){
 ####  in order to have switches for unix only
   unix:!macx: PCSC_INCLUDE_DIR += /usr/include/PCSC
 }
-
-## Link to the privacy filter broker instead of linking 
-## directly to the pcsc library
-
-USE_PRIVACYFB=no
 
 ## Specify the following variable explicitly
 ## in order to have a Makefile produced also on

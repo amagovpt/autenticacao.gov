@@ -2,7 +2,7 @@
 
  * Copyright (C) 2017 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -12,7 +12,6 @@ import "../scripts/Constants.js" as Constants
 
 Item {
     width: 2 * Constants.SIZE_TEXT_LIST_BULLET
-    anchors.top: parent.top
     Rectangle {
         width: Constants.SIZE_TEXT_LIST_BULLET
         height: Constants.SIZE_TEXT_LIST_BULLET

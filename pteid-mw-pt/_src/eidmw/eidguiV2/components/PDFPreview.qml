@@ -4,7 +4,7 @@
  * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -282,6 +282,9 @@ Rectangle {
             onWidthChanged: {
                 dragSigRect.x = dragTarget.lastCoord_x / dragTarget.lastScreenWidth * background_image.width
                 dragSigRect.y = dragTarget.lastCoord_y / dragTarget.lastScreenHeight * background_image.height
+
+                propertyPageLoader.propertyBackupBackgroundWidth = background_image.width
+                propertyPageLoader.propertyBackupBackgroundHeight = background_image.height
             }
         }
     }

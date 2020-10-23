@@ -4,7 +4,7 @@
  * Copyright (C) 2017, 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -64,6 +64,7 @@ namespace eIDMW {
 
 			PTEIDCMD_API int signClose(std::string in_code);
             PTEIDCMD_API void cancelRequest();
+            PTEIDCMD_API int sendSms();
             PTEIDCMD_API void set_pdf_handler(PTEID_PDFSignature *in_pdf_handler);
             PTEIDCMD_API void add_pdf_handler(PTEID_PDFSignature *in_pdf_handler);
             PTEIDCMD_API void clear_pdf_handlers();

@@ -5,7 +5,7 @@
  * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -65,9 +65,11 @@ PageDefinitionsSCAPForm {
         target: gapi
         onSignalGenericError: {
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalCardDataChanged: {
             console.log("Definitions SCAP Signature --> Data Changed")
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyBusyIndicator.running = false
             isCardPresent = true
             propertyButtonLoadEntityAttributes.enabled =
@@ -86,6 +88,9 @@ PageDefinitionsSCAPForm {
             else if (error_code == GAPI.NoCardFound) {
                 return;
             }
+            else if (error_code == GAPI.CardUnknownCard) {
+                return;
+            }
             else if (error_code == GAPI.SodCardReadError) {
                 bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR") + controler.autoTr
             }
@@ -94,6 +99,9 @@ PageDefinitionsSCAPForm {
                }
             else if (error_code == GAPI.CardPinTimeout) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT") + controler.autoTr
+            }
+            else if (error_code == GAPI.IncompatibleReader) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
             }
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR") + controler.autoTr
@@ -181,23 +189,24 @@ PageDefinitionsSCAPForm {
                     }
                 }
                 console.log(popupMsg)
+
                 if(pdfsignresult == GAPI.ScapMultiEntityError){
                     titlePopup = qsTranslate("PageDefinitionsSCAP","STR_WARNING")
                     bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_MULTI_ENTITIES_FIRST")
                             + " " + popupMsg + " "
-                            + qsTranslate("PageDefinitionsSCAP","STR_SCAP_MULTI_ENTITIES_SECOND")
+                            + "<b>" + qsTranslate("PageDefinitionsSCAP","STR_SCAP_MULTI_ENTITIES_SECOND") + "</b>"
                             + "<br><br>"
                             + qsTranslate("PageDefinitionsSCAP","STR_SCAP_MULTI_ENTITIES_THIRD")
                 }else if(pdfsignresult == GAPI.ScapAttributesExpiredError){
                     bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_FIRST")
                             + " " + popupMsg + " "
-                            + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_SECOND")
+                            + "<b>" + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_SECOND") + "</b>"
                             + "<br><br>"
                             + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ATTRIBUTES_EXPIRED_THIRD")
                             + " " + popupMsg + "."
                 }else if(pdfsignresult == GAPI.ScapZeroAttributesError){
                     console.log("ScapZeroAttributesError")
-                    bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST")
+                    bodyPopup = "<b>" + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST") + "</b>"
                             + " " + popupMsg + "."
                             + "<br><br>"
                             + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND")
@@ -212,10 +221,8 @@ PageDefinitionsSCAPForm {
             popupMsg = ""
 
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-            // Load attributes from cache (Entities, ShortDescription)
-            isLoadingCache = true
-            gapi.startLoadingAttributesFromCache(GAPI.ScapAttrEntities,
-                                                 GAPI.ScapAttrDescriptionShort)
+
+            propertyBusyIndicatorAttributes.running = false
             propertyBusyIndicator.running = false
         }
         onSignalSCAPPingSuccess: {
@@ -276,6 +283,7 @@ PageDefinitionsSCAPForm {
             gapi.startLoadingAttributesFromCache(GAPI.ScapAttrEntities,
                                                  GAPI.ScapAttrDescriptionShort)
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyBusyIndicatorAttributes.running = false
         }
         onSignalEntityAttributesLoaded:{
@@ -321,6 +329,7 @@ PageDefinitionsSCAPForm {
             }
             //Load attributes from cache (Companies, ShortDescription)
             propertyBusyIndicatorAttributes.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             gapi.startLoadingAttributesFromCache(GAPI.ScapAttrCompanies,
                                                  GAPI.ScapAttrDescriptionShort)
         }
@@ -354,6 +363,7 @@ PageDefinitionsSCAPForm {
                 }
             }
             propertyBusyIndicatorAttributes.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalRemoveSCAPAttributesSucess: {
             console.log("Definitions SCAP - Signal SCAP Signal Remove SCAP Attributes Sucess")
@@ -498,6 +508,7 @@ PageDefinitionsSCAPForm {
                     id: entityText
                     text: '<b>' + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITY") + '</b> ' + entityName
                     font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
@@ -505,6 +516,7 @@ PageDefinitionsSCAPForm {
                     id: attrTitle
                     text: '<b>'+ qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTR") + '</b>'
                     font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
@@ -514,6 +526,7 @@ PageDefinitionsSCAPForm {
                     wrapMode: Text.WordWrap
                     text: attribute
                     font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                 }
             }
             function focusForward(){
@@ -579,6 +592,7 @@ PageDefinitionsSCAPForm {
                     id: entityText
                     text: '<b>' + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITY") + '</b> ' + entityName
                     font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
@@ -586,6 +600,7 @@ PageDefinitionsSCAPForm {
                     id: attrTitle
                     text: '<b>'+ qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTR") + '</b>'
                     font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }
@@ -595,6 +610,7 @@ PageDefinitionsSCAPForm {
                     wrapMode: Text.WordWrap
                     text: attribute
                     font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
                 }
             }
 
@@ -700,6 +716,7 @@ PageDefinitionsSCAPForm {
         onClicked: {
             console.log("ButtonLoadCompanyAttributes clicked!")
             isLoadingAttributes = true
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             propertyBusyIndicatorAttributes.running = true
             propertyPageLoader.attributeListBackup = []
             gapi.startGettingCompanyAttributes(false)
@@ -718,6 +735,7 @@ PageDefinitionsSCAPForm {
     propertyButtonLoadEntityAttributes {
         onClicked: {
             console.log("ButtonLoadEntityAttributes clicked!")
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             propertyBusyIndicatorAttributes.running = true
             isLoadingAttributes = true
             var attributeList = []

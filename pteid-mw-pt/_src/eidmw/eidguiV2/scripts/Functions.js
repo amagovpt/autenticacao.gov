@@ -225,6 +225,14 @@ function stripFilePrefix(filePath) {
         return filePath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/, "");
     }
 }
+function replaceFileSuffix(url, suffix){
+    //replaces file extension if there is one, by given suffix.
+    var filename = url.split(/[\\/]/).pop()
+    if (filename.lastIndexOf('.') > 0)
+        filename = filename.substring(0, filename.lastIndexOf('.'))
+
+    return url.substring(0, url.lastIndexOf('/') + 1 ) + filename + suffix
+}
 function filterText(text){
     var temp = text.replace(/<[^>]*>/g, '')
     temp = temp.replace(/\*/g, '')

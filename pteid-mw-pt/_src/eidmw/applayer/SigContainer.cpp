@@ -5,7 +5,7 @@
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 

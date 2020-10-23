@@ -7,6 +7,22 @@
          "last_day":"2020-06-30",
          "text":"No atual contexto, é recomendado que os cidadãos utilizem os canais digitais para acesso a serviços públicos.<br><br>Vários documentos, dos quais o Cartão de Cidadão, cujo prazo expirou depois de 24 de fevereiro, continuam válidos até 30 de junho.",
          "link":"https://eportugal.gov.pt/noticias/covid-19-estado-de-alerta-e-servicos-publicos"
+      },
+      {
+         "id":"2",
+         "title":"Covid-19",
+         "first_day":"2020-05-15",
+         "last_day":"2020-10-30",
+         "text":"No atual contexto, é recomendado que os cidadãos utilizem os canais digitais para acesso a serviços públicos.<br><br>Vários documentos, dos quais o Cartão de Cidadão, cujo prazo expirou depois de 24 de fevereiro, continuam válidos até 30 de outubro.",
+         "link":"https://eportugal.gov.pt/covid-19"
+      },
+      {
+         "id":"3",
+         "title":"Atualização da aplicação e Covid-19",
+         "first_day":"2020-06-02",
+         "last_day":"2020-10-30",
+         "text":"Versões da aplicação Autenticação.gov anteriores à versão 3.1.2 devem ser atualizadas devido à revogação de certificados, nomeadamente para conseguir assinar com Chave Móvel Digital e Atributos Profissionais.<br><br>No atual contexto, é recomendado que os cidadãos utilizem os canais digitais para acesso a serviços públicos.<br><br>Vários documentos, dos quais o Cartão de Cidadão, cujo prazo expirou depois de 24 de fevereiro, continuam válidos até 30 de outubro.",
+         "link":"https://eportugal.gov.pt/covid-19"
       }
    ]
 }

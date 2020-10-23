@@ -4,7 +4,7 @@
  * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -66,13 +66,15 @@ ns1__AttributeType *convertAttributeType(ns3__AttributeType *, soap *);
 unsigned int SHA256_Wrapper(unsigned char *data, unsigned long data_len, unsigned char *digest)
 {
 
-    EVP_MD_CTX cmd_ctx;
+    EVP_MD_CTX *cmd_ctx = EVP_MD_CTX_new();
     unsigned int md_len = 0;
-
+ 
     //Calculate the hash from the data
-    EVP_DigestInit(&cmd_ctx, EVP_sha256());
-    EVP_DigestUpdate(&cmd_ctx, data, data_len);
-    EVP_DigestFinal(&cmd_ctx, digest, &md_len);
+    EVP_DigestInit(cmd_ctx, EVP_sha256());
+    EVP_DigestUpdate(cmd_ctx, data, data_len);
+    EVP_DigestFinal(cmd_ctx, digest, &md_len);
+ 
+    EVP_MD_CTX_free(cmd_ctx);
 
     return md_len;
 
@@ -258,7 +260,7 @@ ns1__AttributeType *convertAttributeType(ns3__AttributeType *attributeType, soap
 QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const char *outputPath,
                                                  std::string certChain, QString citizenName, QString citizenId,
                                                  QString attributeSupplier,  QString attribute,
-                                                 PDFSignatureInfo signatureInfo, bool isVisible, bool isCC,
+                                                 PDFSignatureInfo signatureInfo, bool isVisible, bool isTimestamp, bool isCC,
                                                  bool useCustomImage, QByteArray &m_jpeg_scaled_data)
 {
     qDebug() << "openSCAPSignature inputFile: " << inputFile << " outputPath: " << outputPath;
@@ -266,6 +268,12 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
     local_pdf_handler = new PTEID_PDFSignature(inputFile);
 
     PDFSignature *sig_handler = local_pdf_handler->getPdfSignature();
+
+    if (isTimestamp)
+    {
+        sig_handler->enableTimestamp();
+    }
+    
 	
 	if (useCustomImage && isVisible) {
 		const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(
@@ -455,7 +463,7 @@ static int ParseHeader(struct soap * soap, const char * key, const char * val)
 }
 
 int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QString filepath,
-                                QString citizenName, QString citizenId,int ltv, bool isCC,
+                                QString citizenName, QString citizenId, bool isTimestamp, bool isCC,
                                 PDFSignatureInfo signatureInfo, std::vector<ns3__AttributeType *> &attributeTypeList,
                                 bool useCustomImage, QByteArray &m_jpeg_scaled_data)
 {
@@ -476,10 +484,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 #ifdef __linux__
 	ca_path = "/etc/ssl/certs";
 	//Load CA certificates from file provided with pteid-mw
-#elif WIN32
-	cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR)) + "/cacerts.pem";
-	//TODO
-#elif __APPLE__
+#else
 	cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
 #endif
 
@@ -850,10 +855,14 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                     if (mainAttribute->SubAttributeList != NULL) {
                         for (uint ii = 0; ii < mainAttribute->SubAttributeList->SubAttribute.size(); ii++) {
                             ns1__SubAttributeType *acSubAttr = mainAttribute->SubAttributeList->SubAttribute.at(ii);
-                            if(ii != 0)signDetailsReason.append("; ");
-                            signDetailsReason.append(QString::fromStdString(acSubAttr->Description->c_str()));
+                            if(ii != 0) signDetailsReason.append("; ");
+							if (acSubAttr->Description != NULL) {
+								signDetailsReason.append(QString::fromStdString(acSubAttr->Description->c_str()));
+							}
                             signDetailsReason.append(": ");
-                            signDetailsReason.append(QString::fromStdString(acSubAttr->Value->c_str()));
+							if (acSubAttr->Value != NULL) {
+								signDetailsReason.append(QString::fromStdString(acSubAttr->Value->c_str()));
+							}
                         }
                     }
                     signatureInfo.setReason(strdup(signDetailsReason.toStdString().c_str()));
@@ -863,9 +872,11 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                     signatureInfo.setLocation(strdup(signOriginalLocation.toStdString().c_str()));
                 }
 
+                // Only the last signature should be timestamped
+                bool isLast = (i == transactionList.size() - 1);
                 signatureHash = openSCAPSignature(inputPath, outputPath,
                                 transaction->AttributeSupplierCertificateChain, citizenName, citizenId,
-                                attributeSupplierListString, attributeListString, signatureInfo, isVisible, isCC, 
+                                attributeSupplierListString, attributeListString, signatureInfo, isVisible, isTimestamp && isLast, isCC,
                                 useCustomImage, m_jpeg_scaled_data);
 
                 if (signatureHash.size() == 0) {

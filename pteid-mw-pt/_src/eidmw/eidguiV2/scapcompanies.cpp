@@ -1,10 +1,10 @@
 /*-****************************************************************************
 
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -41,7 +41,7 @@ std::vector<ns2__AttributesType *> loadCacheFile(QString &filePath) {
     std::istream * istream = &replyStream;
 
     soap * soap2 = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
-    soap_set_namespaces(soap2, namespaces);
+    soap_set_namespaces(soap2, SCAP_namespaces);
 
     soap2->is = istream;
 
@@ -283,6 +283,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
 
         soap sp;
         soap_init2(&sp, SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
+        soap_set_namespaces(&sp, SCAP_namespaces);
         
         long ret;
         if (useOAuth) {
@@ -294,9 +295,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
             std::string cacerts_file;
 #ifdef __linux__
             ca_path = "/etc/ssl/certs";
-#elif WIN32
-            cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR)) + "\\cacerts.pem";
-#elif __APPLE__
+#else
             cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
 #endif
             ret = soap_ssl_client_context(&sp, SOAP_SSL_DEFAULT,
@@ -388,7 +387,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
         std::stringstream ss;
         if (!useOAuth) {
             sp.os = &ss;
-            if (soap_write_ns2__AttributeRequestType(&sp, attr_request))
+            if (soap_write__ns2__AttributeRequest(&sp, attr_request))
             {
                 qDebug() << "Error serializing AttributeRequest!";
             }
@@ -488,7 +487,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
         
         eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG , "ScapSignature",
                         "ACService returned: %s",
-                        ( !scapResult.empty() ? scapResult.c_str() : "Null SCAP result" ));
+                        ( !scapResult.empty() ? "SCAP result is not null" : "Null SCAP result" ));
 
         // Remove request answer headers
         std::string replyString = scapResult;
@@ -524,7 +523,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
         soap soap2;
         soap_init2(&soap2, SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
 
-        soap_set_namespaces(&soap2, namespaces);
+        soap_set_namespaces(&soap2, SCAP_namespaces);
 
         soap2.is = istream;
 

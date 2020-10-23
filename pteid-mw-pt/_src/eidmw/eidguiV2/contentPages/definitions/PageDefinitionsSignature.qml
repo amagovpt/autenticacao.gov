@@ -3,7 +3,7 @@
  * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -47,27 +47,6 @@ PageDefinitionsSignatureForm {
         }
         onSignalCardAccessError: {
             console.log("Definitions Signature --> onSignalCardAccessError")
-            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
-            var bodyPopup = ""
-            if (error_code == GAPI.NoReaderFound) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER") + controler.autoTr
-            }
-            else if (error_code == GAPI.NoCardFound) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD") + controler.autoTr
-            }
-            else if (error_code == GAPI.SodCardReadError) {
-                bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR") + controler.autoTr
-            }
-            else if (error_code == GAPI.CardUserPinCancel) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED") + controler.autoTr
-            }
-            else if (error_code == GAPI.CardPinTimeout) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT") + controler.autoTr
-            }
-            else {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR") + controler.autoTr
-            }
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
             clearFields()
             propertyBusyIndicator.running = false
         }

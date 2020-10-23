@@ -5,7 +5,7 @@
  * Copyright (C) 2018 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -79,6 +79,9 @@ PageCardNotesForm {
             }
             else if (error_code == GAPI.CardPinTimeout) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
+            }
+            else if (error_code == GAPI.IncompatibleReader) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
             }
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
@@ -182,6 +185,7 @@ PageCardNotesForm {
         propertySaveNotes.enabled = b
     }
     function startWritingNotes(){
+        mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
         gapi.startWritingPersoNotes(propertyEditNotes.text);
     }
 

@@ -2,7 +2,7 @@
 
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -15,6 +15,7 @@ RowLayout {
     anchors.topMargin: 0.5 * Constants.SIZE_TEXT_BODY
     width: parent.width
     TextBullet {
+        Layout.fillHeight: true
     }
     Text {
         id: rowText

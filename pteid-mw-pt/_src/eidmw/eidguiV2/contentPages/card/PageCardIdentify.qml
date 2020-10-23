@@ -4,7 +4,7 @@
  * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -85,6 +85,9 @@ PageCardIdentifyForm {
             else if (error_code == GAPI.CardPinTimeout) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
             }
+            else if (error_code == GAPI.IncompatibleReader) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
+            }
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
@@ -145,7 +148,6 @@ PageCardIdentifyForm {
 
         onSignalSaveCardPhotoFinished: {
             if(success) {
-                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 createsuccess_dialog.open()
                 createdSuccTitle.forceActiveFocus()
             } else {
@@ -166,7 +168,6 @@ PageCardIdentifyForm {
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - createsuccess_dialog.width * 0.5
         y: parent.height * 0.5 - createsuccess_dialog.height * 0.5
-        modal: true
 
         header: Label {
             id: createdSuccTitle
@@ -269,7 +270,8 @@ PageCardIdentifyForm {
             }
         }
         onRejected:{
-            createsuccess_dialog.open()
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
         }
         onClosed: {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
@@ -279,7 +281,7 @@ PageCardIdentifyForm {
 
     propertySavePhotoDialogOutput {
         onAccepted: {
-            outputFile = propertySavePhotoDialogOutput.fileUrl.toString()
+            outputFile = propertySavePhotoDialogOutput.file.toString()
             console.log("Saving photo to: " + outputFile)
             
             var file = decodeURIComponent(Functions.stripFilePrefix(outputFile))
@@ -318,16 +320,16 @@ PageCardIdentifyForm {
 
     propertyPngButton {
         onClicked: {
-            propertySavePhotoDialogOutput.filename = "FotoDoCidadao.png"
-            propertySavePhotoDialogOutput.nameFilters = ["PNG (*.png)"]
+            propertySavePhotoDialogOutput.currentFile = propertySavePhotoDialogOutput.folder + "/FotoDoCidadao.png"
+            propertySavePhotoDialogOutput.nameFilters = ["PNG (*.png)"];
             propertySavePhotoDialogOutput.open();
         }
     }
 
     propertyJpegButton {
         onClicked: {
-            propertySavePhotoDialogOutput.filename = "FotoDoCidadao.jpg"
-            propertySavePhotoDialogOutput.nameFilters = ["JPEG (*.jpg *.jpeg *.jpe *.jfif)"]
+            propertySavePhotoDialogOutput.currentFile = propertySavePhotoDialogOutput.folder + "/FotoDoCidadao.jpg"
+            propertySavePhotoDialogOutput.nameFilters = ["JPEG (*.jpg)"];
             propertySavePhotoDialogOutput.open();
         }
     }

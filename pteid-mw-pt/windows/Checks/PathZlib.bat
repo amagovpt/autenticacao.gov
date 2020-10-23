@@ -1,5 +1,5 @@
 @echo [INFO] Input PTEID_DIR_ZLIB=%PTEID_DIR_ZLIB%
-@set FILE_TO_FIND="lib\zlib.lib" "lib\zlib.bsc"
+@set FILE_TO_FIND="lib\zlib.lib"
 @echo [INFO] Looking for files: %FILE_TO_FIND%
 
 @set FILE_NOT_FOUND=

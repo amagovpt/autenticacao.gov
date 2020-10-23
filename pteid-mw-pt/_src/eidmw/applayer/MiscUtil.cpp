@@ -278,14 +278,16 @@ char *X509_to_PEM(X509 *x509) {
         return NULL;
     }
 
-    pem = (char *) malloc( bio->num_write + 1 );
+    long alloc_size = BIO_number_written(bio) + 1;
+
+    pem = (char *) malloc(alloc_size);
     if ( NULL == pem ){
         BIO_free(bio);
         return NULL;
     }
 
-    memset( pem, 0, bio->num_write + 1 );
-    BIO_read( bio, pem, bio->num_write );
+    memset(pem, 0, alloc_size);
+    BIO_read( bio, pem, alloc_size);
     BIO_free( bio );
 
     return pem;

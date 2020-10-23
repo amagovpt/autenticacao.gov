@@ -6,7 +6,7 @@
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -38,7 +38,7 @@ Item {
     property alias propertyCheckboxShowAnime: checkboxShowAnime
     property alias propertyCheckBoxDebugMode: checkboxDebugMode
     property alias propertyGraphicsTextField: graphicsTextField
-    property alias propertyCheckboxAccelGraphics: checkboxAccelGraphics
+    property alias propertyComboboxAccelGraphics: comboboxAccelGraphics
     property alias propertyRectAppNetworkCheckBox: rectAppNetworkCheckBox
     property alias propertyCheckboxSystemProxy: checkboxSystemProxy
     property alias propertyCheckboxProxy: checkboxProxy
@@ -927,7 +927,7 @@ Item {
                     radius: Constants.FORM_SHADOW_RADIUS
                     samples: Constants.FORM_SHADOW_SAMPLES
                     color: Constants.COLOR_FORM_SHADOW
-                    source: rectAppLooks
+                    source: rectAppGraphicsCheckBox
                     spread: Constants.FORM_SHADOW_SPREAD
                     opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
                 }
@@ -943,8 +943,8 @@ Item {
                     id: rectAppGraphicsCheckBox
                     width: parent.width
                     color: "white"
-                    height: graphicsTextField.height + checkboxAccelGraphics.height
-                            + 3 * Constants.SIZE_TEXT_V_SPACE
+                    height: graphicsTextField.height + graphicsInfoTextField.height + comboboxAccelGraphics.height
+                            + 4 * Constants.SIZE_TEXT_V_SPACE
                     anchors.top: dateAppGraphics.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
@@ -963,39 +963,102 @@ Item {
                         Keys.onPressed: {
                             handleKeyPressed(event.key, graphicsTextField)
                         }
-                        KeyNavigation.tab: checkboxAccelGraphics
-                        KeyNavigation.down: checkboxAccelGraphics
-                        KeyNavigation.right: checkboxAccelGraphics
+                        KeyNavigation.tab: graphicsInfoTextField
+                        KeyNavigation.down: graphicsInfoTextField
+                        KeyNavigation.right: graphicsInfoTextField
                         KeyNavigation.backtab: dateAppGraphics
                         KeyNavigation.up: dateAppGraphics
                         KeyNavigation.left: dateAppGraphics
                     }
-                    CheckBox {
-                        id: checkboxAccelGraphics
-                        enabled: false
-                        text: qsTranslate("PageDefinitionsApp",
-                                          "STR_ACCEL_ENABLE")
-                              + controler.autoTr
-                        height: 25
+                    Text {
+                        id: graphicsInfoTextField
+                        x: 10
+                        text: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + controler.autoTr
+                        anchors.top: graphicsTextField.bottom
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                        font.capitalization: Font.MixedCase
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.bold: activeFocus
+                        wrapMode: Text.WordWrap
+                        Accessible.name: text
+                        KeyNavigation.tab: textLink
+                        KeyNavigation.down: textLink
+                        KeyNavigation.right: textLink
+                        KeyNavigation.backtab: graphicsTextField
+                        KeyNavigation.up: graphicsTextField
+                        KeyNavigation.left: graphicsTextField
+                    }
+                    Components.Link {
+                        id: textLink
+                        anchors.left: graphicsInfoTextField.right
+                        anchors.verticalCenter: graphicsInfoTextField.verticalCenter
+                        width: parent.width
+                        propertyText.text: "<a href='https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-com-placas-gr%c3%a1ficas-integradas-em-windows'>" +
+                                           qsTranslate("PageDefinitionsApp", "STR_HERE") + controler.autoTr + "</a>."
+                        propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-com-placas-gr%c3%a1ficas-integradas-em-windows'
+                        propertyText.font.capitalization: Font.MixedCase
+                        propertyText.font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        propertyText.font.family: lato.name
+                        propertyText.font.bold: activeFocus
+                        KeyNavigation.tab: textGraphicsRendering
+                        KeyNavigation.down: textGraphicsRendering
+                        KeyNavigation.right: textGraphicsRendering
+                        KeyNavigation.left: graphicsInfoTextField
+                        KeyNavigation.backtab: graphicsInfoTextField
+                        KeyNavigation.up: graphicsInfoTextField
+                    }
+                    Text {
+                        id: textGraphicsRendering
+                        x: 10
+                        font.capitalization: Font.MixedCase
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.bold: activeFocus
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.verticalCenter: comboboxAccelGraphics.verticalCenter
+                        wrapMode: Text.WordWrap
+                        Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key,textSelectReader)
+                        }
+                        KeyNavigation.tab: comboboxAccelGraphics
+                        KeyNavigation.down: comboboxAccelGraphics
+                        KeyNavigation.right: comboboxAccelGraphics
+                        KeyNavigation.backtab: textLink
+                        KeyNavigation.up: textLink
+                        KeyNavigation.left: textLink
+                        text: qsTranslate("PageDefinitionsApp", "STR_ACCEL_MODE") + controler.autoTr
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    ComboBox {
+                        id: comboboxAccelGraphics
+                        enabled: true
+                        height: 3 * Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         font.bold: activeFocus
-                        anchors.top: graphicsTextField.bottom
+                        anchors.left: textGraphicsRendering.right
+                        anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
+                        anchors.top: graphicsInfoTextField.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                        Accessible.role: Accessible.CheckBox
-                        Accessible.name: text
+                        Accessible.role: Accessible.ComboBox
+                        Accessible.name: currentText
                         Keys.onPressed: {
-                            handleKeyPressed(event.key, checkboxAccelGraphics)
+                            handleKeyPressed(event.key, comboboxAccelGraphics)
                         }
+                        model: [
+                            qsTranslate("PageDefinitionsApp", "STR_SOFTWARE_OPENGL") + controler.autoTr,
+                            qsTranslate("PageDefinitionsApp", "STR_HARDWARE") + controler.autoTr,
+                            qsTranslate("PageDefinitionsApp", "STR_SOFTWARE_DIRECT3D") + controler.autoTr
+                        ]
                         KeyNavigation.tab: dateAppNetwork
-                        KeyNavigation.down: dateAppNetwork
                         KeyNavigation.right: dateAppNetwork
-                        KeyNavigation.backtab: graphicsTextField
-                        KeyNavigation.up: graphicsTextField
-                        KeyNavigation.left: graphicsTextField
-                        Keys.onEnterPressed: toggleSwitch(checkboxAccelGraphics)
-                        Keys.onReturnPressed: toggleSwitch(checkboxAccelGraphics)
+                        KeyNavigation.backtab: textGraphicsRendering
+                        KeyNavigation.left: textGraphicsRendering
                     }
                 }
             }
@@ -1028,9 +1091,9 @@ Item {
                     KeyNavigation.tab: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
                     KeyNavigation.down: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
                     KeyNavigation.right: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
-                    KeyNavigation.backtab: checkboxAccelGraphics
-                    KeyNavigation.up: checkboxAccelGraphics
-                    KeyNavigation.left: checkboxAccelGraphics
+                    KeyNavigation.backtab: comboboxAccelGraphics
+                    KeyNavigation.up: comboboxAccelGraphics
+                    KeyNavigation.left: comboboxAccelGraphics
                 }
                 DropShadow {
                     anchors.fill: rectAppNetworkCheckBox

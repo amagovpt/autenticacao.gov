@@ -4,7 +4,7 @@
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -36,6 +36,8 @@ Loader{
     property bool propertyBackupSignShow: true
     property double propertyBackupCoordX: 0
     property double propertyBackupCoordY: 0
+    property double propertyBackupBackgroundWidth: 0
+    property double propertyBackupBackgroundHeight: 0
     property bool propertyBackupSignReduced: false
     property int propertyBackupPage: 1
     property bool propertyBackupLastPage: false

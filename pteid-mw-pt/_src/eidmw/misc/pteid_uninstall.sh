@@ -31,7 +31,7 @@ rm -f /usr/local/lib/libcurl.4.dylib
 rm -rf /usr/local/lib/pteid_jni/
 
 #pteid dialogs utility
-rm -f /usr/local/bin/pteiddialogsQTsrv
+rm -rf /usr/local/bin/pteiddialogsQTsrv.app/
 
 #Certificates
 rm -rf /usr/local/share/certs/

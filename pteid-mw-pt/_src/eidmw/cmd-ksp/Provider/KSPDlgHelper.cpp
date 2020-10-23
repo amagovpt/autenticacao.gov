@@ -1,6 +1,7 @@
 #include "../Inc/KSPDlgHelper.h"
 #include "../Inc/log.h"
 #include "language.h"
+#include "cryptoFramework.h"
 
 using namespace eIDMW;
 
@@ -76,7 +77,7 @@ __in    HWND parentWindow)
     }
     LogTrace(LOGTYPE_INFO, "CmdKspOpenDialogValidateOtp", "appWindow = [0x%08x]", parentWindow);
     SetApplicationWindow(parentWindow);
-    DlgRet ret = DlgAskInputCMD(true, otp, otpLen, (wchar_t *)pszDocname);
+    DlgRet ret = DlgAskInputCMD(true, otp, otpLen, (wchar_t *)pszDocname, NULL, 0, sendSmsCallback);
     if (ret == DLG_OK)
     {
         return ERROR_SUCCESS;
@@ -132,20 +133,31 @@ __in    HWND parentWindow)
     return;
 }
 
-CmdSignThread::CmdSignThread(CMDProxyInfo *cmd_proxyinfo, CMDSignature *cmdSignature, std::string mobileNumber, std::string pin, CByteArray hash, char* docname)
+void sendSmsCallback()
+{
+    if (CmdSignThread::cmdSignature)
+    {
+        CmdSignThread::cmdSignature->sendSms();
+    }
+}
+
+CMDSignature *CmdSignThread::cmdSignature = NULL;
+CmdSignThread::CmdSignThread(CMDProxyInfo *cmd_proxyinfo, CMDSignature *cmdSignature,
+    std::string mobileNumber, std::string pin, CByteArray hash, char* docname, PCCERT_CONTEXT pCert)
 {
     m_cmd_proxyinfo = cmd_proxyinfo;
-    m_cmdSignature = cmdSignature;
+    CmdSignThread::cmdSignature = cmdSignature;
     m_mobileNumber = mobileNumber;
     m_pin = pin;
     m_hash = hash;
     m_docname = docname;
+    m_pCert = pCert;
     m_isValidateOtp = false;
 }
 
 CmdSignThread::CmdSignThread(CMDSignature *cmdSignature, std::string otp)
 {
-    m_cmdSignature = cmdSignature;
+    CmdSignThread::cmdSignature = cmdSignature;
     m_otp = otp;
     m_isValidateOtp = true;
 }
@@ -155,21 +167,60 @@ void CmdSignThread::Run()
     CMDProxyInfo cmd_proxyinfo = CMDProxyInfo::buildProxyInfo();
     if (m_isValidateOtp)
     {
-        m_signResult = m_cmdSignature->signClose(m_otp);
+        m_signResult = cmdSignature->signClose(m_otp);
     }
     else
     {
-        m_signResult = m_cmdSignature->signOpen(cmd_proxyinfo, m_mobileNumber, m_pin, m_hash, m_docname);
+        m_signResult = cmdSignature->signOpen(cmd_proxyinfo, m_mobileNumber, m_pin, m_hash, m_docname);
+
+        if (m_signResult != ERR_NONE)
+        {
+            goto end;
+        }
+        
+        // The state of the certificate is checked after signOpen because the certificate is revoked when
+        // the CMD subscription is canceled but if it was not activated again, the CMD service will return an error
+        // (ERR_GET_CERTIFICATE). This allows to show a more helpful message to the user.
+        std::string url;
+        APL_CryptoFwk *cryptoFwk = (APL_CryptoFwk *)AppLayer.getCryptoFwk();
+
+        HCERTSTORE hCAStore = NULL;
+        hCAStore = CertOpenSystemStore((HCRYPTPROV_LEGACY)NULL, "CA");
+
+        PCCERT_CONTEXT pIssuerCert = NULL;
+        DWORD dwFlags = 0;
+        pIssuerCert = CertGetIssuerCertificateFromStore(
+            hCAStore, m_pCert, pIssuerCert, &dwFlags);
+        // TODO: It should be checked if this is the correct issuer but there should be only one
+        if (!pIssuerCert)
+        {
+            LogTrace(LOGTYPE_WARNING, "CmdSignThread::Run()", "Unable to find issuer certificate in store.");
+            goto end;
+        }
+        
+        CByteArray certBytes(m_pCert->pbCertEncoded, m_pCert->cbCertEncoded);
+        CByteArray issuerCertBytes(pIssuerCert->pbCertEncoded, pIssuerCert->cbCertEncoded);
+        FWK_CertifStatus status = cryptoFwk->OCSPValidation(certBytes, issuerCertBytes);
+        LogTrace(LOGTYPE_INFO, "CmdSignThread::Run()", "OCSP verification status for CMD cert: %d", status);
+
+        if (status == FWK_CertifStatus::FWK_CERTIF_STATUS_REVOKED)
+        {
+            m_signResult = ERR_INV_CERTIFICATE;
+        }
+
+        CertFreeCertificateContext(pIssuerCert);        
     }
+
+end:
     DlgCloseCMDMessage();
 }
 
 void CmdSignThread::Stop(unsigned long ulSleepFrequency)
 {
     LogTrace(LOGTYPE_INFO, "CmdSignThread::Stop()", "Stop() called");
-    if (m_cmdSignature)
+    if (cmdSignature)
     {
-        m_cmdSignature->cancelRequest();
+        cmdSignature->cancelRequest();
     }
     WaitTillStopped(ulSleepFrequency);
 }

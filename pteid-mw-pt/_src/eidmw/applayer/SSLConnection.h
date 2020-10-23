@@ -2,7 +2,7 @@
 
  * Copyright (C) 2012, 2014, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -82,6 +82,7 @@ class SSLConnection
 		APL_Certif * loadCertsFromCard(SSL_CTX *ctx);
 		void loadCertChain(X509_STORE *store, APL_Certif * authentication_cert);
 		void loadAllRootCerts(X509_STORE *store);
+		unsigned long getKeyLength();
 
 		char *m_session_cookie;
 

@@ -114,7 +114,9 @@ CReadersInfo::CReadersInfo(CPCSC *poPCSC, const CByteArray & oReaders)
     {
 		//Ignore readers associated to Windows Virtual Smart Cards
                 if (strstr(csReaders, "Virtual Smart Card") == NULL
-                        && strstr(csReaders, "Windows Hello for Business") == NULL) {
+                        && strstr(csReaders, "Windows Hello for Business") == NULL
+                        && strstr(csReaders, "Microsoft IFD 0") == NULL
+                        && strstr(csReaders, "Microsoft UICC ISO Reader") == NULL) {
 			m_tInfos[m_ulReaderCount].csReader = csReaders;
 			m_tInfos[m_ulReaderCount].ulCurrentState = 0;
 			m_tInfos[m_ulReaderCount].ulEventState = 0;

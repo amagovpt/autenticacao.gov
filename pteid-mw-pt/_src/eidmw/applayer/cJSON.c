@@ -32,9 +32,6 @@
 #include <ctype.h>
 #include "cJSON.h"
 
-#ifdef WIN32
-#define snprintf _snprintf
-#endif
 
 static const char *ep;
 

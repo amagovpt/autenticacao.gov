@@ -565,8 +565,6 @@ __in    DWORD cbHash)
         LogTrace(LOGTYPE_WARNING, "getDocName", "Cannot get window title.");
         goto cleanup;
     }
-    LogTrace(LOGTYPE_INFO, "getDocName", "Window title = %S", pszTitle);
-
     title = pszTitle;
 
     // In Excel, Word and Adobe Acrobat Reader the docname comes before the last " - "
@@ -617,8 +615,13 @@ cleanup:
     }
 
     // Convert string: UTF-16 to UTF-8
+#ifdef WIN32
+    std::wstring u16Docname(title.begin(), title.end());
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> convert;
+#else
     std::u16string u16Docname(title.begin(), title.end());
     std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
+#endif
     docname = convert.to_bytes(u16Docname);
     StringCbCopyA(pszBuffer, cbBuffer, docname.c_str());
 }

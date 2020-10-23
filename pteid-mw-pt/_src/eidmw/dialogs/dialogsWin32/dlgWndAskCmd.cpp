@@ -1,7 +1,7 @@
 /* ****************************************************************************
 
 * eID Middleware Project.
-* Copyright (C) 2008-2009 FedICT.
+* Copyright (C) 2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
 *
 * This is free software; you can redistribute it and/or modify it
 * under the terms of the GNU Lesser General Public License version
@@ -26,90 +26,90 @@
 #include "../langUtil.h"
 #include "Log.h"
 #include "Config.h"
+#include "dlgUtil.h"
 
-#define IDC_STATIC 0
-#define IDB_OK 1
-#define IDB_CANCEL 2
+#define IDC_STATIC_HEADER 0
+#define IDB_OK IDOK
+#define IDB_CANCEL IDCANCEL
 #define IDC_EDIT 3
 #define IDC_STATIC_BOX 4
+#define IDC_STATIC_BOX_TEXT 5
+#define IDC_STATIC_OTP 6
+#define IDC_STATIC_TITLE 7
+#define IDC_SEND_SMS_BOX 8
+#define IDB_SEND_SMS 9
+#define IDC_SEND_SMS_TEXT 10
 
 #define MAX_USERNAME_LENGTH 90
 
 dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
     std::wstring & Header, std::wstring *inId,
-    std::wstring *userName, HWND Parent) : Win32Dialog(L"WndAskCmd")
+    std::wstring *userName, HWND Parent, void(*fSendSmsCallback)(void)) : Win32Dialog(L"WndAskCmd")
 {
-    hbrBkgnd = NULL;
+    m_fSendSmsCallback = fSendSmsCallback;
     OutResult[0] = ' ';
     OutResult[1] = (char)0;
-    
-    textFieldData.okBtnProcData = &okBtnProcData;
-    textFieldData.textFieldUpdated = false;
-    okBtnProcData.btnHovered = false;
-    okBtnProcData.btnEnabled = false;
-    okBtnProcData.mouseTracking = false;
-    cancelBtnProcData.btnHovered = false;
-    cancelBtnProcData.btnEnabled = true;
-    cancelBtnProcData.mouseTracking = false;
 
     std::wstring tmpTitle = L"";
-
-    // Length of OTP/PIN for CMD
-    m_ulOutMinLen = (isValidateOtp ? 6 : 4);
-    m_ulOutMaxLen = (isValidateOtp ? 6 : 8);
 
     // Added for accessibility
     tmpTitle += Header.c_str();
 
-    int Height = 360;
+    int Height = (isValidateOtp ? 440 : 360);
     int Width = 430;
-    ScaleDimensions(&Width, &Height);
-
-    title = GETSTRING_DLG(SigningWith);
-    title.append(L" Chave Móvel Digital");
 
     if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
     {
         RECT clientRect;
         GetClientRect(m_hWnd, &clientRect);
-        textFieldData.hwnd = m_hWnd;
 
-        int buttonWidth = clientRect.right * 0.43;
-        int buttonHeight = clientRect.bottom * 0.08;
-        int contentX = clientRect.right * 0.05;
-        int contentWidth = clientRect.right - 2 * contentX;
-        int textBoxY = clientRect.bottom * 0.35;
-        int boxHeight = clientRect.bottom * 0.23;
-        int editOutY = clientRect.bottom * 0.63;
-        int editOutLabelHeight = clientRect.bottom * 0.06;
+        int contentX = (int)(clientRect.right * 0.05);
+        int contentWidth = (int)(clientRect.right - 2 * contentX);
+        int paddingY = contentX;
+        int titleHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.12 : 0.14));
+        int headerY = (int)(titleHeight + paddingY);
+        int textBoxY = (int)(clientRect.bottom * (isValidateOtp ? 0.29 : 0.35));
+        int boxHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.18 : 0.23));
+        int editOutY = (int)(clientRect.bottom * (isValidateOtp ? 0.65 : 0.58));
+        int editOutLabelHeight = (int)(clientRect.bottom * 0.06);
+        int editFieldHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.135 : 0.165));
+        int buttonWidth = (int)(clientRect.right * 0.43);
+        int buttonHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.066 : 0.08));
+        int buttonY = (int)(clientRect.bottom - paddingY - buttonHeight);
+        //send SMS box
+        int sendSmsBoxY = (int)(textBoxY + boxHeight + paddingY);
+        int sendSmsButtonX = (int)(1.5 * contentX + contentWidth - buttonWidth);
 
-        HWND OK_Btn = CreateWindow(
-            L"BUTTON", GETSTRING_DLG(Confirm), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT | BS_OWNERDRAW,
-            clientRect.right * 0.52, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
-            m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL);
+        // TITLE
+        std::wstring title = GETSTRING_DLG(SigningWith);
+        title.append(L" Chave Móvel Digital");
 
-        HWND  Cancel_Btn = CreateWindow(
-            L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT | BS_OWNERDRAW,
-            clientRect.right * 0.05, clientRect.bottom * 0.87, buttonWidth, buttonHeight,
-            m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL);
+        titleData.text = title.c_str();
+        titleData.font = PteidControls::StandardFontHeader;
+        titleData.color = BLUE;
+        HWND hTitle = PteidControls::CreateText(
+            contentX, paddingY,
+            contentWidth, titleHeight,
+            m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
 
-        EnableWindow(OK_Btn, okBtnProcData.btnEnabled);
-        EnableWindow(Cancel_Btn, cancelBtnProcData.btnEnabled);
-        SetWindowSubclass(OK_Btn, dlgWndAskCmd::DlgButtonProc, 0, (DWORD_PTR)&okBtnProcData);
-        SetWindowSubclass(Cancel_Btn, dlgWndAskCmd::DlgButtonProc, 0, (DWORD_PTR)&cancelBtnProcData);
+        // HEADER
+        headerData.font = (isValidateOtp ? PteidControls::StandardFont : PteidControls::StandardFontBold);
+        headerData.text = Header.c_str();
+        HWND hHeader = PteidControls::CreateText(
+            contentX, headerY,
+            contentWidth, titleHeight,
+            m_hWnd, (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
 
-        DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER;
+        // BOX W/ TEXT
 
-        int headerY = clientRect.bottom * 0.18;
-        HWND hStaticHeader = CreateWindow(
-            L"STATIC", Header.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
-            contentX,
-            headerY,
-            contentWidth,
-            clientRect.bottom * 0.15,
-            m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-        SendMessage(hStaticHeader, WM_SETFONT, (WPARAM)(isValidateOtp ? TextFont : TextFontHeader), 0);
+        // box
+        hStaticBox = CreateWindow(
+            L"STATIC", NULL, WS_CHILD | WS_VISIBLE,
+            contentX, textBoxY,
+            contentWidth, boxHeight,
+            m_hWnd, (HMENU)IDC_STATIC_BOX, m_hInstance, NULL);
 
+        // text
         std::wstring boxText;
         if (!isValidateOtp)
         {
@@ -126,69 +126,90 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         else {
             boxText += GETSTRING_DLG(SigningDataWithIdentifier);
         }
-        hStaticBox = CreateWindow(
-            L"STATIC", NULL, WS_CHILD | WS_VISIBLE | SS_LEFT,
-            contentX,
-            textBoxY,
-            contentWidth,
-            boxHeight,
-            m_hWnd, (HMENU)IDC_STATIC_BOX, m_hInstance, NULL);
 
-        hStaticBoxText= CreateWindow(
-            L"STATIC", boxText.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
-            contentX + contentWidth * 0.05,
-            textBoxY + boxHeight * 0.12,
-            contentWidth*0.9,
-            boxHeight*0.76,
-            m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-        SendMessage(hStaticBoxText, WM_SETFONT, (WPARAM)TextFont, 0);
+        boxTextData.text = boxText.c_str();
+        HWND hBoxText = PteidControls::CreateText(
+            (int)(contentX + contentWidth * 0.03), (int)(textBoxY + boxHeight * 0.12),
+            (int)(contentWidth * 0.94), (int)(boxHeight * 0.75),
+            m_hWnd, (HMENU)IDC_STATIC_BOX_TEXT, m_hInstance, &boxTextData);
 
+        // docId
         if (isValidateOtp)
         {
             std::wstring docId;
             docId.append(L"\"").append(*inId).append(L"\"");
-            hStaticBoxTextBold = CreateWindow(
-                L"STATIC", docId.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
-                contentX + contentWidth * 0.05,
-                textBoxY + boxHeight * 0.33,
-                contentWidth*0.9,
-                boxHeight*0.65,
-                m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-            SendMessage(hStaticBoxTextBold, WM_SETFONT, (WPARAM)TextFontHeader, 0);
+
+            docIdTextData.font = PteidControls::StandardFontBold;
+            docIdTextData.text = docId.c_str();
+            HWND hDocIdText = PteidControls::CreateText(
+                (int)(contentX + contentWidth * 0.03), (int)(textBoxY + boxHeight * 0.33),
+                (int)(contentWidth * 0.94), (int)(boxHeight * 0.65),
+                m_hWnd, (HMENU)IDC_STATIC_OTP, m_hInstance, &docIdTextData);
         }
 
-        dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_NUMBER;
+        // SEND SMS BOX
+        if (isValidateOtp)
+        {
+            hSendSmsBox = CreateWindow(
+                L"STATIC", NULL, WS_CHILD | WS_VISIBLE,
+                contentX, sendSmsBoxY,
+                contentWidth, buttonHeight + 2 * paddingY,
+                m_hWnd, (HMENU)IDC_SEND_SMS_BOX, m_hInstance, NULL);
 
+            std::wstring sendSmsText;
+            sendSmsText = GETSTRING_DLG(ToSendSmsPress);
+            sendSmsText += L" \"";
+            sendSmsText += GETSTRING_DLG(SendSms);
+            sendSmsText += L"\".";
+            sendSmsTextData.text = sendSmsText.c_str();
+            HWND hSendSmsText = PteidControls::CreateText(
+                1.5 * contentX, sendSmsBoxY + 0.77 * paddingY,
+                contentWidth - buttonWidth - contentX, buttonHeight + 2 * paddingY,
+                m_hWnd, (HMENU)IDC_SEND_SMS_TEXT, m_hInstance, &sendSmsTextData);
+
+            sendSmsBtnData.text = GETSTRING_DLG(SendSms);
+            HWND hSendSmsButton = PteidControls::CreateButton(
+                sendSmsButtonX, sendSmsBoxY + paddingY, buttonWidth - contentX, buttonHeight,
+                m_hWnd, (HMENU)IDB_SEND_SMS, m_hInstance, &sendSmsBtnData);
+        }
+
+        // TEXT EDIT
         if (!isValidateOtp)
         {
-            dwStyle |= ES_PASSWORD;
+            textFieldData.title = GETSTRING_DLG(SignaturePinCmd);
+            textFieldData.isPassword = true;
+            textFieldData.minLength = 4;
+            textFieldData.maxLength = 8;
         }
-
-        int editFieldHeight = clientRect.bottom * 0.05;
-        std::wstring textEditLabel = (isValidateOtp ? GETSTRING_DLG(InsertSecurityCode) : GETSTRING_DLG(SignaturePinCmd));
-        HWND hStaticTextOut = CreateWindow(
-            L"STATIC", textEditLabel.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT,
-            contentX, editOutY, contentWidth, clientRect.bottom * 0.08,
-            m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL);
-
-        hTextEditOut = CreateWindowEx(NULL,
-            L"EDIT", L"", dwStyle,
-            clientRect.right * 0.05 + contentWidth*0.05, // shift to the right and draw the box in the right place
-            editOutY + editOutLabelHeight + clientRect.bottom * 0.04, // shift down 
-            contentWidth*0.9,
+        else
+        {
+            textFieldData.title = GETSTRING_DLG(InsertSecurityCode);
+            textFieldData.minLength = 6;
+            textFieldData.maxLength = 6;
+        }
+        textFieldData.isNumeric = true;
+        HWND hTextEdit = PteidControls::CreateTextField(
+            contentX,
+            editOutY + editOutLabelHeight, 
+            contentWidth,
             editFieldHeight,
-            m_hWnd, (HMENU)IDC_EDIT, m_hInstance, NULL);
+            m_hWnd, (HMENU)IDC_EDIT, m_hInstance, &textFieldData);
+        SetFocus(textFieldData.getMainWnd());
 
-        // okBtnProcData is passed to test if it is enabled to determine border color
-        SetWindowSubclass(hTextEditOut, dlgWndAskCmd::DlgEditProc, 0, (DWORD_PTR)&textFieldData);
+        // BUTTONS
+        okBtnProcData.highlight = true;
+        okBtnProcData.setEnabled(false);
+        okBtnProcData.text = GETSTRING_DLG(Confirm);
+        cancelBtnProcData.text = GETSTRING_DLG(Cancel);
 
-        SendMessage(hTextEditOut, EM_LIMITTEXT, m_ulOutMaxLen, 0);
-        SendMessage(hStaticTextOut, WM_SETFONT, (WPARAM)TextFont, 0);
-        SendMessage(hTextEditOut, WM_SETFONT, (WPARAM)TextFont, 0);
-        SendMessage(OK_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
-        SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
+        HWND Cancel_Btn = PteidControls::CreateButton(
+            contentX, buttonY, buttonWidth, buttonHeight,
+            m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &cancelBtnProcData);
 
-        SetFocus(GetDlgItem(m_hWnd, IDC_EDIT));
+        HWND OK_Btn = PteidControls::CreateButton(
+            (int)(clientRect.right - buttonWidth - contentX), buttonY, buttonWidth, buttonHeight,
+            m_hWnd, (HMENU)IDB_OK, m_hInstance, &okBtnProcData);
+
     }
 }
 
@@ -200,99 +221,13 @@ dlgWndAskCmd::~dlgWndAskCmd()
 void dlgWndAskCmd::GetResult()
 {
     wchar_t outBuf[RESULT_BUFFER_SIZE];
-    long len = (long)SendMessage(GetDlgItem(m_hWnd, IDC_EDIT), WM_GETTEXTLENGTH, 0, 0);
+    long len = (long)SendMessage(textFieldData.getMainWnd(), WM_GETTEXTLENGTH, 0, 0);
     if (len < RESULT_BUFFER_SIZE)
     {
-        SendMessage(GetDlgItem(m_hWnd, IDC_EDIT), WM_GETTEXT, (WPARAM)(sizeof(outBuf)), (LPARAM)outBuf);
+        SendMessage(textFieldData.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(outBuf)), (LPARAM)outBuf);
         wcscpy_s(OutResult, outBuf);
     }
 }
-
-
-LRESULT CALLBACK dlgWndAskCmd::DlgButtonProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
-{
-    DlgButtonData *btnProcData = (DlgButtonData *)dwRefData;
-    switch (uMsg)
-    {
-
-    case WM_MOUSEMOVE:
-    {
-        if (!btnProcData->mouseTracking)
-        {
-            // start tracking if we aren't already
-            TRACKMOUSEEVENT tme;
-            tme.cbSize = sizeof(TRACKMOUSEEVENT);
-            tme.dwFlags = TME_HOVER | TME_LEAVE;
-            tme.hwndTrack = hWnd;
-            tme.dwHoverTime = 1;
-            btnProcData->mouseTracking = TrackMouseEvent(&tme);
-        }
-        return 0;
-    }
-    case WM_MOUSEHOVER:
-    {
-        btnProcData->mouseTracking = false;
-        btnProcData->btnHovered = true;
-        InvalidateRect(hWnd, NULL, TRUE);
-        UpdateWindow(hWnd);
-        return 0;
-    }
-
-    case WM_MOUSELEAVE:
-    {
-        btnProcData->mouseTracking = false;
-        btnProcData->btnHovered = false;
-        InvalidateRect(hWnd, NULL, TRUE);
-        UpdateWindow(hWnd);
-        return 0;
-    }
-    default:
-
-        break;
-    }
-
-    return DefSubclassProc(hWnd, uMsg, wParam, lParam);
-}
-
-LRESULT CALLBACK dlgWndAskCmd::DlgEditProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
-{
-    DlgTextFieldData *textFieldProcData = (DlgTextFieldData *)dwRefData;
-    switch (uMsg)
-    {
-    case WM_PRINTCLIENT:
-    case WM_PAINT:
-    {
-        // Do not repaint if textField was not updated (it will paint the rectangle over the text)
-        if (textFieldProcData->textFieldUpdated)
-        {
-            break;
-        }
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hWnd, &ps);
-
-        RECT rectDlg;
-        GetClientRect(textFieldProcData->hwnd, &rectDlg);
-
-        RECT rectEdit;
-        GetClientRect(hWnd, &rectEdit);
-        
-        HPEN pen = CreatePen(PS_INSIDEFRAME, 2, (textFieldProcData->okBtnProcData->btnEnabled? BLUE : GREY));
-        SelectObject(hdc, pen);
-        SetBkMode(hdc, TRANSPARENT);
-
-        Rectangle(hdc, rectEdit.left - rectDlg.right*0.05, rectEdit.top - rectDlg.bottom * 0.03, rectEdit.right + rectDlg.right*0.05, rectEdit.bottom + rectDlg.bottom*0.03);
-
-        EndPaint(hWnd, &ps);
-        textFieldProcData->textFieldUpdated = true;
-        break;
-    }
-    default:
-        break;
-    }
-
-    return DefSubclassProc(hWnd, uMsg, wParam, lParam);
-}
-
 
 LRESULT dlgWndAskCmd::ProcecEvent
 (UINT		uMsg,			// Message For This Window
@@ -300,7 +235,6 @@ WPARAM		wParam,			// Additional Message Information
 LPARAM		lParam)		// Additional Message Information
 {
     PAINTSTRUCT ps;
-    RECT rect;
 
     switch (uMsg)
     {
@@ -312,32 +246,30 @@ LPARAM		lParam)		// Additional Message Information
         {
             if (EN_CHANGE == HIWORD(wParam))
             {
-                textFieldData.textFieldUpdated = false;
-                okBtnProcData.btnEnabled = AreFieldsFilled();
-                EnableWindow(GetDlgItem(m_hWnd, IDOK), ((unsigned int)okBtnProcData.btnEnabled));
-                InvalidateRect(hTextEditOut, NULL, TRUE);
-                UpdateWindow(hTextEditOut);
-
-                /* Simulate a mouse click in TextEditOut to rewrite the text 
-                   which was erased by redrawing the text field */
-                // The click should be at the rightmost point of the textfield
-                GetClientRect(hTextEditOut, &rect);
-                LPARAM lParam = MAKELPARAM(rect.right, rect.bottom / 2);
-                PostMessage(hTextEditOut, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
-                PostMessage(hTextEditOut, WM_LBUTTONUP, MK_LBUTTON, lParam);
+                okBtnProcData.setEnabled(textFieldData.isAcceptableInput());
             }
             return 0;
         }
 
         case IDB_OK:
-            GetResult();
-            dlgResult = eIDMW::DLG_OK;
-            close();
+            if (okBtnProcData.isEnabled())
+            {
+                GetResult();
+                dlgResult = eIDMW::DLG_OK;
+                close();
+            }
             return TRUE;
 
         case IDB_CANCEL:
             dlgResult = eIDMW::DLG_CANCEL;
             close();
+            return TRUE;
+
+        case IDB_SEND_SMS:
+            sendSmsBtnData.setEnabled(false);
+            if (m_fSendSmsCallback)
+                m_fSendSmsCallback();
+            SetFocus(textFieldData.getMainWnd());
             return TRUE;
 
         default:
@@ -355,95 +287,60 @@ LPARAM		lParam)		// Additional Message Information
         break;
     }
 
-    //Set the TextColor for the subwindows hTextEdit and hStaticText
+    //Set the TextColor for the box
     case WM_CTLCOLORSTATIC:
     {
         HDC hdcStatic = (HDC)wParam;
 
         MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskCmd::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
-        if ((HWND)lParam == hStaticBox || (HWND)lParam == hStaticBoxText || (HWND)lParam == hStaticBoxTextBold)
+        SetBkColor(hdcStatic, TRANSPARENT);
+        if ((HWND)lParam == hStaticBox || (HWND)lParam == hSendSmsBox)
         {
-            SetBkColor(hdcStatic, LIGHTGREY);
-            return (INT_PTR)CreateSolidBrush(LIGHTGREY);
+            if (m_hbrBkgnd != NULL)
+            {
+                DeleteObject(m_hbrBkgnd);
+            }
+            m_hbrBkgnd = CreateSolidBrush(((HWND)lParam == hSendSmsBox ? WHITE : LIGHTGREY));
+            return (INT_PTR)m_hbrBkgnd;
         }
 
-        SetBkColor(hdcStatic, WHITE);
-
-        if (hbrBkgnd == NULL)
+        if (m_hbrBkgnd == NULL)
         {
-            hbrBkgnd = CreateSolidBrush(WHITE);
+            m_hbrBkgnd = CreateSolidBrush(WHITE);
         }
 
-        return (INT_PTR)hbrBkgnd;
+        return (INT_PTR)m_hbrBkgnd;
     }
 
     case WM_PAINT:
     {
         m_hDC = BeginPaint(m_hWnd, &ps);
-        SetTextColor(m_hDC, RGB(0x3C, 0x5D, 0xBC));
 
-        //Change top header dimensions
-        GetClientRect(m_hWnd, &rect);
-        rect.left = rect.right * 0.05;
-        rect.top = rect.bottom * 0.05;
-        rect.right -= rect.left;
-        rect.bottom = rect.bottom * 0.25;
-
-        SetBkColor(m_hDC, RGB(255, 255, 255));
-        SelectObject(m_hDC, TextFontTitle);
         MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
 
-        //The first call is needed to calculate the needed bounding rectangle
-        DrawText(m_hDC, title.c_str(), -1, &rect, DT_WORDBREAK | DT_CALCRECT);
-        DrawText(m_hDC, title.c_str(), -1, &rect, DT_WORDBREAK);
+        DrawApplicationIcon(m_hDC, m_hWnd);
+
+        // Paint the Send Sms Box
+        int penWidth = 2;
+        ScaleDimensions(&penWidth, NULL);
+        HPEN pen = CreatePen(PS_INSIDEFRAME, penWidth, LIGHTGREY);
+        SelectObject(m_hDC, pen);
+        SetBkMode(m_hDC, TRANSPARENT);
+        RECT rectSmsBoxInClientCoord;
+        GetClientRect(hSendSmsBox, &rectSmsBoxInClientCoord);
+        MapWindowPoints(hSendSmsBox, m_hWnd, (LPPOINT)&rectSmsBoxInClientCoord, 2);
+        Rectangle(m_hDC,
+            rectSmsBoxInClientCoord.left - penWidth,
+            rectSmsBoxInClientCoord.top - penWidth,
+            rectSmsBoxInClientCoord.right + penWidth,
+            rectSmsBoxInClientCoord.bottom + penWidth);
+        DeleteObject(pen);
 
         EndPaint(m_hWnd, &ps);
 
         SetForegroundWindow(m_hWnd);
 
         return 0;
-    }
-
-    case WM_DRAWITEM:
-    {
-        LPDRAWITEMSTRUCT pDIS = (LPDRAWITEMSTRUCT)lParam;
-        switch (pDIS->CtlID) {
-        case IDB_CANCEL:
-        case IDB_OK:
-            if (pDIS->CtlID == IDB_CANCEL)
-            {
-                SetTextColor(pDIS->hDC, BLUE);
-                SetBkColor(pDIS->hDC, (cancelBtnProcData.btnHovered ? GREY : LIGHTGREY));
-            }
-            else if (pDIS->CtlID == IDB_OK)
-            {
-                SetTextColor(pDIS->hDC, WHITE);
-                if (okBtnProcData.btnEnabled)
-                {
-                    SetBkColor(pDIS->hDC, (okBtnProcData.btnHovered ? DARKBLUE : BLUE));
-                }
-                else
-                {
-                    SetBkColor(pDIS->hDC, LIGHTBLUE);
-                }
-            }
-
-            wchar_t textBuf[12];
-            SendMessage(GetDlgItem(m_hWnd, pDIS->CtlID), WM_GETTEXT, (WPARAM)(sizeof(textBuf)), (LPARAM)textBuf);
-            std::wstring textString(textBuf);
-
-            SelectObject(pDIS->hDC, TextFontHeader);
-            SetTextAlign(pDIS->hDC, TA_CENTER | VTA_CENTER);
-
-            ExtTextOut(pDIS->hDC,
-                pDIS->rcItem.right / 2,
-                pDIS->rcItem.bottom / 4,
-                ETO_OPAQUE | ETO_CLIPPED, &pDIS->rcItem, textString.c_str(), textString.length(), NULL);
-            DrawEdge(pDIS->hDC, &pDIS->rcItem, (pDIS->itemState & ODS_SELECTED ? EDGE_SUNKEN : NULL), BF_RECT);
-
-            return TRUE;
-        }
-        break;
     }
 
     case WM_ACTIVATE:
@@ -479,14 +376,7 @@ LPARAM		lParam)		// Additional Message Information
     case WM_CREATE:
     {
         MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskCmd::ProcecEvent WM_CREATE (wParam=%X, lParam=%X)", wParam, lParam);
-
-        HMENU hSysMenu;
-
-        hSysMenu = GetSystemMenu(m_hWnd, FALSE);
-        EnableMenuItem(hSysMenu, 3, MF_BYPOSITION | MF_GRAYED);
-        SendMessage(m_hWnd, DM_SETDEFID, (WPARAM)IDC_EDIT, (LPARAM)0);
-
-        return DefWindowProc((HWND)((CREATESTRUCT *)lParam)->lpCreateParams, uMsg, wParam, lParam);
+        break;
     }
 
     case WM_CLOSE:
@@ -507,15 +397,7 @@ LPARAM		lParam)		// Additional Message Information
     }
 
     default:
-    {
-        return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
-    }
+        break;
     }
     return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
-}
-
-bool dlgWndAskCmd::AreFieldsFilled()
-{
-    long outLen = (long)SendMessage(GetDlgItem(m_hWnd, IDC_EDIT), WM_GETTEXTLENGTH, 0, 0);
-    return outLen >= m_ulOutMinLen;
 }

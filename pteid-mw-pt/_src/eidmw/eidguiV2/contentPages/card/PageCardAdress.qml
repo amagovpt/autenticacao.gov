@@ -5,7 +5,7 @@
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -31,6 +31,7 @@ PageCardAdressForm {
         target: gapi
         onSignalGenericError: {
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalAddressLoaded: {
             console.log("Address --> Data Changed")
@@ -62,6 +63,7 @@ PageCardAdressForm {
             }
 
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
 
             propertyButtonConfirmOfAddress.enabled = true
 
@@ -102,6 +104,9 @@ PageCardAdressForm {
             }
             else if (error_code == GAPI.CardPinTimeout) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
+            }
+            else if (error_code == GAPI.IncompatibleReader) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
             }
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
@@ -153,6 +158,7 @@ PageCardAdressForm {
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 if(Constants.USE_SDK_PIN_UI_POPUP){
+                    mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                     gapi.verifyAddressPin("")
                 }else{
                     dialogTestPin.open()
@@ -297,7 +303,7 @@ PageCardAdressForm {
                 gapi.startReadingAddress()
                 return;
             }
-
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             var triesLeft = gapi.doVerifyAddressPin(textFieldPin.text)
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             if (triesLeft === 3) {
@@ -367,9 +373,8 @@ PageCardAdressForm {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Components.Link {
                     id: textPinMsgConfirm
-                    propertyText.text: qsTr("STR_ADDRESS_CHANGE_TEXT") + " "
-                          + "<a href='https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'>"
-                          + qsTr("STR_ADDRESS_CHANGE_TEXT_LINK")
+                    propertyText.text: "<a href='dummy-link' style='color: black; text-decoration:none'>" + qsTr("STR_ADDRESS_CHANGE_TEXT") + "</a>" + " "
+                          + "<a href=https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao>" + qsTr("STR_ADDRESS_CHANGE_TEXT_LINK")+ "</a>"
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -425,7 +430,7 @@ PageCardAdressForm {
                     anchors.left: textPinCurrent.right
                     anchors.bottom: parent.bottom
                     focus: true
-
+                    validator: RegExpValidator { regExp: /[a-zA-Z0-9]+/ }
                     Accessible.role: Accessible.EditableText
                     Accessible.name: placeholderText
                     KeyNavigation.tab: textPinNew
@@ -474,7 +479,7 @@ PageCardAdressForm {
                     clip: false
                     anchors.left: textPinNew.right
                     anchors.bottom: parent.bottom
-
+                    validator: RegExpValidator { regExp: /[a-zA-Z0-9]+/ }
                     Accessible.role: Accessible.EditableText
                     Accessible.name: placeholderText
                     KeyNavigation.tab: cancelButton
@@ -705,6 +710,8 @@ PageCardAdressForm {
                     var bodyPopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_ADDRESS_BLOCKED")
                     mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
                 }else{
+                    propertyBusyIndicator.running = true
+                    mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                     gapi.verifyAddressPin("")
                 }
             }else{

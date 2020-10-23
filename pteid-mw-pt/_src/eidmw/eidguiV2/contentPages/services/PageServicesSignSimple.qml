@@ -5,7 +5,7 @@
  * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -39,12 +39,14 @@ PageServicesSignSimpleForm {
         target: gapi
         onSignalGenericError: {
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
 
         onSignalPdfSignSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             signsuccess_dialog.open()
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalPdfSignFail: {
             console.log("Sign failed with error code: " + error_code)
@@ -59,6 +61,7 @@ PageServicesSignSimpleForm {
             cmdDialog.close()
             signerror_dialog.visible = true
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyOutputSignedFile = ""
         }
         onSignalCardAccessError: {
@@ -84,6 +87,9 @@ PageServicesSignSimpleForm {
                 else if (error_code == GAPI.CardPinTimeout) {
                     bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
                 }
+                else if (error_code == GAPI.IncompatibleReader) {
+                    bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
+                }
                 else {
                     bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
                 }
@@ -92,6 +98,7 @@ PageServicesSignSimpleForm {
                     cardLoaded = false
             }
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyButtonHidedAdd.forceActiveFocus()
         }
         onSignalCardDataChanged: {
@@ -105,6 +112,7 @@ PageServicesSignSimpleForm {
             propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_NIC") + ": "
                     + gapi.getDataCardIdentifyValue(GAPI.NIC)
             propertyBusyIndicatorRunning = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             cardLoaded = true
             propertyButtonHidedAdd.forceActiveFocus()
         }
@@ -403,10 +411,11 @@ PageServicesSignSimpleForm {
     }
     propertyFileDialogOutput {
         onAccepted: {
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             propertyBusyIndicatorRunning = true
             var loadedFilePath = filesModel.get(0).fileUrl
             var isTimestamp = false
-            var outputFile = propertyFileDialogOutput.fileUrl.toString()
+            var outputFile = propertyFileDialogOutput.file.toString()
             outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
 
             var page = 1
@@ -415,7 +424,7 @@ PageServicesSignSimpleForm {
             var reason = ""
             var location = ""
 
-            var isSmallSignature = false
+            var isSmallSignature = propertyCheckSignReduced.checked
 
             var coord_x = propertyPDFPreview.propertyCoordX
 
@@ -443,7 +452,7 @@ PageServicesSignSimpleForm {
 
         onAccepted: {
             /*console.log("You chose file(s): " + propertyFileDialog.fileUrls)*/
-            var path = propertyFileDialog.fileUrls[0];
+            var path = propertyFileDialog.file.toString();
             path = decodeURIComponent(Functions.stripFilePrefix(path))
             /*console.log("Adding file: " + path)*/
             var newFileUrl = {"fileUrl": path}
@@ -488,10 +497,19 @@ PageServicesSignSimpleForm {
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }else{
                 var outputFile = filesModel.get(0).fileUrl
-                //Check if filename has extension and remove it.
-                if( outputFile.lastIndexOf('.') > 0)
-                    var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'));
-                propertyFileDialogOutput.filename = outputFile + "_signed.pdf"
+                var prefix = (Qt.platform.os === "windows" ? "file:///" : "file://");
+
+                // If application was started with signSimple and output option from command line
+                var shortcutOutput = getShortcutOutput()
+                if (shortcutOutput) {
+                    outputFile = outputFile.substring(outputFile.lastIndexOf('/')+1, outputFile.length - 1)
+                    outputFile = prefix + shortcutOutput + Functions.replaceFileSuffix(outputFile, "_signed.pdf")
+                    propertyFileDialogOutput.file = outputFile
+                    propertyFileDialogOutput.accepted()
+                    gapi.setShortcutOutput("")
+                    return;
+                }
+                propertyFileDialogOutput.currentFile = prefix + Functions.replaceFileSuffix(outputFile, "_signed.pdf")
                 propertyFileDialogOutput.open()
             }
         }
@@ -507,10 +525,18 @@ PageServicesSignSimpleForm {
                 return;
             }
             var outputFile = filesModel.get(0).fileUrl
-            //Check if filename has extension and remove it.
-            if( outputFile.lastIndexOf('.') > 0)
-                var outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'));
-            propertyFileDialogCMDOutput.filename = outputFile + "_signed.pdf";
+            var prefix = (Qt.platform.os === "windows" ? "file:///" : "file://");
+            // If application was started with signSimple and output option from command line
+            var shortcutOutput = getShortcutOutput()
+            if (shortcutOutput) {
+                outputFile = outputFile.substring(outputFile.lastIndexOf('/')+1, outputFile.length - 1)
+                outputFile = prefix + shortcutOutput + Functions.replaceFileSuffix(outputFile, "_signed.pdf")
+                propertyFileDialogCMDOutput.file = outputFile
+                propertyFileDialogCMDOutput.accepted()
+                gapi.setShortcutOutput("")
+                return;
+            }
+            propertyFileDialogCMDOutput.currentFile = prefix + Functions.replaceFileSuffix(outputFile, "_signed.pdf")
             propertyFileDialogCMDOutput.open()
         }
     }
@@ -611,11 +637,28 @@ PageServicesSignSimpleForm {
 
         }
     }
+    propertyCheckSignReduced{
+        onCheckedChanged: {
+            if(propertyCheckSignReduced.checked){
+                propertyPDFPreview.propertySigHidth = 45
+                propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.2
+                propertyPDFPreview.propertyDragSigReasonText.height = 0
+                propertyPDFPreview.propertyDragSigLocationText.height = 0
+                propertyPDFPreview.propertyDragSigImg.height = 0
+            }else{
+                propertyPDFPreview.propertySigHidth = 90
+                propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.1
+                propertyPDFPreview.propertyDragSigReasonText.height = propertyPDFPreview.propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                propertyPDFPreview.propertyDragSigLocationText.height = propertyPDFPreview.propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                propertyPDFPreview.propertyDragSigImg.height = propertyPDFPreview.propertyDragSigRect.height * 0.3
+            }
+        }
+    }
     Component.onCompleted: {
-        if (gapi.getShortcutFlag() > 0)
+        if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignSimple)
             filesModel.append(
                         {
-                            "fileUrl": gapi.getShortcutInputPDF()
+                            "fileUrl": gapi.getShortcutPaths()[0]
                         });
 
         console.log("Page Services Sign Simple mainWindowCompleted")
@@ -640,7 +683,10 @@ PageServicesSignSimpleForm {
     }
     Component.onDestruction: {
         console.log("PageServicesSignSimple destruction")
-        if(gapi) gapi.closeAllPdfPreviews();
+        if(gapi) {
+            gapi.closeAllPdfPreviews();
+            gapi.setShortcutOutput("")
+        }
     }
     function updateIndicators(pageCount){
         propertySpinBoxControl.up.indicator.visible = true
@@ -687,5 +733,16 @@ PageServicesSignSimpleForm {
     function maxTextInputLength(num){
         //given number of pages returns maximum length that TextInput should accept
         return Math.ceil(Math.log(num + 1) / Math.LN10);
+    }
+
+    function getShortcutOutput() {
+        var output = gapi.getShortcutOutput()
+        if (output == "")
+            return null
+        output = gapi.getAbsolutePath(output)
+        if (output.charAt(output.length - 1) != "/") {
+            output += "/"
+        }
+        return output
     }
 }

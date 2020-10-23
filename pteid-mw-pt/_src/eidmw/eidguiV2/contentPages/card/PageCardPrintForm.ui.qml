@@ -4,12 +4,13 @@
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
 import QtQuick 2.6
 import QtQuick.Controls 2.1
+import Qt.labs.platform 1.0
 import QtGraphicalEffects 1.0
 import eidguiV2 1.0
 
@@ -50,9 +51,11 @@ Item {
         z: 1
     }
 
-    FileSaveDialog {
+    FileDialog {
         id: fileDialogOutput
         title: qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
+        fileMode: FileDialog.SaveFile
+        folder: StandardPaths.writableLocation(StandardPaths.HomeLocation)
         nameFilters: ["PDF (*.pdf)", "All files (*)"]
     }
 

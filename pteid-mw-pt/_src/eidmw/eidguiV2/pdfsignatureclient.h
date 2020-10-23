@@ -3,7 +3,7 @@
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -72,7 +72,7 @@ class PDFSignatureClient
 public:
 
     PDFSignatureClient();
-    int signPDF(ProxyInfo, QString, QString, QString, QString, int, bool,
+    int signPDF(ProxyInfo, QString, QString, QString, QString, bool, bool,
                 PDFSignatureInfo, std::vector<ns3__AttributeType *> &,
                 bool, QByteArray &m_jpeg_scaled_data);
 
@@ -81,7 +81,7 @@ private:
     QByteArray openSCAPSignature(const char *inputFile, const char *outputPath,
                             std::string certChain, QString citizenName, QString citizenId,
                             QString attributeSupplier, QString attribute,
-                            PDFSignatureInfo signatureInfo, bool isVisible, bool isCC,
+                            PDFSignatureInfo signatureInfo, bool isVisible, bool isTimestamp, bool isCC,
                             bool useCustomImage, QByteArray &m_jpeg_scaled_data);
 
     unsigned char * callSCAPSignatureService(soap* sp, QByteArray signatureHash,

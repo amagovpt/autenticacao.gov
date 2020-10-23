@@ -3,7 +3,7 @@
  * Copyright (C) 2016-2017 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2016 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -134,11 +134,11 @@ namespace eIDMW
 
 		unsigned char ssc_block[] = {0,0,0,0,0,0,0,0};
 		unsigned char xx[MAC_KEYSIZE];
-	    unsigned char des_out[MAC_KEYSIZE];
-	    unsigned char *msg = NULL;
-	    des_key_schedule ks_a;
-	    des_key_schedule ks_b;
-	    size_t i, j;
+	    	unsigned char des_out[MAC_KEYSIZE];
+	    	unsigned char *msg = NULL;
+	    	DES_key_schedule ks_a;
+	    	DES_key_schedule ks_b;
+	    	size_t i, j;
 
 		CByteArray in;
 		//std::cerr << "DEBUG: retail_mac_des: mac_input.Size(): " << mac_input.Size() << std::endl;
@@ -489,7 +489,7 @@ namespace eIDMW
 
         //Verify hash C = SHA-1 [PRND1 || KICC || SN.ICC || TRnd || KIFD || DH.Params]
 
-        EVP_MD_CTX cmd_ctx;
+        EVP_MD_CTX * cmd_ctx = EVP_MD_CTX_new();
 		unsigned int md_len = 0;
 		const int prnd1_len = 106;
 
@@ -501,24 +501,26 @@ namespace eIDMW
 		dh_params.Append(this->dh_p);
 		dh_params.Append(this->dh_q);
 
-		EVP_DigestInit(&cmd_ctx, EVP_sha1());
-		EVP_DigestUpdate(&cmd_ctx, prnd1, prnd1_len);
-		EVP_DigestUpdate(&cmd_ctx, m_kicc.GetBytes(), m_kicc.Size());
-		EVP_DigestUpdate(&cmd_ctx, snICC.GetBytes(), snICC.Size());
-		EVP_DigestUpdate(&cmd_ctx, m_RNDIFD.GetBytes(), m_RNDIFD.Size());
-		EVP_DigestUpdate(&cmd_ctx, m_kifd.GetBytes(), m_kifd.Size());
-		EVP_DigestUpdate(&cmd_ctx, dh_params.GetBytes(), dh_params.Size());
+		EVP_DigestInit(cmd_ctx, EVP_sha1());
+		EVP_DigestUpdate(cmd_ctx, prnd1, prnd1_len);
+		EVP_DigestUpdate(cmd_ctx, m_kicc.GetBytes(), m_kicc.Size());
+		EVP_DigestUpdate(cmd_ctx, snICC.GetBytes(), snICC.Size());
+		EVP_DigestUpdate(cmd_ctx, m_RNDIFD.GetBytes(), m_RNDIFD.Size());
+		EVP_DigestUpdate(cmd_ctx, m_kifd.GetBytes(), m_kifd.Size());
+		EVP_DigestUpdate(cmd_ctx, dh_params.GetBytes(), dh_params.Size());
 
 
-    	EVP_DigestFinal(&cmd_ctx, computed_digest, &md_len);
+		EVP_DigestFinal(cmd_ctx, computed_digest, &md_len);
 
-    	if (md_len != 20)
-    	{
-    		fprintf(stderr, "Should be SHA-1 hash, Abort!\n");
-    		return false;
-    	}
+		if (md_len != 20)
+		{
+			fprintf(stderr, "Should be SHA-1 hash, Abort!\n");
+			return false;
+		}
 
-    	//Check the calculated hash against the one returned by the card
+		EVP_MD_CTX_free(cmd_ctx);
+
+		//Check the calculated hash against the one returned by the card
 		return memcmp(computed_digest, c_hash, 20) == 0;
 	}
 
@@ -606,7 +608,7 @@ namespace eIDMW
 		if (cRnd == NULL || strlen(cRnd) == 0)
 		{
 			fprintf(stderr, "Couldn't get CRnd random bytes from the card, aborting!\n");
-			
+
 			free(cRnd);
 			free(snIFD);
 			return CByteArray();
@@ -620,41 +622,41 @@ namespace eIDMW
 		challenge[0] = 0x6A;
 		challenge[127] = 0xBC;
 
-        if (RAND_status() != 1) {
+		if (RAND_status() != 1) {
 			MWLOG(LEV_ERROR, MOD_APL, L"SecurityContext: RNG is not seeded yet!");
-        }
+		}
 
 
-        if (RAND_bytes(prnd2, PRND2_SIZE) == 0) {
+		if (RAND_bytes(prnd2, PRND2_SIZE) == 0) {
 
-            fprintf(stderr, "Error obtaining PRND2 bytes of random from OpenSSL\n");
-            free(cRnd);
-            free(snIFD);
-            return CByteArray();
-        }
+			fprintf(stderr, "Error obtaining PRND2 bytes of random from OpenSSL\n");
+			free(cRnd);
+			free(snIFD);
+			return CByteArray();
+		}
 
-		EVP_MD_CTX cmd_ctx;
+		EVP_MD_CTX * cmd_ctx = EVP_MD_CTX_new();
 		unsigned int md_len = 0;
 
-		EVP_DigestInit(&cmd_ctx, EVP_sha1());
-		EVP_DigestUpdate(&cmd_ctx, prnd2, PRND2_SIZE);
-		EVP_DigestUpdate(&cmd_ctx, m_kifd.GetBytes(), m_kifd.Size());
-		EVP_DigestUpdate(&cmd_ctx, sn_ifd_bytes.GetBytes(), sn_ifd_bytes.Size());
-		EVP_DigestUpdate(&cmd_ctx, crnd_bytes.GetBytes(), crnd_bytes.Size());
-		EVP_DigestUpdate(&cmd_ctx, m_kicc.GetBytes(), m_kicc.Size());
-		EVP_DigestUpdate(&cmd_ctx, dh_params.GetBytes(), dh_params.Size());
+		EVP_DigestInit(cmd_ctx, EVP_sha1());
+		EVP_DigestUpdate(cmd_ctx, prnd2, PRND2_SIZE);
+		EVP_DigestUpdate(cmd_ctx, m_kifd.GetBytes(), m_kifd.Size());
+		EVP_DigestUpdate(cmd_ctx, sn_ifd_bytes.GetBytes(), sn_ifd_bytes.Size());
+		EVP_DigestUpdate(cmd_ctx, crnd_bytes.GetBytes(), crnd_bytes.Size());
+		EVP_DigestUpdate(cmd_ctx, m_kicc.GetBytes(), m_kicc.Size());
+		EVP_DigestUpdate(cmd_ctx, dh_params.GetBytes(), dh_params.Size());
 
 
-    	EVP_DigestFinal(&cmd_ctx, sha1_digest, &md_len);
+		EVP_DigestFinal(cmd_ctx, sha1_digest, &md_len);
 
-    	if (md_len != 20)
-    	{
-    		fprintf(stderr, "Should be SHA-1 hash, Abort!\n");
-    	}
 
-    	for (int i=0; i!=PRND2_SIZE; i++)
+		if (md_len != 20)
 		{
+		    fprintf(stderr, "Should be SHA-1 hash, Abort!\n");
+		}
 
+		for (int i=0; i!=PRND2_SIZE; i++)
+		{
 			challenge[i+1] = prnd2[i];
 		}
 
@@ -662,7 +664,8 @@ namespace eIDMW
 			challenge[i+107] = sha1_digest[i];
 
 		free(cRnd);
-        free(snIFD);
+		free(snIFD);
+		EVP_MD_CTX_free(cmd_ctx);
 
 		return CByteArray(challenge, sizeof(challenge));
 	}
@@ -681,9 +684,15 @@ namespace eIDMW
 		this->dh_g = CByteArray(std::string(dh_params.dh_g), true);
 		this->dh_q = CByteArray(std::string(dh_params.dh_q), true);
 
+		BIGNUM *dhkey_p = NULL;
+		BIGNUM *dhkey_g = NULL;
+
 		DH * dh_key = DH_new();
-		BN_hex2bn(&(dh_key->p), dh_params.dh_p);
-		BN_hex2bn(&(dh_key->g), dh_params.dh_g);
+
+		BN_hex2bn(&dhkey_p, dh_params.dh_p);
+		BN_hex2bn(&dhkey_g, dh_params.dh_g);
+
+		DH_set0_pqg(dh_key, dhkey_p, NULL, dhkey_g);
 
 		//Store the card auth key for later
 		this->pkIccAuth = CByteArray(std::string(dh_params.card_auth_public_key), true);
@@ -694,13 +703,17 @@ namespace eIDMW
 			throw CMWEXCEPTION(EIDMW_ERR_CVC_GENERIC_ERROR);
 		}
 
-	 	char * kifd = BN_bn2hex(dh_key->pub_key);
-	 	unsigned char * kifd_bytes = (unsigned char *) OPENSSL_malloc(BN_num_bytes(dh_key->pub_key));
+		const BIGNUM * pub_key = NULL;
+
+		DH_get0_key(dh_key, &pub_key, NULL);
+
+	 	char * kifd = BN_bn2hex(pub_key);
+	 	unsigned char * kifd_bytes = (unsigned char *) OPENSSL_malloc(BN_num_bytes(pub_key));
 
 	 	//int BN_bn2bin(const BIGNUM *a, unsigned char *to);
 	 	//Store the byte array version for further computations
-	 	BN_bn2bin(dh_key->pub_key, kifd_bytes);
-	 	m_kifd = CByteArray(kifd_bytes, BN_num_bytes(dh_key->pub_key));
+	 	BN_bn2bin(pub_key, kifd_bytes);
+	 	m_kifd = CByteArray(kifd_bytes, BN_num_bytes(pub_key));
 
 	 	if(!sam_helper->sendKIFD(kifd))
 	 	{
@@ -722,7 +735,7 @@ namespace eIDMW
 		
 	    //DH_compute_key() computes the shared secret from the private DH value in dh and the other party's public value in pub_key and stores it in
         //key. key must point to DH_size(dh) bytes of memory.
-        unsigned int shared_secret_len = DH_size(dh_key);
+        	unsigned int shared_secret_len = DH_size(dh_key);
 		unsigned char * kicc_ifd = (unsigned char *) OPENSSL_malloc(shared_secret_len);
 		rc = DH_compute_key(kicc_ifd, kicc, dh_key);
 
@@ -730,8 +743,9 @@ namespace eIDMW
 
 		m_kicc_ifd = CByteArray(kicc_ifd, shared_secret_len);
 
-		//std::cerr << "KICC/KIFD " << byteArrayToString(m_kicc_ifd) << std::endl;
+		DH_free(dh_key);
 
+		//std::cerr << "KICC/KIFD " << byteArrayToString(m_kicc_ifd) << std::endl;
 	}
 
 	bool SecurityContext::writeFile(char *fileID, CByteArray file_content, unsigned int offset)

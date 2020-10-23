@@ -24,9 +24,7 @@
 
 #include "asn1.h"
 
-#ifdef WIN32
-#define snprintf _snprintf
-#else
+#ifndef WIN32
 #define strnicmp strncasecmp
 #endif
 

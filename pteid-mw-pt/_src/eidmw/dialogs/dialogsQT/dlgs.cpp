@@ -434,7 +434,12 @@ void eIDMW::CallQTServer(const DlgFunctionIndex index,
   char csCommand[150];
   Type_WndGeometry *pWndGeometry = (Type_WndGeometry *)wndGeometry;
 
-  sprintf(csCommand,"%s/%s %i %s", "/usr/local/bin", csServerName.c_str(),index,csFilename );
+std::string csServerPath = "/usr/local/bin/";
+#ifdef __APPLE__
+  csServerPath += "pteiddialogsQTsrv.app/Contents/MacOS/";
+#endif
+
+  sprintf(csCommand,"%s/%s %i %s", csServerPath.c_str(), csServerName.c_str(), index, csFilename);
 
   if  ( ( pWndGeometry != NULL )
         && ( pWndGeometry->x >= 0 ) && ( pWndGeometry->y >= 0 )

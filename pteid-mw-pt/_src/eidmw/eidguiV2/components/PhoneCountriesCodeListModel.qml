@@ -3,7 +3,7 @@
  * Copyright (C) 2018 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 André Guerreiro - <aguerreiro1985@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 

@@ -46,7 +46,7 @@ preprocess.variable_out+=SOURCES
 ###
 ### As a postbuild step, compile the generated .java files and jar them to a jar file
 ###
-unix:QMAKE_POST_LINK =	javac -d ../eidlibJava/class ./src/*.java ./GeneratedFiles/*.java && \
+unix:QMAKE_POST_LINK =	javac -encoding utf8 -d ../eidlibJava/class ./src/*.java ./GeneratedFiles/*.java && \
 			jar cf ../jar/$${EIDLIBJAR} -C ../eidlibJava/class . && mkdir -p javadocs/
 
 ## destination directory
@@ -60,7 +60,7 @@ LIBS +=	-l$${DLGLIB}
 LIBS +=	-l$${CARDLAYERLIB}
 LIBS +=	-l$${APPLAYERLIB}
 
-macx: INCLUDEPATH += /Library/Java/JavaVirtualMachines/jdk-11.0.6.jdk/Contents/Home/include/ /Library/Java/JavaVirtualMachines/jdk-11.0.6.jdk/Contents/Home/include/darwin/ /usr/local/Cellar/openssl/1.0.2q/include/
+macx: INCLUDEPATH += /Library/Java/JavaVirtualMachines/jdk-11.0.6.jdk/Contents/Home/include/ /Library/Java/JavaVirtualMachines/jdk-11.0.6.jdk/Contents/Home/include/darwin/ $$DEPS_DIR/openssl/include
 macx: LIB += -Wl,-framework -Wl,Java
 
 DEPENDPATH += .
@@ -70,17 +70,15 @@ INCLUDEPATH += ../dialogs
 INCLUDEPATH += ../common
 INCLUDEPATH += ../cardlayer
 INCLUDEPATH += ../eidlib
-INCLUDEPATH += /usr/lib/jvm/java-8-openjdk-amd64/include
-INCLUDEPATH += /usr/lib/jvm/java-8-openjdk-amd64/include/linux
+INCLUDEPATH += /usr/lib/jvm/java-11-openjdk-amd64/include
+INCLUDEPATH += /usr/lib/jvm/java-11-openjdk-amd64/include/linux
 
-macx:INCLUDEPATH += /usr/local/include
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 
 DEFINES += EIDMW_EIDLIB_EXPORTS
 
 # Input
 
-#macx: SOURCES += GeneratedFiles/eidlibJava_Wrapper.cpp
 SOURCES += ../eidlib/eidlibCard.cpp
 SOURCES += ../eidlib/eidlibCrypto.cpp
 SOURCES += ../eidlib/eidlibDoc.cpp

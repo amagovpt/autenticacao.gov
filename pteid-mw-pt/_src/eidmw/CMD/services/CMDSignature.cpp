@@ -4,7 +4,7 @@
  * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -372,6 +372,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
 
 int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin, int page, double coord_x, double coord_y, const char *location, const char *reason, const char *outfile_path)
 {
+    m_userId = in_userId;
     if (cmdService)
     {
         delete cmdService;
@@ -564,6 +565,10 @@ int CMDSignature::signClose(std::string in_code)
     }
 
     return ERR_NONE;
+}
+
+int CMDSignature::sendSms() {
+    return cmdService->forceSMS(m_proxyInfo, m_userId);
 }
 
 }

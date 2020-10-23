@@ -5,7 +5,7 @@
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -60,9 +60,8 @@ PageDefinitionsAppForm {
             controler.setPinpadEnabledValue(propertyCheckboxEnablePinpad.checked) 
 
             if (propertyCheckboxEnablePinpad.enabled) {
-                var titlePopup = qsTranslate("PageDefinitionsApp","STR_USE_PINPAD") + controler.autoTr
-                var bodyPopup = qsTranslate("Popup Card","STR_POPUP_RESTART_APP") + controler.autoTr
-                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                restart_dialog.headerTitle = qsTranslate("PageDefinitionsApp","STR_USE_PINPAD") + controler.autoTr
+                restart_dialog.open()
             }
         }
     }
@@ -109,9 +108,8 @@ PageDefinitionsAppForm {
         onCheckedChanged: {
             controler.setUseSystemScaleValue(propertyCheckboxUseSystemScale.checked)
             if (propertyCheckboxUseSystemScale.enabled) {
-                var titlePopup = qsTranslate("PageDefinitionsApp","STR_SCALE_APPLICATION_TITLE") + controler.autoTr
-                var bodyPopup = qsTranslate("Popup Card","STR_POPUP_RESTART_APP") + controler.autoTr
-                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                restart_dialog.headerTitle = qsTranslate("PageDefinitionsApp","STR_SCALE_APPLICATION_TITLE") + controler.autoTr
+                restart_dialog.open()
             }
         }
     }
@@ -119,9 +117,8 @@ PageDefinitionsAppForm {
         console.log("propertyComboBoxScaling onActivated index = "
                     + propertyComboBoxScaling.currentIndex)
         controler.setApplicationScaleValue(propertyComboBoxScaling.currentIndex)
-        var titlePopup = qsTranslate("PageDefinitionsApp","STR_SCALE_APPLICATION_TITLE") + controler.autoTr
-        var bodyPopup = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
-        mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+        restart_dialog.headerTitle = qsTranslate("PageDefinitionsApp","STR_SCALE_APPLICATION_TITLE") + controler.autoTr
+        restart_dialog.open()
     }
     propertyComboBoxScaling.onModelChanged: {
         propertyComboBoxScaling.currentIndex = controler.getApplicationScaleValue()
@@ -137,7 +134,9 @@ PageDefinitionsAppForm {
                 var titlePopup = qsTranslate("Popup Card","STR_POPUP_DEBUG_MODE") + controler.autoTr
                 var bodyPopup = ""
                 if (debugFilename === "") {
-                    bodyPopup = qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
+                    restart_dialog.headerTitle = titlePopup
+                    restart_dialog.open()
+                    return
                 } else {
                     bodyPopup = qsTranslate("Popup Card", "STR_POPUP_WIN_DEBUG_FILE_ERROR").arg(debugFilename) + controler.autoTr
                 }
@@ -146,18 +145,20 @@ PageDefinitionsAppForm {
         }
     }
 
-    propertyCheckboxAccelGraphics{
-        onCheckedChanged: {
-            if(propertyCheckboxAccelGraphics.checked){
-                controler.setGraphicsAccelValue(true)
-            }else{
-                controler.setGraphicsAccelValue(false)
-            }
-            if(propertyCheckboxAccelGraphics.enabled){
-                var titlePopup = qsTranslate("Popup Card","STR_POPUP_ACCEL_GRAPHICS") + controler.autoTr
-                var bodyPopup = qsTranslate("Popup Card","STR_POPUP_RESTART_APP") + controler.autoTr
-                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-            }
+    propertyComboboxAccelGraphics{
+        onActivated:  {
+            console.log("propertyComboboxAccelGraphics onActivated index = "
+                        + propertyComboboxAccelGraphics.currentIndex)
+            controler.setGraphicsAccelValue(propertyComboboxAccelGraphics.currentIndex)
+            restart_dialog.headerTitle = qsTranslate("Popup Card","STR_POPUP_ACCEL_GRAPHICS") + controler.autoTr
+            restart_dialog.open()
+        }
+        onModelChanged: {
+            console.log("propertyComboboxAccelGraphics onModelChanged index = "
+                        + propertyComboboxAccelGraphics.currentIndex)
+            propertyComboboxAccelGraphics.currentIndex = controler.getGraphicsAccelValue();
+            console.log("propertyComboboxAccelGraphics onModelChanged index = "
+                        + propertyComboboxAccelGraphics.currentIndex)
         }
     }
     propertyCheckboxSystemProxy{
@@ -236,6 +237,9 @@ PageDefinitionsAppForm {
 
             propertyCheckboxUseSystemScale.visible = false
             propertyComboBoxScaling.width = propertyComboBoxScaling.parent.width - propertyTextManualScaling.width - 2*10- Constants.SIZE_TEXT_V_SPACE
+
+            // Only Windows supports ANGLE option
+            propertyComboboxAccelGraphics.model = propertyComboboxAccelGraphics.model.slice(0,-1)
         }
 
         propertyCheckboxStartAutoupdate.checked = controler.getStartAutoupdateValue()
@@ -257,9 +261,6 @@ PageDefinitionsAppForm {
             propertyCheckBoxDebugMode.checked = false
         }
         propertyCheckBoxDebugMode.enabled = true
-
-        propertyCheckboxAccelGraphics.checked = controler.getGraphicsAccelValue();
-        propertyCheckboxAccelGraphics.enabled = true;
 
         updatePages()
 

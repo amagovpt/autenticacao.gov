@@ -5,7 +5,7 @@
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -116,7 +116,11 @@ Item {
                 id: mouseAreaMinimizeButton
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked: mainWindow.showMinimized()
+                onClicked:{
+                    if (Qt.platform.os === "osx")
+                        mainWindow.flags = Qt.Window | Qt.CustomizeWindowHint | Qt.WindowMinMaxButtonsHint;
+                    mainWindow.showMinimized();
+                }
             }
         }
         Image {
@@ -157,7 +161,6 @@ Item {
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
-                    mainWindow.visible = false
                     mainWindow.close()
                 }
             }

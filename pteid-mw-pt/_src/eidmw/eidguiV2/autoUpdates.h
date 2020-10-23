@@ -2,7 +2,7 @@
 
  * Copyright (C) 2019-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -48,6 +48,9 @@ public:
         : m_AppController(AppController)
     {
     }
+    ~AutoUpdates() {
+        delete qnam;
+    }
     void setAppController(AppController* AppController){
         m_AppController = AppController;
     }
@@ -82,7 +85,7 @@ private:
     int m_updateType;
     QUrl url;
     QNetworkProxy proxy;
-    QNetworkAccessManager qnam;
+    QNetworkAccessManager *qnam = NULL;
     QNetworkReply *reply;
     QFile *file;
     int fileIdx = 0;
@@ -126,6 +129,7 @@ private:
     void RunAppPackage(std::string pkg, std::string distro);
     void RunCertsPackage(QStringList certs);
     bool validateHash(QString certPath, QString hash);
+    bool verifyPackageSignature(std::string &pkg);
 };
 
 #endif //AUTOUPDATES_H

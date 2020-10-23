@@ -4,7 +4,7 @@
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -64,6 +64,9 @@ class CMDServices {
         // CCMovelMultipleSign
 		int ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigned char *> in_hashs,
                                 std::vector<std::string> docNames, std::string in_pin);
+
+        // ForceSMS
+        int forceSMS(CMDProxyInfo proxyInfo, std::string in_userId);
 
         // ValidateOtp
         int getSignatures(CMDProxyInfo proxyInfo, std::string in_code, std::vector<CByteArray *> out_signature );
@@ -151,6 +154,9 @@ class CMDServices {
                                                 , std::string *in_pin);
 
         int checkGetCertificateWithPinResponse( _ns2__GetCertificateWithPinResponse *response );
+
+        // ForceSMS
+        int checkForceSmsResponse(_ns2__ForceSMSResponse *response);
 };
 
 }

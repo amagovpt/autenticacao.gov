@@ -1,4 +1,4 @@
-# Manual de Utilização do Middleware do Cartão de Cidadão <!-- omit in toc -->
+# Manual da Aplicação Autenticação.gov para computador <!-- omit in toc -->
 
 ![Ilustração: Cartão de Cidadão](Pictures/CartaoCidadao.png "Cartão de Cidadão"){:.center}
 
@@ -7,92 +7,96 @@
 
 # Tabela de conteúdos <!-- omit in toc -->
 
-- [Introdução](#introdu%c3%a7%c3%a3o)
-- [Download, instalação e remoção do middleware](#download-instala%c3%a7%c3%a3o-e-remo%c3%a7%c3%a3o-do-middleware)
+- [Introdução](#introdução)
+- [Download, instalação e remoção da aplicação](#download-instalação-e-remoção-da-aplicação)
   - [Sistemas Operativos oficialmente suportados](#sistemas-operativos-oficialmente-suportados)
-  - [Download do pacote de instalação do middleware](#download-do-pacote-de-instala%c3%a7%c3%a3o-do-middleware)
-  - [Instalação do *middleware*](#instala%c3%a7%c3%a3o-do-middleware)
-    - [Instalação em Microsoft Windows](#instala%c3%a7%c3%a3o-em-microsoft-windows)
-    - [Instalação em Linux](#instala%c3%a7%c3%a3o-em-linux)
-      - [Instalação através do *Software Center*](#instala%c3%a7%c3%a3o-atrav%c3%a9s-do-software-center)
-      - [Instalação através da linha de comandos](#instala%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos)
-    - [Instalação em Mac OS](#instala%c3%a7%c3%a3o-em-mac-os)
-  - [Remoção do middleware](#remo%c3%a7%c3%a3o-do-middleware)
-    - [Remoção em *Microsoft Windows 7*](#remo%c3%a7%c3%a3o-em-microsoft-windows-7)
-    - [Remoção em *Microsoft Windows 10*](#remo%c3%a7%c3%a3o-em-microsoft-windows-10)
-    - [Remoção em Linux](#remo%c3%a7%c3%a3o-em-linux)
-      - [Remoção através do *Software Center*](#remo%c3%a7%c3%a3o-atrav%c3%a9s-do-software-center)
-      - [Remoção através da linha de comandos](#remo%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos)
-    - [Remoção em MacOS](#remo%c3%a7%c3%a3o-em-macos)
-- [Aplicação Utilitária “Autenticação.Gov”](#aplica%c3%a7%c3%a3o-utilit%c3%a1ria-autentica%c3%a7%c3%a3ogov)
-  - [Apresentação da Aplicação](#apresenta%c3%a7%c3%a3o-da-aplica%c3%a7%c3%a3o)
-  - [Funcionalidades da aplicação](#funcionalidades-da-aplica%c3%a7%c3%a3o)
-    - [Menu Cartão](#menu-cart%c3%a3o)
+  - [Download do pacote de instalação da aplicação](#download-do-pacote-de-instalação-da-aplicação)
+  - [Instalação da aplicação](#instalação-da-aplicação)
+    - [Instalação em Microsoft Windows](#instalação-em-microsoft-windows)
+    - [Instalação em Linux](#instalação-em-linux)
+      - [Instalação através do *Software Center*](#instalação-através-do-software-center)
+      - [Instalação através da linha de comandos](#instalação-através-da-linha-de-comandos)
+    - [Instalação em Mac OS](#instalação-em-mac-os)
+  - [Remoção da aplicação](#remoção-da-aplicação)
+    - [Remoção em *Microsoft Windows 7*](#remoção-em-microsoft-windows-7)
+    - [Remoção em *Microsoft Windows 10*](#remoção-em-microsoft-windows-10)
+    - [Remoção em Linux](#remoção-em-linux)
+      - [Remoção através do *Software Center*](#remoção-através-do-software-center)
+      - [Remoção através da linha de comandos](#remoção-através-da-linha-de-comandos)
+    - [Remoção em MacOS](#remoção-em-macos)
+- [Aplicação Utilitária “Autenticação.Gov”](#aplicação-utilitária-autenticaçãogov)
+  - [Apresentação da Aplicação](#apresentação-da-aplicação)
+  - [Funcionalidades da aplicação](#funcionalidades-da-aplicação)
+    - [Menu Cartão](#menu-cartão)
       - [Identidade](#identidade)
       - [Outros dados](#outros-dados)
-      - [Morada e Alteração de morada](#morada-e-altera%c3%a7%c3%a3o-de-morada)
+      - [Morada e Alteração de morada](#morada-e-alteração-de-morada)
       - [Notas](#notas)
       - [Imprimir](#imprimir)
     - [Assinatura digital](#assinatura-digital)
       - [Simples](#simples)
-      - [Avançada](#avan%c3%a7ada)
-      - [Introdução de chave](#introdu%c3%a7%c3%a3o-de-chave)
-      - [Verificação de assinatura digital em documento PDF em Windows](#verifica%c3%a7%c3%a3o-de-assinatura-digital-em-documento-pdf-em-windows)
-    - [Segurança](#seguran%c3%a7a)
+      - [Avançada](#avançada)
+      - [Introdução de chave](#introdução-de-chave)
+      - [Verificação de assinatura digital em documento PDF em Windows](#verificação-de-assinatura-digital-em-documento-pdf-em-windows)
+    - [Segurança](#segurança)
       - [Certificados](#certificados)
-      - [Código PIN](#c%c3%b3digo-pin)
-    - [Configurações](#configura%c3%a7%c3%b5es)
-      - [Personalização da Assinatura](#personaliza%c3%a7%c3%a3o-da-assinatura)
+      - [Código PIN](#código-pin)
+    - [Configurações](#configurações)
+      - [Personalização da Assinatura](#personalização-da-assinatura)
       - [Atributos Profissionais](#atributos-profissionais)
-      - [Configuração da aplicação](#configura%c3%a7%c3%a3o-da-aplica%c3%a7%c3%a3o)
-      - [Configuração de assinaturas](#configura%c3%a7%c3%a3o-de-assinaturas)
-      - [Dados da aplicação](#dados-da-aplica%c3%a7%c3%a3o)
-      - [Atualizações](#atualiza%c3%a7%c3%b5es)
+      - [Configuração da aplicação](#configuração-da-aplicação)
+      - [Configuração de assinaturas](#configuração-de-assinaturas)
+      - [Dados da aplicação](#dados-da-aplicação)
+      - [Atualizações](#atualizações)
     - [Ajuda](#ajuda)
-- [Integração com aplicações](#integra%c3%a7%c3%a3o-com-aplica%c3%a7%c3%b5es)
+- [Integração com aplicações](#integração-com-aplicações)
   - [Assinatura digital na suite *Microsoft Office*](#assinatura-digital-na-suite-microsoft-office)
   - [Assinatura digital na suite *LibreOffice / OpenOffice*](#assinatura-digital-na-suite-libreoffice--openoffice)
   - [Assinatura digital de email com *Microsoft Outlook*](#assinatura-digital-de-email-com-microsoft-outlook)
   - [Assinatura digital em *Adobe Acrobat Reader*](#assinatura-digital-em-adobe-acrobat-reader)
-  - [Assinatura digital com Chave Móvel Digital](#assinatura-digital-com-chave-m%c3%b3vel-digital)
+  - [Assinatura digital em *Adobe Acrobat Reader DC* em MacOS com PKCS#11](#assinatura-digital-em-adobe-acrobat-reader-dc-em-macos-com-pkcs11)
+  - [Assinatura digital com Chave Móvel Digital](#assinatura-digital-com-chave-móvel-digital)
   - [Assinatura digital de email com Mozilla Thunderbird](#assinatura-digital-de-email-com-mozilla-thunderbird)
-  - [Autenticação em portais WEB](#autentica%c3%a7%c3%a3o-em-portais-web)
-- [Resolução de Problemas](#resolu%c3%a7%c3%a3o-de-problemas)
-  - [Exibida mensagem de erro quando se tenta adicionar o módulo PKCS\#11 no *Firefox / Thunderbird*](#exibida-mensagem-de-erro-quando-se-tenta-adicionar-o-m%c3%b3dulo-pkcs11-no-firefox--thunderbird)
-  - [Não é possível adicionar o módulo PKCS\#11 ao *Adobe Acrobat Reader* em *MacOS*](#n%c3%a3o-%c3%a9-poss%c3%advel-adicionar-o-m%c3%b3dulo-pkcs11-ao-adobe-acrobat-reader-em-macos)
-  - [Impossibilidade de assinatura em *Adobe Reader*, *Microsoft Office* e *LibreOffice* com Cartão de Cidadão](#impossibilidade-de-assinatura-em-adobe-reader-microsoft-office-e-libreoffice-com-cart%c3%a3o-de-cidad%c3%a3o)
-  - [O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão](#o-leitor-de-cart%c3%b5es-est%c3%a1-instalado-mas-n%c3%a3o-%c3%a9-detetado-pela-aplica%c3%a7%c3%a3o-do-cart%c3%a3o-de-cidad%c3%a3o)
-  - [Não são detetados quaisquer certificados durante a tentativa de assinatura na suite *LibreOffice / Apache OpenOffice*](#n%c3%a3o-s%c3%a3o-detetados-quaisquer-certificados-durante-a-tentativa-de-assinatura-na-suite-libreoffice--apache-openoffice)
-  - [Problemas com placas gráficas integradas em *Windows*](#problemas-com-placas-gr%c3%a1ficas-integradas-em-windows)
-- [Instruções de configuração em ambientes empresariais](#instru%c3%a7%c3%b5es-de-configura%c3%a7%c3%a3o-em-ambientes-empresariais)
-  - [Configurações através de chaves de registo Windows](#configura%c3%a7%c3%b5es-atrav%c3%a9s-de-chaves-de-registo-windows)
-  - [Configurações através de ficheiro de configuração em Linux e MacOS](#configura%c3%a7%c3%b5es-atrav%c3%a9s-de-ficheiro-de-configura%c3%a7%c3%a3o-em-linux-e-macos)
-  - [Instalação automatizada em ambientes Windows](#instala%c3%a7%c3%a3o-automatizada-em-ambientes-windows)
-  - [Informação sobre servidores de Proxy](#informa%c3%a7%c3%a3o-sobre-servidores-de-proxy)
+  - [Autenticação em portais WEB](#autenticação-em-portais-web)
+    - [Configurar autenticação para *Mozilla Firefox*](#configurar-autenticação-para-mozilla-firefox)
+- [Resolução de Problemas](#resolução-de-problemas)
+  - [Exibida mensagem de erro quando se tenta adicionar o módulo PKCS\#11 no *Firefox / Thunderbird*](#exibida-mensagem-de-erro-quando-se-tenta-adicionar-o-módulo-pkcs11-no-firefox--thunderbird)
+  - [Não é possível adicionar o módulo PKCS\#11 ao *Adobe Acrobat Reader* em *MacOS*](#não-é-possível-adicionar-o-módulo-pkcs11-ao-adobe-acrobat-reader-em-macos)
+  - [Impossibilidade de assinatura em *Adobe Reader*, *Microsoft Office* e *LibreOffice* com Cartão de Cidadão](#impossibilidade-de-assinatura-em-adobe-reader-microsoft-office-e-libreoffice-com-cartão-de-cidadão)
+  - [O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão](#o-leitor-de-cartões-está-instalado-mas-não-é-detetado-pela-aplicação-do-cartão-de-cidadão)
+  - [Não são detetados quaisquer certificados durante a tentativa de assinatura na suite *LibreOffice / Apache OpenOffice*](#não-são-detetados-quaisquer-certificados-durante-a-tentativa-de-assinatura-na-suite-libreoffice--apache-openoffice)
+  - [Problemas com placas gráficas integradas](#problemas-com-placas-gráficas-integradas)
+  - [Aplicação não arranca](#aplicação-não-arranca)
+- [Interface de linha de comandos](#interface-de-linha-de-comandos)
+  - [Consultar ajuda e versão](#consultar-ajuda-e-versão)
+  - [Atalho para submenus de assinatura](#atalho-para-submenus-de-assinatura)
+- [Instruções de configuração em ambientes empresariais](#instruções-de-configuração-em-ambientes-empresariais)
+  - [Configurações através de chaves de registo Windows](#configurações-através-de-chaves-de-registo-windows)
+  - [Configurações através de ficheiro de configuração em Linux e MacOS](#configurações-através-de-ficheiro-de-configuração-em-linux-e-macos)
+  - [Instalação automatizada em ambientes Windows](#instalação-automatizada-em-ambientes-windows)
+  - [Informação sobre servidores de Proxy](#informação-sobre-servidores-de-proxy)
 
 <!-- DO NOT REMOVE the next comment. It is here so the script to generate the pdf version of this manual knows where the content starts and to ignore the table of contents. -->
 <!-- Content_begin -->
 
 # Introdução
 
-Este manual pretende descrever todas as funcionalidades providenciadas
-pelo _middleware_ do Cartão de Cidadão.
+NOTA: A partir da versão 3.2.0, houve uma alteração de nomenclatura no manual. As referências a "Middleware do Cartão de Cidadão" foram substituídas por "aplicação Autenticação.gov para computador", excepto quando o termo "*middleware*" é mais apropriado.
 
-O *middleware* do Cartão de Cidadão, pode definir-se como a “camada” de
-software entre o computador e o seu Cartão de Cidadão. Através do
-*middleware* são disponibilizadas ao sistema operativo e aplicações
-funcionalidades de autenticação e assinatura eletrónica.
+Este manual pretende descrever todas as funcionalidades providenciadas pela aplicação Autenticação.gov para computador.
 
-Além do *middleware*, existe também uma aplicação para a gestão do seu
-Cartão de Cidadão, onde poderá visualizar as suas informações, editar as
-suas notas, modificar os seus *PIN* pessoais e assinar digitalmente
+A instalação da aplicação Autenticação.gov para computador inclui o *middleware* do Cartão de Cidadão. Este *middleware* pode definir-se como a “camada” de
+software entre o computador e o seu Cartão de Cidadão e é através deste que são disponibilizadas ao sistema operativo e outras aplicações funcionalidades de autenticação e assinatura eletrónica.
+
+A aplicação Autenticação.gov para computador permite a gestão do seu
+Cartão de Cidadão. Nesta poderá visualizar as suas informações, editar as
+suas notas, modificar os seus *PIN*s pessoais e assinar digitalmente
 ficheiros.
 
-Este manual abrange três áreas fundamentais da utilização do
-*middleware*:
+Este manual pode-se dividir nas seguintes fundamentais áreas de utilização:
 
 -   Na primeira área (no capítulo dois), aborda o descarregamento,
-    instalação e remoção do *middleware*;
+    instalação e remoção da aplicação;
 -   Na segunda área (no capítulo três), descreve as funcionalidades da
     aplicação de gestão do Cartão de Cidadão e de assinatura digital de
     ficheiros;
@@ -102,10 +106,10 @@ Este manual abrange três áreas fundamentais da utilização do
     automatizada em ambientes Windows e configuração em ambientes
     empresariais;
 
-# Download, instalação e remoção do middleware
+# Download, instalação e remoção da aplicação
 
 Neste ponto são apresentadas as instruções para a instalação e remoção
-do *middleware* do Cartão de Cidadão.
+da aplicação Autenticação.gov para computador.
 
 ## Sistemas Operativos oficialmente suportados
 
@@ -122,20 +126,18 @@ A lista de sistemas operativos suportados, nas suas arquiteturas de 32 e
     -   OpenSuse Leap 15 e superiores
     -   Ubuntu 18.04 e superiores
 -   Sistemas operativos Apple:
-    -   Mac OSX Yosemite e superiores
+    -   Mac OSX Sierra (10.12) e superiores
 
-## Download do pacote de instalação do middleware
+## Download do pacote de instalação da aplicação
 
-Para obter o pacote de instalação do *middleware*, deverá aceder ao
+Para obter o pacote de instalação da aplicação, deverá aceder ao
 sítio oficial do Cartão de Cidadão em
-[http://www.autenticacao.gov.pt](http://www.autenticacao.gov.pt/)
+[http://www.autenticacao.gov.pt](http://www.autenticacao.gov.pt/) e pressionar "Descarregar" no rectângulo com título "Aplicação Autenticação.gov".
 
-![Ilustração: Download](Pictures/Portal_Autenticacao.Gov_Download_options.png "Download"){:.center}
+![Ilustração: Download](Pictures/Portal_Autenticacao.Gov_Homepage.png "Download"){:.center}
 
-Se escolher na barra de navegação a seguinte opção
-“Cartão de Cidadão” → “Aplicação do Cartão de Cidadão” através dos dados
-fornecidos pelo navegador será efetuada uma tentativa de identificar o
-sistema operativo e na área de conteúdos do lado direito será
+Ao clicar no link "aplicação Autenticação.gov para computador" será efetuada uma tentativa de identificar o sistema operativo através dos dados
+fornecidos pelo navegador e na área de conteúdos do lado direito será
 apresentada uma hiperligação que permite efetuar o descarregamento do
 pacote de instalação adequado ao seu sistema.
 
@@ -143,24 +145,21 @@ Nos casos dos sistemas operativos *Linux*, não é possível identificar a
 distribuição, deste modo será apresentada a lista das distribuições
 suportadas para a arquitetura detetada.
 
-A hiperligação “[*Para instalar outras versões ou aceder aos Manuais de
-Utilização, carregue aqui*](https://www.autenticacao.gov.pt/cc-software)”
-permite o acesso à lista de todos os pacotes de instalação dos sistemas operativos
-suportados e manual de utilização.
+Esta página contém a lista de todos os pacotes de instalação dos sistemas operativos oficialmente suportados e manuais de utilização.
 
 ![Ilustração: Opções de download](Pictures/Portal_Autenticacao.Gov_Download.png "Opções de download"){:.center}
 
 Após efetuado o download da respetiva versão, avance
-para o ponto seguinte – Instalação do *middleware*.
+para o ponto seguinte – Instalação da aplicação.
 
-## Instalação do *middleware*
+## Instalação da aplicação
 
 As instruções apresentadas de seguida pressupõem que o ficheiro de
-instalação do *middleware* foi descarregado previamente da Internet.
+instalação da aplicação foi descarregado previamente da Internet.
 Caso não tenha sido, efetue os passos descritos no ponto anterior –
-Download do pacote de instalação do *middleware*.
+Download do pacote de instalação da aplicação.
 
-Para a instalação do *middleware* do Cartão de Cidadão, deverão ser
+Para a instalação da aplicação Autenticação.gov para computador, deverão ser
 executados os passos descritos nos pontos seguintes, relativos ao
 sistema operativo utilizado.
 
@@ -173,8 +172,7 @@ sistema operativo utilizado.
 
     ![Ilustração: Instalação da aplicação em Windows](Pictures/Autenticacao.Gov_Instalacao_termos.png "Instalação da aplicação em Windows"){:.center}
 
-3.  Após selecionar **Avançadas**, poderá escolher a pasta onde deseja instalar o
-    *middleware*. Se desejar alterar a pasta predefinida, carrege em
+3.  Após selecionar **Avançadas**, poderá escolher a pasta onde deseja instalar a aplicação. Se desejar alterar a pasta predefinida, carrege em
     **Alterar** e na janela que surgir, navegue até à pasta de destino
     e carregue **OK**. Para continuar a instalação na pasta de destino,
     deverá premir o botão **Seguinte**.
@@ -186,7 +184,7 @@ sistema operativo utilizado.
 5.  Após a conclusão deste assistente, este solicitará a reinicialização
     do computador.
 
-6.  No próximo arranque do *Windows* a instalação do *middleware* estará
+6.  No próximo arranque do *Windows* a instalação da aplicação estará
     finalizada.
 
 ### Instalação em Linux
@@ -197,7 +195,7 @@ assistente gráfico. Este ecrã poderá variar consoante a distribuição,
 neste manual apresenta-se as imagens da utilização do *Ubuntu Software*
 em Linux Ubuntu 18.04.3 LTS.
 
-Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linha de comandos](#instala%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos).
+Em alternativa, a aplicação poderá também ser [instalada recorrendo à linha de comandos](#instala%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos).
 
 #### Instalação através do *Software Center*
 
@@ -217,27 +215,28 @@ Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linh
 
     ![Ilustração: Instalação_Linux](Pictures/Autenticacao.Gov_Instalacao_Linux3.png "Instalação_Linux"){:.center}
 
-4.  Após a conclusão do passo acima, a instalação do *middleware* está
+4.  Após a conclusão do passo acima, a instalação da aplicação está
     terminada.
 5.  Recomenda-se a reinicialização do sistema para assegurar o bom
-    funcionamento do *middleware*.
+    funcionamento da aplicação.
 
 #### Instalação através da linha de comandos
 
 1.  Execute o comando de instalação de software no sistema, consoante o
     gestor de pacotes utilizado pelo seu sistema.
 
-    Gestor de pacotes baseado em ficheiros .deb, execute o comando:
+    Sistema baseado em pacotes .deb, execute o comando:
 
-    `sudo dpkg -i pteid\*.deb`
+    `sudo apt install ./Autenticacao.gov\*.deb`
 
-    Gestor de pacotes baseado em ficheiros .rpm, execute o comando:
+    Sistema baseado em pacotes .rpm, execute o comando:
 
-    `sudo rpm -ivh pteid\*.rpm`
+    `dnf install Autenticacao.gov\*.rpm` em Fedora ou
+    `zypper install Autenticacao.gov\*.rpm` em OpenSUSE
 
-2.  Após este passo, o *middleware* terá sido instalado no computador.
+2.  Após este passo, a aplicação terá sido instalada no computador.
 3.  Recomenda-se a reinicialização do sistema para assegurar o bom
-    funcionamento do *middleware*.
+    funcionamento da aplicação.
 
 ### Instalação em Mac OS
 
@@ -254,14 +253,15 @@ Em alternativa, o *middleware* poderá também ser [instalado recorrendo à linh
 
 3.  A partir deste ponto no assistente deverá premir o botão
     **Continuar** até concluir a instalação.
-4.  Após a conclusão deste assistente, o *middleware* estará instalado
+    
+4.  Após a conclusão deste assistente, a aplicação estará instalada
     no computador. Neste momento a aplicação utilitária
     “Autenticacão.Gov” já estará disponível na pasta Aplicações /
     *Applications*.
 
-## Remoção do middleware
+## Remoção da aplicação
 
-Para proceder à remoção do *middleware* do Cartão de Cidadão, deverão
+Para proceder à remoção da aplicação do Cartão de Cidadão, deverão
 ser executados os passos descritos nos pontos seguintes, relativos ao
 sistema operativo utilizado.
 
@@ -276,7 +276,8 @@ sistema operativo utilizado.
 
 4.  Clique em **Desinstalar**. Confirme todas as janelas de diálogo que irão
     surgir.
-5.  Após estes passos, o *middleware* estará removido do computador.
+
+5.  Após estes passos, a aplicação estará removida do computador.
     Recomenda-se que o computador seja reiniciado no final destes
     passos.
 
@@ -292,7 +293,7 @@ sistema operativo utilizado.
 
 4.  Clique em **Desinstalar**. Confirme todas as janelas de diálogo que irão
     surgir.
-5.  Após estes passos, o *middleware* estará removido do computador.
+5.  Após estes passos, a aplicação estará removida do computador.
     Recomenda-se que o computador seja reiniciado no final destes
     passos.
 
@@ -309,7 +310,7 @@ sistema operativo utilizado.
 
 4.  Clique em **Desinstalar**. Confirme todas as janelas de diálogo que irão
     surgir.
-5.  Após estes passos, o *middleware* estará removido do computador.
+5.  Após estes passos, a aplicação estará removida do computador.
     Recomenda-se que o computador seja reiniciado no final destes
     passos.
 
@@ -321,7 +322,7 @@ assistente gráfico. Este ecrã poderá variar consoante a distribuição,
 neste manual apresenta-se as imagens da utilização do *Ubuntu Software*
 em Linux Ubuntu 18.04.3 LTS.
 
-Em alternativa, o *middleware* poderá também ser [removido recorrendo à linha de comandos](#remo%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos).
+Em alternativa, a aplicação poderá também ser [removida recorrendo à linha de comandos](#remo%c3%a7%c3%a3o-atrav%c3%a9s-da-linha-de-comandos).
 
 #### Remoção através do *Software Center*
 
@@ -350,8 +351,8 @@ seguintes são apresentados os ecrãs utilizando Linux Ubuntu 18.04.3 LTS.
 
     ![Ilustração: Apresentação da aplicação](Pictures/Autenticacao.Gov_Desinstalar_Linux5.png "Apresentação da aplicação"){:.center}
 
-6.  Após a conclusão do passo acima a o processo de desinstalação do
-    *middleware* está terminado.
+6.  Após a conclusão do passo acima a o processo de desinstalação da
+    aplicação está terminado.
 
 #### Remoção através da linha de comandos
 
@@ -366,13 +367,12 @@ seguintes são apresentados os ecrãs utilizando Linux Ubuntu 18.04.3 LTS.
 
     `sudo rpm -U pteid-mw`
 
-2.  Após este passo, o *middleware* terá sido removido do computador.
+2.  Após este passo, a aplicação terá sido removida do computador.
 
 ### Remoção em MacOS
 
 1.  Abra a aplicação "**Terminal**" no MacOS.
-2.  Execute o seguinte comando para desinstalar todos os ficheiros do
-    *middleware*.
+2.  Execute o seguinte comando para desinstalar todos os ficheiros da aplicação.
 
     `sudo /usr/local/bin/pteid_uninstall.sh`
 
@@ -613,21 +613,21 @@ Os ficheiros a assinar podem ser selecionados arrastando-os para a área de pré
 
     - **Localização:** Local onde a assinatura foi efetuada – campo opcional - permite ao signatário indicar o local onde esta assinatura foi efetuada. Disponível para assinaturas do tipo **PDF**.
 
-    - **Adicionar selo temporal:** Adiciona um selo temporal, provando a data à qual a assinatura foi efetuada. Esta é a única forma de provar que o documento existia a determinada hora, pois é aplicada ao documento a data e hora que este está a ser assinado, de forma segura. Note-se que a hora apresentada no selo visível é a hora local do computador onde foi efetuada a assinatura e pode não coincidir com a hora do selo temporal (obtida a partir de um servidor remoto). Disponível para assinaturas do tipo **PDF** e **Outros Ficheiros**.
+    - **Adicionar selo temporal:** Adiciona um selo temporal, provando a data à qual a assinatura foi efetuada. Esta é a única forma de provar que o documento existia a determinada hora, pois é aplicada ao documento a data e hora que este está a ser assinado, de forma segura. Note-se que a hora apresentada no selo visível é a hora local do computador onde foi efetuada a assinatura e pode não coincidir com a hora do selo temporal (obtida a partir de um servidor remoto). Disponível para assinaturas do tipo **PDF** e **Outros Ficheiros**. [Ver tópico Serviço de Selos Temporais na página Configuração de assinaturas](#configuração-de-assinaturas)
 
     - **Adicionar atributos profissionais:** A funcionalidade de assinatura de profissionais permite ao cidadão autenticar-se na qualidade das funções que desempenha na sociedade enquanto profissional qualificado. Na secção [Atributos Profissionais](#atributos-profissionais) é indicado o procedimento para carregar os atributos profissionais. Disponível para assinaturas do tipo **PDF**.
 
-    Para mais informações consulte o seguinte *website*:
+Para mais informações, consulte o seguinte *website*:
 
-        <https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais>
+<https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais>
 
-    - **Visível:** Permite que a assinatura fique visível no documento PDF. Disponível para assinaturas do tipo **PDF**.
+- **Visível:** Permite que a assinatura fique visível no documento PDF. Disponível para assinaturas do tipo **PDF**.
 
-    - **Página:** Poderá escolher a página onde será apresentada a assinatura. Disponível para assinaturas do tipo **PDF**.
+- **Página:** Poderá escolher a página onde será apresentada a assinatura. Disponível para assinaturas do tipo **PDF**.
 
-    - **Última** Poderá escolher a última página para apresentadar a assinatura. Disponível para assinaturas do tipo **PDF**.
+- **Última:** Poderá escolher a última página para apresentadar a assinatura. Disponível para assinaturas do tipo **PDF**.
 
-    ![Ilustração: Selecionar opções de assinatura](Pictures/Autenticacao.Gov_assinatura_avancada2.png "Selecionar opções de assinatura"){:.center}
+![Ilustração: Selecionar opções de assinatura](Pictures/Autenticacao.Gov_assinatura_avancada2.png "Selecionar opções de assinatura"){:.center}
 
 Após selecionar as opções pretendidas, na área indicada na figura anterior, arraste a pré-visualização da assinatura para a localização pretendida e de seguida prima o botão **Assinar com Cartão de Cidadão** ou **Assinar com Chave Móvel Digital**.
 
@@ -780,9 +780,25 @@ suporte na resolução do problema.
     `MacOS: Directoria Home do utilizador i.e.: /Users/Utilizador/`
 
     `Linux: Directoria Home do utilizador i.e.: /home/Utilizador/`
+  
+    **No caso da aplicação não arrancar**, é possivel alterar essa opção usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
 
-- **Aceleração gráfica**: Permite ativar ou desativar a aceleração gráfica na
-aplicação.
+    - Em **Windows**, a chave de registo: **HKEY\_CURRENT\_USER\\Software\\PTEID\\logging\\log_level**;
+
+    - Em **Linux**, a chave com nome "log_level" na secção logging do ficheiro **$HOME/.config/pteid.conf**;
+
+    - Em **MacOS**, a chave com nome "log_level" na secção logging do ficheiro **$HOME/Library/Preferences/pteid.conf**.
+
+    Os valores que a chave pode tomar são:
+    - debug ( em caso de problemas com a aplicação, pode ajudar a equipa de suporte na resolução do problema )
+    - info 
+    - warning 
+    - error (default)
+
+    Em ambiente empresariais deve alterar a seguinte configuração conforme descrito no capítulo [Instruções de configuração em ambientes empresariais](#instruções-de-configuração-em-ambientes-empresariais).
+
+- **Aceleração gráfica**: Permite ativar escolher o modo de renderização gráfica da
+aplicação. A opção *"Hardware (Placa gráfica)"* deverá oferecer um melhor desempenho, mas em caso de problemas poderá ser necessário configurar uma opção alternativa (ver secção [Problemas com placas gráficas em Windows](#problemas-com-placas-gráficas-integradas).)
 
 - **Configurações de rede:** Opções relativas à configuração de servidor
 de proxy. Em redes onde o acesso à Internet só é possível através de
@@ -791,7 +807,7 @@ informações de acesso:
     -   **Proxy de sistema (Windows e MacOS)**. Ao selecionar esta opção
         e se estiver definida uma configuração de *proxy* de sistema ou
         um *script* de auto configuração (*Proxy Autoconfig*), esta
-        configuração será automaticamente utilizada pelo *middleware*.
+        configuração será automaticamente utilizada pela aplicação e por outras aplicações que usem o *middleware* do cartão de cidadão.
     -   **Servidor proxy:** Endereço IP / Hostname / Porto.
     -   **Autenticação proxy:** Credenciais de acesso (se necessário).
 
@@ -811,6 +827,23 @@ durante a inserção e remoção do cartão.
 - **Serviço de Selos Temporais:** Configurar um serviço de selos temporais
 personalizado.
 
+    A aplicação permite seleccionar uma servidor diferente para a obtenção de
+    selos temporais, uma vez que o servidor por defeito do Cartão do Cidadão
+    ([http://ts.cartaodecidadao.pt/tsa/server](http://ts.cartaodecidadao.pt/tsa/server))
+    tem um limite máximo de 20 pedidos em cada período de 20 minutos que
+    se podem efectuar. Se este valor for excedido o serviço será bloqueado durante 24 horas, 
+    sem prejuízo de outras consequências em caso de repetição de situações de bloqueio. 
+    (para mais informações sobre o serviço de selo temporal/timestamps
+    do Cartão do Cidadão, consulte a página
+    [https://pki.cartaodecidadao.pt](https://pki.cartaodecidadao.pt)).
+
+    Para usar um servidor diferente basta introduzir o url do servidor na caixa de texto.
+
+    Após esta configuração tanto as assinaturas de documentos PDF (PAdES)
+    bem como a assinaturas em formato XAdES vão usar este novo servidor
+    configurado para obter os selos temporais ao assinar.
+
+
 - **Microsoft Office (Windows):** Configurações relativas a assinaturas em
 aplicações do Microsoft Office.
 
@@ -829,8 +862,8 @@ empresariais.
 #### Atualizações
 
 Nesta janela é possível verificar manualmente se existem atualizações
-para o *middleware*. Caso existam atualizações, e se o utilizador o
-pretender, o download do instalador do *middleware* é feito
+para a aplicação. Caso existam atualizações, e se o utilizador o
+pretender, o download do instalador da aplicação é feito
 automaticamente e em seguida iniciado o processo de instalação.
 
 ### Ajuda
@@ -841,7 +874,7 @@ A janela ajuda fornece um resumo das funcionalidades da aplicação, indica o ca
 
 # Integração com aplicações
 
-O *middleware* permite a interação com outras aplicações do sistema operativo, disponibilizando duas funcionalidades: Autenticação e Assinatura Digital.
+O *middleware* do Cartão de Cidadão, instalado com a aplicação Autenticação.Gov, permite a interação com outras aplicações do sistema operativo, disponibilizando duas funcionalidades: Autenticação e Assinatura Digital.
 
 A instalação do *middleware* em Windows permite que, ao introduzir um Cartão de Cidadão no leitor, os certificados deste fiquem automaticamente registados no sistema operativo, ficando assim as funcionalidades de autenticação e assinatura disponíveis às aplicações
 que utilizam a camada criptográfica do sistema operativo. Alguns exemplos dessas aplicações são: *Microsoft Word*, *Microsoft Excel*, *Microsoft Outlook* e *Adobe Acrobat Reader*.
@@ -861,14 +894,14 @@ assinatura digital e autenticação nas seguintes aplicações:
 **Autenticação:**
 
 - [Internet Explorer](#autentica%c3%a7%c3%a3o-em-portais-web)
-- [Mozilla Firefox](#assinatura-digital-de-email-com-mozilla-thunderbird)
+- [Mozilla Firefox](#configurar-autenticação-para-mozilla-firefox)
 
 Além das aplicações acima referidas, o *middleware* disponibiliza
 suporte criptográfico às aplicações com interface PKCS\#11 ou suporte
 criptográfico nativo do sistema operativo.
 
 No caso das aplicações com suporte PKCS\#11, geralmente é necessário
-configurar a localização do ficheiro do *middleware*, que permite o
+configurar a localização do ficheiro da aplicação, que permite o
 suporte. A localização deste ficheiro, depende do sistema operativo a
 ser utilizado.
 
@@ -959,7 +992,7 @@ Para **desativar a correspondência com endereço de email do certificado digita
 
 - Versão EN (original): <http://support.microsoft.com/kb/276597/>
 
-Alternativamente, poderá selecionar a opção **Desativar correspondência de e-mails nos certificado no Outlook** nas **Configurações de assinaturas** da aplicação do Cartão de Cidadão.
+Alternativamente, poderá selecionar a opção **Permitir assinatura de e-mails no Outlook** no submenu **Configuração de assinaturas** da aplicação do Cartão de Cidadão.
 
 Para poder assinar digitalmente um email no *Outlook*, é necessário
 inicialmente efetuar a respetiva configuração. Os passos descritos de
@@ -1010,9 +1043,49 @@ assinado.
 
 ## Assinatura digital em *Adobe Acrobat Reader*
 
+Nota: para assinar um documento no *Adobe Acrobat Reader DC* em MacOS, siga as instruções da seccção [Assinatura digital em *Adobe Acrobat Reader* em MacOS com PKCS#11](#assinatura-digital-em-adobe-acrobat-reader-em-macos-com-pkcs11).
+
 Para assinar um documento aberto no *Adobe Acrobat Reader* deve:
 
-1. Aceder ao separadaor **Ferramentas** e selecionar **Certificados**.
+1. Aceder ao separador **Ferramentas** e selecionar **Certificados**.
+
+2. Clique em **Assinar Digitalmente** na barra horizontal por cima do documento.
+
+3. Clique e arraste o rato para determinar a posição do selo de assinatura no documento.
+
+4. Escolha o seu certificado de assinatura, emitido por **EC de Assinatura Digital Qualificada do Cartão de Cidadão X** (onde "X" é um número com 4 dígitos, por exemplo 0010), e carregue **Continuar**.
+
+5. Clique em **Assinar** e escolha o nome e local onde deseja guardar o documento assinado.
+
+6. Para concluir, introduza o seu PIN de assinatura.
+
+## Assinatura digital em *Adobe Acrobat Reader DC* em MacOS com PKCS#11
+
+Para assinar um documento aberto no *Adobe Acrobat Reader DC*, em MacOS, deve primeiro carregar o módulo PKCS#11. Para tal, siga as seguintes instruções:
+
+1. No *Adobe Acrobat Reader DC*, aceda a **Preferências**.
+
+    ![Ilustração: Janela para assinar em *Microsoft Word*.](Pictures/Autenticacao.Gov_macos_adobe_pref.png)
+
+2. Selecione a Categoria **Assinaturas** e na seccção "Certificados confiáveis e de identidade" pressione **Mais...**.
+
+    ![Ilustração: Janela para assinar em *Microsoft Word*.](Pictures/Autenticacao.Gov_macos_adobe_pref2.png)
+
+3. No separador "IDs digitais" selecione **Módulos e tokens PKCS#11** e clique **Adicionar módulo**.
+
+    ![Ilustração: Janela para assinar em *Microsoft Word*.](Pictures/Autenticacao.Gov_macos_adobe_pkcs11.png)
+
+4. No campo de texto insira o caminho da biblioteca: `/usr/local/lib/libpteidpkcs11.dylib` e pressione **OK**.
+
+    ![Ilustração: Janela para assinar em *Microsoft Word*.](Pictures/Autenticacao.Gov_macos_adobe_libpath.png)
+
+Se o seu cartão de cidadão estiver inserido no leitor e o módulo tiver sido adicionado com sucesso, ao pressionar **Atualizar** os certificados ficarão disponíveis e visíveis conforme na imagem seguinte. No caso dos certificados não ficarem disponíveis como na imagem, verifique que o cartão está inserido no leitor, reinicie o *Adobe Acrobat Reader DC* e volte a verificar.
+
+![Ilustração: Janela para assinar em *Microsoft Word*.](Pictures/Autenticacao.Gov_macos_adobe_pkcs11_2.png)
+
+Depois de ter adicionado o módulo PKCS#11, para assinar um documento aberto no *Adobe Acrobat Reader DC* deve, com o cartão de cidadão inserido no leitor:
+
+1. Aceder ao separador **Ferramentas** e selecionar **Certificados**.
 
 2. Clique em **Assinar Digitalmente** na barra horizontal por cima do documento.
 
@@ -1121,28 +1194,42 @@ ser descontinuada, visto a apresentar desvantagens na recolha de dados,
 no entanto alguns sítios ainda utilizam esta forma.
 
 Para poder utilizar este método de autenticação, tem de ter
-obrigatoriamente o *middleware* instalado no seu computador.
+obrigatoriamente a aplicação instalada no seu computador.
 
 Neste caso utilizando Sistema Operativo *Windows* os browsers *Internet
 Explorer*, *Microsoft Edge* e *Google Chrome* não exigem nenhuma
 configuração uma vez registado o certificado de autenticação do Cidadão.
 
 Para o *Mozilla Firefox* em qualquer Sistema Operativo é necessário
-efetuar algumas configurações tal como descrito na secção [Assinatura digital de email com *Mozilla Thunderbird*](#assinatura-digital-de-email-com-mozilla-thunderbird).
+efetuar algumas configurações descritas em [Configurar autenticação para *Mozilla Firefox*](#configurar-autentica%c3%a7%c3%a3o-para-mozilla-firefox).
 
-![Ilustração: Impossibilidade de assinatura](Pictures/Autenticacao.Gov_web_impossibilidade.png
-  "Impossibilidade de assinatura"){:.center}
-
-
-A autenticação por certificado através do portal autenticação.gov.pt não exige a instalação do middleware mas sim do plugin **Autenticação.Gov**.
+A autenticação por certificado através do portal autenticação.gov.pt não exige a instalação da aplicação mas sim do plugin **Autenticação.Gov**.
 
 Para mais informação, consulte esta página de ajuda:
 
 - <https://autenticacao.gov.pt/fa/ajuda/autenticacaogovpt.aspx>
 
 De forma a que a configuração do seu computador suporte qualquer uma das
-alternativas, recomenda-se que instale o *middleware* no seu computador
+alternativas, recomenda-se que instale a aplicação no seu computador
 e também o plugin **Autenticação.Gov**.
+
+
+### Configurar autenticação para *Mozilla Firefox*
+
+Para configurar o *Mozilla Firefox* tem que carregar o módulo PKCS\#11 do Cartão do Cidadão.
+
+Na versão 73.0.1 (para outras versões deverá ser semelhante):
+
+1. Nas opções do *Mozilla Firefox* aceda a **Privacidade e Segurança**. Pode aceder diretamente inserindo `about:preferences#privacy` na barra de endereço.
+
+2. Navegue até ao final da página e, na secção **Certificados**, carregue em **Dispositivos de segurança...** para abrir a janela "Gestor de dispositivos".
+
+![Ilustração: Carregar PKCS\#11 no Mozilla Firefox](Pictures/Firefox_carregar_pkcs11.png
+  "Carregar PKCS\#11 no Mozilla Firefox"){:.center}
+
+3. Pressione **Carregar**. Preencha o nome do módulo, por exemplo "PKCS\#11 do Cartao de Cidadao" (evite o "ç" e "ã"). Seguidamente, carregue em **Procurar...** e navegue até ao módulo PKCS#11 do Cartão de Cidadão, cuja localização se encontra descrita na secção [Integração com aplicações](#integra%c3%a7%c3%a3o-com-aplica%c3%a7%c3%b5es).
+
+4. Pressione **Ok** nas janelas abertas para terminar.
 
 # Resolução de Problemas
 
@@ -1170,6 +1257,9 @@ Deverá aceder ao ficheiro “pteidmdrv.inf”, presente por defeito na
 diretoria “ C:\\ProgramFiles\\PTeID Minidriver” (ou na directoria
 selecionada durante a instalação). Após ter aberto a directoria, abra
 o menu de opções do ficheiro e selecionar a opção **Instalar**.
+
+![Ilustração: Impossibilidade de assinatura](Pictures/Autenticacao.Gov_web_impossibilidade.png
+  "Impossibilidade de assinatura"){:.center}
 
 Após a escolha desta opção, poderá aparecer uma janela de diálogo (Ver
 imagem seguinte) com o título “Ficheiros Necessários”, na qual terá de
@@ -1240,32 +1330,80 @@ Para mais informações consultar a página de ajuda:
 
 -   <https://help.libreoffice.org/Common/Applying_Digital_Signatures/pt>
 
-## Problemas com placas gráficas integradas em *Windows*
+## Problemas com placas gráficas integradas
 
-No caso de existirem problemas gráficos, recomenda-se testar desabilitar a aceleração gráfica por hardware. No menu Definições / Configuração da aplicação / Aceleração é possivel ativar ou desativar a aceleração gráfica na aplicação.
+No caso de existirem problemas gráficos, recomenda-se alterar o modo de renderização gráfica. Pode fazê-lo na secção Aceleração gráfica do submenu [Configuração da aplicação](#configuração-da-aplicação).
 
-No caso da aplicação não arrancar, o procedimento para desabilitar a aceleração gráfica por hardware consiste em adicionar às variáveis de ambiente do sistema a variável **QT_OPENGL** com o valor **software**. Em alternativa é possivel configurar essa opção usando as configurações do software Autenticação.gov.
+**No caso da aplicação não arrancar**, é possivel alterar essa opção usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
 
-Em **Windows** na chave de registo:
+- Em **Windows**, a chave de registo **HKEY\_CURRENT\_USER\\Software\\PTEID\\configuretool\\graphics\_accelaration**;
 
-**HKEY\_CURRENT\_USER\\Software\\PTEID\\configuretool\\graphics\_accelaration**
+- Em **Linux**, a chave com nome "graphics_accelaration" na secção “configuretool” do ficheiro **$HOME/.config/pteid.conf**;
 
-`graphics_accelaration = 1 // Aceleração gráfica ativada`
+- Em **MacOS**, a chave com nome "graphics_accelaration" na secção “configuretool” do ficheiro **$HOME/Library/Preferences/pteid.conf**.
 
-`graphics_accelaration = 0 // Aceleração gráfica desativada`
+Os valores que a chave pode tomar são:
+- 0 para renderização por Software (OpenGL);
+- 1 para aceleração gráfica (Placa gráfica);
+- 2 (Exclusivo para Windows) para renderização por Software (ANGLE, que emula o OpenGL usando Direct3D).
 
-Em **Linux**, no ficheiro **$HOME/.config/pteid.conf na secção** “configuretool”
+Em ambiente empresariais deve alterar a seguinte configuração conforme descrito no capítulo [Instruções de configuração em ambientes empresariais](#instruções-de-configuração-em-ambientes-empresariais).
 
-`graphics_accelaration = 1 // Aceleração gráfica ativada`
+## Aplicação não arranca
 
-`graphics_accelaration = 0 // Aceleração gráfica desativada`
+No caso da aplicação não arrancar e consequentemente não ser possivel alterar as configurações da aplicação na aplicação, é possivel alterar as opções da aplicação usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
 
-Em **MacOS**, no ficheiro **$HOME/Library/Preferences/pteid.conf** na secção “configuretool”
+Uma causa que pode causar problemas está relacionado com a placa gráfica do computador [Problemas com placas gráficas em Windows](#problemas-com-placas-gráficas-integradas).
 
-`graphics_accelaration = 1 // Aceleração gráfica ativada`
+# Interface de linha de comandos
 
-`graphics_accelaration = 0 // Aceleração gráfica desativada`
+**Nota:** Esta funcionalidade só está disponível a partir da versão 3.3.0 da aplicação.
 
+Quando executada a partir da linha de comandos, a aplicação Autenticação.gov para computador aceita alguns modos e opções descritos nas seguintes subsecções.
+
+## Consultar ajuda e versão
+
+A opção *--help* (ou *-h*) permite, para cada modo,  consultar as opções disponíveis na linha de comandos.
+
+A versão instalada pode ser consultada com *--version* (ou *-v*).
+
+Exemplo (Linux):
+```
+$ eidguiV2 -h
+```
+
+## Atalho para submenus de assinatura 
+
+Com os modos *signSimple* e *signAdvanced* é possível inicar a aplicação no submenu de assinatura simples e avançada, respetivamente.
+
+O modo *signSimple* requer o caminho do ficheiro a ser carregado para assinatura. As seguintes opções são suportadas:
+
+- *--destino DESTINO* (*-d DESTINO*): configura a pasta de destino do ficheiro assinado. A pasta de destino não será pedida ao utilizador no momento da assinatura.
+
+
+O modo *signAdvanced* requer uma lista com de caminhos dos ficheiros a serem carregados para assinatura. Em adição à opção *--destino*, suporta ainda as seguintes opções:
+- *--tsa*: ativa a assinatura com timestamp no submenu da Assinatura Avançada;
+- *--motivo MOTIVO* (*-m MOTIVO*): configura o motivo da assinatura; 
+- *--localidade LOCALIDADE* (*-l LOCALIDADE*): configura a localidade da assinatura.
+
+Exemplos (Linux):
+```
+$ eidguiV2 signSimple -d /home/user/Documents/ ficheiro.pdf
+```
+```
+$ eidguiV2 signAdvanced --tsa -m "motivo" -l "localidade" -d /home/user/Documents/ \
+ficheiro1.pdf ... ficheiroN.pdf
+```
+
+Exemplo (Windows):
+```
+$ "C:\Program Files\Portugal Identity Card\pteidguiV2.exe" signSimple -d /home/user/Documents/ ficheiro.pdf
+```
+
+**Nota:** As opções passadas por parâmetros, que contêm um caracter espaço, devem ser colocadas entre aspas. Por exemplo (Linux):
+```
+$ eidguiV2 signSimple -d /home/user/Documents/ "ficheiro para assinar.pdf"
+```
 
 # Instruções de configuração em ambientes empresariais
 
@@ -1278,27 +1416,30 @@ guardadas em sub-chaves de:
 
 `HKCU\Software\PTEID`
 
+Pode-se, no entanto, configurar de forma padronizada uma instalação
+adicionando alguns valores no registo do *Windows* para todos os
+utilizadores da máquina após a instalação do software, usando as chaves listadas
+abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
+
 **Nota:** Não se devem nunca remover ou alterar os seguintes registos:
 
 `HKLM\Software\PTEID\general\install_dirname`
 
 `HKLM\Software\PTEID\general\certs_dir`
 
-Pode-se, no entanto, configurar de forma padronizada uma instalação
-adicionando alguns valores no registo do *Windows* para todos os
-utilizadores da máquina após a instalação do software, usando as chaves listadas
-abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
+Os seguintes registos podem ser adicionados:
 
+---
 `HKLM\Software\PTEID\logging\log_level`
 - **Tipo**: String (debug, info, warning, error)
-- **Descrição**: Nível de detalhe do log do Middleware.
+- **Descrição**: Nível de detalhe do log do Middleware e da aplicação.
 - **Valor por omissão**: error
 
 ---
 
 `HKLM\Software\PTEID\logging\log_dirname`
   - **Tipo**: String
-  - **Descrição**: Directoria onde são gerados os ficheiros de log do Middleware.
+  - **Descrição**: Directoria onde são gerados os ficheiros de log do Middleware e da aplicação.
   - **Valor por omissão**: `C:\Program Files\Portugal Identity Card\log`
 
 ---
@@ -1310,19 +1451,19 @@ abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
 
 ---
 
-`HKLM\Software\PTEID\general\install_dirname`
-
-  - **Tipo**: String
-  - **Descrição**: Directoria onde é instalado o Middleware.
-  - **Valor por omissão**: `C:\Program Files\Portugal Identity Card`
-
----
-
 `HKLM\Software\PTEID\general\cache_dirname`
 
   - **Tipo**: String
-  - **Descrição**: Directoria onde é guardada a cache do Middleware.
+  - **Descrição**: Directoria onde é guardada a cache do Middleware e da aplicação.
   - **Valor por omissão**: `C:\Users\[User]\AppData\Roaming\.pteid-ng`
+
+---
+
+`HKLM\Software\PTEID\general\cache_enabled`
+
+  - **Tipo**: Número (0 / 1)
+  - **Descrição**: Ativar (1) ou desativar (0) a cache relativa aos dados do Cartão do Cidadão.
+  - **Valor por omissão**: 1 (ativa)
 
 ---
 
@@ -1355,6 +1496,14 @@ abaixo, sub-chaves da chave raiz: **`HKLM\Software\PTEID`**
   - **Descrição**:  Permitir cache do PIN de autenticação via minidriver.
   - **Valor por omissão**: 0 (Não). Para versões anteriores à 3.1.0 o valor por omissão é 1.
   - **Configurável a partir da versão**: 3.1.0
+
+---
+
+`HKLM\Software\PTEID\configuretool\graphics_accelaration`
+
+  - **Tipo**: Número (0 / 1 / 2 (somente em Windows))
+  - **Descrição**:  Modo de renderização gráfica. 0 para renderização por Software (OpenGL), 1 para aceleração gráfica (Placa gráfica) ou 2 para rederização por Software (ANGLE que emula o OpenGL usando Direct3D).
+  - **Valor por omissão**: 1 (Placa gráfica)
 
 ---
 

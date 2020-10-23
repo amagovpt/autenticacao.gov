@@ -2,7 +2,7 @@
 
  * Copyright (C) 2014, 2016-2017 André Guerreiro - <aguerreiro1985@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -126,6 +126,19 @@ namespace eIDMW
 			{
 				MWLOG(LEV_ERROR, MOD_APL, L"Error downloading CRL. Libcurl returned %ls\n", 
 						utilStringWiden(string(error_buf)).c_str());
+			}
+			else
+			{
+				long http_code = 0;
+				curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+				if (http_code == 200 && res != CURLE_ABORTED_BY_CALLBACK)
+				{
+						MWLOG(LEV_DEBUG, MOD_APL, "CRL download succeeded.");
+				}
+				else
+				{
+					MWLOG(LEV_ERROR, MOD_APL, "CRL Download failed! HTTP status code: %ld", http_code);
+				}
 			}
 
 			curl_slist_free_all(headers);

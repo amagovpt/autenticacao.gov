@@ -81,28 +81,102 @@ void APL_EidFile_Trace::EmptyFields()
 	m_mappedFields = false;
 }
 
+// Check for issuing date in "CC home delivery" period of card production
+bool activeFlagShouldBeChecked(const char * issuing_date) 
+{
+
+	// create tm with 01/01/2017:
+	std::tm timeinfo = std::tm();
+	timeinfo.tm_year = 2019 - 1900;
+	timeinfo.tm_mon = 8;          // month: september
+	timeinfo.tm_mday = 1;        // day: 1st
+	std::time_t beginCCHOMEPeriod = std::mktime (&timeinfo);
+	
+	timeinfo.tm_year = 2020 - 1900;
+	timeinfo.tm_mon = 10;          // month: November
+	timeinfo.tm_mday = 31;        // day: 31th
+
+	std::time_t endCCHOMEPeriod = std::mktime (&timeinfo);
+
+	std::cmatch cm;
+	std::regex expression("(\\d{2}) (\\d{2}) (\\d{4})"); 
+
+    std::regex_match (issuing_date, cm, expression);
+
+    int day = 0, month = 0, year = 0;
+
+    for (unsigned i=0; i < cm.size(); i++) {
+    	switch (i)
+    	{
+    		//case 0 is ignored as it matches the full regex pattern
+    		case 1:
+    			day = std::stoi(cm[i].str());
+    			break;
+    		case 2:
+    			month = std::stoi(cm[i].str());
+    			break;
+    		case 3:
+    			year = std::stoi(cm[i].str());
+    			break;
+    	}
+    }
+
+    if (day == 0 || month == 0 || year == 0)
+    	return true;
+
+    timeinfo.tm_year = year - 1900;
+	timeinfo.tm_mon = month - 1;
+	timeinfo.tm_mday = day;
+
+	std::time_t issuingTime = std::mktime (&timeinfo);
+
+    return issuingTime > endCCHOMEPeriod || issuingTime < beginCCHOMEPeriod;
+}
+
 bool APL_EidFile_Trace::MapFields()
 {
 	if (m_mappedFields)
 		return true;
 
-	CByteArray pteidngtraceBuffer;
-	unsigned long ulLen=0;
-	CTLVBuffer oTLVBuffer;
-    oTLVBuffer.ParseTLV(m_data.GetBytes(), m_data.Size());
-    CByteArray Validation;
+	if(!m_card)
+		return CARDFILESTATUS_ERROR;
 
-	//Card Validation
-    pteidngtraceBuffer = m_data.GetBytes(PTEIDNG_FIELD_TRACE_POS_VALIDATION, PTEIDNG_FIELD_TRACE_LEN_VALIDATION);
+	if (m_isVerified)
+		return CARDFILESTATUS_OK;
 
-    Validation = pteidngtraceBuffer;
-    if (Validation.ToString() == "01")
-    	m_Validation = "O Cartão de Cidadão encontra-se activo";
-    else
-    	m_Validation = "O Cartão de Cidadão encontra-se inactivo";
+	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 
+	APL_EidFile_ID * idFile = pcard->getFileID();
 
-    isCardActive = (pteidngtraceBuffer.GetByte(0) == PTEIDNG_ACTIVE_CARD);
+	const char * issuing_date = idFile->getValidityBeginDate();
+
+	if (!activeFlagShouldBeChecked(issuing_date)) {
+		MWLOG(LEV_DEBUG, MOD_APL, 
+			"Skipping Active Flag check because this card was issued between 1/9/2019 e 31/11/2020.");
+		
+		m_Validation = "O Cartão de Cidadão encontra-se activo";
+		isCardActive = true;
+		
+	}
+	else {
+		CByteArray pteidngtraceBuffer;
+		unsigned long ulLen=0;
+		CTLVBuffer oTLVBuffer;
+		oTLVBuffer.ParseTLV(m_data.GetBytes(), m_data.Size());
+		CByteArray Validation;
+
+		//Card Validation
+		pteidngtraceBuffer = m_data.GetBytes(PTEIDNG_FIELD_TRACE_POS_VALIDATION, PTEIDNG_FIELD_TRACE_LEN_VALIDATION);
+
+		Validation = pteidngtraceBuffer;
+		if (Validation.ToString() == "01")
+			m_Validation = "O Cartão de Cidadão encontra-se activo";
+		else
+			m_Validation = "O Cartão de Cidadão encontra-se inactivo";
+
+		isCardActive = (pteidngtraceBuffer.GetByte(0) == PTEIDNG_ACTIVE_CARD);
+
+	}
 
     m_mappedFields = true;
 
@@ -906,6 +980,7 @@ tCardFileStatus APL_EidFile_Address::VerifyFile()
 
 	if (m_SODCheck) {
 		
+
 		APL_EidFile_ID * idFile = pcard->getFileID();
 
 		const char * issuing_date = idFile->getValidityBeginDate();

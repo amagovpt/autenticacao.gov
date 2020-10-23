@@ -6,7 +6,7 @@
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -16,8 +16,8 @@ import QtQuick.Controls.Material 2.1
 import QtQuick.Controls.Universal 2.1
 import QtQuick.Window 2.2
 
-import "scripts/Functions.js" as Functions
 import "scripts/Constants.js" as Constants
+import "scripts/Functions.js" as Functions
 
 import "components/" as Components
 
@@ -61,6 +61,7 @@ Window {
         // check for unsaved notes when closing application
         close.accepted = false;
         if(!handleUnsavedNotes(-1,"", Constants.QUIT_APPLICATION)){
+            mainWindow.visible = false;
             gapi.quitApplication();
         }
 
@@ -70,9 +71,14 @@ Window {
         target: controler
         onSignalRestoreWindows: {
             console.log("Signal onSignalRestoreWindows")
+            // Minimize window in case it was just hidden (it would remain hidden otherwise)
+            mainWindow.showMinimized()
+
+            if (Qt.platform.os === "osx")
+                mainWindow.flags = Qt.Window | Qt.CustomizeWindowHint | Qt.FramelessWindowHint;
             mainWindow.raise();
             mainWindow.show();
-            mainWindow.activateWindow();
+            mainWindow.requestActivate();
         }
         onSignalLanguageChangedError: {
             var titlePopup = "Erro / Error"
@@ -86,9 +92,8 @@ Load language error. Please reinstall the application"
         property var isAutoUpdateAlreadyDetected: false
 
         onSignalAutoUpdateSuccess: {
-            var titlePopup = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES")
-            var bodyPopup = qsTranslate("Popup Card","STR_POPUP_RESTART_APP")
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            restart_dialog.headerTitle = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES") + controler.autoTr
+            restart_dialog.open()
         }
         onSignalAutoUpdateAvailable: {
             // Do not show dialog when update page is open
@@ -664,6 +669,131 @@ Load language error. Please reinstall the application"
     }
 
     Dialog {
+        property alias headerTitle: restartDlgTitle.text
+
+        id: restart_dialog
+        width: 400
+        height: 200
+        visible: false
+        font.family: lato.name
+        modal: true
+        closePolicy: Popup.CloseOnEscape
+
+        // Center dialog in the main view
+        x: parent.width * 0.5 - restart_dialog.width * 0.5
+        y: parent.height * 0.5 - restart_dialog.height * 0.5
+
+        header: Label {
+            id: restartDlgTitle
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: rectRestartPopUp.activeFocus
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
+            color: Constants.COLOR_MAIN_BLUE
+        }
+
+        Item {
+            id: rectRestartPopUp
+            width: parent.width
+            height: 50
+
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: restartDlgTitle.text + labelRestartText.text
+
+            Keys.enabled: true
+            KeyNavigation.tab: cancelButton
+            KeyNavigation.down: cancelButton
+            KeyNavigation.right: cancelButton
+            KeyNavigation.backtab: restartButton
+            KeyNavigation.up: restartButton
+
+            Item {
+                id: rectRestartLabelText
+                width: parent.width
+                height: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: labelRestartText
+                    text: qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
+                    font.bold: activeFocus
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width - 48
+                    wrapMode: Text.Wrap
+                }
+            }
+        }
+
+        Item {
+            width: parent.width
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: 80
+            Item {
+                width: parent.width
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.horizontalCenter: parent.horizontalCenter
+                Button {
+                    id: cancelButton
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("Popup File", "STR_POPUP_FILE_CANCEL") + controler.autoTr
+                    anchors.left: parent.left
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: restartButton
+                    KeyNavigation.down: restartButton
+                    KeyNavigation.right: restartButton
+                    KeyNavigation.backtab: rectRestartPopUp
+                    KeyNavigation.up: rectRestartPopUp
+                    highlighted: activeFocus
+                    onClicked: {
+                        restart_dialog.close()
+                    }
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
+                }
+                Button {
+                    id: restartButton
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("Popup File", "STR_POPUP_RESTART_NOW") + controler.autoTr
+                    anchors.right: parent.right
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: rectRestartPopUp
+                    KeyNavigation.down: rectRestartPopUp
+                    KeyNavigation.right: rectRestartPopUp
+                    KeyNavigation.backtab: cancelButton
+                    KeyNavigation.up: cancelButton
+                    highlighted: activeFocus
+                    onClicked: {
+                        gapi.quitApplication(true)
+                    }
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
+                }
+            }
+        }
+        onOpened: {
+            rectRestartPopUp.forceActiveFocus()
+        }
+        onClosed: {
+            mainFormID.propertyPageLoader.forceActiveFocus()
+        }
+    }
+
+
+    Dialog {
         id: unsaved_notes_dialog
         width: 400
         height: 200
@@ -1201,20 +1331,6 @@ Load language error. Please reinstall the application"
                 mainFormID.state = Constants.MenuState.FIRST_RUN
             }
 
-            //Open Advanced Signature on startup
-            if (gapi.getShortcutFlag() > 0) {
-                //mainFormID.propertyMainMenuView.width = mainWindow.width
-                mainFormID.propertyMainMenuListView.currentIndex = 1
-                mainFormID.propertySubMenuListView.currentIndex = 1
-
-                mainFormID.state = Constants.MenuState.EXPAND
-                // Clean the content page
-                mainFormID.propertyPageLoader.source = "contentPages/services/PageServicesSignAdvanced.qml"
-                //TODO: we shouldn't need this to make sure the contentPage gets the expanded space
-                mainWindow.setWidth(Constants.SCREEN_MINIMUM_WIDTH + 1)
-                return;
-            }
-
             if ( mainFormID.state === Constants.MenuState.FIRST_RUN){
                 console.log("Runing First time" + mainWindow.width)
                 mainFormID.propertyMainMenuView.width = mainWindow.width * 2 * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
@@ -1236,6 +1352,25 @@ Load language error. Please reinstall the application"
             if (controler.getDebugModeValue()) {
                 mainFormID.propertyTitleBarContainer.propertyTitleBar.color = Constants.COLOR_TITLEBAR_DEBUG
             }
+
+            // Take shortcut to submenu
+            if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignSimple) {
+                mainFormID.propertShowAnimation = false
+                mainMenuPressed(1)
+                subMenuPressed(1, "contentPages/services/PageServicesSignSimple.qml")
+                //TODO: we shouldn't need this to make sure the contentPage gets the expanded space
+                mainWindow.setWidth(Constants.SCREEN_MINIMUM_WIDTH + 1)
+                mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
+                return
+            } else if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignAdvanced) {
+                mainFormID.propertShowAnimation = false
+                mainMenuPressed(1)
+                subMenuPressed(2, "contentPages/services/PageServicesSignAdvanced.qml")
+                //TODO: we shouldn't need this to make sure the contentPage gets the expanded space
+                mainWindow.setWidth(Constants.SCREEN_MINIMUM_WIDTH + 1)
+                mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
+                return
+            }
         }
         propertyImageLogo {
             onClicked: {
@@ -1243,6 +1378,7 @@ Load language error. Please reinstall the application"
                 if(!handleUnsavedNotes(-1, "", Constants.HOME_ICON_PRESSED)){
                     mainFormID.propertyPageLoader.source = ""
                     mainFormID.state = Constants.MenuState.HOME
+                    mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     propertySubMenuListView.currentIndex = -1
                     propertyMainMenuListView.currentIndex = -1
                     propertyMainMenuBottomListView.currentIndex = -1
@@ -1733,6 +1869,7 @@ Load language error. Please reinstall the application"
             return
         }
 
+        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         mainFormID.propertyMainMenuBottomListView.currentIndex = -1
         mainFormID.propertyMainMenuListView.currentIndex = index
 
@@ -1771,6 +1908,7 @@ Load language error. Please reinstall the application"
             return
         } 
 
+        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         mainFormID.propertySubMenuListView.currentIndex = index
         console.log("Sub Menu index = " + index);
         console.log("Sub Menu Pressed Expand Sub Menu" + mainFormID.propertySubMenuListView.model.get(0).expand)
@@ -1797,6 +1935,7 @@ Load language error. Please reinstall the application"
             return
         }
 
+        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         // Do not select any option
         mainFormID.propertyMainMenuListView.currentIndex = -1
         mainFormID.propertyMainMenuBottomListView.currentIndex = index

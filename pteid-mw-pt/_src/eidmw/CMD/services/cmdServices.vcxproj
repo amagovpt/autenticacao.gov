@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -23,28 +23,29 @@
     <ProjectGuid>{A35BC7D7-882E-487A-9C8A-70D903EF02C3}</ProjectGuid>
     <RootNamespace>cmdServices</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -154,7 +155,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL_098)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
@@ -164,9 +165,9 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>Crypt32.lib;libeay32.lib;ssleay32.lib;pteidcommon.lib;pteidapplayer.lib;pteidlib.lib;WS2_32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Crypt32.lib;libcrypto.lib;libssl.lib;pteidcommon.lib;pteidapplayer.lib;pteidlib.lib;WS2_32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_OPENSSL_098)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_OPENSSL)\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -205,7 +206,7 @@ echo "**************************************************************************
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL_098)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL_X64)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -214,9 +215,9 @@ echo "**************************************************************************
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>Crypt32.lib;WS2_32.Lib;libeay32.lib;ssleay32.lib;pteidcommon.lib;pteidapplayer.lib;pteidlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Crypt32.lib;WS2_32.Lib;libcrypto.lib;libssl.lib;pteidcommon.lib;pteidapplayer.lib;pteidlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_OPENSSL_098_X64)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_OPENSSL_X64)\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>

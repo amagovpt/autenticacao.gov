@@ -5,7 +5,7 @@
  * Copyright (C) 2012 Rui Martinho - <rui.martinho@ama.pt>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -114,6 +114,10 @@
 /** Can't end a transaction that wasn't started (also returned
  *  on Mac OS X when multiple apps are access the card simultaneously) */
 #define EIDMW_ERR_NOT_TRANSACTED       0xe1d00210
+
+/** Incompatible reader.
+ * E.g. incompatibility with new card, protocol or other. */
+#define EIDMW_ERR_INCOMPATIBLE_READER  0xe1d0022C
 
 // Internal errors (caused by the middleware)
 

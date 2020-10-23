@@ -5,7 +5,7 @@
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -103,14 +103,14 @@ public slots:
     bool getShowAnimationsValue(void);
     bool getUseSystemScaleValue(void);
     int  getApplicationScaleValue(void);
-    bool getGraphicsAccelValue(void);
+    int  getGraphicsAccelValue(void);
 
     void setShowNotificationValue(bool bShowNotification);
     void setShowPictureValue(bool bShowPicture);
     void setShowAnimationsValue(bool bShowAnimations);
     void setUseSystemScaleValue(bool bUseSystemScale);
     void setApplicationScaleValue(int iScale);
-    void setGraphicsAccelValue(bool bGraphicsAccel);
+    void setGraphicsAccelValue(int iGraphicsAccel);
 
     QString getTimeStampHostValue (void);
     void setTimeStampHostValue (QString const& timeStamp_host);
@@ -131,6 +131,9 @@ public slots:
     void setOutlookSuppressNameChecks(bool bDisabledMatching);
 
     void userCancelledUpdateCertsDownload();
+    void userCancelledUpdateAppDownload();
+    void setEnablePteidCache(bool bEnabled);
+    bool getEnablePteidCache();
     void flushCache();
     void getPteidCacheSize();
     void getScapCacheSize();
@@ -149,6 +152,7 @@ private:
     void doGetPteidCacheSize();
     void doGetScapCacheSize();
     QString getPteidCacheDir();
+    void createCacheDir();
     void checkUpdateCertslog(void);
     void checkUpdateNewslog(void);
     qint64 dirSize(QString dirPath, QString nameFilter);

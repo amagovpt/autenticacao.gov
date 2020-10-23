@@ -53,6 +53,7 @@ private:
 	Ui::dlgWndAskPINsClass ui;
 	bool OldPIN_OK, NewPIN1_OK, NewPIN2_OK;
 	bool TestPINs(){ return ( OldPIN_OK && NewPIN1_OK && NewPIN2_OK ); }
+	void updateColors( QLineEdit* lineEdit, bool bOk );
 	unsigned int m_ulPin1MinLen;
 	unsigned int m_ulPin2MinLen;
 	unsigned int m_ulPin1MaxLen;

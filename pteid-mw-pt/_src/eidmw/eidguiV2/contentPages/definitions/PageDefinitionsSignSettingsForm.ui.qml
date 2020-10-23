@@ -3,7 +3,7 @@
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 - 2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -460,7 +460,7 @@ Item {
                         id: checkboxCMDRegRemember
                         text: qsTranslate(
                                   "PageDefinitionsSignSettings",
-                                  "STR_CMD_REGISTER_REMENBER") + controler.autoTr
+                                  "STR_CMD_REGISTER_REMEMBER") + controler.autoTr
                         height: 25
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD

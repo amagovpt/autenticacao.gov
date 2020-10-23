@@ -32,6 +32,7 @@
 #include <vector>
 #include "Mutex.h"
 
+#include "Export.h"
 
 // Mutex.h includes windows.h and that conflicts with the openssl defines
 #if defined(__WINCRYPT_H__)
@@ -107,7 +108,6 @@ void loadWindowsRootCertificates(X509_STORE *store);
   * Abstract class for cryptographic features 
   *
   * The goal of this class is to provide facilities to openSSL usage
-  * This is only for internal use, no export is foreseen. 
   *
   *********************************************************************************/
 class APL_CryptoFwk
@@ -206,11 +206,6 @@ public:
 	bool GetHashSha1(const CByteArray &data, CByteArray *hash);
 
 	/**
-	  * Verify if the signature of the data (sha1 algorithm)
-	  */
-	bool VerifySignatureSha1(const CByteArray &data, const CByteArray &signature, const CByteArray &cert);
-
-	/**
 	  * Validate the certificate through CRL process
 	  */
 	FWK_CertifStatus CRLValidation(const CByteArray &cert,const CByteArray &crl);
@@ -221,7 +216,7 @@ public:
 	  * @return true if Validation OK
 	  * @return false if Revoked or Unknown
 	  */
-	FWK_CertifStatus OCSPValidation(const CByteArray &cert, const CByteArray &issuer, CByteArray *response=NULL);
+	EIDMW_APL_API FWK_CertifStatus OCSPValidation(const CByteArray &cert, const CByteArray &issuer, CByteArray *response=NULL);
 
 	/**
 	  * Send a OCSP request and get the response
@@ -349,12 +344,12 @@ protected:
 	/**
 	  * Verify if the signature of the data
 	  */
-	bool VerifySignature(const CByteArray &data, const CByteArray &signature, X509 *pX509, const EVP_MD *algorithm);
+	//bool VerifySignature(const CByteArray &data, const CByteArray &signature, X509 *pX509, const EVP_MD *algorithm);
 
 	/**
 	  * Verify if the cert is the correct root
 	  */
-	bool VerifyRoot(const CByteArray &cert, const unsigned char *const *roots);
+	bool VerifyRoot(const CByteArray &cert, const unsigned char *const *roots, const unsigned long *root_lengths);
 
 	/**
 	  * Send a OCSP request and get the response
@@ -378,7 +373,7 @@ protected:
 	/**
 	  * Convert ASN1_TIME into string
 	  */
-	void TimeToString(ASN1_TIME *asn1Time, std::string &strTime, const char *format);
+	void TimeToString(const ASN1_TIME *asn1Time, std::string &strTime, const char *format);
 
 	/**
 	  * Convert ASN1_GENERALIZEDTIME into struct tm
@@ -388,12 +383,12 @@ protected:
 	/**
 	  * Convert ASN1_GENERALIZEDTIME into char*
 	  */
-	void GeneralTimeToBuffer(ASN1_GENERALIZEDTIME *asn1Time, char* buffer,size_t bufferSize);
+	void GeneralTimeToBuffer(const ASN1_GENERALIZEDTIME *asn1Time, char* buffer,size_t bufferSize);
 
 	/**
 	  * Convert ASN1_UTCTIME into struct tm
 	  */
-	void UtcTimeToString(ASN1_UTCTIME *asn1Time, struct tm &timeinfo);
+	void UtcTimeToString(const ASN1_UTCTIME *asn1Time, struct tm &timeinfo);
 
 
 	/**

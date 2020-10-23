@@ -6,7 +6,7 @@
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2012 lmcm - <lmcm@caixamagica.pt>
  * Copyright (C) 2014, 2016, 2018 AndrÃ© Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -32,121 +32,141 @@
 #include "Log.h"
 #include "Config.h"
 
-#define IDC_STATIC 0
-#define IDB_OK 1
-#define IDB_CANCEL 2
+#define IDC_STATIC_TITLE 0
+#define IDB_OK IDOK
+#define IDB_CANCEL IDCANCEL
 #define IDB_RETRY 3
+#define IDC_STATIC_BODY 4
+#define IDC_STATIC_HEADER 5
+#define IDI_ICON 6
 #define IMG_SIZE 128
-
-std::wstring langbad = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
 dlgWndBadPIN::dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries, HWND Parent )
 :Win32Dialog(L"WndBadPIN")
 {
-	hbrBkgnd = NULL;
-
 	std::wstring tmpTitle = L"";
 
-	if(wcscmp(L"nl",langbad.c_str())==0)
-		tmpTitle += (L"Atenção");
-	else
-		tmpTitle += GETSTRING_DLG(Notification);
+	tmpTitle += GETSTRING_DLG(Notification);
 	tmpTitle += L": ";
-	tmpTitle += GETSTRING_DLG(Bad); 
-	tmpTitle += L" ";
 
+	std::wstring title;
+	title = GETSTRING_DLG(Bad);
+	title += L" \"";
 	if ( wcsstr(const_cast<wchar_t*>( PINName.c_str()), (L"PIN da Autentica")) != 0)
-		tmpTitle += (L"Pin da Autenticação");
+		title += (L"Pin da Autenticação");
 	else
-		tmpTitle += PINName;
+		title += PINName;
+	title += L"\"";
 
-	wchar_t tmpBuf[128];
-	std::wstring tmpStr = L"";
-	_itow_s( RemainingTries, tmpBuf, 128, 10 ); 
-	szHeader = new wchar_t[128];
-	szBody = L"";
-
-	tmpStr = GETSTRING_DLG(Bad);
-	tmpStr += L" \""; 
-	if ( wcsstr(const_cast<wchar_t*>( PINName.c_str()), (L"PIN da Autentica")) != 0)
-		tmpStr += (L"Pin da Autenticação");
-	else
-		tmpStr += PINName;
-	tmpStr += L"\": ";
-	tmpStr += tmpBuf;
-	tmpStr += L" "; 
-	tmpStr += GETSTRING_DLG(RemainingAttempts); 
-	wcscpy_s( szHeader, 128, tmpStr.c_str() );
-	if( RemainingTries == 0 )
+	std::wstring header;
+	if (RemainingTries == 0)
 	{
-		if ( wcsstr(const_cast<wchar_t*>( PINName.c_str()), (L"PIN da Autentica")) != 0)
-			tmpTitle += L"Pin da Autenticação";
-		else
-			tmpTitle += PINName;
-		tmpStr += L" ";
-		tmpStr = GETSTRING_DLG(PinBlocked);
-		szBody = tmpStr.c_str();
+		header = GETSTRING_DLG(PinBlocked);
 	}
 	else
 	{
-		szBody = GETSTRING_DLG(TryAgainOrCancel);
+		header = GETSTRING_DLG(IncorrectPin);
+		header += L"\n";
+		wchar_t triesBuf[32];
+		_itow_s(RemainingTries, triesBuf, 128, 10);
+		header += triesBuf;
+		header += L" "; 
+		header += GETSTRING_DLG(RemainingAttempts); 
+		header += L"."; 
 	}
+		
 
-	int window_height = 280;
-	int window_width = 420;
-	ScaleDimensions(&window_width, &window_height);
+	int window_height = 360;
+	int window_width = 430;
 
 	// Added for accessibility
-	tmpTitle += szHeader;
-	tmpTitle += szBody;
+	tmpTitle += title;
+	tmpTitle += header;
 
 	if (CreateWnd(tmpTitle.c_str(), window_width, window_height, IDI_APPICON, Parent))
 	{
 		RECT clientRect;
 		GetClientRect( m_hWnd, &clientRect );
 
-		int buttonWidth = 0.22 * window_width;
-		int buttonHeight = 0.12 * window_height;
-		int buttonX = clientRect.right - 0.24 * window_width;
-		int buttonY = clientRect.bottom - 0.24 * window_height;
-		int buttonSpacing = 0.04 * buttonWidth;
+		int contentX = (int)(clientRect.right * 0.05);
+		int paddingY = (int)(clientRect.bottom * 0.05);
+		int contentWidth = (int)(clientRect.right - 2 * contentX);
+		int titleHeight = (int)(clientRect.right * 0.13);
+		int imgWidth = (int)(clientRect.right * 0.25);
+		int imgHeight = imgWidth;
+		int imgX = (int)((clientRect.right - imgWidth) / 2);
+		int imgY = (int)(clientRect.bottom * 0.25);
+		int headerY = (int)(clientRect.bottom * 0.65);
+		int headerHeight = (int)(clientRect.bottom * 0.15);
+		int buttonWidth = (int)(clientRect.right * 0.43);
+		int buttonHeight = (int)(clientRect.bottom * 0.08);
+		int buttonY = (int)(clientRect.bottom - paddingY - buttonHeight);
+		int buttonSpacing = (int)(contentWidth - 2 * buttonWidth);
 
-		if( RemainingTries == 0 )
-		{
-			OK_Btn = CreateWindow(
-				L"BUTTON", GETSTRING_DLG(Ok), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-				buttonX, buttonY, buttonWidth, buttonHeight, 
-				m_hWnd, (HMENU)IDB_OK, m_hInstance, NULL );
-			SendMessage(OK_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
+		// TITLE
+		titleData.text = title.c_str();
+		titleData.font = PteidControls::StandardFontHeader;
+		titleData.color = BLUE;
+		HWND hTitle = PteidControls::CreateText(
+			contentX, paddingY,
+			contentWidth, titleHeight,
+			m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
+
+		// IMAGE
+		imageIco = (HICON)LoadImage(m_hInstance,
+			MAKEINTRESOURCE(IDI_ICON2),
+			IMAGE_ICON, 256, 256, NULL);
+		if (imageIco == NULL){
+			MWLOG(LEV_ERROR, MOD_DLG, L"  --> dlgWndBadPIN::dlgWndBadPIN Error while loading image: 0x%x", GetLastError());
 		}
+		HWND hwndImage = CreateWindow(
+			L"STATIC", L"warning.ico", WS_CHILD | WS_VISIBLE | SS_ICON | SS_REALSIZECONTROL,
+			imgX, imgY, imgWidth, imgHeight,
+			m_hWnd, (HMENU)IDI_ICON, m_hInstance, NULL);
+		SendMessage(hwndImage, STM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)imageIco);
+
+		// HEADER
+		headerData.text = header.c_str();
+		headerData.font = PteidControls::StandardFontBold;
+		headerData.horizontalCentered = true;
+		HWND hHeader = PteidControls::CreateText(
+			contentX, headerY,
+			contentWidth, headerHeight,
+			m_hWnd, (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
+
+		// BUTTONS
+		if (RemainingTries == 0)
+		{
+			okBtnData.text = GETSTRING_DLG(Ok);
+			HWND okBtn = PteidControls::CreateButton(
+				contentX + (contentWidth - buttonWidth) / 2, buttonY, buttonWidth, buttonHeight,
+				m_hWnd, (HMENU)IDB_OK, m_hInstance, &okBtnData);
+			SetFocus(okBtnData.getMainWnd());
+		} 
 		else
 		{
-			Retry_Btn = CreateWindow(
-				L"BUTTON", GETSTRING_DLG(Retry), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-				buttonX - buttonWidth - buttonSpacing, buttonY, buttonWidth, buttonHeight, 
-				m_hWnd, (HMENU)IDB_RETRY, m_hInstance, NULL );
-			SendMessage(Retry_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
+			cancelBtnData.text = GETSTRING_DLG(Cancel);
+			retryBtnData.text = GETSTRING_DLG(Retry);
+			retryBtnData.highlight = true;
 
-			Cancel_Btn = CreateWindow(
-				L"BUTTON", GETSTRING_DLG(Cancel), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_TEXT | BS_FLAT,
-				buttonX, buttonY, buttonWidth, buttonHeight, 
-				m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, NULL );
-			SendMessage(Cancel_Btn, WM_SETFONT, (WPARAM)TextFont, 0);
+			HWND cancelBtn = PteidControls::CreateButton(
+				contentX, buttonY, buttonWidth, buttonHeight,
+				m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &cancelBtnData);
+			SetFocus(cancelBtnData.getMainWnd());
+
+			HWND RetryBtn = PteidControls::CreateButton(
+				contentX + buttonWidth + buttonSpacing, buttonY, buttonWidth, buttonHeight,
+				m_hWnd, (HMENU)IDB_RETRY, m_hInstance, &retryBtnData);
+
 		}
-
-		//Message is vertically centered 
-		HWND hStaticText = CreateWindow( 
-			L"STATIC", szBody, WS_CHILD | WS_VISIBLE | SS_CENTER, 
-			0, clientRect.bottom / 2, clientRect.right, window_height * 0.08, 
-			m_hWnd, (HMENU)IDC_STATIC, m_hInstance, NULL );
-		SendMessage( hStaticText, WM_SETFONT, (WPARAM)TextFont, 0 );
 
 	}
 }
 
 dlgWndBadPIN::~dlgWndBadPIN()
 {
-    EnableWindow(m_parent, TRUE);
+	DestroyIcon(imageIco);
+	EnableWindow(m_parent, TRUE);
 	KillWindow( );
 }
 
@@ -156,7 +176,6 @@ LRESULT dlgWndBadPIN::ProcecEvent
 				LPARAM		lParam )		// Additional Message Information
 {
 	PAINTSTRUCT ps;
-	RECT rect;
 
 	switch( uMsg )
 	{
@@ -164,24 +183,22 @@ LRESULT dlgWndBadPIN::ProcecEvent
 		{
 			switch( LOWORD(wParam) )
 			{
+			case IDB_OK:
+				dlgResult = eIDMW::DLG_OK;
+				close();
+				return TRUE;
+			case IDB_CANCEL:
+				dlgResult = eIDMW::DLG_CANCEL;
+				close();
+				return TRUE;
 
-				case IDB_OK:
-					dlgResult = eIDMW::DLG_OK;
-					close();
-					return TRUE;
+			case IDB_RETRY:
+				dlgResult = eIDMW::DLG_RETRY;
+				close();
+				return TRUE;
 
-				case IDB_CANCEL:
-					dlgResult = eIDMW::DLG_CANCEL;
-					close();
-					return TRUE;
-
-				case IDB_RETRY:
-					dlgResult = eIDMW::DLG_RETRY;
-					close();
-					return TRUE;
-
-				default:
-					return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
+			default:
+				return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
 			}
 		}
 
@@ -194,44 +211,25 @@ LRESULT dlgWndBadPIN::ProcecEvent
 				return 0;
 			break;
 		}
-		//Set the TextColor for the subwindows hTextEdit and hStaticText
+
 		case WM_CTLCOLORSTATIC:
 		{
-			COLORREF grey = RGB(0xD6, 0xD7, 0xD7);
-			COLORREF white = RGB(0xFF, 0xFF, 0xFF);
 			HDC hdcStatic = (HDC)wParam;
-			SetTextColor(hdcStatic, RGB(0x3C, 0x5D, 0xBC));
-
 			//MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndBadPIN::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
-			if ((HWND)lParam == Retry_Btn || (HWND)lParam == OK_Btn || (HWND)lParam == Cancel_Btn)
+			SetBkColor(hdcStatic, WHITE);
+			if (m_hbrBkgnd == NULL)
 			{
-				SetBkColor(hdcStatic, grey);
-				return (INT_PTR)CreateSolidBrush(grey);
+				m_hbrBkgnd = CreateSolidBrush(WHITE);
 			}
 
-			SetBkColor(hdcStatic, white);
-
-			if (hbrBkgnd == NULL)
-			{
-				hbrBkgnd = CreateSolidBrush(white);
-			}
-
-			return (INT_PTR)hbrBkgnd;
+			return (INT_PTR)m_hbrBkgnd;
 		}
 
 		case WM_PAINT:
 		{
 			m_hDC = BeginPaint(m_hWnd, &ps);
-			SetTextColor(m_hDC, RGB(0x3C, 0x5D, 0xBC));
 
-			GetClientRect(m_hWnd, &rect);
-			rect.left += 20;
-			rect.top += 32;
-			rect.right -= 20;
-			rect.bottom -= 60;
-			SetBkColor(m_hDC, RGB(255, 255, 255));
-			SelectObject(m_hDC, TextFontTitle);
-			DrawText(m_hDC, szHeader, -1, &rect, DT_WORDBREAK);
+			DrawApplicationIcon(m_hDC, m_hWnd);
 
 			EndPaint(m_hWnd, &ps);
 
@@ -271,16 +269,8 @@ LRESULT dlgWndBadPIN::ProcecEvent
 		case WM_CREATE:
 		{
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndBadPIN::ProcecEvent WM_CREATE (wParam=%X, lParam=%X)",wParam,lParam);
-
-			HMENU hSysMenu;
-
-			hSysMenu = GetSystemMenu( m_hWnd, FALSE );
-			EnableMenuItem( hSysMenu, 2, MF_BYPOSITION | MF_GRAYED );
-
-			return 1;
+			break;
 		}
-
-
 		case WM_CLOSE:
 		{
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndBadPIN::ProcecEvent WM_CLOSE (wParam=%X, lParam=%X)",wParam,lParam);
@@ -300,7 +290,7 @@ LRESULT dlgWndBadPIN::ProcecEvent
 
 		default:
 		{
-			return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
+			break;
 		}
 	}
 	return DefWindowProc( m_hWnd, uMsg, wParam, lParam );

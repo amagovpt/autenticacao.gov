@@ -1,7 +1,7 @@
 /* ****************************************************************************
 
 * eID Middleware Project.
-* Copyright (C) 2008-2009 FedICT.
+* Copyright (C) 2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
 *
 * This is free software; you can redistribute it and/or modify it
 * under the terms of the GNU Lesser General Public License version
@@ -22,24 +22,19 @@
 #include "../dialogs.h"
 #include <string>
 #include <vector>
+#include "components\pteidControls.h"
 
 using namespace eIDMW;
 
 class dlgWndCmdMsg : public Win32Dialog
 {
-    struct DlgButtonData {
-        bool btnHovered;
-        bool mouseTracking;
-    };
-    DlgButtonData btnProcData;
+    PteidControls::TextData titleData, textTopData, textBottomData;
+    PteidControls::ButtonData btnProcData;
 
     HWND hwndImage;
     HICON imageIco;
 
     DlgCmdMsgType type;
-
-    HBRUSH hbrBkgnd;
-    std::wstring title;
 
 public:
     dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND Parent = NULL);
@@ -51,7 +46,5 @@ public:
         LPARAM		lParam);		// Additional Message Information
     
     void stopExec();
-
-    static LRESULT CALLBACK DlgButtonProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 };
 

@@ -37,24 +37,29 @@ __in    const wchar_t *message,
 __in    DlgCmdMsgType msgType,
 __in    HWND parentWindow);
 
+void sendSmsCallback();
+
 class CmdSignThread : public CThread
 {
 public:
-    CmdSignThread(CMDProxyInfo *cmd_proxyinfo, CMDSignature *cmdSignature, std::string mobileNumber, std::string pin, CByteArray hash, char* docname);
+    CmdSignThread(CMDProxyInfo *cmd_proxyinfo, CMDSignature *cmdSignature, std::string mobileNumber, std::string pin, CByteArray hash, char* docname, PCCERT_CONTEXT pCert);
     CmdSignThread(CMDSignature *cmdSignature, std::string otp);
 
     void Run();
     void Stop(unsigned long ulSleepFrequency = 100);
 
     int GetSignResult();
+    /* FIXME: cmdSignature is a static member because it needs to be accessed globally (to be used by sendSmsCallback()).
+              This means that this class is not thread safe as cmdSignature is shared between instances. */
+    static CMDSignature *cmdSignature;
 
 private:
     CMDProxyInfo *m_cmd_proxyinfo;
-    CMDSignature *m_cmdSignature;
     std::string m_mobileNumber;
     std::string m_pin;
     std::string m_otp;
     CByteArray m_hash;
+    PCCERT_CONTEXT m_pCert;
     char* m_docname;
     bool m_isValidateOtp;
 

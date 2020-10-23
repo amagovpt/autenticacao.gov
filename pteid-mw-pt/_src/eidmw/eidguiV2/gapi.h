@@ -3,9 +3,9 @@
  * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
- * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ * Copyright (C) 2018-2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -42,6 +42,9 @@
 
 #include "OAuthAttributes.h"
 #include "AttributeFactory.h"
+
+#define SUCCESS_EXIT_CODE 0
+#define RESTART_EXIT_CODE  1
 
 /* For filenames we need to maintain latin-1 or UTF-8 native encoding */
 //This macro's argument is a QString
@@ -162,7 +165,7 @@ public:
     QString outputPDF;
     int page; double location_x; double location_y;
     QString location; QString reason;
-    int ltv;
+    bool isTimestamp;
     QList<int> attribute_index;
 };
 
@@ -214,7 +217,7 @@ public:
     enum AddressInfoKey { District, Municipality, Parish, Streettype, Streetname, Buildingtype, Doorno, Floor, Side, Locality, Place, Zip4, Zip3, PostalLocality,
                           Foreigncountry, Foreignaddress, Foreigncity, Foreignregion, Foreignlocality, Foreignpostalcode};
 
-    enum CardAccessError { NoReaderFound, NoCardFound, PinBlocked, CardReadError, SodCardReadError, CardUserPinCancel, CardUnknownError, CardPinTimeout };
+    enum CardAccessError { NoReaderFound, NoCardFound, CardUnknownCard, PinBlocked, SodCardReadError, CardUserPinCancel, CardUnknownError, CardPinTimeout, IncompatibleReader };
 
     enum SignMessage { SignMessageOK, SignMessageTimestampFailed, SignFilePermissionFailed, PDFFileUnsupported};
 
@@ -237,6 +240,8 @@ public:
 
     enum CmdDialogClass { Sign, RegisterCert, AskToRegisterCert };
 
+    enum ShortcutId { ShortcutIdNone, ShortcutIdSignSimple, ShortcutIdSignAdvanced};
+
     Q_ENUMS(ScapPdfSignResult)
     Q_ENUMS(ScapAttrType)
     Q_ENUMS(ScapAttrDescription)
@@ -251,6 +256,7 @@ public:
     Q_ENUMS(AutoUpdateType)
     Q_ENUMS(PinUsage)
     Q_ENUMS(CmdDialogClass)
+    Q_ENUMS(ShortcutId)
 
     bool isAddressLoaded() {return m_addressLoaded; }
 
@@ -258,10 +264,6 @@ public:
     QQuickImageProvider * buildPdfImageProvider() { return image_provider_pdf; }
 
     PDFPreviewImageProvider * image_provider_pdf;
-
-    //This flag is used to start the application in specific subpage
-    void setShortcutFlag(int value) { m_shortcutFlag = value; }
-    void setShortcutPDFPath(QString &inputPdf) { m_shortcutInputPDF = inputPdf ;}
 
     // Do not forget to declare your class to the QML system.
     static void declareQMLTypes() {
@@ -285,8 +287,6 @@ public slots:
     void startReadingPersoNotes();
     void startWritingPersoNotes(QString text);
     void startReadingAddress();
-    int getShortcutFlag() {return m_shortcutFlag; }
-	QString getShortcutInputPDF() {	return m_shortcutInputPDF.replace(QChar('\\'), QChar('/')); }
     void startPrintPDF(QString outputFile, bool isBasicInfo,bool isAdditionalInfo,
                        bool isAddress,bool isNotes,bool isPrintDate,bool isSign);
     void startPrint(QString outputFile, bool isBasicInfo,bool isAdditionalInfo,
@@ -303,6 +303,21 @@ public slots:
 	void startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp);
 	void startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, bool isTimestamp);
 
+    //This flag is used to start the application in specific signature subpage
+    void setShortcutFlag(ShortcutId value) { m_shortcutFlag = value; }
+    void addShortcutPath(QString path) { m_shortcutPaths.append(path.replace(QChar('\\'), QChar('/'))); };
+    void setShortcutLocation(QString location) { m_shortcutLocation = location; }
+    void setShortcutReason(QString reason) { m_shortcutReason = reason; }
+    void setShortcutTsa(bool useTsa) { m_shortcutTsa = useTsa; }
+    void setShortcutOutput(QString output) { m_shortcutOutput = output; }
+    int getShortcutFlag() { return m_shortcutFlag; }
+    QList<QString> getShortcutPaths() { return m_shortcutPaths; }
+    QString getShortcutLocation() { return m_shortcutLocation; }
+    QString getShortcutReason() { return m_shortcutReason; }
+    QString getShortcutOutput() { return m_shortcutOutput; }
+    QString getAbsolutePath(QString path);
+    bool getShortcutTsa() { return m_shortcutTsa; }
+
     /* SCAP Methods  */
     void startGettingEntities();
     void startGettingCompanyAttributes(bool useOAuth);
@@ -312,7 +327,7 @@ public slots:
     void startPingSCAP();
 
     void startSigningSCAP(QString inputPdf, QString outputPDF, int page, double location_x, double location_y,
-                          QString location, QString reason, int ltv, QList<int> attribute_index);
+                          QString location, QString reason, bool isTimestamp, QList<int> attribute_index);
 
     void abortSCAPWithCMD(); // close the listing server
 
@@ -352,7 +367,9 @@ public slots:
     void doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token, QList<int> attribute_list);
     void signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
                        QString outputFile, int page, double coord_x, double coord_y,
-                       QString reason, QString location);
+                       QString reason, QString location, bool isTimestamp);
+    void sendSmsCmd(CmdDialogClass dialogType);
+    void doSendSmsCmd(CmdDialogClass dialogType);
 
     static void addressChangeCallback(void *, int);
     void showChangeAddressDialog(long code);
@@ -392,7 +409,7 @@ public slots:
     void cancelDownload();
     void httpFinished();
 
-    void quitApplication();
+    void quitApplication(bool restart = false);
     void forgetAllCertificates( void );
     void forgetCertificates(QString const& reader);
 
@@ -508,6 +525,10 @@ private:
     void initScapAppId(void);
     void doRegisterCMDCertOpen(QString mobileNumber, QString pin);
     void doRegisterCMDCertClose(QString otp);
+    void drawSectionHeader(QPainter &painter, double pos_x, double pos_y, QString section_name);
+    void drawPrintingDate(QPainter &painter, QString printing_date);
+    double checkNewPageAndPrint(QPrinter &printer, QPainter &painter, double current_y, double remaining_height, double max_height, bool print_date = false, QString date_label = "");
+    double drawSingleField(QPainter &painter, double pos_x, double pos_y, QString name, QString value, double line_length, int field_margin = 15, bool is_bounded_rect = false, double bound_width = 360);
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;
@@ -522,9 +543,14 @@ private:
 
     QString m_persoData;
     bool m_addressLoaded;
-    int m_shortcutFlag;
-    QString m_shortcutInputPDF;
+    ShortcutId m_shortcutFlag;
+    QList<QString> m_shortcutPaths;
+    QString m_shortcutLocation;
+    QString m_shortcutReason;
+    QString m_shortcutOutput;
+    bool m_shortcutTsa = false;
     signed int selectedReaderIndex = -1;
+    double print_scale_factor = 1;
 
     tCallBackHandles		m_callBackHandles;
     tCallBackData			m_callBackData;

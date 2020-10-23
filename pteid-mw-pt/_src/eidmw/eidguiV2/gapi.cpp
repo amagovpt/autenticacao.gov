@@ -6,7 +6,7 @@
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -59,7 +59,7 @@ GAPI::GAPI(QObject *parent) :
     m_cmdCertificates =  new eIDMW::CMDCertificates();
 #endif
     m_addressLoaded = false;
-    m_shortcutFlag = 0;
+    m_shortcutFlag = ShortcutIdNone;
 
     // Create callbacks for all readers at the startup
     setEventCallbacks();
@@ -85,23 +85,30 @@ void GAPI::initTranslation() {
 bool GAPI::LoadTranslationFile(QString NewLanguage)
 {
     QString strTranslationFile;
+    QString translations_dir;
     strTranslationFile = QString("eidmw_") + NewLanguage;
 
-    qDebug() << "C++: GAPI LoadTranslationFile" << strTranslationFile << m_Settings.getExePath();
+#ifdef __APPLE__
+    translations_dir = m_Settings.getExePath()+"/../Resources/";
+#else
+    translations_dir = m_Settings.getExePath()+"/";
+#endif
 
-    if (!m_translator.load(strTranslationFile,m_Settings.getExePath()+"/"))
+    qDebug() << "C++: GAPI LoadTranslationFile" << strTranslationFile << translations_dir;
+
+    if (!m_translator.load(strTranslationFile,translations_dir))
     {
         // this should not happen, since we've built the menu with the translation filenames
         strTranslationFile = QString("eidmw_") + STR_DEF_GUILANGUAGE;
         //try load default translation file
-        qDebug() << "C++: AppController GAPI" << strTranslationFile << m_Settings.getExePath();
-        if (!m_translator.load(strTranslationFile,m_Settings.getExePath()+"/"))
+        qDebug() << "C++: GAPI LoadTranslationFile" << strTranslationFile << translations_dir;
+        if (!m_translator.load(strTranslationFile,translations_dir))
         {
             // this should not happen too, since we've built the menu with the translation filenames
-            qDebug() << "C++: AppController Load Default Translation File Error";
+            qDebug() << "C++: GAPI Load Default Translation File Error";
             return false;
         }
-        qDebug() << "C++: AppController Loaded Default Translation File";
+        qDebug() << "C++: GAPI Loaded Default Translation File";
         qApp->installTranslator(&m_translator);
         return false;
     }
@@ -184,6 +191,10 @@ QString GAPI::getAddressField(AddressInfoKey key) {
     else if (errorCode == EIDMW_ERR_PIN_BLOCKED) \
 { \
     emit signalCardAccessError(PinBlocked); \
+    } \
+    else if (errorCode == EIDMW_ERR_INCOMPATIBLE_READER) \
+{ \
+    emit signalCardAccessError(IncompatibleReader); \
     } \
     else if (errorCode == EIDMW_ERR_TIMEOUT) \
 { \
@@ -548,6 +559,8 @@ void GAPI::showChangeAddressDialog(long code)
     {
     case 0:
         error_msg = tr("STR_CHANGE_ADDRESS_SUCESS");
+        //Reload address data in case of successful address change
+        startReadingAddress();
         break;
         //The error code for connection error is common between SAM and OTP
     case EIDMW_OTP_CONNECTION_ERROR:
@@ -604,8 +617,6 @@ void GAPI::showChangeAddressDialog(long code)
 
     qDebug() << error_msg;
     signalUpdateProgressStatus(error_msg);
-
-    //TODO: Reload card information in case of successful address change
 }
 
 void GAPI::showSignCMDDialog(long error_code)
@@ -895,7 +906,7 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
 
         scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
             m_scap_params.location_x, m_scap_params.location_y,
-            m_scap_params.location, m_scap_params.reason, 0, attrs, cmd_details,
+            m_scap_params.location, m_scap_params.reason, m_scap_params.isTimestamp, attrs, cmd_details,
             useCustomSignature(), m_jpeg_scaled_data);
 
         for (size_t i = 0; i < cmd_pdfSignatures.size(); i++)
@@ -928,7 +939,7 @@ QString generateTempFile() {
 
 void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
     QString outputFile, int page, double coord_x, double coord_y,
-    QString reason, QString location) {
+    QString reason, QString location, bool isTimestamp) {
 
     qDebug() << "signOpenScapWithCMD! MobileNumber = " << mobileNumber << " secret_code = " << secret_code <<
         " loadedFilePaths = " << loadedFilePaths <<
@@ -948,7 +959,7 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<
     m_scap_params.location_y = coord_y;
     m_scap_params.location = location;
     m_scap_params.reason = reason;
-
+    m_scap_params.isTimestamp = isTimestamp;
 
     CmdParams cmdParams;
     SignParams signParams;
@@ -1042,6 +1053,25 @@ void GAPI::signCloseCMD(QString sms_token, QList<int> attribute_list)
 
     else
         Concurrent::run(this, &GAPI::doCloseSignCMD, cmd_signature, sms_token);
+}
+
+void GAPI::sendSmsCmd(CmdDialogClass dialogType) {
+    Concurrent::run(this, &GAPI::doSendSmsCmd, dialogType);
+}
+void GAPI::doSendSmsCmd(CmdDialogClass dialogType) {
+#ifdef WIN32
+    if (dialogType == GAPI::RegisterCert)
+    {
+        m_cmdCertificates->sendSms();
+    }
+    else if (dialogType == GAPI::Sign)
+    {
+        cmd_signature->sendSms();
+    }
+#else
+    cmd_signature->sendSms();
+#endif
+    // TODO: update status
 }
 
 QString GAPI::getCardActivation() {
@@ -1240,16 +1270,21 @@ void GAPI::doPrintPDF(PrintParams &params) {
 static QPen black_pen;
 static QPen blue_pen;
 
-double drawSingleField(QPainter &painter, double pos_x, double pos_y, QString name, QString value, double line_length, int field_margin = 15, bool is_bounded_rect = false, double bound_width = 360)
+double GAPI::drawSingleField(QPainter &painter, double pos_x, double pos_y, QString name, QString value, double line_length, int field_margin, bool is_bounded_rect, double bound_width)
 {
     painter.setPen(blue_pen);
 
+    // apply scale factor to default values
+    if (field_margin == 15)
+        field_margin *= print_scale_factor;
+    if (bound_width == 360)
+        bound_width *= print_scale_factor;
     if (field_margin == 0){
-        line_length -= 15;
+        line_length -= 15 * print_scale_factor;
     }
 
     painter.drawText(QPointF(pos_x + field_margin, pos_y), name);
-    pos_y += 7;
+    pos_y += 7 * print_scale_factor;
 
     painter.drawLine(QPointF(pos_x + field_margin, pos_y), QPointF(pos_x + (line_length - field_margin), pos_y));
     painter.setPen(black_pen);
@@ -1258,19 +1293,19 @@ double drawSingleField(QPainter &painter, double pos_x, double pos_y, QString na
         int flags = Qt::TextWordWrap | Qt::TextWrapAnywhere;
         int textFlags = Qt::TextWordWrap;
         QFontMetricsF fm = painter.fontMetrics();
-        QRectF bounding_rect = fm.boundingRect(QRectF(pos_x + field_margin, pos_y, bound_width - 2 * field_margin, 500), flags, value);
+        QRectF bounding_rect = fm.boundingRect(QRectF(pos_x + field_margin, pos_y, bound_width - 2 * field_margin, 500 * print_scale_factor), flags, value);
 
         painter.drawText(bounding_rect.adjusted(0, 0, 0, 0), textFlags, value);
-        pos_y += bounding_rect.height() + 15;
+        pos_y += bounding_rect.height() + 15 * print_scale_factor;
     } else {
-        pos_y += 15;
+        pos_y += 15 * print_scale_factor;
         painter.drawText(QPointF(pos_x + field_margin, pos_y), value);
     }
 
     return pos_y;
 }
 
-void drawSectionHeader(QPainter &painter, double pos_x, double pos_y, QString section_name)
+void GAPI::drawSectionHeader(QPainter &painter, double pos_x, double pos_y, QString section_name)
 {
     QFont header_font("DIN Light");
     header_font.setPointSize(11);
@@ -1283,15 +1318,15 @@ void drawSectionHeader(QPainter &painter, double pos_x, double pos_y, QString se
     painter.setBrush(light_grey);
     painter.setPen(light_grey);
 
-    painter.drawRoundedRect(QRectF(pos_x, pos_y, 250, 30), 10.0, 10.0);
+    painter.drawRoundedRect(QRectF(pos_x, pos_y, 250 * print_scale_factor, 30 * print_scale_factor), 10.0 * print_scale_factor, 10.0 * print_scale_factor);
     painter.setPen(black_pen);
 
-    painter.drawText(pos_x + 20, pos_y + 20, section_name);
+    painter.drawText(pos_x + 20 * print_scale_factor, pos_y + 20 * print_scale_factor, section_name);
 
     painter.setFont(regular_font);
 }
 
-void drawPrintingDate(QPainter &painter, QString printing_date){
+void GAPI::drawPrintingDate(QPainter &painter, QString printing_date){
     QFont date_font("DIN Medium");
     date_font.setPointSize(8);
     date_font.setBold(false);
@@ -1300,7 +1335,11 @@ void drawPrintingDate(QPainter &painter, QString printing_date){
 
     printing_date += " " + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm");
     painter.setFont(date_font);
-    painter.drawText(QRectF(painter.device()->width() - 225, painter.device()->height() - 25, 200, 100), Qt::TextWordWrap, printing_date);
+    painter.drawText(QRectF(painter.device()->width() - 225 * print_scale_factor,
+                            painter.device()->height() - 25 * print_scale_factor,
+                            200 * print_scale_factor,
+                            100 * print_scale_factor),
+                    Qt::TextWordWrap, printing_date);
 
     painter.setFont(regular_font);
 }
@@ -1327,10 +1366,10 @@ QString getTextFromLines(QStringList lines, int start, int stop){
     return text_lines.join("\n");
 }
 
-double checkNewPageAndPrint(QPrinter &printer, QPainter &painter, double current_y, double remaining_height, double max_height, bool print_date = false, QString date_label = ""){
+double GAPI::checkNewPageAndPrint(QPrinter &printer, QPainter &painter, double current_y, double remaining_height, double max_height, bool print_date, QString date_label){
     if (current_y + remaining_height > max_height){
         printer.newPage();
-        current_y = 50;
+        current_y = 50 * print_scale_factor;
         if (print_date)
         {
             drawPrintingDate(painter, date_label);
@@ -1344,11 +1383,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     qDebug() << "drawpdf! outputFile = " << params.outputFile <<
         "isBasicInfo = " << params.isBasicInfo << "isAddicionalInfo" << params.isAddicionalInfo << "isAddress"
         << params.isAddress << "isNotes = " << params.isNotes << "isPrintDate = " << params.isPrintDate << "isSign = " << params.isSign;
-    //gives a bit of left margin
-    double page_margin = 33.5;
-    double pos_x = page_margin, pos_y = 0;
-    bool res = false;
-    int field_margin = 15;
+
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance drawpdf");
 
     BEGIN_TRY_CATCH;
@@ -1361,7 +1396,8 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     PTEID_EId &eid_file = card->getID();
 
     //QPrinter printer;
-    printer.setResolution(96);
+    print_scale_factor = printer.resolution() / 96.0;
+
     printer.setColorMode(QPrinter::Color);
     printer.setPaperSize(QPrinter::A4);
 
@@ -1377,11 +1413,18 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
     //Start drawing
     QPainter painter;
+    bool res = false;
     res = painter.begin(&printer);
     if (res == false){
         qDebug() << "Start drawing return error: " << res;
         return false;
     }
+
+    //gives a bit of left margin
+    double page_margin = 33.5 * print_scale_factor;
+    double pos_x = page_margin, pos_y = 0;
+    int field_margin = 15 * print_scale_factor;
+
     double page_height = painter.device()->height();
     double page_width = painter.device()->width();
     double full_page = (page_width - 2 * page_margin);
@@ -1390,11 +1433,11 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
     //Font setup
     QFont din_font("DIN Medium");
-    din_font.setPixelSize(18);
+    din_font.setPixelSize(18 * print_scale_factor);
 
     //  Include header as png pixmap
     QPixmap header = loadHeader();
-    QRectF headerImgRect = QRectF(pos_x, pos_y, 359.0, 75.0);
+    QRectF headerImgRect = QRectF(pos_x, pos_y, 359.0 * print_scale_factor, 75.0 * print_scale_factor);
     painter.drawPixmap(headerImgRect, header, QRect(0.0, 0.0, header.width(), header.height()));
 
     //  //Alternative using the QtSVG module, not enabled for now because the rendering is far from perfect
@@ -1410,15 +1453,15 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     blue_pen.setColor(QColor(78, 138, 190));
     painter.setPen(blue_pen);
 
-    int line_length = 487;
+    int line_length = 487 * print_scale_factor;
     //Horizontal separator below the CC logo
     painter.drawLine(QPointF(pos_x, pos_y), QPointF(pos_x + line_length, pos_y));
-    pos_y += 25;
+    pos_y += 25 * print_scale_factor;
 
     //Change text color
     blue_pen = painter.pen();
 
-    const double LINE_HEIGHT = 45.0;
+    const double LINE_HEIGHT = 45.0 * print_scale_factor;
 
     //    din_font.setBold(true);
     painter.setFont(din_font);
@@ -1426,15 +1469,15 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     painter.drawText(QPointF(pos_x, pos_y), tr("STR_PERSONAL_DATA"));
 
     pos_y += field_margin;
-    int circle_radius = 6;
+    int circle_radius = 6 * print_scale_factor;
 
     painter.setPen(black_pen);
     //Reset font
-    din_font.setPixelSize(10);
+    din_font.setPixelSize(10 * print_scale_factor);
     din_font.setBold(false);
     painter.setFont(din_font);
 
-    pos_y += 30;
+    pos_y += 30 * print_scale_factor;
 
     if (params.isPrintDate)
     {
@@ -1453,14 +1496,14 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
         QPixmap pixmap_photo;
         pixmap_photo.loadFromData(photo.GetBytes(), photo.Size(), "PNG");
 
-        const int img_height = 200;
+        const int img_height = 200 * print_scale_factor;
 
         //Scale height if needed
         QPixmap scaled = pixmap_photo.scaledToHeight(img_height, Qt::SmoothTransformation);
 
-        painter.drawPixmap(QPointF(pos_x + 500, pos_y - 80), scaled);
+        painter.drawPixmap(QPointF(pos_x + 500 * print_scale_factor, pos_y - 80 * print_scale_factor), scaled);
 
-        pos_y += 50;
+        pos_y += 50 * print_scale_factor;
 
         double new_pos_y = drawSingleField(painter, pos_x, pos_y, tr("STR_GIVEN_NAME"),
             QString::fromUtf8(eid_file.getGivenName()), half_page, 0, true, half_page);
@@ -1501,11 +1544,11 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     if (params.isAddicionalInfo)
     {
         //height of this section, if spacing between fields change update this value
-        double min_section_height = 235;
+        double min_section_height = 235 * print_scale_factor;
         pos_y = checkNewPageAndPrint(printer, painter, pos_y, min_section_height, page_height, params.isPrintDate, tr("STR_PRINTED_ON"));
 
         drawSectionHeader(painter, pos_x, pos_y, tr("STR_ADDITIONAL_INFORMATION"));
-        pos_y += 50;
+        pos_y += 50 * print_scale_factor;
 
         drawSingleField(painter, pos_x, pos_y, tr("STR_VAT_NUM"),
             QString::fromUtf8(eid_file.getTaxNo()), third_of_page, 0);
@@ -1531,17 +1574,17 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
             QString::fromUtf8(eid_file.getDocumentVersion()), half_page, 0);
         drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_CARD_STATE"),
             getCardActivation(), half_page, field_margin, true, half_page);
-        pos_y += 50;
+        pos_y += 50 * print_scale_factor;
     }
 
     if (params.isAddress)
     {
         //height of this section, if spacing between fields change update this value
-        double min_section_height = 350;
+        double min_section_height = 350 * print_scale_factor;
         pos_y = checkNewPageAndPrint(printer, painter, pos_y, min_section_height, page_height, params.isPrintDate, tr("STR_PRINTED_ON"));
 
         drawSectionHeader(painter, pos_x, pos_y, tr("STR_ADDRESS"));
-        pos_y += 50;
+        pos_y += 50 * print_scale_factor;
 
         PTEID_Address &addressFile = card->getAddr();
 
@@ -1608,7 +1651,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
             drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_ADDRESS"),
                 QString::fromUtf8(addressFile.getForeignAddress()), half_page, 0, true, page_width);
         }
-        pos_y += 80;
+        pos_y += 80 * print_scale_factor;
     }
 
     if (params.isNotes)
@@ -1619,18 +1662,18 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
         if (perso_data.size() > 0)
         {
-            pos_x = 30; //gives a bit of left margin
-            pos_y += 50;
+            pos_x = 30 * print_scale_factor; //gives a bit of left margin
+            pos_y += 50 * print_scale_factor;
 
             pos_y = checkNewPageAndPrint(printer, painter, pos_y, 0, page_height, params.isPrintDate, tr("STR_PRINTED_ON"));
 
             drawSectionHeader(painter, pos_x, pos_y, tr("STR_PERSONAL_NOTES"));
 
-            pos_y += 50;
+            pos_y += 50 * print_scale_factor;
 
             QStringList lines = perso_data.split("\n", QString::KeepEmptyParts);
 
-            const int TEXT_LINE_HEIGHT = 20;
+            const int TEXT_LINE_HEIGHT = 20 * print_scale_factor;
 
             int line_count = lines.length();
             double height_to_print = TEXT_LINE_HEIGHT * line_count;
@@ -1645,12 +1688,12 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
                 line_index_stop = line_index_start + (page_remaining_space / TEXT_LINE_HEIGHT);
 
-                if (page_remaining_space < 50 && height_to_print > 0)
+                if (page_remaining_space < 50 * print_scale_factor && height_to_print > 0)
                 {
                     printer.newPage();
-                    pos_y = 50;
+                    pos_y = 50 * print_scale_factor;
                     drawSectionHeader(painter, pos_x, pos_y, tr("STR_PERSONAL_NOTES"));
-                    pos_y += 50;
+                    pos_y += 50 * print_scale_factor;
                     if (params.isPrintDate)
                     {
                         drawPrintingDate(painter, tr("STR_PRINTED_ON"));
@@ -2172,8 +2215,7 @@ void GAPI::startRemovingAttributesFromCache(int scapAttrType) {
 }
 
 void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, double location_x,
-    double location_y, QString location, QString reason, int ltv,
-    QList<int> attribute_index) {
+    double location_y, QString location, QString reason, bool ltv, QList<int> attribute_index) {
 
     SCAPSignParams signParams = { inputPDF, outputPDF, page, location_x, location_y,
         location, reason, ltv, attribute_index };
@@ -2192,7 +2234,7 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
 
     scapServices.executeSCAPSignature(this, params.inputPDF, params.outputPDF, params.page,
         params.location_x, params.location_y, params.location, params.reason,
-        params.ltv, attrs, useCustomSignature(), m_jpeg_scaled_data);
+        params.isTimestamp, attrs, useCustomSignature(), m_jpeg_scaled_data);
     END_TRY_CATCH
 }
 
@@ -2230,24 +2272,31 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, boo
             childrensList.push_back(name.c_str());
 
             std::string description = mainAttributeObject->Description->c_str();
-            if (!isShortDescription) {
+			if (!isShortDescription) {
 
-                QString subAttributes(" (");
-                QString subAttributesValues;
-                for (uint subAttributePos = 0; subAttributePos < mainAttributeObject->SubAttributeList->SubAttribute.size(); subAttributePos++){
-                    ns3__SubAttributeType * subAttribute = mainAttributeObject->SubAttributeList->SubAttribute.at(subAttributePos);
+				QString subAttributes(" (");
+				QString subAttributesValues;
+				uint subAttributePos = 0;
 
-                    QString subDescription(subAttribute->Description->c_str());
-                    QString subValue(subAttribute->Value->c_str());
-                    subAttributesValues.append(subDescription + ": " + subValue + ", ");
-                }
-                // Chop 2 to remove last 2 chars (', ')
-                subAttributesValues.chop(2);
-                subAttributes.append(subAttributesValues + ")");
+				while (mainAttributeObject->SubAttributeList != NULL && subAttributePos < mainAttributeObject->SubAttributeList->SubAttribute.size()) {
+					ns3__SubAttributeType * subAttribute = mainAttributeObject->SubAttributeList->SubAttribute.at(subAttributePos);
+					QString subDescription, subValue;
+					if (subAttribute->Description != NULL) {
+						subDescription += subAttribute->Description->c_str();
+					}
+					if (subAttribute->Value != NULL) {
+						subValue += subAttribute->Value->c_str();
+					}
+					subAttributesValues.append(subDescription + ": " + subValue + ", ");
+					subAttributePos++;
+				}
+				// Chop 2 to remove last 2 chars (', ')
+				subAttributesValues.chop(2);
+				subAttributes.append(subAttributesValues + ")");
 
-                /* qDebug() << "Sub attributes : " << subAttributes; */
-                description += subAttributes.toStdString();
-            }
+				/* qDebug() << "Sub attributes : " << subAttributes; */
+				description += subAttributes.toStdString();
+			}
 
             childrensList.push_back(description.c_str());
         }
@@ -2284,8 +2333,8 @@ void GAPI::getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth) {
         getCardInstance(card);
     }
     if (!useOAuth && card == NULL) {
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SCAP Company Attributes Loaded Error!");
-        emit signalCompanyAttributesLoadedError();
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SCAP Entities Attributes Loaded Error!");
+        emit signalEntityAttributesLoadedError();
         return;
     }
 
@@ -2325,7 +2374,7 @@ void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
         getCardInstance(card);
     }
     if (!useOAuth && card == NULL) {
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Auth error");
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "SCAP Companies Attributes Loaded Error!");
         emit signalCompanyAttributesLoadedError();
         return;
     }
@@ -2528,7 +2577,7 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                 case PTEID_CARDTYPE_UNKNOWN:
                 {
                     selectedReaderIndex = -1;
-                    emit signalCardAccessError(CardUnknownError);
+                    emit signalCardAccessError(CardUnknownCard);
                     break;
                 }
                 default:
@@ -2557,7 +2606,7 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                     case PTEID_CARDTYPE_UNKNOWN:
                     {
                         selectedReaderIndex = -1;
-                        emit signalCardAccessError(CardUnknownError);
+                        emit signalCardAccessError(CardUnknownCard);
                         break;
                     }
                     default:
@@ -3343,7 +3392,7 @@ void GAPI::doRegisterCMDCertClose(QString otp) {
 #endif
 }
 
-void GAPI::quitApplication(void) {
+void GAPI::quitApplication(bool restart) {
     try
     {
         if (m_Settings.getRemoveCert())
@@ -3371,7 +3420,8 @@ void GAPI::quitApplication(void) {
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui",
             "Exiting application after timeout.");
     }
-    qApp->quit();
+    qApp->exit((restart ? RESTART_EXIT_CODE : SUCCESS_EXIT_CODE));
+
 }
 
 //*****************************************************
@@ -3424,4 +3474,13 @@ bool GAPI::checkCMDSupport() {
 #else
     return false;
 #endif
+}
+
+QString GAPI::getAbsolutePath(QString path) {
+    QFileInfo fileInfo(path);
+    if (fileInfo.exists() && fileInfo.isRelative())
+    {
+        return fileInfo.absoluteFilePath();
+    }
+    return path;
 }
