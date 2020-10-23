@@ -77,7 +77,7 @@
 #include "Stream.h"
 #include "XRef.h"
 #include "Linearization.h"
-//#include "DeflateStream.h"
+#include "FlateEncoder.h"
 #include "Link.h"
 #include "Error.h"
 #include "ErrorCodes.h"
@@ -874,7 +874,15 @@ void PDFDoc::addDSS(std::vector<ValidationDataElement *> validationData)
     {
         Object streamDictObj, streamObj;
         streamDictObj.initDict(xref);
-        MemStream *stream = new MemStream((char *)validationData[i]->getData(), 0, validationData[i]->getSize(), &streamDictObj);
+        Stream *stream = new MemStream((char *)validationData[i]->getData(), 0, validationData[i]->getSize(), &streamDictObj);
+
+        /* Compress stream if it is CRL. */
+        if (validationData[i]->getType() == ValidationDataElement::CRL)
+        {
+            Object obj;
+            streamDictObj.dictAdd(copyString("Filter"), obj.initName("FlateDecode"));
+            stream = new FlateEncoder(stream);
+        }
         streamObj.initStream(stream);
 
         Ref streamRef = xref->addIndirectObject(&streamObj);

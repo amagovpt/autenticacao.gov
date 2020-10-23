@@ -48,9 +48,6 @@
     <ClCompile Include="poppler\FileSpec.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="goo\FixedPoint.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="poppler\FontEncodingTables.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -87,16 +84,10 @@
     <ClCompile Include="poppler\Iconv.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="goo\ImgWriter.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="poppler\JArithmeticDecoder.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="poppler\JBIG2Stream.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="goo\JpegWriter.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="poppler\JPXStream.cc">
@@ -156,9 +147,6 @@
     <ClCompile Include="poppler\PDFDocFactory.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="goo\PNGWriter.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="poppler\PopplerCache.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -186,19 +174,16 @@
     <ClCompile Include="poppler\Stream.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="goo\TiffWriter.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="poppler\ViewerPreferences.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="poppler\win_iconv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="poppler\XpdfPluginAPI.cc">
+    <ClCompile Include="poppler\XRef.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="poppler\XRef.cc">
+    <ClCompile Include="poppler\FlateEncoder.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -231,9 +216,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="poppler\FileSpec.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="goo\FixedPoint.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="poppler\Form.h">
@@ -275,16 +257,10 @@
     <ClInclude Include="poppler\Hints.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="goo\ImgWriter.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="poppler\JArithmeticDecoder.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="poppler\JBIG2Stream.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="goo\JpegWriter.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="poppler\JPXStream.h">
@@ -341,9 +317,6 @@
     <ClInclude Include="poppler\PDFDocFactory.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="goo\PNGWriter.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="poppler\PopplerCache.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -371,22 +344,19 @@
     <ClInclude Include="poppler\Stream.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="goo\TiffWriter.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="poppler\ViewerPreferences.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="poppler\win_iconv.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="poppler\XpdfPluginAPI.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="poppler\XRef.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="poppler\FlateEncoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
