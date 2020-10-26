@@ -877,7 +877,12 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 		/* send the request and get a response */
 		if( NULL == *pResponse)
 		{
-			MWLOG(LEV_ERROR, MOD_APL, "GetOCSPResponse - Error querying OCSP: %s", ERR_error_string(ERR_get_error(), NULL));
+			const char *data = NULL;
+			int flags = 0;
+			long err = ERR_get_error_line_data(NULL, NULL, &data, &flags);
+			//Check if associated data string is returned in flags
+			MWLOG(LEV_ERROR, MOD_APL, "GetOCSPResponse - Error querying OCSP: %s Additional data: %s", ERR_error_string(err, NULL), flags & ERR_TXT_STRING != 0 ? data : "N/A");
+	
 			eStatus=FWK_CERTIF_STATUS_ERROR;
 			goto cleanup;
 		}
