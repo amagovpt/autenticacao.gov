@@ -16,7 +16,7 @@
     <name>DialogCMD</name>
     <message>
         <source>STR_REGISTER_CMD_CERT_DESC</source>
-        <translation>Registar o seu certificado da Chave Móvel Digital permite assinar com CMD em algumas aplicações terceiras. Poderá a qualquer momento registar o certificado em &quot;Configuração de assinaturas&quot;.</translation>
+        <translation>Registar o seu certificado da Chave Móvel Digital permite assinar com CMD em outras aplicações. Poderá a qualquer momento registar o certificado em &quot;Configuração de assinaturas&quot;.</translation>
     </message>
 </context>
 <context>
@@ -933,11 +933,11 @@
     </message>
     <message>
         <source>STR_REGISTER_CMD_CERT_TITLE</source>
-        <translation>Registar certificado de Chave Móvel Digital</translation>
+        <translation>Quer assinar com a Chave Móvel Digital em outras aplicações? Registe agora o seu certificado</translation>
     </message>
     <message>
         <source>STR_REGISTER_CMD_CERT_TEXT</source>
-        <translation>Registar o certificado associado à sua Chave Móvel Digital permite efetuar assinaturas com CMD em algumas aplicações terceiras.</translation>
+        <translation>Registar o certificado associado à sua Chave Móvel Digital permite efetuar assinaturas com CMD em outras aplicações.</translation>
     </message>
     <message>
         <source>STR_REGISTER_CMD_CERT_BUTTON</source>
@@ -1583,7 +1583,7 @@
     </message>
     <message>
         <source>STR_SIGN_CMD_URL</source>
-        <translation>Clique para conhecer a Chave Móvel Digital</translation>
+        <translation>Clique para ativar ou gerir a assinatura da sua Chave Móvel Digital</translation>
     </message>
     <message>
         <source>STR_SIGN_SUCESS_MULTI</source>
@@ -1970,7 +1970,7 @@
     </message>
     <message>
         <source>STR_POPUP_INCOMPATIBLE_READER</source>
-        <translation type="unfinished">Leitor possivelmente incompatível com este cartão. Se possível, experimente atualizar o controlador do seu leitor ou um leitor diferente.&lt;br&gt;Caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
+        <translation>Leitor possivelmente incompatível com este cartão. Se possível, experimente atualizar o controlador do seu leitor ou um leitor diferente.&lt;br&gt;Caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -2194,7 +2194,7 @@
     </message>
     <message>
         <source>STR_SEND_BY_SMS_BUTTON</source>
-        <translation type="unfinished">Enviar por SMS</translation>
+        <translation>Enviar por SMS</translation>
     </message>
 </context>
 </TS>

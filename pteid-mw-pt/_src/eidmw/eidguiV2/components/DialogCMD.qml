@@ -91,6 +91,8 @@ Item {
             font.bold: dialogContent.activeFocus
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
+            wrapMode: Text.WordWrap
+            lineHeight: 1.2
         }
         contentItem: Item {
             property var next : labelCMDText

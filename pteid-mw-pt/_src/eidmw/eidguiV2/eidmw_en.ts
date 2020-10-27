@@ -16,7 +16,7 @@
     <name>DialogCMD</name>
     <message>
         <source>STR_REGISTER_CMD_CERT_DESC</source>
-        <translation>Registering your Chave Móvel Digital certificate allows signing with CMD in some third-party applications. It is possible to register the certificate at any time in &quot;Signatures configuration&quot;.</translation>
+        <translation>Registering your Chave Móvel Digital certificate allows signing with CMD in other applications. It is possible to register the certificate at any time in &quot;Signatures configuration&quot;.</translation>
     </message>
 </context>
 <context>
@@ -935,11 +935,11 @@
     </message>
     <message>
         <source>STR_REGISTER_CMD_CERT_TITLE</source>
-        <translation>Register Chave Móvel Digital&apos;s certificate</translation>
+        <translation>Do you want to sign with Chave Móvel Digital in other applications? Register your certificate now</translation>
     </message>
     <message>
         <source>STR_REGISTER_CMD_CERT_TEXT</source>
-        <translation>Registering the certificate associated to your Chave Móvel Digital allows signing with CMD in some third-party applications.</translation>
+        <translation>Registering the certificate associated to your Chave Móvel Digital allows signing with CMD in other applications.</translation>
     </message>
     <message>
         <source>STR_REGISTER_CMD_CERT_BUTTON</source>
@@ -1585,7 +1585,7 @@
     </message>
     <message>
         <source>STR_SIGN_CMD_URL</source>
-        <translation>Click to know the Chave Móvel Digital</translation>
+        <translation>Click to activate or manage your Chave Móvel Digital signature</translation>
     </message>
     <message>
         <source>STR_SIGN_SUCESS_MULTI</source>
@@ -1972,7 +1972,7 @@
     </message>
     <message>
         <source>STR_POPUP_INCOMPATIBLE_READER</source>
-        <translation type="unfinished">The reader may be incompatible with this card. Try to update the reader&apos;s driver or a different reader if possible.&lt;br&gt;If this error persists, contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
+        <translation>The reader may be incompatible with this card. Try to update the reader&apos;s driver or a different reader if possible.&lt;br&gt;If this error persists, contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -2197,7 +2197,7 @@
     </message>
     <message>
         <source>STR_SEND_BY_SMS_BUTTON</source>
-        <translation type="unfinished">Send by SMS</translation>
+        <translation>Send by SMS</translation>
     </message>
 </context>
 </TS>
