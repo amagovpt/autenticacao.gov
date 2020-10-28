@@ -37,6 +37,7 @@ namespace eIDMW
 
 		bool findIssuerInEidStore(APL_CryptoFwkPteid * cryptoFwk, CByteArray &certif_ba, CByteArray &issuer_ba);
 		void addOCSPCertToValidationData(CByteArray &ocsp_response_ba);
+        bool isOCSPSigningCert(CByteArray &cert);
 
         PDFSignature *m_signedPdfDoc;
         std::vector<ValidationDataElement*> m_validationData;

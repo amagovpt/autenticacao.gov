@@ -136,6 +136,16 @@ namespace eIDMW
 
 	}
 
+    bool PAdESExtender::isOCSPSigningCert(CByteArray &cert)
+    {
+        X509 *pX509 = NULL;
+        const unsigned char * data = cert.GetBytes();
+        int size = cert.Size();
+        pX509 = d2i_X509(&pX509, &data, size);
+
+        return  XKU_OCSP_SIGN == XKU_OCSP_SIGN & X509_get_extended_key_usage(pX509);
+    }
+
     ValidationDataElement* PAdESExtender::addValidationElement(ValidationDataElement &elem)
     {
    
@@ -264,15 +274,22 @@ namespace eIDMW
         equal to the subject name of the current certificate) and add the revocation data. */
         for (size_t i = 0; i < m_validationData.size(); i++)
         {
-            if (m_validationData[i]->getType() != ValidationDataElement::CERT)
-                continue;
-            
-            size_t subjLen = m_validationData[i]->getSize();
-            CByteArray certDataByteArray(m_validationData[i]->getData(), subjLen);
-            
-            size_t j;
             CByteArray issuerCertDataByteArray;
             size_t issuerLen;
+            CByteArray response;
+            FWK_CertifStatus status;
+
+            if (m_validationData[i]->getType() != ValidationDataElement::CERT)
+                continue;
+
+            size_t subjLen = m_validationData[i]->getSize();
+            CByteArray certDataByteArray(m_validationData[i]->getData(), subjLen);
+
+            /* Do not try to validate OCSP Signing cert with OCSP. Go straight to CRL. */
+            if (isOCSPSigningCert(certDataByteArray))
+                goto crl;
+
+            size_t j;
 
 			MWLOG(LEV_DEBUG, MOD_APL, "### %s: adding revocation info for certificate: %s", __FUNCTION__, certificate_subject_from_der(certDataByteArray));
             
@@ -307,8 +324,6 @@ namespace eIDMW
 
 			}
 
-            CByteArray response;
-            FWK_CertifStatus status;
             if (foundIssuer)
             {
                 status = cryptoFwk->GetOCSPResponse(certDataByteArray, issuerCertDataByteArray, &response, false);
@@ -331,6 +346,7 @@ namespace eIDMW
 			}
             else if (!foundIssuer || status == FWK_CERTIF_STATUS_ERROR)
             {
+            crl:
                 /* Use CRL if there is no OCSP response. */
                 CRLFetcher crlFetcher;
                 std::string crlUrl;
