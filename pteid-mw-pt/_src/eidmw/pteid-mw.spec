@@ -20,8 +20,8 @@
 %endif
 %endif
 
-%define git_revision git20201016
-%define app_version 3.3.0
+%define git_revision git20201028
+%define app_version 3.3.1
 
 Name:           pteid-mw
 BuildRequires:  pcsc-lite-devel make swig
@@ -276,8 +276,13 @@ fi
 /usr/share/icons/*
 /usr/share/pixmaps/*
 /usr/local/share/certs
+/usr/local/share/pteid-mw
 
 %changelog
+* Wed Oct 28 2020 André Guerreiro <andre.guerreiro@caixamagica.pt>
+  - Support for legislative change regarding expired cards until March 31st 2021
+  - Improvement in trusted certificates update feature
+
 * Fri Oct 16 2020 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   - SCAP signature with timestamp is a new option
   - Small format signature in simple signature menu
