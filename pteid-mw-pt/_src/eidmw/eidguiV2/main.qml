@@ -1833,7 +1833,9 @@ Load language error. Please reinstall the application"
             font.pixelSize: Constants.SIZE_TEXT_LABEL
             font.bold: mouseAreaVersionLabel.containsMouse
             font.family: lato.name
-            color: Constants.COLOR_MAIN_DARK_GRAY
+            color:  mainFormID.opacity == Constants.OPACITY_MAIN_FOCUS 
+                ? Constants.COLOR_MAIN_DARK_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
+
             text: qsTranslate("PageHelpAbout","STR_HELP_APP_VERSION") + controler.autoTr
                     + " " + controler.getAppVersion().split("-")[0]
             MouseArea {
