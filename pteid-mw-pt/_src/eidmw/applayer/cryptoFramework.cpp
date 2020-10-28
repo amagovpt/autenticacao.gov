@@ -1045,7 +1045,9 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Iss
 		goto cleanup;
 	}
 
-    pCertID = OCSP_cert_to_id(isOutdatedOCSPResponder(pUrlResponder) ? EVP_sha256(): EVP_sha1(), pX509_Cert, pX509_Issuer);
+    /* This workaround is commented so that Adobe deems the signature as LTV enabled. See isOutdatedOCSPResponder comment. */
+    //pCertID = OCSP_cert_to_id(isOutdatedOCSPResponder(pUrlResponder) ? EVP_sha256(): EVP_sha1(), pX509_Cert, pX509_Issuer);
+    pCertID = OCSP_cert_to_id(EVP_sha1(), pX509_Cert, pX509_Issuer);
     if (!pCertID)
 	{
 		eStatus = FWK_CERTIF_STATUS_ERROR;
