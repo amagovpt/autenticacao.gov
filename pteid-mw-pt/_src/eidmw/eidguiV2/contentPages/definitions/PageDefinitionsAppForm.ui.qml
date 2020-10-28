@@ -994,9 +994,9 @@ Item {
                         anchors.left: graphicsInfoTextField.right
                         anchors.verticalCenter: graphicsInfoTextField.verticalCenter
                         width: parent.width
-                        propertyText.text: "<a href='https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-com-placas-gr%c3%a1ficas-integradas-em-windows'>" +
+                        propertyText.text: "<a href='https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-com-placas-gr%C3%A1ficas-integradas'>" +
                                            qsTranslate("PageDefinitionsApp", "STR_HERE") + controler.autoTr + "</a>."
-                        propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-com-placas-gr%c3%a1ficas-integradas-em-windows'
+                        propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-com-placas-gr%C3%A1ficas-integradas'
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_FIELD
                         propertyText.font.family: lato.name
