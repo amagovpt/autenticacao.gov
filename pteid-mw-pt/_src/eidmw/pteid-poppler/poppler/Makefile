@@ -7,8 +7,8 @@ BASENAME=libpteid-poppler
 ifeq ($(shell uname), Darwin)
 	LIB_FILENAME=$(BASENAME).a
 	LDFLAGS += -liconv
-	CXXFLAGS += -std=c++11 -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
-	CFLAGS += -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
+	CXXFLAGS += -std=c++11 -mmacosx-version-min=10.12 -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
+	CFLAGS += -fno-omit-frame-pointer -mmacosx-version-min=10.12 -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
 else
 	LIB_FILENAME=$(BASENAME).a
 	override CXXFLAGS += -std=c++11 -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
