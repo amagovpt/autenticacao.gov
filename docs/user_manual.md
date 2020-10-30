@@ -227,12 +227,24 @@ Em alternativa, a aplicação poderá também ser [instalada recorrendo à linha
 
     Sistema baseado em pacotes .deb, execute o comando:
 
-    `sudo apt install ./Autenticacao.gov\*.deb`
+    `sudo apt install ./Autenticacao.gov*.deb`
+
+    Por exemplo, em *Ubuntu 20*:
+
+    `sudo apt install ./Autenticacao.gov_Ubuntu_20_x64`
 
     Sistema baseado em pacotes .rpm, execute o comando:
 
-    `dnf install Autenticacao.gov\*.rpm` em Fedora ou
-    `zypper install Autenticacao.gov\*.rpm` em OpenSUSE
+    `dnf install Autenticacao.gov*.rpm` em Fedora ou
+    `zypper install Autenticacao.gov*.rpm` em OpenSUSE
+
+    Por exemplo, em *Fedora*:
+
+    `dnf install Autenticacao.gov_Fedora_x64.rpm`
+
+    Por exemplo, em *OpenSUSE*:
+
+    `zypper install Autenticacao.gov_OpenSUSE_x64.rpm`
 
 2.  Após este passo, a aplicação terá sido instalada no computador.
 3.  Recomenda-se a reinicialização do sistema para assegurar o bom
