@@ -9,15 +9,15 @@
             "package": "20126/78595/Autenticacao.gov_Ubuntu_19_x64.deb"
         },
         "ubuntu20": {
-            "latestVersion": "3.1.1",
+            "latestVersion": "3.3.1",
             "package": "20126/78595/Autenticacao.gov_Ubuntu_20_x64.deb"
         },
         "windows32": {
-            "latestVersion": "3.3.0",
+            "latestVersion": "3.3.1",
             "package": "20126/78595/Autenticacao.gov_Win_x86.msi"
         },
         "windows64": {
-            "latestVersion": "3.3.0",
+            "latestVersion": "3.3.1",
             "package": "20126/78595/Autenticacao.gov_Win_x64.msi"
         },
         "fedora32": {
@@ -25,7 +25,7 @@
             "package": ""
         },
         "fedora64": {
-            "latestVersion": "3.1.0",
+            "latestVersion": "3.3.1",
             "package": "20126/78595/Autenticacao.gov_Fedora_x64.rpm"
         },
         "suse32": {
@@ -33,15 +33,25 @@
             "package": ""
         },
         "suse64": {
-            "latestVersion": "3.1.0",
+            "latestVersion": "3.3.1",
             "package": "20126/78595/Autenticacao.gov_OpenSUSE_x64.rpm"
         },
         "osx": {
-            "latestVersion": "3.3.0",
+            "latestVersion": "3.3.1",
             "package": "20126/78595/Autenticacao.gov_MacOS.pkg"
         }
     },
     "versions": [
+        {
+            "version": "3.3.1",
+            "date": "2020-10-30",
+            "release_notes": [
+                "Auto-update dos certificados root CA confiáveis",
+                "Update licença EUPL para versão 1.2",
+                "Suporte para cumprir a legislação em vigor em que os documentos expirados depois de 24 de fevereiro de 2020 são válidos até 31 de março de 2021",
+                "[MacOS]: Não deixar instalar em versões anteriores ao MacOS 10.12"
+            ]
+        },
         {
             "version": "3.3.0",
             "date": "2020-09-24",
