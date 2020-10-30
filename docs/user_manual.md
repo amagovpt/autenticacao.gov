@@ -1035,11 +1035,11 @@ assinatura propriamente.
 
     ![Ilustração: Assinatura em Outlook](Pictures/Autenticacao.Gov_outlook4.png "Assinatura em Outlook"){:.center}
 
-6.  Adicione uma descrição a esta configuração, p. ex.: “Assinatura com Cartão de Cidadão” e clique no botão **Escolher** para selecionar o certificado.
+6.  Adicione uma descrição a esta configuração, p. ex.: “Assinatura com Cartão de Cidadão” e clique no botão **Escolher** para selecionar o certificado. Selecione o seu certificado de assinatura do Cartão de Cidadão ou  [Chave Móvel Digital](#assinatura-digital-com-chave-m%c3%b3vel-digital).
 
     ![Ilustração: Assinatura em Outlook: Escolha do certificado](Pictures/Autenticacao.Gov_outlook5.png "Escolha do certificado"){:.center}
 
-7.  Selecione o seu certificado de assinatura e clique em **OK**.
+7.  Na configuração **Algoritmo hash** escolha **SHA256** e clique em **OK**.
 
 8.  Clique em **OK** em todas as janelas de configuração abertas. A
     configuração está terminada.
