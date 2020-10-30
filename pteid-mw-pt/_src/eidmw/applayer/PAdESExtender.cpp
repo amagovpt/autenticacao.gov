@@ -143,7 +143,7 @@ namespace eIDMW
         int size = cert.Size();
         pX509 = d2i_X509(&pX509, &data, size);
 
-        return  XKU_OCSP_SIGN == XKU_OCSP_SIGN & X509_get_extended_key_usage(pX509);
+        return  XKU_OCSP_SIGN & X509_get_extended_key_usage(pX509);
     }
 
     ValidationDataElement* PAdESExtender::addValidationElement(ValidationDataElement &elem)
