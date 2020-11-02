@@ -600,6 +600,12 @@ Neste modo, assinatura simples, apenas é possível selecionar a página e mover
 
 Por fim, carregar no botão **Assinar com Cartão de Cidadão** ou **Assinar com Chave Móvel Digital**.
 
+O botão **Assinar com Cartão de Cidadão** só está disponível quando o Cartão de Cidadão estiver inserido no leitor de cartões e for correctamente lido pela aplicação. O botão **Assinar com Chave Móvel Digital** só está disponível nas assinaturas do tipo **PDF**.
+
+Após clicar em **Assinar** deverá escolher a localização da pasta e do ficheiro onde guardar o ficheiro assinado (Não é possível substituir o ficheiro original) e seguir o procedimento de assinatura (ver secção [Introdução de chave](#introdu%c3%a7%c3%a3o-de-chave)). Em seguida é apresentado uma mensagem a indicar se a assinatura digital foi efetuada com sucesso.
+
+![Ilustração: Assinatura digital foi efetuada com sucesso](Pictures/Autenticacao.Gov_assinatura_sucesso.png "Assinatura digital foi efetuada com sucesso"){:.center}
+
 #### Avançada
 
 Assinatura digital de um documento PDF ou outro qualquer documento com possibilidade de assinar vários documentos ao mesmo tempo, adicionar atributos profissionais, bem como configurar outras opções.
@@ -643,9 +649,11 @@ Para mais informações, consulte o seguinte *website*:
 
 Após selecionar as opções pretendidas, na área indicada na figura anterior, arraste a pré-visualização da assinatura para a localização pretendida e de seguida prima o botão **Assinar com Cartão de Cidadão** ou **Assinar com Chave Móvel Digital**.
 
-O botão **Assinar com Cartão de Cidadão** só está disponível quando o Cartão de Cidadão estiver inserido no leitor de cartões e for correctamente lido pela aplicação. O botão **Assinar com Chave Móvel Digital** só está disponível mas assinaturas do tipo **PDF**.
+O botão **Assinar com Cartão de Cidadão** só está disponível quando o Cartão de Cidadão estiver inserido no leitor de cartões e for correctamente lido pela aplicação. O botão **Assinar com Chave Móvel Digital** só está disponível nas assinaturas do tipo **PDF**.
 
 Após clicar em **Assinar** deverá escolher a localização da pasta e do ficheiro onde guardar o ficheiro assinado (Não é possível substituir o ficheiro original) e seguir o procedimento de assinatura (ver secção [Introdução de chave](#introdu%c3%a7%c3%a3o-de-chave)). Em seguida é apresentado uma mensagem a indicar se a assinatura digital foi efetuada com sucesso.
+
+![Ilustração: Assinatura digital foi efetuada com sucesso](Pictures/Autenticacao.Gov_assinatura_sucesso.png "Assinatura digital foi efetuada com sucesso"){:.center}
 
 A imagem seguinte é um exemplo de um ficheiro assinado com a aplicação **Autenticação.Gov**.
 
@@ -810,7 +818,7 @@ suporte na resolução do problema.
     Em ambiente empresariais deve alterar a seguinte configuração conforme descrito no capítulo [Instruções de configuração em ambientes empresariais](#instruções-de-configuração-em-ambientes-empresariais).
 
 - **Aceleração gráfica**: Permite ativar escolher o modo de renderização gráfica da
-aplicação. A opção *"Hardware (Placa gráfica)"* deverá oferecer um melhor desempenho, mas em caso de problemas poderá ser necessário configurar uma opção alternativa (ver secção [Problemas com placas gráficas em Windows](#problemas-com-placas-gráficas-integradas).)
+aplicação. A opção *"Hardware (Placa gráfica)"* deverá oferecer um melhor desempenho, mas em caso de problemas poderá ser necessário configurar uma opção alternativa (ver secção [Problemas com placas gráficas integradas](#problemas-com-placas-gráficas-integradas).)
 
 - **Configurações de rede:** Opções relativas à configuração de servidor
 de proxy. Em redes onde o acesso à Internet só é possível através de
@@ -1365,7 +1373,7 @@ Em ambiente empresariais deve alterar a seguinte configuração conforme descrit
 
 No caso da aplicação não arrancar e consequentemente não ser possivel alterar as configurações da aplicação na aplicação, é possivel alterar as opções da aplicação usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
 
-Uma causa que pode causar problemas está relacionado com a placa gráfica do computador [Problemas com placas gráficas em Windows](#problemas-com-placas-gráficas-integradas).
+Uma causa que pode causar problemas está relacionado com a placa gráfica do computador [Problemas com placas gráficas integradas](#problemas-com-placas-gráficas-integradas).
 
 # Interface de linha de comandos
 
