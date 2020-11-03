@@ -1385,11 +1385,11 @@ Uma causa que pode causar problemas está relacionado com a placa gráfica do co
 
 ## Problemas com a nova cadeia de confiança
 
-O Sistema de Certificação Eletrónica do Estado colocou em produção um novo certificado raiz para o Sistema. Em consequência, a ECCE (https://www.ecce.gov.pt/) passou a emitir todos os seus certificados sob a nova cadeia de confiança, incluindo os certificados do Cartão de Cidadão, a partir de 10 de julho de 2020. Esta nova cadeia, no caso de não ser disponibilizada pelo sistema operativo, deverá ser instalada manualmente para que os certificados dos cartões emitidos após essa data sejam confiáveis no sistema operativo Windows e algumas funcionalidades de assinatura ou autenticação possam ser usadas.
+O Sistema de Certificação Eletrónica do Estado colocou em produção um novo certificado raiz do Estado. Em consequência, os certificados do Cartão de Cidadão passaram a ser emitidos, desde 4 de abril de 2020, sob a nova cadeia de confiança do Estado Português. O certificado raiz da nova cadeia, no caso de não ser disponibilizado pelo sistema operativo, deverá ser instalado manualmente para que os certificados dos cartões emitidos após essa data sejam automaticamente confiáveis pelo sistema operativo Windows, assim como por algumas aplicações que não utilizam a lista de serviços confiáveis publicada pela União Europeia.
 
-No seguinte link poderá consultar toda a informação sobre os certificados, bem como a informação para instalação do novo certificado. Deverá seguir as instruções específicas para "certificados emitidos a partir de 10 de julho de 2020".
+No seguinte link poderá consultar o manual de instalação da cadeia do SCEE. Deverá seguir as instruções específicas para o “Certificado da Entidade de Certificação Eletrónica do Estado - ECRaizEstado 002” (passos 4.1 a 4.10 do manual).
 
-https://www.ecce.gov.pt/certificados/
+[https://www.ecce.gov.pt/certificados/](https://www.ecce.gov.pt/certificados/)
 
 ## Problemas na validação das assinaturas 
 
