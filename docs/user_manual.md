@@ -67,6 +67,8 @@
   - [Não são detetados quaisquer certificados durante a tentativa de assinatura na suite *LibreOffice / Apache OpenOffice*](#não-são-detetados-quaisquer-certificados-durante-a-tentativa-de-assinatura-na-suite-libreoffice--apache-openoffice)
   - [Problemas com placas gráficas integradas](#problemas-com-placas-gráficas-integradas)
   - [Aplicação não arranca](#aplicação-não-arranca)
+  - [Problemas com a nova cadeia de confiança](#problemas-com-a-nova-cadeia-de-confiança)
+  - [Problemas na validação das assinaturas](#problemas-na-validação-das-assinaturas)
 - [Interface de linha de comandos](#interface-de-linha-de-comandos)
   - [Consultar ajuda e versão](#consultar-ajuda-e-versão)
   - [Atalho para submenus de assinatura](#atalho-para-submenus-de-assinatura)
@@ -606,6 +608,8 @@ Após clicar em **Assinar** deverá escolher a localização da pasta e do fiche
 
 ![Ilustração: Assinatura digital foi efetuada com sucesso](Pictures/Autenticacao.Gov_assinatura_sucesso.png "Assinatura digital foi efetuada com sucesso"){:.center}
 
+Em caso de problemas na validação das assinaturas, verifique se está relacionado com o tópico [Problemas com a nova cadeia de confiança](#problemas-com-a-nova-cadeia-de-confiança).
+
 #### Avançada
 
 Assinatura digital de um documento PDF ou outro qualquer documento com possibilidade de assinar vários documentos ao mesmo tempo, adicionar atributos profissionais, bem como configurar outras opções.
@@ -658,6 +662,8 @@ Após clicar em **Assinar** deverá escolher a localização da pasta e do fiche
 A imagem seguinte é um exemplo de um ficheiro assinado com a aplicação **Autenticação.Gov**.
 
 ![Ilustração: Aspeto final da assinatura](Pictures/Autenticacao.Gov_Assinatura_exemplo.png "Aspeto final da assinatura"){:.center}
+
+Em caso de problemas na validação das assinaturas, verifique se está relacionado com o tópico [Problemas com a nova cadeia de confiança](#problemas-com-a-nova-cadeia-de-confiança).
 
 #### Introdução de chave
 
@@ -1288,6 +1294,8 @@ selecionar a pasta “drivers” que esta na diretoria “C:\\Windows\\System32�
 ![Ilustração: Impossibilidade de assinatura](Pictures/Autenticacao.Gov_web_impossibilidade2.png
   "Impossibilidade de assinatura"){:.center}
 
+Em caso de problemas verifique se está relacionado com o tópico [Problemas com a nova cadeia de confiança](#problemas-com-a-nova-cadeia-de-confiança).
+
 ## O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão
 
 ### Windows <!-- omit in toc -->
@@ -1374,6 +1382,18 @@ Em ambiente empresariais deve alterar a seguinte configuração conforme descrit
 No caso da aplicação não arrancar e consequentemente não ser possivel alterar as configurações da aplicação na aplicação, é possivel alterar as opções da aplicação usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
 
 Uma causa que pode causar problemas está relacionado com a placa gráfica do computador [Problemas com placas gráficas integradas](#problemas-com-placas-gráficas-integradas).
+
+## Problemas com a nova cadeia de confiança
+
+O Sistema de Certificação Eletrónica do Estado colocou em produção um novo certificado raiz para o Sistema. Em consequência, a ECCE (https://www.ecce.gov.pt/) passou a emitir todos os seus certificados sob a nova cadeia de confiança, incluindo os certificados do Cartão de Cidadão, a partir de 10 de julho de 2020. Esta nova cadeia, no caso de não ser disponibilizada pelo sistema operativo, deverá ser instalada manualmente para que os certificados dos cartões emitidos após essa data sejam confiáveis no sistema operativo Windows e algumas funcionalidades de assinatura ou autenticação possam ser usadas.
+
+No seguinte link poderá consultar toda a informação sobre os certificados, bem como a informação para instalação do novo certificado. Deverá seguir as instruções específicas para "certificados emitidos a partir de 10 de julho de 2020".
+
+https://www.ecce.gov.pt/certificados/
+
+## Problemas na validação das assinaturas 
+
+Em caso de problemas na validação das assinaturas, verifique se está relacionado com o tópico [Problemas com a nova cadeia de confiança](#problemas-com-a-nova-cadeia-de-confiança).
 
 # Interface de linha de comandos
 
