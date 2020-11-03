@@ -791,7 +791,9 @@ namespace eIDMW
         /* Calculate hash */
         m_pkcs7 = PKCS7_new();
 
-        bool timestamp = (m_level == LEVEL_TIMESTAMP || m_level == LEVEL_LTV);
+        bool timestamp = (m_level == LEVEL_TIMESTAMP 
+                        || m_level == LEVEL_LT
+                        || m_level == LEVEL_LTV);
 
         CByteArray in_hash = computeHash_pkcs7( data, dataLen
                                                 , certificate
@@ -820,7 +822,7 @@ namespace eIDMW
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
 
-        bool timestamp = (m_level == LEVEL_TIMESTAMP || m_level == LEVEL_LTV);
+        bool timestamp = (m_level == LEVEL_TIMESTAMP || m_level == LEVEL_LT || m_level == LEVEL_LTV);
 
         int return_code =
             getSignedData_pkcs7((unsigned char*)signature.GetBytes()
@@ -837,13 +839,12 @@ namespace eIDMW
         m_doc->closeSignature(signature_contents);
         save();
 
-        if (m_level == LEVEL_LTV)
-        {
+        if (m_level == LEVEL_LT || m_level == LEVEL_LTV) {
             if(!addLtv()) {
                 return_code = 1;
             }
         }
-
+        
         m_signStarted = false;
 
         free((void *)signature_contents);
@@ -934,6 +935,14 @@ namespace eIDMW
     bool PDFSignature::addLtv() 
     {
         PAdESExtender padesExtender(this);
-        return padesExtender.addLTA();
+        if (m_level == LEVEL_LT)
+        {
+            return padesExtender.addLT();
+        }
+        else if (m_level == LEVEL_LTV)
+        {
+            return padesExtender.addLTA();
+        }
+        return false;
     }
 }

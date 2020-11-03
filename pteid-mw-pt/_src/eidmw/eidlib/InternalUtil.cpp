@@ -140,6 +140,9 @@ APL_SignatureLevel ConvertSignatureLevel(PTEID_SignatureLevel level)
     case PTEID_LEVEL_TIMESTAMP:
         return LEVEL_TIMESTAMP;
 
+    case PTEID_LEVEL_LT:
+        return LEVEL_LT;
+		
     case PTEID_LEVEL_LTV:
         return LEVEL_LTV;
 

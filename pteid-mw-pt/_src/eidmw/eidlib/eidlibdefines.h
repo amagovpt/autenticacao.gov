@@ -102,6 +102,7 @@ enum PTEID_SignatureLevel
 {
     PTEID_LEVEL_BASIC,
     PTEID_LEVEL_TIMESTAMP,
+    PTEID_LEVEL_LT,
     PTEID_LEVEL_LTV
 };
 

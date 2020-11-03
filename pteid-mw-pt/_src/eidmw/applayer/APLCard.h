@@ -77,6 +77,7 @@ enum APL_SignatureLevel
 {
     LEVEL_BASIC,
     LEVEL_TIMESTAMP,
+    LEVEL_LT,
     LEVEL_LTV
 };
 
