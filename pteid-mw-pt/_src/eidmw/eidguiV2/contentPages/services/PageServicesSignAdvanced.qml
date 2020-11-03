@@ -633,6 +633,9 @@ PageServicesSignAdvancedForm {
     }
 
     propertyCheckboxLTV {
+        onCheckedChanged: {
+            propertyPageLoader.propertyBackupAddLTV = propertyCheckboxLTV.checked
+        }
         onEnabledChanged: {
             if (!propertyCheckboxLTV.enabled)
                 propertyCheckboxLTV.checked = false
@@ -1299,6 +1302,7 @@ PageServicesSignAdvancedForm {
         propertyRadioButtonPADES.checked = propertyPageLoader.propertyBackupFormatPades
         propertyRadioButtonXADES.checked = !propertyPageLoader.propertyBackupFormatPades
         propertySwitchSignTemp.checked = propertyPageLoader.propertyBackupTempSign
+        propertyCheckboxLTV.checked= propertyPageLoader.propertyBackupAddLTV
         propertySwitchSignAdd.checked = propertyPageLoader.propertyBackupSignAdd
         propertyCheckSignShow.checked = propertyPageLoader.propertyBackupSignShow
         propertyCheckSignReduced.checked = propertyPageLoader.propertyBackupSignReduced

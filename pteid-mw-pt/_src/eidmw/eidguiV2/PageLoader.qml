@@ -31,6 +31,7 @@ Loader{
     property bool propertyAnimationExtendedFinished: false
     property bool propertyBackupFormatPades: true
     property bool propertyBackupTempSign: false
+    property bool propertyBackupAddLTV: false
     property bool propertyBackupSignAdd: false
     property variant attributeListBackup: []
     property bool propertyBackupSignShow: true
