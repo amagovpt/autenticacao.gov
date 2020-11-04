@@ -99,6 +99,7 @@ HEADERS += \
 	cJSON.h \
 	SSLConnection.h \
 	PNGConverter.h \
+	PAdESExtender.h \
 	J2KHelper.h \
 	PDFSignature.h
 
@@ -132,6 +133,7 @@ SOURCES += \
 	ess_lib.c \
 	CRLFetcher.cpp \
 	PDFSignature.cpp \
+	PAdESExtender.cpp \
 	SAM.cpp \
 	OCSP.cpp \
 	PNGConverter.cpp \
