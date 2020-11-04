@@ -33,6 +33,8 @@ namespace eIDMW
     {
         // TODO: verify if B first. Return error if not
         bool success = true;
+        int tsTokenLen = 0;
+        unsigned char *tsToken = NULL;
 
         m_signedPdfDoc->m_incrementalMode = true;
 
@@ -64,9 +66,7 @@ namespace eIDMW
 
         timestamp_token = tsresp.GetBytes();
         tsp_token_len = tsresp.Size();
-
-        unsigned char *tsToken = NULL;
-        int tsTokenLen = 0;
+        
         if (!getTokenFromTsResponse(timestamp_token, tsp_token_len, &tsToken, &tsTokenLen)) {
             MWLOG(LEV_ERROR, MOD_APL, "LTV: Error getting TimeStampToken from respnse.");
             success = false;
@@ -275,6 +275,7 @@ namespace eIDMW
         for (size_t i = 0; i < m_validationData.size(); i++)
         {
             CByteArray issuerCertDataByteArray;
+            bool foundIssuer = false;
             size_t issuerLen;
             CByteArray response;
             FWK_CertifStatus status;
@@ -293,7 +294,6 @@ namespace eIDMW
 
 			MWLOG(LEV_DEBUG, MOD_APL, "### %s: adding revocation info for certificate: %s", __FUNCTION__, certificate_subject_from_der(certDataByteArray));
             
-            bool foundIssuer = false;
             for (j = 0; j < m_validationData.size(); j++)
             {
                 if (m_validationData[j]->getType() != ValidationDataElement::CERT)
