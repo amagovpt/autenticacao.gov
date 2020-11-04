@@ -142,8 +142,10 @@ namespace eIDMW
         const unsigned char * data = cert.GetBytes();
         int size = cert.Size();
         pX509 = d2i_X509(&pX509, &data, size);
+        uint32_t ext_key_usage = X509_get_extended_key_usage(pX509);
 
-        return  XKU_OCSP_SIGN & X509_get_extended_key_usage(pX509);
+        //Check if the certificate contains any extended key usage and then the specific OCSP flag
+        return  ext_key_usage != UINT32_MAX && XKU_OCSP_SIGN & ext_key_usage;
     }
 
     ValidationDataElement* PAdESExtender::addValidationElement(ValidationDataElement &elem)
@@ -287,8 +289,10 @@ namespace eIDMW
             CByteArray certDataByteArray(m_validationData[i]->getData(), subjLen);
 
             /* Do not try to validate OCSP Signing cert with OCSP. Go straight to CRL. */
-            if (isOCSPSigningCert(certDataByteArray))
-                goto crl;
+            if (isOCSPSigningCert(certDataByteArray)) {
+                MWLOG(LEV_DEBUG, MOD_APL, "OCSP Signing cert detected for cert index %d", i);
+                continue;
+            }
 
             size_t j;
 
