@@ -73,7 +73,7 @@ enum PDFWriteMode {
 };
 
 
-POPPLER_API class ValidationDataElement
+class POPPLER_API ValidationDataElement
 {
 public:
     enum ValidationDataType
