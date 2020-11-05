@@ -290,8 +290,8 @@ namespace eIDMW
 
             /* Do not try to validate OCSP Signing cert with OCSP. Go straight to CRL. */
             if (isOCSPSigningCert(certDataByteArray)) {
-                MWLOG(LEV_DEBUG, MOD_APL, "OCSP Signing cert detected for cert index %d", i);
-                continue;
+                MWLOG(LEV_DEBUG, MOD_APL, "OCSP signing cert detected for cert # %lu", i);
+                goto crl;
             }
 
             size_t j;
