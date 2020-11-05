@@ -460,6 +460,10 @@
         <source>STR_SAVE_PHOTO_ERROR</source>
         <translation>Ocorreu um erro ao guardar foto.  Verifique se o ficheiro resultante não está aberto em outro programa ou se tem permissões para escrita.</translation>
     </message>
+    <message>
+        <source>STR_LTV_FAILED</source>
+        <translation>Mas a Validação de Longo Prazo não foi corretamente  aplicada.</translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>

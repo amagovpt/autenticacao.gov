@@ -157,9 +157,8 @@ Item {
                 Text {
                     id: textMessageTop
                     height: 25
-                    verticalAlignment: Text.AlignVCenter
                     anchors.top: linkCMD.visible ? linkCMD.bottom : progressBar.bottom
-                    anchors.topMargin: linkCMD.visible ? Constants.SIZE_ROW_V_SPACE : 0
+                    anchors.topMargin: linkCMD.visible ? Constants.SIZE_ROW_V_SPACE : 3
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     font.bold: activeFocus

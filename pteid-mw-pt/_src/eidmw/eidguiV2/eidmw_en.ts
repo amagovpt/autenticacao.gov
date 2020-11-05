@@ -462,6 +462,10 @@
         <source>STR_SAVE_PHOTO_ERROR</source>
         <translation>An error occured while saving the photo. Check if the file is not currently open in another program or if you have write permissions.</translation>
     </message>
+    <message>
+        <source>STR_LTV_FAILED</source>
+        <translation>But the Long Term Validation was not correctly applied.</translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>

@@ -178,6 +178,9 @@ QString GAPI::getAddressField(AddressInfoKey key) {
     } else if (errorCode == EIDMW_TIMESTAMP_ERROR) \
 { \
     emit signalPdfSignSucess(SignMessageTimestampFailed); \
+    } else if (errorCode == EIDMW_LTV_ERROR) \
+{ \
+    emit signalPdfSignSucess(SignMessageLtvFailed); \
     } else if (errorCode == EIDMW_PERMISSION_DENIED) \
 { \
     emit signalPdfSignFail(SignFilePermissionFailed); \
@@ -624,7 +627,7 @@ void GAPI::showSignCMDDialog(long error_code)
     QString message;
     QString support_string = tr("STR_CMD_ERROR_MSG");
 
-    if (error_code == 0 || error_code == EIDMW_TIMESTAMP_ERROR){
+    if (error_code == 0 || error_code == EIDMW_TIMESTAMP_ERROR || error_code == EIDMW_LTV_ERROR){
         PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "CMD signature op finished with sucess");
     } else {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "CMD signature op finished with error code 0x%08x", error_code);
@@ -677,6 +680,9 @@ void GAPI::showSignCMDDialog(long error_code)
     case EIDMW_TIMESTAMP_ERROR:
         message = tr("STR_CMD_SUCESS") + " " + tr("STR_TIME_STAMP_FAILED");
         break;
+    case EIDMW_LTV_ERROR:
+        message = tr("STR_CMD_SUCESS") + " " + tr("STR_LTV_FAILED");
+        break;
     default:
         message = tr("STR_CMD_LOGIN_ERROR");
         break;
@@ -684,7 +690,7 @@ void GAPI::showSignCMDDialog(long error_code)
 
     if (error_code != 0){
         // If there is error show message screen
-        if (error_code == EIDMW_TIMESTAMP_ERROR){
+        if (error_code == EIDMW_TIMESTAMP_ERROR || error_code == EIDMW_LTV_ERROR){
             signalUpdateProgressStatus(message);
         } else if (error_code == SCAP_SECRETKEY_ERROR_CODE
                 || error_code == SCAP_CLOCK_ERROR_CODE) {
@@ -864,7 +870,7 @@ void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
 
     signCMDFinished(ret);
     signalUpdateProgressBar(100);
-    if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR)
+    if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR || ret == EIDMW_LTV_ERROR)
     {
         emit signalOpenFile();
     }

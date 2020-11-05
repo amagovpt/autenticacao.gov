@@ -123,6 +123,8 @@ PageServicesSignAdvancedForm {
                     signsuccess_dialog.propertySignSuccessDialogText.text =
                             qsTranslate("PageServicesSign","STR_TIME_STAMP_FAILED")
                 }
+            }else if(error_code == GAPI.SignMessageLtvFailed){
+                signsuccess_dialog.propertySignSuccessDialogText.text = qsTranslate("GAPI","STR_LTV_FAILED")
             }else{ // Sign with time stamp succefull
                 signsuccess_dialog.propertySignSuccessDialogText.text = ""
             }

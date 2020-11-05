@@ -841,7 +841,7 @@ namespace eIDMW
 
         if (m_level == LEVEL_LT || m_level == LEVEL_LTV) {
             if(!addLtv()) {
-                return_code = 1;
+                return_code = 2;
             }
         }
         
@@ -860,6 +860,10 @@ namespace eIDMW
 
         if (return_code == 1) {
             throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
+        }
+        else if (return_code == 2)
+        {
+            throw CMWEXCEPTION(EIDMW_LTV_ERROR);
         }
         return return_code;
     }
