@@ -1259,7 +1259,7 @@
     </message>
     <message>
         <source>STR_UPDATE_CERTS_TITLE</source>
-        <translation>Novos certificados</translation>
+        <translation>Atualizar certificados</translation>
     </message>
     <message>
         <source>STR_UPDATE_CERTS_BUTTON_SEARCH</source>
@@ -1329,6 +1329,10 @@
     <message>
         <source>STR_AUTOUPDATENEWS_URL</source>
         <translation>Clique para saber mais</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_CERTS_NEWS</source>
+        <translation>Novos certificados</translation>
     </message>
 </context>
 <context>

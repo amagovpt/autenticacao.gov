@@ -1261,7 +1261,7 @@
     </message>
     <message>
         <source>STR_UPDATE_CERTS_TITLE</source>
-        <translation>New certificates</translation>
+        <translation>Update certificates</translation>
     </message>
     <message>
         <source>STR_UPDATE_CERTS_BUTTON_SEARCH</source>
@@ -1331,6 +1331,10 @@
     <message>
         <source>STR_AUTOUPDATENEWS_URL</source>
         <translation>Click to know more</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_CERTS_NEWS</source>
+        <translation>New certificates</translation>
     </message>
 </context>
 <context>

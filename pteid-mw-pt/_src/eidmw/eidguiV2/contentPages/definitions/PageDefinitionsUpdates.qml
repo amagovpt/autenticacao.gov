@@ -78,7 +78,6 @@ PageDefinitionsUpdatesForm {
                 propertyTextDescriptionCerts.text = tempTextDescription
                         +  " " +qsTranslate("PageHelpAbout","STR_HELP_APP_CERTS_UPDATE") + " : "
                         + controler.getCertsLog()
-                        + ". " + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
                 propertyProgressBarCerts.visible = false
                 propertyProgressBarCerts.value = 0
                 propertyProgressBarCerts.indeterminate = false

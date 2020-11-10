@@ -510,10 +510,7 @@ Item {
                                     font.bold: focus
                                     color: Constants.COLOR_TEXT_LABEL
                                     height: Constants.SIZE_TEXT_LABEL
-                                    text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_TITLE")
-                                    elide: Text.ElideLeft
-                                    textFormat: Text.RichText
-                                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                                    text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_NEWS")
                                     Accessible.role: Accessible.TitleBar
                                     Accessible.name: text
                                     KeyNavigation.tab: rectUpdateAppTitle
