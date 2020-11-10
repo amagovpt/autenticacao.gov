@@ -21,9 +21,6 @@ Loader{
     height: parent.height
 
     property alias propertyGeneralPopUp: generalPopUp
-    property alias propertyRectPopUp: rectPopUp
-    property alias propertyGeneralTitleText: titleText
-    property alias propertyGeneralPopUpLabelText: labelText.propertyText
     property bool propertyGeneralPopUpRetSubMenu: false // By default return to the Page Loader
 
     // Backup data about unfinished advance signature
