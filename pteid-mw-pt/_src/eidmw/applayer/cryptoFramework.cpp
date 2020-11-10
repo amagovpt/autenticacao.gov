@@ -788,7 +788,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 
 	OCSP_request_add1_nonce(pRequest, 0, -1);
 
-	MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: OCSP connecting to host %s port: %s IsSSL? %d",
+	MWLOG(LEV_DEBUG, MOD_APL, "OCSP connecting to host %s port: %s IsSSL? %d",
 		pszHost, pszPort, iSSL);
 
 	/* establish a connection to the OCSP responder using proxy according to the Config */
