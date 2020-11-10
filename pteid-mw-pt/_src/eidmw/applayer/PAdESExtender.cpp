@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
- * Copyright (C) 2020 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2020 AndrÃ© Guerreiro - <aguerreiro1985@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 
@@ -159,7 +159,7 @@ namespace eIDMW
         uint32_t ext_key_usage = X509_get_extended_key_usage(pX509);
 
         //Check if the certificate contains any extended key usage and then the specific OCSP flag
-        return  ext_key_usage != UINT32_MAX && XKU_OCSP_SIGN & ext_key_usage;
+        return ext_key_usage != UINT32_MAX && XKU_OCSP_SIGN & ext_key_usage;
     }
 
     ValidationDataElement* PAdESExtender::addValidationElement(ValidationDataElement &elem)
@@ -209,6 +209,7 @@ namespace eIDMW
 		ValidationDataElement crlElem(crl.GetBytes(), crl.Size(), ValidationDataElement::CRL, vri_keys);
 		addValidationElement(crlElem);
 
+        return true;
 	}
 
 	bool isSignerCertificate(X509 * cert) {
@@ -237,7 +238,6 @@ namespace eIDMW
         bool success = true;
 
 		CByteArray issuerCertDataByteArray;
-		bool foundIssuer = false;
 		size_t issuerLen;
 		FWK_CertifStatus status;
 
@@ -352,6 +352,7 @@ namespace eIDMW
 		{
 			CByteArray ocsp_response;
 			bool ocsp_check_revocation = false;
+            bool foundIssuer = false;
 			ValidationDataElement *vd_elem = m_validationData[signer_cert_idx];
 			CByteArray signer_cert(vd_elem->getData(), vd_elem->getSize());
 			MWLOG(LEV_DEBUG, MOD_APL, "### %s: adding revocation info for certificate: %s", __FUNCTION__, certificate_subject_from_der(signer_cert));
