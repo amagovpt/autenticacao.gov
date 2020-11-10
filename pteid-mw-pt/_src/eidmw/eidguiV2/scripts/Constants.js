@@ -75,6 +75,18 @@ var SIZE_TEXT_LABEL_FOCUS = 14
 var SIZE_TEXT_FIELD = 12
 var SIZE_TEXT_BODY = 16
 
+if (Qt.platform.os === "linux") {
+    // #FIXME: Workaround for wrong characters in new QT version (qt5.14) Gitlab#186
+    // Using lato-regular with font size 12 create a command line warning
+    // "Warning: distance-field glyph is not available with index 5042"
+    // and results in wrong charactes with text sequences like "fi"
+    var SIZE_TEXT_LINK_LABEL = 13
+    var SIZE_TEXT_LINK_BODY = 16
+}else{
+    var SIZE_TEXT_LINK_LABEL = 12
+    var SIZE_TEXT_LINK_BODY = 16
+}
+
 var SIZE_TEXT_LIST_BULLET = 8
 var SIZE_ARROW_INDICATOR = 20
 var SIZE_ARROW_OFFSET = 1

@@ -27,7 +27,7 @@ Item {
         selectByMouse: true
         selectByKeyboard: true
         textFormat: Text.RichText
-        font.pixelSize: Constants.SIZE_TEXT_BODY
+        font.pixelSize: Constants.SIZE_TEXT_LINK_BODY
         font.italic: false
         font.family: lato.name
         font.capitalization: Font.MixedCase

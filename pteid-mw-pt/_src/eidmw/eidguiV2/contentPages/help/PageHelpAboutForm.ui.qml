@@ -136,6 +136,7 @@ Item {
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             propertyText.text: "<a href='https://www.autenticacao.gov.pt/o-cartao-de-cidadao'>" +
                                "https://www.autenticacao.gov.pt/o-cartao-de-cidadao" + "</a>"
+            propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_BODY
             propertyAccessibleText: qsTranslate("PageHelpAbout","STR_HELP_CC_SELECT")
             propertyAccessibleDescription:  qsTranslate("PageHelpAbout","STR_HELP_CC_SELECT")
             propertyLinkUrl: 'https://www.autenticacao.gov.pt/o-cartao-de-cidadao'

@@ -64,6 +64,7 @@ Item {
                                              "STR_SIGN_HELP_CMD_LINK")
             propertyText.width: parent.width
             propertyText.wrapMode: Text.Wrap
+            propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_BODY
             Layout.fillWidth: true
             propertyAccessibleText: qsTranslate(
                                         "PageServicesSign",
@@ -113,6 +114,7 @@ Item {
                                + "<a href='https://www.autenticacao.gov.pt'>" + " " + qsTranslate(
                                    "PageServicesSign",
                                    "STR_SIGN_HELP_AUTENTICACAO.GOV_LINK")
+            propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_BODY
             propertyText.width: parent.width
             propertyText.wrapMode: Text.Wrap
             Layout.fillWidth: true

@@ -998,8 +998,7 @@ Item {
                                            qsTranslate("PageDefinitionsApp", "STR_HERE") + controler.autoTr + "</a>."
                         propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-com-placas-gr%C3%A1ficas-integradas'
                         propertyText.font.capitalization: Font.MixedCase
-                        propertyText.font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        propertyText.font.family: lato.name
+                        propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                         propertyText.font.bold: activeFocus
                         KeyNavigation.tab: textGraphicsRendering
                         KeyNavigation.down: textGraphicsRendering

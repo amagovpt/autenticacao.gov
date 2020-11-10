@@ -130,7 +130,7 @@ Item {
                             propertyText.text: qsTranslate("PageDefinitionsUpdates",
                                                            "STR_UPDATE_TEXT")
                             propertyText.font.bold: activeFocus || textDescription.activeFocus
-                            propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                            propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                             width: parent.width
                             height: parent.height
                             Accessible.role: Accessible.TitleBar
@@ -468,7 +468,7 @@ Item {
                             propertyText.text: qsTranslate("PageDefinitionsUpdates",
                                                            "STR_UPDATE_TEXT")
                             propertyText.font.bold: activeFocus || textDescriptionCerts.activeFocus
-                            propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                            propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                             width: parent.width
                             height: parent.height
                             Accessible.role: Accessible.TitleBar

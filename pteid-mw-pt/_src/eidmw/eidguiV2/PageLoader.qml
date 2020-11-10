@@ -112,7 +112,7 @@ Loader{
                     width: parent.width
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                     propertyText.color: Constants.COLOR_TEXT_LABEL
                     propertyText.height: parent.height
                     anchors.bottom: parent.bottom

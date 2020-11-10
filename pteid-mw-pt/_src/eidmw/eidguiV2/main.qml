@@ -491,7 +491,7 @@ Load language error. Please reinstall the application"
                     propertyText.font.italic: true
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.top: parent.top
-                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                     propertyText.font.bold: activeFocus
                     propertyAccessibleText: qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATENEWS_URL")
                     KeyNavigation.tab: checkboxDontAskAgain

@@ -132,7 +132,7 @@ Item {
                     propertyText.font.italic: true
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.top: parent.top
-                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                     propertyText.font.bold: activeFocus
                     propertyAccessibleText: qsTranslate("PageServicesSign","STR_SIGN_CMD_URL")
                     propertyLinkUrl: 'https://www.autenticacao.gov.pt/cmd-pedido-chave'
