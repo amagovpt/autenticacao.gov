@@ -1,8 +1,9 @@
 /*-****************************************************************************
 
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2020 André Guerreiro - <aguerreiro1985@gmail.com>
  *
- * Licensed under the EUPL V.1.1
+ * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
@@ -10,7 +11,9 @@
 #define __PADES_EXTENDER_H
 
 #include <vector>
+#include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include "PDFSignature.h"
 
 /* Forward declaration of ValidationDataElement defined in pteid-poppler. */
@@ -19,8 +22,11 @@ class ValidationDataElement;
 namespace eIDMW
 {
 
-    /* PAdESExtender allows to extend the level of an existing PAdES signed document. 
-    This can be done in a incremental way without breaking the existing signature. */
+    /* PAdESExtender allows to extend the level of an existing PAdES-B or PAdES-T signed document. 
+       This can be done in a incremental way without breaking the existing signature.
+	   Revocation information and related certificates are added to the /DSS dictionary in Catalog object
+	   For PAdES-LTA level an additional DocumentTimestamp is added at the end
+	*/
     class PAdESExtender
     {
     public:
@@ -36,8 +42,9 @@ namespace eIDMW
         ValidationDataElement* addValidationElement(ValidationDataElement &elem);
 
 		bool findIssuerInEidStore(APL_CryptoFwkPteid * cryptoFwk, CByteArray &certif_ba, CByteArray &issuer_ba);
-		void addOCSPCertToValidationData(CByteArray &ocsp_response_ba);
+		bool addOCSPCertToValidationData(CByteArray &ocsp_response_ba, CByteArray &out_ocsp_cert);
         bool isOCSPSigningCert(CByteArray &cert);
+		bool addCRLRevocationInfo(CByteArray & cert, std::unordered_set<std::string> vri_keys);
 
         PDFSignature *m_signedPdfDoc;
         std::vector<ValidationDataElement*> m_validationData;
