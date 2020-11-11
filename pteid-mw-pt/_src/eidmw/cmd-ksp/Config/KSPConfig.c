@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2020 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.2
+
+****************************************************************************-*/
 
 /**
 KSPConfig - command-line utility that performs registration and removal of the KSP module

@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.2
+
+****************************************************************************-*/
+
 #include "../Inc/KSPDlgHelper.h"
 #include "../Inc/log.h"
 #include "language.h"
