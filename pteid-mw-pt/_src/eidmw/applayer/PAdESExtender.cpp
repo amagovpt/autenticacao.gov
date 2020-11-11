@@ -91,64 +91,64 @@ namespace eIDMW
         return success;
     }
 
-	bool PAdESExtender::findIssuerInEidStore(APL_CryptoFwkPteid * cryptoFwk, CByteArray &certif_ba, CByteArray &issuer_ba) {
-		bool issuer_found = false;
-		APL_Certifs eidstore;
+    bool PAdESExtender::findIssuerInEidStore(APL_CryptoFwkPteid * cryptoFwk, CByteArray &certif_ba, CByteArray &issuer_ba) {
+        bool issuer_found = false;
+        APL_Certifs eidstore;
 
-		for (unsigned long i = 0; i != eidstore.countAll(); i++) {
-			const CByteArray & candidate_issuer = eidstore.getCert(i)->getData();
-			if (cryptoFwk->isIssuer(certif_ba, candidate_issuer)) {
-				issuer_found = true;
-				issuer_ba.ClearContents();
-				issuer_ba.Append(candidate_issuer);
-				MWLOG(LEV_INFO, MOD_APL, "%s: Found issuer: %s", eidstore.getCert(i)->getOwnerName(), __FUNCTION__);
-				break;
-			}
+        for (unsigned long i = 0; i != eidstore.countAll(); i++) {
+            const CByteArray & candidate_issuer = eidstore.getCert(i)->getData();
+            if (cryptoFwk->isIssuer(certif_ba, candidate_issuer)) {
+                issuer_found = true;
+                issuer_ba.ClearContents();
+                issuer_ba.Append(candidate_issuer);
+                MWLOG(LEV_INFO, MOD_APL, "%s: Found issuer: %s", eidstore.getCert(i)->getOwnerName(), __FUNCTION__);
+                break;
+            }
 
-		}
+        }
 
-		return issuer_found;
-	}
+        return issuer_found;
+    }
 
-	/* 
-	   Extract the OCSP signing certificate from the response and add it to m_validationData
-	   The return value means if we need to add revocation info (CRL) for the OCSP certificate itself
-	*/
-	bool PAdESExtender::addOCSPCertToValidationData(CByteArray &ocsp_response_ba, CByteArray &out_ocsp_cert) {
+    /* 
+       Extract the OCSP signing certificate from the response and add it to m_validationData
+       The return value means if we need to add revocation info (CRL) for the OCSP certificate itself
+    */
+    bool PAdESExtender::addOCSPCertToValidationData(CByteArray &ocsp_response_ba, CByteArray &out_ocsp_cert) {
 
-		bool check_revocation = false;
-		const unsigned char *p = ocsp_response_ba.GetBytes();
-		OCSP_RESPONSE *resp = d2i_OCSP_RESPONSE(NULL, &p, ocsp_response_ba.Size());
+        bool check_revocation = false;
+        const unsigned char *p = ocsp_response_ba.GetBytes();
+        OCSP_RESPONSE *resp = d2i_OCSP_RESPONSE(NULL, &p, ocsp_response_ba.Size());
 
-		if (resp != NULL) {
-			OCSP_BASICRESP * basic_resp = OCSP_response_get1_basic(resp);
-			if (basic_resp != NULL) {
-				const STACK_OF(X509) * certs = OCSP_resp_get0_certs(basic_resp);
-				for (size_t i = 0; certs && i < sk_X509_num(certs); i++) {
-					MWLOG(LEV_DEBUG, MOD_APL, "Adding one certificate to DSS from OCSP response");
-					X509 *cert = sk_X509_value(certs, i);
-					//Check for presence of the "OCSP No-Check" extension from the beginning
-					int index = X509_get_ext_by_NID(cert, NID_id_pkix_OCSP_noCheck, -1);
-					check_revocation = (index == -1);
+        if (resp != NULL) {
+            OCSP_BASICRESP * basic_resp = OCSP_response_get1_basic(resp);
+            if (basic_resp != NULL) {
+                const STACK_OF(X509) * certs = OCSP_resp_get0_certs(basic_resp);
+                for (size_t i = 0; certs && i < sk_X509_num(certs); i++) {
+                    MWLOG(LEV_DEBUG, MOD_APL, "Adding one certificate to DSS from OCSP response");
+                    X509 *cert = sk_X509_value(certs, i);
+                    //Check for presence of the "OCSP No-Check" extension from the beginning
+                    int index = X509_get_ext_by_NID(cert, NID_id_pkix_OCSP_noCheck, -1);
+                    check_revocation = (index == -1);
 
-					unsigned char * der_data = NULL;
-					int data_len = X509_to_DER(cert, &der_data);
-					ValidationDataElement vde(der_data, data_len, ValidationDataElement::CERT);
-					addValidationElement(vde);
-					//Return OCSP cert to caller
-					out_ocsp_cert.Append(der_data, data_len);
-				}
+                    unsigned char * der_data = NULL;
+                    int data_len = X509_to_DER(cert, &der_data);
+                    ValidationDataElement vde(der_data, data_len, ValidationDataElement::CERT);
+                    addValidationElement(vde);
+                    //Return OCSP cert to caller
+                    out_ocsp_cert.Append(der_data, data_len);
+                }
 
-			}
-			OCSP_RESPONSE_free(resp);
+            }
+            OCSP_RESPONSE_free(resp);
 
-		}
-		else {
-			MWLOG(LEV_WARN, MOD_APL, "%s: Failed to decode OCSP response!", __FUNCTION__);
-		}
-		
-		return check_revocation;
-	}
+        }
+        else {
+            MWLOG(LEV_WARN, MOD_APL, "%s: Failed to decode OCSP response!", __FUNCTION__);
+        }
+        
+        return check_revocation;
+    }
 
     bool PAdESExtender::isOCSPSigningCert(CByteArray &cert)
     {
@@ -189,57 +189,57 @@ namespace eIDMW
         return newElem;
     }
 
-	bool PAdESExtender::addCRLRevocationInfo(CByteArray & cert, std::unordered_set<string> vri_keys) {
+    bool PAdESExtender::addCRLRevocationInfo(CByteArray & cert, std::unordered_set<string> vri_keys) {
 
-		CRLFetcher crlFetcher;
-		std::string crlUrl;
-		APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
-		if (!cryptoFwk->GetCDPUrl(cert, crlUrl))
-		{
-			MWLOG(LEV_ERROR, MOD_APL, "addCRLRevocationInfo(): Couldn't parse CRL URL from certificate");
-			return false;
-		}
-		CByteArray crl = crlFetcher.fetch_CRL_file(crlUrl.c_str());
+        CRLFetcher crlFetcher;
+        std::string crlUrl;
+        APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
+        if (!cryptoFwk->GetCDPUrl(cert, crlUrl))
+        {
+            MWLOG(LEV_ERROR, MOD_APL, "addCRLRevocationInfo(): Couldn't parse CRL URL from certificate");
+            return false;
+        }
+        CByteArray crl = crlFetcher.fetch_CRL_file(crlUrl.c_str());
 
-		if (crl.Size() == 0) {
-			MWLOG(LEV_ERROR, MOD_APL, "Network error fetching CRL from %s or empty response. Revocation info is incomplete!", crlUrl.c_str());
-			return false;
-		}
+        if (crl.Size() == 0) {
+            MWLOG(LEV_ERROR, MOD_APL, "Network error fetching CRL from %s or empty response. Revocation info is incomplete!", crlUrl.c_str());
+            return false;
+        }
 
-		ValidationDataElement crlElem(crl.GetBytes(), crl.Size(), ValidationDataElement::CRL, vri_keys);
-		addValidationElement(crlElem);
+        ValidationDataElement crlElem(crl.GetBytes(), crl.Size(), ValidationDataElement::CRL, vri_keys);
+        addValidationElement(crlElem);
 
         return true;
-	}
+    }
 
-	bool isSignerCertificate(X509 * cert) {
-		uint32_t ext_key_usage = X509_get_extended_key_usage(cert);
+    bool isSignerCertificate(X509 * cert) {
+        uint32_t ext_key_usage = X509_get_extended_key_usage(cert);
 
-		//Exclude OCSP signing and TSA certificates
-		if (ext_key_usage != UINT32_MAX) {
-			if (XKU_OCSP_SIGN & ext_key_usage)
-				return false;
-			else if (XKU_TIMESTAMP & ext_key_usage)
-				return false;
-		}
-		//Exclude CA certificates
-		uint32_t key_usage = X509_get_key_usage(cert);
-		if (key_usage != UINT32_MAX) {
-			if (KU_KEY_CERT_SIGN & key_usage)
-				return false;
-		}
+        //Exclude OCSP signing and TSA certificates
+        if (ext_key_usage != UINT32_MAX) {
+            if (XKU_OCSP_SIGN & ext_key_usage)
+                return false;
+            else if (XKU_TIMESTAMP & ext_key_usage)
+                return false;
+        }
+        //Exclude CA certificates
+        uint32_t key_usage = X509_get_key_usage(cert);
+        if (key_usage != UINT32_MAX) {
+            if (KU_KEY_CERT_SIGN & key_usage)
+                return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
     bool PAdESExtender::addLT()
     {
         // TODO: verify if T first. Extend if not
         bool success = true;
 
-		CByteArray issuerCertDataByteArray;
-		size_t issuerLen;
-		FWK_CertifStatus status;
+        CByteArray issuerCertDataByteArray;
+        size_t issuerLen;
+        FWK_CertifStatus status;
 
         m_signedPdfDoc->m_incrementalMode = true;
 
@@ -249,14 +249,14 @@ namespace eIDMW
         const char *hexHash = NULL;
         unsigned char *signatureContents = NULL;
 
-		std::vector<size_t> signerCerts_idx;
+        std::vector<size_t> signerCerts_idx;
         std::unordered_set<int> sigIndexes = doc->getSignaturesIndexesUntilLastTimestamp();
 
-		if (sigIndexes.empty()) {
-			MWLOG(LEV_ERROR, MOD_APL, "addLT(): No signatures found in the document. Pre-condition for addLT() is broken!");
-			success = false;
-			goto cleanup;
-		}
+        if (sigIndexes.empty()) {
+            MWLOG(LEV_ERROR, MOD_APL, "addLT(): No signatures found in the document. Pre-condition for addLT() is broken!");
+            success = false;
+            goto cleanup;
+        }
         
         for (auto const& idx : sigIndexes)
         {
@@ -321,7 +321,7 @@ namespace eIDMW
                     }
                 }
             }
-			
+            
             /* Iterate over the certificates in this signature and add them to DSS.*/
             for (size_t i = 0; certs && i < sk_X509_num(certs); i++) {
                 unsigned char *certBytes = NULL;
@@ -334,30 +334,30 @@ namespace eIDMW
                     success = false;
                     goto cleanup;
                 }
-				size_t vd_size = m_validationData.size();
+                size_t vd_size = m_validationData.size();
 
                 ValidationDataElement certElem(certBytes, len, ValidationDataElement::CERT);
                 ValidationDataElement *addedElem = addValidationElement(certElem);
                 addedElem->addVriKey(hexHash);
-				//Add to signerCerts_idx if it's a signing cert and ignore duplicates
-				if (isSignerCertificate(cert) && m_validationData.size() > vd_size) {
+                //Add to signerCerts_idx if it's a signing cert and ignore duplicates
+                if (isSignerCertificate(cert) && m_validationData.size() > vd_size) {
 
-					signerCerts_idx.push_back(m_validationData.size()-1);
-				}
+                    signerCerts_idx.push_back(m_validationData.size()-1);
+                }
             }
         }
 
-		//Add revocation info for all signer certificates preferably using OCSP
-		for (auto signer_cert_idx: signerCerts_idx)
-		{
-			CByteArray ocsp_response;
-			bool ocsp_check_revocation = false;
+        //Add revocation info for all signer certificates preferably using OCSP
+        for (auto signer_cert_idx: signerCerts_idx)
+        {
+            CByteArray ocsp_response;
+            bool ocsp_check_revocation = false;
             bool foundIssuer = false;
-			ValidationDataElement *vd_elem = m_validationData[signer_cert_idx];
-			CByteArray signer_cert(vd_elem->getData(), vd_elem->getSize());
-			MWLOG(LEV_DEBUG, MOD_APL, "### %s: adding revocation info for certificate: %s", __FUNCTION__, certificate_subject_from_der(signer_cert));
+            ValidationDataElement *vd_elem = m_validationData[signer_cert_idx];
+            CByteArray signer_cert(vd_elem->getData(), vd_elem->getSize());
+            MWLOG(LEV_DEBUG, MOD_APL, "### %s: adding revocation info for certificate: %s", __FUNCTION__, certificate_subject_from_der(signer_cert));
             
-			//Find issuer for each signing cert
+            //Find issuer for each signing cert
             for (size_t j = 0; j < m_validationData.size(); j++)
             {
                 if (m_validationData[j]->getType() != ValidationDataElement::CERT)
@@ -373,58 +373,58 @@ namespace eIDMW
                 }
             }
 
-			/* Searching in eidstore may be useful to support more CA certificates in PADES-LT other than CC and CMD */
-			if (!foundIssuer) {
-				//Try to find issuer in eidstore certificates
-				foundIssuer = findIssuerInEidStore(cryptoFwk, signer_cert, issuerCertDataByteArray);
-				if (foundIssuer) {
+            /* Searching in eidstore may be useful to support more CA certificates in PADES-LT other than CC and CMD */
+            if (!foundIssuer) {
+                //Try to find issuer in eidstore certificates
+                foundIssuer = findIssuerInEidStore(cryptoFwk, signer_cert, issuerCertDataByteArray);
+                if (foundIssuer) {
                     ValidationDataElement vde(issuerCertDataByteArray.GetBytes(), 
                         issuerCertDataByteArray.Size(), ValidationDataElement::CERT, vd_elem->getVriHashKeys());
-					addValidationElement(vde);
-				}
+                    addValidationElement(vde);
+                }
 
-			}
+            }
 
             if (foundIssuer)
             {
                 status = cryptoFwk->GetOCSPResponse(signer_cert, issuerCertDataByteArray, &ocsp_response, false);
-				
+                
             }
-			else {
-				MWLOG(LEV_WARN, MOD_APL, "### %s: Couldn't find issuer for signing cert. Revocation info is going to be fetched from CRL", __FUNCTION__);
-			}
+            else {
+                MWLOG(LEV_WARN, MOD_APL, "### %s: Couldn't find issuer for signing cert. Revocation info is going to be fetched from CRL", __FUNCTION__);
+            }
 
-			if (status == FWK_CERTIF_STATUS_VALID) {
-				CByteArray ocsp_responder_cert;
-				ocsp_check_revocation = addOCSPCertToValidationData(ocsp_response, ocsp_responder_cert);
+            if (status == FWK_CERTIF_STATUS_VALID) {
+                CByteArray ocsp_responder_cert;
+                ocsp_check_revocation = addOCSPCertToValidationData(ocsp_response, ocsp_responder_cert);
 
-				ValidationDataElement ocspResponseElem(ocsp_response.GetBytes(), ocsp_response.Size(), ValidationDataElement::OCSP, vd_elem->getVriHashKeys());
-				addValidationElement(ocspResponseElem);
+                ValidationDataElement ocspResponseElem(ocsp_response.GetBytes(), ocsp_response.Size(), ValidationDataElement::OCSP, vd_elem->getVriHashKeys());
+                addValidationElement(ocspResponseElem);
 
-				if (ocsp_check_revocation) {
-					addCRLRevocationInfo(ocsp_responder_cert, vd_elem->getVriHashKeys());
-				}
-			}
+                if (ocsp_check_revocation) {
+                    addCRLRevocationInfo(ocsp_responder_cert, vd_elem->getVriHashKeys());
+                }
+            }
             if (status == FWK_CERTIF_STATUS_REVOKED || status == FWK_CERTIF_STATUS_SUSPENDED)
             {
                 MWLOG(LEV_ERROR, MOD_APL, "### %s: OCSP validation: revoked certificate", __FUNCTION__);
                 success = false;
                 goto cleanup;
             }
-			else if (status == FWK_CERTIF_STATUS_UNKNOWN) {
-				MWLOG(LEV_WARN, MOD_APL, "### %s: OCSP server returned unknown status so it's either a server error or the request is buggy or uses unsupported algorithm/feature", __FUNCTION__);
-				success = false;
-				goto cleanup;
-			}
+            else if (status == FWK_CERTIF_STATUS_UNKNOWN) {
+                MWLOG(LEV_WARN, MOD_APL, "### %s: OCSP server returned unknown status so it's either a server error or the request is buggy or uses unsupported algorithm/feature", __FUNCTION__);
+                success = false;
+                goto cleanup;
+            }
             else if (!foundIssuer || status == FWK_CERTIF_STATUS_ERROR) {
                 /* Use CRL if there is no OCSP response or we couldn't find the issuer (it should never happen with CC or CMD signatures) */
-				success = addCRLRevocationInfo(signer_cert, vd_elem->getVriHashKeys());
-				if (!success) {
-					goto cleanup;
-				}
+                success = addCRLRevocationInfo(signer_cert, vd_elem->getVriHashKeys());
+                if (!success) {
+                    goto cleanup;
+                }
             }
         
-		}  //End of outer loop
+        }  //End of outer loop
 
         doc->addDSS(m_validationData);
         m_signedPdfDoc->save();
