@@ -972,9 +972,9 @@ biblioteca iText ([http://itextpdf.com](http://itextpdf.com/)).
 
 Os métodos de assinatura de PDF fornecem as seguintes opções:
   - Assinatura de acordo com a especificação dos seguintes perfis:
-    - PAdES-B: O nível mais simples para assinaturas de curto-prazo. Este perfil não inclui selo temporal.
+    - PAdES-B: O nível mais simples para assinaturas de validade limitada à data de validade do certificado de assinatura do CC (até 5 anos ou até 10 anos). Este perfil não inclui selo temporal.
     - PAdES-T: Inclui um *timestamp* que prova o momento em que foi realizada a assinatura.
-    - PAdES-LT: Para além dos requisitos do nível PAdES-T, são adicionados os dados necessários para validar a assinatura digital (responstas OCSP e CRLs).
+    - PAdES-LT: Para além dos requisitos do nível PAdES-T, são adicionados os dados necessários para validar o certificado usado para a assinatura digital (respostas OCSP e CRLs).
     - PAdES-LTA: Este nível é recomendado a documentos que estão destinados a serem arquivados por um longo período de tempo. Inclui os requisitos do nível PAdES-LT e, adicionalmente, um *timestamp* que garante a integridade dos dados de validação. Deste modo, é possível provar no futuro que no momento da assinatura o certificado do cartão e respectiva cadeia não estavam revogados ou expirados.
   - Assinatura de vários ficheiros em *batch* (com apenas uma introdução
     de PIN).
