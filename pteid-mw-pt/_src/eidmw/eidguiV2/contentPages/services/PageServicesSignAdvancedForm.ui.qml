@@ -51,6 +51,7 @@ Item {
     property alias propertyTextFieldReason: textFieldReason
     property alias propertyTextFieldLocal: textFieldLocal
     property alias propertySwitchSignTemp: switchSignTemp
+    property alias propertyCheckboxLTV : checkboxLTV
     property alias propertyCheckSignShow: checkSignShow
     property alias propertyCheckSignReduced: checkSignReduced
     property alias propertyRectSignPageOptions: rectSignPageOptions
@@ -59,6 +60,7 @@ Item {
     property alias propertyRadioButtonXADES: radioButtonXADES
     property alias propertyMouseAreaToolTipPades: mouseAreaToolTipPades
     property alias propertyMouseAreaToolTipXades: mouseAreaToolTipXades
+    property alias propertyMouseAreaToolTipLTV: mouseAreaToolTipLTV
     property alias propertySwitchSignAdd: switchSignAdd
     property alias propertyTextAttributesMsg: textAttributesMsg
     property alias propertyMouseAreaTextAttributesMsg: mouseAreaTextAttributesMsg
@@ -74,6 +76,11 @@ Item {
                                                  + radioButtonPADES.width + rectToolTipPades.width
                                                  + 10 + radioButtonXADES.width
                                                  + rectToolTipXades.width * 0.5
+    property int propertyMouseAreaToolTipLTVX: Constants.SIZE_ROW_H_SPACE
+                                                 + Constants.SIZE_TEXT_FIELD_H_SPACE
+                                                 + checkboxLTV.x
+                                                 + 10 + checkboxLTV.width
+                                                 + rectToolTipLTV.width * 0.5
     property int propertyMouseAreaToolTipY: rectMainLeftFile.height
     property alias propertyTextSpinBox: textSpinBox
     property alias propertySpinBoxControl: spinBoxControl
@@ -521,6 +528,7 @@ Item {
                     Switch {
                         id: switchSignTemp
                         height: Constants.HEIGHT_SWITCH_COMPONENT
+                        //width: parent.width * 0.7
                         anchors.top: textFieldLocal.bottom
                         text: qsTranslate("PageServicesSign",
                                           "STR_SIGN_ADD_TIMESTAMP")
@@ -531,13 +539,52 @@ Item {
                         font.capitalization: Font.MixedCase
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
-                        KeyNavigation.tab: switchSignAdd
-                        KeyNavigation.down: switchSignAdd
-                        KeyNavigation.right: switchSignAdd
+                        KeyNavigation.tab: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
+                        KeyNavigation.down: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
+                        KeyNavigation.right: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
                         KeyNavigation.backtab: textFieldLocal
                         KeyNavigation.up: textFieldLocal
                         Keys.onEnterPressed: toggleSwitch(switchSignTemp)
                         Keys.onReturnPressed: toggleSwitch(switchSignTemp)
+                    }
+                    CheckBox {
+                        id: checkboxLTV
+                        text: qsTranslate("PageServicesSign",
+                                          "STR_SIGN_ADD_LTV")
+                        height: 25
+                        anchors.top: textFieldLocal.bottom
+                        anchors.left: switchSignTemp.right
+                        enabled: switchSignTemp.checked         /* timestamp enabled */
+                                && !switchSignAdd.checked       /* scap disabled */
+                                && radioButtonPADES.checked     /* pdf signature */
+                                && filesModel.count == 1        /* single file only */
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                    }
+                    Item {
+                        id: rectToolTipLTV
+                        width: Constants.SIZE_IMAGE_TOOLTIP
+                        height: Constants.SIZE_IMAGE_TOOLTIP
+                        anchors.leftMargin: 0
+                        anchors.left: checkboxLTV.right
+                        anchors.top: checkboxLTV.top
+
+                        Image {
+                            anchors.fill: parent
+                            antialiasing: true
+                            fillMode: Image.PreserveAspectFit
+                            source: "../../images/tooltip_grey.png"
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+                        MouseArea {
+                            id: mouseAreaToolTipLTV
+                            anchors.fill: parent
+                            hoverEnabled: true
+                        }
                     }
                     Switch {
                         id: switchSignAdd
@@ -554,8 +601,8 @@ Item {
                         KeyNavigation.tab: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
                         KeyNavigation.down: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
                         KeyNavigation.right: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
-                        KeyNavigation.backtab: switchSignTemp
-                        KeyNavigation.up: switchSignTemp
+                        KeyNavigation.backtab: (checkboxLTV.enabled ? checkboxLTV : switchSignTemp)
+                        KeyNavigation.up: (checkboxLTV.enabled ? checkboxLTV : switchSignTemp)
                         Keys.onEnterPressed: toggleSwitch(switchSignAdd)
                         Keys.onReturnPressed: toggleSwitch(switchSignAdd)
                     }

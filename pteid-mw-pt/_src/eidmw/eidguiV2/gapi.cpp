@@ -178,6 +178,9 @@ QString GAPI::getAddressField(AddressInfoKey key) {
     } else if (errorCode == EIDMW_TIMESTAMP_ERROR) \
 { \
     emit signalPdfSignSucess(SignMessageTimestampFailed); \
+    } else if (errorCode == EIDMW_LTV_ERROR) \
+{ \
+    emit signalPdfSignSucess(SignMessageLtvFailed); \
     } else if (errorCode == EIDMW_PERMISSION_DENIED) \
 { \
     emit signalPdfSignFail(SignFilePermissionFailed); \
@@ -624,7 +627,7 @@ void GAPI::showSignCMDDialog(long error_code)
     QString message;
     QString support_string = tr("STR_CMD_ERROR_MSG");
 
-    if (error_code == 0 || error_code == EIDMW_TIMESTAMP_ERROR){
+    if (error_code == 0 || error_code == EIDMW_TIMESTAMP_ERROR || error_code == EIDMW_LTV_ERROR){
         PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "CMD signature op finished with sucess");
     } else {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "CMD signature op finished with error code 0x%08x", error_code);
@@ -677,6 +680,9 @@ void GAPI::showSignCMDDialog(long error_code)
     case EIDMW_TIMESTAMP_ERROR:
         message = tr("STR_CMD_SUCESS") + " " + tr("STR_TIME_STAMP_FAILED");
         break;
+    case EIDMW_LTV_ERROR:
+        message = tr("STR_CMD_SUCESS") + " " + tr("STR_LTV_FAILED");
+        break;
     default:
         message = tr("STR_CMD_LOGIN_ERROR");
         break;
@@ -684,7 +690,7 @@ void GAPI::showSignCMDDialog(long error_code)
 
     if (error_code != 0){
         // If there is error show message screen
-        if (error_code == EIDMW_TIMESTAMP_ERROR){
+        if (error_code == EIDMW_TIMESTAMP_ERROR || error_code == EIDMW_LTV_ERROR){
             signalUpdateProgressStatus(message);
         } else if (error_code == SCAP_SECRETKEY_ERROR_CODE
                 || error_code == SCAP_CLOCK_ERROR_CODE) {
@@ -864,7 +870,7 @@ void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
 
     signCMDFinished(ret);
     signalUpdateProgressBar(100);
-    if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR)
+    if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR || ret == EIDMW_LTV_ERROR)
     {
         emit signalOpenFile();
     }
@@ -974,7 +980,8 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<
     signParams.coord_y = -1;
     signParams.location = location;
     signParams.reason = reason;
-    signParams.isTimestamp = 0;
+    signParams.isTimestamp = false;
+    signParams.isLtv = false;
     signParams.isSmallSignature = 0;
 
     cmd_signature->clear_pdf_handlers();
@@ -1000,7 +1007,7 @@ void GAPI::cancelCMDSign() {
 }
 void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
     QString outputFile, int page, double coord_x, double coord_y,
-    QString reason, QString location, bool isTimestamp, bool isSmall)
+    QString reason, QString location, bool isTimestamp, bool isLTV, bool isSmall)
 {
     /*qDebug() << "signOpenCMD! MobileNumber = " << mobileNumber << " secret_code = " << secret_code <<
     " loadedFilePaths = " << loadedFilePaths <<
@@ -1016,7 +1023,7 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QList<QString>
 
     CmdParams cmdParams = { mobileNumber, secret_code };
     SignParams signParams = { loadedFilePaths, outputFile, page, coord_x,
-        coord_y, reason, location, isTimestamp, isSmall };
+        coord_y, reason, location, isTimestamp, isLTV, isSmall };
 
     cmd_signature->clear_pdf_handlers();
 
@@ -1027,8 +1034,17 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QList<QString>
         cmd_pdfSignatures.push_back(cmd_pdfSignature); // keep track of pointers to be deleted
         cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
 
-        if (signParams.isTimestamp > 0)
-            cmd_pdfSignature->enableTimestamp();
+        if (signParams.isTimestamp) {
+            if (signParams.isLtv)
+            {
+                cmd_pdfSignature->setSignatureLevel(PTEID_LEVEL_LTV);
+            }
+            else
+            {
+                cmd_pdfSignature->setSignatureLevel(PTEID_LEVEL_TIMESTAMP);
+            }
+        }
+
         if (signParams.isSmallSignature > 0)
             cmd_pdfSignature->enableSmallSignatureFormat();
 
@@ -1725,19 +1741,19 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 }
 
 void GAPI::startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
-    QString reason, QString location, bool isTimestamp, bool isSmall) {
+    QString reason, QString location, bool isTimestamp, bool isLTV, bool isSmall) {
     //TODO: refactor startSigningPDF/startSigningBatchPDF                           
     QList<QString> loadedFilePaths = { loadedFilePath };
-    SignParams params = { loadedFilePaths, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isSmall };
+    SignParams params = { loadedFilePaths, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isLTV, isSmall };
     QFuture<void> future =
         Concurrent::run(this, &GAPI::doSignPDF, params);
 
 }
 
 void GAPI::startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outputFile, int page, double coord_x, double coord_y,
-    QString reason, QString location, bool isTimestamp, bool isSmall) {
+    QString reason, QString location, bool isTimestamp, bool isLTV, bool isSmall) {
 
-    SignParams params = { loadedFileBatchPath, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isSmall };
+    SignParams params = { loadedFileBatchPath, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isLTV, isSmall };
 
     QFuture<void> future =
         Concurrent::run(this, &GAPI::doSignBatchPDF, params);
@@ -1770,7 +1786,7 @@ void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, bool is
 
 void GAPI::startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, bool isTimestamp) {
 
-    SignParams params = { loadedFileBatchPath, outputFile, 0, 0, 0, "", "", isTimestamp, 0 };
+    SignParams params = { loadedFileBatchPath, outputFile, 0, 0, 0, "", "", isTimestamp, false, 0 };
 
     QFuture<void> future =
         Concurrent::run(this, &GAPI::doSignBatchXADES, params);
@@ -1877,9 +1893,18 @@ void GAPI::doSignPDF(SignParams &params) {
     QString fullInputPath = params.loadedFilePaths[0];
     PTEID_PDFSignature sig_handler(getPlatformNativeString(fullInputPath));
 
-    if (params.isTimestamp) {
-        sig_handler.enableTimestamp();
+    if (params.isTimestamp)
+    {
+        if (params.isLtv)
+        {
+            sig_handler.setSignatureLevel(PTEID_LEVEL_LTV);
+        }
+        else
+        {
+            sig_handler.setSignatureLevel(PTEID_LEVEL_TIMESTAMP);
+        }
     }
+
     if (params.isSmallSignature) {
         sig_handler.enableSmallSignatureFormat();
     }
@@ -1921,9 +1946,18 @@ void GAPI::doSignBatchPDF(SignParams &params) {
             params.page == 0 ? true : false);
     }
 
-    if (params.isTimestamp) {
-        sig_handler->enableTimestamp();
+    if (params.isTimestamp)
+    {
+        if (params.isLtv)
+        {
+            sig_handler->setSignatureLevel(PTEID_LEVEL_LTV);
+        }
+        else
+        {
+            sig_handler->setSignatureLevel(PTEID_LEVEL_TIMESTAMP);
+        }
     }
+
     if (params.isSmallSignature) {
         sig_handler->enableSmallSignatureFormat();
     }

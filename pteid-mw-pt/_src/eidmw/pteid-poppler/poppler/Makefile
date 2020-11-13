@@ -58,6 +58,7 @@ SOURCES =		\
 	XRef.cc			\
 	PageLabelInfo.cc	\
 	SecurityHandler.cc	\
+	FlateEncoder.cc \
 	Sound.cc	\
 	BuiltinFont.cc	\
 	BuiltinFontTables.cc \

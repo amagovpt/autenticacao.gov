@@ -360,6 +360,18 @@ int PEM_to_DER( char *pem, unsigned char **der ){
     return X509_to_DER( x509, der );
 }
 
+char * certificate_subject_from_der(CByteArray & ba) {
+	X509 *x509 = DER_to_X509(ba.GetBytes(), ba.Size());
+
+	if (x509 == NULL)
+		return "X509 parsing ERROR";
+	char *cert_subj = X509_NAME_oneline(X509_get_subject_name(x509), 0, 0);
+
+	X509_free(x509);
+
+	return cert_subj;
+}
+
 /*
 Base64 encode binary-data: it can be used also for C-style strings if we ignore the 0x0 terminator
 */

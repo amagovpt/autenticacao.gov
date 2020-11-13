@@ -132,7 +132,7 @@ public:
   GBool addSigRefToPage(Ref *, Object* sig_ref);
 
   int setSignatureByteRange(unsigned long sig_contents_offset, unsigned long estimated_len,
-		  unsigned long filesize);
+		  unsigned long filesize, Object *signature_dict = NULL, Ref *signature_dict_ref = NULL);
 
   // Get number of pages.
   int getNumPages();
@@ -159,6 +159,11 @@ public:
                  unsigned char *img_data, unsigned long img_length, int rotate_signature, bool isPTLanguage);
   void addSignatureAppearance(Object *parent, int, int);
   void closeSignature(const char *signature_contents, unsigned long len);
+
+  void addDSSEntry(Ref *dssRef);
+  /* Fill the following keys of the signature field dictionary: Type, SubType, FT, F, SigSector, Rect, T and P.*/
+  void fillSignatureField(Object *signatureFieldDict, PDFRectangle *rect, int sig_sector, Ref *refFirstPage);
+  void addSigFieldToAcroForm(Ref *sigFieldRef, Ref *refFirstPage);
 
   // Get a page.
   Page *getPage(int i);

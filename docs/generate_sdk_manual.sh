@@ -1,6 +1,6 @@
 #!/bin/bash
 VERSION=$(awk -F "=" '/PTEID_PRODUCT_VERSION=/{print $2}' ../pteid-mw-pt/_src/eidmw/release_data)
-NOW=$(date +%x)
+NOW=$(date +"%d/%m/%Y")
 
 #filter out header, table of contents and css class .center
 echo "Removing header 'page', table of contents and css 'center' image class."

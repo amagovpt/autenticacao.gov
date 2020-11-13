@@ -127,7 +127,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\_Builds\;$(ProjectDir)\goo;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_ZLIB)\include;$(ProjectDir)\..\_Builds\;$(ProjectDir)\goo;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
@@ -141,6 +141,8 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_ZLIB)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -149,7 +151,7 @@
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\_Builds\;$(ProjectDir)\goo;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_ZLIB_X64)\include;$(ProjectDir)\..\_Builds\;$(ProjectDir)\goo;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
@@ -164,6 +166,8 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX64</TargetMachine>
+      <AdditionalDependencies>zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_ZLIB_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -186,6 +190,7 @@
     <ClCompile Include="poppler\Dict.cc" />
     <ClCompile Include="poppler\Error.cc" />
     <ClCompile Include="poppler\FileSpec.cc" />
+    <ClCompile Include="poppler\FlateEncoder.cc" />
     <ClCompile Include="poppler\FontEncodingTables.cc" />
     <ClCompile Include="poppler\Form.cc" />
     <ClCompile Include="poppler\Hints.cc" />
@@ -247,6 +252,7 @@
     <ClInclude Include="poppler\Dict.h" />
     <ClInclude Include="poppler\Error.h" />
     <ClInclude Include="poppler\FileSpec.h" />
+    <ClInclude Include="poppler\FlateEncoder.h" />
     <ClInclude Include="poppler\Form.h" />
     <ClInclude Include="poppler\Hints.h" />
     <ClInclude Include="poppler\JArithmeticDecoder.h" />

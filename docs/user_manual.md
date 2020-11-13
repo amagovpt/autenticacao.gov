@@ -37,7 +37,7 @@
       - [Simples](#simples)
       - [Avançada](#avançada)
       - [Introdução de chave](#introdução-de-chave)
-      - [Verificação de assinatura digital em documento PDF em Windows](#verificação-de-assinatura-digital-em-documento-pdf-em-windows)
+      - [Verificação de documento PDF assinado em Windows ou MacOS](#verificação-de-documento-pdf-assinado-em-windows-ou-macos)
     - [Segurança](#segurança)
       - [Certificados](#certificados)
       - [Código PIN](#código-pin)
@@ -616,15 +616,14 @@ Assinatura digital de um documento PDF ou outro qualquer documento com possibili
 
 Os ficheiros a assinar podem ser selecionados arrastando-os para a área de pré-visualização ou utilizando a combinação de teclas **CTRL+V**. Pode também clicar na área de pré-visualização ou no botão **Adicionar ficheiros** e selecionar manualmente os ficheiros. Será exibida uma janela para selecionar os ficheiros que pretende assinar. Os ficheiros selecionados serão apresentados na janela “Escolha os ficheiros”, como podemos visualizar na imagem seguinte.
 
+![Ilustração: Submemu de assinatura avançada](Pictures/Autenticacao.Gov_assinatura_avancada.png "Submemu de assinatura avançada"){:.center}
+
 - **Selecionar ficheiros:** Abre uma nova janela que permitirá selecionar os documentos a serem assinados. É possível adicionar e remover ficheiros individualmente ou todos.
 - **Pré-visualização da assinatura:** Permite visualizar o documento a ser assinado, bem como a pré-visualização da própria assinatura. A pré-visualização existe apenas para assinatura do tipo **PDF**.
 
-  ![Ilustração: Selecionar ficheiro PDF para assinar na assinatura avançada](Pictures/Autenticacao.Gov_assinatura_avancada.png "Selecionar ficheiro PDF para assinar na assinatura avançada"){:.center}
-
-
 - **Configurações:**
 
-    Neste modo, é possível selecionar um conjunto de opções e mover a assinatura digital para o local pretendido. Após a seleção dos ficheiros, deverá selecionar as opções da assinatura. As configurações da assinatura são as seguintes e podem ser visualizadas na imagem seguinte:
+    Neste modo, é possível selecionar um conjunto de opções e mover a assinatura digital para o local pretendido. Após a seleção dos ficheiros, deverá selecionar as opções da assinatura. As configurações da assinatura são as seguintes:
 
     - **Tipo:** Tipo de assinatura – campo obrigatório – permite selecionar assinatura de ficheiros:
 
@@ -637,6 +636,8 @@ Os ficheiros a assinar podem ser selecionados arrastando-os para a área de pré
 
     - **Adicionar selo temporal:** Adiciona um selo temporal, provando a data à qual a assinatura foi efetuada. Esta é a única forma de provar que o documento existia a determinada hora, pois é aplicada ao documento a data e hora que este está a ser assinado, de forma segura. Note-se que a hora apresentada no selo visível é a hora local do computador onde foi efetuada a assinatura e pode não coincidir com a hora do selo temporal (obtida a partir de um servidor remoto). Disponível para assinaturas do tipo **PDF** e **Outros Ficheiros**. [Ver tópico Serviço de Selos Temporais na página Configuração de assinaturas](#configuração-de-assinaturas)
 
+      - **Adicionar LTV:** LTV (*Long-Term Validation*). Com a opção ativa, os dados necessários para validar a assinatura digital serão incluidos no ficheiro final assinado. Deste modo, é possível provar no futuro que no momento da assinatura o certificado do cartão (ou Chave Móvel Digital) e respectiva cadeia não estavam revogados ou expirados. Este nível é recomendado para documentos que estão destinados a serem arquivados por um longo período de tempo. A assinatura LTV obedece à especificação do perfil PAdES-LTA.
+
     - **Adicionar atributos profissionais:** A funcionalidade de assinatura de profissionais permite ao cidadão autenticar-se na qualidade das funções que desempenha na sociedade enquanto profissional qualificado. Na secção [Atributos Profissionais](#atributos-profissionais) é indicado o procedimento para carregar os atributos profissionais. Disponível para assinaturas do tipo **PDF**.
 
 Para mais informações, consulte o seguinte *website*:
@@ -648,8 +649,6 @@ Para mais informações, consulte o seguinte *website*:
 - **Página:** Poderá escolher a página onde será apresentada a assinatura. Disponível para assinaturas do tipo **PDF**.
 
 - **Última:** Poderá escolher a última página para apresentadar a assinatura. Disponível para assinaturas do tipo **PDF**.
-
-![Ilustração: Selecionar opções de assinatura](Pictures/Autenticacao.Gov_assinatura_avancada2.png "Selecionar opções de assinatura"){:.center}
 
 Após selecionar as opções pretendidas, na área indicada na figura anterior, arraste a pré-visualização da assinatura para a localização pretendida e de seguida prima o botão **Assinar com Cartão de Cidadão** ou **Assinar com Chave Móvel Digital**.
 
@@ -683,7 +682,7 @@ introduzir as respetivas credenciais, conforme a figura seguinte.
 
 ![Ilustração: Assinatura digital com a Chave Móvel Digital](Pictures/Autenticacao.Gov_assinatura_cmd.png "Assinatura digital com a Chave Móvel Digital"){:.center}
 
-#### Verificação de assinatura digital em documento PDF em Windows
+#### Verificação de documento PDF assinado em Windows ou MacOS
 
 Após aplicar uma assinatura digital num documento, esta deverá ser
 identificada automaticamente ao abrir o documento em *Adobe Reader*. A

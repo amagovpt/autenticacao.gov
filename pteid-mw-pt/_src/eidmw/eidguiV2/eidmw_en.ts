@@ -462,6 +462,10 @@
         <source>STR_SAVE_PHOTO_ERROR</source>
         <translation>An error occured while saving the photo. Check if the file is not currently open in another program or if you have write permissions.</translation>
     </message>
+    <message>
+        <source>STR_LTV_FAILED</source>
+        <translation>But the Long Term Validation was not correctly applied.</translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>
@@ -1874,6 +1878,14 @@
     <message>
         <source>STR_SEND_SMS_DESC</source>
         <translation>To send a new security code by SMS press &quot;Send by SMS&quot;.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_ADD_LTV</source>
+        <translation>Add LTV</translation>
+    </message>
+    <message>
+        <source>STR_LTV_TOOLTIP</source>
+        <translation>The Long Term Validation (LTV) includes validation data of the certificate chain used in the signature which allows future signature verifications to confirm that the signature was valid at generation time. For more information, consult the application manual.</translation>
     </message>
 </context>
 <context>

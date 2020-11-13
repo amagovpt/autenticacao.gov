@@ -486,6 +486,8 @@ const EVP_MD *APL_CryptoFwk::ConvertAlgorithm(FWK_HashAlgo algo)
 		return EVP_md5();
 	case FWK_ALGO_SHA1:
 		return EVP_sha1();
+	case FWK_ALGO_SHA256:
+		return EVP_sha256();
 	default:
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	}
@@ -646,7 +648,7 @@ FWK_CertifStatus APL_CryptoFwk::OCSPValidation(const CByteArray &cert, const CBy
 	return GetOCSPResponse(cert,issuer,pResponse);
 }
 
-FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const CByteArray &cert, const CByteArray &issuer, CByteArray *pResponse)
+FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const CByteArray &cert, const CByteArray &issuer, CByteArray *pResponse, bool verifyResponse)
 {
 	bool bResponseOk = false;
 	const unsigned char *pucCert=NULL;
@@ -674,7 +676,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const CByteArray &cert, const CB
 
 	try
 	{
-		eStatus=GetOCSPResponse(pX509_Cert,pX509_Issuer,&pOcspResponse);
+		eStatus=GetOCSPResponse(pX509_Cert,pX509_Issuer,&pOcspResponse, verifyResponse);
 		if(eStatus!=FWK_CERTIF_STATUS_CONNECT && eStatus!=FWK_CERTIF_STATUS_ERROR)
 			bResponseOk=true;
 	}
@@ -786,7 +788,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 
 	OCSP_request_add1_nonce(pRequest, 0, -1);
 
-	MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: OCSP connecting to host %s port: %s IsSSL? %d",
+	MWLOG(LEV_DEBUG, MOD_APL, "OCSP connecting to host %s port: %s IsSSL? %d",
 		pszHost, pszPort, iSSL);
 
 	/* establish a connection to the OCSP responder using proxy according to the Config */
@@ -1007,7 +1009,24 @@ cleanup:
     return eStatus;
 }
 
-FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Issuer, OCSP_RESPONSE **pResponse)
+/*
+   As of October 2020 we consider CC and PKI OCSP servers to be outdated as
+   they use RSA-SHA1 signatures by default
+   These servers are:
+   ocsp.cmd.cartaodecidadao.pt
+   ocsp.asc.cartaodecidadao.pt
+   ocsp.auc.cartaodecidadao.pt
+   ocsp.root.cartaodecidadao.pt
+
+   We use the non-standard workaround of using a SHA-256 CertID element in the request to avoid this behaviour
+   For other OCSP responders we use the "universally accepted" SHA-1 CertID
+   TODO: we should remove the workaround once the returned OCSP responses are signed with RSA-SHA256
+*/
+bool isOutdatedOCSPResponder(char *ocsp_url) {
+	return strstr(ocsp_url, "cartaodecidadao.pt") != NULL;
+}
+
+FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Issuer, OCSP_RESPONSE **pResponse, bool verifyResponse)
 {
 	if(pX509_Cert==NULL || pX509_Issuer==NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
@@ -1026,12 +1045,17 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Iss
 		goto cleanup;
 	}
 
-    pCertID = OCSP_cert_to_id(0, pX509_Cert, pX509_Issuer);
+    /* This workaround is commented so that Adobe deems the signature as LTV enabled. See isOutdatedOCSPResponder comment. */
+    //pCertID = OCSP_cert_to_id(isOutdatedOCSPResponder(pUrlResponder) ? EVP_sha256(): EVP_sha1(), pX509_Cert, pX509_Issuer);
+    pCertID = OCSP_cert_to_id(EVP_sha1(), pX509_Cert, pX509_Issuer);
     if (!pCertID)
 	{
 		eStatus = FWK_CERTIF_STATUS_ERROR;
 		goto cleanup;
 	}
+
+    if (!verifyResponse)
+        pX509_Issuer = NULL;
 
 	eStatus=GetOCSPResponse(pUrlResponder,pCertID,pResponse,pX509_Issuer);
 

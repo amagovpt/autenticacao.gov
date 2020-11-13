@@ -305,6 +305,9 @@ const char* PTEID_Exception::GetMessage()
 			case EIDMW_TIMESTAMP_ERROR:
 				error_message = "Timestamp error during signature";
 				break;
+			case EIDMW_LTV_ERROR:
+				error_message = "Error adding LTV to signature.";
+				break;
 			case EIDMW_PDF_INVALID_ERROR:
 				error_message = "Invalid PDF document";
 				break;

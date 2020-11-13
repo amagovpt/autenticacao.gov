@@ -374,8 +374,13 @@ bool PTEID_PDFSignature::isLandscapeFormat()
 void PTEID_PDFSignature::enableTimestamp()
 {
 	mp_signature->enableTimestamp();
-
 }
+
+void PTEID_PDFSignature::setSignatureLevel(PTEID_SignatureLevel signLevel)
+{
+	mp_signature->setSignatureLevel(ConvertSignatureLevel(signLevel));
+}
+
 // this function is not exposed to Java, however is keep for backward compatibility
 void PTEID_PDFSignature::setCustomImage(unsigned char *image_data, unsigned long img_length)
 {

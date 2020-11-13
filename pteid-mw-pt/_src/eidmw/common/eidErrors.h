@@ -250,6 +250,7 @@
 #define EIDMW_ERR_CVC_PATH_NOT_FOUND      0xe1d01f03
 
 #define EIDMW_TIMESTAMP_ERROR             0xe1d01e01
+#define EIDMW_LTV_ERROR                   0xe1d01e02
 #define EIDMW_PDF_INVALID_ERROR           0xe1d01e05
 #define EIDMW_PDF_UNSUPPORTED_ERROR       0xe1d01e06
 #define EIDMW_PDF_INVALID_PAGE_ERROR      0xe1d01e07

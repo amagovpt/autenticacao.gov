@@ -53,7 +53,9 @@ namespace eIDMW
 	int X509_to_DER(X509 *x509, unsigned char **der);
 	X509 *DER_to_X509(unsigned char *der, int len);
 	char *DER_to_PEM(unsigned char *der, int len);
+	char * certificate_subject_from_der(CByteArray & ba);
 	EIDMW_APL_API int PEM_to_DER(char *pem, unsigned char **der);
+	
 	EIDMW_APL_API char *getCPtr(std::string inStr, int *outLen);
 
 //Use _strdup instead of strdup to silence Win32 warnings

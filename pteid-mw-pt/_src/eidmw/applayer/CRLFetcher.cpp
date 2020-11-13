@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2014, 2016-2017 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2016-2020 André Guerreiro - <aguerreiro1985@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 
@@ -16,6 +16,10 @@
 #include "Util.h"
 #include "Log.h"
 
+#ifdef WIN32
+#include <wincrypt.h>
+#endif
+
 namespace eIDMW
 {
 
@@ -29,7 +33,38 @@ namespace eIDMW
 		return realsize;
 
 	}
-	
+
+#ifdef WIN32
+	CByteArray CRLFetcher::fetch_CRL_file(const char *url) {
+		CByteArray crl_data;
+
+		DWORD dwRetrievalFlags = 0;
+		//Timeout in milliseconds
+		DWORD dwTimeout = 20 * 1000;
+		CRL_CONTEXT * crl_ctx = NULL;
+		MWLOG(LEV_DEBUG, MOD_APL, "Downloading CRL %s using CryptRetrieveObjectByUrl", url);
+
+		BOOL ret = CryptRetrieveObjectByUrlA(url, CONTEXT_OID_CRL, dwRetrievalFlags, dwTimeout, (LPVOID *)&crl_ctx, NULL, NULL, NULL, NULL);
+
+		if (!ret) {
+			MWLOG(LEV_ERROR, MOD_APL, "Error fetching CRL! CryptRetrieveObjectByUrl error code: %08x", GetLastError());
+		
+		}
+		else {
+			if (crl_ctx->dwCertEncodingType & X509_ASN_ENCODING) {
+				MWLOG(LEV_DEBUG, MOD_APL, "Successfully fetched %d bytes of CRL content", crl_ctx->cbCrlEncoded);
+				crl_data.Append(crl_ctx->pbCrlEncoded, crl_ctx->cbCrlEncoded);
+			}
+			else {
+				MWLOG(LEV_ERROR, MOD_APL, "CRLFetcher: unexpected encoding in CRL_CONTEXT object! This should never happen...");
+			}
+			CertFreeCRLContext(crl_ctx);
+		}
+
+		return crl_data;
+	}
+
+#else
 	CByteArray CRLFetcher::fetch_CRL_file(const char *url)
 	{
 		CURL *curl;
@@ -50,29 +85,14 @@ namespace eIDMW
 			return received_data;
 		}
 
-#ifdef WIN32
-		//Get system proxy configuration
-		APL_Config conf_pac(CConfig::EIDMW_CONFIG_PARAM_PROXY_PACFILE);
-		const char * proxy_pac = conf_pac.getString();
-		if (proxy_pac != NULL && strlen(proxy_pac) > 0)
-		{
-			MWLOG(LEV_DEBUG, MOD_APL, "timestamp_data using Proxy PAC");
-			GetProxyFromPac(proxy_pac, url, &pac_proxy_host, &pac_proxy_port);
-			MWLOG(LEV_DEBUG, MOD_APL, "timestamp_data using Proxy host: %s port: %s", pac_proxy_host.c_str(), pac_proxy_port.c_str());
-		}
-#endif
-
 		MWLOG(LEV_DEBUG, MOD_APL, "Downloading CRL: %s", url);
 
 		//Make sure the static array receiving the network reply 
 		// is zero'd out before each request
 		received_data.Chop(received_data.Size());
 
-		#ifdef _WIN32
-		curl_global_init(CURL_GLOBAL_WIN32);
-#else
 		curl_global_init(CURL_GLOBAL_NOTHING);
-#endif
+
 		curl = curl_easy_init();
 		
 		if (curl == NULL)
@@ -146,5 +166,6 @@ namespace eIDMW
 			return received_data;
 
 	}
+#endif
 
 }

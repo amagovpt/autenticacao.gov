@@ -45,10 +45,10 @@
 #endif
 #include "APLCard.h"
 
-#include "openssl/evp.h"
-#include "openssl/ocsp.h"
-#include "openssl/ssl.h"
-#include "openssl/bio.h"
+#include <openssl/evp.h>
+#include <openssl/ocsp.h>
+#include <openssl/ssl.h>
+#include <openssl/bio.h>
 
 namespace eIDMW
 {
@@ -225,7 +225,7 @@ public:
 	  *
 	  * @return The status
 	  */
-	FWK_CertifStatus GetOCSPResponse(const CByteArray &cert, const CByteArray &issuer, CByteArray *response);
+	FWK_CertifStatus GetOCSPResponse(const CByteArray &cert, const CByteArray &issuer, CByteArray *response, bool verifyResponse = true);
 
 	/**
 	  * Send a OCSP request and get the response
@@ -356,7 +356,7 @@ protected:
 	  *
 	  * @return The status
 	  */
-	FWK_CertifStatus GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Issuer, OCSP_RESPONSE **pResponse); 
+	FWK_CertifStatus GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Issuer, OCSP_RESPONSE **pResponse, bool verifyResponse = true); 
 
 	/**
 	  * Send a OCSP request and get the response

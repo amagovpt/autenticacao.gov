@@ -24,6 +24,7 @@
 #include "Log.h"
 #include "Util.h"
 #include "APLConfig.h"
+#include "cryptoFwkPteid.h"
 
 #include <string>
 
@@ -34,6 +35,7 @@
 #include <openssl/bio.h>
 #include <openssl/x509.h>
 #include "sign-pkcs7.h"
+#include "TsaClient.h"
 
 namespace eIDMW
 {
@@ -68,7 +70,7 @@ namespace eIDMW
 		m_attributeSupplier = NULL;
 		m_attributeName = NULL;
 		m_batch_mode = true;
-		m_timestamp = false;
+		m_level = LEVEL_BASIC;
 		m_isLandscape = false;
 		m_small_signature = false;
 		my_custom_image.img_data = NULL;
@@ -97,7 +99,7 @@ namespace eIDMW
         m_attributeSupplier = NULL;
 		m_attributeName = NULL;
         m_batch_mode = false;
-        m_timestamp = false;
+        m_level = LEVEL_BASIC;
         m_isLandscape = false;
         m_small_signature = false;
         my_custom_image.img_data = NULL;
@@ -151,7 +153,7 @@ namespace eIDMW
 		m_attributeSupplier = NULL;
 		m_attributeName = NULL;
 		m_batch_mode = false;
-		m_timestamp = false;
+		m_level = LEVEL_BASIC;
 		m_isLandscape = false;
 		m_small_signature = false;
 		my_custom_image.img_data = NULL;
@@ -173,7 +175,12 @@ namespace eIDMW
 
 	void PDFSignature::enableTimestamp()
 	{
-		m_timestamp = true;
+		m_level = LEVEL_TIMESTAMP;
+	}
+
+	void PDFSignature::setSignatureLevel(APL_SignatureLevel level) 
+	{
+		m_level = level;
 	}
 
 	void PDFSignature::enableSmallSignature()
@@ -498,7 +505,7 @@ namespace eIDMW
 						cachedPin = true;
 						m_card->getCalReader()->setSSO(true);
 					}
-					m_timestamp = false; // disable timetamp for the next files
+					m_level = LEVEL_BASIC; // disable timetamp for the next files
 					throwTimestampError = true;
 				}
 			 }
@@ -784,10 +791,14 @@ namespace eIDMW
         /* Calculate hash */
         m_pkcs7 = PKCS7_new();
 
+        bool timestamp = (m_level == LEVEL_TIMESTAMP 
+                        || m_level == LEVEL_LT
+                        || m_level == LEVEL_LTV);
+
         CByteArray in_hash = computeHash_pkcs7( data, dataLen
                                                 , certificate
                                                 , certificate_cas
-                                                , m_timestamp
+                                                , timestamp
                                                 , m_pkcs7
                                                 , &m_signerInfo 
                                                 , isCardSign);
@@ -811,11 +822,13 @@ namespace eIDMW
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
 
+        bool timestamp = (m_level == LEVEL_TIMESTAMP || m_level == LEVEL_LT || m_level == LEVEL_LTV);
+
         int return_code =
             getSignedData_pkcs7((unsigned char*)signature.GetBytes()
             , signature.Size()
             , m_signerInfo
-            , m_timestamp
+            , timestamp
             , m_pkcs7
             , &signature_contents);
 
@@ -824,10 +837,40 @@ namespace eIDMW
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 
         m_doc->closeSignature(signature_contents);
+        save();
 
+        if (m_level == LEVEL_LT || m_level == LEVEL_LTV) {
+            if(!addLtv()) {
+                return_code = 2;
+            }
+        }
+        
+        m_signStarted = false;
+
+        free((void *)signature_contents);
+
+        delete m_outputName;
+        m_outputName = NULL;
+
+        delete m_doc;
+        m_doc = NULL;
+
+        PKCS7_free( m_pkcs7 );
+        m_pkcs7 = NULL;
+
+        if (return_code == 1) {
+            throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
+        }
+        else if (return_code == 2)
+        {
+            throw CMWEXCEPTION(EIDMW_LTV_ERROR);
+        }
+        return return_code;
+    }
+
+    void PDFSignature::save() {
         PDFWriteMode pdfWriteMode =
             m_incrementalMode ? writeForceIncremental : writeForceRewrite;
-
         // Create and save pdf to temp file to allow overwrite of original file
 #ifdef WIN32
         TCHAR tmpPathBuffer[MAX_PATH];
@@ -850,11 +893,11 @@ namespace eIDMW
             MWLOG(LEV_ERROR, MOD_APL, "signClose: Error occurred GetTempFileName: %d", GetLastError());
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
-    #ifdef UNICODE
+#ifdef UNICODE
         std::string utf8FilenameTmp = utilStringNarrow(tmpFilename);
-    #else
+#else
         std::string utf8FilenameTmp = tmpFilename;
-    #endif
+#endif
         std::wstring utf16FilenameTmp = utilStringWiden(utf8FilenameTmp);
         int tmp_ret = m_doc->saveAs((wchar_t *)utf16FilenameTmp.c_str(), pdfWriteMode);
         PDFDoc *tmpDoc = makePDFDoc(utf8FilenameTmp.c_str());
@@ -875,36 +918,35 @@ namespace eIDMW
         tmpDoc = NULL;
         remove(utf8FilenameTmp.c_str());
 
-        m_signStarted = false;
-
-        free((void *)signature_contents);
-
-        delete m_outputName;
-        m_outputName = NULL;
-
         delete m_doc;
-        m_doc = NULL;
+        m_doc = makePDFDoc(m_outputName->getCString());
 
-        PKCS7_free( m_pkcs7 );
-        m_pkcs7 = NULL;
-
-        if (tmp_ret == errPermission || tmp_ret == errOpenFile){
+        if (tmp_ret == errPermission || tmp_ret == errOpenFile) {
             throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
         }
         else if (tmp_ret != errNone) {
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
 
-        if (final_ret == errPermission || final_ret == errOpenFile){
+        if (final_ret == errPermission || final_ret == errOpenFile) {
             throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
         }
         else if (final_ret != errNone) {
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
+    }
 
-        if (return_code == 1) {
-            throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
+    bool PDFSignature::addLtv() 
+    {
+        PAdESExtender padesExtender(this);
+        if (m_level == LEVEL_LT)
+        {
+            return padesExtender.addLT();
         }
-        return return_code;
+        else if (m_level == LEVEL_LTV)
+        {
+            return padesExtender.addLTA();
+        }
+        return false;
     }
 }

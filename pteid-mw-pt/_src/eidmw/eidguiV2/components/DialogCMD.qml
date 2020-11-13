@@ -157,9 +157,8 @@ Item {
                 Text {
                     id: textMessageTop
                     height: 25
-                    verticalAlignment: Text.AlignVCenter
                     anchors.top: linkCMD.visible ? linkCMD.bottom : progressBar.bottom
-                    anchors.topMargin: linkCMD.visible ? Constants.SIZE_ROW_V_SPACE : 0
+                    anchors.topMargin: linkCMD.visible ? Constants.SIZE_ROW_V_SPACE : 3
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     font.bold: activeFocus
@@ -759,6 +758,10 @@ Item {
         if (typeof propertySwitchSignTemp !== "undefined")
             isTimestamp = propertySwitchSignTemp.checked
 
+        var isLTV = false
+        if (typeof propertyCheckboxLTV !== "undefined")
+            isLTV = propertyCheckboxLTV.checked
+
         var reason = ""
         if (typeof propertyTextFieldReason !== "undefined")
             reason = propertyTextFieldReason.text
@@ -805,7 +808,7 @@ Item {
                              loadedFilePaths,outputFile,page,
                              coord_x,coord_y,
                              reason,location,
-                             isTimestamp, isSmallSignature)
+                             isTimestamp, isLTV, isSmallSignature)
         }
     }
 

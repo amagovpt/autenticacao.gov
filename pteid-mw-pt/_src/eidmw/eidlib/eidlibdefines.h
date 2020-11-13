@@ -98,6 +98,13 @@ enum PTEID_FileType
 	PTEID_FILETYPE_CSV
 };
 
+enum PTEID_SignatureLevel
+{
+    PTEID_LEVEL_BASIC,
+    PTEID_LEVEL_TIMESTAMP,
+    PTEID_LEVEL_LT,
+    PTEID_LEVEL_LTV
+};
 
 /**
     Enumeration that includes all the configuration values of pteid-mw

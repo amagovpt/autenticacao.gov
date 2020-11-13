@@ -29,6 +29,7 @@
 #include "eidlibdefines.h"
 #include "APLReader.h"
 #include "APLCertif.h"
+#include "APLCard.h"
 
 #include "eidlibException.h"
 #include "MWException.h"
@@ -93,6 +94,8 @@ PTEID_CertifType ConvertCertType(APL_CertifType eType);
 APL_HashAlgo ConvertHashAlgo(PTEID_HashAlgo eAlgo);
 
 tLOG_Level ConvertLogLevel(PTEID_LogLevel level);
+
+APL_SignatureLevel ConvertSignatureLevel(PTEID_SignatureLevel level);
 }
 
 #endif //__INTERNALUTIL_H__

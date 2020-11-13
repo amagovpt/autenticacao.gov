@@ -5,46 +5,46 @@
 ![](Pictures/CartaoCidadao.png)
 
 # Table of Contents <!-- omit in toc -->
-- [Introdução](#introdu%c3%a7%c3%a3o)
-- [Abreviaturas e acrónimos](#abreviaturas-e-acr%c3%b3nimos)
-- [Instalação](#instala%c3%a7%c3%a3o)
+- [Introdução](#introdução)
+- [Abreviaturas e acrónimos](#abreviaturas-e-acrónimos)
+- [Instalação](#instalação)
   - [Sistemas Operativos suportados](#sistemas-operativos-suportados)
-  - [Linguagens de programação](#linguagens-de-programa%c3%a7%c3%a3o)
+  - [Linguagens de programação](#linguagens-de-programação)
   - [Compiladores](#compiladores)
-  - [Instalação do Middleware](#instala%c3%a7%c3%a3o-do-middleware)
+  - [Instalação do Middleware](#instalação-do-middleware)
     - [Windows](#windows)
     - [Linux](#linux)
     - [MacOS](#macos)
 - [Procedimentos](#procedimentos)
-  - [Pré-condições](#pr%c3%a9-condi%c3%a7%c3%b5es)
-  - [Inicialização / Finalização do SDK](#inicializa%c3%a7%c3%a3o--finaliza%c3%a7%c3%a3o-do-sdk)
+  - [Pré-condições](#pré-condições)
+  - [Inicialização / Finalização do SDK](#inicialização--finalização-do-sdk)
   - [Configurar modo teste](#configurar-modo-teste)
-  - [Acesso ao *smartcard* Cartão de Cidadão](#acesso-ao-smartcard-cart%c3%a3o-de-cidad%c3%a3o)
-    - [Eventos de inserção / remoção de cartões](#eventos-de-inser%c3%a7%c3%a3o--remo%c3%a7%c3%a3o-de-cart%c3%b5es)
-  - [Dados pessoais do cidadão](#dados-pessoais-do-cidad%c3%a3o)
-    - [Obtenção da Identificação](#obten%c3%a7%c3%a3o-da-identifica%c3%a7%c3%a3o)
-    - [Obtenção da fotografia](#obten%c3%a7%c3%a3o-da-fotografia)
-    - [Obtenção da morada](#obten%c3%a7%c3%a3o-da-morada)
+  - [Acesso ao *smartcard* Cartão de Cidadão](#acesso-ao-smartcard-cartão-de-cidadão)
+    - [Eventos de inserção / remoção de cartões](#eventos-de-inserção--remoção-de-cartões)
+  - [Dados pessoais do cidadão](#dados-pessoais-do-cidadão)
+    - [Obtenção da Identificação](#obtenção-da-identificação)
+    - [Obtenção da fotografia](#obtenção-da-fotografia)
+    - [Obtenção da morada](#obtenção-da-morada)
     - [Leitura e escrita das notas pessoais](#leitura-e-escrita-das-notas-pessoais)
-    - [Leitura dos dados de identidade do Cidadão e da Morada](#leitura-dos-dados-de-identidade-do-cidad%c3%a3o-e-da-morada)
-    - [Obtenção dos dados do cartão em formato XML](#obten%c3%a7%c3%a3o-dos-dados-do-cart%c3%a3o-em-formato-xml)
+    - [Leitura dos dados de identidade do Cidadão e da Morada](#leitura-dos-dados-de-identidade-do-cidadão-e-da-morada)
+    - [Obtenção dos dados do cartão em formato XML](#obtenção-dos-dados-do-cartão-em-formato-xml)
   - [PINs](#pins)
-    - [Verificação e alteração do PIN](#verifica%c3%a7%c3%a3o-e-altera%c3%a7%c3%a3o-do-pin)
+    - [Verificação e alteração do PIN](#verificação-e-alteração-do-pin)
   - [Assinatura Digital](#assinatura-digital)
     - [Formato XML Advanced Electronic Signatures (XAdES)](#formato-xml-advanced-electronic-signatures-xades)
     - [Ficheiros PDF](#ficheiros-pdf)
     - [Bloco de dados](#bloco-de-dados)
-    - [Multi-assinatura com uma única introdução de PIN](#multi-assinatura-com-uma-%c3%banica-introdu%c3%a7%c3%a3o-de-pin)
+    - [Multi-assinatura com uma única introdução de PIN](#multi-assinatura-com-uma-única-introdução-de-pin)
     - [Configurar o servidor de selo temporal](#configurar-o-servidor-de-selo-temporal)
   - [Certificados digitais](#certificados-digitais)
-    - [Leitura dos certificados digitais presentes no cartão de cidadão](#leitura-dos-certificados-digitais-presentes-no-cart%c3%a3o-de-cidad%c3%a3o)
-  - [Sessão segura](#sess%c3%a3o-segura)
+    - [Leitura dos certificados digitais presentes no cartão de cidadão](#leitura-dos-certificados-digitais-presentes-no-cartão-de-cidadão)
+  - [Sessão segura](#sessão-segura)
 - [Tratamento de erros](#tratamento-de-erros)
 - [API PKCS#11](#api-pkcs11)
-- [Compatibilidade com o SDK da versão 1](#compatibilidade-com-o-sdk-da-vers%c3%a3o-1)
-  - [Métodos removidos](#m%c3%a9todos-removidos)
-  - [Diferenças no comportamento de alguns métodos](#diferen%c3%a7as-no-comportamento-de-alguns-m%c3%a9todos)
-  - [Códigos de Erro](#c%c3%b3digos-de-erro)
+- [Compatibilidade com o SDK da versão 1](#compatibilidade-com-o-sdk-da-versão-1)
+  - [Métodos removidos](#métodos-removidos)
+  - [Diferenças no comportamento de alguns métodos](#diferenças-no-comportamento-de-alguns-métodos)
+  - [Códigos de Erro](#códigos-de-erro)
 
 <!--- Content_begin -->
 
@@ -971,9 +971,11 @@ biblioteca iText ([http://itextpdf.com](http://itextpdf.com/)).
 
 
 Os métodos de assinatura de PDF fornecem as seguintes opções:
-  - Assinatura com *timestamp* de modo a garantir que a validade da
-    assinatura não se limita à validade do certificado do Cartão de
-    Cidadão.
+  - Assinatura de acordo com a especificação dos seguintes perfis:
+    - PAdES-B: O nível mais simples para assinaturas de curto-prazo. Este perfil não inclui selo temporal.
+    - PAdES-T: Inclui um *timestamp* que prova o momento em que foi realizada a assinatura.
+    - PAdES-LT: Para além dos requisitos do nível PAdES-T, são adicionados os dados necessários para validar a assinatura digital (responstas OCSP e CRLs).
+    - PAdES-LTA: Este nível é recomendado a documentos que estão destinados a serem arquivados por um longo período de tempo. Inclui os requisitos do nível PAdES-LT e, adicionalmente, um *timestamp* que garante a integridade dos dados de validação. Deste modo, é possível provar no futuro que no momento da assinatura o certificado do cartão e respectiva cadeia não estavam revogados ou expirados.
   - Assinatura de vários ficheiros em *batch* (com apenas uma introdução
     de PIN).
   - Inclusão de detalhes adicionais como a localização ou motivo da
@@ -1010,8 +1012,13 @@ PTEID_ByteArray jpeg_data(image_data, image_length);
 signature.setCustomImage(jpeg_data);
 
 signature.enableSmallSignatureFormat();
-//Assinatura com selo temporal
-signature.enableTimestamp();
+
+/* Configurar o perfil da assinatura:
+PAdES-B: PTEID_SignatureLevel::PTEID_LEVEL_BASIC (configurado por defeito)
+PAdES-T: PTEID_SignatureLevel::PTEID_LEVEL_TIMESTAMP
+PAdES-LT: PTEID_SignatureLevel::PTEID_LEVEL_LT
+PAdES-LTA: PTEID_SignatureLevel::PTEID_LEVEL_LTV */
+signature.setSignatureLevel(PTEID_SignatureLevel::PTEID_LEVEL_TIMESTAMP);
 
 
 /* Assinatura utilizando localização precisa: os parâmetros pos_x e pos_y
