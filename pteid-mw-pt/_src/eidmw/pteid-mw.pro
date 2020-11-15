@@ -20,7 +20,8 @@ SUBDIRS += cardlayer/cardlayer.pro
 SUBDIRS +=	pkcs11/pkcs11.pro \
 	        applayer \
 	        eidlib \
-		eidlibJava_Wrapper
+		eidlibJava_Wrapper \
+		eidlibCS_Wrapper
 
 applayer.depends = pteid-poppler		
 
