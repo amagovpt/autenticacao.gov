@@ -9,6 +9,8 @@
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>pteidlib_dotnet.snk</AssemblyOriginatorKeyFile>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <AssemblyName>pteidlib_dotnet</AssemblyName>
+        <RootNamespace>eIDMW</RootNamespace>
     </PropertyGroup>
 
     <Target Name="GenerateAssemblyInfo" BeforeTargets="Build">
@@ -18,12 +20,12 @@
     </Target>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationFile>bin\Debug\libNetCore.xml</DocumentationFile>
+      <DocumentationFile>bin\Debug\pteidlib_dotnet.xml</DocumentationFile>
       <NoWarn>1701;1702;1591</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DocumentationFile>bin\Release\libNetCore.xml</DocumentationFile>
+      <DocumentationFile>bin\Release\pteidlib_dotnet.xml</DocumentationFile>
       <NoWarn>1701;1702;1591</NoWarn>
     </PropertyGroup>
 
