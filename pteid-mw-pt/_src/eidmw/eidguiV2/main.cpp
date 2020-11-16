@@ -178,40 +178,40 @@ int main(int argc, char *argv[])
 
     AppController::initApplicationScale();
 
-	PTEID_InitSDK();
+    PTEID_InitSDK();
 
-	// GUISettings init
-	GUISettings settings;
-	// AppController init
-	AppController controller(settings);
+    // GUISettings init
+    GUISettings settings;
+    // AppController init
+    AppController controller(settings);
 
     if (settings.getGraphicsAccel() == 0)
-	{
-		qDebug() << "C++: Starting App without graphics acceleration";
-		QCoreApplication::setAttribute(Qt::AA_UseSoftwareOpenGL);
-	}
+    {
+        qDebug() << "C++: Starting App without graphics acceleration";
+        QCoreApplication::setAttribute(Qt::AA_UseSoftwareOpenGL);
+    }
 #ifdef WIN32
-	else if (settings.getGraphicsAccel() == 2) {
-		qDebug() << "C++: Starting App with ANGLE emulation for OpenGL";
-		QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
-	}
+    else if (settings.getGraphicsAccel() == 2) {
+        qDebug() << "C++: Starting App with ANGLE emulation for OpenGL";
+        QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
+    }
 #endif
-	else
-	{
-		qDebug() << "C++: Starting App with graphics acceleration";
-	}
+    else
+    {
+        qDebug() << "C++: Starting App with graphics acceleration";
+    }
 
-	SingleApplication app(argc, argv);
+    SingleApplication app(argc, argv);
 
-	app.setOrganizationName("Portuguese State");
-	app.setApplicationVersion(settings.getGuiVersion() + " - " + REVISION_NUM_STRING + " [ " + REVISION_HASH_STRING + " ]");
+    app.setOrganizationName("Portuguese State");
+    app.setApplicationVersion(settings.getGuiVersion() + " - " + REVISION_NUM_STRING + " [ " + REVISION_HASH_STRING + " ]");
 
-	// Set app icon
-	app.setWindowIcon(QIcon(":/appicon.ico"));
+    // Set app icon
+    app.setWindowIcon(QIcon(":/appicon.ico"));
 
-	QQuickStyle::setStyle("Material");
-	//QQuickStyle::setStyle("Universal");
-	//QQuickStyle::setStyle("Default");
+    QQuickStyle::setStyle("Material");
+    //QQuickStyle::setStyle("Universal");
+    //QQuickStyle::setStyle("Default");
 
     QQmlApplicationEngine *engine = new QQmlApplicationEngine();
 
