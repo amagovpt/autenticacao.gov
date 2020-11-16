@@ -415,6 +415,7 @@ PageServicesSignSimpleForm {
             propertyBusyIndicatorRunning = true
             var loadedFilePath = filesModel.get(0).fileUrl
             var isTimestamp = false
+            var isLTV = false
             var outputFile = propertyFileDialogOutput.file.toString()
             outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
 
@@ -439,7 +440,7 @@ PageServicesSignSimpleForm {
             propertyOutputSignedFile = outputFile;
 
             gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
-                                 reason, location, isTimestamp, isSmallSignature)
+                                 reason, location, isTimestamp, isLTV, isSmallSignature)
         }
     }
     propertyFileDialogCMDOutput {
