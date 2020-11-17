@@ -98,20 +98,24 @@ Item {
             }
         }
 
-        Image {
-            id: minimizeButton
-            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
-            height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
-            fillMode: Image.PreserveAspectFit
-            anchors {
-                right: fullScreentButton.left;
-                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE;
-                rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
-                verticalCenter: parent.verticalCenter
+        Item {
+            id: minimizeRect
+            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR + Constants.TITLE_BAR_H_ICON_SPACE
+            height: parent.height
+            anchors.right: fullScreenRect.left
+            Image {
+                id: minimizeButton
+                width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+                height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+                fillMode: Image.PreserveAspectFit
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    verticalCenter: parent.verticalCenter
+                }
+                source: mouseAreaMinimizeButton.containsMouse ?
+                            "../images/titleBar/minimize_hover.png" :
+                            "../images/titleBar/minimize.png"
             }
-            source: mouseAreaMinimizeButton.containsMouse ?
-                        "../images/titleBar/minimize_hover.png" :
-                        "../images/titleBar/minimize.png"
             MouseArea {
                 id: mouseAreaMinimizeButton
                 anchors.fill: parent
@@ -123,18 +127,22 @@ Item {
                 }
             }
         }
-        Image {
-            id: fullScreentButton
-            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
-            height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
-            fillMode: Image.PreserveAspectFit
-            anchors {
-                right: quitButton.left;
-                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE;
-                rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
-                verticalCenter: parent.verticalCenter
+        Item {
+            id: fullScreenRect
+            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR + Constants.TITLE_BAR_H_ICON_SPACE
+            height: parent.height
+            anchors.right: quitRect.left
+            Image {
+                id: fullScreentButton
+                width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+                height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+                fillMode: Image.PreserveAspectFit
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    verticalCenter: parent.verticalCenter
+                }
+                source: getFullScreentButtonIcon()
             }
-            source: getFullScreentButtonIcon() 
             MouseArea {
                 id: mouseAreaFullScreentButton
                 anchors.fill: parent
@@ -142,20 +150,24 @@ Item {
                 onClicked: getScreenState()
             }
         }
-        Image {
-            id: quitButton
-            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
-            height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
-            fillMode: Image.PreserveAspectFit
-            anchors {
-                right: parent.right;
-                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE;
-                rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
-                verticalCenter: parent.verticalCenter
+        Item {
+            id: quitRect
+            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR + Constants.TITLE_BAR_H_ICON_SPACE
+            height: parent.height
+            anchors.right: parent.right
+            Image {
+                id: quitButton
+                width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+                height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+                fillMode: Image.PreserveAspectFit
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    verticalCenter: parent.verticalCenter
+                }
+                source: mouseAreaQuitButton.containsMouse ?
+                            "../images/titleBar/quit_hover.png" :
+                            "../images/titleBar/quit.png"
             }
-            source: mouseAreaQuitButton.containsMouse ?
-                        "../images/titleBar/quit_hover.png" :
-                        "../images/titleBar/quit.png"
             MouseArea {
                 id: mouseAreaQuitButton
                 anchors.fill: parent
@@ -168,7 +180,7 @@ Item {
         MouseArea {
             id: mouseRegion
             anchors.left: parent.left
-            anchors.right: minimizeButton.left
+            anchors.right: minimizeRect.left
             height: parent.height
 
             property variant clickPos: ""
