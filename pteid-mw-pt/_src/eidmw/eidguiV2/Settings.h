@@ -3,7 +3,7 @@
  * eID Middleware Project.
  * Copyright (C) 2008-2009 FedICT.
  * Copyright (C) 2019 Caixa Magica Software.
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
@@ -53,6 +53,10 @@
 
 #define PIN_MAX_LENGHT 8
 #define PIN_MIN_LENGHT 4
+
+#define OPENGL_SOFTWARE     0
+#define OPENGL_HARDWARE     1
+#define OPENGL_DIRECT3D     2
 
 
 class GUISettings
