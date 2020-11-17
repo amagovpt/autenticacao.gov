@@ -150,11 +150,19 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
             PTEID_ReleaseSDK();
             exit(1);
         }
-
-        args = parser->positionalArguments(); // some option values were interpreted as positional args before. call this again
+        // some option values were interpreted as positional args before. call this again
+        args = parser->positionalArguments(); 
+        // Input Files
         if (args.size() < 2)
         {
             qDebug() << "ERROR: " << mode << ": " << "No input files were provided.";
+            gapi->quitApplication();
+            PTEID_ReleaseSDK();
+            exit(1);
+        }
+        if (mode == "signSimple" && args.size() != 2)
+        {
+            qDebug() << "ERROR: signSimple can only take one file as input.";
             gapi->quitApplication();
             PTEID_ReleaseSDK();
             exit(1);
@@ -172,7 +180,7 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
                 exit(1);
             }
         }
-
+        // Shotcuts and options
         if (mode == "signAdvanced")
         {
             gapi->setShortcutFlag(GAPI::ShortcutIdSignAdvanced);
@@ -180,17 +188,9 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
             gapi->setShortcutReason(parser->value(reasonOption));
             gapi->setShortcutLocation(parser->value(locationOption));
         } else {
-            if (args.size() != 2)
-            {
-                qDebug() << "ERROR: signSimple can only take one file as input.";
-                gapi->quitApplication();
-                PTEID_ReleaseSDK();
-                exit(1);
-            }
-
             gapi->setShortcutFlag(GAPI::ShortcutIdSignSimple);
         }
-
+        // Output dir
         if (parser->isSet(outputOption) && !QFileInfo::exists(parser->value(outputOption)))
         {
             qDebug() << "ERROR: File/folder does not exist for output folder: " << parser->value(outputOption);
