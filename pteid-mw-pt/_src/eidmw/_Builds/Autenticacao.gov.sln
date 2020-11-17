@@ -98,8 +98,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cmdKsp", "..\cmd-ksp\Provid
 		{E27CF8F7-E472-4966-B7D6-448B1427A0D6} = {E27CF8F7-E472-4966-B7D6-448B1427A0D6}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pteidmw-helloworld", "..\..\..\..\..\mw-tools\pteidmw-helloworld\pteidmw-helloworld.vcxproj", "{F4C9EFC1-5643-412E-9E23-8F0078545B01}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -424,20 +422,6 @@ Global
 		{3B1D3E3D-02DB-4A95-A788-1823BABD412B}.Release|x64.Deploy.0 = Release|x64
 		{3B1D3E3D-02DB-4A95-A788-1823BABD412B}.Release|x86.ActiveCfg = Release|Win32
 		{3B1D3E3D-02DB-4A95-A788-1823BABD412B}.Release|x86.Build.0 = Release|Win32
-		{F4C9EFC1-5643-412E-9E23-8F0078545B01}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{F4C9EFC1-5643-412E-9E23-8F0078545B01}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{F4C9EFC1-5643-412E-9E23-8F0078545B01}.Debug|Win32.ActiveCfg = Debug|Win32
-		{F4C9EFC1-5643-412E-9E23-8F0078545B01}.Debug|Win32.Build.0 = Debug|Win32
-		{F4C9EFC1-5643-412E-9E23-8F0078545B01}.Debug|x64.ActiveCfg = Debug|Win32
-		{F4C9EFC1-5643-412E-9E23-8F0078545B01}.Debug|x86.ActiveCfg = Debug|Win32
-		{F4C9EFC1-5643-412E-9E23-8F0078545B01}.Debug|x86.Build.0 = Debug|Win32
-		{F4C9EFC1-5643-412E-9E23-8F0078545B01}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{F4C9EFC1-5643-412E-9E23-8F0078545B01}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{F4C9EFC1-5643-412E-9E23-8F0078545B01}.Release|Win32.ActiveCfg = Release|Win32
-		{F4C9EFC1-5643-412E-9E23-8F0078545B01}.Release|Win32.Build.0 = Release|Win32
-		{F4C9EFC1-5643-412E-9E23-8F0078545B01}.Release|x64.ActiveCfg = Release|Win32
-		{F4C9EFC1-5643-412E-9E23-8F0078545B01}.Release|x86.ActiveCfg = Release|Win32
-		{F4C9EFC1-5643-412E-9E23-8F0078545B01}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
