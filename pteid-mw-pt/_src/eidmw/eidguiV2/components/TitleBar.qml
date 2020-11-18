@@ -60,6 +60,7 @@ Item {
 
     property alias propertyTitleBar: container
     property alias propertyModeText: modeText
+    property alias propertyMouseRegion: mouseRegion
 
     Rectangle {
         id: container
@@ -181,7 +182,8 @@ Item {
             id: mouseRegion
             anchors.left: parent.left
             anchors.right: minimizeRect.left
-            height: parent.height
+            anchors.bottom: parent.bottom
+            height: parent.height - Constants.FRAME_WINDOW_SIZE
 
             property variant clickPos: ""
             property variant appStartPos: ""

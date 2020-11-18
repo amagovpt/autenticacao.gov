@@ -17,6 +17,7 @@ Item {
 
     property alias propertyMouseRegion: mouseRegion
     property string propertySide: ""
+    z: 10 //always on top of any other content
 
     Item{
         id: containerMouseMovCalc
@@ -56,6 +57,14 @@ Item {
                 case "BOTTOM":
                     if(mainWindow.height+delta.y > Constants.SCREEN_MINIMUM_HEIGHT){
                         mainWindow.height = mainWindow.height+delta.y
+                    }else{
+                        mainWindow.height = Constants.SCREEN_MINIMUM_HEIGHT
+                    }
+                    break;
+                case "TOP":
+                    if(mainWindow.height-delta.y > Constants.SCREEN_MINIMUM_HEIGHT){
+                        mainWindow.height = mainWindow.height-delta.y
+                        mainWindow.y =  mainWindow.y+delta.y
                     }else{
                         mainWindow.height = Constants.SCREEN_MINIMUM_HEIGHT
                     }
