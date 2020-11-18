@@ -40,7 +40,7 @@ Item {
                 switch(propertySide) {
                 case "LEFT":
                     if(mainWindow.width-delta.x > Constants.SCREEN_MINIMUM_WIDTH){
-                        console.log(delta)
+                        //console.log(delta)
                         mainWindow.width = mainWindow.width-delta.x
                         mainWindow.x =  mainWindow.x+delta.x
                     }else{
