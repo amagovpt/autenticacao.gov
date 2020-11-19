@@ -14,6 +14,61 @@
 
 class Concurrent {
 public:
+
+    template <typename T>
+    static QFuture<T> run(T(*functionPointer)())
+    {
+        QFuture<T> future = QtConcurrent::run(functionPointer);
+        cleanFutureList();
+        m_futures.append(future);
+        return future;
+    }
+
+    template <typename T, typename Param1, typename Arg1>
+    static QFuture<T> run(T(*functionPointer)(Param1), const Arg1 &arg1)
+    {
+        QFuture<T> future = QtConcurrent::run(functionPointer, arg1);
+        cleanFutureList();
+        m_futures.append(future);
+        return future;
+    }
+
+    template <typename T, typename Param1, typename Arg1, typename Param2, typename Arg2>
+    static QFuture<T> run(T(*functionPointer)(Param1, Param2), const Arg1 &arg1, const Arg2 &arg2)
+    {
+        QFuture<T> future = QtConcurrent::run(functionPointer, arg1, arg2);
+        cleanFutureList();
+        m_futures.append(future);
+        return future;
+    }
+
+    template <typename T, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3>
+    static QFuture<T> run(T(*functionPointer)(Param1, Param2, Param3), const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3)
+    {
+        QFuture<T> future = QtConcurrent::run(functionPointer, arg1, arg2, arg3);
+        cleanFutureList();
+        m_futures.append(future);
+        return future;
+    }
+
+    template <typename T, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3, typename Param4, typename Arg4>
+    static QFuture<T> run(T(*functionPointer)(Param1, Param2, Param3, Param4), const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4)
+    {
+        QFuture<T> future = QtConcurrent::run(functionPointer, arg1, arg2, arg3, arg4);
+        cleanFutureList();
+        m_futures.append(future);
+        return future;
+    }
+
+    template <typename T, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3, typename Param4, typename Arg4, typename Param5, typename Arg5>
+    static QFuture<T> run(T(*functionPointer)(Param1, Param2, Param3, Param4, Param5), const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
+    {
+        QFuture<T> future = QtConcurrent::run(functionPointer, arg1, arg2, arg3, arg4, arg5);
+        cleanFutureList();
+        m_futures.append(future);
+        return future;
+    }
+
     template <typename T, typename Class>
     static QFuture<T> run(Class *object, T(Class::*fn)())
     {
