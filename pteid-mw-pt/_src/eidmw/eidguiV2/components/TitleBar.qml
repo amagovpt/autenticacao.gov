@@ -1,9 +1,9 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
- * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
+ * Copyright (C) 2019-2020 José Pinto - <jose.pinto@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
 
@@ -61,6 +61,10 @@ Item {
     property alias propertyTitleBar: container
     property alias propertyModeText: modeText
     property alias propertyMouseRegion: mouseRegion
+
+    property variant clickPos: ""
+    property variant appStartPos: ""
+    property variant appStartPosBackup: ""
 
     Rectangle {
         id: container
@@ -185,15 +189,17 @@ Item {
             anchors.bottom: parent.bottom
             height: parent.height - Constants.FRAME_WINDOW_SIZE
 
-            property variant clickPos: ""
-            property variant appStartPos: ""
-
             cursorShape: Qt.OpenHandCursor
 
             onPressed: {
                 // fetch global position
                 clickPos = controler.getCursorPos()
                 appStartPos = Qt.point(mainWindow.x, mainWindow.y)
+                if(appStartPos.x != 0 && appStartPos.y != 0)
+                    appStartPosBackup = appStartPos
+            }
+            onDoubleClicked: {
+                getScreenState()
             }
             onPositionChanged: {
                 var newPos = controler.getCursorPos()
@@ -206,9 +212,11 @@ Item {
     function getScreenState(){
         if(mainWindow.visibility === Window.Maximized ){
             console.log("Screen is Maximized"+ mainWindow.visibility)
+            appStartPos = appStartPosBackup
             mainWindow.showNormal()
         }else{
             console.log("Screen is not Maximized" + mainWindow.visibility)
+            appStartPos = Qt.point(0, 0)
             mainWindow.showMaximized()
         }
     }
