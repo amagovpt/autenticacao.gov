@@ -314,6 +314,14 @@ void truncateUtf8String(std::string &utf8String, size_t numberOfChars)
         count += (*ptr++ & 0xC0) != 0x80;
         byteIdx++;
     }
+	unsigned char last = utf8String.at(byteIdx - 1);
+	//Add remaining UTF-8 continuation bytes if last is a leading byte in a multi-byte char
+	if ((last & 0xF0) == 0xF0)
+		byteIdx += 3;
+	else if ((last & 0xE0) == 0xE0)
+		byteIdx += 2;
+	else if ((last & 0xC0) == 0xC0)
+		byteIdx++;
     utf8String = utf8String.substr(0, byteIdx);
 }
 
