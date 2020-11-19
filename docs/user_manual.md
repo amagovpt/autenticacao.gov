@@ -884,6 +884,10 @@ Neste separador é possível apagar os dados de cache armazenados das
 leituras dos cartões e do carregamento de atributos profissionais e
 empresariais.
 
+Existe também a possibilidade de desabilitar a cache dos dados dos cartões, desativando a opção "Utilizar cache de dados do cartão".
+
+![Ilustração: Janela Dados Aplicação](Pictures/Autenticacao.Gov_dados_app.png "Janela Dados Aplicação"){:.center}
+
 #### Atualizações
 
 Nesta janela é possível verificar manualmente se existem atualizações
