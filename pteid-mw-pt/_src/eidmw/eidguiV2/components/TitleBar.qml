@@ -210,8 +210,8 @@ Item {
         }
     }
     function getScreenState(){
-        if(mainWindow.visibility === Window.Maximized ){
-            console.log("Screen is Maximized"+ mainWindow.visibility)
+        if(mainWindow.visibility === Window.Maximized
+            || mainWindow.visibility === Window.FullScreen){
             appStartPos = appStartPosBackup
             mainWindow.showNormal()
         }else{
@@ -222,7 +222,8 @@ Item {
     }
 
     function getFullScreentButtonIcon(){
-        if(mainWindow.visibility === Window.Maximized ){
+        if(mainWindow.visibility === Window.Maximized
+            || mainWindow.visibility === Window.FullScreen){
             return mouseAreaFullScreentButton.containsMouse ?
                     "../images/titleBar/restore_hover.png" :
                     "../images/titleBar/restore.png"
