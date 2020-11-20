@@ -31,6 +31,14 @@
          "last_day":"2021-03-31",
          "text":"Versões da aplicação Autenticação.gov anteriores à versão 3.1.2 devem ser atualizadas devido à revogação de certificados, nomeadamente para conseguir assinar com Chave Móvel Digital e Atributos Profissionais.<br><br>No atual contexto, é recomendado que os cidadãos utilizem os canais digitais para acesso a serviços públicos.<br><br>Vários documentos, entre os quais o Cartão de Cidadão, cujo prazo expirou depois de 24 de fevereiro de 2020, continuam válidos até 31 de março de 2021.",
          "link":"https://eportugal.gov.pt/covid-19"
+      },
+      {
+         "id":"5",
+         "title":"Atributos dos dirigentes públicos, Atualização e Covid-19",
+         "first_day":"2020-11-20",
+         "last_day":"2020-11-23",
+         "text":"<b>Devido a manutenção programada, os atributos dos dirigentes públicos (DRE), estarão indisponíveis entre as 18:00 do dia 20 de novembro e as 22:00 do dia 23 de novembro.</b><br><br>Versões da aplicação Autenticação.gov anteriores à versão 3.1.2 devem ser atualizadas devido à revogação de certificados, nomeadamente para conseguir assinar com Chave Móvel Digital e Atributos Profissionais.<br><br>No atual contexto, é recomendado que os cidadãos utilizem os canais digitais para acesso a serviços públicos.<br><br>Vários documentos, entre os quais o Cartão de Cidadão, cujo prazo expirou depois de 24 de fevereiro de 2020, continuam válidos até 31 de março de 2021.",
+         "link":"https://eportugal.gov.pt/covid-19"
       }
    ]
 }
