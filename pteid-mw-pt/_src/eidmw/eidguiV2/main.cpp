@@ -67,33 +67,34 @@ int parseCommandlineAppArguments(QCommandLineParser *parser, GUISettings *settin
         PTEID_Config::SetTestMode(true);
         sam_server.setString("pki.teste.cartaodecidadao.pt:443");
         settings->setTestMode(true);
-        qDebug() << "Starting App in test mode";
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", 
+            "Starting App in test mode");
     }
 
     if (parser->isSet(versionOption)) {
-        qDebug() << "C++: Command line option to show Version";
         parser->showVersion();
     }
 
     if (parser->isSet(helpOption)) {
-        qDebug() << "C++: Command line option to show Help";
         parser->showHelp();
     }
 
     int tGraphicsAccel = settings->getGraphicsAccel();
     if (parser->isSet(hardwareModeOption))
     {
-        qDebug() << "C++: Command line option to OPENGL_HARDWARE";
         if (tGraphicsAccel != OPENGL_HARDWARE) {
             settings->setAccelGraphics(OPENGL_HARDWARE);
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", 
+                "Command line option set OPENGL_HARDWARE. Current option : %d", tGraphicsAccel);
             return RESTART_EXIT_CODE;
         }
     }
     else if (parser->isSet(softwareModeOption))
     {
-        qDebug() << "C++:  Command line option to OPENGL_SOFTWARE";
         if (tGraphicsAccel != OPENGL_SOFTWARE) {
             settings->setAccelGraphics(OPENGL_SOFTWARE);
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", 
+                "Command line option set OPENGL_SOFTWARE. Current option : %d", tGraphicsAccel);
             return RESTART_EXIT_CODE;
         }
     }
@@ -103,6 +104,8 @@ int parseCommandlineAppArguments(QCommandLineParser *parser, GUISettings *settin
         qDebug() << "C++:  Command line option to OPENGL_DIRECT3D";
         if (tGraphicsAccel != OPENGL_DIRECT3D) {
             settings->setAccelGraphics(OPENGL_DIRECT3D);
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", 
+                "Command line option set OPENGL_DIRECT3D. Current option : %d", tGraphicsAccel);
             return RESTART_EXIT_CODE;
         }
     }
@@ -236,6 +239,8 @@ int main(int argc, char *argv[])
     {
         qDebug() << "C++: Starting App with hardware graphics acceleration";
     }
+
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui", "OpenGL option : %d", tGraphicsAccel);
 
     SingleApplication app(argc, argv);
 
