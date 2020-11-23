@@ -480,6 +480,8 @@ void AppController::flushCache(){
 
 void AppController::doFlushCache(){
     if(removePteidCache()){
+        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
+                "No read permissions: PTEID cache removed success!");
         emit signalRemovePteidCacheSuccess();
     }
 }
