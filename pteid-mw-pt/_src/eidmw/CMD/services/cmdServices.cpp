@@ -337,6 +337,21 @@ int CMDServices::checkGetCertificateWithPinResponse(
         return ERR_GET_CERTIFICATE;
     }
 
+    int statusCode = atoi(response->GetCertificateWithPinResult->Code->c_str());
+    if (IS_SOAP_ERROR(statusCode)) {
+        if (!response->GetCertificateWithPinResult->Message->empty()) {
+            MWLOG_ERR(logBuf, "GetCertificateWithPinResult SOAP Error Code %d: %s", statusCode, response->GetCertificateWithPinResult->Message->c_str());
+        } else {
+            MWLOG_ERR(logBuf, "GetCertificateWithPinResult SOAP Error Code %d", statusCode);
+        }
+
+        if (statusCode == SOAP_ERR_GENERIC 
+            && strcmp(response->GetCertificateWithPinResult->Message->c_str(), "User does not have signature active") == 0) {
+            return ERR_GET_CERTIFICATE;
+        }
+        return statusCode;
+    }
+
     return ERR_NONE;
 }
 
