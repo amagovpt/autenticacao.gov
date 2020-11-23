@@ -372,8 +372,7 @@ Item {
                     id: rectOfficeCheckbox
                     width: parent.width
                     color: "white"
-                    height: checkboxDisable.height + 2
-                            * Constants.SIZE_TEXT_V_SPACE
+                    height: checkboxDisable.height + Constants.SIZE_TEXT_V_SPACE
                     anchors.top: textOfficeTitle.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
@@ -407,8 +406,7 @@ Item {
             Item {
                 id: rectLoadCMDCerts
                 width: parent.width
-                height: textLoadCMDCertsTitle.height + rectLoadCMDCertsSettings.height
-                        + 3*Constants.SIZE_TEXT_V_SPACE
+                height: rectLoadCMDCertsSettings.height + textLoadCMDCertsTitle.height + Constants.SIZE_ROW_V_SPACE + Constants.SIZE_TEXT_V_SPACE
 
                 anchors.top: rectOffice.bottom // in Windows, rectOffice is visible
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
@@ -457,8 +455,8 @@ Item {
                 Rectangle {
                     id: rectLoadCMDCertsSettings
                     width: parent.width
-                    height: rectLoadCMDCertsText.height + rectLoadCMDCertsButton.height + 3
-                                * Constants.SIZE_TEXT_V_SPACE
+                    height: rectLoadCMDCertsText.height + rectLoadCMDCertsRemember.height +
+                            linkRegisterCMDCert.height + 4 * Constants.SIZE_TEXT_V_SPACE
                     anchors.top: textLoadCMDCertsTitle.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                     Item {
@@ -482,56 +480,49 @@ Item {
                             Keys.onPressed: {
                                 handleKeyPressed(event.key, loadCMDCertsText)
                             }
-                            KeyNavigation.tab: loadCMDCertsButton
-                            KeyNavigation.down: loadCMDCertsButton
-                            KeyNavigation.right: loadCMDCertsButton
+                            KeyNavigation.tab: linkRegisterCMDCert
+                            KeyNavigation.down: linkRegisterCMDCert
+                            KeyNavigation.right: linkRegisterCMDCert
                             KeyNavigation.backtab: textLoadCMDCertsTitle
                             KeyNavigation.up: textLoadCMDCertsTitle
                         }
                     }
-                    Item {
-                        id: rectLoadCMDCertsButton
-                        width: parent.width * 0.3
-                        x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                        height: loadCMDCertsButton.height
+                    Components.Link {
+                        id: linkRegisterCMDCert
                         anchors.top: rectLoadCMDCertsText.bottom
-                        anchors.leftMargin: 100
-                        Button {
-                            id: loadCMDCertsButton
-                            text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_BUTTON") + controler.autoTr
-                            height: Constants.HEIGHT_BOTTOM_COMPONENT
-                            width: Constants.WIDTH_BUTTON
-                            highlighted: activeFocus
-                            font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            font.capitalization: Font.MixedCase
-                            font.bold: activeFocus
-                            anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                            Accessible.role: Accessible.CheckBox
-                            Accessible.name: text
-                            Keys.onPressed: {
-                                handleKeyPressed(event.key, loadCMDCertsButton)
-                            }
-                            KeyNavigation.tab: checkboxCMDRegRemember
-                            KeyNavigation.down: checkboxCMDRegRemember
-                            KeyNavigation.right: checkboxCMDRegRemember
-                            KeyNavigation.backtab: loadCMDCertsText
-                            KeyNavigation.up: loadCMDCertsText
+                        x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        width: parent.width
+                        propertyText.text: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") 
+                            + "<a href='https://amagovpt.github.io/autenticacao.gov/user_manual.html#assinatura-digital-com-chave-m%C3%B3vel-digital'>" 
+                            + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
+                        propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#assinatura-digital-com-chave-m%C3%B3vel-digital'
+                        propertyText.font.capitalization: Font.MixedCase
+                        propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+                        propertyText.font.bold: activeFocus
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, linkRegisterCMDCert)
                         }
+                        KeyNavigation.tab: checkboxCMDRegRemember
+                        KeyNavigation.down: checkboxCMDRegRemember
+                        KeyNavigation.right: checkboxCMDRegRemember
+                        KeyNavigation.left: loadCMDCertsText
+                        KeyNavigation.backtab: loadCMDCertsText
+                        KeyNavigation.up: textRootCACertDesc
                     }
                     Item {
                         id: rectLoadCMDCertsRemember
-                        width: parent.width * 0.7 - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
                         height: loadCMDCertsButton.height
-                        anchors.top: rectLoadCMDCertsText.bottom
+                        anchors.top: linkRegisterCMDCert.bottom
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         anchors.right: parent.right
+                        anchors.left: parent.left
 
                         CheckBox {
                             id: checkboxCMDRegRemember
                             text: qsTranslate(
                                       "PageDefinitionsSignSettings",
                                       "STR_CMD_REGISTER_REMEMBER") + controler.autoTr
-                            height: 25
+                            height: Constants.HEIGHT_BOTTOM_COMPONENT
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
@@ -542,22 +533,47 @@ Item {
                             Keys.onPressed: {
                                 handleKeyPressed(event.key, checkboxCMDRegRemember)
                             }
-                            KeyNavigation.tab: textRootCACertTitle
-                            KeyNavigation.down: textRootCACertTitle
-                            KeyNavigation.right: textRootCACertTitle
-                            KeyNavigation.backtab: loadCMDCertsButton
-                            KeyNavigation.up: loadCMDCertsButton
+                            KeyNavigation.tab: loadCMDCertsButton
+                            KeyNavigation.down: loadCMDCertsButton
+                            KeyNavigation.right: loadCMDCertsButton
+                            KeyNavigation.backtab: linkRegisterCMDCert
+                            KeyNavigation.up: linkRegisterCMDCert
                             Keys.onEnterPressed: toggleSwitch(checkboxDisable)
                             Keys.onReturnPressed: toggleSwitch(checkboxDisable)
                         }
                     }
+                    Button {
+                        id: loadCMDCertsButton
+                        text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_BUTTON") + controler.autoTr
+                        height: Constants.HEIGHT_BOTTOM_COMPONENT
+                        width: Constants.WIDTH_BUTTON
+                        anchors.top: linkRegisterCMDCert.bottom
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                        anchors.right: parent.right
+                        anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE 
+                        highlighted: activeFocus
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, loadCMDCertsButton)
+                        }
+                        KeyNavigation.tab: textRootCACertTitle
+                        KeyNavigation.down: textRootCACertTitle
+                        KeyNavigation.right: textRootCACertTitle
+                        KeyNavigation.backtab: checkboxCMDRegRemember
+                        KeyNavigation.up: checkboxCMDRegRemember
+                    }
                 }
             }
 
-            Item{
+            Item {
                 id: rectAddRootCACert
                 width: parent.width
-                height: 6*Constants.SIZE_TEXT_FIELD + 4*Constants.SIZE_ROW_V_SPACE
+                height: rowAddRootCACert.height + textRootCACertTitle.height + Constants.SIZE_ROW_V_SPACE
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 anchors.rightMargin: Constants.SIZE_ROW_H_SPACE
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
@@ -582,8 +598,8 @@ Item {
                     KeyNavigation.tab: textRootCACertDesc
                     KeyNavigation.down: textRootCACertDesc
                     KeyNavigation.right: textRootCACertDesc
-                    KeyNavigation.backtab: checkboxCMDRegRemember
-                    KeyNavigation.up: checkboxCMDRegRemember
+                    KeyNavigation.backtab: loadCMDCertsButton
+                    KeyNavigation.up: loadCMDCertsButton
                 }
                 DropShadow {
                     anchors.fill: rowAddRootCACert
@@ -607,12 +623,12 @@ Item {
                 Rectangle {
                     id: rowAddRootCACert
                     width: parent.width
-                    height: 6*Constants.SIZE_TEXT_FIELD + 3*Constants.SIZE_ROW_V_SPACE
+                    height: rectRootCACert.height + rectInstallRootCACert.height + Constants.SIZE_ROW_V_SPACE + Constants.SIZE_TEXT_V_SPACE
                     anchors.top: textRootCACertTitle.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                    Rectangle {
+                    Item {
                         id: rectRootCACert
-                        height: 4*Constants.SIZE_TEXT_FIELD
+                        height: childrenRect.height
                         anchors.top: rowAddRootCACert.top
                         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                         anchors.left: parent.left
@@ -663,18 +679,18 @@ Item {
                         }
                     }
                 
-                    Rectangle {
+                    Item {
                         id: rectInstallRootCACert
-                        height: 2*Constants.SIZE_TEXT_FIELD
+                        height: childrenRect.height
                         anchors.top: rectRootCACert.bottom
-                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE 
                         anchors.left: parent.left
                         anchors.right: parent.right
                         anchors.leftMargin: Constants.SIZE_TEXT_FIELD_H_SPACE 
                         anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE 
 
-                        Rectangle {
+                        Item {
                             id: rectIsCertInstalled
+                            height: childrenRect.height
                             anchors.left: parent.left
                             anchors.right: parent.right
                             Text {
@@ -704,7 +720,7 @@ Item {
                                 enabled: !propertyIsRootCaCertInstalled
                                 text: qsTranslate("PageDefinitionsApp","STR_INSTALL_CERT")
                                 anchors.right: parent.right
-                                width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE) * 0.50
+                                width: Constants.WIDTH_BUTTON
                                 height: Constants.HEIGHT_BOTTOM_COMPONENT
                                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                                 font.family: lato.name

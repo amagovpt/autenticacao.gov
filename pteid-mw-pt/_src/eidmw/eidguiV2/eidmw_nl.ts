@@ -1176,7 +1176,7 @@
     </message>
     <message>
         <source>STR_CMD_REGISTER_REMEMBER</source>
-        <translation>Não voltar a mostrar janela para registar no arranque</translation>
+        <translation>Não mostrar janela para registar no arranque</translation>
     </message>
 </context>
 <context>

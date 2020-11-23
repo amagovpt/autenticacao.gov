@@ -1178,7 +1178,7 @@
     </message>
     <message>
         <source>STR_CMD_REGISTER_REMEMBER</source>
-        <translation>Do not show window to register at startup again</translation>
+        <translation>Do not show window to register at startup</translation>
     </message>
 </context>
 <context>
