@@ -906,10 +906,6 @@
         <translation>Graphic acceleration</translation>
     </message>
     <message>
-        <source>STR_ACCEL_ENABLE</source>
-        <translation type="vanished">Enable graphic acceleration</translation>
-    </message>
-    <message>
         <source>STR_CERTIFICATES_TITLE</source>
         <translation>Certificates</translation>
     </message>
@@ -1016,6 +1012,34 @@
     <message>
         <source>STR_SOFTWARE_DIRECT3D</source>
         <translation>Software (Direct3D)</translation>
+    </message>
+    <message>
+        <source>STR_ROOT_CA_CERT_INSTALL_TITLE</source>
+        <translation>New State Root Certificate</translation>
+    </message>
+    <message>
+        <source>STR_ROOT_CA_CERT_INSTALL_DESC</source>
+        <translation>Some applications require the installation of the root certificate of the new certificate chain to correctly generate or validate signatures.</translation>
+    </message>
+    <message>
+        <source>STR_CERT_ALREADY_INSTALLED</source>
+        <translation>The certificate is already installed.</translation>
+    </message>
+    <message>
+        <source>STR_CERT_NOT_INSTALLED</source>
+        <translation>The certificate is not installed.</translation>
+    </message>
+    <message>
+        <source>STR_INSTALL_CERT</source>
+        <translation>Install certificate</translation>
+    </message>
+    <message>
+        <source>STR_ROOT_CERT_INSTALLED_SUCCESS</source>
+        <translation>The certificate was installed successfully.</translation>
+    </message>
+    <message>
+        <source>STR_ROOT_CERT_INSTALLED_ERROR</source>
+        <translation>It was not possible to install the certificate.</translation>
     </message>
 </context>
 <context>
@@ -1154,7 +1178,7 @@
     </message>
     <message>
         <source>STR_CMD_REGISTER_REMEMBER</source>
-        <translation>Do not show window to register at startup again</translation>
+        <translation>Do not show window to register at startup</translation>
     </message>
 </context>
 <context>

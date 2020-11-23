@@ -874,6 +874,8 @@ aplicações do Microsoft Office.
 
 - **Chave Móvel Digital (Windows):** Permite registar o certificado associado à sua conta da Chave Móvel Digital. Para saber mais consulte a secção [Assinatura digital com Chave Móvel Digital](#assinatura-digital-com-chave-m%c3%b3vel-digital).
 
+- **Novo certificado raiz do Estado (Windows):** Permite instalar o certificado raiz da nova cadeia de certificados do cartão de cidadão na *Store* de certificados raiz confiáveis do Windows. Para saber mais consulte a secção [Problemas com a nova cadeia de confiança](#problemas-com-a-nova-cadeia-de-confiança).
+
 A imagem seguinte permite visualizar o menu de configurações de assinaturas.
 
 ![Ilustração: Janela de configurações de assinaturas](Pictures/Autenticacao.Gov_configuracao_assinaturas.png "Janela de configurações de assinaturas"){:.center}
@@ -1388,11 +1390,11 @@ Uma causa que pode causar problemas está relacionado com a placa gráfica do co
 
 ## Problemas com a nova cadeia de confiança
 
-O Sistema de Certificação Eletrónica do Estado colocou em produção um novo certificado raiz do Estado. Em consequência, os certificados do Cartão de Cidadão passaram a ser emitidos, desde 4 de abril de 2020, sob a nova cadeia de confiança do Estado Português. O certificado raiz da nova cadeia, no caso de não ser disponibilizado pelo sistema operativo, deverá ser instalado manualmente para que os certificados dos cartões emitidos após essa data sejam automaticamente confiáveis pelo sistema operativo Windows, assim como por algumas aplicações que não utilizam a lista de serviços confiáveis publicada pela União Europeia.
+O Sistema de Certificação Eletrónica do Estado colocou em produção um novo certificado raiz do Estado. Em consequência, os certificados do Cartão de Cidadão passaram a ser emitidos, desde 4 de abril de 2020, sob a nova cadeia de confiança do Estado Português. O certificado raiz da nova cadeia, no caso de não ser disponibilizado pelo sistema operativo, deverá ser instalado para que os certificados dos cartões emitidos após essa data sejam automaticamente confiáveis pelo sistema operativo Windows, assim como por algumas aplicações que não utilizam a lista de serviços confiáveis publicada pela União Europeia.
 
-No seguinte link poderá consultar o manual de instalação da cadeia do SCEE. Deverá seguir as instruções específicas para o “Certificado da Entidade de Certificação Eletrónica do Estado - ECRaizEstado 002” (passos 4.1 a 4.10 do manual).
+Pode instalar o certificado na *Store* do Windows através da aplicação do Cartão de Cidadão no submenu [Configuração de assinaturas](#configuração-de-assinaturas). Para tal, clique no botão **Instalar certificado** na secção **Novo certificado raiz do Estado**. O certificado será adicionado à *Store* “Trusted Root Certification Authorities” associada ao “Current User”.
 
-[https://www.ecce.gov.pt/certificados/](https://www.ecce.gov.pt/certificados/)
+Alternativamente, pode instalar o certificado manualmente seguindo as instruções no manual de instalação da cadeia do SCEE disponível em [https://www.ecce.gov.pt/certificados/](https://www.ecce.gov.pt/certificados/). Deverá seguir as instruções específicas para o “Certificado da Entidade de Certificação Eletrónica do Estado - ECRaizEstado 002” (passos 4.1 a 4.10 do manual).
 
 ## Problemas na validação das assinaturas 
 

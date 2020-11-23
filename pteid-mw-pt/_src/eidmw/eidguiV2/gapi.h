@@ -410,6 +410,8 @@ public slots:
 #ifdef WIN32
     QVariantList getRegisteredCmdPhoneNumbers();
 #endif
+    bool areRootCACertsInstalled();
+    void installRootCACert();
 
     void cancelDownload();
     void httpFinished();
@@ -452,6 +454,7 @@ signals:
     void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage, bool success);
     void signalCertificatesChanged(const QVariantMap certificatesMap);
     void signalCertificatesFail();
+    void signalInstalledRootCACert(bool successful);
     void signalShowCardActivation(QString statusMessage);
     void signalTestPinFinished(int triesLeft, int pin);
     void signalModifyPinFinished(int triesLeft, int pin);
@@ -530,6 +533,7 @@ private:
     void initScapAppId(void);
     void doRegisterCMDCertOpen(QString mobileNumber, QString pin);
     void doRegisterCMDCertClose(QString otp);
+    void doInstallRootCACert();
     void drawSectionHeader(QPainter &painter, double pos_x, double pos_y, QString section_name);
     void drawPrintingDate(QPainter &painter, QString printing_date);
     double checkNewPageAndPrint(QPrinter &printer, QPainter &painter, double current_y, double remaining_height, double max_height, bool print_date = false, QString date_label = "");

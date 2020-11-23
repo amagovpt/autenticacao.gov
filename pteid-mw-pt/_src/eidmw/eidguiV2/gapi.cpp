@@ -3426,6 +3426,28 @@ void GAPI::doRegisterCMDCertClose(QString otp) {
 #endif
 }
 
+bool GAPI::areRootCACertsInstalled() {
+#ifdef WIN32
+    return Concurrent::run(&CERTIFICATES::IsNewRootCACertInstalled);
+#else
+    return false;
+#endif
+}
+
+void GAPI::installRootCACert() {
+#ifdef WIN32
+    Concurrent::run(this, &GAPI::doInstallRootCACert);
+#endif
+}
+
+
+void GAPI::doInstallRootCACert() {
+#ifdef WIN32
+    bool installed = m_Certificates.InstallNewRootCa();
+    emit signalInstalledRootCACert(installed);
+#endif
+}
+
 void GAPI::quitApplication(bool restart) {
     try
     {

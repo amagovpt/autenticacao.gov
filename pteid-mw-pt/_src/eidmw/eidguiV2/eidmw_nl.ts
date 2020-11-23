@@ -904,10 +904,6 @@
         <translation>Aceleração gráfica</translation>
     </message>
     <message>
-        <source>STR_ACCEL_ENABLE</source>
-        <translation type="vanished">Activar aceleração gráfica</translation>
-    </message>
-    <message>
         <source>STR_CERTIFICATES_TITLE</source>
         <translation>Certificados</translation>
     </message>
@@ -1014,6 +1010,34 @@
     <message>
         <source>STR_SOFTWARE_DIRECT3D</source>
         <translation>Software (Direct3D)</translation>
+    </message>
+    <message>
+        <source>STR_ROOT_CA_CERT_INSTALL_TITLE</source>
+        <translation>Novo certificado raiz do Estado</translation>
+    </message>
+    <message>
+        <source>STR_ROOT_CA_CERT_INSTALL_DESC</source>
+        <translation>Algumas aplicações requerem a instalação do certificado raíz da nova cadeia de certificados para gerarem ou validarem assinaturas corretamente.</translation>
+    </message>
+    <message>
+        <source>STR_CERT_ALREADY_INSTALLED</source>
+        <translation>O certificado já está instalado.</translation>
+    </message>
+    <message>
+        <source>STR_CERT_NOT_INSTALLED</source>
+        <translation>O certificado não está instalado.</translation>
+    </message>
+    <message>
+        <source>STR_INSTALL_CERT</source>
+        <translation>Instalar certificado</translation>
+    </message>
+    <message>
+        <source>STR_ROOT_CERT_INSTALLED_SUCCESS</source>
+        <translation>O certificado foi instalado com sucesso.</translation>
+    </message>
+    <message>
+        <source>STR_ROOT_CERT_INSTALLED_ERROR</source>
+        <translation>Não foi possível instalar o certificado.</translation>
     </message>
 </context>
 <context>
@@ -1152,7 +1176,7 @@
     </message>
     <message>
         <source>STR_CMD_REGISTER_REMEMBER</source>
-        <translation>Não voltar a mostrar janela para registar no arranque</translation>
+        <translation>Não mostrar janela para registar no arranque</translation>
     </message>
 </context>
 <context>
