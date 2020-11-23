@@ -43,15 +43,15 @@ Window {
      }
     
     onWidthChanged: {
-        console.log("Resizing app width: " + width + "height" + height)
+        //console.log("Resizing app width: " + width + "height" + height)
         mainFormID.propertyMainMenuView.width = Functions.getMainMenuWidth(width)
         mainFormID.propertySubMenuView.width = Functions.getSubMenuWidth(width)
         mainFormID.propertyContentPagesView.width = Functions.getContentPagesMenuWidth(width)
     }
 
     onHeightChanged: {
-        console.log("Resizing app height: " + height)
-        console.log("Position: (" + x + "," + y + ")")
+        //console.log("Resizing app height: " + height)
+        //console.log("Position: (" + x + "," + y + ")")
     }
     onXChanged: {
     }

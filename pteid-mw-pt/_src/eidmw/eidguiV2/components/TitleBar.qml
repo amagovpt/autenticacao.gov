@@ -1,9 +1,9 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
- * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
+ * Copyright (C) 2019-2020 José Pinto - <jose.pinto@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
 
@@ -60,6 +60,11 @@ Item {
 
     property alias propertyTitleBar: container
     property alias propertyModeText: modeText
+    property alias propertyMouseRegion: mouseRegion
+
+    property variant clickPos: ""
+    property variant appStartPos: ""
+    property variant appStartPosBackup: ""
 
     Rectangle {
         id: container
@@ -98,20 +103,24 @@ Item {
             }
         }
 
-        Image {
-            id: minimizeButton
-            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
-            height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
-            fillMode: Image.PreserveAspectFit
-            anchors {
-                right: fullScreentButton.left;
-                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE;
-                rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
-                verticalCenter: parent.verticalCenter
+        Item {
+            id: minimizeRect
+            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR + Constants.TITLE_BAR_H_ICON_SPACE
+            height: parent.height
+            anchors.right: fullScreenRect.left
+            Image {
+                id: minimizeButton
+                width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+                height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+                fillMode: Image.PreserveAspectFit
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    verticalCenter: parent.verticalCenter
+                }
+                source: mouseAreaMinimizeButton.containsMouse ?
+                            "../images/titleBar/minimize_hover.png" :
+                            "../images/titleBar/minimize.png"
             }
-            source: mouseAreaMinimizeButton.containsMouse ?
-                        "../images/titleBar/minimize_hover.png" :
-                        "../images/titleBar/minimize.png"
             MouseArea {
                 id: mouseAreaMinimizeButton
                 anchors.fill: parent
@@ -123,18 +132,22 @@ Item {
                 }
             }
         }
-        Image {
-            id: fullScreentButton
-            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
-            height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
-            fillMode: Image.PreserveAspectFit
-            anchors {
-                right: quitButton.left;
-                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE;
-                rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
-                verticalCenter: parent.verticalCenter
+        Item {
+            id: fullScreenRect
+            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR + Constants.TITLE_BAR_H_ICON_SPACE
+            height: parent.height
+            anchors.right: quitRect.left
+            Image {
+                id: fullScreentButton
+                width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+                height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+                fillMode: Image.PreserveAspectFit
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    verticalCenter: parent.verticalCenter
+                }
+                source: getFullScreentButtonIcon()
             }
-            source: getFullScreentButtonIcon() 
             MouseArea {
                 id: mouseAreaFullScreentButton
                 anchors.fill: parent
@@ -142,20 +155,24 @@ Item {
                 onClicked: getScreenState()
             }
         }
-        Image {
-            id: quitButton
-            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
-            height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
-            fillMode: Image.PreserveAspectFit
-            anchors {
-                right: parent.right;
-                leftMargin: Constants.TITLE_BAR_H_ICON_SPACE;
-                rightMargin: Constants.TITLE_BAR_H_ICON_SPACE
-                verticalCenter: parent.verticalCenter
+        Item {
+            id: quitRect
+            width: Constants.SIZE_IMAGE_ICON_TITLE_BAR + Constants.TITLE_BAR_H_ICON_SPACE
+            height: parent.height
+            anchors.right: parent.right
+            Image {
+                id: quitButton
+                width: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+                height: Constants.SIZE_IMAGE_ICON_TITLE_BAR
+                fillMode: Image.PreserveAspectFit
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    verticalCenter: parent.verticalCenter
+                }
+                source: mouseAreaQuitButton.containsMouse ?
+                            "../images/titleBar/quit_hover.png" :
+                            "../images/titleBar/quit.png"
             }
-            source: mouseAreaQuitButton.containsMouse ?
-                        "../images/titleBar/quit_hover.png" :
-                        "../images/titleBar/quit.png"
             MouseArea {
                 id: mouseAreaQuitButton
                 anchors.fill: parent
@@ -168,11 +185,9 @@ Item {
         MouseArea {
             id: mouseRegion
             anchors.left: parent.left
-            anchors.right: minimizeButton.left
-            height: parent.height
-
-            property variant clickPos: ""
-            property variant appStartPos: ""
+            anchors.right: minimizeRect.left
+            anchors.bottom: parent.bottom
+            height: parent.height - Constants.FRAME_WINDOW_SIZE
 
             cursorShape: Qt.OpenHandCursor
 
@@ -180,6 +195,11 @@ Item {
                 // fetch global position
                 clickPos = controler.getCursorPos()
                 appStartPos = Qt.point(mainWindow.x, mainWindow.y)
+                if(appStartPos.x != 0 && appStartPos.y != 0)
+                    appStartPosBackup = appStartPos
+            }
+            onDoubleClicked: {
+                getScreenState()
             }
             onPositionChanged: {
                 var newPos = controler.getCursorPos()
@@ -190,17 +210,20 @@ Item {
         }
     }
     function getScreenState(){
-        if(mainWindow.visibility === Window.Maximized ){
-            console.log("Screen is Maximized"+ mainWindow.visibility)
+        if(mainWindow.visibility === Window.Maximized
+            || mainWindow.visibility === Window.FullScreen){
+            appStartPos = appStartPosBackup
             mainWindow.showNormal()
         }else{
             console.log("Screen is not Maximized" + mainWindow.visibility)
+            appStartPos = Qt.point(0, 0)
             mainWindow.showMaximized()
         }
     }
 
     function getFullScreentButtonIcon(){
-        if(mainWindow.visibility === Window.Maximized ){
+        if(mainWindow.visibility === Window.Maximized
+            || mainWindow.visibility === Window.FullScreen){
             return mouseAreaFullScreentButton.containsMouse ?
                     "../images/titleBar/restore_hover.png" :
                     "../images/titleBar/restore.png"

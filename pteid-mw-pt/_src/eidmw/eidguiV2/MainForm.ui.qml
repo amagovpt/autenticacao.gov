@@ -58,9 +58,8 @@ Rectangle {
     /* Frame Window */
     Components.FrameWindow {
         id: leftFrameBar;
-        z: 0
         width: Constants.FRAME_WINDOW_SIZE;
-        height: mainView.height;
+        height: mainView.height + Constants.TITLE_BAR_SIZE
         anchors.left:  mainView.left
         propertyMouseRegion.cursorShape: Qt.SizeHorCursor
         propertySide: "LEFT"
@@ -68,21 +67,29 @@ Rectangle {
     /* Frame Window */
     Components.FrameWindow {
         id: rightFrameBar;
-        z: 0
         width: Constants.FRAME_WINDOW_SIZE;
-        height: mainView.height;
+        height: mainView.height
         anchors.right: mainView.right
+        anchors.bottom: mainView.bottom
         propertyMouseRegion.cursorShape: Qt.SizeHorCursor
         propertySide: "RIGHT"
     }
     /* Frame Window */
     Components.FrameWindow {
         id: bottomFrameBar;
-        z: 0
         width: parent.width;
         height: Constants.FRAME_WINDOW_SIZE;
         anchors.bottom: mainView.bottom
         propertySide: "BOTTOM"
+    }
+    /* Frame Window */
+    Components.FrameWindow {
+        id: topFrameBar
+        width: titleBar.propertyMouseRegion.width
+        height: Constants.FRAME_WINDOW_SIZE
+        anchors.top: titleBar.top
+        anchors.left: parent.left
+        propertySide: "TOP"
     }
 
     /* Main View */

@@ -35,10 +35,10 @@ var SCREEN_MINIMUM_HEIGHT = 576;
 
 // Title bar
 var TITLE_BAR_SIZE = 25
-var TITLE_BAR_H_ICON_SPACE = 15
+var TITLE_BAR_H_ICON_SPACE = 20
 
 // Frame detection
-var FRAME_WINDOW_SIZE = 10
+var FRAME_WINDOW_SIZE = 4
 
 // Opacity Main vs Popups Focus
 var OPACITY_POPUP_FOCUS = 0.5
