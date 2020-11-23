@@ -628,7 +628,7 @@ Os ficheiros a assinar podem ser selecionados arrastando-os para a área de pré
     - **Tipo:** Tipo de assinatura – campo obrigatório – permite selecionar assinatura de ficheiros:
 
         - **PDF:** PAdES (*PDF Advanced Electronic Signatures*). Disponível para assinaturas com **Cartão de Cidadão** e **Chave Móvel Digital**.
-        - **Outros ficheiros:** Pacote ASiC com *XML Advanced Electronic Signatures* (XadES). Disponível para assinaturas com **Cartão de Cidadão**.
+        - **Outros ficheiros:** Pacote ASiC com *XML Advanced Electronic Signatures* (XAdES). Disponível para assinaturas com **Cartão de Cidadão**. Este pacote é um arquivo ZIP criado de acordo com a especificação ASiC (Associated Signature Container) desenvolvido pela ETSI (European Telecommunications Standards Institute) e segue os padrões da UE. Este arquivo contêm a informação assinada (ficheiros originais) e a respetiva assinatura no formato XAdES.
 
     - **Motivo:** Motivo da assinatura – campo opcional – permite ao signatário indicar o motivo da sua assinatura. Disponível para assinaturas do tipo **PDF**.
 
