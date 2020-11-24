@@ -6,7 +6,7 @@
   <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\VC9\Release\ ?>
   <Fragment>
     <DirectoryRef Id="APPLICATIONFOLDER">
-      <Component Id="PteidGuiShortcutOpenGL" Guid="{737097CD-3807-40DF-A0A7-9842516BA37B}">
+      <Component Id="PteidGuiShortcutOpenGL" Guid="{737097CD-3807-40DF-A0A7-9842516BA37B}" KeyPath="yes">
         <Shortcut Id="eidguiV2ShortcutDirect3d"
             Name="Autenticação.Gov Direct3d"
             Description="!(loc.PteidGuiDescr)"

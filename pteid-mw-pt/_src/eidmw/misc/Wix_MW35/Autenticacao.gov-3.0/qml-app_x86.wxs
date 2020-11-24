@@ -4,9 +4,9 @@
   <?define var.QMLDIROUTPUT=..\..\..\_Binaries35\Win32\VC9\Release\qml-app\ ?>
   <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\VC9\Release\ ?>
   <Fragment>
-    <DirectoryRef Id="APPLICATIONFOLDER"></DirectoryRef>
+    <DirectoryRef Id="APPLICATIONFOLDER">
 
-    <Component Id="PteidGuiShortcutOpenGL" Guid="{737097CD-3807-40DF-A0A7-9842516BA37B}">
+    <Component Id="PteidGuiShortcutOpenGL" Guid="{737097CD-3807-40DF-A0A7-9842516BA37B}" KeyPath="yes">
       <Shortcut Id="eidguiV2ShortcutDirect3d"
           Name="Autenticação.Gov Direct3d"
           Description="!(loc.PteidGuiDescr)"
@@ -28,6 +28,7 @@
           WorkingDirectory="EIDGUIV2DIR"
           Arguments="-c"/>
     </Component>
+    </DirectoryRef>
     
     <DirectoryRef Id="ApplicationProgramsFolder">
       <Component Id="PteidGuiShortcut" Guid="{CBD0F388-EAE5-4FA1-8C38-EC223928FF13}">
