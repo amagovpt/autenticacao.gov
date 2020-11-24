@@ -65,6 +65,7 @@
   - [Impossibilidade de assinatura em *Adobe Reader*, *Microsoft Office* e *LibreOffice* com Cartão de Cidadão](#impossibilidade-de-assinatura-em-adobe-reader-microsoft-office-e-libreoffice-com-cartão-de-cidadão)
   - [O leitor de cartões está instalado mas não é detetado pela aplicação do Cartão de Cidadão](#o-leitor-de-cartões-está-instalado-mas-não-é-detetado-pela-aplicação-do-cartão-de-cidadão)
   - [Não são detetados quaisquer certificados durante a tentativa de assinatura na suite *LibreOffice / Apache OpenOffice*](#não-são-detetados-quaisquer-certificados-durante-a-tentativa-de-assinatura-na-suite-libreoffice--apache-openoffice)
+  - [Problemas gráficos na aplicação](#problemas-gráficos-na-aplicação)
   - [Problemas com placas gráficas integradas](#problemas-com-placas-gráficas-integradas)
   - [Aplicação não arranca](#aplicação-não-arranca)
   - [Problemas com a nova cadeia de confiança](#problemas-com-a-nova-cadeia-de-confiança)
@@ -823,7 +824,7 @@ suporte na resolução do problema.
     Em ambiente empresariais deve alterar a seguinte configuração conforme descrito no capítulo [Instruções de configuração em ambientes empresariais](#instruções-de-configuração-em-ambientes-empresariais).
 
 - **Aceleração gráfica**: Permite ativar escolher o modo de renderização gráfica da
-aplicação. A opção *"Hardware (Placa gráfica)"* deverá oferecer um melhor desempenho, mas em caso de problemas poderá ser necessário configurar uma opção alternativa (ver secção [Problemas com placas gráficas integradas](#problemas-com-placas-gráficas-integradas).)
+aplicação. A opção *"Hardware (Placa gráfica)"* deverá oferecer um melhor desempenho, mas em caso de problemas poderá ser necessário configurar uma opção alternativa (ver secção [Problemas gráficos na aplicação](#problemas-gráficos-na-aplicação).)
 
 - **Configurações de rede:** Opções relativas à configuração de servidor
 de proxy. Em redes onde o acesso à Internet só é possível através de
@@ -1363,30 +1364,42 @@ Para mais informações consultar a página de ajuda:
 
 -   <https://help.libreoffice.org/Common/Applying_Digital_Signatures/pt>
 
-## Problemas com placas gráficas integradas
+## Problemas gráficos na aplicação
 
 No caso de existirem problemas gráficos, recomenda-se alterar o modo de renderização gráfica. Pode fazê-lo na secção Aceleração gráfica do submenu [Configuração da aplicação](#configuração-da-aplicação).
 
-**No caso da aplicação não arrancar**, é possivel alterar essa opção usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
+**No caso da aplicação não arrancar**, é possível alterar essa opção de duas formas distintas:
 
-- Em **Windows**, a chave de registo **HKEY\_CURRENT\_USER\\Software\\PTEID\\configuretool\\graphics\_accelaration**;
+1. [Exclusivo para Windows a partir da versão 3.4.0 da aplicação] Na pasta da instalação da aplicação (que por defeito é "C:\Program Files\Portugal Identity Card") existe três atalhos que ao clicar vai abrir a aplicação alterando o modo de renderização gráfica. Os atalhos são ícones clicáveis com o símbolo da aplicação e têm os seguintes nomes:
 
-- Em **Linux**, a chave com nome "graphics_accelaration" na secção “configuretool” do ficheiro **$HOME/.config/pteid.conf**;
+    - **Autenticação.Gov Software** para renderização por Software (OpenGL);
+    - **Autenticação.Gov Hardware** para renderização por Hardware (Placa gráfica);
+    - **Autenticação.Gov Direct3d** para renderização por Software (ANGLE, que emula o OpenGL usando Direct3D);
 
-- Em **MacOS**, a chave com nome "graphics_accelaration" na secção “configuretool” do ficheiro **$HOME/Library/Preferences/pteid.conf**.
+    No caso de existirem problemas gráficos, ou a aplicação não arrancar, deverá experimentar as três opções e ver qual tem melhor resultado. A última opção escolhida, fica guardada e poderá voltar a arrancar a aplicação clicando no ícone no ambiente de trabalho ou no menu iniciar.
 
-Os valores que a chave pode tomar são:
-- 0 para renderização por Software (OpenGL);
-- 1 para aceleração gráfica (Placa gráfica);
-- 2 (Exclusivo para Windows) para renderização por Software (ANGLE, que emula o OpenGL usando Direct3D).
+2. Ou usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
+
+   - Em **Windows**, a chave de registo **HKEY\_CURRENT\_USER\\Software\\PTEID\\configuretool\\graphics\_accelaration**;
+   - Em **Linux**, a chave com nome "graphics_accelaration" na secção “configuretool” do ficheiro **$HOME/.config/pteid.conf**;
+   - Em **MacOS**, a chave com nome "graphics_accelaration" na secção “configuretool” do ficheiro **$HOME/Library/Preferences/pteid.conf**.
+
+   Os valores que a chave pode tomar são:
+   - 0 para renderização por Software (OpenGL);
+   - 1 para renderização por Hardware (Placa gráfica);
+   - 2 (Exclusivo para Windows) para renderização por Software (ANGLE, que emula o OpenGL usando Direct3D).
 
 Em ambiente empresariais deve alterar a seguinte configuração conforme descrito no capítulo [Instruções de configuração em ambientes empresariais](#instruções-de-configuração-em-ambientes-empresariais).
+
+## Problemas com placas gráficas integradas
+
+No caso de existirem problemas com placas gráficas integradas, consulte o tópico [Problemas gráficos na aplicação](#problemas-gráficos-na-aplicação).
 
 ## Aplicação não arranca
 
 No caso da aplicação não arrancar e consequentemente não ser possivel alterar as configurações da aplicação na aplicação, é possivel alterar as opções da aplicação usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
 
-Uma causa que pode causar problemas está relacionado com a placa gráfica do computador [Problemas com placas gráficas integradas](#problemas-com-placas-gráficas-integradas).
+Uma causa que pode causar problemas está relacionado com a placa gráfica do computador, consulte o tópico [Problemas gráficos na aplicação](#problemas-gráficos-na-aplicação).
 
 ## Problemas com a nova cadeia de confiança
 
@@ -1547,7 +1560,7 @@ Os seguintes registos podem ser adicionados:
 `HKLM\Software\PTEID\configuretool\graphics_accelaration`
 
   - **Tipo**: Número (0 / 1 / 2 (somente em Windows))
-  - **Descrição**:  Modo de renderização gráfica. 0 para renderização por Software (OpenGL), 1 para aceleração gráfica (Placa gráfica) ou 2 para rederização por Software (ANGLE que emula o OpenGL usando Direct3D).
+  - **Descrição**:  Modo de renderização gráfica. 0 para renderização por Software (OpenGL), 1 para renderização por Hardware (Placa gráfica) ou 2 para rederização por Software (ANGLE que emula o OpenGL usando Direct3D).
   - **Valor por omissão**: 1 (Placa gráfica)
 
 ---
