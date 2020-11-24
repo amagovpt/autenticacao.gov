@@ -72,6 +72,7 @@
   - [Problemas na validação das assinaturas](#problemas-na-validação-das-assinaturas)
 - [Interface de linha de comandos](#interface-de-linha-de-comandos)
   - [Consultar ajuda e versão](#consultar-ajuda-e-versão)
+  - [Atalho para configurar modo de renderização gráfica](#atalho-para-configurar-modo-de-renderização-gráfica)
   - [Atalho para submenus de assinatura](#atalho-para-submenus-de-assinatura)
 - [Instruções de configuração em ambientes empresariais](#instruções-de-configuração-em-ambientes-empresariais)
   - [Configurações através de chaves de registo Windows](#configurações-através-de-chaves-de-registo-windows)
@@ -1376,7 +1377,7 @@ No caso de existirem problemas gráficos, recomenda-se alterar o modo de renderi
     - **Autenticação.Gov Hardware** para renderização por Hardware (Placa gráfica);
     - **Autenticação.Gov Direct3d** para renderização por Software (ANGLE, que emula o OpenGL usando Direct3D);
 
-    No caso de existirem problemas gráficos, ou a aplicação não arrancar, deverá experimentar as três opções e ver qual tem melhor resultado. A última opção escolhida, fica guardada e poderá voltar a arrancar a aplicação clicando no ícone no ambiente de trabalho ou no menu iniciar.
+    No caso de existirem problemas gráficos, ou a aplicação não arrancar, deverá experimentar as três opções e ver qual tem melhor resultado. A última opção escolhida, ficará guardada e poderá voltar a arrancar a aplicação clicando no ícone no ambiente de trabalho ou no menu iniciar.
 
 2. Ou usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
 
@@ -1389,11 +1390,13 @@ No caso de existirem problemas gráficos, recomenda-se alterar o modo de renderi
    - 1 para renderização por Hardware (Placa gráfica);
    - 2 (Exclusivo para Windows) para renderização por Software (ANGLE, que emula o OpenGL usando Direct3D).
 
+3.  Ou usando o [Interface de linha de comandos](#interface-de-linha-de-comandos).
+
 Em ambiente empresariais deve alterar a seguinte configuração conforme descrito no capítulo [Instruções de configuração em ambientes empresariais](#instruções-de-configuração-em-ambientes-empresariais).
 
 ## Problemas com placas gráficas integradas
 
-No caso de existirem problemas com placas gráficas integradas, consulte o tópico [Problemas gráficos na aplicação](#problemas-gráficos-na-aplicação).
+No caso de existirem problemas com placas gráficas, consulte o tópico [Problemas gráficos na aplicação](#problemas-gráficos-na-aplicação).
 
 ## Aplicação não arranca
 
@@ -1428,6 +1431,28 @@ A versão instalada pode ser consultada com *--version* (ou *-v*).
 Exemplo (Linux):
 ```
 $ eidguiV2 -h
+```
+## Atalho para configurar modo de renderização gráfica
+
+É possível configurar o modo de renderização gráfica com umas das seguintes opções:
+- *-w*: (Exclusivo para Windows) para renderização por Software (ANGLE, que emula o OpenGL usando Direct3D).
+- *-s*: para renderização por Software (OpenGL);
+- *-c*: para renderização por Hardware (Placa gráfica)(Valor por omissão);
+
+No caso de existirem problemas gráficos, ou a aplicação não arrancar, deverá experimentar as três opções e ver qual tem melhor resultado. A última opção escolhida, ficará guardada e poderá voltar a arrancar a aplicação clicando no ícone no ambiente de trabalho, no menu iniciar ou mesmo pela linha de comandos sem passar este parâmetro.
+
+**Nota:** Disponível a partir da versão 3.4.0 da aplicação.
+
+No caso de existirem problemas com placas gráficas, consulte o tópico [Problemas gráficos na aplicação](#problemas-gráficos-na-aplicação).
+
+Exemplo (Linux):
+```
+$ eidguiV2 -c
+```
+
+Exemplo (Windows):
+```
+$ "C:\Program Files\Portugal Identity Card\pteidguiV2.exe" -c
 ```
 
 ## Atalho para submenus de assinatura 
