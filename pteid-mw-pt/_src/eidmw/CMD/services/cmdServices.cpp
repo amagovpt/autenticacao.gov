@@ -345,8 +345,7 @@ int CMDServices::checkGetCertificateWithPinResponse(
             MWLOG_ERR(logBuf, "GetCertificateWithPinResult SOAP Error Code %d", statusCode);
         }
 
-        if (statusCode == SOAP_ERR_GENERIC 
-            && strcmp(response->GetCertificateWithPinResult->Message->c_str(), "User does not have signature active") == 0) {
+        if (statusCode == SOAP_ERR_GENERIC) {
             return ERR_GET_CERTIFICATE;
         }
         return statusCode;
