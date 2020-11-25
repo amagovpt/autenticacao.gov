@@ -216,7 +216,7 @@ Item {
             mainWindow.showNormal()
         }else{
             console.log("Screen is not Maximized" + mainWindow.visibility)
-            appStartPos = Qt.point(0, 0)
+            appStartPos = Qt.point(Screen.virtualX, Screen.virtualY)
             mainWindow.showMaximized()
         }
     }
