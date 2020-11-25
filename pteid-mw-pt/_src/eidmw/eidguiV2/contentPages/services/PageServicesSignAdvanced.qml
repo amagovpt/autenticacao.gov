@@ -49,7 +49,10 @@ PageServicesSignAdvancedForm {
         Timer {
             id: tooltipExitTimer
             interval: Constants.TOOLTIP_TIMEOUT_MS
-            onTriggered: controlToolTip.close()
+            onTriggered: {
+                controlToolTip.close()
+                stop()
+            }
         }
     }
     Keys.onRightPressed: {
@@ -599,6 +602,7 @@ PageServicesSignAdvancedForm {
     }
     propertyMouseAreaToolTipPades{
         onEntered: {
+            tooltipExitTimer.stop()
             controlToolTip.close()
             controlToolTip.text = qsTranslate("PageServicesSign","STR_SIGN_PDF_FILES")
             controlToolTip.x = propertyMouseAreaToolTipPadesX - controlToolTip.width * 0.5
@@ -611,6 +615,7 @@ PageServicesSignAdvancedForm {
     }
     propertyMouseAreaToolTipXades{
         onEntered: {
+            tooltipExitTimer.stop()
             controlToolTip.close()
             controlToolTip.text = qsTranslate("PageServicesSign","STR_SIGN_PACKAGE")
             controlToolTip.x = propertyMouseAreaToolTipXadesX - controlToolTip.width * 0.5
@@ -623,6 +628,7 @@ PageServicesSignAdvancedForm {
     }
     propertyMouseAreaToolTipLTV{
         onEntered: {
+            tooltipExitTimer.stop()
             controlToolTip.close()
             controlToolTip.text = qsTranslate("PageServicesSign","STR_LTV_TOOLTIP")
             controlToolTip.x = propertyMouseAreaToolTipLTVX - controlToolTip.width * 0.5
