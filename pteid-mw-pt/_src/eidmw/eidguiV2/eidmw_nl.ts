@@ -1907,7 +1907,7 @@
     </message>
     <message>
         <source>STR_LTV_TOOLTIP</source>
-        <translation>A Validação de longo prazo (LTV) inclui provas da validade da cadeia de certificados utilizados na assinatura que permite no futuro confirmar que a assinatura era válida na hora em que o documento foi assinado. Para mais informações, consulte o manual da aplicação.</translation>
+        <translation>A Validação de longo prazo (LTV) inclui provas da validade da cadeia de certificados utilizados na assinatura que permite no futuro confirmar que a assinatura era válida na hora em que o documento foi assinado.</translation>
     </message>
 </context>
 <context>

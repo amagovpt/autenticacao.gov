@@ -1909,7 +1909,7 @@
     </message>
     <message>
         <source>STR_LTV_TOOLTIP</source>
-        <translation>The Long Term Validation (LTV) includes validation data of the certificate chain used in the signature which allows future signature verifications to confirm that the signature was valid at generation time. For more information, consult the application manual.</translation>
+        <translation>The Long Term Validation (LTV) includes validation data of the certificate chain used in the signature which allows future signature verifications to confirm that the signature was valid at generation time.</translation>
     </message>
 </context>
 <context>
