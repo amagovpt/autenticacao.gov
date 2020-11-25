@@ -553,7 +553,7 @@ Item {
                                           "STR_SIGN_ADD_LTV")
                         height: 25
                         anchors.top: textFieldLocal.bottom
-                        anchors.left: switchSignTemp.right
+                        x: 0.6 * parent.width
                         enabled: switchSignTemp.checked         /* timestamp enabled */
                                 && !switchSignAdd.checked       /* scap disabled */
                                 && radioButtonPADES.checked     /* pdf signature */
