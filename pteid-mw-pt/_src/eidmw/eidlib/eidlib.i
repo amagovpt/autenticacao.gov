@@ -1097,6 +1097,10 @@ return $jnicall;
 %javaexception("PTEID_Exception") setString	   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") setLong	   JAVA_CODE_THROW
 
+%ignore eIDMW::PTEID_Config(const char *csName, const char *czSection, const char *csDefaultValue);
+%ignore eIDMW::PTEID_Config(const char *csName, const wchar_t *czSection, const wchar_t *csDefaultValue);
+%ignore eIDMW::PTEID_Config(const char *csName, const char *czSection, long lDefaultValue);
+
 //------------------------------------------------------------
 // class PTEID_Sod
 //------------------------------------------------------------
