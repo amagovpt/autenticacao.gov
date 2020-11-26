@@ -1262,6 +1262,8 @@ Na versão 73.0.1 (para outras versões deverá ser semelhante):
 
 3. Pressione **Carregar**. Preencha o nome do módulo, por exemplo "PKCS\#11 do Cartao de Cidadao" (evite o "ç" e "ã"). Seguidamente, carregue em **Procurar...** e navegue até ao módulo PKCS#11 do Cartão de Cidadão, cuja localização se encontra descrita na secção [Integração com aplicações](#integra%c3%a7%c3%a3o-com-aplica%c3%a7%c3%b5es).
 
+**Nota**: em MacOS o que se recomenda neste passo é copiar e colar no campo "Nome do ficheiro do módulo" o seguinte nome: `/usr/local/lib/libpteidpkcs11.dylib`
+
 4. Pressione **Ok** nas janelas abertas para terminar.
 
 # Resolução de Problemas
