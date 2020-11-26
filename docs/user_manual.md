@@ -331,7 +331,7 @@ sistema operativo utilizado.
     passos.
 
 
-Nota: a diretoria e ficheiros de *log*, na pasta de instalação (por defeito em `C:\Program Files\Portugal Identity Card\log\`), não serão removidos ao desinstalar a aplicação Autenticação.Gov.
+**Nota**: a diretoria e ficheiros de *log*, que se encontram na pasta de instalação (por defeito em `C:\Program Files\Portugal Identity Card\log\`), não serão removidos ao desinstalar a aplicação Autenticação.Gov.
 
 ### Remoção em Linux
 
@@ -819,11 +819,14 @@ suporte na resolução do problema.
 
     **No caso da aplicação não arrancar**, é possivel alterar essa opção usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
 
-    - Em **Windows**, a chave de registo: **HKEY\_CURRENT\_USER\\Software\\PTEID\\logging\\log_level**;
+    - Em **Windows**, a chave de registo:  
+**HKEY\_CURRENT\_USER\\Software\\PTEID\\logging\\log_level**;
 
-    - Em **Linux**, a chave com nome "log_level" na secção logging do ficheiro **$HOME/.config/pteid.conf**;
+    - Em **Linux**, a chave com nome "log_level" na secção logging do ficheiro:  
+**$HOME/.config/pteid.conf**;
 
-    - Em **MacOS**, a chave com nome "log_level" na secção logging do ficheiro **$HOME/Library/Preferences/pteid.conf**.
+    - Em **MacOS**, a chave com nome "log_level" na secção logging do ficheiro:  
+**$HOME/Library/Preferences/pteid.conf**.
 
     Os valores que a chave pode tomar são:
     - debug ( em caso de problemas com a aplicação, pode ajudar a equipa de suporte na resolução do problema )
@@ -1392,9 +1395,12 @@ No caso de existirem problemas gráficos, recomenda-se alterar o modo de renderi
 
 2. Ou usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
 
-   - Em **Windows**, a chave de registo **HKEY\_CURRENT\_USER\\Software\\PTEID\\configuretool\\graphics\_accelaration**;
-   - Em **Linux**, a chave com nome "graphics_accelaration" na secção “configuretool” do ficheiro **$HOME/.config/pteid.conf**;
-   - Em **MacOS**, a chave com nome "graphics_accelaration" na secção “configuretool” do ficheiro **$HOME/Library/Preferences/pteid.conf**.
+   - Em **Windows**, a chave de registo:  
+**HKEY\_CURRENT\_USER\\Software\\PTEID\\configuretool\\graphics\_accelaration**;
+   - Em **Linux**, a chave com nome "graphics_accelaration" na secção “configuretool” do ficheiro:  
+**$HOME/.config/pteid.conf**;
+   - Em **MacOS**, a chave com nome "graphics_accelaration" na secção “configuretool” do ficheiro:  
+**$HOME/Library/Preferences/pteid.conf**.
 
    Os valores que a chave pode tomar são:
    - 0 para renderização por Software (OpenGL);
@@ -1491,7 +1497,8 @@ ficheiro1.pdf ... ficheiroN.pdf
 
 Exemplo (Windows):
 ```
-$ "C:\Program Files\Portugal Identity Card\pteidguiV2.exe" signSimple -d /home/user/Documents/ ficheiro.pdf
+> "C:\Program Files\Portugal Identity Card\pteidguiV2.exe" signSimple^
+ -d C:\Users\USER\Documents ficheiro.pdf
 ```
 
 **Nota:** As opções passadas por parâmetros, que contêm um caracter espaço, devem ser colocadas entre aspas. Por exemplo (Linux):
