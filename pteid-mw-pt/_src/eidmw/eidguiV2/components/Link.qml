@@ -38,7 +38,7 @@ Item {
         onLinkActivated: Qt.openUrlExternally(propertyLinkUrl)
         wrapMode: Text.WordWrap
 
-        Accessible.role: Accessible.Link
+        Accessible.role: propertyLinkUrl == "" ? Accessible.StaticText : Accessible.Link 
         Accessible.name: propertyAccessibleText
         Accessible.description: propertyAccessibleDescription
 
@@ -46,7 +46,7 @@ Item {
         Keys.onReturnPressed: Qt.openUrlExternally(propertyLinkUrl)
 
     }
-    Accessible.role: Accessible.Link
+    Accessible.role: propertyLinkUrl == "" ? Accessible.StaticText : Accessible.Link 
     Accessible.name: propertyAccessibleText
     Accessible.description: propertyAccessibleDescription
     Keys.onSpacePressed: Qt.openUrlExternally(propertyLinkUrl)

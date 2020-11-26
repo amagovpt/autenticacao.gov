@@ -699,7 +699,8 @@ Load language error. Please reinstall the application"
             height: 50
 
             Accessible.role: Accessible.AlertMessage
-            Accessible.name: restartDlgTitle.text + labelRestartText.text
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") 
+                    + restartDlgTitle.text + labelRestartText.text
 
             Keys.enabled: true
             KeyNavigation.tab: cancelButton
@@ -828,7 +829,8 @@ Load language error. Please reinstall the application"
             height: 50
 
             Accessible.role: Accessible.AlertMessage
-            Accessible.name: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES") + titleText.text + labelText.text
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") 
+                    + qsTranslate("PageCardNotes","STR_UNSAVED_NOTES") + titleText.text + labelText.text
 
             Keys.enabled: true
             KeyNavigation.tab: rejectButton
