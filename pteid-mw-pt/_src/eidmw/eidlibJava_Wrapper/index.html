@@ -74,7 +74,7 @@ PTEID_EIDCard card = readerContext.getEIDCard();
   </h4>
   <p>
    The SDK allows to receive events when a card is inserted or removed using callbacks
-   <br/>
+   <br>
    - For that make sure to use
    <code>
     SetEventCallback
@@ -188,9 +188,9 @@ PTEID_ByteArray pb = new PTEID_ByteArray(notes.getBytes(), notes.getBytes().leng
 boolean bOk = card.writePersonalNotes(personalNotes, card.getPins().getPinByPinRef(PTEID_Pin.AUTH_PIN));
 (...)
 </code></pre>
-  <h2 id="signing-documents">
+  <h3 id="signing-documents">
    Signing Documents
-  </h2>
+  </h3>
   <p>
    Make sure to initialize the underlying classes that will be used to sign documents, as follows
   </p>
@@ -250,7 +250,7 @@ card.SignXades(output, files, files.length);
     SignXadesA()
    </code>
    , etc..
-   <br/>
+   <br>
    For more details see at
    <a href="./classpt_1_1gov_1_1cartaodecidadao_1_1PTEID__EIDCard.html">
     PTEID_EIDCard
@@ -261,7 +261,7 @@ card.SignXades(output, files, files.length);
   </h5>
   <p>
    The SDK allows to configure XAdES signature parameters.
-   <br/>
+   <br>
    For example, to change the Time Stamping Authority (TSA) by changing the url or the server request timeout, as follows
   </p>
   <pre><code class="java">PTEID_Config config = new PTEID_Config(PTEID_PARAM_XSIGN_TSAURL);
@@ -274,7 +274,7 @@ new PTEID_Config(PTEID_PARAM_XSIGN_TIMEOUT).setLong(60); // allow a timeout of 6
   </h4>
   <p>
    One can verify the a PDF signature using the iText SDK.
-   <br/>
+   <br>
    See
    <a href="https://github.com/itext/i7js-samples/tree/master/publications/signatures/src/test/java/com/itextpdf/samples/signatures/chapter05">
     iText-example
@@ -296,9 +296,9 @@ new PTEID_Config(PTEID_PARAM_XSIGN_TIMEOUT).setLong(60); // allow a timeout of 6
   <script>
    hljs.initHighlightingOnLoad();
   </script>
-  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
   </script>
-  <script type="text/javascript">
+  <script>
    MathJax.Hub.Config({"showProcessingMessages" : false,"messageStyle" : "none","tex2jax": { inlineMath: [ [ "$", "$" ] ] }});
   </script>
  </body>
