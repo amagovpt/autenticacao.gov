@@ -173,10 +173,7 @@ Loader{
     }
 
     function activateGeneralPopup(titlePopup, bodyPopup, returnToSubMenuWhenClosed,
-        linkUrl, accessibleText){
-            
-            if (linkUrl === undefined) linkUrl = ""
-            if (accessibleText === undefined) accessibleText = bodyPopup 
+        linkUrl = "", accessibleText = bodyPopup){
             
             titleText.text = titlePopup
             labelText.propertyText.text = bodyPopup
