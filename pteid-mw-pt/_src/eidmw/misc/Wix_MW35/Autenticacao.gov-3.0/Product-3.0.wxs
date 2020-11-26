@@ -225,8 +225,6 @@
         <CreateFolder>
           <util:PermissionEx GenericAll="yes" User="Users" />
         </CreateFolder>
-        <RemoveFile Id="RemoveLogFiles" On="uninstall" Name="*"/>
-        <RemoveFolder Id="RemoveLogFolder" On="uninstall"/>
       </Component>
     </DirectoryRef>
 

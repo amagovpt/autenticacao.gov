@@ -330,6 +330,9 @@ sistema operativo utilizado.
     Recomenda-se que o computador seja reiniciado no final destes
     passos.
 
+
+Nota: a diretoria e ficheiros de *log*, em `C:\Program Files\Portugal Identity Card\log\`, não serão removidos ao desinstalar a aplicação Autenticação.Gov.
+
 ### Remoção em Linux
 
 Algumas distribuições de Linux, disponibilizam um gestor de aplicações -
