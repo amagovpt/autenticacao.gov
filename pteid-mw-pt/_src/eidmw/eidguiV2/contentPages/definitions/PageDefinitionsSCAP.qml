@@ -144,6 +144,8 @@ PageDefinitionsSCAPForm {
 
             var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
             var bodyPopup = ""
+            var linkUrl = ""
+            var accessibleText = ""
             if(isCompany === true){
                 if(pdfsignresult == GAPI.ScapAttributesExpiredError){
                     console.log("ScapAttributesExpiredError")
@@ -151,11 +153,19 @@ PageDefinitionsSCAPForm {
                             + " "
                             + "<a href=\"https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais\">"
                             + "https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
+                    linkUrl = 'https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais'
+                    accessibleText = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ATTRIBUTES_EXPIRED")
+                            + " "
+                            + "https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
                 }else if(pdfsignresult == GAPI.ScapZeroAttributesError){
                     console.log("ScapZeroAttributesError")
                     bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES")
                             + " "
                             + "<a href=\"https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais\">"
+                            + "https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
+                    linkUrl = 'https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais'
+                    accessibleText = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES")
+                            + " "
                             + "https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
                 }else {
                     console.log("ScapGenericError")
@@ -219,8 +229,7 @@ PageDefinitionsSCAPForm {
             }
 
             popupMsg = ""
-
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false, linkUrl, accessibleText)
 
             propertyBusyIndicatorAttributes.running = false
             propertyBusyIndicator.running = false
