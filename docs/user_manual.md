@@ -331,7 +331,7 @@ sistema operativo utilizado.
     passos.
 
 
-Nota: a diretoria e ficheiros de *log*, em `C:\Program Files\Portugal Identity Card\log\`, não serão removidos ao desinstalar a aplicação Autenticação.Gov.
+Nota: a diretoria e ficheiros de *log*, na pasta de instalação (por defeito em `C:\Program Files\Portugal Identity Card\log\`), não serão removidos ao desinstalar a aplicação Autenticação.Gov.
 
 ### Remoção em Linux
 
@@ -802,15 +802,21 @@ aplicação. Este modo eleva o nível de detalhe do *log* para *debug*, o
 que, em caso de problemas com a aplicação, pode ajudar a equipa de
 suporte na resolução do problema.
 
-  Os ficheiros de log por omissão são criados nas seguintes localizações e tem
+  Os ficheiros de *log* por omissão são criados nas seguintes localizações e têm
   como nome o prefixo .PTEID:
 
-    `Windows: C:\Program Files\Portugal Identity Card\log\`
+    - **Windows**: Na pasta `log`, que se encontra na pasta de instalação (que por defeito é `C:\Program Files\Portugal Identity Card`), i.e.:
 
-    `MacOS: Directoria Home do utilizador i.e.: /Users/Utilizador/`
+        `C:\Program Files\Portugal Identity Card\log\`
 
-    `Linux: Directoria Home do utilizador i.e.: /home/Utilizador/`
-  
+    - **MacOS**: Directoria Home do utilizador, i.e.:
+
+        `/Users/Utilizador/`
+
+    - **Linux**: Directoria Home do utilizador, i.e.:
+
+        `/home/Utilizador/`
+
     **No caso da aplicação não arrancar**, é possivel alterar essa opção usando as configurações do software Autenticação.gov (via Chaves de Registo em Windows ou ficheiro de configuração em Linux e MacOS).
 
     - Em **Windows**, a chave de registo: **HKEY\_CURRENT\_USER\\Software\\PTEID\\logging\\log_level**;
