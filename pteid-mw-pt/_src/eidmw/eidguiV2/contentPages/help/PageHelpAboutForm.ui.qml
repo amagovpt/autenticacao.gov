@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * Licensed under the EUPL V.1.2
@@ -43,7 +43,7 @@ Item {
             color: Constants.COLOR_TEXT_TITLE
             font.family: lato.name
             font.bold: activeFocus
-            Accessible.role: Accessible.TitleBar
+            Accessible.role: Accessible.StaticText
             Accessible.name: text
             KeyNavigation.tab: textDescription
             KeyNavigation.down: textDescription

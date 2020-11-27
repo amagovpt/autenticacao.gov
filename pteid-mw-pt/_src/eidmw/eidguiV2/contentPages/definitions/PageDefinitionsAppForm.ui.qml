@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
@@ -101,7 +101,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp","STR_CARD_READER_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: textReader.text
                     KeyNavigation.tab: textSelectReader
                     KeyNavigation.down: textSelectReader
@@ -155,7 +155,7 @@ Item {
                         font.bold: activeFocus
                         color: Constants.COLOR_TEXT_BODY
                         wrapMode: Text.WordWrap
-                        Accessible.role: Accessible.TitleBar
+                        Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         Keys.onPressed: {
                             handleKeyPressed(event.key,textSelectReader)
@@ -240,7 +240,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp","STR_START_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppStart)
@@ -323,7 +323,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp","STR_START_AUTOUPDATES_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, startAutoupdateText)
@@ -408,7 +408,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp","STR_LANGUAGE_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppLanguage)
@@ -527,7 +527,7 @@ Item {
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
                                       "STR_APP_LOOK_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppLook)
@@ -618,7 +618,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text:  qsTranslate("PageDefinitionsApp", "STR_SCALE_APPLICATION_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppLook)
@@ -666,7 +666,7 @@ Item {
                         font.family: lato.name
                         font.bold: activeFocus
                         wrapMode: Text.WordWrap
-                        Accessible.role: Accessible.TitleBar
+                        Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         Keys.onPressed: {
                             handleKeyPressed(event.key,textSelectReader)
@@ -722,7 +722,7 @@ Item {
                             anchors.rightMargin: Constants.SIZE_TEXT_V_SPACE
                             anchors.verticalCenter: parent.verticalCenter
                             wrapMode: Text.WordWrap
-                            Accessible.role: Accessible.TitleBar
+                            Accessible.role: Accessible.StaticText
                             Accessible.name: text
                             Keys.onPressed: {
                                 handleKeyPressed(event.key,textSelectReader)
@@ -795,7 +795,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateDebugMode)
@@ -845,7 +845,7 @@ Item {
                         font.family: lato.name
                         font.bold: activeFocus
                         wrapMode: Text.WordWrap
-                        Accessible.role: Accessible.TitleBar
+                        Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         Keys.onPressed: {
                             handleKeyPressed(event.key, debugModeTextField)
@@ -908,7 +908,7 @@ Item {
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
                                       "STR_APP_GRAPHICS_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppGraphics)
@@ -958,7 +958,7 @@ Item {
                         font.family: lato.name
                         font.bold: activeFocus
                         wrapMode: Text.WordWrap
-                        Accessible.role: Accessible.TitleBar
+                        Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         Keys.onPressed: {
                             handleKeyPressed(event.key, graphicsTextField)
@@ -1066,7 +1066,7 @@ Item {
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
                                       "STR_NETWORK_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppNetwork)

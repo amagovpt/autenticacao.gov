@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
@@ -76,7 +76,7 @@ Item {
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_APP_TITLE") + controler.autoTr
-                Accessible.role: Accessible.TitleBar
+                Accessible.role: Accessible.StaticText
                 Accessible.name: text
                 KeyNavigation.tab: rectUpdateAppTitle
                 KeyNavigation.down: rectUpdateAppTitle
@@ -133,7 +133,7 @@ Item {
                             propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                             width: parent.width
                             height: parent.height
-                            Accessible.role: Accessible.TitleBar
+                            Accessible.role: Accessible.StaticText
                             Accessible.name: propertyText.text
                             KeyNavigation.tab: buttonSearch.visible ? buttonSearch : installedVersion
                             KeyNavigation.down: buttonSearch.visible ? buttonSearch : installedVersion
@@ -413,7 +413,7 @@ Item {
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_TITLE") + controler.autoTr
-                Accessible.role: Accessible.TitleBar
+                Accessible.role: Accessible.StaticText
                 Accessible.name: text
                 KeyNavigation.tab: rectUpdateAppTitle
                 KeyNavigation.down: rectUpdateAppTitle
@@ -471,7 +471,7 @@ Item {
                             propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                             width: parent.width
                             height: parent.height
-                            Accessible.role: Accessible.TitleBar
+                            Accessible.role: Accessible.StaticText
                             Accessible.name: propertyText.text
                             KeyNavigation.tab: buttonSearch.visible ? buttonSearch : installedVersion
                             KeyNavigation.down: buttonSearch.visible ? buttonSearch : installedVersion
@@ -511,7 +511,7 @@ Item {
                                     color: Constants.COLOR_TEXT_LABEL
                                     height: Constants.SIZE_TEXT_LABEL
                                     text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_NEWS")
-                                    Accessible.role: Accessible.TitleBar
+                                    Accessible.role: Accessible.StaticText
                                     Accessible.name: text
                                     KeyNavigation.tab: rectUpdateAppTitle
                                     KeyNavigation.down: rectUpdateAppTitle

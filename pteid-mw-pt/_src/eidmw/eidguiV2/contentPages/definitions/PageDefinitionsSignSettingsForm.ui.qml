@@ -101,7 +101,7 @@ Item {
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
                                       "STR_CERTIFICATES_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     // If this component is changed, the workaround to scroll the page automatically with
                     // keyboard navigation has to be updated also;
@@ -215,7 +215,7 @@ Item {
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
                                       "STR_TIMESTAMP_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppTimeStamp)
@@ -364,7 +364,7 @@ Item {
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsSignSettings",
                                       "STR_OFFICE_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, textOfficeTitle)
@@ -448,7 +448,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp","STR_CMD_CERT_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, textLoadCMDCertsTitle)
@@ -501,7 +501,7 @@ Item {
                             width: parent.width
                             text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_TEXT") + controler.autoTr
                             wrapMode: Text.WordWrap
-                            Accessible.role: Accessible.TitleBar
+                            Accessible.role: Accessible.StaticText
                             Accessible.name: text
                             Keys.onPressed: {
                                 handleKeyPressed(event.key, loadCMDCertsText)
@@ -617,7 +617,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp","STR_ROOT_CA_CERT_INSTALL_TITLE")
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, textRootCACertTitle)

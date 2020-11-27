@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
- * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2019-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 
@@ -70,7 +70,7 @@ Item {
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDataApp","STR_CACHE_TITLE") + controler.autoTr
-                Accessible.role: Accessible.TitleBar
+                Accessible.role: Accessible.StaticText
                 Accessible.name: text
                 KeyNavigation.tab: cacheAppTextField
                 KeyNavigation.down: cacheAppTextField
@@ -241,7 +241,7 @@ Item {
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDataApp","STR_SCAP_CACHE_TITLE") + controler.autoTr
-                Accessible.role: Accessible.TitleBar
+                Accessible.role: Accessible.StaticText
                 Accessible.name: text
                 KeyNavigation.tab: cacheSCAPTextField
                 KeyNavigation.down: cacheSCAPTextField
