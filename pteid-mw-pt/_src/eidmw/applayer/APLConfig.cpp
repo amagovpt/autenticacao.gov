@@ -402,7 +402,6 @@ void getProxySystemWide(const wchar_t *host_default, long port_default, const wc
 
 	if (config_useSystemProxy.getLong() != 1)
 	{
-		MWLOG(LEV_DEBUG, MOD_APL, L"getProxySystemWide(): Skipping because config flag is OFF");
 		return;
 	}
 
