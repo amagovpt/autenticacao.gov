@@ -630,9 +630,11 @@ Item {
                             font.bold: activeFocus
                             visible: false
                             x: 54
-                            KeyNavigation.tab: listViewEntities
-                            KeyNavigation.down:listViewEntities
-                            KeyNavigation.right: listViewEntities
+                            Accessible.role: Accessible.Button
+                            Accessible.name: text
+                            KeyNavigation.tab: pdfPreviewArea
+                            KeyNavigation.down:pdfPreviewArea
+                            KeyNavigation.right: pdfPreviewArea
                             KeyNavigation.backtab: switchSignAdd
                             KeyNavigation.up: switchSignAdd
                         }

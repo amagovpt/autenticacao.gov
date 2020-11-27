@@ -156,9 +156,9 @@ Item {
                         checked: controler.getEnablePteidCache()
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
-                        KeyNavigation.tab: rectAppCacheText
-                        KeyNavigation.down: rectAppCacheText
-                        KeyNavigation.right: rectAppCacheText
+                        KeyNavigation.tab: cacheAppSizeTextField
+                        KeyNavigation.down: cacheAppSizeTextField
+                        KeyNavigation.right: cacheAppSizeTextField
                         KeyNavigation.backtab: cacheAppTextField
                         KeyNavigation.up: cacheAppTextField
                     }
@@ -191,8 +191,8 @@ Item {
                             KeyNavigation.tab: buttonRemoveAppCache.enabled ? buttonRemoveAppCache : dateSCAPCache
                             KeyNavigation.down: buttonRemoveAppCache.enabled ? buttonRemoveAppCache : dateSCAPCache
                             KeyNavigation.right: buttonRemoveAppCache.enabled ? buttonRemoveAppCache : dateSCAPCache
-                            KeyNavigation.backtab: cacheAppTextField
-                            KeyNavigation.up: cacheAppTextField
+                            KeyNavigation.backtab: checkboxEnableCache
+                            KeyNavigation.up: checkboxEnableCache
                         }
                     }
                     Rectangle {

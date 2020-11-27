@@ -225,6 +225,8 @@ Item {
                         visible: propertyPageLoader.propertyBackupFromSignaturePage
                         font.underline: mouseArealinkScapEntities.containsMouse
                         font.bold: activeFocus
+                        Accessible.role: Accessible.Button
+                        Accessible.name: text
                         KeyNavigation.tab: buttonRemoveEntityAttributes
                         Keys.onDownPressed: buttonRemoveEntityAttributes
                         Keys.onUpPressed: goToLastEntity()
@@ -403,6 +405,8 @@ Item {
                         font.bold: activeFocus
                         color: Constants.COLOR_MAIN_BLUE
                         visible: propertyPageLoader.propertyBackupFromSignaturePage
+                        Accessible.role: Accessible.Button
+                        Accessible.name: text
                         KeyNavigation.tab: buttonRemoveCompanyAttributes
                         KeyNavigation.down: buttonRemoveCompanyAttributes
                         Keys.onUpPressed:{

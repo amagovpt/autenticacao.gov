@@ -78,11 +78,12 @@ Item {
                 text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_APP_TITLE") + controler.autoTr
                 Accessible.role: Accessible.StaticText
                 Accessible.name: text
-                KeyNavigation.tab: rectUpdateAppTitle
-                KeyNavigation.down: rectUpdateAppTitle
-                KeyNavigation.right: rectUpdateAppTitle
-                KeyNavigation.backtab: rectUpdateAppTitle
-                KeyNavigation.up: rectUpdateAppTitle
+                KeyNavigation.tab: textDescription.visible ? textDescription : textProgressBar
+                KeyNavigation.down: textDescription.visible ? textDescription : textProgressBar
+                KeyNavigation.right: textDescription.visible ? textDescription : textProgressBar
+                KeyNavigation.backtab: buttonSearchCerts
+                KeyNavigation.up: buttonSearchCerts
+                KeyNavigation.left: buttonSearchCerts
             }
             DropShadow {
                 anchors.fill: rowUpdateApp
@@ -126,6 +127,9 @@ Item {
                         height: Constants.SIZE_TEXT_LABEL
                         anchors.top: mainItemWithPadding.top
                         Components.Link {
+                            property var keyNavNext: (buttonSearch.visible ? buttonSearch : 
+                                        (buttonCancelUpdate.visible ? buttonCancelUpdate : installedVersion ))
+
                             id: textDescription
                             propertyText.text: qsTranslate("PageDefinitionsUpdates",
                                                            "STR_UPDATE_TEXT")
@@ -135,9 +139,9 @@ Item {
                             height: parent.height
                             Accessible.role: Accessible.StaticText
                             Accessible.name: propertyText.text
-                            KeyNavigation.tab: buttonSearch.visible ? buttonSearch : installedVersion
-                            KeyNavigation.down: buttonSearch.visible ? buttonSearch : installedVersion
-                            KeyNavigation.right: buttonSearch.visible ? buttonSearch : installedVersion
+                            KeyNavigation.tab: keyNavNext
+                            KeyNavigation.down: keyNavNext
+                            KeyNavigation.right: keyNavNext
                             KeyNavigation.left: rectUpdateAppTitle
                             KeyNavigation.backtab: rectUpdateAppTitle
                             KeyNavigation.up: rectUpdateAppTitle
@@ -268,9 +272,9 @@ Item {
                             font.capitalization: Font.MixedCase
                             highlighted: activeFocus ? true : false
                             anchors.horizontalCenter: parent.horizontalCenter
-                            KeyNavigation.tab: propertyMainItem
-                            KeyNavigation.down: propertyMainItem
-                            KeyNavigation.right: propertyMainItem
+                            KeyNavigation.tab: rectUpdateCertsTitle
+                            KeyNavigation.down: rectUpdateCertsTitle
+                            KeyNavigation.right: rectUpdateCertsTitle
                             KeyNavigation.left: textDescription
                             KeyNavigation.backtab: textDescription
                             KeyNavigation.up: textDescription
@@ -295,12 +299,12 @@ Item {
                             highlighted: activeFocus ? true : false
                             anchors.horizontalCenter: parent.horizontalCenter
                             visible: false
-                            KeyNavigation.tab: propertyMainItem
-                            KeyNavigation.down: propertyMainItem
-                            KeyNavigation.right: propertyMainItem
-                            KeyNavigation.left: buttonSearch
-                            KeyNavigation.backtab: buttonSearch
-                            KeyNavigation.up: buttonSearch
+                            KeyNavigation.tab: rectUpdateCertsTitle
+                            KeyNavigation.down: rectUpdateCertsTitle
+                            KeyNavigation.right: rectUpdateCertsTitle
+                            KeyNavigation.left: textDescription
+                            KeyNavigation.backtab: textDescription
+                            KeyNavigation.up: textDescription
                         }
                     }
 
@@ -367,9 +371,9 @@ Item {
                                         visible: false
                                         textFormat: "RichText"
                                         Accessible.role: Accessible.StaticText
-                                        KeyNavigation.tab: rectUpdateAppTitle
-                                        KeyNavigation.down: rectUpdateAppTitle
-                                        KeyNavigation.right: rectUpdateAppTitle
+                                        KeyNavigation.tab: rectUpdateCertsTitle
+                                        KeyNavigation.down: rectUpdateCertsTitle
+                                        KeyNavigation.right: rectUpdateCertsTitle
                                         KeyNavigation.left: buttonStartUpdate
                                         KeyNavigation.backtab: buttonStartUpdate
                                         KeyNavigation.up: buttonStartUpdate
@@ -403,6 +407,9 @@ Item {
             anchors.top : rectUpdateApp.bottom
 
             Text {
+                property var keyNavBack: (buttonSearch.visible ? buttonSearch : 
+                            (buttonCancelUpdate.visible ? buttonCancelUpdate : releaseNoteScrollViewText))
+
                 id: rectUpdateCertsTitle
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: activeFocus
@@ -415,11 +422,12 @@ Item {
                 text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_TITLE") + controler.autoTr
                 Accessible.role: Accessible.StaticText
                 Accessible.name: text
-                KeyNavigation.tab: rectUpdateAppTitle
-                KeyNavigation.down: rectUpdateAppTitle
-                KeyNavigation.right: rectUpdateAppTitle
-                KeyNavigation.backtab: rectUpdateAppTitle
-                KeyNavigation.up: rectUpdateAppTitle
+                KeyNavigation.tab: textDescriptionCerts
+                KeyNavigation.down: textDescriptionCerts
+                KeyNavigation.right: textDescriptionCerts
+                KeyNavigation.backtab: keyNavBack
+                KeyNavigation.up: keyNavBack
+                KeyNavigation.left: keyNavBack
             }
 
             DropShadow {
@@ -473,12 +481,12 @@ Item {
                             height: parent.height
                             Accessible.role: Accessible.StaticText
                             Accessible.name: propertyText.text
-                            KeyNavigation.tab: buttonSearch.visible ? buttonSearch : installedVersion
-                            KeyNavigation.down: buttonSearch.visible ? buttonSearch : installedVersion
-                            KeyNavigation.right: buttonSearch.visible ? buttonSearch : installedVersion
-                            KeyNavigation.left: rectUpdateAppTitle
-                            KeyNavigation.backtab: rectUpdateAppTitle
-                            KeyNavigation.up: rectUpdateAppTitle
+                            KeyNavigation.tab: buttonSearchCerts
+                            KeyNavigation.down: buttonSearchCerts
+                            KeyNavigation.right: buttonSearchCerts
+                            KeyNavigation.left: rectUpdateCertsTitle
+                            KeyNavigation.backtab: rectUpdateCertsTitle
+                            KeyNavigation.up: rectUpdateCertsTitle
                         }
                     }
                     Item {
@@ -670,9 +678,9 @@ Item {
                             KeyNavigation.tab: propertyMainItem
                             KeyNavigation.down: propertyMainItem
                             KeyNavigation.right: propertyMainItem
-                            KeyNavigation.left: textDescription
-                            KeyNavigation.backtab: textDescription
-                            KeyNavigation.up: textDescription
+                            KeyNavigation.left: textDescriptionCerts
+                            KeyNavigation.backtab: textDescriptionCerts
+                            KeyNavigation.up: textDescriptionCerts
                         }
                     }
                     Item {
