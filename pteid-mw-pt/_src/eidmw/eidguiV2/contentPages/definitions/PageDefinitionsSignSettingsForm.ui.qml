@@ -220,9 +220,9 @@ Item {
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppTimeStamp)
                     }
-                    KeyNavigation.tab: checkboxTimeStamp
-                    KeyNavigation.down: checkboxTimeStamp
-                    KeyNavigation.right: checkboxTimeStamp
+                    KeyNavigation.tab: linkTimestampService
+                    KeyNavigation.down: linkTimestampService
+                    KeyNavigation.right: linkTimestampService
                     KeyNavigation.backtab: checkboxRemove
                     KeyNavigation.up: checkboxRemove
                 }
@@ -250,8 +250,32 @@ Item {
                     width: parent.width
                     color: "white"
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                    height: checkboxTimeStamp.height + boxAppTimeStamp.height
+                    height: checkboxTimeStamp.height + boxAppTimeStamp.height + linkTimestampService.height + Constants.SIZE_ROW_V_SPACE + Constants.SIZE_TEXT_V_SPACE
                     anchors.top: dateAppTimeStamp.bottom
+
+                    Components.Link {
+                        id: linkTimestampService
+                        anchors.top: parent.top
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                        x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        width: parent.width
+                        propertyText.text: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") 
+                            + "<a href='https://amagovpt.github.io/autenticacao.gov/user_manual.html#configura%C3%A7%C3%A3o-de-assinaturas'>" 
+                            + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
+                        propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#configura%C3%A7%C3%A3o-de-assinaturas'
+                        propertyText.font.capitalization: Font.MixedCase
+                        propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+                        propertyText.font.bold: activeFocus
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, linkTimestampService)
+                        }
+                        KeyNavigation.tab: checkboxTimeStamp
+                        KeyNavigation.down: checkboxTimeStamp
+                        KeyNavigation.right: checkboxTimeStamp
+                        KeyNavigation.left: dateAppTimeStamp
+                        KeyNavigation.backtab: dateAppTimeStamp
+                        KeyNavigation.up: dateAppTimeStamp
+                    }
 
                     CheckBox {
                         id: checkboxTimeStamp
@@ -262,6 +286,7 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         font.bold: activeFocus
+                        anchors.top: linkTimestampService.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         checked: false
                         Accessible.role: Accessible.CheckBox
@@ -272,8 +297,8 @@ Item {
                         KeyNavigation.tab: checkboxTimeStamp.checked ? textFieldTimeStamp : (rectOffice.visible ? textOfficeTitle: dateAppTimeStamp)
                         KeyNavigation.down: checkboxTimeStamp.checked ? textFieldTimeStamp : (rectOffice.visible ? textOfficeTitle: dateAppTimeStamp)
                         KeyNavigation.right: checkboxTimeStamp.checked ? textFieldTimeStamp : (rectOffice.visible ? textOfficeTitle: dateAppTimeStamp)
-                        KeyNavigation.backtab: dateAppTimeStamp
-                        KeyNavigation.up: dateAppTimeStamp
+                        KeyNavigation.backtab: linkTimestampService
+                        KeyNavigation.up: linkTimestampService
                         Keys.onEnterPressed: toggleSwitch(checkboxTimeStamp)
                         Keys.onReturnPressed: toggleSwitch(checkboxTimeStamp)
                     }
@@ -307,9 +332,9 @@ Item {
                             Keys.onPressed: {
                                 handleKeyPressed(event.key, textFieldTimeStamp)
                             }
-                            KeyNavigation.tab: rectOffice.visible ? textOfficeTitle: dateAppTimeStamp
-                            KeyNavigation.down: rectOffice.visible ? textOfficeTitle: dateAppTimeStamp
-                            KeyNavigation.right: rectOffice.visible ? textOfficeTitle: dateAppTimeStamp
+                            KeyNavigation.tab:  rectOffice.visible ? textOfficeTitle: dateAppTimeStamp
+                            KeyNavigation.down:  rectOffice.visible ? textOfficeTitle: dateAppTimeStamp
+                            KeyNavigation.right:  rectOffice.visible ? textOfficeTitle: dateAppTimeStamp
                             KeyNavigation.backtab: checkboxTimeStamp
                             KeyNavigation.up: checkboxTimeStamp
                         }

@@ -348,7 +348,7 @@ PageServicesSignAdvancedForm {
             Item {
                 id: rectLabelText
                 width: parent.width
-                height: 50
+                height: 55
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: labelText
@@ -357,7 +357,7 @@ PageServicesSignAdvancedForm {
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
-                    width: parent.width - 48
+                    width: parent.width
                     wrapMode: Text.Wrap
                 }
             }

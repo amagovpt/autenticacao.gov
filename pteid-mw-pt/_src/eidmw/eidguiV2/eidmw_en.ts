@@ -172,7 +172,7 @@
     </message>
     <message>
         <source>STR_TIME_STAMP_FAILED</source>
-        <translation>But the timestamp could not be applied.</translation>
+        <translation>However, the timestamp could not be applied. Verify the settings for the timestamp service in the menu &quot;Signatures configuration&quot;.</translation>
     </message>
     <message>
         <source>STR_CHANGING_ADDRESS</source>
@@ -464,7 +464,7 @@
     </message>
     <message>
         <source>STR_LTV_FAILED</source>
-        <translation>But the Long Term Validation was not correctly applied.</translation>
+        <translation>However, the Long Term Validation was not correctly applied. Verify the settings for the timestamp service in the menu &quot;Signatures configuration&quot;.</translation>
     </message>
 </context>
 <context>
@@ -1743,11 +1743,11 @@
     </message>
     <message>
         <source>STR_TIME_STAMP_MULTI_FAILED</source>
-        <translation>But some of the timestamps could not be applied</translation>
+        <translation>But some of the timestamps could not be applied. Verify the settings for the timestamp service in the menu &quot;Signatures configuration&quot;.</translation>
     </message>
     <message>
         <source>STR_TIME_STAMP_FAILED</source>
-        <translation>But the timestamp could not be applied</translation>
+        <translation>However, the timestamp could not be applied. Verify the settings for the timestamp service in the menu &quot;Signatures configuration&quot;.</translation>
     </message>
     <message>
         <source>STR_SCAP_NOT_VALID_ATTRIBUTES</source>

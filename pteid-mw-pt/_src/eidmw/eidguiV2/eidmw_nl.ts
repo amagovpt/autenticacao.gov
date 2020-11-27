@@ -170,7 +170,7 @@
     </message>
     <message>
         <source>STR_TIME_STAMP_FAILED</source>
-        <translation>Mas o selo temporal não foi aplicado.</translation>
+        <translation>No entanto, o selo temporal não foi aplicado. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
     </message>
     <message>
         <source>STR_CHANGING_ADDRESS</source>
@@ -462,7 +462,7 @@
     </message>
     <message>
         <source>STR_LTV_FAILED</source>
-        <translation>Mas a Validação de Longo Prazo não foi corretamente  aplicada.</translation>
+        <translation>No entanto, a Validação de Longo Prazo não foi corretamente  aplicada. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
     </message>
 </context>
 <context>
@@ -1741,11 +1741,11 @@
     </message>
     <message>
         <source>STR_TIME_STAMP_MULTI_FAILED</source>
-        <translation>Mas alguns dos selos temporais não foram aplicados</translation>
+        <translation>Mas alguns dos selos temporais não foram aplicados. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
     </message>
     <message>
         <source>STR_TIME_STAMP_FAILED</source>
-        <translation>Mas o selo temporal não foi aplicado</translation>
+        <translation>No entanto, o selo temporal não foi aplicado. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
     </message>
     <message>
         <source>STR_SCAP_NOT_VALID_ATTRIBUTES</source>
