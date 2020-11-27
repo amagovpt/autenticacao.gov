@@ -121,9 +121,9 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
     {
         if (!parser->parse(QCoreApplication::arguments())) {
             qDebug() << "ERROR: default no-arguments mode: " << parser->errorText().toStdString().c_str();
-            gapi->quitApplication();
-            PTEID_ReleaseSDK();
-            exit(1);
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "parseCommandlineGuiArguments: default no-arguments mode: %s", parser->errorText().toStdString().c_str());
+            return;
         }
     }
     else if (mode == "signAdvanced" || mode == "signSimple")
@@ -149,9 +149,9 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
 
         if (!parser->parse(QCoreApplication::arguments())) {
             qDebug() << "ERROR: " << mode << ": " << parser->errorText().toStdString().c_str();
-            gapi->quitApplication();
-            PTEID_ReleaseSDK();
-            exit(1);
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "parseCommandlineGuiArguments: %s: %s", mode.toStdString().c_str(), parser->errorText().toStdString().c_str());
+            return;
         }
         // some option values were interpreted as positional args before. call this again
         args = parser->positionalArguments(); 
@@ -159,16 +159,16 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
         if (args.size() < 2)
         {
             qDebug() << "ERROR: " << mode << ": " << "No input files were provided.";
-            gapi->quitApplication();
-            PTEID_ReleaseSDK();
-            exit(1);
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "parseCommandlineGuiArguments: %s: No input files were provided.", mode.toStdString().c_str());
+            return;
         }
         if (mode == "signSimple" && args.size() != 2)
         {
             qDebug() << "ERROR: signSimple can only take one file as input.";
-            gapi->quitApplication();
-            PTEID_ReleaseSDK();
-            exit(1);
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "parseCommandlineGuiArguments: signSimple can only take one file as input");
+            return;
         }
         for (int i = 1; i < args.size(); i++)
         {
@@ -178,12 +178,12 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
             }else
             {
                 qDebug() << "ERROR: Cannot load file for signature. File/folder does not exist: " << args[i];
-                gapi->quitApplication();
-                PTEID_ReleaseSDK();
-                exit(1);
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui",
+                    "parseCommandlineGuiArguments: Cannot load file for signature. File/folder does not exist: %s", args[i].toStdString().c_str());
+                return;
             }
         }
-        // Shotcuts and options
+        // Shortcuts and options
         if (mode == "signAdvanced")
         {
             gapi->setShortcutFlag(GAPI::ShortcutIdSignAdvanced);
@@ -197,18 +197,19 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
         if (parser->isSet(outputOption) && !QFileInfo::exists(parser->value(outputOption)))
         {
             qDebug() << "ERROR: File/folder does not exist for output folder: " << parser->value(outputOption);
-            gapi->quitApplication();
-            PTEID_ReleaseSDK();
-            exit(1);
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "parseCommandlineGuiArguments: File/folder does not exist for output folder: %s", parser->value(outputOption).toStdString().c_str());
+            gapi->setShortcutFlag(GAPI::ShortcutIdNone);
+            return;
         }
         gapi->setShortcutOutput(parser->value(outputOption));
     }
     else
     {
         qDebug() << "ERROR: Unknown mode: " << mode;
-        gapi->quitApplication();
-        PTEID_ReleaseSDK();
-        exit(1);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "parseCommandlineGuiArguments: Unknown mode: %s", mode.toStdString().c_str());
+        return;
     }
 }
 
