@@ -1045,7 +1045,7 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QList<QString>
             }
         }
 
-        if (signParams.isSmallSignature > 0)
+        if (signParams.isSmallSignature)
             cmd_pdfSignature->enableSmallSignatureFormat();
 
         if (useCustomSignature()) {
