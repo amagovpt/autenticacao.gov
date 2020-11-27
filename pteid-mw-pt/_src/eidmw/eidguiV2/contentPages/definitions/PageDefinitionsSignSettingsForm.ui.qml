@@ -263,6 +263,7 @@ Item {
                             + "<a href='https://amagovpt.github.io/autenticacao.gov/user_manual.html#configura%C3%A7%C3%A3o-de-assinaturas'>" 
                             + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
                         propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#configura%C3%A7%C3%A3o-de-assinaturas'
+                        propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " " + qsTranslate("PageDefinitionsApp", "STR_HERE") 
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                         propertyText.font.bold: activeFocus
@@ -521,6 +522,7 @@ Item {
                             + "<a href='https://amagovpt.github.io/autenticacao.gov/user_manual.html#assinatura-digital-com-chave-m%C3%B3vel-digital'>" 
                             + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
                         propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#assinatura-digital-com-chave-m%C3%B3vel-digital'
+                        propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " " + qsTranslate("PageDefinitionsApp", "STR_HERE") 
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                         propertyText.font.bold: activeFocus
@@ -689,6 +691,7 @@ Item {
                                 + "<a href='https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-com-a-nova-cadeia-de-confian%C3%A7a'>" 
                                 + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
                             propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-com-a-nova-cadeia-de-confian%C3%A7a'
+                            propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " " + qsTranslate("PageDefinitionsApp", "STR_HERE") 
                             propertyText.font.capitalization: Font.MixedCase
                             propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                             propertyText.font.bold: activeFocus

@@ -943,7 +943,7 @@ Item {
                     id: rectAppGraphicsCheckBox
                     width: parent.width
                     color: "white"
-                    height: graphicsTextField.height + graphicsInfoTextField.height + comboboxAccelGraphics.height
+                    height: graphicsTextField.height + textLink.height + comboboxAccelGraphics.height
                             + 4 * Constants.SIZE_TEXT_V_SPACE
                     anchors.top: dateAppGraphics.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
@@ -963,49 +963,33 @@ Item {
                         Keys.onPressed: {
                             handleKeyPressed(event.key, graphicsTextField)
                         }
-                        KeyNavigation.tab: graphicsInfoTextField
-                        KeyNavigation.down: graphicsInfoTextField
-                        KeyNavigation.right: graphicsInfoTextField
+                        KeyNavigation.tab: textLink
+                        KeyNavigation.down: textLink
+                        KeyNavigation.right: textLink
                         KeyNavigation.backtab: dateAppGraphics
                         KeyNavigation.up: dateAppGraphics
                         KeyNavigation.left: dateAppGraphics
                     }
-                    Text {
-                        id: graphicsInfoTextField
-                        x: 10
-                        text: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + controler.autoTr
-                        anchors.top: graphicsTextField.bottom
-                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                        font.capitalization: Font.MixedCase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        font.bold: activeFocus
-                        wrapMode: Text.WordWrap
-                        Accessible.name: text
-                        KeyNavigation.tab: textLink
-                        KeyNavigation.down: textLink
-                        KeyNavigation.right: textLink
-                        KeyNavigation.backtab: graphicsTextField
-                        KeyNavigation.up: graphicsTextField
-                        KeyNavigation.left: graphicsTextField
-                    }
                     Components.Link {
                         id: textLink
-                        anchors.left: graphicsInfoTextField.right
-                        anchors.verticalCenter: graphicsInfoTextField.verticalCenter
+                        x: 10
+                        anchors.top: graphicsTextField.bottom
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         width: parent.width
-                        propertyText.text: "<a href='https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-gráficos-na-aplicação'>" +
-                                           qsTranslate("PageDefinitionsApp", "STR_HERE") + controler.autoTr + "</a>."
+                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " "
+                                            + "<a href='https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-gráficos-na-aplicação'>"
+                                            + qsTranslate("PageDefinitionsApp", "STR_HERE")
                         propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-gráficos-na-aplicação'
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
-                        propertyText.font.bold: activeFocus
+                        propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " "
+                                            + qsTranslate("PageDefinitionsApp", "STR_HERE")
                         KeyNavigation.tab: textGraphicsRendering
                         KeyNavigation.down: textGraphicsRendering
                         KeyNavigation.right: textGraphicsRendering
-                        KeyNavigation.left: graphicsInfoTextField
-                        KeyNavigation.backtab: graphicsInfoTextField
-                        KeyNavigation.up: graphicsInfoTextField
+                        KeyNavigation.left: graphicsTextField
+                        KeyNavigation.backtab: graphicsTextField
+                        KeyNavigation.up: graphicsTextField
                     }
                     Text {
                         id: textGraphicsRendering
@@ -1024,9 +1008,9 @@ Item {
                         KeyNavigation.tab: comboboxAccelGraphics
                         KeyNavigation.down: comboboxAccelGraphics
                         KeyNavigation.right: comboboxAccelGraphics
-                        KeyNavigation.backtab: textLink
-                        KeyNavigation.up: textLink
-                        KeyNavigation.left: textLink
+                        KeyNavigation.backtab: textLink.propertyText
+                        KeyNavigation.up: textLink.propertyText
+                        KeyNavigation.left: textLink.propertyText
                         text: qsTranslate("PageDefinitionsApp", "STR_ACCEL_MODE") + controler.autoTr
                         verticalAlignment: Text.AlignVCenter
                     }
@@ -1042,7 +1026,7 @@ Item {
                         anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                         anchors.right: parent.right
                         anchors.rightMargin: 10
-                        anchors.top: graphicsInfoTextField.bottom
+                        anchors.top: textLink.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.ComboBox
                         Accessible.name: currentText
