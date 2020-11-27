@@ -557,7 +557,6 @@ Item {
                         enabled: switchSignTemp.checked         /* timestamp enabled */
                                 && !switchSignAdd.checked       /* scap disabled */
                                 && radioButtonPADES.checked     /* pdf signature */
-                                && filesModel.count == 1        /* single file only */
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
