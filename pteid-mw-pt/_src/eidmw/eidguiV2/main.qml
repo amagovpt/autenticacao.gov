@@ -227,6 +227,8 @@ Load language error. Please reinstall the application"
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             font.family: lato.name
             color: Constants.COLOR_MAIN_BLUE
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: labelTextTitle.text
             KeyNavigation.tab: textAutoupdate
             KeyNavigation.down: textAutoupdate
             KeyNavigation.right: textAutoupdate
@@ -257,6 +259,7 @@ Load language error. Please reinstall the application"
                     width: parent.width
                     anchors.bottom: parent.bottom
                     wrapMode: Text.WordWrap
+                    Accessible.name: textAutoupdate.text
                     KeyNavigation.tab: openTextAutoupdate
                     KeyNavigation.down: openTextAutoupdate
                     KeyNavigation.right: openTextAutoupdate
@@ -285,6 +288,7 @@ Load language error. Please reinstall the application"
                     width: parent.width
                     anchors.bottom: parent.bottom
                     wrapMode: Text.WordWrap
+                    Accessible.name: openTextAutoupdate.text
                     KeyNavigation.tab: buttonCancelUpdate
                     KeyNavigation.down: buttonCancelUpdate
                     KeyNavigation.right: buttonCancelUpdate
