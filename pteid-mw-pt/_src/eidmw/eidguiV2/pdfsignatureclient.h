@@ -32,29 +32,29 @@ class ns1__TransactionType;
 
 class PDFSignatureInfo{
 public:
-    PDFSignatureInfo(int _selectedPage, double _x, double _y, bool _isPortrait, const char *_location, const char *_reason){
+    PDFSignatureInfo(int _selectedPage, double _x, double _y, bool isLtv, const char *_location, const char *_reason) {
         selectedPage = _selectedPage;
         x = _x;
         y = _y;
-        portrait = _isPortrait;
         location = _location;
         reason = _reason;
+		is_ltv = isLtv;
     }
 
     int getSelectedPage() { return selectedPage; }
     double getX() { return x; }
     double getY() { return y; }
-    bool isPortrait() { return portrait; }
-    const char * getLocation(){ return location; }
-    const char * getReason(){ return reason; }
-    void setReason(const char * _reason){reason = _reason;}
-    void setLocation(const char * _location){location = _location;}
+	bool isLtv() { return is_ltv; }
+    const char * getLocation() { return location; }
+    const char * getReason() { return reason; }
+    void setReason(const char * _reason) { reason = _reason; }
+    void setLocation(const char * _location) { location = _location; }
 
 private:
     int selectedPage;
     double x;
     double y;
-    bool portrait;
+	bool is_ltv;
     const char *location;
     const char *reason;
 };
@@ -92,6 +92,7 @@ private:
     eIDMW::PTEID_PDFSignature * local_pdf_handler;
     QString current_output_file;
 
+	bool is_last_signature;
     std::string * processId;
     //This key is used as input for the TOTP generation
     std::string m_secretKey;

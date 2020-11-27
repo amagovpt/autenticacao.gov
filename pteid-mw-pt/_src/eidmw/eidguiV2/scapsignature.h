@@ -45,16 +45,15 @@ public:
 
 	std::vector<ns3__AttributeSupplierType *> getAttributeSuppliers();
 
-	void getEntityAttributes();
     std::vector<ns2__AttributesType *> getAttributes(GAPI *parent, eIDMW::PTEID_EIDCard *card, std::vector<int> supplier_ids, bool useOAuth = false);
 
     void executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepath, int selected_page,
-                double location_x, double location_y, QString &location, QString &reason, bool isTimestamp,
+                double location_x, double location_y, QString &location, QString &reason, bool isTimestamp, bool isLtv,
                 std::vector<int> attributes_index, CmdSignedFileDetails cmd_details,
                 bool useCustomImage, QByteArray &m_jpeg_scaled_data);
 
     void executeSCAPSignature(GAPI *parent, QString &inputPath, QString &savefilepath, int selected_page,
-		double location_x, double location_y, QString &location, QString &reason, bool isTimestamp, 
+		double location_x, double location_y, QString &location, QString &reason, bool isTimestamp, bool isLtv,
 		std::vector<int> selected_attributes, bool useCustomImage, QByteArray &m_jpeg_scaled_data);
 
     std::vector<ns2__AttributesType *> loadAttributesFromCache(bool isCompanies);
@@ -64,8 +63,6 @@ public:
     bool removeAttributesFromCache();
     void cancelGetAttributesWithCMD();
 	/* Connection error functions */
-	//The error message should be in the GUI, we should just return an enum
-    //QString getConnErrStr();
 
 private:
 	std::vector<ns3__AttributeSupplierType *> m_suppliersList;

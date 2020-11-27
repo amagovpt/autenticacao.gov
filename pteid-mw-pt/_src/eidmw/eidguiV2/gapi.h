@@ -165,9 +165,13 @@ struct SCAPSignParams {
 public:
     QString inputPDF;
     QString outputPDF;
-    int page; double location_x; double location_y;
-    QString location; QString reason;
+    int page; 
+	double location_x;
+	double location_y;
+	QString reason;
+    QString location;
     bool isTimestamp;
+	bool isLtv;
     QList<int> attribute_index;
 };
 
@@ -332,7 +336,7 @@ public slots:
     void startPingSCAP();
 
     void startSigningSCAP(QString inputPdf, QString outputPDF, int page, double location_x, double location_y,
-                          QString location, QString reason, bool isTimestamp, QList<int> attribute_index);
+                          QString location, QString reason, bool isTimestamp, bool isLtv, QList<int> attribute_index);
 
     void abortSCAPWithCMD(); // close the listing server
 
@@ -372,7 +376,7 @@ public slots:
     void doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token, QList<int> attribute_list);
     void signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
                        QString outputFile, int page, double coord_x, double coord_y,
-                       QString reason, QString location, bool isTimestamp);
+                       QString reason, QString location, bool isTimestamp, bool isLtv);
     void sendSmsCmd(CmdDialogClass dialogType);
     void doSendSmsCmd(CmdDialogClass dialogType);
 

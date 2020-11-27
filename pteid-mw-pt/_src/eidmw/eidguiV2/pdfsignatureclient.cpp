@@ -50,6 +50,7 @@ PDFSignatureClient::PDFSignatureClient()
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APPID);
 
         m_appID = config.getString();
+		is_last_signature = false;
 
         /*qDebug() << "m_appID = " << m_appID;*/
     }
@@ -313,6 +314,16 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
                                    strdup(attributeSupplier.toUtf8().constData()), strdup(attribute.toUtf8().constData()));
 
     sig_handler->setExternCertificate(certificatesData.at(0));
+	APL_SignatureLevel level = APL_SignatureLevel::LEVEL_BASIC;
+
+	if (signatureInfo.isLtv()) {
+		if (is_last_signature)
+			level = APL_SignatureLevel::LEVEL_LTV;
+		else
+			level = APL_SignatureLevel::LEVEL_LT;
+	}
+
+	sig_handler->setSignatureLevel(level);
 
     std::vector<CByteArray> caCerts(certificatesData.begin() + 1, certificatesData.end());
 
@@ -873,10 +884,10 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                 }
 
                 // Only the last signature should be timestamped
-                bool isLast = (i == transactionList.size() - 1);
+				is_last_signature = (i == transactionList.size() - 1);
                 signatureHash = openSCAPSignature(inputPath, outputPath,
                                 transaction->AttributeSupplierCertificateChain, citizenName, citizenId,
-                                attributeSupplierListString, attributeListString, signatureInfo, isVisible, isTimestamp && isLast, isCC,
+                                attributeSupplierListString, attributeListString, signatureInfo, isVisible, isTimestamp && is_last_signature, isCC,
                                 useCustomImage, m_jpeg_scaled_data);
 
                 if (signatureHash.size() == 0) {

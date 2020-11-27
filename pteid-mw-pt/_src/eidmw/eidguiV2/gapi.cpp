@@ -912,7 +912,7 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
 
         scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
             m_scap_params.location_x, m_scap_params.location_y,
-            m_scap_params.location, m_scap_params.reason, m_scap_params.isTimestamp, attrs, cmd_details,
+            m_scap_params.location, m_scap_params.reason, m_scap_params.isTimestamp, m_scap_params.isLtv, attrs, cmd_details,
             useCustomSignature(), m_jpeg_scaled_data);
 
         for (size_t i = 0; i < cmd_pdfSignatures.size(); i++)
@@ -945,12 +945,12 @@ QString generateTempFile() {
 
 void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
     QString outputFile, int page, double coord_x, double coord_y,
-    QString reason, QString location, bool isTimestamp) {
+    QString reason, QString location, bool isTimestamp, bool isLtv) {
 
     qDebug() << "signOpenScapWithCMD! MobileNumber = " << mobileNumber << " secret_code = " << secret_code <<
         " loadedFilePaths = " << loadedFilePaths <<
         " outputFile = " << outputFile << " page = " << page << " coord_x" << coord_x <<
-        " coord_y" << coord_y << " reason = " << reason << " location = " << location;
+        " coord_y" << coord_y << " reason = " << reason << " location = " << location << "isLtv= "<<isLtv;
 
     signalUpdateProgressStatus(tr("STR_CMD_CONNECTING"));
 
@@ -966,11 +966,13 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<
     m_scap_params.location = location;
     m_scap_params.reason = reason;
     m_scap_params.isTimestamp = isTimestamp;
+	m_scap_params.isLtv = isLtv;
 
     CmdParams cmdParams;
     SignParams signParams;
 
-    //Invisible CMD signature
+    /* Invisible CMD signature: with SCAP only the last signature generated
+	   by the actual SCAP system is visible */
     cmdParams.secret_code = secret_code;
     cmdParams.mobileNumber = mobileNumber;
     signParams.loadedFilePaths = loadedFilePaths;
@@ -989,12 +991,14 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<
     for (int i = 0; i < loadedFilePaths.size(); i++) {
         QString fullInputPath = loadedFilePaths[i];
         PTEID_PDFSignature * cmd_pdfSignature = new eIDMW::PTEID_PDFSignature();
-
+		
         cmd_pdfSignatures.push_back(cmd_pdfSignature); // keep track of pointers to be deleted
         cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
-
+		PTEID_SignatureLevel sig_level = isLtv ? PTEID_LEVEL_LT : PTEID_LEVEL_BASIC;
+		cmd_pdfSignature->setSignatureLevel(sig_level);
         cmd_signature->add_pdf_handler(cmd_pdfSignature);
     }
+
     Concurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, cmdParams, signParams);
 
 }
@@ -2249,10 +2253,10 @@ void GAPI::startRemovingAttributesFromCache(int scapAttrType) {
 }
 
 void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, double location_x,
-    double location_y, QString location, QString reason, bool ltv, QList<int> attribute_index) {
+    double location_y, QString location, QString reason, bool isTimestamp, bool isLtv,  QList<int> attribute_index) {
 
     SCAPSignParams signParams = { inputPDF, outputPDF, page, location_x, location_y,
-        location, reason, ltv, attribute_index };
+        location, reason, isTimestamp, isLtv, attribute_index };
 
     Concurrent::run(this, &GAPI::doSignSCAP, signParams);
 }
@@ -2268,7 +2272,7 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
 
     scapServices.executeSCAPSignature(this, params.inputPDF, params.outputPDF, params.page,
         params.location_x, params.location_y, params.location, params.reason,
-        params.isTimestamp, attrs, useCustomSignature(), m_jpeg_scaled_data);
+        params.isTimestamp, params.isLtv, attrs, useCustomSignature(), m_jpeg_scaled_data);
     END_TRY_CATCH
 }
 

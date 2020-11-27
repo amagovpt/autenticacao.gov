@@ -555,7 +555,6 @@ Item {
                         anchors.top: textFieldLocal.bottom
                         x: 0.6 * parent.width
                         enabled: switchSignTemp.checked         /* timestamp enabled */
-                                && !switchSignAdd.checked       /* scap disabled */
                                 && radioButtonPADES.checked     /* pdf signature */
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD

@@ -1558,7 +1558,7 @@ PageServicesSignAdvancedForm {
                     }
                     console.log("QML AttributeList: ", attributeList)
                     gapi.startSigningSCAP(loadedFilePath, outputFile, page, coord_x, coord_y,
-                                            location,reason, isTimestamp, attributeList)
+                                            location, reason, isTimestamp, isLTV, attributeList)
                 } else {
                     gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
                                             reason, location, isTimestamp, isLTV, isSmallSignature)

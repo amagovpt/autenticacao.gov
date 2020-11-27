@@ -802,7 +802,7 @@ Item {
             gapi.signOpenScapWithCMD(mobileNumber,textFieldPin.text,
                                      loadedFilePaths,outputFile,page,
                                      coord_x, coord_y,
-                                     reason,location, isTimestamp)
+                                     reason, location, isTimestamp, isLTV)
         } else {
             gapi.signOpenCMD(mobileNumber,textFieldPin.text,
                              loadedFilePaths,outputFile,page,
