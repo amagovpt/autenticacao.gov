@@ -2256,7 +2256,7 @@ void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, doubl
     double location_y, QString location, QString reason, bool isTimestamp, bool isLtv,  QList<int> attribute_index) {
 
     SCAPSignParams signParams = { inputPDF, outputPDF, page, location_x, location_y,
-        location, reason, isTimestamp, isLtv, attribute_index };
+        reason, location, isTimestamp, isLtv, attribute_index };
 
     Concurrent::run(this, &GAPI::doSignSCAP, signParams);
 }
