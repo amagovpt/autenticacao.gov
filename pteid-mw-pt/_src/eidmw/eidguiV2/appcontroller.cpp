@@ -647,8 +647,10 @@ bool AppController::getOutlookSuppressNameChecks(void) {
         }
         catch (...)
         {
-            PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Outlook SupressNameChecks registry does not exist");
+            PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Outlook SupressNameChecks registry does not exist. RegName: %ls", regName.c_str());
+            return false;
         }
+        PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Get Outlook SupressNameChecks registry: %d RegName: %ls", abValueDat, regName.c_str());
         return abValueDat == 1;
     }
 
@@ -678,7 +680,7 @@ void AppController::setOutlookSuppressNameChecks(bool bDisabledMatching) {
         }
         catch (...)
         {
-            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Could not set Outlook SupressNameChecks registry");
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Could not set Outlook SupressNameChecks registry. RegName: %ls", regName.c_str());
         }
         return;
     }

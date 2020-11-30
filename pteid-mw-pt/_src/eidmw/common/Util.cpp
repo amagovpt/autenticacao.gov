@@ -330,27 +330,34 @@ void ReadReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD *dw
     HKEY hKey;
     LONG result = RegOpenKeyEx(hive, subKey, 0, KEY_READ, &hKey);
     if (result != ERROR_SUCCESS){
+        RegCloseKey(hKey);
         throw CMWEXCEPTION(EIDMW_CONF);
         return;
     }
     result = RegQueryValueExW(hKey, leafKey, NULL, dwType, (LPBYTE)output, outputSize);
     if (result != ERROR_SUCCESS){
+        RegCloseKey(hKey);
         throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
         return;
     }
+    RegCloseKey(hKey);
 }
 void WriteReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD dwType, void* input, DWORD inputSize) {
     HKEY hKey;
-    LONG result = RegOpenKeyEx(hive, subKey, 0, KEY_WRITE, &hKey);
-    if (result != ERROR_SUCCESS){
+
+    LONG result = RegCreateKeyEx(hive, subKey, 0L, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL);
+    if (result != ERROR_SUCCESS) {
+        RegCloseKey(hKey);
         throw CMWEXCEPTION(EIDMW_CONF);
         return;
     }
     result = RegSetValueExW(hKey, leafKey, NULL, dwType, (LPBYTE)input, inputSize);
     if (result != ERROR_SUCCESS){
+        RegCloseKey(hKey);
         throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
         return;
     }
+    RegCloseKey(hKey);
 }
 #endif
 }

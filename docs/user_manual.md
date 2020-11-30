@@ -1026,18 +1026,18 @@ email que se pretende assinar.
 
 Nos certificados existentes no Cartão de Cidadão não existe qualquer
 endereço de email. Desta forma, para que seja possível efetuar
-assinaturas digitais no *Outlook*, é assim necessário desativar esta
-validação através da alteração das configurações no sistema operativo.
+assinaturas digitais no *Outlook* com o Cartão de Cidadão, é assim necessário desativar esta
+validação.
+
+Na aplicação poderá desactivar essa validação selecionando a opção **Permitir assinatura de e-mails no Outlook** no submenu **Configuração de assinaturas** da aplicação do Cartão de Cidadão.
 
   ![Ilustração: Localização da opção para desativar a correspondência de e-mails nos certificado no Microsoft Outlook](Pictures/Autenticacao.Gov_configuracao_assinaturas.png "Localização da opção para desativar a correspondência de e-mails nos certificado no Microsoft Outlook"){:.center}
 
-Para **desativar a correspondência com endereço de email do certificado digital**, deve seguir as instruções disponibilizadas no *website* da *Microsoft*:
+Alternativamente, para **desativar a correspondência com endereço de email do certificado digital**, poderá seguir as instruções disponibilizadas no *website* da *Microsoft*:
 
 - Versão PT: <http://support.microsoft.com/kb/276597/pt>
 
 - Versão EN (original): <http://support.microsoft.com/kb/276597/>
-
-Alternativamente, poderá selecionar a opção **Permitir assinatura de e-mails no Outlook** no submenu **Configuração de assinaturas** da aplicação do Cartão de Cidadão.
 
 Para poder assinar digitalmente um email no *Outlook*, é necessário
 inicialmente efetuar a respetiva configuração. Os passos descritos de
@@ -1045,8 +1045,7 @@ seguida, estão divididos em **configuração**, consistindo na
 configuração inicial necessária, e **assinatura**, consistindo na
 assinatura propriamente.
 
-**Nota:** As imagens apresentadas são referentes ao *Microsoft Outlook
-2016*.
+**Nota:** As imagens apresentadas são referentes ao *Microsoft Outlook 2016*.
 
 **Configuração** – Esta operação é realizada apenas uma vez.
 
