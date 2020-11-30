@@ -648,6 +648,7 @@ bool CERTIFICATES::IsNewRootCACertInstalled()
 
     CertCloseStore(hRootStore, CERT_CLOSE_STORE_FORCE_FLAG);
 #endif
+    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Is new root CA Cert installed. Result: %d", rootCaFound); 
     return rootCaFound;
 }
 
@@ -697,6 +698,7 @@ bool CERTIFICATES::InstallNewRootCa()
                 "CertAddCertificateContextToStore failed with error code: 0x%08x", err);
         }
     }
+    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Install New Root CA. Result: %d", result);
     return result;
 #else
     return false;
