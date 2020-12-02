@@ -452,7 +452,7 @@ signals:
     void signCMDFinished(long error_code);
     void signalValidateOtp();
     void signalShowLoadAttrButton();
-    void signalShowMessage(QString msg);
+    void signalShowMessage(QString msg, QString urlLink);
     void signalOpenFile();
     void signalCardChanged(const int error_code);
     void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage, bool success);

@@ -39,12 +39,15 @@ Item {
         onSignalShowMessage: {
             console.log("Signal Show Message: " + msg)
             dialogContent.state = Constants.DLG_STATE.SHOW_MESSAGE;
-            labelCMDText.text = msg
-            labelCMDText.forceActiveFocus()
+            labelCMDText.propertyText.text = msg
+            labelCMDText.propertyAccessibleText = textMessageTop.text + Functions.filterText(msg)
+            labelCMDText.propertyLinkUrl = urlLink
+            labelCMDText.propertyText.forceActiveFocus()
         }
         onSignalOpenFile: {
             console.log("Signal Open File")
             dialogContent.state = Constants.DLG_STATE.OPEN_FILE;
+            dialogContent.forceActiveFocus()
         }
         onSignalUpdateProgressBar: {
             console.log("CMD sign change --> update progress bar with value = " + value)
@@ -95,7 +98,7 @@ Item {
             lineHeight: 1.2
         }
         contentItem: Item {
-            property var next : labelCMDText
+            property var next : linkCMD.visible ? linkCMD : labelCMDText.propertyText
 
             id: dialogContent
             height: parent.height
@@ -108,7 +111,7 @@ Item {
             }
             Accessible.role: Accessible.AlertMessage
             Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
-                             + dialogTitle.text
+                             + dialogTitle.text + textMessageTop.text
             KeyNavigation.tab: next
             KeyNavigation.down: next
             KeyNavigation.right: next
@@ -136,9 +139,9 @@ Item {
                     propertyText.font.bold: activeFocus
                     propertyAccessibleText: qsTranslate("PageServicesSign","STR_SIGN_CMD_URL")
                     propertyLinkUrl: 'https://www.autenticacao.gov.pt/cmd-pedido-chave'
-                    KeyNavigation.tab: comboBoxMobileNumber.visible ? comboBoxMobileNumber : labelCMDText
-                    KeyNavigation.down: comboBoxMobileNumber.visible ? comboBoxMobileNumber : labelCMDText
-                    KeyNavigation.right: comboBoxMobileNumber.visible ? comboBoxMobileNumber : labelCMDText
+                    KeyNavigation.tab: comboBoxMobileNumber.visible ? comboBoxMobileNumber : labelCMDText.propertyText
+                    KeyNavigation.down: comboBoxMobileNumber.visible ? comboBoxMobileNumber : labelCMDText.propertyText
+                    KeyNavigation.right: comboBoxMobileNumber.visible ? comboBoxMobileNumber : labelCMDText.propertyText
                     KeyNavigation.backtab: dialogContent
                     KeyNavigation.up: dialogContent
 
@@ -161,7 +164,7 @@ Item {
                     anchors.topMargin: linkCMD.visible ? Constants.SIZE_ROW_V_SPACE : 3
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
-                    font.bold: activeFocus
+                    font.bold: ( activeFocus || labelCMDText.propertyText.activeFocus) ? true : false
                     color: Constants.COLOR_TEXT_LABEL
                     width: parent.width
                     wrapMode: Text.WordWrap
@@ -400,28 +403,30 @@ Item {
                 visible: false
                 z:1
             }
-            Text {
-                id: labelCMDText
-                visible: false
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
-                font.family: lato.name
-                font.bold: activeFocus
-                color: Constants.COLOR_TEXT_LABEL
-                anchors.verticalCenter: parent.verticalCenter
-                verticalAlignment: Text.AlignVCenter
+            Item {
+                id: rectLabelCMDText
                 height: 50
                 width: parent.width
-                wrapMode: Text.Wrap
-                Accessible.role: Accessible.StaticText
-                Accessible.name: textMessageTop.text + "\n" + text
-                KeyNavigation.tab: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)
-                KeyNavigation.down: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)
-                KeyNavigation.right: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)
-                Keys.onEnterPressed: {
-                    confirmDlg()
-                }
-                Keys.onReturnPressed: {
-                    confirmDlg()
+                anchors.verticalCenter: parent.verticalCenter
+                Link {
+                        id: labelCMDText
+                        visible: false
+                        propertyText.verticalAlignment: Text.AlignVCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        height: 50
+                        width: parent.width
+                        propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+                        anchors.fill: parent 
+                        propertyText.color: Constants.COLOR_TEXT_LABEL
+                        KeyNavigation.tab: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)
+                        KeyNavigation.down: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)
+                        KeyNavigation.right: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)      
+                        Keys.onEnterPressed: {
+                            confirmDlg()
+                        }
+                        Keys.onReturnPressed: {
+                            confirmDlg()
+                        }
                 }
             }
             CheckBox {
@@ -434,10 +439,13 @@ Item {
                 font.capitalization: Font.MixedCase
                 font.bold: activeFocus
                 checked: !controler.getAskToRegisterCmdCertValue()
-                anchors.top: labelCMDText.bottom
+                anchors.top: rectLabelCMDText.bottom
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 Accessible.role: Accessible.CheckBox
                 Accessible.name: text
+                KeyNavigation.left: labelCMDText.propertyText
+                KeyNavigation.backtab: labelCMDText.propertyText
+                KeyNavigation.up: labelCMDText.propertyText
                 onClicked: {
                     controler.setAskToRegisterCmdCertValue(!checkboxDontAskAgain.checked)
                 }
@@ -450,7 +458,11 @@ Item {
                     PropertyChanges {target: linkCMD; visible: true}
                     PropertyChanges {target: checkboxDontAskAgain; visible: true}
                     PropertyChanges {target: buttonCancel; prev: checkboxDontAskAgain}
-                    PropertyChanges {target: labelCMDText; visible: true; text: qsTr("STR_REGISTER_CMD_CERT_DESC") + controler.autoTr}
+                    PropertyChanges {
+                        target: labelCMDText; visible: true; propertyLinkUrl: ""
+                        propertyText.text: qsTr("STR_REGISTER_CMD_CERT_DESC") + controler.autoTr; 
+                        propertyAccessibleText: qsTr("STR_REGISTER_CMD_CERT_DESC") + controler.autoTr; 
+                    }
                     PropertyChanges {target: buttonConfirm; text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_BUTTON") + controler.autoTr}
                     PropertyChanges {target: dialogTitle; restoreEntryValues : false; text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_TITLE") + controler.autoTr}
                 },
@@ -509,24 +521,30 @@ Item {
                     PropertyChanges {
                         target: labelCMDText;
                         visible: true;
-                        text: qsTranslate("Popup File","STR_POPUP_LOAD_SCAP_ATTR") + controler.autoTr
+                        propertyLinkUrl: ""
+                        propertyText.text: qsTranslate("Popup File","STR_POPUP_LOAD_SCAP_ATTR") + controler.autoTr;
+                        propertyAccessibleText: qsTranslate("Popup File","STR_POPUP_LOAD_SCAP_ATTR") + controler.autoTr;
                     }
                 },
                 State {
                     name: Constants.DLG_STATE.SHOW_MESSAGE
-                    PropertyChanges {target: labelCMDText; visible: true}
+                    PropertyChanges {
+                        target: labelCMDText; visible: true; 
+                    }
                     PropertyChanges {target: progressBar; visible: true}
                     PropertyChanges {target: progressBarIndeterminate; visible: false}
                 },
                 State {
                     name: Constants.DLG_STATE.OPEN_FILE
-                    PropertyChanges {target: labelCMDText; visible: true}
+                    PropertyChanges {target: labelCMDText; visible: true; propertyLinkUrl: ""}
                     PropertyChanges {target: buttonConfirm; text: qsTranslate("Popup File","STR_POPUP_FILE_OPEN") + controler.autoTr}
                     PropertyChanges {target: progressBar; visible: true}
                     PropertyChanges {
                         target: labelCMDText
                         visible: true
-                        text: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN") + controler.autoTr :
+                        propertyText.text: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN") + controler.autoTr :
+                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI") + controler.autoTr
+                        propertyAccessibleText: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN") + controler.autoTr :
                                                qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI") + controler.autoTr
                     }
                 }
@@ -538,7 +556,7 @@ Item {
             height: Constants.HEIGHT_BOTTOM_COMPONENT + Constants.SIZE_ROW_V_SPACE
             
             Button {
-                property var prev: labelCMDText
+                property var prev: checkboxDontAskAgain
                 id: buttonCancel
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
@@ -655,7 +673,7 @@ Item {
         else {
             console.log("Error: invalid cmd dialog type: " + type)
             dialogContent.state = Constants.DLG_STATE.SHOW_MESSAGE
-            labelCMDText.text = qsTranslate("GAPI", "STR_POPUP_ERROR") + controler.autoTr
+            labelCMDText.propertyText.text = qsTranslate("GAPI", "STR_POPUP_ERROR") + controler.autoTr
         }
 
         cmdDialog.open()

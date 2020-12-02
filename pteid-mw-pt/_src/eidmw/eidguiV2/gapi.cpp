@@ -626,6 +626,7 @@ void GAPI::showSignCMDDialog(long error_code)
 {
     QString message;
     QString support_string = tr("STR_CMD_ERROR_MSG");
+    QString urlLink = tr("STR_MAIL_SUPPORT");
 
     if (error_code == 0 || error_code == EIDMW_TIMESTAMP_ERROR || error_code == EIDMW_LTV_ERROR){
         PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "CMD signature op finished with sucess");
@@ -650,7 +651,9 @@ void GAPI::showSignCMDDialog(long error_code)
         message = tr("STR_CMD_TIMEOUT_ERROR");
         break;
     case ERR_GET_CERTIFICATE:
+        urlLink = tr("STR_URL_AUTENTICACAO_GOT_PT");
         message = tr("STR_CMD_GET_CERTIFICATE_ERROR");
+        support_string = "";
         break;
     case HTTP_PROXY_AUTH_REQUIRED:
         message = tr("STR_CMD_PROXY_AUTH_ERROR");
@@ -698,7 +701,7 @@ void GAPI::showSignCMDDialog(long error_code)
         } else {
             message += "<br><br>" + support_string;
             signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "!");
-            signalShowMessage(message);
+            signalShowMessage(message, urlLink);
         }
     }
     else{
@@ -3375,6 +3378,7 @@ void GAPI::doRegisterCMDCertOpen(QString mobileNumber, QString pin) {
     int res = m_cmdCertificates->ImportCertificatesOpen(mobileNumber.toStdString(), pin.toStdString());
 
     QString error_msg;
+    QString urlLink = "";
     // errors in cmdErrors.h
     switch (res) {
     case ERR_NONE:
@@ -3387,14 +3391,16 @@ void GAPI::doRegisterCMDCertOpen(QString mobileNumber, QString pin) {
         error_msg = tr("STR_VERIFY_INTERNET");
         break;
     case ERR_GET_CERTIFICATE:
+        urlLink = tr("STR_URL_AUTENTICACAO_GOT_PT");
         error_msg = tr("STR_CMD_GET_CERTIFICATE_ERROR");
         break;
     default:
+        urlLink = tr("STR_URL_AUTENTICACAO_GOT_PT");
         error_msg = tr("STR_CERT_REG_ERROR");
     }
     signalUpdateProgressBar(100);
     signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "!");
-    emit signalShowMessage(error_msg);
+    emit signalShowMessage(error_msg, urlLink);
 #endif
 }
 void GAPI::registerCMDCertClose(QString otp) {
@@ -3410,6 +3416,7 @@ void GAPI::doRegisterCMDCertClose(QString otp) {
 
     QString top_msg = tr("STR_POPUP_ERROR") + "!";
     QString error_msg;
+    QString urlLink = "";
     // errors in cmdErrors.h
     switch (res) {
     case ERR_NONE:
@@ -3422,11 +3429,12 @@ void GAPI::doRegisterCMDCertClose(QString otp) {
         break;
     default:
         error_msg = tr("STR_CERT_REG_ERROR");
+        urlLink = tr("STR_URL_AUTENTICACAO_GOT_PT");
     }
 
     signalUpdateProgressBar(100);
     signalUpdateProgressStatus(top_msg);
-    emit signalShowMessage(error_msg);
+    emit signalShowMessage(error_msg, urlLink);
 #endif
 }
 

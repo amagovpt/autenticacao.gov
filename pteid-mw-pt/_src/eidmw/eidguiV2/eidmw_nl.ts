@@ -137,7 +137,7 @@
     <message>
         <source>STR_CMD_GET_CERTIFICATE_ERROR</source>
         <oldsource>STR_GET_CERTIFICATE_ERROR</oldsource>
-        <translation>Registo inexistente ou subscrição da assinatura digital inativa. Verifique se a subscrição da assinatura digital está ativada em &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;</translation>
+        <translation>Registo inexistente ou subscrição da assinatura digital inativa. Verifique se a subscrição da assinatura digital está ativada em &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;. &lt;br&gt;&lt;br&gt;Caso o erro persista, contacte-nos por email para &lt;b&gt;info.cidadao@ama.pt&lt;/b&gt;, indicando o número de telémovel associado à sua Chave Móvel Digital.</translation>
     </message>
     <message>
         <source>STR_CMD_PROXY_AUTH_ERROR</source>
@@ -222,7 +222,7 @@
     </message>
     <message>
         <source>STR_CERT_REG_ERROR</source>
-        <translation>Ocorreu um erro no registo do certificado.</translation>
+        <translation>Ocorreu um erro no registo do certificado. Verifique se a subscrição da assinatura digital está ativada em &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>STR_CERT_REG_SUCC</source>
@@ -463,6 +463,14 @@
     <message>
         <source>STR_LTV_FAILED</source>
         <translation>No entanto, a Validação de Longo Prazo não foi corretamente  aplicada. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
+    </message>
+    <message>
+        <source>STR_MAIL_SUPPORT</source>
+        <translation>mailto:info.cidadao@ama.pt</translation>
+    </message>
+    <message>
+        <source>STR_URL_AUTENTICACAO_GOT_PT</source>
+        <translation>https://www.autenticacao.gov.pt</translation>
     </message>
 </context>
 <context>

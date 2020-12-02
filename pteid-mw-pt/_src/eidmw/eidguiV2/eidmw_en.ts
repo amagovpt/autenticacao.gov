@@ -139,7 +139,7 @@
     <message>
         <source>STR_CMD_GET_CERTIFICATE_ERROR</source>
         <oldsource>STR_GET_CERTIFICATE_ERROR</oldsource>
-        <translation>Non-existent registration or inactive digital signature subscription. Verify that digital signature subscription is enabled on &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;</translation>
+        <translation>Non-existent registration or inactive digital signature subscription. Verify that digital signature subscription is enabled on &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;. &lt;br&gt;&lt;br&gt;If this error persists email us at &lt;b&gt;info.cidadao@ama.pt&lt;/b&gt;, indicating the mobile number linked to your Chave Móvel Digital.</translation>
     </message>
     <message>
         <source>STR_CMD_PROXY_AUTH_ERROR</source>
@@ -220,7 +220,7 @@
     </message>
     <message>
         <source>STR_CERT_REG_ERROR</source>
-        <translation>An error occured while registering the certificate.</translation>
+        <translation>An error occured while registering the certificate. Verify that digital signature subscription is enabled on &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>STR_CERT_REG_SUCC</source>
@@ -465,6 +465,14 @@
     <message>
         <source>STR_LTV_FAILED</source>
         <translation>However, the Long Term Validation was not correctly applied. Verify the settings for the timestamp service in the menu &quot;Signatures configuration&quot;.</translation>
+    </message>
+    <message>
+        <source>STR_MAIL_SUPPORT</source>
+        <translation>mailto:info.cidadao@ama.pt</translation>
+    </message>
+    <message>
+        <source>STR_URL_AUTENTICACAO_GOT_PT</source>
+        <translation>https://www.autenticacao.gov.pt</translation>
     </message>
 </context>
 <context>
