@@ -269,13 +269,7 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
     local_pdf_handler = new PTEID_PDFSignature(inputFile);
 
     PDFSignature *sig_handler = local_pdf_handler->getPdfSignature();
-
-    if (isTimestamp)
-    {
-        sig_handler->enableTimestamp();
-    }
-    
-	
+    	
 	if (useCustomImage && isVisible) {
 		const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(
 			m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
@@ -314,7 +308,7 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
                                    strdup(attributeSupplier.toUtf8().constData()), strdup(attribute.toUtf8().constData()));
 
     sig_handler->setExternCertificate(certificatesData.at(0));
-	APL_SignatureLevel level = APL_SignatureLevel::LEVEL_BASIC;
+	APL_SignatureLevel level = isTimestamp ? APL_SignatureLevel::LEVEL_TIMESTAMP : APL_SignatureLevel::LEVEL_BASIC;
 
 	if (signatureInfo.isLtv()) {
 		if (is_last_signature)
