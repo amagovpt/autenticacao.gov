@@ -1024,12 +1024,12 @@ A assinatura digital no *Outlook*, por omissão, obriga a que o
 certificado digital inclua o endereço de email, e este corresponda com o
 email que se pretende assinar.
 
-Nos certificados existentes no Cartão de Cidadão não existe qualquer
+Nos certificados existentes no Cartão de Cidadão e na Chave Móvel Digital não existe qualquer
 endereço de email. Desta forma, para que seja possível efetuar
-assinaturas digitais no *Outlook* com o Cartão de Cidadão, é assim necessário desativar esta
+assinaturas digitais no *Outlook* com o Cartão de Cidadão e Chave Móvel Digital, é assim necessário desativar esta
 validação.
 
-Na aplicação poderá desactivar essa validação selecionando a opção **Permitir assinatura de e-mails no Outlook** no submenu **Configuração de assinaturas** da aplicação do Cartão de Cidadão.
+Na aplicação poderá desactivar essa validação selecionando a opção **Permitir assinatura de e-mails no Outlook** no submenu **Configuração de assinaturas** da aplicação Autenticação.gov para computador.
 
   ![Ilustração: Localização da opção para desativar a correspondência de e-mails nos certificado no Microsoft Outlook](Pictures/Autenticacao.Gov_configuracao_assinaturas.png "Localização da opção para desativar a correspondência de e-mails nos certificado no Microsoft Outlook"){:.center}
 
