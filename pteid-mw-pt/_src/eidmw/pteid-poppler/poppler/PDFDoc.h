@@ -244,7 +244,7 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
   POPPLER_API GBool isSigned();
   POPPLER_API unsigned long getSigByteArray(unsigned char **byte_array, bool incremental);
   POPPLER_API GBool isReaderEnabled();
-  POPPLER_API std::unordered_set<int> getSignaturesIndexesUntilLastTimestamp();
+  POPPLER_API std::unordered_set<int> getSignaturesIndexes();
   POPPLER_API int getSignatureContents(unsigned char **, int sigIdx = 0);
 
   POPPLER_API Object *getByteRange();

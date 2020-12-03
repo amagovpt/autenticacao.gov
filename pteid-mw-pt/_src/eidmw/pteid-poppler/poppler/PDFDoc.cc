@@ -567,7 +567,7 @@ GBool PDFDoc::isReaderEnabled()
 
 }
 
-std::unordered_set<int> PDFDoc::getSignaturesIndexesUntilLastTimestamp()
+std::unordered_set<int> PDFDoc::getSignaturesIndexes()
 {
     std::unordered_set<int> indexes;
     Object *acro_form = getCatalog()->getAcroForm();
@@ -578,7 +578,7 @@ std::unordered_set<int> PDFDoc::getSignaturesIndexesUntilLastTimestamp()
 
     // FIXME: this assumes the references for the latest signatures are appended to the
     // Fields dict. Most PDF creators should append.
-    for (int i = fields.arrayGetLength()-1; i >= 0; i--) 
+    for (int i = 0; i != fields.arrayGetLength(); i++)
     {
         fields.arrayGet(i, &f);
 
@@ -587,20 +587,22 @@ std::unordered_set<int> PDFDoc::getSignaturesIndexesUntilLastTimestamp()
         if (strcmp(type.getName(), "Annot") == 0
             && strcmp(obj1.getName(), "Sig") == 0)
         {
-            indexes.insert(i);
 
             f.dictLookup("V", &sig_dict);
             sig_dict.dictLookup("Type", &type);
             sig_dict.dictLookup("SubFilter", &obj1);
-            if (strcmp(type.getName(), "DocTimeStamp") == 0
-                && strcmp(obj1.getName(), "ETSI.RFC3161") == 0)
-                break;
+			if (strcmp(type.getName(), "DocTimeStamp") != 0
+				&& strcmp(obj1.getName(), "ETSI.RFC3161") != 0) {
+				indexes.insert(i);
+			}
         }
     }
 
     return indexes;
 }
 
+/* Parameter sigIdx is the index for the signature dict in the document fields array 
+*/
 int PDFDoc::getSignatureContents(unsigned char **contents, int sigIdx)
 {
 	Object *acro_form = getCatalog()->getAcroForm();
@@ -610,31 +612,35 @@ int PDFDoc::getSignatureContents(unsigned char **contents, int sigIdx)
 		return 0;
 	acro_form->dictLookup("Fields", &fields);
 	
-	//Find the Signature Field and retrieve /Contents
-    int idx = -1;
-	for (int i = fields.arrayGetLength()-1; i >= 0; i--)
-	{
-	    fields.arrayGet(i, &f);
+	if (sigIdx >= fields.arrayGetLength()) {
+		error(errInternal, -1, "Signature field index %d greater than fields array length: %d", sigIdx, fields.arrayGetLength());
+		return 0;
+	}
+	fields.arrayGet(sigIdx, &f);
 
-	    f.dictLookup("Type", &type);
-	    f.dictLookup("FT", &obj1);
-	    if (strcmp(type.getName(), "Annot") == 0
+	f.dictLookup("Type", &type);
+	f.dictLookup("FT", &obj1);
+	if (strcmp(type.getName(), "Annot") == 0
 			    && strcmp(obj1.getName(), "Sig") == 0)
-	    {
-			idx++;
-			f.dictLookup("V", &sig_dict);
+	{
+		f.dictLookup("V", &sig_dict);
+		//Signature field may be empty so "/V" dictionary is optional
+		if (sig_dict.isDict()) {
+
 			sig_dict.dictLookup("Contents", &contents_obj);
-			if (contents_obj.isString() && idx == sigIdx)
+			if (contents_obj.isString())
 			{
 				GooString *str = contents_obj.getString();
-				int ret = str->getLength();	
+				int ret = str->getLength();
 				*contents = (unsigned char *)malloc(ret);
 				memcpy(*contents, str->getCString(), ret);
 				return ret;
 			}
-
 		}
 
+	}
+	else {
+		error(errInternal, -1, "Signature field index is wrong!: %d", sigIdx);
 	}
 
 	return 0;

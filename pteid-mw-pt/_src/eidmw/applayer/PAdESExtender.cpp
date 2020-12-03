@@ -250,7 +250,7 @@ namespace eIDMW
         unsigned char *signatureContents = NULL;
 
         std::vector<size_t> signerCerts_idx;
-        std::unordered_set<int> sigIndexes = doc->getSignaturesIndexesUntilLastTimestamp();
+        std::unordered_set<int> sigIndexes = doc->getSignaturesIndexes();
 
         if (sigIndexes.empty()) {
             MWLOG(LEV_ERROR, MOD_APL, "addLT(): No signatures found in the document. Pre-condition for addLT() is broken!");
@@ -260,6 +260,7 @@ namespace eIDMW
         
         for (auto const& idx : sigIndexes)
         {
+
             /* Compute SHA1 of signature contents to add as key of VRI dict. */
             int length = doc->getSignatureContents(&signatureContents, idx);
             if (length <= 0)
@@ -355,7 +356,7 @@ namespace eIDMW
             bool foundIssuer = false;
             ValidationDataElement *vd_elem = m_validationData[signer_cert_idx];
             CByteArray signer_cert(vd_elem->getData(), vd_elem->getSize());
-            MWLOG(LEV_DEBUG, MOD_APL, "### %s: adding revocation info for certificate: %s", __FUNCTION__, certificate_subject_from_der(signer_cert));
+            MWLOG(LEV_DEBUG, MOD_APL, "%s: adding revocation info for certificate: %s", __FUNCTION__, certificate_subject_from_der(signer_cert));
             
             //Find issuer for each signing cert
             for (size_t j = 0; j < m_validationData.size(); j++)
