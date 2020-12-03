@@ -976,9 +976,9 @@ Item {
                         anchors.top: graphicsTextField.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         width: parent.width
-                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " "
+                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + controler.autoTr + " "
                                             + "<a href='https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-gráficos-na-aplicação'>"
-                                            + qsTranslate("PageDefinitionsApp", "STR_HERE")
+                                            + qsTranslate("PageDefinitionsApp", "STR_HERE") + controler.autoTr
                         propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-gráficos-na-aplicação'
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
