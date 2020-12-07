@@ -83,10 +83,10 @@ namespace eIDMW
 
     cleanup:
         if (hexToken)
-            delete hexToken;
+            delete[] hexToken;
 
         if (to_sign)
-            delete to_sign;
+            free(to_sign);
 
         return success;
     }
@@ -432,7 +432,7 @@ namespace eIDMW
 
     cleanup:
         if (hexHash)
-            delete hexHash;
+            delete[] hexHash;
 
         if (!m_calledFromLtaMethod)
         {
