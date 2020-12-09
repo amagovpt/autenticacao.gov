@@ -135,6 +135,9 @@ Catalog::Catalog(PDFDoc *docA) {
   // get the AcroForm dictionary
   catDict.dictLookup("AcroForm", &acroForm);
 
+  // get the DSS dictionary
+  catDict.dictLookup("DSS", &dss);
+
   // read base URI
   if (catDict.dictLookup("URI", &obj)->isDict()) {
     if (obj.dictLookup("Base", &obj2)->isString()) {
@@ -266,17 +269,6 @@ fallback:
 }
 
 #endif
-
-void Catalog::addDSSEntry(Ref *dssRef)
-{
-    Object dssRefObj;
-    dssRefObj.initRef(dssRef->num, dssRef->gen);
-    catDict.dictAdd(copyString("DSS"), &dssRefObj);
-    Ref catRef;
-    catRef.gen = xref->getRootGen();
-    catRef.num = xref->getRootNum();
-    xref->setModifiedObject(&catDict, catRef);
-}
 
 void Catalog::fillSignatureField(Object *signature_field, PDFRectangle *rect, int sig_sector, Ref *refFirstPage)
 {
@@ -2287,6 +2279,94 @@ Object *Catalog::getOutline()
   }
 
   return &outline;
+}
+
+Object *Catalog::createDSS()
+{
+    Object *dssPtr = getDSS();
+    
+    /* If DSS already exists, mark it for update if needed and return &dss. 
+        Else, create DSS. */
+    if (dssPtr->isDict())
+    {
+        Object dssRef;
+        catDict.dictLookupNF("DSS", &dssRef);
+        if (dssRef.isRef())
+            xref->setModifiedObject(dssPtr, dssRef.getRef());
+        dssRef.free();
+    }
+    else
+    {
+        dssPtr->initDict(xref);
+        Ref dssRef = xref->addIndirectObject(dssPtr);
+
+        Object dssRefObj;
+        dssRefObj.initRef(dssRef.num, dssRef.gen);
+        catDict.dictAdd(copyString("DSS"), &dssRefObj);
+        Ref catRef;
+        catRef.gen = xref->getRootGen();
+        catRef.num = xref->getRootNum();
+        xref->setModifiedObject(&catDict, catRef);
+    }
+
+    Object dssEntry;
+
+    dssPtr->dictLookup("OCSPs", &dssEntry);
+    if (!dssEntry.isArray())
+    {
+        dssEntry.initArray(xref);
+        dssPtr->dictAdd(copyString("OCSPs"), &dssEntry);
+    }
+    dssEntry.free();
+
+    dssPtr->dictLookup("CRLs", &dssEntry);
+    if (!dssEntry.isArray())
+    {
+        dssEntry.initArray(xref);
+        dssPtr->dictAdd(copyString("CRLs"), &dssEntry);
+    }
+    dssEntry.free();
+
+    dssPtr->dictLookup("Certs", &dssEntry);
+    if (!dssEntry.isArray())
+    {
+        dssEntry.initArray(xref);
+        dssPtr->dictAdd(copyString("Certs"), &dssEntry);
+    }
+    dssEntry.free();
+
+    dssPtr->dictLookup("VRI", &dssEntry);
+    if (!dssEntry.isDict())
+    {
+        dssEntry.initDict(xref);
+        Ref vriRef = xref->addIndirectObject(&dssEntry);
+        Object vriRefObj;
+        vriRefObj.initRef(vriRef.num, vriRef.gen);
+        dssPtr->dictAdd(copyString("VRI"), &vriRefObj);
+    }
+    dssEntry.free();
+
+    return dssPtr;
+}
+
+Object *Catalog::getDSS()
+{
+  if (!dss.isDict())
+  {
+     Object catDict;
+
+     xref->getCatalog(&catDict);
+     if (catDict.isDict()) {
+       dss.free();
+       catDict.dictLookup("DSS", &dss);
+     } else {
+       error(errSyntaxError, -1, "Catalog object is wrong type ({0:s})", catDict.getTypeName());
+       dss.initNull();
+     }
+     catDict.free();
+  }
+
+  return &dss;
 }
 
 Object *Catalog::getDests()

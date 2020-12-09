@@ -244,7 +244,9 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
   POPPLER_API GBool isSigned();
   POPPLER_API unsigned long getSigByteArray(unsigned char **byte_array, bool incremental);
   POPPLER_API GBool isReaderEnabled();
-  POPPLER_API std::unordered_set<int> getSignaturesIndexes();
+  /*Returns set of indexes of the signatures until (and including) the last timestamp signature. 
+  The indexes are relative to the last signature: 0 is the last, 1 is the previous one, ... */
+  POPPLER_API std::unordered_set<int> getSignaturesIndexesUntilLastTimestamp();
   POPPLER_API int getSignatureContents(unsigned char **, int sigIdx = 0);
 
   POPPLER_API Object *getByteRange();
@@ -260,8 +262,9 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
   POPPLER_API void closeSignature(const char *signature_contents);
   POPPLER_API unsigned int getSignedVersionLen();
 
-  // LTV related methods // TODO: merge addDSS with prepareTimestamp into prepareLtv
+  // LTV related methods
   POPPLER_API void addDSS(std::vector<ValidationDataElement *> validationData);
+  POPPLER_API void getCertsInDSS(std::vector<ValidationDataElement *> *validationData);
   POPPLER_API void prepareTimestamp();
   //POPPLER_API void closeLtv(const char *signature_contents);
 

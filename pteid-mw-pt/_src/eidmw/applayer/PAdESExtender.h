@@ -41,10 +41,14 @@ namespace eIDMW
         It returns a pointer to the element in m_validationData */
         ValidationDataElement* addValidationElement(ValidationDataElement &elem);
 
+        /* Remove vde from m_validationData. WARNING: ONLY IMPLEMENTED FOR TYPE CERT*/
+        void removeValidationElement(ValidationDataElement* vde);
+
         bool findIssuerInEidStore(APL_CryptoFwkPteid * cryptoFwk, CByteArray &certif_ba, CByteArray &issuer_ba);
         bool addOCSPCertToValidationData(CByteArray &ocsp_response_ba, CByteArray &out_ocsp_cert);
         bool isOCSPSigningCert(CByteArray &cert);
         bool addCRLRevocationInfo(CByteArray & cert, std::unordered_set<std::string> vri_keys);
+        unsigned long getCertUniqueId(const unsigned char * data, int dataSize);
 
         PDFSignature *m_signedPdfDoc;
         std::vector<ValidationDataElement*> m_validationData;

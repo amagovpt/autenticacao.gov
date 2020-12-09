@@ -567,7 +567,7 @@ GBool PDFDoc::isReaderEnabled()
 
 }
 
-std::unordered_set<int> PDFDoc::getSignaturesIndexes()
+std::unordered_set<int> PDFDoc::getSignaturesIndexesUntilLastTimestamp()
 {
     std::unordered_set<int> indexes;
     Object *acro_form = getCatalog()->getAcroForm();
@@ -578,7 +578,8 @@ std::unordered_set<int> PDFDoc::getSignaturesIndexes()
 
     // FIXME: this assumes the references for the latest signatures are appended to the
     // Fields dict. Most PDF creators should append.
-    for (int i = 0; i != fields.arrayGetLength(); i++)
+    size_t lastField = fields.arrayGetLength()-1;
+    for (int i = lastField; i >= 0; i--) 
     {
         fields.arrayGet(i, &f);
 
@@ -587,13 +588,14 @@ std::unordered_set<int> PDFDoc::getSignaturesIndexes()
         if (strcmp(type.getName(), "Annot") == 0
             && strcmp(obj1.getName(), "Sig") == 0)
         {
+            indexes.insert(lastField-i);
 
             f.dictLookup("V", &sig_dict);
             sig_dict.dictLookup("Type", &type);
             sig_dict.dictLookup("SubFilter", &obj1);
-			if (strcmp(type.getName(), "DocTimeStamp") != 0
-				&& strcmp(obj1.getName(), "ETSI.RFC3161") != 0) {
-				indexes.insert(i);
+            if (strcmp(type.getName(), "DocTimeStamp") == 0
+                && strcmp(obj1.getName(), "ETSI.RFC3161") == 0) {
+                break;
 			}
         }
     }
@@ -611,12 +613,12 @@ int PDFDoc::getSignatureContents(unsigned char **contents, int sigIdx)
 	if (acro_form->isNull())
 		return 0;
 	acro_form->dictLookup("Fields", &fields);
-	
-	if (sigIdx >= fields.arrayGetLength()) {
+	int lastField = fields.arrayGetLength()-1;
+	if (sigIdx > lastField) {
 		error(errInternal, -1, "Signature field index %d greater than fields array length: %d", sigIdx, fields.arrayGetLength());
 		return 0;
 	}
-	fields.arrayGet(sigIdx, &f);
+	fields.arrayGet(lastField-sigIdx, &f);
 
 	f.dictLookup("Type", &type);
 	f.dictLookup("FT", &obj1);
@@ -844,6 +846,42 @@ void PDFDoc::closeSignature(const char *signature_contents)
   	getCatalog()->closeSignature(signature_contents, ESTIMATED_LEN);
 }
 
+void PDFDoc::getCertsInDSS(std::vector<ValidationDataElement *> *certs)
+{
+    Object *dss = getCatalog()->getDSS();
+
+    if (!dss->isDict())
+        return;
+
+    Object certArray;
+    dss->dictLookup("Certs", &certArray);
+
+    if (!certArray.isArray())
+        return;
+
+    for (size_t i = 0; i < certArray.arrayGetLength(); i++)
+    {
+        Object certObj;
+        certArray.arrayGet(i, &certObj);
+
+        if (certObj.isStream())
+        {
+            Stream *certStream = certObj.getStream();
+            GooString certRaw;
+            certStream->fillGooString(&certRaw);
+
+            ValidationDataElement *vde = new ValidationDataElement(
+                (unsigned char*)certRaw.getCString(), certRaw.getLength(), ValidationDataElement::CERT);
+
+            certs->push_back(vde);
+        }
+
+        certObj.free();
+    }
+
+    certArray.free();
+}
+
 void PDFDoc::addDSS(std::vector<ValidationDataElement *> validationData)
 {
     /* Write and fill content with placeholder for the byterange. */
@@ -851,29 +889,8 @@ void PDFDoc::addDSS(std::vector<ValidationDataElement *> validationData)
     OutStream * str = &mem_stream;
     saveIncrementalUpdate(str);
 
-    Object ocspArrayObj, crlArrayObj, certArrayObj;
-    ocspArrayObj.initArray(xref);
-    crlArrayObj.initArray(xref);
-    certArrayObj.initArray(xref);
-
-    // VRI
-    Object vriObj;
-    vriObj.initDict(xref);
-
-    Ref vriRef = xref->addIndirectObject(&vriObj);
-    Object vriRefObj;
-    vriRefObj.initRef(vriRef.num, vriRef.gen);
-
-    // DSS
-    Object dssDictObj;
-    dssDictObj.initDict(xref);
-    dssDictObj.dictAdd(copyString("VRI"), &vriRefObj);
-    dssDictObj.dictAdd(copyString("OCSPs"), &ocspArrayObj);
-    dssDictObj.dictAdd(copyString("CRLs"), &crlArrayObj);
-    dssDictObj.dictAdd(copyString("Certs"), &certArrayObj);
-
-    Ref dssRef = xref->addIndirectObject(&dssDictObj);
-    getCatalog()->addDSSEntry(&dssRef);
+    // create DSS if it does not exist
+    Object *dss = getCatalog()->createDSS();
 
     // Add validation data to DSS dictionary and VRI
     for (size_t i = 0; i < validationData.size(); i++)
@@ -897,27 +914,40 @@ void PDFDoc::addDSS(std::vector<ValidationDataElement *> validationData)
         streamRefObj.initRef(streamRef.num, streamRef.gen);
 
         char *vriPointerType;
+        Object vdeArrayObj, vdeArrayRef;
 
         switch (validationData[i]->getType())
         {
             case ValidationDataElement::OCSP:
-                ocspArrayObj.arrayAdd(&streamRefObj);
+                dss->dictLookup("OCSPs", &vdeArrayObj);
+                dss->dictLookupNF("OCSPs", &vdeArrayRef);
                 vriPointerType = "OCSP";
                 break;
 
             case ValidationDataElement::CRL:
-                crlArrayObj.arrayAdd(&streamRefObj);
+                dss->dictLookup("CRLs", &vdeArrayObj);
+                dss->dictLookupNF("CRL", &vdeArrayRef);
                 vriPointerType = "CRL";
                 break;
 
             case ValidationDataElement::CERT:
-                certArrayObj.arrayAdd(&streamRefObj);
+                dss->dictLookup("Certs", &vdeArrayObj);
+                dss->dictLookupNF("Cert", &vdeArrayRef);
                 vriPointerType = "Cert";
                 break;
         }
 
+        vdeArrayObj.arrayAdd(&streamRefObj);
+
+        /*If the array is indirect object we need to update it.*/
+        if (vdeArrayRef.isRef())
+            xref->setModifiedObject(&vdeArrayObj, vdeArrayRef.getRef());
+
         /* Each validation datum can be used to validate different objects
          and, for that reason, be present in multiple vri entries. */
+        Object vriObj, vriRef;
+        dss->dictLookup("VRI", &vriObj);
+        dss->dictLookupNF("VRI", &vriRef);
         Object vriEntry;
         for (auto const& key : validationData[i]->getVriHashKeys())
         {
@@ -939,6 +969,10 @@ void PDFDoc::addDSS(std::vector<ValidationDataElement *> validationData)
             }
             vriPointerArrayObj.arrayAdd(&streamRefObj);
         }
+
+        /*If the VRI dict is indirect object we need to update it.*/
+        if (vriRef.isRef())
+            xref->setModifiedObject(&vriObj, vriRef.getRef());
     }
 }
 

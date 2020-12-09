@@ -162,17 +162,19 @@ namespace eIDMW
         return ext_key_usage != UINT32_MAX && XKU_OCSP_SIGN & ext_key_usage;
     }
 
+    unsigned long PAdESExtender::getCertUniqueId(const unsigned char * data, int dataSize)
+    {
+        X509 *pX509 = NULL;
+        pX509 = d2i_X509(&pX509, &data, dataSize);
+        return X509_issuer_and_serial_hash(pX509);
+    }
+
     ValidationDataElement* PAdESExtender::addValidationElement(ValidationDataElement &elem)
     {
    
         if (elem.getType() == ValidationDataElement::CERT)
         {
-            X509 *pX509 = NULL;
-            const unsigned char * data = elem.getData();
-            int size = elem.getSize();
-            pX509 = d2i_X509(&pX509, &data, size);
-
-            signed long uniqueCertId = X509_issuer_and_serial_hash(pX509);
+            signed long uniqueCertId = getCertUniqueId(elem.getData(), elem.getSize());
             if (m_certsInDoc.find(uniqueCertId) != m_certsInDoc.end())
             {
                 return m_certsInDoc.at(uniqueCertId);
@@ -187,6 +189,30 @@ namespace eIDMW
         ValidationDataElement *newElem = new ValidationDataElement(elem);
         m_validationData.push_back(newElem);
         return newElem;
+    }
+
+    void PAdESExtender::removeValidationElement(ValidationDataElement *elem)
+    {
+
+        if (elem->getType() == ValidationDataElement::CERT)
+        {
+            signed long docCertId = getCertUniqueId(elem->getData(), elem->getSize());
+            vector<ValidationDataElement *>::iterator it = m_validationData.begin();
+            while(it != m_validationData.end())
+            {
+                ValidationDataElement *newVde = *it;
+                if (newVde->getType() == ValidationDataElement::CERT)
+                {
+                    signed long newVdeId = getCertUniqueId(newVde->getData(), newVde->getSize());
+                    if (newVdeId == docCertId)
+                    {
+                        it = m_validationData.erase(it);
+                        continue;
+                    }
+                }
+                it++;
+            }
+        }
     }
 
     bool PAdESExtender::addCRLRevocationInfo(CByteArray & cert, std::unordered_set<string> vri_keys) {
@@ -250,7 +276,7 @@ namespace eIDMW
         unsigned char *signatureContents = NULL;
 
         std::vector<size_t> signerCerts_idx;
-        std::unordered_set<int> sigIndexes = doc->getSignaturesIndexes();
+        std::unordered_set<int> sigIndexes = doc->getSignaturesIndexesUntilLastTimestamp();
 
         if (sigIndexes.empty()) {
             MWLOG(LEV_ERROR, MOD_APL, "addLT(): No signatures found in the document. Pre-condition for addLT() is broken!");
@@ -426,6 +452,18 @@ namespace eIDMW
             }
         
         }  //End of outer loop
+
+        /* Remove from m_validationData the certs already present in document DSS. */
+        {
+            std::vector<ValidationDataElement*> certsAlreadyAdded;
+            doc->getCertsInDSS(&certsAlreadyAdded);
+
+            for (auto cert : certsAlreadyAdded)
+            {
+                removeValidationElement(cert);
+                delete cert;
+            }
+        }
 
         doc->addDSS(m_validationData);
         m_signedPdfDoc->save();
