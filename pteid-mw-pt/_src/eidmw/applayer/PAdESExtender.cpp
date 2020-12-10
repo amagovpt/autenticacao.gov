@@ -124,7 +124,7 @@ namespace eIDMW
             OCSP_BASICRESP * basic_resp = OCSP_response_get1_basic(resp);
             if (basic_resp != NULL) {
                 const STACK_OF(X509) * certs = OCSP_resp_get0_certs(basic_resp);
-                for (size_t i = 0; certs && i < sk_X509_num(certs); i++) {
+                for (int i = 0; certs && i < sk_X509_num(certs); i++) {
                     MWLOG(LEV_DEBUG, MOD_APL, "Adding one certificate to DSS from OCSP response");
                     X509 *cert = sk_X509_value(certs, i);
                     //Check for presence of the "OCSP No-Check" extension from the beginning
@@ -265,7 +265,7 @@ namespace eIDMW
 
         CByteArray issuerCertDataByteArray;
         size_t issuerLen;
-        FWK_CertifStatus status;
+        FWK_CertifStatus status = FWK_CERTIF_STATUS_UNCHECK;
 
         m_signedPdfDoc->m_incrementalMode = true;
 
@@ -342,7 +342,7 @@ namespace eIDMW
                         ts_certs = ts_p7->d.signed_and_enveloped->cert;
                     }
 
-                    for (size_t i = 0; i < sk_X509_num(ts_certs); i++)
+                    for (int i = 0; i < sk_X509_num(ts_certs); i++)
                     {
                         sk_X509_push(certs, sk_X509_value(ts_certs, i));
                     }
@@ -350,7 +350,7 @@ namespace eIDMW
             }
             
             /* Iterate over the certificates in this signature and add them to DSS.*/
-            for (size_t i = 0; certs && i < sk_X509_num(certs); i++) {
+            for (int i = 0; certs && i < sk_X509_num(certs); i++) {
                 unsigned char *certBytes = NULL;
                 X509 *cert = sk_X509_value(certs, i);
 

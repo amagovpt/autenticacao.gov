@@ -549,7 +549,6 @@ namespace eIDMW
 		//The class ctor initializes it to (0,0,0,0)
 		//so we can use this for invisible sig
 		PDFRectangle sig_location;
-		const char * signature_contents = NULL;
 
 		APL_Config config_language(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
