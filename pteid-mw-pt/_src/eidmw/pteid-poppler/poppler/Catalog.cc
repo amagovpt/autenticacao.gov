@@ -2317,7 +2317,6 @@ Object *Catalog::createDSS()
         dssEntry.initArray(xref);
         dssPtr->dictAdd(copyString("OCSPs"), &dssEntry);
     }
-    dssEntry.free();
 
     dssPtr->dictLookup("CRLs", &dssEntry);
     if (!dssEntry.isArray())
@@ -2325,7 +2324,6 @@ Object *Catalog::createDSS()
         dssEntry.initArray(xref);
         dssPtr->dictAdd(copyString("CRLs"), &dssEntry);
     }
-    dssEntry.free();
 
     dssPtr->dictLookup("Certs", &dssEntry);
     if (!dssEntry.isArray())
@@ -2333,7 +2331,6 @@ Object *Catalog::createDSS()
         dssEntry.initArray(xref);
         dssPtr->dictAdd(copyString("Certs"), &dssEntry);
     }
-    dssEntry.free();
 
     dssPtr->dictLookup("VRI", &dssEntry);
     if (!dssEntry.isDict())
@@ -2344,7 +2341,6 @@ Object *Catalog::createDSS()
         vriRefObj.initRef(vriRef.num, vriRef.gen);
         dssPtr->dictAdd(copyString("VRI"), &vriRefObj);
     }
-    dssEntry.free();
 
     return dssPtr;
 }
@@ -2357,7 +2353,6 @@ Object *Catalog::getDSS()
 
      xref->getCatalog(&catDict);
      if (catDict.isDict()) {
-       dss.free();
        catDict.dictLookup("DSS", &dss);
      } else {
        error(errSyntaxError, -1, "Catalog object is wrong type ({0:s})", catDict.getTypeName());
