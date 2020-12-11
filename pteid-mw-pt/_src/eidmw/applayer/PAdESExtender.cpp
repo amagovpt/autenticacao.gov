@@ -382,7 +382,10 @@ namespace eIDMW
             bool foundIssuer = false;
             ValidationDataElement *vd_elem = m_validationData[signer_cert_idx];
             CByteArray signer_cert(vd_elem->getData(), vd_elem->getSize());
-            MWLOG(LEV_DEBUG, MOD_APL, "%s: adding revocation info for certificate: %s", __FUNCTION__, certificate_subject_from_der(signer_cert));
+			//Replaced full subject by "issuer - serial" for privacy reasons
+            //MWLOG(LEV_DEBUG, MOD_APL, "%s: adding revocation info for certificate: %s", __FUNCTION__, certificate_subject_from_der(signer_cert));
+
+			MWLOG(LEV_DEBUG, MOD_APL, "%s: adding revocation info for cert issued by: %s", __FUNCTION__, certificate_issuer_serial_from_der(signer_cert).c_str());
             
             //Find issuer for each signing cert
             for (size_t j = 0; j < m_validationData.size(); j++)

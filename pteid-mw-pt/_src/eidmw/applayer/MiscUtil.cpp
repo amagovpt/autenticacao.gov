@@ -372,6 +372,27 @@ char * certificate_subject_from_der(CByteArray & ba) {
 	return cert_subj;
 }
 
+std::string certificate_issuer_serial_from_der(CByteArray & ba) {
+	std::string out;
+	char tmp_buffer[128] = { 0 };
+	X509 *x509 = DER_to_X509(ba.GetBytes(), ba.Size());
+
+	if (x509 == NULL)
+		return std::string("X509 parsing ERROR");
+
+	X509_NAME_get_text_by_NID(X509_get_issuer_name(x509), NID_commonName, tmp_buffer, sizeof(tmp_buffer));
+	out.append(tmp_buffer);
+	out.append(" - ");
+
+	CByteArray baTemp;
+	baTemp.Append(X509_get_serialNumber(x509)->data, X509_get_serialNumber(x509)->length);
+	out.append(baTemp.ToString(false));
+
+	X509_free(x509);
+
+	return out;
+}
+
 /*
 Base64 encode binary-data: it can be used also for C-style strings if we ignore the 0x0 terminator
 */
