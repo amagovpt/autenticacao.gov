@@ -194,6 +194,8 @@ namespace eIDMW
             return OAuthConnectionError;
         }
         std::cout << "listening in port: " << std::to_string(m_server.serverPort()) << std::endl;
+        MWLOG(LEV_DEBUG, MOD_GUI, L"OAuthAttribues:listening in port: %s:%d", 
+            m_server.serverAddress().toString().toStdString().c_str(), m_server.serverPort());
 
         openBrowser(m_server.serverPort());
 
@@ -204,17 +206,25 @@ namespace eIDMW
             hasConn = m_server.waitForNewConnection(1000);
             seconds++;
         }
-        if (!hasConn || m_wasCancelled)
-        {
+        if (!hasConn) {
             m_server.close();
-            MWLOG(LEV_DEBUG, MOD_GUI, L"OAuthAttribues:get token timed out or process was canceled");
-            return (m_wasCancelled ? OAuthCancelled : OAuthTimeoutError);
+            MWLOG(LEV_DEBUG, MOD_GUI, L"OAuthAttribues: get token timed out");
+            return OAuthTimeoutError;
+        }
+        if (m_wasCancelled) {
+            m_server.close();
+            MWLOG(LEV_DEBUG, MOD_GUI, L"OAuthAttribues: process was canceled");
+            return OAuthCancelled;
         }
 
         QTcpSocket *conn = m_server.nextPendingConnection();
         QByteArray buffer;
-        if (!conn || !conn->waitForReadyRead(RECV_TOKEN_TIMEOUT)){
-            MWLOG(LEV_ERROR, MOD_GUI, L"OAuthAttribues: callback with token connection failed: can't establish new connection or not ready for read.");
+        if (!conn){
+            MWLOG(LEV_ERROR, MOD_GUI, L"OAuthAttribues: callback with token connection failed: can't establish new connection");
+            return OAuthConnectionError;
+        }
+        if (!conn->waitForReadyRead(RECV_TOKEN_TIMEOUT)){
+            MWLOG(LEV_ERROR, MOD_GUI, L"OAuthAttribues: callback with token connection failed: not ready for read.");
             return OAuthConnectionError;
         }
         
