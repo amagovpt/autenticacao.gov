@@ -750,7 +750,7 @@ void GAPI::addressChangeCallback(void *instance, int value)
 void GAPI::doChangeAddress(const char *process, const char *secret_code)
 {
     qDebug() << "DoChangeAddress!";
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doChangeAddress");
+    PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "Change Address started");
 
     try
     {
