@@ -932,6 +932,11 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
         signalUpdateProgressBar(100);
     }
     //TODO: reset the m_scap_params struct
+
+    if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR || ret == EIDMW_LTV_ERROR)
+    {
+        emit signalOpenFile();
+    }
 }
 
 

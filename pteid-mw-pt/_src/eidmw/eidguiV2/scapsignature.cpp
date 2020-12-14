@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
@@ -90,6 +90,7 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
         std::vector<int> attributes_index, CmdSignedFileDetails cmd_details,
         bool useCustomImage, QByteArray &m_jpeg_scaled_data) {
 
+qDebug() << "2222222222222222222222222222";
     std::vector<ns3__AttributeType*> selected_attributes = getSelectedAttributes(attributes_index);
 
     if (selected_attributes.size() == 0)
@@ -112,12 +113,12 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
     }
     catch (eIDMW::PTEID_Exception &e)
     {
-        std::cerr << "Caught exception signing PDF. Error code: " << e.GetError() << std::endl;
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "executeSCAPWithCMDSignature",
+            "Caught exception signing PDF. Error code: %08x", e.GetError());
         throw;
     }
     if (successful == GAPI::ScapSucess) {
         parent->signCMDFinished(ERR_NONE);
-        emit parent->signalOpenFile();
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "ScapSignature",
                   "SCAP signature with CMD sucess");
     }
