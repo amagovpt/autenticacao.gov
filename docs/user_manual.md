@@ -70,6 +70,7 @@
   - [Aplicação não arranca](#aplicação-não-arranca)
   - [Problemas com a nova cadeia de confiança](#problemas-com-a-nova-cadeia-de-confiança)
   - [Problemas na validação das assinaturas](#problemas-na-validação-das-assinaturas)
+  - [Serviços online usados pela aplicação](#serviços-online-usados-pela-aplicação)
 - [Interface de linha de comandos](#interface-de-linha-de-comandos)
   - [Consultar ajuda e versão](#consultar-ajuda-e-versão)
   - [Atalho para configurar modo de renderização gráfica](#atalho-para-configurar-modo-de-renderização-gráfica)
@@ -1431,6 +1432,52 @@ Alternativamente, pode instalar o certificado manualmente seguindo as instruçõ
 ## Problemas na validação das assinaturas 
 
 Em caso de problemas na validação das assinaturas, verifique se está relacionado com o tópico [Problemas com a nova cadeia de confiança](#problemas-com-a-nova-cadeia-de-confiança).
+
+## Serviços online usados pela aplicação
+
+Algumas funcionalidades da aplicação requerem a ligação a serviços online para funcionarem corretamente. É por isso necessário garantir que não existe *firewall* ou outro *software* na rede local que impeça a ligação a estes serviços.
+
+Os *hostnames* e respetivos portos utilizados são listados em seguida por funcionalidade.
+
+**Assinatura com Chave Móvel Digital:**
+
+- cmd.autenticacao.gov.pt (porto 443)
+
+**Validação de certificados:**
+
+Servidores OCSP:
+- ocsp.ecee.gov.pt   (porto 80 e 443)
+- ocsp.multicert.com (porto 80)
+- ocsp.root.cartaodecidadao.pt (porto 80)
+- ocsp.auc.cartaodecidadao.pt  (porto 80)
+- ocsp.asc.cartaodecidadao.pt  (porto 80)
+
+Servidores CRL:
+- crls.ecee.gov.pt (porto 80)
+- pkiroot.multicert.com (porto 80)
+- pki.cartaodecidadao.pt (porto 80)
+
+**Assinatura com atributos Profissionais:**
+
+- scap.autenticacao.gov.pt (porto 443)
+- autenticacao.gov.pt (porto 443) (apenas para carregamento com CMD)
+
+**Alteração de morada:**
+
+- pki.cartaodecidadao.pt (porto 443)
+
+**Atualização da aplicação, certificados e notícias:**
+
+- autenticacao.gov.pt (porto 443)
+- raw.githubusercontent.com
+  - Na obtenção do ficheiro em https://raw.githubusercontent.com/amagovpt/autenticacao.gov/master/pteid-mw-pt/_src/eidmw/version.json
+  - Na obtenção do ficheiro em https://raw.githubusercontent.com/amagovpt/autenticacao.gov/master/pteid-mw-pt/_src/eidmw/news.json
+- github.com
+  - URLs da forma: https://github.com/amagovpt/autenticacao.gov/blob/master/pteid-mw-pt/_src/eidmw/misc/certs/\<nome do ficheiro>
+
+**Selo temporal (por defeito):**
+
+- ts.cartaodecidadao.pt (porto 80)
 
 # Interface de linha de comandos
 

@@ -45,6 +45,7 @@
   - [Métodos removidos](#métodos-removidos)
   - [Diferenças no comportamento de alguns métodos](#diferenças-no-comportamento-de-alguns-métodos)
   - [Códigos de Erro](#códigos-de-erro)
+- [Serviços online usados pelo Middleware](#serviços-online-usados-pelo-middleware)
 
 <!--- Content_begin -->
 
@@ -1476,3 +1477,26 @@ ser mantidos para garantir retrocompatibilidade.
 | SC_ERROR_OBJECT_NOT_VALID    | -1406 | A consistência da informação presente no cartão   |
 |                              |       | está comprometida                                 |
 
+# Serviços online usados pelo Middleware
+
+Algumas funcionalidades requerem a ligação a serviços online para funcionarem corretamente. É por isso necessário garantir que não existe *firewall* ou outro *software* na rede local que impeça a ligação a estes serviços.
+
+Os *hostnames* e respetivos portos utilizados são listados em seguida por funcionalidade.
+
+**Validação de certificados:**
+
+Servidores OCSP:
+- ocsp.ecee.gov.pt   (porto 80 e 443)
+- ocsp.multicert.com (porto 80)
+- ocsp.root.cartaodecidadao.pt (porto 80)
+- ocsp.auc.cartaodecidadao.pt  (porto 80)
+- ocsp.asc.cartaodecidadao.pt  (porto 80)
+
+Servidores CRL:
+- crls.ecee.gov.pt (porto 80)
+- pkiroot.multicert.com (porto 80)
+- pki.cartaodecidadao.pt (porto 80)
+
+**Selo temporal (por defeito):**
+
+- ts.cartaodecidadao.pt (porto 80)
