@@ -127,24 +127,52 @@ Item {
                         height: Constants.SIZE_TEXT_LABEL
                         anchors.top: mainItemWithPadding.top
                         Components.Link {
-                            property var keyNavNext: (buttonSearch.visible ? buttonSearch : 
-                                        (buttonCancelUpdate.visible ? buttonCancelUpdate : installedVersion ))
-
                             id: textDescription
-                            propertyText.text: qsTranslate("PageDefinitionsUpdates",
-                                                           "STR_UPDATE_TEXT")
+                            width: parent.width
+
+                            propertyLinkUrl: 'https://www.autenticacao.gov.pt/web/guest/cc-aplicacao'
+                            propertyText.text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT")
+                                + "<a href='" + textDescription.propertyLinkUrl + "'>"
+                                + qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT_LINK") + "</a>."
+                            propertyAccessibleText: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT")
+
                             propertyText.font.bold: activeFocus || textDescription.activeFocus
                             propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+
+                            Accessible.name: propertyText.text
+                            KeyNavigation.tab: supportSystemsLink
+                            KeyNavigation.down: supportSystemsLink
+                            KeyNavigation.right: supportSystemsLink
+                            KeyNavigation.left: rectUpdateAppTitle
+                            KeyNavigation.backtab: rectUpdateAppTitle
+                            KeyNavigation.up: rectUpdateAppTitle
+                        }
+                        Components.Link {
+                            id: supportSystemsLink
                             width: parent.width
-                            height: parent.height
+                            anchors.top: textDescription.bottom
+
+                            property var keyNavNext: (buttonSearch.visible ? buttonSearch :
+                                        (buttonCancelUpdate.visible ? buttonCancelUpdate : installedVersion ))
+
+                            propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#sistemas-operativos-oficialmente-suportados'
+
+                            propertyText.text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_SUPPORTED_SYSTEMS")
+                                + "<a href='" + supportSystemsLink.propertyLinkUrl + "'>"
+                                + qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT_LINK") + "</a>."
+                            propertyAccessibleText: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_SUPPORTED_SYSTEMS")
+
+                            propertyText.font.bold: activeFocus || supportSystemsLink.activeFocus
+                            propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+
                             Accessible.role: Accessible.StaticText
                             Accessible.name: propertyText.text
                             KeyNavigation.tab: keyNavNext
                             KeyNavigation.down: keyNavNext
                             KeyNavigation.right: keyNavNext
-                            KeyNavigation.left: rectUpdateAppTitle
-                            KeyNavigation.backtab: rectUpdateAppTitle
-                            KeyNavigation.up: rectUpdateAppTitle
+                            KeyNavigation.left: textDescription
+                            KeyNavigation.backtab: textDescription
+                            KeyNavigation.up: textDescription
                         }
                     }
                     Item {
@@ -152,7 +180,7 @@ Item {
                         width: parent.width
                         height: parent.height * 3 * Constants.HEIGHT_DEFINITIONS_UPDATE_LABEL_ROW
                         anchors.top: rawTextDescription.bottom
-                        anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
+                        anchors.topMargin: 6 * Constants.SIZE_TEXT_V_SPACE + Constants.SIZE_TEXT_LINK_LABEL
                         Item {
                             id: rawInstalledVersion
                             width: parent.width * 0.33 - Constants.SIZE_ROW_H_SPACE
@@ -170,9 +198,9 @@ Item {
                             KeyNavigation.tab: remoteVersion
                             KeyNavigation.down: remoteVersion
                             KeyNavigation.right: remoteVersion
-                            KeyNavigation.left: textDescription
-                            KeyNavigation.backtab: textDescription
-                            KeyNavigation.up: textDescription
+                            KeyNavigation.left: supportSystemsLink
+                            KeyNavigation.backtab: supportSystemsLink
+                            KeyNavigation.up: supportSystemsLink
                         }
                         Item {
                             id: rawRemoteVersion
@@ -313,7 +341,7 @@ Item {
                         width: parent.width
                         height: parent.height - rawReleaseNoteScrollView.y
                         anchors.top: rawRowVersion.bottom
-                        anchors.topMargin: 4 * Constants.SIZE_TEXT_V_SPACE
+                        anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
                         Rectangle {
                             id: releaseNoteScrollView
                             width: parent.width

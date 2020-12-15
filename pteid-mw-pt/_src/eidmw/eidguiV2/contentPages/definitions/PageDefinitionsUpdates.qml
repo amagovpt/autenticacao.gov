@@ -133,6 +133,8 @@ PageDefinitionsUpdatesForm {
                             Functions.filterText(propertyReleaseScrollViewText.text)
                     propertyReleaseScrollViewText.visible = true
                     propertyTextDescription.text = qsTranslate("PageDefinitionsUpdates","STR_UPDATE_AVAILABLE")
+                        + "<a href='" + propertyTextDescriptionText.propertyLinkUrl + "'>"
+                        + qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT_LINK") + "</a>."
                     propertyInstalledVersion.propertyDateField.text = arg2
                     propertyRemoteVersion.propertyDateField.text = arg3
 

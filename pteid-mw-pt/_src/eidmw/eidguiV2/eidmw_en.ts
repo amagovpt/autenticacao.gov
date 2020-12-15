@@ -1325,7 +1325,7 @@
     </message>
     <message>
         <source>STR_UPDATE_AVAILABLE</source>
-        <translation>A new update is available. Press Install do perform the update.</translation>
+        <translation>A new update is available. Press &lt;b&gt;Install&lt;/b&gt; to perform the update or, to check the available versions, click </translation>
     </message>
     <message>
         <source>STR_UPDATE_STARTING_DOWNLOAD</source>
@@ -1333,7 +1333,7 @@
     </message>
     <message>
         <source>STR_UPDATE_TEXT</source>
-        <translation>Press the button to check for available updates.</translation>
+        <translation>Press the button to check for available updates or, to check the available versions, click </translation>
     </message>
     <message>
         <source>STR_UPDATE_BUTTON</source>
@@ -1371,6 +1371,14 @@
     <message>
         <source>STR_UPDATE_CERTS_NEWS</source>
         <translation>New certificates</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_SUPPORTED_SYSTEMS</source>
+        <translation>To check the supported operating systems click </translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_TEXT_LINK</source>
+        <translation>here</translation>
     </message>
 </context>
 <context>

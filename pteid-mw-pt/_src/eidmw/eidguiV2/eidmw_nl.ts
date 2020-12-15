@@ -1323,7 +1323,7 @@
     </message>
     <message>
         <source>STR_UPDATE_AVAILABLE</source>
-        <translation>Existe uma atualização disponí­vel. Clique em Instalar para prosseguir</translation>
+        <translation>Existe uma atualização disponí­vel. Clique em &lt;b&gt;Instalar&lt;/b&gt; para prosseguir ou, para consultar as versões disponíveis, clique </translation>
     </message>
     <message>
         <source>STR_UPDATE_STARTING_DOWNLOAD</source>
@@ -1331,7 +1331,7 @@
     </message>
     <message>
         <source>STR_UPDATE_TEXT</source>
-        <translation>Pressione o botão para verificar se existem atualizações disponíveis.</translation>
+        <translation>Pressione o botão para verificar se existem atualizações disponíveis ou, para consultar as versões disponíveis, clique </translation>
     </message>
     <message>
         <source>STR_UPDATE_BUTTON</source>
@@ -1369,6 +1369,14 @@
     <message>
         <source>STR_UPDATE_CERTS_NEWS</source>
         <translation>Novos certificados</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_SUPPORTED_SYSTEMS</source>
+        <translation>Para consultar os sistemas operativos suportados clique </translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_TEXT_LINK</source>
+        <translation>aqui</translation>
     </message>
 </context>
 <context>
