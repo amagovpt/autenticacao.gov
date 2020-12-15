@@ -46,7 +46,6 @@ namespace eIDMW
 
         bool findIssuerInEidStore(APL_CryptoFwkPteid * cryptoFwk, CByteArray &certif_ba, CByteArray &issuer_ba);
         bool addOCSPCertToValidationData(CByteArray &ocsp_response_ba, CByteArray &out_ocsp_cert);
-        bool isOCSPSigningCert(CByteArray &cert);
         bool addCRLRevocationInfo(CByteArray & cert, std::unordered_set<std::string> vri_keys);
         unsigned long getCertUniqueId(const unsigned char * data, int dataSize);
 

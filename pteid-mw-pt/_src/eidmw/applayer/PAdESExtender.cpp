@@ -150,23 +150,15 @@ namespace eIDMW
         return check_revocation;
     }
 
-    bool PAdESExtender::isOCSPSigningCert(CByteArray &cert)
-    {
-        X509 *pX509 = NULL;
-        const unsigned char * data = cert.GetBytes();
-        int size = cert.Size();
-        pX509 = d2i_X509(&pX509, &data, size);
-        uint32_t ext_key_usage = X509_get_extended_key_usage(pX509);
-
-        //Check if the certificate contains any extended key usage and then the specific OCSP flag
-        return ext_key_usage != UINT32_MAX && XKU_OCSP_SIGN & ext_key_usage;
-    }
-
     unsigned long PAdESExtender::getCertUniqueId(const unsigned char * data, int dataSize)
     {
         X509 *pX509 = NULL;
         pX509 = d2i_X509(&pX509, &data, dataSize);
-        return X509_issuer_and_serial_hash(pX509);
+        long cert_unique_id = X509_issuer_and_serial_hash(pX509);
+
+        X509_free(pX509);
+
+        return cert_unique_id;
     }
 
     ValidationDataElement* PAdESExtender::addValidationElement(ValidationDataElement &elem)
@@ -258,6 +250,8 @@ namespace eIDMW
         return true;
     }
 
+    using PKCS7_ptr = std::unique_ptr<PKCS7, decltype(&::PKCS7_free)>;
+
     bool PAdESExtender::addLT()
     {
         // TODO: verify if T first. Extend if not
@@ -301,9 +295,10 @@ namespace eIDMW
             cryptoFwk->GetHashSha1(contentBytes, &hash);
             hexHash = bin2AsciiHex(hash.GetBytes(), hash.Size());
 
-            PKCS7 *p7 = NULL;
-            p7 = d2i_PKCS7(NULL, (const unsigned char**)&signatureContents, length);
-            if (p7 == NULL)
+            free(signatureContents);
+
+            PKCS7_ptr p7(d2i_PKCS7(NULL, (const unsigned char**)&signatureContents, length), ::PKCS7_free);
+            if (p7.get() == NULL)
             {
                 MWLOG(LEV_ERROR, MOD_APL,
                     "addLT(): Error decoding signature content.");
@@ -322,7 +317,7 @@ namespace eIDMW
 
             /* Add validation data for signature timestamp */
             ASN1_TYPE *asn1TokenType = NULL;
-            STACK_OF(PKCS7_SIGNER_INFO) * signer_info = PKCS7_get_signer_info(p7);
+            STACK_OF(PKCS7_SIGNER_INFO) * signer_info = PKCS7_get_signer_info(p7.get());
             asn1TokenType = PKCS7_get_attribute(sk_PKCS7_SIGNER_INFO_value(signer_info, 0), NID_id_smime_aa_timeStampToken);
             if (asn1TokenType != NULL && asn1TokenType->type == V_ASN1_SEQUENCE)
             {
