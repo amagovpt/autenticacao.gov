@@ -569,6 +569,8 @@ void GAPI::showChangeAddressDialog(long code)
     case EIDMW_OTP_CONNECTION_ERROR:
         error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CONNECTION_ERROR") + "<br><br>" +
             tr("STR_VERIFY_INTERNET");
+        if (m_Settings.isProxyConfigured())
+            error_msg.append(" ").append(tr("STR_VERIFY_PROXY"));
         break;
 
     case EIDMW_OTP_CERTIFICATE_ERROR:
@@ -661,6 +663,8 @@ void GAPI::showSignCMDDialog(long error_code)
     case SOAP_TCP_ERROR:
         message = tr("STR_CONNECTION_ERROR") + "<br><br>" +
             tr("STR_VERIFY_INTERNET");
+        if (m_Settings.isProxyConfigured())
+            message.append(" ").append(tr("STR_VERIFY_PROXY"));
         break;
     case SOAP_ERR_SERVICE_FAIL:
         message = tr("STR_CMD_SERVICE_FAIL");
@@ -788,19 +792,6 @@ void GAPI::changeAddress(QString process, QString secret_code)
     char *processUtf8 = strdup(process.toUtf8().constData());
     char *secret_codeUtf8 = strdup(secret_code.toUtf8().constData());
     Concurrent::run(this, &GAPI::doChangeAddress, processUtf8, secret_codeUtf8);
-}
-
-QString GAPI::translateCMDErrorCode(int errorCode) {
-    QString errorMsg;
-
-    switch (errorCode) {
-    case SOAP_TCP_ERROR:
-        errorMsg = tr("STR_CONNECTION_ERROR") + "\n\n" +
-            tr("STR_VERIFY_INTERNET");
-        break;
-    }
-
-    return errorMsg;
 }
 
 void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdParams &cmdParams, SignParams &signParams)

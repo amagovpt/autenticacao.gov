@@ -503,7 +503,6 @@ private:
     void connectToCard();
     void getSCAPEntities();
     void getSCAPCompanyAttributes(bool OAuth);
-    QString translateCMDErrorCode(int errorCode);
 
     //scapAttrType : 0 = Entities, 1 = Companies, 2 = All Attributes
     void getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription);

@@ -125,6 +125,8 @@ public slots:
     void setProxyUsernameValue (QString const& proxy_user);
     QString getProxyPwdValue (void);
     void setProxyPwdValue (QString const& proxy_pwd);
+    /* Is proxy manually configured or using system? */
+    bool isProxyConfigured();
 
     bool isOutlookInstalled();
     bool getOutlookSuppressNameChecks(void);

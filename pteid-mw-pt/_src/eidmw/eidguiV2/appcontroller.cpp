@@ -466,6 +466,11 @@ QString AppController::getProxyPwdValue (void){
 void AppController::setProxyPwdValue (QString const& proxy_pwd){
     m_Settings.setProxyPwd(proxy_pwd);
 }
+
+bool AppController::isProxyConfigured() {
+    return m_Settings.isProxyConfigured();
+}
+
 void AppController::setEnablePteidCache (bool bEnabled){
     m_Settings.setEnablePteidCache(bEnabled);
 }

@@ -738,6 +738,17 @@ public:
         return m_pteid_cachedir;
     }
 
+    /* Is proxy manually configured or using system? */
+    bool isProxyConfigured() {
+        if (!getProxyHost().isEmpty() && getProxyPort() != 0) {
+            return true; //Manually configured
+        }
+        if (getProxySystem()) {
+            return true; //Configured in system
+        }
+        return false;
+    }
+
     /* Test Mode */
     bool getTestMode()	{
         return m_test_mode;

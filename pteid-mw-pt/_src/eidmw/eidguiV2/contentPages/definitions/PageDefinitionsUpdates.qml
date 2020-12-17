@@ -59,6 +59,10 @@ PageDefinitionsUpdatesForm {
             }else if (error_code == GAPI.NetworkError) {
                 tempTextDescription =
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_NETWORK_ERROR")
+                if (controler.isProxyConfigured()) {
+                    tempTextDescription += " " 
+                        + qsTranslate("GAPI","STR_VERIFY_PROXY")
+                }
             }
 
             if(updateType == GAPI.AutoUpdateApp){

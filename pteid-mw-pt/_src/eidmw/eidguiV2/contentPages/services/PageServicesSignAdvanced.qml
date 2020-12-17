@@ -196,6 +196,10 @@ PageServicesSignAdvancedForm {
                     qsTranslate("PageServicesSign","STR_SCAP_PING_FAIL_FIRST")
                     + "\n\n"
                     + qsTranslate("PageServicesSign","STR_SCAP_PING_FAIL_SECOND")
+            if (controler.isProxyConfigured()) {
+                signerror_dialog.propertySignFailDialogText.text += " " 
+                    + qsTranslate("GAPI","STR_VERIFY_PROXY")
+            }
             signerror_dialog.visible = true
             propertyBusyIndicatorRunning = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS

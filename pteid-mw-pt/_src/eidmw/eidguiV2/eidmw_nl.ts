@@ -67,7 +67,7 @@
     </message>
     <message>
         <source>STR_VERIFY_INTERNET</source>
-        <translation>Por favor certifique-se que está ligado à internet</translation>
+        <translation>Por favor certifique-se que está ligado à internet.</translation>
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_ERROR</source>
@@ -471,6 +471,10 @@
     <message>
         <source>STR_URL_AUTENTICACAO_GOT_PT</source>
         <translation>https://www.autenticacao.gov.pt</translation>
+    </message>
+    <message>
+        <source>STR_VERIFY_PROXY</source>
+        <translation>Verifique se o proxy está bem configurado.</translation>
     </message>
 </context>
 <context>
