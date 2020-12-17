@@ -295,9 +295,10 @@ namespace eIDMW
             cryptoFwk->GetHashSha1(contentBytes, &hash);
             hexHash = bin2AsciiHex(hash.GetBytes(), hash.Size());
 
-            free(signatureContents);
-
+            unsigned char * ptr = signatureContents;
             PKCS7_ptr p7(d2i_PKCS7(NULL, (const unsigned char**)&signatureContents, length), ::PKCS7_free);
+            free(ptr);
+
             if (p7.get() == NULL)
             {
                 MWLOG(LEV_ERROR, MOD_APL,
