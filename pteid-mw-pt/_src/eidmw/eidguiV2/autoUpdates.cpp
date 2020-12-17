@@ -1202,8 +1202,8 @@ bool AutoUpdates::validateHash(QString certPath, QString hashString){
     QString hash = QString(QCryptographicHash::hash((DataFile),QCryptographicHash::Sha256).toHex());
 
     if (QString::compare(hash, hashString, Qt::CaseInsensitive)){
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-            "AutoUpdates::validateHash: Certificate invalid: %s %s %s ",
+        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
+            "AutoUpdates::validateHash Certificate invalid or outdated: %s %s %s ",
                   certPath.toStdString().c_str(),hashString.toStdString().c_str(),hash.toStdString().c_str());
         return false;
     }
