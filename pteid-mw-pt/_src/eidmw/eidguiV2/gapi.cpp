@@ -1122,8 +1122,12 @@ QString GAPI::getCardActivation() {
     else if (card->isActive() && !isExpiredDate(eid_file.getValidityEndDate()))
     {
         //Network access errors (OCSP/CRL)
-        if (certificateStatus == PTEID_CERTIF_STATUS_CONNECT)
-            return QString(tr("STR_CARD_CONNECTION_ERROR"));
+        if (certificateStatus == PTEID_CERTIF_STATUS_CONNECT) {
+            QString msg(tr("STR_CARD_CONNECTION_ERROR"));
+            if (m_Settings.isProxyConfigured())
+                msg.append(" ").append(tr("STR_VERIFY_PROXY"));            
+            return msg;
+        }
         else if (certificateStatus == PTEID_CERTIF_STATUS_ERROR
                  || certificateStatus == PTEID_CERTIF_STATUS_ISSUER
                  || certificateStatus == PTEID_CERTIF_STATUS_UNKNOWN)

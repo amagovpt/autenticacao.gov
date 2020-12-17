@@ -194,7 +194,7 @@
     </message>
     <message>
         <source>STR_CARD_CONNECTION_ERROR</source>
-        <translation>Não foi possível confirmar o estado do Cartão de Cidadão. Verifique a ligação à internet</translation>
+        <translation>Não foi possível confirmar o estado do Cartão de Cidadão. Verifique a ligação à internet.</translation>
     </message>
     <message>
         <source>STR_CARD_VALIDATION_ERROR</source>
@@ -1511,7 +1511,7 @@
     <name>PageSecurityCertificates</name>
     <message>
         <source>STR_STATUS_NETWORK_ERROR</source>
-        <translation>Não foi possível validar o certificado. Verifique a ligação à internet</translation>
+        <translation>Não foi possível validar o certificado. Verifique a ligação à internet.</translation>
     </message>
     <message>
         <source>STR_STATUS_REVOKED</source>
@@ -1544,7 +1544,7 @@
     </message>
     <message>
         <source>STR_STATUS_ERROR</source>
-        <translation>Não foi possível validar o certificado. Verifique a ligação à internet</translation>
+        <translation>Não foi possível validar o certificado. Verifique a ligação à internet.</translation>
     </message>
     <message>
         <source>STR_STATUS_VALID</source>
