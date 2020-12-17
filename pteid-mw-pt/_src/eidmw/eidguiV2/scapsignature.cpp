@@ -90,7 +90,6 @@ void ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepa
         std::vector<int> attributes_index, CmdSignedFileDetails cmd_details,
         bool useCustomImage, QByteArray &m_jpeg_scaled_data) {
 
-qDebug() << "2222222222222222222222222222";
     std::vector<ns3__AttributeType*> selected_attributes = getSelectedAttributes(attributes_index);
 
     if (selected_attributes.size() == 0)
@@ -190,74 +189,88 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
 
         eIDMW::PTEID_EIDCard &card = readerContext.getEIDCard();
 
-        // Get Citizen info
-        QString citizenName = card.getID().getGivenName();
-        citizenName.append(" ");
-        citizenName.append(card.getID().getSurname());
-
-        citizenId = card.getID().getCivilianIdNumber();
-
         PTEID_PDFSignature pdf_sig(strdup(inputPath.toUtf8().constData()));
 		PTEID_SignatureLevel citizen_signature_level = isLtv ? PTEID_LEVEL_LT : PTEID_LEVEL_BASIC;
 		pdf_sig.setSignatureLevel(citizen_signature_level);
 
         // Sign pdf
         sign_rc = card.SignPDF(pdf_sig, selected_page, 0, false, strdup(location.toUtf8().constData()),
-                                strdup(reason.toUtf8().constData()), temp_save_path);
-        if (sign_rc == 0)
-        {
-            PDFSignatureClient scap_signature_client;
-            ProxyInfo m_proxyInfo;
-            int successful = scap_signature_client.signPDF(
-                        m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
-                        QString(citizenId), isTimestamp, true, PDFSignatureInfo(selected_page, location_x, location_y,
-                        isLtv, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes,
-                        useCustomImage, m_jpeg_scaled_data);
-            if (successful == GAPI::ScapSucess) {
-                parent->signalPdfSignSucess(parent->SignMessageOK);
-                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "ScapSignature",
-                          "SCAP CC ScapSuccess");
-            }
-            else if (successful == GAPI::ScapTimeOutError) {
-                qDebug() << "Error in SCAP service Timeout!";
-                parent->signalSCAPServiceTimeout();
-                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                          "SCAP CC ScapTimeOutError");
-            }
-            else if (successful == GAPI::ScapClockError) {
-                qDebug() << "Error in SCAP service Clock Error!";
-                parent->signalSCAPServiceFail(successful);
-                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                          "SCAP CC ScapClockError");
-            }
-            else if (successful == GAPI::ScapSecretKeyError) {
-                qDebug() << "Error in SCAP service SecretKey Error!";
-                parent->signalSCAPServiceFail(successful);
-                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                          "SCAP CC ScapSecretKeyError");
-            }
-            else {
-                qDebug() << "Error in SCAP Signature service!";
-                parent->signalSCAPServiceFail(successful);
-                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                          "SCAP CC Error. ScapPdfSignResult = %d",successful);
-            }
-        }
-        else {
-            parent->signalSCAPServiceFail(GAPI::ScapGenericError);
-            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                      "SCAP CC Card Generic Error");
-        }
-                
+                                strdup(reason.toUtf8().constData()), temp_save_path);       
     }
     catch (eIDMW::PTEID_Exception &e)
     {
         eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
               "executeSCAPSignature - Exception accessing EIDCard. Error code: %08x",  e.GetError());
-        free(temp_save_path);
-        throw;
+        if (e.GetError() != EIDMW_TIMESTAMP_ERROR && e.GetError() != EIDMW_LTV_ERROR){
+            free(temp_save_path);
+            throw;
+        }
     }
 
+    if (sign_rc == 0)
+    {
+        try {
+                PDFSignatureClient scap_signature_client;
+                ProxyInfo m_proxyInfo;
+
+                // Get Citizen info
+                PTEID_ReaderContext& readerContext = ReaderSet.getReader();
+                if (!readerContext.isCardPresent())
+                {
+                    qDebug() << "executeSCAPSignature: Pteid Signature error: No card found in the reader!";
+                }
+                eIDMW::PTEID_EIDCard &card = readerContext.getEIDCard();
+                QString citizenName = card.getID().getGivenName();
+                citizenName.append(" ");
+                citizenName.append(card.getID().getSurname());
+                citizenId = card.getID().getCivilianIdNumber();
+
+                int successful = scap_signature_client.signPDF(
+                            m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
+                            QString(citizenId), isTimestamp, true, PDFSignatureInfo(selected_page, location_x, location_y,
+                            isLtv, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData())), selected_attributes,
+                            useCustomImage, m_jpeg_scaled_data);
+                if (successful == GAPI::ScapSucess) {
+                    parent->signalPdfSignSucess(parent->SignMessageOK);
+                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "ScapSignature",
+                            "SCAP CC ScapSuccess");
+                }
+                else if (successful == GAPI::ScapTimeOutError) {
+                    qDebug() << "Error in SCAP service Timeout!";
+                    parent->signalSCAPServiceTimeout();
+                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                            "SCAP CC ScapTimeOutError");
+                }
+                else if (successful == GAPI::ScapClockError) {
+                    qDebug() << "Error in SCAP service Clock Error!";
+                    parent->signalSCAPServiceFail(successful);
+                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                            "SCAP CC ScapClockError");
+                }
+                else if (successful == GAPI::ScapSecretKeyError) {
+                    qDebug() << "Error in SCAP service SecretKey Error!";
+                    parent->signalSCAPServiceFail(successful);
+                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                            "SCAP CC ScapSecretKeyError");
+                }
+                else {
+                    qDebug() << "Error in SCAP Signature service!";
+                    parent->signalSCAPServiceFail(successful);
+                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                            "SCAP CC Error. ScapPdfSignResult = %d",successful);
+                }
+            }
+            catch (eIDMW::PTEID_Exception &e)
+            {
+                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                    "executeSCAPSignature - Exception accessing SCAP services. Error code: %08x",  e.GetError());
+                free(temp_save_path);
+                throw;
+            }
+    } else {
+        parent->signalSCAPServiceFail(GAPI::ScapGenericError);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature","SCAP CC Card Generic Error");
+    }
     free(temp_save_path);
 }
 

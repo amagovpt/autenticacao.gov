@@ -471,6 +471,7 @@ namespace eIDMW
 		else
 		{
 			 bool throwTimestampError = false;
+			 bool throwLTVError = false;
 			 bool cachedPin = false;
 			 for (unsigned int i = 0; i < m_files_to_sign.size(); i++)
 			 {
@@ -495,7 +496,7 @@ namespace eIDMW
 				}
 				catch (CMWException e)
 				{
-					if (e.GetError() != EIDMW_TIMESTAMP_ERROR){
+					if (e.GetError() != EIDMW_TIMESTAMP_ERROR && e.GetError() != EIDMW_LTV_ERROR){
 						m_card->getCalReader()->setSSO(false);
 						throw e;
 					}
@@ -506,10 +507,17 @@ namespace eIDMW
 						m_card->getCalReader()->setSSO(true);
 					}
 					m_level = LEVEL_BASIC; // disable timetamp for the next files
-					throwTimestampError = true;
+					
+					if (e.GetError() == EIDMW_TIMESTAMP_ERROR)
+						throwTimestampError = true;
+					else
+						throwLTVError = true;
 				}
 			 }
 			 m_card->getCalReader()->setSSO(false);
+
+			if (throwLTVError)
+				throw CMWEXCEPTION(EIDMW_LTV_ERROR);
 
 			if (throwTimestampError)
 				throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
@@ -856,6 +864,8 @@ namespace eIDMW
 
         PKCS7_free( m_pkcs7 );
         m_pkcs7 = NULL;
+
+        MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature::signClose return_code = %d", return_code);
 
         if (return_code == 1) {
             throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);

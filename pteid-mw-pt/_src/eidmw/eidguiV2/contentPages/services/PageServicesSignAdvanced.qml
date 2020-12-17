@@ -1541,7 +1541,7 @@ PageServicesSignAdvancedForm {
 
             /*console.log("Output filename: " + outputFile)*/
             console.log("Signing in position coord_x: " + coord_x
-                        + " and coord_y: "+coord_y + " page: " + page + " timestamp: " + isTimestamp)
+                        + " and coord_y: "+coord_y + " page: " + page + " timestamp: " + isTimestamp + " ltv: " + isLTV)
 
             propertyOutputSignedFile = outputFile;
             if (propertyListViewFiles.count == 1) {

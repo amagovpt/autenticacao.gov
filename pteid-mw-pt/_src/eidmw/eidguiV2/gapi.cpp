@@ -875,55 +875,60 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
     long ret = 0;
     std::string local_sms_token = sms_token.toUtf8().data();
 
-    try {
+    try 
+    {
         signalUpdateProgressBar(65);
         ret = cmd_signature->signClose(local_sms_token);
-
-        if (ret != 0) {
-            qDebug() << "signClose failed!" << endl;
-            signCMDFinished(ret);
-            signalUpdateProgressBar(100);
-            return;
-        }
-
-        signalUpdateProgressStatus(tr("STR_CMD_SIGNING_SCAP"));
-
-        signalUpdateProgressBar(80);
-
-        //Do SCAP Signature
-        std::vector<int> attrs;
-        for (int i = 0; i != attribute_list.size(); i++) {
-            attrs.push_back(attribute_list.at(i));
-        }
-
-        //See details of this
-        CmdSignedFileDetails cmd_details;
-        cmd_details.signedCMDFile = m_scap_params.inputPDF;
-
-        cmd_details.citizenName = cmd_signature->getCertificateCitizenName();
-        //The method returns something like "BI123456789";
-        cmd_details.citizenId = QString(cmd_signature->getCertificateCitizenID() + 2);
-
-        scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
-            m_scap_params.location_x, m_scap_params.location_y,
-            m_scap_params.location, m_scap_params.reason, m_scap_params.isTimestamp, m_scap_params.isLtv, attrs, cmd_details,
-            useCustomSignature(), m_jpeg_scaled_data);
-
-        for (size_t i = 0; i < cmd_pdfSignatures.size(); i++)
-            delete cmd_pdfSignatures[i];
-
-        cmd_pdfSignatures.clear();
-        cmd_signature->clear_pdf_handlers();
     }
     catch (PTEID_Exception &e) {
         ret = e.GetError();
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doCloseSignCMDWithSCAP",
-            "Caught exception in some SDK method. Error code: %08x", e.GetError());
-        signCMDFinished(ret);
-        signalUpdateProgressBar(100);
+            "CMD SignClose. Error code: %08x", e.GetError());
     }
+
+    if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR || ret == EIDMW_LTV_ERROR)
+    {
+        try 
+        {
+            signalUpdateProgressStatus(tr("STR_CMD_SIGNING_SCAP"));
+
+            signalUpdateProgressBar(80);
+
+            //Do SCAP Signature
+            std::vector<int> attrs;
+            for (int i = 0; i != attribute_list.size(); i++) {
+                attrs.push_back(attribute_list.at(i));
+            }
+
+            //See details of this
+            CmdSignedFileDetails cmd_details;
+            cmd_details.signedCMDFile = m_scap_params.inputPDF;
+
+            cmd_details.citizenName = cmd_signature->getCertificateCitizenName();
+            //The method returns something like "BI123456789";
+            cmd_details.citizenId = QString(cmd_signature->getCertificateCitizenID() + 2);
+
+            scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
+                m_scap_params.location_x, m_scap_params.location_y,
+                m_scap_params.location, m_scap_params.reason, m_scap_params.isTimestamp, m_scap_params.isLtv, attrs, cmd_details,
+                useCustomSignature(), m_jpeg_scaled_data);
+
+            for (size_t i = 0; i < cmd_pdfSignatures.size(); i++)
+                delete cmd_pdfSignatures[i];
+
+            cmd_pdfSignatures.clear();
+            cmd_signature->clear_pdf_handlers();
+        }
+        catch (PTEID_Exception &e) {
+            ret = e.GetError();
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doCloseSignCMDWithSCAP",
+                    "executeSCAPWithCMDSignature. Error code: %08x", e.GetError());
+            }
+        }
     //TODO: reset the m_scap_params struct
 
+    signCMDFinished(ret);
+    signalUpdateProgressBar(100);
     if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR || ret == EIDMW_LTV_ERROR)
     {
         emit signalOpenFile();

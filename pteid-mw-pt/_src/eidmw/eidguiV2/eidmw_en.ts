@@ -1755,7 +1755,7 @@
     </message>
     <message>
         <source>STR_TIME_STAMP_MULTI_FAILED</source>
-        <translation>But some of the timestamps could not be applied. Verify the settings for the timestamp service in the menu &quot;Signatures configuration&quot;.</translation>
+        <translation>However, some of the timestamps could not be applied. Verify the settings for the timestamp service in the menu &quot;Signatures configuration&quot;.</translation>
     </message>
     <message>
         <source>STR_TIME_STAMP_FAILED</source>

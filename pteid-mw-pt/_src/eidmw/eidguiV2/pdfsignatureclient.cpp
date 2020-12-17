@@ -50,7 +50,7 @@ PDFSignatureClient::PDFSignatureClient()
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APPID);
 
         m_appID = config.getString();
-		is_last_signature = false;
+        is_last_signature = false;
 
         /*qDebug() << "m_appID = " << m_appID;*/
     }
@@ -269,13 +269,13 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
     local_pdf_handler = new PTEID_PDFSignature(inputFile);
 
     PDFSignature *sig_handler = local_pdf_handler->getPdfSignature();
-    	
-	if (useCustomImage && isVisible) {
-		const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(
-			m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
-		sig_handler->setCustomImage(
-			const_cast<unsigned char *>(imageData.GetBytes()), imageData.Size());
-	}
+        
+    if (useCustomImage && isVisible) {
+        const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(
+            m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
+        sig_handler->setCustomImage(
+            const_cast<unsigned char *>(imageData.GetBytes()), imageData.Size());
+    }
 
     std::vector<std::string> certs = toPEM((char *)certChain.c_str(), certChain.size());
 
@@ -308,16 +308,16 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
                                    strdup(attributeSupplier.toUtf8().constData()), strdup(attribute.toUtf8().constData()));
 
     sig_handler->setExternCertificate(certificatesData.at(0));
-	APL_SignatureLevel level = isTimestamp ? APL_SignatureLevel::LEVEL_TIMESTAMP : APL_SignatureLevel::LEVEL_BASIC;
+    APL_SignatureLevel level = isTimestamp ? APL_SignatureLevel::LEVEL_TIMESTAMP : APL_SignatureLevel::LEVEL_BASIC;
 
-	if (signatureInfo.isLtv()) {
-		if (is_last_signature)
-			level = APL_SignatureLevel::LEVEL_LTV;
-		else
-			level = APL_SignatureLevel::LEVEL_LT;
-	}
+    if (signatureInfo.isLtv()) {
+        if (is_last_signature)
+            level = APL_SignatureLevel::LEVEL_LTV;
+        else
+            level = APL_SignatureLevel::LEVEL_LT;
+    }
 
-	sig_handler->setSignatureLevel(level);
+    sig_handler->setSignatureLevel(level);
 
     std::vector<CByteArray> caCerts(certificatesData.begin() + 1, certificatesData.end());
 
@@ -483,51 +483,51 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
     sp->send_timeout = SEND_TIMEOUT;
     sp->connect_timeout = CONNECT_TIMEOUT;
 
-	char * ca_path = NULL;
-	std::string cacerts_file;
+    char * ca_path = NULL;
+    std::string cacerts_file;
 
 #ifdef __linux__
-	ca_path = "/etc/ssl/certs";
-	//Load CA certificates from file provided with pteid-mw
+    ca_path = "/etc/ssl/certs";
+    //Load CA certificates from file provided with pteid-mw
 #else
-	cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
+    cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
 #endif
 
-	int ret = soap_ssl_client_context(sp, SOAP_SSL_DEFAULT,
-		NULL,
-		NULL,
-		cacerts_file.size() > 0 ? cacerts_file.c_str() : NULL, /* cacert file to store trusted certificates (needed to verify server) */
-		ca_path,
-		NULL);
+    int ret = soap_ssl_client_context(sp, SOAP_SSL_DEFAULT,
+        NULL,
+        NULL,
+        cacerts_file.size() > 0 ? cacerts_file.c_str() : NULL, /* cacert file to store trusted certificates (needed to verify server) */
+        ca_path,
+        NULL);
 
-	if (ret != SOAP_OK) {
-		eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR
-			, "ScapSignature"
-			, "Error in signPDF: Gsoap returned %d "
-			, ret);
+    if (ret != SOAP_OK) {
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR
+            , "ScapSignature"
+            , "Error in signPDF: Gsoap returned %d "
+            , ret);
         qDebug() << "signPDF() returned error!" << ret;
-		return GAPI::ScapGenericError;
-	}
+        return GAPI::ScapGenericError;
+    }
 
     AuthorizationServiceSoapBindingProxy proxy(sp);
 
-	std::string proxy_host;
-	long proxy_port;
+    std::string proxy_host;
+    long proxy_port;
 
-	std::string s_endpoint = QString("https://" + settings.getScapServerHost() + ":" +
-		settings.getScapServerPort().append(AUTHORIZATION_ENDPOINT)).toStdString();
+    std::string s_endpoint = QString("https://" + settings.getScapServerHost() + ":" +
+        settings.getScapServerPort().append(AUTHORIZATION_ENDPOINT)).toStdString();
 
-	proxy.soap_endpoint = s_endpoint.c_str();
+    proxy.soap_endpoint = s_endpoint.c_str();
 
     if (proxyInfo.isAutoConfig()) 
     {
         proxyInfo.getProxyForHost(s_endpoint, &proxy_host, &proxy_port);
-		if (proxy_host.size() > 0) {
-			sp->proxy_host = proxy_host.c_str();
-			sp->proxy_port = proxy_port;
+        if (proxy_host.size() > 0) {
+            sp->proxy_host = proxy_host.c_str();
+            sp->proxy_port = proxy_port;
          }
-	}
-	else if (proxyInfo.isManualConfig()) {
+    }
+    else if (proxyInfo.isManualConfig()) {
         sp->proxy_host = strdup(proxyInfo.getProxyHost().c_str());
         try {
             proxy_port = std::stol(proxyInfo.getProxyPort());
@@ -536,12 +536,12 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
             eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Error parsing proxy port to number value.");
         }
         sp->proxy_port = proxy_port;
-		if (proxyInfo.getProxyUser().size() > 0) {
+        if (proxyInfo.getProxyUser().size() > 0) {
             sp->proxy_userid = strdup(proxyInfo.getProxyUser().c_str());
             sp->proxy_passwd = strdup(proxyInfo.getProxyPwd().c_str());
-		}
+        }
 
-	}
+    }
 
     _ns1__AuthorizationRequest authorizationRequest;
     _ns1__AuthorizationResponse authorizationResponse;
@@ -733,6 +733,8 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
             QString signOriginalLocation = signatureInfo.getLocation();
             bool moreThanOneNext = false;
             std::vector <QTemporaryFile *> tempFiles;
+            bool throwTimestampError = false;
+            bool throwLTVError = false;
 
             for (unsigned int i = 0; i != transactionList.size(); i++) {
                 bool isVisible = false;
@@ -861,13 +863,13 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                         for (uint ii = 0; ii < mainAttribute->SubAttributeList->SubAttribute.size(); ii++) {
                             ns1__SubAttributeType *acSubAttr = mainAttribute->SubAttributeList->SubAttribute.at(ii);
                             if(ii != 0) signDetailsReason.append("; ");
-							if (acSubAttr->Description != NULL) {
-								signDetailsReason.append(QString::fromStdString(acSubAttr->Description->c_str()));
-							}
+                            if (acSubAttr->Description != NULL) {
+                                signDetailsReason.append(QString::fromStdString(acSubAttr->Description->c_str()));
+                            }
                             signDetailsReason.append(": ");
-							if (acSubAttr->Value != NULL) {
-								signDetailsReason.append(QString::fromStdString(acSubAttr->Value->c_str()));
-							}
+                            if (acSubAttr->Value != NULL) {
+                                signDetailsReason.append(QString::fromStdString(acSubAttr->Value->c_str()));
+                            }
                         }
                     }
                     signatureInfo.setReason(strdup(signDetailsReason.toStdString().c_str()));
@@ -878,7 +880,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                 }
 
                 // Only the last signature should be timestamped
-				is_last_signature = (i == transactionList.size() - 1);
+                is_last_signature = (i == transactionList.size() - 1);
                 signatureHash = openSCAPSignature(inputPath, outputPath,
                                 transaction->AttributeSupplierCertificateChain, citizenName, citizenId,
                                 attributeSupplierListString, attributeListString, signatureInfo, isVisible, isTimestamp && is_last_signature, isCC,
@@ -908,7 +910,13 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                         closeSCAPSignature(scap_signature, sig_len);
                     }
                     catch (eIDMW::CMWException &e) {
-                        throw PTEID_Exception(e.GetError());
+                        if (e.GetError() != EIDMW_TIMESTAMP_ERROR && e.GetError() != EIDMW_LTV_ERROR){
+                            throw PTEID_Exception(e.GetError());
+                        }
+                        if (e.GetError() == EIDMW_TIMESTAMP_ERROR)
+                            throwTimestampError = true;
+                        else
+                            throwLTVError = true;
                     }
                 }else{
                     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Call SCAP Signature Service failed! signature len invalid");
@@ -921,7 +929,11 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
             for (auto& tempFile : tempFiles){
                 delete tempFile;
             }
-
+            if (throwLTVError)
+                throw PTEID_Exception(EIDMW_LTV_ERROR);
+                
+            if (throwTimestampError)
+                throw PTEID_Exception(EIDMW_TIMESTAMP_ERROR);
         }
     }
 

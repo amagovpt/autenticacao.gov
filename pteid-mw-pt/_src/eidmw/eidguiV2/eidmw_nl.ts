@@ -1753,7 +1753,7 @@
     </message>
     <message>
         <source>STR_TIME_STAMP_MULTI_FAILED</source>
-        <translation>Mas alguns dos selos temporais não foram aplicados. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
+        <translation>No entanto, alguns dos selos temporais não foram aplicados. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
     </message>
     <message>
         <source>STR_TIME_STAMP_FAILED</source>
