@@ -170,7 +170,7 @@
     </message>
     <message>
         <source>STR_TIME_STAMP_FAILED</source>
-        <translation>No entanto, o selo temporal não foi aplicado. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
+        <translation>No entanto, um ou vários selos temporais não foram aplicados. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
     </message>
     <message>
         <source>STR_CHANGING_ADDRESS</source>
@@ -462,7 +462,7 @@
     </message>
     <message>
         <source>STR_LTV_FAILED</source>
-        <translation>No entanto, a Validação de Longo Prazo não foi corretamente  aplicada. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
+        <translation>No entanto, a Validação de Longo Prazo não foi corretamente aplicada. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
     </message>
     <message>
         <source>STR_MAIL_SUPPORT</source>
@@ -1753,7 +1753,7 @@
     </message>
     <message>
         <source>STR_TIME_STAMP_MULTI_FAILED</source>
-        <translation>No entanto, alguns dos selos temporais não foram aplicados. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
+        <translation>No entanto, um ou vários selos temporais não foram aplicados. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
     </message>
     <message>
         <source>STR_TIME_STAMP_FAILED</source>
