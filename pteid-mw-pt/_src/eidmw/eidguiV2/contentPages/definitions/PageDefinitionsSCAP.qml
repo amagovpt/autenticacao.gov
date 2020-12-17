@@ -252,7 +252,7 @@ PageDefinitionsSCAPForm {
                     + "\n\n"
                     + qsTranslate("PageDefinitionsSCAP","STR_SCAP_PING_FAIL_SECOND")
             if (controler.isProxyConfigured()) {
-                bodyPopup.propertySignFailDialogText.text += " " 
+                bodyPopup += " " 
                     + qsTranslate("GAPI","STR_VERIFY_PROXY")
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
