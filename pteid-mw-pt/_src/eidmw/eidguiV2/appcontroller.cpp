@@ -17,6 +17,8 @@
 #include <QAccessible>
 #include <QClipboard>
 #include <QGuiApplication>
+#include <QProcess>
+#include <QStandardPaths>
 
 #include <fstream>
 #include <sstream>
@@ -796,4 +798,16 @@ QStringList AppController::getFilesFromClipboard(){
     QStringList filenames = clipboard->text().split(QRegExp("\n"));
 
     return filenames;
+}
+
+void AppController::openTransfersFolder(){
+    QStringList args(QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).first());
+    QProcess process;
+    process.setProgram("/usr/bin/xdg-open");
+    process.setArguments(args);
+    if(!process.startDetached())
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                  "AppController::openTransfersFolder: Failed to open file manager at: %s", args.first().toStdString().c_str());
+    }
 }

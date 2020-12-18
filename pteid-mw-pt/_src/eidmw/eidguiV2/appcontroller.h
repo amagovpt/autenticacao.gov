@@ -143,6 +143,7 @@ public slots:
     QString getFontFile(QString font);
     QStringList getFilesFromClipboard();
     static void initApplicationScale();
+    void openTransfersFolder();
 
 private:
     GUISettings&    m_Settings;

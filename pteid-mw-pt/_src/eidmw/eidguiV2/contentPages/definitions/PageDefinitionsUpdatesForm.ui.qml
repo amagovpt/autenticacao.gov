@@ -26,10 +26,12 @@ Item {
     property alias propertyTextDescriptionText: textDescription
     property alias propertyButtonStartUpdate: buttonStartUpdate
     property alias propertyButtonCancelUpdate: buttonCancelUpdate
+    property alias propertyButtonOpenTransferFolder: buttonOpenTransferFolder
     property alias propertyReleaseScrollViewText: releaseNoteScrollViewText
     property alias propertyReleaseNoteScrollView: releaseNoteScrollView
     property alias propertyRemoteVersion: remoteVersion
     property alias propertyInstalledVersion: installedVersion
+    property alias propertySupportedSystems: supportSystemsLink
 
     property alias propertyButtonSearchCerts: buttonSearchCerts
     property alias propertyProgressBarCerts: progressBarCerts
@@ -327,6 +329,34 @@ Item {
                             highlighted: activeFocus ? true : false
                             anchors.horizontalCenter: parent.horizontalCenter
                             visible: false
+                            KeyNavigation.tab: rectUpdateCertsTitle
+                            KeyNavigation.down: rectUpdateCertsTitle
+                            KeyNavigation.right: rectUpdateCertsTitle
+                            KeyNavigation.left: textDescription
+                            KeyNavigation.backtab: textDescription
+                            KeyNavigation.up: textDescription
+                        }
+                    }
+                    Item {
+                        id: rawButtonOpenTransferFolder
+                        width: parent.width
+                        height: Constants.HEIGHT_BOTTOM_COMPONENT
+                        anchors.top: textProgressBar.bottom
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                        Button {
+                            id: buttonOpenTransferFolder
+                            text: qsTranslate("PageDefinitionsUpdates",
+                                              "STR_UPDATE_BUTTON_OPEN_TRANSFERS")
+                            anchors.horizontalCenterOffset: 0
+                            width: 1.4 * Constants.WIDTH_BUTTON
+                            height: parent.height
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.family: lato.name
+                            font.capitalization: Font.MixedCase
+                            highlighted: activeFocus ? true : false
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            visible: false
+
                             KeyNavigation.tab: rectUpdateCertsTitle
                             KeyNavigation.down: rectUpdateCertsTitle
                             KeyNavigation.right: rectUpdateCertsTitle

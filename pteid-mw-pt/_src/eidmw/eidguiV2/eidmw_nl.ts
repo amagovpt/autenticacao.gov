@@ -1378,6 +1378,14 @@
         <source>STR_UPDATE_TEXT_LINK</source>
         <translation>aqui</translation>
     </message>
+    <message>
+        <source>STR_UPDATE_TRANSFER_DONE</source>
+        <translation>Transferência concluída.&lt;br&gt;Pode encontrar o instalador da nova versão na pasta &lt;b&gt;Transferências&lt;/b&gt;.&lt;br&gt;Para prosseguir com a instalação da nova versão, siga as instruções indicadas no manual disponível </translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_BUTTON_OPEN_TRANSFERS</source>
+        <translation>Abrir &lt;b&gt;Transferências&lt;/b&gt;</translation>
+    </message>
 </context>
 <context>
     <name>PageHelpAbout</name>

@@ -12,6 +12,7 @@
 #include <QCursor>
 #include <QDebug>
 #include <QtConcurrent>
+#include <QStandardPaths>
 
 #include <fstream>
 #include <sstream>
@@ -950,23 +951,23 @@ void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
 
     std::cout << "pkgpath " << pkgpath << " distro " << distro << std::endl;
 
-    if (distro.substr(0, 6) == "ubuntu")
+    QString pkgDestinationPath = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).first();
+    pkgDestinationPath.append("/");
+    pkgDestinationPath.append(pkg.c_str());
+
+    if (QFile::exists(pkgDestinationPath))
+        QFile::remove(pkgDestinationPath);
+
+    if(!QFile::rename(QString::fromStdString(pkgpath), pkgDestinationPath))
     {
-        // TODO: Ubunto < 17
-        execl ("/usr/bin/software-center", "software-center", pkgpath.c_str(), NULL);
-        pkgpath.insert(0,"--local-filename=");
-        execl ("/usr/bin/ubuntu-software", "gnome-software", pkgpath.c_str(), NULL);
+        qDebug() << "C++ AUTO UPDATES: Failed to move package to " << pkgDestinationPath.toStdString().c_str();
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AppController::RunPackage: Failed to move package to %s" , pkgDestinationPath.toStdString().c_str());
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        return;
     }
 
-    else if (distro == "fedora")
-    {
-        execl ("/usr/bin/gpk-install-local-file", "gpk-install-local-file", pkgpath.c_str(), NULL);
-    }
+    getAppController()->signalAutoUpdateSuccess(m_updateType);
 
-    else if (distro == "suse")
-    {
-        execl ("/usr/bin/gpk-install-local-file", "gpk-install-local-file", pkgpath.c_str(), NULL);
-    }
 #endif
     qDebug() << "C++ AUTO UPDATES: RunPackage finish";
 }

@@ -1380,6 +1380,14 @@
         <source>STR_UPDATE_TEXT_LINK</source>
         <translation>here</translation>
     </message>
+    <message>
+        <source>STR_UPDATE_TRANSFER_DONE</source>
+        <translation>Download completed.&lt;br&gt;You can find the new package in the &lt;b&gt;Downloads&lt;/b&gt; directory.&lt;br&gt;To proceed with the installation, follow the instructions indicated in the user manual available </translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_BUTTON_OPEN_TRANSFERS</source>
+        <translation>Open &lt;b&gt;Downloads&lt;/b&gt;</translation>
+    </message>
 </context>
 <context>
     <name>PageHelpAbout</name>
