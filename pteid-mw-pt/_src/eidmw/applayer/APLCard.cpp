@@ -279,17 +279,33 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, const char *output_file)
 {
 	if (paths == NULL || n_paths < 1 || !checkExistingFiles(paths, n_paths))
-	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	XadesSignature sig(this);
 	sig.enableTimestamp();
+	bool throwTimestampError = false;
+	CByteArray * ptr = NULL;
 
-	CByteArray &signature = sig.SignXades(paths, n_paths);
+	try
+	{
+		CByteArray &signature = sig.SignXades(paths, n_paths);
+		ptr = &signature;
+	}
+	catch (CMWException &e) {
+		MWLOG(LEV_ERROR, MOD_APL, L"SignXades:: Error code: %08x", e.GetError());
+		if (e.GetError() != EIDMW_TIMESTAMP_ERROR)
+			throw e;
+
+		throwTimestampError = true;
+	}
 
 	//Write zip container signature and referenced files in zip container
-	StoreSignatureToDisk(signature, paths, n_paths, output_file);
+	StoreSignatureToDisk(*ptr, paths, n_paths, output_file);
+	
+	if (throwTimestampError)
+		throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
 
-	return signature;
+	return *ptr;
 }
 
 CByteArray &APL_Card::SignXadesA(const char ** paths, unsigned int n_paths, const char *output_file)
