@@ -91,10 +91,6 @@ Load language error. Please reinstall the application"
         property var autoUpdateCerts: true
         property var isAutoUpdateAlreadyDetected: false
 
-        onSignalAutoUpdateSuccess: {
-            restart_dialog.headerTitle = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES") + controler.autoTr
-            restart_dialog.open()
-        }
         onSignalAutoUpdateAvailable: {
             // Do not show dialog when update page is open
             if(mainFormID.propertyMainMenuBottomListView.currentIndex != 0
