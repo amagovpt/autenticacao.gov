@@ -895,6 +895,7 @@ public:
 
     /**
     * Produce a XAdES-T Signature of the files indicated by the parameter @e paths and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter @e output_path.
+    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
     *
     * @param paths is an array of null-terminated strings representing absolute paths in
     * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
@@ -905,6 +906,8 @@ public:
 
     /**
     * Produce a XAdES-A Signature of the files indicated by the parameter @e paths and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter @e output_path.
+    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
+    * If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a XAdES-LT or XAdES-LTA depending where the timestamping fails.
     *
     * @param paths is an array of null-terminated strings representing absolute paths in
     * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
@@ -925,7 +928,8 @@ public:
 
     /**
     * Produce XAdES-T Signatures of the files indicated by the parameter @e paths and stores each of the results in an individual ASiC container in a zip format.
-    *
+    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
+    * 
     * @param paths is an array of null-terminated strings representing absolute paths in
     * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
     * @param n_paths is the number of elements in the @e paths array
@@ -935,7 +939,9 @@ public:
 
     /**
     * Produce XAdES-A Signatures of the files indicated by the parameter @e paths and stores each of the results in an individual ASiC container in a zip format.
-    *
+    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
+    * If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a XAdES-LT or XAdES-LTA depending where the timestamping fails.
+    * 
     * @param paths is an array of null-terminated strings representing absolute paths in
     * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
     * @param n_paths is the number of elements in the @e paths array
@@ -946,6 +952,9 @@ public:
 			
 	/**
 	* PDF Signature with location by page sector (the portrait A4 page is split into 18 cells: 6 lines and 3 columns) 
+	* If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a PAdES-B signature.
+	* If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a PAdES-LT or PAdES-LTA depending where the timestamping fails.
+	*
  	* @param sig_handler: this defines the input file and some signature options
  	* @param page: in case of visible signature it defines the page where the signature will appear
 	* @param page_sector: position in the signature grid, between 1 to 18 for Portrait documents and 1 to 20 for Landscape ones
@@ -960,6 +969,9 @@ public:
 
 	/**
 	* PDF Signature with location by coordinates (expressed in percentage of page height/width). The coordinate system has its origin in the top left corner of the page
+	* If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a PAdES-B signature.
+	* If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a PAdES-LT or PAdES-LTA depending where the timestamping fails.
+	* 
 	* @param sig_handler: this defines the input file and some signature options
 	* @param page: in case of visible signature it defines the page where the signature will appear
 	* @param coord_x: X coordinate of the signature location (percentage of page width)
