@@ -3394,6 +3394,8 @@ void GAPI::doRegisterCMDCertOpen(QString mobileNumber, QString pin) {
         return;
     case SOAP_TCP_ERROR:
         error_msg = tr("STR_VERIFY_INTERNET");
+        if (m_Settings.isProxyConfigured())
+            error_msg.append(" ").append(tr("STR_VERIFY_PROXY"));
         break;
     case ERR_GET_CERTIFICATE:
         urlLink = tr("STR_URL_AUTENTICACAO_GOT_PT");
@@ -3431,6 +3433,8 @@ void GAPI::doRegisterCMDCertClose(QString otp) {
         break;
     case SOAP_TCP_ERROR:
         error_msg = tr("STR_VERIFY_INTERNET");
+        if (m_Settings.isProxyConfigured())
+            error_msg.append(" ").append(tr("STR_VERIFY_PROXY"));
         break;
     default:
         error_msg = tr("STR_CERT_REG_ERROR");
