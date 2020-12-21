@@ -60,8 +60,9 @@ namespace eIDMW
 		void enableLongTermValidation() { m_do_long_term_validation = true; };
 
 		CByteArray mp_timestamp_data;
-		/* This flag is set to true if some timestamp was not applied in the last signature. */
-		bool throwTimestampException = false;
+		/* Return true if some timestamp(/archival timestamp) was not applied in the last signature. */
+		bool shouldThrowTimestampException() {return throwTimestampException;}
+		bool shouldThrowLTVException() {return throwLTVException;}
 
 		private:
 
@@ -104,6 +105,9 @@ namespace eIDMW
 		//Intermediate hash containing the signedinfo external file
 		EVP_MD_CTX *m_digest_state;
 		APL_Card *mp_card;
+
+		bool throwTimestampException = false;
+		bool throwLTVException = false;
 	};
 }
 

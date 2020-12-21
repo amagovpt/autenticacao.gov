@@ -240,6 +240,8 @@ void APL_Card::SignXadesAIndividual(const char ** paths, unsigned int n_paths, c
 // It signs each input file seperately and creates a .zip container for each
 void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const char *output_dir, bool timestamp, bool xades_a)
 {
+	bool throwTimestampException = false;
+	bool throwLTVException = false;
 
 	if (paths == NULL || n_paths < 1 || !checkExistingFiles(paths, n_paths))
 	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
@@ -259,6 +261,12 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 		files_to_sign[0] = paths[i];
 		CByteArray &signature = sig.SignXades(files_to_sign, 1);
 
+		if (sig.shouldThrowTimestampException())
+			throwTimestampException = true;
+
+		if (sig.shouldThrowLTVException())
+			throwLTVException = true;
+
 		const char *output_file = generateFinalPath(output_dir, paths[i]);
 		StoreSignatureToDisk (signature, files_to_sign, 1, output_file);
 		delete []output_file;
@@ -272,6 +280,12 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 	}
 
 	getCalReader()->setSSO(false);
+
+	if (throwTimestampException)
+		throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
+
+	if (throwLTVException)
+		throw CMWEXCEPTION(EIDMW_LTV_ERROR);
 
 }
 
@@ -289,7 +303,7 @@ CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, cons
 	//Write zip container signature and referenced files in zip container
 	StoreSignatureToDisk(signature, paths, n_paths, output_file);
 	
-	if (sig.throwTimestampException)
+	if (sig.shouldThrowTimestampException())
 		throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
 
 	return signature;
@@ -307,6 +321,12 @@ CByteArray &APL_Card::SignXadesA(const char ** paths, unsigned int n_paths, cons
 
 	//Write zip container signature and referenced files in zip container
 	StoreSignatureToDisk(signature, paths, n_paths, output_file);
+
+	if (sig.shouldThrowTimestampException())
+		throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
+
+	if (sig.shouldThrowLTVException())
+		throw CMWEXCEPTION(EIDMW_LTV_ERROR);
 
 	return signature;
 }
