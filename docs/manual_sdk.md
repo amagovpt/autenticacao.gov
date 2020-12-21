@@ -864,8 +864,8 @@ if (pin.verifyPin("", ref triesLeft, true){
 Esta funcionalidade permite a assinar um ou múltiplos ficheiros em
 qualquer formato utilizando ou não selos temporais.
 
-Os métodos **SignXades**/**SignXadesT** produzem um ficheiro .zip que contém os
-ficheiros assinados e um ficheiro XML com a assinatura. O formato deste
+Os métodos **SignXades**/**SignXadesT**/**SignXadesA** produzem um ficheiro .zip que contém os
+ficheiros assinados e um ficheiro XML com a assinatura (XAdES-B/XAdES-T/XAdES-LTA, respetivamente). O formato deste
 ficheiro .zip segue a
 [norma europeia ASIC](https://www.etsi.org/deliver/etsi_ts/102900_102999/102918/01.01.01_60/ts_102918v010101p.pdf)
 para *containers* de assinatura.
@@ -939,7 +939,7 @@ card.SignXadesA( destino, ficheiros, ficheiros.length );
 **Nota:** Alternativamente é possível assinar individualmente cada
 ficheiro da seguinte forma:
 
-  - Sem selo temporal
+  - Sem selo temporal (XAdES-B):
     - C++
 
         `card.SignXadesIndividual( dirDestino, ficheiros, n_paths );`
@@ -948,7 +948,7 @@ ficheiro da seguinte forma:
 
       `card.SignXadesIndividual( dirDestino, ficheiros, ficheiros.length );`
 
-  - Com selo temporal
+  - Com selo temporal (XAdES-T):
     - C++
 
         `card.SignXadesTIndividual( dirDestino, ficheiros, n_paths );`
@@ -957,8 +957,21 @@ ficheiro da seguinte forma:
 
         `card.SignXadesTIndividual( dirDestino, ficheiros, ficheiros.length );`
 
+  - Para arquivo de longo período temporal (XAdES-LTA):
+    - C++
+
+        `card.SignXadesAIndividual( dirDestino, ficheiros, n_paths );`
+
+    - Java/C\#
+
+        `card.SignXadesAIndividual( dirDestino, ficheiros, ficheiros.length );`
+
 O parâmetro **dirDestino** contêm a directoria destino onde serão
 colocados os ficheiros assinados.
+
+**Nota 2:** Se for emitida a exceção com código ```EIDMW_TIMESTAMP_ERROR``` durante uma assinatura XAdES-T ou XAdES-LTA, significa que a aplicação do *timestamp* na assinatura falhou ou, no caso dos métodos de assinatura individual, que falhou para pelo menos uma das assinaturas. Neste caso, as assinaturas cujo *timestamping* falhou ficam com nível XAdES-B.
+
+**Nota 3:** De modo semelhante à nota anterior, se for emitida a exceção com código ```EIDMW_LTV_ERROR``` numa assinatura XAdES-LTA, então a aplicação do *timestamp* sobre os dados de revogação não foi corretamente adicionado. Nesse caso, as assinaturas cujo *timestamping* falhou ficam com nível XAdES-T ou XAdES-LT.
 
 ### Ficheiros PDF
 
@@ -1033,6 +1046,10 @@ double pos_x = 0.1;
 double pos_y = 0.1;
 card.SignPDF(signature,  page, pos_x, pos_y, location, reason, output_file);
 ```
+
+**Nota:** Se for emitida a exceção com código ```EIDMW_TIMESTAMP_ERROR``` durante uma assinatura PAdES-T, PAdES-LT ou PAdES-LTA, significa que a aplicação do *timestamp* em uma ou mais assinaturas falhou. Neste caso, as assinaturas cujo *timestamping* falhou ficam com nível PAdES-B.
+
+**Nota 2:** De modo semelhante à nota anterior, se for emitida a exceção com código ```EIDMW_LTV_ERROR``` numa assinatura PAdES-LT ou PAdES-LTA, significa que não foi possível adicionar os dados de revogação ou o selo temporal sobre esses dados. Nesse caso, as assinaturas cujo *timestamping* falhou ficam com nível PAdES-T ou PAdES-LT dependendo se os dados de revogação foram corretamente adicionados.
 
 ### Bloco de dados
 
