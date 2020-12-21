@@ -60,6 +60,8 @@ namespace eIDMW
 		void enableLongTermValidation() { m_do_long_term_validation = true; };
 
 		CByteArray mp_timestamp_data;
+		/* This flag is set to true if some timestamp was not applied in the last signature. */
+		bool throwTimestampException = false;
 
 		private:
 

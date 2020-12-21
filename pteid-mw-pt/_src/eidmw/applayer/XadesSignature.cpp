@@ -1151,6 +1151,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 	EVP_PKEY *pub_key = NULL;
 	//XMLCh * signature_id = NULL;
 	CByteArray * emptyBa = new CByteArray();
+	throwTimestampException = false;
 
 	CByteArray sha1_hash;
 	CByteArray rsa_signature;
@@ -1274,7 +1275,15 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		//XAdES-T level
 		if (m_do_timestamping || m_do_long_term_validation)
 		{
-			AddSignatureTimestamp(sig->getParentDocument());
+			try
+			{
+				AddSignatureTimestamp(sig->getParentDocument());
+			}
+			catch (CMWException &e) {
+				MWLOG(LEV_ERROR, MOD_APL, L"XadesSignature::Sign: Failed to add timestamp. Error code: %08x", e.GetError());
+				throwTimestampException = true;
+			}
+			
 		}
 
 		//XAdES-A level stuff

@@ -119,7 +119,7 @@ PageServicesSignAdvancedForm {
             propertyBusyIndicatorRunning = false
             // test time stamp
             if(error_code == GAPI.SignMessageTimestampFailed){
-                if(propertyListViewFiles.count > 1){
+                if(propertyListViewFiles.count > 1 && propertyRadioButtonPADES.checked){
                     signsuccess_dialog.propertySignSuccessDialogText.text =
                             qsTranslate("PageServicesSign","STR_TIME_STAMP_MULTI_FAILED")
                 }else{

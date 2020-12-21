@@ -283,29 +283,16 @@ CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, cons
 
 	XadesSignature sig(this);
 	sig.enableTimestamp();
-	bool throwTimestampError = false;
-	CByteArray * ptr = NULL;
 
-	try
-	{
-		CByteArray &signature = sig.SignXades(paths, n_paths);
-		ptr = &signature;
-	}
-	catch (CMWException &e) {
-		MWLOG(LEV_ERROR, MOD_APL, L"SignXades:: Error code: %08x", e.GetError());
-		if (e.GetError() != EIDMW_TIMESTAMP_ERROR)
-			throw e;
-
-		throwTimestampError = true;
-	}
+	CByteArray &signature = sig.SignXades(paths, n_paths);
 
 	//Write zip container signature and referenced files in zip container
-	StoreSignatureToDisk(*ptr, paths, n_paths, output_file);
+	StoreSignatureToDisk(signature, paths, n_paths, output_file);
 	
-	if (throwTimestampError)
+	if (sig.throwTimestampException)
 		throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
 
-	return *ptr;
+	return signature;
 }
 
 CByteArray &APL_Card::SignXadesA(const char ** paths, unsigned int n_paths, const char *output_file)
