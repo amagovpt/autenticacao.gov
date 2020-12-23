@@ -644,6 +644,8 @@ Os ficheiros a assinar podem ser selecionados arrastando-os para a área de pré
 
       - **Adicionar LTV:** LTV (*Long-Term Validation*). Com a opção ativa, os dados necessários para validar a assinatura digital serão incluidos no ficheiro final assinado. Deste modo, é possível provar no futuro que no momento da assinatura o certificado do cartão (ou Chave Móvel Digital) e respectiva cadeia não estavam revogados ou expirados. Este nível é recomendado para documentos que estão destinados a serem arquivados por um longo período de tempo. A assinatura LTV obedece à especificação do perfil PAdES-LTA.
 
+        **Nota**: Disponível a partir da versão 3.4.0 da aplicação.
+
     - **Adicionar atributos profissionais:** A funcionalidade de assinatura de profissionais permite ao cidadão autenticar-se na qualidade das funções que desempenha na sociedade enquanto profissional qualificado. Na secção [Atributos Profissionais](#atributos-profissionais) é indicado o procedimento para carregar os atributos profissionais. Disponível para assinaturas do tipo **PDF**.
 
 Para mais informações, consulte o seguinte *website*:
