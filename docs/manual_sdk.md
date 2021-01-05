@@ -1488,8 +1488,8 @@ ser mantidos para garantir retrocompatibilidade.
 | SC_ERROR_CARD_NOT_PRESENT    | -1104 | O cartão de cidadão não está inserido no leitor   |
 | SC_ERROR_KEYPAD_TIMEOUT      | -1108 | Expirou o tempo para introduzir o PIN             |
 | SC_ERROR_KEYPAD_CANCELLED    | -1109 | O utilizador cancelou a acção de introduzir o PIN |
-| SC_ERROR_AUTH_METHOD_BLOCKED | -1212 | O cartão tem o método de autenticação bloqueado   |
-| SC_ERROR_PIN_CODE_INCORRECT  | -1214 | O código PIN introduzido está incorrecto          |
+| SC_ERROR_AUTH_METHOD_BLOCKED | -1212 | O cartão tem o PIN bloqueado                      |
+| SC_ERROR_PIN_CODE_INCORRECT  | -1214 | O código PIN ou PUK introduzido está incorrecto   |
 | SC_ERROR_INTERNAL            | -1400 | Ocorreu um erro interno                           |
 | SC_ERROR_OBJECT_NOT_VALID    | -1406 | A consistência da informação presente no cartão   |
 |                              |       | está comprometida                                 |
