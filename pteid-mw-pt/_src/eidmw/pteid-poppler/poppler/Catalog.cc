@@ -339,8 +339,8 @@ void Catalog::addSigFieldToAcroForm(Ref *sig_ref, Ref *refFirstPage)
 
         acroform.dictAdd(copyString("Fields"), &fields);
         acroform.dictAdd(copyString("SigFlags"), obj.initInt(3));
-        //catDict.dictAdd(copyString("AcroForm"), &acroform);
         local_acroForm = acroform;
+        catDict.dictAdd(copyString("AcroForm"), &local_acroForm);
     }
     else
     {
@@ -374,7 +374,6 @@ void Catalog::addSigFieldToAcroForm(Ref *sig_ref, Ref *refFirstPage)
     Ref catalog_ref;
     catalog_ref.gen = xref->getRootGen();
     catalog_ref.num = xref->getRootNum();
-    catDict.dictAdd(copyString("AcroForm"), &local_acroForm);
 
     //By the spec we should be handling the case
     //where the acroform object is compressed and we're doing 
