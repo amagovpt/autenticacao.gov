@@ -663,10 +663,6 @@ void AutoUpdates::ChooseAppVersion(std::string distro, std::string arch, cJSON *
 
     std::string downloadurl;
 
-    eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_URL);
-    std::string configurl = config.getString();
-    downloadurl.append(configurl);
-
 #ifdef WIN32
 
 #elif __APPLE__
@@ -681,7 +677,7 @@ void AutoUpdates::ChooseAppVersion(std::string distro, std::string arch, cJSON *
     }
 #endif
     //Name of the msi/deb/rpm will be distro specific
-    cJSON *package_json = cJSON_GetObjectItem(dist_json, "package");
+    cJSON *package_json = cJSON_GetObjectItem(dist_json, "packageUrl");
     if (!cJSON_IsString(package_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get package_json for this distribution.");

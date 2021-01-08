@@ -865,8 +865,6 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_XSIGN_TIMEOUT);			break;
 
 	//AUTOUPDATES
-	case PTEID_PARAM_AUTOUPDATES_URL:
-        m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_URL);         break;
     case PTEID_PARAM_AUTOUPDATES_VERIFY_URL:
         m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_VERIFY_URL);  break;
     case PTEID_PARAM_AUTOUPDATES_CERTS_URL:
