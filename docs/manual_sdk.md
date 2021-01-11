@@ -1,5 +1,7 @@
 # Manual do SDK – Middleware do Cartão de Cidadão <!-- omit in toc -->
 
+NOTA: A documentação foi transferida para https://amagovpt.github.io/docs.autenticacao.gov/
+
 # Versão 3 <!-- omit in toc -->
 
 ![](Pictures/CartaoCidadao.png)
@@ -50,6 +52,8 @@
 <!--- Content_begin -->
 
 # Introdução
+
+NOTA: A documentação foi transferida para https://amagovpt.github.io/docs.autenticacao.gov/
 
 Este documento destina-se a programadores e analistas de sistemas que
 tencionam desenvolver soluções informáticas com base no SDK do

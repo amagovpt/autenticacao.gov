@@ -5,31 +5,35 @@
 O objectivo deste projecto é disponibilizar uma nova versão de middleware que facilite e potencie a utilização do Cartão de Cidadão
 e da assinatura com Chave Móvel Digital
 
-## Manual de Utilização
+## Documentação
+
+O código fonte da documentação e os documentos técnicos deste projecto foram transferidos para o repositório https://github.com/amagovpt/docs.autenticacao.gov.
+
+### Manual de Utilização
 
 O Manual de Utilização pretende descrever todas as funcionalidades providenciadas pelo middleware do Cartão de Cidadão.
 
-[Manual de Utilização (online)](https://amagovpt.github.io/autenticacao.gov/user_manual.html)
+[Manual de Utilização (online)](https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html)
 
-[Manual de Utilização (download pdf)](docs/Manual_de_Utilizacao_v3.pdf)
+[Manual de Utilização (download pdf)](https://amagovpt.github.io/docs.autenticacao.gov/Manual_de_Utilizacao_v3.pdf)
 
-## SDK
+### SDK
 
 Está disponível um SDK, com o objetivo de disponibilizar a integração com outras aplicações, das funcionalidades desenvolvidas no âmbito deste projeto.
 Existem SDK's para as linguagens C, C++, JAVA e C#.
 
 Poderá aceder ao manual no seguinte URL:
 
-[Manual do SDK (online)](https://amagovpt.github.io/autenticacao.gov/manual_sdk.html)
+[Manual do SDK (online)](https://amagovpt.github.io/docs.autenticacao.gov/manual_sdk.html)
 
-[Manual do SDK (download pdf)](docs/Manual_de_SDK.pdf)
+[Manual do SDK (download pdf)](https://amagovpt.github.io/docs.autenticacao.gov/Manual_de_SDK.pdf)
 
 A documentação da API disponibilizada pelo SDK está disponível nos seguintes URLs:
 
 
-[Documentação Técnica do SDK C++ (online)](https://amagovpt.github.io/autenticacao.gov/sdk/cpp/)
+[Documentação Técnica do SDK C++ (online)](https://amagovpt.github.io/docs.autenticacao.gov/sdk/cpp/)
 
-[Documentação Técnica do SDK Java (online)](https://amagovpt.github.io/autenticacao.gov/sdk/java/)
+[Documentação Técnica do SDK Java (online)](https://amagovpt.github.io/docs.autenticacao.gov/sdk/java/)
 
 ## Compilar o Middleware do Cartão de Cidadão
 

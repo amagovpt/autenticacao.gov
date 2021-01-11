@@ -1,5 +1,7 @@
 # Manual da Aplicação Autenticação.gov para computador <!-- omit in toc -->
 
+NOTA: A documentação foi transferida para https://amagovpt.github.io/docs.autenticacao.gov/
+
 ![Ilustração: Cartão de Cidadão](Pictures/CartaoCidadao.png "Cartão de Cidadão"){:.center}
 
 ![Ilustração: Aplicação Autenticação.gov](Pictures/Autenticacao.Gov_Home.png "Aplicação Autenticação.gov"){:.center}
@@ -85,6 +87,9 @@
 <!-- Content_begin -->
 
 # Introdução
+
+NOTA: A documentação foi movida para https://amagovpt.github.io/docs.autenticacao.gov/
+
 
 NOTA: A partir da versão 3.2.0, houve uma alteração de nomenclatura no manual. As referências a "Middleware do Cartão de Cidadão" foram substituídas por "aplicação Autenticação.gov para computador", excepto quando o termo "*middleware*" é mais apropriado.
 
