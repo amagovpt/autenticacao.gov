@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
@@ -1367,19 +1367,10 @@ Load language error. Please reinstall the application"
                 mainFormID.propertyTitleBarContainer.propertyTitleBar.color = Constants.COLOR_TITLEBAR_DEBUG
             }
 
-            // Take shortcut to submenu
-            if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignSimple) {
+            // Take shortcut to signature page
+            if (gapi.getShortcutFlag() == GAPI.ShortcutIdSign) {
                 mainFormID.propertShowAnimation = false
-                mainMenuPressed(1)
-                subMenuPressed(1, "contentPages/services/PageServicesSign.qml")
-                //TODO: we shouldn't need this to make sure the contentPage gets the expanded space
-                mainWindow.setWidth(Constants.SCREEN_MINIMUM_WIDTH + 1)
-                mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
-                return
-            } else if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignAdvanced) {
-                mainFormID.propertShowAnimation = false
-                mainMenuPressed(1)
-                subMenuPressed(2, "contentPages/services/PageServicesSign.qml")
+                mainMenuPressed(Constants.MAIN_MENU_SIGN_PAGE_INDEX)
                 //TODO: we shouldn't need this to make sure the contentPage gets the expanded space
                 mainWindow.setWidth(Constants.SCREEN_MINIMUM_WIDTH + 1)
                 mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
@@ -1933,29 +1924,18 @@ Load language error. Please reinstall the application"
         // if there are unsaved notes
         if(handleUnsavedNotes(index,url,Constants.SUB_MENU_PRESSED)){
             return
-        } 
+        }
 
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         mainFormID.propertySubMenuListView.currentIndex = index
         console.log("Sub Menu index = " + index);
-        console.log("Sub Menu Pressed Expand Sub Menu" + mainFormID.propertySubMenuListView.model.get(0).expand)
 
-        if(mainFormID.propertySubMenuListView.model.get(index).expand === true){
-            // Clean the content page
-            mainFormID.propertyPageLoader.propertyForceFocus = false
-            mainFormID.state = Constants.MenuState.EXPAND
-            mainFormID.propertyPageLoader.source = url
-        }else{
-            mainFormID.propertyPageLoader.propertyForceFocus = true
-            //var temp = url
-            mainFormID.propertyPageLoader.source = ""
-            mainFormID.propertyPageLoader.source = url
-            /* Setting the state should be done after setting the source: changing the state causes the PDFPreview to call 
-                another (unnecessary) requestPixmap if the signature pages are loaded. */
-            mainFormID.state = Constants.MenuState.NORMAL
-
-        }
+        // Clean the content page
+        mainFormID.propertyPageLoader.propertyForceFocus = false
+        mainFormID.state = Constants.MenuState.EXPAND
+        mainFormID.propertyPageLoader.source = url
     }
+
     function mainMenuBottomPressed(index){
         // if there are unsaved notes
         if(handleUnsavedNotes(index,"",Constants.MAIN_BOTTOM_MENU_PRESSED)){

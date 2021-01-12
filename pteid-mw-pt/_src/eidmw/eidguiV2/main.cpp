@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
@@ -126,23 +126,21 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
             return;
         }
     }
-    else if (mode == "signAdvanced" || mode == "signSimple")
+    // sign is the correct option. signAdvanced and signSimple are legacy options
+    else if (mode == "sign" || mode == "signAdvanced" || mode == "signSimple")
     {
         parser->clearPositionalArguments();
-        parser->addPositionalArgument(mode, (mode == "signSimple" ? signSimpleDescription : signAdvancedDescription));
-        QString inputDescription((mode == "signSimple" ? "File " : "List of files "));
-        inputDescription.append("to be loaded for signing.");
+        parser->addPositionalArgument(mode, signSimpleDescription );
+        QString inputDescription("File  or list of files to be loaded for signing.");
         parser->addPositionalArgument("input", inputDescription);
 
         const QCommandLineOption timestampingOption("tsa", "Check timestamping");
         const QCommandLineOption reasonOption(QStringList() << "m" << "motivo", "Set default reason", "reason");
         const QCommandLineOption locationOption(QStringList() << "l" << "localidade", "Set default location", "location");
-        if (mode == "signAdvanced")
-        {
-            parser->addOption(timestampingOption);
-            parser->addOption(reasonOption);
-            parser->addOption(locationOption);
-        }
+
+        parser->addOption(timestampingOption);
+        parser->addOption(reasonOption);
+        parser->addOption(locationOption);
 
         const QCommandLineOption outputOption(QStringList() << "d" << "destino", "Set output folder", "output");
         parser->addOption(outputOption);
@@ -163,13 +161,7 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
                 "parseCommandlineGuiArguments: %s: No input files were provided.", mode.toStdString().c_str());
             return;
         }
-        if (mode == "signSimple" && args.size() != 2)
-        {
-            qDebug() << "ERROR: signSimple can only take one file as input.";
-            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui",
-                "parseCommandlineGuiArguments: signSimple can only take one file as input");
-            return;
-        }
+
         for (int i = 1; i < args.size(); i++)
         {
             if (QFileInfo::exists(args[i])) {
@@ -184,15 +176,11 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
             }
         }
         // Shortcuts and options
-        if (mode == "signAdvanced")
-        {
-            gapi->setShortcutFlag(GAPI::ShortcutIdSignAdvanced);
-            gapi->setShortcutTsa(parser->isSet(timestampingOption));
-            gapi->setShortcutReason(parser->value(reasonOption));
-            gapi->setShortcutLocation(parser->value(locationOption));
-        } else {
-            gapi->setShortcutFlag(GAPI::ShortcutIdSignSimple);
-        }
+        gapi->setShortcutFlag(GAPI::ShortcutIdSign);
+        gapi->setShortcutTsa(parser->isSet(timestampingOption));
+        gapi->setShortcutReason(parser->value(reasonOption));
+        gapi->setShortcutLocation(parser->value(locationOption));
+
         // Output dir
         if (parser->isSet(outputOption) && !QFileInfo::exists(parser->value(outputOption)))
         {

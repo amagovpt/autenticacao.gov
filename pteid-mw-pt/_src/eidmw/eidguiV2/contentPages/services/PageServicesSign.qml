@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
@@ -1335,7 +1335,7 @@ PageServicesSignForm {
         propertyTextFieldLocal.text = propertyPageLoader.propertyBackupReason
         propertyPDFPreview.setSignPreview(propertyPageLoader.propertyBackupCoordX * propertyPDFPreview.propertyBackground.width,propertyPageLoader.propertyBackupCoordY * propertyPDFPreview.propertyBackground.height)
 
-        if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignAdvanced){
+        if (gapi.getShortcutFlag() == GAPI.ShortcutIdSign){
             var paths = gapi.getShortcutPaths()
             for(var i = 0; i < paths.length; i++) {
                 paths[i] = gapi.getAbsolutePath(paths[i])
@@ -1346,8 +1346,8 @@ PageServicesSignForm {
             propertyTextFieldReason.text = gapi.getShortcutReason()
             propertySwitchSignTemp.checked = gapi.getShortcutTsa()
 
-            // do not update fields next time (includes input, motive, ...)
-            gapi.setShortcutFlag(0)
+            // do not update fields next time (includes input, local, reason, tsa, ...)
+            gapi.setShortcutFlag(GAPI.ShortcutIdNone)
         }
         propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                 qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")

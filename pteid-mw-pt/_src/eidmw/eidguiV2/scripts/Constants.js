@@ -4,6 +4,12 @@
 // Program options
 var USE_SDK_PIN_UI_POPUP = true
 
+// Menu static entries
+// Changing the MainMenuModel may force update the next constants:
+var MAIN_MENU_SIGN_PAGE_INDEX = 1
+var SUB_MENU_SIGN_PAGE_INDEX = 0
+var SIGNATURE_PAGE_URL = "contentPages/services/PageServicesSign.qml"
+
 // Start Popup options
 var DIALOG_WIDTH = 600
 var DIALOG_HEIGHT = 300
