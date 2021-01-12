@@ -843,23 +843,10 @@ PageDefinitionsSCAPForm {
         propertyPageLoader.propertyBackupFromSignaturePage = false
         mainFormID.state = Constants.MenuState.EXPAND
         mainFormID.propertySubMenuListView.model.clear()
-        for(var i = 0; i < mainFormID.propertyMainMenuListView.model.get(1).subdata.count; ++i) {
-            /*console.log("Sub Menu indice " + i + " - "
-                        + mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i).subName);*/
-            mainFormID.propertySubMenuListView.model
-            .append({
-                        "subName": qsTranslate("MainMenuModel",
-                                            mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i).name),
-                        "expand": mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i)
-                        .expand,
-                        "url": mainFormID.propertyMainMenuListView.model.get(1).subdata.get(i)
-                        .url
-                    })
-        }
         mainFormID.propertyMainMenuListView.currentIndex = 1
         mainFormID.propertyMainMenuBottomListView.currentIndex = -1
         mainFormID.propertySubMenuListView.currentIndex = -1
-        mainFormID.propertyPageLoader.source = "/contentPages/services/PageServicesSignAdvanced.qml"
+        mainFormID.propertyPageLoader.source = "/contentPages/services/PageServicesSign.qml"
     }
 
     function isAnyEntitySelected() {

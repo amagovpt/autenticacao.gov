@@ -21,7 +21,7 @@ import "../../components" as Components
 //Import C++ defined enums
 import eidguiV2 1.0
 
-PageServicesSignAdvancedForm {
+PageServicesSignForm {
 
     property bool isAnimationFinished: mainFormID.propertyPageLoader.propertyAnimationExtendedFinished
     property string propertyOutputSignedFile : ""
@@ -69,7 +69,7 @@ PageServicesSignAdvancedForm {
     }
 
     Keys.onPressed: {
-        console.log("PageServicesSignAdvancedForm onPressed:" + event.key)
+        console.log("PageServicesSignForm onPressed:" + event.key)
 
         if(propertyListViewEntities.focus === false){
             Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)

@@ -1215,7 +1215,6 @@ Load language error. Please reinstall the application"
                 }
             },
             Transition {
-                from: Constants.MenuState.NORMAL
                 to: Constants.MenuState.EXPAND
                 NumberAnimation
                 {
@@ -1234,6 +1233,15 @@ Load language error. Please reinstall the application"
                     easing.type: Easing.Linear
                     to: Constants.COLOR_MAIN_DARK_GRAY;
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+                }
+                NumberAnimation
+                {
+                    id: animationExpandMainMenuPagesWidth
+                    target: mainFormID.propertyMainMenuView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: mainFormID.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 NumberAnimation
                 {
@@ -1363,7 +1371,7 @@ Load language error. Please reinstall the application"
             if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignSimple) {
                 mainFormID.propertShowAnimation = false
                 mainMenuPressed(1)
-                subMenuPressed(1, "contentPages/services/PageServicesSignSimple.qml")
+                subMenuPressed(1, "contentPages/services/PageServicesSign.qml")
                 //TODO: we shouldn't need this to make sure the contentPage gets the expanded space
                 mainWindow.setWidth(Constants.SCREEN_MINIMUM_WIDTH + 1)
                 mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
@@ -1371,7 +1379,7 @@ Load language error. Please reinstall the application"
             } else if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignAdvanced) {
                 mainFormID.propertShowAnimation = false
                 mainMenuPressed(1)
-                subMenuPressed(2, "contentPages/services/PageServicesSignAdvanced.qml")
+                subMenuPressed(2, "contentPages/services/PageServicesSign.qml")
                 //TODO: we shouldn't need this to make sure the contentPage gets the expanded space
                 mainWindow.setWidth(Constants.SCREEN_MINIMUM_WIDTH + 1)
                 mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
@@ -1881,33 +1889,44 @@ Load language error. Please reinstall the application"
         mainFormID.propertyMainMenuBottomListView.currentIndex = -1
         mainFormID.propertyMainMenuListView.currentIndex = index
 
-        // Clear list model and then load a new sub menu
+        // Clear the sub menu
         mainFormID.propertySubMenuListView.model.clear()
-        for(var i = 0; i < mainFormID.propertyMainMenuListView.model.get(index).subdata.count; ++i) {
-            /*console.log("Sub Menu indice " + i + " - "
-                        + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name + " - "
-                        + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).expand + " - "
-                        + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).url)*/
-            mainFormID.propertySubMenuListView.model
-            .append({
-                        "subName": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name,
-                        "expand": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).expand,
-                        "url": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).url
-                    })
-        }
-        // Open the content page of the first item of the new sub menu
-        mainFormID.propertyPageLoader.propertyForceFocus = false
-        mainFormID.propertyPageLoader.source =
-                mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
-        mainFormID.propertySubMenuListView.currentIndex = 0
-        /* Setting the state should be done after setting the source: changing the state causes the PDFPreview to call 
-           another (unnecessary) requestPixmap if the signature pages are loaded. */
-        mainFormID.state = Constants.MenuState.NORMAL
 
-        /*console.log("Main Menu index = " + index);
-        console.log("Set focus sub menu")
-        console.log("Sub menu count" + mainFormID.propertySubMenuListView.count)*/
-        mainFormID.propertySubMenuListView.forceActiveFocus()
+        if(mainFormID.propertyMainMenuListView.model.get(index).expand === true){
+            mainFormID.propertyPageLoader.propertyForceFocus = true
+            mainFormID.state = Constants.MenuState.EXPAND
+            mainFormID.propertyPageLoader.source =
+                    mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
+        }else{
+            // Load a new sub menu
+            for(var i = 0; i < mainFormID.propertyMainMenuListView.model.get(index).subdata.count; ++i) {
+                /*console.log("Sub Menu indice " + i + " - "
+                            + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name + " - "
+                            + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).expand + " - "
+                            + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).url)*/
+                mainFormID.propertySubMenuListView.model
+                .append({
+                            "subName": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name,
+                            "expand": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).expand,
+                            "url": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).url
+                        })
+            }
+
+            // Open the content page of the first item of the new sub menu
+            mainFormID.propertyPageLoader.propertyForceFocus = false
+            mainFormID.propertyPageLoader.source =
+                    mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
+            mainFormID.propertySubMenuListView.currentIndex = 0
+            /* Setting the state should be done after setting the source: changing the state causes the PDFPreview to call
+               another (unnecessary) requestPixmap if the signature pages are loaded. */
+            mainFormID.state = Constants.MenuState.NORMAL
+
+            /*console.log("Main Menu index = " + index);
+            console.log("Set focus sub menu")
+            console.log("Sub menu count" + mainFormID.propertySubMenuListView.count)*/
+            mainFormID.propertySubMenuListView.forceActiveFocus()
+
+        }
     }
 
     function subMenuPressed(index, url){
