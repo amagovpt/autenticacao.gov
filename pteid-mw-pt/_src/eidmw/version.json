@@ -37,18 +37,19 @@
             "package": "20126/78595/Autenticacao.gov_OpenSUSE_x64.rpm"
         },
         "osx": {
-            "latestVersion": "3.3.1",
+            "latestVersion": "3.4.0",
             "package": "20126/78595/Autenticacao.gov_MacOS.pkg"
         }
     },
     "versions": [
         {
             "version": "3.4.0",
-            "date": "2021-01-12",
+            "date": "2021-01-13",
             "release_notes": [
                 "Adicionar suporte para assinatura PDF com LTV (Validação em longo prazo)",
-                "Registo do Certificado ECRaizEstado 002 via menu configurações",
-                "Facilitar mudar de configuração gráfica, disponibilizando atalhos na pasta da aplicação para o efeito"
+                "[Windows] Registo do Certificado ECRaizEstado 002 via menu configurações",
+                "[Windows] Facilitar mudar de configuração gráfica, disponibilizando atalhos na pasta da aplicação para o efeito",
+                "[MacOS] Correção nas assinaturas com Chave Móvel Digital e SCAP para MacOS Sierra e High Sierra"
             ]
         },
         {
