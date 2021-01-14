@@ -604,6 +604,18 @@ PageServicesSignForm {
             mainFormID.propertyPageLoader.forceActiveFocus()
         }
     }
+
+    propertyArrowHelpMouseArea {
+        onClicked: {
+            console.log("propertyArrowHelpMouseArea clicked")
+        }
+    }
+    propertyArrowOptionsMouseArea {
+        onClicked: {
+            console.log("propertyArrowHelpMouseArea clicked")
+        }
+    }
+
     propertyMouseAreaToolTipPades{
         onEntered: {
             tooltipExitTimer.stop()

@@ -1931,9 +1931,14 @@ Load language error. Please reinstall the application"
         console.log("Sub Menu index = " + index);
 
         // Clean the content page
-        mainFormID.propertyPageLoader.propertyForceFocus = false
-        mainFormID.state = Constants.MenuState.EXPAND
+        mainFormID.propertyPageLoader.propertyForceFocus = true
+        //var temp = url
+        mainFormID.propertyPageLoader.source = ""
         mainFormID.propertyPageLoader.source = url
+        /* Setting the state should be done after setting the source: changing the state causes the PDFPreview to call
+                        another (unnecessary) requestPixmap if the signature pages are loaded. */
+        mainFormID.state = Constants.MenuState.NORMAL
+
     }
 
     function mainMenuBottomPressed(index){

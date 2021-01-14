@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
@@ -13,6 +13,7 @@ import QtQuick 2.6
 import QtQuick.Controls 2.1
 import Qt.labs.platform 1.0
 import QtGraphicalEffects 1.0
+import QtQuick.Layouts 1.3
 import eidguiV2 1.0
 
 /* Constants imports */
@@ -77,10 +78,10 @@ Item {
                                                  + 10 + radioButtonXADES.width
                                                  + rectToolTipXades.width * 0.5
     property int propertyMouseAreaToolTipLTVX: Constants.SIZE_ROW_H_SPACE
-                                                 + Constants.SIZE_TEXT_FIELD_H_SPACE
-                                                 + checkboxLTV.x
-                                                 + 10 + checkboxLTV.width
-                                                 + rectToolTipLTV.width * 0.5
+                                               + Constants.SIZE_TEXT_FIELD_H_SPACE
+                                               + checkboxLTV.x
+                                               + 10 + checkboxLTV.width
+                                               + rectToolTipLTV.width * 0.5
     property int propertyMouseAreaToolTipY: rectMainLeftFile.height
     property alias propertyTextSpinBox: textSpinBox
     property alias propertySpinBoxControl: spinBoxControl
@@ -88,6 +89,8 @@ Item {
     property alias propertyPageText: pageText
     property alias propertyTitleConf: titleConf
 
+    property alias propertyArrowHelpMouseArea: arrowHelpMouseArea
+    property alias propertyArrowOptionsMouseArea: arrowOptionsMouseArea
 
     BusyIndicator {
         id: busyIndicator
@@ -103,9 +106,6 @@ Item {
         id: rowMain
         width: parent.width - Constants.SIZE_ROW_H_SPACE
         height: parent.height
-
-        // Expanded menu need a Horizontal space to Main Menu
-        x: Constants.SIZE_ROW_H_SPACE
 
         FileDialog {
             id: fileDialog
@@ -140,610 +140,832 @@ Item {
         }
 
         Item {
-            id: rectMainLeftFile
-            width: parent.width * 0.5 - Constants.SIZE_ROW_H_SPACE
-            height: mainItem.height - rectMainLeftOptions.height - 4 * Constants.SIZE_ROW_V_SPACE
+            id: rectMainLeft
+            width: parent.width * 0.5
+            height: parent.height
 
-            DropShadow {
-                anchors.fill: rectFile
-                horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
-                verticalOffset: Constants.FORM_SHADOW_V_OFFSET
-                radius: Constants.FORM_SHADOW_RADIUS
-                samples: Constants.FORM_SHADOW_SAMPLES
-                color: Constants.COLOR_FORM_SHADOW
-                source: rectFile
-                spread: Constants.FORM_SHADOW_SPREAD
-                opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
-            }
-            RectangularGlow {
-                anchors.fill: rectFile
-                glowRadius: Constants.FORM_GLOW_RADIUS
-                spread: Constants.FORM_GLOW_SPREAD
-                color: Constants.COLOR_FORM_GLOW
-                cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
-            }
-
-            Text {
-                id: titleSelectFile
-                x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
-                font.family: lato.name
-                color: Constants.COLOR_TEXT_LABEL
-                height: Constants.SIZE_TEXT_LABEL
-                text: qsTranslate("Popup File", "STR_POPUP_FILE_INPUT_MULTI")
-            }
-            Rectangle {
-                id: rectFile
-                width: parent.width
+            Flickable {
+                id: flickable
+                width: parent.width - Constants.SIZE_ROW_H_SPACE
                 height: parent.height
+                anchors.top: rectMainLeft.top
+                clip:true
+                contentHeight: rectMainLeftHelp.childrenRect.height
+                               + 6 * Constants.SIZE_ROW_V_SPACE
+                               + rectMainLeftFile.childrenRect.height
+                               + rectMainLeftOptions.childrenRect.height
 
-                color: "white"
-                anchors.top: titleSelectFile.bottom
-                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Item {
-                    id: itemOptionsFiles
-                    width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                    height: parent.height - itemBottonsFiles.height - Constants.SIZE_ROW_V_SPACE
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    ListView {
-                        id: listViewFiles
-                        y: Constants.SIZE_TEXT_V_SPACE
-                        width: parent.width
-                        height: parent.height
-                        clip: true
-                        spacing: Constants.SIZE_LISTVIEW_SPACING
-                        boundsBehavior: Flickable.StopAtBounds
-                        model: filesModel
-                        delegate: listViewFilesDelegate
-
-                        ScrollBar.vertical: ScrollBar {
-                            id: filesListViewScroll
-                            hoverEnabled: true
-                            active: hovered || pressed
-                        }
-                        Text {
-                            id: textDragMsgListView
-                            anchors.fill: parent
-                            font.bold: true
-                            wrapMode: Text.WordWrap
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            font.pixelSize: Constants.SIZE_TEXT_BODY
-                            font.family: lato.name
-                            color: Constants.COLOR_TEXT_LABEL
-                            visible: !fileLoaded
-                        }
-                    }
-                    MouseArea {
-                        id: mouseAreaItemOptionsFiles
-                        width: parent.width
-                        height: parent.height
-                        enabled: !fileLoaded
-                    }
+                ScrollBar.vertical: ScrollBar {
+                    id: settingsScroll
+                    parent: rectMainLeft
+                    visible: true
+                    active: true // QtQuick.Controls 2.1 does not have AlwaysOn prop
+                    width: Constants.SIZE_TEXT_FIELD_H_SPACE
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                    anchors.bottom: parent.bottom
+                    stepSize : 1.0
                 }
-                Item {
-                    id: itemBottonsFiles
-                    width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                    height: Constants.HEIGHT_BOTTOM_COMPONENT
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: itemOptionsFiles.bottom
-                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-
-                    Button {
-                        id: buttonAdd
-                        width: Constants.WIDTH_BUTTON
-                        height: parent.height
-                        text: qsTranslate("PageServicesSign",
-                                          "STR_SIGN_ADD_MULTI_BUTTON")
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        font.capitalization: Font.MixedCase
-                        highlighted: activeFocus ? true : false
-                        Accessible.role: Accessible.Button
-                        Accessible.name: text
-                        KeyNavigation.tab: buttonRemoveAll
-                        KeyNavigation.down: buttonRemoveAll
-                        KeyNavigation.right: buttonRemoveAll
-                        KeyNavigation.backtab: button_signCMD
-                        KeyNavigation.up: button_signCMD
-                        Keys.onEnterPressed: clicked()
-                        Keys.onReturnPressed: clicked()
-                    }
-                    Button {
-                        id: buttonRemoveAll
-                        width: Constants.WIDTH_BUTTON
-                        height: parent.height
-                        anchors.right: itemBottonsFiles.right
-                        text: qsTranslate("PageServicesSign",
-                                          "STR_SIGN_REMOVE_MULTI_BUTTON")
-                        enabled: fileLoaded
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        font.capitalization: Font.MixedCase
-                        highlighted: activeFocus ? true : false
-                        Accessible.role: Accessible.Button
-                        Accessible.name: text
-                        KeyNavigation.tab: titleConf
-                        KeyNavigation.down: titleConf
-                        KeyNavigation.right: titleConf
-                        KeyNavigation.backtab: buttonAdd
-                        KeyNavigation.up: buttonAdd
-                        Keys.onEnterPressed: clicked()
-                        Keys.onReturnPressed: clicked()
-                    }
-                }
-            }
-            DropArea {
-                id: dropFileArea
-                anchors.fill: parent
-                z: 1
-            }
-        }
-        Item {
-            id: rectMainLeftOptions
-            width: parent.width * 0.5 - Constants.SIZE_ROW_H_SPACE
-
-            height: titleConf.height + rectOptions.height
-
-            anchors.top: rectMainLeftFile.bottom
-            anchors.topMargin: 3 * Constants.SIZE_ROW_V_SPACE
-
-            DropShadow {
-                anchors.fill: rectOptions
-                horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
-                verticalOffset: Constants.FORM_SHADOW_V_OFFSET
-                radius: Constants.FORM_SHADOW_RADIUS
-                samples: Constants.FORM_SHADOW_SAMPLES
-                color: Constants.COLOR_FORM_SHADOW
-                source: rectOptions
-                spread: Constants.FORM_SHADOW_SPREAD
-                opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
-            }
-            RectangularGlow {
-                anchors.fill: rectOptions
-                glowRadius: Constants.FORM_GLOW_RADIUS
-                spread: Constants.FORM_GLOW_SPREAD
-                color: Constants.COLOR_FORM_GLOW
-                cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
-            }
-
-            Text {
-                id: titleConf
-                x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                font.pixelSize: activeFocus
-                                ? Constants.SIZE_TEXT_LABEL_FOCUS
-                                : Constants.SIZE_TEXT_LABEL
-                font.bold: activeFocus
-                font.family: lato.name
-                color: Constants.COLOR_TEXT_LABEL
-                height: Constants.SIZE_TEXT_LABEL
-                text: qsTranslate("PageServicesSign", "STR_SIGN_SETTINGS")
-                Accessible.role: Accessible.Section
-                Accessible.name: text
-                KeyNavigation.tab: textFormatSign
-                KeyNavigation.down: textFormatSign
-                KeyNavigation.right: textFormatSign
-                KeyNavigation.backtab: buttonRemoveAll
-                KeyNavigation.up: buttonRemoveAll
-            }
-
-            Rectangle {
-                id: rectOptions
-                width: parent.width
-                height: itemOptions.height
-                color: "white"
-                anchors.top: titleConf.bottom
-                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
                 Item {
-                    id: itemOptions
-                    width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                    height: Constants.SIZE_TEXT_V_SPACE + rectFormatOptions.height
-                            + textFieldReason.height + textFieldLocal.height
-                            + switchSignTemp.height + switchSignAdd.height
-                            + rectangleEntities.height
-                            //+ rowPreserv.height
-                            + Constants.SIZE_TEXT_V_SPACE + Constants.SIZE_TEXT_V_SPACE
+                    id: rectMainLeftHelp
+                    width: parent.width - 1 * Constants.SIZE_ROW_H_SPACE
+                    height: 160
+                    x: Constants.SIZE_ROW_H_SPACE
 
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    DropShadow {
+                        anchors.fill: rectHelp
+                        horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                        verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                        radius: Constants.FORM_SHADOW_RADIUS
+                        samples: Constants.FORM_SHADOW_SAMPLES
+                        color: Constants.COLOR_FORM_SHADOW
+                        source: rectHelp
+                        spread: Constants.FORM_SHADOW_SPREAD
+                        opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
+                    }
+                    RectangularGlow {
+                        anchors.fill: rectHelp
+                        glowRadius: Constants.FORM_GLOW_RADIUS
+                        spread: Constants.FORM_GLOW_SPREAD
+                        color: Constants.COLOR_FORM_GLOW
+                        cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                        opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
+                    }
 
-                    Item {
-                        id: rectFormatOptions
+                    Text {
+                        id: titleHelp
+                        x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_LABEL
+                        height: Constants.SIZE_TEXT_LABEL
+                        text: qsTranslate("PageServicesSign", "STR_SIGN_HELP_TITLE")
+                    }
+                    Rectangle {
+                        id: rectHelp
                         width: parent.width
-                        height: radioButtonPADES.height
-                        anchors.top: itemOptions.top
+                        height: parent.height
+
+                        color: Constants.COLOR_MAIN_MIDDLE_GRAY
+                        anchors.top: titleHelp.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                        Text {
-                            id: textFormatSign
-                            text: qsTranslate("PageServicesSign",
-                                              "STR_SIGN_FORMAT")
-                            rightPadding: 0
-                            padding: 0
-                            verticalAlignment: Text.AlignVCenter
-                            color: Constants.COLOR_TEXT_BODY
-                            height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-                            font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            font.capitalization: Font.MixedCase
-                            font.bold: activeFocus
-                            Accessible.role: Accessible.Row
-                            Accessible.name: text
-                            KeyNavigation.tab: radioButtonPADES
-                            KeyNavigation.down: radioButtonPADES
-                            KeyNavigation.right: radioButtonPADES
-                            KeyNavigation.backtab: titleConf
-                            KeyNavigation.up: titleConf
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        Components.Link {
+                            id: textSubTitle
+                            anchors.top: textTitle.bottom
+                            propertyText.text: qsTranslate("PageServicesSign",
+                                                           "STR_SIGN_HELP_SUB_TITLE") + " "
+                                               + "<a href='https://www.autenticacao.gov.pt/cmd-pedido-chave'>"
+                                               + qsTranslate("PageServicesSign",
+                                                             "STR_SIGN_HELP_CMD_LINK")
+                            propertyText.width: parent.width
+                            propertyText.textMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
+                            propertyText.wrapMode: Text.Wrap
+                            propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+                            Layout.fillWidth: true
+                            propertyAccessibleText: qsTranslate(
+                                                        "PageServicesSign",
+                                                        "STR_SIGN_HELP_SUB_TITLE") + qsTranslate(
+                                                        "PageServicesSign",
+                                                        "STR_SIGN_HELP_CMD_LINK")
+                            propertyAccessibleDescription: qsTranslate(
+                                                               "PageServicesSign",
+                                                               "STR_SIGN_HELP_CMD_SELECT")
+                            propertyLinkUrl: 'https://www.autenticacao.gov.pt/cmd-pedido-chave'
+                            KeyNavigation.tab: autenticacaoGovLink
+                            KeyNavigation.down: autenticacaoGovLink
+                            KeyNavigation.right: autenticacaoGovLink
+                            KeyNavigation.left: titleHelp
+                            KeyNavigation.backtab: titleHelp
+                            KeyNavigation.up: titleHelp
                         }
-                        RadioButton {
-                            id: radioButtonPADES
-                            anchors.left: textFormatSign.right
-                            height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-                            text: qsTranslate("PageServicesSign","STR_SIGN_PDF")
-                            checked: true
-                            leftPadding: 0
-                            rightPadding: 0
-                            anchors.leftMargin: 10
-                            enabled: true
-                            font.capitalization: Font.MixedCase
-                            opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
-                            Accessible.role: Accessible.RadioButton
-                            Accessible.name: text
-                            KeyNavigation.tab: radioButtonXADES
-                            KeyNavigation.down: radioButtonXADES
-                            KeyNavigation.right: radioButtonXADES
-                            KeyNavigation.backtab: textFormatSign
-                            KeyNavigation.up: textFormatSign
-                            Keys.onEnterPressed: toggleRadio(radioButtonPADES)
-                            Keys.onReturnPressed: toggleRadio(radioButtonPADES)
-                            contentItem: Text {
-                                text: radioButtonPADES.text
-                                leftPadding: 22
-                                font.family: lato.name
-                                font.bold: radioButtonPADES.activeFocus
-                                font.pixelSize: Constants.SIZE_TEXT_LABEL
-                                horizontalAlignment: Text.AlignRight
-                                verticalAlignment: Text.AlignVCenter
-                                color: Constants.COLOR_MAIN_PRETO
-                            }
+
+                        Components.Link {
+                            id: autenticacaoGovLink
+                            anchors.top: textSubTitle.bottom
+                            propertyText.text: qsTranslate("PageServicesSign",
+                                                           "STR_SIGN_HELP_TOPIC_2")
+                                               + "<a href='https://www.autenticacao.gov.pt'>" + " " + qsTranslate(
+                                                   "PageServicesSign",
+                                                   "STR_SIGN_HELP_AUTENTICACAO.GOV_LINK")
+                            propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+                            propertyText.width: parent.width
+                            propertyText.textMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
+                            propertyText.wrapMode: Text.Wrap
+                            Layout.fillWidth: true
+                            propertyAccessibleText: qsTranslate(
+                                                        "PageServicesSign",
+                                                        "STR_SIGN_HELP_TOPIC_2") + qsTranslate(
+                                                        "PageServicesSign",
+                                                        "STR_SIGN_HELP_AUTENTICACAO.GOV_LINK")
+                            propertyAccessibleDescription: qsTranslate(
+                                                               "PageServicesSign",
+                                                               "STR_SIGN_HELP_AUTENTICACAO.GOV_SELECT")
+                            propertyLinkUrl: 'https://www.autenticacao.gov.pt'
+                            KeyNavigation.tab: textTitle
+                            KeyNavigation.down: textTitle
+                            KeyNavigation.right: textTitle
+                            KeyNavigation.left: textSubTitle
+                            KeyNavigation.backtab: textSubTitle
+                            KeyNavigation.up: textSubTitle
                         }
                         Item {
-                            id: rectToolTipPades
-                            width: Constants.SIZE_IMAGE_TOOLTIP
-                            height: Constants.SIZE_IMAGE_TOOLTIP
-                            anchors.leftMargin: 0
-                            anchors.left: radioButtonPADES.right
+                            id: arrowHelpRect
+                            width: parent.width
+                            height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                            anchors.top: autenticacaoGovLink.bottom
 
                             Image {
-                                anchors.fill: parent
+                                id: arrowHelp
                                 antialiasing: true
-                                fillMode: Image.PreserveAspectFit
-                                source: "../../images/tooltip_grey.png"
                                 anchors.horizontalCenter: parent.horizontalCenter
+                                width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                                height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                                source: arrowHelpMouseArea.containsMouse || activeFocus
+                                        ? "../../images/arrow-down_hover.png"
+                                        : "../../images/arrow-down_AMA.png"
+
+                                Accessible.role: Accessible.Button
+                                Accessible.name: qsTranslate("GAPI", "STR_SIGN_OPEN_HELP")
+                                KeyNavigation.tab: pngButton
+                                KeyNavigation.down: pngButton
+                                KeyNavigation.right: pngButton
+                                KeyNavigation.backtab: jpegButton
+                                KeyNavigation.up: jpegButton
                             }
                             MouseArea {
-                                id: mouseAreaToolTipPades
+                                id: arrowHelpMouseArea
                                 anchors.fill: parent
                                 hoverEnabled: true
+                                z: 1
                             }
                         }
-                        RadioButton {
-                            id: radioButtonXADES
-                            anchors.left: rectToolTipPades.right
-                            height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-                            text: qsTranslate("PageServicesSign",
-                                              "STR_SIGN_ANY_FILE")
-                            anchors.leftMargin: 10
-                            leftPadding: 0
-                            rightPadding: 0
-                            enabled: true
-                            font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            font.capitalization: Font.MixedCase
-                            opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
-                            Accessible.role: Accessible.RadioButton
-                            Accessible.name: text
-                            KeyNavigation.tab: textFieldReason
-                            KeyNavigation.down: textFieldReason
-                            KeyNavigation.right: textFieldReason
-                            KeyNavigation.backtab: radioButtonPADES
-                            KeyNavigation.up: radioButtonPADES
-                            Keys.onEnterPressed: toggleRadio(radioButtonXADES)
-                            Keys.onReturnPressed: toggleRadio(radioButtonXADES)
-                            contentItem: Text {
-                                text: radioButtonXADES.text
-                                leftPadding: 22
-                                font.family: lato.name
-                                font.bold: radioButtonXADES.activeFocus
-                                font.pixelSize: Constants.SIZE_TEXT_LABEL
-                                horizontalAlignment: Text.AlignRight
-                                verticalAlignment: Text.AlignVCenter
-                                color: Constants.COLOR_MAIN_PRETO
-                            }
-                        }
-                        Item {
-                            id: rectToolTipXades
-                            width: Constants.SIZE_IMAGE_TOOLTIP
-                            height: Constants.SIZE_IMAGE_TOOLTIP
-                            anchors.left: radioButtonXADES.right
+                    }
 
-                            Image {
-                                anchors.fill: parent
-                                antialiasing: true
-                                fillMode: Image.PreserveAspectFit
-                                source: "../../images/tooltip_grey.png"
-                                anchors.horizontalCenter: parent.horizontalCenter
-                            }
-                            MouseArea {
-                                id: mouseAreaToolTipXades
+                }
+                Item {
+                    id: rectMainLeftFile
+                    width: parent.width - Constants.SIZE_ROW_H_SPACE - Constants.FORM_SHADOW_H_OFFSET
+                    height: 100
+                    x: Constants.SIZE_ROW_H_SPACE
+                    anchors.top: rectMainLeftHelp.bottom
+                    anchors.topMargin: 3 * Constants.SIZE_ROW_V_SPACE
+
+                    DropShadow {
+                        anchors.fill: rectFile
+                        horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                        verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                        radius: Constants.FORM_SHADOW_RADIUS
+                        samples: Constants.FORM_SHADOW_SAMPLES
+                        color: Constants.COLOR_FORM_SHADOW
+                        source: rectFile
+                        spread: Constants.FORM_SHADOW_SPREAD
+                        opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
+                    }
+                    RectangularGlow {
+                        anchors.fill: rectFile
+                        glowRadius: Constants.FORM_GLOW_RADIUS
+                        spread: Constants.FORM_GLOW_SPREAD
+                        color: Constants.COLOR_FORM_GLOW
+                        cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                        opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
+                    }
+
+                    Text {
+                        id: titleSelectFile
+                        x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_LABEL
+                        height: Constants.SIZE_TEXT_LABEL
+                        text: qsTranslate("Popup File", "STR_POPUP_FILE_INPUT_MULTI")
+                    }
+                    Rectangle {
+                        id: rectFile
+                        width: parent.width
+                        height: parent.height
+
+                        color: "white"
+                        anchors.top: titleSelectFile.bottom
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        Item {
+                            id: itemOptionsFiles
+                            width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+                            height: parent.height - itemBottonsFiles.height - Constants.SIZE_ROW_V_SPACE
+                            anchors.horizontalCenter: parent.horizontalCenter
+
+                            ListView {
+                                id: listViewFiles
+                                y: Constants.SIZE_TEXT_V_SPACE
                                 width: parent.width
                                 height: parent.height
-                                hoverEnabled: true
+                                clip: true
+                                spacing: Constants.SIZE_LISTVIEW_SPACING
+                                boundsBehavior: Flickable.StopAtBounds
+                                model: filesModel
+                                delegate: listViewFilesDelegate
+
+                                ScrollBar.vertical: ScrollBar {
+                                    id: filesListViewScroll
+                                    hoverEnabled: true
+                                    active: hovered || pressed
+                                }
+                                Text {
+                                    id: textDragMsgListView
+                                    anchors.fill: parent
+                                    font.bold: true
+                                    wrapMode: Text.WordWrap
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pixelSize: Constants.SIZE_TEXT_BODY
+                                    font.family: lato.name
+                                    color: Constants.COLOR_TEXT_LABEL
+                                    visible: !fileLoaded
+                                }
+                            }
+                            MouseArea {
+                                id: mouseAreaItemOptionsFiles
+                                width: parent.width
+                                height: parent.height
+                                enabled: !fileLoaded
                             }
                         }
-                    }
-
-                    TextField {
-                        id: textFieldReason
-                        width: parent.width
-                        font.italic: textFieldReason.text === "" ? true : false
-                        anchors.top: rectFormatOptions.bottom
-                        placeholderText: qsTranslate("PageServicesSign",
-                                                     "STR_SIGN_REASON") + "?"
-                        enabled: fileLoaded
-                        font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.capitalization: Font.MixedCase
-                        Accessible.role: Accessible.EditableText
-                        Accessible.name: textFieldReason.placeholderText
-                        KeyNavigation.tab: textFieldLocal
-                        KeyNavigation.down: textFieldLocal
-                        KeyNavigation.right: textFieldLocal
-                        KeyNavigation.backtab: radioButtonXADES
-                        KeyNavigation.up: radioButtonXADES
-                    }
-                    TextField {
-                        id: textFieldLocal
-                        width: parent.width
-                        font.italic: textFieldLocal.text === "" ? true : false
-                        anchors.top: textFieldReason.bottom
-                        placeholderText: qsTranslate("PageServicesSign",
-                                                     "STR_SIGN_LOCAL") + "?"
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        enabled: fileLoaded
-                        font.family: lato.name
-                        font.capitalization: Font.MixedCase
-                        Accessible.role: Accessible.EditableText
-                        Accessible.name: textFieldLocal.placeholderText
-                        KeyNavigation.tab: switchSignTemp
-                        KeyNavigation.down: switchSignTemp
-                        KeyNavigation.right: switchSignTemp
-                        KeyNavigation.backtab: textFieldReason
-                        KeyNavigation.up: textFieldReason
-                    }
-                    Switch {
-                        id: switchSignTemp
-                        height: Constants.HEIGHT_SWITCH_COMPONENT
-                        //width: parent.width * 0.7
-                        anchors.top: textFieldLocal.bottom
-                        text: qsTranslate("PageServicesSign",
-                                          "STR_SIGN_ADD_TIMESTAMP")
-                        enabled: fileLoaded
-                        font.family: lato.name
-                        font.bold: activeFocus
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.capitalization: Font.MixedCase
-                        Accessible.role: Accessible.CheckBox
-                        Accessible.name: text
-                        KeyNavigation.tab: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
-                        KeyNavigation.down: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
-                        KeyNavigation.right: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
-                        KeyNavigation.backtab: textFieldLocal
-                        KeyNavigation.up: textFieldLocal
-                        Keys.onEnterPressed: toggleSwitch(switchSignTemp)
-                        Keys.onReturnPressed: toggleSwitch(switchSignTemp)
-                    }
-                    CheckBox {
-                        id: checkboxLTV
-                        text: qsTranslate("PageServicesSign",
-                                          "STR_SIGN_ADD_LTV")
-                        height: 25
-                        anchors.top: textFieldLocal.bottom
-                        x: 0.6 * parent.width
-                        enabled: switchSignTemp.checked         /* timestamp enabled */
-                                && radioButtonPADES.checked     /* pdf signature */
-                        font.family: lato.name
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.capitalization: Font.MixedCase
-                        font.bold: activeFocus
-                        Accessible.role: Accessible.CheckBox
-                        Accessible.name: text
-                    }
-                    Item {
-                        id: rectToolTipLTV
-                        width: Constants.SIZE_IMAGE_TOOLTIP
-                        height: Constants.SIZE_IMAGE_TOOLTIP
-                        anchors.leftMargin: 0
-                        anchors.left: checkboxLTV.right
-                        anchors.top: checkboxLTV.top
-
-                        Image {
-                            anchors.fill: parent
-                            antialiasing: true
-                            fillMode: Image.PreserveAspectFit
-                            source: "../../images/tooltip_grey.png"
+                        Item {
+                            id: itemBottonsFiles
+                            width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+                            height: Constants.HEIGHT_BOTTOM_COMPONENT
                             anchors.horizontalCenter: parent.horizontalCenter
-                        }
-                        MouseArea {
-                            id: mouseAreaToolTipLTV
-                            anchors.fill: parent
-                            hoverEnabled: true
-                        }
-                    }
-                    Switch {
-                        id: switchSignAdd
-                        height: Constants.HEIGHT_SWITCH_COMPONENT
-                        anchors.top: switchSignTemp.bottom
-                        text: qsTranslate("PageServicesSign",
-                                          "STR_SIGN_ADD_ATTRIBUTES")
-                        enabled: fileLoaded
-                        font.family: lato.name
-                        font.bold: activeFocus
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.capitalization: Font.MixedCase
-                        z: 1
-                        KeyNavigation.tab: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
-                        KeyNavigation.down: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
-                        KeyNavigation.right: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
-                        KeyNavigation.backtab: (checkboxLTV.enabled ? checkboxLTV : switchSignTemp)
-                        KeyNavigation.up: (checkboxLTV.enabled ? checkboxLTV : switchSignTemp)
-                        Keys.onEnterPressed: toggleSwitch(switchSignAdd)
-                        Keys.onReturnPressed: toggleSwitch(switchSignAdd)
-                    }
-                    Item {
-                        id: rectangleEntities
-                        width: parent.width
-                        height: mainItem.height * 0.25
-                        anchors.top: switchSignAdd.bottom
-                        MouseArea {
-                            id: mouseAreaTextAttributesMsg
-                            anchors.fill: parent
-                            enabled: true
-                            hoverEnabled: true
-                        }
+                            anchors.top: itemOptionsFiles.bottom
+                            anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
-                        Text {
-                            id: textAttributesMsg
-                            text: qsTranslate("PageServicesSign",
-                                              "STR_ATTRIBUTES_EMPTY")
-                            verticalAlignment: Text.AlignVCenter
-                            color: Constants.COLOR_TEXT_LABEL
-                            height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
-                            font.family: lato.name
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            font.capitalization: Font.MixedCase
-                            font.underline: mouseAreaTextAttributesMsg.containsMouse
-                            font.bold: activeFocus
-                            visible: false
-                            x: 54
-                            Accessible.role: Accessible.Button
-                            Accessible.name: text
-                            KeyNavigation.tab: pdfPreviewArea
-                            KeyNavigation.down:pdfPreviewArea
-                            KeyNavigation.right: pdfPreviewArea
-                            KeyNavigation.backtab: switchSignAdd
-                            KeyNavigation.up: switchSignAdd
-                        }
-                        ListView {
-                            id: listViewEntities
-                            anchors.fill: parent
-                            clip: true
-                            model: entityAttributesModel
-                            delegate: attributeListDelegate
-                            focus: true
-                            spacing: 2
-                            boundsBehavior: Flickable.StopAtBounds
-                            highlightMoveDuration: 1000
-                            highlightMoveVelocity: 1000
-
-                            ScrollBar.vertical: ScrollBar {
-                                id: attributesListViewScroll
-                                active: true
-                                visible: true
-                                width: Constants.SIZE_TEXT_FIELD_H_SPACE
+                            Button {
+                                id: buttonAdd
+                                width: Constants.WIDTH_BUTTON
+                                height: parent.height
+                                text: qsTranslate("PageServicesSign",
+                                                  "STR_SIGN_ADD_MULTI_BUTTON")
+                                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                                font.family: lato.name
+                                font.capitalization: Font.MixedCase
+                                highlighted: activeFocus ? true : false
+                                Accessible.role: Accessible.Button
+                                Accessible.name: text
+                                KeyNavigation.tab: buttonRemoveAll
+                                KeyNavigation.down: buttonRemoveAll
+                                KeyNavigation.right: buttonRemoveAll
+                                KeyNavigation.backtab: button_signCMD
+                                KeyNavigation.up: button_signCMD
+                                Keys.onEnterPressed: clicked()
+                                Keys.onReturnPressed: clicked()
                             }
-                            KeyNavigation.tab: pdfPreviewArea
-                            KeyNavigation.down:pdfPreviewArea
-                            KeyNavigation.right: pdfPreviewArea
-                            KeyNavigation.backtab: textAttributesMsg
-                            KeyNavigation.up: textAttributesMsg
+                            Button {
+                                id: buttonRemoveAll
+                                width: Constants.WIDTH_BUTTON
+                                height: parent.height
+                                anchors.right: itemBottonsFiles.right
+                                text: qsTranslate("PageServicesSign",
+                                                  "STR_SIGN_REMOVE_MULTI_BUTTON")
+                                enabled: fileLoaded
+                                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                                font.family: lato.name
+                                font.capitalization: Font.MixedCase
+                                highlighted: activeFocus ? true : false
+                                Accessible.role: Accessible.Button
+                                Accessible.name: text
+                                KeyNavigation.tab: titleConf
+                                KeyNavigation.down: titleConf
+                                KeyNavigation.right: titleConf
+                                KeyNavigation.backtab: buttonAdd
+                                KeyNavigation.up: buttonAdd
+                                Keys.onEnterPressed: clicked()
+                                Keys.onReturnPressed: clicked()
+                            }
                         }
                     }
-//                    Row {
-//                        id: rowPreserv
-//                        anchors.top: rectangleEntities.bottom
-//                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-//                        width: parent.width
-//                        height: 0
-//                        spacing: 5
-//                        x: 40
-//                        visible: false
+                    DropArea {
+                        id: dropFileArea
+                        anchors.fill: parent
+                        z: 1
+                    }
+                }
+                Item {
+                    id: rectMainLeftOptions
+                    width: parent.width - Constants.SIZE_ROW_H_SPACE - Constants.FORM_SHADOW_H_OFFSET
+                    height: titleConf.height + rectOptions.height
+                    x: Constants.SIZE_ROW_H_SPACE
+                    anchors.top: rectMainLeftFile.bottom
+                    anchors.topMargin: 3 * Constants.SIZE_ROW_V_SPACE
 
-//                        Switch {
-//                            id: switchPreserv
-//                            text: ""
-//                            spacing: -10
-//                            anchors.verticalCenter: parent.verticalCenter
-//                            font.family: lato.name
-//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-//                            font.capitalization: Font.MixedCase
-//                            height: parent.height
-//                        }
-//                        Text {
-//                            id: textPreserv1
-//                            x: 35
-//                            text: qsTranslate("PageServicesSign",
-//                                              "STR_SIGN_ATTRIBUTES_SAVE")
-//                            verticalAlignment: Text.AlignVCenter
-//                            anchors.verticalCenter: parent.verticalCenter
-//                            font.bold: false
-//                            font.family: lato.name
-//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-//                            font.capitalization: Font.MixedCase
-//                            color: Constants.COLOR_TEXT_BODY
-//                            height: parent.height
-//                        }
-//                        Text {
-//                            id: textPreserv2
-//                            text: qsTranslate(
-//                                      "PageServicesSign",
-//                                      "STR_SIGN_ATTRIBUTES_SAVE_HOW_LONG")
-//                            verticalAlignment: Text.AlignVCenter
-//                            anchors.verticalCenter: parent.verticalCenter
-//                            font.bold: false
-//                            font.family: lato.name
-//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-//                            font.capitalization: Font.MixedCase
-//                            color: Constants.COLOR_TEXT_BODY
-//                            visible: switchPreserv.checked
-//                            height: parent.height
-//                        }
-//                        ComboBox {
-//                            id: comboBoxPreserve
-//                            width: 80
-//                            anchors.verticalCenter: parent.verticalCenter
-//                            height: parent.height
-//                            // textPreservAnos.text is related with model values
-//                            // if model is changed textPreservAnos.text may be changed
-//                            model: ["0", "1", "3", "5", "10"]
-//                            font.family: lato.name
-//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-//                            font.capitalization: Font.MixedCase
-//                            visible: switchPreserv.checked
-//                        }
-//                        Text {
-//                            id: textPreservAnos
-//                            text: comboBoxPreserve.currentIndex
-//                                  === 1 ? qsTranslate(
-//                                              "PageServicesSign",
-//                                              "STR_SIGN_ATTRIBUTES_YEAR") : qsTranslate(
-//                                              "PageServicesSign",
-//                                              "STR_SIGN_ATTRIBUTES_YEARS")
-//                            verticalAlignment: Text.AlignVCenter
-//                            anchors.verticalCenter: parent.verticalCenter
-//                            font.bold: false
-//                            font.family: lato.name
-//                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-//                            font.capitalization: Font.MixedCase
-//                            color: Constants.COLOR_TEXT_BODY
-//                            visible: switchPreserv.checked
-//                            height: parent.height
-//                        }
-//                    }
+                    DropShadow {
+                        anchors.fill: rectOptions
+                        horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                        verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                        radius: Constants.FORM_SHADOW_RADIUS
+                        samples: Constants.FORM_SHADOW_SAMPLES
+                        color: Constants.COLOR_FORM_SHADOW
+                        source: rectOptions
+                        spread: Constants.FORM_SHADOW_SPREAD
+                        opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
+                    }
+                    RectangularGlow {
+                        anchors.fill: rectOptions
+                        glowRadius: Constants.FORM_GLOW_RADIUS
+                        spread: Constants.FORM_GLOW_SPREAD
+                        color: Constants.COLOR_FORM_GLOW
+                        cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                        opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
+                    }
+
+                    Text {
+                        id: titleConf
+                        x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        font.pixelSize: activeFocus
+                                        ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                        : Constants.SIZE_TEXT_LABEL
+                        font.bold: activeFocus
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_LABEL
+                        height: Constants.SIZE_TEXT_LABEL
+                        text: qsTranslate("PageServicesSign", "STR_SIGN_ADVANCED_OPTIONS")
+                        Accessible.role: Accessible.Section
+                        Accessible.name: text
+                        KeyNavigation.tab: textFormatSign
+                        KeyNavigation.down: textFormatSign
+                        KeyNavigation.right: textFormatSign
+                        KeyNavigation.backtab: buttonRemoveAll
+                        KeyNavigation.up: buttonRemoveAll
+                    }
+                    Rectangle {
+                        id: rectOptions
+                        width: parent.width
+                        height: itemOptions.height
+                        color: "white"
+                        anchors.top: titleConf.bottom
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
+                        Rectangle {
+                            id: arrowOptionsRect
+                            width: parent.width - Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                            height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                            visible: true
+                            y: Constants.SIZE_TEXT_V_SPACE
+                            color: "white"
+                            Text {
+                                id: titleOptions
+                                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                                font.pixelSize: activeFocus
+                                                ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                                : Constants.SIZE_TEXT_LABEL
+                                font.bold: activeFocus
+                                font.family: lato.name
+                                color: Constants.COLOR_TEXT_LABEL
+                                height: Constants.SIZE_TEXT_LABEL
+                                text: qsTranslate("PageServicesSign", "STR_SIGN_SETTINGS")
+                                Accessible.role: Accessible.Section
+                                Accessible.name: text
+                                KeyNavigation.tab: textFormatSign
+                                KeyNavigation.down: textFormatSign
+                                KeyNavigation.right: textFormatSign
+                                KeyNavigation.backtab: buttonRemoveAll
+                                KeyNavigation.up: buttonRemoveAll
+                            }
+                            Image {
+                                id: arrowOptions
+                                anchors.top: parent.top
+                                anchors.right: parent.right
+                                antialiasing: true
+                                horizontalAlignment: parent.horizontalCenter
+                                width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                                height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                                source: arrowOptionsMouseArea.containsMouse || activeFocus
+                                        ? "../../images/arrow-down_hover.png"
+                                        : "../../images/arrow-down_AMA.png"
+                                MouseArea {
+                                    id: arrowOptionsMouseArea
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    z: 1
+                                }
+                                Accessible.role: Accessible.Button
+                                Accessible.name: qsTranslate("GAPI", "STR_SIGN_OPEN_OPTIONS")
+                                KeyNavigation.tab: pngButton
+                                KeyNavigation.down: pngButton
+                                KeyNavigation.right: pngButton
+                                KeyNavigation.backtab: jpegButton
+                                KeyNavigation.up: jpegButton
+                            }
+                        }
+
+                        Item {
+                            id: itemOptions
+                            width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+                            height: Constants.SIZE_TEXT_V_SPACE + rectFormatOptions.height
+                                    + textFieldReason.height + textFieldLocal.height
+                                    + switchSignTemp.height + switchSignAdd.height
+                                    + rectangleEntities.height
+                            //+ rowPreserv.height
+                                    + Constants.SIZE_TEXT_V_SPACE + Constants.SIZE_TEXT_V_SPACE
+
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.top: arrowOptionsRect.bottom
+                            Item {
+                                id: rectFormatOptions
+                                width: parent.width
+                                height: radioButtonPADES.height
+                                anchors.top: itemOptions.top
+                                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                                Text {
+                                    id: textFormatSign
+                                    text: qsTranslate("PageServicesSign",
+                                                      "STR_SIGN_FORMAT")
+                                    rightPadding: 0
+                                    padding: 0
+                                    verticalAlignment: Text.AlignVCenter
+                                    color: Constants.COLOR_TEXT_BODY
+                                    height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
+                                    font.family: lato.name
+                                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                                    font.capitalization: Font.MixedCase
+                                    font.bold: activeFocus
+                                    Accessible.role: Accessible.Row
+                                    Accessible.name: text
+                                    KeyNavigation.tab: radioButtonPADES
+                                    KeyNavigation.down: radioButtonPADES
+                                    KeyNavigation.right: radioButtonPADES
+                                    KeyNavigation.backtab: titleConf
+                                    KeyNavigation.up: titleConf
+                                }
+                                RadioButton {
+                                    id: radioButtonPADES
+                                    anchors.left: textFormatSign.right
+                                    height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
+                                    text: qsTranslate("PageServicesSign","STR_SIGN_PDF")
+                                    checked: true
+                                    leftPadding: 0
+                                    rightPadding: 0
+                                    anchors.leftMargin: 10
+                                    enabled: true
+                                    font.capitalization: Font.MixedCase
+                                    opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                                    Accessible.role: Accessible.RadioButton
+                                    Accessible.name: text
+                                    KeyNavigation.tab: radioButtonXADES
+                                    KeyNavigation.down: radioButtonXADES
+                                    KeyNavigation.right: radioButtonXADES
+                                    KeyNavigation.backtab: textFormatSign
+                                    KeyNavigation.up: textFormatSign
+                                    Keys.onEnterPressed: toggleRadio(radioButtonPADES)
+                                    Keys.onReturnPressed: toggleRadio(radioButtonPADES)
+                                    contentItem: Text {
+                                        text: radioButtonPADES.text
+                                        leftPadding: 22
+                                        font.family: lato.name
+                                        font.bold: radioButtonPADES.activeFocus
+                                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                                        horizontalAlignment: Text.AlignRight
+                                        verticalAlignment: Text.AlignVCenter
+                                        color: Constants.COLOR_MAIN_PRETO
+                                    }
+                                }
+                                Item {
+                                    id: rectToolTipPades
+                                    width: Constants.SIZE_IMAGE_TOOLTIP
+                                    height: Constants.SIZE_IMAGE_TOOLTIP
+                                    anchors.left: radioButtonPADES.right
+
+                                    Image {
+                                        anchors.fill: parent
+                                        antialiasing: true
+                                        fillMode: Image.PreserveAspectFit
+                                        source: "../../images/tooltip_grey.png"
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                    }
+                                    MouseArea {
+                                        id: mouseAreaToolTipPades
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                    }
+                                }
+                                RadioButton {
+                                    id: radioButtonXADES
+                                    anchors.left: rectToolTipPades.right
+                                    height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
+                                    text: qsTranslate("PageServicesSign",
+                                                      "STR_SIGN_ANY_FILE")
+                                    anchors.leftMargin: 10
+                                    leftPadding: 0
+                                    rightPadding: 0
+                                    enabled: true
+                                    font.family: lato.name
+                                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                                    font.capitalization: Font.MixedCase
+                                    opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                                    Accessible.role: Accessible.RadioButton
+                                    Accessible.name: text
+                                    KeyNavigation.tab: textFieldReason
+                                    KeyNavigation.down: textFieldReason
+                                    KeyNavigation.right: textFieldReason
+                                    KeyNavigation.backtab: radioButtonPADES
+                                    KeyNavigation.up: radioButtonPADES
+                                    Keys.onEnterPressed: toggleRadio(radioButtonXADES)
+                                    Keys.onReturnPressed: toggleRadio(radioButtonXADES)
+                                    contentItem: Text {
+                                        text: radioButtonXADES.text
+                                        leftPadding: 22
+                                        font.family: lato.name
+                                        font.bold: radioButtonXADES.activeFocus
+                                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                                        horizontalAlignment: Text.AlignRight
+                                        verticalAlignment: Text.AlignVCenter
+                                        color: Constants.COLOR_MAIN_PRETO
+                                    }
+                                }
+                                Item {
+                                    id: rectToolTipXades
+                                    width: Constants.SIZE_IMAGE_TOOLTIP
+                                    height: Constants.SIZE_IMAGE_TOOLTIP
+                                    anchors.left: radioButtonXADES.right
+
+                                    Image {
+                                        anchors.fill: parent
+                                        antialiasing: true
+                                        fillMode: Image.PreserveAspectFit
+                                        source: "../../images/tooltip_grey.png"
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                    }
+                                    MouseArea {
+                                        id: mouseAreaToolTipXades
+                                        width: parent.width
+                                        height: parent.height
+                                        hoverEnabled: true
+                                    }
+                                }
+                            }
+
+                            TextField {
+                                id: textFieldReason
+                                width: parent.width
+                                font.italic: textFieldReason.text === "" ? true : false
+                                anchors.top: rectFormatOptions.bottom
+                                placeholderText: qsTranslate("PageServicesSign",
+                                                             "STR_SIGN_REASON") + "?"
+                                enabled: fileLoaded
+                                font.family: lato.name
+                                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                                font.capitalization: Font.MixedCase
+                                Accessible.role: Accessible.EditableText
+                                Accessible.name: textFieldReason.placeholderText
+                                KeyNavigation.tab: textFieldLocal
+                                KeyNavigation.down: textFieldLocal
+                                KeyNavigation.right: textFieldLocal
+                                KeyNavigation.backtab: radioButtonXADES
+                                KeyNavigation.up: radioButtonXADES
+                            }
+                            TextField {
+                                id: textFieldLocal
+                                width: parent.width
+                                font.italic: textFieldLocal.text === "" ? true : false
+                                anchors.top: textFieldReason.bottom
+                                placeholderText: qsTranslate("PageServicesSign",
+                                                             "STR_SIGN_LOCAL") + "?"
+                                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                                enabled: fileLoaded
+                                font.family: lato.name
+                                font.capitalization: Font.MixedCase
+                                Accessible.role: Accessible.EditableText
+                                Accessible.name: textFieldLocal.placeholderText
+                                KeyNavigation.tab: switchSignTemp
+                                KeyNavigation.down: switchSignTemp
+                                KeyNavigation.right: switchSignTemp
+                                KeyNavigation.backtab: textFieldReason
+                                KeyNavigation.up: textFieldReason
+                            }
+                            Switch {
+                                id: switchSignTemp
+                                height: Constants.HEIGHT_SWITCH_COMPONENT
+                                //width: parent.width * 0.7
+                                anchors.top: textFieldLocal.bottom
+                                text: qsTranslate("PageServicesSign",
+                                                  "STR_SIGN_ADD_TIMESTAMP")
+                                enabled: fileLoaded
+                                font.family: lato.name
+                                font.bold: activeFocus
+                                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                                font.capitalization: Font.MixedCase
+                                Accessible.role: Accessible.CheckBox
+                                Accessible.name: text
+                                KeyNavigation.tab: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
+                                KeyNavigation.down: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
+                                KeyNavigation.right: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
+                                KeyNavigation.backtab: textFieldLocal
+                                KeyNavigation.up: textFieldLocal
+                                Keys.onEnterPressed: toggleSwitch(switchSignTemp)
+                                Keys.onReturnPressed: toggleSwitch(switchSignTemp)
+                            }
+                            CheckBox {
+                                id: checkboxLTV
+                                text: qsTranslate("PageServicesSign",
+                                                  "STR_SIGN_ADD_LTV")
+                                height: 25
+                                anchors.top: textFieldLocal.bottom
+                                x: 0.6 * parent.width
+                                enabled: switchSignTemp.checked         /* timestamp enabled */
+                                         && radioButtonPADES.checked     /* pdf signature */
+                                font.family: lato.name
+                                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                                font.capitalization: Font.MixedCase
+                                font.bold: activeFocus
+                                Accessible.role: Accessible.CheckBox
+                                Accessible.name: text
+                            }
+                            Item {
+                                id: rectToolTipLTV
+                                width: Constants.SIZE_IMAGE_TOOLTIP
+                                height: Constants.SIZE_IMAGE_TOOLTIP
+                                anchors.leftMargin: - 5
+                                anchors.left: checkboxLTV.right
+                                anchors.top: checkboxLTV.top
+
+                                Image {
+                                    anchors.fill: parent
+                                    antialiasing: true
+                                    fillMode: Image.PreserveAspectFit
+                                    source: "../../images/tooltip_grey.png"
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                }
+                                MouseArea {
+                                    id: mouseAreaToolTipLTV
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                }
+                            }
+                            Switch {
+                                id: switchSignAdd
+                                height: Constants.HEIGHT_SWITCH_COMPONENT
+                                anchors.top: switchSignTemp.bottom
+                                text: qsTranslate("PageServicesSign",
+                                                  "STR_SIGN_ADD_ATTRIBUTES")
+                                enabled: fileLoaded
+                                font.family: lato.name
+                                font.bold: activeFocus
+                                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                                font.capitalization: Font.MixedCase
+                                z: 1
+                                KeyNavigation.tab: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
+                                KeyNavigation.down: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
+                                KeyNavigation.right: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
+                                KeyNavigation.backtab: (checkboxLTV.enabled ? checkboxLTV : switchSignTemp)
+                                KeyNavigation.up: (checkboxLTV.enabled ? checkboxLTV : switchSignTemp)
+                                Keys.onEnterPressed: toggleSwitch(switchSignAdd)
+                                Keys.onReturnPressed: toggleSwitch(switchSignAdd)
+                            }
+                            Item {
+                                id: rectangleEntities
+                                width: parent.width
+                                height: mainItem.height * 0.15
+                                anchors.top: switchSignAdd.bottom
+                                MouseArea {
+                                    id: mouseAreaTextAttributesMsg
+                                    anchors.fill: parent
+                                    enabled: true
+                                    hoverEnabled: true
+                                }
+
+                                Text {
+                                    id: textAttributesMsg
+                                    text: qsTranslate("PageServicesSign",
+                                                      "STR_ATTRIBUTES_EMPTY")
+                                    verticalAlignment: Text.AlignVCenter
+                                    color: Constants.COLOR_TEXT_LABEL
+                                    height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
+                                    font.family: lato.name
+                                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                                    font.capitalization: Font.MixedCase
+                                    font.underline: mouseAreaTextAttributesMsg.containsMouse
+                                    font.bold: activeFocus
+                                    visible: false
+                                    x: 54
+                                    Accessible.role: Accessible.Button
+                                    Accessible.name: text
+                                    KeyNavigation.tab: pdfPreviewArea
+                                    KeyNavigation.down:pdfPreviewArea
+                                    KeyNavigation.right: pdfPreviewArea
+                                    KeyNavigation.backtab: switchSignAdd
+                                    KeyNavigation.up: switchSignAdd
+                                }
+                                ListView {
+                                    id: listViewEntities
+                                    anchors.fill: parent
+                                    clip: true
+                                    model: entityAttributesModel
+                                    delegate: attributeListDelegate
+                                    focus: true
+                                    spacing: 2
+                                    boundsBehavior: Flickable.StopAtBounds
+                                    highlightMoveDuration: 1000
+                                    highlightMoveVelocity: 1000
+
+                                    ScrollBar.vertical: ScrollBar {
+                                        id: attributesListViewScroll
+                                        active: true
+                                        visible: true
+                                        width: Constants.SIZE_TEXT_FIELD_H_SPACE
+                                    }
+                                    KeyNavigation.tab: pdfPreviewArea
+                                    KeyNavigation.down:pdfPreviewArea
+                                    KeyNavigation.right: pdfPreviewArea
+                                    KeyNavigation.backtab: textAttributesMsg
+                                    KeyNavigation.up: textAttributesMsg
+                                }
+                            }
+                            //                    Row {
+                            //                        id: rowPreserv
+                            //                        anchors.top: rectangleEntities.bottom
+                            //                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                            //                        width: parent.width
+                            //                        height: 0
+                            //                        spacing: 5
+                            //                        x: 40
+                            //                        visible: false
+
+                            //                        Switch {
+                            //                            id: switchPreserv
+                            //                            text: ""
+                            //                            spacing: -10
+                            //                            anchors.verticalCenter: parent.verticalCenter
+                            //                            font.family: lato.name
+                            //                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            //                            font.capitalization: Font.MixedCase
+                            //                            height: parent.height
+                            //                        }
+                            //                        Text {
+                            //                            id: textPreserv1
+                            //                            x: 35
+                            //                            text: qsTranslate("PageServicesSign",
+                            //                                              "STR_SIGN_ATTRIBUTES_SAVE")
+                            //                            verticalAlignment: Text.AlignVCenter
+                            //                            anchors.verticalCenter: parent.verticalCenter
+                            //                            font.bold: false
+                            //                            font.family: lato.name
+                            //                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            //                            font.capitalization: Font.MixedCase
+                            //                            color: Constants.COLOR_TEXT_BODY
+                            //                            height: parent.height
+                            //                        }
+                            //                        Text {
+                            //                            id: textPreserv2
+                            //                            text: qsTranslate(
+                            //                                      "PageServicesSign",
+                            //                                      "STR_SIGN_ATTRIBUTES_SAVE_HOW_LONG")
+                            //                            verticalAlignment: Text.AlignVCenter
+                            //                            anchors.verticalCenter: parent.verticalCenter
+                            //                            font.bold: false
+                            //                            font.family: lato.name
+                            //                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            //                            font.capitalization: Font.MixedCase
+                            //                            color: Constants.COLOR_TEXT_BODY
+                            //                            visible: switchPreserv.checked
+                            //                            height: parent.height
+                            //                        }
+                            //                        ComboBox {
+                            //                            id: comboBoxPreserve
+                            //                            width: 80
+                            //                            anchors.verticalCenter: parent.verticalCenter
+                            //                            height: parent.height
+                            //                            // textPreservAnos.text is related with model values
+                            //                            // if model is changed textPreservAnos.text may be changed
+                            //                            model: ["0", "1", "3", "5", "10"]
+                            //                            font.family: lato.name
+                            //                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            //                            font.capitalization: Font.MixedCase
+                            //                            visible: switchPreserv.checked
+                            //                        }
+                            //                        Text {
+                            //                            id: textPreservAnos
+                            //                            text: comboBoxPreserve.currentIndex
+                            //                                  === 1 ? qsTranslate(
+                            //                                              "PageServicesSign",
+                            //                                              "STR_SIGN_ATTRIBUTES_YEAR") : qsTranslate(
+                            //                                              "PageServicesSign",
+                            //                                              "STR_SIGN_ATTRIBUTES_YEARS")
+                            //                            verticalAlignment: Text.AlignVCenter
+                            //                            anchors.verticalCenter: parent.verticalCenter
+                            //                            font.bold: false
+                            //                            font.family: lato.name
+                            //                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            //                            font.capitalization: Font.MixedCase
+                            //                            color: Constants.COLOR_TEXT_BODY
+                            //                            visible: switchPreserv.checked
+                            //                            height: parent.height
+                            //                        }
+                            //                    }
+                        }
+                    }
                 }
             }
         }
@@ -752,7 +974,7 @@ Item {
             id: rectMainRight
             width: parent.width * 0.5
             height: parent.height - rowBottom.height
-            anchors.left: rectMainLeftFile.right
+            anchors.left: rectMainLeft.right
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
 
             DropShadow {
