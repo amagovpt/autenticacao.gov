@@ -1318,6 +1318,7 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, NetworkBuffer *net_buffer
 	int r = -1;
 	unsigned int bytes_read = 0, header_len = 0, content_length = 0;
 	unsigned int current_buf_length = net_buffer->buf_size;
+	char end_of_headers_token[] = {0x0d, 0x0a, 0x0d, 0x0a};
 
 	do
 	{
@@ -1326,10 +1327,17 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, NetworkBuffer *net_buffer
 		if (r > 0)
 		{
 			if (bytes_read == 0) {
-				header_len = r;
+
 				char * buffer_tmp = (char*)calloc(strlen(net_buffer->buf) + 1, 1);
 				strcpy(buffer_tmp, net_buffer->buf);
 				content_length = parseContentLength(buffer_tmp);
+				if (content_length > 0 && header_len == 0) {
+					char *end_of_headers = strstr(net_buffer->buf, end_of_headers_token);
+					if (end_of_headers) {
+						header_len = (end_of_headers-net_buffer->buf) + sizeof(end_of_headers_token);
+					}
+				}
+
 				free(buffer_tmp);
 			}
 
