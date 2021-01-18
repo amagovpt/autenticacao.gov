@@ -145,6 +145,7 @@ public slots:
     QString getFontFile(QString font);
     QStringList getFilesFromClipboard();
     static void initApplicationScale();
+    void zipLogs();
 
 private:
     GUISettings&    m_Settings;
@@ -189,6 +190,8 @@ signals:
     void signalCacheNotWritable();
     void signalAppCacheSize(QString cacheSize);
     void signalScapCacheSize(QString cacheSize);
+    void signalZipLogsSuccess(bool largeZip, QString filename);
+    void signalZipLogsFail();
 };
 
 #endif // APPCONTROLLER_H

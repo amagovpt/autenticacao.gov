@@ -907,7 +907,7 @@
     </message>
     <message>
         <source>STR_DEBUG_MODE_DESCRIPTION</source>
-        <translation>Please enable debug mode if you encounter problems with the application.</translation>
+        <translation>If you encounter problems with the application, first, enable debug mode. Then, repeat the action that lead to the problem. Lastly, press the &quot;Create Report&quot; button.</translation>
     </message>
     <message>
         <source>STR_DEBUG_MODE_ENABLE</source>
@@ -1052,6 +1052,34 @@
     <message>
         <source>STR_ROOT_CERT_INSTALLED_ERROR</source>
         <translation>It was not possible to install the certificate.</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_SUCCESS_TITLE</source>
+        <translation>Report created successfully</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_SUCCESS</source>
+        <translation>A report was created on Desktop, with the name: </translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_FAIL_TITLE</source>
+        <translation>Error creating report</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_FAIL</source>
+        <translation>An error occured creating report on Desktop.</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_BUTTON</source>
+        <translation>Create report</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_DESCRIPTION</source>
+        <translation>After pressing the button &quot;Create Report&quot;, a file will be created on Desktop, which should be sent to the support team through the email address &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;, along with a description of the problem.</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_LARGE</source>
+        <translation>Warning: The created file&apos;s size exceeds 15MB. For this reason, it&apos;s possible some email clients won&apos;t allow it to be annexed to the message.</translation>
     </message>
 </context>
 <context>

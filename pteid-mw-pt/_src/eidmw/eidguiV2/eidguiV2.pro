@@ -52,14 +52,16 @@ MOC_DIR = build
 macx: INCLUDEPATH += $$DEPS_DIR/openssl/include
 macx: INCLUDEPATH += $$DEPS_DIR/poppler-0.90.1/include/poppler/qt5/
 macx: INCLUDEPATH += $$DEPS_DIR/libcurl/include
+macx: INCLUDEPATH += $$DEPS_DIR/libzip/include
 macx: LIBS += -L$$DEPS_DIR/openssl/lib/
 macx: LIBS += -L$$DEPS_DIR/poppler-0.90.1/lib/
 macx: LIBS += -L$$DEPS_DIR/libcurl/lib/
+macx: LIBS += -L$$DEPS_DIR/libzip/lib/
 macx: LIBS += -Wl,-framework -Wl,Security
 
 unix:!macx: LIBS += -Wl,-rpath-link,../lib
 LIBS += -L../lib -lpteidcommon -lpteidapplayer -lpteidlib  \
-        -lssl -lcrypto -lpoppler-qt5 -lCMDServices -lcurl
+        -lssl -lcrypto -lpoppler-qt5 -lCMDServices -lcurl -lzip
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

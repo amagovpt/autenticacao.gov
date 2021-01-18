@@ -905,7 +905,7 @@
     </message>
     <message>
         <source>STR_DEBUG_MODE_DESCRIPTION</source>
-        <translation>Por favor ligue o modo de diagnóstico se encontrar problemas com a aplicação.</translation>
+        <translation>Se encontrar problemas com a aplicação deve, em primeiro lugar, ativar o modo diagnóstico. De seguida, deve repetir a ação que levou à situação de erro. Por fim, deve pressionar o botão &quot;Criar relatório&quot;.</translation>
     </message>
     <message>
         <source>STR_DEBUG_MODE_ENABLE</source>
@@ -1050,6 +1050,34 @@
     <message>
         <source>STR_ROOT_CERT_INSTALLED_ERROR</source>
         <translation>Não foi possível instalar o certificado.</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_SUCCESS_TITLE</source>
+        <translation>Sucesso ao criar relatório</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_SUCCESS</source>
+        <translation>Foi criado o relatório no Ambiente de Trabalho com o nome: </translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_FAIL_TITLE</source>
+        <translation>Erro ao criar relatório</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_FAIL</source>
+        <translation>Ocorreu um erro ao criar o relatório no Ambiente de Trabalho.</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_BUTTON</source>
+        <translation>Criar relatório</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_DESCRIPTION</source>
+        <translation>Ao pressionar o botão &quot;Criar relatório&quot; será criado um ficheiro no Ambiente de Trabalho, que deverá ser enviado para a equipa de suporte através do email &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;, anexado à descrição do problema.</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_LARGE</source>
+        <translation>Atenção: O ficheiro criado tem tamanho superior a 15MB. Por esse motivo, é possível que alguns clientes de email não permitam que seja anexado à mensagem.</translation>
     </message>
 </context>
 <context>
