@@ -824,7 +824,7 @@ void AppController::zipLogs() {
     std::string logDir;
 #ifdef WIN32
     eIDMW::PTEID_Config loggingDirname(eIDMW::PTEID_PARAM_GENERAL_INSTALLDIR);
-    logDir.append(loggingDirname.getString()).append("\\logs\\");
+    logDir.append(loggingDirname.getString()).append("\\log\\");
 #else
     eIDMW::PTEID_Config loggingDirname(eIDMW::PTEID_PARAM_LOGGING_DIRNAME);
     logDir.append(loggingDirname.getString());
