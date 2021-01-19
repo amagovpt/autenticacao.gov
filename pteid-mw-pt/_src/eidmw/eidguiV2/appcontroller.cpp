@@ -806,13 +806,12 @@ QStringList AppController::getFilesFromClipboard(){
 }
 
 QString timestampString(){
-    int timestampSize = 15; // format YYYYMMDDHHMMSS
-    char timestamp[timestampSize];
+    char timestamp[TIMESTAMP_MAX_SIZE]; // format YYYYMMDDHHMMSS
 
     time_t _tm = time(nullptr);
     struct tm * t = localtime(&_tm);
 
-    strftime(timestamp, timestampSize, "%Y%m%d%H%M%S", t);
+    strftime(timestamp, TIMESTAMP_MAX_SIZE, "%Y%m%d%H%M%S", t);
 
     return QString(timestamp);
 }
