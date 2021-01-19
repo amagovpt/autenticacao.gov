@@ -126,7 +126,7 @@ Item {
                     Item {
                         id: rawTextDescription
                         width: parent.width
-                        height: Constants.SIZE_TEXT_LABEL
+                        height: 2 * Constants.SIZE_TEXT_LABEL
                         anchors.top: mainItemWithPadding.top
                         Components.Link {
                             id: textDescription
