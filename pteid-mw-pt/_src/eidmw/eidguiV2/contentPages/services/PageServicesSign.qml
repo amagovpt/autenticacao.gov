@@ -113,6 +113,8 @@ PageServicesSignForm {
             entityAttributesModel.count > 0
                     ? propertyListViewEntities.forceActiveFocus()
                     : propertyTextAttributesMsg.forceActiveFocus()
+
+            propertyItemOptions.height = propertyOptionsHeight
         }
         onSignalPdfSignSucess: {
             signsuccess_dialog.open()
@@ -607,13 +609,55 @@ PageServicesSignForm {
 
     propertyArrowHelpMouseArea {
         onClicked: {
-            console.log("propertyArrowHelpMouseArea clicked")
+            if(propertyShowHelp == true){
+                collapseAnimation.start()
+                propertyShowHelp = false
+            } else {
+                expandAnimation.start()
+                propertyShowHelp = true
+            }
         }
     }
+    PropertyAnimation {
+        id: expandAnimation
+        target: propertyRectHelp
+        properties: "height"
+        to: 160
+        duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+    }
+    PropertyAnimation {
+        id: collapseAnimation
+        target: propertyRectHelp
+        properties: "height"
+        to: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+        duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+    }
+
     propertyArrowOptionsMouseArea {
         onClicked: {
-            console.log("propertyArrowHelpMouseArea clicked")
+            if(propertyShowOptions == true){
+                collapseAnimationOptions.start()
+                propertyShowOptions = false
+            } else {
+                expandAnimationOptions.start()
+                propertyShowOptions = true
+            }
         }
+    }
+
+    PropertyAnimation {
+        id: expandAnimationOptions
+        target: propertyItemOptions
+        properties: "height"
+        to: propertyOptionsHeight
+        duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+    }
+    PropertyAnimation {
+        id: collapseAnimationOptions
+        target: propertyItemOptions
+        properties: "height"
+        to: 0
+        duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
     }
 
     propertyMouseAreaToolTipPades{
@@ -903,6 +947,9 @@ PageServicesSignForm {
             }else{
                 console.log("propertySwitchSignAdd not checked")
                 entityAttributesModel.clear()
+                propertyListViewEntities.contentHeight = 0
+                propertyItemOptions.height = propertyOptionsHeight
+
                 propertyCheckSignReduced.enabled = true
                 propertyCheckSignShow.enabled = true
                 propertyRadioButtonXADES.enabled = true

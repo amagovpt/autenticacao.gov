@@ -91,6 +91,20 @@ Item {
 
     property alias propertyArrowHelpMouseArea: arrowHelpMouseArea
     property alias propertyArrowOptionsMouseArea: arrowOptionsMouseArea
+    property alias propertyRectHelp: rectMainLeftHelp
+
+    property bool propertyShowHelp: true
+    property bool propertyShowOptions: false
+
+    property int propertyOptionsHeight: rectFormatOptions.height
+                                        + textFieldReason.height
+                                        + textFieldLocal.height
+                                        + switchSignTemp.height
+                                        + switchSignAdd.height
+                                        + rectangleEntities.height
+                                        + 2 * Constants.SIZE_TEXT_V_SPACE
+
+    property alias propertyItemOptions: itemOptions
 
     BusyIndicator {
         id: busyIndicator
@@ -150,8 +164,9 @@ Item {
                 height: parent.height
                 anchors.top: rectMainLeft.top
                 clip:true
-                contentHeight: rectMainLeftHelp.childrenRect.height
-                               + 6 * Constants.SIZE_ROW_V_SPACE
+                contentHeight: titleHelp.childrenRect.height
+                               +rectMainLeftHelp.childrenRect.height
+                               + 7 * Constants.SIZE_ROW_V_SPACE
                                + rectMainLeftFile.childrenRect.height
                                + rectMainLeftOptions.childrenRect.height
 
@@ -159,63 +174,47 @@ Item {
                     id: settingsScroll
                     parent: rectMainLeft
                     visible: true
-                    active: true // QtQuick.Controls 2.1 does not have AlwaysOn prop
+                    onActiveChanged: {
+                        if (!active)
+                            active = true
+                    }
                     width: Constants.SIZE_TEXT_FIELD_H_SPACE
                     anchors.right: parent.right
                     anchors.top: parent.top
-                    anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                     anchors.bottom: parent.bottom
                     stepSize : 1.0
                 }
 
+                Text {
+                    id: titleHelp
+                    x: 2 * Constants.SIZE_ROW_H_SPACE
+                    font.pixelSize: Constants.SIZE_TEXT_BODY
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: Constants.SIZE_TEXT_BODY
+                    text: qsTranslate("PageServicesSign", "STR_SIGN_HELP_TITLE")
+                }
+
                 Item {
                     id: rectMainLeftHelp
-                    width: parent.width - 1 * Constants.SIZE_ROW_H_SPACE
+                    width: parent.width - Constants.SIZE_ROW_H_SPACE
                     height: 160
                     x: Constants.SIZE_ROW_H_SPACE
+                    anchors.top: titleHelp.bottom
+                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                    clip: true
 
-                    DropShadow {
-                        anchors.fill: rectHelp
-                        horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
-                        verticalOffset: Constants.FORM_SHADOW_V_OFFSET
-                        radius: Constants.FORM_SHADOW_RADIUS
-                        samples: Constants.FORM_SHADOW_SAMPLES
-                        color: Constants.COLOR_FORM_SHADOW
-                        source: rectHelp
-                        spread: Constants.FORM_SHADOW_SPREAD
-                        opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
-                    }
-                    RectangularGlow {
-                        anchors.fill: rectHelp
-                        glowRadius: Constants.FORM_GLOW_RADIUS
-                        spread: Constants.FORM_GLOW_SPREAD
-                        color: Constants.COLOR_FORM_GLOW
-                        cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
-                        opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
-                    }
-
-                    Text {
-                        id: titleHelp
-                        x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                        font.pixelSize: Constants.SIZE_TEXT_LABEL
-                        font.family: lato.name
-                        color: Constants.COLOR_TEXT_LABEL
-                        height: Constants.SIZE_TEXT_LABEL
-                        text: qsTranslate("PageServicesSign", "STR_SIGN_HELP_TITLE")
-                    }
                     Rectangle {
                         id: rectHelp
                         width: parent.width
                         height: parent.height
 
                         color: Constants.COLOR_MAIN_MIDDLE_GRAY
-                        anchors.top: titleHelp.bottom
-                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         anchors.horizontalCenter: parent.horizontalCenter
 
                         Components.Link {
                             id: textSubTitle
-                            anchors.top: textTitle.bottom
+                            y: Constants.SIZE_TEXT_FIELD_V_SPACE
                             propertyText.text: qsTranslate("PageServicesSign",
                                                            "STR_SIGN_HELP_SUB_TITLE") + " "
                                                + "<a href='https://www.autenticacao.gov.pt/cmd-pedido-chave'>"
@@ -276,8 +275,7 @@ Item {
                             id: arrowHelpRect
                             width: parent.width
                             height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
-                            anchors.top: autenticacaoGovLink.bottom
-
+                            anchors.bottom: parent.bottom
                             Image {
                                 id: arrowHelp
                                 antialiasing: true
@@ -503,7 +501,8 @@ Item {
                     Rectangle {
                         id: rectOptions
                         width: parent.width
-                        height: itemOptions.height
+                        height: itemOptions.height + arrowOptionsRect.height
+                                + 2 * Constants.SIZE_TEXT_V_SPACE
                         color: "white"
                         anchors.top: titleConf.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
@@ -564,15 +563,9 @@ Item {
                         Item {
                             id: itemOptions
                             width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                            height: Constants.SIZE_TEXT_V_SPACE + rectFormatOptions.height
-                                    + textFieldReason.height + textFieldLocal.height
-                                    + switchSignTemp.height + switchSignAdd.height
-                                    + rectangleEntities.height
-                            //+ rowPreserv.height
-                                    + Constants.SIZE_TEXT_V_SPACE + Constants.SIZE_TEXT_V_SPACE
-
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.top: arrowOptionsRect.bottom
+                            clip: true
                             Item {
                                 id: rectFormatOptions
                                 width: parent.width
@@ -827,7 +820,8 @@ Item {
                             Item {
                                 id: rectangleEntities
                                 width: parent.width
-                                height: mainItem.height * 0.15
+                                height: listViewEntities.contentHeight
+                                        + listViewEntities.spacing * listViewEntities.count
                                 anchors.top: switchSignAdd.bottom
                                 MouseArea {
                                     id: mouseAreaTextAttributesMsg
@@ -861,7 +855,6 @@ Item {
                                 ListView {
                                     id: listViewEntities
                                     anchors.fill: parent
-                                    clip: true
                                     model: entityAttributesModel
                                     delegate: attributeListDelegate
                                     focus: true
@@ -869,13 +862,6 @@ Item {
                                     boundsBehavior: Flickable.StopAtBounds
                                     highlightMoveDuration: 1000
                                     highlightMoveVelocity: 1000
-
-                                    ScrollBar.vertical: ScrollBar {
-                                        id: attributesListViewScroll
-                                        active: true
-                                        visible: true
-                                        width: Constants.SIZE_TEXT_FIELD_H_SPACE
-                                    }
                                     KeyNavigation.tab: pdfPreviewArea
                                     KeyNavigation.down:pdfPreviewArea
                                     KeyNavigation.right: pdfPreviewArea
@@ -883,87 +869,6 @@ Item {
                                     KeyNavigation.up: textAttributesMsg
                                 }
                             }
-                            //                    Row {
-                            //                        id: rowPreserv
-                            //                        anchors.top: rectangleEntities.bottom
-                            //                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                            //                        width: parent.width
-                            //                        height: 0
-                            //                        spacing: 5
-                            //                        x: 40
-                            //                        visible: false
-
-                            //                        Switch {
-                            //                            id: switchPreserv
-                            //                            text: ""
-                            //                            spacing: -10
-                            //                            anchors.verticalCenter: parent.verticalCenter
-                            //                            font.family: lato.name
-                            //                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            //                            font.capitalization: Font.MixedCase
-                            //                            height: parent.height
-                            //                        }
-                            //                        Text {
-                            //                            id: textPreserv1
-                            //                            x: 35
-                            //                            text: qsTranslate("PageServicesSign",
-                            //                                              "STR_SIGN_ATTRIBUTES_SAVE")
-                            //                            verticalAlignment: Text.AlignVCenter
-                            //                            anchors.verticalCenter: parent.verticalCenter
-                            //                            font.bold: false
-                            //                            font.family: lato.name
-                            //                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            //                            font.capitalization: Font.MixedCase
-                            //                            color: Constants.COLOR_TEXT_BODY
-                            //                            height: parent.height
-                            //                        }
-                            //                        Text {
-                            //                            id: textPreserv2
-                            //                            text: qsTranslate(
-                            //                                      "PageServicesSign",
-                            //                                      "STR_SIGN_ATTRIBUTES_SAVE_HOW_LONG")
-                            //                            verticalAlignment: Text.AlignVCenter
-                            //                            anchors.verticalCenter: parent.verticalCenter
-                            //                            font.bold: false
-                            //                            font.family: lato.name
-                            //                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            //                            font.capitalization: Font.MixedCase
-                            //                            color: Constants.COLOR_TEXT_BODY
-                            //                            visible: switchPreserv.checked
-                            //                            height: parent.height
-                            //                        }
-                            //                        ComboBox {
-                            //                            id: comboBoxPreserve
-                            //                            width: 80
-                            //                            anchors.verticalCenter: parent.verticalCenter
-                            //                            height: parent.height
-                            //                            // textPreservAnos.text is related with model values
-                            //                            // if model is changed textPreservAnos.text may be changed
-                            //                            model: ["0", "1", "3", "5", "10"]
-                            //                            font.family: lato.name
-                            //                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            //                            font.capitalization: Font.MixedCase
-                            //                            visible: switchPreserv.checked
-                            //                        }
-                            //                        Text {
-                            //                            id: textPreservAnos
-                            //                            text: comboBoxPreserve.currentIndex
-                            //                                  === 1 ? qsTranslate(
-                            //                                              "PageServicesSign",
-                            //                                              "STR_SIGN_ATTRIBUTES_YEAR") : qsTranslate(
-                            //                                              "PageServicesSign",
-                            //                                              "STR_SIGN_ATTRIBUTES_YEARS")
-                            //                            verticalAlignment: Text.AlignVCenter
-                            //                            anchors.verticalCenter: parent.verticalCenter
-                            //                            font.bold: false
-                            //                            font.family: lato.name
-                            //                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            //                            font.capitalization: Font.MixedCase
-                            //                            color: Constants.COLOR_TEXT_BODY
-                            //                            visible: switchPreserv.checked
-                            //                            height: parent.height
-                            //                        }
-                            //                    }
                         }
                     }
                 }
