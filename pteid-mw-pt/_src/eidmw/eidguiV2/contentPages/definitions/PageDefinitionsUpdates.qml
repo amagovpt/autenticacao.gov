@@ -52,6 +52,8 @@ PageDefinitionsUpdatesForm {
             }else if (error_code == GAPI.DownloadCancelled) {
                 tempTextDescription =
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
+                        + "<a href='" + propertyTextDescriptionText.propertyLinkUrl + "'>"
+                        + qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT_LINK") + "</a>."
             }else if (error_code == GAPI.InstallFailed) {
                 tempTextDescription =
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL")
@@ -246,6 +248,7 @@ PageDefinitionsUpdatesForm {
     propertyButtonCancelUpdate {
         onClicked: {
             console.log("propertyButtonCancelAppUpdate clicked")
+            propertySupportedSystems.visible = true
             propertyProgressBar.visible = false
             propertyButtonSearch.visible = true
             controler.userCancelledUpdateAppDownload()
