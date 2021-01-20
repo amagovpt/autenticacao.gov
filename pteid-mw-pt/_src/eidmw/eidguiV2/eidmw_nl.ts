@@ -1386,6 +1386,10 @@
         <source>STR_UPDATE_BUTTON_OPEN_TRANSFERS</source>
         <translation>Abrir &lt;b&gt;Transferências&lt;/b&gt;</translation>
     </message>
+    <message>
+        <source>STR_UPDATE_CERTS_TEXT</source>
+        <translation>Pressione o botão para verificar se existem atualizações disponíveis.</translation>
+    </message>
 </context>
 <context>
     <name>PageHelpAbout</name>

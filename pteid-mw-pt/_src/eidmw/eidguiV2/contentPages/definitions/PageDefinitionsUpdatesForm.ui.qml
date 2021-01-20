@@ -532,7 +532,7 @@ Item {
                         Components.Link {
                             id: textDescriptionCerts
                             propertyText.text: qsTranslate("PageDefinitionsUpdates",
-                                                           "STR_UPDATE_TEXT")
+                                                           "STR_UPDATE_CERTS_TEXT")
                             propertyText.font.bold: activeFocus || textDescriptionCerts.activeFocus
                             propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                             width: parent.width

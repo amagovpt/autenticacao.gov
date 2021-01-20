@@ -191,7 +191,7 @@ PageDefinitionsUpdatesForm {
                             qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_NO_UPDATES")
                             + " " + qsTranslate("PageHelpAbout","STR_HELP_APP_CERTS_UPDATE") + " : "
                             + controler.getCertsLog()
-                            + ". " + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
+                            + ". " + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_TEXT")
                     propertyButtonSearchCerts.visible = true
                 }
                 propertyProgressBarCerts.visible = false
@@ -302,6 +302,6 @@ PageDefinitionsUpdatesForm {
                 qsTranslate("PageHelpAbout","STR_HELP_APP_CERTS_UPDATE") + " : "
                 + controler.getCertsLog()
                 + ". "
-                + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
+                + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_TEXT")
     }
 }

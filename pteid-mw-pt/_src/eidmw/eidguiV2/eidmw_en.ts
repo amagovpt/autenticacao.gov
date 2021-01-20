@@ -1388,6 +1388,10 @@
         <source>STR_UPDATE_BUTTON_OPEN_TRANSFERS</source>
         <translation>Open &lt;b&gt;Downloads&lt;/b&gt;</translation>
     </message>
+    <message>
+        <source>STR_UPDATE_CERTS_TEXT</source>
+        <translation>Press the button to check for available updates.</translation>
+    </message>
 </context>
 <context>
     <name>PageHelpAbout</name>
