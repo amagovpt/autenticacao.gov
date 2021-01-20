@@ -65,24 +65,6 @@ Item {
     property alias propertySwitchSignAdd: switchSignAdd
     property alias propertyTextAttributesMsg: textAttributesMsg
     property alias propertyMouseAreaTextAttributesMsg: mouseAreaTextAttributesMsg
-    // Calculate ToolTip Position
-    property int propertyMouseAreaToolTipPadesX: Constants.SIZE_ROW_H_SPACE
-                                                 + Constants.SIZE_TEXT_FIELD_H_SPACE
-                                                 + textFormatSign.width + 10
-                                                 + radioButtonPADES.width
-                                                 + rectToolTipPades.width * 0.5
-    property int propertyMouseAreaToolTipXadesX: Constants.SIZE_ROW_H_SPACE
-                                                 + Constants.SIZE_TEXT_FIELD_H_SPACE
-                                                 + textFormatSign.width + 10
-                                                 + radioButtonPADES.width + rectToolTipPades.width
-                                                 + 10 + radioButtonXADES.width
-                                                 + rectToolTipXades.width * 0.5
-    property int propertyMouseAreaToolTipLTVX: Constants.SIZE_ROW_H_SPACE
-                                               + Constants.SIZE_TEXT_FIELD_H_SPACE
-                                               + checkboxLTV.x
-                                               + 10 + checkboxLTV.width
-                                               + rectToolTipLTV.width * 0.5
-    property int propertyMouseAreaToolTipY: rectMainLeftFile.height
     property alias propertyTextSpinBox: textSpinBox
     property alias propertySpinBoxControl: spinBoxControl
     property alias propertyCheckLastPage: checkLastPage
@@ -741,8 +723,8 @@ Item {
                             Switch {
                                 id: switchSignTemp
                                 height: Constants.HEIGHT_SWITCH_COMPONENT
-                                //width: parent.width * 0.7
                                 anchors.top: textFieldLocal.bottom
+                                x: - 5
                                 text: qsTranslate("PageServicesSign",
                                                   "STR_SIGN_ADD_TIMESTAMP")
                                 enabled: fileLoaded
@@ -766,7 +748,8 @@ Item {
                                                   "STR_SIGN_ADD_LTV")
                                 height: 25
                                 anchors.top: textFieldLocal.bottom
-                                x: 0.6 * parent.width
+                                anchors.left: switchSignTemp.right
+                                anchors.leftMargin: - 5
                                 enabled: switchSignTemp.checked         /* timestamp enabled */
                                          && radioButtonPADES.checked     /* pdf signature */
                                 font.family: lato.name
@@ -801,6 +784,7 @@ Item {
                                 id: switchSignAdd
                                 height: Constants.HEIGHT_SWITCH_COMPONENT
                                 anchors.top: switchSignTemp.bottom
+                                x: - 5
                                 text: qsTranslate("PageServicesSign",
                                                   "STR_SIGN_ADD_ATTRIBUTES")
                                 enabled: fileLoaded

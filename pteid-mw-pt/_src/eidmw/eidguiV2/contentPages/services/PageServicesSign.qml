@@ -665,8 +665,11 @@ PageServicesSignForm {
             tooltipExitTimer.stop()
             controlToolTip.close()
             controlToolTip.text = qsTranslate("PageServicesSign","STR_SIGN_PDF_FILES")
-            controlToolTip.x = propertyMouseAreaToolTipPadesX - controlToolTip.width * 0.5
-            controlToolTip.y = propertyMouseAreaToolTipY + 22
+            controlToolTip.x = propertyRadioButtonPADES.mapToItem(controlToolTip.parent,0,0).x
+                    + propertyRadioButtonPADES.width + Constants.SIZE_IMAGE_TOOLTIP * 0.5
+                    - controlToolTip.width * 0.5
+            controlToolTip.y = propertyRadioButtonPADES.mapToItem(controlToolTip.parent,0,0).y
+                    - controlToolTip.height - Constants.SIZE_SPACE_IMAGE_TOOLTIP
             controlToolTip.open()
         }
         onExited: {
@@ -678,8 +681,11 @@ PageServicesSignForm {
             tooltipExitTimer.stop()
             controlToolTip.close()
             controlToolTip.text = qsTranslate("PageServicesSign","STR_SIGN_PACKAGE")
-            controlToolTip.x = propertyMouseAreaToolTipXadesX - controlToolTip.width * 0.5
-            controlToolTip.y = propertyMouseAreaToolTipY + 22
+            controlToolTip.x = propertyRadioButtonXADES.mapToItem(controlToolTip.parent,0,0).x
+                    + propertyRadioButtonXADES.width + Constants.SIZE_IMAGE_TOOLTIP * 0.5
+                    - controlToolTip.width * 0.5
+            controlToolTip.y = propertyRadioButtonXADES.mapToItem(controlToolTip.parent,0,0).y
+                    - controlToolTip.height - Constants.SIZE_SPACE_IMAGE_TOOLTIP
             controlToolTip.open()
         }
         onExited: {
@@ -691,8 +697,11 @@ PageServicesSignForm {
             tooltipExitTimer.stop()
             controlToolTip.close()
             controlToolTip.text = qsTranslate("PageServicesSign","STR_LTV_TOOLTIP")
-            controlToolTip.x = propertyMouseAreaToolTipLTVX - controlToolTip.width * 0.5
-            controlToolTip.y = propertyCheckboxLTV.mapToItem(controlToolTip.parent,0,0).y - controlToolTip.height
+            controlToolTip.x = propertyCheckboxLTV.mapToItem(controlToolTip.parent,0,0).x
+                    + propertyCheckboxLTV.width + Constants.SIZE_IMAGE_TOOLTIP * 0.5
+                    - controlToolTip.width * 0.5
+            controlToolTip.y = propertyCheckboxLTV.mapToItem(controlToolTip.parent,0,0).y
+                    - controlToolTip.height - Constants.SIZE_SPACE_IMAGE_TOOLTIP
             controlToolTip.open()
         }
         onExited: {
