@@ -1216,7 +1216,7 @@ PageServicesSignForm {
                     color: Constants.COLOR_TEXT_BODY
                     wrapMode: Text.WrapAnywhere
                     Component.onCompleted: {
-                        if(fileName.height > iconRemove.height){
+                        if(fileName.paintedHeight > iconRemove.height){
                             rectlistViewFilesDelegate.height = fileName.height + 5
                         }else{
                             rectlistViewFilesDelegate.height = iconRemove.height
@@ -1368,6 +1368,22 @@ PageServicesSignForm {
         }else{
             propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
         }
+
+        if (gapi.getShortcutFlag() == GAPI.ShortcutIdSign){
+            var paths = gapi.getShortcutPaths()
+            for(var i = 0; i < paths.length; i++) {
+                paths[i] = gapi.getAbsolutePath(paths[i])
+            }
+            updateUploadedFiles(paths)
+
+            propertyTextFieldLocal.text = gapi.getShortcutLocation()
+            propertyTextFieldReason.text = gapi.getShortcutReason()
+            propertySwitchSignTemp.checked = gapi.getShortcutTsa()
+
+            // do not update fields next time (includes input, local, reason, tsa, ...)
+            gapi.setShortcutFlag(GAPI.ShortcutIdNone)
+        }
+
         gapi.startCardReading()
     }
     Component.onDestruction: {
@@ -1403,20 +1419,7 @@ PageServicesSignForm {
         propertyTextFieldLocal.text = propertyPageLoader.propertyBackupReason
         propertyPDFPreview.setSignPreview(propertyPageLoader.propertyBackupCoordX * propertyPDFPreview.propertyBackground.width,propertyPageLoader.propertyBackupCoordY * propertyPDFPreview.propertyBackground.height)
 
-        if (gapi.getShortcutFlag() == GAPI.ShortcutIdSign){
-            var paths = gapi.getShortcutPaths()
-            for(var i = 0; i < paths.length; i++) {
-                paths[i] = gapi.getAbsolutePath(paths[i])
-            }
-            updateUploadedFiles(paths)
 
-            propertyTextFieldLocal.text = gapi.getShortcutLocation()
-            propertyTextFieldReason.text = gapi.getShortcutReason()
-            propertySwitchSignTemp.checked = gapi.getShortcutTsa()
-
-            // do not update fields next time (includes input, local, reason, tsa, ...)
-            gapi.setShortcutFlag(GAPI.ShortcutIdNone)
-        }
         propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                 qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
     }
