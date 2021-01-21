@@ -253,21 +253,23 @@ Item {
                             KeyNavigation.backtab: textSubTitle
                             KeyNavigation.up: textSubTitle
                         }
-                        Item {
+                        Rectangle {
                             id: arrowHelpRect
                             width: parent.width
-                            height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                            height: Constants.SIZE_IMAGE_BOTTOM_MENU
                             anchors.bottom: parent.bottom
+                            color: Constants.COLOR_MAIN_MIDDLE_GRAY
                             Image {
                                 id: arrowHelp
                                 antialiasing: true
                                 anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.verticalCenter: parent.verticalCenter
                                 width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
                                 height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
                                 source: arrowHelpMouseArea.containsMouse || activeFocus
                                         ? "../../images/arrow-down_hover.png"
                                         : "../../images/arrow-down_AMA.png"
-
+                                rotation: propertyShowHelp ? 180 : 0
                                 Accessible.role: Accessible.Button
                                 Accessible.name: qsTranslate("GAPI", "STR_SIGN_OPEN_HELP")
                                 KeyNavigation.tab: pngButton
@@ -522,12 +524,7 @@ Item {
                                 source: arrowOptionsMouseArea.containsMouse || activeFocus
                                         ? "../../images/arrow-down_hover.png"
                                         : "../../images/arrow-down_AMA.png"
-                                MouseArea {
-                                    id: arrowOptionsMouseArea
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    z: 1
-                                }
+                                rotation: propertyShowOptions ? 180 : 0
                                 Accessible.role: Accessible.Button
                                 Accessible.name: qsTranslate("GAPI", "STR_SIGN_OPEN_OPTIONS")
                                 KeyNavigation.tab: pngButton
@@ -535,6 +532,12 @@ Item {
                                 KeyNavigation.right: pngButton
                                 KeyNavigation.backtab: jpegButton
                                 KeyNavigation.up: jpegButton
+                            }
+                            MouseArea {
+                                id: arrowOptionsMouseArea
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                z: 1
                             }
                         }
 

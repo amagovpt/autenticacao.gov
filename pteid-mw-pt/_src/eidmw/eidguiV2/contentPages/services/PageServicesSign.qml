@@ -629,7 +629,7 @@ PageServicesSignForm {
         id: collapseAnimation
         target: propertyRectHelp
         properties: "height"
-        to: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+        to: Constants.SIZE_IMAGE_BOTTOM_MENU
         duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
     }
 
