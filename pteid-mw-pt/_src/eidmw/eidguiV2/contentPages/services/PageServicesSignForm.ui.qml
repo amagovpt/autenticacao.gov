@@ -42,7 +42,6 @@ Item {
     property alias propertyTextDragMsgImg: textDragMsgImg
     property alias propertyListViewFiles: listViewFiles
     property alias propertyListViewEntities: listViewEntities
-    property alias propertyFilesListViewScroll: filesListViewScroll
     property alias propertyButtonAdd: buttonAdd
     property alias propertyButtonRemoveAll: buttonRemoveAll
     property alias propertyButtonSignWithCC: button_signCC
@@ -87,6 +86,7 @@ Item {
                                         + 2 * Constants.SIZE_TEXT_V_SPACE
 
     property alias propertyItemOptions: itemOptions
+    property alias propertySettingsScroll: settingsScroll
 
     BusyIndicator {
         id: busyIndicator
@@ -289,7 +289,7 @@ Item {
                 Item {
                     id: rectMainLeftFile
                     width: parent.width - Constants.SIZE_ROW_H_SPACE - Constants.FORM_SHADOW_H_OFFSET
-                    height: 100
+                    height: itemOptionsFiles.height + 4 * Constants.SIZE_TEXT_V_SPACE + itemBottonsFiles.height
                     x: Constants.SIZE_ROW_H_SPACE
                     anchors.top: rectMainLeftHelp.bottom
                     anchors.topMargin: 3 * Constants.SIZE_ROW_V_SPACE
@@ -336,12 +336,14 @@ Item {
                         Item {
                             id: itemOptionsFiles
                             width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                            height: parent.height - itemBottonsFiles.height - Constants.SIZE_ROW_V_SPACE
+                            height: !filesModel.count || listViewFiles.contentHeight < Constants.MIN_HEIGHT_FILES_RECT
+                                ? Constants.MIN_HEIGHT_FILES_RECT 
+                                : listViewFiles.contentHeight
                             anchors.horizontalCenter: parent.horizontalCenter
+                            y: 2 * Constants.SIZE_TEXT_V_SPACE
 
                             ListView {
                                 id: listViewFiles
-                                y: Constants.SIZE_TEXT_V_SPACE
                                 width: parent.width
                                 height: parent.height
                                 clip: true
@@ -349,12 +351,6 @@ Item {
                                 boundsBehavior: Flickable.StopAtBounds
                                 model: filesModel
                                 delegate: listViewFilesDelegate
-
-                                ScrollBar.vertical: ScrollBar {
-                                    id: filesListViewScroll
-                                    hoverEnabled: true
-                                    active: hovered || pressed
-                                }
                                 Text {
                                     id: textDragMsgListView
                                     anchors.fill: parent
@@ -805,7 +801,6 @@ Item {
                                 id: rectangleEntities
                                 width: parent.width
                                 height: listViewEntities.contentHeight
-                                        + listViewEntities.spacing * listViewEntities.count
                                 anchors.top: switchSignAdd.bottom
                                 MouseArea {
                                     id: mouseAreaTextAttributesMsg

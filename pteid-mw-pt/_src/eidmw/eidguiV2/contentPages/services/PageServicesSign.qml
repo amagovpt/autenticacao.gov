@@ -733,8 +733,6 @@ PageServicesSignForm {
             propertyPageLoader.propertyBackupCoordY = propertyPDFPreview.propertyDragSigRect.y / propertyPDFPreview.propertyBackground.height
 
             updateUploadedFiles(filesArray)
-            // Force scroll and focus to the last item addded
-            forceScrollandFocus()
         }
         onExited: {
             console.log ("onExited");
@@ -749,9 +747,6 @@ PageServicesSignForm {
         }
         onDropped: {
             updateUploadedFiles(filesArray)
-
-            // Force scroll and focus to the last item addded
-            forceScrollandFocus()
         }
         onExited: {
             console.log ("onExited");
@@ -843,7 +838,7 @@ PageServicesSignForm {
         id: attributeListDelegate
         Rectangle {
             id: container
-            width: parent.width - Constants.SIZE_ROW_H_SPACE
+            width: parent.width
             height: columnItem.height + 15
             Keys.onSpacePressed: {
                 checkboxSel.focus = true
@@ -977,9 +972,6 @@ PageServicesSignForm {
             console.log("Num files: " + propertyFileDialog.files.length)
 
             updateUploadedFiles(propertyFileDialog.files)
-
-            // Force scroll and focus to the last item addded
-            forceScrollandFocus()
         }
         onRejected: {
             console.log("Canceled")
@@ -1190,8 +1182,8 @@ PageServicesSignForm {
         id: listViewFilesDelegate
         Rectangle{
             id: rectlistViewFilesDelegate
-            width: parent.width - propertyFilesListViewScroll.width
-                   - Constants.SIZE_ROW_H_SPACE * 0.5
+            width: parent.width
+            height: parent.height
             color: getColorItem(mouseAreaFileName.containsMouse,
                                 mouseAreaIconDelete.containsMouse)
             MouseArea {
@@ -1424,14 +1416,6 @@ PageServicesSignForm {
                 qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
     }
 
-    function forceScrollandFocus() {
-        // Force scroll and focus to the last item added
-        propertyListViewFiles.positionViewAtEnd()
-        //propertyListViewFiles.forceActiveFocus()
-        propertyListViewFiles.currentIndex = propertyListViewFiles.count -1
-        if(propertyFilesListViewScroll.position > 0)
-            propertyFilesListViewScroll.active = true
-    }
     function getColorItem(mouseItem, mouseImage){
 
         var handColor
