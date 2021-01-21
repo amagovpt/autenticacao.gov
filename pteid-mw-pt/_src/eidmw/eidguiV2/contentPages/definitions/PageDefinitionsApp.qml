@@ -40,6 +40,23 @@ PageDefinitionsAppForm {
     }
     Connections {
         target: controler
+        onSignalZipLogsSuccess: {
+            console.log("Zip containing log files successfully created on Desktop")
+            var titlePopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_SUCCESS_TITLE") + controler.autoTr
+            var bodyPopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_SUCCESS") + controler.autoTr + filename + "."
+            if (largeZip){
+                console.log("Warning: zip with log files is larger than 15MB")
+                bodyPopup += "<br><br>" + qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_LARGE") + controler.autoTr
+            }
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+
+        }
+        onSignalZipLogsFail: {
+            console.log("Failed to create a zip with log files on Desktop")
+            var titlePopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_FAIL_TITLE") + controler.autoTr
+            var bodyPopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_FAIL") + controler.autoTr
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+        }
     }
 
     propertyComboBoxReader.onActivated:  {

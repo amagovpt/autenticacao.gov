@@ -32,6 +32,7 @@
 #include "autoUpdates.h"
 
 #define STR_LOCALTIME_MAX_SIZE   24
+#define TIMESTAMP_MAX_SIZE       15
 
 class AppController : public QObject
 {
@@ -146,6 +147,7 @@ public slots:
     QStringList getFilesFromClipboard();
     static void initApplicationScale();
     void openTransfersFolder();
+    void zipLogs();
 
 private:
     GUISettings&    m_Settings;
@@ -190,6 +192,8 @@ signals:
     void signalCacheNotWritable();
     void signalAppCacheSize(QString cacheSize);
     void signalScapCacheSize(QString cacheSize);
+    void signalZipLogsSuccess(bool largeZip, QString filename);
+    void signalZipLogsFail();
 };
 
 #endif // APPCONTROLLER_H
