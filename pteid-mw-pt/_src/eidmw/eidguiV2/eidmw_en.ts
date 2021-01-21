@@ -1329,7 +1329,7 @@
     </message>
     <message>
         <source>STR_UPDATE_AVAILABLE</source>
-        <translation>A new update is available. Press Install do perform the update.</translation>
+        <translation>A new update is available. Press &lt;b&gt;Install&lt;/b&gt; to perform the update or, to check the available versions, click </translation>
     </message>
     <message>
         <source>STR_UPDATE_STARTING_DOWNLOAD</source>
@@ -1337,7 +1337,7 @@
     </message>
     <message>
         <source>STR_UPDATE_TEXT</source>
-        <translation>Press the button to check for available updates.</translation>
+        <translation>Press the button to check for available updates or, to check the available versions, click </translation>
     </message>
     <message>
         <source>STR_UPDATE_BUTTON</source>
@@ -1375,6 +1375,26 @@
     <message>
         <source>STR_UPDATE_CERTS_NEWS</source>
         <translation>New certificates</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_SUPPORTED_SYSTEMS</source>
+        <translation>To check the supported operating systems click </translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_TEXT_LINK</source>
+        <translation>here</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_TRANSFER_DONE</source>
+        <translation>Download completed.&lt;br&gt;You can find the new package in the &lt;b&gt;Downloads&lt;/b&gt; directory.&lt;br&gt;To proceed with the installation, follow the instructions indicated in the user manual available </translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_BUTTON_OPEN_TRANSFERS</source>
+        <translation>Open &lt;b&gt;Downloads&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_CERTS_TEXT</source>
+        <translation>Press the button to check for available updates.</translation>
     </message>
 </context>
 <context>
