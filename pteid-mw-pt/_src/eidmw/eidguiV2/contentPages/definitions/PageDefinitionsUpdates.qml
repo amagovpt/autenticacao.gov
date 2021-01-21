@@ -115,7 +115,7 @@ PageDefinitionsUpdatesForm {
                 propertyProgressBar.indeterminate = false
                 propertyButtonCancelUpdate.visible = false
                 if (Qt.platform.os === "linux") {
-                    propertyTextDescriptionText.propertyLinkUrl = "https://amagovpt.github.io/autenticacao.gov/user_manual.html#atualização-da-aplicação"
+                    propertyTextDescriptionText.propertyLinkUrl = "https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#atualização-da-aplicação"
                     propertyTextDescription.text = qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TRANSFER_DONE")
                         + "<a href='" + propertyTextDescriptionText.propertyLinkUrl + "'>"
                         + qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT_LINK") + "</a>."

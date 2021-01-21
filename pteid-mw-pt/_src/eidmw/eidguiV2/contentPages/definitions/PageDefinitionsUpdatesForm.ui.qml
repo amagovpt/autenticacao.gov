@@ -157,7 +157,7 @@ Item {
                             property var keyNavNext: (buttonSearch.visible ? buttonSearch :
                                         (buttonCancelUpdate.visible ? buttonCancelUpdate : installedVersion ))
 
-                            propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#sistemas-operativos-oficialmente-suportados'
+                            propertyLinkUrl: 'https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#sistemas-operativos-oficialmente-suportados'
 
                             propertyText.text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_SUPPORTED_SYSTEMS")
                                 + "<a href='" + supportSystemsLink.propertyLinkUrl + "'>"
