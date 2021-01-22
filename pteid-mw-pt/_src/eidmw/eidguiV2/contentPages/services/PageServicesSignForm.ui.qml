@@ -90,6 +90,10 @@ Item {
 
     property alias propertyItemOptions: itemOptions
     property alias propertySettingsScroll: settingsScroll
+    property alias propertyFlickable: flickable
+    property alias propertyTitleHelp: titleHelp
+
+
 
     BusyIndicator {
         id: busyIndicator
@@ -159,10 +163,6 @@ Item {
                     id: settingsScroll
                     parent: rectMainLeft
                     visible: true
-                    onActiveChanged: {
-                        if (!active)
-                            active = true
-                    }
                     width: Constants.SIZE_TEXT_FIELD_H_SPACE
                     anchors.right: parent.right
                     anchors.top: parent.top
@@ -184,9 +184,13 @@ Item {
                     KeyNavigation.tab: propertyShowHelp == true ? textSubTitle.propertyText : buttonArrowHelp
                     KeyNavigation.down: propertyShowHelp == true ? textSubTitle.propertyText : buttonArrowHelp
                     KeyNavigation.right: propertyShowHelp == true ? textSubTitle.propertyText : buttonArrowHelp
+                    Keys.onPressed: {
+                        handleKeyPressed(event.key, titleHelp)
+                    }
                     KeyNavigation.left: titleHelp
                     KeyNavigation.backtab: titleHelp
                     KeyNavigation.up: titleHelp
+
                 }
 
                 Item {
@@ -231,6 +235,9 @@ Item {
                             KeyNavigation.tab: autenticacaoGovLink.propertyText
                             KeyNavigation.down: autenticacaoGovLink.propertyText
                             KeyNavigation.right: autenticacaoGovLink.propertyText
+                            Keys.onPressed: {
+                                handleKeyPressed(event.key, textSubTitle)
+                            }
                             KeyNavigation.left: titleHelp
                             KeyNavigation.backtab: titleHelp
                             KeyNavigation.up: titleHelp
@@ -262,6 +269,9 @@ Item {
                             KeyNavigation.tab: buttonArrowHelp
                             KeyNavigation.down: buttonArrowHelp
                             KeyNavigation.right: buttonArrowHelp
+                            Keys.onPressed: {
+                                handleKeyPressed(event.key, autenticacaoGovLink)
+                            }
                             KeyNavigation.left: textSubTitle.propertyText
                             KeyNavigation.backtab: textSubTitle.propertyText
                             KeyNavigation.up: textSubTitle.propertyText
@@ -295,6 +305,9 @@ Item {
                                 KeyNavigation.tab: propertyShowHelp == true ? buttonAdd : titleConf
                                 KeyNavigation.down: propertyShowHelp == true ? buttonAdd : titleConf
                                 KeyNavigation.right: propertyShowHelp == true ? buttonAdd : titleConf
+                                Keys.onPressed: {
+                                    handleKeyPressed(event.key, buttonArrowHelp)
+                                }
                                 KeyNavigation.backtab: propertyShowHelp == true ? autenticacaoGovLink.propertyText : titleHelp
                                 KeyNavigation.up: propertyShowHelp == true ? autenticacaoGovLink.propertyText : titleHelp
                                 Keys.onEnterPressed: clicked()
@@ -418,6 +431,9 @@ Item {
                                 KeyNavigation.tab: buttonRemoveAll
                                 KeyNavigation.down: buttonRemoveAll
                                 KeyNavigation.right: buttonRemoveAll
+                                Keys.onPressed: {
+                                    handleKeyPressed(event.key, buttonAdd)
+                                }
                                 KeyNavigation.backtab: button_signCMD
                                 KeyNavigation.up: button_signCMD
                                 Keys.onEnterPressed: clicked()
@@ -440,6 +456,9 @@ Item {
                                 KeyNavigation.tab: titleConf
                                 KeyNavigation.down: titleConf
                                 KeyNavigation.right: titleConf
+                                Keys.onPressed: {
+                                    handleKeyPressed(event.key, buttonRemoveAll)
+                                }
                                 KeyNavigation.backtab: buttonAdd
                                 KeyNavigation.up: buttonAdd
                                 Keys.onEnterPressed: clicked()
@@ -496,6 +515,9 @@ Item {
                         Accessible.name: text
                         KeyNavigation.tab: buttonArrowOptions
                         KeyNavigation.down: buttonArrowOptions
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, titleConf)
+                        }
                         KeyNavigation.right: buttonArrowOptions
                         KeyNavigation.backtab: buttonRemoveAll
                         KeyNavigation.up: buttonRemoveAll
@@ -509,9 +531,9 @@ Item {
                         anchors.top: titleConf.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
-                        Rectangle {
+                        Item {
                             id: arrowOptionsRect
-                            width: parent.width - Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                            width: parent.width
                             height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
                             visible: true
                             y: Constants.SIZE_TEXT_V_SPACE
@@ -533,7 +555,8 @@ Item {
 
                             Button {
                                 id: buttonArrowOptions
-                                anchors.horizontalCenter: parent.right
+                                anchors.right: parent.right
+                                anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
                                 height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
@@ -554,6 +577,9 @@ Item {
                                 KeyNavigation.tab: propertyShowOptions == true ? textFormatSign : pdfPreviewArea
                                 KeyNavigation.down: propertyShowOptions == true ? textFormatSign : pdfPreviewArea
                                 KeyNavigation.right: propertyShowOptions == true ? textFormatSign : pdfPreviewArea
+                                Keys.onPressed: {
+                                    handleKeyPressed(event.key, buttonArrowOptions)
+                                }
                                 KeyNavigation.backtab: titleConf
                                 KeyNavigation.up: titleConf
                                 Keys.onEnterPressed: clicked()
@@ -596,6 +622,9 @@ Item {
                                     Accessible.name: text
                                     KeyNavigation.tab: radioButtonPADES
                                     KeyNavigation.down: radioButtonPADES
+                                    Keys.onPressed: {
+                                        handleKeyPressed(event.key, textFormatSign)
+                                    }
                                     KeyNavigation.right: radioButtonPADES
                                     KeyNavigation.backtab: buttonArrowOptions
                                     KeyNavigation.up: buttonArrowOptions
@@ -617,6 +646,9 @@ Item {
                                     KeyNavigation.tab: radioButtonXADES
                                     KeyNavigation.down: radioButtonXADES
                                     KeyNavigation.right: radioButtonXADES
+                                    Keys.onPressed: {
+                                        handleKeyPressed(event.key, radioButtonPADES)
+                                    }
                                     KeyNavigation.backtab: textFormatSign
                                     KeyNavigation.up: textFormatSign
                                     Keys.onEnterPressed: toggleRadio(radioButtonPADES)
@@ -670,6 +702,9 @@ Item {
                                     KeyNavigation.tab: textFieldReason
                                     KeyNavigation.down: textFieldReason
                                     KeyNavigation.right: textFieldReason
+                                    Keys.onPressed: {
+                                        handleKeyPressed(event.key, radioButtonXADES)
+                                    }
                                     KeyNavigation.backtab: radioButtonPADES
                                     KeyNavigation.up: radioButtonPADES
                                     Keys.onEnterPressed: toggleRadio(radioButtonXADES)
@@ -722,6 +757,9 @@ Item {
                                 Accessible.name: textFieldReason.placeholderText
                                 KeyNavigation.tab: textFieldLocal
                                 KeyNavigation.down: textFieldLocal
+                                Keys.onPressed: {
+                                    handleKeyPressed(event.key, textFieldReason)
+                                }
                                 KeyNavigation.right: textFieldLocal
                                 KeyNavigation.backtab: radioButtonXADES
                                 KeyNavigation.up: radioButtonXADES
@@ -742,6 +780,9 @@ Item {
                                 KeyNavigation.tab: switchSignTemp
                                 KeyNavigation.down: switchSignTemp
                                 KeyNavigation.right: switchSignTemp
+                                Keys.onPressed: {
+                                    handleKeyPressed(event.key, textFieldLocal)
+                                }
                                 KeyNavigation.backtab: textFieldReason
                                 KeyNavigation.up: textFieldReason
                             }
@@ -761,6 +802,9 @@ Item {
                                 Accessible.name: text
                                 KeyNavigation.tab: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
                                 KeyNavigation.down: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
+                                Keys.onPressed: {
+                                    handleKeyPressed(event.key, switchSignTemp)
+                                }
                                 KeyNavigation.right: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
                                 KeyNavigation.backtab: textFieldLocal
                                 KeyNavigation.up: textFieldLocal
@@ -821,6 +865,9 @@ Item {
                                 KeyNavigation.tab: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
                                 KeyNavigation.down: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
                                 KeyNavigation.right: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
+                                Keys.onPressed: {
+                                    handleKeyPressed(event.key, switchSignAdd)
+                                }
                                 KeyNavigation.backtab: (checkboxLTV.enabled ? checkboxLTV : switchSignTemp)
                                 KeyNavigation.up: (checkboxLTV.enabled ? checkboxLTV : switchSignTemp)
                                 Keys.onEnterPressed: toggleSwitch(switchSignAdd)
@@ -857,6 +904,9 @@ Item {
                                     KeyNavigation.tab: pdfPreviewArea
                                     KeyNavigation.down:pdfPreviewArea
                                     KeyNavigation.right: pdfPreviewArea
+                                    Keys.onPressed: {
+                                        handleKeyPressed(event.key, textAttributesMsg)
+                                    }
                                     KeyNavigation.backtab: switchSignAdd
                                     KeyNavigation.up: switchSignAdd
                                 }
@@ -873,6 +923,9 @@ Item {
                                     KeyNavigation.tab: pdfPreviewArea
                                     KeyNavigation.down:pdfPreviewArea
                                     KeyNavigation.right: pdfPreviewArea
+                                    Keys.onPressed: {
+                                        handleKeyPressed(event.key, listViewEntities)
+                                    }
                                     KeyNavigation.backtab: textAttributesMsg
                                     KeyNavigation.up: textAttributesMsg
                                 }
@@ -1205,6 +1258,9 @@ Item {
                     KeyNavigation.tab: button_signCMD.enabled ? button_signCMD : titleHelp
                     KeyNavigation.down: button_signCMD.enabled ? button_signCMD : titleHelp
                     KeyNavigation.right: button_signCMD.enabled ? button_signCMD : titleHelp
+                    Keys.onPressed: {
+                        handleKeyPressed(event.key, button_signCC)
+                    }
                     KeyNavigation.backtab: checkSignReduced
                     KeyNavigation.up: checkSignReduced
                     Keys.onEnterPressed: clicked()
@@ -1227,6 +1283,9 @@ Item {
                     KeyNavigation.tab: titleHelp
                     KeyNavigation.down: titleHelp
                     KeyNavigation.right: titleHelp
+                    Keys.onPressed: {
+                        handleKeyPressed(event.key, button_signCMD)
+                    }
                     KeyNavigation.backtab: button_signCC
                     KeyNavigation.up: button_signCC
                     Keys.onEnterPressed: clicked()

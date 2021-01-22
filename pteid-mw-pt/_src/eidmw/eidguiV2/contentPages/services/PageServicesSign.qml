@@ -115,6 +115,10 @@ PageServicesSignForm {
                     : propertyTextAttributesMsg.forceActiveFocus()
 
             propertyItemOptions.height = propertyOptionsHeight
+
+            // Scroll down to see attributes rectangle
+            if(propertyFlickable.contentHeight > propertyFlickable.height)
+                propertyFlickable.flick(0, - getMaxFlickVelocity())
         }
         onSignalPdfSignSucess: {
             signsuccess_dialog.open()
@@ -642,6 +646,13 @@ PageServicesSignForm {
         properties: "height"
         to: propertyOptionsHeight
         duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+        onRunningChanged: {
+            // Scroll down to see attributes rectangle
+            if (!expandAnimationOptions.running
+                    && propertyFlickable.contentHeight > propertyFlickable.height){
+                propertyFlickable.flick(0, - getMaxFlickVelocity())
+            }
+        }
     }
     PropertyAnimation {
         id: collapseAnimationOptions
@@ -1651,5 +1662,55 @@ PageServicesSignForm {
             output += "/"
         }
         return output
+    }
+    function handleKeyPressed(key, callingObject){
+        var direction = getDirection(key)
+        switch(direction){
+        case Constants.DIRECTION_UP:
+            if(callingObject === propertyTitleHelp && !propertyFlickable.atYEnd){
+                propertyFlickable.flick(0, - getMaxFlickVelocity())
+            }
+            else if(!propertyFlickable.atYBeginning)
+                propertyFlickable.flick(0, Constants.FLICK_Y_VELOCITY)
+            break;
+
+        case Constants.DIRECTION_DOWN:
+            if(callingObject === propertyRadioButtonXADES
+                    && !fileLoaded
+                    && !propertyFlickable.atYBeginning){
+                propertyFlickable.flick(0, getMaxFlickVelocity());
+            }
+            else if(callingObject === propertyButtonSignWithCC
+                    && !propertyButtonSignCMD.enabled
+                    && !propertyFlickable.atYBeginning){
+                propertyFlickable.flick(0, getMaxFlickVelocity());
+            }
+            else if(callingObject === propertyButtonSignCMD 
+                    && !propertyFlickable.atYBeginning){
+                propertyFlickable.flick(0, getMaxFlickVelocity());
+            }
+            else if(callingObject === propertyListViewEntities 
+                    && !propertyFlickable.atYBeginning){
+                propertyFlickable.flick(0, getMaxFlickVelocity());
+            }
+            else if(!propertyFlickable.atYEnd)
+                propertyFlickable.flick(0, - Constants.FLICK_Y_VELOCITY)
+            break;
+        }
+    }
+    function getDirection(key){
+        var direction = Constants.NO_DIRECTION;
+        if (key == Qt.Key_Backtab || key == Qt.Key_Up || key == Qt.Key_Left){
+            direction = Constants.DIRECTION_UP;
+        }
+        else if (key == Qt.Key_Tab || key == Qt.Key_Down || key == Qt.Key_Right){
+            direction = Constants.DIRECTION_DOWN;
+        }
+        return direction;
+    }
+    function getMaxFlickVelocity(){
+        // use visible area of flickable object to calculate
+        // a smooth flick velocity
+        return 200 + Constants.FLICK_Y_VELOCITY_MAX * (1 - propertyFlickable.visibleArea.heightRatio)
     }
 }
