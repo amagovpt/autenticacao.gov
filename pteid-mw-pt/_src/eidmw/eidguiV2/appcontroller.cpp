@@ -305,6 +305,8 @@ void AppController::autoUpdatesNews(){
 
 void AppController::startUpdateApp(){
     qDebug() << "C++: startUpdateApp";
+    PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
+                "AppController::startUpdateApp: App update started!");
     appUpdate.startUpdate();
 }
 
