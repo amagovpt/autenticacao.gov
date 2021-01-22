@@ -41,7 +41,13 @@ Window {
         name: "Lato" // This avoids printing error on application start
         source: controler.getFontFile("lato")
      }
-    
+
+
+
+
+
+
+
     onWidthChanged: {
         //console.log("Resizing app width: " + width + "height" + height)
         mainFormID.propertyMainMenuView.width = Functions.getMainMenuWidth(width)
@@ -1460,6 +1466,13 @@ Load language error. Please reinstall the application"
                 mainMenuPressed(index)
             }
 
+
+
+
+
+
+
+
             MouseArea {
                 id: mouseAreaMainMenu
                 anchors.fill: parent
@@ -1501,6 +1514,14 @@ Load language error. Please reinstall the application"
                     }
                 }
             }
+
+
+
+
+
+
+
+
 
             Text {
                 id: textMain

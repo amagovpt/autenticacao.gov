@@ -294,6 +294,7 @@ PageServicesSignForm {
                         propertyPageLoader.propertyBackupCoordX * propertyPageLoader.propertyBackupBackgroundWidth,
                         propertyPageLoader.propertyBackupCoordY * propertyPageLoader.propertyBackupBackgroundHeight)
 
+            propertyPDFPreview.forceActiveFocus()
         }
     }
 
@@ -606,18 +607,13 @@ PageServicesSignForm {
             mainFormID.propertyPageLoader.forceActiveFocus()
         }
     }
-
-    propertyArrowHelpMouseArea {
-        onClicked: {
-            if(propertyShowHelp == true){
-                collapseAnimation.start()
-                propertyShowHelp = false
-            } else {
-                expandAnimation.start()
-                propertyShowHelp = true
-            }
-        }
+    propertyButtonArrowHelp {
+        onClicked: Functions.showHelp()
     }
+    propertyArrowHelpMouseArea {
+        onClicked: Functions.showHelp()
+    }
+
     PropertyAnimation {
         id: expandAnimation
         target: propertyRectHelp
@@ -633,16 +629,11 @@ PageServicesSignForm {
         duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
     }
 
+    propertyButtonArrowOptions {
+        onClicked: Functions.showOptions()
+    }
     propertyArrowOptionsMouseArea {
-        onClicked: {
-            if(propertyShowOptions == true){
-                collapseAnimationOptions.start()
-                propertyShowOptions = false
-            } else {
-                expandAnimationOptions.start()
-                propertyShowOptions = true
-            }
-        }
+        onClicked: Functions.showOptions()
     }
 
     PropertyAnimation {

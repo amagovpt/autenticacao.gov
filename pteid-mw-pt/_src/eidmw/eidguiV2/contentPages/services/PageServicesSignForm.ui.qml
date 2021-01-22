@@ -70,7 +70,10 @@ Item {
     property alias propertyPageText: pageText
     property alias propertyTitleConf: titleConf
 
+    property alias propertyButtonArrowHelp: buttonArrowHelp
     property alias propertyArrowHelpMouseArea: arrowHelpMouseArea
+
+    property alias propertyButtonArrowOptions: buttonArrowOptions
     property alias propertyArrowOptionsMouseArea: arrowOptionsMouseArea
     property alias propertyRectHelp: rectMainLeftHelp
 
@@ -172,9 +175,18 @@ Item {
                     x: 2 * Constants.SIZE_ROW_H_SPACE
                     font.pixelSize: Constants.SIZE_TEXT_BODY
                     font.family: lato.name
+                    font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_BODY
                     text: qsTranslate("PageServicesSign", "STR_SIGN_HELP_TITLE")
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: titleHelp.text
+                    KeyNavigation.tab: propertyShowHelp == true ? textSubTitle.propertyText : buttonArrowHelp
+                    KeyNavigation.down: propertyShowHelp == true ? textSubTitle.propertyText : buttonArrowHelp
+                    KeyNavigation.right: propertyShowHelp == true ? textSubTitle.propertyText : buttonArrowHelp
+                    KeyNavigation.left: titleHelp
+                    KeyNavigation.backtab: titleHelp
+                    KeyNavigation.up: titleHelp
                 }
 
                 Item {
@@ -216,9 +228,9 @@ Item {
                                                                "PageServicesSign",
                                                                "STR_SIGN_HELP_CMD_SELECT")
                             propertyLinkUrl: 'https://www.autenticacao.gov.pt/cmd-pedido-chave'
-                            KeyNavigation.tab: autenticacaoGovLink
-                            KeyNavigation.down: autenticacaoGovLink
-                            KeyNavigation.right: autenticacaoGovLink
+                            KeyNavigation.tab: autenticacaoGovLink.propertyText
+                            KeyNavigation.down: autenticacaoGovLink.propertyText
+                            KeyNavigation.right: autenticacaoGovLink.propertyText
                             KeyNavigation.left: titleHelp
                             KeyNavigation.backtab: titleHelp
                             KeyNavigation.up: titleHelp
@@ -236,6 +248,7 @@ Item {
                             propertyText.width: parent.width
                             propertyText.textMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
                             propertyText.wrapMode: Text.Wrap
+                            propertyText.font.bold: activeFocus
                             Layout.fillWidth: true
                             propertyAccessibleText: qsTranslate(
                                                         "PageServicesSign",
@@ -246,43 +259,52 @@ Item {
                                                                "PageServicesSign",
                                                                "STR_SIGN_HELP_AUTENTICACAO.GOV_SELECT")
                             propertyLinkUrl: 'https://www.autenticacao.gov.pt'
-                            KeyNavigation.tab: textTitle
-                            KeyNavigation.down: textTitle
-                            KeyNavigation.right: textTitle
-                            KeyNavigation.left: textSubTitle
-                            KeyNavigation.backtab: textSubTitle
-                            KeyNavigation.up: textSubTitle
+                            KeyNavigation.tab: buttonArrowHelp
+                            KeyNavigation.down: buttonArrowHelp
+                            KeyNavigation.right: buttonArrowHelp
+                            KeyNavigation.left: textSubTitle.propertyText
+                            KeyNavigation.backtab: textSubTitle.propertyText
+                            KeyNavigation.up: textSubTitle.propertyText
                         }
                         Rectangle {
                             id: arrowHelpRect
                             width: parent.width
                             height: Constants.SIZE_IMAGE_BOTTOM_MENU
                             anchors.bottom: parent.bottom
-                            color: Constants.COLOR_MAIN_MIDDLE_GRAY
-                            Image {
-                                id: arrowHelp
-                                antialiasing: true
+                            color: Constants.COLOR_MAIN_MIDDLE_GRAY 
+                            Button {
+                                id: buttonArrowHelp
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
                                 height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
-                                source: arrowHelpMouseArea.containsMouse || activeFocus
-                                        ? "../../images/arrow-down_hover.png"
-                                        : "../../images/arrow-down_AMA.png"
-                                rotation: propertyShowHelp ? 180 : 0
+                                enabled: true
+                                background: Rectangle {
+                                    anchors.fill: parent
+                                    color: "transparent"
+                                    Image {
+                                        source: arrowHelpMouseArea.containsMouse || buttonArrowHelp.activeFocus
+                                                ? "../../images/arrow-down_hover.png"
+                                                : "../../images/arrow-down_AMA.png"
+                                        anchors.fill: parent
+                                        rotation: propertyShowHelp ? 180 : 0
+                                    }
+                                }
                                 Accessible.role: Accessible.Button
                                 Accessible.name: qsTranslate("GAPI", "STR_SIGN_OPEN_HELP")
-                                KeyNavigation.tab: pngButton
-                                KeyNavigation.down: pngButton
-                                KeyNavigation.right: pngButton
-                                KeyNavigation.backtab: jpegButton
-                                KeyNavigation.up: jpegButton
+                                KeyNavigation.tab: propertyShowHelp == true ? buttonAdd : titleConf
+                                KeyNavigation.down: propertyShowHelp == true ? buttonAdd : titleConf
+                                KeyNavigation.right: propertyShowHelp == true ? buttonAdd : titleConf
+                                KeyNavigation.backtab: propertyShowHelp == true ? autenticacaoGovLink.propertyText : titleHelp
+                                KeyNavigation.up: propertyShowHelp == true ? autenticacaoGovLink.propertyText : titleHelp
+                                Keys.onEnterPressed: clicked()
+                                Keys.onReturnPressed: clicked()
                             }
                             MouseArea {
                                 id: arrowHelpMouseArea
                                 anchors.fill: parent
                                 hoverEnabled: true
-                                z: 1
+                                z: 0
                             }
                         }
                     }
@@ -472,9 +494,9 @@ Item {
                         text: qsTranslate("PageServicesSign", "STR_SIGN_ADVANCED_OPTIONS")
                         Accessible.role: Accessible.Section
                         Accessible.name: text
-                        KeyNavigation.tab: textFormatSign
-                        KeyNavigation.down: textFormatSign
-                        KeyNavigation.right: textFormatSign
+                        KeyNavigation.tab: buttonArrowOptions
+                        KeyNavigation.down: buttonArrowOptions
+                        KeyNavigation.right: buttonArrowOptions
                         KeyNavigation.backtab: buttonRemoveAll
                         KeyNavigation.up: buttonRemoveAll
                     }
@@ -493,51 +515,55 @@ Item {
                             height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
                             visible: true
                             y: Constants.SIZE_TEXT_V_SPACE
-                            color: "white"
+
                             Text {
                                 id: titleOptions
                                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                                 font.pixelSize: activeFocus
                                                 ? Constants.SIZE_TEXT_LABEL_FOCUS
                                                 : Constants.SIZE_TEXT_LABEL
-                                font.bold: activeFocus
+                                font.bold: arrowOptionsMouseArea.containsMouse || buttonArrowOptions.activeFocus
                                 font.family: lato.name
                                 color: Constants.COLOR_TEXT_LABEL
                                 height: Constants.SIZE_TEXT_LABEL
                                 text: qsTranslate("PageServicesSign", "STR_SIGN_SETTINGS")
                                 Accessible.role: Accessible.Section
                                 Accessible.name: text
-                                KeyNavigation.tab: textFormatSign
-                                KeyNavigation.down: textFormatSign
-                                KeyNavigation.right: textFormatSign
-                                KeyNavigation.backtab: buttonRemoveAll
-                                KeyNavigation.up: buttonRemoveAll
                             }
-                            Image {
-                                id: arrowOptions
-                                anchors.top: parent.top
-                                anchors.right: parent.right
-                                antialiasing: true
-                                horizontalAlignment: parent.horizontalCenter
+
+                            Button {
+                                id: buttonArrowOptions
+                                anchors.horizontalCenter: parent.right
+                                anchors.verticalCenter: parent.verticalCenter
                                 width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
                                 height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
-                                source: arrowOptionsMouseArea.containsMouse || activeFocus
-                                        ? "../../images/arrow-down_hover.png"
-                                        : "../../images/arrow-down_AMA.png"
-                                rotation: propertyShowOptions ? 180 : 0
+                                enabled: true
+                                background: Rectangle {
+                                    anchors.fill: parent
+                                    color: "transparent"
+                                    Image {
+                                        source: arrowOptionsMouseArea.containsMouse || buttonArrowOptions.activeFocus
+                                                ? "../../images/arrow-down_hover.png"
+                                                : "../../images/arrow-down_AMA.png"
+                                        anchors.fill: parent
+                                        rotation: propertyShowOptions ? 180 : 0
+                                    }
+                                }
                                 Accessible.role: Accessible.Button
                                 Accessible.name: qsTranslate("GAPI", "STR_SIGN_OPEN_OPTIONS")
-                                KeyNavigation.tab: pngButton
-                                KeyNavigation.down: pngButton
-                                KeyNavigation.right: pngButton
-                                KeyNavigation.backtab: jpegButton
-                                KeyNavigation.up: jpegButton
+                                KeyNavigation.tab: propertyShowOptions == true ? textFormatSign : pdfPreviewArea
+                                KeyNavigation.down: propertyShowOptions == true ? textFormatSign : pdfPreviewArea
+                                KeyNavigation.right: propertyShowOptions == true ? textFormatSign : pdfPreviewArea
+                                KeyNavigation.backtab: titleConf
+                                KeyNavigation.up: titleConf
+                                Keys.onEnterPressed: clicked()
+                                Keys.onReturnPressed: clicked()
                             }
                             MouseArea {
-                                id: arrowOptionsMouseArea
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                z: 1
+                                    id: arrowOptionsMouseArea
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    z: 1
                             }
                         }
 
@@ -571,8 +597,8 @@ Item {
                                     KeyNavigation.tab: radioButtonPADES
                                     KeyNavigation.down: radioButtonPADES
                                     KeyNavigation.right: radioButtonPADES
-                                    KeyNavigation.backtab: titleConf
-                                    KeyNavigation.up: titleConf
+                                    KeyNavigation.backtab: buttonArrowOptions
+                                    KeyNavigation.up: buttonArrowOptions
                                 }
                                 RadioButton {
                                     id: radioButtonPADES
@@ -862,7 +888,7 @@ Item {
             width: parent.width * 0.5
             height: parent.height - rowBottom.height
             anchors.left: rectMainLeft.right
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE * 0.5
 
             DropShadow {
                 anchors.fill: rectPre
@@ -1176,9 +1202,9 @@ Item {
                     font.capitalization: Font.MixedCase
                     highlighted: activeFocus ? true : false
                     anchors.left: parent.left
-                    KeyNavigation.tab: button_signCMD.enabled ? button_signCMD : buttonAdd
-                    KeyNavigation.down: button_signCMD.enabled ? button_signCMD : buttonAdd
-                    KeyNavigation.right: button_signCMD.enabled ? button_signCMD : buttonAdd
+                    KeyNavigation.tab: button_signCMD.enabled ? button_signCMD : titleHelp
+                    KeyNavigation.down: button_signCMD.enabled ? button_signCMD : titleHelp
+                    KeyNavigation.right: button_signCMD.enabled ? button_signCMD : titleHelp
                     KeyNavigation.backtab: checkSignReduced
                     KeyNavigation.up: checkSignReduced
                     Keys.onEnterPressed: clicked()
@@ -1198,9 +1224,9 @@ Item {
                     font.capitalization: Font.MixedCase
                     highlighted: activeFocus ? true : false
                     anchors.right: parent.right
-                    KeyNavigation.tab: buttonAdd
-                    KeyNavigation.down: buttonAdd
-                    KeyNavigation.right: buttonAdd
+                    KeyNavigation.tab: titleHelp
+                    KeyNavigation.down: titleHelp
+                    KeyNavigation.right: titleHelp
                     KeyNavigation.backtab: button_signCC
                     KeyNavigation.up: button_signCC
                     Keys.onEnterPressed: clicked()

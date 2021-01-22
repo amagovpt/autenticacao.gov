@@ -476,6 +476,14 @@
         <source>STR_VERIFY_PROXY</source>
         <translation>Verifique se o proxy está bem configurado.</translation>
     </message>
+    <message>
+        <source>STR_SIGN_OPEN_HELP</source>
+        <translation>Abrir ajuda</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_OPTIONS</source>
+        <translation>Open opções avançadas</translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>
@@ -556,15 +564,15 @@
     </message>
     <message>
         <source>STR_MENU_SIGN_HELP</source>
-        <translation>Ajuda</translation>
+        <translation type="vanished">Ajuda</translation>
     </message>
     <message>
         <source>STR_MENU_SIGN_SIMPLE</source>
-        <translation>Simples</translation>
+        <translation type="vanished">Simples</translation>
     </message>
     <message>
         <source>STR_MENU_SIGN_ADVANCE</source>
-        <translation>Avançada</translation>
+        <translation type="vanished">Avançada</translation>
     </message>
     <message>
         <source>STR_MENU_SECURITY</source>
@@ -1741,7 +1749,7 @@
     </message>
     <message>
         <source>STR_POPUP_FILE_CANCEL</source>
-        <translation>Cancelar</translation>
+        <translation type="vanished">Cancelar</translation>
     </message>
     <message>
         <source>STR_LOAD_PDF_ERROR_MSG</source>
@@ -1773,20 +1781,20 @@
     </message>
     <message>
         <source>STR_SIGN_TITLE_SIGN</source>
-        <translation>Selecione o lugar da assinatura</translation>
+        <translation type="vanished">Selecione o lugar da assinatura</translation>
     </message>
     <message>
         <source>STR_SIGN_TITLE_FILE</source>
-        <translation>Selecione o ficheiro</translation>
+        <translation type="vanished">Selecione o ficheiro</translation>
     </message>
     <message>
         <source>STR_SIGN_DROP</source>
-        <translation>Arraste para esta zona o ficheiro a assinar ou clique para procurar o ficheiro</translation>
+        <translation type="vanished">Arraste para esta zona o ficheiro a assinar ou clique para procurar o ficheiro</translation>
     </message>
     <message>
         <source>STR_SIGN_ADD_BUTTON</source>
         <oldsource>STR_SIGN_ADD_BUTTON1</oldsource>
-        <translation>Adicionar ficheiro</translation>
+        <translation type="vanished">Adicionar ficheiro</translation>
     </message>
     <message>
         <source>STR_SIGN_ADD_MULTI_BUTTON</source>
@@ -1862,7 +1870,7 @@
     </message>
     <message>
         <source>STR_SIGN_REMOVE_BUTTON</source>
-        <translation>Remover ficheiro</translation>
+        <translation type="vanished">Remover ficheiro</translation>
     </message>
     <message>
         <source>STR_SIGN_CARD_BUTTON</source>
@@ -1887,7 +1895,7 @@
     </message>
     <message>
         <source>STR_SIGN_HELP_TOPIC_1</source>
-        <translation>Use o menu “Simples” para assinar um documento PDF ou o menu “Avançada” para outros tipos de ficheiros e opções adicionais.</translation>
+        <translation type="vanished">Use o menu “Simples” para assinar um documento PDF ou o menu “Avançada” para outros tipos de ficheiros e opções adicionais.</translation>
     </message>
     <message>
         <source>STR_SIGN_HELP_AUTENTICACAO.GOV_LINK</source>
@@ -1920,6 +1928,10 @@
     <message>
         <source>STR_LTV_TOOLTIP</source>
         <translation>A Validação de longo prazo (LTV) inclui provas da validade da cadeia de certificados utilizados na assinatura que permite no futuro confirmar que a assinatura era válida na hora em que o documento foi assinado.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_ADVANCED_OPTIONS</source>
+        <translation>Opções avançadas</translation>
     </message>
 </context>
 <context>
@@ -2066,6 +2078,10 @@
     <message>
         <source>STR_POPUP_RESTART_NOW</source>
         <translation>Reiniciar agora</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_HELP_TITLE</source>
+        <translation type="obsolete">Assinatura digital</translation>
     </message>
 </context>
 <context>

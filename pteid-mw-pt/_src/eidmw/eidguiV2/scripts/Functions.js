@@ -239,3 +239,21 @@ function filterText(text){
     temp = temp.replace(/\#/g, '')
     return temp
 }
+function showHelp() {
+    if(propertyShowHelp == true){
+            collapseAnimation.start()
+            propertyShowHelp = false
+        } else {
+            expandAnimation.start()
+            propertyShowHelp = true
+    }
+}
+function showOptions() {
+    if(propertyShowOptions == true){
+        collapseAnimationOptions.start()
+        propertyShowOptions = false
+    } else {
+        expandAnimationOptions.start()
+        propertyShowOptions = true
+    }
+}
