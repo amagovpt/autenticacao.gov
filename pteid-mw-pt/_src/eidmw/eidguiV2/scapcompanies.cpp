@@ -494,10 +494,17 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
 
         if (!useOAuth)
         {
-            int initialPos = replyString.find("<AttributeResponse");
+            size_t initialPos = replyString.find("<AttributeResponse");
+            if (initialPos == std::string::npos)
+            {
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                    "Error reading AttributeResponse! Malformed XML response.");
+                parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
+                return result;
+            }
             std::string endString = "</AttributeResponse>";
 
-            int finalPos = replyString.find(endString) + endString.length();
+            size_t finalPos = replyString.find(endString) + endString.length();
             replyString = replyString.substr(initialPos, finalPos - initialPos);
         }
         else
