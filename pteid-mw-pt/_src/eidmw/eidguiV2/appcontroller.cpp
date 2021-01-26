@@ -492,7 +492,7 @@ void AppController::flushCache(){
 void AppController::doFlushCache(){
     if(removePteidCache()){
         PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
-                "No read permissions: PTEID cache removed success!");
+                "PTEID cache removed success!");
         emit signalRemovePteidCacheSuccess();
     }
 }
@@ -533,7 +533,8 @@ bool AppController::removePteidCache() {
         return has_all_permissions;
     }
     catch(...) {
-        std::cerr << "Error ocurred while removing ptEidCache from cache!";
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "Error removing PTEID cache directory from cache");
         emit signalRemovePteidCacheFail();
         return false;
     }
