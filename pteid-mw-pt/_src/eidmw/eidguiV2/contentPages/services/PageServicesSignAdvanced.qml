@@ -114,6 +114,11 @@ PageServicesSignAdvancedForm {
                     ? propertyListViewEntities.forceActiveFocus()
                     : propertyTextAttributesMsg.forceActiveFocus()
         }
+        onSignalAttributesPossiblyExpired: {
+            var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+            var bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRS_POSSIBLY_EXPIRED")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+        }
         onSignalPdfSignSucess: {
             signsuccess_dialog.open()
             propertyBusyIndicatorRunning = false

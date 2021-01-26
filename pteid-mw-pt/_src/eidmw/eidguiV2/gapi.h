@@ -478,6 +478,7 @@ signals:
     void signalAttributesLoaded(const QList<QString> attribute_list);
     void signalCompanyAttributesLoadedError();
     void signalEntityAttributesLoadedError();
+    void signalAttributesPossiblyExpired();
     void signalPdfPrintSucess();
     void signalPrinterPrintSucess();
     void signalPdfPrintSignSucess();

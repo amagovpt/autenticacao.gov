@@ -378,6 +378,11 @@ PageDefinitionsSCAPForm {
             propertyBusyIndicatorAttributes.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
+        onSignalAttributesPossiblyExpired: {
+            var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+            var bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRS_POSSIBLY_EXPIRED")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+        }
         onSignalRemoveSCAPAttributesSucess: {
             console.log("Definitions SCAP - Signal SCAP Signal Remove SCAP Attributes Sucess")
             if (isLoadingAttributes == false) {

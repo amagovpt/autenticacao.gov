@@ -1971,6 +1971,10 @@
         <source>STR_LTV_TOOLTIP</source>
         <translation>The Long Term Validation (LTV) includes validation data of the certificate chain used in the signature which allows future signature verifications to confirm that the signature was valid at generation time.</translation>
     </message>
+    <message>
+        <source>STR_SCAP_ATTRS_POSSIBLY_EXPIRED</source>
+        <translation>One or more attributes may be expired. Please reload your attributes.</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>

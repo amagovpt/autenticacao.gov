@@ -1969,6 +1969,10 @@
         <source>STR_LTV_TOOLTIP</source>
         <translation>A Validação de longo prazo (LTV) inclui provas da validade da cadeia de certificados utilizados na assinatura que permite no futuro confirmar que a assinatura era válida na hora em que o documento foi assinado.</translation>
     </message>
+    <message>
+        <source>STR_SCAP_ATTRS_POSSIBLY_EXPIRED</source>
+        <translation>Um ou mais atributos podem estar expirados. Por favor, recarregue os seus atributos.</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>

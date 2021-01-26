@@ -14,6 +14,7 @@
 #include <QString>
 #include <QVector>
 #include <QDate>
+#include <QRegExp>
 #include <cstdio>
 #include <QQuickImageProvider>
 #include <QPrinter>
@@ -33,6 +34,7 @@
 #include "credentials.h"
 #include "Config.h"
 #include "Util.h"
+#include "MiscUtil.h"
 #include "proxyinfo.h"
 #include "concurrent.h"
 
@@ -2313,6 +2315,7 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, boo
             ns5__ObjectType * signatureObject = signatureType->ns5__Object.at(0);
             ns3__PersonalDataType * personalDataObject = signatureObject->union_ObjectType.ns3__Attribute->PersonalData;
             ns3__MainAttributeType * mainAttributeObject = signatureObject->union_ObjectType.ns3__Attribute->MainAttribute;
+            std::string validity = signatureObject->union_ObjectType.ns3__Attribute->Validity;
 
             std::string name = personalDataObject->Name;
             childrensList.push_back(name.c_str());
@@ -2345,6 +2348,7 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, boo
 			}
 
             childrensList.push_back(description.c_str());
+            childrensList.push_back(validity);
         }
     }
     return childrensList;
@@ -2439,6 +2443,23 @@ void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
     getSCAPAttributesFromCache(true,false);
 }
 
+bool isAttributeExpired(std::string& date, std::string& supplier) {
+    QRegExp dateFormat("^\\d{4}-\\d{2}-\\d{2}$"); // xsd:date format
+    if (date.empty() || dateFormat.indexIn(date.c_str()) == -1) {
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui",
+            "getSCAPAttributesFromCache: Bad date format in validity of attribute supplied by: '%s' -> '%s'", supplier.c_str(), date.c_str());
+            return false;
+    }
+
+    const char * format = "%Y-%m-%d"; // xsd:date format
+    bool isExpired = !CTimestampUtil::checkTimestamp(date, format);
+    if (isExpired) {
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui",
+            "getSCAPAttributesFromCache: Attribute supplied by: '%s' may be expired -> '%s'", supplier.c_str(), date.c_str());
+    }
+
+    return isExpired;
+}
 
 void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription) {
 
@@ -2462,6 +2483,7 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
         attributes = scapServices.reloadAttributesFromCache();
     }
 
+    bool possiblyExpired = false;
     for (uint i = 0; i < attributes.size(); i++) {
         //Skip malformed AttributeResponseValues element
         if (attributes.at(i)->ATTRSupplier == NULL) {
@@ -2470,10 +2492,12 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
         std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
         std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), isShortDescription);
 
-        for (uint j = 0; j < childAttributes.size(); j = j + 2) {
+        for (uint j = 0; j < childAttributes.size(); j = j + 3) {
             attribute_list.append(QString::fromStdString(attrSupplier));
             attribute_list.append(QString::fromStdString(childAttributes.at(j)));
             attribute_list.append(QString::fromStdString(childAttributes.at(j + 1)));
+            //check validity of attributes
+            possiblyExpired = possiblyExpired || isAttributeExpired(childAttributes.at(j + 2), attrSupplier);
         }
     }
     if (scapAttrType == ScapAttrEntities)
@@ -2482,6 +2506,9 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
         emit signalCompanyAttributesLoaded(attribute_list);
     else if (scapAttrType == ScapAttrAll)
         emit signalAttributesLoaded(attribute_list);
+
+    if (possiblyExpired)
+        emit signalAttributesPossiblyExpired();
 }
 
 void GAPI::removeSCAPAttributesFromCache(int scapAttrType) {
