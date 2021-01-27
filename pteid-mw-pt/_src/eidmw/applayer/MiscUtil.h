@@ -102,7 +102,7 @@ public:
 	/**
 	  * return true if timestamp > now
 	  */
-	static bool checkTimestamp(std::string &timestamp,const char *format);
+	EIDMW_APL_API static bool checkTimestamp(std::string &timestamp,const char *format);
 };
 
 /******************************************************************************//**
