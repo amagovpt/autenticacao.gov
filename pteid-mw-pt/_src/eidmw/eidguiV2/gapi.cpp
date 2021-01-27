@@ -2483,7 +2483,7 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
         attributes = scapServices.reloadAttributesFromCache();
     }
 
-    bool possiblyExpired = false;
+    QStringList possiblyExpiredSuppliers;
     for (uint i = 0; i < attributes.size(); i++) {
         //Skip malformed AttributeResponseValues element
         if (attributes.at(i)->ATTRSupplier == NULL) {
@@ -2497,7 +2497,9 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
             attribute_list.append(QString::fromStdString(childAttributes.at(j)));
             attribute_list.append(QString::fromStdString(childAttributes.at(j + 1)));
             //check validity of attributes
-            possiblyExpired = possiblyExpired || isAttributeExpired(childAttributes.at(j + 2), attrSupplier);
+            if (isAttributeExpired(childAttributes.at(j + 2), attrSupplier)) {
+                possiblyExpiredSuppliers.push_back(QString::fromStdString(attrSupplier));
+            }
         }
     }
     if (scapAttrType == ScapAttrEntities)
@@ -2507,8 +2509,8 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
     else if (scapAttrType == ScapAttrAll)
         emit signalAttributesLoaded(attribute_list);
 
-    if (possiblyExpired)
-        emit signalAttributesPossiblyExpired();
+    if (!possiblyExpiredSuppliers.empty())
+        emit signalAttributesPossiblyExpired(possiblyExpiredSuppliers);
 }
 
 void GAPI::removeSCAPAttributesFromCache(int scapAttrType) {

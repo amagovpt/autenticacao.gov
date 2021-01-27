@@ -1971,7 +1971,7 @@
     </message>
     <message>
         <source>STR_SCAP_ATTRS_POSSIBLY_EXPIRED</source>
-        <translation>Um ou mais atributos podem estar expirados. Por favor, recarregue os seus atributos.</translation>
+        <translation>Os atributos fornecidos pelas seguintes entidades podem estar expirados:</translation>
     </message>
 </context>
 <context>

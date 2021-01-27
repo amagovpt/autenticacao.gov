@@ -380,7 +380,10 @@ PageDefinitionsSCAPForm {
         }
         onSignalAttributesPossiblyExpired: {
             var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
-            var bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRS_POSSIBLY_EXPIRED")
+            var bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRS_POSSIBLY_EXPIRED") + "<br>"
+            for (var i = 0; i < expiredSuppliers.length; i++) {
+                bodyPopup += "<br> - " + expiredSuppliers[i]
+            }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalRemoveSCAPAttributesSucess: {

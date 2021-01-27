@@ -1973,7 +1973,7 @@
     </message>
     <message>
         <source>STR_SCAP_ATTRS_POSSIBLY_EXPIRED</source>
-        <translation>One or more attributes may be expired. Please reload your attributes.</translation>
+        <translation>The attributes provided by the following entities may be expired:</translation>
     </message>
 </context>
 <context>
