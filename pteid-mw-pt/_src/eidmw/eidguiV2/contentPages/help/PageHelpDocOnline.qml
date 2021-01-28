@@ -19,7 +19,7 @@ PageHelpDocOnlineForm {
 
     propertyButtonDownload{
         onClicked: {
-            Qt.openUrlExternally("https://amagovpt.github.io/autenticacao.gov/Manual_de_Utilizacao_v3.pdf");
+            Qt.openUrlExternally("https://amagovpt.github.io/docs.autenticacao.gov/Manual_de_Utilizacao_v3.pdf");
         }
     }
 
