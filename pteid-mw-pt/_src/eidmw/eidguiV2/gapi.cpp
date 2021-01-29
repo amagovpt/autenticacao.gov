@@ -701,9 +701,13 @@ void GAPI::showSignCMDDialog(long error_code)
         // If there is error show message screen
         if (error_code == EIDMW_TIMESTAMP_ERROR || error_code == EIDMW_LTV_ERROR){
             signalUpdateProgressStatus(message);
-        } else if (error_code == SCAP_SECRETKEY_ERROR_CODE
-                || error_code == SCAP_CLOCK_ERROR_CODE) {
+        } 
+        else if (error_code == SCAP_SECRETKEY_ERROR_CODE){
             signalUpdateProgressStatus(message);
+        }
+        else if (error_code == SCAP_CLOCK_ERROR_CODE){
+            signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "!");
+            signalShowMessage(message,"");
         } else {
             message += "<br><br>" + support_string;
             signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "!");
@@ -888,6 +892,7 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
             "CMD SignClose. Error code: %08x", e.GetError());
     }
 
+    // CMD signature success
     if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR || ret == EIDMW_LTV_ERROR)
     {
         try 
@@ -910,7 +915,7 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
             //The method returns something like "BI123456789";
             cmd_details.citizenId = QString(cmd_signature->getCertificateCitizenID() + 2);
 
-            scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
+            int ret_scap = scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
                 m_scap_params.location_x, m_scap_params.location_y,
                 m_scap_params.location, m_scap_params.reason, m_scap_params.isTimestamp, m_scap_params.isLtv, attrs, cmd_details,
                 useCustomSignature(), m_jpeg_scaled_data);
@@ -920,19 +925,27 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
 
             cmd_pdfSignatures.clear();
             cmd_signature->clear_pdf_handlers();
+
+            // SCAP signature with errors
+            if(ret_scap != GAPI::ScapSucess){
+                signalUpdateProgressBar(100);
+                return;
+            } 
         }
         catch (PTEID_Exception &e) {
             ret = e.GetError();
             PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doCloseSignCMDWithSCAP",
                     "executeSCAPWithCMDSignature. Error code: %08x", e.GetError());
             }
-        }
+    }
     //TODO: reset the m_scap_params struct
 
     signCMDFinished(ret);
     signalUpdateProgressBar(100);
     if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR || ret == EIDMW_LTV_ERROR)
     {
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "ScapSignature",
+                  "SCAP signature with CMD sucess: %d",ret);
         emit signalOpenFile();
     }
 }

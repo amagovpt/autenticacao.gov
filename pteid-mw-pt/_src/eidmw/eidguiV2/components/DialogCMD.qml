@@ -37,12 +37,7 @@ Item {
             textFieldReturnCode.forceActiveFocus()
         }
         onSignalShowMessage: {
-            console.log("Signal Show Message: " + msg)
-            dialogContent.state = Constants.DLG_STATE.SHOW_MESSAGE;
-            labelCMDText.propertyText.text = msg
-            labelCMDText.propertyAccessibleText = textMessageTop.text + Functions.filterText(msg)
-            labelCMDText.propertyLinkUrl = urlLink
-            labelCMDText.propertyText.forceActiveFocus()
+            showMessage(msg,urlLink)
         }
         onSignalOpenFile: {
             console.log("Signal Open File")
@@ -518,6 +513,7 @@ Item {
                 State {
                     name: Constants.DLG_STATE.LOAD_ATTRIBUTES
                     PropertyChanges {target: buttonConfirm; text: qsTranslate("PageServicesSign","STR_LOAD_SCAP_ATTRIBUTES") + controler.autoTr}
+                    PropertyChanges {target: progressBar; visible: true}
                     PropertyChanges {
                         target: labelCMDText;
                         visible: true;
@@ -866,5 +862,14 @@ Item {
         close()
         gapi.startRemovingAttributesFromCache(GAPI.ScapAttrAll)
         jumpToDefinitionsSCAP()
+    }
+    
+    function showMessage(msg,urlLink){
+        console.log("Show Message: " + msg)
+        dialogContent.state = Constants.DLG_STATE.SHOW_MESSAGE;
+        labelCMDText.propertyText.text = msg
+        labelCMDText.propertyAccessibleText = textMessageTop.text + Functions.filterText(msg)
+        labelCMDText.propertyLinkUrl = urlLink
+        labelCMDText.propertyText.forceActiveFocus()
     }
 }

@@ -191,27 +191,36 @@ PageServicesSignAdvancedForm {
             propertyOutputSignedFile = ""
         }
         onSignalSCAPPingSuccess: {
-            signerror_dialog.propertySignFailDialogText.text =
-                    qsTranslate("PageServicesSign","STR_SIGN_SCAP_SERVICE_FAIL")
-            signerror_dialog.visible = true
-            propertyBusyIndicatorRunning = false
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-            propertyOutputSignedFile = ""
+            var msg = qsTranslate("PageServicesSign","STR_SIGN_SCAP_SERVICE_FAIL")
+            if (dialogSignCMD.isVisible()){
+                dialogSignCMD.showMessage(msg,"")
+            } else {
+                signerror_dialog.propertySignFailDialogText.text = msg
+                signerror_dialog.visible = true
+                propertyBusyIndicatorRunning = false
+                mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                propertyOutputSignedFile = ""
+            }
         }
         onSignalSCAPPingFail: {
             console.log("Sign advanced - Signal SCAP ping fail")
-            signerror_dialog.propertySignFailDialogText.text =
-                    qsTranslate("PageServicesSign","STR_SCAP_PING_FAIL_FIRST")
+            var msg = qsTranslate("PageServicesSign","STR_SCAP_PING_FAIL_FIRST")
                     + "\n\n"
                     + qsTranslate("PageServicesSign","STR_SCAP_PING_FAIL_SECOND")
+
             if (controler.isProxyConfigured()) {
-                signerror_dialog.propertySignFailDialogText.text += " " 
-                    + qsTranslate("GAPI","STR_VERIFY_PROXY")
+                msg += " " + qsTranslate("GAPI","STR_VERIFY_PROXY")
             }
-            signerror_dialog.visible = true
-            propertyBusyIndicatorRunning = false
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-            propertyOutputSignedFile = ""
+
+            if (dialogSignCMD.isVisible()){
+                dialogSignCMD.showMessage(msg,"")
+            } else {
+                signerror_dialog.propertySignFailDialogText.text = msg
+                signerror_dialog.visible = true
+                propertyBusyIndicatorRunning = false
+                mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                propertyOutputSignedFile = ""
+            }
         }
         onSignalCardAccessError: {
             console.log("Sign Advanced Page onSignalCardAccessError")
