@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2014, 2016-2017 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2016-2021 André Guerreiro - <aguerreiro1985@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 
@@ -47,6 +47,9 @@ struct SignedChallengeResponse
 	char *internal_auth;
 	char *set_se_command;
 };
+
+//Utility function for RemoteAddress
+char * byteArrayToHexString(CByteArray &ba_in);
 
 
 class SAM

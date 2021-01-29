@@ -61,6 +61,11 @@ typedef struct cJSON_Hooks {
 /* Supply malloc, realloc and free functions to cJSON */
 extern void cJSON_InitHooks(cJSON_Hooks* hooks);
 
+// Helper functions already defined in later versions of cJSON but we keep this version for now
+extern int cJSON_IsObject(cJSON * json);
+   
+extern int cJSON_IsString(cJSON * json);
+
 
 /* Supply a block of JSON, and this returns a cJSON object you can interrogate. Call cJSON_Delete when finished. */
 extern cJSON *cJSON_Parse(const char *value);

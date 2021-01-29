@@ -127,6 +127,8 @@ SOURCES += \
 	SigContainer.cpp \
 	ScapSSLConnection.cpp \
 	XadesSignature.cpp \
+	RemoteAddress.cpp  \
+	RemoteAddressRequest.cpp \
 	SODParser.cpp \
 	SSLConnection.cpp \
 	TSAClient.cpp \

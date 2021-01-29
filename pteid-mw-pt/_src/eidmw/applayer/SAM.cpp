@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2014, 2016-2017 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2016-2021 André Guerreiro - <aguerreiro1985@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 
@@ -36,6 +36,15 @@ SAM::SAM(APL_Card *card)
 }
 
 
+char * byteArrayToHexString(CByteArray &ba_in) {
+	size_t hex_len = 2 * ba_in.Size()+ 1;
+
+	char * hex_string = (char *)malloc(hex_len);
+	const unsigned char *in = ba_in.GetBytes();	
+	binToHex(in, ba_in.Size(), hex_string, hex_len);
+
+	return hex_string;
+}
 
 bool checkResultSW12(CByteArray &result)
 {
@@ -392,7 +401,7 @@ char *SAM::generateChallenge(char * chr_string)
 	char *challenge = NULL;
 	if (!chr_string || strlen(chr_string) == 0)
 	{
-		fprintf(stderr, "SAM::generateChallenge(): Invalid or empty CHR param\n");
+		MWLOG(LEV_ERROR, MOD_APL, "SAM::generateChallenge(): Invalid or empty CHR param");
 		return NULL;
 	}
 
