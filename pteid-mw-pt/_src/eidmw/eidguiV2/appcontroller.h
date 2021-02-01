@@ -128,6 +128,11 @@ public slots:
     /* Is proxy manually configured or using system? */
     bool isProxyConfigured();
 
+    bool getShowSignatureOptions(void);
+    void setShowSignatureOptions(bool bShowSignatureOptions);
+    bool getShowSignatureHelp(void);
+    void setShowSignatureHelp(bool bShowSignatureHelp);
+
     bool isOutlookInstalled();
     bool getOutlookSuppressNameChecks(void);
     void setOutlookSuppressNameChecks(bool bDisabledMatching);

@@ -471,6 +471,22 @@ bool AppController::isProxyConfigured() {
     return m_Settings.isProxyConfigured();
 }
 
+bool AppController::getShowSignatureOptions(void){
+    return m_Settings.getShowSignatureOptions();
+}
+
+void AppController::setShowSignatureOptions(bool bShowSignatureOptions){
+    m_Settings.setShowSignatureOptions(bShowSignatureOptions);
+}
+
+bool AppController::getShowSignatureHelp(void){
+    return m_Settings.getShowSignatureHelp();
+}
+
+void AppController::setShowSignatureHelp(bool bShowSignatureHelp){
+    m_Settings.setShowSignatureHelp(bShowSignatureHelp);
+}
+
 void AppController::setEnablePteidCache (bool bEnabled){
     m_Settings.setEnablePteidCache(bEnabled);
 }
