@@ -253,6 +253,8 @@
     <ClCompile Include="TsaClient.cpp" />
     <ClCompile Include="XadesSignature.cpp" />
     <ClCompile Include="XercesUtils.cpp" />
+    <ClCompile Include="RemoteAddress.cpp" />
+    <ClCompile Include="RemoteAddressRequest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APLCard.h" />
@@ -284,6 +286,8 @@
     <ClInclude Include="sign-pkcs7.h" />
     <ClInclude Include="SODParser.h" />
     <ClInclude Include="SSLConnection.h" />
+    <ClInclude Include="RemoteAddress.h" />
+    <ClInclude Include="RemoteAddressRequest.h" />
     <ClInclude Include="TsaClient.h" />
     <ClInclude Include="XadesSignature.h" />
   </ItemGroup>
