@@ -86,14 +86,14 @@ Item {
                                         + switchSignTemp.height
                                         + switchSignAdd.height
                                         + rectangleEntities.height
-                                        + 2 * Constants.SIZE_TEXT_V_SPACE
+                                        + Constants.SIZE_TEXT_V_SPACE
+
+    property int propertyListViewHeight:0
 
     property alias propertyItemOptions: itemOptions
     property alias propertySettingsScroll: settingsScroll
     property alias propertyFlickable: flickable
     property alias propertyTitleHelp: titleHelp
-
-
 
     BusyIndicator {
         id: busyIndicator
@@ -281,7 +281,7 @@ Item {
                             width: parent.width
                             height: Constants.SIZE_IMAGE_BOTTOM_MENU
                             anchors.bottom: parent.bottom
-                            color: Constants.COLOR_MAIN_MIDDLE_GRAY 
+                            color: Constants.COLOR_MAIN_MIDDLE_GRAY
                             Button {
                                 id: buttonArrowHelp
                                 anchors.horizontalCenter: parent.horizontalCenter
@@ -876,7 +876,8 @@ Item {
                             Item {
                                 id: rectangleEntities
                                 width: parent.width
-                                height: listViewEntities.contentHeight
+                                height: propertyListViewHeight
+                                        + listViewEntities.count * Constants.SIZE_LISTVIEW_SPACING
                                 anchors.top: switchSignAdd.bottom
                                 MouseArea {
                                     id: mouseAreaTextAttributesMsg
@@ -916,7 +917,7 @@ Item {
                                     model: entityAttributesModel
                                     delegate: attributeListDelegate
                                     focus: true
-                                    spacing: 2
+                                    spacing: Constants.SIZE_LISTVIEW_SPACING
                                     boundsBehavior: Flickable.StopAtBounds
                                     highlightMoveDuration: 1000
                                     highlightMoveVelocity: 1000

@@ -841,7 +841,7 @@ PageServicesSignForm {
         Rectangle {
             id: container
             width: parent.width
-            height: columnItem.height + 15
+            height: columnItem.height + Constants.SIZE_TEXT_V_SPACE
             Keys.onSpacePressed: {
                 checkboxSel.focus = true
             }
@@ -852,6 +852,9 @@ PageServicesSignForm {
                 }else{
                     propertyListViewEntities.currentIndex++
                 }
+            }
+            Component.onCompleted: {
+                propertyListViewHeight += height
             }
 
             color:  propertyListViewEntities.currentIndex === index && propertyListViewEntities.focus
@@ -953,7 +956,7 @@ PageServicesSignForm {
             }else{
                 console.log("propertySwitchSignAdd not checked")
                 entityAttributesModel.clear()
-                propertyListViewEntities.contentHeight = 0
+                propertyListViewHeight = 0
                 propertyItemOptions.height = propertyOptionsHeight
 
                 propertyCheckSignReduced.enabled = true
