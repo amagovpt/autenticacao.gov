@@ -1,6 +1,9 @@
-/* RemoteAddress helper functions for HTTP API requests using libcurl
-
- * Copyright (C) 2020-2021 André Guerreiro - <aguerreiro1985@gmail.com>
+/*-****************************************************************************
+ *
+ *  Copyright (C) 2020-2021 André Guerreiro - <aguerreiro1985@gmail.com>
+ *  Licensed under the EUPL V.1.2
+ *
+ *  RemoteAddress helper functions for HTTP API requests using libcurl
  */
 
 
@@ -11,6 +14,7 @@
 #include <regex>
 
 #include "Log.h"
+#include "eidErrors.h"
 #include "MiscUtil.h"
 #include "APLConfig.h"
 
@@ -43,6 +47,33 @@ std::string parseCookieFromHeaders(std::string headers) {
     }
  }
 
+ char *get_url_endpoint(const char *full_url) {
+    char * str = (char *)full_url;
+
+    return strrchr(str, '/');
+
+ }
+
+ void handle_curl_error(CURLcode rc) {
+    if (rc == CURLE_OPERATION_TIMEDOUT)
+            throw CMWEXCEPTION(EIDMW_REMOTEADDR_CONNECTION_TIMEOUT);
+        else if (rc == CURLE_COULDNT_RESOLVE_HOST || rc == CURLE_COULDNT_CONNECT)
+            throw CMWEXCEPTION(EIDMW_REMOTEADDR_CONNECTION_ERROR);
+        else
+            throw CMWEXCEPTION(EIDMW_REMOTEADDR_UNKNOWN_ERROR);
+ }
+
+ void handle_http_error(long http_code) {
+    if (http_code >= 400 && http_code < 500) {
+        //TODO: should we have an error code for 4XX errors from the API ?
+        throw CMWEXCEPTION(EIDMW_REMOTEADDR_UNKNOWN_ERROR);
+    }
+    else if (http_code >= 500 && http_code < 600) {
+        throw CMWEXCEPTION(EIDMW_REMOTEADDR_SERVER_ERROR);
+    }
+
+ }
+
 PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, const char *cookie) {
 
     PostResponse resp;
@@ -54,7 +85,7 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
     CURLcode rc = curl_global_init(CURL_GLOBAL_ALL);
     if (rc != 0) {
         MWLOG(LEV_ERROR, MOD_APL, "Fatal error: curl_global_init failed! Error code: %d", rc);
-        return resp;
+        throw CMWEXCEPTION(EIDMW_REMOTEADDR_UNKNOWN_ERROR);
     }
 
     /* get a curl handle */
@@ -85,7 +116,6 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
 
         /* Specify the CA certs PEM file - necessary for libcurl OpenSSL backend on Windows and MacOS */
         std::string cacerts_file = std::string(conf_certsdir.getString()) + "/cacerts.pem";
-       
         curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_file.c_str());
 
         /* Now specify the POST data */
@@ -94,7 +124,6 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
 
 
         curl_easy_setopt(curl, CURLOPT_TIMEOUT, DEFAULT_NETWORK_TIMEOUT);
-        
         /* send all data to this function  */
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_write_data);
 
@@ -111,11 +140,11 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
         res = curl_easy_perform(curl);
         /* Check for errors */
         if (res != CURLE_OK) {
-            MWLOG(LEV_ERROR, MOD_APL, "RemoteAddress call to %s failed! curl error msg: %s", endpoint_url, curl_easy_strerror(res));
+            MWLOG(LEV_ERROR, MOD_APL, "RemoteAddress call to %s failed! curl error msg: %s", get_url_endpoint(endpoint_url), curl_easy_strerror(res));
+
             goto cleanup;
         }
-        else
-        {
+        else {
             long http_code = 0;
             curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
             resp.http_code = http_code;
@@ -127,13 +156,17 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
             }
             else
             {
-                MWLOG(LEV_ERROR, MOD_APL, "RemoteAddress call to %s returned HTTP error %ld Message: %s", endpoint_url, http_code,
+                MWLOG(LEV_ERROR, MOD_APL, "RemoteAddress call to %s returned HTTP error %ld Message: %s", get_url_endpoint(endpoint_url), http_code,
                         (char *)received_data.c_str());
             }
 
-
         }
 
+    }
+    else {
+        MWLOG(LEV_ERROR, MOD_APL, "curl initialization failed: curl_easy_init!");
+        curl_global_cleanup();
+        throw CMWEXCEPTION(EIDMW_REMOTEADDR_UNKNOWN_ERROR);
     }
 
     cleanup:
@@ -141,11 +174,14 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
     /* always cleanup */
     curl_easy_cleanup(curl);
     curl_global_cleanup();
-    
+
+    if (res != CURLE_OK) {
+        handle_curl_error(res);
+    }
+    handle_http_error(resp.http_code);
     return resp;
 
 }
 
 
-} //End of namespace decl 
-
+} //End of namespace decl

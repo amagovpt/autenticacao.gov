@@ -1,7 +1,10 @@
- /* RemoteAddress helper functions - JSON parsing, object building and card interactions
- 
-  * Copyright (C) 2020-2021 André Guerreiro - <aguerreiro1985@gmail.com>
-  */
+/*-****************************************************************************
+ * Copyright (C) 2020-2021 André Guerreiro - <aguerreiro1985@gmail.com>
+ *
+ * Licensed under the EUPL V.1.2
+ *
+ * RemoteAddress helper functions - JSON parsing, object building and card interactions
+ */
 
 #include "ByteArray.h"
 #include "APLCardPteid.h"
@@ -112,6 +115,7 @@ RA_DHParamsResponse parseDHParamsResponse(const char * json_str) {
 
     item = cJSON_GetObjectItem(dh_params, "DHParamsResponse");
 
+    //TODO: ErrorStatus exists even with DHParamsResponse!
     if (!cJSON_IsObject(item)) {
         //Error response: get Error Status and write it to resp
         item = cJSON_GetObjectItem(dh_params, "ErrorStatus");
@@ -304,9 +308,9 @@ char * build_json_obj_dhparams(DHParams &dh, APL_EidFile_ID *id_file, APL_EidFil
         cJSON_AddItemToObject(root, "addr", buildAddressObject(*addr));
     }
     else {
-        cJSON_AddItemToObject(root, "foreign_addr", buildForeignAddressObject(*addr));   
+        cJSON_AddItemToObject(root, "foreign_addr", buildForeignAddressObject(*addr));
     }
-    
+
     cJSON_AddItemToObject(parent, "DHParams", root);
 
     char * json_str = cJSON_PrintUnformatted(parent);

@@ -6,7 +6,7 @@
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2011-2012 lmcm - <lmcm@caixamagica.pt>
  * Copyright (C) 2011-2012 Rui Martinho - <rui.martinho@ama.pt>
- * Copyright (C) 2012, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012, 2016-2021 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  * Copyright (C) 2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
@@ -1645,6 +1645,7 @@ void APL_AddrEId::loadRemoteAddress() {
     const std::string ENDPOINT_READADDRESS = "/readaddress/readAddress";
 
     std::string url_endpoint_dh, url_endpoint_signchallenge, url_endpoint_readaddress;
+    long exception_code = 0;
 
 	if (remoteAddressLoaded) {
 		return;
@@ -1693,10 +1694,11 @@ void APL_AddrEId::loadRemoteAddress() {
 
 	RA_DHParamsResponse dh_params_resp = parseDHParamsResponse(resp.http_response.c_str());
 
-	if (dh_params_resp.error_code == 0) 
+	if (dh_params_resp.error_code == 0)
 	{
 		if (!sam_helper.sendKIFD((char *)dh_params_resp.kifd.c_str())) {
 			MWLOG(LEV_ERROR, MOD_APL, "loadRemoteAddress(): Card failed to accept DH server public key KIFD!");
+			exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
 			goto cleanup;
 		}
 
@@ -1706,7 +1708,8 @@ void APL_AddrEId::loadRemoteAddress() {
 		bool verified = sam_helper.verifyCert_CV_IFD((char *)dh_params_resp.cv_ifd_cert.c_str());
 
 		if (!verified) {
-			MWLOG(LEV_ERROR, MOD_APL, "Card failed to verify server-provided CV certificate! ");
+			MWLOG(LEV_ERROR, MOD_APL, "Card failed to verify server-provided CV certificate!");
+			exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
 			goto cleanup;
 		}
 
@@ -1715,6 +1718,10 @@ void APL_AddrEId::loadRemoteAddress() {
 		//prepareExternalAutenticate(card, cvc_cert, rsa_ca_pubkey);
 
 		char * challenge = sam_helper.generateChallenge(chr);
+		if (challenge == NULL) {
+			exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
+			goto cleanup;
+		}
 
 		json_str = build_json_obj_sign_challenge(challenge, kicc);
 		PostResponse resp = post_json_remoteaddress(url_endpoint_signchallenge.c_str(), json_str, received_cookie.c_str());
@@ -1730,7 +1737,8 @@ void APL_AddrEId::loadRemoteAddress() {
 			bool ret = sam_helper.verifySignedChallenge(signed_challenge);
 
 			if (!ret) {
-				MWLOG(LEV_ERROR, MOD_APL, "Card rejected server-provided signature. Process aborted!");;
+				MWLOG(LEV_ERROR, MOD_APL, "Card rejected server-provided signature. Process aborted!");
+				exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
 				goto cleanup;
 			}
 
@@ -1741,22 +1749,28 @@ void APL_AddrEId::loadRemoteAddress() {
 
 			const unsigned char le_byte[] = { 0x00 };
 
-            //Needed for T=1 protocol
+            //Needed for T=1 smartcard protocol
 			mse_internal_auth_cmd.Append(le_byte, sizeof(le_byte));
 			internal_auth_cmd.Append(le_byte, sizeof(le_byte));
+
+			//TODO: maybe catch cardlayer exceptions in sendAPDU and translate to SMARTCARD_ERROR
 
 			CByteArray resp_mse_internal_auth = m_card->sendAPDU(mse_internal_auth_cmd);
 
 			unsigned int sw12 = 0;
 			if (!checkResultSW12(resp_mse_internal_auth, &sw12)) {
-				fprintf(stderr, "MSE SET INTERNAL Auth failed! SW12: %04X\n", sw12);
+				MWLOG(LEV_ERROR, MOD_APL, "MSE SET INTERNAL Auth failed! SW12: %04X", sw12);
+				exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
+				goto cleanup;
 
 			}
 
 			CByteArray resp_internal_auth = m_card->sendAPDU(internal_auth_cmd);
 			sw12 = 0;
 			if (!checkResultSW12(resp_internal_auth, &sw12)) {
-				fprintf(stderr, "INTERNAL AUTHENTICATION failed! SW12: %04X\n", sw12);
+				MWLOG(LEV_ERROR, MOD_APL, "INTERNAL AUTHENTICATION failed! SW12: %04X", sw12);
+				exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
+				goto cleanup;
 
 			}
 
@@ -1778,14 +1792,8 @@ void APL_AddrEId::loadRemoteAddress() {
 			}
 			else {
 
-				if (getaddr_resp->error_code == -1) {
-					MWLOG(LEV_ERROR, MOD_APL, "Endpoint readaddress request failed due to connection error or network timeout");
-				}
-				else {
-					MWLOG(LEV_ERROR, MOD_APL, "getaddress message returned: code %d msg: %s", 
-						getaddr_resp->error_code, 
-						getaddr_resp->error_msg != NULL ? getaddr_resp->error_msg : "msg_empty" );
-				}
+				MWLOG(LEV_ERROR, MOD_APL, "Unexpected server response for %s, no http error code but empty/malformed response", ENDPOINT_READADDRESS.c_str());
+				exception_code = EIDMW_REMOTEADDR_SERVER_ERROR;
 			}
 
 		}
@@ -1793,7 +1801,9 @@ void APL_AddrEId::loadRemoteAddress() {
 	}
 
 	cleanup:
-	  MWLOG(LEV_INFO, MOD_APL, "Exiting %s early: some error ocurred", __FUNCTION__);
+	  if (exception_code > 0) {
+	  	throw CMWEXCEPTION(exception_code);
+	  }
 
 }
 
