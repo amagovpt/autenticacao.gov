@@ -302,9 +302,9 @@ Item {
                                 }
                                 Accessible.role: Accessible.Button
                                 Accessible.name: qsTranslate("GAPI", "STR_SIGN_OPEN_HELP")
-                                KeyNavigation.tab: propertyShowHelp == true ? buttonAdd : titleConf
-                                KeyNavigation.down: propertyShowHelp == true ? buttonAdd : titleConf
-                                KeyNavigation.right: propertyShowHelp == true ? buttonAdd : titleConf
+                                KeyNavigation.tab: titleSelectFile
+                                KeyNavigation.down: titleSelectFile
+                                KeyNavigation.right: titleSelectFile
                                 Keys.onPressed: {
                                     handleKeyPressed(event.key, buttonArrowHelp)
                                 }
@@ -354,11 +354,25 @@ Item {
                     Text {
                         id: titleSelectFile
                         x: Constants.SIZE_TEXT_FIELD_H_SPACE
-                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        font.pixelSize: activeFocus
+                                        ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                        : Constants.SIZE_TEXT_LABEL
+                        font.bold: activeFocus
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_LABEL
                         height: Constants.SIZE_TEXT_LABEL
                         text: qsTranslate("Popup File", "STR_POPUP_FILE_INPUT_MULTI")
+
+                        Accessible.role: Accessible.Section
+                        Accessible.name: text
+                        KeyNavigation.tab: listViewFiles.count > 0 ? listViewFiles : buttonAdd
+                        KeyNavigation.down: listViewFiles.count > 0 ? listViewFiles : buttonAdd
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, titleSelectFile)
+                        }
+                        KeyNavigation.right: listViewFiles.count > 0 ? listViewFiles : buttonAdd
+                        KeyNavigation.backtab: buttonArrowHelp
+                        KeyNavigation.up: buttonArrowHelp
                     }
                     Rectangle {
                         id: rectFile

@@ -848,9 +848,11 @@ PageServicesSignForm {
             Keys.onTabPressed: {
                 checkboxSel.focus = true
                 if(propertyListViewEntities.currentIndex == propertyListViewEntities.count -1){
+                    handleKeyPressed(event.key, "")
                     propertyPDFPreview.forceActiveFocus()
                 }else{
                     propertyListViewEntities.currentIndex++
+                    handleKeyPressed(event.key, "")
                 }
             }
             Component.onCompleted: {
@@ -1189,8 +1191,28 @@ PageServicesSignForm {
             id: rectlistViewFilesDelegate
             width: parent.width
             height: parent.height
-            color: getColorItem(mouseAreaFileName.containsMouse,
-                                mouseAreaIconDelete.containsMouse)
+            color:  propertyListViewFiles.currentIndex === index && propertyListViewFiles.focus
+                    ? Constants.COLOR_MAIN_DARK_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
+
+            Keys.onSpacePressed: {
+                console.log("Delete file index:" + index);
+                var temp = propertyListViewFiles.currentIndex
+                removeFileFromList(index)
+                if (propertyListViewFiles.currentIndex > 0) {
+                    propertyListViewFiles.currentIndex = temp - 1
+                }
+            }
+            Keys.onTabPressed: {
+                if(propertyListViewFiles.currentIndex == propertyListViewFiles.count -1){
+                    propertyListViewFiles.currentIndex = 0;
+                    handleKeyPressed(event.key, "")
+                    propertyButtonAdd.forceActiveFocus()
+                }else{
+                    propertyListViewFiles.currentIndex++
+                    handleKeyPressed(event.key, "")
+                }
+            }
+
             MouseArea {
                 id: mouseAreaFileName
                 anchors.fill: parent
@@ -1237,14 +1259,7 @@ PageServicesSignForm {
                         hoverEnabled : true
                         onClicked: {
                             console.log("Delete file index:" + index);
-                            gapi.closePdfPreview(filesModel.get(index).fileUrl);
-                            for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
-                            {
-                                if(propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl
-                                        === filesModel.get(index).fileUrl)
-                                    propertyPageLoader.propertyBackupfilesModel.remove(index)
-                            }
-                            filesModel.remove(index)
+                            removeFileFromList(index)
                         }
                     }
                 }
@@ -1301,7 +1316,7 @@ PageServicesSignForm {
                 }else{
                     propertyTextDragMsgImg.visible = true
                 }
-                propertyTitleConf.forceActiveFocus()
+                propertyListViewFiles.forceActiveFocus()
             }
         }
     }
@@ -1426,16 +1441,6 @@ PageServicesSignForm {
                 qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
     }
 
-    function getColorItem(mouseItem, mouseImage){
-
-        var handColor
-        if(mouseItem || mouseImage){
-            handColor = Constants.COLOR_MAIN_DARK_GRAY
-        }else{
-            handColor = Constants.COLOR_MAIN_SOFT_GRAY
-        }
-        return handColor
-    }
     function getMinimumPage(){
         // Function to detect minimum number of pages of all loaded pdfs to sign
         var minimumPage = 0
@@ -1720,5 +1725,16 @@ PageServicesSignForm {
         // use visible area of flickable object to calculate
         // a smooth flick velocity
         return 200 + Constants.FLICK_Y_VELOCITY_MAX * (1 - propertyFlickable.visibleArea.heightRatio)
+    }
+
+    function removeFileFromList(index){
+        gapi.closePdfPreview(filesModel.get(index).fileUrl);
+        for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
+        {
+            if(propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl
+                    === filesModel.get(index).fileUrl)
+                propertyPageLoader.propertyBackupfilesModel.remove(index)
+        }
+        filesModel.remove(index)
     }
 }

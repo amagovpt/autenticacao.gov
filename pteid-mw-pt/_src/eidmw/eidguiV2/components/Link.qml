@@ -45,6 +45,10 @@ Item {
         Keys.onSpacePressed: Qt.openUrlExternally(propertyLinkUrl)
         Keys.onReturnPressed: Qt.openUrlExternally(propertyLinkUrl)
 
+        Keys.onPressed: {
+            handleKeyPressed(event.key, linkText)
+        }
+
     }
     Accessible.role: propertyLinkUrl == "" ? Accessible.StaticText : Accessible.Link 
     Accessible.name: propertyAccessibleText
