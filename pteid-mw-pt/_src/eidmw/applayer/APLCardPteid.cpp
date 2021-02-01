@@ -1416,7 +1416,6 @@ const char *APL_PersonalNotesEId::getPersonalNotes(bool forceMap)
 ---------------------------------------- APL_AddrEId ---------------------------------------------
 *****************************************************************************************/
 
-//TODO: this class will be the RemoteAddress loader class
 APL_AddrEId::APL_AddrEId(APL_EIDCard *card)
 {
 	m_card=card;
@@ -1571,9 +1570,6 @@ CByteArray APL_AddrEId::getTLV()
 	return ba;
 }
 
-//Fwd declarations
-CByteArray getSodData(APL_EIDCard *card);
-CByteArray getAuthCert(APL_EIDCard *card);
 
 bool checkResultSW12(CByteArray &result, unsigned int *p_sw12)
 {
@@ -1936,32 +1932,38 @@ bool APL_AddrEId::isNationalAddress()
 
 const char *APL_AddrEId::getForeignCountry()
 {
-	return m_card->getFileAddress()->getForeignCountry();
+	loadRemoteAddress();
+	return m_Foreign_Country.c_str();
 }
 
 const char *APL_AddrEId::getForeignAddress()
 {
-	return m_card->getFileAddress()->getForeignAddress();
+	loadRemoteAddress();
+	return m_Foreign_Generic_Address.c_str();
 }
 
 const char *APL_AddrEId::getForeignCity()
 {
-	return m_card->getFileAddress()->getForeignCity();
+	loadRemoteAddress();
+	return m_Foreign_City.c_str();
 }
 
 const char *APL_AddrEId::getForeignRegion()
 {
-	return m_card->getFileAddress()->getForeignRegion();
+	loadRemoteAddress();
+	return m_Foreign_Region.c_str();
 }
 
 const char *APL_AddrEId::getForeignLocality()
 {
-	return m_card->getFileAddress()->getForeignLocality();
+	loadRemoteAddress();
+	return m_Foreign_Locality.c_str();
 }
 
 const char *APL_AddrEId::getForeignPostalCode()
 {
-	return m_card->getFileAddress()->getForeignPostalCode();
+	loadRemoteAddress();
+	return m_Foreign_Postal_Code.c_str();
 }
 
 /*****************************************************************************************

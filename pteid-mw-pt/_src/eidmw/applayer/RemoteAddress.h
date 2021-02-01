@@ -52,6 +52,9 @@ namespace eIDMW
             }
     };
 
+    CByteArray getSodData(APL_EIDCard *card);
+    CByteArray getAuthCert(APL_EIDCard *card);
+
     RA_DHParamsResponse parseDHParamsResponse(const char * json_str);
     RA_SignChallengeResponse parseSignChallengeResponse(const char * json_str);
     RA_GetAddressResponse *validateReadAddressResponse(const char * json_str);
