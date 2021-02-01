@@ -239,21 +239,21 @@ function filterText(text){
     temp = temp.replace(/\#/g, '')
     return temp
 }
-function showHelp() {
-    if(propertyShowHelp == true){
-            collapseAnimation.start()
-            propertyShowHelp = false
-        } else {
-            expandAnimation.start()
-            propertyShowHelp = true
-    }
-}
-function showOptions() {
-    if(propertyShowOptions == true){
-        collapseAnimationOptions.start()
-        propertyShowOptions = false
+function showHelp(show) {
+    if(show){
+        expandAnimation.start()
     } else {
-        expandAnimationOptions.start()
-        propertyShowOptions = true
+        collapseAnimation.start()
     }
+    propertyShowHelp = show
+    controler.setShowSignatureHelp(show)
+}
+function showOptions(show) {
+    if(show){
+        expandAnimationOptions.start()
+    } else {
+        collapseAnimationOptions.start()
+    }
+    propertyShowOptions = show
+    controler.setShowSignatureOptions(show)
 }

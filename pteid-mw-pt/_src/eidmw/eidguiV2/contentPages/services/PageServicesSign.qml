@@ -612,10 +612,10 @@ PageServicesSignForm {
         }
     }
     propertyButtonArrowHelp {
-        onClicked: Functions.showHelp()
+        onClicked: Functions.showHelp(!propertyShowHelp)
     }
     propertyArrowHelpMouseArea {
-        onClicked: Functions.showHelp()
+        onClicked: Functions.showHelp(!propertyShowHelp)
     }
 
     PropertyAnimation {
@@ -634,10 +634,10 @@ PageServicesSignForm {
     }
 
     propertyButtonArrowOptions {
-        onClicked: Functions.showOptions()
+        onClicked: Functions.showOptions(!propertyShowOptions)
     }
     propertyArrowOptionsMouseArea {
-        onClicked: Functions.showOptions()
+        onClicked: Functions.showOptions(!propertyShowOptions)
     }
 
     PropertyAnimation {
@@ -1380,6 +1380,11 @@ PageServicesSignForm {
             // do not update fields next time (includes input, local, reason, tsa, ...)
             gapi.setShortcutFlag(GAPI.ShortcutIdNone)
         }
+
+        if (!propertyShowHelp)
+            propertyRectHelp.height = Constants.SIZE_IMAGE_BOTTOM_MENU
+        if (propertyShowOptions)
+            propertyItemOptions.height = propertyOptionsHeight
 
         gapi.startCardReading()
     }

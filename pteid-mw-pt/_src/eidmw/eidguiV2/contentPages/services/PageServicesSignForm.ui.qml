@@ -77,8 +77,8 @@ Item {
     property alias propertyArrowOptionsMouseArea: arrowOptionsMouseArea
     property alias propertyRectHelp: rectMainLeftHelp
 
-    property bool propertyShowHelp: true
-    property bool propertyShowOptions: false
+    property bool propertyShowHelp: controler.getShowSignatureHelp()
+    property bool propertyShowOptions: controler.getShowSignatureOptions()
 
     property int propertyOptionsHeight: rectFormatOptions.height
                                         + textFieldReason.height
