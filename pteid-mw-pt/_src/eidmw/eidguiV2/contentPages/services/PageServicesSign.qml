@@ -957,9 +957,6 @@ PageServicesSignForm {
                                                      GAPI.ScapAttrDescriptionLong)
             }else{
                 console.log("propertySwitchSignAdd not checked")
-                entityAttributesModel.clear()
-                propertyListViewHeight = 0
-                propertyItemOptions.height = propertyOptionsHeight
 
                 propertyCheckSignReduced.enabled = true
                 propertyCheckSignShow.enabled = true
@@ -967,6 +964,11 @@ PageServicesSignForm {
                 propertyTextAttributesMsg.visible = false
                 propertyMouseAreaTextAttributesMsg.enabled = false
                 propertyMouseAreaTextAttributesMsg.z = 0
+
+                entityAttributesModel.clear()
+                propertyListViewHeight = 0
+                propertyItemOptions.height = propertyOptionsHeight
+
                 propertyPDFPreview.forceActiveFocus()
             }
         }

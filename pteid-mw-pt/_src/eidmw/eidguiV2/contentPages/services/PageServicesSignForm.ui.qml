@@ -890,8 +890,9 @@ Item {
                             Item {
                                 id: rectangleEntities
                                 width: parent.width
-                                height: propertyListViewHeight
-                                        + listViewEntities.count * Constants.SIZE_LISTVIEW_SPACING
+                                height: listViewEntities.count > 0
+                                    ? (propertyListViewHeight+ listViewEntities.count * Constants.SIZE_LISTVIEW_SPACING)
+                                    : textAttributesMsg.height
                                 anchors.top: switchSignAdd.bottom
                                 MouseArea {
                                     id: mouseAreaTextAttributesMsg
@@ -906,7 +907,7 @@ Item {
                                                       "STR_ATTRIBUTES_EMPTY")
                                     verticalAlignment: Text.AlignVCenter
                                     color: Constants.COLOR_TEXT_LABEL
-                                    height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
+                                    height: visible ? Constants.HEIGHT_RADIO_BOTTOM_COMPONENT : 0
                                     font.family: lato.name
                                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                                     font.capitalization: Font.MixedCase
