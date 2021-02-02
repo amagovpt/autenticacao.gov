@@ -48,7 +48,7 @@
         "osx": {
             "latestVersion": "3.4.0",
             "package": "20126/78595/Autenticacao.gov_MacOS.pkg",
-            "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/Autenticacao.gov_MacOS-Notarized.pkg"
+            "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/Autenticacao.gov_MacOS.pkg"
         }
     },
     "versions": [
