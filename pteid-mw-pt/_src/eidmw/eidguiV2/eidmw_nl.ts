@@ -1923,7 +1923,7 @@
     </message>
     <message>
         <source>STR_SIGN_ADD_LTV</source>
-        <translation>Adicionar LTV</translation>
+        <translation>Validação de longo prazo</translation>
     </message>
     <message>
         <source>STR_LTV_TOOLTIP</source>

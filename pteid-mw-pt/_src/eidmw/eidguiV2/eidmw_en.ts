@@ -1925,7 +1925,7 @@
     </message>
     <message>
         <source>STR_SIGN_ADD_LTV</source>
-        <translation>Add LTV</translation>
+        <translation>Long-Term Validation</translation>
     </message>
     <message>
         <source>STR_LTV_TOOLTIP</source>

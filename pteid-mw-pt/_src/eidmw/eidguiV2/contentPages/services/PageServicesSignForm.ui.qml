@@ -84,9 +84,10 @@ Item {
                                         + textFieldReason.height
                                         + textFieldLocal.height
                                         + switchSignTemp.height
+                                        + checkboxLTV.height
                                         + switchSignAdd.height
                                         + rectangleEntities.height
-                                        + Constants.SIZE_TEXT_V_SPACE
+                                        + 4 * Constants.SIZE_TEXT_V_SPACE
 
     property int propertyListViewHeight:0
 
@@ -804,7 +805,7 @@ Item {
                                 id: switchSignTemp
                                 height: Constants.HEIGHT_SWITCH_COMPONENT
                                 anchors.top: textFieldLocal.bottom
-                                x: - 5
+                                x: 5
                                 text: qsTranslate("PageServicesSign",
                                                   "STR_SIGN_ADD_TIMESTAMP")
                                 enabled: fileLoaded
@@ -829,10 +830,9 @@ Item {
                                 id: checkboxLTV
                                 text: qsTranslate("PageServicesSign",
                                                   "STR_SIGN_ADD_LTV")
-                                height: 25
-                                anchors.top: textFieldLocal.bottom
-                                anchors.left: switchSignTemp.right
-                                anchors.leftMargin: - 5
+                                height: Constants.HEIGHT_SWITCH_COMPONENT
+                                anchors.top: switchSignTemp.bottom
+                                x: 48
                                 enabled: switchSignTemp.checked         /* timestamp enabled */
                                          && radioButtonPADES.checked     /* pdf signature */
                                 font.family: lato.name
@@ -866,8 +866,9 @@ Item {
                             Switch {
                                 id: switchSignAdd
                                 height: Constants.HEIGHT_SWITCH_COMPONENT
-                                anchors.top: switchSignTemp.bottom
-                                x: - 5
+                                anchors.top: checkboxLTV.bottom
+                                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                                x: 5
                                 text: qsTranslate("PageServicesSign",
                                                   "STR_SIGN_ADD_ATTRIBUTES")
                                 enabled: fileLoaded
@@ -894,6 +895,7 @@ Item {
                                     ? (propertyListViewHeight+ listViewEntities.count * Constants.SIZE_LISTVIEW_SPACING)
                                     : textAttributesMsg.height
                                 anchors.top: switchSignAdd.bottom
+                                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                                 MouseArea {
                                     id: mouseAreaTextAttributesMsg
                                     anchors.fill: parent
