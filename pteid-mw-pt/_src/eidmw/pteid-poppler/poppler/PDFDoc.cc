@@ -593,10 +593,12 @@ std::unordered_set<int> PDFDoc::getSignaturesIndexesUntilLastTimestamp()
             f.dictLookup("V", &sig_dict);
             sig_dict.dictLookup("Type", &type);
             sig_dict.dictLookup("SubFilter", &obj1);
-            if (strcmp(type.getName(), "DocTimeStamp") == 0
-                && strcmp(obj1.getName(), "ETSI.RFC3161") == 0) {
-                break;
-			}
+            if (type.isName() && obj1.isName()) {
+              if (strcmp(type.getName(), "DocTimeStamp") == 0
+                  && strcmp(obj1.getName(), "ETSI.RFC3161") == 0) {
+                  break;
+              }
+			      }
         }
     }
 
@@ -913,7 +915,7 @@ void PDFDoc::addDSS(std::vector<ValidationDataElement *> validationData)
         Object streamRefObj;
         streamRefObj.initRef(streamRef.num, streamRef.gen);
 
-        char *vriPointerType;
+        const char *vriPointerType;
         Object vdeArrayObj, vdeArrayRef;
 
         switch (validationData[i]->getType())
@@ -965,7 +967,7 @@ void PDFDoc::addDSS(std::vector<ValidationDataElement *> validationData)
             if (vriPointerArrayObj.isNull())
             {
                 vriPointerArrayObj.initArray(xref);
-                vriEntry.dictAdd(vriPointerType, &vriPointerArrayObj);
+                vriEntry.dictAdd((char *)vriPointerType, &vriPointerArrayObj);
             }
             vriPointerArrayObj.arrayAdd(&streamRefObj);
         }
