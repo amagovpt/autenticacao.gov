@@ -197,7 +197,7 @@ Item {
                 Item {
                     id: rectMainLeftHelp
                     width: parent.width - Constants.SIZE_ROW_H_SPACE
-                    height: 160
+                    height: Constants.HEIGHT_HELP_EXPANDED
                     x: Constants.SIZE_ROW_H_SPACE
                     anchors.top: titleHelp.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
@@ -214,6 +214,7 @@ Item {
                         Components.Link {
                             id: textSubTitle
                             y: Constants.SIZE_TEXT_FIELD_V_SPACE
+                            visible: rectMainLeftHelp.height > Constants.HEIGHT_HELP_COLLAPSED
                             propertyText.text: qsTranslate("PageServicesSign",
                                                            "STR_SIGN_HELP_SUB_TITLE") + " "
                                                + "<a href='https://www.autenticacao.gov.pt/cmd-pedido-chave'>"
@@ -246,6 +247,7 @@ Item {
 
                         Components.Link {
                             id: autenticacaoGovLink
+                            visible: rectMainLeftHelp.height > Constants.HEIGHT_HELP_COLLAPSED
                             anchors.top: textSubTitle.bottom
                             propertyText.text: qsTranslate("PageServicesSign",
                                                            "STR_SIGN_HELP_TOPIC_2")

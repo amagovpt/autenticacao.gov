@@ -622,14 +622,14 @@ PageServicesSignForm {
         id: expandAnimation
         target: propertyRectHelp
         properties: "height"
-        to: 160
+        to: Constants.HEIGHT_HELP_EXPANDED
         duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
     }
     PropertyAnimation {
         id: collapseAnimation
         target: propertyRectHelp
         properties: "height"
-        to: Constants.SIZE_IMAGE_BOTTOM_MENU
+        to: Constants.HEIGHT_HELP_COLLAPSED
         duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
     }
 
@@ -1399,7 +1399,7 @@ PageServicesSignForm {
         }
 
         if (!propertyShowHelp)
-            propertyRectHelp.height = Constants.SIZE_IMAGE_BOTTOM_MENU
+            propertyRectHelp.height = Constants.HEIGHT_HELP_COLLAPSED
         if (propertyShowOptions)
             propertyItemOptions.height = propertyOptionsHeight
 
