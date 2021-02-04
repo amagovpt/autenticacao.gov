@@ -894,7 +894,7 @@ Item {
                                 id: rectangleEntities
                                 width: parent.width
                                 height: listViewEntities.count > 0
-                                    ? (propertyListViewHeight+ listViewEntities.count * Constants.SIZE_LISTVIEW_SPACING)
+                                    ? (propertyListViewHeight + (listViewEntities.count - 1) * Constants.SIZE_LISTVIEW_SPACING)
                                     : textAttributesMsg.height
                                 anchors.top: switchSignAdd.bottom
                                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
@@ -940,6 +940,7 @@ Item {
                                     boundsBehavior: Flickable.StopAtBounds
                                     highlightMoveDuration: 1000
                                     highlightMoveVelocity: 1000
+                                    cacheBuffer: Constants.SCAP_ATTR_LISTVIEW_CACHEBUFFER
                                     KeyNavigation.tab: pdfPreviewArea
                                     KeyNavigation.down:pdfPreviewArea
                                     KeyNavigation.right: pdfPreviewArea

@@ -841,7 +841,7 @@ PageServicesSignForm {
         Rectangle {
             id: container
             width: parent.width
-            height: columnItem.height + Constants.SIZE_TEXT_V_SPACE
+            height: entityText.contentHeight + Constants.SIZE_TEXT_V_SPACE
             Keys.onSpacePressed: {
                 checkboxSel.focus = true
             }
