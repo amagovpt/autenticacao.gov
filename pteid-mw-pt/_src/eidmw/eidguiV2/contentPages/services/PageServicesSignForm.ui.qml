@@ -941,6 +941,7 @@ Item {
                                     highlightMoveDuration: 1000
                                     highlightMoveVelocity: 1000
                                     cacheBuffer: Constants.SCAP_ATTR_LISTVIEW_CACHEBUFFER
+                                    interactive: false //disables scroll/drag for this listview
                                     KeyNavigation.tab: pdfPreviewArea
                                     KeyNavigation.down:pdfPreviewArea
                                     KeyNavigation.right: pdfPreviewArea
