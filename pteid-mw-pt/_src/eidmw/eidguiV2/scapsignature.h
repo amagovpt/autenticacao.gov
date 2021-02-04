@@ -69,7 +69,7 @@ private:
 	std::vector<ns2__AttributesType *> m_attributesList;
 	
 	ErrorConn connectionErr;
-	eIDMW::OAuthAttributes *m_oauth; //keep to abort oauth listener
+	eIDMW::OAuthAttributes *m_oauth = NULL; //keep to abort oauth listener
 	std::vector<ns3__AttributeType*> getSelectedAttributes(std::vector<int> attributes_index);
 	void setConnErr( int soapConnectionErr, void *in_suppliers_resp );
 	

@@ -61,7 +61,6 @@ namespace eIDMW
         setAttributes(attributes);
     }
     OAuthAttributes::~OAuthAttributes(){
-		qDebug() << "Closing OAuthAttributes server";
         m_server.close();
     }
     void OAuthAttributes::setAttributes(std::vector<CitizenAttribute> attributes) {

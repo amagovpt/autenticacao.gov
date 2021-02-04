@@ -371,6 +371,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
                 soap_destroy(&sp);
                 soap_end(&sp);
                 soap_done(&sp);
+                m_oauth = NULL;
                 return result;
             }
             std::map<CitizenAttribute, std::string> *attributesMap = oauth.getAttributes();
@@ -470,6 +471,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
                 soap_destroy(&sp);
                 soap_end(&sp);
                 soap_done(&sp);
+                m_oauth = NULL;
                 return result;
             }
 
@@ -500,6 +502,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
                 PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
                     "Error reading AttributeResponse! Malformed XML response.");
                 parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
+                m_oauth = NULL;
                 return result;
             }
             std::string endString = "</AttributeResponse>";
@@ -548,6 +551,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
             //soap_destroy(&soap2);
             //soap_end(&soap2);
             //soap_done(&soap2);
+            m_oauth = NULL;
             return result;
         }
 
@@ -608,6 +612,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
                     //soap_destroy(&soap2);
                     //soap_end(&soap2);
                     //soap_done(&soap2);
+                    m_oauth = NULL;
                     return result;
                 }
             }
@@ -622,6 +627,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
                 //soap_destroy(&soap2);
                 //soap_end(&soap2);
                 //soap_done(&soap2);
+                m_oauth = NULL;
                 return result;
             }
 
@@ -658,7 +664,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
         parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
         qDebug() << "Error in getAttributes():" << ex.what();
     }
-
+    m_oauth = NULL;
     return result;
 }
 
