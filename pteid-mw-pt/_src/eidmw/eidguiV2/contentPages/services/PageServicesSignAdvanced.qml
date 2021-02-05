@@ -568,6 +568,7 @@ PageServicesSignAdvancedForm {
                     font.capitalization: Font.MixedCase
                     onClicked: {
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                        propertyPageLoader.attributeListBackup = []
                         gapi.startRemovingAttributesFromCache(GAPI.ScapAttrAll)
                         signerror_dialog.close()
                         jumpToDefinitionsSCAP()
