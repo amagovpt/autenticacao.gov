@@ -24,6 +24,10 @@ namespace eIDMW
 {
 
 
+    //Implemented in CurlProxy.cpp
+    extern void curl_apply_proxy_settings(CURL * curl_handle);
+
+
 static size_t curl_write_data(char *ptr, size_t size, size_t nmemb, void * stream) {
     std::string *receive_buffer = (std::string *)stream;
     size_t realsize = size * nmemb;
@@ -79,6 +83,7 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
     PostResponse resp;
 
     CURLcode res;
+    char errbuf[CURL_ERROR_SIZE];
 
     MWLOG(LEV_DEBUG, MOD_APL, "post_json_remoteaddress called for endpoint_url: %s", endpoint_url);
 
@@ -124,8 +129,14 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
 
 
         curl_easy_setopt(curl, CURLOPT_TIMEOUT, DEFAULT_NETWORK_TIMEOUT);
+
+        curl_apply_proxy_settings(curl);
+
         /* send all data to this function  */
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_write_data);
+
+        //set buffer for human readable error message
+        curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
 
         curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, curl_write_data);
 
@@ -136,12 +147,17 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
 
         curl_easy_setopt(curl, CURLOPT_USERAGENT, PTEID_USER_AGENT_VALUE);
 
+         /* set the error buffer as empty before performing a request */
+        errbuf[0] = 0;
+
         /* Perform the request, res will get the return code */
         res = curl_easy_perform(curl);
+
         /* Check for errors */
         if (res != CURLE_OK) {
-            MWLOG(LEV_ERROR, MOD_APL, "RemoteAddress call to %s failed! curl error msg: %s", get_url_endpoint(endpoint_url), curl_easy_strerror(res));
 
+            MWLOG(LEV_ERROR, MOD_APL, "RemoteAddress call to %s failed! curl error code: %d message: %s",
+                    get_url_endpoint(endpoint_url), res, strlen(errbuf) > 0 ? errbuf: curl_easy_strerror(res));
             goto cleanup;
         }
         else {
