@@ -70,12 +70,8 @@ PageServicesSignForm {
 
     Keys.onPressed: {
         console.log("PageServicesSignForm onPressed:" + event.key)
+        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
 
-        if(propertyListViewEntities.focus === false){
-            Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
-        } else {
-            propertyPDFPreview.forceActiveFocus()
-        }
         // CTRL + V
         if ((event.key == Qt.Key_V) && (event.modifiers & Qt.ControlModifier)){
             filesArray = controler.getFilesFromClipboard();
@@ -846,15 +842,22 @@ PageServicesSignForm {
                 checkboxSel.focus = true
             }
             Keys.onTabPressed: {
-                checkboxSel.focus = true
-                if(propertyListViewEntities.currentIndex == propertyListViewEntities.count -1){
-                    handleKeyPressed(event.key, "")
-                    propertyPDFPreview.forceActiveFocus()
-                }else{
-                    propertyListViewEntities.currentIndex++
-                    handleKeyPressed(event.key, "")
-                }
+                focusForward();
+                handleKeyPressed(event.key, attributeListDelegate)
             }
+            Keys.onDownPressed: {
+                focusForward();
+                handleKeyPressed(event.key, attributeListDelegate)
+            }
+            Keys.onBacktabPressed: {
+                focusBackward();
+                handleKeyPressed(event.key, attributeListDelegate)
+            }
+            Keys.onUpPressed: {
+                focusBackward();
+                handleKeyPressed(event.key, attributeListDelegate)
+            }
+
             Component.onCompleted: {
                 propertyListViewHeight += height
             }
@@ -879,6 +882,7 @@ PageServicesSignForm {
                 onFocusChanged: {
                     if(focus) propertyListViewEntities.currentIndex = index
                 }
+                Keys.forwardTo: container
             }
             Column {
                 id: columnItem
@@ -895,7 +899,22 @@ PageServicesSignForm {
                     font.capitalization: Font.MixedCase
                 }
             }
-
+            function focusForward(){
+                checkboxSel.focus = true
+                if (propertyListViewEntities.currentIndex == propertyListViewEntities.count - 1) {
+                    propertyPDFPreview.forceActiveFocus()
+                }else{
+                    propertyListViewEntities.currentIndex++
+                }
+            }
+            function focusBackward(){
+                checkboxSel.focus = true
+                if(propertyListViewEntities.currentIndex == 0){
+                    propertySwitchSignAdd.forceActiveFocus()
+                }else{
+                    propertyListViewEntities.currentIndex--
+                }
+            }
         }
     }
 
@@ -1685,6 +1704,10 @@ PageServicesSignForm {
             if(callingObject === propertyTitleHelp && !propertyFlickable.atYEnd){
                 propertyFlickable.flick(0, - getMaxFlickVelocity())
             }
+            else if(callingObject === attributeListDelegate
+                    && !propertyFlickable.atYBeginning){
+                propertyFlickable.flick(0, Constants.FLICK_Y_VELOCITY_ATTR_LIST);
+            }
             else if(!propertyFlickable.atYBeginning)
                 propertyFlickable.flick(0, Constants.FLICK_Y_VELOCITY)
             break;
@@ -1707,6 +1730,10 @@ PageServicesSignForm {
             else if(callingObject === propertyListViewEntities 
                     && !propertyFlickable.atYBeginning){
                 propertyFlickable.flick(0, getMaxFlickVelocity());
+            }
+            else if(callingObject === attributeListDelegate
+                    && !propertyFlickable.atYEnd){
+                propertyFlickable.flick(0, - Constants.FLICK_Y_VELOCITY_ATTR_LIST);
             }
             else if(!propertyFlickable.atYEnd)
                 propertyFlickable.flick(0, - Constants.FLICK_Y_VELOCITY)
