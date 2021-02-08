@@ -25,7 +25,7 @@ namespace eIDMW
 
 
     //Implemented in CurlProxy.cpp
-    extern void curl_apply_proxy_settings(CURL * curl_handle);
+    extern void curl_apply_proxy_settings(CURL * curl_handle, const char * url);
 
 
 static size_t curl_write_data(char *ptr, size_t size, size_t nmemb, void * stream) {
@@ -130,7 +130,7 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
 
         curl_easy_setopt(curl, CURLOPT_TIMEOUT, DEFAULT_NETWORK_TIMEOUT);
 
-        curl_apply_proxy_settings(curl);
+        curl_apply_proxy_settings(curl, endpoint_url);
 
         /* send all data to this function  */
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_write_data);

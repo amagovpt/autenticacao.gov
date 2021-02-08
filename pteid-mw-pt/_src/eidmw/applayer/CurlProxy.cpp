@@ -10,7 +10,7 @@
 
 namespace eIDMW {
 
-    void curl_apply_proxy_settings(CURL * curl_handle) {
+    void curl_apply_proxy_settings(CURL * curl_handle, const char * url) {
 
         std::string pac_proxy_host;
         std::string pac_proxy_port;
@@ -21,7 +21,7 @@ namespace eIDMW {
         if (proxy_pac != NULL && strlen(proxy_pac) > 0)
         {
             MWLOG(LEV_DEBUG, MOD_APL, "curl_apply_proxy using Proxy PAC");
-            GetProxyFromPac(proxy_pac, TSA_URL, &pac_proxy_host, &pac_proxy_port);
+            GetProxyFromPac(proxy_pac, url, &pac_proxy_host, &pac_proxy_port);
             MWLOG(LEV_DEBUG, MOD_APL, "curl_apply_proxy using Proxy host: %s port: %s", pac_proxy_host.c_str(), pac_proxy_port.c_str());
         }
     #endif
