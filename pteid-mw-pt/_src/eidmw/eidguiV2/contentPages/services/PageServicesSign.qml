@@ -113,8 +113,10 @@ PageServicesSignForm {
             propertyItemOptions.height = propertyOptionsHeight
 
             // Scroll down to see attributes rectangle
-            if(propertyFlickable.contentHeight > propertyFlickable.height)
-                propertyFlickable.flick(0, - getMaxFlickVelocity())
+            if (!propertyFlickable.atYEnd) {
+                var velocity = Math.min(getMaxFlickVelocity(), Constants.FLICK_Y_VELOCITY_MAX_ATTR_LIST)
+                propertyFlickable.flick(0, - velocity)
+            }
         }
         onSignalPdfSignSucess: {
             signsuccess_dialog.open()
