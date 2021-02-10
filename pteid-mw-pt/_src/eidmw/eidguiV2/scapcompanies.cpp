@@ -59,7 +59,8 @@ std::vector<ns2__AttributesType *> loadCacheFile(QString &filePath) {
 
     //Remove malformed elements contained in the cache file (returned by service response)
     attributesType.erase(
-        std::remove_if(attributesType.begin(), attributesType.end(), [] (ns2__AttributesType *attr) { return attr->ATTRSupplier == NULL; } ),
+        std::remove_if(attributesType.begin(), attributesType.end(), [] (ns2__AttributesType *attr) 
+            { return attr->ATTRSupplier == NULL || attr->ResponseResult->ResultCode != "200" ;} ),
         attributesType.end());
     
     return attributesType;

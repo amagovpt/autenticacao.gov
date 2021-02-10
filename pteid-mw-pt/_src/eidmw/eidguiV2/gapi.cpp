@@ -2319,6 +2319,9 @@ void GAPI::getSCAPEntities() {
 std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, bool isShortDescription) {
     std::vector<std::string> childrensList;
 
+    if (attributes->SignedAttributes == NULL){
+            return childrensList;
+    }
     std::vector<ns5__SignatureType *> signatureAttributeList = attributes->SignedAttributes->ns3__SignatureAttribute;
 
     for (uint i = 0; i < signatureAttributeList.size(); i++) {
