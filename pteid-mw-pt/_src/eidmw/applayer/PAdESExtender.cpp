@@ -417,7 +417,7 @@ namespace eIDMW
                 
             }
             else {
-                MWLOG(LEV_WARN, MOD_APL, "### %s: Couldn't find issuer for signing cert. Revocation info is going to be fetched from CRL", __FUNCTION__);
+                MWLOG(LEV_WARN, MOD_APL, "%s: Couldn't find issuer for signing cert. Revocation info is going to be fetched from CRL", __FUNCTION__);
             }
 
             if (status == FWK_CERTIF_STATUS_VALID) {
@@ -433,12 +433,12 @@ namespace eIDMW
             }
             if (status == FWK_CERTIF_STATUS_REVOKED || status == FWK_CERTIF_STATUS_SUSPENDED)
             {
-                MWLOG(LEV_ERROR, MOD_APL, "### %s: OCSP validation: revoked certificate", __FUNCTION__);
+                MWLOG(LEV_ERROR, MOD_APL, "%s: OCSP validation: revoked certificate", __FUNCTION__);
                 success = false;
                 goto cleanup;
             }
             else if (status == FWK_CERTIF_STATUS_UNKNOWN) {
-                MWLOG(LEV_WARN, MOD_APL, "### %s: OCSP server returned unknown status so it's either a server error or the request is buggy or uses unsupported algorithm/feature", __FUNCTION__);
+                MWLOG(LEV_WARN, MOD_APL, "%s: OCSP server returned unknown status so it's either a server error or the request is buggy or uses unsupported algorithm/feature", __FUNCTION__);
                 success = false;
                 goto cleanup;
             }
