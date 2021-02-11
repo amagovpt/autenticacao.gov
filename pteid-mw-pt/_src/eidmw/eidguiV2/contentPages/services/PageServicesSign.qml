@@ -1320,6 +1320,7 @@ PageServicesSignForm {
                         propertyPDFPreview.propertyBackground.cache = false
                         propertyPDFPreview.propertyBackground.source =
                                 "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
+                        propertyPDFPreview.propertyFileName = Functions.fileBaseName(loadedFilePath)
                         propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
                     }else{
                         filesModel.remove(propertyListViewFiles.count-1)

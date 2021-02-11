@@ -48,6 +48,7 @@ Rectangle {
     property real stepSizeY : height * 0.1
 
     property bool sealHasChanged: false
+    property string propertyFileName: ""
 
     color: Constants.COLOR_MAIN_SOFT_GRAY
 
@@ -86,8 +87,10 @@ Rectangle {
     }
 
     Accessible.role: Accessible.Canvas
-    Accessible.name: !sealHasChanged ? qsTranslate("PageServicesSign", "STR_SIGN_NAV_DESCRIPTION") : ""
-    
+    Accessible.name: qsTranslate("PageServicesSign", "STR_SIGN_NAV_FILE_PREVIEW")
+                     + propertyFileName + "."
+                     + qsTranslate("PageServicesSign", "STR_SIGN_NAV_DESCRIPTION")
+
     DropArea {
         id: dragTarget
         width: parent.width

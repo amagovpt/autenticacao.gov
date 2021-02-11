@@ -1935,6 +1935,10 @@
         <source>STR_SIGN_ADVANCED_OPTIONS</source>
         <translation>Advanced options</translation>
     </message>
+    <message>
+        <source>STR_SIGN_NAV_FILE_PREVIEW</source>
+        <translation>Preview of file: </translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>

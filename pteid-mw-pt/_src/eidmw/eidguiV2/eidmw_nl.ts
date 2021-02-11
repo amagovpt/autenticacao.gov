@@ -1933,6 +1933,10 @@
         <source>STR_SIGN_ADVANCED_OPTIONS</source>
         <translation>Opções avançadas</translation>
     </message>
+    <message>
+        <source>STR_SIGN_NAV_FILE_PREVIEW</source>
+        <translation>Pré-visualização do ficheiro: </translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>
