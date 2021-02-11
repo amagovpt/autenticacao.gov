@@ -465,12 +465,6 @@ PageDefinitionsSCAPForm {
         }
     }
 
-    propertyListViewEntities{
-        onFocusChanged: {
-            if(propertyListViewEntities.focus)propertyListViewEntities.currentIndex = 0
-        }
-    }
-
     Component {
         id: attributeListDelegateEntities
         Rectangle {

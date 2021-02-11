@@ -154,6 +154,7 @@ Item {
 
                         function focusNextVisibleElement(){
                             if (listViewEntities.count > 0) {
+                                listViewEntities.currentIndex = 0
                                 listViewEntities.forceActiveFocus()
                             }
                             else if (propertyPageLoader.propertyBackupFromSignaturePage) {
