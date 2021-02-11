@@ -78,12 +78,6 @@ Rectangle {
         visible: false
         Accessible.role: Accessible.StaticText
         Accessible.name: text
-
-        Keys.onPressed: {
-            if (pdfPreview.focus === false) {
-                pdfPreview.forceActiveFocus()
-            }
-        }
     }
 
     Accessible.role: Accessible.Canvas
@@ -377,17 +371,26 @@ Rectangle {
     // after the user changed the position of the signature seal.
     // Other approaches included using a Slider Component
     // or Text component with Accessible.role: Accessible.Indicator however the screen reader
-    // does not automatically utter the change so we had to fallback to change the focus to utter the position
+    // does not automatically utter the change so we had to fallback to change the focus with a Timer to utter the position
     function toggleFocus() {
-        if (!sealHasChanged) {
-            sealHasChanged = true
-        }
-        if (pdfPreview.focus === true) {
+        dummyText.forceActiveFocus()
+        console.log("Signature Preview: " + positionText.text)
+    }
+    Timer {
+        id: delayFocusPositionText
+        interval: 20
+        repeat: false
+        running: false
+        onTriggered: {
             positionText.forceActiveFocus()
-            console.log("Signature Preview: " + positionText.text)
-        } else {
-            pdfPreview.forceActiveFocus()
         }
+    }
+    Text {
+        id: dummyText
+        text: ""
+        visible: false
+        Accessible.name: text
+        onFocusChanged: if (activeFocus) delayFocusPositionText.start()
     }
 
     function getData(){
