@@ -44,8 +44,8 @@ Rectangle {
     property real propertyPdfOriginalWidth: 0
     property real propertyPdfOriginalHeight: 0
 
-    property real stepSizeX : 5.0
-    property real stepSizeY : 10.0
+    property real stepSizeX : width * 0.1
+    property real stepSizeY : height * 0.1
 
     property bool sealHasChanged: false
 
