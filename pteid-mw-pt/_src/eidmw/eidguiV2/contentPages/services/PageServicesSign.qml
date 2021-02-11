@@ -841,7 +841,7 @@ PageServicesSignForm {
             width: parent.width
             height: entityText.contentHeight + Constants.SIZE_TEXT_V_SPACE
             Keys.onSpacePressed: {
-                checkboxSel.focus = true
+                checkboxSel.checked = !checkboxSel.checked
             }
             Keys.onTabPressed: {
                 focusForward();
@@ -869,6 +869,7 @@ PageServicesSignForm {
 
             Accessible.role: Accessible.CheckBox
             Accessible.name: Functions.filterText(entityText.text)
+            Accessible.checked: checkboxSel.checked
 
             CheckBox {
                 id: checkboxSel
