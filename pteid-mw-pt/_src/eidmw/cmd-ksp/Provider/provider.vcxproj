@@ -216,6 +216,11 @@
     <ClInclude Include="..\Inc\log.h" />
     <ClInclude Include="language.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="cmdKsp.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

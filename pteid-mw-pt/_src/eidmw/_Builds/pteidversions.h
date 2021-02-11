@@ -4,6 +4,7 @@
  * Copyright (C) 2011-2014, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2012 lmcm - <lmcm@caixamagica.pt>
  * Copyright (C) 2018-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2021 Miguel Figueira - <miguel.figueira@caixamagica.pt>m>
  *
  * Licensed under the EUPL V.1.2
 
@@ -108,5 +109,12 @@
 #define WIN_PKCS11_VERSION2          BASE_VERSION2          
 #define WIN_PKCS11_VERSION3          BASE_VERSION3          
 #define WIN_PKCS11_VERSION4          REVISION_NUM
+
+// CMDKSP
+#define WIN_CMDKSP_VERSION_STRING    BASE_VERSION_STRING REVISION_NUM_STRING
+#define WIN_CMDKSP_VERSION1          BASE_VERSION1          
+#define WIN_CMDKSP_VERSION2          BASE_VERSION2          
+#define WIN_CMDKSP_VERSION3          BASE_VERSION3          
+#define WIN_CMDKSP_VERSION4          REVISION_NUM
 
 #endif //__PTEID_VERSION_H__
