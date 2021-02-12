@@ -2467,8 +2467,10 @@ bool isAttributeExpired(std::string& date, std::string& supplier) {
             return false;
     }
 
+    std::string today;
     const char * format = "%Y-%m-%d"; // xsd:date format
-    bool isExpired = !CTimestampUtil::checkTimestamp(date, format);
+    CTimestampUtil::getTimestamp(today,0L,format);
+    bool isExpired = today.compare(date) > 0; // today is after validity -> expired
     if (isExpired) {
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui",
             "getSCAPAttributesFromCache: Attribute supplied by: '%s' may be expired -> '%s'", supplier.c_str(), date.c_str());
@@ -2525,8 +2527,10 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
     else if (scapAttrType == ScapAttrAll)
         emit signalAttributesLoaded(attribute_list);
 
-    if (!possiblyExpiredSuppliers.empty())
+    if (!possiblyExpiredSuppliers.empty()) {
+        possiblyExpiredSuppliers.removeDuplicates();
         emit signalAttributesPossiblyExpired(possiblyExpiredSuppliers);
+    }
 }
 
 void GAPI::removeSCAPAttributesFromCache(int scapAttrType) {
