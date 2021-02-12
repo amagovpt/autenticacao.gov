@@ -1042,6 +1042,19 @@ unsigned int PDFDoc::getSignedVersionLen()
 	return preparedSigLength;
 }
 
+GBool PDFDoc::containsXfaForm() {
+	Object * acroForm = NULL;
+	Object xfa;
+	GBool res = gFalse;
+	if ((acroForm = getCatalog()->getAcroForm())->isDict()) {
+		acroForm->dictLookup("XFA", &xfa);
+		res = xfa.isStream() || xfa.isArray();
+		xfa.free();
+	}
+	
+	return res;
+}
+
 
 Links *PDFDoc::getLinks(int page) {
   Page *p = getPage(page);

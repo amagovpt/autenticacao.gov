@@ -237,9 +237,13 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
 #endif
 
   // Is the file encrypted?
-  GBool isEncrypted() { return xref->isEncrypted(); }
+  POPPLER_API GBool isEncrypted() { return xref->isEncrypted(); }
 
-  /* PTEID-Changes */
+  /* pteid-mw - New functions that are absent from upstream Poppler */
+
+  // Whether the file contains a form of type XFA (XML Forms Architecture) - only supported by Adobe products ?
+  POPPLER_API GBool containsXfaForm();
+
   // Is the file signed?
   POPPLER_API GBool isSigned();
   POPPLER_API unsigned long getSigByteArray(unsigned char **byte_array, bool incremental);
