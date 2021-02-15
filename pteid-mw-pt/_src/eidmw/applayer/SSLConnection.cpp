@@ -1292,10 +1292,13 @@ void SSLConnection::read_chunked_reply(SSL *ssl, NetworkBuffer *net_buffer, bool
 			//Double the buffer length
 			current_buf_length *= 2;
 
+			MWLOG(LEV_DEBUG, MOD_APL, "Double the buffer length (size=%d): ", current_buf_length);
+
 			net_buffer->buf = (char*)realloc(net_buffer->buf, current_buf_length);
 			net_buffer->buf_size = current_buf_length;
 			if (!net_buffer->buf) {
 				fprintf(stderr, "Critical error: out of memory!\n");
+				MWLOG(LEV_ERROR, MOD_APL, "Critical error: out of memory!");
 				exit(1);
 			}
 			buffer = net_buffer->buf;
@@ -1303,6 +1306,8 @@ void SSLConnection::read_chunked_reply(SSL *ssl, NetworkBuffer *net_buffer, bool
 
     }
     while(bytes_read == 0 || !final_chunk_read);
+
+	MWLOG(LEV_DEBUG, MOD_APL, "Server chunked reply (size=%d): ", bytes_read);
 
     //Extract the HTTP body of the chunked message
     parse_http_chunked_body(net_buffer);

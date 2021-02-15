@@ -92,9 +92,10 @@ namespace eIDMW
 			MWLOG(LEV_DEBUG, MOD_APL, "ScapSSLConnection: server response is chunked, trying read_chunked_reply()");
 			read_chunked_reply(m_ssl_connection, &buffer, true);
 
+		} else {
+			MWLOG(LEV_DEBUG, MOD_APL, "Server reply (size=%d): ", bytes_read);
 		}
 
-		MWLOG(LEV_DEBUG, MOD_APL, "Server reply (size=%d): \n", bytes_read);
 		if (bytes_read > 0) {
 			char * http_status = get_status_line(buffer.buf);
 			MWLOG(LEV_DEBUG, MOD_APL, "Server returned HTTP status: %s", http_status);
