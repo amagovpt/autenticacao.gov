@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
@@ -41,7 +41,13 @@ Window {
         name: "Lato" // This avoids printing error on application start
         source: controler.getFontFile("lato")
      }
-    
+
+
+
+
+
+
+
     onWidthChanged: {
         //console.log("Resizing app width: " + width + "height" + height)
         mainFormID.propertyMainMenuView.width = Functions.getMainMenuWidth(width)
@@ -1211,7 +1217,6 @@ Load language error. Please reinstall the application"
                 }
             },
             Transition {
-                from: Constants.MenuState.NORMAL
                 to: Constants.MenuState.EXPAND
                 NumberAnimation
                 {
@@ -1230,6 +1235,15 @@ Load language error. Please reinstall the application"
                     easing.type: Easing.Linear
                     to: Constants.COLOR_MAIN_DARK_GRAY;
                     duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+                }
+                NumberAnimation
+                {
+                    id: animationExpandMainMenuPagesWidth
+                    target: mainFormID.propertyMainMenuView
+                    property: "width"
+                    easing.type: Easing.OutQuad
+                    to: mainFormID.propertyMainView.width * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE;
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_MOVE_VIEW : 0
                 }
                 NumberAnimation
                 {
@@ -1355,19 +1369,10 @@ Load language error. Please reinstall the application"
                 mainFormID.propertyTitleBarContainer.propertyTitleBar.color = Constants.COLOR_TITLEBAR_DEBUG
             }
 
-            // Take shortcut to submenu
-            if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignSimple) {
+            // Take shortcut to signature page
+            if (gapi.getShortcutFlag() == GAPI.ShortcutIdSign) {
                 mainFormID.propertShowAnimation = false
-                mainMenuPressed(1)
-                subMenuPressed(1, "contentPages/services/PageServicesSignSimple.qml")
-                //TODO: we shouldn't need this to make sure the contentPage gets the expanded space
-                mainWindow.setWidth(Constants.SCREEN_MINIMUM_WIDTH + 1)
-                mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
-                return
-            } else if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignAdvanced) {
-                mainFormID.propertShowAnimation = false
-                mainMenuPressed(1)
-                subMenuPressed(2, "contentPages/services/PageServicesSignAdvanced.qml")
+                mainMenuPressed(Constants.MAIN_MENU_SIGN_PAGE_INDEX)
                 //TODO: we shouldn't need this to make sure the contentPage gets the expanded space
                 mainWindow.setWidth(Constants.SCREEN_MINIMUM_WIDTH + 1)
                 mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
@@ -1457,6 +1462,13 @@ Load language error. Please reinstall the application"
                 mainMenuPressed(index)
             }
 
+
+
+
+
+
+
+
             MouseArea {
                 id: mouseAreaMainMenu
                 anchors.fill: parent
@@ -1498,6 +1510,14 @@ Load language error. Please reinstall the application"
                     }
                 }
             }
+
+
+
+
+
+
+
+
 
             Text {
                 id: textMain
@@ -1877,62 +1897,67 @@ Load language error. Please reinstall the application"
         mainFormID.propertyMainMenuBottomListView.currentIndex = -1
         mainFormID.propertyMainMenuListView.currentIndex = index
 
-        // Clear list model and then load a new sub menu
+        // Clear the sub menu
         mainFormID.propertySubMenuListView.model.clear()
-        for(var i = 0; i < mainFormID.propertyMainMenuListView.model.get(index).subdata.count; ++i) {
-            /*console.log("Sub Menu indice " + i + " - "
-                        + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name + " - "
-                        + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).expand + " - "
-                        + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).url)*/
-            mainFormID.propertySubMenuListView.model
-            .append({
-                        "subName": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name,
-                        "expand": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).expand,
-                        "url": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).url
-                    })
-        }
-        // Open the content page of the first item of the new sub menu
-        mainFormID.propertyPageLoader.propertyForceFocus = false
-        mainFormID.propertyPageLoader.source =
-                mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
-        mainFormID.propertySubMenuListView.currentIndex = 0
-        /* Setting the state should be done after setting the source: changing the state causes the PDFPreview to call 
-           another (unnecessary) requestPixmap if the signature pages are loaded. */
-        mainFormID.state = Constants.MenuState.NORMAL
 
-        /*console.log("Main Menu index = " + index);
-        console.log("Set focus sub menu")
-        console.log("Sub menu count" + mainFormID.propertySubMenuListView.count)*/
-        mainFormID.propertySubMenuListView.forceActiveFocus()
+        if(mainFormID.propertyMainMenuListView.model.get(index).expand === true){
+            mainFormID.propertyPageLoader.propertyForceFocus = true
+            mainFormID.state = Constants.MenuState.EXPAND
+            mainFormID.propertyPageLoader.source =
+                    mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
+        }else{
+            // Load a new sub menu
+            for(var i = 0; i < mainFormID.propertyMainMenuListView.model.get(index).subdata.count; ++i) {
+                /*console.log("Sub Menu indice " + i + " - "
+                            + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name + " - "
+                            + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).expand + " - "
+                            + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).url)*/
+                mainFormID.propertySubMenuListView.model
+                .append({
+                            "subName": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name,
+                            "expand": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).expand,
+                            "url": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).url
+                        })
+            }
+
+            // Open the content page of the first item of the new sub menu
+            mainFormID.propertyPageLoader.propertyForceFocus = false
+            mainFormID.propertyPageLoader.source =
+                    mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
+            mainFormID.propertySubMenuListView.currentIndex = 0
+            /* Setting the state should be done after setting the source: changing the state causes the PDFPreview to call
+               another (unnecessary) requestPixmap if the signature pages are loaded. */
+            mainFormID.state = Constants.MenuState.NORMAL
+
+            /*console.log("Main Menu index = " + index);
+            console.log("Set focus sub menu")
+            console.log("Sub menu count" + mainFormID.propertySubMenuListView.count)*/
+            mainFormID.propertySubMenuListView.forceActiveFocus()
+
+        }
     }
 
     function subMenuPressed(index, url){
         // if there are unsaved notes
         if(handleUnsavedNotes(index,url,Constants.SUB_MENU_PRESSED)){
             return
-        } 
+        }
 
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         mainFormID.propertySubMenuListView.currentIndex = index
         console.log("Sub Menu index = " + index);
-        console.log("Sub Menu Pressed Expand Sub Menu" + mainFormID.propertySubMenuListView.model.get(0).expand)
 
-        if(mainFormID.propertySubMenuListView.model.get(index).expand === true){
-            // Clean the content page
-            mainFormID.propertyPageLoader.propertyForceFocus = false
-            mainFormID.state = Constants.MenuState.EXPAND
-            mainFormID.propertyPageLoader.source = url
-        }else{
-            mainFormID.propertyPageLoader.propertyForceFocus = true
-            //var temp = url
-            mainFormID.propertyPageLoader.source = ""
-            mainFormID.propertyPageLoader.source = url
-            /* Setting the state should be done after setting the source: changing the state causes the PDFPreview to call 
-                another (unnecessary) requestPixmap if the signature pages are loaded. */
-            mainFormID.state = Constants.MenuState.NORMAL
+        // Clean the content page
+        mainFormID.propertyPageLoader.propertyForceFocus = true
+        //var temp = url
+        mainFormID.propertyPageLoader.source = ""
+        mainFormID.propertyPageLoader.source = url
+        /* Setting the state should be done after setting the source: changing the state causes the PDFPreview to call
+                        another (unnecessary) requestPixmap if the signature pages are loaded. */
+        mainFormID.state = Constants.MenuState.NORMAL
 
-        }
     }
+
     function mainMenuBottomPressed(index){
         // if there are unsaved notes
         if(handleUnsavedNotes(index,"",Constants.MAIN_BOTTOM_MENU_PRESSED)){

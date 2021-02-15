@@ -21,7 +21,7 @@ import "../../components" as Components
 //Import C++ defined enums
 import eidguiV2 1.0
 
-PageServicesSignAdvancedForm {
+PageServicesSignForm {
 
     property bool isAnimationFinished: mainFormID.propertyPageLoader.propertyAnimationExtendedFinished
     property string propertyOutputSignedFile : ""
@@ -69,13 +69,9 @@ PageServicesSignAdvancedForm {
     }
 
     Keys.onPressed: {
-        console.log("PageServicesSignAdvancedForm onPressed:" + event.key)
+        console.log("PageServicesSignForm onPressed:" + event.key)
+        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
 
-        if(propertyListViewEntities.focus === false){
-            Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
-        } else {
-            propertyPDFPreview.forceActiveFocus()
-        }
         // CTRL + V
         if ((event.key == Qt.Key_V) && (event.modifiers & Qt.ControlModifier)){
             filesArray = controler.getFilesFromClipboard();
@@ -113,6 +109,14 @@ PageServicesSignAdvancedForm {
             entityAttributesModel.count > 0
                     ? propertyListViewEntities.forceActiveFocus()
                     : propertyTextAttributesMsg.forceActiveFocus()
+
+            propertyItemOptions.height = propertyOptionsHeight
+
+            // Scroll down to see attributes rectangle
+            if (!propertyFlickable.atYEnd) {
+                var velocity = Math.min(getMaxFlickVelocity(), Constants.FLICK_Y_VELOCITY_MAX_ATTR_LIST)
+                propertyFlickable.flick(0, - velocity)
+            }
         }
         onSignalAttributesPossiblyExpired: {
             var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
@@ -314,6 +318,7 @@ PageServicesSignAdvancedForm {
                         propertyPageLoader.propertyBackupCoordX * propertyPageLoader.propertyBackupBackgroundWidth,
                         propertyPageLoader.propertyBackupCoordY * propertyPageLoader.propertyBackupBackgroundHeight)
 
+            propertyPDFPreview.forceActiveFocus()
         }
     }
 
@@ -627,13 +632,67 @@ PageServicesSignAdvancedForm {
             mainFormID.propertyPageLoader.forceActiveFocus()
         }
     }
+    propertyButtonArrowHelp {
+        onClicked: Functions.showHelp(!propertyShowHelp)
+    }
+    propertyArrowHelpMouseArea {
+        onClicked: Functions.showHelp(!propertyShowHelp)
+    }
+
+    PropertyAnimation {
+        id: expandAnimation
+        target: propertyRectHelp
+        properties: "height"
+        to: Constants.HEIGHT_HELP_EXPANDED
+        duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+    }
+    PropertyAnimation {
+        id: collapseAnimation
+        target: propertyRectHelp
+        properties: "height"
+        to: Constants.HEIGHT_HELP_COLLAPSED
+        duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+    }
+
+    propertyButtonArrowOptions {
+        onClicked: Functions.showOptions(!propertyShowOptions)
+    }
+    propertyArrowOptionsMouseArea {
+        onClicked: Functions.showOptions(!propertyShowOptions)
+    }
+
+    PropertyAnimation {
+        id: expandAnimationOptions
+        target: propertyItemOptions
+        properties: "height"
+        to: propertyOptionsHeight
+        duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+        onRunningChanged: {
+            // Scroll down to see attributes rectangle
+            if (!expandAnimationOptions.running
+                    && propertyFlickable.contentHeight > propertyFlickable.height){
+                propertyFlickable.flick(0, - getMaxFlickVelocity())
+            }
+        }
+    }
+    PropertyAnimation {
+        id: collapseAnimationOptions
+        target: propertyItemOptions
+        properties: "height"
+        to: 0
+        duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+    }
+
     propertyMouseAreaToolTipPades{
         onEntered: {
             tooltipExitTimer.stop()
             controlToolTip.close()
             controlToolTip.text = qsTranslate("PageServicesSign","STR_SIGN_PDF_FILES")
-            controlToolTip.x = propertyMouseAreaToolTipPadesX - controlToolTip.width * 0.5
-            controlToolTip.y = propertyMouseAreaToolTipY + 22
+            controlToolTip.x = propertyRadioButtonPADES.mapToItem(controlToolTip.parent,0,0).x
+                    + propertyRadioButtonPADES.width + Constants.SIZE_IMAGE_TOOLTIP * 0.5
+                    - controlToolTip.width * 0.5
+            controlToolTip.y = propertyRadioButtonPADES.mapToItem(controlToolTip.parent,0,0).y
+                    - controlToolTip.height - Constants.SIZE_SPACE_IMAGE_TOOLTIP
             controlToolTip.open()
         }
         onExited: {
@@ -645,8 +704,11 @@ PageServicesSignAdvancedForm {
             tooltipExitTimer.stop()
             controlToolTip.close()
             controlToolTip.text = qsTranslate("PageServicesSign","STR_SIGN_PACKAGE")
-            controlToolTip.x = propertyMouseAreaToolTipXadesX - controlToolTip.width * 0.5
-            controlToolTip.y = propertyMouseAreaToolTipY + 22
+            controlToolTip.x = propertyRadioButtonXADES.mapToItem(controlToolTip.parent,0,0).x
+                    + propertyRadioButtonXADES.width + Constants.SIZE_IMAGE_TOOLTIP * 0.5
+                    - controlToolTip.width * 0.5
+            controlToolTip.y = propertyRadioButtonXADES.mapToItem(controlToolTip.parent,0,0).y
+                    - controlToolTip.height - Constants.SIZE_SPACE_IMAGE_TOOLTIP
             controlToolTip.open()
         }
         onExited: {
@@ -658,8 +720,11 @@ PageServicesSignAdvancedForm {
             tooltipExitTimer.stop()
             controlToolTip.close()
             controlToolTip.text = qsTranslate("PageServicesSign","STR_LTV_TOOLTIP")
-            controlToolTip.x = propertyMouseAreaToolTipLTVX - controlToolTip.width * 0.5
-            controlToolTip.y = propertyCheckboxLTV.mapToItem(controlToolTip.parent,0,0).y - controlToolTip.height
+            controlToolTip.x = propertyCheckboxLTV.mapToItem(controlToolTip.parent,0,0).x
+                    + propertyCheckboxLTV.width + Constants.SIZE_IMAGE_TOOLTIP * 0.5
+                    - controlToolTip.width * 0.5
+            controlToolTip.y = propertyCheckboxLTV.mapToItem(controlToolTip.parent,0,0).y
+                    - controlToolTip.height - Constants.SIZE_SPACE_IMAGE_TOOLTIP
             controlToolTip.open()
         }
         onExited: {
@@ -691,8 +756,6 @@ PageServicesSignAdvancedForm {
             propertyPageLoader.propertyBackupCoordY = propertyPDFPreview.propertyDragSigRect.y / propertyPDFPreview.propertyBackground.height
 
             updateUploadedFiles(filesArray)
-            // Force scroll and focus to the last item addded
-            forceScrollandFocus()
         }
         onExited: {
             console.log ("onExited");
@@ -707,9 +770,6 @@ PageServicesSignAdvancedForm {
         }
         onDropped: {
             updateUploadedFiles(filesArray)
-
-            // Force scroll and focus to the last item addded
-            forceScrollandFocus()
         }
         onExited: {
             console.log ("onExited");
@@ -801,18 +861,30 @@ PageServicesSignAdvancedForm {
         id: attributeListDelegate
         Rectangle {
             id: container
-            width: parent.width - Constants.SIZE_ROW_H_SPACE
-            height: columnItem.height + 15
+            width: parent.width
+            height: entityText.contentHeight + Constants.SIZE_TEXT_V_SPACE
             Keys.onSpacePressed: {
-                checkboxSel.focus = true
+                checkboxSel.checked = !checkboxSel.checked
             }
             Keys.onTabPressed: {
-                checkboxSel.focus = true
-                if(propertyListViewEntities.currentIndex == propertyListViewEntities.count -1){
-                    propertyPDFPreview.forceActiveFocus()
-                }else{
-                    propertyListViewEntities.currentIndex++
-                }
+                focusForward();
+                handleKeyPressed(event.key, attributeListDelegate)
+            }
+            Keys.onDownPressed: {
+                focusForward();
+                handleKeyPressed(event.key, attributeListDelegate)
+            }
+            Keys.onBacktabPressed: {
+                focusBackward();
+                handleKeyPressed(event.key, attributeListDelegate)
+            }
+            Keys.onUpPressed: {
+                focusBackward();
+                handleKeyPressed(event.key, attributeListDelegate)
+            }
+
+            Component.onCompleted: {
+                propertyListViewHeight += height
             }
 
             color:  propertyListViewEntities.currentIndex === index && propertyListViewEntities.focus
@@ -820,6 +892,7 @@ PageServicesSignAdvancedForm {
 
             Accessible.role: Accessible.CheckBox
             Accessible.name: Functions.filterText(entityText.text)
+            Accessible.checked: checkboxSel.checked
 
             CheckBox {
                 id: checkboxSel
@@ -835,6 +908,7 @@ PageServicesSignAdvancedForm {
                 onFocusChanged: {
                     if(focus) propertyListViewEntities.currentIndex = index
                 }
+                Keys.forwardTo: container
             }
             Column {
                 id: columnItem
@@ -851,7 +925,22 @@ PageServicesSignAdvancedForm {
                     font.capitalization: Font.MixedCase
                 }
             }
-
+            function focusForward(){
+                checkboxSel.focus = true
+                if (propertyListViewEntities.currentIndex == propertyListViewEntities.count - 1) {
+                    propertyPDFPreview.forceActiveFocus()
+                }else{
+                    propertyListViewEntities.currentIndex++
+                }
+            }
+            function focusBackward(){
+                checkboxSel.focus = true
+                if(propertyListViewEntities.currentIndex == 0){
+                    propertySwitchSignAdd.forceActiveFocus()
+                }else{
+                    propertyListViewEntities.currentIndex--
+                }
+            }
         }
     }
 
@@ -913,13 +1002,18 @@ PageServicesSignAdvancedForm {
                                                      GAPI.ScapAttrDescriptionLong)
             }else{
                 console.log("propertySwitchSignAdd not checked")
-                entityAttributesModel.clear()
+
                 propertyCheckSignReduced.enabled = true
                 propertyCheckSignShow.enabled = true
                 propertyRadioButtonXADES.enabled = true
                 propertyTextAttributesMsg.visible = false
                 propertyMouseAreaTextAttributesMsg.enabled = false
                 propertyMouseAreaTextAttributesMsg.z = 0
+
+                entityAttributesModel.clear()
+                propertyListViewHeight = 0
+                propertyItemOptions.height = propertyOptionsHeight
+
                 propertyPDFPreview.forceActiveFocus()
             }
         }
@@ -932,9 +1026,6 @@ PageServicesSignAdvancedForm {
             console.log("Num files: " + propertyFileDialog.files.length)
 
             updateUploadedFiles(propertyFileDialog.files)
-
-            // Force scroll and focus to the last item addded
-            forceScrollandFocus()
         }
         onRejected: {
             console.log("Canceled")
@@ -1145,10 +1236,30 @@ PageServicesSignAdvancedForm {
         id: listViewFilesDelegate
         Rectangle{
             id: rectlistViewFilesDelegate
-            width: parent.width - propertyFilesListViewScroll.width
-                   - Constants.SIZE_ROW_H_SPACE * 0.5
-            color: getColorItem(mouseAreaFileName.containsMouse,
-                                mouseAreaIconDelete.containsMouse)
+            width: parent.width
+            height: parent.height
+            color:  propertyListViewFiles.currentIndex === index && propertyListViewFiles.focus
+                    ? Constants.COLOR_MAIN_DARK_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
+
+            Keys.onSpacePressed: {
+                console.log("Delete file index:" + index);
+                var temp = propertyListViewFiles.currentIndex
+                removeFileFromList(index)
+                if (propertyListViewFiles.currentIndex > 0) {
+                    propertyListViewFiles.currentIndex = temp - 1
+                }
+            }
+            Keys.onTabPressed: {
+                if(propertyListViewFiles.currentIndex == propertyListViewFiles.count -1){
+                    propertyListViewFiles.currentIndex = 0;
+                    handleKeyPressed(event.key, "")
+                    propertyButtonAdd.forceActiveFocus()
+                }else{
+                    propertyListViewFiles.currentIndex++
+                    handleKeyPressed(event.key, "")
+                }
+            }
+
             MouseArea {
                 id: mouseAreaFileName
                 anchors.fill: parent
@@ -1171,7 +1282,7 @@ PageServicesSignAdvancedForm {
                     color: Constants.COLOR_TEXT_BODY
                     wrapMode: Text.WrapAnywhere
                     Component.onCompleted: {
-                        if(fileName.height > iconRemove.height){
+                        if(fileName.paintedHeight > iconRemove.height){
                             rectlistViewFilesDelegate.height = fileName.height + 5
                         }else{
                             rectlistViewFilesDelegate.height = iconRemove.height
@@ -1195,14 +1306,7 @@ PageServicesSignAdvancedForm {
                         hoverEnabled : true
                         onClicked: {
                             console.log("Delete file index:" + index);
-                            gapi.closePdfPreview(filesModel.get(index).fileUrl);
-                            for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
-                            {
-                                if(propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl
-                                        === filesModel.get(index).fileUrl)
-                                    propertyPageLoader.propertyBackupfilesModel.remove(index)
-                            }
-                            filesModel.remove(index)
+                            removeFileFromList(index)
                         }
                     }
                 }
@@ -1239,6 +1343,7 @@ PageServicesSignAdvancedForm {
                         propertyPDFPreview.propertyBackground.cache = false
                         propertyPDFPreview.propertyBackground.source =
                                 "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
+                        propertyPDFPreview.propertyFileName = Functions.fileBaseName(loadedFilePath)
                         propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
                     }else{
                         filesModel.remove(propertyListViewFiles.count-1)
@@ -1259,7 +1364,7 @@ PageServicesSignAdvancedForm {
                 }else{
                     propertyTextDragMsgImg.visible = true
                 }
-                propertyTitleConf.forceActiveFocus()
+                propertyListViewFiles.forceActiveFocus()
             }
         }
     }
@@ -1323,6 +1428,27 @@ PageServicesSignAdvancedForm {
         }else{
             propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
         }
+
+        if (gapi.getShortcutFlag() == GAPI.ShortcutIdSign){
+            var paths = gapi.getShortcutPaths()
+            for(var i = 0; i < paths.length; i++) {
+                paths[i] = gapi.getAbsolutePath(paths[i])
+            }
+            updateUploadedFiles(paths)
+
+            propertyTextFieldLocal.text = gapi.getShortcutLocation()
+            propertyTextFieldReason.text = gapi.getShortcutReason()
+            propertySwitchSignTemp.checked = gapi.getShortcutTsa()
+
+            // do not update fields next time (includes input, local, reason, tsa, ...)
+            gapi.setShortcutFlag(GAPI.ShortcutIdNone)
+        }
+
+        if (!propertyShowHelp)
+            propertyRectHelp.height = Constants.HEIGHT_HELP_COLLAPSED
+        if (propertyShowOptions)
+            propertyItemOptions.height = propertyOptionsHeight
+
         gapi.startCardReading()
     }
     Component.onDestruction: {
@@ -1358,42 +1484,11 @@ PageServicesSignAdvancedForm {
         propertyTextFieldLocal.text = propertyPageLoader.propertyBackupReason
         propertyPDFPreview.setSignPreview(propertyPageLoader.propertyBackupCoordX * propertyPDFPreview.propertyBackground.width,propertyPageLoader.propertyBackupCoordY * propertyPDFPreview.propertyBackground.height)
 
-        if (gapi.getShortcutFlag() == GAPI.ShortcutIdSignAdvanced){
-            var paths = gapi.getShortcutPaths()
-            for(var i = 0; i < paths.length; i++) {
-                paths[i] = gapi.getAbsolutePath(paths[i])
-            }
-            updateUploadedFiles(paths)
 
-            propertyTextFieldLocal.text = gapi.getShortcutLocation()
-            propertyTextFieldReason.text = gapi.getShortcutReason()
-            propertySwitchSignTemp.checked = gapi.getShortcutTsa()
-
-            // do not update fields next time (includes input, motive, ...)
-            gapi.setShortcutFlag(0)
-        }
         propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                 qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
     }
 
-    function forceScrollandFocus() {
-        // Force scroll and focus to the last item added
-        propertyListViewFiles.positionViewAtEnd()
-        //propertyListViewFiles.forceActiveFocus()
-        propertyListViewFiles.currentIndex = propertyListViewFiles.count -1
-        if(propertyFilesListViewScroll.position > 0)
-            propertyFilesListViewScroll.active = true
-    }
-    function getColorItem(mouseItem, mouseImage){
-
-        var handColor
-        if(mouseItem || mouseImage){
-            handColor = Constants.COLOR_MAIN_DARK_GRAY
-        }else{
-            handColor = Constants.COLOR_MAIN_SOFT_GRAY
-        }
-        return handColor
-    }
     function getMinimumPage(){
         // Function to detect minimum number of pages of all loaded pdfs to sign
         var minimumPage = 0
@@ -1628,5 +1723,74 @@ PageServicesSignAdvancedForm {
             output += "/"
         }
         return output
+    }
+    function handleKeyPressed(key, callingObject){
+        var direction = getDirection(key)
+        switch(direction){
+        case Constants.DIRECTION_UP:
+            if(callingObject === propertyTitleHelp && !propertyFlickable.atYEnd){
+                propertyFlickable.flick(0, - getMaxFlickVelocity())
+            }
+            else if(callingObject === attributeListDelegate
+                    && !propertyFlickable.atYBeginning){
+                propertyFlickable.flick(0, Constants.FLICK_Y_VELOCITY_ATTR_LIST);
+            }
+            else if(!propertyFlickable.atYBeginning)
+                propertyFlickable.flick(0, Constants.FLICK_Y_VELOCITY)
+            break;
+
+        case Constants.DIRECTION_DOWN:
+            if(callingObject === propertyRadioButtonXADES
+                    && !fileLoaded
+                    && !propertyFlickable.atYBeginning){
+                propertyFlickable.flick(0, getMaxFlickVelocity());
+            }
+            else if(callingObject === propertyButtonSignWithCC
+                    && !propertyButtonSignCMD.enabled
+                    && !propertyFlickable.atYBeginning){
+                propertyFlickable.flick(0, getMaxFlickVelocity());
+            }
+            else if(callingObject === propertyButtonSignCMD 
+                    && !propertyFlickable.atYBeginning){
+                propertyFlickable.flick(0, getMaxFlickVelocity());
+            }
+            else if(callingObject === propertyListViewEntities 
+                    && !propertyFlickable.atYBeginning){
+                propertyFlickable.flick(0, getMaxFlickVelocity());
+            }
+            else if(callingObject === attributeListDelegate
+                    && !propertyFlickable.atYEnd){
+                propertyFlickable.flick(0, - Constants.FLICK_Y_VELOCITY_ATTR_LIST);
+            }
+            else if(!propertyFlickable.atYEnd)
+                propertyFlickable.flick(0, - Constants.FLICK_Y_VELOCITY)
+            break;
+        }
+    }
+    function getDirection(key){
+        var direction = Constants.NO_DIRECTION;
+        if (key == Qt.Key_Backtab || key == Qt.Key_Up || key == Qt.Key_Left){
+            direction = Constants.DIRECTION_UP;
+        }
+        else if (key == Qt.Key_Tab || key == Qt.Key_Down || key == Qt.Key_Right){
+            direction = Constants.DIRECTION_DOWN;
+        }
+        return direction;
+    }
+    function getMaxFlickVelocity(){
+        // use visible area of flickable object to calculate
+        // a smooth flick velocity
+        return 200 + Constants.FLICK_Y_VELOCITY_MAX * (1 - propertyFlickable.visibleArea.heightRatio)
+    }
+
+    function removeFileFromList(index){
+        gapi.closePdfPreview(filesModel.get(index).fileUrl);
+        for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
+        {
+            if(propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl
+                    === filesModel.get(index).fileUrl)
+                propertyPageLoader.propertyBackupfilesModel.remove(index)
+        }
+        filesModel.remove(index)
     }
 }

@@ -246,7 +246,7 @@ public:
 
     enum CmdDialogClass { Sign, RegisterCert, AskToRegisterCert };
 
-    enum ShortcutId { ShortcutIdNone, ShortcutIdSignSimple, ShortcutIdSignAdvanced};
+    enum ShortcutId { ShortcutIdNone, ShortcutIdSign};
 
     enum SignLevel { LevelBasic, LevelTimestamp, LevelLTV };
 

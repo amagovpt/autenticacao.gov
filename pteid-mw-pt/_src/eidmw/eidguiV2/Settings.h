@@ -243,6 +243,23 @@ public:
             }
         }
         //----------------------------------------------------------
+        // check ShowSignatureOptions
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWSIGNOPTIONS);
+            long ShowSignOption = config.getLong();
+            setShowSignatureOptions(ShowSignOption);
+
+        }
+        //----------------------------------------------------------
+        // check ShowSignatureHelp
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWSIGNHELP);
+            long ShowSignatureHelp = config.getLong();
+            setShowSignatureHelp(ShowSignatureHelp);
+        }
+        //----------------------------------------------------------
         // check ShowHelpStartUp
         //----------------------------------------------------------
         {
@@ -758,6 +775,27 @@ public:
         m_test_mode = test_mode;
     }
 
+       /* GUI Signature Options */
+    bool getShowSignatureOptions() {
+        return m_bShowSignatureOptions;
+    }
+
+    void setShowSignatureOptions( bool bShowSignatureOptions ) {
+        m_bShowSignatureOptions = bShowSignatureOptions;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWSIGNOPTIONS);
+        config.setLong(m_bShowSignatureOptions);
+    }
+
+       /* GUI Signature Help */
+    bool getShowSignatureHelp() {
+        return m_bShowSignatureHelp;
+    }
+
+    void setShowSignatureHelp( bool bShowSignatureHelp ) {
+        m_bShowSignatureHelp = bShowSignatureHelp;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWSIGNHELP);
+        config.setLong(m_bShowSignatureHelp);
+    }
 
 private:
     //Proxy Settings
@@ -785,6 +823,8 @@ private:
     bool    m_bAskToRegisterCmdCert;//!< the GUI will ask to register the CMD cert on start (T/F)
     bool    m_bShowPicture;         //!< show the picture (T/F)
     bool    m_bShowNotification;    //!< show the notification (T/F)
+    bool    m_bShowSignatureOptions;//!< show signature options in GUI Signature page (T/F)
+    bool    m_bShowSignatureHelp;   //!< show signature help in GUI Signature page (T/F)
     bool    m_bAutoCardReading;     //!< read the inserted card at startup (T/F)
     bool    m_bAutoStartup;         //!< start the app when windows starts (T/F)
     bool    m_bRegCert;             //!< register certificates on insert (T/F)

@@ -482,6 +482,14 @@
         <source>STR_SCAP_NOT_VALID_ATTRIBUTES</source>
         <translation>One or more selected attributes are not active. Please clear a cache and reload its attributes</translation>
     </message>
+    <message>
+        <source>STR_SIGN_OPEN_HELP</source>
+        <translation>Open help</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_OPTIONS</source>
+        <translation>Open advanced options</translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>
@@ -562,15 +570,15 @@
     </message>
     <message>
         <source>STR_MENU_SIGN_HELP</source>
-        <translation>Help</translation>
+        <translation type="vanished">Help</translation>
     </message>
     <message>
         <source>STR_MENU_SIGN_SIMPLE</source>
-        <translation>Simple</translation>
+        <translation type="vanished">Simple</translation>
     </message>
     <message>
         <source>STR_MENU_SIGN_ADVANCE</source>
-        <translation>Advanced</translation>
+        <translation type="vanished">Advanced</translation>
     </message>
     <message>
         <source>STR_MENU_SECURITY</source>
@@ -1795,7 +1803,7 @@
     </message>
     <message>
         <source>STR_POPUP_FILE_CANCEL</source>
-        <translation>Cancel</translation>
+        <translation type="vanished">Cancel</translation>
     </message>
     <message>
         <source>STR_LOAD_PDF_ERROR_MSG</source>
@@ -1827,20 +1835,20 @@
     </message>
     <message>
         <source>STR_SIGN_TITLE_SIGN</source>
-        <translation>Select signature place</translation>
+        <translation type="vanished">Select signature place</translation>
     </message>
     <message>
         <source>STR_SIGN_TITLE_FILE</source>
-        <translation>Select file</translation>
+        <translation type="vanished">Select file</translation>
     </message>
     <message>
         <source>STR_SIGN_DROP</source>
-        <translation>Drag a file to be signed or click to find a file</translation>
+        <translation type="vanished">Drag a file to be signed or click to find a file</translation>
     </message>
     <message>
         <source>STR_SIGN_ADD_BUTTON</source>
         <oldsource>STR_SIGN_ADD_BUTTON1</oldsource>
-        <translation>Add file</translation>
+        <translation type="vanished">Add file</translation>
     </message>
     <message>
         <source>STR_SIGN_ADD_MULTI_BUTTON</source>
@@ -1916,7 +1924,7 @@
     </message>
     <message>
         <source>STR_SIGN_REMOVE_BUTTON</source>
-        <translation>Remove file</translation>
+        <translation type="vanished">Remove file</translation>
     </message>
     <message>
         <source>STR_SIGN_CARD_BUTTON</source>
@@ -1941,7 +1949,7 @@
     </message>
     <message>
         <source>STR_SIGN_HELP_TOPIC_1</source>
-        <translation>Use the &quot;Simple&quot; menu to sign a PDF document or the &quot;Advanced&quot; menu for other file types and additional options.</translation>
+        <translation type="vanished">Use the &quot;Simple&quot; menu to sign a PDF document or the &quot;Advanced&quot; menu for other file types and additional options.</translation>
     </message>
     <message>
         <source>STR_SIGN_HELP_AUTENTICACAO.GOV_LINK</source>
@@ -1969,7 +1977,7 @@
     </message>
     <message>
         <source>STR_SIGN_ADD_LTV</source>
-        <translation>Add LTV</translation>
+        <translation>Long-Term Validation</translation>
     </message>
     <message>
         <source>STR_LTV_TOOLTIP</source>
@@ -1978,6 +1986,14 @@
     <message>
         <source>STR_SCAP_ATTRS_POSSIBLY_EXPIRED</source>
         <translation>The attributes provided by the following entities may be expired:</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_ADVANCED_OPTIONS</source>
+        <translation>Advanced options</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_NAV_FILE_PREVIEW</source>
+        <translation>Preview of file: </translation>
     </message>
 </context>
 <context>
@@ -2124,6 +2140,10 @@
     <message>
         <source>STR_POPUP_RESTART_NOW</source>
         <translation>Restart now</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_HELP_TITLE</source>
+        <translation type="obsolete">Digital signature</translation>
     </message>
 </context>
 <context>

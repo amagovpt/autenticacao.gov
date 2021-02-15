@@ -233,9 +233,30 @@ function replaceFileSuffix(url, suffix){
 
     return url.substring(0, url.lastIndexOf('/') + 1 ) + filename + suffix
 }
+function fileBaseName(filepath){
+    return filepath.split(/[\\/]/).pop()
+}
 function filterText(text){
     var temp = text.replace(/<[^>]*>/g, '')
     temp = temp.replace(/\*/g, '')
     temp = temp.replace(/\#/g, '')
     return temp
+}
+function showHelp(show) {
+    if(show){
+        expandAnimation.start()
+    } else {
+        collapseAnimation.start()
+    }
+    propertyShowHelp = show
+    controler.setShowSignatureHelp(show)
+}
+function showOptions(show) {
+    if(show){
+        expandAnimationOptions.start()
+    } else {
+        collapseAnimationOptions.start()
+    }
+    propertyShowOptions = show
+    controler.setShowSignatureOptions(show)
 }

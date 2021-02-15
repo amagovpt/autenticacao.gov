@@ -38,10 +38,6 @@
         <file>images/arrow-right_hover.png</file>
         <file>images/arrow-right_white_AMA.png</file>
         <file>qtquickcontrols2.conf</file>
-        <file>contentPages/services/PageServicesSignAdvanced.qml</file>
-        <file>contentPages/services/PageServicesSignAdvancedForm.ui.qml</file>
-        <file>contentPages/services/PageServicesSignSimple.qml</file>
-        <file>contentPages/services/PageServicesSignSimpleForm.ui.qml</file>
         <file>contentPages/definitions/PageDefinitionsApp.qml</file>
         <file>contentPages/definitions/PageDefinitionsAppForm.ui.qml</file>
         <file>contentPages/definitions/PageDefinitionsSignSettings.qml</file>
@@ -88,12 +84,12 @@
         <file>contentPages/definitions/PageDefinitionsSCAP.qml</file>
         <file>contentPages/definitions/PageDefinitionsSCAPForm.ui.qml</file>
         <file>scripts/Functions.js</file>
-        <file>contentPages/services/PageServicesSignHelp.qml</file>
-        <file>contentPages/services/PageServicesSignHelpForm.ui.qml</file>
         <file>appicon.icns</file>
         <file>appicon.ico</file>
         <file>images/arrow-down_hover.png</file>
         <file>images/arrow-down_AMA.png</file>
         <file>components/TextRow.qml</file>
+        <file>contentPages/services/PageServicesSign.qml</file>
+        <file>contentPages/services/PageServicesSignForm.ui.qml</file>
     </qresource>
 </RCC>
