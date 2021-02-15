@@ -242,6 +242,8 @@ public:
 
     enum CardAccessError { NoReaderFound, NoCardFound, CardUnknownCard, PinBlocked, SodCardReadError, CardUserPinCancel, CardUnknownError, CardPinTimeout, IncompatibleReader };
 
+    enum RemoteAddressError { AddressConnectionError, AddressServerError, AddressConnectionTimeout, AddressSmartcardError, AddressUnknownError };
+
     enum SignMessage { SignMessageOK, SignMessageTimestampFailed, SignMessageLtvFailed, SignFilePermissionFailed, PDFFileUnsupported};
 
     enum PrintMessage {NoPrinterAvailable};
@@ -272,6 +274,7 @@ public:
     Q_ENUMS(ScapAttrType)
     Q_ENUMS(ScapAttrDescription)
     Q_ENUMS(CardAccessError)
+    Q_ENUMS(RemoteAddressError)
     Q_ENUMS(eCustomEventType)
     Q_ENUMS(IDInfoKey)
     Q_ENUMS(AddressInfoKey)
@@ -488,6 +491,7 @@ signals:
     void signalSignCertRevoked();
     void signalAddressLoaded(bool m_foreign);
     void signalCardAccessError(int error_code);
+    void signalRemoteAddressError(int error_code);
     void signalGenericError(const QString error_code);
     void signalSaveCardPhotoFinished(bool success);
     void signalPersoDataLoaded(const QString& persoNotes);

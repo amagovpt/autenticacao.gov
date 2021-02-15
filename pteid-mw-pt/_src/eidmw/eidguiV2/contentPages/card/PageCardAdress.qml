@@ -88,6 +88,7 @@ PageCardAdressForm {
             textMessageTop.propertyAccessibleText = Functions.filterText(statusMessage)
             textMessageTop.propertyText.forceActiveFocus()
         }
+
         onSignalAddressShowEmail: {
             rectMessageTopLink.visible = true
             textMessageTop.propertyLinkUrl= 'mailto:cartaodecidadao@irn.mj.pt'
@@ -101,8 +102,67 @@ PageCardAdressForm {
             rectMessageTopLink.visible = true
             textMessageTop.propertyLinkUrl= 'https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao'
         }
+        onSignalRemoteAddressError: {
+            console.log("Card Address onSignalRemoteAddressError: "+ error_code)
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+            var bodyPopup = ""
+            if (error_code == GAPI.AddressConnectionError) {
+                bodyPopup = qsTr("STR_REMOTEADDRESS_NETWORK_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+            }            
+            else if (error_code == GAPI.AddressServerError) {
+                bodyPopup = qsTr("STR_REMOTEADDRESS_SERVER_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+            }            
+            else if (error_code == GAPI.AddressConnectionTimeout) {
+                bodyPopup = qsTr("STR_REMOTEADDRESS_TIMEOUT_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+            }            
+            else if (error_code == GAPI.AddressSmartcardError) {
+                bodyPopup = qsTr("STR_REMOTEADDRESS_SMARTCARD_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+            }
+            else if (error_code == GAPI.AddressCertificateError) {
+                bodyPopup = qsTranslate("GAPI", "STR_CERTIFICATE_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+            }
+            else if (error_code == GAPI.AddressUnknownError) {
+                bodyPopup = qsTr("STR_REMOTEADDRESS_UNKNOWN_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+            }
+            else {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
+            }
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
+
+            propertyDistrict.propertyDateField.text = ""
+            propertyMunicipality.propertyDateField.text = ""
+            propertyParish.propertyDateField.text = ""
+            propertyStreetType.propertyDateField.text = ""
+            propertyStreetName.propertyDateField.text = ""
+            propertyDoorNo.propertyDateField.text = ""
+            propertyFloor.propertyDateField.text = ""
+            propertyPlace.propertyDateField.text = ""
+            propertySide.propertyDateField.text = ""
+            propertyLocality.propertyDateField.text = ""
+            propertyZip4.propertyDateField.text = ""
+            propertyZip3.propertyDateField.text = ""
+            propertyPostalLocality.propertyDateField.text = ""
+            propertyForeignCountry.propertyDateField.text = ""
+            propertyForeignAddress.propertyDateField.text = ""
+            propertyForeignCity.propertyDateField.text = ""
+            propertyForeignRegion.propertyDateField.text = ""
+            propertyForeignLocality.propertyDateField.text = ""
+            propertyForeignPostalCode.propertyDateField.text = ""
+            propertyBusyIndicator.running = false
+
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            propertyButtonConfirmOfAddress.enabled = true
+        }
+
         onSignalCardAccessError: {
             console.log("Card Adress onSignalCardAccessError"+ error_code)
+
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
             if (error_code == GAPI.NoReaderFound) {
@@ -123,6 +183,9 @@ PageCardAdressForm {
             }
             else if (error_code == GAPI.IncompatibleReader) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
+            }
+            else if (error_code == GAPI.AddressUnknownError) {
+                bodyPopup = qsTr("STR_REMOTEADDRESS_UNKNOWN_ERROR")
             }
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
@@ -151,8 +214,9 @@ PageCardAdressForm {
             propertyForeignPostalCode.propertyDateField.text = ""
             propertyBusyIndicator.running = false
         }
+
         onSignalCardChanged: {
-            console.log("Card Adress onSignalCardChanged")
+            console.log("Card Address onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
                 var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 var bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")

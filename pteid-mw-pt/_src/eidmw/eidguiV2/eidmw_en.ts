@@ -707,6 +707,23 @@
         <source>STR_ADDRESS_ONLINE_CHANGE_TEXT</source>
         <translation>If you want to change your address, click</translation>
     </message>
+    <message>
+        <source>STR_REMOTEADDRESS_SERVER_ERROR</source>
+        <translation>Service temporarily unavailable - please, try again later</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_TIMEOUT_ERROR</source>
+        <translation>Couldn't get response from service - please, try again later</translation>
+    </message>
+
+    <message>
+        <source>STR_REMOTEADDRESS_SMARTCARD_ERROR</source>
+        <translation>Error reading card for remote address loading</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_UNKNOWN_ERROR</source>
+        <translation>Unexpected error loading remote address</translation>
+    </message>
 </context>
 <context>
     <name>PageCardNotes</name>

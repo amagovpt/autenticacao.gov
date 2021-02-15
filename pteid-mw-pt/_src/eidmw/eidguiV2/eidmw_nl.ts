@@ -716,6 +716,20 @@
     <message>
         <source>STR_ADDRESS_ONLINE_CHANGE_TEXT</source>
         <translation>Caso pretenda alterar a sua morada, clique</translation>
+    <source>STR_REMOTEADDRESS_SERVER_ERROR</source>
+        <translation>Serviço temporariamente indisponível - tente de novo por favor</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_TIMEOUT_ERROR</source>
+        <translation>Não foi possível obter resposta do Serviço de consulta de morada - tente de novo por favor</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_SMARTCARD_ERROR</source>
+        <translation>Erro na leitura do cartão para consulta de morada</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_UNKNOWN_ERROR</source>
+        <translation>Erro inesperado na consulta de morada - tente de novo por favor</translation>
     </message>
 </context>
 <context>

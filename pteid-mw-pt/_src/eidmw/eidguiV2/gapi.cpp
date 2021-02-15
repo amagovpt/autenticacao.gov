@@ -240,6 +240,26 @@ void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int inde
     else if (errorCode == EIDMW_ERR_TIMEOUT) {
         emit signalCardAccessError(CardPinTimeout);
     }
+    else if (errorCode == EIDMW_REMOTEADDR_CONNECTION_ERROR)
+    {
+        emit signalRemoteAddressError(AddressConnectionError);
+    }
+    else if (errorCode == EIDMW_REMOTEADDR_SERVER_ERROR)
+    { \
+        emit signalRemoteAddressError(AddressServerError);
+    }  \
+    else if (errorCode == EIDMW_REMOTEADDR_CONNECTION_TIMEOUT)
+    {
+        emit signalRemoteAddressError(AddressConnectionTimeout);
+    }
+    else if (errorCode == EIDMW_REMOTEADDR_SMARTCARD_ERROR)
+    {
+        emit signalRemoteAddressError(AddressSmartcardError);
+    }
+    else if (errorCode == EIDMW_REMOTEADDR_UNKNOWN_ERROR)
+    {
+        emit signalRemoteAddressError(AddressUnknownError);
+    }
     else if (errorCode == EIDMW_ERR_OP_CANCEL) {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Operation cancelled by user");
     }
@@ -251,7 +271,7 @@ void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int inde
         QString msgError = QString("%1\n").arg(user_error);
         emit signalGenericError(msgError);
     }
-}
+
 
 void GAPI::getAddressFile() {
     qDebug() << "C++: getAddressFile()";
