@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
@@ -167,6 +167,11 @@ PageServicesSignAdvancedForm {
                 console.log("ScapAttributesExpiredError")
                 signerror_dialog.propertySignFailDialogText.text =
                         qsTranslate("PageServicesSign","STR_SCAP_NOT_VALID_ATTRIBUTES")
+
+                // Show button to load attributes
+                closeButtonError.visible = false
+                buttonLoadAttr.visible = true
+                buttonCancelAttr.visible = true
             }
             else if(pdfsignresult === GAPI.ScapClockError){
                 console.log("ScapClockError")

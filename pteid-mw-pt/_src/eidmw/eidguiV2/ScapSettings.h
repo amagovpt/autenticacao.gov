@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2018-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2018-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * Licensed under the EUPL V.1.2
@@ -26,9 +26,11 @@ class ScapSettings
     #define CONNECT_TIMEOUT     60
 
     #define SCAP_ATTRIBUTES_OK          200
-    #define SCAP_ATTRIBUTES_EXPIRED     401
-    #define SCAP_ZERO_ATTRIBUTES        402
-    #define SCAP_ATTRIBUTES_NOT_VALID   403
+
+    // Service attributes error codes
+    #define SCAP_ATTRIBUTES_EXPIRED     401    // Citizen only has expired attributes 
+    #define SCAP_ZERO_ATTRIBUTES        402    // Citizen has no attributes 
+    #define SCAP_ATTRIBUTES_NOT_VALID   403    // Attributes request do not match the citizen's attributes
 
     #define SCAP_GENERIC_ERROR_CODE     404
     #define SCAP_CLOCK_ERROR_CODE       405
@@ -36,6 +38,10 @@ class ScapSettings
 
     #define SCAP_MAX_CLOCK_DIF          5*60    // 5 minutos
 
+    // Service autentication error codes
+    #define SCAP_TOTP_FAILED_ERROR_CODE     802     // TOTP validation has failed
+    #define SCAP_ACCOUNT_MATCH_ERROR_CODE   803     // Account match has failed
+    #define SCAP_REQUEST_ERROR_CODE         805     // Request with invalid or missing fields
 
 public:
     //------------------------------------------------------

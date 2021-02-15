@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
@@ -632,11 +632,6 @@ void GAPI::showSignCMDDialog(long error_code)
     QString support_string = tr("STR_CMD_ERROR_MSG");
     QString urlLink = tr("STR_MAIL_SUPPORT");
 
-    if (error_code == 0 || error_code == EIDMW_TIMESTAMP_ERROR || error_code == EIDMW_LTV_ERROR){
-        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "CMD signature op finished with sucess");
-    } else {
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "CMD signature op finished with error code 0x%08x", error_code);
-    }
     switch (error_code)
     {
     case 0:
@@ -650,6 +645,15 @@ void GAPI::showSignCMDDialog(long error_code)
         break;
     case SCAP_SECRETKEY_ERROR_CODE:
         message = tr("STR_SCAP_SECRETKEY_ERROR");
+        break;
+    case SCAP_ATTRIBUTES_EXPIRED:
+        message = tr("STR_SCAP_NOT_VALID_ATTRIBUTES");
+        break;
+    case SCAP_ZERO_ATTRIBUTES:
+        message = tr("STR_SCAP_NOT_VALID_ATTRIBUTES");
+        break;
+    case SCAP_ATTRIBUTES_NOT_VALID:
+        message = tr("STR_SCAP_NOT_VALID_ATTRIBUTES");
         break;
     case -1:
         message = tr("STR_CMD_TIMEOUT_ERROR");
@@ -702,8 +706,12 @@ void GAPI::showSignCMDDialog(long error_code)
         if (error_code == EIDMW_TIMESTAMP_ERROR || error_code == EIDMW_LTV_ERROR){
             signalUpdateProgressStatus(message);
         } 
-        else if (error_code == SCAP_SECRETKEY_ERROR_CODE){
-            signalUpdateProgressStatus(message);
+        else if (error_code == SCAP_SECRETKEY_ERROR_CODE
+                 || error_code == SCAP_ATTRIBUTES_EXPIRED
+                 || error_code == SCAP_ZERO_ATTRIBUTES
+                 || error_code == SCAP_ATTRIBUTES_NOT_VALID){
+            signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "! " + message);
+            signalShowLoadAttrButton();
         }
         else if (error_code == SCAP_CLOCK_ERROR_CODE){
             signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "!");
@@ -717,6 +725,15 @@ void GAPI::showSignCMDDialog(long error_code)
     else{
         // Success
         signalUpdateProgressStatus(message);
+    }
+
+    if (error_code == 0 || error_code == EIDMW_TIMESTAMP_ERROR || error_code == EIDMW_LTV_ERROR){
+        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", 
+            "CMD signature op finished with sucess with error code 0x%08x", error_code);
+        emit signalOpenFile();
+    } else {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", 
+            "CMD signature op finished with error code 0x%08x", error_code);
     }
 
     qDebug() << "Show Sign CMD Dialog - Error code: " << error_code
@@ -870,10 +887,6 @@ void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
 
     signCMDFinished(ret);
     signalUpdateProgressBar(100);
-    if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR || ret == EIDMW_LTV_ERROR)
-    {
-        emit signalOpenFile();
-    }
 }
 
 void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token, QList<int> attribute_list) {
@@ -942,12 +955,7 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
 
     signCMDFinished(ret);
     signalUpdateProgressBar(100);
-    if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR || ret == EIDMW_LTV_ERROR)
-    {
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "ScapSignature",
-                  "SCAP signature with CMD sucess: %d",ret);
-        emit signalOpenFile();
-    }
+
 }
 
 

@@ -476,6 +476,10 @@
         <source>STR_VERIFY_PROXY</source>
         <translation>Verifique se o proxy está bem configurado.</translation>
     </message>
+    <message>
+        <source>STR_SCAP_NOT_VALID_ATTRIBUTES</source>
+        <translation>Um ou mais atributos selecionados não se encontram ativos. Por favor, limpe a cache e recarregue os seus atributos</translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>

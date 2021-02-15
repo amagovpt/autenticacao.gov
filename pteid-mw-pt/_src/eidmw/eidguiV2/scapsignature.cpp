@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
@@ -116,34 +116,52 @@ int ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepat
             "Caught exception signing PDF. Error code: %08x", e.GetError());
         throw;
     }
-    if (successful != GAPI::ScapSucess) {
-        if (successful == GAPI::ScapTimeOutError) {
-            qDebug() << "Error in SCAP service Timeout with CMD service!";
-            parent->signalSCAPServiceTimeout();
-            parent->signCMDFinished(SCAP_GENERIC_ERROR_CODE);
-            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                    "SCAP CMD Error. ScapTimeOutError");
-        }
-        else if (successful == GAPI::ScapClockError) {
-            qDebug() << "Error in SCAP service Clock Error with CMD service!";
-            parent->signCMDFinished(SCAP_CLOCK_ERROR_CODE);
-            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                    "SCAP CMD Error. ScapClockError");
-        }
-        else if (successful == GAPI::ScapSecretKeyError) {
-            qDebug() << "Error in SCAP service SecretKey Error with CMD service!";
-            parent->signalShowLoadAttrButton();
-            parent->signCMDFinished(SCAP_SECRETKEY_ERROR_CODE);
-            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                    "SCAP CMD Error. ScapSecretKeyError");
-        }
-        else {
-            qDebug() << "Error in SCAP Signature with CMD service!";
-            parent->signalSCAPServiceFail(successful);
-            parent->signCMDFinished(SCAP_GENERIC_ERROR_CODE);
-            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                    "SCAP CMD Error. ScapPdfSignResult = %d",successful);
-        }
+    if (successful == GAPI::ScapSucess) {
+        parent->signalPdfSignSucess(parent->SignMessageOK);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "ScapSignature",
+                "SCAP CMD ScapSuccess");
+    }
+    else if (successful == GAPI::ScapAttributesExpiredError) {
+        qDebug() << "Error in SCAP service ScapAttributesExpiredError!";
+        parent->signCMDFinished(SCAP_ATTRIBUTES_EXPIRED);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                "SCAP CMD Error. ScapAttributesExpiredError");
+    }
+    else if (successful == GAPI::ScapZeroAttributesError) {
+        qDebug() << "Error in SCAP service ScapZeroAttributesError!";
+        parent->signCMDFinished(SCAP_ZERO_ATTRIBUTES);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                "SCAP CMD Error. ScapZeroAttributesError");
+    }
+    else if (successful == GAPI::ScapNotValidAttributesError) {
+        qDebug() << "Error in SCAP service ScapNotValidAttributesError!";
+        parent->signCMDFinished(SCAP_ATTRIBUTES_NOT_VALID);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                "SCAP CMD Error. ScapNotValidAttributesError");
+    }
+    else if (successful == GAPI::ScapTimeOutError) {
+        qDebug() << "Error in SCAP service Timeout with CMD service!";
+        parent->signalSCAPServiceTimeout();
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                "SCAP CMD Error. ScapTimeOutError");
+    }
+    else if (successful == GAPI::ScapClockError) {
+        qDebug() << "Error in SCAP service Clock Error with CMD service!";
+        parent->signCMDFinished(SCAP_CLOCK_ERROR_CODE);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                "SCAP CMD Error. ScapClockError");
+    }
+    else if (successful == GAPI::ScapSecretKeyError) {
+        qDebug() << "Error in SCAP service SecretKey Error with CMD service!";
+        parent->signCMDFinished(SCAP_SECRETKEY_ERROR_CODE);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                "SCAP CMD Error. ScapSecretKeyError");
+    }
+    else {
+        qDebug() << "Error in SCAP Signature with CMD service!";
+        parent->signCMDFinished(SCAP_GENERIC_ERROR_CODE);
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                "SCAP CMD Error. ScapPdfSignResult = %d",successful);
     }
     return successful;
 }
