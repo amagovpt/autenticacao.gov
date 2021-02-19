@@ -759,7 +759,8 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
 #endif
             qDebug() << "Cert exists: " << QString::fromUtf8(file_name_temp.c_str());
         } else{
-            qDebug() << "Cert does not exist or invalid: " << QString::fromUtf8(file_name_temp.c_str());
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "AutoUpdates::RunCertsPackage: Cert does not exist or invalid:! %s",file_name_temp.c_str());
 
             downloadurl.append(configurl);
             downloadurl.append(cert_json->string);
@@ -779,7 +780,8 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
 
 void AutoUpdates::updateWindows()
 {
-    qDebug() << "C++ AUTO UPDATES: There are updates available";
+    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "AutoUpdates::RunCertsPackage: There are updates available!");
 
     if(m_updateType == GAPI::AutoUpdateApp){
         // Show popup about app update
