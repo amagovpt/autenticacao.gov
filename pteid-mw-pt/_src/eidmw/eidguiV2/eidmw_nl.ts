@@ -1712,7 +1712,7 @@
     </message>
     <message>
         <source>STR_SIGN_OPEN_MULTI</source>
-        <translation>Abrir diretório com ficheiro(s) assinado(s) ?</translation>
+        <translation>Abrir pasta com ficheiro(s) assinado(s) ?</translation>
     </message>
     <message>
         <source>STR_SIGN_FAIL</source>
@@ -1993,6 +1993,22 @@
         <source>STR_SIGN_NAV_FILE_PREVIEW</source>
         <translation>Pré-visualização do ficheiro: </translation>
     </message>
+    <message>
+        <source>STR_SIGN_OPEN_ERROR</source>
+        <translation>Não foi possivel abrir o ficheiro assinado. Verifique se a pasta de destino ainda existe ou o ficheiro foi removido.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_ERROR_TITLE</source>
+        <translation>Abrir ficheiro assinado</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_ERROR_TITLE_MULTI</source>
+        <translation>Abrir pasta com ficheiro(s) assinado(s)</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_ERROR_MULTI</source>
+        <translation>Não foi possivel abrir a pasta de destino dos ficheiros assinados. Verifique se a pasta de destino ainda existe.</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>
@@ -2138,10 +2154,6 @@
     <message>
         <source>STR_POPUP_RESTART_NOW</source>
         <translation>Reiniciar agora</translation>
-    </message>
-    <message>
-        <source>STR_SIGN_HELP_TITLE</source>
-        <translation type="obsolete">Assinatura digital</translation>
     </message>
 </context>
 <context>

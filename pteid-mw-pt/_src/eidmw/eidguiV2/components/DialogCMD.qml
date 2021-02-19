@@ -543,6 +543,29 @@ Item {
                         propertyAccessibleText: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN") + controler.autoTr :
                                                qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI") + controler.autoTr
                     }
+                },
+                State {
+                    name: Constants.DLG_STATE.OPEN_FILE_ERROR
+                    PropertyChanges {target: progressBar; visible: true}
+                    PropertyChanges {target: progressBarIndeterminate; visible: false}
+                    PropertyChanges {target: buttonCancel; visible: false}
+                    PropertyChanges {target: buttonConfirm; visible: true}
+                    PropertyChanges {target: buttonConfirm; text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM") + controler.autoTr}
+                    PropertyChanges {
+                        target: dialogTitle
+                        restoreEntryValues : false
+                        text: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_TITLE") + controler.autoTr :
+                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_TITLE_MULTI") + controler.autoTr
+                    }
+                    PropertyChanges {
+                        target: labelCMDText;
+                        visible: true;
+                        propertyLinkUrl: ""
+                        propertyText.text: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR") + controler.autoTr :
+                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_MULTI") + controler.autoTr
+                        propertyAccessibleText: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR") + controler.autoTr :
+                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_MULTI") + controler.autoTr
+                    }
                 }
             ]
         }
@@ -680,31 +703,34 @@ Item {
             return;
         
         switch(dialogContent.state){
-        case Constants.DLG_STATE.REGISTER_FORM:
-            registerCMDCertOpen();
-            break;
-        case Constants.DLG_STATE.SIGN_FORM:
-            signCMD()
-            break;
-        case Constants.DLG_STATE.VALIDATE_OTP:
-            if (dialogType == GAPI.RegisterCert)
-                registerCMDCertClose()
-            else if (dialogType == GAPI.Sign)
-                signCMDConfirm()
-            break;
-        case Constants.DLG_STATE.LOAD_ATTRIBUTES:
-            loadSCAPAttributes()
-            break;
-        case Constants.DLG_STATE.SHOW_MESSAGE:
-            close()
-            break;
-        case Constants.DLG_STATE.OPEN_FILE:
-            openSignedFiles()
-            break;
-        case Constants.DLG_STATE.ASK_TO_REGISTER_CERT:
-            close()
-            open(GAPI.RegisterCert)
-            break;
+            case Constants.DLG_STATE.REGISTER_FORM:
+                registerCMDCertOpen();
+                break;
+            case Constants.DLG_STATE.SIGN_FORM:
+                signCMD()
+                break;
+            case Constants.DLG_STATE.VALIDATE_OTP:
+                if (dialogType == GAPI.RegisterCert)
+                    registerCMDCertClose()
+                else if (dialogType == GAPI.Sign)
+                    signCMDConfirm()
+                break;
+            case Constants.DLG_STATE.LOAD_ATTRIBUTES:
+                loadSCAPAttributes()
+                break;
+            case Constants.DLG_STATE.SHOW_MESSAGE:
+                close()
+                break;
+            case Constants.DLG_STATE.OPEN_FILE:
+                openSignedFiles()
+                break;
+            case Constants.DLG_STATE.OPEN_FILE_ERROR:
+                close()
+                break;
+            case Constants.DLG_STATE.ASK_TO_REGISTER_CERT:
+                close()
+                open(GAPI.RegisterCert)
+                break;
         }
     }
 
@@ -842,22 +868,14 @@ Item {
         }
         gapi.signCloseCMD(textFieldReturnCode.text, attributeList)
     }
-
     function openSignedFiles() {
-        if (Qt.platform.os === "windows") {
-            if (propertyOutputSignedFile.substring(0, 2) == "//" ){
-                propertyOutputSignedFile = "file:" + propertyOutputSignedFile
-            }else{
-                propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+        if (Functions.openSignedFiles() == true){
+                close()
+            } else {
+                dialogContent.state = Constants.DLG_STATE.OPEN_FILE_ERROR
+                labelCMDText.propertyText.forceActiveFocus()
             }
-        }else{
-            propertyOutputSignedFile = "file://" + propertyOutputSignedFile
-        }
-        /*console.log("Open Url Externally: " + propertyOutputSignedFile)*/
-        Qt.openUrlExternally(propertyOutputSignedFile)
-        close()
     }
-
     function loadSCAPAttributes(){
         close()
         propertyPageLoader.attributeListBackup = []

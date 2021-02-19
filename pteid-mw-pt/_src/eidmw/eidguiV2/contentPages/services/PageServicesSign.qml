@@ -1520,23 +1520,20 @@ PageServicesSignForm {
             propertySpinBoxControl.down.indicator.enabled = false
         }
     }
-    function openSignedFile(){
-        if (Qt.platform.os === "windows") {
-            if (propertyOutputSignedFile.substring(0, 2) == "//" ){
-                propertyOutputSignedFile = "file:" + propertyOutputSignedFile
-            }else{
-                propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
-            }
-        }else{
-            propertyOutputSignedFile = "file://" + propertyOutputSignedFile
-        }
-        /*console.log("Open Url Externally: " + propertyOutputSignedFile)*/
-        Qt.openUrlExternally(propertyOutputSignedFile)
-    }
     function signSuccessShowSignedFile(){
-        openSignedFile()
         signsuccess_dialog.close()
-        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+        if (Functions.openSignedFiles() == false){
+
+            var titlePopup =  propertyListViewFiles.count > 1 || propertyRadioButtonXADES.checked == 1
+                ? qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_TITLE_MULTI") + controler.autoTr
+                : qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_TITLE") + controler.autoTr
+
+            var bodyPopup = propertyListViewFiles.count > 1 || propertyRadioButtonXADES.checked == 1
+                ? qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_MULTI") + controler.autoTr
+                : qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR") + controler.autoTr
+
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+        }
     }
     function toTitleCase(str) {
         return str.replace(/\w\S*/g, function(txt){

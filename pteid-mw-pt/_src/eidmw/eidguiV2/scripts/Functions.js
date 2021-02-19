@@ -260,3 +260,22 @@ function showOptions(show) {
     propertyShowOptions = show
     controler.setShowSignatureOptions(show)
 }
+function openSignedFiles(){
+    var propertyOutputSignedFileCopy = propertyOutputSignedFile
+    if (Qt.platform.os === "windows") {
+        if (propertyOutputSignedFile.substring(0, 2) == "//" ){
+            propertyOutputSignedFile = "file:" + propertyOutputSignedFile
+        }else{
+            propertyOutputSignedFile = "file:///" + propertyOutputSignedFile
+        }
+    }else{
+        propertyOutputSignedFile = "file://" + propertyOutputSignedFile
+    }
+
+    if(gapi.fileExists(propertyOutputSignedFileCopy) 
+        && Qt.openUrlExternally(propertyOutputSignedFile) == true){
+            return true
+    } else {
+            return false
+    } 
+}

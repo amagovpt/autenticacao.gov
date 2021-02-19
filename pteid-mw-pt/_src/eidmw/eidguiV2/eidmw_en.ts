@@ -1995,6 +1995,22 @@
         <source>STR_SIGN_NAV_FILE_PREVIEW</source>
         <translation>Preview of file: </translation>
     </message>
+    <message>
+        <source>STR_SIGN_OPEN_ERROR</source>
+        <translation>The signed file could not be opened. Check if the destination folder still exists or the file has been removed. </translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_ERROR_TITLE</source>
+        <translation>Open signed file</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_ERROR_TITLE_MULTI</source>
+        <translation>Open folder with signed file(s)</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_ERROR_MULTI</source>
+        <translation>Could not open the destination folder for signed files. Check that the destination folder still exists. </translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>
@@ -2140,10 +2156,6 @@
     <message>
         <source>STR_POPUP_RESTART_NOW</source>
         <translation>Restart now</translation>
-    </message>
-    <message>
-        <source>STR_SIGN_HELP_TITLE</source>
-        <translation type="obsolete">Digital signature</translation>
     </message>
 </context>
 <context>

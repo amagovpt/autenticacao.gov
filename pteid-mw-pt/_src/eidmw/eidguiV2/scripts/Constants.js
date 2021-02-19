@@ -268,8 +268,9 @@ var DLG_STATE = Object.freeze({
     VALIDATE_OTP:           "3",
     SHOW_MESSAGE:           "4",
     OPEN_FILE:              "5",
-    LOAD_ATTRIBUTES:        "6",
-    ASK_TO_REGISTER_CERT:   "7"
+    OPEN_FILE_ERROR:        "6",
+    LOAD_ATTRIBUTES:        "7",
+    ASK_TO_REGISTER_CERT:   "8"
 })
 
 var ARROW_RIGHT = "images/arrow-right_white_AMA.png"
