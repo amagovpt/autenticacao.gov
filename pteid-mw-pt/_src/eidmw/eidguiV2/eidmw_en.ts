@@ -713,7 +713,7 @@
     </message>
     <message>
         <source>STR_REMOTEADDRESS_TIMEOUT_ERROR</source>
-        <translation>Couldn't get response from service - please, try again later</translation>
+        <translation>Could not get response from service - please, try again later</translation>
     </message>
 
     <message>
