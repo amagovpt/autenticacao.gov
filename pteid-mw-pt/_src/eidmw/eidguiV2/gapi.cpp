@@ -2324,6 +2324,11 @@ void GAPI::getSCAPEntities() {
     emit signalSCAPEntitiesLoaded(attributeSuppliers);
 }
 
+bool isSpecialValidity(QString value) {
+    QString year = "9999", month = "12", day = "31";
+    return value.contains(year) && value.contains(month) && value.contains(day);
+}
+
 std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, bool isShortDescription) {
     std::vector<std::string> childrensList;
 
@@ -2360,7 +2365,9 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, boo
 					if (subAttribute->Value != NULL) {
 						subValue += subAttribute->Value->c_str();
 					}
-					subAttributesValues.append(subDescription + ": " + subValue + ", ");
+					// Don't append special validity date -> "31 12 9999"
+					if (!isSpecialValidity(subValue))
+						subAttributesValues.append(subDescription + ": " + subValue + ", ");
 					subAttributePos++;
 				}
 				// Chop 2 to remove last 2 chars (', ')
@@ -2368,7 +2375,8 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, boo
 				subAttributes.append(subAttributesValues + ")");
 
 				/* qDebug() << "Sub attributes : " << subAttributes; */
-				description += subAttributes.toStdString();
+				if (subAttributes != " ()") // don't append empty parenthesis
+					description += subAttributes.toStdString();
 			}
 
             childrensList.push_back(description.c_str());
