@@ -1349,17 +1349,30 @@ PageServicesSignForm {
                         filesModel.remove(propertyListViewFiles.count-1)
                         var titlePopup = qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR")
                         var bodyPopup = ""
-                        if(pageCount === -1){
+                        var link = "https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#problemas-com-ficheiros-pdf-não-suportados"
+                        if (pageCount === Constants.UNSUPPORTED_PDF_ERROR) {
                             console.log("Error loading pdf file")
                             bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_ADVANCED_PDF_ERROR_MSG")
-                        }else if(pageCount === -2){
+                        }
+                        else if (pageCount === Constants.ENCRYPTED_PDF_ERROR) {
                             console.log("Error loading pdf encrypted file")
                             bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_ENCRYPTED_PDF_ERROR_MSG")
-                        }else{
+                                        + " " + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO")
+                                        + "<a href=" + link + ">"
+                                        + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
+                        }
+                        else if (pageCount === Constants.XFA_FORM_PDF_ERROR) {
+                            console.log("Error loading pdf with XFA forms")
+                            bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_XFA_FORM_PDF_ERROR_MSG")
+                                        + " " + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO")
+                                        + "<a href=" + link + ">"
+                                        + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
+                        }
+                        else {
                             console.log("Generic Error loading pdf file")
                             bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR_MSG")
                         }
-                        mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                        mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false, link)
                     }
                 }else{
                     propertyTextDragMsgImg.visible = true

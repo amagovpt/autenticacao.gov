@@ -2009,6 +2009,10 @@
         <source>STR_SIGN_OPEN_ERROR_MULTI</source>
         <translation>Não foi possivel abrir a pasta de destino dos ficheiros assinados. Verifique se a pasta de destino ainda existe.</translation>
     </message>
+    <message>
+        <source>STR_LOAD_XFA_FORM_PDF_ERROR_MSG</source>
+        <translation>Ficheiros PDF com formulários XFA não são suportados.</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>

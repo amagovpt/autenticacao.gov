@@ -2011,6 +2011,10 @@
         <source>STR_SIGN_OPEN_ERROR_MULTI</source>
         <translation>Could not open the destination folder for signed files. Check that the destination folder still exists. </translation>
     </message>
+    <message>
+        <source>STR_LOAD_XFA_FORM_PDF_ERROR_MSG</source>
+        <translation>PDF files with XFA forms are not supported.</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>
