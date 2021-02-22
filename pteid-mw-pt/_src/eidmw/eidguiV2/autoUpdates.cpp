@@ -89,6 +89,9 @@ void AutoUpdates::initRequest(int updateType){
     // Auto update App
     std::string remoteversion;
     if(m_updateType == GAPI::AutoUpdateApp){
+        // Write inside this type to write to log once.
+        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "AutoUpdates::started");
+
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_VERIFY_URL);
         remoteversion.append(config.getString());
         remoteversion.append("version.json");
@@ -759,7 +762,7 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
 #endif
             qDebug() << "Cert exists: " << QString::fromUtf8(file_name_temp.c_str());
         } else{
-            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+            PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
                 "AutoUpdates::RunCertsPackage: Cert does not exist or invalid:! %s",file_name_temp.c_str());
 
             downloadurl.append(configurl);
@@ -780,7 +783,7 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
 
 void AutoUpdates::updateWindows()
 {
-    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+    PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
                 "AutoUpdates::RunCertsPackage: There are updates available!");
 
     if(m_updateType == GAPI::AutoUpdateApp){
