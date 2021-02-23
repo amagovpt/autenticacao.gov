@@ -509,8 +509,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 	signature_dict->dictAdd(copyString("Contents"), obj1.initString(sig_content));
 	signature_dict->dictAdd(copyString("SubFilter"), obj1.initName("ETSI.CAdES.detached"));
 
-	char * name_latin1 = utf8_to_latin1(signer_info->name);
-	signature_dict->dictAdd(copyString("Name"), obj1.initString(new GooString(name_latin1)));
+	signature_dict->dictAdd(copyString("Name"), obj1.initString(new GooString("")));
 
 	build_prop.initDict(xref);
 	build_prop_app.initDict(xref);
@@ -528,8 +527,6 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 #endif
 
 	build_prop.dictAdd(copyString("App"), &build_prop_app);
-
-	free(name_latin1);
 
 	const char *loc = location != NULL ? utf8_to_latin1(location) : "";
 	signature_dict->dictAdd(copyString("Location"), obj1.initString(new GooString(loc)));
