@@ -946,8 +946,12 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 
             }
 
-			unsigned long verify_flags = 0;
-			int rc =  OCSP_basic_verify(pBasic, intermediate_certs, store, verify_flags);
+            // OCSP_NOCHECKS flag - disables the verification "that the signer certificate meets the OCSP issuer criteria including potential delegation"
+            // See openssl docs at: https://www.openssl.org/docs/man1.1.1/man3/OCSP_basic_verify.html
+            // This flag is needed for ocsp.ecee.gov.pt which is using a single OCSP responder cert issued by the new root CA "ECRaizEstado 002"
+            // even for OCSP responses of certs issued by the old root ECRaizEstado 
+			unsigned long verify_flags = OCSP_NOCHECKS;
+			int rc = OCSP_basic_verify(pBasic, intermediate_certs, store, verify_flags);
 
 			if (rc <= 0) {
 				unsigned long osslError = ERR_get_error();
