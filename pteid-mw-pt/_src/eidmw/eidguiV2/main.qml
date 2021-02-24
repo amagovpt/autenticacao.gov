@@ -150,7 +150,7 @@ Load language error. Please reinstall the application"
                 }
                 if (error_code == GAPI.InstallFailed){
                     var titlePopup = qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTIFICATES_FAIL")
-                    var bodyPopup = qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL")
+                    var bodyPopup = qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_CERTS_FAIL")
                             + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
                     mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
                 }

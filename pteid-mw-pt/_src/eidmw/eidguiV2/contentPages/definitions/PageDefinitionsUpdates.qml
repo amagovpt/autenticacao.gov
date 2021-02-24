@@ -55,9 +55,16 @@ PageDefinitionsUpdatesForm {
                         + "<a href='" + propertyTextDescriptionText.propertyLinkUrl + "'>"
                         + qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT_LINK") + "</a>."
             }else if (error_code == GAPI.InstallFailed) {
-                tempTextDescription =
-                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL")
-                        + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
+                if (updateType == GAPI.AutoUpdateApp) {
+                    tempTextDescription =
+                            qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL")
+                }
+                else {
+                    tempTextDescription =
+                            qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_CERTS_FAIL")
+                }
+                tempTextDescription +=
+                        "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
             }else if (error_code == GAPI.NetworkError) {
                 tempTextDescription =
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_NETWORK_ERROR")

@@ -1298,7 +1298,7 @@
     </message>
     <message>
         <source>STR_UPDATE_INSTALL_FAIL</source>
-        <translation>Falha na instalação de um ou mais certificados.</translation>
+        <translation>Falha na instalação da actualização.</translation>
     </message>
     <message>
         <source>STR_UPDATE_SUCCESS</source>
@@ -1433,6 +1433,10 @@
     <message>
         <source>STR_UPDATE_CERTS_TEXT</source>
         <translation>Pressione o botão para verificar se existem atualizações disponíveis.</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_INSTALL_CERTS_FAIL</source>
+        <translation>Falha na instalação de um ou mais certificados.</translation>
     </message>
 </context>
 <context>

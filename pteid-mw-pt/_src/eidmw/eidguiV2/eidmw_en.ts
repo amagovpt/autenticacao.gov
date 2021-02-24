@@ -1300,7 +1300,7 @@
     </message>
     <message>
         <source>STR_UPDATE_INSTALL_FAIL</source>
-        <translation>The installation of one or more certificates failed.</translation>
+        <translation>Failed to install update.</translation>
     </message>
     <message>
         <source>STR_UPDATE_SUCCESS</source>
@@ -1435,6 +1435,10 @@
     <message>
         <source>STR_UPDATE_CERTS_TEXT</source>
         <translation>Press the button to check for available updates.</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_INSTALL_CERTS_FAIL</source>
+        <translation>The installation of one or more certificates failed.</translation>
     </message>
 </context>
 <context>
