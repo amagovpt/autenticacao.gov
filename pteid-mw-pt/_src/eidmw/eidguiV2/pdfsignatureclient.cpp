@@ -407,26 +407,13 @@ unsigned char * PDFSignatureClient::callSCAPSignatureService(soap* sp, QByteArra
 
     if (rc != SOAP_OK) {
         qDebug() << "Error returned by Signature in SoapBindingProxy(). Error code: " << rc;
-        if (rc == SOAP_FAULT) {
-            if (proxy.soap->fault != NULL && proxy.soap->fault->faultstring != NULL)
-                PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                          "Error returned by calling Signature in SoapBindingProxy() returned SOAP Fault: %s",
-                          proxy.soap->fault->faultstring);
-            error = GAPI::ScapGenericError;
-        } else if (rc == SOAP_EOF || rc == SOAP_TCP_ERROR) {
-            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                      "Error returned by calling Signature in SoapBindingProxy(). Error code: %d", rc);
-            error = GAPI::ScapTimeOutError;
-        } else {
-            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                      "Error returned by calling Signature in SoapBindingProxy(). Error code: %d", rc);
-            error = GAPI::ScapGenericError;
-        }
+        error = handleError(rc, proxy.soap, __FUNCTION__);
         return NULL;
     }
     else {
          //Check for Success Status
-        if (std::stoi(sigResponse.Status->Code) == 0 && sigResponse.DocumentSignature != NULL) {
+        int status_code = std::stoi(sigResponse.Status->Code);
+        if (status_code == 0 && sigResponse.DocumentSignature != NULL) {
             PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
                       "SignatureService returned with status code: %s and message: %s",
                       sigResponse.Status->Code.c_str(),
@@ -452,7 +439,7 @@ unsigned char * PDFSignatureClient::callSCAPSignatureService(soap* sp, QByteArra
             eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", 
                 "SCAPSignatureService returned functional error code: %s and message: %s", sigResponse.Status->Code.c_str(),
                 sigResponse.Status->Message.c_str());
-            error = mapSCAPError(std::stoi(sigResponse.Status->Code), "SignatureService");
+            error = handleError(status_code, NULL, __FUNCTION__);
             return NULL;
         }
     }
@@ -629,38 +616,19 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
     if (rc != SOAP_OK) {
         qDebug() << "Error returned by calling Authorization in SoapBindingProxy(). Error code: " << rc;
-
-        if (rc == SOAP_FAULT) {
-            if (proxy.soap->fault != NULL && proxy.soap->fault->faultstring != NULL)
-                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                                 "Error returned by calling Authorization in SoapBindingProxy() returned SOAP Fault: %s",
-                                 proxy.soap->fault->faultstring);
-            return GAPI::ScapGenericError;
-        } else if (rc == SOAP_EOF) {
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                             "Error returned by calling Authorization in SoapBindingProxy(). Error code: %d", rc);
-            return GAPI::ScapTimeOutError;
-        } else if (rc == SOAP_TCP_ERROR) {
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                             "Error returned by calling Authorization in SoapBindingProxy(). Error code: %d", rc);
-            return GAPI::ScapTimeOutError;
-        } else {
-            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                      "Error returned by calling Authorization in SoapBindingProxy(). Error code: %d", rc);
-            return GAPI::ScapGenericError;
-        }
-
+        return handleError(rc, proxy.soap, __FUNCTION__);
     }
     else {
         qDebug() << "Authorization service returned SOAP_OK";
         //Check for Success Status
-        if (std::stoi(authorizationResponse.Status->Code) != 0 || authorizationResponse.TransactionList == NULL) {
+        int status_code = std::stoi(authorizationResponse.Status->Code);
+        if (status_code != 0 || authorizationResponse.TransactionList == NULL) {
             qDebug() << "authorizationService returned error";
             PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
                       "AuthorizationService returned error. error code: %s and message: %s",
                       authorizationResponse.Status->Code.c_str(),
                       authorizationResponse.Status->Message.c_str());
-            return mapSCAPError(std::stoi(authorizationResponse.Status->Code), "AuthorizationService");
+            return handleError(status_code, NULL, __FUNCTION__);
         }
 
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
@@ -896,34 +864,51 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
     return GAPI::ScapSucess;
 }
 
-int mapSCAPError(int status_code, const char *call){
-    if (status_code == SCAP_TOTP_FAILED_ERROR_CODE) {
-        QDateTime serverTime = QDateTime::fromString(httpDate, Qt::RFC2822Date);
-        long local = time(nullptr);
-        long server = serverTime.toSecsSinceEpoch();
-        qDebug() << "local: " << local << "server: " << server;
-
-        if (abs(difftime(local,server)) > SCAP_MAX_CLOCK_DIF) {
-            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                        "%s returned tLocal: %ld tServer: %ld", call, local, server);
-            return GAPI::ScapClockError;
+int handleError(int status_code, soap *sp, const char *call){
+    if (sp != NULL) { // SOAP error
+        if (status_code == SOAP_FAULT) {
+            if (sp->fault != NULL && sp->fault->faultstring != NULL)
+                PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                            "Error returned by calling %s in SoapBindingProxy() returned SOAP Fault: %s", call,
+                            sp->fault->faultstring);
+            return GAPI::ScapGenericError;
         }
-        else {
+
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                        "Error returned by calling %s in SoapBindingProxy(). Error code: %d", call, status_code);
+
+        if (status_code == SOAP_EOF || status_code == SOAP_TCP_ERROR) {
+            return GAPI::ScapTimeOutError;
+        }
+    }
+    else { // SCAP error
+        if (status_code == SCAP_TOTP_FAILED_ERROR_CODE) {
+            QDateTime serverTime = QDateTime::fromString(httpDate, Qt::RFC2822Date);
+            long local = time(nullptr);
+            long server = serverTime.toSecsSinceEpoch();
+            qDebug() << "local: " << local << "server: " << server;
+
+            if (abs(difftime(local,server)) > SCAP_MAX_CLOCK_DIF) {
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                            "%s returned tLocal: %ld tServer: %ld", call, local, server);
+                return GAPI::ScapClockError;
+            }
+            else {
+                return GAPI::ScapSecretKeyError;
+            }
+        }
+        if (status_code == SCAP_ACCOUNT_MATCH_ERROR_CODE || status_code == SCAP_REQUEST_ERROR_CODE) {
             return GAPI::ScapSecretKeyError;
         }
+        if (status_code == SCAP_ATTRIBUTES_EXPIRED) {
+            return GAPI::ScapAttributesExpiredError;
+        }
+        if (status_code == SCAP_ZERO_ATTRIBUTES) {
+            return GAPI::ScapZeroAttributesError;
+        }
+        if (status_code == SCAP_ATTRIBUTES_NOT_VALID) {
+            return GAPI::ScapNotValidAttributesError;
+        }
     }
-    if (status_code == SCAP_ACCOUNT_MATCH_ERROR_CODE || status_code == SCAP_REQUEST_ERROR_CODE) {
-        return GAPI::ScapSecretKeyError;
-    }
-    if (status_code == SCAP_ATTRIBUTES_EXPIRED) {
-        return GAPI::ScapAttributesExpiredError;
-    }
-    if (status_code == SCAP_ZERO_ATTRIBUTES) {
-        return GAPI::ScapZeroAttributesError;
-    }
-    if (status_code == SCAP_ATTRIBUTES_NOT_VALID) {
-        return GAPI::ScapNotValidAttributesError;
-    }
-
     return GAPI::ScapGenericError;
 }

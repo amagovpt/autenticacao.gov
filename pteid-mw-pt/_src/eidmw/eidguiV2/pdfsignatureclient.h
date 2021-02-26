@@ -30,7 +30,7 @@ class ns1__MainAttributeType;
 class ns1__AttributeSupplierType;
 class ns1__TransactionType;
 
-int mapSCAPError(int status_code, const char *call);
+int handleError(int status_code, soap *sp, const char *call);
 
 class PDFSignatureInfo{
 public:
