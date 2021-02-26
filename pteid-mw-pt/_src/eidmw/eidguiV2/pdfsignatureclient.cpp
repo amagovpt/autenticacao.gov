@@ -102,7 +102,7 @@ void loadPkcs7Object(QByteArray &sigBinary, SignatureDetails &sigDetails)
     PKCS7 *p7 = d2i_PKCS7(NULL, (const unsigned char **)&binaryData, sigBinary.size());
 
     if (!p7) {
-        fprintf(stderr, "Error loading the PKCS7 object from binary data\n");
+        qDebug() << "Error loading the PKCS7 object from binary data";
         return;
     }
 
@@ -110,7 +110,7 @@ void loadPkcs7Object(QByteArray &sigBinary, SignatureDetails &sigDetails)
 
     if (!signers) {
         //TODO
-        fprintf(stderr, "Error loading the PKCS7 object from binary data\n");
+        qDebug() << "Error loading the PKCS7 object from binary data";
         return;
     }
 
@@ -143,8 +143,7 @@ void loadPkcs7Object(QByteArray &sigBinary, SignatureDetails &sigDetails)
             SHA256_Wrapper(authenticated_attr_buf, auth_attr_len, documentHash);
             sigDetails.document_hash = QByteArray((const char *)documentHash, sizeof(documentHash));
         } else {
-            fprintf(stderr,
-                    "Error loading the authenticated attributes (input for documentHash) from PKCS7 data\n");
+            qDebug() << "Error loading the authenticated attributes (input for documentHash) from PKCS7 data";
             return;
         }
     }
