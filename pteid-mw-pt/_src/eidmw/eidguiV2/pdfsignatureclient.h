@@ -30,6 +30,8 @@ class ns1__MainAttributeType;
 class ns1__AttributeSupplierType;
 class ns1__TransactionType;
 
+int mapSCAPError(int status_code, const char *call);
+
 class PDFSignatureInfo{
 public:
     PDFSignatureInfo(int _selectedPage, double _x, double _y, bool isLtv, const char *_location, const char *_reason) {
@@ -85,7 +87,8 @@ private:
                             bool useCustomImage, QByteArray &m_jpeg_scaled_data);
 
     unsigned char * callSCAPSignatureService(soap* sp, QByteArray signatureHash,
-                            ns1__TransactionType *transaction, unsigned int &signatureLen, QString citizenId);
+                            ns1__TransactionType *transaction, unsigned int &signatureLen,
+                            QString citizenId, int &error);
 
     int closeSCAPSignature(unsigned char * scap_signature, unsigned int len);
     
