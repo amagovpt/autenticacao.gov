@@ -1021,8 +1021,9 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<
 		
         cmd_pdfSignatures.push_back(cmd_pdfSignature); // keep track of pointers to be deleted
         cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
-		PTEID_SignatureLevel sig_level = isLtv ? PTEID_LEVEL_LT : PTEID_LEVEL_BASIC;
-		cmd_pdfSignature->setSignatureLevel(sig_level);
+        PTEID_SignatureLevel sig_level = isTimestamp ?
+                (isLtv ? PTEID_LEVEL_LT : PTEID_LEVEL_TIMESTAMP) : PTEID_LEVEL_BASIC;
+        cmd_pdfSignature->setSignatureLevel(sig_level);
         cmd_signature->add_pdf_handler(cmd_pdfSignature);
     }
 

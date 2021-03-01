@@ -203,8 +203,9 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
         eIDMW::PTEID_EIDCard &card = readerContext.getEIDCard();
 
         PTEID_PDFSignature pdf_sig(strdup(inputPath.toUtf8().constData()));
-		PTEID_SignatureLevel citizen_signature_level = isLtv ? PTEID_LEVEL_LT : PTEID_LEVEL_BASIC;
-		pdf_sig.setSignatureLevel(citizen_signature_level);
+        PTEID_SignatureLevel citizen_signature_level = isTimestamp ?
+                (isLtv ? PTEID_LEVEL_LT : PTEID_LEVEL_TIMESTAMP) : PTEID_LEVEL_BASIC;
+        pdf_sig.setSignatureLevel(citizen_signature_level);
 
         // Sign pdf
         sign_rc = card.SignPDF(pdf_sig, selected_page, 0, false, strdup(location.toUtf8().constData()),
