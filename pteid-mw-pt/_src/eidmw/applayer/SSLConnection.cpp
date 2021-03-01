@@ -737,8 +737,7 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 	char *body = skipHTTPHeaders(buffer.buf);
 
 	json = cJSON_Parse(body);
-	cJSON *my_json = json->child;
-	if (my_json == NULL)
+	if (json == NULL)
 	{
 		fprintf(stderr, "DEBUG: Server returned malformed JSON data: %s\n", body);
 		free(buffer.buf);
@@ -746,6 +745,8 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
         cJSON_Delete(json);
 		return server_params;
 	}
+
+	cJSON *my_json = json->child;
 
 	handleErrorCode(my_json, __FUNCTION__);
 
