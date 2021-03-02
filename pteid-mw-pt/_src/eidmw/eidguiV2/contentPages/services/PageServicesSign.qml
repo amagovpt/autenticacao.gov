@@ -960,7 +960,7 @@ PageServicesSignForm {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSignShow = propertyCheckSignShow.checked
             if(propertyCheckSignShow.checked){
-                propertyCheckSignReduced.enabled = true
+                propertyCheckSignReduced.enabled = !propertySwitchSignAdd.checked
                 propertyCheckLastPage.enabled = true
                 propertySpinBoxControl.enabled = true
                 propertySpinBoxControl.up.indicator.enabled = true
@@ -989,8 +989,6 @@ PageServicesSignForm {
             if(propertySwitchSignAdd.checked){
                 console.log("propertySwitchSignAdd checked")
                 propertyBusyIndicatorRunning = true
-                propertyCheckSignShow.checked = true
-                propertyCheckSignShow.enabled = false
                 propertyCheckSignReduced.checked = false
                 propertyCheckSignReduced.enabled = false
                 propertyRadioButtonXADES.enabled = false
@@ -1004,7 +1002,6 @@ PageServicesSignForm {
                 console.log("propertySwitchSignAdd not checked")
 
                 propertyCheckSignReduced.enabled = true
-                propertyCheckSignShow.enabled = true
                 propertyRadioButtonXADES.enabled = true
                 propertyTextAttributesMsg.visible = false
                 propertyMouseAreaTextAttributesMsg.enabled = false
