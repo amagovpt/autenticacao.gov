@@ -721,7 +721,7 @@ DHParamsResponse *SSLConnection::do_SAM_1stpost(DHParams *p, char *secretCode, c
 	
 	if (ret > 0)
 	{
-		MWLOG(LEV_DEBUG, MOD_APL, "do_SAM_1stpost: Server reply: %s", buffer.buf);
+		MWLOG(LEV_DEBUG, MOD_APL, "do_SAM_1stpost: Server reply (%u bytes): %s", ret, buffer.buf);
 		m_session_cookie = parseCookie(buffer.buf);
 		if (m_session_cookie == NULL)
 		{
@@ -1308,8 +1308,6 @@ void SSLConnection::read_chunked_reply(SSL *ssl, NetworkBuffer *net_buffer, bool
     }
     while(bytes_read == 0 || !final_chunk_read);
 
-	MWLOG(LEV_DEBUG, MOD_APL, "Server chunked reply (size=%d): ", bytes_read);
-
     //Extract the HTTP body of the chunked message
     parse_http_chunked_body(net_buffer);
 
@@ -1324,7 +1322,8 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, NetworkBuffer *net_buffer
 	int r = -1;
 	unsigned int bytes_read = 0, header_len = 0, content_length = 0;
 	unsigned int current_buf_length = net_buffer->buf_size;
-	char end_of_headers_token[] = {0x0d, 0x0a, 0x0d, 0x0a};
+	const char * eoh_token     = "\r\n\r\n";
+	const size_t eoh_token_len = 4;
 
 	do
 	{
@@ -1338,9 +1337,9 @@ unsigned int SSLConnection::read_from_stream(SSL* ssl, NetworkBuffer *net_buffer
 				strcpy(buffer_tmp, net_buffer->buf);
 				content_length = parseContentLength(buffer_tmp);
 				if (content_length > 0 && header_len == 0) {
-					char *end_of_headers = strstr(net_buffer->buf, end_of_headers_token);
+					char *end_of_headers = strstr(net_buffer->buf, eoh_token);
 					if (end_of_headers) {
-						header_len = (end_of_headers-net_buffer->buf) + sizeof(end_of_headers_token);
+						header_len = (end_of_headers-net_buffer->buf) + eoh_token_len;
 					}
 				}
 
