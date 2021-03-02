@@ -1247,6 +1247,14 @@ Load language error. Please reinstall the application"
                 }
                 NumberAnimation
                 {
+                    target: mainFormID.propertyContentPagesView
+                    property: "opacity"
+                    easing.type: Easing.Linear
+                    to: 1;
+                    duration: mainFormID.propertShowAnimation ? Constants.ANIMATION_CHANGE_OPACITY : 0
+                }
+                NumberAnimation
+                {
                     id: animationExpandContentPagesWidthExpand
                     target: mainFormID.propertyContentPagesView
                     property: "width"
