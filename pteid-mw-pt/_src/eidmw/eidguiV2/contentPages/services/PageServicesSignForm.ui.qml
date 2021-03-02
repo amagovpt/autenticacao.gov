@@ -998,8 +998,7 @@ Item {
 
                 Text {
                     id: textDragMsgImg
-                    width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                    height: parent.height
+                    anchors.fill: parent
                     font.bold: true
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Text.AlignHCenter
