@@ -29,7 +29,7 @@ Loader{
     property bool propertyBackupFormatPades: true
     property bool propertyBackupTempSign: false
     property bool propertyBackupAddLTV: false
-    property bool propertyBackupSignAdd: false
+    property bool propertyBackupSwitchAddAttributes: false
     property variant attributeListBackup: []
     property bool propertyBackupSignShow: true
     property double propertyBackupCoordX: 0

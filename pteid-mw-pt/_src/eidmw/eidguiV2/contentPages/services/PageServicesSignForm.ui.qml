@@ -61,7 +61,7 @@ Item {
     property alias propertyMouseAreaToolTipPades: mouseAreaToolTipPades
     property alias propertyMouseAreaToolTipXades: mouseAreaToolTipXades
     property alias propertyMouseAreaToolTipLTV: mouseAreaToolTipLTV
-    property alias propertySwitchSignAdd: switchSignAdd
+    property alias propertySwitchAddAttributes: switchAddAttributes
     property alias propertyTextAttributesMsg: textAttributesMsg
     property alias propertyMouseAreaTextAttributesMsg: mouseAreaTextAttributesMsg
     property alias propertyTextSpinBox: textSpinBox
@@ -85,7 +85,7 @@ Item {
                                         + textFieldLocal.height
                                         + switchSignTemp.height
                                         + checkboxLTV.height
-                                        + switchSignAdd.height
+                                        + switchAddAttributes.height
                                         + rectangleEntities.height
                                         + 4 * Constants.SIZE_TEXT_V_SPACE
 
@@ -817,12 +817,12 @@ Item {
                                 font.capitalization: Font.MixedCase
                                 Accessible.role: Accessible.CheckBox
                                 Accessible.name: text
-                                KeyNavigation.tab: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
-                                KeyNavigation.down: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
+                                KeyNavigation.tab: (checkboxLTV.enabled ? checkboxLTV : switchAddAttributes)
+                                KeyNavigation.down: (checkboxLTV.enabled ? checkboxLTV : switchAddAttributes)
                                 Keys.onPressed: {
                                     handleKeyPressed(event.key, switchSignTemp)
                                 }
-                                KeyNavigation.right: (checkboxLTV.enabled ? checkboxLTV : switchSignAdd)
+                                KeyNavigation.right: (checkboxLTV.enabled ? checkboxLTV : switchAddAttributes)
                                 KeyNavigation.backtab: textFieldLocal
                                 KeyNavigation.up: textFieldLocal
                                 Keys.onEnterPressed: toggleSwitch(switchSignTemp)
@@ -866,7 +866,7 @@ Item {
                                 }
                             }
                             Switch {
-                                id: switchSignAdd
+                                id: switchAddAttributes
                                 height: Constants.HEIGHT_SWITCH_COMPONENT
                                 anchors.top: checkboxLTV.bottom
                                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
@@ -879,16 +879,16 @@ Item {
                                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                                 font.capitalization: Font.MixedCase
                                 z: 1
-                                KeyNavigation.tab: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
-                                KeyNavigation.down: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
-                                KeyNavigation.right: switchSignAdd.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
+                                KeyNavigation.tab: switchAddAttributes.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
+                                KeyNavigation.down: switchAddAttributes.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
+                                KeyNavigation.right: switchAddAttributes.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
                                 Keys.onPressed: {
-                                    handleKeyPressed(event.key, switchSignAdd)
+                                    handleKeyPressed(event.key, switchAddAttributes)
                                 }
                                 KeyNavigation.backtab: (checkboxLTV.enabled ? checkboxLTV : switchSignTemp)
                                 KeyNavigation.up: (checkboxLTV.enabled ? checkboxLTV : switchSignTemp)
-                                Keys.onEnterPressed: toggleSwitch(switchSignAdd)
-                                Keys.onReturnPressed: toggleSwitch(switchSignAdd)
+                                Keys.onEnterPressed: toggleSwitch(switchAddAttributes)
+                                Keys.onReturnPressed: toggleSwitch(switchAddAttributes)
                             }
                             Item {
                                 id: rectangleEntities
@@ -896,7 +896,7 @@ Item {
                                 height: listViewEntities.count > 0
                                     ? (propertyListViewHeight + (listViewEntities.count - 1) * Constants.SIZE_LISTVIEW_SPACING)
                                     : textAttributesMsg.height
-                                anchors.top: switchSignAdd.bottom
+                                anchors.top: switchAddAttributes.bottom
                                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                                 MouseArea {
                                     id: mouseAreaTextAttributesMsg
@@ -927,8 +927,8 @@ Item {
                                     Keys.onPressed: {
                                         handleKeyPressed(event.key, textAttributesMsg)
                                     }
-                                    KeyNavigation.backtab: switchSignAdd
-                                    KeyNavigation.up: switchSignAdd
+                                    KeyNavigation.backtab: switchAddAttributes
+                                    KeyNavigation.up: switchAddAttributes
                                 }
                                 ListView {
                                     id: listViewEntities
@@ -1018,8 +1018,8 @@ Item {
                     KeyNavigation.tab: textSpinBox
                     KeyNavigation.down: textSpinBox
                     KeyNavigation.right: textSpinBox
-                    KeyNavigation.backtab: switchSignAdd
-                    KeyNavigation.up: switchSignAdd
+                    KeyNavigation.backtab: switchAddAttributes
+                    KeyNavigation.up: switchAddAttributes
                 }
             }
 

@@ -838,7 +838,7 @@ Item {
         propertyOutputSignedFile = outputFile
 
         dialogContent.state = Constants.DLG_STATE.PROGRESS
-        if (typeof propertySwitchSignAdd !== "undefined" && propertySwitchSignAdd.checked) {
+        if (typeof propertySwitchAddAttributes !== "undefined" && propertySwitchAddAttributes.checked) {
             gapi.signOpenScapWithCMD(mobileNumber,textFieldPin.text,
                                      loadedFilePaths,outputFile,page,
                                      coord_x, coord_y,
@@ -857,7 +857,7 @@ Item {
         /*console.log("Send sms_token : " + textFieldReturnCode.text)*/
         var attributeList = []
         //CMD with SCAP attributes
-        if (typeof propertySwitchSignAdd !== "undefined" && propertySwitchSignAdd.checked) {
+        if (typeof propertySwitchAddAttributes !== "undefined" && propertySwitchAddAttributes.checked) {
             var count = 0
             for (var i = 0; i < entityAttributesModel.count; i++){
                 if(entityAttributesModel.get(i).checkBoxAttr == true) {

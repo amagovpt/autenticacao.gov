@@ -936,7 +936,7 @@ PageServicesSignForm {
             function focusBackward(){
                 checkboxSel.focus = true
                 if(propertyListViewEntities.currentIndex == 0){
-                    propertySwitchSignAdd.forceActiveFocus()
+                    propertySwitchAddAttributes.forceActiveFocus()
                 }else{
                     propertyListViewEntities.currentIndex--
                 }
@@ -960,7 +960,7 @@ PageServicesSignForm {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSignShow = propertyCheckSignShow.checked
             if(propertyCheckSignShow.checked){
-                propertyCheckSignReduced.enabled = !propertySwitchSignAdd.checked
+                propertyCheckSignReduced.enabled = !propertySwitchAddAttributes.checked
                 propertyCheckLastPage.enabled = true
                 propertySpinBoxControl.enabled = true
                 propertySpinBoxControl.up.indicator.enabled = true
@@ -983,11 +983,11 @@ PageServicesSignForm {
         }
     }
 
-    propertySwitchSignAdd {
+    propertySwitchAddAttributes {
         onCheckedChanged: {
-            propertyPageLoader.propertyBackupSignAdd = propertySwitchSignAdd.checked
-            if(propertySwitchSignAdd.checked){
-                console.log("propertySwitchSignAdd checked")
+            propertyPageLoader.propertyBackupSwitchAddAttributes = propertySwitchAddAttributes.checked
+            if(propertySwitchAddAttributes.checked){
+                console.log("propertySwitchAddAttributes checked")
                 propertyBusyIndicatorRunning = true
                 propertyCheckSignReduced.checked = false
                 propertyCheckSignReduced.enabled = false
@@ -999,7 +999,7 @@ PageServicesSignForm {
                 gapi.startLoadingAttributesFromCache(GAPI.ScapAttrAll,
                                                      GAPI.ScapAttrDescriptionLong)
             }else{
-                console.log("propertySwitchSignAdd not checked")
+                console.log("propertySwitchAddAttributes not checked")
 
                 propertyCheckSignReduced.enabled = true
                 propertyRadioButtonXADES.enabled = true
@@ -1083,7 +1083,7 @@ PageServicesSignForm {
                     propertyFileDialogOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
 
                     //PAdES with SCAP switch checked but no attributes selected
-                    if(propertyRadioButtonPADES.checked && propertySwitchSignAdd.checked
+                    if(propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked
                                                         && numberOfAttributesSelected() == 0)
                     {
                         var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
@@ -1097,7 +1097,7 @@ PageServicesSignForm {
                     propertyFileDialogOutput.currentFile = prefix + Functions.replaceFileSuffix(outputFile, newSuffix)
                     propertyFileDialogOutput.open()
                 }else{
-                    if (propertySwitchSignAdd.checked){
+                    if (propertySwitchAddAttributes.checked){
                         var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
                         var bodyPopup = qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
                         mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
@@ -1125,13 +1125,13 @@ PageServicesSignForm {
                 var bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CMD_SUPPORT")
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
-            else if( propertySwitchSignAdd.checked && numberOfAttributesSelected() == 0) {
+            else if( propertySwitchAddAttributes.checked && numberOfAttributesSelected() == 0) {
                 var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
                 var bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
                 return;
             }
-            else if (propertySwitchSignAdd.checked && propertyListViewFiles.count > 1){
+            else if (propertySwitchAddAttributes.checked && propertyListViewFiles.count > 1){
                 var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
                 var bodyPopup = qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
@@ -1195,7 +1195,7 @@ PageServicesSignForm {
                 propertyTextFieldLocal.enabled = true
                 propertyTextFieldReason.opacity = 1.0
                 propertyTextFieldLocal.opacity = 1.0
-                propertySwitchSignAdd.enabled = true
+                propertySwitchAddAttributes.enabled = true
                 propertyCheckSignShow.enabled = true
                 propertyCheckSignReduced.enabled = true
                 propertyButtonSignCMD.enabled = true
@@ -1213,7 +1213,7 @@ PageServicesSignForm {
                 propertyTextFieldLocal.enabled = false
                 propertyTextFieldReason.opacity = Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                 propertyTextFieldLocal.opacity = Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
-                propertySwitchSignAdd.enabled = false
+                propertySwitchAddAttributes.enabled = false
 
                 propertyCheckSignShow.enabled = false
                 propertyCheckSignReduced.enabled = false
@@ -1474,7 +1474,7 @@ PageServicesSignForm {
         propertyRadioButtonXADES.checked = !propertyPageLoader.propertyBackupFormatPades
         propertySwitchSignTemp.checked = propertyPageLoader.propertyBackupTempSign
         propertyCheckboxLTV.checked= propertyPageLoader.propertyBackupAddLTV
-        propertySwitchSignAdd.checked = propertyPageLoader.propertyBackupSignAdd
+        propertySwitchAddAttributes.checked = propertyPageLoader.propertyBackupSwitchAddAttributes
         propertyCheckSignShow.checked = propertyPageLoader.propertyBackupSignShow
         propertyCheckSignReduced.checked = propertyPageLoader.propertyBackupSignReduced
 
@@ -1671,7 +1671,7 @@ PageServicesSignForm {
             propertyOutputSignedFile = outputFile;
             if (propertyListViewFiles.count == 1) {
                 var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
-                if(propertySwitchSignAdd.checked) {
+                if(propertySwitchAddAttributes.checked) {
                     //In the new SCAP implementation we use our PDFSignature class as a simple signature
                     //so we don't need to convert coordinates
                     //coord_x = gapi.getPageSize(page).width * coord_x
