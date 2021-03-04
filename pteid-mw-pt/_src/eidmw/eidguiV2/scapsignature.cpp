@@ -117,7 +117,6 @@ int ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepat
         throw;
     }
     if (successful == GAPI::ScapSucess) {
-        parent->signalPdfSignSucess(parent->SignMessageOK);
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "ScapSignature",
                 "SCAP CMD ScapSuccess");
     }
