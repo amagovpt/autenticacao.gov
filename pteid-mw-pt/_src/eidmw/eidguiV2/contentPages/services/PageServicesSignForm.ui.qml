@@ -1288,7 +1288,7 @@ Item {
                               "PageServicesSign", "STR_SIGN_CMD_BUTTON")
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
-                    enabled: fileLoaded
+                    enabled: fileLoaded && radioButtonPADES.checked
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase

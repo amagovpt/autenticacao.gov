@@ -1198,7 +1198,6 @@ PageServicesSignForm {
                 propertySwitchAddAttributes.enabled = true
                 propertyCheckSignShow.enabled = true
                 propertyCheckSignReduced.enabled = true
-                propertyButtonSignCMD.enabled = true
                 filesModel.clear()
                 for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
                 {
@@ -1217,7 +1216,6 @@ PageServicesSignForm {
 
                 propertyCheckSignShow.enabled = false
                 propertyCheckSignReduced.enabled = false
-                propertyButtonSignCMD.enabled = false
                 filesModel.clear()
                 for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
                 {
@@ -1343,7 +1341,7 @@ PageServicesSignForm {
                         propertyPDFPreview.propertyFileName = Functions.fileBaseName(loadedFilePath)
                         propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
                     }else{
-                        filesModel.remove(propertyListViewFiles.count-1)
+                        removeFileFromList(filesModel.count-1)
                         var titlePopup = qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR")
                         var bodyPopup = ""
                         var link = "https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#problemas-com-ficheiros-pdf-não-suportados"
@@ -1571,8 +1569,8 @@ PageServicesSignForm {
         };
 
         if (!containsFile(newFileUrl, propertyPageLoader.propertyBackupfilesModel)){
-            filesModel.append(newFileUrl);
             propertyPageLoader.propertyBackupfilesModel.append(newFileUrl);
+            filesModel.append(newFileUrl);
         } else {
             alreadyUploaded = true;
         }
