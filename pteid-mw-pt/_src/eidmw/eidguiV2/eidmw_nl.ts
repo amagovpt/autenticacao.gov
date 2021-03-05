@@ -91,7 +91,7 @@
     </message>
     <message>
         <source>STR_CMD_ERROR_MSG</source>
-        <translation>Por favor tente novamente. Caso o erro persista, contacte-nos por email para &lt;a href=&quot;mailto:info.cidadao@ama.pt&quot;&gt;info.cidadao@ama.pt&lt;/a&gt;, indicando o número de telémovel associado à sua Chave Móvel Digital.</translation>
+        <translation>Por favor tente novamente. Caso o erro persista, contacte-nos por email para &lt;a href=&quot;mailto:info.cidadao@ama.pt&quot;&gt;info.cidadao@ama.pt&lt;/a&gt;, indicando o número de telemóvel associado à sua Chave Móvel Digital.</translation>
     </message>
     <message>
         <source>STR_CMD_SUCESS</source>
@@ -137,7 +137,7 @@
     <message>
         <source>STR_CMD_GET_CERTIFICATE_ERROR</source>
         <oldsource>STR_GET_CERTIFICATE_ERROR</oldsource>
-        <translation>Registo inexistente ou subscrição da assinatura digital inativa. Verifique se a subscrição da assinatura digital está ativada em &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;. &lt;br&gt;&lt;br&gt;Caso o erro persista, contacte-nos por email para &lt;b&gt;info.cidadao@ama.pt&lt;/b&gt;, indicando o número de telémovel associado à sua Chave Móvel Digital.</translation>
+        <translation>Registo inexistente ou subscrição da assinatura digital inativa. Verifique se a subscrição da assinatura digital está ativada em &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;. &lt;br&gt;&lt;br&gt;Caso o erro persista, contacte-nos por email para &lt;b&gt;info.cidadao@ama.pt&lt;/b&gt;, indicando o número de telemóvel associado à sua Chave Móvel Digital.</translation>
     </message>
     <message>
         <source>STR_CMD_PROXY_AUTH_ERROR</source>
