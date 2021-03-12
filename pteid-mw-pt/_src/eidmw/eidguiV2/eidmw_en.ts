@@ -569,18 +569,6 @@
         <translation>Signature</translation>
     </message>
     <message>
-        <source>STR_MENU_SIGN_HELP</source>
-        <translation type="vanished">Help</translation>
-    </message>
-    <message>
-        <source>STR_MENU_SIGN_SIMPLE</source>
-        <translation type="vanished">Simple</translation>
-    </message>
-    <message>
-        <source>STR_MENU_SIGN_ADVANCE</source>
-        <translation type="vanished">Advanced</translation>
-    </message>
-    <message>
         <source>STR_MENU_SECURITY</source>
         <translation>Security</translation>
     </message>
@@ -1198,7 +1186,7 @@
     </message>
     <message>
         <source>STR_BACK_TO_SIGNATURE_PAGE</source>
-        <translation>Click here to return to the advanced signature page</translation>
+        <translation>Click here to return to the signature page</translation>
     </message>
     <message>
         <source>STR_SCAP_BUTTON_LOAD</source>
@@ -1950,10 +1938,6 @@
     <message>
         <source>STR_SIGN_HELP_CMD_SELECT</source>
         <translation>https://www.autenticacao.gov.pt/cmd-pedido-chave</translation>
-    </message>
-    <message>
-        <source>STR_SIGN_HELP_TOPIC_1</source>
-        <translation type="vanished">Use the &quot;Simple&quot; menu to sign a PDF document or the &quot;Advanced&quot; menu for other file types and additional options.</translation>
     </message>
     <message>
         <source>STR_SIGN_HELP_AUTENTICACAO.GOV_LINK</source>

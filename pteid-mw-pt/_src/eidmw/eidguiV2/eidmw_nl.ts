@@ -486,7 +486,7 @@
     </message>
     <message>
         <source>STR_SIGN_OPEN_OPTIONS</source>
-        <translation>Open opções avançadas</translation>
+        <translation>Abrir opções avançadas</translation>
     </message>
 </context>
 <context>
@@ -1196,7 +1196,7 @@
     </message>
     <message>
         <source>STR_BACK_TO_SIGNATURE_PAGE</source>
-        <translation>Clique aqui para voltar para a página de assinatura avançada</translation>
+        <translation>Clique aqui para voltar para a página de assinatura</translation>
     </message>
     <message>
         <source>STR_SCAP_BUTTON_LOAD</source>
@@ -1948,10 +1948,6 @@
     <message>
         <source>STR_SIGN_HELP_CMD_SELECT</source>
         <translation>https://www.autenticacao.gov.pt/cmd-pedido-chave</translation>
-    </message>
-    <message>
-        <source>STR_SIGN_HELP_TOPIC_1</source>
-        <translation type="vanished">Use o menu “Simples” para assinar um documento PDF ou o menu “Avançada” para outros tipos de ficheiros e opções adicionais.</translation>
     </message>
     <message>
         <source>STR_SIGN_HELP_AUTENTICACAO.GOV_LINK</source>
