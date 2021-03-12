@@ -92,9 +92,9 @@ class CMDSignatureGsoapProxy: public BasicHttpBinding_USCORECCMovelSignatureProx
 };
 
 /*  *********************************************************
-    ***    handleError()                                  ***
+    ***    handleCommunicationError()                     ***
     ********************************************************* */
-int handleError( BasicHttpBinding_USCORECCMovelSignatureProxy proxy, int ret ){
+int handleCommunicationError( BasicHttpBinding_USCORECCMovelSignatureProxy proxy, int &ret ){
     if ( ret != SOAP_OK ) {
         if ( ( proxy.soap_fault() != NULL )
             && ( proxy.soap_fault()->faultstring)) {
@@ -104,6 +104,8 @@ int handleError( BasicHttpBinding_USCORECCMovelSignatureProxy proxy, int ret ){
             MWLOG_ERR(logBuf, "Unknown SOAP Fault! - ret: %d", ret );
         }
 
+        if ( ret > 200 )
+            ret += ERR_ADDR_CMD_BASE;
         return ret;
     }
 
@@ -442,7 +444,7 @@ int CMDServices::GetCertificate(CMDProxyInfo proxyInfo, std::string in_userId, c
     }
 
     /* Handling errors */
-    if ( handleError( proxy, ret ) != ERR_NONE ) return ret;
+    if ( handleCommunicationError( proxy, ret ) != ERR_NONE ) return ret;
 
     /* Validate response */
     ret = checkGetCertificateResponse( &response );
@@ -577,7 +579,7 @@ int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char * in_hash, st
     */
 
     /* Handling errors */
-    if ( handleError( proxy, ret ) != ERR_NONE ) return ret;
+    if ( handleCommunicationError( proxy, ret ) != ERR_NONE ) return ret;
 
     /* Validate response */
     ret = checkCCMovelSignResponse( &response );
@@ -716,7 +718,7 @@ int CMDServices::ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigne
         delete ids[i];
 
     /* Handling errors */
-    if ( handleError( proxy, ret ) != ERR_NONE ) return ret;
+    if ( handleCommunicationError( proxy, ret ) != ERR_NONE ) return ret;
 
     /* Validate response */
     ret = checkCCMovelMultipleSignResponse( &response );
@@ -911,7 +913,7 @@ int CMDServices::sendValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, _n
     }
 
     /* Handling errors */
-    if ( handleError( proxy, ret ) != ERR_NONE ) return ret;
+    if ( handleCommunicationError( proxy, ret ) != ERR_NONE ) return ret;
 
     /* Validate response */
     ret = checkValidateOtpResponse( &response );
@@ -1049,7 +1051,7 @@ int CMDServices::askForCertificate(CMDProxyInfo proxyInfo, std::string in_userId
     }
 
     /* Handling errors */
-    if (handleError(proxy, ret) != ERR_NONE) return ret;
+    if ( handleCommunicationError(proxy, ret) != ERR_NONE ) return ret;
 
     /* Validate response */
     ret = checkGetCertificateWithPinResponse(&response);
@@ -1238,7 +1240,7 @@ int CMDServices::forceSMS(CMDProxyInfo proxyInfo, std::string in_userId){
     }
 
     /* Handling errors */
-    if (handleError(proxy, ret) != ERR_NONE) return ret;
+    if ( handleCommunicationError(proxy, ret) != ERR_NONE ) return ret;
 
     /* Validate response */
     ret = checkForceSmsResponse(&response);

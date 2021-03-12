@@ -655,7 +655,7 @@ void GAPI::showSignCMDDialog(long error_code)
     case SCAP_ATTRIBUTES_NOT_VALID:
         message = tr("STR_SCAP_NOT_VALID_ATTRIBUTES");
         break;
-    case -1:
+    case SOAP_EOF:
         message = tr("STR_CMD_TIMEOUT_ERROR");
         break;
     case ERR_GET_CERTIFICATE:
