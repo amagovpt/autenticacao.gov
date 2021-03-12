@@ -2141,7 +2141,7 @@
     </message>
     <message>
         <source>STR_POPUP_FILE_UNIQUE_MULTI</source>
-        <translation>Para assinar múltiplos ficheiros use a opção assinatura avançada</translation>
+        <translation>Só existe uma assinatura personalizada</translation>
     </message>
     <message>
         <source>STR_POPUP_FILE_CANCEL</source>

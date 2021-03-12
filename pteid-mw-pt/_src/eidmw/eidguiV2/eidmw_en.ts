@@ -2143,7 +2143,7 @@
     </message>
     <message>
         <source>STR_POPUP_FILE_UNIQUE_MULTI</source>
-        <translation>To sign multiple files use the advanced signature page</translation>
+        <translation>There is only one personalized signature</translation>
     </message>
     <message>
         <source>STR_POPUP_FILE_CANCEL</source>
