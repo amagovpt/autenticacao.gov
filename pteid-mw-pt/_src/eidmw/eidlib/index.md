@@ -108,53 +108,56 @@ if (pin.verifyPin(“”, &triesLeft, true){
 	bool bResult = pin.changePin("","", triesLeft, pin.getLabel());
 	if (!bResult && -1 == triesLeft) return;
 }
+
 ```
 
-### Signing Documents
+## Signatures with eID card (citizen signature certificate)
 Make sure to initialize the underlying classes that will be used to sign documents, as follows
 #### How to sign PDF documents (PAdES)
 ```cpp
+
 #include “eidlib.h”
 (...)
 PTEID_EIDCard &card = readerContext.getEIDCard();
 //PDF file to sign
 PTEID_PDFSignature signature(“/home/user/input.pdf”);
 
-signature.enableSmallSignatureFormat();
-signature.enableTimestamp(); // use this if signature should contain a timestamp 
+/* Optional settings for the signature */
 
-// add custom image to the signature can't be using in combination with enableSmallSignatureFormat() method
-// image_data pointer should point to a JPEG format image with recommended dimensions are 185x41 px
+// Apply a visible signature with half the height of regular visible signatures
+signature.enableSmallSignatureFormat();  
+
+/* Signature profile according to PAdES specification
+PAdES-B:   PTEID_SignatureLevel::PTEID_LEVEL_BASIC (default level)
+PAdES-T:   PTEID_SignatureLevel::PTEID_LEVEL_TIMESTAMP
+PAdES-LT:  PTEID_SignatureLevel::PTEID_LEVEL_LT
+PAdES-LTA: PTEID_SignatureLevel::PTEID_LEVEL_LTV */
+signature.setSignatureLevel(PTEID_SignatureLevel::PTEID_LEVEL_BASIC);
+
+// add custom image to the signature - it can't be used in combination with enableSmallSignatureFormat() method
+// image_data should point to a JPEG format image with recommended dimensions 185x41 px
 unsigned char *image_data;
- unsigned long image_length;
+unsigned long image_length;
 signature.setCustomImage(image_data,image_length);
 
-//Select the localization (sectors in page) of signature. 
-// The parameter is_landscape serves to indicate if the file is landscape, hence it changes the sectors
-//select the sector number and page
-int sector = 1;
+//Select the location of visible signature in the document
+//X and Y coordinates of the signature location as percentage of page width and height [0-1]
+//To apply an invisible signature negative values should be specified for both parameters, e.g. -1
+double location_x = 0.2;
+double location_y = 0.2;
 int page = 1;
-bool is_landscape = false;
+
 const char * location = “Lisboa, Portugal”;
 const char * reason = “Agree with the content in the file”;
 
-//If batch signature the it should point to the output directory instead of a file
+//If the instance of PTEID_PDFSignature is in "batch mode" (see next section) output should have the output directory path instead of a file path
 const char * output = “/home/user/output_signed.pdf”;
-card.SignPDF(signature,  page, sector, is_landscape, location, reason, output_file);
+card.SignPDF(signature,  page, sector, location_x, location_y, location, reason, output_file);
 
 ```
 
-If instead want to use a precise location inside a file then can be achieved as follows
-```cpp
-//The parameters pos_x e pos_y indicate the precise location in a file as a percentage of width and height of a page
-//For vertical A4 pages these value range between [0-1]
-double pos_x = 0.1; 
-double pos_y = 0.1;
-card.SignPDF(signature,  page, pos_x, pos_y, location, reason, output_file);
-``` 
-
 #### How to sign multiple PDF documents
-It's possible to sign multiple PDF files in batch mode, as follows
+It's possible to sign multiple PDF files in batch mode with a single PIN prompt, as follows
 ```cpp
 #include “eidlib.h”
 (...)
@@ -166,30 +169,31 @@ PTEID_PDFSignature signature(“/home/user/input.pdf”);
 signature.addToBatchSigning( “Other_File.pdf” );
 signature.addToBatchSigning( “Yet_Another_FILE.pdf” );
 (...)
-int sector = 1;
+
+double location_x = 0.2;
+double location_y = 0.2;
 int page = 1;
-bool is_landscape = false;
+
 const char * location = “Lisboa, Portugal”;
 const char * reason = “I agree with the content in the file”;
 
 //In this case the output is a destination directory
-const char * output = “/home/user/d”;
-card.SignPDF(signature,  page, sector, is_landscape, location, reason, output_file);
+const char * output = “/home/user/signed_documents/”;
+card.SignPDF(signature,  page, location_x, location_y, is_landscape, location, reason, output_file);
 
 ```
-Note that when signing multiple files the `reason`, `localization`, `page` and `sector` are equal in documets.
+Note that when signing multiple files the signature profile selected with setSignatureLevel(), and the SignPDF() parameters `reason`, `location`, `page`, `location_x` and `location_y` are applied to all documents.
 
 #### Verify a PAdES signature 
 
-One can verify the a PDF signature using the Java iText SDK.
+One can verify a PAdES signature using the Java iText SDK.
 See [iText-example](https://github.com/itext/i7js-samples/tree/master/publications/signatures/src/test/java/com/itextpdf/samples/signatures/chapter05) for a concrete example of how to verify a signature.
 
 
-#### How to sign any document (XAdES)
+#### How to sign any type of file (XAdES signature format)
 Sign files in batch mode
 ```cpp
-unsigned long n_errors = 200; 
-char errors[n_errors];
+
 const char *files[] = {"test/File1.txt", 
 					"test/File2.pdf", 
 					"test/File3.md", 
@@ -198,14 +202,14 @@ const char *destination =”test/files_signed.zip”; //the output file that wil
 int n_paths = 4; // size of files array
 
 // simple signature (1 unique signature for all files)
-card.SignXades( destination, files, n_paths ); 
+card.SignXades(destination, files, n_paths); 
 (...)
 // timestamp signature (1 unique signature of type T (Timestamp) for all files)
-card.SignXadesT( destination, files, n_paths ); 
+card.SignXadesT(destination, files, n_paths); 
 (...)
 
 // archival signature (1 unique signature of type A(archival) for all files)
-card.SignXadesA( destination, files, n_paths ); 
+card.SignXadesA(destination, files, n_paths); 
 (...)
 
 ```

@@ -87,7 +87,7 @@ String nrCC = eid.getDocumentNumber();
 (...)
 ```
 
-#### Get picture of a card holder
+#### Get citizen picture file
 
 
 ```java
@@ -138,7 +138,7 @@ boolean bOk = card.writePersonalNotes(personalNotes, card.getPins().getPinByPinR
 
 
 
-## Signing Documents
+## Signatures with eID card (citizen signature certificate)
 Make sure to initialize the underlying classes that will be used to sign documents, as follows
 ```java
 PTEID_ReaderSet readerSet = PTEID_ReaderSet.instance();
@@ -150,31 +150,46 @@ PTEID_EIDCard card = readerContext.getEIDCard();
 
 
 ```java
-int page = 1; // the page where the signature is applied
-int position = 2; // position of the signature in the page
-boolean landscape = false; //indicates if the signature should be applied in landscape
+//Select the location of visible signature in the document.
+//X and Y coordinates of the signature location as percentage of page width and height [0-1]
+//To apply an invisible signature negative values should be specified for both parameters, e.g. -1
+double location_x = 0.2;
+double location_y = 0.2;
+int page = 1;
+
 String location = "Lisbon, Portugal"; 
 String reason = "I agree with the content of this document";
 
-// signing a batch of documents
+/* Signature profile according to PAdES specification
+PAdES-B:   PTEID_SignatureLevel.PTEID_LEVEL_BASIC (default level)
+PAdES-T:   PTEID_SignatureLevel.PTEID_LEVEL_TIMESTAMP
+PAdES-LT:  PTEID_SignatureLevel.PTEID_LEVEL_LT
+PAdES-LTA: PTEID_SignatureLevel.PTEID_LEVEL_LTV */
+signature.setSignatureLevel(PTEID_SignatureLevel.PTEID_LEVEL_BASIC);
+
+
+//jpeg_data is a byte[] containing a JPEG image file with recommended dimensions 185x41 px
+PTEID_ByteArray image_data = new PTEID_ByteArray(jpeg_data, jpeg_data.length);
+signature.setCustomImage(image_data);
+
+// Signing a batch of documents with only one PIN prompt
 PTEID_PDFSignature signature = new PTEID_PDFSignature();
 String[] files = new String[] {'/home/user/document.pdf', '/home/user/another_document.pdf'};
 for (String inputFile : files) {
     signature.addToBatchSigning(inputFile);
 }
-String output = 'home/user/signed_files';
-signature.enableTimestamp(); // use this if signature should contain a timestamp 
+String output = 'home/user/signed_documents/';
 
 // sign only one document
 PTEID_PDFSignature signature = new PTEID_PDFSignature('/home/user/document.pdf');
 String output = 'home/user/document_signed.pdf';
 
-// do the actual signature
-int returnCode = card.SignPDF(signature, page, position, landscape, location, reason, output);
+// Perform the actual signature
+int returnCode = card.SignPDF(signature, page, location_x, location_y, location, reason, output);
 
 ```
 
-#### How to sign any document (XAdES)
+#### How to sign any type of file (XAdES signature format)
 
 
 ```java
@@ -190,9 +205,8 @@ String output = 'home/user/signed_file.zip';
 card.SignXades(output, files, files.length);
 
 ```
-The SDK also supports other XAdES signatures such as temporal `SignXadesT()`, archival `SignXadesA()`, etc..
+The SDK also supports other XAdES signature profiles such as signature with timestamp `SignXadesT()` or archival `SignXadesA()`, etc..
 For more details see at [PTEID_EIDCard](./classpt_1_1gov_1_1cartaodecidadao_1_1PTEID__EIDCard.html) 
-
 
 
 ##### Timestamp Server configuration 
@@ -202,7 +216,6 @@ For example, to change the Time Stamping Authority (TSA) by changing the url or 
 PTEID_Config config = new PTEID_Config(PTEID_PARAM_XSIGN_TSAURL);
 config.setString("http://sha256timestamp.ws.symantec.com/sha256/timestamp"); //use a third party TSA
 
-new PTEID_Config(PTEID_PARAM_XSIGN_TIMEOUT).setLong(60); // allow a timeout of 60 seconds
 ```
 
 #### Verify a PAdES signature 
