@@ -1590,7 +1590,7 @@ void json_parse_string(std::string &dest_string, cJSON *json_obj, const char *it
 		dest_string.append(item->valuestring);
 	}
 	else {
-		MWLOG(LEV_ERROR, MOD_APL, "Failed to parse JSON string element: %s", item_name);
+		MWLOG(LEV_DEBUG, MOD_APL, "Address field %s is missing", item_name);
 	}
 
 }
