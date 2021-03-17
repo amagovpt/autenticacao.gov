@@ -190,6 +190,7 @@ PageCardAdressForm {
             }
             else if (error_code == GAPI.AddressUnknownError) {
                 bodyPopup = qsTr("STR_REMOTEADDRESS_UNKNOWN_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
             }
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")

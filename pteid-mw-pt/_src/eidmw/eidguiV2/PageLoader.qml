@@ -57,7 +57,7 @@ Loader{
 
     Dialog {
         id: generalPopUp
-        width: 400
+        width: 450
         height: 200
         visible: false
 
