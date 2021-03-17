@@ -65,9 +65,8 @@ PageCardAdressForm {
             propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
 
-            propertyButtonConfirmOfAddress.enabled = true
+            gapi.setAddressLoaded(true)
 
-            //gapi.setAddressLoaded(true)
             if(!Constants.USE_SDK_PIN_UI_POPUP)
                 dialogTestPin.visible = false
             if(mainFormID.propertyPageLoader.propertyForceFocus
@@ -106,6 +105,7 @@ PageCardAdressForm {
             console.log("Card Address onSignalRemoteAddressError: "+ error_code)
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
+
             if (error_code == GAPI.AddressConnectionError) {
                 bodyPopup = qsTr("STR_REMOTEADDRESS_NETWORK_ERROR")
                     + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
@@ -165,6 +165,8 @@ PageCardAdressForm {
 
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
+            propertyButtonConfirmOfAddress.enabled = false
+
             if (error_code == GAPI.NoReaderFound) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
             }
@@ -177,9 +179,11 @@ PageCardAdressForm {
             }
             else if (error_code == GAPI.CardUserPinCancel) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
+                propertyButtonConfirmOfAddress.enabled = true
             }
             else if (error_code == GAPI.CardPinTimeout) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
+                propertyButtonConfirmOfAddress.enabled = true
             }
             else if (error_code == GAPI.IncompatibleReader) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
@@ -190,7 +194,6 @@ PageCardAdressForm {
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
-            propertyButtonConfirmOfAddress.enabled = false
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
 
             propertyDistrict.propertyDateField.text = ""
@@ -218,6 +221,7 @@ PageCardAdressForm {
         onSignalCardChanged: {
             console.log("Card Address onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
+                propertyButtonConfirmOfAddress.enabled = false
                 var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 var bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
@@ -243,6 +247,7 @@ PageCardAdressForm {
                 propertyForeignPostalCode.propertyDateField.text = ""
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
+                propertyButtonConfirmOfAddress.enabled = true
                 if(Constants.USE_SDK_PIN_UI_POPUP){
                     mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                     gapi.verifyAddressPin("", false)
