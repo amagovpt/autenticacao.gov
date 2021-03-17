@@ -896,8 +896,9 @@ int handleError(int status_code, soap *sp, const char *call){
                 return GAPI::ScapSecretKeyError;
             }
         }
-        if (status_code == SCAP_ACCOUNT_MATCH_ERROR_CODE || status_code == SCAP_REQUEST_ERROR_CODE) {
-            return GAPI::ScapSecretKeyError;
+        if (status_code == SCAP_ACCOUNT_MATCH_ERROR_CODE
+                || status_code == SCAP_REQUEST_ERROR_CODE) {
+            return GAPI::ScapNotValidAttributesError;
         }
         if (status_code == SCAP_ATTRIBUTES_EXPIRED) {
             return GAPI::ScapAttributesExpiredError;
