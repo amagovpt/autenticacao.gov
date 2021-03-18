@@ -1,9 +1,0 @@
-plugins:
-  - jekyll-relative-links
-relative_links:
-  enabled: true
-  collections: true
-include:
-  - user_manual.md
-kramdown:
-  gfm_quirks: [paragraph_end, no_auto_typographic]
