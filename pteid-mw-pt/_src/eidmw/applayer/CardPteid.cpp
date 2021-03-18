@@ -871,8 +871,8 @@ bool isCardExpirationDateTolerated(const char *card_expiry_date) {
      // create tm structure with 24/02/2020: the start of the expiration tolerance period
     std::tm timeinfo = std::tm();
     timeinfo.tm_year = 2020 - 1900;
-    timeinfo.tm_mon = 1;          // month: February
-    timeinfo.tm_mday = 24;        // day: 24st
+    timeinfo.tm_mon = 1;           // month: February
+    timeinfo.tm_mday = 24;         // day: 24th
     std::time_t startTolerancePeriod = std::mktime (&timeinfo);
 
     std::cmatch cm;
