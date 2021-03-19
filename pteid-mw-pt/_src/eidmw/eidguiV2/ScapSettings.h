@@ -32,9 +32,10 @@ class ScapSettings
     #define SCAP_ZERO_ATTRIBUTES        402    // Citizen has no attributes 
     #define SCAP_ATTRIBUTES_NOT_VALID   403    // Attributes request do not match the citizen's attributes
 
-    #define SCAP_GENERIC_ERROR_CODE     404
-    #define SCAP_CLOCK_ERROR_CODE       405
-    #define SCAP_SECRETKEY_ERROR_CODE   406
+    #define SCAP_GENERIC_ERROR_CODE            404
+    #define SCAP_CLOCK_ERROR_CODE              405
+    #define SCAP_SECRETKEY_ERROR_CODE          406
+    #define SCAP_ATTR_POSSIBLY_EXPIRED_WARNING 407
 
     #define SCAP_MAX_CLOCK_DIF          5*60    // 5 minutos
 

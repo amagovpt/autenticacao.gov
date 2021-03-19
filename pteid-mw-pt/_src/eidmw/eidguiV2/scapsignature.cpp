@@ -82,6 +82,21 @@ std::vector<ns3__AttributeType*> ScapServices::getSelectedAttributes(std::vector
     return parsedAttributes;
 }
 
+bool detectExpiredAttributes(std::vector<ns3__AttributeType*> selected_attributes){
+    std::string validity, supplier;
+
+    for (unsigned int i = 0; i < selected_attributes.size(); i++) {
+        supplier = selected_attributes.at(i)->AttributeSupplier->Name;
+        validity = selected_attributes.at(i)->Validity;
+
+        if (GAPI::isAttributeExpired(validity, supplier)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 /*
 *  SCAP signature with citizen signature using CMD
 */
@@ -157,10 +172,17 @@ int ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepat
                 "SCAP CMD Error. ScapSecretKeyError");
     }
     else {
-        qDebug() << "Error in SCAP Signature with CMD service!";
-        parent->signCMDFinished(SCAP_GENERIC_ERROR_CODE);
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                "SCAP CMD Error. ScapPdfSignResult = %d",successful);
+        if (detectExpiredAttributes(selected_attributes)) {
+            parent->signCMDFinished(SCAP_ATTR_POSSIBLY_EXPIRED_WARNING);
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                    "SCAP CMD Error with possibly expired attributes. ScapPdfSignResult = %d",successful);
+        }
+        else {
+            qDebug() << "Error in SCAP Signature with CMD service!";
+            parent->signCMDFinished(SCAP_GENERIC_ERROR_CODE);
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                    "SCAP CMD Error. ScapPdfSignResult = %d",successful);
+        }
     }
     return successful;
 }
@@ -267,10 +289,17 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
                             "SCAP CC ScapSecretKeyError");
                 }
                 else {
-                    qDebug() << "Error in SCAP Signature service!";
-                    parent->signalSCAPServiceFail(successful);
-                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                            "SCAP CC Error. ScapPdfSignResult = %d",successful);
+                    if (detectExpiredAttributes(selected_attributes)) {
+                        parent->signalSCAPServiceFail(GAPI::ScapAttrPossiblyExpiredWarning);
+                        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                                "SCAP CC Error with possibly expired attributes. ScapPdfSignResult = %d",successful);
+                    }
+                    else {
+                        qDebug() << "Error in SCAP Signature service!";
+                        parent->signalSCAPServiceFail(successful);
+                        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                                "SCAP CC Error. ScapPdfSignResult = %d",successful);
+                    }
                 }
             }
             catch (eIDMW::PTEID_Exception &e)

@@ -237,7 +237,8 @@ public:
     enum AutoUpdateType {AutoUpdateNoExist, AutoUpdateApp, AutoUpdateCerts, AutoUpdateNews};
 
     enum ScapPdfSignResult { ScapTimeOutError, ScapGenericError, ScapAttributesExpiredError, ScapZeroAttributesError,
-                             ScapNotValidAttributesError, ScapClockError, ScapSecretKeyError, ScapMultiEntityError, ScapSucess };
+                             ScapNotValidAttributesError, ScapClockError, ScapSecretKeyError, ScapMultiEntityError,
+                             ScapSucess, ScapAttrPossiblyExpiredWarning };
 
     enum ScapAttrType {ScapAttrEntities, ScapAttrCompanies, ScapAttrAll};
     enum ScapAttrDescription {ScapAttrDescriptionShort, ScapAttrDescriptionLong};
@@ -333,6 +334,7 @@ public slots:
     void startLoadingAttributesFromCache(int scapAttrType, bool isShortDescription);
     void startRemovingAttributesFromCache(int scapAttrType);
     void startGettingEntityAttributes(QList<int> entity_index, bool useOAuth);
+    static bool isAttributeExpired(std::string& date, std::string& supplier);
     void startPingSCAP();
 
     void startSigningSCAP(QString inputPdf, QString outputPDF, int page, double location_x, double location_y,

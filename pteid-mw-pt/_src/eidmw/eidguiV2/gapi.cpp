@@ -646,6 +646,9 @@ void GAPI::showSignCMDDialog(long error_code)
     case SCAP_SECRETKEY_ERROR_CODE:
         message = tr("STR_SCAP_SECRETKEY_ERROR");
         break;
+    case SCAP_ATTR_POSSIBLY_EXPIRED_WARNING:
+        message = tr("STR_SCAP_SIGNATURE_ERROR") + "<br>" + tr("STR_SCAP_CHECK_EXPIRED_ATTR");
+        break;
     case SCAP_ATTRIBUTES_EXPIRED:
         message = tr("STR_SCAP_NOT_VALID_ATTRIBUTES");
         break;
@@ -709,7 +712,8 @@ void GAPI::showSignCMDDialog(long error_code)
         else if (error_code == SCAP_SECRETKEY_ERROR_CODE
                  || error_code == SCAP_ATTRIBUTES_EXPIRED
                  || error_code == SCAP_ZERO_ATTRIBUTES
-                 || error_code == SCAP_ATTRIBUTES_NOT_VALID){
+                 || error_code == SCAP_ATTRIBUTES_NOT_VALID
+                 || error_code == SCAP_ATTR_POSSIBLY_EXPIRED_WARNING){
             signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "! " + message);
             signalShowLoadAttrButton();
         }
@@ -2476,7 +2480,7 @@ void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
     getSCAPAttributesFromCache(true,false);
 }
 
-bool isAttributeExpired(std::string& date, std::string& supplier) {
+bool GAPI::isAttributeExpired(std::string& date, std::string& supplier) {
     QRegExp dateFormat("^\\d{4}-\\d{2}-\\d{2}$"); // xsd:date format
     if (date.empty() || dateFormat.indexIn(date.c_str()) == -1) {
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui",

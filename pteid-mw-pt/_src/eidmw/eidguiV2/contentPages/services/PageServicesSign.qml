@@ -118,14 +118,6 @@ PageServicesSignForm {
                 propertyFlickable.flick(0, - velocity)
             }
         }
-        onSignalAttributesPossiblyExpired: {
-            var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
-            var bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRS_POSSIBLY_EXPIRED") + "<br>"
-            for (var i = 0; i < expiredSuppliers.length; i++) {
-                bodyPopup += "<br> - " + expiredSuppliers[i]
-            }
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-        }
         onSignalPdfSignSucess: {
             signsuccess_dialog.open()
             propertyBusyIndicatorRunning = false
@@ -173,6 +165,16 @@ PageServicesSignForm {
                         qsTranslate("PageServicesSign","STR_SCAP_NOT_VALID_ATTRIBUTES")
 
                 // Show button to load attributes
+                closeButtonError.visible = false
+                buttonLoadAttr.visible = true
+                buttonCancelAttr.visible = true
+            }
+            else if (pdfsignresult === GAPI.ScapAttrPossiblyExpiredWarning) {
+                console.log("ScapAttrPossiblyExpiredWarning")
+                signerror_dialog.propertySignFailDialogText.text =
+                        qsTranslate("PageServicesSign","STR_SIGN_SCAP_SERVICE_FAIL") + "<br><br>"
+                        + qsTranslate("GAPI","STR_SCAP_CHECK_EXPIRED_ATTR")
+
                 closeButtonError.visible = false
                 buttonLoadAttr.visible = true
                 buttonCancelAttr.visible = true

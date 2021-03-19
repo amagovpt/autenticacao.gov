@@ -488,6 +488,10 @@
         <source>STR_SIGN_OPEN_OPTIONS</source>
         <translation>Abrir opções avançadas</translation>
     </message>
+    <message>
+        <source>STR_SCAP_CHECK_EXPIRED_ATTR</source>
+        <translation>Verifique se os atributos selecionados estão expirados.</translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>
