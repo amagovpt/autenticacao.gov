@@ -308,7 +308,7 @@ int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coo
 
 	PDFSignature *pdf_sig = sig_handler.mp_signature;
 
-	if (coord_x >= 0 && coord_y >= 0){
+	if (coord_x >= 0 && coord_y >= 0 && page != 0){
 		pdf_sig->setVisibleCoordinates(page, coord_x, coord_y);
 	}
 

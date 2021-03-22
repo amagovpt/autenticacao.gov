@@ -583,7 +583,7 @@ namespace eIDMW
 			delete outputName;
 			throw CMWEXCEPTION(EIDMW_PDF_UNSUPPORTED_ERROR);
 		}
-
+	
 		if (m_page > (unsigned int)doc->getNumPages())
 		{
 			fprintf(stderr, "Error: Signature Page %u is out of bounds for document %s",
@@ -598,26 +598,25 @@ namespace eIDMW
 		if (p == NULL)
 		{
 			fprintf(stderr, "Failed to get page from PDFDoc object\n");
-			throw CMWEXCEPTION(EIDMW_PDF_INVALID_ERROR);
-		}
-
-		//By the spec, the visible/writable area can be cropped by the CropBox, BleedBox, etc...
-		//We're assuming the most common case of MediaBox matching the visible area
-		PDFRectangle *p_media = p->getMediaBox();
-
-		double height = p_media->y2, width = p_media->x2;
-		m_isLandscape = isLandscapeFormat();
-
-		//Fix dimensions for the /Rotate case
-		if (p->getRotate() == 90 || p->getRotate() == 270)
-		{
-			double dim1 = height;
-			height = width;
-			width = dim1;
+			throw CMWEXCEPTION(EIDMW_PDF_INVALID_PAGE_ERROR);
 		}
 
 		if (m_visible)
 		{
+			//By the spec, the visible/writable area can be cropped by the CropBox, BleedBox, etc...
+			//We're assuming the most common case of MediaBox matching the visible area
+			PDFRectangle *p_media = p->getMediaBox();
+
+			double height = p_media->y2, width = p_media->x2;
+			m_isLandscape = isLandscapeFormat();
+
+			//Fix dimensions for the /Rotate case
+			if (p->getRotate() == 90 || p->getRotate() == 270)
+			{
+				double dim1 = height;
+				height = width;
+				width = dim1;
+			}
 			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Page mediaBox: (H: %f W:%f) Location_x: %f, location_y: %f",
 				 height, width, location_x, location_y);
 
@@ -659,27 +658,27 @@ namespace eIDMW
 				}
 			}
 
-		}
-		MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Signature rectangle before rotation (if needed) (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+			MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Signature rectangle before rotation (if needed) (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
 
-		if (p->getRotate() == 90)
-		{
-			//Apply Rotation of R: R' = [-y2, x1, -y1, x2]
-			sig_location = PDFRectangle(height-sig_location.y2, sig_location.x1,
-			              height-sig_location.y1, sig_location.x2);
-			MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
-		} else if (p->getRotate() == 270)
-		{
-			//Apply Rotation of R: R' = [y1, -x2, y2, -x1]
-			sig_location = PDFRectangle(sig_location.y1, width-sig_location.x2,
-			              sig_location.y2, width-sig_location.x1);
-			MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
-		}  else if (p->getRotate() == 180)
-		{
-			//Apply Rotation of R: R' = []
-			sig_location = PDFRectangle(width-sig_location.x2, height-sig_location.y2,
-			              width-sig_location.x1, height-sig_location.y1);
-			MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+			if (p->getRotate() == 90)
+			{
+				//Apply Rotation of R: R' = [-y2, x1, -y1, x2]
+				sig_location = PDFRectangle(height-sig_location.y2, sig_location.x1,
+							height-sig_location.y1, sig_location.x2);
+				MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+			} else if (p->getRotate() == 270)
+			{
+				//Apply Rotation of R: R' = [y1, -x2, y2, -x1]
+				sig_location = PDFRectangle(sig_location.y1, width-sig_location.x2,
+							sig_location.y2, width-sig_location.x1);
+				MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+			}  else if (p->getRotate() == 180)
+			{
+				//Apply Rotation of R: R' = []
+				sig_location = PDFRectangle(width-sig_location.x2, height-sig_location.y2,
+							width-sig_location.x1, height-sig_location.y1);
+				MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+			}
 		}
 
 		unsigned char *to_sign;
