@@ -68,11 +68,14 @@ protected:
 #define DIR_SEP '\\'
 #else
 #define DIR_SEP '/'
+
 #endif
 //Reduced form of the standard __FILE__ macro: remove all directories from the path
-#define __FILENAME__ (strrchr(__FILE__, DIR_SEP) ? strrchr(__FILE__, DIR_SEP) + 1 : __FILE__)
+constexpr const char *filename_for_logging(const char * path) {
+	return (strrchr(path, DIR_SEP) ? strrchr(path, DIR_SEP) + 1 : path);
+}
 
-#define CMWEXCEPTION(i)	CMWException(i, __FILENAME__, __LINE__)
+#define CMWEXCEPTION(i)	CMWException(i, filename_for_logging(__FILE__), __LINE__)
 
 }
 #endif
