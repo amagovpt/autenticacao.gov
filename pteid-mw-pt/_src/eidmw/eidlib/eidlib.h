@@ -951,7 +951,7 @@ public:
 
 			
 	/**
-	* PDF Signature with location by page sector (the portrait A4 page is split into 18 cells: 6 lines and 3 columns) 
+	* PDF Signature with location by page sector (the portrait A4 page is split into 18 cells: 6 lines and 3 columns). 
 	* If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a PAdES-B signature.
 	* If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a PAdES-LT or PAdES-LTA depending where the timestamping fails.
 	*
@@ -968,17 +968,18 @@ public:
 			const char *outfile_path);
 
 	/**
-	* PDF Signature with location by coordinates (expressed in percentage of page height/width). The coordinate system has its origin in the top left corner of the page
+	* PDF Signature with location by coordinates (expressed in percentage of page height/width). The coordinate system has its origin in the top left corner of the page.
+	* To apply an invisible signature negative values should be specified for both coordinates, e.g. -1.
 	* If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a PAdES-B signature.
 	* If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a PAdES-LT or PAdES-LTA depending where the timestamping fails.
 	* 
 	* @param sig_handler: this defines the input file and some signature options
 	* @param page: in case of visible signature it defines the page where the signature will appear
-	* @param coord_x: X coordinate of the signature location (percentage of page width)
-	* @param coord_y: Y coordinate of the signature location (percentage of page height)
+	* @param coord_x: X coordinate of the signature location (percentage of page width [0-1])
+	* @param coord_y: Y coordinate of the signature location (percentage of page height [0-1])
 	* @param location: Location field in the added signature metadata
-	* @param reason: Signature metadata field
-	* @param outfile_path: Native Filesystem path of the ouput file
+	* @param reason: Reason field in the added signature metadata
+	* @param outfile_path: Native filesystem path of the ouput file
 	**/
 	    PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
 			const char *outfile_path);
