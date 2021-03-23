@@ -156,6 +156,12 @@ Load language error. Please reinstall the application"
                 }
             }
         }
+        onSignalAutoUpdateSuccess: {
+            if(updateType == GAPI.AutoUpdateCerts){
+                restart_dialog.headerTitle = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES") + controler.autoTr
+                restart_dialog.open()
+            }
+        }
     }
 
     Connections {
