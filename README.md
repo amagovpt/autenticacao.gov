@@ -48,7 +48,7 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
 
    As dependências para execução do Middleware em Linux (nomes de pacotes válidos para a distribuição Ubuntu 20.04), são as seguintes:
    ```bash
-   sudo apt install pcscd qml-module-qt-labs-folderlistmodel qml-module-qt-labs-settings qml-module-qt-labs-platform qml-module-qtgraphicaleffects qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qtquick-layouts qml-module-qtquick-templates2 qml-module-qtquick-window2 qml-module-qtquick2 qt5-gtk-platformtheme libnsspem
+   sudo apt install pcscd qml-module-qt-labs-folderlistmodel qml-module-qt-labs-settings qml-module-qt-labs-platform qml-module-qtgraphicaleffects qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qtquick-layouts qml-module-qtquick-templates2 qml-module-qtquick-window2 qml-module-qtquick2 qt5-gtk-platformtheme libnsspem fonts-lato
    ```
 
 2. Clonar o repositório

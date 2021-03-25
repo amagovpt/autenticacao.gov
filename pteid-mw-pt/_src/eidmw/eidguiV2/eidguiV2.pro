@@ -113,10 +113,7 @@ translations.path = $${INSTALL_DIR_BIN}
 translations.files += eidmw_en.qm \
                 eidmw_nl.qm
 
-fonts.path = $${INSTALL_DIR_BIN}
-fonts.files += fonts/lato/Lato-Regular.ttf
-
-INSTALLS += target translations fonts
+INSTALLS += target translations
 
 HEADERS += \
     appcontroller.h \

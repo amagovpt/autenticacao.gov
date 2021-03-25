@@ -40,6 +40,7 @@ Depends: pcscd,
 	qml-module-qtquick-window2,
 	qml-module-qtquick2,
 	qt5-gtk-platformtheme,
+	fonts-lato,
         ${misc:Depends},
         ${shlibs:Depends}
 Description: Autenticação.Gov

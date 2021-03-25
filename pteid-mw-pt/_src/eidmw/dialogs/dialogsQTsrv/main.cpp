@@ -138,6 +138,18 @@ QString getPinName( DlgPinUsage usage, wchar_t *inPinName ) {
     return PinName;
 }
 
+QFont getLatoFont(){
+	QFont font;
+#ifdef __APPLE__
+	QString fontFile = ":/fonts/lato/Lato-Regular.ttf";
+	int id = QFontDatabase::addApplicationFont(fontFile);
+	font = QFontDatabase::applicationFontFamilies(id).at(0);
+#else
+	font = QFont("lato");
+#endif
+	return font;
+}
+
 int main(int argc, char *argv[])
 {
 	int iFunctionIndex = 0;
@@ -181,13 +193,10 @@ int main(int argc, char *argv[])
 	QCoreApplication::addLibraryPath(QString("/Applications/Autentica\xC3\xA7\xC3\xA3o.gov.app/Contents/PlugIns/"));
 	#endif
 
-	QString fontFile = ":/fonts/lato/Lato-Regular.ttf";
 	if(iFunctionIndex == DLG_ASK_PIN)
 	{
 		QApplication a(argc, argv);
-		int id = QFontDatabase::addApplicationFont(fontFile);
-		QFont font(QFontDatabase::applicationFontFamilies(id).at(0));
-		a.setFont(font);
+		a.setFont(getLatoFont());
 		a.setWindowIcon(QIcon(":/images/appicon.ico"));
 
 		// attach to the segment and get a pointer
@@ -290,9 +299,7 @@ int main(int argc, char *argv[])
 	else if (iFunctionIndex == DLG_ASK_PINS )
 	{
 		QApplication a(argc, argv);
-		int id = QFontDatabase::addApplicationFont(fontFile);
-		QFont font(QFontDatabase::applicationFontFamilies(id).at(0));
-		a.setFont(font);
+		a.setFont(getLatoFont());
 		a.setWindowIcon(QIcon(":/images/appicon.ico"));
 
 		// attach to the segment and get a pointer
@@ -358,9 +365,7 @@ int main(int argc, char *argv[])
 	else if (iFunctionIndex == DLG_BAD_PIN)
 	{
 		QApplication a(argc, argv);
-		int id = QFontDatabase::addApplicationFont(fontFile);
-		QFont font(QFontDatabase::applicationFontFamilies(id).at(0));
-		a.setFont(font);
+		a.setFont(getLatoFont());
 		a.setWindowIcon(QIcon(":/images/appicon.ico"));
 
 		// attach to the segment and get a pointer
@@ -513,9 +518,7 @@ int main(int argc, char *argv[])
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process started (pin=%ls, usage=%ld, operation=%ld)", argv[0],oInfoData->pinName,  oInfoData->usage, oInfoData->operation);
 
 			QApplication a(argc, argv);
-			int id = QFontDatabase::addApplicationFont(fontFile);
-			QFont font(QFontDatabase::applicationFontFamilies(id).at(0));
-			a.setFont(font);
+			a.setFont(getLatoFont());
 			a.setWindowIcon(QIcon(":/images/appicon.ico"));
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : QApplication created", argv[0]);
 
