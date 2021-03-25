@@ -70,7 +70,8 @@ PageCardAdressForm {
             gapi.setAddressLoaded(true)
             if(!Constants.USE_SDK_PIN_UI_POPUP)
                 dialogTestPin.visible = false
-            if(mainFormID.propertyPageLoader.propertyForceFocus)
+            if(mainFormID.propertyPageLoader.propertyForceFocus
+                && !dialogConfirmOfAddressProgress.visible )
                 propertyRectNacionalDistrict.forceActiveFocus()
         }
         onSignalUpdateProgressBar: {
@@ -84,6 +85,7 @@ PageCardAdressForm {
         onSignalUpdateProgressStatus: {
             console.log("Address change --> update progress status with text = " + statusMessage)            
             textMessageTop.propertyText.text = statusMessage
+            textMessageTop.propertyAccessibleText = Functions.filterText(statusMessage)
             textMessageTop.propertyText.forceActiveFocus()
         }
         onSignalAddressShowLink: {
@@ -384,7 +386,7 @@ PageCardAdressForm {
                     propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                     anchors.fill: parent 
                     propertyText.anchors.fill: textPinMsgConfirm
-                    propertyAccessibleText: qsTr("STR_ADDRESS_CHANGE_TEXT") + 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
+                    propertyAccessibleText: qsTr("STR_ADDRESS_CHANGE_TEXT") + qsTr("STR_ADDRESS_CHANGE_TEXT_HERE")
                     propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
                     KeyNavigation.tab: textPinCurrent
                     KeyNavigation.down: textPinCurrent
@@ -624,7 +626,6 @@ PageCardAdressForm {
                     width: parent.width
                     propertyText.height: parent.height
                     anchors.bottom: parent.bottom
-                    propertyAccessibleText: Functions.filterText(textMessageTop.propertyText.text)
                     propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
                     KeyNavigation.tab: textMessageTopLink.propertyText
                     KeyNavigation.down: textMessageTopLink.propertyText
@@ -651,7 +652,7 @@ PageCardAdressForm {
                     propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                     anchors.fill: parent 
                     propertyText.anchors.fill: textMessageTopLink
-                    propertyAccessibleText: qsTr("STR_CHANGE_ADDRESS_LINK") + 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
+                    propertyAccessibleText: qsTr("STR_CHANGE_ADDRESS_LINK") + qsTr("STR_ADDRESS_CHANGE_TEXT_HERE")
                     propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
                     KeyNavigation.tab: confirmOkButton
                     KeyNavigation.down: confirmOkButton
