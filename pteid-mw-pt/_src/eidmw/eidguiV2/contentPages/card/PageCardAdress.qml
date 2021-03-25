@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
@@ -82,9 +82,12 @@ PageCardAdressForm {
             }
         }
         onSignalUpdateProgressStatus: {
-            console.log("Address change --> update progress status with text = " + statusMessage)
+            console.log("Address change --> update progress status with text = " + statusMessage)            
             textMessageTop.propertyText.text = statusMessage
             textMessageTop.propertyText.forceActiveFocus()
+        }
+        onSignalAddressShowLink: {
+            rectMessageTopLink.visible = true
         }
         onSignalCardAccessError: {
             console.log("Card Adress onSignalCardAccessError"+ error_code)
@@ -363,6 +366,7 @@ PageCardAdressForm {
             KeyNavigation.tab: textPinMsgConfirm.propertyText
             KeyNavigation.down: textPinMsgConfirm.propertyText
             KeyNavigation.right: textPinMsgConfirm.propertyText
+            KeyNavigation.left: okButton
             KeyNavigation.backtab: okButton
             KeyNavigation.up: okButton
 
@@ -374,7 +378,7 @@ PageCardAdressForm {
                 Components.Link {
                     id: textPinMsgConfirm
                     propertyText.text: "<a href='dummy-link' style='color: black; text-decoration:none'>" + qsTr("STR_ADDRESS_CHANGE_TEXT") + "</a>" + " "
-                          + "<a href=https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao>" + qsTr("STR_ADDRESS_CHANGE_TEXT_LINK")+ "</a>"
+                          + "<a href=https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao>" + qsTr("STR_ADDRESS_CHANGE_TEXT_HERE")+ "</a>"
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
@@ -385,6 +389,7 @@ PageCardAdressForm {
                     KeyNavigation.tab: textPinCurrent
                     KeyNavigation.down: textPinCurrent
                     KeyNavigation.right: textPinCurrent
+                    KeyNavigation.left: rectPopUp
                     KeyNavigation.backtab: rectPopUp
                     KeyNavigation.up: rectPopUp
                 }
@@ -414,6 +419,7 @@ PageCardAdressForm {
                     KeyNavigation.tab: textFieldNumProcess
                     KeyNavigation.down: textFieldNumProcess
                     KeyNavigation.right: textFieldNumProcess
+                    KeyNavigation.left: textPinMsgConfirm.propertyText
                     KeyNavigation.backtab: textPinMsgConfirm.propertyText
                     KeyNavigation.up: textPinMsgConfirm.propertyText
                 }
@@ -436,6 +442,7 @@ PageCardAdressForm {
                     KeyNavigation.tab: textPinNew
                     KeyNavigation.down: textPinNew
                     KeyNavigation.right: textPinNew
+                    KeyNavigation.left: textPinCurrent
                     KeyNavigation.backtab: textPinCurrent
                     KeyNavigation.up: textPinCurrent
                 }
@@ -464,6 +471,7 @@ PageCardAdressForm {
                     KeyNavigation.tab: textFieldConfirmAddress
                     KeyNavigation.down: textFieldConfirmAddress
                     KeyNavigation.right: textFieldConfirmAddress
+                    KeyNavigation.left: textFieldNumProcess
                     KeyNavigation.backtab: textFieldNumProcess
                     KeyNavigation.up: textFieldNumProcess
                 }
@@ -485,6 +493,7 @@ PageCardAdressForm {
                     KeyNavigation.tab: cancelButton
                     KeyNavigation.down: cancelButton
                     KeyNavigation.right: cancelButton
+                    KeyNavigation.left: textPinNew
                     KeyNavigation.backtab: textPinNew
                     KeyNavigation.up: textPinNew
                 }
@@ -516,6 +525,7 @@ PageCardAdressForm {
                 KeyNavigation.tab: okButton
                 KeyNavigation.down: okButton
                 KeyNavigation.right: okButton
+                KeyNavigation.left: textFieldConfirmAddress
                 KeyNavigation.backtab: textFieldConfirmAddress
                 KeyNavigation.up: textFieldConfirmAddress
                 Keys.onEnterPressed: clicked()
@@ -545,6 +555,7 @@ PageCardAdressForm {
                 KeyNavigation.tab: rectPopUp
                 KeyNavigation.down: rectPopUp
                 KeyNavigation.right: rectPopUp
+                KeyNavigation.left: cancelButton
                 KeyNavigation.backtab: cancelButton
                 KeyNavigation.up: cancelButton
                 Keys.onEnterPressed: clicked()
@@ -579,22 +590,24 @@ PageCardAdressForm {
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
-            font.bold: activeFocus ? true : false
+            font.bold: rectPopUpProgress.activeFocus ? true : false
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
+        }
+        Item {
+            id: rectPopUpProgress
+            width: parent.width
+            height: rectMessageTop.height + progressBar.height + progressBarIndeterminate.height
+
             Accessible.role: Accessible.AlertMessage
             Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
                              + labelConfirmOfAddressProgressTextTitle.text
             KeyNavigation.tab: textMessageTop.propertyText
             KeyNavigation.down: textMessageTop.propertyText
             KeyNavigation.right: textMessageTop.propertyText
-            KeyNavigation.backtab: okButton
-            KeyNavigation.up: okButton
-        }
-
-        Item {
-            width: parent.width
-            height: rectMessageTop.height + progressBar.height + progressBarIndeterminate.height
+            KeyNavigation.left: confirmOkButton
+            KeyNavigation.backtab: confirmOkButton
+            KeyNavigation.up: confirmOkButton
 
             Item {
                 id: rectMessageTop
@@ -612,11 +625,40 @@ PageCardAdressForm {
                     propertyText.height: parent.height
                     anchors.bottom: parent.bottom
                     propertyAccessibleText: Functions.filterText(textMessageTop.propertyText.text)
+                    propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
+                    KeyNavigation.tab: textMessageTopLink.propertyText
+                    KeyNavigation.down: textMessageTopLink.propertyText
+                    KeyNavigation.right: textMessageTopLink.propertyText
+                    KeyNavigation.left: rectPopUpProgress
+                    KeyNavigation.backtab: rectPopUpProgress
+                    KeyNavigation.up: rectPopUpProgress 
+                }
+            }
+
+            Item {
+                id: rectMessageTopLink
+                width: parent.width
+                visible: false
+                height: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: rectMessageTop.bottom
+                Components.Link {
+                    id: textMessageTopLink
+                    propertyText.text: "<a href='dummy-link' style='color: black; text-decoration:none'>" + qsTr("STR_CHANGE_ADDRESS_LINK") + "</a>" + " "
+                          + "<a href=https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao>" + qsTr("STR_ADDRESS_CHANGE_TEXT_HERE")+ "</a>"
+                    propertyText.verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+                    anchors.fill: parent 
+                    propertyText.anchors.fill: textMessageTopLink
+                    propertyAccessibleText: qsTr("STR_CHANGE_ADDRESS_LINK") + 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
+                    propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
                     KeyNavigation.tab: confirmOkButton
                     KeyNavigation.down: confirmOkButton
                     KeyNavigation.right: confirmOkButton
-                    KeyNavigation.backtab: rectPopUp
-                    KeyNavigation.up: rectPopUp
+                    KeyNavigation.left: textMessageTop.propertyText
+                    KeyNavigation.backtab: textMessageTop.propertyText
+                    KeyNavigation.up: textMessageTop.propertyText 
                 }
             }
 
@@ -664,6 +706,7 @@ PageCardAdressForm {
                 font.capitalization: Font.MixedCase
                 visible: progressBarIndeterminate.visible ? false : true
                 onClicked: {
+                    rectMessageTopLink.visible = false
                     dialogConfirmOfAddressProgress.close()
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     mainFormID.propertyPageLoader.forceActiveFocus()
@@ -671,11 +714,12 @@ PageCardAdressForm {
                 highlighted: activeFocus ? true : false
                 Accessible.role: Accessible.Button
                 Accessible.name: text
-                KeyNavigation.tab: labelConfirmOfAddressProgressTextTitle
-                KeyNavigation.down: labelConfirmOfAddressProgressTextTitle
-                KeyNavigation.right: textMessageTop.propertyText
-                KeyNavigation.backtab: textMessageTop.propertyText
-                KeyNavigation.up: textMessageTop.propertyText
+                KeyNavigation.tab: rectPopUpProgress
+                KeyNavigation.down: rectPopUpProgress
+                KeyNavigation.right: rectPopUpProgress
+                KeyNavigation.left: textMessageTopLink.propertyText
+                KeyNavigation.backtab: textMessageTopLink.propertyText
+                KeyNavigation.up: textMessageTopLink.propertyText
                 Keys.onEnterPressed: clicked()
                 Keys.onReturnPressed: clicked()
             }
@@ -685,7 +729,7 @@ PageCardAdressForm {
             dialogConfirmOfAddressProgress.open()
         }
         onOpened: {
-            labelConfirmOfAddressProgressTextTitle.forceActiveFocus()
+            rectPopUpProgress.forceActiveFocus()
         }
     }
 

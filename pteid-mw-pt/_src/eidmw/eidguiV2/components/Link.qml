@@ -31,7 +31,7 @@ Item {
         font.italic: false
         font.family: lato.name
         font.capitalization: Font.MixedCase
-        font.bold: activeFocus? true : false
+        font.bold: activeFocus || parent.activeFocus ? true : false
         color: Constants.COLOR_TEXT_BODY
         visible: parent.visible
         font.underline: mouseArea.containsMouse

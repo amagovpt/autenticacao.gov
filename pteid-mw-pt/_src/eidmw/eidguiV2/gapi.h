@@ -450,6 +450,7 @@ signals:
     void signalPdfSignFail(int error_code);
     void signalUpdateProgressBar(int value);
     void signalUpdateProgressStatus(const QString statusMessage);
+    void signalAddressShowLink();
     void addressChangeFinished(long return_code);
     void signCMDFinished(long error_code);
     void signalValidateOtp();

@@ -620,6 +620,7 @@ void GAPI::showChangeAddressDialog(long code)
         error_msg += "<br><br>" + support_string_wait_5min;
     } else if (code != 0 && code != SAM_PROCESS_EXPIRED_ERROR){
         error_msg += "<br><br>" + support_string;
+        signalAddressShowLink();
     }
 
     qDebug() << error_msg;

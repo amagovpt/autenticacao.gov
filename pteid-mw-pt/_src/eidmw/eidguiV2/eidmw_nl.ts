@@ -638,10 +638,6 @@
         <translation>Caso tenha solicitado uma alteração de morada, insira o número de processo e o código secreto recebidos pelo correio. Caso pretenda alterar a sua morada, clique</translation>
     </message>
     <message>
-        <source>STR_ADDRESS_CHANGE_TEXT_LINK</source>
-        <translation>aqui</translation>
-    </message>
-    <message>
         <source>STR_ADDRESS_CHANGE_NUMBER</source>
         <translation>Nº de Processo de alteração de Morada</translation>
     </message>
@@ -676,6 +672,14 @@
     <message>
         <source>STR_ADDRESS_CHANGE_BUTTON</source>
         <translation>Confirmar</translation>
+    </message>
+    <message>
+        <source>STR_CHANGE_ADDRESS_LINK</source>
+        <translation>Para mais informações sobre a alteração de morada, clique </translation>
+    </message>
+    <message>
+        <source>STR_ADDRESS_CHANGE_TEXT_HERE</source>
+        <translation>aqui.</translation>
     </message>
 </context>
 <context>

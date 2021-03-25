@@ -628,10 +628,6 @@
         <translation>If you have requested a change of address, enter the process number and secret code received by mail. If you want to change your address, click</translation>
     </message>
     <message>
-        <source>STR_ADDRESS_CHANGE_TEXT_LINK</source>
-        <translation>here</translation>
-    </message>
-    <message>
         <source>STR_ADDRESS_CHANGE_NUMBER</source>
         <translation>Process Number</translation>
     </message>
@@ -666,6 +662,14 @@
     <message>
         <source>STR_ADDRESS_CHANGE_BUTTON</source>
         <translation>Confirm</translation>
+    </message>
+    <message>
+        <source>STR_CHANGE_ADDRESS_LINK</source>
+        <translation>For more information about change your address, click </translation>
+    </message>
+    <message>
+        <source>STR_ADDRESS_CHANGE_TEXT_HERE</source>
+        <translation>here.</translation>
     </message>
 </context>
 <context>
