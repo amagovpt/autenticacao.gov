@@ -102,8 +102,6 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
     if (curl) {
         struct curl_slist *headers = NULL;
 
-        //TODO: apply_proxy_config(curl, pInfo);
-
         headers = curl_slist_append(headers, "Content-Type: application/json");
 
         if (cookie != NULL) {
@@ -146,6 +144,10 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &received_data);
 
         curl_easy_setopt(curl, CURLOPT_USERAGENT, PTEID_USER_AGENT_VALUE);
+
+	/** XX: In testing environment disable certificate verification completely */
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0); 
 
          /* set the error buffer as empty before performing a request */
         errbuf[0] = 0;
