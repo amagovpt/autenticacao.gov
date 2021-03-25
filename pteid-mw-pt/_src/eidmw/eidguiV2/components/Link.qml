@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
- * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2019-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
@@ -44,10 +44,6 @@ Item {
 
         Keys.onSpacePressed: Qt.openUrlExternally(propertyLinkUrl)
         Keys.onReturnPressed: Qt.openUrlExternally(propertyLinkUrl)
-
-        Keys.onPressed: {
-            handleKeyPressed(event.key, linkText)
-        }
 
     }
     Accessible.role: propertyLinkUrl == "" ? Accessible.StaticText : Accessible.Link 

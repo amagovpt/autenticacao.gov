@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
@@ -949,6 +949,9 @@ Item {
                         KeyNavigation.tab: dateAppGraphics
                         KeyNavigation.down: dateAppGraphics
                         KeyNavigation.right: dateAppGraphics
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, debugInfoLink)
+                        }
                         KeyNavigation.left: logsTextField
                         KeyNavigation.backtab: logsTextField
                         KeyNavigation.up: logsTextField
@@ -1056,6 +1059,9 @@ Item {
                         KeyNavigation.tab: textGraphicsRendering
                         KeyNavigation.down: textGraphicsRendering
                         KeyNavigation.right: textGraphicsRendering
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, textLink)
+                        }
                         KeyNavigation.left: graphicsTextField
                         KeyNavigation.backtab: graphicsTextField
                         KeyNavigation.up: graphicsTextField
