@@ -119,7 +119,7 @@ Rectangle {
                 border.color: pdfPreview.activeFocus || positionText.activeFocus ? Constants.COLOR_MAIN_DARK_GRAY
                              : Constants.COLOR_GREY_BUTTON_BACKGROUND
                 opacity: 0.7
-                visible: width >= Constants.FOCUS_BORDER && background_image.status != Image.Null
+                visible: width >= Constants.FOCUS_BORDER && background_image.status != Image.Null && dragSigRect.visible
             }
             Item {
                 id: dragSigRect
