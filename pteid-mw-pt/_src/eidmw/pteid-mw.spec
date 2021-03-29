@@ -1,7 +1,7 @@
 #
 # spec file for package pteid-mw
 #
-# Copyright (c) 2011-2019 Caixa Magica Software
+# Copyright (c) 2011-2021 Caixa Magica Software
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -20,8 +20,8 @@
 %endif
 %endif
 
-%define git_revision git20201028
-%define app_version 3.3.1
+%define git_revision git20210329
+%define app_version 3.5.0
 
 Name:           pteid-mw
 BuildRequires:  pcsc-lite-devel make swig
@@ -277,6 +277,14 @@ fi
 /usr/local/share/pteid-mw
 
 %changelog
+* Mon Mar 29 2021 André Guerreiro <andre.guerreiro@caixamagica.pt>
+  - New unified signature page in GUI app
+  - Bugfixes in SCAP signatures
+  - Stop bundling lato font and use the distro-provided TTF file
+  - Extended support for expired cards until December 31st 2021
+  - New feature - diagnostic report
+  - Improved detection of unsupported PDF documents with XFA forms
+
 * Wed Oct 28 2020 André Guerreiro <andre.guerreiro@caixamagica.pt>
   - Support for legislative change regarding expired cards until March 31st 2021
   - Improvement in trusted certificates update feature
