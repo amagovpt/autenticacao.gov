@@ -165,7 +165,7 @@ PTEID_Address address;
 (...)
 PTEID_Pins pins = card.getPins();
 PTEID_Pin pin = pins.getPinByPinRef(PTEID_Pin.ADDR_PIN);
-if (pin.verifyPin(“”, triesLeft, true){
+if (pin.verifyPin("", triesLeft, true){
     address = card.getAddr();
     String countryCode = address.getCountryCode();
     String district = address.getDistrict();
@@ -182,7 +182,7 @@ if (pin.verifyPin(“”, triesLeft, true){
 // read personal notes
 String pdata = card.getID().getPersoData();
 // write personal notes
-String notes = “a few notes”;
+String notes = "a few notes";
 PTEID_ByteArray pb = new PTEID_ByteArray(notes.getBytes(), notes.getBytes().length);
 boolean bOk = card.writePersonalNotes(personalNotes, card.getPins().getPinByPinRef(PTEID_Pin.AUTH_PIN));
 (...)
