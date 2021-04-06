@@ -147,7 +147,7 @@ Item {
                         property string previousText: text
                         text: ""
                         width: flickable.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                        height: flickable.height
+                        height: Math.max(paintedHeight, flickable.height);
                         focus: true
                         wrapMode: TextEdit.Wrap
                         selectByMouse: true
