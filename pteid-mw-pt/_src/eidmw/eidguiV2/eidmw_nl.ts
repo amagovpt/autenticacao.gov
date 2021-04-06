@@ -1271,7 +1271,7 @@
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_CUSTOM_TITLE</source>
-        <translation>Usar assinatura personalizada</translation>
+        <translation>Usar assinatura com imagem personalizada</translation>
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_FILE_LOAD</source>

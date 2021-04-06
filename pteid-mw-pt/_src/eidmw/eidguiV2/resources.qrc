@@ -91,5 +91,6 @@
         <file>components/TextRow.qml</file>
         <file>contentPages/services/PageServicesSign.qml</file>
         <file>contentPages/services/PageServicesSignForm.ui.qml</file>
+        <file>images/icons-resize.png</file>
     </qresource>
 </RCC>

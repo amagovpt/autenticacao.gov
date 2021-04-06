@@ -294,6 +294,19 @@ Rectangle {
                 source: "qrc:/images/icons-move.png"
             }
 
+            Image {
+                id: dragSigResizeImage
+                height: dragSigRect.height * 0.5
+                fillMode: Image.PreserveAspectFit
+                anchors.top: dragSigRect.bottom
+                anchors.topMargin: -dragSigMoveImage.height * 0.5
+                anchors.right: dragSigRect.right
+                anchors.rightMargin: -dragSigMoveImage.width * 0.5
+
+                visible: dragSigRect.visible
+                source: "qrc:/images/icons-resize.png"
+            }
+
             onWidthChanged: {
                 dragSigRect.x = dragTarget.lastCoord_x / dragTarget.lastScreenWidth * background_image.width
                 dragSigRect.y = dragTarget.lastCoord_y / dragTarget.lastScreenHeight * background_image.height
