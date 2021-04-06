@@ -160,13 +160,6 @@ PageCardNotesForm {
         }
     }
 
-    propertyMouseAreaFlickable{
-        onClicked: {
-            // TODO: Move cursor to the clicked position
-            propertyEditNotes.forceActiveFocus()
-        }
-    }
-
     function ensureVisible(r)
     {
         if (propertyFlickNotes.contentY >= r.y){
