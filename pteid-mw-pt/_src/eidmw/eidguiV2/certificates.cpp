@@ -154,6 +154,8 @@ bool CERTIFICATES::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertCont
 
     if ( NULL != hMyStore )
     {
+        RemoveOlderUserCerts(hMyStore, pCertContext);
+
         // ----------------------------------------------------
         // look if we already have a certificate with the same
         // subject (contains name and document number) in the store
@@ -333,6 +335,101 @@ bool CERTIFICATES::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertCont
 #endif
     return true;
 }
+
+#ifdef WIN32
+void CERTIFICATES::RemoveOlderUserCerts(HCERTSTORE hMyStore, PCCERT_CONTEXT pTargetCert)
+{
+    DWORD dwSubjectSerialLen = CertGetNameStringW(
+        pTargetCert,
+        CERT_NAME_ATTR_TYPE,
+        0,
+        (void *)szOID_DEVICE_SERIAL_NUMBER,
+        NULL,
+        0);
+
+    PWSTR csTargetSubjectSerial = new WCHAR[dwSubjectSerialLen];
+    CertGetNameStringW(
+        pTargetCert,
+        CERT_NAME_ATTR_TYPE,
+        0,
+        (void *)szOID_DEVICE_SERIAL_NUMBER,
+        csTargetSubjectSerial,
+        dwSubjectSerialLen);
+
+    DWORD dwIssuerLen = CertGetNameStringW(
+        pTargetCert,
+        CERT_NAME_SIMPLE_DISPLAY_TYPE,
+        CERT_NAME_ISSUER_FLAG,
+        0,
+        NULL,
+        0);
+
+    DWORD dwCharsToBeRemoved = 5; // p.e. " 0010"
+    PWSTR csIssuerSubjectCN = new WCHAR[dwIssuerLen - dwCharsToBeRemoved];
+    CertGetNameStringW(
+        pTargetCert,
+        CERT_NAME_SIMPLE_DISPLAY_TYPE,
+        CERT_NAME_ISSUER_FLAG,
+        0,
+        csIssuerSubjectCN,
+        dwIssuerLen - dwCharsToBeRemoved);
+
+    PWSTR csCandidateSubjectSerial = new WCHAR[dwSubjectSerialLen];
+
+    PCCERT_CONTEXT pCert = NULL;
+    while (pCert = CertFindCertificateInStore(
+        hMyStore,
+        X509_ASN_ENCODING,
+        0,
+        CERT_FIND_ISSUER_STR,
+        csIssuerSubjectCN,
+        pCert
+    ))
+    {
+        CertGetNameStringW(
+            pCert,
+            CERT_NAME_ATTR_TYPE,
+            0,
+            (void *)szOID_DEVICE_SERIAL_NUMBER,
+            csCandidateSubjectSerial,
+            dwSubjectSerialLen);
+
+        if (wcscmp(csTargetSubjectSerial, csCandidateSubjectSerial) == 0)
+        {
+            // NotBefore and NotAfter of cert to be added to store
+            FILETIME lpNotBeforeTarget = pTargetCert->pCertInfo->NotBefore;
+            FILETIME lpNotAfterTarget = pTargetCert->pCertInfo->NotAfter;
+
+            // NotBefore and NotAfter of cert found in store
+            FILETIME lpNotBeforeCandidate = pCert->pCertInfo->NotBefore;
+            FILETIME lpNotAfterCandidate = pCert->pCertInfo->NotAfter;
+
+            if (CompareFileTime(&lpNotAfterTarget, &lpNotAfterCandidate) > 0 &&
+                CompareFileTime(&lpNotBeforeTarget, &lpNotBeforeCandidate) > 0)
+            {
+                if (!CertDuplicateCertificateContext(pCert))
+                {
+                    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                        "CertDuplicateCertificateContext failed with error code 0x%08x", GetLastError());
+                    goto cleanup;
+                }
+                if (!CertDeleteCertificateFromStore(pCert))
+                {
+                    (PTEID_LOG_LEVEL_ERROR, "eidgui",
+                        "CertDeleteCertificateFromStore failed with error code 0x%08x", GetLastError());
+                    goto cleanup;
+                }
+            }
+        }
+    }
+
+cleanup:
+    delete[] csTargetSubjectSerial;
+    delete[] csCandidateSubjectSerial;
+    delete[] csIssuerSubjectCN;
+}
+#endif
+
 //*****************************************************
 // store the authority certificates of the card in a specific reader
 //*****************************************************

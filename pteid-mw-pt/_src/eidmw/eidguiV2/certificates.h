@@ -55,6 +55,7 @@ private:
 #ifdef WIN32
     static bool ProviderNameCorrect (PCCERT_CONTEXT pCertContext );
     static PCCERT_CONTEXT getNewRootCaCertContextFromEidstore();
+    static void RemoveOlderUserCerts(HCERTSTORE hMyStore, PCCERT_CONTEXT pTargetCert);
 #endif
     static void forgetCertificates( QString const& readerName );
 };
