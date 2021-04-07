@@ -165,7 +165,7 @@ PTEID_Address address;
 (...)
 PTEID_Pins pins = card.getPins();
 PTEID_Pin pin = pins.getPinByPinRef(PTEID_Pin.ADDR_PIN);
-if (pin.verifyPin("", triesLeft, true){
+if (pin.verifyPin("", triesLeft, true)){
     address = card.getAddr();
     String countryCode = address.getCountryCode();
     String district = address.getDistrict();
