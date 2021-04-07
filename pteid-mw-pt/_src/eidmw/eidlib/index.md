@@ -58,9 +58,9 @@ Ask the user to introduce the address pin the obtain the address
 PTEID_EIDCard &card = readerContext.getEIDCard();
 unsigned long triesLeft;
 (...)
-PTEID_Pins pins = card.getPins();
-PTEID_Pin pin = pins.getPinByPinRef(PTEID_Pin.ADDR_PIN);	
-if (pin.verifyPin(“”, &triesLeft, true){
+PTEID_Pins &pins = card.getPins();
+PTEID_Pin &pin = pins.getPinByPinRef(PTEID_Pin.ADDR_PIN);	
+if (pin.verifyPin(“”, &triesLeft, true)){
 	PTEID_Address &addr =  card.getAddr();
 	const char * municipio =  addr.getMunicipality();
 }
@@ -102,9 +102,9 @@ For example, change the address pin. Ask to verify the pin then change the pin i
 PTEID_EIDCard &card  = readerContext.getEIDCard();
 unsigned long triesLeft;
 (...)
-PTEID_Pins pins = card.getPins();
-PTEID_Pin pin = pins.getPinByPinRef(PTEID_Pin.ADDR_PIN);	
-if (pin.verifyPin(“”, &triesLeft, true){
+PTEID_Pins &pins = card.getPins();
+PTEID_Pin &pin = pins.getPinByPinRef(PTEID_Pin.ADDR_PIN);	
+if (pin.verifyPin(“”, &triesLeft, true)){
 	bool bResult = pin.changePin("","", triesLeft, pin.getLabel());
 	if (!bResult && -1 == triesLeft) return;
 }
