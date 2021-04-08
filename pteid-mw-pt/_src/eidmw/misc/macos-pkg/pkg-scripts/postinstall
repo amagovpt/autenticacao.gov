@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#postinstall script to amend the broken upgrade in build 3.1.0
+#If build 3.1.0 was cleanly installed this is still needed to restore the correct dir structure
+
+if [ -d "/Applications/Autenticação.gov.localized/Autenticação.gov.app" ]
+then
+   mv "/Applications/Autenticação.gov.localized/Autenticação.gov.app" "/Applications/Autenticação.gov.app"
+   rm -rf "/Applications/Autenticação.gov.localized"
+fi
+
+#Generate fontconfig cache in advance
+/usr/local/bin/fc-cache -rv
