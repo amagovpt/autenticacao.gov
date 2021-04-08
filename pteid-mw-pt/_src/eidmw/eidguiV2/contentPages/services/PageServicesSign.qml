@@ -93,7 +93,7 @@ PageServicesSignForm {
                 // Fix the differences between entities and companies attributes about uppercase style
                 attribute_list[i+1] = toTitleCase(attribute_list[i+1])
                 entityAttributesModel.append({
-                                                 entityName: attribute_list[i+3],
+                                                 entityName: attribute_list[i+3] != "" ? attribute_list[i+3] : attribute_list[i],
                                                  citizenName: attribute_list[i+1],
                                                  attribute: attribute_list[i+2],
                                                  checkBoxAttr: false
