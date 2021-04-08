@@ -722,7 +722,8 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
                             }
                         }
                         if(lastAttrSupplierType != "ENTERPRISE"){
-                            if(QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "INSTITUTION"){
+                            if(QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "INSTITUTION"
+                                || QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "EMPLOYEE"){
                                 attributeSupplierListString.append(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
                             }else{
                                 attributeSupplierListString.append(QString::fromStdString("SCAP"));

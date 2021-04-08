@@ -2359,37 +2359,43 @@ std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, boo
             childrensList.push_back(name.c_str());
 
             std::string description = mainAttributeObject->Description->c_str();
-			if (!isShortDescription) {
 
-				QString subAttributes(" (");
-				QString subAttributesValues;
-				uint subAttributePos = 0;
+            std::string entityName;
 
-				while (mainAttributeObject->SubAttributeList != NULL && subAttributePos < mainAttributeObject->SubAttributeList->SubAttribute.size()) {
-					ns3__SubAttributeType * subAttribute = mainAttributeObject->SubAttributeList->SubAttribute.at(subAttributePos);
-					QString subDescription, subValue;
-					if (subAttribute->Description != NULL) {
-						subDescription += subAttribute->Description->c_str();
-					}
-					if (subAttribute->Value != NULL) {
-						subValue += subAttribute->Value->c_str();
-					}
-					// Don't append special validity date -> "31 12 9999"
-					if (!isSpecialValidity(subValue))
-						subAttributesValues.append(subDescription + ": " + subValue + ", ");
-					subAttributePos++;
-				}
-				// Chop 2 to remove last 2 chars (', ')
-				subAttributesValues.chop(2);
-				subAttributes.append(subAttributesValues + ")");
+            QString subAttributes(" (");
+            QString subAttributesValues;
+            uint subAttributePos = 0;
 
-				/* qDebug() << "Sub attributes : " << subAttributes; */
-				if (subAttributes != " ()") // don't append empty parenthesis
-					description += subAttributes.toStdString();
-			}
+            while (mainAttributeObject->SubAttributeList != NULL && subAttributePos < mainAttributeObject->SubAttributeList->SubAttribute.size()) {
+                ns3__SubAttributeType * subAttribute = mainAttributeObject->SubAttributeList->SubAttribute.at(subAttributePos);
+                QString subDescription, subValue;
+                if (subAttribute->Description != NULL) {
+                    subDescription += subAttribute->Description->c_str();
+                }
+                if (subAttribute->Value != NULL) {
+                    subValue += subAttribute->Value->c_str();
+                }
+                // Don't append special validity date -> "31 12 9999"
+                if (!isSpecialValidity(subValue) && !isShortDescription)
+                    subAttributesValues.append(subDescription + ": " + subValue + ", ");
+
+                // For use with scap attribute type: EMPLOYEE
+                if(subDescription == "Nome da entidade")
+                    entityName = subAttribute->Value->c_str();
+
+                subAttributePos++;
+            }
+            // Chop 2 to remove last 2 chars (', ')
+            subAttributesValues.chop(2);
+            subAttributes.append(subAttributesValues + ")");
+
+            /* qDebug() << "Sub attributes : " << subAttributes; */
+            if (subAttributes != " ()") // don't append empty parenthesis
+                description += subAttributes.toStdString();
 
             childrensList.push_back(description.c_str());
             childrensList.push_back(validity);
+            childrensList.push_back(entityName.c_str());
         }
     }
     return childrensList;
@@ -2535,10 +2541,17 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
         std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
         std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), isShortDescription);
 
-        for (uint j = 0; j < childAttributes.size(); j = j + 3) {
+        for (uint j = 0; j < childAttributes.size(); j = j + 4) {
             attribute_list.append(QString::fromStdString(attrSupplier));
             attribute_list.append(QString::fromStdString(childAttributes.at(j)));
             attribute_list.append(QString::fromStdString(childAttributes.at(j + 1)));
+
+            // For use with scap attribute type: EMPLOYEE
+            if(QString::fromStdString(attributes.at(i)->ATTRSupplier->Id) == "http://interop.gov.pt/SCAP/FAF"){
+                attribute_list.append(QString::fromStdString(childAttributes.at(j + 3)));
+            } else {
+                attribute_list.append(QString::fromStdString(attrSupplier));
+            }
             //check validity of attributes
             if (isAttributeExpired(childAttributes.at(j + 2), attrSupplier)) {
                 possiblyExpiredSuppliers.push_back(QString::fromStdString(attrSupplier));
