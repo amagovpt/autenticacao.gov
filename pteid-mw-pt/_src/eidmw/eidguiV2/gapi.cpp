@@ -2331,8 +2331,11 @@ void GAPI::getSCAPEntities() {
 }
 
 bool isSpecialValidity(QString value) {
-    QString year = "9999", month = "12", day = "31";
-    return value.contains(year) && value.contains(month) && value.contains(day);
+
+    // Search AAAA/MM/DD, AAAA-MM-DD, AAAA MM DD
+    QRegExp dateFormat("(9999|99|12|31)(/|-| *)(9999|99|12|31)(/|-| *)(9999|99|12|31)");
+
+    return dateFormat.indexIn(value) != -1;
 }
 
 std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, bool isShortDescription) {
