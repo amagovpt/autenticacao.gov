@@ -1,1 +1,0 @@
-Just to make sure the MAC installer creates this (otherwise empty) dir.
