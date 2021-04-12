@@ -71,6 +71,7 @@ struct tCertifInfo
 {
 	std::string serialNumber;			/**< Serial number of the certificate */
 	std::string ownerName;				/**< Name of the certificate owner */
+	std::string subjectSerialNumber;	/**< Serial number of the subject of the certificate */
 	std::string issuerName;				/**< Name of the certificate issuer */
 	std::string validityNotBefore;		/**< Begin date validity */
 	std::string validityNotAfter;		/**< End date validity */

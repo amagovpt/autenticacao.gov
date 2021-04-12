@@ -1228,6 +1228,10 @@ bool APL_CryptoFwk::getCertInfo(const CByteArray &cert, tCertifInfo &info, const
 	X509_NAME_get_text_by_NID(X509_get_subject_name(pX509), NID_commonName, szTemp, sizeof(szTemp));
 	info.ownerName=szTemp;
 
+	memset(szTemp, 0, sizeof(szTemp));
+	X509_NAME_get_text_by_NID(X509_get_subject_name(pX509), NID_serialNumber, szTemp, sizeof(szTemp));
+	info.subjectSerialNumber=szTemp;
+
     memset(szTemp, 0, sizeof(szTemp));
 	X509_NAME_get_text_by_NID(X509_get_issuer_name(pX509), NID_commonName, szTemp, sizeof(szTemp));
 	info.issuerName=szTemp;

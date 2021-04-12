@@ -370,7 +370,7 @@ struct tCertifInfo;
   * Class that represents one certificate
   * 
   * Can be constructed from a PKSC15 object from a smart card
-  * or from a certificates strore and a file.
+  * or from a certificates store and a file.
   *
   * To get APL_Certif object, we have to ask it from APL_Certifs 
   *********************************************************************************/
@@ -525,6 +525,7 @@ public:
 
 	EIDMW_APL_API const char *getSerialNumber();		/**< Return the serial number */
 	EIDMW_APL_API const char *getOwnerName();			/**< Return the name of the owner */
+	EIDMW_APL_API const char *getSubjectSerialNumber();	/**< Return the serial number of the subject */
 	EIDMW_APL_API const char *getIssuerName();			/**< Return the name of the issuer */
 	EIDMW_APL_API const char *getValidityBegin();		/**< Return validity begin date */
 	EIDMW_APL_API const char *getValidityEnd();			/**< Return validity end date */

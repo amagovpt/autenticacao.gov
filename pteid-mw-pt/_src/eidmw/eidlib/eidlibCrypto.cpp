@@ -344,6 +344,20 @@ const char *PTEID_Certificate::getOwnerName()
 	return out;
 }
 
+const char *PTEID_Certificate::getSubjectSerialNumber()
+{
+	const char *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
+	out = pimpl->getSubjectSerialNumber();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
 const char *PTEID_Certificate::getIssuerName()
 {
 	const char *out = NULL;

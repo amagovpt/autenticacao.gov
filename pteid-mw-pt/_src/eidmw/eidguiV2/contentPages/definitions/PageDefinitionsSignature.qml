@@ -30,14 +30,12 @@ PageDefinitionsSignatureForm {
         onSignalGenericError: {
             propertyBusyIndicator.running = false
         }
-        onSignalCardDataChanged: {
-            console.log("Definitions Signature --> Data Changed")
-            //console.trace();
+        onSignalSignCertDataChanged: {
+            console.log("Definitions Signature --> Certificate Data Changed")
 
-            propertySigSignedByNameText.text = propertySigSignedByNameTextCustom.text =
-                    gapi.getDataCardIdentifyValue(GAPI.Givenname) + " " +  gapi.getDataCardIdentifyValue(GAPI.Surname)
-            propertySigNumIdText.text = propertySigNumIdTextCustom.text = qsTranslate("GAPI","STR_NIC") + ": "
-                    + gapi.getDataCardIdentifyValue(GAPI.Documentnum)
+            propertySigSignedByNameText.text = propertySigSignedByNameTextCustom.text = ownerName
+            propertySigNumIdText.text = propertySigNumIdTextCustom.text =
+                qsTranslate("GAPI","STR_NIC") + ": " + NIC
             propertySigLocationText.text = propertySigLocationTextCustom.text ="{" + qsTr("STR_CUSTOM_SIGN_LOCATION") + "}"
 
             propertyBusyIndicator.running = false
@@ -63,7 +61,7 @@ PageDefinitionsSignatureForm {
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED") + controler.autoTr
                 propertyBusyIndicator.running = true
-                gapi.startCardReading()
+                gapi.startGettingInfoFromSignCert()
             }
             else{
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN") + controler.autoTr
@@ -184,7 +182,7 @@ PageDefinitionsSignatureForm {
 
         console.log("Page Definitions Signature mainWindowCompleted")
         propertyBusyIndicator.running = true
-        gapi.startCardReading()
+        gapi.startGettingInfoFromSignCert()
         propertySigDateText.text = propertySigDateTextCustom.text =
                 qsTranslate("PageServicesSign", "STR_SIGN_DATE") + ": " + getDate()
         clearFields()

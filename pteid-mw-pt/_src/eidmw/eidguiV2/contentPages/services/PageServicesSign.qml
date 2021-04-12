@@ -270,19 +270,16 @@ PageServicesSignForm {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyButtonAdd.forceActiveFocus()
         }
-        onSignalCardDataChanged: {
-            console.log("Services Sign Advanced --> Data Changed")
-            //console.trace();
+        onSignalSignCertDataChanged: {
+            console.log("Services Sign Advanced --> Certificate Data Changed")
             propertyPDFPreview.propertyDragSigSignedByNameText.text =
-                    qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
-                    + gapi.getDataCardIdentifyValue(GAPI.Givenname)
-                    + " " +  gapi.getDataCardIdentifyValue(GAPI.Surname)
+                    qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": " + ownerName
 
-            propertyPDFPreview.propertyDragSigNumIdText.text = qsTranslate("GAPI","STR_NIC") + ": "
-                    + gapi.getDataCardIdentifyValue(GAPI.NIC)
+            propertyPDFPreview.propertyDragSigNumIdText.text =
+                    qsTranslate("GAPI","STR_NIC") + ": " + NIC
             propertyBusyIndicatorRunning = false
-            cardLoaded = true
             propertyButtonAdd.forceActiveFocus()
+            cardLoaded = true
         }
         onSignalCardChanged: {
             console.log("Services Sign Advanced onSignalCardChanged")
@@ -299,7 +296,7 @@ PageServicesSignForm {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicatorRunning = true
                 cardLoaded = true
-                gapi.startCardReading()
+                gapi.startGettingInfoFromSignCert();
             }
             else{
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
@@ -1459,7 +1456,7 @@ PageServicesSignForm {
         if (propertyShowOptions)
             propertyItemOptions.height = propertyOptionsHeight
 
-        gapi.startCardReading()
+        gapi.startGettingInfoFromSignCert();
     }
     Component.onDestruction: {
         console.log("PageServicesSignAdvanced destruction")

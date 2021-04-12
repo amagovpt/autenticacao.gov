@@ -3310,6 +3310,30 @@ void GAPI::fillCertificateList(void)
     END_TRY_CATCH
 }
 
+void GAPI::startGettingInfoFromSignCert() {
+    Concurrent::run(this, &GAPI::getInfoFromSignCert);
+}
+
+void GAPI::getInfoFromSignCert(void)
+{
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetInfoFromSignCert");
+
+    BEGIN_TRY_CATCH
+
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+
+    if (card == NULL) return;
+
+    PTEID_Certificate& cert = card->getCertificates().getCert(PTEID_Certificate::CITIZEN_SIGN);
+    QString ownerName = cert.getOwnerName();
+    QString NIC = cert.getSubjectSerialNumber();
+
+    emit signalSignCertDataChanged(ownerName, NIC);
+
+    END_TRY_CATCH
+}
+
 QString GAPI::getCachePath(void){
     return m_Settings.getPteidCachedir();
 }

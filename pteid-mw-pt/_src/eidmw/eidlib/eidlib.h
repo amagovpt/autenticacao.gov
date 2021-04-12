@@ -1483,6 +1483,7 @@ public:
 	PTEIDSDK_API void getFormattedData(PTEID_ByteArray &data);	/**< Return the content of the certificate without ending zero */
 	PTEIDSDK_API const char *getSerialNumber();		/**< Return the serial number of the certificate */
 	PTEIDSDK_API const char *getOwnerName();			/**< Return the name of the owner of the certificate */
+	PTEIDSDK_API const char *getSubjectSerialNumber();	/**< Return the serial number of the subject of the certificate */
 	PTEIDSDK_API const char *getIssuerName();			/**< Return the name of the issuer of the certificate */
 	PTEIDSDK_API const char *getValidityBegin();		/**< Return the validity begin date of the certificate */
 	PTEIDSDK_API const char *getValidityEnd();		/**< Return the validity end date of the certificate */

@@ -1639,6 +1639,13 @@ const char *APL_Certif::getOwnerName()
 	return m_info->ownerName.c_str();
 }
 
+const char *APL_Certif::getSubjectSerialNumber()
+{
+	initInfo();
+
+	return m_info->subjectSerialNumber.c_str();
+}
+
 const char *APL_Certif::getIssuerName()
 {
 	initInfo();
