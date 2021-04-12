@@ -114,6 +114,19 @@ bool StartsWith(const char *csData, const char *csSearch)
 
 	return true;
 }
+
+void SubstringInplace(char *buffer, size_t from, size_t to)
+{
+	size_t initial_str_size = strlen(buffer);
+	size_t new_str_size = to - from;
+
+	if ( from <= to && to <= initial_str_size)
+	{
+		std::memmove(buffer, buffer + from , strlen(buffer + from));
+		std::memset(buffer + new_str_size, 0, initial_str_size - new_str_size);
+	}
+}
+
 //--------------------------------------------
 // conversion table to convert IBM 850 to UTF8
 // only the highest 128 characters can/will be converted

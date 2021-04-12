@@ -3329,6 +3329,9 @@ void GAPI::getInfoFromSignCert(void)
     QString ownerName = cert.getOwnerName();
     QString NIC = cert.getSubjectSerialNumber();
 
+    //remove "BI" prefix
+    NIC.replace("BI","");
+
     emit signalSignCertDataChanged(ownerName, NIC);
 
     END_TRY_CATCH

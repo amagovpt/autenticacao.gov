@@ -53,6 +53,8 @@ EIDMW_CMN_API bool StartsWithCI(const char *csData, const char *csSearch);
  */
 EIDMW_CMN_API bool StartsWith(const char *csData, const char *csSearch);
 
+EIDMW_CMN_API void SubstringInplace(char *buffer, size_t from, size_t to);
+
 EIDMW_CMN_API char *bin2AsciiHex(const unsigned char * pData, unsigned long ulLen);
 
 // Get the first n utf8 encoded chars in a string 

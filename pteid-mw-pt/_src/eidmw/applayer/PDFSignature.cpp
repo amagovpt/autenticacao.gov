@@ -388,6 +388,11 @@ namespace eIDMW
 		X509_NAME_get_text_by_NID(subj, NID_serialNumber, data_serial, cert_field_size);
 		X509_NAME_get_text_by_NID(subj, NID_commonName, data_common_name, cert_field_size);
 
+		//remove "BI" prefix
+		if (StartsWith(data_serial, "BI")) {
+			SubstringInplace(data_serial, 2, strlen(data_serial));
+		}
+
 		m_civil_number = data_serial;
 		m_citizen_fullname = data_common_name;
 		X509_free(x509);
