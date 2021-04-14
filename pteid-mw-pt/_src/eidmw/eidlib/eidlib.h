@@ -1513,6 +1513,11 @@ public:
 	PTEIDSDK_API bool isFromCard();
 
 	/**
+	  * Return true if the current time is between the certificate's notBefore and notAfter
+	  */
+	PTEIDSDK_API bool verifyDateValidity();
+
+	/**
 	  * Return the issuer certificate.
 	  *
 	  * if there is no issuer (root), PTEID_ExCertNoIssuer exception is thrown

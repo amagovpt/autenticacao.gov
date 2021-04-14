@@ -2021,6 +2021,14 @@
         <source>STR_LOAD_XFA_FORM_PDF_ERROR_MSG</source>
         <translation>Ficheiros PDF com formulários XFA não são suportados.</translation>
     </message>
+    <message>
+        <source>STR_EXPIRED_SIGN_CERT</source>
+        <translation>O certificado de assinatura do Cartão de Cidadão inserido está expirado.</translation>
+    </message>
+    <message>
+        <source>STR_WARNING</source>
+        <translation>Aviso</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>

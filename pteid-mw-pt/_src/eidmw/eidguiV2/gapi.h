@@ -293,6 +293,7 @@ public slots:
     void setAddressLoaded(bool addressLoaded) {m_addressLoaded = addressLoaded; }
     void startCardReading();
     void startGettingInfoFromSignCert();
+    void startCheckSignatureCertValidity();
     void startSavingCardPhoto(QString outputFile);
     int getStringByteLength(QString text);
     void startReadingPersoNotes();
@@ -442,6 +443,7 @@ signals:
     void signalSetReaderComboIndex(long selected_reader);
     void signalCardDataChanged();
     void signalSignCertDataChanged(QString ownerName, QString NIC);
+    void signalSignCertExpired();
     void signalAddressLoaded(bool m_foreign);
     void signalCardAccessError(int error_code);
     void signalGenericError(const QString error_code);
@@ -533,6 +535,7 @@ private:
     void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);
     void fillCertificateList (void );
     void getCertificateAuthStatus(void );
+    void checkSignatureCertValidity(void);
     void getInfoFromSignCert(void);
     int findCardCertificate(QString issuedBy, QString issuedTo);
     void doExportCardCertificate(QString issuedBy, QString issuedTo, QString outputPath);

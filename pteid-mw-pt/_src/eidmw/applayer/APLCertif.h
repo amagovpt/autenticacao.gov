@@ -533,6 +533,7 @@ public:
 	
 	EIDMW_APL_API bool isHidden();						/**< This is an hidden certificate */
 	EIDMW_APL_API bool isFromCard();						/**< This certificate comes from the card */
+	EIDMW_APL_API bool verifyDateValidity();			/**< The current time is between notBefore and notAfter */
 
 	EIDMW_APL_API APL_Certifs *getCertificates();		/**< Return a pointer to the store */
 

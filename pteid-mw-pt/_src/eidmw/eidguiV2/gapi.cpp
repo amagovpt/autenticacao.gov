@@ -3279,6 +3279,29 @@ void GAPI::getCertificateAuthStatus(void)
     emit signalShowCardActivation(returnString);
 }
 
+void GAPI::startCheckSignatureCertValidity() {
+    Concurrent::run(this, &GAPI::checkSignatureCertValidity);
+}
+
+void GAPI::checkSignatureCertValidity(void)
+{
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "checkSignatureCertValidity");
+
+    BEGIN_TRY_CATCH
+
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+
+    if (card == NULL) return;
+
+    PTEID_Certificate& cert = card->getCertificates().getCert(PTEID_Certificate::CITIZEN_SIGN);
+
+    if (!cert.verifyDateValidity())
+        emit signalSignCertExpired();
+
+    END_TRY_CATCH
+}
+
 void GAPI::fillCertificateList(void)
 {
     bool noIssuer = false;

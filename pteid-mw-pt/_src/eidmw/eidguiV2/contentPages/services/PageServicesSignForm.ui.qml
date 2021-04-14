@@ -27,6 +27,7 @@ Item {
     property variant filesArray: []
     property bool fileLoaded: false
     property bool cardLoaded: false
+    property bool signCertExpired: false
     property bool propertyBusyIndicatorRunning: false
 
     property alias propertyRectMainRight: rectMainRight
@@ -1265,7 +1266,7 @@ Item {
                               "PageServicesSign", "STR_SIGN_CARD_BUTTON")
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
-                    enabled: fileLoaded && cardLoaded
+                    enabled: fileLoaded && cardLoaded && !signCertExpired
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase

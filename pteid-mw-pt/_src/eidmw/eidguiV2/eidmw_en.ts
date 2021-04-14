@@ -2011,6 +2011,14 @@
         <source>STR_LOAD_XFA_FORM_PDF_ERROR_MSG</source>
         <translation>PDF files with XFA forms are not supported.</translation>
     </message>
+    <message>
+        <source>STR_EXPIRED_SIGN_CERT</source>
+        <translation>The inserted Citizen Card&apos;s signature certificate is expired.</translation>
+    </message>
+    <message>
+        <source>STR_WARNING</source>
+        <translation>Warning</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>

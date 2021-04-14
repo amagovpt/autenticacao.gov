@@ -296,7 +296,10 @@ PageServicesSignForm {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicatorRunning = true
                 cardLoaded = true
+                signCertExpired = false
+
                 gapi.startGettingInfoFromSignCert();
+                gapi.startCheckSignatureCertValidity();
             }
             else{
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
@@ -304,6 +307,13 @@ PageServicesSignForm {
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
 
+        }
+        onSignalSignCertExpired: {
+            console.log("Services Sign onSignalSignCertExpired")
+            var titlePopup = qsTranslate("PageServicesSign", "STR_WARNING")
+            var bodyPopup = qsTranslate("PageServicesSign","STR_EXPIRED_SIGN_CERT")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            signCertExpired = true
         }
     }
     Connections {
@@ -1456,7 +1466,9 @@ PageServicesSignForm {
         if (propertyShowOptions)
             propertyItemOptions.height = propertyOptionsHeight
 
+        signCertExpired = false
         gapi.startGettingInfoFromSignCert();
+        gapi.startCheckSignatureCertValidity();
     }
     Component.onDestruction: {
         console.log("PageServicesSignAdvanced destruction")

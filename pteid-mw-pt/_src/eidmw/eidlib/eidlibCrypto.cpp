@@ -198,6 +198,20 @@ bool PTEID_Certificate::isTest()
 	return out;
 }
 
+bool PTEID_Certificate::verifyDateValidity()
+{
+	bool out = false;
+
+	BEGIN_TRY_CATCH
+
+	APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
+	out = pimpl->verifyDateValidity();
+
+	END_TRY_CATCH
+
+	return out;
+}
+
 bool PTEID_Certificate::isFromPteidValidChain()
 {
 	bool out = false;

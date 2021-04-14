@@ -1609,6 +1609,11 @@ void APL_Certif::initInfo()
 		m_initInfo=true;
 }
 
+bool APL_Certif::verifyDateValidity()
+{
+	return m_cryptoFwk->VerifyDateValidity(getData());
+}
+
 bool APL_Certif::isHidden()
 {
 	return m_hidden;
