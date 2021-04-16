@@ -258,7 +258,7 @@
         <File Id="pteidmdrv.cat" Name="pteidmdrv.cat" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.cat" KeyPath="no" DiskId="1" />
         <File Id="pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="no" DiskId="1" />
         <File Id="pteidmdrv64.dll" Name="pteidmdrv64.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" KeyPath="no" DiskId="1" />
-        <difx:Driver ForceInstall="no" PlugAndPlayPrompt="no" DeleteFiles="yes"  />
+        <!--<difx:Driver ForceInstall="no" PlugAndPlayPrompt="no" DeleteFiles="yes"  /> -->
       </Component>
       <!-- Certificate Propagation Service is a standard Windows service available in from Windows Vista on. In order to use the minidriver
 			   it is necessary that this service is running. When a smart card reader is inserted this service should be started  by the smart card
@@ -268,6 +268,14 @@
         <RegistryValue Root="HKLM" Key="System\CurrentControlSet\Services\CertPropSvc" Type="integer" Name="Start" Value="2" KeyPath="yes"/>
         <!-- Start Certificate Propagation Service now -->
         <!--<ServiceControl Id="StartCertPropSvc" Name="CertPropSvc" Start="install" Wait="no"/>-->
+      </Component>
+      <!-- Trick used by OpenSC minidriver: install an alias for the Base smart card CSP. 
+      Using a different CSP in minidriver installation deactivates the plug and play feature -->
+      <Component Id="PteidBaseCSP" Guid="*">
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Cryptography\Defaults\Provider\Pteid CSP">
+          <RegistryValue Type="string" Name="Image Path" Value="basecsp.dll" KeyPath="yes"/>
+          <RegistryValue Type="integer" Name="Type" Value="1"/>
+        </RegistryKey>
       </Component>
     </DirectoryRef>
 
@@ -359,21 +367,39 @@
 
       <Component Id="REGISTERMINIDRIVER" Guid="{B9980C19-883E-49F9-BDD2-AB3D75187C8F}">
         <RegistryKey Root="HKLM"
-                     Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid (IAS)"
+                     Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS)"
                      Action="createAndRemoveOnUninstall">
           <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="yes"/>
           <RegistryValue Type="binary" Name="ATR" Value="3B959540FFD000540130" KeyPath="no"/>
           <RegistryValue Type="binary" Name="ATRMask" Value="fffffffffffffffffffc" KeyPath="no"/>
-          <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+          <RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
           <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
         </RegistryKey>
         <RegistryKey Root="HKLM"
-                   Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\Pteid (Gemsafe)"
+                   Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (Gemsafe)"
                    Action="createAndRemoveOnUninstall">
           <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
           <RegistryValue Type="binary" Name="ATR" Value="3B7D95000080318065B08311000083009000" KeyPath="no"/>
           <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
-          <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+          <RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
+          <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+        </RegistryKey>
+        <RegistryKey Root="HKLM"
+                   Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (Gemsafe) 3"
+                   Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATR" Value="3bff9600008131804380318065b0850300ef120fff82900067" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
+          <RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
+          <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+        </RegistryKey>
+        <RegistryKey Root="HKLM"
+                   Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (Gemsafe) 4"
+                   Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATR" Value="3bff9600008131fe4380318065b085040120120fff829000d0" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
+          <RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
           <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
         </RegistryKey>
       </Component>
@@ -490,6 +516,7 @@
         <!-- Shortcuts -->
         <Feature Id="Install_Minidriver" Title="!(loc.Minidriver)" Description="!(loc.MinidriverDescr)" Level="0" AllowAdvertise="no">
           <ComponentRef Id="pteidmdrv"/>
+          <ComponentRef Id="PteidBaseCSP"/>
           <ComponentRef Id="CertPropService"/>
           <ComponentRef Id="pteidmdrvsystem32"/>
           <ComponentRef Id="REGISTERMINIDRIVER"/>
