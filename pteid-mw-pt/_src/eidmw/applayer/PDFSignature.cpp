@@ -504,7 +504,7 @@ namespace eIDMW
 				{
 					if (e.GetError() != EIDMW_TIMESTAMP_ERROR && e.GetError() != EIDMW_LTV_ERROR){
 						m_card->getCalReader()->setSSO(false);
-						throw e;
+						throw CBatchSignFailedException(e.GetError(), i);
 					}
 
 					// Enable PIN cache

@@ -511,6 +511,18 @@ PTEID_ExSOD::~PTEID_ExSOD()
 {
 }
 
+/*****************************************************************************************
+---------------------------- PTEID_ExBatchSignatureFailed --------------------------------
+*****************************************************************************************/
+PTEID_ExBatchSignatureFailed::PTEID_ExBatchSignatureFailed(long lError, unsigned int index):
+	PTEID_Exception(lError), m_failedSignatureIndex(index)
+{
+}
+
+PTEID_ExBatchSignatureFailed::~PTEID_ExBatchSignatureFailed()
+{
+}
+
 //Deprecated Classes - we leave them here just to support old pteidlibj versions
 
 /*****************************************************************************************

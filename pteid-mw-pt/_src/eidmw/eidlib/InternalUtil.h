@@ -60,6 +60,12 @@
 		if(m_context->mutex) m_context->mutex->Unlock();	\
 		throw;												\
 	}														\
+	catch(CBatchSignFailedException &e)						\
+	{														\
+		if(m_context->mutex) m_context->mutex->Unlock();	\
+		throw PTEID_ExBatchSignatureFailed(e.GetError(),	\
+			e.GetFailedSignatureIndex());					\
+	}														\
 	catch(CMWException &e)									\
 	{														\
 		e.GetError();										\

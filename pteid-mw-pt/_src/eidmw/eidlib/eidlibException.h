@@ -235,6 +235,32 @@ public:
 	PTEIDSDK_API virtual ~PTEID_ExSOD();				/**< Destructor */
 };
 
+/******************************************************************************//**
+  * Exception class PTEID_ExBatchSignatureFailed error codes:
+  *
+  * All error codes related with pdf signatures (except timestamp/LTV errors), e.g.:
+  *
+  *		EIDMW_PDF_INVALID_ERROR
+  *		EIDMW_PDF_UNSUPPORTED_ERROR
+  *		EIDMW_PDF_INVALID_PAGE_ERROR
+  *
+  * Throw when batch signature fails.
+  * Used in : - int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason, const char *outfile_path)
+  *
+  * Use GetFailedSignatureIndex() to know which of the signatures(from the batch) failed.
+  *********************************************************************************/
+class PTEID_ExBatchSignatureFailed: public PTEID_Exception
+{
+public:
+	PTEIDSDK_API PTEID_ExBatchSignatureFailed(long lError, unsigned int failedIndex);	/**< Constructor */
+	PTEIDSDK_API virtual ~PTEID_ExBatchSignatureFailed();	/**< Destructor */
+
+	unsigned int GetFailedSignatureIndex() const { return m_failedSignatureIndex; }; /**< Returns the index (within batch) of the failed signature */
+
+private:
+	long m_failedSignatureIndex;
+};
+
 //DEPRECATED EXCEPTION Classes: not currently used
 class PTEID_ExCardBadType : public PTEID_Exception
 {

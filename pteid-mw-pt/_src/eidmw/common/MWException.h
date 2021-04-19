@@ -64,6 +64,20 @@ protected:
 	long m_lPinRef;
 };
 
+class EIDMW_CMN_API CBatchSignFailedException: public CMWException
+{
+public:
+    CBatchSignFailedException(long lError, unsigned int failedSignatureIndex) :
+        CMWException(lError, "", 0),
+        m_failedSignatureIndex(failedSignatureIndex){};
+
+    unsigned int GetFailedSignatureIndex() const { return m_failedSignatureIndex; };
+
+protected:
+    unsigned int m_failedSignatureIndex;
+};
+
+
 
 #ifdef _WIN32
 #define DIR_SEP '\\'
