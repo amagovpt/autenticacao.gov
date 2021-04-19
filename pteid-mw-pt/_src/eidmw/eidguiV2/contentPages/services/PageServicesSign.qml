@@ -88,12 +88,12 @@ PageServicesSignForm {
         onSignalAttributesLoaded:{
             console.log("Sign advanced - Signal SCAP attributes loaded")
 
-            for(var i = 0; i < attribute_list.length; i=i+3)
+            for(var i = 0; i < attribute_list.length; i=i+4)
             {
                 // Fix the differences between entities and companies attributes about uppercase style
                 attribute_list[i+1] = toTitleCase(attribute_list[i+1])
                 entityAttributesModel.append({
-                                                 entityName: attribute_list[i],
+                                                 entityName: attribute_list[i+3] != "" ? attribute_list[i+3] : attribute_list[i],
                                                  citizenName: attribute_list[i+1],
                                                  attribute: attribute_list[i+2],
                                                  checkBoxAttr: false

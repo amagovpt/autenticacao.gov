@@ -303,7 +303,7 @@ PageDefinitionsSCAPForm {
             console.log("Definitions SCAP - Signal SCAP Entity attributes loaded")
             console.log(attribute_list)
             if(entityAttributesModel.count == 0){
-                for(var i = 0; i < attribute_list.length; i=i+3)
+                for(var i = 0; i < attribute_list.length; i=i+4)
                 {
                     entityAttributesModel.append({
                                                      entityName: attribute_list[i],
@@ -313,7 +313,7 @@ PageDefinitionsSCAPForm {
                 }
             }else{
                 // Remove old attributes
-                for(i = 0; i < attribute_list.length; i=i+3)
+                for(i = 0; i < attribute_list.length; i=i+4)
                 {
                     for (var j = 0; j < entityAttributesModel.count; j++){
                         if(entityAttributesModel.get(j).entityName === attribute_list[i]){
@@ -328,7 +328,7 @@ PageDefinitionsSCAPForm {
                     }
                 }
                 // Add new attribute
-                for(i = 0; i < attribute_list.length; i=i+3)
+                for(i = 0; i < attribute_list.length; i=i+4)
                 {
                     for (var j = 0; j < entityAttributesModel.count; j++){
                         if(entityAttributesModel.get(j).entityName === attribute_list[i]){
@@ -350,7 +350,7 @@ PageDefinitionsSCAPForm {
             console.log("Definitions SCAP - Signal SCAP company attributes loaded")
             isLoadingCache = false
             companyAttributesModel.clear()
-            for(var i = 0; i < attribute_list.length; i=i+3)
+            for(var i = 0; i < attribute_list.length; i=i+4)
             {
                 attribute_list[i+1] = toTitleCase(attribute_list[i+1])
                 // Let's see if company already exists and in what index
