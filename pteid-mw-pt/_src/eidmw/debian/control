@@ -3,6 +3,7 @@ Section: utils
 Priority: extra
 Maintainer: Agência para a Modernização Administrativa, IP <ama@ama.pt>
 Build-Depends: debhelper (>= 7.0.50~),
+               pkg-config, 
                libpcsclite-dev,
                libpoppler-qt5-dev,
                libzip-dev,

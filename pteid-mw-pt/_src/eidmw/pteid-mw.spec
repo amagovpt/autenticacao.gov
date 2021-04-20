@@ -24,7 +24,7 @@
 %define app_version 3.5.0
 
 Name:           pteid-mw
-BuildRequires:  pcsc-lite-devel make swig
+BuildRequires:  pcsc-lite-devel make swig pkg-config
 BuildRequires:  libzip-devel
 BuildRequires:  openjpeg2-devel
 Requires:       pcsc-lite curl lato-fonts
