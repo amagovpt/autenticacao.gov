@@ -27,7 +27,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
-#include <string.h>
+#include <cstring>
 #include <iostream>
 
 #ifdef WIN32
