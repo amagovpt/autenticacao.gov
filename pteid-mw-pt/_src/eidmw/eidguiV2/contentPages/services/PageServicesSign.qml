@@ -139,12 +139,19 @@ PageServicesSignForm {
         onSignalPdfSignFail: {
             console.log("Sign failed with error code: " + error_code)
 
+            signerror_dialog.propertySignFailDialogText.text = ""
+            if ( index != -1 ){ //batch signature failed
+                var filename = Functions.fileBaseName(propertyListViewFiles.model.get(index).fileUrl)
+                signerror_dialog.propertySignFailDialogText.text =
+                    qsTranslate("PageServicesSign","STR_SIGN_BATCH_FAILED") + filename + ".<br><br>"
+            }
+
             if (error_code == GAPI.SignFilePermissionFailed) {
-                signerror_dialog.propertySignFailDialogText.text = qsTranslate("PageServicesSign","STR_SIGN_FILE_PERMISSION_FAIL")
+                signerror_dialog.propertySignFailDialogText.text += qsTranslate("PageServicesSign","STR_SIGN_FILE_PERMISSION_FAIL")
             } else if (error_code == GAPI.PDFFileUnsupported) {
-                signerror_dialog.propertySignFailDialogText.text = qsTranslate("PageServicesSign","STR_SIGN_PDF_FILE_UNSUPPORTED")
+                signerror_dialog.propertySignFailDialogText.text += qsTranslate("PageServicesSign","STR_SIGN_PDF_FILE_UNSUPPORTED")
             } else {
-                signerror_dialog.propertySignFailDialogText.text = qsTranslate("PageServicesSign","STR_SIGN_GENERIC_ERROR") + " " + error_code
+                signerror_dialog.propertySignFailDialogText.text += qsTranslate("PageServicesSign","STR_SIGN_GENERIC_ERROR") + " " + error_code
             }
             dialogSignCMD.close()
             signerror_dialog.visible = true

@@ -451,7 +451,7 @@ signals:
     void signalPersoDataLoaded(const QString& persoNotes);
     void signalAddressLoadedChanged();
     void signalPdfSignSucess(int error_code);
-    void signalPdfSignFail(int error_code);
+    void signalPdfSignFail(int error_code, int index);
     void signalUpdateProgressBar(int value);
     void signalUpdateProgressStatus(const QString statusMessage);
     void signalAddressShowLink();
@@ -507,6 +507,7 @@ signals:
 
 private:
     bool LoadTranslationFile( QString NewLanguage );
+    void emitErrorSignal(long errorCode, int index = -1);
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
     void connectToCard();
     void getSCAPEntities();

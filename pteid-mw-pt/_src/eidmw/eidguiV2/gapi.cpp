@@ -153,66 +153,71 @@ QString GAPI::getAddressField(AddressInfoKey key) {
     return m_addressData[key];
 }
 
-#define BEGIN_TRY_CATCH  \
-    try					  \
+#define BEGIN_TRY_CATCH                                 \
+    try                                                 \
 {
 
-#define END_TRY_CATCH    \
-    }                    \
-    catch (PTEID_ExNoReader &) \
-{                           \
-    qDebug() << "No card reader found !"; \
-    emit signalCardAccessError(NoReaderFound); \
-    }     \
-    catch (PTEID_ExNoCardPresent &) \
-{     \
-    qDebug() << "No card present."; \
-    emit signalCardAccessError(NoCardFound); \
-    }     \
-    catch (PTEID_Exception &e) \
-{ \
-    long errorCode = e.GetError(); \
-    if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && \
-    errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN) \
-{ \
-    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "SOD exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
-    emit signalCardAccessError(SodCardReadError); \
-    } else if (errorCode == EIDMW_TIMESTAMP_ERROR) \
-{ \
-    emit signalPdfSignSucess(SignMessageTimestampFailed); \
-    } else if (errorCode == EIDMW_LTV_ERROR) \
-{ \
-    emit signalPdfSignSucess(SignMessageLtvFailed); \
-    } else if (errorCode == EIDMW_PERMISSION_DENIED) \
-{ \
-    emit signalPdfSignFail(SignFilePermissionFailed); \
-    } else if (errorCode == EIDMW_PDF_UNSUPPORTED_ERROR) \
-{ \
-	emit signalPdfSignFail(PDFFileUnsupported); \
-    } else if (errorCode == EIDMW_ERR_PIN_CANCEL) \
-{ \
-    emit signalCardAccessError(CardUserPinCancel); \
-    } \
-    else if (errorCode == EIDMW_ERR_PIN_BLOCKED) \
-{ \
-    emit signalCardAccessError(PinBlocked); \
-    } \
-    else if (errorCode == EIDMW_ERR_INCOMPATIBLE_READER) \
-{ \
-    emit signalCardAccessError(IncompatibleReader); \
-    } \
-    else if (errorCode == EIDMW_ERR_TIMEOUT) \
-{ \
-    emit signalCardAccessError(CardPinTimeout); \
-    } \
-    else \
-{ \
-    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", e.GetError()); \
-    /* Discard the 0xe1d0 prefix */                       \
-    unsigned long user_error = e.GetError() & 0x0000FFFF; \
-    QString msgError = QString("%1\n").arg(user_error); \
-    emit signalGenericError(msgError); \
-    } \
+#define END_TRY_CATCH                                               \
+    }                                                               \
+    catch (PTEID_ExNoReader &)                                      \
+    {                                                               \
+        qDebug() << "No card reader found !";                       \
+        emit signalCardAccessError(NoReaderFound);                  \
+    }                                                               \
+    catch (PTEID_ExNoCardPresent &)                                 \
+    {                                                               \
+        qDebug() << "No card present.";                             \
+        emit signalCardAccessError(NoCardFound);                    \
+    }                                                               \
+    catch (PTEID_ExBatchSignatureFailed &e)                         \
+    {                                                               \
+        qDebug() << "Batch signature failed at index: "             \
+                 << e.GetFailedSignatureIndex();                    \
+        emitErrorSignal(e.GetError(), e.GetFailedSignatureIndex()); \
+    }                                                               \
+    catch (PTEID_Exception &e)                                      \
+    {                                                               \
+        emitErrorSignal(e.GetError());                              \
+}
+
+void GAPI::emitErrorSignal(long errorCode, int index){
+    if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR,
+            "eidgui", "SOD exception! Error code (see strings in eidErrors.h): %08lx\n", errorCode);
+        emit signalCardAccessError(SodCardReadError);
+    }
+    else if (errorCode == EIDMW_TIMESTAMP_ERROR) {
+        emit signalPdfSignSucess(SignMessageTimestampFailed);
+    }
+    else if (errorCode == EIDMW_LTV_ERROR) {
+        emit signalPdfSignSucess(SignMessageLtvFailed);
+    }
+    else if (errorCode == EIDMW_PERMISSION_DENIED) {
+        emit signalPdfSignFail(SignFilePermissionFailed, index);
+    }
+    else if (errorCode == EIDMW_PDF_UNSUPPORTED_ERROR) {
+        emit signalPdfSignFail(PDFFileUnsupported, index);
+    }
+    else if (errorCode == EIDMW_ERR_PIN_CANCEL) {
+        emit signalCardAccessError(CardUserPinCancel);
+    }
+    else if (errorCode == EIDMW_ERR_PIN_BLOCKED) {
+        emit signalCardAccessError(PinBlocked);
+    }
+    else if (errorCode == EIDMW_ERR_INCOMPATIBLE_READER) {
+        emit signalCardAccessError(IncompatibleReader);
+    }
+    else if (errorCode == EIDMW_ERR_TIMEOUT) {
+        emit signalCardAccessError(CardPinTimeout);
+    }
+    else {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", errorCode);
+        /* Discard the 0xe1d0 prefix */
+        unsigned long user_error = errorCode & 0x0000FFFF;
+        QString msgError = QString("%1\n").arg(user_error);
+        emit signalGenericError(msgError);
+    }
 }
 
 void GAPI::getAddressFile() {

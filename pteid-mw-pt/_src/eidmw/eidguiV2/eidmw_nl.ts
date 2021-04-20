@@ -2029,6 +2029,10 @@
         <source>STR_WARNING</source>
         <translation>Aviso</translation>
     </message>
+    <message>
+        <source>STR_SIGN_BATCH_FAILED</source>
+        <translation>A assinatura em lote terminou no ficheiro: </translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>

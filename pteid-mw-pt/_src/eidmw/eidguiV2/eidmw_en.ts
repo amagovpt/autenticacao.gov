@@ -2019,6 +2019,10 @@
         <source>STR_WARNING</source>
         <translation>Warning</translation>
     </message>
+    <message>
+        <source>STR_SIGN_BATCH_FAILED</source>
+        <translation>Batch signature stopped at file: </translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>
