@@ -366,21 +366,21 @@
       </Component>
 
       <Component Id="REGISTERMINIDRIVER" Guid="{B9980C19-883E-49F9-BDD2-AB3D75187C8F}">
-        <RegistryKey Root="HKLM"
-                     Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (IAS)"
-                     Action="createAndRemoveOnUninstall">
-          <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="yes"/>
-          <RegistryValue Type="binary" Name="ATR" Value="3B959540FFD000540130" KeyPath="no"/>
-          <RegistryValue Type="binary" Name="ATRMask" Value="fffffffffffffffffffc" KeyPath="no"/>
+         <RegistryKey Root="HKLM"
+                   Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (Gemsafe) 1"
+                   Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATR" Value="3b7d95000080318065b08311000083009000" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
           <RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
           <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
         </RegistryKey>
-        <RegistryKey Root="HKLM"
-                   Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (Gemsafe)"
-                   Action="createAndRemoveOnUninstall">
+         <RegistryKey Root="HKLM"
+                    Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid (Gemsafe) 2"
+                    Action="createAndRemoveOnUninstall">
           <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
-          <RegistryValue Type="binary" Name="ATR" Value="3B7D95000080318065B08311000083009000" KeyPath="no"/>
-          <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATR" Value="3b7d95000080318065b0831100008300" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffff" KeyPath="no"/>
           <RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
           <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
         </RegistryKey>
