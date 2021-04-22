@@ -492,6 +492,9 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
                         "ACService returned: %s",
                         ( !scapResult.empty() ? "SCAP result is not null" : "Null SCAP result" ));
 
+        //PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG , "ScapSignature",
+          //      "ACService returned: %s",( !scapResult.empty() ? scapResult.c_str() : "Null SCAP result" ));
+
         // Remove request answer headers
         std::string replyString = scapResult;
 
@@ -502,6 +505,10 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
             {
                 PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
                     "Error reading AttributeResponse! Malformed XML response.");
+
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG , "ScapSignature",
+                        "Malformed XML response: %s",( !scapResult.empty() ? scapResult.c_str() : "Null SCAP result" ));
+
                 parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
                 m_oauth = NULL;
                 return result;
@@ -546,6 +553,10 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
             qDebug() << "Error reading AttributeResponseType! Malformed XML response";
             PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
                       "Error reading AttributeResponseType! Malformed XML response. Error Code: %d",ret);
+
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG , "ScapSignature",
+                    "Malformed XML AttributeResponse: %s",( !scapResult.empty() ? scapResult.c_str() : "Null SCAP result" ));
+
             parent->signalSCAPDefinitionsServiceFail(GAPI::ScapGenericError, allEnterprises);
             //FIXME: mem leak
             //soap_destroy(&soap2);
@@ -643,6 +654,10 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
 				parent->signalCacheNotWritable();
             }
         } else {
+
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG , "ScapSignature",
+                        "Attributes responde error: %s",( !scapResult.empty() ? scapResult.c_str() : "Null SCAP result" ));
+
             if(allEnterprises) {
                 parent->signalCompanyAttributesLoadedError();
             }else{
