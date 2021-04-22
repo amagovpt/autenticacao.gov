@@ -9,6 +9,7 @@
 ****************************************************************************-*/
 
 #include <vector>
+#include <algorithm>
 #include <sstream>
 #include "eidlib.h"
 
@@ -413,6 +414,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
         char * c_soapAction = strdup(soapAction);
 
         std::string scapResult;
+		//SCAP Attribute loading with CC - uses PTEID_ScapConnection for TLS with client authentication
         if (!useOAuth)
         {
             //TODO: the PTEID_ScapConnection class does not implement a network timeout because it uses OpenSSL blocking IO mode
@@ -420,7 +422,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
             eIDMW::PTEID_ScapConnection scap(scapAddr, scapPort);
             scapResult.assign(scap.postSoapRequest(c_endpoint, c_soapAction, soapBody));
         }
-        else
+        else  //SCAP Attribute loading with CMD - direct gSoap call
         {
             // Add the authorization token in http_post_header
             sp.fposthdr = http_post_header;
@@ -495,9 +497,11 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
         //PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG , "ScapSignature",
           //      "ACService returned: %s",( !scapResult.empty() ? scapResult.c_str() : "Null SCAP result" ));
 
-        // Remove request answer headers
+		
         std::string replyString = scapResult;
-
+		//We don't need Windows line-endings in this string and it will be only used for debug log
+		scapResult.erase(std::remove(scapResult.begin(), scapResult.end(), '\r'), scapResult.end());
+		// Skip response HTTP headers by searching for the expected root XML tag
         if (!useOAuth)
         {
             size_t initialPos = replyString.find("<AttributeResponse");
@@ -656,7 +660,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
         } else {
 
             PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG , "ScapSignature",
-                        "Attributes responde error: %s",( !scapResult.empty() ? scapResult.c_str() : "Null SCAP result" ));
+                        "Attributes response error: %s",( !scapResult.empty() ? scapResult.c_str() : "Null SCAP result" ));
 
             if(allEnterprises) {
                 parent->signalCompanyAttributesLoadedError();
