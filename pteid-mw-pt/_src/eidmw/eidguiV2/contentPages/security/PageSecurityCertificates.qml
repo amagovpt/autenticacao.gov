@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
@@ -381,5 +381,40 @@ PageSecurityCertificatesForm {
                 child.propertyDateField.text = ""
             }
         }
+    }
+    function handleKeyPressed(key, callingObject){
+        var direction = getDirection(key)
+        switch(direction){
+            case Constants.DIRECTION_UP:
+                if(callingObject === propertyRectEntity && !propertyRowMain.atYEnd){
+                    propertyRowMain.flick(0, - getMaxFlickVelocity())
+                }
+                else if(!propertyRowMain.atYBeginning)
+                    propertyRowMain.flick(0, Constants.FLICK_Y_VELOCITY)
+                break;
+
+            case Constants.DIRECTION_DOWN:
+                if(callingObject === propertyButtonExportCertificate && !propertyRowMain.atYBeginning){
+                    propertyRowMain.flick(0, getMaxFlickVelocity());
+                }
+                else if(!propertyRowMain.atYEnd)
+                    propertyRowMain.flick(0, - Constants.FLICK_Y_VELOCITY)
+                break;
+        }
+    }
+    function getDirection(key){
+        var direction = Constants.NO_DIRECTION;
+        if (key == Qt.Key_Backtab || key == Qt.Key_Up || key == Qt.Key_Left){
+            direction = Constants.DIRECTION_UP;
+        }
+        else if (key == Qt.Key_Tab || key == Qt.Key_Down || key == Qt.Key_Right){
+            direction = Constants.DIRECTION_DOWN;
+        }
+        return direction;
+    }
+    function getMaxFlickVelocity(){
+        // use visible area of flickable object to calculate
+        // a smooth flick velocity
+        return 200 + Constants.FLICK_Y_VELOCITY_MAX * (1 - propertyRowMain.visibleArea.heightRatio)
     }
 }

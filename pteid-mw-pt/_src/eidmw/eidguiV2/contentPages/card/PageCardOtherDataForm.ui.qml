@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017, 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017 - 2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
  *
  * Licensed under the EUPL V.1.2
@@ -228,7 +228,7 @@ Item {
     Rectangle {
         id: rowCardStatus
         width: parent.width
-        height: Constants.HEIGHT_TEXT_BOX + 20
+        height: Constants.HEIGHT_TEXT_BOX
         anchors.top: rowLocalOfRequest.bottom
         anchors.topMargin: 40
         Item{
@@ -238,8 +238,10 @@ Item {
             Components.LabelTextBoxForm{
                 id: textBoxCardState
                 propertyDateText.text: qsTranslate("GAPI","STR_CARD_STATE")
-                propertyRectField.height: Constants.HEIGHT_TEXT_BOX
+                propertyRectField.height: propertyDateField.paintedHeight 
+                    + Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP            
                 propertyDateField.wrapMode: Text.WordWrap
+                propertyDateField.font.capitalization: Font.MixedCase
             }
             Accessible.role: Accessible.Column
             Accessible.name: textBoxCardState.accessibleText

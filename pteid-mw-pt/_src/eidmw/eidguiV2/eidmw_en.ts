@@ -494,6 +494,10 @@
         <source>STR_SCAP_CHECK_EXPIRED_ATTR</source>
         <translation>Check if the selected attributes are expired.</translation>
     </message>
+    <message>
+        <source>STR_CARD_SUSPENDED</source>
+        <translation>The authentication certificate of this card is not active. If you received your card in the mail, activation may take up to 2 business days from the date of delivery. If the problem persists, call the line Citizen Card (+351) 210 990 111, available between 9am and 18h on weekdays.</translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>
@@ -1585,7 +1589,7 @@
     </message>
     <message>
         <source>STR_STATUS_SUSPENDED</source>
-        <translation>Inactive or Suspended</translation>
+        <translation>Inactive or Suspended.</translation>
     </message>
     <message>
         <source>STR_CERT_CHAIN_ERROR</source>

@@ -1171,8 +1171,9 @@ QString GAPI::getCardActivation() {
                  || certificateStatus == PTEID_CERTIF_STATUS_ISSUER
                  || certificateStatus == PTEID_CERTIF_STATUS_UNKNOWN)
             return QString(tr("STR_CARD_VALIDATION_ERROR"));
-        else if (certificateStatus == PTEID_CERTIF_STATUS_SUSPENDED
-                 || certificateStatus == PTEID_CERTIF_STATUS_REVOKED)
+        else if (certificateStatus == PTEID_CERTIF_STATUS_SUSPENDED)
+            return QString(tr("STR_CARD_SUSPENDED"));
+        else if (certificateStatus == PTEID_CERTIF_STATUS_REVOKED)
             return QString(tr("STR_CARD_CANCELED"));
         else if(certificateStatus == PTEID_CERTIF_STATUS_EXPIRED)
             return QString(tr("STR_CARD_EXPIRED_CERT"));

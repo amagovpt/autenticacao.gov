@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
