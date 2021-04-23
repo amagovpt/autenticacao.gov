@@ -20,6 +20,7 @@ import "../../scripts/Constants.js" as Constants
 import "../../components" as Components
 
 Item {
+    id: main
     anchors.fill: parent
     visible: true
 
@@ -60,12 +61,11 @@ Item {
     Flickable {
         id: rowMain
         width: parent.width + Constants.SIZE_ROW_H_SPACE
-        height: parent.height - rowTop.height - Constants.SIZE_ROW_V_SPACE
+        height: parent.height - rowTop.height
         anchors.top: rowTop.bottom
         anchors.right: parent.right
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
         clip:true
-        contentHeight: content.childrenRect.height + 2*Constants.SIZE_ROW_V_SPACE
+        contentHeight: content.childrenRect.height
 
         ScrollBar.vertical: ScrollBar {
             id: settingsScroll
@@ -74,17 +74,15 @@ Item {
             active: true // QtQuick.Controls 2.1 does not have AlwaysOn prop
             width: Constants.SIZE_TEXT_FIELD_H_SPACE
             anchors.right: parent.right
-            anchors.top: rowTop.bottom
-            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            anchors.top: parent.top
             anchors.bottom: parent.bottom
             stepSize : 1.0
         }
 
         Item{
             id: content
-            anchors.top: parent.top
             width: rowMain.parent.width - Constants.SIZE_ROW_H_SPACE
-            height: rectTop.height + titleCertificatesTitle.height + rectBottom.height
+            height: parent.height
             x: Constants.SIZE_ROW_H_SPACE
 
             DropShadow {
@@ -121,15 +119,16 @@ Item {
             Rectangle{
                 id: rectTop
                 width: parent.width
-                height: 150
+                height: main.height * 0.34 - titleCertificatesTitle.height
                 color: "white"
                 anchors.top: titleCertificatesTitle.bottom
                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                clip: true
 
                 Components.Accordion {
                     id: acordion
                     anchors.fill: parent
-                    anchors.margins: 10
+                    anchors.margins: 8
                 }
             }
 
@@ -149,7 +148,7 @@ Item {
                 height: rectBottom.childrenRect.height
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: titleSelectedBox.bottom
-                anchors.topMargin: 0.9 * Constants.SIZE_TEXT_V_SPACE
+                anchors.topMargin: SIZE_ROW_V_SPACE
 
                 Item{
                     id: rectEntity
