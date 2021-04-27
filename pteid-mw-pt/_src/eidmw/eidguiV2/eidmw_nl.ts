@@ -1267,7 +1267,7 @@
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_FILE_LOAD</source>
-        <translation>Arraste a imagem da assinatura personalizada ou clique para procurar o ficheiro (Recomendado 185 x 41 px)</translation>
+        <translation>Arraste a imagem da assinatura personalizada ou clique para procurar o ficheiro (Recomendado 351 x 77 px)</translation>
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_REMOVE_BUTTON</source>

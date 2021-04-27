@@ -1257,7 +1257,7 @@
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_FILE_LOAD</source>
-        <translation>Drag the custom signature image file or click to browse the file (Recommended 185 x 41 px)</translation>
+        <translation>Drag the custom signature image file or click to browse the file (Recommended 351 x 77 px)</translation>
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_REMOVE_BUTTON</source>

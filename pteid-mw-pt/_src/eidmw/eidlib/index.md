@@ -135,7 +135,7 @@ PAdES-LTA: PTEID_SignatureLevel::PTEID_LEVEL_LTV */
 signature.setSignatureLevel(PTEID_SignatureLevel::PTEID_LEVEL_BASIC);
 
 // add custom image to the signature - it can't be used in combination with enableSmallSignatureFormat() method
-// image_data should point to a JPEG format image with recommended dimensions 185x41 px
+// image_data should point to a JPEG format image with recommended dimensions 351x77 px
 unsigned char *image_data;
 unsigned long image_length;
 signature.setCustomImage(image_data,image_length);

@@ -1441,7 +1441,7 @@ PageServicesSignForm {
 
         propertyPageLoader.propertyBackupFromSignaturePage = false
         propertyBusyIndicatorRunning = true
-        var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture_qml.jpg"
+        var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpg"
         if(gapi.getUseCustomSignature() && gapi.customSignImageExist()){
             if (Qt.platform.os === "windows") {
                 urlCustomImage = "file:///"+urlCustomImage

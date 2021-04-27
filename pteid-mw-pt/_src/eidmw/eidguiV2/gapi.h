@@ -403,7 +403,7 @@ public slots:
 
     QString getCachePath(void);
     bool customSignImageExist(void);
-    void customSignRemove(void);
+    void customSignImageRemove(void);
 
     void updateReaderList( void );
     void setUseCustomSignature (bool UseCustomSignature);
@@ -578,7 +578,6 @@ private:
     tCallBackHandles		m_callBackHandles;
     tCallBackData			m_callBackData;
 
-    QImage m_custom_image;
     QByteArray m_jpeg_scaled_data;
 
     QTimer* m_timerReaderList;

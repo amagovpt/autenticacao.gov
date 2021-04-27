@@ -3384,59 +3384,50 @@ bool GAPI::customSignImageExist(void){
     return fileExists(path);
 }
 
-//check if file exists and if yes: Is it really a file and no directory?
-
-void GAPI::customSignRemove(void){
-    QStringList paths = {m_Settings.getPteidCachedir() + "/CustomSignPicture.jpg",
-                         m_Settings.getPteidCachedir() + "/CustomSignPicture_qml.jpg"};
-
-    for (int i = 0; i < paths.size(); i++)
-        QFile::remove(paths.at(i));
+void GAPI::customSignImageRemove(void){
+    QString path = m_Settings.getPteidCachedir() + "/CustomSignPicture.jpg";
+    QFile::remove(path);
 }
 
 bool GAPI::useCustomSignature(void){
     QString customImagePath = m_Settings.getPteidCachedir() + "/CustomSignPicture.jpg";
-    m_custom_image = QImage(customImagePath);
+    QFile custom_image(customImagePath);
 
-    if (m_Settings.getUseCustomSignature() && !m_custom_image.isNull())
+    if (m_Settings.getUseCustomSignature() && custom_image.exists())
     {
         qDebug() << "Using Custom Picture to sign a PDF";
-        QBuffer buffer(&m_jpeg_scaled_data);
-        buffer.open(QIODevice::WriteOnly);
-        m_custom_image.save(&buffer, "JPG", 100);
+        custom_image.open(QIODevice::ReadOnly);
+        m_jpeg_scaled_data = custom_image.readAll();
+        custom_image.close();
         return true;
-    }else{
-        qDebug() << "Using default Picture to CC sign";
-        return false;
     }
+
+    qDebug() << "Using default Picture to CC sign";
+    return false;
 }
+
 bool GAPI::saveCustomImageToCache(QString url){
+    int MAX_IMAGE_HEIGHT = 77;
+    int MAX_IMAGE_WIDTH = 351;
+
+    // remove old image from cache
+    if (customSignImageExist())
+        customSignImageRemove();
+
     QString customImagePathCache = m_Settings.getPteidCachedir() + "/CustomSignPicture.jpg";
 
-    if (QFile::exists(customImagePathCache))
-    {
-        QFile::remove(customImagePathCache);
+    QUrl source(url);
+    QImage custom_image;
+
+    if (custom_image.load(source.toLocalFile(), "JPG")) {
+        if (custom_image.height() == MAX_IMAGE_HEIGHT && custom_image.width() == MAX_IMAGE_WIDTH) {
+            return QFile::copy(source.toLocalFile(), customImagePathCache);
+        }
+    }
+    else {
+        custom_image.load(source.toLocalFile());
     }
 
-    QUrl source = QUrl(url);
-    QImage custom_image = QImage(source.toLocalFile());
-
-    // keep original resolution image to display in the application
-    QString customImagePathCacheQml = m_Settings.getPteidCachedir() + "/CustomSignPicture_qml.jpg";
-    if (QFile::exists(customImagePathCacheQml))
-    {
-        QFile::remove(customImagePathCacheQml);
-    }
-    // set white background so png images with transparency are displayed
-    // in the application as they appear in the real signature seal
-    QImage customImageWhiteBg(custom_image.width(), custom_image.height(), QImage::Format_RGB32);
-    customImageWhiteBg.fill(QColor(Qt::white).rgb());
-    QPainter painterAux(&customImageWhiteBg);
-    painterAux.drawImage(0, 0, custom_image);
-    customImageWhiteBg.save(customImagePathCacheQml, "JPG", 100);
-
-    int MAX_IMAGE_HEIGHT = 41;
-    int MAX_IMAGE_WIDTH = 185;
     float RECOMMENDED_RATIO = MAX_IMAGE_HEIGHT / (float) MAX_IMAGE_WIDTH;
     float ACTUAL_RATIO = custom_image.height() / (float) custom_image.width();
 

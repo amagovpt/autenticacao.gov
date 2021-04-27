@@ -814,7 +814,7 @@ class PTEID_PDFSignature
 		/**
 	     * Use this method to change the image that's used on the bottom of the visible signature
 	     * This image will replace the default "Cartão de Cidadão" logo
-	     * @param image_data - image data in JPEG format (recommended size: 185x41 px)
+	     * @param image_data - image data in JPEG format (recommended size: 351x77 px)
 	     **/
 		PTEIDSDK_API void setCustomImage(const PTEID_ByteArray &image_data);
 

@@ -146,7 +146,7 @@ PageDefinitionsSignatureForm {
             fileLoaded = false
             propertyRadioButtonDefault.checked = true
             propertyRadioButtonCustom.checked = false
-            gapi.customSignRemove()
+            gapi.customSignImageRemove()
             propertyRadioButtonDefault.forceActiveFocus()
         }
     }
@@ -194,7 +194,7 @@ PageDefinitionsSignatureForm {
             propertyRadioButtonCustom.checked = false
         }
         if(gapi.customSignImageExist()){
-            var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture_qml.jpg"
+            var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpg"
             if (Qt.platform.os === "windows") {
                 urlCustomImage = "file:///"+urlCustomImage
             }else{
