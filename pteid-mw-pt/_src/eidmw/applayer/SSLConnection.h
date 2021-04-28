@@ -83,6 +83,7 @@ class SSLConnection
 		void loadCertChain(X509_STORE *store, APL_Certif * authentication_cert);
 		void loadAllRootCerts(X509_STORE *store);
 		unsigned long getKeyLength();
+		void log_server_address(BIO * bio);
 
 		char *m_session_cookie;
 

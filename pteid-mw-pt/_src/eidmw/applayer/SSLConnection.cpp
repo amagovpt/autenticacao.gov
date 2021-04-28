@@ -42,6 +42,7 @@
 #include <winsock.h>
 #else
 #include <sys/select.h>
+#include <arpa/inet.h>
 #endif
 
 
@@ -904,6 +905,77 @@ char * tlsVersionString(int version) {
 
 }
 
+void log_certificate_digest(X509 * cert, BIO *bio) {
+	unsigned char sha256_digest[SHA256_DIGEST_LENGTH];
+	char * digest_str = NULL;
+
+	int rc = X509_digest(cert, EVP_sha256(), sha256_digest, NULL);
+	if (rc) {
+		const size_t alloc_len = SHA256_DIGEST_LENGTH * 2 +1;
+		digest_str = (char *)malloc(alloc_len);
+		binToHex(sha256_digest, SHA256_DIGEST_LENGTH, digest_str, alloc_len);
+
+		BIO_printf(bio, "Certificate digest: %s\n", digest_str);
+
+		free(digest_str);
+
+	}
+
+}
+
+int verify_callback(int preverify_ok, X509_STORE_CTX *ctx) {
+	STACK_OF(X509) *sk;
+	unsigned char *p;
+	MWLOG(LEV_DEBUG, MOD_APL, "verify_callback called with preverify_ok = %d", preverify_ok);
+
+	//We only want the DEBUG logs for verification failure
+	if (preverify_ok == 0) {
+
+		sk = X509_STORE_CTX_get1_chain(ctx);
+		if (sk != NULL) {
+			//Memory buffer for the server certificate strings
+			BIO *mem_bio = BIO_new(BIO_s_mem());
+
+			for (unsigned int i = 0; i < sk_X509_num(sk); i++) {
+				X509 * cert_i = sk_X509_value(sk, i);
+				BIO_printf(mem_bio, "%2d s:", i);
+				X509_NAME_print_ex(mem_bio, X509_get_subject_name(cert_i), 0, XN_FLAG_RFC2253);
+				BIO_puts(mem_bio, "\n");
+				BIO_printf(mem_bio, "   i:");
+				X509_NAME_print_ex(mem_bio, X509_get_issuer_name(cert_i), 0, XN_FLAG_RFC2253);
+				BIO_puts(mem_bio, "\n");
+				if (i==0) {
+					log_certificate_digest(cert_i, mem_bio);
+				}
+			}
+			long size = BIO_get_mem_data(mem_bio, &p);
+			//We need to NULL terminate the buffer
+			p[size] = 0;
+			MWLOG(LEV_DEBUG, MOD_APL, "verify_callback: Certificate chain: \n%s", p);
+			BIO_free_all(mem_bio);
+		}
+		else {
+			MWLOG(LEV_ERROR, MOD_APL, "verify_callback: Server didn't return any certificate!");
+		}
+
+	}
+
+
+	//Return the value of preverify so we are not affecting the libssl built-in validation
+	return preverify_ok;
+}
+
+void SSLConnection::log_server_address(BIO * bio) {
+	struct in_addr ip_struct;
+	size_t address_len = 0;
+
+	const BIO_ADDR * address = BIO_get_conn_address(bio);
+	BIO_ADDR_rawaddress(address, &ip_struct, &address_len);
+
+	MWLOG(LEV_DEBUG, MOD_APL, "Connecting to server IP address: %s", inet_ntoa(ip_struct));
+
+}
+
 /**
  * Connect to a host using an encrypted stream
  */
@@ -951,10 +1023,10 @@ void SSLConnection::connect_encrypted(char* host_and_port)
 	// TODO: Load windows root certificates with some validations
 	//loadWindowsRootCertificates(store);
 
-	SSL_CTX_set_default_verify_paths(ctx);
+	//SSL_CTX_set_default_verify_paths(ctx);
 
     SSL_CTX_set_options(ctx, SSL_OP_NO_TICKET | SSL_OP_NO_SSLv2);
-    SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
+    SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, verify_callback);
 
 	X509_VERIFY_PARAM *vpm = SSL_CTX_get0_param(ctx);
 	//Verify hostname in the server-provided certificate
@@ -1027,6 +1099,9 @@ void SSLConnection::connect_encrypted(char* host_and_port)
 
     // Generate key
     unsigned long key_bits = getKeyLength();
+
+    log_server_address(bio);
+
     MWLOG(LEV_DEBUG, MOD_APL, "Generating dummy key with %lu bits", key_bits);
 
     rc = RSA_generate_key_ex(rsa, (int)key_bits, bn, NULL);

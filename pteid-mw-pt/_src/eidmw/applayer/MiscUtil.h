@@ -77,8 +77,13 @@ std::string urlEncode(unsigned char *data, int len);
 
 void replace_lastdot_inplace(char *in);
 
+//Base-64 encoding for binary data
+
 char *Base64Encode(const unsigned char *input, long length);
 void Base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded, unsigned int &decoded_len);
+
+//Hex string encoding for binary data
+void binToHex(const unsigned char *in, size_t in_len, char *out, size_t out_len);
 
 //Common type between 2/3 different cpp files
 typedef struct _hashed_file_

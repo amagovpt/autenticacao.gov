@@ -440,6 +440,19 @@ void Base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded
     BIO_free_all(bio);
 }
 
+void binToHex(const unsigned char *in, size_t in_len, char *out, size_t out_len)
+{
+    unsigned int n;
+    char *pos;
+
+    pos = out;
+    for (n = 0; n < in_len; n++) {
+        sprintf(pos, "%02x", in[n]);
+        pos += 2;
+    }
+    *pos = '\0';
+}
+
 /*****************************************************************************************
 ------------------------------------ CTimestampUtil ---------------------------------------
 *****************************************************************************************/
