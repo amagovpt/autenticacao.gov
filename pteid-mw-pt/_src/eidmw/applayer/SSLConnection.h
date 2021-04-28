@@ -65,7 +65,6 @@ class SSLConnection
 		bool do_SAM_4thpost(StartWriteResponse &resp);
 
 	protected:
-		void ReadUserCert();
 		static void init_openssl();
 		//Generic POST routine that actually writes and reads from the SSL connection
 		char * Post(char *cookie, char *url_path, char *body);
