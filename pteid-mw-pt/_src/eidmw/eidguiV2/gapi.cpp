@@ -739,11 +739,11 @@ void GAPI::showSignCMDDialog(long error_code)
 
     if (error_code == 0 || error_code == EIDMW_TIMESTAMP_ERROR || error_code == EIDMW_LTV_ERROR){
         PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", 
-            "CMD signature op finished with sucess with error code 0x%08x", error_code);
+            "Successful CMD signature - Returned error code: 0x%08x", error_code);
         emit signalOpenFile();
     } else {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", 
-            "CMD signature op finished with error code 0x%08x", error_code);
+            "Failed CMD signature - Returned error code: 0x%08x", error_code);
     }
 
     qDebug() << "Show Sign CMD Dialog - Error code: " << error_code
@@ -2263,12 +2263,12 @@ void GAPI::httpFinished()
             httpRequestAborted = true;
             httpRequestSuccess = false;
             emit signalSCAPPingFail();
-            QString strLog = QString("PingSCAP: Http request FAIL to: ");
+            QString strLog = QString("PingSCAP: HTTP request FAIL to: ");
             strLog += reply->url().toString();
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature", strLog.toStdString().c_str());
         } else {
             qDebug() << "C++: signalSCAPPingSuccess";
-            QString strLog = QString("PingSCAP: Http request SUCCESS to: ");
+            QString strLog = QString("PingSCAP: HTTP request SUCCESS to: ");
             strLog += reply->url().toString();
             PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "ScapSignature", strLog.toStdString().c_str());
             httpRequestAborted = false;
