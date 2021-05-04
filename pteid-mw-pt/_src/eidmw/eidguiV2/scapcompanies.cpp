@@ -413,6 +413,9 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
         char * c_endpoint = strdup(ac_endpoint);
         char * c_soapAction = strdup(soapAction);
 
+		eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
+			"Loading SCAP attributes with %s. Generated ProcessID: %s", useOAuth ? "CMD" : "CC card", cleanUuid.toUtf8().data());
+
         std::string scapResult;
 		//SCAP Attribute loading with CC - uses PTEID_ScapConnection for TLS with client authentication
         if (!useOAuth)
@@ -451,7 +454,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
                     proxyinfo_port = std::stol(m_proxyInfo.getProxyPort());
                 }
                 catch (...) {
-                    eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapCompanies", "Error parsing proxy port to number value.");
+                    eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Error parsing proxy port to number value.");
                 }
                 sp.proxy_host = strdup(m_proxyInfo.getProxyHost().c_str());
                 sp.proxy_port = proxyinfo_port;

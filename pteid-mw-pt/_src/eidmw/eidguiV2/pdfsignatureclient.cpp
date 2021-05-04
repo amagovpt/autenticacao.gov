@@ -624,16 +624,18 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
         if (status_code != 0 || authorizationResponse.TransactionList == NULL) {
             qDebug() << "authorizationService returned error";
             PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                      "AuthorizationService returned error. error code: %s and message: %s",
+                      "AuthorizationService returned error. Error code: %s, message: %s, ProcessID: %s",
                       authorizationResponse.Status->Code.c_str(),
-                      authorizationResponse.Status->Message.c_str());
+                      authorizationResponse.Status->Message.c_str(),
+				      authorizationResponse.ProcessId != NULL ? authorizationResponse.ProcessId->c_str() : "(null)");
             return handleError(status_code, NULL, __FUNCTION__);
         }
 
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
-                      "AuthorizationService returned with status code: %s and message: %s",
+                      "AuthorizationService returned with status code: %s, message: %s, ProcessID for current SCAP signature: %s",
                       authorizationResponse.Status->Code.c_str(),
-                      authorizationResponse.Status->Message.c_str());
+                      authorizationResponse.Status->Message.c_str(),
+			     authorizationResponse.ProcessId != NULL ? authorizationResponse.ProcessId->c_str() : "(null)");
 
         std::vector<ns1__TransactionType *> transactionList =
             authorizationResponse.TransactionList->Transaction;
