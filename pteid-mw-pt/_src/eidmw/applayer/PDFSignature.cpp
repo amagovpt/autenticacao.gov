@@ -388,11 +388,6 @@ namespace eIDMW
 		X509_NAME_get_text_by_NID(subj, NID_serialNumber, data_serial, cert_field_size);
 		X509_NAME_get_text_by_NID(subj, NID_commonName, data_common_name, cert_field_size);
 
-		//remove "BI" prefix
-		if (StartsWith(data_serial, "BI")) {
-			SubstringInplace(data_serial, 2, strlen(data_serial));
-		}
-
 		m_civil_number = data_serial;
 		m_citizen_fullname = data_common_name;
 		X509_free(x509);
@@ -715,7 +710,16 @@ namespace eIDMW
 		if (this->my_custom_image.img_data != NULL)
 			doc->addCustomSignatureImage(my_custom_image.img_data, my_custom_image.img_length);
 
-        doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, m_civil_number,
+		// remove "BI" prefix and checkdigit from NIC
+		std::string nic = m_civil_number;
+		size_t offset = 0;
+		size_t nic_length = 8;
+		if (nic.find("BI") == 0){
+			offset = 2;
+		}
+		nic = nic.substr(offset, nic_length);
+
+        doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, nic.c_str(),
                                  location, reason, m_page, m_sector, isLangPT, isCC());
         unsigned long len = doc->getSigByteArray(&to_sign, m_incrementalMode);
 
