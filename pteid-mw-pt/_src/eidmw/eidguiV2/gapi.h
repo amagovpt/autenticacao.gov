@@ -472,6 +472,7 @@ signals:
     void signalTriesLeftPinFinished(int triesLeft, int pin);
     void signalBeginOAuth();
     void signalEndOAuth(int oauthResult);
+    void signalCustomSignImageRemoved();
         
     //SCAP signals
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);

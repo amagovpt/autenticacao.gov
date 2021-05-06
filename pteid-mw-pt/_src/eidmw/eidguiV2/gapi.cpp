@@ -3382,8 +3382,21 @@ QString GAPI::getCachePath(void){
 }
 
 bool GAPI::customSignImageExist(void){
+    int IMAGE_HEIGHT = 77;
+    int IMAGE_WIDTH = 351;
     QString path = m_Settings.getPteidCachedir() + "/CustomSignPicture.jpg";
-    return fileExists(path);
+
+    if (QFile::exists(path)){
+        QImage customImage(path);
+        if (customImage.height() == IMAGE_HEIGHT && customImage.width() == IMAGE_WIDTH){
+            return true;
+        }
+
+        customSignImageRemove();
+        emit signalCustomSignImageRemoved();
+    }
+
+    return false;
 }
 
 void GAPI::customSignImageRemove(void){

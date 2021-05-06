@@ -322,6 +322,12 @@ PageServicesSignForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             signCertExpired = true
         }
+        onSignalCustomSignImageRemoved: {
+            console.log("Services Sign onSignalCustomSignImageRemoved")
+            var titlePopup = qsTranslate("PageServicesSign", "STR_WARNING")
+            var bodyPopup = qsTranslate("PageServicesSign","STR_CUSTOM_IMAGE_REMOVED")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+        }
     }
     Connections {
         target: image_provider_pdf

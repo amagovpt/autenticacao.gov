@@ -39,7 +39,6 @@ PageDefinitionsSignatureForm {
             propertySigLocationText.text = propertySigLocationTextCustom.text ="{" + qsTr("STR_CUSTOM_SIGN_LOCATION") + "}"
 
             propertyBusyIndicator.running = false
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                         propertyRadioButtonDefault.forceActiveFocus()
         }
@@ -69,6 +68,12 @@ PageDefinitionsSignatureForm {
             }
 
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, returnSubMenuWhenClosed)
+        }
+        onSignalCustomSignImageRemoved: {
+            console.log("Definitions Signature onSignalCustomSignImageRemoved")
+            var titlePopup = qsTranslate("PageServicesSign", "STR_WARNING")
+            var bodyPopup = qsTranslate("PageServicesSign","STR_CUSTOM_IMAGE_REMOVED")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
     }
 
@@ -186,7 +191,7 @@ PageDefinitionsSignatureForm {
         propertySigDateText.text = propertySigDateTextCustom.text =
                 qsTranslate("PageServicesSign", "STR_SIGN_DATE") + ": " + getDate()
         clearFields()
-        if(gapi.getUseCustomSignature()){
+        if(gapi.getUseCustomSignature() && gapi.customSignImageExist()){
             propertyRadioButtonDefault.checked = false
             propertyRadioButtonCustom.checked = true
         }else{

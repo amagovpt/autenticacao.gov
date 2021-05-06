@@ -2037,6 +2037,10 @@
         <source>STR_SIGN_BATCH_FAILED</source>
         <translation>A assinatura em lote terminou no ficheiro: </translation>
     </message>
+    <message>
+        <source>STR_CUSTOM_IMAGE_REMOVED</source>
+        <translation>A imagem de assinatura personalizada guardada não tem dimensões corretas e vai ser removida. Por favor, volte a carregar a imagem de assinatura personalizada.</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>

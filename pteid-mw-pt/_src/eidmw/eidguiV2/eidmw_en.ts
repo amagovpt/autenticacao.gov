@@ -2027,6 +2027,10 @@
         <source>STR_SIGN_BATCH_FAILED</source>
         <translation>Batch signature stopped at file: </translation>
     </message>
+    <message>
+        <source>STR_CUSTOM_IMAGE_REMOVED</source>
+        <translation>The stored custom signature image has incorrect dimensions and will be removed. Please, load a new custom signature image.</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>
