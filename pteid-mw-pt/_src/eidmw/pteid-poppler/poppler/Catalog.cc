@@ -1200,7 +1200,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 		free(location_latin1);
 	}
 
-	n2_commands->append("\r\nET\r\n");
+	n2_commands->append("\r\nET\r\nQ\r\n");
 
 	appearance_obj.initDict(xref);
 	appearance_obj.dictAdd(copyString("Type"), obj1.initName("XObject"));
