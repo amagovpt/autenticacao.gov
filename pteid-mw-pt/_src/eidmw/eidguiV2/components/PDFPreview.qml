@@ -154,6 +154,15 @@ Rectangle {
                     anchors.topMargin: 2
                     x: 2
                 }
+                Image {
+                    id: dragSigImage
+                    height: dragSigRect.height * 0.3
+                    fillMode: Image.PreserveAspectFit
+                    anchors.bottom: dragSigRect.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    cache: false
+                    x: 2
+                }
                 Text {
                     id: sigSignedByText
                     font.pixelSize:propertySigLineHeight
@@ -212,17 +221,6 @@ Rectangle {
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigDateText.bottom
                     text: ""
-                    x: 2
-                }
-
-                Image {
-                    id: dragSigImage
-                    height: dragSigRect.height * 0.3
-                    fillMode: Image.PreserveAspectFit
-                    anchors.top: sigLocationText.bottom
-                    anchors.topMargin: Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    cache: false
                     x: 2
                 }
 
