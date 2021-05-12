@@ -28,7 +28,6 @@ Item {
     property alias propertyTextBoxIssuingEntity: textBoxIssuingEntity
     property alias propertyTextBoxDocumentType: textBoxDocumentType
     property alias propertyTextBoxPlaceOfRequest: textBoxPlaceOfRequest
-    property alias propertyTextBoxCardState: textBoxCardState
 
     Item {
         id: rowTop
@@ -68,8 +67,8 @@ Item {
             KeyNavigation.tab: rectSocialSecurityNum
             KeyNavigation.down: rectSocialSecurityNum
             KeyNavigation.right: rectSocialSecurityNum
-            KeyNavigation.backtab: rectCardStatus
-            KeyNavigation.up: rectCardStatus
+            KeyNavigation.backtab: rectLocalOfRequest
+            KeyNavigation.up: rectLocalOfRequest
         }
         Item{
             id: rectSocialSecurityNum
@@ -217,34 +216,6 @@ Item {
             }
             Accessible.role: Accessible.Column
             Accessible.name: textBoxPlaceOfRequest.accessibleText
-            KeyNavigation.tab: rectCardStatus
-            KeyNavigation.down: rectCardStatus
-            KeyNavigation.right: rectCardStatus
-            KeyNavigation.backtab: rectDocumentType
-            KeyNavigation.up: rectDocumentType
-        }
-    }
-
-    Rectangle {
-        id: rowCardStatus
-        width: parent.width
-        height: Constants.HEIGHT_TEXT_BOX
-        anchors.top: rowLocalOfRequest.bottom
-        anchors.topMargin: 40
-        Item{
-            id: rectCardStatus
-            width: parent.width
-            height: parent.height
-            Components.LabelTextBoxForm{
-                id: textBoxCardState
-                propertyDateText.text: qsTranslate("GAPI","STR_CARD_STATE")
-                propertyRectField.height: propertyDateField.paintedHeight 
-                    + Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP            
-                propertyDateField.wrapMode: Text.WordWrap
-                propertyDateField.font.capitalization: Font.MixedCase
-            }
-            Accessible.role: Accessible.Column
-            Accessible.name: textBoxCardState.accessibleText
             KeyNavigation.tab: rectTaxNum
             KeyNavigation.down: rectTaxNum
             KeyNavigation.right: rectTaxNum

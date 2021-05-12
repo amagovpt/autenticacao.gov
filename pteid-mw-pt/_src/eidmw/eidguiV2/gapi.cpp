@@ -1171,9 +1171,8 @@ QString GAPI::getCardActivation() {
                  || certificateStatus == PTEID_CERTIF_STATUS_ISSUER
                  || certificateStatus == PTEID_CERTIF_STATUS_UNKNOWN)
             return QString(tr("STR_CARD_VALIDATION_ERROR"));
-        else if (certificateStatus == PTEID_CERTIF_STATUS_SUSPENDED)
-            return QString(tr("STR_CARD_SUSPENDED"));
-        else if (certificateStatus == PTEID_CERTIF_STATUS_REVOKED)
+        else if (certificateStatus == PTEID_CERTIF_STATUS_SUSPENDED
+                 || certificateStatus == PTEID_CERTIF_STATUS_REVOKED)
             return QString(tr("STR_CARD_CANCELED"));
         else if(certificateStatus == PTEID_CERTIF_STATUS_EXPIRED)
             return QString(tr("STR_CARD_EXPIRED_CERT"));
@@ -1635,8 +1634,10 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 
         drawSingleField(painter, pos_x, pos_y, tr("STR_CARD_VERSION"),
             QString::fromUtf8(eid_file.getDocumentVersion()), half_page, 0);
+        /*
         drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_CARD_STATE"),
             getCardActivation(), half_page, field_margin, true, half_page);
+        */
         pos_y += 50 * print_scale_factor;
     }
 

@@ -342,7 +342,7 @@
     </message>
     <message>
         <source>STR_CARD_STATE</source>
-        <translation>Estado do Cartão</translation>
+        <translation type="vanished">Estado do Cartão</translation>
     </message>
     <message>
         <source>STR_DOCUMENT_TYPE</source>
@@ -491,10 +491,6 @@
     <message>
         <source>STR_SCAP_CHECK_EXPIRED_ATTR</source>
         <translation>Verifique se os atributos selecionados estão expirados.</translation>
-    </message>
-    <message>
-        <source>STR_CARD_SUSPENDED</source>
-        <translation>O certificado de autenticação deste cartão não está ativo. Se recebeu o seu cartão pelo correio, a ativação poderá demorar até 2 dias úteis a partir da data de entrega. Se o problema persistir, ligue para a linha Cartão de Cidadão (+351) 210 990 111, disponível entre as 9h e as 18h, nos dias úteis.</translation>
     </message>
 </context>
 <context>
