@@ -148,7 +148,6 @@ Item {
                 height: rectBottom.childrenRect.height
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: titleSelectedBox.bottom
-                anchors.topMargin: SIZE_ROW_V_SPACE
 
                 Item{
                     id: rectEntity
