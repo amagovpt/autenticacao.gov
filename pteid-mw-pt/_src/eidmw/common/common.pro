@@ -70,6 +70,7 @@ HEADERS += ByteArray.h \
            win_macros.h \
            prefix.h \
            StringOps.h \
+           MyriadFontGlyphWidths.h \
            libtomcrypt/tomcrypt_argchk.h \
            libtomcrypt/tomcrypt_cfg.h \
            libtomcrypt/tomcrypt_hash.h \
@@ -91,6 +92,7 @@ SOURCES += ByteArray.cpp \
            TLVBuffer.cpp \
            Util.cpp \
            StringOps.cpp \
+           MyriadFontGlyphWidths.cpp \
            libtomcrypt/md5.c \
            libtomcrypt/sha1.c \
            libtomcrypt/sha256.c \

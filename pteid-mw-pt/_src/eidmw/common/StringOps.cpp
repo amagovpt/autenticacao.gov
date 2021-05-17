@@ -26,4 +26,106 @@ void replace(std::string& str, const std::string& from, const std::string& to) {
         start_pos += to.length();
     }
 }
+
+/*
+ * Get the exact widths of the glyphs necessary to represent
+ * the text in 'winansi_encoded_string', for a chosen font-face and fontsize
+ * Units: postscript points (pts)
+ */
+double getStringWidth(const char *winansi_encoded_string, double font_size, MyriadFontType font)
+{
+    double total_width = 0;
+    unsigned int w = 0;
+    unsigned char code = 0;
+
+    //Lookup each winansi char width
+    for (unsigned int i = 0; i!= strlen(winansi_encoded_string); i++)
+    {
+       code = (unsigned char)winansi_encoded_string[i];
+       w = getWidth(code, font);
+       total_width += 0.001 * font_size * w;
+    }
+
+    return total_width;
+}
+
+std::string getFittingSubString(const std::string &str, double font_size, MyriadFontType font, double space_available)
+{
+    int i = str.length() - 1;
+    const double reserved = getStringWidth("(...)", font_size, font);
+    while(i >= 0)
+    {
+        std::string tmp = str.substr(0, i);
+        if (getStringWidth(tmp.c_str(), font_size, font) <= (space_available - reserved))
+            return tmp;
+        i--;
+
+    }
+    return "";
+}
+
+std::vector<std::string> wrapString(const std::string& content, double available_space, double font_size, MyriadFontType font,
+                                    int available_lines, double space_first_line) {
+
+  std::vector<std::string> result;
+  std::string current_line;
+  std::string word;
+
+  double space_width = getStringWidth(" ", font_size, font);
+  double suspension_points_width = getStringWidth("(...)", font_size, font);
+
+  double space_left = space_first_line == 0 ? available_space : space_first_line;
+  double word_width = 0;
+  double needed_width = 0;
+
+  std::istringstream iss(content, std::istringstream::in);
+  while (iss >> word)
+  {
+    word_width = getStringWidth(word.c_str(), font_size, font);
+    needed_width = word_width + space_width;
+
+    if (available_lines == 1) // last line
+      needed_width += suspension_points_width;
+
+    //No more space in current line
+    if (needed_width > space_left)
+    {
+      available_lines--;
+
+      // if it' i's the first word of current line, and it is too long
+      if (current_line.empty())
+        current_line.append(getFittingSubString(word, font_size, font, space_left));
+
+      if (available_lines == 0)
+      {
+        //No more available lines so its an early exit...
+        current_line.append("(...)");
+        result.push_back(current_line);
+        return result;
+      }
+
+      // New line
+      result.push_back(current_line);
+      current_line = word;
+
+      // Reset space_left
+      space_left = available_space - word_width;
+    }
+    else
+    {
+      if (current_line.size() > 1)
+        current_line.append(" ");
+
+      // add word to current line
+      current_line.append(word);
+
+      // re-calculate space_left in current line
+      space_left -= (word_width + space_width);
+    }
+  }
+
+  result.push_back(current_line);
+  return result;
+}
+
 } /* namespace eIDMW */

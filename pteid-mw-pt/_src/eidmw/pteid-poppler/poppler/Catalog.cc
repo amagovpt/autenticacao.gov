@@ -878,144 +878,36 @@ std::string escape_pdf_string(std::string unescaped_str) {
 }
 
 /*
- * Get the exact widths of the glyphs necessary to represent
- * our text in our chosen font-face and fontsize
- * Units: postscript points (pts)
- */
-double getStringWidth(const char *winansi_encoded_string, double font_size, MyriadFontType font)
-{
-    double total_width = 0;
-    unsigned int w = 0;
-    unsigned char code = 0;
-
-    //Lookup each winansi char width 
-    for (unsigned int i = 0; i!= strlen(winansi_encoded_string); i++)
-    {
-       code = (unsigned char)winansi_encoded_string[i];
-       w = getWidth(code, font);
-	total_width += 0.001 * font_size * w;	 
-    }
-
-    return total_width;
-
-}
-
-std::string getFittingSubString(std::string &str, double font_size,
-			   	MyriadFontType font, double space_available)
-{
-	int i = str.length() - 1;
-	const double reserved = getStringWidth("(...)", font_size, font);
-   	while(i >= 0)
-	{
-	    std::string tmp = str.substr(0, i);
-	    if (getStringWidth(tmp.c_str(), font_size, font) <= 
-						(space_available - reserved))
-		return tmp;
-		i--;
-
-	}
-	return "";
-}
-
-/*
- * Generate PDF text display commands according to a fixed-column
- * layout 
+ * Generate PDF text display commands according to a fixed-column layout
  */
 GooString *formatMultilineString(char *content, double available_space, double font_size, MyriadFontType font,
                int available_lines, double line_height, double space_first_line=0)
 {
-	GooString *multi_line = new GooString();
-	std::string line = std::string(content);
-	std::string word;
-  std::string single_line;
+  std::string strContent(content);
 
-	//Length of the ' ' char in current font and font-size
-	double space_width = getWidth(' ', font) * font_size * 0.001;
-	//Length of the '(...)' string in current font and font-size
-	double space_width_suspension_points = getStringWidth("(...)", font_size, font);
+  // get string wrapped to the available size
+  std::vector<std::string> wrapped =
+    eIDMW::wrapString(strContent, available_space, font_size, (eIDMW::MyriadFontType) font, available_lines, space_first_line);
 
-	std::istringstream iss(line, std::istringstream::in);
+  double horizontal_shift = -(available_space - space_first_line);
 
-	double space_left = space_first_line == 0 ? available_space : space_first_line;
-	double word_width;
-	/* Shift to the left to offset the left margin of the 
-	first line if space_first_line > 0 */
-	double horizontal_shift = -(available_space - space_first_line);
-	int lines_used = 0, word_count = 0;
+  GooString *multi_line = new GooString();
+  std::unique_ptr<GooString> line_spacing_command(new GooString());
 
-	multi_line->append("("); //Init String
+  for (auto it = wrapped.begin(); it != wrapped.end(); ++it) {
+    multi_line->append(line_spacing_command.get());
+    std::string escaped = escape_pdf_string(*it);
 
-	while(iss >> word)
-	{
-		word_width = getStringWidth(word.c_str(), font_size, font);
-		//No more space in current line
-		if (word_width + space_width + (lines_used == available_lines - 1 ? space_width_suspension_points : 0) > space_left)
-		{
-			lines_used++;
-			
-			if (word_count == 0)
-			{
+    multi_line->append("(");
+    multi_line->append(escaped.c_str());
+    multi_line->append(") Tj\r\n");
 
-        single_line.append(getFittingSubString(word, font_size, font, space_left).c_str());
-				/*multi_line->append(
-						getFittingSubString(word, font_size, font, space_left).c_str()); */
-				lines_used = available_lines;
-			}
+    line_spacing_command.reset(GooString::format("{0:f} -{1:f} Td\r\n", horizontal_shift, line_height));
 
-			
-      std::string escaped = escape_pdf_string(single_line);
-      multi_line->append(escaped.c_str());
-
-			multi_line->append(lines_used == available_lines ? "\\(...\\)) Tj\r\n" : ") Tj\r\n");
-
-      if (lines_used == available_lines)
-      {
-         return multi_line;
-      }
-
-			if (lines_used > 1 || space_first_line == 0)
-				horizontal_shift = 0;
-
-			//Line spacing
-      GooString * tmp = GooString::format("{0:f} -{1:f} Td\r\n", horizontal_shift, line_height);
-			multi_line->append(tmp);
-
-			delete tmp; 
-			//Space first line is only relevant for the 1st line
-			space_first_line = 0;
-
-			multi_line->append("("); 	  //Begin new line
-      single_line.clear();
-            
-      single_line += word;
-		
-			//Reset space_left
-			space_left = available_space - word_width;
-		}
-		else
-		{
-			if (single_line.size() > 1)
-				single_line.append(" ");
-
-			//multi_line->append(word.c_str());
-      single_line += word;
-			space_left -= (word_width + space_width);
-
-		}
-
-		word_count++;
-
-	}
-
-  if (single_line.size() > 0) {
-      std::string escaped = escape_pdf_string(single_line);
-      multi_line->append(escaped.c_str());
+    horizontal_shift = 0;
   }
 
-	multi_line->append(") Tj\r\n");
-
   return multi_line;
-
 }
 
 /*
@@ -1025,6 +917,7 @@ GooString *formatMultilineString(char *content, double available_space, double f
 bool checkFontSize(char *content, double available_space, double font_size, MyriadFontType font,
                int available_lines, double line_height, double space_first_line=0)
 {
+#if 0
         GooString *multi_line = new GooString();
         std::string line = std::string(content);
         std::string word;
@@ -1100,7 +993,7 @@ bool checkFontSize(char *content, double available_space, double font_size, Myri
 
 	multi_line->append(") Tj\r\n");
 
-
+#endif
 	return true;
 
 }

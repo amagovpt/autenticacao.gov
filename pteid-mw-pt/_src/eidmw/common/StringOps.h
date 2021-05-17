@@ -16,11 +16,22 @@
 
 #pragma once
 #include "Export.h"
-#include <string>
+#include "MyriadFontGlyphWidths.h"
+#include <sstream>
+#include <vector>
 
 namespace eIDMW 
 {
 EIDMW_CMN_API void replace(std::string& str, const std::string& from, const std::string& to);
+
+/*
+ * Wrap string "content", on a width of "available_space",
+ * using a font-face of Myriad-Font (regular, italic, or bold) in size "font_size",
+ * up to a maximum of "available_lines" lines.
+ * Units: postscript points (pts)
+ */
+EIDMW_CMN_API std::vector<std::string> wrapString(const std::string& content, double available_space, double font_size,
+        MyriadFontType ft, int available_lines, double space_first_line=0);
 
 }
 

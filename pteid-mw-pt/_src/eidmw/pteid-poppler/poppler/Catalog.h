@@ -44,6 +44,7 @@
 #endif
 
 #include "Object.h"
+#include "StringOps.h"
 
 #define ESTIMATED_LEN 30000
 #define PLACEHOLDER_LEN ESTIMATED_LEN
