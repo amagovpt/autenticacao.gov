@@ -176,9 +176,6 @@ Rectangle {
                 Text {
                     id: sigSignedByNameText
                     font.pixelSize: propertySigLineHeight
-                    height: propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
-                    width: parent.width - sigSignedByText.paintedWidth - 6
-                    clip: true
                     font.family: lato.name
                     font.bold: true
                     color: Constants.COLOR_TEXT_BODY
@@ -195,7 +192,7 @@ Rectangle {
                     clip: true
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
-                    anchors.top: sigSignedByText.bottom
+                    anchors.top: sigSignedByNameText.bottom
                     text: ""
                     x: 2
                 }

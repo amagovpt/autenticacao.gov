@@ -34,6 +34,7 @@
 #include "credentials.h"
 #include "Config.h"
 #include "Util.h"
+#include "StringOps.h"
 #include "MiscUtil.h"
 #include "proxyinfo.h"
 #include "concurrent.h"
@@ -3376,6 +3377,28 @@ void GAPI::getInfoFromSignCert(void)
     emit signalSignCertDataChanged(ownerName, NIC);
 
     END_TRY_CATCH
+}
+
+QStringList GAPI::getWrappedOwnerName(QString name) {
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "getWrappedOwnerName");
+
+    std::string ownerName(name.toLatin1().constData());
+
+    // TODO: use actual dimensions of rectangle to calculate wrap like we do for the real seal
+    // these values are defaults for the citizen's name on a regular signature
+    double signed_by_length = 51.0;
+    double available_space = 177;
+    const float font_size = 8;
+    const int available_lines = 5;
+
+    std::vector<std::string> result = wrapString(ownerName, available_space, font_size,
+            MYRIAD_BOLD, available_lines, available_space - signed_by_length);
+
+    QStringList wrapped;
+    for (std::string s: result)
+        wrapped.append(QString::fromLatin1(s.c_str()));
+
+    return wrapped;
 }
 
 QString GAPI::getCachePath(void){

@@ -436,6 +436,8 @@ public slots:
     bool fileExists(QString path);
     QList<QString> getFilesFromDirectory(QString path);
 
+    QStringList getWrappedOwnerName(QString name);
+
 signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed

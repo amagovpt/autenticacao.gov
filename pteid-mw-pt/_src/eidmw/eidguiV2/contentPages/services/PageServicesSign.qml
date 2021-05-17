@@ -279,8 +279,11 @@ PageServicesSignForm {
         }
         onSignalSignCertDataChanged: {
             console.log("Services Sign Advanced --> Certificate Data Changed")
+
+            var wrappedName = gapi.getWrappedOwnerName(ownerName).join("<br>");
+
             propertyPDFPreview.propertyDragSigSignedByNameText.text =
-                    qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": " + ownerName
+                qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": " + wrappedName
 
             propertyPDFPreview.propertyDragSigNumIdText.text =
                     qsTranslate("GAPI","STR_NIC") + ": " + NIC
