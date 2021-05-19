@@ -159,7 +159,7 @@ Rectangle {
                     height: dragSigRect.height * 0.3
                     fillMode: Image.PreserveAspectFit
                     anchors.bottom: dragSigRect.bottom
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.left: parent.left
                     cache: false
                     x: 2
                 }
