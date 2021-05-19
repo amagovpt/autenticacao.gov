@@ -24,6 +24,8 @@ namespace eIDMW
 {
 EIDMW_CMN_API void replace(std::string& str, const std::string& from, const std::string& to);
 
+EIDMW_CMN_API bool endsWith(const std::string& string, const std::string& ending);
+
 /*
  * Wrap string "content", on a width of "available_space",
  * using a font-face of Myriad-Font (regular, italic, or bold) in size "font_size",

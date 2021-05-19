@@ -910,94 +910,6 @@ GooString *formatMultilineString(char *content, double available_space, double f
   return multi_line;
 }
 
-/*
- * Generate PDF text display commands according to a fixed-column
- * layout to check check if text fit in the available space with a specific font size
- */
-bool checkFontSize(char *content, double available_space, double font_size, MyriadFontType font,
-               int available_lines, double line_height, double space_first_line=0)
-{
-#if 0
-        GooString *multi_line = new GooString();
-        std::string line = std::string(content);
-        std::string word;
-
-	//Length of the ' ' char in current font and font-size
-	double space_width = getWidth(' ', font) * font_size * 0.001;
-	//Length of the '(...)' string in current font and font-size
-	double space_width_suspension_points = getStringWidth("(...)", font_size, font);
-	std::istringstream iss(line, std::istringstream::in);
-
-	double space_left = space_first_line == 0 ? available_space : space_first_line;
-	double word_width;
-	/* Shift to the left to offset the left margin of the
-	first line if space_first_line > 0 */
-	double horizontal_shift = -(available_space - space_first_line);
-	int lines_used = 0, word_count = 0;
-
-	multi_line->append("("); //Init String
-
-	while( iss >> word)
-	{
-	        word_width = getStringWidth(word.c_str(), font_size, font);
-		//No more space in current line
-		if (word_width + space_width + (lines_used == available_lines - 1  ? space_width_suspension_points : 0) > space_left)
-		{
-		        lines_used++;
-
-			if (word_count == 0)
-			{
-			        multi_line->append(
-				                getFittingSubString(word, font_size, font, space_left).c_str());
-				lines_used = available_lines;
-			}
-
-			if (lines_used == available_lines)
-			{
-			 //No more available lines so its an early exit...
-			 multi_line->append("\\(...\\)) Tj \r\n");
-			 return false;
-
-			}
-			multi_line->append(") Tj\r\n");
-			if (lines_used > 1 || space_first_line == 0)
-			        horizontal_shift = 0;
-
-                        //Line spacing
-                        GooString * tmp = GooString::format("{0:f} -{1:f} Td\r\n", horizontal_shift, line_height);
-                        multi_line->append(tmp);
-
-			delete tmp;
-			//Space first line is only relevant for the 1st line
-			space_first_line = 0;
-			multi_line->append("("); 	  //Begin new line
-			multi_line->append(word.c_str());
-
-			//Reset space_left
-			space_left = available_space - word_width;
-		}
-		else
-		{
-		        if (multi_line->getLength() > 1)
-			        multi_line->append(" ");
-
-			multi_line->append(word.c_str());
-			space_left -= (word_width + space_width);
-
-		}
-
-		word_count++;
-
-	}
-
-
-	multi_line->append(") Tj\r\n");
-
-#endif
-	return true;
-
-}
-
 void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInfo *signer_info,
 	char * date_str, const char* location, const char* reason, int rect_x, int rect_y,
 	unsigned char *img_data, unsigned long img_length, int rotate_signature, bool isPTLanguage)
@@ -1377,7 +1289,6 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
 
         if (signer_info->attribute_name != NULL) {
             char * name_latin1 = utf8_to_latin1(signer_info->attribute_name);
-            bool isSizeOK = false;
             double attribute_name_length = 0;
             int lines = 0;
             int size_attr = 0;
@@ -1388,37 +1299,23 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
                     + (2 - linesAttributeProvider) * font_size_medium
                     + ( 2 - linesReason) * font_size
                     + ( 1 - linesLocation) * font_size_medium;
+            double first_line_offset[] = {77.0, 68.0, 58.0, 48.0, 38.0};
+            int aux[] = {1, 2, 2, 3, 4};
+            int font_sizes[] = {8, 7, 6, 5, 4};
 
-            for (int i = 8; i >= 4; i--){
-                size_attr = i;
-                switch (i) {
-                    case 8:
-                        lines = 1 + heightLeft / i;
-                        attribute_name_length = 77.0;
-                        break;
-                    case 7:
-                        lines = 2 + heightLeft / i;
-                        attribute_name_length = 68.0;
-                        break;
-                    case 6:
-                        lines = 2 + heightLeft / i ;
-                        attribute_name_length = 58.0;
-                        break;
-                    case 5:
-                        lines = 3 + heightLeft / i;
-                        attribute_name_length = 48.0;
-                        break;
-                    default:
-                        lines = 4 + heightLeft / 4;
-                        attribute_name_length = 38.0;
-                        size_attr = 4;
-                        break;
-                }
-                isSizeOK = checkFontSize(name_latin1,rect_width, size_attr,
-                                        MYRIAD_BOLD, lines, size_attr,
-                                        rect_width - attribute_name_length);
-                if( isSizeOK ) break;
+            std::vector<std::string> wrapped;
+            for (size_t i = 0; i < sizeof(font_sizes)/sizeof(int); ++i)
+            {
+              size_attr = font_sizes[i];
+              lines = aux[i] + heightLeft / size_attr;
+              attribute_name_length = first_line_offset[i];
+
+              wrapped = eIDMW::wrapString(name_latin1, rect_width, size_attr, (eIDMW::MyriadFontType)MYRIAD_BOLD,
+                                          lines, rect_width - attribute_name_length);
+
+              if (!eIDMW::endsWith(wrapped.back(), "(...)")) break; //stop if string fits without suspension points
             }
+
             double line_height_attr_name = size_attr + 1;
             if (linesAttributeProvider < 2)
             {

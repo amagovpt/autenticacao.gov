@@ -27,6 +27,13 @@ void replace(std::string& str, const std::string& from, const std::string& to) {
     }
 }
 
+bool endsWith(const std::string& fullString, const std::string& ending){
+    if (fullString.length() < ending.length())
+        return false;
+
+    return fullString.compare(fullString.length() - ending.length(), ending.length(), ending) == 0;
+}
+
 /*
  * Get the exact widths of the glyphs necessary to represent
  * the text in 'winansi_encoded_string', for a chosen font-face and fontsize
