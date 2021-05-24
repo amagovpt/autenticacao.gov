@@ -905,6 +905,7 @@ return $jnicall;
 %javaexception("PTEID_Exception") getRawData		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") sendAPDU			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") Sign			JAVA_CODE_THROW
+%javaexception("PTEID_Exception") SignSHA256		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") readFile			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") writeFile			JAVA_CODE_THROW
 
