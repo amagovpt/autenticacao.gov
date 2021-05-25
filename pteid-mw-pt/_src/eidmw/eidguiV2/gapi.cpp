@@ -3401,6 +3401,112 @@ QStringList GAPI::getWrappedOwnerName(QString name) {
     return wrapped;
 }
 
+/* Helper function to format SCAP strings to be displayed in signature seal preview */
+std::pair<std::string, std::string> formatSCAPSealStrings(QVariantList qVarList) {
+    //qVarList is a list of "pairs" -> entity - attribute
+
+    // group by entity
+    std::map<std::string, std::vector<std::string>> grouped;
+    for (const QVariant& a: qVarList) { //order will be reversed
+        QStringList entity_attribute_pair = a.toStringList();
+        std::string entity = entity_attribute_pair.at(0).toStdString();
+        std::string attribute = entity_attribute_pair.at(1).toStdString();
+        grouped[entity].push_back(attribute);
+    }
+
+    // format attributes strings for each enitity
+    const std::string comma_sep = ", ";
+    const std::string and_sep = " e ";
+    std::string current_sep;
+
+    const size_t numberOfEntities = grouped.size();
+    std::map<std::string, std::string> joined;
+    for (const auto& g: grouped) {
+        std::string currentEntitiy = g.first;
+        std::vector<std::string> currentAttrs = g.second;
+        std::string currentAttrsString;
+        size_t attrCount = currentAttrs.size();
+
+        if (attrCount > 1 && numberOfEntities > 1)
+            currentAttrsString = "{";
+        else
+            currentAttrsString = "";
+
+        current_sep = "";
+        for (size_t i = 0; i < attrCount; i++) {
+            currentAttrsString += current_sep;
+            currentAttrsString += currentAttrs[i];
+
+            if ( i != attrCount - 2 )
+                current_sep = comma_sep;
+            else
+                current_sep = and_sep;
+        }
+
+        if (attrCount > 1 && numberOfEntities > 1)
+            currentAttrsString.append("}");
+
+        joined[currentEntitiy] = currentAttrsString;
+    }
+
+    // merge all entities and attributes in a string each
+    std::string result_entities;
+    std::string result_attributes;
+
+    current_sep = "";
+    // iterating in reverse to restore correct order of attributes
+    for (auto it = joined.rbegin(); it != joined.rend(); it++) {
+        result_entities += current_sep;
+        result_entities += it->first;
+
+        result_attributes += current_sep;
+        result_attributes += it->second;
+
+        current_sep = and_sep;
+    }
+
+    return std::make_pair(result_entities, result_attributes);
+}
+
+QVariantList GAPI::getWrappedSCAPAttributes(QVariantList attr_list) {
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "getWrappedSCAPAttributes");
+
+    // merge attributes into one string for entities and another for attributes, ready to wrap
+    std::pair<std::string, std::string> joined = formatSCAPSealStrings(attr_list);
+
+    std::string entities_to_wrap = QString::fromStdString(joined.first).toLatin1().constData();
+    std::string attributes_to_wrap = QString::fromStdString(joined.second).toLatin1().constData();
+
+    // TODO: use actual dimensions of rectangle to calculate wrap like we do for the real seal
+    double first_line_offset = 40.0;
+    double available_space = 177;
+    float font_size = 6;
+    int available_lines = 2;
+
+    std::vector<std::string> result_entities = wrapString(entities_to_wrap, available_space,
+        font_size, MYRIAD_BOLD, available_lines, available_space - first_line_offset);
+
+    first_line_offset = 77.0;
+    available_lines = 5;
+    font_size = 8;
+
+    std::vector<std::string> result_attributes = wrapString(attributes_to_wrap, available_space,
+        font_size, MYRIAD_BOLD, available_lines, available_space - first_line_offset);
+
+    QStringList wrapped_entities;
+    for (std::string s: result_entities)
+        wrapped_entities.append(QString::fromLatin1(s.c_str()));
+
+    QStringList wrapped_attributes;
+    for (std::string s: result_attributes)
+        wrapped_attributes.append(QString::fromLatin1(s.c_str()));
+
+    QVariantList result;
+    result.append(wrapped_entities);
+    result.append(wrapped_attributes);
+    return result;
+}
+
 QString GAPI::getCachePath(void){
     return m_Settings.getPteidCachedir();
 }

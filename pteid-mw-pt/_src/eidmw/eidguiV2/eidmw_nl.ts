@@ -2037,6 +2037,14 @@
         <source>STR_CUSTOM_IMAGE_REMOVED</source>
         <translation>A imagem de assinatura personalizada guardada não tem dimensões corretas e vai ser removida. Por favor, volte a carregar a imagem de assinatura personalizada.</translation>
     </message>
+    <message>
+        <source>STR_SCAP_CERTIFIED_BY</source>
+        <translation>Certificado por: </translation>
+    </message>
+    <message>
+        <source>STR_SCAP_CERTIFIED_ATTRIBUTES</source>
+        <translation>Atributos certificados: </translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>

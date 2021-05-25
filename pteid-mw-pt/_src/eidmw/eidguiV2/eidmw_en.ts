@@ -2027,6 +2027,14 @@
         <source>STR_CUSTOM_IMAGE_REMOVED</source>
         <translation>The stored custom signature image has incorrect dimensions and will be removed. Please, load a new custom signature image.</translation>
     </message>
+    <message>
+        <source>STR_SCAP_CERTIFIED_BY</source>
+        <translation>Certified by: </translation>
+    </message>
+    <message>
+        <source>STR_SCAP_CERTIFIED_ATTRIBUTES</source>
+        <translation>Certified Attributes: </translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>

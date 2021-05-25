@@ -437,6 +437,7 @@ public slots:
     QList<QString> getFilesFromDirectory(QString path);
 
     QStringList getWrappedOwnerName(QString name);
+    QVariantList getWrappedSCAPAttributes(QVariantList attr_list);
 
 signals:
     // Signal from GAPI to Gui

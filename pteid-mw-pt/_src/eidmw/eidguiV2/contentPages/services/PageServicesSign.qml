@@ -929,6 +929,7 @@ PageServicesSignForm {
                 onCheckedChanged: {
                     entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
                     propertyPageLoader.attributeListBackup[index] = checkboxSel.checked
+                    updateSCAPInfoOnPreview()
                 }
                 onFocusChanged: {
                     if(focus) propertyListViewEntities.currentIndex = index
@@ -965,6 +966,32 @@ PageServicesSignForm {
                 }else{
                     propertyListViewEntities.currentIndex--
                 }
+            }
+            function updateSCAPInfoOnPreview(){
+                var attrList = []
+                var count = 0
+                for (var i = 0; i < entityAttributesModel.count; i++){
+                    var currentAttribute = entityAttributesModel.get(i)
+                    if(currentAttribute.checkBoxAttr == true){
+                        var entity = currentAttribute.entityName
+                        var attr = currentAttribute.attribute
+                        attrList.push([entity.trim(), attr.trim()])
+                    }
+                }
+
+                propertyPDFPreview.propertyDragSigCertifiedByText.text =
+                    qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_BY")
+                propertyPDFPreview.propertyDragSigAttributesText.text =
+                    qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_ATTRIBUTES")
+
+                if (attrList != []) {
+                    var wrappedAttr = gapi.getWrappedSCAPAttributes(attrList)
+                    var entities = wrappedAttr[0].join("<br>")
+                    var attributes = wrappedAttr[1].join("<br>")
+                    propertyPDFPreview.propertyDragSigCertifiedByText.text += " " + entities
+                    propertyPDFPreview.propertyDragSigAttributesText.text += " " + attributes
+                }
+
             }
         }
     }
@@ -1020,6 +1047,8 @@ PageServicesSignForm {
                 propertyTextAttributesMsg.visible = true
                 propertyMouseAreaTextAttributesMsg.enabled = true
                 propertyMouseAreaTextAttributesMsg.z = 1
+                propertyPDFPreview.propertyDragSigCertifiedByText.visible = true
+                propertyPDFPreview.propertyDragSigAttributesText.visible = true
                 // Load attributes from cache (all, LongDescription)
                 gapi.startLoadingAttributesFromCache(GAPI.ScapAttrAll,
                                                      GAPI.ScapAttrDescriptionLong)
@@ -1035,7 +1064,8 @@ PageServicesSignForm {
                 entityAttributesModel.clear()
                 propertyListViewHeight = 0
                 propertyItemOptions.height = propertyOptionsHeight
-
+                propertyPDFPreview.propertyDragSigCertifiedByText.visible = false
+                propertyPDFPreview.propertyDragSigAttributesText.visible = false
                 propertyPDFPreview.forceActiveFocus()
             }
         }

@@ -27,8 +27,11 @@ Rectangle {
     property alias propertyDragSigLocationText: sigLocationText
     property alias propertyDragSigImg: dragSigImage
     property alias propertyDragSigWaterImg: dragSigWaterImage
+    property alias propertyDragSigCertifiedByText: sigCertifiedByText
+    property alias propertyDragSigAttributesText: sigAttributesText
 
     property real propertySigLineHeight: dragSigRect.height * 0.1
+    property real propertySigLineHeightSmall: propertySigLineHeight * 0.7
     property bool propertyReducedChecked: false
 
     property alias propertyCoordX: dragTarget.coord_x
@@ -186,8 +189,8 @@ Rectangle {
                 }
                 Text {
                     id: sigNumIdText
-                    font.pixelSize: propertySigLineHeight
-                    height: propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                    font.pixelSize: !sigCertifiedByText.visible ? propertySigLineHeight : propertySigLineHeightSmall
+                    height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
                     font.family: lato.name
@@ -198,8 +201,8 @@ Rectangle {
                 }
                 Text {
                     id: sigDateText
-                    font.pixelSize: propertySigLineHeight
-                    height: propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                    font.pixelSize: !sigCertifiedByText.visible ? propertySigLineHeight : propertySigLineHeightSmall
+                    height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
                     font.family: lato.name
@@ -210,14 +213,34 @@ Rectangle {
                 }
                 Text {
                     id: sigLocationText
-                    font.pixelSize: propertySigLineHeight
-                    height: propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                    font.pixelSize: !sigCertifiedByText.visible ? propertySigLineHeight : propertySigLineHeightSmall
+                    height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigDateText.bottom
                     text: ""
+                    x: 2
+                }
+                Text {
+                    id: sigCertifiedByText
+                    font.pixelSize: propertySigLineHeightSmall
+                    visible: false
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_BODY
+                    anchors.top: sigLocationText.text == "" ? sigDateText.bottom : sigLocationText.bottom
+                    text: qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_BY")
+                    x: 2
+                }
+                Text {
+                    id: sigAttributesText
+                    font.pixelSize: propertySigLineHeight
+                    visible: false
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_BODY
+                    anchors.top: sigCertifiedByText.bottom
+                    text: qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_ATTRIBUTES")
                     x: 2
                 }
 
