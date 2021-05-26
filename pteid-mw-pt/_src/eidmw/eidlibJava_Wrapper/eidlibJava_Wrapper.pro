@@ -46,7 +46,7 @@ preprocess.variable_out+=SOURCES
 ###
 ### As a postbuild step, compile the generated .java files and jar them to a jar file
 ###
-unix:QMAKE_POST_LINK =	javac -encoding utf8 -d ../eidlibJava/class ./src/*.java ./GeneratedFiles/*.java && \
+unix:QMAKE_POST_LINK =	javac --release 8 -encoding utf8 -d ../eidlibJava/class ./src/*.java ./GeneratedFiles/*.java && \
 			jar cf ../jar/$${EIDLIBJAR} -C ../eidlibJava/class . && mkdir -p javadocs/
 
 ## destination directory
