@@ -11,17 +11,22 @@
             "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/Autenticacao.gov_Ubuntu_19_x64.deb"
         },
         "ubuntu20": {
-            "latestVersion": "3.5.0",
+            "latestVersion": "3.6.0",
             "package": "20126/78595/Autenticacao.gov_Ubuntu_20_x64.deb",
             "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/pteid-mw_ubuntu20_amd64.deb"
         },
+        "ubuntu21": {
+            "latestVersion": "3.6.0",
+            "package": "20126/78595/Autenticacao.gov_Ubuntu_21_x64.deb",
+            "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/pteid-mw_ubuntu21_amd64.deb"
+        },
         "windows32": {
-            "latestVersion": "3.5.0",
+            "latestVersion": "3.6.0",
             "package": "20126/78595/Autenticacao.gov_Win_x86.msi",
             "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/Autenticacao.gov_Win_x86_signed.msi"
         },
         "windows64": {
-            "latestVersion": "3.5.0",
+            "latestVersion": "3.6.0",
             "package": "20126/78595/Autenticacao.gov_Win_x64.msi",
             "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/Autenticacao.gov_Win_x64_signed.msi"
         },
@@ -31,7 +36,7 @@
             "packageUrl": ""
         },
         "fedora64": {
-            "latestVersion": "3.5.0",
+            "latestVersion": "3.6.0",
             "package": "20126/78595/Autenticacao.gov_Fedora_x64.rpm",
             "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/pteid-mw-fedora32.x86_64.rpm"
         },
@@ -41,17 +46,28 @@
             "packageUrl": ""
         },
         "suse64": {
-            "latestVersion": "3.5.0",
+            "latestVersion": "3.6.0",
             "package": "20126/78595/Autenticacao.gov_OpenSUSE_x64.rpm",
             "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/pteid-mw-opensuse15.2.x86_64.rpm"
         },
         "osx": {
-            "latestVersion": "3.5.0",
+            "latestVersion": "3.6.0",
             "package": "20126/78595/Autenticacao.gov_MacOS.pkg",
             "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/Autenticacao.gov_MacOS.pkg"
         }
     },
     "versions": [
+        {
+            "version": "3.6.0",
+            "date": "2021-05-27",
+            "release_notes": [
+                "Correções nas assinaturas com Atributos Profissionais",
+                "Melhoria na qualidade de imagem customizada - assinatura PDF",
+                "Correções nas assinaturas de PDF em lote",
+                "[Windows] Melhoria no instalador para permitir a instalação para processadores ARM",
+                "[Windows] Melhorias no registo de certificados do Cartão de Cidadão"
+            ]
+        },
         {
             "version": "3.5.0",
             "date": "2021-03-31",
