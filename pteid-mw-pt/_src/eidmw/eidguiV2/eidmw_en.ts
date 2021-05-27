@@ -494,6 +494,10 @@
         <source>STR_SCAP_CHECK_EXPIRED_ATTR</source>
         <translation>Check if the selected attributes are expired.</translation>
     </message>
+    <message>
+        <source>STR_SIGNED_BY</source>
+        <translation>Signed by: </translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>

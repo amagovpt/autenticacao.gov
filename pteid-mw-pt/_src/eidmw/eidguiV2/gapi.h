@@ -436,7 +436,7 @@ public slots:
     bool fileExists(QString path);
     QList<QString> getFilesFromDirectory(QString path);
 
-    QStringList getWrappedOwnerName(QString name);
+    QStringList getWrappedOwnerName(QString name, bool isSCAPSignature);
     QVariantList getWrappedSCAPAttributes(QVariantList attr_list);
 
 signals:

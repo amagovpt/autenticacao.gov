@@ -35,5 +35,7 @@ EIDMW_CMN_API bool endsWith(const std::string& string, const std::string& ending
 EIDMW_CMN_API std::vector<std::string> wrapString(const std::string& content, double available_space, double font_size,
         MyriadFontType ft, int available_lines, double space_first_line=0);
 
+EIDMW_CMN_API double getStringWidth(const char *winansi_encoded_string, double font_size, MyriadFontType font);
+
 }
 
