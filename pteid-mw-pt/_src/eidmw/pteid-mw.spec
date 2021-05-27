@@ -20,8 +20,8 @@
 %endif
 %endif
 
-%define git_revision git20210329
-%define app_version 3.5.0
+%define git_revision git20210526
+%define app_version 3.6.0
 
 Name:           pteid-mw
 BuildRequires:  pcsc-lite-devel make swig pkg-config
@@ -57,15 +57,17 @@ BuildRequires:  libxml-security-c-devel
 BuildRequires:  java-11-openjdk-devel
 Requires:       poppler-qt5
 Requires:       pcsc-lite-ccid
-Requires:       qt5
+Requires:       qt5-qtquickcontrols
+Requires:       qt5-qtquickcontrols2
 
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtbase-private-devel
 BuildRequires:  qt5-qtdeclarative-devel
 BuildRequires:  qt5-qtquickcontrols2-devel
 BuildRequires:  qt5-qttools-devel
-#Just install the big qt5 meta-package
-BuildRequires:  qt5
+BuildRequires:  qt5-qtquickcontrols
+BuildRequires:  qt5-qtquickcontrols2
+
 BuildRequires:  libpng-devel
 
 BuildRequires:  xml-security-c-devel
@@ -277,6 +279,11 @@ fi
 /usr/local/share/pteid-mw
 
 %changelog
+* Wed May 26 2021 André Guerreiro <andre.guerreiro@caixamagica.pt>
+  - SCAP signature improvements
+  - Improved signature with custom image
+  - Batch PDF signature improvements
+
 * Mon Mar 29 2021 André Guerreiro <andre.guerreiro@caixamagica.pt>
   - New unified signature page in GUI app
   - Bugfixes in SCAP signatures
