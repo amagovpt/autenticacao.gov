@@ -496,6 +496,14 @@
         <source>STR_SIGNED_BY</source>
         <translation>Assinado por: </translation>
     </message>
+    <message>
+        <source>STR_CERTIFIED_BY</source>
+        <translation>Certificado por: </translation>
+    </message>
+    <message>
+        <source>STR_CERTIFIED_ATTRIBUTES</source>
+        <translation>Atributos certificados: </translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>

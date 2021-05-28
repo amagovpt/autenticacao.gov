@@ -498,6 +498,14 @@
         <source>STR_SIGNED_BY</source>
         <translation>Signed by: </translation>
     </message>
+    <message>
+        <source>STR_CERTIFIED_BY</source>
+        <translation>Certified by: </translation>
+    </message>
+    <message>
+        <source>STR_CERTIFIED_ATTRIBUTES</source>
+        <translation>Certified Attributes: </translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>

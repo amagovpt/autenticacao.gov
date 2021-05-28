@@ -3476,21 +3476,25 @@ QVariantList GAPI::getWrappedSCAPAttributes(QVariantList attr_list) {
     std::string entities_to_wrap = QString::fromStdString(joined.first).toLatin1().constData();
     std::string attributes_to_wrap = QString::fromStdString(joined.second).toLatin1().constData();
 
-    // TODO: use actual dimensions of rectangle to calculate wrap like we do for the real seal
-    double first_line_offset = 40.0;
-    double available_space = 177;
-    float font_size = 6;
-    int available_lines = 2;
+    const double seal_width = PDFSignature::getSignatureSealWidth();
 
-    std::vector<std::string> result_entities = wrapString(entities_to_wrap, available_space,
-        font_size, MYRIAD_BOLD, available_lines, available_space - first_line_offset);
+    //entities
+    std::string entity_label = tr("STR_CERTIFIED_BY").toLatin1().constData();
+    const float font_size_small = 6;
+    const int two_available_lines = 2;
+    const double entity_label_offset = getStringWidth(entity_label.c_str(), font_size_small, MYRIAD_BOLD);
 
-    first_line_offset = 77.0;
-    available_lines = 5;
-    font_size = 8;
+    std::vector<std::string> result_entities = wrapString(entities_to_wrap, seal_width,
+        font_size_small, MYRIAD_BOLD, two_available_lines, seal_width - entity_label_offset);
 
-    std::vector<std::string> result_attributes = wrapString(attributes_to_wrap, available_space,
-        font_size, MYRIAD_BOLD, available_lines, available_space - first_line_offset);
+    //attributes
+    std::string attr_label = tr("STR_CERTIFIED_ATTRIBUTES").toLatin1().constData();
+    const float font_size = 8;
+    const int five_available_lines = 5;
+    const double attrs_label_offset = getStringWidth(attr_label.c_str(), font_size, MYRIAD_BOLD);
+
+    std::vector<std::string> result_attributes = wrapString(attributes_to_wrap, seal_width,
+        font_size, MYRIAD_BOLD, five_available_lines, seal_width - attrs_label_offset);
 
     QStringList wrapped_entities;
     for (std::string s: result_entities)
