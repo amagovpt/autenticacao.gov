@@ -11,8 +11,8 @@ ifeq ($(shell uname), Darwin)
 	CFLAGS += -fno-omit-frame-pointer -mmacosx-version-min=10.12 -fPIC -O3 -I.. -I../../common/ -I../goo/ -I../../_Builds/ -g
 else
 	LIB_FILENAME=$(BASENAME).a
-	override CXXFLAGS += -std=c++11 -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
-	override CFLAGS += -fno-omit-frame-pointer -fPIC -O3 -I.. -I../goo/ -I../../_Builds/ -g
+	override CXXFLAGS += -std=c++11 -fno-omit-frame-pointer -fPIC -O3 -I.. -I../../common/ -I../goo/ -I../../_Builds/ -g
+	override CFLAGS += -fno-omit-frame-pointer -fPIC -O3 -I.. -I../../common -I../goo/ -I../../_Builds/ -g
 endif
 
 SOURCES =		\

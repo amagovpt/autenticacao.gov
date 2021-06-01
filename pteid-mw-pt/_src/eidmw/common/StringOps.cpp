@@ -16,6 +16,7 @@
 
 #include "StringOps.h"
 #include <string>
+#include <cstring>
 
 namespace eIDMW {
 
