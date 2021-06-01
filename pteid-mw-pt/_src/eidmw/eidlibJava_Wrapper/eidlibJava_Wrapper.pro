@@ -76,6 +76,7 @@ INCLUDEPATH += /usr/lib/jvm/java-11-openjdk-amd64/include/linux
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 
 DEFINES += EIDMW_EIDLIB_EXPORTS
+DEFINES += EIDMW_JAVA_WRAPPER
 
 # Input
 

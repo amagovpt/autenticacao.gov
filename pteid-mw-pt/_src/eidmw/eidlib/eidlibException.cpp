@@ -33,7 +33,7 @@
 
 namespace eIDMW
 {
-	
+
 /*****************************************************************************************
 ---------------------------------------- PTEID_Exception --------------------------------------
 *****************************************************************************************/
@@ -51,17 +51,22 @@ long PTEID_Exception::GetError() const
 }
 
 /*	Returns the corresponding error message for a given error code
-	the error codes are defined in common/eidErrors.h, 
-	update GetMessage function when more errors have been added or removed 
+	the error codes are defined in common/eidErrors.h,
+	update GetMessage function when more errors have been added or removed
 */
 const char* PTEID_Exception::GetMessage()
 {
+#ifdef EIDMW_JAVA_WRAPPER
+	long mask_low_32bit = 0xFFFFFFFF;
+	//Clear the 32 MSB which can be set to 1 from a signed int to long conversion
+	m_lError &= mask_low_32bit;
+#endif
 	if (!m_lError) {
 		error_message = "No error code was provided";
 	} else {
 		switch(m_lError) {
 
-			// Results of calling the function with incorrect parameters 
+			// Results of calling the function with incorrect parameters
 			case EIDMW_ERR_PARAM_BAD:
 				error_message = "A function parameter has an unexpected value";
 				break;
@@ -136,7 +141,7 @@ const char* PTEID_Exception::GetMessage()
 				error_message = "Can't end a transaction that wasn't started";
 				break;
 
-			// Internal errors 
+			// Internal errors
 			case EIDMW_ERR_LIMIT:
 				error_message = "An internal limit has been reached";
 				break;
@@ -178,7 +183,7 @@ const char* PTEID_Exception::GetMessage()
 			case EIDMW_WRONG_PIN_FORMAT:
 				error_message = "A PIN with invalid length or format was entered";
 				break;
-			
+
 			// Parser errors
 			case EIDMW_WRONG_ASN1_FORMAT:
 				error_message = "Could not find expected elements in parsed ASN.1 vector";
@@ -188,7 +193,7 @@ const char* PTEID_Exception::GetMessage()
 				break;
 
 			// I/O errors
-			case EIDMW_FILE_NOT_OPENED:	
+			case EIDMW_FILE_NOT_OPENED:
 				error_message = "File could not be opened";
 				break;
 			case EIDMW_PERMISSION_DENIED:
@@ -329,7 +334,7 @@ const char* PTEID_Exception::GetMessage()
 
 PTEID_Exception PTEID_Exception::THROWException(CMWException &e)
 {
-	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidlib", 
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidlib",
 		"PTEID_Exception generated from %s:%ld error code: %08x", e.GetFile().c_str(), e.GetLine(), e.GetError());
 
 	switch(e.GetError())
