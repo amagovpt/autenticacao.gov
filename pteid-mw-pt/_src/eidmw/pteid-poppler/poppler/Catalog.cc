@@ -854,6 +854,29 @@ Ref Catalog::addImageXObject(int width, int height, unsigned char *data, unsigne
 	return ref_to_appearance;
 }
 
+// According to the PDF spec 1.7 - section 9.4.3 the following characters need to be escaped:
+// LEFT PARENTHESIS (28h), RIGHT PARENTHESIS (29h), and REVERSE SOLIDUS (backslash)
+std::string escape_pdf_string(std::string unescaped_str) {
+  std::string escaped_str;
+
+  const char * ptr = unescaped_str.c_str();
+
+  escaped_str.reserve(strlen(ptr));
+  
+  while(*ptr != 0) {
+    if ( *ptr == '(' || *ptr == ')' || *ptr == '\\') {
+      escaped_str += '\\';
+    }
+
+    escaped_str += (*ptr);
+
+    ptr++;
+  }
+
+  return escaped_str;
+
+}
+
 /*
  * Get the exact widths of the glyphs necessary to represent
  * our text in our chosen font-face and fontsize
@@ -904,6 +927,7 @@ GooString *formatMultilineString(char *content, double available_space, double f
 	GooString *multi_line = new GooString();
 	std::string line = std::string(content);
 	std::string word;
+  std::string single_line;
 
 	//Length of the ' ' char in current font and font-size
 	double space_width = getWidth(' ', font) * font_size * 0.001;
@@ -921,7 +945,7 @@ GooString *formatMultilineString(char *content, double available_space, double f
 
 	multi_line->append("("); //Init String
 
-	while( iss >> word)
+	while(iss >> word)
 	{
 		word_width = getStringWidth(word.c_str(), font_size, font);
 		//No more space in current line
@@ -931,41 +955,50 @@ GooString *formatMultilineString(char *content, double available_space, double f
 			
 			if (word_count == 0)
 			{
-				multi_line->append(
-						getFittingSubString(word, font_size, font, space_left).c_str());
+
+        single_line.append(getFittingSubString(word, font_size, font, space_left).c_str());
+				/*multi_line->append(
+						getFittingSubString(word, font_size, font, space_left).c_str()); */
 				lines_used = available_lines;
 			}
 
-			if (lines_used == available_lines)
-			{
-			 //No more available lines so its an early exit...
-			 multi_line->append("\\(...\\)) Tj \r\n");
-			 return multi_line;
+			
+      std::string escaped = escape_pdf_string(single_line);
+      multi_line->append(escaped.c_str());
 
-			}
-			multi_line->append(") Tj\r\n");
+			multi_line->append(lines_used == available_lines ? "\\(...\\)) Tj\r\n" : ") Tj\r\n");
+
+      if (lines_used == available_lines)
+      {
+         return multi_line;
+      }
+
 			if (lines_used > 1 || space_first_line == 0)
 				horizontal_shift = 0;
 
 			//Line spacing
-                        GooString * tmp = GooString::format("{0:f} -{1:f} Td\r\n", horizontal_shift, line_height);
+      GooString * tmp = GooString::format("{0:f} -{1:f} Td\r\n", horizontal_shift, line_height);
 			multi_line->append(tmp);
 
 			delete tmp; 
 			//Space first line is only relevant for the 1st line
 			space_first_line = 0;
+
 			multi_line->append("("); 	  //Begin new line
-			multi_line->append(word.c_str());
+      single_line.clear();
+            
+      single_line += word;
 		
 			//Reset space_left
 			space_left = available_space - word_width;
 		}
 		else
 		{
-			if (multi_line->getLength() > 1)
-				multi_line->append(" ");
+			if (single_line.size() > 1)
+				single_line.append(" ");
 
-			multi_line->append(word.c_str());
+			//multi_line->append(word.c_str());
+      single_line += word;
 			space_left -= (word_width + space_width);
 
 		}
@@ -974,11 +1007,14 @@ GooString *formatMultilineString(char *content, double available_space, double f
 
 	}
 
+  if (single_line.size() > 0) {
+      std::string escaped = escape_pdf_string(single_line);
+      multi_line->append(escaped.c_str());
+  }
 
 	multi_line->append(") Tj\r\n");
 
-
-	return multi_line;
+  return multi_line;
 
 }
 
