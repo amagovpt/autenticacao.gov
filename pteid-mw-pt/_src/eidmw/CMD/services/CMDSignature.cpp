@@ -169,12 +169,7 @@ int CMDSignature::cli_getCertificate(std::string in_userId)
             return ERR_NULL_PDF_HANDLER;
         }
     }
-
-    if (isDBG)
-    {
-        printData((char *)"\nUserId: ", (unsigned char *)in_userId.c_str(), in_userId.size());
-    }
-
+  
     std::vector<CByteArray> certificates;
     int ret = cmdService->getCertificate(m_proxyInfo, in_userId, certificates);
 
@@ -212,12 +207,6 @@ int CMDSignature::cli_getCertificate(std::string in_userId)
     {
         CByteArray externCertificate = certificates.at(0);
         m_string_certificate = externCertificate.ToString(false, false);
-        if (isDBG)
-        {
-            printData((char *)"\n Certificate: ",
-                      (unsigned char *)externCertificate.GetBytes(),
-                      externCertificate.Size());
-        }
     }
 
     return ERR_NONE;
@@ -241,12 +230,6 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
             MWLOG_ERR(logBuf, "NULL pdf_handler");
             return ERR_NULL_PDF_HANDLER;
         }
-    }
-
-    /* printData */
-    if (isDBG)
-    {
-        printData((char *)"\nIN - User Pin: ", (unsigned char *)in_pin.c_str(), in_pin.size());
     }
 
     /*

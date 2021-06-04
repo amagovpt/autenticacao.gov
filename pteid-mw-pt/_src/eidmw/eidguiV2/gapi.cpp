@@ -984,7 +984,7 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<
     QString outputFile, int page, double coord_x, double coord_y,
     QString reason, QString location, bool isTimestamp, bool isLtv) {
 
-    qDebug() << "signOpenScapWithCMD! MobileNumber = " << mobileNumber << " secret_code = " << secret_code <<
+    qDebug() << "signOpenScapWithCMD! MobileNumber = " << mobileNumber <<
         " loadedFilePaths = " << loadedFilePaths <<
         " outputFile = " << outputFile << " page = " << page << " coord_x" << coord_x <<
         " coord_y" << coord_y << " reason = " << reason << " location = " << location << "isLtv= "<<isLtv;
