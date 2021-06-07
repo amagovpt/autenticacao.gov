@@ -1289,32 +1289,21 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
 
         if (signer_info->attribute_name != NULL) {
             char * name_latin1 = utf8_to_latin1(signer_info->attribute_name);
-            double attribute_name_length = 0;
-            int lines = 0;
-            int size_attr = 0;
 
-            // Check if text fit it the height left in the rectangle seal
-            // Starting from text size 8 to 4
             int heightLeft = (2 - linesName) * font_size
                     + (2 - linesAttributeProvider) * font_size_medium
                     + ( 2 - linesReason) * font_size
                     + ( 1 - linesLocation) * font_size_medium;
-            double first_line_offset[] = {77.0, 68.0, 58.0, 48.0, 38.0};
-            int aux[] = {1, 2, 2, 3, 4};
-            int font_sizes[] = {8, 7, 6, 5, 4};
 
-            std::vector<std::string> wrapped;
-            for (size_t i = 0; i < sizeof(font_sizes)/sizeof(int); ++i)
-            {
-              size_attr = font_sizes[i];
-              lines = aux[i] + heightLeft / size_attr;
-              attribute_name_length = first_line_offset[i];
+            const std::string label = isPTLanguage ? "Atributos certificados: " : "Certified Attributes: ";
+            const std::string to_wrap = name_latin1;
 
-              wrapped = eIDMW::wrapString(name_latin1, rect_width, size_attr, (eIDMW::MyriadFontType)MYRIAD_BOLD,
-                                          lines, rect_width - attribute_name_length);
+            eIDMW::WrapParams wrap_parameters =
+              eIDMW::calculateWrapParams(to_wrap, label, heightLeft, rect_width);
 
-              if (!eIDMW::endsWith(wrapped.back(), "(...)")) break; //stop if string fits without suspension points
-            }
+            const unsigned int size_attr = wrap_parameters.font_size;
+            const unsigned int lines = wrap_parameters.available_lines;
+            const double attribute_name_length = wrap_parameters.first_line_offset;
 
             double line_height_attr_name = size_attr + 1;
             if (linesAttributeProvider < 2)

@@ -135,4 +135,41 @@ std::vector<std::string> wrapString(const std::string& content, double available
   return result;
 }
 
+/*
+ * Determines maximum font size and number of lines
+ * that fit in the available space and height left
+ *
+ * Used in signature seals with SCAP strings
+ * font size varies from 8 to 4.
+ */
+WrapParams calculateWrapParams(const std::string& text, const std::string& label, int height_left,
+                               double available_width)
+{
+    unsigned int max_font_size = 8;
+    unsigned int min_font_size = 4;
+
+    unsigned int font_size;
+    int lines;
+    double label_width, text_width;
+
+    int aux_lines[] = {1, 2, 2, 3, 4};
+    for (font_size = max_font_size; font_size >= min_font_size; --font_size) {
+        lines = aux_lines[8 - font_size] + height_left / font_size;
+
+        text_width = getStringWidth(text.c_str(), font_size, MYRIAD_BOLD);
+        label_width = getStringWidth(label.c_str(), font_size, MYRIAD_REGULAR);
+
+        if (text_width + label_width <= available_width * lines)
+            break; // at current font size, strings fits on available space
+    }
+
+    WrapParams p;
+    p.font_size = font_size;
+    p.available_lines = lines;
+    p.first_line_offset = label_width;
+
+    return p;
+}
+
+
 } /* namespace eIDMW */

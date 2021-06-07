@@ -22,6 +22,13 @@
 
 namespace eIDMW 
 {
+
+EIDMW_CMN_API struct WrapParams {
+    unsigned int font_size;
+    unsigned int available_lines;
+    double first_line_offset;
+};
+
 EIDMW_CMN_API void replace(std::string& str, const std::string& from, const std::string& to);
 
 EIDMW_CMN_API bool endsWith(const std::string& string, const std::string& ending);
@@ -36,6 +43,9 @@ EIDMW_CMN_API std::vector<std::string> wrapString(const std::string& content, do
         MyriadFontType ft, int available_lines, double space_first_line=0);
 
 EIDMW_CMN_API double getStringWidth(const char *winansi_encoded_string, double font_size, MyriadFontType font);
+
+EIDMW_CMN_API WrapParams calculateWrapParams(const std::string& text, const std::string& label,int height_left,
+        double available_width);
 
 }
 
