@@ -1,0 +1,55 @@
+#!/bin/bash
+
+#Kill running processes
+killall -9 pteidgui 2> /dev/null
+killall -9 eidguiV2 2> /dev/null
+killall -9 pteiddialogsQTsrv 2> /dev/null
+
+#Old application, checking for existence to avoid failing when the user manually deleted them
+
+if [ -d "/Applications/Cartão de Cidadão.app" ]
+then
+   rm -rf "/Applications/Cartão de Cidadão.app"
+fi
+
+#Remove wrongly installed app in build 3.1.0
+if [ -d "/Applications/Autenticação.gov.localized" ]
+then
+   rm -rf "/Applications/Autenticação.gov.localized"
+fi
+# For the case where build 3.1.0 was cleanly installed we also need to remove first
+if [ -d "/Applications/Autenticação.gov.app" ]
+then
+   rm -rf "/Applications/Autenticação.gov.app"
+fi
+
+if [ -f "/usr/local/bin/pteiddialogsQTsrv" ]
+then
+   rm -f "/usr/local/bin/pteiddialogsQTsrv"
+fi
+
+#Remove the system package "receipts"
+if pkgutil --pkgs=pt.cartaodecidadao.certs
+then
+   pkgutil --forget pt.cartaodecidadao.certs
+fi
+
+if pkgutil --pkgs=pt.cartaodecidadao.lib
+then
+   pkgutil --forget pt.cartaodecidadao.lib
+fi
+
+if pkgutil --pkgs=pt.cartaodecidadao.bin
+then
+pkgutil --forget pt.cartaodecidadao.bin
+fi
+
+if pkgutil --pkgs=pt.cartaodecidadao.apps
+then
+pkgutil --forget pt.cartaodecidadao.apps
+fi
+
+if pkgutil --pkgs=pt.cartaodecidadao.frameworks
+then
+ pkgutil --forget pt.cartaodecidadao.frameworks
+fi

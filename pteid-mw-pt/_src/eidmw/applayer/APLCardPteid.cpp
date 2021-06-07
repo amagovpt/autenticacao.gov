@@ -394,7 +394,7 @@ bool SCV_tolerance_active()
     //Get current time
     time_t t = std::time(nullptr);
 
-    const char * time_limit = "2021-03-31";
+    const char * time_limit = "2021-12-31";
     char current_date[16];
     if (std::strftime(current_date, sizeof(current_date), "%Y-%m-%d", std::localtime(&t))) {
         if (strcmp(time_limit, current_date) > 0) {
@@ -416,23 +416,18 @@ APL_EidFile_Sod *APL_EIDCard::getFileSod()
 		if(!m_FileSod)
 		{
 			const char * expiry_date = NULL;
-			CByteArray ba_validityEndDate;     //Validity date read from card if needed
+			CByteArray ba_validityEndDate;     //Validity date field from card ID file
 			m_FileSod=new APL_EidFile_Sod(this);
 
-			if (m_FileID) {
-				expiry_date = m_FileID->getValidityEndDate();
-			}
-			else {
-				//Read the validity end date directly from cardlayer to avoid recursive calls from APL_EidFile_ID::getValidityEndDate
-
-				unsigned long bytes_read = 
+			//Read the validity end date directly from cardlayer to avoid recursive calls from APL_EidFile_ID::getValidityEndDate
+			unsigned long bytes_read = 
 				  this->readFile(PTEID_FILE_ID, ba_validityEndDate, PTEIDNG_FIELD_ID_POS_ValidityEndDate, PTEIDNG_FIELD_ID_LEN_ValidityEndDate);
-				MWLOG(LEV_DEBUG, MOD_APL, "Read %lu bytes from card for ValidityEndDate", bytes_read);
+			MWLOG(LEV_DEBUG, MOD_APL, "Read %lu bytes from card for ValidityEndDate", bytes_read);
 
-				ba_validityEndDate.TrimRight('\0');
-				MWLOG(LEV_DEBUG, MOD_APL, "ValidityEndDate freshly read: %s", ba_validityEndDate.GetBytes());
-				expiry_date = (char *)ba_validityEndDate.GetBytes();
-			}
+			ba_validityEndDate.TrimRight('\0');
+			MWLOG(LEV_DEBUG, MOD_APL, "ValidityEndDate freshly read: %s", ba_validityEndDate.GetBytes());
+			expiry_date = (char *)ba_validityEndDate.GetBytes();
+		
 
 			m_FileSod->setCertificateValidityException(
 				       SCV_tolerance_active() && isCardExpirationDateTolerated(expiry_date));

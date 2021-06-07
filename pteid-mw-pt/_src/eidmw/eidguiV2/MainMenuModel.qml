@@ -1,12 +1,15 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017, 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017 - 2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
 import QtQuick 2.6
+
+// Changing this file may force update the next constants:
+// MAIN_MENU_SIGN_PAGE_INDEX; SUB_MENU_SIGN_PAGE_INDEX; SIGNATURE_PAGE_URL
 
 ListModel {
     ListElement {
@@ -45,19 +48,9 @@ ListModel {
         expand: true
         subdata:[
             ListElement {
-                name: QT_TR_NOOP("STR_MENU_SIGN_HELP")
+                name: QT_TR_NOOP("STR_MENU_SIGN")
                 expand: false
-                url: "contentPages/services/PageServicesSignHelp.qml"
-            },
-            ListElement {
-                name: QT_TR_NOOP("STR_MENU_SIGN_SIMPLE")
-                expand: true
-                url: "contentPages/services/PageServicesSignSimple.qml"
-            },
-            ListElement {
-                name: QT_TR_NOOP("STR_MENU_SIGN_ADVANCE")
-                expand: true
-                url: "contentPages/services/PageServicesSignAdvanced.qml"
+                url: "contentPages/services/PageServicesSign.qml"
             }
         ]
     }

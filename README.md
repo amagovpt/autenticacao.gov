@@ -5,31 +5,35 @@
 O objectivo deste projecto é disponibilizar uma nova versão de middleware que facilite e potencie a utilização do Cartão de Cidadão
 e da assinatura com Chave Móvel Digital
 
-## Manual de Utilização
+## Documentação
+
+O código fonte da documentação e os documentos técnicos deste projecto foram transferidos para o repositório https://github.com/amagovpt/docs.autenticacao.gov.
+
+### Manual de Utilização
 
 O Manual de Utilização pretende descrever todas as funcionalidades providenciadas pelo middleware do Cartão de Cidadão.
 
-[Manual de Utilização (online)](https://amagovpt.github.io/autenticacao.gov/user_manual.html)
+[Manual de Utilização (online)](https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html)
 
-[Manual de Utilização (download pdf)](docs/Manual_de_Utilizacao_v3.pdf)
+[Manual de Utilização (download pdf)](https://amagovpt.github.io/docs.autenticacao.gov/Manual_de_Utilizacao_v3.pdf)
 
-## SDK
+### SDK
 
 Está disponível um SDK, com o objetivo de disponibilizar a integração com outras aplicações, das funcionalidades desenvolvidas no âmbito deste projeto.
 Existem SDK's para as linguagens C, C++, JAVA e C#.
 
 Poderá aceder ao manual no seguinte URL:
 
-[Manual do SDK (online)](https://amagovpt.github.io/autenticacao.gov/manual_sdk.html)
+[Manual do SDK (online)](https://amagovpt.github.io/docs.autenticacao.gov/manual_sdk.html)
 
-[Manual do SDK (download pdf)](docs/Manual_de_SDK.pdf)
+[Manual do SDK (download pdf)](https://amagovpt.github.io/docs.autenticacao.gov/Manual_de_SDK.pdf)
 
 A documentação da API disponibilizada pelo SDK está disponível nos seguintes URLs:
 
 
-[Documentação Técnica do SDK C++ (online)](https://amagovpt.github.io/autenticacao.gov/sdk/cpp/)
+[Documentação Técnica do SDK C++ (online)](https://amagovpt.github.io/docs.autenticacao.gov/sdk/cpp/)
 
-[Documentação Técnica do SDK Java (online)](https://amagovpt.github.io/autenticacao.gov/sdk/java/)
+[Documentação Técnica do SDK Java (online)](https://amagovpt.github.io/docs.autenticacao.gov/sdk/java/)
 
 ## Compilar o Middleware do Cartão de Cidadão
 
@@ -44,7 +48,7 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
 
    As dependências para execução do Middleware em Linux (nomes de pacotes válidos para a distribuição Ubuntu 20.04), são as seguintes:
    ```bash
-   sudo apt install pcscd qml-module-qt-labs-folderlistmodel qml-module-qt-labs-settings qml-module-qt-labs-platform qml-module-qtgraphicaleffects qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qtquick-layouts qml-module-qtquick-templates2 qml-module-qtquick-window2 qml-module-qtquick2 qt5-gtk-platformtheme libnsspem
+   sudo apt install pcscd qml-module-qt-labs-folderlistmodel qml-module-qt-labs-settings qml-module-qt-labs-platform qml-module-qtgraphicaleffects qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qtquick-layouts qml-module-qtquick-templates2 qml-module-qtquick-window2 qml-module-qtquick2 qt5-gtk-platformtheme libnsspem fonts-lato
    ```
 
 2. Clonar o repositório
@@ -79,7 +83,7 @@ Instruções para compilação em Windows (Visual Studio 2017)
 É importante assegurar que as dependências são compiladas com a mesma versão de Visual Studio que será usada para compilar o Middleware.
 Será assim necessário compilar as seguintes bibliotecas (versões utilizadas para a última release Windows):
 
-- openSSL 1.1.1 - https://www.openssl.org/source/openssl-1.1.1f.tar.gz
+- openSSL 1.1.1j - https://www.openssl.org/source/openssl-1.1.1j.tar.gz
 - xerces-c 3.2.3 - https://xerces.apache.org/xerces-c/build-3.html
 - libcurl 7.69.1 - https://curl.haxx.se/download.html
 - zlib 1.2.11 - http://www.zlib.net/zlib-1.2.11.tar.gz

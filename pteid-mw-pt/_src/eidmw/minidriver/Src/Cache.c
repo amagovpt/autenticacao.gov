@@ -40,28 +40,30 @@
 #include <direct.h>
 #include <errno.h>
 
-BOOL getCacheFilePath(char *filename_bin, char* Path, size_t Path_max)
+#define WHERE "getCacheFilePath"
+BOOL getCacheFilePath(char *filename_bin, char* path, DWORD path_len)
 {
 	char ascii_filename[18*2];
 
 	bin2AsciiHex(filename_bin, ascii_filename, 17);
-	GetEnvironmentVariableA("LOCALAPPDATA", (LPSTR)Path, Path_max);
+	GetEnvironmentVariableA("LOCALAPPDATA", (LPSTR)path, path_len);
 	
-    strncat(Path, "\\pteidmdrv\\", 12);
+	strncat(path, "\\pteidmdrv\\", 12);
 	//Create cache directory if not existent
-	if(_mkdir(Path) != 0)
+	if(_mkdir(path) != 0)
 	{
-		if(errno == ENOENT) {
-			//printf("Mkdir failed!\n");
+		if (errno == ENOENT) {
+			LogTrace(LOGTYPE_ERROR, WHERE, "Failed to create cache dir at %s due to missing parent, shouldn't happen!", path);
 			return FALSE;  /* Oops, giving up */
-
 		}
+
 	}
 
 	//Append filename (Card serial number + FileID)
-	strncat(Path, ascii_filename, strlen(ascii_filename));
+	strncat(path, ascii_filename, strlen(ascii_filename));
 	return TRUE;
 }
+#undef WHERE
 
 #define WHERE "readFromCache"
 BOOL readFromCache(const char *cache_path, char * Buf)

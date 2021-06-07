@@ -111,7 +111,7 @@ DWORD WINAPI   CardReadFile
 )
 {
    DWORD                dwReturn    = 0;
-   int                  i           = 0;
+   DWORD                  i           = 0;
    int                  DirFound    = 0;
    int                  FileFound   = 0;
 	CONTAINER_MAP_RECORD cmr[2];
@@ -198,7 +198,7 @@ DWORD WINAPI   CardReadFile
 				pcbData,
 				0);
 			if (dwReturn != SCARD_S_SUCCESS)  {
-				LogTrace(LOGTYPE_ERROR, WHERE, "Error CardGetProperty for [CP_CARD_GUID]: 0x08X", dwReturn);
+				LogTrace(LOGTYPE_ERROR, WHERE, "Error returned by CardGetProperty for [CP_CARD_GUID]: %08X", dwReturn);
 				CLEANUP(dwReturn);
 			}
 
@@ -248,7 +248,7 @@ DWORD WINAPI   CardReadFile
 					&cbDataLen,
 					0);
 				if (dwReturn != SCARD_S_SUCCESS)  {
-					LogTrace(LOGTYPE_ERROR, WHERE, "Error CardGetProperty for [CP_CARD_SERIAL_NO]: 0x08X", dwReturn);
+					LogTrace(LOGTYPE_ERROR, WHERE, "Error returned by CardGetProperty for [CP_CARD_SERIAL_NO]: %08X", dwReturn);
 					CLEANUP(dwReturn);
 				}
 				
@@ -273,19 +273,19 @@ DWORD WINAPI   CardReadFile
 
 				if (dwReturn != SCARD_S_SUCCESS)
 				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "Error PteidParsePrKDF: 0x08X", dwReturn);
+					LogTrace(LOGTYPE_ERROR, WHERE, "Error returned by PteidParsePrKDF: %08X", dwReturn);
 					CLEANUP(dwReturn);
 				}
 				//Save this value for the next call of CardSignData...
 				g_keySize = keySize;
 		
 				memset(cmr[0].wszGuid, '\0', sizeof(cmr[0].wszGuid));
-				iReturn = MultiByteToWideChar(CP_UTF8, 0, szContainerName, strlen(szContainerName), cmr[0].wszGuid, sizeof(cmr[0].wszGuid));
+				iReturn = MultiByteToWideChar(CP_UTF8, 0, szContainerName, (int)strlen(szContainerName), cmr[0].wszGuid, sizeof(cmr[0].wszGuid));
 
 				if (iReturn == 0) 
 				{
 					dwReturn = GetLastError();
-					LogTrace(LOGTYPE_ERROR, WHERE, "Error MultiByteToWideChar: 0x08X", dwReturn);
+					LogTrace(LOGTYPE_ERROR, WHERE, "Error in MultiByteToWideChar: %08X", dwReturn);
 					CLEANUP(dwReturn);
 				}
 				cmr[0].bFlags                     = CONTAINER_MAP_VALID_CONTAINER|CONTAINER_MAP_DEFAULT_CONTAINER;
@@ -299,12 +299,12 @@ DWORD WINAPI   CardReadFile
 				/* Container name for Non-repudiation key */
 				sprintf (szContainerName, "NR_%s", szSerialNumber);
 				memset(cmr[1].wszGuid, '\0', sizeof(cmr[1].wszGuid));
-				iReturn = MultiByteToWideChar(CP_UTF8, 0, szContainerName, strlen(szContainerName), cmr[1].wszGuid, sizeof(cmr[1].wszGuid));
+				iReturn = MultiByteToWideChar(CP_UTF8, 0, szContainerName, (int)strlen(szContainerName), cmr[1].wszGuid, sizeof(cmr[1].wszGuid));
 
 				if (iReturn == 0) 
 				{
 					dwReturn = GetLastError();
-					LogTrace(LOGTYPE_ERROR, WHERE, "Error MultiByteToWideChar: 0x08X", dwReturn);
+					LogTrace(LOGTYPE_ERROR, WHERE, "Error in MultiByteToWideChar: %08X", dwReturn);
 					CLEANUP(dwReturn);
 				}
 				cmr[1].bFlags                     = CONTAINER_MAP_VALID_CONTAINER;

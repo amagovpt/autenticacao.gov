@@ -1151,6 +1151,7 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 	EVP_PKEY *pub_key = NULL;
 	//XMLCh * signature_id = NULL;
 	CByteArray * emptyBa = new CByteArray();
+	throwTimestampException = false;
 
 	CByteArray sha1_hash;
 	CByteArray rsa_signature;
@@ -1274,21 +1275,44 @@ CByteArray &XadesSignature::Sign(const char ** paths, unsigned int n_paths)
 		//XAdES-T level
 		if (m_do_timestamping || m_do_long_term_validation)
 		{
-			AddSignatureTimestamp(sig->getParentDocument());
+			try
+			{
+				AddSignatureTimestamp(sig->getParentDocument());
+			}
+			catch (CMWException &e) {
+				MWLOG(LEV_ERROR, MOD_APL, L"XadesSignature::Sign: Failed to add timestamp. Error code: %08x", e.GetError());
+				if (e.GetError() != EIDMW_TIMESTAMP_ERROR)
+					throw e;
+
+				throwTimestampException = true;
+			}
+			
 		}
 
 		//XAdES-A level stuff
-		if (m_do_long_term_validation)
+		if (m_do_long_term_validation && !throwTimestampException)
 		{
 			AddRevocationInfo(sig->getParentDocument());
 
 			addCompleteCertificateRefs(sig->getParentDocument());
 
-			//Add XAdES-XL timestamp
-			AddSigAndRefsTimestamp(sig->getParentDocument());
+			try
+			{
+					//Add XAdES-XL timestamp
+					AddSigAndRefsTimestamp(sig->getParentDocument());
 
-			//Add XAdES-A timestamp
-			AddArchiveTimestamp(sig->getParentDocument());
+					//Add XAdES-A timestamp
+					AddArchiveTimestamp(sig->getParentDocument());
+		
+			}
+			catch (CMWException &e) {
+				MWLOG(LEV_ERROR, MOD_APL,
+					L"XadesSignature::Sign: Failed to add archive timestamp. Error code: %08x", e.GetError());
+				if (e.GetError() != EIDMW_TIMESTAMP_ERROR)
+					throw e;
+
+				throwLTVException = true;
+			}
 		}
 	}
 	catch (XSECCryptoException &e)

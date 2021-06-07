@@ -13,6 +13,7 @@
 
 #include "APLCard.h"
 #include "APLCardPteid.h"
+#include "MiscUtil.h"
 #include "Reader.h"
 #include "Log.h"
 #include "SAM.h"
@@ -34,19 +35,6 @@ SAM::SAM(APL_Card *card)
 	m_card = card;
 }
 
-
-void binToHex(const unsigned char *in, size_t in_len, char *out, size_t out_len)
-{
-	unsigned int n;
-	char *pos;
-
-	pos = out;
-	for (n = 0; n < in_len; n++) {
-		sprintf(pos, "%02x", in[n]);
-		pos += 2;
-	}
-	*pos = '\0';
-}
 
 
 bool checkResultSW12(CByteArray &result)

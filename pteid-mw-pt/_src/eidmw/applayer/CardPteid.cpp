@@ -85,16 +85,17 @@ void APL_EidFile_Trace::EmptyFields()
 bool activeFlagShouldBeChecked(const char * issuing_date) 
 {
 
-	// create tm with 01/01/2017:
+	// create tm with 01/09/2019:
 	std::tm timeinfo = std::tm();
 	timeinfo.tm_year = 2019 - 1900;
 	timeinfo.tm_mon = 8;          // month: september
 	timeinfo.tm_mday = 1;        // day: 1st
 	std::time_t beginCCHOMEPeriod = std::mktime (&timeinfo);
 	
-	timeinfo.tm_year = 2020 - 1900;
-	timeinfo.tm_mon = 10;          // month: November
-	timeinfo.tm_mday = 31;        // day: 31th
+	// create tm with 19/04/20:
+	timeinfo.tm_year = 2021 - 1900;
+	timeinfo.tm_mon = 3;          // month: April
+	timeinfo.tm_mday = 19;        // day: 19th
 
 	std::time_t endCCHOMEPeriod = std::mktime (&timeinfo);
 
@@ -152,7 +153,7 @@ bool APL_EidFile_Trace::MapFields()
 
 	if (!activeFlagShouldBeChecked(issuing_date)) {
 		MWLOG(LEV_DEBUG, MOD_APL, 
-			"Skipping Active Flag check because this card was issued between 1/9/2019 e 31/11/2020.");
+			"Skipping Active Flag check because this card was issued between 1/9/2019 e 19/04/2021.");
 		
 		m_Validation = "O Cartão de Cidadão encontra-se activo";
 		isCardActive = true;
@@ -871,8 +872,8 @@ bool isCardExpirationDateTolerated(const char *card_expiry_date) {
      // create tm structure with 24/02/2020: the start of the expiration tolerance period
     std::tm timeinfo = std::tm();
     timeinfo.tm_year = 2020 - 1900;
-    timeinfo.tm_mon = 1;          // month: February
-    timeinfo.tm_mday = 24;        // day: 24st
+    timeinfo.tm_mon = 1;           // month: February
+    timeinfo.tm_mday = 24;         // day: 24th
     std::time_t startTolerancePeriod = std::mktime (&timeinfo);
 
     std::cmatch cm;

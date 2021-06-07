@@ -24,6 +24,7 @@
 #include "Log.h"
 #include "Util.h"
 #include "APLConfig.h"
+#include "cryptoFwkPteid.h"
 
 #include <string>
 
@@ -34,6 +35,7 @@
 #include <openssl/bio.h>
 #include <openssl/x509.h>
 #include "sign-pkcs7.h"
+#include "TsaClient.h"
 
 namespace eIDMW
 {
@@ -68,7 +70,7 @@ namespace eIDMW
 		m_attributeSupplier = NULL;
 		m_attributeName = NULL;
 		m_batch_mode = true;
-		m_timestamp = false;
+		m_level = LEVEL_BASIC;
 		m_isLandscape = false;
 		m_small_signature = false;
 		my_custom_image.img_data = NULL;
@@ -97,7 +99,7 @@ namespace eIDMW
         m_attributeSupplier = NULL;
 		m_attributeName = NULL;
         m_batch_mode = false;
-        m_timestamp = false;
+        m_level = LEVEL_BASIC;
         m_isLandscape = false;
         m_small_signature = false;
         my_custom_image.img_data = NULL;
@@ -151,7 +153,7 @@ namespace eIDMW
 		m_attributeSupplier = NULL;
 		m_attributeName = NULL;
 		m_batch_mode = false;
-		m_timestamp = false;
+		m_level = LEVEL_BASIC;
 		m_isLandscape = false;
 		m_small_signature = false;
 		my_custom_image.img_data = NULL;
@@ -173,7 +175,12 @@ namespace eIDMW
 
 	void PDFSignature::enableTimestamp()
 	{
-		m_timestamp = true;
+		m_level = LEVEL_TIMESTAMP;
+	}
+
+	void PDFSignature::setSignatureLevel(APL_SignatureLevel level) 
+	{
+		m_level = level;
 	}
 
 	void PDFSignature::enableSmallSignature()
@@ -387,15 +394,16 @@ namespace eIDMW
 	}
 
 	int PDFSignature::getPageCount()  {
-		if (!m_doc->isOk())
-		{
+		if (!m_doc->isOk()) {
 			fprintf(stderr,"getPageCount(): Probably broken PDF...\n");
 			return -1;
 		}
-		if (m_doc->isEncrypted())
-		{
+		if (m_doc->isEncrypted()) {
 			fprintf(stderr, "getPageCount(): Encrypted PDFs are unsupported at the moment\n");
 			return -2;
+		}
+		if (m_doc->containsXfaForm()) {
+			return -3;
 		}
 		return m_doc->getNumPages();
 	}
@@ -464,6 +472,7 @@ namespace eIDMW
 		else
 		{
 			 bool throwTimestampError = false;
+			 bool throwLTVError = false;
 			 bool cachedPin = false;
 			 for (unsigned int i = 0; i < m_files_to_sign.size(); i++)
 			 {
@@ -488,9 +497,9 @@ namespace eIDMW
 				}
 				catch (CMWException e)
 				{
-					if (e.GetError() != EIDMW_TIMESTAMP_ERROR){
+					if (e.GetError() != EIDMW_TIMESTAMP_ERROR && e.GetError() != EIDMW_LTV_ERROR){
 						m_card->getCalReader()->setSSO(false);
-						throw e;
+						throw CBatchSignFailedException(e.GetError(), i);
 					}
 
 					// Enable PIN cache
@@ -498,11 +507,18 @@ namespace eIDMW
 						cachedPin = true;
 						m_card->getCalReader()->setSSO(true);
 					}
-					m_timestamp = false; // disable timetamp for the next files
-					throwTimestampError = true;
+					m_level = LEVEL_BASIC; // disable timetamp for the next files
+					
+					if (e.GetError() == EIDMW_TIMESTAMP_ERROR)
+						throwTimestampError = true;
+					else
+						throwLTVError = true;
 				}
 			 }
 			 m_card->getCalReader()->setSSO(false);
+
+			if (throwLTVError)
+				throw CMWEXCEPTION(EIDMW_LTV_ERROR);
 
 			if (throwTimestampError)
 				throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
@@ -542,7 +558,6 @@ namespace eIDMW
 		//The class ctor initializes it to (0,0,0,0)
 		//so we can use this for invisible sig
 		PDFRectangle sig_location;
-		const char * signature_contents = NULL;
 
 		APL_Config config_language(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
@@ -568,7 +583,7 @@ namespace eIDMW
 			delete outputName;
 			throw CMWEXCEPTION(EIDMW_PDF_UNSUPPORTED_ERROR);
 		}
-
+	
 		if (m_page > (unsigned int)doc->getNumPages())
 		{
 			fprintf(stderr, "Error: Signature Page %u is out of bounds for document %s",
@@ -583,26 +598,25 @@ namespace eIDMW
 		if (p == NULL)
 		{
 			fprintf(stderr, "Failed to get page from PDFDoc object\n");
-			throw CMWEXCEPTION(EIDMW_PDF_INVALID_ERROR);
-		}
-
-		//By the spec, the visible/writable area can be cropped by the CropBox, BleedBox, etc...
-		//We're assuming the most common case of MediaBox matching the visible area
-		PDFRectangle *p_media = p->getMediaBox();
-
-		double height = p_media->y2, width = p_media->x2;
-		m_isLandscape = isLandscapeFormat();
-
-		//Fix dimensions for the /Rotate case
-		if (p->getRotate() == 90 || p->getRotate() == 270)
-		{
-			double dim1 = height;
-			height = width;
-			width = dim1;
+			throw CMWEXCEPTION(EIDMW_PDF_INVALID_PAGE_ERROR);
 		}
 
 		if (m_visible)
 		{
+			//By the spec, the visible/writable area can be cropped by the CropBox, BleedBox, etc...
+			//We're assuming the most common case of MediaBox matching the visible area
+			PDFRectangle *p_media = p->getMediaBox();
+
+			double height = p_media->y2, width = p_media->x2;
+			m_isLandscape = isLandscapeFormat();
+
+			//Fix dimensions for the /Rotate case
+			if (p->getRotate() == 90 || p->getRotate() == 270)
+			{
+				double dim1 = height;
+				height = width;
+				width = dim1;
+			}
 			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Page mediaBox: (H: %f W:%f) Location_x: %f, location_y: %f",
 				 height, width, location_x, location_y);
 
@@ -644,27 +658,27 @@ namespace eIDMW
 				}
 			}
 
-		}
-		MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Signature rectangle before rotation (if needed) (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+			MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Signature rectangle before rotation (if needed) (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
 
-		if (p->getRotate() == 90)
-		{
-			//Apply Rotation of R: R' = [-y2, x1, -y1, x2]
-			sig_location = PDFRectangle(height-sig_location.y2, sig_location.x1,
-			              height-sig_location.y1, sig_location.x2);
-			MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
-		} else if (p->getRotate() == 270)
-		{
-			//Apply Rotation of R: R' = [y1, -x2, y2, -x1]
-			sig_location = PDFRectangle(sig_location.y1, width-sig_location.x2,
-			              sig_location.y2, width-sig_location.x1);
-			MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
-		}  else if (p->getRotate() == 180)
-		{
-			//Apply Rotation of R: R' = []
-			sig_location = PDFRectangle(width-sig_location.x2, height-sig_location.y2,
-			              width-sig_location.x1, height-sig_location.y1);
-			MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+			if (p->getRotate() == 90)
+			{
+				//Apply Rotation of R: R' = [-y2, x1, -y1, x2]
+				sig_location = PDFRectangle(height-sig_location.y2, sig_location.x1,
+							height-sig_location.y1, sig_location.x2);
+				MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+			} else if (p->getRotate() == 270)
+			{
+				//Apply Rotation of R: R' = [y1, -x2, y2, -x1]
+				sig_location = PDFRectangle(sig_location.y1, width-sig_location.x2,
+							sig_location.y2, width-sig_location.x1);
+				MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+			}  else if (p->getRotate() == 180)
+			{
+				//Apply Rotation of R: R' = []
+				sig_location = PDFRectangle(width-sig_location.x2, height-sig_location.y2,
+							width-sig_location.x1, height-sig_location.y1);
+				MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature: Rotating rectangle to (%f, %f, %f, %f)", sig_location.x1, sig_location.y1, sig_location.x2, sig_location.y2);
+			}
 		}
 
 		unsigned char *to_sign;
@@ -696,7 +710,16 @@ namespace eIDMW
 		if (this->my_custom_image.img_data != NULL)
 			doc->addCustomSignatureImage(my_custom_image.img_data, my_custom_image.img_length);
 
-        doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, m_civil_number,
+		// remove "BI" prefix and checkdigit from NIC
+		std::string nic = m_civil_number;
+		size_t offset = 0;
+		size_t nic_length = 8;
+		if (nic.find("BI") == 0){
+			offset = 2;
+		}
+		nic = nic.substr(offset, nic_length);
+
+        doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, nic.c_str(),
                                  location, reason, m_page, m_sector, isLangPT, isCC());
         unsigned long len = doc->getSigByteArray(&to_sign, m_incrementalMode);
 
@@ -784,10 +807,14 @@ namespace eIDMW
         /* Calculate hash */
         m_pkcs7 = PKCS7_new();
 
+        bool timestamp = (m_level == LEVEL_TIMESTAMP 
+                        || m_level == LEVEL_LT
+                        || m_level == LEVEL_LTV);
+
         CByteArray in_hash = computeHash_pkcs7( data, dataLen
                                                 , certificate
                                                 , certificate_cas
-                                                , m_timestamp
+                                                , timestamp
                                                 , m_pkcs7
                                                 , &m_signerInfo 
                                                 , isCardSign);
@@ -811,11 +838,13 @@ namespace eIDMW
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
 
+        bool timestamp = (m_level == LEVEL_TIMESTAMP || m_level == LEVEL_LT || m_level == LEVEL_LTV);
+
         int return_code =
             getSignedData_pkcs7((unsigned char*)signature.GetBytes()
             , signature.Size()
             , m_signerInfo
-            , m_timestamp
+            , timestamp
             , m_pkcs7
             , &signature_contents);
 
@@ -824,10 +853,42 @@ namespace eIDMW
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 
         m_doc->closeSignature(signature_contents);
+        save();
 
+        if (m_level == LEVEL_LT || m_level == LEVEL_LTV) {
+            if(!addLtv()) {
+                return_code = 2;
+            }
+        }
+        
+        m_signStarted = false;
+
+        free((void *)signature_contents);
+
+        delete m_outputName;
+        m_outputName = NULL;
+
+        delete m_doc;
+        m_doc = NULL;
+
+        PKCS7_free( m_pkcs7 );
+        m_pkcs7 = NULL;
+
+        MWLOG(LEV_DEBUG, MOD_APL, "PDFSignature::signClose return_code = %d", return_code);
+
+        if (return_code == 1) {
+            throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
+        }
+        else if (return_code == 2)
+        {
+            throw CMWEXCEPTION(EIDMW_LTV_ERROR);
+        }
+        return return_code;
+    }
+
+    void PDFSignature::save() {
         PDFWriteMode pdfWriteMode =
             m_incrementalMode ? writeForceIncremental : writeForceRewrite;
-
         // Create and save pdf to temp file to allow overwrite of original file
 #ifdef WIN32
         TCHAR tmpPathBuffer[MAX_PATH];
@@ -850,11 +911,11 @@ namespace eIDMW
             MWLOG(LEV_ERROR, MOD_APL, "signClose: Error occurred GetTempFileName: %d", GetLastError());
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
-    #ifdef UNICODE
+#ifdef UNICODE
         std::string utf8FilenameTmp = utilStringNarrow(tmpFilename);
-    #else
+#else
         std::string utf8FilenameTmp = tmpFilename;
-    #endif
+#endif
         std::wstring utf16FilenameTmp = utilStringWiden(utf8FilenameTmp);
         int tmp_ret = m_doc->saveAs((wchar_t *)utf16FilenameTmp.c_str(), pdfWriteMode);
         PDFDoc *tmpDoc = makePDFDoc(utf8FilenameTmp.c_str());
@@ -875,36 +936,35 @@ namespace eIDMW
         tmpDoc = NULL;
         remove(utf8FilenameTmp.c_str());
 
-        m_signStarted = false;
-
-        free((void *)signature_contents);
-
-        delete m_outputName;
-        m_outputName = NULL;
-
         delete m_doc;
-        m_doc = NULL;
+        m_doc = makePDFDoc(m_outputName->getCString());
 
-        PKCS7_free( m_pkcs7 );
-        m_pkcs7 = NULL;
-
-        if (tmp_ret == errPermission || tmp_ret == errOpenFile){
+        if (tmp_ret == errPermission || tmp_ret == errOpenFile) {
             throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
         }
         else if (tmp_ret != errNone) {
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
 
-        if (final_ret == errPermission || final_ret == errOpenFile){
+        if (final_ret == errPermission || final_ret == errOpenFile) {
             throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
         }
         else if (final_ret != errNone) {
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
         }
+    }
 
-        if (return_code == 1) {
-            throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
+    bool PDFSignature::addLtv() 
+    {
+        PAdESExtender padesExtender(this);
+        if (m_level == LEVEL_LT)
+        {
+            return padesExtender.addLT();
         }
-        return return_code;
+        else if (m_level == LEVEL_LTV)
+        {
+            return padesExtender.addLTA();
+        }
+        return false;
     }
 }

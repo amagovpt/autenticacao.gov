@@ -1645,7 +1645,7 @@ DWORD PteidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, P
    unsigned char     recvbuf[256];
    unsigned long     recvlen = sizeof(recvbuf);
    char certPath[25];
-   const int		 max_path = 512;
+   const DWORD		 certpath_len = 512;
    BYTE              SW1, SW2;
 
    DWORD             cbCertif;
@@ -1674,9 +1674,9 @@ DWORD PteidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, P
 	   certPath[serial_len] = translateCertType(dwCertSpec);
 
 	   //More than enough for long file paths...
-	   filename = pCardData->pfnCspAlloc(max_path);
+	   filename = pCardData->pfnCspAlloc(certpath_len);
 
-	   getCacheFilePath(certPath, filename, max_path);
+	   getCacheFilePath(certPath, filename, certpath_len);
 
 	   if (readFromCache(filename, *ppbCertif))
 	   {

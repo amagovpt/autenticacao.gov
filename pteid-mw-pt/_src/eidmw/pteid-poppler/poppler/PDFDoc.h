@@ -46,6 +46,8 @@
 #endif
 
 #include <stdio.h>
+#include <unordered_set>
+#include <string>
 #include "XRef.h"
 #include "Catalog.h"
 #include "Page.h"
@@ -68,6 +70,74 @@ enum PDFWriteMode {
   writeStandard,
   writeForceRewrite,
   writeForceIncremental
+};
+
+
+class POPPLER_API ValidationDataElement
+{
+public:
+    enum ValidationDataType
+    {
+        OCSP,
+        CRL,
+        CERT
+    };
+
+    ValidationDataElement(unsigned char *data, size_t dataSize, ValidationDataType type) {
+        this->data = new unsigned char[dataSize];
+        memcpy((char*)this->data, (char*)data, dataSize);
+        this->dataSize = dataSize;
+        this->type = type;
+    }
+
+    ValidationDataElement(unsigned char *data, size_t dataSize, ValidationDataType type, std::unordered_set<std::string> &vriHashKeys) 
+        : ValidationDataElement(data, dataSize, type) {
+
+        for (auto const& key : vriHashKeys)
+            addVriKey(key.c_str());
+    }
+
+    ValidationDataElement(const ValidationDataElement &vde)
+    {
+        this->data = new unsigned char[vde.dataSize];
+        memcpy((char*)this->data, (char*)vde.data, vde.dataSize);
+        this->dataSize = vde.dataSize;
+        this->type = vde.type;
+
+        for (auto const& key : vde.vriHashKeys)
+            addVriKey(key.c_str());
+    }
+
+    ~ValidationDataElement()
+    {
+        delete [] this->data;
+    }
+
+    unsigned char * getData() {
+        return data;
+    }
+
+    size_t getSize() {
+        return dataSize;
+    }
+
+    ValidationDataType getType() {
+        return type;
+    }
+
+    void addVriKey(const char *key) {
+        vriHashKeys.insert(key);
+    }
+
+    std::unordered_set<std::string> &getVriHashKeys() {
+        return vriHashKeys;
+    }
+
+private:
+    unsigned char *data;
+    size_t dataSize;
+    ValidationDataType type;
+    std::unordered_set<std::string> vriHashKeys;
 };
 
 //------------------------------------------------------------------------
@@ -167,14 +237,21 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
 #endif
 
   // Is the file encrypted?
-  GBool isEncrypted() { return xref->isEncrypted(); }
+  POPPLER_API GBool isEncrypted() { return xref->isEncrypted(); }
 
-  /* PTEID-Changes */
+  /* pteid-mw - New functions that are absent from upstream Poppler */
+
+  // Whether the file contains a form of type XFA (XML Forms Architecture) - only supported by Adobe products ?
+  POPPLER_API GBool containsXfaForm();
+
   // Is the file signed?
   POPPLER_API GBool isSigned();
   POPPLER_API unsigned long getSigByteArray(unsigned char **byte_array, bool incremental);
   POPPLER_API GBool isReaderEnabled();
-  POPPLER_API int getSignatureContents(unsigned char **);
+  /*Returns set of indexes of the signatures until (and including) the last timestamp signature. 
+  The indexes are relative to the last signature: 0 is the last, 1 is the previous one, ... */
+  POPPLER_API std::unordered_set<int> getSignaturesIndexesUntilLastTimestamp();
+  POPPLER_API int getSignatureContents(unsigned char **, int sigIdx = 0);
 
   POPPLER_API Object *getByteRange();
 
@@ -188,6 +265,12 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
 
   POPPLER_API void closeSignature(const char *signature_contents);
   POPPLER_API unsigned int getSignedVersionLen();
+
+  // LTV related methods
+  POPPLER_API void addDSS(std::vector<ValidationDataElement *> validationData);
+  POPPLER_API void getCertsInDSS(std::vector<ValidationDataElement *> *validationData);
+  POPPLER_API void prepareTimestamp();
+  //POPPLER_API void closeLtv(const char *signature_contents);
 
   /* End of PTEID Changes */
 

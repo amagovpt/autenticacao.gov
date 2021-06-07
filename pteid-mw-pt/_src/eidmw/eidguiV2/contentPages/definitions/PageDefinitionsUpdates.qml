@@ -52,13 +52,26 @@ PageDefinitionsUpdatesForm {
             }else if (error_code == GAPI.DownloadCancelled) {
                 tempTextDescription =
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
+                        + "<a href='" + propertyTextDescriptionText.propertyLinkUrl + "'>"
+                        + qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT_LINK") + "</a>."
             }else if (error_code == GAPI.InstallFailed) {
-                tempTextDescription =
-                        qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL")
-                        + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
+                if (updateType == GAPI.AutoUpdateApp) {
+                    tempTextDescription =
+                            qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_FAIL")
+                }
+                else {
+                    tempTextDescription =
+                            qsTranslate("PageDefinitionsUpdates","STR_UPDATE_INSTALL_CERTS_FAIL")
+                }
+                tempTextDescription +=
+                        "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_CONTACT_SUPPORT")
             }else if (error_code == GAPI.NetworkError) {
                 tempTextDescription =
                         qsTranslate("PageDefinitionsUpdates","STR_UPDATE_NETWORK_ERROR")
+                if (controler.isProxyConfigured()) {
+                    tempTextDescription += " " 
+                        + qsTranslate("GAPI","STR_VERIFY_PROXY")
+                }
             }
 
             if(updateType == GAPI.AutoUpdateApp){
@@ -78,7 +91,6 @@ PageDefinitionsUpdatesForm {
                 propertyTextDescriptionCerts.text = tempTextDescription
                         +  " " +qsTranslate("PageHelpAbout","STR_HELP_APP_CERTS_UPDATE") + " : "
                         + controler.getCertsLog()
-                        + ". " + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
                 propertyProgressBarCerts.visible = false
                 propertyProgressBarCerts.value = 0
                 propertyProgressBarCerts.indeterminate = false
@@ -108,19 +120,35 @@ PageDefinitionsUpdatesForm {
             }
         }
         onSignalAutoUpdateSuccess: {
-            propertyTextDescriptionCerts.text =
+            if(updateType == GAPI.AutoUpdateApp){
+                propertyProgressBar.visible = false
+                propertyProgressBar.value = 0
+                propertyProgressBar.indeterminate = false
+                propertyButtonCancelUpdate.visible = false
+                if (Qt.platform.os === "linux") {
+                    propertyTextDescriptionText.propertyLinkUrl = "https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#atualização-da-aplicação"
+                    propertyTextDescription.text = qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TRANSFER_DONE")
+                        + "<a href='" + propertyTextDescriptionText.propertyLinkUrl + "'>"
+                        + qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT_LINK") + "</a>."
+                    propertyTextDescriptionText.forceActiveFocus()
+                    propertyButtonOpenTransferFolder.visible = true
+                    propertyButtonOpenTransferFolder.forceActiveFocus()
+                }
+            } else {
+                propertyTextDescriptionCerts.text =
                     qsTranslate("PageDefinitionsUpdates","STR_UPDATE_SUCCESS")
                     + "<br><br>" + qsTranslate("Popup Card","STR_POPUP_RESTART_APP")
-            propertyProgressBarCerts.visible = false
-            propertyProgressBarCerts.value = 0
-            propertyProgressBarCerts.indeterminate = false
-            propertyButtonSearchCerts.visible = true
-            propertyButtonStartUpdateCerts.visible = false
-            propertyButtonCancelUpdateCerts.visible = false
-            propertyReleaseNoteScrollViewCerts.visible = false
-            propertyReleaseScrollViewTextCerts.visible = false
-            restart_dialog.headerTitle = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES") + controler.autoTr
-            restart_dialog.open()
+                propertyProgressBarCerts.visible = false
+                propertyProgressBarCerts.value = 0
+                propertyProgressBarCerts.indeterminate = false
+                propertyButtonSearchCerts.visible = true
+                propertyButtonStartUpdateCerts.visible = false
+                propertyButtonCancelUpdateCerts.visible = false
+                propertyReleaseNoteScrollViewCerts.visible = false
+                propertyReleaseScrollViewTextCerts.visible = false
+                restart_dialog.headerTitle = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES") + controler.autoTr
+                restart_dialog.open()
+            }
         }
         onSignalAutoUpdateAvailable: {
             console.log("PageDefinitionsUpdates onSignalAutoUpdateAvailable")
@@ -134,6 +162,8 @@ PageDefinitionsUpdatesForm {
                             Functions.filterText(propertyReleaseScrollViewText.text)
                     propertyReleaseScrollViewText.visible = true
                     propertyTextDescription.text = qsTranslate("PageDefinitionsUpdates","STR_UPDATE_AVAILABLE")
+                        + "<a href='" + propertyTextDescriptionText.propertyLinkUrl + "'>"
+                        + qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT_LINK") + "</a>."
                     propertyInstalledVersion.propertyDateField.text = arg2
                     propertyRemoteVersion.propertyDateField.text = arg3
 
@@ -174,7 +204,7 @@ PageDefinitionsUpdatesForm {
                             qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_NO_UPDATES")
                             + " " + qsTranslate("PageHelpAbout","STR_HELP_APP_CERTS_UPDATE") + " : "
                             + controler.getCertsLog()
-                            + ". " + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
+                            + ". " + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_TEXT")
                     propertyButtonSearchCerts.visible = true
                 }
                 propertyProgressBarCerts.visible = false
@@ -218,6 +248,7 @@ PageDefinitionsUpdatesForm {
         onClicked: {
             console.log("propertyButtonStartUpdate clicked")
             propertyTextDescription.forceActiveFocus()
+            propertySupportedSystems.visible = false
             propertyProgressBar.visible = true
             propertyProgressBar.indeterminate = true
             propertyButtonSearch.visible = false
@@ -228,6 +259,7 @@ PageDefinitionsUpdatesForm {
     propertyButtonCancelUpdate {
         onClicked: {
             console.log("propertyButtonCancelAppUpdate clicked")
+            propertySupportedSystems.visible = true
             propertyProgressBar.visible = false
             propertyButtonSearch.visible = true
             controler.userCancelledUpdateAppDownload()
@@ -268,6 +300,12 @@ PageDefinitionsUpdatesForm {
             propertyTextDescriptionCerts.forceActiveFocus()
         }
     }
+    propertyButtonOpenTransferFolder {
+        onClicked: {
+            console.log("propertyButtonOpenTransferFolder clicked")
+            controler.openTransfersFolder();
+        }
+    }
 
 
     Component.onCompleted: {
@@ -278,6 +316,6 @@ PageDefinitionsUpdatesForm {
                 qsTranslate("PageHelpAbout","STR_HELP_APP_CERTS_UPDATE") + " : "
                 + controler.getCertsLog()
                 + ". "
-                + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_TEXT")
+                + "<br><br>" + qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_TEXT")
     }
 }

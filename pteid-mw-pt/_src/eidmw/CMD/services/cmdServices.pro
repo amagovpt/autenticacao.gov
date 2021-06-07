@@ -67,7 +67,6 @@ HEADERS += \
             cmdErrors.h \
             cmdServices.h \
             CMDSignature.h \
-            CCMovelSignature.h \
             soapH.h \
             soapStub.h \
             soapBasicHttpBinding_USCORECCMovelSignatureProxy.h \

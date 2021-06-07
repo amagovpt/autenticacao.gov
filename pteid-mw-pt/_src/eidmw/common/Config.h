@@ -219,6 +219,8 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GUITOOL_FILESAVE          L"default_save_path"        //string; path, ""(default)
 #define EIDMW_CNF_GUITOOL_STARTUPDATE       L"start_autoupdate"         //number; 0=no, 1=yes(default)
 #define EIDMW_CNF_GUITOOL_ASKREGCMDCERT     L"ask_register_cmd_cert"    //number; 0=no, 1=yes(default)
+#define EIDMW_CNF_GUITOOL_SHOWSIGNOPTIONS   L"show_signature_options"   //number; 0=no(default), 1=yes
+#define EIDMW_CNF_GUITOOL_SHOWSIGNHELP      L"show_signature_help"      //number; 0=no, 1=yes(default)
 
 #define EIDMW_CNF_SECTION_XSIGN             L"xsign"                    //section for xsign
 #define EIDMW_CNF_XSIGN_TSAURL              L"tsa_url"                  //string URL of the Timestamp Server
@@ -391,6 +393,8 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_GUITOOL_FILESAVE;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_STARTUPDATE;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_ASKREGCMDCERT;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWSIGNOPTIONS;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWSIGNHELP;
 
     //XSIGN
     static const struct Param_Str EIDMW_CONFIG_PARAM_XSIGN_TSAURL;

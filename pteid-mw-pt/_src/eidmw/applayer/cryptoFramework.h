@@ -45,10 +45,10 @@
 #endif
 #include "APLCard.h"
 
-#include "openssl/evp.h"
-#include "openssl/ocsp.h"
-#include "openssl/ssl.h"
-#include "openssl/bio.h"
+#include <openssl/evp.h>
+#include <openssl/ocsp.h>
+#include <openssl/ssl.h>
+#include <openssl/bio.h>
 
 namespace eIDMW
 {
@@ -71,6 +71,7 @@ struct tCertifInfo
 {
 	std::string serialNumber;			/**< Serial number of the certificate */
 	std::string ownerName;				/**< Name of the certificate owner */
+	std::string subjectSerialNumber;	/**< Serial number of the subject of the certificate */
 	std::string issuerName;				/**< Name of the certificate issuer */
 	std::string validityNotBefore;		/**< Begin date validity */
 	std::string validityNotAfter;		/**< End date validity */
@@ -225,7 +226,7 @@ public:
 	  *
 	  * @return The status
 	  */
-	FWK_CertifStatus GetOCSPResponse(const CByteArray &cert, const CByteArray &issuer, CByteArray *response);
+	FWK_CertifStatus GetOCSPResponse(const CByteArray &cert, const CByteArray &issuer, CByteArray *response, bool verifyResponse = true);
 
 	/**
 	  * Send a OCSP request and get the response
@@ -356,7 +357,7 @@ protected:
 	  *
 	  * @return The status
 	  */
-	FWK_CertifStatus GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Issuer, OCSP_RESPONSE **pResponse); 
+	FWK_CertifStatus GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Issuer, OCSP_RESPONSE **pResponse, bool verifyResponse = true); 
 
 	/**
 	  * Send a OCSP request and get the response

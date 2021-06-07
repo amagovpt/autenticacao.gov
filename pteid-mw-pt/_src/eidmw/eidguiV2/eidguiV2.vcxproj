@@ -97,7 +97,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_CURL_X64)\include;.;$(PTEID_DIR_QT_5_X64)\include;$(PTEID_DIR_QT_5_X64)\include\QtQuick;$(PTEID_DIR_QT_5_X64)\include\QtGui\5.12.8\;..\_Builds;..\common;$(PTEID_DIR_QT_5_X64)\include\QtCore\5.12.8\QtCore;$(PTEID_DIR_QT_5_X64)\include\QtCore\5.12.8;$(PTEID_DIR_QT_5_X64)\include\QtGui\5.12.8\QtGui;$(PTEID_DIR_QT_5_X64)\mkspecs\win32-msvc;$(PTEID_DIR_QT_5_X64)\include\QtGui;$(PTEID_DIR_QT_5_X64)\include\QtConcurrent;$(PTEID_DIR_QT_5_X64)\include\QtQuickControls2;$(PTEID_DIR_QT_5_X64)\include\QtWidgets;$(PTEID_DIR_QT_5_X64)\include\QtPrintSupport;$(PTEID_DIR_QT_5_X64)\include\QtANGLE;$(PTEID_DIR_QT_5_X64)\include\QtQml;$(PTEID_DIR_QT_5_X64)\include\QtNetwork;$(PTEID_DIR_QT_5_X64)\include\QtCore;$(PTEID_POPPLER_QT5)\qt5\src;release;$(PTEID_DIR_QT_5_X64)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;$(PTEID_DIR_OPENSSL_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_CURL_X64)\include;.;$(PTEID_DIR_QT_5_X64)\include;$(PTEID_DIR_QT_5_X64)\include\QtQuick;$(PTEID_DIR_QT_5_X64)\include\QtGui\5.12.8\;..\_Builds;..\common;$(PTEID_DIR_QT_5_X64)\include\QtCore\5.12.8\QtCore;$(PTEID_DIR_QT_5_X64)\include\QtCore\5.12.8;$(PTEID_DIR_QT_5_X64)\include\QtGui\5.12.8\QtGui;$(PTEID_DIR_QT_5_X64)\mkspecs\win32-msvc;$(PTEID_DIR_QT_5_X64)\include\QtGui;$(PTEID_DIR_QT_5_X64)\include\QtConcurrent;$(PTEID_DIR_QT_5_X64)\include\QtQuickControls2;$(PTEID_DIR_QT_5_X64)\include\QtWidgets;$(PTEID_DIR_QT_5_X64)\include\QtPrintSupport;$(PTEID_DIR_QT_5_X64)\include\QtANGLE;$(PTEID_DIR_QT_5_X64)\include\QtQml;$(PTEID_DIR_QT_5_X64)\include\QtNetwork;$(PTEID_DIR_QT_5_X64)\include\QtCore;$(PTEID_POPPLER_QT5)\qt5\src;release;$(PTEID_DIR_QT_5_X64)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_LIBZIP_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -116,8 +116,8 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libcurl769.lib;Cryptui.lib;Wintrust.lib;Crypt32.lib;qtmain.lib;shell32.lib;libcrypto.lib;libssl.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteid-poppler.lib;pteidlib.lib;xsec_2.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_POPPLER_QT5)\x64;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_DIR_QT_5_X64)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libcurl769.lib;Cryptui.lib;Wintrust.lib;Crypt32.lib;qtmain.lib;shell32.lib;libcrypto.lib;libssl.lib;libzip.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteid-poppler.lib;pteidlib.lib;xsec_2.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_POPPLER_QT5)\x64;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_DIR_QT_5_X64)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_LIBZIP_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -146,7 +146,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_CURL)\include;.;$(PTEID_DIR_QT_5)\include;$(PTEID_DIR_QT_5)\include\QtQuick;$(PTEID_DIR_QT_5)\include\QtGui\5.12.8\;..\_Builds;..\common;$(PTEID_DIR_QT_5)\include\QtCore\5.12.8\QtCore;$(PTEID_DIR_QT_5)\include\QtCore\5.12.8;$(PTEID_DIR_QT_5)\include\QtGui\5.12.8\QtGui;$(PTEID_DIR_QT_5)\mkspecs\win32-msvc;$(PTEID_DIR_QT_5)\include\QtGui;$(PTEID_DIR_QT_5)\include\QtConcurrent;$(PTEID_DIR_QT_5)\include\QtQuickControls2;$(PTEID_DIR_QT_5)\include\QtWidgets;$(PTEID_DIR_QT_5)\include\QtPrintSupport;$(PTEID_DIR_QT_5)\include\QtANGLE;$(PTEID_DIR_QT_5)\include\QtQml;$(PTEID_DIR_QT_5)\include\QtNetwork;$(PTEID_DIR_QT_5)\include\QtCore;$(PTEID_POPPLER_QT5)\qt5\src;release;$(PTEID_DIR_QT_5)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;$(PTEID_DIR_OPENSSL)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_CURL)\include;.;$(PTEID_DIR_QT_5)\include;$(PTEID_DIR_QT_5)\include\QtQuick;$(PTEID_DIR_QT_5)\include\QtGui\5.12.8\;..\_Builds;..\common;$(PTEID_DIR_QT_5)\include\QtCore\5.12.8\QtCore;$(PTEID_DIR_QT_5)\include\QtCore\5.12.8;$(PTEID_DIR_QT_5)\include\QtGui\5.12.8\QtGui;$(PTEID_DIR_QT_5)\mkspecs\win32-msvc;$(PTEID_DIR_QT_5)\include\QtGui;$(PTEID_DIR_QT_5)\include\QtConcurrent;$(PTEID_DIR_QT_5)\include\QtQuickControls2;$(PTEID_DIR_QT_5)\include\QtWidgets;$(PTEID_DIR_QT_5)\include\QtPrintSupport;$(PTEID_DIR_QT_5)\include\QtANGLE;$(PTEID_DIR_QT_5)\include\QtQml;$(PTEID_DIR_QT_5)\include\QtNetwork;$(PTEID_DIR_QT_5)\include\QtCore;$(PTEID_POPPLER_QT5)\qt5\src;release;$(PTEID_DIR_QT_5)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;$(PTEID_DIR_OPENSSL)\include;$(PTEID_DIR_LIBZIP)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -165,8 +165,8 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libcurl769.lib;Cryptui.lib;Wintrust.lib;qtmain.lib;Crypt32.lib;shell32.lib;libssl.lib;libcrypto.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteid-poppler.lib;pteidDlgsWin32.lib;cmdServices.lib;xsec_2.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_POPPLER_QT5)\win32;$(PTEID_DIR_OPENSSL)\lib\;$(PTEID_DIR_QT_5)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libcurl769.lib;Cryptui.lib;Wintrust.lib;qtmain.lib;Crypt32.lib;shell32.lib;libssl.lib;libcrypto.lib;libzip.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteid-poppler.lib;pteidDlgsWin32.lib;cmdServices.lib;xsec_2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_POPPLER_QT5)\win32;$(PTEID_DIR_OPENSSL)\lib\;$(PTEID_DIR_QT_5)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_LIBZIP)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -329,6 +329,8 @@
     <None Include="contentPages\definitions\PageDefinitionsSignSettingsForm.ui.qml" />
     <None Include="contentPages\help\PageHelpAccessibility.qml" />
     <None Include="contentPages\help\PageHelpAccessibilityForm.ui.qml" />
+    <None Include="contentPages\services\PageServicesSign.qml" />
+    <None Include="contentPages\services\PageServicesSignForm.ui.qml" />
     <None Include="contentPages\services\PageServicesSignHelp.qml" />
     <None Include="contentPages\services\PageServicesSignHelpForm.ui.qml" />
     <None Include="images\dummy\CCdemo.png" />
@@ -370,10 +372,6 @@
     <None Include="contentPages\security\PageSecurityCertificatesForm.ui.qml" />
     <None Include="contentPages\security\PageSecurityPinCodes.qml" />
     <None Include="contentPages\security\PageSecurityPinCodesForm.ui.qml" />
-    <None Include="contentPages\services\PageServicesSignAdvanced.qml" />
-    <None Include="contentPages\services\PageServicesSignAdvancedForm.ui.qml" />
-    <None Include="contentPages\services\PageServicesSignSimple.qml" />
-    <None Include="contentPages\services\PageServicesSignSimpleForm.ui.qml" />
     <None Include="images\dummy\Pdfdemo.png" />
     <None Include="contentPages\security\PinCodesModel.qml" />
     <None Include="components\ScrollBar.qml" />

@@ -30,18 +30,15 @@ PageDefinitionsSignatureForm {
         onSignalGenericError: {
             propertyBusyIndicator.running = false
         }
-        onSignalCardDataChanged: {
-            console.log("Definitions Signature --> Data Changed")
-            //console.trace();
+        onSignalSignCertDataChanged: {
+            console.log("Definitions Signature --> Certificate Data Changed")
 
-            propertySigSignedByNameText.text = propertySigSignedByNameTextCustom.text =
-                    gapi.getDataCardIdentifyValue(GAPI.Givenname) + " " +  gapi.getDataCardIdentifyValue(GAPI.Surname)
-            propertySigNumIdText.text = propertySigNumIdTextCustom.text = qsTranslate("GAPI","STR_NIC") + ": "
-                    + gapi.getDataCardIdentifyValue(GAPI.Documentnum)
+            propertySigSignedByNameText.text = propertySigSignedByNameTextCustom.text = ownerName
+            propertySigNumIdText.text = propertySigNumIdTextCustom.text =
+                qsTranslate("GAPI","STR_NIC") + ": " + NIC
             propertySigLocationText.text = propertySigLocationTextCustom.text ="{" + qsTr("STR_CUSTOM_SIGN_LOCATION") + "}"
 
             propertyBusyIndicator.running = false
-            mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                         propertyRadioButtonDefault.forceActiveFocus()
         }
@@ -63,7 +60,7 @@ PageDefinitionsSignatureForm {
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED") + controler.autoTr
                 propertyBusyIndicator.running = true
-                gapi.startCardReading()
+                gapi.startGettingInfoFromSignCert()
             }
             else{
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN") + controler.autoTr
@@ -71,6 +68,12 @@ PageDefinitionsSignatureForm {
             }
 
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, returnSubMenuWhenClosed)
+        }
+        onSignalCustomSignImageRemoved: {
+            console.log("Definitions Signature onSignalCustomSignImageRemoved")
+            var titlePopup = qsTranslate("PageServicesSign", "STR_WARNING")
+            var bodyPopup = qsTranslate("PageServicesSign","STR_CUSTOM_IMAGE_REMOVED")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
     }
 
@@ -148,7 +151,7 @@ PageDefinitionsSignatureForm {
             fileLoaded = false
             propertyRadioButtonDefault.checked = true
             propertyRadioButtonCustom.checked = false
-            gapi.customSignRemove()
+            gapi.customSignImageRemove()
             propertyRadioButtonDefault.forceActiveFocus()
         }
     }
@@ -184,11 +187,11 @@ PageDefinitionsSignatureForm {
 
         console.log("Page Definitions Signature mainWindowCompleted")
         propertyBusyIndicator.running = true
-        gapi.startCardReading()
+        gapi.startGettingInfoFromSignCert()
         propertySigDateText.text = propertySigDateTextCustom.text =
                 qsTranslate("PageServicesSign", "STR_SIGN_DATE") + ": " + getDate()
         clearFields()
-        if(gapi.getUseCustomSignature()){
+        if(gapi.getUseCustomSignature() && gapi.customSignImageExist()){
             propertyRadioButtonDefault.checked = false
             propertyRadioButtonCustom.checked = true
         }else{
@@ -196,7 +199,7 @@ PageDefinitionsSignatureForm {
             propertyRadioButtonCustom.checked = false
         }
         if(gapi.customSignImageExist()){
-            var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture_qml.jpg"
+            var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpg"
             if (Qt.platform.os === "windows") {
                 urlCustomImage = "file:///"+urlCustomImage
             }else{

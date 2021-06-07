@@ -24,7 +24,6 @@ Item {
     property alias propertyEditNotes: edit
     property alias propertyBusyIndicator: busyIndicator
     property alias propertySaveNotes: saveNotes
-    property alias propertyMouseAreaFlickable: mouseAreaFlickable
     property alias propertyProgressBar: progressBar
     property alias propertyNotesText: notesText
     property string progressBarText: ""
@@ -148,9 +147,11 @@ Item {
                         property string previousText: text
                         text: ""
                         width: flickable.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                        height: flickable.height
+                        height: Math.max(paintedHeight, flickable.height);
                         focus: true
                         wrapMode: TextEdit.Wrap
+                        selectByMouse: true
+                        selectionColor: Constants.COLOR_MAIN_BLUE
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         color: Constants.COLOR_TEXT_BODY
@@ -176,10 +177,6 @@ Item {
                             if (!active)
                                 active = true
                         }
-                    }
-                    MouseArea {
-                        id: mouseAreaFlickable
-                        anchors.fill: parent
                     }
                 }
             }

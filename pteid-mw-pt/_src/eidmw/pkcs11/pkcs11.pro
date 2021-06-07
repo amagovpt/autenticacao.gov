@@ -40,7 +40,6 @@ QMAKE_CFLAGS += -fno-strict-aliasing
 
 DEFINES += 
 unix:!macx:  DEFINES += __UNIX__
-#macx:  DEFINES += __OLD_PCSC_API__
 
 # Input
 HEADERS += asn1.h \

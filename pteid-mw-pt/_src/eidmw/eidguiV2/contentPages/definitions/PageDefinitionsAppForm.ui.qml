@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
@@ -101,7 +101,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp","STR_CARD_READER_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: textReader.text
                     KeyNavigation.tab: textSelectReader
                     KeyNavigation.down: textSelectReader
@@ -155,7 +155,7 @@ Item {
                         font.bold: activeFocus
                         color: Constants.COLOR_TEXT_BODY
                         wrapMode: Text.WordWrap
-                        Accessible.role: Accessible.TitleBar
+                        Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         Keys.onPressed: {
                             handleKeyPressed(event.key,textSelectReader)
@@ -240,7 +240,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp","STR_START_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppStart)
@@ -323,7 +323,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp","STR_START_AUTOUPDATES_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, startAutoupdateText)
@@ -408,7 +408,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp","STR_LANGUAGE_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppLanguage)
@@ -527,7 +527,7 @@ Item {
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
                                       "STR_APP_LOOK_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppLook)
@@ -618,7 +618,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text:  qsTranslate("PageDefinitionsApp", "STR_SCALE_APPLICATION_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppLook)
@@ -666,7 +666,7 @@ Item {
                         font.family: lato.name
                         font.bold: activeFocus
                         wrapMode: Text.WordWrap
-                        Accessible.role: Accessible.TitleBar
+                        Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         Keys.onPressed: {
                             handleKeyPressed(event.key,textSelectReader)
@@ -722,7 +722,7 @@ Item {
                             anchors.rightMargin: Constants.SIZE_TEXT_V_SPACE
                             anchors.verticalCenter: parent.verticalCenter
                             wrapMode: Text.WordWrap
-                            Accessible.role: Accessible.TitleBar
+                            Accessible.role: Accessible.StaticText
                             Accessible.name: text
                             Keys.onPressed: {
                                 handleKeyPressed(event.key,textSelectReader)
@@ -795,7 +795,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateDebugMode)
@@ -831,7 +831,9 @@ Item {
                     id: rectDebugModeCheckBox
                     width: parent.width
                     color: "white"
-                    height: debugModeTextField.height + checkboxDebugMode.height + 3*Constants.SIZE_TEXT_V_SPACE
+                    height: debugModeTextField.height + checkboxDebugMode.height
+                            + logsTextField.height + 10 * Constants.SIZE_TEXT_V_SPACE
+                            + debugInfoLink.height
                     anchors.top: dateDebugMode.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
@@ -845,7 +847,7 @@ Item {
                         font.family: lato.name
                         font.bold: activeFocus
                         wrapMode: Text.WordWrap
-                        Accessible.role: Accessible.TitleBar
+                        Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         Keys.onPressed: {
                             handleKeyPressed(event.key, debugModeTextField)
@@ -869,20 +871,90 @@ Item {
                         font.capitalization: Font.MixedCase
                         font.bold: activeFocus
                         anchors.top: debugModeTextField.bottom
-                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                        anchors.topMargin: 2 * Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         Keys.onPressed: {
                             handleKeyPressed(event.key, checkboxDebugMode)
                         }
-                        KeyNavigation.tab: dateAppGraphics
-                        KeyNavigation.down: dateAppGraphics
-                        KeyNavigation.right: dateAppGraphics
+                        KeyNavigation.tab: buttonZipLogs
+                        KeyNavigation.down: buttonZipLogs
+                        KeyNavigation.right: buttonZipLogs
                         KeyNavigation.backtab: debugModeTextField
                         KeyNavigation.up: debugModeTextField
                         KeyNavigation.left: debugModeTextField
                         Keys.onEnterPressed: toggleSwitch(checkboxDebugMode)
                         Keys.onReturnPressed: toggleSwitch(checkboxDebugMode)
+                    }
+                    Button {
+                        id: buttonZipLogs
+                        text: qsTranslate("PageDefinitionsApp", "STR_LOG_ZIP_BUTTON")  + controler.autoTr
+                        anchors.right: parent.right
+                        anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        anchors.verticalCenter: checkboxDebugMode.verticalCenter
+                        width: 1.4 * Constants.WIDTH_BUTTON
+                        height: Constants.HEIGHT_BOTTOM_COMPONENT
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.capitalization: Font.MixedCase
+                        highlighted: activeFocus
+                        KeyNavigation.tab: logsTextField
+                        KeyNavigation.down: logsTextField
+                        KeyNavigation.right: logsTextField
+                        KeyNavigation.left: checkboxDebugMode
+                        KeyNavigation.backtab: checkboxDebugMode
+                        KeyNavigation.up: checkboxDebugMode
+                        onClicked: {
+                            controler.zipLogs()
+                        }
+                    }
+                    Text {
+                        id: logsTextField
+                        width: parent.width - 20
+                        anchors.top: checkboxDebugMode.bottom
+                        anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
+                        x:10
+                        font.capitalization: Font.MixedCase
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.bold: activeFocus
+                        wrapMode: Text.WordWrap
+                        text: qsTranslate("PageDefinitionsApp", "STR_LOG_ZIP_DESCRIPTION") + controler.autoTr
+                        Accessible.role: Accessible.StaticText
+                        Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, logsTextField)
+                        }
+                        KeyNavigation.tab: debugInfoLink
+                        KeyNavigation.down: debugInfoLink
+                        KeyNavigation.right: debugInfoLink
+                        KeyNavigation.backtab: buttonZipLogs
+                        KeyNavigation.up: buttonZipLogs
+                        KeyNavigation.left: buttonZipLogs
+                    }
+                    Components.Link {
+                        id: debugInfoLink
+                        x: 10
+                        anchors.top: logsTextField.bottom
+                        anchors.topMargin: 2* Constants.SIZE_TEXT_V_SPACE
+                        width: parent.width
+                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + controler.autoTr + " "
+                                            + "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#obtenção-do-relatório-para-análise-através-do-menu-configurações'>"
+                                            + qsTranslate("PageDefinitionsApp", "STR_HERE") + controler.autoTr
+                        propertyLinkUrl: 'https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#obtenção-do-relatório-para-análise-através-do-menu-configurações'
+                        propertyText.font.capitalization: Font.MixedCase
+                        propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+                        propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " "
+                                            + qsTranslate("PageDefinitionsApp", "STR_HERE")
+                        KeyNavigation.tab: dateAppGraphics
+                        KeyNavigation.down: dateAppGraphics
+                        KeyNavigation.right: dateAppGraphics
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, debugInfoLink)
+                        }
+                        KeyNavigation.left: logsTextField
+                        KeyNavigation.backtab: logsTextField
+                        KeyNavigation.up: logsTextField
                     }
                 }
             }
@@ -908,7 +980,7 @@ Item {
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
                                       "STR_APP_GRAPHICS_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppGraphics)
@@ -916,9 +988,9 @@ Item {
                     KeyNavigation.tab: graphicsTextField
                     KeyNavigation.down: graphicsTextField
                     KeyNavigation.right: graphicsTextField
-                    KeyNavigation.backtab: checkboxDebugMode
-                    KeyNavigation.up: checkboxDebugMode
-                    KeyNavigation.left: checkboxDebugMode
+                    KeyNavigation.backtab: logsTextField
+                    KeyNavigation.up: logsTextField
+                    KeyNavigation.left: logsTextField
                 }
                 DropShadow {
                     anchors.fill: rectAppGraphicsCheckBox
@@ -943,7 +1015,7 @@ Item {
                     id: rectAppGraphicsCheckBox
                     width: parent.width
                     color: "white"
-                    height: graphicsTextField.height + graphicsInfoTextField.height + comboboxAccelGraphics.height
+                    height: graphicsTextField.height + textLink.height + comboboxAccelGraphics.height
                             + 4 * Constants.SIZE_TEXT_V_SPACE
                     anchors.top: dateAppGraphics.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
@@ -958,55 +1030,41 @@ Item {
                         font.family: lato.name
                         font.bold: activeFocus
                         wrapMode: Text.WordWrap
-                        Accessible.role: Accessible.TitleBar
+                        Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         Keys.onPressed: {
                             handleKeyPressed(event.key, graphicsTextField)
                         }
-                        KeyNavigation.tab: graphicsInfoTextField
-                        KeyNavigation.down: graphicsInfoTextField
-                        KeyNavigation.right: graphicsInfoTextField
+                        KeyNavigation.tab: textLink
+                        KeyNavigation.down: textLink
+                        KeyNavigation.right: textLink
                         KeyNavigation.backtab: dateAppGraphics
                         KeyNavigation.up: dateAppGraphics
                         KeyNavigation.left: dateAppGraphics
                     }
-                    Text {
-                        id: graphicsInfoTextField
-                        x: 10
-                        text: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + controler.autoTr
-                        anchors.top: graphicsTextField.bottom
-                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                        font.capitalization: Font.MixedCase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        font.bold: activeFocus
-                        wrapMode: Text.WordWrap
-                        Accessible.name: text
-                        KeyNavigation.tab: textLink
-                        KeyNavigation.down: textLink
-                        KeyNavigation.right: textLink
-                        KeyNavigation.backtab: graphicsTextField
-                        KeyNavigation.up: graphicsTextField
-                        KeyNavigation.left: graphicsTextField
-                    }
                     Components.Link {
                         id: textLink
-                        anchors.left: graphicsInfoTextField.right
-                        anchors.verticalCenter: graphicsInfoTextField.verticalCenter
+                        x: 10
+                        anchors.top: graphicsTextField.bottom
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         width: parent.width
-                        propertyText.text: "<a href='https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-com-placas-gr%C3%A1ficas-integradas'>" +
-                                           qsTranslate("PageDefinitionsApp", "STR_HERE") + controler.autoTr + "</a>."
-                        propertyLinkUrl: 'https://amagovpt.github.io/autenticacao.gov/user_manual.html#problemas-com-placas-gr%C3%A1ficas-integradas'
+                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + controler.autoTr + " "
+                                            + "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#problemas-gráficos-na-aplicação'>"
+                                            + qsTranslate("PageDefinitionsApp", "STR_HERE") + controler.autoTr
+                        propertyLinkUrl: 'https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#problemas-gráficos-na-aplicação'
                         propertyText.font.capitalization: Font.MixedCase
-                        propertyText.font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        propertyText.font.family: lato.name
-                        propertyText.font.bold: activeFocus
+                        propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+                        propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " "
+                                            + qsTranslate("PageDefinitionsApp", "STR_HERE")
                         KeyNavigation.tab: textGraphicsRendering
                         KeyNavigation.down: textGraphicsRendering
                         KeyNavigation.right: textGraphicsRendering
-                        KeyNavigation.left: graphicsInfoTextField
-                        KeyNavigation.backtab: graphicsInfoTextField
-                        KeyNavigation.up: graphicsInfoTextField
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, textLink)
+                        }
+                        KeyNavigation.left: graphicsTextField
+                        KeyNavigation.backtab: graphicsTextField
+                        KeyNavigation.up: graphicsTextField
                     }
                     Text {
                         id: textGraphicsRendering
@@ -1025,9 +1083,9 @@ Item {
                         KeyNavigation.tab: comboboxAccelGraphics
                         KeyNavigation.down: comboboxAccelGraphics
                         KeyNavigation.right: comboboxAccelGraphics
-                        KeyNavigation.backtab: textLink
-                        KeyNavigation.up: textLink
-                        KeyNavigation.left: textLink
+                        KeyNavigation.backtab: textLink.propertyText
+                        KeyNavigation.up: textLink.propertyText
+                        KeyNavigation.left: textLink.propertyText
                         text: qsTranslate("PageDefinitionsApp", "STR_ACCEL_MODE") + controler.autoTr
                         verticalAlignment: Text.AlignVCenter
                     }
@@ -1043,7 +1101,7 @@ Item {
                         anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                         anchors.right: parent.right
                         anchors.rightMargin: 10
-                        anchors.top: graphicsInfoTextField.bottom
+                        anchors.top: textLink.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.ComboBox
                         Accessible.name: currentText
@@ -1083,7 +1141,7 @@ Item {
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
                                       "STR_NETWORK_TITLE") + controler.autoTr
-                    Accessible.role: Accessible.TitleBar
+                    Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppNetwork)

@@ -546,7 +546,7 @@ DWORD CardGetGuid(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDa
 		0);
 	if (dwReturn != SCARD_S_SUCCESS)  
    {
-		LogTrace(LOGTYPE_ERROR, WHERE, "Error CardGetProperty for [CP_CARD_SERIAL_NO]: 0x08X", dwReturn);
+		LogTrace(LOGTYPE_ERROR, WHERE, "Error returned by CardGetProperty for [CP_CARD_SERIAL_NO]: %08X", dwReturn);
 		CLEANUP(dwReturn);
    }
 

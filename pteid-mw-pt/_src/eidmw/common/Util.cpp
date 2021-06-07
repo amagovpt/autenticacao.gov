@@ -114,6 +114,19 @@ bool StartsWith(const char *csData, const char *csSearch)
 
 	return true;
 }
+
+void SubstringInplace(char *buffer, size_t from, size_t to)
+{
+	size_t initial_str_size = strlen(buffer);
+	size_t new_str_size = to - from;
+
+	if ( from <= to && to <= initial_str_size)
+	{
+		std::memmove(buffer, buffer + from , strlen(buffer + from));
+		std::memset(buffer + new_str_size, 0, initial_str_size - new_str_size);
+	}
+}
+
 //--------------------------------------------
 // conversion table to convert IBM 850 to UTF8
 // only the highest 128 characters can/will be converted
@@ -314,6 +327,14 @@ void truncateUtf8String(std::string &utf8String, size_t numberOfChars)
         count += (*ptr++ & 0xC0) != 0x80;
         byteIdx++;
     }
+	unsigned char last = utf8String.at(byteIdx - 1);
+	//Add remaining UTF-8 continuation bytes if last is a leading byte in a multi-byte char
+	if ((last & 0xF0) == 0xF0)
+		byteIdx += 3;
+	else if ((last & 0xE0) == 0xE0)
+		byteIdx += 2;
+	else if ((last & 0xC0) == 0xC0)
+		byteIdx++;
     utf8String = utf8String.substr(0, byteIdx);
 }
 
@@ -322,27 +343,34 @@ void ReadReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD *dw
     HKEY hKey;
     LONG result = RegOpenKeyEx(hive, subKey, 0, KEY_READ, &hKey);
     if (result != ERROR_SUCCESS){
+        RegCloseKey(hKey);
         throw CMWEXCEPTION(EIDMW_CONF);
         return;
     }
     result = RegQueryValueExW(hKey, leafKey, NULL, dwType, (LPBYTE)output, outputSize);
     if (result != ERROR_SUCCESS){
+        RegCloseKey(hKey);
         throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
         return;
     }
+    RegCloseKey(hKey);
 }
 void WriteReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD dwType, void* input, DWORD inputSize) {
     HKEY hKey;
-    LONG result = RegOpenKeyEx(hive, subKey, 0, KEY_WRITE, &hKey);
-    if (result != ERROR_SUCCESS){
+
+    LONG result = RegCreateKeyEx(hive, subKey, 0L, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL);
+    if (result != ERROR_SUCCESS) {
+        RegCloseKey(hKey);
         throw CMWEXCEPTION(EIDMW_CONF);
         return;
     }
     result = RegSetValueExW(hKey, leafKey, NULL, dwType, (LPBYTE)input, inputSize);
     if (result != ERROR_SUCCESS){
+        RegCloseKey(hKey);
         throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
         return;
     }
+    RegCloseKey(hKey);
 }
 #endif
 }

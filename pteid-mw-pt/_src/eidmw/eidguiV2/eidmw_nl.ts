@@ -67,7 +67,7 @@
     </message>
     <message>
         <source>STR_VERIFY_INTERNET</source>
-        <translation>Por favor certifique-se que está ligado à internet</translation>
+        <translation>Por favor certifique-se que está ligado à internet.</translation>
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_ERROR</source>
@@ -91,7 +91,7 @@
     </message>
     <message>
         <source>STR_CMD_ERROR_MSG</source>
-        <translation>Por favor tente novamente. Caso o erro persista, contacte-nos por email para &lt;a href=&quot;mailto:info.cidadao@ama.pt&quot;&gt;info.cidadao@ama.pt&lt;/a&gt;, indicando o número de telémovel associado à sua Chave Móvel Digital.</translation>
+        <translation>Por favor tente novamente. Caso o erro persista, contacte-nos por email para &lt;a href=&quot;mailto:info.cidadao@ama.pt&quot;&gt;info.cidadao@ama.pt&lt;/a&gt;, indicando o número de telemóvel associado à sua Chave Móvel Digital.</translation>
     </message>
     <message>
         <source>STR_CMD_SUCESS</source>
@@ -137,7 +137,7 @@
     <message>
         <source>STR_CMD_GET_CERTIFICATE_ERROR</source>
         <oldsource>STR_GET_CERTIFICATE_ERROR</oldsource>
-        <translation>Registo inexistente ou subscrição da assinatura digital inativa. Verifique se a subscrição da assinatura digital está ativada em &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;</translation>
+        <translation>Registo inexistente ou subscrição da assinatura digital inativa. Verifique se a subscrição da assinatura digital está ativada em &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;. &lt;br&gt;&lt;br&gt;Caso o erro persista, contacte-nos por email para &lt;b&gt;info.cidadao@ama.pt&lt;/b&gt;, indicando o número de telemóvel associado à sua Chave Móvel Digital.</translation>
     </message>
     <message>
         <source>STR_CMD_PROXY_AUTH_ERROR</source>
@@ -170,7 +170,7 @@
     </message>
     <message>
         <source>STR_TIME_STAMP_FAILED</source>
-        <translation>Mas o selo temporal não foi aplicado.</translation>
+        <translation>No entanto, um ou vários selos temporais não foram aplicados. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
     </message>
     <message>
         <source>STR_CHANGING_ADDRESS</source>
@@ -194,7 +194,7 @@
     </message>
     <message>
         <source>STR_CARD_CONNECTION_ERROR</source>
-        <translation>Não foi possível confirmar o estado do Cartão de Cidadão. Verifique a ligação à internet</translation>
+        <translation>Não foi possível confirmar o estado do Cartão de Cidadão. Verifique a ligação à internet.</translation>
     </message>
     <message>
         <source>STR_CARD_VALIDATION_ERROR</source>
@@ -222,7 +222,7 @@
     </message>
     <message>
         <source>STR_CERT_REG_ERROR</source>
-        <translation>Ocorreu um erro no registo do certificado.</translation>
+        <translation>Ocorreu um erro no registo do certificado. Verifique se a subscrição da assinatura digital está ativada em &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>STR_CERT_REG_SUCC</source>
@@ -342,7 +342,7 @@
     </message>
     <message>
         <source>STR_CARD_STATE</source>
-        <translation>Estado do Cartão</translation>
+        <translation type="vanished">Estado do Cartão</translation>
     </message>
     <message>
         <source>STR_DOCUMENT_TYPE</source>
@@ -460,6 +460,38 @@
         <source>STR_SAVE_PHOTO_ERROR</source>
         <translation>Ocorreu um erro ao guardar foto.  Verifique se o ficheiro resultante não está aberto em outro programa ou se tem permissões para escrita.</translation>
     </message>
+    <message>
+        <source>STR_LTV_FAILED</source>
+        <translation>No entanto, a Validação de Longo Prazo não foi corretamente aplicada. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
+    </message>
+    <message>
+        <source>STR_MAIL_SUPPORT</source>
+        <translation>mailto:info.cidadao@ama.pt</translation>
+    </message>
+    <message>
+        <source>STR_URL_AUTENTICACAO_GOT_PT</source>
+        <translation>https://www.autenticacao.gov.pt</translation>
+    </message>
+    <message>
+        <source>STR_VERIFY_PROXY</source>
+        <translation>Verifique se o proxy está bem configurado.</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_NOT_VALID_ATTRIBUTES</source>
+        <translation>Um ou mais atributos selecionados não se encontram ativos. Por favor, limpe a cache e recarregue os seus atributos</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_HELP</source>
+        <translation>Abrir ajuda</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_OPTIONS</source>
+        <translation>Abrir opções avançadas</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_CHECK_EXPIRED_ATTR</source>
+        <translation>Verifique se os atributos selecionados estão expirados.</translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>
@@ -540,15 +572,15 @@
     </message>
     <message>
         <source>STR_MENU_SIGN_HELP</source>
-        <translation>Ajuda</translation>
+        <translation type="vanished">Ajuda</translation>
     </message>
     <message>
         <source>STR_MENU_SIGN_SIMPLE</source>
-        <translation>Simples</translation>
+        <translation type="vanished">Simples</translation>
     </message>
     <message>
         <source>STR_MENU_SIGN_ADVANCE</source>
-        <translation>Avançada</translation>
+        <translation type="vanished">Avançada</translation>
     </message>
     <message>
         <source>STR_MENU_SECURITY</source>
@@ -606,10 +638,6 @@
         <translation>Caso tenha solicitado uma alteração de morada, insira o número de processo e o código secreto recebidos pelo correio. Caso pretenda alterar a sua morada, clique</translation>
     </message>
     <message>
-        <source>STR_ADDRESS_CHANGE_TEXT_LINK</source>
-        <translation>aqui</translation>
-    </message>
-    <message>
         <source>STR_ADDRESS_CHANGE_NUMBER</source>
         <translation>Nº de Processo de alteração de Morada</translation>
     </message>
@@ -644,6 +672,14 @@
     <message>
         <source>STR_ADDRESS_CHANGE_BUTTON</source>
         <translation>Confirmar</translation>
+    </message>
+    <message>
+        <source>STR_CHANGE_ADDRESS_LINK</source>
+        <translation>Para mais informações sobre a alteração de morada, clique </translation>
+    </message>
+    <message>
+        <source>STR_ADDRESS_CHANGE_TEXT_HERE</source>
+        <translation>aqui.</translation>
     </message>
 </context>
 <context>
@@ -889,7 +925,7 @@
     </message>
     <message>
         <source>STR_DEBUG_MODE_DESCRIPTION</source>
-        <translation>Por favor ligue o modo de diagnóstico se encontrar problemas com a aplicação.</translation>
+        <translation>Se encontrar problemas com a aplicação deve, em primeiro lugar, ativar o modo diagnóstico. De seguida, deve repetir a ação que levou à situação de erro. Por fim, deve pressionar o botão &quot;Criar relatório&quot;.</translation>
     </message>
     <message>
         <source>STR_DEBUG_MODE_ENABLE</source>
@@ -898,10 +934,6 @@
     <message>
         <source>STR_APP_GRAPHICS_TITLE</source>
         <translation>Aceleração gráfica</translation>
-    </message>
-    <message>
-        <source>STR_ACCEL_ENABLE</source>
-        <translation type="vanished">Activar aceleração gráfica</translation>
     </message>
     <message>
         <source>STR_CERTIFICATES_TITLE</source>
@@ -1011,6 +1043,62 @@
         <source>STR_SOFTWARE_DIRECT3D</source>
         <translation>Software (Direct3D)</translation>
     </message>
+    <message>
+        <source>STR_ROOT_CA_CERT_INSTALL_TITLE</source>
+        <translation>Novo certificado raiz do Estado</translation>
+    </message>
+    <message>
+        <source>STR_ROOT_CA_CERT_INSTALL_DESC</source>
+        <translation>Algumas aplicações requerem a instalação do certificado raíz da nova cadeia de certificados para gerarem ou validarem assinaturas corretamente.</translation>
+    </message>
+    <message>
+        <source>STR_CERT_ALREADY_INSTALLED</source>
+        <translation>O certificado já está instalado.</translation>
+    </message>
+    <message>
+        <source>STR_CERT_NOT_INSTALLED</source>
+        <translation>O certificado não está instalado.</translation>
+    </message>
+    <message>
+        <source>STR_INSTALL_CERT</source>
+        <translation>Instalar certificado</translation>
+    </message>
+    <message>
+        <source>STR_ROOT_CERT_INSTALLED_SUCCESS</source>
+        <translation>O certificado foi instalado com sucesso.</translation>
+    </message>
+    <message>
+        <source>STR_ROOT_CERT_INSTALLED_ERROR</source>
+        <translation>Não foi possível instalar o certificado.</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_SUCCESS_TITLE</source>
+        <translation>Sucesso ao criar relatório</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_SUCCESS</source>
+        <translation>Foi criado o relatório no Ambiente de Trabalho com o nome: </translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_FAIL_TITLE</source>
+        <translation>Erro ao criar relatório</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_FAIL</source>
+        <translation>Ocorreu um erro ao criar o relatório no Ambiente de Trabalho.</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_BUTTON</source>
+        <translation>Criar relatório</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_DESCRIPTION</source>
+        <translation>Ao pressionar o botão &quot;Criar relatório&quot; será criado um ficheiro no Ambiente de Trabalho, que deverá ser enviado para a equipa de suporte através do email &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;, anexado à descrição do problema.</translation>
+    </message>
+    <message>
+        <source>STR_LOG_ZIP_LARGE</source>
+        <translation>Atenção: O ficheiro criado tem tamanho superior a 15MB. Por esse motivo, é possível que alguns clientes de email não permitam que seja anexado à mensagem.</translation>
+    </message>
 </context>
 <context>
     <name>PageDefinitionsSCAP</name>
@@ -1116,7 +1204,7 @@
     </message>
     <message>
         <source>STR_BACK_TO_SIGNATURE_PAGE</source>
-        <translation>Clique aqui para voltar para a página de assinatura avançada</translation>
+        <translation>Clique aqui para voltar para a página de assinatura</translation>
     </message>
     <message>
         <source>STR_SCAP_BUTTON_LOAD</source>
@@ -1148,7 +1236,7 @@
     </message>
     <message>
         <source>STR_CMD_REGISTER_REMEMBER</source>
-        <translation>Não voltar a mostrar janela para registar no arranque</translation>
+        <translation>Não mostrar janela para registar no arranque</translation>
     </message>
 </context>
 <context>
@@ -1175,7 +1263,7 @@
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_FILE_LOAD</source>
-        <translation>Arraste a imagem da assinatura personalizada ou clique para procurar o ficheiro (Recomendado 185 x 41 px)</translation>
+        <translation>Arraste a imagem da assinatura personalizada ou clique para procurar o ficheiro (Recomendado 351 x 77 px)</translation>
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_REMOVE_BUTTON</source>
@@ -1218,7 +1306,7 @@
     </message>
     <message>
         <source>STR_UPDATE_INSTALL_FAIL</source>
-        <translation>Falha na instalação de um ou mais certificados.</translation>
+        <translation>Falha na instalação da actualização.</translation>
     </message>
     <message>
         <source>STR_UPDATE_SUCCESS</source>
@@ -1259,7 +1347,7 @@
     </message>
     <message>
         <source>STR_UPDATE_CERTS_TITLE</source>
-        <translation>Novos certificados</translation>
+        <translation>Atualizar certificados</translation>
     </message>
     <message>
         <source>STR_UPDATE_CERTS_BUTTON_SEARCH</source>
@@ -1287,7 +1375,7 @@
     </message>
     <message>
         <source>STR_UPDATE_AVAILABLE</source>
-        <translation>Existe uma atualização disponí­vel. Clique em Instalar para prosseguir</translation>
+        <translation>Existe uma atualização disponí­vel. Clique em &lt;b&gt;Instalar&lt;/b&gt; para prosseguir ou, para consultar as versões disponíveis, clique </translation>
     </message>
     <message>
         <source>STR_UPDATE_STARTING_DOWNLOAD</source>
@@ -1295,7 +1383,7 @@
     </message>
     <message>
         <source>STR_UPDATE_TEXT</source>
-        <translation>Pressione o botão para verificar se existem atualizações disponíveis.</translation>
+        <translation>Pressione o botão para verificar se existem atualizações disponíveis ou, para consultar as versões disponíveis, clique </translation>
     </message>
     <message>
         <source>STR_UPDATE_BUTTON</source>
@@ -1329,6 +1417,34 @@
     <message>
         <source>STR_AUTOUPDATENEWS_URL</source>
         <translation>Clique para saber mais</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_CERTS_NEWS</source>
+        <translation>Novos certificados</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_SUPPORTED_SYSTEMS</source>
+        <translation>Para consultar os sistemas operativos suportados clique </translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_TEXT_LINK</source>
+        <translation>aqui</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_TRANSFER_DONE</source>
+        <translation>Transferência concluída.&lt;br&gt;Pode encontrar o instalador da nova versão na pasta &lt;b&gt;Transferências&lt;/b&gt;.&lt;br&gt;Para prosseguir com a instalação da nova versão, siga as instruções indicadas no manual disponível </translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_BUTTON_OPEN_TRANSFERS</source>
+        <translation>Abrir &lt;b&gt;Transferências&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_CERTS_TEXT</source>
+        <translation>Pressione o botão para verificar se existem atualizações disponíveis.</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_INSTALL_CERTS_FAIL</source>
+        <translation>Falha na instalação de um ou mais certificados.</translation>
     </message>
 </context>
 <context>
@@ -1467,7 +1583,7 @@
     <name>PageSecurityCertificates</name>
     <message>
         <source>STR_STATUS_NETWORK_ERROR</source>
-        <translation>Não foi possível validar o certificado. Verifique a ligação à internet</translation>
+        <translation>Não foi possível validar o certificado. Verifique a ligação à internet.</translation>
     </message>
     <message>
         <source>STR_STATUS_REVOKED</source>
@@ -1479,7 +1595,7 @@
     </message>
     <message>
         <source>STR_STATUS_SUSPENDED</source>
-        <translation>Inativo ou Suspenso</translation>
+        <translation>Inativo ou Suspenso.</translation>
     </message>
     <message>
         <source>STR_CERT_CHAIN_ERROR</source>
@@ -1500,7 +1616,7 @@
     </message>
     <message>
         <source>STR_STATUS_ERROR</source>
-        <translation>Não foi possível validar o certificado. Verifique a ligação à internet</translation>
+        <translation>Não foi possível validar o certificado. Verifique a ligação à internet.</translation>
     </message>
     <message>
         <source>STR_STATUS_VALID</source>
@@ -1608,7 +1724,7 @@
     </message>
     <message>
         <source>STR_SIGN_OPEN_MULTI</source>
-        <translation>Abrir diretório com ficheiro(s) assinado(s) ?</translation>
+        <translation>Abrir pasta com ficheiro(s) assinado(s) ?</translation>
     </message>
     <message>
         <source>STR_SIGN_FAIL</source>
@@ -1697,7 +1813,7 @@
     </message>
     <message>
         <source>STR_POPUP_FILE_CANCEL</source>
-        <translation>Cancelar</translation>
+        <translation type="vanished">Cancelar</translation>
     </message>
     <message>
         <source>STR_LOAD_PDF_ERROR_MSG</source>
@@ -1709,11 +1825,11 @@
     </message>
     <message>
         <source>STR_TIME_STAMP_MULTI_FAILED</source>
-        <translation>Mas alguns dos selos temporais não foram aplicados</translation>
+        <translation>No entanto, um ou vários selos temporais não foram aplicados. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
     </message>
     <message>
         <source>STR_TIME_STAMP_FAILED</source>
-        <translation>Mas o selo temporal não foi aplicado</translation>
+        <translation>No entanto, o selo temporal não foi aplicado. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
     </message>
     <message>
         <source>STR_SCAP_NOT_VALID_ATTRIBUTES</source>
@@ -1729,20 +1845,20 @@
     </message>
     <message>
         <source>STR_SIGN_TITLE_SIGN</source>
-        <translation>Selecione o lugar da assinatura</translation>
+        <translation type="vanished">Selecione o lugar da assinatura</translation>
     </message>
     <message>
         <source>STR_SIGN_TITLE_FILE</source>
-        <translation>Selecione o ficheiro</translation>
+        <translation type="vanished">Selecione o ficheiro</translation>
     </message>
     <message>
         <source>STR_SIGN_DROP</source>
-        <translation>Arraste para esta zona o ficheiro a assinar ou clique para procurar o ficheiro</translation>
+        <translation type="vanished">Arraste para esta zona o ficheiro a assinar ou clique para procurar o ficheiro</translation>
     </message>
     <message>
         <source>STR_SIGN_ADD_BUTTON</source>
         <oldsource>STR_SIGN_ADD_BUTTON1</oldsource>
-        <translation>Adicionar ficheiro</translation>
+        <translation type="vanished">Adicionar ficheiro</translation>
     </message>
     <message>
         <source>STR_SIGN_ADD_MULTI_BUTTON</source>
@@ -1818,7 +1934,7 @@
     </message>
     <message>
         <source>STR_SIGN_REMOVE_BUTTON</source>
-        <translation>Remover ficheiro</translation>
+        <translation type="vanished">Remover ficheiro</translation>
     </message>
     <message>
         <source>STR_SIGN_CARD_BUTTON</source>
@@ -1840,10 +1956,6 @@
     <message>
         <source>STR_SIGN_HELP_CMD_SELECT</source>
         <translation>https://www.autenticacao.gov.pt/cmd-pedido-chave</translation>
-    </message>
-    <message>
-        <source>STR_SIGN_HELP_TOPIC_1</source>
-        <translation>Use o menu “Simples” para assinar um documento PDF ou o menu “Avançada” para outros tipos de ficheiros e opções adicionais.</translation>
     </message>
     <message>
         <source>STR_SIGN_HELP_AUTENTICACAO.GOV_LINK</source>
@@ -1868,6 +1980,62 @@
     <message>
         <source>STR_SEND_SMS_DESC</source>
         <translation>Para enviar novo código de segurança por SMS clique &quot;Enviar por SMS&quot;.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_ADD_LTV</source>
+        <translation>Validação de longo prazo</translation>
+    </message>
+    <message>
+        <source>STR_LTV_TOOLTIP</source>
+        <translation>A Validação de longo prazo (LTV) inclui provas da validade da cadeia de certificados utilizados na assinatura que permite no futuro confirmar que a assinatura era válida na hora em que o documento foi assinado.</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_ATTRS_POSSIBLY_EXPIRED</source>
+        <translation>Os atributos fornecidos pelas seguintes entidades podem estar expirados:</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_ADVANCED_OPTIONS</source>
+        <translation>Opções avançadas</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_NAV_FILE_PREVIEW</source>
+        <translation>Pré-visualização do ficheiro: </translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_ERROR</source>
+        <translation>Não foi possivel abrir o ficheiro assinado. Verifique se a pasta de destino ainda existe ou o ficheiro foi removido.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_ERROR_TITLE</source>
+        <translation>Abrir ficheiro assinado</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_ERROR_TITLE_MULTI</source>
+        <translation>Abrir pasta com ficheiro(s) assinado(s)</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_ERROR_MULTI</source>
+        <translation>Não foi possivel abrir a pasta de destino dos ficheiros assinados. Verifique se a pasta de destino ainda existe.</translation>
+    </message>
+    <message>
+        <source>STR_LOAD_XFA_FORM_PDF_ERROR_MSG</source>
+        <translation>Ficheiros PDF com formulários XFA não são suportados.</translation>
+    </message>
+    <message>
+        <source>STR_EXPIRED_SIGN_CERT</source>
+        <translation>O certificado de assinatura do Cartão de Cidadão inserido está expirado.</translation>
+    </message>
+    <message>
+        <source>STR_WARNING</source>
+        <translation>Aviso</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_BATCH_FAILED</source>
+        <translation>A assinatura em lote terminou no ficheiro: </translation>
+    </message>
+    <message>
+        <source>STR_CUSTOM_IMAGE_REMOVED</source>
+        <translation>A imagem de assinatura personalizada guardada não tem dimensões corretas e vai ser removida. Por favor, volte a carregar a imagem de assinatura personalizada.</translation>
     </message>
 </context>
 <context>
@@ -1993,7 +2161,7 @@
     </message>
     <message>
         <source>STR_POPUP_FILE_UNIQUE_MULTI</source>
-        <translation>Para assinar múltiplos ficheiros use a opção assinatura avançada</translation>
+        <translation>Só existe uma assinatura personalizada</translation>
     </message>
     <message>
         <source>STR_POPUP_FILE_CANCEL</source>

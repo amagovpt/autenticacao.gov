@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
@@ -47,7 +47,7 @@ Item {
             horizontalAlignment: Text.left
             color: Constants.COLOR_TEXT_TITLE
             Layout.fillWidth: true
-            Accessible.role: Accessible.TitleBar
+            Accessible.role: Accessible.StaticText
             Accessible.name: qsTranslate("PageHelpDocOnline",
                                          "STR_HELP_DOC_TITLE") + " " + mainWindow.title
                              + qsTranslate("PageHelpDocOnline", "STR_HELP_DOC_HOME_PAGE")

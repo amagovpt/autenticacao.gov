@@ -1,9 +1,10 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//
-// Copyright (c) Microsoft Corporation. All rights reserved.
+/*-****************************************************************************
+
+ * Copyright (C) 2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.2
+
+****************************************************************************-*/
 
 /*++
 
@@ -96,9 +97,9 @@ LPVOID lpvReserved)
         LogInit();
 
 #if _WIN64
-        LogTrace(LOGTYPE_INFO, "GetKeyStorageInterface", "Loaded 64-bit dll");
+        LogTrace(LOGTYPE_TRACE, "GetKeyStorageInterface", "Loaded 64-bit dll");
 #else
-        LogTrace(LOGTYPE_INFO, "GetKeyStorageInterface", "Loaded 32-bit dll");
+        LogTrace(LOGTYPE_TRACE, "GetKeyStorageInterface", "Loaded 32-bit dll");
 #endif
 
     }
@@ -169,7 +170,7 @@ __in    DWORD   dwFlags)
     size_t cbProviderName = 0;
     UNREFERENCED_PARAMETER(dwFlags);
 
-    LogTrace(LOGTYPE_INFO, "KSPOpenProvider", "Call KSPOpenProvider");
+    LogTrace(LOGTYPE_TRACE, "KSPOpenProvider", "Call KSPOpenProvider");
 
     // Validate input parameters.
     if (phProvider == NULL)
@@ -240,7 +241,7 @@ __in    NCRYPT_PROV_HANDLE hProvider)
     SECURITY_STATUS Status = NTE_INTERNAL_ERROR;
     CMDKSP_PROVIDER *pProvider = NULL;
 
-    LogTrace(LOGTYPE_INFO, "KSPFreeProvider", "Call KSPFreeProvider");
+    LogTrace(LOGTYPE_TRACE, "KSPFreeProvider", "Call KSPFreeProvider");
 
     // Validate input parameters.
     pProvider = CmdKspValidateProvHandle(hProvider);
@@ -595,7 +596,7 @@ __in    DWORD   dwFlags)
     DWORD cbSecurityInfo = 0;
     DWORD cbTmp = 0;
 
-    LogTrace(LOGTYPE_INFO, "KSPGetKeyProperty", "Call KSPGetKeyProperty");
+    LogTrace(LOGTYPE_TRACE, "KSPGetKeyProperty", "Call KSPGetKeyProperty");
 
     //
     // Validate input parameters.
@@ -861,7 +862,7 @@ __in    DWORD   dwFlags)
     SECURITY_STATUS Status = NTE_INTERNAL_ERROR;
     CMDKSP_PROVIDER *pProvider = NULL;
 
-    LogTrace(LOGTYPE_INFO, "KSPSetProviderProperty", "Call KSPSetProviderProperty");
+    LogTrace(LOGTYPE_TRACE, "KSPSetProviderProperty", "Call KSPSetProviderProperty");
 
     // Validate input parameters.
     pProvider = CmdKspValidateProvHandle(hProvider);
@@ -957,8 +958,8 @@ __in    DWORD   dwFlags)
     CMDKSP_KEY           *pKey = NULL;
     DWORD                   dwTempFlags = dwFlags;
 
-    LogTrace(LOGTYPE_INFO, "KSPSetKeyProperty", "Call KSPSetKeyProperty");
-    LogTrace(LOGTYPE_INFO, "KSPSetKeyProperty", "pszProperty=%S", pszProperty);
+    LogTrace(LOGTYPE_TRACE, "KSPSetKeyProperty", "Call KSPSetKeyProperty");
+    LogTrace(LOGTYPE_TRACE, "KSPSetKeyProperty", "pszProperty=%S", pszProperty);
 
     // Validate input parameters.
     pProvider = CmdKspValidateProvHandle(hProvider);
@@ -993,7 +994,7 @@ __in    DWORD   dwFlags)
             LogTrace(LOGTYPE_WARNING, "KSPSetKeyProperty", "IsWindow fail");
             goto cleanup;
         }
-        LogTrace(LOGTYPE_INFO, "KSPSetKeyProperty", "HWND Handle = [0x%08x]", pKey->hWnd);
+        LogTrace(LOGTYPE_TRACE, "KSPSetKeyProperty", "HWND Handle = [0x%08x]", pKey->hWnd);
     }
     else {
         LogTrace(LOGTYPE_WARNING, "KSPSetKeyProperty", "KSPSetProperty called for unsupported property - doing nothing...");
@@ -1017,7 +1018,7 @@ __in    NCRYPT_KEY_HANDLE hKey,
 __in    DWORD   dwFlags)
 {
 
-    LogTrace(LOGTYPE_INFO, "KSPFinalizeKey", "Call KSPFinalizeKey NTE_NOT_SUPPORTED");
+    LogTrace(LOGTYPE_TRACE, "KSPFinalizeKey", "Call KSPFinalizeKey NTE_NOT_SUPPORTED");
 
     return NTE_NOT_SUPPORTED;
 }
@@ -1034,7 +1035,7 @@ __inout NCRYPT_KEY_HANDLE hKey,
 __in    DWORD   dwFlags)
 {
 
-    LogTrace(LOGTYPE_INFO, "KSPDeleteKey", "Call KSPDeleteKey NTE_NOT_SUPPORTED");
+    LogTrace(LOGTYPE_TRACE, "KSPDeleteKey", "Call KSPDeleteKey NTE_NOT_SUPPORTED");
 
     return NTE_NOT_SUPPORTED;
 }
@@ -1059,7 +1060,7 @@ __in    NCRYPT_KEY_HANDLE hKey)
     CMDKSP_PROVIDER *pProvider;
     CMDKSP_KEY *pKey = NULL;
 
-    LogTrace(LOGTYPE_INFO, "KSPFreeKey", "Call KSPFreeKey");
+    LogTrace(LOGTYPE_TRACE, "KSPFreeKey", "Call KSPFreeKey");
 
     // Validate input parameters.
     pProvider = CmdKspValidateProvHandle(hProvider);
@@ -1103,7 +1104,7 @@ KSPFreeBuffer(
 __deref PVOID   pvInput)
 {
 
-    LogTrace(LOGTYPE_INFO, "KSPFreeBuffer", "Call KSPFreeBuffer");
+    LogTrace(LOGTYPE_TRACE, "KSPFreeBuffer", "Call KSPFreeBuffer");
     //
     // Free the buffer from the heap.
     //
@@ -1130,7 +1131,7 @@ __in    DWORD   cbOutput,
 __out   DWORD * pcbResult,
 __in    DWORD   dwFlags)
 {
-    LogTrace(LOGTYPE_INFO, "KSPEncrypt", "Call KSPEncrypt NTE_NOT_SUPPORTED");
+    LogTrace(LOGTYPE_TRACE, "KSPEncrypt", "Call KSPEncrypt NTE_NOT_SUPPORTED");
 
     return NTE_NOT_SUPPORTED;
 }
@@ -1153,7 +1154,7 @@ __in    DWORD   cbOutput,
 __out   DWORD * pcbResult,
 __in    DWORD   dwFlags)
 {
-    LogTrace(LOGTYPE_INFO, "KSPDecrypt", "Call KSPDecrypt NTE_NOT_SUPPORTED");
+    LogTrace(LOGTYPE_TRACE, "KSPDecrypt", "Call KSPDecrypt NTE_NOT_SUPPORTED");
 
     return NTE_NOT_SUPPORTED;
 }
@@ -1186,7 +1187,7 @@ __in    DWORD   dwFlags)
     CMDKSP_PROVIDER *pProvider = NULL;
     SECURITY_STATUS Status = NTE_INTERNAL_ERROR;
 
-    LogTrace(LOGTYPE_INFO, "KSPIsAlgSupported", "Call KSPIsAlgSupported");
+    LogTrace(LOGTYPE_TRACE, "KSPIsAlgSupported", "Call KSPIsAlgSupported");
 
     // Validate input parameters.
     pProvider = CmdKspValidateProvHandle(hProvider);
@@ -1259,7 +1260,7 @@ __in    DWORD   dwFlags)
     PBYTE pbOutput = NULL;
     DWORD cbOutput = 0;
 
-    LogTrace(LOGTYPE_INFO, "KSPEnumAlgorithms", "Call KSPEnumAlgorithms");
+    LogTrace(LOGTYPE_TRACE, "KSPEnumAlgorithms", "Call KSPEnumAlgorithms");
 
     // Validate input parameters.
     pProvider = CmdKspValidateProvHandle(hProvider);
@@ -1342,7 +1343,7 @@ __inout PVOID * ppEnumState,
 __in    DWORD   dwFlags)
 {
 
-    LogTrace(LOGTYPE_INFO, "KSPEnumKeys", "Call KSPEnumKeys - NTE_NOT_SUPPORTED");
+    LogTrace(LOGTYPE_TRACE, "KSPEnumKeys", "Call KSPEnumKeys - NTE_NOT_SUPPORTED");
 
     return NTE_NOT_SUPPORTED;
 
@@ -1363,7 +1364,7 @@ __in_bcount(cbData) PBYTE pbData,
 __in    DWORD   cbData,
 __in    DWORD   dwFlags)
 {
-    LogTrace(LOGTYPE_INFO, "KSPImportKey", "Call KSPImportKey NTE_NOT_SUPPORTED");
+    LogTrace(LOGTYPE_TRACE, "KSPImportKey", "Call KSPImportKey NTE_NOT_SUPPORTED");
 
     return NTE_NOT_SUPPORTED;
 
@@ -1417,8 +1418,8 @@ __in    DWORD   dwFlags)
     SECURITY_STATUS     Status = NTE_INTERNAL_ERROR;
     UNREFERENCED_PARAMETER(hExportKey);
 
-    LogTrace(LOGTYPE_INFO, "KSPExportKey", "Call KSPExportKey");
-    LogTrace(LOGTYPE_INFO, "KSPExportKey", "pszBlobType param= %S", pszBlobType);
+    LogTrace(LOGTYPE_TRACE, "KSPExportKey", "Call KSPExportKey");
+    LogTrace(LOGTYPE_TRACE, "KSPExportKey", "pszBlobType param= %S", pszBlobType);
 
     // Validate input parameters.
     pProvider = CmdKspValidateProvHandle(hProvider);
@@ -1609,7 +1610,7 @@ __in    DWORD   dwFlags)
     DWORD               cbTmp = 0;
     LPWSTR              csSubject = NULL;
 
-    LogTrace(LOGTYPE_INFO, "KSPSignHash", "Call KSPSignHash hKey = [0x%08x]", hKey);
+    LogTrace(LOGTYPE_TRACE, "KSPSignHash", "Call KSPSignHash hKey = [0x%08x]", hKey);
 
     pKey = CmdKspValidateKeyHandle(hKey);
 
@@ -1654,11 +1655,11 @@ __in    DWORD   dwFlags)
     if (pbSignature == NULL)
     {
         //This call is to query the size.
-        LogTrace(LOGTYPE_INFO, "KSPSignHash", "This call is to query the size.");
+        LogTrace(LOGTYPE_TRACE, "KSPSignHash", "This call is to query the size.");
         // Return the size of the key used to sign
         Status = ERROR_SUCCESS;
         *pcbResult = pKey->dwKeyBitLength / 8;
-        LogTrace(LOGTYPE_INFO, "KSPSignHash", "Signature size = %d", *pcbResult);
+        LogTrace(LOGTYPE_TRACE, "KSPSignHash", "Signature size = %d", *pcbResult);
         goto cleanup;
     }
 
@@ -1806,7 +1807,7 @@ __in    DWORD   dwFlags)
             goto cleanup;
         }
         else {
-            LogTrace(LOGTYPE_INFO, "KSPSignHash", "Successfully decoded %d signature bytes!", signature_len);
+            LogTrace(LOGTYPE_TRACE, "KSPSignHash", "Successfully decoded %d signature bytes!", signature_len);
         }
         Status = ERROR_SUCCESS;
     }
@@ -1861,7 +1862,7 @@ __in    DWORD   dwFlags)
     CMDKSP_KEY *pKey;
     UNREFERENCED_PARAMETER(hProvider);
 
-    LogTrace(LOGTYPE_INFO, "KSPVerifySignature", "Call KSPVerifySignature.");
+    LogTrace(LOGTYPE_TRACE, "KSPVerifySignature", "Call KSPVerifySignature.");
 
     // Validate input parameters.
     pKey = CmdKspValidateKeyHandle(hKey);
@@ -1952,7 +1953,7 @@ __in    DWORD   dwFlags)
     UNREFERENCED_PARAMETER(pszOperation);
     UNREFERENCED_PARAMETER(dwFlags);
 
-    LogTrace(LOGTYPE_INFO, "KSPPromptUser", "Call KSPPromptUser NTE_NOT_SUPPORTED");
+    LogTrace(LOGTYPE_TRACE, "KSPPromptUser", "Call KSPPromptUser NTE_NOT_SUPPORTED");
 
     return NTE_NOT_SUPPORTED;
 }
@@ -1968,7 +1969,7 @@ __in    DWORD   dwFlags)
     UNREFERENCED_PARAMETER(phEvent);
     UNREFERENCED_PARAMETER(dwFlags);
 
-    LogTrace(LOGTYPE_INFO, "KSPNotifyChangeKey", "Call KSPNotifyChangeKey NTE_NOT_SUPPORTED");
+    LogTrace(LOGTYPE_TRACE, "KSPNotifyChangeKey", "Call KSPNotifyChangeKey NTE_NOT_SUPPORTED");
 
     return NTE_NOT_SUPPORTED;
 }
@@ -1989,7 +1990,7 @@ __in    DWORD   dwFlags)
     UNREFERENCED_PARAMETER(phAgreedSecret);
     UNREFERENCED_PARAMETER(dwFlags);
 
-    LogTrace(LOGTYPE_INFO, "KSPSecretAgreement", "Call KSPSecretAgreement NTE_NOT_SUPPORTED");
+    LogTrace(LOGTYPE_TRACE, "KSPSecretAgreement", "Call KSPSecretAgreement NTE_NOT_SUPPORTED");
 
     return NTE_NOT_SUPPORTED;
 }
@@ -2016,7 +2017,7 @@ __in        ULONG                dwFlags)
     UNREFERENCED_PARAMETER(pcbResult);
     UNREFERENCED_PARAMETER(dwFlags);
 
-    LogTrace(LOGTYPE_INFO, "KSPDeriveKey", "Call KSPDeriveKey NTE_NOT_SUPPORTED");
+    LogTrace(LOGTYPE_TRACE, "KSPDeriveKey", "Call KSPDeriveKey NTE_NOT_SUPPORTED");
 
     return NTE_NOT_SUPPORTED;
 }
@@ -2030,7 +2031,7 @@ __in    NCRYPT_SECRET_HANDLE hSharedSecret)
     UNREFERENCED_PARAMETER(hProvider);
     UNREFERENCED_PARAMETER(hSharedSecret);
 
-    LogTrace(LOGTYPE_INFO, "KSPFreeSecret", "Call KSPFreeSecret NTE_NOT_SUPPORTED");
+    LogTrace(LOGTYPE_TRACE, "KSPFreeSecret", "Call KSPFreeSecret NTE_NOT_SUPPORTED");
 
     return NTE_NOT_SUPPORTED;
 }

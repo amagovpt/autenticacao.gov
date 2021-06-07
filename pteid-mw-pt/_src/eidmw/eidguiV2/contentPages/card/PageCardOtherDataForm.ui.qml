@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017, 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017 - 2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
  *
  * Licensed under the EUPL V.1.2
@@ -28,7 +28,6 @@ Item {
     property alias propertyTextBoxIssuingEntity: textBoxIssuingEntity
     property alias propertyTextBoxDocumentType: textBoxDocumentType
     property alias propertyTextBoxPlaceOfRequest: textBoxPlaceOfRequest
-    property alias propertyTextBoxCardState: textBoxCardState
 
     Item {
         id: rowTop
@@ -68,8 +67,8 @@ Item {
             KeyNavigation.tab: rectSocialSecurityNum
             KeyNavigation.down: rectSocialSecurityNum
             KeyNavigation.right: rectSocialSecurityNum
-            KeyNavigation.backtab: rectCardStatus
-            KeyNavigation.up: rectCardStatus
+            KeyNavigation.backtab: rectLocalOfRequest
+            KeyNavigation.up: rectLocalOfRequest
         }
         Item{
             id: rectSocialSecurityNum
@@ -217,32 +216,6 @@ Item {
             }
             Accessible.role: Accessible.Column
             Accessible.name: textBoxPlaceOfRequest.accessibleText
-            KeyNavigation.tab: rectCardStatus
-            KeyNavigation.down: rectCardStatus
-            KeyNavigation.right: rectCardStatus
-            KeyNavigation.backtab: rectDocumentType
-            KeyNavigation.up: rectDocumentType
-        }
-    }
-
-    Rectangle {
-        id: rowCardStatus
-        width: parent.width
-        height: Constants.HEIGHT_TEXT_BOX + 20
-        anchors.top: rowLocalOfRequest.bottom
-        anchors.topMargin: 40
-        Item{
-            id: rectCardStatus
-            width: parent.width
-            height: parent.height
-            Components.LabelTextBoxForm{
-                id: textBoxCardState
-                propertyDateText.text: qsTranslate("GAPI","STR_CARD_STATE")
-                propertyRectField.height: Constants.HEIGHT_TEXT_BOX
-                propertyDateField.wrapMode: Text.WordWrap
-            }
-            Accessible.role: Accessible.Column
-            Accessible.name: textBoxCardState.accessibleText
             KeyNavigation.tab: rectTaxNum
             KeyNavigation.down: rectTaxNum
             KeyNavigation.right: rectTaxNum

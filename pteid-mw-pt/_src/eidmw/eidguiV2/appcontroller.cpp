@@ -17,12 +17,16 @@
 #include <QAccessible>
 #include <QClipboard>
 #include <QGuiApplication>
+#include <QProcess>
+#include <QStandardPaths>
+#include <QDirIterator>
 
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <stdlib.h>
 #include <cstring>
+#include <zip.h>
 
 #include "eidlib.h"
 #include "Util.h"
@@ -301,6 +305,8 @@ void AppController::autoUpdatesNews(){
 
 void AppController::startUpdateApp(){
     qDebug() << "C++: startUpdateApp";
+    PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
+                "AppController::startUpdateApp: App update started!");
     appUpdate.startUpdate();
 }
 
@@ -466,6 +472,27 @@ QString AppController::getProxyPwdValue (void){
 void AppController::setProxyPwdValue (QString const& proxy_pwd){
     m_Settings.setProxyPwd(proxy_pwd);
 }
+
+bool AppController::isProxyConfigured() {
+    return m_Settings.isProxyConfigured();
+}
+
+bool AppController::getShowSignatureOptions(void){
+    return m_Settings.getShowSignatureOptions();
+}
+
+void AppController::setShowSignatureOptions(bool bShowSignatureOptions){
+    m_Settings.setShowSignatureOptions(bShowSignatureOptions);
+}
+
+bool AppController::getShowSignatureHelp(void){
+    return m_Settings.getShowSignatureHelp();
+}
+
+void AppController::setShowSignatureHelp(bool bShowSignatureHelp){
+    m_Settings.setShowSignatureHelp(bShowSignatureHelp);
+}
+
 void AppController::setEnablePteidCache (bool bEnabled){
     m_Settings.setEnablePteidCache(bEnabled);
 }
@@ -480,6 +507,8 @@ void AppController::flushCache(){
 
 void AppController::doFlushCache(){
     if(removePteidCache()){
+        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
+                "PTEID cache removed success!");
         emit signalRemovePteidCacheSuccess();
     }
 }
@@ -520,7 +549,8 @@ bool AppController::removePteidCache() {
         return has_all_permissions;
     }
     catch(...) {
-        std::cerr << "Error ocurred while removing ptEidCache from cache!";
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "Error removing PTEID cache directory from cache");
         emit signalRemovePteidCacheFail();
         return false;
     }
@@ -645,8 +675,10 @@ bool AppController::getOutlookSuppressNameChecks(void) {
         }
         catch (...)
         {
-            PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Outlook SupressNameChecks registry does not exist");
+            PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Outlook SupressNameChecks registry does not exist. RegName: %ls", regName.c_str());
+            return false;
         }
+        PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Get Outlook SupressNameChecks registry: %d RegName: %ls", abValueDat, regName.c_str());
         return abValueDat == 1;
     }
 
@@ -676,7 +708,7 @@ void AppController::setOutlookSuppressNameChecks(bool bDisabledMatching) {
         }
         catch (...)
         {
-            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Could not set Outlook SupressNameChecks registry");
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Could not set Outlook SupressNameChecks registry. RegName: %ls", regName.c_str());
         }
         return;
     }
@@ -792,4 +824,101 @@ QStringList AppController::getFilesFromClipboard(){
     QStringList filenames = clipboard->text().split(QRegExp("\n"));
 
     return filenames;
+}
+
+void AppController::openTransfersFolder(){
+    QStringList args(QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).first());
+    QProcess process;
+    process.setProgram("/usr/bin/xdg-open");
+    process.setArguments(args);
+    if(!process.startDetached())
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                  "AppController::openTransfersFolder: Failed to open file manager at: %s", args.first().toStdString().c_str());
+    }
+}
+
+QString timestampString(){
+    char timestamp[TIMESTAMP_MAX_SIZE]; // format YYYYMMDDHHMMSS
+
+    time_t _tm = time(nullptr);
+    struct tm * t = localtime(&_tm);
+
+    strftime(timestamp, TIMESTAMP_MAX_SIZE, "%Y%m%d%H%M%S", t);
+
+    return QString(timestamp);
+}
+
+void AppController::zipLogs() {
+/*
+ *   create a zip on Desktop with log files
+ *   with name of type: Autenticacao.gov_logs_TIMESTAMP.zip
+*/
+    std::string logDir;
+#ifdef WIN32
+    eIDMW::PTEID_Config loggingDirname(eIDMW::PTEID_PARAM_GENERAL_INSTALLDIR);
+    logDir.append(loggingDirname.getString()).append("\\log\\");
+#else
+    eIDMW::PTEID_Config loggingDirname(eIDMW::PTEID_PARAM_LOGGING_DIRNAME);
+    logDir.append(loggingDirname.getString());
+#endif
+
+    int status = 0;
+    zip_t *pZip = NULL;
+
+    QString zipFileName = QString("/Autenticacao.gov_logs_%1.zip").arg(timestampString());
+    QString outputDir(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
+    QString outputFile(outputDir + zipFileName);
+
+#ifdef WIN32
+    extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+    qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
+#endif
+    QFileInfo outputDirInfo(outputDir);
+    if (!outputDirInfo.isWritable()) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AppController::zipLog: no permissions to write on dir %s", outputDir.toStdString().c_str());
+        emit signalZipLogsFail();
+        return;
+    }
+#ifdef WIN32
+    qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
+#endif
+
+    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "AppController::zipLog called with outputFile: %s", outputFile.toStdString().c_str());
+
+    pZip = zip_open(outputFile.toStdString().c_str(), ZIP_CREATE | ZIP_TRUNCATE, &status);
+    if(!pZip) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AppController::zipLog: zip_open() failed, error %d", status);
+        emit signalZipLogsFail();
+        return;
+    }
+
+    // Add log files to the zip
+    QDirIterator it(logDir.c_str(), QStringList() << ".PTEID_*" << "pteidmdrv.log", QDir::AllEntries | QDir::Hidden);
+    while (it.hasNext()) {
+        zip_source_t *source = zip_source_file(pZip, it.next().toStdString().c_str(), 0, -1);
+        if (source == NULL || zip_file_add(pZip, it.fileName().toStdString().c_str(), source, ZIP_FL_ENC_GUESS) < 0)
+        {
+            zip_source_free(source);
+            free(pZip);
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AppController::zipLog: Failed to add logs to zip container");
+            emit signalZipLogsFail();
+            return;
+        }
+    }
+
+    if (zip_close(pZip) < 0)
+    {
+        free(pZip);
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AppController::zipLog: zip_close failed with error %s",
+            zip_error_strerror(zip_get_error(pZip)));
+        emit signalZipLogsFail();
+        return;
+    }
+
+    QFile newZipFile(outputFile);
+    bool largeZip = newZipFile.size() > 15728640; //15MiB
+
+    zipFileName.remove(0,1); //remove slash
+    emit signalZipLogsSuccess(largeZip, zipFileName);
 }

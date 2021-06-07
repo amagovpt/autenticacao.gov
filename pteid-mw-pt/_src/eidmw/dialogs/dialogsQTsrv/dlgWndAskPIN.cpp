@@ -106,7 +106,7 @@ QPushButton:hover{background-color: #C6C7C7}");
 	m_ulPinMaxLen = pinInfo.ulMaxLen;
 	//Max Length of PINs for PTEID cards as currently defined by INCM personalization
 	ui.txtPIN->setMaxLength( 8 );
-	ui.txtPIN->setStyleSheet("QLineEdit {border: 2px solid #D6D7D7; padding-left: 10px}\
+	ui.txtPIN->setStyleSheet("QLineEdit {color: #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px;}\
 QLineEdit:focus {border: 3px solid #D6D7D7;}");
 
 	m_UseKeypad = UseKeypad;
@@ -148,7 +148,7 @@ void dlgWndAskPIN::on_txtPIN_textChanged( const QString & text )
 		colorButton = colorInputTextBox = "#3C5DBC"; //blue
 
 	ui.btnOk->setEnabled(bEnable);
-	ui.txtPIN->setStyleSheet("QLineEdit {border: 2px solid " + colorInputTextBox + "; padding-left: 10px}\
+	ui.txtPIN->setStyleSheet("QLineEdit {color: #000000; font-size: 12pt; border: 2px solid " + colorInputTextBox + "; padding-left: 10px;}\
 QLineEdit:focus {border: 3px  solid " + colorInputTextBox + ";}");
 	ui.btnOk->setStyleSheet("QPushButton {background-color: " + colorButton + "; color: #ffffff; border-radius: 0}\
 QPushButton:hover{background-color: #2C3DAC}");

@@ -4,7 +4,7 @@
  * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 
@@ -19,6 +19,7 @@
 
 #include "ByteArray.h"
 #include "APLCard.h"
+#include "PAdESExtender.h"
 #include <openssl/pkcs7.h>
 
 class PDFRectangle;
@@ -38,6 +39,7 @@ namespace eIDMW
 		int img_width;
 	} Pixmap;
 
+
 	class PDFSignature
 	{
 	public:
@@ -49,6 +51,7 @@ namespace eIDMW
 		//Batch Operations (with PIN caching)
 		EIDMW_APL_API void batchAddFile(char *file_path, bool last_page);
 		EIDMW_APL_API void enableTimestamp();
+		EIDMW_APL_API void setSignatureLevel(APL_SignatureLevel);
 
 		EIDMW_APL_API void setVisible(unsigned int page, int sector);
 		EIDMW_APL_API void setVisibleCoordinates(unsigned int page, double coord_x, double coord_y);
@@ -100,6 +103,8 @@ namespace eIDMW
 		EIDMW_APL_API void setSCAPAttributes(const char * citizenName, const char * citizenId,
 	                      const char * attributeSupplier, const char * attributeName);
 
+        EIDMW_APL_API bool addLtv();
+
 	private:
 		void parseCitizenDataFromCert(CByteArray &certData);
 		CByteArray getCitizenCertificate();
@@ -108,6 +113,7 @@ namespace eIDMW
 		PDFRectangle computeSigLocationFromSectorLandscape(double, double, int);
 		int signSingleFile(const char *location, const char *reason,
             const char *outfile_path, bool isCardSign);
+        void save();
 
 		/* Certificate Data*/
 		CByteArray m_certificate;
@@ -132,7 +138,7 @@ namespace eIDMW
 		bool m_visible;
 		bool m_isLandscape;
 		bool m_batch_mode;
-		bool m_timestamp;
+		APL_SignatureLevel m_level;
 		bool m_small_signature;
 		std::vector< std::pair<char *, bool> > m_files_to_sign;
 		std::vector< std::pair<std::string, int> > unique_filenames;
@@ -153,6 +159,8 @@ namespace eIDMW
         /* Fields for SCAP signature */
         const char * m_attributeSupplier;
         const char * m_attributeName;
+
+        friend class PAdESExtender;
 	};
 
 }

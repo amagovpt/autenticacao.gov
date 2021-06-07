@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<installer-gui-script minSpecVersion="1">
+    <title>Autenticação.gov</title>
+    <organization>pt.cartaodecidadao</organization>
+    <domains enable_localSystem="true"/>
+    <options customize="never" require-scripts="true" rootVolumeOnly="true" />
+
+    <script>
+    function CustomInstallationCheck()
+    {
+        if(!(system.compareVersions(system.version.ProductVersion, '10.12') >= 0))
+        {
+                <!-- Allow installation only on 10.12 or higher -->
+                my.result.title = "Erro na instalação";
+                my.result.message = "Esta versão do macOS não é suportada.\n\nA Aplicação Autenticação.gov suporta apenas versões macOS 10.12 ou superiores";
+                my.result.type = 'Fatal';
+                return false;
+        }
+        return true;
+    }
+    </script>
+
+    <installation-check script="CustomInstallationCheck();"/>
+
+    <!-- Define documents displayed at various steps -->
+    <welcome    file="welcome.html"    mime-type="text/html" />
+    <license    file="license.html"    mime-type="text/html" />
+    <!-- List all component packages -->
+    <pkg-ref id="pt.cartaodecidadao.lib"
+             version="0"
+             auth="root">pteid-lib.pkg</pkg-ref>
+    <pkg-ref id="pt.cartaodecidadao.certs"
+             version="0"
+             auth="root">pteid-certs.pkg</pkg-ref>
+    <pkg-ref id="pt.cartaodecidadao.bin"
+             version="0"
+             auth="root">pteid-bin.pkg</pkg-ref>
+    <pkg-ref id="pt.cartaodecidadao.apps"
+             version="0"
+             auth="root">pteid-apps.pkg</pkg-ref>
+
+    <!-- List them again here. They can now be organized
+         as a hierarchy if you want. -->
+    <choices-outline>
+        <line choice="pt.cartaodecidadao.lib"/>
+        <line choice="pt.cartaodecidadao.certs"/>
+        <line choice="pt.cartaodecidadao.bin"/>
+        <line choice="pt.cartaodecidadao.apps"/>
+    </choices-outline>
+    <!-- Define each choice above -->
+    <choice
+        id="pt.cartaodecidadao.lib"
+        visible="true"
+        title="Bibliotecas de suporte ao MW"
+        description="libraries"
+        start_selected="true">
+      <pkg-ref id="pt.cartaodecidadao.lib"/>
+    </choice>
+    <choice
+        id="pt.cartaodecidadao.certs"
+        visible="true"
+        title="Certificados da PKI do Cartão de Cidadão"
+        description="certificates"
+        start_selected="true">
+      <pkg-ref id="pt.cartaodecidadao.certs"/>
+    </choice>
+    <choice
+        id="pt.cartaodecidadao.bin"
+        visible="true"
+        title="Utilities"
+        description="PIN dialogs utilities"
+        start_selected="true">
+      <pkg-ref id="pt.cartaodecidadao.bin"/>
+    </choice>
+    <choice
+        id="pt.cartaodecidadao.apps"
+        visible="true"
+        title="Aplicações do Cartão de Cidadão"
+        description="Applications"
+        start_selected="true">
+      <pkg-ref id="pt.cartaodecidadao.apps"/>
+    </choice>
+</installer-gui-script>

@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * Licensed under the EUPL V.1.2
@@ -43,7 +43,7 @@ Item {
             color: Constants.COLOR_TEXT_TITLE
             font.family: lato.name
             font.bold: activeFocus
-            Accessible.role: Accessible.TitleBar
+            Accessible.role: Accessible.StaticText
             Accessible.name: text
             KeyNavigation.tab: textDescription
             KeyNavigation.down: textDescription
@@ -136,6 +136,7 @@ Item {
             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             propertyText.text: "<a href='https://www.autenticacao.gov.pt/o-cartao-de-cidadao'>" +
                                "https://www.autenticacao.gov.pt/o-cartao-de-cidadao" + "</a>"
+            propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_BODY
             propertyAccessibleText: qsTranslate("PageHelpAbout","STR_HELP_CC_SELECT")
             propertyAccessibleDescription:  qsTranslate("PageHelpAbout","STR_HELP_CC_SELECT")
             propertyLinkUrl: 'https://www.autenticacao.gov.pt/o-cartao-de-cidadao'

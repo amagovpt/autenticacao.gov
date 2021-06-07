@@ -1,6 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
+ * Copyright (C) 2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 
@@ -41,7 +42,7 @@ Item {
             horizontalAlignment: Text.left
             color: Constants.COLOR_TEXT_TITLE
             Layout.fillWidth: true
-            Accessible.role: Accessible.TitleBar
+            Accessible.role: Accessible.StaticText
             Accessible.name: qsTranslate("PageHelpAccessibility", "STR_HELP_ACCESSIBILITY_TITLE")
             KeyNavigation.tab: text1
             KeyNavigation.down: text1

@@ -43,30 +43,7 @@ isEmpty(PCSC_INCLUDE_DIR){
   unix:!macx: PCSC_INCLUDE_DIR += /usr/include/PCSC
 }
 
-## Specify the following variable explicitly
-## in order to have a Makefile produced also on
-## Mac (default is Xcode, which does not take care 
-## of linking the lib with the full version number)
-MAKEFILE_GENERATOR=UNIX
-
-## Define explicitly the C and the C++ compiler
-## (on Mac the definition seems to be lost
-## when MAKEFILE_GENERATOR is set explicitly)
-QMAKE_CC=gcc
-QMAKE_CXX=g++
-
 unix:!macx: QMAKE_CXXFLAGS += -fPIC
-#macx: DEFINES += __OLD_PCSC_API__ __APPLE__ QT_NO_DEBUG
-macx: DEFINES += __APPLE__ QT_NO_DEBUG
-osx10_4 {
-	DEFINES += __OLD_PCSC_API__
-}
-
-
-## Package name
-## Portugal -> pteid
-## Portugal -> pteid
-## ...
 
 isEmpty(PKG_NAME){	
 ## By default build for Portugal

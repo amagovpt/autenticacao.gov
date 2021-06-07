@@ -308,7 +308,7 @@ int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coo
 
 	PDFSignature *pdf_sig = sig_handler.mp_signature;
 
-	if (coord_x >= 0 && coord_y >= 0){
+	if (coord_x >= 0 && coord_y >= 0 && page != 0){
 		pdf_sig->setVisibleCoordinates(page, coord_x, coord_y);
 	}
 
@@ -374,8 +374,13 @@ bool PTEID_PDFSignature::isLandscapeFormat()
 void PTEID_PDFSignature::enableTimestamp()
 {
 	mp_signature->enableTimestamp();
-
 }
+
+void PTEID_PDFSignature::setSignatureLevel(PTEID_SignatureLevel signLevel)
+{
+	mp_signature->setSignatureLevel(ConvertSignatureLevel(signLevel));
+}
+
 // this function is not exposed to Java, however is keep for backward compatibility
 void PTEID_PDFSignature::setCustomImage(unsigned char *image_data, unsigned long img_length)
 {

@@ -266,7 +266,25 @@ void SWIGSTDCALL SWIG_RegisterStringCallback(SWIG_CSharpStringHelperCallback cal
   }
 
   static protected SWIGStringHelper swigStringHelper = new SWIGStringHelper();
+
+	public static byte[] ToUTF8(string input) {
+		byte[] bytes = Encoding.UTF8.GetBytes(input);
+		return bytes;
+	}
 %}
+
+%typemap(imtype, out="string") 	const char * "byte[]"
+%typemap(csin,
+	pre ="byte[] bytes$csinput = $modulePINVOKE.ToUTF8($csinput);"
+) const char *
+"bytes$csinput"
+
+%typemap(imtype, out="string") 	char * "byte[]"
+%typemap(csin,
+	pre ="byte[] bytes$csinput = $modulePINVOKE.ToUTF8($csinput);"
+) char *
+"bytes$csinput"
+
 
 ///////////////////////////////////////// const char * const * /////////////////////////////////////////////
 %{
@@ -316,7 +334,7 @@ protected class CUSTOM_StringArrayHelper
 static protected CUSTOM_StringArrayHelper custom_StringArrayHelper = new CUSTOM_StringArrayHelper();
 %}
 
-%typemap(imtype, out="IntPtr", inattributes="[MarshalAs(UnmanagedType.LPArray)]") const char * const *  "string[]"
+%typemap(imtype, out="IntPtr", inattributes="[MarshalAs(UnmanagedType.LPArray)]") const char * const *  "IntPtr[]"
 %typemap(ctype)		           const char ** "const char * const *"
 %typemap(ctype) 					const char * const *  "const char * const *"
 %typemap(cstype) 					const char * const * "string[]"
@@ -329,8 +347,20 @@ static protected CUSTOM_StringArrayHelper custom_StringArrayHelper = new CUSTOM_
 	$result = (const char *const*)CUSTOM_CSharpStringArrayCallback((void *)$1, size);
 }
 
-//%typemap(in) 					const char * const * %{ $1 = $input; %}
-
+%typemap(csin,
+	pre =""
+	"IntPtr[] ptrArray$csinput = new IntPtr[$csinput.Length];" 
+	"GCHandle [] handles$csinput = new GCHandle[$csinput.Length];" // keep handles to free in post
+	"for(long i = 0; i < $csinput.Length; i++) {"
+		"handles$csinput[i] = GCHandle.Alloc($modulePINVOKE.ToUTF8($csinput[i]), GCHandleType.Pinned);" // Handle must be pinned to call AddrOfPinnedObject 
+		"ptrArray$csinput[i] = handles$csinput[i].AddrOfPinnedObject();" // Get Addr of allocated byte[]
+	"}",
+	post=""
+	"for(long i = 0; i < $csinput.Length; i++) {"
+		"handles$csinput[i].Free();"
+	"}"
+) const char * const *
+"ptrArray$csinput"
 
 %typemap(csout, excode=CSHARP_CODE_THROW) const char * const *
 {
@@ -388,7 +418,9 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 %pragma(csharp) imclassimports=
 %{
 using System;
+using System.Text;
 using System.Runtime.InteropServices;
+
 
 public delegate void PTEID_SetEventDelegate(Int32 lRet, uint ulState, IntPtr pvRef);
 
@@ -873,6 +905,7 @@ return $jnicall;
 %javaexception("PTEID_Exception") getRawData		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") sendAPDU			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") Sign			JAVA_CODE_THROW
+%javaexception("PTEID_Exception") SignSHA256		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") readFile			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") writeFile			JAVA_CODE_THROW
 
@@ -1096,6 +1129,10 @@ return $jnicall;
 %javaexception("PTEID_Exception") getLong	   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") setString	   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") setLong	   JAVA_CODE_THROW
+
+%ignore eIDMW::PTEID_Config(const char *csName, const char *czSection, const char *csDefaultValue);
+%ignore eIDMW::PTEID_Config(const char *csName, const wchar_t *czSection, const wchar_t *csDefaultValue);
+%ignore eIDMW::PTEID_Config(const char *csName, const char *czSection, long lDefaultValue);
 
 //------------------------------------------------------------
 // class PTEID_Sod

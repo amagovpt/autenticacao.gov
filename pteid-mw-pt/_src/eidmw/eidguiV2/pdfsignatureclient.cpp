@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
@@ -50,6 +50,7 @@ PDFSignatureClient::PDFSignatureClient()
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_SCAP_APPID);
 
         m_appID = config.getString();
+        is_last_signature = false;
 
         /*qDebug() << "m_appID = " << m_appID;*/
     }
@@ -101,7 +102,7 @@ void loadPkcs7Object(QByteArray &sigBinary, SignatureDetails &sigDetails)
     PKCS7 *p7 = d2i_PKCS7(NULL, (const unsigned char **)&binaryData, sigBinary.size());
 
     if (!p7) {
-        fprintf(stderr, "Error loading the PKCS7 object from binary data\n");
+        qDebug() << "Error loading the PKCS7 object from binary data";
         return;
     }
 
@@ -109,7 +110,7 @@ void loadPkcs7Object(QByteArray &sigBinary, SignatureDetails &sigDetails)
 
     if (!signers) {
         //TODO
-        fprintf(stderr, "Error loading the PKCS7 object from binary data\n");
+        qDebug() << "Error loading the PKCS7 object from binary data";
         return;
     }
 
@@ -142,8 +143,7 @@ void loadPkcs7Object(QByteArray &sigBinary, SignatureDetails &sigDetails)
             SHA256_Wrapper(authenticated_attr_buf, auth_attr_len, documentHash);
             sigDetails.document_hash = QByteArray((const char *)documentHash, sizeof(documentHash));
         } else {
-            fprintf(stderr,
-                    "Error loading the authenticated attributes (input for documentHash) from PKCS7 data\n");
+            qDebug() << "Error loading the authenticated attributes (input for documentHash) from PKCS7 data";
             return;
         }
     }
@@ -268,19 +268,13 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
     local_pdf_handler = new PTEID_PDFSignature(inputFile);
 
     PDFSignature *sig_handler = local_pdf_handler->getPdfSignature();
-
-    if (isTimestamp)
-    {
-        sig_handler->enableTimestamp();
+        
+    if (useCustomImage && isVisible) {
+        const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(
+            m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
+        sig_handler->setCustomImage(
+            const_cast<unsigned char *>(imageData.GetBytes()), imageData.Size());
     }
-    
-	
-	if (useCustomImage && isVisible) {
-		const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(
-			m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
-		sig_handler->setCustomImage(
-			const_cast<unsigned char *>(imageData.GetBytes()), imageData.Size());
-	}
 
     std::vector<std::string> certs = toPEM((char *)certChain.c_str(), certChain.size());
 
@@ -313,6 +307,16 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
                                    strdup(attributeSupplier.toUtf8().constData()), strdup(attribute.toUtf8().constData()));
 
     sig_handler->setExternCertificate(certificatesData.at(0));
+    APL_SignatureLevel level = isTimestamp ? APL_SignatureLevel::LEVEL_TIMESTAMP : APL_SignatureLevel::LEVEL_BASIC;
+
+    if (signatureInfo.isLtv()) {
+        if (is_last_signature)
+            level = APL_SignatureLevel::LEVEL_LTV;
+        else
+            level = APL_SignatureLevel::LEVEL_LT;
+    }
+
+    sig_handler->setSignatureLevel(level);
 
     std::vector<CByteArray> caCerts(certificatesData.begin() + 1, certificatesData.end());
 
@@ -367,7 +371,7 @@ const char *SIGNATURE_ENDPOINT = "/SCAPSignature/SignatureService";
 
 unsigned char * PDFSignatureClient::callSCAPSignatureService(soap* sp, QByteArray documentHash,
                                                  ns1__TransactionType *transaction, unsigned int &signatureLen,
-                                                             QString citizenId)
+                                                 QString citizenId, int &error)
 {
     ScapSettings settings;
    
@@ -401,17 +405,19 @@ unsigned char * PDFSignatureClient::callSCAPSignatureService(soap* sp, QByteArra
     int rc = proxy.Signature(&sigRequest, sigResponse);
 
     if (rc != SOAP_OK) {
-
         qDebug() << "Error returned by Signature in SoapBindingProxy(). Error code: " << rc;
-        if (rc == SOAP_FAULT) {
-
-            qDebug() << "SOAP Fault returned: TODO print fault message";
-        }
+        error = handleError(rc, proxy.soap, __FUNCTION__);
         return NULL;
     }
     else {
          //Check for Success Status
-        if (sigResponse.Status->Code == "00" && sigResponse.DocumentSignature != NULL) {
+        int status_code = std::stoi(sigResponse.Status->Code);
+        if (status_code == 0 && sigResponse.DocumentSignature != NULL) {
+            PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
+                      "SignatureService returned with status code: %s and message: %s",
+                      sigResponse.Status->Code.c_str(),
+                      sigResponse.Status->Message.c_str());
+
             unsigned int sig_len = sigResponse.DocumentSignature->__size;
 
             qDebug() << "SignatureService returned signature size: " << sig_len;
@@ -432,6 +438,7 @@ unsigned char * PDFSignatureClient::callSCAPSignatureService(soap* sp, QByteArra
             eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", 
                 "SCAPSignatureService returned functional error code: %s and message: %s", sigResponse.Status->Code.c_str(),
                 sigResponse.Status->Message.c_str());
+            error = handleError(status_code, NULL, __FUNCTION__);
             return NULL;
         }
     }
@@ -478,51 +485,51 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
     sp->send_timeout = SEND_TIMEOUT;
     sp->connect_timeout = CONNECT_TIMEOUT;
 
-	char * ca_path = NULL;
-	std::string cacerts_file;
+    char * ca_path = NULL;
+    std::string cacerts_file;
 
 #ifdef __linux__
-	ca_path = "/etc/ssl/certs";
-	//Load CA certificates from file provided with pteid-mw
+    ca_path = "/etc/ssl/certs";
+    //Load CA certificates from file provided with pteid-mw
 #else
-	cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
+    cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
 #endif
 
-	int ret = soap_ssl_client_context(sp, SOAP_SSL_DEFAULT,
-		NULL,
-		NULL,
-		cacerts_file.size() > 0 ? cacerts_file.c_str() : NULL, /* cacert file to store trusted certificates (needed to verify server) */
-		ca_path,
-		NULL);
+    int ret = soap_ssl_client_context(sp, SOAP_SSL_DEFAULT,
+        NULL,
+        NULL,
+        cacerts_file.size() > 0 ? cacerts_file.c_str() : NULL, /* cacert file to store trusted certificates (needed to verify server) */
+        ca_path,
+        NULL);
 
-	if (ret != SOAP_OK) {
-		eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR
-			, "ScapSignature"
-			, "Error in signPDF: Gsoap returned %d "
-			, ret);
+    if (ret != SOAP_OK) {
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR
+            , "ScapSignature"
+            , "Error in signPDF: Gsoap returned %d "
+            , ret);
         qDebug() << "signPDF() returned error!" << ret;
-		return GAPI::ScapGenericError;
-	}
+        return GAPI::ScapGenericError;
+    }
 
     AuthorizationServiceSoapBindingProxy proxy(sp);
 
-	std::string proxy_host;
-	long proxy_port;
+    std::string proxy_host;
+    long proxy_port;
 
-	std::string s_endpoint = QString("https://" + settings.getScapServerHost() + ":" +
-		settings.getScapServerPort().append(AUTHORIZATION_ENDPOINT)).toStdString();
+    std::string s_endpoint = QString("https://" + settings.getScapServerHost() + ":" +
+        settings.getScapServerPort().append(AUTHORIZATION_ENDPOINT)).toStdString();
 
-	proxy.soap_endpoint = s_endpoint.c_str();
+    proxy.soap_endpoint = s_endpoint.c_str();
 
     if (proxyInfo.isAutoConfig()) 
     {
         proxyInfo.getProxyForHost(s_endpoint, &proxy_host, &proxy_port);
-		if (proxy_host.size() > 0) {
-			sp->proxy_host = proxy_host.c_str();
-			sp->proxy_port = proxy_port;
+        if (proxy_host.size() > 0) {
+            sp->proxy_host = proxy_host.c_str();
+            sp->proxy_port = proxy_port;
          }
-	}
-	else if (proxyInfo.isManualConfig()) {
+    }
+    else if (proxyInfo.isManualConfig()) {
         sp->proxy_host = strdup(proxyInfo.getProxyHost().c_str());
         try {
             proxy_port = std::stol(proxyInfo.getProxyPort());
@@ -531,12 +538,12 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
             eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Error parsing proxy port to number value.");
         }
         sp->proxy_port = proxy_port;
-		if (proxyInfo.getProxyUser().size() > 0) {
+        if (proxyInfo.getProxyUser().size() > 0) {
             sp->proxy_userid = strdup(proxyInfo.getProxyUser().c_str());
             sp->proxy_passwd = strdup(proxyInfo.getProxyPwd().c_str());
-		}
+        }
 
-	}
+    }
 
     _ns1__AuthorizationRequest authorizationRequest;
     _ns1__AuthorizationResponse authorizationResponse;
@@ -608,317 +615,303 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
     if (rc != SOAP_OK) {
         qDebug() << "Error returned by calling Authorization in SoapBindingProxy(). Error code: " << rc;
-
-        if (rc == SOAP_FAULT) {
-            if (proxy.soap->fault != NULL && proxy.soap->fault->faultstring != NULL)
-                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                                 "Error returned by calling Authorization in SoapBindingProxy() returned SOAP Fault: %s",
-                                 proxy.soap->fault->faultstring);
-            return GAPI::ScapGenericError;
-        } else if (rc == SOAP_EOF) {
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                             "Error returned by calling Authorization in SoapBindingProxy(). Error code: %d", rc);
-            return GAPI::ScapTimeOutError;
-        } else if (rc == SOAP_TCP_ERROR) {
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                             "Error returned by calling Authorization in SoapBindingProxy(). Error code: %d", rc);
-            return GAPI::ScapTimeOutError;
-        } else {
-            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                      "Error returned by calling Authorization in SoapBindingProxy(). Error code: %d", rc);
-            return GAPI::ScapGenericError;
-        }
-
+        return handleError(rc, proxy.soap, __FUNCTION__);
     }
     else {
         qDebug() << "Authorization service returned SOAP_OK";
         //Check for Success Status
-        if (authorizationResponse.Status->Code == "802") {
-            qDebug() << "authorizationService returned error 802";
-            {
-                QDateTime serverTime = QDateTime::fromString(httpDate, Qt::RFC2822Date);
-                long local = time(nullptr);
-                long server = serverTime.toSecsSinceEpoch();
-                qDebug() << "local: " << local << "server: " << server;
-
-                if (abs(difftime(local,server)) > SCAP_MAX_CLOCK_DIF){
-                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                              "AuthorizationService returned error. error code: "
-                              "%s message: %s tLocal: %ld tServer: %ld",
-                              authorizationResponse.Status->Code.c_str(),
-                              authorizationResponse.Status->Message.c_str(),
-                              local,
-                              server);
-                    return GAPI::ScapClockError;
-                }else{
-                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                              "AuthorizationService returned error. error code: %s message: %s",
-                              authorizationResponse.Status->Code.c_str(),
-                              authorizationResponse.Status->Message.c_str());
-                    return GAPI::ScapSecretKeyError;
-                }
-            }
-        }
-        if (authorizationResponse.Status->Code == "803"
-                || authorizationResponse.Status->Code == "805") {
-            qDebug() << "authorizationService returned error 803 or 805";
-            {
-                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                          "AuthorizationService returned error. error code: %s message: %s",
-                          authorizationResponse.Status->Code.c_str(),
-                          authorizationResponse.Status->Message.c_str());
-                return GAPI::ScapSecretKeyError;
-            }
-        }
-        if (authorizationResponse.Status->Code == "401") {
-            qDebug() << "authorizationService returned error 401";
-            {
-                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                          "AuthorizationService returned error. error code: %s message: %s",
-                          authorizationResponse.Status->Code.c_str(),
-                          authorizationResponse.Status->Message.c_str());
-                return GAPI::ScapAttributesExpiredError;
-            }
-        }
-        if (authorizationResponse.Status->Code == "402") {
-            qDebug() << "authorizationService returned error 402";
-            {
-                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                          "AuthorizationService returned error. error code: %s message: %s",
-                          authorizationResponse.Status->Code.c_str(),
-                          authorizationResponse.Status->Message.c_str());
-                return GAPI::ScapZeroAttributesError;
-            }
-        }
-        if (authorizationResponse.Status->Code == "403") {
-            qDebug() << "authorizationService returned error 403";
-            {
-                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                          "AuthorizationService returned error. error code: %s message: %s",
-                          authorizationResponse.Status->Code.c_str(),
-                          authorizationResponse.Status->Message.c_str());
-                return GAPI::ScapNotValidAttributesError;
-            }
-        }
-        else if (authorizationResponse.Status->Code != "00" || authorizationResponse.TransactionList == NULL) {
+        int status_code = std::stoi(authorizationResponse.Status->Code);
+        if (status_code != 0 || authorizationResponse.TransactionList == NULL) {
             qDebug() << "authorizationService returned error";
             PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                      "AuthorizationService returned error. error code: %s and message: %s",
+                      "AuthorizationService returned error. Error code: %s, message: %s, ProcessID: %s",
                       authorizationResponse.Status->Code.c_str(),
-                      authorizationResponse.Status->Message.c_str());
-            return GAPI::ScapGenericError;
+                      authorizationResponse.Status->Message.c_str(),
+				      authorizationResponse.ProcessId != NULL ? authorizationResponse.ProcessId->c_str() : "(null)");
+            return handleError(status_code, NULL, __FUNCTION__);
         }
-        else {
 
-            std::vector<ns1__TransactionType *> transactionList =
-                authorizationResponse.TransactionList->Transaction;
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
+                      "AuthorizationService returned with status code: %s, message: %s, ProcessID for current SCAP signature: %s",
+                      authorizationResponse.Status->Code.c_str(),
+                      authorizationResponse.Status->Message.c_str(),
+			     authorizationResponse.ProcessId != NULL ? authorizationResponse.ProcessId->c_str() : "(null)");
 
-            this->processId = authorizationResponse.ProcessId;
+        std::vector<ns1__TransactionType *> transactionList =
+            authorizationResponse.TransactionList->Transaction;
 
-            const char * outputPath = NULL;
-            const char * inputPath = strdup(filepath.toUtf8().constData());
+        this->processId = authorizationResponse.ProcessId;
 
-            QTemporaryFile *tempFile = NULL;
+        const char * outputPath = NULL;
+        const char * inputPath = strdup(filepath.toUtf8().constData());
 
-            QString attributeListString = "";
-            QString attributeSupplierListString = "";
-            QString lastAttrSupplierString = "";
-            QString lastAttrSupplierType = "";
-            QString signOriginalReason = signatureInfo.getReason();
-            QString signOriginalLocation = signatureInfo.getLocation();
-            bool moreThanOneNext = false;
-            std::vector <QTemporaryFile *> tempFiles;
+        QTemporaryFile *tempFile = NULL;
 
-            for (unsigned int i = 0; i != transactionList.size(); i++) {
-                bool isVisible = false;
-                QByteArray signatureHash;
-                ns1__MainAttributeType *mainAttribute = NULL;
+        QString attributeListString = "";
+        QString attributeSupplierListString = "";
+        QString lastAttrSupplierString = "";
+        QString lastAttrSupplierType = "";
+        QString signOriginalReason = signatureInfo.getReason();
+        QString signOriginalLocation = signatureInfo.getLocation();
+        bool moreThanOneNext = false;
+        std::vector <QTemporaryFile *> tempFiles;
+        bool throwTimestampError = false;
+        bool throwLTVError = false;
 
-                ns1__TransactionType *transaction = transactionList.at(i);
+        for (unsigned int i = 0; i != transactionList.size(); i++) {
+            bool isVisible = false;
+            QByteArray signatureHash;
+            ns1__MainAttributeType *mainAttribute = NULL;
 
-                mainAttribute = transaction->MainAttribute;
+            ns1__TransactionType *transaction = transactionList.at(i);
 
-                //In this case we are adding a visible signature
-                if (i == transactionList.size() - 1) {
-                    outputPath = strdup(finalfilepath.toUtf8().constData());
-                    attributeListString.append(QString::fromStdString("."));
-                    attributeSupplierListString.append(QString::fromStdString("."));
-                    isVisible = true;
-                }
-                else {
-                    // Creates a temporary file for every iteration except the last
-                    isVisible = false;
-                    ns1__TransactionType *transactionNext = transactionList.at(i+1);
+            mainAttribute = transaction->MainAttribute;
+
+            //In this case we are adding a visible signature
+            if (i == transactionList.size() - 1) {
+                outputPath = strdup(finalfilepath.toUtf8().constData());
+                attributeListString.append(QString::fromStdString("."));
+                attributeSupplierListString.append(QString::fromStdString("."));
+                isVisible = true;
+            }
+            else {
+                // Creates a temporary file for every iteration except the last
+                isVisible = false;
+                ns1__TransactionType *transactionNext = transactionList.at(i+1);
 
 
-                    // A new attribute for a NEW attribute supplier;
-                    if(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()) != lastAttrSupplierString){
-                            qDebug() << "A new attribute for a NEW attribute supplier";
+                // A new attribute for a NEW attribute supplier;
+                if(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()) != lastAttrSupplierString){
+                        qDebug() << "A new attribute for a NEW attribute supplier";
 
-                            // Check if have more than one attribute from this attribute supplier
-                            if(moreThanOneNext){
-                                attributeListString.append(QString::fromStdString(" } "));
+                        // Check if have more than one attribute from this attribute supplier
+                        if(moreThanOneNext){
+                            attributeListString.append(QString::fromStdString(" } "));
+                        }
+                        if(QString::fromStdString(transaction->AttributeSupplier->Name.c_str())
+                                == QString::fromStdString(transactionNext->AttributeSupplier->Name.c_str())){
+                            moreThanOneNext = true;
+                        }else{
+                            moreThanOneNext = false;
+                        }
+                        // Check if the first time
+                        if(i == 0){
+                            qDebug() << "The first time";
+                            if(moreThanOneNext) attributeListString.append(QString::fromStdString(" { "));
+                            attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
+                        }else{
+                            qDebug() << "Not the first time";
+                            if(lastAttrSupplierType == "ENTERPRISE"){
+                                attributeListString.append(QString::fromStdString(" de "));
+                                attributeListString.append(lastAttrSupplierString);
                             }
-                            if(QString::fromStdString(transaction->AttributeSupplier->Name.c_str())
-                                    == QString::fromStdString(transactionNext->AttributeSupplier->Name.c_str())){
-                                moreThanOneNext = true;
-                            }else{
-                                moreThanOneNext = false;
-                            }
-                            // Check if the first time
-                            if(i == 0){
-                                qDebug() << "The first time";
-                                if(moreThanOneNext) attributeListString.append(QString::fromStdString(" { "));
-                                attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
-                            }else{
-                                qDebug() << "Not the first time";
-                                if(lastAttrSupplierType == "ENTERPRISE"){
-                                    attributeListString.append(QString::fromStdString(" de "));
-                                    attributeListString.append(lastAttrSupplierString);
-                                }
 
-                                attributeListString.append(QString::fromStdString(" e "));
-                                if(moreThanOneNext) attributeListString.append(QString::fromStdString(" { "));
-                                attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
+                            attributeListString.append(QString::fromStdString(" e "));
+                            if(moreThanOneNext) attributeListString.append(QString::fromStdString(" { "));
+                            attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
 
-                                // The LAST attributeSupplier
-                                if(lastAttrSupplierType != "ENTERPRISE"){
-                                    if(i == transactionList.size() - 2){
+                            // The LAST attributeSupplier
+                            if(lastAttrSupplierType != "ENTERPRISE"){
+                                if(i == transactionList.size() - 2){
+                                    attributeSupplierListString.append(QString::fromStdString(" e "));
+                                }else{
+                                    if(QString::fromStdString(transactionNext->AttributeSupplier->Type->c_str()) == "ENTERPRISE"){
                                         attributeSupplierListString.append(QString::fromStdString(" e "));
                                     }else{
-                                        if(QString::fromStdString(transactionNext->AttributeSupplier->Type->c_str()) == "ENTERPRISE"){
-                                            attributeSupplierListString.append(QString::fromStdString(" e "));
-                                        }else{
-                                            attributeSupplierListString.append(QString::fromStdString(" , "));
-                                        }
+                                        attributeSupplierListString.append(QString::fromStdString(" , "));
                                     }
                                 }
                             }
-                            if(lastAttrSupplierType != "ENTERPRISE"){
-                                if(QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "INSTITUTION"){
-                                    attributeSupplierListString.append(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
-                                }else{
-                                    attributeSupplierListString.append(QString::fromStdString("SCAP"));
-                                }
-                            }
-                    }
-
-                    //  A new attribute for the SAME attribute supplier
-                    if(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()) == lastAttrSupplierString){
-                            qDebug() << "A new attribute for the same attribute supplier";
-                            if(QString::fromStdString(transaction->AttributeSupplier->Name.c_str())
-                                    == QString::fromStdString(transactionNext->AttributeSupplier->Name.c_str())){
-                                attributeListString.append(QString::fromStdString(" , "));
+                        }
+                        if(lastAttrSupplierType != "ENTERPRISE"){
+                            if(QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "INSTITUTION"
+                                || QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "EMPLOYEE"){
+                                attributeSupplierListString.append(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
                             }else{
-                                attributeListString.append(QString::fromStdString(" e "));
+                                attributeSupplierListString.append(QString::fromStdString("SCAP"));
                             }
-
-                            attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
-                    }
-
-                    // The LAST attribute visible
-                    if(i == transactionList.size() - 2){
-                            qDebug() << "The LAST attribute visible";
-                            if(moreThanOneNext) attributeListString.append(QString::fromStdString(" } "));
-
-                            if(QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "ENTERPRISE")
-                            {
-                                attributeListString.append(QString::fromStdString(" de "));
-                                attributeListString.append(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
-                            }
-                    }
-                    lastAttrSupplierString = QString::fromStdString(transaction->AttributeSupplier->Name.c_str());
-                    lastAttrSupplierType = QString::fromStdString(transaction->AttributeSupplier->Type->c_str());
-
-                    tempFile = new QTemporaryFile();
-                    tempFiles.push_back(tempFile);
-
-
-                    if (!tempFile->open()) {
-                        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "PDF Signature error: Error creating temporary file");
-                        return GAPI::ScapGenericError;
-                    }
-                    outputPath = strdup(tempFile->fileName().toStdString().c_str());
+                        }
                 }
 
-                // If signature is not visible then add attribute details in the reason field of the signature details
-                // Else add original reason and location
-                if(!isVisible)
-                {
-                    QString signDetailsReason = "";
-                    QString signDetailsLocation = "";
-                    signDetailsReason.append("Entidade: " + QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
-                    signDetailsReason.append(". Na qualidade de: ");
-                    signDetailsReason.append(mainAttribute->Description->c_str());
-                    signDetailsReason.append(". Subatributos: ");
+                //  A new attribute for the SAME attribute supplier
+                if(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()) == lastAttrSupplierString){
+                        qDebug() << "A new attribute for the same attribute supplier";
+                        if(QString::fromStdString(transaction->AttributeSupplier->Name.c_str())
+                                == QString::fromStdString(transactionNext->AttributeSupplier->Name.c_str())){
+                            attributeListString.append(QString::fromStdString(" , "));
+                        }else{
+                            attributeListString.append(QString::fromStdString(" e "));
+                        }
 
-                    if (mainAttribute->SubAttributeList != NULL) {
-                        for (uint ii = 0; ii < mainAttribute->SubAttributeList->SubAttribute.size(); ii++) {
-                            ns1__SubAttributeType *acSubAttr = mainAttribute->SubAttributeList->SubAttribute.at(ii);
-                            if(ii != 0) signDetailsReason.append("; ");
-							if (acSubAttr->Description != NULL) {
-								signDetailsReason.append(QString::fromStdString(acSubAttr->Description->c_str()));
-							}
-                            signDetailsReason.append(": ");
-							if (acSubAttr->Value != NULL) {
-								signDetailsReason.append(QString::fromStdString(acSubAttr->Value->c_str()));
-							}
+                        attributeListString.append(QString::fromStdString(mainAttribute->Description->data()));
+                }
+
+                // The LAST attribute visible
+                if(i == transactionList.size() - 2){
+                        qDebug() << "The LAST attribute visible";
+                        if(moreThanOneNext) attributeListString.append(QString::fromStdString(" } "));
+
+                        if(QString::fromStdString(transaction->AttributeSupplier->Type->c_str()) == "ENTERPRISE")
+                        {
+                            attributeListString.append(QString::fromStdString(" de "));
+                            attributeListString.append(QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
+                        }
+                }
+                lastAttrSupplierString = QString::fromStdString(transaction->AttributeSupplier->Name.c_str());
+                lastAttrSupplierType = QString::fromStdString(transaction->AttributeSupplier->Type->c_str());
+
+                tempFile = new QTemporaryFile();
+                tempFiles.push_back(tempFile);
+
+
+                if (!tempFile->open()) {
+                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "PDF Signature error: Error creating temporary file");
+                    return GAPI::ScapGenericError;
+                }
+                outputPath = strdup(tempFile->fileName().toStdString().c_str());
+            }
+
+            // If signature is not visible then add attribute details in the reason field of the signature details
+            // Else add original reason and location
+            if(!isVisible)
+            {
+                QString signDetailsReason = "";
+                QString signDetailsLocation = "";
+                signDetailsReason.append("Entidade: " + QString::fromStdString(transaction->AttributeSupplier->Name.c_str()));
+                signDetailsReason.append(". Na qualidade de: ");
+                signDetailsReason.append(mainAttribute->Description->c_str());
+                signDetailsReason.append(". Subatributos: ");
+
+                if (mainAttribute->SubAttributeList != NULL) {
+                    for (uint ii = 0; ii < mainAttribute->SubAttributeList->SubAttribute.size(); ii++) {
+                        ns1__SubAttributeType *acSubAttr = mainAttribute->SubAttributeList->SubAttribute.at(ii);
+                        if(ii != 0) signDetailsReason.append("; ");
+                        if (acSubAttr->Description != NULL) {
+                            signDetailsReason.append(QString::fromStdString(acSubAttr->Description->c_str()));
+                        }
+                        signDetailsReason.append(": ");
+                        if (acSubAttr->Value != NULL) {
+                            signDetailsReason.append(QString::fromStdString(acSubAttr->Value->c_str()));
                         }
                     }
-                    signatureInfo.setReason(strdup(signDetailsReason.toStdString().c_str()));
-                    signatureInfo.setLocation(strdup(signDetailsLocation.toStdString().c_str()));
-                }else{
-                    signatureInfo.setReason(strdup(signOriginalReason.toStdString().c_str()));
-                    signatureInfo.setLocation(strdup(signOriginalLocation.toStdString().c_str()));
                 }
+                signatureInfo.setReason(strdup(signDetailsReason.toStdString().c_str()));
+                signatureInfo.setLocation(strdup(signDetailsLocation.toStdString().c_str()));
+            }else{
+                signatureInfo.setReason(strdup(signOriginalReason.toStdString().c_str()));
+                signatureInfo.setLocation(strdup(signOriginalLocation.toStdString().c_str()));
+            }
 
-                // Only the last signature should be timestamped
-                bool isLast = (i == transactionList.size() - 1);
-                signatureHash = openSCAPSignature(inputPath, outputPath,
-                                transaction->AttributeSupplierCertificateChain, citizenName, citizenId,
-                                attributeSupplierListString, attributeListString, signatureInfo, isVisible, isTimestamp && isLast, isCC,
-                                useCustomImage, m_jpeg_scaled_data);
+            // Only the last signature should be timestamped
+            is_last_signature = (i == transactionList.size() - 1);
+            signatureHash = openSCAPSignature(inputPath, outputPath,
+                            transaction->AttributeSupplierCertificateChain, citizenName, citizenId,
+                            attributeSupplierListString, attributeListString, signatureInfo, isVisible, isTimestamp && is_last_signature, isCC,
+                            useCustomImage, m_jpeg_scaled_data);
 
-                if (signatureHash.size() == 0) {
-                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Open SCAP Signature failed! signatureHash invalid!");
-                    return GAPI::ScapGenericError;
-                }
+            if (signatureHash.size() == 0) {
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Open SCAP Signature failed! signatureHash invalid!");
+                return GAPI::ScapGenericError;
+            }
 
 #ifdef DEBUG
-                std::string filename = std::string("/tmp/transaction_")+ std::to_string(i) + "_hash.bin";
+            std::string filename = std::string("/tmp/transaction_")+ std::to_string(i) + "_hash.bin";
 
-                WriteToFile(filename.c_str(), (unsigned char *)signatureHash.data(), signatureHash.size());
+            WriteToFile(filename.c_str(), (unsigned char *)signatureHash.data(), signatureHash.size());
 #endif
 
-                unsigned int sig_len = 0;
-                unsigned char * scap_signature = callSCAPSignatureService(sp, signatureHash,
-                                                                          transaction, sig_len, citizenId);
-                
-                if (sig_len > 0) {
-#ifdef DEBUG            
-                    std::string filename = std::string("/tmp/transaction_")+ std::to_string(i) + "_signature.bin";
-                    WriteToFile(filename.c_str(), (unsigned char *)scap_signature, sig_len);
+            int error = 0;
+            unsigned int sig_len = 0;
+            unsigned char * scap_signature = callSCAPSignatureService(sp, signatureHash,
+                                                                        transaction, sig_len, citizenId, error);
+
+            if (sig_len > 0) {
+#ifdef DEBUG
+                std::string filename = std::string("/tmp/transaction_")+ std::to_string(i) + "_signature.bin";
+                WriteToFile(filename.c_str(), (unsigned char *)scap_signature, sig_len);
 #endif
-                    try{
-                        closeSCAPSignature(scap_signature, sig_len);
-                    }
-                    catch (eIDMW::CMWException &e) {
+                try{
+                    closeSCAPSignature(scap_signature, sig_len);
+                }
+                catch (eIDMW::CMWException &e) {
+                    if (e.GetError() != EIDMW_TIMESTAMP_ERROR && e.GetError() != EIDMW_LTV_ERROR){
                         throw PTEID_Exception(e.GetError());
                     }
-                }else{
-                    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Call SCAP Signature Service failed! signature len invalid");
-                    return GAPI::ScapGenericError;
+                    if (e.GetError() == EIDMW_TIMESTAMP_ERROR)
+                        throwTimestampError = true;
+                    else
+                        throwLTVError = true;
                 }
-                // Apply the next signature over the current one's output file
-                inputPath = outputPath;
+            }else{
+                if (scap_signature == NULL && error != 0) {
+                    return error;
+                }
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Call SCAP Signature Service failed! signature len invalid");
+                return GAPI::ScapGenericError;
             }
-            // Delete tempFiles the tempFiles
-            for (auto& tempFile : tempFiles){
-                delete tempFile;
-            }
-
+            // Apply the next signature over the current one's output file
+            inputPath = outputPath;
         }
+        // Delete tempFiles the tempFiles
+        for (auto& tempFile : tempFiles){
+            delete tempFile;
+        }
+        if (throwLTVError)
+            throw PTEID_Exception(EIDMW_LTV_ERROR);
+            
+        if (throwTimestampError)
+            throw PTEID_Exception(EIDMW_TIMESTAMP_ERROR);
     }
 
     return GAPI::ScapSucess;
+}
+
+int handleError(int status_code, soap *sp, const char *call){
+    if (sp != NULL) { // SOAP error
+        if (status_code == SOAP_FAULT) {
+            if (sp->fault != NULL && sp->fault->faultstring != NULL)
+                PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                            "Error returned by calling %s in SoapBindingProxy() returned SOAP Fault: %s", call,
+                            sp->fault->faultstring);
+            return GAPI::ScapGenericError;
+        }
+
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                        "Error returned by calling %s in SoapBindingProxy(). Error code: %d", call, status_code);
+
+        if (status_code == SOAP_EOF || status_code == SOAP_TCP_ERROR) {
+            return GAPI::ScapTimeOutError;
+        }
+    }
+    else { // SCAP error
+        if (status_code == SCAP_TOTP_FAILED_ERROR_CODE) {
+            QDateTime serverTime = QDateTime::fromString(httpDate, Qt::RFC2822Date);
+            long local = time(nullptr);
+            long server = serverTime.toSecsSinceEpoch();
+            qDebug() << "local: " << local << "server: " << server;
+
+            if (abs(difftime(local,server)) > SCAP_MAX_CLOCK_DIF) {
+                PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                            "%s returned tLocal: %ld tServer: %ld", call, local, server);
+                return GAPI::ScapClockError;
+            }
+            else {
+                return GAPI::ScapSecretKeyError;
+            }
+        }
+        if (status_code == SCAP_ACCOUNT_MATCH_ERROR_CODE
+                || status_code == SCAP_REQUEST_ERROR_CODE) {
+            return GAPI::ScapNotValidAttributesError;
+        }
+        if (status_code == SCAP_ATTRIBUTES_EXPIRED) {
+            return GAPI::ScapAttributesExpiredError;
+        }
+        if (status_code == SCAP_ZERO_ATTRIBUTES) {
+            return GAPI::ScapZeroAttributesError;
+        }
+        if (status_code == SCAP_ATTRIBUTES_NOT_VALID) {
+            return GAPI::ScapNotValidAttributesError;
+        }
+    }
+    return GAPI::ScapGenericError;
 }

@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
- * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2019-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
@@ -27,18 +27,18 @@ Item {
         selectByMouse: true
         selectByKeyboard: true
         textFormat: Text.RichText
-        font.pixelSize: Constants.SIZE_TEXT_BODY
+        font.pixelSize: Constants.SIZE_TEXT_LINK_BODY
         font.italic: false
         font.family: lato.name
         font.capitalization: Font.MixedCase
-        font.bold: activeFocus? true : false
+        font.bold: activeFocus || parent.activeFocus ? true : false
         color: Constants.COLOR_TEXT_BODY
         visible: parent.visible
         font.underline: mouseArea.containsMouse
         onLinkActivated: Qt.openUrlExternally(propertyLinkUrl)
         wrapMode: Text.WordWrap
 
-        Accessible.role: Accessible.Link
+        Accessible.role: propertyLinkUrl == "" ? Accessible.StaticText : Accessible.Link 
         Accessible.name: propertyAccessibleText
         Accessible.description: propertyAccessibleDescription
 
@@ -46,7 +46,7 @@ Item {
         Keys.onReturnPressed: Qt.openUrlExternally(propertyLinkUrl)
 
     }
-    Accessible.role: Accessible.Link
+    Accessible.role: propertyLinkUrl == "" ? Accessible.StaticText : Accessible.Link 
     Accessible.name: propertyAccessibleText
     Accessible.description: propertyAccessibleDescription
     Keys.onSpacePressed: Qt.openUrlExternally(propertyLinkUrl)

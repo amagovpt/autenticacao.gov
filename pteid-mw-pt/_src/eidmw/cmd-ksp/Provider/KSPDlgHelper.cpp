@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.2
+
+****************************************************************************-*/
+
 #include "../Inc/KSPDlgHelper.h"
 #include "../Inc/log.h"
 #include "language.h"
@@ -34,7 +42,7 @@ __in    HWND parentWindow)
     {
         parentWindow = GetActiveWindow();
     }
-    LogTrace(LOGTYPE_INFO, "CmdKspOpenDialogSign", "appWindow = [0x%08x]", parentWindow);
+    LogTrace(LOGTYPE_TRACE, "CmdKspOpenDialogSign", "appWindow = [0x%08x]", parentWindow);
     SetApplicationWindow(parentWindow);
     DlgRet ret = DlgAskInputCMD(false, pin, pinLen, (wchar_t *)userId, userName, userNameLen);
     if (ret == DLG_OK)
@@ -75,7 +83,7 @@ __in    HWND parentWindow)
     {
         parentWindow = GetActiveWindow();
     }
-    LogTrace(LOGTYPE_INFO, "CmdKspOpenDialogValidateOtp", "appWindow = [0x%08x]", parentWindow);
+    LogTrace(LOGTYPE_TRACE, "CmdKspOpenDialogValidateOtp", "appWindow = [0x%08x]", parentWindow);
     SetApplicationWindow(parentWindow);
     DlgRet ret = DlgAskInputCMD(true, otp, otpLen, (wchar_t *)pszDocname, NULL, 0, sendSmsCallback);
     if (ret == DLG_OK)
@@ -101,7 +109,7 @@ __in    HWND parentWindow)
     {
         parentWindow = GetActiveWindow();
     }
-    LogTrace(LOGTYPE_INFO, "CmdKspOpenDialogProgress", "appWindow = [0x%08x]", parentWindow);
+    LogTrace(LOGTYPE_TRACE, "CmdKspOpenDialogProgress", "appWindow = [0x%08x]", parentWindow);
     SetApplicationWindow(parentWindow);
     DlgRet ret = DlgCMDMessage(
         DlgCmdMsgType::DLG_CMD_PROGRESS, 
@@ -127,7 +135,7 @@ __in    HWND parentWindow)
     {
         parentWindow = GetActiveWindow();
     }
-    LogTrace(LOGTYPE_INFO, "CmdKspOpenDialogError", "appWindow = [0x%08x]", parentWindow);
+    LogTrace(LOGTYPE_TRACE, "CmdKspOpenDialogError", "appWindow = [0x%08x]", parentWindow);
     SetApplicationWindow(parentWindow);
     DlgRet ret = DlgCMDMessage(msgType, message);
     return;
@@ -217,7 +225,7 @@ end:
 
 void CmdSignThread::Stop(unsigned long ulSleepFrequency)
 {
-    LogTrace(LOGTYPE_INFO, "CmdSignThread::Stop()", "Stop() called");
+    LogTrace(LOGTYPE_TRACE, "CmdSignThread::Stop()", "Stop() called");
     if (cmdSignature)
     {
         cmdSignature->cancelRequest();

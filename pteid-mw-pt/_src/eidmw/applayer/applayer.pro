@@ -24,6 +24,7 @@ INSTALLS += target
 
 CONFIG -= warn_on
 CONFIG -= qt
+CONFIG += link_pkgconfig
 
 ## destination directory for the compiler
 DESTDIR = ../lib 
@@ -36,11 +37,13 @@ LIBS += -L../lib \
 	    -lxerces-c \
 	    -lxml-security-c \
 	    -lcurl \
-	    -lopenjp2 \
 	    -lpng \
 	    -lz \
 	    -lzip \
 	    -lstdc++
+
+macx:  LIBS += -lopenjp2
+!macx: PKGCONFIG += libopenjp2
 
 
 !macx: LIBS += -Wl,-R,'../lib'
@@ -60,7 +63,7 @@ macx: LIBS += -Wl,-framework -Wl,CoreServices
 macx: LIBS += -liconv
 macx: INCLUDEPATH +=$$DEPS_DIR/openssl/include $$DEPS_DIR/libzip/include $$DEPS_DIR/openjpeg/include/openjpeg-2.3/ $$DEPS_DIR/xml-security-c/include/ $$DEPS_DIR/xerces-c-3.2.3/include $$DEPS_DIR/libpng/include
 macx: INCLUDEPATH += /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/CFNetwork.framework/Headers/
-!macx: INCLUDEPATH += /usr/include/openjpeg-2.3 /usr/include/libpng16
+!macx: INCLUDEPATH += /usr/include/libpng16
 
 LIBS += -l$${CARDLAYERLIB}
 
@@ -99,6 +102,7 @@ HEADERS += \
 	cJSON.h \
 	SSLConnection.h \
 	PNGConverter.h \
+	PAdESExtender.h \
 	J2KHelper.h \
 	PDFSignature.h
 
@@ -132,6 +136,7 @@ SOURCES += \
 	ess_lib.c \
 	CRLFetcher.cpp \
 	PDFSignature.cpp \
+	PAdESExtender.cpp \
 	SAM.cpp \
 	OCSP.cpp \
 	PNGConverter.cpp \

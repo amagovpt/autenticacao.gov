@@ -1,7 +1,7 @@
 #
 # spec file for package pteid-mw
 #
-# Copyright (c) 2011-2019 Caixa Magica Software
+# Copyright (c) 2011-2021 Caixa Magica Software
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -20,14 +20,14 @@
 %endif
 %endif
 
-%define git_revision git20201028
-%define app_version 3.3.1
+%define git_revision git20210526
+%define app_version 3.6.0
 
 Name:           pteid-mw
-BuildRequires:  pcsc-lite-devel make swig
+BuildRequires:  pcsc-lite-devel make swig pkg-config
 BuildRequires:  libzip-devel
 BuildRequires:  openjpeg2-devel
-Requires:       pcsc-lite curl
+Requires:       pcsc-lite curl lato-fonts
 
 
 %if 0%{?suse_version}
@@ -57,15 +57,17 @@ BuildRequires:  libxml-security-c-devel
 BuildRequires:  java-11-openjdk-devel
 Requires:       poppler-qt5
 Requires:       pcsc-lite-ccid
-Requires:       qt5
+Requires:       qt5-qtquickcontrols
+Requires:       qt5-qtquickcontrols2
 
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtbase-private-devel
 BuildRequires:  qt5-qtdeclarative-devel
 BuildRequires:  qt5-qtquickcontrols2-devel
 BuildRequires:  qt5-qttools-devel
-#Just install the big qt5 meta-package
-BuildRequires:  qt5
+BuildRequires:  qt5-qtquickcontrols
+BuildRequires:  qt5-qtquickcontrols2
+
 BuildRequires:  libpng-devel
 
 BuildRequires:  xml-security-c-devel
@@ -161,7 +163,6 @@ install -m 755 eidguiV2/eidguiV2 $RPM_BUILD_ROOT/usr/local/bin/eidguiV2
 install -m 755 -p bin/pteiddialogsQTsrv $RPM_BUILD_ROOT/usr/local/bin/pteiddialogsQTsrv
 install -m 644 -p eidguiV2/eidmw_en.qm $RPM_BUILD_ROOT/usr/local/bin/
 install -m 644 -p eidguiV2/eidmw_nl.qm $RPM_BUILD_ROOT/usr/local/bin/
-install -m 644 -p eidguiV2/fonts/lato/Lato-Regular.ttf $RPM_BUILD_ROOT/usr/local/bin/
 
 mkdir -p $RPM_BUILD_ROOT/usr/share/applications
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/usr/share/applications
@@ -270,7 +271,6 @@ fi
 /usr/local/bin/pteiddialogsQTsrv
 /usr/local/bin/eidmw_en.qm
 /usr/local/bin/eidmw_nl.qm
-/usr/local/bin/Lato-Regular.ttf
 /usr/local/include/*
 /usr/share/applications/*
 /usr/share/icons/*
@@ -279,6 +279,19 @@ fi
 /usr/local/share/pteid-mw
 
 %changelog
+* Wed May 26 2021 André Guerreiro <andre.guerreiro@caixamagica.pt>
+  - SCAP signature improvements
+  - Improved signature with custom image
+  - Batch PDF signature improvements
+
+* Mon Mar 29 2021 André Guerreiro <andre.guerreiro@caixamagica.pt>
+  - New unified signature page in GUI app
+  - Bugfixes in SCAP signatures
+  - Stop bundling lato font and use the distro-provided TTF file
+  - Extended support for expired cards until December 31st 2021
+  - New feature - diagnostic report
+  - Improved detection of unsupported PDF documents with XFA forms
+
 * Wed Oct 28 2020 André Guerreiro <andre.guerreiro@caixamagica.pt>
   - Support for legislative change regarding expired cards until March 31st 2021
   - Improvement in trusted certificates update feature

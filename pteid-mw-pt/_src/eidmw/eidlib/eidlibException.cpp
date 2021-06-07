@@ -24,8 +24,10 @@
 
 **************************************************************************** */
 #include "eidlibException.h"
+#include "eidlib.h"
 #include "MWException.h"
 #include "eidErrors.h"
+
 #include <iostream>
 
 
@@ -305,6 +307,9 @@ const char* PTEID_Exception::GetMessage()
 			case EIDMW_TIMESTAMP_ERROR:
 				error_message = "Timestamp error during signature";
 				break;
+			case EIDMW_LTV_ERROR:
+				error_message = "Error adding LTV to signature.";
+				break;
 			case EIDMW_PDF_INVALID_ERROR:
 				error_message = "Invalid PDF document";
 				break;
@@ -324,6 +329,9 @@ const char* PTEID_Exception::GetMessage()
 
 PTEID_Exception PTEID_Exception::THROWException(CMWException &e)
 {
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidlib", 
+		"PTEID_Exception generated from %s:%ld error code: %08x", e.GetFile().c_str(), e.GetLine(), e.GetError());
+
 	switch(e.GetError())
 	{
 	case EIDMW_ERR_RELEASE_NEEDED:
@@ -500,6 +508,18 @@ PTEID_ExSOD::PTEID_ExSOD(long lError):PTEID_Exception(lError)
 }
 
 PTEID_ExSOD::~PTEID_ExSOD()
+{
+}
+
+/*****************************************************************************************
+---------------------------- PTEID_ExBatchSignatureFailed --------------------------------
+*****************************************************************************************/
+PTEID_ExBatchSignatureFailed::PTEID_ExBatchSignatureFailed(long lError, unsigned int index):
+	PTEID_Exception(lError), m_failedSignatureIndex(index)
+{
+}
+
+PTEID_ExBatchSignatureFailed::~PTEID_ExBatchSignatureFailed()
 {
 }
 

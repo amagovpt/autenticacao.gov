@@ -797,6 +797,9 @@ class PTEID_PDFSignature
 		 * Using PTEID_Config with parameter PTEID_PARAM_XSIGN_TSAURL a different TSA may be specified
 		 **/
 		PTEIDSDK_API void enableTimestamp();
+
+		PTEIDSDK_API void setSignatureLevel(PTEID_SignatureLevel);
+
 		/**
 		 * Use a smaller format for the visible signature which is 50% smaller in height but as wide as the regular format
 		 * The default "Cartão de Cidadão" logo or a custom image supplied via setCustomImage() will not be included
@@ -811,7 +814,7 @@ class PTEID_PDFSignature
 		/**
 	     * Use this method to change the image that's used on the bottom of the visible signature
 	     * This image will replace the default "Cartão de Cidadão" logo
-	     * @param image_data - image data in JPEG format (recommended size: 185x41 px)
+	     * @param image_data - image data in JPEG format (recommended size: 351x77 px)
 	     **/
 		PTEIDSDK_API void setCustomImage(const PTEID_ByteArray &image_data);
 
@@ -892,6 +895,7 @@ public:
 
     /**
     * Produce a XAdES-T Signature of the files indicated by the parameter @e paths and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter @e output_path.
+    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
     *
     * @param paths is an array of null-terminated strings representing absolute paths in
     * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
@@ -902,6 +906,8 @@ public:
 
     /**
     * Produce a XAdES-A Signature of the files indicated by the parameter @e paths and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter @e output_path.
+    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
+    * If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a XAdES-LT or XAdES-LTA depending where the timestamping fails.
     *
     * @param paths is an array of null-terminated strings representing absolute paths in
     * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
@@ -922,7 +928,8 @@ public:
 
     /**
     * Produce XAdES-T Signatures of the files indicated by the parameter @e paths and stores each of the results in an individual ASiC container in a zip format.
-    *
+    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
+    * 
     * @param paths is an array of null-terminated strings representing absolute paths in
     * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
     * @param n_paths is the number of elements in the @e paths array
@@ -932,7 +939,9 @@ public:
 
     /**
     * Produce XAdES-A Signatures of the files indicated by the parameter @e paths and stores each of the results in an individual ASiC container in a zip format.
-    *
+    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
+    * If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a XAdES-LT or XAdES-LTA depending where the timestamping fails.
+    * 
     * @param paths is an array of null-terminated strings representing absolute paths in
     * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
     * @param n_paths is the number of elements in the @e paths array
@@ -942,7 +951,10 @@ public:
 
 			
 	/**
-	* PDF Signature with location by page sector (the portrait A4 page is split into 18 cells: 6 lines and 3 columns) 
+	* PDF Signature with location by page sector (the portrait A4 page is split into 18 cells: 6 lines and 3 columns). 
+	* If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a PAdES-B signature.
+	* If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a PAdES-LT or PAdES-LTA depending where the timestamping fails.
+	*
  	* @param sig_handler: this defines the input file and some signature options
  	* @param page: in case of visible signature it defines the page where the signature will appear
 	* @param page_sector: position in the signature grid, between 1 to 18 for Portrait documents and 1 to 20 for Landscape ones
@@ -956,14 +968,18 @@ public:
 			const char *outfile_path);
 
 	/**
-	* PDF Signature with location by coordinates (expressed in percentage of page height/width). The coordinate system has its origin in the top left corner of the page
+	* PDF Signature with location by coordinates (expressed in percentage of page height/width). The coordinate system has its origin in the top left corner of the page.
+	* To apply an invisible signature negative values should be specified for both coordinates, e.g. -1.
+	* If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a PAdES-B signature.
+	* If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a PAdES-LT or PAdES-LTA depending where the timestamping fails.
+	* 
 	* @param sig_handler: this defines the input file and some signature options
 	* @param page: in case of visible signature it defines the page where the signature will appear
-	* @param coord_x: X coordinate of the signature location (percentage of page width)
-	* @param coord_y: Y coordinate of the signature location (percentage of page height)
+	* @param coord_x: X coordinate of the signature location (percentage of page width [0-1])
+	* @param coord_y: Y coordinate of the signature location (percentage of page height [0-1])
 	* @param location: Location field in the added signature metadata
-	* @param reason: Signature metadata field
-	* @param outfile_path: Native Filesystem path of the ouput file
+	* @param reason: Reason field in the added signature metadata
+	* @param outfile_path: Native filesystem path of the ouput file
 	**/
 	    PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
 			const char *outfile_path);
@@ -1467,6 +1483,7 @@ public:
 	PTEIDSDK_API void getFormattedData(PTEID_ByteArray &data);	/**< Return the content of the certificate without ending zero */
 	PTEIDSDK_API const char *getSerialNumber();		/**< Return the serial number of the certificate */
 	PTEIDSDK_API const char *getOwnerName();			/**< Return the name of the owner of the certificate */
+	PTEIDSDK_API const char *getSubjectSerialNumber();	/**< Return the serial number of the subject of the certificate */
 	PTEIDSDK_API const char *getIssuerName();			/**< Return the name of the issuer of the certificate */
 	PTEIDSDK_API const char *getValidityBegin();		/**< Return the validity begin date of the certificate */
 	PTEIDSDK_API const char *getValidityEnd();		/**< Return the validity end date of the certificate */
@@ -1494,6 +1511,11 @@ public:
 	  * This certificate comes from the card.
 	  */
 	PTEIDSDK_API bool isFromCard();
+
+	/**
+	  * Return true if the current time is between the certificate's notBefore and notAfter
+	  */
+	PTEIDSDK_API bool verifyDateValidity();
 
 	/**
 	  * Return the issuer certificate.

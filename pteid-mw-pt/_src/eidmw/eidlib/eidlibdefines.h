@@ -98,6 +98,13 @@ enum PTEID_FileType
 	PTEID_FILETYPE_CSV
 };
 
+enum PTEID_SignatureLevel
+{
+    PTEID_LEVEL_BASIC,
+    PTEID_LEVEL_TIMESTAMP,
+    PTEID_LEVEL_LT,
+    PTEID_LEVEL_LTV
+};
 
 /**
     Enumeration that includes all the configuration values of pteid-mw
@@ -172,12 +179,13 @@ enum PTEID_Param
     PTEID_PARAM_GUITOOL_APPLICATIONSCALE,   //number; 0=100%(default), 1=125%, 2=150%,... (25% increments)
     PTEID_PARAM_GUITOOL_GRAPHICSACCEL,      //number; 0=no, 1=yes(default)
     PTEID_PARAM_GUITOOL_SHOWSTARTUPHELP,    //number; 0=no(default), 1=yes
+    PTEID_PARAM_GUITOOL_SHOWSIGNOPTIONS,    //number; 0=no(default), 1=yes
+    PTEID_PARAM_GUITOOL_SHOWSIGNHELP,       //number; 0=no, 1=yes(default)
 
 	//PROXY
 	PTEID_PARAM_PROXY_CONNECT_TIMEOUT,	//number
 
 	//AUTOUPDATES
-    PTEID_PARAM_AUTOUPDATES_URL,        //string
     PTEID_PARAM_AUTOUPDATES_VERIFY_URL, //string
     PTEID_PARAM_AUTOUPDATES_CERTS_URL,  //string
     PTEID_PARAM_AUTOUPDATES_NEWS_URL    //string

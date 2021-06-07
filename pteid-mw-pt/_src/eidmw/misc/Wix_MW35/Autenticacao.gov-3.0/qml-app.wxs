@@ -6,6 +6,29 @@
   <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\VC9\Release\ ?>
   <Fragment>
     <DirectoryRef Id="APPLICATIONFOLDER">
+      <Component Id="PteidGuiShortcutOpenGL" Guid="{737097CD-3807-40DF-A0A7-9842516BA37B}" KeyPath="yes">
+        <Shortcut Id="eidguiV2ShortcutDirect3d"
+            Name="Autenticação.Gov Direct3d"
+            Description="!(loc.PteidGuiDescr)"
+            Target="[APPLICATIONFOLDER]pteidguiV2.exe"
+            WorkingDirectory="EIDGUIV2DIR"
+            Arguments="-w"/>
+
+        <Shortcut Id="eidguiV2ShortcutSoftware"
+            Name="Autenticação.Gov Software"
+            Description="!(loc.PteidGuiDescr)"
+            Target="[APPLICATIONFOLDER]pteidguiV2.exe"
+            WorkingDirectory="EIDGUIV2DIR"
+            Arguments="-s"/>
+
+        <Shortcut Id="eidguiV2ShortcutHardware"
+            Name="Autenticação.Gov Hardware"
+            Description="!(loc.PteidGuiDescr)"
+            Target="[APPLICATIONFOLDER]pteidguiV2.exe"
+            WorkingDirectory="EIDGUIV2DIR"
+            Arguments="-c"/>
+      </Component>
+
       <Component Id="cmp6FAEA3F9F61E5AB0CE462E42B572D724" Guid="{CC08D994-3049-4F53-A844-EE4F20755822}">
         <File Id="fil6A41295D0070F31E5D32EDFAC11A6F0D" KeyPath="yes" Source="$(var.QMLDIR)\D3Dcompiler_47.dll" />
       </Component>
@@ -2480,6 +2503,7 @@
   <Fragment>
     <ComponentGroup Id="qmlAppComponentGroup">
       <ComponentRef Id="PteidGuiShortcut"/>
+      <ComponentRef Id="PteidGuiShortcutOpenGL"/>
       <ComponentRef Id="RegisterPteidAutoStart"/>
       <ComponentRef Id="cmp6FAEA3F9F61E5AB0CE462E42B572D724" />
       <ComponentRef Id="cmpED1C29F8914A4A53211F619E1872ECC1" />

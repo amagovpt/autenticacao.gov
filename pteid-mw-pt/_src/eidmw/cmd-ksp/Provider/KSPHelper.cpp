@@ -1,9 +1,11 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//
-// Copyright (c) Microsoft Corporation. All rights reserved.
+/*-****************************************************************************
+
+ * Copyright (C) 2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ * Copyright (C) 2020 José Pinto - <jose.pinto@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.2
+
+****************************************************************************-*/
 
 /*++
 
@@ -242,7 +244,7 @@ __deref_out CMDKSP_KEY **ppKey)
     NTSTATUS          ntStatus = STATUS_INTERNAL_ERROR;
     BYTE *pbHashBuffer = NULL;
 
-    LogTrace(LOGTYPE_INFO, "CreateNewKeyObject", "CreateNewKeyObject");
+    LogTrace(LOGTYPE_TRACE, "CreateNewKeyObject", "CreateNewKeyObject");
 
     //Initialize the key object.
     pKey = (CMDKSP_KEY *)HeapAlloc(GetProcessHeap(), 0, sizeof(CMDKSP_KEY));
@@ -306,7 +308,7 @@ __deref_out CMDKSP_KEY **ppKey)
             NULL,
             lpProcessName,
             FILENAME_MAX);
-        LogTrace(LOGTYPE_INFO, "getDocName", "ProcessName=%s", lpProcessName);
+        LogTrace(LOGTYPE_TRACE, "getDocName", "ProcessName=%s", lpProcessName);
 
         pKey->pszProcessBaseName = lpProcessName;
         pKey->hWnd = GetMainWindow(lpProcessName);
@@ -399,7 +401,7 @@ __deref_out CMDKSP_KEY **ppKey)
         Status = NTE_INTERNAL_ERROR;
         goto cleanup;
     }
-    LogTrace(LOGTYPE_INFO, "CreateNewKeyObject", "Certificate's key bit length = %d", pKey->dwKeyBitLength);
+    LogTrace(LOGTYPE_TRACE, "CreateNewKeyObject", "Certificate's key bit length = %d", pKey->dwKeyBitLength);
 
     //The usage of the key is for signing.
     pKey->dwKeyUsagePolicy = NCRYPT_ALLOW_SIGNING_FLAG;
@@ -438,7 +440,7 @@ __inout CMDKSP_KEY *pKey)
     SECURITY_STATUS Status = ERROR_SUCCESS;
     NTSTATUS ntStatus = STATUS_INTERNAL_ERROR;
 
-    LogTrace(LOGTYPE_INFO, "DeleteKeyObject", "DeleteKeyObject");
+    LogTrace(LOGTYPE_TRACE, "DeleteKeyObject", "DeleteKeyObject");
 
     //Delete the key name.
     if (pKey->pszKeyName)
@@ -499,7 +501,7 @@ std::wstring GetShortHashString(PBYTE pbHash, DWORD cbHash) {
 #define SHORT_HASH_LEN 8
     DWORD dwFlags = CRYPT_STRING_BASE64 | CRYPT_STRING_NOCRLF;
     DWORD cchHash;
-    LogTrace(LOGTYPE_INFO, "GetHashString", "pbHash=%x cbHash=%d", pbHash, cbHash);
+    LogTrace(LOGTYPE_TRACE, "GetHashString", "pbHash=%x cbHash=%d", pbHash, cbHash);
     if (!CryptBinaryToStringW(
         pbHash,
         cbHash,

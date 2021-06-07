@@ -348,7 +348,6 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
 
     for (size_t i = 0; i < signatureInputs.size(); i++)
         delete signatureInputs[i];
-		
 
     if (ret != ERR_NONE)
     {
@@ -517,6 +516,7 @@ int CMDSignature::signClose(std::string in_code)
     if (m_pdf_handlers.size())
     {
         bool throwTimestampError = false;
+        bool throwLTVError = false;
         int ret_had_errors = ERR_NONE;
         for (size_t i = 0; i < m_pdf_handlers.size(); i++)
         {
@@ -528,10 +528,13 @@ int CMDSignature::signClose(std::string in_code)
                 ret = pdf->signClose(signature_cba);
             }
             catch (CMWException &e) {
-                if (e.GetError() != EIDMW_TIMESTAMP_ERROR){
+                if (e.GetError() != EIDMW_TIMESTAMP_ERROR && e.GetError() != EIDMW_LTV_ERROR){
                     throw PTEID_Exception(e.GetError());
                 }
-                throwTimestampError = true;
+                if (e.GetError() == EIDMW_TIMESTAMP_ERROR)
+                    throwTimestampError = true;
+                else
+                    throwLTVError = true;
             }
 
             if (ret != ERR_NONE)
@@ -545,8 +548,11 @@ int CMDSignature::signClose(std::string in_code)
             }
         }
 
+        if (throwLTVError)
+                throw PTEID_Exception(EIDMW_LTV_ERROR);
+
         if (throwTimestampError)
-            throw PTEID_Exception(EIDMW_TIMESTAMP_ERROR);
+                throw PTEID_Exception(EIDMW_TIMESTAMP_ERROR);
 
         if (ret_had_errors != ERR_NONE)
             return ERR_SIGN_CLOSE;

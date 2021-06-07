@@ -1,3 +1,11 @@
+/*-****************************************************************************
+
+ * Copyright (C) 2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ *
+ * Licensed under the EUPL V.1.2
+
+****************************************************************************-*/
+
 #ifndef __CMDKSP_LANGUAGE_H__
 #define __CMDKSP_LANGUAGE_H__
 

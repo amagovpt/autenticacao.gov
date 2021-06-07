@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
@@ -26,10 +26,12 @@ Item {
     property alias propertyTextDescriptionText: textDescription
     property alias propertyButtonStartUpdate: buttonStartUpdate
     property alias propertyButtonCancelUpdate: buttonCancelUpdate
+    property alias propertyButtonOpenTransferFolder: buttonOpenTransferFolder
     property alias propertyReleaseScrollViewText: releaseNoteScrollViewText
     property alias propertyReleaseNoteScrollView: releaseNoteScrollView
     property alias propertyRemoteVersion: remoteVersion
     property alias propertyInstalledVersion: installedVersion
+    property alias propertySupportedSystems: supportSystemsLink
 
     property alias propertyButtonSearchCerts: buttonSearchCerts
     property alias propertyProgressBarCerts: progressBarCerts
@@ -76,13 +78,14 @@ Item {
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_APP_TITLE") + controler.autoTr
-                Accessible.role: Accessible.TitleBar
+                Accessible.role: Accessible.StaticText
                 Accessible.name: text
-                KeyNavigation.tab: rectUpdateAppTitle
-                KeyNavigation.down: rectUpdateAppTitle
-                KeyNavigation.right: rectUpdateAppTitle
-                KeyNavigation.backtab: rectUpdateAppTitle
-                KeyNavigation.up: rectUpdateAppTitle
+                KeyNavigation.tab: textDescription.visible ? textDescription : textProgressBar
+                KeyNavigation.down: textDescription.visible ? textDescription : textProgressBar
+                KeyNavigation.right: textDescription.visible ? textDescription : textProgressBar
+                KeyNavigation.backtab: buttonSearchCerts
+                KeyNavigation.up: buttonSearchCerts
+                KeyNavigation.left: buttonSearchCerts
             }
             DropShadow {
                 anchors.fill: rowUpdateApp
@@ -123,24 +126,55 @@ Item {
                     Item {
                         id: rawTextDescription
                         width: parent.width
-                        height: Constants.SIZE_TEXT_LABEL
+                        height: 2 * Constants.SIZE_TEXT_LABEL
                         anchors.top: mainItemWithPadding.top
                         Components.Link {
                             id: textDescription
-                            propertyText.text: qsTranslate("PageDefinitionsUpdates",
-                                                           "STR_UPDATE_TEXT")
-                            propertyText.font.bold: activeFocus || textDescription.activeFocus
-                            propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
                             width: parent.width
-                            height: parent.height
-                            Accessible.role: Accessible.TitleBar
+
+                            propertyLinkUrl: 'https://www.autenticacao.gov.pt/web/guest/cc-aplicacao'
+                            propertyText.text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT")
+                                + "<a href='" + textDescription.propertyLinkUrl + "'>"
+                                + qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT_LINK") + "</a>."
+                            propertyAccessibleText: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT")
+
+                            propertyText.font.bold: activeFocus || textDescription.activeFocus
+                            propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+
                             Accessible.name: propertyText.text
-                            KeyNavigation.tab: buttonSearch.visible ? buttonSearch : installedVersion
-                            KeyNavigation.down: buttonSearch.visible ? buttonSearch : installedVersion
-                            KeyNavigation.right: buttonSearch.visible ? buttonSearch : installedVersion
+                            KeyNavigation.tab: supportSystemsLink
+                            KeyNavigation.down: supportSystemsLink
+                            KeyNavigation.right: supportSystemsLink
                             KeyNavigation.left: rectUpdateAppTitle
                             KeyNavigation.backtab: rectUpdateAppTitle
                             KeyNavigation.up: rectUpdateAppTitle
+                        }
+                        Components.Link {
+                            id: supportSystemsLink
+                            width: parent.width
+                            anchors.top: textDescription.bottom
+
+                            property var keyNavNext: (buttonSearch.visible ? buttonSearch :
+                                        (buttonCancelUpdate.visible ? buttonCancelUpdate : installedVersion ))
+
+                            propertyLinkUrl: 'https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#sistemas-operativos-oficialmente-suportados'
+
+                            propertyText.text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_SUPPORTED_SYSTEMS")
+                                + "<a href='" + supportSystemsLink.propertyLinkUrl + "'>"
+                                + qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT_LINK") + "</a>."
+                            propertyAccessibleText: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_SUPPORTED_SYSTEMS")
+
+                            propertyText.font.bold: activeFocus || supportSystemsLink.activeFocus
+                            propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+
+                            Accessible.role: Accessible.StaticText
+                            Accessible.name: propertyText.text
+                            KeyNavigation.tab: keyNavNext
+                            KeyNavigation.down: keyNavNext
+                            KeyNavigation.right: keyNavNext
+                            KeyNavigation.left: textDescription
+                            KeyNavigation.backtab: textDescription
+                            KeyNavigation.up: textDescription
                         }
                     }
                     Item {
@@ -148,7 +182,7 @@ Item {
                         width: parent.width
                         height: parent.height * 3 * Constants.HEIGHT_DEFINITIONS_UPDATE_LABEL_ROW
                         anchors.top: rawTextDescription.bottom
-                        anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
+                        anchors.topMargin: 6 * Constants.SIZE_TEXT_V_SPACE + Constants.SIZE_TEXT_LINK_LABEL
                         Item {
                             id: rawInstalledVersion
                             width: parent.width * 0.33 - Constants.SIZE_ROW_H_SPACE
@@ -166,9 +200,9 @@ Item {
                             KeyNavigation.tab: remoteVersion
                             KeyNavigation.down: remoteVersion
                             KeyNavigation.right: remoteVersion
-                            KeyNavigation.left: textDescription
-                            KeyNavigation.backtab: textDescription
-                            KeyNavigation.up: textDescription
+                            KeyNavigation.left: supportSystemsLink
+                            KeyNavigation.backtab: supportSystemsLink
+                            KeyNavigation.up: supportSystemsLink
                         }
                         Item {
                             id: rawRemoteVersion
@@ -268,9 +302,9 @@ Item {
                             font.capitalization: Font.MixedCase
                             highlighted: activeFocus ? true : false
                             anchors.horizontalCenter: parent.horizontalCenter
-                            KeyNavigation.tab: propertyMainItem
-                            KeyNavigation.down: propertyMainItem
-                            KeyNavigation.right: propertyMainItem
+                            KeyNavigation.tab: rectUpdateCertsTitle
+                            KeyNavigation.down: rectUpdateCertsTitle
+                            KeyNavigation.right: rectUpdateCertsTitle
                             KeyNavigation.left: textDescription
                             KeyNavigation.backtab: textDescription
                             KeyNavigation.up: textDescription
@@ -295,12 +329,40 @@ Item {
                             highlighted: activeFocus ? true : false
                             anchors.horizontalCenter: parent.horizontalCenter
                             visible: false
-                            KeyNavigation.tab: propertyMainItem
-                            KeyNavigation.down: propertyMainItem
-                            KeyNavigation.right: propertyMainItem
-                            KeyNavigation.left: buttonSearch
-                            KeyNavigation.backtab: buttonSearch
-                            KeyNavigation.up: buttonSearch
+                            KeyNavigation.tab: rectUpdateCertsTitle
+                            KeyNavigation.down: rectUpdateCertsTitle
+                            KeyNavigation.right: rectUpdateCertsTitle
+                            KeyNavigation.left: textDescription
+                            KeyNavigation.backtab: textDescription
+                            KeyNavigation.up: textDescription
+                        }
+                    }
+                    Item {
+                        id: rawButtonOpenTransferFolder
+                        width: parent.width
+                        height: Constants.HEIGHT_BOTTOM_COMPONENT
+                        anchors.top: textProgressBar.bottom
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                        Button {
+                            id: buttonOpenTransferFolder
+                            text: qsTranslate("PageDefinitionsUpdates",
+                                              "STR_UPDATE_BUTTON_OPEN_TRANSFERS")
+                            anchors.horizontalCenterOffset: 0
+                            width: 1.4 * Constants.WIDTH_BUTTON
+                            height: parent.height
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.family: lato.name
+                            font.capitalization: Font.MixedCase
+                            highlighted: activeFocus ? true : false
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            visible: false
+
+                            KeyNavigation.tab: rectUpdateCertsTitle
+                            KeyNavigation.down: rectUpdateCertsTitle
+                            KeyNavigation.right: rectUpdateCertsTitle
+                            KeyNavigation.left: textDescription
+                            KeyNavigation.backtab: textDescription
+                            KeyNavigation.up: textDescription
                         }
                     }
 
@@ -309,7 +371,7 @@ Item {
                         width: parent.width
                         height: parent.height - rawReleaseNoteScrollView.y
                         anchors.top: rawRowVersion.bottom
-                        anchors.topMargin: 4 * Constants.SIZE_TEXT_V_SPACE
+                        anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
                         Rectangle {
                             id: releaseNoteScrollView
                             width: parent.width
@@ -367,9 +429,9 @@ Item {
                                         visible: false
                                         textFormat: "RichText"
                                         Accessible.role: Accessible.StaticText
-                                        KeyNavigation.tab: rectUpdateAppTitle
-                                        KeyNavigation.down: rectUpdateAppTitle
-                                        KeyNavigation.right: rectUpdateAppTitle
+                                        KeyNavigation.tab: rectUpdateCertsTitle
+                                        KeyNavigation.down: rectUpdateCertsTitle
+                                        KeyNavigation.right: rectUpdateCertsTitle
                                         KeyNavigation.left: buttonStartUpdate
                                         KeyNavigation.backtab: buttonStartUpdate
                                         KeyNavigation.up: buttonStartUpdate
@@ -403,6 +465,9 @@ Item {
             anchors.top : rectUpdateApp.bottom
 
             Text {
+                property var keyNavBack: (buttonSearch.visible ? buttonSearch : 
+                            (buttonCancelUpdate.visible ? buttonCancelUpdate : releaseNoteScrollViewText))
+
                 id: rectUpdateCertsTitle
                 x: Constants.SIZE_TEXT_FIELD_H_SPACE
                 font.pixelSize: activeFocus
@@ -413,13 +478,14 @@ Item {
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_TITLE") + controler.autoTr
-                Accessible.role: Accessible.TitleBar
+                Accessible.role: Accessible.StaticText
                 Accessible.name: text
-                KeyNavigation.tab: rectUpdateAppTitle
-                KeyNavigation.down: rectUpdateAppTitle
-                KeyNavigation.right: rectUpdateAppTitle
-                KeyNavigation.backtab: rectUpdateAppTitle
-                KeyNavigation.up: rectUpdateAppTitle
+                KeyNavigation.tab: textDescriptionCerts
+                KeyNavigation.down: textDescriptionCerts
+                KeyNavigation.right: textDescriptionCerts
+                KeyNavigation.backtab: keyNavBack
+                KeyNavigation.up: keyNavBack
+                KeyNavigation.left: keyNavBack
             }
 
             DropShadow {
@@ -466,19 +532,19 @@ Item {
                         Components.Link {
                             id: textDescriptionCerts
                             propertyText.text: qsTranslate("PageDefinitionsUpdates",
-                                                           "STR_UPDATE_TEXT")
+                                                           "STR_UPDATE_CERTS_TEXT")
                             propertyText.font.bold: activeFocus || textDescriptionCerts.activeFocus
-                            propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                            propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                             width: parent.width
                             height: parent.height
-                            Accessible.role: Accessible.TitleBar
+                            Accessible.role: Accessible.StaticText
                             Accessible.name: propertyText.text
-                            KeyNavigation.tab: buttonSearch.visible ? buttonSearch : installedVersion
-                            KeyNavigation.down: buttonSearch.visible ? buttonSearch : installedVersion
-                            KeyNavigation.right: buttonSearch.visible ? buttonSearch : installedVersion
-                            KeyNavigation.left: rectUpdateAppTitle
-                            KeyNavigation.backtab: rectUpdateAppTitle
-                            KeyNavigation.up: rectUpdateAppTitle
+                            KeyNavigation.tab: buttonSearchCerts
+                            KeyNavigation.down: buttonSearchCerts
+                            KeyNavigation.right: buttonSearchCerts
+                            KeyNavigation.left: rectUpdateCertsTitle
+                            KeyNavigation.backtab: rectUpdateCertsTitle
+                            KeyNavigation.up: rectUpdateCertsTitle
                         }
                     }
                     Item {
@@ -510,11 +576,8 @@ Item {
                                     font.bold: focus
                                     color: Constants.COLOR_TEXT_LABEL
                                     height: Constants.SIZE_TEXT_LABEL
-                                    text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_TITLE")
-                                    elide: Text.ElideLeft
-                                    textFormat: Text.RichText
-                                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                                    Accessible.role: Accessible.TitleBar
+                                    text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_NEWS")
+                                    Accessible.role: Accessible.StaticText
                                     Accessible.name: text
                                     KeyNavigation.tab: rectUpdateAppTitle
                                     KeyNavigation.down: rectUpdateAppTitle
@@ -673,9 +736,9 @@ Item {
                             KeyNavigation.tab: propertyMainItem
                             KeyNavigation.down: propertyMainItem
                             KeyNavigation.right: propertyMainItem
-                            KeyNavigation.left: textDescription
-                            KeyNavigation.backtab: textDescription
-                            KeyNavigation.up: textDescription
+                            KeyNavigation.left: textDescriptionCerts
+                            KeyNavigation.backtab: textDescriptionCerts
+                            KeyNavigation.up: textDescriptionCerts
                         }
                     }
                     Item {

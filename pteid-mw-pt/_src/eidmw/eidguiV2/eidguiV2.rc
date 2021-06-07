@@ -68,7 +68,7 @@ BEGIN
         BLOCK "080904b0"
         BEGIN
 	        VALUE "CompanyName", PTEID_COMPANY_NAME
-            VALUE "FileDescription", "Autenticacao.gov Application"
+            VALUE "FileDescription", "Autenticação.gov"
             VALUE "FileVersion", WIN_GUI_VERSION_STRING
             VALUE "InternalName", "pteidguiV2"
 			VALUE "LegalCopyright", PTEID_COPYRIGHT

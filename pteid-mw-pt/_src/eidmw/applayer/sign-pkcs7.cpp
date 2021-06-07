@@ -210,6 +210,62 @@ void add_certificate(PKCS7 *p7, unsigned char * cert_data,
 typedef unsigned int
     (*HashFunc)(unsigned char *data, unsigned long data_len, unsigned char *digest);
 
+bool verifyTsResponse(TS_RESP *tsresp) {
+    TS_VERIFY_CTX * verify_ctx = TS_VERIFY_CTX_new();
+    TS_VERIFY_CTX_set_flags(verify_ctx, TS_VFY_VERSION);
+
+    if (TS_RESP_verify_response(verify_ctx, tsresp) != 1) {
+        MWLOG(LEV_ERROR, MOD_APL, "Failed to verify TS response! Details: %s",
+            ERR_error_string(ERR_get_error(), NULL));
+        return false;
+    }
+
+    TS_VERIFY_CTX_free(verify_ctx);
+    return true;
+}
+
+bool getTsToken(TS_RESP *tsresp, unsigned char **p7_der, int *p7_len)
+{
+    PKCS7* token = TS_RESP_get_token(tsresp);
+
+    *p7_len = i2d_PKCS7(token, NULL);
+    *p7_der = (unsigned char *)OPENSSL_malloc(*p7_len);
+    unsigned char *p = *p7_der;
+    i2d_PKCS7(token, &p);
+
+    if (!PKCS7_type_is_signed(token))
+    {
+        MWLOG(LEV_ERROR, MOD_APL, L"Error in timestamp token: not signed!");
+        return false;
+    }
+
+    return true;
+}
+
+bool getTokenFromTsResponse(unsigned char *tsResp, int tsRespLen, unsigned char **outToken, int *outTokenLen)
+{
+    TS_RESP *tsresp = d2i_TS_RESP(NULL, (const unsigned char**)&tsResp, tsRespLen);
+    if (tsresp == NULL)
+    {
+        MWLOG(LEV_ERROR, MOD_APL,
+            L"Error decoding timestamp token! Incorrect ASN.1 data");
+        return false;
+    }
+
+    if (!verifyTsResponse(tsresp)) {
+        TS_RESP_free(tsresp);
+        return false;
+    }
+
+    if (!getTsToken(tsresp, outToken, outTokenLen))
+    {
+        TS_RESP_free(tsresp);
+        return false;
+    }
+
+    TS_RESP_free(tsresp);
+    return true;
+}
 
 /*
  * Appends the TSP TimestampToken to the existing PKCS7 signature as an unsigned attribute
@@ -223,33 +279,18 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 
 	if (tsresp != NULL)
 	{
-		TS_VERIFY_CTX * verify_ctx = TS_VERIFY_CTX_new();
-		TS_VERIFY_CTX_set_flags(verify_ctx, TS_VFY_VERSION);
+        if (!verifyTsResponse(tsresp)) {
+            TS_RESP_free(tsresp);
+            return 1;
+        }
 
-		if (TS_RESP_verify_response(verify_ctx, tsresp) != 1) {
-
-			MWLOG(LEV_ERROR, MOD_APL, "Failed to verify TS response! Details: %s",
-				ERR_error_string(ERR_get_error(), NULL));
-
-			TS_RESP_free(tsresp);
-			return 1;
-		}
-
-		TS_VERIFY_CTX_free(verify_ctx);
-
-		PKCS7* token = TS_RESP_get_token(tsresp);
-
-		int p7_len = i2d_PKCS7(token, NULL);
-		unsigned char *p7_der = (unsigned char *)OPENSSL_malloc(p7_len);
-		unsigned char *p = p7_der;
-		i2d_PKCS7(token, &p);
-
-		if (!PKCS7_type_is_signed(token))
-		{
-			MWLOG(LEV_ERROR, MOD_APL, L"Error in timestamp token: not signed!");
-			TS_RESP_free(tsresp);
-			return 1;
-		}
+        unsigned char *p7_der = NULL;
+        int p7_len;
+        if (!getTsToken(tsresp, &p7_der, &p7_len))
+        {
+            TS_RESP_free(tsresp);
+            return 1;
+        }
 
 		//Add timestamp token to the PKCS7 signature object
 		ASN1_STRING *value = ASN1_STRING_new();
@@ -274,11 +315,7 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 void add_signingCertificate(PKCS7_SIGNER_INFO *signer_info, X509 *signing_cert)
 {
 
-	ASN1_STRING *seq = NULL;
-	unsigned char *p, *pp = NULL;
-	int len;
 	int ret = 0;
-	int signed_string_nid = -1;
 
 	ESS_SIGNING_CERT_V2 * sc = NULL;
 	const int issuer_needed = 1;

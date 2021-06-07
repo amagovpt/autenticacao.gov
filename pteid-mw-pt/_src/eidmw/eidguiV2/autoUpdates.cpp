@@ -12,6 +12,7 @@
 #include <QCursor>
 #include <QDebug>
 #include <QtConcurrent>
+#include <QStandardPaths>
 
 #include <fstream>
 #include <sstream>
@@ -88,6 +89,9 @@ void AutoUpdates::initRequest(int updateType){
     // Auto update App
     std::string remoteversion;
     if(m_updateType == GAPI::AutoUpdateApp){
+        // Write inside this type to write to log once.
+        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "AutoUpdates::started");
+
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_VERIFY_URL);
         remoteversion.append(config.getString());
         remoteversion.append("version.json");
@@ -662,10 +666,6 @@ void AutoUpdates::ChooseAppVersion(std::string distro, std::string arch, cJSON *
 
     std::string downloadurl;
 
-    eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_URL);
-    std::string configurl = config.getString();
-    downloadurl.append(configurl);
-
 #ifdef WIN32
 
 #elif __APPLE__
@@ -680,7 +680,7 @@ void AutoUpdates::ChooseAppVersion(std::string distro, std::string arch, cJSON *
     }
 #endif
     //Name of the msi/deb/rpm will be distro specific
-    cJSON *package_json = cJSON_GetObjectItem(dist_json, "package");
+    cJSON *package_json = cJSON_GetObjectItem(dist_json, "packageUrl");
     if (!cJSON_IsString(package_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get package_json for this distribution.");
@@ -762,7 +762,8 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
 #endif
             qDebug() << "Cert exists: " << QString::fromUtf8(file_name_temp.c_str());
         } else{
-            qDebug() << "Cert does not exist or invalid: " << QString::fromUtf8(file_name_temp.c_str());
+            PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
+                "AutoUpdates::RunCertsPackage: Cert does not exist or invalid:! %s",file_name_temp.c_str());
 
             downloadurl.append(configurl);
             downloadurl.append(cert_json->string);
@@ -782,7 +783,8 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
 
 void AutoUpdates::updateWindows()
 {
-    qDebug() << "C++ AUTO UPDATES: There are updates available";
+    PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
+                "AutoUpdates::RunCertsPackage: There are updates available!");
 
     if(m_updateType == GAPI::AutoUpdateApp){
         // Show popup about app update
@@ -950,23 +952,23 @@ void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
 
     std::cout << "pkgpath " << pkgpath << " distro " << distro << std::endl;
 
-    if (distro.substr(0, 6) == "ubuntu")
+    QString pkgDestinationPath = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).first();
+    pkgDestinationPath.append("/");
+    pkgDestinationPath.append(pkg.c_str());
+
+    if (QFile::exists(pkgDestinationPath))
+        QFile::remove(pkgDestinationPath);
+
+    if(!QFile::rename(QString::fromStdString(pkgpath), pkgDestinationPath))
     {
-        // TODO: Ubunto < 17
-        execl ("/usr/bin/software-center", "software-center", pkgpath.c_str(), NULL);
-        pkgpath.insert(0,"--local-filename=");
-        execl ("/usr/bin/ubuntu-software", "gnome-software", pkgpath.c_str(), NULL);
+        qDebug() << "C++ AUTO UPDATES: Failed to move package to " << pkgDestinationPath.toStdString().c_str();
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AppController::RunPackage: Failed to move package to %s" , pkgDestinationPath.toStdString().c_str());
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        return;
     }
 
-    else if (distro == "fedora")
-    {
-        execl ("/usr/bin/gpk-install-local-file", "gpk-install-local-file", pkgpath.c_str(), NULL);
-    }
+    getAppController()->signalAutoUpdateSuccess(m_updateType);
 
-    else if (distro == "suse")
-    {
-        execl ("/usr/bin/gpk-install-local-file", "gpk-install-local-file", pkgpath.c_str(), NULL);
-    }
 #endif
     qDebug() << "C++ AUTO UPDATES: RunPackage finish";
 }
@@ -1202,8 +1204,8 @@ bool AutoUpdates::validateHash(QString certPath, QString hashString){
     QString hash = QString(QCryptographicHash::hash((DataFile),QCryptographicHash::Sha256).toHex());
 
     if (QString::compare(hash, hashString, Qt::CaseInsensitive)){
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-            "AutoUpdates::validateHash: Certificate invalid: %s %s %s ",
+        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
+            "AutoUpdates::validateHash Certificate invalid or outdated: %s %s %s ",
                   certPath.toStdString().c_str(),hashString.toStdString().c_str(),hash.toStdString().c_str());
         return false;
     }

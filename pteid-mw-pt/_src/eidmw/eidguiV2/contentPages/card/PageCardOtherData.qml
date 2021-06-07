@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
@@ -27,11 +27,9 @@ PageCardOtherDataForm {
         target: gapi
         onSignalGenericError: {
             propertyBusyIndicator.running = false
-            propertyTextBoxCardState.propertyDateField.enabled = false
         }
         onSignalCardDataChanged: {
             console.log("Data Card Identify --> Data Changed")
-            gapi.startGetCardActivation()
             propertyTextBoxNIF.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.NIF)
             propertyTextBoxNISS.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.NISS)
             propertyTextBoxNSNS.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.NSNS)
@@ -40,17 +38,10 @@ PageCardOtherDataForm {
             propertyTextBoxIssuingEntity.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.IssuingEntity)
             propertyTextBoxDocumentType.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Documenttype)
             propertyTextBoxPlaceOfRequest.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.PlaceOfRequest)
-            propertyTextBoxCardState.propertyDateField.text = ""
-            propertyTextBoxCardState.propertyDateField.enabled = true
+            propertyBusyIndicator.running = false
             mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                 propertyRectTaxNum.forceActiveFocus()
-        }
-        onSignalShowCardActivation: {
-            propertyBusyIndicator.running = false
-            if (propertyTextBoxCardState.propertyDateField.enabled){
-                propertyTextBoxCardState.propertyDateField.text = statusMessage
-            }
         }
 
         onSignalCardAccessError: {
@@ -87,8 +78,6 @@ PageCardOtherDataForm {
             propertyTextBoxIssuingEntity.propertyDateField.text = ""
             propertyTextBoxDocumentType.propertyDateField.text = ""
             propertyTextBoxPlaceOfRequest.propertyDateField.text = ""
-            propertyTextBoxCardState.propertyDateField.text = ""
-            propertyTextBoxCardState.propertyDateField.enabled = false
             propertyBusyIndicator.running = false
         }
         onSignalCardChanged: {
@@ -107,7 +96,6 @@ PageCardOtherDataForm {
                 propertyTextBoxIssuingEntity.propertyDateField.text = ""
                 propertyTextBoxDocumentType.propertyDateField.text = ""
                 propertyTextBoxPlaceOfRequest.propertyDateField.text = ""
-                propertyTextBoxCardState.propertyDateField.text = ""
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
@@ -118,7 +106,6 @@ PageCardOtherDataForm {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
                 returnSubMenuWhenClosed = true;
             }
-            propertyTextBoxCardState.propertyDateField.enabled = false
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, returnSubMenuWhenClosed)
         }
     }

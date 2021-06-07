@@ -1609,6 +1609,11 @@ void APL_Certif::initInfo()
 		m_initInfo=true;
 }
 
+bool APL_Certif::verifyDateValidity()
+{
+	return m_cryptoFwk->VerifyDateValidity(getData());
+}
+
 bool APL_Certif::isHidden()
 {
 	return m_hidden;
@@ -1637,6 +1642,13 @@ const char *APL_Certif::getOwnerName()
 	initInfo();
 
 	return m_info->ownerName.c_str();
+}
+
+const char *APL_Certif::getSubjectSerialNumber()
+{
+	initInfo();
+
+	return m_info->subjectSerialNumber.c_str();
 }
 
 const char *APL_Certif::getIssuerName()

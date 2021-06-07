@@ -1,6 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2017, 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
 
@@ -10,6 +11,8 @@
 #include <QObject>
 #include <QDebug>
 #include <QDir>
+#include <QByteArray>
+#include <QFile>
 
 #ifdef WIN32
 #include <stdio.h>
@@ -30,6 +33,8 @@ typedef const void *PCX509CERT;
 //MW libraries
 #include "eidlib.h"
 #include "eidlibException.h"
+#include "Util.h"
+#include "Config.h"
 
 using namespace eIDMW;
 
@@ -149,6 +154,8 @@ bool CERTIFICATES::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertCont
 
     if ( NULL != hMyStore )
     {
+        RemoveOlderUserCerts(hMyStore, pCertContext);
+
         // ----------------------------------------------------
         // look if we already have a certificate with the same
         // subject (contains name and document number) in the store
@@ -328,6 +335,101 @@ bool CERTIFICATES::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertCont
 #endif
     return true;
 }
+
+#ifdef WIN32
+void CERTIFICATES::RemoveOlderUserCerts(HCERTSTORE hMyStore, PCCERT_CONTEXT pTargetCert)
+{
+    DWORD dwSubjectSerialLen = CertGetNameStringW(
+        pTargetCert,
+        CERT_NAME_ATTR_TYPE,
+        0,
+        (void *)szOID_DEVICE_SERIAL_NUMBER,
+        NULL,
+        0);
+
+    PWSTR csTargetSubjectSerial = new WCHAR[dwSubjectSerialLen];
+    CertGetNameStringW(
+        pTargetCert,
+        CERT_NAME_ATTR_TYPE,
+        0,
+        (void *)szOID_DEVICE_SERIAL_NUMBER,
+        csTargetSubjectSerial,
+        dwSubjectSerialLen);
+
+    DWORD dwIssuerLen = CertGetNameStringW(
+        pTargetCert,
+        CERT_NAME_SIMPLE_DISPLAY_TYPE,
+        CERT_NAME_ISSUER_FLAG,
+        0,
+        NULL,
+        0);
+
+    DWORD dwCharsToBeRemoved = 5; // p.e. " 0010"
+    PWSTR csIssuerSubjectCN = new WCHAR[dwIssuerLen - dwCharsToBeRemoved];
+    CertGetNameStringW(
+        pTargetCert,
+        CERT_NAME_SIMPLE_DISPLAY_TYPE,
+        CERT_NAME_ISSUER_FLAG,
+        0,
+        csIssuerSubjectCN,
+        dwIssuerLen - dwCharsToBeRemoved);
+
+    PWSTR csCandidateSubjectSerial = new WCHAR[dwSubjectSerialLen];
+
+    PCCERT_CONTEXT pCert = NULL;
+    while (pCert = CertFindCertificateInStore(
+        hMyStore,
+        X509_ASN_ENCODING,
+        0,
+        CERT_FIND_ISSUER_STR,
+        csIssuerSubjectCN,
+        pCert
+    ))
+    {
+        CertGetNameStringW(
+            pCert,
+            CERT_NAME_ATTR_TYPE,
+            0,
+            (void *)szOID_DEVICE_SERIAL_NUMBER,
+            csCandidateSubjectSerial,
+            dwSubjectSerialLen);
+
+        if (wcscmp(csTargetSubjectSerial, csCandidateSubjectSerial) == 0)
+        {
+            // NotBefore and NotAfter of cert to be added to store
+            FILETIME lpNotBeforeTarget = pTargetCert->pCertInfo->NotBefore;
+            FILETIME lpNotAfterTarget = pTargetCert->pCertInfo->NotAfter;
+
+            // NotBefore and NotAfter of cert found in store
+            FILETIME lpNotBeforeCandidate = pCert->pCertInfo->NotBefore;
+            FILETIME lpNotAfterCandidate = pCert->pCertInfo->NotAfter;
+
+            if (CompareFileTime(&lpNotAfterTarget, &lpNotAfterCandidate) > 0 &&
+                CompareFileTime(&lpNotBeforeTarget, &lpNotBeforeCandidate) > 0)
+            {
+                if (!CertDuplicateCertificateContext(pCert))
+                {
+                    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+                        "CertDuplicateCertificateContext failed with error code 0x%08x", GetLastError());
+                    goto cleanup;
+                }
+                if (!CertDeleteCertificateFromStore(pCert))
+                {
+                    (PTEID_LOG_LEVEL_ERROR, "eidgui",
+                        "CertDeleteCertificateFromStore failed with error code 0x%08x", GetLastError());
+                    goto cleanup;
+                }
+            }
+        }
+    }
+
+cleanup:
+    delete[] csTargetSubjectSerial;
+    delete[] csCandidateSubjectSerial;
+    delete[] csIssuerSubjectCN;
+}
+#endif
+
 //*****************************************************
 // store the authority certificates of the card in a specific reader
 //*****************************************************
@@ -577,5 +679,125 @@ bool CERTIFICATES::ImportCertificates( const char* readerName )
     return bImported;
 #else
     return true;
+#endif
+}
+
+#ifdef WIN32
+PCCERT_CONTEXT CERTIFICATES::getNewRootCaCertContextFromEidstore()
+{
+    std::wstring certFilePath = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR) + L"\\" + NEW_ROOT_CA_FILE_NAME;
+    QFile file(QString::fromStdWString(certFilePath));
+    if (!file.open(QIODevice::ReadOnly)) 
+    {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Unable to open new root CA cert file for reading.");
+        return NULL;
+    }
+    QByteArray certData = file.readAll();
+    const BYTE *data = (const BYTE *)certData.data();
+    PCCERT_CONTEXT pCert = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, data, certData.size());
+    return pCert;
+}
+#endif
+
+
+//*****************************************************
+// Check if the Root CA ECRaizEstado 002 is installed in Root store
+//*****************************************************
+bool CERTIFICATES::IsNewRootCACertInstalled() 
+{
+    bool rootCaFound = false;
+#ifdef WIN32
+    HCERTSTORE hRootStore = NULL;
+    PCCERT_CONTEXT pCert = NULL;
+    PCCERT_CONTEXT pEidStoreCert = NULL;
+    pEidStoreCert = getNewRootCaCertContextFromEidstore();
+
+    if (!pEidStoreCert)
+    {
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "Could not find the new root CA cert in eidstore.");
+        return false;
+    }
+
+    hRootStore = CertOpenSystemStore((HCRYPTPROV_LEGACY)NULL, L"ROOT");
+    if (!hRootStore) {
+        DWORD err = GetLastError();
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "CertOpenSystemStore failed with error code: 0x%08x", err);
+        return false;
+    }
+
+    while (pCert = CertFindCertificateInStore(
+        hRootStore,
+        X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
+        0,
+        CERT_FIND_PUBLIC_KEY,
+        &(pEidStoreCert->pCertInfo->SubjectPublicKeyInfo),
+        pCert
+    ))
+    {
+        if (0 == memcmp(pCert->pCertInfo->Subject.pbData,
+                        pEidStoreCert->pCertInfo->Subject.pbData,
+                        pEidStoreCert->pCertInfo->Subject.cbData))
+        {
+            rootCaFound = true;
+            break;
+        }
+    }
+
+    CertCloseStore(hRootStore, CERT_CLOSE_STORE_FORCE_FLAG);
+#endif
+    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Is new root CA Cert installed. Result: %d", rootCaFound); 
+    return rootCaFound;
+}
+
+//*****************************************************
+// Install the Root CA ECRaizEstado 002 in Root store
+//*****************************************************
+bool CERTIFICATES::InstallNewRootCa()
+{
+#ifdef WIN32
+    HCERTSTORE hRootStore = NULL;
+    PCCERT_CONTEXT pEidStoreCert = NULL;
+    pEidStoreCert = getNewRootCaCertContextFromEidstore();
+
+    if (!pEidStoreCert)
+    {
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "Could not find new root CA cert in eidstore.");
+        return false;
+    }
+
+    hRootStore = CertOpenSystemStore((HCRYPTPROV_LEGACY)NULL, L"ROOT");
+    if (!hRootStore) {
+        DWORD err = GetLastError();
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui",
+            "CertOpenSystemStore failed with error code: 0x%08x", err);
+        return false;
+    }
+
+    bool result = CertAddCertificateContextToStore(
+        hRootStore,                // Store handle
+        pEidStoreCert,                // Pointer to a certificate
+        CERT_STORE_ADD_USE_EXISTING,
+        NULL);
+    
+    CertCloseStore(hRootStore, CERT_CLOSE_STORE_FORCE_FLAG);
+
+    if (!result)
+    {
+        DWORD err = GetLastError();
+        if (err == ERROR_CANCELLED)
+        {
+            PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "User denied registration of root certificate.");
+        }
+        else
+        {
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui",
+                "CertAddCertificateContextToStore failed with error code: 0x%08x", err);
+        }
+    }
+    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Install New Root CA. Result: %d", result);
+    return result;
+#else
+    return false;
 #endif
 }

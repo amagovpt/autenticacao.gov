@@ -203,10 +203,6 @@
     <None Include="contentPages\security\PageSecurityCertificatesForm.ui.qml" />
     <None Include="contentPages\security\PageSecurityPinCodes.qml" />
     <None Include="contentPages\security\PageSecurityPinCodesForm.ui.qml" />
-    <None Include="contentPages\services\PageServicesSignAdvanced.qml" />
-    <None Include="contentPages\services\PageServicesSignAdvancedForm.ui.qml" />
-    <None Include="contentPages\services\PageServicesSignSimple.qml" />
-    <None Include="contentPages\services\PageServicesSignSimpleForm.ui.qml" />
     <None Include="images\dummy\Pdfdemo.png" />
     <None Include="contentPages\security\PinCodesModel.qml" />
     <None Include="components\ScrollBar.qml" />
@@ -253,6 +249,12 @@
     <None Include="contentPages\help\PageHelpAccessibility.qml" />
     <None Include="contentPages\help\PageHelpAccessibilityForm.ui.qml" />
     <None Include="components\TextRow.qml" />
+    <None Include="contentPages\services\PageServicesSign.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="contentPages\services\PageServicesSignForm.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="gapi.h">

@@ -53,7 +53,11 @@ namespace eIDMW
 	int X509_to_DER(X509 *x509, unsigned char **der);
 	X509 *DER_to_X509(unsigned char *der, int len);
 	char *DER_to_PEM(unsigned char *der, int len);
+	char * certificate_subject_from_der(CByteArray & ba);
+	std::string certificate_issuer_serial_from_der(CByteArray & ba);
+
 	EIDMW_APL_API int PEM_to_DER(char *pem, unsigned char **der);
+	
 	EIDMW_APL_API char *getCPtr(std::string inStr, int *outLen);
 
 //Use _strdup instead of strdup to silence Win32 warnings
@@ -68,14 +72,18 @@ char * Basename(char *absolute_path);
 int Truncate(const char *path);
 //Charset conversion
 void latin1_to_utf8(unsigned char * in, unsigned char *out);
-char * utf8_to_latin1(char * in);
 
 std::string urlEncode(unsigned char *data, int len);
 
 void replace_lastdot_inplace(char *in);
 
+//Base-64 encoding for binary data
+
 char *Base64Encode(const unsigned char *input, long length);
 void Base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded, unsigned int &decoded_len);
+
+//Hex string encoding for binary data
+void binToHex(const unsigned char *in, size_t in_len, char *out, size_t out_len);
 
 //Common type between 2/3 different cpp files
 typedef struct _hashed_file_
@@ -94,12 +102,12 @@ public:
 	/**
 	  * Return timestamp in format with delay
 	  */
-	static void getTimestamp(std::string &timestamp,long delay,const char *format);
+	EIDMW_APL_API static void getTimestamp(std::string &timestamp,long delay,const char *format);
 
 	/**
 	  * return true if timestamp > now
 	  */
-	static bool checkTimestamp(std::string &timestamp,const char *format);
+	EIDMW_APL_API static bool checkTimestamp(std::string &timestamp,const char *format);
 };
 
 /******************************************************************************//**

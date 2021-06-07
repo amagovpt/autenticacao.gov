@@ -21,9 +21,6 @@ Loader{
     height: parent.height
 
     property alias propertyGeneralPopUp: generalPopUp
-    property alias propertyRectPopUp: rectPopUp
-    property alias propertyGeneralTitleText: titleText
-    property alias propertyGeneralPopUpLabelText: labelText.propertyText
     property bool propertyGeneralPopUpRetSubMenu: false // By default return to the Page Loader
 
     // Backup data about unfinished advance signature
@@ -31,7 +28,8 @@ Loader{
     property bool propertyAnimationExtendedFinished: false
     property bool propertyBackupFormatPades: true
     property bool propertyBackupTempSign: false
-    property bool propertyBackupSignAdd: false
+    property bool propertyBackupAddLTV: false
+    property bool propertyBackupSwitchAddAttributes: false
     property variant attributeListBackup: []
     property bool propertyBackupSignShow: true
     property double propertyBackupCoordX: 0
@@ -97,10 +95,10 @@ Loader{
 
             Accessible.role: Accessible.AlertMessage
             Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
-                             + titleText.text + labelText.propertyText.text
-            KeyNavigation.tab: okButton
-            KeyNavigation.down: okButton
-            KeyNavigation.right: okButton
+                             + titleText.text + labelText.propertyAccessibleText
+            KeyNavigation.tab: labelText.propertyText
+            KeyNavigation.down: labelText.propertyText
+            KeyNavigation.right: labelText.propertyText
             KeyNavigation.backtab: okButton
             KeyNavigation.up: okButton
 
@@ -115,10 +113,15 @@ Loader{
                     width: parent.width
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                     propertyText.color: Constants.COLOR_TEXT_LABEL
                     propertyText.height: parent.height
                     anchors.bottom: parent.bottom
+                    KeyNavigation.tab: okButton
+                    KeyNavigation.down: okButton
+                    KeyNavigation.right: okButton
+                    KeyNavigation.backtab: rectPopUp
+                    KeyNavigation.up: rectPopUp
                 }
             }
             Button {
@@ -136,8 +139,8 @@ Loader{
                 KeyNavigation.tab: rectPopUp
                 KeyNavigation.down: rectPopUp
                 KeyNavigation.right: rectPopUp
-                KeyNavigation.backtab: rectPopUp
-                KeyNavigation.up: rectPopUp
+                KeyNavigation.backtab: labelText.propertyText
+                KeyNavigation.up: labelText.propertyText
                 Keys.onEnterPressed: clicked()
                 Keys.onReturnPressed: clicked()
                 highlighted: activeFocus ? true : false
@@ -169,14 +172,18 @@ Loader{
         }
     }
 
-    function activateGeneralPopup(titlePopup, bodyPopup, returnToSubMenuWhenClosed){
-        titleText.text = titlePopup
-        labelText.propertyText.text = bodyPopup
-        mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = returnToSubMenuWhenClosed;
+    function activateGeneralPopup(titlePopup, bodyPopup, returnToSubMenuWhenClosed,
+        linkUrl = "", accessibleText = bodyPopup){
+            
+            titleText.text = titlePopup
+            labelText.propertyText.text = bodyPopup
+            labelText.propertyLinkUrl = linkUrl
+            labelText.propertyAccessibleText = accessibleText
+            mainFormID.propertyPageLoader.propertyGeneralPopUpRetSubMenu = returnToSubMenuWhenClosed;
 
-        // reduce main window opacity
-        mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-        generalPopUp.visible = true;
-        rectPopUp.forceActiveFocus();
+            // reduce main window opacity
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+            generalPopUp.visible = true;
+            rectPopUp.forceActiveFocus();
     }
 }
