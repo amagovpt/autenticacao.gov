@@ -213,6 +213,9 @@
         <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\XMLUserData.cs">
             <Link>GeneratedFiles\XMLUserData.cs</Link>
         </Compile>
+        <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_SignatureLevel.cs">
+            <Link>GeneratedFiles\PTEID_SignatureLevel.cs</Link>
+        </Compile>
         <Compile Include="..\eidlibCS_Wrapper\src\Pteid.cs">
             <Link>Pteid.cs</Link>
         </Compile>
