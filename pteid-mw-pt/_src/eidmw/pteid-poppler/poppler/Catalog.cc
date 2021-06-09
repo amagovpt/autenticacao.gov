@@ -1173,7 +1173,7 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
         int linesLocation = 0;
 
         //Start with Italics font
-        GooString *n2_commands = GooString::format(commands_template.c_str(), rect_height - 10, (int)font_size);
+        GooString *n2_commands = GooString::format(commands_template.c_str(), rect_height - (line_height + 1), (int)font_size);
 
         if (!small_signature_format && reason != NULL && strlen(reason) > 0)
         {
@@ -1290,10 +1290,18 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
         if (signer_info->attribute_name != NULL) {
             char * name_latin1 = utf8_to_latin1(signer_info->attribute_name);
 
-            int heightLeft = (2 - linesName) * font_size
-                    + (2 - linesAttributeProvider) * font_size_medium
-                    + ( 2 - linesReason) * font_size
-                    + ( 1 - linesLocation) * font_size_medium;
+            // The first line of seal (reason) is 1pt higher than normal line_height.
+            // The space occupied by this first line is always reserved for 'reason',
+            // even when 'reason' is empty
+            int heightReason = 1 + line_height;
+            if (linesReason > 1) {
+                heightReason += line_height * (linesReason - 1);
+            }
+
+            int heightLeft = rect_height - (heightReason
+                + linesName * line_height
+                + linesLocation * line_height_medium
+                + linesAttributeProvider * line_height_medium);
 
             const std::string label = isPTLanguage ? "Atributos certificados: " : "Certified Attributes: ";
             const std::string to_wrap = name_latin1;

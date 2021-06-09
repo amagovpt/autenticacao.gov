@@ -143,25 +143,28 @@ std::vector<std::string> wrapString(const std::string& content, double available
  * Used in signature seals with SCAP strings
  * font size varies from 8 to 4.
  */
-WrapParams calculateWrapParams(const std::string& text, const std::string& label, int height_left,
-                               double available_width)
+WrapParams calculateWrapParams(const std::string& text, const std::string& label, int rect_height,
+                               double rect_width)
 {
     unsigned int max_font_size = 8;
     unsigned int min_font_size = 4;
 
+    unsigned int line_height;
     unsigned int font_size;
-    int lines;
-    double label_width, text_width;
+    unsigned int lines;
+    double label_width;
 
-    int aux_lines[] = {1, 2, 2, 3, 4};
-    for (font_size = max_font_size; font_size >= min_font_size; --font_size) {
-        lines = aux_lines[8 - font_size] + height_left / font_size;
+    std::vector<std::string> wrapped;
+    for (unsigned int i = max_font_size; i >= min_font_size; --i) {
+        font_size = i;
+        line_height = font_size + 1;
+        lines = rect_height / line_height - 1;
 
-        text_width = getStringWidth(text.c_str(), font_size, MYRIAD_BOLD);
         label_width = getStringWidth(label.c_str(), font_size, MYRIAD_REGULAR);
+        wrapped = wrapString(text, rect_width, font_size, MYRIAD_BOLD, lines, rect_width - label_width);
 
-        if (text_width + label_width <= available_width * lines)
-            break; // at current font size, strings fits on available space
+        if (!endsWith(wrapped.back(), "(...)"))
+            break; // at current font size, wrapped strings fit on available space
     }
 
     WrapParams p;
