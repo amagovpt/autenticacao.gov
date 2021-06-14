@@ -835,14 +835,14 @@ PageServicesSignForm {
     propertyTextFieldReason{
         onTextChanged: {
             propertyPDFPreview.propertyDragSigReasonText.text = propertyTextFieldReason.text
-            propertyPageLoader.propertyBackupLocal = propertyTextFieldReason.text
+            propertyPageLoader.propertyBackupReason = propertyTextFieldReason.text
         }
     }
     propertyTextFieldLocal{
         onTextChanged: {
             propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text === "" ? "" :
                 qsTranslate("PageServicesSign", "STR_SIGN_LOCATION") + ": " + propertyTextFieldLocal.text
-            propertyPageLoader.propertyBackupReason = propertyTextFieldLocal.text
+            propertyPageLoader.propertyBackupLocal = propertyTextFieldLocal.text
         }
     }
 
@@ -1546,8 +1546,8 @@ PageServicesSignForm {
 
         propertySpinBoxControl.value = propertyPageLoader.propertyBackupPage
         propertyCheckLastPage.checked = propertyPageLoader.propertyBackupLastPage
-        propertyTextFieldReason.text = propertyPageLoader.propertyBackupLocal
-        propertyTextFieldLocal.text = propertyPageLoader.propertyBackupReason
+        propertyTextFieldReason.text = propertyPageLoader.propertyBackupReason
+        propertyTextFieldLocal.text = propertyPageLoader.propertyBackupLocal
         propertyPDFPreview.setSignPreview(propertyPageLoader.propertyBackupCoordX * propertyPDFPreview.propertyBackground.width,propertyPageLoader.propertyBackupCoordY * propertyPDFPreview.propertyBackground.height)
 
 
