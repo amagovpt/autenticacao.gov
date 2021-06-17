@@ -850,7 +850,7 @@ PageServicesSignForm {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSignReduced = propertyCheckSignReduced.checked
             if(propertyCheckSignReduced.checked){
-                propertyPDFPreview.propertySigHidth = 45
+                propertyPDFPreview.propertySigHeight = 45
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.2
                 propertyPDFPreview.propertyDragSigReasonText.height = 0
                 propertyPDFPreview.propertyDragSigLocationText.height = 0
@@ -858,7 +858,7 @@ PageServicesSignForm {
                 propertyPDFPreview.propertyDragSigLocationText.text = ""
                 propertyPDFPreview.propertyDragSigImg.height = 0
             }else{
-                propertyPDFPreview.propertySigHidth = 90
+                propertyPDFPreview.propertySigHeight = 90
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.1
                 propertyPDFPreview.propertyDragSigReasonText.height = propertyPDFPreview.propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                 propertyPDFPreview.propertyDragSigLocationText.height = propertyPDFPreview.propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE

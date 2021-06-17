@@ -41,7 +41,7 @@ Rectangle {
     // Signature have a static size
     property real propertyConvertPixelToPts: 1 / 0.75
     property real propertySigWidth: 178
-    property real propertySigHidth: 90
+    property real propertySigHeight: 90
 
     //Properties to store Pdf original size
     property real propertyPdfOriginalWidth: 0
@@ -128,7 +128,7 @@ Rectangle {
                 id: dragSigRect
                 width: (propertySigWidth) * propertyConvertPixelToPts * background_image.width
                        / (propertyPdfOriginalWidth / propertyConvertPixelToPts)
-                height: (propertySigHidth) * propertyConvertPixelToPts * background_image.height
+                height: (propertySigHeight) * propertyConvertPixelToPts * background_image.height
                         / (propertyPdfOriginalHeight / propertyConvertPixelToPts)
 
                 Drag.active: dragArea.drag.active
