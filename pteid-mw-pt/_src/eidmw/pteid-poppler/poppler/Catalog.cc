@@ -1173,7 +1173,7 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
         int linesLocation = 0;
 
         //Start with Italics font
-        GooString *n2_commands = GooString::format(commands_template.c_str(), rect_height - (line_height + 1), (int)font_size);
+        GooString *n2_commands = GooString::format(commands_template.c_str(), (int)(rect_height - line_height + 1), (int)font_size);
 
         if (!small_signature_format && reason != NULL && strlen(reason) > 0)
         {
