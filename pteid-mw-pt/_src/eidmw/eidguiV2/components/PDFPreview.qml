@@ -31,7 +31,6 @@ Rectangle {
     property alias propertyDragSigAttributesText: sigAttributesText
 
     property real propertySigLineHeight: dragSigRect.height * 0.1
-    property real propertySigLineHeightSmall: propertySigLineHeight * 0.7
     property bool propertyReducedChecked: false
 
     property alias propertyCoordX: dragTarget.coord_x
@@ -42,6 +41,14 @@ Rectangle {
     property real propertyConvertPixelToPts: 1 / 0.75
     property real propertySigWidth: 178
     property real propertySigHeight: 90
+    property real propertyPDFHeightScaleFactor: background_image.height * propertyConvertPixelToPts
+                                               / (propertyPdfOriginalHeight / propertyConvertPixelToPts)
+    property real propertyPDFWidthScaleFactor: background_image.width * propertyConvertPixelToPts
+                                               / (propertyPdfOriginalWidth / propertyConvertPixelToPts)
+
+    property real propertySigFontSizeBig: 8 * propertyPDFHeightScaleFactor
+    property real propertySigFontSizeSmall: 6 * propertyPDFHeightScaleFactor
+    property real propertyCurrentAttrsFontSize: 8
 
     //Properties to store Pdf original size
     property real propertyPdfOriginalWidth: 0
@@ -126,26 +133,24 @@ Rectangle {
             }
             Item {
                 id: dragSigRect
-                width: (propertySigWidth) * propertyConvertPixelToPts * background_image.width
-                       / (propertyPdfOriginalWidth / propertyConvertPixelToPts)
-                height: (propertySigHeight) * propertyConvertPixelToPts * background_image.height
-                        / (propertyPdfOriginalHeight / propertyConvertPixelToPts)
+                width: (propertySigWidth) * propertyPDFWidthScaleFactor
+                height: (propertySigHeight) * propertyPDFHeightScaleFactor
 
                 Drag.active: dragArea.drag.active
                 opacity: background_image.status == Image.Ready ? 1.0 : 0.0
 
                 Text {
                     id: sigReasonText
-                    font.pixelSize: propertySigLineHeight
+                    font.pixelSize: propertySigFontSizeBig
                     font.italic: true
-                    height: propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                    height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     text: ""
                     anchors.top: dragSigRect.top
-                    anchors.topMargin: propertySigLineHeight * 0.40
+                    anchors.topMargin: font.pixelSize
                     x: 2
                 }
 
@@ -168,8 +173,8 @@ Rectangle {
                 }
                 Text {
                     id: sigSignedByText
-                    font.pixelSize:propertySigLineHeight
-                    height: propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                    font.pixelSize: propertySigFontSizeBig
+                    height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigReasonText.bottom
@@ -178,7 +183,7 @@ Rectangle {
                 }
                 Text {
                     id: sigSignedByNameText
-                    font.pixelSize: propertySigLineHeight
+                    font.pixelSize: propertySigFontSizeBig
                     font.family: lato.name
                     font.bold: true
                     color: Constants.COLOR_TEXT_BODY
@@ -189,7 +194,7 @@ Rectangle {
                 }
                 Text {
                     id: sigNumIdText
-                    font.pixelSize: !sigCertifiedByText.visible ? propertySigLineHeight : propertySigLineHeightSmall
+                    font.pixelSize: !sigCertifiedByText.visible ? propertySigFontSizeBig : propertySigFontSizeSmall
                     height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
@@ -201,7 +206,7 @@ Rectangle {
                 }
                 Text {
                     id: sigDateText
-                    font.pixelSize: !sigCertifiedByText.visible ? propertySigLineHeight : propertySigLineHeightSmall
+                    font.pixelSize: !sigCertifiedByText.visible ? propertySigFontSizeBig : propertySigFontSizeSmall
                     height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
@@ -213,7 +218,7 @@ Rectangle {
                 }
                 Text {
                     id: sigLocationText
-                    font.pixelSize: !sigCertifiedByText.visible ? propertySigLineHeight : propertySigLineHeightSmall
+                    font.pixelSize: !sigCertifiedByText.visible ? propertySigFontSizeBig : propertySigFontSizeSmall
                     height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
@@ -225,7 +230,7 @@ Rectangle {
                 }
                 Text {
                     id: sigCertifiedByText
-                    font.pixelSize: propertySigLineHeightSmall
+                    font.pixelSize: propertySigFontSizeSmall
                     visible: false
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
@@ -235,11 +240,13 @@ Rectangle {
                 }
                 Text {
                     id: sigAttributesText
-                    font.pixelSize: propertySigLineHeight
+                    font.pixelSize: propertyCurrentAttrsFontSize * propertyPDFHeightScaleFactor
+                    lineHeight: 0.8 // smaller line spacing to match real seal
                     visible: false
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigCertifiedByText.bottom
+                    anchors.bottom: parent.bottom
                     text: qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_ATTRIBUTES")
                     x: 2
                 }

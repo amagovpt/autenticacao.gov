@@ -437,7 +437,8 @@ public slots:
     QList<QString> getFilesFromDirectory(QString path);
 
     QStringList getWrappedOwnerName(QString name, bool isSCAPSignature);
-    QVariantList getWrappedSCAPAttributes(QVariantList attr_list);
+    QVariantList getWrappedSCAPAttributes(QVariantList attr_list, unsigned int linesReason,
+        unsigned int linesName, unsigned int linesLocation);
 
 signals:
     // Signal from GAPI to Gui

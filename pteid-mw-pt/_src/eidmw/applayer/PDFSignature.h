@@ -59,6 +59,7 @@ namespace eIDMW
 		EIDMW_APL_API int getPageCount();
 		EIDMW_APL_API int getOtherPageCount(const char *input_path);
 		EIDMW_APL_API static double getSignatureSealWidth() { return sig_width; };
+		EIDMW_APL_API static double getSignatureSealHeight() { return sig_height; };
 		void setCard(APL_Card *card) { m_card = card; };
 
 		//General interface to signing in single file-mode or batch-mode

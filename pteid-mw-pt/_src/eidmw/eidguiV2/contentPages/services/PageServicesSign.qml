@@ -25,6 +25,9 @@ PageServicesSignForm {
 
     property bool isAnimationFinished: mainFormID.propertyPageLoader.propertyAnimationExtendedFinished
     property string propertyOutputSignedFile : ""
+    property int propertyLinesName : 0
+    property int propertyLinesReason : 0
+    property int propertyLinesLocation : 0
 
     ToolTip {
         property var maxWidth: 500
@@ -281,10 +284,11 @@ PageServicesSignForm {
             console.log("Services Sign Advanced --> Certificate Data Changed")
 
             var isSCAP = (propertySwitchAddAttributes.checked && numberOfAttributesSelected() != 0);
-            var wrappedName = gapi.getWrappedOwnerName(ownerName, isSCAP).join("<br>");
+            var wrappedName = gapi.getWrappedOwnerName(ownerName, isSCAP)
+            propertyLinesName = wrappedName.length
 
             propertyPDFPreview.propertyDragSigSignedByNameText.text =
-                qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": " + wrappedName
+                qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": " + wrappedName.join("<br>");
 
             propertyPDFPreview.propertyDragSigNumIdText.text =
                     qsTranslate("GAPI","STR_NIC") + ": " + NIC
@@ -836,6 +840,10 @@ PageServicesSignForm {
         onTextChanged: {
             propertyPDFPreview.propertyDragSigReasonText.text = propertyTextFieldReason.text
             propertyPageLoader.propertyBackupReason = propertyTextFieldReason.text
+
+            // reason can take up to 2 lines, but here we have no knowledge of how many it takes...
+            // leaving zero or one lines for now
+            propertyLinesReason = propertyTextFieldReason.text == "" ? 0 : 1
         }
     }
     propertyTextFieldLocal{
@@ -843,6 +851,7 @@ PageServicesSignForm {
             propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text === "" ? "" :
                 qsTranslate("PageServicesSign", "STR_SIGN_LOCATION") + ": " + propertyTextFieldLocal.text
             propertyPageLoader.propertyBackupLocal = propertyTextFieldLocal.text
+            propertyLinesLocation = propertyTextFieldLocal.text == "" ? 0 : 1
         }
     }
 
@@ -986,11 +995,16 @@ PageServicesSignForm {
                     qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_ATTRIBUTES")
 
                 if (attrList != []) {
-                    var wrappedAttr = gapi.getWrappedSCAPAttributes(attrList)
+                    var wrappedAttr = gapi.getWrappedSCAPAttributes(attrList, propertyLinesReason,
+                                                                    propertyLinesName, propertyLinesLocation)
                     var entities = wrappedAttr[0].join("<br>")
                     var attributes = wrappedAttr[1].join("<br>")
+                    var fontSize = wrappedAttr[2];
+
                     propertyPDFPreview.propertyDragSigCertifiedByText.text += " " + entities
                     propertyPDFPreview.propertyDragSigAttributesText.text += " " + attributes
+                    propertyPDFPreview.propertyCurrentAttrsFontSize = fontSize
+
                 }
 
             }

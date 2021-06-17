@@ -3467,7 +3467,8 @@ std::pair<std::string, std::string> formatSCAPSealStrings(QVariantList qVarList)
     return std::make_pair(result_entities, result_attributes);
 }
 
-QVariantList GAPI::getWrappedSCAPAttributes(QVariantList attr_list) {
+QVariantList GAPI::getWrappedSCAPAttributes(QVariantList attr_list, unsigned int linesReason,
+    unsigned int linesName, unsigned int linesLocation) {
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "getWrappedSCAPAttributes");
 
     // merge attributes into one string for entities and another for attributes, ready to wrap
@@ -3477,6 +3478,7 @@ QVariantList GAPI::getWrappedSCAPAttributes(QVariantList attr_list) {
     std::string attributes_to_wrap = QString::fromStdString(joined.second).toLatin1().constData();
 
     const double seal_width = PDFSignature::getSignatureSealWidth();
+    const double seal_height = PDFSignature::getSignatureSealHeight();
 
     //entities
     std::string entity_label = tr("STR_CERTIFIED_BY").toLatin1().constData();
@@ -3487,14 +3489,32 @@ QVariantList GAPI::getWrappedSCAPAttributes(QVariantList attr_list) {
     std::vector<std::string> result_entities = wrapString(entities_to_wrap, seal_width,
         font_size_small, MYRIAD_BOLD, two_available_lines, seal_width - entity_label_offset);
 
+    // calculate space left in seal
+    const int line_height = 9;
+    const int line_height_medium = 7;
+
+    if (linesReason == 0){
+        linesReason = 1; // space used for first line of 'reason' is always reserved, even when empty
+    }
+
+    unsigned int heightReason = 1 + line_height * linesReason; //first line is 1pt higher
+    unsigned int linesAttributeProvider = result_entities.size();
+
+    int heightLeft = seal_height - (heightReason
+        + linesName * line_height
+        + linesLocation * line_height_medium
+        + linesAttributeProvider * line_height_medium);
+
     //attributes
     std::string attr_label = tr("STR_CERTIFIED_ATTRIBUTES").toLatin1().constData();
-    const float font_size = 8;
-    const int five_available_lines = 5;
-    const double attrs_label_offset = getStringWidth(attr_label.c_str(), font_size, MYRIAD_BOLD);
+
+    WrapParams wrap_parameters = calculateWrapParams(attributes_to_wrap, attr_label, heightLeft, seal_width);
+    const float font_size = wrap_parameters.font_size;
+    const int lines = wrap_parameters.available_lines;
+    const double attrs_label_offset = wrap_parameters.first_line_offset;
 
     std::vector<std::string> result_attributes = wrapString(attributes_to_wrap, seal_width,
-        font_size, MYRIAD_BOLD, five_available_lines, seal_width - attrs_label_offset);
+        font_size, MYRIAD_BOLD, lines, seal_width - attrs_label_offset);
 
     QStringList wrapped_entities;
     for (std::string s: result_entities)
@@ -3507,6 +3527,7 @@ QVariantList GAPI::getWrappedSCAPAttributes(QVariantList attr_list) {
     QVariantList result;
     result.append(wrapped_entities);
     result.append(wrapped_attributes);
+    result.append(font_size);
     return result;
 }
 
