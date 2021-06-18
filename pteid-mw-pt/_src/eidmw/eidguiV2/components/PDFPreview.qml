@@ -128,7 +128,7 @@ Rectangle {
                 border.width: Constants.FOCUS_BORDER
                 border.color: pdfPreview.activeFocus || positionText.activeFocus ? Constants.COLOR_MAIN_DARK_GRAY
                              : Constants.COLOR_GREY_BUTTON_BACKGROUND
-                opacity: 0.7
+                color: "transparent"
                 visible: width >= Constants.FOCUS_BORDER && background_image.status != Image.Null && dragSigRect.visible
             }
             Item {
@@ -170,6 +170,11 @@ Rectangle {
                     anchors.left: parent.left
                     cache: false
                     x: 2
+                    Rectangle {
+                        color: "white"
+                        anchors.fill: parent
+                        z: parent.z - 1
+                    }
                 }
                 Text {
                     id: sigSignedByText
