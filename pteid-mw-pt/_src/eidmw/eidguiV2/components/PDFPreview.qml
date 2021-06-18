@@ -150,7 +150,7 @@ Rectangle {
                     color: Constants.COLOR_TEXT_LABEL
                     text: ""
                     anchors.top: dragSigRect.top
-                    anchors.topMargin: font.pixelSize
+                    anchors.topMargin: 2
                     x: 2
                 }
 
@@ -183,6 +183,7 @@ Rectangle {
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigReasonText.bottom
+                    clip: true
                     text: ""
                     x: 2
                 }
@@ -194,6 +195,7 @@ Rectangle {
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigReasonText.bottom
                     anchors.left: sigSignedByText.right
+                    clip: true
                     text: ""
                     x: 2
                 }
@@ -240,6 +242,7 @@ Rectangle {
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigLocationText.text == "" ? sigDateText.bottom : sigLocationText.bottom
+                    clip: true
                     text: qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_BY")
                     x: 2
                 }
@@ -252,6 +255,7 @@ Rectangle {
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigCertifiedByText.bottom
                     anchors.bottom: parent.bottom
+                    clip: true
                     text: qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_ATTRIBUTES")
                     x: 2
                 }
