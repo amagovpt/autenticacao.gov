@@ -282,8 +282,6 @@ Rectangle {
                         propertyDragSigImg.height = 0
                     }else{
                         propertySigLineHeight = propertyDragSigRect.height * 0.1
-                        propertyDragSigReasonText.height = propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
-                        propertyDragSigLocationText.height = propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                         propertyDragSigImg.height = propertyDragSigRect.height * 0.3
                     }
                 }

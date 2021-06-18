@@ -861,16 +861,16 @@ PageServicesSignForm {
             if(propertyCheckSignReduced.checked){
                 propertyPDFPreview.propertySigHeight = 45
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.2
-                propertyPDFPreview.propertyDragSigReasonText.height = 0
-                propertyPDFPreview.propertyDragSigLocationText.height = 0
+                propertyPDFPreview.propertyDragSigReasonText.visible = false
+                propertyPDFPreview.propertyDragSigLocationText.visible = false
                 propertyPDFPreview.propertyDragSigReasonText.text = ""
                 propertyPDFPreview.propertyDragSigLocationText.text = ""
                 propertyPDFPreview.propertyDragSigImg.height = 0
             }else{
                 propertyPDFPreview.propertySigHeight = 90
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.1
-                propertyPDFPreview.propertyDragSigReasonText.height = propertyPDFPreview.propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
-                propertyPDFPreview.propertyDragSigLocationText.height = propertyPDFPreview.propertySigLineHeight + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                propertyPDFPreview.propertyDragSigReasonText.visible = true
+                propertyPDFPreview.propertyDragSigLocationText.visible = true
                 propertyPDFPreview.propertyDragSigReasonText.text = propertyTextFieldReason.text
                 propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text === "" ? "" :
                     qsTranslate("PageServicesSign", "STR_SIGN_LOCATION") + ": " + propertyTextFieldLocal.text
