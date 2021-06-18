@@ -884,7 +884,7 @@ PageServicesSignForm {
         Rectangle {
             id: container
             width: parent.width
-            height: entityText.contentHeight + Constants.SIZE_TEXT_V_SPACE
+            height: Math.max(entityText.contentHeight + Constants.SIZE_TEXT_V_SPACE, checkboxSel.height)
             Keys.onSpacePressed: {
                 checkboxSel.checked = !checkboxSel.checked
             }
@@ -922,6 +922,9 @@ PageServicesSignForm {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.capitalization: Font.MixedCase
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: Constants.SIZE_LISTVIEW_SPACING
+                padding: 0
                 checked: checkBoxAttr
                 onCheckedChanged: {
                     entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
@@ -937,6 +940,7 @@ PageServicesSignForm {
                 anchors.left: checkboxSel.right
                 width: parent.width - checkboxSel.width
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.leftMargin: Constants.SIZE_LISTVIEW_SPACING
                 Text {
                     id: entityText
                     text: "<b>" + citizenName + " </b> - " + entityName + " - " + attribute
