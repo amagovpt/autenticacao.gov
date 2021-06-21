@@ -40,7 +40,7 @@ EIDMW_CMN_API bool endsWith(const std::string& string, const std::string& ending
  * Units: postscript points (pts)
  */
 EIDMW_CMN_API std::vector<std::string> wrapString(const std::string& content, double available_space, double font_size,
-        MyriadFontType ft, int available_lines, double space_first_line=0);
+        MyriadFontType ft, int available_lines, double first_line_offset=0);
 
 EIDMW_CMN_API double getStringWidth(const char *winansi_encoded_string, double font_size, MyriadFontType font);
 

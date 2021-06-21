@@ -881,15 +881,15 @@ std::string escape_pdf_string(std::string unescaped_str) {
  * Generate PDF text display commands according to a fixed-column layout
  */
 GooString *formatMultilineString(char *content, double available_space, double font_size, MyriadFontType font,
-               int available_lines, double line_height, double space_first_line=0)
+               int available_lines, double line_height, double first_line_offset=0)
 {
   std::string strContent(content);
 
   // get string wrapped to the available size
   std::vector<std::string> wrapped =
-    eIDMW::wrapString(strContent, available_space, font_size, (eIDMW::MyriadFontType) font, available_lines, space_first_line);
+    eIDMW::wrapString(strContent, available_space, font_size, (eIDMW::MyriadFontType) font, available_lines, first_line_offset);
 
-  double horizontal_shift = -(available_space - space_first_line);
+  double horizontal_shift = -first_line_offset;
 
   GooString *multi_line = new GooString();
   std::unique_ptr<GooString> line_spacing_command(new GooString());
@@ -994,7 +994,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 	char * name_latin1 = utf8_to_latin1(signer_info->name);
         GooString *name_str = formatMultilineString(name_latin1, rect_width, font_size,
                                                     MYRIAD_BOLD, 5, line_height,
-                                                    rect_width - assinado_por_length);
+                                                    assinado_por_length);
 	n2_commands->append(name_str);
 
 	int lines = 0;
@@ -1209,7 +1209,7 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
         //The parameter 2 in lines is intended to allow as much lines as needed to the name field
         char * name_latin1 = utf8_to_latin1(signer_info->name);
         GooString *name_str = formatMultilineString(name_latin1,
-                                        rect_width, font_size, MYRIAD_BOLD, 2, line_height, rect_width - assinado_por_length);
+                                        rect_width, font_size, MYRIAD_BOLD, 2, line_height, assinado_por_length);
         n2_commands->append(name_str);
 
         char *haystack = name_str->getCString();
@@ -1276,7 +1276,7 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
             char * name_latin1 = utf8_to_latin1(signer_info->attribute_provider);
             GooString *name_str = formatMultilineString(name_latin1,
                                             rect_width, font_size_medium, MYRIAD_BOLD, 2,
-                                            line_height_medium, rect_width - assinado_por_length);
+                                            line_height_medium, assinado_por_length);
             n2_commands->append(name_str);
 
             haystack = name_str->getCString();
@@ -1335,7 +1335,7 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
             n2_commands->append(str9.get());
             GooString *name_str = formatMultilineString(name_latin1,rect_width, size_attr,
                                                         MYRIAD_BOLD, lines, size_attr,
-                                                        rect_width - attribute_name_length);
+                                                        attribute_name_length);
             n2_commands->append(name_str);
         }
 

@@ -3391,7 +3391,7 @@ QStringList GAPI::getWrappedOwnerName(QString name, bool isSCAPSignature) {
     const double signed_by_length = getStringWidth(signedBy.c_str(), font_size, MYRIAD_BOLD);
 
     std::vector<std::string> result = wrapString(ownerName, available_space, font_size,
-            MYRIAD_BOLD, available_lines, available_space - signed_by_length);
+            MYRIAD_BOLD, available_lines, signed_by_length);
 
     QStringList wrapped;
     for (std::string s: result)
@@ -3487,7 +3487,7 @@ QVariantList GAPI::getWrappedSCAPAttributes(QVariantList attr_list, unsigned int
     const double entity_label_offset = getStringWidth(entity_label.c_str(), font_size_small, MYRIAD_BOLD);
 
     std::vector<std::string> result_entities = wrapString(entities_to_wrap, seal_width,
-        font_size_small, MYRIAD_BOLD, two_available_lines, seal_width - entity_label_offset);
+        font_size_small, MYRIAD_BOLD, two_available_lines, entity_label_offset);
 
     // calculate space left in seal
     const int line_height = 9;

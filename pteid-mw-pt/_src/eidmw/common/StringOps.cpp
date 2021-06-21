@@ -73,7 +73,7 @@ std::string getFittingSubString(const std::string &str, double font_size, Myriad
 }
 
 std::vector<std::string> wrapString(const std::string& content, double available_space, double font_size, MyriadFontType font,
-                                    int available_lines, double space_first_line) {
+                                    int available_lines, double first_line_offset) {
 
   std::vector<std::string> result;
   std::string current_line;
@@ -82,7 +82,7 @@ std::vector<std::string> wrapString(const std::string& content, double available
   double space_width = getStringWidth(" ", font_size, font);
   double suspension_points_width = getStringWidth("(...)", font_size, font);
 
-  double space_left = space_first_line == 0 ? available_space : space_first_line;
+  double space_left = available_space - first_line_offset;
   double word_width = 0;
   double needed_width = 0;
 
