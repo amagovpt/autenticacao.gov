@@ -415,6 +415,11 @@ public slots:
     bool getRemoveCertValue(void);
     void registerCMDCertOpen(QString mobileNumber, QString pin);
     void registerCMDCertClose(QString otp);
+    void setUseNumId(bool UseNumId);
+    bool getUseNumId(void);
+    void setUseDate (bool UseDate);
+    bool getUseDate(void);
+
 #ifdef WIN32
     QVariantList getRegisteredCmdPhoneNumbers();
 #endif

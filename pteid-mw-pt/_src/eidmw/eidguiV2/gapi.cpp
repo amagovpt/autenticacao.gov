@@ -3646,6 +3646,20 @@ bool GAPI::getRemoveCertValue(void){
 
     return m_Settings.getRemoveCert();
 }
+void GAPI::setUseNumId(bool UseNumId){
+
+    m_Settings.setUseNumId(UseNumId);
+}
+bool GAPI::getUseNumId(void){
+    return m_Settings.getUseNumId();
+}
+void GAPI::setUseDate(bool UseDate){
+
+    m_Settings.setUseDate(UseDate);
+}
+bool GAPI::getUseDate(void){
+    return m_Settings.getUseDate();
+}
 
 #ifdef WIN32
 QVariantList GAPI::getRegisteredCmdPhoneNumbers() {

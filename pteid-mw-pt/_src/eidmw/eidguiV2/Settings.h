@@ -58,6 +58,9 @@
 #define OPENGL_HARDWARE     1
 #define OPENGL_DIRECT3D     2
 
+#define SIGN_SEAL_NUM_ID_OPTION 1
+#define SIGN_SEAL_DATE_OPTION 2
+
 
 class GUISettings
 {
@@ -86,6 +89,7 @@ public:
         , m_bRemoveCert(false)
         , m_strExePath("")
         , m_test_mode(false)
+        , m_iSignSealOptions(0)
     {
         //----------------------------------------------------------
         // Check always what is set in the registry
@@ -242,6 +246,16 @@ public:
                 setUseCustomSignature(true);
             }
         }
+
+        //----------------------------------------------------------
+        // check SIGNSEALOPTIONS
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SIGNSEALOPTIONS);
+            long UseSignSealOptions = config.getLong();
+            setSignSealOptions(UseSignSealOptions);
+        }
+
         //----------------------------------------------------------
         // check ShowSignatureOptions
         //----------------------------------------------------------
@@ -797,6 +811,49 @@ public:
         config.setLong(m_bShowSignatureHelp);
     }
 
+    bool getUseNumId(void) {
+        return (m_iSignSealOptions & SIGN_SEAL_NUM_ID_OPTION);
+    }
+    
+    bool getUseDate(void) {
+        return (m_iSignSealOptions & SIGN_SEAL_DATE_OPTION);
+    }
+
+    void setUseNumId(bool bUseNumId) {
+        if (bUseNumId)   
+        {
+            m_iSignSealOptions |= SIGN_SEAL_NUM_ID_OPTION;
+        }
+        else
+        {
+            m_iSignSealOptions &= SIGN_SEAL_DATE_OPTION;
+        }
+
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SIGNSEALOPTIONS);
+        config.setLong(m_iSignSealOptions);
+    }
+
+    void setUseDate(bool bUseDate) {
+        if (bUseDate)  
+        {
+            m_iSignSealOptions |= SIGN_SEAL_DATE_OPTION;
+        }
+        else
+        {
+            m_iSignSealOptions &= SIGN_SEAL_NUM_ID_OPTION;
+        }
+
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SIGNSEALOPTIONS);
+        config.setLong(m_iSignSealOptions);
+    }
+
+    void setSignSealOptions(int iSignSealOptions) {
+        m_iSignSealOptions = iSignSealOptions;
+        
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SIGNSEALOPTIONS);
+        config.setLong(m_iSignSealOptions);
+    }
+
 private:
     //Proxy Settings
     bool m_bProxySystem;
@@ -831,7 +888,8 @@ private:
     bool    m_bRemoveCert;          //!< remove certificates on close (T/F)
     bool    m_showJavaApps;         // wether we should show the SCAP/DSS buttons...
     QString m_strExePath;           //!< path to the executable
-    bool m_test_mode;
+    bool    m_test_mode;
+    int     m_iSignSealOptions;
 
     QString m_GUIVersion;           //!! Full version of the GUI
 };

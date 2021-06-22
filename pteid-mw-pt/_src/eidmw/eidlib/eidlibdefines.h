@@ -181,6 +181,7 @@ enum PTEID_Param
     PTEID_PARAM_GUITOOL_SHOWSTARTUPHELP,    //number; 0=no(default), 1=yes
     PTEID_PARAM_GUITOOL_SHOWSIGNOPTIONS,    //number; 0=no(default), 1=yes
     PTEID_PARAM_GUITOOL_SHOWSIGNHELP,       //number; 0=no, 1=yes(default)
+	PTEID_PARAM_GUITOOL_SIGNSEALOPTIONS,	//number; 0=both options disabled, 1=only use num id, 2=only use date, 3=both options enabled(default)
 
 	//PROXY
 	PTEID_PARAM_PROXY_CONNECT_TIMEOUT,	//number
