@@ -237,6 +237,7 @@
     <ClCompile Include="LogBase.cpp" />
     <ClCompile Include="Mutex.cpp" />
     <ClCompile Include="MWException.cpp" />
+    <ClCompile Include="MyriadFontGlyphWidths.cpp" />
     <ClCompile Include="StringOps.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="TLV.cpp" />
@@ -259,6 +260,7 @@
     <ClInclude Include="LogBase.h" />
     <ClInclude Include="Mutex.h" />
     <ClInclude Include="MWException.h" />
+    <ClInclude Include="MyriadFontGlyphWidths.h" />
     <ClInclude Include="StringOps.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="ThreadDefines.h" />

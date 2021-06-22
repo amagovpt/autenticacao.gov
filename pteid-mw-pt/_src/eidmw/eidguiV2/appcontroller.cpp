@@ -726,6 +726,8 @@ QString AppController::getFontFile(QString font) {
     QString executable_dir = m_Settings.getExePath()+"/";
 #ifdef __APPLE__
     executable_dir.append("../Resources/");
+#else
+    executable_dir.append("../share/pteid-mw/fonts/");
 #endif
     fontFile.append(executable_dir.toStdString());
 #endif
@@ -733,6 +735,10 @@ QString AppController::getFontFile(QString font) {
     if (font.compare("lato") == 0)
     {
         fontFile.append("Lato-Regular.ttf");
+    }
+    else if (font.compare("myriad") == 0)
+    {
+        fontFile.append("MyriadPro-Regular.otf");
     }
     else{
         return "";

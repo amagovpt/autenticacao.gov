@@ -62,6 +62,12 @@ Rectangle {
 
     color: Constants.COLOR_MAIN_SOFT_GRAY
 
+    FontLoader {
+        id: myriad
+        name: "MyriadPro"
+        source: controler.getFontFile("myriad")
+    }
+
     Keys.onUpPressed: {
         moveUp(stepSizeY)
         toggleFocus()
@@ -146,7 +152,7 @@ Rectangle {
                     height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
-                    font.family: lato.name
+                    font.family: myriad.name
                     color: Constants.COLOR_TEXT_LABEL
                     text: ""
                     anchors.top: dragSigRect.top
@@ -180,7 +186,7 @@ Rectangle {
                     id: sigSignedByText
                     font.pixelSize: propertySigFontSizeBig
                     height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
-                    font.family: lato.name
+                    font.family: myriad.name
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigReasonText.bottom
                     clip: true
@@ -190,7 +196,7 @@ Rectangle {
                 Text {
                     id: sigSignedByNameText
                     font.pixelSize: propertySigFontSizeBig
-                    font.family: lato.name
+                    font.family: myriad.name
                     font.bold: true
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigReasonText.bottom
@@ -205,7 +211,7 @@ Rectangle {
                     height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
-                    font.family: lato.name
+                    font.family: myriad.name
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigSignedByNameText.bottom
                     text: ""
@@ -217,7 +223,7 @@ Rectangle {
                     height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
-                    font.family: lato.name
+                    font.family: myriad.name
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigNumIdText.bottom
                     text: qsTranslate("PageServicesSign", "STR_SIGN_DATE") + ": " + getData()
@@ -229,7 +235,7 @@ Rectangle {
                     height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     width: parent.width - 4
                     clip: true
-                    font.family: lato.name
+                    font.family: myriad.name
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigDateText.bottom
                     text: ""
@@ -239,7 +245,7 @@ Rectangle {
                     id: sigCertifiedByText
                     font.pixelSize: propertySigFontSizeSmall
                     visible: false
-                    font.family: lato.name
+                    font.family: myriad.name
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigLocationText.text == "" ? sigDateText.bottom : sigLocationText.bottom
                     clip: true
@@ -251,7 +257,7 @@ Rectangle {
                     font.pixelSize: propertyCurrentAttrsFontSize * propertyPDFHeightScaleFactor
                     lineHeight: 0.8 // smaller line spacing to match real seal
                     visible: false
-                    font.family: lato.name
+                    font.family: myriad.name
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigCertifiedByText.bottom
                     anchors.bottom: parent.bottom

@@ -84,6 +84,9 @@
     <ClCompile Include="libtomcrypt\sha512.c">
       <Filter>libtomcrypt</Filter>
     </ClCompile>
+    <ClCompile Include="MyriadFontGlyphWidths.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ByteArray.h">
@@ -148,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="libtomcrypt\tomcrypt_macros.h">
       <Filter>libtomcrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="MyriadFontGlyphWidths.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
