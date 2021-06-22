@@ -40,8 +40,6 @@
 //
 //========================================================================
 
-#include <config.h>
-
 #ifdef USE_GCC_PRAGMAS
 #pragma implementation
 #endif
@@ -62,6 +60,9 @@
 #include <sstream>
 #include <string>
 #include <math.h>
+
+#include "config.h"
+
 //For MW version string
 #include "pteidversions.h"
 #include "goo/gmem.h"
