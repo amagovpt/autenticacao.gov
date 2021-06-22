@@ -54,6 +54,11 @@ Item {
     property alias propertySigWaterImgCustom: dragSigWaterImageCustom
     property alias propertyImagePreCustom: imagePreCustom
 
+    property alias propertyCheckBoxNumId: checkboxNumId
+    property alias propertyCheckBoxNumId2: checkboxNumId2
+    property alias propertyCheckBoxDate: checkboxDate
+    property alias propertyCheckBoxDate2: checkboxDate2
+
     BusyIndicator {
         id: busyIndicator
         running: false
@@ -118,9 +123,9 @@ Item {
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: radioButtonDefault.indicator.width + radioButtonDefault.spacing
                 }
-                KeyNavigation.tab: radioButtonCustom
-                KeyNavigation.down: radioButtonCustom
-                KeyNavigation.right: radioButtonCustom
+                KeyNavigation.tab: checkboxNumId
+                KeyNavigation.down: checkboxNumId
+                KeyNavigation.right: checkboxNumId
                 KeyNavigation.backtab: buttonAdd
                 KeyNavigation.up: buttonAdd
                 Keys.onEnterPressed: toggleRadio(radioButtonDefault)
@@ -217,8 +222,15 @@ Item {
                         anchors.topMargin: -5
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
-                        checked: true
+                        enabled: radioButtonDefault.checked
                         opacity: radioButtonDefault.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
+                        KeyNavigation.tab: checkboxDate
+                        KeyNavigation.down: checkboxDate
+                        KeyNavigation.right: checkboxDate
+                        KeyNavigation.backtab: radioButtonDefault
+                        KeyNavigation.up: radioButtonDefault
+                        Keys.onEnterPressed: checkboxNumId.checked = !checkboxNumId.checked
+                        Keys.onReturnPressed: checkboxNumId.checked = !checkboxNumId.checked
                     }
 
                     Text {
@@ -248,8 +260,15 @@ Item {
                         anchors.topMargin: -5
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
-                        checked: true
+                        enabled: radioButtonDefault.checked
                         opacity: radioButtonDefault.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
+                        KeyNavigation.tab: radioButtonCustom
+                        KeyNavigation.down: radioButtonCustom
+                        KeyNavigation.right: radioButtonCustom
+                        KeyNavigation.backtab: checkboxNumId
+                        KeyNavigation.up: checkboxNumId
+                        Keys.onEnterPressed: checkboxDate.checked = !checkboxDate.checked
+                        Keys.onReturnPressed: checkboxDate.checked = !checkboxDate.checked
                     }
                     Text {
                         id: sigDateText
@@ -351,11 +370,11 @@ Item {
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: radioButtonCustom.indicator.width + radioButtonCustom.spacing
                 }
-                KeyNavigation.tab: buttonRemove
-                KeyNavigation.down: buttonRemove
-                KeyNavigation.right: buttonRemove
-                KeyNavigation.backtab: radioButtonDefault
-                KeyNavigation.up: radioButtonDefault
+                KeyNavigation.tab: checkboxNumId2
+                KeyNavigation.down: checkboxNumId2
+                KeyNavigation.right: checkboxNumId2
+                KeyNavigation.backtab: checkboxDate
+                KeyNavigation.up: checkboxDate
                 Keys.onEnterPressed: toggleRadio(radioButtonCustom)
                 Keys.onReturnPressed: toggleRadio(radioButtonCustom)
             }
@@ -461,8 +480,16 @@ Item {
                         anchors.topMargin: -5
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
-                        checked: true
+                        checked: checkboxNumId.checked
+                        enabled: radioButtonCustom.checked
                         opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
+                        KeyNavigation.tab: checkboxDate2
+                        KeyNavigation.down: checkboxDate2
+                        KeyNavigation.right: checkboxDate2
+                        KeyNavigation.backtab: radioButtonCustom
+                        KeyNavigation.up: radioButtonCustom
+                        Keys.onEnterPressed: checkboxNumId2.checked = !checkboxNumId2.checked
+                        Keys.onReturnPressed: checkboxNumId2.checked = !checkboxNumId2.checked
                     }
                     Text {
                         id: sigNumIdTextCustom
@@ -491,8 +518,16 @@ Item {
                         anchors.topMargin: -5
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
-                        checked: true
+                        checked: checkboxDate.checked
+                        enabled: radioButtonCustom.checked
                         opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
+                        KeyNavigation.tab: buttonRemove
+                        KeyNavigation.down: buttonRemove
+                        KeyNavigation.right: buttonRemove
+                        KeyNavigation.backtab: checkboxNumId2
+                        KeyNavigation.up: checkboxNumId2
+                        Keys.onEnterPressed: checkboxDate2.checked = !checkboxDate2.checked
+                        Keys.onReturnPressed: checkboxDate2.checked = !checkboxDate2.checked
                     }
                     Text {
                         id: sigDateTextCustom

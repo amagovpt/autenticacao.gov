@@ -182,6 +182,20 @@ PageDefinitionsSignatureForm {
             }
         }
     }
+    
+    propertyCheckBoxNumId {
+        onCheckedChanged: {
+            gapi.setUseNumId(propertyCheckBoxNumId.checked)
+            propertyCheckBoxNumId2.checked = propertyCheckBoxNumId.checked
+        }
+    }
+
+    propertyCheckBoxDate {
+        onCheckedChanged: {
+            gapi.setUseDate(propertyCheckBoxDate.checked)
+            propertyCheckBoxDate2.checked = propertyCheckBoxDate.checked
+        }
+    }
 
     Component.onCompleted: {
 
@@ -210,6 +224,10 @@ PageDefinitionsSignatureForm {
         }
         if(mainFormID.propertyPageLoader.propertyForceFocus)
             propertyRadioButtonDefault.forceActiveFocus()
+        
+        propertyCheckBoxNumId.checked = gapi.getUseNumId()
+        propertyCheckBoxDate.checked = gapi.getUseDate()
+        
     }
     function getDate(){
         var time = Qt.formatDateTime(new Date(), "yy.MM.dd hh:mm:ss")
