@@ -37,6 +37,9 @@ Item {
     property alias propertyRectAppLook: rectAppLook
     property alias propertyCheckboxShowAnime: checkboxShowAnime
     property alias propertyCheckBoxDebugMode: checkboxDebugMode
+    property alias propertyButtonZipLogs: buttonZipLogs
+    property alias propertyDebugModeStep3TextField: debugModeStep3TextField
+    property alias propertyDebugModeStep1TextField: debugModeStep1TextField
     property alias propertyGraphicsTextField: graphicsTextField
     property alias propertyComboboxAccelGraphics: comboboxAccelGraphics
     property alias propertyRectAppNetworkCheckBox: rectAppNetworkCheckBox
@@ -800,9 +803,9 @@ Item {
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateDebugMode)
                     }
-                    KeyNavigation.tab: debugModeTextField
-                    KeyNavigation.down: debugModeTextField
-                    KeyNavigation.right: debugModeTextField
+                    KeyNavigation.tab: debugModeDescriptionTextField
+                    KeyNavigation.down: debugModeDescriptionTextField
+                    KeyNavigation.right: debugModeDescriptionTextField
                     KeyNavigation.backtab: comboBoxScaling
                     KeyNavigation.up: comboBoxScaling
                     KeyNavigation.left: comboBoxScaling
@@ -831,14 +834,16 @@ Item {
                     id: rectDebugModeCheckBox
                     width: parent.width
                     color: "white"
-                    height: debugModeTextField.height + checkboxDebugMode.height
-                            + logsTextField.height + 10 * Constants.SIZE_TEXT_V_SPACE
-                            + debugInfoLink.height
+                    height: debugModeDescriptionTextField.height 
+                            + debugModeStep1TextField.height + debugModeStep2TextField.height
+                            + debugModeStep3TextField.height + debugModeStep4TextField.height
+                            + debugModeStep5TextField.height + debugInfoLink.height 
+                            + Constants.SIZE_TEXT_V_SPACE * 20
                     anchors.top: dateDebugMode.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
 
                     Text {
-                        id: debugModeTextField
+                        id: debugModeDescriptionTextField
                         width: parent.width - 20
                         x: 10
                         y: Constants.SIZE_TEXT_V_SPACE
@@ -850,19 +855,47 @@ Item {
                         Accessible.role: Accessible.StaticText
                         Accessible.name: text
                         Keys.onPressed: {
-                            handleKeyPressed(event.key, debugModeTextField)
+                            handleKeyPressed(event.key, debugModeDescriptionTextField)
                         }
-                        KeyNavigation.tab: checkboxDebugMode
-                        KeyNavigation.down: checkboxDebugMode
-                        KeyNavigation.right: checkboxDebugMode
+                        KeyNavigation.tab: debugModeStep1TextField
+                        KeyNavigation.down: debugModeStep1TextField
+                        KeyNavigation.right: debugModeStep1TextField
                         KeyNavigation.backtab: dateDebugMode
                         KeyNavigation.up: dateDebugMode
                         KeyNavigation.left: dateDebugMode
                         text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_DESCRIPTION") + controler.autoTr
                     }
 
+                    Text {
+                        id: debugModeStep1TextField
+                        x: debugModeDescriptionTextField.x
+                        anchors.top: debugModeDescriptionTextField.bottom
+                        anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
+                        font.capitalization: Font.MixedCase
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.bold: activeFocus
+                        wrapMode: Text.WordWrap
+                        Accessible.role: Accessible.StaticText
+                        Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, debugModeDescriptionTextField)
+                        }
+                        KeyNavigation.tab: checkboxDebugMode
+                        KeyNavigation.down: checkboxDebugMode
+                        KeyNavigation.right: checkboxDebugMode
+                        KeyNavigation.backtab: debugModeDescriptionTextField
+                        KeyNavigation.up: debugModeDescriptionTextField
+                        KeyNavigation.left: debugModeDescriptionTextField
+                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP1") + controler.autoTr
+                    }
+
                     CheckBox {
                         id: checkboxDebugMode
+                        anchors.top: debugModeDescriptionTextField.bottom
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
                         enabled: false
                         text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_ENABLE") + controler.autoTr
                         height: 25
@@ -870,50 +903,150 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         font.bold: activeFocus
-                        anchors.top: debugModeTextField.bottom
-                        anchors.topMargin: 2 * Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         Keys.onPressed: {
                             handleKeyPressed(event.key, checkboxDebugMode)
                         }
-                        KeyNavigation.tab: buttonZipLogs
-                        KeyNavigation.down: buttonZipLogs
-                        KeyNavigation.right: buttonZipLogs
-                        KeyNavigation.backtab: debugModeTextField
-                        KeyNavigation.up: debugModeTextField
-                        KeyNavigation.left: debugModeTextField
+                        KeyNavigation.tab: debugModeStep2TextField
+                        KeyNavigation.down: debugModeStep2TextField
+                        KeyNavigation.right: debugModeStep2TextField
+                        KeyNavigation.backtab: debugModeStep1TextField
+                        KeyNavigation.up: debugModeStep1TextField
+                        KeyNavigation.left: debugModeStep1TextField
                         Keys.onEnterPressed: toggleSwitch(checkboxDebugMode)
                         Keys.onReturnPressed: toggleSwitch(checkboxDebugMode)
                     }
+
+                    Text {
+                        id: debugModeStep2TextField
+                        x: debugModeStep1TextField.x
+                        anchors.top: debugModeStep1TextField.bottom
+                        anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
+                        color: debugModeStep1TextField.color
+                        font.capitalization: Font.MixedCase
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.bold: activeFocus
+                        wrapMode: Text.WordWrap
+                        Accessible.role: Accessible.StaticText
+                        Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, debugModeDescriptionTextField)
+                        }
+                        KeyNavigation.tab: debugModeStep3TextField
+                        KeyNavigation.down: debugModeStep3TextField
+                        KeyNavigation.right: debugModeStep3TextField
+                        KeyNavigation.backtab: checkboxDebugMode
+                        KeyNavigation.up: checkboxDebugMode
+                        KeyNavigation.left: checkboxDebugMode
+                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP2") + controler.autoTr
+                            
+                        
+                    }
+
+                    Text {
+                        id: debugModeStep3TextField
+                        x: debugModeStep1TextField.x
+                        anchors.top: debugModeStep2TextField.bottom
+                        anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
+                        font.capitalization: Font.MixedCase
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        wrapMode: Text.WordWrap
+                        Accessible.role: Accessible.StaticText
+                        Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, debugModeDescriptionTextField)
+                        }
+                        KeyNavigation.tab: debugModeStep4TextField
+                        KeyNavigation.down: debugModeStep4TextField
+                        KeyNavigation.right: debugModeStep4TextField
+                        KeyNavigation.backtab: debugModeStep2TextField
+                        KeyNavigation.up: debugModeStep2TextField
+                        KeyNavigation.left: debugModeStep2TextField
+                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP3") + controler.autoTr
+                    }
+
+                    Text {
+                        id: debugModeStep4TextField
+                        x: debugModeStep1TextField.x
+                        anchors.top: debugModeStep3TextField.bottom
+                        anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
+                        color: debugModeStep3TextField.color
+                        font.capitalization: Font.MixedCase
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.bold: activeFocus
+                        wrapMode: Text.WordWrap
+                        Accessible.role: Accessible.StaticText
+                        Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, debugModeDescriptionTextField)
+                        }
+                        KeyNavigation.tab: buttonZipLogs
+                        KeyNavigation.down: buttonZipLogs
+                        KeyNavigation.right: buttonZipLogs
+                        KeyNavigation.backtab: debugModeStep3TextField
+                        KeyNavigation.up: debugModeStep3TextField
+                        KeyNavigation.left: debugModeStep3TextField
+                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP4") + controler.autoTr
+                    }
+
                     Button {
                         id: buttonZipLogs
-                        text: qsTranslate("PageDefinitionsApp", "STR_LOG_ZIP_BUTTON")  + controler.autoTr
                         anchors.right: parent.right
                         anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
-                        anchors.verticalCenter: checkboxDebugMode.verticalCenter
+                        anchors.verticalCenter: debugModeStep4TextField.verticalCenter
                         width: 1.4 * Constants.WIDTH_BUTTON
                         height: Constants.HEIGHT_BOTTOM_COMPONENT
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
                         highlighted: activeFocus
-                        KeyNavigation.tab: logsTextField
-                        KeyNavigation.down: logsTextField
-                        KeyNavigation.right: logsTextField
-                        KeyNavigation.left: checkboxDebugMode
-                        KeyNavigation.backtab: checkboxDebugMode
-                        KeyNavigation.up: checkboxDebugMode
+                        KeyNavigation.tab: debugModeStep5TextField
+                        KeyNavigation.down: debugModeStep5TextField
+                        KeyNavigation.right: debugModeStep5TextField
+                        KeyNavigation.left: debugModeStep4TextField
+                        KeyNavigation.backtab: debugModeStep4TextField
+                        KeyNavigation.up: debugModeStep4TextField
                         onClicked: {
                             controler.zipLogs()
                         }
+                        text: qsTranslate("PageDefinitionsApp", "STR_LOG_ZIP_BUTTON")  + controler.autoTr
                     }
+
+                    Text {
+                        id: debugModeStep5TextField
+                        x: debugModeStep1TextField.x
+                        anchors.top: debugModeStep4TextField.bottom
+                        anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
+                        color: debugModeStep3TextField.color
+                        width: parent.width - logsTextField.width - Constants.SIZE_TEXT_FIELD_H_SPACE * 4
+                        font.capitalization: Font.MixedCase
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.bold: activeFocus
+                        wrapMode: Text.WordWrap
+                        Accessible.role: Accessible.StaticText
+                        Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, debugModeDescriptionTextField)
+                        }
+                        KeyNavigation.tab: logsTextField
+                        KeyNavigation.down: logsTextField
+                        KeyNavigation.right: logsTextField
+                        KeyNavigation.backtab: buttonZipLogs
+                        KeyNavigation.up: buttonZipLogs
+                        KeyNavigation.left: buttonZipLogs
+                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP5") + controler.autoTr
+                    }
+                
                     Text {
                         id: logsTextField
-                        width: parent.width - 20
-                        anchors.top: checkboxDebugMode.bottom
-                        anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
-                        x:10
+                        anchors.right: parent.right
+                        anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        anchors.verticalCenter: debugModeStep5TextField.verticalCenter
                         font.capitalization: Font.MixedCase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
@@ -928,15 +1061,16 @@ Item {
                         KeyNavigation.tab: debugInfoLink
                         KeyNavigation.down: debugInfoLink
                         KeyNavigation.right: debugInfoLink
-                        KeyNavigation.backtab: buttonZipLogs
-                        KeyNavigation.up: buttonZipLogs
-                        KeyNavigation.left: buttonZipLogs
+                        KeyNavigation.backtab: debugModeStep5TextField
+                        KeyNavigation.up: debugModeStep5TextField
+                        KeyNavigation.left: debugModeStep5TextField
                     }
+
                     Components.Link {
                         id: debugInfoLink
                         x: 10
-                        anchors.top: logsTextField.bottom
-                        anchors.topMargin: 2* Constants.SIZE_TEXT_V_SPACE
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: Constants.SIZE_TEXT_V_SPACE
                         width: parent.width
                         propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + controler.autoTr + " "
                                             + "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#obtenção-do-relatório-para-análise-através-do-menu-configurações'>"

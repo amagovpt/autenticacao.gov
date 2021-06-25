@@ -273,10 +273,18 @@ PageDefinitionsAppForm {
 
         if (controler.getDebugModeValue()) {
             propertyCheckBoxDebugMode.checked = true
+            propertyButtonZipLogs.enabled = true
+            propertyDebugModeStep1TextField.color = "gray"
+            propertyDebugModeStep3TextField.color = "black"
+            propertyDebugModeStep3TextField.font.bold = true
         }
         else {
             propertyCheckBoxDebugMode.checked = false
+            propertyButtonZipLogs.enabled = false
+            propertyDebugModeStep1TextField.color = "black"
+            propertyDebugModeStep3TextField.color = "gray"
         }
+
         propertyCheckBoxDebugMode.enabled = true
 
         updatePages()

@@ -925,7 +925,27 @@
     </message>
     <message>
         <source>STR_DEBUG_MODE_DESCRIPTION</source>
-        <translation>Se encontrar problemas com a aplicação deve, em primeiro lugar, ativar o modo diagnóstico. De seguida, deve repetir a ação que levou à situação de erro. Por fim, deve pressionar o botão &quot;Criar relatório&quot;.</translation>
+        <translation>Se encontrar problemas com a aplicação deve seguir os seguintes passos:</translation>
+    </message>
+    <message>
+        <source>STR_DEBUG_MODE_STEP1</source>
+        <translation>1. - Ativar o modo de diagnóstico:</translation>
+    </message>
+    <message>
+        <source>STR_DEBUG_MODE_STEP2</source>
+        <translation>2. - Reiniciar a aplicação para prosseguir com o procedimento de diagnóstico.</translation>
+    </message>
+    <message>
+        <source>STR_DEBUG_MODE_STEP3</source>
+        <translation>3. - Repetir a ação que levou à situação de erro.</translation>
+    </message>
+    <message>
+        <source>STR_DEBUG_MODE_STEP4</source>
+        <translation>4. - Pressionar o botão &quot;Criar relatório&quot;.</translation>
+    </message>
+    <message>
+        <source>STR_DEBUG_MODE_STEP5</source>
+        <translation>5. - Enviar a descrição do problema em conjunto com o relatório, presente no Ambiente de Trabalho, para:</translation>
     </message>
     <message>
         <source>STR_DEBUG_MODE_ENABLE</source>
@@ -1093,7 +1113,7 @@
     </message>
     <message>
         <source>STR_LOG_ZIP_DESCRIPTION</source>
-        <translation>Ao pressionar o botão &quot;Criar relatório&quot; será criado um ficheiro no Ambiente de Trabalho, que deverá ser enviado para a equipa de suporte através do email &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;, anexado à descrição do problema.</translation>
+        <translation>&lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;</translation>
     </message>
     <message>
         <source>STR_LOG_ZIP_LARGE</source>
@@ -2323,7 +2343,7 @@
     </message>
     <message>
         <source>STR_RUN_DEBUG_MODE</source>
-        <translation>Modo de diagnóstico</translation>
+        <translation>Modo de diagnóstico - Repita a ação que levou à situação de erro</translation>
     </message>
 </context>
 <context>
