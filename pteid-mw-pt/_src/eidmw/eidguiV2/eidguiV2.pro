@@ -113,7 +113,10 @@ translations.path = $${INSTALL_DIR_BIN}
 translations.files += eidmw_en.qm \
                 eidmw_nl.qm
 
-INSTALLS += target translations
+fonts.path = $${INSTALL_DIR_BIN}/../share/pteid-mw/fonts
+fonts.files += fonts/myriad/MyriadPro-Regular.otf
+
+INSTALLS += target translations fonts
 
 HEADERS += \
     appcontroller.h \

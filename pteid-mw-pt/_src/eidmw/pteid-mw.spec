@@ -163,6 +163,8 @@ install -m 755 eidguiV2/eidguiV2 $RPM_BUILD_ROOT/usr/local/bin/eidguiV2
 install -m 755 -p bin/pteiddialogsQTsrv $RPM_BUILD_ROOT/usr/local/bin/pteiddialogsQTsrv
 install -m 644 -p eidguiV2/eidmw_en.qm $RPM_BUILD_ROOT/usr/local/bin/
 install -m 644 -p eidguiV2/eidmw_nl.qm $RPM_BUILD_ROOT/usr/local/bin/
+install -m 644 -p eidguiV2/fonts/myriad/MyriadPro-Regular.otf $RPM_BUILD_ROOT/usr/local/share/pteid-mw/fonts/
+
 
 mkdir -p $RPM_BUILD_ROOT/usr/share/applications
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/usr/share/applications
