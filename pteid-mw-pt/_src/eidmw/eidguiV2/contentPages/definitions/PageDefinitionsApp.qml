@@ -277,12 +277,16 @@ PageDefinitionsAppForm {
             propertyDebugModeStep1TextField.color = "gray"
             propertyDebugModeStep3TextField.color = "black"
             propertyDebugModeStep3TextField.font.bold = true
+            propertyDebugModeStep1Arrow.opacity = 0.3
+            propertyDebugModeStep4Arrow.opacity = 0.8
         }
         else {
             propertyCheckBoxDebugMode.checked = false
             propertyButtonZipLogs.enabled = false
             propertyDebugModeStep1TextField.color = "black"
             propertyDebugModeStep3TextField.color = "gray"
+            propertyDebugModeStep1Arrow.opacity = 0.8
+            propertyDebugModeStep4Arrow.opacity = 0.3
         }
 
         propertyCheckBoxDebugMode.enabled = true

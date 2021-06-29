@@ -38,8 +38,10 @@ Item {
     property alias propertyCheckboxShowAnime: checkboxShowAnime
     property alias propertyCheckBoxDebugMode: checkboxDebugMode
     property alias propertyButtonZipLogs: buttonZipLogs
-    property alias propertyDebugModeStep3TextField: debugModeStep3TextField
     property alias propertyDebugModeStep1TextField: debugModeStep1TextField
+    property alias propertyDebugModeStep3TextField: debugModeStep3TextField
+    property alias propertyDebugModeStep1Arrow: debugModeStep1Arrow
+    property alias propertyDebugModeStep4Arrow: debugModeStep4Arrow
     property alias propertyGraphicsTextField: graphicsTextField
     property alias propertyComboboxAccelGraphics: comboboxAccelGraphics
     property alias propertyRectAppNetworkCheckBox: rectAppNetworkCheckBox
@@ -917,7 +919,29 @@ Item {
                         Keys.onEnterPressed: toggleSwitch(checkboxDebugMode)
                         Keys.onReturnPressed: toggleSwitch(checkboxDebugMode)
                     }
+             
+                    Rectangle {
+                        id: debugModeSte1Rectangle
+                        anchors.right: debugModeStep1Arrow.horizontalCenter
+                        anchors.rightMargin: 0
+                        anchors.verticalCenter: debugModeStep1TextField.verticalCenter
+                        width: parent.width - checkboxDebugMode.width - debugModeStep1Arrow.width - debugModeStep1TextField.width - Constants.SIZE_TEXT_FIELD_H_SPACE * 4
+                        height: 2
+                        color: "black"
+                        opacity: debugModeStep1Arrow.opacity
+                    }
 
+                    Image {
+                        id: debugModeStep1Arrow
+                        anchors.right: checkboxDebugMode.left
+                        anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        anchors.verticalCenter: debugModeStep1TextField.verticalCenter
+                        antialiasing: true
+                        width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                        height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                        source: "../../images/arrow-right_AMA.png"
+                    }
+                    
                     Text {
                         id: debugModeStep2TextField
                         x: debugModeStep1TextField.x
@@ -993,6 +1017,28 @@ Item {
                         text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP4") + controler.autoTr
                     }
 
+                    Rectangle {
+                        id: debugModeStep4Rectangle
+                        anchors.right: debugModeStep4Arrow.horizontalCenter
+                        anchors.rightMargin: 0
+                        anchors.verticalCenter: debugModeStep4TextField.verticalCenter
+                        width: parent.width - buttonZipLogs.width - debugModeStep4Arrow.width - debugModeStep4TextField.width - Constants.SIZE_TEXT_FIELD_H_SPACE * 3
+                        height: 2
+                        color: "black"
+                        opacity: debugModeStep4Arrow.opacity
+                    }
+
+                    Image {
+                        id: debugModeStep4Arrow
+                        anchors.right: buttonZipLogs.left
+                        anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        anchors.verticalCenter: debugModeStep4TextField.verticalCenter
+                        antialiasing: true
+                        width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                        height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                        source: "../../images/arrow-right_AMA.png"
+                    }
+
                     Button {
                         id: buttonZipLogs
                         anchors.right: parent.right
@@ -1022,7 +1068,7 @@ Item {
                         anchors.top: debugModeStep4TextField.bottom
                         anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
                         color: debugModeStep3TextField.color
-                        width: parent.width - logsTextField.width - Constants.SIZE_TEXT_FIELD_H_SPACE * 4
+                        width: Constants.SIZE_TEXT_FIELD_H_SPACE * 28
                         font.capitalization: Font.MixedCase
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
@@ -1042,6 +1088,31 @@ Item {
                         text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP5") + controler.autoTr
                     }
                 
+
+                    Rectangle {
+                        id: debugModeStep5Rectangle
+                        anchors.left: debugModeStep5TextField.right
+                        anchors.leftMargin: Constants.SIZE_TEXT_FIELD_H_SPACE * 2
+                        anchors.right: debugModeStep5Arrow.horizontalCenter
+                        anchors.rightMargin: 0
+                        anchors.verticalCenter: debugModeStep5TextField.verticalCenter
+                        height: 2
+                        color: "black"
+                        opacity: debugModeStep4Arrow.opacity
+                    }
+
+                    Image {
+                        id: debugModeStep5Arrow
+                        anchors.right: logsTextField.left
+                        anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        anchors.verticalCenter: debugModeStep5TextField.verticalCenter
+                        antialiasing: true
+                        width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                        height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                        source: "../../images/arrow-right_AMA.png"
+                        opacity: debugModeStep4Arrow.opacity
+                    }
+
                     Text {
                         id: logsTextField
                         anchors.right: parent.right
