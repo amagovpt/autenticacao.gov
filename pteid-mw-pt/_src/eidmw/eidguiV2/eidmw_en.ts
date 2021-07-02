@@ -918,25 +918,25 @@
         <translation>If you encounter problems with the application, please follow these steps:</translation>
     </message>
     <message>
-    <source>STR_DEBUG_MODE_STEP1</source>
-    <translation>1. - Enable debug mode:</translation>
-</message>
-<message>
-    <source>STR_DEBUG_MODE_STEP2</source>
-    <translation>2. - Restart the application to procede with the debug procedure.</translation>
-</message>
-<message>
-    <source>STR_DEBUG_MODE_STEP3</source>
-    <translation>3. - Repeat the action that lead to the problem</translation>
-</message>
-<message>
-    <source>STR_DEBUG_MODE_STEP4</source>
-    <translation>4. - Press the button &quot;Create report&quot;.</translation>
-</message>
-<message>
-    <source>STR_DEBUG_MODE_STEP5</source>
-    <translation>5. - Send an email with the description of the problem and the report, saved in the Desktop, to:</translation>
-</message>
+        <source>STR_DEBUG_MODE_STEP1</source>
+        <translation>1. - Enable debug mode:</translation>
+    </message>
+    <message>
+        <source>STR_DEBUG_MODE_STEP2</source>
+        <translation>2. - Restart the application to procede with the debug procedure.</translation>
+    </message>
+    <message>
+        <source>STR_DEBUG_MODE_STEP3</source>
+        <translation>3. - Repeat the action that lead to the problem</translation>
+    </message>
+    <message>
+        <source>STR_DEBUG_MODE_STEP4</source>
+        <translation>4. - Press the button &quot;Create report&quot;.</translation>
+    </message>
+    <message>
+        <source>STR_DEBUG_MODE_STEP5</source>
+        <translation>5. - Send an email with the description of the problem and the report, saved in the Desktop, to: &lt;a href=&apos;mailto:cartaodecidadao@irn.mj.pt&apos;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;</translation>
+    </message>
     <message>
         <source>STR_DEBUG_MODE_ENABLE</source>
         <translation>Enable debug mode</translation>
@@ -1103,7 +1103,7 @@
     </message>
     <message>
         <source>STR_LOG_ZIP_DESCRIPTION</source>
-        <translation>&lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;</translation>
+        <translation type="vanished">&lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;</translation>
     </message>
     <message>
         <source>STR_LOG_ZIP_LARGE</source>

@@ -945,7 +945,7 @@
     </message>
     <message>
         <source>STR_DEBUG_MODE_STEP5</source>
-        <translation>5. - Enviar a descrição do problema em conjunto com o relatório, presente no Ambiente de Trabalho, para:</translation>
+        <translation>5. - Enviar a descrição do problema em conjunto com o relatório, presente no Ambiente de Trabalho, para: &lt;a href=&apos;mailto:cartaodecidadao@irn.mj.pt&apos;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;</translation>
     </message>
     <message>
         <source>STR_DEBUG_MODE_ENABLE</source>
@@ -1110,10 +1110,6 @@
     <message>
         <source>STR_LOG_ZIP_BUTTON</source>
         <translation>Criar relatório</translation>
-    </message>
-    <message>
-        <source>STR_LOG_ZIP_DESCRIPTION</source>
-        <translation>&lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;</translation>
     </message>
     <message>
         <source>STR_LOG_ZIP_LARGE</source>

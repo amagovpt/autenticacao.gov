@@ -40,8 +40,6 @@ Item {
     property alias propertyButtonZipLogs: buttonZipLogs
     property alias propertyDebugModeStep1TextField: debugModeStep1TextField
     property alias propertyDebugModeStep3TextField: debugModeStep3TextField
-    property alias propertyDebugModeStep1Arrow: debugModeStep1Arrow
-    property alias propertyDebugModeStep4Arrow: debugModeStep4Arrow
     property alias propertyGraphicsTextField: graphicsTextField
     property alias propertyComboboxAccelGraphics: comboboxAccelGraphics
     property alias propertyRectAppNetworkCheckBox: rectAppNetworkCheckBox
@@ -896,8 +894,8 @@ Item {
                         id: checkboxDebugMode
                         anchors.top: debugModeDescriptionTextField.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-                        anchors.right: parent.right
-                        anchors.rightMargin: 10
+                        anchors.left: debugModeStep1TextField.right
+                        anchors.leftMargin: 10
                         enabled: false
                         text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_ENABLE") + controler.autoTr
                         height: 25
@@ -919,29 +917,7 @@ Item {
                         Keys.onEnterPressed: toggleSwitch(checkboxDebugMode)
                         Keys.onReturnPressed: toggleSwitch(checkboxDebugMode)
                     }
-             
-                    Rectangle {
-                        id: debugModeSte1Rectangle
-                        anchors.right: debugModeStep1Arrow.horizontalCenter
-                        anchors.rightMargin: 0
-                        anchors.verticalCenter: debugModeStep1TextField.verticalCenter
-                        width: parent.width - checkboxDebugMode.width - debugModeStep1Arrow.width - debugModeStep1TextField.width - Constants.SIZE_TEXT_FIELD_H_SPACE * 4
-                        height: 2
-                        color: "black"
-                        opacity: debugModeStep1Arrow.opacity
-                    }
 
-                    Image {
-                        id: debugModeStep1Arrow
-                        anchors.right: checkboxDebugMode.left
-                        anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
-                        anchors.verticalCenter: debugModeStep1TextField.verticalCenter
-                        antialiasing: true
-                        width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
-                        height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
-                        source: "../../images/arrow-right_AMA.png"
-                    }
-                    
                     Text {
                         id: debugModeStep2TextField
                         x: debugModeStep1TextField.x
@@ -1017,32 +993,10 @@ Item {
                         text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP4") + controler.autoTr
                     }
 
-                    Rectangle {
-                        id: debugModeStep4Rectangle
-                        anchors.right: debugModeStep4Arrow.horizontalCenter
-                        anchors.rightMargin: 0
-                        anchors.verticalCenter: debugModeStep4TextField.verticalCenter
-                        width: parent.width - buttonZipLogs.width - debugModeStep4Arrow.width - debugModeStep4TextField.width - Constants.SIZE_TEXT_FIELD_H_SPACE * 3
-                        height: 2
-                        color: "black"
-                        opacity: debugModeStep4Arrow.opacity
-                    }
-
-                    Image {
-                        id: debugModeStep4Arrow
-                        anchors.right: buttonZipLogs.left
-                        anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
-                        anchors.verticalCenter: debugModeStep4TextField.verticalCenter
-                        antialiasing: true
-                        width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
-                        height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
-                        source: "../../images/arrow-right_AMA.png"
-                    }
-
                     Button {
                         id: buttonZipLogs
-                        anchors.right: parent.right
-                        anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        anchors.left: debugModeStep4TextField.right
+                        anchors.leftMargin: 10
                         anchors.verticalCenter: debugModeStep4TextField.verticalCenter
                         width: 1.4 * Constants.WIDTH_BUTTON
                         height: Constants.HEIGHT_BOTTOM_COMPONENT
@@ -1062,80 +1016,27 @@ Item {
                         text: qsTranslate("PageDefinitionsApp", "STR_LOG_ZIP_BUTTON")  + controler.autoTr
                     }
 
-                    Text {
+                    Components.Link {
                         id: debugModeStep5TextField
                         x: debugModeStep1TextField.x
                         anchors.top: debugModeStep4TextField.bottom
                         anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
-                        color: debugModeStep3TextField.color
-                        width: Constants.SIZE_TEXT_FIELD_H_SPACE * 28
-                        font.capitalization: Font.MixedCase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        font.bold: activeFocus
-                        wrapMode: Text.WordWrap
-                        Accessible.role: Accessible.StaticText
-                        Accessible.name: text
+                        width: parent.width - 20
+                        propertyText.color: debugModeStep3TextField.color
+                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP5")
+                        propertyText.font.capitalization: Font.MixedCase
+                        propertyText.font.pixelSize: Constants.SIZE_TEXT_FIELD
                         Keys.onPressed: {
                             handleKeyPressed(event.key, debugModeDescriptionTextField)
-                        }
-                        KeyNavigation.tab: logsTextField
-                        KeyNavigation.down: logsTextField
-                        KeyNavigation.right: logsTextField
-                        KeyNavigation.backtab: buttonZipLogs
-                        KeyNavigation.up: buttonZipLogs
-                        KeyNavigation.left: buttonZipLogs
-                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP5") + controler.autoTr
-                    }
-                
-
-                    Rectangle {
-                        id: debugModeStep5Rectangle
-                        anchors.left: debugModeStep5TextField.right
-                        anchors.leftMargin: Constants.SIZE_TEXT_FIELD_H_SPACE * 2
-                        anchors.right: debugModeStep5Arrow.horizontalCenter
-                        anchors.rightMargin: 0
-                        anchors.verticalCenter: debugModeStep5TextField.verticalCenter
-                        height: 2
-                        color: "black"
-                        opacity: debugModeStep4Arrow.opacity
-                    }
-
-                    Image {
-                        id: debugModeStep5Arrow
-                        anchors.right: logsTextField.left
-                        anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
-                        anchors.verticalCenter: debugModeStep5TextField.verticalCenter
-                        antialiasing: true
-                        width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
-                        height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
-                        source: "../../images/arrow-right_AMA.png"
-                        opacity: debugModeStep4Arrow.opacity
-                    }
-
-                    Text {
-                        id: logsTextField
-                        anchors.right: parent.right
-                        anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
-                        anchors.verticalCenter: debugModeStep5TextField.verticalCenter
-                        font.capitalization: Font.MixedCase
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.family: lato.name
-                        font.bold: activeFocus
-                        wrapMode: Text.WordWrap
-                        text: qsTranslate("PageDefinitionsApp", "STR_LOG_ZIP_DESCRIPTION") + controler.autoTr
-                        Accessible.role: Accessible.StaticText
-                        Accessible.name: text
-                        Keys.onPressed: {
-                            handleKeyPressed(event.key, logsTextField)
                         }
                         KeyNavigation.tab: debugInfoLink
                         KeyNavigation.down: debugInfoLink
                         KeyNavigation.right: debugInfoLink
-                        KeyNavigation.backtab: debugModeStep5TextField
-                        KeyNavigation.up: debugModeStep5TextField
-                        KeyNavigation.left: debugModeStep5TextField
+                        KeyNavigation.backtab: buttonZipLogs
+                        KeyNavigation.up: buttonZipLogs
+                        KeyNavigation.left: buttonZipLogs
                     }
+
 
                     Components.Link {
                         id: debugInfoLink
@@ -1157,9 +1058,9 @@ Item {
                         Keys.onPressed: {
                             handleKeyPressed(event.key, debugInfoLink)
                         }
-                        KeyNavigation.left: logsTextField
-                        KeyNavigation.backtab: logsTextField
-                        KeyNavigation.up: logsTextField
+                        KeyNavigation.left: debugModeStep5TextField
+                        KeyNavigation.backtab: debugModeStep5TextField
+                        KeyNavigation.up: debugModeStep5TextField
                     }
                 }
             }
@@ -1193,9 +1094,9 @@ Item {
                     KeyNavigation.tab: graphicsTextField
                     KeyNavigation.down: graphicsTextField
                     KeyNavigation.right: graphicsTextField
-                    KeyNavigation.backtab: logsTextField
-                    KeyNavigation.up: logsTextField
-                    KeyNavigation.left: logsTextField
+                    KeyNavigation.backtab: debugInfoLink
+                    KeyNavigation.up: debugInfoLink
+                    KeyNavigation.left: debugInfoLink
                 }
                 DropShadow {
                     anchors.fill: rectAppGraphicsCheckBox
