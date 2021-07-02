@@ -240,7 +240,9 @@
             <RegistryValue Type="integer" Name="Type" Value="1"/>
           </RegistryKey>
         </Component>
-				<!-- Certificate Propagation Service is a standard Windows service available in Windows Vista and later versions. In order to use the minidriver
+      
+        
+        <!-- Certificate Propagation Service is a standard Windows service available in Windows Vista and later versions. In order to use the minidriver
 			   it is necessary that this service is running. When a smart card reader is inserted this service should be started  by the smart card
 			   driver. As not all drivers are following this guidance, we start CertPropSvc during the minidriver install -->
 				<Component Id="CertPropService" Guid="932459d0-df59-11de-8a39-0800200c9a66" Permanent="yes" Win64="yes">
@@ -436,7 +438,7 @@
 						<RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="no"/>
 						<RegistryValue Type="binary" Name="ATR" Value="3b7d95000080318065b08311000083009000" KeyPath="no"/>
 						<RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
-						<RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+						<RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
 						<RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
 					</RegistryKey>
           <RegistryKey Root="HKLM"
@@ -476,7 +478,7 @@
 						<RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
 						<RegistryValue Type="binary" Name="ATR" Value="3b7d95000080318065b08311000083009000" KeyPath="no"/>
 						<RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
-						<RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+						<RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
 						<RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
 					</RegistryKey>
           <RegistryKey Root="HKLM"
@@ -507,6 +509,13 @@
             <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
           </RegistryKey>
 				</Component>
+        
+        <Component Id="PteidBaseCSP32" Guid="*" Win64="no">
+          <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Cryptography\Defaults\Provider\Pteid CSP">
+              <RegistryValue Type="string" Name="Image Path" Value="basecsp.dll" KeyPath="yes"/>
+              <RegistryValue Type="integer" Name="Type" Value="1"/>
+          </RegistryKey>
+        </Component>
 
 				<Component Id="RegistryPteidSystem" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA3}">
 					<RegistryKey Root="HKLM"
@@ -565,7 +574,6 @@
           
           </RegistryKey>
        </Component>
-        
 
 
 			</DirectoryRef>
@@ -660,6 +668,7 @@
             <ComponentRef Id="pteidmdrvsystem32"/>
             <ComponentRef Id="pteidmdrvsystem64"/>
             <ComponentRef Id="PteidBaseCSP"/>
+            <ComponentRef Id="PteidBaseCSP32"/>
 						<ComponentRef Id="REGISTERMINIDRIVER_64"/>
             <ComponentRef Id="REGISTERMINIDRIVER_32"/>
 						<Condition Level="1">VersionNT >= 601</Condition>
