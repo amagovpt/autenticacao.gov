@@ -721,8 +721,6 @@ Item {
                             font.family: lato.name
                             font.bold: activeFocus
                             color: Constants.COLOR_TEXT_BODY
-                            anchors.right: comboBoxScaling.left
-                            anchors.rightMargin: Constants.SIZE_TEXT_V_SPACE
                             anchors.verticalCenter: parent.verticalCenter
                             wrapMode: Text.WordWrap
                             Accessible.role: Accessible.StaticText
@@ -747,6 +745,8 @@ Item {
                             height: 3 * Constants.SIZE_TEXT_FIELD
                             anchors.right: parent.right
                             anchors.rightMargin: 10
+                            anchors.left: textManualScaling.right
+                            anchors.leftMargin: 10
                             anchors.top: parent.top
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
