@@ -1259,7 +1259,7 @@ PageServicesSignForm {
             id: rectlistViewFilesDelegate
             width: parent.width
             height: parent.height
-            color:  propertyListViewFiles.currentIndex === index && propertyListViewFiles.focus
+            color:  propertyListViewFiles.currentIndex === index
                     ? Constants.COLOR_MAIN_DARK_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
 
             Keys.onSpacePressed: {
@@ -1285,6 +1285,15 @@ PageServicesSignForm {
                 id: mouseAreaFileName
                 anchors.fill: parent
                 hoverEnabled : true
+                onClicked: {
+                    console.log("Click file index:" + index)
+                    propertyListViewFiles.currentIndex = index
+                    propertyPDFPreview.propertyBackground.source =
+                        "image://pdfpreview_imageprovider/"+ fileUrl + "?page=" + propertySpinBoxControl.value
+                    
+                    propertyPDFPreview.propertyFileName = Functions.fileBaseName(fileUrl)
+                    propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg" 
+                }
             }
 
             Item {
@@ -1293,8 +1302,8 @@ PageServicesSignForm {
 
                 Text {
                     id: fileName
-                    text: fileUrl
                     width: parent.width - iconRemove.width - Constants.SIZE_LISTVIEW_IMAGE_SPACE
+                    text: fileUrl
                     x: Constants.SIZE_LISTVIEW_IMAGE_SPACE * 0.5
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -1310,6 +1319,7 @@ PageServicesSignForm {
                         }
                     }
                 }
+
                 Image {
                     id: iconRemove
                     x: fileName.width + Constants.SIZE_LISTVIEW_IMAGE_SPACE * 0.5
@@ -1352,6 +1362,7 @@ PageServicesSignForm {
                     propertyTextDragMsgImg.visible = false
                     // Preview the last file selected
                     var loadedFilePath = filesModel.get(filesModel.count-1).fileUrl
+                    propertyListViewFiles.currentIndex = filesModel.count - 1
                     var pageCount = gapi.getPDFpageCount(loadedFilePath)
                     if(pageCount > 0){
                         propertyTextSpinBox.maximumLength = maxTextInputLength(pageCount)
@@ -1405,7 +1416,7 @@ PageServicesSignForm {
 
     propertySpinBoxControl {
         onValueChanged: {
-            var loadedFilePath = filesModel.get(filesModel.count-1).fileUrl
+            var loadedFilePath = filesModel.get(propertyListViewFiles.currentIndex).fileUrl
             var maxPageAllowed = getMinimumPage()
             if(propertySpinBoxControl.value > maxPageAllowed){
                 propertySpinBoxControl.value = 1
@@ -1418,25 +1429,24 @@ PageServicesSignForm {
     }
     propertyCheckLastPage {
         onCheckedChanged: {
-            var loadedFilePath = propertyListViewFiles.model.get(filesModel.count-1).fileUrl
+            var loadedFilePath = filesModel.get(propertyListViewFiles.currentIndex).fileUrl
             propertyPageLoader.propertyBackupLastPage =  propertyCheckLastPage.checked
-            var pageCount = gapi.getPDFpageCount(loadedFilePath)
 
             if(propertyCheckLastPage.checked){
-                propertySpinBoxControl.value = pageCount
                 propertySpinBoxControl.enabled = false
                 propertyPageText.enabled = false
-                propertyPDFPreview.propertyBackground.source =
-                        "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + pageCount
-            }else{
+            }
+            else{
                 propertySpinBoxControl.enabled = true
                 propertyPageText.enabled = true
                 propertyTextSpinBox.visible = true
-                if(propertySpinBoxControl.value > getMinimumPage())
-                    propertySpinBoxControl.value = getMinimumPage()
-                propertyPDFPreview.propertyBackground.source =
-                        "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
             }
+           
+            propertySpinBoxControl.value = getMinimumPage()
+            console.log("Check2: " + propertySpinBoxControl.value)
+
+            propertyPDFPreview.propertyBackground.source =
+                "image://pdfpreview_imageprovider/"+ loadedFilePath + "?page=" + propertySpinBoxControl.value
         }
     }
 
