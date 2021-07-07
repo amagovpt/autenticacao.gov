@@ -25,15 +25,13 @@
 
 using namespace eIDMW;
 
-const char *signSimpleDescription = "Open simple Signature submenu.";
-const char *signAdvancedDescription = "Open advanced Signature submenu.";
+const char *signDescription = "Open Signature submenu.";
 
 int parseCommandlineAppArguments(QCommandLineParser *parser, GUISettings *settings) {
 
     QString modeDescription("Mode of the application. Possible values are:\n ");
     modeDescription.append("\"\" (empty): default mode\n");
-    modeDescription.append("\"signSimple\": ").append(signSimpleDescription).append("\n");
-    modeDescription.append("\"signAdvanced\": ").append(signAdvancedDescription);
+    modeDescription.append("\"sign\": ").append(signDescription);
     parser->addPositionalArgument("mode", modeDescription);
 
     const QCommandLineOption helpOption = parser->addHelpOption();
@@ -130,7 +128,7 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
     else if (mode == "sign" || mode == "signAdvanced" || mode == "signSimple")
     {
         parser->clearPositionalArguments();
-        parser->addPositionalArgument(mode, signSimpleDescription );
+        parser->addPositionalArgument(mode, signDescription);
         QString inputDescription("File  or list of files to be loaded for signing.");
         parser->addPositionalArgument("input", inputDescription);
 
