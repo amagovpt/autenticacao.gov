@@ -1286,8 +1286,12 @@ PageServicesSignForm {
                 anchors.fill: parent
                 hoverEnabled : true
                 onClicked: {
-                    console.log("Click file index:" + index)
                     propertyListViewFiles.currentIndex = index
+                    var pageCount = gapi.getPDFpageCount(fileUrl)
+                    propertyTextSpinBox.maximumLength = maxTextInputLength(pageCount)
+                    propertySpinBoxControl.value = 
+                        propertyCheckLastPage.checked ? pageCount : propertySpinBoxControl.value
+
                     propertyPDFPreview.propertyBackground.source =
                         "image://pdfpreview_imageprovider/"+ fileUrl + "?page=" + propertySpinBoxControl.value
                     
@@ -1369,8 +1373,6 @@ PageServicesSignForm {
                         if(propertyCheckLastPage.checked==true
                                 || propertySpinBoxControl.value > pageCount)
                             propertySpinBoxControl.value = pageCount
-                        if(propertySpinBoxControl.value > getMinimumPage())
-                            propertySpinBoxControl.value = getMinimumPage()
                         updateIndicators(pageCount)
                         propertyPDFPreview.propertyBackground.cache = false
                         propertyPDFPreview.propertyBackground.source =
@@ -1417,9 +1419,9 @@ PageServicesSignForm {
     propertySpinBoxControl {
         onValueChanged: {
             var loadedFilePath = filesModel.get(propertyListViewFiles.currentIndex).fileUrl
-            var maxPageAllowed = getMinimumPage()
+            var maxPageAllowed = propertyCheckLastPage.checked ? gapi.getPDFpageCount(loadedFilePath) : getMinimumPage()
             if(propertySpinBoxControl.value > maxPageAllowed){
-                propertySpinBoxControl.value = 1
+                propertySpinBoxControl.value = maxPageAllowed
             }
             propertyPDFPreview.propertyBackground.source =
                     "image://pdfpreview_imageprovider/"+loadedFilePath + "?page=" + propertySpinBoxControl.value
@@ -1435,15 +1437,14 @@ PageServicesSignForm {
             if(propertyCheckLastPage.checked){
                 propertySpinBoxControl.enabled = false
                 propertyPageText.enabled = false
+                propertySpinBoxControl.value = gapi.getPDFpageCount(loadedFilePath)
             }
             else{
                 propertySpinBoxControl.enabled = true
                 propertyPageText.enabled = true
                 propertyTextSpinBox.visible = true
+                propertySpinBoxControl.value = getMinimumPage()
             }
-           
-            propertySpinBoxControl.value = getMinimumPage()
-            console.log("Check2: " + propertySpinBoxControl.value)
 
             propertyPDFPreview.propertyBackground.source =
                 "image://pdfpreview_imageprovider/"+ loadedFilePath + "?page=" + propertySpinBoxControl.value
@@ -1686,7 +1687,7 @@ PageServicesSignForm {
     function signCC(outputFile) {
         var isTimestamp = propertySwitchSignTemp.checked
         if (propertyRadioButtonPADES.checked) {
-            var page = propertySpinBoxControl.value
+            var page = propertyCheckLastPage.checked ? 0 : propertySpinBoxControl.value
             var reason = propertyTextFieldReason.text
             var location = propertyTextFieldLocal.text
             var isSmallSignature = propertyCheckSignReduced.checked
