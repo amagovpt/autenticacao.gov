@@ -2021,7 +2021,7 @@ void GAPI::doSignBatchPDF(SignParams &params) {
         sig_handler->setCustomImage(imageData);
     }
 
-    card->SignPDF(*sig_handler, params.page, params.coord_x, params.coord_y,
+    card->SignPDF(*sig_handler, params.page == 0 ? 1 : params.page, params.coord_x, params.coord_y,
         params.location.toUtf8().data(), params.reason.toUtf8().data(),
         getPlatformNativeString(params.outputFile));
 
