@@ -1560,6 +1560,12 @@ bool checkCmdErrorAndShowDlg(HWND hWnd, bool proxyUsed, int error, HWND parentWi
     return error != ERR_NONE;
 }
 
+bool validateInputHash(DWORD hash_len) {
+
+	//Only valid hash for current CMD signature service
+	return hash_len == SHA256_LEN;
+}
+
 /******************************************************************************
 * DESCRIPTION :  creates a signature of a hash value.
 *
@@ -1669,6 +1675,13 @@ __in    DWORD   dwFlags)
         Status = NTE_INVALID_PARAMETER;
         goto cleanup;
     }
+
+	if (!validateInputHash(cbHashValue)) 
+	{
+		LogTrace(LOGTYPE_ERROR, "KSPSignHash", "Invalid hash parameter! HashValue length: %lu", cbHashValue);
+		Status = NTE_NOT_SUPPORTED;
+		goto cleanup;
+	}
 
     // This block tells the compiler the objects instantiated here won't be used after the label cleanup
     // (see compiler error C2362)
