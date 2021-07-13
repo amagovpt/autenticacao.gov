@@ -1,7 +1,7 @@
 :: @echo off
 
 :: Inf2cat and signtool are installed by Windows Driver Kit (just check "Build Environments"):
-set INF2CAT_PATH="C:\Program Files (x86)\Windows Kits\8.0\bin\x86\inf2cat.exe" 
+set INF2CAT_PATH="C:\Program Files (x86)\Windows Kits\10\bin\x86\inf2cat.exe" 
 ::set SIGNTOOL_PATH=C:\WinDDK\7600.16385.1\bin\x86
 
 set BUILDPATH=%~dp0
@@ -28,17 +28,7 @@ copy %BINPATH_64%\pteidmdrv64.dll %BUILDPATH%\Release\pteidmdrv64.dll
 ::copy %BINPATH_64D%\pteidmdrv64.dll %BUILDPATH%\Debug\pteidmdrv64.dll
 
 :: Create catalog
-%INF2CAT_PATH% /driver:%BUILDPATH%\Release\ /os:XP_X86,XP_X64,Vista_X86,Vista_X64,7_X86,7_X64
-::%INF2CAT_PATH% /driver:%BUILDPATH%\Debug\ /os:XP_X86,XP_X64,Vista_X86,Vista_X64,7_X86,7_X64
+%INF2CAT_PATH% /driver:%BUILDPATH%\Release\ /os:7_X86,7_X64,8_X86,8_X64,10_X86,10_X64
 
-:: Certificate name and store
-::set CERTIFICATENAME=Caixa Magica Software
-::set CERTIFICATESTORE=PrivateCertStore
-:: To create a test certificate: 
-::%SIGNTOOL_PATH%\MakeCert.exe -r -pe -ss  %CERTIFICATESTORE% -n "CN=%CERTIFICATENAME%" fedicteidtest.cer
-
-:: Sign the catalog with the official Cartao de Cidadao certificate
-::%SIGNTOOL_PATH%\SignTool.exe sign /v /s %CERTIFICATESTORE% /n "%CERTIFICATENAME%"  /t http://timestamp.verisign.com/scripts/timestamp.dll %BUILDPATH%\Release\pteidmdrv.cat
+:: Sign the catalog with a valid Code Signing certificate identified by its SHA-1 thumbprint
 ::%SIGNTOOL_PATH%\SignTool.exe sign /v /sha1 0c526195081d0ec73e3a697f03a17160190a976f /t http://timestamp.verisign.com/scripts/timestamp.dll %BUILDPATH%\Release\pteidmdrv.cat
-::%SIGNTOOL_PATH%\SignTool.exe sign /v /sha1 0c526195081d0ec73e3a697f03a17160190a976f /t http://timestamp.verisign.com/scripts/timestamp.dll %BUILDPATH%\Debug\pteidmdrv.cat
-
