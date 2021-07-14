@@ -165,12 +165,11 @@ function getSubMenuName(index) {
 }
 
 function goToSubMenu() {
-    mainFormID.state = Constants.MenuState.NORMAL;
     console.log("submenu index at ", mainFormID.propertySubMenuListView.currentIndex)
     console.log("MODEL at index at ", mainFormID.propertySubMenuListView.model)
 
     if (mainFormID.propertySubMenuListView.currentIndex != -1) {
-
+        mainFormID.state = Constants.MenuState.NORMAL;
         if (mainFormID.propertyMainMenuListView.currentIndex != -1) {
             if (mainFormID.propertyMainMenuListView.model.get(
                         mainFormID.propertyMainMenuListView.currentIndex).expand === true) {
@@ -188,6 +187,7 @@ function goToSubMenu() {
                 mainFormID.propertySubMenuListView.currentIndex = 0
             }
         }
+
         mainFormID.propertySubMenuListView.forceActiveFocus();
     } else {
         goToHome();
