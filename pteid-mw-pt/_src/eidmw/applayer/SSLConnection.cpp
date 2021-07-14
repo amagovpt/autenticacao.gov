@@ -1139,9 +1139,10 @@ void SSLConnection::connect_encrypted(char* host_and_port)
     }
 
     SSL_SESSION * session = SSL_get_session(m_ssl_connection);
+	const SSL_CIPHER * cipher = SSL_get_current_cipher(m_ssl_connection);
 
-    MWLOG(LEV_DEBUG, MOD_APL, "TLS protocol version used: %s",
-    	     tlsVersionString(SSL_SESSION_get_protocol_version(session)));
+    MWLOG(LEV_DEBUG, MOD_APL, "TLS protocol version used: %s Cipher: %s",
+    	     tlsVersionString(SSL_SESSION_get_protocol_version(session)), SSL_CIPHER_get_name(cipher));
 
 }
 
