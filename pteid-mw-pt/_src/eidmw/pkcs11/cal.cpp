@@ -419,9 +419,14 @@ if (pInfo == NULL_PTR)
    }
 
 //look for type in table
-for (i=0; (info = &table[i]) && (info->type) &&(info->type != type); i++)
-	{
-	}
+for (i = 0; i < (int)(sizeof(table) / sizeof(table[0])); i++)
+   {
+      if (table[i].type == type)
+      {
+         info = &table[i];
+         break;
+      }
+   }
 
 if ((info) && (info->type))
    {
