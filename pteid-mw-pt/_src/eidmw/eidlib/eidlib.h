@@ -614,6 +614,14 @@ public:
 	 */
     PTEIDSDK_API virtual PTEID_ByteArray sendAPDU(const PTEID_ByteArray& cmd);
 
+	/**
+	* Sets SSO on the card reader to allow pin caching
+	* Caller is responsible for restoring the state after the signing
+	* session is concluded
+	* @param enable boolean that will set the SSO state
+	*/
+	PTEIDSDK_API virtual void SetSSO(bool enable = false);
+
  	/**
 	 * Raw RSA signature with PCKS #1 padding.
 	 * @param data holds the data to be signed, at most 32 bytes.

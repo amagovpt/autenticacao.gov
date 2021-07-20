@@ -235,6 +235,12 @@ void APL_Card::SignXadesAIndividual(const char ** paths, unsigned int n_paths, c
 	SignIndividual(paths, n_paths, output_dir, false, true);
 }
 
+void APL_Card::setSSO(bool enable)
+{
+	getCalReader()->setSSO(enable);
+}
+
+
 
 // Implementation of the PIN-caching version of SignXades()
 // It signs each input file seperately and creates a .zip container for each
