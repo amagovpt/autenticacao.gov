@@ -13,6 +13,8 @@
 
 using namespace eIDMW;
 
+static char logBuf[512];
+
 /******************************************************************************
 *
 * DESCRIPTION : Opens a dialog for the user to introduce the mobile number and
@@ -42,7 +44,7 @@ __in    HWND parentWindow)
     {
         parentWindow = GetActiveWindow();
     }
-    LogTrace(LOGTYPE_TRACE, "CmdKspOpenDialogSign", "appWindow = [0x%08x]", parentWindow);
+    MWLOG_DEBUG(logBuf, "appWindow = [0x%08x]", parentWindow);
     SetApplicationWindow(parentWindow);
     DlgRet ret = DlgAskInputCMD(false, pin, pinLen, (wchar_t *)userId, userName, userNameLen);
     if (ret == DLG_OK)
@@ -83,7 +85,7 @@ __in    HWND parentWindow)
     {
         parentWindow = GetActiveWindow();
     }
-    LogTrace(LOGTYPE_TRACE, "CmdKspOpenDialogValidateOtp", "appWindow = [0x%08x]", parentWindow);
+    MWLOG_DEBUG(logBuf, "appWindow = [0x%08x]", parentWindow);
     SetApplicationWindow(parentWindow);
     DlgRet ret = DlgAskInputCMD(true, otp, otpLen, (wchar_t *)pszDocname, NULL, 0, sendSmsCallback);
     if (ret == DLG_OK)
@@ -109,7 +111,7 @@ __in    HWND parentWindow)
     {
         parentWindow = GetActiveWindow();
     }
-    LogTrace(LOGTYPE_TRACE, "CmdKspOpenDialogProgress", "appWindow = [0x%08x]", parentWindow);
+    MWLOG_DEBUG(logBuf, "appWindow = [0x%08x]", parentWindow);
     SetApplicationWindow(parentWindow);
     DlgRet ret = DlgCMDMessage(
         DlgCmdMsgType::DLG_CMD_PROGRESS, 
@@ -135,7 +137,7 @@ __in    HWND parentWindow)
     {
         parentWindow = GetActiveWindow();
     }
-    LogTrace(LOGTYPE_TRACE, "CmdKspOpenDialogError", "appWindow = [0x%08x]", parentWindow);
+    MWLOG_DEBUG(logBuf, "appWindow = [0x%08x]", parentWindow);
     SetApplicationWindow(parentWindow);
     DlgRet ret = DlgCMDMessage(msgType, message);
     return;
@@ -202,14 +204,14 @@ void CmdSignThread::Run()
         // TODO: It should be checked if this is the correct issuer but there should be only one
         if (!pIssuerCert)
         {
-            LogTrace(LOGTYPE_WARNING, "CmdSignThread::Run()", "Unable to find issuer certificate in store.");
+            MWLOG_WARN(logBuf, "Unable to find issuer certificate in store.");
             goto end;
         }
         
         CByteArray certBytes(m_pCert->pbCertEncoded, m_pCert->cbCertEncoded);
         CByteArray issuerCertBytes(pIssuerCert->pbCertEncoded, pIssuerCert->cbCertEncoded);
         FWK_CertifStatus status = cryptoFwk->OCSPValidation(certBytes, issuerCertBytes);
-        LogTrace(LOGTYPE_INFO, "CmdSignThread::Run()", "OCSP verification status for CMD cert: %d", status);
+        MWLOG_INFO(logBuf, "OCSP verification status for CMD cert: %d", status);
 
         if (status == FWK_CertifStatus::FWK_CERTIF_STATUS_REVOKED)
         {
@@ -225,7 +227,7 @@ end:
 
 void CmdSignThread::Stop(unsigned long ulSleepFrequency)
 {
-    LogTrace(LOGTYPE_TRACE, "CmdSignThread::Stop()", "Stop() called");
+    MWLOG_DEBUG(logBuf, "Stop() called");
     if (cmdSignature)
     {
         cmdSignature->cancelRequest();

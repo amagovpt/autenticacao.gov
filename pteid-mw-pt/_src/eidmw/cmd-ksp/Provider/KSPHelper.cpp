@@ -34,13 +34,15 @@ Implementation Note:
 #include <ncrypt.h>
 #include <intsafe.h>
 #include <strsafe.h>
-#include "..\inc\KSP.h"
-#include "..\Inc\log.h"
+#include "../Inc/KSP.h"
+#include "../Inc/log.h"
 #include "psapi.h"
 #include <codecvt>
 #include "Util.h"
 
 using namespace eIDMW;
+
+static char logBuf[512];
 
 HWND g_HWND = NULL;
 BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
@@ -53,7 +55,7 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
         lpClassName,
         256) == 0)
     {
-        LogTrace(LOGTYPE_ERROR, "EnumWindowsProcPID", "Error getting window class name.");
+        MWLOG_ERR(logBuf, "Error getting window class name.");
         return TRUE;
     }
 
@@ -244,7 +246,7 @@ __deref_out CMDKSP_KEY **ppKey)
     NTSTATUS          ntStatus = STATUS_INTERNAL_ERROR;
     BYTE *pbHashBuffer = NULL;
 
-    LogTrace(LOGTYPE_TRACE, "CreateNewKeyObject", "CreateNewKeyObject");
+    MWLOG_DEBUG(logBuf, "CreateNewKeyObject");
 
     //Initialize the key object.
     pKey = (CMDKSP_KEY *)HeapAlloc(GetProcessHeap(), 0, sizeof(CMDKSP_KEY));
@@ -308,7 +310,7 @@ __deref_out CMDKSP_KEY **ppKey)
             NULL,
             lpProcessName,
             FILENAME_MAX);
-        LogTrace(LOGTYPE_TRACE, "getDocName", "ProcessName=%s", lpProcessName);
+        MWLOG_DEBUG(logBuf, "ProcessName=%s", lpProcessName);
 
         pKey->pszProcessBaseName = lpProcessName;
         pKey->hWnd = GetMainWindow(lpProcessName);
@@ -331,7 +333,7 @@ __deref_out CMDKSP_KEY **ppKey)
             NULL,
             NULL))
         {
-            LogTrace(LOGTYPE_ERROR, "CreateNewKeyObject", "Error computing the size of the hash buffer in CryptStringToBinary");
+            MWLOG_ERR(logBuf, "Error computing the size of the hash buffer in CryptStringToBinary");
             Status = NTE_INTERNAL_ERROR;
             goto cleanup;
         }
@@ -345,7 +347,7 @@ __deref_out CMDKSP_KEY **ppKey)
             NULL,
             NULL))
         {
-            LogTrace(LOGTYPE_ERROR, "CreateNewKeyObject", "Error getting the hash in CryptStringToBinary");
+            MWLOG_ERR(logBuf, "Error getting the hash in CryptStringToBinary");
             Status = NTE_INTERNAL_ERROR;
             goto cleanup;
         }
@@ -362,7 +364,7 @@ __deref_out CMDKSP_KEY **ppKey)
 
         if (pCert == NULL)
         {
-            LogTrace(LOGTYPE_ERROR, "CreateNewKeyObject", "Could not find the certificate associated with this private key.");
+            MWLOG_ERR(logBuf, "Could not find the certificate associated with this private key.");
             Status = NTE_INTERNAL_ERROR;
             goto cleanup;
         }
@@ -376,7 +378,7 @@ __deref_out CMDKSP_KEY **ppKey)
             NULL,
             &cbMobileNumber))
         {
-            LogTrace(LOGTYPE_ERROR, "CreateNewKeyObject", "Could not get size of certificate's friendly name.");
+            MWLOG_ERR(logBuf, "Could not get size of certificate's friendly name.");
             Status = NTE_INTERNAL_ERROR;
             goto cleanup;
         }
@@ -387,7 +389,7 @@ __deref_out CMDKSP_KEY **ppKey)
             pszMobileNumber,
             &cbMobileNumber))
         {
-            LogTrace(LOGTYPE_ERROR, "CreateNewKeyObject", "Could not get certificate's friendly name.");
+            MWLOG_ERR(logBuf, "Could not get certificate's friendly name.");
             Status = NTE_INTERNAL_ERROR;
             goto cleanup;
         }
@@ -397,11 +399,11 @@ __deref_out CMDKSP_KEY **ppKey)
     pKey->dwKeyBitLength = CertGetPublicKeyLength(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, &pKey->pCert->pCertInfo->SubjectPublicKeyInfo);
     if (pKey->dwKeyBitLength == 0)
     {
-        LogTrace(LOGTYPE_ERROR, "CreateNewKeyObject", "Could not get certificate's key bit length.");
+        MWLOG_ERR(logBuf, "Could not get certificate's key bit length.");
         Status = NTE_INTERNAL_ERROR;
         goto cleanup;
     }
-    LogTrace(LOGTYPE_TRACE, "CreateNewKeyObject", "Certificate's key bit length = %d", pKey->dwKeyBitLength);
+    MWLOG_DEBUG(logBuf, "Certificate's key bit length = %d", pKey->dwKeyBitLength);
 
     //The usage of the key is for signing.
     pKey->dwKeyUsagePolicy = NCRYPT_ALLOW_SIGNING_FLAG;
@@ -440,7 +442,7 @@ __inout CMDKSP_KEY *pKey)
     SECURITY_STATUS Status = ERROR_SUCCESS;
     NTSTATUS ntStatus = STATUS_INTERNAL_ERROR;
 
-    LogTrace(LOGTYPE_TRACE, "DeleteKeyObject", "DeleteKeyObject");
+    MWLOG_DEBUG(logBuf, "DeleteKeyObject");
 
     //Delete the key name.
     if (pKey->pszKeyName)
@@ -501,7 +503,7 @@ std::wstring GetShortHashString(PBYTE pbHash, DWORD cbHash) {
 #define SHORT_HASH_LEN 8
     DWORD dwFlags = CRYPT_STRING_BASE64 | CRYPT_STRING_NOCRLF;
     DWORD cchHash;
-    LogTrace(LOGTYPE_TRACE, "GetHashString", "pbHash=%x cbHash=%d", pbHash, cbHash);
+    MWLOG_DEBUG(logBuf, "pbHash=%x cbHash=%d", pbHash, cbHash);
     if (!CryptBinaryToStringW(
         pbHash,
         cbHash,
@@ -509,7 +511,7 @@ std::wstring GetShortHashString(PBYTE pbHash, DWORD cbHash) {
         NULL,
         &cchHash))
     {
-        LogTrace(LOGTYPE_ERROR, "GetHashString", "Error getting string size CryptBinaryToString");
+        MWLOG_ERR(logBuf, "Error getting string size CryptBinaryToString");
         return L"";
     }
 
@@ -521,7 +523,7 @@ std::wstring GetShortHashString(PBYTE pbHash, DWORD cbHash) {
         chHash,
         &cchHash))
     {
-        LogTrace(LOGTYPE_ERROR, "GetHashString", "Error getting string CryptBinaryToString");
+        MWLOG_ERR(logBuf,  "Error getting string CryptBinaryToString");
         delete[] chHash;
         return L"";
     }
@@ -549,7 +551,7 @@ __in    DWORD cbHash)
     std::string docname;
 
     if (!hParentWindow){
-        LogTrace(LOGTYPE_WARNING, "getDocName", "Could not get main window.");
+        MWLOG_WARN(logBuf, "Could not get main window.");
         goto cleanup;
     }
 
@@ -557,14 +559,14 @@ __in    DWORD cbHash)
     cbWindowTitle = GetWindowTextLengthA(hParentWindow);
     if (cbWindowTitle == 0)
     {
-        LogTrace(LOGTYPE_WARNING, "getDocName", "Cannot get window title size.");
+        MWLOG_WARN(logBuf, "Cannot get window title size.");
         goto cleanup;
     }
     pszTitle = new WCHAR[cbWindowTitle + 1];
     cbWritten = GetWindowTextW(hParentWindow, pszTitle, cbWindowTitle + 1);
     if (cbWritten == 0)
     {
-        LogTrace(LOGTYPE_WARNING, "getDocName", "Cannot get window title.");
+        MWLOG_WARN(logBuf, "Cannot get window title.");
         goto cleanup;
     }
     title = pszTitle;
@@ -586,7 +588,7 @@ __in    DWORD cbHash)
 
     if (docnameEndingIdx == std::string::npos)
     {
-        LogTrace(LOGTYPE_WARNING, "getDocName", "Could not find docname in title.");
+        MWLOG_WARN(logBuf, "Could not find docname in title.");
         goto cleanup;
     }
 
@@ -595,7 +597,7 @@ __in    DWORD cbHash)
     if (strcmp(lpProcessName, "OUTLOOK.EXE") == 0 
         && title.substr(docnameEndingIdx).find(L"Outlook") != std::string::npos)
     {
-        LogTrace(LOGTYPE_INFO, "getDocName", "Outlook window does not have Subject in title.");
+        MWLOG_INFO(logBuf, "Outlook window does not have Subject in title.");
         goto cleanup;
     }
 

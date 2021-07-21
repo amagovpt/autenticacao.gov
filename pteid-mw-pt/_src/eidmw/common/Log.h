@@ -65,6 +65,7 @@ typedef enum {
     MOD_CMD,   // CMD
     MOD_SDK,   // SDK
     MOD_TEST,  // Unit test
+    MOD_KSP,   // KSP
 } tModule;
 
 /**

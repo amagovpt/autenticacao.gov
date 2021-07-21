@@ -24,28 +24,16 @@
 
 **************************************************************************** */
 
-#define LOGTYPE_ERROR       0
-#define LOGTYPE_WARNING     1
-#define LOGTYPE_INFO        2
-#define LOGTYPE_TRACE       3
+#include "..\..\common\Log.h"
 
-#define LOGTYPE_NONE        666
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-extern void LogInit(void);
-extern void LogTrace(int info, const char *pWhere, const char *format, ...);
-
-extern void LogDump(int iStreamLg, unsigned char *pa_cStream);
-extern void LogDumpBin(char *pa_cName, int iStreamLg, unsigned char *pa_cStream);
-
-// Get log_level and log_dirname from hKey registry key
-// in: hKey (HKEY_CURRENT_USER HKEY_LOCAL_MACHINE HKEY_USERS), cbLogDirname (pbLogDirname length)
-// out: dwLogLevel, pbLogDirname
-void GetRegLogLevelAndDir(HKEY hKey, INT *dwLogLevel, LPBYTE pbLogDirname, DWORD cbLogDirname);
-
-#ifdef __cplusplus
-}
+//logging
+#ifdef WIN32
+#define _LOG_( buf, level, mod, format, ... ) { sprintf( buf, "%s() - ", __FUNCTION__ );                \
+                                                    sprintf( &buf[strlen(buf)], format, __VA_ARGS__ );      \
+                                                    MWLOG( level, mod, buf);                                \
+                                                    printf( "%s\n", buf ); }
+#define MWLOG_ERR( buf, format, ...   )     _LOG_( buf, LEV_ERROR, MOD_KSP, format, __VA_ARGS__ )
+#define MWLOG_WARN( buf, format, ...  )     _LOG_( buf, LEV_WARN , MOD_KSP, format, __VA_ARGS__ )
+#define MWLOG_INFO( buf, format, ...  )     _LOG_( buf, LEV_INFO , MOD_KSP, format, __VA_ARGS__ )
+#define MWLOG_DEBUG( buf, format, ... )     _LOG_( buf, LEV_DEBUG, MOD_KSP, format, __VA_ARGS__ )
 #endif

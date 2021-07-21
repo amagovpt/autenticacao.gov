@@ -100,6 +100,9 @@ CLog &MapModule(tModule moduleIn)
 		case MOD_CMD:
 			group = L"CCMovel";
 			break;
+		case MOD_KSP:
+			group = L"KSP";
+			break;
 		default:
 			group = L"";
 			break;

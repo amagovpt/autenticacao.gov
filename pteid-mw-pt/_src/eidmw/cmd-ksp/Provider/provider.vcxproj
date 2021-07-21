@@ -202,10 +202,6 @@
     <ClCompile Include="KSP.cpp" />
     <ClCompile Include="KSPDlgHelper.cpp" />
     <ClCompile Include="KSPHelper.cpp" />
-    <ClCompile Include="Log.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</CompileAs>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="KSP.def" />
