@@ -3660,7 +3660,10 @@ void GAPI::setUseDate(bool UseDate){
 bool GAPI::getUseDate(void){
     return m_Settings.getUseDate();
 }
-
+void GAPI::resizeSignPreview(int width, int height) {
+    m_seal_width = width;
+    m_seal_height = height;
+}
 #ifdef WIN32
 QVariantList GAPI::getRegisteredCmdPhoneNumbers() {
     QVariantList regCmdNumList;

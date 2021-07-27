@@ -419,6 +419,7 @@ public slots:
     bool getUseNumId(void);
     void setUseDate (bool UseDate);
     bool getUseDate(void);
+    void resizeSignPreview(int height, int width);
 
 #ifdef WIN32
     QVariantList getRegisteredCmdPhoneNumbers();
@@ -599,6 +600,9 @@ private:
     QString m_pac_url;
     bool httpRequestAborted;
     bool httpRequestSuccess;
+
+    int m_seal_width = 178;
+    int m_seal_height = 90;
 
 protected:
     QTranslator m_translator;

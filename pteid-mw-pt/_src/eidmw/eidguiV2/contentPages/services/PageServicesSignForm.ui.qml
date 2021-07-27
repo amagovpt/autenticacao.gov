@@ -1030,6 +1030,7 @@ Item {
                 id: mouseAreaRectMainRigh
                 anchors.fill: parent
                 enabled: !fileLoaded
+                visible: !fileLoaded
             }
             DropArea {
                 id: dropArea

@@ -29,6 +29,8 @@ Rectangle {
     property alias propertyDragSigWaterImg: dragSigWaterImage
     property alias propertyDragSigCertifiedByText: sigCertifiedByText
     property alias propertyDragSigAttributesText: sigAttributesText
+    property alias propertycontainerMouseMovCalcBottom: containerMouseMovCalcBottom
+    property alias propertycontainerMouseMovCalcRight: containerMouseMovCalcRight
 
     property real propertySigLineHeight: dragSigRect.height * 0.1
     property bool propertyReducedChecked: false
@@ -39,8 +41,11 @@ Rectangle {
     // Properties used to convert to postscript points (1 px == 0.75 points)
     // Signature have a static size
     property real propertyConvertPixelToPts: 1 / 0.75
-    property real propertySigWidth: 178
-    property real propertySigHeight: 90
+    property real propertySigWidthDefault: 178
+    property real propertySigHeightDefault: 90
+    property real propertySigWidthMin: 89
+    property real propertySigHeightMin: 45
+    
     property real propertyPDFHeightScaleFactor: background_image.height * propertyConvertPixelToPts
                                                / (propertyPdfOriginalHeight / propertyConvertPixelToPts)
     property real propertyPDFWidthScaleFactor: background_image.width * propertyConvertPixelToPts
@@ -139,11 +144,88 @@ Rectangle {
             }
             Item {
                 id: dragSigRect
-                width: (propertySigWidth) * propertyPDFWidthScaleFactor
-                height: (propertySigHeight) * propertyPDFHeightScaleFactor
+                width: (propertySigWidthDefault) * propertyPDFWidthScaleFactor
+                height: (propertySigHeightDefault) * propertyPDFHeightScaleFactor
 
                 Drag.active: dragArea.drag.active
                 opacity: background_image.status == Image.Ready ? 1.0 : 0.0
+
+                Item {
+                    id: containerMouseMovCalcRight
+                    z:10
+                    width: Constants.FOCUS_BORDER; height: parent.height
+                    anchors.left: parent.right
+                    MouseArea {
+                        id: mouseRegioncontainerMouseMovCalcRight
+                        anchors.fill: parent
+
+                        property variant lastPos: ""
+
+                        cursorShape: Qt.SizeHorCursor
+
+                        onPressed: lastPos = controler.getCursorPos()
+
+                        onPositionChanged: {
+
+                            var newPos = controler.getCursorPos()
+                            var delta = Qt.point(newPos.x-lastPos.x, newPos.y-lastPos.y)
+
+                            var diff = (background_image.width - background_image.width) / 2
+                            if (dragSigRect.x + dragSigRect.width + delta.x > background_image.width) {
+                                dragSigRect.width = dragSigRect.width
+                            }
+                            else if(dragSigRect.width+delta.x > (propertySigWidthMin) * propertyPDFWidthScaleFactor){
+                                dragSigRect.width = dragSigRect.width+delta.x
+                            }
+                            else {
+                                dragSigRect.width = (propertySigWidthMin) * propertyPDFWidthScaleFactor
+                            }
+                            lastPos = newPos;
+
+                            gapi.resizeSignPreview(
+                                parseInt(dragSigRect.width / propertyPDFWidthScaleFactor), 
+                                parseInt(dragSigRect.height / propertyPDFHeightScaleFactor))
+                        }
+                    }
+                }
+
+                Item {
+                    id: containerMouseMovCalcBottom
+                    z:10
+                    width: parent.width ; height: Constants.FOCUS_BORDER
+                    anchors.top: dragSigRect.bottom
+                    MouseArea {
+                        id: mouseRegioncontainerMouseMovCalcBottom
+                        anchors.fill: parent
+
+                        property variant lastPos: ""
+
+                        cursorShape: Qt.SizeVerCursor
+
+                        onPressed: lastPos = controler.getCursorPos()
+                            
+                        onPositionChanged: {
+
+                            var newPos = controler.getCursorPos()
+                            var delta = Qt.point(newPos.x-lastPos.x, newPos.y-lastPos.y)
+
+                            if (dragSigRect.y + dragSigRect.height + delta.y > background_image.height) {
+                                dragSigRect.height = dragSigRect.height
+                            }
+                            else if(dragSigRect.height+delta.y > (propertySigHeightMin) * propertyPDFWidthScaleFactor){
+                                dragSigRect.height = (dragSigRect.height+delta.y)
+                            }else{
+                                dragSigRect.height = (propertySigHeightMin) * propertyPDFHeightScaleFactor
+                            }
+
+                            lastPos = newPos;
+
+                            gapi.resizeSignPreview(
+                                parseInt(dragSigRect.width / propertyPDFWidthScaleFactor), 
+                                parseInt(dragSigRect.height / propertyPDFHeightScaleFactor))
+                        }
+                    }
+                }
 
                 Text {
                     id: sigReasonText
@@ -162,7 +244,7 @@ Rectangle {
 
                 Image {
                     id: dragSigWaterImage
-                    height: propertyReducedChecked ? dragSigRect.height * 0.8 : dragSigRect.height * 0.4
+                    height: propertyReducedChecked ? propertySigHeightDefault * propertyPDFHeightScaleFactor * 0.8 : propertySigHeightDefault * propertyPDFHeightScaleFactor * 0.4
                     fillMode: Image.PreserveAspectFit
                     anchors.top: sigReasonText.bottom
                     anchors.topMargin: 2
@@ -170,14 +252,15 @@ Rectangle {
                 }
                 Image {
                     id: dragSigImage
-                    height: dragSigRect.height * 0.3
+                    height: propertySigHeightDefault * propertyPDFHeightScaleFactor * 0.3
                     fillMode: Image.PreserveAspectFit
                     anchors.bottom: dragSigRect.bottom
-                    anchors.left: parent.left
                     cache: false
                     x: 2
                     Rectangle {
                         color: "white"
+                        height: parent.height
+                        width: parent.width
                         anchors.fill: parent
                         z: parent.z - 1
                     }
@@ -198,6 +281,7 @@ Rectangle {
                     font.pixelSize: propertySigFontSizeBig
                     font.family: myriad.name
                     font.bold: true
+                    width: parent.width
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: sigReasonText.bottom
                     anchors.left: sigSignedByText.right
@@ -294,23 +378,22 @@ Rectangle {
 
                     if(propertyReducedChecked){
                         propertySigLineHeight = propertyDragSigRect.height * 0.2
-                        propertyDragSigImg.height = 0
+                        dragSigImage.height = 0
                     }else{
                         propertySigLineHeight = propertyDragSigRect.height * 0.1
-                        propertyDragSigImg.height = propertyDragSigRect.height * 0.3
+                        dragSigImage.height = propertySigHeightDefault * propertyPDFHeightScaleFactor * 0.3
                     }
                 }
             }
+
             Image {
                 id: dragSigMoveImage
                 height: dragSigRect.height * 0.5
                 fillMode: Image.PreserveAspectFit
-                anchors.top: dragSigRect.bottom
-                anchors.topMargin: -dragSigMoveImage.height * 0.5
-                anchors.left: dragSigRect.left
-                anchors.leftMargin: -dragSigMoveImage.width * 0.5
+                anchors.verticalCenter: dragSigRect.bottom
+                anchors.horizontalCenter: dragSigRect.left
 
-                visible: dragSigRect.visible
+                visible: fileLoaded
                 source: "qrc:/images/icons-move.png"
             }
 
@@ -318,12 +401,10 @@ Rectangle {
                 id: dragSigResizeImage
                 height: dragSigRect.height * 0.5
                 fillMode: Image.PreserveAspectFit
-                anchors.top: dragSigRect.bottom
-                anchors.topMargin: -dragSigMoveImage.height * 0.5
-                anchors.right: dragSigRect.right
-                anchors.rightMargin: -dragSigMoveImage.width * 0.5
+                anchors.verticalCenter: dragSigRect.bottom
+                anchors.horizontalCenter: dragSigRect.right
 
-                visible: dragSigRect.visible
+                visible: fileLoaded
                 source: "qrc:/images/icons-resize.png"
             }
 
@@ -331,9 +412,39 @@ Rectangle {
                 dragSigRect.x = dragTarget.lastCoord_x / dragTarget.lastScreenWidth * background_image.width
                 dragSigRect.y = dragTarget.lastCoord_y / dragTarget.lastScreenHeight * background_image.height
 
+                updateSignPreviewSize()
+
                 propertyPageLoader.propertyBackupBackgroundWidth = background_image.width
                 propertyPageLoader.propertyBackupBackgroundHeight = background_image.height
             }
+        }
+    }
+
+    function updateSignPreviewSize() {
+        if (dragTarget.lastScreenWidth != 0 && dragTarget.lastScreenHeight != 0 && background_image.width != 0 && background_image.height != 0) {
+            
+            dragSigRect.width = dragSigRect.width / dragTarget.lastScreenWidth* background_image.width
+            dragSigRect.height = dragSigRect.height / dragTarget.lastScreenHeight * background_image.height
+        }
+        console.log("Height: " + dragSigRect.height + "Width: " + dragSigRect.width)
+/*
+        if (dragSigRect.height < (propertySigHeightMin) * propertyPDFHeightScaleFactor) {
+            dragSigRect.height = (propertySigHeightMin) * propertyPDFHeightScaleFactor
+        }
+
+        if (dragSigRect.width < (propertySigWidthMin) * propertyPDFWidthScaleFactor) {
+            dragSigRect.width = (propertySigWidthMin) * propertyPDFWidthScaleFactor
+        }
+
+        if (dragSigRect.height == 0 || dragSigRect.width == 0) {
+            dragSigRect.height = (propertySigHeightDefault) * propertyPDFHeightScaleFactor
+            dragSigRect.width = (propertySigHeightDefault) * propertyPDFWidthScaleFactor
+        }
+*/
+        if(propertyReducedChecked){
+            dragSigImage.height = 0
+        }else{
+            dragSigImage.height = dragSigImage.height / dragTarget.lastScreenHeight * background_image.height
         }
     }
 
