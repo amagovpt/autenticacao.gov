@@ -158,7 +158,8 @@ WrapParams calculateWrapParams(const std::string& text, const std::string& label
     for (unsigned int i = max_font_size; i >= min_font_size; --i) {
         font_size = i;
         line_height = font_size + 1;
-        lines = rect_height / line_height - 1;
+        // Remove half line for safety
+        lines = ( rect_height - (line_height / 2) ) / line_height ;
 
         label_width = getStringWidth(label.c_str(), font_size, MYRIAD_REGULAR);
         wrapped = wrapString(text, rect_width, font_size, MYRIAD_BOLD, lines, rect_width - label_width);
