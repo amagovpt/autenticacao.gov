@@ -554,6 +554,8 @@ namespace eIDMW
 	{
 
         bool isLangPT = false;
+		bool showNIC = false;
+		bool showDate = false;
 		PDFDoc *doc = m_doc;
 		//The class ctor initializes it to (0,0,0,0)
 		//so we can use this for invisible sig
@@ -617,8 +619,15 @@ namespace eIDMW
 				height = width;
 				width = dim1;
 			}
-			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Page mediaBox: (H: %f W:%f) Location_x: %f, location_y: %f",
-				 height, width, location_x, location_y);
+
+			APL_Config config_seal(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_SIGNSEALOPTIONS);
+
+			showNIC = config_seal.getLong() & 1;
+			showDate = config_seal.getLong() & 2;
+
+			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Page mediaBox: (H: %f W:%f) \
+				Location_x: %f, location_y: %f, showNIC: %d, showDate: %d",
+				height, width, location_x, location_y, showNIC, showDate);
 
 			//Sig Location by sector
 			if (location_x == -1)
@@ -710,17 +719,23 @@ namespace eIDMW
 		if (this->my_custom_image.img_data != NULL)
 			doc->addCustomSignatureImage(my_custom_image.img_data, my_custom_image.img_length);
 
-		// remove "BI" prefix and checkdigit from NIC
-		std::string nic = m_civil_number;
-		size_t offset = 0;
-		size_t nic_length = 8;
-		if (nic.find("BI") == 0){
-			offset = 2;
+		if(showNIC)
+		{
+			// remove "BI" prefix and checkdigit from NIC
+			std::string nic = m_civil_number;
+			size_t offset = 0;
+			size_t nic_length = 8;
+			if (nic.find("BI") == 0){
+				offset = 2;
+			}
+			nic = nic.substr(offset, nic_length);
+			doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, nic.c_str(),
+	                                 location, reason, m_page, m_sector, isLangPT, isCC(), showDate);
+		} else {
+			doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, NULL,
+	                                 location, reason, m_page, m_sector, isLangPT, isCC(), showDate);
 		}
-		nic = nic.substr(offset, nic_length);
 
-        doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, nic.c_str(),
-                                 location, reason, m_page, m_sector, isLangPT, isCC());
         unsigned long len = doc->getSigByteArray(&to_sign, m_incrementalMode);
 
 		int rc = 0;

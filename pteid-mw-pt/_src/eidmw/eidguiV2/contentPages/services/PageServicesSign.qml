@@ -290,8 +290,15 @@ PageServicesSignForm {
             propertyPDFPreview.propertyDragSigSignedByNameText.text =
                 qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": " + wrappedName.join("<br>");
 
-            propertyPDFPreview.propertyDragSigNumIdText.text =
-                    qsTranslate("GAPI","STR_NIC") + ": " + NIC
+            if(gapi.getUseNumId() == true){
+                propertyPDFPreview.propertyDragSigNumIdText.text =
+                        qsTranslate("GAPI","STR_NIC") + ": " + NIC
+            } else {
+                propertyPDFPreview.propertyDragSigNumIdText.visible = false
+            }
+
+            propertyPDFPreview.propertyDragSigDateText.visible = gapi.getUseDate()
+        
             propertyBusyIndicatorRunning = false
             propertyButtonAdd.forceActiveFocus()
             cardLoaded = true
@@ -304,7 +311,14 @@ PageServicesSignForm {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 propertyPDFPreview.propertyDragSigSignedByNameText.text =
                         qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
-                propertyPDFPreview.propertyDragSigNumIdText.text =  qsTranslate("GAPI","STR_NIC") + ": "
+                if(gapi.getUseNumId() == true){
+                    propertyPDFPreview.propertyDragSigNumIdText.text =  qsTranslate("GAPI","STR_NIC") + ": "
+                } else {
+                    propertyPDFPreview.propertyDragSigNumIdText.visible = false
+                }
+
+                propertyPDFPreview.propertyDragSigDateText.visible = gapi.getUseDate()
+
                 cardLoaded = false
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
@@ -1526,6 +1540,16 @@ PageServicesSignForm {
             propertyRectHelp.height = Constants.HEIGHT_HELP_COLLAPSED
         if (propertyShowOptions)
             propertyItemOptions.height = propertyOptionsHeight
+
+        propertyPDFPreview.propertyDragSigSignedByNameText.text =
+            qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
+        if(gapi.getUseNumId() == true){
+            propertyPDFPreview.propertyDragSigNumIdText.text =
+                qsTranslate("GAPI","STR_NIC") + ": "
+        } else {
+            propertyPDFPreview.propertyDragSigNumIdText.visible = false
+        }
+        propertyPDFPreview.propertyDragSigDateText.visible = gapi.getUseDate()
 
         signCertExpired = false
         gapi.startGettingInfoFromSignCert();

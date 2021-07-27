@@ -753,7 +753,7 @@ Ref PDFDoc::getPageRef(int page)
 
 void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
 		const char * name, const char *civil_number, const char *location, const char *reason, int page, int sector,
-		bool isPTLanguage, bool isCCSignature)
+		bool isPTLanguage, bool isCCSignature, bool showDate)
 {
 	const char needle[] = "/Type /Sig";
 	// Turn Signature mode On
@@ -770,11 +770,11 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
 	   Ref first_page = getPageRef(page);
      
 	   getCatalog()->prepareSignature(rect, &signer_info, &first_page, location,
-		   reason, this->fileSize, page, sector, m_image_data_jpeg, m_image_length, isPTLanguage, isCCSignature);
+		   reason, this->fileSize, page, sector, m_image_data_jpeg, m_image_length, isPTLanguage, isCCSignature, showDate);
 	}
 	else
 	   getCatalog()->prepareSignature(rect, &signer_info, NULL, location,
-	   reason, this->fileSize, page, sector, m_image_data_jpeg, m_image_length, isPTLanguage, isCCSignature);
+	   reason, this->fileSize, page, sector, m_image_data_jpeg, m_image_length, isPTLanguage, isCCSignature, showDate);
 	
 	//Add enough space for the placeholder string
 	MemOutStream mem_stream(this->fileSize + 20000); 

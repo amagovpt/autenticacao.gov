@@ -225,7 +225,7 @@ Rectangle {
                     clip: true
                     font.family: myriad.name
                     color: Constants.COLOR_TEXT_BODY
-                    anchors.top: sigNumIdText.bottom
+                    anchors.top: sigNumIdText.visible ? sigNumIdText.bottom : sigSignedByNameText.bottom
                     text: qsTranslate("PageServicesSign", "STR_SIGN_DATE") + ": " + getData()
                     x: 2
                 }
@@ -237,7 +237,7 @@ Rectangle {
                     clip: true
                     font.family: myriad.name
                     color: Constants.COLOR_TEXT_BODY
-                    anchors.top: sigDateText.bottom
+                    anchors.top: sigDateText.visible ? sigDateText.bottom : sigDateText.anchors.top
                     text: ""
                     x: 2
                 }
@@ -247,7 +247,7 @@ Rectangle {
                     visible: false
                     font.family: myriad.name
                     color: Constants.COLOR_TEXT_BODY
-                    anchors.top: sigLocationText.text == "" ? sigDateText.bottom : sigLocationText.bottom
+                    anchors.top: sigLocationText.text == "" ? sigLocationText.anchors.top : sigLocationText.bottom
                     clip: true
                     text: qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_BY")
                     x: 2

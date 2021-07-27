@@ -403,7 +403,7 @@ void Catalog::addSigFieldToAcroForm(Ref *sig_ref, Ref *refFirstPage)
 //TODO: Too long, split this into 2 functions at least
 void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_info, Ref *firstPageRef,
 	       	const char *location, const char *reason, unsigned long filesize, int page, int sig_sector,
-		unsigned char *img_data, unsigned long img_length, bool isPTLanguage, bool isCCSignature)
+		unsigned char *img_data, unsigned long img_length, bool isPTLanguage, bool isCCSignature, bool showDate)
 {
 
 	Object signature_field;
@@ -444,7 +444,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 	// the local time zone is behind UTC.
 	char timezone_sign = timezone_offset > 0 ? '-' : '+';
 
-	GooString * date_with_timezone = GooString::format(tzoffset_fmt, date_outstr, timezone_sign, off_hours_utc, off_minutes_utc);
+    GooString * date_with_timezone = GooString::format(tzoffset_fmt, date_outstr, timezone_sign, off_hours_utc, off_minutes_utc);
 	memset(date_outstr, 0, sizeof(date_outstr));
 
 	strftime(date_outstr, sizeof(date_outstr), "D:%Y%m%d%H%M%S", tmp_date);
@@ -479,11 +479,13 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
         int x = rect->x2 - rect->x1 - 1;
         int y = rect->y2 - rect->y1 - 1;
 		if (signer_info->attribute_provider == NULL) {
-			addSignatureAppearance(&signature_field, signer_info, date_with_timezone->getCString(),
+			addSignatureAppearance(&signature_field, signer_info, 
+        showDate ? date_with_timezone->getCString(): NULL,
 				location, reason, x, y, img_data, img_length, rotate_signature, isPTLanguage);
 		}
 		else {
-			addSignatureAppearanceSCAP(&signature_field, signer_info, date_with_timezone->getCString(),
+			addSignatureAppearanceSCAP(&signature_field, signer_info, 
+        showDate ? date_with_timezone->getCString() : NULL,
 				location, reason, x, y, img_data, img_length, rotate_signature, isPTLanguage);
 		}
 	}
@@ -917,12 +919,12 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 {
 	const char * strings_pt[] = { "(Assinado por : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n", 
 	                                                "(Num. de Identifica\xE7\xE3o: {0:s}) Tj\r\n",
-							"0 -10 Td\r\n(Data: {0:s}) Tj\r\n",
+							"(Data: {0:s}) Tj\r\n",
 							"Localiza\xE7\xE3o: {0:s}"};
 
 	const char * strings_en[] = { "(Signed by : ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
 	                                                "(Identification number: {0:s}) Tj\r\n",
-							"0 -10 Td\r\n(Date: {0:s}) Tj\r\n",
+							"(Date: {0:s}) Tj\r\n",
 							"Location: {0:s}"};
 
 	Object ap_dict, appearance_obj, obj1, obj2, obj3,
@@ -1014,21 +1016,27 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 	else
 		n2_commands->append("0 -10 Td\r\n");
 
-	//Back to regular font
-	std::unique_ptr<GooString> str3(GooString::format("/F1 {0:d} Tf\r\n", (int)font_size));
-	n2_commands->append(str3.get());
+    //Back to regular font
+	  std::unique_ptr<GooString> str3(GooString::format("/F1 {0:d} Tf\r\n", (int)font_size));
+    n2_commands->append(str3.get());
 
-	std::unique_ptr<GooString> str4(GooString::format(isPTLanguage ? strings_pt[1] : strings_en[1],
+  if (signer_info->civil_number != NULL){
+	  std::unique_ptr<GooString> str4(GooString::format(isPTLanguage ? strings_pt[1] : strings_en[1],
 				signer_info->civil_number));
-	n2_commands->append(str4.get());
+	  n2_commands->append(str4.get());
+    n2_commands->append("0 -10 Td\r\n");
+  }
 
-	std::unique_ptr<GooString> str5(GooString::format(isPTLanguage ? strings_pt[2] : strings_en[2],
-		date_str));
-	n2_commands->append(str5.get());
+  if (date_str != NULL){
+    
+	  std::unique_ptr<GooString> str5(GooString::format(isPTLanguage ? strings_pt[2] : strings_en[2],
+		  date_str));
+	  n2_commands->append(str5.get());
+    n2_commands->append("0 -10 Td\r\n");
+  }
 
 	if (!small_signature_format && location != NULL && strlen(location) > 0)
 	{
-		n2_commands->append("0 -10 Td\r\n");
 		char * location_latin1 = utf8_to_latin1(location);
 		GooString * tmp_location = GooString::format(isPTLanguage ? strings_pt[3] : strings_en[3],
 					location_latin1);
@@ -1113,14 +1121,14 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
 {
         const char * strings_pt[] = { "(Assinado por: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
                                                         "(Num. de Identifica\xE7\xE3o: {0:s}) Tj\r\n",
-                                                        "0 -8 Td\r\n(Data: {0:s}) Tj\r\n",
+                                                        "(Data: {0:s}) Tj\r\n",
                                                         "Localiza\xE7\xE3o: {0:s}",
                                                         "(Certificado por: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
                                                         "(Atributos certificados: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n"};
 
         const char * strings_en[] = { "(Signed by: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
                                                         "(Identification number: {0:s}) Tj\r\n",
-                                                        "0 -8 Td\r\n(Date: {0:s}) Tj\r\n",
+                                                        "(Date: {0:s}) Tj\r\n",
                                                         "Location: {0:s}",
                                                         "(Certified by: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n",
                                                         "(Certified Attributes: ) Tj\r\n{0:f} 0 Td\r\n/F3 {1:d} Tf\r\n"};
@@ -1222,28 +1230,34 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
 
         if (linesName < 2)
         {
-                std::unique_ptr<GooString> str2(GooString::format("{0:f} -7 Td\r\n", -assinado_por_length));
+                std::unique_ptr<GooString> str2(GooString::format("{0:f} -8 Td\r\n", -assinado_por_length));
                 n2_commands->append(str2.get());
         }
         else
-                n2_commands->append("0 -7 Td\r\n");
+                n2_commands->append("0 -8 Td\r\n");
 
         //Back to regular font
         std::unique_ptr<GooString> str3(GooString::format("/F1 {0:d} Tf\r\n", (int)font_size_medium));
         n2_commands->append(str3.get());
 
-        std::unique_ptr<GooString> str4(GooString::format(isPTLanguage ? strings_pt[1] : strings_en[1],
-                                signer_info->civil_number));
-        n2_commands->append(str4.get());
+        if (signer_info->civil_number != NULL ){
+          std::unique_ptr<GooString> str4(GooString::format(isPTLanguage ? strings_pt[1] : strings_en[1],
+              signer_info->civil_number));
+          n2_commands->append(str4.get());
+          n2_commands->append("0 -8 Td\r\n");
+        }
 
-        std::unique_ptr<GooString> str5(GooString::format(isPTLanguage ? strings_pt[2] : strings_en[2],
-                date_str));
-        n2_commands->append(str5.get());
+        if (date_str != NULL){
+          	
+          std::unique_ptr<GooString> str5(GooString::format(isPTLanguage ? strings_pt[2] : strings_en[2],
+            date_str));
+          n2_commands->append(str5.get());
+          n2_commands->append("0 -8 Td\r\n");
+        }
 
         if (!small_signature_format && location != NULL && strlen(location) > 0)
         {
                 linesLocation = 1;
-                n2_commands->append("0 -7 Td\r\n");
                 char * location_latin1 = utf8_to_latin1(location);
                 GooString * tmp_location = GooString::format(isPTLanguage ? strings_pt[3] : strings_en[3],
                                         location_latin1);
@@ -1251,6 +1265,7 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
                 GooString * multiline2 = formatMultilineString(tmp_location->getCString(),
                                         rect_width, font_size_medium, MYRIAD_REGULAR, 1, line_height_medium);
                 n2_commands->append(multiline2);
+                n2_commands->append("0 -8 Td\r\n");
 
                 delete multiline2;
                 delete tmp_location;
@@ -1258,15 +1273,14 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
         }
 
         buf = GooString::format("0 0 0 rg\r\n/F1 {0:d} Tf\r\n", (int)font_size_medium);
-        //Change font to regular black font
+                //Change font to regular black font
         n2_commands->append(buf);
         delete buf;
 
         assinado_por_length = 40.0;
 
         if (signer_info->attribute_provider != NULL) {
-
-            n2_commands->append("0 -8 Td\r\n");
+            
             //Change to bold font for the signer name
             std::unique_ptr<GooString> str6(GooString::format(isPTLanguage ? strings_pt[4] : strings_en[4],
                     assinado_por_length, (int)font_size_medium));
@@ -1291,7 +1305,7 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
         if (signer_info->attribute_name != NULL) {
             char * name_latin1 = utf8_to_latin1(signer_info->attribute_name);
 
-            // The first line of seal (reason) is 1pt higher than normal line_height.
+            // The first line of seal (reason) is 1pt higher than normal line_height (top margin).
             // The space occupied by this first line is always reserved for 'reason',
             // even when 'reason' is empty
             int heightReason = 1 + line_height;
@@ -1301,6 +1315,8 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
 
             int heightLeft = rect_height - (heightReason
                 + linesName * line_height
+                + (signer_info->civil_number != NULL ? font_size_medium : 0) 
+                + (date_str != NULL ? font_size_medium : 0) 
                 + linesLocation * line_height_medium
                 + linesAttributeProvider * line_height_medium);
 

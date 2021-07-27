@@ -144,7 +144,7 @@ public:
 
   void prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_info, Ref *first_page_ref, const char *location,
 	                      const char *reason, unsigned long, int page, int sig_sector, 
-    unsigned char *img_data, unsigned long img_length, bool isPTLanguage, bool isCCSignature);
+    unsigned char *img_data, unsigned long img_length, bool isPTLanguage, bool isCCSignature, bool showDate);
   
   Ref addFontDict(const char *basefont, const char *name);
   Ref addImageXObject(int width, int height, unsigned char *data, unsigned long length_in_bytes);
