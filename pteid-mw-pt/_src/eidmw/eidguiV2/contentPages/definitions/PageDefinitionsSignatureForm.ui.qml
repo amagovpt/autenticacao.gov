@@ -393,11 +393,6 @@ Item {
                         z: 1
                     }
 
-                    MouseArea {
-                        id: mouseAreaPreCustom
-                        anchors.fill: parent
-                    }
-
                     Text {
                         id: sigReasonTextCustom
                         font.pixelSize: propertySigLineHeight * 0.8
@@ -577,6 +572,11 @@ Item {
                             visible: fileLoaded
                             opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
                             cache: false
+                        }
+                        
+                        MouseArea {
+                            id: mouseAreaPreCustom
+                            anchors.fill: parent
                         }
                     }
                     Text {

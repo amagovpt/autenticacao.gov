@@ -197,6 +197,18 @@ PageDefinitionsSignatureForm {
         }
     }
 
+    propertyCheckBoxNumId2 {
+        onCheckedChanged: {
+            propertyCheckBoxNumId.checked = propertyCheckBoxNumId2.checked
+        }
+    }
+
+    propertyCheckBoxDate2 {
+        onCheckedChanged: {
+            propertyCheckBoxDate.checked = propertyCheckBoxDate2.checked
+        }
+    }
+
     Component.onCompleted: {
 
         console.log("Page Definitions Signature mainWindowCompleted")
