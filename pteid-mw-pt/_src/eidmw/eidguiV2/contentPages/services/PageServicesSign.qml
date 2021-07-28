@@ -873,7 +873,7 @@ PageServicesSignForm {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSignReduced = propertyCheckSignReduced.checked
             if(propertyCheckSignReduced.checked){
-                propertyPDFPreview.propertySigHeight = 45
+                propertyPDFPreview.propertySigHeightDefault = 45
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.2
                 propertyPDFPreview.propertyDragSigReasonText.visible = false
                 propertyPDFPreview.propertyDragSigLocationText.visible = false
@@ -881,14 +881,14 @@ PageServicesSignForm {
                 propertyPDFPreview.propertyDragSigLocationText.text = ""
                 propertyPDFPreview.propertyDragSigImg.height = 0
             }else{
-                propertyPDFPreview.propertySigHeight = 90
+                propertyPDFPreview.propertySigHeightDefault = 90
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.1
                 propertyPDFPreview.propertyDragSigReasonText.visible = true
                 propertyPDFPreview.propertyDragSigLocationText.visible = true
                 propertyPDFPreview.propertyDragSigReasonText.text = propertyTextFieldReason.text
                 propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text === "" ? "" :
                     qsTranslate("PageServicesSign", "STR_SIGN_LOCATION") + ": " + propertyTextFieldLocal.text
-                propertyPDFPreview.propertyDragSigImg.height = propertyPDFPreview.propertyDragSigRect.height * 0.3
+                propertyPDFPreview.propertyDragSigImg.height = propertyPDFPreview.propertySigHeightDefault * propertyPDFPreview.propertyPDFHeightScaleFactor * 0.3
             }
         }
     }

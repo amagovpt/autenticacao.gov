@@ -227,6 +227,31 @@ Rectangle {
                     }
                 }
 
+                Image {
+                    id: dragSigWaterImage
+                    height: propertyReducedChecked ? propertySigHeightDefault * propertyPDFHeightScaleFactor * 0.8 : propertySigHeightDefault * propertyPDFHeightScaleFactor * 0.4
+                    fillMode: Image.PreserveAspectFit
+                    anchors.top: parent.top
+                    anchors.topMargin: dragSigImage.visible ? (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2 : (parent.height - dragSigWaterImage.height) / 2
+                    x: 2
+                }
+                Image {
+                    id: dragSigImage
+                    height: propertyReducedChecked ? 0 : propertySigHeightDefault * propertyPDFHeightScaleFactor * 0.3
+                    fillMode: Image.PreserveAspectFit
+                    anchors.top: dragSigWaterImage.bottom
+                    anchors.topMargin: (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2
+                    cache: false
+                    x: 2
+                    Rectangle {
+                        color: "white"
+                        height: parent.height
+                        width: parent.width
+                        anchors.fill: parent
+                        z: parent.z - 1
+                    }
+                }
+
                 Text {
                     id: sigReasonText
                     font.pixelSize: propertySigFontSizeBig
@@ -242,36 +267,14 @@ Rectangle {
                     x: 2
                 }
 
-                Image {
-                    id: dragSigWaterImage
-                    height: propertyReducedChecked ? propertySigHeightDefault * propertyPDFHeightScaleFactor * 0.8 : propertySigHeightDefault * propertyPDFHeightScaleFactor * 0.4
-                    fillMode: Image.PreserveAspectFit
-                    anchors.top: sigReasonText.bottom
-                    anchors.topMargin: 2
-                    x: 2
-                }
-                Image {
-                    id: dragSigImage
-                    height: propertySigHeightDefault * propertyPDFHeightScaleFactor * 0.3
-                    fillMode: Image.PreserveAspectFit
-                    anchors.bottom: dragSigRect.bottom
-                    cache: false
-                    x: 2
-                    Rectangle {
-                        color: "white"
-                        height: parent.height
-                        width: parent.width
-                        anchors.fill: parent
-                        z: parent.z - 1
-                    }
-                }
                 Text {
                     id: sigSignedByText
                     font.pixelSize: propertySigFontSizeBig
                     height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                     font.family: myriad.name
                     color: Constants.COLOR_TEXT_BODY
-                    anchors.top: sigReasonText.bottom
+                    anchors.top: propertyReducedChecked ? parent.top : sigReasonText.bottom
+                    anchors.topMargin: propertyReducedChecked ? (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2 : 0
                     clip: true
                     text: ""
                     x: 2
@@ -283,7 +286,8 @@ Rectangle {
                     font.bold: true
                     width: parent.width
                     color: Constants.COLOR_TEXT_BODY
-                    anchors.top: sigReasonText.bottom
+                    anchors.top: propertyReducedChecked ? parent.top : sigReasonText.bottom 
+                    anchors.topMargin: propertyReducedChecked ? (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2 : 0
                     anchors.left: sigSignedByText.right
                     clip: true
                     text: ""
@@ -309,7 +313,7 @@ Rectangle {
                     clip: true
                     font.family: myriad.name
                     color: Constants.COLOR_TEXT_BODY
-                    anchors.top: sigNumIdText.visible ? sigNumIdText.bottom : sigSignedByNameText.bottom
+                    anchors.top: sigNumIdText.bottom
                     text: qsTranslate("PageServicesSign", "STR_SIGN_DATE") + ": " + getData()
                     x: 2
                 }
@@ -321,7 +325,7 @@ Rectangle {
                     clip: true
                     font.family: myriad.name
                     color: Constants.COLOR_TEXT_BODY
-                    anchors.top: sigDateText.visible ? sigDateText.bottom : sigDateText.anchors.top
+                    anchors.top: sigDateText.bottom
                     text: ""
                     x: 2
                 }
@@ -331,7 +335,7 @@ Rectangle {
                     visible: false
                     font.family: myriad.name
                     color: Constants.COLOR_TEXT_BODY
-                    anchors.top: sigLocationText.text == "" ? sigLocationText.anchors.top : sigLocationText.bottom
+                    anchors.top: sigLocationText.text == "" ? sigDateText.bottom : sigLocationText.bottom
                     clip: true
                     text: qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_BY")
                     x: 2
@@ -378,10 +382,16 @@ Rectangle {
 
                     if(propertyReducedChecked){
                         propertySigLineHeight = propertyDragSigRect.height * 0.2
-                        dragSigImage.height = 0
                     }else{
                         propertySigLineHeight = propertyDragSigRect.height * 0.1
-                        dragSigImage.height = propertySigHeightDefault * propertyPDFHeightScaleFactor * 0.3
+                    }
+
+                    console.log("Sigy: " + dragSigRect.y + "|SigHeight: " + dragSigRect.height + "|ImageHeight: " + dragSigImage.height)
+                    if (dragSigRect.height < dragSigImage.height + dragSigWaterImage.height) {
+                        dragSigImage.visible = false
+                    }
+                    else {
+                        dragSigImage.visible = true
                     }
                 }
             }
@@ -421,30 +431,24 @@ Rectangle {
     }
 
     function updateSignPreviewSize() {
-        if (dragTarget.lastScreenWidth != 0 && dragTarget.lastScreenHeight != 0 && background_image.width != 0 && background_image.height != 0) {
-            
+
+        if (dragTarget.lastScreenWidth != 0 && dragTarget.lastScreenHeight != 0 
+            && background_image.width != 0 && background_image.height != 0) 
+        {
             dragSigRect.width = dragSigRect.width / dragTarget.lastScreenWidth* background_image.width
             dragSigRect.height = dragSigRect.height / dragTarget.lastScreenHeight * background_image.height
         }
-        console.log("Height: " + dragSigRect.height + "Width: " + dragSigRect.width)
-/*
-        if (dragSigRect.height < (propertySigHeightMin) * propertyPDFHeightScaleFactor) {
-            dragSigRect.height = (propertySigHeightMin) * propertyPDFHeightScaleFactor
-        }
+        else if (background_image.width != 0 && background_image.height != 0) 
+        {
+            if (dragSigRect.height > background_image.height) 
+            {
+                dragSigRect.height = background_image.height
+            }
 
-        if (dragSigRect.width < (propertySigWidthMin) * propertyPDFWidthScaleFactor) {
-            dragSigRect.width = (propertySigWidthMin) * propertyPDFWidthScaleFactor
-        }
-
-        if (dragSigRect.height == 0 || dragSigRect.width == 0) {
-            dragSigRect.height = (propertySigHeightDefault) * propertyPDFHeightScaleFactor
-            dragSigRect.width = (propertySigHeightDefault) * propertyPDFWidthScaleFactor
-        }
-*/
-        if(propertyReducedChecked){
-            dragSigImage.height = 0
-        }else{
-            dragSigImage.height = dragSigImage.height / dragTarget.lastScreenHeight * background_image.height
+            if (dragSigRect.width > background_image.width) 
+            {
+                dragSigRect.width = background_image.width
+            }
         }
     }
 
