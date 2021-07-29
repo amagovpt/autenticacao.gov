@@ -38,18 +38,18 @@ Rectangle {
     property alias propertyCoordX: dragTarget.coord_x
     property alias propertyCoordY: dragTarget.coord_y
 
-    // Properties used to convert to postscript points (1 px == 0.75 points)
+    // Properties used to convert to postscript points (1 px == 0.75 points for 72 DPI) 
     // Signature have a static size
-    property real propertyConvertPixelToPts: 1 / 0.75
-    property real propertySigWidthDefault: 178
-    property real propertySigHeightDefault: 90
-    property real propertySigWidthMin: 89
-    property real propertySigHeightMin: 45
+    property real propertyConvertPtsToPixel:  0.75 // (px to points - Multiply by 0.75 for 72 DPI) (points to px -> Divide by 75 for 72 DPI) 
+    property real propertySigWidthDefault: 178 / propertyConvertPtsToPixel
+    property real propertySigHeightDefault: 90 / propertyConvertPtsToPixel
+    property real propertySigWidthMin: 89 / propertyConvertPtsToPixel
+    property real propertySigHeightMin: 45 / propertyConvertPtsToPixel
     
-    property real propertyPDFHeightScaleFactor: background_image.height * propertyConvertPixelToPts
-                                               / (propertyPdfOriginalHeight / propertyConvertPixelToPts)
-    property real propertyPDFWidthScaleFactor: background_image.width * propertyConvertPixelToPts
-                                               / (propertyPdfOriginalWidth / propertyConvertPixelToPts)
+    property real propertyPDFHeightScaleFactor: background_image.height 
+                                               / (propertyPdfOriginalHeight / propertyConvertPtsToPixel)
+    property real propertyPDFWidthScaleFactor: background_image.width 
+                                               / (propertyPdfOriginalWidth / propertyConvertPtsToPixel )
 
     property real propertySigFontSizeBig: 8 * propertyPDFHeightScaleFactor
     property real propertySigFontSizeSmall: 6 * propertyPDFHeightScaleFactor
