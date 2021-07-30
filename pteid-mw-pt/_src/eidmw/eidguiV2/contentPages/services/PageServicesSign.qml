@@ -310,7 +310,7 @@ PageServicesSignForm {
             if (error_code == GAPI.ET_CARD_REMOVED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 propertyPDFPreview.propertyDragSigSignedByNameText.text =
-                        qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
+                        qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ":  "
                 if(gapi.getUseNumId() == true){
                     propertyPDFPreview.propertyDragSigNumIdText.text =  qsTranslate("GAPI","STR_NIC") + ": "
                 } else {
@@ -1542,7 +1542,7 @@ PageServicesSignForm {
             propertyItemOptions.height = propertyOptionsHeight
 
         propertyPDFPreview.propertyDragSigSignedByNameText.text =
-            qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": "
+            qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ":  "
         if(gapi.getUseNumId() == true){
             propertyPDFPreview.propertyDragSigNumIdText.text =
                 qsTranslate("GAPI","STR_NIC") + ": "

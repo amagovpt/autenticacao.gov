@@ -53,7 +53,6 @@ Rectangle {
 
     property real propertySigFontSizeBig: 8 * propertyPDFHeightScaleFactor
     property real propertySigFontSizeSmall: 6 * propertyPDFHeightScaleFactor
-    property real propertyCurrentAttrsFontSize: 8
 
     //Properties to store Pdf original size
     property real propertyPdfOriginalWidth: 0
@@ -144,8 +143,8 @@ Rectangle {
             }
             Item {
                 id: dragSigRect
-                width: (propertySigWidthDefault) * propertyPDFWidthScaleFactor
-                height: (propertySigHeightDefault) * propertyPDFHeightScaleFactor
+                width: propertySigWidthDefault * propertyPDFWidthScaleFactor
+                height: propertySigHeightDefault * propertyPDFHeightScaleFactor
 
                 Drag.active: dragArea.drag.active
                 opacity: background_image.status == Image.Ready ? 1.0 : 0.0
@@ -233,7 +232,7 @@ Rectangle {
                     fillMode: Image.PreserveAspectFit
                     anchors.top: parent.top
                     anchors.topMargin: dragSigImage.visible ? (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2 : (parent.height - dragSigWaterImage.height) / 2
-                    x: 2
+                    x: 1
                 }
                 Image {
                     id: dragSigImage
@@ -242,7 +241,7 @@ Rectangle {
                     anchors.top: dragSigWaterImage.bottom
                     anchors.topMargin: (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2
                     cache: false
-                    x: 2
+                    x: 1
                     Rectangle {
                         color: "white"
                         height: parent.height
@@ -347,7 +346,7 @@ Rectangle {
                 }
                 Text {
                     id: sigAttributesText
-                    font.pixelSize: propertyCurrentAttrsFontSize * propertyPDFHeightScaleFactor
+                    font.pixelSize: propertyCurrentAttrsFontSize
                     lineHeight: 0.8 // smaller line spacing to match real seal
                     visible: false
                     font.family: myriad.name
@@ -403,7 +402,7 @@ Rectangle {
 
             Image {
                 id: dragSigMoveImage
-                height: dragSigRect.height * 0.5
+                height: 35
                 fillMode: Image.PreserveAspectFit
                 anchors.verticalCenter: dragSigRect.bottom
                 anchors.horizontalCenter: dragSigRect.left
@@ -414,7 +413,7 @@ Rectangle {
 
             Image {
                 id: dragSigResizeImage
-                height: dragSigRect.height * 0.5
+                height: 35
                 fillMode: Image.PreserveAspectFit
                 anchors.verticalCenter: dragSigRect.bottom
                 anchors.horizontalCenter: dragSigRect.right

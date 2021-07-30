@@ -1026,7 +1026,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 	  std::unique_ptr<GooString> str4(GooString::format(isPTLanguage ? strings_pt[1] : strings_en[1],
 				signer_info->civil_number));
 	  n2_commands->append(str4.get());
-    n2_commands->append("0 -10 Td\r\n");
+    n2_commands->append("0 -9 Td\r\n");
   }
 
   if (date_str != NULL){
@@ -1034,7 +1034,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 	  std::unique_ptr<GooString> str5(GooString::format(isPTLanguage ? strings_pt[2] : strings_en[2],
 		  date_str));
 	  n2_commands->append(str5.get());
-    n2_commands->append("0 -10 Td\r\n");
+    n2_commands->append("0 -9 Td\r\n");
   }
 
 	if (!small_signature_format && location != NULL && strlen(location) > 0)
