@@ -942,7 +942,8 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
             int ret_scap = scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
                 m_scap_params.location_x, m_scap_params.location_y,
                 m_scap_params.location, m_scap_params.reason, m_scap_params.isTimestamp, m_scap_params.isLtv, attrs, cmd_details,
-                useCustomSignature(), m_jpeg_scaled_data);
+                useCustomSignature(), m_jpeg_scaled_data,
+                m_seal_width, m_seal_height);
 
             for (size_t i = 0; i < cmd_pdfSignatures.size(); i++)
                 delete cmd_pdfSignatures[i];
@@ -1957,6 +1958,8 @@ void GAPI::doSignPDF(SignParams &params) {
     if (params.isSmallSignature) {
         sig_handler.enableSmallSignatureFormat();
     }
+    
+    sig_handler.setCustomSealSize(m_seal_width,m_seal_height);
 
     if (useCustomSignature()) {
         const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
@@ -2010,6 +2013,8 @@ void GAPI::doSignBatchPDF(SignParams &params) {
     if (params.isSmallSignature) {
         sig_handler->enableSmallSignatureFormat();
     }
+
+    sig_handler->setCustomSealSize(m_seal_width,m_seal_height);
 
     if (useCustomSignature()) {
         const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
@@ -2316,7 +2321,8 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
 
     scapServices.executeSCAPSignature(this, params.inputPDF, params.outputPDF, params.page,
         params.location_x, params.location_y, params.location, params.reason,
-        params.isTimestamp, params.isLtv, attrs, useCustomSignature(), m_jpeg_scaled_data);
+        params.isTimestamp, params.isLtv, attrs, useCustomSignature(), m_jpeg_scaled_data, 
+        m_seal_width, m_seal_height);
     END_TRY_CATCH
 }
 
@@ -3384,7 +3390,7 @@ QStringList GAPI::getWrappedOwnerName(QString name, bool isSCAPSignature) {
     std::string signedBy = tr("STR_SIGNED_BY").toLatin1().constData();
     std::string ownerName = name.toLatin1().constData();
 
-    const double available_space = PDFSignature::getSignatureSealWidth();
+    const double available_space = m_seal_width;
     const float font_size = 8;
     const int available_lines = isSCAPSignature ? 2 : 5;
     const double signed_by_length = getStringWidth(signedBy.c_str(), font_size, MYRIAD_BOLD);
@@ -3476,8 +3482,8 @@ QVariantList GAPI::getWrappedSCAPAttributes(QVariantList attr_list, unsigned int
     std::string entities_to_wrap = QString::fromStdString(joined.first).toLatin1().constData();
     std::string attributes_to_wrap = QString::fromStdString(joined.second).toLatin1().constData();
 
-    const double seal_width = PDFSignature::getSignatureSealWidth();
-    const double seal_height = PDFSignature::getSignatureSealHeight();
+    double seal_width = m_seal_width;
+    double seal_height = m_seal_height;
 
     //entities
     std::string entity_label = tr("STR_CERTIFIED_BY").toLatin1().constData();
@@ -3659,7 +3665,9 @@ void GAPI::setUseDate(bool UseDate){
 bool GAPI::getUseDate(void){
     return m_Settings.getUseDate();
 }
-void GAPI::resizeSignPreview(int width, int height) {
+void GAPI::resizePDFSignSeal(unsigned int width, unsigned int height) {
+    qDebug() << "C++: Resize sign seal. Width: " << width << " Height:" <<height;
+    
     m_seal_width = width;
     m_seal_height = height;
 }

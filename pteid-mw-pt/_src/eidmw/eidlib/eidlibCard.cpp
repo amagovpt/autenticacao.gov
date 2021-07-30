@@ -8,7 +8,7 @@
  * Copyright (C) 2011-2012 Rui Martinho - <rui.martinho@ama.pt>
  * Copyright (C) 2012-2014, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
- * Copyright (C) 2017-2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -390,6 +390,11 @@ void PTEID_PDFSignature::setCustomImage(unsigned char *image_data, unsigned long
 void PTEID_PDFSignature::setCustomImage(const PTEID_ByteArray &image_data)
 {
 	mp_signature->setCustomImage(const_cast<unsigned char *>(image_data.GetBytes()) , image_data.Size());
+}
+
+void PTEID_PDFSignature::setCustomSealSize(unsigned int width, unsigned int height)
+{
+	mp_signature->setCustomSealSize(width,height);
 }
 
 void PTEID_PDFSignature::enableSmallSignatureFormat()

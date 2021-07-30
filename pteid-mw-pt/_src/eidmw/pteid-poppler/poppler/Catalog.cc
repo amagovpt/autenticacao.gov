@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2012,2014, 2016-2019 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2018-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2018-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * Licensed under the EUPL V.1.2
@@ -914,6 +914,42 @@ GooString *formatMultilineString(char *content, double available_space, double f
   return multi_line;
 }
 
+std::string Catalog::get_commands_template(int rect_y, unsigned char *img_data){
+
+  std::string commands_template;
+  bool show_im0 = true;
+  int water_mark_pos_y = 0;
+
+  int img_margins = (rect_y - HEIGHT_WATER_MARK_IMG - HEIGHT_SIGN_IMG) / 2; 
+  if  (img_margins < 0) {
+    img_margins = 0;
+    show_im0 = false;
+    water_mark_pos_y =  rect_y - HEIGHT_WATER_MARK_IMG - DEFAULT_IMG_MARGINS;
+  } else {
+    water_mark_pos_y = rect_y - HEIGHT_WATER_MARK_IMG - img_margins;
+  }
+
+  std::string sign_img = "";
+  if(useCCLogo || img_data != NULL){
+      sign_img = "q\r\n139.29 0 0 30.87 0 0 cm\r\n/Im0 Do\r\nQ\r\n";
+  } else {
+      sign_img = "q\r\n109.29 0 0 31.00 0 0 cm\r\n/Im0 Do\r\nQ\r\n";
+  }
+  std::string commands_template_sign_img = std::string("q\r\n40.5 0 0 31.5 0 ") 
+          + std::to_string( water_mark_pos_y ) 
+          + " cm\r\n/Im1 Do\r\nQ\r\n"
+          + (show_im0 ? sign_img : "")
+          + "q 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
+  
+  	//Small signature formats only includes one image: Im1
+	if (small_signature_format)
+		commands_template = "q\r\n40.5 0 0 31.5 0 0 cm\r\n/Im1 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
+  else
+    commands_template = commands_template_sign_img;
+
+  return commands_template;
+}
+
 void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInfo *signer_info,
 	char * date_str, const char* location, const char* reason, int rect_x, int rect_y,
 	unsigned char *img_data, unsigned long img_length, int rotate_signature, bool isPTLanguage)
@@ -946,15 +982,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 		ap_command_toplevel.appendf("-1 0 0 -1 {0:d} {1:d} cm \r\n", rect_x, rect_y);
 	}
 
-	std::string commands_template;
 
-	//Small signature formats only includes one image: Im1
-	if (small_signature_format)
-		commands_template = "q\r\n40.5 0 0 31.5 0 0 cm\r\n/Im1 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
-        else if (useCCLogo || img_data != NULL)
-                commands_template = "q\r\n40.5 0 0 31.5 0 43 cm\r\n/Im1 Do\r\nQ\r\nq\r\n139.29 0 0 30.87 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
-        else
-		commands_template = "q\r\n40.5 0 0 31.5 0 43 cm\r\n/Im1 Do\r\nQ\r\nq\r\n109.29 0 0 31.00 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
 
 	initBuiltinFontTables();
 	
@@ -968,7 +996,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 	int rect_height = ((rotate_signature == 90 || rotate_signature == 270) ? rect_x : rect_y);
 	
 	//Start with Italics font
-	GooString *n2_commands = GooString::format(commands_template.c_str(), rect_height - 10, (int)font_size);
+	GooString *n2_commands = GooString::format(get_commands_template(rect_y,img_data).c_str(), rect_height - 10, (int)font_size);
 
 	if (!small_signature_format && reason != NULL && strlen(reason) > 0)
 	{
@@ -1153,15 +1181,6 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
           ap_command_toplevel.appendf("-1 0 0 -1 {0:d} {1:d} cm \r\n", rect_x, rect_y);
         }
 
-        std::string commands_template;
-
-        //Small signature formats only includes one image: Im1
-        if (small_signature_format)
-                commands_template = "q\r\n40.5 0 0 31.5 0 0 cm\r\n/Im1 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
-        else if (useCCLogo)
-                commands_template = "q\r\n40.5 0 0 31.5 0 43 cm\r\n/Im1 Do\r\nQ\r\nq\r\n139.29 0 0 30.87 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
-        else
-                commands_template = "q\r\n40.5 0 0 31.5 0 43 cm\r\n/Im1 Do\r\nQ\r\nq\r\n109.29 0 0 31.00 0 0 cm\r\n/Im0 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
 
         initBuiltinFontTables();
 
@@ -1184,7 +1203,7 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
         int linesLocation = 0;
 
         //Start with Italics font
-        GooString *n2_commands = GooString::format(commands_template.c_str(), (int)(rect_height - line_height + 1), (int)font_size);
+        GooString *n2_commands = GooString::format(get_commands_template(rect_y,img_data).c_str(), (int)(rect_height - line_height + 1), (int)font_size);
 
         if (!small_signature_format && reason != NULL && strlen(reason) > 0)
         {
@@ -1203,7 +1222,7 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
                 delete multiline;
                 n2_commands->append("0 -8 Td\r\n");
         }
-
+ 
         GooString * buf = GooString::format("0 0 0 rg\r\n/F1 {0:d} Tf\r\n", (int)font_size);
         //Change font to regular black font
         n2_commands->append(buf);

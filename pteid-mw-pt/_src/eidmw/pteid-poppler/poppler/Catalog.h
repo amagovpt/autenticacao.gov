@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2012-2014, 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2018-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * Licensed under the EUPL V.1.2
@@ -50,6 +50,10 @@
 #define PLACEHOLDER_LEN ESTIMATED_LEN
 #define CUSTOM_IMAGE_BITMAP_WIDTH 351
 #define CUSTOM_IMAGE_BITMAP_HEIGHT 77
+
+#define HEIGHT_WATER_MARK_IMG   32        // Round up 31.5
+#define HEIGHT_SIGN_IMG         31.0      // Round up 30.87 (CC). 31.00 (CMD)
+#define DEFAULT_IMG_MARGINS     15
 #include <vector>
 
 class PDFDoc;
@@ -161,6 +165,8 @@ public:
                  unsigned char *img_data, unsigned long img_length, int rotate_signature, bool isPTLanguage);
   void addSignatureAppearance(Object *parent, int, int);
   void closeSignature(const char *signature_contents, unsigned long len);
+
+  std::string get_commands_template(int rect_y, unsigned char *img_data);
 
   /* Fill the following keys of the signature field dictionary: Type, SubType, FT, F, SigSector, Rect, T and P.*/
   void fillSignatureField(Object *signatureFieldDict, PDFRectangle *rect, int sig_sector, 

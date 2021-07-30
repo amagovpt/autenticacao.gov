@@ -300,6 +300,7 @@ QByteArray PDFSignatureClient::openSCAPSignature(const char *inputFile, const ch
             sig_handler->setVisibleCoordinates(
                         signatureInfo.getSelectedPage() > 0 ? signatureInfo.getSelectedPage() : sig_handler->getPageCount(),
                         signatureInfo.getX(), signatureInfo.getY());
+            sig_handler->setCustomSealSize(signatureInfo.getSealWidth(),signatureInfo.getSealHeight());
         }
     }
     sig_handler->setSCAPAttributes(strdup(citizenName.toUtf8().constData()),

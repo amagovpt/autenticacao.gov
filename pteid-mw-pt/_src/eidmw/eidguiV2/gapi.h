@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2018-2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
@@ -419,7 +419,7 @@ public slots:
     bool getUseNumId(void);
     void setUseDate (bool UseDate);
     bool getUseDate(void);
-    void resizeSignPreview(int height, int width);
+    void resizePDFSignSeal(unsigned int height, unsigned int width);
 
 #ifdef WIN32
     QVariantList getRegisteredCmdPhoneNumbers();

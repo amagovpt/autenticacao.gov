@@ -28,11 +28,12 @@ PageServicesSignForm {
     property int propertyLinesName : 0
     property int propertyLinesReason : 0
     property int propertyLinesLocation : 0
+    property string ownerNameBackup: ""
 
     ToolTip {
         property var maxWidth: 500
         id: controlToolTip
-        contentItem: 
+        contentItem:
             Text {
                 id: tooltipText
                 text: controlToolTip.text
@@ -43,7 +44,7 @@ PageServicesSignForm {
                     controlToolTip.width = Math.min(controlToolTip.maxWidth, controlToolTip.implicitWidth)
                 }
             }
-        
+
         background: Rectangle {
             border.color: Constants.COLOR_MAIN_DARK_GRAY
             color: Constants.COLOR_MAIN_SOFT_GRAY
@@ -283,13 +284,8 @@ PageServicesSignForm {
         onSignalSignCertDataChanged: {
             console.log("Services Sign Advanced --> Certificate Data Changed")
 
-            var isSCAP = (propertySwitchAddAttributes.checked && numberOfAttributesSelected() != 0);
-            var wrappedName = gapi.getWrappedOwnerName(ownerName, isSCAP)
-            propertyLinesName = wrappedName.length
-
-            propertyPDFPreview.propertyDragSigSignedByNameText.text =
-                qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ": " + wrappedName.join("<br>");
-
+            ownerNameBackup = ownerName
+            updateWrappedName()
             if(gapi.getUseNumId() == true){
                 propertyPDFPreview.propertyDragSigNumIdText.text =
                         qsTranslate("GAPI","STR_NIC") + ": " + NIC
@@ -298,7 +294,7 @@ PageServicesSignForm {
             }
 
             propertyPDFPreview.propertyDragSigDateText.visible = gapi.getUseDate()
-        
+
             propertyBusyIndicatorRunning = false
             propertyButtonAdd.forceActiveFocus()
             cardLoaded = true
@@ -362,10 +358,32 @@ PageServicesSignForm {
                         propertyPageLoader.propertyBackupCoordX * propertyPageLoader.propertyBackupBackgroundWidth,
                         propertyPageLoader.propertyBackupCoordY * propertyPageLoader.propertyBackupBackgroundHeight)
 
+            if (propertyPDFPreview.propertyDragSigRect.height < propertyPDFPreview.propertyDragSigImg.height + propertyPDFPreview.propertyDragSigWaterImg.height) {
+                propertyPDFPreview.propertyDragSigImg.visible = false
+            }
+            else {
+                propertyPDFPreview.propertyDragSigImg.visible = true
+            }
             propertyPDFPreview.forceActiveFocus()
         }
     }
 
+    Connections {
+        target: propertyPDFPreview
+        onUpdateSealData: {
+             updateWrappedName();
+             updateSCAPInfoOnPreview();
+
+            var width = propertyPDFPreview.propertyDragSigRect.width / propertyPDFPreview.propertyPDFWidthScaleFactor * propertyPDFPreview.propertyConvertPtsToPixel
+            var height =propertyPDFPreview.propertyDragSigRect.height / propertyPDFPreview.propertyPDFWidthScaleFactor * propertyPDFPreview.propertyConvertPtsToPixel
+
+            // The height of the small signature is half of the height of the current configured signature
+            // So we have to double the height to small signature have the height of the preview
+            height = propertyCheckSignReduced.checked ? 2 * height : height
+
+            gapi.resizePDFSignSeal(parseInt(width),parseInt(height))
+        }
+    }
     Components.DialogCMD{
         id: dialogSignCMD
     }
@@ -873,22 +891,26 @@ PageServicesSignForm {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSignReduced = propertyCheckSignReduced.checked
             if(propertyCheckSignReduced.checked){
-                propertyPDFPreview.propertySigHeightDefault = 45
+                propertyPDFPreview.propertyDragSigRect.height =
+                    propertyPDFPreview.propertySigHeightReducedDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
+                propertyPDFPreview.propertyDragSigRect.width =
+                    propertyPDFPreview.propertySigWidthReducedDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.2
                 propertyPDFPreview.propertyDragSigReasonText.visible = false
                 propertyPDFPreview.propertyDragSigLocationText.visible = false
                 propertyPDFPreview.propertyDragSigReasonText.text = ""
                 propertyPDFPreview.propertyDragSigLocationText.text = ""
-                propertyPDFPreview.propertyDragSigImg.height = 0
             }else{
-                propertyPDFPreview.propertySigHeightDefault = 90
+                propertyPDFPreview.propertyDragSigRect.height =
+                    propertyPDFPreview.propertySigHeightDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
+                propertyPDFPreview.propertyDragSigRect.width =
+                    propertyPDFPreview.propertySigWidthDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.1
                 propertyPDFPreview.propertyDragSigReasonText.visible = true
                 propertyPDFPreview.propertyDragSigLocationText.visible = true
                 propertyPDFPreview.propertyDragSigReasonText.text = propertyTextFieldReason.text
                 propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text === "" ? "" :
                     qsTranslate("PageServicesSign", "STR_SIGN_LOCATION") + ": " + propertyTextFieldLocal.text
-                propertyPDFPreview.propertyDragSigImg.height = propertyPDFPreview.propertySigHeightDefault * propertyPDFPreview.propertyPDFHeightScaleFactor * 0.3
             }
         }
     }
@@ -990,37 +1012,6 @@ PageServicesSignForm {
                 }else{
                     propertyListViewEntities.currentIndex--
                 }
-            }
-            function updateSCAPInfoOnPreview(){
-                var attrList = []
-                var count = 0
-                for (var i = 0; i < entityAttributesModel.count; i++){
-                    var currentAttribute = entityAttributesModel.get(i)
-                    if(currentAttribute.checkBoxAttr == true){
-                        var entity = currentAttribute.entityName
-                        var attr = currentAttribute.attribute
-                        attrList.push([entity.trim(), attr.trim()])
-                    }
-                }
-
-                propertyPDFPreview.propertyDragSigCertifiedByText.text =
-                    qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_BY")
-                propertyPDFPreview.propertyDragSigAttributesText.text =
-                    qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_ATTRIBUTES")
-
-                if (attrList != []) {
-                    var wrappedAttr = gapi.getWrappedSCAPAttributes(attrList, propertyLinesReason,
-                                                                    propertyLinesName, propertyLinesLocation)
-                    var entities = wrappedAttr[0].join("<br>")
-                    var attributes = wrappedAttr[1].join("<br>")
-                    var fontSize = wrappedAttr[2];
-
-                    propertyPDFPreview.propertyDragSigCertifiedByText.text += " " + entities
-                    propertyPDFPreview.propertyDragSigAttributesText.text += " " + attributes
-                    propertyPDFPreview.propertyCurrentAttrsFontSize = fontSize
-
-                }
-
             }
         }
     }
@@ -1851,11 +1842,11 @@ PageServicesSignForm {
                     && !propertyFlickable.atYBeginning){
                 propertyFlickable.flick(0, getMaxFlickVelocity());
             }
-            else if(callingObject === propertyButtonSignCMD 
+            else if(callingObject === propertyButtonSignCMD
                     && !propertyFlickable.atYBeginning){
                 propertyFlickable.flick(0, getMaxFlickVelocity());
             }
-            else if(callingObject === propertyListViewEntities 
+            else if(callingObject === propertyListViewEntities
                     && !propertyFlickable.atYBeginning){
                 propertyFlickable.flick(0, getMaxFlickVelocity());
             }
@@ -1878,6 +1869,14 @@ PageServicesSignForm {
         }
         return direction;
     }
+    function updateWrappedName(){
+        var isSCAP = (propertySwitchAddAttributes.checked && numberOfAttributesSelected() != 0);
+        var wrappedName = gapi.getWrappedOwnerName(ownerNameBackup, isSCAP)
+        propertyLinesName = wrappedName.length
+
+        propertyPDFPreview.propertyDragSigSignedByNameText.text =
+            qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ":  " + wrappedName.join("<br>");
+    }
     function getMaxFlickVelocity(){
         // use visible area of flickable object to calculate
         // a smooth flick velocity
@@ -1893,5 +1892,36 @@ PageServicesSignForm {
                 propertyPageLoader.propertyBackupfilesModel.remove(index)
         }
         filesModel.remove(index)
+    }
+    function updateSCAPInfoOnPreview(){
+        var attrList = []
+        var count = 0
+        for (var i = 0; i < entityAttributesModel.count; i++){
+            var currentAttribute = entityAttributesModel.get(i)
+            if(currentAttribute.checkBoxAttr == true){
+                var entity = currentAttribute.entityName
+                var attr = currentAttribute.attribute
+                attrList.push([entity.trim(), attr.trim()])
+            }
+        }
+
+        propertyPDFPreview.propertyDragSigCertifiedByText.text =
+            qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_BY")
+        propertyPDFPreview.propertyDragSigAttributesText.text =
+            qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_ATTRIBUTES")
+
+        if (attrList != []) {
+            var wrappedAttr = gapi.getWrappedSCAPAttributes(attrList, propertyLinesReason,
+                                                            propertyLinesName, propertyLinesLocation)
+            var entities = wrappedAttr[0].join("<br>")
+            var attributes = wrappedAttr[1].join("<br>")
+            var fontSize = wrappedAttr[2];
+
+            propertyPDFPreview.propertyDragSigCertifiedByText.text += " " + entities
+            propertyPDFPreview.propertyDragSigAttributesText.text += " " + attributes
+            propertyPDFPreview.propertyCurrentAttrsFontSize = fontSize
+
+        }
+
     }
 }

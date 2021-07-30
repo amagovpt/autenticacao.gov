@@ -8,7 +8,7 @@
  * Copyright (C) 2011-2012 Rui Martinho - <rui.martinho@ama.pt>
  * Copyright (C) 2012-2014, 2016-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -811,6 +811,7 @@ class PTEID_PDFSignature
 		 **/
 		PTEIDSDK_API char *getOccupiedSectors(int page);
 		PTEIDSDK_API void setCustomImage(unsigned char *image_data, unsigned long image_length);
+		PTEIDSDK_API void setCustomSealSize(unsigned int width, unsigned int height);
 		/**
 	     * Use this method to change the image that's used on the bottom of the visible signature
 	     * This image will replace the default "Cartão de Cidadão" logo

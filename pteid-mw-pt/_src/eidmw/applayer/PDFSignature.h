@@ -2,7 +2,7 @@
 
  * Copyright (C) 2012-2014, 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
@@ -58,8 +58,6 @@ namespace eIDMW
 		EIDMW_APL_API char *getOccupiedSectors(int page);
 		EIDMW_APL_API int getPageCount();
 		EIDMW_APL_API int getOtherPageCount(const char *input_path);
-		EIDMW_APL_API static double getSignatureSealWidth() { return sig_width; };
-		EIDMW_APL_API static double getSignatureSealHeight() { return sig_height; };
 		void setCard(APL_Card *card) { m_card = card; };
 
 		//General interface to signing in single file-mode or batch-mode
@@ -67,6 +65,7 @@ namespace eIDMW
             const char *outfile_path, bool isCardSign);
         EIDMW_APL_API bool isLandscapeFormat();
 		EIDMW_APL_API void setCustomImage(unsigned char *img_data, unsigned long img_length);
+		EIDMW_APL_API void setCustomSealSize(unsigned int width, unsigned int height);
 		EIDMW_APL_API void enableSmallSignature();
 
         bool getBatch_mode();
@@ -125,12 +124,10 @@ namespace eIDMW
 
 		const char * m_pdf_file_path;
 
-		// These values are constants because the actual construction of the signature appearance in pteid-poppler assumes
-		// this amount of available space
-		static const double sig_height;
-		static const double sig_width;
-		static const double tb_margin;
-
+		// Default values
+		unsigned int m_sig_height = 90;
+		unsigned int m_sig_width = 178;
+		unsigned int m_tb_margin = 40;
 		static const int lr_margin = 30;
 
 		char *m_civil_number;

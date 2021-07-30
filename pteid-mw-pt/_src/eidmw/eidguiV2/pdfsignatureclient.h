@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2018-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2018-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 
@@ -34,18 +34,23 @@ int handleError(int status_code, soap *sp, const char *call);
 
 class PDFSignatureInfo{
 public:
-    PDFSignatureInfo(int _selectedPage, double _x, double _y, bool isLtv, const char *_location, const char *_reason) {
+    PDFSignatureInfo(int _selectedPage, double _x, double _y, bool isLtv, const char *_location, const char *_reason,
+            unsigned int _seal_width, unsigned int _seal_height) {
         selectedPage = _selectedPage;
         x = _x;
         y = _y;
         location = _location;
         reason = _reason;
 		is_ltv = isLtv;
+        seal_width = _seal_width;
+        seal_height = _seal_height;
     }
 
     int getSelectedPage() { return selectedPage; }
     double getX() { return x; }
     double getY() { return y; }
+    unsigned int getSealWidth() { return seal_width; }
+    unsigned int getSealHeight() { return seal_height; }
 	bool isLtv() { return is_ltv; }
     const char * getLocation() { return location; }
     const char * getReason() { return reason; }
@@ -56,6 +61,8 @@ private:
     int selectedPage;
     double x;
     double y;
+    unsigned int seal_width;
+    unsigned int seal_height;
 	bool is_ltv;
     const char *location;
     const char *reason;

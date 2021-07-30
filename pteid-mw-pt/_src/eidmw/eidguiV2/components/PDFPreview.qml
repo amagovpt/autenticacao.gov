@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
@@ -16,6 +16,8 @@ import "../scripts/Constants.js" as Constants
 
 Rectangle {
     id: pdfPreview
+
+    signal updateSealData()
 
     property alias propertyBackground: background_image
     property alias propertyDragSigRect: dragSigRect
@@ -41,9 +43,13 @@ Rectangle {
     // Properties used to convert to postscript points (1 px == 0.75 points for 72 DPI) 
     // Signature have a static size
     property real propertyConvertPtsToPixel:  0.75 // (px to points - Multiply by 0.75 for 72 DPI) (points to px -> Divide by 75 for 72 DPI) 
+    
     property real propertySigWidthDefault: 178 / propertyConvertPtsToPixel
+    property real propertySigWidthReducedDefault: 178 / propertyConvertPtsToPixel
     property real propertySigHeightDefault: 90 / propertyConvertPtsToPixel
-    property real propertySigWidthMin: 89 / propertyConvertPtsToPixel
+    property real propertySigHeightReducedDefault: 45 / propertyConvertPtsToPixel
+    
+    property real propertySigWidthMin: 120 / propertyConvertPtsToPixel
     property real propertySigHeightMin: 45 / propertyConvertPtsToPixel
     
     property real propertyPDFHeightScaleFactor: background_image.height 
@@ -51,8 +57,16 @@ Rectangle {
     property real propertyPDFWidthScaleFactor: background_image.width 
                                                / (propertyPdfOriginalWidth / propertyConvertPtsToPixel )
 
-    property real propertySigFontSizeBig: 8 * propertyPDFHeightScaleFactor
-    property real propertySigFontSizeSmall: 6 * propertyPDFHeightScaleFactor
+    // The files used in preview seal and draw seal are not the same so we have some differences.
+    // From Catalog.cc: 
+    // #define HEIGHT_WATER_MARK_IMG   32  // Round up 31.5
+    // #define HEIGHT_SIGN_IMG         31.0      // Round up 30.87 (CC) or 31.00 (CMD)
+    property real propertyWaterMarkImgHeight:   31.5 / propertyConvertPtsToPixel
+    property real propertySignImgHeight:        30.87 / propertyConvertPtsToPixel
+
+    property real propertySigFontSizeBig: 8 / propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
+    property real propertySigFontSizeSmall: 6 / propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
+    property real propertyCurrentAttrsFontSize: 8 / propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
 
     //Properties to store Pdf original size
     property real propertyPdfOriginalWidth: 0
@@ -181,9 +195,7 @@ Rectangle {
                             }
                             lastPos = newPos;
 
-                            gapi.resizeSignPreview(
-                                parseInt(dragSigRect.width / propertyPDFWidthScaleFactor), 
-                                parseInt(dragSigRect.height / propertyPDFHeightScaleFactor))
+                            pdfPreview.updateSealData();
                         }
                     }
                 }
@@ -217,18 +229,23 @@ Rectangle {
                                 dragSigRect.height = (propertySigHeightMin) * propertyPDFHeightScaleFactor
                             }
 
+                            if (dragSigRect.height < dragSigImage.height + dragSigWaterImage.height) {
+                                dragSigImage.visible = false
+                            }
+                            else {
+                                dragSigImage.visible = true
+                            }
+
                             lastPos = newPos;
 
-                            gapi.resizeSignPreview(
-                                parseInt(dragSigRect.width / propertyPDFWidthScaleFactor), 
-                                parseInt(dragSigRect.height / propertyPDFHeightScaleFactor))
+                            pdfPreview.updateSealData();
                         }
                     }
                 }
 
                 Image {
                     id: dragSigWaterImage
-                    height: propertyReducedChecked ? propertySigHeightDefault * propertyPDFHeightScaleFactor * 0.8 : propertySigHeightDefault * propertyPDFHeightScaleFactor * 0.4
+                    height: propertyWaterMarkImgHeight * propertyPDFHeightScaleFactor
                     fillMode: Image.PreserveAspectFit
                     anchors.top: parent.top
                     anchors.topMargin: dragSigImage.visible ? (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2 : (parent.height - dragSigWaterImage.height) / 2
@@ -236,18 +253,19 @@ Rectangle {
                 }
                 Image {
                     id: dragSigImage
-                    height: propertyReducedChecked ? 0 : propertySigHeightDefault * propertyPDFHeightScaleFactor * 0.3
+                    height: propertyReducedChecked ? 0 : propertySignImgHeight * propertyPDFHeightScaleFactor
                     fillMode: Image.PreserveAspectFit
                     anchors.top: dragSigWaterImage.bottom
                     anchors.topMargin: (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2
                     cache: false
+                    visible: false
                     x: 1
                     Rectangle {
                         color: "white"
                         height: parent.height
                         width: parent.width
                         anchors.fill: parent
-                        z: parent.z - 1
+                        z: parent.z - 1 
                     }
                 }
 
@@ -390,13 +408,10 @@ Rectangle {
                         propertySigLineHeight = propertyDragSigRect.height * 0.1
                     }
 
-                    console.log("Sigy: " + dragSigRect.y + "|SigHeight: " + dragSigRect.height + "|ImageHeight: " + dragSigImage.height)
-                    if (dragSigRect.height < dragSigImage.height + dragSigWaterImage.height) {
-                        dragSigImage.visible = false
-                    }
-                    else {
-                        dragSigImage.visible = true
-                    }
+                    pdfPreview.updateSealData();
+                }
+                onWidthChanged: {
+                    pdfPreview.updateSealData();
                 }
             }
 
