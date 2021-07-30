@@ -1518,7 +1518,7 @@ PageServicesSignForm {
             }
             propertyPDFPreview.propertyDragSigImg.source = urlCustomImage
         }else{
-            propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC.png"
+            propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC_seal.png"
         }
 
         if (gapi.getShortcutFlag() == GAPI.ShortcutIdSign){

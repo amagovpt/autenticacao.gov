@@ -218,6 +218,7 @@
     <None Include="images\help_icon_selected.png" />
     <None Include="images\icons-move.png" />
     <None Include="images\logo_CC.png" />
+    <None Include="images\logo_CC_seal.png" />
     <None Include="images\logo_autenticacao_gov.png" />
     <None Include="images\logo_autenticacao_gov100.png" />
     <None Include="images\logo_compete2020.png" />
