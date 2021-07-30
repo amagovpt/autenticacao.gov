@@ -978,9 +978,9 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 
 		free(reason_latin1);
 		delete multiline;
+    n2_commands->append("0 -10 Td\r\n");
 	}
 
-	n2_commands->append("0 -10 Td\r\n");
 	GooString * buf = GooString::format("0 0 0 rg\r\n/F1 {0:d} Tf\r\n", (int)font_size);
 	//Change font to regular black font
 	n2_commands->append(buf);
@@ -1200,9 +1200,9 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
 
                 free(reason_latin1);
                 delete multiline;
+                n2_commands->append("0 -8 Td\r\n");
         }
 
-        n2_commands->append("0 -8 Td\r\n");
         GooString * buf = GooString::format("0 0 0 rg\r\n/F1 {0:d} Tf\r\n", (int)font_size);
         //Change font to regular black font
         n2_commands->append(buf);
@@ -1307,12 +1307,8 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
             char * name_latin1 = utf8_to_latin1(signer_info->attribute_name);
 
             // The first line of seal (reason) is 1pt higher than normal line_height (top margin).
-            // The space occupied by this first line is always reserved for 'reason',
-            // even when 'reason' is empty
-            int heightReason = 1 + line_height;
-            if (linesReason > 1) {
-                heightReason += line_height * (linesReason - 1);
-            }
+
+            int heightReason = line_height * linesReason + 1;
 
             int heightLeft = rect_height - (heightReason
                 + linesName * line_height

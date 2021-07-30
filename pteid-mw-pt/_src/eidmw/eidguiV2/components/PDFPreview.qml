@@ -256,7 +256,11 @@ Rectangle {
                     id: sigReasonText
                     font.pixelSize: propertySigFontSizeBig
                     font.italic: true
-                    height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                    height: sigReasonText.contentWidth == 0
+                            ? 0
+                            : (sigReasonText.lineCount > 1
+                               ? 2 * font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                               : font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE)
                     width: parent.width - 4
                     clip: true
                     font.family: myriad.name
@@ -265,6 +269,7 @@ Rectangle {
                     anchors.top: dragSigRect.top
                     anchors.topMargin: 2
                     x: 2
+                    wrapMode: Text.Wrap 
                 }
 
                 Text {
@@ -274,7 +279,7 @@ Rectangle {
                     font.family: myriad.name
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: propertyReducedChecked ? parent.top : sigReasonText.bottom
-                    anchors.topMargin: propertyReducedChecked ? (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2 : 0
+                    anchors.topMargin: propertyReducedChecked ? 2 : 0
                     clip: true
                     text: ""
                     x: 2
@@ -287,7 +292,7 @@ Rectangle {
                     width: parent.width
                     color: Constants.COLOR_TEXT_BODY
                     anchors.top: propertyReducedChecked ? parent.top : sigReasonText.bottom 
-                    anchors.topMargin: propertyReducedChecked ? (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2 : 0
+                    anchors.topMargin: propertyReducedChecked ? 2 : 0
                     anchors.left: sigSignedByText.right
                     clip: true
                     text: ""
