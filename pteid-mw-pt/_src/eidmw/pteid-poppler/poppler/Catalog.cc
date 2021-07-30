@@ -996,8 +996,9 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 	
 	//The parameter 5 in lines is intended to allow as much lines as needed to the name field	
 	char * name_latin1 = utf8_to_latin1(signer_info->name);
+        // small_signature only have 4 lines maximum
         GooString *name_str = formatMultilineString(name_latin1, rect_width, font_size,
-                                                    MYRIAD_BOLD, 5, line_height,
+                                                    MYRIAD_BOLD, small_signature_format ? 4 : 5, line_height,
                                                     assinado_por_length);
 	n2_commands->append(name_str);
 
