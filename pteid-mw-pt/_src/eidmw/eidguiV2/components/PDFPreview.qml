@@ -353,6 +353,7 @@ Rectangle {
                 }
                 Text {
                     id: sigCertifiedByText
+                    width: parent.width
                     font.pixelSize: propertySigFontSizeSmall
                     visible: false
                     font.family: myriad.name
@@ -364,6 +365,7 @@ Rectangle {
                 }
                 Text {
                     id: sigAttributesText
+                    width: parent.width
                     font.pixelSize: propertyCurrentAttrsFontSize
                     lineHeight: 0.8 // smaller line spacing to match real seal
                     visible: false
