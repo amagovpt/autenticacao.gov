@@ -257,7 +257,8 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
 
   POPPLER_API void prepareSignature(bool incremental, PDFRectangle *rect, const char * name, 
 		  const char *civil_number, const char *location,
-		  const char *reason, int page, int sector, bool isPTLanguage, bool isCCSignature, bool showDate);
+		  const char *reason, int page, int sector, bool isPTLanguage, 
+      bool isCCSignature, bool showDate, bool small_signature);
   POPPLER_API void addCustomSignatureImage(unsigned char *image_data, unsigned long image_length);
   POPPLER_API void addSCAPAttributes(const char *attributeSupplier, const char *attributeName);
   

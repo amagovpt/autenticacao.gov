@@ -271,7 +271,8 @@ fallback:
 
 #endif
 
-void Catalog::fillSignatureField(Object *signature_field, PDFRectangle *rect, int sig_sector, Ref *refFirstPage)
+void Catalog::fillSignatureField(Object *signature_field, PDFRectangle *rect, 
+    int sig_sector, Ref *refFirstPage, bool isSmallSignature)
 {
     Object obj1, obj2, obj3, obj4;
 
@@ -291,8 +292,7 @@ void Catalog::fillSignatureField(Object *signature_field, PDFRectangle *rect, in
     double r0 = 0, r1 = 0, r2 = 0, r3 = 0;
     if (rect && rect->isValid())
     {
-        //Check if signature height (y2 - y1) is less than 90 considering rounding errors
-        small_signature_format = (rect->y2 - rect->y1) - 90.0 < -0.00001;
+        small_signature_format = isSmallSignature;
 
         r0 = rect->x1;
         r1 = rect->y1;
@@ -403,7 +403,8 @@ void Catalog::addSigFieldToAcroForm(Ref *sig_ref, Ref *refFirstPage)
 //TODO: Too long, split this into 2 functions at least
 void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_info, Ref *firstPageRef,
 	       	const char *location, const char *reason, unsigned long filesize, int page, int sig_sector,
-		unsigned char *img_data, unsigned long img_length, bool isPTLanguage, bool isCCSignature, bool showDate)
+		      unsigned char *img_data, unsigned long img_length, bool isPTLanguage, bool isCCSignature, 
+          bool showDate, bool small_signature)
 {
 
 	Object signature_field;
@@ -467,7 +468,7 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 
     Ref *refFirstPage = firstPageRef != NULL ? firstPageRef : &(pageRefs[page - 1]);
     signature_field.initDict(xref);
-    fillSignatureField(&signature_field, rect, sig_sector, refFirstPage);
+    fillSignatureField(&signature_field, rect, sig_sector, refFirstPage, small_signature);
 	Object obj1, obj2, obj3, ref_to_dict;
 
 	Page *page_obj = getPage(page);

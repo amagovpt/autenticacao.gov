@@ -144,7 +144,8 @@ public:
 
   void prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_info, Ref *first_page_ref, const char *location,
 	                      const char *reason, unsigned long, int page, int sig_sector, 
-    unsigned char *img_data, unsigned long img_length, bool isPTLanguage, bool isCCSignature, bool showDate);
+                        unsigned char *img_data, unsigned long img_length, bool isPTLanguage, bool isCCSignature, 
+                        bool showDate, bool small_signature);
   
   Ref addFontDict(const char *basefont, const char *name);
   Ref addImageXObject(int width, int height, unsigned char *data, unsigned long length_in_bytes);
@@ -162,7 +163,8 @@ public:
   void closeSignature(const char *signature_contents, unsigned long len);
 
   /* Fill the following keys of the signature field dictionary: Type, SubType, FT, F, SigSector, Rect, T and P.*/
-  void fillSignatureField(Object *signatureFieldDict, PDFRectangle *rect, int sig_sector, Ref *refFirstPage);
+  void fillSignatureField(Object *signatureFieldDict, PDFRectangle *rect, int sig_sector, 
+      Ref *refFirstPage, bool isSmallSignature = false);
   void addSigFieldToAcroForm(Ref *sigFieldRef, Ref *refFirstPage);
 
   // Get a page.

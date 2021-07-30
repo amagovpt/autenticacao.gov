@@ -730,10 +730,10 @@ namespace eIDMW
 			}
 			nic = nic.substr(offset, nic_length);
 			doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, nic.c_str(),
-	                                 location, reason, m_page, m_sector, isLangPT, isCC(), showDate);
+	                                 location, reason, m_page, m_sector, isLangPT, isCC(), showDate, m_small_signature);
 		} else {
 			doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, NULL,
-	                                 location, reason, m_page, m_sector, isLangPT, isCC(), showDate);
+	                                 location, reason, m_page, m_sector, isLangPT, isCC(), showDate, m_small_signature);
 		}
 
         unsigned long len = doc->getSigByteArray(&to_sign, m_incrementalMode);
