@@ -374,8 +374,8 @@ PageServicesSignForm {
              updateWrappedName();
              updateSCAPInfoOnPreview();
 
-            var width = propertyPDFPreview.propertyDragSigRect.width / propertyPDFPreview.propertyPDFWidthScaleFactor * propertyPDFPreview.propertyConvertPtsToPixel
-            var height =propertyPDFPreview.propertyDragSigRect.height / propertyPDFPreview.propertyPDFWidthScaleFactor * propertyPDFPreview.propertyConvertPtsToPixel
+            var width = propertyPDFPreview.propertyDragSigRect.width / propertyPDFPreview.propertyPDFWidthScaleFactor / propertyPDFPreview.propertyConvertPtsToPixel
+            var height =propertyPDFPreview.propertyDragSigRect.height / propertyPDFPreview.propertyPDFWidthScaleFactor / propertyPDFPreview.propertyConvertPtsToPixel
 
             // The height of the small signature is half of the height of the current configured signature
             // So we have to double the height to small signature have the height of the preview

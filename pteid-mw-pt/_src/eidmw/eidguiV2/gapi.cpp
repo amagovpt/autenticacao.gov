@@ -2091,8 +2091,10 @@ QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
     // Document starts at page 0 in the poppler-qt5 API
     Poppler::Page *popplerPage = m_docs.at(m_filePath)->page(page - 1);
 
-    const double resX = 72.0;
-    const double resY = 72.0;
+    // This DPI resolution have the be the same
+    // used in qml property "propertyConvertPtsToPixel"
+    const double resX = 300.0;
+    const double resY = 300.0;
     if (popplerPage == NULL)
     {
         qDebug() << "Failed to get page object: " << page;

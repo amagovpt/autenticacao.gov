@@ -40,33 +40,34 @@ Rectangle {
     property alias propertyCoordX: dragTarget.coord_x
     property alias propertyCoordY: dragTarget.coord_y
 
-    // Properties used to convert to postscript points (1 px == 0.75 points for 72 DPI) 
-    // Signature have a static size
-    property real propertyConvertPtsToPixel:  0.75 // (px to points - Multiply by 0.75 for 72 DPI) (points to px -> Divide by 75 for 72 DPI) 
+    // Properties used to convert to postscript points
+    // The DPI resolution value (300) have to be same as used in gapi.cpp in method renderPDFPage (resX and resY)
+    property real propertyConvertPtsToPixel:  (1/72) * 300 // (300 DPI)
     
-    property real propertySigWidthDefault: 178 / propertyConvertPtsToPixel
-    property real propertySigWidthReducedDefault: 178 / propertyConvertPtsToPixel
-    property real propertySigHeightDefault: 90 / propertyConvertPtsToPixel
-    property real propertySigHeightReducedDefault: 45 / propertyConvertPtsToPixel
-    
-    property real propertySigWidthMin: 120 / propertyConvertPtsToPixel
-    property real propertySigHeightMin: 45 / propertyConvertPtsToPixel
-    
-    property real propertyPDFHeightScaleFactor: background_image.height 
-                                               / (propertyPdfOriginalHeight / propertyConvertPtsToPixel)
-    property real propertyPDFWidthScaleFactor: background_image.width 
-                                               / (propertyPdfOriginalWidth / propertyConvertPtsToPixel )
+    // Signature have a dynamic size
+
+
+    property real propertySigWidthDefault: 178 * propertyConvertPtsToPixel
+    property real propertySigWidthReducedDefault: 178 * propertyConvertPtsToPixel
+    property real propertySigHeightDefault: 90 * propertyConvertPtsToPixel
+    property real propertySigHeightReducedDefault: 45 * propertyConvertPtsToPixel
+
+    property real propertySigWidthMin: 120 * propertyConvertPtsToPixel
+    property real propertySigHeightMin: 45 * propertyConvertPtsToPixel
+
+    property real propertyPDFHeightScaleFactor: background_image.height / propertyPdfOriginalHeight
+    property real propertyPDFWidthScaleFactor: background_image.width / propertyPdfOriginalWidth
 
     // The files used in preview seal and draw seal are not the same so we have some differences.
     // From Catalog.cc: 
     // #define HEIGHT_WATER_MARK_IMG   32  // Round up 31.5
     // #define HEIGHT_SIGN_IMG         31.0      // Round up 30.87 (CC) or 31.00 (CMD)
-    property real propertyWaterMarkImgHeight:   31.5 / propertyConvertPtsToPixel
-    property real propertySignImgHeight:        30.87 / propertyConvertPtsToPixel
+    property real propertyWaterMarkImgHeight:   31.5 * propertyConvertPtsToPixel
+    property real propertySignImgHeight:        30.87 * propertyConvertPtsToPixel
 
-    property real propertySigFontSizeBig: 8 / propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
-    property real propertySigFontSizeSmall: 6 / propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
-    property real propertyCurrentAttrsFontSize: 8 / propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
+    property real propertySigFontSizeBig: 8 * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
+    property real propertySigFontSizeSmall: 6 * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
+    property real propertyCurrentAttrsFontSize: 8 * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
 
     //Properties to store Pdf original size
     property real propertyPdfOriginalWidth: 0
