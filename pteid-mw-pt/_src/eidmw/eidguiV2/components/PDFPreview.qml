@@ -168,6 +168,8 @@ Rectangle {
                     z:10
                     width: Constants.FOCUS_BORDER; height: parent.height
                     anchors.left: parent.right
+                    clip: false
+
                     MouseArea {
                         id: mouseRegioncontainerMouseMovCalcRight
                         anchors.fill: parent
@@ -205,6 +207,8 @@ Rectangle {
                     z:10
                     width: parent.width ; height: Constants.FOCUS_BORDER
                     anchors.top: dragSigRect.bottom
+                    clip: false 
+
                     MouseArea {
                         id: mouseRegioncontainerMouseMovCalcBottom
                         anchors.fill: parent
@@ -243,139 +247,147 @@ Rectangle {
                     }
                 }
 
-                Image {
-                    id: dragSigWaterImage
-                    height: propertyWaterMarkImgHeight * propertyPDFHeightScaleFactor
-                    fillMode: Image.PreserveAspectFit
-                    anchors.top: parent.top
-                    anchors.topMargin: dragSigImage.visible ? (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2 : (parent.height - dragSigWaterImage.height) / 2
-                    x: 1
-                }
-                Image {
-                    id: dragSigImage
-                    height: propertyReducedChecked ? 0 : propertySignImgHeight * propertyPDFHeightScaleFactor
-                    fillMode: Image.PreserveAspectFit
-                    anchors.top: dragSigWaterImage.bottom
-                    anchors.topMargin: (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2
-                    cache: false
-                    visible: false
-                    x: 1
-                    Rectangle {
-                        color: "white"
-                        height: parent.height
-                        width: parent.width
-                        anchors.fill: parent
-                        z: parent.z - 1 
+                Item {
+                    id: clippableArea
+                    height: parent.height; width: parent.width
+                    anchors.fill: parent
+                    clip: true
+
+                    Image {
+                        id: dragSigWaterImage
+                        height: propertyWaterMarkImgHeight * propertyPDFHeightScaleFactor
+                        fillMode: Image.PreserveAspectFit
+                        anchors.top: parent.top
+                        anchors.topMargin: dragSigImage.visible ? (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2 : (parent.height - dragSigWaterImage.height) / 2
+                        x: 1
                     }
-                }
 
-                Text {
-                    id: sigReasonText
-                    font.pixelSize: propertySigFontSizeBig
-                    font.italic: true
-                    height: sigReasonText.contentWidth == 0
-                            ? 0
-                            : (sigReasonText.lineCount > 1
-                               ? 2 * font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
-                               : font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE)
-                    width: parent.width - 4
-                    clip: true
-                    font.family: myriad.name
-                    color: Constants.COLOR_TEXT_LABEL
-                    text: ""
-                    anchors.top: dragSigRect.top
-                    anchors.topMargin: 2
-                    x: 2
-                    wrapMode: Text.Wrap 
-                }
+                    Image {
+                        id: dragSigImage
+                        height: propertyReducedChecked ? 0 : propertySignImgHeight * propertyPDFHeightScaleFactor
+                        fillMode: Image.PreserveAspectFit
+                        anchors.top: dragSigWaterImage.bottom
+                        anchors.topMargin: (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2
+                        cache: false
+                        visible: false
+                        x: 1
+                        Rectangle {
+                            color: "white"
+                            height: parent.height
+                            width: parent.width
+                            anchors.fill: parent
+                            z: parent.z - 1 
+                        }
+                    }
 
-                Text {
-                    id: sigSignedByText
-                    font.pixelSize: propertySigFontSizeBig
-                    height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
-                    font.family: myriad.name
-                    color: Constants.COLOR_TEXT_BODY
-                    anchors.top: propertyReducedChecked ? parent.top : sigReasonText.bottom
-                    anchors.topMargin: propertyReducedChecked ? 2 : 0
-                    clip: true
-                    text: ""
-                    x: 2
-                }
-                Text {
-                    id: sigSignedByNameText
-                    font.pixelSize: propertySigFontSizeBig
-                    font.family: myriad.name
-                    font.bold: true
-                    width: parent.width
-                    color: Constants.COLOR_TEXT_BODY
-                    anchors.top: propertyReducedChecked ? parent.top : sigReasonText.bottom 
-                    anchors.topMargin: propertyReducedChecked ? 2 : 0
-                    anchors.left: sigSignedByText.right
-                    clip: true
-                    text: ""
-                    x: 2
-                }
-                Text {
-                    id: sigNumIdText
-                    font.pixelSize: !sigCertifiedByText.visible ? propertySigFontSizeBig : propertySigFontSizeSmall
-                    height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
-                    width: parent.width - 4
-                    clip: true
-                    font.family: myriad.name
-                    color: Constants.COLOR_TEXT_BODY
-                    anchors.top: sigSignedByNameText.bottom
-                    text: ""
-                    x: 2
-                }
-                Text {
-                    id: sigDateText
-                    font.pixelSize: !sigCertifiedByText.visible ? propertySigFontSizeBig : propertySigFontSizeSmall
-                    height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
-                    width: parent.width - 4
-                    clip: true
-                    font.family: myriad.name
-                    color: Constants.COLOR_TEXT_BODY
-                    anchors.top: sigNumIdText.visible ? sigNumIdText.bottom : sigSignedByNameText.bottom
-                    text: qsTranslate("PageServicesSign", "STR_SIGN_DATE") + ": " + getData()
-                    x: 2
-                }
-                Text {
-                    id: sigLocationText
-                    font.pixelSize: !sigCertifiedByText.visible ? propertySigFontSizeBig : propertySigFontSizeSmall
-                    height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
-                    width: parent.width - 4
-                    clip: true
-                    font.family: myriad.name
-                    color: Constants.COLOR_TEXT_BODY
-                    anchors.top: sigDateText.visible ? sigDateText.bottom : sigNumIdText.visible ? sigNumIdText.bottom : sigSignedByNameText.bottom
-                    text: ""
-                    x: 2
-                }
-                Text {
-                    id: sigCertifiedByText
-                    width: parent.width
-                    font.pixelSize: propertySigFontSizeSmall
-                    visible: false
-                    font.family: myriad.name
-                    color: Constants.COLOR_TEXT_BODY
-                    anchors.top: sigLocationText.text != "" ? sigLocationText.bottom : sigDateText.visible ? sigDateText.bottom : sigNumIdText.visible ? sigNumIdText.bottom : sigSignedByNameText.bottom
-                    clip: true
-                    text: qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_BY")
-                    x: 2
-                }
-                Text {
-                    id: sigAttributesText
-                    width: parent.width
-                    font.pixelSize: propertyCurrentAttrsFontSize
-                    lineHeight: 0.8 // smaller line spacing to match real seal
-                    visible: false
-                    font.family: myriad.name
-                    color: Constants.COLOR_TEXT_BODY
-                    anchors.top: sigCertifiedByText.bottom
-                    anchors.bottom: parent.bottom
-                    clip: true
-                    text: qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_ATTRIBUTES")
-                    x: 2
+                    Text {
+                        id: sigReasonText
+                        font.pixelSize: propertySigFontSizeBig
+                        font.italic: true
+                        height: sigReasonText.contentWidth == 0
+                                ? 0
+                                : (sigReasonText.lineCount > 1
+                                ? 2 * font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                                : font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE)
+                        width: parent.width - 4
+                        clip: true
+                        font.family: myriad.name
+                        color: Constants.COLOR_TEXT_LABEL
+                        text: ""
+                        anchors.top: parent.top
+                        anchors.topMargin: 2
+                        x: 2
+                        wrapMode: Text.Wrap 
+                    }
+
+                    Text {
+                        id: sigSignedByText
+                        font.pixelSize: propertySigFontSizeBig
+                        height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                        font.family: myriad.name
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: propertyReducedChecked ? parent.top : sigReasonText.bottom
+                        anchors.topMargin: propertyReducedChecked ? 2 : 0
+                        clip: true
+                        text: ""
+                        x: 2
+                    }
+                    Text {
+                        id: sigSignedByNameText
+                        font.pixelSize: propertySigFontSizeBig
+                        font.family: myriad.name
+                        font.bold: true
+                        width: parent.width
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: propertyReducedChecked ? parent.top : sigReasonText.bottom 
+                        anchors.topMargin: propertyReducedChecked ? 2 : 0
+                        anchors.left: sigSignedByText.right
+                        clip: true
+                        text: ""
+                        x: 2
+                    }
+                    Text {
+                        id: sigNumIdText
+                        font.pixelSize: !sigCertifiedByText.visible ? propertySigFontSizeBig : propertySigFontSizeSmall
+                        height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                        width: parent.width - 4
+                        clip: true
+                        font.family: myriad.name
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigSignedByNameText.bottom
+                        text: ""
+                        x: 2
+                    }
+                    Text {
+                        id: sigDateText
+                        font.pixelSize: !sigCertifiedByText.visible ? propertySigFontSizeBig : propertySigFontSizeSmall
+                        height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                        width: parent.width - 4
+                        clip: true
+                        font.family: myriad.name
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigNumIdText.visible ? sigNumIdText.bottom : sigSignedByNameText.bottom
+                        text: qsTranslate("PageServicesSign", "STR_SIGN_DATE") + ": " + getData()
+                        x: 2
+                    }
+                    Text {
+                        id: sigLocationText
+                        font.pixelSize: !sigCertifiedByText.visible ? propertySigFontSizeBig : propertySigFontSizeSmall
+                        height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
+                        width: parent.width - 4
+                        clip: true
+                        font.family: myriad.name
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigDateText.visible ? sigDateText.bottom : sigNumIdText.visible ? sigNumIdText.bottom : sigSignedByNameText.bottom
+                        text: ""
+                        x: 2
+                    }
+                    Text {
+                        id: sigCertifiedByText
+                        width: parent.width
+                        font.pixelSize: propertySigFontSizeSmall
+                        visible: false
+                        font.family: myriad.name
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigLocationText.text != "" ? sigLocationText.bottom : sigDateText.visible ? sigDateText.bottom : sigNumIdText.visible ? sigNumIdText.bottom : sigSignedByNameText.bottom
+                        clip: true
+                        text: qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_BY")
+                        x: 2
+                    }
+                    Text {
+                        id: sigAttributesText
+                        width: parent.width
+                        font.pixelSize: propertyCurrentAttrsFontSize
+                        lineHeight: 0.8 // smaller line spacing to match real seal
+                        visible: false
+                        font.family: myriad.name
+                        color: Constants.COLOR_TEXT_BODY
+                        anchors.top: sigCertifiedByText.bottom
+                        anchors.bottom: parent.bottom
+                        clip: true
+                        text: qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_ATTRIBUTES")
+                        x: 2
+                    }
                 }
 
                 MouseArea {
