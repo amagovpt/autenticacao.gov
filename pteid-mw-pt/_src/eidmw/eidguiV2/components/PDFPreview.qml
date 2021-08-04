@@ -423,10 +423,10 @@ Rectangle {
                         propertySigLineHeight = propertyDragSigRect.height * 0.1
                     }
                     propertyPDFHeightScaleFactor = background_image.height / propertyPdfOriginalHeight
-                    propertyPDFWidthScaleFactor =  background_image.width / propertyPdfOriginalWidth
                     pdfPreview.updateSealData();
                 }
                 onWidthChanged: {
+                    propertyPDFWidthScaleFactor =  background_image.width / propertyPdfOriginalWidth
                     pdfPreview.updateSealData();
                 }
             }

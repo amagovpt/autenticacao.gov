@@ -294,7 +294,7 @@ PageServicesSignForm {
             }
 
             propertyPDFPreview.propertyDragSigDateText.visible = gapi.getUseDate()
-
+            
             propertyBusyIndicatorRunning = false
             propertyButtonAdd.forceActiveFocus()
             cardLoaded = true
@@ -375,7 +375,7 @@ PageServicesSignForm {
              updateSCAPInfoOnPreview();
 
             var width = propertyPDFPreview.propertyDragSigRect.width / propertyPDFPreview.propertyPDFWidthScaleFactor / propertyPDFPreview.propertyConvertPtsToPixel
-            var height =propertyPDFPreview.propertyDragSigRect.height / propertyPDFPreview.propertyPDFWidthScaleFactor / propertyPDFPreview.propertyConvertPtsToPixel
+            var height = propertyPDFPreview.propertyDragSigRect.height / propertyPDFPreview.propertyPDFHeightScaleFactor / propertyPDFPreview.propertyConvertPtsToPixel
 
             // The height of the small signature is half of the height of the current configured signature
             // So we have to double the height to small signature have the height of the preview
@@ -894,7 +894,7 @@ PageServicesSignForm {
                 propertyPDFPreview.propertyDragSigRect.height =
                     propertyPDFPreview.propertySigHeightReducedDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
                 propertyPDFPreview.propertyDragSigRect.width =
-                    propertyPDFPreview.propertySigWidthReducedDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
+                    propertyPDFPreview.propertySigWidthReducedDefault * propertyPDFPreview.propertyPDFWidthScaleFactor
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.2
                 propertyPDFPreview.propertyDragSigReasonText.visible = false
                 propertyPDFPreview.propertyDragSigLocationText.visible = false
@@ -904,7 +904,7 @@ PageServicesSignForm {
                 propertyPDFPreview.propertyDragSigRect.height =
                     propertyPDFPreview.propertySigHeightDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
                 propertyPDFPreview.propertyDragSigRect.width =
-                    propertyPDFPreview.propertySigWidthDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
+                    propertyPDFPreview.propertySigWidthDefault * propertyPDFPreview.propertyPDFWidthScaleFactor
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.1
                 propertyPDFPreview.propertyDragSigReasonText.visible = true
                 propertyPDFPreview.propertyDragSigLocationText.visible = true
@@ -1541,7 +1541,7 @@ PageServicesSignForm {
             propertyPDFPreview.propertyDragSigNumIdText.visible = false
         }
         propertyPDFPreview.propertyDragSigDateText.visible = gapi.getUseDate()
-
+        
         signCertExpired = false
         gapi.startGettingInfoFromSignCert();
         gapi.startCheckSignatureCertValidity();
