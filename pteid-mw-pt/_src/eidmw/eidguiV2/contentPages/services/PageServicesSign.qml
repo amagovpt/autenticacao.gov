@@ -891,10 +891,12 @@ PageServicesSignForm {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSignReduced = propertyCheckSignReduced.checked
             if(propertyCheckSignReduced.checked){
-                propertyPDFPreview.propertyDragSigRect.height =
-                    propertyPDFPreview.propertySigHeightReducedDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
-                propertyPDFPreview.propertyDragSigRect.width =
-                    propertyPDFPreview.propertySigWidthReducedDefault * propertyPDFPreview.propertyPDFWidthScaleFactor
+                if (propertyPDFPreview.propertyPDFHeightScaleFactor > 0) {
+                    propertyPDFPreview.propertyDragSigRect.height =
+                        propertyPDFPreview.propertySigHeightReducedDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
+                    propertyPDFPreview.propertyDragSigRect.width =
+                        propertyPDFPreview.propertySigWidthReducedDefault * propertyPDFPreview.propertyPDFWidthScaleFactor
+                }
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.2
                 propertyPDFPreview.propertyDragSigReasonText.visible = false
                 propertyPDFPreview.propertyDragSigLocationText.visible = false

@@ -158,8 +158,8 @@ Rectangle {
             }
             Item {
                 id: dragSigRect
-                width: propertySigWidthDefault * propertyPDFWidthScaleFactor
-                height: propertySigHeightDefault * propertyPDFHeightScaleFactor
+                width: propertyReducedChecked ? propertySigWidthReducedDefault * propertyPDFWidthScaleFactor : propertySigWidthDefault * propertyPDFWidthScaleFactor
+                height: propertyReducedChecked ? propertySigHeightReducedDefault * propertyPDFHeightScaleFactor : propertySigHeightDefault * propertyPDFHeightScaleFactor
 
                 Drag.active: dragArea.drag.active
                 opacity: background_image.status == Image.Ready ? 1.0 : 0.0
