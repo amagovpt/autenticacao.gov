@@ -283,7 +283,7 @@ Rectangle {
 
                     Text {
                         id: sigReasonText
-                        font.pixelSize: propertySigFontSizeBig
+                        font.pixelSize: getFontSize() * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
                         font.italic: true
                         height: sigReasonText.contentWidth == 0
                                 ? 0
@@ -303,7 +303,7 @@ Rectangle {
 
                     Text {
                         id: sigSignedByText
-                        font.pixelSize: propertySigFontSizeBig
+                        font.pixelSize: getFontSize() * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
                         height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                         font.family: myriad.name
                         color: Constants.COLOR_TEXT_BODY
@@ -315,7 +315,7 @@ Rectangle {
                     }
                     Text {
                         id: sigSignedByNameText
-                        font.pixelSize: propertySigFontSizeBig
+                        font.pixelSize: getFontSize() * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
                         font.family: myriad.name
                         font.bold: true
                         width: parent.width
@@ -329,7 +329,7 @@ Rectangle {
                     }
                     Text {
                         id: sigNumIdText
-                        font.pixelSize: !sigCertifiedByText.visible ? propertySigFontSizeBig : propertySigFontSizeSmall
+                        font.pixelSize: getFontSize() * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
                         height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                         width: parent.width - 4
                         clip: true
@@ -341,7 +341,7 @@ Rectangle {
                     }
                     Text {
                         id: sigDateText
-                        font.pixelSize: !sigCertifiedByText.visible ? propertySigFontSizeBig : propertySigFontSizeSmall
+                        font.pixelSize: getFontSize() * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
                         height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                         width: parent.width - 4
                         clip: true
@@ -353,7 +353,7 @@ Rectangle {
                     }
                     Text {
                         id: sigLocationText
-                        font.pixelSize: !sigCertifiedByText.visible ? propertySigFontSizeBig : propertySigFontSizeSmall
+                        font.pixelSize: getFontSize() * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
                         height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                         width: parent.width - 4
                         clip: true
@@ -366,7 +366,7 @@ Rectangle {
                     Text {
                         id: sigCertifiedByText
                         width: parent.width
-                        font.pixelSize: propertySigFontSizeSmall
+                        font.pixelSize: getFontSize() * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
                         visible: false
                         font.family: myriad.name
                         color: Constants.COLOR_TEXT_BODY
@@ -378,7 +378,7 @@ Rectangle {
                     Text {
                         id: sigAttributesText
                         width: parent.width
-                        font.pixelSize: propertyCurrentAttrsFontSize
+                        font.pixelSize: getFontSize() * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
                         lineHeight: 0.8 // smaller line spacing to match real seal
                         visible: false
                         font.family: myriad.name

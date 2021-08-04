@@ -1926,4 +1926,21 @@ PageServicesSignForm {
         }
 
     }
+
+    function getFontSize() {       
+         
+        var reason = propertyTextFieldReason.text
+        var name = propertyPDFPreview.propertyDragSigSignedByNameText.text //maybe add propertyDragSigSignedByText
+        var nic = propertyPDFPreview.propertyDragSigNumIdText.text
+        var date = propertyPDFPreview.propertyDragSigDateText.text
+        var location = propertyTextFieldLocal.text
+        var isReduced = propertyCheckSignReduced.checked
+        var width = propertyPDFPreview.propertyDragSigRect.width / propertyPDFPreview.propertyPDFWidthScaleFactor / propertyPDFPreview.propertyConvertPtsToPixel
+        var height = propertyPDFPreview.propertyDragSigRect.height / propertyPDFPreview.propertyPDFHeightScaleFactor / propertyPDFPreview.propertyConvertPtsToPixel
+
+        console.log("getFontSize(" + isReduced + " , " + reason + " , " + name + " , " + nic + " , " + date + " , " + location + " , " + width + " , " + height + ")")
+
+        //return gapi.getFontSize(isReduced, reason, name, nic, date, location, width, height)
+        return 8
+    }
 }
