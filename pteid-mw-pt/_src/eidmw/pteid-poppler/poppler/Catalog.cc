@@ -918,15 +918,10 @@ std::string Catalog::get_commands_template(int rect_y, unsigned char *img_data){
 
   std::string commands_template;
   bool show_im0 = true;
-  int water_mark_pos_y = 0;
+  int water_mark_pos_y = rect_y - HEIGHT_WATER_MARK_IMG;
 
-  int img_margins = (rect_y - HEIGHT_WATER_MARK_IMG - HEIGHT_SIGN_IMG) / 2; 
-  if  (img_margins < 0) {
-    img_margins = 0;
+  if  (rect_y - HEIGHT_WATER_MARK_IMG - HEIGHT_SIGN_IMG < 0) {
     show_im0 = false;
-    water_mark_pos_y =  rect_y - HEIGHT_WATER_MARK_IMG - DEFAULT_IMG_MARGINS;
-  } else {
-    water_mark_pos_y = rect_y - HEIGHT_WATER_MARK_IMG - img_margins;
   }
 
   std::string sign_img = "";
@@ -941,9 +936,10 @@ std::string Catalog::get_commands_template(int rect_y, unsigned char *img_data){
           + (show_im0 ? sign_img : "")
           + "q 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
   
-  	//Small signature formats only includes one image: Im1
+  // Small signature formats only includes one image: Im1
+  // water_mark_pos_y = 45 - HEIGHT_WATER_MARK_IMG = 13  
 	if (small_signature_format)
-		commands_template = "q\r\n40.5 0 0 31.5 0 0 cm\r\n/Im1 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
+		commands_template = "q\r\n40.5 0 0 31.5 0 13 cm\r\n/Im1 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
   else
     commands_template = commands_template_sign_img;
 

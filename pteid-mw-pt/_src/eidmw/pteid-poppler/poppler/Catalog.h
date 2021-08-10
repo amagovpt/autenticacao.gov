@@ -53,7 +53,7 @@
 
 #define HEIGHT_WATER_MARK_IMG   32        // Round up 31.5
 #define HEIGHT_SIGN_IMG         31.0      // Round up 30.87 (CC). 31.00 (CMD)
-#define DEFAULT_IMG_MARGINS     15
+
 #include <vector>
 
 class PDFDoc;

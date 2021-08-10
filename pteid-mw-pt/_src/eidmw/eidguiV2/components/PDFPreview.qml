@@ -259,7 +259,7 @@ Rectangle {
                         height: propertyWaterMarkImgHeight * propertyPDFHeightScaleFactor
                         fillMode: Image.PreserveAspectFit
                         anchors.top: parent.top
-                        anchors.topMargin: dragSigImage.visible ? (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2 : (parent.height - dragSigWaterImage.height) / 2
+                        anchors.topMargin: 0
                         x: 1
                     }
 
@@ -268,7 +268,7 @@ Rectangle {
                         height: propertyReducedChecked ? 0 : propertySignImgHeight * propertyPDFHeightScaleFactor
                         fillMode: Image.PreserveAspectFit
                         anchors.top: dragSigWaterImage.bottom
-                        anchors.topMargin: (parent.height - dragSigWaterImage.height - dragSigImage.height) / 2
+                        anchors.topMargin: parent.height - dragSigWaterImage.height - dragSigImage.height
                         cache: false
                         visible: false
                         x: 1
