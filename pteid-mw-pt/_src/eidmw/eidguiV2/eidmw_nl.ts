@@ -1259,7 +1259,7 @@
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_BY</source>
-        <translation>Assinado por</translation>
+        <translation>Assinado por:</translation>
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_LOCATION</source>

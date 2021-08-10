@@ -496,7 +496,7 @@
     </message>
     <message>
         <source>STR_SIGNED_BY</source>
-        <translation>Signed by: </translation>
+        <translation>Signed by : </translation>
     </message>
     <message>
         <source>STR_CERTIFIED_BY</source>
