@@ -25,10 +25,9 @@ PageServicesSignForm {
 
     property bool isAnimationFinished: mainFormID.propertyPageLoader.propertyAnimationExtendedFinished
     property string propertyOutputSignedFile : ""
-    property int propertyLinesName : 0
-    property int propertyLinesReason : 0
-    property int propertyLinesLocation : 0
     property string ownerNameBackup: ""
+    property string ownerAttrBackup: ""
+    property string ownerEntitiesBackup: ""
 
     ToolTip {
         property var maxWidth: 500
@@ -371,8 +370,6 @@ PageServicesSignForm {
     Connections {
         target: propertyPDFPreview
         onUpdateSealData: {
-             updateWrappedName();
-             updateSCAPInfoOnPreview();
 
             var width = propertyPDFPreview.propertyDragSigRect.width / propertyPDFPreview.propertyPDFWidthScaleFactor / propertyPDFPreview.propertyConvertPtsToPixel
             var height = propertyPDFPreview.propertyDragSigRect.height / propertyPDFPreview.propertyPDFHeightScaleFactor / propertyPDFPreview.propertyConvertPtsToPixel
@@ -382,6 +379,12 @@ PageServicesSignForm {
             height = propertyCheckSignReduced.checked ? 2 * height : height
 
             gapi.resizePDFSignSeal(parseInt(width),parseInt(height))
+
+            getFontSize()
+
+            updateWrappedName();
+            updateWrappedLocation(propertyTextFieldLocal.text);
+            updateSCAPInfoOnPreview();
         }
     }
     Components.DialogCMD{
@@ -872,18 +875,13 @@ PageServicesSignForm {
         onTextChanged: {
             propertyPDFPreview.propertyDragSigReasonText.text = propertyTextFieldReason.text
             propertyPageLoader.propertyBackupReason = propertyTextFieldReason.text
-
-            // reason can take up to 2 lines, but here we have no knowledge of how many it takes...
-            // leaving zero or one lines for now
-            propertyLinesReason = propertyTextFieldReason.text == "" ? 0 : 1
         }
     }
     propertyTextFieldLocal{
         onTextChanged: {
-            propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text === "" ? "" :
-                qsTranslate("PageServicesSign", "STR_SIGN_LOCATION") + ": " + propertyTextFieldLocal.text
+            updateWrappedLocation(propertyTextFieldLocal.text);
+
             propertyPageLoader.propertyBackupLocal = propertyTextFieldLocal.text
-            propertyLinesLocation = propertyTextFieldLocal.text == "" ? 0 : 1
         }
     }
 
@@ -1873,11 +1871,18 @@ PageServicesSignForm {
     }
     function updateWrappedName(){
         var isSCAP = (propertySwitchAddAttributes.checked && numberOfAttributesSelected() != 0);
-        var wrappedName = gapi.getWrappedOwnerName(ownerNameBackup, isSCAP)
-        propertyLinesName = wrappedName.length
-
+        
+        var wrappedName = gapi.getWrappedText(ownerNameBackup, 
+            isSCAP ? Constants.NAME_SCAP_MAX_LINES : Constants.NAME_MAX_LINES, Constants.SEAL_NAME_OFFSET)
         propertyPDFPreview.propertyDragSigSignedByNameText.text =
-            qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + ":  " + wrappedName.join("<br>");
+            qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + " " + wrappedName.join("<br>");            
+    }
+
+    function updateWrappedLocation(text){
+        var wrappedName = gapi.getWrappedText(text, Constants.LOCATION_MAX_LINES, Constants.SEAL_LOCATION_OFFSET)
+
+        propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text === "" ? "" :
+            qsTranslate("PageServicesSign", "STR_SIGN_LOCATION") + ": " + wrappedName.join("<br>");
     }
     function getMaxFlickVelocity(){
         // use visible area of flickable object to calculate
@@ -1913,14 +1918,22 @@ PageServicesSignForm {
             qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_ATTRIBUTES")
 
         if (attrList != []) {
-            var wrappedAttr = gapi.getWrappedSCAPAttributes(attrList, propertyLinesReason,
-                                                            propertyLinesName, propertyLinesLocation)
-            var entities = wrappedAttr[0].join("<br>")
-            var attributes = wrappedAttr[1].join("<br>")
-            var fontSize = wrappedAttr[2];
+            var wrappedAttr = gapi.getSCAPAttributesText(attrList)
 
-            propertyPDFPreview.propertyDragSigCertifiedByText.text += " " + entities
-            propertyPDFPreview.propertyDragSigAttributesText.text += " " + attributes
+            var entitiesText = wrappedAttr[0]
+            var attributesText = wrappedAttr[1]
+
+            ownerEntitiesBackup = entitiesText
+            ownerAttrBackup = attributesText
+
+            getFontSize()
+
+            var entities = gapi.getWrappedText(entitiesText, Constants.PROVIDER_SCAP_MAX_LINES, Constants.SEAL_PROVIDER_NAME_OFFSET)
+            var attributes = gapi.getWrappedText(attributesText, Constants.ATTR_SCAP_MAX_LINES, Constants.SEAL_ATTR_NAME_OFFSET)
+            var fontSize = wrappedAttr[2]
+
+            propertyPDFPreview.propertyDragSigCertifiedByText.text += " " + entities.join("<br>");
+            propertyPDFPreview.propertyDragSigAttributesText.text += " " + attributes.join("<br>");
             propertyPDFPreview.propertyCurrentAttrsFontSize = fontSize
 
         }
@@ -1930,17 +1943,24 @@ PageServicesSignForm {
     function getFontSize() {       
          
         var reason = propertyTextFieldReason.text
-        var name = propertyPDFPreview.propertyDragSigSignedByNameText.text //maybe add propertyDragSigSignedByText
-        var nic = propertyPDFPreview.propertyDragSigNumIdText.text
-        var date = propertyPDFPreview.propertyDragSigDateText.text
+        var name = ownerNameBackup
+        var nic = gapi.getUseNumId()
+        var date = gapi.getUseDate()
         var location = propertyTextFieldLocal.text
+        var entities = ownerEntitiesBackup
+        var attributes = ownerAttrBackup
         var isReduced = propertyCheckSignReduced.checked
         var width = propertyPDFPreview.propertyDragSigRect.width / propertyPDFPreview.propertyPDFWidthScaleFactor / propertyPDFPreview.propertyConvertPtsToPixel
         var height = propertyPDFPreview.propertyDragSigRect.height / propertyPDFPreview.propertyPDFHeightScaleFactor / propertyPDFPreview.propertyConvertPtsToPixel
 
-        console.log("getFontSize(" + isReduced + " , " + reason + " , " + name + " , " + nic + " , " + date + " , " + location + " , " + width + " , " + height + ")")
+        console.log("getFontSize(" + isReduced + " , " + reason + " , " + name + " , " + nic + " , " + date + " , " + location 
+                + " , " + entities + " , " + attributes + " , " + width + " , " + height + ")")
 
-        //return gapi.getFontSize(isReduced, reason, name, nic, date, location, width, height)
-        return 8
+        propertyPDFPreview.propertyFontSize = 
+                gapi.getSealFontSize(isReduced, reason, name, nic, date, location, 
+                entities, attributes, width, height)
+
+        propertyPDFPreview.propertyFontMargin = 
+                propertyPDFPreview.propertyFontSize  > 5 ? 1 : 0  
     }
 }

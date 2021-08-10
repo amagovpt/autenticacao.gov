@@ -54,6 +54,20 @@
 #define HEIGHT_WATER_MARK_IMG   32        // Round up 31.5
 #define HEIGHT_SIGN_IMG         31.0      // Round up 30.87 (CC). 31.00 (CMD)
 
+#define SEAL_NAME_OFFSET            6
+#define SEAL_LOCATION_OFFSET        5.5
+#define SEAL_PROVIDER_NAME_OFFSET   6.5
+#define SEAL_ATTR_NAME_OFFSET       9.5
+
+#define NAME_MAX_LINES              5
+#define NAME_REDUCED_MAX_LINES      4
+#define REASON_MAX_LINES            2
+#define LOCATION_MAX_LINES          2
+
+#define NAME_SCAP_MAX_LINES         2
+#define PROVIDER_SCAP_MAX_LINES     2
+#define ATTR_SCAP_MAX_LINES         10   
+
 #include <vector>
 
 class PDFDoc;

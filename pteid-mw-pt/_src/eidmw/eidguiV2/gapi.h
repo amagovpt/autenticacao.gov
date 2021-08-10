@@ -442,9 +442,11 @@ public slots:
     bool fileExists(QString path);
     QList<QString> getFilesFromDirectory(QString path);
 
-    QStringList getWrappedOwnerName(QString name, bool isSCAPSignature);
-    QVariantList getWrappedSCAPAttributes(QVariantList attr_list, unsigned int linesReason,
-        unsigned int linesName, unsigned int linesLocation);
+    QStringList getWrappedText(QString name, int maxlines, int offset);
+    QVariantList getSCAPAttributesText(QVariantList attr_list);
+    int getSealFontSize(bool isReduced, QString reason, QString name, 
+        bool nic, bool date, QString location, QString entities, QString attributes,
+        unsigned int width, unsigned int height);
 
 signals:
     // Signal from GAPI to Gui
@@ -603,6 +605,7 @@ private:
 
     int m_seal_width = 178;
     int m_seal_height = 90;
+    int m_font_size = 8;
 
 protected:
     QTranslator m_translator;

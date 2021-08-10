@@ -2,6 +2,7 @@
 
  * Copyright (C) 2012 Rui Martinho - <rui.martinho@ama.pt>
  * Copyright (C) 2012 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 
@@ -176,5 +177,102 @@ WrapParams calculateWrapParams(const std::string& text, const std::string& label
     return p;
 }
 
+FontParams calculateFontParams(bool small_signature_format, const std::string& reason, const std::string& name,
+        bool haveNic, bool haveDate, const std::string& location, const std::string& entities, 
+        const std::string& attributes,
+        int rect_width, int rect_height)
+{
+    unsigned int max_font_size = 8;
+    unsigned int min_font_size = 2;
+
+    unsigned int line_height;
+    unsigned int font_size;
+
+    std::vector<std::string> wrapped;
+
+    printf("Calculate FontParams w=%d h=%d\n", rect_width, rect_height);
+
+    for (unsigned int i = max_font_size; i >= min_font_size; --i) {
+        int countReason = 0;
+        int countEntities = 0;
+        int countAttributes = 0;
+        int countLocation = 0;
+        int linesFit = 0;
+        int linesCount = 0;
+        font_size = i;
+        line_height = font_size > 5 ? font_size + 1 : font_size;
+
+        // The first line have 1 px top margin
+        linesFit = ( rect_height - 1 ) / line_height ;
+
+        if (!small_signature_format && reason != "")
+        {
+          std::vector<std::string> wrappedReason;
+          wrappedReason = wrapString(reason, rect_width, font_size, MYRIAD_ITALIC, 2);
+          countReason = wrappedReason.size();
+          /*for (std::string s: wrappedReason){
+            printf("**** wrappedReason **** %s\n", s.c_str());
+          }*/
+          linesCount +=  countReason;
+        }
+
+        std::vector<std::string> wrappedName;
+        double first_line_offset = 6 * font_size;
+        wrappedName = wrapString(name, rect_width, font_size, MYRIAD_BOLD, 5, first_line_offset);
+        int countName = wrappedName.size();
+        /*for (std::string s: wrappedName){
+          printf("**** wrappedName **** %s\n", s.c_str());
+        }*/
+
+        linesCount += countName;
+        linesCount += haveNic ? 1 : 0;
+        linesCount += haveDate ? 1 : 0;
+
+        if (!small_signature_format && location != "")
+        {
+          std::vector<std::string> wrappedLocation;
+          wrappedLocation = wrapString(location, rect_width, font_size, MYRIAD_ITALIC, 2);
+          countLocation = wrappedLocation.size();
+          /*for (std::string s: wrappedLocation){
+            printf("**** wrappedLocation **** %s\n", s.c_str());
+          }*/
+          linesCount +=  countLocation;
+        }
+
+        if (!small_signature_format && entities != "")
+        {
+          std::vector<std::string> wrappedEntities;
+          wrappedEntities = wrapString(entities, rect_width, font_size, MYRIAD_ITALIC, 2);
+          countEntities = wrappedEntities.size();
+          /*for (std::string s: wrappedEntities){
+            printf("**** wrappedEntities **** %s\n", s.c_str());
+          }*/
+          linesCount +=  countEntities;
+        }
+
+        if (!small_signature_format && attributes != "")
+        {
+          std::vector<std::string> wrappedAttributes;
+          wrappedAttributes = wrapString(attributes, rect_width, font_size, MYRIAD_ITALIC, 10);
+          countAttributes = wrappedAttributes.size();
+          /*for (std::string s: wrappedAttributes){
+            printf("**** wrappedAttributes **** %s\n", s.c_str());
+          }*/
+          linesCount +=  countAttributes;
+        }
+
+        if (linesFit >= linesCount){
+            printf("break i = %d countReason=%d countName=%d countEntities=%d countAttributes=%d countLocation=%d\n", 
+              i, countReason, countName, countEntities, countAttributes,countLocation );
+            break;
+        }
+    }
+
+    FontParams p;
+    p.font_size = font_size;
+    p.line_height = line_height;
+
+    return p;
+}
 
 } /* namespace eIDMW */
