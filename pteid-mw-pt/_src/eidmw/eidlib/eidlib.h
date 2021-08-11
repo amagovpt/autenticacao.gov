@@ -811,6 +811,13 @@ class PTEID_PDFSignature
 		 **/
 		PTEIDSDK_API char *getOccupiedSectors(int page);
 		PTEIDSDK_API void setCustomImage(unsigned char *image_data, unsigned long image_length);
+		/**
+	     * Use this method to change the size of the visible signature (Minimum size: 120x35 px)
+		 * Visible signature never will be smaller than page
+		 * Except if the page is smaller then minimum size
+		 * @param width - width of the visible signature (Minimum size: 120 px)
+		 * @param height - height of the visible signature (Minimum size: 35 px)
+	     **/
 		PTEIDSDK_API void setCustomSealSize(unsigned int width, unsigned int height);
 		/**
 	     * Use this method to change the image that's used on the bottom of the visible signature

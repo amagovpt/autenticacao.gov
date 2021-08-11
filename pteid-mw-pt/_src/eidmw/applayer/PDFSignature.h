@@ -22,6 +22,14 @@
 #include "PAdESExtender.h"
 #include <openssl/pkcs7.h>
 
+#define SEAL_DEFAULT_HEIGHT		90
+#define SEAL_DEFAULT_WIDTH		178
+
+#define SEAL_MINIMUM_HEIGHT		35
+#define SEAL_MINIMUM_WIDTH		120
+
+#define bigger(a,b) ((a)>(b)?(a):(b))
+
 class PDFRectangle;
 class PDFDoc;
 class GooString;
@@ -65,6 +73,9 @@ namespace eIDMW
             const char *outfile_path, bool isCardSign);
         EIDMW_APL_API bool isLandscapeFormat();
 		EIDMW_APL_API void setCustomImage(unsigned char *img_data, unsigned long img_length);
+		/**
+	     * Use this method to change the size of the visible signature (Minimum size: 120x35 px)
+	     **/
 		EIDMW_APL_API void setCustomSealSize(unsigned int width, unsigned int height);
 		EIDMW_APL_API void enableSmallSignature();
 
@@ -125,8 +136,8 @@ namespace eIDMW
 		const char * m_pdf_file_path;
 
 		// Default values
-		unsigned int m_sig_height = 90;
-		unsigned int m_sig_width = 178;
+		unsigned int m_sig_height = SEAL_DEFAULT_HEIGHT;
+		unsigned int m_sig_width = SEAL_DEFAULT_WIDTH;
 		unsigned int m_tb_margin = 40;
 		static const int lr_margin = 30;
 

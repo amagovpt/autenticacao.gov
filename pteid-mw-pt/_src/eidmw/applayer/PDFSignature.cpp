@@ -121,8 +121,8 @@ namespace eIDMW
 
 	void PDFSignature::setCustomSealSize(unsigned int width, unsigned int height)
 	{
-		m_sig_width = width;
-		m_sig_height = height;
+		m_sig_width = bigger(width, SEAL_MINIMUM_WIDTH);
+		m_sig_height = bigger(height, SEAL_MINIMUM_HEIGHT);
 	}
 
 	PDFSignature::~PDFSignature()
@@ -644,9 +644,20 @@ namespace eIDMW
 				//"Round down" to a legal value to make sure we don't get partially off-page signatures
 				if (location_y > 1.0)
 					location_y = 1.0;
+				if (location_x > 1.0)
+					location_x = 1.0;
 
 			    double sig_width = m_sig_width;
 			    double actual_sig_height =  m_small_signature ? m_sig_height / 2.0 : m_sig_height;
+				
+     			// Visible signature never will be smaller than page
+		 		// Except if the page is smaller then minimum size
+				if (sig_width > width && width >= SEAL_MINIMUM_WIDTH)
+					sig_width = width;
+
+				if (actual_sig_height > height && height >= SEAL_MINIMUM_HEIGHT)
+					actual_sig_height = height;
+
 			    //sig_location.x1 = lr_margin+ (width-lr_margin*2)*location_x;
 			    sig_location.x1 = (width)*location_x;
 
