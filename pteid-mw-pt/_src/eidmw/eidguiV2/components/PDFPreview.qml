@@ -140,6 +140,10 @@ Rectangle {
         property real lastScreenWidth : 0
         property real lastScreenHeight : 0
 
+        //Properties to store last screen size
+        property real lastWidth : 0
+        property real lastHeight : 0
+
         Image {
             id: background_image
             sourceSize.width: dragTarget.width
@@ -456,6 +460,7 @@ Rectangle {
             }
 
             onWidthChanged: {
+                console.log("******************* background_image onWidthChanged **********************")
                 dragSigRect.x = dragTarget.lastCoord_x / dragTarget.lastScreenWidth * background_image.width
                 dragSigRect.y = dragTarget.lastCoord_y / dragTarget.lastScreenHeight * background_image.height
 
@@ -467,26 +472,100 @@ Rectangle {
         }
     }
 
+    function updatePageSize() {
+        console.log("******************* updatePageSize **********************")
+        dragSigRect.visible = true
+        propertyPDFHeightScaleFactor = background_image.height / propertyPdfOriginalHeight
+        propertyPDFWidthScaleFactor = background_image.width / propertyPdfOriginalWidth
+
+        if (propertyPDFWidthScaleFactor > 0 & propertyPDFHeightScaleFactor > 0) {
+            propertyDragSigRect.height = dragSigRect.height
+            propertyDragSigRect.width = dragSigRect.width
+        }
+
+        if (propertyPdfOriginalWidth != 0 && propertyPdfOriginalHeight != 0 
+            && background_image.width != 0 && background_image.height != 0) 
+        {
+            dragSigRect.width = dragSigRect.width / propertyPdfOriginalWidth * dragTarget.lastWidth
+            dragSigRect.height = dragSigRect.height / propertyPdfOriginalHeight * dragTarget.lastHeight
+        }
+        if (background_image.width != 0 && background_image.height != 0) 
+        {
+            if (dragSigRect.height > background_image.height ) 
+            {
+                if (background_image.height < propertySigHeightMin * propertyPDFHeightScaleFactor){
+                    dragSigRect.visible = false
+                    propertyTextDragMsgImg.text = qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL")
+                    propertyTextDragMsgImg.visible = true
+                } else {
+                    dragSigRect.height = background_image.height
+                }
+            }
+
+            if (dragSigRect.width > background_image.width ) 
+            {
+                if (background_image.width < propertySigWidthMin * propertyPDFWidthScaleFactor){
+                    dragSigRect.visible = false
+                    propertyTextDragMsgImg.text = qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL")
+                    propertyTextDragMsgImg.visible = true
+                } else {
+                    dragSigRect.width = background_image.width
+                }
+                
+            }
+        }
+        console.log("############# propertyPdfOriginalWidth : " + propertyPdfOriginalWidth)
+        console.log("############# propertyPdfOriginalHeight : " + propertyPdfOriginalHeight)
+        dragTarget.lastWidth = propertyPdfOriginalWidth
+        dragTarget.lastHeight = propertyPdfOriginalHeight
+    }
+
     function updateSignPreviewSize() {
+        console.log("******************* updateSignPreviewSize **********************")
+        console.log(dragSigRect.width)
+        console.log(background_image.height)
+        dragSigRect.visible = true
+        propertyPDFHeightScaleFactor = background_image.height / propertyPdfOriginalHeight
+        propertyPDFWidthScaleFactor = background_image.width / propertyPdfOriginalWidth
+
+        if (propertyPDFWidthScaleFactor > 0 & propertyPDFHeightScaleFactor > 0) {
+            propertyDragSigRect.height = dragSigRect.height
+            propertyDragSigRect.width = dragSigRect.width
+        }
 
         if (dragTarget.lastScreenWidth != 0 && dragTarget.lastScreenHeight != 0 
             && background_image.width != 0 && background_image.height != 0) 
         {
-            dragSigRect.width = dragSigRect.width / dragTarget.lastScreenWidth* background_image.width
+            dragSigRect.width = dragSigRect.width / dragTarget.lastScreenWidth * background_image.width
             dragSigRect.height = dragSigRect.height / dragTarget.lastScreenHeight * background_image.height
         }
-        else if (background_image.width != 0 && background_image.height != 0) 
+        if (background_image.width != 0 && background_image.height != 0) 
         {
-            if (dragSigRect.height > background_image.height) 
+            if (dragSigRect.height > background_image.height ) 
             {
-                dragSigRect.height = background_image.height
+                if (background_image.height < propertySigHeightMin * propertyPDFHeightScaleFactor){
+                    dragSigRect.visible = false
+                    propertyTextDragMsgImg.text = qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL")
+                    propertyTextDragMsgImg.visible = true
+                } else {
+                    dragSigRect.height = background_image.height
+                }
             }
 
-            if (dragSigRect.width > background_image.width) 
+            if (dragSigRect.width > background_image.width ) 
             {
-                dragSigRect.width = background_image.width
+                if (background_image.width < propertySigWidthMin * propertyPDFWidthScaleFactor){
+                    dragSigRect.visible = false
+                    propertyTextDragMsgImg.text = qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL")
+                    propertyTextDragMsgImg.visible = true
+                } else {
+                    dragSigRect.width = background_image.width
+                }
             }
         }
+
+        console.log(dragSigRect.width)
+        console.log(background_image.height)
     }
 
     function updateSignPreview(){

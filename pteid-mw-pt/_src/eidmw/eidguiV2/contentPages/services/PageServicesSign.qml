@@ -353,6 +353,7 @@ PageServicesSignForm {
             propertyPDFPreview.propertyPdfOriginalWidth=pdfWidth
             propertyPDFPreview.propertyPdfOriginalHeight=pdfHeight
             propertyPDFPreview.updateSignPreview()
+            propertyPDFPreview.updatePageSize()
             propertyPDFPreview.setSignPreview(
                         propertyPageLoader.propertyBackupCoordX * propertyPageLoader.propertyBackupBackgroundWidth,
                         propertyPageLoader.propertyBackupCoordY * propertyPageLoader.propertyBackupBackgroundHeight)
@@ -1403,6 +1404,8 @@ PageServicesSignForm {
                 fileLoaded = false
                 propertyTextDragMsgImg.visible = true
                 propertyPDFPreview.propertyBackground.source = ""
+                propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
+                        qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
                 propertyButtonAdd.forceActiveFocus()
             }
             else {
