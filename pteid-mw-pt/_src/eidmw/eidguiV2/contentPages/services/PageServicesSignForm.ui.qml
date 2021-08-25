@@ -1120,6 +1120,7 @@ Item {
                             height: parent.height
                             implicitWidth: 20
                             implicitHeight: parent.height
+                            color: "transparent"
 
                             Text {
                                 text: ">"
@@ -1143,6 +1144,7 @@ Item {
                             height: parent.height
                             implicitWidth: 20
                             implicitHeight: Constants.HEIGHT_BOTTOM_COMPONENT
+                            color: "transparent"
 
                             Text {
                                 text: "<"
