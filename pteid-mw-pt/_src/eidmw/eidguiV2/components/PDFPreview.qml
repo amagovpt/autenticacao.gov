@@ -475,6 +475,7 @@ Rectangle {
     function updatePageSize() {
         console.log("******************* updatePageSize **********************")
         dragSigRect.visible = true
+        propertyTextDragMsgImg.text = ""
         propertyPDFHeightScaleFactor = background_image.height / propertyPdfOriginalHeight
         propertyPDFWidthScaleFactor = background_image.width / propertyPdfOriginalWidth
 
@@ -489,6 +490,7 @@ Rectangle {
             dragSigRect.width = dragSigRect.width / propertyPdfOriginalWidth * dragTarget.lastWidth
             dragSigRect.height = dragSigRect.height / propertyPdfOriginalHeight * dragTarget.lastHeight
         }
+
         if (background_image.width != 0 && background_image.height != 0) 
         {
             if (dragSigRect.height > background_image.height ) 
@@ -511,7 +513,6 @@ Rectangle {
                 } else {
                     dragSigRect.width = background_image.width
                 }
-                
             }
         }
         console.log("############# propertyPdfOriginalWidth : " + propertyPdfOriginalWidth)
@@ -525,8 +526,15 @@ Rectangle {
         console.log(dragSigRect.width)
         console.log(background_image.height)
         dragSigRect.visible = true
+        propertyTextDragMsgImg.text = ""
         propertyPDFHeightScaleFactor = background_image.height / propertyPdfOriginalHeight
         propertyPDFWidthScaleFactor = background_image.width / propertyPdfOriginalWidth
+
+        if (!sealHasChanged) {
+            dragSigRect.width = propertyReducedChecked ? propertySigWidthReducedDefault * propertyPDFWidthScaleFactor : propertySigWidthDefault * propertyPDFWidthScaleFactor
+            dragSigRect.height = propertyReducedChecked ? propertySigHeightReducedDefault * propertyPDFHeightScaleFactor : propertySigHeightDefault * propertyPDFHeightScaleFactor
+            sealHasChanged = true
+        }
 
         if (propertyPDFWidthScaleFactor > 0 & propertyPDFHeightScaleFactor > 0) {
             propertyDragSigRect.height = dragSigRect.height
@@ -570,7 +578,7 @@ Rectangle {
 
     function updateSignPreview(){
 
-        dragTarget.coord_x = (dragSigRect.x) / background_image.width
+        dragTarget.coord_x = (dragSigRect.x) / background_image.width   
         dragTarget.coord_y = (dragSigRect.y + dragSigRect.height) / background_image.height
         dragTarget.lastCoord_x = dragSigRect.x
         dragTarget.lastCoord_y = dragSigRect.y
@@ -694,5 +702,37 @@ Rectangle {
         time += " " + offset
 
         return time
+    }
+
+    function reset() {
+
+        dragSigRect.width = propertyReducedChecked ? propertySigWidthReducedDefault * propertyPDFWidthScaleFactor : propertySigWidthDefault * propertyPDFWidthScaleFactor
+        dragSigRect.height = propertyReducedChecked ? propertySigHeightReducedDefault * propertyPDFHeightScaleFactor : propertySigHeightDefault * propertyPDFHeightScaleFactor
+
+        dragTarget.coord_x = 0
+        dragTarget.coord_y = 0
+
+        //Properties to store last signature positions
+        dragTarget.lastCoord_x = 0
+        dragTarget.lastCoord_y = 0
+
+        //Properties to store last screen size
+        dragTarget.lastScreenWidth = 0
+        dragTarget.lastScreenHeight = 0
+
+        //Properties to store last screen size
+        dragTarget.lastWidth = 0
+        dragTarget.lastHeight = 0
+
+        //propertyPdfOriginalWidth = 0
+        //propertyPdfOriginalHeight = 0
+
+        propertyFontSize = 0
+        propertyFontMargin = 0
+
+        propertyPDFHeightScaleFactor = 0
+        propertyPDFWidthScaleFactor = 0
+
+        sealHasChanged = false
     }
 }

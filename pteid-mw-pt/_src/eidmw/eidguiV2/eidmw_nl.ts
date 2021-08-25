@@ -2057,6 +2057,10 @@
         <source>STR_SCAP_CERTIFIED_ATTRIBUTES</source>
         <translation>Atributos certificados: </translation>
     </message>
+    <message>
+    <source>STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL</source>
+    <translation>Pré-visualização do ficheiro PDF indisponível devido às suas dimensões reduzidas.</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>

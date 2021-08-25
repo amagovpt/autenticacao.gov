@@ -2047,6 +2047,10 @@
         <source>STR_SCAP_CERTIFIED_ATTRIBUTES</source>
         <translation>Certified Attributes: </translation>
     </message>
+    <message>
+    <source>STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL</source>
+    <translation>PDF preview unavailable due to its reduced dimensions.</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>

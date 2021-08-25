@@ -346,7 +346,7 @@ PageServicesSignForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
     }
-    Connections {
+    Connections {   
         target: image_provider_pdf
         onSignalPdfSourceChanged: {
             console.log("Receive signal onSignalPdfSourceChanged pdfWidth = "+pdfWidth+" pdfHeight = "+pdfHeight);
@@ -901,6 +901,7 @@ PageServicesSignForm {
                 propertyPDFPreview.propertyDragSigLocationText.visible = false
                 propertyPDFPreview.propertyDragSigReasonText.text = ""
                 propertyPDFPreview.propertyDragSigLocationText.text = ""
+                propertyPDFPreview.updateSignPreviewSize()
             }else{
                 propertyPDFPreview.propertyDragSigRect.height =
                     propertyPDFPreview.propertySigHeightDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
@@ -912,6 +913,7 @@ PageServicesSignForm {
                 propertyPDFPreview.propertyDragSigReasonText.text = propertyTextFieldReason.text
                 propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text === "" ? "" :
                     qsTranslate("PageServicesSign", "STR_SIGN_LOCATION") + ": " + propertyTextFieldLocal.text
+                propertyPDFPreview.updateSignPreviewSize()
             }
         }
     }
@@ -1406,6 +1408,8 @@ PageServicesSignForm {
                 propertyPDFPreview.propertyBackground.source = ""
                 propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                         qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
+                propertyTextDragMsgImg.text = qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
+                propertyPDFPreview.reset()
                 propertyButtonAdd.forceActiveFocus()
             }
             else {
