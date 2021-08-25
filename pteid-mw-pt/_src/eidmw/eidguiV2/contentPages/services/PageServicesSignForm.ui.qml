@@ -1016,7 +1016,6 @@ Item {
                     id: pdfPreviewArea
                     width: parent.width
                     height: parent.height
-                    propertyDragSigRect.visible: checkSignShow.checked
                     propertyReducedChecked: checkSignReduced.checked
                     KeyNavigation.tab: textSpinBox
                     KeyNavigation.down: textSpinBox
