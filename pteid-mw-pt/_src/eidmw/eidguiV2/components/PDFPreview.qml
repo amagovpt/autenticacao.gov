@@ -144,6 +144,27 @@ Rectangle {
         //Properties to store last screen size
         property real lastWidth : 0
         property real lastHeight : 0
+        Rectangle {
+            id: smallFileWarning
+            width: parent.width
+            height: Constants.SIZE_TEXT_BODY * 3
+            color: Constants.COLOR_LINE_SUB_MENU
+            z: 1
+            visible: smallFile
+
+            Text {
+                width: parent.width
+                height: parent.height
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
+                font.bold: true
+                font.pixelSize: Constants.SIZE_TEXT_BODY
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
+                text: qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL")
+            }
+        }
 
         Image {
             id: background_image
@@ -476,7 +497,6 @@ Rectangle {
     function updatePageSize() {
         console.log("******************* updatePageSize **********************")
         smallFile = false
-        propertyTextDragMsgImg.text = ""
         propertyPDFHeightScaleFactor = background_image.height / propertyPdfOriginalHeight
         propertyPDFWidthScaleFactor = background_image.width / propertyPdfOriginalWidth
 
@@ -498,8 +518,6 @@ Rectangle {
             {
                 if (background_image.height < propertySigHeightMin * propertyPDFHeightScaleFactor){
                     smallFile = true
-                    propertyTextDragMsgImg.text = qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL")
-                    propertyTextDragMsgImg.visible = true
                 } else {
                     dragSigRect.height = background_image.height
                 }
@@ -509,8 +527,6 @@ Rectangle {
             {
                 if (background_image.width < propertySigWidthMin * propertyPDFWidthScaleFactor){
                     smallFile = true
-                    propertyTextDragMsgImg.text = qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL")
-                    propertyTextDragMsgImg.visible = true
                 } else {
                     dragSigRect.width = background_image.width
                 }
@@ -527,7 +543,6 @@ Rectangle {
         console.log(dragSigRect.width)
         console.log(background_image.height)
         smallFile = false
-        propertyTextDragMsgImg.text = ""
         propertyPDFHeightScaleFactor = background_image.height / propertyPdfOriginalHeight
         propertyPDFWidthScaleFactor = background_image.width / propertyPdfOriginalWidth
 
@@ -554,8 +569,6 @@ Rectangle {
             {
                 if (background_image.height < propertySigHeightMin * propertyPDFHeightScaleFactor){
                     smallFile = true
-                    propertyTextDragMsgImg.text = qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL")
-                    propertyTextDragMsgImg.visible = true
                 } else {
                     dragSigRect.height = background_image.height
                 }
@@ -565,8 +578,6 @@ Rectangle {
             {
                 if (background_image.width < propertySigWidthMin * propertyPDFWidthScaleFactor){
                     smallFile = true
-                    propertyTextDragMsgImg.text = qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL")
-                    propertyTextDragMsgImg.visible = true
                 } else {
                     dragSigRect.width = background_image.width
                 }
