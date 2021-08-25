@@ -267,7 +267,7 @@ PageDefinitionsSignatureForm {
     }
     function clearFields(){
         propertySigReasonText.text = propertySigReasonTextCustom.text = "{" + qsTr("STR_CUSTOM_SIGN_REASON") + "}"
-        propertySigSignedByText.text = propertySigSignedByTextCustom.text = qsTr("STR_CUSTOM_SIGN_BY") + ": "
+        propertySigSignedByText.text = propertySigSignedByTextCustom.text = qsTr("STR_CUSTOM_SIGN_BY")
         propertySigSignedByNameText.text = propertySigSignedByNameTextCustom.text = ""
         propertySigNumIdText.text = propertySigNumIdTextCustom.text = qsTranslate("GAPI","STR_NIC") + ": "
         propertySigLocationText.text = propertySigLocationTextCustom.text = "{" + qsTr("STR_CUSTOM_SIGN_LOCATION") + "}"

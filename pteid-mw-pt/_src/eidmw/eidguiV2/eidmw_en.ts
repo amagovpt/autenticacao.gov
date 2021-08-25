@@ -1249,7 +1249,7 @@
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_BY</source>
-        <translation>Signed by</translation>
+        <translation>Signed by: </translation>
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_LOCATION</source>
