@@ -75,7 +75,7 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 		if (poCard == NULL) {
 
 			MWLOG(LEV_DEBUG, MOD_CAL, "Using Reader: %s", csReader.c_str());
-			MWLOG(LEV_DEBUG, MOD_APL, "ATR input value: %s",
+			MWLOG(LEV_DEBUG, MOD_CAL, "ATR input value: %s",
 			poContext->m_oPCSC.GetATR(hCard).ToString(true, false).c_str());
 
 			//2018-05 Gemsafe cards are the only ones in use by now
