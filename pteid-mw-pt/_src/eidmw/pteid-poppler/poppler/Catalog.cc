@@ -938,8 +938,10 @@ std::string Catalog::get_commands_template(int rect_y, unsigned char *img_data){
   
   // Small signature formats only includes one image: Im1
   // water_mark_pos_y = 45 - HEIGHT_WATER_MARK_IMG = 13  
-	if (small_signature_format)
-		commands_template = "q\r\n40.5 0 0 31.5 0 13 cm\r\n/Im1 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
+  if (small_signature_format)
+    commands_template = "q\r\n40.5 0 0 31.5 0 " 
+          + std::to_string(water_mark_pos_y) 
+          + " cm\r\n/Im1 Do\r\nQ\r\nq 0.30588 0.54117 0.74509 rg\r\nBT\r\n0 {0:d} Td\r\n/F2 {1:d} Tf\r\n";
   else
     commands_template = commands_template_sign_img;
 
