@@ -482,7 +482,6 @@ Rectangle {
             }
 
             onWidthChanged: {
-                console.log("******************* background_image onWidthChanged **********************")
                 dragSigRect.x = dragTarget.lastCoord_x / dragTarget.lastScreenWidth * background_image.width
                 dragSigRect.y = dragTarget.lastCoord_y / dragTarget.lastScreenHeight * background_image.height
 
@@ -495,7 +494,6 @@ Rectangle {
     }
 
     function updatePageSize() {
-        console.log("******************* updatePageSize **********************")
         smallFile = false
         propertyPDFHeightScaleFactor = background_image.height / propertyPdfOriginalHeight
         propertyPDFWidthScaleFactor = background_image.width / propertyPdfOriginalWidth
@@ -532,16 +530,11 @@ Rectangle {
                 }
             }
         }
-        console.log("############# propertyPdfOriginalWidth : " + propertyPdfOriginalWidth)
-        console.log("############# propertyPdfOriginalHeight : " + propertyPdfOriginalHeight)
         dragTarget.lastWidth = propertyPdfOriginalWidth
         dragTarget.lastHeight = propertyPdfOriginalHeight
     }
 
     function updateSignPreviewSize() {
-        console.log("******************* updateSignPreviewSize **********************")
-        console.log(dragSigRect.width)
-        console.log(background_image.height)
         smallFile = false
         propertyPDFHeightScaleFactor = background_image.height / propertyPdfOriginalHeight
         propertyPDFWidthScaleFactor = background_image.width / propertyPdfOriginalWidth
@@ -583,9 +576,6 @@ Rectangle {
                 }
             }
         }
-
-        console.log(dragSigRect.width)
-        console.log(background_image.height)
     }
 
     function updateSignPreview(){

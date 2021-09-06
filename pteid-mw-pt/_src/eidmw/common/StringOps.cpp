@@ -190,7 +190,7 @@ FontParams calculateFontParams(bool small_signature_format, const std::string& r
 
     std::vector<std::string> wrapped;
 
-    printf("Calculate FontParams w=%d h=%d\n", rect_width, rect_height);
+    //printf("Calculate FontParams w=%d h=%d\n", rect_width, rect_height);
 
     for (unsigned int i = max_font_size; i >= min_font_size; --i) {
         int countReason = 0;
@@ -262,8 +262,8 @@ FontParams calculateFontParams(bool small_signature_format, const std::string& r
         }
 
         if (linesFit >= linesCount){
-            printf("break i = %d countReason=%d countName=%d countEntities=%d countAttributes=%d countLocation=%d\n", 
-              i, countReason, countName, countEntities, countAttributes,countLocation );
+            //printf("break i = %d countReason=%d countName=%d countEntities=%d countAttributes=%d countLocation=%d\n", 
+            //  i, countReason, countName, countEntities, countAttributes,countLocation );
             break;
         }
     }

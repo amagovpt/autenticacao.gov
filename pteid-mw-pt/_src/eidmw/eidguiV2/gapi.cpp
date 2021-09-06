@@ -3495,7 +3495,7 @@ int GAPI::getSealFontSize(bool isReduced, QString reason, QString name,
 
     m_font_size = wrap_parameters.font_size;
 
-    qDebug() << "Seal Font Size = " << m_font_size;
+    // qDebug() << "Seal Font Size = " << m_font_size;
 
     return m_font_size;
 }
@@ -3630,7 +3630,7 @@ bool GAPI::getUseDate(void){
     return m_Settings.getUseDate();
 }
 void GAPI::resizePDFSignSeal(unsigned int width, unsigned int height) {
-    qDebug() << "C++: Resize sign seal. Width: " << width << " Height:" <<height;
+    // qDebug() << "C++: Resize sign seal. Width: " << width << " Height:" <<height;
     
     m_seal_width = width;
     m_seal_height = height;

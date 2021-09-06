@@ -1970,8 +1970,8 @@ PageServicesSignForm {
         var width = propertyPDFPreview.propertyDragSigRect.width / propertyPDFPreview.propertyPDFWidthScaleFactor / propertyPDFPreview.propertyConvertPtsToPixel
         var height = propertyPDFPreview.propertyDragSigRect.height / propertyPDFPreview.propertyPDFHeightScaleFactor / propertyPDFPreview.propertyConvertPtsToPixel
 
-        console.log("getFontSize(" + isReduced + " , " + reason + " , " + name + " , " + nic + " , " + date + " , " + location 
-                + " , " + entities + " , " + attributes + " , " + width + " , " + height + ")")
+        //console.log("getFontSize(" + isReduced + " , " + reason + " , " + name + " , " + nic + " , " + date + " , " + location 
+        //        + " , " + entities + " , " + attributes + " , " + width + " , " + height + ")")
 
         propertyPDFPreview.propertyFontSize = 
                 gapi.getSealFontSize(isReduced, reason, name, nic, date, location, 
