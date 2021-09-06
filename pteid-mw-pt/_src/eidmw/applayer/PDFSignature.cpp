@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2013 Vasco Dias - <vasco.dias@caixamagica.pt>
  * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
@@ -39,10 +39,6 @@
 
 namespace eIDMW
 {
-
-	const double PDFSignature::sig_height = 90;
-	const double PDFSignature::sig_width = 178;
-	const double PDFSignature::tb_margin = 40;
 
 
 	PDFDoc * makePDFDoc(const char *utf8Filepath) {
@@ -121,6 +117,12 @@ namespace eIDMW
 		this->my_custom_image.img_data = (unsigned char*)malloc(img_length);
 		memcpy(this->my_custom_image.img_data, img_data, img_length);
 		this->my_custom_image.img_length = img_length;
+	}
+
+	void PDFSignature::setCustomSealSize(unsigned int width, unsigned int height)
+	{
+		m_sig_width = bigger(width, SEAL_MINIMUM_WIDTH);
+		m_sig_height = bigger(height, SEAL_MINIMUM_HEIGHT);
 	}
 
 	PDFSignature::~PDFSignature()
@@ -247,7 +249,7 @@ namespace eIDMW
 		double vert_align = 16; //Add this to vertically center inside each cell
 		//Number of columns for portrait layout
 		int columns = 4;
-		double signature_height = m_small_signature ? sig_height / 2.0 : sig_height;
+		double signature_height = m_small_signature ? m_sig_height / 2.0 : m_sig_height;
 		int MAX_SECTOR = m_small_signature ? 40 : 20;
 		const double n_lines = MAX_SECTOR / 4.0;
 
@@ -267,8 +269,8 @@ namespace eIDMW
 			if (sector % 4 == 0)
 			   line = sector / 4;
 
-			sig_rect.y1 += (page_height - 2*tb_margin) * (n_lines-line) / n_lines;
-			sig_rect.y2 += (page_height - 2*tb_margin) * (n_lines-line) / n_lines;
+			sig_rect.y1 += (page_height - 2*m_tb_margin) * (n_lines-line) / n_lines;
+			sig_rect.y2 += (page_height - 2*m_tb_margin) * (n_lines-line) / n_lines;
 		}
 
 		int column = (sector-1) % 4;
@@ -276,11 +278,11 @@ namespace eIDMW
 		sig_rect.x1 += (column * sig_width);
 		sig_rect.x2 += (column * sig_width);
 
-		sig_rect.y1 += tb_margin + vert_align;
+		sig_rect.y1 += m_tb_margin + vert_align;
 
 		//Define height and width of the rectangle
 		sig_rect.x2 += sig_width;
-		sig_rect.y2 += signature_height + tb_margin + vert_align;
+		sig_rect.y2 += signature_height + m_tb_margin + vert_align;
 
 
 		MWLOG(LEV_DEBUG, MOD_APL, "computeSigLocationFromSectorLandscape: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
@@ -294,7 +296,7 @@ namespace eIDMW
 		MWLOG(LEV_DEBUG, MOD_APL, "computeSigLocationFromSector called with sector=%d and m_small_signature = %d", sector, m_small_signature);
 
 		int MAX_SECTOR = m_small_signature ? 36 : 18;
-		double signature_height = m_small_signature ? sig_height / 2.0 : sig_height;
+		double signature_height = m_small_signature ? m_sig_height / 2.0 : m_sig_height;
 		const double n_lines = MAX_SECTOR / 3.0;
 		// Add padding, adjust to subtly tweak the location
 		// The units for x_pad, y_pad, sig_height and sig_width are postscript
@@ -320,8 +322,8 @@ namespace eIDMW
 			if (sector % 3 == 0)
 			   line = sector / 3;
 
-			sig_rect.y1 += (page_height - 2*tb_margin) * (n_lines-line) / n_lines;
-			sig_rect.y2 += (page_height - 2*tb_margin) * (n_lines-line) / n_lines;
+			sig_rect.y1 += (page_height - 2*m_tb_margin) * (n_lines-line) / n_lines;
+			sig_rect.y2 += (page_height - 2*m_tb_margin) * (n_lines-line) / n_lines;
 		}
 
 		if (sector % 3 == 2 )
@@ -336,11 +338,11 @@ namespace eIDMW
 			sig_rect.x2 += sig_width * 2.0;
 		}
 
-		sig_rect.y1 += tb_margin + vert_align;
+		sig_rect.y1 += m_tb_margin + vert_align;
 
 		//Define height and width of the rectangle
 		sig_rect.x2 += sig_width;
-		sig_rect.y2 += signature_height + tb_margin + vert_align;
+		sig_rect.y2 += signature_height + m_tb_margin + vert_align;
 
 		MWLOG(LEV_DEBUG, MOD_APL, "computeSigLocationFromSector: Sector: %02d Location = (%f, %f) (%f, %f) \n", sector, sig_rect.x1, sig_rect.y1, sig_rect.x2, sig_rect.y2);
 		return sig_rect;
@@ -554,6 +556,8 @@ namespace eIDMW
 	{
 
         bool isLangPT = false;
+		bool showNIC = false;
+		bool showDate = false;
 		PDFDoc *doc = m_doc;
 		//The class ctor initializes it to (0,0,0,0)
 		//so we can use this for invisible sig
@@ -617,8 +621,15 @@ namespace eIDMW
 				height = width;
 				width = dim1;
 			}
-			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Page mediaBox: (H: %f W:%f) Location_x: %f, location_y: %f",
-				 height, width, location_x, location_y);
+
+			APL_Config config_seal(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_SIGNSEALOPTIONS);
+
+			showNIC = config_seal.getLong() & 1;
+			showDate = config_seal.getLong() & 2;
+
+			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Page mediaBox: (H: %f W:%f) \
+				Location_x: %f, location_y: %f, showNIC: %d, showDate: %d",
+				height, width, location_x, location_y, showNIC, showDate);
 
 			//Sig Location by sector
 			if (location_x == -1)
@@ -633,9 +644,20 @@ namespace eIDMW
 				//"Round down" to a legal value to make sure we don't get partially off-page signatures
 				if (location_y > 1.0)
 					location_y = 1.0;
+				if (location_x > 1.0)
+					location_x = 1.0;
 
-			    double sig_width = PDFSignature::sig_width;
-			    double actual_sig_height =  m_small_signature ? sig_height / 2.0 : sig_height;
+			    double sig_width = m_sig_width;
+			    double actual_sig_height =  m_small_signature ? m_sig_height / 2.0 : m_sig_height;
+				
+     			// Visible signature never will be smaller than page
+		 		// Except if the page is smaller then minimum size
+				if (sig_width > width && width >= SEAL_MINIMUM_WIDTH)
+					sig_width = width;
+
+				if (actual_sig_height > height && height >= SEAL_MINIMUM_HEIGHT)
+					actual_sig_height = height;
+
 			    //sig_location.x1 = lr_margin+ (width-lr_margin*2)*location_x;
 			    sig_location.x1 = (width)*location_x;
 
@@ -710,17 +732,23 @@ namespace eIDMW
 		if (this->my_custom_image.img_data != NULL)
 			doc->addCustomSignatureImage(my_custom_image.img_data, my_custom_image.img_length);
 
-		// remove "BI" prefix and checkdigit from NIC
-		std::string nic = m_civil_number;
-		size_t offset = 0;
-		size_t nic_length = 8;
-		if (nic.find("BI") == 0){
-			offset = 2;
+		if(showNIC)
+		{
+			// remove "BI" prefix and checkdigit from NIC
+			std::string nic = m_civil_number;
+			size_t offset = 0;
+			size_t nic_length = 8;
+			if (nic.find("BI") == 0){
+				offset = 2;
+			}
+			nic = nic.substr(offset, nic_length);
+			doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, nic.c_str(),
+	                                 location, reason, m_page, m_sector, isLangPT, isCC(), showDate, m_small_signature);
+		} else {
+			doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, NULL,
+	                                 location, reason, m_page, m_sector, isLangPT, isCC(), showDate, m_small_signature);
 		}
-		nic = nic.substr(offset, nic_length);
 
-        doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, nic.c_str(),
-                                 location, reason, m_page, m_sector, isLangPT, isCC());
         unsigned long len = doc->getSigByteArray(&to_sign, m_incrementalMode);
 
 		int rc = 0;

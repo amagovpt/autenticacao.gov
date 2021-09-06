@@ -182,6 +182,32 @@ PageDefinitionsSignatureForm {
             }
         }
     }
+    
+    propertyCheckBoxNumId {
+        onCheckedChanged: {
+            gapi.setUseNumId(propertyCheckBoxNumId.checked)
+            propertyCheckBoxNumId2.checked = propertyCheckBoxNumId.checked
+        }
+    }
+
+    propertyCheckBoxDate {
+        onCheckedChanged: {
+            gapi.setUseDate(propertyCheckBoxDate.checked)
+            propertyCheckBoxDate2.checked = propertyCheckBoxDate.checked
+        }
+    }
+
+    propertyCheckBoxNumId2 {
+        onCheckedChanged: {
+            propertyCheckBoxNumId.checked = propertyCheckBoxNumId2.checked
+        }
+    }
+
+    propertyCheckBoxDate2 {
+        onCheckedChanged: {
+            propertyCheckBoxDate.checked = propertyCheckBoxDate2.checked
+        }
+    }
 
     Component.onCompleted: {
 
@@ -210,6 +236,10 @@ PageDefinitionsSignatureForm {
         }
         if(mainFormID.propertyPageLoader.propertyForceFocus)
             propertyRadioButtonDefault.forceActiveFocus()
+        
+        propertyCheckBoxNumId.checked = gapi.getUseNumId()
+        propertyCheckBoxDate.checked = gapi.getUseDate()
+        
     }
     function getDate(){
         var time = Qt.formatDateTime(new Date(), "yy.MM.dd hh:mm:ss")
@@ -237,7 +267,7 @@ PageDefinitionsSignatureForm {
     }
     function clearFields(){
         propertySigReasonText.text = propertySigReasonTextCustom.text = "{" + qsTr("STR_CUSTOM_SIGN_REASON") + "}"
-        propertySigSignedByText.text = propertySigSignedByTextCustom.text = qsTr("STR_CUSTOM_SIGN_BY") + ": "
+        propertySigSignedByText.text = propertySigSignedByTextCustom.text = qsTr("STR_CUSTOM_SIGN_BY")
         propertySigSignedByNameText.text = propertySigSignedByNameTextCustom.text = ""
         propertySigNumIdText.text = propertySigNumIdTextCustom.text = qsTranslate("GAPI","STR_NIC") + ": "
         propertySigLocationText.text = propertySigLocationTextCustom.text = "{" + qsTr("STR_CUSTOM_SIGN_LOCATION") + "}"

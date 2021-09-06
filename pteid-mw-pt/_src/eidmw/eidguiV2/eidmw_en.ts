@@ -494,6 +494,18 @@
         <source>STR_SCAP_CHECK_EXPIRED_ATTR</source>
         <translation>Check if the selected attributes are expired.</translation>
     </message>
+    <message>
+        <source>STR_SIGNED_BY</source>
+        <translation>Signed by : </translation>
+    </message>
+    <message>
+        <source>STR_CERTIFIED_BY</source>
+        <translation>Certified by: </translation>
+    </message>
+    <message>
+        <source>STR_CERTIFIED_ATTRIBUTES</source>
+        <translation>Certified Attributes: </translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>
@@ -1257,7 +1269,7 @@
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_BY</source>
-        <translation>Signed by</translation>
+        <translation>Signed by: </translation>
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_LOCATION</source>
@@ -1269,7 +1281,7 @@
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_CUSTOM_TITLE</source>
-        <translation>Use custom signature</translation>
+        <translation>Use signature with custom image</translation>
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_FILE_LOAD</source>
@@ -2046,6 +2058,18 @@
     <message>
         <source>STR_CUSTOM_IMAGE_REMOVED</source>
         <translation>The stored custom signature image has incorrect dimensions and will be removed. Please, load a new custom signature image.</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_CERTIFIED_BY</source>
+        <translation>Certified by: </translation>
+    </message>
+    <message>
+        <source>STR_SCAP_CERTIFIED_ATTRIBUTES</source>
+        <translation>Certified Attributes: </translation>
+    </message>
+    <message>
+    <source>STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL</source>
+    <translation>PDF preview unavailable due to its reduced dimensions.</translation>
     </message>
 </context>
 <context>

@@ -54,6 +54,11 @@ Item {
     property alias propertySigWaterImgCustom: dragSigWaterImageCustom
     property alias propertyImagePreCustom: imagePreCustom
 
+    property alias propertyCheckBoxNumId: checkboxNumId
+    property alias propertyCheckBoxNumId2: checkboxNumId2
+    property alias propertyCheckBoxDate: checkboxDate
+    property alias propertyCheckBoxDate2: checkboxDate2
+
     BusyIndicator {
         id: busyIndicator
         running: false
@@ -118,9 +123,9 @@ Item {
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: radioButtonDefault.indicator.width + radioButtonDefault.spacing
                 }
-                KeyNavigation.tab: radioButtonCustom
-                KeyNavigation.down: radioButtonCustom
-                KeyNavigation.right: radioButtonCustom
+                KeyNavigation.tab: checkboxNumId
+                KeyNavigation.down: checkboxNumId
+                KeyNavigation.right: checkboxNumId
                 KeyNavigation.backtab: buttonAdd
                 KeyNavigation.up: buttonAdd
                 Keys.onEnterPressed: toggleRadio(radioButtonDefault)
@@ -160,6 +165,23 @@ Item {
                         x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                     }
+                    CheckBox {
+                        id: checkboxName
+                        text: ""
+                        height: propertySigLineHeight
+                        visible: true
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
+                        anchors.top: sigReasonText.bottom
+                        anchors.topMargin: -5
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        checked: true
+                        enabled: false
+                        opacity: radioButtonDefault.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
+                    }
                     Text {
                         id: sigSignedByText
                         font.pixelSize: propertySigLineHeight * 0.8
@@ -167,6 +189,7 @@ Item {
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigReasonText.bottom
+                        anchors.left: checkboxName.right
                         text: ""
                         x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
@@ -186,6 +209,30 @@ Item {
                         x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                     }
+                    CheckBox {
+                        id: checkboxNumId
+                        text: ""
+                        height: propertySigLineHeight
+                        visible: true
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
+                        anchors.top: sigSignedByText.bottom
+                        anchors.topMargin: -5
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        enabled: radioButtonDefault.checked
+                        opacity: radioButtonDefault.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
+                        KeyNavigation.tab: checkboxDate
+                        KeyNavigation.down: checkboxDate
+                        KeyNavigation.right: checkboxDate
+                        KeyNavigation.backtab: radioButtonDefault
+                        KeyNavigation.up: radioButtonDefault
+                        Keys.onEnterPressed: checkboxNumId.checked = !checkboxNumId.checked
+                        Keys.onReturnPressed: checkboxNumId.checked = !checkboxNumId.checked
+                    }
+
                     Text {
                         id: sigNumIdText
                         font.pixelSize: propertySigLineHeight * 0.8
@@ -195,9 +242,33 @@ Item {
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigSignedByText.bottom
+                        anchors.left: checkboxNumId.right
                         text: ""
                         x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
+                    }
+                    CheckBox {
+                        id: checkboxDate
+                        text: ""
+                        height: propertySigLineHeight
+                        visible: true
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
+                        anchors.top: sigNumIdText.bottom
+                        anchors.topMargin: -5
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        enabled: radioButtonDefault.checked
+                        opacity: radioButtonDefault.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
+                        KeyNavigation.tab: radioButtonCustom
+                        KeyNavigation.down: radioButtonCustom
+                        KeyNavigation.right: radioButtonCustom
+                        KeyNavigation.backtab: checkboxNumId
+                        KeyNavigation.up: checkboxNumId
+                        Keys.onEnterPressed: checkboxDate.checked = !checkboxDate.checked
+                        Keys.onReturnPressed: checkboxDate.checked = !checkboxDate.checked
                     }
                     Text {
                         id: sigDateText
@@ -208,7 +279,7 @@ Item {
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigNumIdText.bottom
-                        x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
+                        anchors.left: checkboxDate.right
                         visible: true
                     }
                     Text {
@@ -220,6 +291,7 @@ Item {
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigDateText.bottom
+                        anchors.topMargin: 5
                         text: ""
                         x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
@@ -298,11 +370,11 @@ Item {
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: radioButtonCustom.indicator.width + radioButtonCustom.spacing
                 }
-                KeyNavigation.tab: buttonRemove
-                KeyNavigation.down: buttonRemove
-                KeyNavigation.right: buttonRemove
-                KeyNavigation.backtab: radioButtonDefault
-                KeyNavigation.up: radioButtonDefault
+                KeyNavigation.tab: checkboxNumId2
+                KeyNavigation.down: checkboxNumId2
+                KeyNavigation.right: checkboxNumId2
+                KeyNavigation.backtab: checkboxDate
+                KeyNavigation.up: checkboxDate
                 Keys.onEnterPressed: toggleRadio(radioButtonCustom)
                 Keys.onReturnPressed: toggleRadio(radioButtonCustom)
             }
@@ -319,11 +391,6 @@ Item {
                         id: dropArea
                         anchors.fill: parent
                         z: 1
-                    }
-
-                    MouseArea {
-                        id: mouseAreaPreCustom
-                        anchors.fill: parent
                     }
 
                     Text {
@@ -351,6 +418,23 @@ Item {
                         visible: true
                         opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
                     }
+                    CheckBox {
+                        id: checkboxName2
+                        text: ""
+                        height: propertySigLineHeight
+                        visible: true
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
+                        anchors.top: sigReasonTextCustom.bottom
+                        anchors.topMargin: -5
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        checked: true
+                        enabled: false
+                        opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
+                    }
                     Text {
                         id: sigSignedByTextCustom
                         font.pixelSize: propertySigLineHeight * 0.8
@@ -358,6 +442,7 @@ Item {
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigReasonTextCustom.bottom
+                        anchors.left: checkboxName2.right
                         x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                         opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
@@ -377,6 +462,30 @@ Item {
                         visible: true
                         opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
                     }
+                    CheckBox {
+                        id: checkboxNumId2
+                        text: ""
+                        height: propertySigLineHeight
+                        visible: true
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
+                        anchors.top: sigSignedByNameTextCustom.bottom
+                        anchors.topMargin: -5
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        checked: checkboxNumId.checked
+                        enabled: radioButtonCustom.checked
+                        opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
+                        KeyNavigation.tab: checkboxDate2
+                        KeyNavigation.down: checkboxDate2
+                        KeyNavigation.right: checkboxDate2
+                        KeyNavigation.backtab: radioButtonCustom
+                        KeyNavigation.up: radioButtonCustom
+                        Keys.onEnterPressed: checkboxNumId2.checked = !checkboxNumId2.checked
+                        Keys.onReturnPressed: checkboxNumId2.checked = !checkboxNumId2.checked
+                    }
                     Text {
                         id: sigNumIdTextCustom
                         font.pixelSize: propertySigLineHeight * 0.8
@@ -386,9 +495,34 @@ Item {
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigSignedByTextCustom.bottom
+                        anchors.left: checkboxNumId2.right
                         x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                         opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
+                    }
+                    CheckBox {
+                        id: checkboxDate2
+                        text: ""
+                        height: propertySigLineHeight
+                        visible: true
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
+                        anchors.top: sigNumIdTextCustom.bottom
+                        anchors.topMargin: -5
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        checked: checkboxDate.checked
+                        enabled: radioButtonCustom.checked
+                        opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
+                        KeyNavigation.tab: buttonRemove
+                        KeyNavigation.down: buttonRemove
+                        KeyNavigation.right: buttonRemove
+                        KeyNavigation.backtab: checkboxNumId2
+                        KeyNavigation.up: checkboxNumId2
+                        Keys.onEnterPressed: checkboxDate2.checked = !checkboxDate2.checked
+                        Keys.onReturnPressed: checkboxDate2.checked = !checkboxDate2.checked
                     }
                     Text {
                         id: sigDateTextCustom
@@ -399,6 +533,7 @@ Item {
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: sigNumIdTextCustom.bottom
+                        anchors.left: checkboxDate2.right
                         x: Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
                         visible: true
                         opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
@@ -437,6 +572,11 @@ Item {
                             visible: fileLoaded
                             opacity: radioButtonCustom.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
                             cache: false
+                        }
+                        
+                        MouseArea {
+                            id: mouseAreaPreCustom
+                            anchors.fill: parent
                         }
                     }
                     Text {

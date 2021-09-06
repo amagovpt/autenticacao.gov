@@ -34,6 +34,7 @@
 #include "credentials.h"
 #include "Config.h"
 #include "Util.h"
+#include "StringOps.h"
 #include "MiscUtil.h"
 #include "proxyinfo.h"
 #include "concurrent.h"
@@ -941,7 +942,8 @@ void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token
             int ret_scap = scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
                 m_scap_params.location_x, m_scap_params.location_y,
                 m_scap_params.location, m_scap_params.reason, m_scap_params.isTimestamp, m_scap_params.isLtv, attrs, cmd_details,
-                useCustomSignature(), m_jpeg_scaled_data);
+                useCustomSignature(), m_jpeg_scaled_data,
+                m_seal_width, m_seal_height);
 
             for (size_t i = 0; i < cmd_pdfSignatures.size(); i++)
                 delete cmd_pdfSignatures[i];
@@ -1956,6 +1958,8 @@ void GAPI::doSignPDF(SignParams &params) {
     if (params.isSmallSignature) {
         sig_handler.enableSmallSignatureFormat();
     }
+    
+    sig_handler.setCustomSealSize(m_seal_width,m_seal_height);
 
     if (useCustomSignature()) {
         const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
@@ -2009,6 +2013,8 @@ void GAPI::doSignBatchPDF(SignParams &params) {
     if (params.isSmallSignature) {
         sig_handler->enableSmallSignatureFormat();
     }
+
+    sig_handler->setCustomSealSize(m_seal_width,m_seal_height);
 
     if (useCustomSignature()) {
         const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
@@ -2085,9 +2091,10 @@ QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
     // Document starts at page 0 in the poppler-qt5 API
     Poppler::Page *popplerPage = m_docs.at(m_filePath)->page(page - 1);
 
-    //TODO: Test the resolution on Windows
-    const double resX = 120.0;
-    const double resY = 120.0;
+    // This DPI resolution have the be the same
+    // used in qml property "propertyConvertPtsToPixel"
+    const double resX = 300.0;
+    const double resY = 300.0;
     if (popplerPage == NULL)
     {
         qDebug() << "Failed to get page object: " << page;
@@ -2316,7 +2323,8 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
 
     scapServices.executeSCAPSignature(this, params.inputPDF, params.outputPDF, params.page,
         params.location_x, params.location_y, params.location, params.reason,
-        params.isTimestamp, params.isLtv, attrs, useCustomSignature(), m_jpeg_scaled_data);
+        params.isTimestamp, params.isLtv, attrs, useCustomSignature(), m_jpeg_scaled_data, 
+        m_seal_width, m_seal_height);
     END_TRY_CATCH
 }
 
@@ -3378,6 +3386,120 @@ void GAPI::getInfoFromSignCert(void)
     END_TRY_CATCH
 }
 
+QStringList GAPI::getWrappedText(QString text, int maxlines, int offset) {
+
+    std::string _text = text.toLatin1().constData();
+
+    std::vector<std::string> result = wrapString(_text, m_seal_width, m_font_size,
+            MYRIAD_BOLD, maxlines, offset * m_font_size);
+
+    QStringList wrapped;
+    for (std::string s: result)
+        wrapped.append(QString::fromLatin1(s.c_str()));
+
+    return wrapped;
+}
+
+/* Helper function to format SCAP strings to be displayed in signature seal preview */
+std::pair<std::string, std::string> formatSCAPSealStrings(QVariantList qVarList) {
+    //qVarList is a list of "pairs" -> entity - attribute
+
+    // group by entity
+    std::map<std::string, std::vector<std::string>> grouped;
+    for (const QVariant& a: qVarList) { //order will be reversed
+        QStringList entity_attribute_pair = a.toStringList();
+        std::string entity = entity_attribute_pair.at(0).toStdString();
+        std::string attribute = entity_attribute_pair.at(1).toStdString();
+        grouped[entity].push_back(attribute);
+    }
+
+    // format attributes strings for each enitity
+    const std::string comma_sep = ", ";
+    const std::string and_sep = " e ";
+    std::string current_sep;
+
+    const size_t numberOfEntities = grouped.size();
+    std::map<std::string, std::string> joined;
+    for (const auto& g: grouped) {
+        std::string currentEntitiy = g.first;
+        std::vector<std::string> currentAttrs = g.second;
+        std::string currentAttrsString;
+        size_t attrCount = currentAttrs.size();
+
+        if (attrCount > 1 && numberOfEntities > 1)
+            currentAttrsString = "{";
+        else
+            currentAttrsString = "";
+
+        current_sep = "";
+        for (size_t i = 0; i < attrCount; i++) {
+            currentAttrsString += current_sep;
+            currentAttrsString += currentAttrs[i];
+
+            if ( i != attrCount - 2 )
+                current_sep = comma_sep;
+            else
+                current_sep = and_sep;
+        }
+
+        if (attrCount > 1 && numberOfEntities > 1)
+            currentAttrsString.append("}");
+
+        joined[currentEntitiy] = currentAttrsString;
+    }
+
+    // merge all entities and attributes in a string each
+    std::string result_entities;
+    std::string result_attributes;
+
+    current_sep = "";
+    // iterating in reverse to restore correct order of attributes
+    for (auto it = joined.rbegin(); it != joined.rend(); it++) {
+        result_entities += current_sep;
+        result_entities += it->first;
+
+        result_attributes += current_sep;
+        result_attributes += it->second;
+
+        current_sep = and_sep;
+    }
+
+    return std::make_pair(result_entities, result_attributes);
+}
+
+QVariantList GAPI::getSCAPAttributesText(QVariantList attr_list) {
+
+    // merge attributes into one string for entities and another for attributes, ready to wrap
+    std::pair<std::string, std::string> joined = formatSCAPSealStrings(attr_list);
+
+    std::string entities_to_wrap = QString::fromStdString(joined.first).toLatin1().constData();
+    std::string attributes_to_wrap = QString::fromStdString(joined.second).toLatin1().constData();
+
+    QVariantList result;
+    result.append(QString::fromLatin1(entities_to_wrap.c_str()));
+    result.append(QString::fromLatin1(attributes_to_wrap.c_str()));
+    result.append(m_font_size);
+    return result;
+}
+
+
+int GAPI::getSealFontSize(bool isReduced, QString reason, QString name, 
+        bool nic, bool date, QString location, QString entities, QString attributes, 
+        unsigned int width, unsigned int height){
+
+    FontParams wrap_parameters = calculateFontParams(isReduced, 
+        reason.toUtf8().constData(), name.toUtf8().constData(),
+        nic, date, location.toUtf8().constData(), 
+        entities.toUtf8().constData(), attributes.toUtf8().constData(),
+        width, height);
+
+    m_font_size = wrap_parameters.font_size;
+
+    // qDebug() << "Seal Font Size = " << m_font_size;
+
+    return m_font_size;
+}
+
 QString GAPI::getCachePath(void){
     return m_Settings.getPteidCachedir();
 }
@@ -3493,7 +3615,26 @@ bool GAPI::getRemoveCertValue(void){
 
     return m_Settings.getRemoveCert();
 }
+void GAPI::setUseNumId(bool UseNumId){
 
+    m_Settings.setUseNumId(UseNumId);
+}
+bool GAPI::getUseNumId(void){
+    return m_Settings.getUseNumId();
+}
+void GAPI::setUseDate(bool UseDate){
+
+    m_Settings.setUseDate(UseDate);
+}
+bool GAPI::getUseDate(void){
+    return m_Settings.getUseDate();
+}
+void GAPI::resizePDFSignSeal(unsigned int width, unsigned int height) {
+    // qDebug() << "C++: Resize sign seal. Width: " << width << " Height:" <<height;
+    
+    m_seal_width = width;
+    m_seal_height = height;
+}
 #ifdef WIN32
 QVariantList GAPI::getRegisteredCmdPhoneNumbers() {
     QVariantList regCmdNumList;

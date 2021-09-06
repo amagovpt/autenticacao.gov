@@ -66,6 +66,7 @@
         <file>images/remove_file.png</file>
         <file>images/remove_file_hover.png</file>
         <file>images/logo_CC.png</file>
+        <file>images/logo_CC_seal.png</file>
         <file>components/TitleBar.qml</file>
         <file>components/FrameWindow.qml</file>
         <file>images/tooltip_grey.png</file>
@@ -91,5 +92,6 @@
         <file>components/TextRow.qml</file>
         <file>contentPages/services/PageServicesSign.qml</file>
         <file>contentPages/services/PageServicesSignForm.ui.qml</file>
+        <file>images/icons-resize.png</file>
     </qresource>
 </RCC>

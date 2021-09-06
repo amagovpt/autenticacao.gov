@@ -8,7 +8,7 @@
  * Copyright (C) 2011-2012 Rui Martinho - <rui.martinho@ama.pt>
  * Copyright (C) 2012-2014, 2016-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -801,8 +801,9 @@ class PTEID_PDFSignature
 		PTEIDSDK_API void setSignatureLevel(PTEID_SignatureLevel);
 
 		/**
-		 * Use a smaller format for the visible signature which is 50% smaller in height but as wide as the regular format
-		 * The default "Cartão de Cidadão" logo or a custom image supplied via setCustomImage() will not be included
+		 * Use a smaller format for the visible signature which is 50% smaller in height but as wide as the regular format.
+		 * If using a smaller format and a custom seal size at the same time the final size is 50% smaller then the current configured size.
+		 * The default "Cartão de Cidadão" logo or a custom image supplied via setCustomImage() will not be included.
 		 **/
 		PTEIDSDK_API void enableSmallSignatureFormat();
 		PTEIDSDK_API bool isLandscapeFormat();
@@ -811,6 +812,14 @@ class PTEID_PDFSignature
 		 **/
 		PTEIDSDK_API char *getOccupiedSectors(int page);
 		PTEIDSDK_API void setCustomImage(unsigned char *image_data, unsigned long image_length);
+		/**
+	     * Use this method to change the size of the visible signature (Minimum size: 120x35 px)
+		 * Visible signature never will be smaller than page
+		 * Except if the page is smaller then minimum size
+		 * @param width - width of the visible signature (Minimum size: 120 px)
+		 * @param height - height of the visible signature (Minimum size: 35 px)
+	     **/
+		PTEIDSDK_API void setCustomSealSize(unsigned int width, unsigned int height);
 		/**
 	     * Use this method to change the image that's used on the bottom of the visible signature
 	     * This image will replace the default "Cartão de Cidadão" logo

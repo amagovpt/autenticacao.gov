@@ -492,6 +492,18 @@
         <source>STR_SCAP_CHECK_EXPIRED_ATTR</source>
         <translation>Verifique se os atributos selecionados estão expirados.</translation>
     </message>
+    <message>
+        <source>STR_SIGNED_BY</source>
+        <translation>Assinado por: </translation>
+    </message>
+    <message>
+        <source>STR_CERTIFIED_BY</source>
+        <translation>Certificado por: </translation>
+    </message>
+    <message>
+        <source>STR_CERTIFIED_ATTRIBUTES</source>
+        <translation>Atributos certificados: </translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>
@@ -1263,7 +1275,7 @@
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_BY</source>
-        <translation>Assinado por</translation>
+        <translation>Assinado por: </translation>
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_LOCATION</source>
@@ -1275,7 +1287,7 @@
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_CUSTOM_TITLE</source>
-        <translation>Usar assinatura personalizada</translation>
+        <translation>Usar assinatura com imagem personalizada</translation>
     </message>
     <message>
         <source>STR_CUSTOM_SIGN_FILE_LOAD</source>
@@ -2052,6 +2064,18 @@
     <message>
         <source>STR_CUSTOM_IMAGE_REMOVED</source>
         <translation>A imagem de assinatura personalizada guardada não tem dimensões corretas e vai ser removida. Por favor, volte a carregar a imagem de assinatura personalizada.</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_CERTIFIED_BY</source>
+        <translation>Certificado por: </translation>
+    </message>
+    <message>
+        <source>STR_SCAP_CERTIFIED_ATTRIBUTES</source>
+        <translation>Atributos certificados: </translation>
+    </message>
+    <message>
+    <source>STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL</source>
+    <translation>Pré-visualização do ficheiro PDF indisponível devido às suas dimensões reduzidas.</translation>
     </message>
 </context>
 <context>

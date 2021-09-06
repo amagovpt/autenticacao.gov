@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2018-2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
@@ -415,6 +415,12 @@ public slots:
     bool getRemoveCertValue(void);
     void registerCMDCertOpen(QString mobileNumber, QString pin);
     void registerCMDCertClose(QString otp);
+    void setUseNumId(bool UseNumId);
+    bool getUseNumId(void);
+    void setUseDate (bool UseDate);
+    bool getUseDate(void);
+    void resizePDFSignSeal(unsigned int height, unsigned int width);
+
 #ifdef WIN32
     QVariantList getRegisteredCmdPhoneNumbers();
 #endif
@@ -435,6 +441,12 @@ public slots:
     bool isFile(QString path);
     bool fileExists(QString path);
     QList<QString> getFilesFromDirectory(QString path);
+
+    QStringList getWrappedText(QString name, int maxlines, int offset);
+    QVariantList getSCAPAttributesText(QVariantList attr_list);
+    int getSealFontSize(bool isReduced, QString reason, QString name, 
+        bool nic, bool date, QString location, QString entities, QString attributes,
+        unsigned int width, unsigned int height);
 
 signals:
     // Signal from GAPI to Gui
@@ -590,6 +602,10 @@ private:
     QString m_pac_url;
     bool httpRequestAborted;
     bool httpRequestSuccess;
+
+    int m_seal_width = 178;
+    int m_seal_height = 90;
+    int m_font_size = 8;
 
 protected:
     QTranslator m_translator;

@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2012-2014, 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
- * Copyright (C) 2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2018-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * Licensed under the EUPL V.1.2
@@ -44,11 +44,30 @@
 #endif
 
 #include "Object.h"
+#include "StringOps.h"
 
 #define ESTIMATED_LEN 30000
 #define PLACEHOLDER_LEN ESTIMATED_LEN
 #define CUSTOM_IMAGE_BITMAP_WIDTH 351
 #define CUSTOM_IMAGE_BITMAP_HEIGHT 77
+
+#define HEIGHT_WATER_MARK_IMG   32        // Round up 31.5
+#define HEIGHT_SIGN_IMG         31.0      // Round up 30.87 (CC). 31.00 (CMD)
+
+#define SEAL_NAME_OFFSET            6
+#define SEAL_LOCATION_OFFSET        5.5
+#define SEAL_PROVIDER_NAME_OFFSET   6.5
+#define SEAL_ATTR_NAME_OFFSET       9.5
+
+#define NAME_MAX_LINES              5
+#define NAME_REDUCED_MAX_LINES      4
+#define REASON_MAX_LINES            2
+#define LOCATION_MAX_LINES          2
+
+#define NAME_SCAP_MAX_LINES         2
+#define PROVIDER_SCAP_MAX_LINES     2
+#define ATTR_SCAP_MAX_LINES         10   
+
 #include <vector>
 
 class PDFDoc;
@@ -143,7 +162,8 @@ public:
 
   void prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_info, Ref *first_page_ref, const char *location,
 	                      const char *reason, unsigned long, int page, int sig_sector, 
-    unsigned char *img_data, unsigned long img_length, bool isPTLanguage, bool isCCSignature);
+                        unsigned char *img_data, unsigned long img_length, bool isPTLanguage, bool isCCSignature, 
+                        bool showDate, bool small_signature);
   
   Ref addFontDict(const char *basefont, const char *name);
   Ref addImageXObject(int width, int height, unsigned char *data, unsigned long length_in_bytes);
@@ -160,8 +180,11 @@ public:
   void addSignatureAppearance(Object *parent, int, int);
   void closeSignature(const char *signature_contents, unsigned long len);
 
+  std::string get_commands_template(int rect_y, unsigned char *img_data);
+
   /* Fill the following keys of the signature field dictionary: Type, SubType, FT, F, SigSector, Rect, T and P.*/
-  void fillSignatureField(Object *signatureFieldDict, PDFRectangle *rect, int sig_sector, Ref *refFirstPage);
+  void fillSignatureField(Object *signatureFieldDict, PDFRectangle *rect, int sig_sector, 
+      Ref *refFirstPage, bool isSmallSignature = false);
   void addSigFieldToAcroForm(Ref *sigFieldRef, Ref *refFirstPage);
 
   // Get a page.

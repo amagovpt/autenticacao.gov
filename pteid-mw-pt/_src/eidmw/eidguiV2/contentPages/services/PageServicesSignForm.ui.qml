@@ -1016,7 +1016,6 @@ Item {
                     id: pdfPreviewArea
                     width: parent.width
                     height: parent.height
-                    propertyDragSigRect.visible: checkSignShow.checked
                     propertyReducedChecked: checkSignReduced.checked
                     KeyNavigation.tab: textSpinBox
                     KeyNavigation.down: textSpinBox
@@ -1030,6 +1029,7 @@ Item {
                 id: mouseAreaRectMainRigh
                 anchors.fill: parent
                 enabled: !fileLoaded
+                visible: !fileLoaded
             }
             DropArea {
                 id: dropArea
@@ -1120,6 +1120,7 @@ Item {
                             height: parent.height
                             implicitWidth: 20
                             implicitHeight: parent.height
+                            color: "transparent"
 
                             Text {
                                 text: ">"
@@ -1143,6 +1144,7 @@ Item {
                             height: parent.height
                             implicitWidth: 20
                             implicitHeight: Constants.HEIGHT_BOTTOM_COMPONENT
+                            color: "transparent"
 
                             Text {
                                 text: "<"
