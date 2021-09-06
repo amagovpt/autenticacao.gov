@@ -801,8 +801,9 @@ class PTEID_PDFSignature
 		PTEIDSDK_API void setSignatureLevel(PTEID_SignatureLevel);
 
 		/**
-		 * Use a smaller format for the visible signature which is 50% smaller in height but as wide as the regular format
-		 * The default "Cartão de Cidadão" logo or a custom image supplied via setCustomImage() will not be included
+		 * Use a smaller format for the visible signature which is 50% smaller in height but as wide as the regular format.
+		 * If using a smaller format and a custom seal size at the same time the final size is 50% smaller then the current configured size.
+		 * The default "Cartão de Cidadão" logo or a custom image supplied via setCustomImage() will not be included.
 		 **/
 		PTEIDSDK_API void enableSmallSignatureFormat();
 		PTEIDSDK_API bool isLandscapeFormat();
