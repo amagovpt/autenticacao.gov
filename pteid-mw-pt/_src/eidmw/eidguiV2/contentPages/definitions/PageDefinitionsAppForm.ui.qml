@@ -722,6 +722,8 @@ Item {
                             font.bold: activeFocus
                             color: Constants.COLOR_TEXT_BODY
                             anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: checkboxUseSystemScale.enabled ? checkboxUseSystemScale.right : parent.left 
+                            anchors.leftMargin: 10
                             wrapMode: Text.WordWrap
                             Accessible.role: Accessible.StaticText
                             Accessible.name: text
