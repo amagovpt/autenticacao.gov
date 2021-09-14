@@ -1076,7 +1076,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 
 	if (lines < 2)
 	{
-		std::unique_ptr<GooString> str2(GooString::format("{0:f} -{1:d} Td\r\n",  (int)line_height, -assinado_por_length));
+		std::unique_ptr<GooString> str2(GooString::format("{0:f} -{1:d} Td\r\n", -assinado_por_length, (int)line_height));
 		n2_commands->append(str2.get()); 
 	}
 	else
@@ -1132,7 +1132,7 @@ void Catalog::addSignatureAppearance(Object *signature_field, SignatureSignerInf
 
     if (lines < 2)
     {
-      std::unique_ptr<GooString> str2(GooString::format("{0:f} -{1:d} Td\r\n",  (int)line_height, -location_length));
+      std::unique_ptr<GooString> str2(GooString::format("{0:f} -{1:d} Td\r\n",  -location_length, (int)line_height));
       n2_commands->append(str2.get()); 
     }
     else
@@ -1353,7 +1353,7 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
 
         if (lines < 2)
         {
-                std::unique_ptr<GooString> str2(GooString::format("{0:f} -{1:d} Td\r\n",  (int)line_height, -assinado_por_length));
+                std::unique_ptr<GooString> str2(GooString::format("{0:f} -{1:d} Td\r\n", -assinado_por_length, (int)line_height));
                 n2_commands->append(str2.get());
         }
         else
@@ -1408,7 +1408,7 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
 
           if (lines < 2)
           {
-            std::unique_ptr<GooString> str2(GooString::format("{0:f} -{1:d} Td\r\n",  (int)line_height, -location_length));
+            std::unique_ptr<GooString> str2(GooString::format("{0:f} -{1:d} Td\r\n",   -location_length, (int)line_height));
             n2_commands->append(str2.get()); 
           }
           else
