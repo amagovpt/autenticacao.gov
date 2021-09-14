@@ -1092,6 +1092,8 @@ void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QList<QString>
         if (signParams.isSmallSignature)
             cmd_pdfSignature->enableSmallSignatureFormat();
 
+        cmd_pdfSignature->setCustomSealSize(m_seal_width, m_seal_height);
+
         if (useCustomSignature()) {
             const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
             cmd_pdfSignature->setCustomImage(imageData);
