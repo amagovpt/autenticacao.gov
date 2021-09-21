@@ -198,7 +198,7 @@ PageDefinitionsSCAPForm {
                         count++
                     }
                 }
-                console.log(popupMsg)
+                console.log("popupMsg: " + popupMsg)
 
                 if(pdfsignresult == GAPI.ScapMultiEntityError){
                     titlePopup = qsTranslate("PageDefinitionsSCAP","STR_WARNING")
@@ -301,7 +301,7 @@ PageDefinitionsSCAPForm {
         }
         onSignalEntityAttributesLoaded:{
             console.log("Definitions SCAP - Signal SCAP Entity attributes loaded")
-            console.log(attribute_list)
+            console.log("Attributelist: " + attribute_list)
             if(entityAttributesModel.count == 0){
                 for(var i = 0; i < attribute_list.length; i=i+4)
                 {
