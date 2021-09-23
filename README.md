@@ -1,4 +1,13 @@
 # Middleware Oficial de Identificação Eletrónica em Portugal - Cartão de Cidadão, da Chave Móvel Digital e Sistema de Certificação de atributos profissionais
+
+## Novidades
+> **⚠ IMPORTANTE: Consulta de Morada do Cartão de Cidadão.**  
+> Desde a versão lançada em Outubro de 2021 do Middleware a morada do Cartão de Cidadão é lida a partir dos serviços centrais.
+> 
+> Isto implica uma ligação à Internet funcional para a leitura dos dados da morada.
+> 
+> Para utilizadores do SDK, consultar o [Manual do SDK (online)](https://amagovpt.github.io/docs.autenticacao.gov/manual_sdk.html).
+
 ## Introdução
 ### Objectivos
 
