@@ -691,6 +691,10 @@
         <source>STR_ADDRESS_CHANGE_TEXT_HERE</source>
         <translation>here.</translation>
     </message>
+    <message>
+        <source>STR_ADDRESS_ONLINE_CHANGE_TEXT</source>
+        <translation>If you want to change your address, click</translation>
+    </message>
 </context>
 <context>
     <name>PageCardNotes</name>

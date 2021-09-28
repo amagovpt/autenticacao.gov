@@ -6,7 +6,7 @@
 > 
 > Isto implica uma ligação à Internet funcional para a leitura dos dados da morada.
 > 
-> Para utilizadores do SDK, consultar o [Manual do SDK (online)](https://amagovpt.github.io/docs.autenticacao.gov/manual_sdk.html).
+> Para utilizadores do SDK, consultar o [Manual do SDK (online)](https://amagovpt.github.io/docs.autenticacao.gov/manual_sdk.html#obten%C3%A7%C3%A3o-da-morada).
 
 ## Introdução
 ### Objectivos

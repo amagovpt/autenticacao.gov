@@ -701,6 +701,10 @@
         <source>STR_ADDRESS_CHANGE_TEXT_HERE</source>
         <translation>aqui.</translation>
     </message>
+    <message>
+        <source>STR_ADDRESS_ONLINE_CHANGE_TEXT</source>
+        <translation>Caso pretenda alterar a sua morada, clique</translation>
+    </message>
 </context>
 <context>
     <name>PageCardNotes</name>
@@ -2082,8 +2086,8 @@
         <translation>Atributos certificados: </translation>
     </message>
     <message>
-    <source>STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL</source>
-    <translation>Pré-visualização do ficheiro PDF indisponível devido às suas dimensões reduzidas.</translation>
+        <source>STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL</source>
+        <translation>Pré-visualização do ficheiro PDF indisponível devido às suas dimensões reduzidas.</translation>
     </message>
 </context>
 <context>
