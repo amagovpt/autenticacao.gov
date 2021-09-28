@@ -504,6 +504,14 @@
         <source>STR_CERTIFIED_ATTRIBUTES</source>
         <translation>Atributos certificados: </translation>
     </message>
+    <message>
+        <source>STR_CHANGE_ADDRESS_UNDEFINED_PROCESS_NUMBER</source>
+        <translation>Não existe uma alteração de morada registada para este cartão.</translation>
+    </message>
+    <message>
+        <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
+        <translation>Alterações de morada iniciadas após Outubro de 2021 devem ser confirmadas no portal eportugal.gov.pt. Para mais informações, clique &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;aqui&lt;/a&gt;. Para processos de alteração de morada iniciados antes de Outubro de 2021, verifique que está a usar o Cartão de Cidadão correcto.</translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>
@@ -647,7 +655,7 @@
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT</source>
-        <translation>Caso tenha solicitado uma alteração de morada, insira o número de processo e o código secreto recebidos pelo correio. Caso pretenda alterar a sua morada, clique</translation>
+        <translation>Alterações de morada iniciadas após Outubro de 2021 devem ser confirmadas no portal eportugal.gov.pt. Para mais informações, clique &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;aqui&lt;/a&gt;. &lt;br&gt;&lt;br&gt;Para processos de alteração de morada iniciados antes de Outubro de 2021, insira o número de processo e o código secreto recebidos pelo correio.</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_NUMBER</source>

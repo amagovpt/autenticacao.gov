@@ -506,6 +506,14 @@
         <source>STR_CERTIFIED_ATTRIBUTES</source>
         <translation>Certified Attributes: </translation>
     </message>
+    <message>
+        <source>STR_CHANGE_ADDRESS_UNDEFINED_PROCESS_NUMBER</source>
+        <translation>There is no registered address change for this card. </translation>
+    </message>
+    <message>
+        <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
+        <translation>Address changes started after October 2021 must be confirmed on the portal eportugal.gov.pt. For more information, click &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;here&lt;/a&gt;. For address change processes started before October 2021, please check that you are using the correct Citizen Card.</translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>
@@ -637,7 +645,7 @@
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT</source>
-        <translation>If you have requested a change of address, enter the process number and secret code received by mail. If you want to change your address, click</translation>
+        <translation>Address changes started after October 2021 must be confirmed on the portal eportugal.gov.pt. For more information, click &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;here&lt;/a&gt;. &lt;br&gt;&lt;br&gt;For address change processes started before October 2021, enter the process number and secret code received by mail.</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_NUMBER</source>
@@ -2068,8 +2076,8 @@
         <translation>Certified Attributes: </translation>
     </message>
     <message>
-    <source>STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL</source>
-    <translation>PDF preview unavailable due to its reduced dimensions.</translation>
+        <source>STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL</source>
+        <translation>PDF preview unavailable due to its reduced dimensions.</translation>
     </message>
 </context>
 <context>

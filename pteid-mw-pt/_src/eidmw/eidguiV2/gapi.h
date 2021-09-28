@@ -467,6 +467,7 @@ signals:
     void signalUpdateProgressBar(int value);
     void signalUpdateProgressStatus(const QString statusMessage);
     void signalAddressShowLink();
+    void signalAddressShowUndefinedLink();
     void addressChangeFinished(long return_code);
     void signCMDFinished(long error_code);
     void signalValidateOtp();

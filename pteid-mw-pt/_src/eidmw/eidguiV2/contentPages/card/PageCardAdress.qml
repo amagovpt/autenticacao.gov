@@ -90,6 +90,12 @@ PageCardAdressForm {
         }
         onSignalAddressShowLink: {
             rectMessageTopLink.visible = true
+            textMessageTop.propertyLinkUrl= 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
+        }
+
+        onSignalAddressShowUndefinedLink: {
+            rectMessageTopLink.visible = true
+            textMessageTop.propertyLinkUrl= 'https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao'
         }
         onSignalCardAccessError: {
             console.log("Card Adress onSignalCardAccessError"+ error_code)
