@@ -738,16 +738,16 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
         if (!dir.exists())
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                "AutoUpdates::RunCertsPackage: Certs dir do not exist! %s",certs_dir.getString());
-            qDebug() << "C++: AutoUpdates::RunCertsPackage: Certs dir do not exist!";
+                "AutoUpdates::ChooseCertificates: Certs dir does not exist! %s",certs_dir.getString());
+            qDebug() << "C++: AutoUpdates::ChooseCertificates: Certs dir do not exist!";
             getAppController()->signalAutoUpdateFail(m_updateType,GAPI::InstallFailed);
             return;
         }
         if (!dir.isReadable())
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                "AutoUpdates::RunCertsPackage: Certs dir not have read permissions! %s",certs_dir.getString());
-            qDebug() << "C++: AutoUpdates::RunCertsPackage: Certs dir not have read permissions!";
+                "AutoUpdates::ChooseCertificates: Certs dir is not readable! %s",certs_dir.getString());
+            qDebug() << "C++: AutoUpdates::ChooseCertificates: Certs dir is not readable!";
             getAppController()->signalAutoUpdateFail(m_updateType,GAPI::InstallFailed);
             return;
         }
@@ -763,7 +763,7 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
             qDebug() << "Cert exists: " << QString::fromUtf8(file_name_temp.c_str());
         } else{
             PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
-                "AutoUpdates::RunCertsPackage: Cert does not exist or invalid:! %s",file_name_temp.c_str());
+                "AutoUpdates::ChooseCertificates: Cert does not exist or invalid:! %s",file_name_temp.c_str());
 
             downloadurl.append(configurl);
             downloadurl.append(cert_json->string);
@@ -784,7 +784,7 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
 void AutoUpdates::updateWindows()
 {
     PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
-                "AutoUpdates::RunCertsPackage: There are updates available!");
+                "AutoUpdates::updateWindows: There are updates available!");
 
     if(m_updateType == GAPI::AutoUpdateApp){
         // Show popup about app update
