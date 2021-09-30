@@ -494,15 +494,15 @@
     </message>
     <message>
         <source>STR_SIGNED_BY</source>
-        <translation>Assinado por: </translation>
+        <translation type="vanished">Assinado por: </translation>
     </message>
     <message>
         <source>STR_CERTIFIED_BY</source>
-        <translation>Certificado por: </translation>
+        <translation type="vanished">Certificado por: </translation>
     </message>
     <message>
         <source>STR_CERTIFIED_ATTRIBUTES</source>
-        <translation>Atributos certificados: </translation>
+        <translation type="vanished">Atributos certificados: </translation>
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_PROCESS_NUMBER</source>
@@ -511,6 +511,10 @@
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
         <translation>Alterações de morada iniciadas após Outubro de 2021 devem ser confirmadas no portal eportugal.gov.pt. Para mais informações, clique &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;aqui&lt;/a&gt;. Para processos de alteração de morada iniciados antes de Outubro de 2021, verifique que está a usar o Cartão de Cidadão correcto.</translation>
+    </message>
+    <message>
+        <source>STR_VERIFY_INTERNET_SAM</source>
+        <translation>Após Outubro de 2021 a confirmação de morada é efectuada no portal eportugal.gov.pt. Para mais informações, clique &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;aqui&lt;/a&gt;. Caso contrário Por favor certifique-se que está ligado à internet.</translation>
     </message>
 </context>
 <context>

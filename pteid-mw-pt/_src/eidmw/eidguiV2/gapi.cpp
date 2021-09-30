@@ -579,7 +579,7 @@ void GAPI::showChangeAddressDialog(long code)
         //The error code for connection error is common between SAM and OTP
     case EIDMW_OTP_CONNECTION_ERROR:
         error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CONNECTION_ERROR") + "<br><br>" +
-            tr("STR_VERIFY_INTERNET");
+            tr("STR_VERIFY_INTERNET_SAM");
         if (m_Settings.isProxyConfigured())
             error_msg.append(" ").append(tr("STR_VERIFY_PROXY"));
         break;

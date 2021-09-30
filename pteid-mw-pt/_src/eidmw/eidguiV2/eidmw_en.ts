@@ -496,15 +496,15 @@
     </message>
     <message>
         <source>STR_SIGNED_BY</source>
-        <translation>Signed by : </translation>
+        <translation type="vanished">Signed by : </translation>
     </message>
     <message>
         <source>STR_CERTIFIED_BY</source>
-        <translation>Certified by: </translation>
+        <translation type="vanished">Certified by: </translation>
     </message>
     <message>
         <source>STR_CERTIFIED_ATTRIBUTES</source>
-        <translation>Certified Attributes: </translation>
+        <translation type="vanished">Certified Attributes: </translation>
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_PROCESS_NUMBER</source>
@@ -513,6 +513,10 @@
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
         <translation>Address changes started after October 2021 must be confirmed on the portal eportugal.gov.pt. For more information, click &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;here&lt;/a&gt;. For address change processes started before October 2021, please check that you are using the correct Citizen Card.</translation>
+    </message>
+    <message>
+        <source>STR_VERIFY_INTERNET_SAM</source>
+        <translation>Address changes started after October 2021 must be confirmed on the portal eportugal.gov.pt. For more information, click &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;here&lt;/a&gt;. Otherwise please be sure you are connected to the internet.</translation>
     </message>
 </context>
 <context>
