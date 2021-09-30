@@ -381,7 +381,7 @@ PageCardAdressForm {
             Item {
                 id: rectMessage
                 width: parent.width
-                height: 90
+                height: 85
                 anchors.horizontalCenter: parent.horizontalCenter
                 Components.Link {
                     id: textPinMsgConfirm
@@ -432,7 +432,7 @@ PageCardAdressForm {
             Item {
                 id: rectNumProcess
                 width: parent.width
-                height: 35
+                height: 40
                 anchors.top: rectMessageOnline.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
@@ -484,7 +484,7 @@ PageCardAdressForm {
             Item {
                 id: rectConfirmAddress
                 width: parent.width
-                height: 35
+                height: 40
                 anchors.top: rectNumProcess.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
