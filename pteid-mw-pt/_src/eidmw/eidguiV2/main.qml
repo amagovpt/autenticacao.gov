@@ -1899,10 +1899,10 @@ Load language error. Please reinstall the application"
         console.log("Window mainWindow Completed")
         mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
         gapi.setAppAsDlgParent()
+        controler.autoUpdatesCerts()
+        controler.autoUpdatesNews()
         if (controler.getStartAutoupdateValue()) {
             controler.autoUpdateApp()
-            controler.autoUpdatesCerts()
-            controler.autoUpdatesNews()
         }
         if(Qt.platform.os === "windows" && controler.getAskToRegisterCmdCertValue()){
             mainFormID.propertyCmdDialog.open(GAPI.AskToRegisterCert)
