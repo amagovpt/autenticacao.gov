@@ -66,6 +66,7 @@ PageCardAdressForm {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
 
             gapi.setAddressLoaded(true)
+            propertyButtonConfirmOfAddress.enabled = true
 
             if(!Constants.USE_SDK_PIN_UI_POPUP)
                 dialogTestPin.visible = false
