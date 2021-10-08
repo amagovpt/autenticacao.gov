@@ -859,6 +859,7 @@ return $jnicall;
 // It is done per function because there seems no way in SWIG to let it
 // generate the exception catching for all functions except the contructors
 // and destructors.
+
 //------------------------------------------------------------
 // class PTEID_Object : none
 //------------------------------------------------------------
@@ -1044,10 +1045,14 @@ return $jnicall;
 //------------------------------------------------------------
 // class PTEID_Address
 //------------------------------------------------------------
+%javaexception("PTEID_Exception") getCountryCode        JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getMunicipality		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getMunicipalityCode	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getDistrict			JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getDistrictCode		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getStreetName			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getCivilParish		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getCivilParishCode	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getAbbrStreetType		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getStreetType			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getAbbrBuildingType	JAVA_CODE_THROW
@@ -1060,6 +1065,13 @@ return $jnicall;
 %javaexception("PTEID_Exception") getZip4				JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getZip3				JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getPostalLocality		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getGeneratedAddressCode JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getForeignCountry    JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getForeignAddress    JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getForeignCity       JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getForeignRegion     JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getForeignLocality   JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getForeignPostalCode JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_EIdFullDoc: none
