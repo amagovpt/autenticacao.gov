@@ -1,3 +1,10 @@
+/*-****************************************************************************
+ *
+ *  Copyright (C) 2021 André Guerreiro - <aguerreiro1985@gmail.com>
+ *  Licensed under the EUPL V.1.2
+ *
+ *  Apply pteid proxy configuration to a libcurl request handle
+ */
 
 #include <string>
 #include <curl/curl.h>
@@ -5,8 +12,6 @@
 #include "APLConfig.h"
 #include "Log.h"
 
-
-//Apply MW proxy configuration to a curl request handle
 
 namespace eIDMW {
 
