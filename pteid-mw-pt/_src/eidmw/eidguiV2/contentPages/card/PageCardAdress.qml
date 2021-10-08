@@ -218,6 +218,9 @@ PageCardAdressForm {
             propertyForeignLocality.propertyDateField.text = ""
             propertyForeignPostalCode.propertyDateField.text = ""
             propertyBusyIndicator.running = false
+
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            propertyButtonConfirmOfAddress.enabled = true
         }
 
         onSignalCardChanged: {
@@ -249,7 +252,6 @@ PageCardAdressForm {
                 propertyForeignPostalCode.propertyDateField.text = ""
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
-                propertyButtonConfirmOfAddress.enabled = true
                 if(Constants.USE_SDK_PIN_UI_POPUP){
                     mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                     gapi.verifyAddressPin("", false)
