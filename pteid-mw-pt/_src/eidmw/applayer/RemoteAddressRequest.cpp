@@ -155,7 +155,7 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
         /* Check for errors */
         if (res != CURLE_OK) {
 
-            MWLOG(LEV_ERROR, MOD_APL, "RemoteAddress call to %s failed! curl error code: %d message: %s",
+            MWLOG(LEV_ERROR, MOD_APL, "RemoteAddress call to %s failed! curl error code: %d curl message: %s",
                     get_url_endpoint(endpoint_url), res, strlen(errbuf) > 0 ? errbuf: curl_easy_strerror(res));
             goto cleanup;
         }
@@ -171,8 +171,8 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
             }
             else
             {
-                MWLOG(LEV_ERROR, MOD_APL, "RemoteAddress call to %s returned HTTP error %ld Message: %s", get_url_endpoint(endpoint_url), http_code,
-                        (char *)received_data.c_str());
+                MWLOG(LEV_ERROR, MOD_APL, "RemoteAddress server returned HTTP error on endpoint %s: %ld", get_url_endpoint(endpoint_url), http_code);
+				MWLOG(LEV_DEBUG, MOD_APL, "Received data: %s", (char *)received_data.c_str());
             }
 
         }
