@@ -21,7 +21,7 @@ CByteArray getSodData(APL_EIDCard *card) {
     const CByteArray sod_data = card->getSod().getData();
     const unsigned char *data_p = sod_data.GetBytes();
 
-    //Trim the padding 0x00 bytes parsing the length from the top-level ASN.1 object 77 82 XX YY
+    //Trim the padding 0x00 bytes parsing the length from the top-level ASN.1 object 77 82 [XX YY]
     int sodLen = int((data_p[2] << 8) + data_p[3] + 4);
 
     return CByteArray(data_p, sodLen);
@@ -34,10 +34,10 @@ CByteArray getAuthCert(APL_EIDCard *card) {
 
     const unsigned char *data_p = ba.GetBytes();
 
-    //Trim the padding 0x00 bytes parsing the length from the top-level ASN.1 object 30 82 XX YY
-    int sodLen = int((data_p[2] << 8) + data_p[3] + 4);
+    //Trim the padding 0x00 bytes parsing the length from the top-level ASN.1 object 30 82 [XX YY]
+    int certificate_len = int((data_p[2] << 8) + data_p[3] + 4);
 
-    return CByteArray(data_p, sodLen);
+    return CByteArray(data_p, certificate_len);
 }
 
 
