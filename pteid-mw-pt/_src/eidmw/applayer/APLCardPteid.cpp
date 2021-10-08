@@ -1681,16 +1681,12 @@ void APL_AddrEId::loadRemoteAddress() {
 
 	char * json_str = build_json_obj_dhparams(dh_params, m_card->getFileID(), m_card->getFileAddress(), sod_data, authCert_data);
 
-	//cerr << "json_str: " << endl << json_str << endl;
-
 	//1st POST
 	PostResponse resp = post_json_remoteaddress(url_endpoint_dh.c_str(), json_str, NULL);
 
 	MWLOG(LEV_INFO, MOD_APL, "%s Endpoint (1) returned HTTP code: %ld", __FUNCTION__, resp.http_code);
 
 	std::string received_cookie = parseCookieFromHeaders(resp.http_headers);
-
-	//cout << "Parsed cookie: " << received_cookie << endl;
 
 	RA_DHParamsResponse dh_params_resp = parseDHParamsResponse(resp.http_response.c_str());
 
@@ -1714,8 +1710,6 @@ void APL_AddrEId::loadRemoteAddress() {
 		}
 
 		char * chr = sam_helper.getPK_IFD_AUT((char *)dh_params_resp.cv_ifd_cert.c_str());
-
-		//prepareExternalAutenticate(card, cvc_cert, rsa_ca_pubkey);
 
 		char * challenge = sam_helper.generateChallenge(chr);
 		if (challenge == NULL) {
@@ -1792,7 +1786,7 @@ void APL_AddrEId::loadRemoteAddress() {
 			}
 			else {
 
-				MWLOG(LEV_ERROR, MOD_APL, "Unexpected server response for %s, no http error code but empty/malformed response", ENDPOINT_READADDRESS.c_str());
+				MWLOG(LEV_ERROR, MOD_APL, "Unexpected server response for %s, no HTTP error code but empty/malformed response", ENDPOINT_READADDRESS.c_str());
 				exception_code = EIDMW_REMOTEADDR_SERVER_ERROR;
 			}
 

@@ -49,8 +49,8 @@ RA_SignChallengeResponse parseSignChallengeResponse(const char * json_str) {
     cJSON *signed_challenge = cJSON_Parse(json_str);
     cJSON *item = NULL;
     if (signed_challenge == NULL) {
-        //MWLOG(LEV_ERROR, MOD_APL, "Failed to parse JSON for parseSignChallengeResponse!");
-        fprintf(stderr, "JSON parsing error in parseSignChallengeResponse! Input: %s\n", json_str);
+        MWLOG(LEV_ERROR, MOD_APL, "Failed to parse JSON for parseSignChallengeResponse!");
+        MWLOG(LEV_DEBUG, MOD_APL, "SignChallengeResponse - malformed JSON data: %s", json_str);
         return resp;
     }
 
@@ -109,13 +109,13 @@ RA_DHParamsResponse parseDHParamsResponse(const char * json_str) {
     cJSON *item = NULL;
     if (dh_params == NULL)
     {
-        MWLOG(LEV_ERROR, MOD_APL, "Failed to parse JSON for DHparamsResponse! Input: %s", json_str);
+        MWLOG(LEV_ERROR, MOD_APL, "Failed to parse JSON for DHparamsResponse!");
+        MWLOG(LEV_DEBUG, MOD_APL, "DHParamsResponse - malformed JSON data: %s", json_str);
         return resp;
     }
 
     item = cJSON_GetObjectItem(dh_params, "DHParamsResponse");
 
-    //TODO: ErrorStatus exists even with DHParamsResponse!
     if (!cJSON_IsObject(item)) {
         //Error response: get Error Status and write it to resp
         item = cJSON_GetObjectItem(dh_params, "ErrorStatus");
@@ -152,7 +152,8 @@ RA_GetAddressResponse * validateReadAddressResponse(const char * json_str) {
     cJSON *item = NULL;
     if (cjson_obj == NULL)
     {
-        MWLOG(LEV_ERROR, MOD_APL, "Failed to parse JSON for ReadAddressResponse! Input: %s", json_str);
+        MWLOG(LEV_ERROR, MOD_APL, "Failed to parse JSON for ReadAddressResponse!");
+        MWLOG(LEV_DEBUG, MOD_APL, "DHParamsResponse - malformed JSON data: %s", json_str);
         resp->error_code = -1;
         return resp;
     }

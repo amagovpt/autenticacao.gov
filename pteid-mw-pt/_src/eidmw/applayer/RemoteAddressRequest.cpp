@@ -105,6 +105,7 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
         headers = curl_slist_append(headers, "Content-Type: application/json");
 
         if (cookie != NULL) {
+            MWLOG(LEV_DEBUG, MOD_APL, "Performing authenticated request which means adding a Cookie header");
             std::string cookie_header("Cookie: ");
             cookie_header.append(cookie);
             headers = curl_slist_append(headers, cookie_header.c_str());
