@@ -2126,7 +2126,7 @@
     </message>
     <message>
         <source>STR_SOD_VALIDATION_ERROR</source>
-        <translation>Consistência da informação do cartão está comprometida!</translation>
+        <translation>Não foi possível verificar a informação do Cartão de Cidadão. &lt;br&gt;Verifique se tem a versão atualizada da aplicação.</translation>
     </message>
     <message>
         <source>STR_POPUP_CARD_ACCESS_ERROR</source>

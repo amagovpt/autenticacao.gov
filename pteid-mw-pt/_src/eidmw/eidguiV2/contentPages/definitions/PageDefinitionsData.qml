@@ -45,7 +45,9 @@ PageDefinitionsDataForm {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD") + controler.autoTr
             }
             else if (error_code == GAPI.SodCardReadError) {
-                bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR") 
+                    + "<br/><br/>" + qsTranslate("Popup Card","STR_GENERIC_ERROR_MSG") 
+                    + controler.autoTr
             }
             else if (error_code == GAPI.CardUserPinCancel) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED") + controler.autoTr

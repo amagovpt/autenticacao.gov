@@ -2120,7 +2120,7 @@
     </message>
     <message>
         <source>STR_SOD_VALIDATION_ERROR</source>
-        <translation>SOD validation failed: card data consistency is compromised!</translation>
+        <translation>It was not possible to verify the Citizen Card information. &lt;br&gt; Check if you have an updated version of the application.</translation>
     </message>
     <message>
         <source>STR_POPUP_CARD_ACCESS_ERROR</source>
