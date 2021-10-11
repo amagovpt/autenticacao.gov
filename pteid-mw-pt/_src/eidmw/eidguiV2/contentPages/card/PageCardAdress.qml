@@ -167,6 +167,12 @@ PageCardAdressForm {
                 propertyZip4.propertyDateField.text = ""
                 propertyZip3.propertyDateField.text = ""
                 propertyPostalLocality.propertyDateField.text = ""
+                propertyForeignCountry.propertyDateField.text = ""
+                propertyForeignAddress.propertyDateField.text = ""
+                propertyForeignCity.propertyDateField.text = ""
+                propertyForeignRegion.propertyDateField.text = ""
+                propertyForeignLocality.propertyDateField.text = ""
+                propertyForeignPostalCode.propertyDateField.text = ""
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 if(Constants.USE_SDK_PIN_UI_POPUP){
