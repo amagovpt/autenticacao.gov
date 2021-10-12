@@ -564,6 +564,7 @@
 							<RegistryValue Type="string" Name="language" Value="nl"/>
 							<RegistryValue Type="string" Name="install_dirname" Value="[APPLICATIONFOLDER]"/>
 							<RegistryValue Type="string" Name="certs_dir" Value="[APPLICATIONFOLDER]eidstore\certs"/>
+              <RegistryValue Type="string" Name="certs_dir_test" Value="[APPLICATIONFOLDER]eidstore\certs_test"/>
 						</RegistryKey>
             <RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
 							<RegistryValue Type="string" Name="log_dirname" Value="[APPLICATIONFOLDER]log"/>
