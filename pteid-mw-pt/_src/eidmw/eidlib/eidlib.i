@@ -1072,6 +1072,7 @@ return $jnicall;
 %javaexception("PTEID_Exception") getForeignRegion     JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getForeignLocality   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getForeignPostalCode JAVA_CODE_THROW
+%javaexception("PTEID_Exception") isNationalAddress    JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_EIdFullDoc: none
