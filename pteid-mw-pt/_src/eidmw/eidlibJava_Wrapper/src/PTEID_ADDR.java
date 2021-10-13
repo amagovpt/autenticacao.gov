@@ -1,7 +1,7 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Pteidlib compatibility API - data class for Address info
  */
+
 package pteidlib;
 
 import java.util.logging.Level;
@@ -49,11 +49,10 @@ public class PTEID_ADDR implements pteidlibJava_WrapperConstants {
     public String numMorF = "";
     PTEID_ByteArray m_data;
 
-    protected PTEID_ADDR(PTEID_Address addr){
-        try {
-            version = 0;
-            addrType = addr.isNationalAddress() ? "N" : "I";
-            country = addr.getCountryCode();
+    protected PTEID_ADDR(PTEID_Address addr) throws PTEID_Exception {
+        version = 0;
+        addrType = addr.isNationalAddress() ? "N" : "I";
+        country = addr.getCountryCode();
         if (addr.isNationalAddress()) {
             district = addr.getDistrictCode();
             districtDesc = addr.getDistrict();
@@ -84,12 +83,9 @@ public class PTEID_ADDR implements pteidlibJava_WrapperConstants {
             postalF = addr.getForeignPostalCode();
             numMorF = addr.getGeneratedAddressCode();
         }
-        } catch (PTEID_Exception ex) {
-            Logger.getLogger(PTEID_ADDR.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
-    protected PTEID_ADDR( byte[] addressRaw ){
+    protected PTEID_ADDR( byte[] addressRaw ) {
         try {
             m_data = new PTEID_ByteArray( addressRaw, addressRaw.length );
 

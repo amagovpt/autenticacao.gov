@@ -22,7 +22,7 @@ public class PteidException extends Exception
   public PteidException(int error_code)
   {
     this.error_code = error_code;
-    String str = "Error code : " + Integer.toString(error_code);
+    String str = "Error code : " + Integer.toHexString(error_code);
     this.message = str;
   }
   

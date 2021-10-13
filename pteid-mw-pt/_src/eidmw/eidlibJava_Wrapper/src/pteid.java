@@ -36,7 +36,7 @@ public class pteid {
     private static int SC_ERROR_NO_READERS_FOUND = -1101;
     private static int SC_ERROR_CARD_NOT_PRESENT = -1104;
 
-        private static String GEMPC_PINPAD = "GemPC Pinpad";
+    private static String GEMPC_PINPAD = "GemPC Pinpad";
 
     protected static final char[] hexChars = {
         '0', '1', '2', '3', '4', '5',
@@ -132,18 +132,18 @@ public class pteid {
             throw new PteidException(SC_ERROR_KEYPAD_CANCELLED);
         } else {
             throw new PteidException(ex.GetError());
-        }  
+        }
     }
 
     public static PTEID_ADDR GetAddr() throws PteidException {
 
         try {
-                        //Workaround for GemPC issue with 3072-bits cards
-                        if (readerContext.getName().contains(GEMPC_PINPAD)) {
-                                //Just need to read SOD file, we don't actually need the data
-                                PTEID_ByteArray throwaway_sod = new PTEID_ByteArray();
-                                idCard.readFile("3F005F00EF06", throwaway_sod);
-                        }
+            //Workaround for GemPC issue with 3072-bits cards
+            if (readerContext.getName().contains(GEMPC_PINPAD)) {
+                //Just need to read SOD file, we don't actually need the data
+                PTEID_ByteArray throwaway_sod = new PTEID_ByteArray();
+                idCard.readFile("3F005F00EF06", throwaway_sod);
+            }
             PTEID_ulwrapper ul = new PTEID_ulwrapper(-1);
             PTEID_Pins pins = idCard.getPins();
             for (long i = 0; i < pins.count(); i++) {
