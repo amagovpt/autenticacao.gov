@@ -404,8 +404,8 @@ namespace eidpt
             postalF = addr.getForeignPostalCode();
             numMorF = addr.getGeneratedAddressCode();
         }
-        } catch (PTEID_Exception) {
-            throw new PteidException(0);
+        } catch (PTEID_Exception e) {
+            throw new PteidException(e.GetError());
         }
     }
 

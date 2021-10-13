@@ -12,7 +12,7 @@ namespace eidpt
 		
 	  }
 	  
-	  public PteidException(int error_code): base("Error code : " +Convert.ToString(error_code))
+	  public PteidException(int error_code): base("Error code : " +error_code.ToString("X4"))
 	  {
 		
 	  }
