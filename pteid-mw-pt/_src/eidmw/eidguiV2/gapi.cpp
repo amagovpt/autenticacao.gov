@@ -1977,7 +1977,7 @@ void GAPI::doSignPDF(SignParams &params) {
         const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
         sig_handler.setCustomImage(imageData);
     }
-    card->SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
+    card->SignPDF(sig_handler, params.page == 0 ? 1 : params.page, params.coord_x, params.coord_y,
         params.location.toUtf8().data(), params.reason.toUtf8().data(),
         getPlatformNativeString(params.outputFile));
 
