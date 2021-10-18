@@ -852,31 +852,6 @@
         <source>STR_PRINT_PDF_BUTTON</source>
         <translation>Gerar PDF</translation>
     </message>
-    <message>
-        <source>STR_REMOTEADDRESS_SERVER_ERROR</source>
-        <translation>Serviço temporariamente indisponível.</translation>
-    </message>
-    <message>
-        <source>STR_REMOTEADDRESS_TIMEOUT_ERROR</source>
-        <translation>Não foi possível obter resposta do Serviço de consulta de morada.</translation>
-    </message>
-    <message>
-        <source>STR_REMOTEADDRESS_SMARTCARD_ERROR</source>
-        <translation>Erro na leitura do cartão para consulta de morada.</translation>
-    </message>
-    <message>
-        <source>STR_REMOTEADDRESS_UNKNOWN_ERROR</source>
-        <translation>Erro inesperado na consulta de morada.</translation>
-    </message>
-    <message>
-        <source>STR_REMOTEADDRESS_GENERIC</source>
-        <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecida
-        dao@irn.mj.pt&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <source>STR_REMOTEADDRESS_NETWORK_ERROR</source>
-        <translation>Por favor verifique a sua ligação a internet.</translation>
-    </message>
 </context>
 <context>
     <name>PageDataApp</name>

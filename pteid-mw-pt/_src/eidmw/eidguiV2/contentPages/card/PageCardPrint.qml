@@ -230,24 +230,24 @@ PageCardPrintForm {
             var titlePopup = qsTr("STR_PRINT_CREATE_PDF") + ": " + qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
             if (error_code == GAPI.AddressConnectionError) {
-                bodyPopup = qsTr("STR_REMOTEADDRESS_NETWORK_ERROR")
-                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+                bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_NETWORK_ERROR")
+                    + "<br/><br/>" + qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_GENERIC")
             }            
             else if (error_code == GAPI.AddressServerError) {
-                bodyPopup = qsTr("STR_REMOTEADDRESS_SERVER_ERROR")
-                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+                bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_SERVER_ERROR")
+                    + "<br/><br/>" + qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_GENERIC")
             }            
             else if (error_code == GAPI.AddressConnectionTimeout) {
-                bodyPopup = qsTr("STR_REMOTEADDRESS_TIMEOUT_ERROR")
-                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+                bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_TIMEOUT_ERROR")
+                    + "<br/><br/>" + qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_GENERIC")
             }            
             else if (error_code == GAPI.AddressSmartcardError) {
-                bodyPopup = qsTr("STR_REMOTEADDRESS_SMARTCARD_ERROR")
-                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+                bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_SMARTCARD_ERROR")
+                    + "<br/><br/>" + qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_GENERIC")
             }
             else if (error_code == GAPI.AddressUnknownError) {
-                bodyPopup = qsTr("STR_REMOTEADDRESS_UNKNOWN_ERROR")
-                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+                bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_UNKNOWN_ERROR")
+                    + "<br/><br/>" + qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_GENERIC")
             }
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
