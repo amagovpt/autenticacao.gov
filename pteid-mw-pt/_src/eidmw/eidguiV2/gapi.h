@@ -580,7 +580,7 @@ private:
     bool doSignPrintPDF(QString &file_to_sign, QString &outputsign, bool isTimestamp, bool isLtv);
     void doPrintPDF(PrintParamsWithSignature &params);
     void doPrint(PrintParams &params);
-    bool drawpdf(QPrinter &printer, PrintParams params);
+    bool drawpdf(QPrinter &printer, PrintParams params, long &addressError);
     void doSignBatchPDF(SignParams &params);
     void doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, bool isLTV, bool isASIC);
     void doSignBatchXADES(SignParams &params);

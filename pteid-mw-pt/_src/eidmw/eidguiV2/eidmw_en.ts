@@ -842,6 +842,30 @@
         <source>STR_PRINT_PDF_BUTTON</source>
         <translation>Create PDF</translation>
     </message>
+    <message>
+        <source>STR_REMOTEADDRESS_SERVER_ERROR</source>
+        <translation>Service temporarily unavailable.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_TIMEOUT_ERROR</source>
+        <translation>Could not get response from service.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_SMARTCARD_ERROR</source>
+        <translation>Error reading card for remote address loading.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_UNKNOWN_ERROR</source>
+        <translation>Unexpected error loading remote address.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_GENERIC</source>
+        <translation>Please try again. If this error persists, please contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_NETWORK_ERROR</source>
+        <translation>Please check your Internet connection.</translation>
+    </message>
 </context>
 <context>
     <name>PageDataApp</name>
