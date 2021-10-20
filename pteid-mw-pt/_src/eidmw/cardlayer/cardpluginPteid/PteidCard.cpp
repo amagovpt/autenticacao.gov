@@ -556,8 +556,10 @@ bool CPteidCard::PinCmd(tPinOperation operation, const tPin & Pin,
 
 unsigned long CPteidCard::GetSupportedAlgorithms()
 {
-	unsigned long ulAlgos =
-		SIGN_ALGO_RSA_PKCS | SIGN_ALGO_SHA1_RSA_PKCS;
+		unsigned long ulAlgos =
+			SIGN_ALGO_RSA_PKCS | SIGN_ALGO_SHA1_RSA_PKCS | SIGN_ALGO_SHA256_RSA_PKCS
+			                   | SIGN_ALGO_SHA384_RSA_PKCS | SIGN_ALGO_SHA512_RSA_PKCS | SIGN_ALGO_RSA_PSS;
+
 
 	return ulAlgos;
 }
@@ -566,9 +568,8 @@ unsigned long CPteidCard::GetSupportedAlgorithms()
 void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
     unsigned long ulInputLen)
 {
-	// Data = [04 80 <algoref> 84 <keyref>]  (5 bytes)
     CByteArray oDataias, oDatagem;
-    unsigned char ucAlgo;
+    unsigned char ucAlgo = 0x02;
     CByteArray oResp;
 
     m_ucCLA = 0x00;
@@ -576,16 +577,26 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
 	if (m_AppletVersion == 1) {
 		oDatagem.Append(0x80);
 		oDatagem.Append(0x01);
-		if (algo == SIGN_ALGO_SHA256_RSA_PKCS)
-			oDatagem.Append(0x42);
-		else
-			oDatagem.Append(0x02); //Algorithm: RSA with PKCS#1 Padding
+		//Algorithm: RSA with PKCS#1 Padding
+		if (ulInputLen == SHA256_LEN)
+			ucAlgo = 0x42;
+		else if (ulInputLen == SHA384_LEN)
+			ucAlgo = 0x52;
+		else if (ulInputLen == SHA512_LEN)
+			ucAlgo = 0x62;
+		else if (ulInputLen == SHA1_LEN)
+			ucAlgo = 0x12;
+		//Algorithm: RSA with PSS Padding
+		if (algo == SIGN_ALGO_RSA_PSS) {
+			ucAlgo += 3;
+		}
+		oDatagem.Append(ucAlgo);
 		oDatagem.Append(0x84);
 		oDatagem.Append(0x01);
 		oDatagem.Append((unsigned char) key.ulKeyRef);
 		oResp = SendAPDU(0x22, 0x41, 0xB6, oDatagem);
     } else {
-
+		//Legacy IAS v1 cards
     	oDataias.Append(0x95);
     	oDataias.Append(0x01);
     	oDataias.Append(0x40);
@@ -627,7 +638,7 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
     bool bOK = false;
     m_ucCLA = 0x00;
 
-    MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::SignInternal called with algoID=%02x and data length=%d",
+    MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::SignInternal called with algoID=%04x and data length=%d",
     	algo, oData.Size());
 
     if (pPin != NULL)
