@@ -1795,7 +1795,7 @@ void APL_AddrEId::loadRemoteAddress() {
 	}
 
 	cleanup:
-	  if (exception_code > 0) {
+	  if (exception_code != 0) {
 	  	throw CMWEXCEPTION(exception_code);
 	  }
 
