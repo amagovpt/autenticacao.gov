@@ -1248,6 +1248,9 @@ void GAPI::startPrint(QString outputFile, bool isBasicInfo, bool isAdditionalInf
             else if (addressError == EIDMW_REMOTEADDR_SMARTCARD_ERROR) {
                 emit signalRemoteAddressError(AddressSmartcardError);
             }
+            else if (addressError == EIDMW_REMOTEADDR_CERTIFICATE_ERROR) {
+                emit signalRemoteAddressError(AddressCertificateError);
+            }
             else if (addressError == EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
                 emit signalRemoteAddressError(AddressUnknownError);
             }
@@ -1270,6 +1273,9 @@ void GAPI::startPrint(QString outputFile, bool isBasicInfo, bool isAdditionalInf
             }
             else if (addressError == EIDMW_REMOTEADDR_SMARTCARD_ERROR) {
                 emit signalRemoteAddressError(AddressSmartcardError);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_CERTIFICATE_ERROR) {
+                emit signalRemoteAddressError(AddressCertificateError);
             }
             else if (addressError == EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
                 emit signalRemoteAddressError(AddressUnknownError);
@@ -1358,6 +1364,9 @@ void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
             else if (addressError == EIDMW_REMOTEADDR_SMARTCARD_ERROR) {
                 emit signalRemoteAddressError(AddressSmartcardError);
             }
+            else if (addressError == EIDMW_REMOTEADDR_CERTIFICATE_ERROR) {
+                emit signalRemoteAddressError(AddressCertificateError);
+            }
             else if (addressError == EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
                 emit signalRemoteAddressError(AddressUnknownError);
             }
@@ -1392,6 +1401,9 @@ void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
         }
         else if (addressError == EIDMW_REMOTEADDR_SMARTCARD_ERROR) {
             emit signalRemoteAddressError(AddressSmartcardError);
+        }
+        else if (addressError == EIDMW_REMOTEADDR_CERTIFICATE_ERROR) {
+            emit signalRemoteAddressError(AddressCertificateError);
         }
         else if (addressError == EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
             emit signalRemoteAddressError(AddressUnknownError);

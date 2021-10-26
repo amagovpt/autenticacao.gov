@@ -189,6 +189,10 @@ PageCardAdressForm {
             else if (error_code == GAPI.IncompatibleReader) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
             }
+            else if (error_code == GAPI.AddressCertificateError) {
+                bodyPopup = qsTranslate("GAPI", "STR_CERTIFICATE_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+            }
             else if (error_code == GAPI.AddressUnknownError) {
                 bodyPopup = qsTr("STR_REMOTEADDRESS_UNKNOWN_ERROR")
                     + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")

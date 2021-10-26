@@ -242,7 +242,7 @@ public:
 
     enum CardAccessError { NoReaderFound, NoCardFound, CardUnknownCard, PinBlocked, SodCardReadError, CardUserPinCancel, CardUnknownError, CardPinTimeout, IncompatibleReader };
 
-    enum RemoteAddressError { AddressConnectionError, AddressServerError, AddressConnectionTimeout, AddressSmartcardError, AddressUnknownError };
+    enum RemoteAddressError { AddressConnectionError, AddressServerError, AddressConnectionTimeout, AddressSmartcardError, AddressCertificateError, AddressUnknownError };
 
     enum SignMessage { SignMessageOK, SignMessageTimestampFailed, SignMessageLtvFailed, SignFilePermissionFailed, PDFFileUnsupported};
 

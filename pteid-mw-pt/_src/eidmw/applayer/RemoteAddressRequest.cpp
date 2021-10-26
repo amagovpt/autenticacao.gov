@@ -63,6 +63,8 @@ std::string parseCookieFromHeaders(std::string headers) {
             throw CMWEXCEPTION(EIDMW_REMOTEADDR_CONNECTION_TIMEOUT);
         else if (rc == CURLE_COULDNT_RESOLVE_HOST || rc == CURLE_COULDNT_CONNECT)
             throw CMWEXCEPTION(EIDMW_REMOTEADDR_CONNECTION_ERROR);
+        else if (rc == CURLE_PEER_FAILED_VERIFICATION)
+            throw CMWEXCEPTION(EIDMW_REMOTEADDR_CERTIFICATE_ERROR);
         else
             throw CMWEXCEPTION(EIDMW_REMOTEADDR_UNKNOWN_ERROR);
  }
