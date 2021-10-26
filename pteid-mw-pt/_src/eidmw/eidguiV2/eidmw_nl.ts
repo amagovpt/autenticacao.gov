@@ -58,6 +58,10 @@
         <translation>Erro na comunicação</translation>
     </message>
     <message>
+        <source>STR_CERTIFICATE_ERROR</source>
+        <translation>Este erro pode ser resultado da interferência na rede, por um software externo à aplicação Autenticação.Gov. Recomenda-se que repita a confirmação de morada noutro computador e/ou numa rede doméstica.</translation>
+    </message>
+    <message>
         <source>STR_PROXY_AUTH_FAILED</source>
         <translation>O seu servidor de proxy requer autenticação. Por favor verifique as configurações de rede no menu &quot;Configurações da Aplicação&quot;.</translation>
     </message>

@@ -63,6 +63,10 @@
         <translation>Connection Error</translation>
     </message>
     <message>
+        <source>STR_CERTIFICATE_ERROR</source>
+        <translation>This error may be the result of a network interference, caused by a software unrelated to Autenticação.Gov. Please repeat the address confirmation procedure on another computer and/or on a domestic network.</translation>
+    </message>
+    <message>
         <source>STR_PROXY_AUTH_FAILED</source>
         <translation>Your proxy server requires authentication. Please review your network settings in the &quot;Application Configuration&quot; menu.</translation>
     </message>

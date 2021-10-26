@@ -585,8 +585,8 @@ void GAPI::showChangeAddressDialog(long code)
         break;
 
     case EIDMW_OTP_CERTIFICATE_ERROR:
-        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CONNECTION_ERROR") + "<br><br>" +
-            tr("STR_VERIFY_APP_UPDATE");
+        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_VERIFY_APP_UPDATE") + "<br><br>" +
+            tr("STR_CERTIFICATE_ERROR");
         break;
 
     case EIDMW_SAM_PROXY_AUTH_FAILED:
