@@ -932,7 +932,7 @@
     </message>
     <message>
         <source>STR_SHOW_ANIME_OP</source>
-        <translation>Activar animações</translation>
+        <translation>Ativar animações</translation>
     </message>
     <message>
         <source>STR_SCALE_APPLICATION_TITLE</source>
