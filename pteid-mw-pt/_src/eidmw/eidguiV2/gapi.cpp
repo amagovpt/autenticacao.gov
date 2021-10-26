@@ -564,7 +564,7 @@ void GAPI::showChangeAddressDialog(long code)
 
     //code = SAM_UNDEFINED_PROCESS_NUMBER;
     if (code == 0){
-        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "AddressChange op finished with sucess");
+        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "AddressChange op completed successfully");
     } else {
 		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code 0x%08x", code);
     }
@@ -3864,3 +3864,4 @@ QString GAPI::getAbsolutePath(QString path) {
     }
     return path;
 }
+
