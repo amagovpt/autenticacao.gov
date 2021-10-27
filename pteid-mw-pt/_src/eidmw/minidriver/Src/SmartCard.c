@@ -475,11 +475,27 @@ cleanup:
 }
 #undef WHERE
 
+BYTE getGemaltoAlgoID(DWORD hash_len) {
+	switch (hash_len) {
+	case SHA1_LEN:
+		return 0x12;
+	case SHA256_LEN:
+		return 0x42;
+	case SHA384_LEN:
+		return 0x52;
+	case SHA512_LEN:
+		return 0x62;
+	default:
+		return 0x02;
+	}
+}
+
+
 /****************************************************************************************************/
 
 #define WHERE "PteidMSE"
 DWORD PteidMSE(PCARD_DATA   pCardData, 
-			     BYTE      key_id,  BYTE is_sha256) 
+			     BYTE      key_id, DWORD hash_length,  BOOL pss_padding) 
 {
   
    DWORD             dwReturn = 0;
@@ -510,8 +526,11 @@ DWORD PteidMSE(PCARD_DATA   pCardData,
 	   Cmd [4] = 0x06; //Length of data
 	   Cmd [5] = 0x80; //Tag (Algorithm ID)
 	   Cmd [6] = 0x01;
-	   Cmd [7] = is_sha256 ? 0x42 : 0x02;
-	   Cmd [8] = 0x84; //Tag (Key Reference) 
+	   //pss_padding parameter adds 3 to the default (PKCS#1) algorithm IDs
+	   Cmd[7] = getGemaltoAlgoID(hash_length);
+	   if (pss_padding)
+			   Cmd[7] += 3;
+	   Cmd [8] = 0x84; //Tag (Key Reference)
 	   Cmd [9] = 0x01;
 	   if(key_id == 0) 
 		Cmd [10] = 0x02; //Auth keyRef
@@ -918,7 +937,7 @@ DWORD PteidSignData(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE
 		0x05, 0x00, 0x04, 0x20 };
 	
    PteidSelectApplet(pCardData);
-   dwReturn = PteidMSE(pCardData, pin_id, 0);
+   dwReturn = PteidMSE(pCardData, pin_id, cbToBeSigned, FALSE);
 
    if (dwReturn != SCARD_S_SUCCESS)
    {
@@ -1250,7 +1269,7 @@ cleanup:
 
 
 #define WHERE "PteidSignDataGemsafe"
-DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature)
+DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature, BOOL pss_padding)
 {
 
    DWORD                   dwReturn = 0;
@@ -1269,32 +1288,16 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    unsigned int            i          = 0;
    unsigned int            cbHdrHash  = 0;
    const unsigned char     *pbHdrHash = NULL;
-
-   static const unsigned char SHA1_AID[] = {
-       0x30, 0x21,
-           0x30, 0x09,
-               0x06, 0x05, 0x2b, 0x0e, 0x03, 0x02, 0x1a,
-           0x05, 0x00,
-           0x04, 0x14
-   };
          
-   BYTE is_sha256 = cbToBeSigned == 32;
    DWORD out_len = 0;
 
    memset(recvbuf, 0, out_len);
 
-   dwReturn = PteidMSE(pCardData, pin_id, is_sha256);
+   dwReturn = PteidMSE(pCardData, pin_id, cbToBeSigned, pss_padding);
 
    if (dwReturn != SCARD_S_SUCCESS)
    {
 	CLEANUP(dwReturn);
-   }
-
-   if (cbToBeSigned == 20)
-   {
-	  LogTrace(LOGTYPE_INFO, WHERE, "Using SHA1_AID as header...");
-      cbHdrHash = sizeof(SHA1_AID);
-      pbHdrHash = SHA1_AID;
    }
 
    /* Sign Command for GEMSAFE*/
@@ -1302,21 +1305,13 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    Cmd [1] = 0x2A;   /* PSO: Hash COMMAND */
    Cmd [2] = 0x90;
    Cmd [3] = 0xA0; 
-   Cmd[4] = cbToBeSigned == 20 ? (BYTE)(cbToBeSigned + cbHdrHash) + 2 : (BYTE)(cbToBeSigned + 2); // The value of cbToBeSigned should always fit a single byte so this cast is safe 
+   Cmd [4] = (BYTE)(cbToBeSigned + 2); // The value of cbToBeSigned +2 should always fit a single byte so this cast is safe 
    Cmd [5] = 0x90;
-   Cmd [6] = cbToBeSigned == 20 ? (BYTE)(cbToBeSigned + cbHdrHash) : (BYTE)(cbToBeSigned);
+   Cmd [6] = (BYTE)(cbToBeSigned);
    
-   if (cbToBeSigned == 20)
-   {	
-	  memcpy(Cmd + 7, pbHdrHash, cbHdrHash);
-      memcpy(Cmd + 7 + cbHdrHash, pbToBeSigned, cbToBeSigned);
-      uiCmdLg = 7 + cbHdrHash + cbToBeSigned;
-   }
-   else
-   {
-	  memcpy(Cmd + 7, pbToBeSigned, cbToBeSigned);
-	  uiCmdLg = 7 + cbToBeSigned;
-   }
+   
+   memcpy(Cmd + 7, pbToBeSigned, cbToBeSigned);
+   uiCmdLg = 7 + cbToBeSigned;
    
 #ifdef _DEBUG
    LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", cbHdrHash + cbToBeSigned, (char *)&Cmd[5]);

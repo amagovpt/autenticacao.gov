@@ -190,7 +190,7 @@ DWORD WINAPI   CardSignData
 	BCRYPT_PSS_PADDING_INFO    *PssPadInfo  = NULL;
 
 	unsigned int               uiHashAlgo   = HASH_ALGO_NONE;
-
+	
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 	LogTrace(LOGTYPE_INFO, WHERE, "CardSignData called with pInfo->aiHashAlg: %d", pInfo->aiHashAlg); 
 
@@ -244,7 +244,7 @@ DWORD WINAPI   CardSignData
 	{
 		LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwSigningFlags: CARD_BUFFER_SIZE_ONLY");
 		//TODO: hardcoded signature length
-		pInfo->cbSignedData = 128;
+		pInfo->cbSignedData = g_keySize / 8;
 		CLEANUP(SCARD_S_SUCCESS);
 	}
 
@@ -254,8 +254,9 @@ DWORD WINAPI   CardSignData
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
 	
-	//SHAMD5 Hash used by SSLv3 should be the largest supported hash
-	if (pInfo->cbData > 36)
+	//SHA-512 is the largest supported hash
+	//TODO: check for the version of this hash in "DigestInfo format"
+	if (pInfo->cbData > SHA512_LEN)
 	{
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter (Hash Size): %d", pInfo->cbData);
 		CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
@@ -351,7 +352,8 @@ DWORD WINAPI   CardSignData
 				break;
 			case CARD_PADDING_PSS:
 				LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwPaddingType: CARD_PADDING_PSS");
-				memcpy (&PssPadInfo, pInfo->pPaddingInfo, sizeof(PssPadInfo));
+				PssPadInfo = (BCRYPT_PSS_PADDING_INFO *)pInfo->pPaddingInfo;
+				LogTrace(LOGTYPE_INFO, WHERE, "PSS AlgId: %S", PssPadInfo->pszAlgId);
 				break;
 			case CARD_PADDING_NONE:
 				LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwPaddingType: CARD_PADDING_NONE");
@@ -383,7 +385,7 @@ DWORD WINAPI   CardSignData
 		pInfo->cbData, 
 		pInfo->pbData, 
 		&(pInfo->cbSignedData), 
-		&(pInfo->pbSignedData));
+		&(pInfo->pbSignedData), PssPadInfo != NULL);
 
 	}
 	else

@@ -62,8 +62,12 @@ typedef struct _PIN_VERIFY_STRUCTURE
 #define FEATURE_MCT_READERDIRECT         0x08 
 #define FEATURE_MCT_UNIVERSAL            0x09 
 #define FEATURE_IFD_PIN_PROPERTIES       0x0A 
-#define FEATURE_ABORT                    0x0B 
+#define FEATURE_ABORT                    0x0B
 
+#define SHA1_LEN   20
+#define SHA256_LEN 32
+#define SHA384_LEN 48
+#define SHA512_LEN 64
 
 typedef struct _FEATURES
 {
@@ -109,7 +113,8 @@ extern DWORD PteidSignDataGemsafe
 				DWORD cbToBeSigned, 
 				PBYTE pbToBeSigned, 
 				DWORD *pcbSignature, 
-				PBYTE *ppbSignature
+				PBYTE *ppbSignature, 
+				BOOL pss_padding
 			);
 extern DWORD PteidReadFile
 			(
@@ -153,9 +158,10 @@ extern DWORD   PteidAuthenticateExternal
 
 extern DWORD   PteidMSE
 				(
-						PCARD_DATA   pCardData, 
+				 PCARD_DATA   pCardData, 
 			     BYTE      key_id,
-				 BYTE is_sha256
+				 DWORD hash_length,
+				 BOOL pss_padding
 				 ); 
 
 extern DWORD   PteidChangePIN
