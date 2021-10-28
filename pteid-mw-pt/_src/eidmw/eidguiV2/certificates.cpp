@@ -109,10 +109,10 @@ void ImportCertFromDisk(void *cert_path)
     }
 }
 #endif
-//**************************************************
-// Checks of older registered certificates are not
-// still bound to the CSP when the minidriver is used
-//**************************************************
+//****************************************************
+// Checks if existing registered certificate is bound to the correct
+// Cryptographic Key Provider - this is crucial for eID signatures using the CNG API
+//****************************************************
 #ifdef WIN32
 bool CERTIFICATES::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
 {
@@ -135,8 +135,15 @@ bool CERTIFICATES::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
     }
     if(CertGetCertificateContextProperty(pCertContext, dwPropId, pCryptKeyProvInfo, &cbData))
     {
-        if (!wcscmp(pCryptKeyProvInfo->pwszProvName, L"Portugal Identity Card CSP"))
-            return false;
+		if (wcscmp(pCryptKeyProvInfo->pwszProvName, MS_SCARD_PROV_W) != 0) {
+			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui",
+				"KeyProvider name is different than expected!", GetLastError());
+			return false;
+		}
+		else {
+			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui",
+				"KeyProvider name is correct in existing certificate", GetLastError());
+		}
     }
     return true;
 }
@@ -181,11 +188,8 @@ bool CERTIFICATES::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertCont
                     {
                         if (E_ACCESSDENIED == GetLastError())
                         {
-                            //QString strCaption(tr("Deleting former certificate"));
-                            //QString strMessage(tr("Error deleting former certificate"));
-                            //QMessageBox::information(NULL,strCaption,strMessage);
                             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                                "StoreUserCerts: Deleting former certificate: Error deleting former certificate");
+                                "StoreUserCerts: Deleting existing certificate: Error deleting former certificate");
                         }
                     }
                     pPrevCert = NULL;
@@ -235,7 +239,7 @@ bool CERTIFICATES::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertCont
                 strContainerName = "DS_";
             }
             strContainerName += pSerialKey;
-            pCryptKeyProvInfo->pwszProvName			= (LPWSTR)L"Microsoft Base Smart Card Crypto Provider";
+            pCryptKeyProvInfo->pwszProvName			= (LPWSTR)MS_SCARD_PROV_W;
             pCryptKeyProvInfo->dwKeySpec			= AT_SIGNATURE;
         
         pCryptKeyProvInfo->pwszContainerName	= (LPWSTR)strContainerName.utf16();
