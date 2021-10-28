@@ -1291,7 +1291,9 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
          
    DWORD out_len = 0;
 
-   memset(recvbuf, 0, out_len);
+   memset(recvbuf, 0, recvlen);
+
+   LogTrace(LOGTYPE_INFO, WHERE, "PteidSignDataGemsafe called with input data len: %d", cbToBeSigned);
 
    dwReturn = PteidMSE(pCardData, pin_id, cbToBeSigned, pss_padding);
 
@@ -1338,6 +1340,16 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    }
    LogTrace(LOGTYPE_INFO, WHERE, "Return: APDU PSO Hash");
    LogDump (recvlen, (char *)recvbuf);
+
+   if ((SW1 != 0x90 && SW2 != 0x00) && SW1 != 0x61) {
+	   LogTrace(LOGTYPE_ERROR, WHERE, "PSO: Hash command failed with SW12 = %02x %02x", SW1, SW2);
+	   if (SW1 == 0x69 && SW2 == 0x85) {
+		   CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
+	   }
+	   else {
+		   CLEANUP(SCARD_E_UNEXPECTED);
+	   }
+   }
   
    Cmd [0] = 0x00;
    Cmd [1] = 0x2A;   /* PSO: Compute Digital Signature COMMAND */
@@ -1409,7 +1421,7 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
 
    }
    if (SW1 != 0x90 && SW2 != 0x00) {
-	   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: CDS) GET RESPONSE errorcode: [0x%02X]", dwReturn);
+	   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: CDS) errorcode: [0x%02X]", dwReturn);
 	   CLEANUP(SCARD_E_UNEXPECTED);
    }
 
