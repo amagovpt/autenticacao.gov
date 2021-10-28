@@ -685,6 +685,17 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
     if (m_AppletVersion == 1) {
     	// PSO: Hash GEMSAFE
     	oResp1 = SendAPDU(0x2A, 0x90, 0xA0, oData1);
+
+		unsigned long SW12 = getSW12(oResp1);
+		if (SW12 != 0x9000) {
+			if (SW12 == 0x6985) {
+				throw CMWEXCEPTION(EIDMW_ERR_ALGO_BAD);
+			}
+			else {
+				throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(SW12));
+			}
+		}
+
     	// PSO: Compute Digital Signature GEMSAFE
 		oResp = SendAPDU(0x2A, 0x9E, 0x9A, 0x00);
 
