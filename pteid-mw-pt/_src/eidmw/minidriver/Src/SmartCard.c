@@ -1421,8 +1421,13 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
 
    }
    if (SW1 != 0x90 && SW2 != 0x00) {
-	   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: CDS) errorcode: [0x%02X]", dwReturn);
-	   CLEANUP(SCARD_E_UNEXPECTED);
+	   LogTrace(LOGTYPE_ERROR, WHERE, "PSO: CDS command failed with SW12 = %02x %02x", SW1, SW2);
+	   if (SW1 == 0x69 && SW2 == 0x82) {
+		   CLEANUP(SCARD_W_SECURITY_VIOLATION);
+	   }
+	   else {
+		   CLEANUP(SCARD_E_UNEXPECTED);
+	   }
    }
 
    memcpy(le_sig + signature_len, recvbuf, recvlen - 2);
