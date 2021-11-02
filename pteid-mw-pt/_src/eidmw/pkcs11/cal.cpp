@@ -312,8 +312,8 @@ if (pMechanismList == NULL)
    if (algos & SIGN_ALGO_SHA256_RSA_PKCS)    *pulCount +=1;
    if (algos & SIGN_ALGO_SHA384_RSA_PKCS)    *pulCount +=1;
    if (algos & SIGN_ALGO_SHA512_RSA_PKCS)    *pulCount +=1;
-   //3 variants of RSA-PSS
-   if (algos & SIGN_ALGO_RSA_PSS)            *pulCount +=3;
+   //4 variants of RSA-PSS
+   if (algos & SIGN_ALGO_RSA_PSS)            *pulCount +=4;
    return (CKR_OK);
    }
 
@@ -393,6 +393,10 @@ if (algos & SIGN_ALGO_SHA512_RSA_PKCS)
    }
 if (algos & SIGN_ALGO_RSA_PSS)
    {
+   if (n++ <= *pulCount)
+      pMechanismList[n-1] = CKM_RSA_PKCS_PSS;
+   else
+      return (CKR_BUFFER_TOO_SMALL);
    if (n++ <= *pulCount)
       pMechanismList[n-1] = CKM_SHA256_RSA_PKCS_PSS;
    else
@@ -987,6 +991,7 @@ try
       case CKM_SHA384_RSA_PKCS:        algo = SIGN_ALGO_SHA384_RSA_PKCS;     break;
       case CKM_SHA512:
       case CKM_SHA512_RSA_PKCS:        algo = SIGN_ALGO_SHA512_RSA_PKCS;     break;
+     case CKM_RSA_PKCS_PSS:
 	  case CKM_SHA384_RSA_PKCS_PSS:
 	  case CKM_SHA512_RSA_PKCS_PSS:
 	  case CKM_SHA256_RSA_PKCS_PSS:    algo = SIGN_ALGO_RSA_PSS;             break;
