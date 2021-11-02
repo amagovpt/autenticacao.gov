@@ -31,6 +31,9 @@ std::vector<ns2__AttributesType *> loadCacheFile(QString &filePath) {
     QFile cacheFile(filePath);
     if( !cacheFile.open(QIODevice::ReadOnly) ) {
         qDebug() << "loadCacheFile() Error: " << cacheFile.errorString();
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+            "Load Cache File Error: %s",cacheFile.errorString().toLocal8Bit().data());
+
         return attributesType;
     }
     qDebug() << "Reading XML cached file";
@@ -53,7 +56,9 @@ std::vector<ns2__AttributesType *> loadCacheFile(QString &filePath) {
     qDebug() << "Retrieved attributes from converting XML to object. Size: "<< attr_response.AttributeResponseValues.size();
 
     if (ret != 0) {
-        qDebug() << "Error reading AttributeResponseType";
+        qDebug() << "";
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+            "Error reading AttributeResponseType");
         return attributesType;
     }
     attributesType = attr_response.AttributeResponseValues;
@@ -95,7 +100,8 @@ std::vector<ns2__AttributesType *>
     }
     catch(...) {
         qDebug() << "Error ocurred while loading attributes from cache!";
-        //TODO: report error
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+            "Error ocurred while loading attributes from cache!");
     }
     return m_attributesList;
 }
@@ -192,8 +198,9 @@ std::vector<ns2__AttributesType *>
         */
     }
     catch(...) {
-        qDebug() << "Error ocurred while loading attributes from cache!";
-        //TODO: report error
+        qDebug() << "Error ocurred while reloading attributes from cache!";
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+            "Error ocurred while reloading attributes from cache!");
     }
     return m_attributesList;
 }
@@ -222,6 +229,8 @@ bool ScapServices::removeAttributesFromCache() {
     }
     catch(...) {
         qDebug() << "Error ocurred while removing attributes from cache!";
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+            "Error ocurred while removing attributes from cache!");
         return false;
     }
 }
