@@ -212,11 +212,11 @@ try
    size_t serialNrLen = oSerialNr.size();
    size_t snoffset = serialNrLen > 16 ? serialNrLen - 16 : 0;
    size_t snlen = serialNrLen - snoffset > 16 ? 16 : serialNrLen - snoffset;
-   //printf("off = %d, len = %d\n", snoffset, snlen);
+
+   //All the strings in TOKEN_INFO struct are space-padded AND without NULL terminator
+   //so we need a specialized strcpy to generate them
    strcpy_n(pInfo->serialNumber, oSerialNr.c_str() + snoffset, snlen, ' ');
    strcpy_n(pInfo->label, oReader.GetCardLabel().c_str(), 32, ' ');
-   if(oReader.IsPinpadReader())
-      pInfo->flags = CKF_PROTECTED_AUTHENTICATION_PATH;
    }
 catch (CMWException e)
    {
