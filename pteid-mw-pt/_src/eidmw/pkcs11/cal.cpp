@@ -201,13 +201,17 @@ if ((status == P11_CARD_REMOVED) || (status == P11_CARD_NOT_PRESENT) )
    goto cleanup;
    }
 
-//TODO token recognized  CKR_TOKEN_NOT_RECOGNIZED
 try
    {
+   CReader &oReader = oCardLayer->getReader(reader);
+
+   //Detect not recognized cards and fail early
+   if (oReader.GetCardType() == CARD_UNKNOWN) {
+      return CKR_TOKEN_NOT_RECOGNIZED;
+   }
    // Take the last 16 hex chars of the serialnr.
    // For PTeID cards, the serial nr. is 32 hex chars long,
    // and the first one are the same for all cards
-   CReader &oReader = oCardLayer->getReader(reader);
    std::string oSerialNr = oReader.GetSerialNr();
    size_t serialNrLen = oSerialNr.size();
    size_t snoffset = serialNrLen > 16 ? serialNrLen - 16 : 0;
