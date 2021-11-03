@@ -81,7 +81,7 @@ HWND GetMainWindow(LPSTR lpProcessName)
     {
         windowClass = "OpusApp";
     }
-    else if (strcmp(lpProcessName, "AcroRd32.exe") == 0)
+    else if (strcmp(lpProcessName, "AcroRd32.exe") == 0 || strcmp(lpProcessName, "Acrobat.exe") == 0)
     {
         windowClass = "AcrobatSDIWindow";
     }
@@ -479,7 +479,7 @@ std::wstring GetApplicationName(LPSTR lpProcessName) {
     {
         return L"Microsoft Word";
     }
-    else if (strcmp(lpProcessName, "AcroRd32.exe") == 0)
+    else if (strcmp(lpProcessName, "AcroRd32.exe") == 0 || strcmp(lpProcessName, "Acrobat.exe") == 0)
     {
         return L"Adobe Acrobat Reader";
     }
@@ -576,6 +576,7 @@ __in    DWORD cbHash)
     if (strcmp(lpProcessName, "EXCEL.EXE") == 0 ||
         strcmp(lpProcessName, "WINWORD.EXE") == 0 ||
         strcmp(lpProcessName, "AcroRd32.exe") == 0 ||
+		strcmp(lpProcessName, "Acrobat.exe") == 0 ||
         strcmp(lpProcessName, "OUTLOOK.EXE") == 0)
     {
         size_t idx = 0;
