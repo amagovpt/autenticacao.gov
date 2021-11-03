@@ -605,6 +605,7 @@ FWK_CertifStatus APL_CryptoFwk::CRLValidation(const CByteArray &cert,const CByte
  	const unsigned char *pucCert=NULL;
 	pucCert=cert.GetBytes();
 	bool bFound=false;
+	bool onHold = false;
 	FWK_CertifStatus eStatus=FWK_CERTIF_STATUS_UNCHECK;
 
 	if ( ! d2i_X509_Wrapper(&pX509, pucCert,cert.Size() ) )
@@ -626,12 +627,21 @@ FWK_CertifStatus APL_CryptoFwk::CRLValidation(const CByteArray &cert,const CByte
 			if(ASN1_INTEGER_cmp(X509_get_serialNumber(pX509), X509_REVOKED_get0_serialNumber(pRevoked))==0)
 			{
 				bFound=true;
+				int crit = 0;
+				ASN1_ENUMERATED * revocation_reason = (ASN1_ENUMERATED *)X509_REVOKED_get_ext_d2i(pRevoked, NID_crl_reason, &crit, NULL);
+
+				if (revocation_reason && ASN1_ENUMERATED_get(revocation_reason) == OCSP_REVOKED_STATUS_CERTIFICATEHOLD) {
+					MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: certificate is on hold in CRL");
+					onHold = true;
+				}
 				break;
 			}
 		}
 	}
 
-	if(bFound)
+	if (onHold)
+		eStatus = FWK_CERTIF_STATUS_SUSPENDED;
+	else if(bFound)
 		eStatus = FWK_CERTIF_STATUS_REVOKED;
 	else
 		eStatus = FWK_CERTIF_STATUS_VALID;
