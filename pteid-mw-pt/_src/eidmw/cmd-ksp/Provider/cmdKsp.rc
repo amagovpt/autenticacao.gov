@@ -55,7 +55,7 @@ BEGIN
     BEGIN
         BLOCK "080904b0"
         BEGIN
-            VALUE "FileDescription", "Key Storage Provider Dynamic Link Library for Chave MÃ³vel Digital"
+            VALUE "FileDescription", "Key Storage Provider Dynamic Link Library for Chave Móvel Digital"
             VALUE "CompanyName", PTEID_COMPANY_NAME
             VALUE "FileVersion", WIN_CMDKSP_VERSION_STRING
             VALUE "InternalName", "cmdKsp"
