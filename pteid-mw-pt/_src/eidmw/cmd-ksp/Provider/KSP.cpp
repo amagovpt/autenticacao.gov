@@ -1642,6 +1642,13 @@ __in    DWORD   dwFlags)
         goto cleanup;
     }
 
+	//Check for RSA-PSS which is not currently supported for CMD signatures
+	if (dwFlags & BCRYPT_PAD_PSS) {
+		MWLOG_ERR(logBuf, "Unsupported RSA-PSS algorithm!");
+		Status = NTE_NOT_SUPPORTED;
+		goto cleanup;
+	}
+
     if (pKey->fFinished == FALSE)
     {
         MWLOG_ERR(logBuf, "NTE_BAD_KEY_STATE");
