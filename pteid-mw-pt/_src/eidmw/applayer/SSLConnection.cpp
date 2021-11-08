@@ -1317,14 +1317,11 @@ void SSLConnection::read_chunked_reply(SSL *ssl, NetworkBuffer *net_buffer, bool
     	r = SSL_read(ssl, buffer+bytes_read, current_buf_length-bytes_read);
     	//Read the chunk length
     	if (r > 0 && bytes_read > 0)
-    	{
-    		//XX: Can we assume that the final Chunk is always at the start of the last SSL packet??
-    		if (memcmp(buffer+bytes_read, "\x30\x0d\x0a\x0d\x0a", 5) == 0)
-    		{
-    			final_chunk_read = true;
-    			//fprintf(stderr, "DEBUG: Final chunk read. Ending read_chunked_reply() loop!\n");
-    			//Discard the final chunk
-    			*(buffer+bytes_read) = 0;
+		{
+			//Check for final chunk marker at the end of the buffer
+			if (memcmp(buffer+bytes_read + r -5, "\x30\x0d\x0a\x0d\x0a", 5) == 0) {
+				final_chunk_read = true;
+				*(buffer+bytes_read + r - 5) = 0;
     		}
 
     	}
