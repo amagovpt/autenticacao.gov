@@ -16,10 +16,10 @@ PKG_DIR=$(pwd)
 EIDGUI_BUNDLE_DIR="${PKG_DIR}/apps/Autenticação.gov.app/Contents/MacOS"
 RESOURCES_BUNDLE_DIR="${PKG_DIR}/apps/Autenticação.gov.app/Contents/Resources"
 EIDGUI_BUNDLE_FRAMEWORKS="${PKG_DIR}/apps/Autenticação.gov.app/Contents/Frameworks"
-BIN_BUNDLE_DIR="${PKG_DIR}/bin"
+BIN_BUNDLE_DIR="${PKG_DIR}/dialogs"
 CERTS_BUNDLE_DIR="${PKG_DIR}/certs/"
 HTML_BUNDLE_DIR="${PKG_DIR}/certs/pteid-mw/www/"
-LIB_BUNDLE_DIR="${PKG_DIR}/lib/lib"
+LIB_BUNDLE_DIR="${PKG_DIR}/system-libs/lib"
 
 SIGNING_CERTIFICATE="$1"
 
@@ -31,7 +31,7 @@ cd $LIB_DIR
 git_revision=`git rev-list --count HEAD`
 popd
 
-VERSION="3.6.0.$git_revision"
+VERSION="3.7.0.$git_revision"
 
 echo "Packaging PTEID Git revision $git_revision" 
 echo "IMPORTANT: Don't forget to update the version in apps/Info.plist and release notes in resources dir"
@@ -52,12 +52,12 @@ sed "s/GIT_REVISION/$git_revision/" resources/pt.lproj/welcome.html.tpl > resour
 sed "s/GIT_REVISION/$git_revision/" resources/en.lproj/welcome.html.tpl > resources/en.lproj/welcome.html
 
 #Copy eidlib header files - this forms the C++ SDK along the libpteidlib.dylib
-recreate_dir lib/include
-cp $EIDLIB_DIR/eidlib.h              lib/include
-cp $EIDLIB_DIR/eidlibcompat.h        lib/include
-cp $EIDLIB_DIR/eidlibdefines.h       lib/include
-cp $EIDLIB_DIR/eidlibException.h     lib/include
-cp $EIDLIB_DIR/../common/eidErrors.h lib/include
+recreate_dir system-libs/include
+cp $EIDLIB_DIR/eidlib.h              system-libs/include
+cp $EIDLIB_DIR/eidlibcompat.h        system-libs/include
+cp $EIDLIB_DIR/eidlibdefines.h       system-libs/include
+cp $EIDLIB_DIR/eidlibException.h     system-libs/include
+cp $EIDLIB_DIR/../common/eidErrors.h system-libs/include
 
 #Copy libraries and 3rd-party dependencies
 find $LIB_BUNDLE_DIR -name '*.dylib' -delete
@@ -65,7 +65,7 @@ copy_external_dylibs $LIB_BUNDLE_DIR
 cp -af $LIB_DIR/*.dylib $LIB_BUNDLE_DIR
 recreate_dir $LIB_BUNDLE_DIR/pteid_jni/
 cp -af $JAR_DIR/pteidlibj.jar $LIB_BUNDLE_DIR/pteid_jni/
-cd $LIB_BUNDLE_DIR
+cd system-libs
 sh ./change_paths.sh
 
 cd $PKG_DIR
@@ -111,8 +111,8 @@ fi
 recreate_dir $PKG_DIR/pkg/
 
 # Build component packages and the final "product" package
-pkgbuild --filter '.*/change_paths.sh' --root lib --install-location /usr/local --identifier pt.cartaodecidadao.lib --version $VERSION --ownership recommended pkg/pteid-lib.pkg
-pkgbuild --filter '.*/change_paths.sh' --root bin --install-location /usr/local/bin --component-plist bin/apps.plist --identifier pt.cartaodecidadao.bin --version $VERSION  --ownership recommended pkg/pteid-bin.pkg
+pkgbuild --filter '.*/change_paths.sh' --root system-libs --install-location /usr/local --identifier pt.cartaodecidadao.lib --version $VERSION --ownership recommended pkg/pteid-lib.pkg
+pkgbuild --filter '.*/change_paths.sh' --root dialogs --install-location /usr/local/bin --component-plist dialogs/apps.plist --identifier pt.cartaodecidadao.bin --version $VERSION  --ownership recommended pkg/pteid-bin.pkg
 pkgbuild --filter '.*/change_paths.sh' --root apps --install-location /Applications --scripts pkg-scripts/ --component-plist apps.plist --identifier pt.cartaodecidadao.apps --version $VERSION  --ownership recommended pkg/pteid-apps.pkg
 pkgbuild --root certs --identifier pt.cartaodecidadao.certs --install-location /usr/local/share --version $VERSION --ownership recommended pkg/pteid-certs.pkg
 
