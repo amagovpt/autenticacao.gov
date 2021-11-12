@@ -776,6 +776,58 @@ BOOL checkStatusCode(const char * context, DWORD dwReturn, BYTE SW1, BYTE SW2)
 	return TRUE;
 }
 
+#define SHA256_DIGESTINFO 1
+#define SHA384_DIGESTINFO 2
+#define SHA512_DIGESTINFO 3
+
+static const unsigned char SHA256_AID[] = {
+		0x30, 0x31,
+			0x30, 0x0d,
+				0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01,
+			0x05, 0x00,
+			0x04, 0x20
+};
+static const unsigned char SHA384_AID[] = {
+	0x30, 0x41,
+		0x30, 0x0d,
+			0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02,
+		0x05,0x00,
+		0x04, 0x30
+};
+static const unsigned char SHA512_AID[] = {
+	0x30, 0x51,
+		0x30, 0x0d,
+			0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03,
+		0x05, 0x00,
+		0x04, 0x40
+};
+
+/* Return one of the constants SHA256_PREFIX, SHA384_PREFIX, SHA512_PREFIX if the supplied byte array is in the expected ASN.1 DigestInfo structure
+   for those types of hashes or the constant 0 if it doesn't match any known structure
+   From RFC 8017 (PKCS#1 version 2.2):
+	DigestInfo ::= SEQUENCE {
+				   digestAlgorithm AlgorithmIdentifier,
+				   digest OCTET STRING
+			   }
+*/
+unsigned int matchDigestInfoPrefix(PBYTE hash, DWORD hash_len) {
+	
+	switch (hash_len) {
+		case SHA256_LEN + sizeof(SHA256_AID) :
+			return memcmp(hash, SHA256_AID, sizeof(SHA256_AID)) == 0 ? SHA256_DIGESTINFO : 0;
+
+		case SHA384_LEN + sizeof(SHA384_AID) :
+			return memcmp(hash, SHA384_AID, sizeof(SHA384_AID)) == 0 ? SHA384_DIGESTINFO : 0;
+
+		case SHA512_LEN + sizeof(SHA512_AID) :
+			return memcmp(hash, SHA512_AID, sizeof(SHA512_AID)) == 0 ? SHA512_DIGESTINFO : 0;
+
+		default:
+			return 0;
+	}
+}
+
+
 /****************************************************************************************************/
 
 #define WHERE "PteidGetCardSN"
@@ -1287,6 +1339,8 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
 
    unsigned int            i          = 0;
    unsigned int            cbHdrHash  = 0;
+   unsigned int            hash_offset = 0;
+   unsigned int            hash_len = cbToBeSigned;
    const unsigned char     *pbHdrHash = NULL;
          
    DWORD out_len = 0;
@@ -1295,28 +1349,52 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
 
    LogTrace(LOGTYPE_INFO, WHERE, "PteidSignDataGemsafe called with input data len: %d", cbToBeSigned);
 
-   dwReturn = PteidMSE(pCardData, pin_id, cbToBeSigned, pss_padding);
+   //Skip the DigestInfo prefix as the card PSO.CDS command is prepared to receive a raw hash and add the prefix internally
+   if (!pss_padding) {
+
+	   unsigned int digest_info_type = matchDigestInfoPrefix(pbToBeSigned, cbToBeSigned);
+
+	   if (digest_info_type == SHA256_DIGESTINFO) {
+		   hash_offset += sizeof(SHA256_AID);
+		   hash_len    -= sizeof(SHA256_AID);
+	   }
+	   else if (digest_info_type == SHA384_DIGESTINFO) {
+		   hash_offset += sizeof(SHA384_AID);
+		   hash_len    -= sizeof(SHA384_AID);
+	   }
+	   else if (digest_info_type == SHA512_DIGESTINFO) {
+		   hash_offset += sizeof(SHA512_AID);
+		   hash_len    -= sizeof(SHA512_AID);
+	   }
+
+	   if (digest_info_type != 0) {
+		   LogTrace(LOGTYPE_INFO, WHERE, "Detected a prefixed hash: actually signing only %u bytes", hash_len);
+	   }
+   }
+
+   dwReturn = PteidMSE(pCardData, pin_id, hash_len, pss_padding);
 
    if (dwReturn != SCARD_S_SUCCESS)
    {
 	CLEANUP(dwReturn);
    }
+     
 
    /* Sign Command for GEMSAFE*/
    Cmd [0] = 0x00;
    Cmd [1] = 0x2A;   /* PSO: Hash COMMAND */
    Cmd [2] = 0x90;
    Cmd [3] = 0xA0; 
-   Cmd [4] = (BYTE)(cbToBeSigned + 2); // The value of cbToBeSigned +2 should always fit a single byte so this cast is safe 
+   Cmd [4] = (BYTE)(hash_len + 2); // The value of hash_len +2 should always fit a single byte so this cast is safe 
    Cmd [5] = 0x90;
-   Cmd [6] = (BYTE)(cbToBeSigned);
+   Cmd [6] = (BYTE)(hash_len);
    
    
-   memcpy(Cmd + 7, pbToBeSigned, cbToBeSigned);
-   uiCmdLg = 7 + cbToBeSigned;
+   memcpy(Cmd + 7, pbToBeSigned+hash_offset, hash_len);
+   uiCmdLg = 7 + hash_len;
    
 #ifdef _DEBUG
-   LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", cbHdrHash + cbToBeSigned, (char *)&Cmd[5]);
+   LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", hash_len, (char *)&Cmd[5]);
    
    LogTrace(LOGTYPE_INFO, WHERE, "APDU PSO Hash");
    LogDump (uiCmdLg, (char *)Cmd);

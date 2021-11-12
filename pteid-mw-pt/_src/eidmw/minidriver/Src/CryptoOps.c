@@ -192,7 +192,7 @@ DWORD WINAPI   CardSignData
 	unsigned int               uiHashAlgo   = HASH_ALGO_NONE;
 	
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
-	LogTrace(LOGTYPE_INFO, WHERE, "CardSignData called with pInfo->aiHashAlg: %d", pInfo->aiHashAlg); 
+	LogTrace(LOGTYPE_INFO, WHERE, "CardSignData called with pInfo->aiHashAlg: %d", pInfo->aiHashAlg);
 
 	/********************/
 	/* Check Parameters */
@@ -310,9 +310,11 @@ DWORD WINAPI   CardSignData
 
 				PkcsPadInfo = (BCRYPT_PKCS1_PADDING_INFO *) pInfo->pPaddingInfo;
 
+				LogTrace(LOGTYPE_INFO, WHERE, "PkcsPadInfo->pszAlgId: %S", PkcsPadInfo->pszAlgId == NULL ? L"NULL" : PkcsPadInfo->pszAlgId);
+
 				if ( PkcsPadInfo->pszAlgId == NULL )
 				{
-					LogTrace(LOGTYPE_INFO, WHERE, "PkcsPadInfo->pszAlgId = NULL: CMD PKCS#1 Sign...");
+					LogTrace(LOGTYPE_INFO, WHERE, "PkcsPadInfo->pszAlgId = NULL: PKCS#1 Sign...");
 
 					uiHashAlgo = HASH_ALGO_NONE;
 				}
