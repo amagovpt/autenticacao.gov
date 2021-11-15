@@ -65,6 +65,8 @@ public:
     virtual CByteArray GetSerialNrBytes();
 	virtual std::string GetLabel();
 
+	virtual std::string GetAppletVersion();
+
     virtual void Lock();
     virtual void Unlock();
 

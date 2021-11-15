@@ -303,6 +303,7 @@ protected:
 	APLPublicKey *m_RootCAPubKey;
 	std::string *m_tokenSerial;
 	std::string *m_tokenLabel;
+	std::string *m_appletVersion;
 };
 
 /******************************************************************************//**

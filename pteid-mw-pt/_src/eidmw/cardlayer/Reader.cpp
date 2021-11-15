@@ -305,6 +305,14 @@ std::string CReader::GetCardLabel()
 	return csLabel;
 }
 
+std::string CReader::GetAppletVersion()
+{
+	if (m_poCard == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+
+	return m_poCard->GetAppletVersion();
+}
+
 void CReader::Lock()
 {
     if (m_poCard == NULL)

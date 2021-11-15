@@ -80,6 +80,7 @@ public:
      *   - the appletversion (1 byte): 0x10, 0x11, 0x20
      *   - the global OS version (2 bytes) */
     virtual CByteArray GetInfo();
+	virtual std::string GetAppletVersion();
 
 	virtual DlgPinUsage PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey);
 	virtual bool PinCmd(tPinOperation operation, const tPin & Pin,

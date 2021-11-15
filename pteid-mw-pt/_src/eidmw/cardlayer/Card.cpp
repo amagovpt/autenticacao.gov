@@ -104,6 +104,11 @@ std::string CCard::GetLabel()
 	return "";
 }
 
+std::string CCard::GetAppletVersion()
+{
+	return "";
+}
+
 void CCard::Lock()
 {
 	if (m_ulLockCount == 0){

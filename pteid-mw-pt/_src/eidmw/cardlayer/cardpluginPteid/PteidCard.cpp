@@ -194,6 +194,29 @@ CByteArray CPteidCard::GetInfo()
     return m_oCardData;
 }
 
+std::string CPteidCard::GetAppletVersion() {
+	std::string applet_version;
+	const size_t VERSION_OFFSET = 3, VERSION_LEN = 7;
+	if (GetType() == CARD_PTEID_IAS07) {
+		const unsigned char apdu_appletversion[] = { 0x00, 0xCA, 0xDF, 0x30, 0x00 };
+		CByteArray applet_version_ba(apdu_appletversion, sizeof(apdu_appletversion));
+		CByteArray resp = SendAPDU(applet_version_ba);
+		unsigned long ulSW12 = getSW12(resp);
+		
+		if (ulSW12 == 0x9000) {
+			
+			const unsigned char * data = resp.GetBytes();
+			applet_version.append((const char *)data+VERSION_OFFSET, VERSION_LEN);
+		}
+	}
+	else {
+		throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+	}
+
+	return applet_version;
+
+}
+
 unsigned long CPteidCard::PinStatus(const tPin & Pin)
 {
 	unsigned long ulSW12 = 0;

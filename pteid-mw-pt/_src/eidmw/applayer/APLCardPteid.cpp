@@ -79,6 +79,7 @@ APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader, APL_CardType cardType):APL_S
 	m_sodCheck = false;
 	m_tokenLabel = NULL;
 	m_tokenSerial = NULL;
+	m_appletVersion = NULL;
 }
 
 APL_EIDCard::~APL_EIDCard()
@@ -722,6 +723,24 @@ const char *APL_EIDCard::getTokenLabel(){
 		//END_CAL_OPERATION(m_reader)
 	}
 	return m_tokenLabel->c_str();
+}
+
+const char * APL_EIDCard::getAppletVersion() {
+
+	if (!m_appletVersion) {
+		m_reader->CalLock();
+		try {
+			m_appletVersion = new string(m_reader->getCalReader()->GetAppletVersion());
+		}
+		catch (...) {
+			m_reader->CalUnlock();
+			delete m_appletVersion;
+			throw;
+		}
+		m_reader->CalUnlock();
+	}
+	return m_appletVersion->c_str();
+
 }
 
 APLPublicKey *APL_EIDCard::getRootCAPubKey(){
@@ -1999,7 +2018,7 @@ const char *APL_DocVersionInfo::getSoftmaskVersion()
 
 const char *APL_DocVersionInfo::getAppletVersion()
 {
-	return m_card->getFileInfo()->getAppletVersion();
+	return m_card->getAppletVersion();
 }
 
 const char *APL_DocVersionInfo::getGlobalOsVersion()

@@ -93,6 +93,8 @@ public:
     std::string GetSerialNr();
     std::string GetCardLabel();
 
+	std::string GetAppletVersion();
+
     void setSSO(bool value);
 
 	/* Lock the card for exclusive use. Multiple calls are possible
