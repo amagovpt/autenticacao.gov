@@ -222,8 +222,15 @@ namespace eIDMW
             return OAuthConnectionError;
         }
         if (!conn->waitForReadyRead(RECV_TOKEN_TIMEOUT)){
-            MWLOG(LEV_ERROR, MOD_GUI, L"OAuthAttributes: callback with token connection failed: expired timeout waiting for socket read");
-            return OAuthConnectionError;
+            if (conn->bytesAvailable() > 0) 
+            {
+                MWLOG(LEV_CRIT, MOD_GUI, L"OAuthAttributes: waitForReadyRead() failed but there is data present in the socket");
+            }
+            else
+            {
+                MWLOG(LEV_ERROR, MOD_GUI, L"OAuthAttributes: callback with token connection failed: expired timeout waiting for socket read");
+                return OAuthConnectionError;
+            }
         }
         
         buffer = conn->readAll();
