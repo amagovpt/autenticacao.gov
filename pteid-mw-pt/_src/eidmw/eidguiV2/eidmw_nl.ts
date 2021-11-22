@@ -514,11 +514,11 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
-        <translation>Alterações de morada iniciadas após Outubro de 2021 devem ser confirmadas no portal eportugal.gov.pt. Para mais informações, clique &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;aqui&lt;/a&gt;. Para processos de alteração de morada iniciados antes de Outubro de 2021, verifique que está a usar o Cartão de Cidadão correcto.</translation>
+        <translation>Verifique que está a usar o Cartão de Cidadão correcto. A confirmação de morada está prevista mudar para o portal eportugal.gov.pt. Para mais informações, e para verificar se é o seu caso, clique &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;aqui&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>STR_VERIFY_INTERNET_SAM</source>
-        <translation>Após Outubro de 2021 a confirmação de morada é efectuada no portal eportugal.gov.pt. Para mais informações, clique &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;aqui&lt;/a&gt;. Caso contrário Por favor certifique-se que está ligado à internet.</translation>
+        <translation>Por favor certifique-se que está ligado à internet.</translation>
     </message>
 </context>
 <context>
@@ -663,7 +663,7 @@
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT</source>
-        <translation>Alterações de morada iniciadas após Outubro de 2021 devem ser confirmadas no portal eportugal.gov.pt. Para mais informações, clique &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;aqui&lt;/a&gt;. &lt;br&gt;&lt;br&gt;Para processos de alteração de morada iniciados antes de Outubro de 2021, insira o número de processo e o código secreto recebidos pelo correio.</translation>
+        <translation>Caso tenha solicitado uma alteração de morada, insira o número de processo e o código secreto recebidos pelo correio.</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_NUMBER</source>

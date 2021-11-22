@@ -516,11 +516,11 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
-        <translation>Address changes started after October 2021 must be confirmed on the portal eportugal.gov.pt. For more information, click &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;here&lt;/a&gt;. For address change processes started before October 2021, please check that you are using the correct Citizen Card.</translation>
+        <translation>Please check that you are using the correct Citizen Card. The confirmation of address changes is foreseen to be moved to the eportugal.gov.pt portal. For more information, click &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;here&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>STR_VERIFY_INTERNET_SAM</source>
-        <translation>Address changes started after October 2021 must be confirmed on the portal eportugal.gov.pt. For more information, click &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;here&lt;/a&gt;. Otherwise please be sure you are connected to the internet.</translation>
+        <translation>Please be sure you are connected to the internet.</translation>
     </message>
 </context>
 <context>
@@ -653,7 +653,7 @@
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT</source>
-        <translation>Address changes started after October 2021 must be confirmed on the portal eportugal.gov.pt. For more information, click &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;here&lt;/a&gt;. &lt;br&gt;&lt;br&gt;For address change processes started before October 2021, enter the process number and secret code received by mail.</translation>
+        <translation>If you started an address change procedure, enter the process number and secret code received by mail.</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_NUMBER</source>

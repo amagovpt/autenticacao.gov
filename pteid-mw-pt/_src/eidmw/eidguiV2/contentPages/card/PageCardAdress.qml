@@ -373,7 +373,7 @@ PageCardAdressForm {
         Item {
             id: rectPopUp
             width: parent.width
-            height: rectMessage.height + rectMessageOnline.height + rectNumProcess.height + rectConfirmAddress.height
+            height: rectMessage.height + rectNumProcess.height + rectConfirmAddress.height
 
             Accessible.role: Accessible.AlertMessage
             Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
@@ -388,44 +388,18 @@ PageCardAdressForm {
             Item {
                 id: rectMessage
                 width: parent.width
-                height: 85
+                height: 60
                 anchors.horizontalCenter: parent.horizontalCenter
                 Components.Link {
                     id: textPinMsgConfirm
-                    propertyText.text: "<a href='dummy-link' style='color: black; text-decoration:none'>" + qsTr("STR_ADDRESS_CHANGE_TEXT") + "</a>" + " "
-                          + "<a href=https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao></a>"
-                    propertyText.verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
-                    anchors.fill: parent 
-                    propertyText.anchors.fill: textPinMsgConfirm
-                    propertyAccessibleText: qsTr("STR_ADDRESS_CHANGE_TEXT")
-                    propertyLinkUrl: 'https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao'
-                    KeyNavigation.tab: textPinMsgOnlineConfirm
-                    KeyNavigation.down: textPinMsgOnlineConfirm
-                    KeyNavigation.right: textPinMsgOnlineConfirm
-                    KeyNavigation.left: rectPopUp
-                    KeyNavigation.backtab: rectPopUp
-                    KeyNavigation.up: rectPopUp
-                }
-            }
-
-            Item {
-                id: rectMessageOnline
-                width: parent.width
-                height: 20
-                anchors.top: rectMessage.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                Components.Link {
-                    id: textPinMsgOnlineConfirm
-                    propertyText.text: "<a href='dummy-link' style='color: black; text-decoration:none'>" + qsTr("STR_ADDRESS_ONLINE_CHANGE_TEXT") + "</a>" + " "
+                    propertyText.text: qsTr("STR_ADDRESS_CHANGE_TEXT") + " " +  qsTr("STR_ADDRESS_ONLINE_CHANGE_TEXT") + " "
                           + "<a href=https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao>" + qsTr("STR_ADDRESS_CHANGE_TEXT_HERE")+ "</a>"
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                     anchors.fill: parent 
-                    propertyText.anchors.fill: textPinMsgOnlineConfirm
-                    propertyAccessibleText: qsTr("STR_ADDRESS_ONLINE_CHANGE_TEXT") + qsTr("STR_ADDRESS_CHANGE_TEXT_HERE")
+                    propertyText.anchors.fill: textPinMsgConfirm
+                    propertyAccessibleText: qsTr("STR_ADDRESS_CHANGE_TEXT_HERE")
                     propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
                     KeyNavigation.tab: textPinCurrent
                     KeyNavigation.down: textPinCurrent
@@ -439,8 +413,8 @@ PageCardAdressForm {
             Item {
                 id: rectNumProcess
                 width: parent.width
-                height: 40
-                anchors.top: rectMessageOnline.bottom
+                height: 60
+                anchors.top: rectMessage.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textPinCurrent
@@ -460,9 +434,9 @@ PageCardAdressForm {
                     KeyNavigation.tab: textFieldNumProcess
                     KeyNavigation.down: textFieldNumProcess
                     KeyNavigation.right: textFieldNumProcess
-                    KeyNavigation.left: textPinMsgOnlineConfirm.propertyText
-                    KeyNavigation.backtab: textPinMsgOnlineConfirm.propertyText
-                    KeyNavigation.up: textPinMsgOnlineConfirm.propertyText
+                    KeyNavigation.left: textPinMsgConfirm.propertyText
+                    KeyNavigation.backtab: textPinMsgConfirm.propertyText
+                    KeyNavigation.up: textPinMsgConfirm.propertyText
                 }
                 TextField {
                     id: textFieldNumProcess
@@ -491,7 +465,7 @@ PageCardAdressForm {
             Item {
                 id: rectConfirmAddress
                 width: parent.width
-                height: 40
+                height: 60
                 anchors.top: rectNumProcess.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
@@ -545,7 +519,7 @@ PageCardAdressForm {
             width: dialogConfirmOfAddress.availableWidth
             height: Constants.HEIGHT_BOTTOM_COMPONENT
             anchors.horizontalCenter: parent.horizontalCenter
-            y: 180
+            anchors.top: rectPopUp.bottom 
             Button {
                 id: cancelButton
                 width: Constants.WIDTH_BUTTON
