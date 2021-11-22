@@ -142,13 +142,13 @@ Item {
                 Item {
                     anchors.fill: rectPreDefault
                     opacity: radioButtonDefault.checked ? 1 : Constants.OPACITY_SIGNATURE_IMAGE_DISABLED
+                    clip:true
                     Text {
                         id: sigReasonText
                         font.pixelSize: propertySigLineHeight * 0.8
                         font.italic: true
                         height: propertySigLineHeight
                         width: parent.width - 2 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
-                        clip: true
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_LABEL
                         text: ""
@@ -387,6 +387,7 @@ Item {
 
                 Item {
                     anchors.fill: rectPreCustom
+                    clip: true
                     DropArea {
                         id: dropArea
                         anchors.fill: parent
@@ -399,7 +400,6 @@ Item {
                         font.italic: true
                         height: propertySigLineHeight
                         width: parent.width - 2 * Constants.SIZE_MARGIN_SIGNATURE_SEAL_CONFIG
-                        clip: true
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_LABEL
                         text: ""
