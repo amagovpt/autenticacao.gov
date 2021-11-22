@@ -78,6 +78,7 @@ Item {
         x: parent.width * 0.5 - cmdDialog.width * 0.5
         y: parent.height * 0.5 - cmdDialog.height * 0.5
         modal: true
+        closePolicy: Popup.CloseOnEscape
         z: Constants.DIALOG_CASCATE_MIDDLE
 
         header: Label {
@@ -662,8 +663,8 @@ Item {
             else
                 textFieldMobileNumber.forceActiveFocus();
         }
-        onRejected:{
-            cmdDialog.open()
+        onRejected: {
+            dialogContainer.close()
         }
     }
 
