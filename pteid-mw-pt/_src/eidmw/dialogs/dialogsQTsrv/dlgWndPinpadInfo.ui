@@ -58,9 +58,6 @@
       <height>105</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
-    </property>
     <property name="text">
      <string/>
     </property>
@@ -76,9 +73,6 @@
       <width>350</width>
       <height>30</height>
      </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
     </property>
     <property name="text">
      <string/>
@@ -118,9 +112,6 @@
       <width>350</width>
       <height>71</height>
      </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
     </property>
     <property name="text">
      <string/>

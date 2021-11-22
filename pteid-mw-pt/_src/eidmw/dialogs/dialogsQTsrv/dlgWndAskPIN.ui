@@ -226,9 +226,6 @@
    <property name="layoutDirection">
     <enum>Qt::RightToLeft</enum>
    </property>
-   <property name="styleSheet">
-    <string notr="true">background-image: url(:/Resources/alpha.png);</string>
-   </property>
    <property name="text">
     <string>PIN</string>
    </property>

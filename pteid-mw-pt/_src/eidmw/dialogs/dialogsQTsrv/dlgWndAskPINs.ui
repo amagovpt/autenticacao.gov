@@ -108,9 +108,6 @@
     <property name="autoFillBackground">
      <bool>false</bool>
     </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
-    </property>
     <property name="text">
      <string>Current PIN</string>
     </property>
@@ -145,9 +142,6 @@
     </property>
     <property name="autoFillBackground">
      <bool>false</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::NoFrame</enum>
@@ -192,9 +186,6 @@
     </property>
     <property name="layoutDirection">
      <enum>Qt::RightToLeft</enum>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
     </property>
     <property name="text">
      <string>Confirm new PIN</string>
@@ -272,9 +263,6 @@
       <width>361</width>
       <height>51</height>
      </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
     </property>
     <property name="text">
      <string>Enter you PIN</string>
