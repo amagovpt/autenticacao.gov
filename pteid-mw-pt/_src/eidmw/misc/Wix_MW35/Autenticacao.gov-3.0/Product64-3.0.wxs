@@ -235,15 +235,6 @@
 					<File Id="pteidmdrv64.dll" Name="pteidmdrv64.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" KeyPath="no" DiskId="1" />
 					<!-- <difx:Driver ForceInstall="no" PlugAndPlayPrompt="no" DeleteFiles="yes" /> -->
 				</Component>
-          <!-- Trick used by OpenSC minidriver: install an alias for the Base smart card CSP. 
-        Using a different CSP in minidriver installation deactivates the plug and play feature -->
-        <Component Id="PteidBaseCSP" Guid="*">
-          <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Cryptography\Defaults\Provider\Pteid CSP">
-            <RegistryValue Type="string" Name="Image Path" Value="basecsp.dll" KeyPath="yes"/>
-            <RegistryValue Type="integer" Name="Type" Value="1"/>
-          </RegistryKey>
-        </Component>
-      
         
         <!-- Certificate Propagation Service is a standard Windows service available in Windows Vista and later versions. In order to use the minidriver
 			   it is necessary that this service is running. When a smart card reader is inserted this service should be started  by the smart card
@@ -441,7 +432,7 @@
 						<RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="no"/>
 						<RegistryValue Type="binary" Name="ATR" Value="3b7d95000080318065b08311000083009000" KeyPath="no"/>
 						<RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
-						<RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
+						<RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
 						<RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
 					</RegistryKey>
           <RegistryKey Root="HKLM"
@@ -450,7 +441,7 @@
             <RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="no"/>
             <RegistryValue Type="binary" Name="ATR" Value="3b7d95000080318065b0831100008300" KeyPath="no"/>
             <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffff" KeyPath="no"/>
-            <RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
             <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
           </RegistryKey>
           <RegistryKey Root="HKLM"
@@ -459,7 +450,7 @@
             <RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="no"/>
             <RegistryValue Type="binary" Name="ATR" Value="3bff9600008131804380318065b0850300ef120fff82900067" KeyPath="no"/>
             <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
-            <RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
             <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
           </RegistryKey>
           <RegistryKey Root="HKLM"
@@ -468,7 +459,7 @@
             <RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="no"/>
             <RegistryValue Type="binary" Name="ATR" Value="3bff9600008131fe4380318065b085040120120fff829000d0" KeyPath="no"/>
             <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
-            <RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
             <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
           </RegistryKey>				
 				</Component>
@@ -481,7 +472,7 @@
 						<RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
 						<RegistryValue Type="binary" Name="ATR" Value="3b7d95000080318065b08311000083009000" KeyPath="no"/>
 						<RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffffffff" KeyPath="no"/>
-						<RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
+						<RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
 						<RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
 					</RegistryKey>
           <RegistryKey Root="HKLM"
@@ -490,7 +481,7 @@
             <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
             <RegistryValue Type="binary" Name="ATR" Value="3b7d95000080318065b0831100008300" KeyPath="no"/>
             <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffff0000ffff" KeyPath="no"/>
-            <RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
             <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
           </RegistryKey>
           <RegistryKey Root="HKLM"
@@ -499,7 +490,7 @@
             <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
             <RegistryValue Type="binary" Name="ATR" Value="3bff9600008131804380318065b0850300ef120fff82900067" KeyPath="no"/>
             <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
-            <RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
             <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
           </RegistryKey>
           <RegistryKey Root="HKLM"
@@ -508,17 +499,10 @@
             <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
             <RegistryValue Type="binary" Name="ATR" Value="3bff9600008131fe4380318065b085040120120fff829000d0" KeyPath="no"/>
             <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
-            <RegistryValue Type="string" Name="Crypto Provider" Value="Pteid CSP" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
             <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
           </RegistryKey>
 				</Component>
-        
-        <Component Id="PteidBaseCSP32" Guid="*" Win64="no">
-          <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Cryptography\Defaults\Provider\Pteid CSP">
-              <RegistryValue Type="string" Name="Image Path" Value="basecsp.dll" KeyPath="yes"/>
-              <RegistryValue Type="integer" Name="Type" Value="1"/>
-          </RegistryKey>
-        </Component>
 
 				<Component Id="RegistryPteidSystem" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA3}">
 					<RegistryKey Root="HKLM"
@@ -672,8 +656,6 @@
 						<ComponentRef Id="CertPropService"/>
             <ComponentRef Id="pteidmdrvsystem32"/>
             <ComponentRef Id="pteidmdrvsystem64"/>
-            <ComponentRef Id="PteidBaseCSP"/>
-            <ComponentRef Id="PteidBaseCSP32"/>
 						<ComponentRef Id="REGISTERMINIDRIVER_64"/>
             <ComponentRef Id="REGISTERMINIDRIVER_32"/>
 						<Condition Level="1">VersionNT >= 601</Condition>
