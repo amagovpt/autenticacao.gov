@@ -283,7 +283,73 @@ PageCardPrintForm {
                                propertySwitchAddress.checked,
                                propertySwitchNotes.checked,
                                propertySwitchPrintDate.checked,
-                               propertySwitchPdfSign.checked)
+                               propertySwitchPdfSign.checked,
+                               propertySwitchIsTimestamp.checked,
+                               propertyCheckboxIsLtv.checked)
+        }
+    }
+
+    propertySwitchPdfSign {
+        onCheckedChanged: {
+            if (!propertySwitchPdfSign.checked) {
+                propertyCheckboxIsLtv.checked = false
+                propertySwitchIsTimestamp.checked = false
+            }
+        }
+    }
+
+    propertySwitchIsTimestamp {
+        onCheckedChanged: {
+            if (!propertySwitchIsTimestamp.checked) {
+                propertyCheckboxIsLtv.checked = false
+            }
+        }
+    }
+
+    ToolTip {
+        property var maxWidth: 500
+        id: controlToolTip
+        contentItem:
+            Text {
+                id: tooltipText
+                text: controlToolTip.text
+                font: controlToolTip.font
+                color: Constants.COLOR_MAIN_PRETO
+                wrapMode: Text.WordWrap
+                onTextChanged: {
+                    controlToolTip.width = Math.min(controlToolTip.maxWidth, controlToolTip.implicitWidth)
+                }
+            }
+
+        background: Rectangle {
+            border.color: Constants.COLOR_MAIN_DARK_GRAY
+            color: Constants.COLOR_MAIN_SOFT_GRAY
+        }
+
+        Timer {
+            id: tooltipExitTimer
+            interval: Constants.TOOLTIP_TIMEOUT_MS
+            onTriggered: {
+                controlToolTip.close()
+                stop()
+            }
+        }
+    }
+    
+    propertyMouseAreaToolTipIsLTV {
+        onEntered: {
+            tooltipExitTimer.stop()
+            controlToolTip.close()
+            controlToolTip.text = qsTranslate("PageServicesSign","STR_LTV_TOOLTIP")
+            controlToolTip.x = propertyCheckboxIsLtv.mapToItem(controlToolTip.parent,0,0).x
+                    + propertyCheckboxIsLtv.width + Constants.SIZE_IMAGE_TOOLTIP * 0.5
+                    - controlToolTip.width * 0.5
+            controlToolTip.y = propertyCheckboxIsLtv.mapToItem(controlToolTip.parent,0,0).y
+                    - controlToolTip.height - Constants.SIZE_SPACE_IMAGE_TOOLTIP
+            controlToolTip.open()
+        }
+        onExited: {
+            tooltipExitTimer.start()
         }
     }
 

@@ -132,6 +132,8 @@ public:
     bool isNotes;
     bool isPrintDate;
     bool isSign;
+    bool isTimestamp;
+    bool isLtv;
 };
 
 struct SignParams {
@@ -300,7 +302,7 @@ public slots:
     void startWritingPersoNotes(QString text);
     void startReadingAddress();
     void startPrintPDF(QString outputFile, bool isBasicInfo,bool isAdditionalInfo,
-                       bool isAddress,bool isNotes,bool isPrintDate,bool isSign);
+                       bool isAddress,bool isNotes,bool isPrintDate,bool isSign, bool isTimestamp, bool isLtv);
     void startPrint(QString outputFile, bool isBasicInfo,bool isAdditionalInfo,
                        bool isAddress, bool isNotes, bool isPrintDate, bool isSign);
     //This method should be used by basic and advanced signature modes
@@ -540,7 +542,7 @@ private:
     void doSaveCardPhoto(QString outputFile);
     void getAddressFile();
     void doSignPDF(SignParams &params);
-    bool doSignPrintPDF(QString &file_to_sign, QString &outputsign);
+    bool doSignPrintPDF(QString &file_to_sign, QString &outputsign, bool isTimestamp, bool isLtv);
     void doPrintPDF(PrintParams &params);
     void doPrint(PrintParams &params);
     bool drawpdf(QPrinter &printer, PrintParams params);

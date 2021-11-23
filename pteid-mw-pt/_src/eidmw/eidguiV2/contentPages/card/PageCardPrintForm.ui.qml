@@ -31,6 +31,9 @@ Item {
     property alias propertySwitchNotes: switchNotes
     property alias propertySwitchPrintDate: switchPrintDate
     property alias propertySwitchPdfSign: switchPdfSign
+    property alias propertySwitchIsTimestamp: switchSignTemp
+    property alias propertyCheckboxIsLtv: checkboxLTV
+    property alias propertyMouseAreaToolTipIsLTV: mouseAreaToolTipIsLTV
 
     property alias propertyTitleSelectData: titleSelectData
 
@@ -208,7 +211,7 @@ Item {
     Item {
         id: rowSelectOptions
         width: parent.width
-        height: Constants.HEIGHT_SWITCH_COMPONENT
+        height: titleOptions.height + rectOptions.height
         anchors.top: rowSelectData.bottom
         anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
 
@@ -255,7 +258,7 @@ Item {
         Rectangle {
             id: rectOptions
             width: parent.width
-            height: parent.height
+            height: switchPdfSign.height + switchSignTemp.height
             color: "white"
             anchors.top: titleOptions.bottom
             anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
@@ -269,13 +272,78 @@ Item {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.capitalization: Font.MixedCase
                 Accessible.role: Accessible.CheckBox
-                KeyNavigation.tab: buttonPrint
-                KeyNavigation.down: buttonPrint
-                KeyNavigation.right: buttonPrint
+                KeyNavigation.tab: (switchSignTemp.enabled ? switchSignTemp : buttonPrint)
+                KeyNavigation.down: (switchSignTemp.enabled ? switchSignTemp : buttonPrint)
+                KeyNavigation.right: (switchSignTemp.enabled ? switchSignTemp : buttonPrint)
                 KeyNavigation.backtab: titleOptions
                 KeyNavigation.up: titleOptions
                 Keys.onEnterPressed: toggleSwitch(switchPdfSign)
                 Keys.onReturnPressed: toggleSwitch(switchPdfSign)
+            }
+            Switch {
+                id: switchSignTemp
+                height: Constants.HEIGHT_SWITCH_COMPONENT
+                x: 20
+                anchors.top: switchPdfSign.bottom   
+                text: qsTranslate("PageServicesSign",
+                                    "STR_SIGN_ADD_TIMESTAMP")
+                enabled: switchPdfSign.checked
+                font.family: lato.name
+                font.bold: activeFocus
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.capitalization: Font.MixedCase
+                Accessible.role: Accessible.CheckBox
+                Accessible.name: text
+                KeyNavigation.tab: (checkboxLTV.enabled ? checkboxLTV : buttonPrint)
+                KeyNavigation.down: (checkboxLTV.enabled ? checkboxLTV : buttonPrint)
+                KeyNavigation.right: (checkboxLTV.enabled ? checkboxLTV : buttonPrint)
+                KeyNavigation.backtab: switchPdfSign
+                KeyNavigation.up: switchPdfSign
+                Keys.onEnterPressed: toggleSwitch(switchSignTemp)
+                Keys.onReturnPressed: toggleSwitch(switchSignTemp)
+            }
+            CheckBox {
+                id: checkboxLTV
+                text: qsTranslate("PageServicesSign",
+                                    "STR_SIGN_ADD_LTV")
+                height: Constants.HEIGHT_SWITCH_COMPONENT
+                anchors.left: switchSignTemp.right
+                anchors.verticalCenter: switchSignTemp.verticalCenter
+                enabled: switchSignTemp.checked && switchPdfSign.checked
+                font.family: lato.name
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.capitalization: Font.MixedCase
+                font.bold: activeFocus
+                Accessible.role: Accessible.CheckBox
+                Accessible.name: text
+                KeyNavigation.tab: buttonPrint
+                KeyNavigation.down: buttonPrint
+                KeyNavigation.right: buttonPrint
+                KeyNavigation.backtab: switchSignTemp
+                KeyNavigation.up: switchSignTemp
+                Keys.onEnterPressed: toggleSwitch(checkboxLTV)
+                Keys.onReturnPressed: toggleSwitch(checkboxLTV)
+            }
+            Item {
+                id: rectToolTipIsLTV
+                width: Constants.SIZE_IMAGE_TOOLTIP
+                height: Constants.SIZE_IMAGE_TOOLTIP
+                anchors.leftMargin: - 5
+                anchors.left: checkboxLTV.right
+                anchors.top: checkboxLTV.top
+
+                Image {
+                    anchors.fill: parent
+                    antialiasing: true
+                    fillMode: Image.PreserveAspectFit
+                    source: "../../images/tooltip_grey.png"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+                MouseArea {
+                    id: mouseAreaToolTipIsLTV
+                    anchors.fill: parent
+                    hoverEnabled: true
+                }
             }
         }
     }

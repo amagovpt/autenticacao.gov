@@ -1229,9 +1229,9 @@ QPixmap PhotoImageProvider::requestPixmap(const QString &id, QSize *size, const 
 }
 
 void GAPI::startPrintPDF(QString outputFile, bool isBasicInfo, bool isAddicionalInfo,
-    bool isAddress, bool isNotes, bool isPrintDate, bool isSign) {
+    bool isAddress, bool isNotes, bool isPrintDate, bool isSign, bool isTimestamp, bool isLtv) {
 
-    PrintParams params = { outputFile, isBasicInfo, isAddicionalInfo, isAddress, isNotes, isPrintDate, isSign };
+    PrintParams params = { outputFile, isBasicInfo, isAddicionalInfo, isAddress, isNotes, isPrintDate, isSign, isTimestamp, isLtv};
     Concurrent::run(this, &GAPI::doPrintPDF, params);
 }
 
@@ -1276,7 +1276,7 @@ void GAPI::startPrint(QString outputFile, bool isBasicInfo, bool isAddicionalInf
     }
 }
 
-bool GAPI::doSignPrintPDF(QString &file_to_sign, QString &outputsign) {
+bool GAPI::doSignPrintPDF(QString &file_to_sign, QString &outputsign, bool isTimestamp, bool isLtv) {
 	PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doSignPrintPDF");
     BEGIN_TRY_CATCH
 
@@ -1286,6 +1286,18 @@ bool GAPI::doSignPrintPDF(QString &file_to_sign, QString &outputsign) {
     if (card == NULL) return false;
 
     PTEID_PDFSignature sig_handler(getPlatformNativeString(file_to_sign));
+
+    if (isTimestamp)
+    {
+        if (isLtv)
+        {
+            sig_handler.setSignatureLevel(PTEID_LEVEL_LTV);
+        }
+        else
+        {
+            sig_handler.setSignatureLevel(PTEID_LEVEL_TIMESTAMP);
+        }
+    }
 
     card->SignPDF(sig_handler, 0, 0, false, "", "", getPlatformNativeString(outputsign));
 
@@ -1300,7 +1312,8 @@ void GAPI::doPrintPDF(PrintParams &params) {
 
     qDebug() << "doPrintPDF! outputFile = " << params.outputFile <<
         "isBasicInfo = " << params.isBasicInfo << "isAddicionalInfo" << params.isAddicionalInfo << "isAddress"
-        << params.isAddress << "isNotes = " << params.isNotes << "isPrintDate = " << params.isPrintDate << "isSign = " << params.isSign;
+        << params.isAddress << "isNotes = " << params.isNotes << "isPrintDate = " << params.isPrintDate << "isSign = " << params.isSign 
+        << "isTimestamp = " << params.isTimestamp << "isLtv = " << params.isLtv;
 
     QString pdffiletmp;
     QPrinter pdf_printer;
@@ -1325,7 +1338,7 @@ void GAPI::doPrintPDF(PrintParams &params) {
         }
 
         QFuture<bool> new_thread = Concurrent::run(this, &GAPI::doSignPrintPDF, nativepdftmp,
-            originalOutputFile);
+            originalOutputFile, params.isTimestamp, params.isLtv);
 
         res = new_thread.result();
         // Emit signal if success but if false a popup about some error is already sent
