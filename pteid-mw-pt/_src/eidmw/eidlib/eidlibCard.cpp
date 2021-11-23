@@ -804,6 +804,9 @@ bool PTEID_EIDCard::Activate(const char *pinCode, PTEID_ByteArray &BCDDate, bool
 }
 
 bool PTEID_EIDCard::writePersonalNotes(const PTEID_ByteArray &out,PTEID_Pin *pin,const char *csPinCode){
+	unsigned long ulSize = 1000;
+	unsigned char *pucData = static_cast<unsigned char *>(calloc(ulSize, sizeof(char)));
+
 	BEGIN_TRY_CATCH
 
 	//ensure that pin asked is the authentication one
@@ -812,17 +815,20 @@ bool PTEID_EIDCard::writePersonalNotes(const PTEID_ByteArray &out,PTEID_Pin *pin
 	}
 
 	/**
-	 * clear notes before writing again,
-	 * avoids mergings previous notes with new ones,
+	 * Write 1000 bytes to replace all the data in the notes file.
+	 * Avoids merging previous notes with new ones,
 	 * leading to a inconsistent state
 	*/
-	bool cleared = clearPersonalNotes(pin, csPinCode);
-	if (cleared) {
-		persoNotesDirty = writeFile("3F005F00EF07", out, pin, csPinCode);
-	}
-	
+	memcpy((void *) pucData, out.GetBytes(), out.Size());
+
+	const unsigned char *data = const_cast<unsigned char *>(pucData);
+	const PTEID_ByteArray notes(data, ulSize);
+
+	persoNotesDirty = writeFile("3F005F00EF07", notes, pin, csPinCode);
+
 	END_TRY_CATCH
 
+	free(pucData);
 	return persoNotesDirty;
 }
 
