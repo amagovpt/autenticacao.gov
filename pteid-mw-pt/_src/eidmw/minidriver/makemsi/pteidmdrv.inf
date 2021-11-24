@@ -8,7 +8,7 @@ Class=SmartCard
 ClassGuid={990A2BD7-E738-46c7-B26F-1CF8FB9F1391}
 Provider=%AMA%
 CatalogFile=pteidmdrv.cat
-DriverVer=02/03/2020,4.0.0.5
+DriverVer=11/23/2021,4.0.0.6
 
 [Manufacturer]
 %AMA%=Fedict,NTamd64,NTamd64.6.1,NTx86,NTx86.6.1
