@@ -154,15 +154,49 @@ PageCardPrintForm {
         }
         onSignalPdfPrintSignSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+            openFileText.text = qsTr("STR_CREATE_OPEN")
             createsuccess_dialog.visible = true
             createdSuccTitle.forceActiveFocus()
             propertyBusyIndicator.running = false
         }
         onSignalPdfPrintSucess: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+            openFileText.text = qsTr("STR_CREATE_OPEN")
             createsuccess_dialog.visible = true
             createdSuccTitle.forceActiveFocus()
             propertyBusyIndicator.running = false
+        }
+        onSignalPdfSignSucess: {
+            // test time stamp
+            if (error_code == GAPI.SignMessageTimestampFailed)
+            {
+                openFileText.text = qsTranslate("PageServicesSign","STR_TIME_STAMP_FAILED")
+            }
+            else if (error_code == GAPI.SignMessageLtvFailed)
+            {
+                openFileText.text = qsTranslate("GAPI","STR_LTV_FAILED")
+            }
+            else 
+            { // Sign with time stamp successful
+                openFileText.text = qsTr("STR_CREATE_OPEN")
+            }
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+            createsuccess_dialog.visible = true
+            createdSuccTitle.forceActiveFocus()
+            propertyBusyIndicator.running = false
+        }
+        onSignalPdfSignFail: {
+            var titlePopup = qsTranslate("PageServicesSign", "STR_SIGN_FAIL")
+            var bodyPopup = ""
+            if (error_code == GAPI.SignFilePermissionFailed) 
+            {
+                bodyPopup += qsTranslate("PageServicesSign", "STR_SIGN_FILE_PERMISSION_FAIL")
+            } 
+            else 
+            {
+                bodyPopup += qsTranslate("PageServicesSign", "STR_SIGN_GENERIC_ERROR") + " " + error_code
+            }
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalPdfPrintFail: {
             var titlePopup = qsTr("STR_PRINT_CREATE_PDF")
@@ -227,6 +261,9 @@ PageCardPrintForm {
             }
             else if (error_code == GAPI.IncompatibleReader) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
+            }
+            else if (error_code == GAPI.PinBlocked) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_PIN_BLOCKED")
             }
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
