@@ -1028,6 +1028,7 @@ Item {
                         propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP5")
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        propertyLinkUrl: 'mailto:cartaodecidadao@irn.mj.pt'
                         Keys.onPressed: {
                             handleKeyPressed(event.key, debugModeDescriptionTextField)
                         }
