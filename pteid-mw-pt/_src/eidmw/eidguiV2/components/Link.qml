@@ -56,7 +56,6 @@ Item {
         anchors.fill: linkText
         enabled: linkRect.visible
         acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-        cursorShape: (linkText.hoveredLink != "" &&
-                      linkText.hoveredLink != "dummy-link") ? Qt.PointingHandCursor : Qt.ArrowCursor
+        cursorShape: linkText.hoveredLink != "" ? Qt.PointingHandCursor : Qt.ArrowCursor
     }
 }
