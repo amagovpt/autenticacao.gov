@@ -1932,7 +1932,7 @@
     </message>
     <message>
         <source>STR_SIGN_LOCAL</source>
-        <translation>Locality</translation>
+        <translation>Location</translation>
     </message>
     <message>
         <source>STR_SIGN_ADD_TIMESTAMP</source>

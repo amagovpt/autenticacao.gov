@@ -1938,7 +1938,7 @@
     </message>
     <message>
         <source>STR_SIGN_LOCAL</source>
-        <translation>Localidade</translation>
+        <translation>Localização</translation>
     </message>
     <message>
         <source>STR_SIGN_ADD_TIMESTAMP</source>
