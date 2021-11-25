@@ -197,11 +197,13 @@ PageCardPrintForm {
                 bodyPopup += qsTranslate("PageServicesSign", "STR_SIGN_GENERIC_ERROR") + " " + error_code
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            propertyBusyIndicator.running = false
         }
         onSignalPdfPrintFail: {
             var titlePopup = qsTr("STR_PRINT_CREATE_PDF")
             var bodyPopup = qsTr("STR_PRINT_CREATE_PDF_FAIL")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            propertyBusyIndicator.running = false
         }
         onSignalPrinterPrintSucess: {
             var titlePopup = qsTr("STR_PRINT_PRINTER")
@@ -314,6 +316,8 @@ PageCardPrintForm {
             
             outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
             /*console.log("Output filename: " + outputFile)*/
+            propertyBusyIndicator.running = true
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             gapi.startPrintPDF(outputFile,
                                propertySwitchBasic.checked,
                                propertySwitchAdditional.checked,
