@@ -197,7 +197,7 @@ CByteArray CPteidCard::GetInfo()
 std::string CPteidCard::GetAppletVersion() {
 	std::string applet_version;
 	const size_t VERSION_OFFSET = 3, VERSION_LEN = 7;
-	if (GetType() == CARD_PTEID_IAS07) {
+	if (m_cardType == CARD_PTEID_IAS07) {
 		const unsigned char apdu_appletversion[] = { 0x00, 0xCA, 0xDF, 0x30, 0x00 };
 		CByteArray applet_version_ba(apdu_appletversion, sizeof(apdu_appletversion));
 		CByteArray resp = SendAPDU(applet_version_ba);
@@ -579,14 +579,21 @@ bool CPteidCard::PinCmd(tPinOperation operation, const tPin & Pin,
 
 unsigned long CPteidCard::GetSupportedAlgorithms()
 {
-		unsigned long ulAlgos =
-			SIGN_ALGO_RSA_PKCS | SIGN_ALGO_SHA1_RSA_PKCS | SIGN_ALGO_SHA256_RSA_PKCS
-			                   | SIGN_ALGO_SHA384_RSA_PKCS | SIGN_ALGO_SHA512_RSA_PKCS | SIGN_ALGO_RSA_PSS;
-
+	unsigned long ulAlgos =
+		SIGN_ALGO_RSA_PKCS | SIGN_ALGO_SHA1_RSA_PKCS | SIGN_ALGO_SHA256_RSA_PKCS;
+		
+	if (m_cardType == CARD_PTEID_IAS07) {
+		std::string applet_version = GetAppletVersion();
+		char major_version = applet_version[0] == 'v' ? applet_version[1] : applet_version[0];
+			
+		//We could assume that future versions also support these but it's best to be conservative about
+		//supported algorithms
+		if (major_version == '4')
+			ulAlgos |= SIGN_ALGO_SHA384_RSA_PKCS | SIGN_ALGO_SHA512_RSA_PKCS | SIGN_ALGO_RSA_PSS;
+	}
 
 	return ulAlgos;
 }
-
 
 void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
     unsigned long ulInputLen)
