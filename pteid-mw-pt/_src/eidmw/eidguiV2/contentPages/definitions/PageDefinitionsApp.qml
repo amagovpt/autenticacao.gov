@@ -274,15 +274,15 @@ PageDefinitionsAppForm {
         if (controler.getDebugModeValue()) {
             propertyCheckBoxDebugMode.checked = true
             propertyButtonZipLogs.enabled = true
-            propertyDebugModeStep1TextField.color = "gray"
-            propertyDebugModeStep3TextField.color = "black"
+            propertyDebugModeStep1TextField.color = Constants.COLOR_GRAY
+            propertyDebugModeStep3TextField.color = Constants.COLOR_MAIN_BLACK
             propertyDebugModeStep3TextField.font.bold = true
         }
         else {
             propertyCheckBoxDebugMode.checked = false
             propertyButtonZipLogs.enabled = false
-            propertyDebugModeStep1TextField.color = "black"
-            propertyDebugModeStep3TextField.color = "gray"
+            propertyDebugModeStep1TextField.color = Constants.COLOR_MAIN_BLACK
+            propertyDebugModeStep3TextField.color = Constants.COLOR_GRAY
         }
 
         propertyCheckBoxDebugMode.enabled = true

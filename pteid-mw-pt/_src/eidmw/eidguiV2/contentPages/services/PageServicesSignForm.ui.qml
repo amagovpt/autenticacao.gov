@@ -679,7 +679,7 @@ Item {
                                         font.pixelSize: Constants.SIZE_TEXT_LABEL
                                         horizontalAlignment: Text.AlignRight
                                         verticalAlignment: Text.AlignVCenter
-                                        color: Constants.COLOR_MAIN_PRETO
+                                        color: Constants.COLOR_MAIN_BLACK
                                     }
                                 }
                                 Item {
@@ -735,7 +735,7 @@ Item {
                                         font.pixelSize: Constants.SIZE_TEXT_LABEL
                                         horizontalAlignment: Text.AlignRight
                                         verticalAlignment: Text.AlignVCenter
-                                        color: Constants.COLOR_MAIN_PRETO
+                                        color: Constants.COLOR_MAIN_BLACK
                                     }
                                 }
                                 Item {
@@ -1065,7 +1065,7 @@ Item {
                                           "STR_SIGN_PAGE") + ":"
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_LABEL
-                        color: Constants.COLOR_MAIN_PRETO
+                        color: Constants.COLOR_MAIN_BLACK
                         font.capitalization: Font.MixedCase
                         opacity: fileLoaded && propertyRadioButtonPADES.checked
                                  && !checkLastPage.checked ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
@@ -1094,7 +1094,7 @@ Item {
                             z: 2
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_LABEL
-                            color: Constants.COLOR_MAIN_PRETO
+                            color: Constants.COLOR_MAIN_BLACK
                             opacity: fileLoaded
                                      && propertyRadioButtonPADES.checked
                                      && !checkLastPage.checked ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED

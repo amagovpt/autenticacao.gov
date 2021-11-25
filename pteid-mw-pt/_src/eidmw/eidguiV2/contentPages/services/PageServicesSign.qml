@@ -37,7 +37,7 @@ PageServicesSignForm {
                 id: tooltipText
                 text: controlToolTip.text
                 font: controlToolTip.font
-                color: Constants.COLOR_MAIN_PRETO
+                color: Constants.COLOR_MAIN_BLACK
                 wrapMode: Text.WordWrap
                 onTextChanged: {
                     controlToolTip.width = Math.min(controlToolTip.maxWidth, controlToolTip.implicitWidth)

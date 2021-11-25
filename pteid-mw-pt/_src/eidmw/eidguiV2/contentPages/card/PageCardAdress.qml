@@ -658,7 +658,7 @@ PageCardAdressForm {
                 anchors.top: rectMessageTop.bottom
                 Components.Link {
                     id: textMessageTopLink
-                    propertyText.text: "<a href='dummy-link' style='color: black; text-decoration:none'>" + qsTr("STR_CHANGE_ADDRESS_LINK") + "</a>" + " "
+                    propertyText.text: "<a href='dummy-link' style='color: #333333; text-decoration:none'>" + qsTr("STR_CHANGE_ADDRESS_LINK") + "</a>" + " "
                           + "<a href=https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao>" + qsTr("STR_ADDRESS_CHANGE_TEXT_HERE")+ "</a>"
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
