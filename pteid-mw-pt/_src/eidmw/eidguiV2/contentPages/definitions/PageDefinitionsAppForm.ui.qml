@@ -1028,6 +1028,7 @@ Item {
                         propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP5")
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        propertyText.font.bold: activeFocus
                         propertyLinkUrl: 'mailto:cartaodecidadao@irn.mj.pt'
                         Keys.onPressed: {
                             handleKeyPressed(event.key, debugModeDescriptionTextField)
@@ -1055,6 +1056,7 @@ Item {
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                         propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " "
                                             + qsTranslate("PageDefinitionsApp", "STR_HERE")
+                        propertyText.font.bold: activeFocus
                         KeyNavigation.tab: dateAppGraphics
                         KeyNavigation.down: dateAppGraphics
                         KeyNavigation.right: dateAppGraphics
@@ -1165,6 +1167,7 @@ Item {
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                         propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " "
                                             + qsTranslate("PageDefinitionsApp", "STR_HERE")
+                        propertyText.font.bold: activeFocus
                         KeyNavigation.tab: textGraphicsRendering
                         KeyNavigation.down: textGraphicsRendering
                         KeyNavigation.right: textGraphicsRendering
