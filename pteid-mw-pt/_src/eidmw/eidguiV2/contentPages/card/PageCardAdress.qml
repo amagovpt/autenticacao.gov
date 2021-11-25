@@ -401,6 +401,7 @@ PageCardAdressForm {
                     propertyText.anchors.fill: textPinMsgConfirm
                     propertyAccessibleText: qsTr("STR_ADDRESS_CHANGE_TEXT_HERE")
                     propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
+                    propertyText.font.bold: activeFocus
                     KeyNavigation.tab: textPinCurrent
                     KeyNavigation.down: textPinCurrent
                     KeyNavigation.right: textPinCurrent
@@ -640,6 +641,7 @@ PageCardAdressForm {
                     propertyText.height: parent.height
                     anchors.bottom: parent.bottom
                     propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
+                    propertyText.font.bold: activeFocus
                     KeyNavigation.tab: textMessageTopLink.propertyText
                     KeyNavigation.down: textMessageTopLink.propertyText
                     KeyNavigation.right: textMessageTopLink.propertyText
@@ -667,6 +669,7 @@ PageCardAdressForm {
                     propertyText.anchors.fill: textMessageTopLink
                     propertyAccessibleText: qsTr("STR_CHANGE_ADDRESS_LINK") + qsTr("STR_ADDRESS_CHANGE_TEXT_HERE")
                     propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
+                    propertyText.font.bold: activeFocus
                     KeyNavigation.tab: confirmOkButton
                     KeyNavigation.down: confirmOkButton
                     KeyNavigation.right: confirmOkButton

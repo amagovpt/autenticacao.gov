@@ -225,6 +225,7 @@ Item {
                             propertyText.textMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
                             propertyText.wrapMode: Text.Wrap
                             propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+                            propertyText.font.bold: activeFocus
                             Layout.fillWidth: true
                             propertyAccessibleText: qsTranslate(
                                                         "PageServicesSign",

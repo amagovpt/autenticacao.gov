@@ -116,6 +116,7 @@ Loader{
                     propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                     propertyText.color: Constants.COLOR_TEXT_LABEL
                     propertyText.height: parent.height
+                    propertyText.font.bold: activeFocus
                     anchors.bottom: parent.bottom
                     KeyNavigation.tab: okButton
                     KeyNavigation.down: okButton
