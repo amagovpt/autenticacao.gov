@@ -88,6 +88,10 @@ PageCardAdressForm {
             textMessageTop.propertyAccessibleText = Functions.filterText(statusMessage)
             textMessageTop.propertyText.forceActiveFocus()
         }
+        onSignalAddressShowEmail: {
+            rectMessageTopLink.visible = true
+            textMessageTop.propertyLinkUrl= 'mailto:cartaodecidadao@irn.mj.pt'
+        }
         onSignalAddressShowLink: {
             rectMessageTopLink.visible = true
             textMessageTop.propertyLinkUrl= 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
@@ -401,7 +405,6 @@ PageCardAdressForm {
                     propertyText.anchors.fill: textPinMsgConfirm
                     propertyAccessibleText: qsTr("STR_ADDRESS_CHANGE_TEXT_HERE")
                     propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
-                    propertyText.font.bold: activeFocus
                     KeyNavigation.tab: textPinCurrent
                     KeyNavigation.down: textPinCurrent
                     KeyNavigation.right: textPinCurrent
@@ -641,7 +644,6 @@ PageCardAdressForm {
                     propertyText.height: parent.height
                     anchors.bottom: parent.bottom
                     propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
-                    propertyText.font.bold: activeFocus
                     KeyNavigation.tab: textMessageTopLink.propertyText
                     KeyNavigation.down: textMessageTopLink.propertyText
                     KeyNavigation.right: textMessageTopLink.propertyText

@@ -562,7 +562,6 @@ void GAPI::showChangeAddressDialog(long code)
 
     QString support_string_undefined = tr("STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG");
 
-    //code = SAM_UNDEFINED_PROCESS_NUMBER;
     if (code == 0){
         PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "AddressChange op completed successfully");
     } else {
@@ -628,15 +627,21 @@ void GAPI::showChangeAddressDialog(long code)
         error_msg += "<br><br>" + tr("STR_ERROR_CODE") + QString::number(sam_error_code);
     }
 
-    if (code == EIDMW_SAM_UNCONFIRMED_CHANGE){
-        error_msg += "<br><br>" + support_string_wait_5min;
-    }
-    if (code == SAM_UNDEFINED_PROCESS_NUMBER){
-        error_msg += "<br><br>" + support_string_undefined;
-        signalAddressShowUndefinedLink();
-    } else if (code != 0 && code != SAM_PROCESS_EXPIRED_ERROR){
-        error_msg += "<br><br>" + support_string;
-        signalAddressShowLink();
+    if (code != 0){
+        if (code == EIDMW_SAM_UNCONFIRMED_CHANGE){
+            error_msg += "<br><br>" + support_string_wait_5min;
+        }
+        else if (code == SAM_UNDEFINED_PROCESS_NUMBER){
+            error_msg += "<br><br>" + support_string_undefined;
+            signalAddressShowUndefinedLink();
+        } 
+        else if (code == SAM_PROCESS_EXPIRED_ERROR){
+            signalAddressShowLink();
+        } 
+        else {
+            error_msg += "<br><br>" + support_string;
+            signalAddressShowEmail();
+        }
     }
 
     qDebug() << error_msg;

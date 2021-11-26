@@ -119,7 +119,7 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_CHECK_PROCESS_EXPIRED</source>
-        <translation>O prazo de confirmação da alteração de morada expirou. Por favor efetue um novo pedido através dos balcões de atendimento ou do portal ePortugal.</translation>
+        <translation>O prazo de confirmação da alteração de morada expirou. Por favor efetue um novo pedido através dos balcões de atendimento ou do portal &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;ePortugal&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>STR_SCAP_CLOCK_ERROR</source>

@@ -470,6 +470,7 @@ signals:
     void signalUpdateProgressStatus(const QString statusMessage);
     void signalAddressShowLink();
     void signalAddressShowUndefinedLink();
+    void signalAddressShowEmail();
     void addressChangeFinished(long return_code);
     void signCMDFinished(long error_code);
     void signalValidateOtp();

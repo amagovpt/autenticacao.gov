@@ -125,7 +125,7 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_CHECK_PROCESS_EXPIRED</source>
-        <translation>The time period available to confirm the address. A validade do pedido Request validity has change has expired. Please request the change again.</translation>
+        <translation>The time period available to confirm the address has expired. Please place a new request through the customer service desks or through the  &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;ePortugal&lt;/a&gt; portal.</translation>
     </message>
     <message>
         <source>STR_SCAP_CLOCK_ERROR</source>
