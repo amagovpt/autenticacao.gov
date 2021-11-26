@@ -475,23 +475,25 @@ namespace eIDMW
 			            DOMImplementationRegistry::getDOMImplementation(tempStr);
 
 		// construct the DOMWriter
-	        DOMLSSerializer   *theSerializer = ((DOMImplementationLS*)impl)->createLSSerializer();
+	    DOMLSSerializer   *theSerializer = ((DOMImplementationLS*)impl)->createLSSerializer();
 		DOMLSOutput       *theOutputDesc = ((DOMImplementationLS*)impl)->createLSOutput();
 
 
 		 // construct the MemBufFormatTarget
-		 MemBufFormatTarget * myFormatTarget = new MemBufFormatTarget();
-		 theOutputDesc->setByteStream(myFormatTarget);
-		 theOutputDesc->setEncoding(XMLString::transcode("UTF-8"));
-		 theSerializer->write(doc, theOutputDesc);
+		MemBufFormatTarget * myFormatTarget = new MemBufFormatTarget();
+		theOutputDesc->setByteStream(myFormatTarget);
+		theOutputDesc->setEncoding(XMLString::transcode("UTF-8"));
+		theSerializer->write(doc, theOutputDesc);
 
 		// serialize the DOMNode to a UTF-8 string
-		 const XMLByte* utf8_string = myFormatTarget->getRawBuffer();
-		 XMLSize_t size = myFormatTarget->getLen();
-		 MWLOG(LEV_DEBUG, MOD_APL, L"XadesSignature::WriteToByteArray: Returning XML byte array, size=%d", size);
+		const XMLByte* utf8_string = myFormatTarget->getRawBuffer();
+		XMLSize_t size = myFormatTarget->getLen();
+		MWLOG(LEV_DEBUG, MOD_APL, L"XadesSignature::WriteToByteArray: Returning XML byte array, size=%d", size);
 
-		 ba_out->Append((const unsigned char *)utf8_string, size);
-		 return ba_out;
+		ba_out->Append((const unsigned char *)utf8_string, size);
+
+		delete myFormatTarget;
+		return ba_out;
 
 	}
 
