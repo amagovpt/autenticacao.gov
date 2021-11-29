@@ -27,8 +27,6 @@
 //SCAP
 #include "scapsignature.h"
 #include "SCAP-services-v3/SCAPH.h"
-//#include "ASService/ASServiceH.h"   
-//#include "PDFSignature/envStub.h"
 
 #include "ScapSettings.h"
 #include "credentials.h"
@@ -42,6 +40,7 @@
 using namespace eIDMW;
 
 #define TRIES_LEFT_ERROR    1000
+#define TRIES_LEFT_MAX      3
 
 static  bool g_cleaningCallback=false;
 static  int g_runningCallback=0;
@@ -452,20 +451,25 @@ unsigned int GAPI::doVerifyAddressPin(QString pin_value) {
 
     BEGIN_TRY_CATCH
 
-        PTEID_EIDCard * card = NULL;
+    PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card == NULL) return TRIES_LEFT_ERROR;
 
     PTEID_Pin & address_pin = card->getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
-    address_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
+    if (address_pin.isVerified()) {
+        tries_left = TRIES_LEFT_MAX;
+    }
+    else {
+        address_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
 
-    if (tries_left == 0) {
-        qDebug() << "WARNING: Address PIN blocked!" << tries_left;
+        if (tries_left == 0) {
+            qDebug() << "WARNING: Address PIN blocked!" << tries_left;
+        }
     }
 
     END_TRY_CATCH
 
-        emit signalTestPinFinished(tries_left, AddressPin);
+    emit signalTestPinFinished(tries_left, AddressPin);
     //QML default types don't include long
     return (unsigned int)tries_left;
 }
@@ -572,8 +576,6 @@ void GAPI::showChangeAddressDialog(long code)
     {
     case 0:
         error_msg = tr("STR_CHANGE_ADDRESS_SUCESS");
-        //Reload address data in case of successful address change
-        startReadingAddress();
         break;
         //The error code for connection error is common between SAM and OTP
     case EIDMW_OTP_CONNECTION_ERROR:
@@ -817,8 +819,8 @@ void GAPI::doChangeAddress(const char *process, const char *secret_code)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Caught exception in EidCard.ChangeAddress()... closing progressBar");
         this->signalUpdateProgressBar(100);
+        
         this->addressChangeFinished(exception.GetError());
-
         free((char *)process);
         free((char *)secret_code);
         return;

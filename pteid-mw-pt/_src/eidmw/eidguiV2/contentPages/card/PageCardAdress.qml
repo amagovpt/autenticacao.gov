@@ -67,7 +67,7 @@ PageCardAdressForm {
 
             propertyButtonConfirmOfAddress.enabled = true
 
-            gapi.setAddressLoaded(true)
+            //gapi.setAddressLoaded(true)
             if(!Constants.USE_SDK_PIN_UI_POPUP)
                 dialogTestPin.visible = false
             if(mainFormID.propertyPageLoader.propertyForceFocus
@@ -318,13 +318,6 @@ PageCardAdressForm {
         }
 
         onAccepted: {
-            if (gapi.isAddressLoaded) {
-                console.debug("Address is already loaded! Hiding pin dialog...")
-                dialogTestPin.visible = false
-                propertyBusyIndicator.running = true
-                gapi.startReadingAddress()
-                return;
-            }
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             var triesLeft = gapi.doVerifyAddressPin(textFieldPin.text)
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
@@ -729,6 +722,9 @@ PageCardAdressForm {
                     dialogConfirmOfAddressProgress.close()
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     mainFormID.propertyPageLoader.forceActiveFocus()
+                    //Start reloading address data after address change operation
+                    //Also reload after address change error but it should be fast and harmless
+                    gapi.verifyAddressPin("")
                 }
                 highlighted: activeFocus ? true : false
                 Accessible.role: Accessible.Button
@@ -762,25 +758,24 @@ PageCardAdressForm {
 
     Component.onCompleted: {
         console.log("Page Card Address Completed")
-        if (gapi.isAddressLoaded) {
-            console.log("Page Card Address isAddressLoaded")
-            propertyBusyIndicator.running = true
-            gapi.startReadingAddress()
-        }else{
-            if(Constants.USE_SDK_PIN_UI_POPUP){
-                if (gapi.doGetTriesLeftAddressPin() === 0) {
-                    var titlePopup = qsTranslate("Popup PIN","STR_POPUP_ERROR")
-                    var bodyPopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_ADDRESS_BLOCKED")
-                    mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
-                }else{
-                    propertyBusyIndicator.running = true
-                    mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-                    gapi.verifyAddressPin("")
-                }
-            }else{
-                dialogTestPin.open()
-                textFieldPin.text = ""
+        
+        if(Constants.USE_SDK_PIN_UI_POPUP) {
+            if (gapi.doGetTriesLeftAddressPin() === 0) {
+                var titlePopup = qsTranslate("Popup PIN","STR_POPUP_ERROR")
+                var bodyPopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_ADDRESS_BLOCKED")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
             }
+            else {
+                propertyBusyIndicator.running = true
+                mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+                gapi.verifyAddressPin("")
+            }
+        }
+        else 
+        {
+            dialogTestPin.open()
+            textFieldPin.text = ""
+
         }
     }
 }

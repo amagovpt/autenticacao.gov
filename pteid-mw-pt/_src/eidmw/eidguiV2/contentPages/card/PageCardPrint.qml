@@ -297,11 +297,7 @@ PageCardPrintForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, returnSubMenuWhenClosed)
         }
         onSignalTestPinFinished: {
-            if (triesLeft === 3) {
-                var titlePopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
-                var bodyPopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
-                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-            }else {
+            if (triesLeft != 3) {
                 propertySwitchAddress.checked = false
             }
         }
@@ -415,8 +411,16 @@ PageCardPrintForm {
 
     propertySwitchAddress{
         onCheckedChanged: {
-            if(propertySwitchAddress.checked){
-                gapi.verifyAddressPin("")
+            if(propertySwitchAddress.checked) {
+                if (gapi.doGetTriesLeftAddressPin() === 0) {
+                    var titlePopup = qsTranslate("Popup PIN","STR_POPUP_ERROR")
+                    var bodyPopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_ADDRESS_BLOCKED")
+                    mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
+                    propertySwitchAddress.checked = false
+                }
+                else {
+                    gapi.verifyAddressPin("")
+                }
             }
         }
     }
@@ -443,7 +447,7 @@ PageCardPrintForm {
         propertySwitchPdfSign.checked = false
     }
     
-    function showCreatedFile(){
+    function showCreatedFile() {
         if (Qt.platform.os === "windows") {
             if (outputFile.substring(0, 2) === "//") {
                 outputFile = "file:" + outputFile
