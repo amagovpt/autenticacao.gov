@@ -641,7 +641,7 @@ long APL_Pin::getTriesLeft()
 		unsigned long err = e.GetError();
 		if (err != EIDMW_ERR_NOT_SUPPORTED)
 			throw e;
-		}
+	}
 
 	if(status==PIN_STATUS_UNKNOWN)
 		m_triesleft=-1;
@@ -649,6 +649,11 @@ long APL_Pin::getTriesLeft()
 		m_triesleft=status;
 
 	return m_triesleft;
+}
+
+bool APL_Pin::isVerified()
+{
+	return m_card->isPinVerified(m_pinP15);
 }
 
 unsigned long APL_Pin::getFlags()

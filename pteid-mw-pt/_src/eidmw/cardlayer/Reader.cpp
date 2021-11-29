@@ -405,6 +405,14 @@ unsigned long CReader::PinStatus(const tPin & Pin)
     return m_poCard->PinStatus(Pin);
 }
 
+bool CReader::isPinVerified(const tPin & Pin)
+{
+	if (m_poCard == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+
+	return m_poCard->isPinVerified(Pin);
+}
+
 
 CByteArray CReader::RootCAPubKey(){
     if (m_poCard == NULL)

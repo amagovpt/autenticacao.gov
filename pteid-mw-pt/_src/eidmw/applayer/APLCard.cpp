@@ -514,6 +514,16 @@ unsigned long APL_SmartCard::pinStatus(const tPin &Pin)
 	return out;
 }
 
+bool APL_SmartCard::isPinVerified(const tPin &Pin) {
+	bool verified = false;
+
+	BEGIN_CAL_OPERATION(m_reader)
+		verified = m_reader->getCalReader()->isPinVerified(Pin);
+	END_CAL_OPERATION(m_reader)
+
+	return verified;
+}
+
 bool APL_SmartCard::pinCmd(tPinOperation operation, const tPin &Pin,
 		const char *csPin1In, const char *csPin2In,
 		unsigned long &ulRemaining, bool bShowDlg, void *wndGeometry )

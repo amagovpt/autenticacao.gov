@@ -908,6 +908,23 @@ bool PTEID_Pin::changePin()
 
 	return out;
 }
+
+bool PTEID_Pin::isVerified() {
+
+	bool out = false;
+
+	BEGIN_TRY_CATCH
+
+	APL_Pin *pimpl=static_cast<APL_Pin *>(m_impl);
+
+	out = pimpl->isVerified();
+	
+	END_TRY_CATCH
+
+	return out;
+
+}
+
 /*****************************************************************************************
 ---------------------------------------- PTEID_Pins -------------------------------------------
 *****************************************************************************************/

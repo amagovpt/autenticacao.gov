@@ -1363,6 +1363,14 @@ public:
 	PTEIDSDK_API long getTriesLeft();
 
 	/**
+	  * Check the current verification status of the PIN
+	  *
+	  *
+	  * @return true if the PIN has already been successfully presented during the current card session or false otherwise
+	  */
+	PTEIDSDK_API bool isVerified();
+
+	/**
 	  * Ask the card to verify the pin.
 	  * A popup will ask for the code.
 	  * @return true if success and false if failed

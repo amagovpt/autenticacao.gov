@@ -251,6 +251,8 @@ public:
 	  */
 	EIDMW_APL_API virtual unsigned long pinStatus(const tPin & Pin);
 
+	EIDMW_APL_API bool isPinVerified(const tPin & Pin);
+
 	/* Get the CVC CA public key that
 	 * this card uses to verify the CVC key; */
 	EIDMW_APL_API virtual APLPublicKey *getRootCAPubKey()=0;

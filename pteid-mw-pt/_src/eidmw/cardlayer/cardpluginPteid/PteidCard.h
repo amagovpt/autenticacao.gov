@@ -88,6 +88,7 @@ public:
             unsigned long & ulRemaining, const tPrivKey *pKey = NULL,
             bool bShowDlg=true, void *wndGeometry = 0, unsigned long unblockFlags=0 );
     virtual unsigned long PinStatus(const tPin & Pin);
+	virtual bool isPinVerified(const tPin & Pin);
     virtual CByteArray RootCAPubKey();
     virtual bool Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN);
     virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft,

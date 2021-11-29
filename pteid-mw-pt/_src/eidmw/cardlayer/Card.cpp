@@ -334,6 +334,11 @@ unsigned long CCard::PinStatus(const tPin & Pin)
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
 }
 
+bool CCard::isPinVerified(const tPin & Pin)
+{
+	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+}
+
 CByteArray CCard::RootCAPubKey(){
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
 }

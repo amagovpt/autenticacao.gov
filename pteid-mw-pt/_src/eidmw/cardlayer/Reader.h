@@ -123,6 +123,11 @@ public:
 	 * returns PIN_STATUS_UNKNOWN if this info isn't available */
     unsigned long PinStatus(const tPin & Pin);
 
+	/* Verify if the PIN has already been successfully presented during the current "card session"
+	   i.e. since the last SCardConnect and SELECT Application
+	*/
+	bool isPinVerified(const tPin & Pin);
+
     /* Get the CVC CA public key that
      * this card uses to verify the CVC key; */
     CByteArray RootCAPubKey();

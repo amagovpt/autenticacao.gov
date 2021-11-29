@@ -240,6 +240,24 @@ unsigned long CPteidCard::PinStatus(const tPin & Pin)
 	}
 }
 
+bool CPteidCard::isPinVerified(const tPin & Pin) {
+
+	try
+	{
+		CByteArray oResp = SendAPDU(0x20, 0x00, (unsigned char)Pin.ulPinRef, 0);
+		unsigned long ulSW12 = getSW12(oResp);
+		MWLOG(LEV_DEBUG, MOD_CAL, L"PinStatus APDU returned: %x", ulSW12);
+		return ulSW12 == 0x9000;
+	}
+	catch (...)
+	{
+		//m_ucCLA = 0x00;
+		MWLOG(LEV_ERROR, MOD_CAL, L"Error in isPinVerified");
+		throw;
+	}
+
+}
+
 CByteArray CPteidCard::RootCAPubKey(){
 	CByteArray oResp;
 

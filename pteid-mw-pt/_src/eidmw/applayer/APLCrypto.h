@@ -142,12 +142,12 @@ public:
 	/**
 	  * Return the remaining tries for giving the good pin
 	  *
-	  * This opperation is not supported by all card.
 	  *
 	  * @return -1 if not supported
 	  * @return the number of remaining tries in the other case
 	  */
 	EIDMW_APL_API long getTriesLeft();			
+	EIDMW_APL_API bool isVerified();
 	EIDMW_APL_API unsigned long getIndex();		/**< Return m_ulIndex */
 	EIDMW_APL_API unsigned long getPinRef();
 	EIDMW_APL_API unsigned long getType();		/**< Return P15 Type */	
