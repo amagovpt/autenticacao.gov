@@ -62,20 +62,25 @@ Item {
         height: 2 * Constants.SIZE_TEXT_FIELD
         anchors.top: dateText.bottom
         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
-        clip: true
 
-        TextEdit {
-            id: dateField
-            y: Qt.platform.os === "windows" ? Constants.SIZE_TEXT_FIELD_V_SPACE : Constants.SIZE_TEXT_FIELD / 2
-            width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-            height: parent.height - 2 * Constants.SIZE_TEXT_FIELD_V_SPACE
-            anchors.horizontalCenter: rectField.horizontalCenter
-            font.capitalization: Font.AllUppercase
-            font.pixelSize: Constants.SIZE_TEXT_FIELD
-            font.family: lato.name
-            color: Constants.COLOR_TEXT_BODY
-            selectByMouse: true
-            readOnly: true
-        }
+        Rectangle{
+            width: parent.width
+            height: parent.height
+            clip: true
+
+            TextEdit {
+                id: dateField
+                y: Qt.platform.os === "windows" ? Constants.SIZE_TEXT_FIELD_V_SPACE : Constants.SIZE_TEXT_FIELD / 2
+                width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
+                height: parent.height - 2 * Constants.SIZE_TEXT_FIELD_V_SPACE
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.capitalization: Font.AllUppercase
+                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_BODY
+                selectByMouse: true
+                readOnly: true
+            }
+        }   
     }
 }
