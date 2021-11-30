@@ -254,7 +254,7 @@ PageSecurityPinCodesForm {
                 }
                 break;
             case 2:
-                triesLeft = gapi.doVerifyAddressPin(textFieldPin.text)
+                triesLeft = gapi.verifyAddressPin(textFieldPin.text, true)
                 if (triesLeft === 0) {
                     propertyTriesLeftAddressPin.text = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_BLOCKED")
                 }
@@ -633,7 +633,7 @@ PageSecurityPinCodesForm {
             if(Constants.USE_SDK_PIN_UI_POPUP){
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 propertyBusyIndicator.running = true
-                gapi.verifyAddressPin("")
+                gapi.verifyAddressPin("", true)
             }else{
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                 dialogTestPin.propertyLabelTextTitle.text =

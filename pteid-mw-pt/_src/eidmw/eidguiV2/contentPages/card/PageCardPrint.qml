@@ -419,7 +419,7 @@ PageCardPrintForm {
                     propertySwitchAddress.checked = false
                 }
                 else {
-                    gapi.verifyAddressPin("")
+                    gapi.verifyAddressPin("", false)
                 }
             }
         }

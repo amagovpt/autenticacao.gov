@@ -441,13 +441,13 @@ unsigned int GAPI::doGetTriesLeftSignPin() {
     return (unsigned int)tries_left;
 }
 
-void GAPI::verifyAddressPin(QString pin_value) {
-    Concurrent::run(this, &GAPI::doVerifyAddressPin, pin_value);
+void GAPI::verifyAddressPin(QString pin_value, bool forceVerify) {
+    Concurrent::run(this, &GAPI::doVerifyAddressPin, pin_value, forceVerify);
 }
-unsigned int GAPI::doVerifyAddressPin(QString pin_value) {
+unsigned int GAPI::doVerifyAddressPin(QString pin_value, bool forceVerify) {
     setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doVerifyAddressPin");
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doVerifyAddressPin forceVerify: %s", forceVerify ? "yes": "no");
 
     BEGIN_TRY_CATCH
 
@@ -456,7 +456,7 @@ unsigned int GAPI::doVerifyAddressPin(QString pin_value) {
     if (card == NULL) return TRIES_LEFT_ERROR;
 
     PTEID_Pin & address_pin = card->getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
-    if (address_pin.isVerified()) {
+    if (!forceVerify && address_pin.isVerified()) {
         tries_left = TRIES_LEFT_MAX;
     }
     else {

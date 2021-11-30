@@ -347,7 +347,7 @@ public slots:
     void getTriesLeftAuthPin();
     void verifySignPin(QString pin);
     void getTriesLeftSignPin();
-    void verifyAddressPin(QString pin);
+    void verifyAddressPin(QString pin, bool forceVerify);
     void getTriesLeftAddressPin();
 
     unsigned int doGetTriesLeftAuthPin();
@@ -355,7 +355,7 @@ public slots:
     unsigned int doGetTriesLeftAddressPin();
     unsigned int doVerifyAuthPin(QString pin);
     unsigned int doVerifySignPin(QString pin);
-    unsigned int doVerifyAddressPin(QString pin);
+    unsigned int doVerifyAddressPin(QString pin, bool forceVerify);
     unsigned int doChangeAuthPin(QString currentPin, QString newPin);
     unsigned int doChangeSignPin(QString currentPin, QString newPin);
     unsigned int doChangeAddressPin(QString currentPin, QString newPin);

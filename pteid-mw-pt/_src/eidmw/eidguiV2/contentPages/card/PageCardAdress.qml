@@ -181,7 +181,7 @@ PageCardAdressForm {
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 if(Constants.USE_SDK_PIN_UI_POPUP){
                     mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-                    gapi.verifyAddressPin("")
+                    gapi.verifyAddressPin("", false)
                 }else{
                     dialogTestPin.open()
                     textFieldPin.text = ""
@@ -319,7 +319,7 @@ PageCardAdressForm {
 
         onAccepted: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-            var triesLeft = gapi.doVerifyAddressPin(textFieldPin.text)
+            var triesLeft = gapi.doVerifyAddressPin(textFieldPin.text, true)
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             if (triesLeft === 3) {
                 propertyBusyIndicator.running = true
@@ -724,7 +724,7 @@ PageCardAdressForm {
                     mainFormID.propertyPageLoader.forceActiveFocus()
                     //Start reloading address data after address change operation
                     //Also reload after address change error but it should be fast and harmless
-                    gapi.verifyAddressPin("")
+                    gapi.verifyAddressPin("", false)
                 }
                 highlighted: activeFocus ? true : false
                 Accessible.role: Accessible.Button
@@ -768,7 +768,7 @@ PageCardAdressForm {
             else {
                 propertyBusyIndicator.running = true
                 mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-                gapi.verifyAddressPin("")
+                gapi.verifyAddressPin("", false)
             }
         }
         else 
