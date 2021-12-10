@@ -366,6 +366,8 @@ private:
   // Get hints.
   Hints *getHints();
 
+  void cleanSignatureDicts();
+
   PDFDoc();
   void init();
   GBool setup(GooString *ownerPassword, GooString *userPassword);

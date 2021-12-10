@@ -1240,6 +1240,16 @@ void XRef::removeIndirectObject(Ref r) {
   e->updated = true;
 }
 
+void XRef::removeEntry(XRefEntry * e) {
+  if (e->type == xrefEntryFree)
+    return;
+  e->obj.free();
+  e->type = xrefEntryFree;
+  e->gen++;
+  e->updated = true;
+
+}
+
 void XRef::writeXRef(XRef::XRefWriter *writer, GBool writeAllEntries) {
   //create free entries linked-list
   if (getEntry(0)->gen != 65535) {

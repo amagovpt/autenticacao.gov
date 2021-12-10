@@ -764,6 +764,12 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
 
 	getCatalog()->setIncrementalSignature(incremental_mode);
 
+  //Remove signature dictionaries with empty /Contents that break our byterange generation algorithm
+  if (!incremental_mode) {
+
+    cleanSignatureDicts();
+  }
+
   SignatureSignerInfo signer_info { name, civil_number, m_attribute_supplier, m_attribute_name };
 	if (isLinearized())
 	{
@@ -1465,6 +1471,52 @@ void PDFDoc::saveIncrementalUpdate (OutStream* outStr)
 
   delete trailerDict;
   delete uxref;
+}
+
+bool isEmptySignatureDict(Object &sig_dict, int index) {
+  //const char * empty_hexstring_pat = "<00";
+  bool res = false;
+  Object type, contents;
+  sig_dict.dictLookup("Type", &type);
+  sig_dict.dictLookup("Contents", &contents);
+
+  if (type.isName() && strcmp(type.getName(), "Sig")==0) {
+    if (contents.isString()) {
+      // Can't use GooString::getLength() here because it will return the size of the internal buffer
+      // i.e how many bytes are used to store all the 0s of the empty signature placeholder"
+      char * sig_content = contents.getString()->getCString();
+      if (strlen(sig_content) == 0) {
+        res = true;
+      }
+      
+    }
+  }
+
+  type.free();
+  contents.free();
+
+  return res;
+}
+
+void PDFDoc::cleanSignatureDicts() {
+  
+  for (int i=0; i<xref->getNumObjects(); i++) {
+    Object obj1;
+    Ref ref;
+    XRefEntry *entry = xref->getEntry(i);
+    if (entry->type == xrefEntryUncompressed) {
+      ref.num = i;
+      ref.gen = xref->getEntry(i)->gen;
+      xref->fetch(ref.num, ref.gen, &obj1);
+      if (obj1.isDict() && isEmptySignatureDict(obj1, i)) {
+#ifdef _DEBUG
+         fprintf(stderr, "DEBUG: deleting empty signature dict: %d\n", ref.num);
+#endif         
+         xref->removeEntry(entry);
+      }
+      obj1.free();
+    }
+  }
 }
 
 void PDFDoc::saveCompleteRewrite (OutStream* outStr)

@@ -138,6 +138,7 @@ public:
   void setModifiedObject(Object* o, Ref r);
   Ref addIndirectObject (Object* o);
   void removeIndirectObject(Ref r);
+  void removeEntry(XRefEntry * e);
   void add(int num, int gen,  Guint offs, GBool used);
 
   // Output XRef table to stream
