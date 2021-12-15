@@ -1833,9 +1833,9 @@ void GAPI::startSigningPDF(QString loadedFilePath, QString outputFile, int page,
 }
 
 void GAPI::startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outputFile, int page, double coord_x, double coord_y,
-    QString reason, QString location, bool isTimestamp, bool isLTV, bool isSmall) {
+    QString reason, QString location, bool isTimestamp, bool isLTV, bool isSmall, bool isLastPage) {
 
-    SignParams params = { loadedFileBatchPath, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isLTV, isSmall };
+    SignParams params = { loadedFileBatchPath, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isLTV, isSmall, isLastPage };
 
     QFuture<void> future =
         Concurrent::run(this, &GAPI::doSignBatchPDF, params);
@@ -1997,7 +1997,7 @@ void GAPI::doSignPDF(SignParams &params) {
         const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
         sig_handler.setCustomImage(imageData);
     }
-    card->SignPDF(sig_handler, params.page == 0 ? 1 : params.page, params.coord_x, params.coord_y,
+    card->SignPDF(sig_handler, params.page, params.coord_x, params.coord_y,
         params.location.toUtf8().data(), params.reason.toUtf8().data(),
         getPlatformNativeString(params.outputFile));
 
@@ -2010,7 +2010,7 @@ void GAPI::doSignBatchPDF(SignParams &params) {
 
     qDebug() << "doSignBatchPDF! loadedFilePath = " << params.loadedFilePaths << " outputFile = " << params.outputFile <<
         "page = " << params.page << "coord_x" << params.coord_x << "coord_y" << params.coord_y <<
-        "reason = " << params.reason << "location = " << params.location;
+        "reason = " << params.reason << "location = " << params.location << " isLastPage = " << params.isLastPage;
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doSignBatchPDF");
 
@@ -2026,8 +2026,7 @@ void GAPI::doSignBatchPDF(SignParams &params) {
     for (int i = 0; i < params.loadedFilePaths.count(); i++){
         qDebug() << params.loadedFilePaths[i];
         QString fullInputPath = params.loadedFilePaths[i];
-        sig_handler->addToBatchSigning((char *)getPlatformNativeString(fullInputPath),
-            params.page == 0 ? true : false);
+        sig_handler->addToBatchSigning((char *)getPlatformNativeString(fullInputPath), params.isLastPage);
     }
 
     if (params.isTimestamp)
@@ -2053,7 +2052,7 @@ void GAPI::doSignBatchPDF(SignParams &params) {
         sig_handler->setCustomImage(imageData);
     }
 
-    card->SignPDF(*sig_handler, params.page == 0 ? 1 : params.page, params.coord_x, params.coord_y,
+    card->SignPDF(*sig_handler, params.page, params.coord_x, params.coord_y,
         params.location.toUtf8().data(), params.reason.toUtf8().data(),
         getPlatformNativeString(params.outputFile));
 

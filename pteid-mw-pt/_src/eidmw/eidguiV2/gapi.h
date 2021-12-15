@@ -148,6 +148,7 @@ public:
     bool isTimestamp;
     bool isLtv;
     bool isSmallSignature;
+    bool isLastPage;
 };
 
 struct CmdParams {
@@ -304,7 +305,7 @@ public slots:
     void startSigningPDF(QString loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
                          QString reason, QString location, bool isTimestamp, bool isLtv, bool isSmall);
     void startSigningBatchPDF(QList<QString> loadedFileBatchPath, QString outputFile, int page, double coord_x, double coord_y,
-                         QString reason, QString location, bool isTimestamp, bool isLtv, bool isSmall);
+                         QString reason, QString location, bool isTimestamp, bool isLtv, bool isSmall, bool isLastPage);
     int getPDFpageCount(QString loadedFilePath);
     void closePdfPreview(QString filePath);
     void closeAllPdfPreviews();

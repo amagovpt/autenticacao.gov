@@ -1756,11 +1756,12 @@ PageServicesSignForm {
     function signCC(outputFile) {
         var isTimestamp = propertySwitchSignTemp.checked
         if (propertyRadioButtonPADES.checked) {
-            var page = propertyCheckLastPage.checked ? 0 : propertySpinBoxControl.value
+            var page = propertySpinBoxControl.value
             var reason = propertyTextFieldReason.text
             var location = propertyTextFieldLocal.text
             var isSmallSignature = propertyCheckSignReduced.checked
             var isLTV = propertyCheckboxLTV.checked
+            var isLastPage = propertyCheckLastPage.checked
             var coord_x = -1
             var coord_y = -1
             if(propertyCheckSignShow.checked){
@@ -1772,7 +1773,7 @@ PageServicesSignForm {
 
             /*console.log("Output filename: " + outputFile)*/
             console.log("Signing in position coord_x: " + coord_x
-                        + " and coord_y: "+coord_y + " page: " + page + " timestamp: " + isTimestamp + " ltv: " + isLTV)
+                        + " and coord_y: " + coord_y + " page: " + page + " timestamp: " + isTimestamp + " ltv: " + isLTV + " lastPage: " + isLastPage)
 
             propertyOutputSignedFile = outputFile;
             if (propertyListViewFiles.count == 1) {
@@ -1807,7 +1808,7 @@ PageServicesSignForm {
                 // remove duplicate fileUrls
                 batchFilesArray = batchFilesArray.filter(onlyUnique);
                 gapi.startSigningBatchPDF(batchFilesArray, outputFile, page, coord_x, coord_y,
-                                        reason, location, isTimestamp, isLTV, isSmallSignature)
+                                        reason, location, isTimestamp, isLTV, isSmallSignature, isLastPage)
             }
         }
         else {
