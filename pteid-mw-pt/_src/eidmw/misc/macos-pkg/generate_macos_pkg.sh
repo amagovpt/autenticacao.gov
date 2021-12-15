@@ -77,6 +77,7 @@ copy_poppler_qt_to_appbundle  "$EIDGUI_BUNDLE_FRAMEWORKS"
 cp -af $BIN_DIR/../eidguiV2/eidguiV2.app/Contents/MacOS/* "$EIDGUI_BUNDLE_DIR"
 cp -af $BIN_DIR/../eidguiV2/*.qm "$RESOURCES_BUNDLE_DIR"
 cp  $BIN_DIR/../eidguiV2/fonts/lato/Lato-Regular.ttf "$RESOURCES_BUNDLE_DIR"
+cp  $BIN_DIR/../eidguiV2/fonts/myriad/MyriadPro-Regular.otf "$RESOURCES_BUNDLE_DIR"
 cp apps/Info.plist "$EIDGUI_BUNDLE_DIR/../"
 
 cd ${PKG_DIR}/apps/
