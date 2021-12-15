@@ -10,7 +10,7 @@ DEVELOPER_ID_CERT=$1
 SIGNING_IDENTITY="Developer ID Application: $DEVELOPER_ID_CERT"
 echo "############# Starting codesigning script #############"
 echo ""
-DYLIB_DIR=lib/lib
+DYLIB_DIR=system-libs/lib
 
 for file in $DYLIB_DIR/*.dylib
 do
@@ -33,7 +33,7 @@ codesign --force --deep --verbose -s "$SIGNING_IDENTITY" --timestamp -o runtime 
 
 #Sign DialogsQTsrv executable
 echo "Signing pteiddialogsQTsrv executable..."
-codesign --verbose -s "$SIGNING_IDENTITY" --timestamp -o runtime bin/pteiddialogsQTsrv.app/Contents/MacOS/pteiddialogsQTsrv
+codesign --verbose -s "$SIGNING_IDENTITY" --timestamp -o runtime dialogs/pteiddialogsQTsrv.app/Contents/MacOS/pteiddialogsQTsrv
 
 echo "Signing fc-cache executable..."
-codesign --verbose -s "$SIGNING_IDENTITY" --timestamp -o runtime bin/fc-cache
+codesign --verbose -s "$SIGNING_IDENTITY" --timestamp -o runtime dialogs/fc-cache
