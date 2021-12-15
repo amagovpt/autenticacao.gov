@@ -161,7 +161,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>userenv.lib;crypt32.lib;bcrypt_provider.lib;cmdServices.lib;pteidlib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;pteidapplayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_CRYPTPDK)\Lib\win8\x86;..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CRYPTPDK)\Lib\x86;..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>KSP.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -187,7 +187,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>userenv.lib;crypt32.lib;bcrypt_provider.lib;cmdServices.lib;pteidlib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;pteidapplayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_CRYPTPDK)\Lib\win8\x64;..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CRYPTPDK)\Lib\x64;..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>KSP.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>

@@ -149,7 +149,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Windows Kits\8.0\Cryptographic Provider Development Kit\Include;C:\Program Files\Windows Kits\8.0\Cryptographic Provider Development Kit\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_CRYPTPDK)\Include;$(PTEID_DIR_CRYPTPDK)\Lib\x86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader />
@@ -158,7 +158,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>bcrypt_provider.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\Windows Kits\8.0\Cryptographic Provider Development Kit\Lib\win8\x86;C:\Program Files\Windows Kits\8.0\Cryptographic Provider Development Kit\Lib\win8\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CRYPTPDK)\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -171,7 +171,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Windows Kits\8.0\Cryptographic Provider Development Kit\Include;C:\Program Files\Windows Kits\8.0\Cryptographic Provider Development Kit\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_CRYPTPDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader />
@@ -180,7 +180,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>bcrypt_provider.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\Windows Kits\8.0\Cryptographic Provider Development Kit\Lib\win8\x64;C:\Program Files\Windows Kits\8.0\Cryptographic Provider Development Kit\Lib\win8\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CRYPTPDK)\Lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>

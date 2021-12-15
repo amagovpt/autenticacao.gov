@@ -8,7 +8,7 @@
 @if NOT "%FILE_NOT_FOUND_INC%"=="" goto fail
 
 ::---- lib
-@set FILE_TO_FIND_LIB="\Lib\win8\x64\bcrypt_provider.lib" "\Lib\win8\x64\cng_provider.lib" "\Lib\win8\x64\ncrypt_provider.lib" "\Lib\win8\x86\bcrypt_provider.lib" "\Lib\win8\x86\cng_provider.lib" "\Lib\win8\x86\ncrypt_provider.lib"
+@set FILE_TO_FIND_LIB="\Lib\x64\bcrypt_provider.lib" "\Lib\x64\cng_provider.lib" "\Lib\x64\ncrypt_provider.lib" "\Lib\x86\bcrypt_provider.lib" "\Lib\x86\cng_provider.lib" "\Lib\x86\ncrypt_provider.lib"
 @echo [INFO] Looking for files: %FILE_TO_FIND_LIB%
 
 @for %%i in (%FILE_TO_FIND_LIB%) do @if not exist "%PTEID_DIR_CRYPTPDK%\%%~i" set FILE_NOT_FOUND_LIB=%%~i
