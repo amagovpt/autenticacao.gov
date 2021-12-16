@@ -11,12 +11,12 @@
             "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/Autenticacao.gov_Ubuntu_19_x64.deb"
         },
         "ubuntu20": {
-            "latestVersion": "3.6.0",
+            "latestVersion": "3.7.0",
             "package": "20126/78595/Autenticacao.gov_Ubuntu_20_x64.deb",
             "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/pteid-mw_ubuntu20_amd64.deb"
         },
         "ubuntu21": {
-            "latestVersion": "3.6.0",
+            "latestVersion": "3.7.0",
             "package": "20126/78595/Autenticacao.gov_Ubuntu_21_x64.deb",
             "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/pteid-mw_ubuntu21_amd64.deb"
         },
@@ -36,9 +36,9 @@
             "packageUrl": ""
         },
         "fedora64": {
-            "latestVersion": "3.6.0",
+            "latestVersion": "3.7.0",
             "package": "20126/78595/Autenticacao.gov_Fedora_x64.rpm",
-            "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/pteid-mw-fedora32.x86_64.rpm"
+            "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/pteid-mw-fedora34.x86_64.rpm"
         },
         "suse32": {
             "latestVersion": "0.0.0",
@@ -46,12 +46,12 @@
             "packageUrl": ""
         },
         "suse64": {
-            "latestVersion": "3.6.0",
+            "latestVersion": "3.7.0",
             "package": "20126/78595/Autenticacao.gov_OpenSUSE_x64.rpm",
             "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/pteid-mw-opensuse15.2.x86_64.rpm"
         },
         "osx": {
-            "latestVersion": "3.6.0",
+            "latestVersion": "3.7.0",
             "package": "20126/78595/Autenticacao.gov_MacOS.pkg",
             "packageUrl": "https://aplicacoes.autenticacao.gov.pt/apps/Autenticacao.gov_MacOS.pkg"
         }
