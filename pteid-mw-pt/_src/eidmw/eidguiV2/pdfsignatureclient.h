@@ -107,6 +107,8 @@ private:
     //This key is used as input for the TOTP generation
     std::string m_secretKey;
     QString m_appID;
+    static const int totp_digits;
+    static const int totp_step_time;
 };
 
 #endif // PDFSIGNATURECLIENT_H

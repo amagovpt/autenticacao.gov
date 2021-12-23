@@ -367,6 +367,9 @@ void WriteToFile(const char *path, unsigned char *content, unsigned int content_
 }
 
 
+const int PDFSignatureClient::totp_digits = 6;
+const int PDFSignatureClient::totp_step_time = 60;
+
 const char *AUTHORIZATION_ENDPOINT = "/SCAPSignature/AuthorizationService";
 const char *SIGNATURE_ENDPOINT = "/SCAPSignature/SignatureService";
 
@@ -388,14 +391,14 @@ unsigned char * PDFSignatureClient::callSCAPSignatureService(soap* sp, QByteArra
     m_secretKey = settings.getSecretKey(citizenId);
 
     /*qDebug() << "m_secretKey = " << m_secretKey.data();*/
+    std::string new_totp = generateTOTP(m_secretKey, totp_digits, totp_step_time, time(NULL));
 
-    std::string new_totp = generateTOTP(m_secretKey);
-
-    if (new_totp.length() != 6) {
+    if (new_totp.length() != totp_digits) {
         eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", 
-            "Error generating TOTP invalid key");
-        return GAPI::ScapGenericError;
+            "Error generating TOTP: possibly invalid key");
+        return NULL;
     }
+
 
     sigRequest.TOTP = &new_totp;
 
@@ -555,20 +558,19 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
     _ns1__AuthorizationRequest authorizationRequest;
     _ns1__AuthorizationResponse authorizationResponse;
 
-    //TODO: change this
     authorizationRequest.AppId = m_appID.toStdString();
 
     m_secretKey = settings.getSecretKey(citizenId);
 
     /*qDebug() << "m_secretKey = " << m_secretKey.data();*/
+    std::string new_totp = generateTOTP(m_secretKey, totp_digits, totp_step_time, time(NULL));
 
-    std::string new_totp = generateTOTP(m_secretKey);
-
-    if (new_totp.length() != 6) {
+    if (new_totp.length() != totp_digits) {
         eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", 
-            "Error generating TOTP invalid key");
+            "Error generating TOTP: possibly invalid key");
         return GAPI::ScapSecretKeyError;
     }
+
 
     authorizationRequest.TOTP = new_totp;
 
