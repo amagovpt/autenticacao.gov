@@ -25,6 +25,8 @@
 #include <stdint.h> //For uint8_t
 #endif
 
+#include "eidlib.h"
+
 void Base64Decode(const char *array, unsigned int inlen, char * &decoded, unsigned int &decoded_len)
 {
 
@@ -68,6 +70,12 @@ std::string generateTOTP(std::string secretKey) {
     char * base64_buffer;
 
     Base64Decode(secretKey.c_str(), secretKey.size(), base64_buffer, decoded_len);
+
+    if(decoded_len < 20){
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+        "TOTP Base64Decode error decoded_len = %d", decoded_len);
+        return std::string("");
+    }
 
     key_buffer = std::string(base64_buffer, decoded_len);
 

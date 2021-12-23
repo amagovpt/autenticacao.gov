@@ -390,7 +390,13 @@ unsigned char * PDFSignatureClient::callSCAPSignatureService(soap* sp, QByteArra
     /*qDebug() << "m_secretKey = " << m_secretKey.data();*/
 
     std::string new_totp = generateTOTP(m_secretKey);
-    /*eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Generated TOTP: %s", new_totp.c_str());*/
+
+    if (new_totp.length() != 6) {
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", 
+            "Error generating TOTP invalid key");
+        return GAPI::ScapGenericError;
+    }
+
     sigRequest.TOTP = &new_totp;
 
     xsd__base64Binary *base64DocumentHash =
@@ -557,8 +563,13 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
     /*qDebug() << "m_secretKey = " << m_secretKey.data();*/
 
     std::string new_totp = generateTOTP(m_secretKey);
-    /*eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
-     * "Generated TOTP: %s", new_totp.c_str());*/
+
+    if (new_totp.length() != 6) {
+        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", 
+            "Error generating TOTP invalid key");
+        return GAPI::ScapSecretKeyError;
+    }
+
     authorizationRequest.TOTP = new_totp;
 
     SignatureDetails sigDetails;
@@ -891,9 +902,10 @@ int handleError(int status_code, soap *sp, const char *call){
             long server = serverTime.toSecsSinceEpoch();
             qDebug() << "local: " << local << "server: " << server;
 
-            if (abs(difftime(local,server)) > SCAP_MAX_CLOCK_DIF) {
                 PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
                             "%s returned tLocal: %ld tServer: %ld", call, local, server);
+
+            if (abs(difftime(local,server)) > SCAP_MAX_CLOCK_DIF) {
                 return GAPI::ScapClockError;
             }
             else {
