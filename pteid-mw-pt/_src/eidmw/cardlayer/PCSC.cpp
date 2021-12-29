@@ -85,13 +85,15 @@ CByteArray CPCSC::ListReaders()
 	DWORD dwReadersLen = sizeof(csReaders);
 
 	LONG lRet = SCardListReaders(m_hContext, NULL, csReaders, &dwReadersLen);
-	if (SCARD_S_SUCCESS != lRet || m_iListReadersCount < 6)
+	if (SCARD_S_SUCCESS != lRet && m_iListReadersCount < 6)
 	{
-		MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardListReaders(): 0x%0x", lRet);
+		MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardListReaders(): 0x%0x try: %d", lRet, m_iListReadersCount);
 		m_iListReadersCount++;
 	}
+
 	if (SCARD_S_SUCCESS == lRet)
 	{
+		m_iListReadersCount = 0;
 		return CByteArray((unsigned char *) csReaders, dwReadersLen);
 	}
 	else if (SCARD_E_NO_READERS_AVAILABLE == lRet)
