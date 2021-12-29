@@ -631,7 +631,6 @@ FWK_CertifStatus APL_CryptoFwk::CRLValidation(const CByteArray &cert,const CByte
 				ASN1_ENUMERATED * revocation_reason = (ASN1_ENUMERATED *)X509_REVOKED_get_ext_d2i(pRevoked, NID_crl_reason, &crit, NULL);
 
 				if (revocation_reason && ASN1_ENUMERATED_get(revocation_reason) == OCSP_REVOKED_STATUS_CERTIFICATEHOLD) {
-					MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: certificate is on hold in CRL");
 					onHold = true;
 				}
 				break;
@@ -639,12 +638,18 @@ FWK_CertifStatus APL_CryptoFwk::CRLValidation(const CByteArray &cert,const CByte
 		}
 	}
 
-	if (onHold)
+	if (onHold){
+		MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: CRL Validation: Certificate Suspended.");
 		eStatus = FWK_CERTIF_STATUS_SUSPENDED;
-	else if(bFound)
+	}
+	else if(bFound){
+		MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: CRL Validation: Certificate Revoked.");
 		eStatus = FWK_CERTIF_STATUS_REVOKED;
-	else
+	}
+	else {
+		MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: CRL Validation: Certificate Valid.");
 		eStatus = FWK_CERTIF_STATUS_VALID;
+	}
 
 cleanup:
 	//Free openSSL object
