@@ -27,6 +27,8 @@ eidlibCS/obj
 eidlibCS/Properties
 eidlibCS_Wrapper/Build
 eidlibCS_Wrapper/GeneratedFiles
+eidlibNodeJS_Wrapper/GeneratedFiles
+eidlibNodeJS_Wrapper/build
 eidlibJava_Wrapper/Build
 eidlibJava_Wrapper/javadocs
 eidlibJava_Wrapper/javadocs.zip
