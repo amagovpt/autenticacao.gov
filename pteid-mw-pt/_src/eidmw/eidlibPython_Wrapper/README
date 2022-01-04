@@ -1,9 +1,11 @@
-Instruction to build and use the python wrapper:
+# Python pteid-mw module
 
-1 - Install pteid-mw package ( Aplicação do Cartão de Cidadão ) from https://www.autenticacao.gov.pt/cc-software
-2 - Install qmake tool
-3 - Install the latest header files and a Python library (For ubuntu it's included in package 'libpython3.x-dev'). 
-4 - Edit eidlibPython_Wrapper.pro to specify your lib version for the wrapper and specify the includes so the wraper compiles (lines 50 and 53). 
-5 - Compile the wrapper with 'qmake eidlibPython_Wrapper.pro' and 'make'.
-6 - Go to examples folder and execute the example script to get all card info with 'python3 simple_example.py'.
-7 - For documentation execute this 'python3 dump_module_help.py' to get the documentation of this module ( class, function, variables, etc ).
+To build and use the Python wrapper library:
+
+1. Install pteid-mw package ( Aplicação do Cartão de Cidadão ) from https://www.autenticacao.gov.pt/cc-software
+2. Install qmake tool
+3. Install the latest header files and a Python library (For ubuntu it's included in package 'libpython3.x-dev'). 
+4. Edit eidlibPython_Wrapper.pro to specify your lib version for the wrapper and specify the includes so the wraper compiles (lines 50 and 53). 
+5. Compile the wrapper with 'qmake eidlibPython_Wrapper.pro' and 'make'.
+6. Go to examples folder and execute the example script to get all card info with 'python3 simple_example.py'.
+7. For documentation execute this 'python3 dump_module_help.py' to get the documentation of this module ( class, function, variables, etc ).
