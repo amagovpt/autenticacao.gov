@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>VERIFY_TRY_LEFT</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tries@</string>
+		<key>tries</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>PIN verification failed, PIN blocked</string>
+			<key>one</key>
+			<string>PIN verification failed, one try left</string>
+			<key>other</key>
+			<string>PIN verification failed, %d tries left</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

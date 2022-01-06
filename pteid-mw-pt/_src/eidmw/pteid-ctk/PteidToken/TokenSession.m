@@ -1,0 +1,268 @@
+/* ****************************************************************************
+ *
+ * PT eID Middleware Project.
+ *
+ * Copyright (C) 2021-2022 André Guerreiro - <aguerreiro1985@gmail.com>
+*/
+
+#import "Token.h"
+#import "PteidSession.h"
+#include <os/log.h>
+
+@implementation PteidAuthOperation
+
+- (nullable instancetype)initWithSession:(PteidTokenSession *)session {
+    NSLog(@"PTEID initWithSession called");
+    
+    if (self = [super init]) {
+        _session = session;
+
+        self.smartCard = session.smartCard;
+        //XX: these variables are not used ATM
+        const UInt8 template[] = {self.smartCard.cla, 0x20, 0x00, 0x82, 0x08, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+        self.APDUTemplate = [NSData dataWithBytes:template length:sizeof(template)];
+        self.PINFormat = [[TKSmartCardPINFormat alloc] init];
+        self.PINFormat.minPINLength = 4;
+        self.PINFormat.maxPINLength = 8;
+        //self.PINFormat.PINBitOffset = 5 * 8;
+    }
+
+    return self;
+}
+
+// Remove this as soon as PIVAuthOperation implements automatic PIN submission according to APDUTemplate.
+- (BOOL)finishWithError:(NSError * _Nullable __autoreleasing *)error {
+    
+    if(self.PIN == nil){
+        NSLog(@"PTEID finishWithError called PIN == nil");
+        return NO;
+    }
+    
+    // Format PIN as UTF-8, right padded with 0xff to 8 bytes.
+    NSMutableData *PINData = [NSMutableData dataWithLength:8];
+    memset(PINData.mutableBytes, 0xff, PINData.length);
+    
+    NSLog(@"PteidAuthOperation finishWithError() called");
+    
+    //TODO: ASCII or UTF8 encoding? (verify if we can even input non-digit PINs)
+    NSData * pin_bytes = [self.PIN dataUsingEncoding:NSASCIIStringEncoding];
+    NSUInteger bytes_to_copy = pin_bytes.length;
+    [pin_bytes getBytes:PINData.mutableBytes length:bytes_to_copy];
+    
+    // Send VERIFY command to the card.
+    UInt16 sw;
+    //XX: hardcoded PIN ID - it must be read from session variable
+    if ([self.smartCard sendIns:0x20 p1:0x00 p2:0x82 data:PINData le:nil sw:&sw error:error] == nil) {
+        os_log(OS_LOG_DEFAULT, "Verify PIN sendIns failed");
+        return NO;
+    }
+    if ((sw & 0xff00) == 0x6300 || (sw == 0x6984)) {
+        int triesLeft = sw == 0x6983 ? 0 : sw & 0x3f;
+        NSLog(@ "Failed to verify PIN sw:0x%04x retries: %d", sw, triesLeft);
+        if (error != nil) {
+            *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeAuthenticationFailed userInfo:
+                      @{NSLocalizedDescriptionKey: [NSString localizedStringWithFormat: NSLocalizedString(@"VERIFY_TRY_LEFT", nil), triesLeft]}];
+        }
+        return NO;
+    }
+    else if (sw != 0x9000) {
+        NSLog(@"Failed to verify PIN unexpected error sw: 0x%04x", sw);
+        if (error != nil) {
+            *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeAuthenticationFailed userInfo:
+                      @{NSLocalizedDescriptionKey: [NSString localizedStringWithFormat: NSLocalizedString(@"VERIFY_TRY_LEFT", nil), 0]}];
+        }
+        return NO;
+    }
+    
+    // Mark card session sensitive, because we entered PIN into it and no session should access it in this state.
+    self.smartCard.sensitive = YES;
+    
+    // Remember in card context that the card is authenticated.
+    //self.session.smartCard.context = @(YES);
+    self.smartCard.context = @(YES);
+    
+    // Mark BEIDTokenSession as freshly authorized.
+    self.session.authState = PteidAuthStateFreshlyAuthorized;
+    
+    return YES;
+}
+
+//TODO: missing support for secure PIN verification with PINpad readers
+
+@end
+
+
+@implementation PteidTokenSession
+
+- (instancetype)initWithToken:(PteidToken *)token {
+    return [super initWithToken:token];
+}
+
+- (TKTokenAuthOperation *)tokenSession:(TKTokenSession *)session
+                          beginAuthForOperation:(TKTokenOperation)operation
+                          constraint:(TKTokenOperationConstraint)constraint
+                          error:(NSError * _Nullable __autoreleasing *)error {
+    
+    //TODO: verify constraint and operation parameters
+    NSLog(@"Building object PteidAuthOperation!....");
+    if (![constraint isEqual:PteidConstraintPINAlways]) {
+        os_log_error(OS_LOG_DEFAULT, "attempt to evaluate unsupported constraint %@", constraint);
+        if (error != nil) {
+            *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeBadParameter userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"WRONG_CONSTR", nil)}];
+        }
+        return nil;
+    }
+    
+    return [[PteidAuthOperation alloc] initWithSession:self];
+}
+
+- (BOOL)tokenSession:(TKTokenSession *)session supportsOperation:(TKTokenOperation)operation usingKey:(TKTokenObjectID)keyObjectID algorithm:(TKTokenKeyAlgorithm *)algorithm {
+    // Indicate whether the given key supports the specified operation and algorithm.
+    //TODO: verify if algorithm is supported and keyObjectID is not 0
+    TKTokenKeychainKey *keyItem = [self.token.keychainContents keyForObjectID:keyObjectID error:nil];
+     if (keyItem == nil) {
+         NSLog(@"Unsupported TokenOperation: %lu", operation);
+         return NO;
+     }
+    
+    if (operation != TKTokenOperationSignData) {
+        return NO;
+    }
+    
+    BOOL returnValue = ([algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureRaw] && [algorithm supportsAlgorithm:kSecKeyAlgorithmRSASignatureDigestPKCS1v15Raw]);
+    NSLog(@"PTEID supportsOperation returning %i", returnValue);
+    NSLog(@"PTEID supportsOperation algorithm description %s", algorithm.description.UTF8String);
+
+    return returnValue;
+}
+
+- (NSData *)tokenSession:(TKTokenSession *)session signData:(NSData *)dataToSign usingKey:(TKTokenObjectID)keyObjectID algorithm:(TKTokenKeyAlgorithm *)algorithm error:(NSError **)error {
+    __block NSData *signature;
+    unsigned char prefix_pso_hash[] = {0x90, 0x00};
+    unsigned char dst_bytes[] = {0x80, 0x01, 0x00, 0x84, 0x01, 0x00};
+    
+    NSLog(@"PteidTokenSession signData was called with inputData length: %lu algorithm: %@", dataToSign.length, algorithm);
+    TKTokenKeychainKey * sign_key = [self.token.keychainContents keyForObjectID:keyObjectID error:error];
+    
+    if (sign_key != nil) {
+        NSLog(@"Signing key with ID: %@", sign_key.objectID);
+    }
+    else {
+        return nil;
+    }
+    
+    if (self.authState == PteidAuthStateUnauthorized || self.smartCard.context == nil) {
+        NSLog(@"DEBUG: Unauthorized signData attempt!!");
+        if (error != nil) {
+            *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeAuthenticationNeeded userInfo:nil];
+        }
+        return nil;
+    }
+       
+    // Insert code here to sign data using the specified key and algorithm.
+    signature = nil;
+    
+    NSData * hash_to_sign = nil;
+    
+    if ([algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureRaw]) {
+        NSLog(@"Pteid TokenSession - remove PKCS#1 1.5 padding");
+        //  00 01 FF FF 00 ....
+        const char *data_p = dataToSign.bytes;
+        char *e = strchr(&data_p[3], '\0'); // Start at pos 3
+        if (e != NULL) {
+            NSUInteger pos = (NSUInteger)(e - data_p) + 1;
+            //Skip DigestInfo prefix for SHA-2 hash functions
+            pos += 19;
+            hash_to_sign = [dataToSign subdataWithRange:NSMakeRange(pos, dataToSign.length - pos)];
+        }
+        else {
+            NSLog(@"Invalid PKCS#1 padding - couldn't find second zero byte");
+            return signature;
+        
+        }
+    }
+    prefix_pso_hash[1] = (unsigned char) [hash_to_sign length];
+    
+    //TODO: Match DigestInfo prefix to get the right AlgoID
+    dst_bytes[2] = 0x42; //AlgoID
+    //TODO: get keyID from parameter keyObjectID
+    dst_bytes[5] = 0x01; //Key ID (01=sign 02=auth)
+    NSMutableData * pso_hash_data = [NSMutableData alloc];
+    [pso_hash_data appendBytes:prefix_pso_hash length:sizeof(prefix_pso_hash)];
+    [pso_hash_data appendBytes:hash_to_sign.bytes length:hash_to_sign.length];
+    
+    NSData * dst_data = [NSData dataWithBytes:dst_bytes length:sizeof(dst_bytes)];
+    
+    UInt16 sw = 0;
+        
+        //MSE:set with digital signature template specifying the signing key and algo
+    [self.smartCard sendIns:0x22 p1:0x41 p2:0xB6 data:dst_data le:@0 sw:&sw error:error];
+    
+    if (sw != 0x9000) {
+        NSLog(@"MSE-Set command failed! SW: %04x", sw);
+        return nil;
+    }
+    NSLog(@"PSO:Hash input data len: %lu", pso_hash_data.length);
+    
+    [self.smartCard sendIns:0x2A p1:0x90 p2:0xA0 data:pso_hash_data le:@0 sw:&sw error:error];
+    
+    if (sw != 0x9000) {
+        NSLog(@"PSO:Hash command failed! SW: %04x", sw);
+        return nil;
+    }
+    
+    signature = [self.smartCard sendIns:0x2A p1:0x9E p2:0x9A data:nil le:@0 sw:&sw error:error];
+    
+    switch (sw)
+    {
+        case 0x6982:
+            NSLog(@"Pteid TokenSession signData Unauthenticated");
+            if (error != nil) {
+                *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeAuthenticationNeeded userInfo:nil];
+            }
+            return nil;
+        case 0x9000:
+            if (signature != nil)
+                break;
+        default:
+            NSLog(@"Pteid TokenSession signData failed to sign SW: %04x", sw);
+            return nil;
+    }
+    
+    //BOOL success = [self.smartCard inSessionWithError:(NSError **)error executeBlock:(BOOL(^)(NSError **error))signData];
+    /*
+     if(success == NO) {
+     NSLog(@"PTEID sign failed!");
+     return nil;
+     } */
+    
+    return signature;
+}
+
+/* Pteid Card doesn't support encryption so these are empty stubs */
+- (NSData *)tokenSession:(TKTokenSession *)session decryptData:(NSData *)ciphertext usingKey:(TKTokenObjectID)keyObjectID algorithm:(TKTokenKeyAlgorithm *)algorithm error:(NSError **)error {
+    NSData *plaintext;
+
+    // Insert code here to decrypt the ciphertext using the specified key and algorithm.
+    plaintext = nil;
+
+    if (!plaintext) {
+        if (error) {
+            // If the operation failed for some reason, fill in an appropriate error like TKErrorCodeObjectNotFound, TKErrorCodeCorruptedData, etc.
+            // Note that responding with TKErrorCodeAuthenticationNeeded will trigger user authentication after which the current operation will be re-attempted.
+            *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeAuthenticationNeeded userInfo:@{NSLocalizedDescriptionKey: @"Authentication required!"}];
+        }
+    }
+
+    return plaintext;
+}
+
+- (NSData *)tokenSession:(TKTokenSession *)session performKeyExchangeWithPublicKey:(NSData *)otherPartyPublicKeyData usingKey:(TKTokenObjectID)objectID algorithm:(TKTokenKeyAlgorithm *)algorithm parameters:(TKTokenKeyExchangeParameters *)parameters error:(NSError **)error {
+    NSData *secret = nil;
+
+    *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeNotImplemented userInfo:@{NSLocalizedDescriptionKey: @"KeyExchange is not implemented in PteidToken!"}];
+
+    return secret;
+}
+
+@end
