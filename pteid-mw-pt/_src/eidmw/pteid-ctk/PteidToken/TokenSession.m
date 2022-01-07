@@ -19,8 +19,8 @@
 
         self.smartCard = session.smartCard;
         //XX: these variables are not used ATM
-        const UInt8 template[] = {self.smartCard.cla, 0x20, 0x00, 0x82, 0x08, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-        self.APDUTemplate = [NSData dataWithBytes:template length:sizeof(template)];
+        //const UInt8 template[] = {self.smartCard.cla, 0x20, 0x00, 0x82, 0x08, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+        //self.APDUTemplate = [NSData dataWithBytes:template length:sizeof(template)];
         self.PINFormat = [[TKSmartCardPINFormat alloc] init];
         self.PINFormat.minPINLength = 4;
         self.PINFormat.maxPINLength = 8;
@@ -51,8 +51,9 @@
     
     // Send VERIFY command to the card.
     UInt16 sw;
+    
     //XX: hardcoded PIN ID - it must be read from session variable
-    if ([self.smartCard sendIns:0x20 p1:0x00 p2:0x82 data:PINData le:nil sw:&sw error:error] == nil) {
+    if ([self.smartCard sendIns:0x20 p1:0x00 p2: self.session.use_auth_key ? 0x81 : 0x82 data:PINData le:nil sw:&sw error:error] == nil) {
         os_log(OS_LOG_DEFAULT, "Verify PIN sendIns failed");
         return NO;
     }
@@ -81,7 +82,7 @@
     //self.session.smartCard.context = @(YES);
     self.smartCard.context = @(YES);
     
-    // Mark BEIDTokenSession as freshly authorized.
+    // Mark PTEIDTokenSession as freshly authorized.
     self.session.authState = PteidAuthStateFreshlyAuthorized;
     
     return YES;
@@ -121,15 +122,18 @@
     //TODO: verify if algorithm is supported and keyObjectID is not 0
     TKTokenKeychainKey *keyItem = [self.token.keychainContents keyForObjectID:keyObjectID error:nil];
      if (keyItem == nil) {
-         NSLog(@"Unsupported TokenOperation: %lu", operation);
+         NSLog(@"KeyItem not found!");
          return NO;
      }
     
     if (operation != TKTokenOperationSignData) {
         return NO;
     }
+    NSLog(@"Signing key with KeyLabel: %@", keyItem.label);
+    _use_auth_key = [keyItem.label compare:@PTEID_KEY1_LABEL] == NSOrderedSame;
     
     BOOL returnValue = ([algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureRaw] && [algorithm supportsAlgorithm:kSecKeyAlgorithmRSASignatureDigestPKCS1v15Raw]);
+    
     NSLog(@"PTEID supportsOperation returning %i", returnValue);
     NSLog(@"PTEID supportsOperation algorithm description %s", algorithm.description.UTF8String);
 
@@ -142,10 +146,11 @@
     unsigned char dst_bytes[] = {0x80, 0x01, 0x00, 0x84, 0x01, 0x00};
     
     NSLog(@"PteidTokenSession signData was called with inputData length: %lu algorithm: %@", dataToSign.length, algorithm);
-    TKTokenKeychainKey * sign_key = [self.token.keychainContents keyForObjectID:keyObjectID error:error];
+    TKTokenKeychainKey * signing_key = [self.token.keychainContents keyForObjectID:keyObjectID error:error];
     
-    if (sign_key != nil) {
-        NSLog(@"Signing key with ID: %@", sign_key.objectID);
+    if (signing_key != nil) {
+        NSLog(@"Signing key with ID: %@ KeyLabel: %@", signing_key.objectID, signing_key.label);
+        _use_auth_key = [signing_key.label compare:@PTEID_KEY1_LABEL] == NSOrderedSame;
     }
     else {
         return nil;
@@ -185,8 +190,7 @@
     
     //TODO: Match DigestInfo prefix to get the right AlgoID
     dst_bytes[2] = 0x42; //AlgoID
-    //TODO: get keyID from parameter keyObjectID
-    dst_bytes[5] = 0x01; //Key ID (01=sign 02=auth)
+    dst_bytes[5] = _use_auth_key ? 0x02: 0x01;
     NSMutableData * pso_hash_data = [NSMutableData alloc];
     [pso_hash_data appendBytes:prefix_pso_hash length:sizeof(prefix_pso_hash)];
     [pso_hash_data appendBytes:hash_to_sign.bytes length:hash_to_sign.length];
@@ -194,29 +198,32 @@
     NSData * dst_data = [NSData dataWithBytes:dst_bytes length:sizeof(dst_bytes)];
     
     UInt16 sw = 0;
-        
-        //MSE:set with digital signature template specifying the signing key and algo
-    [self.smartCard sendIns:0x22 p1:0x41 p2:0xB6 data:dst_data le:@0 sw:&sw error:error];
+    NSLog(@"MSE-Set use_auth_key: %d", _use_auth_key);
     
+    //MSE:set with digital signature template specifying the signing key and algo
+    [self.smartCard sendIns:0x22 p1:0x41 p2:0xB6 data:dst_data le:@0 sw:&sw error:error];
     if (sw != 0x9000) {
         NSLog(@"MSE-Set command failed! SW: %04x", sw);
         return nil;
     }
     NSLog(@"PSO:Hash input data len: %lu", pso_hash_data.length);
-    
+    sw = 0;
     [self.smartCard sendIns:0x2A p1:0x90 p2:0xA0 data:pso_hash_data le:@0 sw:&sw error:error];
     
     if (sw != 0x9000) {
         NSLog(@"PSO:Hash command failed! SW: %04x", sw);
         return nil;
     }
-    
+    sw = 0;
     signature = [self.smartCard sendIns:0x2A p1:0x9E p2:0x9A data:nil le:@0 sw:&sw error:error];
-    
+    if (signature == nil) {
+        NSLog(@"PteidTokenSession signData signature transmission error: %@", *error);
+        return nil;
+    }
     switch (sw)
     {
         case 0x6982:
-            NSLog(@"Pteid TokenSession signData Unauthenticated");
+            NSLog(@"PteidTokenSession signData Unauthenticated!");
             if (error != nil) {
                 *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeAuthenticationNeeded userInfo:nil];
             }
@@ -225,16 +232,9 @@
             if (signature != nil)
                 break;
         default:
-            NSLog(@"Pteid TokenSession signData failed to sign SW: %04x", sw);
+            NSLog(@"PteidTokenSession signData failed to sign SW: %04x", sw);
             return nil;
     }
-    
-    //BOOL success = [self.smartCard inSessionWithError:(NSError **)error executeBlock:(BOOL(^)(NSError **error))signData];
-    /*
-     if(success == NO) {
-     NSLog(@"PTEID sign failed!");
-     return nil;
-     } */
     
     return signature;
 }

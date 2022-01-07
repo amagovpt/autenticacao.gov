@@ -210,8 +210,8 @@ BOOL check_nonnull_objects(int n, ...) {
     __block NSString *instanceID = nil;
     os_log_info(OS_LOG_DEFAULT, "initWithSmartCard called in PteidToken object: smartCard=%p", smartCard);
 
-    uint8_t fileid_auth_cert[] = {0xef, 0x08};
-    uint8_t fileid_sign_cert[] = {0xef, 0x09};
+    uint8_t fileid_auth_cert[] = {0xef, 0x09};
+    uint8_t fileid_sign_cert[] = {0xef, 0x08};
     //Intermediate CA certificates
     uint8_t fileid_auth_ca_cert[] = {0xef, 0x10};
     uint8_t fileid_sign_ca_cert[] = {0xef, 0x0F};
@@ -244,8 +244,8 @@ BOOL check_nonnull_objects(int n, ...) {
         
         if (check_nonnull_objects(4, cert_file_auth, cert_file_sign, cert_file_ca_auth, cert_file_ca_sign)) {
             NSLog(@"Read certificates files with size: %lu, %lu bytes", [cert_file_auth length], [cert_file_sign length]);
-            if (![self populateIdentityFromSmartCard:smartCard into:items data:cert_file_auth certificateTag: 0xEF08 name:@"CC AUTH CERTIFICATE" keyTag:auth_key_object_id name:@"PTEID Auth Key" sign:YES keyManagement:NO alwaysAuthenticate:YES error:error] ||
-                ![self populateIdentityFromSmartCard:smartCard into:items data:cert_file_sign certificateTag: 0xEF09 name:@"CC SIGNATURE CERTIFICATE" keyTag:sign_key_object_id name:@"PTEID Signature Key" sign:YES keyManagement:NO alwaysAuthenticate:YES error:error] ||
+            if (![self populateIdentityFromSmartCard:smartCard into:items data:cert_file_auth certificateTag: 0xEF08 name:@"CC AUTH CERTIFICATE" keyTag:auth_key_object_id name:@PTEID_KEY1_LABEL sign:YES keyManagement:NO alwaysAuthenticate:YES error:error] ||
+                ![self populateIdentityFromSmartCard:smartCard into:items data:cert_file_sign certificateTag: 0xEF09 name:@"CC SIGNATURE CERTIFICATE" keyTag:sign_key_object_id name:@PTEID_KEY2_LABEL sign:YES keyManagement:NO alwaysAuthenticate:YES error:error] ||
                 ![self populateIdentityFromSmartCard:smartCard into:items data:cert_file_ca_sign certificateTag: 0xEF0F name:@"SIGNATURE SUBCA CERTIFICATE" keyTag:0 name:@"NO_KEY" sign:NO keyManagement:NO alwaysAuthenticate:NO error:error] ||
                 ![self populateIdentityFromSmartCard:smartCard into:items data:cert_file_ca_auth certificateTag: 0xEF10 name:@"AUTHENTICATION SUBCA CERTIFICATE" keyTag:0 name:@"NO_KEY" sign:NO keyManagement:NO alwaysAuthenticate:NO error:error])
             {

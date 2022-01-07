@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 static const TKTokenOperationConstraint PteidConstraintPINAlways = @"PINAlways";
-static const UInt64 auth_key_object_id = 0x81000000, sign_key_object_id=0x82000000;
+static const UInt64 auth_key_object_id = 0x81, sign_key_object_id=0x82;
 
 @class PteidTokenDriver;
 @class PteidToken;
@@ -21,8 +21,12 @@ static const UInt64 auth_key_object_id = 0x81000000, sign_key_object_id=0x820000
 
 - (instancetype)initWithToken:(PteidToken *)token;
 @property (readonly) PteidToken *PteidToken;
+@property (readonly) BOOL use_auth_key;
 
 @end
+
+#define PTEID_KEY1_LABEL "CC_AUTH_KEY"
+#define PTEID_KEY2_LABEL "CC_SIGNATURE_KEY"
 
 
 @interface PteidToken : TKSmartCardToken<TKTokenDelegate>
