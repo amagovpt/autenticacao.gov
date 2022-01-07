@@ -241,20 +241,11 @@
 
 /* Pteid Card doesn't support encryption so these are empty stubs */
 - (NSData *)tokenSession:(TKTokenSession *)session decryptData:(NSData *)ciphertext usingKey:(TKTokenObjectID)keyObjectID algorithm:(TKTokenKeyAlgorithm *)algorithm error:(NSError **)error {
-    NSData *plaintext;
+    NSData *secret = nil;
 
-    // Insert code here to decrypt the ciphertext using the specified key and algorithm.
-    plaintext = nil;
+    *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeNotImplemented userInfo:@{NSLocalizedDescriptionKey: @"Decryption is not implemented in PteidToken!"}];
 
-    if (!plaintext) {
-        if (error) {
-            // If the operation failed for some reason, fill in an appropriate error like TKErrorCodeObjectNotFound, TKErrorCodeCorruptedData, etc.
-            // Note that responding with TKErrorCodeAuthenticationNeeded will trigger user authentication after which the current operation will be re-attempted.
-            *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeAuthenticationNeeded userInfo:@{NSLocalizedDescriptionKey: @"Authentication required!"}];
-        }
-    }
-
-    return plaintext;
+    return secret;
 }
 
 - (NSData *)tokenSession:(TKTokenSession *)session performKeyExchangeWithPublicKey:(NSData *)otherPartyPublicKeyData usingKey:(TKTokenObjectID)objectID algorithm:(TKTokenKeyAlgorithm *)algorithm parameters:(TKTokenKeyExchangeParameters *)parameters error:(NSError **)error {
