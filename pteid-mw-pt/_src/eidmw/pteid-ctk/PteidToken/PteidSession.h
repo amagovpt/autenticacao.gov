@@ -15,6 +15,14 @@ typedef NS_ENUM(NSInteger, PteidAuthState) {
     PteidAuthStateAuthorizedButAlreadyUsed = 2,
 };
 
+typedef enum {
+    PteidHashNone,
+    PteidHashSHA1,
+    PteidHashSHA256,
+    PteidHashSHA384,
+    PteidHashSHA512
+} PteidHashAlgo;
+
 @property PteidAuthState authState;
 
 @end

@@ -139,15 +139,39 @@
 
     return returnValue;
 }
+const char sha1_digestinfo[]   = {0x30, 0x21, 0x30, 0x09, 0x06, 0x05, 0x2b, 0x0e, 0x03, 0x02, 0x1a, 0x05, 0x00, 0x04, 0x14 };
+const char sha256_digestinfo[] = {0x30, 0x31, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01, 0x05, 0x00, 0x04, 0x20 };
+const char sha384_digestinfo[] = {0x30, 0x41, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02, 0x05, 0x00, 0x04, 0x30 };
+const char sha512_digestinfo[] = {0x30, 0x51, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03, 0x05, 0x00, 0x04, 0x40 };
+
+void matchDigestAlgorithmInRawRSAInputData(NSData *data, unsigned long start_offset, PteidHashAlgo *algo) {
+
+    const char *data_p = data.bytes+start_offset;
+
+    if (memcmp(data_p, sha1_digestinfo, sizeof sha1_digestinfo) == 0) {
+        NSLog(@"SHA-1 input hash detected! Legacy signature algorithm - application should be updated");
+        *algo = PteidHashSHA1;
+    }
+    else if (memcmp(data_p, sha256_digestinfo, sizeof sha256_digestinfo) == 0) {
+        *algo = PteidHashSHA256;
+    }
+    else if (memcmp(data_p, sha384_digestinfo, sizeof sha384_digestinfo) == 0) {
+        *algo = PteidHashSHA384;
+    }
+    else if (memcmp(data_p, sha512_digestinfo, sizeof sha512_digestinfo) == 0) {
+        *algo = PteidHashSHA512;
+    }
+ 
+}
 
 - (NSData *)tokenSession:(TKTokenSession *)session signData:(NSData *)dataToSign usingKey:(TKTokenObjectID)keyObjectID algorithm:(TKTokenKeyAlgorithm *)algorithm error:(NSError **)error {
     __block NSData *signature;
+    PteidHashAlgo hash_algo = PteidHashNone;
     unsigned char prefix_pso_hash[] = {0x90, 0x00};
     unsigned char dst_bytes[] = {0x80, 0x01, 0x00, 0x84, 0x01, 0x00};
     
     NSLog(@"PteidTokenSession signData was called with inputData length: %lu algorithm: %@", dataToSign.length, algorithm);
     TKTokenKeychainKey * signing_key = [self.token.keychainContents keyForObjectID:keyObjectID error:error];
-    
     if (signing_key != nil) {
         NSLog(@"Signing key with ID: %@ KeyLabel: %@", signing_key.objectID, signing_key.label);
         _use_auth_key = [signing_key.label compare:@PTEID_KEY1_LABEL] == NSOrderedSame;
@@ -170,14 +194,35 @@
     NSData * hash_to_sign = nil;
     
     if ([algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureRaw]) {
-        NSLog(@"Pteid TokenSession - remove PKCS#1 1.5 padding");
+        NSLog(@"Pteid TokenSession - skip the PKCS#1 1.5 padding bytes");
         //  00 01 FF FF 00 ....
         const char *data_p = dataToSign.bytes;
         char *e = strchr(&data_p[3], '\0'); // Start at pos 3
         if (e != NULL) {
             NSUInteger pos = (NSUInteger)(e - data_p) + 1;
-            //Skip DigestInfo prefix for SHA-2 hash functions
-            pos += 19;
+            matchDigestAlgorithmInRawRSAInputData(dataToSign, pos, &hash_algo);
+            switch (hash_algo) {
+                case PteidHashSHA256:
+                    dst_bytes[2] = 0x42;
+                    pos += sizeof sha256_digestinfo;
+                    break;
+                case PteidHashSHA384:
+                    dst_bytes[2] = 0x52;
+                    pos += sizeof sha384_digestinfo;
+                    break;
+                case PteidHashSHA512:
+                    dst_bytes[2] = 0x62;
+                    pos += sizeof sha512_digestinfo;
+                    break;
+                case PteidHashSHA1:
+                    dst_bytes[2] = 0x12;
+                    pos += sizeof sha1_digestinfo;
+                    break;
+                case PteidHashNone:
+                    NSLog(@"Failed to match input hash algo!");
+                    return nil;
+            }
+    
             hash_to_sign = [dataToSign subdataWithRange:NSMakeRange(pos, dataToSign.length - pos)];
         }
         else {
@@ -188,8 +233,6 @@
     }
     prefix_pso_hash[1] = (unsigned char) [hash_to_sign length];
     
-    //TODO: Match DigestInfo prefix to get the right AlgoID
-    dst_bytes[2] = 0x42; //AlgoID
     dst_bytes[5] = _use_auth_key ? 0x02: 0x01;
     NSMutableData * pso_hash_data = [NSMutableData alloc];
     [pso_hash_data appendBytes:prefix_pso_hash length:sizeof(prefix_pso_hash)];
