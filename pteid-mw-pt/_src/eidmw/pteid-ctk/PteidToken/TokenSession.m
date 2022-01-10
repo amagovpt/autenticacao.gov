@@ -58,7 +58,7 @@
         return NO;
     }
     if ((sw & 0xff00) == 0x6300 || (sw == 0x6984)) {
-        int triesLeft = sw == 0x6983 ? 0 : sw & 0x3f;
+        int triesLeft = sw == 0x6984 ? 0 : sw & 0x3f;
         NSLog(@ "Failed to verify PIN sw:0x%04x retries: %d", sw, triesLeft);
         if (error != nil) {
             *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeAuthenticationFailed userInfo:
@@ -131,14 +131,33 @@
     }
     NSLog(@"Signing key with KeyLabel: %@", keyItem.label);
     _use_auth_key = [keyItem.label compare:@PTEID_KEY1_LABEL] == NSOrderedSame;
-    
-    BOOL returnValue = ([algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureRaw] && [algorithm supportsAlgorithm:kSecKeyAlgorithmRSASignatureDigestPKCS1v15Raw]);
+    //TODO: Add actual RSA-PSS support
+    BOOL returnValue = (([algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureRaw] && [algorithm supportsAlgorithm:kSecKeyAlgorithmRSASignatureDigestPKCS1v15Raw])
+                        || [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA256]);
     
     NSLog(@"PTEID supportsOperation returning %i", returnValue);
     NSLog(@"PTEID supportsOperation algorithm description %s", algorithm.description.UTF8String);
 
     return returnValue;
 }
+
+const char * hashAlgoToString(PteidHashAlgo algo) {
+    switch (algo) {
+        case PteidHashNone:
+            return "No hash!";
+        case PteidHashSHA1:
+            return "SHA-1";
+        case PteidHashSHA256:
+            return "SHA-256";
+        case PteidHashSHA384:
+            return "SHA-384";
+        case PteidHashSHA512:
+            return "SHA-512";
+    }
+
+}
+
+
 const char sha1_digestinfo[]   = {0x30, 0x21, 0x30, 0x09, 0x06, 0x05, 0x2b, 0x0e, 0x03, 0x02, 0x1a, 0x05, 0x00, 0x04, 0x14 };
 const char sha256_digestinfo[] = {0x30, 0x31, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01, 0x05, 0x00, 0x04, 0x20 };
 const char sha384_digestinfo[] = {0x30, 0x41, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02, 0x05, 0x00, 0x04, 0x30 };
@@ -244,17 +263,22 @@ void matchDigestAlgorithmInRawRSAInputData(NSData *data, unsigned long start_off
     NSLog(@"MSE-Set use_auth_key: %d", _use_auth_key);
     
     //MSE:set with digital signature template specifying the signing key and algo
-    [self.smartCard sendIns:0x22 p1:0x41 p2:0xB6 data:dst_data le:@0 sw:&sw error:error];
+    [self.smartCard sendIns:0x22 p1:0x41 p2:0xB6 data:dst_data le:nil sw:&sw error:error];
     if (sw != 0x9000) {
         NSLog(@"MSE-Set command failed! SW: %04x", sw);
         return nil;
     }
     NSLog(@"PSO:Hash input data len: %lu", pso_hash_data.length);
     sw = 0;
-    [self.smartCard sendIns:0x2A p1:0x90 p2:0xA0 data:pso_hash_data le:@0 sw:&sw error:error];
+    [self.smartCard sendIns:0x2A p1:0x90 p2:0xA0 data:pso_hash_data le:nil sw:&sw error:error];
     
     if (sw != 0x9000) {
         NSLog(@"PSO:Hash command failed! SW: %04x", sw);
+        if (error != nil && sw == 0x6985) {
+            NSLog(@"Unsupported hash type for signing in this card: %s", hashAlgoToString(hash_algo));
+            //TODO: maybe use the userInfo dictionary to aid future debugging
+            *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeNotImplemented userInfo:nil];
+        }
         return nil;
     }
     sw = 0;

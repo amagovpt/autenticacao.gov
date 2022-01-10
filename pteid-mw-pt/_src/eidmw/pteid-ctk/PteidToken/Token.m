@@ -20,7 +20,7 @@ BOOL selectApplication(TKSmartCard *card, NSError ** error) {
     uint8_t gemsafe_aid[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02};
     NSData *aid = [NSData dataWithBytes:gemsafe_aid length:sizeof gemsafe_aid];
     
-    [card sendIns:0xA4 p1:0x04 p2:0x00 data:aid le:@0 sw:&sw error:error];
+    [card sendIns:0xA4 p1:0x04 p2:0x00 data:aid le:nil sw:&sw error:error];
     if (sw == 0x9000) {
         return TRUE;
     }
@@ -29,20 +29,24 @@ BOOL selectApplication(TKSmartCard *card, NSError ** error) {
         *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeObjectNotFound userInfo:nil];
     }
     return FALSE;
-}
- */
+} */
 
-NSData* selectFile(TKSmartCard *card, UInt8 p1, UInt8 p2, NSData * file, NSError ** error) {
+/* Select card DF or EF identified by file param  */
+BOOL selectFile(TKSmartCard *card, UInt8 p1, UInt8 p2, NSData * file_id, NSError ** error) {
     UInt16 sw = 0;
-    NSData *data = [card sendIns:0xA4 p1:p1 p2:p2 data:file le:@0 sw:&sw error:error];
+    NSLog(@"Current card communication protocol: %lu CLA byte: %0hhx", [card currentProtocol], [card cla]);
+    [card sendIns:0xA4 p1:p1 p2:p2 data:file_id le:nil sw:&sw error:error];
+    //6D00 is the expected return for the underlying GET RESPONSE for T=0 cards
     if (sw == 0x9000) {
-        return data;
+        return YES;
     }
-    NSLog(@"SelectFile failed to select %@ with SW=%04x", file, sw);
+    NSLog(@"SelectFile failed to select %@ with SW=%04x", file_id, sw);
+       
     if (error != nil) {
-        *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeObjectNotFound userInfo:nil];
+        *error = (sw == 0x6A82) ? [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeObjectNotFound userInfo:nil] :
+                 [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeBadParameter userInfo:nil];
     }
-    return nil;
+    return NO;
 }
 
 NSData * readBinary(TKSmartCard *card, UInt16 pos, NSNumber * le_byte, NSError ** error) {
@@ -60,19 +64,17 @@ NSData * readBinary(TKSmartCard *card, UInt16 pos, NSNumber * le_byte, NSError *
 
 
 NSData* readCompleteFile(TKSmartCard *card, NSData* file, NSError ** error) {
-    
-    /*
-    if (!selectApplication(card, error)) {
-        return nil;
-    } */
-    
-    NSData *data = selectFile(card, 0x02, 0x0C, file, error);
     NSNumber * le_byte = @0;
-    if (data == nil) {
+   
+    BOOL ret = selectFile(card, 0x02, 0x0C, file, error);
+    if (!ret) {
         return nil;
     }
-
-    data = readBinary(card, 0, le_byte, error);
+    
+    /* Read first block of file data to get the ASN.1 sequence length and then read enough blocks
+       to fetch the remaining meaningful bytes
+     */
+    NSData *data = readBinary(card, 0, le_byte, error);
     if (data == nil) {
         return nil;
     }
@@ -103,27 +105,20 @@ NSString *readCardSerialNumber(TKSmartCard * card, NSError ** error) {
     uint8_t offset_pan   = 0xB6;
     NSNumber * len_pan   = @16;
     NSString * serial = NULL;
-/*
-    if (!selectApplication(card, error)) {
-        return nil;
-    }
-*/
                      
     NSData *file_id = [NSData dataWithBytes:fileid_ef_id length:sizeof fileid_ef_id];
     NSData *df_id = [NSData dataWithBytes:df_id_5f00 length:sizeof df_id_5f00];
     //Select 5F00 DF
-    NSData *data = selectFile(card, 0x00, 0x0C, df_id, error);
-    if (data == nil) {
+    if (!selectFile(card, 0x00, 0x0C, df_id, error)) {
           return nil;
     }
     //Select ID file
-    data = selectFile(card, 0x02, 0x0C, file_id, error);
-    if (data == nil) {
-          return nil;
+    if (!selectFile(card, 0x02, 0x0C, file_id, error)) {
+        return nil;
     }
     
     UInt16 sw = 0;
-    data = [card sendIns:0xB0 p1:00 p2:offset_pan data:nil le:len_pan sw:&sw error:error];
+    NSData * data = [card sendIns:0xB0 p1:00 p2:offset_pan data:nil le:len_pan sw:&sw error:error];
     if (sw == 0x9000) {
         serial = [[NSString alloc] initWithBytes:[data bytes] length: [len_pan unsignedIntValue] encoding:NSUTF8StringEncoding];
     }
