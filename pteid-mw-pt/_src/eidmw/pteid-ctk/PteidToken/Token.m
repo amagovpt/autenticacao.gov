@@ -36,7 +36,6 @@ BOOL selectFile(TKSmartCard *card, UInt8 p1, UInt8 p2, NSData * file_id, NSError
     UInt16 sw = 0;
     NSLog(@"Current card communication protocol: %lu CLA byte: %0hhx", [card currentProtocol], [card cla]);
     [card sendIns:0xA4 p1:p1 p2:p2 data:file_id le:nil sw:&sw error:error];
-    //6D00 is the expected return for the underlying GET RESPONSE for T=0 cards
     if (sw == 0x9000) {
         return YES;
     }
@@ -231,7 +230,6 @@ BOOL check_nonnull_objects(int n, ...) {
     if (self = [super initWithSmartCard:smartCard AID:AID instanceID:instanceID tokenDriver:tokenDriver]) {
         NSMutableArray<TKTokenKeychainItem *> *items = [NSMutableArray arrayWithCapacity:4];
         
-        //TODO: read subCA certificates from card
         NSData* cert_file_auth = readCompleteFile(smartCard, cert_file_id1, error);
         NSData* cert_file_sign = readCompleteFile(smartCard, cert_file_id2, error);
         NSData *cert_file_ca_auth = readCompleteFile(smartCard, cert_file_id3, error);

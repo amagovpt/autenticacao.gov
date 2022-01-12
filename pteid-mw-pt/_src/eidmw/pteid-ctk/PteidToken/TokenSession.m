@@ -131,9 +131,11 @@
     }
     NSLog(@"Signing key with KeyLabel: %@", keyItem.label);
     _use_auth_key = [keyItem.label compare:@PTEID_KEY1_LABEL] == NSOrderedSame;
-    //TODO: Add actual RSA-PSS support
+    
     BOOL returnValue = (([algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureRaw] && [algorithm supportsAlgorithm:kSecKeyAlgorithmRSASignatureDigestPKCS1v15Raw])
-                        || [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA256]);
+                        || [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA256]
+                        || [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA384]
+                        || [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA512]);
     
     NSLog(@"PTEID supportsOperation returning %i", returnValue);
     NSLog(@"PTEID supportsOperation algorithm description %s", algorithm.description.UTF8String);
@@ -250,6 +252,22 @@ void matchDigestAlgorithmInRawRSAInputData(NSData *data, unsigned long start_off
         
         }
     }
+    else if ([algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA256]) {
+        NSLog(@"RSA-PSS SHA-256 selected");
+        dst_bytes[2] = 0x45;
+        hash_to_sign = dataToSign;
+    }
+    else if ([algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA384]) {
+        NSLog(@"RSA-PSS SHA-384 selected");
+        dst_bytes[2] = 0x55;
+        hash_to_sign = dataToSign;
+    }
+    else if ([algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA512]) {
+        NSLog(@"RSA-PSS SHA-512 selected");
+        dst_bytes[2] = 0x65;
+        hash_to_sign = dataToSign;
+    }
+
     prefix_pso_hash[1] = (unsigned char) [hash_to_sign length];
     
     dst_bytes[5] = _use_auth_key ? 0x02: 0x01;
@@ -268,7 +286,7 @@ void matchDigestAlgorithmInRawRSAInputData(NSData *data, unsigned long start_off
         NSLog(@"MSE-Set command failed! SW: %04x", sw);
         return nil;
     }
-    NSLog(@"PSO:Hash input data len: %lu", pso_hash_data.length);
+    //NSLog(@"PSO:Hash input data len: %lu", pso_hash_data.length);
     sw = 0;
     [self.smartCard sendIns:0x2A p1:0x90 p2:0xA0 data:pso_hash_data le:nil sw:&sw error:error];
     
