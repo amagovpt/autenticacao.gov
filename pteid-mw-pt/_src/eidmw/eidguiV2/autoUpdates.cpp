@@ -112,6 +112,7 @@ void AutoUpdates::initRequest(int updateType){
     fileName = fileInfo.fileName();
     if (fileName.isEmpty())
     {
+         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AutoUpdates::started Fail");
          getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
          return;
     }
@@ -784,7 +785,7 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
 void AutoUpdates::updateWindows()
 {
     PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
-                "AutoUpdates::updateWindows: There are updates available!");
+                "AutoUpdates::updateWindows: There are updates available! updateType = %d", m_updateType);
 
     if(m_updateType == GAPI::AutoUpdateApp){
         // Show popup about app update
