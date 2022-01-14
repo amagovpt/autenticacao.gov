@@ -845,7 +845,7 @@ namespace eIDMW
                                                 , timestamp
                                                 , m_pkcs7
                                                 , &m_signerInfo 
-                                                , isCardSign);
+                                                , isCardSign ? m_card : NULL);
         setHash(in_hash);
     }
 

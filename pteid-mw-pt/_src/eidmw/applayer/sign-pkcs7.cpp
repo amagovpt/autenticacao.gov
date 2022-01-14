@@ -341,10 +341,9 @@ void add_signingCertificate(PKCS7_SIGNER_INFO *signer_info, X509 *signing_cert)
 
 }
 
-void addCardCertificateChain(PKCS7 *p7) 
+void addCardCertificateChain(PKCS7 *p7, APL_Card * card) 
 {
-    
-    APL_Card *card = AppLayer.getReader().getCard();
+  
     APL_SmartCard * eid_card = static_cast<APL_SmartCard *> (card);
     APL_Certifs *certs = eid_card->getCertificates();
     APL_Certif *signature_cert = certs->getCert(APL_CERTIF_TYPE_SIGNATURE);
@@ -383,7 +382,7 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
                             , bool timestamp
                             , PKCS7 *p7
                             , PKCS7_SIGNER_INFO **out_signer_info
-                            , bool isCardSign) {
+                            , APL_Card * card) {
     CByteArray outHash;
     bool isError = false;
     unsigned char *attr_buf = NULL;
@@ -462,10 +461,10 @@ CByteArray computeHash_pkcs7( unsigned char *data, unsigned long dataLen
 
     PKCS7_add_certificate( p7, x509 );
 
-    if (isCardSign){
-        addCardCertificateChain(p7);
+    if (card != NULL){
+        addCardCertificateChain(p7, card);
     }
-    else{
+    else {
         //For non-card signatures we need to add the supplied CA certificates
         addExternalCertificateChain(p7, ca_certificates);
     }
