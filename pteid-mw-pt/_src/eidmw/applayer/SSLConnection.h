@@ -13,7 +13,7 @@
 #include <openssl/rsa.h>
 #include <openssl/ssl.h>
 
-#include "APLCard.h"
+#include "APLCertif.h"
 #include "APLReader.h"
 #include "SAM.h"
 #include "Export.h"
@@ -30,12 +30,15 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 #define REPLY_BUFSIZE 100000
 #define SCAP_REPLY_BUFSIZE 600000
 
+
 class APL_Certifs;
 
 struct NetworkBuffer {
 	char * buf;
 	unsigned int buf_size;
 };
+
+void setThreadLocalCardInstance(APL_Card * card);
 
 class SSLConnection
 {
@@ -91,7 +94,6 @@ class SSLConnection
 		APL_Certifs *m_certs;
 		//Hostname of our OTP server
 		char * m_host;
-		//APL_Card card_handle;
 
 
 };

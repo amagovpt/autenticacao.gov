@@ -844,7 +844,7 @@ class ScapSSLConnection;
 class PTEID_ScapConnection
 {
 	public:
-		PTEIDSDK_API PTEID_ScapConnection(char *host, char *port);
+		PTEIDSDK_API PTEID_ScapConnection(PTEID_EIDCard *card, char *host, char *port);
 		PTEIDSDK_API ~PTEID_ScapConnection();
 		PTEIDSDK_API char *postSoapRequest(char *endpoint, char *soapAction, char *soapBody);
 
@@ -883,6 +883,12 @@ public:
 	PTEIDSDK_API PTEID_PublicKey& getRootCAPubKey();		/**< Get the CVC CA public key that this card uses to verify the CVC key */
 	PTEIDSDK_API bool isActive();
 	PTEIDSDK_API void doSODCheck(bool check);			/**< Enable/disable the verification of ID and address data against the SOD file */
+
+	#if !defined SWIG
+
+  ScapSSLConnection * buildScapSSLConnection(char *host, char *port);
+
+	#endif
 
 	/**
 	Activate the Pteid card by writing the contents of the supplied PTEID_ByteArray in the card TRACE file

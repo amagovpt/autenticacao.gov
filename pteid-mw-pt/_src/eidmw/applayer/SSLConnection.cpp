@@ -57,24 +57,17 @@ namespace eIDMW
 #define SOCKERRNO         (errno)
 #endif
 
+thread_local APL_Card * sslconnection_card = NULL;
+
+void setThreadLocalCardInstance(APL_Card * card) {
+	sslconnection_card = card;
+
+}
+
 int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 		unsigned char *sigret, unsigned int *siglen, const RSA * rsa)
 {
 
-	APL_Card *card = AppLayer.getReader().getCard();
-
-	if (card == NULL) {
-	    fprintf(stderr, "rsa_sign(): Failed to get card from global aplayer object\n");
-	    return 0;
-    }
-
-    /*
-	if (type != NID_md5_sha1)
-	{
-		fprintf(stderr, "rsa_sign(): Called with wrong input type, it should be NID_md5_sha1!\n");
-		return 0;
-	}
-	*/
 	MWLOG(LEV_DEBUG, MOD_APL, "SSLConnection.rsa_sign() called with type=%d", type);
 
 	CByteArray to_sign(m, m_len);
@@ -83,7 +76,7 @@ int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 	try
 	{
 		//Sign with Authentication Key
-		signed_data = card->Sign(to_sign, false, m_len == SHA256_DIGEST_LENGTH);
+		signed_data = sslconnection_card->Sign(to_sign, false, m_len == SHA256_DIGEST_LENGTH);
 	}
 	catch (CMWException &e)
 	{
@@ -991,6 +984,11 @@ void SSLConnection::connect_encrypted(char* host_and_port)
 		
 	long proxy_port = 0;
 
+	//Check if SSLConnection was passed a "valid card object"
+	if (sslconnection_card == NULL) {
+		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+	}
+
     /* Negotiate with the server the TLS version used, as we're not limited to TLS 1.1 anymore  */
     SSL_CTX *ctx = SSL_CTX_new(TLS_client_method());
 
@@ -1003,9 +1001,7 @@ void SSLConnection::connect_encrypted(char* host_and_port)
     //On Ubuntu 20.04 the default value is 2: see SSL_CTX_set_security_level() manpage
     SSL_CTX_set_security_level(ctx, 1);
 
-    APL_Card *card = AppLayer.getReader().getCard();
-
-    APL_SmartCard * eid_card = static_cast<APL_SmartCard *> (card);
+    APL_SmartCard * eid_card = static_cast<APL_SmartCard *> (sslconnection_card);
     m_certs = eid_card->getCertificates();
 
     //NOTE: to get more debug output from the SSL layer uncomment this

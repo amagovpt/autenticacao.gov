@@ -258,8 +258,10 @@ void APL_EIDCard::ChangeAddress(char *secret_code, char *process, t_callback_add
 	{
 	    throw CMWEXCEPTION(EIDMW_SAM_UNSUPPORTED_CARD);
 	}
-
+	//Init the thread-local variable to be able to access the card in the OpenSSL callback
+	setThreadLocalCardInstance(this);
 	SSLConnection conn;
+
 	conn.InitSAMConnection();
 
 	callback(callback_data, 10);

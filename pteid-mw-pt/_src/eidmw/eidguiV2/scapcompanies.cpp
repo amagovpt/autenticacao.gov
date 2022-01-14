@@ -431,7 +431,7 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
         {
             //TODO: the PTEID_ScapConnection class does not implement a network timeout because it uses OpenSSL blocking IO mode
             //To implement connection timeout it should be done like this: http://stackoverflow.com/a/16035100/9906
-            eIDMW::PTEID_ScapConnection scap(scapAddr, scapPort);
+            eIDMW::PTEID_ScapConnection scap(card, scapAddr, scapPort);
             scapResult.assign(scap.postSoapRequest(c_endpoint, c_soapAction, soapBody));
         }
         else  //SCAP Attribute loading with CMD - direct gSoap call

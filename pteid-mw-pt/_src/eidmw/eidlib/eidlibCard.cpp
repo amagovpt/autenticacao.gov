@@ -320,9 +320,16 @@ int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coo
 
 }
 
-PTEID_ScapConnection::PTEID_ScapConnection(char *host, char *port)
+ScapSSLConnection * PTEID_EIDCard::buildScapSSLConnection(char *host, char *port) {
+	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
+
+	return new ScapSSLConnection(pcard, host, port);
+
+}
+
+PTEID_ScapConnection::PTEID_ScapConnection(PTEID_EIDCard *card, char *host, char *port)
 {
-	m_connection = new ScapSSLConnection(host, port);
+	m_connection = card->buildScapSSLConnection(host, port);
 }
 
 PTEID_ScapConnection::~PTEID_ScapConnection()

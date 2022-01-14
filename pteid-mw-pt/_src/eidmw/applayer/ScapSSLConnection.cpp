@@ -10,6 +10,7 @@
 #include <string>
 
 #include "ScapSSLConnection.h"
+#include "SSLConnection.h"
 #include "Log.h"
 
 
@@ -17,8 +18,9 @@ namespace eIDMW
 {
 
 
-	ScapSSLConnection::ScapSSLConnection(char * host, char *port)
+	ScapSSLConnection::ScapSSLConnection(APL_Card * card, char * host, char *port): SSLConnection()
 	{
+		setThreadLocalCardInstance(card);
 		std::string host_and_port = std::string(host) +":"+ port;
 
 		/* initialise the OpenSSL library */
