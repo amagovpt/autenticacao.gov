@@ -46,15 +46,19 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 	CCard *poCard = NULL;
 	long lErrCode = EIDMW_ERR_CHECK; // should never be returned
 	const char *strReader = NULL;
+	const void * param_structure = NULL;
 
 	if (poContext->m_ulConnectionDelay != 0)
 		CThread::SleepMillisecs(poContext->m_ulConnectionDelay);
 
 	// Try if we can connect to the card via a normal SCardConnect()
 	SCARDHANDLE hCard = 0;
+	std::pair<SCARDHANDLE, DWORD> ret;
 	try 
 	{
-		hCard = poContext->m_oPCSC.Connect(csReader);
+		ret = poContext->m_oPCSC.Connect(csReader);
+		hCard = ret.first;
+
 		if (hCard == 0) {
 			goto done;
 		}
@@ -78,14 +82,22 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 			MWLOG(LEV_DEBUG, MOD_CAL, "ATR input value: %s",
 			poContext->m_oPCSC.GetATR(hCard).ToString(true, false).c_str());
 
+			if (ret.second == SCARD_PROTOCOL_T0)
+               param_structure = SCARD_PCI_T0;
+        	else if (ret.second == SCARD_PROTOCOL_T1)
+				param_structure = SCARD_PCI_T1;
+
+
 			//2018-05 Gemsafe cards are the only ones in use by now
 			int appletVersion = 1;
-			poCard = PTeidCardGetVersion(appletVersion, strReader, hCard, poContext, poPinpad);
+			poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
 			// If no other CCard subclass could be found
 	    	if (poCard == NULL)
 	    	{
 				poCard = new CUnknownCard(hCard, poContext, poPinpad, CByteArray());
 			}
+
+			poCard->setProtocol(param_structure);
 
 			hCard = 0;
 		}

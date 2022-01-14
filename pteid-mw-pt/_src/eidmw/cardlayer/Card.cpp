@@ -29,7 +29,7 @@ namespace eIDMW
 {
 
 CCard::CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad) :
-	m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad),
+	m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad), m_comm_protocol(NULL),
 	m_oCache(poContext), m_ulLockCount(0), m_bSerialNrString(false),m_cardType(CARD_UNKNOWN)
 {
 }
@@ -387,8 +387,9 @@ CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 	
 	CAutoLock oAutoLock(this);
 	long lRetVal = 0;
+	const void * protocol_struct = getProtocolStructure();
 
-	CByteArray oResp = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal);
+	CByteArray oResp = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal, protocol_struct);
 
 	if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED)
 	{
@@ -397,7 +398,7 @@ CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 		if (SelectApplet())
 		{
 			//try again, now that the card has been reset
-			oResp = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal);
+			oResp = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal, protocol_struct);
 		}
 	}
 
@@ -426,6 +427,11 @@ CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 
 	return oResp;
 }
+
+const void * CCard::getProtocolStructure() {
+	return m_comm_protocol;
+}
+    
 
 CByteArray CCard::SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned char ucP2,
     unsigned long ulOutLen)

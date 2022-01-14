@@ -36,6 +36,8 @@ Takes care of
 #include "CardLayerConst.h"
 #include "InternalConst.h"
 
+#include <utility>
+
 #ifndef WIN32
 #include <PCSC/winscard.h>
 #include <PCSC/wintypes.h>
@@ -117,7 +119,7 @@ public:
 
 	bool Status(const std::string &csReader);
 
-    SCARDHANDLE Connect(const std::string &csReader,
+    std::pair<SCARDHANDLE, DWORD> Connect(const std::string &csReader,
 		unsigned long ulShareMode = SCARD_SHARE_SHARED,
 		unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1);
     void Disconnect(SCARDHANDLE hCard, tDisconnectMode disconnectMode);
@@ -133,7 +135,7 @@ public:
 	bool Status(SCARDHANDLE hCard);
 
 	CByteArray Transmit(SCARDHANDLE hCard, const CByteArray &oCmdAPDU,
-		long *plRetVal, void *pSendPci = NULL, void *pRecvPci = NULL);
+		long *plRetVal, const void *pSendPci = NULL, void *pRecvPci = NULL);
 	void Recover(SCARDHANDLE hCard, unsigned long *pulLockCount);
 	CByteArray Control(SCARDHANDLE hCard, unsigned long ulControl,
 		const CByteArray &oCmd, unsigned long ulMaxResponseSize = CTRL_BUF_LEN);

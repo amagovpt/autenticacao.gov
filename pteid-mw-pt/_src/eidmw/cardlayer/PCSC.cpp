@@ -35,11 +35,10 @@
 #include "../common/Thread.h"
 #include "../common/Util.h"
 #include <exception>
+#include <utility>
 
 namespace eIDMW
 {
-static SCARD_IO_REQUEST m_ioSendPci;
-static SCARD_IO_REQUEST m_ioRecvPci;
 
 CPCSC::CPCSC()
 {
@@ -209,18 +208,15 @@ bool CPCSC::Status(const std::string &csReader)
 	return (xReaderState.dwEventState & SCARD_STATE_PRESENT) == SCARD_STATE_PRESENT;
 }
 
-SCARDHANDLE CPCSC::Connect(const std::string &csReader,
+std::pair<SCARDHANDLE, DWORD> CPCSC::Connect(const std::string &csReader,
 	unsigned long ulShareMode, unsigned long ulPreferredProtocols)
 {
-	DWORD dwProtocol;
+	DWORD dwActiveProtocol;
 	SCARDHANDLE hCard = 0;
 
-	dwProtocol = 1;
-
-	//    MWLOG(LEV_DEBUG, MOD_CAL, L"    Calling connect: %0x, %ls, 0x%0x, %0x\n", m_hContext, utilStringWiden(csReader).c_str(), ulShareMode, ulPreferredProtocols);
 
 	LONG lRet = SCardConnect(m_hContext, csReader.c_str(),
-		ulShareMode, ulPreferredProtocols, &hCard, &dwProtocol);
+		ulShareMode, ulPreferredProtocols, &hCard, &dwActiveProtocol);
 
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardConnect(%ls): 0x%0x", utilStringWiden(csReader).c_str(), lRet);
 
@@ -228,19 +224,16 @@ SCARDHANDLE CPCSC::Connect(const std::string &csReader,
 		hCard = 0;
 	else if (SCARD_S_SUCCESS != lRet)
 		throw CMWEXCEPTION(PcscToErr(lRet));
+	/*
 	else
 	{
-		m_ioSendPci.dwProtocol = dwProtocol;
-		m_ioSendPci.cbPciLength = sizeof(SCARD_IO_REQUEST);
-		m_ioRecvPci.dwProtocol = dwProtocol;
-		m_ioRecvPci.cbPciLength = sizeof(SCARD_IO_REQUEST);
-
+		// XX: is this still useful ??
 		// If you do an SCardTransmit() too fast after an SCardConnect(),
 		// some cards/readers will return an error (e.g. 0x801002f)
-		CThread::SleepMillisecs(200);
-	}
+		//CThread::SleepMillisecs(200);
+	} */
 
-	return hCard;
+	return std::make_pair(hCard, dwActiveProtocol);
 }
 
 void CPCSC::Disconnect(SCARDHANDLE hCard, tDisconnectMode disconnectMode)
@@ -306,7 +299,7 @@ bool CPCSC::Status(SCARDHANDLE hCard)
 }
 
 CByteArray CPCSC::Transmit(SCARDHANDLE hCard, const CByteArray &inputAPDU, long *plRetVal,
-	void *pSendPci, void *pRecvPci)
+	const void *pSendPci, void *pRecvPci)
 {
 	CByteArray oCmdAPDU(inputAPDU);
 
@@ -317,16 +310,20 @@ CByteArray CPCSC::Transmit(SCARDHANDLE hCard, const CByteArray &inputAPDU, long 
 	unsigned char ucINS = oCmdAPDU.Size() >= 4 ? oCmdAPDU.GetByte(1) : 0;
 	unsigned long ulLen = ucINS == 0xA4 || ucINS == 0x22 ? 0xFFFFFFFF : 5;
 
-	SCARD_IO_REQUEST *pioSendPci = (pSendPci != NULL) ? (SCARD_IO_REQUEST*) pSendPci : &m_ioSendPci;
-	SCARD_IO_REQUEST *pioRecvPci = (pRecvPci != NULL) ? (SCARD_IO_REQUEST*) pRecvPci : &m_ioRecvPci;	
+	if (pSendPci == NULL) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	const SCARD_IO_REQUEST *pioSendPci = (const SCARD_IO_REQUEST*) pSendPci;
+	//SCARD_IO_REQUEST *pioRecvPci = (pRecvPci != NULL) ? (SCARD_IO_REQUEST*) pRecvPci : &m_ioRecvPci;	
 
 	//DEBUG
 	//printf ("      SCardTransmit(%ls) \n", oCmdAPDU.ToWString(true, true, 0, ulLen).c_str() );
 
-	MWLOG(LEV_DEBUG, MOD_CAL, L"      SCardTransmit(%ls)", oCmdAPDU.ToWString(true, true, 0, ulLen).c_str() );
+	MWLOG(LEV_DEBUG, MOD_CAL, L"      SCardTransmit(%ls)", oCmdAPDU.ToWString(true, true, 0, ulLen).c_str());
 
 	// On Windows we can't send APDUs with Le byte on T=0 cards so the implemented change to support T=1 is not backwards-compatible !!
-	if (m_ioSendPci.dwProtocol == SCARD_PROTOCOL_T0)
+	if (pioSendPci->dwProtocol == SCARD_PROTOCOL_T0)
 	{
 		if (oCmdAPDU.Size() > 4 && oCmdAPDU.GetByte(4) == oCmdAPDU.Size()-6)
 		{
@@ -347,7 +344,7 @@ try_again:
 #endif
 	LONG lRet = SCardTransmit(hCard,
 		pioSendPci, oCmdAPDU.GetBytes(), (DWORD) oCmdAPDU.Size(),
-		pioRecvPci, tucRecv, &dwRecvLen);
+		NULL, tucRecv, &dwRecvLen);
 
 	*plRetVal = lRet;
 	if (SCARD_S_SUCCESS != lRet)

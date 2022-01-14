@@ -118,9 +118,13 @@ public:
 
     virtual void setPinpadHandler(GenericPinpad * pinpad)
     {
-	m_poPinpad = pinpad;
+	   m_poPinpad = pinpad;
 
     }
+
+    const void * getProtocolStructure();
+
+    void setProtocol(const void * protocol_struct) { m_comm_protocol = protocol_struct; }
 
     SCARDHANDLE m_hCard;
 
@@ -148,6 +152,8 @@ protected:
 
     std::map <unsigned int, std::string> m_verifiedPINs;
     unsigned char m_ucCLA;
+
+    const void * m_comm_protocol;
 
 private:
     // No copies allowed

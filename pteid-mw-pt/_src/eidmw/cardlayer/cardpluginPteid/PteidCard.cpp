@@ -51,17 +51,7 @@ static const string TRACEFILE = "3F000003";
 
 unsigned long ulVersion;
 
-// If we want to 'hardcode' this plugin internally in the CAL, this function
-// can't be present because it's the same for all plugins
-#ifndef CARDPLUGIN_IN_CAL
-CCard *GetCardInstance(unsigned long ulVersion, const char *csReader,
-	unsigned long hCard, CContext *poContext, GenericPinpad *poPinpad)
-{
-	return PteidCardGetInstance(ulVersion, csReader, hCard, poContext, poPinpad);
-}
-#endif
-
-static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard)
+static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard, const void *protocol_struct)
 {
 	long lRetVal = 0;
 	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
@@ -70,23 +60,14 @@ static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard)
 	oCmd.Append((unsigned char) sizeof(GEMSAFE_PTEID_APPLET_AID));
 	oCmd.Append(GEMSAFE_PTEID_APPLET_AID, sizeof(GEMSAFE_PTEID_APPLET_AID));
 
-	CByteArray oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal);
+	CByteArray oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, protocol_struct);
 
 	return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
 }
 
-CCard *PTeidCardGetVersion (unsigned long ulVersion, const char *csReader,
-	SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad)
-{
-	CCard *poCard = NULL;
-
-	poCard = PteidCardGetInstance(ulVersion, csReader, hCard, poContext, poPinpad);
-
-	return poCard;
-}
 
 CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
-	SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad)
+	SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol_struct)
 {
 
 	CCard *poCard = NULL;
@@ -100,45 +81,49 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 			oCmd.Append((unsigned char) sizeof(GEMSAFE_PTEID_APPLET_AID));
 			oCmd.Append(GEMSAFE_PTEID_APPLET_AID, sizeof(GEMSAFE_PTEID_APPLET_AID));
 			long lRetVal;
+
 			// Don't remove these brackets, CAutoLock dtor must be called!
 			{
 				CAutoLock oAutLock(&poContext->m_oPCSC, hCard);
 
-				oData = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal);
+				oData = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, protocol_struct);
 				if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED)
 				{
 					unsigned long ulLockCount = 0;
 					poContext->m_oPCSC.Recover(hCard, &ulLockCount);
 
-					bNeedToSelectApplet = PteidCardSelectApplet(poContext, hCard);
+					bNeedToSelectApplet = PteidCardSelectApplet(poContext, hCard, protocol_struct);
 					if (bNeedToSelectApplet)// try again to select the card app
-						oData = poContext->m_oPCSC.Transmit(hCard, oCmd,&lRetVal);
+						oData = poContext->m_oPCSC.Transmit(hCard, oCmd,&lRetVal, protocol_struct);
 				}
 				if (oData.Size() == 2 && oData.GetByte(0) == 0x6A &&
 						(oData.GetByte(1) == 0x82 || oData.GetByte(1) == 0x86))
 				{
 					// Perhaps the applet is no longer selected; so try to select it
 					// first; and if successfull then try to select the AID again
-					bNeedToSelectApplet = PteidCardSelectApplet(poContext, hCard);
+					bNeedToSelectApplet = PteidCardSelectApplet(poContext, hCard, protocol_struct);
 					if (!bNeedToSelectApplet)
 						return poCard;
 				}
 
 				ulVersion = 1;
 				poCard = new CPteidCard(hCard, poContext, poPinpad, oData,
-							bNeedToSelectApplet ? ALW_SELECT_APPLET : TRY_SELECT_APPLET, ulVersion);
+							bNeedToSelectApplet ? ALW_SELECT_APPLET : TRY_SELECT_APPLET, ulVersion, protocol_struct);
 			}
 		}
-		catch(...)
-		{
-			std::cerr << "Exception thrown in cardPluginPteid.CardGetInstance() 1" << endl;
+		catch (CMWException &e) {
+			MWLOG(LEV_ERROR, MOD_CAL, "Exception in card object creation! Error code: %0x on %s:%ld",
+			              e.GetError(), e.GetFile().c_str(), e.GetLine());
+		}
+		catch (const std::exception &e) {
+			MWLOG(LEV_ERROR, MOD_CAL, "Std::exception in card object creation! Msg: %s", e.what());
 		}
 
 	return poCard;
 }
 
 CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
-		     GenericPinpad *poPinpad, const CByteArray & oData, tSelectAppletMode selectAppletMode, unsigned long ulVersion) :
+		     GenericPinpad *poPinpad, const CByteArray & oData, tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol) :
 			 CPkiCard(hCard, poContext, poPinpad)
 {
 	switch (ulVersion){
@@ -150,6 +135,7 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
 		break;
 	}
 	try {
+		setProtocol(protocol);
 		// Get Card Serial Number
 		m_oCardData = ReadFile("3F004F005032");
 		m_ucCLA = 0x00;
@@ -163,14 +149,12 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
 		// Get Card Applet Version
 		m_AppletVersion = ulVersion;
 	}
-	catch (CMWException e)
-	{
+	catch (CMWException e) {
 		MWLOG(LEV_CRIT, MOD_CAL, "Failed to get CardData: 0x%0x File: %s, Line:%ld", e.GetError(), e.GetFile().c_str(), e.GetLine());
 		Disconnect(DISCONNECT_LEAVE_CARD);
 	}
-	catch (...)
-	{
-		MWLOG(LEV_CRIT, MOD_CAL, L"Failed to get CardData");
+	catch (const std::exception &e) {
+		MWLOG(LEV_CRIT, MOD_CAL, L"Failed to get CardData std::exception thrown");
 		Disconnect(DISCONNECT_LEAVE_CARD);
 	}
 }
@@ -783,7 +767,7 @@ bool CPteidCard::ShouldSelectApplet(unsigned char ins, unsigned long ulSW12)
 
 bool CPteidCard::SelectApplet()
 {
-	return PteidCardSelectApplet(m_poContext, m_hCard);
+	return PteidCardSelectApplet(m_poContext, m_hCard, getProtocolStructure());
 }
 
 
