@@ -585,6 +585,8 @@ std::unordered_set<int> PDFDoc::getSignaturesIndexesUntilLastTimestamp()
 
         f.dictLookup("Type", &type);
         f.dictLookup("FT", &obj1);
+        if (!type.isName() || !obj1.isName())
+          continue;
         if (strcmp(type.getName(), "Annot") == 0
             && strcmp(obj1.getName(), "Sig") == 0)
         {
