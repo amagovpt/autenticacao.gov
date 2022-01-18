@@ -1141,6 +1141,10 @@
         <source>STR_LOG_ZIP_LARGE</source>
         <translation>Warning: The created file&apos;s size exceeds 15MB. For this reason, it&apos;s possible some email clients won&apos;t allow it to be annexed to the message.</translation>
     </message>
+    <message>
+        <source>STR_REGISTER_CERTIFICATES</source>
+        <translation>The certificate registration and removal options require this application to be running (minimized or maximized).</translation>
+    </message>
 </context>
 <context>
     <name>PageDefinitionsSCAP</name>

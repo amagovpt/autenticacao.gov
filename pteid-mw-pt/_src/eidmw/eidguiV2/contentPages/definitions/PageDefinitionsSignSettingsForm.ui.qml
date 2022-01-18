@@ -109,9 +109,9 @@ Item {
                     Keys.onPressed: {
                         handleKeyPressed(event.key, dateAppCertificates)
                     }
-                    KeyNavigation.tab: checkboxRegister
-                    KeyNavigation.down: checkboxRegister
-                    KeyNavigation.right: checkboxRegister
+                    KeyNavigation.tab: linkCertificates
+                    KeyNavigation.down: linkCertificates
+                    KeyNavigation.right: linkCertificates
                     KeyNavigation.backtab: buttonAddCACert
                     KeyNavigation.up: buttonAddCACert
                 }
@@ -138,10 +138,35 @@ Item {
                     id: rectAppCertificatesCheckBox
                     width: parent.width
                     color: "white"
-                    height: checkboxRegister.height + checkboxRemove.height + 2
-                            * Constants.SIZE_TEXT_V_SPACE
+                    height: linkCertificates.height + checkboxRegister.height + checkboxRemove.height + 6 * Constants.SIZE_TEXT_V_SPACE
                     anchors.top: dateAppCertificates.bottom
                     anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
+                    Components.Link {
+                        id: linkCertificates
+                        anchors.top: parent.top
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                        x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                        width: parent.width
+                        propertyText.text: qsTranslate("PageDefinitionsApp", "STR_REGISTER_CERTIFICATES")
+                            + " " + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") 
+                            + "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#configura%C3%A7%C3%A3o-de-assinaturas'>" 
+                            + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
+                        propertyLinkUrl: 'https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#configura%C3%A7%C3%A3o-de-assinaturas'
+                        propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_REGISTER_CERTIFICATES") + " " + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " " + qsTranslate("PageDefinitionsApp", "STR_HERE") 
+                        propertyText.font.capitalization: Font.MixedCase
+                        propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+                        propertyText.font.bold: activeFocus
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, linkCertificates)
+                        }
+                        KeyNavigation.tab: checkboxRegister
+                        KeyNavigation.down: checkboxRegister
+                        KeyNavigation.right: checkboxRegister
+                        KeyNavigation.left: dateAppCertificates
+                        KeyNavigation.backtab: dateAppCertificates
+                        KeyNavigation.up: dateAppCertificates
+                    }
 
                     CheckBox {
                         id: checkboxRegister
@@ -153,6 +178,7 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
                         font.bold: activeFocus
+                        anchors.top: linkCertificates.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
@@ -162,8 +188,8 @@ Item {
                         KeyNavigation.tab: checkboxRemove
                         KeyNavigation.down: checkboxRemove
                         KeyNavigation.right: checkboxRemove
-                        KeyNavigation.backtab: dateAppCertificates
-                        KeyNavigation.up: dateAppCertificates
+                        KeyNavigation.backtab: linkCertificates
+                        KeyNavigation.up: linkCertificates
                         Keys.onEnterPressed: toggleSwitch(checkboxRegister)
                         Keys.onReturnPressed: toggleSwitch(checkboxRegister)
                     }

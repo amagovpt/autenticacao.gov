@@ -1147,6 +1147,10 @@
         <source>STR_LOG_ZIP_LARGE</source>
         <translation>Atenção: O ficheiro criado tem tamanho superior a 15MB. Por esse motivo, é possível que alguns clientes de email não permitam que seja anexado à mensagem.</translation>
     </message>
+    <message>
+        <source>STR_REGISTER_CERTIFICATES</source>
+        <translation>As opções de registo e remoção de certificados requerem que esta aplicação esteja em funcionamento (minimizada ou maximizada).</translation>
+    </message>
 </context>
 <context>
     <name>PageDefinitionsSCAP</name>
