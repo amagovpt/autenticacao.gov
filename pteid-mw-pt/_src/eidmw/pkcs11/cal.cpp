@@ -616,7 +616,7 @@ try
       if (ret) goto cleanup;
       ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_EXTRACTABLE, (CK_VOID_PTR) &bfalse, sizeof(bfalse));
       if (ret) goto cleanup;
-      ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_ALWAYS_AUTHENTICATE, (CK_VOID_PTR) &btrue, sizeof(btrue));
+      ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_ALWAYS_AUTHENTICATE, (CK_VOID_PTR) &bfalse, sizeof(bfalse));
       if (ret) goto cleanup;
 			ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_DERIVE, (CK_VOID_PTR) &bfalse, sizeof(bfalse));
       if (ret) goto cleanup;
