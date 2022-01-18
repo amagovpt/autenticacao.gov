@@ -272,9 +272,15 @@ fallback:
 #endif
 
 void Catalog::fillSignatureField(Object *signature_field, PDFRectangle *rect, 
-    int sig_sector, Ref *refFirstPage, bool isSmallSignature)
+    int sig_sector, Ref *refPage, bool isSmallSignature)
 {
     Object obj1, obj2, obj3, obj4;
+
+	if (signature_field == NULL || !signature_field->isDict())
+	{
+		error(errInternal, -1, "fillSignatureField() Invalid param signature_field!");
+		return;
+	}
 
     /* Fill the signature formfield dict key-value pairs */
     signature_field->dictAdd(copyString("Type"), obj1.initName("Annot"));
@@ -308,11 +314,13 @@ void Catalog::fillSignatureField(Object *signature_field, PDFRectangle *rect,
 
     signature_field->dictAdd(copyString("T"), obj2.initString(GooString::format("Signature{0:ud}",
         getBigRandom())));
+	
+	if (refPage != NULL) {
+		Object ref_to_page;
+		ref_to_page.initRef(refPage->num, refPage->gen);
 
-    Object ref_to_first_page;
-    ref_to_first_page.initRef(refFirstPage->num, refFirstPage->gen);
-
-    signature_field->dictAdd(copyString("P"), &ref_to_first_page);
+		signature_field->dictAdd(copyString("P"), &ref_to_page);
+	}
 }
 
 void Catalog::addSigFieldToAcroForm(Ref *sig_ref, Ref *refFirstPage)
