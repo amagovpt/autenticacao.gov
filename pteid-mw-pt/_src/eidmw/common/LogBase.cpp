@@ -801,6 +801,16 @@ void CLog::write(tLOG_Level level,const int line,const char *file,const char *fo
 		writeLineMessageA(format, args);
 }
 
+#ifdef __linux__
+
+void getProcessExecutableName(char *buffer, size_t sizeOfBuffer) {
+	ssize_t ret = readlink("/proc/self/exe", buffer, sizeOfBuffer-1);
+	if (ret == -1) {
+		strncpy(buffer, "Unknown name", sizeOfBuffer);
+	}
+
+}
+#endif
 
 
 //ATTENTION : Design for use with macro
@@ -832,7 +842,7 @@ bool CLog::writeLineHeaderW(tLOG_Level level,const int line,const wchar_t *file)
 #elif __linux__
 	char baseName[512];
 	memset(baseName, 0, sizeof(baseName));
-	readlink("/proc/self/exe", baseName, sizeof(baseName));
+	getProcessExecutableName(baseName, sizeof(baseName));
 #elif __APPLE__
 	uint32_t buf_len = PATH_MAX;
 	char baseName[buf_len];
@@ -899,7 +909,7 @@ bool CLog::writeLineHeaderA(tLOG_Level level_in,const int line,const char *file)
 #elif __linux__
 	char baseName[512];
 	memset(baseName, 0, sizeof(baseName));
-	readlink("/proc/self/exe", baseName, sizeof(baseName));
+	getProcessExecutableName(baseName, sizeof(baseName));
 #elif __APPLE__
 	uint32_t buf_len = PATH_MAX;
 	char baseName[buf_len];

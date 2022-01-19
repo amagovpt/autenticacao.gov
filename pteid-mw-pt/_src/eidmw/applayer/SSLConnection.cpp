@@ -1290,6 +1290,7 @@ void parse_http_chunked_body(NetworkBuffer *net_buffer) {
 	return;
 
 	parser_error:
+		free(out_buffer);
 		MWLOG(LEV_ERROR, MOD_APL, "http_chunked parser error giving up at offset: %u", offset);
 
 }

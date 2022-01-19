@@ -237,7 +237,7 @@ bool CDataFile::Load(bool bLock)
 	
   t_Str szLine;
   t_Str szComment;
-  wchar_t buffer[MAX_BUFFER_LEN]; 
+  wchar_t buffer[MAX_BUFFER_LEN] = {0}; 
   t_Section* pSection = GetSection(L"");
 
   // These need to be set, we'll restore the original values later.
@@ -246,7 +246,7 @@ bool CDataFile::Load(bool bLock)
 
   while ( !bDone )
     {
-      memset(buffer, 0, MAX_BUFFER_LEN);
+      memset(buffer, 0, sizeof(buffer));
       wchar_t* tmp = fgetws( buffer, MAX_BUFFER_LEN, m_stream);
       tmp=tmp;		// avoid warning
 
@@ -1025,16 +1025,16 @@ void Trim(t_Str& szStr)
 // WriteLn
 // Writes the formatted output to the file stream, returning the number of
 // bytes written.
+
 int WriteLn(FILE * stream, wchar_t* fmt, ...)
 {
     if(!stream)
         return 0;
 
-	wchar_t buf[MAX_BUFFER_LEN];
+	wchar_t buf[MAX_BUFFER_LEN] = {0}; 
 	int nLength;
 	t_Str szMsg;
 
-	memset(buf, 0, MAX_BUFFER_LEN);
 	va_list args;
 
 	va_start (args, fmt);

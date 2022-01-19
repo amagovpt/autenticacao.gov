@@ -29,8 +29,8 @@ namespace eIDMW
 {
 
 CCard::CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad) :
-	m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad), m_comm_protocol(NULL),
-	m_oCache(poContext), m_ulLockCount(0), m_bSerialNrString(false),m_cardType(CARD_UNKNOWN)
+	m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad),
+	m_oCache(poContext), m_cardType(CARD_UNKNOWN), m_ulLockCount(0), m_bSerialNrString(false), m_comm_protocol(NULL)
 {
 }
 

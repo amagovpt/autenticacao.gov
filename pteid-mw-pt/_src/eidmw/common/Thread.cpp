@@ -46,7 +46,13 @@ CThread::CThread()
 {
 	m_isRunning = false;
 	m_bStopRequest = false;
+
+#ifdef WIN32
 	m_SyncHandle = NULL;
+#else
+	m_SyncHandle = 0;
+#endif
+	
 }
 
 CThread::~CThread()

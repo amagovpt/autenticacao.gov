@@ -30,6 +30,7 @@ namespace eIDMW
     PAdESExtender::PAdESExtender(PDFSignature *signedPdfDoc) 
     {
         m_signedPdfDoc = signedPdfDoc;
+        m_calledFromLtaMethod = false;
     }
 
     bool PAdESExtender::addT()

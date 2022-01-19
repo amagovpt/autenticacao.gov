@@ -77,7 +77,6 @@ HEADERS += ByteArray.h \
            libtomcrypt/tomcrypt_macros.h \
 
 SOURCES += ByteArray.cpp \
-           ByteArrayReader.cpp \
            ConfigCommon.cpp \
            Config.cpp \
            datafile.cpp \

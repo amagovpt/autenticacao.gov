@@ -146,6 +146,7 @@ t_Str	GetNextWord(t_Str& CommandLine);
 int		CompareNoCase(t_Str str1, t_Str str2);
 int		CompareNoCaseN(t_Str str1, t_Str str2, size_t n);
 void	Trim(t_Str& szStr);
+//XX:   Unused utility function
 int		WriteLn(FILE *stream, wchar_t* fmt, ...);
 
 

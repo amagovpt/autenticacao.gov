@@ -248,6 +248,8 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation,
 		return PinpadControl((unsigned long)ioctl2, b2, operation,
                             ucPinType, pin.csLabel, wndGeometry );
 	}
+
+	return CByteArray();
 }
 
 
