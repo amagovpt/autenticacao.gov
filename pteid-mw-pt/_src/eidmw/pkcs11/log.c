@@ -48,7 +48,15 @@
 
 #ifndef WIN32
 #define strcpy_s(a,b,c)         strcpy((a),(c))
-#define sprintf_s(a,b,c,d,e,f,g,h,i)    sprintf((a),(c),(d),(e),(f),(g),(h),(i))
+
+static inline void sprintf_s(char* buffer, size_t sizeOfBuffer, char* format,...) {
+	va_list ap;
+	va_start(ap, format);
+	if (vsnprintf(buffer, sizeOfBuffer, format, ap) < 0) {
+		strncpy(buffer, "<copy time fail>", sizeOfBuffer);
+	}
+	va_end(ap);
+}
 #endif
 
 /******************************************************************************
