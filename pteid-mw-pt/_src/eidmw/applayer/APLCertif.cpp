@@ -1903,7 +1903,7 @@ APL_CertifStatus APL_OcspResponse::getResponse(CByteArray *response)
 		m_response=new CByteArray; //First response
 	}
 
-	FWK_CertifStatus status;
+	FWK_CertifStatus status = FWK_CERTIF_STATUS_UNCHECK;
 
 	if(m_certif)
 	{
