@@ -55,61 +55,14 @@ namespace eIDMW
 	PDFSignature::PDFSignature()
 	{
 
-		m_visible = false;
-		m_page = 1;
-		m_sector = 0;
-		//Illegal values to start with
-		location_x = -1;
-		location_y = -1;
-		m_civil_number = NULL;
-		m_citizen_fullname = NULL;
-		m_attributeSupplier = NULL;
-		m_attributeName = NULL;
-		m_batch_mode = true;
-		m_level = LEVEL_BASIC;
-		m_isLandscape = false;
-		m_small_signature = false;
-		my_custom_image.img_data = NULL;
-		m_doc = NULL;
-        m_card = NULL;
-
-        m_signerInfo = NULL;
-        m_pkcs7 = NULL;
-        m_outputName = NULL;
-        m_signStarted = false;
-        m_isExternalCertificate = false;
-        m_isCC = true;
-        m_incrementalMode = false;
+		resetMembers();
 	}
 
-	PDFSignature::PDFSignature(const char *pdf_file_path): m_pdf_file_path(pdf_file_path)
+	PDFSignature::PDFSignature(const char *pdf_file_path): PDFSignature()
 	{
-        m_visible = false;
-        m_page = 1;
-        m_sector = 0;
-        //Illegal values to start with
-        location_x = -1;
-        location_y = -1;
-        m_civil_number = NULL;
-        m_citizen_fullname = NULL;
-        m_attributeSupplier = NULL;
-		m_attributeName = NULL;
-        m_batch_mode = false;
-        m_level = LEVEL_BASIC;
-        m_isLandscape = false;
-        m_small_signature = false;
-        my_custom_image.img_data = NULL;
 
+		m_pdf_file_path = pdf_file_path;
 		m_doc = makePDFDoc(pdf_file_path);
-
-        m_card = NULL;
-        m_signerInfo = NULL;
-        m_pkcs7 = NULL;
-        m_outputName = NULL;
-        m_signStarted = false;
-        m_isExternalCertificate = false;
-        m_isCC = true;
-        m_incrementalMode = false;
 	}
 
 	void PDFSignature::setCustomImage(unsigned char *img_data, unsigned long img_length)
@@ -121,8 +74,8 @@ namespace eIDMW
 
 	void PDFSignature::setCustomSealSize(unsigned int width, unsigned int height)
 	{
-		m_sig_width = bigger(width, SEAL_MINIMUM_WIDTH);
-		m_sig_height = bigger(height, SEAL_MINIMUM_HEIGHT);
+		m_sig_width = BIGGER(width, SEAL_MINIMUM_WIDTH);
+		m_sig_height = BIGGER(height, SEAL_MINIMUM_HEIGHT);
 	}
 
 	PDFSignature::~PDFSignature()
@@ -142,12 +95,12 @@ namespace eIDMW
 			delete m_doc;
 	}
 
-	void PDFSignature::setFile(char *pdf_file_path)
+	void PDFSignature::resetMembers() 
 	{
 		m_visible = false;
 		m_page = 1;
 		m_sector = 0;
-		//Illegal values to start with
+		//These values result in an invisible signature
 		location_x = -1;
 		location_y = -1;
 		m_civil_number = NULL;
@@ -159,19 +112,26 @@ namespace eIDMW
 		m_isLandscape = false;
 		m_small_signature = false;
 		my_custom_image.img_data = NULL;
-		m_pdf_file_path = strdup(pdf_file_path);
-		m_doc = makePDFDoc(pdf_file_path);
-
 		m_card = NULL;
 		m_signerInfo = NULL;
 		m_pkcs7 = NULL;
 		m_outputName = NULL;
 		m_signStarted = false;
 		m_isExternalCertificate = false;
+		m_isCC = true;
 	}
+
+	void PDFSignature::setFile(char *pdf_file_path)
+	{
+		resetMembers();
+		m_pdf_file_path = pdf_file_path;
+		m_doc = makePDFDoc(pdf_file_path);
+	}
+
 	void PDFSignature::batchAddFile(char *file_path, bool last_page)
 	{
 		m_files_to_sign.push_back(std::make_pair(_strdup(file_path), last_page));
+		m_batch_mode = true;
 
 	}
 
@@ -456,7 +416,7 @@ namespace eIDMW
 	}
 
 	std::string PDFSignature::getDocName() {
-		std::string pdf_filename = Basename((char *)m_pdf_file_path);
+		std::string pdf_filename = Basename((char *)m_pdf_file_path.c_str());
 
 		return pdf_filename;
 	}
@@ -772,7 +732,7 @@ namespace eIDMW
 			{
 				delete m_doc;
 				if (!m_batch_mode)
-					m_doc = makePDFDoc(m_pdf_file_path);
+					m_doc = makePDFDoc(m_pdf_file_path.c_str());
 			}
 			throw;
 		}

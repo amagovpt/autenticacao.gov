@@ -28,7 +28,7 @@
 #define SEAL_MINIMUM_HEIGHT		35
 #define SEAL_MINIMUM_WIDTH		120
 
-#define bigger(a,b) ((a)>(b)?(a):(b))
+#define BIGGER(a,b) ((a)>(b)?(a):(b))
 
 class PDFRectangle;
 class PDFDoc;
@@ -51,12 +51,14 @@ namespace eIDMW
 	class PDFSignature
 	{
 	public:
+		/* The no-argument constructor is the one we should use for signatures in batch mode */
 		EIDMW_APL_API PDFSignature();
 		EIDMW_APL_API PDFSignature(const char *path);
 		EIDMW_APL_API ~PDFSignature();
 
         EIDMW_APL_API void setFile(char *pdf_file_path);
-		//Batch Operations (with PIN caching)
+		
+		/* Batch signature operation (using in-memory PIN caching) */
 		EIDMW_APL_API void batchAddFile(char *file_path, bool last_page);
 		EIDMW_APL_API void enableTimestamp();
 		EIDMW_APL_API void setSignatureLevel(APL_SignatureLevel);
@@ -113,7 +115,7 @@ namespace eIDMW
 		EIDMW_APL_API int signClose(CByteArray signature);
 
 		EIDMW_APL_API void setSCAPAttributes(const char * citizenName, const char * citizenId,
-	                      const char * attributeSupplier, const char * attributeName);
+	                                         const char * attributeSupplier, const char * attributeName);
 
         EIDMW_APL_API bool addLtv();
 
@@ -124,8 +126,9 @@ namespace eIDMW
 		PDFRectangle computeSigLocationFromSector(double, double, int);
 		PDFRectangle computeSigLocationFromSectorLandscape(double, double, int);
 		int signSingleFile(const char *location, const char *reason,
-            const char *outfile_path, bool isCardSign);
+                           const char *outfile_path, bool isCardSign);
         void save();
+        void resetMembers();
 
 		/* Certificate Data*/
 		CByteArray m_certificate;
@@ -133,7 +136,7 @@ namespace eIDMW
 		APL_Card *m_card;
 		PDFDoc *m_doc;
 
-		const char * m_pdf_file_path;
+		std::string m_pdf_file_path;
 
 		// Default values
 		unsigned int m_sig_height = SEAL_DEFAULT_HEIGHT;
