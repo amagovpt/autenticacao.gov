@@ -21,9 +21,6 @@
     <ClCompile Include="ByteArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ByteArrayReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ConfigCommon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

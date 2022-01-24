@@ -221,7 +221,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ByteArray.cpp" />
-    <ClCompile Include="ByteArrayReader.cpp" />
     <ClCompile Include="ConfigCommon.cpp" />
     <ClCompile Include="ConfigReg.cpp" />
     <ClCompile Include="datafile.cpp" />
