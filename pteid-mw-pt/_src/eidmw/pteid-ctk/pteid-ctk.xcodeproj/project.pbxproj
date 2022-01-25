@@ -14,6 +14,8 @@
 		0C7A06122767A5A200AF8E0E /* TokenSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7A06112767A5A200AF8E0E /* TokenSession.m */; };
 		0C7A06172767A5A200AF8E0E /* PteidToken.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0C7A06072767A5A200AF8E0E /* PteidToken.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0C964819278729540001B2E2 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 0C964818278729540001B2E2 /* en.lproj */; };
+		0CB8783727A02D18004C9802 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0CB8783327A02D18004C9802 /* Localizable.strings */; };
+		0CB8783827A02D18004C9802 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 0CB8783527A02D18004C9802 /* Localizable.stringsdict */; };
 		0CD47F9A27676EFB00816E8F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0CD47F9927676EFB00816E8F /* Assets.xcassets */; };
 		0CD47FA027676EFB00816E8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CD47F9F27676EFB00816E8F /* main.m */; };
 /* End PBXBuildFile section */
@@ -45,6 +47,8 @@
 /* Begin PBXFileReference section */
 		0C2355632767C5E900EC9F5B /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		0C2355642767C5E900EC9F5B /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		0C346DAA27A0304E00046147 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		0C346DAB27A0304E00046147 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		0C7A06072767A5A200AF8E0E /* PteidToken.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PteidToken.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C7A06092767A5A200AF8E0E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		0C7A060C2767A5A200AF8E0E /* Token.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Token.h; sourceTree = "<group>"; };
@@ -55,6 +59,8 @@
 		0C7A06142767A5A200AF8E0E /* PteidToken.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PteidToken.entitlements; sourceTree = "<group>"; };
 		0C964817278633DC0001B2E2 /* PteidSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PteidSession.h; sourceTree = "<group>"; };
 		0C964818278729540001B2E2 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = "<group>"; };
+		0CB8783427A02D18004C9802 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
+		0CB8783627A02D18004C9802 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = pt; path = pt.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		0CD47F9427676EF900816E8F /* PteidTokenApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PteidTokenApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CD47F9927676EFB00816E8F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0CD47F9E27676EFB00816E8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -92,6 +98,8 @@
 		0C7A060B2767A5A200AF8E0E /* PteidToken */ = {
 			isa = PBXGroup;
 			children = (
+				0CB8783327A02D18004C9802 /* Localizable.strings */,
+				0CB8783527A02D18004C9802 /* Localizable.stringsdict */,
 				0C964818278729540001B2E2 /* en.lproj */,
 				0C7A060C2767A5A200AF8E0E /* Token.h */,
 				0C7A060D2767A5A200AF8E0E /* Token.m */,
@@ -199,6 +207,7 @@
 			knownRegions = (
 				en,
 				Base,
+				pt,
 			);
 			mainGroup = 0CD47F7A27675EE300816E8F;
 			productRefGroup = 0CD47F8427675EE300816E8F /* Products */;
@@ -217,6 +226,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C964819278729540001B2E2 /* en.lproj in Resources */,
+				0CB8783727A02D18004C9802 /* Localizable.strings in Resources */,
+				0CB8783827A02D18004C9802 /* Localizable.stringsdict in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +270,27 @@
 			targetProxy = 0C7A06152767A5A200AF8E0E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		0CB8783327A02D18004C9802 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0CB8783427A02D18004C9802 /* pt */,
+				0C346DAA27A0304E00046147 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		0CB8783527A02D18004C9802 /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0CB8783627A02D18004C9802 /* pt */,
+				0C346DAB27A0304E00046147 /* en */,
+			);
+			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		0C7A06192767A5A200AF8E0E /* Debug */ = {

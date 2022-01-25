@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  pteid-ctk
+
+*/
+
+"CORRUPTED_CERT" = "Corrupted certificate data";
+"CARD_AUTH_CERT" = "Certificado de Autenticação";
+"DIG_SIG_CERT" = "Certificado de Assinatura";
+"CARD_AUTH_KEY" = "Chave de Autenticação";
+"DIG_SIG_KEY" = "Chave de Assinatura Digital";
+"WRONG_CONSTR" = "Parâmetro inesperado na operação criptográfica";
