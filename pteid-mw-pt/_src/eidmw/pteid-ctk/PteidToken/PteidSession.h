@@ -24,6 +24,8 @@ typedef enum {
 } PteidHashAlgo;
 
 @property PteidAuthState authState;
+@property BOOL isCanceled;
+
 
 @end
 

@@ -13,10 +13,11 @@
 
 - (nullable instancetype)initWithSession:(PteidTokenSession *)session {
     NSLog(@"PTEID initWithSession called");
+    const unsigned int PinId_index = 3;
     
     if (self = [super init]) {
         _session = session;
-
+        
         self.smartCard = session.smartCard;
         //XX: these variables are not used ATM
         //const UInt8 template[] = {self.smartCard.cla, 0x20, 0x00, 0x82, 0x08, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
@@ -26,8 +27,105 @@
         self.PINFormat.maxPINLength = 8;
         //self.PINFormat.PINBitOffset = 5 * 8;
     }
-
-    return self;
+    
+    TKSmartCardPINFormat *PINFormat;
+    TKSmartCardUserInteractionForSecurePINVerification *userInter;
+    NSData *APDUTemplate;
+    
+    UInt8 template[] = {0x00, 0x20, 0x00, 0x00, 0x08, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+    template[PinId_index] = session.use_auth_key ? 0x81 : 0x82;
+    
+    APDUTemplate = [NSData dataWithBytes:template length:sizeof(template)];
+    PINFormat = [[TKSmartCardPINFormat alloc] init];
+    PINFormat.PINBlockByteLength = 8;
+    PINFormat.PINLengthBitOffset = 0;
+    PINFormat.PINLengthBitSize = 0;
+    PINFormat.PINBitOffset = 0;
+    PINFormat.encoding = TKSmartCardPINEncodingASCII;
+    PINFormat.minPINLength = 4;
+    PINFormat.maxPINLength = 8;
+    PINFormat.charset = TKSmartCardPINCharsetNumeric;
+    PINFormat.PINJustification = TKSmartCardPINJustificationLeft;
+    
+    // try to Verify PIN on the card reader
+    NSData *data = [NSData dataWithBytes:template length:sizeof template];
+    // using PINByteOffset:0 (in stead of 5) as requested due to not currently used
+    //(see https://developer.apple.com/documentation/cryptotokenkit/tksmartcard/1390289-userinteractionforsecurepinverif?language=objc)
+    userInter = [self.smartCard userInteractionForSecurePINVerificationWithPINFormat:PINFormat APDU:data PINByteOffset:0];
+    
+    if (nil == userInter)
+    {
+#ifdef DEBUG
+        os_log_error(OS_LOG_DEFAULT, "Not using a pinpad reader!");
+#endif
+        return self;
+    }
+    
+    //reader is supporting secure PIN entry
+    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+    NSArray *messages = @[@0];//0 is Pin insertion prompt, and only this message is needed
+    userInter.PINMessageIndices = messages;
+    userInter.PINCompletion = TKSmartCardPINCompletionKey;//is 2
+    
+    userInter.initialTimeout = 300;
+    userInter.interactionTimeout = 300;
+    
+#ifdef DEBUG
+    os_log_info(OS_LOG_DEFAULT, "Enter the PIN on the pinpad");
+#endif
+    [userInter runWithReply:^(BOOL success, NSError *error)
+     {
+        NSLog(@"TokenSession Pinpad verification completed %@ %@ %04X", @(success), error, userInter.resultSW);
+        
+#ifdef DEBUG
+        NSLog(@"Smartcard reader name: %@", self.session.smartCard.slot.name);
+#endif
+        switch (userInter.resultSW)
+        {
+            case 0x9000:
+                // Mark card session sensitive, because we entered PIN into it and no session should access it in this state.
+                self.smartCard.sensitive = YES;
+                
+                // Remember in card context that the card is authenticated.
+                self.smartCard.context = @(YES);
+                
+                // Mark BEIDTokenSession as freshly authorized.
+                self.session.authState = PteidAuthStateFreshlyAuthorized;
+                break;
+            case 0x63C1:
+            case 0x63C2:
+            case 0x6983:
+            case 0x6984:
+            {
+                int triesLeft = (userInter.resultSW == 0x6983 || userInter.resultSW == 0x6984) ? 0 : userInter.resultSW & 0x3f;
+                self.session.isCanceled = triesLeft == 0;
+                
+                if (triesLeft == 0) {
+                    NSLog(@"Pinpad verification failed: PIN blocked!");
+                }
+                else {
+                    NSLog(@"Pinpad verification failed: %d tries left", triesLeft);
+                }
+                self.smartCard.sensitive = NO;
+                break;
+            }
+            case 0x6400: // Timeout
+            case 0x6401: // Cancel
+                self.session.isCanceled = YES;
+            default:
+                self.smartCard.sensitive = NO;
+                break;
+        }
+        dispatch_semaphore_signal(sema);
+    }];
+    //Wait max 30 seconds for user to enter PIN on secure PIN pad reader
+    dispatch_time_t  waitTime = dispatch_time(DISPATCH_TIME_NOW,  300000000000);
+    dispatch_semaphore_wait(sema, waitTime);
+    
+    //NSLog(@"PIN handled by reader");
+    
+    //If we're using a pinpad reader the AuthOperation is done, we don't fallback to normal PIN prompt here
+    return nil;
 }
 
 // Remove this as soon as PIVAuthOperation implements automatic PIN submission according to APDUTemplate.
@@ -44,7 +142,6 @@
     
     NSLog(@"PteidAuthOperation finishWithError() called");
     
-    //TODO: ASCII or UTF8 encoding? (verify if we can even input non-digit PINs)
     NSData * pin_bytes = [self.PIN dataUsingEncoding:NSASCIIStringEncoding];
     NSUInteger bytes_to_copy = pin_bytes.length;
     [pin_bytes getBytes:PINData.mutableBytes length:bytes_to_copy];
@@ -52,13 +149,12 @@
     // Send VERIFY command to the card.
     UInt16 sw;
     
-    //XX: hardcoded PIN ID - it must be read from session variable
     if ([self.smartCard sendIns:0x20 p1:0x00 p2: self.session.use_auth_key ? 0x81 : 0x82 data:PINData le:nil sw:&sw error:error] == nil) {
         os_log(OS_LOG_DEFAULT, "Verify PIN sendIns failed");
         return NO;
     }
-    if ((sw & 0xff00) == 0x6300 || (sw == 0x6984)) {
-        int triesLeft = sw == 0x6984 ? 0 : sw & 0x3f;
+    if ((sw & 0xff00) == 0x6300 || (sw == 0x6983) || (sw == 0x6984)) {
+        int triesLeft = (sw == 0x6983 || sw == 0x6984) ? 0 : sw & 0x3f;
         NSLog(@ "Failed to verify PIN sw:0x%04x retries: %d", sw, triesLeft);
         if (error != nil) {
             *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeAuthenticationFailed userInfo:
@@ -96,7 +192,9 @@
 @implementation PteidTokenSession
 
 - (instancetype)initWithToken:(PteidToken *)token {
-    return [super initWithToken:token];
+    PteidTokenSession * session = [super initWithToken:token];
+    _isCanceled = NO;
+    return session;
 }
 
 - (TKTokenAuthOperation *)tokenSession:(TKTokenSession *)session
@@ -113,13 +211,23 @@
         }
         return nil;
     }
-    
-    return [[PteidAuthOperation alloc] initWithSession:self];
+    TKTokenAuthOperation * tokenAuth = [[PteidAuthOperation alloc] initWithSession:self];
+    if(tokenAuth == nil)
+    {
+        if (_isCanceled) {
+            if (error != nil) {
+                  *error = [NSError errorWithDomain:TKErrorDomain code:TKErrorCodeCanceledByUser userInfo:nil];
+            }
+            return nil;
+        }
+       return [[TKTokenAuthOperation alloc] init];
+    }
+        
+    return tokenAuth;
 }
 
 - (BOOL)tokenSession:(TKTokenSession *)session supportsOperation:(TKTokenOperation)operation usingKey:(TKTokenObjectID)keyObjectID algorithm:(TKTokenKeyAlgorithm *)algorithm {
     // Indicate whether the given key supports the specified operation and algorithm.
-    //TODO: verify if algorithm is supported and keyObjectID is not 0
     TKTokenKeychainKey *keyItem = [self.token.keychainContents keyForObjectID:keyObjectID error:nil];
      if (keyItem == nil) {
          NSLog(@"KeyItem not found!");
@@ -213,6 +321,7 @@ void matchDigestAlgorithmInRawRSAInputData(NSData *data, unsigned long start_off
     signature = nil;
     
     NSData * hash_to_sign = nil;
+    //NSLog(@"signData input hash: %@", [dataToSign description]);
     
     if ([algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureRaw]) {
         NSLog(@"Pteid TokenSession - skip the PKCS#1 1.5 padding bytes");
@@ -267,7 +376,7 @@ void matchDigestAlgorithmInRawRSAInputData(NSData *data, unsigned long start_off
         dst_bytes[2] = 0x65;
         hash_to_sign = dataToSign;
     }
-
+    
     prefix_pso_hash[1] = (unsigned char) [hash_to_sign length];
     
     dst_bytes[5] = _use_auth_key ? 0x02: 0x01;

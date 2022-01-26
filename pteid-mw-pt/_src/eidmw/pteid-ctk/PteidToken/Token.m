@@ -209,14 +209,6 @@ BOOL check_nonnull_objects(int n, ...) {
     //Intermediate CA certificates
     uint8_t fileid_auth_ca_cert[] = {0xef, 0x10};
     uint8_t fileid_sign_ca_cert[] = {0xef, 0x0F};
-
-    /*
-    [smartCard beginSessionWithReply:^(BOOL success, NSError * _Nullable error) {
-        if (success) {
-            os_log_info(OS_LOG_DEFAULT, "card Session was successfully established");
-            instanceID = readCardSerialNumber(smartCard, &error); // Fill in a unique persistent identifier of the token
-        }
-    }];  */
     
     instanceID = readCardSerialNumber(smartCard, error);
                      
