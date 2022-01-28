@@ -240,13 +240,15 @@
     NSLog(@"Signing key with KeyLabel: %@", keyItem.label);
     _use_auth_key = [keyItem.label compare:@PTEID_KEY1_LABEL] == NSOrderedSame;
     
-    BOOL returnValue = (([algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureRaw] && [algorithm supportsAlgorithm:kSecKeyAlgorithmRSASignatureDigestPKCS1v15Raw])
-                        || [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA256]
+    BOOL returnValue = [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureRaw] && [algorithm supportsAlgorithm:kSecKeyAlgorithmRSASignatureDigestPKCS1v15Raw];
+    if (!returnValue && self.card_type == CARD_IAS_V4_OR_GREATER) {
+        returnValue = [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA256]
                         || [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA384]
-                        || [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA512]);
+                        || [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA512];
+        
+    }
     
     NSLog(@"PTEID supportsOperation returning %i", returnValue);
-    NSLog(@"PTEID supportsOperation algorithm description %s", algorithm.description.UTF8String);
 
     return returnValue;
 }
@@ -321,7 +323,7 @@ void matchDigestAlgorithmInRawRSAInputData(NSData *data, unsigned long start_off
     signature = nil;
     
     NSData * hash_to_sign = nil;
-    //NSLog(@"signData input hash: %@", [dataToSign description]);
+    NSLog(@"signData input hash: %@", [dataToSign description]);
     
     if ([algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureRaw]) {
         NSLog(@"Pteid TokenSession - skip the PKCS#1 1.5 padding bytes");

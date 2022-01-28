@@ -9,6 +9,7 @@
 #import "PteidSession.h"
 #import <CryptoTokenKit/CryptoTokenKit.h>
 #import <os/log.h>
+
 #include <stdio.h>
 #include <stdarg.h>
 
@@ -128,6 +129,25 @@ NSString *readCardSerialNumber(TKSmartCard * card, NSError ** error) {
     return serial;
 }
 
+CardType getAppletVersion(TKSmartCard * card, NSError ** error) {
+    UInt16 sw = 0;
+    NSData * data = [card sendIns:0xCA p1:0xDF p2:0x30 data:nil le:@0x00 sw:&sw error:error];
+    if (sw == 0x9000) {
+        const char * applet_version = data.bytes;
+        char major_version = applet_version[3] == 'v' ? applet_version[4] : applet_version[3];
+        
+        if (major_version == '3')
+            return CARD_IAS_V3;
+        else if (major_version >= '4')
+            return CARD_IAS_V4_OR_GREATER;
+        else return CARD_IAS_LEGACY;
+    }
+    else {
+        NSLog(@"Get applet failed with SW=%04x error=%@", sw, *error);
+        return 0;
+    }
+}
+
 - (BOOL)populateIdentityFromSmartCard:(TKSmartCard *)smartCard into:(NSMutableArray<TKTokenKeychainItem *> *)items data:(NSData *)certificateData certificateTag:(UInt64)certificateTag name:(NSString *)certificateName keyTag:(TKTLVTag)keyTag name:(NSString *)keyName sign:(BOOL)sign keyManagement:(BOOL)keyManagement alwaysAuthenticate:(BOOL)alwaysAuthenticate error:(NSError **)error {
     
 
@@ -227,6 +247,8 @@ BOOL check_nonnull_objects(int n, ...) {
         NSData *cert_file_ca_auth = readCompleteFile(smartCard, cert_file_id3, error);
         NSData *cert_file_ca_sign = readCompleteFile(smartCard, cert_file_id4, error);
         
+        _card_type = getAppletVersion(smartCard, error);
+        
         if (check_nonnull_objects(4, cert_file_auth, cert_file_sign, cert_file_ca_auth, cert_file_ca_sign)) {
             NSLog(@"Read certificates files with size: %lu, %lu bytes", [cert_file_auth length], [cert_file_sign length]);
             if (![self populateIdentityFromSmartCard:smartCard into:items data:cert_file_auth certificateTag: 0xEF08 name:@"CC AUTH CERTIFICATE" keyTag:auth_key_object_id name:@PTEID_KEY1_LABEL sign:YES keyManagement:NO alwaysAuthenticate:YES error:error] ||
@@ -250,7 +272,10 @@ BOOL check_nonnull_objects(int n, ...) {
 }
 
 - (TKTokenSession *)token:(TKToken *)token createSessionWithError:(NSError **)error {
-    return [[PteidTokenSession alloc] initWithToken:self];
+    PteidTokenSession * session = [[PteidTokenSession alloc] initWithToken:self];
+    session.card_type = self.card_type;
+    
+    return session;
 }
 
 @end

@@ -12,6 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 static const TKTokenOperationConstraint PteidConstraintPINAlways = @"PINAlways";
 static const UInt64 auth_key_object_id = 0x81, sign_key_object_id=0x82;
 
+typedef NS_ENUM(NSUInteger, CardType) {
+    CARD_IAS_LEGACY = 1,
+    CARD_IAS_V3 = 2,
+    CARD_IAS_V4_OR_GREATER = 3
+};
+
 @class PteidTokenDriver;
 @class PteidToken;
 @class PteidTokenSession;
@@ -22,6 +28,7 @@ static const UInt64 auth_key_object_id = 0x81, sign_key_object_id=0x82;
 - (instancetype)initWithToken:(PteidToken *)token;
 @property (readonly) PteidToken *PteidToken;
 @property (readonly) BOOL use_auth_key;
+@property CardType card_type;
 
 @end
 
@@ -32,7 +39,7 @@ static const UInt64 auth_key_object_id = 0x81, sign_key_object_id=0x82;
 @interface PteidToken : TKSmartCardToken<TKTokenDelegate>
 
 - (instancetype)initWithSmartCard:(TKSmartCard *)smartCard AID:(NSData *)AID tokenDriver:(PteidTokenDriver *)tokenDriver error:(NSError **)error;
-
+@property (readonly) CardType card_type;
 @end
 
 @interface PteidTokenDriver : TKSmartCardTokenDriver<TKSmartCardTokenDriverDelegate>
