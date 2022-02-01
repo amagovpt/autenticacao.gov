@@ -65,7 +65,7 @@ class CPteidCard : public CPkiCard
 {
 public:
 	CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad,
-		  const CByteArray & oData, tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol);
+		       tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol);
     ~CPteidCard(void);
 
 	virtual tCardType GetType();

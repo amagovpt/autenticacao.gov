@@ -55,7 +55,7 @@ static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard, const 
 {
 	long lRetVal = 0;
 	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
-	CByteArray oCmd(40);
+	CByteArray oCmd(sizeof(GEMSAFE_PTEID_APPLET_AID) + 5);
 	oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
 	oCmd.Append((unsigned char) sizeof(GEMSAFE_PTEID_APPLET_AID));
 	oCmd.Append(GEMSAFE_PTEID_APPLET_AID, sizeof(GEMSAFE_PTEID_APPLET_AID));
@@ -72,58 +72,34 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 
 	CCard *poCard = NULL;
 
-		try {
-			bool bNeedToSelectApplet = false;
-			CByteArray oData;
-			CByteArray oCmd(40);
-			unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
-			oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
-			oCmd.Append((unsigned char) sizeof(GEMSAFE_PTEID_APPLET_AID));
-			oCmd.Append(GEMSAFE_PTEID_APPLET_AID, sizeof(GEMSAFE_PTEID_APPLET_AID));
-			long lRetVal;
+	try {
+		// Don't remove these brackets, CAutoLock dtor must be called!
+		{
+			CAutoLock oAutLock(&poContext->m_oPCSC, hCard);
 
-			// Don't remove these brackets, CAutoLock dtor must be called!
-			{
-				CAutoLock oAutLock(&poContext->m_oPCSC, hCard);
+			bool selected = PteidCardSelectApplet(poContext, hCard, protocol_struct);
 
-				oData = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, protocol_struct);
-				if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED)
-				{
-					unsigned long ulLockCount = 0;
-					poContext->m_oPCSC.Recover(hCard, &ulLockCount);
-
-					bNeedToSelectApplet = PteidCardSelectApplet(poContext, hCard, protocol_struct);
-					if (bNeedToSelectApplet)// try again to select the card app
-						oData = poContext->m_oPCSC.Transmit(hCard, oCmd,&lRetVal, protocol_struct);
-				}
-				if (oData.Size() == 2 && oData.GetByte(0) == 0x6A &&
-						(oData.GetByte(1) == 0x82 || oData.GetByte(1) == 0x86))
-				{
-					// Perhaps the applet is no longer selected; so try to select it
-					// first; and if successfull then try to select the AID again
-					bNeedToSelectApplet = PteidCardSelectApplet(poContext, hCard, protocol_struct);
-					if (!bNeedToSelectApplet)
-						return poCard;
-				}
-
+			if (selected) {
+				//We don't support PTEID_IAS101 cards anymore...
 				ulVersion = 1;
-				poCard = new CPteidCard(hCard, poContext, poPinpad, oData,
-							bNeedToSelectApplet ? ALW_SELECT_APPLET : TRY_SELECT_APPLET, ulVersion, protocol_struct);
+				poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, protocol_struct);
+				MWLOG(LEV_ERROR, MOD_CAL, "Creating new card instance: %p", poCard);
 			}
 		}
-		catch (CMWException &e) {
-			MWLOG(LEV_ERROR, MOD_CAL, "Exception in card object creation! Error code: %0x on %s:%ld",
-			              e.GetError(), e.GetFile().c_str(), e.GetLine());
-		}
-		catch (const std::exception &e) {
-			MWLOG(LEV_ERROR, MOD_CAL, "Std::exception in card object creation! Msg: %s", e.what());
-		}
+	}
+	catch (CMWException &e) {
+		MWLOG(LEV_ERROR, MOD_CAL, "Exception in card object creation! Error code: %0x on %s:%ld",
+			e.GetError(), e.GetFile().c_str(), e.GetLine());
+	}
+	catch (const std::exception &e) {
+		MWLOG(LEV_ERROR, MOD_CAL, "Std::exception in card object creation! Msg: %s", e.what());
+	}
 
 	return poCard;
 }
 
 CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
-		     GenericPinpad *poPinpad, const CByteArray & oData, tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol) :
+		     GenericPinpad *poPinpad, tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol) :
 			 CPkiCard(hCard, poContext, poPinpad)
 {
 	switch (ulVersion){
