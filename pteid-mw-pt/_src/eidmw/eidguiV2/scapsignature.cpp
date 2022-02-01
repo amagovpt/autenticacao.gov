@@ -193,8 +193,8 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
     std::vector<int> attributes_index, bool useCustomImage, QByteArray &m_jpeg_scaled_data,
     unsigned int seal_width, unsigned int seal_height)
 {
-    // Sets user selected file save path
     const char* citizenId = NULL;
+    PTEID_EIDCard * card = NULL;
 
     std::vector<ns3__AttributeType*> selected_attributes = getSelectedAttributes(attributes_index);
 
@@ -203,6 +203,12 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
         qDebug() << "Couldn't find any index in m_attributesList!";
         return;
     }
+
+    parent->getCardInstance(card);
+
+    //Error handling triggering signal for the GUI is within GAPI::getCardInstance()
+    if (card == NULL)
+            return;
 
     // Creates a temporary file
     QTemporaryFile tempFile;
@@ -215,30 +221,25 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
     char *temp_save_path = strdup(tempFile.fileName().toStdString().c_str());
     qDebug() << "Generating first tempFile: " << temp_save_path;
     int sign_rc = 0;
+    
 
     try {
-        PTEID_ReaderContext& readerContext = ReaderSet.getReader();
-        if (!readerContext.isCardPresent())
-        {
-			qDebug() << "executeSCAPSignature: Pteid Signature error: No card found in the reader!";
-        }
-
-        eIDMW::PTEID_EIDCard &card = readerContext.getEIDCard();
-
+        
+        
         PTEID_PDFSignature pdf_sig(strdup(inputPath.toUtf8().constData()));
         PTEID_SignatureLevel citizen_signature_level = isTimestamp ?
                 (isLtv ? PTEID_LEVEL_LT : PTEID_LEVEL_TIMESTAMP) : PTEID_LEVEL_BASIC;
         pdf_sig.setSignatureLevel(citizen_signature_level);      
 
         // Sign pdf
-        sign_rc = card.SignPDF(pdf_sig, selected_page, 0, false, strdup(location.toUtf8().constData()),
+        sign_rc = card->SignPDF(pdf_sig, selected_page, 0, false, strdup(location.toUtf8().constData()),
                                 strdup(reason.toUtf8().constData()), temp_save_path);       
     }
     catch (eIDMW::PTEID_Exception &e)
     {
         eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
               "executeSCAPSignature - Exception accessing EIDCard. Error code: %08x",  e.GetError());
-        if (e.GetError() != EIDMW_TIMESTAMP_ERROR && e.GetError() != EIDMW_LTV_ERROR){
+        if (e.GetError() != EIDMW_TIMESTAMP_ERROR && e.GetError() != EIDMW_LTV_ERROR) {
             free(temp_save_path);
             throw;
         }
@@ -251,19 +252,14 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
                 ProxyInfo m_proxyInfo;
 
                 // Get Citizen info
-                PTEID_ReaderContext& readerContext = ReaderSet.getReader();
-                if (!readerContext.isCardPresent())
-                {
-                    qDebug() << "executeSCAPSignature: Pteid Signature error: No card found in the reader!";
-                }
-                eIDMW::PTEID_EIDCard &card = readerContext.getEIDCard();
-                QString citizenName = card.getID().getGivenName();
+                PTEID_EId & citizen_info = card->getID();
+                QString citizenName = citizen_info.getGivenName();
                 citizenName.append(" ");
-                citizenName.append(card.getID().getSurname());
-                citizenId = card.getID().getCivilianIdNumber();
+                citizenName.append(citizen_info.getSurname());
+                citizenId = citizen_info.getCivilianIdNumber();
 
                 int successful = scap_signature_client.signPDF(
-                            m_proxyInfo, savefilepath, QString(temp_save_path), QString(citizenName),
+                            m_proxyInfo, savefilepath, QString(temp_save_path), citizenName,
                             QString(citizenId), isTimestamp, true, PDFSignatureInfo(selected_page, location_x, location_y,
                             isLtv, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData()),
                             seal_width, seal_height), selected_attributes, useCustomImage, m_jpeg_scaled_data);

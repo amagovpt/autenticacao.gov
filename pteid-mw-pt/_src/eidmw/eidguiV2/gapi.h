@@ -446,6 +446,8 @@ public slots:
         bool nic, bool date, QString location, QString entities, QString attributes,
         unsigned int width, unsigned int height);
 
+    void getCardInstance(PTEID_EIDCard *&new_card);
+
 signals:
     // Signal from GAPI to Gui
     // Notify about Card Identify changed
@@ -553,7 +555,6 @@ private:
     void getInfoFromSignCert(void);
     int findCardCertificate(QString issuedBy, QString issuedTo);
     void doExportCardCertificate(QString issuedBy, QString issuedTo, QString outputPath);
-    void getCardInstance(PTEID_EIDCard *&new_card);
     bool useCustomSignature(void);
     void stopAllEventCallbacks(void);
     void cleanupCallbackData(void);

@@ -423,7 +423,7 @@ unsigned int GAPI::doGetTriesLeftSignPin() {
 
     BEGIN_TRY_CATCH
 
-        PTEID_EIDCard * card = NULL;
+    PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card == NULL) return TRIES_LEFT_ERROR;
 
@@ -2706,7 +2706,7 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
     try
     {
         unsigned long ReaderCount = ReaderSet.readerCount();
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance Card Reader count =  %ld", ReaderCount);
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance Card Reader count =  %ld", ReaderCount);
         unsigned long ReaderIdx = 0;
         long CardIdx = 0;
         unsigned long tempReaderIndex = 0;
@@ -2808,32 +2808,32 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
     }
     catch (PTEID_ExParamRange &e)
     {
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(CardUnknownError);
     }
     catch (PTEID_ExNoCardPresent &e)
     {
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(NoCardFound);
     }
     catch (PTEID_ExCardChanged &e)
     {
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(CardUnknownError);
     }
     catch (PTEID_ExBadTransaction &e)
     {
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(CardUnknownError);
     }
     catch (PTEID_ExCertNoRoot &e)
     {
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(CardUnknownError);
     }
     catch (PTEID_Exception &e)
     {
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "loadCardData failed with error code 0x%08x", e.GetError());
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance failed with error code 0x%08x", e.GetError());
         emit signalCardAccessError(CardUnknownError);
     }
 }
