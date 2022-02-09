@@ -90,9 +90,6 @@ typedef struct _VENDOR_SPECIFIC
 #define CERT_ROOTCA                 4
 
 #define HASH_ALGO_NONE              0
-#define HASH_ALGO_MD2               1
-#define HASH_ALGO_MD4               2
-#define HASH_ALGO_MD5               3
 #define HASH_ALGO_SHA1              4
 #define HASH_ALGO_SHA_256           5
 #define HASH_ALGO_SHA_384           6

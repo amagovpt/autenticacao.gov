@@ -261,18 +261,9 @@ DWORD WINAPI   CardSignData
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter (Hash Size): %d", pInfo->cbData);
 		CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 	}
-
+	//Only apps using classic CAPI specify the algo in aiHashAlg
 	switch(pInfo->aiHashAlg)
 	{
-	case CALG_MD2:
-		uiHashAlgo = HASH_ALGO_MD2;
-		break;
-	case CALG_MD4:
-		uiHashAlgo = HASH_ALGO_MD4;
-		break;
-	case CALG_MD5:
-		uiHashAlgo = HASH_ALGO_MD5;
-		break;
 	case CALG_SHA1:
 		uiHashAlgo = HASH_ALGO_SHA1;
 		break;
@@ -285,15 +276,8 @@ DWORD WINAPI   CardSignData
 	case CALG_SHA_512:
 		uiHashAlgo = HASH_ALGO_SHA_512;
 		break;
-	case CALG_TLS1PRF:
-	case CALG_MAC:
-	case CALG_HASH_REPLACE_OWF:
-	case CALG_HUGHES_MD5:
-	case CALG_HMAC:
-	case CALG_SSL3_SHAMD5:
-		CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
-		break;
-	default:
+	//CNG apps specify the algo in PADDING_INFO struct
+	case 0:
 		if ( ( pInfo->dwSigningFlags & CARD_PADDING_INFO_PRESENT ) == CARD_PADDING_INFO_PRESENT)
 		{
 			LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwSigningFlags: CARD_PADDING_INFO_PRESENT");
@@ -317,18 +301,6 @@ DWORD WINAPI   CardSignData
 					LogTrace(LOGTYPE_INFO, WHERE, "PkcsPadInfo->pszAlgId = NULL: PKCS#1 Sign...");
 
 					uiHashAlgo = HASH_ALGO_NONE;
-				}
-				else if ( wcscmp(PkcsPadInfo->pszAlgId, L"MD2") == 0 ) 
-				{
-					uiHashAlgo = HASH_ALGO_MD2;
-				}
-				else if ( wcscmp(PkcsPadInfo->pszAlgId, L"MD4") == 0 ) 
-				{
-					uiHashAlgo = HASH_ALGO_MD4;
-				}
-				else if ( wcscmp(PkcsPadInfo->pszAlgId, L"MD5") == 0 ) 
-				{
-					uiHashAlgo = HASH_ALGO_MD5;
 				}
 				else if ( wcscmp(PkcsPadInfo->pszAlgId, L"SHA1") == 0 ) 
 				{
@@ -373,6 +345,8 @@ DWORD WINAPI   CardSignData
 		}
 
 		break;
+	default:
+		CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 	}
 
 #ifdef _DEBUG
