@@ -26,29 +26,15 @@
 * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
-/****************************************************************************************************/
-
+//Need to include this before bcrypt.h for the basic Windows types
+#include <Windows.h>
+#include <bcrypt.h>
 #include "globmdrv.h"
-
 #include "log.h"
 #include "smartcard.h"
 #include "util.h"
 
 /****************************************************************************************************/
-#define __USE_SDK__
-
-#ifndef __USE_SDK__
-typedef struct _BCRYPT_PKCS1_PADDING_INFO 
-{  
-	LPCWSTR pszAlgId;
-} BCRYPT_PKCS1_PADDING_INFO;
-
-typedef struct _BCRYPT_PSS_PADDING_INFO 
-{  
-	LPCWSTR  pszAlgId;  
-	ULONG    cbSalt;
-} BCRYPT_PSS_PADDING_INFO;
-#endif
 
 /****************************************************************************************************/
 
