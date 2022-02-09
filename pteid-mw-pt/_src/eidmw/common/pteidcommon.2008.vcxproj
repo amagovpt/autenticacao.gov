@@ -226,8 +226,6 @@
     <ClCompile Include="datafile.cpp" />
     <ClCompile Include="DynamicLib.cpp" />
     <ClCompile Include="Hash.cpp" />
-    <ClCompile Include="libtomcrypt\md5.c" />
-    <ClCompile Include="libtomcrypt\rmd160.c" />
     <ClCompile Include="libtomcrypt\sha1.c" />
     <ClCompile Include="libtomcrypt\sha256.c" />
     <ClCompile Include="libtomcrypt\sha384.c" />

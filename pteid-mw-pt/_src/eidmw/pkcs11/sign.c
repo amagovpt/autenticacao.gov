@@ -367,22 +367,20 @@ CK_RV C_SignInit(CK_SESSION_HANDLE hSession,    /* the session's handle */
    //since this module is only for PTEID, we check for RSA here and we do not check the device capabilities
    //TODO check mechanism table for signing depending on token in slot
    switch(pMechanism->mechanism)
-      {
-      case CKM_MD5_RSA_PKCS:
+   {
       case CKM_SHA1_RSA_PKCS:
-      case CKM_RIPEMD160_RSA_PKCS:
       case CKM_SHA256_RSA_PKCS:
       case CKM_SHA384_RSA_PKCS:
       case CKM_SHA512_RSA_PKCS:
-	  case CKM_SHA256_RSA_PKCS_PSS:
-	  case CKM_SHA384_RSA_PKCS_PSS:
-	  case CKM_SHA512_RSA_PKCS_PSS: ihash = 1; break;
-     case CKM_RSA_PKCS_PSS:
-     case CKM_RSA_PKCS:            ihash = 0; break;
+      case CKM_SHA256_RSA_PKCS_PSS:
+      case CKM_SHA384_RSA_PKCS_PSS:
+      case CKM_SHA512_RSA_PKCS_PSS: ihash = 1; break;
+      case CKM_RSA_PKCS_PSS:
+      case CKM_RSA_PKCS:            ihash = 0; break;
       default: 
          ret = CKR_MECHANISM_INVALID;
          goto cleanup;            
-      }
+   }
 
    //can we use the object for signing?
    pObject = p11_get_slot_object(pSlot, hKey);

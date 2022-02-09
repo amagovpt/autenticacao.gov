@@ -308,10 +308,9 @@ catch (...)
 
 if (pMechanismList == NULL)
    {
-   *pulCount = 6;  //for 6 hash algos
+   *pulCount = 4;  //for 4 hash algos
 
    if (algos & SIGN_ALGO_RSA_PKCS)           *pulCount +=1;
-   if (algos & SIGN_ALGO_MD5_RSA_PKCS)       *pulCount +=1;
    if (algos & SIGN_ALGO_SHA1_RSA_PKCS)      *pulCount +=1;
    if (algos & SIGN_ALGO_SHA256_RSA_PKCS)    *pulCount +=1;
    if (algos & SIGN_ALGO_SHA384_RSA_PKCS)    *pulCount +=1;
@@ -322,11 +321,6 @@ if (pMechanismList == NULL)
    }
 
 /* hash algos */
-if (n++ <= *pulCount)
-   pMechanismList[n-1] = CKM_MD5;
-else
-   return (CKR_BUFFER_TOO_SMALL);
-
 if (n++ <= *pulCount)
    pMechanismList[n-1] = CKM_SHA_1;
 else
@@ -347,23 +341,11 @@ if (n++ <= *pulCount)
 else
    return (CKR_BUFFER_TOO_SMALL);
 
-if (n++ <= *pulCount)
-   pMechanismList[n-1] = CKM_RIPEMD160;
-else
-   return (CKR_BUFFER_TOO_SMALL);
-
 /* sign algos */
 if (algos & SIGN_ALGO_RSA_PKCS)
    {
    if (n++ <= *pulCount)
       pMechanismList[n-1] = CKM_RSA_PKCS;
-   else
-      return (CKR_BUFFER_TOO_SMALL);
-   }
-if (algos & SIGN_ALGO_MD5_RSA_PKCS)
-   {
-   if (n++ <= *pulCount)
-      pMechanismList[n-1] = CKM_MD5_RSA_PKCS;
    else
       return (CKR_BUFFER_TOO_SMALL);
    }
@@ -985,8 +967,6 @@ try
    switch(pSignData->mechanism)
       {
       case CKM_RSA_PKCS:               algo = SIGN_ALGO_RSA_PKCS;            break;
-      case CKM_MD5:
-      case CKM_MD5_RSA_PKCS:           algo = SIGN_ALGO_MD5_RSA_PKCS;        break;
       case CKM_SHA_1:
       case CKM_SHA1_RSA_PKCS:          algo = SIGN_ALGO_SHA1_RSA_PKCS;       break;
       case CKM_SHA256:
@@ -995,12 +975,10 @@ try
       case CKM_SHA384_RSA_PKCS:        algo = SIGN_ALGO_SHA384_RSA_PKCS;     break;
       case CKM_SHA512:
       case CKM_SHA512_RSA_PKCS:        algo = SIGN_ALGO_SHA512_RSA_PKCS;     break;
-     case CKM_RSA_PKCS_PSS:
+      case CKM_RSA_PKCS_PSS:
 	  case CKM_SHA384_RSA_PKCS_PSS:
 	  case CKM_SHA512_RSA_PKCS_PSS:
 	  case CKM_SHA256_RSA_PKCS_PSS:    algo = SIGN_ALGO_RSA_PSS;             break;
-      case CKM_RIPEMD160:
-      case CKM_RIPEMD160_RSA_PKCS:     algo = SIGN_ALGO_RIPEMD160_RSA_PKCS;  break;
       default:
          ret = CKR_MECHANISM_INVALID;
          goto cleanup;

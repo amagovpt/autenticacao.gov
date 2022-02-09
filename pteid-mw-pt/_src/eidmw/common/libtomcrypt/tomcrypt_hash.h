@@ -5,8 +5,6 @@
 #define USE_SHA256
 #define USE_SHA384
 #define USE_SHA512
-#define USE_MD5
-#define USE_RIPEMD160
 
 #define CRYPT_OK               0
 #define CRYPT_INVALID_ARG      1
@@ -51,76 +49,7 @@ struct sha1_state {
 };
 #endif
 
-#ifdef USE_MD5
-struct md5_state {
-    ulong64 length;
-    ulong32 state[4], curlen;
-    unsigned char buf[64];
-};
-#endif
-
-#ifdef USE_MD4
-struct md4_state {
-    ulong64 length;
-    ulong32 state[4], curlen;
-    unsigned char buf[64];
-};
-#endif
-
-#ifdef USE_TIGER
-struct tiger_state {
-    ulong64 state[3], length;
-    unsigned long curlen;
-    unsigned char buf[64];
-};
-#endif
-
-#ifdef USE_MD2
-struct md2_state {
-    unsigned char chksum[16], X[48], buf[16];
-    unsigned long curlen;
-};
-#endif
-
-#ifdef USE_RIPEMD128
-struct rmd128_state {
-    ulong64 length;
-    unsigned char buf[64];
-    ulong32 curlen, state[4];
-};
-#endif
-
-#ifdef USE_RIPEMD160
-struct rmd160_state {
-    ulong64 length;
-    unsigned char buf[64];
-    ulong32 curlen, state[5];
-};
-#endif
-
-#ifdef USE_WHIRLPOOL
-struct whirlpool_state {
-    ulong64 length, state[8];
-    unsigned char buf[64];
-    ulong32 curlen;
-};
-#endif
-
-#ifdef CHC_HASH
-struct chc_state {
-    ulong64 length;
-    unsigned char state[MAXBLOCKSIZE], buf[MAXBLOCKSIZE];
-    ulong32 curlen;
-};
-#endif
-
 typedef union Hash_state {
-#ifdef CHC_HASH
-    struct chc_state chc;
-#endif
-#ifdef USE_WHIRLPOOL
-    struct whirlpool_state whirlpool;
-#endif
 #ifdef USE_SHA512
     struct sha512_state sha512;
 #endif
@@ -129,24 +58,6 @@ typedef union Hash_state {
 #endif
 #ifdef USE_SHA1
     struct sha1_state   sha1;
-#endif
-#ifdef USE_MD5
-    struct md5_state    md5;
-#endif
-#ifdef USE_MD4
-    struct md4_state    md4;
-#endif
-#ifdef USE_MD2
-    struct md2_state    md2;
-#endif
-#ifdef USE_TIGER
-    struct tiger_state  tiger;
-#endif
-#ifdef USE_RIPEMD128
-    struct rmd128_state rmd128;
-#endif
-#ifdef USE_RIPEMD160
-    struct rmd160_state rmd160;
 #endif
 } hash_state;
 
@@ -187,22 +98,6 @@ extern  struct ltc_hash_descriptor {
     int (*test)(void);
 } hash_descriptor[];
 
-#ifdef CHC_HASH
-int chc_register(int cipher);
-int chc_init(hash_state * md);
-int chc_process(hash_state * md, const unsigned char *in, unsigned long inlen);
-int chc_done(hash_state * md, unsigned char *hash);
-int chc_test(void);
-extern const struct ltc_hash_descriptor chc_desc;
-#endif
-
-#ifdef USE_WHIRLPOOL
-int whirlpool_init(hash_state * md);
-int whirlpool_process(hash_state * md, const unsigned char *in, unsigned long inlen);
-int whirlpool_done(hash_state * md, unsigned char *hash);
-int whirlpool_test(void);
-extern const struct ltc_hash_descriptor whirlpool_desc;
-#endif
 
 #ifdef USE_SHA512
 int sha512_init(hash_state * md);
@@ -250,53 +145,6 @@ int sha1_test(void);
 extern const struct ltc_hash_descriptor sha1_desc;
 #endif
 
-#ifdef USE_MD5
-int md5_init(hash_state * md);
-int md5_process(hash_state * md, const unsigned char *in, unsigned long inlen);
-int md5_done(hash_state * md, unsigned char *hash);
-int md5_test(void);
-extern const struct ltc_hash_descriptor md5_desc;
-#endif
-
-#ifdef USE_MD4
-int md4_init(hash_state * md);
-int md4_process(hash_state * md, const unsigned char *in, unsigned long inlen);
-int md4_done(hash_state * md, unsigned char *hash);
-int md4_test(void);
-extern const struct ltc_hash_descriptor md4_desc;
-#endif
-
-#ifdef USE_MD2
-int md2_init(hash_state * md);
-int md2_process(hash_state * md, const unsigned char *in, unsigned long inlen);
-int md2_done(hash_state * md, unsigned char *hash);
-int md2_test(void);
-extern const struct ltc_hash_descriptor md2_desc;
-#endif
-
-#ifdef USE_TIGER
-int tiger_init(hash_state * md);
-int tiger_process(hash_state * md, const unsigned char *in, unsigned long inlen);
-int tiger_done(hash_state * md, unsigned char *hash);
-int tiger_test(void);
-extern const struct ltc_hash_descriptor tiger_desc;
-#endif
-
-#ifdef USE_RIPEMD128
-int rmd128_init(hash_state * md);
-int rmd128_process(hash_state * md, const unsigned char *in, unsigned long inlen);
-int rmd128_done(hash_state * md, unsigned char *hash);
-int rmd128_test(void);
-extern const struct ltc_hash_descriptor rmd128_desc;
-#endif
-
-#ifdef USE_RIPEMD160
-int rmd160_init(hash_state * md);
-int rmd160_process(hash_state * md, const unsigned char *in, unsigned long inlen);
-int rmd160_done(hash_state * md, unsigned char *hash);
-int rmd160_test(void);
-extern const struct ltc_hash_descriptor rmd160_desc;
-#endif
 
 int find_hash(const char *name);
 int find_hash_id(unsigned char ID);

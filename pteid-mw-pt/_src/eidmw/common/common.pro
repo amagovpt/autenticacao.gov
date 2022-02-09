@@ -92,9 +92,7 @@ SOURCES += ByteArray.cpp \
            Util.cpp \
            StringOps.cpp \
            MyriadFontGlyphWidths.cpp \
-           libtomcrypt/md5.c \
            libtomcrypt/sha1.c \
            libtomcrypt/sha256.c \
            libtomcrypt/sha384.c \
-           libtomcrypt/sha512.c \
-	   libtomcrypt/rmd160.c
+           libtomcrypt/sha512.c

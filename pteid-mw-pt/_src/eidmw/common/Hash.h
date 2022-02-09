@@ -20,7 +20,7 @@
 
 **************************************************************************** */
 /**
- * This class takes care of hashing (SHA1, MD5, ..)
+ * This class takes care of hashing (SHA1, SHA256, ..)
  *
  * Instead of providing the result of GetHash() to the
  * CCard::Sign() function, it is better to provide the
@@ -32,7 +32,7 @@
  *   CByteArray sign(CCard &oCard, const tPrivKey & key, const tPin & Pin)
  *   {
  *     CHash oHash;
- *     oHash.Init(ALGO_MD5_SHA1);
+ *     oHash.Init(ALGO_SHA256);
  *     oHash.Update(...);
  *     oHash.Update(...);
  *     return oCard.Sign(key, Pin, SIGN_ALGO_RSA_PKCS, oHash);
@@ -54,13 +54,10 @@ namespace eIDMW
 {
 
 enum tHashAlgo {
-	ALGO_MD5,       // 16-byte hash
-	ALGO_SHA1,      // 20-byte hash
-	ALGO_MD5_SHA1,  // 36-byte hash, useful for SSL/TLS
-	ALGO_SHA256,    // 32-byte hash
-	ALGO_SHA384,    // 48-byte hash
-	ALGO_SHA512,    // 64-byte hash
-	ALGO_RIPEMD160, // 64-byte hash
+	ALGO_SHA1 = 1,      // 20-byte hash
+	ALGO_SHA256 = 3,    // 32-byte hash
+	ALGO_SHA384 = 4,    // 48-byte hash
+	ALGO_SHA512 = 5    // 64-byte hash
 };
 
 class EIDMW_CMN_API CHash 
