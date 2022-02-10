@@ -1818,7 +1818,8 @@ APL_OcspResponse::APL_OcspResponse(const char *uri,APL_Certif *certif)
 	m_delay = conf_NormalDelay.getLong();
 }
 
-APL_OcspResponse::APL_OcspResponse(const char *uri,APL_HashAlgo hashAlgorithm,const CByteArray &issuerNameHash,const CByteArray &issuerKeyHash,const CByteArray &serialNumber)
+
+APL_OcspResponse::APL_OcspResponse(const char *uri, FWK_HashAlgo hashAlgorithm,const CByteArray &issuerNameHash,const CByteArray &issuerKeyHash,const CByteArray &serialNumber)
 {
 	m_cryptoFwk=AppLayer.getCryptoFwk();
 
@@ -1830,15 +1831,8 @@ APL_OcspResponse::APL_OcspResponse(const char *uri,APL_HashAlgo hashAlgorithm,co
 	m_response=NULL;
 	m_status=APL_CERTIF_STATUS_UNCHECK;
 
-	switch(hashAlgorithm)
-	{
-	case APL_ALGO_MD5:
-		m_certid->hashAlgorithm=FWK_ALGO_MD5;
-		break;
-	case APL_ALGO_SHA1:
-		m_certid->hashAlgorithm=FWK_ALGO_SHA1;
-		break;
-	}
+	m_certid->hashAlgorithm=hashAlgorithm;
+	
 	m_certid->issuerNameHash=new CByteArray(issuerNameHash);
 	m_certid->issuerKeyHash=new CByteArray(issuerKeyHash);
 	m_certid->serialNumber=new CByteArray(serialNumber);

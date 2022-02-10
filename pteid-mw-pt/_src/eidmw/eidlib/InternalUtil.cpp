@@ -97,18 +97,6 @@ PTEID_CertifType ConvertCertType(APL_CertifType eType)
 	}
 }
 
-APL_HashAlgo ConvertHashAlgo(PTEID_HashAlgo eAlgo)
-{
-	switch(eAlgo)
-	{ 
-	case PTEID_ALGO_MD5:
-		return APL_ALGO_MD5;
-
-	default:
-		return APL_ALGO_SHA1;
-	}
-}
-
 tLOG_Level ConvertLogLevel(PTEID_LogLevel level)
 {
 	switch(level)

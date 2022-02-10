@@ -85,11 +85,6 @@ enum PTEID_CertifType
 	PTEID_CERTIF_TYPE_SIGNATURE			/**< Signature certificate */
 };
 
-enum PTEID_HashAlgo {
-	PTEID_ALGO_MD5,      /**< 16-byte hash */
-	PTEID_ALGO_SHA1,     /**< 20-byte hash */
-};
-
 enum PTEID_FileType
 {
 	PTEID_FILETYPE_UNKNOWN=0,

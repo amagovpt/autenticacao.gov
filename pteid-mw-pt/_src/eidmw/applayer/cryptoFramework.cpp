@@ -484,8 +484,6 @@ const EVP_MD *APL_CryptoFwk::ConvertAlgorithm(FWK_HashAlgo algo)
 {
 	switch(algo)
 	{
-	case FWK_ALGO_MD5:
-		return EVP_md5();
 	case FWK_ALGO_SHA1:
 		return EVP_sha1();
 	case FWK_ALGO_SHA256:
@@ -499,12 +497,6 @@ bool APL_CryptoFwk::VerifyHash(const CByteArray &data, const CByteArray &hash, F
 {
 	//Check the hash with sha1 algorithm
 	return VerifyHash(data,hash,ConvertAlgorithm(algo));
-}
-
-bool APL_CryptoFwk::VerifyHashMd5(const CByteArray &data, const CByteArray &hash)
-{
-	//Check the hash with sha1 algorithm
-	return VerifyHash(data,hash,EVP_md5());
 }
 
 bool APL_CryptoFwk::VerifyHashSha1(const CByteArray &data, const CByteArray &hash)
@@ -553,12 +545,6 @@ bool APL_CryptoFwk::GetHashSha1(const CByteArray &data, CByteArray *hash)
 {
 	//Get the hash with sha1 algorithm
 	return GetHash(data,EVP_sha1(),hash);
-}
-
-bool APL_CryptoFwk::GetHashMd5(const CByteArray &data, CByteArray *hash)
-{
-	//Get the hash with md5 algorithm
-	return GetHash(data,EVP_md5(),hash);
 }
 
 bool APL_CryptoFwk::GetHash(const CByteArray &data, const EVP_MD *algorithm, CByteArray *hash)

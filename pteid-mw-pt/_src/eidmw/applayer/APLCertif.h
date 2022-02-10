@@ -37,6 +37,7 @@
 #include "APLCard.h"
 #include "APLCardFile.h"
 #include "APLCrypto.h"
+#include "cryptoFramework.h"
 #include <limits.h>
 
 namespace eIDMW
@@ -91,16 +92,10 @@ enum APL_ValidationLevel
 	APL_VALIDATION_LEVEL_MANDATORY
 };
 
-enum APL_HashAlgo {
-	APL_ALGO_MD5,      // 16-byte hash
-	APL_ALGO_SHA1      // 20-byte hash
-};
-
 class APL_CryptoFwk;
 class APL_CardFile_Certificate;
 class APL_Certif;
 class APL_OcspResponse;
-
 
 /******************************************************************************//**
   * Class that represents a certificates store
@@ -700,15 +695,15 @@ class APL_OcspResponse
 public:
 	/**
 	  * Create an APL_OcspResponse object from the URI only and CertID
-	  * This OCSP Response is not link to any APL_Certif so some methods could not be used
+	  * This OCSP Response is not linked to any APL_Certif so some methods cannot be used
 	  * these methods throw EIDMW_ERR_BAD_USAGE exception
 	  */
-	EIDMW_APL_API APL_OcspResponse(const char *uri,APL_HashAlgo hashAlgorithm,const CByteArray &issuerNameHash,const CByteArray &issuerKeyHash,const CByteArray &serialNumber);
+	EIDMW_APL_API APL_OcspResponse(const char *uri, FWK_HashAlgo hashAlgorithm, const CByteArray &issuerNameHash,const CByteArray &issuerKeyHash,const CByteArray &serialNumber);
 
 	EIDMW_APL_API virtual ~APL_OcspResponse(void);		/**< Destructor */
 
 	/**
-	  * Verify certificate trough OCSP process
+	  * Verify certificate through OCSP process
 	  */
 	EIDMW_APL_API APL_CertifStatus verifyCert();
 

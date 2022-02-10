@@ -86,8 +86,7 @@ struct tCrlInfo
 };
 
 enum FWK_HashAlgo {
-	FWK_ALGO_MD5,      // 16-byte hash
-	FWK_ALGO_SHA1,     // 20-byte hash
+	FWK_ALGO_SHA1,
 	FWK_ALGO_SHA256
 };
 
@@ -177,11 +176,6 @@ public:
 	bool VerifyHash(const CByteArray &data, const CByteArray &hash, FWK_HashAlgo algorithm);
 
 	/**
-	  * Verify if the data has the correct hash (md5 algorithm)
-	  */
-	bool VerifyHashMd5(const CByteArray &data, const CByteArray &hash);
-
-	/**
 	  * Verify if the data has the correct hash (sha1 algorithm)
 	  */
 	bool VerifyHashSha1(const CByteArray &data, const CByteArray &hash);
@@ -195,12 +189,7 @@ public:
 	  * Get the hash of the data
 	  */
 	bool GetHash(const CByteArray &data, FWK_HashAlgo algorithm, CByteArray *hash);
-
-	/**
-	  * Get the hash of the data (md5 algorithm)
-	  */
-	bool GetHashMd5(const CByteArray &data, CByteArray *hash);
-
+	
 	/**
 	  * Get the hash of the data (sha1 algorithm)
 	  */

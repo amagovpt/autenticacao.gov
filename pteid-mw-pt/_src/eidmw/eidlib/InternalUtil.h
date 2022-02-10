@@ -96,9 +96,6 @@ PTEID_CardType ConvertCardType(APL_CardType eCardType);
 PTEID_CertifStatus ConvertCertStatus(APL_CertifStatus eStatus);
 PTEID_CertifType ConvertCertType(APL_CertifType eType);
 
-
-APL_HashAlgo ConvertHashAlgo(PTEID_HashAlgo eAlgo);
-
 tLOG_Level ConvertLogLevel(PTEID_LogLevel level);
 
 APL_SignatureLevel ConvertSignatureLevel(PTEID_SignatureLevel level);
