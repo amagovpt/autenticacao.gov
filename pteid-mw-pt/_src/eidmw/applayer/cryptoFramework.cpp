@@ -37,14 +37,16 @@
 #include "MiscUtil.h"
 #include "Thread.h"
 
-#ifdef WIN32
-#include <wincrypt.h>
-#endif
-
 #include <openssl/evp.h>
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
 #include <openssl/err.h>
+
+#ifdef WIN32
+#include <wincrypt.h>
+#include <winsock.h>
+#endif
+
 #include "xercesc/util/Base64.hpp"
 #include "xercesc/util/XMLString.hpp"
 
@@ -728,6 +730,15 @@ cleanup:
 	return eStatus;
 }
 
+inline int getSocketError() 
+{
+#ifdef _WIN32
+	return WSAGetLastError();
+#else
+	return errno;
+#endif
+}
+
 FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_CERTID *pCertID, OCSP_RESPONSE **pResponse, X509 *pX509_Issuer)
 {
 	//The pointer should not be NULL
@@ -743,7 +754,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 
 	BIO *pBio = 0;
 
-	//OCSP connection socket, we will use async io on it
+	//OCSP connection socket, we will use async I/O on it
 	int fd;
 	int iSSL = 0;
 	int rv = 0;
@@ -823,22 +834,6 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 			goto cleanup;
 		}
 
-		/*
-    SCOPE(OCSP_REQ_CTX, rctx, OCSP_sendreq_new(connection.get(), const_cast<char*>(url.c_str()), 0, -1));
-    if(!rctx)
-        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
-
-    if(!OCSP_REQ_CTX_add1_header(rctx.get(), "Host", const_cast<char*>(hostname.c_str())))
-        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
-		    
-
-    if(!OCSP_REQ_CTX_set1_req(rctx.get(), req))
-        THROW_OPENSSLEXCEPTION("Failed to set OCSP request headers.");
-
-    if(!OCSP_sendreq_nbio(&resp, rctx.get()))
-        THROW_OPENSSLEXCEPTION("Failed to send OCSP request.");
-		*/
-
 		//TODO: Test this with and without proxy ...
 		ctx = OCSP_sendreq_new(pBio, useProxy ? uri : pszPath, NULL, -1);
 
@@ -849,9 +844,9 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 			fprintf(stderr, "OCSP: Adding proxy auth header!\n");
 			std::string proxy_cleartext = std::string(proxy_user_value) + ":" + proxy_pwd.getString();
 
-	        char *auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), proxy_cleartext.size());
-	        std::string header_value = std::string("basic ") + auth_token;
-	        OCSP_REQ_CTX_add1_header(ctx, "Proxy-Authorization", header_value.c_str());
+	    char *auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), proxy_cleartext.size());
+	    std::string header_value = std::string("basic ") + auth_token;
+	    OCSP_REQ_CTX_add1_header(ctx, "Proxy-Authorization", header_value.c_str());
 			free(auth_token);
 		}
 
@@ -897,8 +892,16 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 			const char *data = NULL;
 			int flags = 0;
 			long err = ERR_get_error_line_data(NULL, NULL, &data, &flags);
-			//Check if associated data string is returned in flags
-			MWLOG(LEV_ERROR, MOD_APL, "GetOCSPResponse - Error querying OCSP: %s Additional data: %s", ERR_error_string(err, NULL), ((flags & ERR_TXT_STRING) != 0) ? data : "N/A");
+			if (err == 0) {
+
+				MWLOG(LEV_ERROR, MOD_APL, "GetOCSPResponse - Socket error: %d", getSocketError());
+			}
+			else {
+				//Check if associated data string is returned in flags
+				MWLOG(LEV_ERROR, MOD_APL, "GetOCSPResponse - OpenSSL msg: (%s, Additional data: %s) Socket error: %d", 
+					ERR_error_string(err, NULL), ((flags & ERR_TXT_STRING) != 0) ? data : "N/A", 
+					getSocketError());
+			}
 	
 			eStatus=FWK_CERTIF_STATUS_ERROR;
 			goto cleanup;
