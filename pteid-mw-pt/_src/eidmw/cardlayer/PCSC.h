@@ -21,9 +21,7 @@
 **************************************************************************** */
 /*
 Takes care of
- - communication with the reader/smart card
-       - via the Privacy service, if running
-       - directly via PCSC otherwise
+ - communication with the reader/smart card via Winscard/PCSClite API
  - pinpad handling (loading of pinpad libs, making pinpad commands, ...)
 */
 
@@ -51,20 +49,6 @@ Takes care of
 #define SCARD_READERSTATEA SCARD_READERSTATE_A
 #endif
 
-
-// needed for pcsclite version earlier than 1.4
-#ifndef SCARD_E_NO_READERS_AVAILABLE
-#define SCARD_E_NO_READERS_AVAILABLE 0x8010002E /** Cannot find smart card reader */
-#endif
-#ifndef SCARD_PROTOCOL_UNDEFINED
-#define SCARD_PROTOCOL_UNDEFINED         0x00
-#endif
-#ifndef SCARD_E_COMM_DATA_LOST
-#define SCARD_E_COMM_DATA_LOST           ((DWORD)0x8010002FL)
-#endif
-#ifndef SCARD_E_NO_ACCESS
-#define SCARD_E_NO_ACCESS                ((DWORD)0x80100027)
-#endif
 #ifndef SCARD_ATTR_VENDOR_IFD_VERSION
 #define SCARD_ATTR_VENDOR_IFD_VERSION	 ((DWORD)0x00010102)
 #endif
