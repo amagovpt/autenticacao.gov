@@ -205,7 +205,7 @@ void APL_CertStatusCache::Init(unsigned long ulMaxNbrLine,unsigned long ulNormal
 
 
 //Get the certificate status
-CSC_Status APL_CertStatusCache::getCertStatus(unsigned long ulUniqueID,const CSC_Validation validationType,APL_Certifs *certStore)
+CSC_Status APL_CertStatusCache::getCertStatus(unsigned long ulUniqueID,const CSC_Validation validationType,APL_Certifs *certStore, bool useCache, bool validateChain)
 {
 	if(certStore==NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
@@ -215,24 +215,27 @@ CSC_Status APL_CertStatusCache::getCertStatus(unsigned long ulUniqueID,const CSC
 	APL_CscLine line(ulUniqueID,validationType);
 	unsigned long ulFlags=line.getFlags();
 
-	//Check if the certificate is in the cache and the status still valid
-	do
+	if (useCache)
 	{
-		//If another the status is being validate
-		//	=> Wait and re-enter the function
-		status=getStatusFromCache(ulUniqueID,ulFlags);
+		//Check if the certificate is in the cache and the status still valid
+		do
+		{
+			//If another the status is being validate
+			//	=> Wait and re-enter the function
+			status=getStatusFromCache(ulUniqueID,ulFlags);
 
-		if(status==CSC_STATUS_WAIT)
-			CThread::SleepMillisecs(100);
+			if(status==CSC_STATUS_WAIT)
+				CThread::SleepMillisecs(100);
 
-	} while(status==CSC_STATUS_WAIT);
+		} while(status==CSC_STATUS_WAIT);
+	}
 
 	//IF NOT YET IN THE CACHE
-	if(status==CSC_STATUS_NONE)
+	if(!useCache || status==CSC_STATUS_NONE)
 	{
 
 		//Run the validation process
-		status=checkCertValidation(ulUniqueID,ulFlags,certStore);
+		status=checkCertValidation(ulUniqueID,ulFlags,certStore,validateChain);
 
 		//Add the status to the cache.
 		addStatusToCache(ulUniqueID,ulFlags,status);
@@ -335,7 +338,7 @@ CSC_Status APL_CertStatusCache::convertStatus(APL_CertifStatus status)
 }
 
 //PRIVATE : Do the CRL/OCSP validation
-CSC_Status APL_CertStatusCache::checkCertValidation(unsigned long ulUniqueID,unsigned long ulFlags,APL_Certifs *certStore)
+CSC_Status APL_CertStatusCache::checkCertValidation(unsigned long ulUniqueID,unsigned long ulFlags,APL_Certifs *certStore, bool validateChain)
 {
 	CSC_Status issuerstatus;
 	CSC_Status certstatus;
@@ -343,7 +346,7 @@ CSC_Status APL_CertStatusCache::checkCertValidation(unsigned long ulUniqueID,uns
 	APL_Certif *cert=certStore->getCertUniqueId(ulUniqueID);
 
 	bool bRoot=cert->isRoot();
-
+	
 	//If this is not a root
 	if (bRoot)
 	{
@@ -356,10 +359,13 @@ CSC_Status APL_CertStatusCache::checkCertValidation(unsigned long ulUniqueID,uns
 		if(NULL == (issuer = cert->getIssuer()))
 			return CSC_STATUS_ISSUER;
 
-		issuerstatus=checkCertValidation(issuer->getUniqueId(),ulFlags,certStore);
-		//If the issuer is not valid we return this status
-		if(issuerstatus!=CSC_STATUS_VALID_SIGN && issuerstatus!=CSC_STATUS_VALID_FULL)	
-			return issuerstatus;
+		if (validateChain)
+		{
+			issuerstatus=checkCertValidation(issuer->getUniqueId(),ulFlags,certStore);
+			//If the issuer is not valid we return this status
+			if(issuerstatus!=CSC_STATUS_VALID_SIGN && issuerstatus!=CSC_STATUS_VALID_FULL)	
+				return issuerstatus;
+		}
 	}
 
 	bool bDateOk=m_cryptoFwk->VerifyDateValidity(cert->getData());

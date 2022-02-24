@@ -99,6 +99,7 @@ PageSecurityCertificatesForm {
                                 'valid': certificatesMap.level4.ValidityBegin,
                                 'until':certificatesMap.level4.ValidityEnd,
                                 'key': certificatesMap.level4.KeyLength,
+                                'serial': certificatesMap.level4.SerialNumber,
                                 'status': getCertStatus(certificatesMap.level4.Status),
                                 'children': [
                                     {
@@ -107,6 +108,7 @@ PageSecurityCertificatesForm {
                                         'valid': certificatesMap.level3.ValidityBegin,
                                         'until':certificatesMap.level3.ValidityEnd,
                                         'key': certificatesMap.level3.KeyLength,
+                                        'serial': certificatesMap.level3.SerialNumber,
                                         'status': getCertStatus(certificatesMap.level3.Status),
                                         'children': [
                                             {
@@ -115,6 +117,7 @@ PageSecurityCertificatesForm {
                                                 'valid': certificatesMap.level2.ValidityBegin,
                                                 'until':certificatesMap.level2.ValidityEnd,
                                                 'key': certificatesMap.level2.KeyLength,
+                                                'serial': certificatesMap.level2.SerialNumber,
                                                 'status': getCertStatus(certificatesMap.level2.Status),
                                                 'children': [
                                                     {
@@ -123,6 +126,7 @@ PageSecurityCertificatesForm {
                                                         'valid': certificatesMap.level1.ValidityBegin,
                                                         'until':certificatesMap.level1.ValidityEnd,
                                                         'key': certificatesMap.level1.KeyLength,
+                                                        'serial': certificatesMap.level1.SerialNumber,
                                                         'status': getCertStatus(certificatesMap.level1.Status),
                                                         'children': [
                                                             {
@@ -131,6 +135,7 @@ PageSecurityCertificatesForm {
                                                                 'valid': certificatesMap.level0.ValidityBegin,
                                                                 'until':certificatesMap.level0.ValidityEnd,
                                                                 'key': certificatesMap.level0.KeyLength,
+                                                                'serial': certificatesMap.level0.SerialNumber,
                                                                 'status': getCertStatus(certificatesMap.level0.Status),
                                                             }
                                                         ]
@@ -141,6 +146,7 @@ PageSecurityCertificatesForm {
                                                         'valid': certificatesMap.levelB1.ValidityBegin,
                                                         'until':certificatesMap.levelB1.ValidityEnd,
                                                         'key': certificatesMap.levelB1.KeyLength,
+                                                        'serial': certificatesMap.levelB1.SerialNumber,
                                                         'status': getCertStatus(certificatesMap.levelB1.Status),
                                                         'children': [
                                                             {
@@ -149,6 +155,7 @@ PageSecurityCertificatesForm {
                                                                 'valid': certificatesMap.levelB0.ValidityBegin,
                                                                 'until':certificatesMap.levelB0.ValidityEnd,
                                                                 'key': certificatesMap.levelB0.KeyLength,
+                                                                'serial': certificatesMap.levelB0.SerialNumber,
                                                                 'status': getCertStatus(certificatesMap.levelB0.Status),
                                                             }
                                                         ]
@@ -170,6 +177,7 @@ PageSecurityCertificatesForm {
                                 'valid': certificatesMap.level3.ValidityBegin,
                                 'until':certificatesMap.level3.ValidityEnd,
                                 'key': certificatesMap.level3.KeyLength,
+                                'serial': certificatesMap.level3.SerialNumber,
                                 'status': getCertStatus(certificatesMap.level3.Status),
                                 'children': [
                                     {
@@ -178,6 +186,7 @@ PageSecurityCertificatesForm {
                                         'valid': certificatesMap.level2.ValidityBegin,
                                         'until':certificatesMap.level2.ValidityEnd,
                                         'key': certificatesMap.level2.KeyLength,
+                                        'serial': certificatesMap.level2.SerialNumber,
                                         'status': getCertStatus(certificatesMap.level2.Status),
                                         'children': [
                                             {
@@ -186,6 +195,7 @@ PageSecurityCertificatesForm {
                                                 'valid': certificatesMap.level1.ValidityBegin,
                                                 'until':certificatesMap.level1.ValidityEnd,
                                                 'key': certificatesMap.level1.KeyLength,
+                                                'serial': certificatesMap.level1.SerialNumber,
                                                 'status': getCertStatus(certificatesMap.level1.Status),
                                                 'children': [
                                                     {
@@ -194,6 +204,7 @@ PageSecurityCertificatesForm {
                                                         'valid': certificatesMap.level0.ValidityBegin,
                                                         'until':certificatesMap.level0.ValidityEnd,
                                                         'key': certificatesMap.level0.KeyLength,
+                                                        'serial': certificatesMap.level0.SerialNumber,
                                                         'status': getCertStatus(certificatesMap.level0.Status),
                                                     }
                                                 ]
@@ -204,6 +215,7 @@ PageSecurityCertificatesForm {
                                                 'valid': certificatesMap.levelB1.ValidityBegin,
                                                 'until':certificatesMap.levelB1.ValidityEnd,
                                                 'key': certificatesMap.levelB1.KeyLength,
+                                                'serial': certificatesMap.levelB1.SerialNumber,
                                                 'status': getCertStatus(certificatesMap.levelB1.Status),
                                                 'children': [
                                                     {
@@ -212,6 +224,7 @@ PageSecurityCertificatesForm {
                                                         'valid': certificatesMap.levelB0.ValidityBegin,
                                                         'until':certificatesMap.levelB0.ValidityEnd,
                                                         'key': certificatesMap.levelB0.KeyLength,
+                                                        'serial': certificatesMap.levelB0.SerialNumber,
                                                         'status': getCertStatus(certificatesMap.levelB0.Status),
                                                     }
                                                 ]
@@ -231,6 +244,7 @@ PageSecurityCertificatesForm {
                                 'valid': certificatesMap.level2.ValidityBegin,
                                 'until':certificatesMap.level2.ValidityEnd,
                                 'key': certificatesMap.level2.KeyLength,
+                                'serial': certificatesMap.level2.SerialNumber,
                                 'status': getCertStatus(certificatesMap.level2.Status),
                                 'children': [
                                     {
@@ -239,6 +253,7 @@ PageSecurityCertificatesForm {
                                         'valid': certificatesMap.level1.ValidityBegin,
                                         'until':certificatesMap.level1.ValidityEnd,
                                         'key': certificatesMap.level1.KeyLength,
+                                        'serial': certificatesMap.level1.SerialNumber,
                                         'status': getCertStatus(certificatesMap.level1.Status),
                                         'children': [
                                             {
@@ -247,6 +262,7 @@ PageSecurityCertificatesForm {
                                                 'valid': certificatesMap.level0.ValidityBegin,
                                                 'until':certificatesMap.level0.ValidityEnd,
                                                 'key': certificatesMap.level0.KeyLength,
+                                                'serial': certificatesMap.level0.SerialNumber,
                                                 'status': getCertStatus(certificatesMap.level0.Status),
                                             }
                                         ]
@@ -257,6 +273,7 @@ PageSecurityCertificatesForm {
                                         'valid': certificatesMap.levelB1.ValidityBegin,
                                         'until':certificatesMap.levelB1.ValidityEnd,
                                         'key': certificatesMap.levelB1.KeyLength,
+                                        'serial': certificatesMap.levelB1.SerialNumber,
                                         'status': getCertStatus(certificatesMap.levelB1.Status),
                                         'children': [
                                             {
@@ -265,6 +282,7 @@ PageSecurityCertificatesForm {
                                                 'valid': certificatesMap.levelB0.ValidityBegin,
                                                 'until':certificatesMap.levelB0.ValidityEnd,
                                                 'key': certificatesMap.levelB0.KeyLength,
+                                                'serial': certificatesMap.levelB0.SerialNumber,
                                                 'status': getCertStatus(certificatesMap.levelB0.Status),
                                             }
                                         ]
@@ -318,6 +336,14 @@ PageSecurityCertificatesForm {
             propertyFileDialogOutput.open()
         }
     }
+
+    propertyButtonLessCertificateDetails {
+        onClicked: {
+            mainFormID.propertyPageLoader.propertyForceFocus = false
+            mainFormID.propertyPageLoader.source = "../../contentPages/security/PageSecurityCertificateState.qml"
+        }
+    }
+
     propertyFileDialogOutput {
         onAccepted: {
             var outputFile = propertyFileDialogOutput.file.toString()

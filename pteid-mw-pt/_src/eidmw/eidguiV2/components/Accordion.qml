@@ -119,6 +119,7 @@ Column {
                 textValid.propertyDateField.text === modelData.valid  &&
                 textUntil.propertyDateField.text === modelData.until &&
                 textKey.propertyDateField.text === modelData.key &&
+                textSerialNumber.propertyDateField.text === modelData.serial &&
                 textStatus.propertyDateField.text === modelData.status
                 ){
             return true
@@ -134,6 +135,7 @@ Column {
         textValid.propertyDateField.text = modelData.valid 
         textUntil.propertyDateField.text = modelData.until
         textKey.propertyDateField.text   = modelData.key
+        textSerialNumber.propertyDateField.text = modelData.serial
         textStatus.propertyDateField.text= modelData.status
     }
 }

@@ -30,6 +30,7 @@ Item {
     property alias propertyRectBottom: rectBottom
     property alias propertyButtonViewCertificate: buttonViewCertificate
     property alias propertyButtonExportCertificate: buttonExportCertificate
+    property alias propertyButtonLessCertificateDetails: buttonLessCertificateDetails
     property alias propertyBusyIndicator: busyIndicator
     property alias propertyRowMain: rowMain
 
@@ -253,7 +254,7 @@ Item {
                 }
                 Item{
                     id: rectKey
-                    width: parent.width
+                    width: (parent.width-Constants.SIZE_ROW_H_SPACE) / 3
                     height: Constants.SIZE_TEXT_LABEL
                             + Constants.SIZE_TEXT_V_SPACE
                             + 2 * Constants.SIZE_TEXT_FIELD
@@ -269,12 +270,39 @@ Item {
                     Keys.onPressed: {
                         handleKeyPressed(event.key, rectKey)
                     }
-                    KeyNavigation.tab: rectStatus
-                    KeyNavigation.down: rectStatus
-                    KeyNavigation.right: rectStatus
+                    KeyNavigation.tab: rectSerialNumber
+                    KeyNavigation.down: rectSerialNumber
+                    KeyNavigation.right: rectSerialNumber
                     KeyNavigation.left: rectUntil
                     KeyNavigation.backtab: rectUntil
                     KeyNavigation.up: rectUntil
+                }
+                Item{
+                    id: rectSerialNumber
+                    width: (parent.width-Constants.SIZE_ROW_H_SPACE) * 2 / 3
+                    height: Constants.SIZE_TEXT_LABEL
+                            + Constants.SIZE_TEXT_V_SPACE
+                            + 2 * Constants.SIZE_TEXT_FIELD
+                    anchors.top: rectUntil.bottom
+                    anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                    anchors.left: rectKey.right
+                    anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                    Components.LabelTextBoxForm{
+                        id: textSerialNumber
+                        propertyDateText.text: qsTranslate("PageSecurityCertificates","STR_CERTIFICATES_SERIAL_NUMBER")
+                        propertyDateField.text: ""
+                    }
+                    Accessible.role: Accessible.Row
+                    Accessible.name: textKey.accessibleText
+                    Keys.onPressed: {
+                        handleKeyPressed(event.key, rectKey)
+                    }
+                    KeyNavigation.tab: rectStatus
+                    KeyNavigation.down: rectStatus
+                    KeyNavigation.right: rectStatus
+                    KeyNavigation.left: rectKey
+                    KeyNavigation.backtab: rectKey
+                    KeyNavigation.up: rectKey
                 }
                 Item{
                     id: rectStatus
@@ -345,8 +373,8 @@ Item {
                         height:Constants.HEIGHT_BOTTOM_COMPONENT
                         text: qsTranslate("PageSecurityCertificates","STR_EXPORT_CERTIFICATE")
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: (buttonViewCertificate.visible ? undefined : parent.horizontalCenter)
-                        anchors.right: (buttonViewCertificate.visible ? parent.right : undefined)
+                        anchors.horizontalCenter: (buttonViewCertificate.visible ? parent.horizontalCenter : undefined)
+                        anchors.left: (buttonViewCertificate.visible ? undefined : parent.left)
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
@@ -356,10 +384,32 @@ Item {
                         Keys.onPressed: {
                             handleKeyPressed(event.key, buttonExportCertificate)
                         }
+                        KeyNavigation.tab: buttonLessCertificateDetails
+                        KeyNavigation.down: buttonLessCertificateDetails
+                        KeyNavigation.right: buttonLessCertificateDetails
+                        KeyNavigation.up: buttonViewCertificate
+                        Keys.onEnterPressed: clicked()
+                        Keys.onReturnPressed: clicked()
+                    }
+
+                    Button {
+                        id: buttonLessCertificateDetails
+                        enabled: true
+                        width: Constants.WIDTH_BUTTON
+                        height:Constants.HEIGHT_BOTTOM_COMPONENT
+                        text: qsTranslate("PageSecurityCertificates","STR_SEE_LESS_CERTIFICATE_DETAILS")
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.right: parent.right
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.capitalization: Font.MixedCase
+                        highlighted: activeFocus
                         KeyNavigation.tab: rectEntity
                         KeyNavigation.down: rectEntity
                         KeyNavigation.right: rectEntity
-                        KeyNavigation.up: buttonViewCertificate
+                        KeyNavigation.left: buttonExportCertificate
+                        KeyNavigation.backtab: buttonExportCertificate
+                        KeyNavigation.up: buttonExportCertificate
                         Keys.onEnterPressed: clicked()
                         Keys.onReturnPressed: clicked()
                     }

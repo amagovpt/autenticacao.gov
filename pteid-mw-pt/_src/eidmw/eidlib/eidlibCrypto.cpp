@@ -109,14 +109,14 @@ PTEID_CertifType PTEID_Certificate::getType()
 	return out;
 }
 
-PTEID_CertifStatus PTEID_Certificate::getStatus()
+PTEID_CertifStatus PTEID_Certificate::getStatus(bool useCache, bool validateChain)
 {
         PTEID_CertifStatus out = PTEID_CERTIF_STATUS_UNKNOWN;
 
         BEGIN_TRY_CATCH
 
         APL_Certif *pimpl=static_cast<APL_Certif *>(m_impl);
-        out = ConvertCertStatus(pimpl->getStatus());
+        out = ConvertCertStatus(pimpl->getStatus(useCache, validateChain));
        
         END_TRY_CATCH
 

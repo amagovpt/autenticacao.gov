@@ -220,11 +220,13 @@ public:
 	  * @param pStore : Pointer to the certificte store in which the unique ID must be and all the issuers
 	  * @param bAllowTestRoot : if true, no error is return for Root test
 	  * @param bAllowBadDate : if true, no error is return for bad date
+	  * @param useCache : if true, cached certificates can be utilized for the validation (default true)
+	  * @param validateChain : if true, the entire certificate chain is to be validated (default true)	
 	  *
 	  * @return The status of the certificate
 	  * @return		could not be NONE nor WAIT
 	  */
-	CSC_Status getCertStatus(unsigned long ulUniqueID,CSC_Validation validationType,APL_Certifs *pStore);
+	CSC_Status getCertStatus(unsigned long ulUniqueID,CSC_Validation validationType,APL_Certifs *pStore, bool useCache = true, bool validateChain = true);
 
 	/**
 	  * Return the delay of line validity
@@ -292,11 +294,12 @@ private:
 	  * @param ulUniqueID : The unique id of the certificate to validate
 	  * @param ulFlags : type of validation wanted (NONE, CRL, OCSP), allow test root, allow wrong date
 	  * @param pStore : Pointer to the certificte store in which the unique ID must be and all the issuers
+	  * @param validateChain : Boolean that determines whether or not the entire certificate chain is to be validated
 	  *
 	  * @return The status of the certificate
 	  * @return		could not be NONE nor WAIT
 	  */
-	CSC_Status checkCertValidation(unsigned long ulUniqueID,unsigned long ulFlags,APL_Certifs *pStore);
+	CSC_Status checkCertValidation(unsigned long ulUniqueID,unsigned long ulFlags,APL_Certifs *pStore,bool validateChain = true);
 
 	/**
 	  * Add the status to the cache

@@ -3274,9 +3274,10 @@ void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificat
         certificatesMapChildren.insert("ValidityBegin", cert.getValidityBegin());
         certificatesMapChildren.insert("ValidityEnd", cert.getValidityEnd());
         certificatesMapChildren.insert("KeyLength", QString::number(cert.getKeyLength()));
+        certificatesMapChildren.insert("SerialNumber", cert.getSerialNumber());
         if (status != PTEID_CERTIF_STATUS_CONNECT
             && status != PTEID_CERTIF_STATUS_ERROR){
-            status = cert.getStatus();
+            status = cert.getStatus(true, false);
         }
         certificatesMapChildren.insert("Status", status);
 
@@ -3292,10 +3293,11 @@ void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificat
         certificatesMapChildren.insert("ValidityBegin", cert.getValidityBegin());
         certificatesMapChildren.insert("ValidityEnd", cert.getValidityEnd());
         certificatesMapChildren.insert("KeyLength", QString::number(cert.getKeyLength()));
+        certificatesMapChildren.insert("SerialNumber", cert.getSerialNumber());
 
         if (status != PTEID_CERTIF_STATUS_CONNECT
             && status != PTEID_CERTIF_STATUS_ERROR){
-            status = cert.getStatus();
+            status = cert.getStatus(true, false);
         }
         certificatesMapChildren.insert("Status", status);
 
@@ -3384,6 +3386,52 @@ void GAPI::fillCertificateList(void)
     } else {
         emit signalCertificatesChanged(certificatesMap);
     }
+
+    END_TRY_CATCH
+}
+
+void GAPI::validateCertificates() {
+    Concurrent::run(this, &GAPI::doValidateCertificates);
+}
+
+void GAPI::doValidateCertificates()
+{
+    QVariantMap certificatesMap, certificatesMapChildren;
+
+	PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doValidateCertificates");
+
+    BEGIN_TRY_CATCH
+
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
+
+    PTEID_Certificates&	 certificates = card->getCertificates();
+
+    certificatesMap.clear();
+    PTEID_Certificate &auth_cert = certificates.getCert(PTEID_Certificate::CITIZEN_AUTH);
+
+    certificatesMapChildren.insert("OwnerName", auth_cert.getOwnerName());
+    certificatesMapChildren.insert("IssuerName", auth_cert.getIssuerName());
+    certificatesMapChildren.insert("ValidityBegin", auth_cert.getValidityBegin());
+    certificatesMapChildren.insert("ValidityEnd", auth_cert.getValidityEnd());
+    certificatesMapChildren.insert("KeyLength", QString::number(auth_cert.getKeyLength()));
+    certificatesMapChildren.insert("SerialNumber", auth_cert.getSerialNumber());
+    certificatesMapChildren.insert("Status", auth_cert.getStatus(false, false));
+    certificatesMap.insert("level0", certificatesMapChildren);
+    certificatesMapChildren.clear();
+
+    PTEID_Certificate &sign_cert = certificates.getCert(PTEID_Certificate::CITIZEN_SIGN);
+    certificatesMapChildren.insert("OwnerName", sign_cert.getOwnerName());
+    certificatesMapChildren.insert("IssuerName", sign_cert.getIssuerName());
+    certificatesMapChildren.insert("ValidityBegin", sign_cert.getValidityBegin());
+    certificatesMapChildren.insert("ValidityEnd", sign_cert.getValidityEnd());
+    certificatesMapChildren.insert("KeyLength", QString::number(sign_cert.getKeyLength()));
+    certificatesMapChildren.insert("SerialNumber", sign_cert.getSerialNumber());
+    certificatesMapChildren.insert("Status", sign_cert.getStatus(false, false));
+    certificatesMap.insert("levelB0", certificatesMapChildren);
+
+    emit signalCertificatesChanged(certificatesMap);
 
     END_TRY_CATCH
 }

@@ -482,16 +482,22 @@ public:
 	/**
 	  * Return the status of the certificate
 	  *
-	  * Get the parameter crl/ocsp from config and call getStatus(bool crl, bool ocsp)
+	  * Get the parameter crl/ocsp from config and call getStatus(bool crl, bool ocsp, bool useCache, bool validateChain)
+	  * 
+	  * @param useCache boolean that specifies if cached certificates can be utilized for the validation (default true)
+	  * @param validateChain boolean that specifies if the entire certificate chain is to be validated or not (default true)
 	  */
-	EIDMW_APL_API APL_CertifStatus getStatus();
+	EIDMW_APL_API APL_CertifStatus getStatus(bool useCache = true, bool validateChain = true);
 
 	/**
 	  * Return the status of the certificate
 	  *
 	  * Call the CertStatusCache for finding or calculating this status
+	  * 
+	  * @param useCache boolean that specifies if cached certificates can be utilized for the validation (default true)
+	  * @param validateChain boolean that specifies if the entire certificate chain is to be validated or not (default true)	  
 	  */
-	EIDMW_APL_API APL_CertifStatus getStatus(APL_ValidationLevel crl, APL_ValidationLevel ocsp);
+	EIDMW_APL_API APL_CertifStatus getStatus(APL_ValidationLevel crl, APL_ValidationLevel ocsp, bool useCache = true, bool validateChain = true);
 
 	/**
 	  * Get the CRL from this certificate

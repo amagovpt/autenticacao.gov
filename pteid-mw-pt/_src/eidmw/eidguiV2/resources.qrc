@@ -25,6 +25,8 @@
         <file>contentPages/home/PageHomeForm.ui.qml</file>
         <file>images/logo_autenticacao_gov.png</file>
         <file>images/logo_autenticacao_gov100.png</file>
+        <file>contentPages/security/PageSecurityCertificateState.qml</file>
+        <file>contentPages/security/PageSecurityCertificateStateForm.ui.qml</file>
         <file>contentPages/security/PageSecurityCertificates.qml</file>
         <file>contentPages/security/PageSecurityCertificatesForm.ui.qml</file>
         <file>contentPages/security/PageSecurityPinCodes.qml</file>

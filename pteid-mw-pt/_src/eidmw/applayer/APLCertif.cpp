@@ -1473,23 +1473,23 @@ tCardFileStatus APL_Certif::getFileStatus()
 	return m_certFile->getStatus(false);
 }
 
-APL_CertifStatus APL_Certif::getStatus()
+APL_CertifStatus APL_Certif::getStatus(bool useCache, bool validateChain)
 {
 	APL_ValidationLevel crl=APL_VALIDATION_LEVEL_NONE;
 	APL_ValidationLevel ocsp=APL_VALIDATION_LEVEL_MANDATORY;
 	MWLOG(LEV_DEBUG, MOD_APL, "APL_Certif::getStatus for certificate. Certificate Label: %s", this->getLabel());
         /*MWLOG(LEV_DEBUG, MOD_APL, "APL_Certif::getStatus for cert: %s", this->getOwnerName());*/
 
-	return getStatus(crl, ocsp);
+	return getStatus(crl, ocsp, useCache, validateChain);
 }
 
-APL_CertifStatus APL_Certif::getStatus(APL_ValidationLevel crl, APL_ValidationLevel ocsp)
+APL_CertifStatus APL_Certif::getStatus(APL_ValidationLevel crl, APL_ValidationLevel ocsp, bool useCache, bool validateChain)
 {
 	// CSC_Status statusNone=CSC_STATUS_NONE;
 	// CSC_Status statusCrl=CSC_STATUS_NONE;
 	CSC_Status statusOcsp=CSC_STATUS_NONE;
 
-	statusOcsp=m_statusCache->getCertStatus(getUniqueId(),CSC_VALIDATION_OCSP,m_store);
+	statusOcsp=m_statusCache->getCertStatus(getUniqueId(),CSC_VALIDATION_OCSP,m_store,useCache,validateChain);
 	//fprintf(stderr, "DEBUG APL_Certif::getStatus() returned: %d\n", statusOcsp);
 
 	//If no crl neither ocsp and valid => VALID

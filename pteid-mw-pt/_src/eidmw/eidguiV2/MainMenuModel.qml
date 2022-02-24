@@ -61,7 +61,7 @@ ListModel {
             ListElement {
                 name: QT_TR_NOOP("STR_MENU_CERTIFICATES")
                 expand: false
-                url: "contentPages/security/PageSecurityCertificates.qml"
+                url: "contentPages/security/PageSecurityCertificateState.qml"
             },
             ListElement {
                 name: QT_TR_NOOP("STR_MENU_PIN_CODES")

@@ -1634,6 +1634,26 @@
 <context>
     <name>PageSecurityCertificates</name>
     <message>
+        <source>STR_AUTH_CERTIFICATE</source>
+        <translation>Certificado de Autenticação</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_CERTIFICATE</source>
+        <translation>Certificado de Assinatura Digital</translation>
+    </message>
+    <message>
+        <source>STR_VALIDATE_CERTIFICATES</source>
+        <translation>Validar Certificados</translation>
+    </message>
+    <message>
+        <source>STR_SEE_CERTIFICATE_DETAILS</source>
+        <translation>Ver detalhes</translation>
+    </message>
+    <message>
+        <source>STR_SEE_LESS_CERTIFICATE_DETAILS</source>
+        <translation>Voltar atrás</translation>
+    </message>
+    <message>
         <source>STR_STATUS_NETWORK_ERROR</source>
         <translation>Não foi possível validar o certificado. Verifique a ligação à internet.</translation>
     </message>
@@ -1705,6 +1725,10 @@
     <message>
         <source>STR_CERTIFICATES_KEY_SIZE</source>
         <translation>Tamanho da chave</translation>
+    </message>
+    <message>
+        <source>STR_CERTIFICATES_SERIAL_NUMBER</source>
+        <translation>Número de Série</translation>
     </message>
     <message>
         <source>STR_CERTIFICATES_STATE</source>

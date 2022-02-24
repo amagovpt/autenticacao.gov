@@ -1498,7 +1498,6 @@ public:
 
 	PTEIDSDK_API const char *getLabel();				/**< Return the label of the certificate */
 	PTEIDSDK_API unsigned long getID();				/**< Return the id of the certificate */
-	PTEIDSDK_API PTEID_CertifStatus getStatus();			/**< OCSP/CRL validation status */
 
 	PTEIDSDK_API PTEID_CertifType getType();			/**< Return the type of the certificate */
 
@@ -1511,6 +1510,15 @@ public:
 	PTEIDSDK_API const char *getValidityBegin();		/**< Return the validity begin date of the certificate */
 	PTEIDSDK_API const char *getValidityEnd();		/**< Return the validity end date of the certificate */
 	PTEIDSDK_API unsigned long getKeyLength();		/**< Return the length of public/private key on the certificate */
+
+	/**
+	  * OCSP/CRL validation status 
+	  *
+	  * @param useCache boolean that specifies if cached certificates can be utilized for the validation (default true)
+	  * @param validateChain boolean that specifies if the entire certificate chain is to be validated or not (default true)
+	  * 
+	  */
+	PTEIDSDK_API PTEID_CertifStatus getStatus(bool useCache = true, bool validateChain = true);			
 
 	/**
 	  * Return true if this is a root certificate.

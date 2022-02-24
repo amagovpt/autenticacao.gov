@@ -1628,6 +1628,26 @@
 <context>
     <name>PageSecurityCertificates</name>
     <message>
+        <source>STR_AUTH_CERTIFICATE</source>
+        <translation>Authentication Certificate</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_CERTIFICATE</source>
+        <translation>Digital Signature Certificate</translation>
+    </message>
+    <message>
+        <source>STR_VALIDATE_CERTIFICATES</source>
+        <translation>Validate Certificates</translation>
+    </message>
+    <message>
+        <source>STR_SEE_CERTIFICATE_DETAILS</source>
+        <translation>See details</translation>
+    </message>
+    <message>
+        <source>STR_SEE_LESS_CERTIFICATE_DETAILS</source>
+        <translation>Go back</translation>
+    </message>
+    <message>
         <source>STR_STATUS_NETWORK_ERROR</source>
         <translation>Could not validate certificate. Please check your Internet connection.</translation>
     </message>
@@ -1699,6 +1719,10 @@
     <message>
         <source>STR_CERTIFICATES_KEY_SIZE</source>
         <translation>Key size</translation>
+    </message>
+    <message>
+        <source>STR_CERTIFICATES_SERIAL_NUMBER</source>
+        <translation>Serial Number</translation>
     </message>
     <message>
         <source>STR_CERTIFICATES_STATE</source>
