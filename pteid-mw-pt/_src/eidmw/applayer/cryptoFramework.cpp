@@ -1017,29 +1017,13 @@ cleanup:
     return eStatus;
 }
 
-/*
-   As of October 2020 we consider CC and PKI OCSP servers to be outdated as
-   they use RSA-SHA1 signatures by default
-   These servers are:
-   ocsp.cmd.cartaodecidadao.pt
-   ocsp.asc.cartaodecidadao.pt
-   ocsp.auc.cartaodecidadao.pt
-   ocsp.root.cartaodecidadao.pt
-
-   We use the non-standard workaround of using a SHA-256 CertID element in the request to avoid this behaviour
-   For other OCSP responders we use the "universally accepted" SHA-1 CertID
-   TODO: we should remove the workaround once the returned OCSP responses are signed with RSA-SHA256
-*/
-bool isOutdatedOCSPResponder(char *ocsp_url) {
-	return strstr(ocsp_url, "cartaodecidadao.pt") != NULL;
-}
 
 FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Issuer, OCSP_RESPONSE **pResponse, bool verifyResponse)
 {
 	if(pX509_Cert==NULL || pX509_Issuer==NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
-    OCSP_CERTID *pCertID=NULL;
+	OCSP_CERTID *pCertID=NULL;
 	char *pUrlResponder=NULL;
 	FWK_CertifStatus eStatus=FWK_CERTIF_STATUS_UNCHECK;
 
@@ -1053,24 +1037,22 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(X509 *pX509_Cert,X509 *pX509_Iss
 		goto cleanup;
 	}
 
-    /* This workaround is commented so that Adobe deems the signature as LTV enabled. See isOutdatedOCSPResponder comment. */
-    //pCertID = OCSP_cert_to_id(isOutdatedOCSPResponder(pUrlResponder) ? EVP_sha256(): EVP_sha1(), pX509_Cert, pX509_Issuer);
-    pCertID = OCSP_cert_to_id(EVP_sha1(), pX509_Cert, pX509_Issuer);
-    if (!pCertID)
+	pCertID = OCSP_cert_to_id(EVP_sha1(), pX509_Cert, pX509_Issuer);
+	if (!pCertID)
 	{
 		eStatus = FWK_CERTIF_STATUS_ERROR;
 		goto cleanup;
 	}
 
-    if (!verifyResponse)
-        pX509_Issuer = NULL;
+	if (!verifyResponse)
+		pX509_Issuer = NULL;
 
 	eStatus=GetOCSPResponse(pUrlResponder,pCertID,pResponse,pX509_Issuer);
 
 cleanup:
 	if (pUrlResponder) free(pUrlResponder);
 
-    return eStatus;
+	return eStatus;
 }
 
 bool APL_CryptoFwk::GetOCSPUrl(const CByteArray &cert, std::string &url)
