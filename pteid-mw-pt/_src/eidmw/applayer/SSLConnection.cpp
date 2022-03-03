@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2012-2014, 2016-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012-2014, 2016-2021 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2012 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2016 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  * Copyright (C) 2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
@@ -159,6 +159,7 @@ void SSLConnection::loadCertChain(X509_STORE *store, APL_Certif * authentication
 {
 
 	APL_Certif * certif = authentication_cert;
+	MWLOG(LEV_DEBUG, MOD_APL, "Establishing TLS connection with auth certificate: %s", certif->getSerialNumber());
 	X509 *pCert = NULL;
 	
 	int i = 0;
