@@ -184,7 +184,13 @@ enum PTEID_Param
 	//AUTOUPDATES
     PTEID_PARAM_AUTOUPDATES_VERIFY_URL, //string
     PTEID_PARAM_AUTOUPDATES_CERTS_URL,  //string
-    PTEID_PARAM_AUTOUPDATES_NEWS_URL    //string
+    PTEID_PARAM_AUTOUPDATES_NEWS_URL,    //string
+
+	//CMD CREDENTIALS
+    PTEID_PARAM_CMD_HOST,         //string
+    PTEID_PARAM_CMD_APPID,        //string
+    PTEID_PARAM_CMD_USERID,       //string
+    PTEID_PARAM_CMD_PASSWORD      //string
 
 };
 

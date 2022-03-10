@@ -28,7 +28,6 @@
 #include <Windows.h>
 #else
 #include <pthread.h>
-#include "ThreadDefines.h"
 #endif
 
 namespace eIDMW

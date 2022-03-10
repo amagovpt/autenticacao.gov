@@ -55,13 +55,20 @@ HEADERS += dlgWndBase.h \
            dlgWndAskPIN.h \
            dlgWndAskPINs.h \
            dlgWndBadPIN.h \
-	   dlgWndPinpadInfo.h
+           dlgWndPinpadInfo.h \
+           dlgWndAskCmd.h \
+           dlgWndPickDevice.h \
+           dlgWndCmdMsg.h
+
 
 
 FORMS += dlgWndAskPIN.ui \
          dlgWndAskPINs.ui \
          dlgWndBadPIN.ui \
-	 dlgWndPinpadInfo.ui
+         dlgWndPinpadInfo.ui \
+         dlgWndAskCmd.ui \
+         dlgWndPickDevice.ui \
+         dlgWndCmdMsg.ui
 
 
 SOURCES += main.cpp \
@@ -69,7 +76,10 @@ SOURCES += main.cpp \
            dlgWndAskPIN.cpp \
            dlgWndAskPINs.cpp  \
            dlgWndBadPIN.cpp \
-	   dlgWndPinpadInfo.cpp
+           dlgWndPinpadInfo.cpp \
+           dlgWndAskCmd.cpp \
+           dlgWndPickDevice.cpp \
+           dlgWndCmdMsg.cpp
 
 RESOURCES += resources.qrc
 

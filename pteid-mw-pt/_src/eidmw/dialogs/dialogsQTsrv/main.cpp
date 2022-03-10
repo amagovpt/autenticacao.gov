@@ -8,6 +8,7 @@
  * Copyright (C) 2012 lmcm - <lmcm@caixamagica.pt>
  * Copyright (C) 2012 Rui Martinho - <rui.martinho@ama.pt>
  * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ * Copyright (C) 2021 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -31,6 +32,7 @@
 
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <sys/wait.h>
 
 #include <signal.h>
 
@@ -40,6 +42,9 @@
 #include "dlgWndAskPINs.h"
 #include "dlgWndBadPIN.h"
 #include "dlgWndPinpadInfo.h"
+#include "dlgWndAskCmd.h"
+#include "dlgWndPickDevice.h"
+#include "dlgWndCmdMsg.h"
 #include "SharedMem.h"
 #include "errno.h"
 
@@ -54,8 +59,10 @@
 std::string readableFilePath = "/usr/local/etc/pteidgui.conf";
 
 DlgDisplayPinpadInfoArguments *oInfoData = NULL;
+DlgCMDMessageArguments *oCmdMsgData = NULL;
 dlgWndPinpadInfo *dlgInfo = NULL;
 QDialog *dlg = NULL;
+SharedMem *oShMemory = NULL;
 
 pid_t getPidFromParentid(pid_t parentid, const char *CommandLineToFind);
 
@@ -73,8 +80,25 @@ void sigint_handler(int sig)
   if (dlgInfo)
     delete dlgInfo;
   dlgInfo = NULL;
-  if (dlg)
-    delete dlg;
+
+  if (dlg) {
+	dlgWndCmdMsg * ptr = dynamic_cast<dlgWndCmdMsg *>(dlg);
+	if (ptr)
+	{
+		// dlgWndCmdMsg
+		ptr->close();
+	} else {
+		// pinpad
+		delete dlg;
+	}
+  }
+	if (oShMemory) {
+		oCmdMsgData->returnValue = DLG_OK;
+		oShMemory->Detach((void *)oCmdMsgData);
+		SharedMem::Delete(oShMemory->getID());
+		delete oShMemory;
+	}
+	exit(0);
   dlg = NULL;
 }
 
@@ -642,7 +666,274 @@ int main(int argc, char *argv[])
 			}
 		}
 		return 0;
+	}else if (iFunctionIndex == DLG_ASK_CMD_INPUT )
+	{
+		QApplication a(argc, argv);
+		a.setFont(getLatoFont());
+		a.setWindowIcon(QIcon(":/images/appicon.ico"));
+
+		// attach to the segment and get a pointer
+		DlgAskInputCMDArguments *oData = NULL;
+		SharedMem oShMemory;
+		oShMemory.Attach( sizeof(DlgAskInputCMDArguments), readableFilePath.c_str(),(void **) &oData);
+		MWLOG(LEV_DEBUG, MOD_DLG, L"Running DLG_ASK_CMD_INPUT with args: isValidateOtp=%s length of inOutId=%ld", (oData->isValidateOtp ? "true" : "false"), wcslen(oData->inOutId));
+
+		bool askForId = oData->askForId || (wcslen(oData->inOutId) == 0);
+		dlgWndAskCmd *dlg = NULL;
+		try
+		{
+			size_t ulOutCodeBufferLen = sizeof(oData->Code)/sizeof(wchar_t);
+			if ((!oData->isValidateOtp && ulOutCodeBufferLen < 9) || (oData->isValidateOtp && ulOutCodeBufferLen < 7))
+			{
+				MWLOG(LEV_ERROR, MOD_DLG, L"  --> DlgAskCMD() returns DLG_BAD_PARAM: buffer does not have enough size");
+				return DLG_BAD_PARAM;
+			}
+
+			QString sMessage;
+			std::wstring userName;
+			std::wstring userId = oData->inOutId;
+
+			if (!oData->isValidateOtp) {
+				if (oData->operation == DlgCmdOperation::DLG_CMD_SIGNATURE)
+				{
+					sMessage += GETQSTRING_DLG(Caution);
+					sMessage += " ";
+					sMessage += GETQSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronicWithCmd);
+				}
+
+				//userName.append(csUserName, ulUserNameBufferLen);
+			}
+			else {
+				if (oData->operation == DlgCmdOperation::DLG_CMD_SIGNATURE)
+				{
+					sMessage += GETQSTRING_DLG(InsertOtpSignature);
+				}
+				else if (oData->operation == DlgCmdOperation::DLG_CMD_GET_CERTIFICATE)
+				{
+					sMessage += GETQSTRING_DLG(InsertOtpCert);
+				}
+
+			}
+
+			dlg = new dlgWndAskCmd(oData->operation, oData->isValidateOtp, sMessage, &userId, &userName, oData->callbackWasCalled, askForId, NULL, &parentWndGeometry);
+
+			if( dlg->exec() )
+			{
+				if (dlg->callCallback())
+				{
+					oData->returnValue = DLG_CALLBACK;
+				} else
+				{
+					oData->returnValue = DLG_OK;
+				}
+
+				if (askForId)
+				{
+					wcscpy_s(oData->inOutId, sizeof(oData->inOutId)/sizeof(wchar_t), dlg->getId().c_str());
+				}
+
+				wcscpy_s(oData->Code, sizeof(oData->Code)/sizeof(wchar_t), dlg->getCode().c_str());
+
+				delete dlg;
+				dlg = NULL;
+				oShMemory.Detach((void *)oData);
+				return 0;
+			}
+			delete dlg;
+			dlg = NULL;
+		}
+		catch( ... )
+		{
+			if( dlg ) delete dlg;
+			oData->returnValue = DLG_ERR;
+			oShMemory.Detach((void *)oData);
+			return 0;
+		}
+		oData->returnValue = DLG_CANCEL;
+		oShMemory.Detach((void *)oData);
+		return 0;
+
+	} else if (iFunctionIndex == DLG_PICK_DEVICE )
+	{
+		QApplication a(argc, argv);
+		a.setFont(getLatoFont());
+		a.setWindowIcon(QIcon(":/images/appicon.ico"));
+
+		// attach to the segment and get a pointer
+		DlgPickDeviceArguments *oData = NULL;
+		SharedMem oShMemory;
+		oShMemory.Attach( sizeof(DlgPickDeviceArguments), readableFilePath.c_str(),(void **) &oData);
+		MWLOG(LEV_DEBUG, MOD_DLG, L"Running DLG_PICK_DEVICE");
+
+		dlgWndPickDevice *dlg = NULL;
+		try
+		{
+			dlg = new dlgWndPickDevice(NULL, &parentWndGeometry);
+			if( dlg->exec() )
+			{
+				oData->outDevice = dlg->getOutDevice();
+				oData->returnValue = DLG_OK;
+				delete dlg;
+				dlg = NULL;
+				oShMemory.Detach((void *)oData);
+				return 0;
+			}
+			delete dlg;
+			dlg = NULL;
+		}
+		catch( ... )
+		{
+			if( dlg ) delete dlg;
+			oData->returnValue = DLG_ERR;
+			oShMemory.Detach((void *)oData);
+			return 0;
+		}
+		oData->returnValue = DLG_CANCEL;
+		oShMemory.Detach((void *)oData);
+		return 0;
+
+	} else if (iFunctionIndex == DLG_CMD_MSG )
+	{
+		// Similar to PinpadInfo
+		oShMemory = new SharedMem();
+
+		if ( ( argc == 3 ) || ( argc == 7 ) )
+		{
+			MWLOG(LEV_DEBUG, MOD_DLG,L"  %s called with DLG_CMD_MSG",argv[0]);
+
+			char csCommand[100];
+			sprintf(csCommand,"%s %s %s",argv[0], argv[1], argv[2]);
+            int len;
+			if ( argc == 7 ) {
+                len = strlen( csCommand );
+                sprintf(  &csCommand[len], " %s %s %s %s",
+                          argv[3], argv[4], argv[5], argv[6] );
+            }
+            len = strlen( csCommand );
+            sprintf(  &csCommand[len], " child" );
+
+			// spawn a child process
+			signal(SIGCHLD,SIG_IGN);
+			pid_t pid = fork();
+
+			if(pid == -1)
+			{
+				MWLOG(LEV_ERROR, MOD_DLG, L"  %s fork : %s ", argv[0], strerror(errno) );
+				exit(DLG_ERR);
+			}
+
+			if(pid == 0)
+			{
+				//
+				// fork process
+				//
+				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s fork process started", argv[0]);
+
+				//Due to Mac Leopard constraint, we start another QtServer
+				//See __THE_PROCESS_HAS_FORKED_AND_YOU_CANNOT_USE_THIS_COREFOUNDATION_FUNCTIONALITY___YOU_MUST_EXEC__
+				int code = system(csCommand);
+				if(code != 0)
+				{
+					MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::CallQTServer %s %s child : %s, returned code=%d",argv[1], argv[2], strerror(errno), code );
+					exit(code);
+				}
+
+				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s fork system() return", argv[0]);
+
+				return 0;
+			}
+			else
+			{
+				//
+				// parent process
+				//
+				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s started fork process with ID %d", argv[0], pid);
+
+				pid_t subpid=0;
+
+				for(int i=0; i<10; i++)
+				{
+					CThread::SleepMillisecs(100); //Wait for the child process to start
+					if(0 != (subpid = getPidFromParentid(pid, csCommand)))
+					{
+						break;
+					}
+				}
+
+				oShMemory->Attach( sizeof(DlgCMDMessageArguments), readableFilePath.c_str(),(void **) &oCmdMsgData);
+
+				if(subpid == 0)
+				{
+					MWLOG(LEV_ERROR, MOD_DLG, L"  %s failed to find child process ID", argv[0]);
+					oCmdMsgData->returnValue = DLG_ERR;
+				}
+				else
+				{
+					MWLOG(LEV_DEBUG, MOD_DLG, L"  %s find child process with PID %ld", argv[0], subpid);
+					oCmdMsgData->tRunningProcess = subpid;
+					oCmdMsgData->returnValue = DLG_OK;
+				}
+
+				//wait(NULL);
+
+				oShMemory->Detach((void *)oCmdMsgData);
+
+				return 0;
+			}
+		}
+		else
+		{
+			// attach to the segment and get a pointer
+			oShMemory->Attach( sizeof(DlgCMDMessageArguments), readableFilePath.c_str(),(void **) &oCmdMsgData);
+			MWLOG(LEV_DEBUG, MOD_DLG, L"Running DLG_CMD_MSG");
+
+			QApplication a(argc, argv);
+			a.setFont(getLatoFont());
+			a.setWindowIcon(QIcon(":/images/appicon.ico"));
+			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : QApplication created", argv[0]);
+
+			try
+			{
+				QString message = QString::fromWCharArray( oCmdMsgData->message );
+				DlgCmdMsgType type = oCmdMsgData->type;
+
+				dlg = new dlgWndCmdMsg(oCmdMsgData->operation, type, message, oCmdMsgData->cmdMsgCollectorIndex, NULL, &parentWndGeometry);
+
+				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : dlgWndCmdMsg created", argv[0]);
+				int res = dlg->exec();
+				if (dlg)
+				{
+					delete dlg;
+					dlg = NULL;
+				}
+
+				oCmdMsgData->returnValue = (res == QDialog::Rejected ? DLG_CANCEL : DLG_OK);
+				oShMemory->Detach((void *)oCmdMsgData);
+				SharedMem::Delete(oShMemory->getID());
+				delete oShMemory;
+				return 0;
+
+			}
+			catch( ... )
+			{
+				MWLOG(LEV_ERROR, MOD_DLG, L"  %s child process failed", argv[0]);
+				if (dlg)
+				{
+					delete dlg;
+					dlg = NULL;
+				}
+
+				oCmdMsgData->returnValue = DLG_ERR;
+				oShMemory->Detach((void *)oCmdMsgData);
+				delete oShMemory;
+				//SharedMem::Delete(oShMemory.getID());
+				return 0;
+			}
+			delete oShMemory;
+			return 0;
+		}
 	}
+
 	return iRet;
 }
 

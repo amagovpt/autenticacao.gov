@@ -16,8 +16,13 @@
 #include <xercesc/util/XMLUniDefs.hpp>
 #endif
 
+#include "ByteArray.h"
+
 //XAdES/XML-related utility functions are not exposed in xml-security-c
 #if _XSEC_VERSION_FULL >= 20000L
+
+#define XERCES_NS XERCES_CPP_NAMESPACE_QUALIFIER
+XERCES_CPP_NAMESPACE_USE
 
 namespace eIDMW
 {
@@ -26,6 +31,7 @@ namespace eIDMW
 	safeBuffer &makeQName(safeBuffer & qname, const XMLCh *prefix, const char * localName);
 	safeBuffer &makeQName(safeBuffer & qname, const XMLCh *prefix, const XMLCh * localName);
 	void makeHexByte(XMLCh * h, unsigned char b);
+	CByteArray *DOMDocumentToByteArray(XERCES_NS DOMDocument *doc);
 
 }
 

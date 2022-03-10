@@ -29,6 +29,7 @@
 #include <stdarg.h>
 #include <cstring>
 #include <iostream>
+#include <string>
 
 #ifdef WIN32
 #include <windows.h>
@@ -57,8 +58,12 @@ EIDMW_CMN_API void SubstringInplace(char *buffer, size_t from, size_t to);
 
 EIDMW_CMN_API char *bin2AsciiHex(const unsigned char * pData, unsigned long ulLen);
 
-// Get the first n utf8 encoded chars in a string 
+// Get the first n utf8 encoded chars in a string
 EIDMW_CMN_API void truncateUtf8String(std::string &utf8String, size_t numberOfChars);
+
+#ifndef WIN32
+    std::u32string stringWidenUTF32(std::string utf8_str);
+#endif
 
 #ifdef WIN32
 // Read/Write Registry value

@@ -63,9 +63,6 @@
     <ClCompile Include="MiscUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OCSP.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PDFSignature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -115,6 +112,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PAdESExtender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="proxyinfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="strndup.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

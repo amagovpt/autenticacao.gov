@@ -256,14 +256,13 @@ var MenuState = Object.freeze({
 
 var DLG_STATE = Object.freeze({
     REGISTER_FORM:          "0",
-    SIGN_FORM:              "1",
-    PROGRESS:               "2",
-    VALIDATE_OTP:           "3",
-    SHOW_MESSAGE:           "4",
-    OPEN_FILE:              "5",
-    OPEN_FILE_ERROR:        "6",
-    LOAD_ATTRIBUTES:        "7",
-    ASK_TO_REGISTER_CERT:   "8"
+    PROGRESS:               "1",
+    VALIDATE_OTP:           "2",
+    SHOW_MESSAGE:           "3",
+    OPEN_FILE:              "4",
+    OPEN_FILE_ERROR:        "5",
+    LOAD_ATTRIBUTES:        "6",
+    ASK_TO_REGISTER_CERT:   "7"
 })
 
 var ARROW_RIGHT = "images/arrow-right_white_AMA.png"

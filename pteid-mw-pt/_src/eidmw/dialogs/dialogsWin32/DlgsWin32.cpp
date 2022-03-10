@@ -7,7 +7,7 @@
  * Copyright (C) 2012, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2012 lmcm - <lmcm@caixamagica.pt>
  * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019-2021 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -32,6 +32,7 @@
 #include "dlgWndPinpadInfo.h"
 #include "dlgWndAskCmd.h"
 #include "dlgWndCmdMsg.h"
+#include "dlgWndPickDevice.h"
 #include "resource.h"
 #include "../langUtil.h"
 #include "Config.h"
@@ -52,7 +53,7 @@ dlgWndCmdMsg *dlgCMDMsg = NULL;
 
 std::wstring lang1 = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
-HWND appWindow;
+HWND appWindow = NULL;
 
 #ifdef _MANAGED
 #pragma managed(push, off)
@@ -118,6 +119,7 @@ std::wstring getPinName( DlgPinUsage usage, const wchar_t *inPinName ){
 	************************/
 #ifdef WIN32
 DLGS_EXPORT void eIDMW::SetApplicationWindow(HWND app) {
+	MWLOG(LEV_DEBUG, MOD_DLG, L"SetApplicationWindow: hwnd=%p", app);
 	appWindow = app;
 }
 #endif
@@ -441,19 +443,21 @@ DLGS_EXPORT void eIDMW::DlgClosePinpadInfo( unsigned long ulHandle )
 }
 
 DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(
+			DlgCmdOperation operation,
 			bool isValidateOtp,
-			wchar_t *csOut, unsigned long ulOutBufferLen, wchar_t *csInId,
-			const wchar_t *csUserName, unsigned long ulUserNameBufferLen, void(*fSendSmsCallback)(void))
+			wchar_t *csOutCode, unsigned long ulOutCodeBufferLen, wchar_t *csInOutId, unsigned long csOutIdLen,
+			const wchar_t *csUserName, unsigned long ulUserNameBufferLen, std::function<void(void)> *fSendSmsCallback)
 {
 	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgAskCMD() called with arguments isValidateOtp=%d", isValidateOtp);
 
 	CLang::ResetInit();				// Reset language to take into account last change
 
 	dlgWndAskCmd *dlg = NULL;
+	bool askForId = (csOutIdLen != 0);
 
 	try
 	{
-		if ((!isValidateOtp && ulOutBufferLen < 9) || (isValidateOtp && ulOutBufferLen < 7))
+		if ((!isValidateOtp && ulOutCodeBufferLen < 9) || (isValidateOtp && ulOutCodeBufferLen < 7))
 		{
 			MWLOG(LEV_ERROR, MOD_DLG, L"  --> DlgAskCMD() returns DLG_BAD_PARAM: buffer does not have enough size");
 			return DLG_BAD_PARAM;
@@ -461,24 +465,37 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(
 
 		std::wstring sMessage;
 		std::wstring userName;
-		std::wstring userId = csInId;
+		std::wstring userId;
+		userId = csInOutId;
 
 		if (!isValidateOtp) {
-			sMessage += GETSTRING_DLG(Caution);
-			sMessage += L" ";
-			sMessage += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronicWithCmd);
+			if (operation == DlgCmdOperation::DLG_CMD_SIGNATURE)
+			{
+				sMessage += GETSTRING_DLG(Caution);
+				sMessage += L" ";
+				sMessage += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronicWithCmd);
 
-			userName.append(csUserName, ulUserNameBufferLen);
+				userName.append(csUserName, ulUserNameBufferLen);
+			}
 		}
 		else {
-			sMessage += GETSTRING_DLG(InsertOtp);
+			if (operation == DlgCmdOperation::DLG_CMD_SIGNATURE)
+			{
+				sMessage += GETSTRING_DLG(InsertOtpSignature);
+			}
+			else if (operation == DlgCmdOperation::DLG_CMD_GET_CERTIFICATE)
+			{
+				sMessage += GETSTRING_DLG(InsertOtpCert);
+			}
 		}
 
-		dlg = new dlgWndAskCmd(isValidateOtp, sMessage, &userId, &userName, appWindow, fSendSmsCallback);
+		dlg = new dlgWndAskCmd(operation, isValidateOtp, sMessage, &userId, &userName, appWindow, fSendSmsCallback, askForId);
 		if (dlg->exec())
 		{
 			eIDMW::DlgRet dlgResult = dlg->dlgResult;
-			wcscpy_s(csOut, ulOutBufferLen, dlg->OutResult);
+			wcscpy_s(csOutCode, ulOutCodeBufferLen, dlg->OutCodeResult);
+			if (askForId)
+				wcscpy_s(csInOutId, csOutIdLen, dlg->OutIdResult);
 
 			delete dlg;
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskCMD() returns DLG_OK");
@@ -497,15 +514,35 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(
 	return DLG_CANCEL;
 }
 
-DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdMsgType msgType, const wchar_t *message)
+
+DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType msgType, bool isOtp, unsigned long *pulHandle)
 {
-	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgCMDMessage() called with argument msgType=%d, message=%S", msgType, message);
+    const wchar_t * message = NULL;
+    if (isOtp)
+    {
+        message = GETSTRING_DLG(SendingOtp);
+    }
+    else
+    {
+        message = GETSTRING_DLG(ConnectingWithServer);
+    }
+    return DlgCMDMessage(operation, msgType, message, pulHandle);
+}
+
+DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType msgType, const wchar_t *message, unsigned long *pulHandle)
+{
+	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgCMDMessage() called with argument msgType=%d, message=%s", msgType, message);
 	CLang::ResetInit();				// Reset language to take into account last change
 
 	eIDMW::DlgRet dlgResult;
 	try
 	{
-		dlgCMDMsg = new dlgWndCmdMsg(msgType, message, appWindow);
+		if (pulHandle)
+		{
+			*pulHandle = *pulHandle + 1; // This is a fix so simulate an increment in the handle
+		}
+
+		dlgCMDMsg = new dlgWndCmdMsg(operation, msgType, message, appWindow);
 		dlgCMDMsg->exec();
 		dlgResult = dlgCMDMsg->dlgResult;
 		if (dlgResult == DLG_CANCEL)
@@ -530,11 +567,44 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdMsgType msgType, const wchar_t *me
 	return dlgResult;
 }
 
-DLGS_EXPORT void eIDMW::DlgCloseCMDMessage()
+DLGS_EXPORT void eIDMW::DlgCloseCMDMessage(unsigned long pulHandle)
 {
 	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgCloseCMDMessage() called: =0x%p", dlgCMDMsg);
 	if (dlgCMDMsg)
 	{
 		dlgCMDMsg->stopExec();
 	}
+}
+
+DLGS_EXPORT DlgRet eIDMW::DlgPickDevice(DlgDevice *outDevice)
+{
+    MWLOG(LEV_DEBUG, MOD_DLG, L"DlgPickDevice() called");
+
+    CLang::ResetInit();				// Reset language to take into account last change
+
+    dlgWndPickDevice *dlg = NULL;
+
+    try
+    {
+        dlg = new dlgWndPickDevice(appWindow);
+        if (dlg->exec())
+        {
+            eIDMW::DlgRet dlgResult = dlg->dlgResult;
+            *outDevice = dlg->OutDeviceResult;
+
+            delete dlg;
+            MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgPickDevice() returns DLG_OK");
+            return DLG_OK;
+        }
+        delete dlg;
+    }
+    catch (...)
+    {
+        if (dlg)
+            delete dlg;
+        MWLOG(LEV_ERROR, MOD_DLG, L"  --> DlgPickDevice() returns DLG_ERR");
+        return DLG_ERR;
+    }
+    MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgPickDevice() returns DLG_CANCEL");
+    return DLG_CANCEL;
 }

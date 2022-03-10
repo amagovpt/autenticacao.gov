@@ -73,7 +73,7 @@ int Truncate(const char *path);
 //Charset conversion
 void latin1_to_utf8(unsigned char * in, unsigned char *out);
 
-std::string urlEncode(unsigned char *data, int len);
+std::string urlEncode(const std::string &path);
 
 void replace_lastdot_inplace(char *in);
 
@@ -130,6 +130,13 @@ public:
 	  * Return true if the file exist
 	  */
 	static bool existFile(const char *filePath);
+
+	/**
+	  * Return true if all files exist
+	  */
+	EIDMW_APL_API static bool checkExistingFiles(const char **files, unsigned int n_paths);
+
+	static FILE * openFileForWriting(const char *Dir, const char *filename);
 
 	/**
 	  * Check directory and create it if not exist

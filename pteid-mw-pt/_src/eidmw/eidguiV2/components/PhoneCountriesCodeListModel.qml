@@ -9,6 +9,7 @@
 
 import QtQuick 2.6
 
+/* This list is copied in countryCallingCodeList.h */
 ListModel { 
 
     ListElement { text: "+351 - Portugal" }

@@ -97,7 +97,7 @@ LRESULT CALLBACK PteidControls::Button_Proc(HWND hWnd, UINT uMsg, WPARAM wParam,
     {
         // If enter is pressed when button has focus, send click
         // More info: https://support.microsoft.com/en-in/help/102589/how-to-use-the-enter-key-from-edit-controls-in-a-dialog-box
-        if (wParam == VK_RETURN) {
+        if (wParam == VK_RETURN || wParam == VK_SPACE) {
             SendMessage(hWnd, BM_CLICK, 0, 0);
             return 0;
         }
@@ -185,6 +185,7 @@ LRESULT CALLBACK PteidControls::Button_Container_Proc(HWND hWnd, UINT uMsg, WPAR
         SetTextAlign(pDIS->hDC, TA_CENTER | VTA_CENTER);
 
         SIZE sizText;
+
         GetTextExtentPoint(pDIS->hDC, btnData->text, (int)_tcslen(btnData->text), &sizText);
 
         ExtTextOut(pDIS->hDC,

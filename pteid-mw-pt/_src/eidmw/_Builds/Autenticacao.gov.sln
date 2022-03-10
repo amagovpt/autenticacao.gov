@@ -17,6 +17,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "applayer", "..\applayer\pte
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pteidlib", "..\eidlib\pteidlib.2008.vcxproj", "{3A09DD63-945E-40EB-9053-5FE50F74B7C1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A35BC7D7-882E-487A-9C8A-70D903EF02C3} = {A35BC7D7-882E-487A-9C8A-70D903EF02C3}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libCS.2008", "..\eidlibCS\libCS.2008.csproj", "{99AB14F6-976E-4FEA-A07D-78479B55163A}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -51,7 +54,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cmdServices", "..\CMD\services\cmdServices.vcxproj", "{A35BC7D7-882E-487A-9C8A-70D903EF02C3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{DC41E34B-8251-41DE-8065-D56B022F5755} = {DC41E34B-8251-41DE-8065-D56B022F5755}
-		{3A09DD63-945E-40EB-9053-5FE50F74B7C1} = {3A09DD63-945E-40EB-9053-5FE50F74B7C1}
 	EndProjectSection
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Autenticacao.gov-3.0", "..\misc\Wix_MW35\Autenticacao.gov-3.0\Autenticacao.gov-3.0.wixproj", "{96A4D2EA-E05B-4543-B40A-11EDF067779A}"

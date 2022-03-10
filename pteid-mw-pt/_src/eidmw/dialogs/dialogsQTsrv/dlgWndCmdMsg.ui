@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>dlgWndCmdMsgClass</class>
+ <widget class="QDialog" name="dlgWndCmdMsgClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>480</width>
+    <height>380</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>dlgWndCmdMsg</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>480</width>
+     <height>380</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+
+   <widget class="QPushButton" name="btnCancel">
+    <property name="geometry">
+      <rect>
+      <x>140</x>
+      <y>325</y>
+      <width>200</width>
+      <height>30</height>
+      </rect>
+    </property>
+    <property name="text">
+      <string>&amp;Cancel</string>
+    </property>
+   </widget>
+
+   <widget class="QLabel" name="lblTitle">
+    <property name="geometry">
+     <rect>
+      <x>25</x>
+      <y>10</y>
+      <width>361</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
+    </property>
+    <property name="text">
+     <string>Enter you PIN</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblIcon">
+    <property name="geometry">
+     <rect>
+      <x>415</x>
+      <y>15</y>
+      <width>40</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="lblLoading">
+    <property name="geometry">
+     <rect>
+     <x>185</x>
+     <y>90</y>
+     <width>110</width>
+     <height>110</height>
+     </rect>
+    </property>
+    <property name="alignment">
+     <enum>Qt::AlignCenter</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblTopMsg">
+    <property name="geometry">
+     <rect>
+     <x>0</x>
+     <y>220</y>
+     <width>480</width>
+     <height>30</height>
+     </rect>
+    </property>
+    <property name="alignment">
+     <enum>Qt::AlignCenter</enum>
+    </property>
+    <property name="text">
+     <string>Please wait.</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblBottomMsg">
+    <property name="geometry">
+     <rect>
+     <x>0</x>
+     <y>250</y>
+     <width>480</width>
+     <height>60</height>
+     </rect>
+    </property>
+    <property name="alignment">
+     <enum>Qt::AlignCenter</enum>
+    </property>
+    <property name="text">
+     <string>Connecting with server.</string>
+    </property>
+   </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>2</width>
+     <height>2</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout"/>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+ <connection>
+   <sender>btnCancel</sender>
+   <signal>clicked()</signal>
+   <receiver>dlgWndCmdMsgClass</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>556</x>
+     <y>364</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>424</x>
+     <y>237</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

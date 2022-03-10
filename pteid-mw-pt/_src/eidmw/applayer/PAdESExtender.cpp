@@ -116,38 +116,16 @@ namespace eIDMW
        The return value means if we need to add revocation info (CRL) for the OCSP certificate itself
     */
     bool PAdESExtender::addOCSPCertToValidationData(CByteArray &ocsp_response_ba, CByteArray &out_ocsp_cert) {
+        APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
+        bool check_revocation = !cryptoFwk->GetOCSPCert(ocsp_response_ba, out_ocsp_cert);
 
-        bool check_revocation = false;
-        const unsigned char *p = ocsp_response_ba.GetBytes();
-        OCSP_RESPONSE *resp = d2i_OCSP_RESPONSE(NULL, &p, ocsp_response_ba.Size());
-
-        if (resp != NULL) {
-            OCSP_BASICRESP * basic_resp = OCSP_response_get1_basic(resp);
-            if (basic_resp != NULL) {
-                const STACK_OF(X509) * certs = OCSP_resp_get0_certs(basic_resp);
-                for (int i = 0; certs && i < sk_X509_num(certs); i++) {
-                    MWLOG(LEV_DEBUG, MOD_APL, "Adding one certificate to DSS from OCSP response");
-                    X509 *cert = sk_X509_value(certs, i);
-                    //Check for presence of the "OCSP No-Check" extension from the beginning
-                    int index = X509_get_ext_by_NID(cert, NID_id_pkix_OCSP_noCheck, -1);
-                    check_revocation = (index == -1);
-
-                    unsigned char * der_data = NULL;
-                    int data_len = X509_to_DER(cert, &der_data);
-                    ValidationDataElement vde(der_data, data_len, ValidationDataElement::CERT);
-                    addValidationElement(vde);
-                    //Return OCSP cert to caller
-                    out_ocsp_cert.Append(der_data, data_len);
-                }
-
-            }
-            OCSP_RESPONSE_free(resp);
-
+        int data_len = out_ocsp_cert.Size();
+        if (data_len > 0) {
+            unsigned char *data = out_ocsp_cert.GetBytes();
+            ValidationDataElement vde(data, data_len, ValidationDataElement::CERT);
+            addValidationElement(vde);
         }
-        else {
-            MWLOG(LEV_WARN, MOD_APL, "%s: Failed to decode OCSP response!", __FUNCTION__);
-        }
-        
+
         return check_revocation;
     }
 
@@ -209,26 +187,16 @@ namespace eIDMW
     }
 
     bool PAdESExtender::addCRLRevocationInfo(CByteArray & cert, std::unordered_set<string> vri_keys) {
-
-        CRLFetcher crlFetcher;
-        std::string crlUrl;
+        CByteArray crl;
         APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
-        if (!cryptoFwk->GetCDPUrl(cert, crlUrl))
-        {
-            MWLOG(LEV_ERROR, MOD_APL, "addCRLRevocationInfo(): Couldn't parse CRL URL from certificate");
-            return false;
-        }
-        CByteArray crl = crlFetcher.fetch_CRL_file(crlUrl.c_str());
+        if (cryptoFwk->GetCrlData(cert, crl)) {
+            ValidationDataElement crlElem(crl.GetBytes(), crl.Size(), ValidationDataElement::CRL, vri_keys);
+            addValidationElement(crlElem);
 
-        if (crl.Size() == 0) {
-            MWLOG(LEV_ERROR, MOD_APL, "Network error fetching CRL from %s or empty response. Revocation info is incomplete!", crlUrl.c_str());
-            return false;
+            return true;
         }
 
-        ValidationDataElement crlElem(crl.GetBytes(), crl.Size(), ValidationDataElement::CRL, vri_keys);
-        addValidationElement(crlElem);
-
-        return true;
+        return false;
     }
 
     bool isSignerCertificate(X509 * cert) {

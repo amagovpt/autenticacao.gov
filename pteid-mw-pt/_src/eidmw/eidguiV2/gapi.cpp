@@ -30,6 +30,7 @@
 
 #include "ScapSettings.h"
 #include "credentials.h"
+#include "eidguiV2Credentials.h"
 #include "Config.h"
 #include "Util.h"
 #include "StringOps.h"
@@ -54,11 +55,13 @@ GAPI::GAPI(QObject *parent) :
     image_provider = new PhotoImageProvider();
     image_provider_pdf = new PDFPreviewImageProvider();
 
-    cmd_signature = new eIDMW::CMDSignature(CMDCredentials::getCMDBasicAuthUserId(),
-                                            CMDCredentials::getCMDBasicAuthPassword(), 
-                                            CMDCredentials::getCMDBasicAuthAppId());
+    PTEID_CMDSignatureClient::setCredentials(EIDGUIV2_CMD_BASIC_AUTH_USERID,
+                                             EIDGUIV2_CMD_BASIC_AUTH_PASSWORD,
+                                             EIDGUIV2_CMD_BASIC_AUTH_APPID);
 #ifdef WIN32
-    m_cmdCertificates =  new eIDMW::CMDCertificates();
+    m_cmdCertificates =  new eIDMW::CMDCertificates(CMDCredentials::getCMDBasicAuthUserId(EIDGUIV2_CMD_BASIC_AUTH_USERID),
+                                                    CMDCredentials::getCMDBasicAuthPassword(EIDGUIV2_CMD_BASIC_AUTH_PASSWORD),
+                                                    CMDCredentials::getCMDBasicAuthAppId(EIDGUIV2_CMD_BASIC_AUTH_APPID));
 #endif
     m_addressLoaded = false;
     m_shortcutFlag = ShortcutIdNone;
@@ -187,10 +190,10 @@ void GAPI::emitErrorSignal(long errorCode, int index){
         emit signalCardAccessError(SodCardReadError);
     }
     else if (errorCode == EIDMW_TIMESTAMP_ERROR) {
-        emit signalPdfSignSucess(SignMessageTimestampFailed);
+        emit signalPdfSignSuccess(SignMessageTimestampFailed);
     }
     else if (errorCode == EIDMW_LTV_ERROR) {
-        emit signalPdfSignSucess(SignMessageLtvFailed);
+        emit signalPdfSignSuccess(SignMessageLtvFailed);
     }
     else if (errorCode == EIDMW_PERMISSION_DENIED) {
         emit signalPdfSignFail(SignFilePermissionFailed, index);
@@ -209,6 +212,9 @@ void GAPI::emitErrorSignal(long errorCode, int index){
     }
     else if (errorCode == EIDMW_ERR_TIMEOUT) {
         emit signalCardAccessError(CardPinTimeout);
+    }
+    else if (errorCode == EIDMW_ERR_OP_CANCEL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Operation cancelled by user");
     }
     else {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
@@ -685,7 +691,7 @@ void GAPI::showSignCMDDialog(long error_code)
     case SOAP_EOF:
         message = tr("STR_CMD_TIMEOUT_ERROR");
         break;
-    case ERR_GET_CERTIFICATE:
+    case EIDMW_ERR_CMD_INACTIVE_ACCOUNT:
         urlLink = tr("STR_URL_AUTENTICACAO_GOT_PT");
         message = tr("STR_CMD_GET_CERTIFICATE_ERROR");
         support_string = "";
@@ -699,17 +705,11 @@ void GAPI::showSignCMDDialog(long error_code)
         if (m_Settings.isProxyConfigured())
             message.append(" ").append(tr("STR_VERIFY_PROXY"));
         break;
-    case SOAP_ERR_SERVICE_FAIL:
+    case EIDMW_ERR_CMD_CONNECTION:
         message = tr("STR_CMD_SERVICE_FAIL");
         break;
-    case SOAP_ERR_INVALID_PIN:
-        message = tr("STR_CMD_INVALID_PIN");
-        break;
-    case SOAP_ERR_INVALID_OTP:
+    case EIDMW_ERR_CMD_INVALID_CODE:
         message = tr("STR_CMD_INVALID_OTP");
-        break;
-    case SOAP_ERR_OTP_VALIDATION_ERROR:
-        message = tr("STR_CMD_OTP_VALIDATION_ERROR");
         break;
     case SOAP_ERR_INACTIVE_SERVICE:
         message = tr("STR_CMD_INACTIVE_SERVICE");
@@ -723,6 +723,9 @@ void GAPI::showSignCMDDialog(long error_code)
     case EIDMW_LTV_ERROR:
         message = tr("STR_CMD_SUCESS") + " " + tr("STR_LTV_FAILED");
         break;
+    case EIDMW_ERR_OP_CANCEL:
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "CMD signature was canceled by the user.", error_code);
+        return;
     default:
         message = tr("STR_CMD_LOGIN_ERROR");
         break;
@@ -732,7 +735,7 @@ void GAPI::showSignCMDDialog(long error_code)
         // If there is error show message screen
         if (error_code == EIDMW_TIMESTAMP_ERROR || error_code == EIDMW_LTV_ERROR){
             signalUpdateProgressStatus(message);
-        } 
+        }
         else if (error_code == SCAP_SECRETKEY_ERROR_CODE
                  || error_code == SCAP_ATTRIBUTES_EXPIRED
                  || error_code == SCAP_ZERO_ATTRIBUTES
@@ -845,148 +848,122 @@ void GAPI::changeAddress(QString process, QString secret_code)
     Concurrent::run(this, &GAPI::doChangeAddress, processUtf8, secret_codeUtf8);
 }
 
-void GAPI::doOpenSignCMD(CMDSignature *cmd_signature, CmdParams &cmdParams, SignParams &signParams)
-{
-    /*qDebug() << "doOpenSignCMD! MobileNumber = " << cmdParams.mobileNumber << " secret_code = " << cmdParams.secret_code <<
-    " loadedFilePaths = " << signParams.loadedFilePaths << " outputFile = " << signParams.outputFile <<
-    "page = " << signParams.page << "coord_x" << signParams.coord_x << "coord_y" << signParams.coord_y <<
-    "reason = " << signParams.reason << "location = " << signParams.location;*/
-
-    int ret = -1;
-
-    BEGIN_TRY_CATCH
-        signalUpdateProgressBar(25);
-    CMDProxyInfo proxyInfo = CMDProxyInfo::buildProxyInfo();
-    ret = cmd_signature->signOpen(proxyInfo, cmdParams.mobileNumber.toStdString(), cmdParams.secret_code.toStdString(),
-        signParams.page,
-        signParams.coord_x, signParams.coord_y,
-        signParams.location.toUtf8().data(), signParams.reason.toUtf8().data(),
-        getPlatformNativeString(signParams.outputFile));
-
-    if (ret != 0) {
-        qDebug() << "signOpen failed! - ret: " << ret << endl;
-
-        signCMDFinished(ret);
-        signalUpdateProgressBar(100);
-        return;
-    }
-
-    END_TRY_CATCH
-
-        if (ret == -1) {
-            //Exception was thrown in signOpen
-            signalUpdateProgressBar(100);
-            return;
-        }
-
-    signalUpdateProgressBar(50);
-    signalUpdateProgressStatus(tr("STR_CMD_LOGIN_SUCESS"));
-    emit signalValidateOtp();
-}
-
-void GAPI::doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token)
+void GAPI::doSignCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams)
 {
 
-    long ret = 0;
-    std::string local_sms_token = sms_token.toUtf8().data();
+    long ret = -1;
+
+    PTEID_CMDSignatureClient client;
+
+    const int page = signParams.page;
+    const double coord_x = signParams.coord_x;
+    const double coord_y = signParams.coord_y;
+    const std::string location = signParams.location.toStdString();
+    const std::string reason = signParams.reason.toStdString();
+    const std::string outputFile = signParams.outputFile.toStdString();
 
     try {
-        signalUpdateProgressBar(75);
-        ret = cmd_signature->signClose(local_sms_token);
-
-        for (size_t i = 0; i < cmd_pdfSignatures.size(); i++)
-            delete cmd_pdfSignatures[i];
-
-        cmd_pdfSignatures.clear();
-        cmd_signature->clear_pdf_handlers();
-
-        if (ret != 0) {
-            qDebug() << "signClose failed!" << endl;
-            signCMDFinished(ret);
-            signalUpdateProgressBar(100);
-            return;
-        }
-
-    } catch (PTEID_Exception &e) {
-        ret = e.GetError();
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doCloseSignCMD",
-            "Caught exception in some SDK method. Error code: %08x", e.GetError());
-    }
-
-    signCMDFinished(ret);
-    signalUpdateProgressBar(100);
-}
-
-void GAPI::doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token, QList<int> attribute_list) {
-
-    long ret = 0;
-    std::string local_sms_token = sms_token.toUtf8().data();
-
-    try 
-    {
-        signalUpdateProgressBar(65);
-        ret = cmd_signature->signClose(local_sms_token);
+        ret = client.SignPDF(pdf_signature, page, coord_x, coord_y, location.c_str(), reason.c_str(), outputFile.c_str());
     }
     catch (PTEID_Exception &e) {
         ret = e.GetError();
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doCloseSignCMDWithSCAP",
-            "CMD SignClose. Error code: %08x", e.GetError());
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doSignCMD",
+            "Caught exception in PTEID_CMDSignatureClient::SignPDF. Error code: %08x", e.GetError());
+    }
+
+    showSignCMDDialog(ret);
+}
+
+void GAPI::doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams, QList<int> attribute_list) {
+    connect(this, SIGNAL(signCMDFinished(long)), this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
+
+    long ret = 0;
+
+    try {
+        PTEID_CMDSignatureClient client;
+
+        const int page = signParams.page;
+        const double coord_x = signParams.coord_x;
+        const double coord_y = signParams.coord_y;
+        const std::string location = signParams.location.toStdString();
+        const std::string reason = signParams.reason.toStdString();
+        const std::string outputFile = signParams.outputFile.toStdString();
+
+        ret = client.SignPDF(pdf_signature, page, coord_x, coord_y, location.c_str(), reason.c_str(), outputFile.c_str());
+    }
+    catch (PTEID_Exception &e) {
+        ret = e.GetError();
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doSignSCAPWithCMD", "CMD Sign. Error code: %08x", ret);
     }
 
     // CMD signature success
-    if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR || ret == EIDMW_LTV_ERROR)
-    {
-        try 
-        {
-            signalUpdateProgressStatus(tr("STR_CMD_SIGNING_SCAP"));
+    if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR || ret == EIDMW_LTV_ERROR) {
+        //Do SCAP Signature
+        emit signalUpdateProgressStatus(tr("STR_CMD_SIGNING_SCAP"));
 
-            signalUpdateProgressBar(80);
+        std::vector<int> attrs;
+        for (int attr: attribute_list) {
+            attrs.push_back(attr);
+        }
 
-            //Do SCAP Signature
-            std::vector<int> attrs;
-            for (int i = 0; i != attribute_list.size(); i++) {
-                attrs.push_back(attribute_list.at(i));
-            }
+        CmdSignedFileDetails cmd_details;
+        cmd_details.signedCMDFile = m_scap_params.inputPDF;
+        cmd_details.citizenName = pdf_signature.getCertificateCitizenName();
+        cmd_details.citizenId = QString(pdf_signature.getCertificateCitizenID() + 2); // "+ 2" skips "BI" prefix
 
-            //See details of this
-            CmdSignedFileDetails cmd_details;
-            cmd_details.signedCMDFile = m_scap_params.inputPDF;
-
-            cmd_details.citizenName = cmd_signature->getCertificateCitizenName();
-            //The method returns something like "BI123456789";
-            cmd_details.citizenId = QString(cmd_signature->getCertificateCitizenID() + 2);
-
+        try {
             int ret_scap = scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
-                m_scap_params.location_x, m_scap_params.location_y,
-                m_scap_params.location, m_scap_params.reason, m_scap_params.isTimestamp, m_scap_params.isLtv, attrs, cmd_details,
-                useCustomSignature(), m_jpeg_scaled_data,
-                m_seal_width, m_seal_height);
+                m_scap_params.location_x, m_scap_params.location_y, m_scap_params.location, m_scap_params.reason,
+                m_scap_params.isTimestamp, m_scap_params.isLtv, attrs, cmd_details, useCustomSignature(),
+                m_jpeg_scaled_data, m_seal_width, m_seal_height);
 
-            for (size_t i = 0; i < cmd_pdfSignatures.size(); i++)
-                delete cmd_pdfSignatures[i];
-
-            cmd_pdfSignatures.clear();
-            cmd_signature->clear_pdf_handlers();
-
-            // SCAP signature with errors
             if(ret_scap != GAPI::ScapSucess){
                 signalUpdateProgressBar(100);
                 return;
-            } 
+            }
         }
         catch (PTEID_Exception &e) {
             ret = e.GetError();
             PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doCloseSignCMDWithSCAP",
-                    "executeSCAPWithCMDSignature. Error code: %08x", e.GetError());
-            }
+                "executeSCAPWithCMDSignature. Error code: %08x", ret);
+        }
     }
-    //TODO: reset the m_scap_params struct
-
     signCMDFinished(ret);
     signalUpdateProgressBar(100);
-
 }
 
+void GAPI::doSignXADESWithCMD(SignParams &params) {
+    BEGIN_TRY_CATCH
+
+    std::string output_file = getPlatformNativeString(params.outputFile);
+
+    std::vector<std::string> filenames_tmp;
+    for (const QString &filename: params.loadedFilePaths) {
+        filenames_tmp.push_back(getPlatformNativeString(filename));
+    }
+
+    std::vector<const char *> files_to_sign;
+    for (const std::string &filename: filenames_tmp) {
+        files_to_sign.push_back(filename.c_str());
+    }
+
+    unsigned int file_count = params.loadedFilePaths.count();
+
+    PTEID_SignatureLevel level = PTEID_LEVEL_BASIC;
+    if (params.isLtv) {
+        level = PTEID_LEVEL_LTV;
+    }
+    else if (params.isTimestamp) {
+        level = PTEID_LEVEL_TIMESTAMP;
+    }
+
+    PTEID_CMDSignatureClient client;
+    client.SignXades(output_file.c_str(), &files_to_sign[0], file_count, level);
+
+    emit signalPdfSignSuccess(SignMessageOK);
+
+    END_TRY_CATCH
+}
 
 QString generateTempFile() {
     QTemporaryFile tempFile;
@@ -999,19 +976,8 @@ QString generateTempFile() {
     return tempFile.fileName();
 }
 
-void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
-    QString outputFile, int page, double coord_x, double coord_y,
-    QString reason, QString location, bool isTimestamp, bool isLtv) {
-
-    qDebug() << "signOpenScapWithCMD! MobileNumber = " << mobileNumber <<
-        " loadedFilePaths = " << loadedFilePaths <<
-        " outputFile = " << outputFile << " page = " << page << " coord_x" << coord_x <<
-        " coord_y" << coord_y << " reason = " << reason << " location = " << location << "isLtv= "<<isLtv;
-
-    signalUpdateProgressStatus(tr("STR_CMD_CONNECTING"));
-
-    connect(this, SIGNAL(signCMDFinished(long)),
-        this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
+void GAPI::signScapWithCMD(QList<QString> loadedFilePaths, QString outputFile, QList<int> attribute_list,
+    int page, double coord_x, double coord_y, QString reason, QString location, bool isTimestamp, bool isLtv) {
 
     //Final params for the SCAP signature (visible PDF signature params)  
     m_scap_params.outputPDF = outputFile;
@@ -1022,15 +988,12 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<
     m_scap_params.location = location;
     m_scap_params.reason = reason;
     m_scap_params.isTimestamp = isTimestamp;
-	m_scap_params.isLtv = isLtv;
+    m_scap_params.isLtv = isLtv;
 
-    CmdParams cmdParams;
     SignParams signParams;
 
     /* Invisible CMD signature: with SCAP only the last signature generated
-	   by the actual SCAP system is visible */
-    cmdParams.secret_code = secret_code;
-    cmdParams.mobileNumber = mobileNumber;
+        by the actual SCAP system is visible */
     signParams.loadedFilePaths = loadedFilePaths;
     signParams.outputFile = m_scap_params.inputPDF;
     signParams.page = 0;
@@ -1042,22 +1005,28 @@ void GAPI::signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<
     signParams.isLtv = false;
     signParams.isSmallSignature = 0;
 
-    cmd_signature->clear_pdf_handlers();
+    PTEID_PDFSignature * pdf_signature = new PTEID_PDFSignature();
 
-    for (int i = 0; i < loadedFilePaths.size(); i++) {
-        QString fullInputPath = loadedFilePaths[i];
-        PTEID_PDFSignature * cmd_pdfSignature = new eIDMW::PTEID_PDFSignature();
-		
-        cmd_pdfSignatures.push_back(cmd_pdfSignature); // keep track of pointers to be deleted
-        cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
-        PTEID_SignatureLevel sig_level = isTimestamp ?
-                (isLtv ? PTEID_LEVEL_LT : PTEID_LEVEL_TIMESTAMP) : PTEID_LEVEL_BASIC;
-        cmd_pdfSignature->setSignatureLevel(sig_level);
-        cmd_signature->add_pdf_handler(cmd_pdfSignature);
+    pdf_signature->setFileSigning((char *)getPlatformNativeString(loadedFilePaths.first()));
+
+    if (signParams.isTimestamp) {
+        if (signParams.isLtv) {
+            pdf_signature->setSignatureLevel(PTEID_LEVEL_LTV);
+        }
+        else {
+            pdf_signature->setSignatureLevel(PTEID_LEVEL_TIMESTAMP);
+        }
     }
 
-    Concurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, cmdParams, signParams);
+    pdf_signature->setCustomSealSize(m_seal_width, m_seal_height);
 
+    if (useCustomSignature()) {
+        const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()),
+                                        static_cast<unsigned long>(m_jpeg_scaled_data.size()));
+        pdf_signature->setCustomImage(const_cast<unsigned char *>(imageData.GetBytes()), imageData.Size());
+    }
+
+    Concurrent::run(this, &GAPI::doSignSCAPWithCMD, *pdf_signature, signParams, attribute_list);
 }
 
 void GAPI::doCancelCMDSign() {
@@ -1066,91 +1035,47 @@ void GAPI::doCancelCMDSign() {
 void GAPI::cancelCMDSign() {
     Concurrent::run(this, &GAPI::doCancelCMDSign);
 }
-void GAPI::signOpenCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
-    QString outputFile, int page, double coord_x, double coord_y,
-    QString reason, QString location, bool isTimestamp, bool isLTV, bool isSmall)
+
+void GAPI::signCMD(QList<QString> loadedFilePaths, QString outputFile, int page, double coord_x,
+    double coord_y, QString reason, QString location, bool isTimestamp, bool isLTV, bool isSmall)
 {
-    /*qDebug() << "signOpenCMD! MobileNumber = " << mobileNumber << " secret_code = " << secret_code <<
-    " loadedFilePaths = " << loadedFilePaths <<
-    " outputFile = " << outputFile << " page = " << page << " coord_x" << coord_x <<
-    " coord_y" << coord_y << " reason = " << reason << " location = " << location <<
-    " isTimestamp = " <<  isTimestamp << " isSmall = " << isSmall;*/
 
+    SignParams signParams = { loadedFilePaths, outputFile, page, coord_x, coord_y, reason, location,
+        isTimestamp, isLTV, isSmall };
 
-    signalUpdateProgressStatus(tr("STR_CMD_CONNECTING"));
+    PTEID_PDFSignature * pdf_signature = new PTEID_PDFSignature();
 
-    connect(this, SIGNAL(signCMDFinished(long)),
-        this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
-
-    CmdParams cmdParams = { mobileNumber, secret_code };
-    SignParams signParams = { loadedFilePaths, outputFile, page, coord_x,
-        coord_y, reason, location, isTimestamp, isLTV, isSmall };
-
-    cmd_signature->clear_pdf_handlers();
-
-    for (int i = 0; i < loadedFilePaths.size(); i++) {
-        QString fullInputPath = loadedFilePaths[i];
-        PTEID_PDFSignature * cmd_pdfSignature = new eIDMW::PTEID_PDFSignature();
-
-        cmd_pdfSignatures.push_back(cmd_pdfSignature); // keep track of pointers to be deleted
-        cmd_pdfSignature->setFileSigning((char *)getPlatformNativeString(fullInputPath));
-
-        if (signParams.isTimestamp) {
-            if (signParams.isLtv)
-            {
-                cmd_pdfSignature->setSignatureLevel(PTEID_LEVEL_LTV);
-            }
-            else
-            {
-                cmd_pdfSignature->setSignatureLevel(PTEID_LEVEL_TIMESTAMP);
-            }
+    if (loadedFilePaths.size() == 1) {
+        pdf_signature->setFileSigning((char *)getPlatformNativeString(loadedFilePaths.first()));
+    }
+    else {
+        //batch signature
+        for (QString filepath : loadedFilePaths) {
+            pdf_signature->addToBatchSigning((char *)getPlatformNativeString(filepath));
         }
+    }
 
-        if (signParams.isSmallSignature)
-            cmd_pdfSignature->enableSmallSignatureFormat();
-
-        cmd_pdfSignature->setCustomSealSize(m_seal_width, m_seal_height);
-
-        if (useCustomSignature()) {
-            const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()), static_cast<unsigned long>(m_jpeg_scaled_data.size()));
-            cmd_pdfSignature->setCustomImage(imageData);
+    if (signParams.isTimestamp) {
+        if (signParams.isLtv) {
+            pdf_signature->setSignatureLevel(PTEID_LEVEL_LTV);
         }
-
-        cmd_signature->add_pdf_handler(cmd_pdfSignature);
+        else {
+            pdf_signature->setSignatureLevel(PTEID_LEVEL_TIMESTAMP);
+        }
     }
-    Concurrent::run(this, &GAPI::doOpenSignCMD, cmd_signature, cmdParams, signParams);
-}
 
-void GAPI::signCloseCMD(QString sms_token, QList<int> attribute_list)
-{
-    /*qDebug() << "signCloseCMD! sms_token = " + sms_token;*/
+    if (signParams.isSmallSignature)
+        pdf_signature->enableSmallSignatureFormat();
 
-    signalUpdateProgressStatus(tr("STR_CMD_SENDING_CODE"));
+    pdf_signature->setCustomSealSize(m_seal_width, m_seal_height);
 
-    if (attribute_list.size() > 0)
-        Concurrent::run(this, &GAPI::doCloseSignCMDWithSCAP, cmd_signature, sms_token, attribute_list);
-
-    else
-        Concurrent::run(this, &GAPI::doCloseSignCMD, cmd_signature, sms_token);
-}
-
-void GAPI::sendSmsCmd(CmdDialogClass dialogType) {
-    Concurrent::run(this, &GAPI::doSendSmsCmd, dialogType);
-}
-void GAPI::doSendSmsCmd(CmdDialogClass dialogType) {
-#ifdef WIN32
-    if (dialogType == GAPI::RegisterCert)
-    {
-        m_cmdCertificates->sendSms();
+    if (useCustomSignature()) {
+        const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()),
+                                        static_cast<unsigned long>(m_jpeg_scaled_data.size()));
+        pdf_signature->setCustomImage(const_cast<unsigned char *>(imageData.GetBytes()), imageData.Size());
     }
-    else if (dialogType == GAPI::Sign)
-    {
-        cmd_signature->sendSms();
-    }
-#else
-    cmd_signature->sendSms();
-#endif
-    // TODO: update status
+
+    Concurrent::run(this, &GAPI::doSignCMD, *pdf_signature, signParams);
 }
 
 QString GAPI::getCardActivation() {
@@ -1284,35 +1209,37 @@ void GAPI::startPrint(QString outputFile, bool isBasicInfo, bool isAddicionalInf
 }
 
 bool GAPI::doSignPrintPDF(QString &file_to_sign, QString &outputsign, bool isTimestamp, bool isLtv) {
-	PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doSignPrintPDF");
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doSignPrintPDF");
     BEGIN_TRY_CATCH
 
-        PTEID_EIDCard * card = NULL;
-
-    getCardInstance(card);
-    if (card == NULL) return false;
-
     PTEID_PDFSignature sig_handler(getPlatformNativeString(file_to_sign));
-
-    if (isTimestamp)
-    {
-        if (isLtv)
-        {
+    if (isTimestamp) {
+        if (isLtv) {
             sig_handler.setSignatureLevel(PTEID_LEVEL_LTV);
-        }
-        else
-        {
+        } else {
             sig_handler.setSignatureLevel(PTEID_LEVEL_TIMESTAMP);
         }
     }
 
-    card->SignPDF(sig_handler, 0, 0, false, "", "", getPlatformNativeString(outputsign));
+    PTEID_SigningDeviceFactory &factory = PTEID_SigningDeviceFactory::instance();
+    PTEID_SigningDevice &device = factory.getSigningDevice();
+
+    try {
+        device.SignPDF(sig_handler, 0, 0, false, "", "", getPlatformNativeString(outputsign));
+    }
+    catch (PTEID_Exception &e) {
+        if (device.getDeviceType() == PTEID_SigningDeviceType::CMD) {
+            showSignCMDDialog(e.GetError());
+            return false;
+        }
+        throw;
+    }
 
     return true;
 
     END_TRY_CATCH
 
-        return false;
+    return false;
 }
 
 void GAPI::doPrintPDF(PrintParams &params) {
@@ -1860,15 +1787,16 @@ void GAPI::closeAllPdfPreviews()
     image_provider_pdf->closeAllDocs();
 }
 
-void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp) {
+void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, bool isLTV) {
     QFuture<void> future =
-        Concurrent::run(this, &GAPI::doSignXADES, loadedFilePath, outputFile, isTimestamp);
+        Concurrent::run(this, &GAPI::doSignXADES, loadedFilePath, outputFile, isTimestamp, isLTV);
 
 }
 
-void GAPI::startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, bool isTimestamp) {
+void GAPI::startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile,
+    bool isTimestamp, bool isLTV) {
 
-    SignParams params = { loadedFileBatchPath, outputFile, 0, 0, 0, "", "", isTimestamp, false, 0 };
+    SignParams params = { loadedFileBatchPath, outputFile, 0, 0, 0, "", "", isTimestamp, isLTV, 0 };
 
     QFuture<void> future =
         Concurrent::run(this, &GAPI::doSignBatchXADES, params);
@@ -1877,7 +1805,8 @@ void GAPI::startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString ou
 void GAPI::doSignBatchXADES(SignParams &params) {
     qDebug() << "doSignBatchXADES! loadedFilePath = " << params.loadedFilePaths << " outputFile = " << params.outputFile <<
         "page = " << params.page << "coord_x" << params.coord_x << "coord_y" << params.coord_y <<
-        "reason = " << params.reason << "location = " << params.location << "isTimestamp = " << params.isTimestamp;
+        "reason = " << params.reason << "location = " << params.location <<
+        "isTimestamp = " << params.isTimestamp << "isLtv = " << params.isLtv;
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doSignBatchXADES");
 
@@ -1895,14 +1824,26 @@ void GAPI::doSignBatchXADES(SignParams &params) {
 
     QByteArray tempOutputFile = getPlatformNativeString(params.outputFile);
 
-    if (params.isTimestamp)
-        card->SignXadesT(tempOutputFile.constData(), files_to_sign.data(), params.loadedFilePaths.count());
-    else
-        card->SignXades(tempOutputFile.constData(), files_to_sign.data(), params.loadedFilePaths.count());
+    PTEID_SignatureLevel level = PTEID_LEVEL_BASIC;
+    if (params.isLtv) {
+        level = PTEID_LEVEL_LTV;
+    }
+    else if (params.isTimestamp) {
+        level = PTEID_LEVEL_TIMESTAMP;
+    }
+    card->SignXades(tempOutputFile.constData(), files_to_sign.data(), params.loadedFilePaths.count(), level);
 
-    emit signalPdfSignSucess(SignMessageOK);
+    emit signalPdfSignSuccess(SignMessageOK);
 
     END_TRY_CATCH
+}
+
+void GAPI::startSigningXADESWithCMD(QList<QString> inputFiles, QString outputFile, bool isTimestamp,
+    bool isLTV) {
+
+    SignParams params = {inputFiles, outputFile, 0, 0, 0, "", "", isTimestamp, isLTV, 0 };
+
+    QFuture<void> future = Concurrent::run(this, &GAPI::doSignXADESWithCMD, params);
 }
 
 bool GAPI::isDirectory(QString path) {
@@ -1937,7 +1878,7 @@ QList<QString> GAPI::getFilesFromDirectory(QString path) {
     return allFiles;
 }
 
-void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp) {
+void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, bool isLTV) {
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doSignXADES");
 
     BEGIN_TRY_CATCH
@@ -1952,12 +1893,16 @@ void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, bool isTimest
 
     QByteArray tempOutputFile = getPlatformNativeString(outputFile);
 
-    if (isTimestamp)
-        card->SignXadesT(tempOutputFile.constData(), files_to_sign, 1);
-    else
-        card->SignXades(tempOutputFile.constData(), files_to_sign, 1);
+    PTEID_SignatureLevel level = PTEID_LEVEL_BASIC;
+    if (isLTV) {
+        level = PTEID_LEVEL_LTV;
+    }
+    else if (isTimestamp) {
+        level = PTEID_LEVEL_TIMESTAMP;
+    }
+    card->SignXades(tempOutputFile.constData(), files_to_sign, 1, level);
 
-    emit signalPdfSignSucess(SignMessageOK);
+    emit signalPdfSignSuccess(SignMessageOK);
 
     END_TRY_CATCH
 }
@@ -2001,7 +1946,7 @@ void GAPI::doSignPDF(SignParams &params) {
         params.location.toUtf8().data(), params.reason.toUtf8().data(),
         getPlatformNativeString(params.outputFile));
 
-    emit signalPdfSignSucess(SignMessageOK);
+    emit signalPdfSignSuccess(SignMessageOK);
 
     END_TRY_CATCH
 }
@@ -2056,7 +2001,7 @@ void GAPI::doSignBatchPDF(SignParams &params) {
         params.location.toUtf8().data(), params.reason.toUtf8().data(),
         getPlatformNativeString(params.outputFile));
 
-    emit signalPdfSignSucess(SignMessageOK);
+    emit signalPdfSignSuccess(SignMessageOK);
 
     END_TRY_CATCH
 }
@@ -3916,7 +3861,7 @@ void GAPI::setAppAsDlgParent() {
 }
 
 bool GAPI::checkCMDSupport() {
-#if CMD_SUPPORT
+#if EIDGUIV2_CMD_SUPPORT
     return true;
 #else
     return false;

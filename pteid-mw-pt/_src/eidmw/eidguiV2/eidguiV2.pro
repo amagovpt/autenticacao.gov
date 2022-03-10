@@ -118,6 +118,32 @@ fonts.files += fonts/myriad/MyriadPro-Regular.otf
 
 INSTALLS += target translations fonts
 
+# Copy one file to the destination directory
+defineTest(copyFileToDestDir) {
+    file = $$1
+    dir = $$2
+    message(Copying one file from: $$file to $$dir)
+    system (pwd $$quote($$file) $$escape_expand(\\n\\t))
+    system ($$QMAKE_COPY_FILE $$quote($$file) $$quote($$dir) $$escape_expand(\\n\\t))
+}
+
+# Set here the path to the credentials folder
+PTEID_CREDENTIALS_FOLDER =
+
+isEmpty(PTEID_CREDENTIALS_FOLDER) {
+        message(*****************************************************************************)
+        message(**                              WARNING                                    **)
+        message(*****************************************************************************)
+        message(Do not copy credentials file. Using the credentials file template)
+        copyFileToDestDir($$PWD/eidguiV2Credentials.h.template, $$PWD/eidguiV2Credentials.h)
+    } else {
+        message(*****************************************************************************)
+        message(**                              WARNING                                    **)
+        message(*****************************************************************************)
+        message(Copying the credentials file )
+        copyFileToDestDir($$PTEID_CREDENTIALS_FOLDER/eidguiV2Credentials.h, $$PWD/eidguiV2Credentials.h)
+    }
+
 HEADERS += \
     appcontroller.h \
     gapi.h \
@@ -130,4 +156,5 @@ HEADERS += \
     cJSON_1_7_12.h \
     AttributeFactory.h \
     OAuthAttributes.h \
-    concurrent.h
+    concurrent.h \
+    eidguiV2Credentials.h

@@ -29,10 +29,11 @@ LIBS += -L../lib  \
 		-l$${COMMONLIB} \
 		-l$${DLGLIB} \
 		-l$${CARDLAYERLIB} \
-		-l$${APPLAYERLIB} 
+		-l$${APPLAYERLIB} \
+		-l$${CMDSERVICESLIB} \
 
 DEPENDPATH += .
-INCLUDEPATH += . ../applayer ../common ../cardlayer ../dialogs /usr/local/include
+INCLUDEPATH += . ../applayer ../common ../cardlayer ../dialogs ../CMD/services ../ /usr/local/include
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 
 macx: INCLUDEPATH += $$DEPS_DIR/openssl/include
@@ -45,15 +46,15 @@ HEADERS += eidlib.h \
            eidlibException.h \
            InternalUtil.h \
            dialogs.h \
-           Util.h \
-           proxyinfo.h
+           Util.h
 
 SOURCES += eidlibCard.cpp \
            eidlibCrypto.cpp \
            eidlibDoc.cpp \
            eidlibReader.cpp \
            eidlibException.cpp \
-	   eidlibxades.cpp \
-           InternalUtil.cpp \
-           proxyinfo.cpp
+           eidlibxades.cpp \
+           eidlibCmdClient.cpp \
+           eidlibsignDevFactory.cpp \
+           InternalUtil.cpp
 

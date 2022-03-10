@@ -37,7 +37,7 @@ class dlgWndCmdMsg : public Win32Dialog
     DlgCmdMsgType type;
 
 public:
-    dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND Parent = NULL);
+    dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType msgType, const wchar_t *message, HWND Parent = NULL);
     virtual ~dlgWndCmdMsg();
 
     virtual LRESULT ProcecEvent

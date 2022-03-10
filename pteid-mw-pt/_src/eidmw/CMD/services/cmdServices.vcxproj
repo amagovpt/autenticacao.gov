@@ -155,7 +155,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_LIBZIP)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_OPENSSL)\include;..\..\common;..\..\applayer;..\..\cardlayer;..\..\dialogs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
@@ -165,7 +165,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>Crypt32.lib;libcrypto.lib;libssl.lib;pteidcommon.lib;pteidapplayer.lib;pteidlib.lib;WS2_32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Crypt32.lib;pteidDlgsWin32.lib;libcrypto.lib;libssl.lib;pteidcommon.lib;pteidapplayer.lib;WS2_32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_OPENSSL)\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -181,20 +181,14 @@
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>echo "*********************************************************************************"
-echo "Copying credentials file from: %PTEID_CREDENTIALS_FILE%"
-copy "$(ProjectDir)\credentials.h.template" "$(ProjectDir)\credentials.h"
-copy %PTEID_CREDENTIALS_FILE% "$(ProjectDir)\credentials.h"
-echo "*********************************************************************************"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
-      <Command>echo "*********************************************************************************"
-echo "Copying credentials file from: %PTEID_CREDENTIALS_FILE%"
-copy "$(ProjectDir)\credentials.h.template" "$(ProjectDir)\credentials.h"
-copy %PTEID_CREDENTIALS_FILE% "$(ProjectDir)\credentials.h"
-echo "*********************************************************************************"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
@@ -206,7 +200,7 @@ echo "**************************************************************************
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL_X64)\include;..\..\eidlib;..\..\common;..\..\applayer;..\..\cardlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_LIBZIP_X64)\include;$(PTEID_DIR_XERCES_X64)\include;$(PTEID_XMLSECURITY_X64)\include;$(PTEID_DIR_OPENSSL_X64)\include;..\..\common;..\..\applayer;..\..\cardlayer;..\..\dialogs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -215,7 +209,7 @@ echo "**************************************************************************
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>Crypt32.lib;WS2_32.Lib;libcrypto.lib;libssl.lib;pteidcommon.lib;pteidapplayer.lib;pteidlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Crypt32.lib;pteidDlgsWin32.lib;WS2_32.Lib;libcrypto.lib;libssl.lib;pteidcommon.lib;pteidapplayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_OPENSSL_X64)\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -236,6 +230,7 @@ echo "**************************************************************************
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cmdCertificates.cpp" />
+    <ClCompile Include="cmdSignatureClient.cpp" />
     <ClCompile Include="cmdServices.cpp" />
     <ClCompile Include="CMDSignature.cpp" />
     <ClCompile Include="credentials.cpp" />
@@ -245,6 +240,7 @@ echo "**************************************************************************
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cmdCertificates.h" />
+    <ClInclude Include="cmdSignatureClient.h" />
     <ClInclude Include="cmdErrors.h" />
     <ClInclude Include="cmdServices.h" />
     <ClInclude Include="CMDSignature.h" />

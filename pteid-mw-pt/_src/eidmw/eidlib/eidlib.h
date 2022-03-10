@@ -10,6 +10,7 @@
  * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ * Copyright (C) 2021 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -192,8 +193,10 @@ enum XMLUserData
 };
 // XMLUSERDATA - END
 
-
-
+PTEIDSDK_API enum PTEID_SigningDeviceType{
+	CC,
+	CMD
+};
 
 struct SDK_Context;
 
@@ -591,13 +594,167 @@ friend PTEID_ReaderContext &PTEID_ReaderSet::getReader(APL_ReaderContext *pAplRe
 };
 
 class PTEID_XMLDoc;
+class PTEID_PDFSignature;
 class APL_Card;
+class PTEID_Certificate;
+class PTEID_Certificates;
+
+/******************************************************************************//**
+  * Interface class for objects with Signing capabilities.
+  * @since 3.8.0
+  *********************************************************************************/
+class PTEID_SigningDevice
+{
+public:
+    /**
+     * Raw RSA signature with PCKS #1 padding.
+     * @param data holds the data to be signed, at most 32 bytes.
+     * @param signatureKey whether to use the 'Signature key'. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to @b true.
+     * @return A PTEID_ByteArray containing the signed data.
+     */
+    PTEIDSDK_API virtual PTEID_ByteArray Sign(const PTEID_ByteArray& data, bool signatureKey = false) = 0;
+
+    /**
+    * Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash).
+    * @param data holds the data to be signed, it should be 32 bytes.
+    * @param signatureKey whether to use the 'Signature key'. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to @b true.
+    * @return A PTEID_ByteArray containing the signed data.
+    */
+    PTEIDSDK_API virtual PTEID_ByteArray SignSHA256(const PTEID_ByteArray& data, bool signatureKey = false) = 0;
+
+    /**
+    * Produce a XAdES Signature of the files indicated by the parameter @e paths and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter @e output_path.
+    *
+    * @param paths is an array of null-terminated strings representing absolute paths in
+    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
+    * @param n_paths is the number of elements in the @e paths array
+    * @param output_path points to the resulting container
+    * @param level is an enum used to set the XAdES signature level/profile: XAdES-B (PTEID_LEVEL_BASIC), XAdES-T (PTEID_LEVEL_T), XAdES-LTA (PTEID_LEVEL_LTV). Note: Setting parameter level to PTEID_LEVEL_LT will throw PTEID_Exception(EIDMW_ERR_PARAM_BAD), as it is not supported yet.
+    **/
+    PTEIDSDK_API virtual PTEID_ByteArray SignXades(const char *output_path, const char * const* paths, unsigned int n_paths,
+        PTEID_SignatureLevel level = PTEID_LEVEL_BASIC) = 0;
+
+    /**
+    * Produce a XAdES-T Signature of the files indicated by the parameter @e paths and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter @e output_path.
+    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
+    *
+    * @param paths is an array of null-terminated strings representing absolute paths in
+    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
+    * @param n_paths is the number of elements in the @e paths array
+    * @param output_path points to the resulting container
+    * @deprecated use the SignXades function and set signature level with level (PTEID_SignatureLevel) parameter instead
+    */
+    PTEIDSDK_API virtual PTEID_ByteArray SignXadesT(const char *output_path, const char * const* paths, unsigned int n_paths) = 0;
+
+    /**
+    * Produce a XAdES-LTA Signature of the files indicated by the parameter @e paths and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter @e output_path.
+    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
+    * If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a XAdES-LT or XAdES-LTA depending where the timestamping fails.
+    *
+    * @param paths is an array of null-terminated strings representing absolute paths in
+    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
+    * @param n_paths is the number of elements in the @e paths array
+    * @param output_path points to the resulting container
+    * @deprecated use the SignXades function and set signature level with level (PTEID_SignatureLevel) parameter instead
+    */
+    PTEIDSDK_API virtual PTEID_ByteArray SignXadesA(const char *output_path, const char * const* paths, unsigned int n_paths) = 0;
+
+    /**
+    * Produce XAdES-B Signatures of the files indicated by the parameter @e paths and stores each of the results in an individual ASiC container in a zip format.
+    *
+    * @param paths is an array of null-terminated strings representing absolute paths in
+    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
+    * @param n_paths is the number of elements in the @e paths array
+    * @param output_path directory of the created ASiC containers
+    **/
+    PTEIDSDK_API virtual void SignXadesIndividual(const char *output_path, const char * const* paths, unsigned int n_paths) = 0;
+
+    /**
+    * Produce XAdES-T Signatures of the files indicated by the parameter @e paths and stores each of the results in an individual ASiC container in a zip format.
+    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
+    *
+    * @param paths is an array of null-terminated strings representing absolute paths in
+    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
+    * @param n_paths is the number of elements in the @e paths array
+    * @param output_path directory of the created ASiC containers
+    **/
+    PTEIDSDK_API virtual void SignXadesTIndividual(const char *output_path, const char * const* paths, unsigned int n_paths) = 0;
+
+    /**
+    * Produce XAdES-A Signatures of the files indicated by the parameter @e paths and stores each of the results in an individual ASiC container in a zip format.
+    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
+    * If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a XAdES-LT or XAdES-LTA depending where the timestamping fails.
+    *
+    * @param paths is an array of null-terminated strings representing absolute paths in
+    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
+    * @param n_paths is the number of elements in the @e paths array
+    * @param output_path directory of the created ASiC containers
+    **/
+    PTEIDSDK_API virtual void SignXadesAIndividual(const char *output_path, const char * const* paths, unsigned int n_paths) = 0;
+
+    /*
+		* Add a XAdES signature to the ASIC container at @path. The signature profile is specified in @level parameter
+    */
+    PTEIDSDK_API virtual void SignASiC(const char *path, PTEID_SignatureLevel level = PTEID_LEVEL_BASIC) = 0;
+
+    /**
+    * PDF Signature with location by page sector (the portrait A4 page is split into 18 cells: 6 lines and 3 columns)
+    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a PAdES-B signature.
+    * If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a PAdES-LT or PAdES-LTA depending where the timestamping fails.
+    *
+    * @param sig_handler: this defines the input file and some signature options
+    * @param page: in case of visible signature it defines the page where the signature will appear
+    * @param page_sector: position in the signature grid, between 1 to 18 for Portrait documents and 1 to 20 for Landscape ones
+    * @param is_landscape: is unused parameter, the SDK now detects document orientation automatically
+    * @param location: Signature metadata field
+    * @param reason: Signature metadata field
+    * @param outfile_path: Native Filesystem path of the ouput file
+    * @deprecated use the SignPDF function with location coordinates instead
+    **/
+    PTEIDSDK_API virtual int SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason,
+        const char *outfile_path) = 0;
+
+    /**
+    * PDF Signature with location by coordinates (expressed in percentage of page height/width). The coordinate system has its origin in the top left corner of the page
+    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a PAdES-B signature.
+    * If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a PAdES-LT or PAdES-LTA depending where the timestamping fails.
+    *
+    * @param sig_handler: this defines the input file and some signature options
+    * @param page: in case of visible signature it defines the page where the signature will appear
+    * @param coord_x: X coordinate of the signature location (percentage of page width)
+    * @param coord_y: Y coordinate of the signature location (percentage of page height)
+    * @param location: Location field in the added signature metadata
+    * @param reason: Signature metadata field
+    * @param outfile_path: Native Filesystem path of the ouput file
+    **/
+    PTEIDSDK_API virtual int SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
+        const char *outfile_path) = 0;
+
+    /** @deprecated Use getCertificates() to obtain the certificates and obtain the desired certificate/build the chain manually.*/
+    PTEIDSDK_API virtual PTEID_Certificates& getCertificates() = 0;
+    /** @deprecated Use getCertificates() to obtain the certificates and obtain the desired certificate/build the chain manually.*/
+    PTEIDSDK_API virtual PTEID_Certificate &getCert(PTEID_CertifType type) = 0;
+    /** @deprecated Use getCertificates() to obtain the certificates and obtain the desired certificate/build the chain manually.*/
+    PTEIDSDK_API virtual PTEID_Certificate &getRoot() = 0;
+    /** @deprecated Use getCertificates() to obtain the certificates and obtain the desired certificate/build the chain manually.*/
+    PTEIDSDK_API virtual PTEID_Certificate &getCA() = 0;
+    /** @deprecated Use getCertificates() to obtain the certificates and obtain the desired certificate/build the chain manually.*/
+    PTEIDSDK_API virtual PTEID_Certificate &getSignature() = 0;
+    /** @deprecated Use getCertificates() to obtain the certificates and obtain the desired certificate/build the chain manually.*/
+    PTEIDSDK_API virtual PTEID_Certificate &getAuthentication() = 0;
+
+    /**
+    * Get type of SigningDeviceType.
+    */
+    PTEIDSDK_API virtual PTEID_SigningDeviceType getDeviceType() = 0;
+};
+
 
 /******************************************************************************//**
   * Abstract base class for all the card type supported.
   * The PTEID_ReaderContext::getCard() method will return such an object.
   *********************************************************************************/
-class PTEID_Card : public PTEID_Object
+class PTEID_Card : public PTEID_Object, public PTEID_SigningDevice
 {
 public:
 	PTEIDSDK_API virtual ~PTEID_Card()=0;				/**< Destructor */
@@ -614,21 +771,41 @@ public:
 	 */
     PTEIDSDK_API virtual PTEID_ByteArray sendAPDU(const PTEID_ByteArray& cmd);
 
- 	/**
-	 * Raw RSA signature with PCKS #1 padding.
-	 * @param data holds the data to be signed, at most 32 bytes.
-	 * @param signatureKey whether to use the 'Signature key'. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to @b true.
-	 * @return A PTEID_ByteArray containing the signed data.
-	 */
-    PTEIDSDK_API virtual PTEID_ByteArray Sign(const PTEID_ByteArray& data, bool signatureKey=false);
+    PTEIDSDK_API virtual PTEID_ByteArray Sign(const PTEID_ByteArray& data, bool signatureKey=false) override;
+    PTEIDSDK_API virtual PTEID_ByteArray SignSHA256(const PTEID_ByteArray& data, bool signatureKey=false) override;
 
- 	/**
-	 * Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash).
-	 * @param data holds the data to be signed, it should be 32 bytes.
-	 * @param signatureKey whether to use the 'Signature key'. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to @b true.
-	 * @return A PTEID_ByteArray containing the signed data.
-	 */
-    PTEIDSDK_API virtual PTEID_ByteArray SignSHA256(const PTEID_ByteArray& data, bool signatureKey=false);
+    /**
+    * @copydoc PTEID_SigningDevice::SignXades
+    */
+    PTEIDSDK_API virtual PTEID_ByteArray SignXades(const char *output_path, const char * const* paths, unsigned int n_paths, PTEID_SignatureLevel level = PTEID_LEVEL_BASIC) override;
+
+    /**
+    * @copydoc PTEID_SigningDevice::SignXadesT
+    */
+    PTEIDSDK_API virtual PTEID_ByteArray SignXadesT(const char *output_path, const char * const* paths, unsigned int n_paths) override;
+
+    /**
+    * @copydoc PTEID_SigningDevice::SignXadesA
+    */
+    PTEIDSDK_API virtual PTEID_ByteArray SignXadesA(const char *output_path, const char * const* paths, unsigned int n_paths) override;
+    PTEIDSDK_API virtual void SignXadesIndividual(const char *output_path, const char * const* paths, unsigned int n_paths) override;
+    PTEIDSDK_API virtual void SignXadesTIndividual(const char *output_path, const char * const* paths, unsigned int n_paths) override;
+    PTEIDSDK_API virtual void SignXadesAIndividual(const char *output_path, const char * const* paths, unsigned int n_paths) override;
+    PTEIDSDK_API virtual void SignASiC(const char *path, PTEID_SignatureLevel level = PTEID_LEVEL_BASIC) override;
+    PTEIDSDK_API virtual int SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason, const char *outfile_path) override;
+    PTEIDSDK_API virtual int SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason, const char *outfile_path) override;
+
+    /**
+     * @return an object to access all the certificates on the card.
+     **/
+    PTEIDSDK_API virtual PTEID_Certificates& getCertificates() override;
+    PTEIDSDK_API virtual PTEID_Certificate &getCert(PTEID_CertifType type) override;
+    PTEIDSDK_API virtual PTEID_Certificate &getRoot() override;
+    PTEIDSDK_API virtual PTEID_Certificate &getCA() override;
+    PTEIDSDK_API virtual PTEID_Certificate &getSignature() override;
+    PTEIDSDK_API virtual PTEID_Certificate &getAuthentication() override;
+
+    PTEIDSDK_API virtual PTEID_SigningDeviceType getDeviceType() override { return PTEID_SigningDeviceType::CC; }
 
  	/**
 	 * Read a File from the card.
@@ -654,24 +831,6 @@ private:
 	PTEID_Card(const PTEID_Card& card);					/**< Copy not allowed - not implemented */
 	PTEID_Card& operator= (const PTEID_Card& card);		/**< Copy not allowed - not implemented */
 
-};
-
-class APL_MemoryCard;
-
-/******************************************************************************//**
-  * Abstract base class for Memory card.
-  *********************************************************************************/
-class PTEID_MemoryCard : public PTEID_Card
-{
-public:
-	PTEIDSDK_API virtual ~PTEID_MemoryCard()=0;				/**< Destructor */
-
-protected:
-	PTEID_MemoryCard(const SDK_Context *context,APL_Card *impl);/**< For internal use : Constructor */
-
-private:
-	PTEID_MemoryCard(const PTEID_MemoryCard& card);				/**< Copy not allowed - not implemented */
-	PTEID_MemoryCard& operator= (const PTEID_MemoryCard& card);	/**< Copy not allowed - not implemented */
 };
 
 class PTEID_Pin;
@@ -742,11 +901,6 @@ public:
 	 **/
 	PTEIDSDK_API virtual unsigned long certificateCount();
 
-	/**
-	 * @return an object to access all the certificates on the card.
-	 **/
-	PTEIDSDK_API virtual PTEID_Certificates& getCertificates();
-
 protected:
 	PTEID_SmartCard(const SDK_Context *context,APL_Card *impl);	/**< For internal use : Constructor */
 
@@ -764,6 +918,29 @@ class APL_EIDCard;
 class PTEID_XmlUserRequestedInfo;
 class PTEID_CCXML_Doc;
 class PDFSignature;
+
+
+/* 
+   Helper class to deal with ASIC signature containers used by pteid-mw to deliver XAdES signatures "attached to their input files"
+*/
+class PTEID_ASICContainer
+{
+public:
+	PTEIDSDK_API PTEID_ASICContainer(const char *input_path);
+	PTEIDSDK_API ~PTEID_ASICContainer();
+
+	PTEIDSDK_API long countInputFiles();
+	PTEIDSDK_API const char * getInputFile(long file_n);
+
+	PTEIDSDK_API void extract(const char *filename, const char * out_dir);
+	//PTEIDSDK_API void extractSignature(const char *output_dir, long signature_index);
+
+private:
+	//Internal SigContainer object
+	void * m_impl;
+	std::vector<std::string> m_files;
+
+};
 
 /**
 	Helper class for the PTEID_EIDCard::SignPDF() methods - it defines multiple options that affect the signature operation
@@ -829,12 +1006,14 @@ class PTEID_PDFSignature
 
 		PTEIDSDK_API PDFSignature *getPdfSignature();
 
+		PTEIDSDK_API char *getCertificateCitizenName();
+		PTEIDSDK_API char *getCertificateCitizenID();
+
 	private:
 	//The applayer object that actually implements the signature
 		PDFSignature *mp_signature;
 
-	friend class PTEID_EIDCard;
-
+	friend class PTEID_Card;
 };
 
 
@@ -874,12 +1053,6 @@ public:
 	PTEIDSDK_API bool clearPersonalNotes(PTEID_Pin *pin=NULL,const char *csPinCode="");
 	PTEIDSDK_API const char *readPersonalNotes();
 
-	PTEIDSDK_API PTEID_Certificate &getCert(PTEID_CertifType type);/**< Return certificate by type from the card */
-	PTEIDSDK_API PTEID_Certificate &getRoot();				/**< Return the root certificate from the card */
-	PTEIDSDK_API PTEID_Certificate &getCA();					/**< Return the ca certificate from the card */
-	PTEIDSDK_API PTEID_Certificate &getSignature();			/**< Return the signature certificate from the card */
-	PTEIDSDK_API PTEID_Certificate &getAuthentication();		/**< Return the authentication certificate from the card */
-
 	PTEIDSDK_API PTEID_PublicKey& getRootCAPubKey();		/**< Get the CVC CA public key that this card uses to verify the CVC key */
 	PTEIDSDK_API bool isActive();
 	PTEIDSDK_API void doSODCheck(bool check);			/**< Enable/disable the verification of ID and address data against the SOD file */
@@ -898,112 +1071,11 @@ public:
 	*/
 	PTEIDSDK_API bool Activate(const char *pinCode, PTEID_ByteArray &BCDDate, bool blockActivationPIN);
 
-    /**
-    * Produce a XAdES-B Signature of the files indicated by the parameter @e paths and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter @e output_path.
-    *
-    * @param paths is an array of null-terminated strings representing absolute paths in
-    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
-    * @param n_paths is the number of elements in the @e paths array
-    * @param output_path points to the resulting container
-    **/
-    PTEIDSDK_API PTEID_ByteArray SignXades(const char *output_path, const char * const* paths, unsigned int n_paths); 
-
-    /**
-    * Produce a XAdES-T Signature of the files indicated by the parameter @e paths and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter @e output_path.
-    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
-    *
-    * @param paths is an array of null-terminated strings representing absolute paths in
-    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
-    * @param n_paths is the number of elements in the @e paths array
-    * @param output_path points to the resulting container
-    **/
-    PTEIDSDK_API PTEID_ByteArray SignXadesT(const char *output_path, const char * const* path, unsigned int n_paths);
-
-    /**
-    * Produce a XAdES-A Signature of the files indicated by the parameter @e paths and stores the results in one ASiC container in a zip format. The location of the resulting ASiC container is indicated by the parameter @e output_path.
-    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
-    * If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a XAdES-LT or XAdES-LTA depending where the timestamping fails.
-    *
-    * @param paths is an array of null-terminated strings representing absolute paths in
-    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
-    * @param n_paths is the number of elements in the @e paths array
-    * @param output_path points to the resulting container
-    **/
-    PTEIDSDK_API PTEID_ByteArray SignXadesA(const char *output_path, const char * const* path, unsigned int n_paths); 
-
-    /**
-    * Produce XAdES-B Signatures of the files indicated by the parameter @e paths and stores each of the results in an individual ASiC container in a zip format.
-    *
-    * @param paths is an array of null-terminated strings representing absolute paths in
-    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
-    * @param n_paths is the number of elements in the @e paths array
-    * @param output_path directory of the created ASiC containers
-    **/
-    PTEIDSDK_API void SignXadesIndividual(const char *output_path,  const char * const* paths, unsigned int n_paths);
-
-    /**
-    * Produce XAdES-T Signatures of the files indicated by the parameter @e paths and stores each of the results in an individual ASiC container in a zip format.
-    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
-    * 
-    * @param paths is an array of null-terminated strings representing absolute paths in
-    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
-    * @param n_paths is the number of elements in the @e paths array
-    * @param output_path directory of the created ASiC containers
-    **/
-    PTEIDSDK_API void SignXadesTIndividual(const char *output_path, const char * const* paths, unsigned int n_paths);
-
-    /**
-    * Produce XAdES-A Signatures of the files indicated by the parameter @e paths and stores each of the results in an individual ASiC container in a zip format.
-    * If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a XAdES-B signature.
-    * If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a XAdES-LT or XAdES-LTA depending where the timestamping fails.
-    * 
-    * @param paths is an array of null-terminated strings representing absolute paths in
-    * the local filesystem. Those files content (hashed with SHA-256 algorithm) will be the input data for the RSA signature
-    * @param n_paths is the number of elements in the @e paths array
-    * @param output_path directory of the created ASiC containers
-    **/
-    PTEIDSDK_API void SignXadesAIndividual(const char *output_path, const char * const* paths, unsigned int n_paths); 
-
-			
-	/**
-	* PDF Signature with location by page sector (the portrait A4 page is split into 18 cells: 6 lines and 3 columns). 
-	* If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a PAdES-B signature.
-	* If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a PAdES-LT or PAdES-LTA depending where the timestamping fails.
-	*
- 	* @param sig_handler: this defines the input file and some signature options
- 	* @param page: in case of visible signature it defines the page where the signature will appear
-	* @param page_sector: position in the signature grid, between 1 to 18 for Portrait documents and 1 to 20 for Landscape ones
- 	* @param is_landscape: is unused parameter, the SDK now detects document orientation automatically 
-	* @param location: Signature metadata field
- 	* @param reason: Signature metadata field
- 	* @param outfile_path: Native Filesystem path of the ouput file
-	* @deprecated use the SignPDF function with location coordinates instead
- 	**/
-	    PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason,
-			const char *outfile_path);
-
-	/**
-	* PDF Signature with location by coordinates (expressed in percentage of page height/width). The coordinate system has its origin in the top left corner of the page.
-	* To apply an invisible signature negative values should be specified for both coordinates, e.g. -1.
-	* If PTEID_Exception(EIDMW_TIMESTAMP_ERROR) is thrown, the resulting file is a PAdES-B signature.
-	* If PTEID_Exception(EIDMW_LTV_ERROR) is thrown, the resulting file is a PAdES-LT or PAdES-LTA depending where the timestamping fails.
-	* 
-	* @param sig_handler: this defines the input file and some signature options
-	* @param page: in case of visible signature it defines the page where the signature will appear
-	* @param coord_x: X coordinate of the signature location (percentage of page width [0-1])
-	* @param coord_y: Y coordinate of the signature location (percentage of page height [0-1])
-	* @param location: Location field in the added signature metadata
-	* @param reason: Reason field in the added signature metadata
-	* @param outfile_path: Native filesystem path of the ouput file
-	**/
-	    PTEIDSDK_API int SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
-			const char *outfile_path);
-
 #if !defined SWIG
 	    typedef void (*t_address_change_callback)(void *, int);
 
 	    PTEIDSDK_API void ChangeAddress(char *secretCode, char *process, t_address_change_callback callback, void *callback_data);
-#endif    
+#endif  
 
 protected:
 	PTEID_EIDCard(const SDK_Context *context,APL_Card *impl);		/**< For internal use : Constructor */
@@ -1018,6 +1090,122 @@ friend PTEIDSDK_API long ::PTEID_CVC_Init(const unsigned char *pucCert, int iCer
 
 };
 
+/******************************************************************************//**
+  * This class is a client for signing with Chave Móvel Digital.
+  * @since 3.8.0
+  *********************************************************************************/
+class PTEID_CMDSignatureClient : public PTEID_Object, public PTEID_SigningDevice
+{
+public:
+
+	PTEIDSDK_API PTEID_CMDSignatureClient();										/**< Default constructor */
+	PTEIDSDK_API virtual ~PTEID_CMDSignatureClient();								/**< Destructor */
+
+    /**
+     * If setMobileNumberCaching is enabled, the mobile number used in a previous signature with this instance is 
+     * cached and displayed in the signature dialog as a placeholder.
+     **/
+    PTEIDSDK_API void setMobileNumberCaching(bool enabled);
+
+	/**
+	* @copydoc PTEID_SigningDevice::Sign
+	* \attention The PTEID_CMDSignatureClient class only supports signature key. For that reason, signatureKey must be set to true!
+	*/
+	PTEIDSDK_API virtual PTEID_ByteArray Sign(const PTEID_ByteArray& data, bool signatureKey = false) override;
+	/**
+	* @copydoc PTEID_SigningDevice::SignSHA256
+	* \attention The PTEID_CMDSignatureClient class only supports signature key. For that reason, signatureKey must be set to true!
+	*/
+	PTEIDSDK_API virtual PTEID_ByteArray SignSHA256(const PTEID_ByteArray& data, bool signatureKey = false) override;
+	/**
+	* @copydoc PTEID_SigningDevice::SignXades
+	*/
+	PTEIDSDK_API virtual PTEID_ByteArray SignXades(const char *output_path, const char * const* paths, unsigned int n_paths, PTEID_SignatureLevel level = PTEID_LEVEL_BASIC) override;
+	/**
+	* @warning This method is not implemented for PTEID_CMDSignatureClient.
+	* @throws PTEID_Exception(EIDMW_ERR_NOT_IMPLEMENTED) the method is not implemented.
+	*/
+	PTEIDSDK_API virtual PTEID_ByteArray SignXadesT(const char *output_path, const char * const* paths, unsigned int n_paths) override;
+	/**
+	* @warning This method is not implemented for PTEID_CMDSignatureClient.
+	* @throws PTEID_Exception(EIDMW_ERR_NOT_IMPLEMENTED) the method is not implemented.
+	*/
+	PTEIDSDK_API virtual PTEID_ByteArray SignXadesA(const char *output_path, const char * const* paths, unsigned int n_paths) override;
+	/**
+	* @warning This method is not implemented for PTEID_CMDSignatureClient.
+	* @throws PTEID_Exception(EIDMW_ERR_NOT_IMPLEMENTED) the method is not implemented.
+	*/
+	PTEIDSDK_API virtual void SignXadesIndividual(const char *output_path, const char * const* paths, unsigned int n_paths) override;
+	/**
+	* @warning This method is not implemented for PTEID_CMDSignatureClient.
+	* @throws PTEID_Exception(EIDMW_ERR_NOT_IMPLEMENTED) the method is not implemented.
+	*/
+	PTEIDSDK_API virtual void SignXadesTIndividual(const char *output_path, const char * const* paths, unsigned int n_paths) override;
+	/**
+	* @warning This method is not implemented for PTEID_CMDSignatureClient.
+	* @throws PTEID_Exception(EIDMW_ERR_NOT_IMPLEMENTED) the method is not implemented.
+	*/
+	PTEIDSDK_API virtual void SignXadesAIndividual(const char *output_path, const char * const* paths, unsigned int n_paths) override;
+	PTEIDSDK_API virtual void SignASiC(const char *path, PTEID_SignatureLevel level = PTEID_LEVEL_BASIC) override;
+	PTEIDSDK_API virtual int SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason, const char *outfile_path) override;
+	PTEIDSDK_API virtual int SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason, const char *outfile_path) override;
+
+	/**
+	* This method returns the certificates for the account used in the last signature performed by this client.
+	* If no signature was made, it will open a dialog to introduce the CMD credentials for the account of the certificates to be obtained.
+	* @return an object to access the certificate chain of a CMD account.
+	* @warning The PTEID_CMDSignatureClient instance manages the allocation and deletion of the PTEID_Certificates returned by getCertificates().
+    * This means that the PTEID_Certificates can only be used while the PTEID_CMDSignatureClient exists (in Java/C# be sure to keep a reference to PTEID_CMDSignatureClient!).
+	**/
+	PTEIDSDK_API virtual PTEID_Certificates& getCertificates() override;
+	PTEIDSDK_API virtual PTEID_Certificate &getCert(PTEID_CertifType type) override;
+	PTEIDSDK_API virtual PTEID_Certificate &getRoot() override;
+	PTEIDSDK_API virtual PTEID_Certificate &getCA() override;
+	PTEIDSDK_API virtual PTEID_Certificate &getSignature() override;
+	PTEIDSDK_API virtual PTEID_Certificate &getAuthentication() override;
+
+	PTEIDSDK_API virtual PTEID_SigningDeviceType getDeviceType() override { return PTEID_SigningDeviceType::CMD; }
+
+	/**
+	 * Set the credentials for the CMD services.
+	 * The credentials must be set once before using the CMD services and will be used for every instance of PTEID_CMDSignatureClient.
+	 **/
+	PTEIDSDK_API static void setCredentials(const char* basicAuthUser, const char* basicAuthPassword, const char* applicationId);
+
+private:
+	std::vector<PTEID_Certificates *>m_certificates; /**< For internal use : certificates to be returned by getCertificates. */
+};
+
+/******************************************************************************//**
+  * Singleton class - Factory used to obtain signing devices.
+  * Optionally, opens a dialog to let user choose signing device type.
+  * @since 3.8.0
+  *********************************************************************************/
+class PTEID_SigningDeviceFactory
+{
+public:
+    PTEIDSDK_API static PTEID_SigningDeviceFactory &instance(); /**< Return the singleton object */
+
+    /**
+     * Obtain a signing device.
+     *
+     * At least one of the parameters must be true. Otherwise, PTEID_ExBadUsage is thrown.
+     * If multiple types were allowed, this method opens a dialog to choose the signing device type.
+     *
+     * @param allowCC allow to retrieve handle to PTEID_EIDCard
+     * @param allowCMD allow to retrieve handle to PTEID_CMDSignatureDevice
+     **/
+    PTEIDSDK_API PTEID_SigningDevice &getSigningDevice(bool allowCC = true, bool allowCMD = true);
+
+private:
+    PTEID_SigningDeviceFactory(){};
+    ~PTEID_SigningDeviceFactory();
+
+    PTEID_SigningDeviceFactory(const PTEID_SigningDeviceFactory& factory);              /**< Copy not allowed - not implemented */
+    PTEID_SigningDeviceFactory& operator= (const PTEID_SigningDeviceFactory& factory);  /**< Copy not allowed - not implemented */
+
+    std::vector<PTEID_CMDSignatureClient *>m_cmdClients; /**< For internal use : PTEID_CMDSignatureClient returned by getSigningDevice to be deleted. */
+};
 
 class APL_XmlUserRequestedInfo;
 /******************************************************************************//**
@@ -1478,7 +1666,8 @@ private:
 
 	PTEID_Certificates(const SDK_Context *context,APL_Certifs *impl);/**< For internal use : Constructor */
 
-friend PTEID_Certificates& PTEID_SmartCard::getCertificates();		/**< For internal use : This method must access protected constructor */
+friend PTEID_Certificates& PTEID_Card::getCertificates();		/**< For internal use : This method must access protected constructor */
+friend PTEID_Certificates& PTEID_CMDSignatureClient::getCertificates();		/**< For internal use : This method must access protected constructor */
 };
 
 class APL_Certif;

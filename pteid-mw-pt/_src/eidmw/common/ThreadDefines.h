@@ -4,6 +4,7 @@
  * Copyright (C) 2008-2009 FedICT.
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
+ * Copyright (C) 2021 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -38,13 +39,13 @@
 #ifdef WIN32
 #define THREAD_CLEANUP(sync) if(sync){CloseHandle((HANDLE)sync);}
 #else
-#define THREAD_CLEANUP(sync)
+#define THREAD_CLEANUP(sync) if(sync){pthread_join(sync, NULL);}
 #endif
 
 
 /*-------------------------------------	UNIX --------------------------------*/
 
-#if ( defined( __UNIX__ ) || defined( __XMK__ ) ) && defined( USE_THREADS )
+#if ( defined( __UNIX__ ) || defined( __XMK__ ) )
 
 #if defined( __osf__ ) || defined( __alpha__ )
   #define __C_ASM_H

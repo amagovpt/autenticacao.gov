@@ -878,6 +878,16 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
     case PTEID_PARAM_AUTOUPDATES_NEWS_URL:
         m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_NEWS_URL);  break;
 
+	//CMD
+	case PTEID_PARAM_CMD_HOST:
+		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_HOST);			break;
+	case PTEID_PARAM_CMD_APPID:
+		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_APPID);			break;
+	case PTEID_PARAM_CMD_USERID:
+		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_USERID);		break;
+	case PTEID_PARAM_CMD_PASSWORD:
+		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_PASSWORD);			break;
+
 	default:
 		throw PTEID_ExParamRange();
 	}

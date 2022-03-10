@@ -46,7 +46,7 @@ __in    HWND parentWindow)
     }
     MWLOG_DEBUG(logBuf, "appWindow = [0x%08x]", parentWindow);
     SetApplicationWindow(parentWindow);
-    DlgRet ret = DlgAskInputCMD(false, pin, pinLen, (wchar_t *)userId, userName, userNameLen);
+    DlgRet ret = DlgAskInputCMD(DlgCmdOperation::DLG_CMD_SIGNATURE, false, pin, pinLen, (wchar_t *)userId, 0, userName, userNameLen);
     if (ret == DLG_OK)
     {
         return ERROR_SUCCESS;
@@ -87,7 +87,8 @@ __in    HWND parentWindow)
     }
     MWLOG_DEBUG(logBuf, "appWindow = [0x%08x]", parentWindow);
     SetApplicationWindow(parentWindow);
-    DlgRet ret = DlgAskInputCMD(true, otp, otpLen, (wchar_t *)pszDocname, NULL, 0, sendSmsCallback);
+    std::function<void(void)> fSendSmsCallback = sendSmsCallback;
+    DlgRet ret = DlgAskInputCMD(DlgCmdOperation::DLG_CMD_SIGNATURE, true, otp, otpLen, (wchar_t *)pszDocname, 0, NULL, 0, &fSendSmsCallback);
     if (ret == DLG_OK)
     {
         return ERROR_SUCCESS;
@@ -105,7 +106,8 @@ __in    HWND parentWindow)
 SECURITY_STATUS
 CmdKspOpenDialogProgress(
 __in    bool isValidateOtp,
-__in    HWND parentWindow)
+__in    HWND parentWindow,
+__in    unsigned long *pulHandle)
 {
     if (parentWindow == NULL)
     {
@@ -113,9 +115,9 @@ __in    HWND parentWindow)
     }
     MWLOG_DEBUG(logBuf, "appWindow = [0x%08x]", parentWindow);
     SetApplicationWindow(parentWindow);
-    DlgRet ret = DlgCMDMessage(
+    DlgRet ret = DlgCMDMessage(DlgCmdOperation::DLG_CMD_SIGNATURE,
         DlgCmdMsgType::DLG_CMD_PROGRESS, 
-        (isValidateOtp ? GETSTRING_DLG(SendingOtp) : GETSTRING_DLG(ConnectingWithServer)));
+        (isValidateOtp ? GETSTRING_DLG(SendingOtp) : GETSTRING_DLG(ConnectingWithServer)), pulHandle);
     if (ret == DLG_CANCEL)
     {
         return NTE_USER_CANCELLED;
@@ -131,7 +133,8 @@ void
 CmdKspOpenDialogError(
 __in    const wchar_t *message,
 __in    DlgCmdMsgType msgType,
-__in    HWND parentWindow)
+__in    HWND parentWindow,
+__in    unsigned long *pulHandle)
 {
     if (parentWindow == NULL)
     {
@@ -139,7 +142,7 @@ __in    HWND parentWindow)
     }
     MWLOG_DEBUG(logBuf, "appWindow = [0x%08x]", parentWindow);
     SetApplicationWindow(parentWindow);
-    DlgRet ret = DlgCMDMessage(msgType, message);
+    DlgRet ret = DlgCMDMessage(DlgCmdOperation::DLG_CMD_SIGNATURE, msgType, message, pulHandle);
     return;
 }
 
@@ -153,7 +156,7 @@ void sendSmsCallback()
 
 CMDSignature *CmdSignThread::cmdSignature = NULL;
 CmdSignThread::CmdSignThread(CMDProxyInfo *cmd_proxyinfo, CMDSignature *cmdSignature,
-    std::string mobileNumber, std::string pin, CByteArray hash, char* docname, PCCERT_CONTEXT pCert)
+    std::string mobileNumber, std::string pin, CByteArray hash, char* docname, PCCERT_CONTEXT pCert, unsigned long *pulHandle)
 {
     m_cmd_proxyinfo = cmd_proxyinfo;
     CmdSignThread::cmdSignature = cmdSignature;
@@ -163,13 +166,15 @@ CmdSignThread::CmdSignThread(CMDProxyInfo *cmd_proxyinfo, CMDSignature *cmdSigna
     m_docname = docname;
     m_pCert = pCert;
     m_isValidateOtp = false;
+    m_pulHandle = pulHandle;
 }
 
-CmdSignThread::CmdSignThread(CMDSignature *cmdSignature, std::string otp)
+CmdSignThread::CmdSignThread(CMDSignature *cmdSignature, std::string otp, unsigned long *pulHandle)
 {
     CmdSignThread::cmdSignature = cmdSignature;
     m_otp = otp;
     m_isValidateOtp = true;
+    m_pulHandle = pulHandle;
 }
 
 void CmdSignThread::Run()
@@ -222,7 +227,7 @@ void CmdSignThread::Run()
     }
 
 end:
-    DlgCloseCMDMessage();
+    DlgCloseCMDMessage(*m_pulHandle);
 }
 
 void CmdSignThread::Stop(unsigned long ulSleepFrequency)

@@ -144,7 +144,7 @@ public:
 	  * - First check the issuer name
 	  * - Then verify the signature (must be self-signed)
 	  */
-	bool isSelfIssuer(const CByteArray &cert);
+	EIDMW_APL_API bool isSelfIssuer(const CByteArray &cert);
 
 	/**
 	  * Check if the certificate (cert) has the issuer (issuer)
@@ -232,10 +232,22 @@ public:
 	bool GetOCSPUrl(const CByteArray &cert, std::string &url);
 
 	/**
+	  * Return the signing certificate of the OCSP responder
+	  * @return true if OCSP certificate has the "OCSP No-Check" extension
+	  */
+	bool GetOCSPCert(const CByteArray &ocspResponse, CByteArray &outCert);
+
+	/**
 	  * Return the url of CRL distribution point
 	  * @return true if CDP found
 	  */
 	bool GetCDPUrl(const CByteArray &cert, std::string &url);
+
+	/**
+	  * Return the CRL of a certificate
+	  * @return true if operation succeeded
+	  */
+	bool GetCrlData(const CByteArray &cert, CByteArray &outCrl);
 
 	/**
 	  * Return the Url of the OCSP responder
@@ -255,7 +267,7 @@ public:
 	  *
 	  * @return true if everything ok, false otherwise
 	  */
-	bool getCertInfo(const CByteArray &cert, tCertifInfo &info, const char *dateFormat="%d/%m/%Y");
+	EIDMW_APL_API bool getCertInfo(const CByteArray &cert, tCertifInfo &info, const char *dateFormat="%d/%m/%Y");
 
 	/**
 	  * Return the validitydate of a CRL
@@ -269,7 +281,7 @@ public:
 	  *
 	  * @return true if the operation succeed
 	  */
-	bool b64Encode(const CByteArray &baIn, CByteArray &baOut,bool bWithLineFeed=true);
+	EIDMW_APL_API bool b64Encode(const CByteArray &baIn, CByteArray &baOut,bool bWithLineFeed=true);
 
 	/**
 	  * Decode the byte array in b64

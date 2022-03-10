@@ -171,6 +171,18 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
+    <PreBuildEvent>
+      <Command>echo "*********************************************************************************"
+IF EXIST %PTEID_CREDENTIALS_FOLDER%\kspCredentials.h   (
+    echo "Copying credentials file %PTEID_CREDENTIALS_FOLDER%\kspCredentials.h"
+    copy "%PTEID_CREDENTIALS_FOLDER%\kspCredentials.h" "$(ProjectDir)\kspCredentials.h"
+) ELSE (
+    echo "%PTEID_CREDENTIALS_FOLDER%\kspCredentials.h not found."
+    echo "Copying credentials file "$(ProjectDir)\kspCredentials.h.template"
+    copy "$(ProjectDir)\kspCredentials.h.template" "$(ProjectDir)\kspCredentials.h"
+)
+echo "*********************************************************************************"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
@@ -197,10 +209,21 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
+    <PreBuildEvent>
+      <Command>echo "*********************************************************************************"
+IF EXIST %PTEID_CREDENTIALS_FOLDER%\kspCredentials.h   (
+    echo "Copying credentials file %PTEID_CREDENTIALS_FOLDER%\kspCredentials.h"
+    copy "%PTEID_CREDENTIALS_FOLDER%\kspCredentials.h" "$(ProjectDir)\kspCredentials.h"
+) ELSE (
+    echo "%PTEID_CREDENTIALS_FOLDER%\kspCredentials.h not found."
+    echo "Copying credentials file "$(ProjectDir)\kspCredentials.h.template"
+    copy "$(ProjectDir)\kspCredentials.h.template" "$(ProjectDir)\kspCredentials.h"
+)
+echo "*********************************************************************************"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="KSP.cpp" />
-    <ClCompile Include="KSPDlgHelper.cpp" />
     <ClCompile Include="KSPHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -208,8 +231,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\KSP.h" />
-    <ClInclude Include="..\Inc\KSPDlgHelper.h" />
     <ClInclude Include="..\Inc\log.h" />
+    <ClInclude Include="kspCredentials.h" />
     <ClInclude Include="language.h" />
   </ItemGroup>
   <ItemGroup>

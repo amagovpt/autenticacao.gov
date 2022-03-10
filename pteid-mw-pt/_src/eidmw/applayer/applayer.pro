@@ -104,7 +104,8 @@ HEADERS += \
 	PNGConverter.h \
 	PAdESExtender.h \
 	J2KHelper.h \
-	PDFSignature.h
+	PDFSignature.h \
+	proxyinfo.h
 
 SOURCES += \
 	APLCertif.cpp        \
@@ -138,9 +139,9 @@ SOURCES += \
 	PDFSignature.cpp \
 	PAdESExtender.cpp \
 	SAM.cpp \
-	OCSP.cpp \
 	PNGConverter.cpp \
-	J2KHelper.cpp
+	J2KHelper.cpp \
+	proxyinfo.cpp
 
 # Disable annoying and mostly useless gcc warning and add hidden visibility for non-exposed classes and functions
 QMAKE_CXXFLAGS += -Wno-write-strings

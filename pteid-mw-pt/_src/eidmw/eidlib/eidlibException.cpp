@@ -8,6 +8,7 @@
  * Copyright (C) 2012 Rui Martinho - <rui.martinho@ama.pt>
  * Copyright (C) 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ * Copyright (C) 2020-2021 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -84,6 +85,9 @@ const char* PTEID_Exception::GetMessage()
 				break;
 			case EIDMW_ERR_PIN_FORMAT:
 				error_message = "PIN not allowed for this card (invalid characters, too short/long)";
+				break;
+			case EIDMW_ERR_NOT_IMPLEMENTED:
+				error_message = "The function called is not implemented.";
 				break;
 
 			// Card errors
@@ -182,6 +186,9 @@ const char* PTEID_Exception::GetMessage()
 				break;
 			case EIDMW_WRONG_PIN_FORMAT:
 				error_message = "A PIN with invalid length or format was entered";
+				break;
+			case EIDMW_ERR_OP_CANCEL:
+				error_message = "User canceled the operation.";
 				break;
 
 			// Parser errors
@@ -324,6 +331,23 @@ const char* PTEID_Exception::GetMessage()
 			case EIDMW_PDF_INVALID_PAGE_ERROR:
 				error_message = "Invalid page on PDF document";
 				break;
+			case EIDMW_XADES_UNKNOWN_ERROR:
+				error_message = "XAdES error: unknown error";
+				break;
+
+			case EIDMW_ERR_CMD_BAD_CREDENTIALS:
+				error_message = "CMD credentials are not correctly configured.";
+				break;
+			case EIDMW_ERR_CMD_CONNECTION:
+				error_message = "Connection to CMD services failed.";
+				break;
+			case EIDMW_ERR_CMD_INVALID_CODE:
+				error_message = "The PIN or security code introduced is incorrect.";
+				break;
+			case EIDMW_ERR_CMD_INACTIVE_ACCOUNT:
+				error_message = "The CMD account is expired or inactive.";
+				break;
+			
 			default:
 				error_message = "Unmapped error: " + std::to_string(m_lError);
 				break;

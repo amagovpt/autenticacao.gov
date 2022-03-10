@@ -118,7 +118,9 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
     ui.lblOldPINName->setStyleSheet("QLabel { color : #000000; font-size: 12pt; background: rgba(0,0,0,0);}");
 
     ui.txtOldPIN->setMaxLength(8); //Max Length of PINs for PTEID cards as currently defined by INCM personalization
-    ui.txtOldPIN->setStyleSheet("QLineEdit {color : #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
+    if (m_Pin1Validator)
+        ui.txtOldPIN->setValidator(m_Pin1Validator);
+    ui.txtOldPIN->setStyleSheet("QLineEdit {color: #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
 QLineEdit:focus {border: 3px solid #D6D7D7;}");
 
     // NEW PIN
@@ -127,7 +129,9 @@ QLineEdit:focus {border: 3px solid #D6D7D7;}");
     ui.lblNewPIN1->setStyleSheet("QLabel { color : #000000; font-size: 12pt; background: rgba(0,0,0,0);}");
 
     ui.txtNewPIN1->setMaxLength(8); //Max Length of PINs for PTEID cards as currently defined by INCM personalization
-    ui.txtNewPIN1->setStyleSheet("QLineEdit {color : #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
+    if (m_Pin2Validator)
+        ui.txtNewPIN1->setValidator(m_Pin2Validator);
+    ui.txtNewPIN1->setStyleSheet("QLineEdit {color: #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
 QLineEdit:focus {border: 3px solid #D6D7D7;}");
 
     // CONFIRM NEW PIN
@@ -136,7 +140,9 @@ QLineEdit:focus {border: 3px solid #D6D7D7;}");
     ui.lblNewPIN2->setStyleSheet("QLabel { color : #000000; font-size: 12pt; background: rgba(0,0,0,0);}");
 
     ui.txtNewPIN2->setMaxLength(8); //Max Length of PINs for PTEID cards as currently defined by INCM personalization
-    ui.txtNewPIN2->setStyleSheet("QLineEdit {color : #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
+    if (m_Pin2Validator)
+        ui.txtNewPIN2->setValidator(m_Pin2Validator);
+    ui.txtNewPIN2->setStyleSheet("QLineEdit {color: #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
 QLineEdit:focus {border: 3px solid #D6D7D7;}");
 
     OldPIN_OK = NewPIN1_OK = NewPIN2_OK = false;

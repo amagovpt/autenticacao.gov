@@ -31,7 +31,7 @@ HFONT PteidControls::StandardFontHeader = NULL;
 HFONT PteidControls::StandardFontBold = NULL;
 HFONT PteidControls::StandardFont = NULL;
 
-HFONT PteidControls::CreatePteidFont(int fontPointSize, int fontWeight, HINSTANCE hInstance) {
+HFONT PteidControls::CreatePteidFont(int fontPointSize, int fontWeight, HINSTANCE hInstance, LOGFONT *lfPtr) {
     if (!Font_bFontsLoaded)
     {
         Font_LoadFontsFromResources(hInstance);
@@ -40,13 +40,15 @@ HFONT PteidControls::CreatePteidFont(int fontPointSize, int fontWeight, HINSTANC
 
     LOGFONT lf;
     memset(&lf, 0, sizeof(lf));
-    HDC screen = GetDC(0);
 
     int fontSize = fontPointSize;
     ScaleDimensions(NULL, &fontSize);
     lf.lfHeight = -fontSize;
     lf.lfWeight = fontWeight;
     lf.lfOutPrecision = OUT_TT_ONLY_PRECIS;
+    if (lfPtr != NULL) {
+        lf.lfItalic = lfPtr->lfItalic;
+    }
 
     if (fontWeight == FW_BLACK)
     {

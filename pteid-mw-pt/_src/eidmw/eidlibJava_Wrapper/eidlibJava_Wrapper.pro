@@ -59,6 +59,7 @@ LIBS +=	-l$${COMMONLIB}
 LIBS +=	-l$${DLGLIB}
 LIBS +=	-l$${CARDLAYERLIB}
 LIBS +=	-l$${APPLAYERLIB}
+LIBS +=	-l$${CMDSERVICESLIB}
 
 macx: INCLUDEPATH += /Library/Java/JavaVirtualMachines/jdk-11.0.6.jdk/Contents/Home/include/ /Library/Java/JavaVirtualMachines/jdk-11.0.6.jdk/Contents/Home/include/darwin/ $$DEPS_DIR/openssl/include
 macx: LIB += -Wl,-framework -Wl,Java
@@ -70,6 +71,7 @@ INCLUDEPATH += ../dialogs
 INCLUDEPATH += ../common
 INCLUDEPATH += ../cardlayer
 INCLUDEPATH += ../eidlib
+INCLUDEPATH += ../CMD/services
 INCLUDEPATH += /usr/lib/jvm/java-11-openjdk-amd64/include
 INCLUDEPATH += /usr/lib/jvm/java-11-openjdk-amd64/include/linux
 
@@ -81,6 +83,8 @@ DEFINES += EIDMW_JAVA_WRAPPER
 # Input
 
 SOURCES += ../eidlib/eidlibCard.cpp
+SOURCES += ../eidlib/eidlibCmdClient.cpp
+SOURCES += ../eidlib/eidlibsignDevFactory.cpp
 SOURCES += ../eidlib/eidlibCrypto.cpp
 SOURCES += ../eidlib/eidlibDoc.cpp
 SOURCES += ../eidlib/eidlibException.cpp

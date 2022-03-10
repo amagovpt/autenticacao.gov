@@ -54,12 +54,20 @@ namespace eIDMW
 		/* The no-argument constructor is the one we should use for signatures in batch mode */
 		EIDMW_APL_API PDFSignature();
 		EIDMW_APL_API PDFSignature(const char *path);
+		PDFSignature(const PDFSignature &pdf_sig) = delete;
+		void operator=(const PDFSignature&) = delete;
 		EIDMW_APL_API ~PDFSignature();
 
-        EIDMW_APL_API void setFile(char *pdf_file_path);
-		
+		EIDMW_APL_API void setFile(const char *pdf_file_path);
 		/* Batch signature operation (using in-memory PIN caching) */
+
 		EIDMW_APL_API void batchAddFile(char *file_path, bool last_page);
+
+        EIDMW_APL_API size_t getCurrentBatchSize();
+        /* Build a "clone of" PDFSignature instance without m_files_to_sign and other options copied from this instance
+           Used for batch CMD signature */
+        EIDMW_APL_API PDFSignature * getSpecialCopy(size_t batch_index);
+
 		EIDMW_APL_API void enableTimestamp();
 		EIDMW_APL_API void setSignatureLevel(APL_SignatureLevel);
 
@@ -104,14 +112,14 @@ namespace eIDMW
 
         /* Hash */
 		EIDMW_APL_API CByteArray getHash();
-        
+
         void setHash( CByteArray in_hash );
         void computeHash(unsigned char *data, unsigned long dataLen,
                          CByteArray certificate,
                          std::vector<CByteArray> &CA_certificates,
                          bool isCardSign);
 
-        
+
 		EIDMW_APL_API int signClose(CByteArray signature);
 
 		EIDMW_APL_API void setSCAPAttributes(const char * citizenName, const char * citizenId,

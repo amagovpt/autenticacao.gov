@@ -42,6 +42,9 @@
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_CertifStatus.java">
       <Filter>GeneratedFiles</Filter>
     </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_CMDSignatureClient.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Config.java">
       <Filter>GeneratedFiles</Filter>
     </None>
@@ -132,9 +135,6 @@
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_LogLevel.java">
       <Filter>GeneratedFiles</Filter>
     </None>
-    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_MemoryCard.java">
-      <Filter>GeneratedFiles</Filter>
-    </None>
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Object.java">
       <Filter>GeneratedFiles</Filter>
     </None>
@@ -166,6 +166,12 @@
       <Filter>GeneratedFiles</Filter>
     </None>
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ReaderSet.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_SigningDevice.java">
+      <Filter>GeneratedFiles</Filter>
+    </None>
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_SigningDevicePicker.java">
       <Filter>GeneratedFiles</Filter>
     </None>
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_SmartCard.java">

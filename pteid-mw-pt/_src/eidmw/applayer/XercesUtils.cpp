@@ -28,6 +28,7 @@
 #include "eidErrors.h"
 #include "Log.h"
 #include "MWException.h"
+#include "XercesUtils.h"
 
 
 XERCES_CPP_NAMESPACE_USE
@@ -105,6 +106,32 @@ namespace eIDMW
         else
             h[1] = chLatin_a + toConvert - 10;
 
+    }
+
+    CByteArray *DOMDocumentToByteArray(XERCES_NS DOMDocument * doc) {
+        CByteArray * ba_out = new CByteArray();
+        XMLCh tempStr[3] = {chLatin_L, chLatin_S, chNull};
+        DOMImplementation *impl = DOMImplementationRegistry::getDOMImplementation(tempStr);
+
+        // construct the DOMWriter
+        DOMLSSerializer *theSerializer = ((DOMImplementationLS*)impl)->createLSSerializer();
+        DOMLSOutput *theOutputDesc = ((DOMImplementationLS*)impl)->createLSOutput();
+
+         // construct the MemBufFormatTarget
+        MemBufFormatTarget * myFormatTarget = new MemBufFormatTarget();
+        theOutputDesc->setByteStream(myFormatTarget);
+        theOutputDesc->setEncoding(XMLString::transcode("UTF-8"));
+        theSerializer->write(doc, theOutputDesc);
+
+        // serialize the DOMNode to a UTF-8 string
+        const XMLByte* utf8_string = myFormatTarget->getRawBuffer();
+        XMLSize_t size = myFormatTarget->getLen();
+        MWLOG(LEV_DEBUG, MOD_APL, L"DOMDocumentToByteArray: Returning XML byte array, size=%d", size);
+
+        ba_out->Append((const unsigned char *)utf8_string, size);
+
+        delete myFormatTarget;
+        return ba_out;
     }
 
 } // namespace eIDMW

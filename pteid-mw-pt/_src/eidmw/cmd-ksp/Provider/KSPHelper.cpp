@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ * Copyright (C) 2020-2021 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2020 José Pinto - <jose.pinto@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
@@ -39,6 +39,10 @@ Implementation Note:
 #include "psapi.h"
 #include <codecvt>
 #include "Util.h"
+#include "language.h"
+#include "Thread.h"
+#include "dialogs.h"
+#include "cryptoFramework.h"
 
 using namespace eIDMW;
 
@@ -629,4 +633,75 @@ cleanup:
 #endif
     docname = convert.to_bytes(u16Docname);
     StringCbCopyA(pszBuffer, cbBuffer, docname.c_str());
+}
+
+class DialogThread : public CThread {
+public:
+    DialogThread(DlgCmdMsgType type, std::wstring &message) {
+        m_type = type;
+        m_msg = message;
+    }
+
+    void Run() {
+        m_oldDlgHandle = m_dlgHandle;
+        DlgRet ret = DlgCMDMessage(DlgCmdOperation::DLG_CMD_SIGNATURE, m_type, m_msg.c_str(), &m_dlgHandle);
+    }
+
+    void Stop(unsigned long ulSleepFrequency = 100)
+    {
+        /* m_dlgHandle and m_oldDlgHandle are equal before showing the dialog.
+        the handle is changed after the dialog is shown. If the stored handles are different,
+        the dialog is showing. This is important to ensure the correct handle to close is already set! */
+        for (size_t i = 0; i < 100; i++) // 10 seconds should be enough to show the dialog...
+        {
+            SleepMillisecs(100);
+            if (m_oldDlgHandle != m_dlgHandle)
+                break;
+        }
+
+        DlgCloseCMDMessage(m_dlgHandle);
+        WaitTillStopped();
+    }
+
+private:
+    DlgCmdMsgType m_type;
+    std::wstring m_msg;
+    unsigned long m_dlgHandle = 0;
+    unsigned long m_oldDlgHandle = 0;
+};
+
+/* Return TRUE if cert status is not revoked/suspended. It returns TRUE if the validation fails to avoid stopping the signature. */
+BOOL
+validateCert(
+    __in    PCCERT_CONTEXT pCert)
+{
+    std::wstring dialogMsg(GETSTRING_DLG(ValidatingCertificate));
+    DialogThread dialogThread(DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL, dialogMsg);
+    dialogThread.Start();
+
+    APL_CryptoFwk *cryptoFwk = (APL_CryptoFwk *)AppLayer.getCryptoFwk();
+
+    HCERTSTORE hCAStore = NULL;
+    hCAStore = CertOpenSystemStore((HCRYPTPROV_LEGACY)NULL, "CA");
+
+    PCCERT_CONTEXT pIssuerCert = NULL;
+    DWORD dwFlags = 0;
+    pIssuerCert = CertGetIssuerCertificateFromStore(
+        hCAStore, pCert, pIssuerCert, &dwFlags);
+    // TODO: It should be checked if this is the correct issuer but there should be only one
+    if (!pIssuerCert)
+    {
+        MWLOG_WARN(logBuf, "CmdSignThread::Run(): Unable to find issuer certificate in store");
+        dialogThread.Stop();
+        return true;
+    }
+
+    CByteArray certBytes(pCert->pbCertEncoded, pCert->cbCertEncoded);
+    CByteArray issuerCertBytes(pIssuerCert->pbCertEncoded, pIssuerCert->cbCertEncoded);
+    FWK_CertifStatus status = cryptoFwk->OCSPValidation(certBytes, issuerCertBytes);
+    MWLOG_INFO(logBuf, "CmdSignThread::Run(): OCSP verification status for CMD cert: %d", status);
+
+    CertFreeCertificateContext(pIssuerCert);
+    dialogThread.Stop();
+    return (status != FWK_CertifStatus::FWK_CERTIF_STATUS_REVOKED && status != FWK_CertifStatus::FWK_CERTIF_STATUS_SUSPENDED);
 }

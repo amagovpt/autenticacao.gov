@@ -4,6 +4,7 @@
  * Copyright (C) 2012, 2014, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2012 Rui Martinho - <rui.martinho@ama.pt>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2021 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
 
@@ -54,6 +55,8 @@
 /** Bad usage of a class or function */
 #define EIDMW_ERR_BAD_USAGE            0xe1d00106
 
+/** The function called is not implemented. */
+#define EIDMW_ERR_NOT_IMPLEMENTED      0xe1d00107
 
 // Card errors
 
@@ -162,6 +165,9 @@
 /** A PIN with invalid length or format was entered */
 #define EIDMW_WRONG_PIN_FORMAT         0xe1d0021D
 
+/** User cancelled the operation */
+#define EIDMW_ERR_OP_CANCEL           0xe1d00230
+
 // Parser errors
 
 /** Could not find expected elements in parsed ASN.1 vector */
@@ -255,3 +261,13 @@
 #define EIDMW_PDF_INVALID_ERROR           0xe1d01e05
 #define EIDMW_PDF_UNSUPPORTED_ERROR       0xe1d01e06
 #define EIDMW_PDF_INVALID_PAGE_ERROR      0xe1d01e07
+
+// CMD errors
+#define EIDMW_ERR_CMD_BAD_CREDENTIALS            0xe1d01e08
+#define EIDMW_ERR_CMD_CONNECTION                 0xe1d01e09
+#define EIDMW_ERR_CMD_INVALID_CODE               0xe1d01e0a
+#define EIDMW_ERR_CMD_INACTIVE_ACCOUNT           0xe1d01e0b
+
+// XAdES errors
+#define EIDMW_XADES_UNKNOWN_ERROR                0xe1d01e0c
+#define EIDMW_XADES_INVALID_ASIC_ERROR           0xe1d01e0d

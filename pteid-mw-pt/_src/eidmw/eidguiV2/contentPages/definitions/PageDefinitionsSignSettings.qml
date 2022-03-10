@@ -83,6 +83,7 @@ PageDefinitionsSignSettingsForm {
 
     propertyLoadCMDCertsButton {
         onClicked: {
+            mainFormID.propertyCmdDialog.enableConnections()
             mainFormID.propertyCmdDialog.open(GAPI.RegisterCert)
         }
     }

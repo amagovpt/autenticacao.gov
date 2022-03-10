@@ -6,6 +6,7 @@
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2012, 2016-2017 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
+ * Copyright (C) 2021 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -23,8 +24,11 @@
 **************************************************************************** */
 /********************************************************************************
 ********************************************************************************/
+#include <unistd.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include "errno.h"
 
 #include "../dialogs.h"
@@ -38,11 +42,15 @@
 #include "MWException.h"
 #include "eidErrors.h"
 #include "Config.h"
+#include "Thread.h"
 
 using namespace eIDMW;
 
 std::map< unsigned long, DlgRunningProc* > dlgPinPadInfoCollector;
 unsigned long dlgPinPadInfoCollectorIndex = 0;
+
+std::map< unsigned long, DlgRunningProc* > dlgCMDMsgCollector;
+unsigned long dlgCMDMsgCollectorIndex = 0;
 
 std::string csServerName = "pteiddialogsQTsrv";
 
@@ -364,6 +372,253 @@ dlgPinPadInfoCollector.clear();
 }
 
 
+DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(DlgCmdOperation operation,
+      bool isValidateOtp,
+      wchar_t *csOutCode, unsigned long ulOutCodeBufferLen,
+      wchar_t *csInOutId, unsigned long ulOutIdLen,
+      const wchar_t *csUserName, unsigned long ulUserNameBufferLen,
+      std::function<void(void)> *fSendSmsCallback)
+{
+  MWLOG(LEV_DEBUG, MOD_DLG,L"  eIDMW::DlgAskInputCMD called");
+  DlgRet lRet = DLG_CANCEL;
+
+  DlgAskInputCMDArguments* oData;
+  SharedMem oShMemory;
+  std::string csReadableFilePath;
+
+  try {
+    csReadableFilePath = CreateRandomFile();
+
+    // creating the shared memory segment
+    // attach oData
+    oShMemory.Attach(sizeof(DlgAskInputCMDArguments),csReadableFilePath.c_str(),(void**)&oData);
+
+    // collect the arguments into the struct placed
+    // on the shared memory segment
+    oData->isValidateOtp = isValidateOtp;
+    oData->operation = operation;
+    oData->askForId = ulOutIdLen != 0;
+
+    if (isValidateOtp)
+    {
+      wcsncpy(oData->inOutId, csInOutId, sizeof(oData->inOutId)/sizeof(wchar_t));
+    }
+    else
+    {
+     //Cached mobile number for CMD PIN dialog
+     wcsncpy(oData->inOutId, csInOutId, ulOutIdLen);
+    }
+
+    CallQTServer(DLG_ASK_CMD_INPUT,csReadableFilePath.c_str(), NULL);
+    lRet = oData->returnValue;
+
+    /* If the callback button to send the sms was pressed, call callback and reopen the dialog.
+      callbackWasCalled in oData is set to true to disable the button. */
+    if (oData->returnValue == DLG_CALLBACK)
+    {
+      (*fSendSmsCallback)();
+      oData->callbackWasCalled = true;
+      CallQTServer(DLG_ASK_CMD_INPUT,csReadableFilePath.c_str(), NULL );
+      lRet = oData->returnValue;
+    }
+
+    if(lRet == DLG_OK) {
+      if (!isValidateOtp)
+      {
+        wcscpy_s(csInOutId,ulOutIdLen,oData->inOutId);
+      }
+
+      wcscpy_s(csOutCode,ulOutCodeBufferLen,oData->Code);
+    }
+
+    // detach from the segment
+    oShMemory.Detach(oData);
+
+    // delete the random file
+    DeleteFile(csReadableFilePath.c_str());
+  } catch (...) {
+    // detach from the segment
+    oShMemory.Detach(oData);
+
+    // delete the random file
+    DeleteFile(csReadableFilePath.c_str());
+
+    return DLG_ERR;
+  }
+  return lRet;
+}
+
+DLGS_EXPORT DlgRet eIDMW::DlgPickDevice(DlgDevice *outDevice)
+{
+  MWLOG(LEV_DEBUG, MOD_DLG,L"  eIDMW::DlgPickDevice called");
+  DlgRet lRet = DLG_CANCEL;
+
+  DlgPickDeviceArguments* oData;
+  SharedMem oShMemory;
+  std::string csReadableFilePath;
+
+  try {
+    csReadableFilePath = CreateRandomFile();
+
+    // creating the shared memory segment
+    // attach oData
+    oShMemory.Attach(sizeof(DlgPickDeviceArguments),csReadableFilePath.c_str(),(void**)&oData);
+
+    CallQTServer(DLG_PICK_DEVICE, csReadableFilePath.c_str(), NULL );
+    lRet = oData->returnValue;
+
+    if(lRet == DLG_OK) {
+      *outDevice = oData->outDevice;
+    }
+
+    // detach from the segment
+    oShMemory.Detach(oData);
+
+    // delete the random file
+    DeleteFile(csReadableFilePath.c_str());
+  } catch (...) {
+    // detach from the segment
+    oShMemory.Detach(oData);
+
+    // delete the random file
+    DeleteFile(csReadableFilePath.c_str());
+
+    return DLG_ERR;
+  }
+  return lRet;
+}
+
+
+DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType type, bool isOtp, unsigned long *pulHandle)
+{
+  const wchar_t * message = NULL;
+  if (isOtp)
+  {
+      message = GETSTRING_DLG(SendingOtp);
+  }
+  else
+  {
+      message = GETSTRING_DLG(ConnectingWithServer);
+  }
+  return DlgCMDMessage(operation, type, message, pulHandle);
+}
+
+DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType type, const wchar_t *message, unsigned long *pulHandle)
+{
+  MWLOG(LEV_DEBUG, MOD_DLG,L"  eIDMW::DlgCMDMessage called");
+  DlgRet lRet = DLG_CANCEL;
+
+  DlgCMDMessageArguments* oCmdMessageData;
+  SharedMem oShMemory;
+  std::string csReadableFilePath;
+
+  try {
+    csReadableFilePath = CreateRandomFile();
+
+    // creating the shared memory segment
+    // attach oCmdMessageData
+    oShMemory.Attach(sizeof(DlgCMDMessageArguments),csReadableFilePath.c_str(),(void**)&oCmdMessageData);
+
+    oCmdMessageData->type = type;
+    oCmdMessageData->operation = operation;
+    wcscpy_s(oCmdMessageData->message,sizeof(oCmdMessageData->message)/sizeof(wchar_t), message);
+    oCmdMessageData->cmdMsgCollectorIndex = ++dlgCMDMsgCollectorIndex;
+
+    CallQTServer(DLG_CMD_MSG, csReadableFilePath.c_str(), NULL );
+
+    DlgRunningProc *ptRunningProc = new DlgRunningProc();
+    ptRunningProc->iSharedMemSegmentID = oShMemory.getID();
+    ptRunningProc->csRandomFilename = csReadableFilePath;
+
+    ptRunningProc->tRunningProcess = oCmdMessageData->tRunningProcess;
+
+    dlgCMDMsgCollector[dlgCMDMsgCollectorIndex] = ptRunningProc;
+
+    if( pulHandle )
+      *pulHandle = dlgCMDMsgCollectorIndex;
+
+    /* Wait for dialog process to die. It is not direct child so waitpid does not work.
+    Timeout after 1 minute.*/
+    for (size_t i = 0; i < 600; i++)
+    {
+      CThread::SleepMillisecs(100);
+      //Check if process is running. If no (kill fails), break;
+      if(kill(ptRunningProc->tRunningProcess,0)) {
+        break;
+      }
+    }
+
+    // delete the map entry
+
+    delete ptRunningProc;
+    dlgCMDMsgCollector[dlgCMDMsgCollectorIndex] = NULL;
+    dlgCMDMsgCollector.erase(dlgCMDMsgCollectorIndex);
+
+    lRet = oCmdMessageData->returnValue;
+
+    // detach from the segment
+    oShMemory.Detach(oCmdMessageData);
+    oCmdMessageData = NULL;
+
+    // delete the random file
+    //DeleteFile(csReadableFilePath.c_str());
+    if (access( csReadableFilePath.c_str(), F_OK ) != -1)
+    {
+      // delete the random file
+      DeleteFile(csReadableFilePath.c_str());
+    }
+
+  } catch (...) {
+    // detach from the segment
+    oShMemory.Detach(oCmdMessageData);
+    oCmdMessageData = NULL;
+
+    // delete the random file
+    DeleteFile(csReadableFilePath.c_str());
+
+    MWLOG(LEV_ERROR, MOD_DLG,L"  eIDMW::DlgCMDMessage failed");
+
+    return DLG_ERR;
+  }
+
+  return lRet;
+}
+
+DLGS_EXPORT void eIDMW::DlgCloseCMDMessage(unsigned long ulHandle)
+{
+	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgCloseCMDMessage() called: handle=%lu", ulHandle);
+	// check if we have this handle
+  std::map < unsigned long,DlgRunningProc* >::iterator pIt =
+    dlgCMDMsgCollector.find(ulHandle);
+
+  if( pIt != dlgCMDMsgCollector.end()){
+
+    // check if the process is still running
+    // and send SIGTERM if so
+    if( ! kill(pIt->second->tRunningProcess,0)) {
+
+      MWLOG(LEV_DEBUG, MOD_DLG,L"  eIDMW::DlgCloseCMDMessage :  sending kill signal to process %d",
+	    pIt->second->tRunningProcess);
+
+      if( kill(pIt->second->tRunningProcess, SIGINT) ) {
+
+	     MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCloseCMDMessage sent signal SIGINT to proc %d Error: %s ",
+	          pIt->second->tRunningProcess, strerror(errno) );
+
+	      throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+      }
+
+    } else {
+      MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCloseCMDMessage sent signal 0 to proc %d : Error %s ",
+	    pIt->second->tRunningProcess, strerror(errno) );
+      throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+    }
+
+    // memory is cleaned up in the child process
+
+  }
+
+}
 
 /***************************
  *       Helper Functions

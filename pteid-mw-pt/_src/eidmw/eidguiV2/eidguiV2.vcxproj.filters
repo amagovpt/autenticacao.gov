@@ -296,5 +296,8 @@
     <ClInclude Include="concurrent.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="eidguiV2Credentials.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

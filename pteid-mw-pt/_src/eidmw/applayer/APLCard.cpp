@@ -153,17 +153,6 @@ CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey, bool use_
 
 }
 
-bool checkExistingFiles(const char **files, unsigned int n_paths)
-{
-	for(unsigned int i=0; i != n_paths; i++)
-	{
-		if (!CPathUtil::existFile(files[i]))
-			return false;
-	}
-
-	return true;
-}
-
 int APL_Card::SignPDF(PDFSignature *pdf_sig,  const char *location,
 		         const char *reason, const char *outfile_path)
 {
@@ -179,15 +168,37 @@ int APL_Card::SignPDF(PDFSignature *pdf_sig,  const char *location,
 }
 
 
-CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const char *output_path)
+CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const char *output_path,
+	APL_SignatureLevel level)
 {
-	if (paths == NULL || n_paths < 1 || !checkExistingFiles(paths, n_paths))
+	if (paths == NULL || n_paths < 1 || !CPathUtil::checkExistingFiles(paths, n_paths))
 	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+
+	if (level == LEVEL_LT) {
+		MWLOG(LEV_ERROR, MOD_CMD, "APL_Card::SignXades(): Signature Level LEVEL_LT is not supported.");
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
 
 	XadesSignature sig(this);
 
-	CByteArray &signature = sig.SignXades(paths, n_paths);
-	StoreSignatureToDisk (signature, paths, n_paths,output_path);
+	if (level == LEVEL_TIMESTAMP) {
+		sig.enableTimestamp();
+	}
+	else if (level == LEVEL_LTV) {
+		sig.enableLongTermValidation();
+	}
+
+	CByteArray &signature = sig.signXades(paths, n_paths);
+
+	if (sig.shouldThrowTimestampException()) {
+		throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
+	}
+
+	if (sig.shouldThrowLTVException()) {
+		throw CMWEXCEPTION(EIDMW_LTV_ERROR);
+	}
+
+	SigContainer::createASiC(signature, paths, n_paths,output_path);
 
 	//Write zip container signature and referenced files in zip container
 
@@ -243,7 +254,7 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 	bool throwTimestampException = false;
 	bool throwLTVException = false;
 
-	if (paths == NULL || n_paths < 1 || !checkExistingFiles(paths, n_paths))
+	if (paths == NULL || n_paths < 1 || !CPathUtil::checkExistingFiles(paths, n_paths))
 	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
     const char *files_to_sign[1];
@@ -259,7 +270,7 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 		CByteArray * ts_data = NULL;
 
 		files_to_sign[0] = paths[i];
-		CByteArray &signature = sig.SignXades(files_to_sign, 1);
+		CByteArray &signature = sig.signXades(files_to_sign, 1);
 
 		if (sig.shouldThrowTimestampException())
 			throwTimestampException = true;
@@ -268,7 +279,7 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 			throwLTVException = true;
 
 		const char *output_file = generateFinalPath(output_dir, paths[i]);
-		StoreSignatureToDisk (signature, files_to_sign, 1, output_file);
+		SigContainer::createASiC(signature, files_to_sign, 1, output_file);
 		delete []output_file;
 
 		//Set SSO on after first iteration to avoid more PinCmd() user interaction for the remaining
@@ -292,16 +303,16 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 
 CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, const char *output_file)
 {
-	if (paths == NULL || n_paths < 1 || !checkExistingFiles(paths, n_paths))
+	if (paths == NULL || n_paths < 1 || !CPathUtil::checkExistingFiles(paths, n_paths))
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	XadesSignature sig(this);
 	sig.enableTimestamp();
 
-	CByteArray &signature = sig.SignXades(paths, n_paths);
+	CByteArray &signature = sig.signXades(paths, n_paths);
 
 	//Write zip container signature and referenced files in zip container
-	StoreSignatureToDisk(signature, paths, n_paths, output_file);
+	SigContainer::createASiC(signature, paths, n_paths, output_file);
 	
 	if (sig.shouldThrowTimestampException())
 		throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
@@ -311,16 +322,16 @@ CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, cons
 
 CByteArray &APL_Card::SignXadesA(const char ** paths, unsigned int n_paths, const char *output_file)
 {
-	if (paths == NULL || n_paths < 1 || !checkExistingFiles(paths, n_paths))
+	if (paths == NULL || n_paths < 1 || !CPathUtil::checkExistingFiles(paths, n_paths))
 	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	XadesSignature sig(this);
 	sig.enableLongTermValidation();
 
-	CByteArray &signature = sig.SignXades(paths, n_paths);
+	CByteArray &signature = sig.signXades(paths, n_paths);
 
 	//Write zip container signature and referenced files in zip container
-	StoreSignatureToDisk(signature, paths, n_paths, output_file);
+	SigContainer::createASiC(signature, paths, n_paths, output_file);
 
 	if (sig.shouldThrowTimestampException())
 		throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
@@ -331,18 +342,23 @@ CByteArray &APL_Card::SignXadesA(const char ** paths, unsigned int n_paths, cons
 	return signature;
 }
 
-
-
-/*****************************************************************************************
----------------------------------------- APL_MemoryCard ----------------------------------
-*****************************************************************************************/
-APL_MemoryCard::APL_MemoryCard(APL_ReaderContext *reader):APL_Card(reader)
+void APL_Card::SignASiC(const char *path, APL_SignatureLevel level)
 {
+	if (path == NULL || !CPathUtil::checkExistingFiles(&path, 1)) {
+		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+	}
+
+	XadesSignature sig(this);
+    if (level == LEVEL_TIMESTAMP) {
+        sig.enableTimestamp();
+    }
+    else if (level == LEVEL_LTV) {
+        sig.enableLongTermValidation();
+    }
+
+	sig.signASiC(path);
 }
 
-APL_MemoryCard::~APL_MemoryCard()
-{
-}
 
 /*****************************************************************************************
 ---------------------------------------- APL_SmartCard -----------------------------------

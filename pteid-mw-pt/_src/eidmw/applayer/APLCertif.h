@@ -114,7 +114,7 @@ public:
 	  * This store is not link to any Card so some methods could not be used
 	  * these methods throw EIDMW_ERR_BAD_USAGE exception
 	  */
-	EIDMW_APL_API APL_Certifs();				
+	EIDMW_APL_API APL_Certifs(bool loadFromCertsDir = true);				
 
 	/**
 	  * Destructor

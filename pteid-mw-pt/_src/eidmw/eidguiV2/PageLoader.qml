@@ -42,7 +42,6 @@ Loader{
     property string propertyBackupLocal: ""
     property string propertyBackupReason: ""
     property string propertyBackupMobileNumber: ""
-    property int propertyBackupMobileIndicatorIndex: 0
     property bool propertyBackupFromSignaturePage: false
 
     property bool propertyForceFocus: false

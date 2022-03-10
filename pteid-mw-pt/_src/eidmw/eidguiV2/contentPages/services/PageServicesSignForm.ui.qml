@@ -838,7 +838,6 @@ Item {
                                 anchors.top: switchSignTemp.bottom
                                 x: 48
                                 enabled: switchSignTemp.checked         /* timestamp enabled */
-                                         && radioButtonPADES.checked     /* pdf signature */
                                 font.family: lato.name
                                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                                 font.capitalization: Font.MixedCase
@@ -1294,7 +1293,7 @@ Item {
                               "PageServicesSign", "STR_SIGN_CMD_BUTTON")
                     width: Constants.WIDTH_BUTTON
                     height: parent.height
-                    enabled: fileLoaded && radioButtonPADES.checked
+                    enabled: fileLoaded
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase

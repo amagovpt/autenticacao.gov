@@ -106,6 +106,9 @@
 //Name for operator= becomes assign
 %rename(assign) operator=;
 
+%include <swiginterface.i>
+%interface_custom("PTEID_SigningDeviceProxy", "PTEID_SigningDevice", eIDMW::PTEID_SigningDevice)
+
 #ifdef SWIGCSHARP /********************** C# SPECIFICS ***********************/
 
 ///////////////////////////////////////// Exception /////////////////////////////////////////////
@@ -555,6 +558,78 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 		throw new PTEID_ExDocTypeUnknown();
 	}
 }
+
+///////////////////////////////////////// PTEID_SigningDevice /////////////////////////////////////////////
+/* 
+ The returned PTEID_SigningDevice from PTEID_SigningDeviceFactory::getSigningDevice() is wrapped by the
+ PTEID_SigningDeviceProxy class by SWIG (how it deals with multiple inheritance in C#/Java). This would not
+ allow the PTEID_SigningDevice to be casted to PTEID_Card/PTEID_CMDSignatureClient and invoke methods of 
+ the derived class. As a workaround, convertSigningDevice method is called to wrap the C++ object by the
+ correct C# class (PTEID_EIDCard or PTEID_CMDSignatureClient). 
+
+ This arose another problem. Since the pointer held by the C# classes is a void* casted from a PTEID_SigningDevice*
+ it cannot be casted to the derived class (e.g., PTEID_EIDCard*) during the method calls - it is undefined behaviour.
+ The solution was to call downcastSigningDevice and store the pointer after downcast. 
+ */
+
+%{
+extern "C" SWIGEXPORT
+void * SWIGSTDCALL downcastSigningDevice(void *ptr, int type)
+{
+	eIDMW::PTEID_SigningDevice *devPtr = (eIDMW::PTEID_SigningDevice *)ptr;
+	switch (type)
+	{
+	case eIDMW::PTEID_SigningDeviceType::CC:
+		return (void *)dynamic_cast<eIDMW::PTEID_EIDCard *>(devPtr);
+	case eIDMW::PTEID_SigningDeviceType::CMD:
+		return (void *)dynamic_cast<eIDMW::PTEID_CMDSignatureClient *>(devPtr);
+	default:
+		return ptr;
+	}
+}
+%}
+
+// adapted from http://johnnado.com/swig-csharp-java-downcast/
+%typemap(cstype) 	eIDMW::PTEID_SigningDevice& "PTEID_SigningDevice"
+%pragma(csharp) imclasscode=%{
+	
+	[DllImport("$dllimport", EntryPoint="downcastSigningDevice")]
+    public static extern global::System.IntPtr downcastSigningDevice(global::System.Runtime.InteropServices.HandleRef ptr, int type);
+
+	public static PTEID_SigningDevice convertSigningDevice(IntPtr cPtr, bool owner)
+	{
+	PTEID_SigningDevice ret = null;
+	if (cPtr == IntPtr.Zero) {
+		return ret;
+	}
+	PTEID_SigningDeviceType type = (PTEID_SigningDeviceType) $modulePINVOKE.PTEID_SigningDeviceProxy_getDeviceType(new HandleRef(null, cPtr));
+	
+	cPtr = downcastSigningDevice(new HandleRef(null, cPtr), (int)type);
+	
+	switch (type) {
+		case PTEID_SigningDeviceType.CC:
+			ret = new PTEID_EIDCard(cPtr, owner);
+			break;
+		case PTEID_SigningDeviceType.CMD:
+			ret = new PTEID_CMDSignatureClient(cPtr, owner);
+			break;
+		default:
+			// for unmapped types return proxy (downcasting will not be possible)
+			ret = new PTEID_SigningDeviceProxy(cPtr, owner);
+			break;
+	}
+
+	return ret;
+	}
+%}
+
+%typemap(csout, excode=SWIGEXCODE) eIDMW::PTEID_SigningDevice&
+{
+	IntPtr cPtr = $imcall;
+	$csinterfacename ret = ($csinterfacename) $modulePINVOKE.convertSigningDevice(cPtr, $owner);$excode
+	return ret;
+}
+
 %ignore eIDMW::PTEID_PDFSignature::getPdfSignature();
 #elif SWIGJAVA	/********************** JAVA SPECIFICS ***********************/
 
@@ -662,6 +737,115 @@ return $jnicall;
     return $jnicall;
   }
 */
+
+///////////////////////////////////////// PTEID_SigningDevice /////////////////////////////////////////////
+/* <This code does the same as the uncommented code below. It is left here for now as this follows the
+documentation better and may be useful until this feature is well tested. The alternative below is 
+analogous to to the C# solution above.>
+
+%typemap(jni) eIDMW::PTEID_SigningDevice& "jobject"
+%typemap(jtype) eIDMW::PTEID_SigningDevice& "PTEID_SigningDevice"
+%typemap(jstype) 	eIDMW::PTEID_SigningDevice& "PTEID_SigningDevice"
+%typemap(javaout) eIDMW::PTEID_SigningDevice& {
+	return $jnicall;
+}
+
+%typemap(out) eIDMW::PTEID_SigningDevice& {
+	eIDMW::PTEID_SigningDeviceType type = $1->getDeviceType();
+	eIDMW::PTEID_SigningDevice *devPtr = (eIDMW::PTEID_SigningDevice *)$1;
+
+	jlong cptr = NULL;
+	jclass clazz = NULL;
+	jmethodID mid = NULL;
+	std::string classDescription = "pt/gov/cartaodecidadao";
+	switch (type)
+	{
+	case eIDMW::PTEID_SigningDeviceType::CC:
+	{
+		cptr = (jlong)dynamic_cast<eIDMW::PTEID_EIDCard *>(devPtr);
+		classDescription += "/PTEID_EIDCard";
+		break;
+	}
+	case eIDMW::PTEID_SigningDeviceType::CMD:
+	{
+		cptr = (jlong)dynamic_cast<eIDMW::PTEID_CMDSignatureClient *>(devPtr);
+		classDescription += "/PTEID_CMDSignatureClient";
+		break;
+	}
+	default:
+	{
+		cptr = (jlong)devPtr;
+		classDescription += "/PTEID_SigningDeviceProxy";
+		break;
+	}
+	}
+
+	clazz = jenv->FindClass(classDescription.c_str());
+	if (clazz)
+	{
+		mid = jenv->GetMethodID(clazz, "<init>", "(JZ)V");
+		if (mid) {
+			$result = jenv->NewObject(clazz, mid, cptr, false);
+		}
+	}
+	
+	if (!$result)
+	{
+		CustomExceptionHelper::throwJavaException(EIDMW_WRAPPER_FAILED,jenv);
+	}
+}*/
+%{
+extern "C" SWIGEXPORT jlong JNICALL Java_pt_gov_cartaodecidadao_pteidlibJava_1WrapperJNI_downcastSigningDevice(JNIEnv *jenv, jclass jcls, jlong jarg1, jint jarg2)
+{
+	eIDMW::PTEID_SigningDevice *devPtr = (eIDMW::PTEID_SigningDevice *)jarg1;
+	switch (jarg2)
+	{
+	case eIDMW::PTEID_SigningDeviceType::CC:
+		return (jlong)dynamic_cast<eIDMW::PTEID_EIDCard *>(devPtr);
+	case eIDMW::PTEID_SigningDeviceType::CMD:
+		return (jlong)dynamic_cast<eIDMW::PTEID_CMDSignatureClient *>(devPtr);
+	default:
+		return jarg1;
+	}
+}
+%}
+
+// adapted from http://johnnado.com/swig-csharp-java-downcast/
+%typemap(jstype) 	eIDMW::PTEID_SigningDevice& "PTEID_SigningDevice"
+%pragma(java) jniclasscode=%{
+	public final static native long downcastSigningDevice(long jarg1, int jarg2);
+
+	public final static PTEID_SigningDevice convertSigningDevice(long cPtr, boolean owner)
+	{
+		PTEID_SigningDevice ret = null;
+		if (cPtr == 0) {
+			return ret;
+		}
+		int type = $moduleJNI.PTEID_SigningDeviceProxy_getDeviceType(cPtr, null);
+
+		cPtr = $moduleJNI.downcastSigningDevice(cPtr, type);
+
+		if (type == PTEID_SigningDeviceType.CC.swigValue()) {
+			ret = new PTEID_EIDCard(cPtr, owner);
+		}
+		else if (type == PTEID_SigningDeviceType.CMD.swigValue()) {
+			ret = new PTEID_CMDSignatureClient(cPtr, owner);
+		}
+		else {
+			// for unmapped types return proxy (downcasting will not be possible)
+			ret = new PTEID_SigningDeviceProxy(cPtr, owner);
+		}
+
+		return ret;
+	}
+%}
+
+%typemap(javaout) eIDMW::PTEID_SigningDevice&
+{
+	long cPtr = $jnicall;
+	$javainterfacename ret = ($javainterfacename) $moduleJNI.convertSigningDevice(cPtr, $owner);
+	return ret;
+}
 
 ///////////////////////////////////////// Exception /////////////////////////////////////////////
 
@@ -910,9 +1094,6 @@ return $jnicall;
 %javaexception("PTEID_Exception") readFile			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") writeFile			JAVA_CODE_THROW
 
-//------------------------------------------------------------
-// class PTEID_MemoryCard: none
-//------------------------------------------------------------
 //------------------------------------------------------------
 // class PTEID_SmartCard
 //------------------------------------------------------------
@@ -1176,6 +1357,11 @@ return $jnicall;
 %javaexception("PTEID_Exception") getZip4	   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getZip3	   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getPostalLocality	   JAVA_CODE_THROW
+
+//------------------------------------------------------------
+// class PTEID_SigningDeviceFactory
+//------------------------------------------------------------
+%javaexception("PTEID_Exception") getSigningDevice	   JAVA_CODE_THROW
 
 ///////////////////////////////////////// SetEventCallback /////////////////////////////////////////////
 %typemap(ctype)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "long"

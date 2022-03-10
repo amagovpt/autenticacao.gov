@@ -32,7 +32,7 @@
 #define IDC_STATIC_TEXT_BOTTOM 4
 #define IDC_ANIMATION 5
 
-dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND Parent) : Win32Dialog(L"WndAskCmd")
+dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType msgType, const wchar_t *message, HWND Parent) : Win32Dialog(L"WndAskCmd")
 {
     std::wstring tmpTitle = L"";
     tmpTitle.append(message);
@@ -52,6 +52,7 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
         int titleX = (int)(clientRect.right * 0.05);
         int titleY = (int)(clientRect.bottom * 0.05);
         int contentWidth = (int)(clientRect.right * 0.9);
+        int titleWidth = (int)(contentWidth * 0.9);
         int textTopY = (int)(clientRect.bottom * 0.62);
         int imgWidth = (int)(clientRect.right * 0.25);
         int imgHeight = imgWidth;
@@ -62,19 +63,29 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
         int buttonHeight = (int)(clientRect.bottom * 0.08);
 
         // TITLE
-        std::wstring title = GETSTRING_DLG(SigningWith);
-        title.append(L" Chave Móvel Digital");
+        std::wstring title;
+        switch (operation)
+        {
+        case DlgCmdOperation::DLG_CMD_SIGNATURE:
+            title.append(GETSTRING_DLG(SigningWith)).append(L" ").append(GETSTRING_DLG(CMD));
+            break;
+        case DlgCmdOperation::DLG_CMD_GET_CERTIFICATE:
+            title.append(GETSTRING_DLG(ObtainingCMDCert));
+            break;
+        default:
+            break;
+        }
 
         titleData.text = title.c_str();
         titleData.font = PteidControls::StandardFontHeader;
         titleData.color = BLUE;
         HWND hTitle = PteidControls::CreateText(
             titleX, titleY,
-            contentWidth, (int)(clientRect.bottom * 0.15),
+            titleWidth, (int)(clientRect.bottom * 0.15),
             m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
 
         // ANIMATION / IMAGE
-        if (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS)
+        if (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS || msgType == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL)
         {
             hwndImage = Animate_Create(m_hWnd, IDC_ANIMATION, ACS_AUTOPLAY | ACS_CENTER | WS_CHILD, m_hInstance);
             SetWindowPos(hwndImage, 0, imgX, imgY, imgWidth, imgHeight, SWP_NOZORDER | SWP_SHOWWINDOW);
@@ -96,7 +107,8 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
         }
 
         // TEXT TOP
-        textTopData.text = (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS ? GETSTRING_DLG(PleaseWait) : GETSTRING_DLG(Error));
+        textTopData.text = (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS || msgType == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL ? 
+                                GETSTRING_DLG(PleaseWait) : GETSTRING_DLG(Error));
         textTopData.horizontalCentered = true;
         textTopData.font = PteidControls::StandardFontBold;
         HWND hTextTop = PteidControls::CreateText(
@@ -112,17 +124,21 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdMsgType msgType, const wchar_t *message, HWND P
             m_hWnd, (HMENU)IDC_STATIC_TEXT_BOTTOM, m_hInstance, &textBottomData);
 
         // BUTTON
-        btnProcData.text = (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS ? GETSTRING_DLG(Cancel) : GETSTRING_DLG(Ok));
-        HWND Cancel_Btn = PteidControls::CreateButton(
-            (int)((clientRect.right - buttonWidth) / 2), (int)(clientRect.bottom * 0.87), buttonWidth, buttonHeight,
-            m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &btnProcData);
-        SetFocus(btnProcData.getMainWnd());
+        if ( msgType != DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL)
+        {
+            btnProcData.text = (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS ? 
+                                    GETSTRING_DLG(Cancel) : GETSTRING_DLG(Ok));
+            HWND Cancel_Btn = PteidControls::CreateButton(
+                (int)((clientRect.right - buttonWidth) / 2), (int)(clientRect.bottom * 0.87), buttonWidth, buttonHeight,
+                m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &btnProcData);
+            SetFocus(btnProcData.getMainWnd());
+        }
     }
 }
 
 dlgWndCmdMsg::~dlgWndCmdMsg()
 {
-    if (type == DlgCmdMsgType::DLG_CMD_ERROR_MSG)
+    if (type == DlgCmdMsgType::DLG_CMD_PROGRESS || type == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL)
     {
         Animate_Close(hwndImage);
     }

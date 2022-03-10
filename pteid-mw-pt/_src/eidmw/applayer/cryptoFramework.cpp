@@ -33,19 +33,20 @@
 #include "ByteArray.h"
 #include "APLConfig.h"
 #include "APLCardPteid.h"
+#include "CRLFetcher.h"
 
 #include "MiscUtil.h"
 #include "Thread.h"
+
+#ifdef WIN32
+#include <wincrypt.h>
+#endif
 
 #include <openssl/evp.h>
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
 #include <openssl/err.h>
-
-#ifdef WIN32
-#include <wincrypt.h>
-#include <winsock.h>
-#endif
+#include <openssl/ocsp.h>
 
 #include "xercesc/util/Base64.hpp"
 #include "xercesc/util/XMLString.hpp"
@@ -1189,6 +1190,59 @@ char *APL_CryptoFwk::GetCDPUrl(X509 *pX509_Cert)
 
     return _strdup(pData);
 
+}
+
+bool APL_CryptoFwk::GetCrlData(const CByteArray &cert, CByteArray &outCrl)
+{
+	std::string url;
+	if (!GetCDPUrl(cert, url)) {
+		MWLOG(LEV_ERROR, MOD_APL, "Couldn't parse CRL URL from certificate");
+		return false;
+	}
+
+	CRLFetcher crlFetcher;
+	outCrl = crlFetcher.fetch_CRL_file(url.c_str());
+
+	if (outCrl.Size() == 0) {
+		MWLOG(LEV_ERROR, MOD_APL, "Network error fetching CRL from %s or empty response. "
+			"Revocation info is incomplete!", url.c_str());
+		return false;
+	}
+
+	return true;
+}
+
+bool APL_CryptoFwk::GetOCSPCert(const CByteArray &ocspResponse, CByteArray &outCert)
+{
+	bool noCheckExtension = false;
+	const unsigned char *p = ocspResponse.GetBytes();
+	OCSP_RESPONSE *resp = d2i_OCSP_RESPONSE(NULL, &p, ocspResponse.Size());
+
+	if (resp != NULL) {
+		OCSP_BASICRESP * basicResp = OCSP_response_get1_basic(resp);
+		if (basicResp != NULL) {
+			const STACK_OF(X509) * certs = OCSP_resp_get0_certs(basicResp);
+			for (int i = 0; certs && i < sk_X509_num(certs); i++) {
+				X509 *cert = sk_X509_value(certs, i);
+
+				//Check for presence of the "OCSP No-Check" extension from the beginning
+				int index = X509_get_ext_by_NID(cert, NID_id_pkix_OCSP_noCheck, -1);
+				noCheckExtension = (index != -1);
+
+				unsigned char * data = NULL;
+				int len = X509_to_DER(cert, &data);
+
+				outCert.Append(data, len);
+			}
+
+		}
+		OCSP_RESPONSE_free(resp);
+
+	} else {
+		MWLOG(LEV_WARN, MOD_APL, "%s: Failed to decode OCSP response!", __FUNCTION__);
+	}
+
+	return noCheckExtension;
 }
 
 bool APL_CryptoFwk::getCertInfo(const CByteArray &cert, tCertifInfo &info, const char *dateFormat)

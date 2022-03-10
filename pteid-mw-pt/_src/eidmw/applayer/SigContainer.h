@@ -11,26 +11,46 @@
 #ifndef SIGCONTAINER_H
 #define SIGCONTAINER_H
 
-#define SIG_INTERNAL_PATH "META-INF/signatures.xml"
-#define TS_INTERNAL_PATH "META-INF/ts_resp.bin"
+#include <vector>
+#include <string>
 
-#include <cstdio>
 #include "ByteArray.h"
-#include "MiscUtil.h"
-#include <zip.h>
 
-#ifdef WIN32
-#define NL "\r\n"
-#else
-#define NL "\n"
-#endif
+namespace eIDMW {
 
-namespace eIDMW
-{
+/*
+ * Signature container for XAdES signature files and associated signed file(s) -
+ * It should be compliant with the ASiC specification EN 319 162-1 -
+ * https://www.etsi.org/deliver/etsi_en/319100_319199/31916201/01.01.01_60/en_31916201v010101p.pdf
+ */
+class SigContainer {
+public:
+	EIDMW_APL_API SigContainer(const char* path) : m_path(path) {};
 
+	/*
+	 * Create and save to disk ASiC container with signature file and associated signed files
+	 */
+	EIDMW_APL_API static void createASiC(CByteArray& sig, const char **paths, unsigned int num_paths, const char *output_file);
 
+	/*
+	 * Return the filenames of the input files in this container
+	*/
+	EIDMW_APL_API std::vector<std::string> listInputFiles();
 
-	void StoreSignatureToDisk(CByteArray& sig, const char **paths, int num_paths, const char *output_file);
+	EIDMW_APL_API void extract(const char * filename, const char * out_dir);
+
+	/*
+	 * Return the filename of an eventual new signature xml file for this container
+	 * ex: signatures002.xml, signatures003.xml
+	*/
+	const char *getNextSignatureFileName();
+
+	void addSignature(const char *signatureFilename, const CByteArray& signature);
+
+private:
+	std::string m_path;
+	//std::vector<std::string> m_ContainerFiles;
+};
 
 }
 

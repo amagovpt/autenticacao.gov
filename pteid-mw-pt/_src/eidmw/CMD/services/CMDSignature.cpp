@@ -14,11 +14,13 @@
 #include "StringOps.h"
 #include "PDFSignature.h"
 #include "cmdServices.h"
-#include "eidlibException.h"
 #include "proxyinfo.h"
 #include "Util.h"
 #include "Hash.h"
 #include "eidErrors.h"
+#include "cmdSignatureClient.h"
+
+#define MAX_DOCNAME_LENGTH 44
 
 static char logBuf[512];
 
@@ -92,7 +94,7 @@ void printData(char *msg, unsigned char *data, unsigned int dataLen)
         cmdService = NULL;
     }
 
-    CMDSignature::CMDSignature(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId, PTEID_PDFSignature *in_pdf_handler) {
+    CMDSignature::CMDSignature(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId, PDFSignature *in_pdf_handler) {
         m_basicAuthUser = basicAuthUser;
         m_basicAuthPassword = basicAuthPassword;
         m_applicationId = applicationId;
@@ -117,13 +119,13 @@ void CMDSignature::cancelRequest()
 {
     cmdService->cancelRequest();
 }
-void CMDSignature::set_pdf_handler(PTEID_PDFSignature *in_pdf_handler)
+void CMDSignature::set_pdf_handler(PDFSignature *in_pdf_handler)
 {
     m_pdf_handlers.clear();
     m_pdf_handlers.push_back(in_pdf_handler);
 }
 
-void CMDSignature::add_pdf_handler(PTEID_PDFSignature *in_pdf_handler)
+void CMDSignature::add_pdf_handler(PDFSignature *in_pdf_handler)
 {
     m_pdf_handlers.push_back(in_pdf_handler);
 }
@@ -142,20 +144,21 @@ void CMDSignature::set_string_handler(std::string in_docname_handle,
 
 char *CMDSignature::getCertificateCitizenName()
 {
-    PDFSignature *pdf = m_pdf_handlers[0]->getPdfSignature();
+    PDFSignature *pdf = m_pdf_handlers[0];
 
     return pdf->getCitizenCertificateName();
 }
 
 char *CMDSignature::getCertificateCitizenID()
 {
-    PDFSignature *pdf = m_pdf_handlers[0]->getPdfSignature();
+    PDFSignature *pdf = m_pdf_handlers[0];
 
     return pdf->getCitizenCertificateID();
 }
 
 int CMDSignature::cli_getCertificate(std::string in_userId)
 {
+    m_certificates.clear();
     if (m_pdf_handlers.empty() && m_array_handler.Size() == 0)
     {
         MWLOG_ERR(logBuf, "NULL handler");
@@ -169,14 +172,13 @@ int CMDSignature::cli_getCertificate(std::string in_userId)
             return ERR_NULL_PDF_HANDLER;
         }
     }
-  
-    std::vector<CByteArray> certificates;
-    int ret = cmdService->getCertificate(m_proxyInfo, in_userId, certificates);
+
+    int ret = cmdService->getCertificate(m_proxyInfo, in_userId, m_certificates);
 
     if (ret != ERR_NONE)
         return ret;
 
-    if (0 == certificates.size())
+    if (0 == m_certificates.size())
     {
         MWLOG_ERR(logBuf, "getCertificate failed\n");
         return ERR_GET_CERTIFICATE;
@@ -186,7 +188,7 @@ int CMDSignature::cli_getCertificate(std::string in_userId)
     {
         for (size_t i = 0; i < m_pdf_handlers.size(); i++)
         {
-            PDFSignature *pdf = m_pdf_handlers[i]->getPdfSignature();
+            PDFSignature *pdf = m_pdf_handlers[i];
             if (NULL == pdf)
             {
                 MWLOG_ERR(logBuf, "NULL Pdf\n");
@@ -195,26 +197,23 @@ int CMDSignature::cli_getCertificate(std::string in_userId)
 
             pdf->setBatch_mode(false);
 
-            pdf->setExternCertificate(certificates.at(0));
+            pdf->setExternCertificate(m_certificates.at(0));
 
             pdf->setIsCC(false);
 
-            std::vector<CByteArray> newVec(certificates.begin() + 1, certificates.end());
+            std::vector<CByteArray> newVec(m_certificates.begin() + 1, m_certificates.end());
             pdf->setExternCertificateCA(newVec);
         }
     }
     else
     {
-        CByteArray externCertificate = certificates.at(0);
+        CByteArray externCertificate = m_certificates.at(0);
         m_string_certificate = externCertificate.ToString(false, false);
     }
 
     return ERR_NONE;
 }
 
-/*  *********************************************************
-    ***    CMDSignature::cli_sendDataToSign()          ***
-    ********************************************************* */
 int CMDSignature::cli_sendDataToSign(std::string in_pin)
 {
 
@@ -258,7 +257,7 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
     {
         for (size_t i = 0; i < m_pdf_handlers.size(); i++)
         {
-            PDFSignature *pdf = m_pdf_handlers[i]->getPdfSignature();
+            PDFSignature *pdf = m_pdf_handlers[i];
             if (NULL == pdf)
             {
                 MWLOG_ERR(logBuf, "NULL Pdf\n");
@@ -268,15 +267,25 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
             hashByteArray = pdf->getHash();
             DocName = pdf->getDocName();
 
-            //Truncate docName to the first 44 UTF-8 characters not bytes
-            truncateUtf8String(DocName, 44);
+            //Truncate docName to the first MAX_DOCNAME_LENGTH UTF-8 characters not bytes
+            truncateUtf8String(DocName, MAX_DOCNAME_LENGTH);
             signDocNames.push_back(DocName);
+
+            m_docname_handle += DocName + ", ";
 
             CByteArray *signatureInput = new CByteArray(sha256SigPrefix, sizeof(sha256SigPrefix));
             signatureInput->Append(hashByteArray);
             signatureInputs.push_back(signatureInput);
             signatureInputsBytes.push_back(signatureInput->GetBytes());
         }
+
+        m_docname_handle = m_docname_handle.substr(0, m_docname_handle.size()-2);
+        if (m_docname_handle.length() > MAX_DOCNAME_LENGTH)
+        {
+            truncateUtf8String(m_docname_handle, MAX_DOCNAME_LENGTH - 3);
+            m_docname_handle += "...";
+        }
+
     }
     else
     {
@@ -292,8 +301,8 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
         }
 
         DocName = m_docname_handle;
-        //Truncate docName to the first 44 UTF-8 characters not bytes
-        truncateUtf8String(DocName, 44);
+        //Truncate docName to the first MAX_DOCNAME_LENGTH UTF-8 characters not bytes
+        truncateUtf8String(DocName, MAX_DOCNAME_LENGTH);
         signDocNames.push_back(DocName);
 
         CByteArray *signatureInput = new CByteArray(sha256SigPrefix, sizeof(sha256SigPrefix));
@@ -339,20 +348,103 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
     }
 
     return ERR_NONE;
-} // namespace eIDMW
+}
 
-/*  *********************************************************
-    ***    CMDSignature::signOpen()                       ***
-    ********************************************************* */
+int CMDSignature::signOpen(CMDProxyInfo proxyinfo, CByteArray &in_hash, std::string docname, std::string * mobileNumber, const char *userName)
+{
+    std::string mobile, pin;
+
+    if (mobileNumber)
+    {
+        mobile += *mobileNumber;
+    }
+
+    DlgRet ret = CMDSignatureClient::openAuthenticationDialogPIN(DlgCmdOperation::DLG_CMD_SIGNATURE, &pin, &mobile, userName);
+
+    /* if userName == NULL, mobileNumber is cache. */
+    if (!userName)
+    {
+        mobileNumber->assign(mobile);
+    }
+
+    if(ret == DLG_CANCEL)
+        return ERR_OP_CANCELLED;
+    else if (ret != ERR_NONE)
+        throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+
+    std::function<void(void)> cancelRequestCallback = std::bind(&CMDSignature::cancelRequest, this);
+    CMDProgressDlgThread progressDlgThread(DlgCmdOperation::DLG_CMD_SIGNATURE, false, &cancelRequestCallback);
+    progressDlgThread.Start();
+    try
+    {
+        int result = signOpen(proxyinfo, mobile, pin, in_hash, docname);
+        progressDlgThread.Stop();
+
+        if (progressDlgThread.wasCancelled())
+            return ERR_OP_CANCELLED;
+
+        return result;
+    }
+    catch (CMWException &e)
+    {
+        MWLOG(LEV_ERROR, MOD_CMD, L"CMDSignature::signOpen: Got CMWException with error code: 0x%x", e.GetError());
+        progressDlgThread.Stop();
+        throw;
+    }
+}
+
+int CMDSignature::signOpen(CMDProxyInfo proxyinfo, const char *location, const char *reason, const char *outfile_path, std::string * mobileCache)
+{
+    std::string mobile, pin;
+    if (mobileCache)
+    {
+        mobile.append(*mobileCache);
+    }
+    DlgRet ret = CMDSignatureClient::openAuthenticationDialogPIN(DlgCmdOperation::DLG_CMD_SIGNATURE, &pin, &mobile);
+
+    if (mobileCache)
+    {
+        *mobileCache = mobile;
+    }
+
+    if (ret == DLG_CANCEL)
+        return ERR_OP_CANCELLED;
+    else if (ret != ERR_NONE) {
+        throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+    }
+
+    std::function<void(void)> cancelRequestCallback = std::bind(&CMDSignature::cancelRequest, this);
+    CMDProgressDlgThread progressDlgThread(DlgCmdOperation::DLG_CMD_SIGNATURE, false, &cancelRequestCallback);
+    progressDlgThread.Start();
+    try
+    {
+        int result = signOpen(proxyinfo, mobile, pin, location, reason, outfile_path);
+
+        if (progressDlgThread.wasCancelled())
+            return ERR_OP_CANCELLED;
+
+        progressDlgThread.Stop();
+
+
+        return result;
+    }
+    catch (CMWException &e)
+    {
+        MWLOG(LEV_ERROR, MOD_CMD, L"CMDSignature::signOpen: Got CMWException with error code: 0x%x", e.GetError());
+        progressDlgThread.Stop();
+        throw;
+    }
+}
+
 int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin, CByteArray &in_hash, std::string docname)
 {
     set_string_handler(docname, in_hash);
     clear_pdf_handlers();
     m_computeHash = false;
-    return signOpen(proxyinfo, in_userId, in_pin, 0, 0, 0, NULL, NULL, NULL);
+    return signOpen(proxyinfo, in_userId, in_pin, NULL, NULL, NULL);
 }
 
-int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin, int page, double coord_x, double coord_y, const char *location, const char *reason, const char *outfile_path)
+int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin, const char *location, const char *reason, const char *outfile_path)
 {
     m_userId = in_userId;
     if (cmdService)
@@ -372,7 +464,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
         std::vector<std::string *> filenames;
         for (size_t i = 0; i < m_pdf_handlers.size(); i++)
         {
-            PDFSignature *pdf = m_pdf_handlers[i]->getPdfSignature();
+            PDFSignature *pdf = m_pdf_handlers[i];
             // output filename should not be trimmed
             filenames.push_back(new std::string(pdf->getDocName()));
         }
@@ -385,16 +477,12 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
         int error = ERR_NONE;
         for (size_t i = 0; i < m_pdf_handlers.size(); i++)
         {
-            PDFSignature *pdf = m_pdf_handlers[i]->getPdfSignature();
+            PDFSignature *pdf = m_pdf_handlers[i];
 
-            if (coord_x >= 0 && coord_y >= 0)
-            {
-                pdf->setVisibleCoordinates(page > 0 ? page : pdf->getPageCount(), coord_x, coord_y);
-            }
             try{
                 ret = pdf->signFiles(location, reason, filenames[i]->c_str(), false);
             } catch (eIDMW::CMWException &e) {
-                throw PTEID_Exception(e.GetError());
+                throw CMWEXCEPTION(e.GetError());
             }
 
             delete filenames[i];
@@ -423,7 +511,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
 }
 
 int CMDSignature::cli_getSignatures(std::string in_code,
-                                    std::vector<PTEID_ByteArray *> out_sign)
+                                    std::vector<CByteArray *> out_sign)
 {
     if (m_pdf_handlers.empty() && m_array_handler.Size() == 0)
     {
@@ -464,7 +552,7 @@ int CMDSignature::cli_getSignatures(std::string in_code,
 
     for (size_t i = 0; i < out_sign.size(); i++)
     {
-        out_sign[i]->Clear();
+        out_sign[i]->ClearContents();
         out_sign[i]->Append((const unsigned char *)cbVector[i]->GetBytes(), cbVector[i]->Size());
         delete cbVector[i]; // Append method copies bytes, so it is safe to free
     }
@@ -472,14 +560,47 @@ int CMDSignature::cli_getSignatures(std::string in_code,
     return ERR_NONE;
 }
 
+int CMDSignature::signClose()
+{
+    std::string otp;
+    std::function<void(void)> fSmsCallback = std::bind(&CMDServices::forceSMS, cmdService, m_proxyInfo, m_userId);
+    DlgRet ret = CMDSignatureClient::openAuthenticationDialogOTP(DlgCmdOperation::DLG_CMD_SIGNATURE, &otp, &m_docname_handle, &fSmsCallback);
+
+    if (ret == DLG_CANCEL)
+        return ERR_OP_CANCELLED;
+    else if (ret != ERR_NONE)
+        throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+
+
+    std::function<void(void)> cancelRequestCallback = std::bind(&CMDSignature::cancelRequest, this);
+    CMDProgressDlgThread progressDlgThread(DlgCmdOperation::DLG_CMD_SIGNATURE, true, &cancelRequestCallback);
+    progressDlgThread.Start();
+    try
+    {
+        int result = signClose(otp);
+
+        if (progressDlgThread.wasCancelled())
+            return ERR_OP_CANCELLED;
+
+        progressDlgThread.Stop();
+
+        return result;
+    }
+    catch (...)
+    {
+        progressDlgThread.Stop();
+        throw;
+    }
+}
+
 int CMDSignature::signClose(std::string in_code)
 {
-    std::vector<PTEID_ByteArray *> signatures;
+    std::vector<CByteArray *> signatures;
     if (m_pdf_handlers.size() > 0 || m_array_handler.Size() > 0)
     {
         for (size_t i = 0; i < (std::max)(m_pdf_handlers.size(), std::size_t{1}); i++)
         {
-            signatures.push_back(new PTEID_ByteArray());
+            signatures.push_back(new CByteArray());
         }
     }
     else
@@ -504,7 +625,7 @@ int CMDSignature::signClose(std::string in_code)
         for (size_t i = 0; i < m_pdf_handlers.size(); i++)
         {
             try{
-                PDFSignature *pdf = m_pdf_handlers[i]->getPdfSignature();
+                PDFSignature *pdf = m_pdf_handlers[i];
                 // TODO: look for signature with right id and match it
                 CByteArray signature_cba(signatures[i]->GetBytes(), signatures[i]->Size());
 
@@ -512,7 +633,7 @@ int CMDSignature::signClose(std::string in_code)
             }
             catch (CMWException &e) {
                 if (e.GetError() != EIDMW_TIMESTAMP_ERROR && e.GetError() != EIDMW_LTV_ERROR){
-                    throw PTEID_Exception(e.GetError());
+                    throw CMWEXCEPTION(e.GetError());
                 }
                 if (e.GetError() == EIDMW_TIMESTAMP_ERROR)
                     throwTimestampError = true;
@@ -532,10 +653,10 @@ int CMDSignature::signClose(std::string in_code)
         }
 
         if (throwLTVError)
-                throw PTEID_Exception(EIDMW_LTV_ERROR);
+                throw CMWEXCEPTION(EIDMW_LTV_ERROR);
 
         if (throwTimestampError)
-                throw PTEID_Exception(EIDMW_TIMESTAMP_ERROR);
+                throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
 
         if (ret_had_errors != ERR_NONE)
             return ERR_SIGN_CLOSE;
@@ -549,8 +670,7 @@ int CMDSignature::signClose(std::string in_code)
                       (unsigned char *)m_docname_handle.c_str(), m_docname_handle.size());
         }
 
-        CByteArray ba(signatures[0]->GetBytes(), signatures[0]->Size());
-        m_string_signature = ba.ToString(false, false);
+        m_signature = CByteArray(signatures[0]->GetBytes(), signatures[0]->Size());
     }
 
     return ERR_NONE;

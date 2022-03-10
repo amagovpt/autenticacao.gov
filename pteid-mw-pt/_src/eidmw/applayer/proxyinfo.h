@@ -11,29 +11,29 @@
 #define _PROXYINFO_H
 
 #include <string>
-#include "eidlibdefines.h"
+#include "Export.h"
 
 class ProxyInfo
 {
 public:
-	PTEIDSDK_API ProxyInfo();
+    EIDMW_APL_API ProxyInfo();
 
 	// The configs returned are utf8 encoded
-	PTEIDSDK_API std::string getProxyHost();
+    EIDMW_APL_API std::string getProxyHost();
 
-	PTEIDSDK_API std::string getProxyPort();
+    EIDMW_APL_API std::string getProxyPort();
 
-	PTEIDSDK_API std::string getProxyUser() { return m_proxy_user; }
+    EIDMW_APL_API std::string getProxyUser() { return m_proxy_user; }
 
-	PTEIDSDK_API std::string getProxyPwd() { return m_proxy_pwd; }
+    EIDMW_APL_API std::string getProxyPwd() { return m_proxy_pwd; }
 
-	PTEIDSDK_API bool isSystemProxy() { return system_proxy;  }
+    EIDMW_APL_API bool isSystemProxy() { return system_proxy;  }
 
-	PTEIDSDK_API bool isAutoConfig() { return auto_configured; }
+    EIDMW_APL_API bool isAutoConfig() { return auto_configured; }
 
-	PTEIDSDK_API bool isManualConfig() { return manual_configured; }
+    EIDMW_APL_API bool isManualConfig() { return manual_configured; }
 
-	PTEIDSDK_API void getProxyForHost(std::string urlToFetch, std::string * proxy_host, long *proxy_port);
+    EIDMW_APL_API void getProxyForHost(std::string urlToFetch, std::string * proxy_host, long *proxy_port);
 
 private:
 	bool auto_configured;

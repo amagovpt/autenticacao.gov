@@ -114,7 +114,7 @@ public:
 
 	/* XADeS Signature Methods  */
 
-	EIDMW_APL_API CByteArray &SignXades(const char ** path, unsigned int n_paths, const char *output_path);
+	EIDMW_APL_API CByteArray &SignXades(const char ** path, unsigned int n_paths, const char *output_path, APL_SignatureLevel level);
 
 	EIDMW_APL_API CByteArray &SignXadesT(const char ** path, unsigned int n_paths, const char *output_path);
 
@@ -125,6 +125,8 @@ public:
 	EIDMW_APL_API void SignXadesTIndividual(const char**, unsigned int, const char*);
 
 	EIDMW_APL_API void SignXadesAIndividual(const char**, unsigned int, const char*);
+
+	EIDMW_APL_API void SignASiC(const char *path, APL_SignatureLevel level);
 
 	EIDMW_APL_API bool ChangeCapPin(const char * new_pin);
 
@@ -306,26 +308,6 @@ protected:
 	std::string *m_tokenSerial;
 	std::string *m_tokenLabel;
 	std::string *m_appletVersion;
-};
-
-/******************************************************************************//**
-  * Abstract base class for memory card (like sis card)
-  *********************************************************************************/
-class APL_MemoryCard : public APL_Card
-{
-public:
-	/**
-	  * Pur virtual destructor
-	  */
-	EIDMW_APL_API virtual ~APL_MemoryCard()=0;
-
-protected:
-	/**
-	  * Constructor
-	  *
-	  * @param reader is the reader from the card layer (CAL) in which the card is plugged
-	  */
-	APL_MemoryCard(APL_ReaderContext *reader);
 };
 
 }

@@ -202,9 +202,13 @@
   <ItemGroup>
     <ClCompile Include="..\langUtil.cpp" />
     <ClCompile Include="components\button.cpp" />
+    <ClCompile Include="components\comboBox.cpp" />
     <ClCompile Include="components\editField.cpp" />
     <ClCompile Include="components\font.cpp" />
+    <ClCompile Include="components\hyperlink.cpp" />
+    <ClCompile Include="components\radioButtonGroup.cpp" />
     <ClCompile Include="components\text.cpp" />
+    <ClCompile Include="components\controlBase.cpp" />
     <ClCompile Include="DlgsWin32.cpp" />
     <ClCompile Include="dlgUtil.cpp" />
     <ClCompile Include="dlgWndAskCmd.cpp" />
@@ -213,12 +217,14 @@
     <ClCompile Include="dlgWndBadPIN.cpp" />
     <ClCompile Include="dlgWndBase.cpp" />
     <ClCompile Include="dlgWndCmdMsg.cpp" />
+    <ClCompile Include="dlgWndPickDevice.cpp" />
     <ClCompile Include="dlgWndPinPadInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dialogs.h" />
     <ClInclude Include="..\language.h" />
     <ClInclude Include="..\langUtil.h" />
+    <ClInclude Include="..\countryCallingCodeList.h" />
     <ClInclude Include="components\pteidControls.h" />
     <ClInclude Include="dlgWndAskCmd.h" />
     <ClInclude Include="dlgWndAskPIN.h" />
@@ -226,6 +232,7 @@
     <ClInclude Include="dlgWndBadPIN.h" />
     <ClInclude Include="dlgWndBase.h" />
     <ClInclude Include="dlgWndCmdMsg.h" />
+    <ClInclude Include="dlgWndPickDevice.h" />
     <ClInclude Include="dlgWndPinPadInfo.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />

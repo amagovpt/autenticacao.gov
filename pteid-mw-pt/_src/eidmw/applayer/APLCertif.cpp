@@ -108,10 +108,13 @@ APL_Certifs::APL_Certifs(APL_SmartCard *card)
 
 }
 
-APL_Certifs::APL_Certifs()
+APL_Certifs::APL_Certifs(bool loadFromCertsDir)
 {
 	init(NULL);
-	loadFromFile();
+	if (loadFromCertsDir)
+	{
+		loadFromFile();
+	}
 }
 
 /*
@@ -589,7 +592,6 @@ APL_Certif *APL_Certifs::getCert(APL_CertifType type, unsigned long ulIndex)
 			//If no index we return the first certificate that matches
 			if(ulIndex==ANY_INDEX)
 			{
-				if(cert->isFromCard())
 					return cert;
 			}
 			else

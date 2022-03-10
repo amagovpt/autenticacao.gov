@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ * Copyright (C) 2020-2021 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
 
@@ -409,4 +409,9 @@ __out   LPSTR pszBuffer,
 __in    DWORD cbBuffer,
 __in    PBYTE pbHash,
 __in    DWORD cbHash);
+
+BOOL
+validateCert(
+__in    PCCERT_CONTEXT pCert);
+
 #endif //__CMD_KSP_H__

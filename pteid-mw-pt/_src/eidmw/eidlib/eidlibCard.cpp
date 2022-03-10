@@ -188,16 +188,6 @@ bool PTEID_Card::writeFile(const char *fileID,const PTEID_ByteArray& oData,unsig
 	return out;
 }
 
-/*****************************************************************************************
----------------------------------------- PTEID_MemoryCard --------------------------------------
-*****************************************************************************************/
-PTEID_MemoryCard::PTEID_MemoryCard(const SDK_Context *context,APL_Card *impl):PTEID_Card(context,impl)
-{
-}
-
-PTEID_MemoryCard::~PTEID_MemoryCard()
-{
-}
 
 /*****************************************************************************************
 ---------------------------------------- PTEID_SmartCard --------------------------------------
@@ -272,7 +262,7 @@ long PTEID_SmartCard::readFile(const char *fileID, PTEID_ByteArray &in,PTEID_Pin
 
 
 // is_landscape is unused parameter, we keep it here to ensure backwards-compatibility
-int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason,
+int PTEID_Card::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_sector, bool is_landscape, const char *location, const char *reason,
 			const char *outfile_path)
 {
 	PDFSignature *pdf_sig = NULL;
@@ -296,7 +286,7 @@ int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, int page_s
 }
 
 
-int PTEID_EIDCard::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
+int PTEID_Card::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_x, double coord_y, const char *location, const char *reason,
 			const char *outfile_path)
 
 {
@@ -432,6 +422,16 @@ int PTEID_PDFSignature::getOtherPageCount(const char *input_path)
 	return mp_signature->getOtherPageCount(input_path);
 }
 
+char *PTEID_PDFSignature::getCertificateCitizenName()
+{
+	return mp_signature->getCitizenCertificateName();
+}
+
+char *PTEID_PDFSignature::getCertificateCitizenID()
+{
+	return mp_signature->getCitizenCertificateID();
+}
+
 bool PTEID_SmartCard::writeFile(const char *fileID,const PTEID_ByteArray &baOut,PTEID_Pin *pin,const char *csPinCode, unsigned long ulOffset)
 {
 	bool out = false;
@@ -513,7 +513,7 @@ unsigned long PTEID_SmartCard::certificateCount()
 	return out;
 }
 
-PTEID_Certificates& PTEID_SmartCard::getCertificates()
+PTEID_Certificates& PTEID_Card::getCertificates()
 {
 	PTEID_Certificates *out = NULL;
 
@@ -692,27 +692,27 @@ PTEID_CardVersionInfo& PTEID_EIDCard::getVersionInfo()
 	return *out;
 }
 
-PTEID_Certificate &PTEID_EIDCard::getCert(PTEID_CertifType type)
+PTEID_Certificate &PTEID_Card::getCert(PTEID_CertifType type)
 {
 	return getCertificates().getCert(type);
 }
 
-PTEID_Certificate &PTEID_EIDCard::getRoot()
+PTEID_Certificate &PTEID_Card::getRoot()
 {
 	return getCertificates().getCert(PTEID_CERTIF_TYPE_ROOT);
 }
 
-PTEID_Certificate &PTEID_EIDCard::getCA()
+PTEID_Certificate &PTEID_Card::getCA()
 {
 	return getCertificates().getCert(PTEID_CERTIF_TYPE_ROOT_AUTH);
 }
 
-PTEID_Certificate &PTEID_EIDCard::getAuthentication()
+PTEID_Certificate &PTEID_Card::getAuthentication()
 {
 	return getCertificates().getCert(PTEID_CERTIF_TYPE_AUTHENTICATION);
 }
 
-PTEID_Certificate &PTEID_EIDCard::getSignature()
+PTEID_Certificate &PTEID_Card::getSignature()
 {
 	return getCertificates().getCert(PTEID_CERTIF_TYPE_SIGNATURE);
 }
@@ -811,8 +811,8 @@ bool PTEID_EIDCard::Activate(const char *pinCode, PTEID_ByteArray &BCDDate, bool
 }
 
 bool PTEID_EIDCard::writePersonalNotes(const PTEID_ByteArray &out,PTEID_Pin *pin,const char *csPinCode){
-	unsigned long ulSize = 1000;
-	unsigned char *pucData = static_cast<unsigned char *>(calloc(ulSize, sizeof(char)));
+	const unsigned long notes_file_size = 1000;
+	unsigned char *pucData = static_cast<unsigned char *>(calloc(notes_file_size, sizeof(char)));
 
 	BEGIN_TRY_CATCH
 
@@ -821,15 +821,19 @@ bool PTEID_EIDCard::writePersonalNotes(const PTEID_ByteArray &out,PTEID_Pin *pin
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
 
+	if (out.Size() > notes_file_size) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
+	}
+
 	/**
 	 * Write 1000 bytes to replace all the data in the notes file.
 	 * Avoids merging previous notes with new ones,
-	 * leading to a inconsistent state
+	 * leading to an inconsistent state
 	*/
 	memcpy((void *) pucData, out.GetBytes(), out.Size());
 
 	const unsigned char *data = const_cast<unsigned char *>(pucData);
-	const PTEID_ByteArray notes(data, ulSize);
+	const PTEID_ByteArray notes(data, notes_file_size);
 
 	persoNotesDirty = writeFile("3F005F00EF07", notes, pin, csPinCode);
 

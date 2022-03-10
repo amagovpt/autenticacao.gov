@@ -21,6 +21,8 @@
 #include "Util.h"
 #include "Config.h"
 #include "MiscUtil.h"
+#include "MWException.h"
+#include "eidErrors.h"
 
 #define CC_MOVEL_SERVICE_GET_CERTIFICATE    ( (char *)"http://Ama.Authentication.Service/CCMovelSignature/GetCertificate" )
 #define CC_MOVEL_SERVICE_SIGN               ( (char *)"http://Ama.Authentication.Service/CCMovelSignature/CCMovelSign" )
@@ -36,7 +38,9 @@
 #define SOAP_MUST_NO_UNDERSTAND             0
 #define SOAP_MUST_UNDERSTAND                1
 
-static char logBuf[512];
+#ifndef WIN32
+#define _strdup strdup
+#endif
 
 namespace eIDMW {
 
@@ -46,13 +50,13 @@ namespace eIDMW {
 xsd__base64Binary *encode_base64( soap *sp, std::string in_str ) {
 
     if ( sp == NULL ) {
-        MWLOG_ERR( logBuf, "Null soap" );
+        MWLOG_ERR("%s: Null soap");
         return NULL;
     }
 
     xsd__base64Binary *encoded = NULL;
     if (in_str.empty()) {
-        MWLOG_ERR( logBuf, "Empty in_str" );
+        MWLOG_ERR( "%s: Empty in_str" );
         return NULL;
     }
 
@@ -77,14 +81,14 @@ class CMDSignatureGsoapProxy: public BasicHttpBinding_USCORECCMovelSignatureProx
         CMDSignatureGsoapProxy(struct soap *sp, CMDProxyInfo p): BasicHttpBinding_USCORECCMovelSignatureProxy(sp) {
             if (p.host.size() > 0)  {
 
-                sp->proxy_host = strdup(p.host.c_str());
+                sp->proxy_host = _strdup(p.host.c_str());
                 sp->proxy_port = p.port;
-                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "CMDSignature", "Using proxy: host=%s, port=%ld", sp->proxy_host, sp->proxy_port);
+                MWLOG_DEBUG("CMDSignature - Using proxy: host=%s, port=%ld", sp->proxy_host, sp->proxy_port);
 
                 if (p.user.size() > 0)
                 {
-                    sp->proxy_userid = strdup(p.user.c_str());
-                    sp->proxy_passwd = strdup(p.pwd.c_str());
+                    sp->proxy_userid = _strdup(p.user.c_str());
+                    sp->proxy_passwd = _strdup(p.pwd.c_str());
                 }
 
             }
@@ -94,14 +98,14 @@ class CMDSignatureGsoapProxy: public BasicHttpBinding_USCORECCMovelSignatureProx
 /*  *********************************************************
     ***    handleCommunicationError()                     ***
     ********************************************************* */
-int handleCommunicationError( BasicHttpBinding_USCORECCMovelSignatureProxy proxy, int &ret ){
+int handleCommunicationError( BasicHttpBinding_USCORECCMovelSignatureProxy proxy, int &ret) {
     if ( ret != SOAP_OK ) {
         if ( ( proxy.soap_fault() != NULL )
             && ( proxy.soap_fault()->faultstring)) {
-            MWLOG_ERR(logBuf, "SOAP Fault! %s", proxy.soap_fault()->faultstring);
+            MWLOG_ERR("SOAP Fault! %s", proxy.soap_fault()->faultstring);
         }
         else {
-            MWLOG_ERR(logBuf, "Unknown SOAP Fault! - ret: %d", ret );
+            MWLOG_ERR("Unknown SOAP Fault! - ret: %d", ret );
         }
 
         if ( ret > 200 )
@@ -109,7 +113,7 @@ int handleCommunicationError( BasicHttpBinding_USCORECCMovelSignatureProxy proxy
         return ret;
     }
 
-    MWLOG_INFO( logBuf, "No Error" );
+    MWLOG_INFO("No webservice error" );
     return SOAP_OK;
 }
 
@@ -129,12 +133,12 @@ CMDServices::CMDServices(std::string basicAuthUser, std::string basicAuthPasswor
 
     const char *new_endpoint = NULL;
     std::string cmd_endpoint = getEndpoint();
-      
+
     new_endpoint = cmd_endpoint.c_str();
 
-    MWLOG_DEBUG(logBuf, "Using Endpoint: %s", new_endpoint);
+    MWLOG_DEBUG( "Using Endpoint: %s", new_endpoint);
 
-    setEndPoint(strdup(new_endpoint));
+    setEndPoint(_strdup(new_endpoint));
 
     m_basicAuthUser = basicAuthUser;
     m_basicAuthPassword = basicAuthPassword;
@@ -169,7 +173,7 @@ bool CMDServices::init(int recv_timeout, int send_timeout,
                         int connect_timeout, short mustUnderstand) {
     soap *sp = soap_new2( SOAP_C_UTFSTRING, SOAP_C_UTFSTRING );
     if ( sp == NULL ) {
-        MWLOG_ERR( logBuf, "Null soap" );
+        MWLOG_ERR("Null soap");
         return false;
     }
 
@@ -187,16 +191,16 @@ bool CMDServices::init(int recv_timeout, int send_timeout,
     std::string cacerts_file;
 
 #ifdef __linux__
-    ca_path = "/etc/ssl/certs"; 
+    ca_path = "/etc/ssl/certs";
     //Load CA certificates from file provided with pteid-mw
 #else
     cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR))+"/cacerts.pem";
 #endif
 
     int ret = soap_ssl_client_context(sp, SOAP_SSL_DEFAULT,
-            NULL,    
             NULL,
-            cacerts_file.size() > 0 ? cacerts_file.c_str(): NULL, /* cacert file to store trusted certificates (needed to verify server) */ 
+            NULL,
+            cacerts_file.size() > 0 ? cacerts_file.c_str(): NULL, /* cacert file to store trusted certificates (needed to verify server) */
             ca_path,
             NULL);
 
@@ -204,7 +208,7 @@ bool CMDServices::init(int recv_timeout, int send_timeout,
         soap_destroy( sp );
         setSoap( NULL );
 
-        MWLOG_ERR( logBuf, "soap_ssl_client_context() failed - code: %d", ret );
+        MWLOG_ERR("soap_ssl_client_context() failed - code: %d", ret );
         return false;
     }
 
@@ -296,7 +300,7 @@ void CMDServices::setUserId( std::string in_userId ){
     ********************************************************* */
 void CMDServices::enableBasicAuthentication() {
     if (m_soap == NULL) {
-        MWLOG_ERR(logBuf, "NULL m_soap");
+        MWLOG_ERR( "NULL m_soap");
         return;
     }
     m_soap->userid = m_basicAuthUser.c_str();
@@ -330,21 +334,21 @@ _ns2__GetCertificateWithPin *CMDServices::get_GetCertificateWithPinRequest(soap 
 int CMDServices::checkGetCertificateWithPinResponse(
     _ns2__GetCertificateWithPinResponse *response){
     if (response == NULL){
-        MWLOG_ERR(logBuf, "Null response");
+        MWLOG_ERR("Null response");
         return ERR_NULL_HANDLER;
     }
 
     if (response->GetCertificateWithPinResult == NULL){
-        MWLOG_ERR(logBuf, "Null GetCertificateWithPinResult");
+        MWLOG_ERR("Null GetCertificateWithPinResult");
         return ERR_GET_CERTIFICATE;
     }
 
     int statusCode = atoi(response->GetCertificateWithPinResult->Code->c_str());
     if (IS_SOAP_ERROR(statusCode)) {
         if (!response->GetCertificateWithPinResult->Message->empty()) {
-            MWLOG_ERR(logBuf, "GetCertificateWithPinResult SOAP Error Code %d: %s", statusCode, response->GetCertificateWithPinResult->Message->c_str());
+            MWLOG_ERR( "GetCertificateWithPinResult SOAP Error Code %d: %s", statusCode, response->GetCertificateWithPinResult->Message->c_str());
         } else {
-            MWLOG_ERR(logBuf, "GetCertificateWithPinResult SOAP Error Code %d", statusCode);
+            MWLOG_ERR( "GetCertificateWithPinResult SOAP Error Code %d", statusCode);
         }
 
         if (statusCode == SOAP_ERR_GENERIC) {
@@ -382,12 +386,12 @@ _ns2__GetCertificate *CMDServices::get_GetCertificateRequest(soap *sp, std::stri
 int CMDServices::checkGetCertificateResponse(
                                     _ns2__GetCertificateResponse *response ){
     if ( response == NULL ){
-        MWLOG_ERR( logBuf, "Null response" );
+        MWLOG_ERR("Null response" );
         return ERR_NULL_HANDLER;
     }
 
     if ( response->GetCertificateResult == NULL ){
-        MWLOG_ERR( logBuf, "Null GetCertificateResult" );
+        MWLOG_ERR("Null GetCertificateResult" );
         return ERR_GET_CERTIFICATE;
     }
 
@@ -401,19 +405,19 @@ int CMDServices::GetCertificate(CMDProxyInfo proxyInfo, std::string in_userId, c
                                  int *out_certificateLen ) {
     soap *sp = getSoap();
     if ( sp == NULL ) {
-        MWLOG_ERR( logBuf, "Null soap" );
+        MWLOG_ERR("Null soap" );
         return ERR_NULL_HANDLER;
     }
     enableBasicAuthentication();
 
     if (in_userId.empty()) {
-        MWLOG_ERR( logBuf, "Empty userId" );
+        MWLOG_ERR("Empty userId" );
         return ERR_INV_USERID;
     }
 
     const char *endPoint = getEndPoint();
     CMDSignatureGsoapProxy proxy(sp, proxyInfo);
-                            
+
     proxy.soap_endpoint = endPoint;
 
     /*
@@ -423,7 +427,7 @@ int CMDServices::GetCertificate(CMDProxyInfo proxyInfo, std::string in_userId, c
                                                         getApplicationID(),
                                                         &in_userId );
     if ( send == NULL ) {
-        MWLOG_ERR( logBuf, "NULL send parameters" );
+        MWLOG_ERR("NULL send parameters" );
         return ERR_NULL_HANDLER;
     }
 
@@ -497,12 +501,12 @@ _ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp, std::string in_
     ********************************************************* */
 int CMDServices::checkCCMovelSignResponse( _ns2__CCMovelSignResponse *response ){
     if ( response == NULL ){
-        MWLOG_ERR( logBuf, "Null response" );
+        MWLOG_ERR("Null response" );
         return ERR_NULL_HANDLER;
     }
 
     if ( response->CCMovelSignResult == NULL ){
-        MWLOG_ERR( logBuf, "Null CCMovelSignResult" );
+        MWLOG_ERR("Null CCMovelSignResult" );
         return ERR_NULL_DATA;
     }
 
@@ -516,24 +520,24 @@ int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char * in_hash, st
 
     soap *sp = getSoap();
     if (sp == NULL) {
-        MWLOG_ERR( logBuf, "Null soap" );
+        MWLOG_ERR("Null soap" );
         return ERR_NULL_HANDLER;
     }
     enableBasicAuthentication();
 
     if (in_hash == NULL) {
-        MWLOG_ERR( logBuf, "NULL hash" );
+        MWLOG_ERR("NULL hash");
         return ERR_INV_HASH;
     }
 
     if (in_pin.empty()) {
-        MWLOG_ERR( logBuf, "Empty pin" );
+        MWLOG_ERR("Empty pin");
         return ERR_INV_USERPIN;
     }
 
     std::string in_userId = getUserId();
     if (in_userId.empty()) {
-        MWLOG_ERR( logBuf, "Empty userId" );
+        MWLOG_ERR("Empty userId" );
         return ERR_INV_USERID;
     }
 
@@ -551,7 +555,7 @@ int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char * in_hash, st
     */
     _ns2__CCMovelSign *send = get_CCMovelSignRequest(sp, getApplicationID(), &docName, in_hash, &in_pin, &in_userId);
     if ( send == NULL ){
-        MWLOG_ERR( logBuf, "NULL send parameters" );
+        MWLOG_ERR("NULL send parameters");
         return ERR_NULL_HANDLER;
     }
 
@@ -602,7 +606,7 @@ int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char * in_hash, st
 _ns2__CCMovelMultipleSign *CMDServices::get_CCMovelMultipleSignRequest( soap *sp, std::string in_applicationID,
                                                   std::vector<std::string *> docNames, std::vector<unsigned char *> in_hashes,
                                                   std::vector<std::string *> ids, std::string *in_pin, std::string *in_userId ) {
-                                                  
+
     ns3__MultipleSignRequest *soapMultipleSignRequest = soap_new_ns3__MultipleSignRequest(sp);
 
     soapMultipleSignRequest->ApplicationId = encode_base64(sp, in_applicationID );
@@ -623,29 +627,29 @@ _ns2__CCMovelMultipleSign *CMDServices::get_CCMovelMultipleSignRequest( soap *sp
     }
 
     _ns2__CCMovelMultipleSign *send = soap_new_set__ns2__CCMovelMultipleSign( sp, soapMultipleSignRequest, soapHashesArray );
-    
-    return send;                                                      
+
+    return send;
 }
 
 int CMDServices::checkCCMovelMultipleSignResponse( _ns2__CCMovelMultipleSignResponse *response ){
     if ( response == NULL ){
-        MWLOG_ERR( logBuf, "Null response" );
+        MWLOG_ERR("Null response" );
         return ERR_NULL_HANDLER;
     }
 
     if ( response->CCMovelMultipleSignResult == NULL ){
-        MWLOG_ERR( logBuf, "Null CCMovelMultipleSignResult" );
+        MWLOG_ERR("Null CCMovelMultipleSignResult" );
         return ERR_NULL_DATA;
     }
 
     if (response->CCMovelMultipleSignResult->Code == NULL){
-        MWLOG_ERR( logBuf, "Null CCMovelMultipleSignResult Code" );
+        MWLOG_ERR("Null CCMovelMultipleSignResult Code" );
         return ERR_NULL_DATA;
     }
 
     int statusCode = atoi(response->CCMovelMultipleSignResult->Code->c_str());
     if (IS_SOAP_ERROR(statusCode)) {
-        MWLOG_ERR( logBuf, "CCMovelMultipleSignResult SOAP Error Code %d", statusCode);
+        MWLOG_ERR("CCMovelMultipleSignResult SOAP Error Code %d", statusCode);
         return statusCode;
     }
 
@@ -656,29 +660,29 @@ int CMDServices::ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigne
                                     std::vector<std::string> docNames, std::string in_pin) {
     soap *sp = getSoap();
     if (sp == NULL) {
-        MWLOG_ERR( logBuf, "Null soap" );
+        MWLOG_ERR("Null soap" );
         return ERR_NULL_HANDLER;
     }
 
     if (in_hashes.empty()) {
-        MWLOG_ERR( logBuf, "Empty hashes" );
+        MWLOG_ERR("Empty hashes" );
         return ERR_INV_HASH;
     }
     for(size_t i = 0; i < in_hashes.size(); i++) {
         if(in_hashes[i] == NULL) {
-            MWLOG_ERR( logBuf, "Null hashe" );
+            MWLOG_ERR("Null hash value in hashes");
             return ERR_INV_HASH;
         }
     }
 
     if (in_pin.empty()) {
-        MWLOG_ERR( logBuf, "Empty pin" );
+        MWLOG_ERR("Empty pin" );
         return ERR_INV_USERPIN;
     }
 
     std::string in_userId = getUserId();
     if (in_userId.empty()) {
-        MWLOG_ERR( logBuf, "Empty userId" );
+        MWLOG_ERR("Empty userId" );
         return ERR_INV_USERID;
     }
 
@@ -700,10 +704,10 @@ int CMDServices::ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigne
     /*
         Get CCMovelMultipleSign request
     */
-    _ns2__CCMovelMultipleSign *send = get_CCMovelMultipleSignRequest( sp, getApplicationID(), 
+    _ns2__CCMovelMultipleSign *send = get_CCMovelMultipleSignRequest( sp, getApplicationID(),
                                         docNamesPtrs, in_hashes, ids, &in_pin, &in_userId );
     if ( send == NULL ){
-        MWLOG_ERR( logBuf, "NULL send parameters" );
+        MWLOG_ERR("NULL send parameters" );
         return ERR_NULL_HANDLER;
     }
 
@@ -758,70 +762,70 @@ _ns2__ValidateOtp *CMDServices::get_ValidateOtpRequest(  soap *sp,
     ********************************************************* */
 int CMDServices::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response ){
     if ( response == NULL ) {
-        MWLOG_ERR( logBuf, "Null response" );
+        MWLOG_ERR("Null response" );
         return ERR_NULL_HANDLER;
     }
 
     if ( response->ValidateOtpResult == NULL ) {
-        MWLOG_ERR( logBuf, "Null ValidateOtpResult" );
+        MWLOG_ERR("Null ValidateOtpResult" );
         return ERR_NULL_HANDLER;
     }
 
     if (response->ValidateOtpResult->Status == NULL) {
-        MWLOG_ERR( logBuf, "Null Status" );
+        MWLOG_ERR("Null Status" );
         return ERR_NULL_HANDLER;
     }
 
     if (response->ValidateOtpResult->Status->Code == NULL) {
-        MWLOG_ERR( logBuf, "Null Status Code" );
+        MWLOG_ERR("Null Status Code" );
         return ERR_NULL_DATA;
     }
 
-    int statusCode = atoi( response->ValidateOtpResult->Status->Code->c_str() );    
+    int statusCode = atoi( response->ValidateOtpResult->Status->Code->c_str() );
     if (statusCode == 0) {
-        MWLOG_ERR( logBuf, "Status Code is not a valid code" );
+        MWLOG_ERR("Status Code is not a valid code" );
         return ERR_INV_DATA;
     }
 
     if (IS_SOAP_ERROR(statusCode)) {
-        MWLOG_ERR( logBuf, "Error Status Code");
+        MWLOG_ERR("Error Status Code");
         return statusCode;
     }
 
-    if ( response->ValidateOtpResult->Signature == NULL 
+    if ( response->ValidateOtpResult->Signature == NULL
         && response->ValidateOtpResult->ArrayOfHashStructure == NULL
         && response->ValidateOtpResult->certificate == NULL) {
-        MWLOG_ERR( logBuf, "Null Signature and Certificate" );
+        MWLOG_ERR("Null Signature and Certificate" );
         return ERR_NULL_HANDLER;
     }
 
     if ( response->ValidateOtpResult->Signature != NULL) {
         // CMD with single file
         if ( response->ValidateOtpResult->Signature->__ptr == NULL ) {
-            MWLOG_ERR( logBuf, "Null Signature pointer" );
+            MWLOG_ERR("Null Signature pointer" );
             return ERR_NULL_DATA;
         }
 
         if ( response->ValidateOtpResult->Signature->__size < 1 ) {
-            MWLOG_ERR( logBuf, "Invalide Signature pointer size: %d",
+            MWLOG_ERR("Invalide Signature pointer size: %d",
                     response->ValidateOtpResult->Signature->__size);
             return ERR_SIZE;
         }
     } else if (response->ValidateOtpResult->ArrayOfHashStructure != NULL ){
         // CMD with multiple files
         if (response->ValidateOtpResult->ArrayOfHashStructure->HashStructure.size() <= 0) {
-            MWLOG_ERR( logBuf, "Number of hash structures is invalid: %lu",
+            MWLOG_ERR("Number of hash structures is invalid: %lu",
                     response->ValidateOtpResult->ArrayOfHashStructure->HashStructure.size());
             return ERR_SIZE;
         }
 
         for(size_t i = 0; i < response->ValidateOtpResult->ArrayOfHashStructure->HashStructure.size(); i++){
             if (response->ValidateOtpResult->ArrayOfHashStructure->HashStructure[i]->Hash == NULL) {
-                MWLOG_ERR( logBuf, "Null hash data" );
+                MWLOG_ERR("Null hash data" );
                 return ERR_NULL_DATA;
             }
             if (response->ValidateOtpResult->ArrayOfHashStructure->HashStructure[i]->id == NULL) {
-                MWLOG_ERR( logBuf, "Null id data" );
+                MWLOG_ERR("Null id data" );
                 return ERR_NULL_DATA;
             }
         }
@@ -829,7 +833,7 @@ int CMDServices::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response )
     else {
         // Get CMD certificate
         if (response->ValidateOtpResult->certificate->size() <= 0) {
-            MWLOG_ERR(logBuf, "Certificate size is invalid: %lu",
+            MWLOG_ERR( "Certificate size is invalid: %lu",
                 response->ValidateOtpResult->certificate->size());
             return ERR_SIZE;
         }
@@ -843,23 +847,23 @@ int CMDServices::checkValidateOtpResponse( _ns2__ValidateOtpResponse *response )
 ********************************************************* */
 int CMDServices::checkForceSmsResponse(_ns2__ForceSMSResponse *response){
     if (response == NULL){
-        MWLOG_ERR(logBuf, "Null response");
+        MWLOG_ERR( "Null response");
         return ERR_NULL_HANDLER;
     }
 
     if (response->ForceSMSResult == NULL){
-        MWLOG_ERR(logBuf, "Null ForceSMSResult");
+        MWLOG_ERR( "Null ForceSMSResult");
         return ERR_NULL_DATA;
     }
 
     if (response->ForceSMSResult->Code == NULL){
-        MWLOG_ERR(logBuf, "Null ForceSMSResult Code");
+        MWLOG_ERR( "Null ForceSMSResult Code");
         return ERR_NULL_DATA;
     }
 
     int statusCode = atoi(response->ForceSMSResult->Code->c_str());
     if (IS_SOAP_ERROR(statusCode)) {
-        MWLOG_ERR(logBuf, "ForceSMSResult SOAP Error Code %d", statusCode);
+        MWLOG_ERR( "ForceSMSResult SOAP Error Code %d", statusCode);
         return statusCode;
     }
 
@@ -872,13 +876,13 @@ int CMDServices::checkForceSmsResponse(_ns2__ForceSMSResponse *response){
 int CMDServices::sendValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, _ns2__ValidateOtpResponse &response) {
     soap *sp = getSoap();
     if ( sp == NULL ) {
-        MWLOG_ERR( logBuf, "Null soap" );
+        MWLOG_ERR("Null soap" );
         return ERR_NULL_HANDLER;
     }
     enableBasicAuthentication();
 
     if ( in_code.empty() ) {
-        MWLOG_ERR( logBuf, "Empty code" );
+        MWLOG_ERR("Empty code" );
         return ERR_INV_CODE;
     }
 
@@ -895,7 +899,7 @@ int CMDServices::sendValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, _n
     _ns2__ValidateOtp *send = get_ValidateOtpRequest(sp, getApplicationID(), &code, &processId);
 
     if ( send == NULL ) {
-        MWLOG_ERR( logBuf, "Null send parameters" );
+        MWLOG_ERR("Null send parameters" );
         return ERR_NULL_HANDLER;
     }
 
@@ -939,7 +943,7 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
                                 response.ValidateOtpResult->Signature->__size );
 
             if ( (*outSignature)[0] == NULL ) {
-                MWLOG_ERR( logBuf, "Malloc fail!" );
+                MWLOG_ERR("Malloc fail!" );
                 return ERR_NULL_HANDLER;
             }
 
@@ -947,7 +951,7 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
                     , response.ValidateOtpResult->Signature->__ptr
                     , response.ValidateOtpResult->Signature->__size );
 
-            (*outSignatureLen)[0] = response.ValidateOtpResult->Signature->__size;        
+            (*outSignatureLen)[0] = response.ValidateOtpResult->Signature->__size;
         }else {
             // signing multiple files
             for(size_t i = 0; i < response.ValidateOtpResult->ArrayOfHashStructure->HashStructure.size(); i++)
@@ -957,7 +961,7 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
                                     response.ValidateOtpResult->ArrayOfHashStructure->HashStructure[i]->Hash->__size );
 
                 if ( (*outSignature)[i] == NULL ) {
-                    MWLOG_ERR( logBuf, "Malloc fail!" );
+                    MWLOG_ERR("Malloc fail!" );
                     return ERR_NULL_HANDLER;
                 }
 
@@ -965,10 +969,10 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
                         , response.ValidateOtpResult->ArrayOfHashStructure->HashStructure[i]->Hash->__ptr
                         , response.ValidateOtpResult->ArrayOfHashStructure->HashStructure[i]->Hash->__size );
 
-                (*outSignatureLen)[i] = response.ValidateOtpResult->ArrayOfHashStructure->HashStructure[i]->Hash->__size;        
+                (*outSignatureLen)[i] = response.ValidateOtpResult->ArrayOfHashStructure->HashStructure[i]->Hash->__size;
             }
         }
-    
+
 
 
     }
@@ -984,7 +988,7 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
 
     /* Set certificate */
     if (outCertificate == NULL) {
-        MWLOG_ERR(logBuf, "Null outCertificate");
+        MWLOG_ERR( "Null outCertificate");
         return ERR_NULL_HANDLER;
     }
 
@@ -1004,18 +1008,18 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code
 int CMDServices::askForCertificate(CMDProxyInfo proxyInfo, std::string in_userId, std::string in_pin) {
     soap *sp = getSoap();
     if (sp == NULL) {
-        MWLOG_ERR(logBuf, "Null soap");
+        MWLOG_ERR( "Null soap");
         return ERR_NULL_HANDLER;
     }
     enableBasicAuthentication();
 
     if (in_userId.empty()) {
-        MWLOG_ERR(logBuf, "Empty userId");
+        MWLOG_ERR( "Empty userId");
         return ERR_INV_USERID;
     }
 
     if (in_pin.empty()) {
-        MWLOG_ERR(logBuf, "Empty pin");
+        MWLOG_ERR( "Empty pin");
         return ERR_INV_USERPIN;
     }
 
@@ -1033,7 +1037,7 @@ int CMDServices::askForCertificate(CMDProxyInfo proxyInfo, std::string in_userId
     */
     _ns2__GetCertificateWithPin *send = get_GetCertificateWithPinRequest(sp, getApplicationID(), &in_userId, &in_pin);
     if (send == NULL){
-        MWLOG_ERR(logBuf, "NULL send parameters");
+        MWLOG_ERR( "NULL send parameters");
         return ERR_NULL_HANDLER;
     }
 
@@ -1071,15 +1075,15 @@ int CMDServices::getCMDCertificate(CMDProxyInfo proxyInfo, std::string in_code,
     CByteArray empty_certificate;
 
     if (in_code.empty()) {
-        MWLOG_ERR(logBuf, "Empty otp");
+        MWLOG_ERR( "Empty otp");
         return ERR_INV_USERID;
     }
 
     std::string certificate;
-    
+
     int ret = ValidateOtp(proxyInfo, in_code, &certificate);
     if (ret != ERR_NONE){
-        MWLOG_ERR(logBuf, "ValidateOtp failed");
+        MWLOG_ERR( "ValidateOtp failed");
         return ret;
     }
 
@@ -1092,7 +1096,7 @@ int CMDServices::getCMDCertificate(CMDProxyInfo proxyInfo, std::string in_code,
         int derLen = PEM_to_DER((char *)certs.at(i).c_str(), &der);
 
         if (derLen < 0) {
-            MWLOG_ERR(logBuf, "PEM -> DER conversion failed - len: %d", derLen);
+            MWLOG_ERR( "PEM -> DER conversion failed - len: %d", derLen);
             return ERR_INV_CERTIFICATE;
 
         }
@@ -1111,7 +1115,7 @@ int CMDServices::getCertificate(CMDProxyInfo proxyInfo, std::string in_userId,
     CByteArray empty_certificate;
 
     if ( in_userId.empty() ) {
-        MWLOG_ERR( logBuf, "Empty userId" );
+        MWLOG_ERR("Empty userId" );
         return ERR_INV_USERID;
     }
 
@@ -1132,7 +1136,7 @@ int CMDServices::getCertificate(CMDProxyInfo proxyInfo, std::string in_userId,
         int derLen = PEM_to_DER((char *)certs.at(i).c_str(), &der);
 
        if ( derLen < 0 ) {
-         MWLOG_ERR( logBuf, "PEM -> DER conversion failed - len: %d", derLen );
+         MWLOG_ERR("PEM -> DER conversion failed - len: %d", derLen );
          return ERR_INV_CERTIFICATE;
 
        }
@@ -1140,7 +1144,7 @@ int CMDServices::getCertificate(CMDProxyInfo proxyInfo, std::string in_userId,
        out_cb.push_back(ba);
     }
 
-    
+
     /* Set variables */
     setUserId( in_userId );
 
@@ -1169,26 +1173,26 @@ int CMDServices::getSignatures(CMDProxyInfo proxyInfo, std::string in_code, std:
     int ret = ValidateOtp(proxyInfo, in_code, &sign, &signLen );
 
     if ( ret != ERR_NONE ){
-        MWLOG_ERR( logBuf, "ValidateOtp failed" );
+        MWLOG_ERR("ValidateOtp failed" );
         return ret;
     }
 
     for(size_t i = 0; i < out_cb_vector.size(); i++){
         if ( NULL == sign[i] ){
-            MWLOG_ERR( logBuf, "Null signature" );
+            MWLOG_ERR("Null signature" );
             return ERR_NULL_HANDLER; // memory leak: the next elements in sign and signLen won't be freed
         }
 
         if ( signLen[i] <= 0 ){
             free( sign[i] );
 
-            MWLOG_ERR( logBuf, "Invalid signature length: %d", signLen[i] );
+            MWLOG_ERR("Invalid signature length: %d", signLen[i] );
             return ERR_SIZE; // memory leak: the next elements in sign and signLen won't be freed
         }
 
         out_cb_vector[i]->ClearContents();
         out_cb_vector[i]->Append( (const unsigned char *)sign[i], (unsigned long)signLen[i] );
-    
+
         free( sign[i] );
     }
 
@@ -1201,9 +1205,10 @@ int CMDServices::getSignatures(CMDProxyInfo proxyInfo, std::string in_code, std:
 ***    CMDServices::forceSMS()                    ***
 ********************************************************* */
 int CMDServices::forceSMS(CMDProxyInfo proxyInfo, std::string in_userId){
+    MWLOG_DEBUG( "CMDServices::forceSMS called");
     soap *sp = getSoap();
     if (sp == NULL) {
-        MWLOG_ERR(logBuf, "Null soap");
+        MWLOG_ERR( "Null soap");
         return ERR_NULL_HANDLER;
     }
     enableBasicAuthentication();
@@ -1219,7 +1224,7 @@ int CMDServices::forceSMS(CMDProxyInfo proxyInfo, std::string in_userId){
     */
     _ns2__ForceSMS *send = soap_new__ns2__ForceSMS(sp);
     if (send == NULL){
-        MWLOG_ERR(logBuf, "Null send parameters");
+        MWLOG_ERR( "Null send parameters");
         return ERR_NULL_HANDLER;
     }
     send->processId = &processId;

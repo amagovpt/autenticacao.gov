@@ -150,7 +150,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\common;..\dialogs;..\cardlayer;..\applayer;$(PTEID_DIR_OPENSSL)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\CMD\services\;..\common;..\dialogs;..\cardlayer;..\applayer;$(PTEID_DIR_OPENSSL)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
@@ -164,7 +164,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>pteidapplayer.lib;pteidcommon.lib;pteidDlgsWin32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pteidapplayer.lib;pteidcommon.lib;pteidDlgsWin32.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -186,7 +186,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\common;..\dialogs;..\cardlayer;..\applayer;$(PTEID_DIR_OPENSSL_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\CMD\services\;..\common;..\dialogs;..\cardlayer;..\applayer;$(PTEID_DIR_OPENSSL_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PTEID_35;WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_EIDLIB_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
@@ -201,7 +201,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>pteidapplayer.lib;pteidcommon.lib;pteidDlgsWin32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pteidapplayer.lib;pteidcommon.lib;pteidDlgsWin32.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -219,14 +219,15 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="eidlibCmdClient.cpp" />
     <ClCompile Include="eidlibCard.cpp" />
     <ClCompile Include="eidlibCrypto.cpp" />
     <ClCompile Include="eidlibDoc.cpp" />
     <ClCompile Include="eidlibException.cpp" />
     <ClCompile Include="eidlibReader.cpp" />
+    <ClCompile Include="eidlibSignDevFactory.cpp" />
     <ClCompile Include="eidlibxades.cpp" />
     <ClCompile Include="InternalUtil.cpp" />
-    <ClCompile Include="proxyinfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="eidlib.h">

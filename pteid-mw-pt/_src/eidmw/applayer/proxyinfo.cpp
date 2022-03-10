@@ -9,20 +9,22 @@
 ****************************************************************************-*/
 
 #include "proxyinfo.h"
-#include "eidlib.h"
-#include "eidlibdefines.h"
 #include <codecvt>
 #include <string.h>
 #include "Util.h"
+#include "APLConfig.h"
+#include "Log.h"
+
+using namespace eIDMW;
 
 ProxyInfo::ProxyInfo()
 {
-    eIDMW::PTEID_Config config_host(eIDMW::PTEID_PARAM_PROXY_HOST);
-    eIDMW::PTEID_Config config_port(eIDMW::PTEID_PARAM_PROXY_PORT);
-    eIDMW::PTEID_Config config_username(eIDMW::PTEID_PARAM_PROXY_USERNAME);
-    eIDMW::PTEID_Config config_pwd(eIDMW::PTEID_PARAM_PROXY_PWD);
-    eIDMW::PTEID_Config config_pacfile(eIDMW::PTEID_PARAM_PROXY_PACFILE);
-    eIDMW::PTEID_Config useSystemProxy(eIDMW::PTEID_PARAM_PROXY_USE_SYSTEM);
+    APL_Config config_host(CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST);
+    APL_Config config_port(CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT);
+    APL_Config config_username(CConfig::EIDMW_CONFIG_PARAM_PROXY_USERNAME);
+    APL_Config config_pwd(CConfig::EIDMW_CONFIG_PARAM_PROXY_PWD);
+    APL_Config config_pacfile(CConfig::EIDMW_CONFIG_PARAM_PROXY_PACFILE);
+    APL_Config useSystemProxy(CConfig::EIDMW_CONFIG_PARAM_PROXY_USE_SYSTEM);
 
 #ifdef WIN32
     // in Windows the proxy configs come in utf16. Convert them to utf8:
@@ -76,7 +78,7 @@ ProxyInfo::ProxyInfo()
 
     if (system_proxy && pacfile.length() > 0)
     {
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ProxyInfo",
+        MWLOG(LEV_DEBUG, MOD_APL,
             "Proxy configured with pacfile in system: %s", pacfile.c_str());
         auto_configured = true;
         m_pac_url = pacfile;
@@ -85,18 +87,18 @@ ProxyInfo::ProxyInfo()
     {
         if (system_proxy)
         {
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ProxyInfo",
+            MWLOG(LEV_DEBUG, MOD_APL,
                 "Proxy configured manually in system: host=%s, port=%lu", proxy_host.c_str(), proxy_port);
         }
         else
         {
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ProxyInfo",
+            MWLOG(LEV_DEBUG, MOD_APL,
                 "Proxy configured manually in application: host=%s, port=%lu", proxy_host.c_str(), proxy_port);
         }
     }
     else
     {
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ProxyInfo", "No proxy configured");
+        MWLOG(LEV_DEBUG, MOD_APL, "No proxy configured");
     }
 }
 
@@ -104,18 +106,20 @@ ProxyInfo::ProxyInfo()
 void ProxyInfo::getProxyForHost(std::string urlToFetch, std::string * proxy_host, long *proxy_port)
 {
     if (!auto_configured){
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ProxyInfo",
+        MWLOG(LEV_ERROR, MOD_APL,
             "getProxyForHost: Trying to get proxy from pacfile but it is not configured.");
         return;
     }
     std::string proxy_port_str;
 
-    eIDMW::PTEID_GetProxyFromPac(m_pac_url.c_str(), urlToFetch.c_str(), proxy_host, &proxy_port_str);
+#ifdef WIN32
+    GetProxyFromPac(m_pac_url.c_str(), urlToFetch.c_str(), proxy_host, &proxy_port_str);
+#endif // WIN32
 
     if (proxy_host->size() > 0 && proxy_port_str.size() > 0)
         *proxy_port = atol(proxy_port_str.c_str());
 
-    eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ProxyInfo",
+    MWLOG(LEV_DEBUG, MOD_APL,
         "getProxyForHost: Obtained proxy for endpoint %s: proxy_host=%s proxy_port=%lu", urlToFetch.c_str(),
         proxy_host->c_str(), *proxy_port);
 }
@@ -123,13 +127,13 @@ void ProxyInfo::getProxyForHost(std::string urlToFetch, std::string * proxy_host
 std::string ProxyInfo::getProxyHost() {
     if (auto_configured)
     {
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_WARNING, "ProxyInfo",
+        MWLOG(LEV_WARN, MOD_APL,
             "getProxyHost: Getting manually configured proxy host when there is also a pacfile configured. \
             			To get the proxy from pacfile use the getProxyForHost method.");
     }
     if (!manual_configured)
     {
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ProxyInfo",
+        MWLOG(LEV_ERROR, MOD_APL,
             "getProxyHost: Trying to get proxy host but there is not manual configuration.");
         return "";
     }
@@ -139,13 +143,13 @@ std::string ProxyInfo::getProxyHost() {
 std::string ProxyInfo::getProxyPort() {
     if (auto_configured)
     {
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_WARNING, "ProxyInfo",
+        MWLOG(LEV_WARN, MOD_APL,
             "getProxyPort: Getting manually configured proxy port when there is also a pacfile configured. \
             			To get the proxy from pacfile use the getProxyForHost method.");
     }
     if (!manual_configured)
     {
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ProxyInfo",
+        MWLOG(LEV_ERROR, MOD_APL,
             "getProxyPort: Trying to get proxy port but there is not manual configuration.");
         return "";
     }

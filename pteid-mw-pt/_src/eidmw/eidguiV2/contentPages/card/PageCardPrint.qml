@@ -14,6 +14,7 @@ import QtQuick.Controls 2.1
 
 import "../../scripts/Constants.js" as Constants
 import "../../scripts/Functions.js" as Functions
+import "../../components" as Components
 
 //Import C++ defined enums
 import eidguiV2 1.0
@@ -26,7 +27,9 @@ PageCardPrintForm {
         console.log("PageCardPrintForm onPressed:" + event.key)
         Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
     }
-
+    Components.DialogCMD{
+        id: dialogSignCMD
+    }
     Dialog {
         id: createsuccess_dialog
         width: 400
@@ -428,6 +431,7 @@ PageCardPrintForm {
     Component.onCompleted: {
         console.log("Page Card Print mainWindow Completed")
         propertyBusyIndicator.running = true
+        dialogSignCMD.enableConnections()
         gapi.startCardReading()
     }
 

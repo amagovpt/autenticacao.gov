@@ -121,7 +121,7 @@ PageServicesSignForm {
                 propertyFlickable.flick(0, - velocity)
             }
         }
-        onSignalPdfSignSucess: {
+        onSignalPdfSignSuccess: {
             signsuccess_dialog.open()
             propertyBusyIndicatorRunning = false
             // test time stamp
@@ -853,12 +853,12 @@ PageServicesSignForm {
     }
     propertyFileDialogCMDOutput {
         onAccepted: {
-            dialogSignCMD.open(GAPI.Sign)
+            signCMD()
         }
     }
     propertyFileDialogBatchCMDOutput {
         onAccepted: {
-            dialogSignCMD.open(GAPI.Sign)
+            signCMD()
         }
     }
     propertyFileDialogBatchOutput {
@@ -1201,6 +1201,7 @@ PageServicesSignForm {
     propertyButtonSignCMD {
         onClicked: {
             console.log("Sign with CMD" )
+            dialogSignCMD.enableConnections()
             if (!gapi.checkCMDSupport()) {
                 var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
                 var bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CMD_SUPPORT")
@@ -1223,8 +1224,8 @@ PageServicesSignForm {
                 gapi.setShortcutOutput("")
 
                 var prefix = (Qt.platform.os === "windows" ? "file:///" : "file://")
-                if (propertyListViewFiles.count == 1){
-                    var outputFile =  filesModel.get(0).fileUrl
+
+                if (propertyListViewFiles.count == 1) {
                     if (shortcutOutput) {
                         var inputFile = propertyListViewFiles.model.get(0).fileUrl
                         inputFile = inputFile.substring(inputFile.lastIndexOf('/'), inputFile.length - 1)
@@ -1235,21 +1236,25 @@ PageServicesSignForm {
                         return
                     }
 
-                    //Check if filename has extension and remove it.
-                    if( outputFile.lastIndexOf('.') > 0)
-                        outputFile = outputFile.substring(0, outputFile.lastIndexOf('.'))
+                    var outputFile = propertyListViewFiles.model.get(0).fileUrl
+                    var newSuffix = propertyRadioButtonPADES.checked ? "_signed.pdf" : "_xadessign.asics"
 
-                    propertyFileDialogCMDOutput.currentFile = prefix + outputFile + "_signed.pdf"
+                    propertyFileDialogCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
+                    propertyFileDialogCMDOutput.currentFile = prefix + Functions.replaceFileSuffix(outputFile, newSuffix)
                     propertyFileDialogCMDOutput.open()
-                }else{
-                    if (shortcutOutput) {
-                        propertyFileDialogBatchCMDOutput.folder = prefix + shortcutOutput
-                        propertyFileDialogBatchCMDOutput.accepted()
-                        gapi.setShortcutOutput("")
-                        return
+                } else {
+                    if (propertyRadioButtonPADES.checked) {
+                        propertyFileDialogBatchCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
+                        propertyFileDialogBatchCMDOutput.open()
+                    } else {
+                        var outputFolderPath = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
+                        if (outputFolderPath.lastIndexOf('/') >= 0)
+                            outputFolderPath = outputFolderPath.substring(0, outputFolderPath.lastIndexOf('/'))
+
+                        propertyFileDialogCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
+                        propertyFileDialogCMDOutput.currentFile = prefix + outputFolderPath + "/xadessign.asice";
+                        propertyFileDialogCMDOutput.open()
                     }
-                    propertyFileDialogBatchCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
-                    propertyFileDialogBatchCMDOutput.open()
                 }
             }
         }
@@ -1342,16 +1347,19 @@ PageServicesSignForm {
                 hoverEnabled : true
                 onClicked: {
                     propertyListViewFiles.currentIndex = index
-                    var pageCount = gapi.getPDFpageCount(fileUrl)
-                    propertyTextSpinBox.maximumLength = maxTextInputLength(pageCount)
-                    propertySpinBoxControl.value = 
-                        propertyCheckLastPage.checked ? pageCount : propertySpinBoxControl.value
 
-                    propertyPDFPreview.propertyBackground.source =
-                        "image://pdfpreview_imageprovider/"+ fileUrl + "?page=" + propertySpinBoxControl.value
-                    
-                    propertyPDFPreview.propertyFileName = Functions.fileBaseName(fileUrl)
-                    propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg" 
+                    if (propertyRadioButtonPADES.checked) {
+                        var pageCount = gapi.getPDFpageCount(fileUrl)
+                        propertyTextSpinBox.maximumLength = maxTextInputLength(pageCount)
+                        propertySpinBoxControl.value =
+                            propertyCheckLastPage.checked ? pageCount : propertySpinBoxControl.value
+
+                        propertyPDFPreview.propertyBackground.source =
+                            "image://pdfpreview_imageprovider/"+ fileUrl + "?page=" + propertySpinBoxControl.value
+
+                        propertyPDFPreview.propertyFileName = Functions.fileBaseName(fileUrl)
+                        propertyPDFPreview.propertyDragSigWaterImg.source = "qrc:/images/pteid_signature_watermark.jpg"
+                    }
                 }
             }
 
@@ -1415,7 +1423,11 @@ PageServicesSignForm {
                 propertyPDFPreview.propertyBackground.source = ""
                 propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                         qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
-                propertyTextDragMsgImg.text = qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
+
+                if (propertyRadioButtonXADES.checked) {
+                    propertyTextDragMsgImg.text = qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW")
+                }
+
                 propertyPDFPreview.reset()
                 propertyButtonAdd.forceActiveFocus()
             }
@@ -1518,7 +1530,6 @@ PageServicesSignForm {
 
     Component.onCompleted: {
         console.log("Page Services Sign Advanced mainWindowCompleted")
-
         propertyPageLoader.propertyBackupFromSignaturePage = false
         propertyBusyIndicatorRunning = true
         var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpg"
@@ -1722,6 +1733,18 @@ PageServicesSignForm {
         return count
     }
 
+    function getSeletctedAttributes() {
+        var attributeList = []
+        var count = 0
+        for (var i = 0; i < entityAttributesModel.count; i++){
+            if(entityAttributesModel.get(i).checkBoxAttr) {
+                attributeList[count++] = i
+            }
+        }
+
+        return attributeList
+    }
+
     function jumpToDefinitionsSCAP(){
         propertyPageLoader.propertyBackupFromSignaturePage = true
         // Jump to Menu Definitions - PageDefinitionsSCAP
@@ -1817,14 +1840,96 @@ PageServicesSignForm {
                     propertyOutputSignedFile.substring(0, propertyOutputSignedFile.lastIndexOf('/'))
             if (propertyListViewFiles.count == 1){
                 var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
-                gapi.startSigningXADES(loadedFilePath, outputFile, isTimestamp)
+                gapi.startSigningXADES(loadedFilePath, outputFile, isTimestamp, isLTV)
             }else{
                 var batchFilesArray = []
                 for(var i = 0; i < propertyListViewFiles.count; i++){
                     batchFilesArray[i] =  propertyListViewFiles.model.get(i).fileUrl;
                 }
-                gapi.startSigningBatchXADES(batchFilesArray, outputFile, isTimestamp)
+                gapi.startSigningBatchXADES(batchFilesArray, outputFile, isTimestamp, isLTV)
             }
+        }
+    }
+
+    function signCMD() {
+        var isTimestamp = false
+        if (typeof propertySwitchSignTemp !== "undefined")
+            isTimestamp = propertySwitchSignTemp.checked
+
+        var isLTV = false
+        if (typeof propertyCheckboxLTV !== "undefined")
+            isLTV = propertyCheckboxLTV.checked
+
+        dialogSignCMD.setSignSingleFile(filesModel.count == 1)
+
+        var outputFile = ""
+        if (dialogSignCMD.isSignSingleFile() || propertyRadioButtonXADES.checked) {
+            outputFile = propertyFileDialogCMDOutput.file.toString()
+        } else {
+            outputFile = propertyFileDialogBatchCMDOutput.folder.toString()
+        }
+        outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
+
+        if (propertyRadioButtonPADES.checked) {
+            var loadedFilePaths = []
+            for (var fileIndex = 0; fileIndex < filesModel.count; fileIndex++) {
+                loadedFilePaths.push(filesModel.get(fileIndex).fileUrl)
+            }
+
+            var page = 1
+            if (propertyCheckLastPage.checked) {
+                page = 0 // Sign last page in all documents
+            } else {
+                page = propertySpinBoxControl.value
+            }
+
+            var reason = ""
+            if (typeof propertyTextFieldReason !== "undefined")
+                reason = propertyTextFieldReason.text
+
+            var location = ""
+            if (typeof propertyTextFieldLocal !== "undefined")
+                location = propertyTextFieldLocal.text
+
+            var isSmallSignature = false
+            if (typeof propertyCheckSignReduced !== "undefined")
+                isSmallSignature = propertyCheckSignReduced.checked
+
+            propertyPDFPreview.updateSignPreview()
+            var coord_x = -1
+            var coord_y = -1
+            if (typeof propertyCheckSignShow !== "undefined") {
+                if (propertyCheckSignShow.checked) {
+                    coord_x = propertyPDFPreview.propertyCoordX
+                    //coord_y must be the lower left corner of the signature rectangle
+                    coord_y = propertyPDFPreview.propertyCoordY
+                }
+            } else {
+                coord_x = propertyPDFPreview.propertyCoordX
+                //coord_y must be the lower left corner of the signature rectangle
+                coord_y = propertyPDFPreview.propertyCoordY
+            }
+
+            propertyOutputSignedFile = outputFile
+
+            if (typeof propertySwitchAddAttributes !== "undefined" && propertySwitchAddAttributes.checked) {
+                gapi.signScapWithCMD(loadedFilePaths, outputFile, getSeletctedAttributes(), page, coord_x,
+                    coord_y, reason, location, isTimestamp, isLTV)
+            } else {
+                gapi.signCMD(loadedFilePaths, outputFile, page, coord_x, coord_y, reason, location, isTimestamp,
+                    isLTV,isSmallSignature)
+            }
+        } else {
+            propertyOutputSignedFile = outputFile;
+            propertyOutputSignedFile =
+                propertyOutputSignedFile.substring(0, propertyOutputSignedFile.lastIndexOf('/'))
+
+            var inputFiles = []
+            for (var i = 0; i < propertyListViewFiles.count; i++) {
+                inputFiles[i] = propertyListViewFiles.model.get(i).fileUrl;
+            }
+
+            gapi.startSigningXADESWithCMD(inputFiles, outputFile, isTimestamp, isLTV)
         }
     }
 

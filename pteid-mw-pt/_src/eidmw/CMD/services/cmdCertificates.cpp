@@ -2,16 +2,20 @@
 #include "cmdServices.h"
 #include "credentials.h"
 #include <iostream>
+#include <functional>
 #include "Util.h"
-
-static char logBuf[512];
+#include "cmdSignatureClient.h"
+#include "eidErrors.h"
 
 namespace eIDMW
 {
 
-    CMDCertificates::CMDCertificates()
+    CMDCertificates::CMDCertificates(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId)
     {
         m_cmdService = NULL;
+        m_basicAuthUser = basicAuthUser; 
+        m_basicAuthPassword = basicAuthPassword;
+        m_applicationId = applicationId;
     }
 
     CMDCertificates::~CMDCertificates()
@@ -25,15 +29,14 @@ namespace eIDMW
         }
     }
 
+#ifdef WIN32
     int CMDCertificates::ImportCertificatesOpen(std::string mobileNumber, std::string pin) {
 
         if (m_cmdService)
         {
             delete m_cmdService;
         }
-        m_cmdService = new CMDServices(CMDCredentials::getCMDBasicAuthUserId(),
-                                       CMDCredentials::getCMDBasicAuthPassword(),
-                                       CMDCredentials::getCMDBasicAuthAppId());
+        m_cmdService = new CMDServices(m_basicAuthUser, m_basicAuthPassword, m_applicationId);
 
         CMDProxyInfo proxyInfo = CMDProxyInfo::buildProxyInfo();
         m_mobileNumber = mobileNumber;
@@ -53,7 +56,7 @@ namespace eIDMW
         {
             pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, (BYTE *)cert->c_str(), cert->length());
             if (!pCertContext){
-                MWLOG_ERR(logBuf, "Error creating certificate context: %x\n", GetLastError());
+                MWLOG_ERR("Error creating certificate context: %x", GetLastError());
                 return ERR_INV_CERTIFICATE;
             }
 
@@ -86,7 +89,7 @@ namespace eIDMW
 
         hMyStore = CertOpenSystemStore(NULL, L"MY");
         if (!hMyStore){
-            MWLOG_ERR(logBuf, "Could not open \"MY\" System Store: 0x%x\n", GetLastError());
+            MWLOG_ERR("Could not open \"MY\" System Store: 0x%x", GetLastError());
             goto cleanup;
         }
 
@@ -95,7 +98,7 @@ namespace eIDMW
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
             0,
             CERT_FIND_ISSUER_STR,
-            L"EC de Chave Móvel Digital",
+            L"EC de Chave M\xF3vel Digital",
             pCert
             ))
         {
@@ -106,7 +109,7 @@ namespace eIDMW
                 NULL,
                 &cbMobileNumber))
             {
-                MWLOG_ERR(logBuf, "Could not get size of certificate's friendly name.");
+                MWLOG_ERR("Could not get size of certificate's friendly name.");
                 goto cleanup;
             }
             LPWSTR pszMobileNumber = new WCHAR[cbMobileNumber];
@@ -116,7 +119,7 @@ namespace eIDMW
                 pszMobileNumber,
                 &cbMobileNumber))
             {
-                MWLOG_ERR(logBuf, "Could not get certificate's friendly name.");
+                MWLOG_ERR("Could not get certificate's friendly name.");
                 goto cleanup;
             }
 
@@ -143,7 +146,7 @@ namespace eIDMW
 
         if (0 == certificates.size())
         {
-            MWLOG_ERR(logBuf, "getCertificate failed\n");
+            MWLOG_ERR("getCertificate failed\n");
             return ERR_GET_CERTIFICATE;
         }
 
@@ -164,7 +167,7 @@ namespace eIDMW
         BOOL bSuccess = FALSE;
 
         if (!hMyStore){
-            MWLOG_ERR(logBuf, "Could not open \"MY\" System Store: 0x%x\n", GetLastError());
+            MWLOG_ERR("Could not open \"MY\" System Store: 0x%x", GetLastError());
             goto cleanup;
         }
 
@@ -178,7 +181,7 @@ namespace eIDMW
         RemoveOlderUserCerts(pCertContext);
 
         if (!CertAddCertificateContextToStore(hMyStore, pCertContext, CERT_STORE_ADD_REPLACE_EXISTING, NULL)) {
-            MWLOG_ERR(logBuf, "Error adding certificate to store: 0x%x\n", GetLastError());
+            MWLOG_ERR("Error adding certificate to store: 0x%x", GetLastError());
             goto cleanup;
         }
         bSuccess = true;
@@ -209,7 +212,7 @@ namespace eIDMW
         }
 
         if (!hMemoryStore){
-            MWLOG_ERR(logBuf, "Could not open System Store to add authority certificate: 0x%x\n", GetLastError());
+            MWLOG_ERR("Could not open System Store to add authority certificate: 0x%x", GetLastError());
             return false;
         }
 
@@ -234,11 +237,11 @@ namespace eIDMW
                 CertCloseStore(hMemoryStore, CERT_CLOSE_STORE_FORCE_FLAG);
                 if (GetLastError() == ERROR_CANCELLED)
                 {
-                    MWLOG_ERR(logBuf, "User denied registration of root certificate! Certificate chain will be incomplete...");
+                    MWLOG_ERR("User denied registration of root certificate! Certificate chain will be incomplete...");
                 }
                 else
                 {
-                    MWLOG_ERR(logBuf, "Error adding certificate to store: 0x%x\n", GetLastError());
+                    MWLOG_ERR("Error adding certificate to store: 0x%x", GetLastError());
                 }
                 return false;
             }
@@ -254,7 +257,7 @@ namespace eIDMW
         unsigned long dwPropId = CERT_KEY_PROV_INFO_PROP_ID;
         unsigned long dwFlags = CERT_STORE_NO_CRYPT_RELEASE_FLAG;
 
-        cryptKeyProvInfo.pwszProvName = (LPWSTR)L"Chave Móvel Digital Key Storage Provider"; // name of the prov
+        cryptKeyProvInfo.pwszProvName = (LPWSTR)L"Chave M\xF3vel Digital Key Storage Provider"; // name of the prov
         cryptKeyProvInfo.dwKeySpec = AT_SIGNATURE;
 
         std::wstring strContainerName = L"CMD_";
@@ -264,14 +267,14 @@ namespace eIDMW
         if (!CryptHashCertificate2(BCRYPT_SHA1_ALGORITHM, NULL, NULL, pCertContext->pbCertEncoded,
             pCertContext->cbCertEncoded, NULL, &certHashBufferSize))
         {
-            MWLOG_ERR(logBuf, "Error getting cert hash size in CryptHashCertificate2");
+            MWLOG_ERR("Error getting cert hash size in CryptHashCertificate2");
             return false;
         }
         BYTE *certHashBuffer = new BYTE[certHashBufferSize];
         if (!CryptHashCertificate2(BCRYPT_SHA1_ALGORITHM, NULL, NULL, pCertContext->pbCertEncoded,
             pCertContext->cbCertEncoded, certHashBuffer, &certHashBufferSize))
         {
-            MWLOG_ERR(logBuf, "Error getting cert hash in CryptHashCertificate2");
+            MWLOG_ERR("Error getting cert hash in CryptHashCertificate2");
             delete[] certHashBuffer;
             return false;
         }
@@ -285,7 +288,7 @@ namespace eIDMW
             NULL,
             &certHashHexBufferSize)
             ){
-            MWLOG_ERR(logBuf, "Error in computing hash size in hex in CryptBinaryToStringA");
+            MWLOG_ERR("Error in computing hash size in hex in CryptBinaryToStringA");
             delete[] certHashBuffer;
             return false;
         }
@@ -297,7 +300,7 @@ namespace eIDMW
             certHashHexBuffer,
             &certHashHexBufferSize)
             ){
-            MWLOG_ERR(logBuf, "Error in converting hash to hex in CryptBinaryToStringA");
+            MWLOG_ERR("Error in converting hash to hex in CryptBinaryToStringA");
             delete[] certHashBuffer;
             delete[] certHashHexBuffer;
             return false;
@@ -315,7 +318,7 @@ namespace eIDMW
 
         if (!CertSetCertificateContextProperty(pCertContext, dwPropId, dwFlags, &cryptKeyProvInfo))
         {
-            MWLOG_ERR(logBuf, "Error in CertSetCertificateContextProperty for key container info: 0x%x", GetLastError());
+            MWLOG_ERR("Error in CertSetCertificateContextProperty for key container info: 0x%x", GetLastError());
             return false;
         }
         return true;
@@ -334,7 +337,7 @@ namespace eIDMW
             CERT_STORE_NO_CRYPT_RELEASE_FLAG,
             &tpMobileNumber))
         {
-            MWLOG_ERR(logBuf, "Error in CertSetCertificateContextProperty for certificate's associated mobile number: 0x%x", GetLastError());
+            MWLOG_ERR("Error in CertSetCertificateContextProperty for certificate's associated mobile number: 0x%x", GetLastError());
             return false;
         }
         return true;
@@ -368,7 +371,7 @@ namespace eIDMW
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
             0,
             CERT_FIND_ISSUER_STR,
-            L"EC de Chave Móvel Digital",
+            L"EC de Chave M\xF3vel Digital",
             pCert
             ))
         {
@@ -384,12 +387,12 @@ namespace eIDMW
             {
                 if (!CertDuplicateCertificateContext(pCert))
                 {
-                    MWLOG_ERR(logBuf, "CertDuplicateCertificateContext failed with error code 0x%08x", GetLastError());
+                    MWLOG_ERR("CertDuplicateCertificateContext failed with error code 0x%08x", GetLastError());
                     goto cleanup;
                 }
                 if (!CertDeleteCertificateFromStore(pCert))
                 {
-                    MWLOG_ERR(logBuf, "CertDeleteCertificateFromStore failed with error code 0x%08x", GetLastError());
+                    MWLOG_ERR("CertDeleteCertificateFromStore failed with error code 0x%08x", GetLastError());
                     goto cleanup;
                 }
             }
@@ -403,5 +406,93 @@ namespace eIDMW
     int CMDCertificates::sendSms() {
         CMDProxyInfo proxyInfo = CMDProxyInfo::buildProxyInfo();
         return m_cmdService->forceSMS(proxyInfo, m_mobileNumber);
+    }
+
+#endif
+    int CMDCertificates::getCertificates(std::vector<CByteArray> &outCerts) {
+        CMDServices cmdServices(m_basicAuthUser, m_basicAuthPassword, m_applicationId);
+
+        CMDProxyInfo proxyInfo = CMDProxyInfo::buildProxyInfo();
+
+        std::string mobileNumber, pin;
+        DlgRet dlgRet = CMDSignatureClient::openAuthenticationDialogPIN(DlgCmdOperation::DLG_CMD_GET_CERTIFICATE, &pin, &mobileNumber);
+
+        if (dlgRet == DLG_CANCEL)
+            return ERR_OP_CANCELLED;
+        else if (dlgRet != ERR_NONE)
+            throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+
+        std::function<void(void)> cancelRequestCallback = std::bind(&CMDServices::cancelRequest, &cmdServices);
+        CMDProgressDlgThread progressDlgThread(DlgCmdOperation::DLG_CMD_GET_CERTIFICATE, false, &cancelRequestCallback);
+        progressDlgThread.Start();
+        try
+        {
+            int ret = cmdServices.askForCertificate(proxyInfo, mobileNumber, pin);
+
+            if (progressDlgThread.wasCancelled()){
+                return ERR_OP_CANCELLED;
+            }
+            
+            progressDlgThread.Stop();
+
+            if (ret != ERR_NONE){
+                return ret;
+            }
+        }
+        catch (...)
+        {
+            progressDlgThread.Stop();
+            throw;
+        }
+
+        std::string otp, docname;
+        std::function<void(void)> fSmsCallback = std::bind(&CMDServices::forceSMS, &cmdServices, proxyInfo, mobileNumber);
+        dlgRet = CMDSignatureClient::openAuthenticationDialogOTP(DlgCmdOperation::DLG_CMD_GET_CERTIFICATE, &otp, &docname, &fSmsCallback);
+
+        if (dlgRet == DLG_CANCEL)
+            return ERR_OP_CANCELLED;
+        else if (dlgRet != ERR_NONE)
+            throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+
+        CMDProgressDlgThread progressDlgOtpThread(DlgCmdOperation::DLG_CMD_GET_CERTIFICATE, true, &cancelRequestCallback);
+        progressDlgOtpThread.Start();
+        try
+        {
+            int ret = cmdServices.getCMDCertificate(proxyInfo, otp, outCerts);
+            
+            if (progressDlgOtpThread.wasCancelled())
+                return ERR_OP_CANCELLED;
+
+            progressDlgOtpThread.Stop();
+            return ret;
+        }
+        catch (...)
+        {
+            progressDlgOtpThread.Stop();
+            throw;
+        }
+    }
+
+    int CMDCertificates::getCertificates(std::vector<CByteArray> &outCerts, const std::string& mobileNumber)
+    {
+        CMDServices cmdServices(m_basicAuthUser, m_basicAuthPassword, m_applicationId);
+        CMDProxyInfo proxyInfo = CMDProxyInfo::buildProxyInfo();
+
+        std::function<void(void)> cancelRequestCallback = std::bind(&CMDServices::cancelRequest, &cmdServices);
+        CMDProgressDlgThread progressDlgThread(DlgCmdOperation::DLG_CMD_GET_CERTIFICATE, false, &cancelRequestCallback);
+        progressDlgThread.Start();
+        try {
+            int ret = cmdServices.getCertificate(proxyInfo, mobileNumber, outCerts);
+
+            if (progressDlgThread.wasCancelled()) {
+                return ERR_OP_CANCELLED;
+            }
+
+            progressDlgThread.Stop();
+            return ret;
+        } catch (...) {
+            progressDlgThread.Stop();
+            throw;
+        }
     }
 }

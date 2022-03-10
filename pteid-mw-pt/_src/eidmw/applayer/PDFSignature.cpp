@@ -80,9 +80,10 @@ namespace eIDMW
 
 	PDFSignature::~PDFSignature()
 	{
+
 		free(m_citizen_fullname);
 		free(m_civil_number);
-
+		
 		//Free the strdup'ed strings from batchAddFile
 		for (int i = 0; i != m_files_to_sign.size(); i++)
 			free(m_files_to_sign.at(i).first);
@@ -111,7 +112,8 @@ namespace eIDMW
 		m_level = LEVEL_BASIC;
 		m_isLandscape = false;
 		m_small_signature = false;
-		my_custom_image.img_data = NULL;
+		my_custom_image = {};
+		m_doc = NULL;
 		m_card = NULL;
 		m_signerInfo = NULL;
 		m_pkcs7 = NULL;
@@ -121,15 +123,17 @@ namespace eIDMW
 		m_isCC = true;
 	}
 
-	void PDFSignature::setFile(char *pdf_file_path)
+	void PDFSignature::setFile(const char *pdf_file_path)
 	{
 		resetMembers();
-		m_pdf_file_path = pdf_file_path;
+		m_batch_mode = false;
+		m_pdf_file_path = strdup(pdf_file_path);
 		m_doc = makePDFDoc(pdf_file_path);
 	}
 
 	void PDFSignature::batchAddFile(char *file_path, bool last_page)
 	{
+		m_batch_mode = true;
 		m_files_to_sign.push_back(std::make_pair(_strdup(file_path), last_page));
 		m_batch_mode = true;
 
@@ -140,7 +144,7 @@ namespace eIDMW
 		m_level = LEVEL_TIMESTAMP;
 	}
 
-	void PDFSignature::setSignatureLevel(APL_SignatureLevel level) 
+	void PDFSignature::setSignatureLevel(APL_SignatureLevel level)
 	{
 		m_level = level;
 	}
@@ -313,7 +317,7 @@ namespace eIDMW
 			MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: getCitizenCertificate() This should only be called for Card Signature!");
 
             CByteArray certData;
-           
+
 
             m_card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
 
@@ -421,6 +425,27 @@ namespace eIDMW
 		return pdf_filename;
 	}
 
+	size_t PDFSignature::getCurrentBatchSize() {
+		return m_files_to_sign.size();
+	}
+
+	PDFSignature *PDFSignature::getSpecialCopy(size_t batch_index) {
+
+		if (!m_batch_mode || m_files_to_sign.empty())
+			return NULL;
+
+		PDFSignature * my_clone = new PDFSignature();
+		//Copy all the original signature members other than m_files_to_sign
+		my_clone->setSignatureLevel(m_level);
+		my_clone->setVisibleCoordinates(m_page, location_x, location_y);
+		//TODO: Using deep-copy of the image data is not ideal...
+		if (my_custom_image.img_data != NULL)
+			my_clone->setCustomImage(my_custom_image.img_data, my_custom_image.img_length);
+		my_clone->setFile(m_files_to_sign.at(batch_index).first);
+
+		return my_clone;
+	}
+
 	int PDFSignature::signFiles(const char *location,
 		const char *reason, const char *outfile_path, bool isCardSign)
 	{
@@ -469,8 +494,8 @@ namespace eIDMW
 						cachedPin = true;
 						m_card->getCalReader()->setSSO(true);
 					}
-					m_level = LEVEL_BASIC; // disable timetamp for the next files
-					
+					m_level = LEVEL_BASIC; // Disable timestamp for the next files
+
 					if (e.GetError() == EIDMW_TIMESTAMP_ERROR)
 						throwTimestampError = true;
 					else
@@ -509,7 +534,7 @@ namespace eIDMW
 
 		return doc.getNumPages();
 	}
-	
+
 
 	int PDFSignature::signSingleFile(const char *location,
         const char *reason, const char *outfile_path, bool isCardSign)
@@ -686,7 +711,7 @@ namespace eIDMW
 		if (m_attributeSupplier != NULL) {
 			doc->addSCAPAttributes(m_attributeSupplier, m_attributeName);
 		}
-		
+
         m_incrementalMode = doc->isSigned() || doc->isReaderEnabled();
 
 		if (this->my_custom_image.img_data != NULL)
@@ -795,7 +820,7 @@ namespace eIDMW
         /* Calculate hash */
         m_pkcs7 = PKCS7_new();
 
-        bool timestamp = (m_level == LEVEL_TIMESTAMP 
+        bool timestamp = (m_level == LEVEL_TIMESTAMP
                         || m_level == LEVEL_LT
                         || m_level == LEVEL_LTV);
 
@@ -804,7 +829,7 @@ namespace eIDMW
                                                 , certificate_cas
                                                 , timestamp
                                                 , m_pkcs7
-                                                , &m_signerInfo 
+                                                , &m_signerInfo
                                                 , isCardSign ? m_card : NULL);
         setHash(in_hash);
     }
@@ -836,7 +861,7 @@ namespace eIDMW
             , m_pkcs7
             , &signature_contents);
 
-        //Don't report "unknown error" exception in the case of timestamp error     
+        //Don't report "unknown error" exception in the case of timestamp error
         if (return_code > 1)
             throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 
@@ -848,7 +873,7 @@ namespace eIDMW
                 return_code = 2;
             }
         }
-        
+
         m_signStarted = false;
 
         free((void *)signature_contents);
@@ -942,7 +967,7 @@ namespace eIDMW
         }
     }
 
-    bool PDFSignature::addLtv() 
+    bool PDFSignature::addLtv()
     {
         PAdESExtender padesExtender(this);
         if (m_level == LEVEL_LT)

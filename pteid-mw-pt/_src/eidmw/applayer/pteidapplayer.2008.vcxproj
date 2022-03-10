@@ -195,6 +195,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>PTEID_35;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -236,9 +237,9 @@
     <ClCompile Include="cryptoFwkPteid.cpp" />
     <ClCompile Include="J2KHelper.cpp" />
     <ClCompile Include="MiscUtil.cpp" />
-    <ClCompile Include="OCSP.cpp" />
     <ClCompile Include="PDFSignature.cpp" />
     <ClCompile Include="PhotoPteid.cpp" />
+    <ClCompile Include="proxyinfo.cpp" />
     <ClCompile Include="SAM.cpp" />
     <ClCompile Include="ess_asn1.c" />
     <ClCompile Include="ess_lib.c" />
@@ -248,6 +249,7 @@
     <ClCompile Include="sign-pkcs7.cpp" />
     <ClCompile Include="SODParser.cpp" />
     <ClCompile Include="SSLConnection.cpp" />
+    <ClCompile Include="strndup.c" />
     <ClCompile Include="TsaClient.cpp" />
     <ClCompile Include="XadesSignature.cpp" />
     <ClCompile Include="XercesUtils.cpp" />

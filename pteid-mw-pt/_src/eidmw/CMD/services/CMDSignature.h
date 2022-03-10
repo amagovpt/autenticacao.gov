@@ -2,7 +2,7 @@
 
  * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2017, 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
- * Copyright (C) 2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
+ * Copyright (C) 2019-2021 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
 
@@ -11,9 +11,8 @@
 #ifndef PDF_SIGNATURE_CLI_H
 #define PDF_SIGNATURE_CLI_H
 
-#include "eidlib.h"
 #include "ByteArray.h"
-
+#include "PDFSignature.h"
 #include "cmdErrors.h"
 #define IS_NETWORK_ERROR(error)    IS_SOAP_ERROR(error)
 
@@ -29,6 +28,10 @@ using namespace eIDMW;
 #define PTEIDCMD_API __attribute__ ((visibility ("default")))
 #endif
 
+#define MAX_PIN_SIZE 8
+#define MAX_OTP_SIZE 6
+#define MAX_USER_SIZE 15
+#define MAX_DOCNAME_SIZE 50
 
 namespace eIDMW {
 
@@ -48,25 +51,31 @@ namespace eIDMW {
 	class CMDSignature {
         public:
             PTEIDCMD_API CMDSignature(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId);
-            PTEIDCMD_API CMDSignature(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId, PTEID_PDFSignature *in_pdf_handler);
+            PTEIDCMD_API CMDSignature(std::string basicAuthUser, std::string basicAuthPassword, std::string applicationId, PDFSignature *in_pdf_handler);
 			PTEIDCMD_API ~CMDSignature();
 
+            // The signOpen methods that do not use in_userId/in_pin open the SDK dialog.
             //proxyinfo parameter is saved in m_proxyInfo so that we can reuse it later in signClose()
             // signOpen used to sign hash
             PTEIDCMD_API int signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin, CByteArray &in_hash, std::string docname);
+            PTEIDCMD_API int signOpen(CMDProxyInfo proxyinfo, CByteArray &in_hash, std::string docname, std::string * mobile = NULL, const char *userName = NULL);
             // this signOpen should be used to sign PDFs
 			PTEIDCMD_API int signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin
-                        , int page
-                        , double coord_x, double coord_y
                         , const char *location
                         , const char *reason
                         , const char *outfile_path);
+            PTEIDCMD_API int signOpen(CMDProxyInfo proxyinfo
+                        , const char *location
+                        , const char *reason
+                        , const char *outfile_path
+                        , std::string * mobileCache = NULL); // mobileNumber used for placeholder (cache)
 
-			PTEIDCMD_API int signClose(std::string in_code);
+            PTEIDCMD_API int signClose();
+            PTEIDCMD_API int signClose(std::string in_code);
             PTEIDCMD_API void cancelRequest();
             PTEIDCMD_API int sendSms();
-            PTEIDCMD_API void set_pdf_handler(PTEID_PDFSignature *in_pdf_handler);
-            PTEIDCMD_API void add_pdf_handler(PTEID_PDFSignature *in_pdf_handler);
+            PTEIDCMD_API void set_pdf_handler(PDFSignature *in_pdf_handler);
+            PTEIDCMD_API void add_pdf_handler(PDFSignature *in_pdf_handler);
             PTEIDCMD_API void clear_pdf_handlers();
             PTEIDCMD_API void set_string_handler(std::string in_docname_handle,
                                                  CByteArray in_array_handler);
@@ -76,12 +85,14 @@ namespace eIDMW {
 
             PTEIDCMD_API static std::string getEndpoint();
 
-            std::string m_string_signature;
+            /* Certificate chain from last call to cli_getCertificate. */
+            std::vector<CByteArray> m_certificates;
+            CByteArray m_signature;
             std::string m_string_certificate;
 
         private:
             CMDServices *cmdService;
-            std::vector<PTEID_PDFSignature*> m_pdf_handlers;
+            std::vector<PDFSignature*> m_pdf_handlers;
             std::string m_docname_handle;
             CByteArray m_array_handler;
 
@@ -92,7 +103,8 @@ namespace eIDMW {
             CMDProxyInfo m_proxyInfo;
             int cli_getCertificate( std::string in_userId );
             int cli_sendDataToSign( std::string in_pin );
-            int cli_getSignatures(std::string in_code, std::vector<PTEID_ByteArray *> out_sign);
+            int cli_getSignatures(std::string in_code, std::vector<CByteArray *> out_sign);
+
             std::string m_basicAuthUser;
             std::string m_basicAuthPassword;
             std::string m_applicationId;

@@ -6,7 +6,7 @@
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
- * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
+ * Copyright (C) 2019-2021 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -33,6 +33,7 @@
 #define __DIALOGS_H__
 
 #include <string>
+#include <functional>
 
 #ifdef WIN32
 	#ifdef DLGSWIN32_EXPORTS
@@ -60,7 +61,13 @@ typedef enum {
 	DLG_NEVER,		// Never button clicked
 	DLG_BAD_PARAM, // Bad values for a parameter
 	DLG_ERR,       // Something else went wrong
+	DLG_CALLBACK,  // Call callback (used to send sms in Linux/Mac)
 } DlgRet;
+
+typedef enum {
+	DLG_CC,         // Citizen Card
+	DLG_CMD         // Chave Móvel Digital
+} DlgDevice;
 
 typedef enum {
 	DLG_PIN_OP_VERIFY,
@@ -85,13 +92,17 @@ typedef enum {
 	DLG_PIN_ADDRESS,
 } DlgPinUsage;
 
-#ifdef WIN32
+typedef enum {
+    DLG_CMD_SIGNATURE,
+    DLG_CMD_GET_CERTIFICATE
+} DlgCmdOperation;
+
 typedef enum {
 	DLG_CMD_PROGRESS,
+	DLG_CMD_PROGRESS_NO_CANCEL,
 	DLG_CMD_ERROR_MSG,
 	DLG_CMD_WARNING_MSG,
 } DlgCmdMsgType;
-#endif
 
 const unsigned char PIN_FLAG_DIGITS = 1;
 	
@@ -127,6 +138,9 @@ typedef enum {
    DLG_DISPLAY_PINPAD_INFO,
    DLG_DISPLAY_MODAL,
    DLG_ASK_ACCESS, 
+   DLG_ASK_CMD_INPUT,
+   DLG_PICK_DEVICE,
+   DLG_CMD_MSG,
  } DlgFunctionIndex;
 
  typedef enum {
@@ -205,13 +219,13 @@ DLGS_EXPORT DlgRet DlgBadPin(DlgPinUsage usage, const wchar_t *csPinName,
 /**
  * Show a message explaining how to use the pinpad reader.
  * This dialog is modeless (returns after showing the dialog.
- * The dialog is closed by a call to DlgCloseMsg(), but an 'X'
- * should be present to manually close it if DlgCloseMsg()
+ * The dialog is closed by a call to DlgClosePinpadInfo(), but an 'X'
+ * should be present to manually close it if DlgClosePinpadInfo()
  * hasn't been called.
  * - operation: DLG_PIN_OP_VERIFY, DLG_PIN_OP_CHANGE,
  *     DLG_PIN_OP_UNBLOCK_NO_CHANGE or DLG_PIN_OP_UNBLOCK_CHANGE
  * - pinName: should only be used if 'usage' == DLG_PIN_UNKNOWN
- * - *pulHandle: [OUT]: handle used in DlgCloseMsg(), only
+ * - *pulHandle: [OUT]: handle used in DlgClosePinpadInfo(), only
  *     needed if multiple pinpad dialogs can be called
  * Returns: DLG_OK if all went fine,
  *          DLG_BAD_PARAM or DLG_ERR otherwise
@@ -229,34 +243,55 @@ DLGS_EXPORT void DlgClosePinpadInfo(unsigned long ulHandle);
 /************************************************************************************
 * CMD dialogs
 ************************************************************************************/
-#ifdef WIN32
+
 /**
 * Show CMD dialog to obtain CMD PIN or OTP during signature.
+* - operation: operation being performed.
 * - isValidateOtp: true if dialog should ask for OTP
-* - csOut: buffer to obtain PIN or OTP (depending on isValidateOtp)
-* - csInId: string with mobile number or document name/hash (depending on isValidateOtp)
+* - csOutCode: buffer to obtain PIN or OTP (depending on isValidateOtp)
+* - csInOutId: string with mobile number or document name/hash (depending on isValidateOtp).
+* 				If csOutIdLen > 0, csInOutId points to buffer to store mobile number. The contents of
+* 				the buffer are used for the text field placeholder (it must be null-terminated string).
+* - csOutIdLen: If 0, csInOutId is used as input with mobile number to be displayed.
+*				Otherwise, csOutIdLen contains the buffer size of csInOutId.
 * - csUserName: buffer with the user name (used when obtaining PIN)
 * - fSendSmsCallback: callback function to send request for SMS to CMD service
 */
 
-DLGS_EXPORT DlgRet DlgAskInputCMD(bool isValidateOtp,
-	wchar_t *csOut, unsigned long ulOutBufferLen, wchar_t *csInId = NULL,
-	const wchar_t *csUserName = NULL, unsigned long ulUserNameBufferLen = 0, void (*fSendSmsCallback)(void) = NULL);
-
+DLGS_EXPORT DlgRet DlgAskInputCMD(DlgCmdOperation operation, bool isValidateOtp,
+	wchar_t *csOutCode, unsigned long ulOutCodeBufferLen, 
+	wchar_t *csInOutId = NULL, unsigned long csOutIdLen = 0,
+	const wchar_t *csUserName = NULL, unsigned long ulUserNameBufferLen = 0, 
+	std::function<void(void)> *fSendSmsCallback = NULL);
 
 /**
  * Show CMD dialog for output message or activity progress.
+ * - operation: operation being performed.
  * - msgType: if it is dlg for activity progress or show warning/error msg
  * - message: message to show
+ * - pulHandle: [OUT]: handle used in DlgCloseCMDMessage(), only
+ *     needed if multiple CMD dialogs can be called
  * Returns: DLG_CANCEL if user canceled activity
  */
-DLGS_EXPORT DlgRet DlgCMDMessage(DlgCmdMsgType msgType, const wchar_t *message);
+ // TODO: Add support for multiple cmd message dialogs in Windows. pulHandle not being used (adapt from pinpad).
+DLGS_EXPORT DlgRet DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType msgType, const wchar_t *message, unsigned long *pulHandle);
+/**
+ * Show CMD dialog message for "sending Otp" (isOtp == true) or "connecting with server" (isOtp == false).
+ */
+DLGS_EXPORT DlgRet DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType msgType, bool isOtp, unsigned long *pulHandle);
 
 /**
 * Close the CMD message dialog
 */
-DLGS_EXPORT void DlgCloseCMDMessage();
-#endif
+DLGS_EXPORT void DlgCloseCMDMessage(unsigned long ulHandle);
+
+/**
+ * Show dialog to choose the device: CC or CMD.
+ * - outDevice: store the device picked by the user;
+ * Returns: DLG_CANCEL if user canceled activity
+ */
+DLGS_EXPORT DlgRet DlgPickDevice(DlgDevice *outDevice);
+
 
 /************************************************************************************/
 /**
@@ -321,6 +356,30 @@ struct DlgAskPINArguments {
    unsigned long long infoCollectorIndex;
    pid_t tRunningProcess;
    DlgRet returnValue;
+ } ;
+
+ struct DlgAskInputCMDArguments {
+   wchar_t inOutId[50] = {0};
+   DlgCmdOperation operation;
+   bool isValidateOtp;
+   bool callbackWasCalled = false;
+   wchar_t Code[PIN_MAX_LENGTH+1] = {0};
+   bool askForId;
+   DlgRet returnValue;
+ } ;
+
+ struct DlgPickDeviceArguments {
+   DlgDevice outDevice;
+   DlgRet returnValue;
+ } ;
+
+ struct DlgCMDMessageArguments {
+   wchar_t message[50] = {0};
+   DlgCmdOperation operation;
+   DlgCmdMsgType type;
+   DlgRet returnValue;
+   unsigned long long cmdMsgCollectorIndex;
+   pid_t tRunningProcess;
  } ;
 
  struct DlgRunningProc{

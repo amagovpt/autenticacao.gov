@@ -214,6 +214,7 @@
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Certificate.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Certificates.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_CertifStatus.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_CMDSignatureClient.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Config.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Crl.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_CrlStatus.java" />
@@ -244,7 +245,6 @@
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_HashAlgo.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_KidsCard.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_LogLevel.java" />
-    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_MemoryCard.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Object.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_OcspResponse.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_Param.java" />
@@ -256,6 +256,8 @@
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_RawData_Eid.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ReaderContext.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ReaderSet.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_SigningDevice.java" />
+    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_SigningDevicePicker.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_SmartCard.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ulwrapper.java" />
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ValidationLevel.java" />

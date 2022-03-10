@@ -43,8 +43,10 @@
 #endif
 
 #include <cstdio>
+#include <locale>
 #include <cstring>
 #include <string>
+#include <sstream>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -54,6 +56,7 @@
 #include <errno.h>
 
 #include "MWException.h"
+#include "Log.h"
 #include "eidErrors.h"
 #include "ByteArray.h"
 
@@ -165,20 +168,21 @@ const void *memmem(const void *haystack, size_t n, const void *needle, size_t m)
 		*out = '\0';
 	}
 
-	//adapted from https://codereview.stackexchange.com/a/78539
-	std::string urlEncode(unsigned char *data, int len)
-	{
-		char hexmap[] = { '0', '1', '2', '3', '4', '5', '6', '7',
-			'8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-		std::string s(len * 3, ' ');
-		for (int i = 0; i < len; ++i) {
-			s[3 * i] = '%';
-			s[3 * i + 1] = hexmap[(data[i] & 0xF0) >> 4];
-			s[3 * i + 2] = hexmap[data[i] & 0x0F];
+//adapted from https://github.com/open-eid/libdigidocpp/blob/42a8cfd834c10bdd206fe784a13217df222b1c8e/src/util/File.cpp#L593
+std::string urlEncode(const std::string &path)
+{
+	static const std::string unreserved = "-._~/";
+	static const std::locale locC("C");
+	std::ostringstream dst;
+	for (const char &i: path) {
+		if (std::isalnum(i, locC) || unreserved.find(i) != std::string::npos) {
+			dst << i;
+		} else {
+			dst << '%' << std::hex << std::uppercase << (static_cast<int>(i) & 0xFF);
 		}
-		return s;
 	}
-
+	return dst.str();
+}
 
 void replace_lastdot_inplace(char* str_in)
 {
@@ -523,6 +527,24 @@ std::string CPathUtil::getWorkingDir()
 #define PATH_SEP_CHAR   '/'
 #endif
 
+//TODO: what happens if filename entry in zip contains slashes ??
+FILE * CPathUtil::openFileForWriting(const char *out_dir, const char *filename)
+{
+	std::string file_path = string(out_dir) + PATH_SEP_STR + filename;
+#ifdef WIN32
+	std::wstring w_file_path = utilStringWiden(file_path);
+	FILE * fp_out = _wfopen(w_file_path.c_str(), L"wb");
+#else
+	FILE * fp_out = fopen(file_path.c_str(), "wb");
+#endif
+
+	if (!fp_out) {
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to open file_path: %s errno: %d", file_path.c_str(), errno);
+		throw CMWEXCEPTION(EIDMW_FILE_NOT_OPENED);
+	}
+	return fp_out;
+}
+
 std::string CPathUtil::getDir(const char *filePath)
 {
 	char *directory=new char[strlen(filePath)+1];
@@ -578,6 +600,17 @@ bool CPathUtil::existFile(const char *filePath)
 	{
 #endif
 		return false;
+	}
+
+	return true;
+}
+
+bool CPathUtil::checkExistingFiles(const char **files, unsigned int n_paths)
+{
+	for(unsigned int i=0; i != n_paths; i++)
+	{
+		if (!CPathUtil::existFile(files[i]))
+			return false;
 	}
 
 	return true;
@@ -758,7 +791,7 @@ void CPathUtil::scanDir(const char *Dir,
 	    }
 	  } else {
 	    // log error
-	    printf("APL_CrlDownloadingCache::scanDir stat failed: %s\n",strerror(errno) );
+	    fprintf(stderr, "CPathUtil::scanDir stat failed: %s\n",strerror(errno) );
 	  }
 	}
 	if (bStopRequest)
@@ -768,7 +801,7 @@ void CPathUtil::scanDir(const char *Dir,
 
   } else {
     // log error
-    printf("APL_CrlDownloadingCache::scanDir \"%s\" : %s\n",Dir,strerror(errno));
+    fprintf(stderr, "CPathUtil::scanDir \"%s\" : %s\n",Dir,strerror(errno));
     return;
   }
 

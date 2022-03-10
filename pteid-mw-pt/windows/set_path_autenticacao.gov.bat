@@ -43,4 +43,4 @@
 
 :: Credentials
 ::======
-@set PTEID_CREDENTIALS_FILE=C:\git\tools\set_credentials\credentials.h
+@set PTEID_CREDENTIALS_FOLDER=C:\git\tools\set_credentials\

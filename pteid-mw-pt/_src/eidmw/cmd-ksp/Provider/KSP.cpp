@@ -24,13 +24,16 @@ Abstract:
 #include <ncrypt.h>
 #include "../Inc/KSP.h"
 #include "../Inc/log.h"
-#include "../Inc/KSPDlgHelper.h"
-#include "CMDSignature.h"
+#include "cmdSignatureClient.h"
+#include "MWException.h"
+#include "eidErrors.h"
 #include "proxyinfo.h"
 #include "credentials.h"
-#include "dialogs.h"
+#include "kspCredentials.h"
 #include "Util.h"
 #include "language.h"
+#include "eidlib.h"
+#include "cryptoFramework.h"
 
 using namespace eIDMW;
 
@@ -1527,38 +1530,57 @@ cleanup:
 #define PIN_BUFFER_SIZE 9
 #define OTP_BUFFER_SIZE 7     // OTP is 6 digit
 
-bool checkCmdErrorAndShowDlg(HWND hWnd, bool proxyUsed, int error, HWND parentWindow)
+void handleErrorAndShowDlg(bool proxyUsed, int error, SECURITY_STATUS *hStatus)
 {
     std::wstring msg;
-    if (error == SOAP_TCP_ERROR)
-    {
+    switch (error)
+    {   
+    case EIDMW_ERR_OP_CANCEL:
+        *hStatus = NTE_USER_CANCELLED;
+        break;
+
+    case  EIDMW_ERR_CMD_CONNECTION:
         msg += (proxyUsed ? GETSTRING_DLG(PossibleProxyError) : GETSTRING_DLG(ConnectionError));
-    }
-    else if (error == SOAP_ERR_INVALID_OTP)
-    {
+        *hStatus = CS_E_NETWORK_ERROR;
+        break;
+
+    case  EIDMW_ERR_CMD_INVALID_CODE:
         msg += GETSTRING_DLG(InvalidPinOrOtp);
-    }
-    else if (error == SOAP_ERR_OTP_VALIDATION_ERROR)
-    {
-        msg += GETSTRING_DLG(OtpValidationFailed);
-    }
-    else if (error == ERR_GET_CERTIFICATE)
-    {
+        *hStatus = NTE_INCORRECT_PASSWORD;
+        break;
+
+    case EIDMW_ERR_CMD_INACTIVE_ACCOUNT:
         msg += GETSTRING_DLG(InvalidCertificate);
         msg += L"\n";
         msg += GETSTRING_DLG(VerifyIfDigitalSignatureIsActive);
-    }
-    else if (error == ERR_INV_CERTIFICATE)
-    {
+        *hStatus = NTE_KEYSET_ENTRY_BAD;
+        break;
+    
+    case EIDMW_ERR_CMD_BAD_CREDENTIALS:
+        msg += GETSTRING_DLG(NoCMDCredentials);
+        *hStatus = NTE_BAD_PROVIDER;
+        break;
+
+    case ERR_INV_CERTIFICATE:
         msg += GETSTRING_DLG(InvalidCertificate);
         msg += L"\n";
         msg += GETSTRING_DLG(RegisterCertificateAgain);
+        *hStatus = NTE_KEYSET_ENTRY_BAD;
+        break;
+
+    default:
+        *hStatus = NTE_INTERNAL_ERROR;
+        break;
     }
+
     if (!msg.empty())
     {
-        CmdKspOpenDialogError(msg.c_str(), DlgCmdMsgType::DLG_CMD_WARNING_MSG, parentWindow);
+        DlgRet ret = DlgCMDMessage(DlgCmdOperation::DLG_CMD_SIGNATURE, DlgCmdMsgType::DLG_CMD_WARNING_MSG, msg.c_str(), NULL);
+        if (ret == DlgRet::DLG_ERR)
+        {
+            MWLOG_ERR(logBuf, "handleErrorAndShowDlg: Error occured in DlgCMDMessage.");
+        }
     }
-    return error != ERR_NONE;
 }
 
 bool validateInputHash(DWORD hash_len) {
@@ -1615,7 +1637,7 @@ __in    DWORD   dwFlags)
     CMDKSP_KEY          *pKey = NULL;
     DWORD               cbTmpSig = 0;
     DWORD               cbTmp = 0;
-    LPWSTR              csSubject = NULL;
+    LPSTR              csSubject = NULL;
 
     MWLOG_DEBUG(logBuf, "Call KSPSignHash hKey = [0x%08x]", hKey);
 
@@ -1695,9 +1717,17 @@ __in    DWORD   dwFlags)
     // (see compiler error C2362)
     {
         PTEID_InitSDK();
-        std::wstring registeredMobileNumber = pKey->pszMobileNumber;
-        unsigned long ulPinBufferLen = PIN_BUFFER_SIZE;
-        wchar_t csPin[PIN_BUFFER_SIZE];
+
+        CMDProxyInfo cmd_proxyinfo = CMDProxyInfo::buildProxyInfo();
+        bool isProxySet = cmd_proxyinfo.host.size() > 0;
+
+        if (!validateCert(pKey->pCert))
+        {
+            handleErrorAndShowDlg(isProxySet, ERR_INV_CERTIFICATE, &Status);
+            goto cleanup;
+        }
+
+        std::string registeredMobileNumber = utilStringNarrow(pKey->pszMobileNumber);
         DWORD dwSubjectLen = CertGetNameStringW(
                                 pKey->pCert,
                                 CERT_NAME_SIMPLE_DISPLAY_TYPE,
@@ -1705,8 +1735,8 @@ __in    DWORD   dwFlags)
                                 NULL,
                                 NULL,
                                 0);
-        csSubject = new WCHAR[dwSubjectLen];
-        CertGetNameStringW(
+        csSubject = new CHAR[dwSubjectLen];
+        CertGetNameStringA(
             pKey->pCert,
             CERT_NAME_SIMPLE_DISPLAY_TYPE,
             0,
@@ -1714,122 +1744,29 @@ __in    DWORD   dwFlags)
             csSubject,
             dwSubjectLen);
 
-        Status = CmdKspOpenDialogSign(
-            registeredMobileNumber.c_str(),
-            registeredMobileNumber.size(),
-            csPin, ulPinBufferLen, 
-            csSubject,
-            dwSubjectLen,
-            pKey->hWnd);
-        if (Status != ERROR_SUCCESS)
-        {
-            MWLOG_ERR(logBuf, "Error in CmdKspOpenDialogSign.");
-            goto cleanup;
-        }
-        std::wstring pinW(csPin);
-
-        std::string mobileNumber = utilStringNarrow(registeredMobileNumber);
-        std::string pin = utilStringNarrow(pinW);
-
-        CMDSignature cmd_signature(CMDCredentials::getCMDBasicAuthUserId(),
-                                   CMDCredentials::getCMDBasicAuthPassword(),
-                                   CMDCredentials::getCMDBasicAuthAppId());
-
-        CMDProxyInfo cmd_proxyinfo = CMDProxyInfo::buildProxyInfo();
+        CMDSignatureClient::setCredentials(CMDCredentials::getCMDBasicAuthUserId(KSP_CMD_BASIC_AUTH_USERID).c_str(),
+                                           CMDCredentials::getCMDBasicAuthPassword(KSP_CMD_BASIC_AUTH_PASSWORD).c_str(),
+                                           CMDCredentials::getCMDBasicAuthAppId(KSP_CMD_BASIC_AUTH_APPID).c_str());
 
         CByteArray hashBytes((const unsigned char *)pbHashValue, cbHashValue);
         char docnameBuffer[DOCNAME_BUFFER_SIZE];
         getDocName(pKey->hWnd, pKey->pszProcessBaseName, docnameBuffer, DOCNAME_BUFFER_SIZE, pbHashValue, cbHashValue);
 
-        int ret;
+        CByteArray signature;
+        try
         {
-            CmdSignThread signOpenThread(&cmd_proxyinfo, &cmd_signature, mobileNumber, pin, hashBytes, docnameBuffer, pKey->pCert);
-            signOpenThread.Start();
-
-            // Blocks until user cancels or thread returns
-            Status = CmdKspOpenDialogProgress(false, pKey->hWnd);
-
-            if (Status != ERROR_SUCCESS)
-            {
-                MWLOG_WARN(logBuf, "CmdKspOpenDialogProgress (pin) returned with Status=%d.", Status);
-                signOpenThread.Stop();
-                goto cleanup;
-            }
-            ret = signOpenThread.GetSignResult();
+            CMDSignatureClient cmdClient;
+            signature = cmdClient.Sign(hashBytes, true, docnameBuffer, registeredMobileNumber.c_str(), csSubject);
         }
-
-        if (checkCmdErrorAndShowDlg(pKey->hWnd, cmd_proxyinfo.host.size() > 0, ret, pKey->hWnd))
+        catch (CMWException &e)
         {
-            MWLOG_ERR(logBuf, "Error in signOpen: %d.", ret);
-            Status = NTE_INTERNAL_ERROR;
+            handleErrorAndShowDlg(isProxySet, e.GetError(), &Status);
             goto cleanup;
         }
 
-        unsigned long ulOtpBufferLen = OTP_BUFFER_SIZE;
-        wchar_t csOtp[OTP_BUFFER_SIZE];
-        std::string docName(docnameBuffer);
-        std::string idPattern = " - Id: ";
-        // If we have the docname in the form "<application name> - <last 8 hash chars>" show
-        // only the shorten hash in the dialog
-        if (docName.find(idPattern) != std::wstring::npos)
-        {
-            docName = docName.substr(docName.find(idPattern) + idPattern.length());
-        }
-        Status = CmdKspOpenDialogOtp(csOtp, ulOtpBufferLen, 
-            (wchar_t *)utilStringWiden(docName).c_str(), pKey->hWnd);
-        if (Status != ERROR_SUCCESS)
-        {
-            MWLOG_ERR(logBuf, "Error in CmdKspOpenDialogOtp.");
-            goto cleanup;
-        }
+        memcpy(pbSignature, signature.GetBytes(), signature.Size());
+        *pcbResult = signature.Size();
 
-        std::wstring otpW(csOtp);
-        std::string otp = utilStringNarrow(otpW);
-        {
-            CmdSignThread signCloseThread(&cmd_signature, otp);
-            signCloseThread.Start();
-
-            // Blocks until user cancels or thread returns
-            Status = CmdKspOpenDialogProgress(true, pKey->hWnd);
-
-            if (Status != ERROR_SUCCESS)
-            {
-                MWLOG_WARN(logBuf, "CmdKspOpenDialogProgress (otp) returned with Status=%d.", Status);
-                signCloseThread.Stop();
-                goto cleanup;
-            }
-            ret = signCloseThread.GetSignResult();
-        }
-
-        if (checkCmdErrorAndShowDlg(pKey->hWnd, cmd_proxyinfo.host.size() > 0, ret, pKey->hWnd))
-        {
-            MWLOG_ERR(logBuf, "Error in signClose: %d.", ret);
-            Status = NTE_INTERNAL_ERROR;
-            goto cleanup;
-        }
-
-        DWORD signature_len = cbSignature;
-        Status = CryptStringToBinaryA(
-            cmd_signature.m_string_signature.c_str(),
-            cmd_signature.m_string_signature.length(),
-            CRYPT_STRING_HEX_ANY,
-            pbSignature,
-            &signature_len,
-            NULL,
-            NULL
-            );
-        *pcbResult = signature_len;
-
-        if (Status == 0)
-        {
-            MWLOG_ERR(logBuf, "Failed to decode base64 signature: length: %d sign: %s", cmd_signature.m_string_signature.length(), 
-                                                                                                             cmd_signature.m_string_signature.c_str());
-            Status = NTE_INTERNAL_ERROR;
-            goto cleanup;
-        }
-        else {
-            MWLOG_DEBUG(logBuf, "Successfully decoded %d signature bytes!", signature_len);
-        }
         Status = ERROR_SUCCESS;
     }
 cleanup:

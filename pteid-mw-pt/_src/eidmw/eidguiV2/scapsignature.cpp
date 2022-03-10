@@ -264,7 +264,7 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
                             isLtv, strdup(location.toUtf8().constData()), strdup(reason.toUtf8().constData()),
                             seal_width, seal_height), selected_attributes, useCustomImage, m_jpeg_scaled_data);
                 if (successful == GAPI::ScapSucess) {
-                    parent->signalPdfSignSucess(parent->SignMessageOK);
+                    parent->signalPdfSignSuccess(parent->SignMessageOK);
                     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "ScapSignature",
                             "SCAP CC ScapSuccess");
                 }

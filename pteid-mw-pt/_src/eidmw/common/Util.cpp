@@ -28,7 +28,10 @@
 #include <iostream>
 #include <iterator>
 #include <locale>
+
+
 #ifndef WIN32
+#include <codecvt>
 #include <unistd.h>
 #endif
 #include <stdlib.h>
@@ -69,6 +72,19 @@ namespace eIDMW
 #endif
 
   }
+
+
+#ifndef _WIN32
+    /* Using C++11 features
+       Adapted from https://en.cppreference.com/w/cpp/locale/wstring_convert */
+    std::u32string stringWidenUTF32(std::string utf8_str) {
+         // the UTF-8 / UTF-32 standard conversion facet
+        std::u32string utf32 =
+         std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>{}.from_bytes(utf8_str);
+
+        return utf32;
+    }
+#endif
 
 
   std::string utilStringNarrow(const std::wstring& in, const std::locale& locale)
@@ -282,7 +298,7 @@ std::string IBM850_toUtf8( std::string const& inBuf )
 			ch      = ch - 0x80;
 			idx		= ch*3;
 
-			do 
+			do
 			{
 				in_utf8 += IBM850_to_utf8[idx];
 				idx++;
@@ -301,13 +317,13 @@ std::string IBM850_toUtf8( std::string const& inBuf )
 /* convert binary to ascii-hexadecimal, terminate with a 00-byte
    You have to free the returned buffer yourself !!
  */
-char* bin2AsciiHex(const unsigned char * pData, unsigned long ulLen) 
+char* bin2AsciiHex(const unsigned char * pData, unsigned long ulLen)
 {
     char *pszHex = new char[ulLen*2 + 1];
     if(pData != NULL)
     {
         int j = 0;
-        for(unsigned long i = 0; i < ulLen; i++) 
+        for(unsigned long i = 0; i < ulLen; i++)
         {
             pszHex[j++] = a_cHexChars[pData[i]>>4 & 0x0F];
             pszHex[j++] = a_cHexChars[pData[i] & 0x0F];
@@ -317,7 +333,7 @@ char* bin2AsciiHex(const unsigned char * pData, unsigned long ulLen)
     return pszHex;
 }
 
-// implementation adapted from https://stackoverflow.com/a/32936928 
+// implementation adapted from https://stackoverflow.com/a/32936928
 void truncateUtf8String(std::string &utf8String, size_t numberOfChars)
 {
     const char *ptr = utf8String.c_str();
@@ -434,7 +450,7 @@ int strncpy_s(char *dest, size_t len, const char *src, long count)
 		return -1;
 
 	//On windows _TRUNCATE means that we could copy the maximum of character available
-	if(count==_TRUNCATE) 	
+	if(count==_TRUNCATE)
 	{
 		for ( ; len > 1 && *src != '\0'; dest++, src++, len--)
 			*dest = *src;

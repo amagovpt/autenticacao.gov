@@ -21,29 +21,22 @@
 #include "CMDSignature.h"
 
 #ifdef WIN32
-    #define _LOG_( buf, level, mod, format, ... ) { sprintf( buf, "%s() - ", __FUNCTION__ );                \
-                                                    sprintf( &buf[strlen(buf)], format, __VA_ARGS__ );      \
-                                                    MWLOG( level, mod, buf);                                \
-                                                    printf( "%s\n", buf ); }
-    #define MWLOG_ERR( buf, format, ...   )     _LOG_( buf, LEV_ERROR, MOD_CMD, format, __VA_ARGS__ )
-    #define MWLOG_WARN( buf, format, ...  )     _LOG_( buf, LEV_WARN , MOD_CMD, format, __VA_ARGS__ )
-    #define MWLOG_INFO( buf, format, ...  )     _LOG_( buf, LEV_INFO , MOD_CMD, format, __VA_ARGS__ )
-    #define MWLOG_DEBUG( buf, format, ... )     _LOG_( buf, LEV_DEBUG, MOD_CMD, format, __VA_ARGS__ )
+    #define _LOG_(level, mod, format, ... ) MWLOG( level, mod, format, __FUNCTION__, __VA_ARGS__ ); 
+    #define MWLOG_ERR(format, ...   )     _LOG_(LEV_ERROR, MOD_CMD, format, __VA_ARGS__ )
+    #define MWLOG_WARN(format, ...  )     _LOG_(LEV_WARN , MOD_CMD, format, __VA_ARGS__ )
+    #define MWLOG_INFO(format, ...  )     _LOG_(LEV_INFO , MOD_CMD, format, __VA_ARGS__ )
+    #define MWLOG_DEBUG(format, ... )     _LOG_(LEV_DEBUG, MOD_CMD, format, __VA_ARGS__ )
 #else
-    #define _LOG_( buf, level, mod, format, ... ) { sprintf( buf, "%s() - ", __FUNCTION__ );                \
-                                                    sprintf( &buf[strlen(buf)], format, ## __VA_ARGS__ );   \
-                                                    MWLOG( level, mod, logBuf);                             \
-                                                    printf( "%s\n", buf ); }
-    #define MWLOG_ERR( buf, format, ...   )     _LOG_( buf, LEV_ERROR, MOD_CMD, format, ## __VA_ARGS__ )
-    #define MWLOG_WARN( buf, format, ...  )     _LOG_( buf, LEV_WARN , MOD_CMD, format, ## __VA_ARGS__ )
-    #define MWLOG_INFO( buf, format, ...  )     _LOG_( buf, LEV_INFO , MOD_CMD, format, ## __VA_ARGS__ )
-    #define MWLOG_DEBUG( buf, format, ... )     _LOG_( buf, LEV_DEBUG, MOD_CMD, format, ## __VA_ARGS__ )
-#endif // WIN32
+    #define _LOG_(level, mod, format, ... ) MWLOG( level, mod, format, __FUNCTION__, ##__VA_ARGS__ ); 
+    #define MWLOG_ERR(format, ...   )     _LOG_(LEV_ERROR, MOD_CMD, format, ##__VA_ARGS__ )
+    #define MWLOG_WARN(format, ...  )     _LOG_(LEV_WARN , MOD_CMD, format, ##__VA_ARGS__ )
+    #define MWLOG_INFO(format, ...  )     _LOG_(LEV_INFO , MOD_CMD, format, ##__VA_ARGS__ )
+    #define MWLOG_DEBUG(format, ... )     _LOG_(LEV_DEBUG, MOD_CMD, format, ##__VA_ARGS__ )
+#endif
 
 namespace eIDMW {
 
-void printCPtr( char *c_str, int c_str_len );
-xsd__base64Binary *encode_base64( soap *sp, std::string in_str );
+xsd__base64Binary *encode_base64(soap *sp, std::string in_str);
 
 class CMDServices {
     public:

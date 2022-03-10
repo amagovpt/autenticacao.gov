@@ -243,7 +243,7 @@ public:
 
     enum PinUsage { AuthPin, SignPin, AddressPin };
 
-    enum CmdDialogClass { Sign, RegisterCert, AskToRegisterCert };
+    enum CmdDialogClass { Sign, RegisterCert, AskToRegisterCert, ShowMessage, Progress};
 
     enum ShortcutId { ShortcutIdNone, ShortcutIdSign};
 
@@ -310,8 +310,9 @@ public slots:
     void closePdfPreview(QString filePath);
     void closeAllPdfPreviews();
 
-	void startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp);
-	void startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, bool isTimestamp);
+    void startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, bool isLTV);
+    void startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, bool isTimestamp, bool isLTV);
+    void startSigningXADESWithCMD(QList<QString> loadedFileBatchPath, QString outputFile, bool isTimestamp, bool isLTV);
 
     //This flag is used to start the application in specific signature subpage
     void setShortcutFlag(ShortcutId value) { m_shortcutFlag = value; }
@@ -369,18 +370,17 @@ public slots:
     void doChangeAddress(const char *process, const char *secret_code);
     void cancelCMDSign();
     void cancelCMDRegisterCert();
-    void signOpenCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePath,
-                  QString outputFile, int page, double coord_x, double coord_y, QString reason, QString location,
-                 bool isTimestamp, bool isLTV, bool isSmall);
-    void signCloseCMD(QString sms_token, QList<int> attribute_list);
-    void doOpenSignCMD(CMDSignature *cmd_signature, CmdParams &cmdParams, SignParams &signParams);
-    void doCloseSignCMD(CMDSignature *cmd_signature, QString sms_token);
-    void doCloseSignCMDWithSCAP(CMDSignature *cmd_signature, QString sms_token, QList<int> attribute_list);
-    void signOpenScapWithCMD(QString mobileNumber, QString secret_code, QList<QString> loadedFilePaths,
-                       QString outputFile, int page, double coord_x, double coord_y,
-                       QString reason, QString location, bool isTimestamp, bool isLtv);
-    void sendSmsCmd(CmdDialogClass dialogType);
-    void doSendSmsCmd(CmdDialogClass dialogType);
+    void signCMD(QList<QString> loadedFilePath, QString outputFile, int page, double coord_x,
+                     double coord_y, QString reason, QString location, bool isTimestamp, bool isLTV,
+                     bool isSmall);
+    void doSignCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams);
+
+    //SCAP with CMD
+    void signScapWithCMD(QList<QString> loadedFilePaths, QString outputFile, QList<int> attribute_list,
+                         int page, double coord_x, double coord_y, QString reason, QString location,
+                         bool isTimestamp, bool isLtv);
+    void doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams, QList<int> attribute_list);
+
 
     static void addressChangeCallback(void *, int);
     void showChangeAddressDialog(long code);
@@ -464,7 +464,7 @@ signals:
     void signalSaveCardPhotoFinished(bool success);
     void signalPersoDataLoaded(const QString& persoNotes);
     void signalAddressLoadedChanged();
-    void signalPdfSignSucess(int error_code);
+    void signalPdfSignSuccess(int error_code);
     void signalPdfSignFail(int error_code, int index);
     void signalUpdateProgressBar(int value);
     void signalUpdateProgressStatus(const QString statusMessage);
@@ -548,8 +548,9 @@ private:
     void doPrint(PrintParams &params);
     bool drawpdf(QPrinter &printer, PrintParams params);
     void doSignBatchPDF(SignParams &params);
-	void doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp);
+    void doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, bool isLTV);
     void doSignBatchXADES(SignParams &params);
+    void doSignXADESWithCMD(SignParams &params);
     void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);
     void fillCertificateList (void );
     void getCertificateAuthStatus(void );
@@ -576,7 +577,7 @@ private:
     PhotoImageProvider *image_provider;
 
     CMDSignature *cmd_signature;
-    std::vector<PTEID_PDFSignature *> cmd_pdfSignatures;
+    std::vector<PDFSignature *> cmd_pdfSignatures;
     ScapServices scapServices;
     SCAPSignParams m_scap_params;
 

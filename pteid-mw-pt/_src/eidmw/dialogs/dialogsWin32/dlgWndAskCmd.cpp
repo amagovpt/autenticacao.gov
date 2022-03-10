@@ -1,7 +1,7 @@
 /* ****************************************************************************
 
 * eID Middleware Project.
-* Copyright (C) 2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
+* Copyright (C) 2020-2021 Miguel Figueira - <miguelblcfigueira@gmail.com>
 *
 * This is free software; you can redistribute it and/or modify it
 * under the terms of the GNU Lesser General Public License version
@@ -27,11 +27,12 @@
 #include "Log.h"
 #include "Config.h"
 #include "dlgUtil.h"
+#include "../countryCallingCodeList.h"
 
 #define IDC_STATIC_HEADER 0
 #define IDB_OK IDOK
 #define IDB_CANCEL IDCANCEL
-#define IDC_EDIT 3
+#define IDC_EDIT_CODE 3
 #define IDC_STATIC_BOX 4
 #define IDC_STATIC_BOX_TEXT 5
 #define IDC_STATIC_OTP 6
@@ -39,23 +40,29 @@
 #define IDC_SEND_SMS_BOX 8
 #define IDB_SEND_SMS 9
 #define IDC_SEND_SMS_TEXT 10
+#define IDC_EDIT_ID 11
+#define IDC_EDIT_PREFIX_MOBILE 12
+#define IDC_SYSLINK 13
 
 #define MAX_USERNAME_LENGTH 90
 
-dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
+dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp,
     std::wstring & Header, std::wstring *inId,
-    std::wstring *userName, HWND Parent, void(*fSendSmsCallback)(void)) : Win32Dialog(L"WndAskCmd")
+    std::wstring *userName, HWND Parent, std::function<void(void)> *fSendSmsCallback, bool askForId) : Win32Dialog(L"WndAskCmd")
 {
+    m_askForId = askForId;
     m_fSendSmsCallback = fSendSmsCallback;
-    OutResult[0] = ' ';
-    OutResult[1] = (char)0;
+    OutCodeResult[0] = ' ';
+    OutCodeResult[1] = (char)0;
+    OutIdResult[0] = ' ';
+    OutIdResult[1] = (char)0;
 
     std::wstring tmpTitle = L"";
 
     // Added for accessibility
     tmpTitle += Header.c_str();
 
-    int Height = (isValidateOtp ? 440 : 360);
+    int Height = (isValidateOtp ? 490 : 360);
     int Width = 430;
 
     if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
@@ -67,11 +74,16 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         int contentWidth = (int)(clientRect.right - 2 * contentX);
         int paddingY = contentX;
         int titleHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.12 : 0.14));
+        int titleWidth = (int)(contentWidth * 0.9);
         int headerY = (int)(titleHeight + paddingY);
-        int textBoxY = (int)(clientRect.bottom * (isValidateOtp ? 0.29 : 0.35));
+        int textBoxY = (int)(clientRect.bottom * (isValidateOtp ? 0.25 : 0.25));
         int boxHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.18 : 0.23));
-        int editOutY = (int)(clientRect.bottom * (isValidateOtp ? 0.65 : 0.58));
-        int editOutLabelHeight = (int)(clientRect.bottom * 0.06);
+        int linkY = (int)(clientRect.bottom * 0.20);
+        int editIdX = (int)(clientRect.right * 0.6);
+        int editIdY = (int)(clientRect.bottom * 0.30);
+        int boxSeparationSpace = (int)(clientRect.right * 0.02);
+        int editCodeY = (int)(clientRect.bottom * (isValidateOtp ? 0.6 : 0.5));
+        int editLabelHeight = (int)(clientRect.bottom * 0.06);
         int editFieldHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.135 : 0.165));
         int buttonWidth = (int)(clientRect.right * 0.43);
         int buttonHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.066 : 0.08));
@@ -80,72 +92,168 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
         int sendSmsBoxY = (int)(textBoxY + boxHeight + paddingY);
         int sendSmsButtonX = (int)(1.5 * contentX + contentWidth - buttonWidth);
 
+		int cautionY = (int)(buttonY - paddingY * 2);
+
         // TITLE
-        std::wstring title = GETSTRING_DLG(SigningWith);
-        title.append(L" Chave Móvel Digital");
+        std::wstring title;
+        switch (operation)
+        {
+        case DlgCmdOperation::DLG_CMD_SIGNATURE:
+            title.append(GETSTRING_DLG(SigningWith)).append(L" ").append(GETSTRING_DLG(CMD));
+            break;
+        case DlgCmdOperation::DLG_CMD_GET_CERTIFICATE:
+            title.append(GETSTRING_DLG(ObtainingCMDCert));
+            break;
+        default:
+            break;
+        }
 
         titleData.text = title.c_str();
         titleData.font = PteidControls::StandardFontHeader;
         titleData.color = BLUE;
         HWND hTitle = PteidControls::CreateText(
             contentX, paddingY,
-            contentWidth, titleHeight,
+            titleWidth, titleHeight,
             m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
 
-        // HEADER
-        headerData.font = (isValidateOtp ? PteidControls::StandardFont : PteidControls::StandardFontBold);
-        headerData.text = Header.c_str();
-        HWND hHeader = PteidControls::CreateText(
-            contentX, headerY,
-            contentWidth, titleHeight,
-            m_hWnd, (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
+		if (isValidateOtp) {
 
-        // BOX W/ TEXT
+			// HEADER
+			headerData.font = (isValidateOtp ? PteidControls::StandardFont : PteidControls::StandardFontBold);
+			headerData.text = Header.c_str();
+			if (operation == DlgCmdOperation::DLG_CMD_GET_CERTIFICATE)
+			{
+				// there is no id box => fill the space by moving header down
+				headerY += (int)(0.1 * clientRect.bottom);
+			}
+			HWND hHeader = PteidControls::CreateText(
+				contentX, headerY,
+				contentWidth, titleHeight,
+				m_hWnd, (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
 
-        // box
-        hStaticBox = CreateWindow(
-            L"STATIC", NULL, WS_CHILD | WS_VISIBLE,
-            contentX, textBoxY,
-            contentWidth, boxHeight,
-            m_hWnd, (HMENU)IDC_STATIC_BOX, m_hInstance, NULL);
+			// CAUTION 
+			std::wstring cautionText;
+			cautionData.font = PteidControls::StandardFontBold;
+			cautionText = GETSTRING_DLG(Caution);
+			cautionText += L" ";
+			cautionText += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronicWithCmd);
+			cautionData.text = cautionText.c_str();
+			HWND hCaution = PteidControls::CreateText(
+				contentX, cautionY,
+				contentWidth, titleHeight,
+				m_hWnd, (HMENU)IDC_STATIC_HEADER, m_hInstance, &cautionData);
+		}
 
-        // text
-        std::wstring boxText;
-        if (!isValidateOtp)
+		// BOX W/ TEXT
+        if (!m_askForId && operation == DlgCmdOperation::DLG_CMD_SIGNATURE)
         {
-            *userName = userName->substr(0, MAX_USERNAME_LENGTH);
-            boxText = GETSTRING_DLG(TheChosenCertificateIsFrom);
-            boxText += L" ";
-            boxText += userName->c_str();
-            boxText += L", ";
-            boxText += GETSTRING_DLG(AssociatedWithNumber);
-            boxText += L" ";
-            boxText += inId->c_str();
-            boxText += L".";
-        }
-        else {
-            boxText += GETSTRING_DLG(SigningDataWithIdentifier);
-        }
+            // box
+            hStaticBox = CreateWindow(
+                L"STATIC", NULL, WS_CHILD | WS_VISIBLE,
+                contentX, textBoxY,
+                contentWidth, boxHeight,
+                m_hWnd, (HMENU)IDC_STATIC_BOX, m_hInstance, NULL);
 
-        boxTextData.text = boxText.c_str();
-        HWND hBoxText = PteidControls::CreateText(
-            (int)(contentX + contentWidth * 0.03), (int)(textBoxY + boxHeight * 0.12),
-            (int)(contentWidth * 0.94), (int)(boxHeight * 0.75),
-            m_hWnd, (HMENU)IDC_STATIC_BOX_TEXT, m_hInstance, &boxTextData);
+            // text
+            std::wstring boxText;
+            if (!isValidateOtp)
+            {
+                *userName = userName->substr(0, MAX_USERNAME_LENGTH);
+                boxText = GETSTRING_DLG(TheChosenCertificateIsFrom);
+                boxText += L" ";
+                boxText += userName->c_str();
+                boxText += L", ";
+                boxText += GETSTRING_DLG(AssociatedWithNumber);
+                boxText += L" ";
+                boxText += inId->c_str();
+                boxText += L".";
+            }
+            else {
+                boxText += GETSTRING_DLG(SigningDataWithIdentifier);
+            }
 
-        // docId
-        if (isValidateOtp)
+            boxTextData.text = boxText.c_str();
+            HWND hBoxText = PteidControls::CreateText(
+                (int)(contentX + contentWidth * 0.03), (int)(textBoxY + boxHeight * 0.12),
+                (int)(contentWidth * 0.94), (int)(boxHeight * 0.75),
+                m_hWnd, (HMENU)IDC_STATIC_BOX_TEXT, m_hInstance, &boxTextData);
+
+            // docId
+            if (isValidateOtp)
+            {
+                std::wstring docId;
+                docId.append(L"\"").append(*inId).append(L"\"");
+
+                docIdTextData.font = PteidControls::StandardFontBold;
+                docIdTextData.text = docId.c_str();
+                HWND hDocIdText = PteidControls::CreateText(
+                    (int)(contentX + contentWidth * 0.03), (int)(textBoxY + boxHeight * 0.33),
+                    (int)(contentWidth * 0.94), (int)(boxHeight * 0.65),
+                    m_hWnd, (HMENU)IDC_STATIC_OTP, m_hInstance, &docIdTextData);
+            }
+        }
+        // INSERT USERID TEXT EDIT
+        else if (!isValidateOtp)
         {
-            std::wstring docId;
-            docId.append(L"\"").append(*inId).append(L"\"");
+            // Link: Activate and Manage CMD subscription
+            std::wstring clickToActivateText = GETSTRING_DLG(ActivateOrManageCMD);
+            std::wstring link = L"<A HREF=\"https://www.autenticacao.gov.pt/cmd-pedido-chave\">" + clickToActivateText + L" </A>";
 
-            docIdTextData.font = PteidControls::StandardFontBold;
-            docIdTextData.text = docId.c_str();
-            HWND hDocIdText = PteidControls::CreateText(
-                (int)(contentX + contentWidth * 0.03), (int)(textBoxY + boxHeight * 0.33),
-                (int)(contentWidth * 0.94), (int)(boxHeight * 0.65),
-                m_hWnd, (HMENU)IDC_STATIC_OTP, m_hInstance, &docIdTextData);
+            LOGFONT lf;
+            memset(&lf, 0, sizeof(lf));
+            lf.lfItalic = 1;
+            int fontSize = 13;
+
+            linkData.font = PteidControls::CreatePteidFont(fontSize, FW_REGULAR, m_hInstance, &lf);
+            linkData.text = link.c_str();
+
+            PteidControls::CreateHyperlink(
+                contentX, linkY,
+                contentWidth, editLabelHeight,
+                m_hWnd, (HMENU)IDC_SYSLINK, m_hInstance, &linkData);
+
+            // Label
+            std::wstring mobileNumberLabel = GETSTRING_DLG(InsertMobileNumber);
+            mobileNumberFieldData.text = mobileNumberLabel.c_str();
+            mobileNumberFieldData.font = PteidControls::StandardFont;
+            PteidControls::CreateText(
+                contentX, editIdY,
+                contentWidth, editLabelHeight,
+                m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &mobileNumberFieldData);
+
+            std::wstring cachedMobile;
+            int cachedPrefix = -1;
+            stripPrefixFromMobile(*inId, &cachedPrefix, &cachedMobile);
+
+            // ComboBox
+            mobilePrefixData.items = getCountryCallingCodeList();
+            if (cachedPrefix >= 0)
+            {
+                mobilePrefixData.selectedIdx = cachedPrefix;
+            }
+            PteidControls::CreateComboBox(
+                contentX,
+                editIdY + editLabelHeight,
+                editIdX - contentX - boxSeparationSpace,
+                editFieldHeight - editLabelHeight,
+                m_hWnd, (HMENU)IDC_EDIT_PREFIX_MOBILE, m_hInstance, &mobilePrefixData);
+
+            // Text field
+            textFieldIdData.minLength = 1;
+            textFieldIdData.maxLength = ID_BUFFER_SIZE-1;
+            textFieldIdData.isNumeric = true;
+            HWND hIdTextEdit = PteidControls::CreateTextField(
+                editIdX,
+                editIdY + editLabelHeight, 
+                contentWidth - editIdX + contentX,
+                editFieldHeight - editLabelHeight, // This field has a separate label
+                m_hWnd, (HMENU)IDC_EDIT_ID, m_hInstance, &textFieldIdData);
+            textFieldIdData.setAccessibleName(mobileNumberLabel.c_str());
+            SendMessage(textFieldIdData.getMainWnd(), WM_SETTEXT, NULL, (LPARAM)cachedMobile.c_str());
+            SendMessage(textFieldIdData.getMainWnd(), EM_SETSEL, (WPARAM)0, (LPARAM)-1);
+            SetFocus(textFieldIdData.getMainWnd());
         }
+        
 
         // SEND SMS BOX
         if (isValidateOtp)
@@ -173,28 +281,30 @@ dlgWndAskCmd::dlgWndAskCmd(bool isValidateOtp,
                 m_hWnd, (HMENU)IDB_SEND_SMS, m_hInstance, &sendSmsBtnData);
         }
 
-        // TEXT EDIT
+        // CODE TEXT EDIT
         if (!isValidateOtp)
         {
-            textFieldData.title = GETSTRING_DLG(SignaturePinCmd);
-            textFieldData.isPassword = true;
-            textFieldData.minLength = 4;
-            textFieldData.maxLength = 8;
+            textFieldCodeData.title = GETSTRING_DLG(SignaturePinCmd);
+            textFieldCodeData.isPassword = true;
+            textFieldCodeData.minLength = 4;
+            textFieldCodeData.maxLength = 8;
         }
         else
         {
-            textFieldData.title = GETSTRING_DLG(InsertSecurityCode);
-            textFieldData.minLength = 6;
-            textFieldData.maxLength = 6;
+            textFieldCodeData.title = GETSTRING_DLG(InsertSecurityCode);
+            textFieldCodeData.minLength = 6;
+            textFieldCodeData.maxLength = 6;
         }
-        textFieldData.isNumeric = true;
+        textFieldCodeData.isNumeric = true;
         HWND hTextEdit = PteidControls::CreateTextField(
             contentX,
-            editOutY + editOutLabelHeight, 
+            editCodeY + editLabelHeight, 
             contentWidth,
             editFieldHeight,
-            m_hWnd, (HMENU)IDC_EDIT, m_hInstance, &textFieldData);
-        SetFocus(textFieldData.getMainWnd());
+            m_hWnd, (HMENU)IDC_EDIT_CODE, m_hInstance, &textFieldCodeData);
+
+        if (!m_askForId)
+            SetFocus(textFieldCodeData.getMainWnd());
 
         // BUTTONS
         okBtnProcData.highlight = true;
@@ -220,13 +330,34 @@ dlgWndAskCmd::~dlgWndAskCmd()
 
 void dlgWndAskCmd::GetResult()
 {
-    wchar_t outBuf[RESULT_BUFFER_SIZE];
-    long len = (long)SendMessage(textFieldData.getMainWnd(), WM_GETTEXTLENGTH, 0, 0);
-    if (len < RESULT_BUFFER_SIZE)
+    wchar_t outCodeBuf[CODE_BUFFER_SIZE];
+    long len = (long)SendMessage(textFieldCodeData.getMainWnd(), WM_GETTEXTLENGTH, 0, 0);
+    if (len < CODE_BUFFER_SIZE)
     {
-        SendMessage(textFieldData.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(outBuf)), (LPARAM)outBuf);
-        wcscpy_s(OutResult, outBuf);
+        SendMessage(textFieldCodeData.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(outCodeBuf)), (LPARAM)outCodeBuf);
+        wcscpy_s(OutCodeResult, outCodeBuf);
     }
+
+    if (m_askForId)
+    {
+        std::wstring mobileNumber;
+        std::wstring countryCode = mobilePrefixData.items[mobilePrefixData.selectedIdx];
+        std::size_t found = countryCode.find(L'-');
+        if (found != std::string::npos && found > 0)
+        {
+            mobileNumber.append(countryCode, 0, found-1);
+        }
+
+        wchar_t outIdBuf[ID_BUFFER_SIZE];
+        len = (long)SendMessage(textFieldIdData.getMainWnd(), WM_GETTEXTLENGTH, 0, 0);
+        if (len < ID_BUFFER_SIZE)
+        {
+            SendMessage(textFieldIdData.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(outIdBuf)), (LPARAM)outIdBuf);
+            mobileNumber.append(outIdBuf);
+        }
+        wcsncpy_s(OutIdResult, mobileNumber.c_str(), ID_BUFFER_SIZE);
+    }
+    
 }
 
 LRESULT dlgWndAskCmd::ProcecEvent
@@ -242,11 +373,21 @@ LPARAM		lParam)		// Additional Message Information
     {
         switch (LOWORD(wParam))
         {
-        case IDC_EDIT:
+        case IDC_EDIT_ID:
+        case IDC_EDIT_CODE:
         {
             if (EN_CHANGE == HIWORD(wParam))
             {
-                okBtnProcData.setEnabled(textFieldData.isAcceptableInput());
+                if (m_askForId)
+                {
+                    okBtnProcData.setEnabled(textFieldCodeData.isAcceptableInput() && textFieldIdData.isAcceptableInput());
+                } 
+                else
+                {
+                    okBtnProcData.setEnabled(textFieldCodeData.isAcceptableInput());
+                }
+                
+                
             }
             return 0;
         }
@@ -268,8 +409,8 @@ LPARAM		lParam)		// Additional Message Information
         case IDB_SEND_SMS:
             sendSmsBtnData.setEnabled(false);
             if (m_fSendSmsCallback)
-                m_fSendSmsCallback();
-            SetFocus(textFieldData.getMainWnd());
+                (*m_fSendSmsCallback)();
+            SetFocus(textFieldCodeData.getMainWnd());
             return TRUE;
 
         default:

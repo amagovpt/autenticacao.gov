@@ -4,6 +4,7 @@
  * Copyright (C) 2008-2009 FedICT.
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
+ * Copyright (C) 2021 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -34,7 +35,6 @@
 #ifndef __UNIX__
 #define __UNIX__
 #endif
-#define USE_THREADS
 #include <unistd.h>
 #endif
 

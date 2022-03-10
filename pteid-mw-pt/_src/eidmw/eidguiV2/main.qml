@@ -560,6 +560,7 @@ Load language error. Please reinstall the application"
                 autoUpdateNews.close()
                 if(mainFormID.propertyCmdDialog.isVisible()){
                     mainFormID.propertyCmdDialog.close()
+                    mainFormID.propertyCmdDialog.enableConnections()
                     mainFormID.propertyCmdDialog.open(GAPI.AskToRegisterCert)
                 } else if(autoUpdateDialog.visible){
                     autoUpdateDialog.close()
@@ -1905,6 +1906,7 @@ Load language error. Please reinstall the application"
             controler.autoUpdateApp()
         }
         if(Qt.platform.os === "windows" && controler.getAskToRegisterCmdCertValue()){
+            mainFormID.propertyCmdDialog.enableConnections()
             mainFormID.propertyCmdDialog.open(GAPI.AskToRegisterCert)
         }
     }

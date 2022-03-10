@@ -95,6 +95,8 @@ DEFINE_LANG_STR(PinBlocked) = {L"PIN blocked", L"PIN bloqueado", L"", L""};
 DEFINE_LANG_STR(PinpadInfo) = {L"Pinpad info", L"Pinpad info", L"", L""};
 DEFINE_LANG_STR(Message) = {L"Message", L"Mensagem", L"", L""};
 DEFINE_LANG_STR(SignaturePin) = {L"Signature PIN", L"PIN de assinatura", L"", L""};
+DEFINE_LANG_STR(CMD) = { L"Digital Mobile Key", L"Chave Móvel Digital", L"", L""};
+DEFINE_LANG_STR(SignaturePinCmd) = {L"Insert Digital Mobile Key's Signature PIN", L"Inserir PIN da assinatura da Chave Móvel Digital", L"", L""};
 DEFINE_LANG_STR(ActivationPin) = {L"Activation PIN", L"Código de ativação", L"", L""};
 DEFINE_LANG_STR(AuthenticationPin) = {L"Authentication PIN", L"PIN de autenticação", L"", L""};
 DEFINE_LANG_STR(AddressPin) = {L"Address PIN", L"PIN de morada", L"", L""};
@@ -102,6 +104,7 @@ DEFINE_LANG_STR(UnknownPin) = {L"Unknown PIN", L"PIN desconhecido", L"", L""};
 DEFINE_LANG_STR(PleaseEnterTheCorrectEidCard) = {L"Please enter the correct eID card.", L"Introduza um cartão válido.", L"", L""};
 DEFINE_LANG_STR(Caution) = {L"CAUTION:", L"ATENÇÃO:", L"", L""};
 DEFINE_LANG_STR(YouAreAboutToMakeALegallyBindingElectronic) = {L"You are about to make a legally binding electronic signature with your identity card.", L"Vai realizar uma assinatura eletrónica válida com o seu Cartão de Cidadão.", L"", L""};
+DEFINE_LANG_STR(YouAreAboutToMakeALegallyBindingElectronicWithCmd) = { L"You are about to make a legally binding electronic signature with Digital Mobile Key.", L"Vai realizar uma assinatura eletrónica válida com a Chave Móvel Digital.", L"", L"" };
 DEFINE_LANG_STR(PleaseEnterYourPin) = {L"Please enter your PIN", L"Introduza o código PIN", L"", L""};
 DEFINE_LANG_STR(PleaseEnterYourPinOnThePinpadReader) = {L"Please enter your PIN on the pinpad reader.", L"Por favor, introduza o PIN no seu leitor PINPAD.", L"", L""};
 DEFINE_LANG_STR(ToContinueOrClickTheCancelButton) = {L"to continue or click the Cancel button.", L"para continuar ou clique em cancelar", L"", L""};
@@ -124,6 +127,20 @@ DEFINE_LANG_STR(UnlockWithoutPUKInstructions) = {L"1) Enter your new PIN and pre
 												 L"1) Por favor introduza o seu novo PIN e pressione 'OK'\n2) Introduza novamente o seu novo PIN e pressione 'OK'.", L"", L""};
 DEFINE_LANG_STR(PinpadCanBeDisabled) = { L"The pinpad functionality can be disabled in Application Configuration. Check manual.", L"A funcionalidade PINPAD pode ser desativada na Configuração da Aplicação. Ver manual.", L"", L"" };
 DEFINE_LANG_STR(IncorrectPin) = {L"The PIN of the Citizen Card is incorrect.", L"O PIN do Cartão de Cidadão introduzido está incorrecto.", L"", L""};
+DEFINE_LANG_STR(InsertMobileNumber) = { L"Insert associated mobile number", L"Inserir número de telemóvel associado", L"", L"" };
+DEFINE_LANG_STR(SigningDataWithIdentifier) = { L"Signing data with identifier:", L"Assinatura de dados com identificador:", L"", L"" };
+DEFINE_LANG_STR(InsertOtpSignature) = { L"To confirm the signature, insert in the next 5 minutes the security code that was sent to your mobile phone.", L"Para confirmar a assinatura, insira nos próximos 5 minutos o código de segurança que foi enviado para o seu telemóvel.", L"", L"" };
+DEFINE_LANG_STR(InsertOtpCert) = { L"To obtain the certificate chain, insert in the next 5 minutes the security code that was sent to your mobile phone.", L"Para obter a cadeia de certificados, insira nos próximos 5 minutos o código de segurança que foi enviado para o seu telemóvel.", L"", L"" };
+DEFINE_LANG_STR(InsertSecurityCode) = { L"Insert the temporary security code", L"Inserir código de segurança temporário", L"", L"" };
+DEFINE_LANG_STR(SendSms) = {L"SEND BY SMS", L"ENVIAR POR SMS", L"", L""};
+DEFINE_LANG_STR(SelectDevice) = { L"Select the signature device", L"Selecione o meio de assinatura", L"", L"" };
+DEFINE_LANG_STR(ToSendSmsPress) = {L"To send the code by SMS press", L"Para enviar o código por SMS clique", L"", L""};
+DEFINE_LANG_STR(SendingOtp) = { L"Sending confirmation code to server.", L"Enviando o código de confirmação para o servidor.", L"", L"" };
+DEFINE_LANG_STR(ObtainingCMDCert) = { L"Obtaining certificate of Digital Mobile Key", L"Obter certificado da Chave Móvel Digital", L"", L"" };
+DEFINE_LANG_STR(ConnectingWithServer) = { L"Connecting with server.", L"A conectar com o servidor.", L"", L"" };
+DEFINE_LANG_STR(Error) = {L"ERROR", L"ERRO", L"", L""};
+DEFINE_LANG_STR(PleaseWait) = {L"PLEASE WAIT", L"POR FAVOR AGUARDE", L"", L""};
+DEFINE_LANG_STR(ActivateOrManageCMD) = {L"Click to activate or manage your Chave Móvel Digital signature", L"Clique para ativar ou gerir a assinatura da sua Chave Móvel Digital", L"", L""};
 #define GETSTRING_DLG(code) LANG_STR_ ## code[CLang::GetLang()]
 #ifndef WIN32
 #define GETQSTRING_DLG(code) QString::fromWCharArray(LANG_STR_ ## code[CLang::GetLang()])

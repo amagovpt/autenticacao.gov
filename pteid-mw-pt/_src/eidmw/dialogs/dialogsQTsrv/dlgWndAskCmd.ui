@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>dlgWndAskCmdClass</class>
+ <widget class="QDialog" name="dlgWndAskCmdClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>480</width>
+    <height>380</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>dlgWndAskCmd</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>480</width>
+     <height>380</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <widget class="QLabel" name="lblHeader">
+   <property name="text">
+     <string>Attention: You are about to make a legally binding electronic signature with Digital Mobile Key.</string>
+    </property>
+    <property name="wordWrap">
+      <bool>true</bool>
+    </property>
+   <property name="geometry">
+    <rect>
+     <x>25</x>
+     <y>55</y>
+     <width>430</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color : #000000; font-size:12pt; font-weight:500; background:rgba(0,0,0,0)</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblDocumentId">
+   <property name="text">
+     <string>Signing data with identifier:</string>
+    </property>
+    <property name="visible">
+      <bool>false</bool>
+    </property>
+    <property name="wordWrap">
+      <bool>true</bool>
+    </property>
+   <property name="geometry">
+    <rect>
+     <x>25</x>
+     <y>130</y>
+     <width>430</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color : #000000; font-size:12pt; background: #f1f1f2; padding: 13px;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblClickToActivate">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>25</x>
+      <y>70</y>
+      <width>430</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="acceptDrops">
+     <bool>false</bool>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-size:11pt; font-style: italic</string>
+    </property>
+      <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+
+   <widget class="QLabel" name="lblMobile">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>25</x>
+      <y>160</y>
+      <width>430</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="acceptDrops">
+     <bool>false</bool>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
+    </property>
+    <property name="text">
+     <string>Insert associated mobile number</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="listCountryCode">
+    <property name="geometry">
+     <rect>
+      <x>25</x>
+      <y>187</y>
+      <width>250</width>
+      <height>35</height>
+     </rect>
+    </property>
+   </widget>
+   
+   <widget class="QWidget" name="rectSendSms">
+    <property name="geometry">
+      <rect>
+      <x>25</x>
+      <y>225</y>
+      <width>430</width>
+      <height>80</height>
+      </rect>
+    </property>
+    <property name="visible">
+      <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+      <string notr="true">border: 2px solid #f1f2f2;</string>
+    </property>
+
+    <widget class="QLabel" name="lblSendSms">
+      <property name="text">
+        <string>To send the code by SMS press "SEND BY SMS"</string>
+        </property>
+        <property name="wordWrap">
+          <bool>true</bool>
+        </property>
+      <property name="geometry">
+        <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>240</width>
+        <height>80</height>
+        </rect>
+      </property>
+      <property name="styleSheet">
+        <string notr="true">margin: 13px; border: transparent;</string>
+      </property>
+      </widget>
+
+      <widget class="QPushButton" name="btnSendSms">
+        <property name="geometry">
+          <rect>
+          <x>238</x>
+          <y>25</y>
+          <width>180</width>
+          <height>30</height>
+          </rect>
+        </property>
+        <property name="text">
+          <string>SEND SMS</string>
+        </property>
+      </widget>
+   </widget>
+
+   <widget class="QLineEdit" name="txtMobile">
+    <property name="geometry">
+     <rect>
+      <x>288</x>
+      <y>187</y>
+      <width>168</width>
+      <height>35</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblCode">
+    <property name="geometry">
+     <rect>
+      <x>25</x>
+      <y>240</y>
+      <width>430</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <property name="text">
+     <string>Insert Digital Mobile Key's Signature PIN</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="scaledContents">
+     <bool>false</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtCode">
+    <property name="geometry">
+     <rect>
+      <x>25</x>
+      <y>267</y>
+      <width>430</width>
+      <height>35</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblError">
+    <property name="geometry">
+     <rect>
+      <x>25</x>
+      <y>295</y>
+      <width>430</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="styleSheet">
+     <string>background: rgba(0,0,0,0); color: #FF0000; font-size:12pt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblCaution">
+   <property name="text">
+     <string>Attention: You are about to make a legally binding electronic signature with Digital Mobile Key.</string>
+    </property>
+    <property name="wordWrap">
+      <bool>true</bool>
+    </property>
+   <property name="geometry">   
+    <rect>
+     <x>25</x>
+     <y>370</y>
+     <width>430</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color : #000000; font-size:12pt; font-weight:500; background:rgba(0,0,0,0)</string>
+   </property>
+  </widget>
+   <widget class="QPushButton" name="btnCancel">
+    <property name="geometry">
+      <rect>
+      <x>25</x>
+      <y>325</y>
+      <width>203</width>
+      <height>30</height>
+      </rect>
+    </property>
+    <property name="text">
+      <string>&amp;Cancel</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnOk">
+    <property name="enabled">
+      <bool>false</bool>
+    </property>
+    <property name="geometry">
+      <rect>
+      <x>253</x>
+      <y>325</y>
+      <width>202</width>
+      <height>30</height>
+      </rect>
+    </property>
+    <property name="text">
+      <string>&amp;OK</string>
+    </property>
+    <property name="default">
+      <bool>true</bool>
+    </property>
+    </widget>
+   <widget class="QLabel" name="lblTitle">
+    <property name="geometry">
+     <rect>
+      <x>25</x>
+      <y>10</y>
+      <width>361</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
+    </property>
+    <property name="text">
+     <string>Enter you PIN</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblIcon">
+    <property name="geometry">
+     <rect>
+      <x>415</x>
+      <y>15</y>
+      <width>40</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>2</width>
+     <height>2</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout"/>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>btnOk</sender>
+   <signal>clicked()</signal>
+   <receiver>dlgWndAskCmdClass</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>218</x>
+     <y>290</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>175</x>
+     <y>213</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnCancel</sender>
+   <signal>clicked()</signal>
+   <receiver>dlgWndAskCmdClass</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>556</x>
+     <y>364</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>424</x>
+     <y>237</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnSendSms</sender>
+   <signal>clicked()</signal>
+   <receiver>dlgWndAskCmdClass</receiver>
+   <slot>sendSms()</slot>
+  </connection>
+ </connections>
+</ui>

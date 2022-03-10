@@ -1,7 +1,7 @@
 /* ****************************************************************************
 
 * eID Middleware Project.
-* Copyright (C) 2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
+* Copyright (C) 2020-2021 Miguel Figueira - <miguelblcfigueira@gmail.com>
 *
 * This is free software; you can redistribute it and/or modify it
 * under the terms of the GNU Lesser General Public License version
@@ -25,35 +25,37 @@
 
 using namespace eIDMW;
 
-#define RESULT_BUFFER_SIZE 10
+#define CODE_BUFFER_SIZE 10
+#define ID_BUFFER_SIZE 50
 
 class dlgWndAskCmd : public Win32Dialog
 {
-    PteidControls::TextData titleData, headerData, boxTextData, docIdTextData, sendSmsTextData;
-    PteidControls::TextFieldData textFieldData;
+    PteidControls::TextData titleData, headerData, linkData, boxTextData, mobileNumberFieldData, docIdTextData, sendSmsTextData, cautionData;
+    PteidControls::TextFieldData textFieldCodeData, textFieldIdData;
     PteidControls::ButtonData okBtnProcData, cancelBtnProcData, sendSmsBtnData;
+    PteidControls::ComboBoxData mobilePrefixData;
 
     void GetResult();
-    bool AreFieldsFilled();
     HWND hStaticBox;
     HWND hSendSmsBox;
+    bool m_askForId;
 
-    void(*m_fSendSmsCallback)(void);
+    std::function<void(void)> *m_fSendSmsCallback;
 
 public:
-    dlgWndAskCmd(bool isValidateOtp,
+    dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp,
         std::wstring & Header,
-        std::wstring *inId = NULL, std::wstring *userName = NULL,
-        HWND Parent = NULL, void(*fSendSmsCallback)(void) = NULL);
+        std::wstring *inOutId = NULL, std::wstring *userName = NULL,
+        HWND Parent = NULL, std::function<void(void)> *fSendSmsCallback = NULL, bool askForId = false);
     virtual ~dlgWndAskCmd();
 
-    wchar_t OutResult[RESULT_BUFFER_SIZE];
+    wchar_t OutCodeResult[CODE_BUFFER_SIZE];
+    wchar_t OutIdResult[ID_BUFFER_SIZE];
 
     virtual LRESULT ProcecEvent
         (UINT		uMsg,			// Message For This Window
         WPARAM		wParam,			// Additional Message Information
         LPARAM		lParam);		// Additional Message Information
-    
-    static LRESULT CALLBACK DlgEditProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
+
 };
 

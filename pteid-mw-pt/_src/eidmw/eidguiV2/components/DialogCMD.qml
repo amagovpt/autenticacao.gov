@@ -21,14 +21,15 @@ import eidguiV2 1.0
 
 Item {
     property var dialogType;
-    property bool signSingleFile;
+    property bool signSingleFile: true;
+    property bool enabledConnections: false
     
     /* #################################################################### *
      * #                             Signals                              # *
     /* #################################################################### */
 
     Connections {
-        enabled: cmdDialog.visible
+        enabled: enabledConnections
         target: gapi
 
         onSignalValidateOtp: {
@@ -37,6 +38,7 @@ Item {
             textFieldReturnCode.forceActiveFocus()
         }
         onSignalShowMessage: {
+            open(GAPI.ShowMessage)
             showMessage(msg,urlLink)
         }
         onSignalOpenFile: {
@@ -50,6 +52,7 @@ Item {
         }
         onSignalUpdateProgressStatus: {
             console.log("CMD sign change --> update progress status with text = " + statusMessage)
+            open(GAPI.Progress)
             textMessageTop.text = statusMessage
             textMessageTop.forceActiveFocus()
         }
@@ -85,6 +88,7 @@ Item {
             id: dialogTitle
             visible: true
             elide: Label.ElideRight
+            text: qsTranslate("PageServicesSign","STR_SIGN_CMD") + controler.autoTr
             padding: 24
             bottomPadding: 0
             font.bold: dialogContent.activeFocus
@@ -206,15 +210,6 @@ Item {
                         popup.z: Constants.DIALOG_CASCATE_MIDDLE
                         anchors.left: textMobileNumber.right
                         anchors.bottom: parent.bottom
-                        onCurrentIndexChanged: {
-                            if(dialogContent.state == Constants.DLG_STATE.SIGN_FORM) {
-                                if(comboBoxMobileNumber.currentIndex >= 0){
-                                    propertyPageLoader.propertyBackupMobileIndicatorIndex = comboBoxMobileNumber.currentIndex
-                                }else{
-                                    comboBoxMobileNumber.currentIndex = propertyPageLoader.propertyBackupMobileIndicatorIndex
-                                }
-                            }
-                        }
                         Accessible.role: Accessible.ComboBox
                         Accessible.name: currentText
                         KeyNavigation.tab: textFieldMobileNumber
@@ -479,22 +474,6 @@ Item {
                     PropertyChanges {target: dialogContent; next: linkCMD}
                 },
                 State {
-                    name: Constants.DLG_STATE.SIGN_FORM
-                    PropertyChanges {target: linkCMD; visible: true}
-                    PropertyChanges {target: rectMobileNumber; visible: true}
-                    PropertyChanges {target: textFieldMobileNumber; visible: true; focus: true; text: propertyPageLoader.propertyBackupMobileNumber}
-                    PropertyChanges {target: rectPin; visible: true}
-                    PropertyChanges {target: textMessageTop; text: qsTranslate("PageServicesSign","STR_SIGN_INSERT_LOGIN") + controler.autoTr}
-                    PropertyChanges {
-                        target: dialogTitle
-                        restoreEntryValues : false
-                        text: qsTranslate("PageServicesSign","STR_SIGN_CMD") + controler.autoTr
-                    }
-                    PropertyChanges {target: buttonCancel; prev: textFieldPin}
-                    PropertyChanges {target: buttonConfirm; enabled: textFieldMobileNumber.acceptableInput && textFieldPin.acceptableInput}
-                    PropertyChanges {target: dialogContent; next: linkCMD}
-                },
-                State {
                     name: Constants.DLG_STATE.PROGRESS
                     PropertyChanges {target: dataFieldsRect; visible: false}
                     PropertyChanges {target: buttonConfirm; visible: false}
@@ -513,6 +492,7 @@ Item {
                 },
                 State {
                     name: Constants.DLG_STATE.LOAD_ATTRIBUTES
+                    PropertyChanges {target: buttonConfirm; visible: true; }
                     PropertyChanges {target: buttonConfirm; text: qsTranslate("PageServicesSign","STR_LOAD_SCAP_ATTRIBUTES") + controler.autoTr}
                     PropertyChanges {target: progressBar; visible: true}
                     PropertyChanges {
@@ -528,6 +508,7 @@ Item {
                     PropertyChanges {
                         target: labelCMDText; visible: true; 
                     }
+                    PropertyChanges {target: buttonConfirm; visible: true; }
                     PropertyChanges {target: progressBar; visible: true}
                     PropertyChanges {target: progressBarIndeterminate; visible: false}
                 },
@@ -535,6 +516,7 @@ Item {
                     name: Constants.DLG_STATE.OPEN_FILE
                     PropertyChanges {target: labelCMDText; visible: true; propertyLinkUrl: ""}
                     PropertyChanges {target: buttonConfirm; text: qsTranslate("Popup File","STR_POPUP_FILE_OPEN") + controler.autoTr}
+                    PropertyChanges {target: buttonConfirm; visible: true}
                     PropertyChanges {target: progressBar; visible: true}
                     PropertyChanges {
                         target: labelCMDText
@@ -677,6 +659,18 @@ Item {
          return cmdDialog.visible
      }
 
+    function enableConnections(){
+        enabledConnections = true
+    }
+
+    function isSignSingleFile(){
+        return signSingleFile
+    }
+
+    function setSignSingleFile(singleFile){
+        signSingleFile = singleFile
+    }
+
     function open(type) {
         dialogType = type
         mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
@@ -684,12 +678,16 @@ Item {
         if (type == GAPI.RegisterCert) {
             dialogContent.state = Constants.DLG_STATE.REGISTER_FORM
         }
-        else if (type == GAPI.Sign) {
-            dialogContent.state = Constants.DLG_STATE.SIGN_FORM
-        }
         else if (type == GAPI.AskToRegisterCert) {
             dialogContent.state = Constants.DLG_STATE.ASK_TO_REGISTER_CERT
         }
+        else if (type == GAPI.ShowMessage) {
+            dialogContent.state = Constants.DLG_STATE.SHOW_MESSAGE
+        }
+        else if (type == GAPI.Progress) {
+            dialogContent.state = Constants.DLG_STATE.PROGRESS
+        }
+
         else {
             console.log("Error: invalid cmd dialog type: " + type)
             dialogContent.state = Constants.DLG_STATE.SHOW_MESSAGE
@@ -707,14 +705,8 @@ Item {
             case Constants.DLG_STATE.REGISTER_FORM:
                 registerCMDCertOpen();
                 break;
-            case Constants.DLG_STATE.SIGN_FORM:
-                signCMD()
-                break;
             case Constants.DLG_STATE.VALIDATE_OTP:
-                if (dialogType == GAPI.RegisterCert)
-                    registerCMDCertClose()
-                else if (dialogType == GAPI.Sign)
-                    signCMDConfirm()
+                registerCMDCertClose()
                 break;
             case Constants.DLG_STATE.LOAD_ATTRIBUTES:
                 loadSCAPAttributes()
@@ -740,12 +732,10 @@ Item {
         cmdDialog.close()
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         mainFormID.propertyPageLoader.forceActiveFocus()
-        if(dialogContent.state == Constants.DLG_STATE.PROGRESS && dialogType == GAPI.Sign) {
-            gapi.cancelCMDSign()
-        }
         if(dialogContent.state == Constants.DLG_STATE.PROGRESS && dialogType == GAPI.RegisterCert) {
             gapi.cancelCMDRegisterCert()
         }
+        enabledConnections = false
     }
 
     function clearInputFields() {
@@ -755,6 +745,7 @@ Item {
     /* ############## Register Certificate ############## */
 
     function registerCMDCertOpen() {
+        enabledConnections = true
         dialogContent.state = Constants.DLG_STATE.PROGRESS
 
         var countryCode = comboBoxMobileNumber.currentText.substring(0, comboBoxMobileNumber.currentText.indexOf(' '));
@@ -772,103 +763,6 @@ Item {
 
     /* ############## Signature  ############## */
 
-    function signCMD(){
-        var loadedFilePaths = []
-        for (var fileIndex = 0; fileIndex < filesModel.count; fileIndex++) {
-            loadedFilePaths.push(filesModel.get(fileIndex).fileUrl)
-        }
-        
-        var outputFile = ""
-        signSingleFile = (filesModel.count == 1)
-        if (signSingleFile) {
-            outputFile = propertyFileDialogCMDOutput.file.toString()
-        }
-        else {
-            outputFile = propertyFileDialogBatchCMDOutput.folder.toString()
-        }
-        outputFile = decodeURIComponent(Functions.stripFilePrefix(outputFile))
-
-        var page = 1
-        if(propertyCheckLastPage.checked) {
-            page = 0 // Sign last page in all documents
-        }else{
-            page = propertySpinBoxControl.value
-        }
-        
-        var isTimestamp = false
-        if (typeof propertySwitchSignTemp !== "undefined")
-            isTimestamp = propertySwitchSignTemp.checked
-
-        var isLTV = false
-        if (typeof propertyCheckboxLTV !== "undefined")
-            isLTV = propertyCheckboxLTV.checked
-
-        var reason = ""
-        if (typeof propertyTextFieldReason !== "undefined")
-            reason = propertyTextFieldReason.text
-
-        var location = ""
-        if (typeof propertyTextFieldLocal !== "undefined")
-            location = propertyTextFieldLocal.text
-
-        var isSmallSignature = false
-        if (typeof propertyCheckSignReduced !== "undefined")
-            isSmallSignature = propertyCheckSignReduced.checked
-
-        propertyPDFPreview.updateSignPreview()
-        var coord_x = -1
-        var coord_y = -1
-        if(typeof propertyCheckSignShow !== "undefined"){
-            if(propertyCheckSignShow.checked){
-                coord_x = propertyPDFPreview.propertyCoordX
-                //coord_y must be the lower left corner of the signature rectangle
-                coord_y = propertyPDFPreview.propertyCoordY
-            }
-        } else {
-            coord_x = propertyPDFPreview.propertyCoordX
-            //coord_y must be the lower left corner of the signature rectangle
-            coord_y = propertyPDFPreview.propertyCoordY
-        }
-
-        /*console.log("Output filename: " + outputFile)*/
-        console.log("Signing in position coord_x: " + coord_x
-                    + " and coord_y: "+coord_y)
-
-        var countryCode = comboBoxMobileNumber.currentText.substring(0, comboBoxMobileNumber.currentText.indexOf(' '));
-        var mobileNumber = countryCode + " " + textFieldMobileNumber.text
-        propertyOutputSignedFile = outputFile
-
-        dialogContent.state = Constants.DLG_STATE.PROGRESS
-        if (typeof propertySwitchAddAttributes !== "undefined" && propertySwitchAddAttributes.checked) {
-            gapi.signOpenScapWithCMD(mobileNumber,textFieldPin.text,
-                                     loadedFilePaths,outputFile,page,
-                                     coord_x, coord_y,
-                                     reason, location, isTimestamp, isLTV)
-        } else {
-            gapi.signOpenCMD(mobileNumber,textFieldPin.text,
-                             loadedFilePaths,outputFile,page,
-                             coord_x,coord_y,
-                             reason,location,
-                             isTimestamp, isLTV, isSmallSignature)
-        }
-    }
-
-    function signCMDConfirm(){
-        dialogContent.state = Constants.DLG_STATE.PROGRESS
-        /*console.log("Send sms_token : " + textFieldReturnCode.text)*/
-        var attributeList = []
-        //CMD with SCAP attributes
-        if (typeof propertySwitchAddAttributes !== "undefined" && propertySwitchAddAttributes.checked) {
-            var count = 0
-            for (var i = 0; i < entityAttributesModel.count; i++){
-                if(entityAttributesModel.get(i).checkBoxAttr == true) {
-                    attributeList[count] = i
-                    count++
-                }
-            }
-        }
-        gapi.signCloseCMD(textFieldReturnCode.text, attributeList)
-    }
     function openSignedFiles() {
         if (Functions.openSignedFiles() == true){
                 close()

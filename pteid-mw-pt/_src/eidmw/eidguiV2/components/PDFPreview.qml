@@ -189,7 +189,7 @@ Rectangle {
                 id: dragSigRect
                 width: propertyReducedChecked ? propertySigWidthReducedDefault * propertyPDFWidthScaleFactor : propertySigWidthDefault * propertyPDFWidthScaleFactor
                 height: propertyReducedChecked ? propertySigHeightReducedDefault * propertyPDFHeightScaleFactor : propertySigHeightDefault * propertyPDFHeightScaleFactor
-                visible: propertyCheckSignShow.checked && !smallFile
+                visible: propertyCheckSignShow.checked && !smallFile && propertyRadioButtonPADES.checked
                 Drag.active: dragArea.drag.active
                 opacity: background_image.status == Image.Ready ? 1.0 : 0.0
 
