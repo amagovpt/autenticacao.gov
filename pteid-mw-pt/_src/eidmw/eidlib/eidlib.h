@@ -193,7 +193,7 @@ enum XMLUserData
 };
 // XMLUSERDATA - END
 
-PTEIDSDK_API enum PTEID_SigningDeviceType{
+enum PTEID_SigningDeviceType{
 	CC,
 	CMD
 };
