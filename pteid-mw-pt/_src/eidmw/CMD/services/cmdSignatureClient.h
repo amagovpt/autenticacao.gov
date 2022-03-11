@@ -46,12 +46,13 @@ namespace eIDMW {
 
         PTEIDCMD_API APL_Certifs* getCertificates();
 
-        /* The PIN is stored in out_pin.
-           If userName == NULL, the mobile number is stored in mobileNumber. If the input is a non empty string,
-           it's contents are used as mobileNumber placeholder (for caching).
-           If userName != NULL, the mobileNumber is not asked. Instead, show box with fixed mobile number and userName (subject of the cert). */
+        /*  * @param[out]     out_pin      If the functions returns DLG_OK the PIN value will be stored here
+			* @param[in,out]  mobileNumber If it's not NULL or empty string, its contents are used as mobileNumber placeholder (for caching).
+			* @param[in]      userName     If it's not NULL, the mobile number value will be stored in mobileNumber on function return.
+			                  Otherwise if it's not an empty string, the mobileNumber is not asked in the dialog. Instead the dialog will display a fixed mobile number and userName (subject of the certificate that will be used). 
+        */
         static DlgRet openAuthenticationDialogPIN(DlgCmdOperation operation, std::string *out_pin, std::string *mobileNumber, const char * userName = NULL);
-        /* The OTP is stored in out_otp. */
+        /* The OTP is stored in out_otp on function return */
         static DlgRet openAuthenticationDialogOTP(DlgCmdOperation operation, std::string *out_otp, std::string *docId, std::function<void(void)> *fSendSmsCallback = NULL);
 
         PTEIDCMD_API static void setCredentials(const char* basicAuthUser, const char* basicAuthPassword, const char* applicationId);
