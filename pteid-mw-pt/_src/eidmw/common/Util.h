@@ -42,6 +42,9 @@ namespace eIDMW
 EIDMW_CMN_API std::wstring   utilStringWiden(const std::string& in, const std::locale& locale = std::locale());
 EIDMW_CMN_API std::string    utilStringNarrow(const std::wstring& in, const std::locale& locale = std::locale());
 EIDMW_CMN_API std::string	 IBM850_toUtf8( std::string const& inBuf );
+#ifdef _WIN32
+EIDMW_CMN_API std::wstring windowsANSIToWideString(const std::string& in);
+#endif
 
 /**
  * Case insensitve search, csSearch should be in lower case.

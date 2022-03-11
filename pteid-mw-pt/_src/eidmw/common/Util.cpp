@@ -73,6 +73,25 @@ namespace eIDMW
 
   }
 
+#ifdef _WIN32
+  std::wstring windowsANSIToWideString(const std::string& in)
+  {
+	  int required_size = MultiByteToWideChar(CP_ACP, 0, in.c_str(), (int)in.size(),
+		  NULL, 0);
+
+	  if (required_size == 0)
+		  return std::wstring();
+
+	  std::vector<wchar_t> buf(++required_size);
+
+	  ::MultiByteToWideChar(CP_ACP, 0, in.c_str(), (int)in.size(),
+		  &buf[0], required_size);
+
+	  return std::wstring(&buf[0]);
+  }
+#endif
+
+
 
 #ifndef _WIN32
     /* Using C++11 features

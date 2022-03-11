@@ -413,7 +413,12 @@ namespace eIDMW
         unsigned long userNameLen = 0;
         if (userName)
         {
+			//userName is assumed to be encoded in ANSI codepage on Windows and UTF-8 on Unix
+#ifdef _WIN32
+			userNameWstr = windowsANSIToWideString(userName);
+#else
             userNameWstr = utilStringWiden(userName);
+#endif
             userNameW = userNameWstr.c_str();
             userNameLen = userNameWstr.size();
         }
