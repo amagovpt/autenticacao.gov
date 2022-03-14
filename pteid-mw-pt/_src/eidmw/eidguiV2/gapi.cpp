@@ -69,6 +69,9 @@ GAPI::GAPI(QObject *parent) :
     // Create callbacks for all readers at the startup
     setEventCallbacks();
 
+	m_cmd_client = new PTEID_CMDSignatureClient();
+	m_cmd_client->setMobileNumberCaching(true);
+
     //----------------------------------
     // set a timer to check if the number of card readers is changed
     //----------------------------------
@@ -853,7 +856,7 @@ void GAPI::doSignCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams)
 
     long ret = -1;
 
-    PTEID_CMDSignatureClient client;
+	PTEID_CMDSignatureClient * client = m_cmd_client;
 
     const int page = signParams.page;
     const double coord_x = signParams.coord_x;
@@ -863,7 +866,7 @@ void GAPI::doSignCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams)
     const std::string outputFile = signParams.outputFile.toStdString();
 
     try {
-        ret = client.SignPDF(pdf_signature, page, coord_x, coord_y, location.c_str(), reason.c_str(), outputFile.c_str());
+        ret = client->SignPDF(pdf_signature, page, coord_x, coord_y, location.c_str(), reason.c_str(), outputFile.c_str());
     }
     catch (PTEID_Exception &e) {
         ret = e.GetError();
@@ -880,7 +883,7 @@ void GAPI::doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &sign
     long ret = 0;
 
     try {
-        PTEID_CMDSignatureClient client;
+        PTEID_CMDSignatureClient * client = m_cmd_client;
 
         const int page = signParams.page;
         const double coord_x = signParams.coord_x;
@@ -889,7 +892,7 @@ void GAPI::doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &sign
         const std::string reason = signParams.reason.toStdString();
         const std::string outputFile = signParams.outputFile.toStdString();
 
-        ret = client.SignPDF(pdf_signature, page, coord_x, coord_y, location.c_str(), reason.c_str(), outputFile.c_str());
+        ret = client->SignPDF(pdf_signature, page, coord_x, coord_y, location.c_str(), reason.c_str(), outputFile.c_str());
     }
     catch (PTEID_Exception &e) {
         ret = e.GetError();
@@ -957,8 +960,8 @@ void GAPI::doSignXADESWithCMD(SignParams &params) {
         level = PTEID_LEVEL_TIMESTAMP;
     }
 
-    PTEID_CMDSignatureClient client;
-    client.SignXades(output_file.c_str(), &files_to_sign[0], file_count, level);
+	PTEID_CMDSignatureClient * client = m_cmd_client;
+    client->SignXades(output_file.c_str(), &files_to_sign[0], file_count, level);
 
     emit signalPdfSignSuccess(SignMessageOK);
 

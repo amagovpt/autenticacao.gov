@@ -576,7 +576,9 @@ private:
     //Don't free this!, we release ownership to the QMLEngine in buildImageProvider()
     PhotoImageProvider *image_provider;
 
+	//TODO: remove this
     CMDSignature *cmd_signature;
+	PTEID_CMDSignatureClient * m_cmd_client;
     std::vector<PDFSignature *> cmd_pdfSignatures;
     ScapServices scapServices;
     SCAPSignParams m_scap_params;
