@@ -83,7 +83,7 @@ namespace eIDMW
             // get cache
             mobile = &m_mobileNumberCached;
 
-            MWLOG(LEV_DEBUG, MOD_CMD, "Using cached mobile number...");
+            MWLOG(LEV_DEBUG, MOD_CMD, "CMDSignatureClient::Sign using cached mobile number...");
         }
 
         int ret;
@@ -114,8 +114,20 @@ namespace eIDMW
             throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
         }
 
+		if (m_shouldMobileCache)
+		{
+			// get cache
+			m_mobileNumber = m_mobileNumberCached;
+			//MWLOG(LEV_DEBUG, MOD_CMD, "CMDSignatureClient::SignXades using cached mobile number");
+		}
+
         DlgRet ret = openAuthenticationDialogPIN(DlgCmdOperation::DLG_CMD_SIGNATURE, &m_pin, &m_mobileNumber);
         handleErrorCode(ret, false);
+
+		if (m_shouldMobileCache) {
+			//Save number for the next signature operation
+			m_mobileNumberCached = m_mobileNumber;
+		}
 
         getCertificates(m_mobileNumber);
 
@@ -210,7 +222,7 @@ namespace eIDMW
             std::string *mobileCache = NULL;
             if (m_shouldMobileCache)
             {
-                MWLOG(LEV_DEBUG, MOD_CMD, "CMDSignatureClient::SignPDF using cached mobileNumber");
+                MWLOG(LEV_DEBUG, MOD_CMD, "CMDSignatureClient::SignPDF using cached mobile number");
                 mobileCache = &m_mobileNumberCached;
             }
 
