@@ -259,6 +259,8 @@ __deref_out CMDKSP_KEY **ppKey)
         Status = NTE_NO_MEMORY;
         goto cleanup;
     }
+	memset(pKey, 0, sizeof(CMDKSP_KEY));
+
     pKey->cbLength = sizeof(CMDKSP_KEY);
     pKey->dwMagic = CMDKSP_KEY_MAGIC;
     pKey->fFinished = FALSE;
