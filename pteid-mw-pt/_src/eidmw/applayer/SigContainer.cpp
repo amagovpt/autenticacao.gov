@@ -110,7 +110,7 @@ static void addEntryExtendedTimestamp(zip_t *asic, zip_int64_t index, const char
 	if (new_file != NULL) {
 		std::wstring utf16FileName = utilStringWiden(std::string(new_file));
 		if (_wstat64(utf16FileName.c_str(), &statBuf) != 0) {
-			MWLOG(LEV_ERROR, MOD_APL, L"%s: Failed to stat input file: %s", __FUNCTION__, errno == ENOENT ? "Filename or path not found": "Invalid parameter");
+			MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to stat input file: %s", __FUNCTION__, errno == ENOENT ? "Filename or path not found": "Invalid parameter");
 		}
 	}
 #else
@@ -143,7 +143,7 @@ static void addReadme(zip_t *asic)
 	zip_source_t *source = zip_source_buffer(asic, README, strlen(README), 0);
 	if (source == NULL || (index = zip_file_add(asic, "META-INF/README.txt", source, ZIP_FL_ENC_GUESS)) < 0) {
 		zip_source_free(source);
-		MWLOG(LEV_ERROR, MOD_APL, L"Failed to add README.txt to zip container");
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to add README.txt to zip container");
 		throw CMWEXCEPTION(EIDMW_XADES_UNKNOWN_ERROR);
 	}
 	addEntryExtendedTimestamp(asic, index, NULL);
@@ -194,7 +194,7 @@ static void addManifest(zip_t *asic, const char **paths, int path_count)
 	zip_source_t *source = zip_source_buffer(asic, xml_manifest, strlen(xml_manifest), 1);
 	if (source == NULL || (index = zip_file_add(asic, "META-INF/manifest.xml", source, ZIP_FL_ENC_GUESS)) < 0) {
 		zip_source_free(source);
-		MWLOG(LEV_ERROR, MOD_APL, L"Failed to add manifest.xml to zip container");
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to add manifest.xml to zip container");
 		throw CMWEXCEPTION(EIDMW_XADES_UNKNOWN_ERROR);
 	}
 
@@ -215,12 +215,12 @@ static void addMimetype(zip_t *asic, int path_count)
 	zip_source_t *source = zip_source_buffer(asic, mimetype, strlen(mimetype), 0);
 	if (source == NULL || (index = zip_file_add(asic, "mimetype", source, ZIP_FL_ENC_GUESS)) < 0) {
 		zip_source_free(source);
-		MWLOG(LEV_ERROR, MOD_APL, L"Failed to add mimetype file to zip container");
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to add mimetype file to zip container");
 		throw CMWEXCEPTION(EIDMW_XADES_UNKNOWN_ERROR);
 	}
 
 	if (zip_set_file_compression(asic, index, ZIP_CM_STORE, 0) < 0) {
-		MWLOG(LEV_ERROR, MOD_APL, L"Failed to set store compression of mimetype");
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to set store compression on mimetype file");
 	}
 
 	addEntryExtendedTimestamp(asic, index, NULL);
@@ -229,11 +229,11 @@ static void addMimetype(zip_t *asic, int path_count)
 void SigContainer::createASiC(CByteArray& sig, const char **paths, unsigned int path_count, const char *output_file)
 {
 	if (path_count < 1) {
-		MWLOG(LEV_ERROR, MOD_APL, L"ASiC container must have at least one input file / data object");
+		MWLOG(LEV_ERROR, MOD_APL, "ASiC container must have at least one input file / data object");
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
 
-	MWLOG(LEV_DEBUG, MOD_APL, L"createASiC() called with output_file = %s", output_file);
+	//MWLOG(LEV_DEBUG, MOD_APL, "createASiC() called with output_file = %s", output_file);
 
 	int status;
 	zip_int64_t file_index;
@@ -241,7 +241,7 @@ void SigContainer::createASiC(CByteArray& sig, const char **paths, unsigned int 
 	if ((asic = zip_open(output_file, ZIP_CREATE | ZIP_TRUNCATE, &status)) == NULL) {
 		zip_error_t error;
 		zip_error_init_with_code(&error, status);
-		MWLOG(LEV_ERROR, MOD_APL, L"createASiC(): failed to create container '%s'. Error: %s",
+		MWLOG(LEV_ERROR, MOD_APL, "createASiC(): failed to create container '%s'. Error: %s",
 			output_file, zip_error_strerror(&error));
 		throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
 	}
@@ -264,13 +264,13 @@ void SigContainer::createASiC(CByteArray& sig, const char **paths, unsigned int 
 
  	// add input files
 	for (unsigned int i = 0; i < path_count; ++i) {
-		MWLOG(LEV_DEBUG, MOD_APL, L"Adding file %s to archive", paths[i]);
+		//MWLOG(LEV_DEBUG, MOD_APL, "Adding file %s to archive", paths[i]);
 
 		const char* zip_entry_name = input_filenames[i].c_str();
 		zip_source_t *source = zip_source_file(asic, paths[i], 0, -1);
 		if (source == NULL || (file_index = zip_file_add(asic, zip_entry_name, source, ZIP_FL_ENC_GUESS)) < 0) {
 			zip_source_free(source);
-			MWLOG(LEV_ERROR, MOD_APL, L"Failed to add %s to zip container", zip_entry_name);
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to add %s to zip container", zip_entry_name);
 			throw CMWEXCEPTION(EIDMW_XADES_UNKNOWN_ERROR);
 		}
 		addEntryExtendedTimestamp(asic, file_index, paths[i]);
@@ -280,18 +280,20 @@ void SigContainer::createASiC(CByteArray& sig, const char **paths, unsigned int 
 	zip_source_t *source = zip_source_buffer(asic, sig.GetBytes(), sig.Size(), 0);
 	if (source == NULL || (file_index = zip_file_add(asic, SIG_INTERNAL_PATH, source, ZIP_FL_ENC_GUESS)) < 0) {
 		zip_source_free(source);
-		MWLOG(LEV_ERROR, MOD_APL, L"Failed to add signature to zip container");
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to add signature to zip container");
 		throw CMWEXCEPTION(EIDMW_XADES_UNKNOWN_ERROR);
 	}
 
 	addEntryExtendedTimestamp(asic, file_index, NULL);
 
 	if (zip_close(asic) < 0) {
-		MWLOG(LEV_ERROR, MOD_APL, L"zip_close() failed with error msg: %s",
+		MWLOG(LEV_ERROR, MOD_APL, "zip_close() failed with error msg: %s",
 			zip_error_strerror(zip_get_error(asic)));
 		free(asic);
 		throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
 	}
+
+	MWLOG(LEV_DEBUG, MOD_APL, "createASiC() finished successfully");
 
 }
 
@@ -299,26 +301,26 @@ static bool check_mimetype(zip_t *container)
 {
 	zip_int64_t index = -1;
 	if ((index = zip_name_locate(container, "mimetype", 0)) == -1) {
-		MWLOG(LEV_DEBUG, MOD_APL, L"check_mimetype(): mimetype file is missing");
+		MWLOG(LEV_DEBUG, MOD_APL, "check_mimetype(): mimetype file is missing");
 		return false;
 	}
 
 	zip_file_t *mimetype_file;
 	if ((mimetype_file = zip_fopen_index(container, index, 0)) == NULL) {
-		MWLOG(LEV_ERROR, MOD_APL, L"check_mimetype(): failed to open mimetype from container");
+		MWLOG(LEV_ERROR, MOD_APL, "check_mimetype(): failed to open mimetype file from container");
 		return false;
 	}
 
 	const size_t BUFSIZE = strlen(MIMETYPE_ASIC_S);
 	std::vector<char> mimetype_buf(BUFSIZE + 1);
 	if ((zip_fread(mimetype_file, &mimetype_buf[0], BUFSIZE)) < 0) {
-		MWLOG(LEV_ERROR, MOD_APL, L"check_mimetype(): zip_fread() failed");
+		MWLOG(LEV_ERROR, MOD_APL, "check_mimetype(): zip_fread() failed");
 		zip_fclose(mimetype_file);
 		return false;
 	}
 
 	if (strcmp(&mimetype_buf[0], MIMETYPE_ASIC_S) != 0 && strcmp(&mimetype_buf[0], MIMETYPE_ASIC_E) != 0) {
-		MWLOG(LEV_DEBUG, MOD_APL, L"check_mimetype(): mimetype does not match ASIC-S or ASIC-E");
+		MWLOG(LEV_DEBUG, MOD_APL, "check_mimetype(): mimetype does not match ASIC-S or ASIC-E");
 		zip_fclose(mimetype_file);
 		return false;
 	}
