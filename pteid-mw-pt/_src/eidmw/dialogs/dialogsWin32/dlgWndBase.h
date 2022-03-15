@@ -50,7 +50,6 @@ public:
 	eIDMW::DlgRet dlgResult;
 
 protected: 
-	void CreateBitapMask( HBITMAP & BmpSource, HBITMAP & BmpMask );
 	static HWND Active_hWnd;
 	static Win32Dialog *Active_lpWnd;
 	static LRESULT CALLBACK WndProc

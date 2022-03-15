@@ -213,17 +213,6 @@ bool Win32Dialog::exec()
 			TranslateMessage( &msg );			// Translate The Message
 			DispatchMessage( &msg );			// Dispatch The Message
 		}
-		if( msg.hwnd == m_hWnd )
-		{
-			if( msg.message == 274 || msg.message == 161 ) // || msg.message == 513 ) // 161 == WM_RESIZE | WM_MOVE; 274 == WM_CLOSE; 513 == WM_COMMAND
-			{
-				//check if it's minimized 
-				if( IsIconic( m_hWnd ) ) 
-				{
-					break; // Exit Loop
-				}
-			}
-		}
 	}
 	return 	dlgResult != eIDMW::DLG_CANCEL;
 }
@@ -244,59 +233,6 @@ void Win32Dialog::close()
 	//ShowWindow( m_hWnd, SW_MINIMIZE );					// Show The Window
 
 	m_ModalHold = false;							// Sets Keyboard Focus To The Window
-}
-
-void Win32Dialog::CreateBitapMask( HBITMAP & BmpSource, HBITMAP & BmpMask )
-{
-	BITMAP bm;
-	// Get the dimensions of the source bitmap
-	GetObject( BmpSource, sizeof(BITMAP), &bm);
-
-	HDC hdcSrc, hdcDst;
-	hdcSrc = CreateCompatibleDC( NULL );
-	hdcDst = CreateCompatibleDC( NULL );
-
-	// Create the mask bitmap
-	BmpMask = CreateBitmap( bm.bmWidth, bm.bmHeight, 1, 1, NULL );
-
-	// Load the bitmaps into memory DC
-	HBITMAP hbmSrcT = (HBITMAP) SelectObject( hdcSrc, BmpSource );
-	HBITMAP hbmDstT = (HBITMAP) SelectObject( hdcDst, BmpMask );
-
-	// Set the transparent color
-	COLORREF clrTrans = RGB( 255, 255, 255 );
-
-	// Change the background to trans color
-	COLORREF clrSaveBk  = SetBkColor( hdcSrc, clrTrans );
-
-	// This call sets up the mask bitmap.
-	BitBlt( hdcDst, 0, 0, bm.bmWidth, bm.bmHeight, hdcSrc, 0, 0, NOTSRCCOPY ); // NOTSRCCOPY );
-
-
-	// Now, we need to paint onto the original image, making
-	// sure that the "transparent" area is set to black. What
-	// we do is AND the monochrome image onto the color Image
-	// first. When blitting from mono to color, the monochrome
-	// pixel is first transformed as follows:
-	// if  1 (black) it is mapped to the color set by SetTextColor().
-	// if  0 (white) is is mapped to the color set by SetBkColor().
-	// Only then is the raster operation performed.
-
-	COLORREF clrSaveDstText = SetTextColor( hdcSrc, 0xFFFFFFFF );
-	SetBkColor( hdcSrc, 0x00000000 );
-
-	SetTextColor( hdcDst, clrSaveDstText );
-
-	SetBkColor( hdcSrc, clrSaveBk );
-	SelectObject( hdcSrc, hbmSrcT );
-	SelectObject( hdcDst, hbmDstT );
-
-	DeleteDC( hdcSrc );
-	DeleteDC( hdcDst );
-
-	// connect the bitmap to it's handle
-	GetObject( BmpMask, sizeof(BITMAP), &bm);
-
 }
 
 void Win32Dialog::Destroy()
