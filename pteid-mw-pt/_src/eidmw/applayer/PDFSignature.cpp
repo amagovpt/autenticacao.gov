@@ -125,7 +125,6 @@ namespace eIDMW
 
 	void PDFSignature::setFile(const char *pdf_file_path)
 	{
-		resetMembers();
 		m_batch_mode = false;
 		m_pdf_file_path = strdup(pdf_file_path);
 		m_doc = makePDFDoc(pdf_file_path);
