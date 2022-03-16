@@ -89,16 +89,13 @@ namespace eIDMW
 		EIDMW_APL_API void setCustomSealSize(unsigned int width, unsigned int height);
 		EIDMW_APL_API void enableSmallSignature();
 
-        bool getBatch_mode();
 		EIDMW_APL_API void setBatch_mode(bool batch_mode);
 
 		//Returns basename without extension as required by CMD services
 		EIDMW_APL_API std::string getDocName();
 
-        bool isExternalCertificate();
         bool isCC();
 		EIDMW_APL_API void setIsCC( bool in_IsCC );
-        void setIsExtCertificate( bool in_IsExternalCertificate );
 
         /* Certificate */
 		EIDMW_APL_API void setExternCertificate(CByteArray certificate);

@@ -54,7 +54,6 @@ namespace eIDMW
 
 	PDFSignature::PDFSignature()
 	{
-
 		resetMembers();
 	}
 
@@ -170,13 +169,9 @@ namespace eIDMW
 
 	}
 
-	bool PDFSignature::getBatch_mode(){
-        return m_batch_mode;
-	}/* PDFSignature::getBatch_mode() */
-
 	void PDFSignature::setBatch_mode( bool batch_mode ){
         m_batch_mode = batch_mode;
-	}/* PDFSignature::setBatch_mode() */
+	}
 
 	bool PDFSignature::isLandscapeFormat()
 	{
@@ -689,7 +684,7 @@ namespace eIDMW
 
 		unsigned char *to_sign;
 
-		if (isExternalCertificate() && m_attributeSupplier == NULL) {
+		if (m_isExternalCertificate && m_attributeSupplier == NULL) {
 			parseCitizenDataFromCert(m_externCertificate);
 		}
 		else {
@@ -740,7 +735,7 @@ namespace eIDMW
 		{
             m_outputName = outputName;
 
-            if (isExternalCertificate()) {
+            if (m_isExternalCertificate) {
 				m_certificate = m_externCertificate;
             }
 
@@ -763,7 +758,7 @@ namespace eIDMW
 
         if (to_sign) free(to_sign);
 
-        if ( !isExternalCertificate()) {
+        if ( !m_isExternalCertificate) {
 
             /* Get card signature from card */
             CByteArray signature = PteidSign( m_card, m_hash );
@@ -781,18 +776,10 @@ namespace eIDMW
         m_isCC = in_IsCC;
     }
 
-    bool PDFSignature::isExternalCertificate(){
-        return m_isExternalCertificate;
-    }
-
-    void PDFSignature::setIsExtCertificate(bool in_IsExternalCertificate) {
-        m_isExternalCertificate = in_IsExternalCertificate;
-    }
-
     void PDFSignature::setExternCertificate( CByteArray certificate) {
         m_externCertificate = certificate;
 
-        setIsExtCertificate( true );
+		m_isExternalCertificate = true;
     }
 
     void PDFSignature::setExternCertificateCA(std::vector<CByteArray> &certificateCAS) {
