@@ -345,7 +345,7 @@ Item {
                         visible: false
                         enabled: false
                         width: Constants.WIDTH_BUTTON
-                        height:Constants.HEIGHT_BOTTOM_COMPONENT
+                        height: Constants.HEIGHT_BOTTOM_COMPONENT
                         text: qsTranslate("PageSecurityCertificates","STR_OPEN_CERTIFICATE")
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.left
@@ -373,8 +373,8 @@ Item {
                         height:Constants.HEIGHT_BOTTOM_COMPONENT
                         text: qsTranslate("PageSecurityCertificates","STR_EXPORT_CERTIFICATE")
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: (buttonViewCertificate.visible ? parent.horizontalCenter : undefined)
-                        anchors.left: (buttonViewCertificate.visible ? undefined : parent.left)
+                        anchors.left: (buttonViewCertificate.visible ? buttonViewCertificate.right : parent.left)
+                        anchors.leftMargin: (buttonViewCertificate.visible ? (parent.width - Constants.WIDTH_BUTTON * 3) / 2 : 0)
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.family: lato.name
                         font.capitalization: Font.MixedCase
