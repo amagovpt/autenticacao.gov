@@ -2412,8 +2412,12 @@
 <context>
     <name>main</name>
     <message>
-        <source>STR_AUTOUPDATE_TITLE</source>
-        <translation>Update Available</translation>
+        <source>STR_AUTOUPDATE_APP_TITLE</source>
+        <translation>Application Update Available</translation>
+    </message>
+    <message>
+        <source>STR_AUTOUPDATE_CERT_TITLE</source>
+        <translation>Certificates Update Available</translation>
     </message>
     <message>
         <source>STR_UPDATE_INSTALL_BUTTON</source>
@@ -2446,6 +2450,62 @@
     <message>
         <source>STR_SEND_BY_SMS_BUTTON</source>
         <translation>Send by SMS</translation>
+    </message>
+        <message>
+        <source>STR_SET_CACHE_TITLE</source>
+        <translation>Choose now if you want to use the card data cache</translation>
+    </message>
+    <message>
+        <source>STR_SET_CACHE_TEXT</source>
+        <translation>The application cache stores card data allowing next reads to take less time.</translation>
+    </message>
+    <message>
+        <source>STR_SET_CACHE_TEXT_MANDATORY</source>
+        <translation>This is a mandatory configuration, it is required to choose one option in order to utilise the application. </translation>
+    </message>
+    <message>
+        <source>STR_SET_CACHE_YES</source>
+        <translation>Yes ( Recommended for personal computers )</translation>
+    </message>
+    <message>
+        <source>STR_SET_CACHE_NO</source>
+        <translation>No ( Recommended for computers of public entities and businesses )</translation>
+    </message>
+    <message>
+        <source>STR_SET_CACHE_PROCEED</source>
+        <translation>Apply</translation>
+    </message>
+    <message>
+        <source>STR_CLOSE</source>
+        <translation>Close</translation>
+    </message>
+    <message>
+        <source>STR_NOTIFICATION_CENTER</source>
+        <translation>Notification Center</translation>
+    </message>
+    <message>
+        <source>STR_NOTIFICATION_RECENT</source>
+        <translation>Recent Notifications</translation>
+    </message>
+    <message>
+        <source>STR_NOTIFICATION_READ</source>
+        <translation>Read Notifications</translation>
+    </message>
+    <message>
+        <source>STR_NOTIFICATION_SERVICES</source>
+        <translation>Services</translation>
+    </message>
+    <message>
+        <source>STR_NOTIFICATION_CONFIG</source>
+        <translation>Configurations</translation>
+    </message>
+    <message>
+        <source>STR_NOTIFICATION_NEWS</source>
+        <translation>News</translation>
+    </message>
+    <message>
+        <source>STR_NOTIFICATION_UPDATE</source>
+        <translation>Updates</translation>
     </message>
 </context>
 </TS>

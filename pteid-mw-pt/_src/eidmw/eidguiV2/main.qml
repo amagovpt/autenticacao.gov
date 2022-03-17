@@ -105,38 +105,15 @@ Load language error. Please reinstall the application"
         property var autoUpdateCerts: true
         property var isAutoUpdateAlreadyDetected: false
 
+        onSignalAutoUpdateNews: {
+            mainFormID.propertyNotificationMenu.addAppNews(news_list)
+        }
+
         onSignalAutoUpdateAvailable: {
             // Do not show dialog when update page is open
             if(mainFormID.propertyMainMenuBottomListView.currentIndex != 0
-                    && mainFormID.propertySubMenuListView.currentIndex != 5){
-                if(updateType == GAPI.AutoUpdateApp){
-                    if(autoUpdateApp){
-                        autoUpdateDialog.update_release_notes = arg1
-                        autoUpdateDialog.update_installed_version = arg2
-                        autoUpdateDialog.update_remote_version = arg3
-                        autoUpdateDialog.update_type = updateType
-                        isAutoUpdateAlreadyDetected = true
-                        autoUpdateApp = false
-                        autoUpdateDialog.open()
-                        labelTextTitle.forceActiveFocus();
-                    }
-                }
-                else if(updateType == GAPI.AutoUpdateCerts){
-                    if(autoUpdateCerts && !isAutoUpdateAlreadyDetected){
-                        autoUpdateDialog.update_certs_list = url_list
-                        autoUpdateDialog.update_type = updateType
-                        isAutoUpdateAlreadyDetected = true
-                        autoUpdateCerts = false
-                        autoUpdateDialog.open()
-                        labelTextTitle.forceActiveFocus();
-                    }
-                }
-                else if(updateType == GAPI.AutoUpdateNews){
-                    autoUpdateNews.propertyTextTitleAutoUpdateNews = arg1
-                    autoUpdateNews.propertytextAutoUpdateNews = arg2
-                    autoUpdateNews.propertyLinkNews = url_list
-                    autoUpdateNews.open()
-                }
+                    || mainFormID.propertySubMenuListView.currentIndex != 5){
+                    mainFormID.propertyNotificationMenu.addUpdate(arg1, arg2, arg3, url_list, updateType)
             }
         }
 
@@ -211,376 +188,6 @@ Load language error. Please reinstall the application"
             }
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             readerContext.open()
-        }
-    }
-
-    Dialog {
-        property string update_release_notes: ""
-        property string update_installed_version: ""
-        property string update_remote_version: ""
-        property string update_certs_list: ""
-        property int update_type: 0
-        property alias propertyTextAutoupdate: textAutoupdate.text
-
-        id: autoUpdateDialog
-        width: Constants.DIALOG_WIDTH
-        height: Constants.DIALOG_HEIGHT
-        font.family: lato.name
-        // Center dialog in the main view
-        x: parent.width * 0.5 - width * 0.5 - Constants.DIALOG_CASCATE_X
-        y: parent.height * 0.5 - height * 0.5 - Constants.DIALOG_CASCATE_X
-        modal: true
-        z: Constants.DIALOG_CASCATE_BOTTON
-
-        header: Label {
-            id: labelTextTitle
-            visible: true
-            text: qsTr("STR_AUTOUPDATE_TITLE")
-            elide: Label.ElideRight
-            padding: 24
-            bottomPadding: 0
-            font.bold: activeFocus
-            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
-            font.family: lato.name
-            color: Constants.COLOR_MAIN_BLUE
-            Accessible.role: Accessible.AlertMessage
-            Accessible.name: labelTextTitle.text
-            KeyNavigation.tab: textAutoupdate
-            KeyNavigation.down: textAutoupdate
-            KeyNavigation.right: textAutoupdate
-            KeyNavigation.left: buttonInstallUpdate
-            KeyNavigation.backtab: buttonInstallUpdate
-            KeyNavigation.up: buttonInstallUpdate
-        }
-
-        Item {
-            width: parent.width
-            height: parent.height
-
-            Item {
-                id: rectMessage
-                width: parent.width
-                height: 50
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                Text {
-                    id: textAutoupdate
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: activeFocus ? Constants.SIZE_TEXT_LABEL_FOCUS : Constants.SIZE_TEXT_LABEL
-                    font.bold: activeFocus
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                    height: parent.height
-                    width: parent.width
-                    anchors.bottom: parent.bottom
-                    wrapMode: Text.WordWrap
-                    Accessible.name: textAutoupdate.text
-                    KeyNavigation.tab: openTextAutoupdate
-                    KeyNavigation.down: openTextAutoupdate
-                    KeyNavigation.right: openTextAutoupdate
-                    KeyNavigation.left: labelTextTitle
-                    KeyNavigation.backtab: labelTextTitle
-                    KeyNavigation.up: labelTextTitle
-                }
-            }
-            Item {
-                id: rectOpenMessage
-                width: parent.width
-                height: 50
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: rectMessage.bottom
-                Text {
-                    id: openTextAutoupdate
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: activeFocus ? Constants.SIZE_TEXT_LABEL_FOCUS : Constants.SIZE_TEXT_LABEL
-                    font.bold: activeFocus
-                    font.family: lato.name
-                    text: qsTranslate("PageDefinitionsUpdates","STR_DISABLE_AUTOUPDATE_INFO")
-                    color: Constants.COLOR_TEXT_LABEL
-                    height: parent.height
-                    width: parent.width
-                    anchors.bottom: parent.bottom
-                    wrapMode: Text.WordWrap
-                    Accessible.name: openTextAutoupdate.text
-                    KeyNavigation.tab: buttonCancelUpdate
-                    KeyNavigation.down: buttonCancelUpdate
-                    KeyNavigation.right: buttonCancelUpdate
-                    KeyNavigation.left: textAutoupdate
-                    KeyNavigation.backtab: textAutoupdate
-                    KeyNavigation.up: textAutoupdate
-                }
-            }
-        }
-        Button {
-            id: buttonCancelUpdate
-            width: Constants.WIDTH_BUTTON
-            height: Constants.HEIGHT_BOTTOM_COMPONENT
-            font.pixelSize: Constants.SIZE_TEXT_FIELD
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            text: qsTranslate("Popup File", "STR_POPUP_FILE_CANCEL")
-            font.capitalization: Font.MixedCase
-            font.family: lato.name
-            KeyNavigation.tab: buttonInstallUpdate
-            KeyNavigation.down: buttonInstallUpdate
-            KeyNavigation.right: buttonInstallUpdate
-            KeyNavigation.left: openTextAutoupdate
-            KeyNavigation.backtab: openTextAutoupdate
-            KeyNavigation.up: openTextAutoupdate
-            highlighted: activeFocus
-            onClicked: {
-                autoUpdateDialog.close()
-            }
-            Keys.onEnterPressed: clicked()
-            Keys.onReturnPressed: clicked()
-        }
-        Button {
-            id: buttonInstallUpdate
-            width: Constants.WIDTH_BUTTON
-            height: Constants.HEIGHT_BOTTOM_COMPONENT
-            font.pixelSize: Constants.SIZE_TEXT_FIELD
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            text: qsTr("STR_UPDATE_INSTALL_BUTTON")
-            font.capitalization: Font.MixedCase
-            font.family: lato.name
-            KeyNavigation.tab: labelTextTitle
-            KeyNavigation.down: labelTextTitle
-            KeyNavigation.right: labelTextTitle
-            KeyNavigation.left: buttonCancelUpdate
-            KeyNavigation.backtab: buttonCancelUpdate
-            KeyNavigation.up: buttonCancelUpdate
-            highlighted: activeFocus
-            onClicked: {
-                autoUpdateDialog.close()
-
-                // go to PageDefinitionsUpdatesForm
-                mainMenuBottomPressed(0)
-                mainFormID.propertyPageLoader.source =
-                        mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.get(5).url
-                mainFormID.propertySubMenuListView.currentIndex = 5
-                mainFormID.propertySubMenuListView.forceActiveFocus()
-
-                //re-emit signal for PageDefinitionsUpdatesForm
-                if(autoUpdateDialog.update_type == GAPI.AutoUpdateApp){
-                    controler.signalAutoUpdateAvailable(GAPI.AutoUpdateApp,
-                                                        autoUpdateDialog.update_release_notes,
-                                                        autoUpdateDialog.update_installed_version,
-                                                        autoUpdateDialog.update_remote_version,
-                                                        "")
-                }
-                if(autoUpdateDialog.update_type == GAPI.AutoUpdateCerts){
-                    controler.signalAutoUpdateAvailable(GAPI.AutoUpdateCerts,
-                                                        "",
-                                                        "",
-                                                        "",
-                                                        autoUpdateDialog.update_certs_list)
-                }
-
-            }
-            Keys.onEnterPressed: clicked()
-            Keys.onReturnPressed: clicked()
-        }
-        onRejected: {
-            autoUpdateDialog.open()
-        }
-        onOpened: {
-            console.log("GAPI.AutoUpdateApp = " + GAPI.AutoUpdateApp)
-            if(!autoUpdateNews.visible && !mainFormID.propertyCmdDialog.isVisible()){
-                labelTextTitle.forceActiveFocus()
-            }
-
-            if(autoUpdateDialog.update_type == GAPI.AutoUpdateApp) {
-                propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_TEXT")
-                + " " + qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_OPEN_TEXT")
-            } else {
-                propertyTextAutoupdate = qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_CERTS_TEXT")
-                + " " + qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATE_OPEN_TEXT")
-            }
-        }
-    }
-
-    Dialog {
-        property alias propertyTextTitleAutoUpdateNews: textTitleAutoUpdateNews.text
-        property alias propertytextAutoUpdateNews: textAutoUpdateNews.text
-        property alias propertyLinkNews: linkNews.propertyLinkUrl
-        property string propertyUrl: "<a href='" + propertyLinkNews + "'>"
-                                     + qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATENEWS_KNOW_MORE")
-        id: autoUpdateNews
-        width: Constants.DIALOG_WIDTH
-        height: Constants.DIALOG_HEIGHT
-        font.family: lato.name
-        // Center dialog in the main view
-        x: parent.width * 0.5 - width * 0.5 + Constants.DIALOG_CASCATE_X
-        y: parent.height * 0.5 - height * 0.5 + Constants.DIALOG_CASCATE_Y
-        modal: true
-        z: Constants.DIALOG_CASCATE_TOP
-
-        header: Label {
-            id: textTitleAutoUpdateNews
-            text: ""
-            visible: true
-            elide: Label.ElideRight
-            padding: 24
-            bottomPadding: 0
-            font.bold: activeFocus
-            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
-            font.family: lato.name
-            color: Constants.COLOR_MAIN_BLUE
-            KeyNavigation.tab: textAutoUpdateNews
-            KeyNavigation.down: textAutoUpdateNews
-            KeyNavigation.right: textAutoUpdateNews
-            KeyNavigation.left: buttonAutoUpdateNewsClose
-            KeyNavigation.backtab: buttonAutoUpdateNewsClose
-            KeyNavigation.up: buttonAutoUpdateNewsClose
-        }
-
-        Item {
-            width: parent.width
-            height: parent.height
-
-            Rectangle {
-                id: rectFieldFlick
-                width: parent.width
-                height: parent.height - (rectNewsLink.visible ? rectNewsLink.height: 10)
-                        - Constants.HEIGHT_BOTTOM_COMPONENT
-                anchors.horizontalCenter: parent.horizontalCenter
-                opacity: 1
-
-                Flickable {
-                    id: flickable
-                    width: parent.width
-                    height: parent.height
-                    boundsBehavior: Flickable.StopAtBounds
-                    maximumFlickVelocity: 2500
-                    flickableDirection: Flickable.VerticalFlick
-                    contentWidth: textAutoUpdateNews.paintedWidth
-                    contentHeight: textAutoUpdateNews.paintedHeight
-                    clip: true
-
-                    Label {
-                        id: textAutoUpdateNews
-                        text: ""
-                        width: flickable.width - scrollBar.width
-                        height: flickable.height
-                        wrapMode: TextEdit.Wrap
-                        font.pixelSize: Constants.SIZE_TEXT_FIELD
-                        font.bold: activeFocus
-                        color: Constants.COLOR_TEXT_BODY
-                        visible: true
-                        textFormat: "RichText"
-                        Accessible.role: Accessible.StaticText
-                        KeyNavigation.tab: linkNews
-                        KeyNavigation.down: linkNews
-                        KeyNavigation.right: linkNews
-                        KeyNavigation.left: textTitleAutoUpdateNews
-                        KeyNavigation.backtab: textTitleAutoUpdateNews
-                        KeyNavigation.up: textTitleAutoUpdateNews
-                    }
-
-                    ScrollBar.vertical: ScrollBar {
-                        id: scrollBar
-                        visible: true
-                        hoverEnabled: true
-                        active: true
-                        width: Constants.SIZE_TEXT_FIELD_H_SPACE
-                    }
-                    MouseArea {
-                        id: mouseAreaFlickable
-                        anchors.fill: parent
-                    }
-                }
-            }
-            Item {
-                id: rectNewsLink
-                width: parent.width
-                height: 40
-                anchors.top: rectFieldFlick.bottom
-                anchors.topMargin: 10
-                opacity: 0.5
-                visible: linkNews.propertyLinkUrl.length > 0
-                Components.Link {
-                    id: linkNews
-                    width: parent.width
-                    height: parent.height
-                    visible: true
-                    propertyText.text: autoUpdateNews.propertyUrl
-                    propertyText.font.italic: true
-                    propertyText.verticalAlignment: Text.AlignVCenter
-                    anchors.top: parent.top
-                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
-                    propertyText.font.bold: activeFocus
-                    propertyAccessibleText: qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATENEWS_URL")
-                    KeyNavigation.tab: checkboxDontAskAgain
-                    KeyNavigation.down: checkboxDontAskAgain
-                    KeyNavigation.right: checkboxDontAskAgain
-                    KeyNavigation.left: textAutoUpdateNews
-                    KeyNavigation.backtab: textAutoUpdateNews
-                    KeyNavigation.up: textAutoUpdateNews
-                }
-            }
-        }
-
-        CheckBox {
-            id: checkboxDontAskAgain
-            text: qsTranslate("main","STR_DONT_ASK_AGAIN")
-            height: 25
-            visible: true
-            font.family: lato.name
-            font.pixelSize: Constants.SIZE_TEXT_FIELD
-            font.capitalization: Font.MixedCase
-            font.bold: activeFocus
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 10
-            anchors.left: parent.left
-            Accessible.role: Accessible.CheckBox
-            Accessible.name: text
-        }
-        Button {
-            id: buttonAutoUpdateNewsClose
-            width: Constants.WIDTH_BUTTON
-            height: Constants.HEIGHT_BOTTOM_COMPONENT
-            font.pixelSize: Constants.SIZE_TEXT_FIELD
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            text: qsTr("STR_UPDATENEWS_OK")
-            font.capitalization: Font.MixedCase
-            font.family: lato.name
-            KeyNavigation.tab: textTitleAutoUpdateNews
-            KeyNavigation.down: textTitleAutoUpdateNews
-            KeyNavigation.right: textTitleAutoUpdateNews
-            KeyNavigation.left: checkboxDontAskAgain
-            KeyNavigation.backtab: checkboxDontAskAgain
-            KeyNavigation.up: checkboxDontAskAgain
-            highlighted: activeFocus
-            onClicked: {
-                autoUpdateNews.close()
-                if(mainFormID.propertyCmdDialog.isVisible()){
-                    mainFormID.propertyCmdDialog.close()
-                    mainFormID.propertyCmdDialog.enableConnections()
-                    mainFormID.propertyCmdDialog.open(GAPI.AskToRegisterCert)
-                } else if(autoUpdateDialog.visible){
-                    autoUpdateDialog.close()
-                    autoUpdateDialog.open()
-                }
-            }
-            Keys.onEnterPressed: clicked()
-            Keys.onReturnPressed: clicked()
-        }
-        onRejected: {
-            autoUpdateNews.open()
-        }
-        onOpened: {
-            console.log("GAPI.AutoUpdateApp = " + GAPI.AutoUpdateApp)
-            textTitleAutoUpdateNews.forceActiveFocus()
-        }
-        onClosed: {
-            if(checkboxDontAskAgain.checked) {
-                controler.updateNewsLog()
-            }
         }
     }
 
@@ -1594,7 +1201,7 @@ Load language error. Please reinstall the application"
     Component {
         id: mainMenuBottomDelegate
         Item {
-            width: mainFormID.propertyMainMenuBottomListView.width / 2
+            width: mainFormID.propertyMainMenuBottomListView.width / 3
             height: mainFormID.propertyMainMenuBottomListView.height
 
 
@@ -1905,9 +1512,11 @@ Load language error. Please reinstall the application"
         if (controler.getStartAutoupdateValue()) {
             controler.autoUpdateApp()
         }
-        if(Qt.platform.os === "windows" && controler.getAskToRegisterCmdCertValue()){
-            mainFormID.propertyCmdDialog.enableConnections()
-            mainFormID.propertyCmdDialog.open(GAPI.AskToRegisterCert)
+        if (controler.getAskToSetCacheValue()) {
+            mainFormID.propertyNotificationMenu.addCacheSettings()   
+        }
+        if(Qt.platform.os === "windows"){
+            mainFormID.propertyNotificationMenu.addCmdSettings(!controler.getAskToRegisterCmdCertValue())
         }
     }
 
@@ -1988,6 +1597,11 @@ Load language error. Please reinstall the application"
             return
         }
 
+        if (index == 2) {
+            mainFormID.propertyNotificationMenu.open()
+            return
+        }
+
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         // Do not select any option
         mainFormID.propertyMainMenuListView.currentIndex = -1
@@ -2032,5 +1646,19 @@ Load language error. Please reinstall the application"
         }
 
         return mainFormID.propertyPageLoader.propertyUnsavedNotes
+    }
+
+    function reloadNotificationCenter() {
+        mainFormID.propertyNotificationMenu.clearModels()
+        controler.autoUpdatesCerts()
+        if (controler.getStartAutoupdateValue()) {
+            controler.autoUpdateApp()
+        }
+        if (controler.getAskToSetCacheValue()) {
+            mainFormID.propertyNotificationMenu.addCacheSettings()   
+        }
+        if(Qt.platform.os === "windows"){
+            mainFormID.propertyNotificationMenu.addCmdSettings(!controler.getAskToRegisterCmdCertValue())
+        }
     }
 }

@@ -72,4 +72,10 @@ ListModel {
             }
         ]
     }
+    ListElement {
+        name: ""
+        expand: false
+        imageUrl: "images/notification_icon.png"
+        imageUrlSel: "images/notification_icon_selected.png"
+    }
 }

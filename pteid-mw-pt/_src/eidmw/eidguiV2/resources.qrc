@@ -53,8 +53,11 @@
         <file>components/CardRowTop.qml</file>
         <file>images/definitions_icon.png</file>
         <file>images/definitions_icon_selected.png</file>
+        <file>images/definitions_icon_selected_notification.png</file>
         <file>images/help_icon.png</file>
         <file>images/help_icon_selected.png</file>
+        <file>images/notification_icon.png</file>
+        <file>images/notification_icon_selected.png</file>
         <file>contentPages/definitions/PageDefinitionsSignature.qml</file>
         <file>contentPages/definitions/PageDefinitionsSignatureForm.ui.qml</file>
         <file>images/titleBar/maximize.png</file>
@@ -76,11 +79,19 @@
         <file>components/DialogCMD.qml</file>
         <file>components/Link.qml</file>
         <file>components/PhoneCountriesCodeListModel.qml</file>
+        <file>components/NotificationMenu.qml</file>
+        <file>components/Notification.qml</file>
         <file>images/icons-move.png</file>
         <file>images/pteid_signature_watermark.jpg</file>
         <file>images/logo_compete2020.png</file>
         <file>images/download_icon_white.png</file>
         <file>images/download_icon_blue.png</file>
+        <file>images/update_icon.png</file>
+        <file>images/update_icon_selected.png</file>
+        <file>images/news_icon.png</file>
+        <file>images/news_icon_selected.png</file>
+        <file>images/services_icon.png</file>
+        <file>images/services_icon_selected.png</file>
         <file>contentPages/card/PageCardPrint.qml</file>
         <file>contentPages/card/PageCardPrintForm.ui.qml</file>
         <file>images/pdf_document_header.png</file>

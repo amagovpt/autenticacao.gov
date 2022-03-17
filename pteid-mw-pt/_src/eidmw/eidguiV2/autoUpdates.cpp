@@ -13,6 +13,8 @@
 #include <QDebug>
 #include <QtConcurrent>
 #include <QStandardPaths>
+#include <QList>
+#include <QMap>
 
 #include <fstream>
 #include <sstream>
@@ -206,41 +208,28 @@ void AutoUpdates::VerifyNewsUpdates(std::string filedata)
 
     parseNews(filedata);
     m_news = ChooseNews(); // Filter active news
+    QVariantMap news_list;
 
     //should be only one
     if(m_news.size() > 0)
     {
         NewsEntry selectedEntry = m_news.at(0);
         // if there are more than one active news entry select highest id
-        for(size_t i = 1; i < m_news.size(); i++)
+        for(size_t i = 0; i < m_news.size(); i++)
         {
             NewsEntry entry = m_news.at(i);
-            if(entry.id == selectedEntry.id){
-                PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing news.json: ID duplicate.");
-                return;
-            }
-
-            if(entry.id > selectedEntry.id)
-                selectedEntry = entry;
+            QVariantMap news;
+            news.insert("id", QString::number(entry.id));
+            news.insert("title", QString::fromStdString(entry.title));
+            news.insert("text", QString::fromStdString(entry.text));
+            news.insert("link", QString::fromStdString(entry.link));
+            news.insert("read", !getAppController()->isToShowNews(QString::number(entry.id)));
+            news_list.insert(QString::number(entry.id), news);
         }
-
-        if(getAppController()->isToShowNews(QString::number(selectedEntry.id)))
-        {
-            qDebug() << "C++ AUTO UPDATES: Active news entry with id: " << QString::number(selectedEntry.id);
-            m_newsTitle = QString::fromStdString(selectedEntry.title);
-            m_newsBody = QString::fromStdString(selectedEntry.text);
-            m_newsUrl = QString::fromStdString(selectedEntry.link);
-            m_newsId = QString::number(selectedEntry.id);
-            updateWindows();
-            return;
-        }
+        getAppController()->signalAutoUpdateNews(news_list);
+        return;
     }
     getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NoUpdatesAvailable);
-}
-
-QString AutoUpdates::getActiveNewsId(void)
-{
-    return m_newsId;
 }
 
 time_t getTimeFromString(std::string stringTime){

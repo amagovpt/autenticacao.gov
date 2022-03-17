@@ -62,7 +62,6 @@ public:
     void startRequest(QUrl url);
     void startUpdate();
     void userCancelledUpdateDownload();
-    QString getActiveNewsId();
 
 public slots:
 

@@ -14,6 +14,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <QMap>
 #include <QUrl>
 #include "Settings.h"
 #include "ScapSettings.h"
@@ -56,7 +57,7 @@ public slots:
     QString getAppRevision(void);
     void updateCertslog(void);
     QString getCertsLog(void);
-    void updateNewsLog(void);
+    void updateNewsLog(QString id);
     QString getNewsLog(void);
     bool isToShowNews(QString id);
     QString getAppCopyright(void);
@@ -95,6 +96,9 @@ public slots:
 
     bool getAskToRegisterCmdCertValue(void);
     void setAskToRegisterCmdCertValue(bool bAskToRegisterCmdCert);
+
+    bool getAskToSetCacheValue(void);
+    void setAskToSetCacheValue(bool bAskToSetCache);
 
     QString getGuiLanguageString(void);
     void setGuiLanguageString (QString language);
@@ -187,6 +191,7 @@ signals:
                                    QString arg2,
                                    QString arg3,
                                    QString url_list);
+    void signalAutoUpdateNews(QVariantMap news_list);
     void signalAutoUpdateProgress(int updateType/*, int value*/);
     void signalStartUpdate(int updateType, QString filename);
     void signalAutoUpdateSuccess(int updateType);

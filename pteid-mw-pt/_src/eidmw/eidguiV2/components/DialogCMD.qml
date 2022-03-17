@@ -572,10 +572,6 @@ Item {
                 highlighted: activeFocus
                 onClicked: {
                     dialogContainer.close()
-                    if(autoUpdateDialog.visible){
-                        autoUpdateDialog.close()
-                        autoUpdateDialog.open()
-                    }
                 }
                 Keys.onEnterPressed: clicked()
                 Keys.onReturnPressed: clicked()

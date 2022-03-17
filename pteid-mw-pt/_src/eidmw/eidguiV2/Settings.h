@@ -172,6 +172,20 @@ public:
                 setDebugMode(true);
             }
         }
+
+        //----------------------------------------------------------
+        // check set cache
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ASKSETCACHE);
+            long askToSetCache = config.getLong();
+
+            if (0 != askToSetCache)
+            {
+                setAskToSetCache(true);
+            }
+        }
+
         //----------------------------------------------------------
         // check ShowPicture
         //----------------------------------------------------------
@@ -487,6 +501,17 @@ public:
         m_bAskToRegisterCmdCert = bAskToRegisterCmdCert;
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ASKREGCMDCERT);
         config.setLong(m_bAskToRegisterCmdCert);
+    }
+
+    bool getAskToSetCache(void)
+    {
+        return m_bAskToSetCache;
+    }
+    void setAskToSetCache(bool bAskToSetCacheValue)
+    {
+        m_bAskToSetCache = bAskToSetCacheValue;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ASKSETCACHE);
+        config.setLong(m_bAskToSetCache);
     }
 
     bool getShowPicture( void )
@@ -878,6 +903,7 @@ private:
     bool    m_bDebugMode;           //!< debug mode enabled (T/F)
     bool    m_bNotShowStartUpHelp;  //!< the GUI Show Help	bool	m_bStartMinimized;              //!< startup minimized (T/F)
     bool    m_bAskToRegisterCmdCert;//!< the GUI will ask to register the CMD cert on start (T/F)
+    bool    m_bAskToSetCache;        //!< the GUI will ask to set the cache (on/off) on start (T/F)
     bool    m_bShowPicture;         //!< show the picture (T/F)
     bool    m_bShowNotification;    //!< show the notification (T/F)
     bool    m_bShowSignatureOptions;//!< show signature options in GUI Signature page (T/F)

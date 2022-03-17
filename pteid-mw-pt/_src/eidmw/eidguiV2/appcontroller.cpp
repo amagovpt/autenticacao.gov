@@ -174,12 +174,14 @@ void AppController::checkUpdateNewslog(){
     }
 }
 
-void AppController::updateNewsLog(){
+void AppController::updateNewsLog(QString id){
 
     QString updateNewsLog = m_Settings.getPteidCachedir() + "/updateNewsLog.txt";
     QFile file(updateNewsLog);
 
-    QString id = newsUpdate.getActiveNewsId();
+    if (!isToShowNews(id)) {
+        return;
+    }
 
     if(file.open(QIODevice::WriteOnly | QIODevice::Append))
     {
@@ -807,6 +809,13 @@ bool AppController::getAskToRegisterCmdCertValue(void) {
 }
 void AppController::setAskToRegisterCmdCertValue(bool bAskToRegisterCmdCert) {
     return m_Settings.setAskToRegisterCmdCert(bAskToRegisterCmdCert);
+}
+
+bool AppController::getAskToSetCacheValue(void) {
+    return m_Settings.getAskToSetCache();
+}
+void AppController::setAskToSetCacheValue(bool bAskToSetCache) {
+    return m_Settings.setAskToSetCache(bAskToSetCache);
 }
 
 void AppController::forceAccessibilityUpdate(QObject *obj) {

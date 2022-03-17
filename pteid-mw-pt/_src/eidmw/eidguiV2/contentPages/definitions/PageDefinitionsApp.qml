@@ -96,7 +96,9 @@ PageDefinitionsAppForm {
                 controler.setGuiLanguageString("en")
                 propertyRadioButtonPT.checked = false
             }
+
             updatePages()
+            mainWindow.reloadNotificationCenter()
         }
     }
     propertyRadioButtonPT{
@@ -107,7 +109,7 @@ PageDefinitionsAppForm {
             }
 
             updatePages()
-
+            mainWindow.reloadNotificationCenter()
         }
     }
 

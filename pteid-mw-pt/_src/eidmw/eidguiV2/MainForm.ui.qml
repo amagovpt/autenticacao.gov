@@ -42,6 +42,8 @@ Rectangle {
 
     property alias propertyCmdDialog: cmdDialog
 
+    property alias propertyNotificationMenu: notificationMenu
+
     property bool propertShowAnimation: true
 
     border.width: Constants.APP_BORDER
@@ -157,7 +159,7 @@ Rectangle {
             }
             ListView {
                 id: mainMenuBottomListView
-                width: Constants.BOTTOM_MENU_WIDTH_SIZE
+                width: Constants.BOTTOM_MENU_WIDTH_SIZE * 1.5
                 height: parent.height * Constants.MAIN_MENU_BOTTOM_RELATIVE_V_SIZE
                 boundsBehavior: Flickable.StopAtBounds
                 highlightFollowsCurrentItem: true
@@ -258,5 +260,8 @@ Rectangle {
     }
     Components.DialogCMD {
         id: cmdDialog
+    }
+    Components.NotificationMenu {
+        id: notificationMenu
     }
 }
