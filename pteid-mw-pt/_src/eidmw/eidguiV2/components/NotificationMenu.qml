@@ -24,6 +24,7 @@ Item {
     anchors.fill: parent
 
     property bool reload: false
+    property bool hasMandatory: false
 
     Popup {
         id: notificationMenuPopup
@@ -50,6 +51,7 @@ Item {
                 height: model.activated ? news.height + update.height + definitions_cmd.height 
                         + definitions_cache.height : Constants.SIZE_IMAGE_BOTTOM_MENU * 2 
                 color: Constants.COLOR_MAIN_SOFT_GRAY
+                visible: !hasMandatory || model.mandatory
                 clip: true
 
                 Rectangle {
@@ -413,6 +415,7 @@ Item {
             "mandatory": true
         })
 
+        hasMandatory = true
         exitIcon.visible = false
         exitArea.enabled = false
         notificationArea.interactive = false
@@ -421,10 +424,12 @@ Item {
 
     function setCacheSettings(index, model, activatedCache) {
         model.mandatory = false
-        openNotification(index, model.read, model.activated)
+        hasMandatory = false
         exitIcon.visible = true
         exitArea.enabled = true
         notificationArea.interactive = true
+
+        openNotification(index, model.read, model.activated)
         controler.setAskToSetCacheValue(false)
         
         if (activatedCache) {
