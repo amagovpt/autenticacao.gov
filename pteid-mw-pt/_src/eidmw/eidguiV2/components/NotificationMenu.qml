@@ -28,7 +28,7 @@ Item {
     Popup {
         id: notificationMenuPopup
         width: 650
-        height: 400
+        height: 450
         modal: true
         anchors.centerIn: parent
         closePolicy: Popup.NoAutoClose
@@ -551,11 +551,11 @@ Item {
             case "news":
                 return qsTranslate("main", "STR_NOTIFICATION_NEWS") + controler.autoTr
             case "update":
-                return qsTranslate("main", "STR_NOTIFICATION_CONFIG") + controler.autoTr
+                return qsTranslate("main", "STR_NOTIFICATION_UPDATE") + controler.autoTr
             case "definitions_cmd":
                 return qsTranslate("main", "STR_NOTIFICATION_SERVICES") + controler.autoTr
             case "definitions_cache":
-                return qsTranslate("main", "STR_NOTIFICATION_UPDATE") + controler.autoTr
+                return qsTranslate("main", "STR_NOTIFICATION_CONFIG") + controler.autoTr
             default:
                 return null
         }
