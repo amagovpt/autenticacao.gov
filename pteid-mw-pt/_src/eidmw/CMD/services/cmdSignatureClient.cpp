@@ -300,25 +300,30 @@ namespace eIDMW
 
             // Errors:
             MWLOG(LEV_ERROR, MOD_CMD, L"Error in CMD operation: isOTP=%s", (isOtp ? L"yes" : L"no"));
-            switch (err)
-            {
-            case ERR_GET_CERTIFICATE:
-                MWLOG(LEV_ERROR, MOD_CMD, L"CMDSignatureClient::handleErrorCode: Expired account or inactive signature subscription.");
-                throw CMWEXCEPTION(EIDMW_ERR_CMD_INACTIVE_ACCOUNT);
+			switch (err)
+			{
+			case ERR_GET_CERTIFICATE:
+				MWLOG(LEV_ERROR, MOD_CMD, L"CMDSignatureClient::handleErrorCode: Expired account or inactive signature subscription.");
+				throw CMWEXCEPTION(EIDMW_ERR_CMD_INACTIVE_ACCOUNT);
 
-            case SOAP_ERR_INVALID_OTP:
-                MWLOG(LEV_ERROR, MOD_CMD, L"CMDSignatureClient::handleErrorCode: Invalid PIN or OTP.");
-                throw CMWEXCEPTION(EIDMW_ERR_CMD_INVALID_CODE);
+			case SOAP_ERR_INVALID_OTP:
+				MWLOG(LEV_ERROR, MOD_CMD, L"CMDSignatureClient::handleErrorCode: Invalid PIN or OTP.");
+				throw CMWEXCEPTION(EIDMW_ERR_CMD_INVALID_CODE);
 
-            case SOAP_TCP_ERROR:
-                MWLOG(LEV_ERROR, MOD_CMD, L"CMDSignatureClient::handleErrorCode: connection error occured.");
-                throw CMWEXCEPTION(EIDMW_ERR_CMD_CONNECTION);
+			case SOAP_TCP_ERROR:
+				MWLOG(LEV_ERROR, MOD_CMD, L"CMDSignatureClient::handleErrorCode: connection error occured.");
+				throw CMWEXCEPTION(EIDMW_ERR_CMD_CONNECTION);
 
-            // TODO: Add mapping to missing errors that may be returned from CMD calls. (Internal errors, ...)
-
-            default:
-                MWLOG(LEV_ERROR, MOD_CMD, L"CMDSignatureClient::handleErrorCode: Error code 0x%x.", err);
-                throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+			default:
+				if (err > ERR_ADDR_CMD_BASE + 200) {
+					MWLOG(LEV_ERROR, MOD_CMD, L"CMDSignatureClient::handleErrorCode: HTTP service Error code %d.", err-ERR_ADDR_CMD_BASE);
+					throw CMWEXCEPTION(EIDMW_ERR_CMD_SERVICE);
+				}
+				else {
+					MWLOG(LEV_ERROR, MOD_CMD, L"CMDSignatureClient::handleErrorCode: Error code 0x%x.", err);
+					throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+				}
+                
             }
 
         }
@@ -331,6 +336,9 @@ namespace eIDMW
         std::string b64DocId;
         if (cryptoFwk->b64Encode(hash, b64DocIdBA) && b64DocIdBA.Size() >= B64_ID_FROM_HASH_SIZE)
         {
+			//Filename-safe variant of Base64 as described in section 5 of RFC 4648
+			b64DocIdBA.Replace('+', '-');
+			b64DocIdBA.Replace('/', '_');
             b64DocId.assign((char *)b64DocIdBA.GetBytes(), B64_ID_FROM_HASH_SIZE);
         }
         else
@@ -409,7 +417,7 @@ namespace eIDMW
         wmemset(pinBuffer, L'\0', pinBufferLength);
 
         std::wstring mobileW = utilStringWiden(*mobileNumber);
-        const unsigned long mobileBufferLength = MAX_USER_SIZE + 1;;
+        const unsigned long mobileBufferLength = MAX_USER_SIZE + 1;
         wchar_t mobileBuffer[mobileBufferLength];
         wcsncpy(mobileBuffer, mobileW.c_str(), mobileBufferLength);
 

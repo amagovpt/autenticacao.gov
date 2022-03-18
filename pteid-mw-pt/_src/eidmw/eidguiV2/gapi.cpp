@@ -703,12 +703,13 @@ void GAPI::showSignCMDDialog(long error_code)
         message = tr("STR_CMD_PROXY_AUTH_ERROR");
         break;
     case SOAP_TCP_ERROR:
+	case EIDMW_ERR_CMD_CONNECTION:
         message = tr("STR_CONNECTION_ERROR") + "<br><br>" +
             tr("STR_VERIFY_INTERNET");
         if (m_Settings.isProxyConfigured())
             message.append(" ").append(tr("STR_VERIFY_PROXY"));
         break;
-    case EIDMW_ERR_CMD_CONNECTION:
+	case EIDMW_ERR_CMD_SERVICE:
         message = tr("STR_CMD_SERVICE_FAIL");
         break;
     case EIDMW_ERR_CMD_INVALID_CODE:

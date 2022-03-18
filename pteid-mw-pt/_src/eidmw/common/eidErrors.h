@@ -267,7 +267,8 @@
 #define EIDMW_ERR_CMD_CONNECTION                 0xe1d01e09
 #define EIDMW_ERR_CMD_INVALID_CODE               0xe1d01e0a
 #define EIDMW_ERR_CMD_INACTIVE_ACCOUNT           0xe1d01e0b
+#define EIDMW_ERR_CMD_SERVICE                    0xe1d01e0c
 
-// XAdES errors
-#define EIDMW_XADES_UNKNOWN_ERROR                0xe1d01e0c
-#define EIDMW_XADES_INVALID_ASIC_ERROR           0xe1d01e0d
+// XAdES signature errors
+#define EIDMW_XADES_UNKNOWN_ERROR                0xe1d01f06
+#define EIDMW_XADES_INVALID_ASIC_ERROR           0xe1d01f07
