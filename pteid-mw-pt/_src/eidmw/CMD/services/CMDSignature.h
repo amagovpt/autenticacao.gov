@@ -30,7 +30,6 @@ using namespace eIDMW;
 
 #define MAX_PIN_SIZE 8
 #define MAX_OTP_SIZE 6
-#define MAX_USER_SIZE 15
 #define MAX_DOCNAME_SIZE 50
 
 namespace eIDMW {

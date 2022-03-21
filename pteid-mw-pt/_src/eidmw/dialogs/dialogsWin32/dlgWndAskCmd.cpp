@@ -27,6 +27,7 @@
 #include "Log.h"
 #include "Config.h"
 #include "dlgUtil.h"
+#include "../dialogs.h"
 #include "../countryCallingCodeList.h"
 
 #define IDC_STATIC_HEADER 0
@@ -240,7 +241,8 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp,
 
             // Text field
             textFieldIdData.minLength = 1;
-            textFieldIdData.maxLength = ID_BUFFER_SIZE-1;
+            //4 chars reserved for the country code prefix
+            textFieldIdData.maxLength = PHONE_NUMBER_LENGTH - 4;
             textFieldIdData.isNumeric = true;
             HWND hIdTextEdit = PteidControls::CreateTextField(
                 editIdX,
@@ -348,9 +350,9 @@ void dlgWndAskCmd::GetResult()
             mobileNumber.append(countryCode, 0, found-1);
         }
 
-        wchar_t outIdBuf[ID_BUFFER_SIZE];
+        wchar_t outIdBuf[PHONE_NUMBER_LENGTH+1];
         len = (long)SendMessage(textFieldIdData.getMainWnd(), WM_GETTEXTLENGTH, 0, 0);
-        if (len < ID_BUFFER_SIZE)
+        if (len < PHONE_NUMBER_LENGTH)
         {
             SendMessage(textFieldIdData.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(outIdBuf)), (LPARAM)outIdBuf);
             mobileNumber.append(outIdBuf);

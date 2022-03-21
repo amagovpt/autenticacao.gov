@@ -417,7 +417,7 @@ namespace eIDMW
         wmemset(pinBuffer, L'\0', pinBufferLength);
 
         std::wstring mobileW = utilStringWiden(*mobileNumber);
-        const unsigned long mobileBufferLength = MAX_USER_SIZE + 1;
+        const unsigned long mobileBufferLength = PHONE_NUMBER_LENGTH + 1;
         wchar_t mobileBuffer[mobileBufferLength];
         wcsncpy(mobileBuffer, mobileW.c_str(), mobileBufferLength);
 

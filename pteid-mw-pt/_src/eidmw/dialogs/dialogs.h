@@ -50,6 +50,8 @@ namespace eIDMW
 {
 
 #define PIN_MAX_LENGTH     16
+//Full phone number including international country prefix
+#define PHONE_NUMBER_LENGTH 20  
 
 typedef enum {
 	DLG_OK,        // OK button clicked

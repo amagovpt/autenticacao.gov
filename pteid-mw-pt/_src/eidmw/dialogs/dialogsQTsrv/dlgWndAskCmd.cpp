@@ -19,6 +19,7 @@
 **************************************************************************** */
 
 #include "dlgWndAskCmd.h"
+#include "../dialogs.h"
 #include "../countryCallingCodeList.h"
 #include "../langUtil.h"
 #include <QDesktopWidget>
@@ -42,7 +43,8 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp,
 
     // TODO: this should come from a pin info struct. (same for Win32 dialogs)
     m_ulIdMinLen = 1;
-    m_ulIdMaxLen = 50;
+    //4 chars reserved for the country code prefix
+    m_ulIdMaxLen = PHONE_NUMBER_LENGTH - 4;
     m_ulCodeMinLen = (isValidateOtp ? 6 : 4);
     m_ulCodeMaxLen = (isValidateOtp ? 6 : 8);
 
