@@ -1778,12 +1778,12 @@ PageServicesSignForm {
 
     function signCC(outputFile) {
         var isTimestamp = propertySwitchSignTemp.checked
+        var isLTV = propertyCheckboxLTV.checked
         if (propertyRadioButtonPADES.checked) {
             var page = propertySpinBoxControl.value
             var reason = propertyTextFieldReason.text
             var location = propertyTextFieldLocal.text
             var isSmallSignature = propertyCheckSignReduced.checked
-            var isLTV = propertyCheckboxLTV.checked
             var isLastPage = propertyCheckLastPage.checked
             var coord_x = -1
             var coord_y = -1
@@ -1834,7 +1834,7 @@ PageServicesSignForm {
                                         reason, location, isTimestamp, isLTV, isSmallSignature, isLastPage)
             }
         }
-        else {
+        else {  //XAdES signature
             propertyOutputSignedFile = outputFile;
             propertyOutputSignedFile =
                     propertyOutputSignedFile.substring(0, propertyOutputSignedFile.lastIndexOf('/'))
