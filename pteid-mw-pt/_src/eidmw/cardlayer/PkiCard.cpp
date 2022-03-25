@@ -27,8 +27,8 @@
 #include <iostream>
 
 #include "PkiCard.h"
-#include "../common/Log.h"
-#include "../common/Thread.h"
+#include "Log.h"
+#include "Thread.h"
 #include "pinpad2.h"
 
 

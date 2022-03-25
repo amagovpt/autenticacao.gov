@@ -29,9 +29,9 @@
 #include "GenericPinpad.h"
 #include "ACR83Pinpad.h"
 
-#include "../common/Log.h"
-#include "../common/Util.h"
-#include "../common/Config.h"
+#include "Log.h"
+#include "Util.h"
+#include "Config.h"
 #include <cstring>
 
 namespace eIDMW

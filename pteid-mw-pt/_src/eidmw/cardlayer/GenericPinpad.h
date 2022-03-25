@@ -39,8 +39,8 @@
 #include "InternalConst.h"
 
 #include "../dialogs/dialogs.h"
-#include "../common/ByteArray.h"
-#include "../common/Thread.h"
+#include "ByteArray.h"
+#include "Thread.h"
 
 #ifndef WIN32
 #include <PCSC/winscard.h>

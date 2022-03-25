@@ -33,9 +33,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../common/eidErrors.h"
-#include "../common/MWException.h"
-#include "../common/Util.h"
+#include "eidErrors.h"
+#include "MWException.h"
+#include "Util.h"
 #include "PKCS15Parser.h"
 
 #include "../pkcs11/asn1.h"

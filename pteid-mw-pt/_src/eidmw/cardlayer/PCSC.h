@@ -28,9 +28,9 @@ Takes care of
 #ifndef PCSC_H
 #define PCSC_H
 
-#include "../common/eidErrors.h"
-#include "../common/ByteArray.h"
-#include "../common/MWException.h"
+#include "eidErrors.h"
+#include "ByteArray.h"
+#include "MWException.h"
 #include "CardLayerConst.h"
 #include "InternalConst.h"
 

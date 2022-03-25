@@ -22,8 +22,8 @@
 
 #include "ACR83Pinpad.h"
 #include "Context.h"
-#include "../common/ByteArray.h"
-#include "../common/Log.h"
+#include "ByteArray.h"
+#include "Log.h"
 
 namespace eIDMW
 {

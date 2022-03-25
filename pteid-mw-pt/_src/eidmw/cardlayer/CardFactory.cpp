@@ -30,8 +30,8 @@
  */
 #include "CardFactory.h"
 #include "UnknownCard.h"
-#include "../common/Log.h"
-#include "../common/Util.h"
+#include "Log.h"
+#include "Util.h"
 
 #include "PteidCard.h"
 #include <vector>

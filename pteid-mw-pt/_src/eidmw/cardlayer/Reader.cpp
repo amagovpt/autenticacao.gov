@@ -25,10 +25,14 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
+
+//pteid-common headers
+#include "Log.h"
+#include "Config.h"
+//cardlayer headers
 #include "Reader.h"
 #include "Card.h"
-#include "../common/Log.h"
-#include "../common/Config.h"
+
 #include "CardFactory.h"
 
 namespace eIDMW

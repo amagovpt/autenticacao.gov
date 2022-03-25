@@ -24,8 +24,8 @@
 #define THREADPOOL_H
 
 #include "PCSC.h"
-#include "../common/Thread.h"
-#include "../common/Mutex.h"
+#include "Thread.h"
+#include "Mutex.h"
 
 #include <map>
 #include <string>

@@ -27,13 +27,17 @@
 #undef UNICODE
 #endif
 
+//pteid-common headers
+#include "Config.h"
+#include "MWException.h"
+#include "Log.h"
+#include "Thread.h"
+#include "Util.h"
+
+//cardlayer headers
 #include "PCSC.h"
 #include "InternalConst.h"
-#include "../common/Config.h"
-#include "../common/MWException.h"
-#include "../common/Log.h"
-#include "../common/Thread.h"
-#include "../common/Util.h"
+
 #include <exception>
 #include <utility>
 

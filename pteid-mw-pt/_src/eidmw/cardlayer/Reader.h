@@ -26,7 +26,7 @@
 
 #include "PKCS15.h"
 #include "Pinpad.h"
-#include "../common/Hash.h"
+#include "Hash.h"
 
 namespace eIDMW
 {

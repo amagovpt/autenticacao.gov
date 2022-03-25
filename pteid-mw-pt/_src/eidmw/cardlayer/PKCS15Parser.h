@@ -22,7 +22,7 @@
 #ifndef __PKCS15PARSER_H__
 #define __PKCS15PARSER_H__
 
-#include "../common/ByteArray.h"
+#include "ByteArray.h"
 #include <vector>
 #include "P15Objects.h"
 

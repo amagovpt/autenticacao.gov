@@ -17,8 +17,9 @@
 
 #include "GempcPinpad.h"
 #include "Context.h"
-#include "../common/ByteArray.h"
-#include "../common/Log.h"
+
+#include "ByteArray.h"
+#include "Log.h"
 
 namespace eIDMW
 {

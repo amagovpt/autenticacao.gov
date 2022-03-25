@@ -26,8 +26,8 @@
 
 #include <vector>
 
-#include "../common/eidErrors.h"
-#include "../common/MWException.h"
+#include "eidErrors.h"
+#include "MWException.h"
 #include "P15Objects.h"
 #include "PKCS15Parser.h"
 

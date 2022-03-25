@@ -23,7 +23,7 @@
 
 #include <stdio.h>
 
-#include "../common/Export.h"
+#include "Export.h"
 
 namespace eIDMW
 {

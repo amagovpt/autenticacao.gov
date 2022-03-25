@@ -24,8 +24,8 @@
 **************************************************************************** */
 #include <sys/stat.h>
 #include "Cache.h"
-#include "../common/Util.h"
-#include "../common/Config.h"
+#include "Util.h"
+#include "Config.h"
 
 namespace eIDMW
 {

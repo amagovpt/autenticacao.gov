@@ -32,7 +32,6 @@ unix:LIBS += -l$${DLGLIB}
 !macx:LIBS += -lpcsclite
 
 INCLUDEPATH += . ../common 
-INCLUDEPATH += cardpluginPteid
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 
 QMAKE_CXXFLAGS += -O2

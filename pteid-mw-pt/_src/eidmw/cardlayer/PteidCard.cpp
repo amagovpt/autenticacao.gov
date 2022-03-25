@@ -25,9 +25,9 @@
 
 **************************************************************************** */
 #include "PteidCard.h"
-#include "../common/Log.h"
-#include "../common/Config.h"
-#include "../CardLayer.h"
+#include "Log.h"
+#include "Config.h"
+#include "CardLayer.h"
 
 #ifdef __GNUC__
 #include <termios.h>

@@ -25,8 +25,8 @@
 #ifndef __PTEIDCARD_H__
 #define __PTEIDCARD_H__
 
-#include "../PkiCard.h"
-#include "../Card.h"
+#include "PkiCard.h"
+#include "Card.h"
 
 using namespace eIDMW;
 
