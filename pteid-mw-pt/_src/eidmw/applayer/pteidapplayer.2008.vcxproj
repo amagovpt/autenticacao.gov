@@ -249,7 +249,6 @@
     <ClCompile Include="sign-pkcs7.cpp" />
     <ClCompile Include="SODParser.cpp" />
     <ClCompile Include="SSLConnection.cpp" />
-    <ClCompile Include="strndup.c" />
     <ClCompile Include="TsaClient.cpp" />
     <ClCompile Include="XadesSignature.cpp" />
     <ClCompile Include="XercesUtils.cpp" />

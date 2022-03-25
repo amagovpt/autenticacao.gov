@@ -27,10 +27,6 @@
 
 #ifdef WIN32
 #define NL "\r\n"
-//Replacement for this POSIX function is in strndup.c - no need to add a new header file just for this
-extern "C" {
-	char * strndup(const char *str, size_t maxlen);
-}
 #else
 #define NL "\n"
 #endif
@@ -190,7 +186,7 @@ static void addManifest(zip_t *asic, const char **paths, int path_count)
 	XMLPlatformUtils::Terminate();
 
 	// xml_manifest is freed by libzip when it is no longer needed
-	const char *xml_manifest = strndup((char *) xml_ba->GetBytes(), xml_ba->Size());
+	const char *xml_manifest = _strdup((char *) xml_ba->GetBytes());
 	zip_source_t *source = zip_source_buffer(asic, xml_manifest, strlen(xml_manifest), 1);
 	if (source == NULL || (index = zip_file_add(asic, "META-INF/manifest.xml", source, ZIP_FL_ENC_GUESS)) < 0) {
 		zip_source_free(source);
@@ -270,6 +266,7 @@ void SigContainer::createASiC(CByteArray& sig, const char **paths, unsigned int 
 		zip_source_t *source = zip_source_file(asic, paths[i], 0, -1);
 		if (source == NULL || (file_index = zip_file_add(asic, zip_entry_name, source, ZIP_FL_ENC_GUESS)) < 0) {
 			zip_source_free(source);
+			zip_discard(asic);
 			MWLOG(LEV_ERROR, MOD_APL, "Failed to add %s to zip container", zip_entry_name);
 			throw CMWEXCEPTION(EIDMW_XADES_UNKNOWN_ERROR);
 		}
@@ -277,9 +274,11 @@ void SigContainer::createASiC(CByteArray& sig, const char **paths, unsigned int 
 	}
 
 	// add signature file
-	zip_source_t *source = zip_source_buffer(asic, sig.GetBytes(), sig.Size(), 0);
+	// signature contains a NULL-terminated string
+	zip_source_t *source = zip_source_buffer(asic, sig.GetBytes(), sig.Size()-1, 0);
 	if (source == NULL || (file_index = zip_file_add(asic, SIG_INTERNAL_PATH, source, ZIP_FL_ENC_GUESS)) < 0) {
 		zip_source_free(source);
+		zip_discard(asic);
 		MWLOG(LEV_ERROR, MOD_APL, "Failed to add signature to zip container");
 		throw CMWEXCEPTION(EIDMW_XADES_UNKNOWN_ERROR);
 	}
@@ -477,8 +476,8 @@ void SigContainer::addSignature(const char *signatureFilename, const CByteArray&
 			" is not an ASiC container", m_path.c_str());
 		throw CMWEXCEPTION(EIDMW_XADES_INVALID_ASIC_ERROR);
 	}
-
-	zip_source_t *source = zip_source_buffer(container, signature.GetBytes(), signature.Size(), 0);
+	//signature contains a NULL-terminated string
+	zip_source_t *source = zip_source_buffer(container, signature.GetBytes(), signature.Size()-1, 0);
 	if (source == NULL || zip_file_add(container, signatureFilename, source, ZIP_FL_ENC_GUESS) < 0) {
 		zip_source_free(source);
 		MWLOG(LEV_ERROR, MOD_APL, L"Failed to add signature to zip container");

@@ -129,6 +129,7 @@ namespace eIDMW
         MWLOG(LEV_DEBUG, MOD_APL, L"DOMDocumentToByteArray: Returning XML byte array, size=%d", size);
 
         ba_out->Append((const unsigned char *)utf8_string, size);
+		ba_out->Append(0x0);
 
         delete myFormatTarget;
         return ba_out;
