@@ -37,7 +37,7 @@ class ScapSettings
     #define SCAP_SECRETKEY_ERROR_CODE          406
     #define SCAP_ATTR_POSSIBLY_EXPIRED_WARNING 407
 
-    #define SCAP_MAX_CLOCK_DIF          5*60    // 5 minutos
+    #define SCAP_MAX_CLOCK_DIFF          3*60    // 3 minutes of clock drift is allowed in SCAP services
 
     // Service autentication error codes
     #define SCAP_TOTP_FAILED_ERROR_CODE     802     // TOTP validation has failed

@@ -907,7 +907,7 @@ int handleError(int status_code, soap *sp, const char *call){
                 PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
                             "%s returned tLocal: %ld tServer: %ld", call, local, server);
 
-            if (abs(difftime(local,server)) > SCAP_MAX_CLOCK_DIF) {
+            if (abs(difftime(local,server)) > SCAP_MAX_CLOCK_DIFF) {
                 return GAPI::ScapClockError;
             }
             else {
