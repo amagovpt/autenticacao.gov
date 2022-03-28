@@ -65,9 +65,9 @@ HEADERS += \
            ThreadPool.h \
            UnknownCard.h \
            pinpad2.h \
-	   GempcPinpad.h \
-	   ACR83Pinpad.h \
-	   cardpluginPteid/PteidCard.h \
+           GempcPinpad.h \
+           ACR83Pinpad.h \
+           PteidCard.h \
            CardReaderInfo.h
 
 SOURCES += \
@@ -80,15 +80,14 @@ SOURCES += \
            PCSC.cpp \
            Pinpad.cpp \
            GenericPinpad.cpp \
-           P15Correction.cpp \
            PKCS15.cpp \
            PKCS15Parser.cpp \
            PkiCard.cpp \
            Reader.cpp \
            ReadersInfo.cpp \
            ThreadPool.cpp \
-	   GempcPinpad.cpp \
-	   ACR83Pinpad.cpp \
-	   cardpluginPteid/PteidCard.cpp \
+           GempcPinpad.cpp \
+           ACR83Pinpad.cpp \
+           PteidCard.cpp \
            UnknownCard.cpp
 
