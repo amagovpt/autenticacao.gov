@@ -124,7 +124,7 @@
     <message>
         <source>STR_SCAP_CLOCK_ERROR</source>
         <oldsource>SCAP_CLOCK_ERROR_CODE</oldsource>
-        <translation>Falha na assinatura com atributos profissionais. Verifique se as definições de data, hora e fuso horário estam corretas no seu  computador  e volte a tentar.</translation>
+        <translation>Falha na assinatura com atributos profissionais. Verifique se as definições de data, hora e fuso horário estão corretas no seu computador e volte a tentar.</translation>
     </message>
     <message>
         <source>STR_SCAP_SECRETKEY_ERROR</source>

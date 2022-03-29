@@ -130,11 +130,11 @@
     <message>
         <source>STR_SCAP_CLOCK_ERROR</source>
         <oldsource>SCAP_CLOCK_ERROR_CODE</oldsource>
-        <translation>Fail at PDF signature with professional attributes. Please make sure the date, time, and time zone settings are correct on your computer and try again.</translation>
+        <translation>An error occured while signing with professional attributes. Please make sure the date, time and time zone settings are correct on your computer and try again.</translation>
     </message>
     <message>
         <source>STR_SCAP_SECRETKEY_ERROR</source>
-        <translation>Fail at PDF signature with professional attributes. Please reload professional attributes.</translation>
+        <translation>An error occured while signing with professional attributes. Please reload professional attributes.</translation>
     </message>
     <message>
         <source>STR_NIC</source>
