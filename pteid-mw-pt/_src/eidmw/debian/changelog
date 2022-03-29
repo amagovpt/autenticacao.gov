@@ -1,3 +1,12 @@
+pteid-mw (3.7.0+git20211215) UNRELEASED; urgency=medium
+
+  * Improvements in visible PDF signature: ability to resize signature seal and select visible fields
+  * Support all available signature algorithms in pteid-pkcs11 module
+  * Bugfix in SCAP attributes loading
+  * Bugfix in address reading. Address PIN is always requested when needed
+  * Fixes in SDK exception handling
+  * Improvements in Address Confirmation feature and error messages
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Wed, 15 Dec 2021 19:00:58 +0000
 pteid-mw (3.6.0+git20210526) UNRELEASED; urgency=medium
 
   * Bugfixes in SCAP signatures

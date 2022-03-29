@@ -20,11 +20,11 @@
 %endif
 %endif
 
-%define git_revision git20210526
-%define app_version 3.6.0
+%define git_revision git20211215
+%define app_version 3.7.0
 
 Name:           pteid-mw
-BuildRequires:  pcsc-lite-devel make swig pkg-config
+BuildRequires:  pcsc-lite-devel make swig
 BuildRequires:  libzip-devel
 BuildRequires:  openjpeg2-devel
 Requires:       pcsc-lite curl lato-fonts
@@ -165,7 +165,6 @@ install -m 644 -p eidguiV2/eidmw_en.qm $RPM_BUILD_ROOT/usr/local/bin/
 install -m 644 -p eidguiV2/eidmw_nl.qm $RPM_BUILD_ROOT/usr/local/bin/
 install -m 644 -p eidguiV2/fonts/myriad/MyriadPro-Regular.otf $RPM_BUILD_ROOT/usr/local/share/pteid-mw/fonts/
 
-
 mkdir -p $RPM_BUILD_ROOT/usr/share/applications
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/usr/share/applications
 
@@ -281,6 +280,14 @@ fi
 /usr/local/share/pteid-mw
 
 %changelog
+* Wed Dec 15 2021 André Guerreiro <andre.guerreiro@caixamagica.pt>
+  - Improvements in visible PDF signature: ability to resize signature seal and select visible fields
+  - Support all available signature algorithms in pteid-pkcs11 module
+  - Bugfix in SCAP attributes loading
+  - Bugfix in address reading. Address PIN is always requested when needed
+  - Fixes in SDK exception handling
+  - Improvements in Address Confirmation feature and error messages
+
 * Wed May 26 2021 André Guerreiro <andre.guerreiro@caixamagica.pt>
   - SCAP signature improvements
   - Improved signature with custom image
