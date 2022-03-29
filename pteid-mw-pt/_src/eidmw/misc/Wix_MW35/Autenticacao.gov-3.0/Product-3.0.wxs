@@ -201,6 +201,9 @@
       <Component Id="SectigoRootCert" Guid="{3405AC06-63D5-4D08-A5C1-E1229F8A5E20}" >
         <File Source="..\..\certs\Usertrust_RSA_Certification_Authority.der" />
       </Component>
+      <Component Id="DigicertRootCert" Guid="{A85481CF-5A7E-440F-A28A-0F2E1D4F5F3F}">
+        <File Source="..\..\certs\DigicertRoot.der" />
+      </Component>
 			
     </DirectoryRef>
 
@@ -458,6 +461,7 @@
       <ComponentRef Id="CertCC006"/>
       <ComponentRef Id="ECRaizEstado002"/>
       <ComponentRef Id="SectigoRootCert"/>
+      <ComponentRef Id="DigicertRootCert"/>
       <ComponentRef Id="CrlDir"/>
       <ComponentRef Id="HttpDir"/>
 
