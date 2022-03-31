@@ -122,7 +122,7 @@ std::vector<std::string> wrapString(const std::string& content, double available
     }
     else
     {
-      if (current_line.size() > 1)
+      if (current_line.size() >= 1)
         current_line.append(" ");
 
       // add word to current line

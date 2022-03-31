@@ -1290,8 +1290,12 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
           _location = _location_latin1;
           free(_location_latin1);
         }
-        const std::string _entities = _entities_latin1;
-        const std::string _attributes = _attributes_latin1;
+
+        const std::string labelProvider = isPTLanguage ? "Certificado por: " : "Certified by: ";
+        const std::string labelAttr = isPTLanguage ? "Atributos certificados: " : "Certified Attributes: ";
+
+        const std::string _entities = labelProvider + _entities_latin1;
+        const std::string _attributes = labelAttr + _attributes_latin1;
 
         eIDMW::FontParams wrap_parameters = eIDMW::calculateFontParams(
           small_signature_format, 
@@ -1487,7 +1491,7 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
                     attribute_name_length, (int)font_size));
             n2_commands->append(str9.get());
             GooString *name_str = formatMultilineString(name_latin1,rect_width, font_size,
-                    MYRIAD_BOLD, ATTR_SCAP_MAX_LINES, font_size, attribute_name_length);
+                    MYRIAD_BOLD, ATTR_SCAP_MAX_LINES, line_height, attribute_name_length);
             n2_commands->append(name_str);
         }
 

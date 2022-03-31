@@ -64,8 +64,8 @@
 #define REASON_MAX_LINES            2
 #define LOCATION_MAX_LINES          2
 
-#define NAME_SCAP_MAX_LINES         2
-#define PROVIDER_SCAP_MAX_LINES     2
+#define NAME_SCAP_MAX_LINES         5
+#define PROVIDER_SCAP_MAX_LINES     3
 #define ATTR_SCAP_MAX_LINES         10   
 
 #include <vector>
