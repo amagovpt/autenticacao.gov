@@ -1416,7 +1416,6 @@ __in    DWORD   dwFlags)
 {
     CMDKSP_PROVIDER        *pProvider = NULL;
     CMDKSP_KEY             *pKey = NULL;
-    PBYTE               pbTemp = NULL;
     BOOL                fPublicKeyBlob = FALSE;
     NTSTATUS            ntStatus = STATUS_INTERNAL_ERROR;
     SECURITY_STATUS     Status = NTE_INTERNAL_ERROR;
@@ -1515,11 +1514,6 @@ __in    DWORD   dwFlags)
     }
 
 cleanup:
-    if (pbTemp)
-    {
-        SecureZeroMemory(pbTemp, *pcbResult);
-        HeapFree(GetProcessHeap(), 0, pbTemp);
-    }
     return Status;
 }
 
