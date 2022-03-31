@@ -388,8 +388,6 @@ unsigned char * PDFSignatureClient::callSCAPSignatureService(soap* sp, QByteArra
     sigRequest.ProcessId = *(this->processId);
     sigRequest.Transaction = transaction;
 
-    m_secretKey = settings.getSecretKey(citizenId);
-
     /*qDebug() << "m_secretKey = " << m_secretKey.data();*/
     std::string new_totp = generateTOTP(m_secretKey, totp_digits, totp_step_time, time(NULL));
 
@@ -559,7 +557,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
     _ns1__AuthorizationResponse authorizationResponse;
 
     authorizationRequest.AppId = m_appID.toStdString();
-
+	//Read stored secretKey from registry or config file
     m_secretKey = settings.getSecretKey(citizenId);
 
     /*qDebug() << "m_secretKey = " << m_secretKey.data();*/
