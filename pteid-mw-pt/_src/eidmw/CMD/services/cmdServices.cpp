@@ -34,7 +34,7 @@
 
 #define SOAP_RECV_TIMEOUT_DEFAULT           60
 #define SOAP_SEND_TIMEOUT_DEFAULT           60
-#define SOAP_CONNECT_TIMEOUT_DEFAULT        60
+#define SOAP_CONNECT_TIMEOUT_DEFAULT        5
 #define SOAP_MUST_NO_UNDERSTAND             0
 #define SOAP_MUST_UNDERSTAND                1
 

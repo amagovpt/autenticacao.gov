@@ -21,9 +21,10 @@
 
 class ScapSettings
 {
+	//Timeout values in seconds for SCAP webservice connections
     #define RECV_TIMEOUT        60
     #define SEND_TIMEOUT        60
-    #define CONNECT_TIMEOUT     60
+    #define CONNECT_TIMEOUT     5
 
     #define SCAP_ATTRIBUTES_OK          200
 

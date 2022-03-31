@@ -298,9 +298,9 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
         
         long ret;
         if (useOAuth) {
-            sp.recv_timeout = 60;
-            sp.send_timeout = 60;
-            sp.connect_timeout = 60;
+            sp.recv_timeout = RECV_TIMEOUT;
+            sp.send_timeout = SEND_TIMEOUT;
+            sp.connect_timeout = CONNECT_TIMEOUT;
 
             char * ca_path = NULL;
             std::string cacerts_file;
