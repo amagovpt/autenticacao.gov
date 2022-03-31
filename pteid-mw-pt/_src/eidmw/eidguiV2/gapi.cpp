@@ -179,14 +179,14 @@ QString GAPI::getAddressField(AddressInfoKey key) {
     {                                                               \
         qDebug() << "Batch signature failed at index: "             \
                  << e.GetFailedSignatureIndex();                    \
-        emitErrorSignal(e.GetError(), e.GetFailedSignatureIndex()); \
+        emitErrorSignal(__FUNCTION__, e.GetError(), e.GetFailedSignatureIndex()); \
     }                                                               \
     catch (PTEID_Exception &e)                                      \
     {                                                               \
-        emitErrorSignal(e.GetError());                              \
+        emitErrorSignal(__FUNCTION__, e.GetError());                              \
 }
 
-void GAPI::emitErrorSignal(long errorCode, int index){
+void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int index){
     if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN) {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR,
             "eidgui", "SOD exception! Error code (see strings in eidErrors.h): %08lx\n", errorCode);
@@ -199,9 +199,11 @@ void GAPI::emitErrorSignal(long errorCode, int index){
         emit signalPdfSignSuccess(SignMessageLtvFailed);
     }
     else if (errorCode == EIDMW_PERMISSION_DENIED) {
+		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Permission denied error in %s", caller_function);
         emit signalPdfSignFail(SignFilePermissionFailed, index);
     }
     else if (errorCode == EIDMW_PDF_UNSUPPORTED_ERROR) {
+		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "PDF unsupported error in %s", caller_function);
         emit signalPdfSignFail(PDFFileUnsupported, index);
     }
     else if (errorCode == EIDMW_ERR_PIN_CANCEL) {
@@ -221,7 +223,7 @@ void GAPI::emitErrorSignal(long errorCode, int index){
     }
     else {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-            "Generic eidlib exception! Error code (see strings in eidErrors.h): %08lx\n", errorCode);
+            "Generic eidlib exception in %s! Error code (see strings in eidErrors.h): %08lx", caller_function, errorCode);
         /* Discard the 0xe1d0 prefix */
         unsigned long user_error = errorCode & 0x0000FFFF;
         QString msgError = QString("%1\n").arg(user_error);

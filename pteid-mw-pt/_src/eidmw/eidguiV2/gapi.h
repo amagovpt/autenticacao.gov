@@ -524,7 +524,7 @@ signals:
 
 private:
     bool LoadTranslationFile( QString NewLanguage );
-    void emitErrorSignal(long errorCode, int index = -1);
+    void emitErrorSignal(const char * callerfunction, long errorCode, int index = -1);
     void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
     void connectToCard();
     void getSCAPEntities();
