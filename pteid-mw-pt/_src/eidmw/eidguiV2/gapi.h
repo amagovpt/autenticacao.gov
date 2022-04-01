@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2022 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2018-2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
@@ -310,9 +310,12 @@ public slots:
     void closePdfPreview(QString filePath);
     void closeAllPdfPreviews();
 
-    void startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, bool isLTV);
-    void startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, bool isTimestamp, bool isLTV);
-    void startSigningXADESWithCMD(QList<QString> loadedFileBatchPath, QString outputFile, bool isTimestamp, bool isLTV);
+    void startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, 
+                        bool isLTV, bool isASIC);
+    void startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile, 
+                        bool isTimestamp, bool isLTV);
+    void startSigningXADESWithCMD(QList<QString> loadedFileBatchPath, QString outputFile, 
+                        bool isTimestamp, bool isLTV, bool isASIC);
 
     //This flag is used to start the application in specific signature subpage
     void setShortcutFlag(ShortcutId value) { m_shortcutFlag = value; }
@@ -548,9 +551,9 @@ private:
     void doPrint(PrintParams &params);
     bool drawpdf(QPrinter &printer, PrintParams params);
     void doSignBatchPDF(SignParams &params);
-    void doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, bool isLTV);
+    void doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, bool isLTV, bool isASIC);
     void doSignBatchXADES(SignParams &params);
-    void doSignXADESWithCMD(SignParams &params);
+    void doSignXADESWithCMD(SignParams &params, bool isASIC);
     void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);
     void fillCertificateList (void );
     void getCertificateAuthStatus(void );

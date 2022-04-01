@@ -156,7 +156,7 @@
     </message>
     <message>
         <source>STR_CMD_INVALID_PIN</source>
-        <translation>Wrong mobile phone number or PIN</translation>
+        <translation type="vanished">Wrong mobile phone number or PIN</translation>
     </message>
     <message>
         <source>STR_CMD_INVALID_OTP</source>
@@ -164,7 +164,7 @@
     </message>
     <message>
         <source>STR_CMD_OTP_VALIDATION_ERROR</source>
-        <translation>It was not possible to validate the confirmation code. The request was not found or validation time has expired</translation>
+        <translation type="vanished">It was not possible to validate the confirmation code. The request was not found or validation time has expired</translation>
     </message>
     <message>
         <source>STR_CMD_INACTIVE_SERVICE</source>
@@ -2119,6 +2119,14 @@
         <source>STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL</source>
         <translation>PDF preview unavailable due to its reduced dimensions.</translation>
     </message>
+    <message>
+        <source>STR_FILE_ASIC</source>
+        <translation>There is an ASiC package in the file list. In this case it is possible to add a signature to the same package, but it needs to be the only one in the file list.</translation>
+    </message>
+    <message>
+        <source>STR_FILE_ASIC_TITLE</source>
+        <translation>ASiC package signature</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>
@@ -2425,7 +2433,7 @@
     </message>
     <message>
         <source>STR_UPDATENEWS_OK</source>
-        <translation>OK</translation>
+        <translation type="vanished">OK</translation>
     </message>
     <message>
         <source>STR_WARNING</source>
@@ -2451,7 +2459,7 @@
         <source>STR_SEND_BY_SMS_BUTTON</source>
         <translation>Send by SMS</translation>
     </message>
-        <message>
+    <message>
         <source>STR_SET_CACHE_TITLE</source>
         <translation>Choose now if you want to use the card data cache</translation>
     </message>
@@ -2477,7 +2485,7 @@
     </message>
     <message>
         <source>STR_CLOSE</source>
-        <translation>Close</translation>
+        <translation type="vanished">Close</translation>
     </message>
     <message>
         <source>STR_NOTIFICATION_CENTER</source>

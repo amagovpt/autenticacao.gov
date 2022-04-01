@@ -154,7 +154,7 @@
     </message>
     <message>
         <source>STR_CMD_INVALID_PIN</source>
-        <translation>Número de telemóvel ou PIN errado</translation>
+        <translation type="vanished">Número de telemóvel ou PIN errado</translation>
     </message>
     <message>
         <source>STR_CMD_INVALID_OTP</source>
@@ -162,7 +162,7 @@
     </message>
     <message>
         <source>STR_CMD_OTP_VALIDATION_ERROR</source>
-        <translation>Não foi possível validar o código de confirmação. O pedido não foi encontrado ou tempo de validação expirou</translation>
+        <translation type="vanished">Não foi possível validar o código de confirmação. O pedido não foi encontrado ou tempo de validação expirou</translation>
     </message>
     <message>
         <source>STR_CMD_INACTIVE_SERVICE</source>
@@ -2125,6 +2125,14 @@
         <source>STR_SIGN_NOT_PREVIEW_PDF_TOO_SMALL</source>
         <translation>Pré-visualização do ficheiro PDF indisponível devido às suas dimensões reduzidas.</translation>
     </message>
+    <message>
+        <source>STR_FILE_ASIC</source>
+        <translation>Existe um pacote ASiC na lista de ficheiros para assinar. Neste caso é possivel adicionar uma assinatura ao mesmo pacote, mas este tem de ser o único na lista de ficheiros.</translation>
+    </message>
+    <message>
+        <source>STR_FILE_ASIC_TITLE</source>
+        <translation>Assinatura de Pacote ASiC</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>
@@ -2430,7 +2438,7 @@
     </message>
     <message>
         <source>STR_UPDATENEWS_OK</source>
-        <translation>OK</translation>
+        <translation type="vanished">OK</translation>
     </message>
     <message>
         <source>STR_WARNING</source>
@@ -2482,7 +2490,7 @@
     </message>
     <message>
         <source>STR_CLOSE</source>
-        <translation>Fechar</translation>
+        <translation type="vanished">Fechar</translation>
     </message>
     <message>
         <source>STR_NOTIFICATION_CENTER</source>

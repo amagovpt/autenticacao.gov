@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2022 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
@@ -938,7 +938,7 @@ void GAPI::doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &sign
     signalUpdateProgressBar(100);
 }
 
-void GAPI::doSignXADESWithCMD(SignParams &params) {
+void GAPI::doSignXADESWithCMD(SignParams &params, bool isASIC) {
     BEGIN_TRY_CATCH
 
     std::string output_file = getPlatformNativeString(params.outputFile);
@@ -964,7 +964,12 @@ void GAPI::doSignXADESWithCMD(SignParams &params) {
     }
 
 	PTEID_CMDSignatureClient * client = m_cmd_client;
-    client->SignXades(output_file.c_str(), &files_to_sign[0], file_count, level);
+
+    if(isASIC){
+        client->SignASiC(files_to_sign[0], level);
+    } else {
+        client->SignXades(output_file.c_str(), &files_to_sign[0], file_count, level);
+    }
 
     emit signalPdfSignSuccess(SignMessageOK);
 
@@ -1793,10 +1798,11 @@ void GAPI::closeAllPdfPreviews()
     image_provider_pdf->closeAllDocs();
 }
 
-void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, bool isLTV) {
-    QFuture<void> future =
-        Concurrent::run(this, &GAPI::doSignXADES, loadedFilePath, outputFile, isTimestamp, isLTV);
-
+void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, 
+    bool isLTV, bool isASIC) {
+    
+    QFuture<void> future = Concurrent::run(this, &GAPI::doSignXADES, loadedFilePath, 
+        outputFile, isTimestamp, isLTV, isASIC);
 }
 
 void GAPI::startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile,
@@ -1844,12 +1850,12 @@ void GAPI::doSignBatchXADES(SignParams &params) {
     END_TRY_CATCH
 }
 
-void GAPI::startSigningXADESWithCMD(QList<QString> inputFiles, QString outputFile, bool isTimestamp,
-    bool isLTV) {
+void GAPI::startSigningXADESWithCMD(QList<QString> inputFiles, QString outputFile, 
+    bool isTimestamp, bool isLTV, bool isASIC) {
 
     SignParams params = {inputFiles, outputFile, 0, 0, 0, "", "", isTimestamp, isLTV, 0 };
 
-    QFuture<void> future = Concurrent::run(this, &GAPI::doSignXADESWithCMD, params);
+    QFuture<void> future = Concurrent::run(this, &GAPI::doSignXADESWithCMD, params, isASIC);
 }
 
 bool GAPI::isDirectory(QString path) {
@@ -1884,7 +1890,7 @@ QList<QString> GAPI::getFilesFromDirectory(QString path) {
     return allFiles;
 }
 
-void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, bool isLTV) {
+void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, bool isLTV, bool isASIC) {
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doSignXADES");
 
     BEGIN_TRY_CATCH
@@ -1906,7 +1912,11 @@ void GAPI::doSignXADES(QString loadedFilePath, QString outputFile, bool isTimest
     else if (isTimestamp) {
         level = PTEID_LEVEL_TIMESTAMP;
     }
-    card->SignXades(tempOutputFile.constData(), files_to_sign, 1, level);
+    if(isASIC){
+        card->SignASiC(files_to_sign[0], level);
+    } else {
+        card->SignXades(tempOutputFile.constData(), files_to_sign, 1, level);
+    }
 
     emit signalPdfSignSuccess(SignMessageOK);
 
