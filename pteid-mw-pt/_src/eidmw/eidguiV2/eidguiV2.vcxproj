@@ -418,6 +418,7 @@ echo "**************************************************************************
     <None Include="qtquickcontrols2.conf" />
     <None Include="images\titleBar\quit.png" />
     <None Include="images\titleBar\quit_hover.png" />
+    <None Include="images\titleBar\quit_hover_blue.png" />
     <None Include="images\remove_file.png" />
     <None Include="images\remove_file_hover.png" />
     <None Include="images\tooltip_grey.png" />

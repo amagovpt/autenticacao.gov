@@ -106,5 +106,6 @@
         <file>contentPages/services/PageServicesSign.qml</file>
         <file>contentPages/services/PageServicesSignForm.ui.qml</file>
         <file>images/icons-resize.png</file>
+        <file>images/titleBar/quit_hover_blue.png</file>
     </qresource>
 </RCC>

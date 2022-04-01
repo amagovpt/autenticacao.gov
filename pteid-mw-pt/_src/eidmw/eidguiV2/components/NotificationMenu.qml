@@ -229,10 +229,13 @@ Item {
 
         Image {
             id: exitIcon
+            visible: true
             width: Constants.SIZE_IMAGE_BOTTOM_MENU 
             height: Constants.SIZE_IMAGE_BOTTOM_MENU 
             fillMode: Image.PreserveAspectFit
-            source: "../images/titleBar/quit_hover.png"
+            source: exitArea.containsMouse ?
+                "../images/titleBar/quit_hover_blue.png" :
+                "../images/titleBar/quit.png"
 
             anchors.top: title.top
             anchors.right: notificationArea.right
