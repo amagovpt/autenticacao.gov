@@ -1176,7 +1176,7 @@ PageServicesSignForm {
                     var outputFile = propertyListViewFiles.model.get(0).fileUrl
                     var newSuffix = propertyRadioButtonPADES.checked ? "_signed.pdf" : "_xadessign.asics"
 
-                    if(containsFileAsice()){
+                    if(containsPackageAsic()){
                         propertyBusyIndicatorRunning = true
                         mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                         var output = decodeURIComponent(Functions.stripFilePrefix(outputFile))
@@ -1195,9 +1195,9 @@ PageServicesSignForm {
                             propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
                             propertyFileDialogBatchOutput.open()
                         }else{
-                            if (containsFileAsice()){
-                                var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASICE_TITLE")
-                                var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASICE")
+                            if (containsPackageAsic()){
+                                var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
+                                var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC")
                                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
                             }else{
                                 var outputFolderPath = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
@@ -1252,7 +1252,7 @@ PageServicesSignForm {
 
                     var outputFile = propertyListViewFiles.model.get(0).fileUrl
                     var newSuffix = propertyRadioButtonPADES.checked ? "_signed.pdf" : "_xadessign.asics"
-                    if(containsFileAsice()){
+                    if(containsPackageAsic()){
                         signCMD()
                     } else {
                         propertyFileDialogCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
@@ -1264,9 +1264,9 @@ PageServicesSignForm {
                         propertyFileDialogBatchCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
                         propertyFileDialogBatchCMDOutput.open()
                     } else {
-                        if (containsFileAsice()){
-                            var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASICE_TITLE")
-                            var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASICE")
+                        if (containsPackageAsic()){
+                            var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
+                            var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC")
                             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
                         }else{
                             var outputFolderPath = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
@@ -1719,7 +1719,7 @@ PageServicesSignForm {
         return alreadyUploaded;
     }
 
-    function containsFileAsice() {
+    function containsPackageAsic() {
         for (var i = 0; i < filesModel.count; i++) {
             if (filesModel.get(i).fileUrl.toString().split('.').pop() === 'asice'
                 || filesModel.get(i).fileUrl.toString().split('.').pop() === 'asics') {
@@ -1732,14 +1732,14 @@ PageServicesSignForm {
 
     function updateUploadedFiles(fileList){
         var fileAlreadyUploaded = false
-        var fileIsAsicePopup = false
+        var fileIsAsicPopup = false
         for(var i = 0; i < fileList.length; i++){
             var path = fileList[i];
 
             path = decodeURIComponent(Functions.stripFilePrefix(path));
             if (gapi.isFile(path)) {
                 fileAlreadyUploaded = appendFileToModel(path);
-                fileIsAsicePopup =  containsFileAsice() && filesModel.count > 1;
+                fileIsAsicPopup =  containsPackageAsic() && filesModel.count > 1;
             } else if (gapi.isDirectory(path)) {
                 var filesInDir = gapi.getFilesFromDirectory(path);
                 if (filesInDir instanceof Array) {
@@ -1753,9 +1753,9 @@ PageServicesSignForm {
             var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ALREADY_UPLOADED")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
-        if (fileIsAsicePopup){
-            var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASICE_TITLE")
-            var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASICE")
+        if (fileIsAsicPopup){
+            var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
+            var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
     }
@@ -1881,7 +1881,7 @@ PageServicesSignForm {
                     propertyOutputSignedFile.substring(0, propertyOutputSignedFile.lastIndexOf('/'))
             if (propertyListViewFiles.count == 1){
                 var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
-                gapi.startSigningXADES(loadedFilePath, outputFile, isTimestamp, isLTV, containsFileAsice())
+                gapi.startSigningXADES(loadedFilePath, outputFile, isTimestamp, isLTV, containsPackageAsic())
             }else{
                 var batchFilesArray = []
                 for(var i = 0; i < propertyListViewFiles.count; i++){
@@ -1905,7 +1905,7 @@ PageServicesSignForm {
 
         var outputFile = ""
         if (dialogSignCMD.isSignSingleFile() || propertyRadioButtonXADES.checked) {
-            if(containsFileAsice()){
+            if(containsPackageAsic()){
                 var prefix = (Qt.platform.os === "windows" ? "file:///" : "file://")
                 var outputFile = propertyListViewFiles.model.get(0).fileUrl
                 var newSuffix = propertyRadioButtonPADES.checked ? "_signed.pdf" : "_xadessign.asics"
@@ -1977,7 +1977,7 @@ PageServicesSignForm {
                 inputFiles[i] = propertyListViewFiles.model.get(i).fileUrl;
             }
 
-            gapi.startSigningXADESWithCMD(inputFiles, outputFile, isTimestamp, isLTV, containsFileAsice())
+            gapi.startSigningXADESWithCMD(inputFiles, outputFile, isTimestamp, isLTV, containsPackageAsic())
         }
     }
 
