@@ -1721,7 +1721,8 @@ PageServicesSignForm {
 
     function containsFileAsice() {
         for (var i = 0; i < filesModel.count; i++) {
-            if (filesModel.get(i).fileUrl.toString().split('.').pop() === 'asice') {
+            if (filesModel.get(i).fileUrl.toString().split('.').pop() === 'asice'
+                || filesModel.get(i).fileUrl.toString().split('.').pop() === 'asics') {
                 console.log("File asice already uploaded");
                 return true;
             }
