@@ -115,7 +115,7 @@ Item {
         FileDialog {
             id: fileDialog
             title: qsTranslate("Popup File", "STR_POPUP_FILE_INPUT_MULTI")
-            folder: StandardPaths.writableLocation(StandardPaths.HomeLocation)
+            folder: Qt.platform.os === "linux" ? StandardPaths.writableLocation(StandardPaths.HomeLocation) : ""
             modality: Qt.WindowModal
             Component.onCompleted: visible = false
             fileMode: FileDialog.OpenFiles
