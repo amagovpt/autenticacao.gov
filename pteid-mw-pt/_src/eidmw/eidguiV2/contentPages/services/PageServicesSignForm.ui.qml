@@ -291,8 +291,8 @@ Item {
                                 id: buttonArrowHelp
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 anchors.verticalCenter: parent.verticalCenter
-                                width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
-                                height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                                width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU_W
+                                height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU_H
                                 enabled: true
                                 background: Rectangle {
                                     anchors.fill: parent
@@ -553,7 +553,7 @@ Item {
                         Item {
                             id: arrowOptionsRect
                             width: parent.width
-                            height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                            height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU_H
                             visible: true
                             y: Constants.SIZE_TEXT_V_SPACE
 
@@ -577,8 +577,8 @@ Item {
                                 anchors.right: parent.right
                                 anchors.rightMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
                                 anchors.verticalCenter: parent.verticalCenter
-                                width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
-                                height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                                width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU_W
+                                height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU_H
                                 enabled: true
                                 background: Rectangle {
                                     anchors.fill: parent
@@ -692,7 +692,6 @@ Item {
                                     Image {
                                         anchors.fill: parent
                                         antialiasing: true
-                                        fillMode: Image.PreserveAspectFit
                                         source: "../../images/tooltip_grey.png"
                                         anchors.horizontalCenter: parent.horizontalCenter
                                     }

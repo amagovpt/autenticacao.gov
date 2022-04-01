@@ -461,8 +461,8 @@ Rectangle {
 
             Image {
                 id: dragSigMoveImage
-                height: 35
-                fillMode: Image.PreserveAspectFit
+                height: Constants.SIZE_IMAGE_SEAL_MOVE
+                width: Constants.SIZE_IMAGE_SEAL_MOVE
                 anchors.verticalCenter: dragSigRect.bottom
                 anchors.horizontalCenter: dragSigRect.left
 
@@ -472,8 +472,8 @@ Rectangle {
 
             Image {
                 id: dragSigResizeImage
-                height: 35
-                fillMode: Image.PreserveAspectFit
+                height: Constants.SIZE_IMAGE_SEAL_RESIZE
+                width: Constants.SIZE_IMAGE_SEAL_RESIZE
                 anchors.verticalCenter: dragSigRect.bottom
                 anchors.horizontalCenter: dragSigRect.right
 

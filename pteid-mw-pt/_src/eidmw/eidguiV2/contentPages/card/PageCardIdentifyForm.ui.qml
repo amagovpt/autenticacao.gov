@@ -236,8 +236,8 @@ Item {
                             anchors.topMargin: parent.height * 0.05
                             anchors.rightMargin: parent.width * 0.05
                             antialiasing: true
-                            width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
-                            height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU
+                            width: Constants.SIZE_IMAGE_ARROW_MAIN_MENU_W
+                            height: Constants.SIZE_IMAGE_ARROW_MAIN_MENU_H
                             source: cancelExportMouseArea.containsMouse || activeFocus
                                     ? "../../images/arrow-down_hover.png"
                                     : "../../images/arrow-down_AMA.png"
