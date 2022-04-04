@@ -83,7 +83,7 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 				//We don't support PTEID_IAS101 cards anymore...
 				ulVersion = 1;
 				poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, protocol_struct);
-				MWLOG(LEV_ERROR, MOD_CAL, "Creating new card instance: %p", poCard);
+				MWLOG(LEV_DEBUG, MOD_CAL, "Creating new card instance: %p", poCard);
 			}
 		}
 	}
