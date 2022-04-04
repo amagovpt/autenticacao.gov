@@ -165,9 +165,6 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_FileType.cs">
       <Link>GeneratedFiles\PTEID_FileType.cs</Link>
     </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_HashAlgo.cs">
-      <Link>GeneratedFiles\PTEID_HashAlgo.cs</Link>
-    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_LogLevel.cs">
       <Link>GeneratedFiles\PTEID_LogLevel.cs</Link>
     </Compile>
@@ -207,7 +204,7 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_SigningDevice.cs">
       <Link>GeneratedFiles\PTEID_SigningDevice.cs</Link>
     </Compile>
-	<Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_SigningDeviceType.cs">
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_SigningDeviceType.cs">
       <Link>GeneratedFiles\PTEID_SigningDeviceType.cs</Link>
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_SigningDeviceProxy.cs">

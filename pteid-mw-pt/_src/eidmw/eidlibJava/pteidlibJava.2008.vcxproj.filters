@@ -126,9 +126,6 @@
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_ForeignerCard.java">
       <Filter>GeneratedFiles</Filter>
     </None>
-    <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_HashAlgo.java">
-      <Filter>GeneratedFiles</Filter>
-    </None>
     <None Include="..\eidlibJava_Wrapper\GeneratedFiles\PTEID_KidsCard.java">
       <Filter>GeneratedFiles</Filter>
     </None>
