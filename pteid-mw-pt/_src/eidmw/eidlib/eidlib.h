@@ -1775,7 +1775,7 @@ class APL_Config;
 
 /**
   * Class to access and modify the config parameters of pteid-mw. 
-    These parameters are persisted in the Windows Registry under the HKEY_CURRENT_USER\Software\PTEID key
+    These parameters are persisted in the Windows Registry under the HKEY_CURRENT_USER\\Software\\PTEID key
     or in the pteid.conf file of the current user (on Linux and MacOS systems)
   */
 class PTEID_Config : public PTEID_Object
