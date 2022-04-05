@@ -631,6 +631,11 @@ void * SWIGSTDCALL downcastSigningDevice(void *ptr, int type)
 }
 
 %ignore eIDMW::PTEID_PDFSignature::getPdfSignature();
+%ignore eIDMW::PTEID_Config::PTEID_Config(const char *csName, const char *czSection, const char *csDefaultValue);
+%ignore eIDMW::PTEID_Config::PTEID_Config(const char *csName, const wchar_t *czSection, const wchar_t *csDefaultValue);
+%ignore eIDMW::PTEID_Config::PTEID_Config(const char *csName, const char *czSection, long lDefaultValue);
+%ignore eIDMW::PTEID_Config::DeleteKeysByPrefix();
+
 #elif SWIGJAVA	/********************** JAVA SPECIFICS ***********************/
 
 ///////////////////////////////////////// ByteArray /////////////////////////////////////////////
@@ -1325,10 +1330,6 @@ extern "C" SWIGEXPORT jlong JNICALL Java_pt_gov_cartaodecidadao_pteidlibJava_1Wr
 %javaexception("PTEID_Exception") setString	   JAVA_CODE_THROW
 %javaexception("PTEID_Exception") setLong	   JAVA_CODE_THROW
 
-%ignore eIDMW::PTEID_Config(const char *csName, const char *czSection, const char *csDefaultValue);
-%ignore eIDMW::PTEID_Config(const char *csName, const wchar_t *czSection, const wchar_t *csDefaultValue);
-%ignore eIDMW::PTEID_Config(const char *csName, const char *czSection, long lDefaultValue);
-
 //------------------------------------------------------------
 // class PTEID_Sod
 //------------------------------------------------------------
@@ -1741,6 +1742,12 @@ void SetEventCallback_WrapperCpp(long lRet, unsigned long ulState, void *pvRef)
 // which should be used as an alterantive
 //--------------------------------------------------
 %ignore eIDMW::PTEID_PDFSignature::setCustomImage(unsigned char *image_data, unsigned long img_length);
+
+
+%ignore eIDMW::PTEID_Config::PTEID_Config(const char *csName, const char *czSection, const char *csDefaultValue);
+%ignore eIDMW::PTEID_Config::PTEID_Config(const char *csName, const wchar_t *czSection, const wchar_t *csDefaultValue);
+%ignore eIDMW::PTEID_Config::PTEID_Config(const char *csName, const char *czSection, long lDefaultValue);
+%ignore eIDMW::PTEID_Config::DeleteKeysByPrefix();
 
 #elif SWIGPYTHON
 
