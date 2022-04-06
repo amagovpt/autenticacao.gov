@@ -589,7 +589,7 @@ void * SWIGSTDCALL downcastSigningDevice(void *ptr, int type)
 }
 %}
 
-// adapted from http://johnnado.com/swig-csharp-java-downcast/
+// Adapted from https://web.archive.org/web/20210415175338/http://johnnado.com/swig-csharp-java-downcast/
 %typemap(cstype) 	eIDMW::PTEID_SigningDevice& "PTEID_SigningDevice"
 %pragma(csharp) imclasscode=%{
 	
