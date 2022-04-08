@@ -959,8 +959,11 @@ class PTEID_PDFSignature
 		 **/
 		PTEIDSDK_API void setFileSigning(char *input_path);
 		/**
-		 * Add a file to a batch mode signature - this means the signature PIN introduced when the first signature is performed
+		 * Add a file to a batch mode signature.
+		 * 
+		 * This means the signature PIN introduced when the first signature is performed
 		 * is cached in memory for the minimum time needed to sign the complete set of files
+		 * 
 		 * @param input_path: Absolute path for a PDF file to be signed in batch mode
 		 **/
 		PTEIDSDK_API void addToBatchSigning(char *input_path);
@@ -968,10 +971,12 @@ class PTEID_PDFSignature
 		PTEIDSDK_API int getPageCount();
 		PTEIDSDK_API int getOtherPageCount(const char *input_path);
 		/**
-		 * Use this method to apply a cryptographic timestamp for the signature(s) - Internet connection is required
-		 * By default the implementation will use the official Cartão de Cidadão TSA at ts.cartaodecidadao.pt
-		 * Information about request limits described at https://pki.cartaodecidadao.pt - in section "Serviço de Selos Temporais"
-		 * Using PTEID_Config with parameter PTEID_PARAM_XSIGN_TSAURL a different TSA may be specified
+		 * Apply a timestamp after signing the document.
+		 * 
+		 * Use this method to apply a cryptographic timestamp for the signature(s) - Internet connection is required.
+		 * By default the implementation will use the official Cartão de Cidadão TSA at ts.cartaodecidadao.pt.
+		 * Information about request limits described at https://pki.cartaodecidadao.pt - in section "Serviço de Selos Temporais".
+		 * Using @ref PTEID_Config with parameter PTEID_PARAM_XSIGN_TSAURL a different TSA may be specified
 		 **/
 		PTEIDSDK_API void enableTimestamp();
 
@@ -1428,37 +1433,37 @@ class PTEID_Address : public PTEID_XMLDoc
 public:
 	PTEIDSDK_API virtual ~PTEID_Address();							/**< Destructor */
 
-	PTEIDSDK_API	bool isNationalAddress();						/**< is the address a portuguese address? */
-	PTEIDSDK_API	const char *getCountryCode();						/**<residence country */
-
+	PTEIDSDK_API	bool isNationalAddress();							/**< Is this address a portuguese address? */
+	PTEIDSDK_API	const char *getCountryCode();					/**< Return field country */
+	// The following 20 getter methods return data only for national addresses
 	PTEIDSDK_API	const char *getDistrict();						/**< Return field District */
-	PTEIDSDK_API	const char *getDistrictCode();					/**< Return field District Code*/
-	PTEIDSDK_API 	const char *getMunicipality();					/**< Return Municipality field */
-	PTEIDSDK_API 	const char *getMunicipalityCode();				/**< Return Municipality Code field */
-	PTEIDSDK_API	const char *getCivilParish();					/**< Return field CivilParish */
-	PTEIDSDK_API	const char *getCivilParishCode();				/**< Return field CivilParish Code */
-	PTEIDSDK_API	const char *getAbbrStreetType();				/**< Return field AbbrStreetType */
+	PTEIDSDK_API	const char *getDistrictCode();				/**< Return field District Code */
+	PTEIDSDK_API 	const char *getMunicipality();				/**< Return field Municipality */
+	PTEIDSDK_API 	const char *getMunicipalityCode();		/**< Return field Municipality Code */
+	PTEIDSDK_API	const char *getCivilParish();					/**< Return field Civil Parish */
+	PTEIDSDK_API	const char *getCivilParishCode();			/**< Return field Civil Parish Code */
+	PTEIDSDK_API	const char *getAbbrStreetType();			/**< Return field Abbreviated street type */
 	PTEIDSDK_API	const char *getStreetType();					/**< Return field StreetType */
 	PTEIDSDK_API	const char *getStreetName();					/**< Return field StreetName */
-	PTEIDSDK_API	const char *getAbbrBuildingType();				/**< Return field AbbrBuildingType */
-	PTEIDSDK_API	const char *getBuildingType();					/**< Return field BuildingType */
-	PTEIDSDK_API	const char *getDoorNo();						/**< Return field DoorNo */
-	PTEIDSDK_API	const char *getFloor();							/**< Return field Floor */
-	PTEIDSDK_API	const char *getSide();							/**< Return field Side */
+	PTEIDSDK_API	const char *getAbbrBuildingType();		/**< Return field Abbreviated building type */
+	PTEIDSDK_API	const char *getBuildingType();				/**< Return field Building Type */
+	PTEIDSDK_API	const char *getDoorNo();							/**< Return field Door Number */
+	PTEIDSDK_API	const char *getFloor();								/**< Return field Floor */
+	PTEIDSDK_API	const char *getSide();								/**< Return field Side */
 	PTEIDSDK_API	const char *getLocality();						/**< Return field Locality */
-	PTEIDSDK_API	const char *getPlace();							/**< Return field Locality */
-	PTEIDSDK_API	const char *getZip4();							/**< Return field Zip4 */
-	PTEIDSDK_API	const char *getZip3();							/**< Return field Zip3 */
-	PTEIDSDK_API	const char *getPostalLocality();				/**< Return field PostalLocality */
-	PTEIDSDK_API	const char *getGeneratedAddressCode();			/**< Return field Address Code */
+	PTEIDSDK_API	const char *getPlace();								/**< Return field Place */
+	PTEIDSDK_API	const char *getZip4();								/**< Return field Zip4 */
+	PTEIDSDK_API	const char *getZip3();								/**< Return field Zip3 */
+	PTEIDSDK_API	const char *getPostalLocality();			/**< Return field Postal Locality */
+	PTEIDSDK_API	const char *getGeneratedAddressCode(); /**< Return field Address Code */
 
 	// The following 6 getter methods are only relevant for foreign addresses
-	PTEIDSDK_API 	const char *getForeignCountry();
-	PTEIDSDK_API 	const char *getForeignAddress();
-	PTEIDSDK_API 	const char *getForeignCity();
-	PTEIDSDK_API 	const char *getForeignRegion();
-	PTEIDSDK_API 	const char *getForeignLocality();
-	PTEIDSDK_API 	const char *getForeignPostalCode();
+	PTEIDSDK_API 	const char *getForeignCountry();     /**< Return foreign address 2-letter ISO 3166-1 country code */
+	PTEIDSDK_API 	const char *getForeignAddress();     /**< Return foreign address generic address field - may contain street name, door number, or other address elements */
+	PTEIDSDK_API 	const char *getForeignCity();        /**< Return foreign address city */
+	PTEIDSDK_API 	const char *getForeignRegion();      /**< Return foreign address region */
+	PTEIDSDK_API 	const char *getForeignLocality();    /**< Return foreign address locality */
+	PTEIDSDK_API 	const char *getForeignPostalCode();  /**< Return foreign address postal code - format is country-dependent */ 
 
 private:
 	PTEID_Address(const PTEID_Address& doc);							/**< Copy not allowed - not implemented */
@@ -1531,9 +1536,11 @@ class APL_Pin;
 class PTEID_Pin : public PTEID_Crypto
 {
 public:
-
+	/** PIN reference value for the authentication PIN. It can be used as parameter for @ref PTEID_Pins::getPinByPinRef() */
 	static const unsigned long AUTH_PIN = 129;
+	/** PIN reference value for the signature PIN. It can be used as parameter for @ref PTEID_Pins::getPinByPinRef() */
 	static const unsigned long SIGN_PIN = 130;
+	/** PIN reference value for the address PIN. It can be used as parameter for @ref PTEID_Pins::getPinByPinRef() */
 	static const unsigned long ADDR_PIN = 131;
 
 	PTEIDSDK_API virtual ~PTEID_Pin();				/**< Destructor */
