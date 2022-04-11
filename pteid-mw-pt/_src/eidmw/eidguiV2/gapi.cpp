@@ -55,13 +55,15 @@ GAPI::GAPI(QObject *parent) :
     image_provider = new PhotoImageProvider();
     image_provider_pdf = new PDFPreviewImageProvider();
 
-    PTEID_CMDSignatureClient::setCredentials(EIDGUIV2_CMD_BASIC_AUTH_USERID,
-                                             EIDGUIV2_CMD_BASIC_AUTH_PASSWORD,
-                                             EIDGUIV2_CMD_BASIC_AUTH_APPID);
+	//Get the configured CMD account details
+	std::string cmd_user_id =  CMDCredentials::getCMDBasicAuthUserId(EIDGUIV2_CMD_BASIC_AUTH_USERID);
+	std::string cmd_password = CMDCredentials::getCMDBasicAuthPassword(EIDGUIV2_CMD_BASIC_AUTH_PASSWORD);
+	std::string cmd_app_id =   CMDCredentials::getCMDBasicAuthAppId(EIDGUIV2_CMD_BASIC_AUTH_APPID);
+
+	PTEID_CMDSignatureClient::setCredentials(cmd_user_id.c_str(), cmd_password.c_str(), cmd_app_id.c_str());
+
 #ifdef WIN32
-    m_cmdCertificates =  new eIDMW::CMDCertificates(CMDCredentials::getCMDBasicAuthUserId(EIDGUIV2_CMD_BASIC_AUTH_USERID),
-                                                    CMDCredentials::getCMDBasicAuthPassword(EIDGUIV2_CMD_BASIC_AUTH_PASSWORD),
-                                                    CMDCredentials::getCMDBasicAuthAppId(EIDGUIV2_CMD_BASIC_AUTH_APPID));
+    m_cmdCertificates =  new eIDMW::CMDCertificates(cmd_user_id.c_str(), cmd_password.c_str(), cmd_app_id.c_str());                                                   
 #endif
     m_addressLoaded = false;
     m_shortcutFlag = ShortcutIdNone;
