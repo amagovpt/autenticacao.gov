@@ -388,11 +388,16 @@ namespace eIDMW
         /* Look for root in eidstore folder: get top cert in cmdStore chain
             and look for issuer in eidstore. */
         APL_Certifs eidstore;
-        APL_Certif *topCert = cmdStore->getCert(0);
-        while (topCert->getIssuer() != NULL)
+        APL_Certif *topCert = cmdStore->getCert(0), *issuer = NULL;
+
+        while ((issuer = topCert->getIssuer()) != NULL && issuer != topCert)
         {
-            topCert = topCert->getIssuer();
+            topCert = issuer;
         }
+		// Do we really need to add another cert from eidstore? 
+		// If we already received a root cert in certs vector we don't...
+		if (issuer == topCert)
+			return;
 
         for (size_t i = 0; i < eidstore.countAll(); i++)
         {
