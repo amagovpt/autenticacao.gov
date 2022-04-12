@@ -546,31 +546,29 @@ namespace eIDMW
 
 		//Default value of language config is PT
 		if (wcscmp(config_language.getWString(),
-			      CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE.csDefault) == 0)
+			CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE.csDefault) == 0) {
 			isLangPT = true;
+		}
 
 		GooString *outputName;
 		outputName = new GooString(outfile_path);
 
 		if (!doc->isOk()) {
-			fprintf(stderr, "Poppler returned error loading PDF document %s\n",
-					doc->getFileName()->getCString());
-
+			MWLOG(LEV_ERROR, MOD_APL, "Error loading PDF document. Malformed or corrupted PDF file!");
 			delete outputName;
 			throw CMWEXCEPTION(EIDMW_PDF_INVALID_ERROR);
 		}
 
 		if (doc->isEncrypted())
 		{
-			fprintf(stderr, "Error: Encrypted PDF \n");
+			MWLOG(LEV_ERROR, MOD_APL, "Trying to sign encrypted PDF: not supported yet.");
 			delete outputName;
 			throw CMWEXCEPTION(EIDMW_PDF_UNSUPPORTED_ERROR);
 		}
 	
 		if (m_page > (unsigned int)doc->getNumPages())
 		{
-			fprintf(stderr, "Error: Signature Page %u is out of bounds for document %s",
-				m_page, doc->getFileName()->getCString());
+			MWLOG(LEV_ERROR, MOD_APL, "Signature Page %u is out of bounds for PDF file", m_page);
 			throw CMWEXCEPTION(EIDMW_PDF_INVALID_PAGE_ERROR);
 		}
 
@@ -580,7 +578,7 @@ namespace eIDMW
 
 		if (p == NULL)
 		{
-			fprintf(stderr, "Failed to get page from PDFDoc object\n");
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to get page from PDFDoc object!");
 			throw CMWEXCEPTION(EIDMW_PDF_INVALID_PAGE_ERROR);
 		}
 
