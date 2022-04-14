@@ -431,7 +431,9 @@ namespace eIDMW
 		PDFSignature * my_clone = new PDFSignature();
 		//Copy all the original signature members other than m_files_to_sign
 		my_clone->setSignatureLevel(m_level);
-		my_clone->setVisibleCoordinates(m_page, location_x, location_y);
+		if (m_visible) {
+			my_clone->setVisibleCoordinates(m_page, location_x, location_y);
+		}
 		//TODO: Using deep-copy of the image data is not ideal...
 		if (my_custom_image.img_data != NULL)
 			my_clone->setCustomImage(my_custom_image.img_data, my_custom_image.img_length);
