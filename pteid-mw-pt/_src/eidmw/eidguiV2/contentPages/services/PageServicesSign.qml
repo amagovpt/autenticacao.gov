@@ -1924,12 +1924,8 @@ PageServicesSignForm {
                 loadedFilePaths.push(filesModel.get(fileIndex).fileUrl)
             }
 
-            var page = 1
-            if (propertyCheckLastPage.checked) {
-                page = 0 // Sign last page in all documents
-            } else {
-                page = propertySpinBoxControl.value
-            }
+            var page = propertySpinBoxControl.value
+            var isLastPage = propertyCheckLastPage.checked
 
             var reason = ""
             if (typeof propertyTextFieldReason !== "undefined")
@@ -1965,7 +1961,7 @@ PageServicesSignForm {
                     coord_y, reason, location, isTimestamp, isLTV)
             } else {
                 gapi.signCMD(loadedFilePaths, outputFile, page, coord_x, coord_y, reason, location, isTimestamp,
-                    isLTV,isSmallSignature)
+                    isLTV,isSmallSignature, isLastPage)
             }
         } else {
             propertyOutputSignedFile = outputFile;

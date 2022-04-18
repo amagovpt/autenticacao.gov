@@ -429,15 +429,19 @@ namespace eIDMW
 			return NULL;
 
 		PDFSignature * my_clone = new PDFSignature();
+		char * input_file = m_files_to_sign.at(batch_index).first;
 		//Copy all the original signature members other than m_files_to_sign
 		my_clone->setSignatureLevel(m_level);
 		if (m_visible) {
-			my_clone->setVisibleCoordinates(m_page, location_x, location_y);
+			//Apply last-page flag
+			int current_file_page = m_files_to_sign.at(batch_index).second ? getOtherPageCount(input_file) : m_page;
+			
+			my_clone->setVisibleCoordinates(current_file_page, location_x, location_y);
 		}
 		//TODO: Using deep-copy of the image data is not ideal...
 		if (my_custom_image.img_data != NULL)
 			my_clone->setCustomImage(my_custom_image.img_data, my_custom_image.img_length);
-		my_clone->setFile(m_files_to_sign.at(batch_index).first);
+		my_clone->setFile(input_file);
 
 		return my_clone;
 	}

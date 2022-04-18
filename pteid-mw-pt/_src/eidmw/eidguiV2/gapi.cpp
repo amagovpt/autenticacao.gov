@@ -1050,11 +1050,11 @@ void GAPI::cancelCMDSign() {
 }
 
 void GAPI::signCMD(QList<QString> loadedFilePaths, QString outputFile, int page, double coord_x,
-    double coord_y, QString reason, QString location, bool isTimestamp, bool isLTV, bool isSmall)
+    double coord_y, QString reason, QString location, bool isTimestamp, bool isLTV, bool isSmall, bool isLastPage)
 {
 
     SignParams signParams = { loadedFilePaths, outputFile, page, coord_x, coord_y, reason, location,
-        isTimestamp, isLTV, isSmall };
+        isTimestamp, isLTV, isSmall};
 
     PTEID_PDFSignature * pdf_signature = new PTEID_PDFSignature();
 
@@ -1064,7 +1064,7 @@ void GAPI::signCMD(QList<QString> loadedFilePaths, QString outputFile, int page,
     else {
         //batch signature
         for (QString filepath : loadedFilePaths) {
-            pdf_signature->addToBatchSigning((char *)getPlatformNativeString(filepath));
+            pdf_signature->addToBatchSigning((char *)getPlatformNativeString(filepath), isLastPage);
         }
     }
 
