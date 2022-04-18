@@ -133,7 +133,6 @@ namespace eIDMW
 	{
 		m_batch_mode = true;
 		m_files_to_sign.push_back(std::make_pair(_strdup(file_path), last_page));
-		m_batch_mode = true;
 
 	}
 
@@ -169,7 +168,7 @@ namespace eIDMW
 
 	}
 
-	void PDFSignature::setBatch_mode( bool batch_mode ){
+	void PDFSignature::setBatch_mode( bool batch_mode ) {
         m_batch_mode = batch_mode;
 	}
 
@@ -437,6 +436,9 @@ namespace eIDMW
 			int current_file_page = m_files_to_sign.at(batch_index).second ? getOtherPageCount(input_file) : m_page;
 			
 			my_clone->setVisibleCoordinates(current_file_page, location_x, location_y);
+			if (m_small_signature) {
+				my_clone->enableSmallSignature();
+			}
 		}
 		//TODO: Using deep-copy of the image data is not ideal...
 		if (my_custom_image.img_data != NULL)
