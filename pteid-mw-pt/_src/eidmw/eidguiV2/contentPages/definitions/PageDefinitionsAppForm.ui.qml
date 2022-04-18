@@ -1025,7 +1025,7 @@ Item {
                         anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
                         width: parent.width - 20
                         propertyText.color: debugModeStep3TextField.color
-                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP5")
+                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP5") + controler.autoTr
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_FIELD
                         propertyText.font.bold: activeFocus
