@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2017-2022 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  * Copyright (C) 2019-2020 José Pinto - <jose.pinto@caixamagica.pt>
@@ -59,7 +59,6 @@ Item {
     id: titleBar
 
     property alias propertyTitleBar: container
-    property alias propertyModeText: modeText
     property alias propertyMouseRegion: mouseRegion
 
     property variant clickPos: ""
@@ -74,32 +73,33 @@ Item {
         Item {
             width:  mainFormID.propertyMainMenuView.width
             height: parent.height
+            property string propertyTestModeText: controler.getTestMode() ?
+                "  [" + qsTr("STR_RUN_MODE") + "]" + controler.autoTr : ""
+            property string propertyDebugModeText: controler.getDebugModeValue() ?
+                "  [" + qsTr("STR_RUN_DEBUG_MODE") + "]" + controler.autoTr : ""
             Text {
                 id: categoryText
                 anchors {
                     verticalCenter: parent.verticalCenter
-                    horizontalCenter: parent.horizontalCenter
                 }
-                text: mainWindow.title
+                x: mainFormID.propertyMainMenuView.width / 2 - 60
+                text: mainWindow.title +  parent.propertyTestModeText + parent.propertyDebugModeText
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 color: "white"
+                visible: mainFormID.state == Constants.MenuState.HOME ? false : true
             }
             Text {
-                id: modeText
-                property string propertyTestModeText: controler.getTestMode() ?
-                    "  [" + qsTr("STR_RUN_MODE") + "]" + controler.autoTr : ""
-                property string propertyDebugModeText: controler.getDebugModeValue() ?
-                    "  [" + qsTr("STR_RUN_DEBUG_MODE") + "]" + controler.autoTr : ""
-
-                text: propertyTestModeText + propertyDebugModeText
-                anchors.left: categoryText.right
+                id: categoryText_home
                 anchors {
                     verticalCenter: parent.verticalCenter
+                    horizontalCenter: parent.horizontalCenter
                 }
+                text: categoryText.text
                 font.pixelSize: Constants.SIZE_TEXT_BODY
                 font.family: lato.name
                 color: "white"
+                visible: !categoryText.visible
             }
         }
 
