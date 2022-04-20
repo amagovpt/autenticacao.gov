@@ -21,7 +21,12 @@
 #include "dlgWndCmdMsg.h"
 #include "../langUtil.h"
 #include "resource.h"
-#include <Commctrl.h>
+
+#include <windows.h>
+#include <objidl.h>
+#include <gdiplus.h>
+#include <uxtheme.h>
+
 #include "dlgWndAskCmd.h"
 #include "Log.h"
 
@@ -32,17 +37,48 @@
 #define IDC_STATIC_TEXT_BOTTOM 4
 #define IDC_ANIMATION 5
 
+#define IDT_TIMER 6
+
+using namespace Gdiplus;
+
+void dlgWndCmdMsg::Paint_Animation(HWND hWnd, HDC hdc, int angle)
+{
+	const Gdiplus::Pen white_pen(Color(255, 255, 255, 255));
+
+	const Gdiplus::SolidBrush cc_lightblue_brush(Color(255, 194, 199, 227));
+	const Gdiplus::SolidBrush cc_blue_brush(Color(255, 62, 95, 172));
+	const Gdiplus::SolidBrush white_brush(Color(255, 255, 255, 255));
+	Gdiplus::Graphics graphics(hdc);
+
+	graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
+
+	//Fill white square that container the outer circle
+	//The extra DrawRectangle call is needed to avoid some unawanted black border lines at the start of the animation
+	graphics.DrawRectangle(&white_pen, img_x, img_y, outer_circle_diameter, outer_circle_diameter);
+	graphics.FillRectangle(&white_brush, img_x, img_y, outer_circle_diameter, outer_circle_diameter);
+
+	graphics.FillEllipse(&cc_lightblue_brush, img_x, img_y, outer_circle_diameter, outer_circle_diameter);
+
+	graphics.FillPie(&cc_blue_brush, img_x, img_y, outer_circle_diameter, outer_circle_diameter, angle, 45.0f);
+	//Smaller ellipse to paint white over the inner part of the circle slice
+	graphics.FillEllipse(&white_brush, img_x + 15, img_y + 15, circle_diameter, circle_diameter);
+}
+
+
 dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType msgType, const wchar_t *message, HWND Parent) : Win32Dialog(L"WndAskCmd")
 {
     std::wstring tmpTitle = L"";
     tmpTitle.append(message);
 
     type = msgType;
+	m_timer = NULL;
 
     dlgResult = DLG_OK;
 
     int Height = 360;
     int Width = 430;
+
+	GdiplusStartupInput gdiplusStartupInput;
 
     if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
     {
@@ -56,8 +92,8 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType msgType, con
         int textTopY = (int)(clientRect.bottom * 0.62);
         int imgWidth = (int)(clientRect.right * 0.25);
         int imgHeight = imgWidth;
-        int imgX = (int)((clientRect.right - imgWidth) / 2 );
-        int imgY = (int)(clientRect.bottom * 0.23);
+        img_x = (int)((clientRect.right - imgWidth) / 2 );
+        img_y = (int)(clientRect.bottom * 0.23);
         int textBottomY = (int)(clientRect.bottom * 0.70);
         int buttonWidth = (int)(clientRect.right * 0.43);
         int buttonHeight = (int)(clientRect.bottom * 0.08);
@@ -87,9 +123,10 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType msgType, con
         // ANIMATION / IMAGE
         if (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS || msgType == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL)
         {
-            hwndImage = Animate_Create(m_hWnd, IDC_ANIMATION, ACS_AUTOPLAY | ACS_CENTER | WS_CHILD, m_hInstance);
-            SetWindowPos(hwndImage, 0, imgX, imgY, imgWidth, imgHeight, SWP_NOZORDER | SWP_SHOWWINDOW);
-            Animate_Open(hwndImage, MAKEINTRESOURCE(IDR_AVI1));
+			GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+			BufferedPaintInit();
+			
+			GetClientRect(m_hWnd, &m_client_rectangle);
         }
         else if (msgType == DlgCmdMsgType::DLG_CMD_ERROR_MSG || msgType == DlgCmdMsgType::DLG_CMD_WARNING_MSG)
         {
@@ -101,7 +138,7 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType msgType, con
             }
             HWND hwndImage = CreateWindow(
                 L"STATIC", L"warning.ico", WS_CHILD | WS_VISIBLE | SS_ICON | SS_REALSIZECONTROL,
-                imgX, imgY, imgWidth, imgHeight,
+				img_x, img_y, imgWidth, imgHeight,
                 m_hWnd, (HMENU)IDI_ICON, m_hInstance, NULL);
             SendMessage(hwndImage, STM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)imageIco);
         }
@@ -140,7 +177,9 @@ dlgWndCmdMsg::~dlgWndCmdMsg()
 {
     if (type == DlgCmdMsgType::DLG_CMD_PROGRESS || type == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL)
     {
-        Animate_Close(hwndImage);
+		BufferedPaintUnInit();
+		GdiplusShutdown(gdiplusToken);
+		KillTimer(m_hWnd, IDT_TIMER);
     }
     else
     {
@@ -149,15 +188,36 @@ dlgWndCmdMsg::~dlgWndCmdMsg()
     KillWindow();
 }
 
+void dlgWndCmdMsg::OnPaint(HWND hWnd, PAINTSTRUCT *ps, HDC hdc)
+{
+	if (hdc)
+	{
+		HDC hdcTo;
+		const RECT animation_rect = { img_x, img_y, img_x + outer_circle_diameter, img_y + outer_circle_diameter };
+
+		//This implements painting with double buffering which is essential for smooth animation rendering
+		HPAINTBUFFER paint_buffer = BeginBufferedPaint(hdc, &animation_rect, BPBF_COMPATIBLEBITMAP, NULL, &hdcTo);
+		Paint_Animation(hWnd, hdcTo, m_angle);
+		EndBufferedPaint(paint_buffer, TRUE);
+		DeleteDC(hdcTo);
+	}
+}
+
 LRESULT dlgWndCmdMsg::ProcecEvent
-(UINT		uMsg,			// Message For This Window
-WPARAM		wParam,			// Additional Message Information
-LPARAM		lParam)		// Additional Message Information
+        (UINT		uMsg,			// Message For This Window
+        WPARAM		wParam,			// Additional Message Information
+        LPARAM		lParam)		// Additional Message Information
 {
     PAINTSTRUCT ps;
+	const RECT animation_rect = { img_x, img_y, img_x + outer_circle_diameter, img_y + outer_circle_diameter };
 
     switch (uMsg)
     {
+	case WM_TIMER:
+
+		m_angle += 15;
+		InvalidateRect(m_hWnd, &animation_rect, TRUE);
+		break;
     case WM_COMMAND:
     {
         switch (LOWORD(wParam))
@@ -172,7 +232,6 @@ LPARAM		lParam)		// Additional Message Information
         }
 
     }
-
     case WM_SIZE:
     {
         MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_SIZE (wParam=%X, lParam=%X)", wParam, lParam);
@@ -197,13 +256,20 @@ LPARAM		lParam)		// Additional Message Information
 
     case WM_PAINT:
     {
-        m_hDC = BeginPaint(m_hWnd, &ps);
+        HDC paint_DC = BeginPaint(m_hWnd, &ps);
+		FillRect(paint_DC, &m_client_rectangle, (HBRUSH)GetStockObject(WHITE_BRUSH));
 
-        MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
-
-        DrawApplicationIcon(m_hDC, m_hWnd);
+        //MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
+		if (type == DlgCmdMsgType::DLG_CMD_PROGRESS || type == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL) {
+			OnPaint(m_hWnd, &ps, paint_DC);
+		}
+        DrawApplicationIcon(paint_DC, m_hWnd);
 
         EndPaint(m_hWnd, &ps);
+		DeleteDC(paint_DC);
+
+		if (!m_timer)
+			m_timer = SetTimer(m_hWnd, IDT_TIMER, ANIMATION_DURATION, (TIMERPROC)NULL);
 
         SetForegroundWindow(m_hWnd);
 

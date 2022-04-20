@@ -158,7 +158,7 @@
       <PreprocessorDefinitions>PTEID_35;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>pteidcommon.lib;psapi.lib;crypt32.lib;ComCtl32.lib;Dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pteidcommon.lib;psapi.lib;crypt32.lib;ComCtl32.lib;gdiplus.lib;uxtheme.lib;Dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -187,7 +187,7 @@
       <PreprocessorDefinitions>PTEID_35;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>pteidcommon.lib;psapi.lib;crypt32.lib;ComCtl32.lib;Dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pteidcommon.lib;psapi.lib;crypt32.lib;ComCtl32.lib;gdiplus.lib;uxtheme.lib;Dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>

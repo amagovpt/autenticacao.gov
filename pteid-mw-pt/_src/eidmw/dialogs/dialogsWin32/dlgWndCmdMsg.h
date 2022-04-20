@@ -30,9 +30,20 @@ class dlgWndCmdMsg : public Win32Dialog
 {
     PteidControls::TextData titleData, textTopData, textBottomData;
     PteidControls::ButtonData btnProcData;
+	int m_angle = 0;
+	int img_x = 0, img_y = 0;
 
-    HWND hwndImage;
+	ULONG_PTR gdiplusToken = NULL;
+	void Paint_Animation(HWND hWnd, HDC hdc, int angle);
+	void OnPaint(HWND hWnd, PAINTSTRUCT *ps, HDC hdc);
+
     HICON imageIco;
+	RECT m_client_rectangle = {0};
+	UINT_PTR m_timer;
+
+	const int circle_diameter = 100;
+	const int outer_circle_diameter = circle_diameter + 30;
+	const int ANIMATION_DURATION = 100;
 
     DlgCmdMsgType type;
 
