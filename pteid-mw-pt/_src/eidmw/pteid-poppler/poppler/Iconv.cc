@@ -56,8 +56,7 @@ utf82latin1(iconv_t conv_desc, const char * euc)
 
     len = strlen (euc);
     if (!len) {
-	fprintf (stderr, "Input string is empty.\n");
-	return (0);
+		return (0);
     }
     /* Assign enough space to put the Latin1. */
     utf8len = len;
