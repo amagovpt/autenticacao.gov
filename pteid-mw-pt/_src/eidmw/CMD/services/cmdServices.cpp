@@ -151,10 +151,13 @@ CMDServices::CMDServices(std::string basicAuthUser, std::string basicAuthPasswor
     ********************************************************* */
 CMDServices::~CMDServices() {
     soap *sp = getSoap();
-    if ( NULL == sp ) return;
 
-    soap_destroy( sp );
-    soap_end( sp );
+    if ( NULL == sp ) 
+        return;
+
+    soap_destroy(sp);
+    soap_end(sp);
+    soap_free(sp);
 
     setSoap( NULL );
 }

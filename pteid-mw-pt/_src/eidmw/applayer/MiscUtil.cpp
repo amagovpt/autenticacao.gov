@@ -361,7 +361,10 @@ int PEM_to_DER( char *pem, unsigned char **der ){
     X509 *x509 = PEM_to_X509( pem );
     if ( NULL == x509) return ((int )-1);
 
-    return X509_to_DER( x509, der );
+    int der_bytes = X509_to_DER( x509, der );
+    X509_free(x509);
+
+    return der_bytes;
 }
 
 char * certificate_subject_from_der(CByteArray & ba) {
