@@ -208,6 +208,8 @@ Catalog::~Catalog() {
   delete form;
   delete optContent;
   delete viewerPrefs;
+  if(m_sig_dict)
+    m_sig_dict->free();
   delete m_sig_dict;
   metadata.free();
   structTreeRoot.free();
@@ -258,7 +260,7 @@ unsigned int getBigRandom()
 	close(fd);
 	if (ret_read == -1)
 	{
-		fprintf(stderr, "Failed to open /dev/urandom, using rand() as fallback!\n");
+		fprintf(stderr, "Failed to read from /dev/urandom, using rand() as fallback!\n");
 		goto fallback;
 	}
 	return res;
@@ -355,9 +357,7 @@ void Catalog::addSigFieldToAcroForm(Ref *sig_ref, Ref *refFirstPage)
     {
         catDict.dictLookupNF("AcroForm", &acroForm_ref);
 
-        fprintf(stderr, "local_acroform is a dict!\n");
         setSigFlags(&local_acroForm, 3);
-
     }
 
     Object o1;
