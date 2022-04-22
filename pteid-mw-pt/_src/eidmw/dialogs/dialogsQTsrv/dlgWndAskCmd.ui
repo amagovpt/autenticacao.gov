@@ -122,9 +122,6 @@
     <property name="autoFillBackground">
      <bool>false</bool>
     </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
-    </property>
     <property name="text">
      <string>Insert associated mobile number</string>
     </property>
@@ -218,9 +215,6 @@
     </property>
     <property name="autoFillBackground">
      <bool>false</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::NoFrame</enum>
@@ -326,9 +320,6 @@
       <width>361</width>
       <height>51</height>
      </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/Resources/alpha.png);</string>
     </property>
     <property name="text">
      <string>Enter you PIN</string>
