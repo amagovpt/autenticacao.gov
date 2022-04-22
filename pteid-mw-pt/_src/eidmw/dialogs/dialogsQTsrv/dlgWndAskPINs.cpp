@@ -37,8 +37,6 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 
 	setFixedSize(this->width(), this->height());
 
-	//this->resize( 350, 280 );
-	m_UK_InputField = 0;
 	m_ulPin1MinLen = pinInfo1.ulMinLen;
 	m_ulPin2MinLen = pinInfo2.ulMinLen;
 	m_ulPin1MaxLen = pinInfo1.ulMaxLen;
@@ -105,10 +103,6 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
     ui.lblEnterYourPIN->setAccessibleName( enterYourPINText );
     ui.lblEnterYourPIN->setStyleSheet("QLabel { color : #000000; font-size:12pt; font-weight:500 }");
 
-    ui.lblPINName_2->setText( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
-    ui.lblPINName_2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Pin)) );
-    ui.lblPINName_2->setStyleSheet("QLabel { color : #3C5DBC; font-size:12pt; }");
-
     // CURRENT PIN
     if (PINName.contains("PUK"))
         ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(Puk)) );
@@ -160,8 +154,6 @@ QPushButton:hover{background-color: #2C3DAC}");
     ui.btnCancel->setStyleSheet("QPushButton {background-color: #D6D7D7; color: #3C5DBC; border-radius: 0}\
 QPushButton:hover{background-color: #C6C7C7}");
 
-    ui.fraPIN_Keypad->setVisible( false );
-
     Type_WndGeometry WndGeometry;
     if ( getWndCenterPos( pParentWndGeometry
                         , QApplication::desktop()->width(), QApplication::desktop()->height()
@@ -206,18 +198,6 @@ void dlgWndAskPINs::on_txtNewPIN2_textChanged( const QString & text )
 	updateColors(ui.txtNewPIN2, NewPIN2_OK);
 }
 
-void dlgWndAskPINs::on_txtPIN_Keypad_textChanged( const QString & text )
-{
-	if( m_UK_InputField == INPUTFIELD_OLD )
-	{
-		ui.btnOk->setEnabled( (unsigned) text.length() >= m_ulPin1MinLen );
-	}
-	else // INPUTFIELD_NEW || INPUTFIELD_CONFIRM
-	{
-		ui.btnOk->setEnabled( (unsigned) text.length() >= m_ulPin2MinLen );
-	}
-}
-
 void dlgWndAskPINs::FinalCheck()
 {
 	if( ui.txtNewPIN2->text() == ui.txtNewPIN1->text() && !ui.txtNewPIN1->text().isEmpty() )
@@ -229,13 +209,6 @@ void dlgWndAskPINs::FinalCheck()
         ui.lblError->setText( QString::fromWCharArray(GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical)) );
         ui.lblError->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical)) );
         ui.lblError->setVisible(true);
-		if( m_UseKeypad )
-		{
-			m_UK_InputField = INPUTFIELD_NEW;
-			ui.txtPIN_Keypad->clear();
-			ui.lblHeader->setText( QString::fromWCharArray(GETSTRING_DLG(RetryEnterYourNewPinCode)) );
-			ui.lblHeader->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(RetryEnterYourNewPinCode)) );
-		}
 	}
 }
 
@@ -251,9 +224,4 @@ QLineEdit:focus {border: 3px solid " + borderColor + ";}");
 	ui.btnOk->setEnabled(TestPINs());
 	ui.btnOk->setStyleSheet("QPushButton {background-color: " + buttonColor + "; color: #ffffff; border-radius: 0}\
 QPushButton:hover{background-color: #2C3DAC}");
-}
-
-void dlgWndAskPINs::on_tbtClear_clicked()
-{
-	ui.txtPIN_Keypad->clear(); 
 }

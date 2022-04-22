@@ -43,25 +43,11 @@ public:
 	std::wstring getPIN();
 
 private slots:
-	void on_tbtNUM_0_clicked();
-	void on_tbtNUM_1_clicked();
-	void on_tbtNUM_2_clicked();
-	void on_tbtNUM_3_clicked();
-	void on_tbtNUM_4_clicked();
-	void on_tbtNUM_5_clicked();
-	void on_tbtNUM_6_clicked();
-	void on_tbtNUM_7_clicked();
-	void on_tbtNUM_8_clicked();
-	void on_tbtNUM_9_clicked();
-	void on_tbtClear_clicked();
-
 	void on_txtPIN_textChanged( const QString & text );
-	void on_txtPIN_2_textChanged( const QString & text );
 
 private:
 	unsigned int m_ulPinMinLen;
 	unsigned int m_ulPinMaxLen;
-	bool m_UseKeypad;
 	Ui::dlgWndAskPINClass ui;
 	QRegExpValidator *m_PinValidator;
 };

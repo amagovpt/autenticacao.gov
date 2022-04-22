@@ -85,10 +85,6 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 	ui.lblPINName->setAccessibleName( PINName );
 	ui.lblPINName->setStyleSheet("QLabel { color : #000000; font-size:12pt; }");
 
-	ui.lblPINName_2->setText( PINName );
-	ui.lblPINName_2->setAccessibleName( PINName );
-	ui.lblPINName_2->setStyleSheet("QLabel { color : #3C5DBC; font-size:16pt; }");
-
 	// OK BUTTON
 	ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Confirm)) );
 	ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Confirm)) );
@@ -111,8 +107,6 @@ QPushButton:hover{background-color: #C6C7C7}");
 	ui.txtPIN->setStyleSheet("QLineEdit {color: #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
 QLineEdit:focus {border: 3px solid #D6D7D7;}");
 
-	m_UseKeypad = UseKeypad;
-	ui.fraPIN_Keypad->setVisible( false );
 	setFixedSize(this->width(), this->height());
 
     Type_WndGeometry WndGeometry;
@@ -135,10 +129,8 @@ dlgWndAskPIN::~dlgWndAskPIN()
 
 std::wstring dlgWndAskPIN::getPIN()
 {
-	if( m_UseKeypad )
-		return QString(ui.txtPIN_2->text()).toStdWString();
-	else
-		return QString(ui.txtPIN->text()).toStdWString();
+
+	return QString(ui.txtPIN->text()).toStdWString();
 }
 
 void dlgWndAskPIN::on_txtPIN_textChanged( const QString & text )
@@ -155,64 +147,3 @@ QLineEdit:focus {border: 3px  solid " + colorInputTextBox + ";}");
 	ui.btnOk->setStyleSheet("QPushButton {background-color: " + colorButton + "; color: #ffffff; border-radius: 0}\
 QPushButton:hover{background-color: #2C3DAC}");
 }
-
-void dlgWndAskPIN::on_txtPIN_2_textChanged( const QString & text )
-{
-	ui.btnOk->setEnabled( (unsigned) text.length() >= m_ulPinMinLen );
-}
-
-void dlgWndAskPIN::on_tbtNUM_0_clicked()
-{
-	if( (unsigned) ui.txtPIN_2->text().size() < m_ulPinMaxLen ) ui.txtPIN_2->setText( ui.txtPIN_2->text() +"0" );
-}
-
-void dlgWndAskPIN::on_tbtNUM_1_clicked()
-{
-	if( (unsigned) ui.txtPIN_2->text().size() < m_ulPinMaxLen ) ui.txtPIN_2->setText( ui.txtPIN_2->text() +"1" );
-}
-
-void dlgWndAskPIN::on_tbtNUM_2_clicked()
-{
-	if( (unsigned) ui.txtPIN_2->text().size() < m_ulPinMaxLen ) ui.txtPIN_2->setText( ui.txtPIN_2->text() +"2" );
-}
-
-void dlgWndAskPIN::on_tbtNUM_3_clicked()
-{
-	if( (unsigned) ui.txtPIN_2->text().size() < m_ulPinMaxLen ) ui.txtPIN_2->setText( ui.txtPIN_2->text() +"3" );
-}
-
-void dlgWndAskPIN::on_tbtNUM_4_clicked()
-{
-	if( (unsigned) ui.txtPIN_2->text().size() < m_ulPinMaxLen ) ui.txtPIN_2->setText( ui.txtPIN_2->text() +"4" );
-}
-
-void dlgWndAskPIN::on_tbtNUM_5_clicked()
-{
-	if( (unsigned) ui.txtPIN_2->text().size() < m_ulPinMaxLen ) ui.txtPIN_2->setText( ui.txtPIN_2->text() +"5" );
-}
-
-void dlgWndAskPIN::on_tbtNUM_6_clicked()
-{
-	if( (unsigned) ui.txtPIN_2->text().size() < m_ulPinMaxLen ) ui.txtPIN_2->setText( ui.txtPIN_2->text() +"6" );
-}
-
-void dlgWndAskPIN::on_tbtNUM_7_clicked()
-{
-	if( (unsigned) ui.txtPIN_2->text().size() < m_ulPinMaxLen ) ui.txtPIN_2->setText( ui.txtPIN_2->text() +"7" );
-}
-
-void dlgWndAskPIN::on_tbtNUM_8_clicked()
-{
-	if( (unsigned) ui.txtPIN_2->text().size() < m_ulPinMaxLen ) ui.txtPIN_2->setText( ui.txtPIN_2->text() +"8" );
-}
-
-void dlgWndAskPIN::on_tbtNUM_9_clicked()
-{
-	if( (unsigned) ui.txtPIN_2->text().size() < m_ulPinMaxLen ) ui.txtPIN_2->setText( ui.txtPIN_2->text() +"9" );
-}
-
-void dlgWndAskPIN::on_tbtClear_clicked()
-{
-	ui.txtPIN_2->clear();
-}
-

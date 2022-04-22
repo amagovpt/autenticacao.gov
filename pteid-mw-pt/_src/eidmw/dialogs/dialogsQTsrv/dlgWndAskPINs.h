@@ -61,7 +61,6 @@ private:
 	unsigned int m_ulPinMaxLen;
 	unsigned int m_ulPin2Flags;
 	bool m_UseKeypad;
-	unsigned char m_UK_InputField;
 	QRegExpValidator *m_Pin1Validator;
 	QRegExpValidator *m_Pin2Validator;
 
@@ -69,10 +68,7 @@ private slots:
 	void on_txtOldPIN_textChanged( const QString & );
 	void on_txtNewPIN1_textChanged( const QString & );
 	void on_txtNewPIN2_textChanged( const QString & );
-	void on_txtPIN_Keypad_textChanged( const QString & );
 	void FinalCheck();
-
-	void on_tbtClear_clicked();
 };
 
 #endif // DLGWNDASKPINS_H
