@@ -346,10 +346,6 @@ friend 	APL_EidFile_Address *APL_EIDCard::getFileAddress();	/**< This method mus
 
 };
 
-// Utility function to be used in the SOD verification process
-
-bool isCardExpirationDateTolerated(const char *card_expiry_date);
-
 
 /******************************************************************************//**
   * Class that represent the file containing the SOD on a PTEID card
@@ -385,8 +381,6 @@ protected:
 	  */    
 	APL_EidFile_Sod(APL_EIDCard *card);
 
-	void setCertificateValidityException(bool dontVerify) { m_certificateValidityException = dontVerify; }
-
 private:
 	APL_EidFile_Sod(const APL_EidFile_Sod& file);				/**< Copy not allowed - not implemented */
 	APL_EidFile_Sod &operator= (const APL_EidFile_Sod& file);	/**< Copy not allowed - not implemented */
@@ -404,7 +398,6 @@ private:
 	CByteArray m_pkHash;
 	CByteArray m_picHash;
 	CByteArray m_encapsulatedContent;
-	bool m_certificateValidityException;
 
 friend 	APL_EidFile_Sod *APL_EIDCard::getFileSod();	/**< This method must access protected constructor */
 };

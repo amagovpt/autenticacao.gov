@@ -868,53 +868,6 @@ void APL_EidFile_Address::MapFieldsInternal()
 	m_mappedFields = true;
 }
 
-bool isCardExpirationDateTolerated(const char *card_expiry_date) {
-     // create tm structure with 24/02/2020: the start of the expiration tolerance period
-    std::tm timeinfo = std::tm();
-    timeinfo.tm_year = 2020 - 1900;
-    timeinfo.tm_mon = 1;           // month: February
-    timeinfo.tm_mday = 24;         // day: 24th
-    std::time_t startTolerancePeriod = std::mktime (&timeinfo);
-
-    std::cmatch cm;
-    std::regex date_expression("(\\d{2}) (\\d{2}) (\\d{4})");
-
-    std::regex_match (card_expiry_date, cm, date_expression);
-
-    int day = 0, month = 0, year = 0;
-
-    for (unsigned i=0; i < cm.size(); i++) {
-       switch (i)
-       {
-          //case 0 is ignored as it matches the full regex pattern
-          case 1:
-            day = std::stoi(cm[i].str());
-            break;
-          case 2:
-            month = std::stoi(cm[i].str());
-            break;
-          case 3:
-            year = std::stoi(cm[i].str());
-            break;
-       }
-    }
-    //Check for invalid input format in card_expiry_date
-    if (day == 0 || month == 0 || year == 0) {
-    	MWLOG(LEV_ERROR, MOD_APL, "isCardExpirationDateTolerated(): invalid input date in card_expiry_date!");
-        return false;
-    }
-
-    timeinfo.tm_year = year - 1900;
-    timeinfo.tm_mon = month - 1;
-    timeinfo.tm_mday = day;
-
-    std::time_t expiryTime = std::mktime (&timeinfo);
-
-    return expiryTime >= startTolerancePeriod;
-
-}
-
-
 //Check for issuing date in "buggy" period of card production
 bool addressSODShouldBeChecked(const char * issuing_date) 
 {
@@ -1443,22 +1396,10 @@ void APL_EidFile_Address::doSODCheck(bool check){
 *****************************************************************************************/
 APL_EidFile_Sod::APL_EidFile_Sod(APL_EIDCard *card): APL_CardFile(card,PTEID_FILE_SOD,NULL)
 {
-   m_certificateValidityException = false;
 }
 
 APL_EidFile_Sod::~APL_EidFile_Sod()
 {
-}
-
-int certificateValidity_callback(int ok, X509_STORE_CTX *ctx) 
-{
-
-	int err = X509_STORE_CTX_get_error(ctx);
-    /* Tolerate certificate expiration */
-    if (err == X509_V_ERR_CERT_HAS_EXPIRED)
-        return 1;
-    /* Otherwise don't override normal behaviour */
-    return ok;
 }
 
 tCardFileStatus APL_EidFile_Sod::VerifyFile()
@@ -1482,11 +1423,9 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 
 	const unsigned char *temp = m_data.GetBytes();
 	long int len = m_data.Size();
-	temp+=4; //jump the response message template format 2" (DER type 77)
+	temp+=4; //Skip the ASN.1 Application 23 tag + 3-byte length (DER type 77)
 
 	p7 = d2i_PKCS7(NULL, (const unsigned char **)&temp, len);
-
-	//STACK_OF(X509) *pSigners = PKCS7_get0_signers(p7, NULL, 0);
 
 	X509_STORE *store = X509_STORE_new();
 
@@ -1505,12 +1444,6 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	
 	BIO *Out = BIO_new(BIO_s_mem());
 
-	if (m_certificateValidityException) {
-		MWLOG(LEV_DEBUG, MOD_APL, "Enabling certificate validation callback!");
-		X509_STORE_set_verify_cb(store, certificateValidity_callback);
-	}
-
-	//verifySOD = PKCS7_verify(p7,pSigners,store,NULL,Out,0)==1;
 	verifySOD = PKCS7_verify(p7, NULL,store,NULL,Out,0)==1;
 	if (verifySOD) {
 		unsigned char *p;
@@ -1530,7 +1463,6 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	}
 
 	X509_STORE_free(store);
-	//sk_X509_free(pSigners);
 	BIO_free_all(Out);
 	PKCS7_free(p7);
 
