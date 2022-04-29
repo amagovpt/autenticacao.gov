@@ -254,7 +254,6 @@
 				<Component Id="RootFolder" Guid="{2FB5D279-50BD-49ed-98D9-3D043520F450}">
 					<CreateFolder/>
 					<Environment Id="PATH" Action="set" Part="last" Permanent="no" System="yes" Name="PATH" Value="[APPLICATIONFOLDER]"/>
-					<Environment Id="CLASSPATH" Action="set" Part="last" Permanent="no" System="yes" Name="CLASSPATH" Value="[APPLICATIONFOLDER]"/>
 				</Component>
 
 				<Component Id="License" Guid="{C00AF621-E882-4805-BA9C-B90AA5DBBCB6}" SharedDllRefCount="yes">
