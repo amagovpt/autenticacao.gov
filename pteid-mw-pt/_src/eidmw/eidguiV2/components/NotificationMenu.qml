@@ -32,7 +32,7 @@ Item {
         height: 450
         modal: true
         anchors.centerIn: parent
-        closePolicy: Popup.NoAutoClose
+        closePolicy: hasMandatory ? Popup.NoAutoClose : Popup.CloseOnEscape
 
         ListModel {
             id: model_recent
