@@ -31,6 +31,8 @@ applayer.depends = pteid-poppler
 
 SUBDIRS += eidguiV2
 
+macx:SUBDIRS += pteid-ctk
+
 ## the subdirs have to be built in the given order
 CONFIG += ordered
 
