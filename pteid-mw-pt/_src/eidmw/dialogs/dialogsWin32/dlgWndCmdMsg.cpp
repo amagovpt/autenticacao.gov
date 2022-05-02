@@ -21,11 +21,9 @@
 #include "dlgWndCmdMsg.h"
 #include "../langUtil.h"
 #include "resource.h"
+#include "components/pteidControls.h"
 
 #include <windows.h>
-#include <objidl.h>
-#include <gdiplus.h>
-#include <uxtheme.h>
 
 #include "dlgWndAskCmd.h"
 #include "Log.h"
@@ -39,32 +37,6 @@
 
 #define IDT_TIMER 6
 
-using namespace Gdiplus;
-
-void dlgWndCmdMsg::Paint_Animation(HWND hWnd, HDC hdc, int angle)
-{
-	const Gdiplus::Pen white_pen(Color(255, 255, 255, 255));
-
-	const Gdiplus::SolidBrush cc_lightblue_brush(Color(255, 194, 199, 227));
-	const Gdiplus::SolidBrush cc_blue_brush(Color(255, 62, 95, 172));
-	const Gdiplus::SolidBrush white_brush(Color(255, 255, 255, 255));
-	Gdiplus::Graphics graphics(hdc);
-
-	graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
-
-	//Fill white square that container the outer circle
-	//The extra DrawRectangle call is needed to avoid some unawanted black border lines at the start of the animation
-	graphics.DrawRectangle(&white_pen, img_x, img_y, outer_circle_diameter, outer_circle_diameter);
-	graphics.FillRectangle(&white_brush, img_x, img_y, outer_circle_diameter, outer_circle_diameter);
-
-	graphics.FillEllipse(&cc_lightblue_brush, img_x, img_y, outer_circle_diameter, outer_circle_diameter);
-
-	graphics.FillPie(&cc_blue_brush, img_x, img_y, outer_circle_diameter, outer_circle_diameter, angle, 45.0f);
-	//Smaller ellipse to paint white over the inner part of the circle slice
-	graphics.FillEllipse(&white_brush, img_x + 15, img_y + 15, circle_diameter, circle_diameter);
-}
-
-
 dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType msgType, const wchar_t *message, HWND Parent) : Win32Dialog(L"WndAskCmd")
 {
     std::wstring tmpTitle = L"";
@@ -77,8 +49,6 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType msgType, con
 
     int Height = 360;
     int Width = 430;
-
-	GdiplusStartupInput gdiplusStartupInput;
 
     if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
     {
@@ -122,10 +92,8 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType msgType, con
 
         // ANIMATION / IMAGE
         if (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS || msgType == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL)
-        {
-			GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
-			BufferedPaintInit();
-			
+        {	
+			PteidControls::Circle_Animation_Setup(gdiplusToken);
 			GetClientRect(m_hWnd, &m_client_rectangle);
         }
         else if (msgType == DlgCmdMsgType::DLG_CMD_ERROR_MSG || msgType == DlgCmdMsgType::DLG_CMD_WARNING_MSG)
@@ -177,8 +145,7 @@ dlgWndCmdMsg::~dlgWndCmdMsg()
 {
     if (type == DlgCmdMsgType::DLG_CMD_PROGRESS || type == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL)
     {
-		BufferedPaintUnInit();
-		GdiplusShutdown(gdiplusToken);
+		PteidControls::Circle_Animation_Destroy(gdiplusToken);
 		KillTimer(m_hWnd, IDT_TIMER);
     }
     else
@@ -186,21 +153,6 @@ dlgWndCmdMsg::~dlgWndCmdMsg()
         DestroyIcon(imageIco);
     }
     KillWindow();
-}
-
-void dlgWndCmdMsg::OnPaint(HWND hWnd, PAINTSTRUCT *ps, HDC hdc)
-{
-	if (hdc)
-	{
-		HDC hdcTo;
-		const RECT animation_rect = { img_x, img_y, img_x + outer_circle_diameter, img_y + outer_circle_diameter };
-
-		//This implements painting with double buffering which is essential for smooth animation rendering
-		HPAINTBUFFER paint_buffer = BeginBufferedPaint(hdc, &animation_rect, BPBF_COMPATIBLEBITMAP, NULL, &hdcTo);
-		Paint_Animation(hWnd, hdcTo, m_angle);
-		EndBufferedPaint(paint_buffer, TRUE);
-		DeleteDC(hdcTo);
-	}
 }
 
 LRESULT dlgWndCmdMsg::ProcecEvent
@@ -261,7 +213,7 @@ LRESULT dlgWndCmdMsg::ProcecEvent
 
         //MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
 		if (type == DlgCmdMsgType::DLG_CMD_PROGRESS || type == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL) {
-			OnPaint(m_hWnd, &ps, paint_DC);
+			PteidControls::Circle_Animation_OnPaint(m_hWnd, paint_DC, &animation_rect, &ps, m_angle );
 		}
         DrawApplicationIcon(paint_DC, m_hWnd);
 

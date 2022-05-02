@@ -138,6 +138,12 @@ public:
     static HWND  CreateComboBox(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, ComboBoxData *data);
     static HWND  CreateRadioButtonGroup(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, RadioButtonGroupData *data);
 
+	/* Progress animation functions */
+	static void  Circle_Animation_Setup(ULONG_PTR gdiplusToken);
+	static void  Circle_Animation_Destroy(ULONG_PTR gdiplusToken);
+	static void  Circle_Animation_OnPaint(HWND hWnd, HDC hdc, const RECT *animation_rect, PAINTSTRUCT *ps, int angle);
+	
+
 private:
     static LRESULT CALLBACK Text_Container_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
     static LRESULT CALLBACK Hyperlink_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
@@ -149,6 +155,8 @@ private:
     static LRESULT CALLBACK ComboBox_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
     static LRESULT CALLBACK RadioButtonGroup_Container_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
     static LRESULT CALLBACK RadioButtonGroup_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
+
+	static void  Paint_Circle_Animation(HWND hWnd, HDC hdc, int circle_x, int circle_y, int outer_circle_diameter, int inner_circle_diameter, int angle);
 
     static void Font_LoadFontsFromResources(HINSTANCE hInstance);
     static BOOL Font_bFontsLoaded;

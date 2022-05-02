@@ -4,7 +4,7 @@
  * Copyright (C) 2008-2009 FedICT.
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
- * Copyright (C) 2012, 2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012, 2018-2022 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -35,6 +35,12 @@ class dlgWndPinpadInfo : public Win32Dialog
 	HFONT headerFont;
 
 	unsigned long m_ulHandle;
+
+	const int ANIMATION_DURATION = 100;
+	int animation_x, animation_y, animation_width;
+	int m_animation_angle = 0;
+	ULONG_PTR gdiplusToken;
+	UINT_PTR m_timer;
 
 public:
 	dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage usage, 

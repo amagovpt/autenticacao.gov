@@ -4,7 +4,7 @@
  * Copyright (C) 2008-2009 FedICT.
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
- * Copyright (C) 2012, 2014, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2016-2022 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2019-2020 Miguel Figueira - <miguelblcfigueira@gmail.com>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
@@ -34,7 +34,7 @@
 #define IDC_STATIC_TITLE 3
 #define IDC_STATIC_HEADER 4
 #define IDC_STATIC_WARNING 5
-#define IDC_ANIMATION 6
+#define IDT_TIMER 6
 
 dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusage, 
 		DlgPinOperation operation, const std::wstring & csReader, 
@@ -45,6 +45,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 	m_ModalHold = true;
 
 	m_ulHandle = ulHandle;
+	m_timer = NULL;
 
 	LPCTSTR warningText = GETSTRING_DLG(PinpadCanBeDisabled);
 	std::wstring tmpTitle = title;
@@ -63,10 +64,9 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 		int paddingY = (int)(clientRect.bottom * 0.05);
 		int contentWidth = (int)(clientRect.right - 2 * contentX);
 		int titleHeight = (int)(clientRect.right * 0.15);
-		int imgWidth = (int)(clientRect.right * 0.25);
-		int imgHeight = imgWidth;
-		int imgX = (int)((clientRect.right - imgWidth) / 2);
-		int imgY = (int)(clientRect.bottom * 0.18);
+		animation_width = (int)(clientRect.right * 0.25);
+	    animation_x = (int)((clientRect.right - animation_width) / 2);
+		animation_y = (int)(clientRect.bottom * 0.18);
 		int headerY = (int)(clientRect.bottom * 0.55);
 		int headerHeight = (int)(clientRect.bottom * 0.2);
 		int warningY = (int)(clientRect.bottom * 0.75);
@@ -82,9 +82,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 			m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
 
 		// ANIMATION
-		hwndAnim = Animate_Create(m_hWnd, IDC_ANIMATION, ACS_AUTOPLAY | ACS_CENTER | WS_CHILD, m_hInstance);
-		SetWindowPos(hwndAnim, 0, imgX, imgY, imgWidth, imgHeight, SWP_NOZORDER | SWP_SHOWWINDOW);
-		Animate_Open(hwndAnim, MAKEINTRESOURCE(IDR_AVI1));
+		PteidControls::Circle_Animation_Setup(gdiplusToken);
 
 		// HEADER
 		headerFont = PteidControls::CreatePteidFont(headerFontSize, FW_BOLD, m_hInstance);
@@ -111,7 +109,8 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 dlgWndPinpadInfo::~dlgWndPinpadInfo()
 {
 	DeleteObject(headerFont);
-	Animate_Close(hwndAnim);
+	PteidControls::Circle_Animation_Destroy(gdiplusToken);
+	KillTimer(m_hWnd, IDT_TIMER);
 	EnableWindow(m_parent, TRUE);
 	KillWindow( );
 }
@@ -121,9 +120,15 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 									LPARAM		lParam )		// Additional Message Information
 {
 	PAINTSTRUCT ps;
+	const RECT animation_rect = { animation_x, animation_y, animation_x + animation_width, animation_y + animation_width };
 
 	switch( uMsg )
 	{
+	case WM_TIMER:
+
+		m_animation_angle += 15;
+		InvalidateRect(m_hWnd, &animation_rect, TRUE);
+		break;
 	case WM_CTLCOLORSTATIC:
 	{
 		HDC hdcStatic = (HDC)wParam;
@@ -140,11 +145,16 @@ LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
 		{
 			m_hDC = BeginPaint( m_hWnd, &ps );
 
+			PteidControls::Circle_Animation_OnPaint(m_hWnd, m_hDC, &animation_rect, &ps, m_animation_angle);
+
 			DrawApplicationIcon(m_hDC, m_hWnd);
 
 			EndPaint( m_hWnd, &ps );
 
 			SetForegroundWindow( m_hWnd );
+
+			if (!m_timer)
+				m_timer = SetTimer(m_hWnd, IDT_TIMER, ANIMATION_DURATION, (TIMERPROC)NULL);
 
 			return 0;
 

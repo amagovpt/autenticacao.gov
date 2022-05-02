@@ -34,8 +34,6 @@ class dlgWndCmdMsg : public Win32Dialog
 	int img_x = 0, img_y = 0;
 
 	ULONG_PTR gdiplusToken = NULL;
-	void Paint_Animation(HWND hWnd, HDC hdc, int angle);
-	void OnPaint(HWND hWnd, PAINTSTRUCT *ps, HDC hdc);
 
     HICON imageIco;
 	RECT m_client_rectangle = {0};

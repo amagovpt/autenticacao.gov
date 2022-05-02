@@ -72,6 +72,9 @@
     <ClCompile Include="components\hyperlink.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="components\animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dialogs.h">

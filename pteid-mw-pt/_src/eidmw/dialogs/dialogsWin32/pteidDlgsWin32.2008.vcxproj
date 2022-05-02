@@ -201,6 +201,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\langUtil.cpp" />
+    <ClCompile Include="components\animation.cpp" />
     <ClCompile Include="components\button.cpp" />
     <ClCompile Include="components\comboBox.cpp" />
     <ClCompile Include="components\editField.cpp" />
