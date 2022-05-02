@@ -46,7 +46,8 @@ Column {
                     id: carot
 
                     anchors.left: parent.left
-                    y: Constants.SIZE_IMAGE_ARROW_ACCORDION * 0.5
+
+                    y: infoRow.expanded ? Constants.SIZE_IMAGE_ARROW_ACCORDION * 0.75 : Constants.SIZE_IMAGE_ARROW_ACCORDION * 0.5
 
                     sourceSize.width: Constants.SIZE_IMAGE_ARROW_ACCORDION
                     sourceSize.height: Constants.SIZE_IMAGE_ARROW_ACCORDION
@@ -66,6 +67,7 @@ Column {
                         left: carot.visible ? carot.right : parent.left
                         top: parent.top
                         margins: Constants.SIZE_TEXT_FIELD * 0.5
+                        leftMargin: infoRow.expanded ? 10 : Constants.SIZE_TEXT_FIELD * 0.5
                     }
                     visible: parent.visible
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
