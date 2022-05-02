@@ -148,7 +148,7 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp,
         if (m_IdValidator)
             ui.txtMobile->setValidator(m_IdValidator);
         ui.txtMobile->setFocus();
-        ui.txtMobile->setStyleSheet("QLineEdit {border: 2px solid #D6D7D7; padding-left: 10px}\
+        ui.txtMobile->setStyleSheet("QLineEdit {color: #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
     QLineEdit:focus {border: 3px solid #D6D7D7;}");
 
         std::vector<QString> countryCodeList = getCountryCallingCodeList();
@@ -178,7 +178,7 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp,
 
 
         ui.listCountryCode->setStyleSheet("QComboBox {border: 2px solid #3C5DBC; padding-left: 10px; combobox-popup: 0;\
-         selection-background-color: #D6D7D7;selection-color: #3C5DBC;}\
+         selection-background-color: #D6D7D7;selection-color: #3C5DBC; color: #000000; font-size: 12pt;}\
         QComboBox:focus {border: 3px solid #3C5DBC;}\
         QComboBox::drop-down {border: 0px; width: 20px;}\
         QComboBox::down-arrow {\
@@ -221,7 +221,7 @@ QPushButton:hover{background-color: #C6C7C7}");
     ui.txtCode->setMaxLength(m_ulCodeMaxLen);
     if (m_CodeValidator)
             ui.txtCode->setValidator(m_CodeValidator);
-    ui.txtCode->setStyleSheet("QLineEdit {border: 2px solid #D6D7D7; padding-left: 10px}\
+    ui.txtCode->setStyleSheet("QLineEdit {color: #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
 QLineEdit:focus {border: 3px solid #D6D7D7;}");
     if (!isValidateOtp)
     {
@@ -308,7 +308,7 @@ void dlgWndAskCmd::updateColors( QLineEdit* lineEdit, bool bOk )
 {
     // Update text field border color
     QString borderColor = bOk ? "#3C5DBC" : "#D6D7D7"; // blue : grey
-    lineEdit->setStyleSheet("QLineEdit {border: 2px solid " + borderColor + "; padding-left: 10px}\
+    lineEdit->setStyleSheet("QLineEdit {color: #000000; font-size: 12pt; border: 2px solid " + borderColor + "; padding-left: 10px}\
 QLineEdit:focus {border: 3px solid " + borderColor + ";}");
 
     // Update OK button enabled status and color
