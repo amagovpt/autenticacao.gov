@@ -169,7 +169,7 @@ PageCardPrintForm {
             createdSuccTitle.forceActiveFocus()
             propertyBusyIndicator.running = false
         }
-        onSignalPdfSignSucess: {
+        onSignalPdfSignSuccess: {
             // test time stamp
             if (error_code == GAPI.SignMessageTimestampFailed)
             {
