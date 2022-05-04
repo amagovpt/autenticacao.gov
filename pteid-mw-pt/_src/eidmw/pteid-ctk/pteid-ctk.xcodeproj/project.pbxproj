@@ -7,46 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C2355652767C5E900EC9F5B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2355642767C5E900EC9F5B /* AppDelegate.m */; };
 		0C7A060A2767A5A200AF8E0E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C7A06092767A5A200AF8E0E /* Cocoa.framework */; };
 		0C7A060E2767A5A200AF8E0E /* Token.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7A060D2767A5A200AF8E0E /* Token.m */; };
 		0C7A06102767A5A200AF8E0E /* TokenDriver.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7A060F2767A5A200AF8E0E /* TokenDriver.m */; };
 		0C7A06122767A5A200AF8E0E /* TokenSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7A06112767A5A200AF8E0E /* TokenSession.m */; };
-		0C7A06172767A5A200AF8E0E /* PteidToken.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0C7A06072767A5A200AF8E0E /* PteidToken.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0C964819278729540001B2E2 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 0C964818278729540001B2E2 /* en.lproj */; };
 		0CB8783727A02D18004C9802 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0CB8783327A02D18004C9802 /* Localizable.strings */; };
 		0CB8783827A02D18004C9802 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 0CB8783527A02D18004C9802 /* Localizable.stringsdict */; };
-		0CD47F9A27676EFB00816E8F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0CD47F9927676EFB00816E8F /* Assets.xcassets */; };
-		0CD47FA027676EFB00816E8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CD47F9F27676EFB00816E8F /* main.m */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		0C7A06152767A5A200AF8E0E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0CD47F7B27675EE300816E8F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0C7A06062767A5A200AF8E0E;
-			remoteInfo = PteidToken;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		0C7A06182767A5A200AF8E0E /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				0C7A06172767A5A200AF8E0E /* PteidToken.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		0C2355632767C5E900EC9F5B /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		0C2355642767C5E900EC9F5B /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		0C346DAA27A0304E00046147 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0C346DAB27A0304E00046147 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		0C7A06072767A5A200AF8E0E /* PteidToken.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PteidToken.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,11 +31,6 @@
 		0C964818278729540001B2E2 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = "<group>"; };
 		0CB8783427A02D18004C9802 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0CB8783627A02D18004C9802 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = pt; path = pt.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
-		0CD47F9427676EF900816E8F /* PteidTokenApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PteidTokenApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0CD47F9927676EFB00816E8F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		0CD47F9E27676EFB00816E8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0CD47F9F27676EFB00816E8F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		0CD47FA127676EFB00816E8F /* PteidTokenApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PteidTokenApp.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,13 +39,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C7A060A2767A5A200AF8E0E /* Cocoa.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0CD47F9127676EF900816E8F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,7 +73,6 @@
 		0CD47F7A27675EE300816E8F = {
 			isa = PBXGroup;
 			children = (
-				0CD47F9527676EF900816E8F /* PteidTokenApp */,
 				0C7A060B2767A5A200AF8E0E /* PteidToken */,
 				0C7A06082767A5A200AF8E0E /* Frameworks */,
 				0CD47F8427675EE300816E8F /* Products */,
@@ -125,23 +82,9 @@
 		0CD47F8427675EE300816E8F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0CD47F9427676EF900816E8F /* PteidTokenApp.app */,
 				0C7A06072767A5A200AF8E0E /* PteidToken.appex */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		0CD47F9527676EF900816E8F /* PteidTokenApp */ = {
-			isa = PBXGroup;
-			children = (
-				0C2355632767C5E900EC9F5B /* AppDelegate.h */,
-				0C2355642767C5E900EC9F5B /* AppDelegate.m */,
-				0CD47F9927676EFB00816E8F /* Assets.xcassets */,
-				0CD47F9E27676EFB00816E8F /* Info.plist */,
-				0CD47F9F27676EFB00816E8F /* main.m */,
-				0CD47FA127676EFB00816E8F /* PteidTokenApp.entitlements */,
-			);
-			path = PteidTokenApp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -164,25 +107,6 @@
 			productReference = 0C7A06072767A5A200AF8E0E /* PteidToken.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		0CD47F9327676EF900816E8F /* PteidTokenApp */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0CD47FA227676EFB00816E8F /* Build configuration list for PBXNativeTarget "PteidTokenApp" */;
-			buildPhases = (
-				0CD47F9027676EF900816E8F /* Sources */,
-				0CD47F9127676EF900816E8F /* Frameworks */,
-				0CD47F9227676EF900816E8F /* Resources */,
-				0C7A06182767A5A200AF8E0E /* Embed App Extensions */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				0C7A06162767A5A200AF8E0E /* PBXTargetDependency */,
-			);
-			name = PteidTokenApp;
-			productName = PteidTokenApp;
-			productReference = 0CD47F9427676EF900816E8F /* PteidTokenApp.app */;
-			productType = "com.apple.product-type.application";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -193,9 +117,6 @@
 				ORGANIZATIONNAME = agrr;
 				TargetAttributes = {
 					0C7A06062767A5A200AF8E0E = {
-						CreatedOnToolsVersion = 11.3.1;
-					};
-					0CD47F9327676EF900816E8F = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
 				};
@@ -214,7 +135,6 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0CD47F9327676EF900816E8F /* PteidTokenApp */,
 				0C7A06062767A5A200AF8E0E /* PteidToken */,
 			);
 		};
@@ -231,14 +151,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0CD47F9227676EF900816E8F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0CD47F9A27676EFB00816E8F /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -252,24 +164,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0CD47F9027676EF900816E8F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0C2355652767C5E900EC9F5B /* AppDelegate.m in Sources */,
-				0CD47FA027676EFB00816E8F /* main.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		0C7A06162767A5A200AF8E0E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0C7A06062767A5A200AF8E0E /* PteidToken */;
-			targetProxy = 0C7A06152767A5A200AF8E0E /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		0CB8783327A02D18004C9802 /* Localizable.strings */ = {
@@ -442,42 +337,6 @@
 			};
 			name = Release;
 		};
-		0CD47FA327676EFB00816E8F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = PteidTokenApp/PteidTokenApp.entitlements;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = PteidTokenApp/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = pt.cartaodecidadao.PteidTokenApp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		0CD47FA427676EFB00816E8F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = PteidTokenApp/PteidTokenApp.entitlements;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = PteidTokenApp/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = pt.cartaodecidadao.PteidTokenApp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -495,15 +354,6 @@
 			buildConfigurations = (
 				0CD47F8827675EE300816E8F /* Debug */,
 				0CD47F8927675EE300816E8F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		0CD47FA227676EFB00816E8F /* Build configuration list for PBXNativeTarget "PteidTokenApp" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0CD47FA327676EFB00816E8F /* Debug */,
-				0CD47FA427676EFB00816E8F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -10,6 +10,7 @@ BIN_DIR=$MW_SOURCE_DIR/pteid-mw-pt/_src/eidmw/bin
 JAR_DIR=$MW_SOURCE_DIR/pteid-mw-pt/_src/eidmw/jar
 EIDLIB_DIR=$MW_SOURCE_DIR/pteid-mw-pt/_src/eidmw/eidlib
 MISC_DIR=$MW_SOURCE_DIR/pteid-mw-pt/_src/eidmw/misc
+CTK_BUNDLE_DIR=$MW_SOURCE_DIR/pteid-mw-pt/_src/eidmw/pteid-ctk/build/Release
 
 PKG_DIR=$(pwd)
 
@@ -31,7 +32,7 @@ cd $LIB_DIR
 git_revision=`git rev-list --count HEAD`
 popd
 
-VERSION="3.7.0.$git_revision"
+VERSION="3.8.0.$git_revision"
 
 echo "Packaging PTEID Git revision $git_revision" 
 echo "IMPORTANT: Don't forget to update the version in apps/Info.plist and release notes in resources dir"
@@ -79,6 +80,9 @@ cp -af $BIN_DIR/../eidguiV2/*.qm "$RESOURCES_BUNDLE_DIR"
 cp  $BIN_DIR/../eidguiV2/fonts/lato/Lato-Regular.ttf "$RESOURCES_BUNDLE_DIR"
 cp  $BIN_DIR/../eidguiV2/fonts/myriad/MyriadPro-Regular.otf "$RESOURCES_BUNDLE_DIR"
 cp apps/Info.plist "$EIDGUI_BUNDLE_DIR/../"
+
+#Copy CryptoTokenKit extension
+cp -r ${CTK_BUNDLE_DIR}/PteidToken.appex ${EIDGUI_BUNDLE_DIR}/../PlugIns/
 
 cd ${PKG_DIR}/apps/
 sh ./change_paths.sh
