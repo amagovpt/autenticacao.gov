@@ -139,7 +139,7 @@ Rectangle {
                 Accessible.role: Accessible.Button
                 Accessible.name: qsTranslate("main","STR_IMAGE_LOGO_ACCESSIBLE_NAME")
                 Keys.onBacktabPressed: {
-                    mainMenuBottomListView.currentIndex = 1
+                    mainMenuBottomListView.currentIndex = mainMenuBottomListView.count - 1
                     mainMenuBottomListView.forceActiveFocus()
                 }
             }
