@@ -156,6 +156,8 @@ static void addManifest(zip_t *asic, const char **paths, int path_count)
 	XMLPlatformUtils::Initialize();
 
 	XMLCh *manifest_prefix = XMLString::transcode("manifest");
+	XMLCh *default_mime = XMLString::transcode("application/octet-stream");
+	XMLCh *asic_mime    = XMLString::transcode(MIMETYPE_ASIC_E);
 	XMLCh *manifest_ns = XMLString::transcode("urn:oasis:names:tc:opendocument:xmlns:manifest:1.0");
 
 	DOMImplementation *impl = DOMImplementationRegistry::getDOMImplementation(XMLString::transcode("Core"));
@@ -166,18 +168,21 @@ static void addManifest(zip_t *asic, const char **paths, int path_count)
 
 	DOMElement *rootElem = doc->getDocumentElement();
 
-	safeBuffer file_entry, full_path;
+	safeBuffer file_entry, full_path, media_type;
 	makeQName(file_entry, manifest_prefix, "file-entry");
 	makeQName(full_path, manifest_prefix, "full-path");
+	makeQName(media_type, manifest_prefix, "media-type");
 
 	DOMElement *first_element = doc->createElementNS(manifest_ns, file_entry.rawXMLChBuffer());
 	first_element->setAttributeNS(manifest_ns, full_path.rawXMLChBuffer(), XMLString::transcode("/"));
+	first_element->setAttributeNS(manifest_ns, media_type.rawXMLChBuffer(), asic_mime);
 	rootElem->appendChild(first_element);
 
 	for (int i = 0; i < path_count; ++i) {
 		DOMElement *element = doc->createElementNS(manifest_ns, file_entry.rawXMLChBuffer());
 		element->setAttributeNS(manifest_ns, full_path.rawXMLChBuffer(),
 			XMLString::transcode(Basename((char *)paths[i])));
+		element->setAttributeNS(manifest_ns, media_type.rawXMLChBuffer(), default_mime);
 		rootElem->appendChild(element);
 	}
 
