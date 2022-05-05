@@ -111,7 +111,7 @@
 
 namespace eIDMW
 {
-#define ASIC_NAMESPACE "http://uri.etsi.org/2918/v1.2.1#"
+#define ASIC_NAMESPACE "http://uri.etsi.org/02918/v1.2.1#"
 #define XADES_NAMESPACE "http://uri.etsi.org/01903/v1.3.2#"
 #define DSIG_NAMESPACE "http://www.w3.org/2000/09/xmldsig#"
 #define CANON_ALGORITHM "http://www.w3.org/2001/10/xml-exc-c14n#"
