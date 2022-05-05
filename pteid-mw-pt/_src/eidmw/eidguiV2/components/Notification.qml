@@ -19,6 +19,7 @@ import "../components" as Components
 import eidguiV2 1.0
 
 Item {
+    id: container
 
     property alias title: title
     property alias description: description
@@ -47,6 +48,11 @@ Item {
         font.pixelSize: Constants.SIZE_TEXT_LABEL_FOCUS
         font.family: lato.name
         color: Constants.COLOR_TEXT_BODY
+
+        Keys.enabled: true
+        KeyNavigation.tab: description
+        KeyNavigation.down: description
+        KeyNavigation.right: description
     }
 
     Label {
@@ -66,6 +72,13 @@ Item {
         font.pixelSize: Constants.SIZE_TEXT_LABEL_FOCUS
         font.bold: activeFocus
         font.family: lato.name
+
+        Keys.enabled: true
+        Keys.onTabPressed: { nextItemInFocusChain().forceActiveFocus() }
+        Keys.onDownPressed: { nextItemInFocusChain().forceActiveFocus() }
+        Keys.onRightPressed: { nextItemInFocusChain().forceActiveFocus() }
+        KeyNavigation.backtab: title
+        KeyNavigation.up: title
     }
 
     Item {
@@ -115,5 +128,11 @@ Item {
         font.family: lato.name
         font.capitalization: Font.MixedCase
         highlighted: activeFocus
+    }
+
+    onFocusChanged: {
+        if (container.focus) {
+            title.forceActiveFocus()
+        }
     }
 }

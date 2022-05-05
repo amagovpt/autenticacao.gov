@@ -25,6 +25,7 @@ Item {
 
     property bool reload: false
     property bool hasMandatory: false
+    property alias popupTitle: title
 
     Popup {
         id: notificationMenuPopup
@@ -50,7 +51,7 @@ Item {
                 width: parent.width
                 height: model.activated ? news.height + update.height + definitions_cmd.height 
                         + definitions_cache.height : Constants.SIZE_IMAGE_BOTTOM_MENU * 2 
-                color: Constants.COLOR_MAIN_SOFT_GRAY
+                color: activeFocus ? Constants.COLOR_MAIN_MIDDLE_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
                 visible: !hasMandatory || model.mandatory
                 clip: true
 
@@ -147,6 +148,10 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_LABEL_FOCUS
                         font.capitalization: Font.MixedCase
                         font.bold: activeFocus
+
+                        Keys.enabled: true
+                        Keys.onBacktabPressed: definitions_cache.description.forceActiveFocus()
+                        Keys.onUpPressed: definitions_cache.description.forceActiveFocus()
                     }
 
                     CheckBox {
@@ -165,6 +170,11 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_LABEL_FOCUS
                         font.capitalization: Font.MixedCase
                         font.bold: activeFocus
+
+                        Keys.enabled: true
+                        Keys.onTabPressed: definitions_cache.rightButton.enabled ? definitions_cache.rightButton.forceActiveFocus() : activatedCache.forceActiveFocus()
+                        Keys.onDownPressed: definitions_cache.rightButton.enabled ? definitions_cache.rightButton.forceActiveFocus() : activatedCache.forceActiveFocus()
+                        Keys.onRightPressed: definitions_cache.rightButton.enabled ? definitions_cache.rightButton.forceActiveFocus() : activatedCache.forceActiveFocus()
                     }
 
                     rightButton {
@@ -206,6 +216,61 @@ Item {
                         onClicked: goToUpdate(model.update_type, model.release_notes, model.installed_version, model.remote_version, model.url_list)
                     }
                 }
+
+                Keys.onSpacePressed: {
+                    openNotification(index, model.read, model.activated)
+                    if (model.activated) {
+                        if (update.visible) update.forceActiveFocus()
+                        else if (definitions_cmd.visible) definitions_cmd.forceActiveFocus()
+                        else if (definitions_cache.visible) definitions_cache.forceActiveFocus()
+                        else if (news.visible) news.forceActiveFocus()
+                    } else {
+                        if (!model.read && listView.count == 0) {
+                            listView_read.forceActiveFocus()
+                        } else {
+                            notification_box.forceActiveFocus()
+                        }
+                    }
+                }
+
+                Keys.onTabPressed: focusForward();
+                Keys.onDownPressed: focusForward();
+                Keys.onBacktabPressed: focusBackward();
+                Keys.onUpPressed: focusBackward();
+
+                function focusForward() {
+                    if (!model.read) {
+                        if (listView.currentIndex == listView.count - 1) {
+                            listView.currentIndex = 0
+                            read_notification_title.visible ? read_notification_title.forceActiveFocus() : popupTitle.forceActiveFocus()
+                        } else {
+                            listView.currentIndex++
+                        }
+                    } else {
+                        if (listView_read.currentIndex == listView_read.count - 1) {
+                            listView_read.currentIndex = 0
+                            popupTitle.forceActiveFocus()
+                        } else {
+                            listView_read.currentIndex++
+                        }
+                    }
+                }
+
+                function focusBackward() {
+                    if (!model.read) {
+                        if (listView.currentIndex == 0) {
+                            new_notification_title.forceActiveFocus()
+                        } else {
+                            listView.currentIndex--
+                        }
+                    } else {
+                        if (listView_read.currentIndex == 0) {
+                            read_notification_title.forceActiveFocus()
+                        } else {
+                            listView_read.currentIndex--
+                        }
+                    }
+                }
             }
         }
 
@@ -217,7 +282,7 @@ Item {
             lineHeight: 1.2
             color: Constants.COLOR_MAIN_BLUE
 
-            font.bold: true
+            font.bold: activeFocus
             font.pixelSize: Constants.SIZE_TEXT_TITLE
             font.family: lato.name
 
@@ -225,6 +290,13 @@ Item {
             anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER
             anchors.left: parent.left
             anchors.leftMargin: Constants.MARGIN_NOTIFICATION_CENTER
+
+            Keys.enabled: true
+            KeyNavigation.tab: new_notification_title.visible ? new_notification_title : read_notification_title
+            KeyNavigation.down: new_notification_title.visible ? new_notification_title : read_notification_title
+            KeyNavigation.right: new_notification_title.visible ? new_notification_title : read_notification_title
+            KeyNavigation.backtab: read_notification_title.visible ? read_notification_title : new_notification_title
+            KeyNavigation.up: read_notification_title.visible ? read_notification_title : new_notification_title
         }
 
         Image {
@@ -273,9 +345,15 @@ Item {
                 
                 anchors.top: parent.top
 
+                font.bold: activeFocus
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.capitalization: Font.MixedCase
+
+                Keys.enabled: true
+                KeyNavigation.tab: listView
+                KeyNavigation.down: listView
+                KeyNavigation.right: listView
             }
 
             ListView {
@@ -291,6 +369,9 @@ Item {
 
                 anchors.top: new_notification_title.bottom
                 anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER / 2
+
+                Keys.forwardTo: delegate
+                onFocusChanged: currentIndex = 0
             }
 
             Text {
@@ -302,9 +383,17 @@ Item {
                 anchors.top: listView.model.count > 0 ? listView.bottom : parent.top
                 anchors.topMargin: listView.model.count > 0 ? Constants.MARGIN_NOTIFICATION_CENTER * 2 : 0
 
+                font.bold: activeFocus
                 font.family: lato.name
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.capitalization: Font.MixedCase
+
+                Keys.enabled: true
+                KeyNavigation.tab: listView_read
+                KeyNavigation.down: listView_read
+                KeyNavigation.right: listView_read
+                KeyNavigation.backtab: new_notification_title.visible ? new_notification_title : popupTitle
+                KeyNavigation.up: new_notification_title.visible ? new_notification_title : popupTitle
             }
 
             ListView {
@@ -320,12 +409,16 @@ Item {
 
                 anchors.top: read_notification_title.bottom
                 anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER / 2
+
+                Keys.forwardTo: delegate
+
+                onFocusChanged: currentIndex = 0
             }
         }
 
         onOpened: {
             console.log("Notification center opened")
-            notificationMenuPopup.forceActiveFocus()
+            popupTitle.forceActiveFocus()
         }
     }
 
