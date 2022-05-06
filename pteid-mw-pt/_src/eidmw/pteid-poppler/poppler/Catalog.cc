@@ -1261,13 +1261,11 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
         char n0_commands[] = "% DSBlank\n";
 
 
-        int rect_width = rotate_signature ? rect_y : rect_x;
-        int rect_height = rotate_signature ? rect_x : rect_y;
+		int rect_width = ((rotate_signature == 90 || rotate_signature == 270) ? rect_y : rect_x);
+		int rect_height = ((rotate_signature == 90 || rotate_signature == 270) ? rect_x : rect_y);
 
         int linesAttributeProvider = 0;
         int linesReason = 0;
-
-        
 
         std::string _reason;
         if (!small_signature_format && reason != NULL && strlen(reason) > 0)
@@ -1512,8 +1510,7 @@ void Catalog::addSignatureAppearanceSCAP(Object *signature_field, SignatureSigne
         resources.dictAdd(copyString("ProcSet"), &procset);
 
         xobject_layers.initDict(xref);
-        Ref n2_layer = newXObject(n2_commands->getCString(), rotate_signature ? rect_y : rect_x, rotate_signature ? rect_x : rect_y,
-         true, true, img_data, img_length);
+        Ref n2_layer = newXObject(n2_commands->getCString(), rect_width, rect_height, true, true, img_data, img_length);
         ref_to_n2.initRef(n2_layer.num, n2_layer.gen);
         xobject_layers.dictAdd(copyString("n2"), &ref_to_n2);
 
