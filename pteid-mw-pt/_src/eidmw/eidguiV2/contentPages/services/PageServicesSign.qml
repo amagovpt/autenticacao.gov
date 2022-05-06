@@ -146,15 +146,15 @@ PageServicesSignForm {
             if ( index != -1 ){ //batch signature failed
                 var filename = Functions.fileBaseName(propertyListViewFiles.model.get(index).fileUrl)
                 signerror_dialog.propertySignFailDialogText.text =
-                    qsTranslate("PageServicesSign","STR_SIGN_BATCH_FAILED") + filename + ".<br><br>"
+                    qsTranslate("PageServicesSign","STR_SIGN_BATCH_FAILED") + filename
             }
 
             if (error_code == GAPI.SignFilePermissionFailed) {
-                signerror_dialog.propertySignFailDialogText.text += qsTranslate("PageServicesSign","STR_SIGN_FILE_PERMISSION_FAIL")
+                signerror_dialog.propertySignFailDialogGenericText.text = qsTranslate("PageServicesSign","STR_SIGN_FILE_PERMISSION_FAIL")
             } else if (error_code == GAPI.PDFFileUnsupported) {
-                signerror_dialog.propertySignFailDialogText.text += qsTranslate("PageServicesSign","STR_SIGN_PDF_FILE_UNSUPPORTED")
+                signerror_dialog.propertySignFailDialogGenericText.text = qsTranslate("PageServicesSign","STR_SIGN_PDF_FILE_UNSUPPORTED")
             } else {
-                signerror_dialog.propertySignFailDialogText.text += qsTranslate("PageServicesSign","STR_SIGN_GENERIC_ERROR") + " " + error_code
+                signerror_dialog.propertySignFailDialogGenericText.text = qsTranslate("PageServicesSign","STR_SIGN_GENERIC_ERROR") + " " + error_code
             }
             dialogSignCMD.close()
             signerror_dialog.visible = true
@@ -568,6 +568,7 @@ PageServicesSignForm {
         y: parent.height * 0.5 - signerror_dialog.height * 0.5
 
         property alias propertySignFailDialogText: text_sign_error
+        property alias propertySignFailDialogGenericText: text_sign_generic_error
 
         header: Label {
             id: titleTextError
@@ -578,33 +579,49 @@ PageServicesSignForm {
             font.bold: rectPopUpError.activeFocus
             font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
             color: Constants.COLOR_MAIN_BLUE
+
         }
         Item {
             id: rectPopUpError
-            width: signerror_dialog.availableWidth
-            height: 50
+            width: parent.width
+            height: parent.height
+
             Accessible.role: Accessible.AlertMessage
             Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
-                             + titleTextError.text + text_sign_error.text
+                             + titleTextError.text + text_sign_error.text + text_sign_generic_error
             KeyNavigation.tab: closeButtonError.visible ? closeButtonError: buttonLoadAttr
             KeyNavigation.right: closeButtonError.visible ? closeButtonError: buttonLoadAttr
             KeyNavigation.down: closeButtonError.visible ? closeButtonError: buttonLoadAttr
             KeyNavigation.backtab: closeButtonError.visible ? closeButtonError: buttonLoadAttr
             KeyNavigation.up: closeButtonError.visible ? closeButtonError: buttonLoadAttr
-            Text {
-                id: text_sign_error
-                font.pixelSize: Constants.SIZE_TEXT_LABEL
-                font.family: lato.name
-                color: Constants.COLOR_TEXT_LABEL
-                height: parent.height
-                width: parent.width - 48
-                wrapMode: Text.Wrap
+            Column{
+                spacing: 10
+                Text {
+                    id: text_sign_error
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    width: rectPopUpError.width
+                    wrapMode: Text.Wrap
+                    elide: Text.ElideRight
+                    maximumLineCount: 3
+                }
+                Text {
+                    id: text_sign_generic_error
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    width: rectPopUpError.width
+                    wrapMode: Text.Wrap
+                }
             }
+
         }
         Item {
             width: signerror_dialog.availableWidth
             height: Constants.HEIGHT_BOTTOM_COMPONENT
-            y: 80
+
+            anchors.bottom: parent.bottom
             Item {
                 width: parent.width
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
