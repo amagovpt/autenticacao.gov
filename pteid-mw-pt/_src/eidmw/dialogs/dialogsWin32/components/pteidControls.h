@@ -161,7 +161,7 @@ private:
     static void Font_LoadFontsFromResources(HINSTANCE hInstance);
     static BOOL Font_bFontsLoaded;
 
-    static void ComboBox_DrawItem(HWND hWnd, HDC hDC, RECT *rect, int index, bool hovered, bool isListItem);
+    static void ComboBox_DrawItem(HWND hWnd, HDC hDC, RECT *rect, int index, bool hovered, bool isListItem, int padding);
 
     static BOOL TextField_IsAcceptableInput(TextFieldData *textFieldData);
 };

@@ -88,6 +88,7 @@ LRESULT CALLBACK PteidControls::ComboBox_Container_Proc(HWND hWnd, UINT uMsg, WP
         {
             int itemIDx = SendMessage((HWND)lParam, (UINT)CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
             data->selectedIdx = itemIDx;
+			InvalidateRect(data->hMainWnd, NULL, TRUE);
         }
         break;
     }
@@ -122,8 +123,6 @@ LRESULT CALLBACK PteidControls::ComboBox_Container_Proc(HWND hWnd, UINT uMsg, WP
             rectContainer.top,
             rectContainer.right,
             rectContainer.bottom);
-
-        // TODO: down arrow.
 
         DeleteObject(pen);
         EndPaint(hWnd, &ps);
@@ -164,6 +163,8 @@ LRESULT CALLBACK PteidControls::ComboBox_Container_Proc(HWND hWnd, UINT uMsg, WP
         LPDRAWITEMSTRUCT lpdis = (LPDRAWITEMSTRUCT)lParam;
 
         bool isListItem = !(lpdis->itemState & ODS_COMBOBOXEDIT);
+		int padding = BORDER_WIDTH_FOCUSED;
+		ScaleDimensions(NULL, &padding);
 
         // Could not get ODS_HOTLIGHT to work but this solved:
         bool hovered = (lpdis->itemState & ODS_SELECTED)  // The item is selected in the list
@@ -176,7 +177,7 @@ LRESULT CALLBACK PteidControls::ComboBox_Container_Proc(HWND hWnd, UINT uMsg, WP
         }
         else
         {
-            ComboBox_DrawItem(lpdis->hwndItem, lpdis->hDC, &(lpdis->rcItem), lpdis->itemID, hovered, isListItem);
+            ComboBox_DrawItem(lpdis->hwndItem, lpdis->hDC, &(lpdis->rcItem), lpdis->itemID, hovered, isListItem, padding);
         }
         return TRUE;
     }
@@ -212,7 +213,7 @@ LRESULT CALLBACK PteidControls::ComboBox_Proc(HWND hWnd, UINT uMsg, WPARAM wPara
         rect.bottom -= 2 * containerPadding;
         rect.right -= 2 * containerPadding;
 
-        ComboBox_DrawItem(hWnd, hDC, &rect, data->selectedIdx, false, false);
+        ComboBox_DrawItem(hWnd, hDC, &rect, data->selectedIdx, false, false, containerPadding);
 
         EndPaint(hWnd, &ps);
         return 0;
@@ -232,7 +233,7 @@ LRESULT CALLBACK PteidControls::ComboBox_Proc(HWND hWnd, UINT uMsg, WPARAM wPara
     return DefSubclassProc(hWnd, uMsg, wParam, lParam);
 }
 
-void PteidControls::ComboBox_DrawItem(HWND hWnd, HDC hDC, RECT *rect, int index, bool hovered, bool isListItem)
+void PteidControls::ComboBox_DrawItem(HWND hWnd, HDC hDC, RECT *rect, int index, bool hovered, bool isListItem, int padding)
 {
     SetTextColor(hDC, BLACK);
     COLORREF prevBk = SetBkColor(hDC, hovered ? LIGHTBLUE :  LIGHTGREY);
@@ -245,7 +246,7 @@ void PteidControls::ComboBox_DrawItem(HWND hWnd, HDC hDC, RECT *rect, int index,
     // Calculate the vertical and horizontal position.
     TEXTMETRIC tm;
     GetTextMetrics(hDC, &tm);
-    int textY = (rect->bottom + rect->top - tm.tmHeight) / 2;
+    int textY = (rect->bottom + rect->top - tm.tmHeight - padding*2) / 2;
     int textX = LOWORD(GetDialogBaseUnits()) / 4;
 
     // Get and display the text for the list item.
