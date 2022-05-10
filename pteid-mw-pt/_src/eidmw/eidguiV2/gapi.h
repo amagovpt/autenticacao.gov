@@ -127,11 +127,22 @@ struct PrintParams {
 public:
     QString outputFile;
     bool isBasicInfo;
-    bool isAddicionalInfo;
+    bool isAdditionalInfo;
     bool isAddress;
     bool isNotes;
     bool isPrintDate;
     bool isSign;
+    
+};
+
+struct PrintParamsWithSignature {
+public:
+    PrintParamsWithSignature(PrintParams &params, bool is_timestamp, bool is_ltv) {
+        base_params = params;
+        isTimestamp = is_timestamp;
+        isLtv = is_ltv;
+    }
+    PrintParams base_params;
     bool isTimestamp;
     bool isLtv;
 };
@@ -547,7 +558,7 @@ private:
     void getAddressFile();
     void doSignPDF(SignParams &params);
     bool doSignPrintPDF(QString &file_to_sign, QString &outputsign, bool isTimestamp, bool isLtv);
-    void doPrintPDF(PrintParams &params);
+    void doPrintPDF(PrintParamsWithSignature &params);
     void doPrint(PrintParams &params);
     bool drawpdf(QPrinter &printer, PrintParams params);
     void doSignBatchPDF(SignParams &params);

@@ -1173,14 +1173,15 @@ QPixmap PhotoImageProvider::requestPixmap(const QString &id, QSize *size, const 
     return p;
 }
 
-void GAPI::startPrintPDF(QString outputFile, bool isBasicInfo, bool isAddicionalInfo,
+void GAPI::startPrintPDF(QString outputFile, bool isBasicInfo, bool isAdditionalInfo,
     bool isAddress, bool isNotes, bool isPrintDate, bool isSign, bool isTimestamp, bool isLtv) {
+    PrintParams base_params = {outputFile, isBasicInfo, isAdditionalInfo, isAddress, isNotes, isPrintDate, isSign};
 
-    PrintParams params = { outputFile, isBasicInfo, isAddicionalInfo, isAddress, isNotes, isPrintDate, isSign, isTimestamp, isLtv};
+    PrintParamsWithSignature params = { base_params, isTimestamp, isLtv};
     Concurrent::run(this, &GAPI::doPrintPDF, params);
 }
 
-void GAPI::startPrint(QString outputFile, bool isBasicInfo, bool isAddicionalInfo,
+void GAPI::startPrint(QString outputFile, bool isBasicInfo, bool isAdditionalInfo,
     bool isAddress, bool isNotes, bool isPrintDate, bool isSign) {
 
     if (QPrinterInfo::availablePrinters().size() == 0) {
@@ -1189,7 +1190,7 @@ void GAPI::startPrint(QString outputFile, bool isBasicInfo, bool isAddicionalInf
         return;
     }
 
-    PrintParams params = { outputFile, isBasicInfo, isAddicionalInfo, isAddress, isNotes, isPrintDate, isSign };
+    PrintParams params = { outputFile, isBasicInfo, isAdditionalInfo, isAddress, isNotes, isPrintDate, isSign };
 
     QPrinter printer;
     bool res = false;
@@ -1255,12 +1256,15 @@ bool GAPI::doSignPrintPDF(QString &file_to_sign, QString &outputsign, bool isTim
     return false;
 }
 
-void GAPI::doPrintPDF(PrintParams &params) {
+void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
 
-    qDebug() << "doPrintPDF! outputFile = " << params.outputFile <<
-        "isBasicInfo = " << params.isBasicInfo << "isAddicionalInfo" << params.isAddicionalInfo << "isAddress"
-        << params.isAddress << "isNotes = " << params.isNotes << "isPrintDate = " << params.isPrintDate << "isSign = " << params.isSign 
-        << "isTimestamp = " << params.isTimestamp << "isLtv = " << params.isLtv;
+    PrintParams base_params = params.base_params;
+    qDebug() << "doPrintPDF! outputFile =" << base_params.outputFile <<
+        "isBasicInfo =" << base_params.isBasicInfo << "isAdditionalInfo =" << base_params.isAdditionalInfo << "isAddress ="
+        << base_params.isAddress << "isNotes =" << base_params.isNotes << "isPrintDate =" << base_params.isPrintDate << "isSign =" << base_params.isSign;
+    if (base_params.isSign) {
+        qDebug() << "SignatureParams: " << "isTimestamp =" << params.isTimestamp << "isLtv =" << params.isLtv;
+    }
 
     QString pdffiletmp;
     QPrinter pdf_printer;
@@ -1269,15 +1273,15 @@ void GAPI::doPrintPDF(PrintParams &params) {
     bool res = false;
 
     BEGIN_TRY_CATCH;
-    if (params.isSign)
+    if (base_params.isSign)
     {
         // Print PDF Signed
         pdffiletmp = QDir::tempPath();
         pdffiletmp.append("/CartaoCidadao.pdf");
         nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
-        originalOutputFile = params.outputFile;
-        params.outputFile = nativepdftmp;
-        res = drawpdf(pdf_printer, params);
+        originalOutputFile = base_params.outputFile;
+        base_params.outputFile = nativepdftmp;
+        res = drawpdf(pdf_printer, base_params);
         if (!res)
         {
             emit signalPdfPrintFail();
@@ -1293,10 +1297,10 @@ void GAPI::doPrintPDF(PrintParams &params) {
             emit signalPdfPrintSignSucess();
     } else {
         // Print PDF not Signed
-        res = drawpdf(pdf_printer, params);
+        res = drawpdf(pdf_printer, base_params);
         if (res) {
             emit signalPdfPrintSucess();
-        }else{
+        } else{
             emit signalPdfPrintFail();
         }
     }
@@ -1416,9 +1420,9 @@ double GAPI::checkNewPageAndPrint(QPrinter &printer, QPainter &painter, double c
 
 bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
 {
-    qDebug() << "drawpdf! outputFile = " << params.outputFile <<
-        "isBasicInfo = " << params.isBasicInfo << "isAddicionalInfo" << params.isAddicionalInfo << "isAddress"
-        << params.isAddress << "isNotes = " << params.isNotes << "isPrintDate = " << params.isPrintDate << "isSign = " << params.isSign;
+    qDebug() << "drawpdf PrintParams: outputFile =" << params.outputFile <<
+        "isBasicInfo =" << params.isBasicInfo << " isAdditionalInfo =" << params.isAdditionalInfo << "isAddress ="
+        << params.isAddress << " isNotes =" << params.isNotes << " isPrintDate =" << params.isPrintDate;
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance drawpdf");
 
