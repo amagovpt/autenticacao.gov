@@ -1054,7 +1054,7 @@ void GAPI::signCMD(QList<QString> loadedFilePaths, QString outputFile, int page,
 {
 
     SignParams signParams = { loadedFilePaths, outputFile, page, coord_x, coord_y, reason, location,
-        isTimestamp, isLTV, isSmall};
+        isTimestamp, isLTV, isSmall, false};
 
     PTEID_PDFSignature * pdf_signature = new PTEID_PDFSignature();
 
@@ -1509,7 +1509,6 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
     painter.drawText(QPointF(pos_x, pos_y), tr("STR_PERSONAL_DATA"));
 
     pos_y += field_margin;
-    int circle_radius = 6 * print_scale_factor;
 
     painter.setPen(black_pen);
     //Reset font
@@ -1581,7 +1580,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
         pos_y = (std::max)(new_pos_y, pos_y + LINE_HEIGHT);
     }
 
-    if (params.isAddicionalInfo)
+    if (params.isAdditionalInfo)
     {
         //height of this section, if spacing between fields change update this value
         double min_section_height = 235 * print_scale_factor;
@@ -1770,7 +1769,7 @@ void GAPI::startSigningPDF(QString loadedFilePath, QString outputFile, int page,
     QString reason, QString location, bool isTimestamp, bool isLTV, bool isSmall) {
     //TODO: refactor startSigningPDF/startSigningBatchPDF                           
     QList<QString> loadedFilePaths = { loadedFilePath };
-    SignParams params = { loadedFilePaths, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isLTV, isSmall };
+    SignParams params = { loadedFilePaths, outputFile, page, coord_x, coord_y, reason, location, isTimestamp, isLTV, isSmall, false };
     QFuture<void> future =
         Concurrent::run(this, &GAPI::doSignPDF, params);
 
@@ -1814,7 +1813,7 @@ void GAPI::startSigningXADES(QString loadedFilePath, QString outputFile, bool is
 void GAPI::startSigningBatchXADES(QList<QString> loadedFileBatchPath, QString outputFile,
     bool isTimestamp, bool isLTV) {
 
-    SignParams params = { loadedFileBatchPath, outputFile, 0, 0, 0, "", "", isTimestamp, isLTV, 0 };
+    SignParams params = { loadedFileBatchPath, outputFile, 0, 0, 0, "", "", isTimestamp, isLTV, 0, 0 };
 
     QFuture<void> future =
         Concurrent::run(this, &GAPI::doSignBatchXADES, params);
@@ -1859,7 +1858,7 @@ void GAPI::doSignBatchXADES(SignParams &params) {
 void GAPI::startSigningXADESWithCMD(QList<QString> inputFiles, QString outputFile, 
     bool isTimestamp, bool isLTV, bool isASIC) {
 
-    SignParams params = {inputFiles, outputFile, 0, 0, 0, "", "", isTimestamp, isLTV, 0 };
+    SignParams params = {inputFiles, outputFile, 0, 0, 0, "", "", isTimestamp, isLTV, 0, 0 };
 
     QFuture<void> future = Concurrent::run(this, &GAPI::doSignXADESWithCMD, params, isASIC);
 }
