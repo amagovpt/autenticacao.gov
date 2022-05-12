@@ -265,13 +265,15 @@ int main(int argc, char *argv[])
 
         engine->addImageProvider("myimageprovider", gapi.buildImageProvider());
         engine->addImageProvider("pdfpreview_imageprovider", gapi.buildPdfImageProvider());
-
+#ifdef WIN32
+		gapi.storeQmlEngine(engine);
+#endif
         // Load translation files
         gapi.initTranslation();
         controller.initTranslation();
 
         // Load main QML file
-        engine->load(QUrl(QStringLiteral("qrc:/main.qml")));
+        engine->load(QUrl(MAIN_QML_PATH));
 
         // Each starting instance will make the running instance to restore.
         QObject::connect(

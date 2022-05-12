@@ -213,6 +213,7 @@ private:
     QMutex renderMutex;
 };
 
+const QString MAIN_QML_PATH("qrc:/main.qml");
 
 class GAPI : public QObject
 {
@@ -282,6 +283,7 @@ public:
     QQuickImageProvider * buildImageProvider() { return image_provider; }
     QQuickImageProvider * buildPdfImageProvider() { return image_provider_pdf; }
 
+	void storeQmlEngine(QQmlApplicationEngine *engine);
     PDFPreviewImageProvider * image_provider_pdf;
 
     // Do not forget to declare your class to the QML system.
@@ -412,6 +414,7 @@ public slots:
     void viewCardCertificate(QString issuedBy, QString issuedTo);
     void exportCardCertificate(QString issuedBy, QString issuedTo, QString outputPath);
     void startGetCardActivation ( void );
+	void setAppAsDlgParent(QObject *object, const QUrl &url);
 
     void initTranslation();
 
@@ -447,8 +450,6 @@ public slots:
     void quitApplication(bool restart = false);
     void forgetAllCertificates( void );
     void forgetCertificates(QString const& reader);
-
-    void setAppAsDlgParent();
 
     // used to check if a path is a directory or a file from QML
     bool isDirectory(QString path);
@@ -590,8 +591,9 @@ private:
     //Don't free this!, we release ownership to the QMLEngine in buildImageProvider()
     PhotoImageProvider *image_provider;
 
-	//TODO: remove this
-    CMDSignature *cmd_signature;
+	//Don't free this, created in main() and should live as long as the app is running
+	QQmlApplicationEngine *m_qml_engine;
+
 	PTEID_CMDSignatureClient * m_cmd_client;
     std::vector<PDFSignature *> cmd_pdfSignatures;
     ScapServices scapServices;

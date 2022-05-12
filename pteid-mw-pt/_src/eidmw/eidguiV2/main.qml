@@ -1534,7 +1534,6 @@ Load language error. Please reinstall the application"
     Component.onCompleted: {
         console.log("Window mainWindow Completed")
         mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
-        gapi.setAppAsDlgParent()
         controler.autoUpdatesCerts()
         controler.autoUpdatesNews()
         if (controler.getStartAutoupdateValue()) {

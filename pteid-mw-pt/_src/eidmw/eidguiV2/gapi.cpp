@@ -19,6 +19,7 @@
 #include <QQuickImageProvider>
 #include <QPrinter>
 #include <QPrinterInfo>
+#include <QWindow>
 #include "qpainter.h"
 
 #include "CMDSignature.h"
@@ -54,6 +55,7 @@ GAPI::GAPI(QObject *parent) :
     QObject(parent) {
     image_provider = new PhotoImageProvider();
     image_provider_pdf = new PDFPreviewImageProvider();
+	m_qml_engine = NULL;
 
 	//Get the configured CMD account details
 	std::string cmd_user_id =  CMDCredentials::getCMDBasicAuthUserId(EIDGUIV2_CMD_BASIC_AUTH_USERID);
@@ -346,7 +348,6 @@ void GAPI::verifyAuthPin(QString pin_value) {
     Concurrent::run(this, &GAPI::doVerifyAuthPin, pin_value);
 }
 unsigned int  GAPI::doVerifyAuthPin(QString pin_value) {
-    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doVerifyAuthPin");
 
@@ -374,7 +375,6 @@ void GAPI::getTriesLeftAuthPin() {
     Concurrent::run(this, &GAPI::doGetTriesLeftAuthPin);
 }
 unsigned int GAPI::doGetTriesLeftAuthPin() {
-    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doGetTriesLeftAuthPin");
 
@@ -402,7 +402,6 @@ void GAPI::verifySignPin(QString pin_value) {
     Concurrent::run(this, &GAPI::doVerifySignPin, pin_value);
 }
 unsigned int  GAPI::doVerifySignPin(QString pin_value) {
-    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doVerifySignPin");
 
@@ -430,7 +429,6 @@ void GAPI::getTriesLeftSignPin() {
     Concurrent::run(this, &GAPI::doGetTriesLeftSignPin);
 }
 unsigned int GAPI::doGetTriesLeftSignPin() {
-    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doGetTriesLeftSignPin");
 
@@ -458,7 +456,6 @@ void GAPI::verifyAddressPin(QString pin_value, bool forceVerify) {
     Concurrent::run(this, &GAPI::doVerifyAddressPin, pin_value, forceVerify);
 }
 unsigned int GAPI::doVerifyAddressPin(QString pin_value, bool forceVerify) {
-    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doVerifyAddressPin forceVerify: %s", forceVerify ? "yes": "no");
 
@@ -491,7 +488,6 @@ void GAPI::getTriesLeftAddressPin() {
     Concurrent::run(this, &GAPI::doGetTriesLeftAddressPin);
 }
 unsigned int GAPI::doGetTriesLeftAddressPin() {
-    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doGetTriesLeftAddressPin");
 
@@ -519,7 +515,6 @@ void GAPI::changeAuthPin(QString currentPin, QString newPin) {
     Concurrent::run(this, &GAPI::doChangeAuthPin, currentPin, newPin);
 }
 unsigned int GAPI::doChangeAuthPin(QString currentPin, QString newPin) {
-    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doChangeAuthPin");
 
@@ -547,7 +542,6 @@ void GAPI::changeSignPin(QString currentPin, QString newPin) {
     Concurrent::run(this, &GAPI::doChangeSignPin, currentPin, newPin);
 }
 unsigned int GAPI::doChangeSignPin(QString currentPin, QString newPin) {
-    setAppAsDlgParent();
     unsigned long tries_left = TRIES_LEFT_ERROR;
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doChangeSignPin");
 
@@ -856,6 +850,15 @@ void GAPI::changeAddress(QString process, QString secret_code)
     Concurrent::run(this, &GAPI::doChangeAddress, processUtf8, secret_codeUtf8);
 }
 
+#ifdef WIN32
+/*Store a pointer to our QMLEngine and register the signal that when triggered will register
+  the main window as parent in pteidDialogsWin32 */
+void GAPI::storeQmlEngine(QQmlApplicationEngine *engine) {
+	m_qml_engine = engine;
+	connect(m_qml_engine, SIGNAL(objectCreated(QObject *, const QUrl &)), this, SLOT(setAppAsDlgParent(QObject *, const QUrl &)));
+}
+#endif
+
 void GAPI::doSignCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams)
 {
 
@@ -1040,13 +1043,6 @@ void GAPI::signScapWithCMD(QList<QString> loadedFilePaths, QString outputFile, Q
     }
 
     Concurrent::run(this, &GAPI::doSignSCAPWithCMD, *pdf_signature, signParams, attribute_list);
-}
-
-void GAPI::doCancelCMDSign() {
-    cmd_signature->cancelRequest();
-}
-void GAPI::cancelCMDSign() {
-    Concurrent::run(this, &GAPI::doCancelCMDSign);
 }
 
 void GAPI::signCMD(QList<QString> loadedFilePaths, QString outputFile, int page, double coord_x,
@@ -2806,7 +2802,7 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
 
 void GAPI::setReaderByUser(unsigned long setReaderIndex){
 
-    qDebug() << "AppController GAPI::setReader!" << setReaderIndex;
+    qDebug() << "GAPI::setReader!" << setReaderIndex;
 
     if (setReaderIndex >= ReaderSet.readerCount()) {
         setReaderIndex = ReaderSet.readerCount() - 1;
@@ -2816,7 +2812,7 @@ void GAPI::setReaderByUser(unsigned long setReaderIndex){
 
 QVariantList GAPI::getRetReaderList()
 {
-    qDebug() << "AppController GAPI::getRetReaderList!";
+    qDebug() << "GAPI::getRetReaderList!";
 
     QVariantList list;
 
@@ -2845,7 +2841,7 @@ QVariantList GAPI::getRetReaderList()
 
 int GAPI::getReaderIndex(void)
 {
-    qDebug() << "AppController GAPI::geReaderIndex!" << selectedReaderIndex;
+    qDebug() << "GAPI::getReaderIndex!" << selectedReaderIndex;
     if (selectedReaderIndex >= 0) {
 
         return selectedReaderIndex;
@@ -3874,10 +3870,14 @@ void GAPI::forgetCertificates(QString const& reader)
 #endif
 }
 
-void GAPI::setAppAsDlgParent() {
+void GAPI::setAppAsDlgParent(QObject *object, const QUrl &url) {
 #ifdef WIN32
-    HWND appWindow = GetForegroundWindow();
-    SetApplicationWindow(appWindow);
+	QWindow* window = NULL;
+	qDebug() << "QMLEngine objectCreated event: " << url;
+	if (url.toString() == MAIN_QML_PATH && (window = qobject_cast<QWindow*>(object)) != NULL) {
+		HWND appWindow = (HWND) window->winId();
+		SetApplicationWindow(appWindow);
+    }
 #endif
 }
 
