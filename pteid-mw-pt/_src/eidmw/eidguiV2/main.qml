@@ -1226,19 +1226,33 @@ Load language error. Please reinstall the application"
                 mainFormID.propertyMainMenuListView.forceActiveFocus();
                 mainFormID.propertyMainMenuListView.currentIndex = 0;
                 mainFormID.propertyMainMenuBottomListView.currentIndex = -1;
-                    }
+            }
 
             Keys.onDownPressed: {
                 console.log("MainMenuBottom onDownPressed currentIndex:"
-                            + mainFormID.propertyMainMenuBottomListView.currentIndex)
+                     + mainFormID.propertyMainMenuBottomListView.currentIndex)
 
-                if(mainFormID.propertyMainMenuBottomListView.currentIndex ==
-                        mainFormID.propertyMainMenuBottomListView.count - 1){
+                if (mainFormID.propertyMainMenuBottomListView.currentIndex ==
+                        mainFormID.propertyMainMenuBottomListView.count - 1) {
                     console.log("Move to Main Menu")
                     mainFormID.propertyMainMenuListView.currentIndex = 0
                     mainFormID.propertyMainMenuListView.forceActiveFocus()
                     mainFormID.propertyMainMenuBottomListView.currentIndex = -1
+                } else {
+                    mainFormID.propertyMainMenuBottomListView.currentIndex++
+                }
+            }
 
+            Keys.onTabPressed: {
+                console.log("MainMenuBottom onTabPressed currentIndex:"
+                    + mainFormID.propertyMainMenuBottomListView.currentIndex)
+
+                if (mainFormID.propertyMainMenuBottomListView.currentIndex ==
+                        mainFormID.propertyMainMenuBottomListView.count - 1) {
+                    console.log("Move to Main Menu")
+                    mainFormID.propertyMainMenuListView.currentIndex = 0
+                    mainFormID.propertyMainMenuListView.forceActiveFocus()
+                    mainFormID.propertyMainMenuBottomListView.currentIndex = -1
                 } else {
                     mainFormID.propertyMainMenuBottomListView.currentIndex++
                 }
@@ -1246,13 +1260,27 @@ Load language error. Please reinstall the application"
 
             Keys.onUpPressed: {
                 console.log("MainMenuBottom onUpPressed currentIndex:"
-                            + mainFormID.propertyMainMenuBottomListView.currentIndex)
+                    + mainFormID.propertyMainMenuBottomListView.currentIndex)
 
-                if(mainFormID.propertyMainMenuBottomListView.currentIndex <=
-                        0 ){
+                if (mainFormID.propertyMainMenuBottomListView.currentIndex <= 0 ) {
                     console.log("Move to Main Menu")
                     mainFormID.propertyMainMenuListView.currentIndex =
-                            mainFormID.propertyMainMenuListView.count -1
+                        mainFormID.propertyMainMenuListView.count -1
+                    mainFormID.propertyMainMenuListView.forceActiveFocus()
+                    mainFormID.propertyMainMenuBottomListView.currentIndex = -1
+                } else {
+                    mainFormID.propertyMainMenuBottomListView.currentIndex--
+                }
+            }
+
+            Keys.onBacktabPressed: {
+                console.log("MainMenuBottom onBackTabPressed currentIndex:"
+                            + mainFormID.propertyMainMenuBottomListView.currentIndex)
+
+                if (mainFormID.propertyMainMenuBottomListView.currentIndex <= 0 ) {
+                    console.log("Move to Main Menu")
+                    mainFormID.propertyMainMenuListView.currentIndex =
+                        mainFormID.propertyMainMenuListView.count -1
                     mainFormID.propertyMainMenuListView.forceActiveFocus()
                     mainFormID.propertyMainMenuBottomListView.currentIndex = -1
                 } else {
