@@ -92,11 +92,11 @@ retry:
 		unsigned long err = GetLastError();
 		if (err == ERROR_INVALID_WINDOW_HANDLE && !retried_creation) {
 			parent = NULL; retried_creation = true;
-			MWLOG(LEV_WARN, MOD_DLG, L"  --> Win32Dialog::createWindowWithParentFallback - Retrying Window creation with NULL parent", err);
+			MWLOG(LEV_ERROR, MOD_DLG, L"  --> Win32Dialog::createWindowWithParentFallback - Retrying Window creation with NULL parent", err);
 			goto retry;
 		}
 		KillWindow();								// Reset The Display
-		MWLOG(LEV_WARN, MOD_DLG, L"  --> Win32Dialog::createWindowWithParentFallback - Window Creation Error - Error=%ld", err);
+		MWLOG(LEV_ERROR, MOD_DLG, L"  --> Win32Dialog::createWindowWithParentFallback - Window Creation Error - Error=%ld", err);
 	}
 
 	m_parent = parent;
