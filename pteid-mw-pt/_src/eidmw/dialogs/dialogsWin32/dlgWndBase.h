@@ -58,6 +58,7 @@ protected:
 						WPARAM		wParam,			// Additional Message Information
 						LPARAM		lParam );		// Additional Message Information
 	bool CreateWnd( const wchar_t* title, int width, int height, int Icon = 0 , HWND Parent = NULL );
+	
 	void KillWindow( );
 	virtual void Destroy();
 	void DrawApplicationIcon(HDC hdc, HWND hwnd);
@@ -74,6 +75,7 @@ protected:
 private:
 	wchar_t*	m_appName;				// Name of the Window Class
 	std::vector<HANDLE>		m_fonthandle;
+	HWND createWindowWithParentFallback(DWORD dwExStyle, const wchar_t * title, DWORD dwStyle, int X, int Y, int nWidth, int nHeight, HWND parent);
 
 };
 

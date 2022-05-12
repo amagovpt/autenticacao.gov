@@ -78,6 +78,32 @@ Win32Dialog::~Win32Dialog()
 	m_ModalHold = false;
 }
 
+HWND Win32Dialog::createWindowWithParentFallback(DWORD dwExStyle, const wchar_t * title, DWORD dwStyle, int X, int Y, int nWidth, int nHeight, HWND parent)
+{
+	bool retried_creation = false;
+	HWND new_window = NULL;
+retry:
+	if (!(new_window = CreateWindowEx(dwExStyle, m_appName, title, dwStyle, X, Y, nWidth, nHeight,
+		parent,
+		NULL,
+		m_hInstance,
+		NULL)))
+	{
+		unsigned long err = GetLastError();
+		if (err == ERROR_INVALID_WINDOW_HANDLE && !retried_creation) {
+			parent = NULL; retried_creation = true;
+			MWLOG(LEV_WARN, MOD_DLG, L"  --> Win32Dialog::createWindowWithParentFallback - Retrying Window creation with NULL parent", err);
+			goto retry;
+		}
+		KillWindow();								// Reset The Display
+		MWLOG(LEV_WARN, MOD_DLG, L"  --> Win32Dialog::createWindowWithParentFallback - Window Creation Error - Error=%ld", err);
+	}
+
+	m_parent = parent;
+
+	return new_window;
+}
+
 
 bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Icon, HWND Parent )
 {
@@ -127,7 +153,8 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 	//dwStyle = WS_CAPTION | WS_VISIBLE |  WS_SYSMENU | WS_OVERLAPPED;
 	dwStyle = WS_POPUP | WS_BORDER;
 
-	dwExStyle = WS_EX_LEFT | WS_EX_LTRREADING | WS_EX_WINDOWEDGE | WS_EX_TOPMOST | WS_EX_DLGMODALFRAME;
+	//dwExStyle = WS_EX_LEFT | WS_EX_LTRREADING | WS_EX_WINDOWEDGE | WS_EX_TOPMOST | WS_EX_DLGMODALFRAME;
+	dwExStyle = WS_EX_LEFT | WS_EX_LTRREADING | WS_EX_WINDOWEDGE | WS_EX_DLGMODALFRAME;
 	if( m_ModalHold )
 	{
 		dwStyle |= WS_POPUP;
@@ -140,28 +167,21 @@ bool Win32Dialog::CreateWnd( const wchar_t* title, int width, int height, int Ic
 
 	// Create The Window
     RECT parentWindow;
-    if (Parent)
+    if (Parent && IsWindow(Parent))
         GetWindowRect(Parent, &parentWindow);
     else
         parentWindow = DeskRect;
+	int X = (parentWindow.right + parentWindow.left) / 2 - (WindowRect.right - WindowRect.left) / 2;
+	int Y = (parentWindow.bottom + parentWindow.top) / 2 - (WindowRect.bottom - WindowRect.top) / 2;
+	int nWidth = WindowRect.right - WindowRect.left;
+	int nHeight = WindowRect.bottom - WindowRect.top;
     
-	if (!(m_hWnd = CreateWindowEx(dwExStyle, m_appName, title, dwStyle,
-        (parentWindow.right + parentWindow.left)/ 2 - (WindowRect.right - WindowRect.left) / 2,
-        (parentWindow.bottom + parentWindow.top)/ 2 - (WindowRect.bottom - WindowRect.top) / 2,
-		WindowRect.right - WindowRect.left,
-		WindowRect.bottom - WindowRect.top,
-		  Parent,
-		  NULL,
-		  m_hInstance,
-		  NULL)))
+	if (!(m_hWnd = createWindowWithParentFallback(dwExStyle, title, dwStyle, X, Y, nWidth, nHeight,
+		  Parent)))
 	{
-		unsigned long err = GetLastError();
-		KillWindow();								// Reset The Display
-		MWLOG(LEV_WARN, MOD_DLG, L"  --> Win32Dialog::CreateWnd - Window Creation Error - Error=%ld", err);
 		return false;
 	}
 
-	m_parent = Parent;
 	SetWindowLong(m_hWnd, GWL_STYLE, 0);  //remove all window styles, check MSDN for details
 
 	 //ShowWindow(m_hWnd, SW_SHOW);          //display window
