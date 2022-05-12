@@ -377,7 +377,7 @@ Item {
             Text {
                 id: read_notification_title
                 text: qsTranslate("main", "STR_NOTIFICATION_READ") + controler.autoTr
-                visible: listView_read.model.count > 0
+                visible: listView_read.model.count > 0 && !hasMandatory
                 color: Constants.COLOR_GRAY
                 
                 anchors.top: listView.model.count > 0 ? listView.bottom : parent.top

@@ -334,6 +334,8 @@ echo "**************************************************************************
     <None Include="components\Accordion.qml" />
     <None Include="components\Button.qml" />
     <None Include="components\DialogCMD.qml" />
+    <None Include="components\Notification.qml" />
+    <None Include="components\NotificationMenu.qml" />
     <None Include="components\PhoneCountriesCodeListModel.qml" />
     <None Include="components\Link.qml" />
     <None Include="components\TextRow.qml" />

@@ -257,6 +257,12 @@
     <None Include="contentPages\services\PageServicesSignForm.ui.qml">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="components\NotificationMenu.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="components\Notification.qml">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="gapi.h">
