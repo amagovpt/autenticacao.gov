@@ -21,13 +21,13 @@
 #include "CMDSignature.h"
 
 #ifdef WIN32
-    #define _LOG_(level, mod, format, ... ) MWLOG( level, mod, format, __FUNCTION__, __VA_ARGS__ ); 
+#define _LOG_(level, mod, format, ... ) MWLOG( level, mod, "%s: " format, __FUNCTION__, __VA_ARGS__ ); 
     #define MWLOG_ERR(format, ...   )     _LOG_(LEV_ERROR, MOD_CMD, format, __VA_ARGS__ )
     #define MWLOG_WARN(format, ...  )     _LOG_(LEV_WARN , MOD_CMD, format, __VA_ARGS__ )
     #define MWLOG_INFO(format, ...  )     _LOG_(LEV_INFO , MOD_CMD, format, __VA_ARGS__ )
     #define MWLOG_DEBUG(format, ... )     _LOG_(LEV_DEBUG, MOD_CMD, format, __VA_ARGS__ )
 #else
-    #define _LOG_(level, mod, format, ... ) MWLOG( level, mod, format, __FUNCTION__, ##__VA_ARGS__ ); 
+    #define _LOG_(level, mod, format, ... ) MWLOG( level, mod, "%s: " format, __FUNCTION__, ##__VA_ARGS__ ); 
     #define MWLOG_ERR(format, ...   )     _LOG_(LEV_ERROR, MOD_CMD, format, ##__VA_ARGS__ )
     #define MWLOG_WARN(format, ...  )     _LOG_(LEV_WARN , MOD_CMD, format, ##__VA_ARGS__ )
     #define MWLOG_INFO(format, ...  )     _LOG_(LEV_INFO , MOD_CMD, format, ##__VA_ARGS__ )

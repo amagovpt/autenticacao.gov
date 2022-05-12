@@ -22,8 +22,6 @@
 
 #define MAX_DOCNAME_LENGTH 44
 
-static char logBuf[512];
-
 namespace eIDMW
 {
 
@@ -72,7 +70,7 @@ void printData(char *msg, unsigned char *data, unsigned int dataLen)
                 cmd_proxyinfo.port = std::stol(proxyinfo.getProxyPort());
             }
             catch (...) {
-                MWLOG_ERR(logBuf, "Error parsing proxy port to number value.");
+                MWLOG_ERR("Error parsing proxy port to number value.");
             }
             if (proxyinfo.getProxyUser().size() > 0) {
                 cmd_proxyinfo.user = proxyinfo.getProxyUser();
@@ -81,8 +79,8 @@ void printData(char *msg, unsigned char *data, unsigned int dataLen)
         }
 
         if (proxyinfo.isAutoConfig() || proxyinfo.isManualConfig()){
-            MWLOG_DEBUG(logBuf, "buildProxyInfo is returning host=%s, port=%lu", cmd_proxyinfo.host.c_str(), cmd_proxyinfo.port);
-            MWLOG_DEBUG(logBuf, "buildProxyInfo proxy authentication? %s", (cmd_proxyinfo.user.size() > 0 ? "YES" : "NO"));
+            MWLOG_DEBUG("Returning host=%s, port=%lu", cmd_proxyinfo.host.c_str(), cmd_proxyinfo.port);
+            MWLOG_DEBUG("Proxy authentication? %s", (cmd_proxyinfo.user.size() > 0 ? "YES" : "NO"));
         }
         return cmd_proxyinfo;
     }
@@ -161,14 +159,14 @@ int CMDSignature::cli_getCertificate(std::string in_userId)
     m_certificates.clear();
     if (m_pdf_handlers.empty() && m_array_handler.Size() == 0)
     {
-        MWLOG_ERR(logBuf, "NULL handler");
+        MWLOG_ERR("NULL handler");
         return ERR_NULL_PDF_HANDLER;
     }
     for (size_t i = 0; i < m_pdf_handlers.size(); i++)
     {
         if (NULL == m_pdf_handlers[i])
         {
-            MWLOG_ERR(logBuf, "NULL pdf_handler");
+            MWLOG_ERR("NULL pdf_handler");
             return ERR_NULL_PDF_HANDLER;
         }
     }
@@ -180,7 +178,7 @@ int CMDSignature::cli_getCertificate(std::string in_userId)
 
     if (0 == m_certificates.size())
     {
-        MWLOG_ERR(logBuf, "getCertificate failed\n");
+        MWLOG_ERR("getCertificate failed\n");
         return ERR_GET_CERTIFICATE;
     }
 
@@ -191,7 +189,7 @@ int CMDSignature::cli_getCertificate(std::string in_userId)
             PDFSignature *pdf = m_pdf_handlers[i];
             if (NULL == pdf)
             {
-                MWLOG_ERR(logBuf, "NULL Pdf\n");
+                MWLOG_ERR("NULL Pdf\n");
                 return ERR_NULL_PDF;
             }
 
@@ -219,14 +217,14 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
 
     if (m_pdf_handlers.empty() && m_array_handler.Size() == 0)
     {
-        MWLOG_ERR(logBuf, "NULL handler");
+        MWLOG_ERR("NULL handler");
         return ERR_NULL_PDF_HANDLER;
     }
     for (size_t i = 0; i < m_pdf_handlers.size(); i++)
     {
         if (NULL == m_pdf_handlers[i])
         {
-            MWLOG_ERR(logBuf, "NULL pdf_handler");
+            MWLOG_ERR("NULL pdf_handler");
             return ERR_NULL_PDF_HANDLER;
         }
     }
@@ -260,7 +258,7 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
             PDFSignature *pdf = m_pdf_handlers[i];
             if (NULL == pdf)
             {
-                MWLOG_ERR(logBuf, "NULL Pdf\n");
+                MWLOG_ERR("NULL Pdf\n");
                 return ERR_NULL_PDF;
             }
             /* Calculate hash */
@@ -322,7 +320,7 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
 
     if (0 == hashByteArray.Size())
     {
-        MWLOG_ERR(logBuf, "getHash failed\n");
+        MWLOG_ERR("getHash failed\n");
         return ERR_GET_HASH;
     }
 
@@ -343,7 +341,7 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin)
 
     if (ret != ERR_NONE)
     {
-        MWLOG_ERR(logBuf, "CMDSignature - Error @ sendDataToSign()");
+        MWLOG_ERR("CMDSignature - Error @ sendDataToSign()");
         return ret;
     }
 
@@ -453,7 +451,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
     }
     cmdService = new CMDServices(m_basicAuthUser, m_basicAuthPassword, m_applicationId);
     m_proxyInfo = proxyinfo;
-
+	MWLOG(LEV_DEBUG, MOD_CMD, L"Requesting GetCertificate endpoint");
     int ret = cli_getCertificate(in_userId);
     if (ret != ERR_NONE)
         return ret;
@@ -489,7 +487,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
 
             if (ret != ERR_NONE)
             {
-                MWLOG_ERR(logBuf, "PDFSignature::signFiles failed: %d", ret);
+                MWLOG_ERR("PDFSignature::signFiles failed: %d", ret);
                 error = ERR_SIGN_PDF;
             }
         }
@@ -505,7 +503,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
                       (unsigned char *)m_docname_handle.c_str(), m_docname_handle.size());
         }
     }
-
+	MWLOG(LEV_DEBUG, MOD_CMD, L"Requesting CCMovelSign endpoint");
     ret = cli_sendDataToSign(in_pin);
     return ret;
 }
@@ -515,14 +513,14 @@ int CMDSignature::cli_getSignatures(std::string in_code,
 {
     if (m_pdf_handlers.empty() && m_array_handler.Size() == 0)
     {
-        MWLOG_ERR(logBuf, "NULL pdf_handlers");
+        MWLOG_ERR("NULL pdf_handlers");
         return ERR_NULL_PDF_HANDLER;
     }
     for (size_t i = 0; i < m_pdf_handlers.size(); i++)
     {
         if (NULL == m_pdf_handlers[i])
         {
-            MWLOG_ERR(logBuf, "NULL pdf_handler");
+            MWLOG_ERR("NULL pdf_handler");
             return ERR_NULL_PDF_HANDLER;
         }
     }
@@ -644,7 +642,7 @@ int CMDSignature::signClose(std::string in_code)
             if (ret != ERR_NONE)
             {
                 ret_had_errors = ret;
-                MWLOG_ERR(logBuf, "SignClose failed");
+                MWLOG_ERR("SignClose failed");
             }
             if (isDBG)
             {

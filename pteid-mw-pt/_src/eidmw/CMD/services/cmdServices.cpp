@@ -83,7 +83,7 @@ class CMDSignatureGsoapProxy: public BasicHttpBinding_USCORECCMovelSignatureProx
 
                 sp->proxy_host = _strdup(p.host.c_str());
                 sp->proxy_port = p.port;
-                MWLOG_DEBUG("CMDSignature - Using proxy: host=%s, port=%ld", sp->proxy_host, sp->proxy_port);
+                MWLOG_DEBUG("Using proxy: host=%s, port=%ld", sp->proxy_host, sp->proxy_port);
 
                 if (p.user.size() > 0)
                 {
@@ -1173,6 +1173,8 @@ int CMDServices::getSignatures(CMDProxyInfo proxyInfo, std::string in_code, std:
         signLen.push_back(0);
         sign.push_back(NULL);
     }
+
+	MWLOG(LEV_DEBUG, MOD_CMD, L"Requesting ValidateOtp endpoint");
     int ret = ValidateOtp(proxyInfo, in_code, &sign, &signLen );
 
     if ( ret != ERR_NONE ){
