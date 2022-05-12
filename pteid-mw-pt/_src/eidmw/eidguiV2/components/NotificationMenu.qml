@@ -238,6 +238,10 @@ Item {
                 Keys.onBacktabPressed: focusBackward();
                 Keys.onUpPressed: focusBackward();
 
+                Accessible.role: Accessible.ListItem
+                Accessible.name: qsTranslate("main", "STR_NOTIFICATION")
+                Accessible.description: qsTranslate("main", "STR_SPACE_TO_OPEN_NOTIFICATION") + controler.autoTr
+
                 function focusForward() {
                     if (!model.read) {
                         if (listView.currentIndex == listView.count - 1) {
@@ -297,6 +301,9 @@ Item {
             KeyNavigation.right: new_notification_title.visible ? new_notification_title : read_notification_title
             KeyNavigation.backtab: read_notification_title.visible ? read_notification_title : new_notification_title
             KeyNavigation.up: read_notification_title.visible ? read_notification_title : new_notification_title
+
+            Accessible.role: Accessible.StaticText
+            Accessible.name: text
         }
 
         Image {
@@ -311,6 +318,9 @@ Item {
 
             anchors.top: title.top
             anchors.right: notificationArea.right
+
+            Accessible.role: Accessible.Button
+            Accessible.name: qsTranslate("main", "STR_CLOSE") + controler.autoTr
         }
 
         MouseArea {
@@ -354,6 +364,9 @@ Item {
                 KeyNavigation.tab: listView
                 KeyNavigation.down: listView
                 KeyNavigation.right: listView
+
+                Accessible.role: Accessible.StaticText
+                Accessible.name: text
             }
 
             ListView {
@@ -365,13 +378,13 @@ Item {
                 delegate: delegate
                 focus: true
                 spacing: 6
-                interactive: false
 
                 anchors.top: new_notification_title.bottom
                 anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER / 2
 
                 Keys.forwardTo: delegate
                 onFocusChanged: currentIndex = 0
+
             }
 
             Text {
@@ -394,6 +407,9 @@ Item {
                 KeyNavigation.right: listView_read
                 KeyNavigation.backtab: new_notification_title.visible ? new_notification_title : popupTitle
                 KeyNavigation.up: new_notification_title.visible ? new_notification_title : popupTitle
+
+                Accessible.role: Accessible.StaticText
+                Accessible.name: text
             }
 
             ListView {
@@ -405,7 +421,6 @@ Item {
                 delegate: delegate
                 focus: true
                 spacing: 6
-                interactive: false
 
                 anchors.top: read_notification_title.bottom
                 anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER / 2

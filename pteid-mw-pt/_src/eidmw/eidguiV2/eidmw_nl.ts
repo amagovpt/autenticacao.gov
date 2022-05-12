@@ -567,6 +567,10 @@
         <source>STR_MENU_ABOUT</source>
         <translation>Acerca</translation>
     </message>
+    <message>
+        <source>STR_MENU_NOTIFICATIONS</source>
+        <translation>Notificações</translation>
+    </message>
 </context>
 <context>
     <name>MainMenuModel</name>
@@ -2490,7 +2494,7 @@
     </message>
     <message>
         <source>STR_CLOSE</source>
-        <translation type="vanished">Fechar</translation>
+        <translation>Fechar</translation>
     </message>
     <message>
         <source>STR_NOTIFICATION_CENTER</source>
@@ -2519,6 +2523,14 @@
     <message>
         <source>STR_NOTIFICATION_UPDATE</source>
         <translation>Atualizações</translation>
+    </message>
+    <message>
+        <source>STR_NOTIFICATION</source>
+        <translation>Notificação</translation>
+    </message>
+    <message>
+        <source>STR_SPACE_TO_OPEN_NOTIFICATION</source>
+        <translation>Pressione espaço para abrir a notificação</translation>
     </message>
 </context>
 </TS>

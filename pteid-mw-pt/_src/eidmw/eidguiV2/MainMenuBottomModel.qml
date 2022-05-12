@@ -73,7 +73,7 @@ ListModel {
         ]
     }
     ListElement {
-        name: ""
+        name: QT_TR_NOOP("STR_MENU_NOTIFICATIONS")
         expand: false
         imageUrl: "images/notification_icon.png"
         imageUrlSel: "images/notification_icon_selected.png"
