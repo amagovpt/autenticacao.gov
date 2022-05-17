@@ -306,7 +306,7 @@ PageServicesSignForm {
             if (error_code == GAPI.ET_CARD_REMOVED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 propertyPDFPreview.propertyDragSigSignedByNameText.text =
-                        qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + " "
+                        qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY")
                 if(gapi.getUseNumId() == true){
                     propertyPDFPreview.propertyDragSigNumIdText.text =  qsTranslate("GAPI","STR_NIC") + ": "
                 } else {
@@ -1605,7 +1605,7 @@ PageServicesSignForm {
             propertyItemOptions.height = propertyOptionsHeight
 
         propertyPDFPreview.propertyDragSigSignedByNameText.text =
-            qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + " "
+            qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY")
         if(gapi.getUseNumId() == true){
             propertyPDFPreview.propertyDragSigNumIdText.text =
                 qsTranslate("GAPI","STR_NIC") + ": "
@@ -2063,7 +2063,7 @@ PageServicesSignForm {
         var wrappedName = gapi.getWrappedText(ownerNameBackup, 
             isSCAP ? Constants.NAME_SCAP_MAX_LINES : Constants.NAME_MAX_LINES, Constants.SEAL_NAME_OFFSET)
         propertyPDFPreview.propertyDragSigSignedByNameText.text =
-            qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + " " + wrappedName.join("<br>");            
+            wrappedName.join("<br>");            
     }
 
     function updateWrappedLocation(text){

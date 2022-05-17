@@ -115,6 +115,7 @@ translations.files += eidmw_en.qm \
 
 fonts.path = $${INSTALL_DIR_BIN}/../share/pteid-mw/fonts
 fonts.files += fonts/myriad/MyriadPro-Regular.otf
+fonts.files += fonts/myriad/MyriadPro-Bold.otf
 
 INSTALLS += target translations fonts
 
