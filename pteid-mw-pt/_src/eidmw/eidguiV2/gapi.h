@@ -384,7 +384,6 @@ public slots:
 
     void changeAddress(QString process, QString secret_code);
     void doChangeAddress(const char *process, const char *secret_code);
-    void cancelCMDSign();
     void cancelCMDRegisterCert();
     void signCMD(QList<QString> loadedFilePath, QString outputFile, int page, double coord_x,
                      double coord_y, QString reason, QString location, bool isTimestamp, bool isLTV,
@@ -550,7 +549,6 @@ private:
     void removeSCAPAttributesFromCache(int scapAttrType);
     bool prepareSCAPCache(int scapAttrType);
     void getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth);
-    void doCancelCMDSign();
     void doCancelCMDRegisterCert();
     void doSignSCAP(SCAPSignParams params);
     void getPersoDataFile();
