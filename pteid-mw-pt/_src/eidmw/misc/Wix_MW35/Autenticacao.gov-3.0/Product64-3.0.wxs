@@ -217,6 +217,9 @@
 				<Component Id="MyriadFont" Guid="{A018741E-7F59-4F9F-9D6C-1CD8C47E8E3D}">
 					<File Source="..\..\..\eidguiV2\fonts\myriad\MyriadPro-Regular.otf" KeyPath="yes" />
 				</Component>
+        <Component Id="MyriadFontBold" Guid="{8EAB5A1B-F55C-4DC5-ADDD-6D3E2377BF72}">
+          <File Source="..\..\..\eidguiV2\fonts\myriad\MyriadPro-Bold.otf" KeyPath="yes" />
+        </Component>
 			</DirectoryRef>
 
 			<DirectoryRef Id="DIRECTORYCACHE">
@@ -595,6 +598,7 @@
 				<ComponentRef Id="OAuthPages"/>
 				<ComponentRef Id="LatoFont"/>
 				<ComponentRef Id="MyriadFont"/>
+        <ComponentRef Id="MyriadFontBold"/>
 
 				<ComponentRef Id="DirectoryCache"/>
 				<ComponentRef Id="License"/>
