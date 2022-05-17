@@ -537,12 +537,14 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 	eIDMW::DlgRet dlgResult;
 	try
 	{
+
+		dlgCMDMsg = new dlgWndCmdMsg(operation, msgType, message, appWindow);
+		//Signal to the calling thread that the dialog is already built
 		if (pulHandle)
 		{
 			*pulHandle = *pulHandle + 1; // This is a fix so simulate an increment in the handle
 		}
 
-		dlgCMDMsg = new dlgWndCmdMsg(operation, msgType, message, appWindow);
 		dlgCMDMsg->exec();
 		dlgResult = dlgCMDMsg->dlgResult;
 		if (dlgResult == DLG_CANCEL)

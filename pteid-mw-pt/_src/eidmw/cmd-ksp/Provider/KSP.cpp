@@ -25,6 +25,7 @@ Abstract:
 #include "../Inc/KSP.h"
 #include "../Inc/log.h"
 #include "cmdSignatureClient.h"
+#include "dialogs.h"
 #include "MWException.h"
 #include "eidErrors.h"
 #include "proxyinfo.h"
@@ -1715,6 +1716,9 @@ __in    DWORD   dwFlags)
         CMDProxyInfo cmd_proxyinfo = CMDProxyInfo::buildProxyInfo();
         bool isProxySet = cmd_proxyinfo.host.size() > 0;
 
+		//Set parent window for the user interaction dialogs
+		SetApplicationWindow(pKey->hWnd);
+
         if (!validateCert(pKey->pCert))
         {
             handleErrorAndShowDlg(isProxySet, ERR_INV_CERTIFICATE, &Status);
@@ -1737,7 +1741,6 @@ __in    DWORD   dwFlags)
             NULL,
             csSubject,
             dwSubjectLen);
-
         CMDSignatureClient::setCredentials(CMDCredentials::getCMDBasicAuthUserId(KSP_CMD_BASIC_AUTH_USERID).c_str(),
                                            CMDCredentials::getCMDBasicAuthPassword(KSP_CMD_BASIC_AUTH_PASSWORD).c_str(),
                                            CMDCredentials::getCMDBasicAuthAppId(KSP_CMD_BASIC_AUTH_APPID).c_str());

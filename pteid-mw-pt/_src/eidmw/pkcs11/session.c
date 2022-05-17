@@ -250,11 +250,11 @@ int isAcroread()
 		   )
    {
 	   fprintf(stderr, "We're being called by acroread!!\n");
-	   free(buf);//LL
+	   free(buf);
 	   return 1;
 
    }
-   free(buf);//LL
+   free(buf);
    return 0;
 
 }

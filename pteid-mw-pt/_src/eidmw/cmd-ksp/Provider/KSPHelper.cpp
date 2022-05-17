@@ -493,6 +493,9 @@ std::wstring GetApplicationName(LPSTR lpProcessName) {
     {
         return L"Microsoft Outlook";
     }
+	else if (strcmp(lpProcessName, "soffice.bin") == 0) {
+		return L"LibreOffice";
+	}
     else
     {
         std::wstring processName = utilStringWiden(lpProcessName);
@@ -509,7 +512,7 @@ std::wstring GetShortHashString(PBYTE pbHash, DWORD cbHash) {
 #define SHORT_HASH_LEN 8
     DWORD dwFlags = CRYPT_STRING_BASE64 | CRYPT_STRING_NOCRLF;
     DWORD cchHash;
-    MWLOG_DEBUG(logBuf, "pbHash=%x cbHash=%d", pbHash, cbHash);
+    MWLOG_DEBUG(logBuf, "pbHash=%p cbHash=%d", pbHash, cbHash);
     if (!CryptBinaryToStringW(
         pbHash,
         cbHash,

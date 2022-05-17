@@ -11,9 +11,12 @@
 #include <gdiplus.h>
 #include <uxtheme.h>
 
+#include "Log.h"
+
 using namespace Gdiplus;
 
 void PteidControls::Paint_Circle_Animation(HWND hWnd, HDC hdc, int circle_x, int circle_y, int outer_circle_diameter, int inner_circle_diameter, int angle) {
+
 	const Gdiplus::Pen white_pen(Color(255, 255, 255, 255));
 
 	const Gdiplus::SolidBrush cc_lightblue_brush(Color(255, 194, 199, 227));
@@ -54,11 +57,14 @@ void PteidControls::Circle_Animation_OnPaint(HWND hWnd, HDC hdc, const RECT *ani
 
 void PteidControls::Circle_Animation_Setup(ULONG_PTR gdiplusToken) {
 	GdiplusStartupInput gdiplusStartupInput;
-	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+	Status st = GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+	MWLOG(LEV_DEBUG, MOD_DLG, L"GdiPlusStartup() status=%d", st);
+
 	BufferedPaintInit();
 }
 
 void PteidControls::Circle_Animation_Destroy(ULONG_PTR gdiplusToken) {
 	BufferedPaintUnInit();
+
 	GdiplusShutdown(gdiplusToken);
 }
