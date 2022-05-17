@@ -2062,8 +2062,8 @@ PageServicesSignForm {
         
         var wrappedName = gapi.getWrappedText(ownerNameBackup, 
             isSCAP ? Constants.NAME_SCAP_MAX_LINES : Constants.NAME_MAX_LINES, Constants.SEAL_NAME_OFFSET)
-        propertyPDFPreview.propertyDragSigSignedByNameText.text =
-            wrappedName.join("<br>");            
+        propertyPDFPreview.propertyDragSigSignedByNameText.text = qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + " <b>" +
+            wrappedName.join("<br>") + "</b>";
     }
 
     function updateWrappedLocation(text){

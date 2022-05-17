@@ -346,7 +346,6 @@ Rectangle {
                         id: sigSignedByNameText
                         font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
                         font.family: myriad.name
-                        font.bold: true
                         width: parent.width
                         color: Constants.COLOR_TEXT_BODY
                         anchors.top: propertyReducedChecked ? parent.top : sigReasonText.bottom 
