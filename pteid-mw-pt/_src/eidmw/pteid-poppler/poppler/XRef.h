@@ -148,6 +148,9 @@ public:
 
   Guint getStartXRef() { return start; }
 
+  void saveSigDictOffset(int offset) { m_sig_dict_offset = offset; }
+  int getSigDictOffset() { return m_sig_dict_offset; }
+   
 
 private:
 
@@ -176,6 +179,8 @@ private:
   Guint prevXRefOffset;		// position of prev XRef section (= next to read)
   Guint mainXRefEntriesOffset;	// offset of entries in main XRef table
   GBool xRefStream;		// true if last XRef section is a stream
+
+  int m_sig_dict_offset; //file offset of the new signature dictionary after saveAs() is executed
 
   void init();
   int reserve(int newSize);

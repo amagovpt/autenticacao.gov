@@ -752,7 +752,6 @@ Ref PDFDoc::getPageRef(int page)
 
 }
 
-
 void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
 		const char * name, const char *civil_number, const char *location, const char *reason, int page, int sector,
 		bool isPTLanguage, bool isCCSignature, bool showDate, bool small_signature)
@@ -802,12 +801,8 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
 
 	long haystack = (long)mem_stream.getData();
 
-	//Start searching after the end of current file	to skip previous
-	//Sig fields
-	if (incremental_mode)
-		base_search = (char *)mem_stream.getData()+this->fileSize;
-	else
-		base_search = (char *)mem_stream.getData();
+	//Start searching at the start of the new sig dictionary object
+	base_search = (char *)mem_stream.getData() + xref->getSigDictOffset();
 
 	found = (long)memmem(base_search, mem_stream.size(),
 			       	(const void *) needle, sizeof(needle)-1);
@@ -1562,6 +1557,10 @@ void PDFDoc::saveCompleteRewrite (OutStream* outStr)
 void PDFDoc::writeDictionnary (Dict* dict, OutStream* outStr, XRef *xRef, Guint numOffset)
 {
   Object obj1;
+  //Store offset of the signature dict object
+  if (dict->isSignatureDict()) {
+    xRef->saveSigDictOffset(outStr->getPos());
+  }
   outStr->printf("<<");
   for (int i=0; i<dict->getLength(); i++) {
     GooString keyName(dict->getKey(i));
@@ -1573,10 +1572,11 @@ void PDFDoc::writeDictionnary (Dict* dict, OutStream* outStr, XRef *xRef, Guint 
   }
   if(dict->isSignatureDict())
    {
-	SignatureDict *sig = dynamic_cast<SignatureDict *>(dict);
-	char padding[100] = { 0 };
-	memset(padding, ' ', sig->getPadding());
-	outStr->printf("%s", padding);
+	 SignatureDict *sig = dynamic_cast<SignatureDict *>(dict);
+	 char padding[100] = { 0 };
+	 memset(padding, ' ', sig->getPadding());
+	 outStr->printf("%s", padding);
+
    }
   outStr->printf(">> ");
 }
