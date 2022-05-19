@@ -97,6 +97,17 @@ bool detectExpiredAttributes(std::vector<ns3__AttributeType*> selected_attribute
     return false;
 }
 
+const char * errorTranslation(long error_code) {
+	switch (error_code) {
+		case EIDMW_TIMESTAMP_ERROR:
+			return "Failed to add timestamp";
+		case EIDMW_LTV_ERROR:
+			return "Failed to add revocation info";
+		default:
+			return "Other cause: see error code";
+	}
+}
+
 /*
 *  SCAP signature with citizen signature using CMD
 */
@@ -128,8 +139,8 @@ int ScapServices::executeSCAPWithCMDSignature(GAPI *parent, QString &savefilepat
     }
     catch (eIDMW::PTEID_Exception &e)
     {
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "executeSCAPWithCMDSignature",
-            "Caught exception signing PDF. Error code: %08x", e.GetError());
+		PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+			"SCAP CMD Error closing SCAP signature: %s Error code: %08x", errorTranslation(e.GetError()), e.GetError());
         throw;
     }
     if (successful == GAPI::ScapSucess) {
@@ -237,7 +248,7 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
     }
     catch (eIDMW::PTEID_Exception &e)
     {
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
               "executeSCAPSignature - Exception accessing EIDCard. Error code: %08x",  e.GetError());
         if (e.GetError() != EIDMW_TIMESTAMP_ERROR && e.GetError() != EIDMW_LTV_ERROR) {
             free(temp_save_path);
@@ -303,7 +314,7 @@ void ScapServices::executeSCAPSignature(GAPI *parent, QString &inputPath, QStrin
             catch (eIDMW::PTEID_Exception &e)
             {
                 eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-                    "executeSCAPSignature - Exception accessing SCAP services. Error code: %08x",  e.GetError());
+                    "SCAP CC Error closing SCAP signature: %s Error code: %08x", errorTranslation(e.GetError()), e.GetError());
                 free(temp_save_path);
                 throw;
             }
