@@ -44,7 +44,7 @@ ListModel {
     ListElement { text: "+975 - Bhutan" }
     ListElement { text: "+284 - British Virgin Islands" }
     ListElement { text: "+591 - Bolivia" }
-    ListElement { text: "+387 - Bosnia and Hercegovina" }
+    ListElement { text: "+387 - Bosnia and Herzegovina" }
     ListElement { text: "+267 - Botswana" }
     ListElement { text: "+55 - Brazil" }
     ListElement { text: "+284 - British V.I." }
@@ -52,13 +52,12 @@ ListModel {
     ListElement { text: "+359 - Bulgaria" }
     ListElement { text: "+226 - Burkina Faso" }
     ListElement { text: "+257 - Burundi" }
+    ListElement { text: "+238 - Cabo Verde" }
     ListElement { text: "+855 - Cambodia" }
     ListElement { text: "+237 - Cameroon" }
     ListElement { text: "+1 - Canada" }
-    ListElement { text: "+238 - CapeVerde Islands" }
     ListElement { text: "+1 - Caribbean Nations" }
     ListElement { text: "+345 - Cayman Islands" }
-    ListElement { text: "+238 - Cape Verdi" }
     ListElement { text: "+236 - Central African Republic" }
     ListElement { text: "+235 - Chad" }
     ListElement { text: "+56 - Chile" }
@@ -74,7 +73,7 @@ ListModel {
     ListElement { text: "+420 - Czech Republic" }
     ListElement { text: "+45 - Denmark" }
     ListElement { text: "+246 - Diego Garcia" }
-    ListElement { text: "+767 - Dominca" }
+    ListElement { text: "+767 - Dominica" }
     ListElement { text: "+809 - Dominican Republic" }
     ListElement { text: "+253 - Djibouti" }
     ListElement { text: "+593 - Ecuador" }
@@ -83,9 +82,10 @@ ListModel {
     ListElement { text: "+240 - Equatorial Guinea" }
     ListElement { text: "+291 - Eritrea" }
     ListElement { text: "+372 - Estonia" }
+    ListElement { text: "+268 - Eswatini" }
     ListElement { text: "+251 - Ethiopia" }
     ListElement { text: "+500 - Falkland Islands" }
-    ListElement { text: "+298 - Faroe (Faeroe) Islands (Denmark)" }
+    ListElement { text: "+298 - Faroe Islands" }
     ListElement { text: "+679 - Fiji" }
     ListElement { text: "+358 - Finland" }
     ListElement { text: "+33 - France" }
@@ -100,10 +100,11 @@ ListModel {
     ListElement { text: "+30 - Greece" }
     ListElement { text: "+299 - Greenland" }
     ListElement { text: "+473 - Grenada/Carricou" }
+    ListElement { text: "+590 - Guadeloupe" }
     ListElement { text: "+671 - Guam" }
     ListElement { text: "+502 - Guatemala" }
     ListElement { text: "+224 - Guinea" }
-    ListElement { text: "+245 - Guinea-Bissau" }
+    ListElement { text: "+245 - Guiné-Bissau" }
     ListElement { text: "+592 - Guyana" }
     ListElement { text: "+509 - Haiti" }
     ListElement { text: "+504 - Honduras" }
@@ -127,6 +128,7 @@ ListModel {
     ListElement { text: "+686 - Kiribati Republic (Gilbert Islands)" }
     ListElement { text: "+82 - Korea, Republic of (South Korea)" }
     ListElement { text: "+850 - Korea, People's Republic of (North Korea)" }
+    ListElement { text: "+383 - Kosovo" }
     ListElement { text: "+965 - Kuwait" }
     ListElement { text: "+996 - Kyrgyz Republic" }
     ListElement { text: "+371 - Latvia" }
@@ -139,7 +141,6 @@ ListModel {
     ListElement { text: "+423 - Liechtenstein" }
     ListElement { text: "+352 - Luxembourg" }
     ListElement { text: "+853 - Macao" }
-    ListElement { text: "+389 - Macedonia" }
     ListElement { text: "+261 - Madagascar" }
     ListElement { text: "+265 - Malawi" }
     ListElement { text: "+60 - Malaysia" }
@@ -153,12 +154,13 @@ ListModel {
     ListElement { text: "+269 - Mayolte" }
     ListElement { text: "+52 - Mexico" }
     ListElement { text: "+691 - Micronesia (F.S. of Polynesia)" }
+    ListElement { text: "+258 - Moçambique" }
     ListElement { text: "+373 - Moldova" }
     ListElement { text: "+33 - Monaco" }
     ListElement { text: "+976 - Mongolia" }
+    ListElement { text: "+382 - Montenegro" }
     ListElement { text: "+473 - Montserrat" }
     ListElement { text: "+212 - Morocco" }
-    ListElement { text: "+258 - Mozambique" }
     ListElement { text: "+95 - Myanmar (former Burma)" }
     ListElement { text: "+264 - Namibia (former South-West Africa)" }
     ListElement { text: "+674 - Nauru" }
@@ -173,6 +175,7 @@ ListModel {
     ListElement { text: "+234 - Nigeria" }
     ListElement { text: "+683 - Niue" }
     ListElement { text: "+850 - North Korea" }
+    ListElement { text: "+389 - North Macedonia" }
     ListElement { text: "+1 670 - North Mariana Islands (Saipan)" }
     ListElement { text: "+47 - Norway" }
     ListElement { text: "+968 - Oman" }
@@ -192,10 +195,10 @@ ListModel {
     ListElement { text: "+250 - Rwanda (Rwandese Republic)" }
     ListElement { text: "+670 - Saipan" }
     ListElement { text: "+378 - San Marino" }
-    ListElement { text: "+239 - Sao Tome and Principe" }
+    ListElement { text: "+239 - São Tomé e Príncipe" }
     ListElement { text: "+966 - Saudi Arabia" }
     ListElement { text: "+221 - Senegal" }
-    ListElement { text: "+381 - Serbia and Montenegro" }
+    ListElement { text: "+381 - Serbia" }
     ListElement { text: "+248 - Seychelles" }
     ListElement { text: "+232 - Sierra Leone" }
     ListElement { text: "+65 - Singapore" }
@@ -210,8 +213,7 @@ ListModel {
     ListElement { text: "+869 - St. Kitts/Nevis" }
     ListElement { text: "+508 - St. Pierre &(et) Miquelon (France)" }
     ListElement { text: "+249 - Sudan" }
-    ListElement { text: "+597 - Suritext" }
-    ListElement { text: "+268 - Swaziland" }
+    ListElement { text: "+597 - Suriname" }
     ListElement { text: "+46 - Sweden" }
     ListElement { text: "+41 - Switzerland" }
     ListElement { text: "+963 - Syrian Arab Republic (Syria)" }
@@ -220,6 +222,7 @@ ListModel {
     ListElement { text: "+7 - Tajikistan" }
     ListElement { text: "+255 - Tanzania (includes Zanzibar)" }
     ListElement { text: "+66 - Thailand" }
+    ListElement { text: "+670 - Timor Leste" }
     ListElement { text: "+228 - Togo (Togolese Republic)" }
     ListElement { text: "+690 - Tokelau" }
     ListElement { text: "+676 - Tonga" }
@@ -233,7 +236,7 @@ ListModel {
     ListElement { text: "+971 - United Arab Emirates" }
     ListElement { text: "+44 - United Kingdom" }
     ListElement { text: "+598 - Uruguay" }
-    ListElement { text: "+1 - USA" }
+    ListElement { text: "+1 - United States of America" }
     ListElement { text: "+7 - Uzbekistan" }
     ListElement { text: "+678 - Vanuatu (New Hebrides)" }
     ListElement { text: "+39 - Vatican City" }
@@ -244,8 +247,6 @@ ListModel {
     ListElement { text: "+685 - Western Samoa" }
     ListElement { text: "+381 - Yemen (People's Democratic Republic of)" }
     ListElement { text: "+967 - Yemen Arab Republic (North Yemen)" }
-    ListElement { text: "+381 - Yugoslavia (discontinued)" }
-    ListElement { text: "+243 - Zaire" }
     ListElement { text: "+260 - Zambia" }
     ListElement { text: "+263 - Zimbabwe" }
 
