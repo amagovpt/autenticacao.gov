@@ -199,7 +199,7 @@ namespace eIDMW
 
 	}
 
-
+	/* DEPRECATED: only kept for SDK compatibility */
 	PDFRectangle PDFSignature::computeSigLocationFromSectorLandscape(double page_height, double page_width, int sector)
 	{
 		PDFRectangle sig_rect;
@@ -247,7 +247,7 @@ namespace eIDMW
 		return sig_rect;
 	}
 
-
+	/* DEPRECATED: only kept for SDK compatibility */
 	PDFRectangle PDFSignature::computeSigLocationFromSector(double page_height, double page_width, int sector)
 	{
 		MWLOG(LEV_DEBUG, MOD_APL, "computeSigLocationFromSector called with sector=%d and m_small_signature = %d", sector, m_small_signature);
@@ -612,8 +612,8 @@ namespace eIDMW
 			showNIC = config_seal.getLong() & 1;
 			showDate = config_seal.getLong() & 2;
 
-			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Page mediaBox: (H: %f W:%f) \
-				Location_x: %f, location_y: %f, showNIC: %d, showDate: %d",
+			MWLOG(LEV_DEBUG, MOD_APL, L"PDFSignature: Visible signature selected. Page mediaBox: (H: %f W:%f)"
+				" location_x: %f, location_y: %f, showNIC: %d, showDate: %d",
 				height, width, location_x, location_y, showNIC, showDate);
 
 			//Sig Location by sector
