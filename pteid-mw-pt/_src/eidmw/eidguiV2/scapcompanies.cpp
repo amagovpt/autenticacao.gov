@@ -105,29 +105,6 @@ std::vector<ns2__AttributesType *>
     }
     return m_attributesList;
 }
-// Not used: Load attributes from cache only from a unique citizen NIC
-/*std::vector<ns2__AttributesType *>
-    ScapServices::loadAttributesFromCache(eIDMW::PTEID_EIDCard &card, bool isCompanies) {
-
-    std::vector<ns2__AttributesType *> attributesType;
-    try
-    {
-        QString citizenNIC(card.getID().getCivilianIdNumber());
-        citizenNIC.chop(1);//remove check digit
-        ScapSettings settings;
-        QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
-
-        QString filePath = scapCacheDir + citizenNIC + (isCompanies ? COMPANIES_SUFFIX : ENTITIES_SUFFIX);
-
-        attributesType = loadCacheFile(filePath);
-    }
-    catch(...) {
-        std::cerr << "Error ocurred while loading attributes from cache!";
-        //TODO: report error
-    }
-
-    return attributesType;
-}*/
 
 std::vector<ns2__AttributesType *>
     ScapServices::reloadAttributesFromCache() {
@@ -135,13 +112,11 @@ std::vector<ns2__AttributesType *>
     std::vector<ns2__AttributesType *> attributesType;
     try
     {
-        //QString citizenNIC(card.getID().getCivilianIdNumber());
-
         ScapSettings settings;
         QString scapCachePath(settings.getCacheDir() + "/scap_attributes/");
         QDir scapCacheDir(scapCachePath);
         QStringList flist = scapCacheDir.entryList(QStringList("*.xml"), QDir::Files | QDir::NoSymLinks);
-        
+
         m_attributesList.clear();
 
         foreach (QString str, flist) {
@@ -156,46 +131,24 @@ std::vector<ns2__AttributesType *>
                     m_attributesList.insert(m_attributesList.end(), attributesType.begin(), attributesType.end());
                 }
             }
-        }
-
-        foreach (QString str, flist) {
-            if (str.endsWith(COMPANIES_SUFFIX))
+            else if (str.endsWith(COMPANIES_SUFFIX))
             {
                 QString cachefilePath(scapCachePath+str);
                 attributesType = loadCacheFile(cachefilePath);
 
                 if (attributesType.size() > 0)
                 {
+                    // Hack: ensure Attribute Supplier Type element is set for ENTERPRISE attributes.
+                    // This is used to distinguish ENTERPRISE from INSTITUTION attributes in gapi
+                    for (ns2__AttributesType *attribute: attributesType) {
+                        attribute->ATTRSupplier->Type = new _ns3__AttributeSupplierType_Type{_ns3__AttributeSupplierType_Type__ENTERPRISE};
+                    }
+
                     //Merge into single vector
                     m_attributesList.insert(m_attributesList.end(), attributesType.begin(), attributesType.end());
                 }
             }
         }
-
-        /*
-
-        QString filePathEntities = scapCacheDir + citizenNIC + ENTITIES_SUFFIX;
-
-        attributesType = loadCacheFile(filePathEntities);
-
-        m_attributesList.clear();
-
-        if (attributesType.size() > 0)
-        {
-            //Merge into single vector
-            m_attributesList.insert(m_attributesList.end(), attributesType.begin(), attributesType.end());
-        }
-
-        QString filePathCompanies = scapCacheDir + citizenNIC + COMPANIES_SUFFIX;
-
-        attributesType = loadCacheFile(filePathCompanies);
-
-        if (attributesType.size() > 0)
-        {
-            //Merge into single vector
-            m_attributesList.insert(m_attributesList.end(), attributesType.begin(), attributesType.end());
-        }
-        */
     }
     catch(...) {
         qDebug() << "Error ocurred while reloading attributes from cache!";

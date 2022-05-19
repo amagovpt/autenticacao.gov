@@ -513,7 +513,7 @@ signals:
     void signalSCAPPingSuccess();
     void signalCompanyAttributesLoaded(const QList<QString> attribute_list);
     void signalEntityAttributesLoaded(const QList<QString> attribute_list);
-    void signalAttributesLoaded(const QList<QString> attribute_list);
+    void signalAttributesLoaded(const QList<QString> attribute_list, const QList<bool> enterpriseAttribute);
     void signalCompanyAttributesLoadedError();
     void signalEntityAttributesLoadedError();
     void signalAttributesPossiblyExpired(const QStringList expiredSuppliers);

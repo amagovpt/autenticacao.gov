@@ -99,7 +99,8 @@ PageServicesSignForm {
                                                  entityName: attribute_list[i+3] != "" ? attribute_list[i+3] : attribute_list[i],
                                                  citizenName: attribute_list[i+1],
                                                  attribute: attribute_list[i+2],
-                                                 checkBoxAttr: false
+                                                 checkBoxAttr: false,
+                                                 isEnterprise: enterpriseAttribute[i/4]
                                              });
             }
 
@@ -2090,13 +2091,17 @@ PageServicesSignForm {
     }
     function updateSCAPInfoOnPreview(){
         var attrList = []
+        var attrListEnterprise = []
         var count = 0
-        for (var i = 0; i < entityAttributesModel.count; i++){
+        for (var i = 0; i < entityAttributesModel.count; i++) {
             var currentAttribute = entityAttributesModel.get(i)
-            if(currentAttribute.checkBoxAttr == true){
+            if (currentAttribute.checkBoxAttr == true) {
                 var entity = currentAttribute.entityName
                 var attr = currentAttribute.attribute
                 attrList.push([entity.trim(), attr.trim()])
+
+                // used show "Certificado por: SCAP" for enterprise attributes
+                attrListEnterprise.push([currentAttribute.isEnterprise ? "SCAP" : entity.trim(), attr.trim()])
             }
         }
 
@@ -2106,10 +2111,11 @@ PageServicesSignForm {
             qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_ATTRIBUTES")
 
         if (attrList != []) {
-            var wrappedAttr = gapi.getSCAPAttributesText(attrList)
+            var entitiesToWrap = gapi.getSCAPAttributesText(attrListEnterprise)
+            var attributesToWrap = gapi.getSCAPAttributesText(attrList)
 
-            var entitiesText = wrappedAttr[0]
-            var attributesText = wrappedAttr[1]
+            var entitiesText = entitiesToWrap[0]
+            var attributesText = attributesToWrap[1]
 
             ownerEntitiesBackup = entitiesText
             ownerAttrBackup = attributesText
@@ -2118,7 +2124,7 @@ PageServicesSignForm {
 
             var entities = gapi.getWrappedText(entitiesText, Constants.PROVIDER_SCAP_MAX_LINES, Constants.SEAL_PROVIDER_NAME_OFFSET)
             var attributes = gapi.getWrappedText(attributesText, Constants.ATTR_SCAP_MAX_LINES, Constants.SEAL_ATTR_NAME_OFFSET)
-            var fontSize = wrappedAttr[2]
+            var fontSize = attributesToWrap[2]
 
             propertyPDFPreview.propertyDragSigCertifiedByText.text += " " + entities.join("<br>");
             propertyPDFPreview.propertyDragSigAttributesText.text += " " + attributes.join("<br>");

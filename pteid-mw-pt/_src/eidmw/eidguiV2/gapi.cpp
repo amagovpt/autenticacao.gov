@@ -2540,12 +2540,17 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
         attributes = scapServices.reloadAttributesFromCache();
     }
 
+    QList<bool> enterpriseAttribute;
     QStringList possiblyExpiredSuppliers;
     for (uint i = 0; i < attributes.size(); i++) {
         //Skip malformed AttributeResponseValues element
         if (attributes.at(i)->ATTRSupplier == NULL) {
             continue;
         }
+
+        _ns3__AttributeSupplierType_Type *type = attributes.at(i)->ATTRSupplier->Type;
+        bool isEnterprise = (type && *type == _ns3__AttributeSupplierType_Type__ENTERPRISE);
+
         std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
         std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), isShortDescription);
 
@@ -2564,6 +2569,7 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
             if (isAttributeExpired(childAttributes.at(j + 2), attrSupplier)) {
                 possiblyExpiredSuppliers.push_back(QString::fromStdString(attrSupplier));
             }
+            enterpriseAttribute.append(isEnterprise);
         }
     }
     if (scapAttrType == ScapAttrEntities)
@@ -2571,7 +2577,7 @@ void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription)
     else if (scapAttrType == ScapAttrCompanies)
         emit signalCompanyAttributesLoaded(attribute_list);
     else if (scapAttrType == ScapAttrAll)
-        emit signalAttributesLoaded(attribute_list);
+        emit signalAttributesLoaded(attribute_list, enterpriseAttribute);
 
     if (!possiblyExpiredSuppliers.empty()) {
         possiblyExpiredSuppliers.removeDuplicates();
@@ -3485,6 +3491,8 @@ std::pair<std::string, std::string> formatSCAPSealStrings(QVariantList qVarList)
 
         if (attrCount > 1 && numberOfEntities > 1)
             currentAttrsString.append("}");
+
+        currentAttrsString.append(" de ").append(currentEntitiy);
 
         joined[currentEntitiy] = currentAttrsString;
     }
