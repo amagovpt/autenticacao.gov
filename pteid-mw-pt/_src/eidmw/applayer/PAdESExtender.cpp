@@ -411,7 +411,7 @@ namespace eIDMW
                 success = false;
                 goto cleanup;
             }
-            else if (!foundIssuer || status == FWK_CERTIF_STATUS_ERROR) {
+            else if (!foundIssuer || status == FWK_CERTIF_STATUS_ERROR || status == FWK_CERTIF_STATUS_CONNECT) {
                 /* Use CRL if there is no OCSP response or we couldn't find the issuer (it should never happen with CC or CMD signatures) */
                 success = addCRLRevocationInfo(signer_cert, vd_elem->getVriHashKeys());
                 if (!success) {
