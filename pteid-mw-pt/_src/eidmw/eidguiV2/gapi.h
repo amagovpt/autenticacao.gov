@@ -330,6 +330,8 @@ public slots:
     void startSigningXADESWithCMD(QList<QString> loadedFileBatchPath, QString outputFile, 
                         bool isTimestamp, bool isLTV, bool isASIC);
 
+    bool isASiC(const QString& filename);
+
     //This flag is used to start the application in specific signature subpage
     void setShortcutFlag(ShortcutId value) { m_shortcutFlag = value; }
     void addShortcutPath(QString path) { m_shortcutPaths.append(path.replace(QChar('\\'), QChar('/'))); };

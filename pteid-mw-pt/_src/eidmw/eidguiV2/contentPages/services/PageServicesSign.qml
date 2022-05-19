@@ -1739,9 +1739,7 @@ PageServicesSignForm {
 
     function containsPackageAsic() {
         for (var i = 0; i < filesModel.count; i++) {
-            if (filesModel.get(i).fileUrl.toString().split('.').pop() === 'asice'
-                || filesModel.get(i).fileUrl.toString().split('.').pop() === 'asics') {
-                console.log("File asice already uploaded");
+            if (gapi.isASiC(filesModel.get(i).fileUrl.toString())) {
                 return true;
             }
         }

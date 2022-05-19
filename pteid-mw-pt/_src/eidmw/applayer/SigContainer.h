@@ -39,6 +39,8 @@ public:
 
 	EIDMW_APL_API void extract(const char * filename, const char * out_dir);
 
+	EIDMW_APL_API static bool isValidASiC(const char *filename);
+
 	/*
 	 * Return the filename of an eventual new signature xml file for this container
 	 * ex: signatures002.xml, signatures003.xml

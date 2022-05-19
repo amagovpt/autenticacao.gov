@@ -24,6 +24,7 @@
 
 #include "CMDSignature.h"
 #include "cmdErrors.h"
+#include "SigContainer.h"
 
 //SCAP
 #include "scapsignature.h"
@@ -1858,6 +1859,16 @@ void GAPI::startSigningXADESWithCMD(QList<QString> inputFiles, QString outputFil
 
     QFuture<void> future = Concurrent::run(this, &GAPI::doSignXADESWithCMD, params, isASIC);
 }
+
+bool GAPI::isASiC(const QString& filename) {
+    BEGIN_TRY_CATCH
+
+    std::string filename_utf8 = filename.toUtf8().constData();
+    return SigContainer::isValidASiC(filename_utf8.c_str());
+
+    END_TRY_CATCH
+}
+
 
 bool GAPI::isDirectory(QString path) {
     QFileInfo fi(path);

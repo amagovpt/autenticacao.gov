@@ -497,4 +497,19 @@ void SigContainer::addSignature(const char *signatureFilename, const CByteArray&
 	}
 }
 
+bool SigContainer::isValidASiC(const char *filename)
+{
+	zip_t *container = NULL;
+	bool isASiCContainer = isASiC(filename, false, &container);
+
+	if (container && zip_close(container) < 0) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: zip_close() failed with error msg: %s", __FUNCTION__,
+			zip_error_strerror(zip_get_error(container)));
+		free(container);
+		throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
+	}
+
+	return isASiCContainer;
+}
+
 };
