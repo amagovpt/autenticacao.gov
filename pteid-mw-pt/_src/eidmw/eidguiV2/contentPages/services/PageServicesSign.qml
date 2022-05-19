@@ -2126,8 +2126,8 @@ PageServicesSignForm {
             var attributes = gapi.getWrappedText(attributesText, Constants.ATTR_SCAP_MAX_LINES, Constants.SEAL_ATTR_NAME_OFFSET)
             var fontSize = attributesToWrap[2]
 
-            propertyPDFPreview.propertyDragSigCertifiedByText.text += " " + entities.join("<br>");
-            propertyPDFPreview.propertyDragSigAttributesText.text += " " + attributes.join("<br>");
+            propertyPDFPreview.propertyDragSigCertifiedByText.text += " <b>" + entities.join("<br>") + "</b>";
+            propertyPDFPreview.propertyDragSigAttributesText.text += " <b>" + attributes.join("<br>") + "</b>";
             propertyPDFPreview.propertyCurrentAttrsFontSize = fontSize
 
         }
