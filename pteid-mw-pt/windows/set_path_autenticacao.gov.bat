@@ -6,7 +6,7 @@
 ::==============================
 @set PTEID_DIR_QML=C:\git\tools\build-scripts\windows\external-libs\qt5.12.8\Win32\VC9\Release\qml-app
 @set PTEID_DIR_QT_5=C:\Qt\Qt5.12.8\5.12.8\msvc2017
-@set PTEID_DIR_OPENSSL=C:\git\tools\build-scripts\windows\external-libs\openssl-1.1.1j-win32
+@set PTEID_DIR_OPENSSL=C:\git\tools\build-scripts\windows\external-libs\openssl-1.1.1n-win32
 @set PTEID_DIR_XERCES=C:\git\tools\build-scripts\windows\external-libs\xerces-c-3.2.3-win32
 @set PTEID_XMLSECURITY=C:\git\tools\build-scripts\windows\external-libs\xml-security-c-2.0.2-win32
 @set PTEID_DIR_CURL=C:\git\tools\build-scripts\windows\external-libs\libcurl-vc-x86-release
@@ -20,7 +20,7 @@
 ::==============================
 @set PTEID_DIR_QML_X64=C:\git\tools\build-scripts\windows\external-libs\qt5.12.8\x64\VC9\Release\qml-app
 @set PTEID_DIR_QT_5_X64=C:\Qt\Qt5.12.8\5.12.8\msvc2017_64
-@set PTEID_DIR_OPENSSL_X64=C:\git\tools\build-scripts\windows\external-libs\openssl-1.1.1j-x64
+@set PTEID_DIR_OPENSSL_X64=C:\git\tools\build-scripts\windows\external-libs\openssl-1.1.1n-x64
 @set PTEID_DIR_XERCES_X64=C:\git\tools\build-scripts\windows\external-libs\xerces-c-3.2.3-win64
 @set PTEID_XMLSECURITY_X64=C:\git\tools\build-scripts\windows\external-libs\xml-security-c-2.0.2-win64
 @set PTEID_DIR_CURL_X64=C:\git\tools\build-scripts\windows\external-libs\libcurl-vc-x64-release
