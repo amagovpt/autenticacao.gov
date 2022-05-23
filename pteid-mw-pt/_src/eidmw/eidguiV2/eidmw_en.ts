@@ -109,7 +109,7 @@
     </message>
     <message>
         <source>STR_CMD_LOGIN_ERROR</source>
-        <translation>Error in the Chave Móvel Digital Login operation!</translation>
+        <translation>Error in the Chave Móvel Digital signing operation!</translation>
     </message>
     <message>
         <source>STR_CMD_TIMEOUT_ERROR</source>

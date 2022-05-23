@@ -107,7 +107,7 @@
     </message>
     <message>
         <source>STR_CMD_LOGIN_ERROR</source>
-        <translation>Erro na operação de autenticação na Chave Móvel Digital!</translation>
+        <translation>Erro na assinatura com a Chave Móvel Digital!</translation>
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_WAIT_5MIN_ERROR_MSG</source>
