@@ -30,6 +30,26 @@
 #define LIST_HEIGHT_FACTOR        5
 #define ITEM_HEIGHT               30
 
+// See this SO thread for the different ways to query the Windows version:
+// https://stackoverflow.com/questions/32115255/c-how-to-detect-windows-10
+DWORD getOSMajorVersion()
+{
+	DWORD ret = 0.0;
+	NTSTATUS(WINAPI *RtlGetVersion)(LPOSVERSIONINFOEXW);
+	OSVERSIONINFOEXW osInfo;
+
+	*(FARPROC*)&RtlGetVersion = GetProcAddress(GetModuleHandleA("ntdll"), "RtlGetVersion");
+
+	if (NULL != RtlGetVersion)
+	{
+		osInfo.dwOSVersionInfoSize = sizeof(osInfo);
+		RtlGetVersion(&osInfo);
+		ret = osInfo.dwMajorVersion;
+	}
+
+	return ret;
+}
+
 HWND PteidControls::CreateComboBox(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, ComboBoxData *data) 
 {
     if (data->selectedIdx >= data->items.size())
@@ -49,14 +69,7 @@ HWND PteidControls::CreateComboBox(int x, int y, int nWidth, int nHeight, HWND h
         x, y, nWidth, nHeight,
         hWndParent, hMenu, hInstance, NULL);
 
-	OSVERSIONINFO osvi;
-
-	ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
-	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-
-	GetVersionEx(&osvi);
-
-	data->use_smaller_triangle = osvi.dwMajorVersion >= 6 && osvi.dwMinorVersion >= 2;
+	data->use_smaller_triangle = getOSMajorVersion() >= 10;
 	
     SetWindowSubclass(hContainer, ComboBox_Container_Proc, 0, (DWORD_PTR)data);
 
