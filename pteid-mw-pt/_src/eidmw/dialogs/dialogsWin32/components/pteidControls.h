@@ -115,6 +115,7 @@ public:
     struct ComboBoxData : ControlData {
         std::vector<LPCTSTR> items;
         size_t selectedIdx = 0;
+		BOOL use_smaller_triangle;
 
     private:
         size_t maxWidth = 0;
@@ -161,7 +162,7 @@ private:
     static void Font_LoadFontsFromResources(HINSTANCE hInstance);
     static BOOL Font_bFontsLoaded;
 
-    static void ComboBox_DrawItem(HWND hWnd, HDC hDC, RECT *rect, int index, bool hovered, bool isListItem, int padding);
+    static void ComboBox_DrawItem(HWND hWnd, HDC hDC, RECT *rect, int index, bool hovered, bool isListItem, int padding, bool use_small_triangle);
 
     static BOOL TextField_IsAcceptableInput(TextFieldData *textFieldData);
 };

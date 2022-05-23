@@ -48,6 +48,16 @@ HWND PteidControls::CreateComboBox(int x, int y, int nWidth, int nHeight, HWND h
         WS_CHILD | WS_VISIBLE,
         x, y, nWidth, nHeight,
         hWndParent, hMenu, hInstance, NULL);
+
+	OSVERSIONINFO osvi;
+
+	ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
+	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+
+	GetVersionEx(&osvi);
+
+	data->use_smaller_triangle = osvi.dwMajorVersion >= 6 && osvi.dwMinorVersion >= 2;
+	
     SetWindowSubclass(hContainer, ComboBox_Container_Proc, 0, (DWORD_PTR)data);
 
     // LIST
@@ -177,7 +187,7 @@ LRESULT CALLBACK PteidControls::ComboBox_Container_Proc(HWND hWnd, UINT uMsg, WP
         }
         else
         {
-            ComboBox_DrawItem(lpdis->hwndItem, lpdis->hDC, &(lpdis->rcItem), lpdis->itemID, hovered, isListItem, padding);
+            ComboBox_DrawItem(lpdis->hwndItem, lpdis->hDC, &(lpdis->rcItem), lpdis->itemID, hovered, isListItem, padding, data);
         }
         return TRUE;
     }
@@ -213,7 +223,7 @@ LRESULT CALLBACK PteidControls::ComboBox_Proc(HWND hWnd, UINT uMsg, WPARAM wPara
         rect.bottom -= 2 * containerPadding;
         rect.right -= 2 * containerPadding;
 
-        ComboBox_DrawItem(hWnd, hDC, &rect, data->selectedIdx, false, false, containerPadding);
+		ComboBox_DrawItem(hWnd, hDC, &rect, data->selectedIdx, false, false, containerPadding, data->use_smaller_triangle);
 
         EndPaint(hWnd, &ps);
         return 0;
@@ -233,7 +243,7 @@ LRESULT CALLBACK PteidControls::ComboBox_Proc(HWND hWnd, UINT uMsg, WPARAM wPara
     return DefSubclassProc(hWnd, uMsg, wParam, lParam);
 }
 
-void PteidControls::ComboBox_DrawItem(HWND hWnd, HDC hDC, RECT *rect, int index, bool hovered, bool isListItem, int padding)
+void PteidControls::ComboBox_DrawItem(HWND hWnd, HDC hDC, RECT *rect, int index, bool hovered, bool isListItem, int padding, bool use_small_triangle)
 {
     SetTextColor(hDC, BLACK);
     COLORREF prevBk = SetBkColor(hDC, hovered ? LIGHTBLUE :  LIGHTGREY);
@@ -267,7 +277,8 @@ void PteidControls::ComboBox_DrawItem(HWND hWnd, HDC hDC, RECT *rect, int index,
     if (!isListItem)
     {
         textX = rect->right - rect->left - 20;
-        _tcscpy_s(itemBuffer, TEXT("▼"));
+		
+        _tcscpy_s(itemBuffer, use_small_triangle ? TEXT("⯆") : TEXT("▼"));
         StringCchLength(itemBuffer, COMBOBOX_ITEM_MAX_LEN, &itemLen);
 
         ExtTextOut(hDC, textX, textY,
