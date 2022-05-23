@@ -520,21 +520,23 @@ namespace eIDMW
 	int PDFSignature::getOtherPageCount(const char *input_path)
 	{
 		GooString filename(input_path);
-		PDFDoc doc(new GooString(input_path));
+		PDFDoc * doc = makePDFDoc(input_path);
 
-		if (doc.getErrorCode() == errEncrypted)
+		if (doc->getErrorCode() == errEncrypted)
 		{
-		    fprintf(stderr,
-		        "getOtherPageCount(): Encrypted PDFs are unsupported at the moment\n");
+			MWLOG(LEV_ERROR, MOD_APL, "getOtherPageCount(): Encrypted PDFs are unsupported at the moment");
 		    return -2;
 		}
-		if (!doc.isOk())
+		if (!doc->isOk())
 		{
-			fprintf(stderr, "getOtherPageCount(): Probably broken PDF...\n");
+			MWLOG(LEV_ERROR, MOD_APL, "getOtherPageCount(): Probably broken PDF...");
 			return -1;
 		}
 
-		return doc.getNumPages();
+		int pages = doc->getNumPages();
+		delete doc;
+
+		return pages;
 	}
 
 
