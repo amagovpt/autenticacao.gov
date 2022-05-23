@@ -263,11 +263,11 @@ void PteidControls::ComboBox_DrawItem(HWND hWnd, HDC hDC, RECT *rect, int index,
         ETO_CLIPPED | ETO_OPAQUE, rect,
         itemBuffer, (UINT)itemLen, NULL);
         
-    // If not list item, draw ⯆
+    // If not list item, draw ▼
     if (!isListItem)
     {
         textX = rect->right - rect->left - 20;
-        _tcscpy_s(itemBuffer, TEXT("⯆"));
+        _tcscpy_s(itemBuffer, TEXT("▼"));
         StringCchLength(itemBuffer, COMBOBOX_ITEM_MAX_LEN, &itemLen);
 
         ExtTextOut(hDC, textX, textY,
