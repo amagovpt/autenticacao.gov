@@ -54,6 +54,7 @@ eidlibJava_Wrapper/GeneratedFiles/
 dialogs/dialogsQTsrv/moc_*
 dialogs/dialogsQTsrv/ui_*
 dialogs/dialogsQTsrv/qrc_resources.cpp
+dialogs/countryCallingCodeList_utf8.h
 eidguiV2/build
 eidguiV2/eidguiV2
 eidguiV2/eidguiV2.app

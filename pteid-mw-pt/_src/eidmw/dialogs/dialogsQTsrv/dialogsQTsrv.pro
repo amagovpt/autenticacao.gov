@@ -84,3 +84,14 @@ SOURCES += main.cpp \
 RESOURCES += resources.qrc
 
 macx: ICON = images/appicon.icns
+
+unix: {
+    PREPROCESS_FILE_IN=../countryCallingCodeList.h
+    PREPROCESS_FILE_OUT=../countryCallingCodeList_utf8.h
+    preprocess.target = $${PREPROCESS_FILE_OUT}
+    preprocess.commands = iconv -f latin1 -t utf8 $${PREPROCESS_FILE_IN} > $${PREPROCESS_FILE_OUT}
+
+    QMAKE_EXTRA_TARGETS += preprocess
+    PRE_TARGETDEPS += $${PREPROCESS_FILE_OUT}
+}
+
