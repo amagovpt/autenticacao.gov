@@ -705,7 +705,7 @@ namespace eIDMW
 				Get the certificate length to trim the padding zero bytes which are useless
 				and affect the certificate digest computation
 				*/
-				long certLen = long(((m_certificate.GetByte(2) << 8) + m_certificate.GetByte(3)) + 4);
+				long certLen = der_certificate_length(m_certificate);
 				m_certificate = m_certificate.GetBytes(0, certLen);
 		   	}
 		}

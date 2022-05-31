@@ -53,6 +53,7 @@ namespace eIDMW
 	int X509_to_DER(X509 *x509, unsigned char **der);
 	X509 *DER_to_X509(unsigned char *der, int len);
 	char *DER_to_PEM(unsigned char *der, int len);
+	long der_certificate_length(const CByteArray &der_certificate);
 	char * certificate_subject_from_der(CByteArray & ba);
 	std::string certificate_issuer_serial_from_der(CByteArray & ba);
 

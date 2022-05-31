@@ -1347,8 +1347,9 @@ const CByteArray &APL_Certif::getData() const
 
 void APL_Certif::getFormattedData(CByteArray &data) const
 {
-	data = m_certFile->getData();
-	data.TrimRight(0);
+	const CByteArray &raw_cert_data = m_certFile->getData();
+	long cert_len = der_certificate_length(raw_cert_data);
+	data = CByteArray(raw_cert_data.GetBytes(), cert_len);
 }
 
 void APL_Certif::resetIssuer()

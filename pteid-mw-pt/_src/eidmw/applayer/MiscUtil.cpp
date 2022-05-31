@@ -367,6 +367,26 @@ int PEM_to_DER( char *pem, unsigned char **der ){
     return der_bytes;
 }
 
+long der_certificate_length(const CByteArray &der_certificate) {
+	const unsigned char * der_data = der_certificate.GetBytes();
+
+	long len = 0;
+	int tag = 0, xclass = 0;
+	const unsigned char * op = der_data;
+
+	int ret = ASN1_get_object(&der_data, &len, &tag, &xclass, der_certificate.Size());
+	MWLOG(LEV_DEBUG, MOD_APL, "%s: Ret=%02x Decoded object len: %d tag: %d, class: %d", __FUNCTION__, ret, len, tag, xclass);
+
+	if (ret != 0x20) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: This should be a constructed ASN.1 object but ASN1_get_object() returned %d!",
+			 __FUNCTION__, ret);
+		return 0;
+	}
+
+	//der_data - op is the amount of the TAG and length bytes (should be 4 for most certificates)
+	return (der_data-op) + len;
+}
+
 char * certificate_subject_from_der(CByteArray & ba) {
 	X509 *x509 = DER_to_X509(ba.GetBytes(), ba.Size());
 
