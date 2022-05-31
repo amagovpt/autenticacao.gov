@@ -3149,7 +3149,7 @@ int GAPI::findCardCertificate(QString issuedBy, QString issuedTo) {
     PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card == NULL) {
-        qDebug() << "Error: inspectCardCertificate should not be called if card is not inserted!";
+        qDebug() << "Error: findCardCertificate should not be called if card is not inserted!";
         return -1;
     }
     PTEID_Certificates&	 certificates = card->getCertificates();
@@ -3171,7 +3171,7 @@ void GAPI::viewCardCertificate(QString issuedBy, QString issuedTo) {
     PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card == NULL) {
-        qDebug() << "Error: inspectCardCertificate should not be called if card is not inserted!";
+        qDebug() << "Error: viewCardCertificate should not be called if card is not inserted!";
         return;
     }
     PTEID_Certificates&	 certificates = card->getCertificates();
@@ -3179,7 +3179,7 @@ void GAPI::viewCardCertificate(QString issuedBy, QString issuedTo) {
     if (certIdx < 0)
     {
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR,
-            "eidgui", "viewCardCertificate: could not find certificate");
+            "eidgui", "viewCardCertificate: could not find certificate!");
         return;
     }
     PTEID_Certificate& cert = certificates.getCert(certIdx);
@@ -3191,7 +3191,7 @@ void GAPI::viewCardCertificate(QString issuedBy, QString issuedTo) {
     if (!pCertContext)
     {
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, 
-            "eidgui", "inspectCardCertificate: Error creating cert context: %d", GetLastError());
+            "eidgui", "viewCardCertificate: Error creating cert context: %d", GetLastError());
         return;
     }
 
@@ -3230,7 +3230,8 @@ void GAPI::doExportCardCertificate(QString issuedBy, QString issuedTo, QString o
         return;
     }
     PTEID_Certificate& cert = certificates.getCert(certIdx);
-    PTEID_ByteArray certData = cert.getCertData();
+	PTEID_ByteArray certData; 
+	cert.getFormattedData(certData);
 
     QFile file(outputPath);
     file.open(QIODevice::WriteOnly);
