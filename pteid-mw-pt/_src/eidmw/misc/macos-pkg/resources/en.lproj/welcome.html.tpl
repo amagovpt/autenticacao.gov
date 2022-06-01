@@ -12,6 +12,9 @@
     <ul>
        <li>Improvements in XAdES signatures: ability to sign with Chave Móvel Digital</li>
        <li>CMD signature is now available in the pteidlib SDKs</li>
+       <li>New certificate status menu</li>
+       <li>New notifications menu</li>
+       <li>Improvements in PDF signature</li>
    </ul>
 </body>
 </html>

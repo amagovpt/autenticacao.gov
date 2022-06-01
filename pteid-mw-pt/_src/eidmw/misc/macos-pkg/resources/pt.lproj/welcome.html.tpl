@@ -10,8 +10,11 @@
 
 	<h2>Versão 3.8.0 - revisão GIT_REVISION</h2>
 	<ul>
-		<li>Melhorias na assinatura XAdES: Possibilidade de assinar com Chave Móvel Digital</li>
-		<li>Assinatura CMD nos SDKs Java e C++</li>
+		<li>Melhorias na assinatura XAdES: possibilidade de assinar com Chave Móvel Digital</li>
+		<li>Assinatura com Chave Móvel Digital nos SDKs Java e C++</li>
+		<li>Novo menu para validar estado dos certificados</li>
+		<li>Nova área de notificações</li>
+		<li>Correções na assinatura de documentos PDF</li>
 	</ul>
 </body>
 </html>
