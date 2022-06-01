@@ -369,7 +369,7 @@ Load language error. Please reinstall the application"
                     id: cancelButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
-                    text: qsTranslate("Popup File", "STR_POPUP_FILE_CANCEL") + controler.autoTr
+                    text: qsTranslate("Popup File", "STR_POPUP_RESTART_LATER") + controler.autoTr
                     anchors.left: parent.left
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name

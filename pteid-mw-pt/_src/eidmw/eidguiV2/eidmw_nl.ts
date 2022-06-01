@@ -2214,7 +2214,7 @@
     </message>
     <message>
         <source>STR_POPUP_RESTART_APP</source>
-        <translation>É necessário reiniciar a aplicação para esta alteração ter efeito. Por favor reinicie a aplicação.</translation>
+        <translation>&lt;b&gt;É necessário reiniciar a aplicação para esta alteração ter efeito.&lt;/b&gt;&lt;br&gt; Deseja reiniciar a aplicação agora?</translation>
     </message>
     <message>
         <source>STR_POPUP_WIN_DEBUG_FILE_ERROR</source>
@@ -2282,6 +2282,10 @@
     <message>
         <source>STR_POPUP_RESTART_NOW</source>
         <translation>Reiniciar agora</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_RESTART_LATER</source>
+        <translation>Reiniciar mais tarde</translation>
     </message>
 </context>
 <context>

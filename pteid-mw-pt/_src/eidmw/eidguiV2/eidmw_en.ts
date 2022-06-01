@@ -2208,7 +2208,7 @@
     </message>
     <message>
         <source>STR_POPUP_RESTART_APP</source>
-        <translation>It is necessary to restart the application for this change to take effect. Please restart the application.</translation>
+        <translation>&lt;b&gt;It is necessary to restart the application for this change to take effect.&lt;/b&gt;&lt;br&gt; Do you want to restart the application now?</translation>
     </message>
     <message>
         <source>STR_POPUP_WIN_DEBUG_FILE_ERROR</source>
@@ -2276,6 +2276,10 @@
     <message>
         <source>STR_POPUP_RESTART_NOW</source>
         <translation>Restart now</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_RESTART_LATER</source>
+        <translation>Restart later</translation>
     </message>
 </context>
 <context>
