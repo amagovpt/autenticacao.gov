@@ -10,4 +10,4 @@ then
 fi
 
 #Generate fontconfig cache in advance
-/usr/local/bin/fc-cache -rv
+/usr/local/bin/fc-cache
