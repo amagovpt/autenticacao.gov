@@ -36,7 +36,7 @@
 #include <openssl/sha.h>
 #include <openssl/ts.h>
 
-#include "ess_asn1.h"
+#include <openssl/ess.h>
 
 #define SHA1_LEN 20
 #define SHA256_LEN 32
@@ -312,6 +312,38 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
 
 }
 
+int ESS_SIGNING_CERT_V2_add(PKCS7_SIGNER_INFO *si,
+                            ESS_SIGNING_CERT_V2 *sc)
+{
+    ASN1_STRING *seq = NULL;
+    unsigned char *p, *pp = NULL;
+    int len = i2d_ESS_SIGNING_CERT_V2(sc, NULL);
+
+    if ((pp = (unsigned char *) OPENSSL_malloc(len)) == NULL) {
+        //ESSerr(ESS_F_ESS_SIGNING_CERT_V2_ADD, ERR_R_MALLOC_FAILURE);
+        goto err;
+    }
+
+    p = pp;
+    i2d_ESS_SIGNING_CERT_V2(sc, &p);
+    if ((seq = ASN1_STRING_new()) == NULL || !ASN1_STRING_set(seq, pp, len)) {
+        //ESSerr(ESS_F_ESS_SIGNING_CERT_V2_ADD, ERR_R_MALLOC_FAILURE);
+        goto err;
+    }
+
+    OPENSSL_free(pp);
+    pp = NULL;
+
+    return PKCS7_add_signed_attribute(si,
+                                      NID_id_smime_aa_signingCertificateV2,
+                                      V_ASN1_SEQUENCE, seq);
+ err:
+    ASN1_STRING_free(seq);
+    OPENSSL_free(pp);
+    return 0;
+}
+
+
 void add_signingCertificate(PKCS7_SIGNER_INFO *signer_info, X509 *signing_cert)
 {
 
@@ -320,7 +352,7 @@ void add_signingCertificate(PKCS7_SIGNER_INFO *signer_info, X509 *signing_cert)
 	ESS_SIGNING_CERT_V2 * sc = NULL;
 	const int issuer_needed = 1;
 
-	sc = ESS_SIGNING_CERT_V2_new_init(EVP_sha256(), signing_cert, NULL,
+	sc = OSSL_ESS_signing_cert_v2_new_init(EVP_sha256(), signing_cert, NULL,
                                                   issuer_needed);
 
 	if (sc == NULL) {

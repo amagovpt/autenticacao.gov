@@ -133,8 +133,6 @@ SOURCES += \
 	SecurityContext.cpp \
 	sign-pkcs7.cpp \
 	cJSON.c \
-	ess_asn1.c \
-	ess_lib.c \
 	CRLFetcher.cpp \
 	PDFSignature.cpp \
 	PAdESExtender.cpp \
