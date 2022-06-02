@@ -79,11 +79,15 @@
 #ifdef SWIGCSHARP	/********************** C# SPECIFICS *************************/
 
 %typemap(csbase) 	eIDMW::PTEID_Exception "System.ApplicationException";
+%include <swiginterface.i>
+%interface_custom("PTEID_SigningDeviceProxy", "PTEID_SigningDevice", eIDMW::PTEID_SigningDevice)
 
 #elif SWIGJAVA		/********************** JAVA SPECIFICS ***********************/
 
 // Here we tell SWIG to create the java class PTEID_Exception as: 'PTEID_Exception extends java.lang.Exception'
 %typemap(javabase)  eIDMW::PTEID_Exception "java.lang.Exception";
+%include <swiginterface.i>
+%interface_custom("PTEID_SigningDeviceProxy", "PTEID_SigningDevice", eIDMW::PTEID_SigningDevice)
 
 #elif SWIGPYTHON
 
@@ -105,9 +109,6 @@
 
 //Name for operator= becomes assign
 %rename(assign) operator=;
-
-%include <swiginterface.i>
-%interface_custom("PTEID_SigningDeviceProxy", "PTEID_SigningDevice", eIDMW::PTEID_SigningDevice)
 
 #ifdef SWIGCSHARP /********************** C# SPECIFICS ***********************/
 
