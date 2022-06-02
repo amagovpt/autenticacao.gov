@@ -125,14 +125,14 @@ Item {
             id: fileDialogOutput
             title: qsTranslate("Popup File", "STR_POPUP_FILE_OUTPUT")
             nameFilters: (propertyRadioButtonPADES.checked ? ["PDF (*.pdf)", "All files (*)"] :
-                                                             ["ASiC container with XAdES (*.asics *.asice)", "All files (*)"])
+                                                             ["All files (*)"])
             fileMode: FileDialog.SaveFile
         }
         FileDialog {
             id: fileDialogCMDOutput
             title: qsTranslate("Popup File", "STR_POPUP_FILE_OUTPUT")
             nameFilters: (propertyRadioButtonPADES.checked ? ["PDF (*.pdf)", "All files (*)"] :
-                                                             ["ASiC container with XAdES (*.asics *.asice)", "All files (*)"])
+                                                             ["All files (*)"])
             fileMode: FileDialog.SaveFile
         }
         FolderDialog {
