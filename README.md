@@ -66,13 +66,13 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
    make
    ```
 
-4. Caso pretenda instalar a aplicação
+4. Caso pretenda instalar a aplicação e as bibliotecas que fazem parte do projeto:
 
    ```bash
    make install && sudo ldconfig
    ```
 
-   A aplicação utilitária será instalada em: /usr/local/bin/eidguiV2
+   A aplicação utilitária será instalada em: /usr/local/bin/eidguiV2 e as bibliotecas do projeto em /usr/local/lib/.
 
    As dependências para a execução do Middleware na distribuição Ubuntu 20.04 estão disponíveis em "Depends" no seguinte URL: [Dependências](pteid-mw-pt/_src/eidmw/debian/control)
 
