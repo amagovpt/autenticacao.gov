@@ -2,7 +2,7 @@
 
 To build and use the NodeJS wrapper library:
 
-1. Make sure the native pteid libraries are already built in ../lib directory, see top-level project README for build instructions. 
+1. Make sure the native pteid libraries are already compiled and installed with `make install`, see top-level project README for build instructions.
 2. Install `node-gyp' tool compatible with your nodejs version.
 3. Generate and compile the Node wrapper by executing: ./generate_swig_wrapper.sh. The compiled module will be located at `build/Release`.
 4. The JS sample code can be executed from the `examples` directory with `nodejs simple_example.js` 

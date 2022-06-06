@@ -34,13 +34,11 @@
           'link_settings': {
             'libraries': [
               '-lpteidcommon',
-              '-lpteiddialogsQT',
-              '-lpteidcardlayer',
               '-lpteidapplayer',
               '-lpteidlib',
             ],
             'library_dirs': [
-              '../lib',
+              '/usr/local/lib/',
             ],
           },
           'cflags_cc!': [
