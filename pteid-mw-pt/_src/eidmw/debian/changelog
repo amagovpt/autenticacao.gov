@@ -1,3 +1,10 @@
+pteid-mw (3.8.0+git20220601) UNRELEASED; urgency=medium
+
+  * Chave Movel Digital signature support in the pteidlib SDK
+  * New notifications menu and cache preference mandatory notification
+  * New certificate status menu
+  * Improvements in PDF signature
+ -- André Guerreiro <andre.guerreiro@caixamagica.pt>  Wed, 1 Jun 2022 12:11:00 +0000
 pteid-mw (3.7.0+git20211215) UNRELEASED; urgency=medium
 
   * Improvements in visible PDF signature: ability to resize signature seal and select visible fields

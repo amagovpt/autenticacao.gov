@@ -20,11 +20,12 @@
 %endif
 %endif
 
-%define git_revision git20211215
-%define app_version 3.7.0
+%define git_revision git20220601
+%define app_version 3.8.0
 
 Name:           pteid-mw
-BuildRequires:  pcsc-lite-devel make swig
+BuildRequires:  pcsc-lite-devel make
+BuildRequires:  swig >= 4.0.0
 BuildRequires:  libzip-devel
 BuildRequires:  openjpeg2-devel
 Requires:       pcsc-lite curl lato-fonts
@@ -163,7 +164,10 @@ install -m 755 eidguiV2/eidguiV2 $RPM_BUILD_ROOT/usr/local/bin/eidguiV2
 install -m 755 -p bin/pteiddialogsQTsrv $RPM_BUILD_ROOT/usr/local/bin/pteiddialogsQTsrv
 install -m 644 -p eidguiV2/eidmw_en.qm $RPM_BUILD_ROOT/usr/local/bin/
 install -m 644 -p eidguiV2/eidmw_nl.qm $RPM_BUILD_ROOT/usr/local/bin/
+
+mkdir -p $RPM_BUILD_ROOT/usr/local/share/pteid-mw/fonts/
 install -m 644 -p eidguiV2/fonts/myriad/MyriadPro-Regular.otf $RPM_BUILD_ROOT/usr/local/share/pteid-mw/fonts/
+install -m 644 -p eidguiV2/fonts/myriad/MyriadPro-Bold.otf $RPM_BUILD_ROOT/usr/local/share/pteid-mw/fonts/
 
 mkdir -p $RPM_BUILD_ROOT/usr/share/applications
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/usr/share/applications
@@ -280,6 +284,12 @@ fi
 /usr/local/share/pteid-mw
 
 %changelog
+* Wed Jun 1 2022 André Guerreiro <andre.guerreiro@caixamagica.pt>
+  - Chave Movel Digital signature support in the pteidlib SDK
+  - New notifications menu and cache preference mandatory notification
+  - New certificate status menu
+  - Improvements in PDF signature
+
 * Wed Dec 15 2021 André Guerreiro <andre.guerreiro@caixamagica.pt>
   - Improvements in visible PDF signature: ability to resize signature seal and select visible fields
   - Support all available signature algorithms in pteid-pkcs11 module
