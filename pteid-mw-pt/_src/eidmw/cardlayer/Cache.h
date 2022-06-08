@@ -29,6 +29,8 @@
 #include "Context.h"
 #include <stdlib.h>
 #include <map>
+#include <unordered_set>
+#include <algorithm>
 
 namespace eIDMW
 {
@@ -90,6 +92,21 @@ public:
 	 */
 	static bool Delete(const std::string & csName);
 
+	/**
+	 * Get the number of Id's that were previously cached on disk.
+	 * Each ID might contain more than one .bin file. This function
+	 * returns the ammount of UNIQUE ID's between all the files.
+	 */
+	unsigned long GetCachedIdsCount();
+
+	/**
+	 * Will try to limit the ammount of cached files on disk.
+	 * If the ammount of already existing ID cached files on disk
+	 * surpasses the ammount passed through ulMaxCacheFiles,
+	 * the oldest ID files will be permanently deleted. 
+	 */
+	bool LimitDiskCacheFiles(unsigned long ulMaxCacheFiles);
+
 protected:
 	CByteArray MemGetFile(const std::string & csName);
 	void MemStoreFile(const std::string & csName, const CByteArray &oData);
@@ -98,6 +115,9 @@ protected:
 	void DiskStoreFile(const std::string & csName, const CByteArray &oData);
 
 	static std::string GetCacheDir(bool bAddSlash = true);
+
+	template <typename Step>
+	void CacheDirIterate(const std::string &csPath, Step step);
 
 	unsigned char *m_pucTemp;
 	CContext *m_poContext;

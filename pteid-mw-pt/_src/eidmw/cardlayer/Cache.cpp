@@ -111,6 +111,9 @@ void CCache::StoreFile(const std::string & csName,
 	{
 		MemStoreFile(csName, oData);
 		DiskStoreFile(csName, oData);
+
+		// Limit the ammount of ID files cached on disk to 10
+		LimitDiskCacheFiles(10);
 	}
 }
 
@@ -213,6 +216,8 @@ void CCache::DiskStoreFile(const std::string & csName,
 #include <direct.h>
 #include <windows.h>
 
+//TODO: Implement CCache::GetCachedIdsCount() for Windows OS 
+
 std::string CCache::GetCacheDir(bool bAddSlash)
 {
 	std::string csCacheDir;
@@ -297,6 +302,83 @@ bool CCache::Delete(const std::string & csName)
 #include <sys/stat.h>
 #include <dirent.h>
 
+// Used for timestamp calculations
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <time.h>
+
+template <typename Step>
+void CCache::CacheDirIterate(const std::string &csPath, Step step)
+{
+	DIR *dir;
+	dirent *diread;
+
+	if ((dir = opendir(csPath.c_str())) != nullptr)
+	{
+		while ((diread = readdir(dir)) != nullptr)
+		{
+			std::string fileName(diread->d_name);
+
+			if (fileName.compare("..") == 0 ||
+				fileName.compare(".") == 0 ||
+				fileName.compare(fileName.length() - 4, 4, ".bin") != 0)
+				continue;
+
+			step(diread);
+		}
+		closedir(dir);
+	}
+}
+
+bool CCache::LimitDiskCacheFiles(unsigned long ulMaxCacheFIles)
+{
+	if(GetCachedIdsCount() <= ulMaxCacheFIles)
+		return false;
+
+	std::string path = GetCacheDir();
+
+	std::string oldestId;	// Oldest ID in the cache file
+	time_t oldestTime;
+	time(&oldestTime);		// Initialize time to now
+	
+	CacheDirIterate(path, [&](dirent *diread) {
+		std::string fileName(diread->d_name);
+		std::string fileFullPath = path + fileName;
+
+		struct stat fileStats;
+		lstat(fileFullPath.c_str(), &fileStats);
+
+		if(difftime(fileStats.st_mtime, oldestTime) < 0)
+		{
+			oldestTime = fileStats.st_mtime;
+			oldestId = fileName.substr(0, fileName.find("_")); // We want the ID of the group of files
+		}
+	});
+
+	// If we have a file to delete, delete it
+	// It is important to check this, incase somehow oldestId is empty,
+	// and _Delete_ will just delete all files inside the cache directory
+	if(!oldestId.empty())
+		Delete(oldestId);
+
+	return true;
+}
+
+unsigned long CCache::GetCachedIdsCount()
+{
+	std::string path = GetCacheDir();
+
+	std::unordered_set<std::string> uniqueIds;
+
+	CacheDirIterate(path, [&uniqueIds](dirent *diread)
+	{
+		std::string fileName(diread->d_name);
+		uniqueIds.insert(fileName.substr(0, fileName.find("_")));
+	});
+
+	return uniqueIds.size();
+}
 
 std::string CCache::GetCacheDir(bool bAddSlash)
 {
