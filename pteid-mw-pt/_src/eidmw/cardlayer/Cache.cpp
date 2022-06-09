@@ -27,6 +27,14 @@
 #include "Util.h"
 #include "Config.h"
 
+#include <unordered_set>
+#include <sys/stat.h>
+// Used for timestamp calculations
+#include <sys/types.h>
+#include <unistd.h>
+#include <time.h>
+
+
 namespace eIDMW
 {
 #ifdef WIN32
@@ -299,14 +307,7 @@ bool CCache::Delete(const std::string & csName)
 
 #else
 
-#include <sys/stat.h>
 #include <dirent.h>
-
-// Used for timestamp calculations
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <time.h>
 
 template <typename Step>
 void CCache::CacheDirIterate(const std::string &csPath, Step step)
@@ -338,7 +339,7 @@ bool CCache::LimitDiskCacheFiles(unsigned long ulMaxCacheFIles)
 
 	std::string path = GetCacheDir();
 
-	std::string oldestId;	// Oldest ID in the cache file
+	std::string oldestEID;	// Oldest eID in the cache file
 	time_t oldestTime;
 	time(&oldestTime);		// Initialize time to now
 	
@@ -347,20 +348,20 @@ bool CCache::LimitDiskCacheFiles(unsigned long ulMaxCacheFIles)
 		std::string fileFullPath = path + fileName;
 
 		struct stat fileStats;
-		lstat(fileFullPath.c_str(), &fileStats);
+		stat(fileFullPath.c_str(), &fileStats);
 
 		if(difftime(fileStats.st_mtime, oldestTime) < 0)
 		{
 			oldestTime = fileStats.st_mtime;
-			oldestId = fileName.substr(0, fileName.find("_")); // We want the ID of the group of files
+			oldestEID = fileName.substr(0, fileName.find("_")); // We want the eID of the group of files
 		}
 	});
 
 	// If we have a file to delete, delete it
 	// It is important to check this, incase somehow oldestId is empty,
 	// and _Delete_ will just delete all files inside the cache directory
-	if(!oldestId.empty())
-		Delete(oldestId);
+	if(!oldestEID.empty())
+		Delete(oldestEID);
 
 	return true;
 }
@@ -369,15 +370,15 @@ unsigned long CCache::GetCachedIdsCount()
 {
 	std::string path = GetCacheDir();
 
-	std::unordered_set<std::string> uniqueIds;
+	std::unordered_set<std::string> uniqueEIDs;
 
-	CacheDirIterate(path, [&uniqueIds](dirent *diread)
+	CacheDirIterate(path, [&uniqueEIDs](dirent *diread)
 	{
 		std::string fileName(diread->d_name);
-		uniqueIds.insert(fileName.substr(0, fileName.find("_")));
+		uniqueEIDs.insert(fileName.substr(0, fileName.find("_")));
 	});
 
-	return uniqueIds.size();
+	return uniqueEIDs.size();
 }
 
 std::string CCache::GetCacheDir(bool bAddSlash)

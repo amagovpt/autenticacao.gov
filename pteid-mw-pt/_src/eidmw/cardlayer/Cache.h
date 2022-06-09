@@ -29,8 +29,6 @@
 #include "Context.h"
 #include <stdlib.h>
 #include <map>
-#include <unordered_set>
-#include <algorithm>
 
 namespace eIDMW
 {
@@ -93,17 +91,17 @@ public:
 	static bool Delete(const std::string & csName);
 
 	/**
-	 * Get the number of Id's that were previously cached on disk.
-	 * Each ID might contain more than one .bin file. This function
-	 * returns the ammount of UNIQUE ID's between all the files.
+	 * Get the number of eIDs that were previously cached on disk.
+	 * Each eID might contain more than one .bin file. This function
+	 * returns the amount of UNIQUE eIDs between all the files.
 	 */
 	unsigned long GetCachedIdsCount();
 
 	/**
 	 * Will try to limit the ammount of cached files on disk.
-	 * If the ammount of already existing ID cached files on disk
-	 * surpasses the ammount passed through ulMaxCacheFiles,
-	 * the oldest ID files will be permanently deleted. 
+	 * If the amount of already existing eIDs cached on disk
+	 * surpasses the amount passed through _ulMaxCacheFiles_,
+	 * the oldest eID files will be permanently deleted. 
 	 */
 	bool LimitDiskCacheFiles(unsigned long ulMaxCacheFiles);
 
