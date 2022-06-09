@@ -1127,9 +1127,7 @@ void AutoUpdates::RunCertsPackage(QStringList certs) {
             certificateFileName = QDir::tempPath() + "/" + certs.at(i);
             if(validateHash(certificateFileName, hashList.at(i))){
                     bHaveFilesToCopy= true;
-                    filesToCopy.append(QDir::tempPath());
-                    filesToCopy.append("/");
-                    filesToCopy.append(certs.at(i));
+                    filesToCopy.append(certificateFileName);
                     filesToCopy.append(" ");
             } else {
                     bUpdateCertsSuccess = false;
@@ -1137,9 +1135,9 @@ void AutoUpdates::RunCertsPackage(QStringList certs) {
         }
     }
 
-    if(bHaveFilesToCopy){
+    if(bHaveFilesToCopy) {
         QProcess *proc = new QProcess(this);
-        proc->waitForFinished();
+        proc->setProcessChannelMode(QProcess::MergedChannels);
 
         QString cmd = "pkexec /bin/cp " + filesToCopy + certs_dir_str;
         proc->start(cmd);
@@ -1153,7 +1151,6 @@ void AutoUpdates::RunCertsPackage(QStringList certs) {
         } else {
 
             proc->waitForFinished();
-            proc->setProcessChannelMode(QProcess::MergedChannels);
 
             if(proc->exitStatus() == QProcess::NormalExit
                     && proc->exitCode() == QProcess::NormalExit){
@@ -1161,6 +1158,9 @@ void AutoUpdates::RunCertsPackage(QStringList certs) {
                           "AutoUpdates::RunCertsPackage: Copy file(s) success: %s",cmd.toStdString().c_str());
             } else {
                 bUpdateCertsSuccess = false;
+                if (proc->exitStatus() == QProcess::NormalExit) {
+                    PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Exit code of pkexec command: %d", proc->exitCode());
+                }
                 PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                           "AutoUpdates::RunCertsPackage: Cannot copy file(s): %s",cmd.toStdString().c_str());
             }
