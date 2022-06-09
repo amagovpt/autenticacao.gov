@@ -27,6 +27,8 @@ Homepage: https://www.autenticacao.gov.pt/cc-software
 Package: pteid-mw
 Conflicts: cartaodecidadao
 Architecture: any
+#TODO: dependency missing for pkexec command: policykit-1 on Ubuntu 20 which is replaced by pkexec on Ubuntu 22
+#On most desktops it is included with the DE but we should add it anyway
 Depends: pcscd,
 	qml-module-qt-labs-folderlistmodel,
 	qml-module-qt-labs-settings,

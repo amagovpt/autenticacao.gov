@@ -28,7 +28,7 @@ BuildRequires:  pcsc-lite-devel make
 BuildRequires:  swig >= 4.0.0
 BuildRequires:  libzip-devel
 BuildRequires:  openjpeg2-devel
-Requires:       pcsc-lite curl lato-fonts
+Requires:       pcsc-lite curl lato-fonts polkit
 
 
 %if 0%{?suse_version}
