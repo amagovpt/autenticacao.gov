@@ -28,6 +28,7 @@
 #include "Config.h"
 
 #include <unordered_set>
+#include <algorithm>
 #include <sys/stat.h>
 // Used for timestamp calculations
 #include <sys/types.h>
@@ -307,10 +308,7 @@ bool CCache::Delete(const std::string & csName)
 
 #else
 
-#include <dirent.h>
-
-template <typename Step>
-void CCache::CacheDirIterate(const std::string &csPath, Step step)
+void CCache::CacheDirIterate(const std::string &csPath, std::function<void(dirent*)> step)
 {
 	DIR *dir;
 	dirent *diread;
@@ -334,15 +332,12 @@ void CCache::CacheDirIterate(const std::string &csPath, Step step)
 
 bool CCache::LimitDiskCacheFiles(unsigned long ulMaxCacheFIles)
 {
-	if(GetCachedIdsCount() <= ulMaxCacheFIles)
+	if (GetCachedIdsCount() <= ulMaxCacheFIles)
 		return false;
 
-	std::string path = GetCacheDir();
+	std::map<std::string, time_t> uniqueEIDs;
 
-	std::string oldestEID;	// Oldest eID in the cache file
-	time_t oldestTime;
-	time(&oldestTime);		// Initialize time to now
-	
+	std::string path = GetCacheDir();
 	CacheDirIterate(path, [&](dirent *diread) {
 		std::string fileName(diread->d_name);
 		std::string fileFullPath = path + fileName;
@@ -350,18 +345,25 @@ bool CCache::LimitDiskCacheFiles(unsigned long ulMaxCacheFIles)
 		struct stat fileStats;
 		stat(fileFullPath.c_str(), &fileStats);
 
-		if(difftime(fileStats.st_mtime, oldestTime) < 0)
-		{
-			oldestTime = fileStats.st_mtime;
-			oldestEID = fileName.substr(0, fileName.find("_")); // We want the eID of the group of files
-		}
+		uniqueEIDs.insert(std::make_pair(fileName.substr(0, fileName.find("_")), fileStats.st_mtime));
 	});
 
-	// If we have a file to delete, delete it
-	// It is important to check this, incase somehow oldestId is empty,
-	// and _Delete_ will just delete all files inside the cache directory
-	if(!oldestEID.empty())
-		Delete(oldestEID);
+	// Returns the oldest. Used to sort the vector
+	auto older = [](std::pair<std::string, time_t> const &a, std::pair<std::string, time_t> const &b)
+	{ return difftime(a.second, b.second) > 0; };
+
+	// Convert the map of unique EIDs-time of creation to a vector so we can easily sort by time of creation
+	std::vector<std::pair<std::string, time_t>> cachedEIDs(uniqueEIDs.begin(), uniqueEIDs.end());
+	std::sort(cachedEIDs.begin(), cachedEIDs.end(), older);
+
+	// Delete all files starting from _ulMaxCacheFiles_
+	std::for_each(cachedEIDs.begin() + ulMaxCacheFIles, cachedEIDs.end(), [&](std::pair<std::string, time_t> const &a) {
+		// If we have a file to delete, delete it
+		// It is important to check this, incase somehow oldestId is empty,
+		// and _Delete_ will just delete all files inside the cache directory
+		if (!a.first.empty())
+			Delete(a.first);
+	});
 
 	return true;
 }

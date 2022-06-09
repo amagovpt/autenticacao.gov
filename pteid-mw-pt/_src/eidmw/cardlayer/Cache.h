@@ -29,6 +29,8 @@
 #include "Context.h"
 #include <stdlib.h>
 #include <map>
+#include <functional>
+#include <dirent.h>
 
 namespace eIDMW
 {
@@ -114,8 +116,7 @@ protected:
 
 	static std::string GetCacheDir(bool bAddSlash = true);
 
-	template <typename Step>
-	void CacheDirIterate(const std::string &csPath, Step step);
+	void CacheDirIterate(const std::string &csPath, std::function<void(dirent*)> step);
 
 	unsigned char *m_pucTemp;
 	CContext *m_poContext;
