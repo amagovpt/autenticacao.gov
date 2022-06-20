@@ -740,7 +740,7 @@ void APL_Certifs::loadCard()
 void APL_Certifs::loadFromFile()
 {
 	bool bStopRequest = false;
-	CPathUtil::scanDir(m_certs_dir.c_str(),"",m_certExtension.c_str(),bStopRequest,this,&APL_Certifs::foundCertificate);
+	scanDir(m_certs_dir.c_str(),"",m_certExtension.c_str(),bStopRequest,this,&APL_Certifs::foundCertificate);
 }
 
 void APL_Certifs::foundCertificate(const char *SubDir, const char *File, void *param)
