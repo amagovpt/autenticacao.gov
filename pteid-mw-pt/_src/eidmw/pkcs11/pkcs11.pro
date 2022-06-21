@@ -25,10 +25,6 @@ DEPENDPATH += .
 LIBS += -L../lib -l$${COMMONLIB} -l$${CARDLAYERLIB} -l$${DLGLIB}
 macx: LIBS += -Wl,-framework -Wl,PCSC
 
-#Support Fat binaries on Mac with both x86 and x86_64 architectures
-macx: CONFIG += x86
-
-
 LIBS +=	-l$${CARDLAYERLIB}
 
 INCLUDEPATH += . ../common ../cardlayer

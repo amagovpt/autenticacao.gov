@@ -34,9 +34,6 @@ INCLUDEPATH += . ../../common
 ##
 QMAKE_CXXFLAGS+=-fno-strict-aliasing
 
-#Support Fat binaries on Mac with both x86 and x86_64 architectures
-macx: CONFIG += x86
-
 ## destination directory for the compiler
 DESTDIR = ../../lib
 
