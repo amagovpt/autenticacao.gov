@@ -26,11 +26,10 @@ change_dylib_dep libcurl.4.dylib "libssl.1.1.dylib libcrypto.1.1.dylib"
 #Fixup pteid-mw libs
 change_dylib_dep libpteidcardlayer.2.0.0.dylib "libpteiddialogsQT.2.dylib libpteidcommon.2.dylib"
 change_dylib_dep libpteiddialogsQT.2.0.0.dylib libpteidcommon.2.dylib
-change_dylib_dep libpteidlib.2.0.0.dylib  "libpteidcommon.2.dylib libpteiddialogsQT.2.dylib libpteidcardlayer.2.dylib libpteidapplayer.2.dylib" 
-change_dylib_dep libCMDServices.1.0.0.dylib  "libssl.1.1.dylib libcrypto.1.1.dylib libpteidcommon.2.dylib libpteidlib.2.dylib libpteidapplayer.2.dylib" 
-change_dylib_dep libpteidlib.2.0.0.dylib  "libpteidcommon.2.dylib libpteiddialogsQT.2.dylib libpteidcardlayer.2.dylib libpteidapplayer.2.dylib" 
+change_dylib_dep libpteidlib.2.0.0.dylib  "libCMDServices.1.dylib libpteidcommon.2.dylib libpteiddialogsQT.2.dylib libpteidcardlayer.2.dylib libpteidapplayer.2.dylib" 
+change_dylib_dep libCMDServices.1.0.0.dylib  "libssl.1.1.dylib libcrypto.1.1.dylib libpteidcommon.2.dylib libpteidlib.2.dylib libpteidapplayer.2.dylib libpteiddialogsQT.2.dylib" 
 change_dylib_dep libpteidpkcs11.2.0.0.dylib  "libpteidcommon.2.dylib libpteiddialogsQT.2.dylib libpteidcardlayer.2.dylib" 
-change_dylib_dep libpteidlibj.2.0.0.dylib  "libpteidcommon.2.dylib libpteiddialogsQT.2.dylib libpteidcardlayer.2.dylib libpteidapplayer.2.dylib"
+change_dylib_dep libpteidlibj.2.0.0.dylib  "libCMDServices.1.dylib libpteidcommon.2.dylib libpteiddialogsQT.2.dylib libpteidcardlayer.2.dylib libpteidapplayer.2.dylib"
 change_dylib_dep libpteidapplayer.2.0.0.dylib "libcurl.4.dylib libpteidcommon.2.dylib libpteidcardlayer.2.dylib \
                 libzip.5.dylib libxml-security-c.20.dylib libpng16.16.dylib libopenjp2.7.dylib libxerces-c-3.2.dylib libcrypto.1.1.dylib libssl.1.1.dylib"
 
