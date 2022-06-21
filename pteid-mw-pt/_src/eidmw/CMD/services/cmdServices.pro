@@ -14,7 +14,7 @@ message("Version $$VERSION")
 target.path = $${INSTALL_DIR_LIB}
 INSTALLS += target
 
-QT -= gui
+CONFIG -= qt
 
 ## destination directory
 DESTDIR = ./../../lib
