@@ -567,12 +567,7 @@ EIDMW_CMN_API int vfprintf_s(FILE *stream, const char *format, va_list argptr)
 #endif
 
 #ifdef WIN32
-void scanDir(const char *Dir,
-			 const char *SubDir,
-			 const char *Ext,
-			 bool &bStopRequest,
-			 void *param,
-			 void (*callback)(const char *SubDir, const char *File, void *param))
+void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRequest, void *param, std::function<void(const char*, const char*, void* param)> callback)
 {
 	WIN32_FIND_DATAA FindFileData;
 	std::string path;
@@ -631,12 +626,7 @@ void scanDir(const char *Dir,
 #include "dirent.h"
 #include "errno.h"
 
-void scanDir(const char *Dir,
-			 const char *SubDir,
-			 const char *Ext,
-			 bool &bStopRequest,
-			 void *param,
-			 void (*callback)(const char *SubDir, const char *File, void *param))
+void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRequest, void *param, std::function<void(const char*, const char*, void* param)> callback)
 {
 	std::string path = Dir;
 	std::string subdir;

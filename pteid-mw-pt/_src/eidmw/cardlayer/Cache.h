@@ -30,7 +30,6 @@
 #include <stdlib.h>
 #include <map>
 #include <functional>
-#include <dirent.h>
 
 namespace eIDMW
 {
@@ -93,19 +92,12 @@ public:
 	static bool Delete(const std::string & csName);
 
 	/**
-	 * Get the number of eIDs that were previously cached on disk.
-	 * Each eID might contain more than one .bin file. This function
-	 * returns the amount of UNIQUE eIDs between all the files.
-	 */
-	unsigned long GetCachedIdsCount();
-
-	/**
 	 * Will try to limit the ammount of cached files on disk.
 	 * If the amount of already existing eIDs cached on disk
 	 * surpasses the amount passed through _ulMaxCacheFiles_,
 	 * the oldest eID files will be permanently deleted. 
 	 */
-	bool LimitDiskCacheFiles(unsigned long ulMaxCacheFiles);
+	static bool LimitDiskCacheFiles(unsigned long ulMaxCacheFiles);
 
 protected:
 	CByteArray MemGetFile(const std::string & csName);
@@ -116,7 +108,7 @@ protected:
 
 	static std::string GetCacheDir(bool bAddSlash = true);
 
-	void CacheDirIterate(const std::string &csPath, std::function<void(dirent*)> step);
+	static void CacheDirIterate(std::function<void(const char* FileName, const char* FullPath)> step);
 
 	unsigned char *m_pucTemp;
 	CContext *m_poContext;

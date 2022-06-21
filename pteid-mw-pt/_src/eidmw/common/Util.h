@@ -30,6 +30,7 @@
 #include <cstring>
 #include <iostream>
 #include <string>
+#include <functional>
 
 #ifdef WIN32
 #include <windows.h>
@@ -100,4 +101,4 @@ EIDMW_CMN_API int vfprintf_s(FILE *stream, const char *format, va_list argptr);
 /**
  * Scan the directory and call the call back function for each file corresponding to the extension
 */
-void scanDir(const char *Dir,const char *SubDir,const char *ext,bool &bStopRequest,void *param,void (* callback)(const char *SubDir, const char *File, void *param));
+void scanDir(const char *Dir, const char *SubDir, const char *ext, bool &bStopRequest, void *param, std::function<void(const char*, const char*, void* param)>);
