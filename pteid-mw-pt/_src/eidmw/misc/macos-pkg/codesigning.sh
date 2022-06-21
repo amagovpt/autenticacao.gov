@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -e   #We can't enable the abort-on-error flag because the codesign command returns error when the input file is already signed 
+set -e   #We can't enable the abort-on-error flag because the codesign command returns error when the input file is already signed 
 
 #Print every command before it is executed as if it were a Makefile
 set -o xtrace
@@ -27,7 +27,7 @@ done
 
 #Sign applications with hardened runtime enabled and entitlements file if needed
 echo "Signing appbundle..."
-find "apps/Autenticação.gov.app/Contents/Resources" -name '*.dylib' -exec codesign --verbose -s "$SIGNING_IDENTITY" --timestamp "{}" \;
+find "apps/Autenticação.gov.app/Contents/Resources" -name '*.dylib' -exec codesign --force --verbose -s "$SIGNING_IDENTITY" --timestamp "{}" \;
 
 codesign --force --deep --verbose -s "$SIGNING_IDENTITY" --timestamp -o runtime --entitlements entitlements.plist apps/Autenticação.gov.app/
 
