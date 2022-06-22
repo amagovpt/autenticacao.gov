@@ -62,7 +62,7 @@
 
 /////////////////////////////////// CCID things ///////////////////////////////
 // More info:
-// http://www.pcscworkgroup.com/specifications/files/pcsc10_v2.01.6.pdf
+// http://pcscworkgroup.com/Download/Specifications/pcsc10_v2.02.02_sup.pdf
 // http://www.usb.org/developers/devclass_docs/DWG_Smart-Card_CCID_Rev110.pdf
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -77,6 +77,7 @@
 #define CCID_CHANGE_START    0x03
 #define CCID_CHANGE_FINISH   0x04
 #define CCID_CHANGE_DIRECT   0x07
+#define CCID_GET_TLV_PROPERTIES 0x12
 
 // The structs below need packing with 1-byte alignment
 #pragma pack(push, pinpad2, 1)
