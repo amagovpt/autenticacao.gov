@@ -72,6 +72,9 @@
     <ClCompile Include="PteidCard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Win32ReaderInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ACR83Pinpad.h">
@@ -141,6 +144,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UnknownCard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReaderDeviceInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -51,6 +51,7 @@ public:
 
     bool UsePinpad();
 	void Init(SCARDHANDLE hCard);
+	int getTlvPropertiesIoctl() { return m_ioctlTlvProperties;  }
     GenericPinpad *getPinpadHandler();
 
 protected:
@@ -72,6 +73,7 @@ protected:
 	unsigned long m_ioctlChangeStart;
 	unsigned long m_ioctlChangeFinish;
 	unsigned long m_ioctlChangeDirect;
+	int m_ioctlTlvProperties;
 
 	unsigned short m_usReaderFirmVers;
 };

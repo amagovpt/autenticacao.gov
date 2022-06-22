@@ -33,6 +33,7 @@ namespace eIDMW
 
 class CCardLayer;
 class CCard;
+struct ReaderDeviceInfo;
 
 class EIDMW_CAL_API CReader
 {
@@ -175,9 +176,11 @@ public:
 
 private:
     CReader(const std::string & csReader, CContext *poContext);
-    // No copies allowed
+	// No copies allowed
     CReader(const CReader & oReader);
     CReader & operator = (const CReader & oReader);
+
+	void readerDeviceInfo(SCARDHANDLE hCard, ReaderDeviceInfo *deviceInfo, int ioctl_get_features);
 
 	bool m_bIgnoreRemoval;
     std::string m_csReader;

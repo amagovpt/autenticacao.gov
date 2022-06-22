@@ -468,7 +468,9 @@ CByteArray CPCSC::Control(SCARDHANDLE hCard, unsigned long ulControl, const CByt
 			pucRecv[0], pucRecv[1]);
 	}
 	else
+	{
 		MWLOG(LEV_DEBUG, MOD_CAL, L"        SCardControl(): %02d bytes returned", dwRecvLen);
+	}
 
 	CByteArray oResp(pucRecv, (unsigned long) dwRecvLen);
 	delete[] pucRecv;

@@ -97,14 +97,15 @@ CByteArray CPinpad::PinpadControl(unsigned long ulControl, const CByteArray & oC
 	return oResp;
 }
 
-#define CHECK_FEATURE(feature, featureID, iotcl) \
+#define CHECK_FEATURE(feature, featureID, ioctl) \
 	if (feature[0] == featureID) \
-		iotcl = 256 * (256 * ((256 * feature[2]) + feature[3]) + feature[4]) + feature[5];
+		ioctl = 256 * (256 * ((256 * feature[2]) + feature[3]) + feature[4]) + feature[5];
 
 void CPinpad::GetFeatureList()
 {
 	m_bCanVerifyUnlock = false;
 	m_bCanChangeUnlock = false;
+	int properties_in_tlv_ioctl = 0;
 	m_ioctlVerifyStart = m_ioctlVerifyFinish = m_ioctlVerifyDirect = 0;
 	m_ioctlChangeStart = m_ioctlChangeFinish = m_ioctlChangeDirect = 0;
 
@@ -123,6 +124,7 @@ void CPinpad::GetFeatureList()
 			ulFeatureLen /= 6;
 			for (unsigned long i = 0; i < ulFeatureLen; i++)
 			{
+				CHECK_FEATURE(pucFeatures, CCID_GET_TLV_PROPERTIES, m_ioctlTlvProperties)
 				CHECK_FEATURE(pucFeatures, CCID_VERIFY_START, m_ioctlVerifyStart)
 				CHECK_FEATURE(pucFeatures, CCID_VERIFY_FINISH, m_ioctlVerifyFinish)
 				CHECK_FEATURE(pucFeatures, CCID_VERIFY_DIRECT, m_ioctlVerifyDirect)
@@ -145,6 +147,7 @@ void CPinpad::GetFeatureList()
 	}
 
 }
+
 
 
 }

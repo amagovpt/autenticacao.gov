@@ -167,7 +167,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>WS2_32.Lib;pteidDlgsWin32.lib;pteidcommon.lib;winscard.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>setupapi.lib;WS2_32.Lib;pteidDlgsWin32.lib;pteidcommon.lib;winscard.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -199,7 +199,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>WS2_32.Lib;pteidDlgsWin32.lib;pteidcommon.lib;winscard.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>setupapi.lib;WS2_32.Lib;pteidDlgsWin32.lib;pteidcommon.lib;winscard.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -231,6 +231,7 @@
     <ClCompile Include="ReadersInfo.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="UnknownCard.cpp" />
+    <ClCompile Include="Win32ReaderInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ACR83Pinpad.h" />
@@ -255,6 +256,7 @@
     <ClInclude Include="PkiCard.h" />
     <ClInclude Include="Reader.h" />
     <CustomBuild Include="ReadersInfo.h" />
+    <ClInclude Include="ReaderDeviceInfo.h" />
     <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="UnknownCard.h" />
   </ItemGroup>

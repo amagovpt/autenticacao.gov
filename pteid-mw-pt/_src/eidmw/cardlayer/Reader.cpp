@@ -32,6 +32,7 @@
 //cardlayer headers
 #include "Reader.h"
 #include "Card.h"
+#include "ReaderDeviceInfo.h"
 
 #include "CardFactory.h"
 
@@ -196,6 +197,68 @@ static const inline wchar_t * Type2String(tCardType cardType)
 	}
 }
 
+
+//Tags specified in PC/SC Part 10
+#define PCSCv2_PART10_PROPERTY_wIdVendor 11  /**< wIdVendor */
+#define PCSCv2_PART10_PROPERTY_wIdProduct 12 /**< wIdProduct */
+
+static void parse_reader_device_properties(unsigned char *bRecvBuffer, unsigned long length, int *vendor_id, int *product_id) {
+	unsigned char *p;
+
+	p = bRecvBuffer;
+	while (p - bRecvBuffer < length)
+	{
+		int tag, len, value;
+
+		tag = *p++;
+		len = *p++;
+
+		switch (len)
+		{
+		case 1:
+			value = *p;
+			break;
+		case 2:
+			value = *p + (*(p + 1) << 8);
+			break;
+		case 4:
+			value = *p + (*(p + 1) << 8) + (*(p + 2) << 16) + (*(p + 3) << 24);
+			break;
+		default:
+			value = -1;
+		}
+
+		switch (tag)
+		{
+
+		case PCSCv2_PART10_PROPERTY_wIdVendor:
+			*vendor_id = value;
+			break;
+		case PCSCv2_PART10_PROPERTY_wIdProduct:
+			*product_id = value;
+			break;
+		default:
+			MWLOG(LEV_DEBUG, MOD_CAL, "%s Unknown tag: 0x%02X (length = %d)\n", __FUNCTION__, tag, len);
+		}
+
+		p += len;
+	}
+}
+
+
+void CReader::readerDeviceInfo(SCARDHANDLE hCard, ReaderDeviceInfo *deviceInfo, int ioctl_get_properties_tlv) {
+	//No input data for this reader command
+	CByteArray oCmd;
+	try {
+
+		CByteArray resp = m_poContext->m_oPCSC.Control(hCard, ioctl_get_properties_tlv, oCmd);
+		parse_reader_device_properties(resp.GetBytes(), resp.Size(), &deviceInfo->vendorID, &deviceInfo->productID);
+	}
+	catch (const CMWException & e) {
+		MWLOG(LEV_WARN, MOD_CAL, "Failed to get device info for reader: %s Error code: %ld", m_csReader.c_str(), e.GetError());
+	}
+}
+
 bool CReader::Connect()
 {
 	if (m_poCard != NULL)
@@ -217,8 +280,23 @@ bool CReader::Connect()
 		else
 			MWLOG(LEV_DEBUG, MOD_CAL, L"Using non-pinpad reader. pinpadEnabled=%ld", pinpadEnabled);
 
+		
+#ifdef WIN32
+		//Get info on all connected readers using Win32 SetupAPI as TLV Properties Control command is not available for all readers
+		std::vector<ReaderDeviceInfo> readerDevices = win32ReaderDevices();
+		for (auto dev : readerDevices) {
+			MWLOG(LEV_INFO, MOD_CAL, "Windows reader: %s %s (vendorID: %04x, productID: %04x) Driver: %s",
+				  dev.manufacturer.c_str(), dev.name.c_str(), dev.vendorID, dev.productID, dev.driver.c_str());
+		}
 		MWLOG(LEV_INFO, MOD_CAL, L" Connected to %ls card in reader %ls",
-				Type2String(m_poCard->GetType()), m_wsReader.c_str());
+			  Type2String(m_poCard->GetType()), m_wsReader.c_str());
+#else
+		ReaderDeviceInfo device_info = { 0 };
+		readerDeviceInfo(m_poCard->m_hCard, &device_info, m_oPinpad->getTlvPropertiesIoctl());
+		MWLOG(LEV_INFO, MOD_CAL, L" Connected to %ls card in reader %ls (vendorID: %04x, productID: %04x)",
+			Type2String(m_poCard->GetType()), m_wsReader.c_str(), device_info.vendorID, device_info.productID);
+#endif
+
 	}
 
 	return m_poCard != NULL;
