@@ -36,7 +36,6 @@
 #endif
 #include <stdlib.h>
 
-
 #include "MWException.h"
 #include "Config.h"
 #include "eidErrors.h"
@@ -408,6 +407,144 @@ void WriteReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD dw
     RegCloseKey(hKey);
 }
 #endif
+
+
+#ifdef WIN32
+
+void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRequest, void *param, std::function<void(const char*, const char*, void* param)> callback)
+{
+	WIN32_FIND_DATAA FindFileData;
+	std::string path;
+	std::string subdir;
+	HANDLE hFind;
+	DWORD a = 0;
+
+	path = Dir;
+	path += "\\*.*";
+	
+
+	// Get the first file
+	hFind = FindFirstFileA(path.c_str(), &FindFileData);
+	if (hFind == INVALID_HANDLE_VALUE)
+		return;
+
+
+	while (a != ERROR_NO_MORE_FILES)
+	{
+
+		if (strcmp(FindFileData.cFileName, ".") != 0 && strcmp(FindFileData.cFileName, "..") != 0)
+		{
+
+			path = Dir;
+			path += "\\";
+			path += FindFileData.cFileName;
+
+			if (FindFileData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
+			{
+
+				subdir = SubDir;
+				if (strlen(SubDir) != 0)
+					subdir += "\\";
+				subdir += FindFileData.cFileName;
+				scanDir(path.c_str(), subdir.c_str(), Ext, bStopRequest, param, callback);
+			}
+			else
+			{
+				std::string file = FindFileData.cFileName;
+				std::string ext = ".";
+				ext += Ext;
+				if (strlen(Ext) == 0 || (file.size() > ext.size() && file.compare(file.size() - ext.size(), ext.size(), ext) == 0))
+				{
+
+					callback(SubDir, FindFileData.cFileName, param);
+				}
+			}
+
+			if (bStopRequest)
+				break;
+		}
+
+		// Get next file
+		if (!FindNextFileA(hFind, &FindFileData))
+			a = GetLastError();
+	}
+	FindClose(hFind);
+}
+
+#else
+#include <sys/stat.h>
+#include "dirent.h"
+#include "errno.h"
+
+void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRequest, void *param, std::function<void(const char*, const char*, void* param)> callback)
+{
+	std::string path = Dir;
+	std::string subdir;
+
+	DIR *pDir = opendir(Dir);
+
+	// If pDir is NULL then the dir doesn't exist
+	if (pDir != NULL)
+	{
+		struct dirent *pFile = readdir(pDir);
+
+		for (; pFile != NULL; pFile = readdir(pDir))
+		{
+
+			// skip the . and .. directories
+			if (strcmp(pFile->d_name, ".") != 0 &&
+				strcmp(pFile->d_name, "..") != 0)
+			{
+
+				path = Dir;
+				path += "/";
+				path += pFile->d_name;
+
+				// check file attributes
+				struct stat buffer;
+				if (!stat(path.c_str(), &buffer))
+				{
+					if (S_ISDIR(buffer.st_mode))
+					{
+						// this is a directory: recursive scan
+						subdir = SubDir;
+						if (strlen(SubDir) != 0)
+							subdir += "/";
+						subdir += pFile->d_name;
+
+						scanDir(path.c_str(), subdir.c_str(), Ext, bStopRequest, param, callback);
+					}
+					else
+					{
+						// this is a regular file
+						std::string file = pFile->d_name;
+						std::string ext = Ext;
+						// check if the file has the requested extension
+						if (strlen(Ext) == 0 || (file.size() > ext.size() && file.compare(file.size() - ext.size(), ext.size(), ext) == 0))
+						{
+							callback(SubDir, file.c_str(), param);
+						}
+					}
+				}
+				else
+				{
+					// log error
+					fprintf(stderr, "CPathUtil::scanDir stat failed: %s\n", strerror(errno));
+				}
+			}
+			if (bStopRequest)
+				break;
+		}
+		closedir(pDir);
+	}
+	else
+	{
+		// log error
+		fprintf(stderr, "CPathUtil::scanDir \"%s\" : %s\n", Dir, strerror(errno));
+		return;
+	}
+}
+#endif
 }
 
 #ifndef WIN32
@@ -564,134 +701,4 @@ EIDMW_CMN_API int vfprintf_s(FILE *stream, const char *format, va_list argptr)
 	return r;
 }
 
-#endif
-
-#ifdef WIN32
-void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRequest, void *param, std::function<void(const char*, const char*, void* param)> callback)
-{
-	WIN32_FIND_DATAA FindFileData;
-	std::string path;
-	std::string subdir;
-	HANDLE hFind;
-	DWORD a = 0;
-
-	path = Dir;
-	path += "\\*.*";
-
-	// Get the first file
-	hFind = FindFirstFileA(path.c_str(), &FindFileData);
-	if (hFind == INVALID_HANDLE_VALUE)
-		return;
-
-	while (a != ERROR_NO_MORE_FILES)
-	{
-		if (strcmp(FindFileData.cFileName, ".") != 0 && strcmp(FindFileData.cFileName, "..") != 0)
-		{
-			path = Dir;
-			path += "\\";
-			path += FindFileData.cFileName;
-
-			if (FindFileData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
-			{
-				subdir = SubDir;
-				if (strlen(SubDir) != 0)
-					subdir += "\\";
-				subdir += FindFileData.cFileName;
-				scanDir(path.c_str(), subdir.c_str(), Ext, bStopRequest, param, callback);
-			}
-			else
-			{
-				std::string file = FindFileData.cFileName;
-				std::string ext = ".";
-				ext += Ext;
-				if (strlen(Ext) == 0 || (file.size() > ext.size() && file.compare(file.size() - ext.size(), ext.size(), ext) == 0))
-				{
-					callback(SubDir, FindFileData.cFileName, param);
-				}
-			}
-
-			if (bStopRequest)
-				break;
-		}
-
-		// Get next file
-		if (!FindNextFileA(hFind, &FindFileData))
-			a = GetLastError();
-	}
-	FindClose(hFind);
-}
-
-#else
-#include <sys/stat.h>
-#include "dirent.h"
-#include "errno.h"
-
-void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRequest, void *param, std::function<void(const char*, const char*, void* param)> callback)
-{
-	std::string path = Dir;
-	std::string subdir;
-
-	DIR *pDir = opendir(Dir);
-
-	// If pDir is NULL then the dir doesn't exist
-	if (pDir != NULL)
-	{
-		struct dirent *pFile = readdir(pDir);
-
-		for (; pFile != NULL; pFile = readdir(pDir))
-		{
-
-			// skip the . and .. directories
-			if (strcmp(pFile->d_name, ".") != 0 &&
-				strcmp(pFile->d_name, "..") != 0)
-			{
-
-				path = Dir;
-				path += "/";
-				path += pFile->d_name;
-
-				// check file attributes
-				struct stat buffer;
-				if (!stat(path.c_str(), &buffer))
-				{
-					if (S_ISDIR(buffer.st_mode))
-					{
-						// this is a directory: recursive scan
-						subdir = SubDir;
-						if (strlen(SubDir) != 0)
-							subdir += "/";
-						subdir += pFile->d_name;
-
-						scanDir(path.c_str(), subdir.c_str(), Ext, bStopRequest, param, callback);
-					}
-					else
-					{
-						// this is a regular file
-						std::string file = pFile->d_name;
-						std::string ext = Ext;
-						// check if the file has the requested extension
-						if (strlen(Ext) == 0 || (file.size() > ext.size() && file.compare(file.size() - ext.size(), ext.size(), ext) == 0))
-						{
-							callback(SubDir, file.c_str(), param);
-						}
-					}
-				}
-				else
-				{
-					// log error
-					fprintf(stderr, "CPathUtil::scanDir stat failed: %s\n", strerror(errno));
-				}
-			}
-			if (bStopRequest)
-				break;
-		}
-		closedir(pDir);
-	}
-	else
-	{
-		// log error
-		fprintf(stderr, "CPathUtil::scanDir \"%s\" : %s\n", Dir, strerror(errno));
-		return;
-	}
-}
 #endif

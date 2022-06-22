@@ -32,10 +32,7 @@
 #include <sys/stat.h>
 // Used for timestamp calculations
 #include <sys/types.h>
-#include <unistd.h>
 #include <time.h>
-#include <dirent.h>
-
 
 namespace eIDMW
 {
@@ -220,7 +217,7 @@ void CCache::CacheDirIterate(std::function<void(const char *FileName, const char
 {
 	std::string cachePath = GetCacheDir();
 	bool stopRequest = false;
-	scanDir(cachePath.c_str(), "", ".bin", stopRequest, nullptr, [&](const char *SubDir, const char *File, void *param) {
+	scanDir(cachePath.c_str(), "", "bin", stopRequest, &stopRequest, [&](const char *SubDir, const char *File, void *param) {
 		std::string fileFullPath = cachePath + File;
 		step(File, fileFullPath.c_str());
 	});
@@ -359,6 +356,10 @@ bool CCache::Delete(const std::string & csName)
 }
 
 #else
+
+#include <unistd.h>
+#include <dirent.h>
+
 
 std::string CCache::GetCacheDir(bool bAddSlash)
 {
