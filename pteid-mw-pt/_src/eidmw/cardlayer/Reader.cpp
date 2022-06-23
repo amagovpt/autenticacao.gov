@@ -208,7 +208,7 @@ static void parse_reader_device_properties(unsigned char *bRecvBuffer, unsigned 
 	p = bRecvBuffer;
 	while (p - bRecvBuffer < length)
 	{
-		int tag, len, value;
+		int tag, len, value, other_prop;
 
 		tag = *p++;
 		len = *p++;
@@ -238,7 +238,8 @@ static void parse_reader_device_properties(unsigned char *bRecvBuffer, unsigned 
 			*product_id = value;
 			break;
 		default:
-			MWLOG(LEV_DEBUG, MOD_CAL, "%s Unknown tag: 0x%02X (length = %d)\n", __FUNCTION__, tag, len);
+			//Property we don't currently use
+			other_prop = value;
 		}
 
 		p += len;
