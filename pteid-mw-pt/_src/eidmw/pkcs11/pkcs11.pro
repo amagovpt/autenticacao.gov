@@ -30,7 +30,6 @@ LIBS +=	-l$${CARDLAYERLIB}
 INCLUDEPATH += . ../common ../cardlayer
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 
-QMAKE_CXXFLAGS += -O2
 QMAKE_CXXFLAGS += -fno-strict-aliasing
 QMAKE_CFLAGS += -fno-strict-aliasing
 

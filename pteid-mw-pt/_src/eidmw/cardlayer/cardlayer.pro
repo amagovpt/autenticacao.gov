@@ -34,8 +34,6 @@ unix:LIBS += -l$${DLGLIB}
 INCLUDEPATH += . ../common 
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 
-QMAKE_CXXFLAGS += -O2
-
 DEFINES += EIDMW_CAL_EXPORT
 
 unix:!macx:  DEFINES += __UNIX__
