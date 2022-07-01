@@ -54,7 +54,6 @@ HEADERS += ByteArray.h \
            Config.h \
            datafile.h \
            ThreadDefines.h \
-           DynamicLib.h \
            eidmwErrors.h \
            Export.h \
            Hash.h \
@@ -79,7 +78,6 @@ SOURCES += ByteArray.cpp \
            ConfigCommon.cpp \
            Config.cpp \
            datafile.cpp \
-           DynamicLib.cpp \
            Hash.cpp \
            Log.cpp \
            LogBase.cpp \

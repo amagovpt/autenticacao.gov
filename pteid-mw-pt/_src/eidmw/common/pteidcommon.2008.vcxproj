@@ -224,7 +224,6 @@
     <ClCompile Include="ConfigCommon.cpp" />
     <ClCompile Include="ConfigReg.cpp" />
     <ClCompile Include="datafile.cpp" />
-    <ClCompile Include="DynamicLib.cpp" />
     <ClCompile Include="Hash.cpp" />
     <ClCompile Include="libtomcrypt\sha1.c" />
     <ClCompile Include="libtomcrypt\sha256.c" />
@@ -245,7 +244,6 @@
     <ClInclude Include="ByteArray.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="datafile.h" />
-    <ClInclude Include="DynamicLib.h" />
     <ClInclude Include="eidErrors.h" />
     <ClInclude Include="Export.h" />
     <ClInclude Include="Hash.h" />
