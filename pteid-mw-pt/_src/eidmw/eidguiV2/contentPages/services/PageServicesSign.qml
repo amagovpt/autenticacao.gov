@@ -1055,27 +1055,6 @@ PageServicesSignForm {
     propertyCheckSignShow{
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSignShow = propertyCheckSignShow.checked
-            if(propertyCheckSignShow.checked){
-                propertyCheckSignReduced.enabled = !propertySwitchAddAttributes.checked
-                propertyCheckLastPage.enabled = true
-                propertySpinBoxControl.enabled = true
-                propertySpinBoxControl.up.indicator.enabled = true
-                propertySpinBoxControl.down.indicator.enabled = true
-                propertySpinBoxControl.up.indicator.opacity = 1
-                propertySpinBoxControl.down.indicator.opacity = 1
-                propertyTextSpinBox.visible = true
-                propertyPageText.opacity = 1
-            }else{
-                propertyCheckSignReduced.enabled = false
-                propertyCheckLastPage.enabled = false
-                propertySpinBoxControl.enabled = false
-                propertySpinBoxControl.up.indicator.enabled = false
-                propertySpinBoxControl.down.indicator.enabled = false
-                propertySpinBoxControl.up.indicator.opacity = Constants.OPACITY_SIGNATURE_TEXT_DISABLED
-                propertySpinBoxControl.down.indicator.opacity = Constants.OPACITY_SIGNATURE_TEXT_DISABLED
-                propertyTextSpinBox.visible = false
-                propertyPageText.opacity = Constants.OPACITY_SIGNATURE_TEXT_DISABLED
-            }
         }
     }
 
@@ -1083,11 +1062,8 @@ PageServicesSignForm {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSwitchAddAttributes = propertySwitchAddAttributes.checked
             if(propertySwitchAddAttributes.checked){
-                console.log("propertySwitchAddAttributes checked")
                 propertyBusyIndicatorRunning = true
                 propertyCheckSignReduced.checked = false
-                propertyCheckSignReduced.enabled = false
-                propertyRadioButtonXADES.enabled = false
                 propertyTextAttributesMsg.visible = true
                 propertyMouseAreaTextAttributesMsg.enabled = true
                 propertyMouseAreaTextAttributesMsg.z = 1
@@ -1097,10 +1073,6 @@ PageServicesSignForm {
                 gapi.startLoadingAttributesFromCache(GAPI.ScapAttrAll,
                                                      GAPI.ScapAttrDescriptionLong)
             }else{
-                console.log("propertySwitchAddAttributes not checked")
-
-                propertyCheckSignReduced.enabled = true
-                propertyRadioButtonXADES.enabled = true
                 propertyTextAttributesMsg.visible = false
                 propertyMouseAreaTextAttributesMsg.enabled = false
                 propertyMouseAreaTextAttributesMsg.z = 0
@@ -1313,43 +1285,20 @@ PageServicesSignForm {
     }
 
     propertyRadioButtonPADES{
-        onCheckedChanged:{
+        onCheckedChanged: {
             propertyPageLoader.propertyBackupFormatPades = propertyRadioButtonPADES.checked
-            if(propertyRadioButtonPADES.checked){
+
+            // reload filemodel -> trigers filesModel.onCountChanged signal
+            filesModel.clear()
+            for (var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++) {
+                filesModel.append({ "fileUrl": propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl })
+            }
+
+            if (propertyRadioButtonPADES.checked) {
                 propertyTextDragMsgListView.text = propertyTextDragMsgImg.text =
                         qsTranslate("PageServicesSign","STR_SIGN_DROP_MULTI")
-                propertyTextFieldReason.enabled = true
-                propertyTextFieldLocal.enabled = true
-                propertyTextFieldReason.opacity = 1.0
-                propertyTextFieldLocal.opacity = 1.0
-                propertySwitchAddAttributes.enabled = true
-                propertyCheckSignShow.enabled = true
-                propertyCheckSignReduced.enabled = true
-                filesModel.clear()
-                for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
-                {
-                    filesModel.append({
-                                          "fileUrl": propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl
-                                      })
-                }
-            }else{
-                propertyTextDragMsgImg.text =
-                        qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW")
-                propertyTextFieldReason.enabled = false
-                propertyTextFieldLocal.enabled = false
-                propertyTextFieldReason.opacity = Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
-                propertyTextFieldLocal.opacity = Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
-                propertySwitchAddAttributes.enabled = false
-
-                propertyCheckSignShow.enabled = false
-                propertyCheckSignReduced.enabled = false
-                filesModel.clear()
-                for(var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++)
-                {
-                    filesModel.append({
-                                          "fileUrl": propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl
-                                      })
-                }
+            } else {
+                propertyTextDragMsgImg.text = qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW")
             }
         }
     }

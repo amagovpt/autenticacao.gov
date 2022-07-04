@@ -710,7 +710,7 @@ Item {
                                     anchors.leftMargin: 10
                                     leftPadding: 0
                                     rightPadding: 0
-                                    enabled: true
+                                    enabled: !propertySwitchAddAttributes.checked
                                     font.family: lato.name
                                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                                     font.capitalization: Font.MixedCase
@@ -873,7 +873,7 @@ Item {
                                 x: 5
                                 text: qsTranslate("PageServicesSign",
                                                   "STR_SIGN_ADD_ATTRIBUTES")
-                                enabled: fileLoaded
+                                enabled: fileLoaded && propertyRadioButtonPADES.checked
                                 font.family: lato.name
                                 font.bold: activeFocus
                                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -1066,8 +1066,7 @@ Item {
                         font.pixelSize: Constants.SIZE_TEXT_LABEL
                         color: Constants.COLOR_MAIN_BLACK
                         font.capitalization: Font.MixedCase
-                        opacity: fileLoaded && propertyRadioButtonPADES.checked
-                                 && !checkLastPage.checked ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                        opacity: spinBoxControl.enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                     }
 
                     SpinBox {
@@ -1082,9 +1081,8 @@ Item {
                         height: parent.height
                         anchors.leftMargin: 0
                         enabled: fileLoaded && propertyRadioButtonPADES.checked
-                                 && !checkLastPage.checked
-                        editable: checkSignShow.checked
-                                  && fileLoaded ? true : false
+                                 && !checkLastPage.checked && checkSignShow.checked
+                        editable: enabled
                         validator: RegExpValidator { regExp: /[1-9][0-9]*/ }
                         Accessible.ignored: true
 
@@ -1094,9 +1092,7 @@ Item {
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_LABEL
                             color: Constants.COLOR_MAIN_BLACK
-                            opacity: fileLoaded
-                                     && propertyRadioButtonPADES.checked
-                                     && !checkLastPage.checked ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                            opacity: spinBoxControl.enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                             horizontalAlignment: Qt.AlignHCenter
                             verticalAlignment: Qt.AlignVCenter
 
@@ -1127,9 +1123,7 @@ Item {
                                 font.pixelSize: Constants.SIZE_ARROW_INDICATOR
                                 color: Constants.COLOR_MAIN_BLUE
                                 font.bold: true
-                                opacity: fileLoaded
-                                         && propertyRadioButtonPADES.checked
-                                         && !checkLastPage.checked ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                                opacity: spinBoxControl.enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                                 anchors.fill: parent
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
@@ -1150,9 +1144,7 @@ Item {
                                 font.family: lato.name
                                 font.pixelSize: Constants.SIZE_ARROW_INDICATOR
                                 color: Constants.COLOR_MAIN_BLUE
-                                opacity: fileLoaded
-                                         && propertyRadioButtonPADES.checked
-                                         && !checkLastPage.checked ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                                opacity: spinBoxControl.enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                                 anchors.fill: parent
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
@@ -1174,7 +1166,8 @@ Item {
                         font.bold: activeFocus
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
-                        enabled: fileLoaded && propertyRadioButtonPADES.checked
+                        enabled: fileLoaded && propertyRadioButtonPADES.checked && checkSignShow.checked
+                        opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: checkSignShow
@@ -1209,7 +1202,8 @@ Item {
                         font.bold: activeFocus
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
-                        enabled: fileLoaded
+                        enabled: fileLoaded && propertyRadioButtonPADES.checked
+                        opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                         checked: true
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
@@ -1238,7 +1232,9 @@ Item {
                         font.bold: activeFocus
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
-                        enabled: fileLoaded
+                        enabled: fileLoaded && checkSignShow.checked && propertyRadioButtonPADES.checked
+                                 && !propertySwitchAddAttributes.checked
+                        opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
                         KeyNavigation.tab: button_signCC.enabled ? button_signCC : button_signCMD
