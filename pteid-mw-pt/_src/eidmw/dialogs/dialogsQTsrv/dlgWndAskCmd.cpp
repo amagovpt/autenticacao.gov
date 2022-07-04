@@ -51,11 +51,11 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp,
     m_ulCodeMaxLen = (isValidateOtp ? 6 : 8);
 
     char buffer[20];
-    sprintf(buffer,"[0-9]{%ld,%ld}",m_ulIdMinLen,m_ulIdMaxLen);
+    sprintf(buffer,"[0-9]{%u,%u}",m_ulIdMinLen,m_ulIdMaxLen);
     QRegExp rx(buffer);
     m_IdValidator=new QRegExpValidator(rx, 0);
 
-    sprintf(buffer,"[0-9]{%ld,%ld}",m_ulCodeMinLen,m_ulCodeMaxLen);
+    sprintf(buffer,"[0-9]{%u,%u}",m_ulCodeMinLen,m_ulCodeMaxLen);
     rx.setPattern(buffer);
     m_CodeValidator=new QRegExpValidator(rx, 0);
 

@@ -39,7 +39,7 @@ dlgWndAskPIN::dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &
 	if( pinInfo.ulFlags & PIN_FLAG_DIGITS )
 	{
 		char buffer[20];
-		sprintf(buffer,"[0-9]{%ld,%ld}",pinInfo.ulMinLen,pinInfo.ulMaxLen);
+		sprintf(buffer,"[0-9]{%llu,%llu}",pinInfo.ulMinLen,pinInfo.ulMaxLen);
 		QRegExp rx(buffer);
 		m_PinValidator=new QRegExpValidator(rx, 0);
 	}
