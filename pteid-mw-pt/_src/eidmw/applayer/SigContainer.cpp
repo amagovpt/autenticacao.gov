@@ -42,11 +42,11 @@ static const char *README =
 "LEIA-ME" NL
 "" NL
 "Este ficheiro zip contém informação assinada com a(s) respectiva(s) assinatura(s) em META-INF/signatures*.xml" NL
-"Esta assinatura foi criada através da Aplicação Oficial do Cartão de Cidadão." NL
+"Esta assinatura foi criada através da aplicação Autenticação.gov" NL
 "" NL
 "Mais Informação:" NL
 "" NL
-"Download da Aplicação Oficial do Cartão de Cidadão:" NL
+"Download da aplicação Autenticação.gov:" NL
 "https://www.autenticacao.gov.pt/cc-aplicacao" NL
 "" NL
 "Especificação Técnica da Assinatura Digital:" NL
