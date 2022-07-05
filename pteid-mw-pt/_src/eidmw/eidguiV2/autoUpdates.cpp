@@ -452,7 +452,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
     if (!cJSON_IsObject(dist_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get object for this distribution (%s)", distrover.c_str());
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::LinuxNotSupported);
         return;
     }
 

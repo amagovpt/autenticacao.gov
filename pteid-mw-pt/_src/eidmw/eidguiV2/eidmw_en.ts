@@ -1344,7 +1344,7 @@
     </message>
     <message>
         <source>STR_UPDATE_LINUX_NOT_SUPPORTED</source>
-        <translation>Your Linux distribution is not supported by Automatic Updates</translation>
+        <translation>Your Linux distribution is not supported by Automatic Updates.</translation>
     </message>
     <message>
         <source>STR_UPDATE_SAVE_FILE</source>

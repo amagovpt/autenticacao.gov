@@ -1350,7 +1350,7 @@
     </message>
     <message>
         <source>STR_UPDATE_LINUX_NOT_SUPPORTED</source>
-        <translation>A sua distribuição Linux não é suportada pelas Atualizações Automáticas</translation>
+        <translation>A sua distribuição Linux não é suportada pelas Atualizações Automáticas.</translation>
     </message>
     <message>
         <source>STR_UPDATE_SAVE_FILE</source>
