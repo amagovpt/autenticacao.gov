@@ -1466,7 +1466,6 @@ PageServicesSignForm {
                         hoverEnabled : true
                         onClicked: {
                             if (filesModel.count == 1) {
-                                console.log("Extract file:" + fileNameInASiC.text + " from container: " + container_path)
                                 var container_path = filesModel.get(0).fileUrl
                                 gapi.extractFileFromASiC(container_path, fileNameInASiC.text)
                             }
