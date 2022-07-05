@@ -32,6 +32,7 @@
 #include "UnknownCard.h"
 #include "Log.h"
 #include "Util.h"
+#include "Cache.h"
 
 #include "PteidCard.h"
 #include <vector>
@@ -91,6 +92,9 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 			//2018-05 Gemsafe cards are the only ones in use by now
 			int appletVersion = 1;
 			poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
+
+			CCache::LimitDiskCacheFiles(10);
+
 			// If no other CCard subclass could be found
 	    	if (poCard == NULL)
 	    	{

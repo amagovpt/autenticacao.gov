@@ -27,6 +27,13 @@
 #include "Util.h"
 #include "Config.h"
 
+#include <unordered_set>
+#include <algorithm>
+#include <sys/stat.h>
+// Used for timestamp calculations
+#include <sys/types.h>
+#include <time.h>
+
 namespace eIDMW
 {
 #ifdef WIN32
@@ -205,6 +212,60 @@ void CCache::DiskStoreFile(const std::string & csName,
 	}
 }
 
+
+void CCache::CacheDirIterate(std::function<void(const char *FileName, const char *FullPath)> step)
+{
+	std::string cachePath = GetCacheDir();
+	bool stopRequest = false;
+	scanDir(cachePath.c_str(), "", "bin", stopRequest, &stopRequest, [&](const char *SubDir, const char *File, void *param) {
+		std::string fileFullPath = cachePath + File;
+		step(File, fileFullPath.c_str());
+	});
+}
+
+// Windows specific
+#ifdef WIN32
+#define stat _stat
+#endif
+
+bool CCache::LimitDiskCacheFiles(unsigned long ulMaxCacheFIles)
+{
+	std::map<std::string, time_t> uniqueEIDs;
+
+	CacheDirIterate([&](const char *FileName, const char *FullPath) {
+		struct stat fileStats;
+		stat(FullPath, &fileStats);
+
+		std::string strFile = FileName;
+		strFile = strFile.substr(0, strFile.find("_"));
+
+		uniqueEIDs.insert(std::make_pair(strFile, fileStats.st_mtime));
+	});
+
+	// We have less than the max amount of cached files
+	if (uniqueEIDs.size() <= ulMaxCacheFIles)
+		return false;
+
+	// Returns the oldest. Used to sort the vector
+	auto older = [](std::pair<std::string, time_t> const &a, std::pair<std::string, time_t> const &b)
+	{ return difftime(a.second, b.second) > 0; };
+
+	// Convert the map of unique EIDs-time of creation to a vector so we can easily sort by time of creation
+	std::vector<std::pair<std::string, time_t>> cachedEIDs(uniqueEIDs.begin(), uniqueEIDs.end());
+	std::sort(cachedEIDs.begin(), cachedEIDs.end(), older);
+
+	// Delete all files starting from _ulMaxCacheFiles_
+	std::for_each(cachedEIDs.begin() + ulMaxCacheFIles, cachedEIDs.end(), [&](std::pair<std::string, time_t> const &a) {
+		// If we have a file to delete, delete it
+		// It is important to check this, incase somehow oldestId is empty,
+		// and _Delete_ will just delete all files inside the cache directory
+		if (!a.first.empty())
+			Delete(a.first);
+	});
+
+	return true;
+}
+
 //////////////////////// Platform-dependent code /////////////////////////
 
 #ifdef WIN32
@@ -212,6 +273,8 @@ void CCache::DiskStoreFile(const std::string & csName,
 #include <io.h>
 #include <direct.h>
 #include <windows.h>
+
+//TODO: Implement CCache::GetCachedIdsCount() for Windows OS 
 
 std::string CCache::GetCacheDir(bool bAddSlash)
 {
@@ -294,7 +357,7 @@ bool CCache::Delete(const std::string & csName)
 
 #else
 
-#include <sys/stat.h>
+#include <unistd.h>
 #include <dirent.h>
 
 

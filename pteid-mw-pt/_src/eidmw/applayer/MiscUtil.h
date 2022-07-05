@@ -145,11 +145,6 @@ public:
 	static void checkDir(const char *directory);
 
 	/**
-	  * Scan the directory and call the call back function for each file corresponding to the extension
-	  */
-	static void scanDir(const char *Dir,const char *SubDir,const char *ext,bool &bStopRequest,void *param,void (* callback)(const char *SubDir, const char *File, void *param));
-
-	/**
 	  * Return the name where the crl file could be found (Relative to the cache dir)
 	  */
 	static std::string getRelativePath(const char *uri);

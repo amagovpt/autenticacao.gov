@@ -29,6 +29,7 @@
 #include "Context.h"
 #include <stdlib.h>
 #include <map>
+#include <functional>
 
 namespace eIDMW
 {
@@ -90,6 +91,14 @@ public:
 	 */
 	static bool Delete(const std::string & csName);
 
+	/**
+	 * Will try to limit the ammount of cached files on disk.
+	 * If the amount of already existing eIDs cached on disk
+	 * surpasses the amount passed through _ulMaxCacheFiles_,
+	 * the oldest eID files will be permanently deleted. 
+	 */
+	static bool LimitDiskCacheFiles(unsigned long ulMaxCacheFiles);
+
 protected:
 	CByteArray MemGetFile(const std::string & csName);
 	void MemStoreFile(const std::string & csName, const CByteArray &oData);
@@ -98,6 +107,8 @@ protected:
 	void DiskStoreFile(const std::string & csName, const CByteArray &oData);
 
 	static std::string GetCacheDir(bool bAddSlash = true);
+
+	static void CacheDirIterate(std::function<void(const char* FileName, const char* FullPath)> step);
 
 	unsigned char *m_pucTemp;
 	CContext *m_poContext;

@@ -30,6 +30,7 @@
 #include <cstring>
 #include <iostream>
 #include <string>
+#include <functional>
 
 #ifdef WIN32
 #include <windows.h>
@@ -73,6 +74,12 @@ EIDMW_CMN_API void truncateUtf8String(std::string &utf8String, size_t numberOfCh
 EIDMW_CMN_API void ReadReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD *dwType, void* output, DWORD *outputSize);
 EIDMW_CMN_API void WriteReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD dwType, void* input, DWORD inputSize);
 #endif
+
+
+/**
+ * Scan the directory and call the call back function for each file corresponding to the extension
+*/
+EIDMW_CMN_API void scanDir(const char *Dir, const char *SubDir, const char *ext, bool &bStopRequest, void *param, std::function<void(const char* SubDir, const char* File, void* param)>);
 }
 
 #ifndef WIN32
@@ -96,4 +103,3 @@ EIDMW_CMN_API int fprintf_s(FILE *stream, const char *format, ...);
 EIDMW_CMN_API int vfprintf_s(FILE *stream, const char *format, va_list argptr);
 
 #endif
-
