@@ -109,6 +109,13 @@ protected:
 	static std::string GetCacheDir(bool bAddSlash = true);
 
 	static void CacheDirIterate(std::function<void(const char* FileName, const char* FullPath)> step);
+	// Cache encryption
+	unsigned int Encrypt(unsigned char *plaintext, int plaintext_len,
+		unsigned char *key, unsigned char *iv, unsigned char *ciphertext);
+	
+	unsigned int Decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,
+        unsigned char *iv, unsigned char *plaintext);
+
 
 	unsigned char *m_pucTemp;
 	CContext *m_poContext;

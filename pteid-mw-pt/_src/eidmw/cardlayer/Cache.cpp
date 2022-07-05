@@ -33,6 +33,14 @@
 // Used for timestamp calculations
 #include <sys/types.h>
 #include <time.h>
+#include <vector>
+
+
+#include <openssl/evp.h>
+#include <openssl/conf.h>
+#include <openssl/err.h>
+#include <openssl/rand.h>
+
 
 namespace eIDMW
 {
@@ -59,6 +67,7 @@ static bool CheckHeader(const unsigned char *pucData, unsigned long ulDataLen);
 CCache::CCache(CContext *poContext) :
 	m_poContext(poContext)
 {
+
 	m_pucTemp = (unsigned char *) malloc(MAX_CACHE_SIZE);
 }
 
@@ -162,6 +171,62 @@ void CCache::MemStoreFile(const std::string & csName,
 
 /////////////////////////// Disk /////////////////////////
 
+unsigned int CCache::Encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
+                 unsigned char *iv, unsigned char *ciphertext)
+{
+    EVP_CIPHER_CTX *ctx;
+    int len;
+    int ciphertext_len;
+
+    if (!(ctx = EVP_CIPHER_CTX_new()))
+		return 0;
+		
+    if (1 != EVP_EncryptInit_ex(ctx, EVP_aes_128_ctr(), NULL, key, iv))
+		return 0;
+
+    if (1 != EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len))
+		return 0;
+    ciphertext_len = len;
+
+    if (1 != EVP_EncryptFinal_ex(ctx, ciphertext + len, &len))
+		return 0;
+    ciphertext_len += len;
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    return ciphertext_len;
+}
+
+unsigned int CCache::Decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,
+            unsigned char *iv, unsigned char *plaintext)
+{
+    EVP_CIPHER_CTX *ctx;
+    int len;
+    int plaintext_len;
+
+    if (!(ctx = EVP_CIPHER_CTX_new()))
+		return 0;
+
+    if (1 != EVP_DecryptInit_ex(ctx, EVP_aes_128_ctr(), NULL, key, iv))
+		return 0;
+
+    if (1 != EVP_DecryptUpdate(ctx, plaintext, &len, ciphertext, ciphertext_len))
+		return 0;
+    plaintext_len = len;
+
+    if (1 != EVP_DecryptFinal_ex(ctx, plaintext + len, &len))
+		return 0;
+    plaintext_len += len;
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    return plaintext_len;
+}
+
+struct EncryptedCacheHeader {
+	unsigned char iv[16];
+};
+
 CByteArray CCache::DiskGetFile(const std::string & csName)
 {
 	if (m_pucTemp == NULL)
@@ -177,14 +242,30 @@ CByteArray CCache::DiskGetFile(const std::string & csName)
 		return CByteArray();
 	else
 	{
-		size_t len = fread(m_pucTemp, 1, MAX_CACHE_SIZE, f);
+		// OpenSSL init
+		ERR_load_crypto_strings();
+		OpenSSL_add_all_algorithms();
+
+		unsigned char iv[16] = {0};
+		// UTILIZE A SECURE KEY IN THE FUTURE
+		unsigned char *key = (unsigned char *)"\xe0\x29\x04\x74\xf5\x3f\x49\x48\x71\x48\xc7\x6c\x04\x40\xe7\x74";
+
+		unsigned char ciphertext[MAX_CACHE_SIZE] = {0};
+		size_t cacheFileLen = fread(ciphertext, 1, MAX_CACHE_SIZE, f);
 		fclose(f);
 
-		if (!CheckHeader(m_pucTemp, (unsigned long) len))
+		// Get the IV from the stored cache
+		memcpy(iv, ciphertext, 16);
+
+		unsigned char plaintext[MAX_CACHE_SIZE] = {0};
+		unsigned int decryptLen = Decrypt(ciphertext + 16, cacheFileLen - 16, key, iv, plaintext);
+
+		memcpy(m_pucTemp, plaintext, decryptLen);
+		if (!CheckHeader(m_pucTemp, (unsigned long) decryptLen))
 			return CByteArray();
 
 		return CByteArray(m_pucTemp + sizeof(tCacheHeader),
-			(unsigned long) (len - sizeof(tCacheHeader)));
+			(unsigned long) (decryptLen - sizeof(tCacheHeader)));
 	}
 }
 
@@ -204,10 +285,25 @@ void CCache::DiskStoreFile(const std::string & csName,
 		; // TODO: log
 	else
 	{
-		size_t tmpHeader = fwrite(&header, sizeof(tCacheHeader), 1, f);
-		tmpHeader = tmpHeader;	//avoid warning
-		size_t tmpData   = fwrite(oData.GetBytes(), 1, oData.Size(), f);
-		tmpData = tmpData;	//avoid warning
+		// OpenSSL init
+		ERR_load_crypto_strings();
+		OpenSSL_add_all_algorithms();
+
+		unsigned char iv[16] = {0};
+		RAND_bytes(iv, 16);
+		// UTILIZE A SECURE KEY IN THE FUTURE
+		unsigned char *key = (unsigned char *)"\xe0\x29\x04\x74\xf5\x3f\x49\x48\x71\x48\xc7\x6c\x04\x40\xe7\x74";
+
+		CByteArray plainData(reinterpret_cast<const unsigned char *>(&header), sizeof(tCacheHeader));
+		plainData.Append(oData);
+
+    	unsigned char ciphertext[MAX_CACHE_SIZE + 16];
+		unsigned int length = Encrypt(plainData.GetBytes(), plainData.Size(), key, iv, ciphertext);
+
+		//Write the IV first
+		fwrite(iv, sizeof(unsigned char), 16, f);
+		fwrite(ciphertext, sizeof(unsigned char), length, f);
+		
 		fclose(f);
 	}
 }
