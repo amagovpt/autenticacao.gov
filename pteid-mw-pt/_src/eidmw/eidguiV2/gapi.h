@@ -331,6 +331,8 @@ public slots:
                         bool isTimestamp, bool isLTV, bool isASIC);
 
     bool isASiC(const QString& filename);
+    QStringList listFilesInASiC(const QString& filename);
+    void extractFileFromASiC(const QString& container_path, const QString& filename);
 
     //This flag is used to start the application in specific signature subpage
     void setShortcutFlag(ShortcutId value) { m_shortcutFlag = value; }
@@ -566,6 +568,7 @@ private:
     void doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, bool isLTV, bool isASIC);
     void doSignBatchXADES(SignParams &params);
     void doSignXADESWithCMD(SignParams &params, bool isASIC);
+    void doExtractFileFromASiC(const QString& container_path, const QString& filename);
     void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);
     void fillCertificateList (void );
     void getCertificateAuthStatus(void );

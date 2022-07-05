@@ -2130,12 +2130,16 @@
         <translation>Pré-visualização do ficheiro PDF indisponível devido às suas dimensões reduzidas.</translation>
     </message>
     <message>
-        <source>STR_FILE_ASIC</source>
-        <translation>Existe um pacote ASiC na lista de ficheiros para assinar. Neste caso é possivel adicionar uma assinatura ao mesmo pacote, mas este tem de ser o único na lista de ficheiros.</translation>
-    </message>
-    <message>
         <source>STR_FILE_ASIC_TITLE</source>
         <translation>Assinatura de Pacote ASiC</translation>
+    </message>
+    <message>
+        <source>STR_FILE_ASIC_ONLY_FILE</source>
+        <translation>Tentou adicionar um pacote ASiC à lista onde já existem outros ficheiros.&lt;br&gt;É possível adicionar uma assinatura a um pacote ASiC, mas este tem de ser o &lt;b&gt;único&lt;/b&gt; elemento da lista de ficheiros.</translation>
+    </message>
+    <message>
+        <source>STR_FILE_ASIC_ALREADY_ON_LIST</source>
+        <translation>Tentou adicionar ficheiros à lista onde já existe um pacote ASiC.&lt;br&gt;É possível adicionar uma assinatura a um pacote ASiC, mas este tem de ser o &lt;b&gt;único&lt;/b&gt; elemento da lista de ficheiros.</translation>
     </message>
 </context>
 <context>

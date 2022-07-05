@@ -1291,7 +1291,10 @@ PageServicesSignForm {
             // reload filemodel -> trigers filesModel.onCountChanged signal
             filesModel.clear()
             for (var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++) {
-                filesModel.append({ "fileUrl": propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl })
+                filesModel.append({ 
+                    "fileUrl": propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl,
+                    "isASiC": propertyPageLoader.propertyBackupfilesModel.get(i).isASiC
+                })
             }
 
             if (propertyRadioButtonPADES.checked) {
@@ -1308,7 +1311,7 @@ PageServicesSignForm {
         Rectangle{
             id: rectlistViewFilesDelegate
             width: parent.width
-            height: parent.height
+            height: fileItem.height
             color:  propertyListViewFiles.currentIndex === index
                     ? Constants.COLOR_MAIN_DARK_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
 
@@ -1354,40 +1357,46 @@ PageServicesSignForm {
             }
 
             Item {
+                id: fileItem
                 width: parent.width
-                height: parent.height
+                height: Math.max(fileName.contentHeight, iconRemove.height) + Constants.SIZE_LISTVIEW_IMAGE_SPACE
+
+                Image {
+                    id: iconASiCContainer
+                    visible: containsPackageAsic() && propertyListViewFiles.count === 1
+                    x: Constants.SIZE_LISTVIEW_IMAGE_SPACE * 0.5
+                    width: visible ? Constants.SIZE_IMAGE_FILE_REMOVE : 0
+                    height: Constants.SIZE_IMAGE_FILE_REMOVE
+                    antialiasing: true
+                    fillMode: Image.PreserveAspectFit
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: "../../images/zip.png"
+                }
 
                 Text {
                     id: fileName
-                    width: parent.width - iconRemove.width - Constants.SIZE_LISTVIEW_IMAGE_SPACE
+                    width: parent.width - iconRemove.width - iconASiCContainer.width - 2 * Constants.SIZE_LISTVIEW_IMAGE_SPACE
                     text: fileUrl
-                    x: Constants.SIZE_LISTVIEW_IMAGE_SPACE * 0.5
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: iconASiCContainer.visible ? iconASiCContainer.right : parent.left
+                    anchors.leftMargin: Constants.SIZE_LISTVIEW_IMAGE_SPACE * 0.5
                     color: Constants.COLOR_TEXT_BODY
                     wrapMode: Text.WrapAnywhere
-                    Component.onCompleted: {
-                        if(fileName.paintedHeight > iconRemove.height){
-                            rectlistViewFilesDelegate.height = fileName.height + 5
-                        }else{
-                            rectlistViewFilesDelegate.height = iconRemove.height
-                        }
-                    }
                 }
 
                 Image {
                     id: iconRemove
-                    x: fileName.width + Constants.SIZE_LISTVIEW_IMAGE_SPACE * 0.5
                     width: Constants.SIZE_IMAGE_FILE_REMOVE
                     height: Constants.SIZE_IMAGE_FILE_REMOVE
                     antialiasing: true
                     fillMode: Image.PreserveAspectFit
                     anchors.verticalCenter: parent.verticalCenter
-                    source:  mouseAreaIconDelete.containsMouse ?
-                                 "../../images/remove_file_hover.png" :
-                                 "../../images/remove_file.png"
+                    anchors.right: parent.right
+                    anchors.rightMargin: Constants.SIZE_LISTVIEW_IMAGE_SPACE * 0.5
+                    source:  setButtonDeleteIcon()
                     MouseArea {
                         id: mouseAreaIconDelete
                         anchors.fill: parent
@@ -1397,10 +1406,81 @@ PageServicesSignForm {
                             removeFileFromList(index)
                         }
                     }
+
+                    function setButtonDeleteIcon() {
+                        if (mouseAreaIconDelete.containsMouse) {
+                            if (propertyListViewFiles.currentIndex === index) {
+                                return "../../images/remove_file_hover.png"
+                            }
+                            return "../../images/remove_file_hover_blue.png"
+                        }
+                        return "../../images/remove_file.png"
+                    }
                 }
             }
         }
     }
+
+    Component {
+        id: asicFilesDelegate
+        Rectangle{
+            id: rectAsicFilesDelegate
+            width: parent.width - Constants.SIZE_ASIC_LISTVIEW_TEXT_OFFSET
+            height: fileItemInASiC.height
+
+            x: Constants.SIZE_ASIC_LISTVIEW_TEXT_OFFSET
+            color: Constants.COLOR_MAIN_SOFT_GRAY
+
+            Item {
+                id: fileItemInASiC
+                width: parent.width
+                height: Math.max(fileNameInASiC.contentHeight, iconExtract.height) + Constants.SIZE_LISTVIEW_IMAGE_SPACE
+
+                Text {
+                    id: fileNameInASiC
+                    width: parent.width - iconExtract.width - Constants.SIZE_LISTVIEW_IMAGE_SPACE
+                    text: fileUrl
+                    x: Constants.SIZE_LISTVIEW_IMAGE_SPACE * 0.5
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: Constants.COLOR_TEXT_BODY
+                    wrapMode: Text.WrapAnywhere
+                }
+
+                Image {
+                    id: iconExtract
+                    x: fileNameInASiC.width + Constants.SIZE_LISTVIEW_IMAGE_SPACE * 0.5
+                    width: Constants.SIZE_IMAGE_FILE_EXTRACT
+                    height: Constants.SIZE_IMAGE_FILE_EXTRACT
+                    antialiasing: true
+                    fillMode: Image.PreserveAspectFit
+                    anchors.verticalCenter: parent.verticalCenter
+                    source:  mouseAreaIconExtract.containsMouse ?
+                                 "../../images/download_hover_blue.png" :
+                                 "../../images/download_icon_blue.png"
+                    MouseArea {
+                        id: mouseAreaIconExtract
+                        anchors.fill: parent
+                        hoverEnabled : true
+                        onClicked: {
+                            if (filesModel.count == 1) {
+                                console.log("Extract file:" + fileNameInASiC.text + " from container: " + container_path)
+                                var container_path = filesModel.get(0).fileUrl
+                                gapi.extractFileFromASiC(container_path, fileNameInASiC.text)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    ListModel {
+        id: asicFilesModel
+    }
+
     ListModel {
         id: filesModel
 
@@ -1420,6 +1500,8 @@ PageServicesSignForm {
 
                 propertyPDFPreview.reset()
                 propertyButtonAdd.forceActiveFocus()
+
+                asicFilesModel.clear()
             }
             else {
                 fileLoaded = true
@@ -1471,6 +1553,16 @@ PageServicesSignForm {
                     }
                 }else{
                     propertyTextDragMsgImg.visible = true
+                    if (containsPackageAsic() && filesModel.count == 1) {
+                        var asicFilename = filesModel.get(0).fileUrl.toString()
+                        var asicFiles = gapi.listFilesInASiC(asicFilename)
+
+                        for (var i = 0; i < asicFiles.length; i++) {
+                            asicFilesModel.append({ "fileUrl": asicFiles[i] })
+                        }
+                    } else {
+                        asicFilesModel.clear()
+                    }
                 }
                 propertyListViewFiles.forceActiveFocus()
             }
@@ -1590,7 +1682,8 @@ PageServicesSignForm {
         {
             if(gapi.fileExists(propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl)){
                 filesModel.append({
-                                      "fileUrl": propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl
+                                      "fileUrl": propertyPageLoader.propertyBackupfilesModel.get(i).fileUrl,
+                                      "isASiC": propertyPageLoader.propertyBackupfilesModel.get(i).isASiC
                                   })
             }
         }
@@ -1674,7 +1767,8 @@ PageServicesSignForm {
     function appendFileToModel(path) {
         var alreadyUploaded = false;
         var newFileUrl = {
-            "fileUrl": path
+            "fileUrl": path,
+            "isASiC" : propertyRadioButtonXADES.checked ? fileIsAsic(path) : false
         };
 
         if (!containsFile(newFileUrl, propertyPageLoader.propertyBackupfilesModel)){
@@ -1688,23 +1782,41 @@ PageServicesSignForm {
 
     function containsPackageAsic() {
         for (var i = 0; i < filesModel.count; i++) {
-            if (gapi.isASiC(filesModel.get(i).fileUrl.toString())) {
+            if (filesModel.get(i).isASiC) {
                 return true;
             }
         }
         return false;
     }
 
-    function updateUploadedFiles(fileList){
-        var fileAlreadyUploaded = false
-        var fileIsAsicPopup = false
-        for(var i = 0; i < fileList.length; i++){
-            var path = fileList[i];
+    function fileIsAsic(fileUrl) {
+        return gapi.isASiC(fileUrl.toString())
+    }
 
-            path = decodeURIComponent(Functions.stripFilePrefix(path));
+    function updateUploadedFiles(fileList) {
+        for (var i = 0; i < fileList.length; i++) {
+            var path = decodeURIComponent(Functions.stripFilePrefix(fileList[i]));
+
             if (gapi.isFile(path)) {
-                fileAlreadyUploaded = appendFileToModel(path);
-                fileIsAsicPopup =  containsPackageAsic() && filesModel.count > 1;
+                if (fileIsAsic(path) && filesModel.count > 0) {
+                    // asic container must be the only file on the list - warning
+                    var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
+                    var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_ONLY_FILE")
+                    mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                } else if (containsPackageAsic()) {
+                    // asic container already on the list - warning
+                    var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
+                    var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_ALREADY_ON_LIST")
+                    mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                } else {
+                    var fileAlreadyUploaded = appendFileToModel(path);
+                    if (fileAlreadyUploaded) {
+                        // file already uploaded - error
+                        var titlePopup = qsTranslate("PageServicesSign","STR_FILE_UPLOAD_FAIL")
+                        var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ALREADY_UPLOADED")
+                        mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                    }
+                }
             } else if (gapi.isDirectory(path)) {
                 var filesInDir = gapi.getFilesFromDirectory(path);
                 if (filesInDir instanceof Array) {
@@ -1712,18 +1824,8 @@ PageServicesSignForm {
                 }
             }
         }
-
-        if (fileAlreadyUploaded){
-            var titlePopup = qsTranslate("PageServicesSign","STR_FILE_UPLOAD_FAIL")
-            var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ALREADY_UPLOADED")
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-        }
-        if (fileIsAsicPopup){
-            var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
-            var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC")
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-        }
     }
+
     function maxTextInputLength(num){
         //given number of pages returns maximum length that TextInput should accept
         return Math.ceil(Math.log(num + 1) / Math.LN10);

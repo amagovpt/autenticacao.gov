@@ -10,7 +10,7 @@
 ****************************************************************************-*/
 
 import QtQuick 2.6
-import QtQuick.Controls 2.1
+import QtQuick.Controls 2.5
 import Qt.labs.platform 1.0
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.3
@@ -42,6 +42,7 @@ Item {
     property alias propertyTextDragMsgListView: textDragMsgListView
     property alias propertyTextDragMsgImg: textDragMsgImg
     property alias propertyListViewFiles: listViewFiles
+    property alias propertyListViewASiCFiles: listViewASiCFiles
     property alias propertyListViewEntities: listViewEntities
     property alias propertyButtonAdd: buttonAdd
     property alias propertyButtonRemoveAll: buttonRemoveAll
@@ -392,33 +393,46 @@ Item {
                         Item {
                             id: itemOptionsFiles
                             width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
-                            height: !filesModel.count || listViewFiles.contentHeight < Constants.MIN_HEIGHT_FILES_RECT
+                            height: !filesModel.count || listViewFiles.contentHeight + listViewASiCFiles.contentHeight < Constants.MIN_HEIGHT_FILES_RECT
                                 ? Constants.MIN_HEIGHT_FILES_RECT 
-                                : listViewFiles.contentHeight
+                                : listViewFiles.contentHeight + listViewASiCFiles.contentHeight
                             anchors.horizontalCenter: parent.horizontalCenter
                             y: 2 * Constants.SIZE_TEXT_V_SPACE
+
+                            Text {
+                                id: textDragMsgListView
+                                anchors.fill: parent
+                                font.bold: true
+                                wrapMode: Text.WordWrap
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                font.pixelSize: Constants.SIZE_TEXT_BODY
+                                font.family: lato.name
+                                color: Constants.COLOR_TEXT_LABEL
+                                visible: !fileLoaded
+                            }
 
                             ListView {
                                 id: listViewFiles
                                 width: parent.width
-                                height: parent.height
-                                clip: true
+                                height: contentHeight
+                                interactive: false
                                 spacing: Constants.SIZE_LISTVIEW_SPACING
                                 boundsBehavior: Flickable.StopAtBounds
                                 model: filesModel
                                 delegate: listViewFilesDelegate
-                                Text {
-                                    id: textDragMsgListView
-                                    anchors.fill: parent
-                                    font.bold: true
-                                    wrapMode: Text.WordWrap
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pixelSize: Constants.SIZE_TEXT_BODY
-                                    font.family: lato.name
-                                    color: Constants.COLOR_TEXT_LABEL
-                                    visible: !fileLoaded
-                                }
+                            }
+                            ListView {
+                                id: listViewASiCFiles
+                                width: parent.width
+                                height: contentHeight
+                                anchors.top: listViewFiles.bottom
+                                anchors.topMargin: Constants.SIZE_LISTVIEW_SPACING
+                                spacing: Constants.SIZE_LISTVIEW_SPACING
+                                boundsBehavior: Flickable.StopAtBounds
+                                model: asicFilesModel
+                                interactive: false
+                                delegate: asicFilesDelegate
                             }
                             MouseArea {
                                 id: mouseAreaItemOptionsFiles

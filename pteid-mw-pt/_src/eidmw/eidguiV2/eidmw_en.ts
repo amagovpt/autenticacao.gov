@@ -2124,12 +2124,16 @@
         <translation>PDF preview unavailable due to its reduced dimensions.</translation>
     </message>
     <message>
-        <source>STR_FILE_ASIC</source>
-        <translation>There is an ASiC package in the file list. In this case it is possible to add a signature to the same package, but it needs to be the only one in the file list.</translation>
-    </message>
-    <message>
         <source>STR_FILE_ASIC_TITLE</source>
         <translation>ASiC package signature</translation>
+    </message>
+    <message>
+        <source>STR_FILE_ASIC_ONLY_FILE</source>
+        <translation>You tried to add an ASiC container to the list where other files already exists. It is possible to add a signature to an ASiC container, but it has to be the &lt;b&gt;only&lt;/b&gt; element in the file list.</translation>
+    </message>
+    <message>
+        <source>STR_FILE_ASIC_ALREADY_ON_LIST</source>
+        <translation>You tried to add files to the list where an ASiC container already exists. It is possible to add a signature to an ASiC container, but it has to be the &lt;b&gt;only&lt;/b&gt; element in the file list.</translation>
     </message>
 </context>
 <context>

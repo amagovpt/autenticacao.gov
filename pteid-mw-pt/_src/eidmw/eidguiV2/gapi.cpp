@@ -17,6 +17,7 @@
 #include <QRegExp>
 #include <cstdio>
 #include <QQuickImageProvider>
+#include <QDesktopServices>
 #include <QPrinter>
 #include <QPrinterInfo>
 #include <QWindow>
@@ -1861,14 +1862,52 @@ void GAPI::startSigningXADESWithCMD(QList<QString> inputFiles, QString outputFil
 }
 
 bool GAPI::isASiC(const QString& filename) {
-    BEGIN_TRY_CATCH
-
     std::string filename_utf8 = filename.toUtf8().constData();
-    return SigContainer::isValidASiC(filename_utf8.c_str());
+    bool isASiC = false;
 
-    END_TRY_CATCH
+    try {
+        isASiC = SigContainer::isValidASiC(filename_utf8.c_str());
+    } catch (const PTEID_Exception& e) {
+        emitErrorSignal(__FUNCTION__, e.GetError());
+    }
+
+    return isASiC;
 }
 
+QStringList GAPI::listFilesInASiC(const QString& filename) {
+    QStringList files;
+
+    try {
+        PTEID_ASICContainer container(filename.toStdString().c_str());
+        long file_count = container.countInputFiles();
+
+        for (long i = 0; i < file_count; ++i) {
+            files.append(container.getInputFile(i));
+        }
+
+    } catch (const PTEID_Exception& e) {
+        emitErrorSignal(__FUNCTION__, e.GetError());
+    }
+
+    return files;
+}
+
+void GAPI::extractFileFromASiC(const QString& container_path, const QString& filename) {
+    Concurrent::run(this, &GAPI::doExtractFileFromASiC, container_path, filename);
+}
+
+void GAPI::doExtractFileFromASiC(const QString& container_path, const QString& filename) {
+    QString out_dir = QDir::tempPath();
+    QString complete_path = QDir::toNativeSeparators(out_dir + "/" + filename);
+
+    try {
+        PTEID_ASICContainer container(container_path.toStdString().c_str());
+        container.extract(filename.toStdString().c_str(), out_dir.toStdString().c_str());
+        QDesktopServices::openUrl("file:///" + complete_path);
+    } catch (const PTEID_Exception& e) {
+        emitErrorSignal(__FUNCTION__, e.GetError());
+    }
+}
 
 bool GAPI::isDirectory(QString path) {
     QFileInfo fi(path);

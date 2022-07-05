@@ -70,6 +70,7 @@
         <file>images/titleBar/quit_hover.png</file>
         <file>images/remove_file.png</file>
         <file>images/remove_file_hover.png</file>
+        <file>images/remove_file_hover_blue.png</file>
         <file>images/logo_CC.png</file>
         <file>images/logo_CC_seal.png</file>
         <file>components/TitleBar.qml</file>
@@ -85,6 +86,7 @@
         <file>images/pteid_signature_watermark.jpg</file>
         <file>images/logo_compete2020.png</file>
         <file>images/download_icon_white.png</file>
+        <file>images/download_hover_blue.png</file>
         <file>images/download_icon_blue.png</file>
         <file>images/update_icon.png</file>
         <file>images/update_icon_selected.png</file>
@@ -107,5 +109,6 @@
         <file>contentPages/services/PageServicesSignForm.ui.qml</file>
         <file>images/icons-resize.png</file>
         <file>images/titleBar/quit_hover_blue.png</file>
+        <file>images/zip.png</file>
     </qresource>
 </RCC>
