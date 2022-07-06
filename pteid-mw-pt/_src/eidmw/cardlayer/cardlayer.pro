@@ -26,9 +26,11 @@ DEPENDPATH += .
 macx: LIBS += -L../lib -l$${COMMONLIB}
 macx: LIBS += -l$${DLGLIB} \
               -Wl,-framework -Wl,PCSC 	
+macx: LIBS += -lcrypto
 
 unix:LIBS += -L../lib -l$${COMMONLIB}
 unix:LIBS += -l$${DLGLIB}
+unix: LIBS += -lcrypto
 !macx:LIBS += -lpcsclite
 
 INCLUDEPATH += . ../common 
