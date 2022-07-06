@@ -806,43 +806,28 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
 	if (ulLen >= 2)
 	  uiFileID = Hex2Byte(csPath, ulLen - 2) + Hex2Byte(csPath, ulLen - 1);
 
-	switch(uiFileID)
+	switch (uiFileID)
 	{
-    case 129: // EF(ODF) 4F005031 (ID on OSX Dont cache otherwise will cause issues on IAS cards)
-        return dontCache;
-    case 47: // EF(ODF) 4F005031 (Dont cache otherwise will cause issues on IAS cards)
-        return dontCache;
-    case 130: // EF(TokenInfo)
-        return dontCache;
-    case 69: // AOD (4401)
-        return dontCache;
-    case 3: // 0003 (TRACE)
-        //return dontCache;
-    case 246: // EF07 (PersoData)
-        return dontCache;
-    case 244: // EF05 (Address)
-        return dontCache;
-	case 252:  //PrkD
-		return dontCache;
+	case 3:	  // 0003 (TRACE)
+	case 47:  // EF(ODF) 4F005031 (Dont cache otherwise will cause issues on IAS cards)
+	case 69:  // AOD (4401)
+	case 129: // EF(ODF) 4F005031 (ID on OSX Dont cache otherwise will cause issues on IAS cards)
+	case 130: // EF(TokenInfo)
+	case 244: // EF05 (Address)
 	case 245: // EF06 (SOD)
-        return dontCache;
-    case 241: // EF02 (ID)
-        return simpleCache;
-#ifdef CAL_EMULATION  // the EF(ID#RN) of the emulated test cards have the same serial nr
-    case 0x4031: // EF(ID#RN)
-#endif
-#ifndef CAL_EMULATION
-    case 0x4031: // EF(ID#RN)
-        return checkSerial;
-#endif
-    case 251: // EF0C (CertD)
-    case 248: // EF09 (Cert Auth)
-    case 247: // EF08 (Cert Sign)
-    case 254: // EF0F (Cert Root Sign)
-    case 255: // EF10 (Cert Root Auth)
-    case 256: // EF11 (CERT ROOT CA)
-        return certCache;
-    }
+	case 246: // EF07 (PersoData)
+	case 251: // EF0C (CertD)
+	case 252: // PrkD
+		return dontCache;
+	case 241: // EF02 (ID)
+		return simpleCache;
+	case 247: // EF08 (Cert Sign)
+	case 248: // EF09 (Cert Auth)
+	case 254: // EF0F (Cert Root Sign)
+	case 255: // EF10 (Cert Root Auth)
+	case 256: // EF11 (CERT ROOT CA)
+		return certCache;
+	}
 
     //Should not happen...
     return dontCache;
