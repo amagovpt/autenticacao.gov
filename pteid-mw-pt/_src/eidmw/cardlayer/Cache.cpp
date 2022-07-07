@@ -171,8 +171,8 @@ void CCache::MemStoreFile(const std::string & csName,
 
 /////////////////////////// Disk /////////////////////////
 
-unsigned int CCache::Encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
-                 unsigned char *iv, unsigned char *ciphertext)
+unsigned int CCache::Encrypt(const unsigned char *plaintext, int plaintext_len,
+		const unsigned char *key, const unsigned char *iv, unsigned char *ciphertext)
 {
     EVP_CIPHER_CTX *ctx;
     int len;
@@ -197,8 +197,8 @@ unsigned int CCache::Encrypt(unsigned char *plaintext, int plaintext_len, unsign
     return ciphertext_len;
 }
 
-unsigned int CCache::Decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,
-            unsigned char *iv, unsigned char *plaintext)
+unsigned int CCache::Decrypt(const unsigned char *ciphertext, int ciphertext_len, const unsigned char *key,
+        const unsigned char *iv, unsigned char *plaintext)
 {
     EVP_CIPHER_CTX *ctx;
     int len;
@@ -222,10 +222,6 @@ unsigned int CCache::Decrypt(unsigned char *ciphertext, int ciphertext_len, unsi
 
     return plaintext_len;
 }
-
-struct EncryptedCacheHeader {
-	unsigned char iv[16];
-};
 
 CByteArray CCache::DiskGetFile(const std::string & csName)
 {
