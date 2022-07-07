@@ -80,7 +80,7 @@ CCache::~CCache(void)
 
 std::string CCache::GetSimpleName(const std::string & csSerialNr, const std::string & csPath)
 {
-	return csSerialNr + "_" + csPath + ".bin";
+	return csSerialNr + "_" + csPath + "." + ENCRYPTED_CACHE_EXT;
 }
 
 CByteArray CCache::GetFile(const std::string & csName,
@@ -312,12 +312,21 @@ void CCache::DiskStoreFile(const std::string & csName,
 	}
 }
 
+void CCache::DeleteNonEncryptedFiles()
+{
+	std::string cachePath = GetCacheDir();
+	bool stopRequest = false;
+	scanDir(cachePath.c_str(), "", CACHE_EXT, stopRequest, &stopRequest, [&](const char *SubDir, const char *File, void *param) {
+		std::string fileFullPath = cachePath + File;
+		remove(fileFullPath.c_str());
+	});
+}
 
 void CCache::CacheDirIterate(std::function<void(const char *FileName, const char *FullPath)> step)
 {
 	std::string cachePath = GetCacheDir();
 	bool stopRequest = false;
-	scanDir(cachePath.c_str(), "", "bin", stopRequest, &stopRequest, [&](const char *SubDir, const char *File, void *param) {
+	scanDir(cachePath.c_str(), "", ENCRYPTED_CACHE_EXT, stopRequest, &stopRequest, [&](const char *SubDir, const char *File, void *param) {
 		std::string fileFullPath = cachePath + File;
 		step(File, fileFullPath.c_str());
 	});
@@ -330,6 +339,8 @@ void CCache::CacheDirIterate(std::function<void(const char *FileName, const char
 
 bool CCache::LimitDiskCacheFiles(unsigned long ulMaxCacheFIles)
 {
+	DeleteNonEncryptedFiles();
+
 	std::map<std::string, time_t> uniqueEIDs;
 
 	CacheDirIterate([&](const char *FileName, const char *FullPath) {
@@ -422,7 +433,7 @@ std::string CCache::GetCacheDir(bool bAddSlash)
 bool CCache::Delete(const std::string & csName)
 {
 	std::string strCacheDir = GetCacheDir();
-	std::string strSearchFor = strCacheDir + csName + "*.bin";
+	std::string strSearchFor = strCacheDir + csName + "*." + ENCRYPTED_CACHE_EXT;
 	const char *csSearchFor = strSearchFor.c_str();
 
 	bool bDeleted = false; // wether or no we deleted something

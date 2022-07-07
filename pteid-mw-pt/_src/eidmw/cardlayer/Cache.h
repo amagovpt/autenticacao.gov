@@ -106,6 +106,8 @@ protected:
 	CByteArray DiskGetFile(const std::string & csName);
 	void DiskStoreFile(const std::string & csName, const CByteArray &oData);
 
+	static void DeleteNonEncryptedFiles();
+
 	static std::string GetCacheDir(bool bAddSlash = true);
 
 	static void CacheDirIterate(std::function<void(const char* FileName, const char* FullPath)> step);
@@ -120,6 +122,9 @@ protected:
 	unsigned char *m_pucTemp;
 	CContext *m_poContext;
 	std::string m_csCacheDir;
+
+	static constexpr const char* CACHE_EXT = "bin";
+	static constexpr const char* ENCRYPTED_CACHE_EXT = "ebin";
 
 #ifdef WIN32
 // See http://groups.google.com/group/microsoft.public.vc.stl/msg/c4dfeb8987d7b8f0
