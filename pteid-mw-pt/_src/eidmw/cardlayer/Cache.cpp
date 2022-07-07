@@ -171,6 +171,11 @@ void CCache::MemStoreFile(const std::string & csName,
 
 /////////////////////////// Disk /////////////////////////
 
+void CCache::setEncryptionKey(const CByteArray &newEncryptionKey)
+{
+	encryptionKey = newEncryptionKey;
+}
+
 unsigned int CCache::Encrypt(const unsigned char *plaintext, int plaintext_len,
 		const unsigned char *key, const unsigned char *iv, unsigned char *ciphertext)
 {
@@ -227,6 +232,10 @@ CByteArray CCache::DiskGetFile(const std::string & csName)
 {
 	if (m_pucTemp == NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_MEMORY);
+	
+	// Invalid encryption key. We will not be able to decrypt the file
+	if(encryptionKey.Size() != ENCRYPTION_KEY_LENGTH)
+		return CByteArray();
 
 	if (m_csCacheDir == "")
 		m_csCacheDir = GetCacheDir();
@@ -243,8 +252,6 @@ CByteArray CCache::DiskGetFile(const std::string & csName)
 		OpenSSL_add_all_algorithms();
 
 		unsigned char iv[16] = {0};
-		// UTILIZE A SECURE KEY IN THE FUTURE
-		unsigned char *key = (unsigned char *)"\xe0\x29\x04\x74\xf5\x3f\x49\x48\x71\x48\xc7\x6c\x04\x40\xe7\x74";
 
 		unsigned char ciphertext[MAX_CACHE_SIZE] = {0};
 		size_t cacheFileLen = fread(ciphertext, 1, MAX_CACHE_SIZE, f);
@@ -254,7 +261,7 @@ CByteArray CCache::DiskGetFile(const std::string & csName)
 		memcpy(iv, ciphertext, 16);
 
 		unsigned char plaintext[MAX_CACHE_SIZE] = {0};
-		unsigned int decryptLen = Decrypt(ciphertext + 16, cacheFileLen - 16, key, iv, plaintext);
+		unsigned int decryptLen = Decrypt(ciphertext + 16, cacheFileLen - 16, encryptionKey.GetBytes(), iv, plaintext);
 		if (decryptLen == 0)
 			return CByteArray();
 
@@ -270,6 +277,10 @@ CByteArray CCache::DiskGetFile(const std::string & csName)
 void CCache::DiskStoreFile(const std::string & csName,
 	const CByteArray &oData)
 {
+	// Invalid encryption key. We will not be able to encrypt the file
+	if(encryptionKey.Size() != ENCRYPTION_KEY_LENGTH)
+		return;
+
 	if (m_csCacheDir == "")
 		m_csCacheDir = GetCacheDir();
 	std::string csFileName = m_csCacheDir + csName;
@@ -289,14 +300,12 @@ void CCache::DiskStoreFile(const std::string & csName,
 
 		unsigned char iv[16] = {0};
 		RAND_bytes(iv, 16);
-		// UTILIZE A SECURE KEY IN THE FUTURE
-		unsigned char *key = (unsigned char *)"\xe0\x29\x04\x74\xf5\x3f\x49\x48\x71\x48\xc7\x6c\x04\x40\xe7\x74";
 
 		CByteArray plainData(reinterpret_cast<const unsigned char *>(&header), sizeof(tCacheHeader));
 		plainData.Append(oData);
 
     	unsigned char ciphertext[MAX_CACHE_SIZE + 16];
-		unsigned int length = Encrypt(plainData.GetBytes(), plainData.Size(), key, iv, ciphertext);
+		unsigned int length = Encrypt(plainData.GetBytes(), plainData.Size(), encryptionKey.GetBytes(), iv, ciphertext);
 		if (length == 0)
 		{
 			fclose(f);

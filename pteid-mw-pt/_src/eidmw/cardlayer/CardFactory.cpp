@@ -102,6 +102,7 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 			}
 
 			poCard->setProtocol(param_structure);
+			poCard->GenerateEncryptionKey();
 
 			hCard = 0;
 		}

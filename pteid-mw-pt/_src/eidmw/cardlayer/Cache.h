@@ -99,6 +99,12 @@ public:
 	 */
 	static bool LimitDiskCacheFiles(unsigned long ulMaxCacheFiles);
 
+	/**
+	 * Set the encryption key to be used for all cache files
+	 * perteining to the current eID.
+	 */
+	void setEncryptionKey(const CByteArray &newEncryptionKey);
+
 protected:
 	CByteArray MemGetFile(const std::string & csName);
 	void MemStoreFile(const std::string & csName, const CByteArray &oData);
@@ -119,12 +125,14 @@ protected:
 	unsigned int Decrypt(const unsigned char *ciphertext, int ciphertext_len, const unsigned char *key,
         const unsigned char *iv, unsigned char *plaintext);
 
+	static const unsigned long ENCRYPTION_KEY_LENGTH = 16;
+	static constexpr const char *CACHE_EXT = "bin";
+	static constexpr const char *ENCRYPTED_CACHE_EXT = "ebin";
+
 	unsigned char *m_pucTemp;
 	CContext *m_poContext;
 	std::string m_csCacheDir;
-
-	static constexpr const char* CACHE_EXT = "bin";
-	static constexpr const char* ENCRYPTED_CACHE_EXT = "ebin";
+	CByteArray encryptionKey = CByteArray(ENCRYPTION_KEY_LENGTH);
 
 #ifdef WIN32
 // See http://groups.google.com/group/microsoft.public.vc.stl/msg/c4dfeb8987d7b8f0

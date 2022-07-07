@@ -428,6 +428,21 @@ CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 	return oResp;
 }
 
+void CCard::GenerateEncryptionKey()
+{
+	// Select file 5F00
+	CByteArray selectFileRes = SendAPDU({(const unsigned char*)"\x00\xA4\x00\x0C\x02\x5F\x00", 7, 7});
+	if(getSW12(selectFileRes, 0x9000))
+	{
+		CByteArray hash = SendAPDU({(const unsigned char*)"\x00\xB0\x86\xD4\x10", 5, 5});
+		if(getSW12(hash, 0x9000))
+		{
+			hash.Chop(2);
+			m_oCache.setEncryptionKey(hash);
+		}
+	}
+}
+
 const void * CCard::getProtocolStructure() {
 	return m_comm_protocol;
 }

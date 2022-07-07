@@ -116,6 +116,8 @@ public:
             const CByteArray & oData);
     virtual CByteArray SendAPDU(const CByteArray & oCmdAPDU);
 
+    virtual void GenerateEncryptionKey();
+
     virtual void setPinpadHandler(GenericPinpad * pinpad)
     {
 	   m_poPinpad = pinpad;
