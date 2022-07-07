@@ -255,6 +255,8 @@ CByteArray CCache::DiskGetFile(const std::string & csName)
 
 		unsigned char plaintext[MAX_CACHE_SIZE] = {0};
 		unsigned int decryptLen = Decrypt(ciphertext + 16, cacheFileLen - 16, key, iv, plaintext);
+		if (decryptLen == 0)
+			return CByteArray();
 
 		memcpy(m_pucTemp, plaintext, decryptLen);
 		if (!CheckHeader(m_pucTemp, (unsigned long) decryptLen))
@@ -295,6 +297,12 @@ void CCache::DiskStoreFile(const std::string & csName,
 
     	unsigned char ciphertext[MAX_CACHE_SIZE + 16];
 		unsigned int length = Encrypt(plainData.GetBytes(), plainData.Size(), key, iv, ciphertext);
+		if (length == 0)
+		{
+			fclose(f);
+			remove(csFileName.c_str()); //If Encrypt failed, no need to leave the file empty, just delete it
+			return;
+		}
 
 		//Write the IV first
 		fwrite(iv, sizeof(unsigned char), 16, f);
