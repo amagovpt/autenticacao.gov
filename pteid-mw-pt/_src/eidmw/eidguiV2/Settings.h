@@ -570,33 +570,24 @@ public:
     }
     void setAutoStartup( bool bAutoStartup )
     {
+    #ifdef WIN32
         m_bAutoStartup = bAutoStartup;
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTWIN);
         config.setLong(m_bAutoStartup);
 
-#ifdef WIN32
         QSettings s("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
-#endif
 
         if (m_bAutoStartup)
         {
-#ifdef WIN32
             QString filePath = QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
             s.setValue("pteid", filePath);
-#endif
-#ifdef __APPLE__
-            //            QProcess::execute("sudo defaults write com.apple.loginwindow LoginHook" + m_strExePath);
-#endif
         }
         else
         {
-#ifdef WIN32
             s.remove("pteid");
-#endif
-#ifdef __APPLE__
-            //            QProcess::execute("sudo defaults delete com.apple.loginwindow LoginHook" + m_strExePath);
-#endif
         }
+
+    #endif
 
     }
     bool getRegCertSetting( void )
