@@ -376,14 +376,6 @@ void AppController::setGuiLanguageString (QString language){
         emit signalLanguageChangedError();
     }
 }
-bool AppController::getStartMinimizedValue (void){
-
-    return m_Settings.getStartMinimized();
-}
-void AppController::setStartMinimizedValue (bool bStartMinimized ){
-
-    m_Settings.setStartMinimized(bStartMinimized);
-}
 bool AppController::getDebugModeValue (void){
 
     return m_Settings.getDebugMode();

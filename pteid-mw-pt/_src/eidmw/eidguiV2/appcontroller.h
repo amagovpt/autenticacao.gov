@@ -88,9 +88,6 @@ public slots:
     bool getStartAutoValue (void);
     void setStartAutoValue (bool bAutoStartup );
 
-    bool getStartMinimizedValue(void);
-    void setStartMinimizedValue(bool bStartMinimized );
-
     bool getDebugModeValue(void);
     QString setDebugModeValue(bool bDebugMode);
 

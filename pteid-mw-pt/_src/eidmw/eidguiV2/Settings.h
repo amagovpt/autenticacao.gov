@@ -78,7 +78,6 @@ public:
         , m_iGraphicsAccel(0)
         , m_bUseCustomSignature(false)
         , m_bPinpadEnabled(false)
-        , m_bStartMinimized(false)
         , m_bStartAutoupdate(false)
         , m_bDebugMode(false)
         , m_bNotShowStartUpHelp(false)
@@ -124,18 +123,6 @@ public:
             }
         }
 
-        //----------------------------------------------------------
-        // check start minimized
-        //----------------------------------------------------------
-        {
-            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTMINI);
-            long StartMinimized = config.getLong();
-
-            if ( 0 != StartMinimized )
-            {
-                setStartMinimized(true);
-            }
-        }
         //----------------------------------------------------------
         // check autoupdates on app start
         //----------------------------------------------------------
@@ -418,17 +405,6 @@ public:
 
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PINPAD_ENABLED);
         config.setLong(m_bPinpadEnabled);
-    }
-    bool getStartMinimized( void ) const
-    {
-        return m_bStartMinimized;
-    }
-    void setStartMinimized( bool bStartMinimized)
-    {
-        m_bStartMinimized = bStartMinimized;
-
-        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_STARTMINI);
-        config.setLong(m_bStartMinimized);
     }
     bool getStartAutoupdate(void) const
     {
@@ -844,7 +820,6 @@ private:
     int     m_iGraphicsAccel;       //!< the Graphics Acceleration 0=Software, 1=Hardware, 2=ANGLE
     bool    m_bUseCustomSignature;  //!< the GUI use custom signature image
     bool    m_bPinpadEnabled;       //!< use Pinpad functionality when supported by readers (T/F)
-    bool    m_bStartMinimized;      //!< startup minimized (T/F)
     bool    m_bStartAutoupdate;     //!< check for updates when starting the app (T/F)
     bool    m_bDebugMode;           //!< debug mode enabled (T/F)
     bool    m_bNotShowStartUpHelp;  //!< the GUI Show Help	bool	m_bStartMinimized;              //!< startup minimized (T/F)
