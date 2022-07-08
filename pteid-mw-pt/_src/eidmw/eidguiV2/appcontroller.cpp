@@ -541,7 +541,7 @@ bool AppController::removePteidCache() {
         qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
 #endif
 
-        dir.setNameFilters(QStringList() << "*.bin" << ".cache.csc");
+        dir.setNameFilters(QStringList() << "*.ebin" << ".cache.csc");
         dir.setFilter(QDir::Files | QDir::Hidden);
 
         foreach(QString dirFile, dir.entryList())
@@ -580,7 +580,7 @@ void AppController::createCacheDir(){
 void AppController::doGetPteidCacheSize() {
     GUISettings settings;
     QString ptEidCacheDir = settings.getPteidCachedir();
-    emit signalAppCacheSize(formatSize(dirSize(ptEidCacheDir, "*.bin")));
+    emit signalAppCacheSize(formatSize(dirSize(ptEidCacheDir, "*.ebin")));
 }
 
 void AppController::getScapCacheSize() {
