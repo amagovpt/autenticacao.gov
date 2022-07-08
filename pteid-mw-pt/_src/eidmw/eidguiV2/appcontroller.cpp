@@ -392,14 +392,6 @@ QString AppController::setDebugModeValue (bool bDebugMode) {
 
     return m_Settings.setDebugMode(bDebugMode);
 }
-bool AppController::getShowNotificationValue (void){
-
-    return m_Settings.getShowNotification();
-}
-bool AppController::getShowPictureValue (void){
-
-    return m_Settings.getShowPicture();
-}
 bool AppController::getShowAnimationsValue(void){
     return m_Settings.getShowAnimations();
 }
@@ -411,14 +403,6 @@ int AppController::getApplicationScaleValue(void) {
 }
 int AppController::getGraphicsAccelValue(void){
     return m_Settings.getGraphicsAccel();
-}
-void AppController::setShowNotificationValue (bool bShowNotification){
-
-    m_Settings.setShowNotification(bShowNotification);
-}
-void AppController::setShowPictureValue (bool bShowPicture){
-
-    m_Settings.setShowPicture(bShowPicture);
 }
 void AppController::setShowAnimationsValue(bool bShowAnimations){
     m_Settings.setShowAnimations(bShowAnimations);

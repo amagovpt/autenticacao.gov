@@ -103,15 +103,11 @@ public slots:
     QString getGuiLanguageString(void);
     void setGuiLanguageString (QString language);
 
-    bool getShowNotificationValue(void);
-    bool getShowPictureValue(void);
     bool getShowAnimationsValue(void);
     bool getUseSystemScaleValue(void);
     int  getApplicationScaleValue(void);
     int  getGraphicsAccelValue(void);
 
-    void setShowNotificationValue(bool bShowNotification);
-    void setShowPictureValue(bool bShowPicture);
     void setShowAnimationsValue(bool bShowAnimations);
     void setUseSystemScaleValue(bool bUseSystemScale);
     void setApplicationScaleValue(int iScale);

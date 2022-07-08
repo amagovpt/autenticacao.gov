@@ -4,7 +4,7 @@
  * Copyright (C) 2008-2009 FedICT.
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2017-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
- * Copyright (C) 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2017-2022 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
  *
@@ -69,7 +69,9 @@ public:
     // ctor
     //------------------------------------------------------
     GUISettings( void )
-        : m_GuiLanguage("nl")
+        : m_bProxySystem(false)
+        , m_proxy_port(0)
+        , m_GuiLanguage("nl")
         , m_bShowAnimations(false)
         , m_bUseSystemScale(false)
         , m_iApplicationScale(0)
@@ -81,8 +83,9 @@ public:
         , m_bDebugMode(false)
         , m_bNotShowStartUpHelp(false)
         , m_bAskToRegisterCmdCert(false)
-        , m_bShowPicture(false)
-        , m_bShowNotification(false)
+        , m_bAskToSetCache(false)
+        , m_bShowSignatureOptions(false)
+        , m_bShowSignatureHelp(false)
         , m_bAutoCardReading(false)
         , m_bAutoStartup(false)
         , m_bRegCert(false)
@@ -186,28 +189,6 @@ public:
             }
         }
 
-        //----------------------------------------------------------
-        // check ShowPicture
-        //----------------------------------------------------------
-        {
-            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWPIC);
-            long ShowPicture = config.getLong();
-            if ( 0 != ShowPicture )
-            {
-                setShowPicture(true);
-            }
-        }
-        //----------------------------------------------------------
-        // check ShowNotification
-        //----------------------------------------------------------
-        {
-            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWNOTIFICATION);
-            long ShowNotification = config.getLong();
-            if ( 0 != ShowNotification )
-            {
-                setShowNotification(true);
-            }
-        }
         //----------------------------------------------------------
         // check ShowAnimations
         //----------------------------------------------------------
@@ -513,21 +494,6 @@ public:
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ASKSETCACHE);
         config.setLong(m_bAskToSetCache);
     }
-
-    bool getShowPicture( void )
-    {
-        return m_bShowPicture;
-    }
-    void setShowPicture( bool bShowPicture )
-    {
-        m_bShowPicture = bShowPicture;
-        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWPIC);
-        config.setLong(m_bShowPicture);
-    }
-    bool getShowNotification( void )
-    {
-        return m_bShowNotification;
-    }
     bool getShowAnimations( void )
     {
         return m_bShowAnimations;
@@ -588,12 +554,6 @@ public:
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWSTARTUPHELP);
         config.setLong(m_bNotShowStartUpHelp);
     }
-    void setShowNotification( bool bShowNotification )
-    {
-        m_bShowNotification = bShowNotification;
-        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SHOWNOTIFICATION);
-        config.setLong(m_bShowNotification);
-    }
     bool getAutoCardReading( void )
     {
         return m_bAutoCardReading;
@@ -650,11 +610,6 @@ public:
             return false;
         }
         return m_bRegCert;
-    }
-
-    bool areJavaAppsEnabled()
-    {
-        return m_showJavaApps;
     }
 
     void setRegCert( bool bRegCert )
@@ -904,15 +859,12 @@ private:
     bool    m_bNotShowStartUpHelp;  //!< the GUI Show Help	bool	m_bStartMinimized;              //!< startup minimized (T/F)
     bool    m_bAskToRegisterCmdCert;//!< the GUI will ask to register the CMD cert on start (T/F)
     bool    m_bAskToSetCache;        //!< the GUI will ask to set the cache (on/off) on start (T/F)
-    bool    m_bShowPicture;         //!< show the picture (T/F)
-    bool    m_bShowNotification;    //!< show the notification (T/F)
     bool    m_bShowSignatureOptions;//!< show signature options in GUI Signature page (T/F)
     bool    m_bShowSignatureHelp;   //!< show signature help in GUI Signature page (T/F)
     bool    m_bAutoCardReading;     //!< read the inserted card at startup (T/F)
     bool    m_bAutoStartup;         //!< start the app when windows starts (T/F)
     bool    m_bRegCert;             //!< register certificates on insert (T/F)
     bool    m_bRemoveCert;          //!< remove certificates on close (T/F)
-    bool    m_showJavaApps;         // wether we should show the SCAP/DSS buttons...
     QString m_strExePath;           //!< path to the executable
     bool    m_test_mode;
     int     m_iSignSealOptions;
