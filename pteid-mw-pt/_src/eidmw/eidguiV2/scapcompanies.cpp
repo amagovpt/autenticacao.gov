@@ -397,36 +397,8 @@ std::vector<ns2__AttributesType *> ScapServices::getAttributes(
             endpoint.append(c_endpoint);
             const char * soap_action = c_soapAction;
 
-            ProxyInfo m_proxyInfo;
-            std::string proxy_host;
-            long proxy_port = 0;
-            if (m_proxyInfo.isAutoConfig())
-            {
-                m_proxyInfo.getProxyForHost(endpoint, &proxy_host, &proxy_port);
-                if (proxy_host.size() > 0)
-                {
-                    sp.proxy_host = proxy_host.c_str();
-                    sp.proxy_port = proxy_port;
-                }
-            }
-            else if (m_proxyInfo.isManualConfig())
-            {
-                long proxyinfo_port;
-                try {
-                    proxyinfo_port = std::stol(m_proxyInfo.getProxyPort());
-                }
-                catch (...) {
-                    eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Error parsing proxy port to number value.");
-                }
-                sp.proxy_host = strdup(m_proxyInfo.getProxyHost().c_str());
-                sp.proxy_port = proxyinfo_port;
-
-                if (m_proxyInfo.getProxyUser().size() > 0)
-                {
-                    sp.proxy_userid = strdup(m_proxyInfo.getProxyUser().c_str());
-                    sp.proxy_passwd = strdup(m_proxyInfo.getProxyPwd().c_str());
-                }
-            }
+            ProxyInfo proxyInfo;
+            proxySettingsForGSoap(proxyInfo, &sp, endpoint);
             
             AttributeClientServiceBindingProxy proxy(&sp);
             ns2__AttributeResponseType attr_response;

@@ -40,6 +40,11 @@ class ns3__AttributeSupplierType;
 
 class GAPI;
 
+struct soap;
+
+//Utility function for GSoap usage
+void proxySettingsForGSoap(ProxyInfo &proxyInfo, soap *sp, std::string &url);
+
 class ScapServices {
 public:
 

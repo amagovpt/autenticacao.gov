@@ -148,20 +148,21 @@ void AutoUpdates::startRequest(QUrl url) {
     }
     else if (proxyinfo.isManualConfig())
     {
-        long proxyinfo_port;
+        long proxyinfo_port = 0;
         try {
             proxyinfo_port = std::stol(proxyinfo.getProxyPort());
+            proxy.setType(QNetworkProxy::HttpProxy);
+            proxy.setHostName(QString::fromStdString(proxyinfo.getProxyHost()));
+            proxy.setPort(proxyinfo_port);
+            if (proxyinfo.getProxyUser().size() > 0) {
+                proxy.setUser(QString::fromStdString(proxyinfo.getProxyUser()));
+                proxy.setPassword(QString::fromStdString(proxyinfo.getProxyPwd()));
+            }
         }
-        catch (...) {
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing proxy port to number value.");
+        catch (...) { //Capture 2 types of exceptions thrown by std::stol()
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "%s: Error parsing proxy port to number value. Proxy config not applied!", __FUNCTION__);
         }
-        proxy.setType(QNetworkProxy::HttpProxy);
-        proxy.setHostName(QString::fromStdString(proxyinfo.getProxyHost()));
-        proxy.setPort(proxyinfo_port);
-        if (proxyinfo.getProxyUser().size() > 0) {
-            proxy.setUser(QString::fromStdString(proxyinfo.getProxyUser()));
-            proxy.setPassword(QString::fromStdString(proxyinfo.getProxyPwd()));
-        }
+        
     }
     QNetworkProxy::setApplicationProxy(proxy);
 

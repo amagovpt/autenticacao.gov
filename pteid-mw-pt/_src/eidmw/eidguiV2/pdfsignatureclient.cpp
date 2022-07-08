@@ -519,7 +519,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
         return GAPI::ScapGenericError;
     }
 
-    AuthorizationServiceSoapBindingProxy proxy(sp);
+    AuthorizationServiceSoapBindingProxy authorization_gsoap_proxy(sp);
 
     std::string proxy_host;
     long proxy_port;
@@ -527,31 +527,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
     std::string s_endpoint = QString("https://" + settings.getScapServerHost() + ":" +
         settings.getScapServerPort().append(AUTHORIZATION_ENDPOINT)).toStdString();
 
-    proxy.soap_endpoint = s_endpoint.c_str();
-
-    if (proxyInfo.isAutoConfig()) 
-    {
-        proxyInfo.getProxyForHost(s_endpoint, &proxy_host, &proxy_port);
-        if (proxy_host.size() > 0) {
-            sp->proxy_host = proxy_host.c_str();
-            sp->proxy_port = proxy_port;
-         }
-    }
-    else if (proxyInfo.isManualConfig()) {
-        sp->proxy_host = strdup(proxyInfo.getProxyHost().c_str());
-        try {
-            proxy_port = std::stol(proxyInfo.getProxyPort());
-         }
-        catch (...) {
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Error parsing proxy port to number value.");
-        }
-        sp->proxy_port = proxy_port;
-        if (proxyInfo.getProxyUser().size() > 0) {
-            sp->proxy_userid = strdup(proxyInfo.getProxyUser().c_str());
-            sp->proxy_passwd = strdup(proxyInfo.getProxyPwd().c_str());
-        }
-
-    }
+    proxySettingsForGSoap(proxyInfo, sp, s_endpoint);
 
     _ns1__AuthorizationRequest authorizationRequest;
     _ns1__AuthorizationResponse authorizationResponse;
@@ -615,19 +591,19 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
     authorizationRequest.AttributeList = attributeList;
 
-    proxy.soap_endpoint = s_endpoint.c_str();
+    authorization_gsoap_proxy.soap_endpoint = s_endpoint.c_str();
 
-    qDebug() << "SCAP PDFSignatureClient:: Authorization endpoint: " << proxy.soap_endpoint;
+    qDebug() << "SCAP PDFSignatureClient:: Authorization endpoint: " << authorization_gsoap_proxy.soap_endpoint;
             
-    pParseHeader = proxy.soap->fparsehdr;
+    pParseHeader = authorization_gsoap_proxy.soap->fparsehdr;
 
-    proxy.soap->fparsehdr = ParseHeader;
+    authorization_gsoap_proxy.soap->fparsehdr = ParseHeader;
 
-    int rc = proxy.Authorization(&authorizationRequest, authorizationResponse);
+    int rc = authorization_gsoap_proxy.Authorization(&authorizationRequest, authorizationResponse);
 
     if (rc != SOAP_OK) {
         qDebug() << "Error returned by calling Authorization in SoapBindingProxy(). Error code: " << rc;
-        return handleError(rc, proxy.soap, __FUNCTION__);
+        return handleError(rc, authorization_gsoap_proxy.soap, __FUNCTION__);
     }
     else {
         qDebug() << "Authorization service returned SOAP_OK";

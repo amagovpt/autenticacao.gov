@@ -108,6 +108,43 @@ const char * errorTranslation(long error_code) {
 	}
 }
 
+void proxySettingsForGSoap(ProxyInfo &proxyInfo, soap *sp, std::string &url) {
+    std::string proxy_host;
+    long proxy_port = 0;
+    if (proxyInfo.isAutoConfig()) {
+        proxyInfo.getProxyForHost(url, &proxy_host, &proxy_port);
+        if (proxy_host.size() > 0)
+        {
+            sp->proxy_host = proxy_host.c_str();
+            sp->proxy_port = proxy_port;
+        }
+    }
+    else if (proxyInfo.isManualConfig()) {
+        try {
+            if (proxyInfo.getProxyHost().size() == 0) {
+
+                eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_WARNING, "ScapSignature",
+                                 "%s: Empty proxy host. Proxy config not applied!", __FUNCTION__);
+                return;
+            }
+            proxy_port = std::stol(proxyInfo.getProxyPort());
+            sp->proxy_host = strdup(proxyInfo.getProxyHost().c_str());
+            sp->proxy_port = proxy_port;
+
+            if (proxyInfo.getProxyUser().size() > 0)
+            {
+                sp->proxy_userid = strdup(proxyInfo.getProxyUser().c_str());
+                sp->proxy_passwd = strdup(proxyInfo.getProxyPwd().c_str());
+            }
+        }
+        catch (...) {  //Capture 2 types of exceptions thrown by std::stol()
+            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature",
+                             "%s: Error parsing proxy port to number value. Proxy config not applied!", __FUNCTION__);
+        }
+
+    }
+}
+
 /*
 *  SCAP signature with citizen signature using CMD
 */
@@ -370,39 +407,9 @@ std::vector<ns3__AttributeSupplierType *> ScapServices::getAttributeSuppliers()
 	std::string port = settings.getScapServerPort().toStdString();
 	std::string sup_endpoint = std::string("https://") + settings.getScapServerHost().toStdString() + ":" + port + as_endpoint;
 
-
-	std::string proxy_host;
-    long proxy_port = 0;
 	//Proxy support using the gsoap BindingProxy
-    ProxyInfo m_proxyInfo;
-	
-    if (m_proxyInfo.isAutoConfig())
-	{
-		m_proxyInfo.getProxyForHost(sup_endpoint, &proxy_host, &proxy_port);
-		if (proxy_host.size() > 0)
-		{
-			sp->proxy_host = proxy_host.c_str();
-			sp->proxy_port = proxy_port;
-		}
-	}
-	else if (m_proxyInfo.isManualConfig())
-	{
-        long proxyinfo_port;
-        try {
-            proxyinfo_port = std::stol(m_proxyInfo.getProxyPort());
-        }
-        catch (...) {
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Error parsing proxy port to number value.");
-        }
-        sp->proxy_host = strdup(m_proxyInfo.getProxyHost().c_str());
-        sp->proxy_port = proxyinfo_port;
-        
-		if (m_proxyInfo.getProxyUser().size() > 0)
-		{
-            sp->proxy_userid = strdup(m_proxyInfo.getProxyUser().c_str());
-            sp->proxy_passwd = strdup(m_proxyInfo.getProxyPwd().c_str());
-		}
-	}
+    ProxyInfo proxyInfo;
+    proxySettingsForGSoap(proxyInfo, sp, sup_endpoint);
 
     ns9__AttributeSupplierResponseType suppliers_resp;
 
