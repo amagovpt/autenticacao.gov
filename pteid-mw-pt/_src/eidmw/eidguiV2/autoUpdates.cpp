@@ -249,7 +249,7 @@ time_t getTimeFromString(std::string stringTime){
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                 "Error parsing news.json: bad date format (expected YYYY-MM-DD) - maybe bad separator");
-        return NULL;
+        return 0;
     }
     try {
         year = std::stoi(splitTime.at(0));
@@ -259,7 +259,7 @@ time_t getTimeFromString(std::string stringTime){
     catch (const std::invalid_argument &ex) {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                 "Error parsing news.json: bad date format (expected YYYY-MM-DD) - bad year, month or day");
-        return NULL;
+        return 0;
     }
 
     struct tm  tm;
