@@ -33,6 +33,7 @@
 #include "Log.h"
 #include "Util.h"
 #include "Cache.h"
+#include "Config.h"
 
 #include "PteidCard.h"
 #include <vector>
@@ -102,7 +103,10 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 			}
 
 			poCard->setProtocol(param_structure);
-			poCard->GenerateEncryptionKey();
+
+			long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
+			if (cacheEnabled)
+				poCard->InitEncryptionKey();
 
 			hCard = 0;
 		}

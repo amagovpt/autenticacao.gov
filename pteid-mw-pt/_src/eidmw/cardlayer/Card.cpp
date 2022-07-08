@@ -428,7 +428,7 @@ CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 	return oResp;
 }
 
-void CCard::GenerateEncryptionKey()
+void CCard::InitEncryptionKey()
 {
 	unsigned char apduSelectFile[] = {0x00, 0xA4, 0x00, 0x0C, 0x02, 0x5F, 0x00};
 
