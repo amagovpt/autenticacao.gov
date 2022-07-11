@@ -306,8 +306,8 @@ __in    DWORD   dwFlags)
     CMDKSP_KEY *pKey = NULL;
 
     MWLOG_INFO(logBuf, "Call KSPOpenKey");
-    MWLOG_INFO(logBuf, "pProvider = [0x%08x]", pProvider);
-    MWLOG_INFO(logBuf, "phKey = [0x%08x] pszKeyName = [0x%08x]", phKey, pszKeyName);
+    MWLOG_INFO(logBuf, "pProvider = [%p]", pProvider);
+    MWLOG_INFO(logBuf, "phKey = [%p]", phKey);
     MWLOG_INFO(logBuf, "Credential ID = %S", pszKeyName);
 
     //
@@ -999,7 +999,7 @@ __in    DWORD   dwFlags)
             MWLOG_WARN(logBuf, "IsWindow fail");
             goto cleanup;
         }
-        MWLOG_DEBUG(logBuf, "HWND Handle = [0x%08x]", pKey->hWnd);
+        MWLOG_DEBUG(logBuf, "HWND Handle = [%p]", pKey->hWnd);
     }
     else {
         MWLOG_WARN(logBuf, "KSPSetProperty called for unsupported property - doing nothing...");
@@ -1634,7 +1634,7 @@ __in    DWORD   dwFlags)
     DWORD               cbTmp = 0;
     LPSTR              csSubject = NULL;
 
-    MWLOG_DEBUG(logBuf, "Call KSPSignHash hKey = [0x%08x]", hKey);
+    MWLOG_DEBUG(logBuf, "Call KSPSignHash hKey = [%Iu]", hKey); //correct specifier for ULONG_PTR
 
     pKey = CmdKspValidateKeyHandle(hKey);
 
