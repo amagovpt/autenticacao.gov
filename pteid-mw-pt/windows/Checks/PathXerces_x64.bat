@@ -1,5 +1,5 @@
 @echo [INFO] Input PTEID_DIR_XERCES_X64=%PTEID_DIR_XERCES_X64%
-@set FILE_TO_FIND="bin\xerces-c_3_2.dll" "lib\xerces-c_3.lib"
+@set FILE_TO_FIND="lib\xerces-c_3.lib"
 @echo [INFO] Looking for files: %FILE_TO_FIND%
 
 @set FILE_NOT_FOUND=

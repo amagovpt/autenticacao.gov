@@ -83,6 +83,12 @@
         <File Id="fil532B63275F24DCA11F229D2F2A4A6718" Source="..\..\..\eidguiV2\eidmw_nl.qm" />
         <File Id="fil532B63275F24DCA11F229D2F2A4A6719" Source="..\..\..\eidguiV2\eidmw_en.qm" />
       </Component>
+      <Component Guid="{A3916629-2BB0-45B5-87D0-601BB2492FAD}">
+        <File Id="libcrypto11" KeyPath="yes" Source="$(env.PTEID_DIR_OPENSSL)\bin\libcrypto-1_1.dll" />
+      </Component>
+      <Component Guid="{F886C589-1B56-4C1A-8732-CEF38E89B18B}">
+        <File Id="libssl11" KeyPath="yes" Source="$(env.PTEID_DIR_OPENSSL)\bin\libssl-1_1.dll" />
+      </Component>
       <Component Id="cmpBFE3655736E41D50E712591DC1147FC5" Guid="{EC420C5B-ABD4-4539-8B65-81392A61F557}">
         <File Id="fil18884C01FADD063A745A8C70ABD0BB4D" KeyPath="yes" Source="$(var.QMLDIR)\Qt5Core.dll" />
       </Component>
@@ -2509,6 +2515,8 @@
       <ComponentRef Id="PteidGuiShortcut"/>
       <ComponentRef Id="RegisterPteidAutoStart"/>
       <ComponentRef Id="PteidGuiShortcutOpenGL"/>
+      <ComponentRef Id="libcrypto11"/>
+      <ComponentRef Id="libssl11"/>
       <ComponentRef Id="cmp7F40CCD4FD162222E744B7B74F9DF5A3" />
       <ComponentRef Id="cmp7F40CCD4FD162222E744B7B74F9DF5A4" />
       <ComponentRef Id="cmp6FAEA3F9F61E5AB0CE462E42B572D724" />

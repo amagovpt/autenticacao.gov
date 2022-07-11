@@ -102,9 +102,6 @@
     <ClCompile Include="PNGConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ess_asn1.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ess_lib.c">
       <Filter>Source Files</Filter>
     </ClCompile>

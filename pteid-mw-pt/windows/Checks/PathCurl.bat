@@ -1,5 +1,5 @@
 @echo [INFO] Input PTEID_DIR_CURL=%PTEID_DIR_CURL%
-@set FILE_TO_FIND="lib\libcurl769.lib" "lib\libcurl769.exp" "bin\libcurl769.dll"
+@set FILE_TO_FIND="lib\libcurl_a.lib"
 @echo [INFO] Looking for files: %FILE_TO_FIND%
 
 @set FILE_NOT_FOUND=

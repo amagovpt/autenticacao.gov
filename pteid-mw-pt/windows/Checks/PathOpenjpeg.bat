@@ -1,5 +1,5 @@
 @echo [INFO] Input PTEID_DIR_OPENJPEG=%PTEID_DIR_OPENJPEG%
-@set FILE_TO_FIND="bin\openjp2.dll" "lib\openjp2.lib"
+@set FILE_TO_FIND="lib\openjp2.lib"
 @echo [INFO] Looking for files: %FILE_TO_FIND%
 
 @set FILE_NOT_FOUND=

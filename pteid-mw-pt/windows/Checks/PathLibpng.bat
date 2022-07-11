@@ -1,5 +1,5 @@
 @echo [INFO] Input PTEID_DIR_LIBPNG=%PTEID_DIR_LIBPNG%
-@set FILE_TO_FIND="bin\libpng16.dll" "lib\libpng16.lib"
+@set FILE_TO_FIND="lib\libpng16_static.lib"
 @echo [INFO] Looking for files: %FILE_TO_FIND%
 
 @set FILE_NOT_FOUND=

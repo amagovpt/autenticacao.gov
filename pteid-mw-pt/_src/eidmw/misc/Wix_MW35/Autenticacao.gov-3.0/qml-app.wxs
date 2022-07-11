@@ -46,6 +46,12 @@
         <File Id="fil532B63275F24DCA11F229D2F2A4A6718" Source="..\..\..\eidguiV2\eidmw_nl.qm" />
         <File Id="fil532B63275F24DCA11F229D2F2A4A6719" Source="..\..\..\eidguiV2\eidmw_en.qm" />
       </Component>
+      <Component Guid="{A3916629-2BB0-45B5-87D0-601BB2492FAD}">
+        <File Id="libcrypto11" KeyPath="yes" Source="$(env.PTEID_DIR_OPENSSL_X64)\bin\libcrypto-1_1-x64.dll" />
+      </Component>
+      <Component Guid="{F886C589-1B56-4C1A-8732-CEF38E89B18B}">
+        <File Id="libssl11" KeyPath="yes" Source="$(env.PTEID_DIR_OPENSSL_X64)\bin\libssl-1_1-x64.dll" />
+      </Component>
       <Component Id="cmp7F40CCD4FD162222E744B7B74F9DF5A3" Guid="{F64668D0-3ACB-4E29-AB95-742B18B6AF3D}">
         <File Id="fil3CBCB4A9EED52796624FC6C8977CC71C" KeyPath="yes" Source="$(env.PTEID_POPPLER_QT5)\x64\poppler-qt5.dll" />
       </Component>
@@ -2505,6 +2511,8 @@
       <ComponentRef Id="PteidGuiShortcut"/>
       <ComponentRef Id="PteidGuiShortcutOpenGL"/>
       <ComponentRef Id="RegisterPteidAutoStart"/>
+      <ComponentRef Id="libcrypto11"/>
+      <ComponentRef Id="libssl11"/>
       <ComponentRef Id="cmp6FAEA3F9F61E5AB0CE462E42B572D724" />
       <ComponentRef Id="cmpED1C29F8914A4A53211F619E1872ECC1" />
       <ComponentRef Id="cmpA20718F4A0EE0FBBC36D57F3E5F5FFEA" />

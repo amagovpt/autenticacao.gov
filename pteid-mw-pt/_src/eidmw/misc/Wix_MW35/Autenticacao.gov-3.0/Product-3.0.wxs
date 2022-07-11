@@ -311,32 +311,6 @@
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)cmdKsp.dll" />
       </Component>
 
-      <Component Id="Runtime35ThirdPartyXerces" Guid="{B1EBF9C5-1A6F-44D4-AA80-DE55AAF052FE}" SharedDllRefCount="yes">
-        <File Source="$(env.PTEID_DIR_XERCES)\bin\xerces-c_3_2.dll" KeyPath="yes"/>
-      </Component>
-      <Component Id="libcrypto" Guid="{3AAFC0CD-FDCB-4F7B-9EB7-7B2E31477691}" SharedDllRefCount="yes">
-        <File Source="$(env.PTEID_DIR_OPENSSL)\bin\libcrypto-1_1.dll" KeyPath="yes"/>
-      </Component>
-      <Component Id="libssl" Guid="{6DBB15A3-6EA1-4869-B133-7D8E1321B56C}" SharedDllRefCount="yes">
-        <File Source="$(env.PTEID_DIR_OPENSSL)\bin\libssl-1_1.dll" KeyPath="yes"/>
-      </Component>
-      <Component Id="Libpng" Guid="{561A9E2E-CA9C-4D45-A9D4-950E1CE6BA3A}" SharedDllRefCount="yes">
-        <File Source="$(env.PTEID_DIR_LIBPNG)\bin\libpng16.dll" KeyPath="yes"/>
-      </Component>
-
-      <Component Id="Openjpeg" Guid="{B167D4DC-ABF6-4C02-8941-3D717022CBF5}" SharedDllRefCount="yes">
-        <File Source="$(env.PTEID_DIR_OPENJPEG)\bin\openjp2.dll" KeyPath="yes"/>
-      </Component>
-      
-      <Component Id="Libzip" Guid="{805F148F-9E58-47F2-938B-B8F137999D08}" SharedDllRefCount="yes">
-        <File Source="$(env.PTEID_DIR_LIBZIP)\lib\libzip.dll" KeyPath="yes"/>
-      </Component>
-  
-      <!--Our Build of LibCurl - custom build options to remove unneeded features-->
-      <Component Id="Curl" Guid="{A2ED6BF8-0C22-4EB8-8A57-ED8327A4133C}" SharedDllRefCount="yes">
-        <File Source="$(env.PTEID_DIR_CURL)\bin\libcurl769.dll" KeyPath="yes" />
-      </Component>
-
       <!-- Our heavily stripped-down version of poppler with PDF Signature Support -->
       <Component Id="Poppler" Guid="{54E15AA8-F4A5-42E8-9D38-3B151223B003}">
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteid-poppler.dll" KeyPath="yes" />
@@ -344,10 +318,6 @@
 
       <Component Id="pteidmdrvsystem32" Guid="{A8259480-E408-11DE-8A39-0800200C9A66}" Permanent="no">
         <File Id="system32_pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="yes" DiskId="1" />
-      </Component>
-
-      <Component Id="XMLSecurity" Guid="{EF7A30DC-47CC-4385-832A-8E871EF69F65}" SharedDllRefCount="yes">
-        <File Source="$(env.PTEID_XMLSECURITY)\lib\xsec_2_0.dll" KeyPath="yes" />
       </Component>
 
       <Component Id="pkcs11" Guid="{D54164C0-795D-4B2D-96C6-C8E395100896}" SharedDllRefCount="yes">
@@ -478,22 +448,13 @@
 
       <!-- System32 -->
       <ComponentRef Id="Runtime35"/>
-      <ComponentRef Id="libcrypto"/>
-      <ComponentRef Id="libssl"/>
-      <!-- <ComponentRef Id="Runtime35ThirdPartyOpenSSL"/> -->
-      <ComponentRef Id="Runtime35ThirdPartyXerces"/>
 
       <!-- Windows -->
 
       <!-- Registry -->
       <ComponentRef Id="RegistryPteidSystem"/>
 
-      <ComponentRef Id="Libpng"/>
-      <ComponentRef Id="Openjpeg"/>
-      <ComponentRef Id="Libzip"/>
-      <ComponentRef Id="Curl"/>
       <ComponentRef Id="Poppler"/>
-      <ComponentRef Id="XMLSecurity"/>
 
       <ComponentRef Id="Cpp_SDK_component"/>
       <ComponentRef Id="Java_SDK_Component"/>
