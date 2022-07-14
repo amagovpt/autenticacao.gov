@@ -33,6 +33,14 @@
 // Used for timestamp calculations
 #include <sys/types.h>
 #include <time.h>
+#include <vector>
+
+
+#include <openssl/evp.h>
+#include <openssl/conf.h>
+#include <openssl/err.h>
+#include <openssl/rand.h>
+
 
 namespace eIDMW
 {
@@ -59,6 +67,7 @@ static bool CheckHeader(const unsigned char *pucData, unsigned long ulDataLen);
 CCache::CCache(CContext *poContext) :
 	m_poContext(poContext)
 {
+
 	m_pucTemp = (unsigned char *) malloc(MAX_CACHE_SIZE);
 }
 
@@ -71,7 +80,7 @@ CCache::~CCache(void)
 
 std::string CCache::GetSimpleName(const std::string & csSerialNr, const std::string & csPath)
 {
-	return csSerialNr + "_" + csPath + ".bin";
+	return csSerialNr + "_" + csPath + "." + ENCRYPTED_CACHE_EXT;
 }
 
 CByteArray CCache::GetFile(const std::string & csName,
@@ -162,10 +171,71 @@ void CCache::MemStoreFile(const std::string & csName,
 
 /////////////////////////// Disk /////////////////////////
 
+void CCache::setEncryptionKey(const CByteArray &newEncryptionKey)
+{
+	encryptionKey = newEncryptionKey;
+}
+
+unsigned int CCache::Encrypt(const unsigned char *plaintext, int plaintext_len,
+		const unsigned char *key, const unsigned char *iv, unsigned char *ciphertext)
+{
+    EVP_CIPHER_CTX *ctx;
+    int len;
+    int ciphertext_len;
+
+    if (!(ctx = EVP_CIPHER_CTX_new()))
+		return 0;
+		
+    if (1 != EVP_EncryptInit_ex(ctx, EVP_aes_128_ctr(), NULL, key, iv))
+		return 0;
+
+    if (1 != EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len))
+		return 0;
+    ciphertext_len = len;
+
+    if (1 != EVP_EncryptFinal_ex(ctx, ciphertext + len, &len))
+		return 0;
+    ciphertext_len += len;
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    return ciphertext_len;
+}
+
+unsigned int CCache::Decrypt(const unsigned char *ciphertext, int ciphertext_len, const unsigned char *key,
+        const unsigned char *iv, unsigned char *plaintext)
+{
+    EVP_CIPHER_CTX *ctx;
+    int len;
+    int plaintext_len;
+
+    if (!(ctx = EVP_CIPHER_CTX_new()))
+		return 0;
+
+    if (1 != EVP_DecryptInit_ex(ctx, EVP_aes_128_ctr(), NULL, key, iv))
+		return 0;
+
+    if (1 != EVP_DecryptUpdate(ctx, plaintext, &len, ciphertext, ciphertext_len))
+		return 0;
+    plaintext_len = len;
+
+    if (1 != EVP_DecryptFinal_ex(ctx, plaintext + len, &len))
+		return 0;
+    plaintext_len += len;
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    return plaintext_len;
+}
+
 CByteArray CCache::DiskGetFile(const std::string & csName)
 {
 	if (m_pucTemp == NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_MEMORY);
+	
+	// Invalid encryption key. We will not be able to decrypt the file
+	if(encryptionKey.Size() != ENCRYPTION_KEY_LENGTH)
+		return CByteArray();
 
 	if (m_csCacheDir == "")
 		m_csCacheDir = GetCacheDir();
@@ -177,20 +247,40 @@ CByteArray CCache::DiskGetFile(const std::string & csName)
 		return CByteArray();
 	else
 	{
-		size_t len = fread(m_pucTemp, 1, MAX_CACHE_SIZE, f);
+		// OpenSSL init
+		ERR_load_crypto_strings();
+		OpenSSL_add_all_algorithms();
+
+		unsigned char iv[16] = {0};
+
+		unsigned char ciphertext[MAX_CACHE_SIZE] = {0};
+		size_t cacheFileLen = fread(ciphertext, 1, MAX_CACHE_SIZE, f);
 		fclose(f);
 
-		if (!CheckHeader(m_pucTemp, (unsigned long) len))
+		// Get the IV from the stored cache
+		memcpy(iv, ciphertext, 16);
+
+		unsigned char plaintext[MAX_CACHE_SIZE] = {0};
+		unsigned int decryptLen = Decrypt(ciphertext + 16, cacheFileLen - 16, encryptionKey.GetBytes(), iv, plaintext);
+		if (decryptLen == 0)
+			return CByteArray();
+
+		memcpy(m_pucTemp, plaintext, decryptLen);
+		if (!CheckHeader(m_pucTemp, (unsigned long) decryptLen))
 			return CByteArray();
 
 		return CByteArray(m_pucTemp + sizeof(tCacheHeader),
-			(unsigned long) (len - sizeof(tCacheHeader)));
+			(unsigned long) (decryptLen - sizeof(tCacheHeader)));
 	}
 }
 
 void CCache::DiskStoreFile(const std::string & csName,
 	const CByteArray &oData)
 {
+	// Invalid encryption key. We will not be able to encrypt the file
+	if(encryptionKey.Size() != ENCRYPTION_KEY_LENGTH)
+		return;
+
 	if (m_csCacheDir == "")
 		m_csCacheDir = GetCacheDir();
 	std::string csFileName = m_csCacheDir + csName;
@@ -204,20 +294,48 @@ void CCache::DiskStoreFile(const std::string & csName,
 		; // TODO: log
 	else
 	{
-		size_t tmpHeader = fwrite(&header, sizeof(tCacheHeader), 1, f);
-		tmpHeader = tmpHeader;	//avoid warning
-		size_t tmpData   = fwrite(oData.GetBytes(), 1, oData.Size(), f);
-		tmpData = tmpData;	//avoid warning
+		// OpenSSL init
+		ERR_load_crypto_strings();
+		OpenSSL_add_all_algorithms();
+
+		unsigned char iv[16] = {0};
+		RAND_bytes(iv, 16);
+
+		CByteArray plainData(reinterpret_cast<const unsigned char *>(&header), sizeof(tCacheHeader));
+		plainData.Append(oData);
+
+    	unsigned char ciphertext[MAX_CACHE_SIZE + 16];
+		unsigned int length = Encrypt(plainData.GetBytes(), plainData.Size(), encryptionKey.GetBytes(), iv, ciphertext);
+		if (length == 0)
+		{
+			fclose(f);
+			remove(csFileName.c_str()); //If Encrypt failed, no need to leave the file empty, just delete it
+			return;
+		}
+
+		//Write the IV first
+		fwrite(iv, sizeof(unsigned char), 16, f);
+		fwrite(ciphertext, sizeof(unsigned char), length, f);
+		
 		fclose(f);
 	}
 }
 
+void CCache::DeleteNonEncryptedFiles()
+{
+	std::string cachePath = GetCacheDir();
+	bool stopRequest = false;
+	scanDir(cachePath.c_str(), "", CACHE_EXT, stopRequest, &stopRequest, [&](const char *SubDir, const char *File, void *param) {
+		std::string fileFullPath = cachePath + File;
+		remove(fileFullPath.c_str());
+	});
+}
 
 void CCache::CacheDirIterate(std::function<void(const char *FileName, const char *FullPath)> step)
 {
 	std::string cachePath = GetCacheDir();
 	bool stopRequest = false;
-	scanDir(cachePath.c_str(), "", "bin", stopRequest, &stopRequest, [&](const char *SubDir, const char *File, void *param) {
+	scanDir(cachePath.c_str(), "", ENCRYPTED_CACHE_EXT, stopRequest, &stopRequest, [&](const char *SubDir, const char *File, void *param) {
 		std::string fileFullPath = cachePath + File;
 		step(File, fileFullPath.c_str());
 	});
@@ -230,6 +348,8 @@ void CCache::CacheDirIterate(std::function<void(const char *FileName, const char
 
 bool CCache::LimitDiskCacheFiles(unsigned long ulMaxCacheFIles)
 {
+	DeleteNonEncryptedFiles();
+
 	std::map<std::string, time_t> uniqueEIDs;
 
 	CacheDirIterate([&](const char *FileName, const char *FullPath) {
@@ -322,7 +442,7 @@ std::string CCache::GetCacheDir(bool bAddSlash)
 bool CCache::Delete(const std::string & csName)
 {
 	std::string strCacheDir = GetCacheDir();
-	std::string strSearchFor = strCacheDir + csName + "*.bin";
+	std::string strSearchFor = strCacheDir + csName + "*." + ENCRYPTED_CACHE_EXT;
 	const char *csSearchFor = strSearchFor.c_str();
 
 	bool bDeleted = false; // wether or no we deleted something
