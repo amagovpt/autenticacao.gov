@@ -57,6 +57,7 @@ GAPI::GAPI(QObject *parent) :
     QObject(parent) {
     image_provider = new PhotoImageProvider();
     image_provider_pdf = new PDFPreviewImageProvider();
+    m_mainWnd = NULL;
 	m_qml_engine = NULL;
 
 	//Get the configured CMD account details
@@ -132,6 +133,20 @@ bool GAPI::LoadTranslationFile(QString NewLanguage)
     //------------------------------------
     qApp->installTranslator(&m_translator);
     return true;
+}
+
+WindowGeometry *GAPI::getWndGeometry() {
+    if (m_mainWnd == NULL) {
+        qDebug() << "C++: GAPI getWndGeometry: Failed to get reference to main window";
+        return NULL;
+    }
+
+    m_wndGeometry.x = m_mainWnd->geometry().x();
+    m_wndGeometry.y = m_mainWnd->geometry().y();
+    m_wndGeometry.width = m_mainWnd->geometry().width();
+    m_wndGeometry.height = m_mainWnd->geometry().height();
+
+    return &m_wndGeometry;
 }
 
 QString GAPI::getDataCardIdentifyValue(IDInfoKey key) {
@@ -360,7 +375,7 @@ unsigned int  GAPI::doVerifyAuthPin(QString pin_value) {
     if (card == NULL) return TRIES_LEFT_ERROR;
 
     PTEID_Pin & auth_pin = card->getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
-    auth_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
+    auth_pin.verifyPin(pin_value.toLatin1().data(), tries_left, true, getWndGeometry());
 
     if (tries_left == 0) {
         qDebug() << "WARNING: Auth PIN blocked!" << tries_left;
@@ -414,7 +429,7 @@ unsigned int  GAPI::doVerifySignPin(QString pin_value) {
     if (card == NULL) return TRIES_LEFT_ERROR;
 
     PTEID_Pin & sign_pin = card->getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
-    sign_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
+    sign_pin.verifyPin(pin_value.toLatin1().data(), tries_left, true, getWndGeometry());
 
     if (tries_left == 0) {
         qDebug() << "WARNING: Sign PIN blocked!" << tries_left;
@@ -472,7 +487,7 @@ unsigned int GAPI::doVerifyAddressPin(QString pin_value, bool forceVerify) {
         tries_left = TRIES_LEFT_MAX;
     }
     else {
-        address_pin.verifyPin(pin_value.toLatin1().data(), tries_left);
+        address_pin.verifyPin(pin_value.toLatin1().data(), tries_left, true, getWndGeometry());
 
         if (tries_left == 0) {
             qDebug() << "WARNING: Address PIN blocked!" << tries_left;
@@ -527,7 +542,7 @@ unsigned int GAPI::doChangeAuthPin(QString currentPin, QString newPin) {
     if (card == NULL) return TRIES_LEFT_ERROR;
 
     PTEID_Pin & auth_pin = card->getPins().getPinByPinRef(PTEID_Pin::AUTH_PIN);
-    auth_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(), tries_left, "");
+    auth_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(), tries_left, "", true, getWndGeometry());
 
     if (tries_left == 0) {
         qDebug() << "WARNING: Auth PIN blocked!" << tries_left;
@@ -554,7 +569,7 @@ unsigned int GAPI::doChangeSignPin(QString currentPin, QString newPin) {
     if (card == NULL) return TRIES_LEFT_ERROR;
 
     PTEID_Pin & sign_pin = card->getPins().getPinByPinRef(PTEID_Pin::SIGN_PIN);
-    sign_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(), tries_left, "");
+    sign_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(), tries_left, "", true, getWndGeometry());
 
     if (tries_left == 0) {
         qDebug() << "WARNING: Sign PIN blocked!" << tries_left;
@@ -789,7 +804,7 @@ unsigned int GAPI::doChangeAddressPin(QString currentPin, QString newPin) {
     if (card == NULL) return TRIES_LEFT_ERROR;
 
     PTEID_Pin & address_pin = card->getPins().getPinByPinRef(PTEID_Pin::ADDR_PIN);
-    address_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(), tries_left, "");
+    address_pin.changePin(currentPin.toLatin1().data(), newPin.toLatin1().data(), tries_left, "", true, getWndGeometry());
 
     if (tries_left == 0) {
         qDebug() << "WARNING: Address PIN blocked!" << tries_left;
@@ -852,14 +867,12 @@ void GAPI::changeAddress(QString process, QString secret_code)
     Concurrent::run(this, &GAPI::doChangeAddress, processUtf8, secret_codeUtf8);
 }
 
-#ifdef WIN32
 /*Store a pointer to our QMLEngine and register the signal that when triggered will register
-  the main window as parent in pteidDialogsWin32 */
+  the main window as parent in pteidDialogs */
 void GAPI::storeQmlEngine(QQmlApplicationEngine *engine) {
 	m_qml_engine = engine;
 	connect(m_qml_engine, SIGNAL(objectCreated(QObject *, const QUrl &)), this, SLOT(setAppAsDlgParent(QObject *, const QUrl &)));
 }
-#endif
 
 void GAPI::doSignCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams)
 {
@@ -3930,14 +3943,16 @@ void GAPI::forgetCertificates(QString const& reader)
 }
 
 void GAPI::setAppAsDlgParent(QObject *object, const QUrl &url) {
+    QWindow* window = NULL;
+    qDebug() << "QMLEngine objectCreated event: " << url;
+    if (url.toString() == MAIN_QML_PATH && (window = qobject_cast<QWindow*>(object)) != NULL) {
 #ifdef WIN32
-	QWindow* window = NULL;
-	qDebug() << "QMLEngine objectCreated event: " << url;
-	if (url.toString() == MAIN_QML_PATH && (window = qobject_cast<QWindow*>(object)) != NULL) {
-		HWND appWindow = (HWND) window->winId();
-		SetApplicationWindow(appWindow);
-    }
+        HWND appWindow = (HWND) window->winId();
+        SetApplicationWindow(appWindow);
+#else
+        m_mainWnd = window;
 #endif
+    }
 }
 
 bool GAPI::checkCMDSupport() {

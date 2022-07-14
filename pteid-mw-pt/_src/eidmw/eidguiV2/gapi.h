@@ -189,6 +189,13 @@ public:
     QList<int> attribute_index;
 };
 
+struct WindowGeometry {
+    int x;
+    int y;
+    int width;
+    int height;
+};
+
 class PDFPreviewImageProvider: public QObject, public QQuickImageProvider
 {
     Q_OBJECT
@@ -587,6 +594,7 @@ private:
     void drawPrintingDate(QPainter &painter, QString printing_date);
     double checkNewPageAndPrint(QPrinter &printer, QPainter &painter, double current_y, double remaining_height, double max_height, bool print_date = false, QString date_label = "");
     double drawSingleField(QPainter &painter, double pos_x, double pos_y, QString name, QString value, double line_length, int field_margin = 15, bool is_bounded_rect = false, double bound_width = 360);
+    WindowGeometry *getWndGeometry();
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;
@@ -631,6 +639,9 @@ private:
     int m_seal_width = 178;
     int m_seal_height = 90;
     int m_font_size = 8;
+
+    WindowGeometry m_wndGeometry;
+    QWindow *m_mainWnd;
 
 protected:
     QTranslator m_translator;

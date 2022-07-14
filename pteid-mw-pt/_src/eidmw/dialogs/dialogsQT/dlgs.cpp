@@ -722,24 +722,17 @@ bool eIDMW::getWndCenterPos(Type_WndGeometry *pWndGeometry,
                              int desktop_width, int desktop_height,
                              int wnd_width, int wnd_height,
                              Type_WndGeometry *outWndGeometry) {
-    if ( outWndGeometry != NULL ){
-        memset( outWndGeometry, -1, sizeof(Type_WndGeometry) );
-    }
 
-    if ( pWndGeometry == NULL ) return false;
+    if (outWndGeometry == NULL || pWndGeometry == NULL) return false;
+    if ((desktop_width < 0) || (desktop_height < 0) || (wnd_width < 0) || (wnd_height < 0)) return false;
 
-    if ( ( desktop_width < 0 ) || ( desktop_height < 0 ) ) return false;
-    if ( ( wnd_width < 0 ) || ( wnd_height < 0 ) ) return false;
-
-    if ( outWndGeometry == NULL ) return false;
+    memset( outWndGeometry, -1, sizeof(Type_WndGeometry) );
 
     outWndGeometry->x = pWndGeometry->x + ( ( pWndGeometry->width - wnd_width ) / 2 );
     outWndGeometry->y = pWndGeometry->y + ( ( pWndGeometry->height - wnd_height ) / 2 );
 
-    if ( outWndGeometry->x < 0 ) return false;
-    if ( outWndGeometry->y < 0 ) return false;
-    if ( outWndGeometry->x > desktop_width  ) return false;
-    if ( outWndGeometry->y > desktop_height ) return false;
+    if (outWndGeometry->x < 0 || outWndGeometry->x > desktop_width) return false;
+    if (outWndGeometry->y < 0 || outWndGeometry->y > desktop_height) return false;
 
     return true;
 }

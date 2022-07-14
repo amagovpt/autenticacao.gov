@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
 	int iFunctionIndex = 0;
 	std::string readableFilePath;
 
-    Type_WndGeometry parentWndGeometry;
+	Type_WndGeometry parentWndGeometry;
 
 	if(signal(SIGINT,sigint_handler) == SIG_ERR)
 	{
@@ -196,12 +196,11 @@ int main(int argc, char *argv[])
 		iFunctionIndex = atoi(argv[1]);
 		readableFilePath = argv[2];
 
-        Type_WndGeometry parentWndGeometry;
 		if (argc > 5 ) {
-	        parentWndGeometry.x = atoi(argv[3]);
-	        parentWndGeometry.y = atoi(argv[4]);
-	        parentWndGeometry.width = atoi(argv[5]);
-	        parentWndGeometry.height = atoi(argv[6]);
+			parentWndGeometry.x = atoi(argv[3]);
+			parentWndGeometry.y = atoi(argv[4]);
+			parentWndGeometry.width = atoi(argv[5]);
+			parentWndGeometry.height = atoi(argv[6]);
 		}
 
 	}

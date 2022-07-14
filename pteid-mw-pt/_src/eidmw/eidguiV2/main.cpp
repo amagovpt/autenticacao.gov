@@ -265,9 +265,9 @@ int main(int argc, char *argv[])
 
         engine->addImageProvider("myimageprovider", gapi.buildImageProvider());
         engine->addImageProvider("pdfpreview_imageprovider", gapi.buildPdfImageProvider());
-#ifdef WIN32
-		gapi.storeQmlEngine(engine);
-#endif
+
+        gapi.storeQmlEngine(engine);
+
         // Load translation files
         gapi.initTranslation();
         controller.initTranslation();
