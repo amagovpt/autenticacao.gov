@@ -1416,16 +1416,25 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 
 	PKCS7 *p7 = NULL;
+	char * error_msg = NULL;
 	bool verifySOD = false;
 	
 	ERR_load_crypto_strings();
 	OpenSSL_add_all_digests();
 
 	const unsigned char *temp = m_data.GetBytes();
+	
 	long int len = m_data.Size();
 	temp+=4; //Skip the ASN.1 Application 23 tag + 3-byte length (DER type 77)
 
 	p7 = d2i_PKCS7(NULL, (const unsigned char **)&temp, len);
+
+	if (!p7) {
+		error_msg = Openssl_errors_to_string();
+		MWLOG(LEV_ERROR, MOD_APL, "EidFile_Sod: Failed to decode SOD PKCS7 object! Openssl errors:\n%s", error_msg != NULL ? error_msg : "N/A");
+		free(error_msg);
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_INVALID_PKCS7);
+	}
 
 	X509_STORE *store = X509_STORE_new();
 
@@ -1456,10 +1465,11 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	}
 	else
 	{
-		char * validation_error = ERR_error_string(ERR_get_error(), NULL);
+		error_msg = Openssl_errors_to_string();
+		
 		//Log specific OpenSSL error
-		MWLOG(LEV_ERROR, MOD_APL, "EidFile_Sod:: Error validating SOD signature. OpenSSL error: %s", validation_error);
-			
+		MWLOG(LEV_ERROR, MOD_APL, "EidFile_Sod:: Error validating SOD signature. OpenSSL errors:\n%s", error_msg ? error_msg : "N/A");
+		free(error_msg);
 	}
 
 	X509_STORE_free(store);

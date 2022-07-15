@@ -207,8 +207,9 @@ QString GAPI::getAddressField(AddressInfoKey key) {
         emitErrorSignal(__FUNCTION__, e.GetError());                              \
 }
 
-void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int index){
-    if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && errorCode <= EIDMW_SOD_ERR_VERIFY_SOD_SIGN) {
+void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int index) {
+	//The SOD-related error codes have values in a contiguous range
+    if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && errorCode <= EIDMW_SOD_ERR_INVALID_PKCS7) {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR,
             "eidgui", "SOD exception! Error code (see strings in eidErrors.h): %08lx\n", errorCode);
         emit signalCardAccessError(SodCardReadError);

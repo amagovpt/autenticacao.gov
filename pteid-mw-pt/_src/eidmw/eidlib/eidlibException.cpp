@@ -250,7 +250,9 @@ const char* PTEID_Exception::GetMessage()
 			case EIDMW_SOD_ERR_VERIFY_SOD_SIGN:
 				error_message = "SOD Error: invalid signature";
 				break;
-
+			case EIDMW_SOD_ERR_INVALID_PKCS7:
+				error_message = "SOD Error: invalid PKCS#7 object";
+				break;
 			// OTP related errors
 			case EIDMW_OTP_CONNECTION_ERROR:
 				error_message = "OTP Error: generic connection error";
@@ -393,6 +395,7 @@ PTEID_Exception PTEID_Exception::THROWException(CMWException &e)
 	case EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE:
 	case EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY:
 	case EIDMW_SOD_ERR_VERIFY_SOD_SIGN:
+	case EIDMW_SOD_ERR_INVALID_PKCS7:
 		throw PTEID_ExSOD(e.GetError());
 
 	case EIDMW_ERR_CARD:
