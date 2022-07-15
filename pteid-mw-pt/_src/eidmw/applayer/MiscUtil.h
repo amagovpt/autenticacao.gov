@@ -57,6 +57,8 @@ namespace eIDMW
 	char * certificate_subject_from_der(CByteArray & ba);
 	std::string certificate_issuer_serial_from_der(CByteArray & ba);
 
+	char * Openssl_errors_to_string();
+
 	EIDMW_APL_API int PEM_to_DER(char *pem, unsigned char **der);
 	
 	EIDMW_APL_API char *getCPtr(std::string inStr, int *outLen);

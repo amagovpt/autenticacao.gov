@@ -30,6 +30,7 @@
 #include <openssl/evp.h>
 #include <openssl/buffer.h>
 #include <openssl/pem.h>
+#include <openssl/err.h>
 
 #ifdef WIN32
 #include <Windows.h>
@@ -260,13 +261,29 @@ std::vector<std::string> toPEM(char *p_certificate, int certificateLen) {
     return certs;
 }
 
+char *memBIO_to_string(BIO *bio) {
+	char * str = NULL;
+	long alloc_size = BIO_number_written(bio) + 1;
+
+	str = (char *)malloc(alloc_size);
+	if (NULL == str) {
+		BIO_free(bio);
+		return NULL;
+	}
+
+	memset(str, 0, alloc_size);
+	BIO_read(bio, str, alloc_size);
+	BIO_free(bio);
+
+	return str;
+}
+
 /*  *********************************************************
     ***          X509_to_PEM()                            ***
     ********************************************************* */
 char *X509_to_PEM(X509 *x509) {
 
     BIO *bio = NULL;
-    char *pem = NULL;
 
     if ( NULL == x509 ) {
         return NULL;
@@ -282,19 +299,19 @@ char *X509_to_PEM(X509 *x509) {
         return NULL;
     }
 
-    long alloc_size = BIO_number_written(bio) + 1;
+    return memBIO_to_string(bio);
 
-    pem = (char *) malloc(alloc_size);
-    if ( NULL == pem ){
-        BIO_free(bio);
-        return NULL;
-    }
+}
 
-    memset(pem, 0, alloc_size);
-    BIO_read( bio, pem, alloc_size);
-    BIO_free( bio );
+char * Openssl_errors_to_string() {
+	BIO * mem_bio = BIO_new(BIO_s_mem());
+	if (mem_bio == NULL) {
+		return NULL;
+	}
+	//Print the error strings for all errors that OpenSSL has recorded in this thread to mem_bio, thus emptying the error queue
+	ERR_print_errors(mem_bio);
 
-    return pem;
+	return memBIO_to_string(mem_bio);
 }
 
 /*  *********************************************************
