@@ -18,5 +18,15 @@ if [ "$1" = "remove" ]; then
 	rm -rf /usr/local/lib/libpteidlib.so
 	rm -rf /usr/local/lib/libpteidlib.so.2
 	rm -rf /usr/local/lib/libpteidlib.so.2.0
+
+    # Delete all .pteid-ng folder and its contents from all users
+    for d in /home/*/; do
+        if [ -d "$d/.pteid-ng" ]; then
+            if [ "$(ls -A $d/.pteid-ng)" ]; then
+                rm "$d"/.pteid-ng/*
+            fi
+            rmdir "$d"/.pteid-ng
+        fi
+    done
 fi
 #DEBHELPER#
