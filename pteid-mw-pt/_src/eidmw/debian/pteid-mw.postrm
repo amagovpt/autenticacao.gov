@@ -20,12 +20,15 @@ if [ "$1" = "remove" ]; then
 	rm -rf /usr/local/lib/libpteidlib.so.2.0
 
     # Delete all .pteid-ng folder and its contents from all users
-    for d in /home/*/; do
+    users=$(getent passwd {1000..6000} | cut -d: -f6);
+    for d in $users; do
         if [ -d "$d/.pteid-ng" ]; then
             if [ "$(ls -A $d/.pteid-ng)" ]; then
-                rm "$d"/.pteid-ng/*
+                # Delete only files pertaining to the cache system
+                rm -f "$d"/.pteid-ng/*.ebin "$d"/.pteid-ng/updateCertsLog.txt "$d"/.pteid-ng/updateNewsLog.txt
             fi
-            rmdir "$d"/.pteid-ng
+            
+            rmdir --ignore-fail-on-non-empty "$d"/.pteid-ng
         fi
     done
 fi
