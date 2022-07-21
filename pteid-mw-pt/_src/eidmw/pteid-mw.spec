@@ -147,7 +147,6 @@ install -m 644 eidlib/eidlibcompat.h $RPM_BUILD_ROOT/usr/local/include/
 install -m 644 eidlib/eidlibdefines.h $RPM_BUILD_ROOT/usr/local/include/
 install -m 644 eidlib/eidlibException.h $RPM_BUILD_ROOT/usr/local/include/
 install -m 644 common/eidErrors.h $RPM_BUILD_ROOT/usr/local/include/
-
 mkdir -p $RPM_BUILD_ROOT/usr/local/share/certs/
 install -m 755 -p misc/certs/*.der $RPM_BUILD_ROOT/usr/local/share/certs/
 install -m 755 -p misc/certs/*.pem $RPM_BUILD_ROOT/usr/local/share/certs/
@@ -260,6 +259,19 @@ rm -rf /usr/local/lib/libpteidlib.so.2.0
 
 rm -rf /usr/share/icons/hicolor/64x64/mimetypes/application-x-signedcc.png
 rm -rf /usr/share/icons/hicolor/64x64/mimetypes/gnome-mime-application-x-signedcc.png
+
+# Delete all .pteid-ng folder and its contents from all users
+users=$(getent passwd {1000..6000} | cut -d: -f6);
+for d in $users; do
+    if [ -d "$d/.pteid-ng" ]; then
+        if [ "$(ls -A $d/.pteid-ng)" ]; then
+            # Delete only files pertaining to the cache system
+            rm -f "$d"/.pteid-ng/*.ebin "$d"/.pteid-ng/updateCertsLog.txt "$d"/.pteid-ng/updateNewsLog.txt
+        fi
+        #Delete folder if is empty
+        rmdir --ignore-fail-on-non-empty "$d"/.pteid-ng
+    fi
+done
 
 %if 0%{?fedora} || 0%{?centos_version}
 rm -rf /etc/ld.so.conf.d/pteid.conf
