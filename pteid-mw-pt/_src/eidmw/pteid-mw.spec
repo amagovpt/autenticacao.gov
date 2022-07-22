@@ -261,14 +261,13 @@ rm -rf /usr/share/icons/hicolor/64x64/mimetypes/application-x-signedcc.png
 rm -rf /usr/share/icons/hicolor/64x64/mimetypes/gnome-mime-application-x-signedcc.png
 
 # Delete all .pteid-ng folder and its contents from all users
-users=$(getent passwd {1000..6000} | cut -d: -f6);
+users=$(getent passwd | awk -F: '$3 >= 1000 && $3 <= 6000' | cut -d: -f6);
 for d in $users; do
     if [ -d "$d/.pteid-ng" ]; then
         if [ "$(ls -A $d/.pteid-ng)" ]; then
             # Delete only files pertaining to the cache system
-            rm -f "$d"/.pteid-ng/*.ebin "$d"/.pteid-ng/updateCertsLog.txt "$d"/.pteid-ng/updateNewsLog.txt
+            rm -f "$d"/.pteid-ng/*.ebin "$d"/.pteid-ng/*.bin "$d"/.pteid-ng/updateCertsLog.txt "$d"/.pteid-ng/updateNewsLog.txt
         fi
-        #Delete folder if is empty
         rmdir --ignore-fail-on-non-empty "$d"/.pteid-ng
     fi
 done
