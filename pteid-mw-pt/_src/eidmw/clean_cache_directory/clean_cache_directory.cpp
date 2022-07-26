@@ -146,10 +146,10 @@ int main()
 
 				if (PathIsDirectoryEmpty(cacheFilesDirectoryPath.c_str()))
 					RemoveDirectory(cacheFilesDirectoryPath.c_str());
-				if (PathIsDirectoryEmpty(eidmwCacheDirectoryPath.c_str()))
-					RemoveDirectory(eidmwCacheDirectoryPath.c_str());
 				if (PathIsDirectoryEmpty(scapAttributesDirectoryPath.c_str()))
 					RemoveDirectory(scapAttributesDirectoryPath.c_str());
+				if (PathIsDirectoryEmpty(eidmwCacheDirectoryPath.c_str()))
+					RemoveDirectory(eidmwCacheDirectoryPath.c_str());
 			}
 		}
 	}
