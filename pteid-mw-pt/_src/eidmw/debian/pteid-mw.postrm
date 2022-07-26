@@ -30,6 +30,18 @@ if [ "$1" = "remove" ]; then
             
             rmdir --ignore-fail-on-non-empty "$d"/.pteid-ng
         fi
+
+		# Delete scap attributes and eidmwcache folder and its contents
+		if [ -d "$d/.eidmwcache" ]; then
+			if [ -d "$d/.eidmwcache/scap_attributes" ]; then
+				if [ "$(ls -A $d/.eidmwcache/scap_attributes)" ]; then
+					# Delete only files pertaining to the cache system
+					rm -f "$d"/.eidmwcache/scap_attributes/*.xml
+				fi
+				rmdir --ignore-fail-on-non-empty "$d"/.eidmwcache/scap_attributes
+			fi
+			rmdir --ignore-fail-on-non-empty "$d"/.eidmwcache
+        fi
     done
 fi
 #DEBHELPER#

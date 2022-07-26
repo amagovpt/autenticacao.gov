@@ -263,13 +263,25 @@ rm -rf /usr/share/icons/hicolor/64x64/mimetypes/gnome-mime-application-x-signedc
 # Delete all .pteid-ng folder and its contents from all users
 users=$(getent passwd | awk -F: '$3 >= 1000 && $3 <= 6000' | cut -d: -f6);
 for d in $users; do
-    if [ -d "$d/.pteid-ng" ]; then
-        if [ "$(ls -A $d/.pteid-ng)" ]; then
-            # Delete only files pertaining to the cache system
-            rm -f "$d"/.pteid-ng/*.ebin "$d"/.pteid-ng/*.bin "$d"/.pteid-ng/updateCertsLog.txt "$d"/.pteid-ng/updateNewsLog.txt
-        fi
-        rmdir --ignore-fail-on-non-empty "$d"/.pteid-ng
+  if [ -d "$d/.pteid-ng" ]; then
+      if [ "$(ls -A $d/.pteid-ng)" ]; then
+          # Delete only files pertaining to the cache system
+          rm -f "$d"/.pteid-ng/*.ebin "$d"/.pteid-ng/*.bin "$d"/.pteid-ng/updateCertsLog.txt "$d"/.pteid-ng/updateNewsLog.txt
+      fi
+      rmdir --ignore-fail-on-non-empty "$d"/.pteid-ng
+  fi
+
+  # Delete scap attributes and eidmwcache folder and its contents
+  if [ -d "$d/.eidmwcache" ]; then
+    if [ -d "$d/.eidmwcache/scap_attributes" ]; then
+      if [ "$(ls -A $d/.eidmwcache/scap_attributes)" ]; then
+        # Delete only files pertaining to the cache system
+        rm -f "$d"/.eidmwcache/scap_attributes/*.xml
+      fi
+      rmdir --ignore-fail-on-non-empty "$d"/.eidmwcache/scap_attributes
     fi
+    rmdir --ignore-fail-on-non-empty "$d"/.eidmwcache
+  fi
 done
 
 %if 0%{?fedora} || 0%{?centos_version}
