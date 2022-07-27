@@ -472,17 +472,25 @@ namespace eIDMW
 						 current_file);
 
 				 m_doc = makePDFDoc(current_file);
-				 //Set page as the last
-				 if (m_files_to_sign.at(i).second)
-				 	m_page = m_doc->getNumPages();
+				 if (!m_doc->isOk()) {
+					 int error_code = m_doc->getErrorCode();
+					 m_card->getCalReader()->setSSO(false);
+					 MWLOG(LEV_ERROR, MOD_APL, "%s in batch mode signature! File index: %d",
+						   error_code == errOpenFile ? "Failed to open file": "Invalid PDF document", i);
+					 throw CBatchSignFailedException(error_code == errOpenFile ? EIDMW_FILE_NOT_OPENED: EIDMW_PDF_INVALID_ERROR, i);
+				 }
+				 //Set page as the last for each PDF doc
+				 if (m_files_to_sign.at(i).second) {
+					 m_page = m_doc->getNumPages();
+				 }
 
-					rc += signSingleFile(location, reason, f.c_str(), isCardSign);
+				 rc += signSingleFile(location, reason, f.c_str(), isCardSign);
 
-					// Enable PIN cache
-					if (!cachedPin) {
-						cachedPin = true;
-						m_card->getCalReader()->setSSO(true);
-					}
+				 // Enable PIN cache
+				 if (!cachedPin) {
+					cachedPin = true;
+					m_card->getCalReader()->setSSO(true);
+				 }
 				}
 				catch (CMWException e)
 				{
