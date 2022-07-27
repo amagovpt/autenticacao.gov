@@ -175,24 +175,24 @@ namespace eIDMW
 	bool PDFSignature::isLandscapeFormat()
 	{
 		if (m_doc)
-        {
-            if (!m_doc->isOk())
-                return false;
+		{
+			if (!m_doc->isOk())
+				return false;
 
-            Page *p = m_doc->getPage(m_page);
-            PDFRectangle *p_media = p->getMediaBox();
+			Page *p = m_doc->getPage(m_page);
+			PDFRectangle *p_media = p->getMediaBox();
 
-            double height = p_media->y2, width = p_media->x2;
+			double height = p_media->y2, width = p_media->x2;
 
-            //Take into account page rotation
+			//Take into account page rotation
 			int page_rotate = p->getRotate();
 			if (page_rotate == 90 || page_rotate == 270)
-            {
-            	height = p_media->x2;
-            	width = p_media->y2;
-            }
+			{
+				height = p_media->x2;
+				width = p_media->y2;
+			}
 
-            return width > height;
+			return width > height;
 		}
 
 		return false;
@@ -307,14 +307,12 @@ namespace eIDMW
 
 	CByteArray PDFSignature::getCitizenCertificate()
 	{
-			MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: getCitizenCertificate() This should only be called for Card Signature!");
+		MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: getCitizenCertificate() This should only be called for Card Signature!");
 
-            CByteArray certData;
+		CByteArray certData;
+		m_card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
 
-
-            m_card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
-
-            return certData;
+		return certData;
 	}
 
 	void PDFSignature::setSCAPAttributes(const char * citizenName, const char * citizenId,
@@ -332,7 +330,7 @@ namespace eIDMW
 
 		unsigned char * cert_data = certData.GetBytes();
 		char *data_serial = (char *)malloc(cert_field_size);
-        char *data_common_name = (char *)malloc(cert_field_size);
+		char *data_common_name = (char *)malloc(cert_field_size);
 
 		X509 *x509 = d2i_X509(NULL, (const unsigned char**)&cert_data, certData.Size());
 
@@ -552,7 +550,7 @@ namespace eIDMW
         const char *reason, const char *outfile_path, bool isCardSign)
 	{
 
-        bool isLangPT = false;
+		bool isLangPT = false;
 		bool showNIC = false;
 		bool showDate = false;
 		PDFDoc *doc = m_doc;
@@ -722,7 +720,7 @@ namespace eIDMW
 			doc->addSCAPAttributes(m_attributeSupplier, m_attributeName);
 		}
 
-        m_incrementalMode = doc->isSigned() || doc->isReaderEnabled();
+		m_incrementalMode = doc->isSigned() || doc->isReaderEnabled();
 
 		if (this->my_custom_image.img_data != NULL)
 			doc->addCustomSignatureImage(my_custom_image.img_data, my_custom_image.img_length);
@@ -744,20 +742,20 @@ namespace eIDMW
 	                                 location, reason, m_page, m_sector, isLangPT, isCC(), showDate, m_small_signature);
 		}
 
-        unsigned long len = doc->getSigByteArray(&to_sign, m_incrementalMode);
+		unsigned long len = doc->getSigByteArray(&to_sign, m_incrementalMode);
 
 		int rc = 0;
 		try
 		{
-            m_outputName = outputName;
+			m_outputName = outputName;
 
-            if (m_isExternalCertificate) {
+			if (m_isExternalCertificate) {
 				m_certificate = m_externCertificate;
-            }
+			}
 
-            computeHash(to_sign, len, m_certificate, m_ca_certificates, isCardSign);
+			computeHash(to_sign, len, m_certificate, m_ca_certificates, isCardSign);
 
-            m_signStarted = true;
+			m_signStarted = true;
 		}
 		catch(CMWException e)
 		{
@@ -772,34 +770,34 @@ namespace eIDMW
 			throw;
 		}
 
-        if (to_sign) free(to_sign);
+		if (to_sign) free(to_sign);
 
-        if ( !m_isExternalCertificate) {
+		if ( !m_isExternalCertificate) {
 
-            /* Get card signature from card */
-            CByteArray signature = PteidSign( m_card, m_hash );
-            rc = signClose( signature );
-        }
+			/* Get card signature from card */
+			CByteArray signature = PteidSign( m_card, m_hash );
+			rc = signClose( signature );
+		}
 
-        return rc;
+		return rc;
 	}
 
     bool PDFSignature::isCC(){
-       return m_isCC;
+		return m_isCC;
     }
 
     void PDFSignature::setIsCC(bool in_IsCC){
-        m_isCC = in_IsCC;
+		m_isCC = in_IsCC;
     }
 
     void PDFSignature::setExternCertificate( CByteArray certificate) {
-        m_externCertificate = certificate;
+		m_externCertificate = certificate;
 
 		m_isExternalCertificate = true;
     }
 
     void PDFSignature::setExternCertificateCA(std::vector<CByteArray> &certificateCAS) {
-        m_ca_certificates = certificateCAS;
+		m_ca_certificates = certificateCAS;
     }
 
     /* Hash */
