@@ -30,6 +30,7 @@ Item {
     property bool signCertExpired: false
     property bool propertyBusyIndicatorRunning: false
 
+    property alias propertyBusyIndicator: busyIndicator
     property alias propertyRectMainRight: rectMainRight
     property alias propertyPDFPreview: pdfPreviewArea
     property alias propertyFileDialog: fileDialog

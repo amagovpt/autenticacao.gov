@@ -3369,6 +3369,36 @@ void GAPI::getCertificateAuthStatus(void)
     emit signalShowCardActivation(returnString);
 }
 
+void GAPI::startCCSignatureCertCheck()
+{
+    Concurrent::run(this, &GAPI::checkCCSignatureCert);
+}
+
+void GAPI::checkCCSignatureCert()
+{
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "checkCCSignatureCert");
+
+    BEGIN_TRY_CATCH
+
+    PTEID_EIDCard *card = NULL;
+    getCardInstance(card);
+    if(card == NULL) return;
+
+    emit signalStartCheckCCSignatureCert();
+
+    PTEID_Certificate& cert = card->getCertificates().getCert(PTEID_Certificate::CITIZEN_SIGN);
+    PTEID_CertifStatus certStatus = cert.getStatus();
+
+    if (certStatus == PTEID_CertifStatus::PTEID_CERTIF_STATUS_SUSPENDED)
+        emit signalSignCertSuspended();
+    else if(certStatus == PTEID_CertifStatus::PTEID_CERTIF_STATUS_REVOKED)
+        emit signalSignCertRevoked();
+    else
+        emit signalOkSignCertificate();
+    
+    END_TRY_CATCH
+}
+
 void GAPI::startCheckSignatureCertValidity() {
     Concurrent::run(this, &GAPI::checkSignatureCertValidity);
 }

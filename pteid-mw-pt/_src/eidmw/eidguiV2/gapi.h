@@ -311,6 +311,7 @@ public slots:
     void setAddressLoaded(bool addressLoaded) {m_addressLoaded = addressLoaded; }
     void startCardReading();
     void startGettingInfoFromSignCert();
+    void startCCSignatureCertCheck();
     void startCheckSignatureCertValidity();
     void startSavingCardPhoto(QString outputFile);
     int getStringByteLength(QString text);
@@ -483,6 +484,8 @@ signals:
     void signalCardDataChanged();
     void signalSignCertDataChanged(QString ownerName, QString NIC);
     void signalSignCertExpired();
+    void signalSignCertSuspended();
+    void signalSignCertRevoked();
     void signalAddressLoaded(bool m_foreign);
     void signalCardAccessError(int error_code);
     void signalGenericError(const QString error_code);
@@ -514,6 +517,9 @@ signals:
     void signalBeginOAuth();
     void signalEndOAuth(int oauthResult);
     void signalCustomSignImageRemoved();
+
+    void signalStartCheckCCSignatureCert(); // Start CC signature check with OCSP
+    void signalOkSignCertificate();         // CC signature certificate OK or OCSP no response
         
     //SCAP signals
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
@@ -579,6 +585,7 @@ private:
     void buildTree(eIDMW::PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap);
     void fillCertificateList (void );
     void getCertificateAuthStatus(void );
+    void checkCCSignatureCert(void);
     void checkSignatureCertValidity(void);
     void getInfoFromSignCert(void);
     int findCardCertificate(QString issuedBy, QString issuedTo);

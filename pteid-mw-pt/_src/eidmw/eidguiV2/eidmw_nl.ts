@@ -2141,6 +2141,14 @@
         <source>STR_FILE_ASIC_ALREADY_ON_LIST</source>
         <translation>Tentou adicionar ficheiros à lista onde já existe um pacote ASiC.&lt;br&gt;É possível adicionar uma assinatura a um pacote ASiC, mas este tem de ser o &lt;b&gt;único&lt;/b&gt; elemento da lista de ficheiros.</translation>
     </message>
+    <message>
+        <source>STR_REVOKED_SIGN_CERT</source>
+        <translation>O certificado de assinatura do Cartão de Cidadão está revogado.</translation>
+    </message>
+    <message>
+        <source>STR_SUSPENDED_SIGN_CERT</source>
+        <translation>O certificado de assinatura do Cartão de Cidadão encontra-se atualmente suspenso. Pode ativar a assinatura digital a qualquer momento num balcão de levantamento do Cartão de Cidadão.</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>

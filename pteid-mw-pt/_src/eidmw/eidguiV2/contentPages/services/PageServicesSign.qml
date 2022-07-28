@@ -334,18 +334,117 @@ PageServicesSignForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
 
         }
+
         onSignalSignCertExpired: {
             console.log("Services Sign onSignalSignCertExpired")
             var titlePopup = qsTranslate("PageServicesSign", "STR_WARNING")
             var bodyPopup = qsTranslate("PageServicesSign","STR_EXPIRED_SIGN_CERT")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             signCertExpired = true
+            
+            propertyBusyIndicator.running = false
         }
+
+        onSignalSignCertSuspended: {
+            console.log("Services Sign onSignalSignCertRevoked")
+            var titlePopup = qsTranslate("PageServicesSign", "STR_WARNING")
+            var bodyPopup = qsTranslate("PageServicesSign","STR_SUSPENDED_SIGN_CERT")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+
+            propertyBusyIndicator.running = false
+        }
+
+        onSignalSignCertRevoked: {
+            console.log("Services Sign onSignalSignCertRevoked")
+            var titlePopup = qsTranslate("PageServicesSign", "STR_WARNING")
+            var bodyPopup = qsTranslate("PageServicesSign","STR_REVOKED_SIGN_CERT")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+
+            propertyBusyIndicator.running = false
+        }
+
         onSignalCustomSignImageRemoved: {
             console.log("Services Sign onSignalCustomSignImageRemoved")
             var titlePopup = qsTranslate("PageServicesSign", "STR_WARNING")
             var bodyPopup = qsTranslate("PageServicesSign","STR_CUSTOM_IMAGE_REMOVED")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+        }
+
+        onSignalStartCheckCCSignatureCert: {
+            console.log("Services Sign onSignalStartCheckCCSignatureCert")
+            propertyBusyIndicator.running = true
+        }
+
+        onSignalOkSignCertificate: {
+            propertyBusyIndicator.running = false
+
+            if (gapi.doGetTriesLeftSignPin() === 0) {
+                var titlePopup = qsTranslate("Popup PIN", "STR_POPUP_ERROR")
+                var bodyPopup = qsTranslate("Popup PIN", "STR_POPUP_CARD_PIN_SIGN_BLOCKED")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            } else {
+                // If application was started with signAdvanced and output option from command line
+                var shortcutOutput = getShortcutOutput()
+                if (shortcutOutput) {
+                    if (propertyListViewFiles.count == 1) {
+                        var inputFile = propertyListViewFiles.model.get(0).fileUrl
+                        inputFile = inputFile.substring(inputFile.lastIndexOf('/'), inputFile.length - 1)
+                        shortcutOutput = shortcutOutput + Functions.replaceFileSuffix(inputFile, "_signed.pdf")
+                    }
+                    signCC(shortcutOutput)
+                    gapi.setShortcutOutput("")
+                    return;
+                }
+                var prefix = (Qt.platform.os === "windows" ? "file:///" : "file://");
+                if (propertyListViewFiles.count == 1) {
+                    propertyFileDialogOutput.title = qsTranslate("Popup File", "STR_POPUP_FILE_OUTPUT")
+
+                    //PAdES with SCAP switch checked but no attributes selected
+                    if (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked
+                        && numberOfAttributesSelected() == 0) {
+                        var titlePopup = qsTranslate("PageServicesSign", "STR_SCAP_WARNING")
+                        var bodyPopup = qsTranslate("PageServicesSign", "STR_SCAP_ATTRIBUTES_NOT_SELECT")
+                        mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                        return
+                    }
+
+                    var outputFile = propertyListViewFiles.model.get(0).fileUrl
+                    var newSuffix = propertyRadioButtonPADES.checked ? "_signed.pdf" : "_xadessign.asics"
+
+                    if (containsPackageAsic()) {
+                        propertyBusyIndicatorRunning = true
+                        mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+                        var output = decodeURIComponent(Functions.stripFilePrefix(outputFile))
+                        signCC(output)
+                    } else {
+                        propertyFileDialogOutput.currentFile = prefix + Functions.replaceFileSuffix(outputFile, newSuffix)
+                        propertyFileDialogOutput.open()
+                    }
+                } else {
+                    if (propertySwitchAddAttributes.checked) {
+                        var titlePopup = qsTranslate("PageServicesSign", "STR_SCAP_WARNING")
+                        var bodyPopup = qsTranslate("PageServicesSign", "STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
+                        mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                    } else {
+                        if (propertyRadioButtonPADES.checked) {
+                            propertyFileDialogBatchOutput.title = qsTranslate("Popup File", "STR_POPUP_FILE_OUTPUT_FOLDER")
+                            propertyFileDialogBatchOutput.open()
+                        } else {
+                            if (containsPackageAsic()) {
+                                var titlePopup = qsTranslate("PageServicesSign", "STR_FILE_ASIC_TITLE")
+                                var bodyPopup = qsTranslate("PageServicesSign", "STR_FILE_ASIC")
+                                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                            } else {
+                                var outputFolderPath = propertyListViewFiles.model.get(propertyListViewFiles.count - 1).fileUrl
+                                if (outputFolderPath.lastIndexOf('/') >= 0)
+                                    outputFolderPath = outputFolderPath.substring(0, outputFolderPath.lastIndexOf('/'))
+                                propertyFileDialogOutput.currentFile = prefix + outputFolderPath + "/xadessign.asice";
+                                propertyFileDialogOutput.open()
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     Connections {   
@@ -1132,74 +1231,8 @@ PageServicesSignForm {
     propertyButtonSignWithCC {
         onClicked: {
             console.log("Sign with CC")
-            if (gapi.doGetTriesLeftSignPin() === 0) {
-                var titlePopup = qsTranslate("Popup PIN","STR_POPUP_ERROR")
-                var bodyPopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SIGN_BLOCKED")
-                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-            }else{
-                // If application was started with signAdvanced and output option from command line
-                var shortcutOutput = getShortcutOutput()
-                if (shortcutOutput) {
-                    if (propertyListViewFiles.count == 1) {
-                        var inputFile = propertyListViewFiles.model.get(0).fileUrl
-                        inputFile = inputFile.substring(inputFile.lastIndexOf('/'), inputFile.length - 1)
-                        shortcutOutput = shortcutOutput + Functions.replaceFileSuffix(inputFile, "_signed.pdf")
-                    }
-                    signCC(shortcutOutput)
-                    gapi.setShortcutOutput("")
-                    return;
-                }
-                var prefix = (Qt.platform.os === "windows" ? "file:///" : "file://");
-                if (propertyListViewFiles.count == 1){
-                    propertyFileDialogOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
 
-                    //PAdES with SCAP switch checked but no attributes selected
-                    if(propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked
-                                                        && numberOfAttributesSelected() == 0)
-                    {
-                        var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
-                        var bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
-                        mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-                        return
-                    }
-
-                    var outputFile = propertyListViewFiles.model.get(0).fileUrl
-                    var newSuffix = propertyRadioButtonPADES.checked ? "_signed.pdf" : "_xadessign.asics"
-
-                    if(containsPackageAsic()){
-                        propertyBusyIndicatorRunning = true
-                        mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-                        var output = decodeURIComponent(Functions.stripFilePrefix(outputFile))
-                        signCC(output)
-                    } else {
-                        propertyFileDialogOutput.currentFile = prefix + Functions.replaceFileSuffix(outputFile, newSuffix)
-                        propertyFileDialogOutput.open()
-                    }
-                }else{
-                    if (propertySwitchAddAttributes.checked){
-                        var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
-                        var bodyPopup = qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
-                        mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-                    }else{
-                        if(propertyRadioButtonPADES.checked){
-                            propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
-                            propertyFileDialogBatchOutput.open()
-                        }else{
-                            if (containsPackageAsic()){
-                                var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
-                                var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC")
-                                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-                            }else{
-                                var outputFolderPath = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
-                                if(outputFolderPath.lastIndexOf('/') >= 0)
-                                    outputFolderPath = outputFolderPath.substring(0, outputFolderPath.lastIndexOf('/'))
-                                propertyFileDialogOutput.currentFile = prefix + outputFolderPath + "/xadessign.asice";
-                                propertyFileDialogOutput.open()
-                            }
-                        }
-                    }
-                }
-            }
+            gapi.startCCSignatureCertCheck();
         }
     }
     propertyButtonSignCMD {

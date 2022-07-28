@@ -2135,6 +2135,14 @@
         <source>STR_FILE_ASIC_ALREADY_ON_LIST</source>
         <translation>You tried to add files to the list where an ASiC container already exists. It is possible to add a signature to an ASiC container, but it has to be the &lt;b&gt;only&lt;/b&gt; element in the file list.</translation>
     </message>
+    <message>
+        <source>STR_REVOKED_SIGN_CERT</source>
+        <translation>The Citizen Card&apos;s signature certificate was revoked.</translation>
+    </message>
+    <message>
+        <source>STR_SUSPENDED_SIGN_CERT</source>
+        <translation>The Citizen Card&apos;s signature certificate is currently suspended. You can activate the digital signature at any time at a Citizen Card pick-up counter.</translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>
