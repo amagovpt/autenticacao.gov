@@ -21,6 +21,8 @@
 #include "ScapSettings.h"
 #include <QDir>
 
+#include <openssl/err.h>
+
 #include "Util.h"
 #include "Config.h"
 
