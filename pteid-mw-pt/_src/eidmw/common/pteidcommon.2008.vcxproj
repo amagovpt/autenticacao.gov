@@ -68,14 +68,16 @@
     <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>

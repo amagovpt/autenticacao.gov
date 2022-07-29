@@ -68,14 +68,16 @@
     <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <OutDir>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+	<TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <OutDir>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+	<TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
@@ -90,28 +92,27 @@
     <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <PreBuildEvent>
-      <Command>..\set_build_nbr.bat</Command>
-    </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>PTEID_35;WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_CMN_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;WITH_OPENSSL;EIDMW_CMDSERVICES_EXPORTS;_USRDLL;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
+	  <AdditionalIncludeDirectories>$(PTEID_DIR_LIBZIP)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_OPENSSL)\include;..\..\common;..\..\applayer;..\..\cardlayer;..\..\dialogs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>PTEID_35;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>WS2_32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
+      <AdditionalDependencies>Crypt32.lib;pteidDlgsWin32.lib;libcrypto.lib;libssl.lib;pteidcommon.lib;pteidapplayer.lib;WS2_32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
+	  <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_OPENSSL)\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -125,12 +126,13 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;WITH_OPENSSL;EIDMW_CMDSERVICES_EXPORTS;_USRDLL;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
+	  <AdditionalIncludeDirectories>$(PTEID_DIR_LIBZIP)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_OPENSSL)\include;..\..\common;..\..\applayer;..\..\cardlayer;..\..\dialogs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
@@ -140,8 +142,9 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>WS2_32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
+      <AdditionalDependencies>Crypt32.lib;pteidDlgsWin32.lib;libcrypto.lib;libssl.lib;pteidcommon.lib;pteidapplayer.lib;WS2_32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\$(ProjectName).dll</OutputFile>
+	  <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_OPENSSL_X64)\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>

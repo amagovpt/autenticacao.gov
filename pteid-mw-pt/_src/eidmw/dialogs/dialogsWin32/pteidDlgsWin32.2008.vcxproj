@@ -21,7 +21,6 @@
   <PropertyGroup Label="Globals">
     <ProjectName>DlgsWin32</ProjectName>
     <ProjectGuid>{E27CF8F7-E472-4966-B7D6-448B1427A0D6}</ProjectGuid>
-    <RootNamespace>BeIdDlgsWin32</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -68,14 +67,16 @@
     <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <OutDir>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+	<TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <OutDir>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+	<TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
@@ -105,7 +106,7 @@
       <PreprocessorDefinitions>PTEID_35;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>pteidcommon.lib;psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pteidcommon.lib;psapi.lib;crypt32.lib;ComCtl32.lib;gdiplus.lib;uxtheme.lib;Dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -134,7 +135,7 @@
       <PreprocessorDefinitions>PTEID_35;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>pteidcommon.lib;psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pteidcommon.lib;psapi.lib;crypt32.lib;ComCtl32.lib;gdiplus.lib;uxtheme.lib;Dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\VC9\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>

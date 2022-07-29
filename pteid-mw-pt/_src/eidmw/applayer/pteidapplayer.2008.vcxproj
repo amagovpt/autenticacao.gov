@@ -68,9 +68,10 @@
     <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+	<TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
@@ -79,9 +80,10 @@
     <TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+	<TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
@@ -92,8 +94,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_CURL)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_DIR_OPENSSL)\include;$(PTEID_DIR_ZLIB)\include;$(PTEID_DIR_LIBPNG)\include;$(PTEID_DIR_OPENJPEG)\include\openjpeg-2.3;$(PTEID_DIR_LIBZIP)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>PTEID_35;WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_CURL)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_DIR_OPENSSL)\include;$(PTEID_DIR_ZLIB)\include;$(PTEID_DIR_LIBPNG)\include;$(PTEID_DIR_OPENJPEG)\include\openjpeg-2.4;$(PTEID_DIR_LIBZIP)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PTEID_35;WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;_CRT_SECURE_NO_WARNINGS;CURL_STATICLIB;OPJ_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -109,9 +111,9 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>wsock32.lib;Shlwapi.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl.lib;pteid-poppler.lib;xsec_2.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;pteidcommon.lib;zlib.lib;libpng16.lib;openjp2.lib;libzip.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;Ws2_32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl_a.lib;Wldap32.lib;normaliz.lib;pteid-poppler.lib;xsec_lib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlibstatic.lib;libpng16_static.lib;openjp2.lib;libzip.lib;cryptnet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_CURL)\lib;$(PTEID_DIR_XERCES)\lib;$(PTEID_DIR_OPENSSL)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_CURL)\lib;$(PTEID_DIR_XERCES)\lib;$(PTEID_DIR_OPENSSL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_DIR_ZLIB)\lib;$(PTEID_DIR_LIBPNG)\lib;$(PTEID_DIR_OPENJPEG)\lib;$(PTEID_DIR_LIBZIP)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -155,8 +157,8 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY_X64)\include;$(PTEID_DIR_CURL_X64)\include;$(PTEID_DIR_XERCES_X64)\include;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_ZLIB_X64)\include;$(PTEID_DIR_LIBPNG_X64)\include;$(PTEID_DIR_OPENJPEG_X64)\include\openjpeg-2.3;$(PTEID_DIR_LIBZIP_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>PTEID_35;WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY_X64)\include;$(PTEID_DIR_CURL_X64)\include;$(PTEID_DIR_XERCES_X64)\include;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_ZLIB_X64)\include;$(PTEID_DIR_LIBPNG_X64)\include;$(PTEID_DIR_OPENJPEG_X64)\include\openjpeg-2.4;$(PTEID_DIR_LIBZIP_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PTEID_35;WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;_CRT_SECURE_NO_WARNINGS;CURL_STATICLIB;OPJ_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -172,9 +174,9 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>wsock32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl.lib;pteid-poppler.lib;xsec_2.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlib.lib;libpng16.lib;openjp2.lib;libzip.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;Ws2_32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl_a.lib;Wldap32.lib;normaliz.lib;pteid-poppler.lib;xsec_lib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlibstatic.lib;libpng16_static.lib;openjp2.lib;libzip.lib;cryptnet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_CURL_X64)\lib;$(PTEID_DIR_XERCES_X64)\lib;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_CURL_X64)\lib;$(PTEID_DIR_XERCES_X64)\lib;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBPNG_X64)\lib;$(PTEID_DIR_OPENJPEG_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>

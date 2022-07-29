@@ -87,8 +87,8 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">eidguiV2</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">eidguiV2</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pteidguiV2</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pteidguiV2</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IgnoreImportLibrary>
   </PropertyGroup>
@@ -211,7 +211,7 @@ echo "**************************************************************************
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;$(PTEID_DIR_QT_5)\include;$(PTEID_DIR_QT_5)\include\QtQuick;$(PTEID_DIR_QT_5)\include\QtGui;$(PTEID_DIR_QT_5)\include\QtANGLE;$(PTEID_DIR_QT_5)\include\QtQml;$(PTEID_DIR_QT_5)\include\QtNetwork;$(PTEID_DIR_QT_5)\include\QtCore;debug;$(PTEID_DIR_QT_5)\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_CURL_X64)\include;.;$(PTEID_DIR_QT_5_X64)\include;$(PTEID_DIR_QT_5_X64)\include\QtQuick;$(PTEID_DIR_QT_5_X64)\include\QtGui\5.12.8\;..\_Builds;..\dialogs;..\common;$(PTEID_DIR_QT_5_X64)\include\QtCore\5.12.8\QtCore;$(PTEID_DIR_QT_5_X64)\include\QtCore\5.12.8;$(PTEID_DIR_QT_5_X64)\include\QtGui\5.12.8\QtGui;$(PTEID_DIR_QT_5_X64)\mkspecs\win32-msvc;$(PTEID_DIR_QT_5_X64)\include\QtGui;$(PTEID_DIR_QT_5_X64)\include\QtConcurrent;$(PTEID_DIR_QT_5_X64)\include\QtQuickControls2;$(PTEID_DIR_QT_5_X64)\include\QtWidgets;$(PTEID_DIR_QT_5_X64)\include\QtPrintSupport;$(PTEID_DIR_QT_5_X64)\include\QtANGLE;$(PTEID_DIR_QT_5_X64)\include\QtQml;$(PTEID_DIR_QT_5_X64)\include\QtNetwork;$(PTEID_DIR_QT_5_X64)\include\QtCore;$(PTEID_POPPLER_QT5)\qt5\src;release;$(PTEID_DIR_QT_5_X64)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_LIBZIP_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -219,7 +219,7 @@ echo "**************************************************************************
       <ExceptionHandling>Sync</ExceptionHandling>
       <ObjectFileName>debug\</ObjectFileName>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;CURL_STATICLIB;WITH_OPENSSL;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -228,13 +228,13 @@ echo "**************************************************************************
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(PTEID_DIR_QT_5)\lib\qtmaind.lib;shell32.lib;$(PTEID_DIR_QT_5)\lib\Qt5Quickd.lib;$(PTEID_DIR_QT_5)\lib\Qt5Guid.lib;$(PTEID_DIR_QT_5)\lib\Qt5Qmld.lib;$(PTEID_DIR_QT_5)\lib\Qt5Networkd.lib;$(PTEID_DIR_QT_5)\lib\Qt5Cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_QT_5_X64)\lib;C:\utils\my_sql\my_sql\lib;C:\utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libcurl_a.lib;Wldap32.lib;normaliz.lib;zlibstatic.lib;Cryptui.lib;Wintrust.lib;qtmaind.lib;Crypt32.lib;shell32.lib;libssl.lib;libcrypto.lib;libzip.lib;Qt5Quickd.lib;Qt5Guid.lib;Qt5Widgetsd.lib;Qt5Qmld.lib;Qt5Networkd.lib;Qt5Cored.lib;Qt5PrintSupportd.lib;Qt5QuickControls2d.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteidDlgsWin32.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_POPPLER_QT5)\x64;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_DIR_QT_5_X64)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <OutputFile>$(OutDir)\eidguiV2.exe</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -250,7 +250,7 @@ echo "**************************************************************************
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;$(PTEID_DIR_QT_5)\include;$(PTEID_DIR_QT_5)\include\QtQuick;$(PTEID_DIR_QT_5)\include\QtGui;$(PTEID_DIR_QT_5)\include\QtANGLE;$(PTEID_DIR_QT_5)\include\QtQml;$(PTEID_DIR_QT_5)\include\QtNetwork;$(PTEID_DIR_QT_5)\include\QtCore;debug;$(PTEID_DIR_QT_5)\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_CURL)\include;.;$(PTEID_DIR_QT_5)\include;$(PTEID_DIR_QT_5)\include\QtQuick;$(PTEID_DIR_QT_5)\include\QtGui\5.12.8\;..\_Builds;..\dialogs;..\common;$(PTEID_DIR_QT_5)\include\QtCore\5.12.8\QtCore;$(PTEID_DIR_QT_5)\include\QtCore\5.12.8;$(PTEID_DIR_QT_5)\include\QtGui\5.12.8\QtGui;$(PTEID_DIR_QT_5)\mkspecs\win32-msvc;$(PTEID_DIR_QT_5)\include\QtGui;$(PTEID_DIR_QT_5)\include\QtConcurrent;$(PTEID_DIR_QT_5)\include\QtQuickControls2;$(PTEID_DIR_QT_5)\include\QtWidgets;$(PTEID_DIR_QT_5)\include\QtPrintSupport;$(PTEID_DIR_QT_5)\include\QtANGLE;$(PTEID_DIR_QT_5)\include\QtQml;$(PTEID_DIR_QT_5)\include\QtNetwork;$(PTEID_DIR_QT_5)\include\QtCore;$(PTEID_POPPLER_QT5)\qt5\src;release;$(PTEID_DIR_QT_5)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;$(PTEID_DIR_OPENSSL)\include;$(PTEID_DIR_LIBZIP)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -258,7 +258,7 @@ echo "**************************************************************************
       <ExceptionHandling>Sync</ExceptionHandling>
       <ObjectFileName>debug\</ObjectFileName>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;CURL_STATICLIB;WITH_OPENSSL;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -267,13 +267,13 @@ echo "**************************************************************************
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(PTEID_DIR_QT_5)\lib\qtmaind.lib;shell32.lib;$(PTEID_DIR_QT_5)\lib\Qt5Quickd.lib;$(PTEID_DIR_QT_5)\lib\Qt5Guid.lib;$(PTEID_DIR_QT_5)\lib\Qt5Qmld.lib;$(PTEID_DIR_QT_5)\lib\Qt5Networkd.lib;$(PTEID_DIR_QT_5)\lib\Qt5Cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_QT_5)\lib;C:\utils\my_sql\my_sql\lib;C:\utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libcurl_a.lib;Wldap32.lib;normaliz.lib;zlibstatic.lib;Cryptui.lib;Wintrust.lib;qtmaind.lib;Crypt32.lib;shell32.lib;libssl.lib;libcrypto.lib;libzip.lib;Qt5Quickd.lib;Qt5Guid.lib;Qt5Widgetsd.lib;Qt5Qmld.lib;Qt5Networkd.lib;Qt5Cored.lib;Qt5PrintSupportd.lib;Qt5QuickControls2d.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteidDlgsWin32.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_POPPLER_QT5)\win32;$(PTEID_DIR_OPENSSL)\lib\;$(PTEID_DIR_QT_5)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_ZLIB)\lib;$(PTEID_DIR_LIBZIP)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <OutputFile>$(OutDir)\eidguiV2.exe</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -296,12 +296,8 @@ echo "**************************************************************************
     <ClCompile Include="ErrorConn.cpp" />
     <ClCompile Include="gapi.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_singleapplication.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_singleapplication_p.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="appcontroller.cpp" />
@@ -323,8 +319,6 @@ echo "**************************************************************************
   <ItemGroup>
     <ClCompile Include="pdfsignatureclient.cpp" />
     <ClCompile Include="release\qrc_resources.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -476,13 +470,15 @@ echo "**************************************************************************
     </CustomBuild>
     <CustomBuild Include="singleapplication.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
-</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
+	  <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="singleapplication_p.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
