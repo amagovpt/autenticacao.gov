@@ -1036,19 +1036,14 @@ void GAPI::signScapWithCMD(QList<QString> loadedFilePaths, QString outputFile, Q
     signParams.isTimestamp = false;
     signParams.isLtv = false;
     signParams.isSmallSignature = 0;
-
+	//TODO: this pdf_signature is never destroyed, it should be built in doSignSCAPWithCMD() where it's actually used
     PTEID_PDFSignature * pdf_signature = new PTEID_PDFSignature();
 
     pdf_signature->setFileSigning((char *)getPlatformNativeString(loadedFilePaths.first()));
 
-    if (signParams.isTimestamp) {
-        if (signParams.isLtv) {
-            pdf_signature->setSignatureLevel(PTEID_LEVEL_LTV);
-        }
-        else {
-            pdf_signature->setSignatureLevel(PTEID_LEVEL_TIMESTAMP);
-        }
-    }
+	PTEID_SignatureLevel citizen_signature_level = isTimestamp ?
+		(isLtv ? PTEID_LEVEL_LT : PTEID_LEVEL_TIMESTAMP) : PTEID_LEVEL_BASIC;
+	pdf_signature->setSignatureLevel(citizen_signature_level);
 
     pdf_signature->setCustomSealSize(m_seal_width, m_seal_height);
 
