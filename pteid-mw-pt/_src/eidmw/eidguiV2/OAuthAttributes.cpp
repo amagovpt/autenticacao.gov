@@ -204,16 +204,18 @@ namespace eIDMW
             hasConn = m_server.waitForNewConnection(1000);
             seconds++;
         }
-        if (!hasConn) {
-            m_server.close();
-            MWLOG(LEV_DEBUG, MOD_GUI, L"OAuthAttributes: get token timed out");
-            return OAuthTimeoutError;
-        }
+        
         if (m_wasCancelled) {
             m_server.close();
             MWLOG(LEV_DEBUG, MOD_GUI, L"OAuthAttributes: process was canceled");
             return OAuthCancelled;
         }
+
+        if (!hasConn) {
+            m_server.close();
+            MWLOG(LEV_DEBUG, MOD_GUI, L"OAuthAttributes: get token timed out");
+            return OAuthTimeoutError;
+        }     
 
         QTcpSocket *conn = m_server.nextPendingConnection();
         QByteArray buffer;
