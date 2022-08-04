@@ -262,7 +262,7 @@ public:
 
     enum PinUsage { AuthPin, SignPin, AddressPin };
 
-    enum CmdDialogClass { Sign, RegisterCert, AskToRegisterCert, ShowMessage, Progress};
+    enum CmdDialogClass { Sign, RegisterCert, ShowMessage, Progress};
 
     enum ShortcutId { ShortcutIdNone, ShortcutIdSign};
 

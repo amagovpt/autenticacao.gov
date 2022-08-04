@@ -444,20 +444,6 @@ Item {
 
             states: [
                 State {
-                    name: Constants.DLG_STATE.ASK_TO_REGISTER_CERT
-                    PropertyChanges {target: dialogContent; next: linkCMD}
-                    PropertyChanges {target: linkCMD; visible: true}
-                    PropertyChanges {target: checkboxDontAskAgain; visible: true}
-                    PropertyChanges {target: buttonCancel; prev: checkboxDontAskAgain}
-                    PropertyChanges {
-                        target: labelCMDText; visible: true; propertyLinkUrl: ""
-                        propertyText.text: qsTr("STR_REGISTER_CMD_CERT_DESC") + controler.autoTr; 
-                        propertyAccessibleText: qsTr("STR_REGISTER_CMD_CERT_DESC") + controler.autoTr; 
-                    }
-                    PropertyChanges {target: buttonConfirm; text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_BUTTON") + controler.autoTr}
-                    PropertyChanges {target: dialogTitle; restoreEntryValues : false; text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_TITLE") + controler.autoTr}
-                },
-                State {
                     name: Constants.DLG_STATE.REGISTER_FORM
                     PropertyChanges {target: linkCMD; visible: true}
                     PropertyChanges {target: rectMobileNumber; visible: true}
@@ -635,10 +621,10 @@ Item {
             }
         }
 
-        onOpened: {
-            if (dialogContent.state == Constants.DLG_STATE.REGISTER_FORM)
-                textFieldMobileNumber.forceActiveFocus();
-            else
+		onOpened: {
+			if (dialogContent.state == Constants.DLG_STATE.REGISTER_FORM)
+				textFieldMobileNumber.forceActiveFocus();
+			else
 				dialogContent.forceActiveFocus()
 		}
         onRejected: {
@@ -673,9 +659,6 @@ Item {
 
         if (type == GAPI.RegisterCert) {
             dialogContent.state = Constants.DLG_STATE.REGISTER_FORM
-        }
-        else if (type == GAPI.AskToRegisterCert) {
-            dialogContent.state = Constants.DLG_STATE.ASK_TO_REGISTER_CERT
         }
         else if (type == GAPI.ShowMessage) {
             dialogContent.state = Constants.DLG_STATE.SHOW_MESSAGE
@@ -715,10 +698,6 @@ Item {
                 break;
             case Constants.DLG_STATE.OPEN_FILE_ERROR:
                 close()
-                break;
-            case Constants.DLG_STATE.ASK_TO_REGISTER_CERT:
-                close()
-                open(GAPI.RegisterCert)
                 break;
         }
     }
