@@ -6,7 +6,7 @@
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2011-2012 lmcm - <lmcm@caixamagica.pt>
  * Copyright (C) 2011-2012 Rui Martinho - <rui.martinho@ama.pt>
- * Copyright (C) 2012-2014, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2016-2022 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
@@ -47,31 +47,16 @@
 #include <sstream>
 
 //UNIQUE INDEX FOR RETRIEVING OBJECT
-#define INCLUDE_OBJECT_DOCEID			1
-#define INCLUDE_OBJECT_SODID			2
-#define INCLUDE_OBJECT_PINS				3
-#define INCLUDE_OBJECT_CERTIFICATES		4
-#define INCLUDE_OBJECT_DOCINFO			5
-#define INCLUDE_OBJECT_FULLDOC			6
-#define INCLUDE_OBJECT_CHALLENGE		7
-#define INCLUDE_OBJECT_RESPONSE			8
-#define INCLUDE_OBJECT_CUSTOMDOC		9
-#define INCLUDE_OBJECT_ROOT_CA_PK   	10
-#define INCLUDE_OBJECT_ADDRESS   	    11
+#define INCLUDE_OBJECT_DOCEID         1
+#define INCLUDE_OBJECT_SODID          2
+#define INCLUDE_OBJECT_PINS           3
+#define INCLUDE_OBJECT_CERTIFICATES   4
+#define INCLUDE_OBJECT_DOCINFO        5
+#define INCLUDE_OBJECT_CUSTOMDOC      9
+#define INCLUDE_OBJECT_ROOT_CA_PK     10
+#define INCLUDE_OBJECT_ADDRESS        11
 
-#define INCLUDE_OBJECT_RAWDATA_ID			21
-#define INCLUDE_OBJECT_RAWDATA_ID_SIG		22
-#define INCLUDE_OBJECT_RAWDATA_ADDR			23
-#define INCLUDE_OBJECT_RAWDATA_ADDR_SIG		24
-#define INCLUDE_OBJECT_RAWDATA_SOD			25
-#define INCLUDE_OBJECT_RAWDATA_CARD_INFO	26
-#define INCLUDE_OBJECT_RAWDATA_TOKEN_INFO	27
-#define INCLUDE_OBJECT_RAWDATA_CHALLENGE	29
-#define INCLUDE_OBJECT_RAWDATA_RESPONSE		30
-#define INCLUDE_OBJECT_RAWDATA_PERSO_DATA   31
-#define INCLUDE_OBJECT_RAWDATA_TRACE		32
-
-#define BCD_DATE_LEN					4
+#define BCD_DATE_LEN                  4
 
 
 //Global variable used by the compatibility functions defined in eidlibcompat.h
