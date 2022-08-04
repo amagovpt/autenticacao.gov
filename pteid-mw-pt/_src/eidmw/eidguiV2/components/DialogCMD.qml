@@ -636,11 +636,11 @@ Item {
         }
 
         onOpened: {
-            if (dialogContent.state == Constants.DLG_STATE.ASK_TO_REGISTER_CERT)
-                dialogContent.forceActiveFocus()
-            else
+            if (dialogContent.state == Constants.DLG_STATE.REGISTER_FORM)
                 textFieldMobileNumber.forceActiveFocus();
-        }
+            else
+				dialogContent.forceActiveFocus()
+		}
         onRejected: {
             dialogContainer.close()
         }
