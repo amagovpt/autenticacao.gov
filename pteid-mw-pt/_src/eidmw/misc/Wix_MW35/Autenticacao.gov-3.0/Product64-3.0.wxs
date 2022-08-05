@@ -72,7 +72,7 @@
 
 		<Property Id="OLDMIDDLEWAREINSTALLED">
 			<RegistrySearch Id="OldMiddlewareInstalled_search" Name="DisplayName" Type="raw" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4411E1E1-E262-4861-8A1A-A8552C846840}"/>
-		</Property>
+		</Property> 
 
 		<Property Id="OLDMIDDLEWAREINSTALLED2">
 			<RegistrySearch Id="OldMiddlewareInstalled_search2" Name="DisplayName" Type="raw" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4411E1E1-E262-4861-8A1A-A8552C846840}_is1"/>
@@ -589,10 +589,13 @@
 	    <?if $(var.PTEID_TARGET_RUNTIME) = VCR8 ?>
 		  <Binary Id="MarkHidden"    SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Release\MarkHidden.exe"/>
 	      <Binary Id="CleanMdrvKeys" SourceFile="$(var.PTEID_BUILD_FOLDER_X64)clean_mdrv_keys.exe" />
+        <Binary Id="CleanCacheDir" SourceFile="$(var.PTEID_BUILD_FOLDER_X64)clean_cache_dir.exe"/>
 	    <?elseif $(var.PTEID_TARGET_RUNTIME) = VCR9 ?>
 	      <Binary Id="MarkHidden"    SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Build\x64\VC9\Release\MarkHidden.exe" />
 	      <Binary Id="CleanMdrvKeys" SourceFile="$(var.PTEID_BUILD_FOLDER_X64)clean_mdrv_keys.exe" />
+        <Binary Id="CleanCacheDir" SourceFile="$(var.PTEID_BUILD_FOLDER_X64)clean_cache_directory.exe"/>
 	    <?endif?>
+
 
 	    <Binary SourceFile="$(var.PTEID_BUILD_FOLDER_X86)\cmdKspConfig.exe" Id="cmdKspConfig"/>
 
@@ -602,6 +605,13 @@
 			Impersonate="no"
 			Return="ignore"
 			Execute="deferred"/>
+
+    <CustomAction Id="CleanCacheDirectory"
+      BinaryKey="CleanCacheDir"
+      ExeCommand="clean_cache_directory.exe"
+      Impersonate="no"
+      Return="ignore"
+      Execute="deferred"/>
 
     <!-- WixUI_Advanced defaults to "[ProgramFilesFolder][ApplicationFolderName]" which is wrong for x64 applications.
     Fix the path with an override. https://github.com/wixtoolset/issues/issues/5908 -->
@@ -647,6 +657,7 @@
 	      <Custom Action="KSPRegister" After="InstallFiles">NOT Installed AND NOT REMOVE</Custom>
 	      <Custom Action="KSPUnregister" Before="InstallFinalize">(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")</Custom>
 	      <Custom Action="KSPRemoveCmdCerts" Before="InstallFinalize">(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")</Custom>
+        <Custom Action="CleanCacheDirectory" Before="InstallFinalize">(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")</Custom>
 		<ScheduleReboot After="InstallFinalize">NOT Installed</ScheduleReboot>
 	</InstallExecuteSequence>
 
