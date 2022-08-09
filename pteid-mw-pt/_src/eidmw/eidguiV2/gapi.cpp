@@ -245,9 +245,9 @@ void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int inde
         emit signalRemoteAddressError(AddressConnectionError);
     }
     else if (errorCode == EIDMW_REMOTEADDR_SERVER_ERROR)
-    { \
+    {
         emit signalRemoteAddressError(AddressServerError);
-    }  \
+    }
     else if (errorCode == EIDMW_REMOTEADDR_CONNECTION_TIMEOUT)
     {
         emit signalRemoteAddressError(AddressConnectionTimeout);
@@ -271,6 +271,7 @@ void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int inde
         QString msgError = QString("%1\n").arg(user_error);
         emit signalGenericError(msgError);
     }
+}
 
 
 void GAPI::getAddressFile() {
@@ -1346,8 +1347,8 @@ void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
         pdffiletmp.append("/CartaoCidadao.pdf");
         nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
 
-        originalOutputFile = params.outputFile;
-        params.outputFile = nativepdftmp;
+        originalOutputFile = base_params.outputFile;
+        base_params.outputFile = nativepdftmp;
         res = drawpdf(pdf_printer, base_params, addressError);
 
         if (!res)
