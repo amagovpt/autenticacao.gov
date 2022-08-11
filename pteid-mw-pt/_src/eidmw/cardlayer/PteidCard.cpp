@@ -595,17 +595,8 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long paddingType,
 		else if (ulInputLen == SHA1_LEN)
 			ucAlgo = 0x12;
 
-		if (ulInputLen == SHA256_LEN)
-			printf(" \n HASH IS OF TYPE SHA256\n ");
-		else if (ulInputLen == SHA384_LEN)
-			printf(" \n HASH IS OF TYPE SHA384\n ");
-		else if (ulInputLen == SHA512_LEN)
-			printf(" \n HASH IS OF TYPE SHA512\n ");
-		else if (ulInputLen == SHA1_LEN)
-			printf(" \n HASH IS OF TYPE SHA1\n ");
 		//Algorithm: RSA with PSS Padding
 		if (paddingType == SIGN_ALGO_RSA_PSS) {
-			printf(" \n USING PSS PADDING \n ");
 			ucAlgo += 3;
 		}
 		oDatagem.Append(ucAlgo);
