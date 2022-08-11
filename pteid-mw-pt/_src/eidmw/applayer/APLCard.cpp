@@ -133,7 +133,7 @@ CByteArray APL_Card::sendAPDU(const CByteArray& cmd)
 	return out;
 }
 
-CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey, bool use_sha256)
+CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey, const unsigned long paddingType)
 {
 	CByteArray out;
 	BEGIN_CAL_OPERATION(m_reader)
@@ -144,9 +144,7 @@ CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey, bool use_
 	else
 		signing_key = m_reader->getCalReader()->GetPrivKeyByID(0x45);
 
-	unsigned long algoID = use_sha256 ? SIGN_ALGO_SHA256_RSA_PKCS : SIGN_ALGO_RSA_PKCS;
-
-	out = m_reader->getCalReader()->Sign(signing_key, algoID, oData);
+	out = m_reader->getCalReader()->Sign(signing_key, paddingType, oData);
 	END_CAL_OPERATION(m_reader)
 
 	return out;

@@ -115,7 +115,32 @@ PTEID_ByteArray PTEID_Card::Sign(const PTEID_ByteArray& data, bool signatureKey)
 	APL_Card *pcard=static_cast<APL_Card *>(m_impl);
 
 	CByteArray cData(data.GetBytes(),data.Size());
-	CByteArray result=pcard->Sign(cData, signatureKey);
+	CByteArray result = pcard->Sign(cData, signatureKey, SIGN_ALGO_RSA_PKCS);
+	out.Append(result.GetBytes(),result.Size());
+
+	END_TRY_CATCH
+
+	return out;
+}
+
+
+PTEID_ByteArray PTEID_Card::Sign(const PTEID_ByteArray& data, PTEID_RSAPaddingType paddingType, bool signatureKey)
+{
+	PTEID_ByteArray out;
+
+	BEGIN_TRY_CATCH
+
+	APL_Card *pcard=static_cast<APL_Card *>(m_impl);
+
+	CByteArray cData(data.GetBytes(),data.Size());
+	CByteArray result;
+	if (paddingType == PTEID_RSAPaddingType::PADDING_TYPE_RSA_PKCS)
+		result = pcard->Sign(cData, signatureKey, SIGN_ALGO_RSA_PKCS);
+	else if (paddingType == PTEID_RSAPaddingType::PADDING_TYPE_RSA_PSS)
+		result = pcard->Sign(cData, signatureKey, SIGN_ALGO_RSA_PSS);
+	else
+		throw CMWEXCEPTION(EIDMW_ERR_ALGO_BAD);
+
 	out.Append(result.GetBytes(),result.Size());
 
 	END_TRY_CATCH

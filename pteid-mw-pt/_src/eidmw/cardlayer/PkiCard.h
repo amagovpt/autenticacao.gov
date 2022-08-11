@@ -72,7 +72,7 @@ public:
         bool bShowDlg=true, void *wndGeometry = 0 );
 
     virtual CByteArray Sign(const tPrivKey & key, const tPin & Pin,
-        unsigned long algo, const CByteArray & oData);
+        unsigned long paddingType, const CByteArray & oData);
 
     virtual CByteArray GetRandom(unsigned long ulLen);
 

@@ -81,7 +81,7 @@ char * BinaryToHexString(unsigned char * argbuf, unsigned int len)
 CByteArray PteidSign(APL_Card *card, CByteArray &to_sign)
 {
 	//True for the signatureKey and SHA-256 params
-	CByteArray output = card->Sign(to_sign, true, true);
+	CByteArray output = card->Sign(to_sign, true, SIGN_ALGO_RSA_PKCS);
 
 	return output;
 }

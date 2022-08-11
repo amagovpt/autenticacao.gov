@@ -145,7 +145,7 @@ public:
 	unsigned long GetSupportedAlgorithms();
 
 	/* Sign data. If necessary, a PIN will be asked */
-    CByteArray Sign(const tPrivKey & key, unsigned long algo,
+    CByteArray Sign(const tPrivKey & key, unsigned long paddingType,
         const CByteArray & oData);
 
     CByteArray GetRandom(unsigned long ulLen);

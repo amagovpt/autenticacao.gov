@@ -99,9 +99,9 @@ protected:
     virtual void showPinDialog(tPinOperation operation, const tPin & Pin,
         std::string & csPin1, std::string & csPin2, const tPrivKey *pKey, void *wndGeometry = 0 );
 
-    virtual void SetSecurityEnv(const tPrivKey & key, unsigned long algo,
+    virtual void SetSecurityEnv(const tPrivKey & key, unsigned long paddingType,
         unsigned long ulInputLen);
-    virtual CByteArray SignInternal(const tPrivKey & key, unsigned long algo,
+    virtual CByteArray SignInternal(const tPrivKey & key, unsigned long paddingType,
         const CByteArray & oData, const tPin *pPin = NULL);
 
 	virtual tCacheInfo GetCacheInfo(const std::string &csPath);

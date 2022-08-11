@@ -573,7 +573,7 @@ unsigned long CPteidCard::GetSupportedAlgorithms()
 	return ulAlgos;
 }
 
-void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
+void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long paddingType,
     unsigned long ulInputLen)
 {
     CByteArray oDataias, oDatagem;
@@ -594,8 +594,18 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long algo,
 			ucAlgo = 0x62;
 		else if (ulInputLen == SHA1_LEN)
 			ucAlgo = 0x12;
+
+		if (ulInputLen == SHA256_LEN)
+			printf(" \n HASH IS OF TYPE SHA256\n ");
+		else if (ulInputLen == SHA384_LEN)
+			printf(" \n HASH IS OF TYPE SHA384\n ");
+		else if (ulInputLen == SHA512_LEN)
+			printf(" \n HASH IS OF TYPE SHA512\n ");
+		else if (ulInputLen == SHA1_LEN)
+			printf(" \n HASH IS OF TYPE SHA1\n ");
 		//Algorithm: RSA with PSS Padding
-		if (algo == SIGN_ALGO_RSA_PSS) {
+		if (paddingType == SIGN_ALGO_RSA_PSS) {
+			printf(" \n USING PSS PADDING \n ");
 			ucAlgo += 3;
 		}
 		oDatagem.Append(ucAlgo);
@@ -639,7 +649,7 @@ void KeepAliveThread::Run() {
 	MWLOG(LEV_DEBUG, MOD_CAL, "Stopping KeepAliveThread");
 }
 
-CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
+CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long paddingType,
     const CByteArray & oData, const tPin *pPin)
 {
     CAutoLock autolock(this);
@@ -647,7 +657,7 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
     m_ucCLA = 0x00;
 
     MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::SignInternal called with algoID=%04x and data length=%d",
-    	algo, oData.Size());
+    	paddingType, oData.Size());
 
     if (pPin != NULL)
     {
@@ -679,7 +689,7 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long algo,
 		throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
     }
 
-    SetSecurityEnv(key, algo, oData.Size());
+    SetSecurityEnv(key, paddingType, oData.Size());
 
     CByteArray oData1;
 

@@ -198,6 +198,15 @@ enum PTEID_SigningDeviceType{
 	CMD
 };
 
+/** @brief RSA padding type
+ *  Which type of padding to be used while signing with RSA
+ */
+enum PTEID_RSAPaddingType
+{
+	PADDING_TYPE_RSA_PKCS,
+	PADDING_TYPE_RSA_PSS,
+};
+
 struct SDK_Context;
 
 class CMutex;
@@ -608,13 +617,13 @@ class PTEID_SigningDevice
 public:
     /**
      * Raw RSA signature with PCKS #1 padding.
-     * @param data holds the data to be signed, at most 32 bytes.
+     * @param data holds the data to be signed, at most 64 bytes.
      * @param signatureKey whether to use the 'Signature key'. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to @b true.
      * @return A PTEID_ByteArray containing the signed data.
      */
     PTEIDSDK_API virtual PTEID_ByteArray Sign(const PTEID_ByteArray& data, bool signatureKey = false) = 0;
 
-    /**
+	/**
     * Raw RSA signature with PCKS #1 padding (applied to a SHA256 hash).
     * @param data holds the data to be signed, it should be 32 bytes.
     * @param signatureKey whether to use the 'Signature key'. By default, it uses the 'Authentication private key'. To sign with the 'Signature private key' set the parameter signatureKey to @b true.
@@ -773,6 +782,16 @@ public:
 
     PTEIDSDK_API virtual PTEID_ByteArray Sign(const PTEID_ByteArray& data, bool signatureKey=false) override;
     PTEIDSDK_API virtual PTEID_ByteArray SignSHA256(const PTEID_ByteArray& data, bool signatureKey=false) override;
+
+	/**
+	 * Signs a block of data using either RSA-PKCS#1 or RSA-PSS.
+	 * 
+	 * @param data block of data to be signed. Has to be hashed using either sha1, sha256, sha384 or sha512. Because of this data has to be at max 64 bytes.
+	 * @param paddingType either RSA-PSS or RSA-PKCS#1
+	 * @param signatureKey by default uses the authentication certificate to sign message. Setting this to @b true makes use of signature certificate instead.
+	 * @return PTEID_ByteArray containing the signed hashed message 
+	 */
+    PTEIDSDK_API virtual PTEID_ByteArray Sign(const PTEID_ByteArray& data, PTEID_RSAPaddingType paddingType, bool signatureKey=false);
 
     /**
     * @copydoc PTEID_SigningDevice::SignXades
