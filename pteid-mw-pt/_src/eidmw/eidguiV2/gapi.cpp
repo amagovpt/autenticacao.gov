@@ -986,10 +986,25 @@ void GAPI::doSignXADESWithCMD(SignParams &params, bool isASIC) {
 
 	PTEID_CMDSignatureClient * client = m_cmd_client;
 
-    if(isASIC){
-        client->SignASiC(files_to_sign[0], level);
-    } else {
-        client->SignXades(output_file.c_str(), &files_to_sign[0], file_count, level);
+    long ret = -1;
+    try {
+        if (isASIC)
+            client->SignASiC(files_to_sign[0], level);
+        else
+            client->SignXades(output_file.c_str(), &files_to_sign[0], file_count, level);
+
+        emit signalPdfSignSuccess(SignMessageOK);
+    }
+    catch (PTEID_Exception &e) {
+        ret = e.GetError();
+        if (isASIC)
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doSignXADESWithCMD",
+                "Caught exception in PTEID_CMDSignatureClient::SignASiC. Error code: %08x", e.GetError());
+        else
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doSignXADESWithCMD",
+                "Caught exception in PTEID_CMDSignatureClient::SignXades. Error code: %08x", e.GetError());
+
+        showSignCMDDialog(ret);
     }
 
     emit signalPdfSignSuccess(SignMessageOK);
