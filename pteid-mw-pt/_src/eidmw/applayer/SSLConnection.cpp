@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2012-2014, 2016-2021 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2016-2023 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2012 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2016 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  * Copyright (C) 2018 Adriano Campos - <adrianoribeirocampos@gmail.com>
@@ -113,13 +113,16 @@ static unsigned long getKeyLength(APL_Certifs *certs)
 static APL_Certif * loadCertsFromCard(SSL_CTX *ctx, APL_Certifs *certs)
 {
 	APL_Certif *auth_cert = certs->getCert(APL_CERTIF_TYPE_AUTHENTICATION);
+	const unsigned char *cert_data = auth_cert->getData().GetBytes();
 
-	MWLOG(LEV_DEBUG, MOD_APL, "Loading from APL_Certifs -> cert length= %ld", auth_cert->getData().Size());
-	int ret = SSL_CTX_use_certificate_ASN1(ctx, auth_cert->getData().Size(), auth_cert->getData().GetBytes());
+	MWLOG(LEV_DEBUG, MOD_APL, "Loading from APL_Certifs: cert length= %ld", auth_cert->getData().Size());
+	X509 * user_cert = d2i_X509(NULL, &cert_data, auth_cert->getData().Size());
+
+	int ret = SSL_CTX_use_cert_and_key(ctx, user_cert, NULL, NULL, 0);
 
 	if (ret != 1)
 	{
-		MWLOG(LEV_ERROR, MOD_APL, "Error loading Auth certificate for SSL handshake! Detail: %s",
+		MWLOG(LEV_ERROR, MOD_APL, "SSL_CTX_use_cert_and_key: Error loading auth certificate for SSL handshake! Detail: %s",
 			ERR_error_string(ERR_get_error(), NULL));
 	}
 
@@ -212,53 +215,33 @@ static bool setupInternalSSL(SSL_CTX *ctx, APL_Card *card)
 	APL_SmartCard * eid_card = static_cast<APL_SmartCard *> (card);
 	APL_Certifs *certs = eid_card->getCertificates();
 
-	APL_Certif * cert = loadCertsFromCard(ctx, certs);
+    //NOTE: to get more debug output from the SSL layer uncomment this
+    //SSL_CTX_set_info_callback(ctx, eIDMW::get_ssl_state_callback);
 
-	if (!cert) {
-		return false;
-	}
 	
 	X509_STORE *store = SSL_CTX_get_cert_store(ctx);
 
-	//Load cert chain for the current card
-	loadCertChain(store, cert);
-
 	loadRootCertsFromCACerts(ctx);
 
-	RSA *rsa = RSA_new();
-
-	//Generate a dummy private key with the same size as the one residing in the smartcard
-	int rc = 0;
-	BIGNUM * bn = BN_new();
-	//RSA_F4 is the exponent value = 65537 (0x10001)
-	rc = BN_set_word(bn, RSA_F4);
-
-	// Generate key
-	unsigned long key_bits = getKeyLength(certs);
-	MWLOG(LEV_DEBUG, MOD_APL, "Generating dummy key with %lu bits", key_bits);
-
-	rc = RSA_generate_key_ex(rsa, (int)key_bits, bn, NULL);
-
-	if (rc != 1) {
-		long openssl_error = ERR_get_error();
-		MWLOG(LEV_ERROR, MOD_APL, "Dummy key generation failed. OpenSSL error: %s", ERR_error_string(openssl_error, NULL));
-		return false;
-	}
-
+    //Change the default RSA_METHOD to use our function for signing
 	RSA_METHOD * current_method = (RSA_METHOD *)RSA_get_default_method();
 
 	RSA_meth_set_sign(current_method, eIDMW::rsa_sign);
 	RSA_meth_set_flags(current_method, RSA_METHOD_FLAG_NO_CHECK);
 
-	RSA_set_method(rsa, current_method);
+	RSA_set_default_method(current_method);
 
-	if (SSL_CTX_use_RSAPrivateKey(ctx, rsa) != 1) {
-		MWLOG(LEV_ERROR, MOD_APL, "Fatal error: SSL_CTX_use_RSAPrivateKey failed!");
+
+	APL_Certif * cert = loadCertsFromCard(ctx, certs);
+
+	if (!cert) {
 		return false;
 	}
 
-	return true;
+	//Load cert chain for the current card
+	loadCertChain(store, cert);
 
+	return true;
 }
 
 static CURLcode sslctxfun(CURL *curl, void *sslctx, void *param) {
