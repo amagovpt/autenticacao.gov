@@ -458,7 +458,7 @@ PageDefinitionsSCAPForm {
                     var bodyPopup = qsTranslate("OAuth","STR_OAUTH_CONNECTION_ERROR")
                     break;
                 case 4://OAuthCancelled
-                    console.log("oauth - cancelado")
+                    console.log("OAuth - cancelled")
                     return;
             }
             if (oauthResult != 0)
