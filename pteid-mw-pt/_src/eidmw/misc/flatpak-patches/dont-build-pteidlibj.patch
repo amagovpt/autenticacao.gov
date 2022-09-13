@@ -1,0 +1,14 @@
+diff --git a/pteid-mw.pro b/pteid-mw-pt/_src/eidmw/pteid-mw.pro
+index e5f689d67..bbbe37d44 100644
+--- a/pteid-mw.pro
++++ b/pteid-mw.pro
+@@ -20,8 +20,7 @@ SUBDIRS += cardlayer/cardlayer.pro
+ SUBDIRS +=	pkcs11/pkcs11.pro \
+ 	        applayer \
+ 	        CMD/services/cmdServices.pro \
+-	        eidlib \
+-		eidlibJava_Wrapper
++	        eidlib
+ 
+ applayer.depends = pteid-poppler		
+ 

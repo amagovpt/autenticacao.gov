@@ -1,0 +1,42 @@
+diff --git a/pteid-mw-pt/_src/eidmw/common/ConfigCommon.cpp b/pteid-mw-pt/_src/eidmw/common/ConfigCommon.cpp
+index 10d7945d8..9b0b44f09 100644
+--- a/common/ConfigCommon.cpp
++++ b/common/ConfigCommon.cpp
+@@ -39,17 +39,17 @@ namespace eIDMW
+ #ifdef WIN32
+   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR   = {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_CERTSDIR,   L"$home" WDIRSEP L"eidstore" WDIRSEP L"certs"};
+ #else
+-  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR 	=	{EIDMW_CNF_SECTION_GENERAL,	EIDMW_CNF_GENERAL_CERTSDIR,  WDIRSEP L"usr" WDIRSEP L"local" WDIRSEP L"share" WDIRSEP L"certs" WDIRSEP};
++  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR 	=	{EIDMW_CNF_SECTION_GENERAL,	EIDMW_CNF_GENERAL_CERTSDIR,  WDIRSEP L"app" WDIRSEP L"share" WDIRSEP L"certs" WDIRSEP};
+ #endif
+ #ifdef WIN32
+   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR_TEST  = {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_CERTSDIR_TEST,   L"$home" WDIRSEP L"eidstore" WDIRSEP L"certs_test"};
+ #else
+-  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR_TEST   = {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_CERTSDIR_TEST,  WDIRSEP L"usr" WDIRSEP L"local" WDIRSEP L"share" WDIRSEP L"certs_test" WDIRSEP};
++  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR_TEST   = {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_CERTSDIR_TEST,  WDIRSEP L"app" WDIRSEP L"share" WDIRSEP L"certs_test" WDIRSEP};
+ #endif
+ #ifdef WIN32
+   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_WEB_DIR = {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_WEBDIR, L"$home" WDIRSEP L"web"};
+ #else
+-  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_WEB_DIR = {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_WEBDIR, WDIRSEP L"usr" WDIRSEP L"local" WDIRSEP L"share" WDIRSEP L"pteid-mw" WDIRSEP L"www"};
++  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_WEB_DIR = {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_WEBDIR, WDIRSEP L"app" WDIRSEP L"share" WDIRSEP L"pteid-mw" WDIRSEP L"www"};
+ #endif
+ 
+   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE	 	=	{EIDMW_CNF_SECTION_GENERAL,	EIDMW_CNF_GENERAL_LANGUAGE,		L"nl"};
+diff --git a/pteid-mw-pt/_src/eidmw/pteid-mw.pro b/pteid-mw-pt/_src/eidmw/pteid-mw.pro
+index e5f689d67..d9682134e 100644
+--- a/pteid-mw.pro
++++ b/pteid-mw.pro
+@@ -38,10 +38,10 @@ CONFIG += ordered
+ 
+ QMAKE_STRIP = echo
+ 
+-data.path +=  /usr/local/share/certs
++data.path +=  /app/share/certs
+ data.files += misc/certs/*
+ 
+-web.path += /usr/local/share/pteid-mw/www
++web.path += /app/share/pteid-mw/www
+ web.files += misc/web/*
+ 
+ INSTALLS += data \

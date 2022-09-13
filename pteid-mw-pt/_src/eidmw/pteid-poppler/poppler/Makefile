@@ -106,6 +106,6 @@ clean:
 	rm -fv $(LIB_FILENAME)
 
 install:
-	install -s $(LIB_FILENAME) $(INSTALL_ROOT)/usr/local/lib/
+	echo "pteid-poppler has nothing to install"
 
 .PHONY:	clean install prepare

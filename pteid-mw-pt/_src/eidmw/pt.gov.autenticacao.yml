@@ -1,0 +1,113 @@
+app-id: pt.gov.autenticacao
+runtime: org.kde.Platform
+runtime-version: '5.15-21.08'
+sdk: org.kde.Sdk
+command: eidguiV2
+finish-args:
+  - --socket=pcsc
+  - --socket=cups
+  - --socket=x11
+  - --device=dri
+  - --filesystem=home
+  - --share=ipc
+  - --share=network
+modules:
+  - name: pcsc-lite
+    config-opts:
+      - --disable-libudev
+      - --disable-libsystemd
+      - --without-systemdsystemunitdir
+      - --disable-serial
+      - --disable-usb
+      - --disable-documentation
+    cleanup:
+      - '/include'
+      - '/bin/pcsc-spy'
+      - '/lib/libpcscspy*'
+      - '/lib/pkg-config'
+      - '/share/doc'
+      - '/share/man'
+    post-install:
+      - rm /app/sbin/pcscd
+      - rmdir /app/sbin || true
+    sources:
+      - type: archive
+        url: https://pcsclite.apdu.fr/files/pcsc-lite-1.8.25.tar.bz2
+        sha256: d76d79edc31cf76e782b9f697420d3defbcc91778c3c650658086a1b748e8792
+  - name: xerces-c
+    buildsystem: autotools
+    cleanup:
+      - '/include'
+      - '/bin/*'
+      - '/lib/pkg-config'
+      - '/lib/libxerces-c.a'
+    sources:
+      - type: archive
+        url: https://dlcdn.apache.org//xerces/c/3/sources/xerces-c-3.2.3.tar.gz
+        sha256: fb96fc49b1fb892d1e64e53a6ada8accf6f0e6d30ce0937956ec68d39bd72c7e
+  - name: libzip
+    buildsystem: cmake-ninja
+    cleanup:
+      - '/bin/zip*'
+      - '/share/man'
+      - '/lib/pkg-config'
+    sources:
+      - type: archive
+        url: https://libzip.org/download/libzip-1.9.2.tar.xz
+        sha256: c93e9852b7b2dc931197831438fee5295976ee0ba24f8524a8907be5c2ba5937 
+  - name: xml-security-c
+    buildsystem: autotools
+    cleanup:
+      - '/include'
+      - '/bin/xsec-*'
+      - '/lib/pkg-config'
+    sources:
+      - type: archive
+        url: https://downloads.apache.org/santuario/c-library/xml-security-c-2.0.4.tar.gz
+        sha256: a78da6720f6c2ba14100d2426131e0d33eac5a2dba5cc11bdd04974b7eb89003
+  - name: openjpeg
+    buildsystem: cmake-ninja
+    cleanup:
+      - '/lib/libopenjp2.a'
+      - '/include'
+      - '/bin/opj_*'
+    sources:
+      - type: archive
+        url: https://github.com/uclouvain/openjpeg/archive/v2.3.1.tar.gz
+        sha256: 63f5a4713ecafc86de51bfad89cc07bb788e9bba24ebbf0c4ca637621aadb6a9
+  - name: poppler
+    buildsystem: cmake-ninja
+    cleanup:
+      - '/lib/pkg-config'
+      - '/include'
+    config-opts:
+      - -DBUILD_GTK_TESTS=OFF
+      - -DBUILD_QT5_TESTS=OFF
+      - -DBUILD_CPP_TESTS=OFF
+      - -DENABLE_UTILS=OFF
+      - -DENABLE_CPP=OFF
+      - -DENABLE_GLIB=OFF
+      - -DENABLE_BOOST=OFF
+    sources:
+      - type: archive
+        url: https://poppler.freedesktop.org/poppler-22.07.0.tar.xz
+        sha256: 420230c5c43782e2151259b3e523e632f4861342aad70e7e20b8773d9eaf3428
+  - name: pteid-mw
+    buildsystem: qmake
+    config-opts:
+      - LIBS += -L/app/lib/
+      - INCLUDEPATH += /app/include/PCSC
+      - INCLUDEPATH += /app/include/poppler/qt5
+      - PREFIX_DIR = /app/
+    build-commands:
+      -  sed -i 's/pteid-scalable/pt.gov.autenticacao/g' debian/pteid-mw-gui.desktop
+      -  install -Dm644 debian/pteid-mw-gui.desktop /app/share/applications/pt.gov.autenticacao.desktop
+      -  install -Dm644 debian/pteid-scalable.svg /app/share/icons/hicolor/scalable/apps/pt.gov.autenticacao.svg
+      -  install -Dm644 pt.gov.autenticacao.metainfo.xml /app/share/appdata/pt.gov.autenticacao.metainfo.xml
+    sources:
+      - type: dir
+        path: .
+      - type: patch
+        path: misc/flatpak-patches/dont-build-pteidlibj.patch
+      - type: patch
+        path: misc/flatpak-patches/dont-use-usrlocal.patch

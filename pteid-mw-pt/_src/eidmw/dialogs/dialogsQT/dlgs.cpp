@@ -43,6 +43,7 @@
 #include "eidErrors.h"
 #include "Config.h"
 #include "Thread.h"
+#include "prefix.h"
 
 using namespace eIDMW;
 
@@ -689,7 +690,7 @@ void eIDMW::CallQTServer(const DlgFunctionIndex index,
   char csCommand[150];
   Type_WndGeometry *pWndGeometry = (Type_WndGeometry *)wndGeometry;
 
-std::string csServerPath = "/usr/local/bin/";
+std::string csServerPath = STRINGIFY(EIDMW_PREFIX) "/bin/";
 #ifdef __APPLE__
   csServerPath += "pteiddialogsQTsrv.app/Contents/MacOS/";
 #endif

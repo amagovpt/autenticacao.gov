@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>pt.gov.autenticacao</id>
+  <launchable type="desktop-id">pt.gov.autenticacao.desktop</launchable>
+  <metadata_license>CC0-1.0</metadata_license>
+  <name>Autenticação.gov</name>
+ 
+  <summary>Autenticação.gov - Cartão de Cidadão e Chave Móvel Digital</summary>
+  <description>
+    <p>
+      A aplicação Autenticação.gov permite ao cidadão tirar partido das funcionalidades eletrónicas do seu Cartão de Cidadão, como:
+
+      - assinar documentos digitais com Cartão de Cidadão ou Chave Móvel Digital
+      - visualizar e imprimir os dados pessoais constantes no Cartão de Cidadão.
+      - personalizar a assinatura digital
+      - visualizar a morada e finalizar o processo de alteração de morada no Cartão de Cidadão
+      - alterar os códigos PIN do Cartão de Cidadão
+      - incluir notas ou informações que o cidadão entenda, como contactos a utilizar em caso de urgência, grupo sanguíneo, alergias, etc.
+    </p>
+  </description>
+  
+  <url type="homepage">https://www.autenticacao.gov.pt</url>
+  <url type="bugtracker">https://github.com/amagovpt/autenticacao.gov/issues</url>
+  <url type="help">https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html</url>
+  
+  <releases>
+    <release version="3.9.0.beta" date="2022-09-12"/>
+  </releases>
+
+  <project_license>EUPL-1.2</project_license>
+  <developer_name>Estado Português</developer_name>
+  <screenshots>
+    <screenshot type="default">https://amagovpt.github.io/docs.autenticacao.gov/Pictures/Autenticacao.Gov_Home.png</screenshot>
+  </screenshots>
+</component>
