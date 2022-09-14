@@ -49,8 +49,8 @@ int parseCommandlineAppArguments(QCommandLineParser *parser, GUISettings *settin
         << "w" << "direct3d", "Graphics rendering with Software (Direct3D)");
     parser->addOption(direct3dModeOption);
 #endif
-    const QCommandLineOption testModeOption(QStringList() 
-        << "t" << "test", "Enable test mode");
+    const QCommandLineOption testModeOption(QStringList()
+        << "t" << "test", "Enable test mode. It accepts only test cards and uses Address Change test server");
     parser->addOption(testModeOption);
 
     parser->parse(QCoreApplication::arguments());
