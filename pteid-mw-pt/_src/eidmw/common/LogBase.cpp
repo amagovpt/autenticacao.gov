@@ -4,7 +4,7 @@
  * Copyright (C) 2008-2009 FedICT.
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
- * Copyright (C) 2017, 2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2017-2022 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2019 João Pinheiro - <joao.pinheiro@caixamagica.pt>
  *
@@ -192,18 +192,19 @@ void CLogger::init(const char *directory,const char *prefix,long filesize,long f
  Check for the presence of a pteid-debug.conf file in current user Desktop folder or %WINDIR%
 */
 bool isWindowsDebugActive() {
-	DWORD dwError = 0;
 	PWSTR pszPath = NULL;
 	DWORD dwAttr = 0;
+	bool is_windows_debug = false;
 	
-	SHGetKnownFolderPath(FOLDERID_Desktop, 0, NULL, &pszPath);
+	if (SHGetKnownFolderPath(FOLDERID_Desktop, 0, NULL, &pszPath) == S_OK) {
+		std::wstring debugFlag(pszPath);
 
-	std::wstring debugFlag(pszPath);
+		debugFlag += L"\\pteid-debug.conf";
 
-	debugFlag += L"\\pteid-debug.conf";
-
-	dwAttr = GetFileAttributes(debugFlag.c_str());
-	bool is_windows_debug = dwAttr != INVALID_FILE_ATTRIBUTES;
+		dwAttr = GetFileAttributes(debugFlag.c_str());
+		is_windows_debug = dwAttr != INVALID_FILE_ATTRIBUTES;
+	}
+	CoTaskMemFree(pszPath);
 
 	std::wstring debugFlag2(_wgetenv(L"WINDIR"));
 	debugFlag2 += L"\\pteid-debug.conf";
@@ -212,6 +213,7 @@ bool isWindowsDebugActive() {
 
 	return (dwAttr != INVALID_FILE_ATTRIBUTES) || is_windows_debug;
 }
+
 #endif
 
 //Set the default values
