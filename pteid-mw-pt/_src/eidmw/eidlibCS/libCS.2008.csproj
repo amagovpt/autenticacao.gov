@@ -198,6 +198,9 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ReaderSet.cs">
       <Link>GeneratedFiles\PTEID_ReaderSet.cs</Link>
     </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_RSAPaddingType.cs">
+      <Link>GeneratedFiles\PTEID_RSAPaddingType.cs</Link>
+    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_SignatureLevel.cs">
       <Link>GeneratedFiles\PTEID_SignatureLevel.cs</Link>
     </Compile>
