@@ -10,7 +10,6 @@
 
 #include "pdfsignatureclient.h"
 #include "scapsignature.h"
-#include "treeiteminfo.h"
 #include "qfileinfo.h"
 #include "qfile.h"
 #include <string.h>
