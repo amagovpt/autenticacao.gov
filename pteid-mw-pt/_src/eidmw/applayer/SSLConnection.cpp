@@ -817,8 +817,6 @@ BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_po
 		int len = 0;
 
 		const char * user_agent = PTEID_USER_AGENT;
-        const char * no_cache = "Pragma: no-cache";
-        const char * no_content = "Content-Length: 0";
         const char * keepAlive = "Proxy-Connection: Keep-Alive";
 
 		MWLOG(LEV_DEBUG, MOD_APL, "SSLConnection: Connecting to proxy Host: %s Port: %ld",
@@ -841,16 +839,16 @@ BIO * SSLConnection::connectToProxyServer(const char * proxy_host, long proxy_po
 
         	char * auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), proxy_cleartext.size());
 
-        	ret = snprintf(connect_request, sizeof(connect_request), "CONNECT %s HTTP/1.1\r\n Host: %s\r\n%s%s\r\n%s\r\n%s\r\n%s\r\n%s\r\n\r\n",
-        		ssl_host_andport, ssl_host, proxy_auth_header, auth_token, user_agent, no_cache, no_content, keepAlive);
+            ret = snprintf(connect_request, sizeof(connect_request), "CONNECT %s HTTP/1.1\r\nHost: %s\r\n%s%s\r\n%s\r\n%s\r\n\r\n",
+        		ssl_host_andport, ssl_host, proxy_auth_header, auth_token, user_agent, keepAlive);
 
         	free(auth_token);
         }
         else
         {
 
-	    	ret = snprintf(connect_request, sizeof(connect_request), "CONNECT %s HTTP/1.1\r\n Host: %s\r\n%s\r\n%s\r\n%s\r\n%s\r\n\r\n",
-            	ssl_host_andport, ssl_host, user_agent, no_cache, no_content, keepAlive);
+            ret = snprintf(connect_request, sizeof(connect_request), "CONNECT %s HTTP/1.1\r\nHost: %s\r\n%s\r\n%s\r\n\r\n",
+            	ssl_host_andport, ssl_host, user_agent, keepAlive);
 		}
 
 	    BIO_puts(cbio, connect_request);
