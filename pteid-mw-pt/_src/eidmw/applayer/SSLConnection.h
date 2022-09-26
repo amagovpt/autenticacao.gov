@@ -40,6 +40,8 @@ struct NetworkBuffer {
 
 void setThreadLocalCardInstance(APL_Card * card);
 
+char * get_status_line(char * full_http_response);
+
 class SSLConnection
 {
 	public:

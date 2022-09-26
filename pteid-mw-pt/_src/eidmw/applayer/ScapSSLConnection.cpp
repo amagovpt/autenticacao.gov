@@ -38,24 +38,6 @@ namespace eIDMW
             
 	}
 
-	char * get_status_line(char * full_http_response) {
-		char * ptr = full_http_response;
-		size_t first_line_len = 0;
-		while(*ptr && *ptr != '\r' && *ptr != '\n') {
-			first_line_len++;
-			ptr++;
-		}
-
-		if (first_line_len == 0 || strlen(full_http_response)== first_line_len) {
-			return full_http_response;
-		}
-
-		char * status_line = (char *) calloc(first_line_len+1, sizeof(char));
-		memcpy(status_line, full_http_response, first_line_len);
-
-		return status_line;
-	}
-
 	#define HEADERS_BUFSIZE 1000
 
 	char * ScapSSLConnection::postSoapRequest(char *endpoint, char *soapAction, char *soapBody)
