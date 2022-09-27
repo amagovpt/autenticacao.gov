@@ -1402,7 +1402,7 @@ XRefEntry *XRef::getEntry(int i, GBool complainIfMissing)
         }
         if (followed) {
           error(errSyntaxError, -1, "Circular XRef");
-          if (!(ok = constructXRef(NULL))) {
+          if (!xRefStream && !(ok = constructXRef(NULL))) {
             errCode = errDamaged;
           }
           break;
@@ -1419,7 +1419,7 @@ XRefEntry *XRef::getEntry(int i, GBool complainIfMissing)
         // try to reconstruct it
         if (!ok || (!prevXRefOffset && entries[i].type == xrefEntryNone)) {
            GBool wasReconstructed = false;
-           if (!(ok = constructXRef(&wasReconstructed))) {
+           if (!xRefStream && !(ok = constructXRef(&wasReconstructed))) {
                errCode = errDamaged;
                break;
            }
@@ -1440,7 +1440,7 @@ XRefEntry *XRef::getEntry(int i, GBool complainIfMissing)
 
       if (entries[i].type == xrefEntryNone) {
         if (complainIfMissing) {
-          error(errSyntaxError, -1, "Invalid XRef entry");
+          error(errSyntaxError, -1, "Invalid XRef entry {0:d}", i);
         }
         entries[i].type = xrefEntryFree;
       }
