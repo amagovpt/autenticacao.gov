@@ -50,7 +50,7 @@ Item {
                 id: notification_box
                 width: parent.width
                 height: model.activated ? news.height + update.height + definitions_cmd.height 
-                        + definitions_cache.height : Constants.SIZE_IMAGE_BOTTOM_MENU * 2 
+                        + definitions_cache.height + definitions_telemetry.height : Constants.SIZE_IMAGE_BOTTOM_MENU * 2 
                 color: activeFocus ? Constants.COLOR_MAIN_MIDDLE_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
                 visible: !hasMandatory || model.mandatory
                 clip: true
@@ -185,6 +185,65 @@ Item {
                 }
 
                 Components.Notification {
+                    id: definitions_telemetry
+                    height: visible ? title.height + description.height + activatedCache.height * 2 + rightButton.height + 75 : 0
+                    visible: model.category === "definitions_telemetry" && model.activated
+
+                    title.text: model.title
+                    description.text: model.text
+
+                    CheckBox {
+                        id: activatedTelemetry
+                        text: qsTranslate("main","STR_SET_TELEMETRY_YES")
+                        checked: false
+                        onClicked: deactivatedTelemetry.checked = false
+
+                        anchors.top: definitions_telemetry.description.bottom
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE 
+                        anchors.left: parent.left
+                        anchors.leftMargin: Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 
+
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL_FOCUS
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
+
+                        Keys.enabled: true
+                        Keys.onBacktabPressed: definitions_telemetry.description.forceActiveFocus()
+                        Keys.onUpPressed: definitions_telemetry.description.forceActiveFocus()
+                    }
+
+                    CheckBox {
+                        id: deactivatedTelemetry
+                        text: qsTranslate("main","STR_SET_TELEMETRY_NO")
+                        checked: false
+                        onClicked: activatedTelemetry.checked = false
+
+                        anchors.top: activatedTelemetry.bottom
+                        anchors.left: parent.left
+                        anchors.leftMargin: Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 
+                        anchors.right: parent.right
+                        anchors.rightMargin: Constants.MARGIN_NOTIFICATION_CENTER
+
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL_FOCUS
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
+
+                        Keys.enabled: true
+                        Keys.onTabPressed: definitions_telemetry.rightButton.enabled ? definitions_telemetry.rightButton.forceActiveFocus() : activatedTelemetry.forceActiveFocus()
+                        Keys.onDownPressed: definitions_telemetry.rightButton.enabled ? definitions_telemetry.rightButton.forceActiveFocus() : activatedTelemetry.forceActiveFocus()
+                        Keys.onRightPressed: definitions_telemetry.rightButton.enabled ? definitions_telemetry.rightButton.forceActiveFocus() : activatedTelemetry.forceActiveFocus()
+                    }
+
+                    rightButton {
+                        text: qsTranslate("main","STR_SET_TELEMETRY_PROCEED")
+                        enabled: activatedTelemetry.checked || deactivatedTelemetry.checked
+                        onClicked: setTelemetrySettings(index, model, activatedTelemetry.checked)
+                    }
+                }
+
+                Components.Notification {
                     id: definitions_cmd
                     height: visible ? title.height + description.height + rightButton.height + 75 : 0
                     visible: model.category === "definitions_cmd" && model.activated
@@ -223,6 +282,7 @@ Item {
                         if (update.visible) update.forceActiveFocus()
                         else if (definitions_cmd.visible) definitions_cmd.forceActiveFocus()
                         else if (definitions_cache.visible) definitions_cache.forceActiveFocus()
+                        else if (definitions_telemetry.visible) definitions_telemetry.forceActiveFocus()
                         else if (news.visible) news.forceActiveFocus()
                     } else {
                         if (!model.read && listView.count == 0) {
@@ -533,6 +593,25 @@ Item {
         mainFormID.propertyNotificationMenu.open()
     }
 
+    function addTelemetrySettings() {
+        insertInModel(4, {
+            "title": qsTranslate("main","STR_SET_TELEMETRY_TITLE"),
+            "text": qsTranslate("main","STR_SET_TELEMETRY_TEXT") + "<br></br><br></br><b>" + qsTranslate("main","STR_SET_TELEMETRY_TEXT_MANDATORY") + "</b>",
+            "link": "",
+            "category": "definitions_telemetry",
+            "read": false,
+            "priority": 4,
+            "activated": true,
+            "mandatory": true
+        })
+
+        hasMandatory = true
+        exitIcon.visible = false
+        exitArea.enabled = false
+        notificationArea.interactive = false
+        mainFormID.propertyNotificationMenu.open()
+    }
+
     function setCacheSettings(index, model, activatedCache) {
         model.mandatory = false
         hasMandatory = false
@@ -550,6 +629,19 @@ Item {
             controler.setEnablePteidCache(false);
             controler.flushCache();
         }     
+    }
+
+    function setTelemetrySettings(index, model, activatedTelemetry) {
+        model.mandatory = false
+        hasMandatory = false
+        exitIcon.visible = true
+        exitArea.enabled = true
+        notificationArea.interactive = true
+
+        openNotification(index, model.read, model.activated)
+        controler.setAskToSetTelemetryValue(false)
+        controler.setEnablePteidTelemetry(activatedTelemetry)
+        gapi.updateTelemetry("app/startup")
     }
 
     function addUpdate(release_notes, installed_version, remote_version, url_list, type) {       
@@ -653,6 +745,7 @@ Item {
                 else  
                     return "../images/services_icon_selected.png"
             case "definitions_cache":
+            case "definitions_telemetry":
                 if (read)
                     return "../images/definitions_icon.png"
                 else  
@@ -671,6 +764,7 @@ Item {
             case "definitions_cmd":
                 return qsTranslate("main", "STR_NOTIFICATION_SERVICES") + controler.autoTr
             case "definitions_cache":
+            case "definitions_telemetry":
                 return qsTranslate("main", "STR_NOTIFICATION_CONFIG") + controler.autoTr
             default:
                 return null

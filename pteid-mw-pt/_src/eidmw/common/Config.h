@@ -137,9 +137,11 @@ replace $install by string in install parameter
 #define EIDMW_CNF_MACRO_COMMON_SUBDIR	L"pteid"					//this subdirectory is part of the common
 
 #define EIDMW_CNF_SECTION_GENERAL       L"general"              //section with the general pupose parameters
+#define EIDMW_CNF_GENERAL_TELEMETRY_ID  L"telemetry_id"              
 #define EIDMW_CNF_GENERAL_INSTALLDIR    L"install_dirname"      //string, directory of the basic eid software; �c:/Program Files/pteid/�
 #define EIDMW_CNF_GENERAL_CACHEDIR      L"cache_dirname"        //string, cache directory for card-file; $common/pteid/crlcache/
 #define EIDMW_CNF_GENERAL_CACHE_ENABLED L"cache_enabled"
+#define EIDMW_CNF_GENERAL_TELEMETRY_ENABLED L"telemetry_enabled"
 #define EIDMW_CNF_GENERAL_CERTSDIR      L"certs_dir"
 #define EIDMW_CNF_GENERAL_CERTSDIR_TEST L"certs_dir_test"
 #define EIDMW_CNF_GENERAL_WEBDIR        L"web_dir"
@@ -220,6 +222,7 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GUITOOL_STARTUPDATE       L"start_autoupdate"         //number; 0=no, 1=yes(default)
 #define EIDMW_CNF_GUITOOL_ASKREGCMDCERT     L"ask_register_cmd_cert"    //number; 0=no, 1=yes(default)
 #define EIDMW_CNF_GUITOOL_ASKSETCACHE       L"ask_set_cache"            //number; 0=no, 1=yes(default)
+#define EIDMW_CNF_GUITOOL_ASKSETTELEMETRY   L"ask_set_telemetry"        // number; 0=no, 1=yes(default)
 #define EIDMW_CNF_GUITOOL_SHOWSIGNOPTIONS   L"show_signature_options"   //number; 0=no(default), 1=yes
 #define EIDMW_CNF_GUITOOL_SHOWSIGNHELP      L"show_signature_help"      //number; 0=no, 1=yes(default)
 #define EIDMW_CNF_GUITOOL_SIGNSEALOPTIONS   L"signature_seal_options"   //number; 0=both options disabled, 1=only use num id, 2=only use date, 3=both options enabled(default)
@@ -309,12 +312,14 @@ public:
     static void SetTestMode(bool bTestMode) { bTestModeEnabled = bTestMode; return;}
 
 	//GENERAL
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_TELEMETRY_ID;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_INSTALL_PRO_DIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_INSTALL_SDK_DIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CACHEDIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_PTEID_TELEMETRY_ENABLED;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR_TEST;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_WEB_DIR;
@@ -396,6 +401,7 @@ public:
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_STARTUPDATE;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_ASKREGCMDCERT;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_ASKSETCACHE;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_ASKSETTELEMETRY;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWSIGNOPTIONS;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWSIGNHELP;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SIGNSEALOPTIONS;

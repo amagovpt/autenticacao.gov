@@ -21,6 +21,7 @@
 #include <QPrinter>
 #include <QPrinterInfo>
 #include <QWindow>
+#include <QUuid>
 #include "qpainter.h"
 
 #include "CMDSignature.h"
@@ -41,6 +42,8 @@
 #include "proxyinfo.h"
 #include "concurrent.h"
 
+#include <curl/curl.h>
+
 using namespace eIDMW;
 
 #define TRIES_LEFT_ERROR    1000
@@ -52,6 +55,82 @@ static  int g_runningCallback=0;
 /*
     GAPI - Graphic Application Programming Interface
 */
+
+//
+// The write callback function to curl requests. At the moment this functions
+// does nothing other than return the ammount of bytes. This allows 
+//
+size_t GAPI::write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
+{
+    return size * nmemb;
+}
+
+//
+// Telemetry is updated by making requests to pre-defined endpoints on a
+// remote server.
+//
+void GAPI::doUpdateTelemetry(QString action)
+{
+    //
+    // Create a new guid once per system.
+    //
+    const auto telemetry_id = m_Settings.getTelemetryId();
+    if (telemetry_id.compare("0") == 0)
+    {
+        const auto new_telemetry_id = QUuid::createUuid().toString(QUuid::Id128);
+        m_Settings.setTelemetryId(new_telemetry_id);
+    }
+
+    auto curl = curl_easy_init();
+    if (curl)
+    {
+        //
+        // The endpoint URL represents the action performed by the client
+        // URL : <hostname>/<action>/
+        //
+        QString url = QString(TEL_HOST) + action + "?tel_id=" + m_Settings.getTelemetryId();
+        curl_easy_setopt(curl, CURLOPT_URL, url.toStdString().c_str());
+
+        //
+        // Create user-agent header with the follow structure
+        // AutenticacaoGov/<version> ( <OS Name> <OS version> ) AutenticacaoGov/<version>
+        //
+        QString userAgent = TEL_APP_USER_AGENT + QString(PTEID_PRODUCT_VERSION) +
+                            " (" + QSysInfo::prettyProductName().toStdString().c_str() + ") " +
+                            TEL_APP_USER_AGENT + QString(PTEID_PRODUCT_VERSION);
+        curl_easy_setopt(curl, CURLOPT_USERAGENT, userAgent.toStdString().c_str());
+
+        //
+        // Custom writefunction callback to pipe the request result so
+        // it does not print to the console/log
+        //
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+
+        curl_easy_perform(curl);
+
+        //
+        // Cleanup curl
+        //
+        curl_easy_cleanup(curl);
+        curl = NULL;
+    }
+}
+
+
+//
+// Telemetry updates are non-blocking, does not produce any logs nor do they
+// throw any exceptions. They are completly silent for both the developer and
+// user.
+//
+void GAPI::updateTelemetry(QString action)
+{
+    if(m_Settings.getEnablePteidTelemetry())
+        //
+        // Run telemetry updates on different thread so it does not block the GUI
+        // thread no matter how long the request manages to take.
+        //
+        Concurrent::run(this, &GAPI::doUpdateTelemetry, action);
+}
 
 GAPI::GAPI(QObject *parent) :
     QObject(parent) {
@@ -899,6 +978,8 @@ void GAPI::doSignCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams)
     }
 
     showSignCMDDialog(ret);
+
+    updateTelemetry(TEL_SIGN_CMD);
 }
 
 void GAPI::doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams, QList<int> attribute_list) {
@@ -957,6 +1038,8 @@ void GAPI::doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &sign
     }
     signCMDFinished(ret);
     signalUpdateProgressBar(100);
+
+    updateTelemetry(TEL_SIGN_CMD_SCAP);
 }
 
 void GAPI::doSignXADESWithCMD(SignParams &params, bool isASIC) {
@@ -1326,6 +1409,7 @@ void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
             emit signalPdfPrintFail();
         }
     }
+    updateTelemetry(TEL_SIGN_CC);
     END_TRY_CATCH
 }
 
@@ -2392,6 +2476,8 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
         params.location_x, params.location_y, params.location, params.reason,
         params.isTimestamp, params.isLtv, attrs, useCustomSignature(), m_jpeg_scaled_data, 
         m_seal_width, m_seal_height);
+
+    updateTelemetry(TEL_SIGN_CC_SCAP);
     END_TRY_CATCH
 }
 

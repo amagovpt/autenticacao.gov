@@ -1542,9 +1542,14 @@ Load language error. Please reinstall the application"
         if (controler.getAskToSetCacheValue()) {
             mainFormID.propertyNotificationMenu.addCacheSettings()   
         }
+        if (controler.getAskToSetTelemetryValue()) {
+            mainFormID.propertyNotificationMenu.addTelemetrySettings()
+        }
         if(Qt.platform.os === "windows"){
             mainFormID.propertyNotificationMenu.addCmdSettings(!controler.getAskToRegisterCmdCertValue())
         }
+
+        gapi.updateTelemetry("app/startup/")
     }
 
     function mainMenuPressed(index){
@@ -1683,6 +1688,9 @@ Load language error. Please reinstall the application"
         }
         if (controler.getAskToSetCacheValue()) {
             mainFormID.propertyNotificationMenu.addCacheSettings()   
+        }
+        if (controler.getAskToSetTelemetryValue()) {
+            mainFormID.propertyNotificationMenu.addTelemetrySettings()
         }
         if(Qt.platform.os === "windows"){
             mainFormID.propertyNotificationMenu.addCmdSettings(!controler.getAskToRegisterCmdCertValue())

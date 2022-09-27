@@ -1155,6 +1155,14 @@
         <source>STR_REGISTER_CERTIFICATES</source>
         <translation>As opções de registo e remoção de certificados requerem que esta aplicação esteja em funcionamento (minimizada ou maximizada).</translation>
     </message>
+    <message>
+        <source>STR_TELEMETRY_TITLE</source>
+        <translation>Telemetria</translation>
+    </message>
+    <message>
+        <source>STR_USE_TELEMETRY_COMBOBOX_TEXT</source>
+        <translation>Usar serviço de telemetria</translation>
+    </message>
 </context>
 <context>
     <name>PageDefinitionsSCAP</name>
@@ -2149,6 +2157,10 @@
         <source>STR_SUSPENDED_SIGN_CERT</source>
         <translation>O certificado de assinatura do Cartão de Cidadão encontra-se atualmente suspenso. Pode ativar a assinatura digital a qualquer momento num balcão de levantamento do Cartão de Cidadão.</translation>
     </message>
+    <message>
+        <source>STR_FILE_ASIC</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>
@@ -2547,6 +2559,30 @@
     <message>
         <source>STR_SPACE_TO_OPEN_NOTIFICATION</source>
         <translation>Pressione espaço para abrir a notificação</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_YES</source>
+        <translation>Sim</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_NO</source>
+        <translation>Não</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_PROCEED</source>
+        <translation>Aplicar</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_TITLE</source>
+        <translation>Defina agora se permite que a aplicação utiliza o sistema de telemetria</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_TEXT</source>
+        <translation>A aplicação envia informação sobre a sua utilização para o propósito de melhorar a futura experiência do utilizador. Nenhuma informação privada pertencente ao utilizador é enviada.</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_TEXT_MANDATORY</source>
+        <translation>Esta é uma configuração de carácter obrigatório, é necessário escolher uma das opções para utilizar a aplicação.</translation>
     </message>
 </context>
 </TS>

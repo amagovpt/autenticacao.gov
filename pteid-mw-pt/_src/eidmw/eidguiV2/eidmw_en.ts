@@ -1149,6 +1149,14 @@
         <source>STR_REGISTER_CERTIFICATES</source>
         <translation>The certificate registration and removal options require this application to be running (minimized or maximized).</translation>
     </message>
+    <message>
+        <source>STR_TELEMETRY_TITLE</source>
+        <translation>Telemetry</translation>
+    </message>
+    <message>
+        <source>STR_USE_TELEMETRY_COMBOBOX_TEXT</source>
+        <translation>Use telemetry service</translation>
+    </message>
 </context>
 <context>
     <name>PageDefinitionsSCAP</name>
@@ -2143,6 +2151,10 @@
         <source>STR_SUSPENDED_SIGN_CERT</source>
         <translation>The Citizen Card&apos;s signature certificate is currently suspended. You can activate the digital signature at any time at a Citizen Card pick-up counter.</translation>
     </message>
+    <message>
+        <source>STR_FILE_ASIC</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>
@@ -2542,6 +2554,30 @@
     <message>
         <source>STR_SPACE_TO_OPEN_NOTIFICATION</source>
         <translation>Press space to open notification</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_YES</source>
+        <translation>Yes</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_NO</source>
+        <translation>No</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_PROCEED</source>
+        <translation>Apply</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_TITLE</source>
+        <translation>Choose now if you allow the app to send telemetry information</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_TEXT</source>
+        <translation>The application sends information about its usage for the purpose of improving future user experience. No private information regarding the user is sent.</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_TEXT_MANDATORY</source>
+        <translation>This is a mandatory configuration, it is required to choose one option in order to utilise the application. </translation>
     </message>
 </context>
 </TS>

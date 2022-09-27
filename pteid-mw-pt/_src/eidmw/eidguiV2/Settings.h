@@ -70,6 +70,7 @@ public:
     //------------------------------------------------------
     GUISettings( void )
         : m_bProxySystem(false)
+        , m_telemetry_id("0")
         , m_proxy_port(0)
         , m_GuiLanguage("nl")
         , m_bShowAnimations(false)
@@ -83,6 +84,7 @@ public:
         , m_bNotShowStartUpHelp(false)
         , m_bAskToRegisterCmdCert(false)
         , m_bAskToSetCache(false)
+        , m_bAskToSetTelemetry(false)
         , m_bShowSignatureOptions(false)
         , m_bShowSignatureHelp(false)
         , m_bAutoCardReading(false)
@@ -107,6 +109,19 @@ public:
                 setGuiLanguage(lng);
             }else{
                 setGuiLanguage(STR_DEF_GUILANGUAGE);
+            }
+        }
+
+        //----------------------------------------------------------
+        // check use Pinpad functionality
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_TELEMETRY_ID);
+            const char* telemetry_id = config.getString();
+
+            if (0 != telemetry_id)
+            {
+                setTelemetryId(telemetry_id);
             }
         }
 
@@ -173,6 +188,19 @@ public:
             if (0 != askToSetCache)
             {
                 setAskToSetCache(true);
+            }
+        }
+
+        //----------------------------------------------------------
+        // check set telemetry
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ASKSETTELEMETRY);
+            long askToSetTelemetry = config.getLong();
+
+            if (0 != askToSetTelemetry)
+            {
+                setAskToSetTelemetry(true);
             }
         }
 
@@ -464,12 +492,38 @@ public:
     {
         return m_bAskToSetCache;
     }
+
+    bool getAskToSetTelemetry(void)
+    {
+        return m_bAskToSetTelemetry;
+    }
+
     void setAskToSetCache(bool bAskToSetCacheValue)
     {
         m_bAskToSetCache = bAskToSetCacheValue;
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ASKSETCACHE);
         config.setLong(m_bAskToSetCache);
     }
+
+    QString getTelemetryId()
+    {
+        return m_telemetry_id;
+    }
+
+    void setTelemetryId(QString telemetry_id)
+    {
+        m_telemetry_id = telemetry_id;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_TELEMETRY_ID);
+        config.setString(m_telemetry_id.toStdString().c_str());
+    }
+
+    void setAskToSetTelemetry(bool bAskToSetTelemetry)
+    {
+        m_bAskToSetTelemetry = bAskToSetTelemetry;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ASKSETTELEMETRY);
+        config.setLong(m_bAskToSetTelemetry);
+    }
+
     bool getShowAnimations( void )
     {
         return m_bShowAnimations;
@@ -689,6 +743,18 @@ public:
         return config.getLong();
     }
 
+    void setEnablePteidTelemetry(bool bEnabled)
+    {
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_TELEMETRY_ENABLED);
+        config.setLong(bEnabled);
+    }
+
+    bool getEnablePteidTelemetry()
+    {
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_TELEMETRY_ENABLED);
+        return config.getLong();
+    }
+
     QString getProxyUsername()
     {
         return m_proxy_username;
@@ -802,6 +868,8 @@ public:
     }
 
 private:
+    QString m_telemetry_id;
+
     //Proxy Settings
     bool m_bProxySystem;
     QString m_proxy_host;
@@ -825,6 +893,7 @@ private:
     bool    m_bNotShowStartUpHelp;  //!< the GUI Show Help	bool	m_bStartMinimized;              //!< startup minimized (T/F)
     bool    m_bAskToRegisterCmdCert;//!< the GUI will ask to register the CMD cert on start (T/F)
     bool    m_bAskToSetCache;        //!< the GUI will ask to set the cache (on/off) on start (T/F)
+    bool    m_bAskToSetTelemetry;   //!< the GUI will ask to set the telemetry service (on/off) on start (T/F)
     bool    m_bShowSignatureOptions;//!< show signature options in GUI Signature page (T/F)
     bool    m_bShowSignatureHelp;   //!< show signature help in GUI Signature page (T/F)
     bool    m_bAutoCardReading;     //!< read the inserted card at startup (T/F)

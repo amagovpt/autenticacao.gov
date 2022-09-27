@@ -479,6 +479,14 @@ bool AppController::getEnablePteidCache (){
     return m_Settings.getEnablePteidCache();
 }
 
+void AppController::setEnablePteidTelemetry (bool bEnabled){
+    m_Settings.setEnablePteidTelemetry(bEnabled);
+}
+
+bool AppController::getEnablePteidTelemetry (){
+    return m_Settings.getEnablePteidTelemetry();
+}
+
 void AppController::flushCache(){
     Concurrent::run(this, &AppController::doFlushCache);
 }
@@ -792,6 +800,13 @@ bool AppController::getAskToSetCacheValue(void) {
 }
 void AppController::setAskToSetCacheValue(bool bAskToSetCache) {
     return m_Settings.setAskToSetCache(bAskToSetCache);
+}
+
+bool AppController::getAskToSetTelemetryValue(void) {
+    return m_Settings.getAskToSetTelemetry();
+}
+void AppController::setAskToSetTelemetryValue(bool bAskToSetTelemetry) {
+    return m_Settings.setAskToSetTelemetry(bAskToSetTelemetry);
 }
 
 void AppController::forceAccessibilityUpdate(QObject *obj) {

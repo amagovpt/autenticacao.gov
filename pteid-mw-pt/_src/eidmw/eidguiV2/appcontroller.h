@@ -97,6 +97,9 @@ public slots:
     bool getAskToSetCacheValue(void);
     void setAskToSetCacheValue(bool bAskToSetCache);
 
+    bool getAskToSetTelemetryValue(void);
+    void setAskToSetTelemetryValue(bool bAskToSetTelemetry);
+
     QString getGuiLanguageString(void);
     void setGuiLanguageString (QString language);
 
@@ -139,6 +142,8 @@ public slots:
     void userCancelledUpdateAppDownload();
     void setEnablePteidCache(bool bEnabled);
     bool getEnablePteidCache();
+    void setEnablePteidTelemetry(bool bEnabled);
+    bool getEnablePteidTelemetry();
     void flushCache();
     void getPteidCacheSize();
     void getScapCacheSize();

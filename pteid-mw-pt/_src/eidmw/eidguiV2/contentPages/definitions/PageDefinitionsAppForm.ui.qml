@@ -37,6 +37,7 @@ Item {
     property alias propertyRectAppLook: rectAppLook
     property alias propertyCheckboxShowAnime: checkboxShowAnime
     property alias propertyCheckBoxDebugMode: checkboxDebugMode
+    property alias propertyCheckBoxUseTelemetry: checkBoxUseTelemetry
     property alias propertyButtonZipLogs: buttonZipLogs
     property alias propertyDebugModeStep1TextField: debugModeStep1TextField
     property alias propertyDebugModeStep3TextField: debugModeStep3TextField
@@ -1225,10 +1226,102 @@ Item {
                             qsTranslate("PageDefinitionsApp", "STR_HARDWARE") + controler.autoTr,
                             qsTranslate("PageDefinitionsApp", "STR_SOFTWARE_DIRECT3D") + controler.autoTr
                         ]
+                        KeyNavigation.tab: textAppTelemetry
+                        KeyNavigation.down: textAppTelemetry
+                        KeyNavigation.right: textAppTelemetry
+                        KeyNavigation.backtab: textGraphicsRendering
+                        KeyNavigation.up: textGraphicsRendering
+                        KeyNavigation.left: textGraphicsRendering
+                    }
+                }
+            }
+
+            
+            Item {
+                id: rectAppTelemetry
+                width: parent.width
+                height: textAppTelemetry.height + rectTelemetryBox.height + 3 * Constants.SIZE_TEXT_V_SPACE
+                anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
+                anchors.top: rectAppGraphics.bottom
+
+                // Title Text
+                Text {
+                    id: textAppTelemetry
+                    x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                    font.pixelSize: activeFocus
+                                    ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                    : Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    font.bold: activeFocus
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: Constants.SIZE_TEXT_LABEL
+                    text: qsTranslate("PageDefinitionsApp",
+                                      "STR_TELEMETRY_TITLE") + controler.autoTr
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: text
+                    Keys.onPressed: {
+                        handleKeyPressed(event.key, textAppTelemetry)
+                    }
+
+                    KeyNavigation.tab: checkBoxUseTelemetry
+                    KeyNavigation.right: checkBoxUseTelemetry
+                    KeyNavigation.backtab: comboboxAccelGraphics
+                    KeyNavigation.left: comboboxAccelGraphics
+                }
+
+                DropShadow {
+                    anchors.fill: rectTelemetryBox
+                    horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                    verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                    radius: Constants.FORM_SHADOW_RADIUS
+                    samples: Constants.FORM_SHADOW_SAMPLES
+                    color: Constants.COLOR_FORM_SHADOW
+                    source: rectTelemetryBox
+                    spread: Constants.FORM_SHADOW_SPREAD
+                    opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
+                }
+
+                RectangularGlow {
+                    anchors.fill: rectTelemetryBox
+                    glowRadius: Constants.FORM_GLOW_RADIUS
+                    spread: Constants.FORM_GLOW_SPREAD
+                    color: Constants.COLOR_FORM_GLOW
+                    cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                    opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
+                }
+
+                Rectangle {
+                    id: rectTelemetryBox
+                    width: parent.width
+                    color: "white"
+                    height: checkBoxUseTelemetry.height + Constants.SIZE_TEXT_V_SPACE * 2
+                    anchors.top: textAppTelemetry.bottom
+                    anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+
+                    CheckBox {
+                        id: checkBoxUseTelemetry
+                        text: qsTranslate("PageDefinitionsApp",
+                                          "STR_USE_TELEMETRY_COMBOBOX_TEXT") + controler.autoTr
+                        height: 25
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
+                        anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                        checked: false
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: text
+                        Keys.onPressed: {
+                            handleKeyPressed(event.key, checkBoxUseTelemetry)
+                        }
+                        Keys.onEnterPressed: toggleSwitch(checkBoxUseTelemetry)
+                        Keys.onReturnPressed: toggleSwitch(checkBoxUseTelemetry)
+
                         KeyNavigation.tab: dateAppNetwork
                         KeyNavigation.right: dateAppNetwork
-                        KeyNavigation.backtab: textGraphicsRendering
-                        KeyNavigation.left: textGraphicsRendering
+                        KeyNavigation.backtab: textAppTelemetry
+                        KeyNavigation.left: textAppTelemetry
                     }
                 }
             }
@@ -1239,7 +1332,7 @@ Item {
                 height: dateAppNetwork.height + rectAppNetworkCheckBox.height
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
-                anchors.top: rectAppGraphics.bottom
+                anchors.top: rectAppTelemetry.bottom
 
                 Text {
                     id: dateAppNetwork
@@ -1261,9 +1354,9 @@ Item {
                     KeyNavigation.tab: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
                     KeyNavigation.down: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
                     KeyNavigation.right: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
-                    KeyNavigation.backtab: comboboxAccelGraphics
-                    KeyNavigation.up: comboboxAccelGraphics
-                    KeyNavigation.left: comboboxAccelGraphics
+                    KeyNavigation.backtab: checkBoxUseTelemetry
+                    KeyNavigation.up: checkBoxUseTelemetry
+                    KeyNavigation.left: checkBoxUseTelemetry
                 }
                 DropShadow {
                     anchors.fill: rectAppNetworkCheckBox
@@ -1512,6 +1605,7 @@ Item {
                     }
                 }
             }
+
         }
     }
 }

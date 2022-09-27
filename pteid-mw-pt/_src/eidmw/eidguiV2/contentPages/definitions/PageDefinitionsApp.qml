@@ -164,6 +164,12 @@ PageDefinitionsAppForm {
         }
     }
 
+    propertyCheckBoxUseTelemetry {
+        onCheckedChanged: {
+            controler.setEnablePteidTelemetry(propertyCheckBoxUseTelemetry.checked)
+        }
+    }
+
     propertyComboboxAccelGraphics{
         onActivated:  {
             console.log("propertyComboboxAccelGraphics onActivated index = "
@@ -286,6 +292,8 @@ PageDefinitionsAppForm {
             propertyDebugModeStep1TextField.color = Constants.COLOR_MAIN_BLACK
             propertyDebugModeStep3TextField.color = Constants.COLOR_GRAY
         }
+
+        propertyCheckBoxUseTelemetry.checked = controler.getEnablePteidTelemetry()
 
         propertyCheckBoxDebugMode.enabled = true
 
