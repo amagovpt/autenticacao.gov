@@ -81,6 +81,9 @@ void GAPI::doUpdateTelemetry(QString action)
         m_Settings.setTelemetryId(new_telemetry_id);
     }
 
+	//
+	// Initiate curl
+	//
     auto curl = curl_easy_init();
     if (curl)
     {
@@ -95,9 +98,9 @@ void GAPI::doUpdateTelemetry(QString action)
         // Create user-agent header with the follow structure
         // AutenticacaoGov/<version> ( <OS Name> <OS version> ) AutenticacaoGov/<version>
         //
-        QString userAgent = TEL_APP_USER_AGENT + QString(PTEID_PRODUCT_VERSION) +
+        QString userAgent = TEL_APP_USER_AGENT + QString("3.8.0") +
                             " (" + QSysInfo::prettyProductName().toStdString().c_str() + ") " +
-                            TEL_APP_USER_AGENT + QString(PTEID_PRODUCT_VERSION);
+                            TEL_APP_USER_AGENT + QString("3.8.0");
         curl_easy_setopt(curl, CURLOPT_USERAGENT, userAgent.toStdString().c_str());
 
         //
@@ -1409,8 +1412,10 @@ void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
             emit signalPdfPrintFail();
         }
     }
-    updateTelemetry(TEL_SIGN_CC);
-    END_TRY_CATCH
+
+	updateTelemetry(TEL_PRINT_PDF);
+    
+	END_TRY_CATCH
 }
 
 static QPen black_pen;
@@ -2122,6 +2127,8 @@ void GAPI::doSignPDF(SignParams &params) {
         getPlatformNativeString(params.outputFile));
 
     emit signalPdfSignSuccess(SignMessageOK);
+
+	updateTelemetry(TEL_SIGN_CC);
 
     END_TRY_CATCH
 }
