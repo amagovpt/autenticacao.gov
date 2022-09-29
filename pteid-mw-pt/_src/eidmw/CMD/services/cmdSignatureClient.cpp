@@ -320,7 +320,7 @@ namespace eIDMW
 					throw CMWEXCEPTION(EIDMW_ERR_CMD_SERVICE);
 				}
 				else {
-					MWLOG(LEV_ERROR, MOD_CMD, L"CMDSignatureClient::handleErrorCode: Error code 0x%x.", err);
+					MWLOG(LEV_ERROR, MOD_CMD, L"CMDSignatureClient::handleErrorCode: Error code %d.", err);
 					throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 				}
                 
