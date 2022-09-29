@@ -42,6 +42,8 @@
 #include "proxyinfo.h"
 #include "concurrent.h"
 
+#include "pteidversions.h"
+
 #include <curl/curl.h>
 
 using namespace eIDMW;
@@ -98,10 +100,10 @@ void GAPI::doUpdateTelemetry(QString action)
         // Create user-agent header with the follow structure
         // AutenticacaoGov/<version> ( <OS Name> <OS version> ) AutenticacaoGov/<version>
         //
-        QString userAgent = TEL_APP_USER_AGENT + QString("3.8.0") +
+        QString user_agent = TEL_APP_USER_AGENT + QString(PTEID_PRODUCT_VERSION) +
                             " (" + QSysInfo::prettyProductName().toStdString().c_str() + ") " +
-                            TEL_APP_USER_AGENT + QString("3.8.0");
-        curl_easy_setopt(curl, CURLOPT_USERAGENT, userAgent.toStdString().c_str());
+                            TEL_APP_USER_AGENT + QString(PTEID_PRODUCT_VERSION);
+        curl_easy_setopt(curl, CURLOPT_USERAGENT, user_agent.toStdString().c_str());
 
         //
         // Custom writefunction callback to pipe the request result so
