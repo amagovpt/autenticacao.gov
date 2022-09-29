@@ -55,7 +55,7 @@
 #define TEL_SIGN_CMD        "app/sign/cmd/"
 #define TEL_SIGN_CMD_SCAP   "app/sign/cmd/scap/"
 #define TEL_SIGN_CC_SCAP    "app/sign/cc/scap/"
-#define TEL_PRINT_PDF		"app/printpdf"
+#define TEL_PRINT_PDF		"app/printpdf/"
 
 
 /* For filenames we need to maintain latin-1 or UTF-8 native encoding */
