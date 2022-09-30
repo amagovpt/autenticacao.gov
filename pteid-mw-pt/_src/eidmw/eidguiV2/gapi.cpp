@@ -64,6 +64,8 @@ static  int g_runningCallback=0;
 //
 size_t GAPI::write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
 {
+    Q_UNUSED(ptr);
+    Q_UNUSED(userdata);
     return size * nmemb;
 }
 

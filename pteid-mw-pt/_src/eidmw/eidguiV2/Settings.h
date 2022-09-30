@@ -70,9 +70,9 @@ public:
     //------------------------------------------------------
     GUISettings( void )
         : m_bProxySystem(false)
-        , m_telemetry_id("0")
         , m_proxy_port(0)
         , m_GuiLanguage("nl")
+        , m_telemetry_id("0")
         , m_bShowAnimations(false)
         , m_bUseSystemScale(false)
         , m_iApplicationScale(0)
@@ -868,7 +868,6 @@ public:
     }
 
 private:
-    QString m_telemetry_id;
 
     //Proxy Settings
     bool m_bProxySystem;
@@ -882,6 +881,7 @@ private:
     QString m_time_stamp_host;
 
     QString m_GuiLanguage;          //!< the GUI language
+    QString m_telemetry_id;
     bool    m_bShowAnimations;      //!< the GUI Animations
     int     m_bUseSystemScale;      //!< use the system scale
     int     m_iApplicationScale;    //!< the GUI scale
