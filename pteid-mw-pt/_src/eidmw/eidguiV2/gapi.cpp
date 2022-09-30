@@ -98,11 +98,9 @@ void GAPI::doUpdateTelemetry(QString action)
 
         //
         // Create user-agent header with the follow structure
-        // AutenticacaoGov/<version> ( <OS Name> <OS version> ) AutenticacaoGov/<version>
+        // AutenticacaoGov/<version> (<OS Name> <OS version>)
         //
-        QString user_agent = TEL_APP_USER_AGENT + QString(PTEID_PRODUCT_VERSION) +
-                            " (" + QSysInfo::prettyProductName().toStdString().c_str() + ") " +
-                            TEL_APP_USER_AGENT + QString(PTEID_PRODUCT_VERSION);
+        QString user_agent = QString(TEL_APP_USER_AGENT) + PTEID_PRODUCT_VERSION + " (" + QSysInfo::prettyProductName().toStdString().c_str() + ")";
         curl_easy_setopt(curl, CURLOPT_USERAGENT, user_agent.toStdString().c_str());
 
         //
