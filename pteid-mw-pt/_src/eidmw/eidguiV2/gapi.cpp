@@ -2673,6 +2673,11 @@ void GAPI::removeSCAPAttributesFromCache(int scapAttrType) {
     // Delete all SCAP secretkey's and SCAP AppID
     settings.resetScapKeys();
 
+    //Nothing more to do if cache dir doesn't exist
+    if (!dir.exists()) {
+        emit signalRemoveSCAPAttributesSucess(scapAttrType);
+    }
+
 #ifdef WIN32
     extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
     qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
