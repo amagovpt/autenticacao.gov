@@ -79,6 +79,7 @@ namespace eIDMW {
             PTEIDCMD_API void set_string_handler(std::string in_docname_handle,
                                                  CByteArray in_array_handler);
 
+            void enableBatchMode() { m_batch_mode = true; }
             PTEIDCMD_API char * getCertificateCitizenName();
             PTEIDCMD_API char * getCertificateCitizenID();
 
@@ -99,6 +100,7 @@ namespace eIDMW {
             std::string m_pin;
             std::string m_receiveCode;
             bool m_computeHash = true;
+            bool m_batch_mode = false;
             CMDProxyInfo m_proxyInfo;
             int cli_getCertificate( std::string in_userId );
             int cli_sendDataToSign( std::string in_pin );

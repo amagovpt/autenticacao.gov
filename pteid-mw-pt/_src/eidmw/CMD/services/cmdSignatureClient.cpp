@@ -208,6 +208,7 @@ namespace eIDMW
             cmdSignature.add_pdf_handler(&pdf_sig);
         }
         else {
+            cmdSignature.enableBatchMode();
             for (size_t i = 0; i < batch_size; i++)
             {
 

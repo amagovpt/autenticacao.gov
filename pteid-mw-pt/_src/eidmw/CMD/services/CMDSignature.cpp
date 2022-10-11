@@ -467,7 +467,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
             filenames.push_back(new std::string(pdf->getDocName()));
         }
 
-        if (m_pdf_handlers.size() > 1)
+        if (m_batch_mode)
             CPathUtil::generate_unique_filenames(outfile_path, filenames, "_signed");
         else
             filenames[0]->assign(outfile_path);
