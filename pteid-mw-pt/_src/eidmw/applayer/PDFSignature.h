@@ -105,7 +105,7 @@ namespace eIDMW
 
 		EIDMW_APL_API char * getCitizenCertificateName() { return m_citizen_fullname; };
 
-		EIDMW_APL_API char * getCitizenCertificateID() { return m_civil_number; } ;
+		EIDMW_APL_API char * getCitizenCertificateID() { return m_document_number; } ;
 
         /* Hash */
 		EIDMW_APL_API CByteArray getHash();
@@ -149,7 +149,7 @@ namespace eIDMW
 		unsigned int m_tb_margin = 40;
 		static const int lr_margin = 30;
 
-		char *m_civil_number;
+		char *m_document_number;
 		char *m_citizen_fullname;
 		unsigned int m_page, m_sector;
 		double location_x, location_y;

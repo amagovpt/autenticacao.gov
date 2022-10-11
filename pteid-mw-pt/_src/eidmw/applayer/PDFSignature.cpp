@@ -81,7 +81,7 @@ namespace eIDMW
 	{
 
 		free(m_citizen_fullname);
-		free(m_civil_number);
+		free(m_document_number);
 		
 		//Free the strdup'ed strings from batchAddFile
 		for (int i = 0; i != m_files_to_sign.size(); i++)
@@ -103,7 +103,7 @@ namespace eIDMW
 		//These values result in an invisible signature
 		location_x = -1;
 		location_y = -1;
-		m_civil_number = NULL;
+		m_document_number = NULL;
 		m_citizen_fullname = NULL;
 		m_attributeSupplier = NULL;
 		m_attributeName = NULL;
@@ -321,7 +321,7 @@ namespace eIDMW
 		m_attributeSupplier = attributeSupplier;
 		m_attributeName = attributeName;
 		m_citizen_fullname = (char *) citizenName;
-		m_civil_number = (char *)citizenId;
+		m_document_number = (char *)citizenId;
 
 	}
 
@@ -345,7 +345,7 @@ namespace eIDMW
 		X509_NAME_get_text_by_NID(subj, NID_serialNumber, data_serial, cert_field_size);
 		X509_NAME_get_text_by_NID(subj, NID_commonName, data_common_name, cert_field_size);
 
-		m_civil_number = data_serial;
+		m_document_number = data_serial;
 		m_citizen_fullname = data_common_name;
 		X509_free(x509);
 	}
@@ -702,8 +702,8 @@ namespace eIDMW
 			parseCitizenDataFromCert(m_externCertificate);
 		}
 		else {
-			//Civil number and name should be only read once
-			if (m_civil_number == NULL) {
+			//Document number and name should be only read once
+			if (m_document_number == NULL) {
 				m_certificate = getCitizenCertificate();
 				parseCitizenDataFromCert(m_certificate);
 
@@ -727,15 +727,13 @@ namespace eIDMW
 
 		if(showNIC)
 		{
-			// remove "BI" prefix and checkdigit from NIC
-			std::string nic = m_civil_number;
-			size_t offset = 0;
 			size_t nic_length = 8;
-			if (nic.find("BI") == 0){
-				offset = 2;
+			std::string doc_nr = m_document_number;
+			if (doc_nr.find("BI") == 0) {
+				doc_nr = doc_nr.substr(2, nic_length);
 			}
-			nic = nic.substr(offset, nic_length);
-			doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, nic.c_str(),
+			
+			doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, doc_nr.c_str(),
 	                                 location, reason, m_page, m_sector, isLangPT, isCC(), showDate, m_small_signature);
 		} else {
 			doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, NULL,
@@ -790,7 +788,7 @@ namespace eIDMW
 		m_isCC = in_IsCC;
     }
 
-    void PDFSignature::setExternCertificate( CByteArray certificate) {
+    void PDFSignature::setExternCertificate(CByteArray certificate) {
 		m_externCertificate = certificate;
 
 		m_isExternalCertificate = true;

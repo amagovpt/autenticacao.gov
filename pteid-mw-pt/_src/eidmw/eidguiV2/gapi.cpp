@@ -936,7 +936,7 @@ void GAPI::doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &sign
         CmdSignedFileDetails cmd_details;
         cmd_details.signedCMDFile = m_scap_params.inputPDF;
         cmd_details.citizenName = pdf_signature.getCertificateCitizenName();
-        cmd_details.citizenId = QString(pdf_signature.getCertificateCitizenID() + 2); // "+ 2" skips "BI" prefix
+        cmd_details.citizenId = pdf_signature.getCertificateCitizenID();
 
         try {
             int ret_scap = scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,

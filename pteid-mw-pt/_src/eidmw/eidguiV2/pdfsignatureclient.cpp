@@ -483,6 +483,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 {
     // Get endpoint from settings
     ScapSettings settings;
+	QString raw_docnumber = citizenId[0] == QChar('B') && citizenId[1] == QChar('I') ? citizenId.right(citizenId.size()-2) : citizenId;
 
     soap *sp = soap_new2(SOAP_C_UTFSTRING, SOAP_C_UTFSTRING);
     //soap * sp = soap_new2(SOAP_ENC_MTOM, SOAP_ENC_MTOM);
@@ -533,7 +534,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
     authorizationRequest.AppId = m_appID.toStdString();
 	//Read stored secretKey from registry or config file
-    m_secretKey = settings.getSecretKey(citizenId);
+    m_secretKey = settings.getSecretKey(raw_docnumber);
 
     /*qDebug() << "m_secretKey = " << m_secretKey.data();*/
     std::string new_totp = generateTOTP(m_secretKey, totp_digits, totp_step_time, time(NULL));
@@ -573,7 +574,7 @@ int PDFSignatureClient::signPDF(ProxyInfo proxyInfo, QString finalfilepath, QStr
 
     //Certificate is string in PEM format
     authorizationRequest.SignatureCertificate = std::string(sigDetails.signing_certificate);
-    ns1__PersonalData *personalData = soap_new_req_ns1__PersonalData(sp, citizenName.toStdString(), citizenId.toStdString());
+    ns1__PersonalData *personalData = soap_new_req_ns1__PersonalData(sp, citizenName.toStdString(), raw_docnumber.toStdString());
     
     authorizationRequest.PersonalData = personalData;
 
