@@ -1830,25 +1830,32 @@ PageServicesSignForm {
             var path = decodeURIComponent(Functions.stripFilePrefix(fileList[i]));
 
             if (gapi.isFile(path)) {
-                if (fileIsAsic(path) && filesModel.count > 0) {
-                    // asic container must be the only file on the list - warning
-                    var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
-                    var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_ONLY_FILE")
-                    mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-                } else if (containsPackageAsic()) {
-                    // asic container already on the list - warning
-                    var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
-                    var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_ALREADY_ON_LIST")
-                    mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-                } else {
-                    var fileAlreadyUploaded = appendFileToModel(path);
-                    if (fileAlreadyUploaded) {
-                        // file already uploaded - error
-                        var titlePopup = qsTranslate("PageServicesSign","STR_FILE_UPLOAD_FAIL")
-                        var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ALREADY_UPLOADED")
+
+                // XAdES related checks should only be done if XAdES configuration is enabled
+                if (propertyRadioButtonXADES.checked) {
+                    if (fileIsAsic(path) && filesModel.count > 0) { 
+                        // asic container must be the only file on the list - warning
+                        var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
+                        var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_ONLY_FILE")
                         mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-                    }
+                        return
+                    } else if (containsPackageAsic()) {
+                        // asic container already on the list - warning
+                        var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
+                        var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_ALREADY_ON_LIST")
+                        mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                        return
+                    } 
                 }
+
+                var fileAlreadyUploaded = appendFileToModel(path);
+                if (fileAlreadyUploaded) {
+                    // file already uploaded - error
+                    var titlePopup = qsTranslate("PageServicesSign","STR_FILE_UPLOAD_FAIL")
+                    var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ALREADY_UPLOADED")
+                    mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                }
+                
             } else if (gapi.isDirectory(path)) {
                 var filesInDir = gapi.getFilesFromDirectory(path);
                 if (filesInDir instanceof Array) {
