@@ -137,7 +137,8 @@ replace $install by string in install parameter
 #define EIDMW_CNF_MACRO_COMMON_SUBDIR	L"pteid"					//this subdirectory is part of the common
 
 #define EIDMW_CNF_SECTION_GENERAL       L"general"              //section with the general pupose parameters
-#define EIDMW_CNF_GENERAL_TELEMETRY_ID  L"telemetry_id"              
+#define EIDMW_CNF_GENERAL_TELEMETRY_ID  L"telemetry_id"  
+#define EIDMW_CNF_GENERAL_TELEMETRY_HOST L"telemetry_host"            
 #define EIDMW_CNF_GENERAL_INSTALLDIR    L"install_dirname"      //string, directory of the basic eid software; �c:/Program Files/pteid/�
 #define EIDMW_CNF_GENERAL_CACHEDIR      L"cache_dirname"        //string, cache directory for card-file; $common/pteid/crlcache/
 #define EIDMW_CNF_GENERAL_CACHE_ENABLED L"cache_enabled"
@@ -313,6 +314,7 @@ public:
 
 	//GENERAL
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_TELEMETRY_ID;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_TELEMETRY_HOST;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_INSTALLDIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_INSTALL_PRO_DIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_INSTALL_SDK_DIR;

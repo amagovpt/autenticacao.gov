@@ -85,7 +85,9 @@ void GAPI::doUpdateTelemetry(QString action)
         m_Settings.setTelemetryId(new_telemetry_id);
     }
 
-	//
+    const auto telemetry_host = m_Settings.getTelemetryHost();
+
+    //
 	// Initiate curl
 	//
     auto curl = curl_easy_init();
@@ -95,7 +97,7 @@ void GAPI::doUpdateTelemetry(QString action)
         // The endpoint URL represents the action performed by the client
         // URL : <hostname>/<action>/
         //
-        QString url = QString(TEL_HOST) + action + "?tel_id=" + m_Settings.getTelemetryId();
+        QString url = telemetry_host + action + "?tel_id=" + m_Settings.getTelemetryId();
         curl_easy_setopt(curl, CURLOPT_URL, url.toStdString().c_str());
 
         //

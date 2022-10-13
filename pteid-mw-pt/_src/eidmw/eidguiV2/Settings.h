@@ -51,6 +51,8 @@
 
 #define STR_DEF_GUILANGUAGE		"nl"
 
+#define TEL_HOST    "http://obs.caixamagica.pt/"
+
 #define PIN_MAX_LENGHT 8
 #define PIN_MIN_LENGHT 4
 
@@ -73,6 +75,7 @@ public:
         , m_proxy_port(0)
         , m_GuiLanguage("nl")
         , m_telemetry_id("0")
+        , m_telemetry_host("0")
         , m_bShowAnimations(false)
         , m_bUseSystemScale(false)
         , m_iApplicationScale(0)
@@ -113,7 +116,7 @@ public:
         }
 
         //----------------------------------------------------------
-        // check use Pinpad functionality
+        // check telemetry id
         //----------------------------------------------------------
         {
             eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_TELEMETRY_ID);
@@ -122,6 +125,23 @@ public:
             if (0 != telemetry_id)
             {
                 setTelemetryId(telemetry_id);
+            }
+        }
+
+
+        //----------------------------------------------------------
+        // check telemetry host
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_TELEMETRY_HOST);
+            const char *telemetry_host = config.getString();
+            if (telemetry_host != 0 && strcmp(telemetry_host, "0") != 0)
+            {
+                setTelemetryHost(telemetry_host);
+            } 
+            else
+            {
+                setTelemetryHost(TEL_HOST);
             }
         }
 
@@ -517,6 +537,18 @@ public:
         config.setString(m_telemetry_id.toStdString().c_str());
     }
 
+    QString getTelemetryHost()
+    {
+        return m_telemetry_host;
+    }
+
+    void setTelemetryHost(QString telemetry_host)
+    {
+        m_telemetry_host = telemetry_host;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_TELEMETRY_HOST);
+        config.setString(m_telemetry_host.toStdString().c_str());
+    }
+
     void setAskToSetTelemetry(bool bAskToSetTelemetry)
     {
         m_bAskToSetTelemetry = bAskToSetTelemetry;
@@ -882,7 +914,8 @@ private:
 
     QString m_GuiLanguage;          //!< the GUI language
     QString m_telemetry_id;
-    bool    m_bShowAnimations;      //!< the GUI Animations
+    QString m_telemetry_host;
+    bool m_bShowAnimations;         //!< the GUI Animations
     int     m_bUseSystemScale;      //!< use the system scale
     int     m_iApplicationScale;    //!< the GUI scale
     int     m_iGraphicsAccel;       //!< the Graphics Acceleration 0=Software, 1=Hardware, 2=ANGLE

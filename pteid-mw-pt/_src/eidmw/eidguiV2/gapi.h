@@ -48,7 +48,6 @@
 #define RESTART_EXIT_CODE  1
 
 // Telemetry definitions (move this somewhere else?)
-#define TEL_HOST            "http://127.0.0.1/"
 #define TEL_APP_USER_AGENT  "AutenticacaoGov/"
 #define TEL_STARTUP         "app/startup/"
 #define TEL_SIGN_CC         "app/sign/cc/"
