@@ -342,6 +342,7 @@ namespace eIDMW
         //Add revocation info for all signer certificates preferably using OCSP
         for (auto signer_cert_idx: signerCerts_idx)
         {
+			status = FWK_CERTIF_STATUS_UNCHECK;
             CByteArray ocsp_response;
             bool ocsp_check_revocation = false;
             bool foundIssuer = false;
