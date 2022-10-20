@@ -7,7 +7,7 @@
 	<?define var.ProductVersion = $(var.PteidMajor).$(var.PteidMinor).$(var.PteidRevisionNumber)?>
 	<?define var.OfficialProductVersion = $(var.PTeidProductVersion) ?>
 
-	<?define var.UpgradeCode ={41D2DFA4-7754-465C-9379-55CDBADE082D}?>
+	<?define var.UpgradeCode ={A736587A-9E3A-4E27-97FB-BAF68EBD4A50}?>
 	<?define var.ProductGuid ={824563DE-75AD-4166-9DC0-B6482F20$(var.PteidRevisionNumber)}?>
 	<?define var.ProductName =Autenticação.Gov $(var.OfficialProductVersion) ($(var.PteidRevisionNumber))?>
 
@@ -31,6 +31,9 @@
 				 InstallPrivileges="elevated" />
 
     <MajorUpgrade DowngradeErrorMessage="!(loc.NoDowngrade)"/>
+    <Upgrade Id="{41D2DFA4-7754-465C-9379-55CDBADE082D}">
+      <UpgradeVersion Property="PTEID_38_OR_OLDER" IncludeMinimum="yes" Minimum="0.0.0" IncludeMaximum="yes" Maximum="3.8.4656" />
+    </Upgrade>
 
 		<?ifndef env.PTEID_DIR_MSM?>
 	     	<?error PTEID_DIR_MSM not defined ?>
