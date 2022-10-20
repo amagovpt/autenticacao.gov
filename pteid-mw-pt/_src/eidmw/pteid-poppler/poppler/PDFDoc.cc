@@ -575,6 +575,9 @@ std::unordered_set<int> PDFDoc::getSignaturesIndexesUntilLastTimestamp()
     if (acro_form->isNull())
         return indexes;
     acro_form->dictLookup("Fields", &fields);
+    //Sanity check: some malformed AcroForms don't have Fields array
+    if (!fields.isArray())
+      return indexes;
 
     // FIXME: this assumes the references for the latest signatures are appended to the
     // Fields dict. Most PDF creators should append.
