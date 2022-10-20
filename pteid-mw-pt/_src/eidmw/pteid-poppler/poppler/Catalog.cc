@@ -325,6 +325,14 @@ void Catalog::fillSignatureField(Object *signature_field, PDFRectangle *rect,
 	}
 }
 
+void Catalog::createFieldsArray(Object *acro_form, Object *fields) {
+    fields->initArray(xref);
+    if (acro_form->isDict()) {
+        acro_form->dictAdd(copyString("Fields"), fields);
+    }
+
+}
+
 void Catalog::addSigFieldToAcroForm(Ref *sig_ref, Ref *refFirstPage)
 {
     Object acroform, local_acroForm, fields_array, ref_to_sig, obj;
@@ -344,11 +352,9 @@ void Catalog::addSigFieldToAcroForm(Ref *sig_ref, Ref *refFirstPage)
     if (!local_acroForm.isDict())
     {
 
-        Object fields;
         acroform.initDict(xref);
-        fields.initArray(xref);
+        createFieldsArray(&acroform, &fields_array);
 
-        acroform.dictAdd(copyString("Fields"), &fields);
         acroform.dictAdd(copyString("SigFlags"), obj.initInt(3));
         local_acroForm = acroform;
         catDict.dictAdd(copyString("AcroForm"), &local_acroForm);
@@ -366,17 +372,17 @@ void Catalog::addSigFieldToAcroForm(Ref *sig_ref, Ref *refFirstPage)
     local_acroForm.dictSet("NeedAppearances", &o1);
 
     local_acroForm.dictLookup("Fields", &fields_array);
-    if (fields_array.isArray())
-    {
-        Object fields_ref;
-        local_acroForm.dictLookupNF("Fields", &fields_ref);
-        fields_array.arrayAdd(&ref_to_sig);
+    //Some malformed documents can have AcroForm without Fields
+    if (!fields_array.isArray()) {
+        createFieldsArray(&local_acroForm, &fields_array);
+    }
 
-        if (fields_ref.isRef())
-        {
-            xref->setModifiedObject(&fields_array, fields_ref.getRef());
+    Object fields_ref;
+    local_acroForm.dictLookupNF("Fields", &fields_ref);
+    fields_array.arrayAdd(&ref_to_sig);
 
-        }
+    if (fields_ref.isRef()) {
+        xref->setModifiedObject(&fields_array, fields_ref.getRef());
     }
 
     //Set the catalog object as modified to force rewrite

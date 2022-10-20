@@ -272,6 +272,7 @@ private:
 
   // Get page label info.
   PageLabelInfo *getPageLabelInfo();
+  void createFieldsArray(Object *acro_form, Object *fields);
 
   PDFDoc *doc;
   XRef *xref;			// the xref table for this PDF file
