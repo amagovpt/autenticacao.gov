@@ -116,11 +116,14 @@ void GAPI::doUpdateTelemetry(TelemetryAction action)
         curl_easy_setopt(curl, CURLOPT_URL, url.toStdString().c_str());
 
         //
-        // Create user-agent header with the follow structure
+        // Create user-agent header with the following structure
         // AutenticacaoGov/<version> (<OS Name> <OS version>)
         //
         QString user_agent = QString(TEL_APP_USER_AGENT) + PTEID_PRODUCT_VERSION + " (" + QSysInfo::prettyProductName().toStdString().c_str() + ")";
         curl_easy_setopt(curl, CURLOPT_USERAGENT, user_agent.toStdString().c_str());
+        //Validate TLS server certificate using our certificate bundle
+        std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
+        curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_file.c_str());
 
         //
         // Custom writefunction callback to pipe the request result so
