@@ -229,11 +229,6 @@ Item {
                         }
                     }
 
-                    function test() {
-                        terms.setVisible(false)
-                    }
-
-
                     Label {
                         id: terms
                         width: parent.width - Constants.SIZE_IMAGE_BOTTOM_MENU - 40
