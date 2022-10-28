@@ -69,11 +69,26 @@ size_t GAPI::write_callback(char *ptr, size_t size, size_t nmemb, void *userdata
     return size * nmemb;
 }
 
+const char* GAPI::telemetryActionToString(TelemetryAction action)
+{
+    switch(action) {
+        case TelemetryAction::Startup:          return "app/startup/";
+        case TelemetryAction::EnableTelemetry:  return "app/enable/";
+        case TelemetryAction::DisableTelemetry: return "app/disable/";
+        case TelemetryAction::SignCC:           return "app/sign/cmd/";
+        case TelemetryAction::SignCMD:          return "app/sign/cmd/";
+        case TelemetryAction::SignCCScap:       return "app/sign/cc/scap/";
+        case TelemetryAction::SignCMDScap:      return "app/sign/cmd/scap/";
+        case TelemetryAction::PrintPDF:         return "app/printpdf/";
+        default:                                return "app/unknown/";
+        }
+}
+
 //
 // Telemetry is updated by making requests to pre-defined endpoints on a
 // remote server.
 //
-void GAPI::doUpdateTelemetry(QString action)
+void GAPI::doUpdateTelemetry(TelemetryAction action)
 {
     //
     // Create a new guid once per system.
@@ -97,7 +112,7 @@ void GAPI::doUpdateTelemetry(QString action)
         // The endpoint URL represents the action performed by the client
         // URL : <hostname>/<action>/
         //
-        QString url = telemetry_host + action + "?tel_id=" + m_Settings.getTelemetryId();
+        QString url = telemetry_host + telemetryActionToString(action) + "?tel_id=" + m_Settings.getTelemetryId();
         curl_easy_setopt(curl, CURLOPT_URL, url.toStdString().c_str());
 
         //
@@ -129,7 +144,7 @@ void GAPI::doUpdateTelemetry(QString action)
 // throw any exceptions. They are completly silent for both the developer and
 // user.
 //
-void GAPI::updateTelemetry(QString action)
+void GAPI::updateTelemetry(TelemetryAction action)
 {
     if(m_Settings.getEnablePteidTelemetry())
         //
@@ -986,7 +1001,7 @@ void GAPI::doSignCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams)
 
     showSignCMDDialog(ret);
 
-    updateTelemetry(TEL_SIGN_CMD);
+    updateTelemetry(TelemetryAction::SignCMD);
 }
 
 void GAPI::doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams, QList<int> attribute_list) {
@@ -1046,7 +1061,7 @@ void GAPI::doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &sign
     signCMDFinished(ret);
     signalUpdateProgressBar(100);
 
-    updateTelemetry(TEL_SIGN_CMD_SCAP);
+    updateTelemetry(TelemetryAction::SignCMDScap);
 }
 
 void GAPI::doSignXADESWithCMD(SignParams &params, bool isASIC) {
@@ -1417,7 +1432,7 @@ void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
         }
     }
 
-	updateTelemetry(TEL_PRINT_PDF);
+	updateTelemetry(TelemetryAction::PrintPDF);
     
 	END_TRY_CATCH
 }
@@ -2132,7 +2147,7 @@ void GAPI::doSignPDF(SignParams &params) {
 
     emit signalPdfSignSuccess(SignMessageOK);
 
-	updateTelemetry(TEL_SIGN_CC);
+    updateTelemetry(TelemetryAction::SignCC);
 
     END_TRY_CATCH
 }
@@ -2488,7 +2503,7 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
         params.isTimestamp, params.isLtv, attrs, useCustomSignature(), m_jpeg_scaled_data, 
         m_seal_width, m_seal_height);
 
-    updateTelemetry(TEL_SIGN_CC_SCAP);
+    updateTelemetry(TelemetryAction::SignCCScap);
     END_TRY_CATCH
 }
 

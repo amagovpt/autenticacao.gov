@@ -2153,7 +2153,7 @@
     </message>
     <message>
         <source>STR_FILE_ASIC</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2569,15 +2569,28 @@
     </message>
     <message>
         <source>STR_SET_TELEMETRY_TITLE</source>
-        <translation>Choose now if you allow the app to send telemetry information</translation>
+        <translation>Do you allow the authentication.gov application to collect and report information about your usage?</translation>
     </message>
     <message>
         <source>STR_SET_TELEMETRY_TEXT</source>
-        <translation>The application sends information about its usage for the purpose of improving future user experience. No private information regarding the user is sent.</translation>
+        <translation>The application will collect data about how you use it, so that we can improve your user experience. No personal data will be collected.</translation>
     </message>
     <message>
         <source>STR_SET_TELEMETRY_TEXT_MANDATORY</source>
-        <translation>This is a mandatory configuration, it is required to choose one option in order to utilise the application. </translation>
+        <translation type="vanished">This is a mandatory configuration, it is required to choose one option in order to utilise the application. </translation>
+    </message>
+    <message>
+        <source>STR_TELEMETRY_TERMS</source>
+        <translation>The data collected is:
+ • Operating system and its version
+ • Authentication.gov application version
+ • Usage events, such as: application start, digital signatures, change or read the Citizen&apos;s Card address
+ • Randomly generated unique identifier to be able to differentiate Authentication.gov application installations
+ • Public IP of the internet connection that is used to send the collected data</translation>
+    </message>
+    <message>
+        <source>STR_TELEMETRY_SHOW_TERMS</source>
+        <translation>You can check the terms of usage here.</translation>
     </message>
 </context>
 </TS>

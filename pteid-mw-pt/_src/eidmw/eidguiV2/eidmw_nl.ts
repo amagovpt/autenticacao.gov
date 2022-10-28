@@ -2159,7 +2159,7 @@
     </message>
     <message>
         <source>STR_FILE_ASIC</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2574,15 +2574,28 @@
     </message>
     <message>
         <source>STR_SET_TELEMETRY_TITLE</source>
-        <translation>Defina agora se permite que a aplicação utiliza o sistema de telemetria</translation>
+        <translation>Permite que a aplicação autenticação.gov recolha e comunique informação sobre o seu uso?</translation>
     </message>
     <message>
         <source>STR_SET_TELEMETRY_TEXT</source>
-        <translation>A aplicação envia informação sobre a sua utilização para o propósito de melhorar a futura experiência do utilizador. Nenhuma informação privada pertencente ao utilizador é enviada.</translation>
+        <translation>A aplicação irá recolher dados sobre como a usa, para podermos melhorar a sua experiência de utilizador/a. Não serão recolhidos quaisquer dados pessoais.</translation>
     </message>
     <message>
         <source>STR_SET_TELEMETRY_TEXT_MANDATORY</source>
-        <translation>Esta é uma configuração de carácter obrigatório, é necessário escolher uma das opções para utilizar a aplicação.</translation>
+        <translation type="vanished">Esta é uma configuração de carácter obrigatório, é necessário escolher uma das opções para utilizar a aplicação.</translation>
+    </message>
+    <message>
+        <source>STR_TELEMETRY_TERMS</source>
+        <translation>Os dados recolhidos são:
+ • Sistema operativo e versão
+ • Versão da aplicação Autenticação.gov
+ • Eventos de utilização, como: iniciar aplicação, assinaturas digitais, alterar ou ler a morada do Cartão de Cidadão
+ • Identificador único gerado aleatoriamente para poder diferenciar instalações da aplicação Autenticação.gov
+ • IP público da ligação de internet que é usado para enviar os dados recolhidos</translation>
+    </message>
+    <message>
+        <source>STR_TELEMETRY_SHOW_TERMS</source>
+        <translation>Poderá consultar os termos de utilização aqui.</translation>
     </message>
 </context>
 </TS>

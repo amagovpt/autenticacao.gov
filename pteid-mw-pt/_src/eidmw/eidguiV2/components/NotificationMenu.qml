@@ -186,11 +186,79 @@ Item {
 
                 Components.Notification {
                     id: definitions_telemetry
-                    height: visible ? title.height + description.height + activatedCache.height * 2 + rightButton.height + 75 : 0
+                    height: visible ? title.height + description.height + textItem.height + terms.height + activatedCache.height * 2 + rightButton.height + 75 : 0
                     visible: model.category === "definitions_telemetry" && model.activated
 
                     title.text: model.title
                     description.text: model.text
+
+                    Text {
+                        id: textItem
+                        text: qsTranslate("main","STR_TELEMETRY_SHOW_TERMS")
+                        font.italic: true
+                        width: parent.width - Constants.SIZE_IMAGE_BOTTOM_MENU - 40
+                        wrapMode: TextEdit.Wrap
+                        color: Constants.COLOR_TEXT_BODY
+                        horizontalAlignment: Text.AlignJustify
+                        elide: Text.ElideRight
+
+                        anchors.top: definitions_telemetry.description.bottom
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 2
+                        anchors.left: parent.left
+                        anchors.leftMargin: Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 + 4
+
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL_FOCUS
+                        font.bold: activeFocus
+                        font.family: lato.name
+
+                        MouseArea {
+                            id: mouseAreaText
+                            cursorShape: Qt.PointingHandCursor
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: {
+                                var isHidden = terms.visible
+
+                                terms.enabled = !isHidden
+                                terms.visible = !isHidden
+
+                                terms.height = isHidden ? 0 : terms.implicitHeight
+                                terms.anchors.leftMargin = isHidden ? 0 : Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 + 4
+                                terms.anchors.topMargin = isHidden ? 0 : Constants.SIZE_ROW_V_SPACE * 2
+                            }
+                        }
+                    }
+
+                    function test() {
+                        terms.setVisible(false)
+                    }
+
+
+                    Label {
+                        id: terms
+                        width: parent.width - Constants.SIZE_IMAGE_BOTTOM_MENU - 40
+                        text: qsTranslate("main","STR_TELEMETRY_TERMS")
+                        wrapMode: TextEdit.Wrap
+                        color: Constants.COLOR_TEXT_BODY
+                        lineHeight: 1.5
+                        elide: Text.ElideRight
+                        visible: false
+                        height: 0
+
+                        anchors.top: textItem.bottom
+                        anchors.left: parent.left
+
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL_FOCUS
+                        font.bold: activeFocus
+                        font.family: lato.name
+
+                        Keys.enabled: true
+                        Keys.onTabPressed: { nextItemInFocusChain().forceActiveFocus() }
+                        Keys.onDownPressed: { nextItemInFocusChain().forceActiveFocus() }
+                        Keys.onRightPressed: { nextItemInFocusChain().forceActiveFocus() }
+                        KeyNavigation.backtab: definitions_telemetry.title
+                        KeyNavigation.up: definitions_telemetry.title
+                    }
 
                     CheckBox {
                         id: activatedTelemetry
@@ -198,7 +266,7 @@ Item {
                         checked: false
                         onClicked: deactivatedTelemetry.checked = false
 
-                        anchors.top: definitions_telemetry.description.bottom
+                        anchors.top: terms.bottom
                         anchors.topMargin: Constants.SIZE_ROW_V_SPACE 
                         anchors.left: parent.left
                         anchors.leftMargin: Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 
@@ -222,8 +290,6 @@ Item {
                         anchors.top: activatedTelemetry.bottom
                         anchors.left: parent.left
                         anchors.leftMargin: Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 
-                        anchors.right: parent.right
-                        anchors.rightMargin: Constants.MARGIN_NOTIFICATION_CENTER
 
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_LABEL_FOCUS
@@ -589,14 +655,14 @@ Item {
         hasMandatory = true
         exitIcon.visible = false
         exitArea.enabled = false
-        notificationArea.interactive = false
+        notificationArea.interactive = true
         mainFormID.propertyNotificationMenu.open()
     }
 
     function addTelemetrySettings() {
         insertInModel(4, {
             "title": qsTranslate("main","STR_SET_TELEMETRY_TITLE"),
-            "text": qsTranslate("main","STR_SET_TELEMETRY_TEXT") + "<br></br><br></br><b>" + qsTranslate("main","STR_SET_TELEMETRY_TEXT_MANDATORY") + "</b>",
+            "text": qsTranslate("main","STR_SET_TELEMETRY_TEXT"),
             "link": "",
             "category": "definitions_telemetry",
             "read": false,
@@ -608,7 +674,7 @@ Item {
         hasMandatory = true
         exitIcon.visible = false
         exitArea.enabled = false
-        notificationArea.interactive = false
+        notificationArea.interactive = true
         mainFormID.propertyNotificationMenu.open()
     }
 
@@ -641,7 +707,9 @@ Item {
         openNotification(index, model.read, model.activated)
         controler.setAskToSetTelemetryValue(false)
         controler.setEnablePteidTelemetry(activatedTelemetry)
-        gapi.updateTelemetry("app/startup")
+        if(activatedTelemetry)
+            gapi.updateTelemetry(GAPI.EnableTelemetry)
+        gapi.updateTelemetry(GAPI.Startup)
     }
 
     function addUpdate(release_notes, installed_version, remote_version, url_list, type) {       

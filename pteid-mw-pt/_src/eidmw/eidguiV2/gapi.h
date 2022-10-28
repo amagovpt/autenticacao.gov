@@ -47,15 +47,7 @@
 #define SUCCESS_EXIT_CODE 0
 #define RESTART_EXIT_CODE  1
 
-// Telemetry definitions (move this somewhere else?)
 #define TEL_APP_USER_AGENT  "AutenticacaoGov/"
-#define TEL_STARTUP         "app/startup/"
-#define TEL_SIGN_CC         "app/sign/cc/"
-#define TEL_SIGN_CMD        "app/sign/cmd/"
-#define TEL_SIGN_CMD_SCAP   "app/sign/cmd/scap/"
-#define TEL_SIGN_CC_SCAP    "app/sign/cc/scap/"
-#define TEL_PRINT_PDF		"app/printpdf/"
-
 
 /* For filenames we need to maintain latin-1 or UTF-8 native encoding */
 //This macro's argument is a QString
@@ -278,6 +270,9 @@ public:
 
     enum SignLevel { LevelBasic, LevelTimestamp, LevelLTV };
 
+    enum TelemetryAction { Startup, SignCC, SignCMD, SignCMDScap, SignCCScap, PrintPDF, EnableTelemetry, DisableTelemetry };
+    Q_ENUMS(TelemetryAction)
+
     Q_ENUMS(ScapPdfSignResult)
     Q_ENUMS(ScapAttrType)
     Q_ENUMS(ScapAttrDescription)
@@ -313,10 +308,11 @@ public:
 
 public slots:
     // Telemetry
-    void updateTelemetry(QString action);
-    void doUpdateTelemetry(QString action);
+    void updateTelemetry(TelemetryAction action);
+    void doUpdateTelemetry(TelemetryAction action);
+    const char* telemetryActionToString(TelemetryAction action);
     static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
-    
+
     // Slots to Gui request values
     QVariantList getRetReaderList(void);
     int getReaderIndex(void);

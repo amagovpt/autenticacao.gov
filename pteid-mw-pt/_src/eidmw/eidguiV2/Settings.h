@@ -51,7 +51,7 @@
 
 #define STR_DEF_GUILANGUAGE		"nl"
 
-#define TEL_HOST    "http://obs.caixamagica.pt/"
+#define TEL_HOST "http://obs.caixamagica.pt/"
 
 #define PIN_MAX_LENGHT 8
 #define PIN_MIN_LENGHT 4
