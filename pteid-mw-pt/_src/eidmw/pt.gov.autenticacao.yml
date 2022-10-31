@@ -43,7 +43,7 @@ modules:
       - '/lib/libxerces-c.a'
     sources:
       - type: archive
-        url: https://dlcdn.apache.org//xerces/c/3/sources/xerces-c-3.2.3.tar.gz
+        url: https://archive.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.3.tar.gz
         sha256: fb96fc49b1fb892d1e64e53a6ada8accf6f0e6d30ce0937956ec68d39bd72c7e
   - name: libzip
     buildsystem: cmake-ninja
