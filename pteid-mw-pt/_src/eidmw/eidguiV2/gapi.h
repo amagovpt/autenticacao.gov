@@ -270,7 +270,7 @@ public:
 
     enum SignLevel { LevelBasic, LevelTimestamp, LevelLTV };
 
-    enum TelemetryAction { Startup, SignCC, SignCMD, SignCMDScap, SignCCScap, PrintPDF, EnableTelemetry, DisableTelemetry };
+    enum TelemetryAction { Startup, SignCC, SignCMD, SignCMDScap, SignCCScap, PrintPDF, Accepted, Denied };
     Q_ENUMS(TelemetryAction)
 
     Q_ENUMS(ScapPdfSignResult)

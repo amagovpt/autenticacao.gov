@@ -167,9 +167,9 @@ PageDefinitionsAppForm {
     propertyCheckBoxUseTelemetry {
         onCheckedChanged: {
             if(propertyCheckBoxUseTelemetry.checked)
-                gapi.updateTelemetry(GAPI.EnableTelemetry)
+                gapi.updateTelemetry(GAPI.Accepted)
             else
-                gapi.updateTelemetry(GAPI.DisableTelemetry)
+                gapi.updateTelemetry(GAPI.Denied)
             controler.setEnablePteidTelemetry(propertyCheckBoxUseTelemetry.checked)
         }
     }

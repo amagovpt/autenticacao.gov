@@ -73,8 +73,8 @@ const char* GAPI::telemetryActionToString(TelemetryAction action)
 {
     switch(action) {
         case TelemetryAction::Startup:          return "app/startup/";
-        case TelemetryAction::EnableTelemetry:  return "app/enable/";
-        case TelemetryAction::DisableTelemetry: return "app/disable/";
+        case TelemetryAction::Accepted:         return "app/accepted/";
+        case TelemetryAction::Denied:           return "app/denied/";
         case TelemetryAction::SignCC:           return "app/sign/cmd/";
         case TelemetryAction::SignCMD:          return "app/sign/cmd/";
         case TelemetryAction::SignCCScap:       return "app/sign/cc/scap/";

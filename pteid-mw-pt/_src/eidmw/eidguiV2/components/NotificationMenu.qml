@@ -738,7 +738,7 @@ Item {
         controler.setAskToSetTelemetryValue(false)
         controler.setEnablePteidTelemetry(activatedTelemetry)
         if(activatedTelemetry)
-            gapi.updateTelemetry(GAPI.EnableTelemetry)
+            gapi.updateTelemetry(GAPI.Accepted)
         gapi.updateTelemetry(GAPI.Startup)
     }
 
