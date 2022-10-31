@@ -192,6 +192,42 @@ Item {
                     title.text: model.title
                     description.text: model.text
 
+                    Image {
+                        id: carot
+
+                        anchors.left: parent.left
+                        anchors.top: definitions_telemetry.description.bottom
+                        anchors.leftMargin: Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 + 4
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 2
+
+                        sourceSize.width: Constants.SIZE_IMAGE_ARROW_ACCORDION
+                        sourceSize.height: Constants.SIZE_IMAGE_ARROW_ACCORDION
+                        source: '../images/arrow-right_AMA.png'
+                        transform: Rotation {
+                            origin.x: Constants.SIZE_IMAGE_ARROW_ACCORDION * 0.5
+                            origin.y: Constants.SIZE_IMAGE_ARROW_ACCORDION * 0.5
+                            angle: terms.visible ? 90 : 0
+                            Behavior on angle { NumberAnimation { duration: 150 } }
+                        }
+
+                        MouseArea {
+                            id: carotMouseArea
+                            cursorShape: Qt.PointingHandCursor
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: {
+                                var isHidden = terms.visible
+
+                                terms.enabled = !isHidden
+                                terms.visible = !isHidden
+
+                                terms.height = isHidden ? 0 : terms.implicitHeight
+                                terms.anchors.leftMargin = isHidden ? 0 : Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 + 4
+                                terms.anchors.topMargin = isHidden ? 0 : Constants.SIZE_ROW_V_SPACE * 2
+                            }
+                        }
+                    }
+
                     Text {
                         id: textItem
                         text: qsTranslate("main","STR_TELEMETRY_SHOW_TERMS")
@@ -204,8 +240,8 @@ Item {
 
                         anchors.top: definitions_telemetry.description.bottom
                         anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 2
-                        anchors.left: parent.left
-                        anchors.leftMargin: Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 + 4
+                        anchors.left: carot.right
+                        anchors.leftMargin: terms.visible ? 10 : Constants.SIZE_TEXT_FIELD * 0.5
 
                         font.pixelSize: Constants.SIZE_TEXT_LABEL_FOCUS
                         font.bold: activeFocus
@@ -413,8 +449,6 @@ Item {
 
             anchors.top: parent.top
             anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER
-            anchors.left: parent.left
-            anchors.leftMargin: Constants.MARGIN_NOTIFICATION_CENTER
 
             Keys.enabled: true
             KeyNavigation.tab: new_notification_title.visible ? new_notification_title : read_notification_title
@@ -453,7 +487,7 @@ Item {
 
         Flickable {
             id: notificationArea
-            width: parent.width - Constants.MARGIN_NOTIFICATION_CENTER * 2
+            width: parent.width
             height: parent.height - title.height - 30
             contentHeight: listView_read.height + listView.height + new_notification_title.height + read_notification_title.height + 50
             clip: true
@@ -464,7 +498,6 @@ Item {
             ScrollBar.vertical: ScrollBar {
                 id: viewScroll
                 active: true
-                visible: false
                 policy: ScrollBar.AlwaysOn
             }
 
@@ -492,13 +525,14 @@ Item {
 
             ListView {
                 id: listView
-                width: parent.width
+                width: parent.width - Constants.MARGIN_NOTIFICATION_CENTER * 2
                 height: childrenRect.height 
                 clip: true
                 model: model_recent
                 delegate: delegate
                 focus: true
                 spacing: 6
+                interactive: false
 
                 anchors.top: new_notification_title.bottom
                 anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER / 2
@@ -542,6 +576,7 @@ Item {
                 delegate: delegate
                 focus: true
                 spacing: 6
+                interactive: false
 
                 anchors.top: read_notification_title.bottom
                 anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER / 2
