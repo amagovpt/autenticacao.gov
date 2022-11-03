@@ -166,11 +166,10 @@ PageDefinitionsAppForm {
 
     propertyCheckBoxUseTelemetry {
         onCheckedChanged: {
-            if(propertyCheckBoxUseTelemetry.checked)
-                gapi.updateTelemetry(GAPI.Accepted)
+            if(propertyCheckBoxUseTelemetry.checkState == Qt.Checked)
+                gapi.enableTelemetry()
             else
-                gapi.updateTelemetry(GAPI.Denied)
-            controler.setEnablePteidTelemetry(propertyCheckBoxUseTelemetry.checked)
+                gapi.disableTelemetry()
         }
     }
 
@@ -297,7 +296,9 @@ PageDefinitionsAppForm {
             propertyDebugModeStep3TextField.color = Constants.COLOR_GRAY
         }
 
-        propertyCheckBoxUseTelemetry.checked = controler.getEnablePteidTelemetry()
+        
+        var tel_status = gapi.getTelemetryStatus();
+        propertyCheckBoxUseTelemetry.checked = tel_status == GAPI.RetryEnable || tel_status == GAPI.Enabled
 
         propertyCheckBoxDebugMode.enabled = true
 

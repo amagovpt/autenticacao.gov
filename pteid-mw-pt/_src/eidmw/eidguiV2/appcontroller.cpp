@@ -479,14 +479,6 @@ bool AppController::getEnablePteidCache (){
     return m_Settings.getEnablePteidCache();
 }
 
-void AppController::setEnablePteidTelemetry (bool bEnabled){
-    m_Settings.setEnablePteidTelemetry(bEnabled);
-}
-
-bool AppController::getEnablePteidTelemetry (){
-    return m_Settings.getEnablePteidTelemetry();
-}
-
 void AppController::flushCache(){
     Concurrent::run(this, &AppController::doFlushCache);
 }

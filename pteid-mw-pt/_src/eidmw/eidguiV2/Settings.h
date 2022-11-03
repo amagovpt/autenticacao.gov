@@ -76,6 +76,7 @@ public:
         , m_GuiLanguage("nl")
         , m_telemetry_id("0")
         , m_telemetry_host("0")
+        , m_telemetry_status(8)
         , m_bShowAnimations(false)
         , m_bUseSystemScale(false)
         , m_iApplicationScale(0)
@@ -142,6 +143,19 @@ public:
             else
             {
                 setTelemetryHost(TEL_HOST);
+            }
+        }
+
+        //----------------------------------------------------------
+        // check telemetry status
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_TELEMETRY_STATUS);
+            long telemetryStatus = config.getLong();
+
+            if (telemetryStatus != 8)
+            {
+                setTelemetryStatus(telemetryStatus);
             }
         }
 
@@ -549,6 +563,18 @@ public:
         config.setString(m_telemetry_host.toStdString().c_str());
     }
 
+    void setTelemetryStatus(long telemetry_status)
+    {
+        m_telemetry_status = telemetry_status;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_TELEMETRY_STATUS);
+        config.setLong(m_telemetry_status);
+    }
+
+    long getTelemetryStatus()
+    {
+        return m_telemetry_status;
+    }
+
     void setAskToSetTelemetry(bool bAskToSetTelemetry)
     {
         m_bAskToSetTelemetry = bAskToSetTelemetry;
@@ -775,18 +801,6 @@ public:
         return config.getLong();
     }
 
-    void setEnablePteidTelemetry(bool bEnabled)
-    {
-        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_TELEMETRY_ENABLED);
-        config.setLong(bEnabled);
-    }
-
-    bool getEnablePteidTelemetry()
-    {
-        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_TELEMETRY_ENABLED);
-        return config.getLong();
-    }
-
     QString getProxyUsername()
     {
         return m_proxy_username;
@@ -915,7 +929,8 @@ private:
     QString m_GuiLanguage;          //!< the GUI language
     QString m_telemetry_id;
     QString m_telemetry_host;
-    bool m_bShowAnimations;         //!< the GUI Animations
+    long    m_telemetry_status;
+    bool    m_bShowAnimations;         //!< the GUI Animations
     int     m_bUseSystemScale;      //!< use the system scale
     int     m_iApplicationScale;    //!< the GUI scale
     int     m_iGraphicsAccel;       //!< the Graphics Acceleration 0=Software, 1=Hardware, 2=ANGLE

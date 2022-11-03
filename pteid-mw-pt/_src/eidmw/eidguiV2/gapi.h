@@ -271,7 +271,8 @@ public:
     enum SignLevel { LevelBasic, LevelTimestamp, LevelLTV };
 
     enum TelemetryAction { Startup, SignCC, SignCMD, SignCMDScap, SignCCScap, PrintPDF, Accepted, Denied };
-    Q_ENUMS(TelemetryAction)
+
+    enum TelemetryStatus { RetryEnable = 1, Enabled = 2, RetryDisable = 4, Disabled = 8 };
 
     Q_ENUMS(ScapPdfSignResult)
     Q_ENUMS(ScapAttrType)
@@ -289,6 +290,8 @@ public:
     Q_ENUMS(CmdDialogClass)
     Q_ENUMS(SignatureLevel)
     Q_ENUMS(ShortcutId)
+    Q_ENUMS(TelemetryAction)
+    Q_ENUMS(TelemetryStatus)
 
     bool isAddressLoaded() {return m_addressLoaded; }
 
@@ -310,7 +313,11 @@ public slots:
     // Telemetry
     void updateTelemetry(TelemetryAction action);
     void doUpdateTelemetry(TelemetryAction action);
-    const char* telemetryActionToString(TelemetryAction action);
+    TelemetryStatus getTelemetryStatus();
+    void setTelemetryStatus(TelemetryStatus status);
+    void enableTelemetry();
+    void disableTelemetry();
+    const char *telemetryActionToString(TelemetryAction action);
     static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
 
     // Slots to Gui request values

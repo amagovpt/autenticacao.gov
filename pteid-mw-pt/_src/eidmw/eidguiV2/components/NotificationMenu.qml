@@ -736,9 +736,8 @@ Item {
 
         openNotification(index, model.read, model.activated)
         controler.setAskToSetTelemetryValue(false)
-        controler.setEnablePteidTelemetry(activatedTelemetry)
         if(activatedTelemetry)
-            gapi.updateTelemetry(GAPI.Accepted)
+            gapi.enableTelemetry()
         gapi.updateTelemetry(GAPI.Startup)
     }
 

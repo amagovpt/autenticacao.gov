@@ -75,7 +75,7 @@ const char* GAPI::telemetryActionToString(TelemetryAction action)
         case TelemetryAction::Startup:          return "app/startup/";
         case TelemetryAction::Accepted:         return "app/accepted/";
         case TelemetryAction::Denied:           return "app/denied/";
-        case TelemetryAction::SignCC:           return "app/sign/cmd/";
+        case TelemetryAction::SignCC:           return "app/sign/cc/";
         case TelemetryAction::SignCMD:          return "app/sign/cmd/";
         case TelemetryAction::SignCCScap:       return "app/sign/cc/scap/";
         case TelemetryAction::SignCMDScap:      return "app/sign/cmd/scap/";
@@ -84,6 +84,40 @@ const char* GAPI::telemetryActionToString(TelemetryAction action)
         }
 }
 
+GAPI::TelemetryStatus GAPI::getTelemetryStatus()
+{
+    return static_cast<TelemetryStatus>(m_Settings.getTelemetryStatus());
+}
+
+void GAPI::setTelemetryStatus(TelemetryStatus status)
+{
+    m_Settings.setTelemetryStatus(static_cast<long>(status));
+}
+
+void GAPI::enableTelemetry()
+{
+    const auto tel_status = m_Settings.getTelemetryStatus();
+
+    if (getTelemetryStatus() == TelemetryStatus::Enabled)
+        return;
+
+    setTelemetryStatus(TelemetryStatus::RetryEnable);
+    Concurrent::run(this, &GAPI::doUpdateTelemetry, TelemetryAction::Accepted);
+}
+
+void GAPI::disableTelemetry()
+{
+    const auto tel_status = getTelemetryStatus();
+    // If we never sent an "accepted" update sucessefully, we don't need to send a "denied/disabled" update
+    if (tel_status == TelemetryStatus::RetryEnable || tel_status == TelemetryStatus::Disabled)
+    {
+        m_Settings.setTelemetryStatus(TelemetryStatus::Disabled);
+        return;
+    }
+
+    m_Settings.setTelemetryStatus(TelemetryStatus::RetryDisable); // trying to send denied telemetry action
+    Concurrent::run(this, &GAPI::doUpdateTelemetry, TelemetryAction::Denied);
+}
 //
 // Telemetry is updated by making requests to pre-defined endpoints on a
 // remote server.
@@ -131,7 +165,20 @@ void GAPI::doUpdateTelemetry(TelemetryAction action)
         //
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
 
-        curl_easy_perform(curl);
+        const auto curl_code = curl_easy_perform(curl);
+
+        //
+        // Retrieve response status code
+        //
+        long http_code = 0;
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+        if(action == TelemetryAction::Accepted || action == TelemetryAction::Denied)
+        {
+            setTelemetryStatus(
+                http_code == 200 ?
+                (action == TelemetryAction::Accepted ? TelemetryStatus::Enabled : TelemetryStatus::Disabled) :
+                (action == TelemetryAction::Accepted ? TelemetryStatus::RetryEnable : TelemetryStatus::RetryDisable));
+        }
 
         //
         // Cleanup curl
@@ -149,7 +196,8 @@ void GAPI::doUpdateTelemetry(TelemetryAction action)
 //
 void GAPI::updateTelemetry(TelemetryAction action)
 {
-    if(m_Settings.getEnablePteidTelemetry())
+    const auto tel_status = getTelemetryStatus();
+    if (tel_status == TelemetryStatus::Enabled)
         //
         // Run telemetry updates on different thread so it does not block the GUI
         // thread no matter how long the request manages to take.
