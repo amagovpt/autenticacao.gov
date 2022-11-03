@@ -96,8 +96,6 @@ void GAPI::setTelemetryStatus(TelemetryStatus status)
 
 void GAPI::enableTelemetry()
 {
-    const auto tel_status = m_Settings.getTelemetryStatus();
-
     if (getTelemetryStatus() == TelemetryStatus::Enabled)
         return;
 
@@ -165,7 +163,7 @@ void GAPI::doUpdateTelemetry(TelemetryAction action)
         //
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
 
-        const auto curl_code = curl_easy_perform(curl);
+        curl_easy_perform(curl);
 
         //
         // Retrieve response status code
