@@ -47,6 +47,8 @@
 #define SUCCESS_EXIT_CODE 0
 #define RESTART_EXIT_CODE  1
 
+#define TEL_APP_USER_AGENT  "AutenticacaoGov/"
+
 /* For filenames we need to maintain latin-1 or UTF-8 native encoding */
 //This macro's argument is a QString
 
@@ -268,6 +270,10 @@ public:
 
     enum SignLevel { LevelBasic, LevelTimestamp, LevelLTV };
 
+    enum TelemetryAction { Startup, SignCC, SignCMD, SignCMDScap, SignCCScap, PrintPDF, Accepted, Denied };
+
+    enum TelemetryStatus { RetryEnable = 1, Enabled = 2, RetryDisable = 4, Disabled = 8 };
+
     Q_ENUMS(ScapPdfSignResult)
     Q_ENUMS(ScapAttrType)
     Q_ENUMS(ScapAttrDescription)
@@ -284,6 +290,8 @@ public:
     Q_ENUMS(CmdDialogClass)
     Q_ENUMS(SignatureLevel)
     Q_ENUMS(ShortcutId)
+    Q_ENUMS(TelemetryAction)
+    Q_ENUMS(TelemetryStatus)
 
     bool isAddressLoaded() {return m_addressLoaded; }
 
@@ -302,6 +310,16 @@ public:
     CMDCertificates *m_cmdCertificates;
 
 public slots:
+    // Telemetry
+    void updateTelemetry(TelemetryAction action);
+    void doUpdateTelemetry(TelemetryAction action);
+    TelemetryStatus getTelemetryStatus();
+    void setTelemetryStatus(TelemetryStatus status);
+    void enableTelemetry();
+    void disableTelemetry();
+    const char *telemetryActionToString(TelemetryAction action);
+    static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
+
     // Slots to Gui request values
     QVariantList getRetReaderList(void);
     int getReaderIndex(void);

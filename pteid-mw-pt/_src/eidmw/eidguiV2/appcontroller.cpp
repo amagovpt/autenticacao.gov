@@ -794,6 +794,13 @@ void AppController::setAskToSetCacheValue(bool bAskToSetCache) {
     return m_Settings.setAskToSetCache(bAskToSetCache);
 }
 
+bool AppController::getAskToSetTelemetryValue(void) {
+    return m_Settings.getAskToSetTelemetry();
+}
+void AppController::setAskToSetTelemetryValue(bool bAskToSetTelemetry) {
+    return m_Settings.setAskToSetTelemetry(bAskToSetTelemetry);
+}
+
 void AppController::forceAccessibilityUpdate(QObject *obj) {
 	/*
 	Create a focus-gained event and notify the accessibility framework to force the active

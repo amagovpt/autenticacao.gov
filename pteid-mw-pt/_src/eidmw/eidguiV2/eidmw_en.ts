@@ -1149,6 +1149,14 @@
         <source>STR_REGISTER_CERTIFICATES</source>
         <translation>The certificate registration and removal options require this application to be running (minimized or maximized).</translation>
     </message>
+    <message>
+        <source>STR_TELEMETRY_TITLE</source>
+        <translation>Telemetry</translation>
+    </message>
+    <message>
+        <source>STR_USE_TELEMETRY_COMBOBOX_TEXT</source>
+        <translation>Use telemetry service</translation>
+    </message>
 </context>
 <context>
     <name>PageDefinitionsSCAP</name>
@@ -2143,6 +2151,10 @@
         <source>STR_SUSPENDED_SIGN_CERT</source>
         <translation>The Citizen Card&apos;s signature certificate is currently suspended. You can activate the digital signature at any time at a Citizen Card pick-up counter.</translation>
     </message>
+    <message>
+        <source>STR_FILE_ASIC</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>
@@ -2542,6 +2554,43 @@
     <message>
         <source>STR_SPACE_TO_OPEN_NOTIFICATION</source>
         <translation>Press space to open notification</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_YES</source>
+        <translation>Yes</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_NO</source>
+        <translation>No</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_PROCEED</source>
+        <translation>Apply</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_TITLE</source>
+        <translation>Do you allow the authentication.gov application to collect and report information about your usage?</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_TEXT</source>
+        <translation>The application will collect data about how you use it, so that we can improve your user experience. No personal data will be collected.</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_TEXT_MANDATORY</source>
+        <translation type="vanished">This is a mandatory configuration, it is required to choose one option in order to utilise the application. </translation>
+    </message>
+    <message>
+        <source>STR_TELEMETRY_TERMS</source>
+        <translation>The data collected is:
+ • Operating system and its version
+ • Authentication.gov application version
+ • Usage events, such as: application start, digital signatures, change or read the Citizen&apos;s Card address
+ • Randomly generated unique identifier to be able to differentiate Authentication.gov application installations
+ • Public IP of the internet connection that is used to send the collected data</translation>
+    </message>
+    <message>
+        <source>STR_TELEMETRY_SHOW_TERMS</source>
+        <translation>You can check the terms of usage here.</translation>
     </message>
 </context>
 </TS>

@@ -108,6 +108,9 @@ enum PTEID_SignatureLevel
 enum PTEID_Param
 {
 	//GENERAL
+	PTEID_PARAM_GENERAL_TELEMETRY_ID,
+	PTEID_PARAM_GENERAL_TELEMETRY_HOST,
+	PTEID_PARAM_GENERAL_TELEMETRY_STATUS,
 	PTEID_PARAM_GENERAL_INSTALLDIR,		//string, directory of the basic eid software;
 	PTEID_PARAM_GENERAL_CACHEDIR,		//string, cache directory for card-file;
 	PTEID_PARAM_GENERAL_PTEID_CACHEDIR,
@@ -160,6 +163,7 @@ enum PTEID_Param
 	PTEID_PARAM_GUITOOL_STARTUPDATE,	//number; 0=no, 1=yes(default)
 	PTEID_PARAM_GUITOOL_ASKREGCMDCERT,	//number; 0=no, 1=yes(default)
 	PTEID_PARAM_GUITOOL_ASKSETCACHE,	//number; 0=no, 1=yes(default)
+	PTEID_PARAM_GUITOOL_ASKSETTELEMETRY,//number; 0=no, 1=yes(default)
 
 	//XSIGN
 	PTEID_PARAM_XSIGN_TSAURL,			//string;

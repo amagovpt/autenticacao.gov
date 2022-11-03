@@ -1542,9 +1542,20 @@ Load language error. Please reinstall the application"
         if (controler.getAskToSetCacheValue()) {
             mainFormID.propertyNotificationMenu.addCacheSettings()   
         }
+        if (controler.getAskToSetTelemetryValue()) {
+            mainFormID.propertyNotificationMenu.addTelemetrySettings()
+        }
         if(Qt.platform.os === "windows"){
             mainFormID.propertyNotificationMenu.addCmdSettings(!controler.getAskToRegisterCmdCertValue())
         }
+
+        // Should we retry any of the telemetry status requests
+        if(gapi.getTelemetryStatus() === GAPI.RetryEnable)
+            gapi.enableTelemetry()
+        else if(gapi.getTelemetryStatus() === GAPI.RetryDisable)
+            gapi.disableTelemetry()
+
+        gapi.updateTelemetry(GAPI.Startup)
     }
 
     function mainMenuPressed(index){
@@ -1683,6 +1694,9 @@ Load language error. Please reinstall the application"
         }
         if (controler.getAskToSetCacheValue()) {
             mainFormID.propertyNotificationMenu.addCacheSettings()   
+        }
+        if (controler.getAskToSetTelemetryValue()) {
+            mainFormID.propertyNotificationMenu.addTelemetrySettings()
         }
         if(Qt.platform.os === "windows"){
             mainFormID.propertyNotificationMenu.addCmdSettings(!controler.getAskToRegisterCmdCertValue())

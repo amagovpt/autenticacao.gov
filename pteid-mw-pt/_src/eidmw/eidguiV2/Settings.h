@@ -51,6 +51,8 @@
 
 #define STR_DEF_GUILANGUAGE		"nl"
 
+#define TEL_HOST "https://tlmt.autenticacao.gov.pt"
+
 #define PIN_MAX_LENGHT 8
 #define PIN_MIN_LENGHT 4
 
@@ -72,6 +74,9 @@ public:
         : m_bProxySystem(false)
         , m_proxy_port(0)
         , m_GuiLanguage("nl")
+        , m_telemetry_id("0")
+        , m_telemetry_host("0")
+        , m_telemetry_status(8)
         , m_bShowAnimations(false)
         , m_bUseSystemScale(false)
         , m_iApplicationScale(0)
@@ -83,6 +88,7 @@ public:
         , m_bNotShowStartUpHelp(false)
         , m_bAskToRegisterCmdCert(false)
         , m_bAskToSetCache(false)
+        , m_bAskToSetTelemetry(false)
         , m_bShowSignatureOptions(false)
         , m_bShowSignatureHelp(false)
         , m_bAutoCardReading(false)
@@ -107,6 +113,49 @@ public:
                 setGuiLanguage(lng);
             }else{
                 setGuiLanguage(STR_DEF_GUILANGUAGE);
+            }
+        }
+
+        //----------------------------------------------------------
+        // check telemetry id
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_TELEMETRY_ID);
+            const char* telemetry_id = config.getString();
+
+            if (0 != telemetry_id)
+            {
+                setTelemetryId(telemetry_id);
+            }
+        }
+
+
+        //----------------------------------------------------------
+        // check telemetry host
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_TELEMETRY_HOST);
+            const char *telemetry_host = config.getString();
+            if (telemetry_host != 0 && strcmp(telemetry_host, "0") != 0)
+            {
+                setTelemetryHost(telemetry_host);
+            } 
+            else
+            {
+                setTelemetryHost(TEL_HOST);
+            }
+        }
+
+        //----------------------------------------------------------
+        // check telemetry status
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_TELEMETRY_STATUS);
+            long telemetryStatus = config.getLong();
+
+            if (telemetryStatus != 8)
+            {
+                setTelemetryStatus(telemetryStatus);
             }
         }
 
@@ -173,6 +222,19 @@ public:
             if (0 != askToSetCache)
             {
                 setAskToSetCache(true);
+            }
+        }
+
+        //----------------------------------------------------------
+        // check set telemetry
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ASKSETTELEMETRY);
+            long askToSetTelemetry = config.getLong();
+
+            if (0 != askToSetTelemetry)
+            {
+                setAskToSetTelemetry(true);
             }
         }
 
@@ -464,12 +526,62 @@ public:
     {
         return m_bAskToSetCache;
     }
+
+    bool getAskToSetTelemetry(void)
+    {
+        return m_bAskToSetTelemetry;
+    }
+
     void setAskToSetCache(bool bAskToSetCacheValue)
     {
         m_bAskToSetCache = bAskToSetCacheValue;
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ASKSETCACHE);
         config.setLong(m_bAskToSetCache);
     }
+
+    QString getTelemetryId()
+    {
+        return m_telemetry_id;
+    }
+
+    void setTelemetryId(QString telemetry_id)
+    {
+        m_telemetry_id = telemetry_id;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_TELEMETRY_ID);
+        config.setString(m_telemetry_id.toStdString().c_str());
+    }
+
+    QString getTelemetryHost()
+    {
+        return m_telemetry_host;
+    }
+
+    void setTelemetryHost(QString telemetry_host)
+    {
+        m_telemetry_host = telemetry_host;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_TELEMETRY_HOST);
+        config.setString(m_telemetry_host.toStdString().c_str());
+    }
+
+    void setTelemetryStatus(long telemetry_status)
+    {
+        m_telemetry_status = telemetry_status;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_TELEMETRY_STATUS);
+        config.setLong(m_telemetry_status);
+    }
+
+    long getTelemetryStatus()
+    {
+        return m_telemetry_status;
+    }
+
+    void setAskToSetTelemetry(bool bAskToSetTelemetry)
+    {
+        m_bAskToSetTelemetry = bAskToSetTelemetry;
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ASKSETTELEMETRY);
+        config.setLong(m_bAskToSetTelemetry);
+    }
+
     bool getShowAnimations( void )
     {
         return m_bShowAnimations;
@@ -802,6 +914,7 @@ public:
     }
 
 private:
+
     //Proxy Settings
     bool m_bProxySystem;
     QString m_proxy_host;
@@ -814,7 +927,10 @@ private:
     QString m_time_stamp_host;
 
     QString m_GuiLanguage;          //!< the GUI language
-    bool    m_bShowAnimations;      //!< the GUI Animations
+    QString m_telemetry_id;
+    QString m_telemetry_host;
+    long    m_telemetry_status;
+    bool    m_bShowAnimations;         //!< the GUI Animations
     int     m_bUseSystemScale;      //!< use the system scale
     int     m_iApplicationScale;    //!< the GUI scale
     int     m_iGraphicsAccel;       //!< the Graphics Acceleration 0=Software, 1=Hardware, 2=ANGLE
@@ -825,6 +941,7 @@ private:
     bool    m_bNotShowStartUpHelp;  //!< the GUI Show Help	bool	m_bStartMinimized;              //!< startup minimized (T/F)
     bool    m_bAskToRegisterCmdCert;//!< the GUI will ask to register the CMD cert on start (T/F)
     bool    m_bAskToSetCache;        //!< the GUI will ask to set the cache (on/off) on start (T/F)
+    bool    m_bAskToSetTelemetry;   //!< the GUI will ask to set the telemetry service (on/off) on start (T/F)
     bool    m_bShowSignatureOptions;//!< show signature options in GUI Signature page (T/F)
     bool    m_bShowSignatureHelp;   //!< show signature help in GUI Signature page (T/F)
     bool    m_bAutoCardReading;     //!< read the inserted card at startup (T/F)

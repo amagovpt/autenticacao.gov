@@ -1155,6 +1155,14 @@
         <source>STR_REGISTER_CERTIFICATES</source>
         <translation>As opções de registo e remoção de certificados requerem que esta aplicação esteja em funcionamento (minimizada ou maximizada).</translation>
     </message>
+    <message>
+        <source>STR_TELEMETRY_TITLE</source>
+        <translation>Telemetria</translation>
+    </message>
+    <message>
+        <source>STR_USE_TELEMETRY_COMBOBOX_TEXT</source>
+        <translation>Usar serviço de telemetria</translation>
+    </message>
 </context>
 <context>
     <name>PageDefinitionsSCAP</name>
@@ -2149,6 +2157,10 @@
         <source>STR_SUSPENDED_SIGN_CERT</source>
         <translation>O certificado de assinatura do Cartão de Cidadão encontra-se atualmente suspenso. Pode ativar a assinatura digital a qualquer momento num balcão de levantamento do Cartão de Cidadão.</translation>
     </message>
+    <message>
+        <source>STR_FILE_ASIC</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>Popup Card</name>
@@ -2547,6 +2559,43 @@
     <message>
         <source>STR_SPACE_TO_OPEN_NOTIFICATION</source>
         <translation>Pressione espaço para abrir a notificação</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_YES</source>
+        <translation>Sim</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_NO</source>
+        <translation>Não</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_PROCEED</source>
+        <translation>Aplicar</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_TITLE</source>
+        <translation>Permite que a aplicação autenticação.gov recolha e comunique informação sobre o seu uso?</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_TEXT</source>
+        <translation>A aplicação irá recolher dados sobre como a usa, para podermos melhorar a sua experiência de utilizador/a. Não serão recolhidos quaisquer dados pessoais.</translation>
+    </message>
+    <message>
+        <source>STR_SET_TELEMETRY_TEXT_MANDATORY</source>
+        <translation type="vanished">Esta é uma configuração de carácter obrigatório, é necessário escolher uma das opções para utilizar a aplicação.</translation>
+    </message>
+    <message>
+        <source>STR_TELEMETRY_TERMS</source>
+        <translation>Os dados recolhidos são:
+ • Sistema operativo e versão
+ • Versão da aplicação Autenticação.gov
+ • Eventos de utilização, como: iniciar aplicação, assinaturas digitais, alterar ou ler a morada do Cartão de Cidadão
+ • Identificador único gerado aleatoriamente para poder diferenciar instalações da aplicação Autenticação.gov
+ • IP público da ligação de internet que é usado para enviar os dados recolhidos</translation>
+    </message>
+    <message>
+        <source>STR_TELEMETRY_SHOW_TERMS</source>
+        <translation>Poderá consultar os termos de utilização aqui.</translation>
     </message>
 </context>
 </TS>

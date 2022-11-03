@@ -164,6 +164,15 @@ PageDefinitionsAppForm {
         }
     }
 
+    propertyCheckBoxUseTelemetry {
+        onCheckedChanged: {
+            if(propertyCheckBoxUseTelemetry.checkState == Qt.Checked)
+                gapi.enableTelemetry()
+            else
+                gapi.disableTelemetry()
+        }
+    }
+
     propertyComboboxAccelGraphics{
         onActivated:  {
             console.log("propertyComboboxAccelGraphics onActivated index = "
@@ -286,6 +295,10 @@ PageDefinitionsAppForm {
             propertyDebugModeStep1TextField.color = Constants.COLOR_MAIN_BLACK
             propertyDebugModeStep3TextField.color = Constants.COLOR_GRAY
         }
+
+        
+        var tel_status = gapi.getTelemetryStatus();
+        propertyCheckBoxUseTelemetry.checked = tel_status == GAPI.RetryEnable || tel_status == GAPI.Enabled
 
         propertyCheckBoxDebugMode.enabled = true
 

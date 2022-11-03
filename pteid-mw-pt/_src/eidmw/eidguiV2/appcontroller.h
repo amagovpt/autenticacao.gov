@@ -97,6 +97,9 @@ public slots:
     bool getAskToSetCacheValue(void);
     void setAskToSetCacheValue(bool bAskToSetCache);
 
+    bool getAskToSetTelemetryValue(void);
+    void setAskToSetTelemetryValue(bool bAskToSetTelemetry);
+
     QString getGuiLanguageString(void);
     void setGuiLanguageString (QString language);
 

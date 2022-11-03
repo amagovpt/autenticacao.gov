@@ -50,7 +50,7 @@ Item {
                 id: notification_box
                 width: parent.width
                 height: model.activated ? news.height + update.height + definitions_cmd.height 
-                        + definitions_cache.height : Constants.SIZE_IMAGE_BOTTOM_MENU * 2 
+                        + definitions_cache.height + definitions_telemetry.height : Constants.SIZE_IMAGE_BOTTOM_MENU * 2 
                 color: activeFocus ? Constants.COLOR_MAIN_MIDDLE_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
                 visible: !hasMandatory || model.mandatory
                 clip: true
@@ -185,6 +185,162 @@ Item {
                 }
 
                 Components.Notification {
+                    id: definitions_telemetry
+                    height: visible ? title.height + description.height + textItem.height + terms.height + activatedCache.height * 2 + rightButton.height + 75 : 0
+                    visible: model.category === "definitions_telemetry" && model.activated
+
+                    title.text: model.title
+                    description.text: model.text
+
+                    Image {
+                        id: carot
+
+                        anchors.left: parent.left
+                        anchors.top: definitions_telemetry.description.bottom
+                        anchors.leftMargin: Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 + 4
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 2
+
+                        sourceSize.width: Constants.SIZE_IMAGE_ARROW_ACCORDION
+                        sourceSize.height: Constants.SIZE_IMAGE_ARROW_ACCORDION
+                        source: '../images/arrow-right_AMA.png'
+                        transform: Rotation {
+                            origin.x: Constants.SIZE_IMAGE_ARROW_ACCORDION * 0.5
+                            origin.y: Constants.SIZE_IMAGE_ARROW_ACCORDION * 0.5
+                            angle: terms.visible ? 90 : 0
+                            Behavior on angle { NumberAnimation { duration: 150 } }
+                        }
+
+                        MouseArea {
+                            id: carotMouseArea
+                            cursorShape: Qt.PointingHandCursor
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: {
+                                var isHidden = terms.visible
+
+                                terms.enabled = !isHidden
+                                terms.visible = !isHidden
+
+                                terms.height = isHidden ? 0 : terms.implicitHeight
+                                terms.anchors.leftMargin = isHidden ? 0 : Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 + 4
+                                terms.anchors.topMargin = isHidden ? 0 : Constants.SIZE_ROW_V_SPACE * 2
+                            }
+                        }
+                    }
+
+                    Text {
+                        id: textItem
+                        text: qsTranslate("main","STR_TELEMETRY_SHOW_TERMS")
+                        font.italic: true
+                        width: parent.width - Constants.SIZE_IMAGE_BOTTOM_MENU - 40
+                        wrapMode: TextEdit.Wrap
+                        color: Constants.COLOR_TEXT_BODY
+                        horizontalAlignment: Text.AlignJustify
+                        elide: Text.ElideRight
+
+                        anchors.top: definitions_telemetry.description.bottom
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE * 2
+                        anchors.left: carot.right
+                        anchors.leftMargin: terms.visible ? 10 : Constants.SIZE_TEXT_FIELD * 0.5
+
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL_FOCUS
+                        font.bold: activeFocus
+                        font.family: lato.name
+
+                        MouseArea {
+                            id: mouseAreaText
+                            cursorShape: Qt.PointingHandCursor
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: {
+                                var isHidden = terms.visible
+
+                                terms.enabled = !isHidden
+                                terms.visible = !isHidden
+
+                                terms.height = isHidden ? 0 : terms.implicitHeight
+                                terms.anchors.leftMargin = isHidden ? 0 : Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 + 4
+                                terms.anchors.topMargin = isHidden ? 0 : Constants.SIZE_ROW_V_SPACE * 2
+                            }
+                        }
+                    }
+
+                    Label {
+                        id: terms
+                        width: parent.width - Constants.SIZE_IMAGE_BOTTOM_MENU - 40
+                        text: qsTranslate("main","STR_TELEMETRY_TERMS")
+                        wrapMode: TextEdit.Wrap
+                        color: Constants.COLOR_TEXT_BODY
+                        lineHeight: 1.5
+                        elide: Text.ElideRight
+                        visible: false
+                        height: 0
+
+                        anchors.top: textItem.bottom
+                        anchors.left: parent.left
+
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL_FOCUS
+                        font.bold: activeFocus
+                        font.family: lato.name
+
+                        Keys.enabled: true
+                        Keys.onTabPressed: { nextItemInFocusChain().forceActiveFocus() }
+                        Keys.onDownPressed: { nextItemInFocusChain().forceActiveFocus() }
+                        Keys.onRightPressed: { nextItemInFocusChain().forceActiveFocus() }
+                        KeyNavigation.backtab: definitions_telemetry.title
+                        KeyNavigation.up: definitions_telemetry.title
+                    }
+
+                    CheckBox {
+                        id: activatedTelemetry
+                        text: qsTranslate("main","STR_SET_TELEMETRY_YES")
+                        checked: false
+                        onClicked: deactivatedTelemetry.checked = false
+
+                        anchors.top: terms.bottom
+                        anchors.topMargin: Constants.SIZE_ROW_V_SPACE 
+                        anchors.left: parent.left
+                        anchors.leftMargin: Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 
+
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL_FOCUS
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
+
+                        Keys.enabled: true
+                        Keys.onBacktabPressed: definitions_telemetry.description.forceActiveFocus()
+                        Keys.onUpPressed: definitions_telemetry.description.forceActiveFocus()
+                    }
+
+                    CheckBox {
+                        id: deactivatedTelemetry
+                        text: qsTranslate("main","STR_SET_TELEMETRY_NO")
+                        checked: false
+                        onClicked: activatedTelemetry.checked = false
+
+                        anchors.top: activatedTelemetry.bottom
+                        anchors.left: parent.left
+                        anchors.leftMargin: Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 
+
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL_FOCUS
+                        font.capitalization: Font.MixedCase
+                        font.bold: activeFocus
+
+                        Keys.enabled: true
+                        Keys.onTabPressed: definitions_telemetry.rightButton.enabled ? definitions_telemetry.rightButton.forceActiveFocus() : activatedTelemetry.forceActiveFocus()
+                        Keys.onDownPressed: definitions_telemetry.rightButton.enabled ? definitions_telemetry.rightButton.forceActiveFocus() : activatedTelemetry.forceActiveFocus()
+                        Keys.onRightPressed: definitions_telemetry.rightButton.enabled ? definitions_telemetry.rightButton.forceActiveFocus() : activatedTelemetry.forceActiveFocus()
+                    }
+
+                    rightButton {
+                        text: qsTranslate("main","STR_SET_TELEMETRY_PROCEED")
+                        enabled: activatedTelemetry.checked || deactivatedTelemetry.checked
+                        onClicked: setTelemetrySettings(index, model, activatedTelemetry.checked)
+                    }
+                }
+
+                Components.Notification {
                     id: definitions_cmd
                     height: visible ? title.height + description.height + rightButton.height + 75 : 0
                     visible: model.category === "definitions_cmd" && model.activated
@@ -223,6 +379,7 @@ Item {
                         if (update.visible) update.forceActiveFocus()
                         else if (definitions_cmd.visible) definitions_cmd.forceActiveFocus()
                         else if (definitions_cache.visible) definitions_cache.forceActiveFocus()
+                        else if (definitions_telemetry.visible) definitions_telemetry.forceActiveFocus()
                         else if (news.visible) news.forceActiveFocus()
                     } else {
                         if (!model.read && listView.count == 0) {
@@ -292,8 +449,6 @@ Item {
 
             anchors.top: parent.top
             anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER
-            anchors.left: parent.left
-            anchors.leftMargin: Constants.MARGIN_NOTIFICATION_CENTER
 
             Keys.enabled: true
             KeyNavigation.tab: new_notification_title.visible ? new_notification_title : read_notification_title
@@ -332,7 +487,7 @@ Item {
 
         Flickable {
             id: notificationArea
-            width: parent.width - Constants.MARGIN_NOTIFICATION_CENTER * 2
+            width: parent.width
             height: parent.height - title.height - 30
             contentHeight: listView_read.height + listView.height + new_notification_title.height + read_notification_title.height + 50
             clip: true
@@ -343,7 +498,6 @@ Item {
             ScrollBar.vertical: ScrollBar {
                 id: viewScroll
                 active: true
-                visible: false
                 policy: ScrollBar.AlwaysOn
             }
 
@@ -371,13 +525,14 @@ Item {
 
             ListView {
                 id: listView
-                width: parent.width
+                width: parent.width - Constants.MARGIN_NOTIFICATION_CENTER * 2
                 height: childrenRect.height 
                 clip: true
                 model: model_recent
                 delegate: delegate
                 focus: true
                 spacing: 6
+                interactive: false
 
                 anchors.top: new_notification_title.bottom
                 anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER / 2
@@ -421,6 +576,7 @@ Item {
                 delegate: delegate
                 focus: true
                 spacing: 6
+                interactive: false
 
                 anchors.top: read_notification_title.bottom
                 anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER / 2
@@ -529,7 +685,26 @@ Item {
         hasMandatory = true
         exitIcon.visible = false
         exitArea.enabled = false
-        notificationArea.interactive = false
+        notificationArea.interactive = true
+        mainFormID.propertyNotificationMenu.open()
+    }
+
+    function addTelemetrySettings() {
+        insertInModel(4, {
+            "title": qsTranslate("main","STR_SET_TELEMETRY_TITLE"),
+            "text": qsTranslate("main","STR_SET_TELEMETRY_TEXT"),
+            "link": "",
+            "category": "definitions_telemetry",
+            "read": false,
+            "priority": 4,
+            "activated": true,
+            "mandatory": true
+        })
+
+        hasMandatory = true
+        exitIcon.visible = false
+        exitArea.enabled = false
+        notificationArea.interactive = true
         mainFormID.propertyNotificationMenu.open()
     }
 
@@ -550,6 +725,20 @@ Item {
             controler.setEnablePteidCache(false);
             controler.flushCache();
         }     
+    }
+
+    function setTelemetrySettings(index, model, activatedTelemetry) {
+        model.mandatory = false
+        hasMandatory = false
+        exitIcon.visible = true
+        exitArea.enabled = true
+        notificationArea.interactive = true
+
+        openNotification(index, model.read, model.activated)
+        controler.setAskToSetTelemetryValue(false)
+        if(activatedTelemetry)
+            gapi.enableTelemetry()
+        gapi.updateTelemetry(GAPI.Startup)
     }
 
     function addUpdate(release_notes, installed_version, remote_version, url_list, type) {       
@@ -653,6 +842,7 @@ Item {
                 else  
                     return "../images/services_icon_selected.png"
             case "definitions_cache":
+            case "definitions_telemetry":
                 if (read)
                     return "../images/definitions_icon.png"
                 else  
@@ -671,6 +861,7 @@ Item {
             case "definitions_cmd":
                 return qsTranslate("main", "STR_NOTIFICATION_SERVICES") + controler.autoTr
             case "definitions_cache":
+            case "definitions_telemetry":
                 return qsTranslate("main", "STR_NOTIFICATION_CONFIG") + controler.autoTr
             default:
                 return null

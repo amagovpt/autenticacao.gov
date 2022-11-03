@@ -21,6 +21,7 @@
 #include <QPrinter>
 #include <QPrinterInfo>
 #include <QWindow>
+#include <QUuid>
 #include "qpainter.h"
 
 #include "CMDSignature.h"
@@ -41,6 +42,10 @@
 #include "proxyinfo.h"
 #include "concurrent.h"
 
+#include "pteidversions.h"
+
+#include <curl/curl.h>
+
 using namespace eIDMW;
 
 #define TRIES_LEFT_ERROR    1000
@@ -52,6 +57,151 @@ static  int g_runningCallback=0;
 /*
     GAPI - Graphic Application Programming Interface
 */
+
+//
+// The write callback function to curl requests. At the moment this functions
+// does nothing other than return the ammount of bytes. This allows 
+//
+size_t GAPI::write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
+{
+    Q_UNUSED(ptr);
+    Q_UNUSED(userdata);
+    return size * nmemb;
+}
+
+const char* GAPI::telemetryActionToString(TelemetryAction action)
+{
+    switch(action) {
+        case TelemetryAction::Startup:          return "app/startup/";
+        case TelemetryAction::Accepted:         return "app/accepted/";
+        case TelemetryAction::Denied:           return "app/denied/";
+        case TelemetryAction::SignCC:           return "app/sign/cc/";
+        case TelemetryAction::SignCMD:          return "app/sign/cmd/";
+        case TelemetryAction::SignCCScap:       return "app/sign/cc/scap/";
+        case TelemetryAction::SignCMDScap:      return "app/sign/cmd/scap/";
+        case TelemetryAction::PrintPDF:         return "app/printpdf/";
+        default:                                return "app/unknown/";
+        }
+}
+
+GAPI::TelemetryStatus GAPI::getTelemetryStatus()
+{
+    return static_cast<TelemetryStatus>(m_Settings.getTelemetryStatus());
+}
+
+void GAPI::setTelemetryStatus(TelemetryStatus status)
+{
+    m_Settings.setTelemetryStatus(static_cast<long>(status));
+}
+
+void GAPI::enableTelemetry()
+{
+    if (getTelemetryStatus() == TelemetryStatus::Enabled)
+        return;
+
+    setTelemetryStatus(TelemetryStatus::RetryEnable);
+    Concurrent::run(this, &GAPI::doUpdateTelemetry, TelemetryAction::Accepted);
+}
+
+void GAPI::disableTelemetry()
+{
+    const auto tel_status = getTelemetryStatus();
+    // If we never sent an "accepted" update sucessefully, we don't need to send a "denied/disabled" update
+    if (tel_status == TelemetryStatus::RetryEnable || tel_status == TelemetryStatus::Disabled)
+    {
+        m_Settings.setTelemetryStatus(TelemetryStatus::Disabled);
+        return;
+    }
+
+    m_Settings.setTelemetryStatus(TelemetryStatus::RetryDisable); // trying to send denied telemetry action
+    Concurrent::run(this, &GAPI::doUpdateTelemetry, TelemetryAction::Denied);
+}
+//
+// Telemetry is updated by making requests to pre-defined endpoints on a
+// remote server.
+//
+void GAPI::doUpdateTelemetry(TelemetryAction action)
+{
+    //
+    // Create a new guid once per system.
+    //
+    const auto telemetry_id = m_Settings.getTelemetryId();
+    if (telemetry_id.compare("0") == 0)
+    {
+        const auto new_telemetry_id = QUuid::createUuid().toString(QUuid::Id128);
+        m_Settings.setTelemetryId(new_telemetry_id);
+    }
+
+    const auto telemetry_host = m_Settings.getTelemetryHost();
+
+    //
+	// Initiate curl
+	//
+    auto curl = curl_easy_init();
+    if (curl)
+    {
+        //
+        // The endpoint URL represents the action performed by the client
+        // URL : <hostname>/<action>/
+        //
+        QString url = telemetry_host + telemetryActionToString(action) + "?tel_id=" + m_Settings.getTelemetryId();
+        curl_easy_setopt(curl, CURLOPT_URL, url.toStdString().c_str());
+
+        //
+        // Create user-agent header with the following structure
+        // AutenticacaoGov/<version> (<OS Name> <OS version>)
+        //
+        QString user_agent = QString(TEL_APP_USER_AGENT) + PTEID_PRODUCT_VERSION + " (" + QSysInfo::prettyProductName().toStdString().c_str() + ")";
+        curl_easy_setopt(curl, CURLOPT_USERAGENT, user_agent.toStdString().c_str());
+        //Validate TLS server certificate using our certificate bundle
+        std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
+        curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_file.c_str());
+
+        //
+        // Custom writefunction callback to pipe the request result so
+        // it does not print to the console/log
+        //
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+
+        curl_easy_perform(curl);
+
+        //
+        // Retrieve response status code
+        //
+        long http_code = 0;
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+        if(action == TelemetryAction::Accepted || action == TelemetryAction::Denied)
+        {
+            setTelemetryStatus(
+                http_code == 200 ?
+                (action == TelemetryAction::Accepted ? TelemetryStatus::Enabled : TelemetryStatus::Disabled) :
+                (action == TelemetryAction::Accepted ? TelemetryStatus::RetryEnable : TelemetryStatus::RetryDisable));
+        }
+
+        //
+        // Cleanup curl
+        //
+        curl_easy_cleanup(curl);
+        curl = NULL;
+    }
+}
+
+
+//
+// Telemetry updates are non-blocking, does not produce any logs nor do they
+// throw any exceptions. They are completly silent for both the developer and
+// user.
+//
+void GAPI::updateTelemetry(TelemetryAction action)
+{
+    const auto tel_status = getTelemetryStatus();
+    if (tel_status == TelemetryStatus::Enabled)
+        //
+        // Run telemetry updates on different thread so it does not block the GUI
+        // thread no matter how long the request manages to take.
+        //
+        Concurrent::run(this, &GAPI::doUpdateTelemetry, action);
+}
 
 GAPI::GAPI(QObject *parent) :
     QObject(parent) {
@@ -899,6 +1049,8 @@ void GAPI::doSignCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams)
     }
 
     showSignCMDDialog(ret);
+
+    updateTelemetry(TelemetryAction::SignCMD);
 }
 
 void GAPI::doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams, QList<int> attribute_list) {
@@ -957,6 +1109,8 @@ void GAPI::doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &sign
     }
     signCMDFinished(ret);
     signalUpdateProgressBar(100);
+
+    updateTelemetry(TelemetryAction::SignCMDScap);
 }
 
 void GAPI::doSignXADESWithCMD(SignParams &params, bool isASIC) {
@@ -1326,7 +1480,10 @@ void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
             emit signalPdfPrintFail();
         }
     }
-    END_TRY_CATCH
+
+	updateTelemetry(TelemetryAction::PrintPDF);
+    
+	END_TRY_CATCH
 }
 
 static QPen black_pen;
@@ -2039,6 +2196,8 @@ void GAPI::doSignPDF(SignParams &params) {
 
     emit signalPdfSignSuccess(SignMessageOK);
 
+    updateTelemetry(TelemetryAction::SignCC);
+
     END_TRY_CATCH
 }
 
@@ -2392,6 +2551,8 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
         params.location_x, params.location_y, params.location, params.reason,
         params.isTimestamp, params.isLtv, attrs, useCustomSignature(), m_jpeg_scaled_data, 
         m_seal_width, m_seal_height);
+
+    updateTelemetry(TelemetryAction::SignCCScap);
     END_TRY_CATCH
 }
 
