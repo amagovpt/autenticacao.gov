@@ -1050,7 +1050,6 @@ void GAPI::doSignCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams)
 
     showSignCMDDialog(ret);
 
-    printf("ret ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> %ld\n", ret);
     if (ret == 0)
         updateTelemetry(TelemetryAction::SignCMD);
 }
