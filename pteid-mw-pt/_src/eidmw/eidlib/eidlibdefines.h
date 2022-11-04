@@ -108,9 +108,6 @@ enum PTEID_SignatureLevel
 enum PTEID_Param
 {
 	//GENERAL
-	PTEID_PARAM_GENERAL_TELEMETRY_ID,
-	PTEID_PARAM_GENERAL_TELEMETRY_HOST,
-	PTEID_PARAM_GENERAL_TELEMETRY_STATUS,
 	PTEID_PARAM_GENERAL_INSTALLDIR,		//string, directory of the basic eid software;
 	PTEID_PARAM_GENERAL_CACHEDIR,		//string, cache directory for card-file;
 	PTEID_PARAM_GENERAL_PTEID_CACHEDIR,
@@ -126,7 +123,7 @@ enum PTEID_Param
 	PTEID_PARAM_GENERAL_PINPAD_ENABLED,
 
 	//LOGGING
-	PTEID_PARAM_LOGGING_DIRNAME,			//string, location of the log-file; $home/pteid/	Full path with volume name.
+	PTEID_PARAM_LOGGING_DIRNAME,		//string, location of the log-file; $home/pteid/	Full path with volume name.
 	PTEID_PARAM_LOGGING_PREFIX,			//string, prefix of the log files
 	PTEID_PARAM_LOGGING_FILENUMBER,		//number, Maximum number of log-files; 3
 	PTEID_PARAM_LOGGING_FILESIZE,		//number, Maximum number of log-files; 3
@@ -134,13 +131,13 @@ enum PTEID_Param
 	PTEID_PARAM_LOGGING_GROUP,			//number; 0=no (default), 1=yes (create on log file by module)
 
 	//CERTIFICATE CACHE
-	PTEID_PARAM_CERTCACHE_CACHEFILE,		//string;
+	PTEID_PARAM_CERTCACHE_CACHEFILE,	//string;
 	PTEID_PARAM_CERTCACHE_LINENUMB,		//number
 	PTEID_PARAM_CERTCACHE_VALIDITY,		//number
-	PTEID_PARAM_CERTCACHE_WAITDELAY,		//number
+	PTEID_PARAM_CERTCACHE_WAITDELAY,	//number
 
     //TIMESTAMP SERVER
-    PTEID_PARAM_TIMESTAMP_HOST,                     //string;
+    PTEID_PARAM_TIMESTAMP_HOST,         //string;
 	//PROXY
 	PTEID_PARAM_PROXY_HOST,				//string;
 	PTEID_PARAM_PROXY_PORT,				//number
@@ -163,10 +160,9 @@ enum PTEID_Param
 	PTEID_PARAM_GUITOOL_STARTUPDATE,	//number; 0=no, 1=yes(default)
 	PTEID_PARAM_GUITOOL_ASKREGCMDCERT,	//number; 0=no, 1=yes(default)
 	PTEID_PARAM_GUITOOL_ASKSETCACHE,	//number; 0=no, 1=yes(default)
-	PTEID_PARAM_GUITOOL_ASKSETTELEMETRY,//number; 0=no, 1=yes(default)
 
 	//XSIGN
-	PTEID_PARAM_XSIGN_TSAURL,			//string;
+	PTEID_PARAM_XSIGN_TSAURL,			//string
 	PTEID_PARAM_XSIGN_ONLINE,			//number
 	PTEID_PARAM_XSIGN_WORKINGDIR,		//string;
 	PTEID_PARAM_XSIGN_TIMEOUT,			//number
@@ -195,7 +191,13 @@ enum PTEID_Param
     PTEID_PARAM_CMD_HOST,         //string
     PTEID_PARAM_CMD_APPID,        //string
     PTEID_PARAM_CMD_USERID,       //string
-    PTEID_PARAM_CMD_PASSWORD      //string
+    PTEID_PARAM_CMD_PASSWORD,     //string
+
+	//Telemetry-related values
+	PTEID_PARAM_GENERAL_TELEMETRY_ID,      //string
+	PTEID_PARAM_GENERAL_TELEMETRY_HOST,    //string
+	PTEID_PARAM_GENERAL_TELEMETRY_STATUS,  //number
+	PTEID_PARAM_GUITOOL_ASKSETTELEMETRY    //number; 0=no, 1=yes(default)
 
 };
 
