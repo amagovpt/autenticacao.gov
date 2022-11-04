@@ -1157,11 +1157,11 @@
     </message>
     <message>
         <source>STR_TELEMETRY_TITLE</source>
-        <translation>Telemetria</translation>
+        <translation>Recolha de dados de utilização</translation>
     </message>
     <message>
         <source>STR_USE_TELEMETRY_COMBOBOX_TEXT</source>
-        <translation>Usar serviço de telemetria</translation>
+        <translation>Permitir que a aplicação recolha e comunique informação sobre o seu uso</translation>
     </message>
 </context>
 <context>

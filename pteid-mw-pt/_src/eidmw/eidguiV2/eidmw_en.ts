@@ -1151,11 +1151,11 @@
     </message>
     <message>
         <source>STR_TELEMETRY_TITLE</source>
-        <translation>Telemetry</translation>
+        <translation>Usage data collection</translation>
     </message>
     <message>
         <source>STR_USE_TELEMETRY_COMBOBOX_TEXT</source>
-        <translation>Use telemetry service</translation>
+        <translation>Allow the application to collect and send information about its usage</translation>
     </message>
 </context>
 <context>
