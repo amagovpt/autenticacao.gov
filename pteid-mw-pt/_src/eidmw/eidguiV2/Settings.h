@@ -76,7 +76,7 @@ public:
         , m_GuiLanguage("nl")
         , m_telemetry_id("0")
         , m_telemetry_host("0")
-        , m_telemetry_status(8)
+        , m_telemetry_status(8)    /* TelemetryStatus::Disabled defined in gapi.h */
         , m_bShowAnimations(false)
         , m_bUseSystemScale(false)
         , m_iApplicationScale(0)
