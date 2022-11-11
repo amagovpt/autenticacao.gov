@@ -88,14 +88,6 @@ public:
     std::string ToString(bool bAddSpace = true, bool bOneLine = true,
         unsigned long ulOffset = 0, unsigned long ulLen = 0xFFFFFFFF) const;
 
-	// Following methods are used when sending data using socket communication to
-	// allow for embedded new line characters without corrupting the data being send.
-	// Any embedded new line character is replaced with an escape character and an 
-	// encoded newline character. So, '\n' becomes '0x271a'.
-	// To allow for embedded escape characters, '0x27' becomes '0x2737'.
-	void HideNewLineCharsA();
-	void RevealNewLineCharsA();
-
 private:
     void MakeArray(const unsigned char * pucData, unsigned long ulSize, unsigned long ulCapacity = 0);
 

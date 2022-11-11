@@ -449,64 +449,6 @@ void CByteArray::MakeArray(const unsigned char * pucData,		//returns allocated m
 	}
 }
 
-// CByteArray::HideNewLineCharsA()
-void CByteArray::HideNewLineCharsA()
-{
-
-	unsigned long noOfSpecials = 0;
-	for (unsigned long i = 0; i < m_ulSize; ++i)
-	{
-		if ((m_pucData[i] == 0x0a) || (m_pucData[i] == 0x27))
-		{
-			noOfSpecials += 1;
-		}
-	}
-
-	if (noOfSpecials == 0) return;
-
-	unsigned long theNewSize = m_ulSize + noOfSpecials;
-	if (theNewSize > m_ulCapacity)
-	{
-		m_pucData = static_cast<unsigned char *>(realloc(m_pucData, theNewSize));
-	}
-
-	unsigned char *src = m_pucData + m_ulSize;
-	unsigned char *dst = m_pucData + theNewSize;
-	for (unsigned long i = 0; i < m_ulSize; ++i)
-	{
-		*--dst = *--src;
-		if ((*dst == 0x0a) || (*dst == 0x27))
-		{
-			*dst += 0x10;
-			*--dst = 0x27;
-		}
-	}
-
-	m_ulSize = theNewSize;
-
-}
-
-// CByteArray::RevealNewLineCharsA()
-void CByteArray::RevealNewLineCharsA()
-{
-
-	unsigned char *src = m_pucData;
-	unsigned char *dst = m_pucData;
-	unsigned long noOfSpecials = 0;
-	for (unsigned long i = 0; i < m_ulSize; ++i)
-	{
-		if (*src == 0x27)
-		{
-			src += 1;
-			*src -= 0x10;
-			noOfSpecials += 1;
-		}
-		*dst++ = *src++;
-	}
-	m_ulSize -= noOfSpecials;
-
-}
-
 void CByteArray::Replace(unsigned char ucByteSrc,unsigned char ucByteDest)
 {
 
@@ -519,5 +461,5 @@ void CByteArray::Replace(unsigned char ucByteSrc,unsigned char ucByteDest)
 	}
 }
 
-} // namespace eidMW
+} // namespace eIDMW
 
