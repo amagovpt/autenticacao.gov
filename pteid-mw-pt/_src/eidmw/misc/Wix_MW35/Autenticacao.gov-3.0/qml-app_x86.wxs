@@ -6,6 +6,25 @@
   <Fragment>
     <DirectoryRef Id="APPLICATIONFOLDER">
 
+      <Directory Id="FONTSDIR" Name="fonts">
+        <Component Id="LatoFont" Guid="{d2c0624a-1839-11ea-8d71-362b9e155667}">
+          <File Source="..\..\..\eidguiV2\fonts\lato\Lato-Regular.ttf" KeyPath="yes" />
+        </Component>
+        <Component Id="MyriadFont" Guid="{A018741E-7F59-4F9F-9D6C-1CD8C47E8E3D}">
+          <File Source="..\..\..\eidguiV2\fonts\myriad\MyriadPro-Regular.otf" KeyPath="yes" />
+        </Component>
+        <Component Id="MyriadFontBold" Guid="{8EAB5A1B-F55C-4DC5-ADDD-6D3E2377BF72}">
+          <File Source="..\..\..\eidguiV2\fonts\myriad\MyriadPro-Bold.otf" KeyPath="yes" />
+        </Component>
+      </Directory>
+
+      <Directory Id="WEBDIR" Name="web">
+        <Component Id="OAuthPages" Guid="{08F97C8A-7A73-427F-B0F1-86D26ECBAA7E}">
+          <File Source="..\..\web\AutenticacaoGov.html" KeyPath="yes" />
+          <File Source="..\..\web\AutenticacaoGov_failed.html" />
+        </Component>
+      </Directory>
+
     <Component Id="PteidGuiShortcutOpenGL" Guid="{737097CD-3807-40DF-A0A7-9842516BA37B}" KeyPath="yes">
       <Shortcut Id="eidguiV2ShortcutDirect3d"
           Name="Autenticação.Gov Direct3d"
@@ -2517,6 +2536,10 @@
       <ComponentRef Id="PteidGuiShortcutOpenGL"/>
       <ComponentRef Id="libcrypto11"/>
       <ComponentRef Id="libssl11"/>
+      <ComponentRef Id="LatoFont"/>
+      <ComponentRef Id="MyriadFont"/>
+      <ComponentRef Id="MyriadFontBold"/>
+      <ComponentRef Id="OAuthPages"/>
       <ComponentRef Id="cmp7F40CCD4FD162222E744B7B74F9DF5A3" />
       <ComponentRef Id="cmp7F40CCD4FD162222E744B7B74F9DF5A4" />
       <ComponentRef Id="cmp6FAEA3F9F61E5AB0CE462E42B572D724" />
