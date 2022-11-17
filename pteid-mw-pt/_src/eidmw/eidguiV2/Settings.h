@@ -33,23 +33,8 @@
 #include <QString>
 #include "eidlib.h"
 
-#define SECTION_CERTVALIDATION		"certificatevalidation"
-#define SECTION_GENERAL				"general"
-#define SECTION_CARDREADERS			"cardreaders"
-#define SECTION_CERTIFICATES		"certificates"
-
-#define STR_LANGUAGE			"language"
-#define STR_STARTMINIMIZED		"start_minimized"
-#define STR_USEVIRTUALKEYPAD	"use_virtual_keypad"
-
-#define STR_SHOWPICTURE			"show_picture"
-#define STR_AUTOCARDREADING		"automatic_cardreading"
-#define STR_AUTOSTARTUP			"start_with_windows"
-#define STR_REGCERT				"register_certificate"
-#define STR_REMOVECERT			"remove_certificate"
-#define STR_CARDREADER			"cardreader"
-
 #define STR_DEF_GUILANGUAGE		"nl"
+
 
 #define TEL_HOST "https://tlmt.autenticacao.gov.pt"
 
