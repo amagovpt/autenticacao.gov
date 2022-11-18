@@ -1636,7 +1636,7 @@
     </message>
     <message>
         <source>STR_HELP_URL</source>
-        <translation>Manual de utilização da aplicação do cartão de cidadão</translation>
+        <translation>Manual de utilização da aplicação</translation>
     </message>
     <message>
         <source>STR_HOME_REMINDER</source>

@@ -1630,7 +1630,7 @@
     </message>
     <message>
         <source>STR_HELP_URL</source>
-        <translation>Cartão de cidadão application manual</translation>
+        <translation>Application user manual</translation>
     </message>
     <message>
         <source>STR_HOME_REMINDER</source>
