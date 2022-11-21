@@ -269,6 +269,11 @@ RegisterProvider(
 }
 ///////////////////////////////////////////////////////////////////////////////
 
+//It's not so simple to include ntstatus.h so we copy here this single error code definition
+#ifndef STATUS_NOT_FOUND
+#define STATUS_NOT_FOUND                 ((NTSTATUS)0xC0000225L)
+#endif
+
 int
 UnRegisterProvider()
 {
@@ -287,6 +292,12 @@ UnRegisterProvider()
                     );
     if (!NT_SUCCESS(ntStatus))
     {
+		//This is the expected error code when for some reason the KSP is already unregistered
+		//when don't need to error out the uninstallation for this reason
+		if (ntStatus == STATUS_NOT_FOUND) {
+			wprintf(L"KSP is already removed, doing nothing.");
+			return 0;
+		}
         wprintf(L"BCryptRemoveContextFunctionProvider failed with error code 0x%08x\n", ntStatus);
         return ntStatus;
     }
