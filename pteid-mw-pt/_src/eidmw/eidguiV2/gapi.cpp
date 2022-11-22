@@ -680,7 +680,7 @@ void GAPI::showChangeAddressDialog(long code)
             error_msg += "<br><br>" + support_string_wait_5min;
         }
         else if (code == SAM_UNDEFINED_PROCESS_NUMBER){
-            error_msg += "<br><br>" + support_string_undefined;
+            error_msg += "<br>" + support_string_undefined;
             signalAddressShowUndefinedLink();
         } 
         else if (code == SAM_PROCESS_EXPIRED_ERROR){
