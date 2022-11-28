@@ -114,20 +114,20 @@ namespace eIDMW
             throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
         }
 
-		if (m_shouldMobileCache)
-		{
-			// get cache
-			m_mobileNumber = m_mobileNumberCached;
-			//MWLOG(LEV_DEBUG, MOD_CMD, "CMDSignatureClient::SignXades using cached mobile number");
-		}
+        if (m_shouldMobileCache)
+        {
+            // get cache
+            m_mobileNumber = m_mobileNumberCached;
+            //MWLOG(LEV_DEBUG, MOD_CMD, "CMDSignatureClient::SignXades using cached mobile number");
+        }
 
         DlgRet ret = openAuthenticationDialogPIN(DlgCmdOperation::DLG_CMD_SIGNATURE, &m_pin, &m_mobileNumber);
         handleErrorCode(ret, false);
 
-		if (m_shouldMobileCache) {
-			//Save number for the next signature operation
-			m_mobileNumberCached = m_mobileNumber;
-		}
+        if (m_shouldMobileCache) {
+            //Save number for the next signature operation
+            m_mobileNumberCached = m_mobileNumber;
+        }
 
         getCertificates(m_mobileNumber);
 
@@ -301,30 +301,30 @@ namespace eIDMW
 
             // Errors:
             MWLOG(LEV_ERROR, MOD_CMD, L"Error in CMD operation: isOTP=%s", (isOtp ? L"yes" : L"no"));
-			switch (err)
-			{
-			case ERR_GET_CERTIFICATE:
-				MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: Expired account or inactive signature subscription.");
-				throw CMWEXCEPTION(EIDMW_ERR_CMD_INACTIVE_ACCOUNT);
-			case SOAP_ERR_INVALID_OTP:
-				MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: Invalid PIN or OTP.");
-				throw CMWEXCEPTION(EIDMW_ERR_CMD_INVALID_CODE);
-			case SOAP_TCP_ERROR:
-				MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: connection error occured.");
-				throw CMWEXCEPTION(EIDMW_ERR_CMD_CONNECTION);
+            switch (err)
+            {
+            case ERR_GET_CERTIFICATE:
+                MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: Expired account or inactive signature subscription.");
+                throw CMWEXCEPTION(EIDMW_ERR_CMD_INACTIVE_ACCOUNT);
+            case SOAP_ERR_INVALID_OTP:
+                MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: Invalid PIN or OTP.");
+                throw CMWEXCEPTION(EIDMW_ERR_CMD_INVALID_CODE);
+            case SOAP_TCP_ERROR:
+                MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: connection error occured.");
+                throw CMWEXCEPTION(EIDMW_ERR_CMD_CONNECTION);
             case SOAP_EOF:
                 MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: timeout in service request");
                 throw CMWEXCEPTION(EIDMW_ERR_CMD_SERVICE);
 
-			default:
-				if (err > ERR_ADDR_CMD_BASE + 200) {
-					MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: HTTP service Error code %d.", err-ERR_ADDR_CMD_BASE);
-					throw CMWEXCEPTION(EIDMW_ERR_CMD_SERVICE);
-				}
-				else {
-					MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: Error code %d.", err);
-					throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
-				}
+            default:
+                if (err > ERR_ADDR_CMD_BASE + 200) {
+                    MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: HTTP service Error code %d.", err-ERR_ADDR_CMD_BASE);
+                    throw CMWEXCEPTION(EIDMW_ERR_CMD_SERVICE);
+                }
+                else {
+                    MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: Error code %d.", err);
+                    throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+                }
                 
             }
 
@@ -338,9 +338,9 @@ namespace eIDMW
         std::string b64DocId;
         if (cryptoFwk->b64Encode(hash, b64DocIdBA) && b64DocIdBA.Size() >= B64_ID_FROM_HASH_SIZE)
         {
-			//Filename-safe variant of Base64 as described in section 5 of RFC 4648
-			b64DocIdBA.Replace('+', '-');
-			b64DocIdBA.Replace('/', '_');
+            //Filename-safe variant of Base64 as described in section 5 of RFC 4648
+            b64DocIdBA.Replace('+', '-');
+            b64DocIdBA.Replace('/', '_');
             b64DocId.assign((char *)b64DocIdBA.GetBytes(), B64_ID_FROM_HASH_SIZE);
         }
         else
@@ -396,10 +396,10 @@ namespace eIDMW
         {
             topCert = issuer;
         }
-		// Do we really need to add another cert from eidstore? 
-		// If we already received a root cert in certs vector we don't...
-		if (issuer == topCert)
-			return;
+        // Do we really need to add another cert from eidstore? 
+        // If we already received a root cert in certs vector we don't...
+        if (issuer == topCert)
+            return;
 
         for (size_t i = 0; i < eidstore.countAll(); i++)
         {
@@ -440,9 +440,9 @@ namespace eIDMW
         unsigned long userNameLen = 0;
         if (userName)
         {
-			//userName is assumed to be encoded in ANSI codepage on Windows and UTF-8 on Unix
+            //userName is assumed to be encoded in ANSI codepage on Windows and UTF-8 on Unix
 #ifdef _WIN32
-			userNameWstr = windowsANSIToWideString(userName);
+            userNameWstr = windowsANSIToWideString(userName);
 #else
             userNameWstr = utilStringWiden(userName);
 #endif
