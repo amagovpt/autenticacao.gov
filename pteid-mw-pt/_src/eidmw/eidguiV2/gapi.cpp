@@ -133,6 +133,9 @@ void GAPI::doUpdateTelemetry(TelemetryAction action)
     }
 
     const auto telemetry_host = m_Settings.getTelemetryHost();
+    if (!telemetry_host.startsWith("http")) {
+        qDebug() << "Wrong value for telemetry_host config! It should begin with http(s) protocol.";
+    }
 
     //
 	// Initiate curl
@@ -142,9 +145,16 @@ void GAPI::doUpdateTelemetry(TelemetryAction action)
     {
         //
         // The endpoint URL represents the action performed by the client
-        // URL : <hostname>/<action>/
+        // URL : protocol://<hostname>/<action>/
         //
-        QString url = telemetry_host + telemetryActionToString(action) + "?tel_id=" + m_Settings.getTelemetryId();
+        QString url = telemetry_host;
+        //Support telemetry_host without trailing slash
+        if (!url.endsWith('/')) {
+            url += '/';
+        }
+        url += telemetryActionToString(action);
+        url += "?tel_id=";
+        url += m_Settings.getTelemetryId();
         curl_easy_setopt(curl, CURLOPT_URL, url.toStdString().c_str());
 
         //
@@ -170,6 +180,7 @@ void GAPI::doUpdateTelemetry(TelemetryAction action)
         //
         long http_code = 0;
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+        qDebug() << "updateTelemetry HTTP status:" << http_code << "for URL:" << url;
         if(action == TelemetryAction::Accepted || action == TelemetryAction::Denied)
         {
             setTelemetryStatus(
