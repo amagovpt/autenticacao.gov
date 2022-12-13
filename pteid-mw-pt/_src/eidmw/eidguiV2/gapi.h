@@ -539,6 +539,7 @@ signals:
     void signalBeginOAuth();
     void signalEndOAuth(int oauthResult);
     void signalCustomSignImageRemoved();
+    void signalOperationCanceledByUser();
 
     void signalStartCheckCCSignatureCert(); // Start CC signature check with OCSP
     void signalOkSignCertificate();         // CC signature certificate OK or OCSP no response

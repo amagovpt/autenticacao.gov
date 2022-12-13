@@ -270,6 +270,11 @@ PageCardPrintForm {
                         propertyTitleSelectData.forceActiveFocus()
 
         }
+        onSignalOperationCanceledByUser: {
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            propertyBusyIndicator.running = false
+        }
+        
         onSignalCardAccessError: {
             console.log("Card Print Page onSignalCardAccessError")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")

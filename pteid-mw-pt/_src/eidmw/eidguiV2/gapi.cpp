@@ -423,6 +423,7 @@ void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int inde
     }
     else if (errorCode == EIDMW_ERR_OP_CANCEL) {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Operation cancelled by user");
+        emit signalOperationCanceledByUser();
     }
     else {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
