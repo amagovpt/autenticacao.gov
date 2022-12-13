@@ -1492,8 +1492,10 @@ bool GAPI::doSignPrintPDF(QString &file_to_sign, QString &outputsign, bool isTim
     }
     catch (PTEID_Exception &e) {
         if (device.getDeviceType() == PTEID_SigningDeviceType::CMD) {
-            showSignCMDDialog(e.GetError());
-            return false;
+            if (e.GetError() != EIDMW_ERR_OP_CANCEL) {
+                showSignCMDDialog(e.GetError());
+                return false;
+            }
         }
         throw;
     }
