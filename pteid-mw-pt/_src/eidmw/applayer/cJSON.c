@@ -47,6 +47,17 @@ static int cJSON_strcasecmp(const char *s1,const char *s2)
 static void *(*cJSON_malloc)(size_t sz) = malloc;
 static void (*cJSON_free)(void *ptr) = free;
 
+int cJSON_IsObject(cJSON * json) 
+{
+    return json != NULL && json->type == cJSON_Object;
+}
+
+int cJSON_IsString(cJSON * json) 
+{
+  
+  return json != NULL && json->type == cJSON_String;
+}
+
 static char* cJSON_strdup(const char* str)
 {
       size_t len;

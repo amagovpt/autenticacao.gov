@@ -510,11 +510,11 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_PROCESS_NUMBER</source>
-        <translation>Não existe uma alteração de morada registada para este cartão.</translation>
+        <translation>Erro por uma das seguintes razões:</translation>
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
-        <translation>Verifique que está a usar o Cartão de Cidadão correcto. A confirmação de morada está prevista mudar para o portal eportugal.gov.pt. Para mais informações, e para verificar se é o seu caso, clique &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;aqui&lt;/a&gt;.</translation>
+        <translation>&#60;ul&#62;&#60;li&#62;N&#227;o est&#225; a usar o Cart&#227;o de Cidad&#227;o para o qual pediu a altera&#231;&#227;o de morada&#60;&#47;li&#62;&#60;li&#62;Fez o pedido de altera&#231;&#227;o de morada depois de 22/12/2022&#46; Tem de confirmar a altera&#231;&#227;o de morada no &#60;a href&#61;&#34;https&#58;&#47;&#47;eportugal&#46;gov&#46;pt&#47;servicos&#47;confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&#34;&#62;portal ePortugal&#60;&#47;a&#62;&#60;&#47;li&#62;&#60;&#47;ul&#62;</translation>
     </message>
     <message>
         <source>STR_VERIFY_INTERNET_SAM</source>
@@ -716,6 +716,30 @@
     <message>
         <source>STR_ADDRESS_ONLINE_CHANGE_TEXT</source>
         <translation>Caso pretenda alterar a sua morada, clique</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_SERVER_ERROR</source>
+        <translation>Serviço temporariamente indisponível.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_TIMEOUT_ERROR</source>
+        <translation>Não foi possível obter resposta do Serviço de consulta de morada.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_SMARTCARD_ERROR</source>
+        <translation>Erro na leitura do cartão para consulta de morada.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_UNKNOWN_ERROR</source>
+        <translation>Erro inesperado na consulta de morada.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_GENERIC</source>
+        <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_NETWORK_ERROR</source>
+        <translation>Por favor verifique a sua ligação a internet.</translation>
     </message>
 </context>
 <context>

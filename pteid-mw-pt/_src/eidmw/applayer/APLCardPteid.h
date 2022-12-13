@@ -40,6 +40,10 @@
 #include "APLPublicKey.h"
 #include "eidlib.h"
 
+
+//Fwd declaration to avoid including cJSON.h in this header
+struct cJSON;
+
 namespace eIDMW
 {
 
@@ -317,6 +321,7 @@ friend APL_DocEId& APL_EIDCard::getID();	/**< This method must access protected 
 friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader); /* this method accesses getxml(,) */
 };
 
+
 /******************************************************************************//**
   * Class that represent the document Address on a PTEID card
   *
@@ -337,7 +342,7 @@ public:
 	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
 	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
 
-	EIDMW_APL_API bool isNationalAddress();				/**<is the address a portuguese address? */
+	EIDMW_APL_API bool isNationalAddress();				    /**<is the address a portuguese address? */
 	EIDMW_APL_API const char *getCountryCode();				/**<residence country */
 
 	EIDMW_APL_API const char *getMunicipality();			/**< Return field Municipality from the Address file */
@@ -381,9 +386,49 @@ private:
 	APL_AddrEId(const APL_AddrEId& doc);				/**< Copy not allowed - not implemented */
 	APL_AddrEId &operator= (const APL_AddrEId& doc);	/**< Copy not allowed - not implemented */
 
+	void loadRemoteAddress();
+	void mapNationalFields(cJSON * json_obj);
+	void mapForeignFields(cJSON * json_obj);
+
 	APL_EIDCard *m_card;							/**< Pointer to the card that construct this object*/
 
+	//Address fields loaded from remote address service
+	std::string m_AddressType;							
+	std::string m_CountryCode;							
+
+	std::string m_DistrictCode;
+	std::string m_DistrictName;
+	std::string m_MunicipalityCode;	
+	std::string m_MunicipalityName;
+	std::string m_CivilParishCode;		
+	std::string m_CivilParishName;
+	std::string m_AbbrStreetType;	
+	std::string m_StreetType;			
+	std::string m_StreetName;		
+	std::string m_AbbrBuildingType;
+	std::string m_BuildingType;
+	std::string m_DoorNo;
+	std::string m_Floor;
+	std::string m_Side;
+	std::string m_Locality;
+	std::string m_Zip4;
+	std::string m_Zip3;
+	std::string m_PostalLocality;
+	std::string m_Place;
+
+	//Foreign address fields
+	std::string m_Foreign_Country;
+	std::string m_Foreign_Generic_Address;
+	std::string m_Foreign_City;
+	std::string m_Foreign_Region;
+	std::string m_Foreign_Locality;
+	std::string m_Foreign_Postal_Code;
+
+	std::string m_Generated_Address_Code;
+
 	APL_XmlUserRequestedInfo *_xmlUInfo;
+
+	bool remoteAddressLoaded;
 
 friend APL_AddrEId& APL_EIDCard::getAddr();	/**< This method must access protected constructor */
 friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader); /* this method accesses getxml(,) */

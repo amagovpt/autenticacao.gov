@@ -119,6 +119,7 @@ SOURCES += \
 	CertStatusCache.cpp  \
 	cryptoFramework.cpp  \
 	cryptoFwkPteid.cpp   \
+	CurlProxy.cpp        \
 	APLCard.cpp          \ 
 	MiscUtil.cpp \
 	XercesUtils.cpp \
@@ -127,6 +128,8 @@ SOURCES += \
 	SigContainer.cpp \
 	ScapSSLConnection.cpp \
 	XadesSignature.cpp \
+	RemoteAddress.cpp  \
+	RemoteAddressRequest.cpp \
 	SODParser.cpp \
 	SSLConnection.cpp \
 	TSAClient.cpp \

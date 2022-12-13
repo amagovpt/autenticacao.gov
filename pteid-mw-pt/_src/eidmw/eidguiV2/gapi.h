@@ -244,6 +244,8 @@ public:
 
     enum CardAccessError { NoReaderFound, NoCardFound, CardUnknownCard, PinBlocked, SodCardReadError, CardUserPinCancel, CardUnknownError, CardPinTimeout, IncompatibleReader };
 
+    enum RemoteAddressError { AddressConnectionError, AddressServerError, AddressConnectionTimeout, AddressSmartcardError, AddressCertificateError, AddressUnknownError };
+
     enum SignMessage { SignMessageOK, SignMessageTimestampFailed, SignMessageLtvFailed, SignFilePermissionFailed, PDFFileUnsupported};
 
     enum PrintMessage {NoPrinterAvailable};
@@ -278,6 +280,7 @@ public:
     Q_ENUMS(ScapAttrType)
     Q_ENUMS(ScapAttrDescription)
     Q_ENUMS(CardAccessError)
+    Q_ENUMS(RemoteAddressError)
     Q_ENUMS(eCustomEventType)
     Q_ENUMS(IDInfoKey)
     Q_ENUMS(AddressInfoKey)
@@ -506,6 +509,7 @@ signals:
     void signalSignCertRevoked();
     void signalAddressLoaded(bool m_foreign);
     void signalCardAccessError(int error_code);
+    void signalRemoteAddressError(int error_code);
     void signalGenericError(const QString error_code);
     void signalSaveCardPhotoFinished(bool success);
     void signalPersoDataLoaded(const QString& persoNotes);
@@ -594,7 +598,7 @@ private:
     bool doSignPrintPDF(QString &file_to_sign, QString &outputsign, bool isTimestamp, bool isLtv);
     void doPrintPDF(PrintParamsWithSignature &params);
     void doPrint(PrintParams &params);
-    bool drawpdf(QPrinter &printer, PrintParams params);
+    bool drawpdf(QPrinter &printer, PrintParams params, long &addressError);
     void doSignBatchPDF(SignParams &params);
     void doSignXADES(QString loadedFilePath, QString outputFile, bool isTimestamp, bool isLTV, bool isASIC);
     void doSignBatchXADES(SignParams &params);

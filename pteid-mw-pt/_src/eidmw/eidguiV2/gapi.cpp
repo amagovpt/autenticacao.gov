@@ -390,6 +390,26 @@ void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int inde
     else if (errorCode == EIDMW_ERR_TIMEOUT) {
         emit signalCardAccessError(CardPinTimeout);
     }
+    else if (errorCode == EIDMW_REMOTEADDR_CONNECTION_ERROR)
+    {
+        emit signalRemoteAddressError(AddressConnectionError);
+    }
+    else if (errorCode == EIDMW_REMOTEADDR_SERVER_ERROR)
+    {
+        emit signalRemoteAddressError(AddressServerError);
+    }
+    else if (errorCode == EIDMW_REMOTEADDR_CONNECTION_TIMEOUT)
+    {
+        emit signalRemoteAddressError(AddressConnectionTimeout);
+    }
+    else if (errorCode == EIDMW_REMOTEADDR_SMARTCARD_ERROR)
+    {
+        emit signalRemoteAddressError(AddressSmartcardError);
+    }
+    else if (errorCode == EIDMW_REMOTEADDR_UNKNOWN_ERROR)
+    {
+        emit signalRemoteAddressError(AddressUnknownError);
+    }
     else if (errorCode == EIDMW_ERR_OP_CANCEL) {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Operation cancelled by user");
     }
@@ -402,6 +422,7 @@ void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int inde
         emit signalGenericError(msgError);
     }
 }
+
 
 void GAPI::getAddressFile() {
     qDebug() << "C++: getAddressFile()";
@@ -809,7 +830,7 @@ void GAPI::showChangeAddressDialog(long code)
             error_msg += "<br><br>" + support_string_wait_5min;
         }
         else if (code == SAM_UNDEFINED_PROCESS_NUMBER){
-            error_msg += "<br><br>" + support_string_undefined;
+            error_msg += "<br>" + support_string_undefined;
             signalAddressShowUndefinedLink();
         } 
         else if (code == SAM_PROCESS_EXPIRED_ERROR){
@@ -1371,6 +1392,7 @@ void GAPI::startPrint(QString outputFile, bool isBasicInfo, bool isAdditionalInf
 
     QPrinter printer;
     bool res = false;
+    long addressError = 0;
 
     printer.setDocName("CartaoCidadao.pdf");
     QPrintDialog *dlg = new QPrintDialog(&printer);
@@ -1378,21 +1400,59 @@ void GAPI::startPrint(QString outputFile, bool isBasicInfo, bool isAdditionalInf
         qDebug() << "QPrintDialog! Accepted";
         BEGIN_TRY_CATCH;
         // Print PDF not Signed
-        res = drawpdf(printer, params);
-
+        res = drawpdf(printer, params, addressError);
+        std::cout << "bef " << addressError << std::endl;
         if (params.outputFile.toUtf8().size() > 0){
             qDebug() << "Create PDF";
             if (res) {
                 emit signalPdfPrintSucess();
-             }else{
+            } 
+            else if (addressError == EIDMW_REMOTEADDR_CONNECTION_ERROR) {
+                emit signalRemoteAddressError(AddressConnectionError);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_SERVER_ERROR) {
+                emit signalRemoteAddressError(AddressServerError);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_CONNECTION_TIMEOUT) {
+                emit signalRemoteAddressError(AddressConnectionTimeout);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_SMARTCARD_ERROR) {
+                emit signalRemoteAddressError(AddressSmartcardError);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_CERTIFICATE_ERROR) {
+                emit signalRemoteAddressError(AddressCertificateError);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
+                emit signalRemoteAddressError(AddressUnknownError);
+            }
+            else{
                 emit signalPdfPrintFail();
             }
          }else{
             qDebug() << "Printing to a printer";
             if (res) {
                 emit signalPrinterPrintSucess();
-             }else{
-                emit signalPrinterPrintFail();
+            }
+            else if (addressError == EIDMW_REMOTEADDR_CONNECTION_ERROR) {
+                emit signalRemoteAddressError(AddressConnectionError);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_SERVER_ERROR) {
+                emit signalRemoteAddressError(AddressServerError);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_CONNECTION_TIMEOUT) {
+                emit signalRemoteAddressError(AddressConnectionTimeout);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_SMARTCARD_ERROR) {
+                emit signalRemoteAddressError(AddressSmartcardError);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_CERTIFICATE_ERROR) {
+                emit signalRemoteAddressError(AddressCertificateError);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
+                emit signalRemoteAddressError(AddressUnknownError);
+            }
+            else{
+                emit signalPdfPrintFail();
             }
         }
         END_TRY_CATCH
@@ -1448,7 +1508,7 @@ void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
     QString nativepdftmp;
     QString originalOutputFile;
     bool res = false;
-
+    long addressError = 0;
     BEGIN_TRY_CATCH;
     if (base_params.isSign)
     {
@@ -1456,12 +1516,34 @@ void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
         pdffiletmp = QDir::tempPath();
         pdffiletmp.append("/CartaoCidadao.pdf");
         nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
+
         originalOutputFile = base_params.outputFile;
         base_params.outputFile = nativepdftmp;
-        res = drawpdf(pdf_printer, base_params);
+        res = drawpdf(pdf_printer, base_params, addressError);
+
         if (!res)
         {
-            emit signalPdfPrintFail();
+            if (addressError == EIDMW_REMOTEADDR_CONNECTION_ERROR) {
+                emit signalRemoteAddressError(AddressConnectionError);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_SERVER_ERROR) {
+                emit signalRemoteAddressError(AddressServerError);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_CONNECTION_TIMEOUT) {
+                emit signalRemoteAddressError(AddressConnectionTimeout);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_SMARTCARD_ERROR) {
+                emit signalRemoteAddressError(AddressSmartcardError);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_CERTIFICATE_ERROR) {
+                emit signalRemoteAddressError(AddressCertificateError);
+            }
+            else if (addressError == EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
+                emit signalRemoteAddressError(AddressUnknownError);
+            }
+            else{
+                emit signalPdfPrintFail();
+            }
             return;
         }
 
@@ -1474,10 +1556,30 @@ void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
             emit signalPdfPrintSignSucess();
     } else {
         // Print PDF not Signed
-        res = drawpdf(pdf_printer, base_params);
+
+        res = drawpdf(pdf_printer, base_params, addressError);
         if (res) {
             emit signalPdfPrintSucess();
-        } else{
+        }
+        else if (addressError == EIDMW_REMOTEADDR_CONNECTION_ERROR) {
+            emit signalRemoteAddressError(AddressConnectionError);
+        }
+        else if (addressError == EIDMW_REMOTEADDR_SERVER_ERROR) {
+            emit signalRemoteAddressError(AddressServerError);
+        }
+        else if (addressError == EIDMW_REMOTEADDR_CONNECTION_TIMEOUT) {
+            emit signalRemoteAddressError(AddressConnectionTimeout);
+        }
+        else if (addressError == EIDMW_REMOTEADDR_SMARTCARD_ERROR) {
+            emit signalRemoteAddressError(AddressSmartcardError);
+        }
+        else if (addressError == EIDMW_REMOTEADDR_CERTIFICATE_ERROR) {
+            emit signalRemoteAddressError(AddressCertificateError);
+        }
+        else if (addressError == EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
+            emit signalRemoteAddressError(AddressUnknownError);
+        }
+        else{
             emit signalPdfPrintFail();
         }
     }
@@ -1598,7 +1700,7 @@ double GAPI::checkNewPageAndPrint(QPrinter &printer, QPainter &painter, double c
     return current_y;
 }
 
-bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
+bool GAPI::drawpdf(QPrinter &printer, PrintParams params, long &addressError)
 {
     qDebug() << "drawpdf PrintParams: outputFile =" << params.outputFile <<
         "isBasicInfo =" << params.isBasicInfo << " isAdditionalInfo =" << params.isAdditionalInfo << "isAddress ="
@@ -1807,72 +1909,83 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params)
         drawSectionHeader(painter, pos_x, pos_y, tr("STR_ADDRESS"));
         pos_y += 50 * print_scale_factor;
 
-        PTEID_Address &addressFile = card->getAddr();
+        try {
+            PTEID_Address &addressFile = card->getAddr();
 
-        if (addressFile.isNationalAddress()){
-            double new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_DISTRICT"),
-                QString::fromUtf8(addressFile.getDistrict()), half_page, 0, true, half_page);
-            double new_height_right = drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_MUNICIPALITY"),
-                QString::fromUtf8(addressFile.getMunicipality()), half_page,
-                field_margin, true, half_page);
-            pos_y = (std::max)((std::max)(new_height_left, new_height_right), pos_y + LINE_HEIGHT);
+            if (addressFile.isNationalAddress()){
+                double new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_DISTRICT"),
+                    QString::fromUtf8(addressFile.getDistrict()), half_page, 0, true, half_page);
+                double new_height_right = drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_MUNICIPALITY"),
+                    QString::fromUtf8(addressFile.getMunicipality()), half_page,
+                    field_margin, true, half_page);
+                pos_y = (std::max)((std::max)(new_height_left, new_height_right), pos_y + LINE_HEIGHT);
 
-            new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_CIVIL_PARISH"),
-                QString::fromUtf8(addressFile.getCivilParish()), full_page, 0, true, page_width);
-            pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
+                new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_CIVIL_PARISH"),
+                    QString::fromUtf8(addressFile.getCivilParish()), full_page, 0, true, page_width);
+                pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
 
-            drawSingleField(painter, pos_x, pos_y, tr("STR_STREET_TYPE"),
-                QString::fromUtf8(addressFile.getStreetType()), full_page, 0, true, page_width);
-            pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
+                drawSingleField(painter, pos_x, pos_y, tr("STR_STREET_TYPE"),
+                    QString::fromUtf8(addressFile.getStreetType()), full_page, 0, true, page_width);
+                pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
 
-            new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_STREET_NAME"),
-                QString::fromUtf8(addressFile.getStreetName()), full_page, 0, true, page_width);
-            pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
+                new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_STREET_NAME"),
+                    QString::fromUtf8(addressFile.getStreetName()), full_page, 0, true, page_width);
+                pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
 
-            new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_HOUSE_BUILDING_NUM"),
-                QString::fromUtf8(addressFile.getDoorNo()), third_of_page, 0);
-            new_height_right = drawSingleField(painter, pos_x + third_of_page, pos_y, tr("STR_FLOOR"),
-                QString::fromUtf8(addressFile.getFloor()), third_of_page);
-            double new_height = drawSingleField(painter, pos_x + 2 * third_of_page, pos_y, tr("STR_SIDE"),
-                QString::fromUtf8(addressFile.getSide()), third_of_page);
-            pos_y = (std::max)(new_height, (std::max)(new_height_left, (std::max)(new_height_left, pos_y + LINE_HEIGHT)));
+                new_height_left = drawSingleField(painter, pos_x, pos_y, tr("STR_HOUSE_BUILDING_NUM"),
+                    QString::fromUtf8(addressFile.getDoorNo()), third_of_page, 0);
+                new_height_right = drawSingleField(painter, pos_x + third_of_page, pos_y, tr("STR_FLOOR"),
+                    QString::fromUtf8(addressFile.getFloor()), third_of_page);
+                double new_height = drawSingleField(painter, pos_x + 2 * third_of_page, pos_y, tr("STR_SIDE"),
+                    QString::fromUtf8(addressFile.getSide()), third_of_page);
+                pos_y = (std::max)(new_height, (std::max)(new_height_left, (std::max)(new_height_left, pos_y + LINE_HEIGHT)));
 
-            drawSingleField(painter, pos_x, pos_y, tr("STR_PLACE"),
-                QString::fromUtf8(addressFile.getPlace()), half_page, 0, true, half_page);
-            new_height_left = drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_LOCALITY"),
-                QString::fromUtf8(addressFile.getLocality()), half_page, field_margin, true, half_page);
+                drawSingleField(painter, pos_x, pos_y, tr("STR_PLACE"),
+                    QString::fromUtf8(addressFile.getPlace()), half_page, 0, true, half_page);
+                new_height_left = drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_LOCALITY"),
+                    QString::fromUtf8(addressFile.getLocality()), half_page, field_margin, true, half_page);
 
-            pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
+                pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
 
-            drawSingleField(painter, pos_x, pos_y, tr("STR_ZIP_CODE"),
-                QString::fromUtf8(addressFile.getZip4()) + "-" + QString::fromUtf8(addressFile.getZip3()), half_page / 2, 0);
-            new_height_left = drawSingleField(painter, pos_x + (half_page / 2), pos_y, tr("STR_POSTAL_LOCALITY"),
-                QString::fromUtf8(addressFile.getPostalLocality()),
-                (3 * half_page) / 2, field_margin, true, (3 * half_page) / 2);
-            pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
+                drawSingleField(painter, pos_x, pos_y, tr("STR_ZIP_CODE"),
+                    QString::fromUtf8(addressFile.getZip4()) + "-" + QString::fromUtf8(addressFile.getZip3()), half_page / 2, 0);
+                new_height_left = drawSingleField(painter, pos_x + (half_page / 2), pos_y, tr("STR_POSTAL_LOCALITY"),
+                    QString::fromUtf8(addressFile.getPostalLocality()),
+                    (3 * half_page) / 2, field_margin, true, (3 * half_page) / 2);
+                pos_y = (std::max)(new_height_left, pos_y + LINE_HEIGHT);
 
-        }else{
-            /* Foreign Address*/
-            drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_COUNTRY"),
-                QString::fromUtf8(addressFile.getForeignCountry()), third_of_page, 0);
-            drawSingleField(painter, pos_x + third_of_page, pos_y, tr("STR_FOREIGN_REGION"),
-                QString::fromUtf8(addressFile.getForeignRegion()), third_of_page);
-            drawSingleField(painter, pos_x + 2 * third_of_page, pos_y, tr("STR_FOREIGN_CITY"),
-                QString::fromUtf8(addressFile.getForeignCity()), third_of_page);
+            }else{
+                /* Foreign Address*/
+                drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_COUNTRY"),
+                    QString::fromUtf8(addressFile.getForeignCountry()), third_of_page, 0);
+                drawSingleField(painter, pos_x + third_of_page, pos_y, tr("STR_FOREIGN_REGION"),
+                    QString::fromUtf8(addressFile.getForeignRegion()), third_of_page);
+                drawSingleField(painter, pos_x + 2 * third_of_page, pos_y, tr("STR_FOREIGN_CITY"),
+                    QString::fromUtf8(addressFile.getForeignCity()), third_of_page);
 
-            pos_y += LINE_HEIGHT;
+                pos_y += LINE_HEIGHT;
 
-            drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_LOCALITY"),
-                QString::fromUtf8(addressFile.getForeignLocality()), half_page, 0, true, half_page);
-            drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_FOREIGN_POSTAL_CODE"),
-                QString::fromUtf8(addressFile.getForeignPostalCode()), half_page, field_margin, true, half_page);
+                drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_LOCALITY"),
+                    QString::fromUtf8(addressFile.getForeignLocality()), half_page, 0, true, half_page);
+                drawSingleField(painter, pos_x + half_page, pos_y, tr("STR_FOREIGN_POSTAL_CODE"),
+                    QString::fromUtf8(addressFile.getForeignPostalCode()), half_page, field_margin, true, half_page);
 
-            pos_y += LINE_HEIGHT;
+                pos_y += LINE_HEIGHT;
 
-            drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_ADDRESS"),
-                QString::fromUtf8(addressFile.getForeignAddress()), half_page, 0, true, page_width);
+                drawSingleField(painter, pos_x, pos_y, tr("STR_FOREIGN_ADDRESS"),
+                    QString::fromUtf8(addressFile.getForeignAddress()), half_page, 0, true, page_width);
+            }
+            pos_y += 80 * print_scale_factor;
         }
-        pos_y += 80 * print_scale_factor;
+        catch (PTEID_Exception e) {
+            if (e.GetError() & 0xe1d01d50 == 0xe1d01d50) {
+                addressError = e.GetError();
+                return false;
+            }
+            else {
+                throw e;
+            }
+        }
     }
 
     if (params.isNotes)

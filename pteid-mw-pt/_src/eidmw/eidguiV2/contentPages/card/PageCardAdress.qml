@@ -65,9 +65,9 @@ PageCardAdressForm {
             propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
 
+            gapi.setAddressLoaded(true)
             propertyButtonConfirmOfAddress.enabled = true
 
-            //gapi.setAddressLoaded(true)
             if(!Constants.USE_SDK_PIN_UI_POPUP)
                 dialogTestPin.visible = false
             if(mainFormID.propertyPageLoader.propertyForceFocus
@@ -88,6 +88,7 @@ PageCardAdressForm {
             textMessageTop.propertyAccessibleText = Functions.filterText(statusMessage)
             textMessageTop.propertyText.forceActiveFocus()
         }
+
         onSignalAddressShowEmail: {
             rectMessageTopLink.visible = true
             textMessageTop.propertyLinkUrl= 'mailto:cartaodecidadao@irn.mj.pt'
@@ -101,33 +102,38 @@ PageCardAdressForm {
             rectMessageTopLink.visible = true
             textMessageTop.propertyLinkUrl= 'https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao'
         }
-        onSignalCardAccessError: {
-            console.log("Card Adress onSignalCardAccessError"+ error_code)
+        onSignalRemoteAddressError: {
+            console.log("Card Address onSignalRemoteAddressError: "+ error_code)
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
-            if (error_code == GAPI.NoReaderFound) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
+
+            if (error_code == GAPI.AddressConnectionError) {
+                bodyPopup = qsTr("STR_REMOTEADDRESS_NETWORK_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+            }            
+            else if (error_code == GAPI.AddressServerError) {
+                bodyPopup = qsTr("STR_REMOTEADDRESS_SERVER_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+            }            
+            else if (error_code == GAPI.AddressConnectionTimeout) {
+                bodyPopup = qsTr("STR_REMOTEADDRESS_TIMEOUT_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+            }            
+            else if (error_code == GAPI.AddressSmartcardError) {
+                bodyPopup = qsTr("STR_REMOTEADDRESS_SMARTCARD_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
             }
-            else if (error_code == GAPI.NoCardFound) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD")
+            else if (error_code == GAPI.AddressCertificateError) {
+                bodyPopup = qsTranslate("GAPI", "STR_CERTIFICATE_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
             }
-            else if (error_code == GAPI.SodCardReadError) {
-                bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
-                    + "<br/><br/>" + qsTranslate("Popup Card","STR_GENERIC_ERROR_MSG")
-            }
-            else if (error_code == GAPI.CardUserPinCancel) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
-            }
-            else if (error_code == GAPI.CardPinTimeout) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
-            }
-            else if (error_code == GAPI.IncompatibleReader) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
+            else if (error_code == GAPI.AddressUnknownError) {
+                bodyPopup = qsTr("STR_REMOTEADDRESS_UNKNOWN_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
             }
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
-            propertyButtonConfirmOfAddress.enabled = false
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
 
             propertyDistrict.propertyDateField.text = ""
@@ -150,10 +156,81 @@ PageCardAdressForm {
             propertyForeignLocality.propertyDateField.text = ""
             propertyForeignPostalCode.propertyDateField.text = ""
             propertyBusyIndicator.running = false
+
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            propertyButtonConfirmOfAddress.enabled = true
         }
+
+        onSignalCardAccessError: {
+            console.log("Card Adress onSignalCardAccessError"+ error_code)
+
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+            var bodyPopup = ""
+            propertyButtonConfirmOfAddress.enabled = false
+
+            if (error_code == GAPI.NoReaderFound) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
+            }
+            else if (error_code == GAPI.NoCardFound) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD")
+            }
+            else if (error_code == GAPI.SodCardReadError) {
+                bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
+                    + "<br/><br/>" + qsTranslate("Popup Card","STR_GENERIC_ERROR_MSG")
+            }
+            else if (error_code == GAPI.CardUserPinCancel) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
+                propertyButtonConfirmOfAddress.enabled = true
+            }
+            else if (error_code == GAPI.CardPinTimeout) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
+                propertyButtonConfirmOfAddress.enabled = true
+            }
+            else if (error_code == GAPI.IncompatibleReader) {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
+            }
+            else if (error_code == GAPI.AddressCertificateError) {
+                bodyPopup = qsTranslate("GAPI", "STR_CERTIFICATE_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+            }
+            else if (error_code == GAPI.AddressUnknownError) {
+                bodyPopup = qsTr("STR_REMOTEADDRESS_UNKNOWN_ERROR")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+            }
+            else {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
+            }
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
+
+            propertyDistrict.propertyDateField.text = ""
+            propertyMunicipality.propertyDateField.text = ""
+            propertyParish.propertyDateField.text = ""
+            propertyStreetType.propertyDateField.text = ""
+            propertyStreetName.propertyDateField.text = ""
+            propertyDoorNo.propertyDateField.text = ""
+            propertyFloor.propertyDateField.text = ""
+            propertyPlace.propertyDateField.text = ""
+            propertySide.propertyDateField.text = ""
+            propertyLocality.propertyDateField.text = ""
+            propertyZip4.propertyDateField.text = ""
+            propertyZip3.propertyDateField.text = ""
+            propertyPostalLocality.propertyDateField.text = ""
+            propertyForeignCountry.propertyDateField.text = ""
+            propertyForeignAddress.propertyDateField.text = ""
+            propertyForeignCity.propertyDateField.text = ""
+            propertyForeignRegion.propertyDateField.text = ""
+            propertyForeignLocality.propertyDateField.text = ""
+            propertyForeignPostalCode.propertyDateField.text = ""
+            propertyBusyIndicator.running = false
+
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            propertyButtonConfirmOfAddress.enabled = true
+        }
+
         onSignalCardChanged: {
-            console.log("Card Adress onSignalCardChanged")
+            console.log("Card Address onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
+                propertyButtonConfirmOfAddress.enabled = false
                 var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 var bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)

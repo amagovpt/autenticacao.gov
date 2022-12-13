@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_ERROR</source>
-        <translation>Error. Error in the Address Change operation!</translation>
+        <translation>Error in the Address Change operation!</translation>
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_CHECK_PROCESS_NUMBER</source>
@@ -512,11 +512,11 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_PROCESS_NUMBER</source>
-        <translation>There is no registered address change for this card. </translation>
+        <translation>Error due to one of the following reasons:</translation>
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
-        <translation>Please check that you are using the correct Citizen Card. The confirmation of address changes is foreseen to be moved to the eportugal.gov.pt portal. For more information, click &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;here&lt;/a&gt;.</translation>
+        <translation>&#60;ul&#62;&#60;li&#62;You are not using the correct card for this address change process&#60;&#47;li&#62;&#60;li&#62;You have requested the address change after 22&#47;12&#47;2022&#46; The address change must be confirmed at &#60;a href&#61;&#34;https&#58;&#47;&#47;eportugal&#46;gov&#46;pt&#47;servicos&#47;confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&#34;&#62;portal ePortugal&#60;&#47;a&#62;&#60;&#47;li&#62;&#60;&#47;ul&#62;</translation>
     </message>
     <message>
         <source>STR_VERIFY_INTERNET_SAM</source>
@@ -697,7 +697,7 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_LINK</source>
-        <translation>For more information about change your address, click </translation>
+        <translation>For more information about address change, click </translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT_HERE</source>
@@ -706,6 +706,30 @@
     <message>
         <source>STR_ADDRESS_ONLINE_CHANGE_TEXT</source>
         <translation>If you want to change your address, click</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_SERVER_ERROR</source>
+        <translation>Service temporarily unavailable.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_TIMEOUT_ERROR</source>
+        <translation>Could not get response from service.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_SMARTCARD_ERROR</source>
+        <translation>Error reading card for remote address loading.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_UNKNOWN_ERROR</source>
+        <translation>Unexpected error loading remote address.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_GENERIC</source>
+        <translation>Please try again. If this error persists, please contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_NETWORK_ERROR</source>
+        <translation>Please check your Internet connection.</translation>
     </message>
 </context>
 <context>

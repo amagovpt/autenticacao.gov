@@ -240,6 +240,9 @@ replace $install by string in install parameter
 #define EIDMW_CNF_AUTOUPDATES_CERTS_URL     L"servercertsurl"           //string
 #define EIDMW_CNF_AUTOUPDATES_NEWS_URL      L"servernewsurl"            //string
 
+#define EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL      L"remoteaddr_url"          //string
+#define EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL_TST  L"remoteaddr_url_test"          //string
+
 namespace eIDMW
 {
 
@@ -419,6 +422,10 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_AUTOUPDATES_VERIFY_URL;
     static const struct Param_Str EIDMW_CONFIG_PARAM_AUTOUPDATES_CERTS_URL;
     static const struct Param_Str EIDMW_CONFIG_PARAM_AUTOUPDATES_NEWS_URL;
+
+    //Remote Address server URL
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL_TEST;
 
 private:
     //below info if not needed any more when the ini-file is hard-coded.

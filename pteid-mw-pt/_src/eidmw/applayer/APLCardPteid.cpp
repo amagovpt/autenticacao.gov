@@ -6,7 +6,7 @@
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2011-2012 lmcm - <lmcm@caixamagica.pt>
  * Copyright (C) 2011-2012 Rui Martinho - <rui.martinho@ama.pt>
- * Copyright (C) 2012, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012, 2016-2021 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  * Copyright (C) 2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
@@ -41,6 +41,8 @@
 #include "SAM.h"
 #include "StringOps.h"
 #include "APLConfig.h"
+#include "RemoteAddress.h"
+#include "RemoteAddressRequest.h"
 
 #include <ctime>
 
@@ -1413,9 +1415,11 @@ const char *APL_PersonalNotesEId::getPersonalNotes(bool forceMap)
 /*****************************************************************************************
 ---------------------------------------- APL_AddrEId ---------------------------------------------
 *****************************************************************************************/
+
 APL_AddrEId::APL_AddrEId(APL_EIDCard *card)
 {
 	m_card=card;
+	remoteAddressLoaded = false;
 }
 
 APL_AddrEId::~APL_AddrEId()
@@ -1566,144 +1570,404 @@ CByteArray APL_AddrEId::getTLV()
 	return ba;
 }
 
+
+bool checkResultSW12(CByteArray &result, unsigned int *p_sw12)
+{
+	unsigned long ulRespLen = result.Size();
+	const unsigned char *result_ptr = result.GetBytes();
+
+	unsigned int ulSW12 = (unsigned int)(256 * result_ptr[ulRespLen - 2] + result_ptr[ulRespLen - 1]);
+	*p_sw12 = ulSW12;
+
+	return ulSW12 == 0x9000;
+}
+
+void json_parse_string(std::string &dest_string, cJSON *json_obj, const char *item_name) {
+
+	cJSON * item = cJSON_GetObjectItem(json_obj, item_name);
+
+	if (cJSON_IsString(item)) {
+		dest_string.append(item->valuestring);
+	}
+	else {
+		MWLOG(LEV_DEBUG, MOD_APL, "Address field %s is missing", item_name);
+	}
+
+}
+
+void APL_AddrEId::mapNationalFields(cJSON * json_obj) {
+
+	
+	m_AddressType.append("N");
+
+	json_parse_string(m_CountryCode, json_obj, "countryCode");
+	json_parse_string(m_DistrictCode, json_obj, "districtCode");
+	json_parse_string(m_DistrictName, json_obj, "district");
+	json_parse_string(m_MunicipalityCode, json_obj, "municipalityCode");
+	json_parse_string(m_MunicipalityName, json_obj, "municipality");
+	json_parse_string(m_CivilParishCode, json_obj, "parishCode");
+	json_parse_string(m_CivilParishName, json_obj, "parish");
+	json_parse_string(m_AbbrStreetType,  json_obj, "abbrStreetType");
+	json_parse_string(m_StreetType,      json_obj, "streetType");
+	json_parse_string(m_StreetName,      json_obj, "streetName");
+	json_parse_string(m_AbbrBuildingType, json_obj, "abbrBuildingType");
+	json_parse_string(m_BuildingType, json_obj, "buildingType");
+	json_parse_string(m_DoorNo, json_obj, "doorNo");
+	json_parse_string(m_Floor, json_obj, "floor");
+	json_parse_string(m_Side, json_obj, "side");
+	json_parse_string(m_Locality, json_obj, "locality");
+	json_parse_string(m_Zip4, json_obj, "zip4");
+	json_parse_string(m_Zip3, json_obj, "zip3");
+	json_parse_string(m_PostalLocality, json_obj, "postalLocality");
+	json_parse_string(m_Place, json_obj, "place");
+	json_parse_string(m_Generated_Address_Code, json_obj, "generatedAddressCode");
+}
+
+
+void APL_AddrEId::mapForeignFields(cJSON * json_obj) {
+
+	m_AddressType.append("I");
+	json_parse_string(m_CountryCode, json_obj, "countryCode");
+
+	json_parse_string(m_Foreign_Country, json_obj,     "foreignCountry");
+	json_parse_string(m_Foreign_City, json_obj,        "foreignCity");
+	json_parse_string(m_Foreign_Region, json_obj,      "foreignRegion");
+	json_parse_string(m_Foreign_Locality, json_obj,    "foreignLocality");
+	json_parse_string(m_Foreign_Postal_Code, json_obj, "foreignPostalCode");
+	json_parse_string(m_Generated_Address_Code, json_obj, "generatedAddressCode");
+	json_parse_string(m_Foreign_Generic_Address, json_obj, "foreignGenericAddress");
+
+}
+
+void APL_AddrEId::loadRemoteAddress() {
+	const std::string ENDPOINT_DH = "/readaddress/sendDHParams";
+    const std::string ENDPOINT_SIGNCHALLENGE = "/readaddress/signChallenge";
+    const std::string ENDPOINT_READADDRESS = "/readaddress/readAddress";
+
+    std::string url_endpoint_dh, url_endpoint_signchallenge, url_endpoint_readaddress;
+    long exception_code = 0;
+
+	if (remoteAddressLoaded) {
+		return;
+	}
+
+	APL_Config conf_baseurl(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL);
+
+	if (!CConfig::isTestModeEnabled()) {
+		url_endpoint_dh += conf_baseurl.getString();
+		url_endpoint_readaddress += conf_baseurl.getString();
+		url_endpoint_signchallenge += conf_baseurl.getString();
+	}
+	else {
+		APL_Config conf_baseurl_t(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL_TEST);
+		url_endpoint_dh += conf_baseurl_t.getString();
+		url_endpoint_readaddress += conf_baseurl_t.getString();
+		url_endpoint_signchallenge += conf_baseurl_t.getString();
+	}
+
+	url_endpoint_dh += ENDPOINT_DH;
+	url_endpoint_signchallenge += ENDPOINT_SIGNCHALLENGE;
+	url_endpoint_readaddress += ENDPOINT_READADDRESS;
+	
+
+	SAM sam_helper(m_card);
+	DHParams dh_params;
+
+	CByteArray sod_data = getSodData(m_card);
+	CByteArray authCert_data = getAuthCert(m_card);
+
+	sam_helper.getDHParams(&dh_params, true);
+
+
+	char * json_str = build_json_obj_dhparams(dh_params, m_card->getFileID(), m_card->getFileAddress(), sod_data, authCert_data);
+
+	//1st POST
+	PostResponse resp = post_json_remoteaddress(url_endpoint_dh.c_str(), json_str, NULL);
+
+	MWLOG(LEV_INFO, MOD_APL, "%s Endpoint (1) returned HTTP code: %ld", __FUNCTION__, resp.http_code);
+
+	std::string received_cookie = parseCookieFromHeaders(resp.http_headers);
+
+	RA_DHParamsResponse dh_params_resp = parseDHParamsResponse(resp.http_response.c_str());
+
+	if (dh_params_resp.error_code == 0)
+	{
+		if (!sam_helper.sendKIFD((char *)dh_params_resp.kifd.c_str())) {
+			MWLOG(LEV_ERROR, MOD_APL, "loadRemoteAddress(): Card failed to accept DH server public key KIFD!");
+			exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
+			goto cleanup;
+		}
+
+    	//2nd POST
+		char * kicc = sam_helper.getKICC();
+
+		bool verified = sam_helper.verifyCert_CV_IFD((char *)dh_params_resp.cv_ifd_cert.c_str());
+
+		if (!verified) {
+			MWLOG(LEV_ERROR, MOD_APL, "Card failed to verify server-provided CV certificate!");
+			exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
+			goto cleanup;
+		}
+
+		char * chr = sam_helper.getPK_IFD_AUT((char *)dh_params_resp.cv_ifd_cert.c_str());
+
+		char * challenge = sam_helper.generateChallenge(chr);
+		if (challenge == NULL) {
+			exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
+			goto cleanup;
+		}
+
+		json_str = build_json_obj_sign_challenge(challenge, kicc);
+		PostResponse resp = post_json_remoteaddress(url_endpoint_signchallenge.c_str(), json_str, received_cookie.c_str());
+
+		MWLOG(LEV_INFO, MOD_APL, "%s Endpoint (2) returned HTTP code: %ld", __FUNCTION__, resp.http_code);
+
+
+		RA_SignChallengeResponse signed_challenge_obj = 
+		parseSignChallengeResponse(resp.http_response.c_str());
+
+		if (signed_challenge_obj.error_code == 0) {
+			char * signed_challenge = (char *) signed_challenge_obj.signed_challenge.c_str();
+			bool ret = sam_helper.verifySignedChallenge(signed_challenge);
+
+			if (!ret) {
+				MWLOG(LEV_ERROR, MOD_APL, "Card rejected server-provided signature. Process aborted!");
+				exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
+				goto cleanup;
+			}
+
+			MWLOG(LEV_DEBUG, MOD_APL, "From now on using Secure Messaging with the smartcard...");
+			bool is_hex = true;
+			CByteArray mse_internal_auth_cmd(signed_challenge_obj.set_se_command, is_hex); 
+			CByteArray internal_auth_cmd(signed_challenge_obj.internal_auth_command, is_hex);
+
+			const unsigned char le_byte[] = { 0x00 };
+
+            //Needed for T=1 smartcard protocol
+			mse_internal_auth_cmd.Append(le_byte, sizeof(le_byte));
+			internal_auth_cmd.Append(le_byte, sizeof(le_byte));
+
+			//TODO: maybe catch cardlayer exceptions in sendAPDU and translate to SMARTCARD_ERROR
+
+			CByteArray resp_mse_internal_auth = m_card->sendAPDU(mse_internal_auth_cmd);
+
+			unsigned int sw12 = 0;
+			if (!checkResultSW12(resp_mse_internal_auth, &sw12)) {
+				MWLOG(LEV_ERROR, MOD_APL, "MSE SET INTERNAL Auth failed! SW12: %04X", sw12);
+				exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
+				goto cleanup;
+
+			}
+
+			CByteArray resp_internal_auth = m_card->sendAPDU(internal_auth_cmd);
+			sw12 = 0;
+			if (!checkResultSW12(resp_internal_auth, &sw12)) {
+				MWLOG(LEV_ERROR, MOD_APL, "INTERNAL AUTHENTICATION failed! SW12: %04X", sw12);
+				exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
+				goto cleanup;
+
+			}
+
+			json_str = build_json_obj_read_address(resp_mse_internal_auth, resp_internal_auth);
+			resp = post_json_remoteaddress(url_endpoint_readaddress.c_str(), json_str, received_cookie.c_str());
+            
+			MWLOG(LEV_INFO, MOD_APL, "%s Endpoint (3) returned HTTP code: %ld", __FUNCTION__, resp.http_code);
+
+			RA_GetAddressResponse *getaddr_resp = validateReadAddressResponse(resp.http_response.c_str());
+			if (getaddr_resp->address_obj != NULL) {
+				remoteAddressLoaded = true;
+				if (!getaddr_resp->is_foreign_address) {
+					mapNationalFields(getaddr_resp->address_obj);
+				}
+				else {
+					mapForeignFields(getaddr_resp->address_obj);
+				}
+
+			}
+			else {
+
+				MWLOG(LEV_ERROR, MOD_APL, "Unexpected server response for %s, no HTTP error code but empty/malformed response", ENDPOINT_READADDRESS.c_str());
+				exception_code = EIDMW_REMOTEADDR_SERVER_ERROR;
+			}
+
+		}
+
+	}
+
+	cleanup:
+	  if (exception_code != 0) {
+	  	throw CMWEXCEPTION(exception_code);
+	  }
+
+}
+
 const char *APL_AddrEId::getMunicipality()
 {
-	return m_card->getFileAddress()->getMunicipality();
+
+	loadRemoteAddress();
+	return m_MunicipalityName.c_str();
 }
 
 const char *APL_AddrEId::getMunicipalityCode()
-{
-	return m_card->getFileAddress()->getMunicipalityCode();
+{	
+	loadRemoteAddress();
+	return m_MunicipalityCode.c_str();
 }
 
 const char *APL_AddrEId::getPlace()
 {
-	return m_card->getFileAddress()->getPlace();
+	loadRemoteAddress();
+	return m_Place.c_str();
 }
 
 const char *APL_AddrEId::getCivilParish()
 {
-	return m_card->getFileAddress()->getCivilParish();
+	loadRemoteAddress();
+	return m_CivilParishName.c_str();
 }
 
 const char *APL_AddrEId::getCivilParishCode()
 {
-	return m_card->getFileAddress()->getCivilParishCode();
+	loadRemoteAddress();
+	return m_CivilParishCode.c_str();
 }
 
 const char *APL_AddrEId::getStreetName()
 {
-	return m_card->getFileAddress()->getStreetName();
+	loadRemoteAddress();
+	return m_StreetName.c_str();
 }
 
 const char *APL_AddrEId::getAbbrStreetType()
 {
-	return m_card->getFileAddress()->getAbbrStreetType();
+	loadRemoteAddress();
+	return m_AbbrStreetType.c_str();
 }
 
 const char *APL_AddrEId::getStreetType()
 {
-	return m_card->getFileAddress()->getStreetType();
+	loadRemoteAddress();
+	return m_StreetType.c_str();
 }
 
 const char *APL_AddrEId::getAbbrBuildingType()
 {
-	return m_card->getFileAddress()->getAbbrBuildingType();
+	loadRemoteAddress();
+	return m_AbbrBuildingType.c_str();
 }
 
 const char *APL_AddrEId::getBuildingType()
 {
-	return m_card->getFileAddress()->getBuildingType();
+	loadRemoteAddress();
+	return m_BuildingType.c_str();
 }
 
 const char *APL_AddrEId::getDoorNo()
 {
-	return m_card->getFileAddress()->getDoorNo();
+	loadRemoteAddress();
+	return m_DoorNo.c_str();
 }
 
 const char *APL_AddrEId::getFloor()
 {
-	return m_card->getFileAddress()->getFloor();
+	loadRemoteAddress();
+	return m_Floor.c_str();
 }
 
 const char *APL_AddrEId::getSide()
 {
-	return m_card->getFileAddress()->getSide();
+	loadRemoteAddress();
+	return m_Side.c_str();
 }
 
 const char *APL_AddrEId::getLocality()
 {
-	return m_card->getFileAddress()->getLocality();
+	loadRemoteAddress();
+	return m_Locality.c_str();
 }
 
 const char *APL_AddrEId::getZip4()
 {
-	return m_card->getFileAddress()->getZip4();
+	loadRemoteAddress();
+	return m_Zip4.c_str();
 }
 
 const char *APL_AddrEId::getZip3()
 {
-	return m_card->getFileAddress()->getZip3();
+	loadRemoteAddress();
+	return m_Zip3.c_str();
 }
 
 const char *APL_AddrEId::getPostalLocality()
 {
-	return m_card->getFileAddress()->getPostalLocality();
+	loadRemoteAddress();
+	return m_PostalLocality.c_str();
 }
 
 const char *APL_AddrEId::getGeneratedAddressCode()
 {
-	return m_card->getFileAddress()->getGeneratedAddressCode();
+	loadRemoteAddress();
+	return m_Generated_Address_Code.c_str();
 }
 
 const char *APL_AddrEId::getDistrict()
 {
-	return m_card->getFileAddress()->getDistrict();
+	loadRemoteAddress();
+	return m_DistrictName.c_str();
 }
 
 const char *APL_AddrEId::getDistrictCode()
 {
-	return m_card->getFileAddress()->getDistrictCode();
+	loadRemoteAddress();
+	return m_DistrictCode.c_str();
 }
 
 const char *APL_AddrEId::getCountryCode()
 {
-	return m_card->getFileAddress()->getCountryCode();
+	loadRemoteAddress();
+	return m_CountryCode.c_str();
 }
 
 bool APL_AddrEId::isNationalAddress()
 {
-	return m_card->getFileAddress()->isNationalAddress();
+	loadRemoteAddress();
+	return m_AddressType == "N";
 }
 
 const char *APL_AddrEId::getForeignCountry()
 {
-	return m_card->getFileAddress()->getForeignCountry();
+	loadRemoteAddress();
+	return m_Foreign_Country.c_str();
 }
 
 const char *APL_AddrEId::getForeignAddress()
 {
-	return m_card->getFileAddress()->getForeignAddress();
+	loadRemoteAddress();
+	return m_Foreign_Generic_Address.c_str();
 }
 
 const char *APL_AddrEId::getForeignCity()
 {
-	return m_card->getFileAddress()->getForeignCity();
+	loadRemoteAddress();
+	return m_Foreign_City.c_str();
 }
 
 const char *APL_AddrEId::getForeignRegion()
 {
-	return m_card->getFileAddress()->getForeignRegion();
+	loadRemoteAddress();
+	return m_Foreign_Region.c_str();
 }
 
 const char *APL_AddrEId::getForeignLocality()
 {
-	return m_card->getFileAddress()->getForeignLocality();
+	loadRemoteAddress();
+	return m_Foreign_Locality.c_str();
 }
 
 const char *APL_AddrEId::getForeignPostalCode()
 {
-	return m_card->getFileAddress()->getForeignPostalCode();
+	loadRemoteAddress();
+	return m_Foreign_Postal_Code.c_str();
 }
 
 /*****************************************************************************************

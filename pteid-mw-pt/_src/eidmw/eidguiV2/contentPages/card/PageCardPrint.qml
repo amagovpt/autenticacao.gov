@@ -225,6 +225,35 @@ PageCardPrintForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
 
         }
+        onSignalRemoteAddressError: {
+            console.log("Card Address onSignalRemoteAddressError: "+ error_code)
+            var titlePopup = qsTr("STR_PRINT_CREATE_PDF") + ": " + qsTranslate("Popup Card","STR_POPUP_ERROR")
+            var bodyPopup = ""
+            if (error_code == GAPI.AddressConnectionError) {
+                bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_NETWORK_ERROR")
+                    + "<br/><br/>" + qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_GENERIC")
+            }            
+            else if (error_code == GAPI.AddressServerError) {
+                bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_SERVER_ERROR")
+                    + "<br/><br/>" + qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_GENERIC")
+            }            
+            else if (error_code == GAPI.AddressConnectionTimeout) {
+                bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_TIMEOUT_ERROR")
+                    + "<br/><br/>" + qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_GENERIC")
+            }            
+            else if (error_code == GAPI.AddressSmartcardError) {
+                bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_SMARTCARD_ERROR")
+                    + "<br/><br/>" + qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_GENERIC")
+            }
+            else if (error_code == GAPI.AddressUnknownError) {
+                bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_UNKNOWN_ERROR")
+                    + "<br/><br/>" + qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_GENERIC")
+            }
+            else {
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
+            }
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
+        }
         onSignalCardDataChanged: {
             console.log("Data Card Print --> Data Changed")
             propertyBusyIndicator.running = false
