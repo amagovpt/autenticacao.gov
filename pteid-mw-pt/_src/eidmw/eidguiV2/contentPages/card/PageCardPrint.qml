@@ -252,6 +252,7 @@ PageCardPrintForm {
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
+            propertyBusyIndicator.running = false
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
         }
         onSignalCardDataChanged: {
@@ -274,7 +275,7 @@ PageCardPrintForm {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyBusyIndicator.running = false
         }
-        
+
         onSignalCardAccessError: {
             console.log("Card Print Page onSignalCardAccessError")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
