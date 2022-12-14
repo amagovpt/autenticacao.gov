@@ -1543,7 +1543,7 @@ Load language error. Please reinstall the application"
             mainFormID.propertyNotificationMenu.addCacheSettings()   
         }
         if (controler.getAskToSetTelemetryValue()) {
-            mainFormID.propertyNotificationMenu.addTelemetrySettings()
+            //mainFormID.propertyNotificationMenu.addTelemetrySettings()
         }
         if(Qt.platform.os === "windows"){
             mainFormID.propertyNotificationMenu.addCmdSettings(!controler.getAskToRegisterCmdCertValue())
@@ -1696,7 +1696,7 @@ Load language error. Please reinstall the application"
             mainFormID.propertyNotificationMenu.addCacheSettings()   
         }
         if (controler.getAskToSetTelemetryValue()) {
-            mainFormID.propertyNotificationMenu.addTelemetrySettings()
+            //mainFormID.propertyNotificationMenu.addTelemetrySettings()
         }
         if(Qt.platform.os === "windows"){
             mainFormID.propertyNotificationMenu.addCmdSettings(!controler.getAskToRegisterCmdCertValue())

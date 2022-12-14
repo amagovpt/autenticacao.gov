@@ -37,7 +37,7 @@ Item {
     property alias propertyRectAppLook: rectAppLook
     property alias propertyCheckboxShowAnime: checkboxShowAnime
     property alias propertyCheckBoxDebugMode: checkboxDebugMode
-    property alias propertyCheckBoxUseTelemetry: checkBoxUseTelemetry
+    //property alias propertyCheckBoxUseTelemetry: checkBoxUseTelemetry
     property alias propertyButtonZipLogs: buttonZipLogs
     property alias propertyDebugModeStep1TextField: debugModeStep1TextField
     property alias propertyDebugModeStep3TextField: debugModeStep3TextField
@@ -1226,9 +1226,9 @@ Item {
                             qsTranslate("PageDefinitionsApp", "STR_HARDWARE") + controler.autoTr,
                             qsTranslate("PageDefinitionsApp", "STR_SOFTWARE_DIRECT3D") + controler.autoTr
                         ]
-                        KeyNavigation.tab: textAppTelemetry
-                        KeyNavigation.down: textAppTelemetry
-                        KeyNavigation.right: textAppTelemetry
+                        KeyNavigation.tab: dateAppNetwork
+                        KeyNavigation.down: dateAppNetwork
+                        KeyNavigation.right: dateAppNetwork
                         KeyNavigation.backtab: textGraphicsRendering
                         KeyNavigation.up: textGraphicsRendering
                         KeyNavigation.left: textGraphicsRendering
@@ -1237,7 +1237,7 @@ Item {
             }
 
             
-            Item {
+            /*Item {
                 id: rectAppTelemetry
                 width: parent.width
                 height: textAppTelemetry.height + rectTelemetryBox.height + 3 * Constants.SIZE_TEXT_V_SPACE
@@ -1324,7 +1324,7 @@ Item {
                         KeyNavigation.left: textAppTelemetry
                     }
                 }
-            }
+            }*/
 
             Item {
                 id: rectAppNetwork
@@ -1332,7 +1332,7 @@ Item {
                 height: dateAppNetwork.height + rectAppNetworkCheckBox.height
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
-                anchors.top: rectAppTelemetry.bottom
+                anchors.top: rectAppGraphics.bottom
 
                 Text {
                     id: dateAppNetwork
@@ -1354,9 +1354,9 @@ Item {
                     KeyNavigation.tab: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
                     KeyNavigation.down: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
                     KeyNavigation.right: checkboxSystemProxy.visible ? checkboxSystemProxy : checkboxProxy
-                    KeyNavigation.backtab: checkBoxUseTelemetry
-                    KeyNavigation.up: checkBoxUseTelemetry
-                    KeyNavigation.left: checkBoxUseTelemetry
+                    KeyNavigation.backtab: comboboxAccelGraphics
+                    KeyNavigation.up: comboboxAccelGraphics
+                    KeyNavigation.left: comboboxAccelGraphics
                 }
                 DropShadow {
                     anchors.fill: rectAppNetworkCheckBox

@@ -164,14 +164,14 @@ PageDefinitionsAppForm {
         }
     }
 
-    propertyCheckBoxUseTelemetry {
+    /*propertyCheckBoxUseTelemetry {
         onCheckedChanged: {
             if(propertyCheckBoxUseTelemetry.checkState == Qt.Checked)
                 gapi.enableTelemetry()
             else
                 gapi.disableTelemetry()
         }
-    }
+    }*/
 
     propertyComboboxAccelGraphics{
         onActivated:  {
@@ -297,8 +297,8 @@ PageDefinitionsAppForm {
         }
 
         
-        var tel_status = gapi.getTelemetryStatus();
-        propertyCheckBoxUseTelemetry.checked = tel_status == GAPI.RetryEnable || tel_status == GAPI.Enabled
+        /*var tel_status = gapi.getTelemetryStatus();
+        propertyCheckBoxUseTelemetry.checked = tel_status == GAPI.RetryEnable || tel_status == GAPI.Enabled*/
 
         propertyCheckBoxDebugMode.enabled = true
 
