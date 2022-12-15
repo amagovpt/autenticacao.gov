@@ -514,7 +514,7 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
-        <translation>&#60;ul&#62;&#60;li&#62;N&#227;o est&#225; a usar o Cart&#227;o de Cidad&#227;o para o qual pediu a altera&#231;&#227;o de morada&#60;&#47;li&#62;&#60;li&#62;Fez o pedido de altera&#231;&#227;o de morada depois de 22/12/2022&#46; Tem de confirmar a altera&#231;&#227;o de morada no &#60;a href&#61;&#34;https&#58;&#47;&#47;eportugal&#46;gov&#46;pt&#47;servicos&#47;confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&#34;&#62;portal ePortugal&#60;&#47;a&#62;&#60;&#47;li&#62;&#60;&#47;ul&#62;</translation>
+        <translation>&#60;ul&#62;&#60;li&#62;N&#227;o est&#225; a usar o Cart&#227;o de Cidad&#227;o para o qual pediu a altera&#231;&#227;o de morada&#60;&#47;li&#62;&#60;li&#62;Fez o pedido de altera&#231;&#227;o de morada no fim de dezembro de 2022 ou mais tarde&#46; Tem de confirmar a altera&#231;&#227;o de morada no &#60;a href&#61;&#34;https&#58;&#47;&#47;eportugal&#46;gov&#46;pt&#47;servicos&#47;confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&#34;&#62;portal ePortugal&#60;&#47;a&#62;&#60;&#47;li&#62;&#60;&#47;ul&#62;</translation>
     </message>
     <message>
         <source>STR_VERIFY_INTERNET_SAM</source>
@@ -667,11 +667,11 @@
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT_1</source>
-        <translation>Alterações de morada iniciadas após 22 de dezembro de 2022 devem ser confirmadas no portal eportugal.gov.pt. Para mais informações, clique</translation>
+        <translation>Alterações de morada iniciadas no fim de dezembro de 2022 ou mais tarde devem ser confirmadas no portal eportugal.gov.pt. Para mais informações, clique</translation>
     </message>
         <message>
         <source>STR_ADDRESS_CHANGE_TEXT_2</source>
-        <translation>Para processos de alteração de morada iniciados antes de 22 de dezembro de 2022 insira o número de processo e código de confirmação recebidos pelo correio.</translation>
+        <translation>Para alterações de morada iniciadas antes do fim de dezembro de 2022 insira o número de processo e código de confirmação recebidos pelo correio.</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_NUMBER</source>
@@ -743,7 +743,7 @@
     </message>
     <message>
         <source>STR_REMOTEADDRESS_NETWORK_ERROR</source>
-        <translation>Por favor verifique a sua ligação a internet.</translation>
+        <translation>Por favor verifique a sua ligação à internet.</translation>
     </message>
 </context>
 <context>
@@ -1260,7 +1260,7 @@
     </message>
     <message>
         <source>STR_SCAP_PING_FAIL_SECOND</source>
-        <translation>Por favor verifique a sua ligação a internet e volte a tentar.</translation>
+        <translation>Por favor verifique a sua ligação à internet e volte a tentar.</translation>
     </message>
     <message>
         <source>STR_SCAP_LOAD_ENTITIES_ERROR</source>
@@ -1423,7 +1423,7 @@
     </message>
     <message>
         <source>STR_UPDATE_NETWORK_ERROR</source>
-        <translation>Por favor verifique a sua ligação a internet e volte a tentar.</translation>
+        <translation>Por favor verifique a sua ligação à internet e volte a tentar.</translation>
     </message>
     <message>
         <source>STR_UPDATE_APP_TITLE</source>
@@ -1836,7 +1836,7 @@
     </message>
     <message>
         <source>STR_SCAP_PING_FAIL_SECOND</source>
-        <translation>Por favor verifique a sua ligação a internet e volte a tentar.</translation>
+        <translation>Por favor verifique a sua ligação à internet e volte a tentar.</translation>
     </message>
     <message>
         <source>STR_SIGN_OPEN_MULTI</source>
