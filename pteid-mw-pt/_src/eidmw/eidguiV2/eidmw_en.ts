@@ -656,8 +656,12 @@
         <translation>Address Confirmation</translation>
     </message>
     <message>
-        <source>STR_ADDRESS_CHANGE_TEXT</source>
-        <translation>If you started an address change procedure, enter the process number and secret code received by mail.</translation>
+        <source>STR_ADDRESS_CHANGE_TEXT_1</source>
+        <translation>If you have requested the address change after December 22nd 2022 the address change must be confirmed at eportugal.gov.pt. For more informations click</translation>
+    </message>
+    <message>
+        <source>STR_ADDRESS_CHANGE_TEXT_2</source>
+        <translation>Otherwise if you have requested the address change before December 22nd 2022, enter the process number and secret code received by mail.</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_NUMBER</source>

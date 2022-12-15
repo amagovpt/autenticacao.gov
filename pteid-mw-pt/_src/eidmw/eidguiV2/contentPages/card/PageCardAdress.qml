@@ -423,7 +423,7 @@ PageCardAdressForm {
     Dialog {
         id: dialogConfirmOfAddress
         width: 600
-        height: 300
+        height: 340
         font.family: lato.name
         // Center dialog in the main view
         x: - mainMenuView.width - subMenuView.width
@@ -447,26 +447,83 @@ PageCardAdressForm {
         Item {
             id: rectPopUp
             width: parent.width
-            height: rectMessage.height + rectNumProcess.height + rectConfirmAddress.height
+            height: rectMessage.height + rectChangeAddressMsg1.height + rectChangeAddressMsg2.height + rectNumProcess.height + rectConfirmAddress.height
 
             Accessible.role: Accessible.AlertMessage
             Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
                              + labelConfirmOfAddressTextTitle.text
-            KeyNavigation.tab: textPinMsgConfirm.propertyText
-            KeyNavigation.down: textPinMsgConfirm.propertyText
-            KeyNavigation.right: textPinMsgConfirm.propertyText
+            KeyNavigation.tab: textChangeAddressMsg1.propertyText
+            KeyNavigation.down: textChangeAddressMsg1.propertyText
+            KeyNavigation.right: textChangeAddressMsg1.propertyText
             KeyNavigation.left: okButton
             KeyNavigation.backtab: okButton
             KeyNavigation.up: okButton
 
             Item {
+                id: rectChangeAddressMsg1
+                width: parent.width
+                height: 40
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Components.Link {
+                    id: textChangeAddressMsg1
+                    propertyText.text: qsTr("STR_ADDRESS_CHANGE_TEXT_1") + " "
+                          + "<a href=https://eportugal.gov.pt/pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao>" + qsTr("STR_ADDRESS_CHANGE_TEXT_HERE")+ "</a>"
+                    propertyText.verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+                    anchors.fill: parent 
+                    propertyText.anchors.fill: textChangeAddressMsg1
+                    propertyAccessibleText: qsTr("STR_ADDRESS_CHANGE_TEXT_HERE")
+                    propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao'
+                    KeyNavigation.tab: textChangeAddressMsg2
+                    KeyNavigation.down: textChangeAddressMsg2
+                    KeyNavigation.right: textChangeAddressMsg2
+                    KeyNavigation.left: rectPopUp
+                    KeyNavigation.backtab: rectPopUp
+                    KeyNavigation.up: rectPopUp
+                }
+            }
+
+            Item {
+                id: rectChangeAddressMsg2
+                width: parent.width
+                height: 40
+                anchors.top: rectChangeAddressMsg1.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    id: textChangeAddressMsg2
+                    text: qsTr("STR_ADDRESS_CHANGE_TEXT_2")
+                    wrapMode: Text.WordWrap
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    font.bold: activeFocus ? true : false
+                    color: Constants.COLOR_TEXT_BODY
+                    height: parent.height
+                    width: parent.width
+                    anchors.bottom: parent.bottom
+                    KeyNavigation.tab: textPinMsgConfirm
+                    KeyNavigation.down: textPinMsgConfirm
+                    KeyNavigation.right: textPinMsgConfirm
+                    KeyNavigation.left: textChangeAddressMsg1.propertyText
+                    KeyNavigation.backtab: textChangeAddressMsg1.propertyText
+                    KeyNavigation.up: textChangeAddressMsg1.propertyText
+                }
+
+            }
+
+            Item {
                 id: rectMessage
                 width: parent.width
-                height: 60
+                height: 20
+                anchors.top: rectChangeAddressMsg2.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
                 Components.Link {
                     id: textPinMsgConfirm
-                    propertyText.text: qsTr("STR_ADDRESS_CHANGE_TEXT") + " " +  qsTr("STR_ADDRESS_ONLINE_CHANGE_TEXT") + " "
+                    propertyText.text: qsTr("STR_ADDRESS_ONLINE_CHANGE_TEXT") + " "
                           + "<a href=https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao>" + qsTr("STR_ADDRESS_CHANGE_TEXT_HERE")+ "</a>"
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
@@ -478,9 +535,9 @@ PageCardAdressForm {
                     KeyNavigation.tab: textPinCurrent
                     KeyNavigation.down: textPinCurrent
                     KeyNavigation.right: textPinCurrent
-                    KeyNavigation.left: rectPopUp
-                    KeyNavigation.backtab: rectPopUp
-                    KeyNavigation.up: rectPopUp
+                    KeyNavigation.left: textChangeAddressMsg2
+                    KeyNavigation.backtab: textChangeAddressMsg2
+                    KeyNavigation.up: textChangeAddressMsg2
                 }
             }
 

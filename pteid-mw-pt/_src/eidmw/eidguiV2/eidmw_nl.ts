@@ -666,8 +666,12 @@
         <translation>Confirmação de Morada</translation>
     </message>
     <message>
-        <source>STR_ADDRESS_CHANGE_TEXT</source>
-        <translation>Caso tenha solicitado uma alteração de morada, insira o número de processo e o código secreto recebidos pelo correio.</translation>
+        <source>STR_ADDRESS_CHANGE_TEXT_1</source>
+        <translation>Alterações de morada iniciadas após 22 de dezembro de 2022 devem ser confirmadas no portal eportugal.gov.pt. Para mais informações, clique</translation>
+    </message>
+        <message>
+        <source>STR_ADDRESS_CHANGE_TEXT_2</source>
+        <translation>Para processos de alteração de morada iniciados antes de 22 de dezembro de 2022 insira o número de processo e código de confirmação recebidos pelo correio.</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_NUMBER</source>
