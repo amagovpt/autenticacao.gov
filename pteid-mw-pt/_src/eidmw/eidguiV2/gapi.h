@@ -313,6 +313,7 @@ public:
     CMDCertificates *m_cmdCertificates;
 
 public slots:
+#if 0
     // Telemetry
     void updateTelemetry(TelemetryAction action);
     void doUpdateTelemetry(TelemetryAction action);
@@ -321,6 +322,7 @@ public slots:
     void enableTelemetry();
     void disableTelemetry();
     const char *telemetryActionToString(TelemetryAction action);
+#endif
     static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
 
     // Slots to Gui request values

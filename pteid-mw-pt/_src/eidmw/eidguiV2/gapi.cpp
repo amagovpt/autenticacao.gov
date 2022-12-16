@@ -69,6 +69,7 @@ size_t GAPI::write_callback(char *ptr, size_t size, size_t nmemb, void *userdata
     return size * nmemb;
 }
 
+#if 0
 const char* GAPI::telemetryActionToString(TelemetryAction action)
 {
     switch(action) {
@@ -213,6 +214,7 @@ void GAPI::updateTelemetry(TelemetryAction action)
         //
         Concurrent::run(this, &GAPI::doUpdateTelemetry, action);
 }
+#endif
 
 GAPI::GAPI(QObject *parent) :
     QObject(parent) {
@@ -1082,9 +1084,10 @@ void GAPI::doSignCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams)
     }
 
     showSignCMDDialog(ret);
-
+#if 0
     if (ret == 0)
         updateTelemetry(TelemetryAction::SignCMD);
+#endif
 }
 
 void GAPI::doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams, QList<int> attribute_list) {
@@ -1143,8 +1146,9 @@ void GAPI::doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &sign
     }
     signCMDFinished(ret);
     signalUpdateProgressBar(100);
-
+#if 0
     updateTelemetry(TelemetryAction::SignCMDScap);
+#endif
 }
 
 void GAPI::doSignXADESWithCMD(SignParams &params, bool isASIC) {
@@ -1597,8 +1601,9 @@ void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
             emit signalPdfPrintFail();
         }
     }
-
+#if 0
 	updateTelemetry(TelemetryAction::PrintPDF);
+#endif
     
 	END_TRY_CATCH
 }
@@ -2323,8 +2328,9 @@ void GAPI::doSignPDF(SignParams &params) {
         getPlatformNativeString(params.outputFile));
 
     emit signalPdfSignSuccess(SignMessageOK);
-
+#if 0
     updateTelemetry(TelemetryAction::SignCC);
+#endif
 
     END_TRY_CATCH
 }
@@ -2679,8 +2685,9 @@ void GAPI::doSignSCAP(SCAPSignParams params) {
         params.location_x, params.location_y, params.location, params.reason,
         params.isTimestamp, params.isLtv, attrs, useCustomSignature(), m_jpeg_scaled_data, 
         m_seal_width, m_seal_height);
-
+#if 0
     updateTelemetry(TelemetryAction::SignCCScap);
+#endif
     END_TRY_CATCH
 }
 

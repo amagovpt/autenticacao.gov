@@ -35,8 +35,9 @@
 
 #define STR_DEF_GUILANGUAGE		"nl"
 
-
+#if 0
 #define TEL_HOST "https://tlmt.autenticacao.gov.pt"
+#endif
 
 #define PIN_MAX_LENGHT 8
 #define PIN_MIN_LENGHT 4
@@ -59,9 +60,11 @@ public:
         : m_bProxySystem(false)
         , m_proxy_port(0)
         , m_GuiLanguage("nl")
+#if 0
         , m_telemetry_id("0")
         , m_telemetry_host("0")
         , m_telemetry_status(8)    /* TelemetryStatus::Disabled defined in gapi.h */
+#endif
         , m_bShowAnimations(false)
         , m_bUseSystemScale(false)
         , m_iApplicationScale(0)
@@ -100,7 +103,7 @@ public:
                 setGuiLanguage(STR_DEF_GUILANGUAGE);
             }
         }
-
+#if 0
         //----------------------------------------------------------
         // check telemetry id
         //----------------------------------------------------------
@@ -143,6 +146,7 @@ public:
                 setTelemetryStatus(telemetryStatus);
             }
         }
+#endif
 
         //----------------------------------------------------------
         // check use Pinpad functionality
@@ -209,7 +213,7 @@ public:
                 setAskToSetCache(true);
             }
         }
-
+#if 0
         //----------------------------------------------------------
         // check set telemetry
         //----------------------------------------------------------
@@ -222,6 +226,7 @@ public:
                 setAskToSetTelemetry(true);
             }
         }
+#endif
 
         //----------------------------------------------------------
         // check ShowAnimations
@@ -523,7 +528,7 @@ public:
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ASKSETCACHE);
         config.setLong(m_bAskToSetCache);
     }
-
+#if 0
     QString getTelemetryId()
     {
         return m_telemetry_id;
@@ -560,12 +565,14 @@ public:
         return m_telemetry_status;
     }
 
+
     void setAskToSetTelemetry(bool bAskToSetTelemetry)
     {
         m_bAskToSetTelemetry = bAskToSetTelemetry;
         eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ASKSETTELEMETRY);
         config.setLong(m_bAskToSetTelemetry);
     }
+#endif
 
     bool getShowAnimations( void )
     {
