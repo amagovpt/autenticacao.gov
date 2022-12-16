@@ -163,6 +163,7 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
         }
         else {
             long http_code = 0;
+            double request_time = 0;
             curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
             resp.http_code = http_code;
 
@@ -174,7 +175,11 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
             else
             {
                 MWLOG(LEV_ERROR, MOD_APL, "RemoteAddress server returned HTTP error on endpoint %s: %ld", get_url_endpoint(endpoint_url), http_code);
-				MWLOG(LEV_DEBUG, MOD_APL, "Received data: %s", (char *)received_data.c_str());
+                MWLOG(LEV_DEBUG, MOD_APL, "Received data: %s", (char *)received_data.c_str());
+            }
+            res = curl_easy_getinfo(curl, CURLINFO_TOTAL_TIME, &request_time);
+            if (res == CURLE_OK) {
+                MWLOG(LEV_DEBUG, MOD_APL, "Request total time: %.3f seconds", request_time);
             }
 
         }
