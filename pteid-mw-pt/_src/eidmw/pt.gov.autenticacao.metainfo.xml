@@ -24,7 +24,7 @@
   <url type="help">https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html</url>
   
   <releases>
-    <release version="3.9.0.beta" date="2022-09-12"/>
+    <release version="3.9.0" date="2022-12-20"/>
   </releases>
 
   <project_license>EUPL-1.2</project_license>
