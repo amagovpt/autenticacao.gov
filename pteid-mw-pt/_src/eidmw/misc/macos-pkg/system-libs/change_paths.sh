@@ -24,7 +24,7 @@ change_dylib_dep libfreetype.6.dylib libpng16.16.dylib
 change_dylib_dep libcurl.4.dylib "libssl.1.1.dylib libcrypto.1.1.dylib"
 
 #Fixup pteid-mw libs
-change_dylib_dep libpteidcardlayer.2.0.0.dylib "libpteiddialogsQT.2.dylib libpteidcommon.2.dylib"
+change_dylib_dep libpteidcardlayer.2.0.0.dylib "libpteiddialogsQT.2.dylib libpteidcommon.2.dylib libcrypto.1.1.dylib"
 change_dylib_dep libpteiddialogsQT.2.0.0.dylib libpteidcommon.2.dylib
 change_dylib_dep libpteidlib.2.0.0.dylib  "libCMDServices.1.dylib libpteidcommon.2.dylib libpteiddialogsQT.2.dylib libpteidcardlayer.2.dylib libpteidapplayer.2.dylib" 
 change_dylib_dep libCMDServices.1.0.0.dylib  "libssl.1.1.dylib libcrypto.1.1.dylib libpteidcommon.2.dylib libpteidlib.2.dylib libpteidapplayer.2.dylib libpteiddialogsQT.2.dylib" 
