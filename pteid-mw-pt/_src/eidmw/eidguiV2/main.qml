@@ -1549,13 +1549,14 @@ Load language error. Please reinstall the application"
             mainFormID.propertyNotificationMenu.addCmdSettings(!controler.getAskToRegisterCmdCertValue())
         }
 
+        /*
         // Should we retry any of the telemetry status requests
         if(gapi.getTelemetryStatus() === GAPI.RetryEnable)
             gapi.enableTelemetry()
         else if(gapi.getTelemetryStatus() === GAPI.RetryDisable)
             gapi.disableTelemetry()
 
-        gapi.updateTelemetry(GAPI.Startup)
+        gapi.updateTelemetry(GAPI.Startup) */
     }
 
     function mainMenuPressed(index){
