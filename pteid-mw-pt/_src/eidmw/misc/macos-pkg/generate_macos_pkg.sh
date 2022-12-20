@@ -3,7 +3,7 @@ set -e
 
 #Print every command before it is executed as if it were a Makefile
 set -o xtrace
-MW_SOURCE_DIR=~/pteid-mw-git
+MW_SOURCE_DIR=~/autenticacao.gov
 #MW source directories, we're copying binaries and other files from here
 LIB_DIR=$MW_SOURCE_DIR/pteid-mw-pt/_src/eidmw/lib
 BIN_DIR=$MW_SOURCE_DIR/pteid-mw-pt/_src/eidmw/bin
@@ -32,7 +32,7 @@ cd $LIB_DIR
 git_revision=`git rev-list --count HEAD`
 popd
 
-VERSION="3.8.0.$git_revision"
+VERSION="3.9.0.$git_revision"
 
 echo "Packaging PTEID Git revision $git_revision" 
 echo "IMPORTANT: Don't forget to update the version in apps/Info.plist and release notes in resources dir"
@@ -61,7 +61,7 @@ cp $EIDLIB_DIR/eidlibException.h     system-libs/include
 cp $EIDLIB_DIR/../common/eidErrors.h system-libs/include
 
 #Copy libraries and 3rd-party dependencies
-find $LIB_BUNDLE_DIR -name '*.dylib' -delete
+recreate_dir $LIB_BUNDLE_DIR
 copy_external_dylibs $LIB_BUNDLE_DIR
 cp -af $LIB_DIR/*.dylib $LIB_BUNDLE_DIR
 recreate_dir $LIB_BUNDLE_DIR/pteid_jni/

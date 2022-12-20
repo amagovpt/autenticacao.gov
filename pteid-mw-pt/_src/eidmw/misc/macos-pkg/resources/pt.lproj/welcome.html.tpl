@@ -6,15 +6,13 @@
 	</style>
 </head>
 <body>
-<h1>Bem-vindo ao instalador do Autenticação.gov 3.8.0</h2>
+<h1>Bem-vindo ao instalador do Autenticação.gov 3.9.0</h2>
 
-	<h2>Versão 3.8.0 - revisão GIT_REVISION</h2>
+	<h2>Versão 3.9.0 - revisão GIT_REVISION</h2>
 	<ul>
-		<li>Melhorias na assinatura XAdES: possibilidade de assinar com Chave Móvel Digital</li>
-		<li>Assinatura com Chave Móvel Digital nos SDKs Java e C++</li>
-		<li>Novo menu para validar estado dos certificados</li>
-		<li>Nova área de notificações</li>
-		<li>Correções na assinatura de documentos PDF</li>
+		<li>Leitura da morada online na aplicação e métodos do SDK</li>
+		<li>Validação do estado do certificado no momento da assinatura com CC por OCSP</li>
+		<li>Melhoria na assinatura XAdES: possibilidade de listar e extrair o conteúdo de um pacote ASiC</li>
 	</ul>
 </body>
 </html>
