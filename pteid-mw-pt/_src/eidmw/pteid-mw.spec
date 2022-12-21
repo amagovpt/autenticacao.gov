@@ -20,8 +20,8 @@
 %endif
 %endif
 
-%define git_revision git20220601
-%define app_version 3.8.0
+%define git_revision git20221220
+%define app_version 3.9.0
 
 Name:           pteid-mw
 BuildRequires:  pcsc-lite-devel make
@@ -307,6 +307,11 @@ fi
 /usr/local/share/pteid-mw
 
 %changelog
+* Tue Dec 20 2022 André Guerreiro <andre.guerreiro@caixamagica.pt>
+  - Address reading from online service
+  - Certificate OCSP validation before signing with CC card
+  - XAdES signature improvement: list and extract the contents of an ASiC container
+
 * Wed Jun 1 2022 André Guerreiro <andre.guerreiro@caixamagica.pt>
   - Chave Movel Digital signature support in the pteidlib SDK
   - New notifications menu and cache preference mandatory notification
