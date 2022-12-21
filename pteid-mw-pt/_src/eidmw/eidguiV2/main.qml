@@ -36,25 +36,12 @@ Window {
 
     title: "Autenticação.Gov"
 
-    FontLoader { 
+    FontLoader {
         id: lato;
         name: "Lato" // This avoids printing error on application start
 
-        source: {
-            // on linux, load installed font by name
-            // on windows and macOS use source property to point to distributed font file
-            if (Qt.platform.os === "windows" || Qt.platform.os === "osx"){
-                controler.getFontFile("lato")
-            }
-            else ""
-        }
+        source: ""
     }
-
-
-
-
-
-
 
     onWidthChanged: {
         //console.log("Resizing app width: " + width + "height" + height)

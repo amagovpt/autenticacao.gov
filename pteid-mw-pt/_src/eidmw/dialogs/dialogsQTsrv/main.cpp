@@ -164,13 +164,10 @@ QString getPinName( DlgPinUsage usage, wchar_t *inPinName ) {
 
 QFont getLatoFont(){
 	QFont font;
-#ifdef __APPLE__
 	QString fontFile = ":/fonts/lato/Lato-Regular.ttf";
 	int id = QFontDatabase::addApplicationFont(fontFile);
 	font = QFontDatabase::applicationFontFamilies(id).at(0);
-#else
-	font = QFont("lato");
-#endif
+
 	return font;
 }
 

@@ -15,6 +15,7 @@
 #include <QQuickStyle>
 #include <QIcon>
 #include <QProcess>
+#include <QFontDatabase>
 #include "appcontroller.h"
 #include "gapi.h"
 #include "eidlib.h"
@@ -271,6 +272,10 @@ int main(int argc, char *argv[])
         // Load translation files
         gapi.initTranslation();
         controller.initTranslation();
+#ifdef __linux__
+        int font_id = QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath()+"/../share/pteid-mw/fonts/Lato-Regular.ttf");
+        qDebug() << "Font id: " << font_id;
+#endif
 
         // Load main QML file
         engine->load(QUrl(MAIN_QML_PATH));
