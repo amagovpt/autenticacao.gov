@@ -512,11 +512,11 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_PROCESS_NUMBER</source>
-        <translation>Error due to one of the following reasons:</translation>
+        <translation>An error occurred for one of the following reasons:</translation>
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
-        <translation>&#60;ul&#62;&#60;li&#62;You are not using the correct card for this address change process&#60;&#47;li&#62;&#60;li&#62;You have requested the address change at the end of December 2022 or later&#46; The address change must be confirmed at &#60;a href&#61;&#34;https&#58;&#47;&#47;eportugal&#46;gov&#46;pt&#47;servicos&#47;confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&#34;&#62;portal ePortugal&#60;&#47;a&#62;&#60;&#47;li&#62;&#60;&#47;ul&#62;</translation>
+        <translation>&lt;ul&gt;&lt;li&gt;You are not using the correct card for this address change process&lt;/li&gt;&lt;li&gt;You have requested the address change after December 28, 2022. The address change must be confirmed at &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;portal ePortugal&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</translation>
     </message>
     <message>
         <source>STR_VERIFY_INTERNET_SAM</source>
@@ -657,11 +657,11 @@
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT_1</source>
-        <translation>If you have requested the address change at the end of December 2022 or later the address change must be confirmed at eportugal.gov.pt. For more information click</translation>
+        <translation>If you applied for a change of address &lt;b&gt;after December 28, 2022&lt;/b&gt;,</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT_2</source>
-        <translation>Otherwise enter the process number and secret code received by mail.</translation>
+        <translation>If you applied for a change of address &lt;b&gt;before December 28, 2022&lt;/b&gt;, complete the following fields:</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_NUMBER</source>
@@ -701,7 +701,7 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_LINK</source>
-        <translation>For more information about address change, click </translation>
+        <translation>For more information about changing the address on the Citizen Card on the ePortugal portal.</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT_HERE</source>
@@ -734,6 +734,10 @@
     <message>
         <source>STR_REMOTEADDRESS_NETWORK_ERROR</source>
         <translation>Please check your Internet connection.</translation>
+    </message>
+    <message>
+        <source>STR_ADDRESS_CHANGE_TEXT_LINK</source>
+        <translation>confirm the address change on the ePortugal portal.</translation>
     </message>
 </context>
 <context>
@@ -1179,11 +1183,11 @@
     </message>
     <message>
         <source>STR_TELEMETRY_TITLE</source>
-        <translation>Usage data collection</translation>
+        <translation type="vanished">Usage data collection</translation>
     </message>
     <message>
         <source>STR_USE_TELEMETRY_COMBOBOX_TEXT</source>
-        <translation>Allow the application to collect and send information about its usage</translation>
+        <translation type="vanished">Allow the application to collect and send information about its usage</translation>
     </message>
 </context>
 <context>

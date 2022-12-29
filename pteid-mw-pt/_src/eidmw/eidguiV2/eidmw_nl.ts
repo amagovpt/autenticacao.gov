@@ -510,11 +510,11 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_PROCESS_NUMBER</source>
-        <translation>Erro por uma das seguintes razões:</translation>
+        <translation>Ocorreu um erro por uma das seguintes razões:</translation>
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
-        <translation>&#60;ul&#62;&#60;li&#62;N&#227;o est&#225; a usar o Cart&#227;o de Cidad&#227;o para o qual pediu a altera&#231;&#227;o de morada&#60;&#47;li&#62;&#60;li&#62;Fez o pedido de altera&#231;&#227;o de morada no fim de dezembro de 2022 ou mais tarde&#46; Tem de confirmar a altera&#231;&#227;o de morada no &#60;a href&#61;&#34;https&#58;&#47;&#47;eportugal&#46;gov&#46;pt&#47;servicos&#47;confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&#34;&#62;portal ePortugal&#60;&#47;a&#62;&#60;&#47;li&#62;&#60;&#47;ul&#62;</translation>
+        <translation>&lt;ul&gt;&lt;li&gt;Não está a usar o Cartão de Cidadão para o qual pediu a alteração de morada&lt;/li&gt;&lt;li&gt;Fez o pedido de alteração de morada depois de 28 (inclusive) de dezembro de 2022. Tem de confirmar a alteração de morada no &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;portal ePortugal&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</translation>
     </message>
     <message>
         <source>STR_VERIFY_INTERNET_SAM</source>
@@ -667,11 +667,11 @@
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT_1</source>
-        <translation>Alterações de morada iniciadas no fim de dezembro de 2022 ou mais tarde devem ser confirmadas no portal eportugal.gov.pt. Para mais informações, clique</translation>
+        <translation>Se fez o pedido de alteração de morada &lt;b&gt;depois de 28 (inclusive) de dezembro de 2022&lt;/b&gt;,</translation>
     </message>
-        <message>
+    <message>
         <source>STR_ADDRESS_CHANGE_TEXT_2</source>
-        <translation>Para alterações de morada iniciadas antes do fim de dezembro de 2022 insira o número de processo e código de confirmação recebidos pelo correio.</translation>
+        <translation>Se fez o pedido de alteração de morada &lt;b&gt;antes de 28 de dezembro de 2022&lt;/b&gt;, preencha os campos seguintes:</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_NUMBER</source>
@@ -711,7 +711,7 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_LINK</source>
-        <translation>Para mais informações sobre a alteração de morada, clique </translation>
+        <translation>Saiba mais sobre alterar a morada do Cartão de Cidadão no portal ePortugal.</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT_HERE</source>
@@ -744,6 +744,10 @@
     <message>
         <source>STR_REMOTEADDRESS_NETWORK_ERROR</source>
         <translation>Por favor verifique a sua ligação à internet.</translation>
+    </message>
+    <message>
+        <source>STR_ADDRESS_CHANGE_TEXT_LINK</source>
+        <translation>confirme a alteração de morada no portal ePortugal.</translation>
     </message>
 </context>
 <context>
@@ -1185,11 +1189,11 @@
     </message>
     <message>
         <source>STR_TELEMETRY_TITLE</source>
-        <translation>Recolha de dados de utilização</translation>
+        <translation type="vanished">Recolha de dados de utilização</translation>
     </message>
     <message>
         <source>STR_USE_TELEMETRY_COMBOBOX_TEXT</source>
-        <translation>Permitir que a aplicação recolha e comunique informação sobre o seu uso</translation>
+        <translation type="vanished">Permitir que a aplicação recolha e comunique informação sobre o seu uso</translation>
     </message>
 </context>
 <context>
