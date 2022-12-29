@@ -79,6 +79,7 @@ APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader, APL_CardType cardType):APL_S
 	m_fileCertRootAuth=NULL;
 
 	m_sodCheck = false;
+	m_mutualAuthFinished = false;
 	m_tokenLabel = NULL;
 	m_tokenSerial = NULL;
 	m_appletVersion = NULL;
@@ -237,6 +238,27 @@ APL_EidFile_Address *APL_EIDCard::getFileAddress()
 	return m_FileAddress;
 }
 
+bool APL_EIDCard::selectApplication() {
+
+	static const unsigned char PTEID_SELECT_APPLICATION[] = { 0x00, 0xA4, 0x04, 0x00, 0x07, 0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02 };
+	CByteArray select_application_cmd(PTEID_SELECT_APPLICATION, sizeof(PTEID_SELECT_APPLICATION));
+	
+	//SelectApplication to reset previous mutual authentication
+	CByteArray resp_ba = sendAPDU(select_application_cmd);
+
+	const unsigned char * resp = resp_ba.GetBytes();
+
+	if (resp_ba.Size() == 2 && resp[0] == 0x90 && resp[1] == 0x00) {
+		m_mutualAuthFinished = false;
+		return true;
+	}
+	else {
+		MWLOG(LEV_ERROR, MOD_APL, "%s Error in select application command: [%2x %2x]", __FUNCTION__, resp[0], resp[1]);
+		return false;
+	}
+
+}
+
 
 /*
 	Implements the address change protocol as implemented by the Portuguese State hosted website
@@ -254,6 +276,10 @@ void APL_EIDCard::ChangeAddress(char *secret_code, char *process, t_callback_add
 
 	DHParams dh_params;
 
+	if (m_mutualAuthFinished) {
+		selectApplication();
+	}
+
 	if (this->getType() == APL_CARDTYPE_PTEID_IAS07)
 		sam_helper.getDHParams(&dh_params, true);
 	else
@@ -262,6 +288,7 @@ void APL_EIDCard::ChangeAddress(char *secret_code, char *process, t_callback_add
 	}
 	//Init the thread-local variable to be able to access the card in the OpenSSL callback
 	setThreadLocalCardInstance(this);
+
 	SSLConnection conn;
 
 	conn.InitSAMConnection();
@@ -304,6 +331,8 @@ void APL_EIDCard::ChangeAddress(char *secret_code, char *process, t_callback_add
 	if (resp_2ndpost != NULL && resp_2ndpost->signed_challenge != NULL)
 	{
 		bool ret_signed_ch = sam_helper.verifySignedChallenge(resp_2ndpost->signed_challenge);
+
+		m_mutualAuthFinished = true;
 
 		if (!ret_signed_ch)
 		{
@@ -1676,8 +1705,11 @@ void APL_AddrEId::loadRemoteAddress() {
 	CByteArray sod_data = getSodData(m_card);
 	CByteArray authCert_data = getAuthCert(m_card);
 
-	sam_helper.getDHParams(&dh_params, true);
+	if (m_card->getMutualAuthFinished()) {
+		m_card->selectApplication();
+	}
 
+	sam_helper.getDHParams(&dh_params, true);
 
 	char * json_str = build_json_obj_dhparams(dh_params, m_card->getFileID(), m_card->getFileAddress(), sod_data, authCert_data);
 
@@ -1735,7 +1767,7 @@ void APL_AddrEId::loadRemoteAddress() {
 				exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
 				goto cleanup;
 			}
-
+			m_card->setMutualAuthFinished(true);
 			MWLOG(LEV_DEBUG, MOD_APL, "From now on using Secure Messaging with the smartcard...");
 			bool is_hex = true;
 			CByteArray mse_internal_auth_cmd(signed_challenge_obj.set_se_command, is_hex); 
