@@ -829,9 +829,10 @@ PageCardAdressForm {
                     dialogConfirmOfAddressProgress.close()
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
                     mainFormID.propertyPageLoader.forceActiveFocus()
-                    //Start reloading address data after address change operation
-                    //Also reload after address change error but it should be fast and harmless
-                    gapi.verifyAddressPin("", false)
+                    //Start reloading address data after successful address change operation
+                    if (!gapi.isAddressLoaded()) {
+                        gapi.verifyAddressPin("", false)
+                    }
                 }
                 highlighted: activeFocus ? true : false
                 Accessible.role: Accessible.Button

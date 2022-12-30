@@ -723,7 +723,7 @@ unsigned int GAPI::doChangeAuthPin(QString currentPin, QString newPin) {
 
     BEGIN_TRY_CATCH
 
-        PTEID_EIDCard * card = NULL;
+    PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card == NULL) return TRIES_LEFT_ERROR;
 
@@ -786,6 +786,8 @@ void GAPI::showChangeAddressDialog(long code)
     {
     case 0:
         error_msg = tr("STR_CHANGE_ADDRESS_SUCESS");
+        //Force address reload in PageCardAddress
+        setAddressLoaded(false);
         break;
         //The error code for connection error is common between SAM and OTP
     case EIDMW_OTP_CONNECTION_ERROR:

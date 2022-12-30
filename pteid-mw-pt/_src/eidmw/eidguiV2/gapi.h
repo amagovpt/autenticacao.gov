@@ -296,8 +296,6 @@ public:
     Q_ENUMS(TelemetryAction)
     Q_ENUMS(TelemetryStatus)
 
-    bool isAddressLoaded() {return m_addressLoaded; }
-
     QQuickImageProvider * buildImageProvider() { return image_provider; }
     QQuickImageProvider * buildPdfImageProvider() { return image_provider_pdf; }
 
@@ -332,6 +330,7 @@ public slots:
     void resetReaderSelected(void) {selectedReaderIndex =  -1; }
     signed int returnReaderSelected(void) {return selectedReaderIndex; }
     void setAddressLoaded(bool addressLoaded) {m_addressLoaded = addressLoaded; }
+    bool isAddressLoaded() { return m_addressLoaded; }
     void startCardReading();
     void startGettingInfoFromSignCert();
     void startCCSignatureCertCheck();
