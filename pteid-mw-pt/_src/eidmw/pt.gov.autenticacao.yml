@@ -6,6 +6,7 @@ command: eidguiV2
 finish-args:
   - --socket=pcsc
   - --socket=cups
+  - --socket=wayland
   - --socket=x11
   - --device=dri
   - --filesystem=home
