@@ -1705,10 +1705,6 @@ void APL_AddrEId::loadRemoteAddress() {
 	CByteArray sod_data = getSodData(m_card);
 	CByteArray authCert_data = getAuthCert(m_card);
 
-	if (m_card->getMutualAuthFinished()) {
-		m_card->selectApplication();
-	}
-
 	sam_helper.getDHParams(&dh_params, true);
 
 	char * json_str = build_json_obj_dhparams(dh_params, m_card->getFileID(), m_card->getFileAddress(), sod_data, authCert_data);
