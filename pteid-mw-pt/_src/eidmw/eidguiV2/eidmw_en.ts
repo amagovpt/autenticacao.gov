@@ -516,7 +516,7 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
-        <translation>&lt;ul&gt;&lt;li&gt;You are not using the correct card for this address change process&lt;/li&gt;&lt;li&gt;You have requested the address change after December 28, 2022. The address change must be confirmed at &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;portal ePortugal&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</translation>
+        <translation>&lt;ul&gt;&lt;li&gt;You are not using the correct card for this address change process&lt;/li&gt;&lt;li&gt;You have requested the address change since December 28, 2022. The address change must be confirmed at &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;portal ePortugal&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</translation>
     </message>
     <message>
         <source>STR_VERIFY_INTERNET_SAM</source>
@@ -657,7 +657,7 @@
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT_1</source>
-        <translation>If you applied for a change of address &lt;b&gt;after December 28, 2022&lt;/b&gt;,</translation>
+        <translation>If you applied for a change of address &lt;b&gt;since December 28, 2022&lt;/b&gt;,</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT_2</source>

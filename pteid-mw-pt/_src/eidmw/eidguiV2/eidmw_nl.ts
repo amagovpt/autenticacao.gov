@@ -514,7 +514,7 @@
     </message>
     <message>
         <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
-        <translation>&lt;ul&gt;&lt;li&gt;Não está a usar o Cartão de Cidadão para o qual pediu a alteração de morada&lt;/li&gt;&lt;li&gt;Fez o pedido de alteração de morada depois de 28 (inclusive) de dezembro de 2022. Tem de confirmar a alteração de morada no &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;portal ePortugal&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</translation>
+        <translation>&lt;ul&gt;&lt;li&gt;Não está a usar o Cartão de Cidadão para o qual pediu a alteração de morada&lt;/li&gt;&lt;li&gt;Fez o pedido de alteração de morada a partir de 28 de dezembro de 2022. Tem de confirmar a alteração de morada no &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;portal ePortugal&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</translation>
     </message>
     <message>
         <source>STR_VERIFY_INTERNET_SAM</source>
@@ -667,7 +667,7 @@
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT_1</source>
-        <translation>Se fez o pedido de alteração de morada &lt;b&gt;depois de 28 (inclusive) de dezembro de 2022&lt;/b&gt;,</translation>
+        <translation>Se fez o pedido de alteração de morada &lt;b&gt;a partir de 28 de dezembro de 2022&lt;/b&gt;,</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT_2</source>
