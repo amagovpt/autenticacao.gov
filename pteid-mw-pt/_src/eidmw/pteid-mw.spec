@@ -20,8 +20,8 @@
 %endif
 %endif
 
-%define git_revision git20221220
-%define app_version 3.9.0
+%define git_revision git20230102
+%define app_version 3.9.1
 
 Name:           pteid-mw
 BuildRequires:  pcsc-lite-devel make
@@ -307,6 +307,10 @@ fi
 /usr/local/share/pteid-mw
 
 %changelog
+* Mon Jan 3 2023 André Guerreiro <andre.guerreiro@caixamagica.pt>
+  - Bugfix in address change
+  - Update help messages related to the new address change process in ePortugal
+
 * Tue Dec 20 2022 André Guerreiro <andre.guerreiro@caixamagica.pt>
   - Address reading from online service
   - Certificate OCSP validation before signing with CC card
