@@ -377,6 +377,8 @@ public:
 	EIDMW_APL_API const char *getForeignRegion();
 	EIDMW_APL_API const char *getForeignLocality();
 	EIDMW_APL_API const char *getForeignPostalCode();
+	//Force remote address reload after successful address change
+	void invalidateAddress();
 
 
 protected:

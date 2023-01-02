@@ -420,6 +420,10 @@ void APL_EIDCard::invalidateAddressSOD()
 		delete m_FileAddress;
 		m_FileAddress = NULL;
 	}
+	if (m_address)
+	{
+		m_address->invalidateAddress();
+	}
 }
 
 APL_EidFile_Sod *APL_EIDCard::getFileSod()
@@ -1615,6 +1619,9 @@ void json_parse_string(std::string &dest_string, cJSON *json_obj, const char *it
 
 	cJSON * item = cJSON_GetObjectItem(json_obj, item_name);
 
+	//Clean string content
+	dest_string = "";
+
 	if (cJSON_IsString(item)) {
 		dest_string.append(item->valuestring);
 	}
@@ -1625,8 +1632,7 @@ void json_parse_string(std::string &dest_string, cJSON *json_obj, const char *it
 }
 
 void APL_AddrEId::mapNationalFields(cJSON * json_obj) {
-
-	
+	m_AddressType = "";
 	m_AddressType.append("N");
 
 	json_parse_string(m_CountryCode, json_obj, "countryCode");
@@ -1654,8 +1660,9 @@ void APL_AddrEId::mapNationalFields(cJSON * json_obj) {
 
 
 void APL_AddrEId::mapForeignFields(cJSON * json_obj) {
-
+	m_AddressType = "";
 	m_AddressType.append("I");
+
 	json_parse_string(m_CountryCode, json_obj, "countryCode");
 
 	json_parse_string(m_Foreign_Country, json_obj,     "foreignCountry");
@@ -1827,6 +1834,10 @@ void APL_AddrEId::loadRemoteAddress() {
 	  	throw CMWEXCEPTION(exception_code);
 	  }
 
+}
+
+void APL_AddrEId::invalidateAddress() {
+	remoteAddressLoaded = false;
 }
 
 const char *APL_AddrEId::getMunicipality()
