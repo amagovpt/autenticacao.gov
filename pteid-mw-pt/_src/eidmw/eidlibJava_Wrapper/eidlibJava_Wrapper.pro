@@ -61,7 +61,7 @@ LIBS +=	-l$${CARDLAYERLIB}
 LIBS +=	-l$${APPLAYERLIB}
 LIBS +=	-l$${CMDSERVICESLIB}
 
-macx: INCLUDEPATH += /Library/Java/JavaVirtualMachines/jdk-11.0.6.jdk/Contents/Home/include/ /Library/Java/JavaVirtualMachines/jdk-11.0.6.jdk/Contents/Home/include/darwin/ $$DEPS_DIR/openssl/include
+macx: INCLUDEPATH += /Library/Java/JavaVirtualMachines/jdk-17.0.5.jdk/Contents/Home/include/ /Library/Java/JavaVirtualMachines/jdk-17.0.5.jdk/Contents/Home/include/darwin/ $$DEPS_DIR/openssl/include
 macx: LIB += -Wl,-framework -Wl,Java
 
 DEPENDPATH += .
