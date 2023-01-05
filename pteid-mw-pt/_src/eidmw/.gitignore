@@ -73,6 +73,9 @@ bin/
 pteid-ctk/build
 xcuserdata/
 
+# Files related to flatpak build
+.flatpak-builder/
+
 # Credentials #
 ###################
 kspCredentials.h
