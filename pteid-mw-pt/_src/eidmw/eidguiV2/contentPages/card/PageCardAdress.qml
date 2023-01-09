@@ -110,22 +110,23 @@ PageCardAdressForm {
             if (error_code == GAPI.AddressConnectionError) {
                 bodyPopup = qsTr("STR_REMOTEADDRESS_NETWORK_ERROR")
                     + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
-            }            
+            }
             else if (error_code == GAPI.AddressServerError) {
                 bodyPopup = qsTr("STR_REMOTEADDRESS_SERVER_ERROR")
                     + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
-            }            
+            }
             else if (error_code == GAPI.AddressConnectionTimeout) {
                 bodyPopup = qsTr("STR_REMOTEADDRESS_TIMEOUT_ERROR")
                     + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
-            }            
+            }
             else if (error_code == GAPI.AddressSmartcardError) {
                 bodyPopup = qsTr("STR_REMOTEADDRESS_SMARTCARD_ERROR")
                     + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
             }
             else if (error_code == GAPI.AddressCertificateError) {
                 bodyPopup = qsTranslate("GAPI", "STR_CERTIFICATE_ERROR")
-                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+                    + qsTranslate("GAPI", "STR_CERTIFICATE_ERROR_READ_ADDRESS")
+                    + "<br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
             }
             else if (error_code == GAPI.AddressUnknownError) {
                 bodyPopup = qsTr("STR_REMOTEADDRESS_UNKNOWN_ERROR")

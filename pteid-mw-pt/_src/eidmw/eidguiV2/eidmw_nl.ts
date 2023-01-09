@@ -59,7 +59,15 @@
     </message>
     <message>
         <source>STR_CERTIFICATE_ERROR</source>
-        <translation>Este erro pode ser resultado da interferência na rede, por um software externo à aplicação Autenticação.Gov. Recomenda-se que repita a confirmação de morada noutro computador e/ou numa rede doméstica.</translation>
+        <translation>Este erro pode ter resultado da interferência na rede, por um software externo à aplicação Autenticação.Gov. </translation>
+    </message>
+    <message>
+        <source>STR_CERTIFICATE_ERROR_READ_ADDRESS</source>
+        <translation>Recomenda-se que repita a leitura de morada noutro computador e/ou numa rede doméstica.</translation>
+    </message>
+    <message>
+        <source>STR_CERTIFICATE_ERROR_CHANGE_ADDRESS</source>
+        <translation>Recomenda-se que repita a confirmação de morada noutro computador e/ou numa rede doméstica.</translation>
     </message>
     <message>
         <source>STR_PROXY_AUTH_FAILED</source>

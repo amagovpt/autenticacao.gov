@@ -419,6 +419,10 @@ void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int inde
     {
         emit signalRemoteAddressError(AddressSmartcardError);
     }
+    else if (errorCode == EIDMW_REMOTEADDR_CERTIFICATE_ERROR)
+    {
+        emit signalRemoteAddressError(AddressCertificateError);
+    }
     else if (errorCode == EIDMW_REMOTEADDR_UNKNOWN_ERROR)
     {
         emit signalRemoteAddressError(AddressUnknownError);
@@ -799,7 +803,7 @@ void GAPI::showChangeAddressDialog(long code)
 
     case EIDMW_OTP_CERTIFICATE_ERROR:
         error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_VERIFY_APP_UPDATE") + "<br><br>" +
-            tr("STR_CERTIFICATE_ERROR");
+            tr("STR_CERTIFICATE_ERROR") + tr("STR_CERTIFICATE_ERROR_CHANGE_ADDRESS");
         break;
 
     case EIDMW_SAM_PROXY_AUTH_FAILED:
@@ -848,13 +852,12 @@ void GAPI::showChangeAddressDialog(long code)
         else if (code == SAM_UNDEFINED_PROCESS_NUMBER){
             error_msg += "<br>" + support_string_undefined;
             signalAddressShowUndefinedLink();
-        } 
+        }
         else if (code == SAM_PROCESS_EXPIRED_ERROR){
             signalAddressShowLink();
-        } 
+        }
         else {
             error_msg += "<br><br>" + support_string;
-            signalAddressShowEmail();
         }
     }
 
@@ -1012,47 +1015,36 @@ void GAPI::addressChangeCallback(void *instance, int value)
     gapi->signalUpdateProgressBar(value);
 }
 
-void GAPI::doChangeAddress(const char *process, const char *secret_code)
+void GAPI::doChangeAddress(QString qs_process, QString qs_secret_code)
 {
     qDebug() << "DoChangeAddress!";
     PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "Change Address started");
 
-    try
-    {
-        PTEID_EIDCard * card = NULL;
-        getCardInstance(card);
-        if (card == NULL) return;
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
 
-        card->ChangeAddress((char *)secret_code, (char*)process, &GAPI::addressChangeCallback, (void*)this);
+    std::string process = qs_process.toUtf8().constData();
+    std::string secret_code = qs_secret_code.toUtf8().constData();
+
+    long error_code = 0;
+    try {
+        card->ChangeAddress((char *)secret_code.c_str(), (char *)process.c_str(), &GAPI::addressChangeCallback, (void*)this);
     }
-    catch (PTEID_Exception & exception)
-    {
+    catch (PTEID_Exception &exception) {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Caught exception in EidCard.ChangeAddress()... closing progressBar");
-        this->signalUpdateProgressBar(100);
-        
-        this->addressChangeFinished(exception.GetError());
-        free((char *)process);
-        free((char *)secret_code);
-        return;
+        emit signalUpdateProgressBar(100);
+        error_code = exception.GetError();
     }
 
-    free((char *)process);
-    free((char *)secret_code);
-    this->addressChangeFinished(0);
+    showChangeAddressDialog(error_code);
 }
 
 void GAPI::changeAddress(QString process, QString secret_code)
 {
-    qDebug() << "ChangeAddress! process = " + process + " secret_code = " + secret_code;
-
+    qDebug() << "Called changeAddress(): process = " + process + "; secret_code = " + secret_code;
+    Concurrent::run(this, &GAPI::doChangeAddress, process, secret_code);
     signalUpdateProgressStatus(tr("STR_CHANGING_ADDRESS"));
-
-    connect(this, SIGNAL(addressChangeFinished(long)),
-        this, SLOT(showChangeAddressDialog(long)), Qt::UniqueConnection);
-
-    char *processUtf8 = strdup(process.toUtf8().constData());
-    char *secret_codeUtf8 = strdup(secret_code.toUtf8().constData());
-    Concurrent::run(this, &GAPI::doChangeAddress, processUtf8, secret_codeUtf8);
 }
 
 /*Store a pointer to our QMLEngine and register the signal that when triggered will register

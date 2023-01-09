@@ -417,7 +417,7 @@ public slots:
     void changeAddressPin(QString currentPin, QString newPin);
 
     void changeAddress(QString process, QString secret_code);
-    void doChangeAddress(const char *process, const char *secret_code);
+    void doChangeAddress(QString process, QString secret_code);
     void cancelCMDRegisterCert();
     void signCMD(QList<QString> loadedFilePath, QString outputFile, int page, double coord_x,
                      double coord_y, QString reason, QString location, bool isTimestamp, bool isLTV,
@@ -522,7 +522,6 @@ signals:
     void signalAddressShowLink();
     void signalAddressShowUndefinedLink();
     void signalAddressShowEmail();
-    void addressChangeFinished(long return_code);
     void signCMDFinished(long error_code);
     void signalValidateOtp();
     void signalShowLoadAttrButton();

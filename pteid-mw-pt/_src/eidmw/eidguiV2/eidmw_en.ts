@@ -64,7 +64,15 @@
     </message>
     <message>
         <source>STR_CERTIFICATE_ERROR</source>
-        <translation>This error may be the result of a network interference, caused by a software unrelated to Autenticação.Gov. Please repeat the address confirmation procedure on another computer and/or on a domestic network.</translation>
+        <translation>This error may be the result of a network interference, caused by a software unrelated to Autenticação.Gov. </translation>
+    </message>
+    <message>
+        <source>STR_CERTIFICATE_ERROR_READ_ADDRESS</source>
+        <translation>Please try to read the address on another computer and/or on a domestic network.</translation>
+    </message>
+    <message>
+        <source>STR_CERTIFICATE_ERROR_CHANGE_ADDRESS</source>
+        <translation>Please repeat the address confirmation procedure on another computer and/or on a domestic network.</translation>
     </message>
     <message>
         <source>STR_PROXY_AUTH_FAILED</source>
