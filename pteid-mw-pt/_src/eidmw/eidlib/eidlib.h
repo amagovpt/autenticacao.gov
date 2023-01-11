@@ -1005,7 +1005,7 @@ class PTEID_PDFSignature
 		/**
 		 * Apply a timestamp after signing the document.
 		 * 
-		 * Use this method to apply a cryptographic timestamp for the signature(s) - Internet connection is required.
+		 * Apply a cryptographic timestamp on the signature(s) - Internet connection is required.
 		 * By default the implementation will use the official Cartão de Cidadão TSA at ts.cartaodecidadao.pt.
 		 * Information about request limits described at https://pki.cartaodecidadao.pt - in section "Serviço de Selos Temporais".
 		 * Using @ref PTEID_Config with parameter PTEID_PARAM_XSIGN_TSAURL a different TSA may be specified
@@ -1027,18 +1027,18 @@ class PTEID_PDFSignature
 		PTEIDSDK_API char *getOccupiedSectors(int page);
 		PTEIDSDK_API void setCustomImage(unsigned char *image_data, unsigned long image_length);
 		/**
-	     * Use this method to change the size of the visible signature (Minimum size: 120x35 px)
+	   * Change the size of the visible signature (Minimum size: 120x35 px)
 		 * Visible signature never will be smaller than page
 		 * Except if the page is smaller then minimum size
-		 * @param width - width of the visible signature (Minimum size: 120 px)
+		 * @param width - width of the visible signature   (Minimum size: 120 px)
 		 * @param height - height of the visible signature (Minimum size: 35 px)
 	     **/
 		PTEIDSDK_API void setCustomSealSize(unsigned int width, unsigned int height);
 		/**
-	     * Use this method to change the image that's used on the bottom of the visible signature
-	     * This image will replace the default "Cartão de Cidadão" logo
-	     * @param image_data - image data in JPEG format (recommended size: 351x77 px)
-	     **/
+		* Change the image that's used on the bottom of the visible signature
+		* This image will replace the default "Cartão de Cidadão" logo
+		* @param image_data - image data in JPEG format (mandatory size: 351x77 px)
+		**/
 		PTEIDSDK_API void setCustomImage(const PTEID_ByteArray &image_data);
 
 		PTEIDSDK_API PDFSignature *getPdfSignature();
