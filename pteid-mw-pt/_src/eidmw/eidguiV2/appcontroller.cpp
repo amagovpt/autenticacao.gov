@@ -795,11 +795,10 @@ void AppController::setAskToSetCacheValue(bool bAskToSetCache) {
 }
 
 bool AppController::getAskToSetTelemetryValue(void) {
-	return false;
-    //return m_Settings.getAskToSetTelemetry();
+    return m_Settings.getAskToSetTelemetry();
 }
 void AppController::setAskToSetTelemetryValue(bool bAskToSetTelemetry) {
-    //return m_Settings.setAskToSetTelemetry(bAskToSetTelemetry);
+    return m_Settings.setAskToSetTelemetry(bAskToSetTelemetry);
 }
 
 void AppController::forceAccessibilityUpdate(QObject *obj) {

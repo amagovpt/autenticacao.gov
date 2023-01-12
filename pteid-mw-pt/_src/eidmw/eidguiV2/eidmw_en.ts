@@ -1191,11 +1191,11 @@
     </message>
     <message>
         <source>STR_TELEMETRY_TITLE</source>
-        <translation type="vanished">Usage data collection</translation>
+        <translation>Usage data collection</translation>
     </message>
     <message>
         <source>STR_USE_TELEMETRY_COMBOBOX_TEXT</source>
-        <translation type="vanished">Allow the application to collect and send information about its usage</translation>
+        <translation>Allow the application to collect and send information about its usage</translation>
     </message>
 </context>
 <context>
@@ -2609,28 +2609,24 @@
     </message>
     <message>
         <source>STR_SET_TELEMETRY_TITLE</source>
-        <translation>Do you allow the authentication.gov application to collect and report information about your usage?</translation>
+        <translation>Do you allow Autenticação.gov to collect and report information about your usage?</translation>
     </message>
     <message>
         <source>STR_SET_TELEMETRY_TEXT</source>
         <translation>The application will collect data about how you use it, so that we can improve your user experience. No personal data will be collected.</translation>
     </message>
     <message>
-        <source>STR_SET_TELEMETRY_TEXT_MANDATORY</source>
-        <translation type="vanished">This is a mandatory configuration, it is required to choose one option in order to utilise the application. </translation>
-    </message>
-    <message>
         <source>STR_TELEMETRY_TERMS</source>
-        <translation>The data collected is:
+        <translation>The collected data items are:
  • Operating system and its version
  • Authentication.gov application version
- • Usage events, such as: application start, digital signatures, change or read the Citizen&apos;s Card address
+ • Usage events, such as: application start, digital signature, or print card data
  • Randomly generated unique identifier to be able to differentiate Authentication.gov application installations
  • Public IP of the internet connection that is used to send the collected data</translation>
     </message>
     <message>
         <source>STR_TELEMETRY_SHOW_TERMS</source>
-        <translation>You can check the terms of usage here.</translation>
+        <translation>More detail about collected data</translation>
     </message>
 </context>
 </TS>
