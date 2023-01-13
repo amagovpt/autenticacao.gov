@@ -58,16 +58,22 @@ std::string parseCookieFromHeaders(std::string headers) {
 
  }
 
- void handle_curl_error(CURLcode rc) {
-    if (rc == CURLE_OPERATION_TIMEDOUT)
-        throw CMWEXCEPTION(EIDMW_REMOTEADDR_CONNECTION_TIMEOUT);
-    else if (rc == CURLE_COULDNT_RESOLVE_HOST || rc == CURLE_COULDNT_CONNECT)
-        throw CMWEXCEPTION(EIDMW_REMOTEADDR_CONNECTION_ERROR);
-    else if (rc == CURLE_PEER_FAILED_VERIFICATION)
-        throw CMWEXCEPTION(EIDMW_REMOTEADDR_CERTIFICATE_ERROR);
-    else
-        throw CMWEXCEPTION(EIDMW_REMOTEADDR_UNKNOWN_ERROR);
-}
+void handle_curl_error(CURLcode rc) {
+
+    switch (rc) {
+        case CURLE_OPERATION_TIMEDOUT:
+            throw CMWEXCEPTION(EIDMW_REMOTEADDR_CONNECTION_TIMEOUT);
+        case CURLE_COULDNT_RESOLVE_HOST:
+        case CURLE_COULDNT_CONNECT:
+        case CURLE_SEND_ERROR:
+        case CURLE_RECV_ERROR:
+            throw CMWEXCEPTION(EIDMW_REMOTEADDR_CONNECTION_ERROR);
+        case CURLE_PEER_FAILED_VERIFICATION:
+            throw CMWEXCEPTION(EIDMW_REMOTEADDR_CERTIFICATE_ERROR);
+        default:
+            throw CMWEXCEPTION(EIDMW_REMOTEADDR_UNKNOWN_ERROR);
+    }
+ }
 
  void handle_http_error(long http_code) {
     if (http_code >= 400 && http_code < 500) {
