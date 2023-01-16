@@ -42,6 +42,21 @@ namespace eIDMW
         m_shouldMobileCache = enabled;
     }
 
+	bool CMDSignatureClient::shouldShowProgressDialogs()
+	{
+#ifdef _WIN32
+		const int buf_len = 1024;
+		char buf[buf_len] = { 0 };
+		if (!GetModuleFileNameA(NULL, (LPSTR)buf, (DWORD)buf_len)) {
+			MWLOG(LEV_INFO, MOD_CMD, "Error returned by GetModuleFileNameA: %d", GetLastError());
+			return true;
+		}
+		return strstr(buf, "OUTLOOK.EXE") == NULL;
+#else
+		return true;
+#endif
+	}
+
     CByteArray CMDSignatureClient::Sign(const CByteArray& data, bool signatureKey, const char * docname, const char *mobileNumber, const char * userName)
     {
         if (!signatureKey)

@@ -56,6 +56,7 @@ namespace eIDMW {
         static DlgRet openAuthenticationDialogOTP(DlgCmdOperation operation, std::string *out_otp, std::string *docId, std::function<void(void)> *fSendSmsCallback = NULL);
 
         PTEIDCMD_API static void setCredentials(const char* basicAuthUser, const char* basicAuthPassword, const char* applicationId);
+		PTEIDCMD_API static bool shouldShowProgressDialogs();
 
     private:
         void handleErrorCode(int err, bool isOtp);

@@ -412,6 +412,6 @@ __in    DWORD cbHash);
 
 BOOL
 validateCert(
-__in    PCCERT_CONTEXT pCert);
+__in    PCCERT_CONTEXT pCert, bool showDialog);
 
 #endif //__CMD_KSP_H__

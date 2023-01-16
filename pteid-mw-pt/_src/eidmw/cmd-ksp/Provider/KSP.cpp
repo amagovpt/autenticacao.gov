@@ -1725,7 +1725,9 @@ __in    DWORD   dwFlags)
 		//Set parent window for the user interaction dialogs
 		SetApplicationWindow(pKey->hWnd);
 
-        if (!validateCert(pKey->pCert))
+		bool showDialog = CMDSignatureClient::shouldShowProgressDialogs();
+
+        if (!validateCert(pKey->pCert, showDialog))
         {
             handleErrorAndShowDlg(isProxySet, ERR_INV_CERTIFICATE, &Status);
             goto cleanup;
@@ -1747,6 +1749,8 @@ __in    DWORD   dwFlags)
             NULL,
             csSubject,
             dwSubjectLen);
+
+		
         CMDSignatureClient::setCredentials(CMDCredentials::getCMDBasicAuthUserId(KSP_CMD_BASIC_AUTH_USERID).c_str(),
                                            CMDCredentials::getCMDBasicAuthPassword(KSP_CMD_BASIC_AUTH_PASSWORD).c_str(),
                                            CMDCredentials::getCMDBasicAuthAppId(KSP_CMD_BASIC_AUTH_APPID).c_str());

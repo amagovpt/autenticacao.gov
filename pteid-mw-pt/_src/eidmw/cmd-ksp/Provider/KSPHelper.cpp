@@ -679,11 +679,14 @@ private:
 /* Return TRUE if cert status is not revoked/suspended. It returns TRUE if the validation fails to avoid stopping the signature. */
 BOOL
 validateCert(
-    __in    PCCERT_CONTEXT pCert)
+    __in    PCCERT_CONTEXT pCert, bool showDialog)
 {
     std::wstring dialogMsg(GETSTRING_DLG(ValidatingCertificate));
     DialogThread dialogThread(DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL, dialogMsg);
-    dialogThread.Start();
+
+	if (showDialog) {
+		dialogThread.Start();
+	}
 
     APL_CryptoFwk *cryptoFwk = (APL_CryptoFwk *)AppLayer.getCryptoFwk();
 
@@ -698,7 +701,9 @@ validateCert(
     if (!pIssuerCert)
     {
         MWLOG_WARN(logBuf, "CmdSignThread::Run(): Unable to find issuer certificate in store");
-        dialogThread.Stop();
+		if (showDialog) {
+			dialogThread.Stop();
+		}
         return true;
     }
 
@@ -708,6 +713,8 @@ validateCert(
     MWLOG_INFO(logBuf, "CmdSignThread::Run(): OCSP verification status for CMD cert: %d", status);
 
     CertFreeCertificateContext(pIssuerCert);
-    dialogThread.Stop();
+	if (showDialog) {
+		dialogThread.Stop();
+	}
     return (status != FWK_CertifStatus::FWK_CERTIF_STATUS_REVOKED && status != FWK_CertifStatus::FWK_CERTIF_STATUS_SUSPENDED);
 }

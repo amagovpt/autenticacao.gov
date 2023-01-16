@@ -101,6 +101,7 @@ namespace eIDMW {
             std::string m_receiveCode;
             bool m_computeHash = true;
             bool m_batch_mode = false;
+			bool m_showProgressDialog = true;
             CMDProxyInfo m_proxyInfo;
             int cli_getCertificate( std::string in_userId );
             int cli_sendDataToSign( std::string in_pin );

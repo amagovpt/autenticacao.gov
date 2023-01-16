@@ -369,24 +369,32 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, CByteArray &in_hash, std::str
         return ERR_OP_CANCELLED;
     else if (ret != ERR_NONE)
         throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+	std::function<void(void)> cancelRequestCallback = std::bind(&CMDSignature::cancelRequest, this);
+	CMDProgressDlgThread progressDlgThread(DlgCmdOperation::DLG_CMD_SIGNATURE, false, &cancelRequestCallback);
 
-    std::function<void(void)> cancelRequestCallback = std::bind(&CMDSignature::cancelRequest, this);
-    CMDProgressDlgThread progressDlgThread(DlgCmdOperation::DLG_CMD_SIGNATURE, false, &cancelRequestCallback);
-    progressDlgThread.Start();
+	m_showProgressDialog = CMDSignatureClient::shouldShowProgressDialogs();
+
+	if (m_showProgressDialog) {
+		progressDlgThread.Start();
+	}
     try
     {
         int result = signOpen(proxyinfo, mobile, pin, in_hash, docname);
-        progressDlgThread.Stop();
+		if (m_showProgressDialog) {
+			progressDlgThread.Stop();
 
-        if (progressDlgThread.wasCancelled())
-            return ERR_OP_CANCELLED;
+			if (progressDlgThread.wasCancelled())
+				return ERR_OP_CANCELLED;
+		}
 
         return result;
     }
     catch (CMWException &e)
     {
         MWLOG(LEV_ERROR, MOD_CMD, L"CMDSignature::signOpen: Got CMWException with error code: 0x%x", e.GetError());
-        progressDlgThread.Stop();
+		if (m_showProgressDialog) {
+			progressDlgThread.Stop();
+		}
         throw;
     }
 }
@@ -572,21 +580,27 @@ int CMDSignature::signClose()
 
     std::function<void(void)> cancelRequestCallback = std::bind(&CMDSignature::cancelRequest, this);
     CMDProgressDlgThread progressDlgThread(DlgCmdOperation::DLG_CMD_SIGNATURE, true, &cancelRequestCallback);
-    progressDlgThread.Start();
+	if (m_showProgressDialog) {
+		progressDlgThread.Start();
+	}
     try
     {
         int result = signClose(otp);
 
-        if (progressDlgThread.wasCancelled())
-            return ERR_OP_CANCELLED;
+		if (m_showProgressDialog) {
+			if (progressDlgThread.wasCancelled())
+				return ERR_OP_CANCELLED;
 
-        progressDlgThread.Stop();
+			progressDlgThread.Stop();
+		}
 
         return result;
     }
     catch (...)
     {
-        progressDlgThread.Stop();
+		if (m_showProgressDialog) {
+			progressDlgThread.Stop();
+		}
         throw;
     }
 }
