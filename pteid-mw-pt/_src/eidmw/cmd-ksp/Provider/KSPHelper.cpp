@@ -327,12 +327,13 @@ __deref_out CMDKSP_KEY **ppKey)
         // The hash can be used to find the cert in the store.
         std::wstring hashHex = pszKeyName;
         hashHex = hashHex.substr(7);
+				
         HCERTSTORE hMyStore = CertOpenSystemStoreW(NULL, L"MY");
         CRYPT_HASH_BLOB hash = { 0, 0 };
         DWORD cbBufferSize;
         if (!CryptStringToBinaryW(
             hashHex.c_str(),
-            hashHex.size(),
+            (DWORD)hashHex.size(),
             CRYPT_STRING_HEXRAW,
             NULL,
             &cbBufferSize,
@@ -346,7 +347,7 @@ __deref_out CMDKSP_KEY **ppKey)
         pbHashBuffer = new BYTE[cbBufferSize];
         if (!CryptStringToBinaryW(
             hashHex.c_str(),
-            hashHex.size(),
+			(DWORD)hashHex.size(),
             CRYPT_STRING_HEXRAW,
             pbHashBuffer,
             &cbBufferSize,
