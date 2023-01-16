@@ -1659,6 +1659,12 @@ __in    DWORD   dwFlags)
         goto cleanup;
     }
 
+	if (dwFlags & NCRYPT_SILENT_FLAG) {
+		MWLOG_ERR(logBuf, "KSPSignHash called with SILENT_FLAG!");
+		Status = NTE_SILENT_CONTEXT;
+		goto cleanup;
+	}
+
 	//Check for RSA-PSS which is not currently supported for CMD signatures
 	if (dwFlags & BCRYPT_PAD_PSS) {
 		MWLOG_ERR(logBuf, "Unsupported RSA-PSS algorithm!");
